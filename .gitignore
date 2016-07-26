@@ -32,3 +32,5 @@ src/main/aaweb/obj/Debug/en-GB/AllyisApps.resources.dll
 src/main/aaweb/obj/Debug/en-US/AllyisApps.resources.dll
 src/main/aaweb/obj/Debug/en/AllyisApps.resources.dll
 src/main/aaweb/obj/Debug/es/AllyisApps.resources.dll
+src/main/aaservices/bin/
+src/main/aaweb/bin/
