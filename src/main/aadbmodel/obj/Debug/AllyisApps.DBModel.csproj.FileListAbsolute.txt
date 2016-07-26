@@ -1,9 +1,0 @@
-C:\SourceFiles\AllyisApps\src\main\aadbmodel\bin\Debug\AllyisApps.DBModel.XML
-C:\SourceFiles\AllyisApps\src\main\aadbmodel\bin\Debug\AllyisApps.DBModel.dll
-C:\SourceFiles\AllyisApps\src\main\aadbmodel\bin\Debug\AllyisApps.DBModel.pdb
-C:\SourceFiles\AllyisApps\src\main\aadbmodel\bin\Debug\AllyisApps.DBModel.dll.CodeAnalysisLog.xml
-C:\SourceFiles\AllyisApps\src\main\aadbmodel\bin\Debug\AllyisApps.DBModel.dll.lastcodeanalysissucceeded
-C:\SourceFiles\AllyisApps\src\main\aadbmodel\bin\Debug\Dapper.dll
-C:\SourceFiles\AllyisApps\src\main\aadbmodel\bin\Debug\Dapper.xml
-C:\SourceFiles\AllyisApps\src\main\aadbmodel\obj\Debug\AllyisApps.DBModel.dll
-C:\SourceFiles\AllyisApps\src\main\aadbmodel\obj\Debug\AllyisApps.DBModel.pdb
