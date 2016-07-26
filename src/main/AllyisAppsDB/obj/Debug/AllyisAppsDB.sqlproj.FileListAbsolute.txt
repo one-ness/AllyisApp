@@ -1,0 +1,9 @@
+C:\SourceFiles\AllyisApps\src\main\AllyisAppsDB\bin\Debug\AllyisAppsDB.dacpac
+C:\SourceFiles\AllyisApps\src\main\AllyisAppsDB\bin\Debug\AllyisAppsDB.dll
+C:\SourceFiles\AllyisApps\src\main\AllyisAppsDB\bin\Debug\AllyisAppsDB.pdb
+C:\SourceFiles\AllyisApps\src\main\AllyisAppsDB\obj\Debug\Model.xml
+C:\SourceFiles\AllyisApps\src\main\AllyisAppsDB\obj\Debug\refactor.xml
+C:\SourceFiles\AllyisApps\src\main\AllyisAppsDB\obj\Debug\postdeploy.sql
+C:\SourceFiles\AllyisApps\src\main\AllyisAppsDB\obj\Debug\predeploy.sql
+C:\SourceFiles\AllyisApps\src\main\AllyisAppsDB\obj\Debug\AllyisAppsDB.dll
+C:\SourceFiles\AllyisApps\src\main\AllyisAppsDB\obj\Debug\AllyisAppsDB.pdb

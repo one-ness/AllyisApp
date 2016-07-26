@@ -1,0 +1,65 @@
+﻿//------------------------------------------------------------------------------
+// <copyright file="SubscriptionInfo.cs" company="Allyis, Inc.">
+//     Copyright (c) Allyis, Inc.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AllyisApps.Services.BusinessObjects
+{
+	/// <summary>
+	/// An object for keeping track of all the info related to a given subscription.
+	/// </summary>
+	public class SubscriptionInfo
+	{
+		/// <summary>
+		/// Gets or sets OrganizationName.
+		/// </summary>
+		public string OrganizationName { get; set; }
+
+		/// <summary>
+		/// Gets or sets SubscriptionId.
+		/// </summary>
+		public int SubscriptionId { get; set; }
+
+		/// <summary>
+		/// Gets or sets OrganizationId.
+		/// </summary>
+		public int OrganizationId { get; set; }
+
+		/// <summary>
+		/// Gets or sets SkuId.
+		/// </summary>
+		public int SkuId { get; set; }
+
+		/// <summary>
+		/// Gets or sets SkuId.
+		/// </summary>
+		public int NumberOfUsers { get; set; }
+
+		/// <summary>
+		/// Gets or sets Licenses.
+		/// </summary>
+		public int Licenses { get; set; }
+
+		/// <summary>
+		/// Gets or sets CreatedDate.
+		/// </summary>
+		public DateTime CreatedUTC { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this subscription is active.
+		/// </summary>
+		public bool IsActive { get; set; }
+
+		/// <summary>
+		///  Gets or sets the name of the Sku.
+		/// </summary>
+		public string Name { get; set; }
+	}
+}

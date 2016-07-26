@@ -1,0 +1,29 @@
+﻿@using AllyisApps.ViewModels
+
+@model ProductSubscriptionViewModel
+
+@{
+	DisplayHints.PageBodyId = "org-unsubscribe";
+	ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.Unsubscribe;
+	Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
+}
+<div>
+	<p>
+		@AllyisApps.Resources.Views.Account.Strings.ConfirmUnsubscribe
+	</p>
+</div>
+<div class="row">
+	@using (Html.BeginForm("Unsubscribe", "Account", FormMethod.Post))
+	{
+		@Html.AntiForgeryToken()
+		@Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+		<input data-val="true" id="OrganizationId" name="OrganizationId" type="hidden" value="@Model.OrganizationId" />
+		<input data-val="true" id="ProductId" name="ProductId" type="hidden" value="@Model.ProductId" />
+		<input data-val="true" id="PreviousSku" name="PreviousSku" type="hidden" value="@Model.PreviousSku" />
+		<input data-val="true" id="CurrentSubscription" name="CurrentSubscription.SubscriptionId" type="hidden" value="@Model.CurrentSubscription.SubscriptionId" />
+		<input type="hidden" name="SelectedSku" value="0" />
+		<input type="submit" class="btn btn-primary" value=@AllyisApps.Resources.Views.Account.Strings.Save>
+	}
+</div>
+
+

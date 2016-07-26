@@ -1,0 +1,116 @@
+﻿@using AllyisApps.Services.BusinessObjects
+@using System.Linq
+
+@model AllyisApps.ViewModels.OrganizationMembersViewModel
+
+@{
+    ViewBag.Title = string.Format("{0} - {1}", AllyisApps.Resources.Views.Account.Strings.ManageUsers, Model.OrganizationName);
+    var query = (from u in Model.DisplayUsers
+                 orderby u.FullName
+                 orderby u.PermissionLevel
+                 select u).ToList();
+}
+@if (Model.TotalUsers > 0)
+{
+    <input id="hdnCurrentOrg" type="hidden" />
+    <input id="hdnSelectedUser" type="hidden" />
+    <div class="table-wrap" style="max-height: 70vh; overflow-y: auto;">
+        <table class="table table-hover table-condensed" style="margin: 0;">
+            <thead>
+                <tr>
+                    <th>@AllyisApps.Resources.Views.Account.Strings.Name</th>
+                    <th>@AllyisApps.Resources.Views.Account.Strings.EmployeeId</th>
+                    <th>@AllyisApps.Resources.Views.Account.Strings.Role</th>
+                </tr>
+            </thead>
+            <tbody id="org-members-list">
+                @*foreach (var usergroup in query)*@
+                @{
+                    var memberPage = 0;
+                    var minGroupSpot = memberPage * Model.PageSize;
+                    var maxGroupSpot = ((memberPage + 1) * Model.PageSize) - 1;
+                    var count = 0;
+                    var pageCount = 1;
+                    var hide = string.Empty;
+
+                    foreach (InvitationInfo invite in Model.PendingInvitation)
+                    {
+                        var firstName = invite.FirstName;
+                        var lastName = invite.LastName;
+                        var email = invite.Email;
+                        var displayEmail = invite.CompressedEmail;
+                        var accessCode = invite.AccessCode;
+
+                        pageCount = 1 + (count / Model.PageSize);
+                        if (count >= minGroupSpot && count <= maxGroupSpot)
+                        {
+                            hide = string.Empty;
+                        }
+                        else
+                        {
+                            hide = "hidden";
+                        }
+
+                    <tr data-page="@pageCount" @hide>
+                        <td>
+                            @firstName @lastName<span class="user-email">(@displayEmail)</span>
+                        </td>
+                        <td></td>
+                        <td class="text-center text-info">
+                            @AllyisApps.Resources.Views.Account.Strings.Invited
+                        </td>
+                    </tr>
+                        count++;
+                    }
+
+                    //foreach (var user in usergroup)
+                    foreach (var user in query)
+                    {
+                        pageCount = 1 + (count / Model.PageSize);
+                        if (count >= minGroupSpot && count <= maxGroupSpot)
+                        {
+                            hide = string.Empty;
+                        }
+                        else
+                        {
+                            hide = "hidden";
+                        }
+
+                    <tr data-page="@pageCount" @hide>
+                        <td>
+                            @user.FullName @*<span class="user-email">(@user.UserInfo.Email)</span>*@
+                        </td>
+                        <td>
+                            @user.EmployeeId
+                        </td>
+                        <td class="text-center">
+                            @AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(user.PermissionLevel)
+                        </td>
+                        <td class="text-right icon-strip">
+                            @if (Model.CurrentUserId != user.UserId)
+                                {
+                                <a href="javascript: void(0);" class="text-muted" title=@AllyisApps.Resources.Views.Account.Strings.RemoveMember
+                                   onclick='removeUser("@user.OrganizationId", "@user.UserId", "@user.FullName")'><span class="fa fa-fw fa-remove text-danger"></span></a>
+                                }
+                        </td>
+                    </tr>
+                        count++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="footPager" data-psize="@Model.PageSize" style="display: flex; justify-content: space-around;">
+        @if (Model.TotalUsers > Model.PageSize)
+        {
+            var page = 1;
+            <input id="page @page" name="pageButton" type="button" value="@page" onClick="showPage(@page)" disabled="" />
+            page++;
+            while (page <= Model.PageCount)
+            {
+            <input id="page @page" name="pageButton" type="button" value="@page" onClick="showPage(@page)" />
+                page++;
+            }
+        }
+    </div>
+}

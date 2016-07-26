@@ -1,0 +1,58 @@
+﻿@{ Layout = "_LayoutBase.cshtml"; }
+<div>
+    <div class="row row-offcanvas row-offcanvas-right">
+        @if (ViewBag.RenderSidebar == true) {
+            <text>
+                <div class="col-xs-12 col-sm-9">
+            </text>
+            }else{
+            <text>
+                <div class="col-xs-12 col-sm-12">
+            </text>
+            }
+        <div id="title-row">
+            @if (ViewBag.RenderSidebar == true)
+                    {
+                <div class="pull-right">
+                    @if (ViewBag.SidebarToggleText == null)
+                        {
+                        <button type="button" class="btn btn-primary btn-xs visible-xs" data-toggle="offcanvas">@AllyisApps.Resources.Views.Shared.Strings.ToggleSidebar</button>
+                        }
+                </div>
+                    }
+            @if(!string.IsNullOrEmpty(ViewBag.Title)){<h1 class="text-center">@ViewBag.Title</h1>}
+            @if(!string.IsNullOrEmpty(ViewBag.Subtitle)) {<h2 class="text-center">@ViewBag.Subtitle</h2>}
+            @if(!string.IsNullOrEmpty(ViewBag.Description)) {<p class="text-center">@ViewBag.Description</p>}
+        </div>
+        @RenderBody()
+    </div>
+    @if (ViewBag.RenderSidebar == true)
+            {
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+            <div class="pull-right">
+                <button type="button" class="btn btn-primary visible-xs" data-toggle="offcanvas" style="margin: 3px 5px">@AllyisApps.Resources.Views.Shared.Strings.Hide</button>
+            </div>
+            @RenderSection("sidebar", required: false)
+        </div>
+            }
+</div>
+</div>
+
+@section scripts {@*chain the section to the next layout*@
+@RenderSection("scripts", required: false)
+<script>
+        $(document).ready(function () {
+          $('[data-toggle="offcanvas"]').click(function () {
+            $('.row-offcanvas').toggleClass('active')
+          });
+        });
+</script>
+}
+
+@section css {@*chain the section to the next layout*@
+@RenderSection("css", required: false)
+}
+
+@section modals {@*chain the section to the next layout*@
+@RenderSection("modals", required: false)
+}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\SourceFiles\AllyisApps\src\main\android-app\time_tracker\build\intermediates\exploded-aar\com.android.support\appcompat-v7\24.0.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="0874286cc2fd88d54fdf130e9d5372730da6de97">
+        <dex dex="C:\SourceFiles\AllyisApps\src\main\android-app\time_tracker\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-24.0.0_9dc5eae816dbefd3a21fa319dda0e85d757c7087\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\user1\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\24.0.0\support-annotations-24.0.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="2943c74db6d4346ab8c6531adac91fa05c137c40">
+        <dex dex="C:\SourceFiles\AllyisApps\src\main\android-app\time_tracker\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-24.0.0_6ea266eca80ede55220f98761489ec78ccf785d7\classes.dex" />
+    </item>
+    <item
+        jar="C:\SourceFiles\AllyisApps\src\main\android-app\time_tracker\build\intermediates\exploded-aar\com.android.support\support-v4\24.0.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="2f7e6e2dad1bccaf68a8820820adc6c0d5b96d37">
+        <dex dex="C:\SourceFiles\AllyisApps\src\main\android-app\time_tracker\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-24.0.0_5096be46f240aafaea9fd9eefed3a1f1800e1f5d\classes.dex" />
+    </item>
+    <item
+        jar="C:\SourceFiles\AllyisApps\src\main\android-app\time_tracker\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\24.0.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="e70f608219ed6b974644c333249ab2bb7b71de98">
+        <dex dex="C:\SourceFiles\AllyisApps\src\main\android-app\time_tracker\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-24.0.0_14d8554c5fc833717c1c9b23a80b4aff81e993e1\classes.dex" />
+    </item>
+    <item
+        jar="C:\SourceFiles\AllyisApps\src\main\android-app\time_tracker\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="b55bc45c010ed96e16c1e686142c0815f68ab3a9">
+        <dex dex="C:\SourceFiles\AllyisApps\src\main\android-app\time_tracker\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_fdced59bce6f2f42e1977929c32d5009a8fef00f\classes.dex" />
+    </item>
+    <item
+        jar="C:\SourceFiles\AllyisApps\src\main\android-app\time_tracker\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="8bb54e867890100e9fa79209c1943acd147246bd">
+        <dex dex="C:\SourceFiles\AllyisApps\src\main\android-app\time_tracker\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_5492ef7df272f13a4b942131b695b5234835b64c\classes.dex" />
+    </item>
+    <item
+        jar="C:\SourceFiles\AllyisApps\src\main\android-app\time_tracker\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\24.0.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="3bd97cfefd783e9de1dd1c30574a6adb44b4409b">
+        <dex dex="C:\SourceFiles\AllyisApps\src\main\android-app\time_tracker\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-24.0.0_fdd47e19e278d888e44247baa96f41fc33b43bff\classes.dex" />
+    </item>
+    <item
+        jar="C:\SourceFiles\AllyisApps\src\main\android-app\time_tracker\build\intermediates\exploded-aar\com.android.support\support-v4\24.0.0\jars\libs\internal_impl-24.0.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="fcaf463e10e69c1923ccf1edeba3b4196d239e00">
+        <dex dex="C:\SourceFiles\AllyisApps\src\main\android-app\time_tracker\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.0.0_35a9d9d42d098fd17d6a5f20a718a6d9638e054c\classes.dex" />
+    </item>
+
+</items>

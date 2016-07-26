@@ -1,0 +1,47 @@
+﻿@import (reference) "_root.less";
+
+html {
+	position: relative;
+	min-height: 100% !important;
+}
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: calc(60px + @grid-gutter-width);
+}
+
+.footer .text-muted {
+	margin: 20px 0;
+}
+
+.footer {
+	position: absolute;
+	bottom: 1px;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: @footer-height;
+	background-color: @navbar-default-bg;
+	border-top: 1px @navbar-default-border solid;
+
+	& > .container {
+		padding-right: 15px;
+		padding-left: 15px;
+	}
+
+	.footer-links {
+		margin-left: @grid-gutter-width;
+
+		a {
+			color: @text-muted;
+			margin-left: @grid-gutter-width/2;
+		}
+	}
+}
+
+#title-row {
+	margin-bottom: @grid-gutter-width/2;
+
+	& > h1:first-of-type {
+		margin-top: 0px;
+	}
+}

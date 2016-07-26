@@ -1,0 +1,84 @@
+﻿@model AllyisApps.ViewModels.OrganizationManageViewModel
+@{
+    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.BillingInformation;
+}
+
+@if (Model.StripeCustomer != null)
+{
+    <input id="hdnCurrentOrg" type="hidden" />
+    <input id="hdnSelectedUser" type="hidden" />
+    <table class="table table-striped table-condensed table-bordered">
+        <tbody>
+
+            <tr>
+                <th>
+                    @AllyisApps.Resources.Views.Account.Strings.Card
+                </th>
+                <td>
+                    *@Model.LastFour
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @AllyisApps.Resources.Views.Account.Strings.BillingEmail
+                </th>
+                <td>
+                    @Model.StripeCustomer.Email
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+
+<div class="modal-body">
+    @if (Model.StripeCustomer == null)
+    {
+        using (Html.BeginForm("Charge", "Account", FormMethod.Post, new { @style = "display: inline-block" }))
+        {
+        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
+                data-name="Allyis Apps"
+                data-class="btn btn-primary"
+                data-description="Adding Billing Information"
+                @*data-image="/128x128.png"*@
+                data-locale="auto"
+                data-label="@AllyisApps.Resources.Views.Account.Strings.AddBillingInformation"
+                data-panel-label="@AllyisApps.Resources.Views.Account.Strings.SubmitBillingInfo"
+                data-allow-remember-me="false"
+                data-billing-address="true"
+                data-zip-code="true">
+        </script>
+        }
+    }
+    else
+    {
+        using (Html.BeginForm("Charge", "Account", FormMethod.Post, new { @style = "display: inline-block" }))
+        {
+        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
+                data-name="Allyis Apps"
+                data-class="btn btn-primary"
+                data-description="Adding Billing Information"
+                @*data-image="/128x128.png"*@
+                data-locale="auto"
+                data-label="Update"
+                data-panel-label="Submit Billing Information"
+                data-allow-remember-me="false"
+                data-billing-address="true"
+                data-zip-code="true"
+                value="Update">
+        </script>
+        }
+
+        using (Html.BeginForm("RemoveBilling", "Account", FormMethod.Get, new { @style = "display: inline-block; padding: 0 12px;" }))
+        {
+        <input type="submit" class="btn btn-danger" value=@AllyisApps.Resources.Views.Account.Strings.Delete>
+
+        }
+        using (Html.BeginForm("GetBillingSummary", "Account", FormMethod.Get, new { @style = "display: inline-block; padding: 0 12px;" }))
+        {
+        <input type="submit" class="btn btn-primary" value=@AllyisApps.Resources.Views.Account.Strings.GetBillingHistory>
+        }
+    }
+</div>

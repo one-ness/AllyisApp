@@ -1,0 +1,66 @@
+﻿@using AllyisApps.ViewModels.Shared;
+@using AllyisApps.Services.BusinessObjects;
+@model SubscriptionsViewModel
+
+@{
+    DisplayHints.PageBodyId = "paneled-index";
+    ViewBag.ProductPanelLinkTextOverride = "Do the things";
+    ViewBag.TitleBar = AllyisApps.Resources.Views.Account.Strings.Index;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    OrganizationInfo details = Model.OrgInfo;
+    string title = details.Name;
+    string subtitle = details.SiteUrl ?? details.Subdomain ?? "";
+    var cityState = details.City != null && details.State != null ? details.City + ", " + details.State : details.City + details.State;
+}
+<div class="row">
+    <div class="col-md-8 col-md-push-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 style="margin-top: 0px; margin-bottom: 0px;">
+                    @title
+                    @if (Model.CanEditOrganization)
+                    {
+                        <a href="@Url.Action("Manage", "Account")" title="Manage Organization" class="pull-right text-muted">
+                            <i class="fa fa-cog  fa-lg"></i>
+                        </a>
+                    }
+                </h2>
+            </div>
+            <div class="panel-body">
+                <div class="col-sm-8 index-details">
+                    <p>
+                        <label>@AllyisApps.Resources.Views.Account.Strings.PhoneNumber:</label>
+                        @details.PhoneNumber
+                        @*Model.UserInfo.PhoneNumber @Model.UserInfo.PhoneExtension*@
+                    </p>
+                    <p>
+                        <label>@AllyisApps.Resources.Views.Account.Strings.Address:</label>
+                        <span class="address-row">@details.Address</span>
+                        <span class="address-row">@cityState @details.PostalCode</span>
+                        @*<span class="address-row">@Model.UserInfo.Address</span>
+                            <span class="address-row">@cityState @Model.UserInfo.PostalCode</span>*@
+                    </p>
+                </div>
+                <div class="col-sm-4 index-details">
+                    <p>
+                        <label>@AllyisApps.Resources.Views.Account.Strings.Website:</label>
+                        <a href="@subtitle" target="_blank">@subtitle</a>
+                    </p>
+                    <p>
+                        <label>@AllyisApps.Resources.Views.Account.Strings.Fax:</label>
+                        @details.FaxNumber
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 col-md-push-2" style="height: 100%; display: flex; flex-wrap: wrap; justify-content: space-around;">
+        @Html.Partial("_ProductPanelsForOne", Model)
+    </div>
+</div>

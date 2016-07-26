@@ -1,0 +1,11 @@
+﻿@using MvcSiteMapProvider;
+
+@if (DisplayHints.ShowBreadcrumbs) {
+    <div class="breadcrumbs">
+        @Html.MvcSiteMap().SiteMapPath()
+        @if (DisplayHints.BreadcrumbNavPartialLocation != null)
+        {
+            Html.RenderPartial(DisplayHints.BreadcrumbNavPartialLocation);
+        }
+    </div>
+}

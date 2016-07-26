@@ -1,0 +1,49 @@
+﻿@import (reference) "_root.less";
+
+/*
+ * Off Canvas
+ * --------------------------------------------------
+ */
+html //, body {
+	overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+
+.navbar {
+	z-index: 1000;
+}
+
+.footer {
+	z-index: 1000;
+	border-top: 1px @navbar-default-border solid;
+}
+
+@media screen and (max-width: 767px) {
+	.row-offcanvas {
+		-webkit-transition: all .25s ease-out;
+		-o-transition: all .25s ease-out;
+		transition: all .25s ease-out;
+	}
+
+	.sidebar-offcanvas {
+		position: fixed;
+		z-index: 2000;
+		overflow-y: auto;
+		overflow-x: hidden;
+		top: 0px; //@navbar-height;
+		bottom: @footer-height;
+		width: 80%;
+		height: 100vh;
+		padding: @padding-base-horizontal;
+		text-align: justify;
+		background-color: @navbar-default-bg;
+		border-left: 1px @navbar-default-border solid;
+		right: ~"calc(-80% + 10px)"; //Must be escaped to dodge LESS compiler
+		-webkit-transition: all .25s ease-out;
+		-o-transition: all .25s ease-out;
+		transition: all .25s ease-out;
+	}
+
+	.row-offcanvas.active .sidebar-offcanvas {
+		right: 0;
+	}
+}

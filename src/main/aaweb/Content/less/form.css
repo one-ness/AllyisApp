@@ -1,0 +1,616 @@
+﻿.thumbnail > img,
+.thumbnail a > img,
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+.btn-group-lg > .btn {
+	padding: 10px 16px;
+	font-size: 18px;
+	line-height: 1.3333333;
+	border-radius: 6px;
+}
+
+.btn-group-sm > .btn {
+	padding: 5px 10px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 3px;
+}
+
+.btn-group-xs > .btn {
+	padding: 1px 5px;
+	font-size: 12px;
+	line-height: 1.5;
+	border-radius: 3px;
+}
+
+@media (min-width: 768px) {
+	.navbar-form .form-group + .form-group {
+		margin-left: 15px;
+	}
+}
+
+.dl-horizontal dd:before,
+.dl-horizontal dd:after,
+.container:before,
+.container:after,
+.container-fluid:before,
+.container-fluid:after,
+.row:before,
+.row:after,
+.form-horizontal .form-group:before,
+.form-horizontal .form-group:after,
+.btn-toolbar:before,
+.btn-toolbar:after,
+.btn-group-vertical > .btn-group:before,
+.btn-group-vertical > .btn-group:after,
+.nav:before,
+.nav:after,
+.navbar:before,
+.navbar:after,
+.navbar-header:before,
+.navbar-header:after,
+.navbar-collapse:before,
+.navbar-collapse:after,
+.pager:before,
+.pager:after,
+.panel-body:before,
+.panel-body:after,
+.modal-footer:before,
+.modal-footer:after {
+	content: " ";
+	display: table;
+}
+
+.dl-horizontal dd:after,
+.container:after,
+.container-fluid:after,
+.row:after,
+.form-horizontal .form-group:after,
+.btn-toolbar:after,
+.btn-group-vertical > .btn-group:after,
+.nav:after,
+.navbar:after,
+.navbar-header:after,
+.navbar-collapse:after,
+.pager:after,
+.panel-body:after,
+.modal-footer:after {
+	clear: both;
+}
+
+label.required:after {
+	color: #d9534f;
+	content: " *";
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: bolder;
+}
+
+@media (min-width: 768px) {
+	.form-inline .form-group + .form-group {
+		margin-left: 15px;
+	}
+}
+/*pair with form-group*/
+.allyis-action-buttons {
+	float: right !important;
+	float: right;
+	text-align: right;
+}
+
+.allyis-action-buttons-top {
+	padding-bottom: 30px;
+}
+/*For displaying an inline group of items.*/
+.very-inline-form {
+	-webkit-transition: opacity 0.5s ease;
+	-o-transition: opacity 0.5s ease;
+	transition: opacity 0.5s ease;
+	position: relative;
+	display: table !important;
+	table-layout: fixed;
+	width: 100%;
+	height: 34px;
+	box-sizing: border-box;
+}
+
+	.very-inline-form .group .btn {
+		border-radius: 0;
+	}
+
+	.very-inline-form .right {
+		overflow: hidden;
+	}
+
+		.very-inline-form .right .btn {
+			float: right;
+		}
+
+	.very-inline-form .form-control {
+		display: table-cell !important;
+		border-radius: 0;
+	}
+
+	.very-inline-form .stretch {
+		width: 100%;
+	}
+
+	.very-inline-form .group {
+		display: table-cell !important;
+	}
+
+@media (max-width: 992px) {
+	.very-inline-form .left {
+		float: left;
+		display: inline-block;
+	}
+
+	.very-inline-form .right {
+		display: inline-block;
+		position: absolute;
+		top: 0px;
+		right: 0px;
+	}
+
+	.very-inline-form .stretch {
+		display: inline-block;
+	}
+}
+
+.very-inline-form .button-anim-wrap {
+	-webkit-transition: all 1s ease;
+	-o-transition: all 1s ease;
+	transition: all 1s ease;
+	overflow: hidden;
+}
+
+	.very-inline-form .button-anim-wrap > div {
+		float: right;
+		width: 80px;
+		height: 34px;
+	}
+
+.very-inline-form.edit .button-anim-wrap {
+	width: 80px;
+}
+
+.very-inline-form.edit .allyisicon-submit {
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+	.very-inline-form.edit .allyisicon-submit.fa-pull-left {
+		margin-right: .3em;
+	}
+
+	.very-inline-form.edit .allyisicon-submit.fa-pull-right {
+		margin-left: .3em;
+	}
+
+	.very-inline-form.edit .allyisicon-submit.pull-left {
+		margin-right: .3em;
+	}
+
+	.very-inline-form.edit .allyisicon-submit.pull-right {
+		margin-left: .3em;
+	}
+
+	.very-inline-form.edit .allyisicon-submit:before {
+		content: "\f00c";
+	}
+
+.very-inline-form.edit .allyisicon-delete {
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+	.very-inline-form.edit .allyisicon-delete.fa-pull-left {
+		margin-right: .3em;
+	}
+
+	.very-inline-form.edit .allyisicon-delete.fa-pull-right {
+		margin-left: .3em;
+	}
+
+	.very-inline-form.edit .allyisicon-delete.pull-left {
+		margin-right: .3em;
+	}
+
+	.very-inline-form.edit .allyisicon-delete.pull-right {
+		margin-left: .3em;
+	}
+
+	.very-inline-form.edit .allyisicon-delete:before {
+		content: "\f00d";
+	}
+
+.very-inline-form.create {
+	opacity: 0.5;
+	background-color: transparent;
+}
+
+	.very-inline-form.create .button-anim-wrap {
+		width: 40px;
+	}
+
+	.very-inline-form.create .hidden-create {
+		display: none;
+		visibility: hidden;
+	}
+
+	.very-inline-form.create .allyisicon-submit {
+		display: inline-block;
+		font: normal normal normal 14px/1 FontAwesome;
+		font-size: inherit;
+		text-rendering: auto;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+		.very-inline-form.create .allyisicon-submit.fa-pull-left {
+			margin-right: .3em;
+		}
+
+		.very-inline-form.create .allyisicon-submit.fa-pull-right {
+			margin-left: .3em;
+		}
+
+		.very-inline-form.create .allyisicon-submit.pull-left {
+			margin-right: .3em;
+		}
+
+		.very-inline-form.create .allyisicon-submit.pull-right {
+			margin-left: .3em;
+		}
+
+		.very-inline-form.create .allyisicon-submit:before {
+			content: "\f067";
+		}
+
+	.very-inline-form.create .allyisicon-delete {
+		display: inline-block;
+		font: normal normal normal 14px/1 FontAwesome;
+		font-size: inherit;
+		text-rendering: auto;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+		.very-inline-form.create .allyisicon-delete.fa-pull-left {
+			margin-right: .3em;
+		}
+
+		.very-inline-form.create .allyisicon-delete.fa-pull-right {
+			margin-left: .3em;
+		}
+
+		.very-inline-form.create .allyisicon-delete.pull-left {
+			margin-right: .3em;
+		}
+
+		.very-inline-form.create .allyisicon-delete.pull-right {
+			margin-left: .3em;
+		}
+
+		.very-inline-form.create .allyisicon-delete:before {
+			content: "\f00d";
+		}
+
+	.very-inline-form.create > *,
+	.very-inline-form.create > .group > * {
+		background-color: transparent;
+	}
+
+.very-inline-form.submitting .allyisicon-submit {
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-animation: fa-spin 1s infinite steps(8);
+	animation: fa-spin 1s infinite steps(8);
+}
+
+	.very-inline-form.submitting .allyisicon-submit.fa-pull-left {
+		margin-right: .3em;
+	}
+
+	.very-inline-form.submitting .allyisicon-submit.fa-pull-right {
+		margin-left: .3em;
+	}
+
+	.very-inline-form.submitting .allyisicon-submit.pull-left {
+		margin-right: .3em;
+	}
+
+	.very-inline-form.submitting .allyisicon-submit.pull-right {
+		margin-left: .3em;
+	}
+
+	.very-inline-form.submitting .allyisicon-submit:before {
+		content: "\f110";
+	}
+
+.very-inline-form.deleting .allyisicon-delete {
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-animation: fa-spin 1s infinite steps(8);
+	animation: fa-spin 1s infinite steps(8);
+}
+
+	.very-inline-form.deleting .allyisicon-delete.fa-pull-left {
+		margin-right: .3em;
+	}
+
+	.very-inline-form.deleting .allyisicon-delete.fa-pull-right {
+		margin-left: .3em;
+	}
+
+	.very-inline-form.deleting .allyisicon-delete.pull-left {
+		margin-right: .3em;
+	}
+
+	.very-inline-form.deleting .allyisicon-delete.pull-right {
+		margin-left: .3em;
+	}
+
+	.very-inline-form.deleting .allyisicon-delete:before {
+		content: "\f110";
+	}
+
+.very-inline-form.changed {
+	opacity: 1;
+}
+
+	.very-inline-form.changed .allyisicon-submit {
+		display: inline-block;
+		font: normal normal normal 14px/1 FontAwesome;
+		font-size: inherit;
+		text-rendering: auto;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+		.very-inline-form.changed .allyisicon-submit.fa-pull-left {
+			margin-right: .3em;
+		}
+
+		.very-inline-form.changed .allyisicon-submit.fa-pull-right {
+			margin-left: .3em;
+		}
+
+		.very-inline-form.changed .allyisicon-submit.pull-left {
+			margin-right: .3em;
+		}
+
+		.very-inline-form.changed .allyisicon-submit.pull-right {
+			margin-left: .3em;
+		}
+
+		.very-inline-form.changed .allyisicon-submit:before {
+			content: "\f12a";
+		}
+
+.very-inline-form.error.error-delete .allyisicon-delete {
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+	.very-inline-form.error.error-delete .allyisicon-delete.fa-pull-left {
+		margin-right: .3em;
+	}
+
+	.very-inline-form.error.error-delete .allyisicon-delete.fa-pull-right {
+		margin-left: .3em;
+	}
+
+	.very-inline-form.error.error-delete .allyisicon-delete.pull-left {
+		margin-right: .3em;
+	}
+
+	.very-inline-form.error.error-delete .allyisicon-delete.pull-right {
+		margin-left: .3em;
+	}
+
+	.very-inline-form.error.error-delete .allyisicon-delete:before {
+		content: "\f071";
+	}
+
+.very-inline-form.error.error-submit .allyisicon-submit {
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+	.very-inline-form.error.error-submit .allyisicon-submit.fa-pull-left {
+		margin-right: .3em;
+	}
+
+	.very-inline-form.error.error-submit .allyisicon-submit.fa-pull-right {
+		margin-left: .3em;
+	}
+
+	.very-inline-form.error.error-submit .allyisicon-submit.pull-left {
+		margin-right: .3em;
+	}
+
+	.very-inline-form.error.error-submit .allyisicon-submit.pull-right {
+		margin-left: .3em;
+	}
+
+	.very-inline-form.error.error-submit .allyisicon-submit:before {
+		content: "\f071";
+	}
+
+.inline-form-anim-wrap {
+	-webkit-transition: all 1s ease;
+	-o-transition: all 1s ease;
+	transition: all 1s ease;
+	left: 0;
+	max-height: 68px;
+	overflow: hidden;
+}
+
+	.inline-form-anim-wrap.swipe-out-left {
+		left: -100%;
+		max-height: 0px;
+	}
+
+	.inline-form-anim-wrap.hidden-sample {
+		max-height: 0px;
+		overflow: hidden;
+		display: none;
+	}
+
+.stripe-button-el {
+	margin-right: 0.5em;
+}
+
+.input-with-approval .approval-wrap {
+	width: 32px;
+	height: 32px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	float: right;
+	position: relative;
+	overflow: hidden;
+}
+
+	.input-with-approval .approval-wrap div {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		opacity: 0;
+		z-index: 1;
+	}
+
+.input-with-approval .was-set.no .yes,
+.input-with-approval .was-set.yes .no {
+	opacity: 0;
+	animation: yesno-fadeOut 0.3s ease-out;
+}
+
+.input-with-approval .yes .yes,
+.input-with-approval .no .no {
+	z-index: 2;
+	opacity: 1;
+	animation: yesno-fadeIn 0.3s ease-out;
+}
+
+@keyframes yesno-fadeIn {
+	from {
+		transform: translateY(-50px);
+		opacity: 0;
+	}
+
+	to {
+		transform: translateY(0px);
+		opacity: 1;
+	}
+}
+
+@keyframes yesno-fadeOut {
+	from {
+		transform: translateY(0px);
+		opacity: 1;
+	}
+
+	to {
+		transform: translateY(50px);
+		opacity: 0;
+	}
+}
+
+.comiseo-daterangepicker-triggerbutton {
+	display: block;
+	width: 100%;
+	height: 34px;
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 1.42857143;
+	color: #555555;
+	background-color: #ffffff;
+	background-image: none;
+	border: 1px solid #cccccc;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	-webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+	border-radius: 0;
+	min-width: 0 !important;
+}
+
+	.comiseo-daterangepicker-triggerbutton:focus {
+		border-color: #66afe9;
+		outline: 0;
+		-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+		box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+	}
+
+	.comiseo-daterangepicker-triggerbutton::-moz-placeholder {
+		color: #999999;
+		opacity: 1;
+	}
+
+	.comiseo-daterangepicker-triggerbutton:-ms-input-placeholder {
+		color: #999999;
+	}
+
+	.comiseo-daterangepicker-triggerbutton::-webkit-input-placeholder {
+		color: #999999;
+	}
+
+	.comiseo-daterangepicker-triggerbutton[disabled],
+	.comiseo-daterangepicker-triggerbutton[readonly],
+	fieldset[disabled] .comiseo-daterangepicker-triggerbutton {
+		background-color: #eeeeee;
+		opacity: 1;
+	}
+
+	.comiseo-daterangepicker-triggerbutton[disabled],
+	fieldset[disabled] .comiseo-daterangepicker-triggerbutton {
+		cursor: not-allowed;
+	}
+
+textarea.comiseo-daterangepicker-triggerbutton {
+	height: auto;
+}
+
+.comiseo-daterangepicker-triggerbutton .ui-button-text {
+	padding: 0;
+	padding-right: 1em;
+	min-width: 0;
+}
+
+#SubdomainName::-ms-clear {
+	display: none;
+}
+/*# sourceMappingURL=form.css.map */

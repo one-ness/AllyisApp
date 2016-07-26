@@ -1,0 +1,2 @@
+﻿INSERT INTO [Lookup].[Language] (LanguageName, CultureName) VALUES ('English (United States)', 'en-US');
+INSERT INTO [Lookup].[Language] (LanguageName, CultureName) VALUES ('Spanish (Spain)', 'es-ES');

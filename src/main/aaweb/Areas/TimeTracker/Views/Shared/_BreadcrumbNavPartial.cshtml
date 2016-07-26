@@ -1,0 +1,16 @@
+﻿@*<ol class="breadcrumbs-nav breadcrumbs-right-nav">*@
+<li class="dropdown link-zone">
+    <a class="dropdown-toggle" id="TheDropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @AllyisApps.Resources.TimeTracker.Views.Shared.Strings.TimeTracker <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-right" id="TheDropdown2">
+        <li>@Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Shared.Strings.TimeEntry, "Index", "TimeEntry")</li>
+        <li>@Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Shared.Strings.Reports, "Report", "TimeEntry")</li>
+
+        @if (true)// was previously: (Permissions.Can(SubAction.EditCustomer))
+            {
+            <li>@Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Shared.Strings.Customers, "Index", "Customer")</li>
+            <li>@Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Shared.Strings.Settings, "Settings", "TimeEntry")</li>
+            }
+        </ul>
+    </li>

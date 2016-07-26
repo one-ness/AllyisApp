@@ -1,0 +1,41 @@
+﻿@using AllyisApps.ViewModels
+
+@model List<LanguageViewModel>
+
+@{
+    Layout = string.Empty;
+}
+
+<footer class="footer">
+    <div class="container-fluid text-center text-muted">
+        <p class="footer-links col-sm-6">
+            <select id="languageSelect" onchange="OnLanguageSelect()" value=@ViewBag.language>
+                @foreach(LanguageViewModel language in Model)
+                {
+                    string languageKey = LanguageViewModel.Clean(language.LanguageName);
+
+                    if (ViewBag.languageName == language.LanguageName)
+                    {
+                        <option value="@language.LanguageID" selected>@(AllyisApps.Resources.Views.Shared.Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
+                    }
+                    else
+                    {
+                        <option value="@language.LanguageID">@(AllyisApps.Resources.Views.Shared.Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
+                    }
+                }
+            </select>
+            &nbsp;
+            @Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.PrivacyPolicy, "PrivacyPolicy", "Home")
+            @Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.Help, "Help", "Home")
+        </p>
+        <p class="col-xs-4 col-sm-5">
+            &copy; @DateTime.Now.Year - Allyis, Inc.
+        </p>
+    </div>
+</footer>
+
+<script type="text/javascript">
+    OnLanguageSelect = function () {
+        window.location.href = "@Url.SubdomainLink("UpdateLanguage", "Shared", null, 0, this.Request)?languageID=" + $('#languageSelect').val();
+    }
+</script>

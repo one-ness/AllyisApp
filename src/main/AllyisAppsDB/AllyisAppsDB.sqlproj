@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>AllyisAppsDB</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{d5dfb873-ff09-4041-86f3-b8a47ad8503d}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>AllyisAppsDB</RootNamespace>
+    <AssemblyName>AllyisAppsDB</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Tables" />
+    <Folder Include="StoredProcedures" />
+    <Folder Include="Scripts" />
+    <Folder Include="Schema" />
+    <Folder Include="Tables\Auth" />
+    <Folder Include="Tables\Billing" />
+    <Folder Include="Tables\Crm" />
+    <Folder Include="Tables\Lookup" />
+    <Folder Include="Tables\Shared" />
+    <Folder Include="Tables\TimeTracker" />
+    <Folder Include="StoredProcedures\Auth" />
+    <Folder Include="StoredProcedures\Billing" />
+    <Folder Include="StoredProcedures\Crm" />
+    <Folder Include="StoredProcedures\Lookup" />
+    <Folder Include="StoredProcedures\TimeTracker" />
+    <Folder Include="Scripts\ReferenceData" />
+    <Folder Include="Scripts\TestData" />
+    <Folder Include="Scripts\Logins" />
+    <Folder Include="Scripts\Users" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\Auth\Auth.Invitation.sql" />
+    <Build Include="Tables\Auth\Auth.InvitationSubRole.sql" />
+    <Build Include="Schema\Auth.sql" />
+    <Build Include="Tables\Auth\Auth.Logging.sql" />
+    <Build Include="Tables\Auth\Auth.Organization.sql" />
+    <Build Include="Tables\Auth\Auth.OrganizationUser.sql" />
+    <Build Include="Tables\Auth\Auth.OrgRole.sql" />
+    <Build Include="Tables\Auth\Auth.ProductRole.sql" />
+    <Build Include="Tables\Auth\Auth.User.sql" />
+    <Build Include="Tables\Auth\Auth.UserTable.sql" />
+    <Build Include="Tables\Billing\Billing.BillingHistory.sql" />
+    <Build Include="Schema\Billing.sql" />
+    <Build Include="Tables\Billing\Billing.Product.sql" />
+    <Build Include="Tables\Billing\Billing.SKU.sql" />
+    <Build Include="Tables\Billing\Billing.StripeCustomerSubscriptionPlan.sql" />
+    <Build Include="Tables\Billing\Billing.StripeOrganizationCustomer.sql" />
+    <Build Include="Tables\Billing\Billing.Subscription.sql" />
+    <Build Include="Tables\Billing\Billing.SubscriptionUser.sql" />
+    <Build Include="Tables\Crm\Crm.ProjectUser.sql" />
+    <Build Include="Tables\Crm\Crm.Customer.sql" />
+    <Build Include="Tables\Crm\Crm.Project.sql" />
+    <Build Include="Schema\Crm.sql" />
+    <Build Include="Tables\Lookup\Lookup.State.sql" />
+    <Build Include="Tables\Lookup\Lookup.Country.sql" />
+    <Build Include="Schema\Lookup.sql" />
+    <Build Include="Tables\Shared\Shared.ProjectUser.sql" />
+    <Build Include="Tables\Shared\Shared.Customer.sql" />
+    <Build Include="Tables\Shared\Shared.Project.sql" />
+    <Build Include="Schema\Shared.sql" />
+    <Build Include="Tables\TimeTracker\TimeTracker.Holiday.sql" />
+    <Build Include="Tables\TimeTracker\TimeTracker.PayClass.sql" />
+    <Build Include="Tables\TimeTracker\TimeTracker.Setting.sql" />
+    <Build Include="Tables\TimeTracker\TimeTracker.TimeEntry.sql" />
+    <Build Include="Schema\TimeTracker.sql" />
+    <Build Include="Tables\AccessCodes.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.CreateInvitationSubRole.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.CreateOrg.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.CreateOrgUser.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.CreateUserInfo.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.CreateUserInvitation.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.DeleteInvitationSubRole.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.DeleteOrg.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.DeleteOrgUser.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.DeleteUserInvitation.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetActiveProductRoleForUser.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetInvitationSubRolesByInvitationId.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetNumberOfOrgSubscriptions.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetOrg.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetOrganizationsByUserId.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetOrganizationsWhereUserIsAdmin.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetOrgFromAccessCode.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetOrgIdBySubdomain.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetOrgListByUserId.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetOrgRoleList.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetOrgUserByEmail.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetOrgUserEmployeeId.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetOrgUserList.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetOrgUserRole.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetProductRoleList.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetProductRoles.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetRolesAndPermissions.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetSubdomainByOrgId.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetSubscriptionsByUserAndOrg.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetUserFromEmail.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetUserInfo.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetUserInvitationsByOrgId.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetUserInvitationsByUserData.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetUserList.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetUsersByOrganization.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetUsersWithSubscriptionToProductInOrganization.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.UpdateOrg.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.UpdateOrgUser.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.UpdateOrgUserEmployeeId.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.UpdateUserActiveOrg.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.UpdateUserActiveSub.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.UpdateUserInfo.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.UpdateUserPassword.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.UpdateUserPasswordResetCode.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.UpdateUserPasswordUsingCode.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.CreateBillingHistory.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.CreateStripeOrgCustomer.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.CreateSubscriptionPlan.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.DeleteBillingInformation.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.DeleteCustomerSubscription.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.DeleteSubscription.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.DeleteSubscriptionUser.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetAllSubscriptionsForOrganization.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetDateAddedToSubscriptionByUserId.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetFreeSku.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetOrgSkus.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetProductAreaBySubscription.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetProductById.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetProductIdByName.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetProductIds.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetProductList.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetProductRolesFromSubscription.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetSkuById.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetSkuForProduct.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetSkuList.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetStripeOrgCustomer.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetStripeSubscriptionPlanPrice.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetSubscription.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetSubscriptionByOrgAndProduct.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetSubscriptionByUser.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetSubscriptionDetailsById.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetSubscriptionDetailsByUser.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetSubscriptionList.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetSubscriptionPlan.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetSubscriptionPlanPricesByOrg.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetSubscriptionsDisplayByOrg.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetSubscriptionUserList.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.UpdateCustomerSubscription.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.UpdateNumberOfUsersSubscription.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.UpdateSubscription.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.UpdateSubscriptionUserProductRole.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.CreateCustomerInfo.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.CreateProject.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.CreateProjectFromCustomerIdOnly.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.CreateProjectUser.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.DeleteCustomer.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.DeleteProject.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.DeleteProjectUser.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetCustomerInfo.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetCustomersByOrgId.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetProjectById.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetProjectsByCustomer.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetProjectsByOrgId.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetProjectsByUserAndOrganization.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetProjectsByUserId.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetProjectUsersByProjectId.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.UpdateCustomerInfo.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.UpdateProject.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.UpdateProjectUser.sql" />
+    <Build Include="StoredProcedures\Lookup\Lookup.GetCountries.sql" />
+    <Build Include="StoredProcedures\Lookup\Lookup.GetCountryList.sql" />
+    <Build Include="StoredProcedures\Lookup\Lookup.GetStateList.sql" />
+    <Build Include="StoredProcedures\Lookup\Lookup.GetStatesByCountry.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.CreateBulkTimeEntry.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.CreateHoliday.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.CreatePayClass.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.CreateTimeEntry.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.DeleteHoliday.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.DeletePayClass.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.DeleteTimeEntry.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetHolidays.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetLockDate.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetOrganizationFromProject.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetPayClassById.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetPayClassByNameAndOrg.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetPayClasses.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetSettings.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetStartOfWeek.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetTimeEntriesByUserOverDateRange.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetTimeEntriesOverDateRange.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetTimeEntryById.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.SetLockDate.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.UpdateSettings.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.UpdateStartOfWeek.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.UpdateTimeEntry.sql" />
+    <None Include="Scripts\ReferenceData\CountryStates.sql" />
+    <None Include="Scripts\ReferenceData\Holidays.sql" />
+    <None Include="Scripts\ReferenceData\PayClasses.sql" />
+    <None Include="Scripts\ReferenceData\Products.sql" />
+    <None Include="Scripts\ReferenceData\Role.sql" />
+    <None Include="Scripts\ReferenceData\Sku.sql" />
+    <None Include="Scripts\TestData\Auth.Organization.Table.sql" />
+    <None Include="Scripts\TestData\Auth.OrganizationUser.Table.sql" />
+    <None Include="Scripts\TestData\Auth.User.Table.sql" />
+    <None Include="Scripts\TestData\Billing.OrganizationCustomer.Table.sql" />
+    <None Include="Scripts\TestData\Billing.Subscription.Table.sql" />
+    <None Include="Scripts\TestData\Billing.SubscriptionUser.Table.sql" />
+    <None Include="Scripts\TestData\DeleteTestDataCopies.sql" />
+    <None Include="Scripts\TestData\DuplicateTestData.sql" />
+    <None Include="Scripts\TestData\Shared.Customer.Table.sql" />
+    <None Include="Scripts\TestData\Shared.Project.Table.sql" />
+    <None Include="Scripts\TestData\Shared.ProjectUser.Table.sql" />
+    <None Include="Scripts\TestData\TestData.sql" />
+    <None Include="Scripts\TestData\TimeTracker.Settings.Table.sql" />
+    <None Include="Scripts\TestData\TimeTracker.TimeEntry.Table.sql">
+      <QuotedIdentifier>ProjectDefault</QuotedIdentifier>
+    </None>
+    <Build Include="StoredProcedures\Billing\Billing.GetBillingHistoryByOrg.sql" />
+    <Build Include="Tables\Lookup\Lookup.Language.sql" />
+    <Build Include="StoredProcedures\Lookup\Lookup.GetLanguages.sql" />
+    <Build Include="StoredProcedures\Lookup\Lookup.GetLanguageByID.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.UpdateUserLanguagePreference.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\PostDeploy.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="AllyisAppsDB.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\ReferenceData\Languages.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\Logins\aaUser.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\Users\aaUser.sql" />
+  </ItemGroup>
+</Project>

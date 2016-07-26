@@ -1,0 +1,33 @@
+﻿@using AllyisApps.Extensions.ViewExtensions;
+@using AllyisApps.Services.BusinessObjects;
+@using AllyisApps.ViewModels.Auth;
+
+@model AccountOrgsViewModel
+@{
+    ViewBag.BarTitle = AllyisApps.Resources.Views.Account.Strings.Organizations;
+    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.Organizations;
+}
+<div class="col-md-push-2 col-md-8">
+    <div class="panel panel-default">
+        <div class="panel-heading panel-heading-inline">
+            <h2>@AllyisApps.Resources.Views.Account.Strings.YourOrganizations</h2>
+            <a href="@Url.SubdomainLink("CreateOrg", "Account", null, 0, this.Request)" class="btn btn-default">@AllyisApps.Resources.Views.Account.Strings.CreateOrganization</a>
+        </div>
+        <div class="list-group list-group-with-buttons">
+            @foreach (OrganizationInfo org in Model.Organizations)
+            {
+                <div class="list-group-item">
+                    <a href="@Url.SubdomainLink("OrgIndex","Account",new RouteValueDictionary(new {area = "", OrganizationId = org.OrganizationId}), org.OrganizationId, this.Request)">
+                        @org.Name
+                    </a> @*
+                    Permissions are entirely dependent now on the chosen organization id
+                    Until an organization is chosen, we cannot find out a user's permissions for it
+                    So this functionality cannot be done under the new permissions system
+                    @if (1 == 1 || true //org.CanEditOrganization) //this was: if (Permissions.Can(OrgAction.Edit, org.OrganizationId))
+                    {
+                        <a href="@Url.SubdomainLink("Manage","Account",new RouteValueDictionary(new {area = ""}), this.Request.Url.Scheme, org.OrganizationId)"><i class="fa fa-cog"></i></a>
+}*@
+                </div>}
+        </div>
+    </div>
+</div>

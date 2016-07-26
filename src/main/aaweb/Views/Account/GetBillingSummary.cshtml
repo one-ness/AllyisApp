@@ -1,0 +1,47 @@
+﻿@using AllyisApps.ViewModels
+
+@model IEnumerable<BillingHistoryItemViewModel>
+
+@{
+    ViewBag.TitleBar = AllyisApps.Resources.Views.Account.Strings.BillingHistory;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center">@AllyisApps.Resources.Views.Account.Strings.BillingHistory</h1>
+
+<table class="table" style="table-layout: fixed">
+    <thead>
+        <tr>
+            <th class="col-xs-2">@AllyisApps.Resources.Views.Account.Strings.Date</th>
+            <th class="col-xs-5">@AllyisApps.Resources.Views.Account.Strings.Description</th>
+            <th class="col-xs-3">@AllyisApps.Resources.Views.Account.Strings.Product</th>
+            <th class="col-xs-2">@AllyisApps.Resources.Views.Account.Strings.User</th>
+        </tr>
+    </thead>
+
+    @foreach (BillingHistoryItemViewModel item in Model)
+    {
+        <tr>
+            <td class="col-xs-2 bhiDate" value="">@item.Date</td>
+            <td class="col-xs-5">@item.Description</td>
+            <td class="col-xs-3">@item.ProductName</td>
+            <td class="col-xs-2" style="overflow: hidden">@item.Username</td>
+        </tr>
+    }
+
+</table>
+
+<script type="text/javascript">
+    function formatDate (date) {
+        var parts = date.toString().split(' ');
+        return parts[4] + " " + date.getMonth() + "/" + parts[2] + "/" + parts[3];
+    }
+
+    window.onload = function () {
+        [].forEach.call(document.getElementsByClassName('bhiDate'), function (elem) {
+            elem.innerHTML = formatDate(new Date(+elem.innerHTML));
+        });
+    }
+</script>
+
+

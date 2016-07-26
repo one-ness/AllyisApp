@@ -1,0 +1,1710 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D9935994-9520-4495-8CF8-99F38EE080BC}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AllyisApps</RootNamespace>
+    <AssemblyName>AllyisApps</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile>true</UseGlobalApplicationHostFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <DocumentationFile>bin\AllyisApps.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <DocumentationFile>bin\AllyisApps.XML</DocumentationFile>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.2.16.0.0\lib\net45\CsvHelper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DataAnnotationsExtensions, Version=5.0.1.16, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DataAnnotationsExtensions.5.0.1.16\lib\NETFramework40\DataAnnotationsExtensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Stripe.net, Version=6.3.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stripe.net.6.3.5\lib\net45\Stripe.net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Customer\DetailsAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Customer\IndexAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Customer\DeleteAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Customer\EditAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Customer\CreateAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Customer\CustomerController.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Manage\ManageController.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Home\HomeController.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Manage\UsersAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Project\CreateAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Project\CreateProjectAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Project\EditAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Project\DeleteAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Project\DetailsAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Project\IndexAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Project\ProjectController.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Project\UpdateProjectAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\CopyEntries.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\PrepareCSVExportAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\PrepareExcelExportAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\SetPreviewDataAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UpdateUserAJAXAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UserEditAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UpdateStartOfWeekAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UpdateOvertimeAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ExportExcelReportAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ExportReportAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ViewPageAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ViewReportAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\DeleteTimeEntryJsonAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ExportAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\IndexAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\EditTimeEntryJsonAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\CreateTimeEntryJsonAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\EditTimeEntryApprovalStateAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\GetDetailsDataJsonAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\CreatePayClassAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\CreateHolidayAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\DeletePayClassAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\DeleteHolidayAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ReportAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\SettingAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\SetLockDateAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TimeEntryController.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\Customer\ManageCustomerViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\Customer\CustomerProjectViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\Customer\CustomerInfoViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\Customer\EditCustomerInfoViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\Project\EditProjectViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\DataExportViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\ReportViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\UserEditViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\SettingsViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryOverDateRangeViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\DeleteTimeEntryViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\CreateTimeEntryViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\EditTimeEntryViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\TimeTrackerAreaRegistration.cs" />
+    <Compile Include="Controllers\Auth\ChangePasswordAction.cs" />
+    <Compile Include="Controllers\Auth\ConfirmEmailAction.cs" />
+    <Compile Include="Controllers\Auth\CreateOrgAction.cs" />
+    <Compile Include="Controllers\Auth\EditProfileAction.cs" />
+    <Compile Include="Controllers\Auth\ForgotPasswordAction.cs" />
+    <Compile Include="Controllers\Auth\IndexAction.cs" />
+    <Compile Include="Controllers\Auth\LogOffAction.cs" />
+    <Compile Include="Controllers\Auth\LogOnAction.cs" />
+    <Compile Include="Controllers\Auth\OrganizationsAction.cs" />
+    <Compile Include="Controllers\Auth\RegisterAction.cs" />
+    <Compile Include="Controllers\Auth\ResetPasswordAction.cs" />
+    <Compile Include="Controllers\ErrorPageController.cs" />
+    <Compile Include="Controllers\Home\AboutAction.cs" />
+    <Compile Include="Controllers\Home\ApplicationRedirectAction.cs" />
+    <Compile Include="Controllers\Home\ContactAction.cs" />
+    <Compile Include="Controllers\Home\ErrorAction.cs" />
+    <Compile Include="Controllers\Home\GetStatesAction.cs" />
+    <Compile Include="Controllers\Home\HelpAction.cs" />
+    <Compile Include="Controllers\Home\IndexAction.cs" />
+    <Compile Include="Controllers\Home\PrivacyPolicyAction.cs" />
+    <Compile Include="Controllers\Home\RouteProductAction.cs" />
+    <Compile Include="Controllers\Auth\AddAction.cs" />
+    <Compile Include="Controllers\Auth\ChargeAction.cs" />
+    <Compile Include="Controllers\Auth\DeleteOrgAction.cs" />
+    <Compile Include="Controllers\Auth\DownloadImportUsersTemplateAction.cs" />
+    <Compile Include="Controllers\Auth\EditAction.cs" />
+    <Compile Include="Controllers\Auth\GetBillingSummaryAction.cs" />
+    <Compile Include="Controllers\Auth\OrgIndexAction.cs" />
+    <Compile Include="Controllers\Auth\InviteAction.cs" />
+    <Compile Include="Controllers\Auth\ManageAction.cs" />
+    <Compile Include="Controllers\Auth\ManagePermissionsAction.cs" />
+    <Compile Include="Controllers\Auth\RemoveBillingAction.cs" />
+    <Compile Include="Controllers\Auth\RemoveMemberAction.cs" />
+    <Compile Include="Controllers\Auth\SubscribeAction.cs" />
+    <Compile Include="Controllers\Auth\UnsubscribeAction.cs" />
+    <Compile Include="Controllers\Auth\UploadCsvFileAction.cs" />
+    <Compile Include="Controllers\Shared\FooterPartialAction.cs" />
+    <Compile Include="Controllers\Shared\LogOnPartialAction.cs" />
+    <Compile Include="Controllers\Shared\SharedController.cs" />
+    <Compile Include="Controllers\Shared\UpdateLanguageAction.cs" />
+    <Compile Include="Core\AppStartup.cs" />
+    <Compile Include="Core\BaseProductController.cs" />
+    <Compile Include="Core\CustomRoutes.cs" />
+    <Compile Include="Core\GlobalSettings.cs" />
+    <Compile Include="Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Extensions\RouteExtensions.cs" />
+    <Compile Include="Resources\Controllers\Auth\Strings.en-GB.Designer.cs">
+      <DependentUpon>Strings.en-GB.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Controllers\Auth\Strings.en-US.Designer.cs">
+      <DependentUpon>Strings.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Controllers\Auth\Strings.en.Designer.cs">
+      <DependentUpon>Strings.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Controllers\Auth\Strings.es.Designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Controllers\Auth\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Customer\Strings.en-GB.Designer.cs">
+      <DependentUpon>Strings.en-GB.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Customer\Strings.en-US.Designer.cs">
+      <DependentUpon>Strings.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Customer\Strings.en.Designer.cs">
+      <DependentUpon>Strings.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Customer\Strings.es.Designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Customer\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Home\Strings.en-GB.Designer.cs">
+      <DependentUpon>Strings.en-GB.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Home\Strings.en-US.Designer.cs">
+      <DependentUpon>Strings.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Home\Strings.en.Designer.cs">
+      <DependentUpon>Strings.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Home\Strings.es.Designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Home\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Manage\Strings.en-GB.Designer.cs">
+      <DependentUpon>Strings.en-GB.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Manage\Strings.en-US.Designer.cs">
+      <DependentUpon>Strings.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Manage\Strings.en.Designer.cs">
+      <DependentUpon>Strings.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Manage\Strings.es.Designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Manage\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Project\Strings.en-GB.Designer.cs">
+      <DependentUpon>Strings.en-GB.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Project\Strings.en-US.Designer.cs">
+      <DependentUpon>Strings.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Project\Strings.en.Designer.cs">
+      <DependentUpon>Strings.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Project\Strings.es.Designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\Project\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\TimeEntry\Strings.en-GB.Designer.cs">
+      <DependentUpon>Strings.en-GB.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\TimeEntry\Strings.en-US.Designer.cs">
+      <DependentUpon>Strings.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\TimeEntry\Strings.en.Designer.cs">
+      <DependentUpon>Strings.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\TimeEntry\Strings.es.Designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Controllers\TimeEntry\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Customer\Strings.en-GB.Designer.cs">
+      <DependentUpon>Strings.en-GB.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Customer\Strings.en-US.Designer.cs">
+      <DependentUpon>Strings.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Customer\Strings.en.Designer.cs">
+      <DependentUpon>Strings.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Customer\Strings.es.Designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Customer\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Manage\Strings.en-GB.Designer.cs">
+      <DependentUpon>Strings.en-GB.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Manage\Strings.en-US.Designer.cs">
+      <DependentUpon>Strings.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Manage\Strings.en.Designer.cs">
+      <DependentUpon>Strings.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Manage\Strings.es.Designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Manage\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Project\Strings.en-GB.Designer.cs">
+      <DependentUpon>Strings.en-GB.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Project\Strings.en-US.Designer.cs">
+      <DependentUpon>Strings.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Project\Strings.en.Designer.cs">
+      <DependentUpon>Strings.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Project\Strings.es.Designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Project\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Shared\Strings.en-GB.Designer.cs">
+      <DependentUpon>Strings.en-GB.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Shared\Strings.en-US.Designer.cs">
+      <DependentUpon>Strings.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Shared\Strings.en.Designer.cs">
+      <DependentUpon>Strings.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Shared\Strings.es.Designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\Shared\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\TimeEntry\Strings.en-GB.Designer.cs">
+      <DependentUpon>Strings.en-GB.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\TimeEntry\Strings.en-US.Designer.cs">
+      <DependentUpon>Strings.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\TimeEntry\Strings.en.Designer.cs">
+      <DependentUpon>Strings.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\TimeEntry\Strings.es.Designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\TimeTracker\Views\TimeEntry\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\ViewModels\Auth\States.es.Designer.cs">
+      <DependentUpon>States.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ViewModels\Auth\States.Designer.cs">
+      <DependentUpon>States.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ViewModels\Auth\Countries.es.Designer.cs">
+      <DependentUpon>Countries.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ViewModels\Auth\Countries.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Countries.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\ViewModels\Auth\Strings.es.Designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ViewModels\Auth\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\ViewModels\Org\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\ViewModels\Org\Strings.es.Designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Views\Account\Images.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Images.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Views\Account\Strings.en-GB.Designer.cs">
+      <DependentUpon>Strings.en-GB.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Views\Account\Strings.en-US.Designer.cs">
+      <DependentUpon>Strings.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Views\Account\Strings.en.Designer.cs">
+      <DependentUpon>Strings.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Views\Account\Strings.es.Designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Views\Account\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Views\Home\Strings.en-GB.Designer.cs">
+      <DependentUpon>Strings.en-GB.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Views\Home\Strings.en-US.Designer.cs">
+      <DependentUpon>Strings.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Views\Home\Strings.en.Designer.cs">
+      <DependentUpon>Strings.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Views\Home\Strings.es.Designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Views\Home\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Views\Shared\Strings.en-GB.Designer.cs">
+      <DependentUpon>Strings.en-GB.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Views\Shared\Strings.en-US.Designer.cs">
+      <DependentUpon>Strings.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Views\Shared\Strings.en.Designer.cs">
+      <DependentUpon>Strings.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Views\Shared\Strings.es.Designer.cs">
+      <DependentUpon>Strings.es.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Views\Shared\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\ApplicationExceptions.cs" />
+    <Compile Include="ViewModels\Auth\AccountOrgsViewModel.cs" />
+    <Compile Include="ViewModels\Auth\ChangePasswordViewModel.cs" />
+    <Compile Include="Areas\TimeTracker\ViewModels\Manage\EditSubscriptionUsersViewModel.cs" />
+    <Compile Include="ViewModels\Auth\RegisterViewModel.cs" />
+    <Compile Include="ViewModels\Auth\EditProfileViewModel.cs" />
+    <Compile Include="ViewModels\Auth\ForgotPasswordViewModel.cs" />
+    <Compile Include="ViewModels\Auth\LogOnViewModel.cs" />
+    <Compile Include="ViewModels\Org\BillingHistoryItemViewModel.cs" />
+    <Compile Include="ViewModels\Org\PermissionsManagementViewModel.cs" />
+    <Compile Include="ViewModels\Auth\ResetPasswordViewModel.cs" />
+    <Compile Include="ViewModels\Auth\UserInfoViewModel.cs" />
+    <Compile Include="ViewModels\Org\BillingViewModel.cs" />
+    <Compile Include="ViewModels\Org\EditOrganizationViewModel.cs" />
+    <Compile Include="ViewModels\Org\EditUserPermissionViewModel.cs" />
+    <Compile Include="ViewModels\Org\OrganizationAddMembersViewModel.cs" />
+    <Compile Include="ViewModels\Org\OrganizationMembersViewModel.cs" />
+    <Compile Include="ViewModels\Org\OrganizationUserViewModel.cs" />
+    <Compile Include="ViewModels\Org\OrganizationManageViewModel.cs" />
+    <Compile Include="Resources\Files\Files.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Files.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Org\SubscriptionDisplayViewModel.cs" />
+    <Compile Include="ViewModels\Org\SubscriptionRoleSelectionModel.cs" />
+    <Compile Include="ViewModels\Shared\LanguageViewModel.cs" />
+    <Compile Include="ViewModels\Shared\LogOnPartialViewModel.cs" />
+    <Compile Include="ViewModels\Shared\SubscriptionsViewModel.cs" />
+    <Content Include="Areas\TimeTracker\Views\Customer\Create.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Customer\Delete.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Customer\Details.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Customer\Edit.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Customer\EditCustomerDetailsPartial.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Customer\Index.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Project\_ProjectEdit.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Areas\TimeTracker\Views\Manage\Users.cshtml" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Parameters.xml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\Settings.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\UserEdit.cshtml" />
+    <Compile Include="Controllers\Auth\AccountController.cs" />
+    <Compile Include="Core\AllyisAppsWebViewPage.cs" />
+    <Compile Include="Core\BaseController.cs" />
+    <Compile Include="Controllers\Home\HomeController.cs" />
+    <Compile Include="Core\BootstrapAlert.cs" />
+    <Compile Include="Areas\TimeTracker\Core\ApprovalState.cs" />
+    <Compile Include="Auth\ValidateAntiForgeryTokenOnAllPosts.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Core\BaseViewModel.cs" />
+    <Compile Include="Utilities\InviteMap.cs" />
+    <Compile Include="ViewModels\Org\ProductSubscriptionViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Errors.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Errors.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Startup.cs" />
+    <Compile Include="Filters\NotificationFilter.cs" />
+    <Compile Include="Core\SQLDateProtectorAttribute.cs" />
+    <Compile Include="Core\MinAgeAttribute.cs" />
+    <Compile Include="Utilities\ErrorHandler.cs" />
+    <Compile Include="Utilities\Helpers.cs" />
+    <Compile Include="Extensions\ViewExtensions.cs" />
+    <Content Include="Content\icons\fav16.png" />
+    <Content Include="Content\icons\fav32.png" />
+    <Content Include="Content\icons\fav64.png" />
+    <Content Include="Content\icons\poweredbystripe.png" />
+    <Content Include="Content\jquery.comiseo.daterangepicker.css" />
+    <Content Include="Content\less\allyis-list-group-search.css">
+      <DependentUpon>allyis-list-group-search.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\allyis-list-group-search.min.css">
+      <DependentUpon>allyis-list-group-search.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\error.css">
+      <DependentUpon>error.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\error.min.css">
+      <DependentUpon>error.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\index.css">
+      <DependentUpon>index.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\index.min.css">
+      <DependentUpon>index.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\modal.css">
+      <DependentUpon>modal.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\modal.min.css">
+      <DependentUpon>modal.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\navigation.css">
+      <DependentUpon>navigation.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\navigation.min.css">
+      <DependentUpon>navigation.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\paneled_index.css">
+      <DependentUpon>paneled_index.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\paneled_index.min.css">
+      <DependentUpon>paneled_index.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\permissions.css">
+      <DependentUpon>permissions.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\permissions.min.css">
+      <DependentUpon>permissions.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\report.css">
+      <DependentUpon>report.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\report.min.css">
+      <DependentUpon>report.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\sale.css">
+      <DependentUpon>sale.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\sale.min.css">
+      <DependentUpon>sale.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <None Include="Content\icons\allyislogo.png" />
+    <Content Include="Content\less\swapper-ui.css">
+      <DependentUpon>swapper-ui.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\swapper-ui.min.css">
+      <DependentUpon>swapper-ui.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\tt_customer.css">
+      <DependentUpon>tt_customer.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\tt_customer.min.css">
+      <DependentUpon>tt_customer.css</DependentUpon>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <None Include="Resources\628px-achtung-svg.png" />
+    <Content Include="Scripts\allyis-list-group-search.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <None Include="Scripts\jquery-3.1.0.intellisense.js" />
+    <Content Include="Scripts\jquery-3.1.0.js" />
+    <Content Include="Scripts\jquery-3.1.0.min.js" />
+    <Content Include="Scripts\jquery-3.1.0.slim.js" />
+    <Content Include="Scripts\jquery-3.1.0.slim.min.js" />
+    <Content Include="Scripts\jquery.comiseo.daterangepicker.js" />
+    <Content Include="Scripts\jquery-3.1.0.slim.min.map" />
+    <Content Include="Scripts\jquery-3.1.0.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js.map">
+      <DependentUpon>jquery.validate.unobtrusive.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\respond.matchmedia.addListener.min.js.map">
+      <DependentUpon>respond.matchmedia.addListener.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\respond.min.js.map">
+      <DependentUpon>respond.min.js</DependentUpon>
+    </Content>
+    <Content Include="favicon.ico" />
+    <Content Include="Views\Account\_Terms.cshtml" />
+    <Content Include="Views\Home\RouteProduct.cshtml" />
+    <Content Include="Views\Shared\ErrorQuiet.cshtml" />
+    <Content Include="Views\Account\OrgIndex.cshtml" />
+    <Content Include="Views\Account\Add.cshtml" />
+    <Content Include="Views\Shared\Oops.cshtml" />
+    <Content Include="Views\Account\GetBillingSummary.cshtml" />
+    <Content Include="Views\Shared\_ProductPanels.cshtml" />
+    <Content Include="Views\Account\Manage.cshtml" />
+    <Content Include="Views\Account\_OrgDetails.cshtml" />
+    <Content Include="Views\Account\_SubDetails.cshtml" />
+    <Content Include="Views\Account\_OrgMembers.cshtml" />
+    <Content Include="Views\Account\_OrganizationEditDetailsPartial.cshtml" />
+    <Content Include="Views\Account\Subscribe.cshtml" />
+    <Content Include="Views\Account\NewMemberJoin.cshtml" />
+    <Content Include="Views\Shared\_ProductPanelsForOne.cshtml" />
+    <Content Include="Views\Account\_OrgBillingInfo.cshtml" />
+    <Content Include="Views\Account\Unsubscribe.cshtml" />
+    <Content Include="Views\Shared\_LayoutModal.cshtml" />
+    <Content Include="Views\Account\AddBillingToSubscribe.cshtml" />
+    <Content Include="Views\Home\PrivacyPolicy.cshtml" />
+    <Content Include="Views\Home\Help.cshtml" />
+    <Content Include="Views\Account\Organizations.cshtml" />
+    <Content Include="Views\Account\CreateOrg.cshtml" />
+    <Content Include="Views\Account\ConfirmRemoveBillingInformation.cshtml" />
+    <Content Include="Views\Account\Permission.cshtml" />
+    <Content Include="Views\Account\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">
+      <Link>CustomDictionary.xml</Link>
+    </CodeAnalysisDictionary>
+    <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\bootstrap\less\bootstrap.css">
+      <DependentUpon>bootstrap.less</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\less\bootstrap.min.css">
+      <DependentUpon>bootstrap.css</DependentUpon>
+    </Content>
+    <Content Include="Content\icons\TimeTracker.png" />
+    <Content Include="Content\icons\expense.png" />
+    <Content Include="Content\icons\invoice.png" />
+    <Content Include="Content\icons\tasks-list.png" />
+    <Content Include="Content\less\breadcrumbs.css">
+      <DependentUpon>breadcrumbs.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\breadcrumbs.min.css">
+      <DependentUpon>breadcrumbs.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\form.css">
+      <DependentUpon>form.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\form.min.css">
+      <DependentUpon>form.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\general.css">
+      <DependentUpon>general.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\general.min.css">
+      <DependentUpon>general.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\offcanvas.css">
+      <DependentUpon>offcanvas.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\offcanvas.min.css">
+      <DependentUpon>offcanvas.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\sticky_footer.css">
+      <DependentUpon>sticky_footer.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\sticky_footer.min.css">
+      <DependentUpon>sticky_footer.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\utilities.css">
+      <DependentUpon>utilities.less</DependentUpon>
+    </Content>
+    <Content Include="Content\less\utilities.min.css">
+      <DependentUpon>utilities.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Site.css">
+      <DependentUpon>Site.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Site.min.css">
+      <DependentUpon>Site.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Timetracker.css">
+      <DependentUpon>Timetracker.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Timetracker.min.css">
+      <DependentUpon>Timetracker.css</DependentUpon>
+    </Content>
+    <Content Include="Scripts\bootstrap\affix.js" />
+    <Content Include="Scripts\bootstrap\alert.js" />
+    <Content Include="Scripts\bootstrap\button.js" />
+    <Content Include="Scripts\bootstrap\carousel.js" />
+    <Content Include="Scripts\bootstrap\collapse.js" />
+    <Content Include="Scripts\bootstrap\dropdown.js" />
+    <Content Include="Scripts\bootstrap\modal.js" />
+    <Content Include="Scripts\bootstrap\popover.js" />
+    <Content Include="Scripts\bootstrap\scrollspy.js" />
+    <Content Include="Scripts\bootstrap\tab.js" />
+    <Content Include="Scripts\bootstrap\tests\index.html" />
+    <Content Include="Scripts\bootstrap\tests\unit\affix.js" />
+    <Content Include="Scripts\bootstrap\tests\unit\alert.js" />
+    <Content Include="Scripts\bootstrap\tests\unit\button.js" />
+    <Content Include="Scripts\bootstrap\tests\unit\carousel.js" />
+    <Content Include="Scripts\bootstrap\tests\unit\collapse.js" />
+    <Content Include="Scripts\bootstrap\tests\unit\dropdown.js" />
+    <Content Include="Scripts\bootstrap\tests\unit\modal.js" />
+    <Content Include="Scripts\bootstrap\tests\unit\phantom.js" />
+    <Content Include="Scripts\bootstrap\tests\unit\popover.js" />
+    <Content Include="Scripts\bootstrap\tests\unit\scrollspy.js" />
+    <Content Include="Scripts\bootstrap\tests\unit\tab.js" />
+    <Content Include="Scripts\bootstrap\tests\unit\tooltip.js" />
+    <Content Include="Scripts\bootstrap\tests\vendor\jquery.min.js" />
+    <Content Include="Scripts\bootstrap\tests\vendor\qunit.css" />
+    <Content Include="Scripts\bootstrap\tests\vendor\qunit.js" />
+    <Content Include="Scripts\bootstrap\tests\visual\affix-with-sticky-footer.html" />
+    <Content Include="Scripts\bootstrap\tests\visual\affix.html" />
+    <Content Include="Scripts\bootstrap\tests\visual\alert.html" />
+    <Content Include="Scripts\bootstrap\tests\visual\button.html" />
+    <Content Include="Scripts\bootstrap\tests\visual\carousel.html" />
+    <Content Include="Scripts\bootstrap\tests\visual\collapse.html" />
+    <Content Include="Scripts\bootstrap\tests\visual\dropdown.html" />
+    <Content Include="Scripts\bootstrap\tests\visual\modal.html" />
+    <Content Include="Scripts\bootstrap\tests\visual\popover.html" />
+    <Content Include="Scripts\bootstrap\tests\visual\scrollspy.html" />
+    <Content Include="Scripts\bootstrap\tests\visual\tab.html" />
+    <Content Include="Scripts\bootstrap\tests\visual\tooltip.html" />
+    <Content Include="Scripts\bootstrap\tooltip.js" />
+    <Content Include="Scripts\bootstrap\transition.js" />
+    <Content Include="Global.asax" />
+    <Content Include="Areas\TimeTracker\Views\web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Areas\TimeTracker\Views\_ViewStart.cshtml" />
+    <Content Include="Content\Site.less" />
+    <Content Include="Content\bootstrap\less\.csscomb.json" />
+    <Content Include="Content\bootstrap\less\.csslintrc" />
+    <Content Include="Content\bootstrap\less\alerts.less" />
+    <Content Include="Content\bootstrap\less\badges.less" />
+    <Content Include="Content\bootstrap\less\bootstrap.less" />
+    <Content Include="Content\bootstrap\less\breadcrumbs.less" />
+    <Content Include="Content\bootstrap\less\button-groups.less" />
+    <Content Include="Content\bootstrap\less\buttons.less" />
+    <Content Include="Content\bootstrap\less\carousel.less" />
+    <Content Include="Content\bootstrap\less\close.less" />
+    <Content Include="Content\bootstrap\less\code.less" />
+    <Content Include="Content\bootstrap\less\component-animations.less" />
+    <Content Include="Content\bootstrap\less\dropdowns.less" />
+    <Content Include="Content\bootstrap\less\forms.less" />
+    <Content Include="Content\bootstrap\less\glyphicons.less" />
+    <Content Include="Content\bootstrap\less\grid.less" />
+    <Content Include="Content\bootstrap\less\input-groups.less" />
+    <Content Include="Content\bootstrap\less\jumbotron.less" />
+    <Content Include="Content\bootstrap\less\labels.less" />
+    <Content Include="Content\bootstrap\less\list-group.less" />
+    <Content Include="Content\bootstrap\less\media.less" />
+    <Content Include="Content\bootstrap\less\mixins.less" />
+    <Content Include="Content\bootstrap\less\mixins\alerts.less" />
+    <Content Include="Content\bootstrap\less\mixins\background-variant.less" />
+    <Content Include="Content\bootstrap\less\mixins\border-radius.less" />
+    <Content Include="Content\bootstrap\less\mixins\buttons.less" />
+    <Content Include="Content\bootstrap\less\mixins\center-block.less" />
+    <Content Include="Content\bootstrap\less\mixins\clearfix.less" />
+    <Content Include="Content\bootstrap\less\mixins\forms.less" />
+    <Content Include="Content\bootstrap\less\mixins\gradients.less" />
+    <Content Include="Content\bootstrap\less\mixins\grid-framework.less" />
+    <Content Include="Content\bootstrap\less\mixins\grid.less" />
+    <Content Include="Content\bootstrap\less\mixins\hide-text.less" />
+    <Content Include="Content\bootstrap\less\mixins\image.less" />
+    <Content Include="Content\bootstrap\less\mixins\labels.less" />
+    <Content Include="Content\bootstrap\less\mixins\list-group.less" />
+    <Content Include="Content\bootstrap\less\mixins\nav-divider.less" />
+    <Content Include="Content\bootstrap\less\mixins\nav-vertical-align.less" />
+    <Content Include="Content\bootstrap\less\mixins\opacity.less" />
+    <Content Include="Content\bootstrap\less\mixins\pagination.less" />
+    <Content Include="Content\bootstrap\less\mixins\panels.less" />
+    <Content Include="Content\bootstrap\less\mixins\progress-bar.less" />
+    <Content Include="Content\bootstrap\less\mixins\reset-filter.less" />
+    <Content Include="Content\bootstrap\less\mixins\reset-text.less" />
+    <Content Include="Content\bootstrap\less\mixins\resize.less" />
+    <Content Include="Content\bootstrap\less\mixins\responsive-visibility.less" />
+    <Content Include="Content\bootstrap\less\mixins\size.less" />
+    <Content Include="Content\bootstrap\less\mixins\tab-focus.less" />
+    <Content Include="Content\bootstrap\less\mixins\table-row.less" />
+    <Content Include="Content\bootstrap\less\mixins\text-emphasis.less" />
+    <Content Include="Content\bootstrap\less\mixins\text-overflow.less" />
+    <Content Include="Content\bootstrap\less\mixins\vendor-prefixes.less" />
+    <Content Include="Content\bootstrap\less\modals.less" />
+    <Content Include="Content\bootstrap\less\navbar.less" />
+    <Content Include="Content\bootstrap\less\navs.less" />
+    <Content Include="Content\bootstrap\less\normalize.less" />
+    <Content Include="Content\bootstrap\less\pager.less" />
+    <Content Include="Content\bootstrap\less\pagination.less" />
+    <Content Include="Content\bootstrap\less\panels.less" />
+    <Content Include="Content\bootstrap\less\popovers.less" />
+    <Content Include="Content\bootstrap\less\print.less" />
+    <Content Include="Content\bootstrap\less\progress-bars.less" />
+    <Content Include="Content\bootstrap\less\responsive-embed.less" />
+    <Content Include="Content\bootstrap\less\responsive-utilities.less" />
+    <Content Include="Content\bootstrap\less\scaffolding.less" />
+    <Content Include="Content\bootstrap\less\tables.less" />
+    <Content Include="Content\bootstrap\less\theme.less" />
+    <Content Include="Content\bootstrap\less\thumbnails.less" />
+    <Content Include="Content\bootstrap\less\tooltip.less" />
+    <Content Include="Content\bootstrap\less\type.less" />
+    <Content Include="Content\bootstrap\less\utilities.less" />
+    <Content Include="Content\bootstrap\less\variables.less" />
+    <Content Include="Content\bootstrap\less\wells.less" />
+    <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Scripts\bootstrap\.jscsrc" />
+    <Content Include="Scripts\bootstrap\.jshintrc" />
+    <Content Include="Scripts\bootstrap\tests\README.md" />
+    <Content Include="Scripts\bootstrap\tests\unit\.jshintrc" />
+    <Content Include="Content\less\_root.less" />
+    <Content Include="Content\less\sticky_footer.less" />
+    <Content Include="Content\less\sticky_footer.css.map">
+      <DependentUpon>sticky_footer.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Site.css.map">
+      <DependentUpon>Site.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\_variables.less" />
+    <Content Include="Content\less\_mixins.less" />
+    <Content Include="Content\bootstrap\less\bootstrap.css.map">
+      <DependentUpon>bootstrap.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\utilities.less" />
+    <Content Include="Content\less\utilities.css.map">
+      <DependentUpon>utilities.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\form.less" />
+    <Content Include="Content\less\form.css.map">
+      <DependentUpon>form.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\general.less" />
+    <Content Include="Content\less\general.css.map">
+      <DependentUpon>general.css</DependentUpon>
+    </Content>
+    <Content Include="Content\bootstrap\LICENSE" />
+    <Content Include="Content\bootstrap\README.md" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_TimeEntryTable.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_ClearRow.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
+    <Content Include="Content\less\offcanvas.less" />
+    <Content Include="Content\less\offcanvas.css.map">
+      <DependentUpon>offcanvas.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\Report.cshtml" />
+    <Content Include="Content\less\breadcrumbs.less" />
+    <Content Include="Content\less\breadcrumbs.css.map">
+      <DependentUpon>breadcrumbs.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Timetracker.less" />
+    <Content Include="Content\Timetracker.css.map">
+      <DependentUpon>Timetracker.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\TimeTracker\Views\Shared\_BreadcrumbNavPartial.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\Index.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_AjaxTimeEntries.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Shared\EditorTemplates\DateTime.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Areas\TimeTracker\Views\TimeEntry\_AjaxTimeEntryBody.cshtml" />
+    <Content Include="Content\font-awesome\less\animated.less" />
+    <Content Include="Content\font-awesome\less\bordered-pulled.less" />
+    <Content Include="Content\font-awesome\less\core.less" />
+    <Content Include="Content\font-awesome\less\fixed-width.less" />
+    <Content Include="Content\font-awesome\less\font-awesome.less" />
+    <Content Include="Content\font-awesome\less\icons.less" />
+    <Content Include="Content\font-awesome\less\larger.less" />
+    <Content Include="Content\font-awesome\less\list.less" />
+    <Content Include="Content\font-awesome\less\mixins.less" />
+    <Content Include="Content\font-awesome\less\path.less" />
+    <Content Include="Content\font-awesome\less\rotated-flipped.less" />
+    <Content Include="Content\font-awesome\less\stacked.less" />
+    <Content Include="Content\font-awesome\less\variables.less" />
+    <Content Include="Content\less\report.less" />
+    <Content Include="Content\less\report.css.map">
+      <DependentUpon>report.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\error.less" />
+    <Content Include="Content\less\error.css.map">
+      <DependentUpon>error.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\paneled_index.less" />
+    <Content Include="Content\less\paneled_index.css.map">
+      <DependentUpon>paneled_index.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\sale.less" />
+    <Content Include="Content\less\sale.css.map">
+      <DependentUpon>sale.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\navigation.less" />
+    <Content Include="Content\less\navigation.css.map">
+      <DependentUpon>navigation.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\tt_customer.less" />
+    <Content Include="Content\less\tt_customer.css.map">
+      <DependentUpon>tt_customer.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\index.less" />
+    <Content Include="Content\less\index.css.map">
+      <DependentUpon>index.css</DependentUpon>
+    </Content>
+    <Content Include="Scripts\bootstrap.min.js.map">
+      <DependentUpon>bootstrap.min.js</DependentUpon>
+    </Content>
+    <Content Include="Content\less\allyis-list-group-search.less" />
+    <Content Include="Content\less\allyis-list-group-search.css.map">
+      <DependentUpon>allyis-list-group-search.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\modal.less" />
+    <Content Include="Content\less\modal.css.map">
+      <DependentUpon>modal.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\swapper-ui.less" />
+    <Content Include="Content\less\swapper-ui.css.map">
+      <DependentUpon>swapper-ui.css</DependentUpon>
+    </Content>
+    <Content Include="Content\less\permissions.less" />
+    <Content Include="Content\less\permissions.css.map">
+      <DependentUpon>permissions.css</DependentUpon>
+    </Content>
+    <None Include="Resources\Files\ImportUserTemplate.csv" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\jquery-2.1.4.min.js" />
+    <Content Include="Scripts\jquery-2.1.4.min.js.map">
+      <DependentUpon>jquery-2.1.4.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\LogOn.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_LogOnPartial.cshtml" />
+    <Content Include="Views\Account\EditProfile.cshtml" />
+    <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Home\index.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Shared\_NotificationPartial.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Project\Details.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Project\Create.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Project\Edit.cshtml" />
+    <Content Include="Views\Shared\_LayoutBase.cshtml" />
+    <Content Include="Views\Shared\_LayoutJustAForm.cshtml" />
+    <Content Include="Views\Shared\_LayoutSidebar.cshtml" />
+    <Content Include="Views\Shared\_Breadcrumbs.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\aadbmodel\AllyisApps.DBModel.csproj">
+      <Project>{15549511-d542-4592-9c4a-dcd10f4c0c45}</Project>
+      <Name>AllyisApps.DBModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\aalib\AllyisApps.Lib.csproj">
+      <Project>{448ffc61-ecf1-4312-a35b-c221f98a895c}</Project>
+      <Name>AllyisApps.Lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\aaservices\AllyisApps.Services.csproj">
+      <Project>{98c191a8-84a2-4e18-b678-c5647b49a953}</Project>
+      <Name>AllyisApps.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Controllers\Auth\Strings.en-GB.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-GB.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Controllers.Auth</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Controllers\Auth\Strings.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-US.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Controllers.Auth</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Controllers\Auth\Strings.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Controllers.Auth</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Controllers\Auth\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Controllers.Auth</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Controllers\Auth\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Controllers.Auth</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Errors.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Errors.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Files\Files.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Files.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Customer\Strings.en-GB.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-GB.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Customer</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Customer\Strings.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-US.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Customer</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Customer\Strings.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Customer</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Customer\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Customer</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Customer\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Customer</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Home\Strings.en-GB.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-GB.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Home</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Home\Strings.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-US.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Home</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Home\Strings.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Home</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Home\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Home</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Home\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Home</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Manage\Strings.en-GB.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-GB.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Manage</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Manage\Strings.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-US.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Manage</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Manage\Strings.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Manage</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Manage\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Manage</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Manage\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Manage</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Project\Strings.en-GB.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-GB.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Project</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Project\Strings.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-US.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Project</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Project\Strings.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Project</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Project\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Project</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\Project\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.Project</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\TimeEntry\Strings.en-GB.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-GB.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.TimeEntry</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\TimeEntry\Strings.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-US.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.TimeEntry</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\TimeEntry\Strings.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.TimeEntry</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\TimeEntry\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.TimeEntry</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Controllers\TimeEntry\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Controllers.TimeEntry</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Customer\Strings.en-GB.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-GB.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Customer</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Customer\Strings.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-US.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Customer</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Customer\Strings.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Customer</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Customer\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Customer</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Customer\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Customer</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Manage\Strings.en-GB.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-GB.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Manage</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Manage\Strings.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-US.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Manage</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Manage\Strings.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Manage</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Manage\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Manage</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Manage\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Manage</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Project\Strings.en-GB.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-GB.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Project</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Project\Strings.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-US.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Project</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Project\Strings.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Project</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Project\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Project</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Project\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Project</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Shared\Strings.en-GB.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-GB.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Shared</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Shared\Strings.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-US.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Shared</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Shared\Strings.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Shared</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Shared\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Shared</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\Shared\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.Shared</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\TimeEntry\Strings.en-GB.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-GB.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.TimeEntry</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\TimeEntry\Strings.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-US.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.TimeEntry</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\TimeEntry\Strings.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.TimeEntry</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\TimeEntry\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.TimeEntry</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TimeTracker\Views\TimeEntry\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.TimeTracker.Views.TimeEntry</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ViewModels\Auth\States.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>States.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.ViewModels.Auth</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ViewModels\Auth\States.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>States.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.ViewModels.Auth</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ViewModels\Auth\Countries.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Countries.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.ViewModels.Auth</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ViewModels\Auth\Countries.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Countries.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.ViewModels.Auth</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ViewModels\Auth\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.ViewModels.Auth</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ViewModels\Auth\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.ViewModels.Auth</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ViewModels\Org\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.ViewModels.Org</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ViewModels\Org\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.ViewModels.Org</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Views\Account\Images.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Images.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Views\Account\Strings.en-GB.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-GB.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Views.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Views\Account\Strings.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-US.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Views.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Views\Account\Strings.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Views.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Views\Account\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Views.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Views\Account\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Views.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Views\Home\Strings.en-GB.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-GB.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Views.Home</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Views\Home\Strings.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-US.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Views.Home</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Views\Home\Strings.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Views.Home</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Views\Home\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Views.Home</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Views\Home\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Views.Home</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Views\Shared\Strings.en-GB.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-GB.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Views.Shared</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Views\Shared\Strings.en-US.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en-US.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Views.Shared</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Views\Shared\Strings.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Views.Shared</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Views\Shared\Strings.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.es.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Views.Shared</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Views\Shared\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>AllyisApps.Resources.Views.Shared</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>62707</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:62707/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="..\packages\StyleCop.MSBuild.4.7.54.0\build\StyleCop.MSBuild.Targets" Condition="Exists('..\packages\StyleCop.MSBuild.4.7.54.0\build\StyleCop.MSBuild.Targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\StyleCop.MSBuild.4.7.54.0\build\StyleCop.MSBuild.Targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\StyleCop.MSBuild.4.7.54.0\build\StyleCop.MSBuild.Targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

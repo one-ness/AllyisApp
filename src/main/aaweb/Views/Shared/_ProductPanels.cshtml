@@ -1,0 +1,67 @@
+﻿@using AllyisApps.Services.Crm;
+@using AllyisApps.ViewModels.Shared;
+@model SubscriptionsViewModel
+
+@{
+	string linkTextOverride = ViewBag.ProductPanelLinkTextOverride;
+
+	Func<int, string, string, dynamic> package = (product_id, title, image) =>
+		new
+		{
+			product_id = product_id,
+			title = title,
+			image_url = image,
+			query = (from entry in Model.Subscriptions
+					 where entry.ProductId == product_id
+					 orderby entry.OrganizationName
+					 select new
+					 {
+						 ProductId = entry.ProductId,
+						 OrganizationId = entry.OrganizationId,
+						 OrganizationName = entry.OrganizationName,
+						 MemberSince = entry.CreatedUTC.ToLocalTime()
+					 }).ToArray(),
+		};
+
+	List<dynamic> product_boxes = new List<dynamic>();
+
+	foreach (ProductInfo prod in Model.ProductList)
+	{
+		product_boxes.Add(package(prod.ProductId, prod.ProductName, string.Format("/Content/icons/{0}.png", prod.ProductName)));
+	}
+}
+
+@foreach (var product_box in product_boxes)
+{
+	int product_id = product_box.product_id;
+	string title = product_box.title;
+	string image_url = product_box.image_url;
+	IEnumerable<dynamic> query = product_box.query;
+	var admin_query = from row in query @*where Permissions.Can(OrgAction.ManageSubscriptions, row.OrganizationId)*@ select row;
+// this logic need fixing
+if (query.Any())
+{
+	<div class="panel-wrap">
+		<div class="panel panel-default">
+			<div class="panel-heading" style="display: table; width: 100%;">
+				<div class="left" style="display: table-cell; width: 30%; text-align: center; vertical-align: middle;">
+					<img src="@image_url" />
+				</div>
+				<div class="right" style="display: table-cell;">
+					<h3>@title</h3>
+					<p>@AllyisApps.Resources.Views.Shared.Strings.LoremShort</p>
+				</div>
+			</div>
+			<div class="list-group">
+				@foreach (var row in query)
+					{
+						string link_text = linkTextOverride ?? (string)row.OrganizationName;
+					    @Html.ActionLink(link_text, "ApplicationRedirect", "Home",
+									routeValues: new { productid = product_id, organizationId = row.OrganizationId },
+									htmlAttributes: new { @class = "list-group-item" })
+					}
+			</div>
+		</div>
+	</div>
+	}
+}

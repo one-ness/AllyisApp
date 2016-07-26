@@ -1,0 +1,216 @@
+﻿@model AllyisApps.ViewModels.OrganizationAddMembersViewModel
+@using AllyisApps.ViewModels
+@using AllyisApps.Services.BusinessObjects
+
+@{
+    Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
+    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.AddMember;
+    string left = "col-xs-3 text-right";
+    string right = "col-xs-9";
+}
+@{ ViewData.Add("Controller", "Account"); }
+@{ ViewData.Add("Action", "Add"); }
+
+<div>
+    <h4 class="modal-title">@AllyisApps.Resources.Views.Account.Strings.InviteMember</h4>
+
+    @using (Html.BeginForm("UploadCSVFile", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="bulk">
+            <h4>@AllyisApps.Resources.Views.Account.Strings.MultipleMembers</h4>
+            <p>
+                @AllyisApps.Resources.Views.Account.Strings.InviteMoreThanOne <a href="@Url.Action("DownloadImportUsersTemplate", "Account")">@AllyisApps.Resources.Views.Account.Strings.ExampleFile</a>.
+            </p>
+            @*Custom styled buttons wired to browser default upload*@
+            <input type="file" id="upload-box" name="upload" style="display:none;"
+                   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+            <input id="upload-file-name-display" class="form-control"
+                   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+            <div style="margin-top: 10px; float:right;">
+                <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@AllyisApps.Resources.Views.Account.Strings.ChooseFile</a>
+                <input style="margin-left: 5px" type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
+            </div>
+        </div>
+        <div class="bulk clearfix">
+            <div class="col-xs-12 modal-divider">
+                <h4>@AllyisApps.Resources.Views.Account.Strings.SingleMember</h4>
+                <p>
+                    @AllyisApps.Resources.Views.Account.Strings.InviteSomeone
+                </p>
+            </div>
+        </div>
+    }
+
+    @using (Html.BeginForm("Invite", "Account", FormMethod.Post, new { @class = "form-horizontal", id = "OrgAddForm" }))
+    {
+        <div>
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.OrganizationId)
+            @Html.ValidationSummary(true)
+            <div class="form-group">
+                <div class="@left">
+                    @Html.ReqLabelFor(model => model.Email, AllyisApps.Resources.Views.Account.Strings.Email)
+                </div>
+                <div class="@right">
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="@left">
+                    @Html.ReqLabelFor(model => model.FirstName, AllyisApps.Resources.Views.Account.Strings.FirstName)
+                </div>
+                <div class="@right">
+                    @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.FirstName)
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="@left">
+                    @Html.ReqLabelFor(model => model.LastName, AllyisApps.Resources.Views.Account.Strings.LastName)
+                </div>
+                <div class="@right">
+                    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LastName)
+                </div>
+            </div>
+            @{var count = 0;
+                var roomInSubscription = true;
+            }
+            @foreach (SubscriptionRoleSelectionModel sub in Model.SubscriptionRoles)
+            {
+                @Html.Hidden(string.Format("SubscriptionRoles[{0}].SubscriptionId", count), sub.SubscriptionId)
+                <div class="form-group">
+                    <div class="@left">
+                        @if (sub.ProductName == "TimeTracker")
+                        {
+                            <label>@(string.Format("{0} {1}", AllyisApps.Resources.Views.Account.Strings.TimeTracker, AllyisApps.Resources.Views.Account.Strings.Role))</label>
+}
+                    </div>
+                    <div class="@right">
+                        @Html.DropDownListDisabled(string.Format("SubscriptionRoles[{0}].SelectedRole", count), new SelectList(sub.Roles, "ProductRoleId", "Name", sub.Roles.Where(x => x.Name == "None").FirstOrDefault()), sub.Disabled, new { @class = "form-control role-selector" })
+                        @if (sub.Disabled)
+                        {
+                            <p>@AllyisApps.Resources.Views.Account.Strings.TooManyUsers</p>roomInSubscription = false;
+                        }
+                    </div>
+                </div>
+
+                if ((sub.ProductName == "TimeTracker") && roomInSubscription) //TimeTracker with room
+                {
+                    <div class="form-group">
+                        <div class="@left">
+                            <label>@AllyisApps.Resources.Views.Account.Strings.TrackProject</label>
+                        </div>
+
+                        <div class="@right">
+                            @{    //outputs list of available projects
+                                List<SelectListItem> selectProjects = new List<SelectListItem>();
+                                foreach (CompleteProjectInfo pInfo in Model.OrganizationProjects)
+                                {
+                                    selectProjects.Add(new SelectListItem
+                                    {
+                                        Text = (pInfo.ProjectName),
+                                        Value = (pInfo.ProjectId.ToString())
+                                    });
+                                }
+
+                                @Html.DropDownList("SubscriptionProjectId", selectProjects, AllyisApps.Resources.Views.Account.Strings.DropDownEmpty, new { @class = "form-control project-selector" });
+                            }
+                        </div>
+                    </div>          }
+                                    count += 1;
+                                }
+
+            <div class="form-group">
+                <div class="@left">
+                    <p>@AllyisApps.Resources.Views.Account.Strings.AddAsOwner</p>
+                </div>
+                <div class="@right">
+                    @Html.CheckBoxFor(m => m.AddAsOwner)
+                </div>
+            </div>
+        </div>
+        <div>
+            <strong><span class="pull-left" hidden="hidden" id="accessCodeDisplay">Access Code: /code/</span></strong>
+            <div class="form-group allyis-action-buttons pull-right">
+                @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, "Manage", "Account", null, new { @class = "btn btn-default" })
+
+                @if (roomInSubscription)
+                {
+                    <input type="submit" id="addMember" value="@AllyisApps.Resources.Views.Account.Strings.Add" class="btn btn-primary" />}
+                else
+                {
+                    <input type="submit" id="addMember" value="@AllyisApps.Resources.Views.Account.Strings.Add" class="btn btn-primary" disabled="disabled" />}
+            </div>
+            <div class="@right">
+                <p id="cannotAddMessage">@AllyisApps.Resources.Views.Account.Strings.CannotAddMessage<br />@AllyisApps.Resources.Views.Account.Strings.CannotAddMessage2</p>
+                <p id="noProjectMessage">@AllyisApps.Resources.Views.Account.Strings.NoProjectMessage</p>
+            </div>
+        </div>            }
+
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        function clearMessagesAndEnableAdd() {
+            $('#addMember').prop('disabled', false);
+            $('#cannotAddMessage').hide();
+            $('#noProjectMessage').hide();
+        }
+
+        function showNoProjectMessage() {
+            $('#noProjectMessage').show();
+            $('#cannotAddMessage').hide();
+            $('#addMember').prop('disabled', true);
+        }
+
+        function showMustBeOwnerOrUserMessage() {
+            $('#noProjectMessage').hide();
+            $('#cannotAddMessage').show();
+            $('#addMember').prop('disabled', true);
+        }
+
+        function checkAddConditions() {
+            if ($('#AddAsOwner').is(':checked')) { // Adding as owner;
+                if ($('.role-selector option:selected').val() != 0) { // Time Tracker role selected: must check for project
+                    if ($('.project-selector option:selected').val() == "") { // No project selected
+                        showNoProjectMessage();
+                    } else { // Project selected
+                        clearMessagesAndEnableAdd();
+                    }
+                } else { // Time Tracker role is None, just adding as owner
+                    clearMessagesAndEnableAdd();
+                }
+            } else { // Not an owner
+                if ($('.role-selector option:selected').val() == 0) { // Selected role is None
+                    showMustBeOwnerOrUserMessage();
+                } else { // Role selected
+                    if ($('.project-selector option:selected').val() == "") { // No project selected
+                        showNoProjectMessage();
+                    } else { // Role and project selected
+                        clearMessagesAndEnableAdd();
+                    }
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            $('#addMember').prop('disabled', true);
+            $('#noProjectMessage').hide();
+
+            $('.project-selector').change(function () {
+                checkAddConditions();
+            });
+
+            $('#AddAsOwner').change(function () {
+                checkAddConditions();
+            });
+
+            $('.role-selector').change(function () {
+                checkAddConditions();
+            });
+        });
+    </script>
+}

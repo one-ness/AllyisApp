@@ -1,0 +1,431 @@
+﻿@using AllyisApps.ViewModels
+@using AllyisApps.Services.BusinessObjects
+@using AllyisApps.Services.Crm
+@model OrganizationManageViewModel
+
+@{
+    DisplayHints.PageBodyId = "org-manage";
+    ViewBag.TitleBar = AllyisApps.Resources.Views.Account.Strings.Manage;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    InvitationInfo emptyInvite = new InvitationInfo()
+    {
+        FirstName = AllyisApps.Resources.Views.Account.Strings.FirstName,
+        LastName = AllyisApps.Resources.Views.Account.Strings.LastName,
+        Email = "email@allyis.com",
+        AccessCode = "None"
+    };
+}
+
+@section Modals {
+    @* <div id="OrgEditModal" class="modal fade" tabindex="-1">
+            @Html.Partial("_OrgEdit", Model.Edit)
+        </div>*@
+
+    @*<div id="InviteMemberModal" class="modal fade" tabindex="-1">
+            @Html.Partial("_OrgInvite", Model.Add)
+        </div>*@
+
+    @*<div id="InvitationReviewModal" class="modal fade" tabindex="-1">
+            @Html.Partial("_ModalInvitation", emptyInvite)
+        </div>*@
+
+    @*<!-- Modal -->
+        <div class="modal fade" id="sharedModal" tabindex="-1" role="dialog" @*aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="square-center"><div>Loading...<i class="fa fa-4x fa-spin fa-cog fa-fw"></i></div></div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->*@
+}
+
+@Html.AntiForgeryToken() @*Used by the javascript dynamic form methods below (for removing users/invitations)*@
+
+<div class="flexbox-row flexbox-row-2-col-collapse">
+    <div style="margin-bottom: 20px">
+        @*Adjust default margins for delete org button to keep it outside the border*@
+        <div class="panel panel-default org-panel" style="margin-bottom: 0px">
+            <div class="panel-heading">
+                <h1 class="panel-title">
+                    @AllyisApps.Resources.Views.Account.Strings.OrganizationDetails
+                    @if (Model.CanEditOrganization)
+                    {
+                        @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Edit, "Edit", null, new { @class = "pull-right text-muted" })
+                        @*<a href=""  title="Edit Organization Details"
+                                class="pull-right text-muted"
+                                data-toggle="modal" data-target="#OrgEditModal">
+                                <i class="fa fa-edit fa-lg"></i>
+                            </a>*@
+}
+
+                </h1>
+            </div>
+            @Html.Partial("_OrgDetails", Model.Details)
+        </div>
+
+    </div>
+    <div class="panel panel-default sub-panel">
+        <div class="panel-heading">
+            <h1 class="panel-title">
+                @AllyisApps.Resources.Views.Account.Strings.Subscriptions
+            </h1>
+        </div>
+        @foreach (SubscriptionDisplayViewModel productSub in Model.Subscriptions)
+        {
+            @Html.Partial("_SubDetails", productSub);
+        }
+        <div class="panel-body">
+            <h4>@AllyisApps.Resources.Views.Account.Strings.Subscribe!</h4>
+            <p>@AllyisApps.Resources.Views.Account.Strings.SubscribeToProducts</p>
+            @if (Model.SubscriptionCount == 0)
+            {
+                <p>@AllyisApps.Resources.Views.Account.Strings.PleaseSubscribe</p>}
+        </div>
+    </div>
+    <div class="panel panel-default members-panel">
+        <div class="panel-heading">
+            <h1 class="panel-title">
+                @AllyisApps.Resources.Views.Account.Strings.Members
+                <span class="pull-right panel-title">
+                    @if (Model.CanEditOrganization) //was if(Permissions.Can(OrgAction.EditSubscriptionUsers))
+                    {
+                        <a href="@Url.Action("ManagePermissions")" title=@AllyisApps.Resources.Views.Account.Strings.ManagePermissions><span class="fa fa-fw fa-lg fa-users text-warning"></span></a>}
+                    @if (Model.CanEditOrganization && Model.SubscriptionCount > 0) //was previously: if (Permissions.Can(OrgAction.AddMembers) && DB Helper.Instance.CheckSubscription(Model.OrganizationId, 1) != null
+                    {
+                        <a href="@Url.Action("Add")" title=@AllyisApps.Resources.Views.Account.Strings.AddMembers><span class="fa fa-fw fa-plus fa-lg text-info"></span></a>
+                        @*@Html.ActionLink("Add", "Add", null, new { @class = "pull-right text-muted" })*@
+                        @*<a href="#" title="Add Member"
+                               class="text-muted"
+                               data-toggle="modal" data-target="#InviteMemberModal" data-keyboard="true" onclick="clearInviteModal()">
+                                <i class="fa fa-fw fa-plus fa-lg"></i>
+                            </a>*@
+}
+                    @*@if (Permissions.Can(OrgAction.EditMembers))
+                        {
+                            <a href="@Url.Action("Manage", "Org")" class="text-muted"
+                                title="Manage Members">
+                                <i class="fa fa-cog  fa-lg"></i>
+                            </a>
+                        }*@
+                </span>
+            </h1>
+        </div>
+        <div>
+            <input id="org-members-search" type="text" class="form-control" placeholder="🔍 " style="border: none;" />
+        </div>
+        @Html.Partial("_OrgMembers", Model.Members)
+    </div>
+
+    <div class="panel panel-default billing-panel" style="height: 100%;">
+        <div class="panel-heading" id="stripe-panel">
+            <h1 class="panel-title clearfix">
+                @AllyisApps.Resources.Views.Account.Strings.BillingInformation
+            </h1>
+            <a href="http://stripe.com"><img src="~/Content/icons/poweredbystripe.png" style="height: 30px; float: right; margin-top: -23px;" title="" alt="Stripe Logo"></a>
+        </div>
+        @Html.Partial("_OrgBillingInfo", Model)
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var MODULE = new ListGroupSearch();
+            MODULE.init({
+                $target: $("#org-members-list")
+            });
+
+            $("#org-members-search").keyup(_.debounce(
+                function (key) {
+                    if (key.which == 13 || key.keyCode == 13) {
+                        if (this.value == "")
+                            MODULE.search(" "); //search on a value that is present in all entries
+                        else
+                            MODULE.search(this.value);
+                        //after search, set new page numbers
+                        paginate();
+                    }
+                },
+                200
+            ));
+
+            $("#org-members-search").keyup(_.debounce(
+                function () { MODULE.search(this.value); },
+                200
+            ));
+        });
+
+        //Clears validation error messages
+        $.fn.clearErrors = function () {
+            $(this).each(function () {
+                $(this).find(".field-validation-error").empty();
+                $(this).trigger('reset.unobtrusiveValidation');
+            });
+        };
+
+        @* Members *@
+        function removeUser(orgId, userId, fullName) {
+            var result = confirm( "@AllyisApps.Resources.Views.Account.Strings.RemoveFromOrg" + fullName + "@AllyisApps.Resources.Views.Account.Strings.RemoveFromOrgEnd");
+            if (result == true) {
+                var url = "@Url.Action("RemoveMember", "Account")?userId=" + userId;
+
+                var form = document.createElement('form');
+                form.setAttribute('method', 'post');
+                form.setAttribute('action', url);
+                form.style.display = 'hidden';
+
+                var token = $('[name="__RequestVerificationToken"]').val();
+
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = '__RequestVerificationToken';
+                input.value = token;
+                form.appendChild(input);
+
+                document.body.appendChild(form)
+                form.submit();
+            }
+        }
+
+        function generateCode(orgId) {
+            var result = confirm("@AllyisApps.Resources.Views.Account.Strings.NewAccessCode");
+            if (result == true) {
+                var url = "/Organization/RegenerateKey?id=" + orgId;
+
+                var token = $('[name="__RequestVerificationToken"]').val();
+
+                var form = document.createElement('form');
+                form.setAttribute('method', 'post');
+                form.setAttribute('action', url);
+
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = '__RequestVerificationToken';
+                input.value = token;
+                form.appendChild(input);
+
+                form.style.display = 'hidden';
+                document.body.appendChild(form)
+                form.submit();
+            }
+        }
+
+        function deleteInvitation(orgId, invId) {
+            var result = confirm("@AllyisApps.Resources.Views.Account.Strings.RemoveInvitation");
+            if (result == true) {
+                var url = "@Url.Action("RemoveInvitation","Account")?invitationId=" + invId;
+
+                var token = $('[name="__RequestVerificationToken"]').val();
+
+                var form = document.createElement('form');
+                form.setAttribute('method', 'post');
+                form.setAttribute('action', url);
+
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = '__RequestVerificationToken';
+                input.value = token;
+                form.appendChild(input);
+
+                form.style.display = 'hidden';
+                document.body.appendChild(form)
+                form.submit();
+            }
+        }
+
+        function paginate() {
+            var pageSize = $('#footPager').data('psize');
+            var pcount = 0;
+            var page = 1;
+            var excludeval = -1;
+            var buttonCount = 1;
+
+            $('#org-members-list').find('tr').each(function () {
+                if (pcount >= pageSize) {
+                    page++;
+                    pcount = 0;
+                }
+
+                if ($(this).hasClass('excluded')) {
+                    $(this).data('page', excludeval);
+                }
+                else {
+                    $(this).data('page', page);
+                    pcount++;
+                }
+            });
+
+            //hide extra page buttons
+            $("input[name='pageButton']").each(function () {
+                if (buttonCount > page) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+                buttonCount++;
+            });
+
+            //build list based on page
+            showPage(1);
+        }
+
+        //show members for page: pageNum
+        function showPage(pageNum) {
+            var pageStr = "" + pageNum;
+            var dPage = "";
+
+            //hide other pages and show selected
+            $('#org-members-list').find('tr').hide();
+            $('#org-members-list').find('tr').each(function () {
+                dPage = $(this).data('page');
+                if (dPage == pageStr) {
+                    if ($(this).not('.excluded')) {
+                        $(this).show();
+                    }
+                    else {
+                        $(this).data('page', excludeval);
+                    }
+                }
+            });
+            select_page(pageNum);
+        }
+
+        //disable selected page button
+        function select_page(pageNum) {
+            var pcount = 1;
+            $("input[name='pageButton']").prop('disabled', false);
+            $("input[name='pageButton']").each(function () {
+                if (pcount == pageNum) {
+                    $(this).prop('disabled', true);
+                }
+                pcount++;
+            });
+        }
+
+        $("#Subdomain").change(function () {
+            var subdomain = $("#Subdomain").val();
+            subdomain = subdomain.trim();
+            if (subdomain != "") {
+                $.ajax({
+                    url: "/Organization/IsSubdomainNameUnique?subdomain=" + subdomain,
+                    success: function (data) {
+                        alert(data);
+                        if (data == "True") {
+                            alert("The provided subdomain can be used.");
+                            $("#submit").prop('disabled', false);
+                        } else {
+                            alert("The subdomain name given is already taken.")
+                            $("#submit").prop('disabled', true);
+                        }
+                    }
+                })
+            }
+        })
+        // TODO Do we still need all these FondleModal functions, if we aren't using modals anymore?
+        function cancelParentModal(ele) {
+            $(ele).closest(".modal").modal('hide');
+        }
+
+        function cancelOrgEditModal() {
+            $("#OrgEditForm").clearErrors();
+            $("#OrgEditForm")[0].reset();
+            $("#OrgEditModal").modal('hide');
+        }
+
+        function cancelInviteModal() {
+            $("#OrgInviteForm").clearErrors();
+            $("#OrgInviteForm")[0].reset();
+            $("#InviteMemberModal").modal('hide');
+        }
+
+        //function cancelInvitationModal() {
+        //    $("#InvitationReviewModal").clearErrors();
+        //    $("#InvitationReviewModal").modal('hide');
+        //}
+
+        function populateInvitationModal(name, email, accessCode) {
+            $("#InvitationUserName").text(name);
+            $("#InvitationUserEmail").text(email);
+            $("#InvitationAccessCode").text(accessCode);
+        }
+
+        function RevealAccessCode() {
+            var result = "Access Code: " + $("#AccessCodeTarget").val();
+            alert(result);
+            $("#accessCodeDisplay").text(result);
+        }
+
+        function clearInviteModal() {
+            $("#OrgInviteForm").clearErrors();
+            $("#OrgInviteForm")[0].reset();
+            $("#accessCodeDisplay").hide();
+        }
+
+        $(document).ready(function () {
+            $('#addMember').prop('disabled', true);
+            if ($('.project-selector option:selected').val() != "") {
+                $('#noProjectMessage').hide();
+            }
+            $('#AddAsOwner').change(function () {
+                //alert($('.project-selector option:selected').val());
+
+                if ($(this).is(':checked') || ($('.role-selector option:selected').val() != 1)) {
+                    $('#addMember').prop('disabled', false);
+                    $('#cannotAddMessage').hide();
+                } else {
+                    $('#addMember').prop('disabled', true);
+                    $('#cannotAddMessage').show();
+                }
+            });
+            $('.role-selector').change(function () {
+                //alert($('.project-selector option:selected').val());
+                if ($('#AddAsOwner').is(':checked') || ($('.role-selector option:selected').val() != 1)) {
+                    $('#addMember').prop('disabled', false);
+                    $('#cannotAddMessage').hide();
+                } else {
+                    $('#addMember').prop('disabled', true);
+                    $('#cannotAddMessage').show();
+                }
+            });
+        });
+
+        $(function () {
+            $("#OrgInviteForm").submit(function () {
+                if ($(this).valid()) {
+                    $.ajax({
+                        url: "/Org/Invite",
+                        type: "POST",
+                        data: $(this).serialize(),
+                        success: function (result) {
+                            if (result.output == "message") {
+                                alert("Error:\n" + result.message);
+                            } else if (result.output == "redirect") {
+                                window.location = "/Org/RedirectWithNotification?url=" + result.url + "&message=" + result.message + "&notificationType=" + result.notificationType;
+                            } else {
+                                var resultout = ""
+                                if (result.accessCode != null) {
+                                    resultout = "Access Code: " + result.accessCode;
+                                    $("#accessCodeDisplay").text(resultout);
+                                    $("#accessCodeDisplay").show();
+                                }
+                                alert("Success!\n" + resultout);
+                                cancelInviteModal();
+                                location.reload();
+                            }
+                        },
+                        fail: function (result) {
+                            alert("Fail");
+                            alert(result);
+                        }
+                    });
+                }
+                return false;
+            });
+        });
+    </script>
+
+}

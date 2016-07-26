@@ -1,0 +1,52 @@
+﻿@using AllyisApps.ViewModels;
+
+@model EditSubscriptionUsersViewModel
+
+@{
+    DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+    DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+    ViewBag.TitleBar = AllyisApps.Resources.TimeTracker.Views.Manage.Strings.ManageTTUsers;
+    ViewBag.Title = AllyisApps.Resources.TimeTracker.Views.Manage.Strings.ManageUsers;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="text-center">
+    <div style="display:inline-block;">
+        <p>
+            @AllyisApps.Resources.TimeTracker.Views.Manage.Strings.EditUsersSubscriptionMaxDialogue1@Model.MaxUsers@AllyisApps.Resources.TimeTracker.Views.Manage.Strings.EditUsersSubscriptionMaxDialogue2
+        </p>
+        @if (Model.InvitationCount != 0)
+        {
+            <p>
+                @AllyisApps.Resources.TimeTracker.Views.Manage.Strings.InvitationCount1@Model.InvitationCount@AllyisApps.Resources.TimeTracker.Views.Manage.Strings.InvitationCount2<br />
+                @AllyisApps.Resources.TimeTracker.Views.Manage.Strings.InvitationCount3
+            </p>
+        }
+        <form action="/TimeTracker/Manage/Users/" method="post">
+            <table class="allyis-table">
+                <tr>
+                    <th>@AllyisApps.Resources.TimeTracker.Views.Manage.Strings.Name</th>
+                    <th>@AllyisApps.Resources.TimeTracker.Views.Manage.Strings.Role</th>
+                </tr>
+                @for (int i = 0; i < Model.Users.Count(); i++)
+                {
+                    var current = Model.Users.ElementAt(i);
+                    <tr>
+                        <td>
+                            @(string.Format("{0} {1}", current.FirstName, current.LastName))
+                        </td>
+                        <td>
+                            @Html.Hidden(string.Format("Users[{0}].UserId", i), current.UserId)
+                            @Html.DropDownList(string.Format("Users[{0}].ProductRoleId", i), new SelectList(Model.Roles, "ProductRoleId", "Name", current.ProductRoleId), new { @class = "form-control", @onChange = "enable(this)" })
+                        </td>
+                    </tr>}
+            </table>
+            @Html.HiddenFor(m => m.MaxUsers)
+            @Html.AntiForgeryToken()
+            <div class="form-group pull-right text-right ">
+                @Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Manage.Strings.Cancel, "Manage", "Account", new { Area = "" }, new { @class = "btn btn-default" })
+                <input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.Manage.Strings.Save class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

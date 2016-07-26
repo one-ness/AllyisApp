@@ -1,0 +1,84 @@
+﻿@using AllyisApps.ViewModels
+@model AllyisApps.ViewModels.UserInfoViewModel
+@{
+    DisplayHints.ShowBreadcrumbs = false;
+    DisplayHints.PageBodyId = "paneled-index";
+    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.MyAccount;
+    var cityState = Model.UserInfo.City != null && Model.UserInfo.State != null ? Model.UserInfo.City + ", " + Model.UserInfo.State : string.Empty;
+}
+
+<div class="row">
+    <div class="col-md-8 col-md-push-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 style="margin-top: 0px; margin-bottom: 0px;">
+                    @Model.UserInfo.FirstName @Model.UserInfo.LastName
+                    <span class="small text-muted" style="margin-left: 10px;">
+                        (@Model.UserInfo.Email)
+                    </span>
+                </h2>
+            </div>
+            <div class="panel-body">
+                <div class="col-sm-8 index-details">
+                    <p>
+                        <label>@AllyisApps.Resources.Views.Account.Strings.PhoneNumber:</label>
+                        @Model.UserInfo.PhoneNumber @Model.UserInfo.PhoneExtension
+                    </p>
+                    <p>
+                        <label>@AllyisApps.Resources.Views.Account.Strings.Address:</label>
+                        <span class="address-row">@Model.UserInfo.Address</span>
+                        <span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
+                    </p>
+                </div>
+                <div class="col-sm-4 vertically-stacked-buttons text-right">
+                    @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.ChangePassword, "ChangePassword", "Account", null, new { @class = "btn btn-default" })
+                    @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.EditProfile, "EditProfile", null, new { @class = "btn btn-default" })
+                    @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.YourOrganizations, "Organizations", null, new { @class = "btn btn-default" })
+                </div>
+            </div>
+
+            @if (Model.Invitations.Count > 0)
+            {
+                <div class="panel-body">
+                    <div class="index-details" style="padding-left: 15px">
+                        <p>
+                            <label>Invitations</label>
+                            @if (Model.Invitations.Count == 1)
+                            {
+                                @AllyisApps.Resources.Views.Account.Strings.Invite
+                            }
+                            else
+                            {
+                                @AllyisApps.Resources.Views.Account.Strings.Invites
+                            }
+                        </p>
+                        @foreach (InvitationViewModel invite in Model.Invitations)
+                        {
+                            <div>
+                                <span class="col-xs-4 col-sm-6">@invite.OrganizationName</span>
+                                <form action="Account/Accept" method="post">
+                                    <input type="hidden" name="invitationId" value="@invite.InvitationId" />
+                                    <span class="col-xs-4 col-sm-3 padding">
+                                        <button type="submit" formmethod="post" formaction="/Account/Accept" class="btn btn-primary col-xs-12">@AllyisApps.Resources.Views.Account.Strings.Accept</button>
+                                    </span>
+                                </form>
+                                <form action="Account/Reject" method="post">
+                                    <input type="hidden" name="invitationId" value="@invite.InvitationId" />
+                                    <span class="col-xs-4 col-sm-3 padding">
+                                        <button type="submit" formmethod="post" formaction="/Account/Reject" class="btn btn-danger col-xs-12">@AllyisApps.Resources.Views.Account.Strings.Reject</button>
+                                    </span>
+                                </form>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="row">
+        <div class="col-md-8 col-md-push-2" style="height: 100%; display: flex; flex-wrap: wrap; justify-content: space-around;">
+            @Html.Partial("_ProductPanels", Model.Subscriptions)
+        </div>
+    </div>

@@ -1,0 +1,70 @@
+﻿@model AllyisApps.ViewModels.EditCustomerInfoViewModel
+
+@{
+    DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+    DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+    ViewBag.Title = AllyisApps.Resources.TimeTracker.Views.Customer.Strings.Create;
+    ViewData.Add("Controller", "Customer");
+    ViewData.Add("Action", "Create");
+}
+
+<div class="shrink-wrap-center">
+    <div>
+        @{ Html.RenderPartial("EditCustomerDetailsPartial", Model, ViewData); }
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+        function updateStateDDL(successCallback) {
+            if ($('#ddlCountry').val() != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/GetStates",
+                    data: JSON.stringify({ country: $('#ddlCountry').val() }),
+                    datatype: "json",
+                    contentType: "application/json",
+                    success: function (states) {
+                        $('#ddlState').empty();
+                        $('#ddlState').append("<option value=\"\">Select...</option>");
+                        for (var i = 0; i < states.length; i++) {
+                            $('#ddlState').append("<option>" + states[i] + "</option>");
+                        }
+                        $('#ddlState').prop("disabled", false);
+
+                        successCallback();
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Error: " + errorThrown)
+                    }
+                });
+            } else {
+                $('#ddlState').empty();
+                $('#ddlState').append("<option value=\"\">Select...</option>");
+            }
+        }
+
+        var preserveState = '@(Model != null ? Model.State : "")';
+
+        // This runs at 'ready'
+        if ($('#ddlCountry').val() != "") {
+            updateStateDDL(function () {
+                if (preserveState != "") {
+                    var ddl = document.getElementById('ddlState');
+                    for (var i = 0; i < ddl.options.length; i++) {
+                        if (ddl.options[i].text === preserveState) {
+                            ddl.selectedIndex = i;
+                        }
+                    }
+                }
+            });
+        }
+
+        $('#ddlCountry').change(updateStateDDL);
+    </script>
+}
+

@@ -1,0 +1,76 @@
+﻿@import "less/_root.less";
+@import "less/report.less";
+@import "bootstrap/less/navbar.less";
+
+@zone-color: @brand-primary;
+@zone-color-bg: lighten(@zone-color, 25%);
+@zone-body-bg: mix(white, @zone-color-bg, 50%);
+//@brand-primary:     darken(@zone-color, 6.5%); // this was a bad idea
+
+//@navbar-default-bg: @zone-color-bg;
+@navbar-default-border: darken(@btn-zone-bg, 6.5%);
+
+// Get rid of the presets menu for narrow viewports
+// to prevent calendar from bleeding off the screen
+@media (max-width: @screen-sm-min) {
+	.comiseo-daterangepicker-presets {
+		display: none;
+	}
+}
+
+// For preventing the navbar, date range select bar,
+// and footer from crushing at narrow viewports
+body {
+	// For navbar
+	min-width: 300px;
+}
+
+@media (max-width: @screen-sm-min) {
+	#date-select {
+		width: 400px;
+
+		@media (max-width: 610px) {
+			width: 100%;
+		}
+	}
+
+	#day-select-wrapper {
+		width: 200px;
+
+		@media (max-width: 700px) {
+			float: right;
+		}
+	}
+}
+
+@media (max-width: 450px) {
+	#drp_autogen0 {
+		font-size: 12px;
+		padding-top: 1px;
+		padding-bottom: 1px;
+		overflow: hidden;
+		vertical-align: middle;
+	}
+}
+
+// Push out the bottom of the page to make room for
+// footer height change
+.panel {
+	margin-bottom: 30px;
+
+	@media (max-width: @screen-sm-min) {
+		margin-bottom: 60px;
+	}
+}
+
+.navbar-default {
+	border-width: 1px 5px;
+	z-index: auto;
+}
+
+// wireframe
+/**, * > *, * > * > *, * > * > * > *, * > * > * > * > *, * > * > * > * > * > * > * {
+    background-color: @zone-body-bg !important;
+    color: @zone-color !important;
+    border-color: @zone-color !important;
+}*/

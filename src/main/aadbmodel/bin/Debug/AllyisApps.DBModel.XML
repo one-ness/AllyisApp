@@ -1,0 +1,2634 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AllyisApps.DBModel</name>
+    </assembly>
+    <members>
+        <member name="T:AllyisApps.DBModel.Auth.UserRolesDBEntity">
+            <summary>
+            The database model for the collection of roles that a user has.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserRolesDBEntity.FirstName">
+            <summary>
+            Gets or sets User's first name.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserRolesDBEntity.LastName">
+            <summary>
+            Gets or sets User's last name.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserRolesDBEntity.UserId">
+            <summary>
+            Gets or sets User's Id.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserRolesDBEntity.OrgRoleId">
+            <summary>
+            Gets or sets Their orgization role id.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserRolesDBEntity.Name">
+            <summary>
+            Gets or sets Name of their role.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserRolesDBEntity.Email">
+            <summary>
+            Gets or sets Their email.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserRolesDBEntity.ProductRoleId">
+            <summary>
+            Gets or sets Their product role ids.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserRolesDBEntity.SubscriptionId">
+            <summary>
+            Gets or sets Their subscription ids.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.Auth.InvitationSubRoleDBEntity">
+            <summary>
+            Invitation sub role.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.InvitationSubRoleDBEntity.InvitationId">
+            <summary>
+            Gets or sets the id of the invitation. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.InvitationSubRoleDBEntity.SubscriptionId">
+            <summary>
+            Gets or sets the subscription id. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.InvitationSubRoleDBEntity.ProductRoleId">
+            <summary>
+            Gets or sets the product role id. 
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.Auth.ProductRoleDBEntity">
+            <summary>
+            The Product Role Table Poco.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.ProductRoleDBEntity.ProductRoleId">
+            <summary>
+            Gets or sets the ProductRoleId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.ProductRoleDBEntity.ProductId">
+            <summary>
+            Gets or sets the ProductId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.ProductRoleDBEntity.Name">
+            <summary>
+            Gets or sets the Name.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.ProductRoleDBEntity.PermissionAdmin">
+            <summary>
+            Gets or sets a value indicating whether the PermissionAdmin bit.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.ProductRoleDBEntity.CreatedUTC">
+            <summary>
+            Gets or sets the CreatedUTC.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.ProductRoleDBEntity.ModifiedUTC">
+            <summary>
+            Gets or sets the ModifiedUTC.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.Auth.InvitationDBEntity">
+            <summary>
+            The model for the invitations table. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.InvitationDBEntity.InvitationId">
+            <summary>
+            Gets or sets the id of the invitation. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.InvitationDBEntity.Email">
+            <summary>
+            Gets or sets the email address that the invitation is being sent to. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.InvitationDBEntity.CompressedEmail">
+            <summary>
+            Gets compressed email.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.InvitationDBEntity.FirstName">
+            <summary>
+            Gets or sets the first name of the recipiant. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.InvitationDBEntity.LastName">
+            <summary>
+            Gets or sets the last name of the recipiant. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.InvitationDBEntity.DateOfBirth">
+            <summary>
+            Gets or sets the birthday of the recipiant. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.InvitationDBEntity.OrganizationId">
+            <summary>
+            Gets or sets the id of the inviting organization. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.InvitationDBEntity.AccessCode">
+            <summary>
+            Gets or sets the access code associated with the invitation. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.InvitationDBEntity.ProjectId">
+            <summary>
+            Gets or sets the Project for which an user is assigned.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.InvitationDBEntity.OrgRole">
+            <summary>
+            Gets or sets the id of the org role the user will be assigned. 
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.Auth.OrgRoleDBEntity">
+            <summary>
+            Represents the OrganizationRole table in the Database.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrgRoleDBEntity.OrgRoleId">
+            <summary>
+            Gets or sets the OrgRoleID.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrgRoleDBEntity.Name">
+            <summary>
+            Gets or sets the role name.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.Auth.OrganizationUserDBEntity">
+            <summary>
+            Represents the OrganizationUser Table.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationUserDBEntity.UserId">
+            <summary>
+            Gets or sets UserId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationUserDBEntity.OrganizationId">
+            <summary>
+            Gets or sets OrganizationId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationUserDBEntity.OrgRoleId">
+            <summary>
+            Gets or sets OrgRoleId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationUserDBEntity.OrganizationName">
+            <summary>
+            Gets the OrganizationName associated with this orguser.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationUserDBEntity.CreatedUTC">
+            <summary>
+            Gets or sets the date this user was added to the organization.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationUserDBEntity.EmployeeId">
+            <summary>
+            Gets or sets the employee id for this user.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.Auth.OrganizationDBEntity">
+            <summary>
+            Represents the Organizations table in the database.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationDBEntity.OrganizationId">
+            <summary>
+            Gets or sets the organization's ID.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationDBEntity.Name">
+            <summary>
+            Gets or sets the organization's e-mail address.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationDBEntity.SiteUrl">
+            <summary>
+            Gets or sets the organization's website URL.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationDBEntity.Address">
+            <summary>
+            Gets or sets the organization's physical address.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationDBEntity.City">
+            <summary>
+            Gets or sets the organization's city.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationDBEntity.State">
+            <summary>
+            Gets or sets the organization's state.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationDBEntity.Country">
+            <summary>
+            Gets or sets the organization's country.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationDBEntity.PostalCode">
+            <summary>
+            Gets or sets the organization's postal code.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationDBEntity.PhoneNumber">
+            <summary>
+            Gets or sets the organization's phone number.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationDBEntity.FaxNumber">
+            <summary>
+            Gets or sets the organization's fax number.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationDBEntity.CreatedUTC">
+            <summary>
+            Gets or sets DateCreated.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationDBEntity.Subdomain">
+            <summary>
+            Gets or sets subdomain.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.OrganizationDBEntity.CanEditOrganization">
+            <summary>
+            Gets or sets a value indicating whether the user has permissions to edit organization.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.Auth.UserDBEntity">
+            <summary>
+            Represents the Users table in the database.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.UserId">
+            <summary>
+            Gets or sets UserId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.FirstName">
+            <summary>
+            Gets or sets FirstName.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.LastName">
+            <summary>
+            Gets or sets LastName.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.Email">
+            <summary>
+            Gets or sets Email.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.PasswordHash">
+            <summary>
+            Gets or sets SecurityStamp.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.EmailConfirmed">
+            <summary>
+            Gets or sets a value indicating whether EmailConfirmed.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.PhoneNumberConfirmed">
+            <summary>
+            Gets or sets a value indicating whether the phone number of the user has been confirmed.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.TwoFactorEnabled">
+            <summary>
+            Gets or sets a value indicating whether TwoFactorEnabled.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.AccessFailedCount">
+            <summary>
+            Gets or sets AccessFailedCount.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.LockoutEnabled">
+            <summary>
+            Gets or sets a value indicating whether LockoutEnabled.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.UserName">
+            <summary>
+            Gets or sets UserName.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.DateOfBirth">
+            <summary>
+            Gets or sets DateOfBirth.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.Address">
+            <summary>
+            Gets or sets Address.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.City">
+            <summary>
+            Gets or sets City.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.State">
+            <summary>
+            Gets or sets State.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.Country">
+            <summary>
+            Gets or sets Country.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.PostalCode">
+            <summary>
+            Gets or sets PostalCode.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.PhoneNumber">
+            <summary>
+            Gets or sets PhoneNumber.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.PhoneExtension">
+            <summary>
+            Gets or sets PhoneExtension.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.LastSubscriptionId">
+            <summary>
+            Gets or sets the last active subscription id.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.ActiveOrganizationId">
+            <summary>
+            Gets or sets the last active organization id.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.LanguagePreference">
+            <summary>
+            Gets or sets the language preference.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.LockoutEndDateUtc">
+            <summary>
+            Gets or sets LockoutEndDateUtc.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Auth.UserDBEntity.PasswordResetCode">
+            <summary>
+            Gets or sets the password reset code.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.BasePoco">
+            <summary>
+            Base class with facility for tracking property changes.
+            </summary>
+            <remarks>
+            1. Uses reflection to get the property name. Possible performance issues!
+            2. Based on code found here: http://www.codeproject.com/Articles/41791/Almost-automatic-INotifyPropertyChanged-automatic.
+            </remarks>	
+        </member>
+        <member name="F:AllyisApps.DBModel.BasePoco.trackChanges">
+            <summary>
+            Gets or sets the flag to enable or disable tracking of property changes.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.BasePoco.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:AllyisApps.DBModel.BasePoco"/> class.
+            </summary>
+        </member>
+        <member name="E:AllyisApps.DBModel.BasePoco.PropertyChanged">
+            <summary>
+            Gets or sets the required event handler for the INotifyPropertyChanged interface.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.BasePoco.PropertyChanges">
+            <summary>
+            Gets the property changes collection.
+            Dictionary(property name, List of object values).
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.BasePoco.IsDirty">
+            <summary>
+            Gets a value indicating whether this object is dirty (modified).
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.BasePoco.StartTracking">
+            <summary>
+            Enable tracking.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.BasePoco.StopTracking">
+            <summary>
+            Disable tracking.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.BasePoco.ClearPropertyChanges">
+            <summary>
+            Clears all the property changes, should be called after the property changes have been logged.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.BasePoco.ApplyPropertyChange``2(``1@,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},``1)">
+            <summary>
+            Change the property if required and throw event.
+            Note: This must be called by all property setters in the derived classes.
+            </summary>
+            <param name="field">A reference to the field being changed.</param>
+            <param name="property">An expression representing the base object and field being changed.</param>
+            <param name="value">The new value of the field.</param>
+            <typeparam name="T">The derived class type.</typeparam>
+            <typeparam name="TF">The type of field being modified.</typeparam>		
+        </member>
+        <member name="M:AllyisApps.DBModel.BasePoco.GetPropertyName``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            Get the name of the given property in the given object.
+            </summary>		
+            <param name="property">An expression representing the source object and property modified.</param>
+            <typeparam name="T">The type of the class containing the property.</typeparam>
+            <returns>The name of the property being changed.</returns>
+        </member>
+        <member name="T:AllyisApps.DBModel.Billing.BillingHistoryItemDBEntity">
+            <summary>
+            Represents an item in the billing history of an organization.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.BillingHistoryItemDBEntity.OrganizationID">
+            <summary>
+            Gets or sets the organization ID.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.BillingHistoryItemDBEntity.Date">
+            <summary>
+            Gets or sets the date.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.BillingHistoryItemDBEntity.Description">
+            <summary>
+            Gets or sets the description.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.BillingHistoryItemDBEntity.UserID">
+            <summary>
+            Gets or sets the user ID.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.BillingHistoryItemDBEntity.UserName">
+            <summary>
+            Gets or sets the user name.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.BillingHistoryItemDBEntity.SkuID">
+            <summary>
+            Gets or sets the sku ID.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.BillingHistoryItemDBEntity.SkuName">
+            <summary>
+            Gets or sets sku name.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.BillingHistoryItemDBEntity.ProductID">
+            <summary>
+            Gets or sets product ID.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.BillingHistoryItemDBEntity.ProductName">
+            <summary>
+            Gets or sets the product name.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.Billing.SubscriptionDisplayDBEntity">
+            <summary>
+            The table to display the subscription information. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDisplayDBEntity.ProductId">
+            <summary>
+            Gets or sets The id of the subscription product. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDisplayDBEntity.ProductName">
+            <summary>
+            Gets or sets The string identifier of the product id.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDisplayDBEntity.SubscriptionId">
+            <summary>
+            Gets or sets The subscription id. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDisplayDBEntity.OrganizationId">
+            <summary>
+            Gets or sets The organization id. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDisplayDBEntity.SkuId">
+            <summary>
+            Gets or sets The Sku id. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDisplayDBEntity.NumberOfUsers">
+            <summary>
+            Gets or sets The number of users.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDisplayDBEntity.SubscriptionsUsed">
+            <summary>
+            Gets or sets Subscriptions used.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDisplayDBEntity.OrganizationName">
+            <summary>
+            Gets or sets The name of the organization. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDisplayDBEntity.SkuName">
+            <summary>
+            Gets or sets The name of the Sku. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDisplayDBEntity.CreatedUTC">
+            <summary>
+            Gets or sets Date the entry was added. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDisplayDBEntity.Tier">
+            <summary>
+            Gets or sets The string representing the tier of the subscription.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.Billing.SubscriptionRoleDBEntity">
+            <summary>
+            Subscription Role.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionRoleDBEntity.Name">
+            <summary>
+            Gets or sets Name.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionRoleDBEntity.ProductRoleId">
+            <summary>
+            Gets or sets ProductRoleId.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.Billing.SubscriptionUserDBEntity">
+            <summary>
+            Subscription User object.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionUserDBEntity.FirstName">
+            <summary>
+            Gets or sets FirstName.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionUserDBEntity.LastName">
+            <summary>
+            Gets or sets LastName.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionUserDBEntity.ProductRoleId">
+            <summary>
+            Gets or sets ProductRoleId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionUserDBEntity.ProductRoleName">
+            <summary>
+            Gets or sets the name of the subscribed product.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionUserDBEntity.UserId">
+            <summary>
+            Gets or sets UserId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionUserDBEntity.CreatedUTC">
+            <summary>
+            Gets or sets the date the subscription user was added. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionUserDBEntity.SubscriptionId">
+            <summary>
+            Gets or sets the id of the subscription.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionUserDBEntity.SkuId">
+            <summary>
+            Gets or sets the SKU of the subscription.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.Billing.ProductDBEntity">
+            <summary>
+            Represents the Product table in the database.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.ProductDBEntity.Description">
+            <summary>
+            Gets or sets Description.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.ProductDBEntity.ProductId">
+            <summary>
+            Gets or sets ProductId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.ProductDBEntity.Name">
+            <summary>
+            Gets or sets Name.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.Billing.SubscriptionDBEntity">
+            <summary>
+            Represents an organization's product subscription.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDBEntity.OrganizationName">
+            <summary>
+            Gets or sets OrganizationName.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDBEntity.SubscriptionId">
+            <summary>
+            Gets or sets SubscriptionId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDBEntity.OrganizationId">
+            <summary>
+            Gets or sets OrganizationId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDBEntity.SkuId">
+            <summary>
+            Gets or sets SkuId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDBEntity.NumberOfUsers">
+            <summary>
+            Gets or sets SkuId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDBEntity.Licenses">
+            <summary>
+            Gets or sets Licenses.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDBEntity.CreatedUTC">
+            <summary>
+            Gets or sets CreatedDate.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDBEntity.IsActive">
+            <summary>
+            Gets or sets a value indicating whether this subscription is active.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SubscriptionDBEntity.Name">
+            <summary>
+             Gets or sets the name of the Sku.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.Billing.SkuDBEntity">
+            <summary>
+            A class representing the Sku table in the database.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SkuDBEntity.SubscriptionId">
+            <summary>
+            Gets or sets SubscriptionId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SkuDBEntity.SkuId">
+            <summary>
+            Gets or sets SkuId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SkuDBEntity.ProductId">
+            <summary>
+            Gets or sets ProductId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SkuDBEntity.Name">
+            <summary>
+            Gets or sets Name.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SkuDBEntity.Price">
+            <summary>
+            Gets or sets Price.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SkuDBEntity.UserLimit">
+            <summary>
+            Gets or sets UserLimit.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Billing.SkuDBEntity.BillingFrequency">
+            <summary>
+            Gets or sets BillingFrequency.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.Cache.OrganizationDBEntityCache">
+            <summary>
+            Organization DB Entity cache.
+            </summary>
+        </member>
+        <member name="F:AllyisApps.DBModel.Cache.OrganizationDBEntityCache.Instance">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.OrganizationDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrganizationDBEntityCache.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.OrganizationDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrganizationDBEntityCache.Refresh">
+            <summary>
+            Load the items from the database again.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrganizationDBEntityCache.Items">
+            <summary>
+            Get the list of items in the cache.
+            </summary>
+            <returns>A list of OrganizationDBEntity entities.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrganizationDBEntityCache.GetItemById(System.Int32)">
+            <summary>
+            Get the item indicated by the item id.
+            </summary>
+            <param name="itemId">The itemId.</param>
+            <returns>The OrganizationDBEntity.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrganizationDBEntityCache.AddUpdate(AllyisApps.DBModel.Auth.OrganizationDBEntity)">
+            <summary>
+            Add or update the given entity to the cache.
+            </summary>
+            <param name="entity">The OrganizationDBEntity.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrganizationDBEntityCache.Load">
+            <summary>
+            Load from db.
+            </summary>
+            <returns>A list of OrganizationDBEntity entities.</returns>
+        </member>
+        <member name="T:AllyisApps.DBModel.Cache.OrgRoleDBEntityCache">
+            <summary>
+            Local list of all organization roles in the database.
+            </summary>
+        </member>
+        <member name="F:AllyisApps.DBModel.Cache.OrgRoleDBEntityCache.Instance">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.OrgRoleDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="F:AllyisApps.DBModel.Cache.OrgRoleDBEntityCache.items">
+            <summary>
+            List of all of the organization roles in the dadtabase.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrgRoleDBEntityCache.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.OrgRoleDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrgRoleDBEntityCache.Refresh">
+            <summary>
+            Reload all of the local items. Should never be called to save proccessing.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrgRoleDBEntityCache.Items">
+            <summary>
+            Get items function.
+            </summary>
+            <returns>List of org roles.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrgRoleDBEntityCache.GetItemById(System.Int32)">
+            <summary>
+            Gets the organization role by its id.
+            </summary>
+            <param name="itemId">Org role id.</param>
+            <returns>Organization role.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrgRoleDBEntityCache.AddUpdate(AllyisApps.DBModel.Auth.OrgRoleDBEntity)">
+            <summary>
+            Updates the local instance with the new orgRole entity.
+            </summary>
+            <param name="entity">The org role to add/update.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrgRoleDBEntityCache.Load">
+            <summary>
+            Gets all of the organization roles from the database.
+            </summary>
+            <returns>A list of organization roles.</returns>
+        </member>
+        <member name="T:AllyisApps.DBModel.Cache.OrganizationUserDBEntityCache">
+            <summary>
+            OrganizationUser DB Entity cache.
+            </summary>
+        </member>
+        <member name="F:AllyisApps.DBModel.Cache.OrganizationUserDBEntityCache.Instance">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.OrganizationUserDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrganizationUserDBEntityCache.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.OrganizationUserDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrganizationUserDBEntityCache.Refresh">
+            <summary>
+            Load the items from the database again.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrganizationUserDBEntityCache.Items">
+            <summary>
+            Get the list of items in the cache.
+            </summary>
+            <returns>A list of OrganizationUserDBEntity entities.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrganizationUserDBEntityCache.GetItemById(System.Int32)">
+            <summary>
+            Get the item indicated by the item id.
+            </summary>
+            <param name="itemId">The itemId.</param>
+            <returns>The OrganizationUserDBEntity.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrganizationUserDBEntityCache.AddUpdate(AllyisApps.DBModel.Auth.OrganizationUserDBEntity)">
+            <summary>
+            Add or update the given entity to the cache.
+            </summary>
+            <param name="entity">The OrganizationUserDBEntity.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.OrganizationUserDBEntityCache.Load">
+            <summary>
+            Load from db.
+            </summary>
+            <returns>A list of OrganizationUserDBEntity entities.</returns>
+        </member>
+        <member name="T:AllyisApps.DBModel.Cache.ProductDBEntityCache">
+            <summary>
+            Product DB Entity cache.
+            </summary>
+        </member>
+        <member name="F:AllyisApps.DBModel.Cache.ProductDBEntityCache.Instance">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.ProductDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.ProductDBEntityCache.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.ProductDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.ProductDBEntityCache.Refresh">
+            <summary>
+            Reload the items from the database.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.ProductDBEntityCache.Items">
+            <summary>
+            Get the list of items in the cache.
+            </summary>
+            <returns>A list of ProductDBEntity entities.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.ProductDBEntityCache.GetItemById(System.Int32)">
+            <summary>
+            Get the item indicated by the item id.
+            </summary>
+            <param name="itemId">The itemId.</param>
+            <returns>The ProductDBEntity.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.ProductDBEntityCache.AddUpdate(AllyisApps.DBModel.Billing.ProductDBEntity)">
+            <summary>
+            Add or update the given entity to the cache.
+            </summary>
+            <param name="entity">The ProductDBEntity.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.ProductDBEntityCache.Load">
+            <summary>
+            Load the items from the database.
+            </summary>
+            <returns>A list of ProductDBEntities.</returns>
+        </member>
+        <member name="T:AllyisApps.DBModel.Cache.ProductRoleDBEntityCache">
+            <summary>
+            Local list of all product roles.
+            </summary>
+        </member>
+        <member name="F:AllyisApps.DBModel.Cache.ProductRoleDBEntityCache.Instance">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.ProductRoleDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="F:AllyisApps.DBModel.Cache.ProductRoleDBEntityCache.items">
+            <summary>
+            List of all of the product roles in the dadtabase.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.ProductRoleDBEntityCache.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.ProductRoleDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.ProductRoleDBEntityCache.Refresh">
+            <summary>
+            Reload all of the local items. Should never be called to save proccessing.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.ProductRoleDBEntityCache.Items">
+            <summary>
+            Get items function.
+            </summary>
+            <returns>List of product roles.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.ProductRoleDBEntityCache.GetItemById(System.Int32)">
+            <summary>
+            Gets the product role by its id.
+            </summary>
+            <param name="itemId">Product role id.</param>
+            <returns>Product role.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.ProductRoleDBEntityCache.AddUpdate(AllyisApps.DBModel.Auth.ProductRoleDBEntity)">
+            <summary>
+            Updates the local instance with the new ProductRole entity.
+            </summary>
+            <param name="entity">The product role to add/update.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.ProductRoleDBEntityCache.Load">
+            <summary>
+            Gets all of the organization roles from the database.
+            </summary>
+            <returns>A list of organization roles.</returns>
+        </member>
+        <member name="T:AllyisApps.DBModel.Cache.SettingDBEntityCache">
+            <summary>
+            Setting DB Entity cache.
+            </summary>
+        </member>
+        <member name="F:AllyisApps.DBModel.Cache.SettingDBEntityCache.Instance">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.SettingDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SettingDBEntityCache.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.SettingDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SettingDBEntityCache.Refresh">
+            <summary>
+            Load the items from the database again.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SettingDBEntityCache.Items">
+            <summary>
+            Get the list of items in the cache.
+            </summary>
+            <returns>A list of SettingDBEntity entities.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SettingDBEntityCache.GetItemById(System.Int32)">
+            <summary>
+            Get the item indicated by the organization id.
+            </summary>
+            <param name="itemId">The itemId.</param>
+            <returns>The SettingDBEntity.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SettingDBEntityCache.AddUpdate(AllyisApps.DBModel.TimeTracker.SettingDBEntity)">
+            <summary>
+            Add or update the given entity to the cache.
+            </summary>
+            <param name="entity">The SettingDBEntity.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SettingDBEntityCache.Load">
+            <summary>
+            Load from db.
+            </summary>
+            <returns>A list of SettingDBEntity entities.</returns>
+        </member>
+        <member name="T:AllyisApps.DBModel.Cache.SkuDBEntityCache">
+            <summary>
+            Sku DB Entity cache.
+            </summary>
+        </member>
+        <member name="F:AllyisApps.DBModel.Cache.SkuDBEntityCache.Instance">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.SkuDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SkuDBEntityCache.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.SkuDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SkuDBEntityCache.Refresh">
+            <summary>
+            Reload items from the database.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SkuDBEntityCache.Items">
+            <summary>
+            Get the list of items in the cache.
+            </summary>
+            <returns>A list of SkuDBEntity entities.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SkuDBEntityCache.GetItemById(System.Int32)">
+            <summary>
+            Get the item indicated by the item id.
+            </summary>
+            <param name="itemId">The itemId.</param>
+            <returns>The SkuDBEntity.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SkuDBEntityCache.AddUpdate(AllyisApps.DBModel.Billing.SkuDBEntity)">
+            <summary>
+            Add or update the given entity to the cache.
+            </summary>
+            <param name="entity">The SkuDBEntity.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SkuDBEntityCache.Load">
+            <summary>
+            Load items from the database.
+            </summary>
+            <returns>A list of SkuDBEntity entities.</returns>
+        </member>
+        <member name="T:AllyisApps.DBModel.Cache.SubscriptionDBEntityCache">
+            <summary>
+            SubscriptionDBEntity cache.
+            </summary>
+        </member>
+        <member name="F:AllyisApps.DBModel.Cache.SubscriptionDBEntityCache.Instance">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.SubscriptionDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SubscriptionDBEntityCache.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.SubscriptionDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SubscriptionDBEntityCache.Refresh">
+            <summary>
+            Reload items from the database.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SubscriptionDBEntityCache.Items">
+            <summary>
+            Get the list of items in the cache.
+            </summary>
+            <returns>A list of SubscriptionDBEntity entities.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SubscriptionDBEntityCache.GetItemById(System.Int32)">
+            <summary>
+            Get the item indicated by the item id.
+            </summary>
+            <param name="itemId">The itemId.</param>
+            <returns>The SubscriptionDBEntity.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SubscriptionDBEntityCache.AddUpdate(AllyisApps.DBModel.Billing.SubscriptionDBEntity)">
+            <summary>
+            Add or update the given entity to the cache.
+            </summary>
+            <param name="entity">The SubscriptionDBEntity.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SubscriptionDBEntityCache.Load">
+            <summary>
+            Load items from the database.
+            </summary>
+            <returns>A list of SubscriptionDBEntity entities.</returns>
+        </member>
+        <member name="T:AllyisApps.DBModel.Cache.SubscriptionUserDBEntityCache">
+            <summary>
+            SubscriptionUserDBEntity Cache.
+            </summary>
+        </member>
+        <member name="F:AllyisApps.DBModel.Cache.SubscriptionUserDBEntityCache.Instance">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.SubscriptionUserDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SubscriptionUserDBEntityCache.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.SubscriptionUserDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SubscriptionUserDBEntityCache.Refresh">
+            <summary>
+            Reload items from the database.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SubscriptionUserDBEntityCache.Items">
+            <summary>
+            Get the list of items in the cache.
+            </summary>
+            <returns>A list of the SubscriptionUserDBEntity entities.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SubscriptionUserDBEntityCache.GetItemById(System.Int32)">
+            <summary>
+            Get the item indicated by the item id.
+            </summary>
+            <param name="itemId">The itemId.</param>
+            <returns>The SubscriptionUserDBEntity.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SubscriptionUserDBEntityCache.AddUpdate(AllyisApps.DBModel.Billing.SubscriptionUserDBEntity)">
+            <summary>
+            Add or update the given entity to the cache.
+            </summary>
+            <param name="entity">The SubscriptionUserDBEntity.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.SubscriptionUserDBEntityCache.Load">
+            <summary>
+            Load items from the database.
+            </summary>
+            <returns>A list of the SubscriptionUserDBEntity entities.</returns>
+        </member>
+        <member name="T:AllyisApps.DBModel.Cache.UserDBEntityCache">
+            <summary>
+            UserDBEntity cache.
+            </summary>
+        </member>
+        <member name="F:AllyisApps.DBModel.Cache.UserDBEntityCache.Instance">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.UserDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="F:AllyisApps.DBModel.Cache.UserDBEntityCache.items">
+            <summary>
+            List of all of the users in the dadtabase.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.UserDBEntityCache.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.Cache.UserDBEntityCache" /> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.UserDBEntityCache.Refresh">
+            <summary>
+            Reload all of the local items. Should never be called to save proccessing.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.UserDBEntityCache.Items">
+            <summary>
+            Get items function.
+            </summary>
+            <returns>List of users.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.UserDBEntityCache.GetItemById(System.Int32)">
+            <summary>
+            Get user by id.
+            </summary>
+            <param name="itemId">The users id.</param>
+            <returns>The given user or null if none.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.UserDBEntityCache.GetUserByEmail(System.String)">
+            <summary>
+            Gets UserDBEntity by email address.
+            </summary>
+            <param name="email">Email of the user.</param>
+            <returns>The UserDBEntity.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.UserDBEntityCache.AddUpdate(AllyisApps.DBModel.Auth.UserDBEntity)">
+            <summary>
+            Updates the local instance with the new user entity.
+            </summary>
+            <param name="entity">The user to add/update.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.Cache.UserDBEntityCache.Load">
+            <summary>
+            Gets all of the users from the database.
+            </summary>
+            <returns>A list of users.</returns>
+        </member>
+        <member name="T:AllyisApps.DBModel.Crm.CompleteProjectDBEntity">
+            <summary>
+            Project table in the database, with supplementary information.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CompleteProjectDBEntity.ProjectId">
+            <summary>
+            Gets or sets The project's id. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CompleteProjectDBEntity.IsActive">
+            <summary>
+            Gets or sets a value indicating whether or not the project is active.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CompleteProjectDBEntity.CustomerId">
+            <summary>
+            Gets or sets The id of the customer that the project belongs to. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CompleteProjectDBEntity.IsCustomerActive">
+            <summary>
+            Gets or sets a value indicating whether or not the Customer is active.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CompleteProjectDBEntity.OrganizationId">
+            <summary>
+            Gets or sets The id of the organization that the customer belongs to. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CompleteProjectDBEntity.CreatedUTC">
+            <summary>
+            Gets or sets The date/time of creation. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CompleteProjectDBEntity.ProjectName">
+            <summary>
+            Gets or sets The name of the project. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CompleteProjectDBEntity.CustomerName">
+            <summary>
+            Gets or sets The name of the customer. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CompleteProjectDBEntity.OrganizationName">
+            <summary>
+            Gets or sets The name of the organization. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CompleteProjectDBEntity.OrgRoleId">
+            <summary>
+            Gets or sets The id of the organization role. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CompleteProjectDBEntity.IsUserActive">
+            <summary>
+            Gets or sets a value indicating whether a user is active on the project, If that project was fetched via userId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CompleteProjectDBEntity.PriceType">
+            <summary>
+            Gets or sets Project Pricing Type.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CompleteProjectDBEntity.StartDate">
+            <summary>
+            Gets or sets Project start date.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CompleteProjectDBEntity.EndDate">
+            <summary>
+            Gets or sets Project end date.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.Crm.ProjectDBEntity">
+            <summary>
+            The project table. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.ProjectDBEntity.ProjectId">
+            <summary>
+            Gets or sets the project id. 
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.ProjectDBEntity.OrganizationId">
+            <summary>
+            Gets or sets the id of the organization associated with the project.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.ProjectDBEntity.CustomerId">
+            <summary>
+            Gets or sets the id of the customer associated with the project.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.ProjectDBEntity.Name">
+            <summary>
+            Gets or sets the project name. 
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.Crm.CustomerDBEntity">
+            <summary>
+            Represents the Users table in the database.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CustomerDBEntity.CustomerId">
+            <summary>
+            Gets or sets CustomerId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CustomerDBEntity.Name">
+            <summary>
+            Gets or sets Name.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CustomerDBEntity.Address">
+            <summary>
+            Gets or sets Address.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CustomerDBEntity.City">
+            <summary>
+            Gets or sets City.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CustomerDBEntity.State">
+            <summary>
+            Gets or sets State.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CustomerDBEntity.Country">
+            <summary>
+            Gets or sets Country.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CustomerDBEntity.PostalCode">
+            <summary>
+            Gets or sets PostalCode.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CustomerDBEntity.ContactEmail">
+            <summary>
+            Gets or sets Email.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CustomerDBEntity.ContactPhoneNumber">
+            <summary>
+            Gets or sets PhoneNumber.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CustomerDBEntity.FaxNumber">
+            <summary>
+            Gets or sets Fax number.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CustomerDBEntity.Website">
+            <summary>
+            Gets or sets Fax number.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CustomerDBEntity.EIN">
+            <summary>
+            Gets or sets Employer Identification Number.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CustomerDBEntity.CreatedUTC">
+            <summary>
+            Gets or sets the date the customer was created.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Crm.CustomerDBEntity.OrganizationId">
+            <summary>
+            Gets or sets the id of the organization associated with the customer.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.DBHelper">
+            <summary>
+            DBHelper Partial.
+            </summary>
+            <summary>
+            DBHelper Partial.
+            </summary>
+            <summary>
+            Provides DB access methods relating to organizations.
+            </summary>
+            <summary>
+            Contains data and information that is not linked to a schema
+            but is still required for the appllication.
+            </summary>
+            <summary>
+            DBHelper Partial.
+            </summary>
+            <summary>
+            DBHelper Partial.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.ValidCountries">
+            <summary>
+            Retrieves a collection of valid countries from the database.
+            </summary>
+            <returns>A collection of country names.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.ValidStates(System.String)">
+            <summary>
+            Retrieves a collection of valid states (or provinces)
+                from the database based on the source country.
+            </summary>
+            <param name="countryName">The country's name.</param>
+            <returns>A collection of states/provinces within that country.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.ValidLanguages">
+            <summary>
+            Retrieves a collection of language settings from the database.
+            </summary>
+            <returns>A collection of all valid language settings.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetLanguage(System.Int32)">
+            <summary>
+            Retrieves a language setting from the database.
+            </summary>
+            <param name="languageID">The language ID.</param>
+            <returns>A language setting row.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSettingList">
+            <summary>
+            Get a list of all setting items.
+            </summary>
+            <returns>A list of all setting items.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetOrganizationFromProject(System.Int32)">
+            <summary>
+            Returns the organizationid of the org associated with a project.
+            </summary>
+            <param name="projectID">The project.</param>
+            <returns>The organization id.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetLockDate(System.Int32,System.Int32)">
+            <summary>
+            Returns the lock date for a specific organization/user.
+            </summary>
+            <param name="organizationID">The Organization Id.</param>
+            <param name="userID">The User Id.</param>
+            <returns>The lock date.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.SetLockDate(System.Int32,System.Int32,System.DateTime)">
+            <summary>
+            Sets the lock date for a specific organization/user.
+            </summary>
+            <param name="organizationID">The Organization Id.</param>
+            <param name="userID">The User Id.</param>
+            <param name="date">The date.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.CreateHoliday(AllyisApps.DBModel.TimeTracker.HolidayDBEntity)">
+            <summary>
+            Creates a holiday and related TimeEntries for an organization.
+            </summary>
+            <param name="newHoliday">The HolidayDBEntity to create.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.DeleteHoliday(System.String,System.DateTime,System.Int32)">
+            <summary>
+            Removes a holiday and related TimeEntries for an organization.
+            </summary>
+            <param name="holidayName">The HolidayDBEntity to delete.</param>
+            <param name="date">The HolidayDBEntity to delete.</param>
+            <param name="organizationID">The HolidayDBEntity to delete.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetHolidays(System.Int32)">
+            <summary>
+            Gets a list of the Holidays for an organization.
+            </summary>
+            <param name="organizationId">The organization id to retrieve holidays for or nothing for defaults.</param>
+            <returns>A list of HolidayDBEntity objects.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.CreatePayClass(System.String,System.Int32)">
+            <summary>
+            Adds a new pay class to the specified organization.
+            </summary>
+            <param name="payClassName">The name of the pay class to add.</param>
+            <param name="organizationID">The organization to add the pay class to.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.DeletePayClass(System.Int32)">
+            <summary>
+            Deletes a pay class from the specified organization.
+            </summary>
+            <param name="payClassID">The name of the pay class to remove.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetPayClasses(System.Int32)">
+            <summary>
+            Returns a list of the payclasses for a given organization or a default list if there aren't any.
+            </summary>
+            <param name="organizationId">The organizationid to look for or null for defaults.</param>
+            <returns>The PayClassDBEntity.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetPayClassById(System.Int32)">
+            <summary>
+            Get play class by id.
+            </summary>
+            <param name="id">Id of pay class.</param>
+            <returns>The PayClassDBEntity.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetPayClassByNameAndOrg(System.String,System.Int32)">
+            <summary>
+            Get a pay class by name and org.
+            </summary>
+            <param name="name">Name of class.</param>
+            <param name="orgId">Id of org.</param>
+            <returns>The PayClassDBEntity.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetTimeEntriesByUserOverDateRange(System.Collections.Generic.List{System.Int32},System.Int32,System.DateTime,System.DateTime)">
+            <summary>
+            Gets all of the time entries with the defined params.
+            </summary>
+            <param name="userId">An array of user Id's.</param>
+            <param name="orgId">The organization's Id.</param>
+            <param name="startingDate">The beginning date of the date range.</param>
+            <param name="endingDate">The ending date of the date range.</param>
+            <returns>A collection of time entries.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetTimeEntriesOverDateRange(System.Int32,System.DateTime,System.DateTime)">
+            <summary>
+            Gets all of the time entries with the defined params.
+            </summary>
+            <param name="orgId">The organization's Id.</param>
+            <param name="startingDate">The beginning date of the date range.</param>
+            <param name="endingDate">The ending date of the date range.</param>
+            <returns>A collection of time entries.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetTimeEntryById(System.Int32)">
+            <summary>
+            Gets a specific time entry. 
+            </summary>
+            <param name="timeEntryId">The id of the time entry.</param>
+            <returns>The time entry.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.CreateTimeEntry(AllyisApps.DBModel.TimeTracker.TimeEntryDBEntity)">
+            <summary>
+            Creates a new time entry in the database.
+            </summary>
+            <param name="entry">Object to be saved to the database.</param>
+            <returns>The id of the created timeEntry. If unsuccessful, returns -1.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateTimeEntry(AllyisApps.DBModel.TimeTracker.TimeEntryDBEntity)">
+            <summary>
+            Updates the database entry at the entries Id with all updatable information.
+            </summary>
+            <param name="entry">Object representing the database entry.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.DeleteTimeEntry(System.Int32)">
+            <summary>
+            Deletes a time entry. 
+            </summary>
+            <param name="timeEntryId">The time entry to be deleted.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.SetTimeEntryApprovalStateById(System.Int32,System.Int32)">
+            <summary>
+            Sets the approval state of a time entry in the database.
+            </summary>
+            <param name="timeEntryId">The Id of the time entry to be updated.</param>
+            <param name="approvalState">The new approval state.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateTimeTrackerStartOfWeek(System.Int32,System.Int32)">
+            <summary>
+            Updatese only the start of week for an org.
+            </summary>
+            <param name="orgId">The organization ID.</param>
+            <param name="startOfWeek">The value for which day should be the start of the week. 1-6 M-Sat, 0 Sun.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateSettings(System.Int32,System.Int32,System.Int32,System.String,System.Single)">
+            <summary>
+            Update settings for an Organization.
+            </summary>
+            <param name="orgId">The Id of the time entry to be updated.</param>
+            <param name="startOfWeek">The new approval state.</param>
+            <param name="overtimeHours">Hours until overtime.</param>
+            <param name="overtimePeriod">Time period for hours until overtime.</param>
+            <param name="overtimeMultiplier">Overtime pay multiplier.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetStartOfWeek(System.Int32)">
+            <summary>
+            Get start of week for organization.
+            </summary>
+            <param name="orgId">The organization Id for which the StartOfWeek is to be retrieved.</param>
+            <returns>The start of week int.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSettings(System.Int32)">
+            <summary>
+            Get settings for organization.
+            </summary>
+            <param name="orgId">The organization Id for which the settings are to be retrieved.</param>
+            <returns>Settings for an organization.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.InitializeTimeTrackerSettings(System.Int32)">
+            <summary>
+            Initializes time tracker settings.
+            </summary>
+            <param name="orgId">The organization ID.</param>
+        </member>
+        <member name="F:AllyisApps.DBModel.DBHelper.productIDList">
+            <summary>
+            Product ID List.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.DBHelper.ProductIDList">
+            <summary>
+            Gets a list of available product IDs.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetProductAreaBySubscription(System.Int32)">
+            <summary>
+            Retrieves the area to route to for a specific subscription.
+            </summary>
+            <param name="subscriptionID">The subscription ID.</param>
+            <returns>The product area string.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetProductIDByName(System.String)">
+            <summary>
+            Retrieves the Product ID by Product Name.
+            </summary>
+            <param name="productName">The name of the product.</param>
+            <returns>The ID of the product.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSubscriptionUserList">
+            <summary>
+            Gets a list of all subscription users.
+            </summary>
+            <returns>List of SubscriptionUserDBEntities.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateSubscriptionUserProductRole(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Updates the subscriptionUser table entry for a specific user of subscription to be productRoleId.
+            If no subscriptionUser table entry exists, one will be created.
+            </summary>
+            <param name="productRoleId">The id of the product role the user will get.</param>
+            <param name="subscriptionId">The subscription's Id.</param>
+            <param name="userId">The User's Id.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.DeleteSubscriptionUser(System.Int32,System.Int32)">
+            <summary>
+            Deletes a subscriptionUser.
+            </summary>
+            <param name="subscriptionId">The subscription's Id.</param>
+            <param name="userId">The user's Id.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.CheckSubscription(System.Int32,System.Int32)">
+            <summary>
+            Executes [Billing].[GetSubscription].
+            </summary>
+            <param name="organizationId">Sets organizationId.</param>
+            <param name="productId">Sets productId.</param>
+            <returns>Requested Organization.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.Unsubscribe(System.Int32)">
+            <summary>
+            Unsubscribe method.
+            </summary>
+            <param name="subscriptionId">Subscription id.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSubscriptionByUser(System.Int32,System.Int32)">
+            <summary>
+            Get subscription by User.
+            </summary>
+            <param name="userId">The UserId.</param>
+            <param name="organizationId">The organizationId.</param>
+            <returns>List of TableSubscriptions.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetDateAddedToSubscriptionByUserId(System.Int32,System.Int32)">
+            <summary>
+            Gets the date that the user joined the subscription. 
+            </summary>
+            <param name="userId">The user in question.</param>
+            <param name="subId">The subscription in question.</param>
+            <returns>The date that the user was added to the subscription.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSubscriptionDetailsById(System.Int32)">
+            <summary>
+            Get Subscription Details by Id.
+            </summary>
+            <param name="subscriptionId"> Subscription Id.</param>
+            <returns>SubscriptionDBEntity obj.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSubscriptionsByOrg(System.Int32)">
+            <summary>
+            Executes [Billing].[GetSubscriptionsByOrg].
+            </summary>
+            <param name="organizationId">Sets OrganizationId.</param>
+            <returns>List of SkuDBEntity's.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSubscriptionByOrgAndProduct(System.Int32,System.Int32)">
+            <summary>
+            Executes [Billing].[GetSubscriptionByOrgAndProduct].
+            </summary>
+            <param name="organizationId">Sets OrganizationId.</param>
+            <param name="productId">Sets ProductId.</param>
+            <returns>List of SkuDBEntity's.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSkuforProduct(System.Int32)">
+            <summary>
+            Executes [Billing].[GetSkuforProduct].
+            </summary>
+            <param name="productID">Sets ProductID.</param>
+            <returns>List of SkuDBEntity's.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetProductById(System.Int32)">
+            <summary>
+            Executes [Billing].[GetProductById].
+            </summary>
+            <param name="productID">Sets ProductID.</param>
+            <returns>ProductDBEntity obj.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetFreeSku(System.Int32)">
+            <summary>
+            Executes [Billing].[GetFreeSku].
+            </summary>
+            <param name="productID">Sets ProductID.</param>
+            <returns>SkuDBEntity obj.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetProductList">
+            <summary>
+            Executes [Billing].[GetProductList].
+            </summary>
+            <returns>List of ProductDBEntity.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.ChangeSubscription(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Executes [Billing].[UpdateSubscription].
+            </summary>
+            <param name="organizationId">Sets OrganizationId.</param>
+            <param name="skuId">Set to 0 for unsubscribe.</param>
+            <param name="productId"> Param @productId. </param>
+            <param name="numberOfUsers">Number of the users the subscription.</param>
+            <returns>The ret ID.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateSubscriptionUsers(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Executes [Billing].[UpdateNumberOfUsersSubscription].
+            </summary>
+            <param name="organizationId">Sets OrganizationId.</param>
+            <param name="skuId">Set to 0 for unsubscribe.</param>
+            <param name="numberOfUsers">Number of the users the subscription.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSkuList">
+            <summary>
+            Executes [Billing].[GetSkuList].
+            </summary>
+            <returns>List of SkuDBEntity's.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSkuDetails(System.Int32)">
+            <summary>
+            Executes [Billing].[GetSkuById].
+            </summary>
+            <param name="skuId">Sets SkuId.</param>
+            <returns>SkuDBEntity obj.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.AddCustomerSubscription(System.String,System.String,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Adds an entry to the customer subscription table.
+            </summary>
+            <param name="stripeTokenCustId">The id of the stripe customer.</param>
+            <param name="stripeTokenSubId">The id of the stripe subscription.</param>
+            <param name="price">The price of the subscription.</param>
+            <param name="numberOfUsers">The number of users for the subscription.</param>
+            <param name="productID">The id of the subscription product.</param>
+            <param name="organizationID">The id of the organization that the subscription belongs to.</param>
+            <returns>Subscription ID.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.AddOrgCustomer(System.Int32,System.String)">
+            <summary>
+            Adds an entry to the organization customer table.
+            </summary>
+            <param name="orgId">The id of the organization.</param>
+            <param name="customerID">The id of the customer object.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetOrgCustomer(System.Int32)">
+            <summary>
+            Gets the customer id for the organization.
+            </summary>
+            <param name="orgId">The id of the organization.</param>
+            <returns>The Organization custormer.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSubscriptionPlan(System.Int32,System.String)">
+            <summary>
+            Gets the subscription id for the organization.
+            </summary>
+            <param name="orgid">The id of the organization.</param>
+            <param name="customerid">The id of the customer.</param>
+            <returns>The subscription plan.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateSubscriptionPlan(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets the subscription id for the organization.
+            </summary>
+            <param name="customerID">The id of the customer.</param>
+            <param name="subscriptionPlanID">The id of the subscription plan to be updated.</param>
+            <param name="price">The price of the subscription.</param>
+            <param name="numberOfUsers">The number of users for the subscription.</param>
+            <returns>The subscription ID.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.DeleteSubscriptionPlan(System.String)">
+            <summary>
+            Deletes a customer subscription.
+            </summary>
+            <param name="subscriptionid">The id of the subscription plan to be deleted.</param>
+            <returns>The deleted subscription plan ID, or -1 on failure.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSubscriptionPlanPrice(System.String)">
+            <summary>
+            Gets the price of the subscription.
+            </summary>
+            <param name="subscriptionid">The id of the subscription in question.</param>
+            <returns>The price of the subscription.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.AddBillingHistory(System.String,System.Int32,System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Adds entry to billing history table. 
+            </summary>
+            <param name="description">What is happening.</param>
+            <param name="orgid">The associated organization id.</param>
+            <param name="userid">The associated user id.</param>
+            <param name="skuid">Optional product id.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.RemoveBilling(System.Int32)">
+            <summary>
+            Removes billing information for an organization.
+            </summary>
+            <param name="orgid">The id of the organization to remove the billing information for.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSubscriptionPlanPrices(System.Int32)">
+            <summary>
+            Executes [Billing].[GetSubscriptionPlanPrices].
+            </summary>
+            <param name="orgid">Sets productID.</param>
+            <returns>List of prices.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSubscriptionIds(System.Int32)">
+            <summary>
+            Gets all the susbcription ids for an organization.
+            </summary>
+            <param name="orgid">The organization id.</param>
+            <returns>The subscription ids.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSubscriptionList">
+            <summary>
+            Gets a list of all subscriptions.
+            </summary>
+            <returns>A list of SubscriptionDBEntity entities.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSubscriptionDetails(System.Int32)">
+            <summary>
+            Retrieves the collection of subscriptions for the specified organization.
+            </summary>
+            <param name="organizationId">The organization's ID.</param>
+            <returns>The collection of OrganizationSubscription objects for this org.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetUserSubscriptionOrganizationList(System.Int32)">
+            <summary>
+            Returns the organization information crossed with subscription and role information, from a user id.
+            </summary>
+            <param name="userId">The user ID.</param>
+            <returns>A collection of SubscriptionDisplay information.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSubscriptionsDisplayByOrg(System.Int32)">
+            <summary>
+            Executes [Billing].[GetSubscriptionsDisplayByOrg].
+            </summary>
+            <param name="organizationId">Sets OrganizationId.</param>
+            <returns>List of SubscriptionDisplay's.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetProductRolesFromSubscription(System.Int32)">
+            <summary>
+            Executes Billing.GetProductRolesFromSubscription.
+            </summary>
+            <param name="subscriptionId">Sets SubscriptionId.</param>
+            <returns>List of SubscriptionRole.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetBillingHistoryByOrg(System.Int32)">
+            <summary>
+            Executes Billing.GetBillingHistoryByOrg.
+            </summary>
+            <param name="orgID">Organization ID.</param>
+            <returns>List of BillingHistoryItem.</returns>
+        </member>
+        <member name="F:AllyisApps.DBModel.DBHelper.Instance">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.DBHelper"/> class from being created.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AllyisApps.DBModel.DBHelper"/> class.
+            </summary>
+            <param name="connectionString">The Connection string.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:AllyisApps.DBModel.DBHelper"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.DBHelper.SqlConnectionString">
+            <summary>
+            Gets or sets the connection string to the backing database.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.Init(System.String)">
+            <summary>
+            Initializes the database helper.
+            </summary>
+            <param name="key">The key of the connection strings configuration.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.CreateUser(AllyisApps.DBModel.Auth.UserDBEntity)">
+            <summary>
+            Updates the user with the information specified in the user table.
+            </summary>
+            <param name="user">The table with the user to create.</param>
+            <returns>The ID of the user if one was created -1 if not.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetUserByEmailAsync(System.String)">
+            <summary>
+            Executes [Auth].[GetUserFromEmail].
+            </summary>
+            <param name="email">Parameter @email.</param>
+            <returns>UserDBEntity obj.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetOrganizationList">
+            <summary>
+            Get a list of all organizations.
+            </summary>
+            <returns>A list of all organizations.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetOrganizationUserList">
+            <summary>
+            Get a list of all organization users.
+            </summary>
+            <returns>A list of all organization users.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetOrganizationUser(System.Int32,System.Int32)">
+            <summary>
+            Gets the Organization User Database entry.
+            </summary>
+            <param name="orgId">The Organization ID.</param>
+            <param name="userId">The User ID.</param>
+            <returns>The Organization User Database entry.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetOrgFromAccessCode(System.String)">
+            <summary>
+            Gets the org id by the access code.
+            </summary>
+            <param name="accessCode">The access code.</param>
+            <returns>The org id.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetProductRoles(System.String)">
+            <summary>
+            Gets the product roles for a specific product.
+            </summary>
+            <param name="productName">The name of the product to get roles for.</param>
+            <returns>The Product roles.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetProductRoleList">
+            <summary>
+            Get all product roles from db.
+            </summary>
+            <returns>A list of product roles.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetProductRoleForUser(System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets the product role for a user for a product.
+            </summary>
+            <param name="productName">The name of the product.</param>
+            <param name="organizationID">The organization.</param>
+            <param name="userID">The user.</param>
+            <returns>The product rold for the user.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetUsersByOrganization(System.Int32,System.Int32)">
+            <summary>
+            Executes Auth.getUsersByOrganization.
+            </summary>
+            <param name="organizationID">Organization Id.</param>
+            <param name="subscriptionId">Subscription Id.</param>
+            <returns>List of Subscription Users.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetOrganizationsWhereUserIsAdmin(System.Int32)">
+            <summary>
+            Gets the organizations where the user Is the admin.
+            </summary>
+            <param name="userId">The User's Id.</param>
+            <returns>A list of the organizations the user is admin of.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateUser(AllyisApps.DBModel.Auth.UserDBEntity)">
+            <summary>
+            Updates the user with the specified ID.
+            </summary>
+            <param name="user">The table with the user to create.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetUserInfo(System.Int32)">
+            <summary>
+            Retrieves the user's information from the database.
+            </summary>
+            <param name="userId">The user's ID.</param>
+            <returns>The TableUsers containing the user's information, null if call fails.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateActiveSubscription(System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Populates a user's last used subscription.
+            </summary>
+            <param name = "userId">Target user's ID.</param>
+            <param name = "subId">The subscription's ID.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateActiveOrganization(System.Int32,System.Int32)">
+            <summary>
+            Populates a user's last used organization.
+            </summary>
+            <param name = "userId">Target user's ID.</param>
+            <param name = "organizationID">The organization's ID.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateUserLanguagePreference(System.Int32,System.Int32)">
+            <summary>
+            Updates the preferred language for a user.
+            </summary>
+            <param name="userID">Target user's ID.</param>
+            <param name="languageID">Language ID.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetUserOrganizationList(System.Int32)">
+            <summary>
+            Gets the list of organizations to which the user belongs, as well as
+            	the user's role within each organization.
+            </summary>
+            <param name="userId">The user's ID.</param>
+            <returns>The collection of organizations this user is a part of.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetUserSubscriptionList(System.Int32,System.Int32)">
+            <summary>
+            Gets the list of subscriptions to which the user belongs, as well as
+            	the user's role within each subscription.
+            </summary>
+            <param name="userId">The user's ID.</param>
+            <param name="orgId">The organization's ID.</param>
+            <returns>The collection of subscriptions this user is a part of for the given organization.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetOrganizationUserListByUserId(System.Int32)">
+            <summary>
+            Gets a list of organizations for which the given user is a member of.
+            </summary>
+            <param name="userId">The user ID.</param>
+            <returns>A list of organizations.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetUsersWithSubscriptionToProductInOrganization(System.Int32,System.Int32)">
+            <summary>
+            Returns the permissions all user's in an organization have for a product.
+            </summary>
+            <param name="organizationId">The organization's Id.</param>
+            <param name="productId">The product's Id.</param>
+            <returns>A collection of user data.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateUserPassword(System.Int32,System.String)">
+            <summary>
+            Updates new password in Auth.User table.
+            </summary>
+            <param name = "userId">Target user's ID.</param>
+            <param name = "password">The subscription's ID.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateUserPasswordUsingCode(System.Int32,System.String,System.String)">
+            <summary>
+            Updates new password in Auth.User table. Requires proper reset code.
+            </summary>
+            <param name = "userId">Target user's ID.</param>
+            <param name = "password">The new password hash.</param>
+            <param name = "code">The password reset code.</param>
+            <returns>An int...</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateUserPasswordResetCode(System.Int32,System.String)">
+            <summary>
+            Updates password reset code in Auth.User table.
+            </summary>
+            <param name = "userId">Target user's ID.</param>
+            <param name = "resetCode">The resetCode.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.CreateOrganization(AllyisApps.DBModel.Auth.OrganizationDBEntity,System.Int32,System.Int32)">
+            <summary>
+            Adds an organization to the database.
+            </summary>
+            <param name="org">The OrganizationDBEntity to create.</param>
+            <param name="ownerId">The owner's user ID.</param>
+            <param name="roleId">The role associated with the creator of the organization.</param>
+            <returns>The id of the created organization or -1.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateOrganization(AllyisApps.DBModel.Auth.OrganizationDBEntity)">
+            <summary>
+            Updates the specified organization with new information.
+            </summary>
+            <param name="org">The organization table with updates.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.DeleteOrganization(System.Int32)">
+            <summary>
+            Executes [Auth].[DeleteOrg].
+            </summary>
+            <param name="organizationId">Parameter @organizationID. </param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.CreateOrganizationUser(AllyisApps.DBModel.Auth.OrganizationUserDBEntity)">
+            <summary>
+            Adds user to an organization.
+            </summary>
+            <param name="orgUser">The organization's ID.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetEmployeeId(System.Int32,System.Int32)">
+            <summary>
+            Gets the employee id for a user for an org.
+            </summary>
+            <param name="userID">The Id of the user.</param>
+            <param name="organizationID">The Id of the organization.</param>
+            <returns>The employee id.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.SetEmployeeId(System.Int32,System.Int32,System.String)">
+            <summary>
+            Sets the employee id for a user for an org.
+            </summary>
+            <param name="userID">The Id of the user.</param>
+            <param name="organizationID">The Id of the organization.</param>
+            <param name="employeeID">The value to set the employeeID to.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateOrganizationUser(AllyisApps.DBModel.Auth.OrganizationUserDBEntity)">
+            <summary>
+            Updates the specified user within the specified organization with a new role.
+            </summary>
+            <param name="orgUser">The orgUser table with updates.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.RemoveOrganizationUser(System.Int32,System.Int32)">
+            <summary>
+            Removes the specified user from the organization.
+            </summary>
+            <param name="organizationId">The organization's ID.</param>
+            <param name="userId">The user's ID.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetPermissionLevel(System.Int32,System.Int32)">
+            <summary>
+            Retrieves the specified user's permissions in the specified organization.
+            </summary>
+            <param name="organizationId">The organization's ID.</param>
+            <param name="userId">The user's ID.</param>
+            <returns>The TableOrganizationRole related to the user for the specified organization.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetOrganization(System.Int32)">
+            <summary>
+            Returns the organization information.
+            </summary>
+            <param name="organizationId">The organization's ID.</param>
+            <returns>The TableOrganizations containing the organization's information, null if an error is encountered.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetOrganizationMemberList(System.Int32)">
+            <summary>
+            Retrieves the list of members for the specified organization.
+            </summary>
+            <param name="organizationId">The organization's ID.</param>
+            <returns>The collection of users in the organization, null on error.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetIdBySubdomain(System.String)">
+            <summary>
+            Retreives the id of the organization that registered the given subdomain.
+            </summary>
+            <param name="subdomain">The organization's subdomain.</param>
+            <returns>The id of the organization.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetSubdomainById(System.Int32)">
+            <summary>
+            Retrieves the subdomain that is registerd with the organzation with the provided id.
+            </summary>
+            <param name="id">The organization's Id.</param>
+            <returns>The subdomain registered with the organization.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetOrganizationSubscriptionCount(System.Int32)">
+            <summary>
+            Executes [Auth].[GetNumberOfOrgSubscriptions].
+            </summary>
+            <param name="organizationID">Parameter @organizationID.</param>
+            <returns>Count of Organization subscriptions.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetOrganizationsByUserId(System.Int32)">
+            <summary>
+             Gets [Auth].[GetOrganizationsByUserId].
+            </summary>
+            <param name="userId">Parameter @userId.</param>
+            <returns>A list of OrganizationDBEntities containing the organizations the user is subscribed to.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.CreateUserInvitation(AllyisApps.DBModel.Auth.InvitationDBEntity)">
+            <summary>
+            Adds a user Invitation to the invitations table.
+            </summary>
+            <param name="invitation">A representation of the invitation to create.</param>
+            <returns>The id of the newly created invitation.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetUserInvitationsByUserData(AllyisApps.DBModel.Auth.UserDBEntity)">
+            <summary>
+            Gets all of the invitations based off of user data.
+            </summary>
+            <param name="user">A representation of the User's data.</param>
+            <returns>A list of invitations the user is a part of.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetUserInvitationsByOrganizationId(System.Int32)">
+            <summary>
+            Gets all of the invitations for the organization.
+            </summary>
+            <param name="organizationID">The organization's Id.</param>
+            <returns>Returns a list of invitations associated with the organization.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.RemoveUserInvitation(System.Int32)">
+            <summary>
+            Deletes the defined invitation.
+            </summary>
+            <param name="invitationId">The invitation's Id.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.CreateInvitationSubRole(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Adds a single entry to the InvitationSubRole database.
+            </summary>
+            <param name="invitationId">The invitation Id.</param>
+            <param name="subscriptionId">The subscription Id.</param>
+            <param name="productRoleId">The Id of the product role.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.DeleteInvitationSubRole(System.Int32,System.Int32)">
+            <summary>
+            Deletes a single entry from the InvitationSubRole database.
+            </summary>
+            <param name="invitationId">The invitation Id.</param>
+            <param name="subscriptionId">The subscription Id.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetInvitationSubRolesByInvitationId(System.Int32)">
+            <summary>
+            Gets the roles for each subscription the invited user has.
+            </summary>
+            <param name="invitationId">The invitation Id.</param>
+            <returns>List of all roles.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetOrgUserFirstName(System.Int32,System.String)">
+            <summary>
+            Gets the first name of a user if they are in that organizaiton.
+            </summary>
+            <param name="organizationID">The organization id.</param>
+            <param name="email">The user email.</param>
+            <returns>The user first name.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetUserInvitationsByOrgId(System.Int32)">
+            <summary>
+            Gets the roles for each subscription the organization has.
+            </summary>
+            <param name="organizationId">The organization Id.</param>
+            <returns>List of all roles.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetInvitationSubRolesByOrganizationId(System.Int32)">
+            <summary>
+            Gets the roles for each subscription the organization has.
+            </summary>
+            <param name="organizationId">The organization Id.</param>
+            <returns>List of all roles.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetRoles(System.Int32)">
+            <summary>
+            Gets the user roles.
+            </summary>
+            <param name="orgid">The id of the relevant organization.</param>
+            <returns>An UserRoles object.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetOrgRoleList">
+            <summary>
+            Gets all roles accross all organizations.
+            </summary>
+            <returns>A list of OrgRoleDBEntity entities.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetUserList">
+            <summary>
+            Gets a user List.
+            </summary>
+            <returns>A list of UserDBEntity entities.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.CreateProject(System.Int32,System.Int32,System.String,System.String,System.DateTime,System.DateTime)">
+            <summary>
+            Method to Create a new project.
+            </summary>
+            <param name="organizationId">The organization associated with the project.</param>
+            <param name="customerId">The id of the customer the project is for.</param>
+            <param name="name">The name of project.</param>
+            <param name="type">The type of project pricing type.</param>
+            <param name="start">The start date of the project.</param>
+            <param name="end">The end date of the project.</param>
+            <returns>Returns the id of the created project, else returns -1.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.CreateProjectFromCustomerIdOnly(System.Int32,System.String,System.String,System.DateTime,System.DateTime)">
+            <summary>
+            Method to Create a new project from the customer Id.
+            </summary>
+            <param name="customerId">The id of the customer the project is for.</param>
+            <param name="name">The name of project.</param>
+            <param name="type">The type of project pricing type.</param>
+            <param name="start">The start date of the project.</param>
+            <param name="end">The end date of the project.</param>
+            <returns>Returns the id of the created project, else returns -1.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.DeleteProject(System.Int32)">
+            <summary>
+            Deletes a project.
+            </summary>
+            <param name="projectId">The id of the project to be deleted.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateProject(System.Int32,System.String,System.String,System.DateTime,System.DateTime)">
+            <summary>
+            Updates the name of the defined project.
+            </summary>
+            <param name="projectId">The Project's Id.</param>
+            <param name="name">The new name of the project.</param>
+            <param name="type">The pricing type of the project.</param>
+            <param name="start">The start date assigned to the project.</param>
+            <param name="end">The end date assigned to the project.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetProjectsByCustomer(System.Int32)">
+            <summary>
+            Gets all the projects associated with a specific customer.
+            </summary>
+            <param name="customerID">The id of the customer.</param>
+            <returns>A collection of projects with the definied customer.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.CreateProjectUser(System.Int32,System.Int32)">
+            <summary>
+            Updates a ProjectUser entry in the database.
+            </summary>
+            <param name="projectId">The project's Id.</param>
+            <param name="userId">The User's Id.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateProjectUser(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Updates a ProjectUser entry in the database, isActive must be specified as 0 or 1.
+            </summary>
+            <param name="projectId">The project ID.</param>
+            <param name="userId">The User ID.</param>
+            <param name="isActive">Is active.</param>
+            <returns>The number of rows successfully updated.</returns>C:\Users\v-trsan\Desktop\AllyisApps\aa\src\main\aadb\StoredProcedures\TimeTracker
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.DeleteProjectUser(System.Int32,System.Int32)">
+            <summary>
+            Deletes a ProjectUser entry in the database.
+            </summary>
+            <param name="projectId">The project's Id.</param>
+            <param name="userId">The User's Id.</param>
+            <returns>A value of 1 if successful, else 0.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetUsersByProjectId(System.Int32)">
+            <summary>
+            Gets a collection of users that currently can use the project.
+            </summary>
+            <param name="projectId">The specified project's Id.</param>
+            <returns>Collection of userIds.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.CreateCustomerInfo(AllyisApps.DBModel.Crm.CustomerDBEntity)">
+            <summary>
+            Updates the customer with the information specified in the customer table.
+            </summary>
+            <param name="customer">The table with the customer to create.</param>
+            <returns>The ID of the customer if one was created -1 if not.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.UpdateCustomer(AllyisApps.DBModel.Crm.CustomerDBEntity)">
+            <summary>
+            Updates the customer with the specified ID.
+            </summary>
+            <param name="customer">The table with the customer to create.</param>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetCustomerList(System.Int32)">
+            <summary>
+            Retrieves the customer's information from the database.
+            </summary>
+            <param name="orgId">The organization's ID.</param>
+            <returns>The CustomerDBEntity containing the customer's information, null if call fails.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetCustomerInfo(System.Int32)">
+            <summary>
+            Retrieves the customer's information from the database.
+            </summary>
+            <param name="customerID">The customer's ID.</param>
+            <returns>The CustomerDBEntity containing the customer's information, null if call fails.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.DeleteCustomer(System.Int32)">
+            <summary>
+            Delete the specified customer.
+            </summary>
+            <param name="customerID">The customer's Id.</param>
+            <returns>True if successful.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetProjectsByUserAndOrganization(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Gets all the projects a user can use in an organization.
+            </summary>
+            <param name="userId">The user's Id.</param>
+            <param name="orgId">The organization's Id.</param>
+            <param name="activity">The level of activity you wish to allow. Specifying 0 includes inactive projects.</param>
+            <returns>A collection of CompleteProjectDBEntity objects for each project the user has access to within the organization.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetProjectsByOrgId(System.Int32,System.Int32)">
+            <summary>
+            Gets all projects from all customers in an organization.
+            </summary>
+            <param name="orgId">The organization's Id.</param>
+            <param name="activity">The level of activity you wish to allow. Specifying 0 includes inactive projects.</param>
+            <returns>A collection of CompleteProjectInfo objects for each project within the organization.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetProjectById(System.Int32)">
+            <summary>
+            Gets a project from its id.
+            </summary>
+            <param name="projectId">The project's Id.</param>
+            <returns>Info about the requested project.</returns>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBHelper.GetProjectsByUserId(System.Int32)">
+            <summary>
+            Gets a Collection of project data that the user can use.
+            </summary>
+            <param name="userId">The User's Id.</param>
+            <returns>Collection of project data.</returns>
+        </member>
+        <member name="T:AllyisApps.DBModel.DBModelStartup">
+            <summary>
+            Startup class for DB Model.
+            </summary>
+        </member>
+        <member name="M:AllyisApps.DBModel.DBModelStartup.Init(System.String)">
+            <summary>
+            Initialize the DB Model.
+            </summary>
+            <param name="connectionStringKey">The connection string key.</param>
+        </member>
+        <member name="T:AllyisApps.DBModel.Shared.LanguageDBEntity">
+            <summary>
+            The model for the language table.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Shared.LanguageDBEntity.LanguageID">
+            <summary>
+            Gets or sets the language ID.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Shared.LanguageDBEntity.LanguageName">
+            <summary>
+            Gets or sets the language name.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.Shared.LanguageDBEntity.CultureName">
+            <summary>
+            Gets or sets the culture name string, as used to construct a CultureInfo instance (e.g. "en-US").
+            See https://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.aspx for more info.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.TimeTracker.HolidayDBEntity">
+            <summary>
+            Represents a holiday for an organization.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.HolidayDBEntity.HolidayId">
+            <summary>
+            Gets or sets the HolidayId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.HolidayDBEntity.HolidayName">
+            <summary>
+            Gets or sets the HolidayName.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.HolidayDBEntity.OrganizationId">
+            <summary>
+            Gets or sets the OrganizationId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.HolidayDBEntity.Date">
+            <summary>
+            Gets or sets the Date.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.HolidayDBEntity.CreatedUTC">
+            <summary>
+            Gets or sets the CreatedUTC.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.HolidayDBEntity.ModifiedUTC">
+            <summary>
+            Gets or sets the ModifiedUTC.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.TimeTracker.PayClassDBEntity">
+            <summary>
+            Pay class.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.PayClassDBEntity.PayClassID">
+            <summary>
+            Gets or sets.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.PayClassDBEntity.Name">
+            <summary>
+            Gets or sets.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.PayClassDBEntity.OrganizationId">
+            <summary>
+            Gets or sets.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.PayClassDBEntity.CreatedUTC">
+            <summary>
+            Gets or sets.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.PayClassDBEntity.ModifiedUTC">
+            <summary>
+            Gets or sets.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.TimeTracker.SettingDBEntity">
+            <summary>
+            The POCO for the Settings table.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.SettingDBEntity.OrganizationId">
+            <summary>
+            Gets or sets the OrganizationId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.SettingDBEntity.StartOfWeek">
+            <summary>
+            Gets or sets the StartOfWeek.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.SettingDBEntity.OvertimeHours">
+            <summary>
+            Gets or sets the OvertimeHours.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.SettingDBEntity.OvertimePeriod">
+            <summary>
+            Gets or sets the OvertimePeriod.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.SettingDBEntity.OvertimeMultiplier">
+            <summary>
+            Gets or sets the OvertimeMultiplier.
+            </summary>
+        </member>
+        <member name="T:AllyisApps.DBModel.TimeTracker.TimeEntryDBEntity">
+            <summary>
+            Represents an entry of time data for TimeTracker.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.TimeEntryDBEntity.TimeEntryId">
+            <summary>
+            Gets or sets the TimeEntryId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.TimeEntryDBEntity.UserId">
+            <summary>
+            Gets or sets the UserId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.TimeEntryDBEntity.FirstName">
+            <summary>
+            Gets or sets the TimeEntryId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.TimeEntryDBEntity.LastName">
+            <summary>
+            Gets or sets the TimeEntryId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.TimeEntryDBEntity.ProjectId">
+            <summary>
+            Gets or sets the ProjectId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.TimeEntryDBEntity.PayClassId">
+            <summary>
+            Gets or sets the PayClassId.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.TimeEntryDBEntity.Date">
+            <summary>
+            Gets or sets the Date.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.TimeEntryDBEntity.Duration">
+            <summary>
+            Gets or sets the Duration.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.TimeEntryDBEntity.Description">
+            <summary>
+            Gets or sets the Description.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.TimeEntryDBEntity.ApprovalState">
+            <summary>
+            Gets or sets the approval state.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.TimeEntryDBEntity.LockSaved">
+            <summary>
+            Gets or sets a value indicating whether the saved approval lock.
+            </summary>
+        </member>
+        <member name="P:AllyisApps.DBModel.TimeTracker.TimeEntryDBEntity.ModSinceApproval">
+            <summary>
+            Gets or sets a value indicating whether the data has changed since being approved or dissaproved.
+            </summary>
+        </member>
+    </members>
+</doc>

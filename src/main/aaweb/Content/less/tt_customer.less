@@ -1,0 +1,70 @@
+﻿@import (reference) "_root.less";
+
+
+.panel-customer {
+	.panel-default;
+
+	.panel-heading {
+		padding: 0;
+		display: flex;
+		flex-flow: row nowrap;
+
+		a:nth-child(1) {
+			flex-grow: 1;
+			padding: @panel-heading-padding;
+			color: @panel-default-text;
+
+			&:hover, &:active, &:focus {
+				text-decoration: none;
+			}
+
+			.text-muted {
+				.text-muted;
+			}
+		}
+
+		a:nth-child(2) {
+			padding: 9px 8px 7px;
+			.fa-lg;
+			color: @panel-default-text;
+
+			&:hover, &:active, &:focus {
+				text-decoration: none;
+			}
+		}
+	}
+
+	> div > div > table {
+		margin: 0;
+	}
+
+	> div > div > div.project-list {
+		border-top: 1px solid @panel-default-border;
+		margin: 0;
+
+		> .list-group-item {
+			a {
+				&:nth-child(1) {
+					padding: 10px 15px 10px 2rem;
+				}
+			}
+		}
+	}
+
+	.included {
+		font-weight: bold;
+	}
+
+	.included .panel-title {
+		font-weight: bold;
+	}
+}
+/*body#tt-customer {
+    .customer-list {
+        .project-list {
+            .list-group-item {
+                padding-left: 2em;
+            }
+        }
+    }
+}*/

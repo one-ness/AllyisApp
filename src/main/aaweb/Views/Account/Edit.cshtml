@@ -1,0 +1,73 @@
+﻿@model AllyisApps.ViewModels.EditOrganizationViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
+    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.EditOrganization;
+}
+@{ ViewData.Add("Controller", "Account"); }
+@{ ViewData.Add("Action", "Edit"); }
+
+@{ Html.RenderPartial("_OrganizationEditDetailsPartial", Model, ViewData); }
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var preserveState = '@(Model != null ? Model.State : "")';
+            //$('#State').prop("disabled", true);
+
+            if ($('#Country').val() != "") {
+                updateStateDDL(function () {
+                    if (preserveState != "") {
+                        var ddl = document.getElementById('State');
+                        for (var i = 0; i < ddl.options.length; i++) {
+                            if (ddl.options[i].text === preserveState) {
+                                ddl.selectedIndex = i;
+                            }
+                        }
+                    }
+                });
+            }
+
+            $('#Country').change(updateStateDDL);
+        });
+
+        function updateStateDDL(successCallback) {
+            if ($('#Country').val() != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/GetStates",
+                    data: JSON.stringify({ country: $('#Country').val() }),
+                    datatype: "json",
+                    contentType: "application/json",
+                    success: function (states) {
+                        $('#State').empty();
+                        $('#State').append("<option value=\"\">Select...</option>");
+                        for (var i = 0; i < states.length; i++) {
+                            $('#State').append("<option>" + states[i] + "</option>");
+                        }
+                        $('#State').prop("disabled", false);
+
+                        successCallback();
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Error: " + errorThrown)
+                    }
+                });
+            } else {
+                $('#State').empty();
+                $('#State').append("<option value=\"\">Select...</option>");
+                //$('#State').prop("disabled", true);
+            }
+        }
+
+        function element_change(where, add, remove) {
+            var $el = $(where);
+            if ($el.hasClass(add) || $el.hasClass(remove)) {
+                $el.addClass('was-set');
+            }
+            $el.addClass(add).removeClass(remove);
+        }
+
+    </script>
+}

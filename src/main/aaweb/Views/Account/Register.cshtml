@@ -1,0 +1,151 @@
+﻿@using System.Web.Mvc.Html
+@using System.Web.Routing
+@using System.Web.Mvc
+@model AllyisApps.ViewModels.RegisterViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
+    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.Register;
+    ViewBag.Subtitle = AllyisApps.Resources.Views.Account.Strings.RegisterNewAccountDialogue;
+}
+@{ ViewData.Add("Controller", "Account"); }
+@{ ViewData.Add("Action", "Register"); }
+
+@using (Html.BeginForm((string)(ViewData["Action"]), (string)ViewData["Controller"], new { ReturnUrl = (string)(ViewBag.ReturnUrl) }, FormMethod.Post, new { @class = "", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(string.Empty, new { @class = "text-danger" })
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.ReqLabelFor(m => m.FirstName, AllyisApps.Resources.Views.Account.Strings.Email)
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Email)
+            </div>
+            <div class="form-group">
+                @Html.ReqLabelFor(m => m.FirstName, AllyisApps.Resources.Views.Account.Strings.FirstName)
+                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.FirstName)
+            </div>
+            <div class="form-group">
+                @Html.ReqLabelFor(m => m.LastName, AllyisApps.Resources.Views.Account.Strings.LastName)
+                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.LastName)
+            </div>
+            <div class="form-group">
+                @Html.ReqLabelFor(m => m.Password, AllyisApps.Resources.Views.Account.Strings.Password)
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", @onkeypress = "capsCheck(event)", @onkeydown = "capsCheck(event)", @CssClass = "alert" })
+                @Html.ValidationMessageFor(m => m.Password)
+            </div>
+            <div class="form-group">
+                @Html.ReqLabelFor(m => m.ConfirmPassword, AllyisApps.Resources.Views.Account.Strings.ConfirmPassword)
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @onkeypress = "capsCheck(event)", @onkeydown = "capsCheck(event)" })
+                @Html.ValidationMessageFor(m => m.ConfirmPassword)
+            </div>
+            <div class="form-group">
+                @Html.ReqLabelFor(m => m.DateOfBirth, AllyisApps.Resources.Views.Account.Strings.DateOfBirth)
+                <input class="form-control text-box single-line" id="DateOfBirth" name="DateOfBirth" type="date">
+                @*Html.ValidationMessageFor(m => m.DateOfBirth)*@
+            </div>
+            <div id="capsWarningDiv" style="visibility:hidden; height:0px"><strong>@AllyisApps.Resources.Views.Account.Strings.CapsLock</strong></div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.ReqLabelFor(m => m.PhoneNumber, AllyisApps.Resources.Views.Account.Strings.PhoneNumber)
+                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.PhoneNumber)
+            </div>
+            <div class="form-group">
+                @Html.ReqLabelFor(m => m.Address, AllyisApps.Resources.Views.Account.Strings.Address)
+                @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.ReqLabelFor(m => m.Country, AllyisApps.Resources.Views.Account.Strings.Country)
+                @Html.DropDownListFor(m => m.Country, new SelectList(Model.GetLocalizedValidCoutriesDictionary(), "Key", "Value"), AllyisApps.Resources.Views.Account.Strings.DropDownEmpty, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.ReqLabelFor(m => m.State, AllyisApps.Resources.Views.Account.Strings.State)
+                @Html.DropDownListFor(m => m.State, new SelectList(new Dictionary<string, string>(), "Key", "Value"), AllyisApps.Resources.Views.Account.Strings.DropDownEmpty, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.ReqLabelFor(m => m.City, AllyisApps.Resources.Views.Account.Strings.City)
+                @Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.ReqLabelFor(m => m.PostalCode, AllyisApps.Resources.Views.Account.Strings.PostalCode)
+                @Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group allyis-action-buttons">
+        <input type="checkbox" name="terms" value=@AllyisApps.Resources.Views.Account.Strings.Accept onchange="document.getElementById('registerSubmit').disabled = !this.checked;">
+        @AllyisApps.Resources.Views.Account.Strings.IAgree @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.TOS, "PrivacyPolicy", "Home", null, new { @style = "color:#0000FF;" }).
+        <br /><br />
+        <a href="/Account/Index" class="btn btn-default">@AllyisApps.Resources.Views.Account.Strings.Cancel</a>
+        <button type="submit" value=@AllyisApps.Resources.Views.Account.Strings.Register class="btn btn-primary" id="registerSubmit" disabled="disabled">@AllyisApps.Resources.Views.Account.Strings.Register</button>
+    </div>
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var preserveState = '@(Model != null ? (AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';
+            //$('#State').prop("disabled", true);
+
+            if ($('#Country').val() != "") {
+                updateStateDDL(function () {
+                    if (preserveState != "") {
+                        var ddl = document.getElementById('State');
+                        for (var i = 0; i < ddl.options.length; i++) {
+                            if (ddl.options[i].text === preserveState) {
+                                ddl.selectedIndex = i;
+                            }
+                        }
+                    }
+                });
+            }
+
+            $('#Country').change(updateStateDDL);
+        });
+
+        function updateStateDDL(successCallback) {
+            if ($('#Country').val() != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/GetStates",
+                    data: JSON.stringify({ country: $('#Country').val() }),
+                    datatype: "json",
+                    contentType: "application/json",
+                    success: function (states) {
+                        $('#State').empty();
+                        $('#State').append("<option value=\"\">" + "@AllyisApps.Resources.Views.Account.Strings.DropDownEmpty" + "</option>");
+                        Object.keys(states).forEach(function (key) {
+                            $('#State').append("<option value=\"" + key + "\">" + states[key] + "</option>");
+                        });
+                        $('#State').prop("disabled", false);
+
+                        successCallback();
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Error: " + errorThrown)
+                    }
+                });
+            } else {
+                $('#State').empty();
+                $('#State').append("<option value=\"\">" + "@AllyisApps.Resources.Views.Account.Strings.DropDownEmpty" + "</option>");
+                //$('#State').prop("disabled", true);
+            }
+        }
+
+        function capsCheck(e) {
+            kc = e.keyCode ? e.keyCode : e.which;
+            sk = e.shiftKey ? e.shiftKey : ((kc == 16) ? true : false);
+            if (((kc >= 65 && kc <= 90) && !sk) || ((kc >= 97 && kc <= 122) && sk)) {
+                document.getElementById('capsWarningDiv').style.visibility = 'visible';
+            }
+            else document.getElementById('capsWarningDiv').style.visibility = 'hidden';
+        }
+
+    </script>
+}

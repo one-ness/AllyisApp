@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Dictionary>
+	<Words>
+		<!--Work around for Code Analysis Compound words bug-->
+		<Unrecognized>
+			<Word>Toolbar</Word>
+			<Word>Spellcheck</Word>
+		</Unrecognized>
+		<Deprecated>
+			<Term PreferredAlternate="Toolbar">ToolBar</Term>
+			<Term PreferredAlternate="Spellcheck">SpellCheck</Term>
+		</Deprecated>
+		<Recognized>
+			<Word>Allyis</Word>
+			<Word>auth</Word>
+			<Word>mvc</Word>
+			<Word>dm</Word>
+			<Word>visualizer</Word>
+			<Word>xex</Word>
+			<Word>xap</Word>
+			<Word>ip</Word>
+			<Word>equatable</Word>
+			<Word>ui</Word>
+			<Word>sim</Word>
+			<Word>msagl</Word>
+			<Word>x</Word>
+			<Word>y</Word>
+			<Word>z</Word>
+			<Word>checkin</Word>
+			<Word>continuable</Word>
+			<Word>Perf</Word>
+			<Word>Visualizer</Word>
+			<Word>Jira</Word>
+			<Word>Otes</Word>
+			<Word>xed</Word>
+			<Word>Ttp</Word>
+			<Word>xap</Word>
+			<Word>dockable</Word>
+			<Word>plugin</Word>
+			<Word>plugins</Word>
+			<Word>reparent</Word>
+			<Word>rtx</Word>
+			<Word>png</Word>
+			<Word>tfs</Word>
+			<Word>ID</Word>
+			<Word>composable</Word>
+			<Word>rdt</Word>
+			<Word>Rdt</Word>
+			<Word>Tokenizer</Word>
+			<Word>Xdk</Word>
+		</Recognized>
+	</Words>
+	<Acronyms>
+		<CasingExceptions>
+			<Acronym>Sku</Acronym>
+			<Acronym>SMTP</Acronym>
+			<Acronym>Udc</Acronym>
+			<Acronym>SDE</Acronym>
+			<Acronym>SDET</Acronym>
+			<Acronym>STE</Acronym>
+			<Acronym>FTE</Acronym>
+			<Acronym>RTX</Acronym>
+			<Acronym>UI</Acronym>
+			<Acronym>ID</Acronym>
+			<Acronym>IDs</Acronym>
+			<Acronym>CVS</Acronym>
+		</CasingExceptions>
+	</Acronyms>
+</Dictionary>

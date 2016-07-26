@@ -1,0 +1,5005 @@
+﻿
+FROM: AllyisApps.Services.Account.AccountService
+
+	// This isn't used. Joining is handled under the hood when a user with invitations registers.
+	/// <summary>
+	/// Adds a user to an organization.
+	/// </summary>
+	/// <param name="accessCode">Access code from invitation.</param>
+	/// <param name="context">Current user context.</param>
+	/// <returns>The result notification.</returns>
+	public string Join(string accessCode, UserContext context)
+	{
+		int o = DBHelper.GetOrgFromAccessCode(accessCode); // Verify the AccessCode is associated with a valid organization
+		string resultNotification = "Invalid Code";
+
+		if (o != 0)
+		{
+			OrganizationDBEntity org = DBHelper.GetOrganization(o);
+			OrgRoleDBEntity role = DBHelper.GetPermissionLevel(org.OrganizationId, Convert.ToInt32(context.UserId)); // Verify the user does not already belong to that organization
+			if (role == null)
+			{
+				DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
+				{
+					UserId = Convert.ToInt32(context.UserId),
+					OrganizationId = org.OrganizationId,
+					OrgRoleId = (int)OrganizationRole.Member
+				});
+				IEnumerable<InvitationDBEntity> invites = DBHelper.GetUserInvitationsByOrgId(org.OrganizationId);
+				InvitationDBEntity thisInvite = invites.Where(x => x.AccessCode == accessCode).SingleOrDefault();
+				DBHelper.RemoveUserInvitation(thisInvite.InvitationId);
+				resultNotification = "You have successfully joined " + DBHelper.GetOrganization(org.OrganizationId).Name + ".";
+			}
+			else
+			{
+				resultNotification = "You are already a memeber of " + DBHelper.GetOrganization(org.OrganizationId).Name + ".";
+			}
+		}
+
+		return resultNotification;
+	}
+
+
+
+
+
+
+
+
+
+
+
+FROM: AllyisApps.Services.Org.OrgService
+
+	/// <summary>
+	/// Gets an organization ID from an invite access code.
+	/// </summary>
+	/// <param name="accessCode">Access code.</param>
+	/// <returns>Organization ID.</returns>
+	public int GetOrgIdFromAccessCode(string accessCode)
+	{
+		return DBHelper.GetOrgFromAccessCode(accessCode);
+	}
+
+	/// <summary>
+	/// Processes an invitation, updating the user's subscription product roles.
+	/// </summary>
+	/// <param name="orgId">Organization Id.</param>
+	/// <param name="invitationId">Invitation Id.</param>
+	/// <param name="userId">User Id.</param>
+	/// <returns>Last product Id.</returns>
+	public int UpdateSubscriptionUserProductRoles(int orgId, int invitationId, int userId)
+	{
+		IEnumerable<SubscriptionDisplayInfo> subs = DBHelper.GetSubscriptionsDisplayByOrg(orgId).Select(s => BusinessObjectsHelper.InitializeSubscriptionDisplayInfo(s));
+		IEnumerable<InvitationSubRoleInfo> roles = this.GetInvitationSubRolesByInvitationId(invitationId);
+		int productId = 0;
+		foreach (InvitationSubRoleInfo roleEntry in roles)
+		{
+			SubscriptionDisplayInfo currentSub = subs.Where(x => x.SubscriptionId == roleEntry.SubscriptionId).SingleOrDefault();
+			if (currentSub != null && currentSub.SubscriptionsUsed < currentSub.NumberOfUsers)
+			{
+				this.UpdateSubscriptionUserProductRole(roleEntry.ProductRoleId, roleEntry.SubscriptionId, userId);
+				productId = currentSub.ProductId;
+			}
+		}
+
+		this.RemoveUserInvitation(invitationId);
+		return productId;
+	}
+
+	/// <summary>
+	/// Gets a list of <see cref="OrganizationInfo"/>s where the user has Admin privilage.
+	/// </summary>
+	/// <param name="userId">User Id.</param>
+	/// <returns>A list of OrganizationInfos where the user has Admin privilage.</returns>
+	public IEnumerable<OrganizationInfo> GetOrganizationsWhereUserIsAdmin(int userId)
+	{
+		if (userId <= 0)
+		{
+			throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+		}
+
+		return DBHelper.GetOrganizationsWhereUserIsAdmin(userId).Select(o => BusinessObjectsHelper.InitializeOrganizationInfo(o));
+	}
+
+	/// <summary>
+	/// Gets the list of subscriptions for an organization.
+	/// </summary>
+	/// <param name="orgId">Organization id.</param>
+	/// <returns><see cref="List{SubscriptionInfo}"/> with this organization's subscriptions.</returns>
+	public List<SubscriptionInfo> GetSubscriptionList(int orgId)
+	{
+		if (orgId < 0)
+		{
+			throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
+		}
+
+		List<SubscriptionInfo> subscriptionList = new List<SubscriptionInfo>();
+		subscriptionList.AddRange(this.GetSubscriptionDetails(orgId));
+		IEnumerable<ProductInfo> products = CrmService.GetProductInfoList();
+
+		// Verify that each product is contained in the list even if there is no
+		//	active subscription for it.
+		foreach (ProductInfo product in products)
+		{
+			if (!subscriptionList.Any((SubscriptionInfo x) => DBHelper.GetSkuDetails(x.SkuId).ProductId == product.ProductId))
+			{
+				SkuDBEntity fsku = DBHelper.GetFreeSku(product.ProductId);
+				if (fsku != null)
+				{
+					subscriptionList.Add(new SubscriptionInfo()
+					{
+						Name = fsku.Name,
+						Licenses = 0,
+						IsActive = true,
+						OrganizationId = orgId,
+						SkuId = fsku.SkuId
+					});
+				}
+			}
+		}
+
+		return subscriptionList;
+	}
+
+	/// <summary>
+	/// Gets the employee id for a user and organization.
+	/// </summary>
+	/// <param name="userId">User Id.</param>
+	/// <param name="orgId">Organization Id.</param>
+	/// <returns>The employee ID.</returns>
+	public string GetEmployeeId(int userId, int orgId)
+	{
+		return DBHelper.GetEmployeeId(userId, orgId);
+	}
+
+	/// <summary>
+	/// Sets the employee id for a user and organization.
+	/// </summary>
+	/// <param name="userId">User Id.</param>
+	/// <param name="orgId">Organization Id.</param>
+	/// <param name="employeeId">New employee Id.</param>
+	public void SetEmployeeId(int userId, int orgId, string employeeId)
+	{
+		if (orgId < 0)
+		{
+			throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
+		}
+		if (string.IsNullOrEmpty(employeeId))
+		{
+			throw new ArgumentNullException("employeeId", "Employee Id must have a value.");
+		}
+
+		DBHelper.SetEmployeeId(userId, orgId, employeeId);
+	}
+
+	/// <summary>
+	/// Gets the subscription count for an organization.
+	/// </summary>
+	/// <param name="orgId">Organization Id.</param>
+	/// <returns>The subscription count.</returns>
+	public int GetSubscriptionCount(int orgId)
+	{
+		if (orgId < 0)
+		{
+			throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
+		}
+
+		return DBHelper.GetOrganizationSubscriptionCount(orgId);
+	}
+
+
+
+
+
+
+
+
+
+
+
+FROM: AllyisApps.Services.Crm.CrmService
+
+	/// <summary>
+	/// Charges a customer.
+	/// </summary>
+	/// <param name="amount">Amount to charge.</param>
+	/// <param name="customer">Stripe customer.</param>
+	/// <returns>A stripe charge object.</returns>
+	[CLSCompliant(false)]
+	public StripeCharge Bill(int amount, StripeCustomer customer)
+	{
+		return StripeWrapper.ChargeCustomer(customer, amount, "usd");
+	}
+
+
+
+
+
+
+
+
+
+
+
+FROM: src/main/aaweb/App_Start/IdentityConfig.cs
+
+		/// <summary>
+		/// Represents a manager class for users within the application context.
+		/// </summary>
+		public class ApplicationUserManager : UserManager<ApplicationUser>
+		{
+			/// <summary>
+			/// Initializes a new instance of the <see cref="ApplicationUserManager"/> class.
+			/// </summary>
+			/// <param name="store">The backing store containing users.</param>
+			public ApplicationUserManager(IUserStore<ApplicationUser> store)
+				: base(store)
+			{
+			}
+
+			/// <summary>
+			/// Creates an ApplicationUserManager for the specified context.
+			/// </summary>
+			/// <param name="options">The creation options.</param>
+			/// <param name="context">The application's user context.</param>
+			/// <returns>A new ApplicationUserManager object for the given context.</returns>
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "MVC framework impl.")]
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "ASP.NET MVC managed.")]
+			public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
+			{
+				var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
+
+				// Configure validation logic for usernames
+				manager.UserValidator = new UserValidator<ApplicationUser>(manager)
+				{
+					AllowOnlyAlphanumericUserNames = false,
+					RequireUniqueEmail = true
+				};
+
+				// Configure validation logic for passwords
+				manager.PasswordValidator = new PasswordValidator
+				{
+					RequiredLength = 6,
+					RequireNonLetterOrDigit = true,
+					RequireDigit = true,
+					RequireLowercase = true,
+					RequireUppercase = true,
+				};
+
+				// Configure user lockout defaults
+				manager.UserLockoutEnabledByDefault = true;
+				manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
+				manager.MaxFailedAccessAttemptsBeforeLockout = 5;
+
+				manager.EmailService = new EmailService();
+
+				var dataProtectionProvider = options.DataProtectionProvider;
+				if (dataProtectionProvider != null)
+				{
+					manager.UserTokenProvider =
+						new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
+				}
+
+				return manager;
+			}
+		}
+
+		/// <summary>
+		/// Class which represents sign-in handling.
+		/// </summary>
+		public class ApplicationSignInManager : SignInManager<ApplicationUser, string>
+		{
+			/// <summary>
+			/// Initializes a new instance of the <see cref="ApplicationSignInManager"/> class.
+			/// </summary>
+			/// <param name="userManager">The user manager.</param>
+			/// <param name="authenticationManager">The authentication manager.</param>
+			public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)
+				: base(userManager, authenticationManager)
+			{
+			}
+
+			/// <summary>
+			/// Creates a new ApplicationSignInManager object for the given context.
+			/// </summary>
+			/// <param name="options">The creation options.</param>
+			/// <param name="context">The application context.</param>
+			/// <returns>A new ApplicationSignInManager object.</returns>
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Justification = "MVC framework impl.")]
+			public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
+			{
+				return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
+			}
+
+			/// <summary>
+			/// Creates a new ClaimsIdentity asynchronously.
+			/// </summary>
+			/// <param name="user">The user to create.</param>
+			/// <returns>The task object which returns ClaimsIdentity on completion.</returns>
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "MVC framework impl.")]
+			public override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
+			{
+				return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
+			}
+		}
+
+		/// <summary>
+		/// Represents a user of this application.
+		/// </summary>
+		public class ApplicationUser : IdentityUser
+		{
+			// You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
+
+			/// <summary>
+			/// Builds a new user identity using the given user manager.
+			/// </summary>
+			/// <param name="manager">The user manager to construct the ClaimsIdentity.</param>
+			/// <returns>The ClaimsIdentity for the new user.</returns>
+			public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
+			{
+				// Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
+				ClaimsIdentity userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+
+				// Add custom user claims here
+				return userIdentity;
+			}
+		}
+
+		/// <summary>
+		/// Represents the application's database context, for authentication purposes.
+		/// </summary>
+		public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+		{
+			/// <summary>
+			/// Initializes a new instance of the <see cref="ApplicationDbContext"/> class.
+			/// </summary>
+			public ApplicationDbContext()
+				: base("DefaultConnection", throwIfV1Schema: false)
+			{
+			}
+
+			/// <summary>
+			/// Creates a new application database context.
+			/// </summary>
+			/// <returns>The resulting ApplicationDbContext.</returns>
+			public static ApplicationDbContext Create()
+			{
+				return new ApplicationDbContext();
+			}
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+FROM: BaseProductController.cs
+
+		/// <summary>
+		/// Gets and Sets the Subscription Id associated with this org-product combination.
+		/// </summary>
+		Using UserContext instead
+		public int SubscriptionId
+		{
+			get
+			{
+				if (!this.pSubscriptionId.HasValue)
+				{
+					SkuDBEntity subscription = DB Helper.Instance.GetSubscriptionByOrgAndProduct(UserContext.ChosenOrganizationId, (int)this.cProductId);
+					if (subscription != null)
+					{
+						this.pSubscriptionId = subscription.SubscriptionId;
+						DB Helper.Instance.UpdateActiveSubscription(UserContext.UserId, this.pSubscriptionId.Value);
+					}
+				}
+
+				return this.pSubscriptionId.Value;
+			}
+		}
+
+		/// <summary>
+		/// Gets user permissions.
+		/// </summary>
+		public override UserPermissions Permissions
+		{
+			get
+			{
+				return this.pPermissions = this.pPermissions ?? new UserPermissions(Convert.ToInt32(UserContext.UserId), this.OrganizationId, this.SubscriptionId);
+			}
+		}
+
+
+
+
+
+
+
+
+
+FROM: RouteProductAction.cs
+
+				IEnumerable<OrganizationDBEntity> orgs = DB Helper.Instance.GetOrganizationsByUserId(Convert.ToInt32(UserContext.UserId));
+				if (orgs != null && !orgs.Any())
+				{
+					Notifications.Add(new BootstrapAlert(Resources.Errors.NoOrganizationWhenGoingToApp, Variety.Info));
+					return this.RedirectToAction("Create", "Organization");
+				}
+				else
+				{
+					IEnumerable<SubscriptionDBEntity> subs = DB Helper.Instance.GetSubscriptionByUser(Convert.ToInt32(UserContext.UserId));
+					IEnumerable<OrganizationDBEntity> subOrgs = DB Helper.Instance.GetOrganizationsByUserProductAccess(UserContext.UserId, productId);
+					if (subOrgs.Count() == 0)
+					{
+						Notifications.Add(new BootstrapAlert(Resources.Errors.YouAreNotSubscribedToThisProduct, Variety.Info));
+						return this.RedirectToAction("Index", "Home");
+					}
+					else if (subOrgs.Count() == 1)
+					{
+						string productName = DB Helper.Instance.GetProductById(productId).Name;
+						//// TODO: Update RouteProduct to change based on productId
+						return this.RedirectToSubDomainAction(productName, subOrgs.Single().OrganizationId, null, "Home");
+					}
+
+					return this.View(subOrgs);
+				}
+
+
+
+
+
+
+
+
+
+
+
+FROM: AllyisApps/Areas/TimeTracker/ViewModels/Project/CreateProjectViewModel.cs
+
+			------------------------------------------------------------------------------
+			 <copyright file = "CreateProjectViewModel.cs" company="Allyis, Inc.">
+				 Copyright(c) Allyis, Inc.All rights reserved.
+			 </copyright>
+			------------------------------------------------------------------------------
+
+			/*
+			This is obsolete. Both Edit and Create project actions use the same View (_ProjectEdit.cshtml), so they both use the same model (EditProjectViewModel).
+			*/
+
+			using System;
+			using System.Collections.Generic;
+			using System.ComponentModel.DataAnnotations;
+
+			namespace AllyisApps.ViewModels
+			{
+				/// <summary>
+				/// View Model for Project Creation.
+				/// </summary>
+				public class CreateProjectViewModel : BaseViewModel
+				{
+					/// <summary>
+					/// Initializes a new instance of the <see cref="CreateProjectViewModel" /> class.
+					/// </summary>
+					public CreateProjectViewModel()
+					{
+					}
+
+					/// <summary>
+					/// Gets or sets Project Name.
+					/// </summary>
+					[Required]
+					[DataType(DataType.Text)]
+					[Display(Name = "Project Name")]
+					public string ProjectName { get; set; }
+
+					/// <summary>
+					/// Gets or sets Organization ID or Null.
+					/// </summary>
+					[Display(Name = "Organization")]
+					public int? OrganizationId { get; set; }
+
+					/// <summary>
+					/// Gets or sets Customer ID.
+					/// </summary>
+					[Required]
+					[Display(Name = "Customer")]
+					public int ParentCustomerId { get; set; }
+
+					/// <summary>
+					/// Gets or sets Project ID.
+					/// </summary>
+					public int ProjectId { get; set; }
+					////public virtual int ProjectId { get; set; }
+
+					/// <summary>
+					/// Gets or sets Project Pricing Type.
+					/// </summary>
+					public string PriceType { get; set; }
+
+					/// <summary>
+					/// Gets or sets Project Start Date.
+					/// </summary>
+					public DateTime StartDate { get; set; }
+
+					/// <summary>
+					/// Gets or sets Project End Date.
+					/// </summary>
+					public DateTime EndDate { get; set; }
+
+					/// <summary>
+					/// Gets or sets the ProjectUsers table.
+					/// </summary>
+					public IEnumerable<ProjectUser> ProjectUsers { get; set; }
+				}
+			}
+
+
+
+
+
+
+
+
+
+FROM:  AllyisApps/Areas/TimeTracker/ViewModels/Project/IndexProjectViewModel.cs
+						------------------------------------------------------------------------------
+			 <copyright file = "indexprojectviewmodel.cs" company="allyis, inc.">
+				 copyright(c) allyis, inc.all rights reserved.
+			 </copyright>
+			------------------------------------------------------------------------------
+
+			using system.collections.generic;
+
+			using allyisapps.services.businessobjects;
+
+			namespace allyisapps.areas.timetracker.viewmodels.project
+			{
+				/// <summary>
+				/// viewmodel for the project index page. 
+				/// </summary>
+				public class indexprojectviewmodel
+				{
+					/// <summary>
+					/// gets or sets the userid, for use in the create new project link.
+					/// </summary>
+					public int userid { get; set; }
+
+					/// <summary>
+					/// gets or sets the listing of projects; usually pulled from db. 
+					/// </summary>
+					public ienumerable<completeprojectinfo> projectlisting { get; set; }
+				}
+			}
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Core\Role.cs
+				//------------------------------------------------------------------------------
+		// <copyright file="Role.cs" company="Allyis, Inc.">
+		//     Copyright (c) Allyis, Inc.  All rights reserved.
+		// </copyright>
+		//------------------------------------------------------------------------------
+
+		namespace AllyisApps.Core
+		{
+			/// <summary>
+			/// Represents possible authentication levels for a user
+			///     in an organization.
+			/// </summary>
+			public enum Role
+			{
+				/// <summary>
+				/// A blank value. 
+				/// </summary>
+				None = 0,
+
+				/// <summary>
+				/// An member of the organization.
+				/// </summary>
+				Member = 1,
+
+				/// <summary>
+				/// The owner of the organization.
+				/// </summary>
+				Owner = 2
+			}
+		}
+
+
+
+
+
+
+
+FROM:C:\SourceFiles\AllyisApps\src\main\aaweb\Core\UserPermissions.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="UserPermissions.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+
+				using System;
+				using System.Collections.Generic;
+				using System.Diagnostics.CodeAnalysis;
+				using System.Linq;
+				using System.Web;
+				using AllyisApps.DBModel;
+				using AllyisApps.DBModel.Auth;
+				using AllyisApps.DBModel.BusinessObjects;
+
+				namespace AllyisApps.Core.Permissions
+				{
+					/// <summary>
+					/// User Permissions helper to wrap all requests and aid in determining permissions within views.
+					/// </summary>
+					public class UserPermissions
+					{
+						internal readonly IEnumerable<TableOrganizationPermissions> OrgPermissions;
+						internal readonly IEnumerable<TableSubscriptionPermissions> ProjectPermissions;
+						internal readonly IEnumerable<TableSubscriptionPermissions> SubPermissions;
+						internal readonly int? OrgId;       
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="UserPermissions"/> class.
+						/// </summary>
+						/// <param name="userId">The User's Id or null if anonymous.</param>
+						/// <param name="organizationId">The currently active OrganizationId or null if none set.</param>
+						/// <param name="subscriptionId">The currently active SubscriptionId or null if none set.</param>
+						public UserPermissions(int userId, int? organizationId = null, int? subscriptionId = null)
+						{
+							this.UserId = userId;
+							if (userId != -1)
+							{
+								this.OrgPermissions = BusinessObjectsHelper.Instance.GetUserOrganizationPermissions(userId);
+								this.ProjectPermissions = BusinessObjectsHelper.Instance.GetUserProjectPermissions(userId);
+								this.SubPermissions = BusinessObjectsHelper.Instance.GetUserSubscriptionPermissions(userId);
+							}
+
+							this.OrgId = organizationId;
+							this.SubId = subscriptionId;
+						}       
+
+						/// <summary>
+						/// Gets UserId or Null if anonymous.
+						/// </summary>
+						public int UserId { get; private set; }
+
+						/// <summary>
+						/// Gets or sets the subscription Id.
+						/// </summary>
+						internal int? SubId
+						{
+							get; set;
+						}
+
+						/// <summary>
+						/// Can the current user perform an action?.
+						/// </summary>
+						/// <param name="action">The Action.</param>
+						/// <param name="subId">The Subscription ID or null if using currently active Subscription.</param>
+						/// <returns>Boolean corresponding to yes and no.</returns>
+						public bool Can(SubAction action, int? subId = null)
+						{
+							int? sub = subId ?? this.SubId;
+							if (!sub.HasValue)
+							{
+								throw new ArgumentException("Must provide subId as parameter or as default in constructor.");
+							}
+
+							return action.Can(this, sub.Value);
+						}
+
+						/// <summary>
+						/// Can the current user perform an action?.
+						/// </summary>
+						/// <param name="action">The Action.</param>
+						/// <param name="orgId">The Organization ID or null if using currently active Organization.</param>
+						/// <returns>Boolean corresponding to yes and no.</returns>
+						public bool Can(OrgAction action, int? orgId = null)
+						{
+							int? org = orgId ?? this.OrgId;
+							if (!org.HasValue)
+							{
+								throw new ArgumentException("Must provide orgId as parameter or as default in constructor.");
+							}
+
+							return action.Can(this, org.Value);
+						}
+
+						/// <summary>
+						/// Can the current user perform an action?.
+						/// </summary>
+						/// <param name="action">The Action.</param>
+						/// <param name="projId">The Project ID.</param>
+						/// <returns>Boolean corresponding to yes and no.</returns>
+						public bool Can(ProjectAction action, int projId)
+						{
+							return action.Can(this, projId);
+						}
+
+						/// <summary>
+						/// Can the current user perform an action?.
+						/// </summary>
+						/// <param name="action">The Action.</param>
+						/// <returns>Boolean corresponding to yes and no.</returns>
+						public bool Can(GeneralAction action)
+						{
+							// using lazy evaluation to rapidly evaluate
+							return !action.LoggedOnState.HasValue   // return true if no requirement
+								|| (action.LoggedOnState.Value && this.UserId != -1)   // further return true if must be logged on and we are
+								|| (!action.LoggedOnState.Value && this.UserId != -1);  // further return true if must be logged off and we are
+						}
+
+						/// <summary>
+						/// Can the current user perform an action.
+						/// </summary>
+						/// <param name="action">The product action being performed.</param>
+						/// <param name="orgId">The id of the organization.</param>
+						/// <param name="productId">The id of the product.</param>
+						/// <returns>True if the user can perform the action, else false.</returns>
+						public bool Can(ProductAction action, int orgId, int productId)
+						{
+							return action.Can(this, orgId, productId);
+						}
+
+						/// <summary>
+						/// Can the current user *not* perform the action?.
+						/// </summary>
+						/// <param name="action">The Action.</param>
+						/// <param name="subId">The Subscription Id or null if using the currently active subscription.</param>
+						/// <returns>Boolean corresponding to yes and no.</returns>
+						public bool Cannot(SubAction action, int? subId = null)
+						{
+							return !this.Can(action, subId);
+						}
+
+						/// <summary>
+						/// Can the current user *not* perform the action?.
+						/// </summary>
+						/// <param name="action">The Action.</param>
+						/// <param name="orgId">The Organization Id or null if using the currently active organization.</param>
+						/// <returns>Boolean corresponding to yes and no.</returns>
+						public bool Cannot(OrgAction action, int? orgId = null)
+						{
+							return !this.Can(action, orgId);
+						}
+
+						/// <summary>
+						/// Can the current user *not* perform the action?.
+						/// </summary>
+						/// <param name="action">The Action.</param>
+						/// <param name="projId">The Project Id.</param>
+						/// <returns>Boolean corresponding to yes and no.</returns>
+						public bool Cannot(ProjectAction action, int projId)
+						{
+							return !this.Can(action, projId);
+						}
+
+						/// <summary>
+						/// Can the current user *not* perform the action?.
+						/// </summary>
+						/// <param name="action">The Action.</param>
+						/// <returns>Boolean corresponding to yes and no.</returns>
+						public bool Cannot(GeneralAction action)
+						{
+							return !this.Can(action);
+						}
+
+						/// <summary>
+						/// Can the current user perform an action.
+						/// </summary>
+						/// <param name="action">The product action being performed.</param>
+						/// <param name="orgId">The id of the organization.</param>
+						/// <param name="productId">The id of the product.</param>
+						/// <returns>True if the user can perform the action, else false.</returns>
+						public bool Cannot(ProductAction action, int orgId, int productId)
+						{
+							return !this.Can(action, orgId, productId);
+						}
+					}
+
+					/// <summary>
+					/// Base type for permission Action.
+					/// </summary>
+					[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "This is a smart enum.")]
+					public class Action
+					{
+						/// <summary>
+						///  Initializes a new instance of the <see cref="Action"/> class.
+						/// </summary>
+						protected Action()
+						{
+						}
+					}
+
+					//// Disable comment warnings. They are re-enabled after this section.
+					//// Justification: As we are about to enter a series of smart enums (the methods of which are indeed documented)
+					////   the names of the static members and their classes are their documentation. Writing this out would take quite
+					////   a long time and simply rehash the information already available in the name itself, while making it
+					////   simultaneously much more difficult to edit and review the code.
+				#pragma warning disable 1591
+
+					/// <summary>
+					/// Permission actions which require no auxillary arguments.
+					/// </summary>
+					[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "This is a smart enum.")]
+					[SuppressMessage("StyleCop.CSharp.Layout", "SA1516:ElementsMustBeSeparatedByBlankLine", Justification = "Doing so makes the smart enum harder to read.")]
+					public sealed class GeneralAction : Action
+					{
+						public static readonly GeneralAction LogOn = new GeneralAction(false);
+						public static readonly GeneralAction Register = new GeneralAction(false);
+						public static readonly GeneralAction ConfirmEmail = new GeneralAction(false);
+						public static readonly GeneralAction ResetPassword = new GeneralAction(false);
+						public static readonly GeneralAction ResendValidationEmail = new GeneralAction(true);
+						public static readonly GeneralAction LogOff = new GeneralAction(true);
+						public static readonly GeneralAction EditProfile = new GeneralAction(true);
+						public static readonly GeneralAction ChangePassword = new GeneralAction(true);
+
+						/// <summary>
+						///  Initializes a new instance of the <see cref="GeneralAction"/> class.
+						/// </summary>
+						/// <param name="loggedOnState">Whether or not the user is required to be logged in. Null for no requirement.</param>
+						private GeneralAction(bool? loggedOnState = null)
+						{
+							this.LoggedOnState = loggedOnState;
+						}
+
+						/// <summary>
+						/// Gets. Does this action require the user to be logged on, off, or neither? (true, false, null).
+						/// </summary>
+						public bool? LoggedOnState { get; private set; }
+					}
+
+					/// <summary>
+					/// Smart enum of permission actions for Organizations (requiring OrgID).
+					/// </summary>
+					[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "This is a smart enum.")]
+					[SuppressMessage("StyleCop.CSharp.Layout", "SA1516:ElementsMustBeSeparatedByBlankLine", Justification = "Doing so makes the smart enum harder to read.")]
+					public sealed class OrgAction : Action
+					{
+						// freely accessible actions
+						public static readonly OrgAction Create = new OrgAction();
+						public static readonly OrgAction Join = new OrgAction();
+
+						// members only
+						public static readonly OrgAction View = new OrgAction(true);
+						public static readonly OrgAction Details = new OrgAction(true);
+
+						// admin only
+						public static readonly OrgAction Delete = new OrgAction(true, true);
+						public static readonly OrgAction Edit = new OrgAction(true, true);
+						public static readonly OrgAction EditStripe = new OrgAction(true, true);
+						public static readonly OrgAction EditMembers = new OrgAction(true, true);
+						public static readonly OrgAction AddMembers = new OrgAction(true, true);
+						public static readonly OrgAction ViewMembers = new OrgAction(true, true);
+						public static readonly OrgAction RemoveMember = new OrgAction(true, true);
+						public static readonly OrgAction EditMemberPermission = new OrgAction(true, true);
+						public static readonly OrgAction RemoveInvitation = new OrgAction(true, true);
+						public static readonly OrgAction RegenerateKey = new OrgAction(true, true);
+						public static readonly OrgAction ViewSubscriptions = new OrgAction(true, true);
+						public static readonly OrgAction ManageSubscriptions = new OrgAction(true, true);
+						public static readonly OrgAction EditSubscriptionUsers = new OrgAction(true, true);
+						public static readonly OrgAction AddSubscription = new OrgAction(true, true);
+						public static readonly OrgAction Unsubscribe = new OrgAction(true, true);
+						public static readonly OrgAction RemoveBilling = new OrgAction(true, true);
+
+						/// <summary>
+						/// Is the user required to be an admin to perform this action?.
+						/// </summary>
+						private readonly bool requireAdmin;
+
+						/// <summary>
+						/// Is the user required to be a member to perform this action?.
+						/// </summary>
+						private readonly bool requireMember;
+
+						/// <summary>
+						///  Initializes a new instance of the <see cref="OrgAction"/> class.
+						/// </summary>
+						/// <param name="requireMember">Should Organization Membership be required to perform the action?.</param>
+						/// <param name="requireAdmin">Should Organization-level Admin Permissions be required to perform the action?.</param>
+						private OrgAction(bool requireMember = false, bool requireAdmin = false)
+						{
+							this.requireMember = requireMember;
+							this.requireAdmin = requireAdmin;
+						}
+
+						/// <summary>
+						/// Can the user perform this action?.
+						/// </summary>
+						/// <param name="userPermissions">The UserPermissions Object initialized for the user.</param>
+						/// <param name="orgId">The Organization Id.</param>
+						/// <returns>Whether or not the user can perform the action (true/false : yes/no).</returns>
+						internal bool Can(UserPermissions userPermissions, int orgId)
+						{
+							bool return_value = true;
+							var result = (from x in userPermissions.OrgPermissions where x.OrganizationId == orgId select x).FirstOrDefault();
+							return_value = return_value && (!this.requireMember || result != null);         // either it's not required they be a member, or they are
+							return_value = return_value && (!this.requireAdmin || result.OrgRoleName == "Owner");  // either it's not required they be an admin, or they are
+							return return_value;
+						}
+					}
+
+					/// <summary>
+					/// Smart enum of permission actions for Subscriptions (requiring Subscription ID).
+					/// </summary>
+					[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "This is a smart enum.")]
+					[SuppressMessage("StyleCop.CSharp.Layout", "SA1516:ElementsMustBeSeparatedByBlankLine", Justification = "Doing so makes the smart enum harder to read.")]
+					public sealed class SubAction : Action
+					{
+						public static readonly SubAction CreateProject = new SubAction(true, true);
+
+						public static readonly SubAction ViewProjectList = new SubAction(true);
+						public static readonly SubAction ViewCustomer = new SubAction(true);
+						public static readonly SubAction ViewCustomerList = new SubAction(true);
+						public static readonly SubAction CreateCustomer = new SubAction(true, true);
+						public static readonly SubAction EditCustomer = new SubAction(true, true);
+						public static readonly SubAction DeleteCustomer = new SubAction(true, true);
+
+						/// <summary>
+						/// Is the user required to be an admin to perform this action?.
+						/// </summary>
+						private readonly bool requireAdmin;
+
+						/// <summary>
+						/// Is the user required to be a member to perform this action?.
+						/// </summary>
+						private readonly bool requireMember;
+
+						/// <summary>
+						///  Initializes a new instance of the <see cref="SubAction"/> class.
+						/// </summary>
+						/// <param name="requireMember">Should Subscription Membership be required to perform the action?.</param>
+						/// <param name="requireAdmin">Should Subscription-level Admin Permissions be required to perform the action?.</param>
+						private SubAction(bool requireMember = false, bool requireAdmin = false)
+						{
+							this.requireMember = requireMember;
+							this.requireAdmin = requireAdmin;
+						}
+
+						/// <summary>
+						/// Can the user perform this action?.
+						/// </summary>
+						/// <param name="userPermissions">The UserPermissions Object initialized for the user.</param>
+						/// <param name="subId">The Subscription Id.</param>
+						/// <returns>Whether or not the user can perform the action (true/false : yes/no).</returns>
+						internal bool Can(UserPermissions userPermissions, int subId)
+						{
+							bool return_value = true;
+							var result = (from x in userPermissions.SubPermissions where x.SubscriptionId == subId select x).FirstOrDefault();
+							return_value = return_value && (!this.requireMember || result != null);         // either it's not required they be a member, or they are
+							return_value = return_value && (!this.requireAdmin || result.PermissionAdmin);  // either it's not required they be an admin, or they are
+							return return_value;
+						}
+					}
+
+					/// <summary>
+					/// Smart enum of permission actions for Projects (requiring Project ID).
+					/// </summary>
+					[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "This is a smart enum.")]
+					[SuppressMessage("StyleCop.CSharp.Layout", "SA1516:ElementsMustBeSeparatedByBlankLine", Justification = "Doing so makes the smart enum harder to read.")]
+					public sealed class ProjectAction : Action
+					{
+						public static readonly ProjectAction View = new ProjectAction(true);
+						public static readonly ProjectAction Create = new ProjectAction(true, true);
+						public static readonly ProjectAction Edit = new ProjectAction(true, true);
+						public static readonly ProjectAction Delete = new ProjectAction(true, true);
+
+						/// <summary>
+						/// Is the user required to be an admin to perform this action?.
+						/// </summary>
+						private readonly bool requireAdmin;
+
+						/// <summary>
+						/// Is the user required to be a member to perform this action?.
+						/// </summary>
+						private readonly bool requireMember;
+
+						/// <summary>
+						///  Initializes a new instance of the <see cref="ProjectAction"/> class.
+						/// </summary>
+						/// <param name="requireMember">Should Organization Membership be required to perform the action?.</param>
+						/// <param name="requireAdmin">Should Organization-level Admin Permissions be required to perform the action?.</param>
+						private ProjectAction(bool requireMember = false, bool requireAdmin = false)
+						{
+							this.requireMember = requireMember;
+							this.requireAdmin = requireAdmin;
+						}
+
+						/// <summary>
+						/// Can the user perform this action?.
+						/// </summary>
+						/// <param name="userPermissions">The UserPermissions Object initialized for the user.</param>
+						/// <param name="projId">The Project Id.</param>
+						/// <returns>Whether or not the user can perform the action (true/false : yes/no).</returns>
+						internal bool Can(UserPermissions userPermissions, int projId)
+						{
+							bool return_value = true;
+							var result = (from x in userPermissions.ProjectPermissions where x.ProjectId == projId select x).FirstOrDefault();
+							return_value = return_value && (!this.requireMember || result != null);         // either it's not required they be a member, or they are
+							return_value = return_value && (!this.requireAdmin || result.PermissionAdmin || result.PermissionProductAdmin);  // either it's not required they be an admin, or they are
+							return return_value;
+						}
+					}
+
+					/// <summary>
+					/// Action objects pertaining to projects.
+					/// </summary>
+					public sealed class ProductAction : Action
+					{
+						////TimeTracker members
+						public static readonly ProductAction TimeTrackerViewSelf = new ProductAction(true);
+						public static readonly ProductAction TimeTrackerEditTimeEntrySelf = new ProductAction(true);
+						public static readonly ProductAction TimeTrackerCreateTimeEntrySelf = new ProductAction(true);
+						public static readonly ProductAction TimeTrackerDeleteTimeEntrySelf = new ProductAction(true);
+						public static readonly ProductAction TimeTrackerCreateReportSelf = new ProductAction(true);
+
+						////TimeTracker Admins
+						public static readonly ProductAction TimeTrackerViewOthers = new ProductAction(true, true);
+						public static readonly ProductAction TimeTrackerEditTimeEntryOthers = new ProductAction(true, true);
+						public static readonly ProductAction TimeTrackerCreateTimeEntryOthers = new ProductAction(true, true);
+						public static readonly ProductAction TimeTrackerDeleteTimeEntryOthers = new ProductAction(true, true);
+						public static readonly ProductAction TimeTrackerCreateReportOthers = new ProductAction(true, true);
+						public static readonly ProductAction TimeTrackerApprove = new ProductAction(true, true);
+						public static readonly ProductAction TimeTrackerSettings = new ProductAction(true, true);
+
+						/// <summary>
+						/// Is the user required to be an admin to perform this action?.
+						/// </summary>
+						private readonly bool requireAdmin;
+
+						/// <summary>
+						/// Is the user required to be a member to perform this action?.
+						/// </summary>
+						private readonly bool requireMember;
+
+						/// <summary>
+						///  Initializes a new instance of the <see cref="ProductAction"/> class.
+						/// </summary>
+						/// <param name="requireMember">Should Subscription Membership be required to perform the action?.</param>
+						/// <param name="requireAdmin">Should Subscription-level Admin Permissions be required to perform the action?.</param>
+						private ProductAction(bool requireMember = false, bool requireAdmin = false)
+						{
+							this.requireMember = requireMember;
+							this.requireAdmin = requireAdmin;
+						}
+
+						/// <summary>
+						/// Can the user perform this action?.
+						/// </summary>
+						/// <param name="userPermissions">The UserPermissions Object initialized for the user.</param>
+						/// <param name="orgId">The organization's Id.</param>
+						/// <param name="productId">The product's Id.</param>
+						/// <returns>Whether or not the user can perform the action (true/false : yes/no).</returns>
+						internal bool Can(UserPermissions userPermissions, int orgId, int productId)
+						{
+							bool return_value = true;
+							var result = (from x in userPermissions.SubPermissions where x.OrganizationId == orgId where x.ProductId == productId select x).FirstOrDefault();
+							return_value = return_value && (!this.requireMember || result != null);         // either it's not required they be a member, or they are
+							return_value = return_value && (!this.requireAdmin || result.PermissionAdmin);  // either it's not required they be an admin, or they are
+							return return_value;
+						}
+					}
+					//// Restore the comment warnings.
+				#pragma warning restore 1591
+				}
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Core\ValidateAntiForgeryTokenOnAllPosts.cs
+		//------------------------------------------------------------------------------
+		// <copyright file="ValidateAntiForgeryTokenOnAllPosts.cs" company="Allyis, Inc.">
+		//     Copyright (c) Allyis, Inc.  All rights reserved.
+		// </copyright>
+		//------
+		using System;
+		using System.Collections.Generic;
+		using System.Linq;
+		using System.Net;
+		using System.Web;
+		using System.Web.Helpers;
+		using System.Web.Mvc;
+
+		namespace AllyisApps.Core
+		{
+			/// <summary>
+			/// Validate Anti Forgery Token On All Posts.
+			/// </summary>
+			[AttributeUsage(AttributeTargets.Class)]
+			public class ValidateAntiForgeryTokenOnAllPosts : AuthorizeAttribute
+			{
+				/// <summary>
+				/// On authorization.
+				/// </summary>
+				/// <param name="filterContext">Filter context.</param>
+				public override void OnAuthorization(AuthorizationContext filterContext)
+				{
+					if (filterContext == null)
+					{
+						throw new ArgumentNullException("filterContext");
+					}
+
+					HttpRequestBase request = filterContext.HttpContext.Request;
+
+					// Only validate POSTs
+					if (request.HttpMethod == WebRequestMethods.Http.Post)
+					{
+						// Ajax POSTs and normal form posts have to be treated differently when it comes
+						// to validating the AntiForgeryToken
+						if (request.IsAjaxRequest())
+						{
+							HttpCookie antiForgeryCookie = request.Cookies[AntiForgeryConfig.CookieName];
+
+							string cookieValue = antiForgeryCookie != null
+								? antiForgeryCookie.Value
+								: null;
+
+							AntiForgery.Validate(cookieValue, request.Headers["__RequestVerificationToken"]);
+						}
+						else
+						{
+							new ValidateAntiForgeryTokenAttribute()
+								.OnAuthorization(filterContext);
+						}
+					}
+				}
+			}
+		}
+
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryOverDateRangeViewModel.cs.orig
+			//------------------------------------------------------------------------------
+			// <copyright file="TimeEntryOverDateRangeViewModel.cs" company="Allyis, Inc.">
+			//     Copyright (c) Allyis, Inc.  All rights reserved.
+			// </copyright>
+			//------------------------------------------------------------------------------
+
+			using System;
+			using System.Collections.Generic;
+			using System.ComponentModel.DataAnnotations;
+
+			using AllyisApps.DBModel.Auth;
+			using AllyisApps.DBModel.TimeTracker;
+			using AllyisApps.Services.BusinessObjects;
+
+			namespace AllyisApps.Areas.TimeTracker.Models
+			{
+				/// <summary>
+				/// Representation of the Time entries defined over the specified date range.
+				/// </summary>
+				public class TimeEntryOverDateRangeViewModel
+				{
+					private const int PageUserLimit = 35;
+
+					/// <summary>
+					/// Initializes a new instance of the <see cref="TimeEntryOverDateRangeViewModel" /> class.
+					/// </summary>
+					public TimeEntryOverDateRangeViewModel()
+					{
+					}
+
+					/// <summary>
+					/// Gets or sets the lock date for the entry.
+					/// </summary>
+					public DateTime LockDate { get; set; }
+
+					/// <summary>
+					/// Gets the list of entries.
+					/// </summary>
+					public IList<EditTimeEntryViewModel> Entries { get; internal set; }
+
+					/// <summary>
+					/// Gets the starting date of the date range.
+					/// </summary>
+					[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+					public DateTime StartDate { get; internal set; }
+
+					/// <summary>
+					/// Gets the ending date of the date range.
+					/// </summary>
+					[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+					public DateTime EndDate { get; internal set; }
+
+					/// <summary>
+					/// Gets the organization's Id.
+					/// </summary>
+					public int OrganizationId { get; internal set; }
+
+					/// <summary>
+					/// Gets a value indicating whether or not user can manage other users.
+					/// </summary>
+					public bool CanManage { get; internal set; }
+
+					/// <summary>
+					/// Gets the user's Id.
+					/// </summary>
+					public int UserId { get; internal set; }
+
+					/// <summary>
+					/// Gets the user's Id.
+					/// </summary>
+					public UserInfo CurrentUser { get; internal set; }
+
+					/// <summary>
+					/// Gets the list of active projects available.
+					/// </summary>
+					public IEnumerable<CompleteProjectInfo> Projects { get; internal set; }
+
+					/// <summary>
+					/// Gets the list of projects available, including inactive projects.
+					/// </summary>
+					public IEnumerable<CompleteProjectInfo> ProjectsWithInactive { get; internal set; }
+
+					/// <summary>
+					/// Gets the list of projects available, associated with their total hours.
+					/// </summary>
+					public IEnumerable<ProjectHours> ProjectHours { get; internal set; }
+
+					/// <summary>
+					/// Gets the total hours spent in the current view.
+					/// </summary>
+					public ProjectHours GrandTotal { get; internal set; }
+
+					/// <summary>
+					/// Gets the list of users for the defined organization. 
+					/// </summary>
+					public IEnumerable<UserInfo> Users { get; internal set; }
+
+					/// <summary>
+					/// Gets the total number of users.
+					/// </summary>
+					public int TotalUsers
+					{
+						get;
+						internal set;
+					}
+
+					/// <summary>
+					/// Gets a value indicating the number of users per page to be displayed.
+					/// </summary>
+					public int PageUserSize
+					{
+						get
+						{
+							return PageUserLimit;
+						}
+					}
+
+					/// <summary>
+					/// Gets a value indicating the number of pages of users to be displayed.
+					/// </summary>
+					public int UserPageCount
+					{
+						get
+						{
+							return (int)Math.Ceiling(this.TotalUsers / (double)PageUserLimit);
+						}
+					}
+
+					/// <summary>
+					/// Gets start of week for an Organization.
+					/// </summary>
+					public StartOfWeekEnum StartOfWeek { get; internal set; }
+
+					/// <summary>
+					/// Gets pay classes for an org.
+					/// </summary>
+					public IEnumerable<PayClassDBEntity> PayClasses { get; internal set; }        
+				}
+
+				/// <summary>
+				/// Unites the project with the total hours duration.
+				/// </summary>
+				public class ProjectHours
+				{
+					/// <summary>
+					/// Gets or sets the project in use.
+					/// </summary>
+					public CompleteProjectInfo Project { get; set; }
+
+					/// <summary>
+					/// Gets or sets the total amount of hours attributed to this project.
+					/// </summary>
+					public float Hours { get; set; }
+
+					/// <summary>
+					/// Converts the number of hours to HH:MM.
+					/// </summary>
+					/// <returns>A string representation in the form of HH:MM.</returns>
+					public string GetHoursInHoursMinutes()
+					{
+						try
+						{
+							return ((int)this.Hours).ToString() + ":" + ((int)Math.Round((this.Hours - (int)this.Hours) * 60.0f)).ToString("00");
+						}
+						catch (Exception e)
+						{
+							return e.ToString();
+						}
+					}
+				}
+			}
+
+
+
+
+
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaservices\Crm\CrmService.cs.orig
+
+			//------------------------------------------------------------------------------
+			// <copyright file="CrmService.cs" company="Allyis, Inc.">
+			//     Copyright (c) Allyis, Inc.  All rights reserved.
+			// </copyright>
+			//------------------------------------------------------------------------------
+
+			using System;
+			using System.Collections;
+			using System.Collections.Generic;
+			using System.Linq;
+			using System.Text;
+			using System.Threading.Tasks;
+
+			using AllyisApps.DBModel;
+			using AllyisApps.DBModel.Auth;
+			using AllyisApps.DBModel.Billing;
+			using AllyisApps.DBModel.Crm;
+			using AllyisApps.Services.Account;
+			using AllyisApps.Services.BusinessObjects;
+			using AllyisApps.Utilities;
+			using Stripe;
+
+			namespace AllyisApps.Services.Crm
+			{
+				/// <summary>
+				/// Services for Cutomer Relationship Management related functions (billing, subscriptions).
+				/// </summary>
+				public partial class CrmService : BaseService
+				{
+					/// <summary>
+					/// Authorization in use for select methods.
+					/// </summary>
+					private AuthorizationService authorizationService;
+
+					/// <summary>
+					/// Initializes a new instance of the <see cref="CrmService"/> class.
+					/// </summary>
+					/// <param name="connectionString">The connection string.</param>
+					public CrmService(string connectionString) : base(connectionString)
+					{
+					}
+
+					/// <summary>
+					/// Initializes a new instance of the <see cref="CrmService"/> class.
+					/// </summary>
+					/// <param name="connectionString">The connection string.</param>
+					/// <param name="userContext">The user context.</param>
+					public CrmService(string connectionString, UserContext userContext) : base(connectionString, userContext)
+					{
+						this.authorizationService = new AuthorizationService(connectionString, userContext);
+					}
+
+					/// <summary>
+					/// Gets a list of <see cref="ProductInfo"/>s for all available products.
+					/// </summary>
+					/// <returns>A list of <see cref="ProductInfo"/>s for all available products.</returns>
+					public static List<ProductInfo> GetProductInfoList()
+					{
+						return DBHelper.Instance.GetProductList().Select(p => new ProductInfo
+						{
+							ProductId = p.ProductId,
+							ProductName = p.Name,
+							ProductDescription = p.Description
+						}).ToList();
+					}
+
+					/// <summary>
+					/// Gets the product Id from the product name.
+					/// This method is static so that it can be accessed in BaseProductController constructor initializations.
+					/// </summary>
+					/// <param name="name">Product name.</param>
+					/// <returns>Product Id.</returns>
+					public static int GetProductIdByName(string name)
+					{
+						return DBHelper.Instance.GetProductIDByName(name);
+					}
+
+					/// <summary>
+					/// Gets a <see cref="CustomerInfo"/>.
+					/// </summary>
+					/// <param name="customerId">Customer Id.</param>
+					/// <returns>The customer entity.</returns>
+					public CustomerInfo GetCustomer(int customerId)
+					{
+						CustomerDBEntity DBE = DBHelper.GetCustomerInfo(customerId);
+						if (DBE == null) return null;
+						return new CustomerInfo
+						{
+							CustomerId = DBE.CustomerId,
+							Name = DBE.Name,
+							Address = DBE.Address,
+							City = DBE.City,
+							State = DBE.State,
+							Country = DBE.Country,
+							PostalCode = DBE.PostalCode,
+							ContactEmail = DBE.ContactEmail,
+							ContactPhoneNumber = DBE.ContactPhoneNumber,
+							FaxNumber = DBE.FaxNumber,
+							Website = DBE.Website,
+							EIN = DBE.EIN,
+							CreatedUTC = DBE.CreatedUTC,
+							OrganizationId = DBE.OrganizationId
+						};
+					}
+
+					/// <summary>
+					/// Creates a customer.
+					/// </summary>
+					/// <param name="customer">Customer info.</param>
+					/// <returns>Customer id.</returns>
+					public int? CreateCustomer(CustomerInfo customer)
+					{
+						if (this.authorizationService.Can(Actions.CoreAction.EditCustomer) && customer != null)
+						{
+							CustomerDBEntity DBE = new CustomerDBEntity
+							{
+								CustomerId = customer.CustomerId,
+								Name = customer.Name,
+								Address = customer.Address,
+								City = customer.City,
+								State = customer.State,
+								Country = customer.Country,
+								PostalCode = customer.PostalCode,
+								ContactEmail = customer.ContactEmail,
+								ContactPhoneNumber = customer.ContactPhoneNumber,
+								FaxNumber = customer.FaxNumber,
+								Website = customer.Website,
+								EIN = customer.EIN,
+								CreatedUTC = customer.CreatedUTC,
+								OrganizationId = customer.OrganizationId
+							};
+							return DBHelper.CreateCustomerInfo(DBE);
+						}
+
+						return null;
+					}
+
+					/// <summary>
+					/// Updates a customer in the database.
+					/// </summary>
+					/// <param name="customer">Updated customer info.</param>
+					/// <returns>Returns false if authorization fails.</returns>
+					public bool UpdateCustomer(CustomerInfo customer)
+					{
+						if (this.authorizationService.Can(Actions.CoreAction.EditCustomer) && customer != null)
+						{
+							CustomerDBEntity DBE = new CustomerDBEntity
+							{
+								CustomerId = customer.CustomerId,
+								Name = customer.Name,
+								Address = customer.Address,
+								City = customer.City,
+								State = customer.State,
+								Country = customer.Country,
+								PostalCode = customer.PostalCode,
+								ContactEmail = customer.ContactEmail,
+								ContactPhoneNumber = customer.ContactPhoneNumber,
+								FaxNumber = customer.FaxNumber,
+								Website = customer.Website,
+								EIN = customer.EIN,
+								CreatedUTC = customer.CreatedUTC,
+								OrganizationId = customer.OrganizationId
+							};
+							DBHelper.UpdateCustomer(DBE);
+							return true;
+						}
+						return false;
+					}
+
+					/// <summary>
+					/// Deletes a customer.
+					/// </summary>
+					/// <param name="customerId">Customer id.</param>
+					/// <returns>Returns false if authorization fails.</returns>
+					public bool DeleteCustomer(int customerId)
+					{
+						if (this.authorizationService.Can(Actions.CoreAction.EditCustomer))
+						{
+							DBHelper.DeleteCustomer(customerId);
+							return true;
+						}
+
+						return false;
+					}
+
+					/// <summary>
+					/// Gets a list of <see cref="CustomerInfo"/>'s for an organization.
+					/// </summary>
+					/// <param name="orgId">Organization Id.</param>
+					/// <returns><see cref="IEnumerable{CustomerDBEntity}"/>.</returns>
+					public IEnumerable<CustomerInfo> GetCustomerList(int orgId)
+					{
+						IEnumerable<CustomerDBEntity> DBEs = DBHelper.GetCustomerList(orgId);
+						List<CustomerInfo> list = new List<CustomerInfo>();
+						foreach (CustomerDBEntity DBE in DBEs)
+						{
+							if (DBE != null)
+							{
+								list.Add( new CustomerInfo
+								{
+									CustomerId = DBE.CustomerId,
+									Name = DBE.Name,
+									Address = DBE.Address,
+									City = DBE.City,
+									State = DBE.State,
+									Country = DBE.Country,
+									PostalCode = DBE.PostalCode,
+									ContactEmail = DBE.ContactEmail,
+									ContactPhoneNumber = DBE.ContactPhoneNumber,
+									FaxNumber = DBE.FaxNumber,
+									Website = DBE.Website,
+									EIN = DBE.EIN,
+									CreatedUTC = DBE.CreatedUTC,
+									OrganizationId = DBE.OrganizationId
+								});
+							}
+						}
+						return list;
+					}
+
+					/// <summary>
+					/// Generates the stripe token.
+					/// </summary>
+					/// <param name="id">The token id.</param>
+					/// <returns>A token.</returns>
+					[CLSCompliant(false)]
+					public StripeToken GenerateToken(string id)
+					{
+						var tokenService = new StripeTokenService();
+						return tokenService.Get(id);
+					}
+
+					/// <summary>
+					/// Creates a stripe customer.
+					/// </summary>
+					/// <param name="t">The stripe token for creating the customer.</param>
+					/// <param name="email">The user's email.</param>
+					/// <returns>A new StripeCustomer.</returns>
+					[CLSCompliant(false)]
+					public StripeCustomer CreateStripeCustomer(StripeToken t, string email)
+					{
+						return StripeWrapper.CreateCustomer(email, t.Id);
+					}
+
+					/// <summary>
+					/// Charges a customer.
+					/// </summary>
+					/// <param name="amount">Amount to charge.</param>
+					/// <param name="customer">Stripe customer.</param>
+					/// <returns>A stripe charge object.</returns>
+					[CLSCompliant(false)]
+					public StripeCharge Bill(int amount, StripeCustomer customer)
+					{
+						return StripeWrapper.ChargeCustomer(customer, amount, "usd");
+					}
+
+					/// <summary>
+					/// Adds an item to billing history.
+					/// </summary>
+					/// <param name="description">A description for the item.</param>
+					/// <param name="orgId">Organization Id.</param>
+					/// <param name="userId">User Id.</param>
+					/// <param name="skuId">Sku Id.</param>
+					public void AddBillingHistory(string description, int orgId, int userId, int? skuId)
+					{
+						DBHelper.AddBillingHistory(description, orgId, userId, skuId);
+					}
+
+					/// <summary>
+					/// Removes billing from an organization.
+					/// </summary>
+					/// <param name="orgId">Organization Id.</param>
+					/// <returns>Returns false if authorization fails.</returns>
+					public bool RemoveBilling(int orgId)
+					{
+						if (this.authorizationService.Can(Actions.CoreAction.EditOrganization))
+						{
+							DBHelper.RemoveBilling(orgId);
+							return true;
+						}
+
+						return false;
+					}
+
+					/// <summary>
+					/// Gets the customer Id for an organization.
+					/// </summary>
+					/// <param name="orgId">Organization Id.</param>
+					/// <returns>The customer ID as a string.</returns>
+					public string GetOrgCustomer(int orgId)
+					{
+						return DBHelper.GetOrgCustomer(orgId);
+					}
+
+					/// <summary>
+					/// Adds a customer to an organization.
+					/// </summary>
+					/// <param name="orgId">Organization Id.</param>
+					/// <param name="customerId">Customer Id.</param>
+					public void AddOrgCustomer(int orgId, string customerId)
+					{
+						DBHelper.AddOrgCustomer(orgId, customerId);
+					}
+
+					/// <summary>
+					/// Create a subscription plan.
+					/// </summary>
+					/// <param name="interval">Charge interval.</param>
+					/// <param name="amount">The Amount.</param>
+					/// <param name="customer">Stripe customer.</param>
+					/// <returns>The plan id.</returns>
+					[CLSCompliant(false)]
+					public string Subscription(string interval, int amount, StripeCustomer customer)
+					{
+						return StripeWrapper.Subsciption(interval, amount, customer);
+					}
+
+					/// <summary>
+					/// Adds a customer subscription.
+					/// </summary>
+					/// <param name="stripeTokenId">Cutomer stipe token Id.</param>
+					/// <param name="planId">Subscription plan Id.</param>
+					/// <param name="amount">The Amount.</param>
+					/// <param name="numberOfUsers">Number of Users.</param>
+					/// <param name="productId">Product Id.</param>
+					/// <param name="orgId">Organization Id.</param>
+					/// <returns>Subscription Id.</returns>
+					public string AddCustomerSubscription(string stripeTokenId, string planId, int amount, int numberOfUsers, int productId, int orgId)
+					{
+						return DBHelper.AddCustomerSubscription(stripeTokenId, planId, amount, numberOfUsers, productId, orgId);
+					}
+
+					/// <summary>
+					/// Updates a customer subscription.
+					/// </summary>
+					/// <param name="userId">User Id, as a string.</param>
+					/// <param name="customerId">Customer Id, as a string.</param>
+					/// <param name="subscriptionId">Subscription Id, as a string.</param>
+					/// <param name="price">The Price.</param>
+					/// <param name="numberOfUsers">Number of Users.</param>
+					/// <returns>The customer subscription.</returns>
+					public string UpdateSubscriptionPlan(string userId, string customerId, string subscriptionId, int price, int numberOfUsers)
+					{
+						return DBHelper.UpdateSubscriptionPlan(userId, customerId, subscriptionId, price, numberOfUsers);
+					}
+
+					/// <summary>
+					/// Updates the active subsciption.
+					/// </summary>
+					/// <param name="subscriptionId">Subscription Id.</param>
+					/// <param name="userId">User Id.</param>
+					public void UpdateActiveSubscription(int? subscriptionId, int userId)
+					{
+						DBHelper.UpdateActiveSubscription(userId, subscriptionId);
+					}
+
+					/// <summary>
+					/// Updates the number of subscription users.
+					/// </summary>
+					/// <param name="orgId">Organization Id.</param>
+					/// <param name="skuId">Sku Id.</param>
+					/// <param name="numberOfUsers">New number of users.</param>
+					public void UpdateSubscriptionUsers(int orgId, int skuId, int numberOfUsers)
+					{
+						DBHelper.UpdateSubscriptionUsers(orgId, skuId, numberOfUsers);
+					}
+
+					/// <summary>
+					/// Deletes a subsciption user.
+					/// </summary>
+					/// <param name="subscriptionId">Subscription Id.</param>
+					/// <param name="userId">User Id.</param>
+					public void DeleteSubscriptionUser(int subscriptionId, int userId)
+					{
+						DBHelper.DeleteSubscriptionUser(subscriptionId, userId);
+					}
+
+					// TODO: Caching for ProductInfo shared by the two methods below
+
+					/// <summary>
+					/// Gets a <see cref="ProductInfo"/>.
+					/// </summary>
+					/// <param name="productId">Product Id.</param>
+					/// <returns>A ProductInfo instance.</returns>
+					public ProductInfo GetProductById(int productId)
+					{
+						ProductDBEntity product = DBHelper.GetProductById(productId);
+						return new ProductInfo
+						{
+							ProductId = product.ProductId,
+							ProductName = product.Name,
+							ProductDescription = product.Description
+						};
+					}
+
+					/// <summary>
+					/// Gets a list of <see cref="ProductRoleInfo"/>s related to a given product.
+					/// </summary>
+					/// <param name="productName">Name of product.</param>
+					/// <returns>List of product roles.</returns>
+					public IEnumerable<ProductRoleInfo> GetProductRoles(string productName)
+					{
+						return DBHelper.GetProductRoles(productName).Select(p => BusinessObjectsHelper.InitializeProductRoleInfo(p));
+					}
+
+					/// <summary>
+					/// Gets a <see cref="SubscriptionInfo"/>.
+					/// </summary>
+					/// <param name="productId">Product Id.</param>
+					/// <returns>A SubscriptionDBEntity.</returns>
+					public SubscriptionInfo GetSubscription(int productId)
+					{
+						SubscriptionDBEntity si = DBHelper.GetSubscriptionDetailsById(productId);
+						if (si == null) return null;
+						return new SubscriptionInfo
+						{
+							OrganizationName = si.OrganizationName,
+							OrganizationId = si.OrganizationId,
+							SubscriptionId = si.SubscriptionId,
+							SkuId = si.SkuId,
+							NumberOfUsers = si.NumberOfUsers,
+							Licenses = si.Licenses,
+							CreatedUTC = si.CreatedUTC,
+							IsActive = si.IsActive,
+							Name = si.Name
+						};
+					}
+
+					/// <summary>
+					/// Gets a subscription plan.
+					/// </summary>
+					/// <param name="orgId">Organization Id.</param>
+					/// <param name="customerId">Customer Id.</param>
+					/// <returns>Subscription Id.</returns>
+					public string GetSubscriptionPlan(int orgId, string customerId)
+					{
+						return DBHelper.GetSubscriptionPlan(orgId, customerId);
+					}
+
+					/// <summary>
+					/// Gets a list of subscription plan prices.
+					/// </summary>
+					/// <param name="orgId">Organization Id.</param>
+					/// <returns><see cref="IEnumerable"/> of prices, as ints.</returns>
+					public IEnumerable<int> GetSubscriptionPlanPrices(int orgId)
+					{
+						return DBHelper.GetSubscriptionPlanPrices(orgId);
+					}
+
+					/// <summary>
+					/// Deletes a subscription plan.
+					/// </summary>
+					/// <param name="subscriptionId">Subscription Id, as a string.</param>
+					/// <returns>A subscription plan.</returns>
+					public string DeleteSubscriptionPlan(string subscriptionId)
+					{
+						return DBHelper.DeleteSubscriptionPlan(subscriptionId);
+					}
+
+					/// <summary>
+					/// Gets a list of <see cref="UserDBEntity"/>'s for users in the organization with subscriptions to the given product.
+					/// </summary>
+					/// <param name="orgId">Organization Id.</param>
+					/// <param name="productId">Product Id.</param>
+					/// <returns>A list of <see cref="UserDBEntity"/>'s for users in the organization with subscriptions to the given product.</returns>
+					public IEnumerable<UserInfo> GetUsersWithSubscriptionToProductInOrganization(int orgId, int productId)
+					{
+						return DBHelper.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Select(u => BusinessObjectsHelper.InitializeUserInfo(u));
+					}
+
+					/// <summary>
+					/// Gets a <see cref="SkuInfo"/> for a given organizaiton and product.
+					/// </summary>
+					/// <param name="orgId">Organization Id.</param>
+					/// <param name="productId">Product Id.</param>
+					/// <returns>A SkuDBEntity.</returns>
+					public SkuInfo GetSubscriptionByOrgAndProduct(int orgId, int productId)
+					{
+						SkuDBEntity sku = DBHelper.GetSubscriptionByOrgAndProduct(orgId, productId);
+						if (sku == null) return null;
+						return new SkuInfo
+						{
+							SkuId = sku.SkuId,
+							ProductId = sku.ProductId,
+							Name = sku.Name,
+							Price = sku.Price,
+							UserLimit = sku.UserLimit,
+							BillingFrequency = sku.BillingFrequency,
+							SubscriptionId = sku.SubscriptionId
+						};
+					}
+
+					/// <summary>
+					/// Gets a <see cref="SubscriptionInfo"/>.
+					/// </summary>
+					/// <param name="orgId">Organization Id.</param>
+					/// <param name="productId">Product Id.</param>
+					/// <returns>A SubscriptionDBEntity.</returns>
+					public SubscriptionInfo CheckSubscription(int orgId, int productId)
+					{
+						SubscriptionDBEntity si = DBHelper.CheckSubscription(orgId, productId);
+						if (si == null) return null;
+						return new SubscriptionInfo
+						{
+							OrganizationName = si.OrganizationName,
+							OrganizationId = si.OrganizationId,
+							SubscriptionId = si.SubscriptionId,
+							SkuId = si.SkuId,
+							NumberOfUsers = si.NumberOfUsers,
+							Licenses = si.Licenses,
+							CreatedUTC = si.CreatedUTC,
+							IsActive = si.IsActive,
+							Name = si.Name
+						};
+					}
+
+			<<<<<<< .mine
+					/// <summary>
+					/// Gets a <see cref="SkuInfo"/>.
+					/// </summary>
+					/// <param name="productId">Product Id.</param>
+					/// <returns></returns>
+					public IEnumerable<SkuInfo> GetSkuForProduct(int productId)
+					{
+						IEnumerable<SkuDBEntity> skus = DBHelper.GetSkuforProduct(productId);
+						List<SkuInfo> list = new List<SkuInfo>();
+						foreach (SkuDBEntity sku in skus)
+						{
+							if (sku != null)
+							{
+								list.Add(new SkuInfo
+								{
+									SkuId = sku.SkuId,
+									ProductId = sku.ProductId,
+									Name = sku.Name,
+									Price = sku.Price,
+									UserLimit = sku.UserLimit,
+									BillingFrequency = sku.BillingFrequency
+								});
+							}
+						}
+			||||||| .r1644
+					/// <summary>
+					/// Gets a <see cref="SkuInfo"/>.
+					/// </summary>
+					/// <param name="productId">Product Id.</param>
+					/// <returns></returns>
+					public IEnumerable<SkuInfo> GetSkuForProduct(int productId)
+					{
+						IEnumerable<SkuDBEntity> skus = DBHelper.GetSkuforProduct(productId);
+						List<SkuInfo> list = new List<SkuInfo>();
+						foreach (SkuDBEntity sku in skus)
+						{
+							if (sku != null)
+							{
+								list.Add(new SkuInfo
+								{
+									SkuId = sku.SkuId,
+									ProductId = sku.ProductId,
+									Name = sku.Name,
+									Price = sku.Price,
+									UserLimit = sku.UserLimit,
+									BillingFrequency = sku.BillingFrequency
+								});
+							}
+						}
+			=======
+					/// <summary>
+					/// Gets a list of <see cref="SubscriptionDisplayInfo"/>s with subscription, organization, and role information for a user.
+					/// </summary>
+					/// <param name="userId">User Id.</param>
+					/// <returns>List of SubscriptionDisplayInfos.</returns>
+					public IEnumerable<SubscriptionDisplayInfo> GetUserSubscriptionOrganizationList (int userId)
+					{
+						return DBHelper.GetUserSubscriptionOrganizationList(userId).Select(s => BusinessObjectsHelper.InitializeSubscriptionDisplayInfo(s));
+					}
+
+					/// <summary>
+					/// Gets a list of <see cref="SubscriptionDisplayInfo"/>s for all subscriptions in an organization.
+					/// </summary>
+					/// <param name="orgId">Organization Id.</param>
+					/// <returns>List of SubscriptionDisplayInfos.</returns>
+					public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplayByOrg (int orgId)
+					{
+						return DBHelper.Instance.GetSubscriptionsDisplayByOrg(orgId).Select(s => BusinessObjectsHelper.InitializeSubscriptionDisplayInfo(s));
+					}
+
+					/// <summary>
+					/// Gets a list of available <see cref="SubscriptionRoleInfo"/>s for a subscription.
+					/// </summary>
+					/// <param name="subscriptionId">Subscription Id.</param>
+					/// <returns>List of SubscriptionRoleInfos.</returns>
+					public IEnumerable<SubscriptionRoleInfo> GetProductRolesFromSubscription(int subscriptionId)
+					{
+						return DBHelper.GetProductRolesFromSubscription(subscriptionId).Select(s =>
+						{
+							if (s == null) return null;
+							return new SubscriptionRoleInfo
+							{
+								Name = s.Name,
+								ProductRoleId = s.ProductRoleId
+							};
+						});
+					}
+
+					/// <summary>
+					/// Gets a <see cref="SkuInfo"/>.
+					/// </summary>
+					/// <param name="productId">Product Id.</param>
+					/// <returns></returns>
+					public IEnumerable<SkuInfo> GetSkuForProduct(int productId)
+					{
+						IEnumerable<SkuDBEntity> skus = DBHelper.GetSkuforProduct(productId);
+						List<SkuInfo> list = new List<SkuInfo>();
+						foreach (SkuDBEntity sku in skus)
+						{
+							if (sku != null)
+							{
+								list.Add(new SkuInfo
+								{
+									SkuId = sku.SkuId,
+									ProductId = sku.ProductId,
+									Name = sku.Name,
+									Price = sku.Price,
+									UserLimit = sku.UserLimit,
+									BillingFrequency = sku.BillingFrequency
+								});
+							}
+						}
+			>>>>>>> .r1669
+
+						return list;
+					}
+
+
+					/// <summary>
+					/// Gets a <see cref="SkuInfo"/>.
+					/// </summary>
+					/// <param name="skuId">Sku Id.</param>
+					/// <returns></returns>
+					public SkuInfo GetSkuDetails(int skuId)
+					{
+						SkuDBEntity sku = DBHelper.GetSkuDetails(skuId);
+						if (sku == null) return null;
+						return new SkuInfo
+						{
+							SkuId = sku.SkuId,
+							ProductId = sku.ProductId,
+							Name = sku.Name,
+							Price = sku.Price,
+							UserLimit = sku.UserLimit,
+							BillingFrequency = sku.BillingFrequency
+						};
+					}
+
+					/// <summary>
+					/// Creates a new Subscription in the database.
+					/// </summary>
+					/// <param name="orgId">Organization Id.</param>
+					/// <param name="selectedSku">Selected Sku.</param>
+					/// <param name="productId">Product Id.</param>
+					/// <param name="numberOfUsers">The number of users.</param>
+					/// <param name="userId">The user's Id.</param>
+					public void AddSubscriptionOfSkuToOrganization(int orgId, int selectedSku, int productId, int numberOfUsers, int userId)
+					{
+						int subID = DBHelper.ChangeSubscription(orgId, selectedSku, productId, numberOfUsers);
+						if (subID != 0)
+						{
+							this.EditProductRole(this.GetProductRolesFromSubscription(subID).Where(x => x.Name == "Manager").Single().ProductRoleId, subID, userId);
+						}
+					}
+
+					/// <summary>
+					/// Updates a user role for a product subscription.
+					/// </summary>
+					/// <param name="productRoleId">Product role Id.</param>
+					/// <param name="subscriptionId">Subscription Id.</param>
+					/// <param name="userId">The user's Id.</param>
+					public void EditProductRole(int productRoleId, int subscriptionId, int userId)
+					{
+						DBHelper.EditProductRole(productRoleId, subscriptionId, userId);
+					}
+
+					/// <summary>
+					/// Unsubscribes a subscription.
+					/// </summary>
+					/// <param name="subscriptionId">Subscription Id.</param>
+					public void Unsubscribe(int subscriptionId)
+					{
+						DBHelper.Unsubscribe(subscriptionId);
+					}
+
+					/// <summary>
+					/// Creates default settings for a product.
+					/// TODO: Is it possible to reduce hard code here?.
+					/// </summary>
+					/// <param name="productId">Id of the product.</param>
+					/// <param name="orgId">The orginizations id.</param>
+					public void InitializeSettingsForProduct(int productId, int orgId)
+					{
+						if (productId == CrmService.GetProductIdByName("TimeTracker"))
+						{
+							DBHelper.InitializeTimeTrackerSettings(orgId);
+						}
+					}
+
+					/// <summary>
+					/// Gets the product role for a user.
+					/// </summary>
+					/// <param name="productName">Product name.</param>
+					/// <param name="orgId">Organization Id.</param>
+					/// <param name="userId">User Id.</param>
+					/// <returns>The product role.</returns>
+					public string GetProductRoleForUser(string productName, int orgId, int userId)
+					{
+						return DBHelper.GetProductRoleForUser(productName, orgId, userId);
+					}
+
+					public string GetProductNameBySubscriptionID(int subscriptionID)
+					{
+						return DBHelper.GetProductAreaBySubscription(subscriptionID);
+					}
+				}
+			}
+
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaservices\Org\OrgService.cs.orig
+				//------------------------------------------------------------------------------
+				// <copyright file="OrgService.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+
+				using System.Collections.Generic;
+				using System.Linq;
+				using System.Threading.Tasks;
+
+				using AllyisApps.DBModel;
+				using AllyisApps.DBModel.Auth;
+				using AllyisApps.DBModel.Billing;
+				using AllyisApps.Services.Account;
+				using AllyisApps.Services.BusinessObjects;
+				using AllyisApps.Services.Crm;
+				using AllyisApps.Utilities;
+
+				namespace AllyisApps.Services.Org
+				{
+					/// <summary>
+					/// Busincess logic for all Organization related services.
+					/// </summary>
+					public partial class OrgService : BaseService
+					{
+						/// <summary>
+						/// Authorization in use for select methods.
+						/// </summary>
+						private AuthorizationService authorizationService;
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="OrgService"/> class.
+						/// </summary>
+						/// <param name="connectionString">The connection string.</param>
+						/// <param name="userContext">The user context.</param>
+						public OrgService(string connectionString, UserContext userContext) : base(connectionString, userContext)
+						{
+							this.authorizationService = new AuthorizationService(connectionString, userContext);
+						}
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="OrgService"/> class.
+						/// </summary>
+						/// <param name="connectionString">The connection string.</param>
+						public OrgService(string connectionString) : base(connectionString)
+						{
+						}
+		
+						/// <summary>
+						/// Gets the subdomain name from the organization Id.
+						/// </summary>
+						/// <param name="orgId">Organization Id.</param>
+						/// <returns>Subdomain name.</returns>
+						public static string GetSubdomainById(int orgId)
+						{
+							return DBHelper.Instance.GetSubdomainById(orgId);
+						}
+
+						/// <summary>
+						/// Gets the organization Id from the subdomain name.
+						/// </summary>
+						/// <param name="subdomain">Subdomain name.</param>
+						/// <returns>Organization id.</returns>
+						public static int GetIdBySubdomain(string subdomain)
+						{
+							return DBHelper.Instance.GetIdBySubdomain(subdomain);
+						}
+
+						/// <summary>
+						/// Creates an organization.
+						/// </summary>
+						/// <param name="organization">Organization info.</param>
+						/// <param name="ownerId">Organization owner user Id.</param>
+						/// <param name="roleId">Organization owner role Id.</param>
+						/// <returns>Organizaiton Id.</returns>
+						public int CreateOrganization(OrganizationInfo organization, int ownerId, int roleId)
+						{
+							return DBHelper.CreateOrganization(BusinessObjectsHelper.GetDBEntityFromOrganizationInfo(organization), ownerId, roleId);
+						}
+
+						/// <summary>
+						/// Gets an <see cref="OrganizationInfo"/>.
+						/// </summary>
+						/// <param name="orgId">Organization Id.</param>
+						/// <returns>The OrganizationInfo.</returns>
+						public OrganizationInfo GetOrganization(int orgId)
+						{
+							return BusinessObjectsHelper.InitializeOrganizationInfo(DBHelper.GetOrganization(orgId));
+						}
+
+						/// <summary>
+						/// Updates an organization chosen by the current user.
+						/// </summary>
+						/// <param name="organization">Updated organization info.</param>
+						/// <returns>Returns false if authorization fails.</returns>
+						public bool UpdateOrganization(OrganizationInfo organization)
+						{
+							if (this.authorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+							{
+								DBHelper.UpdateOrganization(BusinessObjectsHelper.GetDBEntityFromOrganizationInfo(organization));
+
+								return true;
+							}
+
+							return false;
+						}
+
+						/// <summary>
+						/// Updates the active organization.
+						/// </summary>
+						/// <param name="orgId">Organization Id.</param>
+						/// <param name="userId">User Id.</param>
+						public void UpdateActiveOrganization(int orgId, int userId)
+						{
+							DBHelper.UpdateActiveOrganization(userId, orgId);
+						}
+
+						/// <summary>
+						/// Gets the permission level of the current user in the given organization.
+						/// </summary>
+						/// <param name="orgId">Organization Id.</param>
+						/// <param name="userId">User Id.</param>
+						/// <returns>The OrgRoleDBEntity.</returns>
+						public OrgRoleInfo GetPermissionLevel(int orgId, int userId)
+						{
+							OrgRoleDBEntity role = DBHelper.GetPermissionLevel(orgId, userId);
+							if (role == null) return null;
+							return new OrgRoleInfo
+							{
+								OrgRoleId = role.Id,
+								OrgRoleName = role.Name
+							};
+						}
+
+						/// <summary>
+						/// Adds a user to an organization and project.
+						/// </summary>
+						/// <param name="userId">Id of user to add.</param>
+						/// <param name="orgId">Id of organization to add user to.</param>
+						/// <param name="subscriptionProjectId">Id of project to add user to.</param>
+						/// <param name="orgRole">The role to add the user as.</param>
+						public void AddToOrganization(int userId, int orgId, int subscriptionProjectId, int orgRole)
+						{
+							DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity() // ...add them to that organization as  amember
+							{
+								UserId = userId,
+								OrganizationId = orgId,
+								OrgRoleId = orgRole
+							});
+
+							DBHelper.CreateProjectUser(subscriptionProjectId, userId);
+						}
+
+						/// <summary>
+						/// Deletes an organization selected by the current user.
+						/// </summary>
+						/// <param name="orgId">Organization Id.</param>
+						/// <returns>Returns false if permissions fail.</returns>
+						public bool DeleteOrganization(int orgId)
+						{
+							if (this.authorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+							{
+								DBHelper.DeleteOrganization(orgId);
+
+								return true;
+							}
+
+							return false;
+						}
+
+						/// <summary>
+						/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
+						/// </summary>
+						/// <param name="requestingUserFullName">Full name of requesting user (not invitee).</param>
+						/// <param name="webRoot">The url webroot, taken from Global Settings.</param>
+						/// <param name="invitationInfo">An <see cref="InvitationInfo"/> with invitee information filled out.</param>
+						/// <returns>The invitation Id.</returns>
+						public async Task<int> InviteNewUser(string requestingUserFullName, string webRoot, InvitationInfo invitationInfo)
+						{
+							EmailService mail = new EmailService();
+							OrganizationInfo orgInfo = this.GetOrganization(invitationInfo.OrganizationId);
+							string msgbody = new System.Web.HtmlString(requestingUserFullName + " has requested you join their Allyis Apps organization, " + orgInfo.Name +
+												"!<br /> Click <a href=http://" + GetSubdomainById(invitationInfo.OrganizationId) + "." + webRoot +
+												"/Org/NewMemberJoin?accessCode=" + invitationInfo.AccessCode + ">Here</a> to create an account and join!").ToString();
+							await mail.CreateMessage(
+												msgbody,
+												invitationInfo.Email,
+												"Join Allyis Apps!");
+
+							return DBHelper.CreateUserInvitation(BusinessObjectsHelper.GetDBEntityFromInvitationInfo(invitationInfo));
+						}
+
+						/// <summary>
+						/// Removes an invitation.
+						/// </summary>
+						/// <param name="orgId">Organization Id.</param>
+						/// <param name="invitationId">Invitation Id.</param>
+						/// <returns>Returns false if permissions fail.</returns>
+						public bool RemoveInvitation(int orgId, int invitationId)
+						{
+							if (this.authorizationService.Can(Actions.CoreAction.EditOrganization))
+							{
+								IEnumerable<InvitationInfo> invites = this.GetUserInvitations(orgId);
+								InvitationInfo thisInvite = invites.Where(x => x.InvitationId == invitationId).SingleOrDefault();
+								IEnumerable<SubscriptionDisplayInfo> subs = this.DBHelper.GetSubscriptionsDisplayByOrg(orgId).Select(s => BusinessObjectsHelper.InitializeSubscriptionDisplayInfo(s));
+								IEnumerable<InvitationSubRoleInfo> subRoles = this.GetInvitationSubRolesByInvitationId(invitationId);
+								foreach (InvitationSubRoleInfo subRole in subRoles)
+								{
+									SubscriptionDisplayInfo currentSub = subs.Where(x => x.SubscriptionId == subRole.SubscriptionId).SingleOrDefault();
+									if (currentSub != null && currentSub.SubscriptionsUsed < currentSub.NumberOfUsers)
+									{
+										DBHelper.Instance.DeleteInvitationSubRole(subRole.InvitationId, subRole.SubscriptionId);
+									}
+								}
+
+								this.RemoveUserInvitation(invitationId);
+								return true;
+							}
+
+							return false;
+						}
+
+						/// <summary>
+						/// Removes a user invitiation.
+						/// </summary>
+						/// <param name="invitationId">Invitation Id.</param>
+						public void RemoveUserInvitation(int invitationId)
+						{
+							DBHelper.RemoveUserInvitation(invitationId);
+						}
+
+						/// <summary>
+						/// Getst a list of the user invitations for an organization.
+						/// </summary>
+						/// <param name="orgId">Organizaiton id.</param>
+						/// <returns>List of InvitationInfos of organization's user invitations.</returns>
+						public IEnumerable<InvitationInfo> GetUserInvitations(int orgId)
+						{
+							return DBHelper.GetUserInvitationsByOrgId(orgId).Select(i => BusinessObjectsHelper.InitializeInvitationInfo(i));
+						}
+
+						/// <summary>
+						/// Creates a subscription role for an invitation.
+						/// </summary>
+						/// <param name="invitationId">Invitation id.</param>
+						/// <param name="subscriptionId">Subscription id.</param>
+						/// <param name="selectedRole">Selected role.</param>
+						public void CreateInvitationSubRole(int invitationId, int subscriptionId, int selectedRole)
+						{
+							DBHelper.CreateInvitationSubRole(invitationId, subscriptionId, selectedRole);
+						}
+
+						/// <summary>
+						/// Gets a list of <see cref="InvitationSubRoleInfo"/>s using an invitation Id.
+						/// </summary>
+						/// <param name="invitationId">Invitation Id.</param>
+						/// <returns>List of InvitationSubRoleInfos</returns>
+						public IEnumerable<InvitationSubRoleInfo> GetInvitationSubRolesByInvitationId(int invitationId)
+						{
+							return DBHelper.GetInvitationSubRolesByInvitationId(invitationId).Select(i => BusinessObjectsHelper.InitializeInvitationSubRoleInfo(i));
+						}
+
+						/// <summary>
+						/// Processes an invitation, updating the user's subscription product roles.
+						/// </summary>
+						/// <param name="orgId">Organization Id.</param>
+						/// <param name="invitationId">Invitation Id.</param>
+						/// <param name="userId">User Id.</param>
+						/// <returns>Last product Id.</returns>
+						public int UpdateSubscriptionUserProductRoles(int orgId, int invitationId, int userId)
+						{
+							IEnumerable<SubscriptionDisplayInfo> subs = DBHelper.GetSubscriptionsDisplayByOrg(orgId).Select(s => BusinessObjectsHelper.InitializeSubscriptionDisplayInfo(s));
+							IEnumerable<InvitationSubRoleInfo> roles = this.GetInvitationSubRolesByInvitationId(invitationId);
+							int productId = 0;
+							foreach (InvitationSubRoleInfo roleEntry in roles)
+							{
+								SubscriptionDisplayInfo currentSub = subs.Where(x => x.SubscriptionId == roleEntry.SubscriptionId).SingleOrDefault();
+								if (currentSub != null && currentSub.SubscriptionsUsed < currentSub.NumberOfUsers)
+								{
+									this.UpdateSubscriptionUserProductRole(roleEntry.ProductRoleId, roleEntry.SubscriptionId, userId);
+									productId = currentSub.ProductId;
+								}
+							}
+
+							this.RemoveUserInvitation(invitationId);
+							return productId;
+						}
+
+						/// <summary>
+						/// Updates a user's subscription product role.
+						/// </summary>
+						/// <param name="selectedRole">The Role.</param>
+						/// <param name="subscriptionId">Subscription Id.</param>
+						/// <param name="userId">User Id.</param>
+						public void UpdateSubscriptionUserProductRole(int selectedRole, int subscriptionId, int userId)
+						{
+							DBHelper.UpdateSubscriptionUserProductRole(selectedRole, subscriptionId, userId);
+						}
+
+						/// <summary>
+						/// Gets the member count for an organization.
+						/// </summary>
+						/// <param name="orgId">Organization Id.</param>
+						/// <returns>The member count.</returns>
+						public int GetOrganizationMemberCount(int orgId)
+						{
+							return DBHelper.GetOrganizationMemberCount(orgId);
+						}
+
+						/// <summary>
+						/// Gets the member list for an organization.
+						/// </summary>
+						/// <param name="orgId">Organization Id.</param>
+						/// <returns>The member list.</returns>
+						public IEnumerable<OrganizationUserInfo> GetOrganizationMemberList(int orgId)
+						{
+							return DBHelper.GetOrganizationMemberList(orgId).Select(o => BusinessObjectsHelper.InitializeOrganizationUserInfo(o));
+						}
+
+						/// <summary>
+						/// Gets the first name of a user by organization and email.
+						/// </summary>
+						/// <param name="orgId">Organization Id.</param>
+						/// <param name="email">Email address.</param>
+						/// <returns>User's first name.</returns>
+						public string GetOrgUserFirstName(int orgId, string email)
+						{
+							return DBHelper.GetOrgUserFirstName(orgId, email);
+						}
+
+						/// <summary>
+						/// Gets the subscription count for an organization.
+						/// </summary>
+						/// <param name="orgId">Organization Id.</param>
+						/// <returns>The subscription count.</returns>
+						public int GetSubscriptionCount(int orgId)
+						{
+							return DBHelper.GetOrganizationSubscriptionCount(orgId);
+						}
+
+						/// <summary>
+						/// Gets a list of subscription details for an organization.
+						/// </summary>
+						/// <param name="orgId">Organization id.</param>
+						/// <returns><see cref="IEnumerable{SubscriptionInfo}"/></returns>
+						public IEnumerable<SubscriptionInfo> GetSubscriptionDetails(int orgId)
+						{
+							IEnumerable<SubscriptionDBEntity> SubDBEs = DBHelper.GetSubscriptionDetails(orgId);
+				<<<<<<< .mine
+							List<SubscriptionInfo> list = null;
+							foreach (SubscriptionDBEntity DBE in SubDBEs)
+							{
+								if (DBE != null)
+								{
+									list.Add(new SubscriptionInfo{
+										OrganizationName = DBE.OrganizationName,
+										OrganizationId = DBE.OrganizationId,
+										SubscriptionId = DBE.SubscriptionId,
+										SkuId = DBE.SkuId,
+										NumberOfUsers = DBE.NumberOfUsers,
+										Licenses = DBE.Licenses,
+										CreatedUTC = DBE.CreatedUTC,
+										IsActive = DBE.IsActive,
+										Name = DBE.Name
+									});
+								}
+				
+							}
+				||||||| .r1644
+							List<SubscriptionInfo> list = null;
+							foreach (SubscriptionDBEntity DBE in SubDBEs)
+							{
+								if (DBE != null)
+								{
+									list.Add(new SubscriptionInfo{
+										OrganizationName = DBE.OrganizationName,
+										OrganizationId = DBE.OrganizationId,
+										SubscriptionId = DBE.SubscriptionId,
+										SkuId = DBE.SkuId,
+										NumberOfUsers = DBE.NumberOfUsers,
+										Licenses = DBE.Licenses,
+										CreatedUTC = DBE.CreatedUTC,
+										IsActive = DBE.IsActive,
+										Name = DBE.Name
+									});
+								}
+				
+							}
+				=======
+							List<SubscriptionInfo> list = new List<SubscriptionInfo>();
+							foreach (SubscriptionDBEntity DBE in SubDBEs)
+							{
+								if (DBE != null)
+								{
+									list.Add(new SubscriptionInfo{
+										OrganizationName = DBE.OrganizationName,
+										OrganizationId = DBE.OrganizationId,
+										SubscriptionId = DBE.SubscriptionId,
+										SkuId = DBE.SkuId,
+										NumberOfUsers = DBE.NumberOfUsers,
+										Licenses = DBE.Licenses,
+										CreatedUTC = DBE.CreatedUTC,
+										IsActive = DBE.IsActive,
+										Name = DBE.Name
+									});
+								}
+				
+							}
+				>>>>>>> .r1669
+
+							return list;
+						}
+
+						/// <summary>
+						/// Gets the list of subscriptions for an organization.
+						/// </summary>
+						/// <param name="orgId">Organization id.</param>
+						/// <returns><see cref="List{SubscriptionInfo}"/> with this organization's subscriptions.</returns>
+						public List<SubscriptionInfo> GetSubscriptionList(int orgId)
+						{
+							List<SubscriptionInfo> subscriptionList = new List<SubscriptionInfo>();
+							subscriptionList.AddRange(this.GetSubscriptionDetails(orgId));
+							IEnumerable<ProductInfo> products = CrmService.GetProductInfoList();
+
+							// Verify that each product is contained in the list even if there is no
+							//	active subscription for it.
+							foreach (ProductInfo product in products)
+							{
+								if (!subscriptionList.Any((SubscriptionInfo x) => DBHelper.GetSkuDetails(x.SkuId).ProductId == product.ProductId))
+								{
+									SkuDBEntity fsku = DBHelper.GetFreeSku(product.ProductId);
+									if (fsku != null)
+									{
+										subscriptionList.Add(new SubscriptionInfo()
+										{
+											Name = fsku.Name,
+											Licenses = 0,
+											IsActive = true,
+											OrganizationId = orgId,
+											SkuId = fsku.SkuId
+										});
+									}
+								}
+							}
+
+							return subscriptionList;
+						}
+
+						/// <summary>
+						/// Gets an <see cref="OrganizationUserInfo"/> for a user and organization.
+						/// </summary>
+						/// <param name="userId">User Id.</param>
+						/// <param name="orgId">Organization Id.</param>
+						/// <returns>The OrganizationUserInfo.</returns>
+						public OrganizationUserInfo GetUserDetailsByOrganization(int userId, int orgId)
+						{
+							return BusinessObjectsHelper.InitializeOrganizationUserInfo(DBHelper.GetUserDetailsByOrganization(userId, orgId));
+						}
+
+						/// <summary>
+						/// Gets a list of <see cref="OrganizationInfo"/>s where the user has Admin privilage.
+						/// </summary>
+						/// <param name="userId">User Id.</param>
+						/// <returns>A list of OrganizationInfos where the user has Admin privilage.</returns>
+						public IEnumerable<OrganizationInfo> GetOrganizationsWhereUserIsAdmin(int userId)
+						{
+							return DBHelper.GetOrganizationsWhereUserIsAdmin(userId).Select(o => BusinessObjectsHelper.InitializeOrganizationInfo(o));
+						}
+
+						public void UpdateOrganizationUser(int userId, int orgId, int orgRoleId)
+						{
+							DBHelper.UpdateOrganizationUser(new OrganizationUserDBEntity
+							{
+								UserId = userId,
+								OrganizationId = orgId,
+								OrgRoleId = orgRoleId
+							});
+						}
+
+						/// <summary>
+						/// Removes an organization user.
+						/// </summary>
+						/// <param name="orgId">Organization Id.</param>
+						/// <param name="userId">User Id.</param>
+						public void RemoveOrganizationUser(int orgId, int userId)
+						{
+							DBHelper.RemoveOrganizationUser(orgId, userId);
+						}
+
+						/// <summary>
+						/// Gets the employee id for a user and organization.
+						/// </summary>
+						/// <param name="userId">User Id.</param>
+						/// <param name="orgId">Organization Id.</param>
+						/// <returns>The employee ID.</returns>
+						public string GetEmployeeId(int userId, int orgId)
+						{
+							return DBHelper.GetEmployeeId(userId, orgId);
+						}
+
+						/// <summary>
+						/// Gets the employee id for a user and organization.
+						/// </summary>
+						/// <param name="userId">User Id.</param>
+						/// <param name="orgId">Organization Id.</param>
+						/// <param name="employeeId">New employee Id.</param>
+						public void SetEmployeeId(int userId, int orgId, string employeeId)
+						{
+							DBHelper.SetEmployeeId(userId, orgId, employeeId);
+						}
+
+						/// <summary>
+						/// Gets a list of <see cref="InvitationSubRoleInfo"/>s for an organization.
+						/// </summary>
+						/// <param name="orgId">Organization Id.</param>
+						/// <returns>List of InvitationSubRoleInfos</returns>
+						public IEnumerable<InvitationSubRoleInfo> GetInvitationSubRoles(int orgId)
+						{
+							return DBHelper.GetInvitationSubRolesByOrganizationId(orgId).Select(i => BusinessObjectsHelper.InitializeInvitationSubRoleInfo(i));
+						}
+
+						/// <summary>
+						/// Gets a list of <see cref="SubscriptionUserDBEntity"/>'s for the given organization and subscription.
+						/// </summary>
+						/// <param name="orgId">Organization Id.</param>
+						/// <param name="subscriptionId">Subscription Id.</param>
+						/// <returns>A list of <see cref="SubscriptionUserInfo"/>'s for the given organization and subscription.</returns>
+						public IEnumerable<SubscriptionUserInfo> GetUsers(int orgId, int subscriptionId)
+						{
+							IEnumerable<SubscriptionUserDBEntity> sui = DBHelper.GetUsersByOrganization(orgId, subscriptionId);
+				<<<<<<< .mine
+							List<SubscriptionUserInfo> list = null;
+							foreach (SubscriptionUserDBEntity DBE in sui)
+							{
+								if (DBE != null)
+								{
+									list.Add(new SubscriptionUserInfo
+									{
+										FirstName = DBE.FirstName,
+										LastName = DBE.LastName,
+										ProductRoleId = DBE.ProductRoleId,
+										ProductRoleName = DBE.ProductRoleName,
+										UserId = DBE.UserId,
+										CreatedUTC = DBE.CreatedUTC,
+										SubscriptionId = DBE.SubscriptionId,
+										SkuId = DBE.SkuId
+									});
+								}
+							}
+							return list;
+						}
+				||||||| .r1644
+							List<SubscriptionUserInfo> list = null;
+							foreach (SubscriptionUserDBEntity DBE in sui)
+							{
+								if (DBE != null)
+								{
+									list.Add(new SubscriptionUserInfo
+									{
+										FirstName = DBE.FirstName,
+										LastName = DBE.LastName,
+										ProductRoleId = DBE.ProductRoleId,
+										ProductRoleName = DBE.ProductRoleName,
+										UserId = DBE.UserId,
+										CreatedUTC = DBE.CreatedUTC,
+										SubscriptionId = DBE.SubscriptionId,
+										SkuId = DBE.SkuId
+									});
+								}
+							}
+							return list;
+						}
+				=======
+							List<SubscriptionUserInfo> list = new List<SubscriptionUserInfo>();
+							foreach (SubscriptionUserDBEntity DBE in sui)
+							{
+								if (DBE != null)
+								{
+									list.Add(new SubscriptionUserInfo
+									{
+										FirstName = DBE.FirstName,
+										LastName = DBE.LastName,
+										ProductRoleId = DBE.ProductRoleId,
+										ProductRoleName = DBE.ProductRoleName,
+										UserId = DBE.UserId,
+										CreatedUTC = DBE.CreatedUTC,
+										SubscriptionId = DBE.SubscriptionId,
+										SkuId = DBE.SkuId
+									});
+								}
+							}
+							return list;
+						}
+				>>>>>>> .r1669
+
+						/// <summary>
+						/// Gets an organization ID from an invite access code.
+						/// </summary>
+						/// <param name="accessCode">Access code.</param>
+						/// <returns>Organization ID.</returns>
+						public int GetOrgIdFromAccessCode(string accessCode)
+						{
+							return DBHelper.GetOrgFromAccessCode(accessCode);
+						}
+
+						// Note: This is in OrgService and not ProjectService because it is used at least once outside of a product area (i.e. there's no
+						//    instance of ProjectService there).
+						/// <summary>
+						/// Gets all the projects in an organization.
+						/// </summary>
+						/// <param name="orgId">Organization Id.</param>
+						/// <param name="isActive">True (default) to only return active projects, false to include all projects, active or not.</param>
+						/// <returns></returns>
+						public IEnumerable<CompleteProjectInfo> GetProjectsByOrganization(int orgId, bool isActive = true)
+						{
+							return DBHelper.GetProjectsByOrgId(orgId, isActive ? 1 : 0).Select(c => BusinessObjectsHelper.InitializeCompleteProjectInfo(c));
+						}
+
+						/// <summary>
+						/// Gets the user roles for an organization.
+						/// </summary>
+						/// <param name="orgId">Organization Id.</param>
+						/// <returns>List of UserRolesInfos</returns>
+						public IEnumerable<UserRolesInfo> GetUserRoles(int orgId)
+						{
+							return DBHelper.GetRoles(orgId).Select(o => BusinessObjectsHelper.InitializeUserRolesInfo(o));
+						}
+					}
+				}
+
+
+
+
+
+
+
+
+FROM:C:\SourceFiles\AllyisApps\src\main\aaservices\Utilities\Filters.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="Filter.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+
+				using System;
+				using System.Collections.Generic;
+				using System.Linq;
+				using System.Linq.Expressions;
+				using AllyisApps.Services.BusinessObjects;
+
+				namespace AllyisApps.Utilities
+				{
+					/// <summary>
+					/// A filter object for populating filter data.
+					/// </summary>
+					public class Filter
+					{
+						/// <summary>
+						/// Initializes a new instance of the <see cref="Filter" /> class.
+						/// </summary>
+						public Filter()
+						{
+						}
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="Filter" /> class.
+						/// </summary>
+						/// <param name="name">The name of the filter.</param>
+						public Filter(string name)
+						{
+							this.Name = name;
+						}
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="Filter" /> class.
+						/// </summary>
+						/// <param name="name">The name of the filter.</param>
+						/// <param name="users">The list of users.</param>
+						public Filter(string name, IEnumerable<string> users)
+						{
+							this.Name = name;
+							this.UserIds = users;
+						}
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="Filter" /> class.
+						/// </summary>
+						/// <param name="name">The name of the filter.</param>
+						/// <param name="users">The list of users.</param>
+						public Filter(string name, IEnumerable<UserRoles> users)
+						{
+							this.Name = name;
+							this.UserIds = users.Select(x => x.UserId);
+						}
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="Filter" /> class.
+						/// </summary>
+						/// <param name="name">The name of the filter.</param>
+						/// <param name="users">The list of users.</param>
+						/// <param name="whereExpression">A limiting where expression for selecting a subset of users.</param>
+						public Filter(string name, IEnumerable<UserRoles> users, Expression<Func<UserRoles, bool>> whereExpression)
+						{
+							this.Name = name;
+							Func<UserRoles, bool> whereFunction = whereExpression.Compile();
+							this.UserIds = users.Where(whereFunction).Select(x => x.UserId);
+						}
+
+						/// <summary>
+						/// Gets or sets the name of the filter.
+						/// </summary>
+						public string Name { get; set; }
+
+						/// <summary>
+						/// Gets the list of users who are within this filter.
+						/// </summary>
+						public IEnumerable<string> UserIds { get; internal set; }
+
+						/// <summary>
+						/// Gets a string output of the list of userids in this filter.
+						/// </summary>
+						/// <returns>Comma-separated list of userIds.</returns>
+						public string UsersValue()
+						{
+							if (this.UserIds.Count() > 0)
+							{
+								string[] array = this.UserIds.ToArray();
+								string output = string.Join(",", array);
+								return output;
+							}
+
+							return string.Empty;
+						}
+					}
+
+					/// <summary>
+					/// An object representing a group of filters.
+					/// </summary>
+					public class FilterGroup
+					{
+						/// <summary>
+						/// Initializes a new instance of the <see cref="FilterGroup" /> class.
+						/// </summary>
+						public FilterGroup()
+						{
+							this.Filters = new List<Filter>();
+						}
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="FilterGroup" /> class.
+						/// </summary>
+						/// <param name="optGroup">Name of the group.</param>
+						public FilterGroup(string optGroup)
+						{
+							this.OptionGroup = optGroup;
+							this.Filters = new List<Filter>();
+						}
+
+						/// <summary>
+						/// Gets the name of the filter group.
+						/// </summary>
+						public string OptionGroup { get; internal set; }
+
+						/// <summary>
+						/// Gets the list of the filters.
+						/// </summary>
+						public List<Filter> Filters { get; internal set; }
+
+						/// <summary>
+						/// Add a filter to the filter group.
+						/// </summary>
+						/// <param name="filter">The filter to add.</param>
+						public void AddFilter(Filter filter)
+						{
+							this.Filters.Add(filter);
+						}
+					}
+
+					/// <summary>
+					/// A model of all of the filter data for this page.
+					/// </summary>
+					public class FilterDataModel
+					{
+						/// <summary>
+						/// Initializes a new instance of the <see cref="FilterDataModel" /> class.
+						/// </summary>
+						public FilterDataModel()
+						{
+							this.FilterGroups = new List<FilterGroup>();
+						}
+
+						/// <summary>
+						/// Gets the filter representing all users in the organization.
+						/// </summary>
+						public Filter AllUsers { get; internal set; }
+
+						/// <summary>
+						/// Gets the filter representing all users who do not have subscriptions in this organization.
+						/// </summary>
+						public Filter UnassignedUsers { get; internal set; }
+
+						/// <summary>
+						/// Gets the list of filter groups.
+						/// </summary>
+						public List<FilterGroup> FilterGroups { get; internal set; }
+
+						/// <summary>
+						/// Creates and returns a new FilterGroup object.
+						/// </summary>
+						/// <returns>The new instance of FilterGroup.</returns>
+						public FilterGroup AddNewFilterGroup()
+						{
+							FilterGroup result = new FilterGroup();
+							this.FilterGroups.Add(result);
+							return result;
+						}
+
+						/// <summary>
+						/// Creates and returns a new FilterGroup object.
+						/// </summary>
+						/// <param name="name">The name of the filter group.</param>
+						/// <returns>The new instance of FilterGroup.</returns>
+						public FilterGroup AddNewFilterGroup(string name)
+						{
+							FilterGroup result = new FilterGroup(name);
+							this.FilterGroups.Add(result);
+							return result;
+						}
+					}
+				}
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaservices\Utilities\UserPermissionsManagement.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="UserPermissionsManagement.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+				using System;
+				using System.Collections.Generic;
+				using System.Linq;
+				using System.Web;
+				using AllyisApps.Services.BusinessObjects;
+
+				namespace AllyisApps.Utilities
+				{
+					/// <summary>
+					/// Object for viewing a single user's org and sub roles.
+					/// </summary>
+					public class UserPermissionsManagement
+					{
+						/// <summary>
+						/// Initializes a new instance of the <see cref="UserPermissionsManagement" /> class.
+						/// </summary>
+						public UserPermissionsManagement()
+						{
+						}
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="UserPermissionsManagement" /> class.
+						/// </summary>
+						/// <param name="role">A db role object to seed from.</param>
+						public UserPermissionsManagement(UserRoles role)
+						{
+							this.UserId = role.UserId;
+							this.UserName = role.FirstName + " " + role.LastName;
+							this.OrganizationRoleId = role.OrgRoleId;
+							List<SubscriptionRole> subRoles = new List<SubscriptionRole>();
+							SubscriptionRole temp = new SubscriptionRole() { ProductRoleId = role.ProductRoleId };
+							subRoles.Add(temp);
+							this.SubscriptionRoles = subRoles;
+						}
+
+						/// <summary>
+						/// Gets the user's Id.
+						/// </summary>
+						public string UserId { get; internal set; }
+
+						/// <summary>
+						/// Gets the User's full name (first and last).
+						/// </summary>
+						public string UserName { get; internal set; }
+
+						/// <summary>
+						/// Gets the user's email.
+						/// </summary>
+						public string Email { get; internal set; }
+
+						/// <summary>
+						/// Gets the user's role in the organization.
+						/// </summary>
+						public int OrganizationRoleId { get; internal set; }
+
+						/// <summary>
+						/// Gets the list of Subscription roles the user has.
+						/// </summary>
+						public IEnumerable<SubscriptionRole> SubscriptionRoles { get; internal set; }
+					}
+				}
+
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Filters\MinAgeAttribute.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="MinAgeAttribute.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+
+				using System;
+				using System.ComponentModel.DataAnnotations;
+				using AllyisApps.Utilities;
+
+				namespace AllyisApps.Utilities
+				{
+					/// <summary>
+					///     Validator for a minimum age.
+					/// </summary>
+					[AttributeUsage(AttributeTargets.Property |
+						AttributeTargets.Field, AllowMultiple = false)]
+					public sealed class MinAgeAttribute : ValidationAttribute
+					{
+						private readonly int age;
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="MinAgeAttribute" /> class.
+						/// </summary>
+						/// <param name="age">The defined minimum user age.</param>
+						public MinAgeAttribute(int age)
+						{
+							this.age = age;
+						}
+
+						/// <summary>
+						/// Determines whether the age provided is valid.
+						/// </summary>
+						/// <param name="value">The age provided.</param>
+						/// <param name="validationContext">Context that validation occured in.</param>
+						/// <returns>ValidationResult describing whether the age is valid, or an error message.</returns>
+						protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+						{
+							if (value == null)
+							{
+								return new ValidationResult(Resources.Errors.ArugmentNullMessage);
+							}
+
+							if ((DateTime)value <= DateTime.Now.AddYears(-this.age))
+							{
+								return ValidationResult.Success;
+							}
+							else
+							{
+								return new ValidationResult(Resources.Errors.AgeTooLow);
+							}
+						}
+					}
+				}
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Filters\SQLDateProtectorAttribute.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="SQLDateProtectorAttribute.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+
+				using System;
+				using System.ComponentModel.DataAnnotations;
+				using AllyisApps.Utilities;
+
+				namespace AllyisApps.Utilities
+				{
+					/// <summary>
+					///     Validator to guard against SQL date errors.
+					/// </summary>
+					[AttributeUsage(AttributeTargets.Property |
+						AttributeTargets.Field, AllowMultiple = false)]
+					public sealed class SQLDateProtectorAttribute : ValidationAttribute
+					{
+						private readonly DateTime minDate = new DateTime(1753, 1, 1, 0, 0, 0);
+						private readonly DateTime maxDate = new DateTime(9999, 12, 31, 23, 59, 59);
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="SQLDateProtectorAttribute" /> class.
+						/// </summary>
+						public SQLDateProtectorAttribute()
+						{
+							this.ErrorMessage = Resources.Errors.DateOutOfValidSQLRange; // a default value
+						}
+
+						/// <summary>
+						/// Determines whether the provided date falls within the defined values.
+						/// </summary>
+						/// <param name="value">The input date.</param>
+						/// <param name="validationContext">The context where the validation is occuring.</param>
+						/// <returns>Description of the successful validation, or an error message.</returns>
+						protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+						{
+							if (!((DateTime?)value).HasValue)
+							{
+								return ValidationResult.Success;
+							}
+
+							if ((DateTime)value <= this.maxDate && (DateTime)value >= this.minDate)
+							{
+								return ValidationResult.Success;
+							}
+							else
+							{
+								return new ValidationResult(ErrorMessage);
+							}
+						}
+					}
+				}
+
+
+
+
+
+
+
+
+FROM:C:\SourceFiles\AllyisApps\src\main\aaweb\ViewModels\Org\OrganizationViewModel.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="OrganizationViewModel.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+
+				using AllyisApps.DBModel.Auth;
+				using AllyisApps.Services.BusinessObjects;
+
+				namespace AllyisApps.ViewModels
+				{
+					/// <summary>
+					/// Single Representation of the relationship between a user and an organization, adding
+					///     Member count and Subcription count.
+					/// </summary>
+					public class OrganizationViewModel : BaseViewModel
+					{
+						/// <summary>
+						/// Initializes a new instance of the <see cref="OrganizationViewModel"/> class.
+						/// </summary>
+						public OrganizationViewModel()
+						{
+						}
+
+						/// <summary>
+						/// Gets OrganizationDetails.
+						/// </summary>
+						public OrganizationInfo OrganizationDetails { get; internal set; }
+
+						/// <summary>
+						/// Gets UserDetails.
+						/// </summary>
+						public OrganizationUserInfo UserDetails { get; internal set; }
+
+						/// <summary>
+						/// Gets MemberCount.
+						/// </summary>
+						public int MemberCount { get; internal set; }
+
+						/// <summary>
+						/// Gets SubscriptionCount.
+						/// </summary>
+						public int SubscriptionCount { get; internal set; }
+					}
+				}
+
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Utilities\AuthorizationHelper.Org.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="AuthorizationHelper.Org.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+
+				using System;
+				using System.Diagnostics;
+				using AllyisApps.Core;
+				using AllyisApps.DBModel;
+				using AllyisApps.DBModel.Auth;
+
+				namespace AllyisApps.Utilities
+				{
+					/// <summary>
+					/// Class which helps authorize a user's action request with
+					///		respect to their organization.
+					/// </summary>
+					public static partial class AuthorizationHelper
+					{
+						/// <summary>
+						/// Returns whether the current user can view the
+						///     specified organization's profile.
+						/// </summary>
+						/// <param name="organizationId">The organization being viewed.</param>
+						/// <param name="userId">The user performing the modification.</param>
+						/// <returns>Whether the specified user is authorized to view the profile.</returns>
+						[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", Justification = "Placeholder function.")]
+						public static bool CanViewProfile(int organizationId, string userId)
+						{
+							// Organizations provide a public profile.
+							return true;
+						}
+
+						/// <summary>
+						/// Returns whether the current user can edit the organizational
+						///     profile information.
+						/// </summary>
+						/// <param name="organizationId">The organization being modified.</param>
+						/// <param name="userId">The user performing the modification.</param>
+						/// <returns>Whether this action is authorized for the specified user.</returns>
+						public static bool CanEditProfile(int organizationId, int userId)
+						{
+							OrgRoleDBEntity ans = DBHelper.Instance.GetPermissionLevel(organizationId, userId);
+							if (ans == null)
+							{
+								return false;
+							}
+
+							return (Role)ans.Id >= Role.Owner;
+						}
+
+						/// <summary>
+						/// Returns whether the current user can view and edit the list
+						///     of members within the organization.
+						/// </summary>
+						/// <param name="organizationId">The organization being modified.</param>
+						/// <param name="userId">The user performing the modification.</param>
+						/// <returns>Whether this action is authorized for the specified user.</returns>
+						public static bool CanEditMembers(int organizationId, int userId)
+						{
+							return AuthorizationHelper.CanEditProfile(organizationId, userId);
+						}
+
+						/// <summary>
+						/// Returns whether the current user can regenerate the organizational
+						///     access key.
+						/// </summary>
+						/// <param name="organizationId">The organization being modified.</param>
+						/// <param name="userId">The user performing the modification.</param>
+						/// <returns>Whether this action is authorized for the specified user.</returns>
+						public static bool CanEditAccessCode(int organizationId, int userId)
+						{
+							return AuthorizationHelper.CanEditProfile(organizationId, userId);
+						}
+
+						/// <summary>
+						/// Returns whether the current user can modify the organizational
+						///     subscription status.
+						/// </summary>
+						/// <param name="organizationId">The organization being modified.</param>
+						/// <param name="userId">The user performing the modification.</param>
+						/// <returns>Whether this action is authorized for the specified user.</returns>
+						public static bool CanEditSubscriptions(int organizationId, int userId)
+						{
+							return AuthorizationHelper.CanEditProfile(organizationId, userId);
+						}
+
+						/// <summary>
+						/// Returns whether the current user can remove the specified user
+						///     from the organization.
+						/// </summary>
+						/// <param name="organizationId">The organization being modified.</param>
+						/// <param name="currentUserId">The user performing the modification.</param>
+						/// <param name="targetUserId">The user being removed.</param>
+						/// <returns>Whether this action is authorized for the specified user.</returns>
+						public static bool CanRemoveUser(int organizationId, int currentUserId, int targetUserId)
+						{
+							if (currentUserId == targetUserId)
+							{
+								// Users cannot remove themselves.
+								return false;
+							}
+
+							// Any user of rank "Owner" can remove any other user, including other Owners.
+							return (Role)DBHelper.Instance.GetPermissionLevel(organizationId, currentUserId).Id == Role.Owner;
+						}
+
+						/// <summary>
+						/// Returns whether the current user can set the specified permission
+						///     within the organization for the specified user.
+						/// </summary>
+						/// <param name="organizationId">The organization being modified.</param>
+						/// <param name="currentUserId">The user performing the modification.</param>
+						/// <param name="targetUserId">The user being modified.</param>
+						/// <returns>Whether this action is authorized for the specified user.</returns>
+						public static bool CanSetPermission(int organizationId, int currentUserId, int targetUserId)
+						{
+							if (currentUserId == targetUserId)
+							{
+								// Users cannot promote or demote themselves.
+								return false;
+							}
+
+							// Owners can set any other user to any other permission level.
+							return (Role)DBHelper.Instance.GetPermissionLevel(organizationId, currentUserId).Id == Role.Owner;
+						}
+
+						/// <summary>
+						/// Returns whether the current user is an admin of the organization.
+						/// </summary>
+						/// <param name="organizationId">The organization in question.</param>
+						/// <param name="currentUserId">The current user ID.</param>
+						/// <returns>Whether this user is an admin for the specified organization.</returns>
+						public static bool IsOrgAdmin(int organizationId, int currentUserId)
+						{
+							// Owners can set any other user to any other permission level.
+							OrgRoleDBEntity thn = DBHelper.Instance.GetPermissionLevel(organizationId, currentUserId);
+							if (thn == null)
+							{
+								return false;
+							}
+
+							return thn.Id >= 2;
+						}
+					}
+				}
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Utilities\CookieStore.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="CookieStore.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+
+				using System;
+				using System.Collections.Generic;
+				using System.Globalization;
+				using System.Linq;
+				using System.Web;
+				using System.Web.Configuration;
+				using AllyisApps.DBModel;
+				using AllyisApps.DBModel.Auth;
+				using Microsoft.AspNet.Identity;
+
+				namespace AllyisApps.Utilities
+				{
+					/// <summary>
+					/// Handles cookie access for the current user.
+					/// </summary>
+					public static class CookieStore
+					{
+						// Cookie size:
+						//	CurrentUserId = 16b
+						//	ActiveOrgId = 16b
+						//	OrgMembership = N * 16b
+						//  SubscriptionSkus = N * 3 (conservative)
+
+						private const string CurrentUserIdKey = "UserId";
+						private const string ActiveOrganizationIdKey = "OrganizationId";
+						private const string MembershipIdsKey = "MembershipIds";
+						private const string OrganizationsKey = "Organizations";
+
+						private static string hostname;
+						private static string webroot;
+						private static string cookieDomain;
+
+						/// <summary>
+						/// Gets the ID of the current user.
+						/// </summary>
+						public static string CurrentUserId
+						{
+							get
+							{
+								string result = null;
+								result = GetCookie(CurrentUserIdKey);
+								if (!string.IsNullOrWhiteSpace(result))
+								{
+									return result;
+								}
+
+								result = null;
+
+								// removing OWIN identity and using basic FormsAuthentication
+								//// result = HttpContext.Current.Request.GetOwinContext().Authentication.User.Identity.GetUserId();
+								if (result != null)
+								{
+									SetCookie(CurrentUserIdKey, result.ToString());
+								}
+								else
+								{
+									SetCookie(CurrentUserIdKey, null);
+								}
+
+								return result;
+							}
+						}
+
+						/// <summary>
+						/// Gets the ID of the selected (active) organization.
+						/// </summary>
+						public static int ActiveOrganizationId
+						{
+							get
+							{
+								int result = -1;
+								if (int.TryParse(GetCookie(ActiveOrganizationIdKey), out result))
+								{
+									return result;
+								}
+
+								OrganizationDBEntity tbl = DBHelper.Instance.GetActiveOrganization(CookieStore.CurrentUserId);
+								if (tbl != null)
+								{
+									return tbl.OrganizationId;
+								}
+								else
+								{
+									return -1;
+								}
+							}
+						}
+
+						/// <summary>
+						/// Gets a list of IDs for organizations the user is a member of.
+						/// </summary>
+						public static IEnumerable<int> MembershipIds
+						{
+							get
+							{
+								List<int> endResult = new List<int>();
+								string result = GetCookie(MembershipIdsKey);
+								if (!string.IsNullOrWhiteSpace(result))
+								{
+									foreach (string s in result.Split(','))
+									{
+										endResult.Add(int.Parse(s, CultureInfo.CurrentCulture));
+									}
+								}
+
+								IEnumerable<OrganizationUserDBEntity> orgs = DBHelper.Instance.GetUserOrganizationList(CookieStore.CurrentUserId);
+								endResult = orgs.Select(x => x.OrganizationId).ToList();
+								return endResult;
+							}
+						}
+
+						/// <summary>
+						/// Gets the hostname from Web.config.
+						/// </summary>
+						/// <returns>The hostname.</returns>
+						public static string GetHostname()
+						{
+							if (hostname == null)
+							{
+								hostname = System.Web.Configuration.WebConfigurationManager.AppSettings["hostname"];
+								if (hostname == null)
+								{
+									throw new ApplicationException("no hostname in Web.config");
+								}
+							}
+
+							return hostname;
+						}
+
+						/// <summary>
+						/// Gets the webroot from Web.Config.
+						/// </summary>
+						/// <returns>The webroot.</returns>
+						public static string GetWebroot()
+						{
+							if (webroot == null)
+							{
+								webroot = System.Web.Configuration.WebConfigurationManager.AppSettings["webroot"];
+								if (webroot == null)
+								{
+									throw new ApplicationException("no webroot in Web.config");
+								}
+							}
+
+							return webroot;
+						}
+
+						/// <summary>
+						/// Gets the domain string that should be used for setting cookies.
+						/// </summary>
+						/// <returns>The domain string to be used for setting cookies.</returns>
+						public static string GetCookieDomain()
+						{
+							if (cookieDomain == null)
+							{
+								cookieDomain = ((HttpCookiesSection)WebConfigurationManager.GetSection("system.web/httpCookies")).Domain;
+								if (cookieDomain == null)
+								{
+									throw new ApplicationException("no hostname in Web.config");
+								}
+							}
+
+							return cookieDomain;
+						}
+
+						/// <summary>
+						/// Clears all cookies from the response.
+						/// </summary>
+						public static void ClearCookies()
+						{
+							if (HttpContext.Current != null)
+							{
+								if (HttpContext.Current.Response.Cookies[CurrentUserIdKey] != null)
+								{
+									HttpContext.Current.Response.Cookies.Add(OverwriteCookie(CurrentUserIdKey));
+								}
+
+								if (HttpContext.Current.Response.Cookies[ActiveOrganizationIdKey] != null)
+								{
+									HttpContext.Current.Response.Cookies.Add(OverwriteCookie(ActiveOrganizationIdKey));
+								}
+
+								if (HttpContext.Current.Response.Cookies[MembershipIdsKey] != null)
+								{
+									HttpContext.Current.Response.Cookies.Add(OverwriteCookie(MembershipIdsKey));
+								}
+
+								if (HttpContext.Current.Response.Cookies[OrganizationsKey] != null)
+								{
+									HttpContext.Current.Response.Cookies.Add(OverwriteCookie(OrganizationsKey));
+								}
+
+								////
+
+								if (HttpContext.Current.Request.Cookies[CurrentUserIdKey] != null)
+								{
+									HttpContext.Current.Request.Cookies.Add(OverwriteCookie(CurrentUserIdKey));
+								}
+
+								if (HttpContext.Current.Request.Cookies[ActiveOrganizationIdKey] != null)
+								{
+									HttpContext.Current.Request.Cookies.Add(OverwriteCookie(ActiveOrganizationIdKey));
+								}
+
+								if (HttpContext.Current.Request.Cookies[MembershipIdsKey] != null)
+								{
+									HttpContext.Current.Request.Cookies.Add(OverwriteCookie(MembershipIdsKey));
+								}
+
+								if (HttpContext.Current.Request.Cookies[OrganizationsKey] != null)
+								{
+									HttpContext.Current.Request.Cookies.Add(OverwriteCookie(OrganizationsKey));
+								}
+							}
+						}
+
+						private static HttpCookie OverwriteCookie(string key)
+						{
+							HttpCookie result = new HttpCookie(key);
+							result.Expires = DateTime.Now.AddDays(-1);
+							result.Domain = GetCookieDomain();
+							return result;
+						}
+
+						private static string GetCookie(string key)
+						{
+							if (HttpContext.Current.Request.Cookies[key] == null)
+							{
+								return string.Empty;
+							}
+
+							return HttpContext.Current.Request.Cookies[key].Value;
+						}
+
+						private static void SetCookie(string key, string value)
+						{
+							HttpCookie cookie = new HttpCookie(key, value);
+							cookie.HttpOnly = true;
+							cookie.Domain = GetCookieDomain();
+							HttpContext.Current.Response.Cookies.Add(cookie);
+						}
+					}
+				}
+
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Utilities\Filters.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="Filters.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+
+				using System;
+				using System.Collections.Generic;
+				using System.Linq;
+				using System.Linq.Expressions;
+				using AllyisApps.Services.BusinessObjects;
+
+				namespace AllyisApps.Utilities
+				{
+					/// <summary>
+					/// A filter object for populating filter data.
+					/// </summary>
+					public class Filter
+					{
+						/// <summary>
+						/// Initializes a new instance of the <see cref="Filter" /> class.
+						/// </summary>
+						public Filter()
+						{
+						}
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="Filter" /> class.
+						/// </summary>
+						/// <param name="name">The name of the filter.</param>
+						public Filter(string name)
+						{
+							this.Name = name;
+						}
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="Filter" /> class.
+						/// </summary>
+						/// <param name="name">The name of the filter.</param>
+						/// <param name="users">The list of users.</param>
+						public Filter(string name, IEnumerable<string> users)
+						{
+							this.Name = name;
+							this.UserIds = users;
+						}
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="Filter" /> class.
+						/// </summary>
+						/// <param name="name">The name of the filter.</param>
+						/// <param name="users">The list of users.</param>
+						public Filter(string name, IEnumerable<UserRoles> users)
+						{
+							this.Name = name;
+							this.UserIds = users.Select(x => x.UserId);
+						}
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="Filter" /> class.
+						/// </summary>
+						/// <param name="name">The name of the filter.</param>
+						/// <param name="users">The list of users.</param>
+						/// <param name="whereExpression">A limiting where expression for selecting a subset of users.</param>
+						public Filter(string name, IEnumerable<UserRoles> users, Expression<Func<UserRoles, bool>> whereExpression)
+						{
+							this.Name = name;
+							Func<UserRoles, bool> whereFunction = whereExpression.Compile();
+							this.UserIds = users.Where(whereFunction).Select(x => x.UserId);
+						}
+
+						/// <summary>
+						/// Gets or sets the name of the filter.
+						/// </summary>
+						public string Name { get; set; }
+
+						/// <summary>
+						/// Gets the list of users who are within this filter.
+						/// </summary>
+						public IEnumerable<string> UserIds { get; internal set; }
+
+						/// <summary>
+						/// Gets a string output of the list of userids in this filter.
+						/// </summary>
+						/// <returns>Comma-separated list of userIds.</returns>
+						public string UsersValue()
+						{
+							if (this.UserIds.Count() > 0)
+							{
+								string[] array = this.UserIds.ToArray();
+								string output = string.Join(",", array);
+								return output;
+							}
+
+							return string.Empty;
+						}
+					}
+
+					/// <summary>
+					/// An object representing a group of filters.
+					/// </summary>
+					public class FilterGroup
+					{
+						/// <summary>
+						/// Initializes a new instance of the <see cref="FilterGroup" /> class.
+						/// </summary>
+						public FilterGroup()
+						{
+							this.Filters = new List<Filter>();
+						}
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="FilterGroup" /> class.
+						/// </summary>
+						/// <param name="optGroup">Name of the group.</param>
+						public FilterGroup(string optGroup)
+						{
+							this.OptionGroup = optGroup;
+							this.Filters = new List<Filter>();
+						}
+
+						/// <summary>
+						/// Gets the name of the filter group.
+						/// </summary>
+						public string OptionGroup { get; internal set; }
+
+						/// <summary>
+						/// Gets the list of the filters.
+						/// </summary>
+						public List<Filter> Filters { get; internal set; }
+
+						/// <summary>
+						/// Add a filter to the filter group.
+						/// </summary>
+						/// <param name="filter">The filter to add.</param>
+						public void AddFilter(Filter filter)
+						{
+							this.Filters.Add(filter);
+						}
+					}
+
+					/// <summary>
+					/// A model of all of the filter data for this page.
+					/// </summary>
+					public class FilterDataModel
+					{
+						/// <summary>
+						/// Initializes a new instance of the <see cref="FilterDataModel" /> class.
+						/// </summary>
+						public FilterDataModel()
+						{
+							this.FilterGroups = new List<FilterGroup>();
+						}
+
+						/// <summary>
+						/// Gets the filter representing all users in the organization.
+						/// </summary>
+						public Filter AllUsers { get; internal set; }
+
+						/// <summary>
+						/// Gets the filter representing all users who do not have subscriptions in this organization.
+						/// </summary>
+						public Filter UnassignedUsers { get; internal set; }
+
+						/// <summary>
+						/// Gets the list of filter groups.
+						/// </summary>
+						public List<FilterGroup> FilterGroups { get; internal set; }
+
+						/// <summary>
+						/// Creates and returns a new FilterGroup object.
+						/// </summary>
+						/// <returns>The new instance of FilterGroup.</returns>
+						public FilterGroup AddNewFilterGroup()
+						{
+							FilterGroup result = new FilterGroup();
+							this.FilterGroups.Add(result);
+							return result;
+						}
+
+						/// <summary>
+						/// Creates and returns a new FilterGroup object.
+						/// </summary>
+						/// <param name="name">The name of the filter group.</param>
+						/// <returns>The new instance of FilterGroup.</returns>
+						public FilterGroup AddNewFilterGroup(string name)
+						{
+							FilterGroup result = new FilterGroup(name);
+							this.FilterGroups.Add(result);
+							return result;
+						}
+					}
+				}
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Utilities\PermissionsAction.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="PermissionsAction.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+
+				using System;
+				using System.Collections.Generic;
+				using System.Linq;
+
+				using AllyisApps.DBModel;
+				using AllyisApps.DBModel.Auth;
+				using AllyisApps.DBModel.Billing;
+
+				namespace AllyisApps.Utilities
+				{
+					/// <summary>
+					/// An object representing the actions being performed.
+					/// </summary>
+					public class PermissionsAction
+					{
+						/// <summary>
+						/// Initializes a new instance of the <see cref="PermissionsAction" /> class.
+						/// </summary>
+						public PermissionsAction()
+						{
+							this.OrgRoleTarget = 0;
+							this.TimeTrackerRoleTarget = 0;
+						}
+
+						/// <summary>
+						/// Gets or sets the organization's Id.
+						/// </summary>
+						public int OrganizationId { get; set; }
+
+						/// <summary>
+						/// Gets or sets the subscription Id for Timetracker if this organization has one.
+						/// </summary>
+						public int TimeTrackerSubscriptionId { get; set; }
+
+						/// <summary>
+						/// Gets or sets the set of userIds who are members of the organization.
+						/// </summary>
+						public ISet<int> OrganizationMembers { get; set; }
+
+						/// <summary>
+						/// Gets or sets the target role to set the organization users to.
+						/// </summary>
+						public int? OrgRoleTarget { get; set; }
+
+						/// <summary>
+						/// Gets or sets the target role to set the timetracker subscription users to.
+						/// </summary>
+						public int? TimeTrackerRoleTarget { get; set; }
+
+						/// <summary>
+						/// Attempts to perform the OrganizationAssignment action on the list of users.
+						/// </summary>
+						/// <param name="users">The list of users.</param>
+						/// <param name="currentUserId">The id of the current user.</param>
+						/// <param name="result">The instance of PermissionsActionResultViewModel to store result data.</param>
+						public void PerformOrganizationAssignmentAction(IEnumerable<TargetUser> users, int currentUserId, PermissionsActionsResults result)
+						{
+							this.OrganizationMembers = this.OrganizationMembers ?? new HashSet<int>(DBHelper.Instance.GetOrganizationMemberList(this.OrganizationId).Select(x => x.UserId));
+							bool containsCurrentUser = users.Select(x => x.UserId).Contains(Convert.ToInt32(/*UserContext.UserId*/currentUserId));
+							if (users == null || users.Count() == 0)
+							{
+								result.Status = "error";
+								result.Message = "No users have been defined for this action.";
+							}
+							else if (!this.OrgRoleTarget.HasValue)
+							{
+								PermissionsActionResult errorResult = new PermissionsActionResult();
+								errorResult.ActionStatus = "error";
+								errorResult.ActionText = "You did not define a target role for the users.";
+								result.Results.Add(errorResult);
+							}
+							else if (containsCurrentUser && this.OrgRoleTarget == -1)
+							{
+								PermissionsActionResult errorResult = new PermissionsActionResult();
+								errorResult.ActionStatus = "error";
+								errorResult.ActionText = "You are unable to remove yourself from an organization.";
+								result.Results.Add(errorResult);
+							}
+							else if (containsCurrentUser && this.OrgRoleTarget > 0)
+							{
+								PermissionsActionResult errorResult = new PermissionsActionResult();
+								errorResult.ActionStatus = "error";
+								errorResult.ActionText = "You are unable to change your own role in the organization.";
+								result.Results.Add(errorResult);
+							}
+							else if (this.OrgRoleTarget.Value != 0)
+							{
+								PermissionsActionResult successResult = new PermissionsActionResult();
+								PermissionsActionResult failureResult = new PermissionsActionResult();
+								successResult.ActionStatus = "success";
+								successResult.ActionText = "Users changed roles in organization";
+								bool successOccurred = false;
+								bool failureOccurred = false;
+								successResult.TotalUserCount = users.Count();
+								failureResult.TotalUserCount = users.Count();
+
+								foreach (TargetUser user in users)
+								{
+									try
+									{
+										// if (DBHelper.GetPermissionLevel(this.OrganizationId, user.UserId).Id == (int)Role.Owner)
+										// {
+										//     throw new InvalidOperationException("You cannot change the roles of an organization owner.");
+										// }
+										if (this.OrgRoleTarget.Value == -1)
+										{
+											DBHelper.Instance.RemoveOrganizationUser(this.OrganizationId, user.UserId);
+											if (this.TimeTrackerSubscriptionId != 0)
+											{
+												DBHelper.Instance.DeleteSubscriptionUser(this.TimeTrackerSubscriptionId, user.UserId);
+											}
+										}
+										else if (!this.OrganizationMembers.Contains(user.UserId))
+										{
+											throw new InvalidOperationException("No longer a member of the organization.<span class='filter-reload'>Click <a href='javascript: history.go(0)'>here</a> to reload the member list.</span>");
+										}
+										else
+										{
+											DBHelper.Instance.UpdateOrganizationUser(new OrganizationUserDBEntity
+											{
+												UserId = user.UserId,
+												OrganizationId = this.OrganizationId,
+												OrgRoleId = this.OrgRoleTarget.Value
+											});
+										}
+
+										successResult.AffectedUserCount += 1;
+										successResult.Users.Add(user);
+										successOccurred = true;
+									}
+									catch (Exception e)
+									{
+										failureResult.AffectedUserCount += 1;
+										failureResult.Users.Add(user);
+										failureResult.ActionText = e.Message;
+										failureResult.ActionStatus = "failure";
+										failureOccurred = true;
+									}
+								}
+
+								if (successOccurred)
+								{
+									result.Results.Add(successResult);
+								}
+
+								if (failureOccurred)
+								{
+									result.Results.Add(failureResult);
+								}
+							}
+						}
+
+						/// <summary>
+						/// Attempts to perform the TimeTrackerAssignment action on the list of users.
+						/// </summary>
+						/// <param name="users">The list of users.</param>
+						/// <param name="result">The instance of PermissionsActionResultViewModel to store result data.</param>
+						public void PerformTimeTrackerAssignmentAction(IEnumerable<TargetUser> users, PermissionsActionsResults result)
+						{
+							this.OrganizationMembers = this.OrganizationMembers ?? new HashSet<int>(DBHelper.Instance.GetOrganizationMemberList(this.OrganizationId).Select(x => x.UserId));
+							SubscriptionDBEntity subDetails = null;
+							if (this.TimeTrackerSubscriptionId != 0)
+							{
+								subDetails = DBHelper.Instance.GetSubscriptionDetailsById(this.TimeTrackerSubscriptionId);
+							}
+
+							if (subDetails == null)
+							{
+								result.Status = "error";
+								result.Message = "You don't have a subscription to TimeTracker!";
+								this.TimeTrackerSubscriptionId = 0;
+							}
+
+							IEnumerable<UserDBEntity> currentUsers = DBHelper.Instance.GetUsersWithSubscriptionToProductInOrganization(this.OrganizationId, DBHelper.Instance.GetProductIDByName("TimeTracker"));
+							IEnumerable<int> userIds = currentUsers.Select(user => user.UserId);
+			
+							int alteringUsers = users.Where(x => !userIds.Contains(x.UserId)).Count();
+
+							if (users == null || users.Count() == 0)
+							{
+								result.Status = "error";
+								result.Message = "No users have been defined for this action.";
+							}
+							else if (!this.TimeTrackerRoleTarget.HasValue)
+							{
+								PermissionsActionResult errorResult = new PermissionsActionResult();
+								errorResult.ActionStatus = "error";
+								errorResult.ActionText = "You did not define a target role for the users.";
+								errorResult.TotalUserCount = users.Count();
+								errorResult.AffectedUserCount = users.Count();
+								result.Results.Add(errorResult);
+							}
+							else if (subDetails.NumberOfUsers < userIds.Count() + alteringUsers && this.TimeTrackerRoleTarget > 0)
+							{
+								PermissionsActionResult errorResult = new PermissionsActionResult();
+								errorResult.ActionStatus = "error";
+								errorResult.ActionText = string.Format("You are going over your TimeTracker subscription limit (currently {0}/{1}). Please remove some users.", userIds.Count(), subDetails.NumberOfUsers);
+								errorResult.TotalUserCount = users.Count();
+								errorResult.AffectedUserCount = users.Count();
+								result.Results.Add(errorResult);
+							}
+							else if (this.TimeTrackerRoleTarget.Value != 0)
+							{
+								PermissionsActionResult successResult = new PermissionsActionResult();
+								successResult.ActionStatus = "success";
+								successResult.ActionText = "Users changed roles in TimeTracker.";
+								PermissionsActionResult failureResult = new PermissionsActionResult();
+								bool successOccurred = false;
+								bool failureOccurred = false;
+								successResult.TotalUserCount = users.Count();
+								failureResult.TotalUserCount = users.Count();
+
+								foreach (TargetUser user in users)
+								{
+									try
+									{
+										// if (DBHelper.GetPermissionLevel(this.OrganizationId, user.UserId).Id == (int)Role.Owner)
+										// {
+										//     throw new InvalidOperationException("You cannot change the roles of an organization owner.");
+										// }
+										if (this.TimeTrackerRoleTarget.Value == -1)
+										{
+											DBHelper.Instance.DeleteSubscriptionUser(this.TimeTrackerSubscriptionId, user.UserId);
+										}
+										else if (!this.OrganizationMembers.Contains(user.UserId))
+										{
+											throw new InvalidOperationException("No longer a member of the organization.<span class='filter-reload'>Click <a href='javascript: history.go(0)'>here</a> to reload the member list.</span>");
+										}
+										else
+										{
+											DBHelper.Instance.EditProductRole(this.TimeTrackerRoleTarget.Value + 1, this.TimeTrackerSubscriptionId, user.UserId);
+										}
+
+										successResult.AffectedUserCount += 1;
+										successResult.Users.Add(user);
+										successOccurred = true;
+									}
+									catch (Exception e)
+									{
+										failureResult.AffectedUserCount += 1;
+										failureResult.Users.Add(user);
+										failureResult.ActionText = e.Message;
+										failureResult.ActionStatus = "failure";
+										failureOccurred = true;
+									}
+								}
+
+								if (successOccurred)
+								{
+									result.Results.Add(successResult);
+								}
+
+								if (failureOccurred)
+								{
+									result.Results.Add(failureResult);
+								}
+							}
+						}
+					}
+				}
+
+
+
+
+
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Utilities\PermissionsActionResult.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="PermissionsActionResult.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+
+				using System;
+				using System.Collections.Generic;
+				using System.Linq;
+				using System.Web;
+				using AllyisApps.ViewModels;
+
+				namespace AllyisApps.Utilities
+				{
+					/// <summary>
+					/// An object representing the results of a PermissionsAction.
+					/// </summary>
+					public class PermissionsActionResult
+					{
+						/// <summary>
+						/// Initializes a new instance of the <see cref="PermissionsActionResult" /> class.
+						/// </summary>
+						public PermissionsActionResult()
+						{
+							this.Users = new List<TargetUser>();
+						}
+
+						/// <summary>
+						/// Gets or sets the count of users affected with this result.
+						/// </summary>
+						public int AffectedUserCount { get; set; }
+
+						/// <summary>
+						/// Gets or sets the total count of users who had the associated action performed.
+						/// </summary>
+						public int TotalUserCount { get; set; }
+
+						/// <summary>
+						/// Gets or sets the text response for this result.
+						/// </summary>
+						public string ActionText { get; set; }
+
+						/// <summary>
+						/// Gets or sets the status associated with this result.
+						/// </summary>
+						public string ActionStatus { get; set; }
+
+						/// <summary>
+						/// Gets or sets the list of users associated with this result.
+						/// </summary>
+						public List<TargetUser> Users { get; set; }
+					}
+				}
+
+
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Utilities\PermissionsActionsResults.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="PermissionsActionsResults.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+
+				using System;
+				using System.Collections.Generic;
+				using System.Linq;
+				using System.Web;
+
+				namespace AllyisApps.Utilities
+				{
+					/// <summary>
+					/// Object for all results related to the actions that were requested.
+					/// </summary>
+					public class PermissionsActionsResults
+					{
+						/// <summary>
+						/// Initializes a new instance of the <see cref="PermissionsActionsResults" /> class.
+						/// </summary>
+						public PermissionsActionsResults()
+						{
+							this.Results = new List<PermissionsActionResult>();
+						}
+
+						/// <summary>
+						/// Gets the overall status of the requested actions.
+						/// </summary>
+						public string Status { get; internal set; }
+
+						/// <summary>
+						/// Gets the message to respond with.
+						/// </summary>
+						public string Message { get; internal set; }
+
+						/// <summary>
+						/// Gets or sets the list of Result objects that were created when executing the actions.
+						/// </summary>
+						public List<PermissionsActionResult> Results { get; set; }
+
+						/// <summary>
+						/// Gets the result string to respond with.
+						/// </summary>
+						public string Result { get; internal set; }
+					}
+				}
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Utilities\TargetUser.cs
+								//------------------------------------------------------------------------------
+				// <copyright file="TargetUser.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+
+				namespace AllyisApps.Utilities
+				{
+					/// <summary>
+					/// A user to perform actions on.
+					/// </summary>
+					public class TargetUser
+					{
+						/// <summary>
+						/// Initializes a new instance of the <see cref="TargetUser" /> class.
+						/// </summary>
+						public TargetUser()
+						{
+							this.Message = string.Empty;
+						}
+
+						/// <summary>
+						/// Gets or sets the user's Id.
+						/// </summary>
+						public int UserId { get; set; }
+
+						/// <summary>
+						/// Gets or sets the user's Name.
+						/// </summary>
+						public string Name { get; set; }
+
+						/// <summary>
+						/// Gets or sets a return message about the user.
+						/// </summary>
+						public string Message { get; set; }
+					}	
+				}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Utilities\UserIdentityHelper.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="UserIdentityHelper.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+
+				using System;
+				using System.Collections.Generic;
+				using System.Linq;
+				using System.Web;
+				using System.Web.Security;
+				using Microsoft.AspNet.Identity;
+
+				namespace AllyisApps.Utilities
+				{
+					/// <summary>
+					/// Helps hash password.
+					/// </summary>
+					public class UserIdentityHelper
+					{
+						/// <summary>
+						/// Initializes a new instance of the UserIdentityHelper class.
+						/// </summary>
+						public UserIdentityHelper()
+						{
+						}
+
+						/// <summary>
+						/// Get password hash.
+						/// </summary>
+						/// <param name = "password" > The password entered by user.</param>
+						/// <returns>Password hash.</returns>
+						public string GetPasswordHash(string password)
+						{
+							PasswordHasher ph = new PasswordHasher();
+							return ph.HashPassword(password);
+							////return (string)FormsAuthentication.HashPasswordForStoringInConfigFile(password, "sha1");
+						}
+
+						/// <summary>
+						/// Verify hashed password.
+						/// </summary>
+						/// <param name = "passwordStored" > The hashed password stored in database.</param>
+						/// <param name = "passwordEntered" > The plain text password enterd by user.</param>
+						/// <returns>True if the password entered matches the password stored.</returns>
+						public bool VerifyHashedPassword(string passwordStored, string passwordEntered)
+						{
+							PasswordHasher ph = new PasswordHasher();
+							if (ph.VerifyHashedPassword(passwordStored, passwordEntered) == PasswordVerificationResult.Success)
+							{
+								return true;
+							}
+
+							////var passwordnew = this.GetPasswordHash(passwordEntered);
+				   ////         if (passwordStored.CompareTo(passwordnew) == 0)
+				   ////         {
+				   ////             return true;
+				   ////         }
+
+							return false;
+						}
+					}
+				}
+
+
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Utilities\UserPermissionsAction.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="UserPermissionsAction.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+
+				using System;
+				using System.Collections.Generic;
+				using System.Linq;
+				using System.Web;
+				using AllyisApps.DBModel;
+				using AllyisApps.DBModel.Auth;
+				using AllyisApps.DBModel.Billing;
+				using AllyisApps.ViewModels;
+
+				namespace AllyisApps.Utilities
+				{
+					/// <summary>
+					/// Object represnting a list of users and the actions to perform on them.
+					/// </summary>
+					public class UserPermissionsAction
+					{
+						/// <summary>
+						/// Initializes a new instance of the <see cref="UserPermissionsAction" /> class.
+						/// </summary>
+						public UserPermissionsAction()
+						{
+						}
+
+						/// <summary>
+						/// Gets or sets the list of selected users.
+						/// </summary>
+						public IEnumerable<TargetUser> SelectedUsers { get; set; }
+
+						/// <summary>
+						/// Gets or sets the actions to be performed.
+						/// </summary>
+						public PermissionsAction SelectedActions { get; set; }
+
+						/// <summary>
+						/// Attempts to perform the requested actions.
+						/// </summary>
+						/// <param name="currentUserId">The current user ID.</param>
+						/// <returns>A PermissionsActionResultViewModel displaying data regarding the results.</returns>
+						public PermissionsActionsResults ExecuteActions(int currentUserId)
+						{
+							PermissionsActionsResults result = new PermissionsActionsResults();
+							if (this.SelectedActions.OrgRoleTarget != 0)
+							{
+								this.SelectedActions.PerformOrganizationAssignmentAction(this.SelectedUsers, currentUserId, result);
+							}
+
+							if (this.SelectedActions.TimeTrackerRoleTarget != 0)
+							{
+								this.SelectedActions.PerformTimeTrackerAssignmentAction(this.SelectedUsers, result);
+							}
+
+							int totalResults = result.Results.Count();
+							if (totalResults == result.Results.Where(x => x.ActionStatus == "success").Count())
+							{
+								// full Success case
+								result.Status = "success";
+
+								// result.Result = "<p>Filters have changed. Click <a href='javascript: history.go(0)'>here</a> to reload the filters.</p>";
+							}
+							else if (totalResults == result.Results.Where(x => x.ActionStatus == "failure").Count())
+							{
+								// full failure case
+								result.Status = "failure";
+							}
+							else if (totalResults == result.Results.Where(x => x.ActionStatus == "error").Count())
+							{
+								result.Status = "error";
+							}
+							else
+							{
+								// partial failure case
+								result.Status = "partial";
+
+								// result.Result = "<p>Filters have changed. Click <a href='javascript: history.go(0)'>here</a> to reload the filters.</p>";
+							}
+
+							return result;
+						}
+					}    
+				}
+
+
+
+
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Utilities\UserPermissionsManagement.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="UserPermissionsManagement.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+				using System;
+				using System.Collections.Generic;
+				using System.Linq;
+				using System.Web;
+				using AllyisApps.Services.BusinessObjects;
+
+				namespace AllyisApps.Utilities
+				{
+					/// <summary>
+					/// Object for viewing a single user's org and sub roles.
+					/// </summary>
+					public class UserPermissionsManagement
+					{
+						/// <summary>
+						/// Initializes a new instance of the <see cref="UserPermissionsManagement" /> class.
+						/// </summary>
+						public UserPermissionsManagement()
+						{
+						}
+
+						/// <summary>
+						/// Initializes a new instance of the <see cref="UserPermissionsManagement" /> class.
+						/// </summary>
+						/// <param name="role">A db role object to seed from.</param>
+						public UserPermissionsManagement(UserRoles role)
+						{
+							this.UserId = role.UserId;
+							this.UserName = role.FirstName + " " + role.LastName;
+							this.OrganizationRoleId = role.OrgRoleId;
+							List<SubscriptionRole> subRoles = new List<SubscriptionRole>();
+							SubscriptionRole temp = new SubscriptionRole() { ProductRoleId = role.ProductRoleId };
+							subRoles.Add(temp);
+							this.SubscriptionRoles = subRoles;
+						}
+
+						/// <summary>
+						/// Gets the user's Id.
+						/// </summary>
+						public string UserId { get; internal set; }
+
+						/// <summary>
+						/// Gets the User's full name (first and last).
+						/// </summary>
+						public string UserName { get; internal set; }
+
+						/// <summary>
+						/// Gets the user's email.
+						/// </summary>
+						public string Email { get; internal set; }
+
+						/// <summary>
+						/// Gets the user's role in the organization.
+						/// </summary>
+						public int OrganizationRoleId { get; internal set; }
+
+						/// <summary>
+						/// Gets the list of Subscription roles the user has.
+						/// </summary>
+						public IEnumerable<SubscriptionRole> SubscriptionRoles { get; internal set; }
+					}
+				}
+
+
+
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\ViewModels\Auth\EditUserInfoPasswordViewModel.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="RegisterViewModel.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+				using System;
+				using System.Collections.Generic;
+				using System.ComponentModel.DataAnnotations;
+				using System.Linq;
+				using System.Web;
+				using AllyisApps.Core;
+				using AllyisApps.DBModel;
+				using AllyisApps.DBModel.Auth;
+				using AllyisApps.DBModel.BusinessObjects;
+				using AllyisApps.Utilities;
+
+				namespace AllyisApps.ViewModels
+				{
+					/// <summary>
+					/// Represents an editable view of user's information, complete with password.
+					/// </summary>
+					public class RegisterViewModel : EditProfileViewModel
+					{
+						/// <summary>
+						/// Gets or sets the user's password.
+						/// </summary>
+						[Required]
+						[StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+						[DataType(DataType.Password)]
+						[Display(Name = "Password")]
+						public string Password { get; set; }
+
+						/// <summary>
+						/// Gets or sets the user's confirmed password.
+						/// </summary>
+						[Required]
+						[DataType(DataType.Password)]
+						[Display(Name = "Confirm password")]
+						[Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+						public string ConfirmPassword { get; set; }
+
+						/// <summary>
+						/// Creates a new user info object in the database during registration.
+						/// </summary>
+						/// <returns>The ID of the user if created or -1 if not.</returns>
+						public int CreateUserInfo()
+						{
+							UserDBEntity entity = DBHelper.Instance.GetUserByEmail(this.Email);
+							if (entity != null)
+							{
+								throw new ArgumentException("A user with that email already exists.");
+							}
+
+							return DBHelper.Instance.CreateUserInfo(new UserDBEntity()
+							{
+								Email = this.Email,
+								FirstName = this.FirstName,
+								LastName = this.LastName,
+								DateOfBirth = this.DateOfBirth,
+								Address = this.Address,
+								City = this.City,
+								State = this.State,
+								Country = this.Country,
+								PostalCode = this.PostalCode,
+								PhoneNumber = this.PhoneNumber,
+								PasswordHash = Crypto.ComputeSHA512Hash(this.Password),
+								EmailConfirmed = false,
+								AccessFailedCount = 0,
+								TwoFactorEnabled = false,
+								LockoutEnabled = false,
+								LockoutEndDateUtc = null
+							});
+						}
+					}
+				}
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Views\Shared\DisplayTemplates\SiteMapTitleHelperModel.cshtml
+				@model MvcSiteMapProvider.Web.Html.Models.SiteMapTitleHelperModel
+				@using System.Web.Mvc.Html
+				@using MvcSiteMapProvider.Web.Html.Models
+
+				@if (Model.CurrentNode != null) {@Model.CurrentNode.Title;}
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Views\Shared\DisplayTemplates\CanonicalHelperModel.cshtml
+				@model MvcSiteMapProvider.Web.Html.Models.CanonicalHelperModel
+				@using System.Web.Mvc.Html
+				@using MvcSiteMapProvider.Web.Html.Models
+
+				@if (Model.CurrentNode != null && !string.IsNullOrEmpty(Model.CurrentNode.CanonicalUrl)) {
+					<link rel="canonical" href="@Model.CurrentNode.CanonicalUrl" />
+				}
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Views\Shared\DisplayTemplates\MetaRobotsHelperModel.cshtml
+				@model MvcSiteMapProvider.Web.Html.Models.MetaRobotsHelperModel
+				@using System.Web.Mvc.Html
+				@using MvcSiteMapProvider.Web.Html.Models
+
+				@if (Model.CurrentNode != null && !string.IsNullOrEmpty(Model.CurrentNode.MetaRobotsContent)) {
+					<meta name="robots" content="@Model.CurrentNode.MetaRobotsContent" />
+				}
+
+
+
+
+
+FROM:  C:\SourceFiles\AllyisApps\src\main\aaweb\Views\Shared\DisplayTemplates\SiteMapNodeModelList.cshtml
+				@model MvcSiteMapProvider.Web.Html.Models.SiteMapNodeModelList
+				@using System.Web.Mvc.Html
+				@using MvcSiteMapProvider.Web.Html.Models
+
+				<ul>
+					@foreach (var node in Model) { 
+						<li>@Html.DisplayFor(m => node) 
+							@if (node.Children.Any()) {
+								@Html.DisplayFor(m => node.Children)
+							}
+						</li>
+					}
+				</ul>
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Views\Shared\DisplayTemplates\SiteMapNodeModel.cshtml
+				@model MvcSiteMapProvider.Web.Html.Models.SiteMapNodeModel
+				@using System.Web.Mvc.Html
+				@using MvcSiteMapProvider.Web.Html.Models
+
+				@if (Model.IsCurrentNode && Model.SourceMetadata["HtmlHelper"].ToString() != "MvcSiteMapProvider.Web.Html.MenuHelper")  { 
+					<text>@Model.Title</text>
+				} else if (Model.IsClickable) { 
+					if (string.IsNullOrEmpty(Model.Description))
+					{
+						<a href="@Model.Url">@Model.Title</a>
+					}
+					else
+					{
+						<a href="@Model.Url" title="@Model.Description">@Model.Title</a>
+					}
+				} else { 
+					<text>@Model.Title</text>
+				}
+
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Views\Shared\DisplayTemplates\SiteMapHelperModel.cshtml
+				@model MvcSiteMapProvider.Web.Html.Models.SiteMapHelperModel
+				@using System.Web.Mvc.Html
+				@using MvcSiteMapProvider.Web.Html.Models
+
+				<ul class="siteMap">
+					@foreach (var node in Model.Nodes) { 
+						<li>@Html.DisplayFor(m => node) 
+							@if (node.Children.Any()) {
+								@Html.DisplayFor(m => node.Children)
+							}
+						</li>
+					}
+				</ul>
+
+
+
+
+
+
+
+
+FROM:C:\SourceFiles\AllyisApps\src\main\aaweb\Views\Shared\DisplayTemplates\MenuHelperModel.cshtml
+				@model MvcSiteMapProvider.Web.Html.Models.MenuHelperModel
+				@using System.Web.Mvc.Html
+				@using MvcSiteMapProvider.Web.Html.Models
+
+				<ul id="menu">
+					@foreach (var node in Model.Nodes) { 
+						<li>@Html.DisplayFor(m => node) 
+							@if (node.Children.Any()) {
+								@Html.DisplayFor(m => node.Children)
+							}
+						</li>
+					}
+				</ul>
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Controllers\Auth\AccountController.cs
+		/////// <summary>
+		/////// Account Change Message Id.
+		/////// </summary>
+		////public enum AccountChangeMessageId
+		////{
+		////	/// <summary>
+		////	/// Change password was successful.
+		////	/// </summary>
+		////	ChangePasswordSuccess,
+
+		////	/// <summary>
+		////	/// Updating user info was successful.
+		////	/// </summary>
+		////	UpdateProfileSuccess,
+
+		////	/// <summary>
+		////	/// An error was encountered.
+		////	/// </summary>
+		////	Error
+		////}
+
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Controllers\Auth\ConfirmEmailAction.cs
+		// TODO: Replace these? Do we need these still?
+
+		/////// <summary>
+		/////// GET: /Account/ResetPasswordConfirmation/5.
+		/////// </summary>
+		/////// <param name="id">The user's ID.</param>
+		/////// <returns>The result of this action.</returns>
+		////[AllowAnonymous]
+		////public async Task<ActionResult> ResendValidationEmail(int id)
+		////{
+		////	// Ensure the user isn't being spammed maliciously.
+		////	//HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+
+		////	var user = this.UserManager.FindById(id);
+		////	if (user != null)
+		////	{
+		////		if (user.EmailConfirmed)
+		////		{
+		////			// Resend this user's validation e-mail.
+		////			await this.SendValidationEmailAsync(Int32.Parse(id));
+		////			return this.View("DisplayEmail");
+		////		}
+		////	}
+
+		////	// User already confirmed... why are they here?
+		////	return this.View("Error", new HandleErrorInfo(new ApplicationException(@Resources.Errors.EmailAlreadyValidatedMessage), "Subscription", "Subscribe"));
+		////}
+
+		////private async Task SendValidationEmailAsync(int userId)
+		////{
+		////	//var callbackUrl = await this.GetValidationEmailUrl(userId);
+		////	string code = await AccountService.GetConfirmEmailCode(userId);
+		////	string url = GetEmailConfirmationUrl(userId, code);
+		////	await this.UserManager.SendEmailAsync(userId.ToString(), "Confirm your account", "Please confirm your account by clicking <a href=\"" + url + "\">here</a>");
+		////	//await AccountService.SendConfirmationEmail("support@allyisapps.com", model.Email, url);
+		////}
+
+
+
+
+
+
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Controllers\Auth\NewMemberJoinAction.cs
+				//------------------------------------------------------------------------------
+				// <copyright file="NewMemberJoinAction.cs" company="Allyis, Inc.">
+				//     Copyright (c) Allyis, Inc.  All rights reserved.
+				// </copyright>
+				//------------------------------------------------------------------------------
+
+				//// This action is at present unused, replaced by a call to AccountService.AddToPendingOrganizations in RegisterAction.
+				////  Keeping the old code around for now in case something in here turns out to be important, but if nothing has broken
+				////  after a while, it should be removed.
+
+				////using System.Linq;
+				////using System.Web.Mvc;
+
+				////using AllyisApps.Core;
+				////using AllyisApps.Core.Alert;
+				////using AllyisApps.DBModel.Auth;
+				////using AllyisApps.Services.BusinessObjects;
+
+				////namespace AllyisApps.Controllers
+				////{
+				////	/// <summary>
+				////	/// Represents pages for the management of an organization.
+				////	/// </summary>
+				////	public partial class AccountController : BaseController
+				////	{
+				////		/// <summary>
+				////		/// New members join.
+				////		/// </summary>
+				////		/// <param name="accessCode">The access code associated with the invitation.</param>
+				////		/// <returns>Member joins org and redirects to Org/Index.</returns>
+				////		[HttpGet]
+				////		public ActionResult NewMemberJoin(string accessCode)
+				////		{
+				////			if (UserContext.UserId == 0)
+				////			{
+				////				return this.RedirectToAction("Index", "Home");
+				////			}
+
+				////			if (UserContext.ChosenOrganizationId == OrgService.GetOrgIdFromAccessCode(accessCode))
+				////			{
+				////				OrganizationInfo org = OrgService.GetOrganization(UserContext.ChosenOrganizationId);
+				////				OrgRoleInfo role = OrgService.GetPermissionLevel(UserContext.ChosenOrganizationId, UserContext.UserId); // Verify the user does not already belong to that organization
+
+				////				if (role == null)
+				////				{
+				////					InvitationInfo thisInvite = OrgService.GetUserInvitations(UserContext.ChosenOrganizationId).Where(x => x.AccessCode == accessCode).SingleOrDefault();
+				////					if (thisInvite == null)
+				////					{
+				////						string notificationMessage = "Invitation has been deleted";
+				////						Notifications.Add(new BootstrapAlert(notificationMessage, Variety.Warning));
+
+				////						return this.RedirectToAction("Index", "Account");
+				////					}
+
+				////					OrgService.AddToOrganization(UserContext.UserId, UserContext.ChosenOrganizationId, thisInvite.ProjectId, thisInvite.OrgRole);
+
+				////					int productId = OrgService.UpdateSubscriptionUserProductRoles(UserContext.ChosenOrganizationId, thisInvite.InvitationId, UserContext.UserId);
+
+				////					if (productId != 0)
+				////					{
+				////						return this.RedirectToAction("ApplicationRedirect", "Home", new { productId = productId, organizationId = UserContext.ChosenOrganizationId });
+				////					}
+
+				////					return this.Redirect("OrgIndex");
+				////				}
+				////				else
+				////				{
+				////					string notificationMessage = "You already belong to " + OrgService.GetOrganization(org.OrganizationId).Name + ".";
+				////					Notifications.Add(new BootstrapAlert(notificationMessage, Variety.Warning));
+
+				////					return this.Redirect("OrgIndex");
+				////				}
+				////			}
+				////			else
+				////			{
+				////				string notificationMessage = "Invalid Access Code";
+				////				Notifications.Add(new BootstrapAlert(notificationMessage, Variety.Warning));
+
+				////				return this.RedirectToAction("Index", "Account");
+				////			}
+				////		}
+				////	}
+				////}
+
+
+
+
+
+
+
+FROM: C:\SourceFiles\AllyisApps\src\main\aaweb\Comments.cs
+				/** EditMembers.cshtml
+				/** ln 158:
+				function updateUser(orgId, userId, fullName) {
+					var selectedPermission = document.getElementById('ddlPermissions').selectedIndex + 1;	// Account for "None"
+					var url = "/Organization/UpdateUser?id=" + currentOrg + "&userId=" + currentUser + "&roleId=" + selectedPermission;
+
+					var token = $('[name="__RequestVerificationToken"]').val();
+
+					var form = document.createElement('form');
+					form.setAttribute('method', 'post');
+					form.setAttribute('action', url);
+
+					var input = document.createElement('input');
+					input.type = 'hidden';
+					input.name = '__RequestVerificationToken';
+					input.value = token;
+					form.appendChild(input)
+					form.style.display = 'hidden';
+					document.body.appendChild(form)
+					form.submit();
+				}
+ 
+				/** OrganizationViewModels.cs 
+				/** ln 460: OrganizationAddMembersViewModel
+					private char[] sep = new char[] { ',', '\n', ' ', '\r' };
+
+				/** ln 557: ProcessInput()
+					string[] users = this.Email.Split(this.sep, StringSplitOptions.None);
+					foreach (string currentuser in users)
+					{
+						string userEmail = currentuser.Trim();
+					.
+					.
+					.
+					}
+				 * 
+				 * 
+				 * 
+										<!--<div class="row">
+											<div class="col-1">@Html.Label("Card Number")</div>
+											<div class="col-2"><input class="form-textbox" type="text" name="card-number" /></div>
+										</div>-
+											 <div class="form-group">
+												 <div class="col-1">@Html.Label("Card Number")</div>
+												 <div class="col-2">@Html.EditorFor(model => model.Billing.CardNumber, new { htmlAttributes = new { @class = "form-textbox" } })</div>
+											 </div>
+										<div class="expiration-csc-container">
+											<div class="form-group">
+												<div class="col-1">@Html.Label("Expiration Year")</div>
+												<div class="col-2">@Html.EditorFor(model => model.Billing.Expirationyear, new { htmlAttributes = new { @class = "form-textbox" } })</div>
+											</div>
+											<div class="form-group">
+												<div class="col-1">@Html.Label("Expiration Month")</div>
+												<div class="col-2">@Html.EditorFor(model => model.Billing.Expirationmonth, new { htmlAttributes = new { @class = "form-textbox" } })</div>
+											</div>
+											<div class="form-group">
+												<div class="col-1">@Html.ReqLabelFor(model => model.Billing.Cvc)</div>
+												<div class="col-2">@Html.EditorFor(model => model.Billing.Cvc, new { htmlAttributes = new { @class = "form-textbox" } })</div>
+											</div>
+										</div>-->
+
+				 * 
+				**/
+
+From: Manage.cshtml
+
+        @*$(document).ready(function () {
+            var preserveState = '@(Model != null ? Model.Edit.State : "")';
+            //$('#ddlState').prop("disabled", true);
+
+            if ($('#ddlCountry').val() != "") {
+                updateStateDDL(function () {
+                    if (preserveState != "") {
+                        var ddl = document.getElementById('ddlState');
+                        for (var i = 0; i < ddl.options.length; i++) {
+                            if (ddl.options[i].text === preserveState) {
+                                ddl.selectedIndex = i;
+                            }
+                        }
+                    }
+                });
+            }
+
+            $('#ddlCountry').change(updateStateDDL);
+        });
+
+        function updateStateDDL(successCallback) {
+            if ($('#ddlCountry').val() != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "Home/GetStates",
+                    data: JSON.stringify({ country: $('#ddlCountry').val() }),
+                    datatype: "json",
+                    contentType: "application/json",
+                    success: function (states) {
+                        $('#ddlState').empty();
+                        $('#ddlState').append("<option value=\"\">Select...</option>");
+                        for (var i = 0; i < states.length; i++) {
+                            $('#ddlState').append("<option>" + states[i] + "</option>");
+                        }
+                        $('#ddlState').prop("disabled", false);
+
+                        successCallback();
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Error: " + errorThrown)
+                    }
+                });
+            } else {
+                $('#ddlState').empty();
+                $('#ddlState').append("<option value=\"\">Select...</option>");
+                //$('#ddlState').prop("disabled", true);
+            }
+        }*@

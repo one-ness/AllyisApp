@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E5E5E5"
+    android:orientation="vertical"
+    android:padding="16dp" >
+
+                <LinearLayout
+                    android:id="@+id/Save"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <TableLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_marginBottom="12dp"
+                        android:layout_weight="7" >
+
+                        <TableRow
+                            android:id="@+id/tableRow3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_marginBottom="4dp"
+                            android:layout_weight="1" >
+
+                            <TextView
+                                android:id="@+id/tvDate"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:hint="@string/date_pick"
+                                android:textSize="16sp" />
+
+                            <FrameLayout
+                                android:id="@+id/frameLayout2"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".2">
+
+                                <Button
+                                    android:id="@+id/bDateChange"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_margin="1dp"
+                                    android:gravity="center"
+                                    android:text="Set"
+                                    android:textColor="#ffffff"
+                                    android:textSize="14sp" />
+                            </FrameLayout>
+                        </TableRow>
+
+                        <TableRow
+                            android:id="@+id/tableRow4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_marginBottom="4dp"
+                            android:layout_weight="1" >
+
+                            <TextView
+                                android:id="@+id/tvTime"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:hint="Time Duration"
+                                android:textSize="16sp" />
+
+                            <FrameLayout
+                                android:id="@+id/frameLayout3"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".2">
+
+                                <Button
+                                    android:id="@+id/bTimeChange"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_margin="1dp"
+                                    android:gravity="center"
+                                    android:text="Set"
+                                    android:textColor="#ffffff"
+                                    android:textSize="14sp" />
+                            </FrameLayout>
+                        </TableRow>
+
+                        <TableRow
+                            android:id="@+id/tableRow7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_marginBottom="4dp"
+                            android:layout_weight="1" >
+
+                            <TextView
+                                android:id="@+id/tvProject"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:hint="Project"
+                                android:textSize="16sp" />
+
+                            <FrameLayout
+                                android:id="@+id/frameLayout6"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".2">
+
+                                <Button
+                                    android:id="@+id/bProjectChange"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_margin="1dp"
+                                    android:gravity="center"
+                                    android:text="Set"
+                                    android:textColor="#ffffff"
+                                    android:textSize="14sp" />
+                            </FrameLayout>
+                        </TableRow>
+
+                        <TableRow
+                            android:id="@+id/tableRow1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" >
+
+                            <EditText
+                                android:id="@+id/etDescription"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:hint="Description" >
+
+                                <requestFocus />
+                            </EditText>
+                        </TableRow>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" >
+
+                            <FrameLayout
+                                android:id="@+id/frameLayout9"
+                                android:layout_width="0dp"
+                                android:layout_height="fill_parent"
+                                android:layout_weight="1">
+
+                                <Button
+                                    android:id="@+id/cancelButton"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_margin="1dp"
+                                    android:gravity="center"
+                                    android:text="Cancel"
+                                    android:textColor="#ffffff"
+                                    android:textSize="16sp" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:id="@+id/tvFiller"
+                                android:layout_width="0dp"
+                                android:layout_height="fill_parent"
+                                android:layout_weight=".8" />
+
+                            <FrameLayout
+                                android:id="@+id/frameLayout10"
+                                android:layout_width="0dp"
+                                android:layout_height="fill_parent"
+                                android:layout_weight="1" >
+
+                                <Button
+                                    android:id="@+id/saveButton"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_margin="1dp"
+                                    android:gravity="center"
+                                    android:text="Save"
+                                    android:textColor="#ffffff"
+                                    android:textSize="16sp" />
+                            </FrameLayout>
+                        </LinearLayout>
+
+                    </TableLayout>
+                </LinearLayout>
+
+</LinearLayout>

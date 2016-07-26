@@ -1,0 +1,39 @@
+﻿
+@using AllyisApps.Services.BusinessObjects;
+@model CompleteProjectInfo
+
+@{
+    DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+    DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+    ViewBag.Title = AllyisApps.Resources.TimeTracker.Views.Project.Strings.ProjectDetails;
+}
+
+<div class="shrink-wrap-center">
+    <div>
+        <table class="allyis-table">
+            <tr>
+                <th>@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Project</th>
+                <td>@Model.ProjectName</td>
+            </tr>
+            <tr>
+                <th>@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Customer</th>
+                <td>@Model.CustomerName</td>
+            </tr>
+            <tr>
+                <th>@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Org</th>
+                <td>@Model.OrganizationName</td>
+            </tr>
+            <tr>
+                <th>@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Created</th>
+                <td>@Model.CreatedUTC</td>
+            </tr>
+        </table>
+        <div class="allyis-action-buttons">
+            @Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Project.Strings.ProjectList, "Index", "Customer", null, new { @class = "btn btn-default" })
+            @if(Model.CanEditProject) {
+                @Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Project.Strings.Edit, "Edit", new { id = Model.ProjectId }, new { @class = "btn btn-primary" })
+            }
+        </div>
+    </div>
+</div>
+

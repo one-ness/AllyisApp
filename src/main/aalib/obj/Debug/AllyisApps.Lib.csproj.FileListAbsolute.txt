@@ -1,0 +1,9 @@
+C:\SourceFiles\AllyisApps\src\main\aalib\bin\Debug\AllyisApps.Lib.XML
+C:\SourceFiles\AllyisApps\src\main\aalib\bin\Debug\AllyisApps.Lib.dll
+C:\SourceFiles\AllyisApps\src\main\aalib\bin\Debug\AllyisApps.Lib.pdb
+C:\SourceFiles\AllyisApps\src\main\aalib\bin\Debug\AllyisApps.Lib.dll.CodeAnalysisLog.xml
+C:\SourceFiles\AllyisApps\src\main\aalib\bin\Debug\AllyisApps.Lib.dll.lastcodeanalysissucceeded
+C:\SourceFiles\AllyisApps\src\main\aalib\bin\Debug\Newtonsoft.Json.dll
+C:\SourceFiles\AllyisApps\src\main\aalib\bin\Debug\Newtonsoft.Json.xml
+C:\SourceFiles\AllyisApps\src\main\aalib\obj\Debug\AllyisApps.Lib.dll
+C:\SourceFiles\AllyisApps\src\main\aalib\obj\Debug\AllyisApps.Lib.pdb

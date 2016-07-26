@@ -1,0 +1,151 @@
+<StyleCopSettings Version="105">
+  <GlobalSettings>
+    <StringProperty Name="MergeSettingsFiles">NoMerge</StringProperty>
+    <CollectionProperty Name="RecognizedWords">
+      <Value>aspx</Value>
+      <Value>bindability</Value>
+      <Value>bindable</Value>
+      <Value>dbo</Value>
+      <Value>dw</Value>
+      <Value>func</Value>
+      <Value>guid</Value>
+      <Value>interop</Value>
+      <Value>itemid</Value>
+      <Value>IVsRunningDocTableEvents</Value>
+      <Value>msdn</Value>
+      <Value>ntcp</Value>
+      <Value>propid</Value>
+      <Value>reparent</Value>
+      <Value>reparented</Value>
+      <Value>reparenting</Value>
+      <Value>reparents</Value>
+      <Value>revertable</Value>
+      <Value>saveable</Value>
+      <Value>sql</Value>
+      <Value>strapper</Value>
+      <Value>tcp</Value>
+      <Value>templated</Value>
+      <Value>toolbar</Value>
+      <Value>visualstudio</Value>
+      <Value>vs</Value>
+      <Value>vsct</Value>
+      <Value>wcf</Value>
+      <Value>wpf</Value>
+      <Value>xaml</Value>
+      <Value>auth</Value>
+    </CollectionProperty>
+  </GlobalSettings>
+  <Parsers>
+    <Parser ParserId="StyleCop.CSharp.CsParser">
+      <ParserSettings>
+        <BooleanProperty Name="AnalyzeDesignerFiles">False</BooleanProperty>
+        <CollectionProperty Name="GeneratedFileFilters">
+          <Value>\.g\.cs$</Value>
+          <Value>\.generated\.cs$</Value>
+          <Value>\.g\.i\.cs$</Value>
+          <Value>GlobalSuppressions\.cs$</Value>
+          <Value>AssemblyInfoCore\.cs$</Value>
+        </CollectionProperty>
+      </ParserSettings>
+    </Parser>
+  </Parsers>
+  <Analyzers>
+    <Analyzer AnalyzerId="StyleCop.CSharp.DocumentationRules">
+      <Rules>
+        <Rule Name="DocumentationTextMustBeginWithACapitalLetter">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">True</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+        <Rule Name="DocumentationTextMustEndWithAPeriod">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">True</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+        <Rule Name="ElementDocumentationMustBeSpelledCorrectly">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+        <Rule Name="FileHeaderMustContainFileName">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+        <Rule Name="ElementDocumentationMustNotBeCopiedAndPasted">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+      </Rules>
+      <AnalyzerSettings>
+        <StringProperty Name="CompanyName">Allyis, Inc.</StringProperty>
+        <StringProperty Name="Copyright">Copyright (c) Allyis, Inc.  All rights reserved.</StringProperty>
+        <BooleanProperty Name="IgnorePrivates">True</BooleanProperty>
+        <BooleanProperty Name="IncludeFields">False</BooleanProperty>
+      </AnalyzerSettings>
+    </Analyzer>
+    <Analyzer AnalyzerId="StyleCop.CSharp.LayoutRules">
+      <Rules>
+        <Rule Name="SingleLineCommentsMustNotBeFollowedByBlankLine">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+      </Rules>
+      <AnalyzerSettings />
+    </Analyzer>
+    <Analyzer AnalyzerId="StyleCop.CSharp.NamingRules">
+      <Rules>
+        <Rule Name="StaticReadonlyFieldsMustBeginWithUpperCaseLetter">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+      </Rules>
+      <AnalyzerSettings>
+        <CollectionProperty Name="Hungarian">
+          <Value>c</Value>
+          <Value>db</Value>
+          <Value>dw</Value>
+          <Value>f</Value>
+          <Value>id</Value>
+          <Value>ip</Value>
+          <Value>is</Value>
+          <Value>n</Value>
+          <Value>no</Value>
+          <Value>ok</Value>
+          <Value>p</Value>
+          <Value>pc</Value>
+          <Value>pf</Value>
+          <Value>pp</Value>
+          <Value>to</Value>
+          <Value>ui</Value>
+          <Value>vs</Value>
+          <Value>go</Value>
+          <Value>on</Value>
+        </CollectionProperty>
+      </AnalyzerSettings>
+    </Analyzer>
+    <Analyzer AnalyzerId="StyleCop.CSharp.OrderingRules">
+      <Rules>
+        <Rule Name="UsingDirectivesMustBePlacedWithinNamespace">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+      </Rules>
+      <AnalyzerSettings />
+    </Analyzer>
+    <Analyzer AnalyzerId="StyleCop.CSharp.ReadabilityRules">
+      <Rules>
+        <Rule Name="DoNotUseRegions">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">True</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+      </Rules>
+      <AnalyzerSettings />
+    </Analyzer>
+  </Analyzers>
+</StyleCopSettings>

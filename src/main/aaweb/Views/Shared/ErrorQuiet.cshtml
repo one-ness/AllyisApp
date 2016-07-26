@@ -1,0 +1,25 @@
+﻿@{
+    DisplayHints.ShowBreadcrumbs = false;
+    ViewBag.SupportEmail = System.Web.Configuration.WebConfigurationManager.AppSettings["SupportEmail"];
+}
+<div class="jumbotron error">
+    <h1>@AllyisApps.Resources.Views.Shared.Strings.Oops</h1>
+    <p>@AllyisApps.Resources.Views.Shared.Strings.Offerings</p>
+    <p>
+        <a href="mailto:@ViewBag.SupportEmail">@ViewBag.SupportEmail</a>
+    </p>
+    <p>
+        <a href="#errorMessageCollapse" class="btn btn-default" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="errorMessageCollapse">
+            View Error Message
+        </a>
+    </p>
+    <div class="collapse" id="errorMessageCollapse">
+        <pre class="well" style="display: inline-block;">
+            Exception: Thing
+            Controller: Thing
+            Action: Thing
+        </pre>
+    </div>
+</div>
+
+

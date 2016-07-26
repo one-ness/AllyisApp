@@ -1,0 +1,42 @@
+﻿
+@{
+    DisplayHints.ShowBreadcrumbs = false;
+    ViewBag.SupportEmail = System.Web.Configuration.WebConfigurationManager.AppSettings["SupportEmail"];
+}
+
+<div class="jumbotron error">
+    <div class="row">
+        <div class="col-md-6">
+            <h1>@AllyisApps.Resources.Views.Shared.Strings.Oops</h1>
+            <h1 style="COLOR: black; FONT: 13pt/15pt verdana" id="errortype"><span id="errorText">@Response.Status</span></h1>
+        </div>
+        <div class="col-md-6">
+            <h1 style="COLOR: black; FONT: 13pt/15pt verdana"><br /><br />(\/)<br />( . .)<br />c(")(")</h1>
+        </div>
+    </div>
+    <p>@AllyisApps.Resources.Views.Shared.Strings.Offerings</p>
+    <p>
+        <a href="mailto:@ViewBag.SupportEmail">@ViewBag.SupportEmail</a>
+    </p>
+
+    <div class="redirect button" align="center">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-default">@AllyisApps.Resources.Views.Shared.Strings.GoHome <i class="fa fa-home"></i></a>
+    </div>
+
+    @if (Model != null && HttpContext.Current.IsDebuggingEnabled)
+    {
+        <p>
+            <a href="#errorMessageCollapse" class="btn btn-default" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="errorMessageCollapse">
+                @AllyisApps.Resources.Views.Shared.Strings.ViewErrorMessage
+            </a>
+        </p>
+
+        <div class="collapse" id="errorMessageCollapse">
+            <pre class="well" style="display: inline-block;">
+                Exception: @Model.Exception.Message
+                Controller: @Model.ControllerName
+                Action: @Model.ActionName
+            </pre>
+        </div>
+    }
+</div>

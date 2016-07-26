@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mvcSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0"
+            xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd">
+
+  <mvcSiteMapNode title="Allyis Apps" controller="Home" action="Index">
+    <mvcSiteMapNode title="Contact" controller="Home" action="Contact"/>
+    <mvcSiteMapNode title="About" controller="Home" action="About"/>
+    
+    <!--Anonymous User Account Actions-->
+    <mvcSiteMapNode title="Register" controller="Account" action="Register"/>
+    <mvcSiteMapNode title="Confirm Email" controller="Account" action="ConfirmEmail"/>
+    <mvcSiteMapNode title="Forgot Password" controller="Account" action="ForgotPassword"/>
+    <mvcSiteMapNode title="Forgot Password Confirmation" controller="Account" action="ForgotPasswordConfirmation"/>
+    <mvcSiteMapNode title="Reset Password" controller="Account" action="ResetPassword"/>
+    <mvcSiteMapNode title="Reset Password Confirmation" controller="Account" action="ResetPasswordConfirmation"/>
+    <mvcSiteMapNode title="Log Off" controller="Account" action="LogOff"/>
+    
+    <!--Account Actions-->
+    <mvcSiteMapNode title="Account" controller="Account" action="Index">
+      <mvcSiteMapNode title="Change Password" controller="Account" action="ChangePassword"/>
+      <mvcSiteMapNode title="Edit Profile" controller="Account" action="EditProfile"/>
+    </mvcSiteMapNode>
+    
+    <!--Organization Actions-->
+    <mvcSiteMapNode title="Organizations" controller="Organization" action="Index">
+      <mvcSiteMapNode title="Create Organization" controller="Organization" action="Create"/>
+      <mvcSiteMapNode title="Join Organization" controller="Organization" action="Join"/>
+      <mvcSiteMapNode title="Subscription Details" controller="Organization" action="SubscriptionDetails"/>
+      <mvcSiteMapNode title="Details" controller="Organization" action="Details" preservedRouteParameters="id">
+        <mvcSiteMapNode title="Edit Organization" controller="Organization" action="Edit" preservedRouteParameters="id"/>
+        <mvcSiteMapNode title="Edit Members" controller="Organization" action="EditMembers" preservedRouteParameters="id"/>
+        <mvcSiteMapNode title="Add Members" controller="Organization" action="AddMembers" preservedRouteParameters="id"/>
+        <mvcSiteMapNode title="Add Member" controller="Organization" action="AddMember" preservedRouteParameters="id"/>
+        <mvcSiteMapNode title="Edit Member Permissions" controller="Organization" action="EditMemberPermissions" preservedRouteParameters="id, userId, fullName"/>
+        <mvcSiteMapNode title="View Subscriptions" controller="Organization" action="ViewSubscriptions" preservedRouteParameters="id"/>
+        <mvcSiteMapNode title="Edit Subscription Users" controller="Organization" action="EditSubscriptionUsers" preservedRouteParameters="id, subscriptionId"/>
+        <mvcSiteMapNode title="Subscription Details" controller="Organization" action="SubscriptionDetails">
+          <mvcSiteMapNode title="Manage Subscription" controller="Organization" action="ManageSubscription" preservedRouteParameters="id, productName"/>
+        </mvcSiteMapNode>
+      </mvcSiteMapNode>
+    </mvcSiteMapNode>
+    
+    <!--Time Tracker Actions-->
+    <mvcSiteMapNode title="Details" controller="Organization" action="Details" preservedRouteParameters="id">
+      <mvcSiteMapNode title="Time Tracker" area="TimeTracker" controller="Home" action="Index">
+        <mvcSiteMapNode title="Enter Time" area="TimeTracker" controller="TimeEntry" action="Index" />
+      </mvcSiteMapNode>
+    </mvcSiteMapNode>
+
+    <!--Project Actions-->
+    <mvcSiteMapNode title="Projects" controller="Project" action="Index">
+      <mvcSiteMapNode title="Edit Project" controller="Project" action="Edit" preservedRouteParameters="id"/>
+      <mvcSiteMapNode title="Create Project" controller="Project" action="Create"/>
+    </mvcSiteMapNode>
+
+    <!--Customer Actions-->
+    <mvcSiteMapNode title="Customers" controller="Customer" action="Index">
+      <mvcSiteMapNode title="Edit Customer" controller="Customer" action="Edit" preservedRouteParameters="id"/>
+      <mvcSiteMapNode title="Create Customer" controller="Customer" action="Create"/>
+    </mvcSiteMapNode>
+  </mvcSiteMapNode>
+</mvcSiteMap>
