@@ -193,7 +193,7 @@ namespace AllyisApps
 	}
 
 	/// <summary>
-	/// Constants for controller Strings
+	/// Constants for controller Strings.
 	/// </summary>
 	public static class ControllerConstants
 	{
