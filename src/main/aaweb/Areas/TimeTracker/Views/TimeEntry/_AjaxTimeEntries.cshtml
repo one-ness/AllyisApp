@@ -19,41 +19,48 @@
     var dateQuery = from entry in weekGroup orderby entry.Date.Date group entry by entry.Date.Date;
     <div class="panel panel-default timesheet-grouping">
         @foreach (var dateGroup in dateQuery)
-        {
-            var theEntries = from entry in dateGroup where !entry.Sample select entry;
-            var theSample = (from entry in dateGroup where entry.Sample select entry).FirstOrDefault();
-            int totalCount = theEntries.Count();
-            int allVotedCount = (from e in theEntries where e.ApprovalState != (int)ApprovalState.NoApprovalState select e).Count();
-            int allApprovedCount = (from e in theEntries where e.ApprovalState == (int)ApprovalState.Approved select e).Count();
-            int allRejectedCount = (from e in theEntries where e.ApprovalState == (int)ApprovalState.NotApproved select e).Count();
-            bool noneExist = totalCount == 0;
-            bool noneWereVoted = allVotedCount == 0;
-            bool allVotedWereApproved = allVotedCount > 0 && allVotedCount == allApprovedCount;
-            bool allVotedWereRejected = allVotedCount > 0 && allVotedCount == allRejectedCount;
-            bool allWereApproved = allVotedCount > 0 && totalCount == allApprovedCount;
-            bool allWereRejected = allVotedCount > 0 && totalCount == allRejectedCount;
-            bool anyWereChanged = (from e in theEntries where e.ModSinceApproval == true select e).Any();
-            string containerClass = noneExist ? "" :
-                                    noneWereVoted ? "" :
-                                    anyWereChanged ? "pending" :
-                                    allWereApproved ? "approved" :
-                                    allWereRejected ? "rejected" : "pending";
-            string headerClass = containerClass;
-            string selectorClass = allVotedWereApproved ? "approved" :
-                                   allVotedWereRejected ? "rejected" : "";
+	   {
+		   var theEntries = from entry in dateGroup where !entry.Sample select entry;
+		   var theSample = (from entry in dateGroup where entry.Sample select entry).FirstOrDefault();
+		   int totalCount = theEntries.Count();
+		   int allVotedCount = (from e in theEntries where e.ApprovalState != (int)ApprovalState.NoApprovalState select e).Count();
+		   int allApprovedCount = (from e in theEntries where e.ApprovalState == (int)ApprovalState.Approved select e).Count();
+		   int allRejectedCount = (from e in theEntries where e.ApprovalState == (int)ApprovalState.NotApproved select e).Count();
+		   bool noneExist = totalCount == 0;
+		   bool noneWereVoted = allVotedCount == 0;
+		   bool allVotedWereApproved = allVotedCount > 0 && allVotedCount == allApprovedCount;
+		   bool allVotedWereRejected = allVotedCount > 0 && allVotedCount == allRejectedCount;
+		   bool allWereApproved = allVotedCount > 0 && totalCount == allApprovedCount;
+		   bool allWereRejected = allVotedCount > 0 && totalCount == allRejectedCount;
+		   bool anyWereChanged = (from e in theEntries where e.ModSinceApproval == true select e).Any();
+		   string containerClass = noneExist ? "" :
+							  noneWereVoted ? "" :
+							  anyWereChanged ? "pending" :
+							  allWereApproved ? "approved" :
+							  allWereRejected ? "rejected" : "pending";
+		   string headerClass = containerClass;
+		   string selectorClass = allVotedWereApproved ? "approved" :
+							 allVotedWereRejected ? "rejected" : "";
 
-            var currentDate = dateGroup.First().Date.Date;
-            string dateStringNums = currentDate.ToShortDateString();
-            string dateStringDayLong = currentDate.DayOfWeek.ToString();
-            string dateStringDayShort = DateTimeFormatInfo.CurrentInfo.AbbreviatedDayNames[(int)currentDate.DayOfWeek].ToString();
-            
-            string offDayClass = "";
+		   var currentDate = dateGroup.First().Date.Date;
+		   string dateStringNums = currentDate.ToShortDateString();
+		   string dateStringDayLong = currentDate.DayOfWeek.ToString();
+		   string dateStringDayShort = DateTimeFormatInfo.CurrentInfo.AbbreviatedDayNames[(int)currentDate.DayOfWeek].ToString();
 
-            if (theSample.IsOffDay)
-            { // Note: To change the color of offdays/offday entries, edit TimeTracker.css rules for '.table-row .offDay'/'.offDay .form-control', respectively.
-                offDayClass = "offDay";
-            }
+		   string offDayClass = "";
+		   string holidayClass = "";
+
+		   if (theSample.IsOffDay)
+		   { // Note: To change the color of offdays/offday entries, edit TimeTracker.css rules for '.table-row .offDay'/'.offDay .form-control', respectively.
+			   offDayClass = "offDay";
+		   }
+		   if (theSample.IsHoliday && !theSample.IsOffDay)
+		   {
+			   holidayClass = "holiday";
+		   }
+
             <div class="panel-heading hidden visible-xs @(headerClass)">
+			  
                 <label>@(dateStringNums) @(dateStringDayLong)</label>
                 @*
                 if (canApproveReject)
@@ -76,7 +83,7 @@
             </div>
             <div class="table-container @(containerClass)">
 		  	<div class="table-row">
-		  		<div class="panel-left hidden-xs table-col text-center @offDayClass">
+		  		<div class="panel-left hidden-xs table-col text-center @offDayClass @holidayClass">
 		  			@*
 				//This section of code displays a pair of thumbs-up/down to managers in order to approve time entries.
 				//The remainder of the JS and actions remain functional, however there is no interface for them in the application.
@@ -94,7 +101,7 @@
 				}*@
 		  	<label style="display: block;">@dateStringNums</label>
 		  <label style="display: block;">@dateStringDayShort</label>
-			   	<div class="panel-right table-col @offDayClass" style="display: block; background-color:transparent;">
+			   	<div class="panel-right table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
 			   		<table align="center">
 						   <tr>
 			   			@if (currentDate.DayOfWeek == startOfWeek)
@@ -111,7 +118,7 @@
 
 			   </div>
 		  </div>
-		  <div class="panel-right table-col @offDayClass">
+		  <div class="panel-right table-col @offDayClass @holidayClass">
 		  	@{
 			    foreach (var entry in theEntries)
 			    {

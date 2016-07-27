@@ -15,10 +15,10 @@ SELECT DISTINCT [TimeEntryId]
       ,[Description]
   FROM [TimeTracker].[TimeEntry] WITH (NOLOCK) 
   JOIN [Auth].[User] WITH (NOLOCK) ON [User].[UserId] = [TimeEntry].[UserId]
-  JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].[OrganizationId] = @OrganizationId
+  JOIN [Crm].[Customer] WITH (NOLOCK) ON ([Customer].[OrganizationId] = @OrganizationId OR [Customer].[OrganizationId] = 0)
   JOIN [Crm].[ProjectUser] WITH (NOLOCK) ON [ProjectUser].[UserId] = [TimeEntry].[UserId]
-  JOIN [Crm].[Project] WITH (NOLOCK) ON [Project].[ProjectId] = [TimeEntry].[ProjectId]
+  JOIN [Crm].[Project] WITH (NOLOCK) ON ([Project].[ProjectId] = [TimeEntry].[ProjectId] OR [Project].[ProjectId] = 0)
   WHERE [Date] >= @StartingDate
   AND [Date] <= @EndingDate
-  AND [Project].[CustomerId] IN (SELECT [Customer].[CustomerId] FROM [Crm].[Customer] WITH (NOLOCK) WHERE [Customer].[OrganizationId] = @OrganizationId)
+  AND [Project].[CustomerId] IN (SELECT [Customer].[CustomerId] FROM [Crm].[Customer] WITH (NOLOCK) WHERE [Customer].[OrganizationId] = @OrganizationId) OR [Customer].[OrganizationId] = 0
   ORDER BY [Date] ASC

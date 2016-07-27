@@ -75,6 +75,11 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		/// </summary>
 		public bool IsOffDay { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the entry is a holiday.
+        /// </summary>
+        public bool IsHoliday { get; set; }
+
 		/// <summary>
 		/// Gets or sets a value indicating whether the project is deleted or not.
 		/// </summary>
