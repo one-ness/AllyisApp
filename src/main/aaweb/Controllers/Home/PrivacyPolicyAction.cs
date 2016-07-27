@@ -17,12 +17,12 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Shows the Privacy Policy.
 		/// </summary>
-        /// <returns>
-        /// Returns privacy policy view.
-        /// </returns>
+		/// <returns>
+		/// Returns privacy policy view.
+		/// </returns>
 		public ActionResult PrivacyPolicy()
-        {
-            return this.View();
+		{
+			return this.View();
 		}
 	}
 }

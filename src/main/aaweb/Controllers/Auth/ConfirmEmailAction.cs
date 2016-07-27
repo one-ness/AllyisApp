@@ -32,12 +32,12 @@ namespace AllyisApps.Controllers
 			if (await this.AccountService.ConfirmEmailAsync(int.Parse(userId), code))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.NotifyYourEmailIsConfirmed, Variety.Success));
-				return this.RedirectToAction("Account", "LogOn");
+				return this.RedirectToAction(ActionConstants.LogOn, ControllerConstants.Account);
 			}
 			else
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.WarnYourEmailHasAlreadyBeenConfirmed, Variety.Warning));
-				return this.RedirectToAction("Index", "Home");
+				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Home);
 			}
 		}
 	}

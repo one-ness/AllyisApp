@@ -40,63 +40,6 @@ namespace AllyisApps.Core
 		/// </summary>
 		public string Area { get; internal set; }
 
-		/////// <summary>
-		/////// Gets the routeData and adds the subdomain information if possible.
-		/////// </summary>
-		/////// <param name="httpContext">The http context.</param>
-		/////// <returns>The (potentially) updated route data.</returns>
-		////public override RouteData GetRouteData(System.Web.HttpContextBase httpContext)
-		////{
-		////	RouteData routeData = base.GetRouteData(httpContext);
-		////	if (routeData != null)
-		////	{
-		////		string subdomain = null;
-		////		string host = httpContext.Request.Headers["Host"];
-
-		////		// Assuming sub.domain.tld, get the index of the first '.'
-		////		int index = host.IndexOf('.');
-		////		int lastIndex = host.LastIndexOf('.');
-		////		if (index >= 0 && index != lastIndex)
-		////		{
-		////			subdomain = host.Substring(0, index);
-		////		}
-
-		////		if (subdomain == null)
-		////		{
-		////			subdomain = httpContext.Request.Params["subdomain"];
-		////		}
-
-		////		string orgId = httpContext.Request.Params["OrganizationId"];
-		////		if (subdomain != null && (orgId == null))
-		////		{
-		////			//routeData.Values["OrganizationId"] = Services.Org.OrgService.GetIdBySubdomain(subdomain);
-		////			//if (subdomain != "www" && routeData.Values["OrganizationId"].Equals(0))
-		////			//{
-		////				//routeData.Values["controller"] = "Shared";
-		////				//routeData.Values["action"] = "Error";
-		////				//return routeData;
-		////			//}
-		////		}
-
-		////		string controller = routeData.Values["controller"] as string;
-
-		////		if (string.IsNullOrEmpty(routeData.Values["controller"] as string))
-		////		{
-		////			// '||' prevents www subdomain from routing to Org page
-		////			if (string.IsNullOrEmpty(subdomain) || string.Equals(subdomain, "www"))
-		////			{
-		////				//routeData.Values["controller"] = "Home";
-		////			}
-		////			else
-		////			{
-		////				//routeData.Values["controller"] = "Account";
-		////			}
-		////		}
-		////	}
-
-		////	return routeData;
-		////}
-
 		/// <summary>
 		/// Retrieves the relative path of the request based on the route.
 		/// </summary>

@@ -29,15 +29,16 @@ namespace AllyisApps.Controllers
 			// Method includes permissions check
 			if (OrgService.DeleteOrganization()) 
 			{
-				string notification = string.Format("Your organization {0}", Resources.Controllers.Auth.Strings.OrganizationDeleteNotification);
+				string notification = string.Format("{0} {1}", Resources.Controllers.Auth.Strings.YourOrg, Resources.Controllers.Auth.Strings.OrganizationDeleteNotification);
 				Notifications.Add(new BootstrapAlert(notification, Variety.Success));
 
-				string url = string.Format("http://{0}/Account/Index", GlobalSettings.WebRoot);
+				// TODO: we shouldnt be hard coding http...
+				string url = string.Format("http://{0}/{1}/{2}", GlobalSettings.WebRoot, ControllerConstants.Account, ActionConstants.Index);
 				return this.Redirect(url); 
 			}
 
 			// Permissions failed
-			return this.View("Error", new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.ActionUnauthorizedMessage), "Account", "DeleteOrg"));
+			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.ActionUnauthorizedMessage), ControllerConstants.Account, ActionConstants.DeleteOrg));
 		}
 	}
 }

@@ -32,17 +32,17 @@ namespace AllyisApps.Controllers
 
 				if (subs != null && subs.Count() > 0)
 				{
-					Notifications.Add(new BootstrapAlert("You cannot remove your billing information while you are still paying for subscriptions!", Variety.Warning));
-					return this.Redirect("Manage");
+					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.CannotRemoveBilling, Variety.Warning));
+					return this.Redirect(ActionConstants.Manage);
 				}
 				else
 				{
-					return this.View("ConfirmRemoveBillingInformation");
+					return this.View(ViewConstants.ConfirmRemoveBillingInformation);
 				}
 			}
 
 			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
-			return this.RedirectToAction("OrgIndex");
+			return this.RedirectToAction(ActionConstants.OrgIndex);
 		}
 
 		/// <summary>
@@ -55,11 +55,11 @@ namespace AllyisApps.Controllers
 		{
 			if (CrmService.RemoveBilling())
 			{
-				Notifications.Add(new BootstrapAlert("Billing information removed", Variety.Success));
-				return this.Redirect("Manage");
+				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.BillingRemoved, Variety.Success));
+				return this.Redirect(ActionConstants.Manage);
 			}
 
-			return this.RedirectToAction("OrgIndex");
+			return this.RedirectToAction(ActionConstants.OrgIndex);
 		}
 	}
 }

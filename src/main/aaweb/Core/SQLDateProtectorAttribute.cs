@@ -6,15 +6,13 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
-using AllyisApps.Utilities;
 
 namespace AllyisApps.Utilities
 {
 	/// <summary>
-	///     Validator to guard against SQL date errors.
+	/// Validator to guard against SQL date errors.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Property |
-		AttributeTargets.Field, AllowMultiple = false)]
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 	public sealed class SQLDateProtectorAttribute : ValidationAttribute
 	{
 		private readonly DateTime minDate = new DateTime(1753, 1, 1, 0, 0, 0);
@@ -40,8 +38,7 @@ namespace AllyisApps.Utilities
 			{
 				return ValidationResult.Success;
 			}
-
-			if ((DateTime)value <= this.maxDate && (DateTime)value >= this.minDate)
+			else if ((DateTime)value <= this.maxDate && (DateTime)value >= this.minDate)
 			{
 				return ValidationResult.Success;
 			}

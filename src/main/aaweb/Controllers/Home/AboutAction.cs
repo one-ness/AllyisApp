@@ -19,13 +19,13 @@ namespace AllyisApps.Controllers
 		/// Displays the About page.
 		/// </summary>
 		/// <returns>
-        /// The result of this action.
-        /// </returns>
+		/// The result of this action.
+		/// </returns>
 		[AllowAnonymous]
 		public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-            return this.View();
+		{
+			ViewBag.Message = "Your application description page.";
+			return this.View();
 		}
 	}
 }

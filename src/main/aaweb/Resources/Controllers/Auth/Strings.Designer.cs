@@ -70,6 +70,24 @@ namespace AllyisApps.Resources.Controllers.Auth {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Billing information accepted..
+        /// </summary>
+        public static string Billing {
+            get {
+                return ResourceManager.GetString("Billing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Billing information removed..
+        /// </summary>
+        public static string BillingRemoved {
+            get {
+                return ResourceManager.GetString("BillingRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are unable to edit the members of this organization..
         /// </summary>
         public static string CannotEditMembersMessage {
@@ -88,11 +106,29 @@ namespace AllyisApps.Resources.Controllers.Auth {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You cannot remove your billing information while you are still paying for subscriptions!.
+        /// </summary>
+        public static string CannotRemoveBilling {
+            get {
+                return ResourceManager.GetString("CannotRemoveBilling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your password has been changed..
         /// </summary>
         public static string ChangePasswordSuccessMessage {
             get {
                 return ResourceManager.GetString("ChangePasswordSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incorrect Password.
+        /// </summary>
+        public static string IncorrectPassword {
+            get {
+                return ResourceManager.GetString("IncorrectPassword", resourceCulture);
             }
         }
         
@@ -165,6 +201,24 @@ namespace AllyisApps.Resources.Controllers.Auth {
         public static string StatusErrorMessage {
             get {
                 return ResourceManager.GetString("StatusErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The subdomain name provided has already been taken!.
+        /// </summary>
+        public static string SubdomainTaken {
+            get {
+                return ResourceManager.GetString("SubdomainTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Token was not assigned properly..
+        /// </summary>
+        public static string Token {
+            get {
+                return ResourceManager.GetString("Token", resourceCulture);
             }
         }
         
@@ -282,6 +336,15 @@ namespace AllyisApps.Resources.Controllers.Auth {
         public static string YouDontHaveASubscriptionToTimeTracker {
             get {
                 return ResourceManager.GetString("YouDontHaveASubscriptionToTimeTracker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your Organization.
+        /// </summary>
+        public static string YourOrg {
+            get {
+                return ResourceManager.GetString("YourOrg", resourceCulture);
             }
         }
     }

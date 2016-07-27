@@ -32,10 +32,12 @@ namespace AllyisApps.Controllers
 
 				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.UserDeletedSuccessfully, Variety.Success));
 
-				return this.RedirectToAction("Manage");
+				return this.RedirectToAction(ActionConstants.Manage);
 			}
-
-			return this.View("Error", new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.CannotEditMembersMessage), "Account", "RemoveUser"));
+			else
+			{
+				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.CannotEditMembersMessage), ControllerConstants.Account, ActionConstants.RemoveUser));
+			}
 		}
 	}
 }

@@ -31,8 +31,8 @@ namespace AllyisApps.Controllers
 				LanguageName = l.LanguageName,
 				CultureName = l.CultureName
 			}).ToList();
-			
-			return this.View("_Footer", model);
+
+			return this.View(ViewConstants.Footer, model);
 		}
 	}
 }

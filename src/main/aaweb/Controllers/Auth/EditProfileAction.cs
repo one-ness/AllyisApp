@@ -41,6 +41,7 @@ namespace AllyisApps.Controllers
 				DateOfBirth = userInfo.DateOfBirth,
 				ValidCountries = AccountService.ValidCountries()
 			};
+
 			ViewBag.returnUrl = returnUrl;
 
 			return this.View(model);
@@ -72,6 +73,7 @@ namespace AllyisApps.Controllers
 					PostalCode = model.PostalCode,
 					PhoneNumber = model.PhoneNumber
 				}));
+
 				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.UpdateProfileSuccessMessage, Variety.Success));
 
 				if (!string.IsNullOrWhiteSpace(returnUrl))

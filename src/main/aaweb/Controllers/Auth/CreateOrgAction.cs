@@ -42,7 +42,7 @@ namespace AllyisApps.Controllers
 		{
 			if (!this.IsSubdomainNameUnique(model.SubdomainName))
 			{
-				ModelState.AddModelError(string.Empty, "The subdomain name provided has already been taken!");
+				ModelState.AddModelError(string.Empty, Resources.Controllers.Auth.Strings.SubdomainTaken);
 			}
 
 			if (model != null && ModelState.IsValid)
@@ -68,7 +68,7 @@ namespace AllyisApps.Controllers
 				OrgService.UpdateActiveOrganization(UserContext.UserId, orgId);
 
 				// Redirect the user to the details page.
-				string url = string.Format("http://{0}.{1}/Account/Manage", model.SubdomainName, GlobalSettings.WebRoot);
+				string url = string.Format("http://{0}.{1}/{2}/{3}", model.SubdomainName, GlobalSettings.WebRoot, ControllerConstants.Account, ActionConstants.Manage);
 				return this.Redirect(url);
 			}
 

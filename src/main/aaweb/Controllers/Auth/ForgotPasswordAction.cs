@@ -45,7 +45,7 @@ namespace AllyisApps.Controllers
 				if (info != null)
 				{
 					// user exists, reset code is generated.
-					string callbackUrl = Url.Action("ResetPassword", "Account", new { userId = info.UserId, code = info.Code.ToString() }, protocol: Request.Url.Scheme);
+					string callbackUrl = Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, new { userId = info.UserId, code = info.Code.ToString() }, protocol: Request.Url.Scheme);
 
 					EmailService mail = new EmailService();
 					string msgbody = new System.Web.HtmlString(string.Format("Please reset your password by clicking <a href=\"{0}\">here</a>", callbackUrl)).ToString();
@@ -53,7 +53,7 @@ namespace AllyisApps.Controllers
 				}
 
 				// irrespective of failure/success, show the confirmation
-				return this.View("ForgotPasswordConfirmation");
+				return this.View(ViewConstants.ForgotPasswordConfirmation);
 			}
 
 			return this.View(model);

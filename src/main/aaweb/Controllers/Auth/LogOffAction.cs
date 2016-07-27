@@ -30,6 +30,7 @@ namespace AllyisApps.Controllers
 			Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.LogOffSuccess, Variety.Success));
 
 			// redirect to home
+			// TODO: we shouldnt be hard coding http
 			return this.Redirect(string.Format("http://{0}", GlobalSettings.WebRoot));
 		}
 	}

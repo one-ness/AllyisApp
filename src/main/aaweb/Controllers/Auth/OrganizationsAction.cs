@@ -16,19 +16,20 @@ namespace AllyisApps.Controllers
 	/// Controller for account and organization related actions.
 	/// </summary>
 	public partial class AccountController : BaseController
-    {
-        /// <summary>
-        /// Get /Account/Organizations
-        /// View a list of organizations.
-        /// </summary>
-        /// <returns>What to do.</returns>
-        public ActionResult Organizations()
-        {
-            var model = new AccountOrgsViewModel
+	{
+		/// <summary>
+		/// Get /Account/Organizations
+		/// View a list of organizations.
+		/// </summary>
+		/// <returns>What to do.</returns>
+		public ActionResult Organizations()
+		{
+			var model = new AccountOrgsViewModel
 			{
 				Organizations = AccountService.GetOrganizationsByUserId()
 			};
-            return this.View(model);
-        }
-    }
+
+			return this.View(model);
+		}
+	}
 }

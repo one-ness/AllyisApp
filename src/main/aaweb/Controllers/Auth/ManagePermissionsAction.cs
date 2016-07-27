@@ -102,13 +102,13 @@ namespace AllyisApps.Controllers
 				if (model.SelectedActions == null)
 				{
 					Notifications.Add(new BootstrapAlert("No actions were selected.", Variety.Danger));
-					return RedirectToAction("Manage");
+					return RedirectToAction(ActionConstants.Manage);
 				}
 
 				if (model.SelectedUsers == null)
 				{
 					Notifications.Add(new BootstrapAlert("No users were selected.", Variety.Danger));
-					return RedirectToAction("Manage");
+					return RedirectToAction(ActionConstants.Manage);
 				}
 
 				model.SelectedActions.OrganizationId = UserContext.ChosenOrganizationId;
@@ -169,7 +169,7 @@ namespace AllyisApps.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
-			return RedirectToAction("Manage");
+			return RedirectToAction(ActionConstants.Manage);
 		}
 
 		/// <summary>

@@ -42,7 +42,7 @@ namespace AllyisApps.Controllers
 				ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(productId);
 				if (!model.IsValid)
 				{
-					return this.View("Details", orgId);
+					return this.View(ViewConstants.Details, orgId);
 				}
 
 				CrmService.InitializeSettingsForProduct(model.ProductId);
@@ -51,12 +51,12 @@ namespace AllyisApps.Controllers
 
 				model.CurrentUsers = CrmService.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Count();
 
-				return this.View("Subscribe", model);
+				return this.View(ViewConstants.Subscribe, model);
 			}
 
 			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 
-			return this.View("Error", new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Errors.CannotEditSubscriptionsMessage), "Subscription", "Subscribe"));
+			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Errors.CannotEditSubscriptionsMessage), ControllerConstants.Subscription, ActionConstants.Subscribe));
 		}
 
 		/// <summary>
@@ -113,19 +113,19 @@ namespace AllyisApps.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 				ViewBag.ErrorInfo = "Permission";
 
-				return this.View("Error", new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Errors.CannotEditSubscriptionsMessage), "Account", "Subscribe"));
+				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Errors.CannotEditSubscriptionsMessage), ControllerConstants.Account, ActionConstants.Subscribe));
 			}
 
 			if (model == null)
 			{
-				return this.View("Error", new HandleErrorInfo(new ArgumentNullException(@Resources.Errors.ModelNullMessage), "Account", "Subscribe"));
+				return this.View(ViewConstants.Error, new HandleErrorInfo(new ArgumentNullException(@Resources.Errors.ModelNullMessage), ControllerConstants.Account, ActionConstants.Subscribe));
 			}
 
 			if (model.NumberOfUsers < CrmService.GetUsersWithSubscriptionToProductInOrganization(model.OrganizationId, model.ProductId).Count())
 			{
 				Notifications.Add(new BootstrapAlert("You must first remove users from your subscription before reducing the number of users.", Variety.Danger));
 
-				return this.RedirectToAction("Subscribe", new { productName = model.ProductId });
+				return this.RedirectToAction(ActionConstants.Subscribe, new { productName = model.ProductId });
 			}
 
 			if (model.Billing.Amount == 0)
@@ -153,7 +153,7 @@ namespace AllyisApps.Controllers
 			{
 				if (string.IsNullOrEmpty(stripeToken) && string.IsNullOrEmpty(model.StripeToken))
 				{
-					return this.View("AddBillingToSubscribe", model);
+					return this.View(ViewConstants.AddBillingToSubscribe, model);
 				}
 
 				string orgCustomer = CrmService.GetOrgCustomer();
@@ -215,7 +215,7 @@ namespace AllyisApps.Controllers
 				CrmService.UpdateSubscriptionUsers(model.SelectedSku, model.NumberOfUsers);
 			}
 
-			return this.RedirectToAction("Manage");
+			return this.RedirectToAction(ActionConstants.Manage);
 		}
 	}
 }

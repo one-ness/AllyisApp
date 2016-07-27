@@ -53,7 +53,7 @@ namespace AllyisApps.Controllers
 			}
 
 			ViewBag.ReturnUrl = returnUrl;
-			return this.View("_LogOnPartial", model);
+			return this.View(ViewConstants.LogOnPartial, model);
 		}
 	}
 }

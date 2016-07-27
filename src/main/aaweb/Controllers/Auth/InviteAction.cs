@@ -39,7 +39,7 @@ namespace AllyisApps.Controllers
 				{
 					org.Organization = OrgService.GetOrganization(org.OrganizationId);
 					org = await this.ProcessUserInput(org);
-					
+
 					foreach (string user in org.AddedUsers)
 					{
 						Notifications.Add(new BootstrapAlert(user + Resources.Controllers.Auth.Strings.UserAddedSuccessfully, Variety.Success));
@@ -54,16 +54,16 @@ namespace AllyisApps.Controllers
 					{
 						Notifications.Add(new BootstrapAlert(user + Resources.Controllers.Auth.Strings.UserAlreadyExists, Variety.Warning));
 					}
-					
-					return this.RedirectToAction("Manage");
+
+					return this.RedirectToAction(ActionConstants.Manage);
 				}
 
 				// Permission failure
-				return this.View("Error", new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.CannotEditMembersMessage), "Account", "Invite"));
-			} 
+				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.CannotEditMembersMessage), ControllerConstants.Account, ActionConstants.Invite));
+			}
 
 			// Invalid model; try again
-			return this.RedirectToAction("Manage");
+			return this.RedirectToAction(ActionConstants.Manage);
 		}
 
 		//// TODO: If the services get consolidated into one class, this method could be moved to Services and a business object created to mirror OrganizationAddMembersViewModel.
@@ -78,30 +78,19 @@ namespace AllyisApps.Controllers
 		{
 			if (!string.IsNullOrEmpty(orgAddMembers.Email))
 			{
-				string userEmail = orgAddMembers.Email.Trim();				
+				string userEmail = orgAddMembers.Email.Trim();
 				if (AccountService.IsEmailAddressValid(userEmail))
 				{ // If input string kinda looks like an email..
 					UserInfo user = await AccountService.GetUserByEmail(userEmail); // ...Attempt to get the user data by email.
-																						// If that doesn't return null...
+																					// If that doesn't return null...
 					if (user != null)
 					{
 						OrgRoleInfo role = OrgService.GetOrgRole(orgAddMembers.OrganizationId, user.UserId); // ...see if they have permissions in this organization already
-																																// If not...
-					
+																											 // If not...
+
 						if (role == null)
 						{
-							////OrgService.AddToOrganization(user.UserId, orgAddMembers.OrganizationId, orgAddMembers.SubscriptionProjectId, orgAddMembers.AddAsOwner ? (int)OrganizationRole.Owner : (int)OrganizationRole.Member);
-							////orgAddMembers.AddedUsers.Add(userEmail);
-							////IEnumerable<SubscriptionDisplayInfo> subs = CrmService.GetSubscriptionsDisplayByOrg(orgAddMembers.OrganizationId);
 
-							////foreach (SubscriptionRoleSelectionModel subRole in orgAddMembers.SubscriptionRoles)
-							////{
-							////	SubscriptionDisplayInfo currentSub = subs.Where(x => x.SubscriptionId == subRole.SubscriptionId).SingleOrDefault();
-							////	if (currentSub != null && currentSub.SubscriptionsUsed < currentSub.NumberOfUsers)
-							////	{
-							////		OrgService.UpdateSubscriptionUserProductRole(subRole.SelectedRole, subRole.SubscriptionId, user.UserId);
-							////	}
-							////}
 						}
 						else
 						{
@@ -109,41 +98,39 @@ namespace AllyisApps.Controllers
 							return orgAddMembers;
 						}
 					}
-					////else
-					////{
-						// input string is not associated with an existing user
-						// so send them an email and let them know of the request
-						orgAddMembers.EmailedUsers.Add(userEmail);
-						UserInfo requestingUser = AccountService.GetUserInfo();
-						int code = new Random().Next(100000);
-						int invitationId = await OrgService.InviteNewUser(
-							string.Format("{0} {1}", requestingUser.FirstName, requestingUser.LastName),
-							GlobalSettings.WebRoot,
-							new InvitationInfo
-							{
-								Email          = userEmail,
-								FirstName      = orgAddMembers.FirstName,
-								LastName       = orgAddMembers.LastName,
-								OrganizationId = orgAddMembers.OrganizationId,
-								AccessCode     = code.ToString(),
-								DateOfBirth    = DateTime.MinValue.AddYears(1754),
-								OrgRole        = (int)(orgAddMembers.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member),
-								ProjectId      = orgAddMembers.SubscriptionProjectId
-							});
 
-						orgAddMembers.AccessCode = code.ToString();
-
-						if (orgAddMembers.SubscriptionRoles != null)
+					// input string is not associated with an existing user
+					// so send them an email and let them know of the request
+					orgAddMembers.EmailedUsers.Add(userEmail);
+					UserInfo requestingUser = AccountService.GetUserInfo();
+					int code = new Random().Next(100000);
+					int invitationId = await OrgService.InviteNewUser(
+						string.Format("{0} {1}", requestingUser.FirstName, requestingUser.LastName),
+						GlobalSettings.WebRoot,
+						new InvitationInfo
 						{
-							foreach (SubscriptionRoleSelectionModel role in orgAddMembers.SubscriptionRoles)
+							Email = userEmail,
+							FirstName = orgAddMembers.FirstName,
+							LastName = orgAddMembers.LastName,
+							OrganizationId = orgAddMembers.OrganizationId,
+							AccessCode = code.ToString(),
+							DateOfBirth = DateTime.MinValue.AddYears(1754),
+							OrgRole = (int)(orgAddMembers.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member),
+							ProjectId = orgAddMembers.SubscriptionProjectId
+						});
+
+					orgAddMembers.AccessCode = code.ToString();
+
+					if (orgAddMembers.SubscriptionRoles != null)
+					{
+						foreach (SubscriptionRoleSelectionModel role in orgAddMembers.SubscriptionRoles)
+						{
+							if (!role.Disabled && role.SelectedRole != 0)
 							{
-								if (!role.Disabled && role.SelectedRole != 0)
-								{
-									OrgService.CreateInvitationSubRole(invitationId, role.SubscriptionId, role.SelectedRole);
-								}
+								OrgService.CreateInvitationSubRole(invitationId, role.SubscriptionId, role.SelectedRole);
 							}
 						}
-					////}
+					}
 
 					return orgAddMembers;
 				}
@@ -164,10 +151,10 @@ namespace AllyisApps.Controllers
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.InvitationDeleteNotification, Variety.Success));
 
-				return this.RedirectToAction("Manage");
+				return this.RedirectToAction(ActionConstants.Manage);
 			}
 
-			return this.View("Error", new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.CannotEditMembersMessage), "Account", "RemoveInvitation"));
+			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.CannotEditMembersMessage), ControllerConstants.Account, ActionConstants.RemoveInvitation));
 		}
 	}
 }

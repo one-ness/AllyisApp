@@ -49,8 +49,9 @@ namespace AllyisApps.Core
 		{
 			get
 			{
-				this.TempData["Alerts"] = this.TempData["Alerts"] ?? new List<BootstrapAlert>();
-				return (ICollection<BootstrapAlert>)this.TempData["Alerts"];
+				const string tempDataKey = "Alerts";
+				this.TempData[tempDataKey] = this.TempData[tempDataKey] ?? new List<BootstrapAlert>();
+				return (ICollection<BootstrapAlert>)this.TempData[tempDataKey];
 			}
 		}
 
@@ -119,27 +120,11 @@ namespace AllyisApps.Core
 		{
 			if (Request.IsAuthenticated)
 			{
-				return this.RedirectToSubDomainAction(UserContext.ChosenOrganizationId, null, null, "Home");
+				return this.RedirectToSubDomainAction(UserContext.ChosenOrganizationId, null, null, ControllerConstants.Home);
 			}
 
-			return this.RedirectToAction("Index");
+			return this.RedirectToAction(ActionConstants.Index);
 		}
-
-		//// Trying out elimination of this method. Keeping the code here for now in case removing it breaks more than anticipated.
-		/////// <summary>
-		/////// Action for redirecting and adding a notification. Used primarily with ajax calls that return json objects for creating notifications.
-		/////// </summary>
-		/////// <param name="url">The url to redirect to.</param>
-		/////// <param name="message">The message to display.</param>
-		/////// <param name="notificationType">The name of the type of notification style to use.</param>
-		/////// <returns>Redirect to Action Result.</returns>
-		////[HttpGet]
-		////public ActionResult RedirectWithNotification(string url, string message, string notificationType)
-		////{
-		////	this.Notifications.Add(new BootstrapAlert(message, notificationType));
-
-		////	return this.RedirectToAction(url);
-		////}
 
 		/// <summary>
 		/// On action executing - executed before every action.
@@ -177,8 +162,6 @@ namespace AllyisApps.Core
 
 					if (chosenOrgID != 0 && UserContext.ChosenOrganizationId != chosenOrgID)
 					{
-						// &&                  // We don't want to hit the database every time, only when the active org is different
-						// (AccountService.GetOrganizationsByUserId().Where(x => x.OrganizationId == chosenOrgID).FirstOrDefault() != null)) // We also don't want to update if the user is not a part of this organization
 						OrgService.UpdateActiveOrganization(UserContext.UserId, chosenOrgID);
 					}
 				}
@@ -195,10 +178,11 @@ namespace AllyisApps.Core
 			}
 			else
 			{
-				if (TempData["language"] != null)
+				const string tempDataKey = "language";
+				if (TempData[tempDataKey] != null)
 				{
-					languageID = (int)TempData["language"];
-					TempData["language"] = languageID; // Store it again for next request.
+					languageID = (int)TempData[tempDataKey];
+					TempData[tempDataKey] = languageID; // Store it again for next request.
 				}
 			}
 
@@ -211,27 +195,5 @@ namespace AllyisApps.Core
 				ViewBag.languageName = language.LanguageName;
 			}
 		}
-
-		/////// <summary>
-		/////// For language support.
-		/////// </summary>
-		////protected override void ExecuteCore()
-		////{
-		////	int culture = 0;
-		////	if (this.Session == null || this.Session["CurrentCulture"] == null)
-		////	{
-
-		////		int.TryParse(System.Configuration.ConfigurationManager.AppSettings["Culture"], out culture);
-		////		this.Session["CurrentCulture"] = culture;
-		////	}
-		////	else
-		////	{
-		////		culture = (int)this.Session["CurrentCulture"];
-		////	}
-		////	// calling CultureHelper class properties for setting  
-		////	CultureHelper.CurrentCulture = culture;
-
-		////	base.ExecuteCore();
-		////}
 	}
 }

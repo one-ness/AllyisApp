@@ -38,8 +38,10 @@ namespace AllyisApps.Controllers
 			{
 				return this.Redirect(returnUrl);
 			}
-
-			return this.RedirectToAction("Index", "Home");
+			else
+			{
+				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Home);
+			}
 		}
 	}
 }

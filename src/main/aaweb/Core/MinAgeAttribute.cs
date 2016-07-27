@@ -11,10 +11,9 @@ using AllyisApps.Utilities;
 namespace AllyisApps.Utilities
 {
 	/// <summary>
-	///     Validator for a minimum age.
+	/// Validator for a minimum age.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Property |
-		AttributeTargets.Field, AllowMultiple = false)]
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 	public sealed class MinAgeAttribute : ValidationAttribute
 	{
 		private readonly int age;
@@ -40,8 +39,7 @@ namespace AllyisApps.Utilities
 			{
 				return new ValidationResult(Resources.Errors.ArugmentNullMessage);
 			}
-
-			if ((DateTime)value <= DateTime.Now.AddYears(-this.age))
+			else if ((DateTime)value <= DateTime.Now.AddYears(-this.age))
 			{
 				return ValidationResult.Success;
 			}

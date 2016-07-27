@@ -27,8 +27,8 @@ namespace AllyisApps.Controllers
 		[AllowAnonymous]
 		public ActionResult ResetPassword(string userId, string code)
 		{
-             return code == null || userId == null ? this.View("Error", new HandleErrorInfo(new ArgumentException(@Resources.Errors.ParameterErrorMessage), "Subscription", "Subscribe")) : this.View();
-        }
+			 return code == null || userId == null ? this.View(ViewConstants.Error, new HandleErrorInfo(new ArgumentException(@Resources.Errors.ParameterErrorMessage), ControllerConstants.Subscription, ActionConstants.Subscribe)) : this.View();
+		}
 
 		/// <summary>
 		/// POST: /Account/ResetPassword.
@@ -39,16 +39,16 @@ namespace AllyisApps.Controllers
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
+		{
+			if (ModelState.IsValid)
+			{
 				if (await AccountService.ResetPassword(int.Parse(model.UserId), model.Code, model.Password))
 				{
-					return this.RedirectToAction("ResetPasswordConfirmation", "Account");
+					return this.RedirectToAction(ActionConstants.ResetPasswordConfirmation, ControllerConstants.Account);
 				}
-            }
+			}
 
-            return this.View(model);
+			return this.View(model);
 		}
 
 		/// <summary>
@@ -58,7 +58,7 @@ namespace AllyisApps.Controllers
 		[AllowAnonymous]
 		public ActionResult ResetPasswordConfirmation()
 		{
-            return this.View();
+			return this.View();
 		}
 	}
 }

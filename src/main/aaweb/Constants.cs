@@ -32,6 +32,11 @@ namespace AllyisApps
 		public const string Charge = "Charge";
 
 		/// <summary>
+		/// Action-Name: ConfirmEmail.
+		/// </summary>
+		public const string ConfirmEmail = "ConfirmEmail";
+
+		/// <summary>
 		/// Action-Name: CreateOrg.
 		/// </summary>
 		public const string CreateOrg = "CreateOrg";
@@ -137,9 +142,19 @@ namespace AllyisApps
 		public const string RemoveMember = "RemoveMember";
 
 		/// <summary>
+		/// Action-Name: RemoveMember.
+		/// </summary>
+		public const string RemoveUser = "RemoveUser";
+
+		/// <summary>
 		/// Action-Name: ResetPassword.
 		/// </summary>
 		public const string ResetPassword = "ResetPassword";
+
+		/// <summary>
+		/// Action-Name: ResetPasswordConfirmation.
+		/// </summary>
+		public const string ResetPasswordConfirmation = "ResetPasswordConfirmation";
 
 		/// <summary>
 		/// Action-Name: RouteHome.
@@ -198,14 +213,14 @@ namespace AllyisApps
 	public static class ControllerConstants
 	{
 		/// <summary>
-		/// For when you need a key for storing your Controller value or some such thing.
-		/// </summary>
-		public const string Controller = "Controller";
-
-		/// <summary>
 		/// Controller-Name: Account.
 		/// </summary>
 		public const string Account = "Account";
+
+		/// <summary>
+		/// For when you need a key for storing your Controller value or some such thing.
+		/// </summary>
+		public const string Controller = "Controller";
 
 		/// <summary>
 		/// Controller-Name: Home.
@@ -213,8 +228,64 @@ namespace AllyisApps
 		public const string Home = "Home";
 
 		/// <summary>
+		/// Controller-Name: Organization.
+		/// </summary>
+		public const string Organization = "Organization";
+
+		/// <summary>
 		/// Controller-Name: Shared.
 		/// </summary>
 		public const string Shared = "Shared";
+
+		/// <summary>
+		/// Controller-Name: Subscription.
+		/// </summary>
+		public const string Subscription = "Subscription";
+	}
+
+	/// <summary>
+	/// Constants for view Strings.
+	/// </summary>
+	public static class ViewConstants
+	{
+		/// <summary>
+		/// View-Name: AddBillingToSubscribe.
+		/// </summary>
+		public const string AddBillingToSubscribe = "AddBillingToSubscribe";
+
+		/// <summary>
+		/// View-Name: ConfirmRemoveBillingInformation.
+		/// </summary>
+		public const string ConfirmRemoveBillingInformation = "ConfirmRemoveBillingInformation";
+
+		/// <summary>
+		/// View-Name: Details.
+		/// </summary>
+		public const string Details = "Details";
+
+		/// <summary>
+		/// View-Name: Error.
+		/// </summary>
+		public const string Error = "Error";
+
+		/// <summary>
+		/// View-Name: Footer.
+		/// </summary>
+		public const string Footer = "_Footer";
+
+		/// <summary>
+		/// View-Name: ForgotPasswordConfirmation.
+		/// </summary>
+		public const string ForgotPasswordConfirmation = "ForgotPasswordConfirmation";
+
+		/// <summary>
+		/// View-Name: LogOnPartial.
+		/// </summary>
+		public const string LogOnPartial = "_LogOnPartial";
+
+		/// <summary>
+		/// View-Name: Subscribe.
+		/// </summary>
+		public const string Subscribe = "Subscribe";
 	}
 }

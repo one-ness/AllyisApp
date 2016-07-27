@@ -14,15 +14,15 @@ namespace AllyisApps.Controllers
 	/// Controller for home pages / site-wide functions.
 	/// </summary>
 	public partial class HomeController : BaseController
-    {
-        /// <summary>
-        /// Displays the Home page.
-        /// </summary>
-        /// <returns>The result of this action.</returns>
-        [AllowAnonymous]
-        public ActionResult Index()
-        {
-            return this.View();
-        }
-    }
+	{
+		/// <summary>
+		/// Displays the Home page.
+		/// </summary>
+		/// <returns>The result of this action.</returns>
+		[AllowAnonymous]
+		public ActionResult Index()
+		{
+			return this.View();
+		}
+	}
 }

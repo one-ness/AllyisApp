@@ -29,15 +29,15 @@ namespace AllyisApps.Controllers
 				ProductInfo product = CrmService.GetProductById(productId);
 				if (product != null && !string.IsNullOrWhiteSpace(product.ProductName))
 				{
-					return this.RedirectToSubDomainAction(organizationId, product.ProductName, null, "Home");
+					return this.RedirectToSubDomainAction(organizationId, product.ProductName, null, ControllerConstants.Home);
 				}
 				else
 				{
-					return this.RedirectToAction("Index", "Home");
+					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Home);
 				}
 			}
 
-			return this.RedirectToAction("Index");
+			return this.RedirectToAction(ActionConstants.Index);
 		}
 	}
 }

@@ -103,7 +103,7 @@ namespace AllyisApps.Controllers
 						{
 							// no subs or multiple subs, redirect to subscription management
 							this.UserContext.ChosenOrganizationId = this.UserContext.UserOrganizationInfoList.First().OrganizationId;
-							return this.RedirectToSubDomainAction(this.UserContext.UserOrganizationInfoList.First().OrganizationId, null, "Manage", "Account");
+							return this.RedirectToSubDomainAction(this.UserContext.UserOrganizationInfoList.First().OrganizationId, null, ActionConstants.Manage, ControllerConstants.Account);
 						}
 						else
 						{
@@ -117,19 +117,19 @@ namespace AllyisApps.Controllers
 						var org = this.UserContext.UserOrganizationInfoList.Find(x => x.OrganizationId == this.UserContext.ChosenOrganizationId);
 						if (org != null)
 						{
-							return this.RedirectToSubDomainAction(org.OrganizationId, null, "Manage", "Account");
+							return this.RedirectToSubDomainAction(org.OrganizationId, null, ActionConstants.Manage, ControllerConstants.Account);
 						}
 						else
 						{
 							// otherwise send them to select an org
-							return this.RedirectToAction("Organizations", "Account");
+							return this.RedirectToAction(ActionConstants.Organizations, ControllerConstants.Account);
 						}
 					}
 				}
 				else
 				{
 					// They must not have an org.  Just redirect to account page so they can create one.
-					return this.RedirectToAction("Index", "Account");
+					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 				}
 			}
 			else

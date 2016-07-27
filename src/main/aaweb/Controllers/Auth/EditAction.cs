@@ -48,11 +48,11 @@ namespace AllyisApps.Controllers
 				{
 					// Organization updated successfully
 					Notifications.Add(new BootstrapAlert(@Resources.Controllers.Auth.Strings.OrganizationDetailsUpdated, Variety.Success));
-					return this.RedirectToAction("Manage");
+					return this.RedirectToAction(ActionConstants.Manage);
 				}
 
 				// Organization update failed due to invalid permissions
-				return this.View("Error", new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.CannotEditProfileMessage), "Organization", "Edit"));
+				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.CannotEditProfileMessage), ControllerConstants.Organization, ActionConstants.Edit));
 			}
 
 			// Model is invalid, try again
@@ -80,7 +80,7 @@ namespace AllyisApps.Controllers
 			}
 
 			ViewBag.ErrorInfo = "Permission";
-			return this.View("Error", new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.CannotEditProfileMessage), "Organization", "Edit"));
+			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.CannotEditProfileMessage), ControllerConstants.Organization, ActionConstants.Edit));
 		}
 
 		/// <summary>

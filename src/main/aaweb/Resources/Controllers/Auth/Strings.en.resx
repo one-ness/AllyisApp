@@ -192,4 +192,25 @@
   <data name="YouDontHaveASubscriptionToTimeTracker" xml:space="preserve">
     <value>You don't have a subscription to Time Tracker!</value>
   </data>
+  <data name="IncorrectPassword" xml:space="preserve">
+    <value>Incorrect Password</value>
+  </data>
+  <data name="Billing" xml:space="preserve">
+    <value>Billing information accepted.</value>
+  </data>
+  <data name="BillingRemoved" xml:space="preserve">
+    <value>Billing information removed.</value>
+  </data>
+  <data name="CannotRemoveBilling" xml:space="preserve">
+    <value>You cannot remove your billing information while you are still paying for subscriptions!</value>
+  </data>
+  <data name="SubdomainTaken" xml:space="preserve">
+    <value>The subdomain name provided has already been taken!</value>
+  </data>
+  <data name="Token" xml:space="preserve">
+    <value>Token was not assigned properly.</value>
+  </data>
+  <data name="YourOrg" xml:space="preserve">
+    <value>Your Organization</value>
+  </data>
 </root>

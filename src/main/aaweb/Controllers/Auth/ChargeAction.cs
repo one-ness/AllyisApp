@@ -27,20 +27,25 @@ namespace AllyisApps.Controllers
 			{
 				if (stripeToken == null)
 				{
-                    Notifications.Add(new Core.Alert.BootstrapAlert("Token was not assigned properly.", Core.Alert.Variety.Warning));
+					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Controllers.Auth.Strings.Token, Core.Alert.Variety.Warning));
 
-                    return this.RedirectToAction("OrgIndex");
+					return this.RedirectToAction(ActionConstants.OrgIndex);
 				}
+				else
+				{
 
-				CrmService.UpdateBillingInfo(stripeToken, stripeEmail);
+					CrmService.UpdateBillingInfo(stripeToken, stripeEmail);
 
-                Notifications.Add(new Core.Alert.BootstrapAlert("Billing information accepted", Core.Alert.Variety.Success));
-                return this.RedirectToAction("Manage");
+					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Controllers.Auth.Strings.Billing, Core.Alert.Variety.Success));
+					return this.RedirectToAction(ActionConstants.Manage);
+				}
 			}
-
-			// Incorrect permissions
-			Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
-			return this.RedirectToAction("OrgIndex");
+			else
+			{
+				// Incorrect permissions
+				Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
+				return this.RedirectToAction(ActionConstants.OrgIndex);
+			}
 		}
 	}
 }

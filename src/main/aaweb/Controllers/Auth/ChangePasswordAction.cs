@@ -40,18 +40,14 @@ namespace AllyisApps.Controllers
 			{
 				return this.View(model);
 			}
-
-			if (model.NewPassword.CompareTo(model.ConfirmPassword) == 0)
+			else if (model.NewPassword.CompareTo(model.ConfirmPassword) == 0 && await AccountService.ChangePassword(model.OldPassword, model.NewPassword))
 			{
-				if (await AccountService.ChangePassword(model.OldPassword, model.NewPassword))
-				{
-					Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Controllers.Auth.Strings.ChangePasswordSuccessMessage, Variety.Success));
+				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.ChangePasswordSuccessMessage, Variety.Success));
 
-					return this.RedirectToAction("Index");
-				}
+				return this.RedirectToAction(ActionConstants.Index);
 			}
 
-			ModelState.AddModelError(string.Empty, "Incorrect Password");
+			ModelState.AddModelError(string.Empty, Resources.Controllers.Auth.Strings.IncorrectPassword);
 
 			return this.View(model);
 		}

@@ -74,7 +74,7 @@ namespace AllyisApps.Controllers
 				Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
 			}
 
-			return RedirectToAction("Index");
+			return RedirectToAction(ActionConstants.Index);
 		}
 
 		/// <summary>

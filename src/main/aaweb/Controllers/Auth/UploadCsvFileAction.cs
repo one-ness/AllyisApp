@@ -45,7 +45,7 @@ namespace AllyisApps.Controllers
 					if (s == fileExt)
 					{
 						extValid = true;
-                        break;
+						break;
 					}
 				}
 
@@ -53,7 +53,7 @@ namespace AllyisApps.Controllers
 				{
 					string notification = string.Format("File type {0} not valid", fileExt);
 					Notifications.Add(new BootstrapAlert(notification, Variety.Warning));
-					return this.RedirectToAction("Add");
+					return this.RedirectToAction(ActionConstants.Add);
 				}
 
 				StreamReader reader = new StreamReader(upload.InputStream);
@@ -96,7 +96,7 @@ namespace AllyisApps.Controllers
 				}
 			}
 
-			return this.RedirectToAction("Manage");
+			return this.RedirectToAction(ActionConstants.Manage);
 		}
 	}
 }

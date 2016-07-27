@@ -38,7 +38,7 @@ namespace AllyisApps.Controllers
 			}
 
 			Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
-			return this.RedirectToAction("OrgIndex");
+			return this.RedirectToAction(ActionConstants.OrgIndex);
 		}
 
 		/// <summary>

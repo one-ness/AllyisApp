@@ -18,12 +18,12 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Shows the Help page.
 		/// </summary>
-        /// <returns>
-        /// Returns view for help.
-        /// </returns>
+		/// <returns>
+		/// Returns view for help.
+		/// </returns>
 		public ActionResult Help()
-        {
-            return this.View();
+		{
+			return this.View();
 		}
 	}
 }

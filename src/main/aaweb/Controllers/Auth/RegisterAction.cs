@@ -63,18 +63,18 @@ namespace AllyisApps.Controllers
 
 					// send confirmation email
 					string confirmCode = await AccountService.GetConfirmEmailCode(userID);
-					string url = Url.Action("ConfirmEmail", "Account", new { userId = userID, code = confirmCode }, protocol: Request.Url.Scheme);
+					string url = Url.Action(ActionConstants.ConfirmEmail, ControllerConstants.Account, new { userId = userID, code = confirmCode }, protocol: Request.Url.Scheme);
 					await AccountService.SendConfirmationEmail("support@allyisapps.com", model.Email, url);
 
 					if (AccountService.GetInvitationsByUser(model.Email).Count > 0)
 					{
 						// If the user was invited, redirect to the index page to display invitations 
-						return this.RedirectToAction("Index");
+						return this.RedirectToAction(ActionConstants.Index);
 					}
 					else
 					{
 						// Else redirect the user to create an organization
-						return this.RedirectToAction("CreateOrg");
+						return this.RedirectToAction(ActionConstants.CreateOrg);
 					}
 				}
 				else

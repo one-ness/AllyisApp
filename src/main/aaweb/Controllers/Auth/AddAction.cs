@@ -39,7 +39,7 @@ namespace AllyisApps.Controllers
 			}
 
 			ViewBag.ErrorInfo = "Permission";
-			return this.View("Error", new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Errors.CannotEditMembersMessage), "Account", "Add"));
+			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Errors.CannotEditMembersMessage), ControllerConstants.Account, ActionConstants.Add));
 		}
 
 		/// <summary>
