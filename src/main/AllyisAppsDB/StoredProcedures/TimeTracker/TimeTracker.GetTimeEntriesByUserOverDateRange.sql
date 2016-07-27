@@ -17,10 +17,10 @@ SELECT DISTINCT [TimeEntryId]
   FROM [TimeTracker].[TimeEntry]
   WITH (NOLOCK) 
   LEFT JOIN [Auth].[User] WITH (NOLOCK) ON [User].[UserId] = [TimeEntry].[UserId]
-    LEFT JOIN [Crm].[Project] WITH (NOLOCK) ON [Project].[ProjectId] = [TimeEntry].[ProjectId]
-	LEFT JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].CustomerId = [Project].[CustomerId]
+    LEFT JOIN [Crm].[Project] WITH (NOLOCK) ON ([Project].[ProjectId] = [TimeEntry].[ProjectId] OR [Project].[ProjectId] = 0)
+	LEFT JOIN [Crm].[Customer] WITH (NOLOCK) ON ([Customer].CustomerId = [Project].[CustomerId] OR [Customer].[CustomerId] = 0)
   WHERE [User].[UserId] IN (SELECT [userId] FROM @UserId)
   AND [Date] >= @StartingDate
   AND [Date] <= @EndingDate
-  AND [Customer].[OrganizationId] = @OrganizationId
+  AND ([Customer].[OrganizationId] = @OrganizationId OR [Customer].[OrganizationId] = 0)
   ORDER BY [Date] ASC

@@ -5,7 +5,7 @@
 @model EditTimeEntryViewModel
 
 @{
-    bool create = Model.ProjectId == 0;
+    bool create = Model.ProjectId < 0;
     bool edit = !create;
     string form = create ? "CreateTimeEntry" : "EditTimeEntry";
 
@@ -13,17 +13,19 @@
     string extrastyle = create ? "create" : "";
     string hiddensample = Model.Hidden ? "hidden-sample" : "";
     string approvalClass = Model.ModSinceApproval ? "pending" :
-                           Model.ApprovalState == (int)ApprovalState.NotApproved ? "rejected" :
-                           Model.ApprovalState == (int)ApprovalState.Approved ? "approved" : "";
+					  Model.ApprovalState == (int)ApprovalState.NotApproved ? "rejected" :
+					  Model.ApprovalState == (int)ApprovalState.Approved ? "approved" : "";
     bool locked = Model.Locked;//Model.IsDateLocked();
     string lockedClass = locked ? "locked" : "";
     bool disabledString = locked ? true : false;
     var canManage = ViewBag.canManage;
+    List<SelectListItem> blankList = new List<SelectListItem>();
+    blankList.Add(new SelectListItem() { Selected = true, Text = "", Value = "" });
 
     // do not render the date add form if they can't use it
     if (create && locked)
     {
-        return;
+	    return;
     }
 }
 <div class="inline-form-anim-wrap @(hiddensample) @(lockedClass)">
@@ -48,10 +50,10 @@
             {
                 if (canManage)
                 {
-                    @Html.DropDownListDisabled("ProjectIdDdl", from c in Model.ProjectsWithInactive  //Ddl name must be different than model property name or the selected value cannot be adjusted
+                    @Html.DropDownListDisabled("ProjectIdDdl", Model.ProjectId == 0 ? blankList : from c in Model.ProjectsWithInactive  //Ddl name must be different than model property name or the selected value cannot be adjusted
                                                                select new SelectListItem
                                                                {
-                                                                   Selected = (Model.ProjectsWithInactive.Count() == 2) ? (!(c.ProjectId == 0)) : (Model.ProjectId == c.ProjectId), //Automatically selects project if it is the only one - Select Project is a project with Id of 0
+                                                                   Selected = (Model.ProjectsWithInactive.Count() == 2) ? (!(c.ProjectId < 0)) : (Model.ProjectId == c.ProjectId), //Automatically selects project if it is the only one - Select Project is a project with Id of 0
                                                                                                                                                                                     //Selected = (Model.ProjectId == c.ProjectId),
                                                                    Text = (c.ProjectId != 0) ? (string.Format("{0} - {1}", c.CustomerName, c.ProjectName)) : c.ProjectName,    //Only need customer - project text for project ids !=0
                                                                                                                                                                                   //Text = ((Model.Projects.Count() == 2) ? (!(c.ProjectId == 0)) : (Model.ProjectId == c.ProjectId)).ToString(),
@@ -61,10 +63,10 @@
 }
                 else
                 {
-                    @Html.DropDownListDisabled("ProjectIdDdl", from c in Model.Projects  //Ddl name must be different than model property name or the selected value cannot be adjusted
+                    @Html.DropDownListDisabled("ProjectIdDdl", Model.ProjectId == 0 ? blankList : from c in Model.Projects  //Ddl name must be different than model property name or the selected value cannot be adjusted
                                                                select new SelectListItem
                                                                {
-                                                                   Selected = (Model.Projects.Count() == 2) ? (!(c.ProjectId == 0)) : (Model.ProjectId == c.ProjectId), //Automatically selects project if it is the only one - Select Project is a project with Id of 0
+                                                                   Selected = (Model.Projects.Count() == 2) ? (!(c.ProjectId < 0)) : (Model.ProjectId == c.ProjectId), //Automatically selects project if it is the only one - Select Project is a project with Id of 0
                                                                                                                                                                         //Selected = (Model.ProjectId == c.ProjectId),
                                                                    Text = (c.ProjectId != 0) ? (string.Format("{0} - {1}", c.CustomerName, c.ProjectName)) : c.ProjectName,    //Only need customer - project text for project ids !=0
                                                                                                                                                             //Text = ((Model.Projects.Count() == 2) ? (!(c.ProjectId == 0)) : (Model.ProjectId == c.ProjectId)).ToString(),

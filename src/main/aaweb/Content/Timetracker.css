@@ -11426,6 +11426,14 @@ label.required:after {
     background-color: rgba(245, 245, 245, 0.5);
 }
 
+.table-row .holiday {
+	background-color: #C6E0B4;
+}
+
+.holiday .form-control {
+	background-color: rgba(198,224,180, 1);
+}
+
 .inline-form-anim-wrap {
 	-webkit-transition: all 1s ease;
 	-o-transition: all 1s ease;

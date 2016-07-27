@@ -31,3 +31,16 @@ FROM (
 WHERE [Customer].[IsActive] >= @Activity
 	AND [Project].[IsActive] >= @Activity
 	AND [ProjectUser].[IsActive] >= @Activity
+	UNION ALL
+SELECT	[ProjectId],
+		[CustomerId],
+		0,
+		[CreatedUTC],
+		[Name],
+		[IsActive],
+		(SELECT [Name] FROM [Auth].[Organization] WHERE [OrganizationId] = 0),
+		(SELECT [Name] FROM [Crm].[Customer] WHERE [CustomerId] = 0),
+		0,
+		0,
+		0
+		FROM [Crm].[Project] WHERE [ProjectId] = 0

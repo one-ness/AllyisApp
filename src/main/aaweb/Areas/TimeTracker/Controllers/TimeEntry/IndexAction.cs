@@ -89,7 +89,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			IDictionary<int, ProjectHours> hours = new Dictionary<int, ProjectHours>();
 			IEnumerable<HolidayInfo> holidays = TimeTrackerService.GetHolidays().Where(x => (startingDate < x.Date && x.Date < endingDate)); // We only care about holidays within the date range
 
-			foreach (CompleteProjectInfo proj in allProjects)
+			foreach (CompleteProjectInfo proj in allProjects.Where(p=>p.ProjectId>0))
 			{
 				// if ( hours.Count == 0 )
 				hours.Add(proj.ProjectId, new ProjectHours { Project = proj, Hours = 0.0f });
@@ -109,7 +109,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				PayClasses = TimeTrackerService.GetPayClasses(orgId),
 				GrandTotal = new ProjectHours { Project = new CompleteProjectInfo { ProjectName = "Total" }, Hours = 0.0f },
 				Projects = allProjects.Where(x => x.IsActive == true && x.IsCustomerActive == true && x.IsUserActive == true),
-				ProjectsWithInactive = allProjects,
+				ProjectsWithInactive = allProjects.Where(p=>p.ProjectId != 0),
 				StartDate = SetStartingDate(startingDate, startOfWeek),
 				EndDate = SetEndingDate(endingDate, startOfWeek),
 				Entries = new List<EditTimeEntryViewModel>(),
@@ -131,7 +131,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// back to the formula so that the weekend highlighting is based off of start of week.
 			// int weekend = 7 + ((int)startOfWeek - 2); // weekend = both days before startOfWeek
 			int weekend = (int)StartOfWeekEnum.Saturday;
-
+            bool holidayPopulated = false;
 			// For each date in the date range
 			for (var date = result.StartDate; date <= result.EndDate;)
 			{
@@ -152,18 +152,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					// And add its entry to Entries.
 					bool isProjectDeleted = result.Projects.Where(x => x.ProjectId == iter.Current.ProjectId).Select(x => x.ProjectName).FirstOrDefault() == null;
-					result.Entries.Add(new EditTimeEntryViewModel
-					{
-						TimeEntryId = iter.Current.TimeEntryId,
-						ProjectId = iter.Current.ProjectId,
-						PayClassId = iter.Current.PayClassId,
-						UserId = iter.Current.UserId,
-						Date = iter.Current.Date,
-						Duration = string.Format("{0:D2}:{1:D2}", (int)iter.Current.Duration, (int)Math.Round((iter.Current.Duration - (int)iter.Current.Duration) * 60, 0)),
-						Description = iter.Current.Description,
-						StartingDate = result.StartDate,
-						EndingDate = result.EndDate,
-						IsOffDay = (weekend % 7 == (int)iter.Current.Date.DayOfWeek || (weekend + 1) % 7 == (int)iter.Current.Date.DayOfWeek) ? true : false,
+                    result.Entries.Add(new EditTimeEntryViewModel
+                    {
+                        TimeEntryId = iter.Current.TimeEntryId,
+                        ProjectId = iter.Current.ProjectId,
+                        PayClassId = iter.Current.PayClassId,
+                        UserId = iter.Current.UserId,
+                        Date = iter.Current.Date,
+                        Duration = string.Format("{0:D2}:{1:D2}", (int)iter.Current.Duration, (int)Math.Round((iter.Current.Duration - (int)iter.Current.Duration) * 60, 0)),
+                        Description = iter.Current.Description,
+                        StartingDate = result.StartDate,
+                        EndingDate = result.EndDate,
+                        IsOffDay = (weekend % 7 == (int)iter.Current.Date.DayOfWeek || (weekend + 1) % 7 == (int)iter.Current.Date.DayOfWeek) ? true : false,
+                        IsHoliday = TimeTrackerService.GetHolidays().Any(x => x.Date == date),
 						OrganizationId = orgId,
 						Projects = result.Projects,
 						ProjectsWithInactive = result.ProjectsWithInactive,
@@ -174,27 +175,66 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						PayClasses = result.PayClasses,
 						Locked = iter.Current.ApprovalState == (int)Core.ApprovalState.Approved || isProjectDeleted
 					});
+                    if (holidays.Where(x => x.Date == iter.Current.Date).FirstOrDefault() != null)
+                        holidayPopulated = true;
 					iter.MoveNext();
+                    //date = date.AddDays(1);
 				}
-				else if ((holidays.Where(x => x.Date == iter.Current.Date).FirstOrDefault() != null) && iter.Current.Date == date.Date)
+				else if ((holidays.Where(x => x.Date == date).FirstOrDefault() != null) && (iter.Current == null || iter.Current.Date != date) && !holidayPopulated)
 				{
-					// Prepopulate holidays (TODO: Also prepopulate PTO?)
-					// TODO: There's a lot of design discussion that needs to happen before we implement this. For example, should we have an internal customer with
-					// its own projects for Holidays, PTO, etc.? Where should we store the paytypes and durations for holidays? Where do we store the IDs for these?
-					iter.MoveNext();
+                    holidayPopulated = true;
+                    // Prepopulate holidays (TODO: Also prepopulate PTO?)
+                    // TODO: There's a lot of design discussion that needs to happen before we implement this. For example, should we have an internal customer with
+                    // its own projects for Holidays, PTO, etc.? Where should we store the paytypes and durations for holidays? Where do we store the IDs for these?
+
+                    result.GrandTotal.Hours += 8;
+
+                    TimeEntryInfo TE = new TimeEntryInfo()
+                    {
+                        ApprovalState = 1,
+                        Date = date,
+                        Duration = 8,
+                        UserId = userId,
+                        ProjectId = 0,
+                        PayClassId = TimeTrackerService.GetPayClassByNameAndOrg("Holiday", orgId).PayClassID,
+                        Description = holidays.Where(x => x.Date == date).First().HolidayName
+                    };
+
+                    int TEID = TimeTrackerService.CreateTimeEntry(TE);
+
+                    result.Entries.Add(new EditTimeEntryViewModel
+                    {
+                        TimeEntryId = TEID,
+                        Date = date,
+                        UserId = userId,
+                        StartingDate = result.StartDate,
+                        EndingDate = result.EndDate,
+                        IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
+                        IsHoliday = TimeTrackerService.GetHolidays().Any(x => x.Date == date),
+                        OrganizationId = orgId,
+                        Projects = result.Projects,
+                        ProjectsWithInactive = result.ProjectsWithInactive,
+                        PayClassId = TE.PayClassId,
+                        PayClasses = result.PayClasses,
+                        Duration = string.Format("{0:D2}:{1:D2}", (int)TE.Duration, (int)Math.Round((TE.Duration - (int)TE.Duration) * 60, 0)),
+                        Description = TE.Description,
+                        ProjectName = allProjects.Where(x => x.ProjectId == 0).Select(x => x.ProjectName).FirstOrDefault(),
+                    });
 				}
 				else
 				{
-					// Otherwise, create an empty entry.
-					result.Entries.Add(new EditTimeEntryViewModel
-					{
-						Sample = true,
-						Date = date,
-						UserId = userId,
-						StartingDate = result.StartDate,
-						EndingDate = result.EndDate,
-						IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
-						OrganizationId = orgId,
+                    // Otherwise, create an empty entry.
+                    result.Entries.Add(new EditTimeEntryViewModel
+                    {
+                        Sample = true,
+                        Date = date,
+                        UserId = userId,
+                        StartingDate = result.StartDate,
+                        EndingDate = result.EndDate,
+                        IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
+                        IsHoliday = TimeTrackerService.GetHolidays().Any(x => x.Date == date),
+                        OrganizationId = orgId,
+                        ProjectId = -1,
 						Projects = result.Projects,
 						ProjectsWithInactive = result.ProjectsWithInactive,
 						PayClassId = TimeTrackerService.GetPayClassByNameAndOrg("Regular", orgId).PayClassID,
@@ -203,6 +243,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					// Go to the next day.
 					date = date.AddDays(1.0d);
+                    holidayPopulated = false;
 				}
 			}
 

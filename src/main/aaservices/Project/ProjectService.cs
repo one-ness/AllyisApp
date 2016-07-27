@@ -366,9 +366,9 @@ namespace AllyisApps.Services.Project
 		/// <returns>CompleteProjectInfo instance.</returns>
 		public CompleteProjectInfo GetProject(int projectId)
 		{
-			if (projectId <= 0)
+			if (projectId < 0)
 			{
-				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be negative.");
 			}
 
 			return BusinessObjectsHelper.InitializeCompleteProjectInfo(DBHelper.GetProjectById(projectId));
