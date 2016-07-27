@@ -15,6 +15,8 @@ namespace AllyisApps.ViewModels
 	/// </summary>
 	public class EditOrganizationViewModel : BaseViewModel
 	{
+		private const string CharsToReplace = @"""/\[]:|<>+=; ,?*'`()@";
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EditOrganizationViewModel"/> class.
 		/// </summary>
@@ -115,5 +117,22 @@ namespace AllyisApps.ViewModels
 		/// Gets a list of valid countries.
 		/// </summary>
 		public IEnumerable<string> ValidCountries { get; internal set; }
+
+		/// <summary>
+		/// Cleans things.
+		/// </summary>
+		/// <param name="stringToClean">The thing to clean.</param>
+		/// <returns>The cleaned thing.</returns>
+		public string Clean(string stringToClean)
+		{
+			if (stringToClean == null)
+			{
+				return string.Empty;
+			}
+			else
+			{
+				return CharsToReplace.Aggregate(stringToClean, (str, l) => str.Replace(string.Empty + l, string.Empty));
+			}
+		}
 	}
 }

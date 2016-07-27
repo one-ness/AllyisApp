@@ -23,7 +23,7 @@
                     @title
                     @if (Model.CanEditOrganization)
                     {
-                        <a href="@Url.Action("Manage", "Account")" title="Manage Organization" class="pull-right text-muted">
+                        <a href="@Url.Action(ActionConstants.Manage, ControllerConstants.Account)" title="Manage Organization" class="pull-right text-muted">
                             <i class="fa fa-cog  fa-lg"></i>
                         </a>
                     }
@@ -34,14 +34,11 @@
                     <p>
                         <label>@AllyisApps.Resources.Views.Account.Strings.PhoneNumber:</label>
                         @details.PhoneNumber
-                        @*Model.UserInfo.PhoneNumber @Model.UserInfo.PhoneExtension*@
                     </p>
                     <p>
                         <label>@AllyisApps.Resources.Views.Account.Strings.Address:</label>
                         <span class="address-row">@details.Address</span>
                         <span class="address-row">@cityState @details.PostalCode</span>
-                        @*<span class="address-row">@Model.UserInfo.Address</span>
-                            <span class="address-row">@cityState @Model.UserInfo.PostalCode</span>*@
                     </p>
                 </div>
                 <div class="col-sm-4 index-details">

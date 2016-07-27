@@ -56,7 +56,7 @@ if (query.Any())
 				@foreach (var row in query)
 					{
 						string link_text = linkTextOverride ?? (string)row.OrganizationName;
-					    @Html.ActionLink(link_text, "ApplicationRedirect", "Home",
+					    @Html.ActionLink(link_text, ActionConstants.ApplicationRedirect, ControllerConstants.Home,
 									routeValues: new { productid = product_id, organizationId = row.OrganizationId },
 									htmlAttributes: new { @class = "list-group-item" })
 					}

@@ -17,29 +17,6 @@
 }
 
 @section Modals {
-    @* <div id="OrgEditModal" class="modal fade" tabindex="-1">
-            @Html.Partial("_OrgEdit", Model.Edit)
-        </div>*@
-
-    @*<div id="InviteMemberModal" class="modal fade" tabindex="-1">
-            @Html.Partial("_OrgInvite", Model.Add)
-        </div>*@
-
-    @*<div id="InvitationReviewModal" class="modal fade" tabindex="-1">
-            @Html.Partial("_ModalInvitation", emptyInvite)
-        </div>*@
-
-    @*<!-- Modal -->
-        <div class="modal fade" id="sharedModal" tabindex="-1" role="dialog" @*aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="square-center"><div>Loading...<i class="fa fa-4x fa-spin fa-cog fa-fw"></i></div></div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->*@
 }
 
 @Html.AntiForgeryToken() @*Used by the javascript dynamic form methods below (for removing users/invitations)*@
@@ -53,12 +30,7 @@
                     @AllyisApps.Resources.Views.Account.Strings.OrganizationDetails
                     @if (Model.CanEditOrganization)
                     {
-                        @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Edit, "Edit", null, new { @class = "pull-right text-muted" })
-                        @*<a href=""  title="Edit Organization Details"
-                                class="pull-right text-muted"
-                                data-toggle="modal" data-target="#OrgEditModal">
-                                <i class="fa fa-edit fa-lg"></i>
-                            </a>*@
+                        @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Edit, ActionConstants.Edit, null, new { @class = "pull-right text-muted" })
 }
 
                 </h1>
@@ -90,26 +62,12 @@
             <h1 class="panel-title">
                 @AllyisApps.Resources.Views.Account.Strings.Members
                 <span class="pull-right panel-title">
-                    @if (Model.CanEditOrganization) //was if(Permissions.Can(OrgAction.EditSubscriptionUsers))
+                    @if (Model.CanEditOrganization)
                     {
-                        <a href="@Url.Action("ManagePermissions")" title=@AllyisApps.Resources.Views.Account.Strings.ManagePermissions><span class="fa fa-fw fa-lg fa-users text-warning"></span></a>}
-                    @if (Model.CanEditOrganization && Model.SubscriptionCount > 0) //was previously: if (Permissions.Can(OrgAction.AddMembers) && DB Helper.Instance.CheckSubscription(Model.OrganizationId, 1) != null
+                        <a href="@Url.Action(ActionConstants.ManagePermissions)" title=@AllyisApps.Resources.Views.Account.Strings.ManagePermissions><span class="fa fa-fw fa-lg fa-users text-warning"></span></a>}
+                    @if (Model.CanEditOrganization && Model.SubscriptionCount > 0) 
                     {
-                        <a href="@Url.Action("Add")" title=@AllyisApps.Resources.Views.Account.Strings.AddMembers><span class="fa fa-fw fa-plus fa-lg text-info"></span></a>
-                        @*@Html.ActionLink("Add", "Add", null, new { @class = "pull-right text-muted" })*@
-                        @*<a href="#" title="Add Member"
-                               class="text-muted"
-                               data-toggle="modal" data-target="#InviteMemberModal" data-keyboard="true" onclick="clearInviteModal()">
-                                <i class="fa fa-fw fa-plus fa-lg"></i>
-                            </a>*@
-}
-                    @*@if (Permissions.Can(OrgAction.EditMembers))
-                        {
-                            <a href="@Url.Action("Manage", "Org")" class="text-muted"
-                                title="Manage Members">
-                                <i class="fa fa-cog  fa-lg"></i>
-                            </a>
-                        }*@
+                        <a href="@Url.Action(ActionConstants.Add)" title=@AllyisApps.Resources.Views.Account.Strings.AddMembers><span class="fa fa-fw fa-plus fa-lg text-info"></span></a>}
                 </span>
             </h1>
         </div>
@@ -168,9 +126,9 @@
 
         @* Members *@
         function removeUser(orgId, userId, fullName) {
-            var result = confirm( "@AllyisApps.Resources.Views.Account.Strings.RemoveFromOrg" + fullName + "@AllyisApps.Resources.Views.Account.Strings.RemoveFromOrgEnd");
+            var result = confirm("@AllyisApps.Resources.Views.Account.Strings.RemoveFromOrg" + fullName + "@AllyisApps.Resources.Views.Account.Strings.RemoveFromOrgEnd");
             if (result == true) {
-                var url = "@Url.Action("RemoveMember", "Account")?userId=" + userId;
+                var url = "@Url.Action(ActionConstants.RemoveMember, ControllerConstants.Account)?userId=" + userId;
 
                 var form = document.createElement('form');
                 form.setAttribute('method', 'post');
@@ -216,7 +174,7 @@
         function deleteInvitation(orgId, invId) {
             var result = confirm("@AllyisApps.Resources.Views.Account.Strings.RemoveInvitation");
             if (result == true) {
-                var url = "@Url.Action("RemoveInvitation","Account")?invitationId=" + invId;
+                var url = "@Url.Action(ActionConstants.RemoveInvitation, ControllerConstants.Account)?invitationId=" + invId;
 
                 var token = $('[name="__RequestVerificationToken"]').val();
 

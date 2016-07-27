@@ -3,10 +3,10 @@
     Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
     ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.EditProfile;
 }
-@{ ViewData.Add("Controller", "Account"); }
-@{ ViewData.Add("Action", "EditProfile"); }
+@{ ViewData.Add(ControllerConstants.Controller, ControllerConstants.Account); }
+@{ ViewData.Add(ActionConstants.Action, ActionConstants.EditProfile); }
 
-@using (Html.BeginForm((string)(ViewData["Action"]), (string)ViewData["Controller"], new { ReturnUrl = (string)(ViewBag.ReturnUrl) }, FormMethod.Post, new { @class = "form", role = "form" }))
+@using (Html.BeginForm((string)(ViewData[ActionConstants.Action]), (string)ViewData[ControllerConstants.Controller], new { ReturnUrl = (string)(ViewBag.ReturnUrl) }, FormMethod.Post, new { @class = "form", role = "form" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(string.Empty, new { @class = "text-danger" })

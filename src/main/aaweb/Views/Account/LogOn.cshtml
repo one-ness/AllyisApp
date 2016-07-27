@@ -5,7 +5,7 @@
     ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.SignIn;
 }
 
-@using (Html.BeginForm("LogOn", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm(ActionConstants.LogOn, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
 
@@ -30,10 +30,10 @@
             <input type="submit" value="@AllyisApps.Resources.Views.Account.Strings.SignIn" class="btn btn-primary" />
         </p>
         <p>
-            @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.RegisterLinkText, "Register", new { ReturnUrl = ViewBag.ReturnUrl })
+            @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.RegisterLinkText, ActionConstants.Register, new { ReturnUrl = ViewBag.ReturnUrl })
         </p>
         <p>
-            @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.ForgotPasswordViewTitle, "ForgotPassword")
+            @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.ForgotPasswordViewTitle, ActionConstants.ForgotPassword)
         </p>
     </div>
 }

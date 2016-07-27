@@ -10,11 +10,11 @@
     @AllyisApps.Resources.Views.Account.Strings.ConfirmRemoveBilling 
 </p>
 
-@using (Html.BeginForm("RemoveBilling", "Account", FormMethod.Post))
+@using (Html.BeginForm(ActionConstants.RemoveBilling, ControllerConstants.Account, FormMethod.Post))
 {
 
     <div class="form-group allyis-action-buttons">
-        @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+        @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
         <input type="submit" class="btn btn-primary" value=@AllyisApps.Resources.Views.Account.Strings.Continue>
     </div>
 

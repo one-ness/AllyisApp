@@ -8,9 +8,8 @@
     var cost = (userCount - 5).ToString("c");
 }
 
-@using (Html.BeginForm("Subscribe", "Account", FormMethod.Post, new { @class = "form-inline" }))
+@using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, FormMethod.Post, new { @class = "form-inline" }))
 {
-    @*<input type="hidden" value="@Model.ProductId" name="productName" />*@
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.OrganizationId)
     @Html.HiddenFor(m => m.ProductId)
@@ -46,7 +45,7 @@
                     </div>
                     <div class="panel-footer">
                         <div class="pull-right">
-                            @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+                            @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
                             <input type="submit" class="btn btn-primary" value=@AllyisApps.Resources.Views.Account.Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...';">
                         </div>
                         <div class="clearfix"></div>

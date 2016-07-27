@@ -9,74 +9,18 @@
     <li>
         @if (Model.ChosenOrganizationId > 0)
         {
-            <a href="@Url.SubdomainLink("OrgIndex", "Account", null, Model.ChosenOrganizationId, this.Request)">@Model.ChosenOrganizationName</a>
+            <a href="@Url.SubdomainLink(ActionConstants.OrgIndex, ControllerConstants.Account, null, Model.ChosenOrganizationId, this.Request)">@Model.ChosenOrganizationName</a>
         }
     </li>
 
-    @*if (Model.UserOrganizationBriefInfoList.Count > 0)
-    {
-        <li class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                @if (Model.ChosenOrganizationId > 0)
-                {
-                    @:@Model.ChosenOrganizationName
-                }
-                else
-                {
-                    @:Your Organizations
-                }
-                <b class="caret"></b>
-            </a>
-            <ul class="dropdown-menu">
-                @if (Model.CanEditOrganization)
-                {
-                    <li>
-                        <a title="Manage Organization"
-                           href="@Url.SubdomainLink("Manage", "Account", new RouteValueDictionary(new { Area = "" }), this.Request.Url.Scheme, @Model.ChosenOrganizationId)"
-                           class="">Manage Organization</a>
-                    </li>
-                }
-                else if (Model.ChosenOrganizationId > 0)
-                {
-                    <li>
-                        <a href="@Url.SubdomainLink("Index", "Account", new RouteValueDictionary(new { Area = "" }), this.Request.Url.Scheme, @Model.ChosenOrganizationId)">
-                            Information
-                        </a>
-                    </li>
-                }
-
-                <li role="separator" class="divider"></li>
-                @if (Model.UserOrganizationBriefInfoList.Count > 0)
-                {
-                    foreach (var item in Model.UserOrganizationBriefInfoList)
-                    {
-                        <li>
-                            <a href="@Url.SubdomainLink("OrgIndex", "Account", null, this.Request.Url.Scheme, @item.OrganizationID)">@item.OrganizationName</a>
-                        </li>
-                    }
-                }
-                else
-                {
-                    <li class="list-placeholder">
-                        No Subscriptions
-                    </li>}
-            </ul>
-        </li>
-    }*@
+   
     <li>
         @{
-            @*if (Model.ChosenOrganizationId == 0) //catches default org case
-            {
-                <a href="@Url.SubdomainLink("Index", "Account", null, 0, this.Request)">@Model.UserName</a>
-            }
-            else
-            {*@
-                <a href="@Url.SubdomainLink("Index", "Account", new RouteValueDictionary(new {area = ""}), Model.ChosenOrganizationId, this.Request)">@Model.UserName</a>
-            @*}*@
+                <a href="@Url.SubdomainLink(ActionConstants.Index, ControllerConstants.Account, new RouteValueDictionary(new {area = ""}), Model.ChosenOrganizationId, this.Request)">@Model.UserName</a>
         }
     </li>
     <li>
-        <a href="@Url.SubdomainLink("LogOff", "Account", null, 0, this.Request)"
+        <a href="@Url.SubdomainLink(ActionConstants.LogOff, ControllerConstants.Account, null, 0, this.Request)"
            title="@AllyisApps.Resources.Views.Shared.Strings.SignOut"
            class="btn btn-default navbar-btn"
            onclick="return promptForLogOff()">
@@ -86,8 +30,8 @@
             }
             else
             {
-                <li>@Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.Register, "Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, htmlAttributes: new { id = "registerLink" })</li>
-                <li>@Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.SignIn, "LogOn", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, htmlAttributes: new { id = "loginLink" })</li>
+                <li>@Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.Register, ActionConstants.Register, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, htmlAttributes: new { id = "registerLink" })</li>
+                <li>@Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.SignIn, ActionConstants.LogOn, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, htmlAttributes: new { id = "loginLink" })</li>
             }
 
 <script>

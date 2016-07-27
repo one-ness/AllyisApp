@@ -16,7 +16,7 @@
 				<span class="icon-bar"></span>
 			</button>
 			<span class="navbar-brand">
-				<a href=@Url.Action("RouteHome", "Account", new RouteValueDictionary(new { area = "" }))>
+				<a href=@Url.Action(ActionConstants.RouteHome, ControllerConstants.Account, new RouteValueDictionary(new { area = "" }))>
 					<img src="~/Content/icons/allyislogo.png" style="height: 32px; float: left; margin-top: -8px; margin-right: 8px;" title="" alt="apps">
 					@AllyisApps.Resources.Views.Shared.Strings.Apps
 				</a>
@@ -31,7 +31,7 @@
 						{
 							Html.RenderPartial(DisplayHints.BreadcrumbNavPartialLocation);
 						}
-					@Html.Action("LogOnPartial", "Shared", new { returnUrl = ViewBag.ReturnUrl, area = "" })
+					@Html.Action(ActionConstants.LogOnPartial, ControllerConstants.Shared, new { returnUrl = ViewBag.ReturnUrl, area = "" })
 
 				</ul>
 			</div>

@@ -61,6 +61,15 @@ namespace AllyisApps.Resources.Views.Home {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Coming Soon.
         /// </summary>
         public static string ComingSoon {
@@ -70,11 +79,38 @@ namespace AllyisApps.Resources.Views.Home {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contact.
+        /// </summary>
+        public static string Contact {
+            get {
+                return ResourceManager.GetString("Contact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Expense.
         /// </summary>
         public static string Expense {
             get {
                 return ResourceManager.GetString("Expense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        public static string Help {
+            get {
+                return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suspendisse semper velit iaculis sem egestas, vel faucibus justo aliquet. Nulla id purus ut lacus dignissim condimentum a at lacus. Suspendisse vitae sapien at eros congue accumsan. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus pharetra vel lectus non tincidunt. Proin eget elit in neque venenatis faucibus non sed quam. Ut condimentum, lorem vitae consequat facilisis, neque ante mattis velit, eget iaculis mauris ipsum eu lacus. Proin efficitur odio metus. Ut ipsum augue, rhoncus a suscipit [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string HelpText {
+            get {
+                return ResourceManager.GetString("HelpText", resourceCulture);
             }
         }
         
@@ -129,6 +165,15 @@ namespace AllyisApps.Resources.Views.Home {
         public static string Tasks {
             get {
                 return ResourceManager.GetString("Tasks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TBD.
+        /// </summary>
+        public static string TBD {
+            get {
+                return ResourceManager.GetString("TBD", resourceCulture);
             }
         }
         

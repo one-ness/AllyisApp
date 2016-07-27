@@ -117,11 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
   <data name="ComingSoon" xml:space="preserve">
     <value>Coming Soon</value>
   </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
   <data name="Expense" xml:space="preserve">
     <value>Expense</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="HelpText" xml:space="preserve">
+    <value>Suspendisse semper velit iaculis sem egestas, vel faucibus justo aliquet. Nulla id purus ut lacus dignissim condimentum a at lacus. Suspendisse vitae sapien at eros congue accumsan. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus pharetra vel lectus non tincidunt. Proin eget elit in neque venenatis faucibus non sed quam. Ut condimentum, lorem vitae consequat facilisis, neque ante mattis velit, eget iaculis mauris ipsum eu lacus. Proin efficitur odio metus. Ut ipsum augue, rhoncus a suscipit quis, malesuada eu ex. Etiam elit ipsum, luctus et pretium id, porta vel lacus. Donec cursus porttitor consequat. Duis ullamcorper interdum eros quis suscipit.</value>
   </data>
   <data name="Invoice" xml:space="preserve">
     <value>Invoice</value>
@@ -140,6 +152,9 @@
   </data>
   <data name="Tasks" xml:space="preserve">
     <value>Tasks</value>
+  </data>
+  <data name="TBD" xml:space="preserve">
+    <value>TBD</value>
   </data>
   <data name="TimeTracker" xml:space="preserve">
     <value>Time Tracker</value>

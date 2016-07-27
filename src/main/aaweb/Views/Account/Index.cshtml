@@ -31,9 +31,9 @@
                     </p>
                 </div>
                 <div class="col-sm-4 vertically-stacked-buttons text-right">
-                    @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.ChangePassword, "ChangePassword", "Account", null, new { @class = "btn btn-default" })
-                    @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.EditProfile, "EditProfile", null, new { @class = "btn btn-default" })
-                    @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.YourOrganizations, "Organizations", null, new { @class = "btn btn-default" })
+                    @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.ChangePassword,    ActionConstants.ChangePassword, ControllerConstants.Account, null, new { @class = "btn btn-default" })
+                    @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.EditProfile,       ActionConstants.EditProfile,    null, new { @class = "btn btn-default" })
+                    @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.YourOrganizations, ActionConstants.Organizations,  null, new { @class = "btn btn-default" })
                 </div>
             </div>
 

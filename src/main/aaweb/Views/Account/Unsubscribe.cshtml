@@ -13,10 +13,10 @@
 	</p>
 </div>
 <div class="row">
-	@using (Html.BeginForm("Unsubscribe", "Account", FormMethod.Post))
+	@using (Html.BeginForm(ActionConstants.Unsubscribe, ControllerConstants.Account, FormMethod.Post))
 	{
 		@Html.AntiForgeryToken()
-		@Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+		@Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
 		<input data-val="true" id="OrganizationId" name="OrganizationId" type="hidden" value="@Model.OrganizationId" />
 		<input data-val="true" id="ProductId" name="ProductId" type="hidden" value="@Model.ProductId" />
 		<input data-val="true" id="PreviousSku" name="PreviousSku" type="hidden" value="@Model.PreviousSku" />

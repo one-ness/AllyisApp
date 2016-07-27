@@ -6,7 +6,6 @@
     ViewBag.TitleBar = AllyisApps.Resources.Views.Account.Strings.Permissions;
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-
     int productId = Model.TimeTrackerId;
     var query = (from entry in Model.Subscriptions where entry.ProductId == productId select entry).FirstOrDefault();
     bool hasTimeTracker = query != null ? true : false;
@@ -47,7 +46,6 @@
                     <div class="list-group-item">
                         <input type="checkbox" data-name="@user.UserName" id="@user.UserId" data-search="@user.UserName" />
                         <label for="@user.UserId">@user.UserName</label>
-                        @*<i onclick="return getinfo(this)" class="fa fa-info-circle fa-lg text-info"></i>*@
                     </div>}
                 @* There was a display issue on chrome where a useless scrollbar would appear if the last element was not included (or didn't display).
                     This makes sure the final element is always included and displays practically invisibly. *@
@@ -94,13 +92,8 @@
             <div class="panel-footer">
                 <div class="form-group allyis-action-buttons status-root" id="do-it-button">
                     <br />
-                    @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, "Manage", "Account", null, new { @class = "btn btn-default" })
+                    @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
                     <input type="submit" value="@AllyisApps.Resources.Views.Account.Strings.Save" class="btn btn-primary" id="actually-do-it" />
-                    @*
-                        <i class="status submitting fa fa-spinner fa-spin"></i>
-                        <i class="status done fa fa-check"></i>
-                        <i class="status error fa fa-warning"></i>
-                    *@
                 </div>
 
             </div>
@@ -223,82 +216,6 @@
             form.appendTo(document.body).submit();
         }
 
-        //// handle the submission of data
-        //function do_it_submit() {
-        //    var data = do_it_gather_data();
-        //    //data.__RequestVerificationToken = $('input[name="__RequestVerificationToken"]').val();
-        //    var status = $("#do-it .status-root");
-        //    status.removeClass("error").removeClass("done").addClass("set submitting");
-        //    $.ajax({
-        //        url: "ManagePermissions",
-        //        type: "POST",
-        //        contentType: 'application/json; charset=utf-8',
-        //        data: JSON.stringify(data),
-        //        dataType: "json",
-        //        timeout: 1000
-        //    }).done(function(res) {
-        //        status.removeClass("error").removeClass("submitting").addClass("done");
-        //        do_it_show_res(res);
-        //        if(res.Status && res.Status != "failure" && res.Status != "error" )
-        //        {
-        //            do_it_clear_inputs();
-        //            do_it_close();
-        //        }
-
-        //    }).error(function() {
-        //        status.removeClass("done").removeClass("submitting").addClass("error");
-        //        do_it_show_res({Result: "Request timed out. Please try again in a few moments.", Results: []});
-        //    })
-        //}
-
-        //function do_it_show_res(res) {
-        //    //var $log = $("#do-it-summary ul.list-group")
-        //    var $log = $("#permissions-alerts");
-        //    var ele_top = $(document.createElement("div"));
-        //    do_it_show_res_clear_log($log);
-        //    if(res.Result && !_.isEmpty(res.Result)) {
-        //        do_it_show_res_add($log, res.Result);
-        //    }
-        //    _.each(res.Results, function(result) {
-        //        do_it_show_res_add($log, result);
-        //    })
-        //}
-
-        //function do_it_show_res_clear_log($log) {
-        //    $log.html("");
-        //}
-
-        //var do_it_show_res_class_map = {
-        //    success: "alert-success",
-        //    partial: "alert-warning",
-        //    failure: "alert-danger",
-        //    error: "alert-danger"
-        //}
-
-        //function do_it_show_res_add($log, entry) {
-        //    var $el = $(document.createElement("div"));
-        //    $el.addClass("alert");
-        //    var text = ""
-        //    // collect a LI string
-        //    if(_.isObject(entry)) {
-        //        $el.addClass(do_it_show_res_class_map[entry.ActionStatus] || "")
-        //        var lis = _.reduce(entry.Users, function(memo, obj) {
-        //            return "{0}<li>{1}<span class='err-msg'>{2}</span></li>".format(
-        //              memo, obj.Name, obj.Message)
-        //        }, "")
-        //        text = "<span class='count'>{0}/{1}</span> <span class='msg'>{2}</span><ul>{3}</ul>".format(
-        //          entry.AffectedUserCount, entry.TotalUserCount, entry.ActionText, lis)
-        //    } else {
-        //        // TODO: Change earlier handling of entry for full success and partial success to
-        //        // render to objects with appropriate entry.ActionStatus attribute
-        //        $el.addClass("alert-info");
-        //        text = entry.toString();
-        //    }
-        //    $el.append(text);
-        //    $log.append($el);
-        //}
-
-        // do_it_submit-helper. Gathers data from the inputs and converts it to a usable form.
         function do_it_gather_data() {
             var checked_actions = _.map(
               $("#actions input[type='checkbox']:checked"),
@@ -322,18 +239,6 @@
             })
             return result;
         }
-
-        //function do_it_clear_inputs() {
-        //    $("#user-list input[type='checkbox']:checked").attr("checked",false).attr("disabled", false);
-        //    $("#actions input[type='checkbox']").attr("checked",false).attr("disabled", false);
-        //    $('#filter-dropdown');
-        //    do_filter();
-        //}
-
-        @*function do_it_close() {
-            window.location.href='@Url.Action("Manage","Account")';
-        }*@
-
 
         //// prep
         $(document).ready(function() {

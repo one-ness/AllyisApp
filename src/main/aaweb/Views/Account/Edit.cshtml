@@ -4,8 +4,8 @@
     Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
     ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.EditOrganization;
 }
-@{ ViewData.Add("Controller", "Account"); }
-@{ ViewData.Add("Action", "Edit"); }
+@{ ViewData.Add(ControllerConstants.Controller, ControllerConstants.Account); }
+@{ ViewData.Add(ActionConstants.Action, ActionConstants.Edit); }
 
 @{ Html.RenderPartial("_OrganizationEditDetailsPartial", Model, ViewData); }
 
@@ -13,7 +13,7 @@
 {
     <script type="text/javascript">
         $(document).ready(function () {
-            var preserveState = '@(Model != null ? Model.State : "")';
+            var preserveState = '@(Model != null ? (AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';
             //$('#State').prop("disabled", true);
 
             if ($('#Country').val() != "") {
@@ -42,10 +42,10 @@
                     contentType: "application/json",
                     success: function (states) {
                         $('#State').empty();
-                        $('#State').append("<option value=\"\">Select...</option>");
-                        for (var i = 0; i < states.length; i++) {
-                            $('#State').append("<option>" + states[i] + "</option>");
-                        }
+                        $('#State').append("<option value=\"\">" + "@AllyisApps.Resources.Views.Account.Strings.DropDownEmpty" + "</option>");
+                        Object.keys(states).forEach(function (key) {
+                            $('#State').append("<option value=\"" + key + "\">" + states[key] + "</option>");
+                        });
                         $('#State').prop("disabled", false);
 
                         successCallback();
@@ -56,7 +56,7 @@
                 });
             } else {
                 $('#State').empty();
-                $('#State').append("<option value=\"\">Select...</option>");
+                $('#State').append("<option value=\"\">" + "@AllyisApps.Resources.Views.Account.Strings.DropDownEmpty" + "</option>");
                 //$('#State').prop("disabled", true);
             }
         }

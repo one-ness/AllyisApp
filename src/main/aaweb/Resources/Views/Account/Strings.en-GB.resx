@@ -552,4 +552,7 @@
   <data name="EditMember" xml:space="preserve">
     <value>Edit Member</value>
   </data>
+  <data name="Terms" xml:space="preserve">
+    <value>Suspendisse semper velit iaculis sem egestas, vel faucibus justo aliquet. Nulla id purus ut lacus dignissim condimentum a at lacus. Suspendisse vitae sapien at eros congue accumsan. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus pharetra vel lectus non tincidunt. Proin eget elit in neque venenatis faucibus non sed quam. Ut condimentum, lorem vitae consequat facilisis, neque ante mattis velit, eget iaculis mauris ipsum eu lacus. Proin efficitur odio metus. Ut ipsum augue, rhoncus a suscipit quis, malesuada eu ex. Etiam elit ipsum, luctus et pretium id, porta vel lacus. Donec cursus porttitor consequat. Duis ullamcorper interdum eros quis suscipit.</value>
+  </data>
 </root>

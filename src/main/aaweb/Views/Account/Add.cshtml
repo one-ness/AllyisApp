@@ -8,18 +8,18 @@
     string left = "col-xs-3 text-right";
     string right = "col-xs-9";
 }
-@{ ViewData.Add("Controller", "Account"); }
-@{ ViewData.Add("Action", "Add"); }
+@{ ViewData.Add(ControllerConstants.Controller, ControllerConstants.Account); }
+@{ ViewData.Add(ActionConstants.Action, ActionConstants.Add); }
 
 <div>
     <h4 class="modal-title">@AllyisApps.Resources.Views.Account.Strings.InviteMember</h4>
 
-    @using (Html.BeginForm("UploadCSVFile", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("UploadCSVFile", ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <div class="bulk">
             <h4>@AllyisApps.Resources.Views.Account.Strings.MultipleMembers</h4>
             <p>
-                @AllyisApps.Resources.Views.Account.Strings.InviteMoreThanOne <a href="@Url.Action("DownloadImportUsersTemplate", "Account")">@AllyisApps.Resources.Views.Account.Strings.ExampleFile</a>.
+                @AllyisApps.Resources.Views.Account.Strings.InviteMoreThanOne <a href="@Url.Action(ActionConstants.DownloadImportUsersTemplate, ControllerConstants.Account)">@AllyisApps.Resources.Views.Account.Strings.ExampleFile</a>.
             </p>
             @*Custom styled buttons wired to browser default upload*@
             <input type="file" id="upload-box" name="upload" style="display:none;"
@@ -41,7 +41,7 @@
         </div>
     }
 
-    @using (Html.BeginForm("Invite", "Account", FormMethod.Post, new { @class = "form-horizontal", id = "OrgAddForm" }))
+    @using (Html.BeginForm(ActionConstants.Invite, ControllerConstants.Account, FormMethod.Post, new { @class = "form-horizontal", id = "OrgAddForm" }))
     {
         <div>
             @Html.AntiForgeryToken()
@@ -134,7 +134,7 @@
         <div>
             <strong><span class="pull-left" hidden="hidden" id="accessCodeDisplay">Access Code: /code/</span></strong>
             <div class="form-group allyis-action-buttons pull-right">
-                @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, "Manage", "Account", null, new { @class = "btn btn-default" })
+                @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
 
                 @if (roomInSubscription)
                 {

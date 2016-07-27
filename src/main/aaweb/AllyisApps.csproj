@@ -179,6 +179,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionConstants.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -854,7 +855,6 @@
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="Views\Account\_Terms.cshtml" />
-    <Content Include="Views\Home\RouteProduct.cshtml" />
     <Content Include="Views\Shared\ErrorQuiet.cshtml" />
     <Content Include="Views\Account\OrgIndex.cshtml" />
     <Content Include="Views\Account\Add.cshtml" />

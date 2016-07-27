@@ -34,7 +34,7 @@
 <div class="modal-body">
     @if (Model.StripeCustomer == null)
     {
-        using (Html.BeginForm("Charge", "Account", FormMethod.Post, new { @style = "display: inline-block" }))
+        using (Html.BeginForm(ActionConstants.Charge, ActionConstants.Account, FormMethod.Post, new { @style = "display: inline-block" }))
         {
         <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
@@ -53,7 +53,7 @@
     }
     else
     {
-        using (Html.BeginForm("Charge", "Account", FormMethod.Post, new { @style = "display: inline-block" }))
+        using (Html.BeginForm(ActionConstants.Charge, ActionConstants.Account, FormMethod.Post, new { @style = "display: inline-block" }))
         {
         <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
@@ -71,12 +71,12 @@
         </script>
         }
 
-        using (Html.BeginForm("RemoveBilling", "Account", FormMethod.Get, new { @style = "display: inline-block; padding: 0 12px;" }))
+        using (Html.BeginForm(ActionConstants.RemoveBilling, ControllerConstants.Account, FormMethod.Get, new { @style = "display: inline-block; padding: 0 12px;" }))
         {
         <input type="submit" class="btn btn-danger" value=@AllyisApps.Resources.Views.Account.Strings.Delete>
 
         }
-        using (Html.BeginForm("GetBillingSummary", "Account", FormMethod.Get, new { @style = "display: inline-block; padding: 0 12px;" }))
+        using (Html.BeginForm(ActionConstants.GetBillingSummary, ControllerConstants.Account, FormMethod.Get, new { @style = "display: inline-block; padding: 0 12px;" }))
         {
         <input type="submit" class="btn btn-primary" value=@AllyisApps.Resources.Views.Account.Strings.GetBillingHistory>
         }
