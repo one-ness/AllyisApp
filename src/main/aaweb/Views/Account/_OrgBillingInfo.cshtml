@@ -34,7 +34,7 @@
 <div class="modal-body">
     @if (Model.StripeCustomer == null)
     {
-        using (Html.BeginForm(ActionConstants.Charge, ActionConstants.Account, FormMethod.Post, new { @style = "display: inline-block" }))
+        using (Html.BeginForm(ActionConstants.Charge, ControllerConstants.Account, FormMethod.Post, new { @style = "display: inline-block" }))
         {
         <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
@@ -53,7 +53,7 @@
     }
     else
     {
-        using (Html.BeginForm(ActionConstants.Charge, ActionConstants.Account, FormMethod.Post, new { @style = "display: inline-block" }))
+        using (Html.BeginForm(ActionConstants.Charge, ControllerConstants.Account, FormMethod.Post, new { @style = "display: inline-block" }))
         {
         <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
