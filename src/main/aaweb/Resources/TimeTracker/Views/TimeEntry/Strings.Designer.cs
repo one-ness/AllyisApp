@@ -133,6 +133,24 @@ namespace AllyisApps.Resources.TimeTracker.Views.TimeEntry {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy previous day.
+        /// </summary>
+        public static string CopyDay {
+            get {
+                return ResourceManager.GetString("CopyDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy previous week.
+        /// </summary>
+        public static string CopyWeek {
+            get {
+                return ResourceManager.GetString("CopyWeek", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current Week.
         /// </summary>
         public static string Current {
@@ -192,6 +210,15 @@ namespace AllyisApps.Resources.TimeTracker.Views.TimeEntry {
         public static string DayAfterThanksgiving {
             get {
                 return ResourceManager.GetString("DayAfterThanksgiving", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to D.
+        /// </summary>
+        public static string DayInitial {
+            get {
+                return ResourceManager.GetString("DayInitial", resourceCulture);
             }
         }
         
@@ -696,6 +723,15 @@ namespace AllyisApps.Resources.TimeTracker.Views.TimeEntry {
         public static string Week {
             get {
                 return ResourceManager.GetString("Week", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to W.
+        /// </summary>
+        public static string WeekInitial {
+            get {
+                return ResourceManager.GetString("WeekInitial", resourceCulture);
             }
         }
         

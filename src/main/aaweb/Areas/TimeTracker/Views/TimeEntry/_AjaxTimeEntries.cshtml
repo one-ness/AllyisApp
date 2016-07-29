@@ -107,11 +107,11 @@
 			   			@if (currentDate.DayOfWeek == startOfWeek)
 				    {
 			   			<td style="padding-right:5px;">
-			   				<a href="@Url.Action("CopyEntries", "TimeEntry", new {startDateTarget=currentDate, startDateCopy=currentDate.AddDays(-7), endDateCopy=currentDate.AddDays(-1), userId=Model.First().UserId})" class="btn btn-primary" style="width:100%" title="Copy Previous Week"><i class="fa fa-files-o"></i> W</a>
+			   				<a href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new {startDateTarget=currentDate, startDateCopy=currentDate.AddDays(-7), endDateCopy=currentDate.AddDays(-1), userId=Model.First().UserId})" class="btn btn-primary" style="width:100%" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyWeek"><i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.WeekInitial</a>
 			   			</td>
 				    }
 			   		<td style="padding-bottom:5px;">
-			   			<a href="@Url.Action("CopyEntries", "TimeEntry", new {startDateTarget=currentDate, startDateCopy=currentDate.AddDays(-1), endDateCopy=currentDate.AddDays(-1), userId=Model.First().UserId})" class="btn btn-primary" style="width:100%;" title="Copy Previous Day"><i class="fa fa-files-o"></i> D</a>
+			   			<a href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new {startDateTarget=currentDate, startDateCopy=currentDate.AddDays(-1), endDateCopy=currentDate.AddDays(-1), userId=Model.First().UserId})" class="btn btn-primary" style="width:100%;" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyDay"><i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DayInitial</a>
 			   		</td>
 			   	</tr>
 			   </table>

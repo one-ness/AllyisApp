@@ -339,4 +339,16 @@
   <data name="UnpaidTimeOff" xml:space="preserve">
     <value>Unpaid Time Off</value>
   </data>
+  <data name="CopyDay" xml:space="preserve">
+    <value>Copy previous day</value>
+  </data>
+  <data name="CopyWeek" xml:space="preserve">
+    <value>Copy previous week</value>
+  </data>
+  <data name="DayInitial" xml:space="preserve">
+    <value>D</value>
+  </data>
+  <data name="WeekInitial" xml:space="preserve">
+    <value>W</value>
+  </data>
 </root>
