@@ -36,11 +36,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
 			{
-				return this.RedirectToAction("Index", "TimeEntry");
+				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
 			}
 
 			Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Home.Strings.ActionUnauthorizedMessage, Variety.Warning));
-			return this.RedirectToAction("Index", "Home", new { area = string.Empty });
+			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Home, new { area = string.Empty });
 		}
 	}
 }

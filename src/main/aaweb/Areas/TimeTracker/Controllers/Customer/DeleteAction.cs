@@ -27,13 +27,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.CustomerDeleteNotification, Variety.Success));
 
-				return this.RedirectToAction("Index");
+				return this.RedirectToAction(ActionConstants.Index);
 			}
 
 			// Permission failure
 			Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
-			return this.RedirectToAction("Index");
+			return this.RedirectToAction(ActionConstants.Index);
 		}
 	}
 }

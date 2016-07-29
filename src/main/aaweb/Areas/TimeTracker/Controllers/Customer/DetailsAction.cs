@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				CustomerInfo customerInfo = CrmService.GetCustomer(id);
 				return this.View(
-					"Details",
+					ViewConstants.Details,
 					new CustomerInfoViewModel
 					{
 						CustomerInfo = customerInfo,
@@ -39,7 +39,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.ActionUnauthorizedMessage, Variety.Warning));
-			return this.View("Index");
+			return this.View(ViewConstants.Index);
 		}
 	}
 }

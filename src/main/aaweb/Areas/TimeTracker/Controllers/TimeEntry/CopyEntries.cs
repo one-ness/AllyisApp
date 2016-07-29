@@ -34,23 +34,23 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// TODO flesh these out
 			if (startDateCopy > endDateCopy)
 			{
-				return this.View("Error");
+				return this.View(ViewConstants.Error);
 			}
 
 			if (startDateCopy > startDateTarget)
 			{
-				return this.View("Error");
+				return this.View(ViewConstants.Error);
 			}
 			#endregion
 
 			// Check for permission failures TODO flesh these out
 			if (userId == UserContext.UserId && !AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
 			{
-				return this.View("Error");
+				return this.View(ViewConstants.Error);
 			}
 			else if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
 			{
-				return this.View("Error");
+				return this.View(ViewConstants.Error);
 			}
 
 			// Authorized to edit this entry
@@ -72,7 +72,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			return this.RedirectToAction("Index"); // Model should be repopulated with new info at the index
+			return this.RedirectToAction(ActionConstants.Index); // Model should be repopulated with new info at the index
 		}
 	}
 }

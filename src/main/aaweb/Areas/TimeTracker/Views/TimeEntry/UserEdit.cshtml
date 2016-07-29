@@ -10,8 +10,7 @@
 
 <div class="shrink-wrap-center">
     <div>
-        @*@using (@Html.BeginForm((string)ViewData["Action"], (string)ViewData["Controller"], FormMethod.Post, new { @class = "form-horizontal", role = "form" }))*@
-        @using (Html.BeginForm("UserEdit", "TimeEntry", FormMethod.Post, new { @class = "", id = "form1", role = "form", onsubmit = "return userSubmit(this);", name = "EditForm" }))
+        @using (Html.BeginForm(ActionConstants.UserEdit, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = string.Empty, id = "form1", role = "form", onsubmit = "return userSubmit(this);", name = "EditForm" }))
         {
             <div>
                 @Html.AntiForgeryToken()
@@ -69,7 +68,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <input type="button" class="btn btn-default" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Cancel onclick="location='@Url.Action("Index", "Home")'" />
+                <input type="button" class="btn btn-default" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Home)'" />
                 <input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save class="btn btn-primary" id="submitUser" />
             </div>
         }
@@ -87,7 +86,7 @@
             e = $(e);
             var token = e.find('input[name="__RequestVerificationToken"]').val();
             $.ajax({
-                url: '@Url.Action("UpdateUserAJAX", "TimeEntry")',
+                url: '@Url.Action(ActionConstants.UpdateUserAJAX, ControllerConstants.TimeEntry)',
                 type: "POST",
                 data: {
                     __RequestVerificationToken: token,
@@ -96,7 +95,7 @@
                     offUser: user_assign_module.get_out()
                 }
             }).done(function () {
-                location = "@Url.Action("Index", "TimeEntry")";
+                location = "@Url.Action(ActionConstants.Index, ControllerConstants.TimeEntry)";
             })
             return false;
         }

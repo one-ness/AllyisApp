@@ -14,7 +14,7 @@
 <div class="row report-wrap">
     <div class="col-md-10 col-md-push-1 col-lg-8 col-lg-push-2">
         <div class="row">
-            @using (Html.BeginForm("ViewReport", "TimeEntry", FormMethod.Post, htmlAttributes: new { @id = "reportForm" }))
+            @using (Html.BeginForm(ActionConstants.ViewReport, ControllerConstants.TimeEntry, FormMethod.Post, htmlAttributes: new { @id = "reportForm" }))
             {
                 @Html.Hidden("OrganizationId", Model.OrganizationId)
                 <!--Get users By subscriptionUser-->
@@ -139,7 +139,7 @@
         </div>
 
         <!--Paging panel-->
-        @using (Html.BeginForm("ViewPage", "TimeEntry", FormMethod.Post, htmlAttributes: new { @id = "viewPageForm" }))
+        @using (Html.BeginForm(ActionConstants.ViewPage, ControllerConstants.TimeEntry, FormMethod.Post, htmlAttributes: new { @id = "viewPageForm" }))
         {
             <div class="panel panel-default" id="footPager" style="border: 0; display: flex; justify-content: space-around; flex-wrap: wrap;">
                 @Html.Hidden("OrganizationId", Model.OrganizationId)

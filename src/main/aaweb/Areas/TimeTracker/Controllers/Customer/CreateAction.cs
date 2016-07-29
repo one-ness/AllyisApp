@@ -34,7 +34,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.ActionUnauthorizedMessage, Variety.Warning));
-			return this.RedirectToAction("Index");
+			return this.RedirectToAction(ActionConstants.Index);
 		}
 
 		/// <summary>
@@ -69,13 +69,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.CustomerCreatedNotification, Variety.Success));
 
 					// Redirect to the user details page
-					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action("Index"), customerId));
+					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index), customerId));
 				}
 
 				// No customer value, should only happen because of a permission failure
 				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
-				return this.RedirectToAction("Index");
+				return this.RedirectToAction(ActionConstants.Index);
 			}
 
 			// Invalid model

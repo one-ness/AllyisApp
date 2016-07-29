@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			else
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
-				return this.RedirectToAction("Index", "Customer");
+				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
 			}
 		}
 	}

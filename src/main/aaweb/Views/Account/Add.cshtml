@@ -14,7 +14,7 @@
 <div>
     <h4 class="modal-title">@AllyisApps.Resources.Views.Account.Strings.InviteMember</h4>
 
-    @using (Html.BeginForm("UploadCSVFile", ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm(ActionConstants.UploadCSVFile, ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <div class="bulk">
             <h4>@AllyisApps.Resources.Views.Account.Strings.MultipleMembers</h4>

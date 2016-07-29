@@ -4,13 +4,13 @@
         @AllyisApps.Resources.TimeTracker.Views.Shared.Strings.TimeTracker <span class="caret"></span>
     </a>
     <ul class="dropdown-menu dropdown-menu-right" id="TheDropdown2">
-        <li>@Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Shared.Strings.TimeEntry, "Index", "TimeEntry")</li>
-        <li>@Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Shared.Strings.Reports, "Report", "TimeEntry")</li>
+        <li>@Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Shared.Strings.TimeEntry, ActionConstants.Index, ControllerConstants.TimeEntry)</li>
+        <li>@Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Shared.Strings.Reports, ActionConstants.Report, ControllerConstants.TimeEntry)</li>
 
         @if (true)// was previously: (Permissions.Can(SubAction.EditCustomer))
             {
-            <li>@Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Shared.Strings.Customers, "Index", "Customer")</li>
-            <li>@Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Shared.Strings.Settings, "Settings", "TimeEntry")</li>
+            <li>@Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Shared.Strings.Customers, ActionConstants.Index, ControllerConstants.Customer)</li>
+            <li>@Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Shared.Strings.Settings, ActionConstants.Settings, ControllerConstants.TimeEntry)</li>
             }
         </ul>
     </li>

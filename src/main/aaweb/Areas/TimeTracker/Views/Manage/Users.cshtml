@@ -44,7 +44,7 @@
             @Html.HiddenFor(m => m.MaxUsers)
             @Html.AntiForgeryToken()
             <div class="form-group pull-right text-right ">
-                @Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Manage.Strings.Cancel, "Manage", "Account", new { Area = "" }, new { @class = "btn btn-default" })
+                @Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Manage.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, new { Area = "" }, new { @class = "btn btn-default" })
                 <input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.Manage.Strings.Save class="btn btn-primary" />
             </div>
         </form>

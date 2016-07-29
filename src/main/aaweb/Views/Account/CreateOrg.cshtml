@@ -88,7 +88,7 @@
             console.log(isLegal);
             if (isLegal) {
                 $.ajax({
-                    url: "@(Url.Action("IsSubdomainNameUnique"))?subname=" + subdomain,
+                    url: "@(Url.Action(ActionConstants.IsSubdomainNameUnique))?subname=" + subdomain,
                     success: function (data) {
                         if ("False" === data) {
                             element_change('#subdomain-wrap', 'no', 'yes');

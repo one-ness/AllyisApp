@@ -2,7 +2,7 @@
 
 <div class="shrink-wrap-center">
     <div>
-        @using (Html.BeginForm((string)(ViewData["Action"]), (string)ViewData["Controller"], new { ReturnUrl = (string)(ViewBag.ReturnUrl) }, FormMethod.Post, new { @class = "", role = "form" }))
+        @using (Html.BeginForm((string)(ViewData[ActionConstants.Action]), (string)ViewData[ControllerConstants.Controller], new { ReturnUrl = (string)(ViewBag.ReturnUrl) }, FormMethod.Post, new { @class = "", role = "form" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(string.Empty, new { @class = "text-danger" })

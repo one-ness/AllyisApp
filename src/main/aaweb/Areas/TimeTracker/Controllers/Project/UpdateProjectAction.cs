@@ -40,13 +40,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			// Update ProjectUser table
 			var oldUserList = ProjectService.GetUsersByProjectId(project.ProjectId);
-			foreach (var id in project.SelectedProjectUserIds.Where(u => !oldUserList.Any(ou => (int.Parse(u) == ou.UserId))))
+			foreach (var id in project.SelectedProjectUserIds.Where(user => !oldUserList.Any(oldUser => (int.Parse(user) == oldUser.UserId))))
 			{
 				// For each new user that is not included in the old user list
 				ProjectService.CreateProjectUser(project.ProjectId, int.Parse(id));
 			}
 
-			foreach (var user in oldUserList.Where(ou => !project.SelectedProjectUserIds.Any(u => (int.Parse(u) == ou.UserId))))
+			foreach (var user in oldUserList.Where(oldUser => !project.SelectedProjectUserIds.Any(user => (int.Parse(user) == oldUser.UserId))))
 			{
 				// For each old user that is not included in the new user list
 				ProjectService.DeleteProjectUser(project.ProjectId, user.UserId);

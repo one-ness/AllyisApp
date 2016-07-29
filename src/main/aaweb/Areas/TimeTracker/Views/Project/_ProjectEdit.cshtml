@@ -15,7 +15,7 @@
 
 <div>
     <div>
-        @using (Html.BeginForm(action, "Project", FormMethod.Post, new { @class = "", id = "ProjectForm", role = "form", name = "EditForm", onsubmit = "return selectAll()" }))
+        @using (Html.BeginForm(action, ControllerConstants.Project, FormMethod.Post, new { @class = "", id = "ProjectForm", role = "form", name = "EditForm", onsubmit = "return selectAll()" }))
         {
             <div>
                 @Html.AntiForgeryToken()
@@ -84,7 +84,7 @@
             <br />
             <br />
             <div class="modal-footer">
-                <input type="button" class="btn btn-default" value=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Cancel onclick="location='@Url.Action("Index", "Customer")'" />
+                <input type="button" class="btn btn-default" value=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer)'" />
                 <input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Save class="btn btn-primary" id="submitProject" />
             </div>    }
     </div><!-- /.modal-content -->

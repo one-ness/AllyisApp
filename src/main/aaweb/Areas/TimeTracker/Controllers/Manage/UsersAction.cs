@@ -69,7 +69,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			// Permissions failure
 			Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Manage.Strings.ActionUnauthorizedMessage, Variety.Warning));
-			return this.View("Error", new HandleErrorInfo(new UnauthorizedAccessException(@Resources.TimeTracker.Controllers.Manage.Strings.ActionUnauthorizedMessage), "Subscription", "EditUsers"));
+			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.TimeTracker.Controllers.Manage.Strings.ActionUnauthorizedMessage), ControllerConstants.Subscription, ActionConstants.EditUsers));
 		}
 
 		/// <summary>
@@ -83,11 +83,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				EditSubscriptionUsersViewModel model = this.ConstructEditSubcriptionUsersViewModel();
 
-				return model.IsValid ? this.View(model) : this.View("Error", new HandleErrorInfo(new ArgumentException(@Resources.Errors.SubscriptionNonExistantMessage), "Subscription", "EditUsers"));
+				return model.IsValid ? this.View(model) : this.View(ViewConstants.Error, new HandleErrorInfo(new ArgumentException(@Resources.Errors.SubscriptionNonExistantMessage), ControllerConstants.Subscription, ActionConstants.EditUsers));
 			}
 
 			Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Manage.Strings.ActionUnauthorizedMessage, Variety.Warning));
-			return this.View("Error", new HandleErrorInfo(new UnauthorizedAccessException(@Resources.TimeTracker.Controllers.Manage.Strings.ActionUnauthorizedMessage), "Subscription", "EditUsers"));
+			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.TimeTracker.Controllers.Manage.Strings.ActionUnauthorizedMessage), ControllerConstants.Subscription, ActionConstants.EditUsers));
 		}
 
 		/// <summary>

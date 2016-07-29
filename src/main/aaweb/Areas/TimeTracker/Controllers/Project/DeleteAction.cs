@@ -24,12 +24,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (ProjectService.DeleteProject(id))
 			{
-				return this.RedirectToAction("Index", "Customer");
+				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
 			}
 
 			// Permissions failure
 			Notifications.Add(new BootstrapAlert("You do not have permission to delete projects", Variety.Warning));
-			return this.RedirectToAction("Index", "Customer");
+			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
 		}
 	}
 }

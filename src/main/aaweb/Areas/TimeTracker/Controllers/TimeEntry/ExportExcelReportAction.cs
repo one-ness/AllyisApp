@@ -65,7 +65,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert("There was no data to be exported!", Variety.Warning));
 			}
 
-			return this.RedirectToAction("Report", new { organizationId = organizationId });
+			return this.RedirectToAction(ActionConstants.Report, new { organizationId = organizationId });
 		}
 	}
 }

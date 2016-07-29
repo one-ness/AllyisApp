@@ -29,8 +29,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			int limit = pageSize == 0 ? data.Count() : pageSize;
 
 			// only process data values for current page
-			IEnumerable<TimeEntryInfo> previewData = (from p in data
-													  select p).Skip(skipNum).Take(limit);
+			IEnumerable<TimeEntryInfo> previewData = (from p in data select p).Skip(skipNum).Take(limit);
 
 			return previewData;
 		}

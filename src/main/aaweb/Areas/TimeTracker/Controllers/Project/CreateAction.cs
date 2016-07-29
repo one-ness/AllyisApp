@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// Permissions failure
 				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
-				return this.RedirectToAction("Index", "Home");
+				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Home);
 			}
 		}
 
@@ -71,14 +71,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					this.UpdateProject(model);
 					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.SuccessProjectCreated, Variety.Success));
 
-					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action("Index", "Customer"), model.ParentCustomerId));
+					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer), model.ParentCustomerId));
 				}
 				else
 				{
 					// Permissions failure
 					this.Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
-					return this.RedirectToAction("Index", "Customer");
+					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
 				}
 			}
 			else

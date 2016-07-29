@@ -60,7 +60,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (model.Data.Count() == 0)
 			{
 				Notifications.Add(new AllyisApps.Core.Alert.BootstrapAlert("There was no data to be exported!", Variety.Warning));
-				return this.RedirectToAction("Report", new { organizationId = organizationId });
+				return this.RedirectToAction(ActionConstants.Report, new { organizationId = organizationId });
 			}
 
 			model.Output = PrepareCSVExport(model.Data, model.Projects);

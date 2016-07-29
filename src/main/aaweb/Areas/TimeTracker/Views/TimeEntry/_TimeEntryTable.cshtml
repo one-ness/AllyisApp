@@ -62,7 +62,7 @@
                     <td>
                         @if (Model[i].TimeEntryId != 0)
                         {
-                            <a href="@Url.Action("DeleteEntry", routeValues: new
+                            <a href="@Url.Action(ActionConstants.DeleteEntry, routeValues: new
                                 {
                                     timeEntryId = Model[i].TimeEntryId,
                                     startingDate = Model[i].StartingDate,

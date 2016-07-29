@@ -37,14 +37,69 @@ namespace AllyisApps
 		public const string ConfirmEmail = "ConfirmEmail";
 
 		/// <summary>
+		/// Action-Name: Create.
+		/// </summary>
+		public const string Create = "Create";
+
+		/// <summary>
+		/// Action-Name: CreateHoliday.
+		/// </summary>
+		public const string CreateHoliday = "CreateHoliday";
+
+		/// <summary>
 		/// Action-Name: CreateOrg.
 		/// </summary>
 		public const string CreateOrg = "CreateOrg";
 
 		/// <summary>
+		/// Action-Name: CreatePayClass.
+		/// </summary>
+		public const string CreatePayClass = "CreatePayClass";
+
+		/// <summary>
+		/// Action-Name: CreateTimeEntryJson.
+		/// </summary>
+		public const string CreateTimeEntryJson = "CreateTimeEntryJson";
+
+		/// <summary>
+		/// Action-Name: Delete.
+		/// </summary>
+		public const string Delete = "Delete";
+
+		/// <summary>
+		/// Action-Name: DeleteEntry.
+		/// </summary>
+		public const string DeleteEntry = "DeleteEntry";
+
+		/// <summary>
+		/// Action-Name: DeleteHoliday.
+		/// </summary>
+		public const string DeleteHoliday = "DeleteHoliday";
+
+		/// <summary>
 		/// Action-Name: DeleteOrg.
 		/// </summary>
 		public const string DeleteOrg = "DeleteOrg";
+
+		/// <summary>
+		/// Action-Name: DeletePayClass.
+		/// </summary>
+		public const string DeletePayClass = "DeletePayClass";
+
+		/// <summary>
+		/// Action-Name: DeleteTimeEntry.
+		/// </summary>
+		public const string DeleteTimeEntry = "DeleteTimeEntry";
+
+		/// <summary>
+		/// Action-Name: DeleteTimeEntryJson.
+		/// </summary>
+		public const string DeleteTimeEntryJson = "DeleteTimeEntryJson";
+
+		/// <summary>
+		/// Action-Name: Details.
+		/// </summary>
+		public const string Details = "Details";
 
 		/// <summary>
 		/// Action-Name: DownloadImportUsersTemplate.
@@ -62,6 +117,21 @@ namespace AllyisApps
 		public const string EditProfile = "EditProfile";
 
 		/// <summary>
+		/// Action-Name: EditTimeEntryApprovalState.
+		/// </summary>
+		public const string EditTimeEntryApprovalState = "EditTimeEntryApprovalState";
+
+		/// <summary>
+		/// Action-Name: EditTimeEntryJson.
+		/// </summary>
+		public const string EditTimeEntryJson = "EditTimeEntryJson";
+
+		/// <summary>
+		/// Action-Name: Export.
+		/// </summary>
+		public const string Export = "Export";
+
+		/// <summary>
 		/// Action-Name: ForgotPassword.
 		/// </summary>
 		public const string ForgotPassword = "ForgotPassword";
@@ -77,6 +147,11 @@ namespace AllyisApps
 		public const string GetBillingSummary = "GetBillingSummary";
 
 		/// <summary>
+		/// Action-Name: GetDetailsDataJson.
+		/// </summary>
+		public const string GetDetailsDataJson = "GetDetailsDataJson";
+
+		/// <summary>
 		/// Action-Name: Index.
 		/// </summary>
 		public const string Index = "Index";
@@ -85,6 +160,11 @@ namespace AllyisApps
 		/// Action-Name: Invite.
 		/// </summary>
 		public const string Invite = "Invite";
+
+		/// <summary>
+		/// Action-Name: IsSubdomainNameUnique.
+		/// </summary>
+		public const string IsSubdomainNameUnique = "IsSubdomainNameUnique";
 
 		/// <summary>
 		/// Action-Name: LogOff.
@@ -170,6 +250,36 @@ namespace AllyisApps
 		/// Action-Name: Unsubscribe.
 		/// </summary>
 		public const string Unsubscribe = "Unsubscribe";
+
+		/// <summary>
+		/// Action-Name: UpdateOvertime.
+		/// </summary>
+		public const string UpdateOvertime = "UpdateOvertime";
+
+		/// <summary>
+		/// Action-Name: UpdateStartOfWeek.
+		/// </summary>
+		public const string UpdateStartOfWeek = "UpdateStartOfWeek";
+
+		/// <summary>
+		/// Action-Name: UpdateUserAJAX.
+		/// </summary>
+		public const string UpdateUserAJAX = "UpdateUserAJAX";
+
+		/// <summary>
+		/// Action-Name: UploadCSVFile.
+		/// </summary>
+		public const string UploadCSVFile = "UploadCSVFile";
+
+		/// <summary>
+		/// Action-Name: UserEdit.
+		/// </summary>
+		public const string UserEdit = "UserEdit";
+
+		/// <summary>
+		/// Action-Name: ViewPage.
+		/// </summary>
+		public const string ViewPage = "ViewPage";
 		#endregion
 
 		#region home
@@ -204,21 +314,47 @@ namespace AllyisApps
 		/// Action-Name: RouteProduct.
 		/// </summary>
 		public const string UpdateLanguage = "UpdateLanguage";
-        #endregion
+		#endregion
 
-        #region TimeEntry
-        /// <summary>
-        /// Action-Name: CopyEntries.
-        /// </summary>
-        public const string CopyEntries = "CopyEntries";
+		#region TimeEntry
+		/// <summary>
+		/// Action-Name: CopyEntries.
+		/// </summary>
+		public const string CopyEntries = "CopyEntries";
 
-        #endregion
-    }
+		/// <summary>
+		/// Action-Name: Report.
+		/// </summary>
+		public const string Report = "Report";
 
-    /// <summary>
-    /// Constants for controller Strings.
-    /// </summary>
-    public static class ControllerConstants
+		/// <summary>
+		/// Action-Name: SetLockDate.
+		/// </summary>
+		public const string SetLockDate = "SetLockDate";
+
+		/// <summary>
+		/// Action-Name: Settings.
+		/// </summary>
+		public const string Settings = "Settings";
+
+		/// <summary>
+		/// Action-Name: ViewReport.
+		/// </summary>
+		public const string ViewReport = "ViewReport";
+		#endregion
+
+		#region subscription		
+		/// <summary>
+		/// Action-Name: Add.
+		/// </summary>
+		public const string EditUsers = "EditUsers";
+		#endregion
+	}
+
+	/// <summary>
+	/// Constants for controller Strings.
+	/// </summary>
+	public static class ControllerConstants
 	{
 		/// <summary>
 		/// Controller-Name: Account.
@@ -231,6 +367,11 @@ namespace AllyisApps
 		public const string Controller = "Controller";
 
 		/// <summary>
+		/// Controller-Name: Customer.
+		/// </summary>
+		public const string Customer = "Customer";
+
+		/// <summary>
 		/// Controller-Name: Home.
 		/// </summary>
 		public const string Home = "Home";
@@ -239,6 +380,11 @@ namespace AllyisApps
 		/// Controller-Name: Organization.
 		/// </summary>
 		public const string Organization = "Organization";
+
+		/// <summary>
+		/// Controller-Name: Project.
+		/// </summary>
+		public const string Project = "Project";
 
 		/// <summary>
 		/// Controller-Name: Shared.
@@ -250,10 +396,10 @@ namespace AllyisApps
 		/// </summary>
 		public const string Subscription = "Subscription";
 
-        /// <summary>
-        /// Controller-Name: TimeEntry.
-        /// </summary>
-        public const string TimeEntry = "TimeEntry";
+		/// <summary>
+		/// Controller-Name: TimeEntry.
+		/// </summary>
+		public const string TimeEntry = "TimeEntry";
 	}
 
 	/// <summary>
@@ -290,6 +436,11 @@ namespace AllyisApps
 		/// View-Name: ForgotPasswordConfirmation.
 		/// </summary>
 		public const string ForgotPasswordConfirmation = "ForgotPasswordConfirmation";
+
+		/// <summary>
+		/// View-Name: ForgotPasswordConfirmation.
+		/// </summary>
+		public const string Index = "Index";
 
 		/// <summary>
 		/// View-Name: LogOnPartial.

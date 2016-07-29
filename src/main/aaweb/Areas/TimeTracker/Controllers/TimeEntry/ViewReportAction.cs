@@ -103,7 +103,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						}
 
 						this.TempData["RVM"] = reportVM;
-						return this.RedirectToAction("Report");
+						return this.RedirectToAction(ActionConstants.Report);
 					}
 
 				case "Export":
@@ -113,7 +113,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				default:
 					{
-						return this.RedirectToAction("Report", new { organizationId = organizationId });
+						return this.RedirectToAction(ActionConstants.Report, new { organizationId = organizationId });
 					}
 			}
 		}

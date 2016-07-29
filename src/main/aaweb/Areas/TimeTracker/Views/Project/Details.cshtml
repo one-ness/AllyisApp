@@ -29,9 +29,9 @@
             </tr>
         </table>
         <div class="allyis-action-buttons">
-            @Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Project.Strings.ProjectList, "Index", "Customer", null, new { @class = "btn btn-default" })
+            @Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Project.Strings.ProjectList, ActionConstants.Index, ControllerConstants.Customer, null, new { @class = "btn btn-default" })
             @if(Model.CanEditProject) {
-                @Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Project.Strings.Edit, "Edit", new { id = Model.ProjectId }, new { @class = "btn btn-primary" })
+                @Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Project.Strings.Edit, ActionConstants.Edit, new { id = Model.ProjectId }, new { @class = "btn btn-primary" })
             }
         </div>
     </div>

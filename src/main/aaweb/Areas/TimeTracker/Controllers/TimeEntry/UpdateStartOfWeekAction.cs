@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert("Successfully updated start of week", Variety.Success));
 			}
 
-			return this.RedirectToAction("Settings");
+			return this.RedirectToAction(ActionConstants.Settings);
 		}
 	}
 }

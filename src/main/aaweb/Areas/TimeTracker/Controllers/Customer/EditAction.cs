@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 
-			return this.RedirectToAction("Index");
+			return this.RedirectToAction(ActionConstants.Index);
 		}
 
 		/// <summary>
@@ -81,12 +81,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.CustomerDetailsUpdated, Variety.Success));
-					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action("Index"), model.CustomerID));
+					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index), model.CustomerID));
 				}
 
 				// Permissions failure
 				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.ActionUnauthorizedMessage, Variety.Warning));
-				return this.RedirectToAction("Index");
+				return this.RedirectToAction(ActionConstants.Index);
 			}
 
 			// Invalid model

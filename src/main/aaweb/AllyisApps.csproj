@@ -197,7 +197,6 @@
     <Compile Include="Areas\TimeTracker\Controllers\Project\EditAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\DeleteAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\DetailsAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\Project\IndexAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\ProjectController.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\UpdateProjectAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\CopyEntries.cs" />

@@ -39,7 +39,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			List<string> userSelect = null;
 			this.TempData["USelect"] = users;
 
-			return this.RedirectToAction("ViewReport", new { viewDataButton, organizationId, userSelect, dateRangeStart, dateRangeEnd, showExport, customerSelect, pageNum, projectSelect });
+			return this.RedirectToAction(ActionConstants.ViewReport, new { viewDataButton, organizationId, userSelect, dateRangeStart, dateRangeEnd, showExport, customerSelect, pageNum, projectSelect });
 		}
 	}
 }

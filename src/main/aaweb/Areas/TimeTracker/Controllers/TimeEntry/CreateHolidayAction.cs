@@ -43,7 +43,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
-			return this.RedirectToAction("Settings", new { OrganizationId = UserContext.ChosenOrganizationId }); // Same destination regardless of creation success
+			return this.RedirectToAction(ActionConstants.Settings, new { OrganizationId = UserContext.ChosenOrganizationId }); // Same destination regardless of creation success
 		}
 	}
 }

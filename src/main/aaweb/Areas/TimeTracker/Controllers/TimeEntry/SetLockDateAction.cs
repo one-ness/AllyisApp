@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
-			return this.RedirectToAction("Index", new { organizationId, userId, startDate, endDate });
+			return this.RedirectToAction(ActionConstants.Index, new { organizationId, userId, startDate, endDate });
 		}
 	}
 }
