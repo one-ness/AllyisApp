@@ -204,13 +204,21 @@ namespace AllyisApps
 		/// Action-Name: RouteProduct.
 		/// </summary>
 		public const string UpdateLanguage = "UpdateLanguage";
-		#endregion
-	}
+        #endregion
 
-	/// <summary>
-	/// Constants for controller Strings.
-	/// </summary>
-	public static class ControllerConstants
+        #region TimeEntry
+        /// <summary>
+        /// Action-Name: CopyEntries.
+        /// </summary>
+        public const string CopyEntries = "CopyEntries";
+
+        #endregion
+    }
+
+    /// <summary>
+    /// Constants for controller Strings.
+    /// </summary>
+    public static class ControllerConstants
 	{
 		/// <summary>
 		/// Controller-Name: Account.
@@ -241,6 +249,11 @@ namespace AllyisApps
 		/// Controller-Name: Subscription.
 		/// </summary>
 		public const string Subscription = "Subscription";
+
+        /// <summary>
+        /// Controller-Name: TimeEntry.
+        /// </summary>
+        public const string TimeEntry = "TimeEntry";
 	}
 
 	/// <summary>
