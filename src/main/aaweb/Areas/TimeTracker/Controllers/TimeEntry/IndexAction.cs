@@ -89,7 +89,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			IDictionary<int, ProjectHours> hours = new Dictionary<int, ProjectHours>();
 			IEnumerable<HolidayInfo> holidays = TimeTrackerService.GetHolidays().Where(x => (startingDate < x.Date && x.Date < endingDate)); // We only care about holidays within the date range
 
-			foreach (CompleteProjectInfo proj in allProjects.Where(p=>p.ProjectId>0))
+			foreach (CompleteProjectInfo proj in allProjects.Where(p => p.ProjectId > 0))
 			{
 				// if ( hours.Count == 0 )
 				hours.Add(proj.ProjectId, new ProjectHours { Project = proj, Hours = 0.0f });
@@ -109,7 +109,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				PayClasses = TimeTrackerService.GetPayClasses(orgId),
 				GrandTotal = new ProjectHours { Project = new CompleteProjectInfo { ProjectName = "Total" }, Hours = 0.0f },
 				Projects = allProjects.Where(x => x.IsActive == true && x.IsCustomerActive == true && x.IsUserActive == true),
-				ProjectsWithInactive = allProjects.Where(p=>p.ProjectId != 0),
+				ProjectsWithInactive = allProjects.Where(p => p.ProjectId != 0),
 				StartDate = SetStartingDate(startingDate, startOfWeek),
 				EndDate = SetEndingDate(endingDate, startOfWeek),
 				Entries = new List<EditTimeEntryViewModel>(),

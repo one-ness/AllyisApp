@@ -49,9 +49,9 @@ namespace AllyisApps.Core
 		{
 			get
 			{
-				const string tempDataKey = "Alerts";
-				this.TempData[tempDataKey] = this.TempData[tempDataKey] ?? new List<BootstrapAlert>();
-				return (ICollection<BootstrapAlert>)this.TempData[tempDataKey];
+				const string TempDataKey = "Alerts";
+				this.TempData[TempDataKey] = this.TempData[TempDataKey] ?? new List<BootstrapAlert>();
+				return (ICollection<BootstrapAlert>)this.TempData[TempDataKey];
 			}
 		}
 

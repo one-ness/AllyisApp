@@ -714,7 +714,6 @@
     <Content Include="Areas\TimeTracker\Views\Customer\Delete.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Details.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Edit.cshtml" />
-    <Content Include="Areas\TimeTracker\Views\Customer\EditCustomerDetailsPartial.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Index.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Project\_ProjectEdit.cshtml">
       <SubType>Code</SubType>

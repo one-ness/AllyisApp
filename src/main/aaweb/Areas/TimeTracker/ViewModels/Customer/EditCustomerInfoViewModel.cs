@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace AllyisApps.ViewModels
 {
@@ -14,6 +15,8 @@ namespace AllyisApps.ViewModels
 	/// </summary>
 	public class EditCustomerInfoViewModel : BaseViewModel
 	{
+		private const string CharsToReplace = @"""/\[]:|<>+=; ,?*'`()@";
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EditCustomerInfoViewModel"/> class.
 		/// </summary>
@@ -117,5 +120,42 @@ namespace AllyisApps.ViewModels
 		/// Gets or sets List of valid countries.
 		/// </summary>
 		public IEnumerable<string> ValidCountries { get; set; }
+
+		/// <summary>
+		/// Localized valid countries.
+		/// </summary>
+		/// <returns>A Dictionary keyed with the English translation and valued with the localized version.</returns>
+		public Dictionary<string, string> GetLocalizedValidCoutriesDictionary()
+		{
+			Dictionary<string, string> countries = new Dictionary<string, string>();
+
+			foreach (string country in ValidCountries)
+			{
+				string countryKey = Clean(country);
+
+				string localized = AllyisApps.Resources.ViewModels.Auth.Countries.ResourceManager.GetString(countryKey) ?? country;
+
+				countries.Add(country, localized);
+			}
+
+			return countries;
+		}
+
+		/// <summary>
+		/// Cleans things.
+		/// </summary>
+		/// <param name="stringToClean">The thing to clean.</param>
+		/// <returns>The cleaned thing.</returns>
+		public string Clean(string stringToClean)
+		{
+			if (stringToClean == null)
+			{
+				return string.Empty;
+			}
+			else
+			{
+				return CharsToReplace.Aggregate(stringToClean, (str, l) => str.Replace(string.Empty + l, string.Empty));
+			}
+		}
 	}
 }

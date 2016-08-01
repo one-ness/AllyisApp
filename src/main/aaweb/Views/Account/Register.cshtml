@@ -88,6 +88,7 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript">
+
         $(document).ready(function () {
             var preserveState = '@(Model != null ? (AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';
 
@@ -132,7 +133,6 @@
             } else {
                 $('#State').empty();
                 $('#State').append("<option value=\"\">" + "@AllyisApps.Resources.Views.Account.Strings.DropDownEmpty" + "</option>");
-                //$('#State').prop("disabled", true);
             }
         }
 
