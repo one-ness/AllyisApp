@@ -132,6 +132,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// int weekend = 7 + ((int)startOfWeek - 2); // weekend = both days before startOfWeek
 			int weekend = (int)StartOfWeekEnum.Saturday;
 			bool holidayPopulated = false;
+
 			// For each date in the date range
 			for (var date = result.StartDate; date <= result.EndDate;)
 			{
@@ -176,20 +177,23 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Locked = iter.Current.ApprovalState == (int)Core.ApprovalState.Approved || isProjectDeleted
 					});
 					if (holidays.Where(x => x.Date == iter.Current.Date).FirstOrDefault() != null)
+					{
 						holidayPopulated = true;
+					}
+
 					iter.MoveNext();
-					//date = date.AddDays(1);
 				}
 				else if ((holidays.Where(x => x.Date == date).FirstOrDefault() != null) && (iter.Current == null || iter.Current.Date != date) && !holidayPopulated)
 				{
 					holidayPopulated = true;
+
 					// Prepopulate holidays (TODO: Also prepopulate PTO?)
 					// TODO: There's a lot of design discussion that needs to happen before we implement this. For example, should we have an internal customer with
 					// its own projects for Holidays, PTO, etc.? Where should we store the paytypes and durations for holidays? Where do we store the IDs for these?
 
 					result.GrandTotal.Hours += 8;
 
-					TimeEntryInfo TE = new TimeEntryInfo()
+					TimeEntryInfo timeEntryInfo = new TimeEntryInfo()
 					{
 						ApprovalState = 1,
 						Date = date,
@@ -200,11 +204,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Description = holidays.Where(x => x.Date == date).First().HolidayName
 					};
 
-					int TEID = TimeTrackerService.CreateTimeEntry(TE);
+					int timeEntryId = TimeTrackerService.CreateTimeEntry(timeEntryInfo);
 
 					result.Entries.Add(new EditTimeEntryViewModel
 					{
-						TimeEntryId = TEID,
+						TimeEntryId = timeEntryId,
 						Date = date,
 						UserId = userId,
 						StartingDate = result.StartDate,
@@ -214,10 +218,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						OrganizationId = orgId,
 						Projects = result.Projects,
 						ProjectsWithInactive = result.ProjectsWithInactive,
-						PayClassId = TE.PayClassId,
+						PayClassId = timeEntryInfo.PayClassId,
 						PayClasses = result.PayClasses,
-						Duration = string.Format("{0:D2}:{1:D2}", (int)TE.Duration, (int)Math.Round((TE.Duration - (int)TE.Duration) * 60, 0)),
-						Description = TE.Description,
+						Duration = string.Format("{0:D2}:{1:D2}", (int)timeEntryInfo.Duration, (int)Math.Round((timeEntryInfo.Duration - (int)timeEntryInfo.Duration) * 60, 0)),
+						Description = timeEntryInfo.Description,
 						ProjectName = allProjects.Where(x => x.ProjectId == 0).Select(x => x.ProjectName).FirstOrDefault(),
 					});
 				}

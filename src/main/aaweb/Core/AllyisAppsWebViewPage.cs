@@ -21,13 +21,13 @@ namespace AllyisApps.Core
 		{
 			get
 			{
-				const string viewDataKey = "DisplayHints";
-				if (!this.ViewData.ContainsKey(viewDataKey))
+				const string ViewDataKey = "DisplayHints";
+				if (!this.ViewData.ContainsKey(ViewDataKey))
 				{
-					this.ViewData[viewDataKey] = new DisplayHints();
+					this.ViewData[ViewDataKey] = new DisplayHints();
 				}
 
-				return (DisplayHints)this.ViewData[viewDataKey];
+				return (DisplayHints)this.ViewData[ViewDataKey];
 			}
 		}
 

@@ -30,10 +30,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			int orgId = UserContext.ChosenOrganizationId;
 			ReportViewModel reportVM = null;
 
-			const string tempDataKey = "RVM";
-			if (this.TempData[tempDataKey] != null)
+			const string TempDataKey = "RVM";
+			if (this.TempData[TempDataKey] != null)
 			{
-				reportVM = (ReportViewModel)TempData[tempDataKey];
+				reportVM = (ReportViewModel)TempData[TempDataKey];
 				orgId = reportVM.OrganizationId;
 			}
 			else

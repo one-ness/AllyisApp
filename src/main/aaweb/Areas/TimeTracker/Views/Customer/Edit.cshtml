@@ -4,17 +4,17 @@
     DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
     DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
     ViewBag.Title = AllyisApps.Resources.TimeTracker.Views.Customer.Strings.Edit;
-    ViewData.Add("Controller", "Customer");
-    ViewData.Add("Action", "Edit");
+    ViewData.Add(ControllerConstants.Controller, ControllerConstants.Customer);
+    ViewData.Add(ActionConstants.Action, ActionConstants.Edit);
 }
 
 <div class="shrink-wrap-center">
     <div>
-        @using (@Html.BeginForm((string)ViewData[ActionConstants.Action], (string)ViewData[ControllerConstants.Controller], FormMethod.Post, new { @class = "", role = "form" }))
+        @using (@Html.BeginForm((string)ViewData[ActionConstants.Action], (string)ViewData[ControllerConstants.Controller], FormMethod.Post, new { @class = string.Empty, role = "form" }))
         {
             @Html.AntiForgeryToken()
 
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
 
 
             <div class="form-group">
@@ -98,7 +98,7 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            var preserveState = '@(Model != null ? (AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';
+            var preserveState = '@(Model != null ? (AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : string.Empty)';
 
             if ($('#Country').val() != "") {
                 updateStateDDL(function () {
