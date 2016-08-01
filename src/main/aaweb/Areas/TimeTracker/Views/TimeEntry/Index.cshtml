@@ -148,7 +148,7 @@
                             resetBackground = "this.style.backgroundColor=\"#d9edf7\"";
                         }
                         <div data-page="@pageCount" class="@(active)"
-                             onmouseover='this.style.backgroundColor="#c4e3f3"' onmouseout=@resetBackground
+                             onmouseover='this.style.backgroundColor="#c4e3f3"' onmouseout="@resetBackground"
                              style="width: 95%; display: flex; justify-content: flex-end;" @hide>
                             <a class="col-xs-11 text-left" data-search="@user.Email"
                                href="@Url.Action(ActionConstants.Index, routeValues: new
