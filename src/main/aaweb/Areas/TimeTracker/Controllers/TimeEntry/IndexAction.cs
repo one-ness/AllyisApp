@@ -33,23 +33,25 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult Index(int organizationId = 0, int userId = -1, DateTime? startDate = null, DateTime? endDate = null)
 		{
 			bool manager = AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers);
-
-			if (!manager)
-			{
-				throw new UnauthorizedAccessException(AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.CantViewOtherTimeCards);
-			}
 			
-			if (!(userId != -1 && userId != Convert.ToInt32(UserContext.UserId)) && !AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
-			{
-				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
+			if (userId != -1 && userId != Convert.ToInt32(UserContext.UserId))
+			{ // Trying to edit as another user
+				if (!manager)
 				{
+					throw new UnauthorizedAccessException(AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.CantViewOtherTimeCards);
+				}
+				// For a manager editing another user, everything's fine; the next section can be skipped.
+			}
+			else
+			{ // Either userId is -1, or it is the current user
+				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
+				{ // Current user cannot edit self
 					Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 					return this.Redirect("/");
 				}
-				else
-				{
-					userId = Convert.ToInt32(UserContext.UserId);
-				}
+
+				// Can edit self - we must ensure the userId is actually set and isn't still -1
+				userId = Convert.ToInt32(UserContext.UserId);
 			}
 
 			ViewBag.canManage = manager;
@@ -158,11 +160,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ProjectId = iter.Current.ProjectId,
 						PayClassId = iter.Current.PayClassId,
 						UserId = iter.Current.UserId,
-						Date = iter.Current.Date,
+						Date = TimeTrackerService.GetDayFromDateTime(iter.Current.Date),
 						Duration = string.Format("{0:D2}:{1:D2}", (int)iter.Current.Duration, (int)Math.Round((iter.Current.Duration - (int)iter.Current.Duration) * 60, 0)),
 						Description = iter.Current.Description,
-						StartingDate = result.StartDate,
-						EndingDate = result.EndDate,
+						StartingDate = TimeTrackerService.GetDayFromDateTime(result.StartDate),
+						EndingDate = TimeTrackerService.GetDayFromDateTime(result.EndDate),
 						IsOffDay = (weekend % 7 == (int)iter.Current.Date.DayOfWeek || (weekend + 1) % 7 == (int)iter.Current.Date.DayOfWeek) ? true : false,
 						IsHoliday = TimeTrackerService.GetHolidays().Any(x => x.Date == date),
 						OrganizationId = orgId,
@@ -208,10 +210,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					result.Entries.Add(new EditTimeEntryViewModel
 					{
 						TimeEntryId = timeEntryId,
-						Date = date,
+						Date = TimeTrackerService.GetDayFromDateTime(date),
 						UserId = userId,
-						StartingDate = result.StartDate,
-						EndingDate = result.EndDate,
+						StartingDate = TimeTrackerService.GetDayFromDateTime(result.StartDate),
+						EndingDate = TimeTrackerService.GetDayFromDateTime(result.EndDate),
 						IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
 						IsHoliday = TimeTrackerService.GetHolidays().Any(x => x.Date == date),
 						OrganizationId = orgId,
@@ -230,10 +232,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					result.Entries.Add(new EditTimeEntryViewModel
 					{
 						Sample = true,
-						Date = date,
+						Date = TimeTrackerService.GetDayFromDateTime(date),
 						UserId = userId,
-						StartingDate = result.StartDate,
-						EndingDate = result.EndDate,
+						StartingDate = TimeTrackerService.GetDayFromDateTime(result.StartDate),
+						EndingDate = TimeTrackerService.GetDayFromDateTime(result.EndDate),
 						IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
 						IsHoliday = TimeTrackerService.GetHolidays().Any(x => x.Date == date),
 						OrganizationId = orgId,

@@ -42,6 +42,36 @@ namespace AllyisApps.Services.TimeTracker
 		}
 
 		/// <summary>
+		/// Converts a DateTime date into an int representing days since the DateTime min value (Jan 1st, 0001).
+		/// </summary>
+		/// <param name="date">The DateTime date.</param>
+		/// <returns>An int of the date as days since Jan 1st, 0001.</returns>
+		public int GetDayFromDateTime(DateTime date)
+		{
+			return (int)date.Subtract(DateTime.MinValue).TotalDays;
+		}
+
+		/// <summary>
+		/// Converts an int representing days since the DateTime min value (Jan 1st, 0001) into a DateTime date.
+		/// </summary>
+		/// <param name="days">An int of the date as days since Jan 1st, 0001.</param>
+		/// <returns>The DateTime date.</returns>
+		public DateTime GetDateTimeFromDays(int days)
+		{
+			return GetDateFromDays(days);
+		}
+
+		/// <summary>
+		/// Converts an int representing days since the DateTime min value (Jan 1st, 0001) into a DateTime date.
+		/// </summary>
+		/// <param name="days">An int of the date as days since Jan 1st, 0001.</param>
+		/// <returns>The DateTime date.</returns>
+		public static DateTime GetDateFromDays(int days)
+		{
+			return DateTime.MinValue.AddDays(days);
+		}
+
+		/// <summary>
 		/// Gets a <see cref="TimeEntryInfo"/>.
 		/// </summary>
 		/// <param name="timeEntryId">Time entry Id.</param>

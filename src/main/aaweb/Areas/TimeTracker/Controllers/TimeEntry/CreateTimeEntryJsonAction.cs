@@ -54,7 +54,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.DurationFormat);
 				}
 
-				IEnumerable<TimeEntryInfo> otherEntriesToday = TimeTrackerService.GetTimeEntriesByUserOverDateRange(new List<int> { model.UserId }, model.OrganizationId, model.Date, model.Date);
+				IEnumerable<TimeEntryInfo> otherEntriesToday = TimeTrackerService.GetTimeEntriesByUserOverDateRange(new List<int> { model.UserId }, model.OrganizationId,
+						TimeTrackerService.GetDateTimeFromDays(model.Date), TimeTrackerService.GetDateTimeFromDays(model.Date));
 				float durationOther = 0.0f;
 				foreach (TimeEntryInfo otherEntry in otherEntriesToday)
 				{
@@ -73,7 +74,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.MustSelectPayClass);
 				}
-				else if (model.Date <= TimeTrackerService.GetLockDate(model.OrganizationId, model.UserId))
+				else if (model.Date <= TimeTrackerService.GetDayFromDateTime(TimeTrackerService.GetLockDate(model.OrganizationId, model.UserId)))
 				{
 					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.CanOnlyEdit);
 				}
@@ -83,7 +84,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					UserId = model.UserId,
 					ProjectId = model.ProjectId,
 					PayClassId = model.PayClassId,
-					Date = model.Date,
+					Date = TimeTrackerService.GetDateTimeFromDays(model.Date),
 					Duration = durationResult.Value,
 					Description = model.Description
 				});
