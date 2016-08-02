@@ -88,7 +88,7 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		/// <summary>
 		/// Gets or sets the date associated with this entry.
 		/// </summary>
-		public int Date { get; set;  // Note: this must be an int and not a DateTime for correct, culture-independant serialization/deserialization
+		public int Date { get; set; }  // Note: this must be an int and not a DateTime for correct, culture-independant serialization/deserialization
 
 		/// <summary>
 		/// Gets or sets the duration defined in this entry.
