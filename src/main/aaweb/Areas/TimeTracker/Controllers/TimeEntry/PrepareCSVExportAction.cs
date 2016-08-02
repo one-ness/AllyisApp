@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using AllyisApps.Core;
@@ -24,11 +25,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="data">The TimeEntryInfo to be exported.</param>
 		/// <param name="projects">The projects being pulled from, for getting project name and customers.</param>
 		/// <returns>The stream writer.</returns>
+		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:ClosingParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
 		public StreamWriter PrepareCSVExport(IEnumerable<TimeEntryInfo> data, IEnumerable<CompleteProjectInfo> projects)
 		{
 			StreamWriter output = new StreamWriter(new MemoryStream());
 			output.WriteLine(
-				string.Format("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\"",
+				string.Format(
+					"\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\"",
 					Resources.TimeTracker.Controllers.TimeEntry.Strings.LastName,
 					Resources.TimeTracker.Controllers.TimeEntry.Strings.FirstName,
 					Resources.TimeTracker.Controllers.TimeEntry.Strings.Date,
