@@ -49,9 +49,9 @@ namespace AllyisApps.Core
 		{
 			get
 			{
-				const string tempDataKey = "Alerts";
-				this.TempData[tempDataKey] = this.TempData[tempDataKey] ?? new List<BootstrapAlert>();
-				return (ICollection<BootstrapAlert>)this.TempData[tempDataKey];
+				const string TempDataKey = "Alerts";
+				this.TempData[TempDataKey] = this.TempData[TempDataKey] ?? new List<BootstrapAlert>();
+				return (ICollection<BootstrapAlert>)this.TempData[TempDataKey];
 			}
 		}
 
@@ -178,11 +178,11 @@ namespace AllyisApps.Core
 			}
 			else
 			{
-				const string tempDataKey = "language";
-				if (TempData[tempDataKey] != null)
+				const string TempDataKey = "language";
+				if (TempData[TempDataKey] != null)
 				{
-					languageID = (int)TempData[tempDataKey];
-					TempData[tempDataKey] = languageID; // Store it again for next request.
+					languageID = (int)TempData[TempDataKey];
+					TempData[TempDataKey] = languageID; // Store it again for next request.
 				}
 			}
 

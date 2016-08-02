@@ -33,7 +33,6 @@ namespace AllyisApps.Controllers
 				}
 				else
 				{
-
 					CrmService.UpdateBillingInfo(stripeToken, stripeEmail);
 
 					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Controllers.Auth.Strings.Billing, Core.Alert.Variety.Success));

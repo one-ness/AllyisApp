@@ -69,7 +69,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						float total = (from d in dataVM.Data select d.Duration).Sum();
 						int dataCount = dataVM.PreviewData.Count();
 
-						reportVM.PreviewTotal = string.Format("{0} hours total", total);
+						reportVM.PreviewTotal = string.Format("{0} {1}", total, Resources.TimeTracker.Controllers.TimeEntry.Strings.HoursTotal);
 
 						IEnumerable<CompleteProjectInfo> orgProjects = OrgService.GetProjectsByOrganization(organizationId);
 						if (dataCount > 0)
@@ -97,7 +97,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						else
 						{
 							reportVM.PreviewEntries = null;
-							reportVM.PreviewMessage = "There is no data preview to display.";
+							reportVM.PreviewMessage = Resources.TimeTracker.Controllers.TimeEntry.Strings.NoDataPreview;
 							reportVM.PreviewPageTotal = 1;
 							reportVM.PreviewPageNum = 1;
 						}

@@ -87,12 +87,7 @@ namespace AllyisApps.Controllers
 					{
 						OrgRoleInfo role = OrgService.GetOrgRole(orgAddMembers.OrganizationId, user.UserId); // ...see if they have permissions in this organization already
 																											 // If not...
-
-						if (role == null)
-						{
-
-						}
-						else
+						if (role != null)
 						{
 							orgAddMembers.UsersAlreadyExisting.Add(userEmail);
 							return orgAddMembers;

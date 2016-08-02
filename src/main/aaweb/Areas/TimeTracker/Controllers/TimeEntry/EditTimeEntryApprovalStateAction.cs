@@ -31,8 +31,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.Json(new
 				{
 					status = "error",
-					message = "There are no entries to approve here!",
-					e = new UnauthorizedAccessException("There are no entries to approve here!")
+					message = Resources.TimeTracker.Controllers.TimeEntry.Strings.NoEntriesToApprove,
+					e = new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.NoEntriesToApprove)
 				});
 			}
 
@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						{
 							id = data.TimeEntryId,
 							status = "error",
-							message = "There was an error.",
+							message = Resources.TimeTracker.Controllers.TimeEntry.Strings.WasAnError,
 							response = "REFRESH"
 						});
 					}
@@ -62,7 +62,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return this.Json(new
 					{
 						status = "error",
-						message = "There was an error.",
+						message = Resources.TimeTracker.Controllers.TimeEntry.Strings.WasAnError,
 						action = "REFRESH",
 						errors = result.ToArray()
 					});
@@ -75,8 +75,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			return this.Json(new
 			{
 				status = "error",
-				message = "You are not authorized to approve time entries!",
-				e = new UnauthorizedAccessException("You are not authorized to approve time entries!")
+				message = Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZApproveTimeEntries,
+				e = new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZApproveTimeEntries)
 			});
 		}
 	}

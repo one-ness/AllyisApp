@@ -33,7 +33,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
 				{
-					return this.Json(new { status = "error", message = "You are not authorized to delete a time entry.", e = new UnauthorizedAccessException("You are not authorized to delete a time entry.") });
+					return this.Json(new { status = "error", message = Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntryDelete, e = new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntryDelete) });
 				}
 			}
 			else
@@ -43,8 +43,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return this.Json(new
 					{
 						status = "error",
-						message = "You are not authorized to delete a time entry for another user!",
-						e = new UnauthorizedAccessException("You are not authorized to delete a time entry for another user!")
+						message = Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntryOtherUserDelete,
+						e = new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntryOtherUserDelete)
 					});
 				}
 			}
@@ -55,8 +55,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.Json(new
 				{
 					status = "error",
-					message = "The time entry you are attempting to edit has been approved and can no longer be edited.",
-					e = new ArgumentException("The time entry you are attempting to edit has been approved and can no longer be edited."),
+					message = Resources.TimeTracker.Controllers.TimeEntry.Strings.AlreadyApprovedCannotEdit,
+					e = new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.AlreadyApprovedCannotEdit),
 					reason = "ALREADY_APPROVED"
 				});
 			}

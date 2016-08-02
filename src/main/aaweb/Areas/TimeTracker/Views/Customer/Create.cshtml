@@ -4,13 +4,91 @@
     DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
     DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
     ViewBag.Title = AllyisApps.Resources.TimeTracker.Views.Customer.Strings.Create;
-    ViewData.Add("Controller", "Customer");
-    ViewData.Add("Action", "Create");
+    ViewData.Add(ControllerConstants.Controller, ControllerConstants.Customer);
+    ViewData.Add(ActionConstants.Action, ActionConstants.Create);
 }
 
 <div class="shrink-wrap-center">
     <div>
-        @{ Html.RenderPartial("EditCustomerDetailsPartial", Model, ViewData); }
+        @using (@Html.BeginForm((string)ViewData[ActionConstants.Action], (string)ViewData[ControllerConstants.Controller], FormMethod.Post, new { @class = string.Empty, role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+
+
+            <div class="form-group">
+                @Html.ReqLabelFor(model => model.Name, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.Name)
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, string.Empty, new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.ReqLabelFor(model => model.Address, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.Address)
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Address, string.Empty, new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.ReqLabelFor(model => model.City, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.City)
+                @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.City, string.Empty, new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.ReqLabelFor(m => m.Country, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.Country)
+                @Html.DropDownListFor(m => m.Country, new SelectList(Model.GetLocalizedValidCoutriesDictionary(), "Key", "Value"), AllyisApps.Resources.TimeTracker.Views.Customer.Strings.DropDownEmpty, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.ReqLabelFor(m => m.State, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.State)
+                @Html.DropDownListFor(m => m.State, new SelectList(new Dictionary<string, string>(), "Key", "Value"), AllyisApps.Resources.TimeTracker.Views.Customer.Strings.DropDownEmpty, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                @Html.ReqLabelFor(model => model.PostalCode, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.PostalCode)
+                @Html.EditorFor(model => model.PostalCode, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PostalCode, string.Empty, new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.ReqLabelFor(model => model.ContactEmail, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ContactEmail)
+                @Html.EditorFor(model => model.ContactEmail, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ContactEmail, string.Empty, new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.ReqLabelFor(model => model.ContactPhoneNumber, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ContactPhoneNumber)
+                @Html.EditorFor(model => model.ContactPhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ContactPhoneNumber, string.Empty, new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.ReqLabelFor(model => model.FaxNumber, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.FaxNumber)
+                @Html.EditorFor(model => model.FaxNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FaxNumber, string.Empty, new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.ReqLabelFor(model => model.EIN, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.EIN)
+                @Html.EditorFor(model => model.EIN, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.EIN, string.Empty, new { @class = "text-danger" })
+            </div>
+            @Html.HiddenFor(m => m.OrganizationId)
+            @Html.HiddenFor(m => m.CustomerID)
+
+            <div class="form-group allyis-action-buttons">
+                @if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
+                {
+                    @Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Customer.Strings.Cancel, ActionConstants.Index, ControllerConstants.Customer, null, new { @class = "btn btn-default" })
+                    <input type="submit" value="@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.Create" class="btn btn-primary" />
+}
+                else
+                {
+                    @Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Customer.Strings.Cancel, ActionConstants.Index, ControllerConstants.Customer, new { id = Model.CustomerID }, new { @class = "btn btn-default" })
+                    <input type="submit" value="@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.Save" class="btn btn-primary" />
+}
+            </div>
+        }
     </div>
 </div>
 
@@ -20,21 +98,42 @@
 
     <script type="text/javascript">
 
+        $(document).ready(function () {
+            var preserveState = '@(Model != null ? (AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : string.Empty)';
+
+            if ($('#Country').val() != "") {
+                updateStateDDL(function () {
+                    if (preserveState != "") {
+                        var ddl = document.getElementById('State');
+                        for (var i = 0; i < ddl.options.length; i++) {
+                            if (ddl.options[i].text === preserveState) {
+                                ddl.selectedIndex = i;
+                            }
+                        }
+                    }
+                });
+            }
+
+            $('#Country').change(updateStateDDL);
+        });
+
+
         function updateStateDDL(successCallback) {
-            if ($('#ddlCountry').val() != "") {
+            if ($('#Country').val() != "") {
                 $.ajax({
                     type: "POST",
                     url: "/Home/GetStates",
-                    data: JSON.stringify({ country: $('#ddlCountry').val() }),
+                    data: JSON.stringify({ country: $('#Country').val() }),
                     datatype: "json",
                     contentType: "application/json",
                     success: function (states) {
-                        $('#ddlState').empty();
-                        $('#ddlState').append("<option value=\"\">Select...</option>");
-                        for (var i = 0; i < states.length; i++) {
-                            $('#ddlState').append("<option>" + states[i] + "</option>");
-                        }
-                        $('#ddlState').prop("disabled", false);
+                        debugger
+                        $('#State').empty();
+                        $('#State').append("<option value=\"\">" + "@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.DropDownEmpty" + "</option>");
+                        Object.keys(states).forEach(function (key) {
+                            $('#State').append("<option value=\"" + key + "\">" + states[key] + "</option>");
+                        });
+                        $('#State').prop("disabled", false);
 
                         successCallback();
                     },
@@ -43,28 +142,11 @@
                     }
                 });
             } else {
-                $('#ddlState').empty();
-                $('#ddlState').append("<option value=\"\">Select...</option>");
+                $('#State').empty();
+                $('#State').append("<option value=\"\">" + "@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.DropDownEmpty" + "</option>");
             }
         }
 
-        var preserveState = '@(Model != null ? Model.State : "")';
-
-        // This runs at 'ready'
-        if ($('#ddlCountry').val() != "") {
-            updateStateDDL(function () {
-                if (preserveState != "") {
-                    var ddl = document.getElementById('ddlState');
-                    for (var i = 0; i < ddl.options.length; i++) {
-                        if (ddl.options[i].text === preserveState) {
-                            ddl.selectedIndex = i;
-                        }
-                    }
-                }
-            });
-        }
-
-        $('#ddlCountry').change(updateStateDDL);
     </script>
 }
 

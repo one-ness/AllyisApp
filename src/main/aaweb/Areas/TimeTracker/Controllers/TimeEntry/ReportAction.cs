@@ -30,10 +30,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			int orgId = UserContext.ChosenOrganizationId;
 			ReportViewModel reportVM = null;
 
-			const string tempDataKey = "RVM";
-			if (this.TempData[tempDataKey] != null)
+			const string TempDataKey = "RVM";
+			if (this.TempData[TempDataKey] != null)
 			{
-				reportVM = (ReportViewModel)TempData[tempDataKey];
+				reportVM = (ReportViewModel)TempData[TempDataKey];
 				orgId = reportVM.OrganizationId;
 			}
 			else
@@ -100,7 +100,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The user list.</returns>
 		private IEnumerable<SelectListItem> GetUserSelectList(int organizationId, List<int> usersSelected)
 		{
-			IList<UserInfo> users = (IList<UserInfo>)CrmService.GetUsersWithSubscriptionToProductInOrganization(organizationId, Services.Crm.CrmService.GetProductIdByName("TimeTracker")).ToList<UserInfo>();
+			IList<UserInfo> users = (IList<UserInfo>)CrmService.GetUsersWithSubscriptionToProductInOrganization(organizationId, Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker)).ToList<UserInfo>();
 			users.Insert(0, new UserInfo { FirstName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.AllUsersFirst, LastName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.AllUsersLast, UserId = -1 });
 
 			// select current user by default

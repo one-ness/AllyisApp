@@ -33,14 +33,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
 				{
-					throw new UnauthorizedAccessException("You are not authorized to create a report.");
+					throw new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReports);
 				}
 			}
 			else
 			{
 				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
 				{
-					throw new UnauthorizedAccessException("You are not authorized to create reports for another user!");
+					throw new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReportsOtherUser);
 				}
 			}
 

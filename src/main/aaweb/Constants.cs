@@ -452,4 +452,15 @@ namespace AllyisApps
 		/// </summary>
 		public const string Subscribe = "Subscribe";
 	}
+
+	/// <summary>
+	/// Product name constants for use when retreiving product ID by name
+	/// </summary>
+	public static class ProductNameKeyConstants
+	{
+		/// <summary>
+		/// A product name key corresponding to the Time Tracker product.
+		/// </summary>
+		public const string TimeTracker = "TimeTracker";
+	}
 }

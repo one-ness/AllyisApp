@@ -40,7 +40,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return this.Json(new
 					{
 						status = "error",
-						message = "You are not authorized to retrieve this data."
+						message = Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZData
 					});
 				}
 			}
@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return this.Json(new
 					{
 						status = "error",
-						message = "You are not authorized to retrive this data for another user!"
+						message = Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZDataOtherUser
 					});
 				}
 			}
@@ -63,7 +63,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.Json(new
 				{
 					status = "error",
-					message = "An error has occured. Oops!"
+					message = Resources.TimeTracker.Controllers.TimeEntry.Strings.WasAnError
 				});
 			}
 

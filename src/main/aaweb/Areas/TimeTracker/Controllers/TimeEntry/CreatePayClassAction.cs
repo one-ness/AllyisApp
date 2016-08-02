@@ -25,7 +25,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (string.IsNullOrWhiteSpace(newPayClass))
 			{
-				Notifications.Add(new BootstrapAlert("You cannot create a blank pay class", Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotCreateBlankPayClass, Variety.Warning));
 			}
 
 			if (!TimeTrackerService.CreatePayClass(newPayClass))

@@ -31,11 +31,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			if (TimeTrackerService.UpdateSettings(TimeTrackerService.GetStartOfWeek(UserContext.ChosenOrganizationId), actualHours, period, mult))
 			{
-				Notifications.Add(new BootstrapAlert("Successfully updated overtime settings", Variety.Success));
+				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.OvertimeUpdate, Variety.Success));
 			}
 			else
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
 			return this.RedirectToAction(ActionConstants.Settings);

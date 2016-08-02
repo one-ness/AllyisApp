@@ -61,6 +61,15 @@ namespace AllyisApps.Resources.TimeTracker.Controllers.TimeEntry {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are not authorized to perform this action..
+        /// </summary>
+        public static string ActionUnauthorizedMessage {
+            get {
+                return ResourceManager.GetString("ActionUnauthorizedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ALL.
         /// </summary>
         public static string AllUsersFirst {
@@ -79,11 +88,182 @@ namespace AllyisApps.Resources.TimeTracker.Controllers.TimeEntry {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The time entry you are attempting to edit has been approved and can no longer be edited..
+        /// </summary>
+        public static string AlreadyApprovedCannotEdit {
+            get {
+                return ResourceManager.GetString("AlreadyApprovedCannotEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot create a blank pay class..
+        /// </summary>
+        public static string CannotCreateBlankPayClass {
+            get {
+                return ResourceManager.GetString("CannotCreateBlankPayClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot create a holiday without a valid date..
+        /// </summary>
+        public static string CannotCreateHolidayWithInvalidDate {
+            get {
+                return ResourceManager.GetString("CannotCreateHolidayWithInvalidDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot create a holiday without a name..
+        /// </summary>
+        public static string CannotCreateHolidayWIthoutName {
+            get {
+                return ResourceManager.GetString("CannotCreateHolidayWIthoutName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot edit this date..
+        /// </summary>
+        public static string CannotEditDate {
+            get {
+                return ResourceManager.GetString("CannotEditDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duration cannot exceed 24 hours in a day..
+        /// </summary>
+        public static string CannotExceed24 {
+            get {
+                return ResourceManager.GetString("CannotExceed24", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can only edit last week, this week, and any date up till the end of next month..
+        /// </summary>
+        public static string CanOnlyEdit {
+            get {
+                return ResourceManager.GetString("CanOnlyEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You do not have the privelege of viewing other people&apos;s time cards..
+        /// </summary>
+        public static string CantViewOtherTimeCards {
+            get {
+                return ResourceManager.GetString("CantViewOtherTimeCards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Customer.
+        /// </summary>
+        public static string Customer {
+            get {
+                return ResourceManager.GetString("Customer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date.
+        /// </summary>
+        public static string Date {
+            get {
+                return ResourceManager.GetString("Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duration.
+        /// </summary>
+        public static string Duration {
+            get {
+                return ResourceManager.GetString("Duration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must enter the time duration as HH:MM or H.HH format..
+        /// </summary>
+        public static string DurationFormat {
+            get {
+                return ResourceManager.GetString("DurationFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FirstName.
+        /// </summary>
+        public static string FirstName {
+            get {
+                return ResourceManager.GetString("FirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to hours total.
         /// </summary>
         public static string HoursTotal {
             get {
                 return ResourceManager.GetString("HoursTotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The time entry you are attempting to edit has an invalid approval state..
+        /// </summary>
+        public static string InvalidApprovalState {
+            get {
+                return ResourceManager.GetString("InvalidApprovalState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid start of week input..
+        /// </summary>
+        public static string InvalidSOW {
+            get {
+                return ResourceManager.GetString("InvalidSOW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LastName.
+        /// </summary>
+        public static string LastName {
+            get {
+                return ResourceManager.GetString("LastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must select a pay class..
+        /// </summary>
+        public static string MustSelectPayClass {
+            get {
+                return ResourceManager.GetString("MustSelectPayClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must select a project..
+        /// </summary>
+        public static string MustSelectProject {
+            get {
+                return ResourceManager.GetString("MustSelectProject", resourceCulture);
             }
         }
         
@@ -97,11 +277,128 @@ namespace AllyisApps.Resources.TimeTracker.Controllers.TimeEntry {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There was no data to be exported..
+        /// </summary>
+        public static string NoDataToExport {
+            get {
+                return ResourceManager.GetString("NoDataToExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no entries to approve..
+        /// </summary>
+        public static string NoEntriesToApprove {
+            get {
+                return ResourceManager.GetString("NoEntriesToApprove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Filter.
         /// </summary>
         public static string NoFilter {
             get {
                 return ResourceManager.GetString("NoFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are not authorized to approve time entries..
+        /// </summary>
+        public static string NotAuthZApproveTimeEntries {
+            get {
+                return ResourceManager.GetString("NotAuthZApproveTimeEntries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are not authorized to retrieve this data..
+        /// </summary>
+        public static string NotAuthZData {
+            get {
+                return ResourceManager.GetString("NotAuthZData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are not authorized to retrive this data for another user..
+        /// </summary>
+        public static string NotAuthZDataOtherUser {
+            get {
+                return ResourceManager.GetString("NotAuthZDataOtherUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are not authorized to create a time entry..
+        /// </summary>
+        public static string NotAuthZTimeEntry {
+            get {
+                return ResourceManager.GetString("NotAuthZTimeEntry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are not authorized to delete a time entry..
+        /// </summary>
+        public static string NotAuthZTimeEntryDelete {
+            get {
+                return ResourceManager.GetString("NotAuthZTimeEntryDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are not authorized to edit a time entry..
+        /// </summary>
+        public static string NotAuthZTimeEntryEdit {
+            get {
+                return ResourceManager.GetString("NotAuthZTimeEntryEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are not authorized to create a time entry for another user..
+        /// </summary>
+        public static string NotAuthZTimeEntryOtherUser {
+            get {
+                return ResourceManager.GetString("NotAuthZTimeEntryOtherUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are not authorized to delete a time entry for another user..
+        /// </summary>
+        public static string NotAuthZTimeEntryOtherUserDelete {
+            get {
+                return ResourceManager.GetString("NotAuthZTimeEntryOtherUserDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are not authorized to edit a time entry for another user..
+        /// </summary>
+        public static string NotAuthZTimeEntryOtherUserEdit {
+            get {
+                return ResourceManager.GetString("NotAuthZTimeEntryOtherUserEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully updated overtime settings..
+        /// </summary>
+        public static string OvertimeUpdate {
+            get {
+                return ResourceManager.GetString("OvertimeUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project.
+        /// </summary>
+        public static string Project {
+            get {
+                return ResourceManager.GetString("Project", resourceCulture);
             }
         }
         
@@ -115,11 +412,47 @@ namespace AllyisApps.Resources.TimeTracker.Controllers.TimeEntry {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Successfully updated start of week..
+        /// </summary>
+        public static string SuccessfulSOW {
+            get {
+                return ResourceManager.GetString("SuccessfulSOW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to parse duration..
+        /// </summary>
+        public static string UnableParseDuration {
+            get {
+                return ResourceManager.GetString("UnableParseDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are not authorized to create reports..
         /// </summary>
         public static string UnauthorizedReports {
             get {
                 return ResourceManager.GetString("UnauthorizedReports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are not authorized to create reports for other users..
+        /// </summary>
+        public static string UnauthorizedReportsOtherUser {
+            get {
+                return ResourceManager.GetString("UnauthorizedReportsOtherUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an error..
+        /// </summary>
+        public static string WasAnError {
+            get {
+                return ResourceManager.GetString("WasAnError", resourceCulture);
             }
         }
     }

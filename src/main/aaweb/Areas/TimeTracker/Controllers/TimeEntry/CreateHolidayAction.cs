@@ -28,13 +28,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (string.IsNullOrWhiteSpace(newHolidayName))
 			{
-				Notifications.Add(new BootstrapAlert("You cannot create a holiday without a name", Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotCreateHolidayWIthoutName, Variety.Warning));
 			}
 
 			DateTime holidayDate;
 			if (!DateTime.TryParse(newHolidayDate, out holidayDate))
 			{
-				Notifications.Add(new BootstrapAlert("You cannot create a holiday without a valid date", Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotCreateHolidayWithInvalidDate, Variety.Warning));
 			}
 
 			if (!TimeTrackerService.CreateHoliday(new HolidayInfo() { OrganizationId = UserContext.ChosenOrganizationId, HolidayName = newHolidayName, Date = holidayDate }))

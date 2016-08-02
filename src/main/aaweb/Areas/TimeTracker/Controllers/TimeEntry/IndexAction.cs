@@ -34,23 +34,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			bool manager = AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers);
 
-			// Permissions checking
-			if (userId != -1 && userId != Convert.ToInt32(UserContext.UserId))
+			if (!manager)
 			{
-				if (!manager)
-				{
-					throw new UnauthorizedAccessException("You do not have the privilege of viewing other peoples time cards!");
-				}
+				throw new UnauthorizedAccessException(AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.CantViewOtherTimeCards);
 			}
-			else
+			
+			if (!(userId != -1 && userId != Convert.ToInt32(UserContext.UserId)) && !AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
 			{
 				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 					return this.Redirect("/");
 				}
-
-				userId = Convert.ToInt32(UserContext.UserId);
+				else
+				{
+					userId = Convert.ToInt32(UserContext.UserId);
+				}
 			}
 
 			ViewBag.canManage = manager;
@@ -89,7 +88,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			IDictionary<int, ProjectHours> hours = new Dictionary<int, ProjectHours>();
 			IEnumerable<HolidayInfo> holidays = TimeTrackerService.GetHolidays().Where(x => (startingDate < x.Date && x.Date < endingDate)); // We only care about holidays within the date range
 
-			foreach (CompleteProjectInfo proj in allProjects.Where(p=>p.ProjectId>0))
+			foreach (CompleteProjectInfo proj in allProjects.Where(p => p.ProjectId > 0))
 			{
 				// if ( hours.Count == 0 )
 				hours.Add(proj.ProjectId, new ProjectHours { Project = proj, Hours = 0.0f });
@@ -99,7 +98,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			StartOfWeekEnum startOfWeek = TimeTrackerService.GetStartOfWeek(orgId);
 
-			IEnumerable<UserInfo> users = CrmService.GetUsersWithSubscriptionToProductInOrganization(orgId, Services.Crm.CrmService.GetProductIdByName("TimeTracker"));
+			IEnumerable<UserInfo> users = CrmService.GetUsersWithSubscriptionToProductInOrganization(orgId, Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
 
 			TimeEntryOverDateRangeViewModel result = new TimeEntryOverDateRangeViewModel
 			{
@@ -109,7 +108,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				PayClasses = TimeTrackerService.GetPayClasses(orgId),
 				GrandTotal = new ProjectHours { Project = new CompleteProjectInfo { ProjectName = "Total" }, Hours = 0.0f },
 				Projects = allProjects.Where(x => x.IsActive == true && x.IsCustomerActive == true && x.IsUserActive == true),
-				ProjectsWithInactive = allProjects.Where(p=>p.ProjectId != 0),
+				ProjectsWithInactive = allProjects.Where(p => p.ProjectId != 0),
 				StartDate = SetStartingDate(startingDate, startOfWeek),
 				EndDate = SetEndingDate(endingDate, startOfWeek),
 				Entries = new List<EditTimeEntryViewModel>(),
@@ -132,6 +131,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// int weekend = 7 + ((int)startOfWeek - 2); // weekend = both days before startOfWeek
 			int weekend = (int)StartOfWeekEnum.Saturday;
 			bool holidayPopulated = false;
+
 			// For each date in the date range
 			for (var date = result.StartDate; date <= result.EndDate;)
 			{
@@ -176,20 +176,23 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Locked = iter.Current.ApprovalState == (int)Core.ApprovalState.Approved || isProjectDeleted
 					});
 					if (holidays.Where(x => x.Date == iter.Current.Date).FirstOrDefault() != null)
+					{
 						holidayPopulated = true;
+					}
+
 					iter.MoveNext();
-					//date = date.AddDays(1);
 				}
 				else if ((holidays.Where(x => x.Date == date).FirstOrDefault() != null) && (iter.Current == null || iter.Current.Date != date) && !holidayPopulated)
 				{
 					holidayPopulated = true;
+
 					// Prepopulate holidays (TODO: Also prepopulate PTO?)
 					// TODO: There's a lot of design discussion that needs to happen before we implement this. For example, should we have an internal customer with
 					// its own projects for Holidays, PTO, etc.? Where should we store the paytypes and durations for holidays? Where do we store the IDs for these?
 
 					result.GrandTotal.Hours += 8;
 
-					TimeEntryInfo TE = new TimeEntryInfo()
+					TimeEntryInfo timeEntryInfo = new TimeEntryInfo()
 					{
 						ApprovalState = 1,
 						Date = date,
@@ -200,11 +203,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Description = holidays.Where(x => x.Date == date).First().HolidayName
 					};
 
-					int TEID = TimeTrackerService.CreateTimeEntry(TE);
+					int timeEntryId = TimeTrackerService.CreateTimeEntry(timeEntryInfo);
 
 					result.Entries.Add(new EditTimeEntryViewModel
 					{
-						TimeEntryId = TEID,
+						TimeEntryId = timeEntryId,
 						Date = date,
 						UserId = userId,
 						StartingDate = result.StartDate,
@@ -214,10 +217,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						OrganizationId = orgId,
 						Projects = result.Projects,
 						ProjectsWithInactive = result.ProjectsWithInactive,
-						PayClassId = TE.PayClassId,
+						PayClassId = timeEntryInfo.PayClassId,
 						PayClasses = result.PayClasses,
-						Duration = string.Format("{0:D2}:{1:D2}", (int)TE.Duration, (int)Math.Round((TE.Duration - (int)TE.Duration) * 60, 0)),
-						Description = TE.Description,
+						Duration = string.Format("{0:D2}:{1:D2}", (int)timeEntryInfo.Duration, (int)Math.Round((timeEntryInfo.Duration - (int)timeEntryInfo.Duration) * 60, 0)),
+						Description = timeEntryInfo.Description,
 						ProjectName = allProjects.Where(x => x.ProjectId == 0).Select(x => x.ProjectName).FirstOrDefault(),
 					});
 				}

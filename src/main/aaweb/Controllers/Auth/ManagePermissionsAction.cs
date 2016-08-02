@@ -50,7 +50,7 @@ namespace AllyisApps.Controllers
 		{
 			PermissionsManagementViewModel result = new PermissionsManagementViewModel()
 			{
-				TimeTrackerId = Services.Crm.CrmService.GetProductIdByName("TimeTracker")
+				TimeTrackerId = Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker)
 			};
 			result.Subscriptions = CrmService.GetSubscriptionsDisplayByOrg(UserContext.ChosenOrganizationId);
 
@@ -299,7 +299,7 @@ namespace AllyisApps.Controllers
 				selectedAction.TimeTrackerSubscriptionId = 0;
 			}
 
-			IEnumerable<UserInfo> currentUsers = CrmService.GetUsersWithSubscriptionToProductInOrganization(selectedAction.OrganizationId, Services.Crm.CrmService.GetProductIdByName("TimeTracker"));
+			IEnumerable<UserInfo> currentUsers = CrmService.GetUsersWithSubscriptionToProductInOrganization(selectedAction.OrganizationId, Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
 			IEnumerable<int> userIds = currentUsers.Select(user => user.UserId);
 
 			int alteringUsers = users.Where(x => !userIds.Contains(x.UserId)).Count();
