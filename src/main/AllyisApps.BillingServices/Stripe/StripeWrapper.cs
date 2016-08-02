@@ -15,7 +15,7 @@ namespace AllyisApps.BillingServices.StripeService
 	/// <summary>
 	/// Wrapper class for the Stripe library. 
 	/// </summary>
-	public class StripeWrapper
+	public class OldStripeWrapper
 	{
 		/// <summary>
 		/// Creates a Customer from a Token.
