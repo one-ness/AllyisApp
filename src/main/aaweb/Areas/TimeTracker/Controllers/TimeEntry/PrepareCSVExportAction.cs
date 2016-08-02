@@ -27,7 +27,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public StreamWriter PrepareCSVExport(IEnumerable<TimeEntryInfo> data, IEnumerable<CompleteProjectInfo> projects)
 		{
 			StreamWriter output = new StreamWriter(new MemoryStream());
-			output.WriteLine("\"LastName\",\"FirstName\",\"Date\",\"Duration\",\"Project\",\"Customer\",\"Description\"");
+			output.WriteLine(
+				string.Format("\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\"",
+					Resources.TimeTracker.Controllers.TimeEntry.Strings.LastName,
+					Resources.TimeTracker.Controllers.TimeEntry.Strings.FirstName,
+					Resources.TimeTracker.Controllers.TimeEntry.Strings.Date,
+					Resources.TimeTracker.Controllers.TimeEntry.Strings.Duration,
+					Resources.TimeTracker.Controllers.TimeEntry.Strings.Project,
+					Resources.TimeTracker.Controllers.TimeEntry.Strings.Customer,
+					Resources.TimeTracker.Controllers.TimeEntry.Strings.Description
+				)
+			);
 			try
 			{
 				foreach (TimeEntryInfo entry in data)

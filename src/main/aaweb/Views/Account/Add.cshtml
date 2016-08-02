@@ -82,7 +82,7 @@
                 @Html.Hidden(string.Format("SubscriptionRoles[{0}].SubscriptionId", count), sub.SubscriptionId)
                 <div class="form-group">
                     <div class="@left">
-                        @if (sub.ProductName == "TimeTracker")
+                        @if (sub.ProductName == ProductNameKeyConstants.TimeTracker)
                         {
                             <label>@(string.Format("{0} {1}", AllyisApps.Resources.Views.Account.Strings.TimeTracker, AllyisApps.Resources.Views.Account.Strings.Role))</label>
 }
@@ -96,7 +96,7 @@
                     </div>
                 </div>
 
-                if ((sub.ProductName == "TimeTracker") && roomInSubscription) //TimeTracker with room
+                if ((sub.ProductName == ProductNameKeyConstants.TimeTracker) && roomInSubscription) //TimeTracker with room
                 {
                     <div class="form-group">
                         <div class="@left">

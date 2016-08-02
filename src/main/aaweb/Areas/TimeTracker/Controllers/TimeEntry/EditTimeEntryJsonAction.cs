@@ -38,7 +38,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.Json(new
 				{
 					status = "error",
-					message = "The time entry you are attempting to edit has an invalid approval state.",
+					message = Resources.TimeTracker.Controllers.TimeEntry.Strings.InvalidApprovalState,
 					reason = "UNDEFINED_APPROVAL",
 					action = "REVERT",
 					values = new { duration = this.GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
@@ -54,7 +54,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return this.Json(new
 					{
 						status = "error",
-						message = "You are not authorized to edit a time entry.",
+						message = Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntryEdit,
 						action = "REVERT",
 						values = new { duration = this.GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
 					});
@@ -68,7 +68,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return this.Json(new
 					{
 						status = "error",
-						message = "You are not authorized to edit a time entry for another user!",
+						message = Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntryOtherUserEdit,
 						action = "REVERT",
 						values = new { duration = this.GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
 					});
@@ -82,7 +82,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.Json(new
 				{
 					status = "error",
-					message = "The time entry you are attempting to edit has been approved and can no longer be edited.",
+					message = Resources.TimeTracker.Controllers.TimeEntry.Strings.AlreadyApprovedCannotEdit,
 					action = "REVERT",
 					values = new { duration = this.GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
 				});
@@ -117,7 +117,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			model.IsManager = canManage;
 			if (!(durationResult = this.ParseDuration(model.Duration)).HasValue)
 			{
-				throw new ArgumentException("Unable to parse duration.");
+				throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnableParseDuration);
 			}
 
 			IEnumerable<TimeEntryInfo> otherEntriesToday = TimeTrackerService.GetTimeEntriesByUserOverDateRange(new List<int> { model.UserId }, model.OrganizationId, model.Date, model.Date);
@@ -132,22 +132,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			if (durationResult + durationOther > 24.00)
 			{
-				throw new ArgumentException("Duration cannot exceed 24 hours in a day.");
+				throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotExceed24);
 			}
 
 			if (model.ProjectId == 0)
 			{
-				throw new ArgumentException("You must select a project.");
+				throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.MustSelectProject);
 			}
 
 			if (model.PayClassId < 1)
 			{
-				throw new ArgumentException("You must select a pay class.");
+				throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.MustSelectPayClass);
 			}
 
 			if (model.Date <= model.LockDate && !canManage)
 			{
-				throw new ArgumentException("You cannot edit this date.");
+				throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotEditDate);
 			}
 
 			TimeTrackerService.UpdateTimeEntry(new TimeEntryInfo()
@@ -184,7 +184,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				LockSaved = entry.LockSaved,
 				LockDate = TimeTrackerService.GetLockDate(organizationId, entry.UserId),
 				OrganizationId = organizationId,
-				IsManager = CrmService.GetProductRoleForUser("TimeTracker", organizationId, entry.UserId) == "Manager"
+				IsManager = CrmService.GetProductRoleForUser(ProductNameKeyConstants.TimeTracker, organizationId, entry.UserId) == "Manager"
 			};
 		}
 

@@ -20,7 +20,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Initializes a new instance of the <see cref="ManageController" /> class.
 		/// </summary>
 		public ManageController()
-			: base(Services.Crm.CrmService.GetProductIdByName("TimeTracker"))
+			: base(Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker))
 		{
 		}
 	}

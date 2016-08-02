@@ -34,23 +34,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			bool manager = AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers);
 
-			// Permissions checking
-			if (userId != -1 && userId != Convert.ToInt32(UserContext.UserId))
+			if (!manager)
 			{
-				if (!manager)
-				{
-					throw new UnauthorizedAccessException("You do not have the privilege of viewing other peoples time cards!");
-				}
+				throw new UnauthorizedAccessException(AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.CantViewOtherTimeCards);
 			}
-			else
+			
+			if (!(userId != -1 && userId != Convert.ToInt32(UserContext.UserId)) && !AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
 			{
 				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 					return this.Redirect("/");
 				}
-
-				userId = Convert.ToInt32(UserContext.UserId);
+				else
+				{
+					userId = Convert.ToInt32(UserContext.UserId);
+				}
 			}
 
 			ViewBag.canManage = manager;
@@ -99,7 +98,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			StartOfWeekEnum startOfWeek = TimeTrackerService.GetStartOfWeek(orgId);
 
-			IEnumerable<UserInfo> users = CrmService.GetUsersWithSubscriptionToProductInOrganization(orgId, Services.Crm.CrmService.GetProductIdByName("TimeTracker"));
+			IEnumerable<UserInfo> users = CrmService.GetUsersWithSubscriptionToProductInOrganization(orgId, Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
 
 			TimeEntryOverDateRangeViewModel result = new TimeEntryOverDateRangeViewModel
 			{

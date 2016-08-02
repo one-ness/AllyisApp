@@ -17,7 +17,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	[Authorize]
 	public class HomeController : BaseProductController
 	{
-		private static readonly int TimeTrackerID = Services.Crm.CrmService.GetProductIdByName("TimeTracker");
+		private static readonly int TimeTrackerID = Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker);
 
 		#region default constructor
 		/// <summary>

@@ -36,8 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				return this.View(ViewConstants.Error);
 			}
-
-			if (startDateCopy > startDateTarget)
+			else if (startDateCopy > startDateTarget)
 			{
 				return this.View(ViewConstants.Error);
 			}

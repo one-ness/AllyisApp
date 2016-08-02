@@ -32,8 +32,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.Json(new
 				{
 					status = "error",
-					message = "You are not authorized to create a time entry.",
-					e = new UnauthorizedAccessException("You are not authorized to create a time entry.")
+					message = Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntry,
+					e = new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntry)
 				});
 			}
 			else if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
@@ -41,7 +41,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.Json(new
 				{
 					status = "error",
-					message = "You are not authorized to create a time entry for another user!"
+					message = Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntryOtherUser
 				});
 			}
 
@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				float? durationResult;
 				if (!(durationResult = this.ParseDuration(model.Duration)).HasValue)
 				{
-					throw new ArgumentException("You must enter the time duration as HH:MM or H.HH format.");
+					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.DurationFormat);
 				}
 
 				IEnumerable<TimeEntryInfo> otherEntriesToday = TimeTrackerService.GetTimeEntriesByUserOverDateRange(new List<int> { model.UserId }, model.OrganizationId, model.Date, model.Date);
@@ -63,19 +63,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				if (durationResult + durationOther > 24.00)
 				{
-					throw new ArgumentException("Duration cannot exceed 24 hours in a day.");
+					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotExceed24);
 				}
 				else if (model.ProjectId == 0)
 				{
-					throw new ArgumentException("You must select a project.");
+					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.MustSelectProject);
 				}
 				else if (model.PayClassId < 1)
 				{
-					throw new ArgumentException("You must select a pay class.");
+					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.MustSelectPayClass);
 				}
 				else if (model.Date <= TimeTrackerService.GetLockDate(model.OrganizationId, model.UserId))
 				{
-					throw new ArgumentException("You can only edit last week, this week, and any date up till the end of next month.");
+					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.CanOnlyEdit);
 				}
 
 				int id = TimeTrackerService.CreateTimeEntry(new TimeEntryInfo()

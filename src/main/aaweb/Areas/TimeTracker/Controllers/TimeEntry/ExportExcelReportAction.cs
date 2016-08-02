@@ -37,14 +37,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
 				{
-					throw new UnauthorizedAccessException("You are not authorized to create a report.");
+					throw new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReports);
 				}
 			}
 			else
 			{
 				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
 				{
-					throw new UnauthorizedAccessException("You are not authorized to create reports for another user!");
+					throw new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReportsOtherUser);
 				}
 			}
 
@@ -62,7 +62,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
-				Notifications.Add(new BootstrapAlert("There was no data to be exported!", Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.NoDataToExport, Variety.Warning));
 			}
 
 			return this.RedirectToAction(ActionConstants.Report, new { organizationId = organizationId });

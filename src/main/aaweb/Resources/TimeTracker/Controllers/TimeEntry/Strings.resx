@@ -123,19 +123,130 @@
   <data name="AllUsersLast" xml:space="preserve">
     <value>USERS</value>
   </data>
+  <data name="AlreadyApprovedCannotEdit" xml:space="preserve">
+    <value>The time entry you are attempting to edit has been approved and can no longer be edited.</value>
+  </data>
+  <data name="CannotCreateBlankPayClass" xml:space="preserve">
+    <value>You cannot create a blank pay class.</value>
+  </data>
+  <data name="CannotCreateHolidayWithInvalidDate" xml:space="preserve">
+    <value>You cannot create a holiday without a valid date.</value>
+  </data>
+  <data name="CannotCreateHolidayWIthoutName" xml:space="preserve">
+    <value>You cannot create a holiday without a name.</value>
+  </data>
+  <data name="CannotExceed24" xml:space="preserve">
+    <value>Duration cannot exceed 24 hours in a day.</value>
+  </data>
+  <data name="CanOnlyEdit" xml:space="preserve">
+    <value>You can only edit last week, this week, and any date up till the end of next month.</value>
+  </data>
+  <data name="CantViewOtherTimeCards" xml:space="preserve">
+    <value>You do not have the privelege of viewing other people's time cards.</value>
+  </data>
+  <data name="DurationFormat" xml:space="preserve">
+    <value>You must enter the time duration as HH:MM or H.HH format.</value>
+  </data>
   <data name="HoursTotal" xml:space="preserve">
     <value>hours total</value>
+  </data>
+  <data name="MustSelectPayClass" xml:space="preserve">
+    <value>You must select a pay class.</value>
+  </data>
+  <data name="MustSelectProject" xml:space="preserve">
+    <value>You must select a project.</value>
   </data>
   <data name="NoDataPreview" xml:space="preserve">
     <value>There is no data preview to display.</value>
   </data>
+  <data name="NoEntriesToApprove" xml:space="preserve">
+    <value>There are no entries to approve.</value>
+  </data>
   <data name="NoFilter" xml:space="preserve">
     <value>No Filter</value>
+  </data>
+  <data name="NotAuthZApproveTimeEntries" xml:space="preserve">
+    <value>You are not authorized to approve time entries.</value>
+  </data>
+  <data name="NotAuthZTimeEntry" xml:space="preserve">
+    <value>You are not authorized to create a time entry.</value>
+  </data>
+  <data name="NotAuthZTimeEntryDelete" xml:space="preserve">
+    <value>You are not authorized to delete a time entry.</value>
+  </data>
+  <data name="NotAuthZTimeEntryOtherUser" xml:space="preserve">
+    <value>You are not authorized to create a time entry for another user.</value>
+  </data>
+  <data name="NotAuthZTimeEntryOtherUserDelete" xml:space="preserve">
+    <value>You are not authorized to delete a time entry for another user.</value>
   </data>
   <data name="SelectProject" xml:space="preserve">
     <value>Select Project</value>
   </data>
   <data name="UnauthorizedReports" xml:space="preserve">
     <value>You are not authorized to create reports.</value>
+  </data>
+  <data name="WasAnError" xml:space="preserve">
+    <value>There was an error.</value>
+  </data>
+  <data name="CannotEditDate" xml:space="preserve">
+    <value>You cannot edit this date.</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>FirstName</value>
+  </data>
+  <data name="InvalidApprovalState" xml:space="preserve">
+    <value>The time entry you are attempting to edit has an invalid approval state.</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>LastName</value>
+  </data>
+  <data name="NoDataToExport" xml:space="preserve">
+    <value>There was no data to be exported.</value>
+  </data>
+  <data name="NotAuthZData" xml:space="preserve">
+    <value>You are not authorized to retrieve this data.</value>
+  </data>
+  <data name="NotAuthZDataOtherUser" xml:space="preserve">
+    <value>You are not authorized to retrive this data for another user.</value>
+  </data>
+  <data name="NotAuthZTimeEntryEdit" xml:space="preserve">
+    <value>You are not authorized to edit a time entry.</value>
+  </data>
+  <data name="NotAuthZTimeEntryOtherUserEdit" xml:space="preserve">
+    <value>You are not authorized to edit a time entry for another user.</value>
+  </data>
+  <data name="Project" xml:space="preserve">
+    <value>Project</value>
+  </data>
+  <data name="UnableParseDuration" xml:space="preserve">
+    <value>Unable to parse duration.</value>
+  </data>
+  <data name="UnauthorizedReportsOtherUser" xml:space="preserve">
+    <value>You are not authorized to create reports for other users.</value>
+  </data>
+  <data name="ActionUnauthorizedMessage" xml:space="preserve">
+    <value>You are not authorized to perform this action.</value>
+  </data>
+  <data name="InvalidSOW" xml:space="preserve">
+    <value>Invalid start of week input.</value>
+  </data>
+  <data name="OvertimeUpdate" xml:space="preserve">
+    <value>Successfully updated overtime settings.</value>
+  </data>
+  <data name="SuccessfulSOW" xml:space="preserve">
+    <value>Successfully updated start of week.</value>
   </data>
 </root>

@@ -43,7 +43,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// if (Permissions.Cannot(ProductAction.TimeTrackerCreateReportSelf, OrganizationId, TimeTrackerID))
 				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
 				{
-					throw new UnauthorizedAccessException("You are not authorized to create a report.");
+					throw new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReports);
 				}
 			}
 			else
@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// if (Permissions.Cannot(ProductAction.TimeTrackerCreateReportOthers, OrganizationId, TimeTrackerID))
 				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
 				{
-					throw new UnauthorizedAccessException("You are not authorized to create reports for another user!");
+					throw new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReportsOtherUser);
 				}
 			}
 
@@ -59,7 +59,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DataExportViewModel model = this.ConstructDataExportViewModel(organizationId, userId, dateRangeStart, dateRangeEnd, projectId, customerId);
 			if (model.Data.Count() == 0)
 			{
-				Notifications.Add(new AllyisApps.Core.Alert.BootstrapAlert("There was no data to be exported!", Variety.Warning));
+				Notifications.Add(new AllyisApps.Core.Alert.BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.NoDataToExport, Variety.Warning));
 				return this.RedirectToAction(ActionConstants.Report, new { organizationId = organizationId });
 			}
 
