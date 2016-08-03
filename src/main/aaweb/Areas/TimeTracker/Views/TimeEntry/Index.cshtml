@@ -14,17 +14,15 @@
 <div class="row">
     @using (Html.BeginForm(ActionConstants.Index, ControllerConstants.TimeEntry, FormMethod.Get, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" }))
     {
-        @Html.HiddenFor(m => m.OrganizationId)
-        @Html.HiddenFor(m => m.UserId)
-        @Html.HiddenFor(m => m.StartDate)
-        @Html.HiddenFor(m => m.EndDate)
+        <input id="UserId" name="UserId" type="hidden" value="@Model.EntryRange.UserId" />
+        <input id="StartDate" name="StartDate" type="hidden" value="@Model.EntryRange.StartDate" />
+        <input id="EndDate" name="EndDate" type="hidden" value="@Model.EntryRange.EndDate" />
         <div class="form-group pull-left" style="margin-bottom: 15px;">
             <a href="@Url.Action(ActionConstants.Export, ControllerConstants.TimeEntry, routeValues: new
                 {
-                    organizationId = Model.OrganizationId,
-                    userId = Model.UserId,
-                    startingDate = Model.StartDate,
-                    endingDate = Model.EndDate
+                    userId = Model.EntryRange.UserId,
+                    startingDate = Model.EntryRange.StartDate,
+                    endingDate = Model.EntryRange.EndDate
                 })">
                 @*<input type="button" value="Export" class="btn btn-primary">*@
                 <span class="btn btn-primary" style="margin-right: 15px;">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Export</span>
@@ -45,7 +43,7 @@
                         <i class="fa fa-chevron-left"></i>
                     </a>
                     <a class="btn btn-primary" title=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Current
-                       href="@Url.Action(ActionConstants.Index, routeValues: new { organizationId = Model.OrganizationId, userId = Model.UserId })">
+                       href="@Url.Action(ActionConstants.Index, routeValues: new { userId = Model.EntryRange.UserId })">
                         <i class="glyphicon glyphicon-flash"></i>
                     </a>
                     <a class="btn btn-primary" title=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Next
@@ -63,7 +61,7 @@
     }
 </div>
 
-@Html.Partial("_AjaxTimeEntries", Model.Entries)
+@Html.Partial("_AjaxTimeEntries", Model.EntryRange)
 @{ViewBag.SidebarToggleText = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Details;
     ViewBag.RenderSidebar = true;}
 @if (Model.CanManage)
@@ -107,10 +105,9 @@
             </div>
             @using (Html.BeginForm(ActionConstants.SetLockDate, ControllerConstants.TimeEntry, FormMethod.Post))
             {
-                @Html.HiddenFor(m => m.UserId)
-                @Html.HiddenFor(m => m.OrganizationId)
-                @Html.HiddenFor(m => m.StartDate)
-                @Html.HiddenFor(m => m.EndDate)
+                <input id="UserId" name="UserId" type="hidden" value="@Model.EntryRange.UserId" />
+                <input id="StartDate" name="StartDate" type="hidden" value="@Model.EntryRange.StartDate" />
+                <input id="EndDate" name="EndDate" type="hidden" value="@Model.EntryRange.EndDate" />
                 @Html.TextBoxFor(m => m.LockDate, new { name = "LockDate", id = "LockDate", @class = "form-control" })
 //<input type="text" name="LockDate" id="LockDate" class="form-control" value="" onSubmit="alert(LockDate.value);" />
             }
@@ -142,7 +139,7 @@
 
                         string active = "";
                         var resetBackground = "this.style.backgroundColor=\"#FFFFFF\"";
-                        if (user.UserId == Model.UserId)
+                        if (user.UserId == Model.EntryRange.UserId)
                         {
                             active = "list-group-item-info";
                             resetBackground = "this.style.backgroundColor=\"#d9edf7\"";
@@ -153,16 +150,14 @@
                             <a class="col-xs-11 text-left" data-search="@user.Email"
                                href="@Url.Action(ActionConstants.Index, routeValues: new
                             {
-                                organizationId = Model.OrganizationId,
                                 userId = user.UserId,
-                                startDate = Model.StartDate,
-                                endDate = Model.EndDate
+                                startDate = Model.EntryRange.StartDate,
+                                endDate = Model.EntryRange.EndDate
                             })"
                                style="text-decoration: none; color: #000000;">
                                 @user.FirstName @user.LastName
                             </a>
                             <a href="@Url.Action(ActionConstants.UserEdit, routeValues: new {
-                                organizationId = Model.OrganizationId,
                                 userId = user.UserId })"
                                style="text-decoration: none; color: #0066AA;"><i class="fa fa-cog"></i></a>
                         </div>count++;
@@ -192,10 +187,9 @@
     // permission check and grab data
     function ajaxUpdateUserSummary() {
         var data = {
-            userId: "@(Model.UserId)",
-            organizationId: "@(Model.OrganizationId)",
-            startingDate: "@(Model.StartDate)",
-            endingDate: "@(Model.EndDate)"};
+            userId: "@(Model.EntryRange.UserId)",
+            startingDate: "@(Model.EntryRange.StartDate)",
+            endingDate: "@(Model.EntryRange.EndDate)"};
 
         $.ajax({
             type: "post",
@@ -709,8 +703,8 @@
             });
             $('#daterange').daterangepicker("setRange",
             {
-                start: moment((@Model.StartDate.ToUniversalTime().Ticks - 621355968000000000) / 10000).toDate(),
-                end:   moment((@Model.EndDate.ToUniversalTime().Ticks - 621355968000000000) / 10000).toDate()
+                start: moment((@Model.EntryRange.StartDate.ToUniversalTime().Ticks - 621355968000000000) / 10000).toDate(),
+                end:   moment((@Model.EntryRange.EndDate.ToUniversalTime().Ticks - 621355968000000000) / 10000).toDate()
             });
         });
 
@@ -800,7 +794,7 @@
 
             newStart.setTime(newStart.getTime() + (startOffsetChange * 3600000));
             newEnd.setTime(newEnd.getTime() + (endOffsetChange * 3600000));
-
+            console.log("setrange: " + newStart + ", " + newEnd);
             drp.daterangepicker("setRange", {start: newStart, end: newEnd });
         }
     </script>

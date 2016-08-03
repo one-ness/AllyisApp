@@ -21,22 +21,20 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET /TimeTracker/TimeEntry/UserEdit.
 		/// </summary>
-		/// <param name="organizationId">The Organization's Id.</param>
 		/// <param name="userId">The User's Id.</param>
 		/// <returns>The user edit page.</returns>
-		public ActionResult UserEdit(int organizationId = 0, int userId = -1)
+		public ActionResult UserEdit(int userId = -1)
 		{
 			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditProject))
 			{
 				UserInfo userInfo = AccountService.GetUserInfo(userId);
 				return this.View(new UserEditViewModel
 				{
-					OrganizationId = organizationId,
 					UserId = userId,
 					UserInfo = userInfo,
 
 					UserProjects = userInfo == null ? null : ProjectService.GetProjectsByUserId(userId),
-					AllProjects = userInfo == null ? null : OrgService.GetProjectsByOrganization(organizationId),
+					AllProjects = userInfo == null ? null : OrgService.GetProjectsByOrganization(UserContext.ChosenOrganizationId),
 
 					UserName = (userInfo == null) ? null : string.Format("{0} {1}", userInfo.FirstName, userInfo.LastName)
 				});

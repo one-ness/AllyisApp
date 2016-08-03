@@ -7,7 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using AllyisApps.DBModel.TimeTracker;
+
 using AllyisApps.Services.BusinessObjects;
 using AllyisApps.Services.TimeTracker;
 
@@ -26,37 +26,15 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		public DateTime LockDate { get; set; }
 
 		/// <summary>
-		/// Gets the list of entries.
+		/// Gets the list of entries, start and end dates, and user/org id's.
 		/// </summary>
-		public IList<EditTimeEntryViewModel> Entries { get; internal set; }
-
-		/// <summary>
-		/// Gets the starting date of the date range.
-		/// </summary>
-		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-		public DateTime StartDate { get; internal set; }
-
-		/// <summary>
-		/// Gets the ending date of the date range.
-		/// </summary>
-		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-		public DateTime EndDate { get; internal set; }
-
-		/// <summary>
-		/// Gets the organization's Id.
-		/// </summary>
-		public int OrganizationId { get; internal set; }
-
+		public TimeEntryRangeForUserViewModel EntryRange { get; internal set; }
+		
 		/// <summary>
 		/// Gets a value indicating whether or not user can manage other users.
 		/// </summary>
 		public bool CanManage { get; internal set; }
-
-		/// <summary>
-		/// Gets the user's Id.
-		/// </summary>
-		public int UserId { get; internal set; }
-
+		
 		/// <summary>
 		/// Gets the user's Id.
 		/// </summary>

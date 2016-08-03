@@ -24,7 +24,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Submits form to view data.
 		/// </summary>
 		/// <param name="viewDataButton">The value of the button used to submit the form.</param>
-		/// <param name="organizationId">The Organization's Id.</param>
 		/// <param name="userSelect">Array of selected user Ids.</param>
 		/// <param name="dateRangeStart">The beginning of the date range(nullable).</param>
 		/// <param name="dateRangeEnd">The end of the date range (nullable).</param>
@@ -33,7 +32,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="pageNum">The page of results to view.</param>
 		/// <param name="projectSelect">The project's id (not required).</param>
 		/// <returns>The data in a view dependent on the button's value.</returns>
-		public ActionResult ViewReport(string viewDataButton, int organizationId, List<int> userSelect, DateTime? dateRangeStart, DateTime? dateRangeEnd, bool showExport, int customerSelect, int pageNum, int projectSelect = 0)
+		public ActionResult ViewReport(string viewDataButton, List<int> userSelect, DateTime? dateRangeStart, DateTime? dateRangeEnd, bool showExport, int customerSelect, int pageNum, int projectSelect = 0)
 		{
 			switch (viewDataButton)
 			{
@@ -59,9 +58,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 							reportVMselect.Users = userSelect;
 						}
 
-						ReportViewModel reportVM = this.ConstructReportViewModel(UserContext.UserId, organizationId, AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers), showExport, reportVMselect);
+						ReportViewModel reportVM = this.ConstructReportViewModel(UserContext.UserId, UserContext.ChosenOrganizationId, AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers), showExport, reportVMselect);
 
-						DataExportViewModel dataVM = this.ConstructDataExportViewModel(organizationId, reportVMselect.Users, dateRangeStart, dateRangeEnd, projectSelect, customerSelect);
+						DataExportViewModel dataVM = this.ConstructDataExportViewModel(reportVMselect.Users, dateRangeStart, dateRangeEnd, projectSelect, customerSelect);
 
 						dataVM.PageTotal = SetPageTotal(dataVM.Data, reportVM.PreviewPageSize, pageNum); // must set PageTotal first and seperately like this.
 						dataVM.PreviewData = SetPreviewData(dataVM.Data, reportVM.PreviewPageSize, pageNum);
@@ -71,7 +70,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 						reportVM.PreviewTotal = string.Format("{0} {1}", total, Resources.TimeTracker.Controllers.TimeEntry.Strings.HoursTotal);
 
-						IEnumerable<CompleteProjectInfo> orgProjects = OrgService.GetProjectsByOrganization(organizationId);
+						IEnumerable<CompleteProjectInfo> orgProjects = OrgService.GetProjectsByOrganization(UserContext.ChosenOrganizationId);
 						if (dataCount > 0)
 						{
 							IList<TablePreviewEntry> pEntries = new List<TablePreviewEntry>();
@@ -108,12 +107,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				case "Export":
 					{
-						return this.ExportReport(organizationId, userSelect, dateRangeStart, dateRangeEnd, customerSelect, projectSelect);
+						return this.ExportReport(userSelect, dateRangeStart, dateRangeEnd, customerSelect, projectSelect);
 					}
 
 				default:
 					{
-						return this.RedirectToAction(ActionConstants.Report, new { organizationId = organizationId });
+						return this.RedirectToAction(ActionConstants.Report);
 					}
 			}
 		}

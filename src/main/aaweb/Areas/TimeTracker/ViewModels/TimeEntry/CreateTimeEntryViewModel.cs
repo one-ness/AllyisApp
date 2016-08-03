@@ -43,10 +43,5 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		/// Gets or sets the description defined in this entry.
 		/// </summary>
 		public string Description { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Organization's Id.
-		/// </summary>
-		public int OrganizationId { get; set; }
 	}
 }

@@ -23,12 +23,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Action to retreive the number of hours spent in a project.
 		/// </summary>
 		/// <param name="userId">The user's Id.</param>
-		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="startingDate">The starting date of the date range.</param>
 		/// <param name="endingDate">The ending date of the date range.</param>
 		/// <returns>Json object representing all related projects and their current hours.</returns>
 		[HttpPost]
-		public ActionResult GetDetailsDataJson(int userId, int organizationId, DateTime startingDate, DateTime endingDate)
+		public ActionResult GetDetailsDataJson(int userId, DateTime startingDate, DateTime endingDate)
 		{
 			bool manager = AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers);
 
@@ -57,7 +56,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			// Authorized for viewing details
-			TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(userId, manager, organizationId, startingDate, endingDate, TimeTrackerService.GetLockDate(organizationId, userId));
+			TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(userId, manager, startingDate, endingDate, TimeTrackerService.GetLockDate(userId));
 			if (model.Projects.Count() == 0 || model.Projects == null)
 			{
 				return this.Json(new

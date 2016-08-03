@@ -37,7 +37,6 @@
         @Html.HiddenFor(m => m.Date).RemoveIdAttribute()
         @Html.HiddenFor(m => m.StartingDate).RemoveIdAttribute()
         @Html.HiddenFor(m => m.EndingDate).RemoveIdAttribute()
-        @Html.HiddenFor(m => m.OrganizationId).RemoveIdAttribute()
         <div class="group left" style="width: 70px;">
             @Html.TextBoxDisabledFor(m => Model.Duration, locked, new { @class = "form-control", @onchange = "changeOccur(this)", @onkeypress = "keyDown(event, this)", @size = 5, @maxlength = 5, @placeholder = "HH:MM" }).RemoveIdAttribute()
         </div>

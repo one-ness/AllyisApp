@@ -677,18 +677,12 @@ namespace AllyisApps.Services.Crm
 		}
 
 		/// <summary>
-		/// Gets a list of <see cref="SubscriptionDisplayInfo"/>s for all subscriptions in an organization.
+		/// Gets a list of <see cref="SubscriptionDisplayInfo"/>s for all subscriptions in the chosen organization.
 		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
 		/// <returns>List of SubscriptionDisplayInfos.</returns>
-		public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplayByOrg(int orgId)
+		public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplay()
 		{
-			if (orgId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
-			}
-
-			return DBHelper.Instance.GetSubscriptionsDisplayByOrg(orgId).Select(s => BusinessObjectsHelper.InitializeSubscriptionDisplayInfo(s));
+			return DBHelper.Instance.GetSubscriptionsDisplayByOrg(UserContext.ChosenOrganizationId).Select(s => BusinessObjectsHelper.InitializeSubscriptionDisplayInfo(s));
 		}
 
 		/// <summary>
@@ -854,20 +848,14 @@ namespace AllyisApps.Services.Crm
 		/// Gets the product role for a user.
 		/// </summary>
 		/// <param name="productName">Product name.</param>
-		/// <param name="orgId">Organization Id.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns>The product role.</returns>
-		public string GetProductRoleForUser(string productName, int orgId, int userId)
+		public string GetProductRoleForUser(string productName, int userId)
 		{
 			#region Validation
 			if (string.IsNullOrEmpty(productName))
 			{
 				throw new ArgumentNullException("productName", "Product name must have a value.");
-			}
-
-			if (orgId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
 			}
 
 			if (userId <= 0)
@@ -876,7 +864,7 @@ namespace AllyisApps.Services.Crm
 			}
 			#endregion
 
-			return DBHelper.GetProductRoleForUser(productName, orgId, userId);
+			return DBHelper.GetProductRoleForUser(productName, UserContext.ChosenOrganizationId, userId);
 		}
 
 		/// <summary>

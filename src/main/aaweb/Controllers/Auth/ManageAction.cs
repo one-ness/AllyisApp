@@ -59,7 +59,7 @@ namespace AllyisApps.Controllers
 				UserId = x.UserId
 			});
 
-			IEnumerable<SubscriptionDisplayInfo> subs = CrmService.GetSubscriptionsDisplayByOrg(UserContext.ChosenOrganizationId);
+			IEnumerable<SubscriptionDisplayInfo> subs = CrmService.GetSubscriptionsDisplay();
 			IEnumerable<SubscriptionDisplayViewModel> subscriptions = Services.Crm.CrmService.GetProductInfoList().Select(p =>
 			{
 				return new SubscriptionDisplayViewModel

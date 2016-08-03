@@ -31,11 +31,6 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		public IEnumerable<PayClassInfo> PayClasses { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Organization's Id.
-		/// </summary>
-		public int OrganizationId { get; set; }
-
-		/// <summary>
 		/// Gets or sets the starting date of the date range.
 		/// </summary>
 		public int StartingDate { get; set; } // Note: this must be an int and not a DateTime for correct, culture-independant serialization/deserialization
