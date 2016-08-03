@@ -20,6 +20,10 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "AllyisAppsDB", "AllyisAppsD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllyisApps.BillingServices", "AllyisApps.BillingServices\AllyisApps.BillingServices.csproj", "{0FDE35E2-5D06-41F5-B2E7-B7B0BF3028FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllyisApps.BillingServices.Stripe", "External.Stripe\AllyisApps.BillingServices.Stripe.csproj", "{14080904-6318-45BF-B12F-59E5AA55E3F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllyisApps.BillingServices.Common", "AllyisApps.BillingServices.Common\AllyisApps.BillingServices.Common.csproj", "{7829F110-92B1-4A99-9D75-1DD971B980EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +57,14 @@ Global
 		{0FDE35E2-5D06-41F5-B2E7-B7B0BF3028FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FDE35E2-5D06-41F5-B2E7-B7B0BF3028FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FDE35E2-5D06-41F5-B2E7-B7B0BF3028FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14080904-6318-45BF-B12F-59E5AA55E3F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14080904-6318-45BF-B12F-59E5AA55E3F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14080904-6318-45BF-B12F-59E5AA55E3F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14080904-6318-45BF-B12F-59E5AA55E3F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7829F110-92B1-4A99-9D75-1DD971B980EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7829F110-92B1-4A99-9D75-1DD971B980EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7829F110-92B1-4A99-9D75-1DD971B980EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7829F110-92B1-4A99-9D75-1DD971B980EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

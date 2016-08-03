@@ -13,7 +13,6 @@ using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.Services.Account;
 using AllyisApps.Services.BusinessObjects;
-using AllyisApps.Utilities;
 using Stripe;
 
 namespace AllyisApps.Services.Crm
