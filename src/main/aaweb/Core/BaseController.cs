@@ -102,13 +102,12 @@ namespace AllyisApps.Core
 			string url;
 			if (chosenOrg == "default")
 			{
-				url = string.Format("http://{0}/{1}", rootAndMiddle, route);
+				url = string.Format("http://{0}/{1}?OrganizationId={2}", rootAndMiddle, route, organizationId); // The org id value here lets us change orgs without subdomains. TODO: When subdomains are fixed, remove the org id from here.
 			}
 			else
 			{
 				url = string.Format("http://{0}.{1}/{2}", chosenOrg, rootAndMiddle, route);
 			}
-
 			return this.Redirect(url);
 		}
 
