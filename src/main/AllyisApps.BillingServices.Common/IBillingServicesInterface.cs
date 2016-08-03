@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AllyisApps.BillingServices
+namespace AllyisApps.BillingServices.Common
 {
-	interface BillingSystemInterface
+	public interface IBillingServicesInterface
 	{
 		// Plans are per offering, ie Time Tracker, Consulting, etc
 		#region plans
