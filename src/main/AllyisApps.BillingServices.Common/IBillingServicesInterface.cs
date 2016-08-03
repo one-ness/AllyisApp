@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using AllyisApps.BillingServices.Common.Types;
 
 namespace AllyisApps.BillingServices.Common
 {
@@ -13,28 +10,28 @@ namespace AllyisApps.BillingServices.Common
 		bool CreatePlan();
 		bool DeletePlan();
 		bool UpdatePlan();
-		bool RetrievePlan();
+		BillingPlan RetrievePlan();
 		#endregion
 
 		#region customers
 		bool CreateCustomer();
 		bool DeleteCustomer();
 		bool UpdateCustomer();
-		bool RetrieveCustomer();
-		List<bool> ListCustomers();
+		BillingCustomer RetrieveCustomer();
+		List<BillingCustomer> ListCustomers();
 		#endregion
 
 		#region subscriptions
 		bool CreateSubscription();
 		bool DeleteSubscription();
 		bool UpdateSubscription();
-		bool RetrieveSubscription();
-		List<bool> ListSubscriptions();
+		BillingSubscription RetrieveSubscription();
+		List<BillingSubscription> ListSubscriptions();
 		#endregion
 
 		#region charges
 		bool CreateCharge();
-		bool RetrieveCharge();
+		BillingCharge RetrieveCharge();
 		#endregion
 	}
 }

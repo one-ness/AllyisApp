@@ -9,10 +9,10 @@ using AllyisApps.Services.BusinessObjects;
 
 namespace AllyisApps.ViewModels
 {
-    /// <summary>
-    /// Represents basic user info.
-    /// </summary>
-    public class EditSubscriptionUsersViewModel : BaseViewModel
+	/// <summary>
+	/// Represents basic user info.
+	/// </summary>
+	public class EditSubscriptionUsersViewModel : BaseViewModel
 	{
 		/// <summary>
 		/// Gets or sets the maximum number of users as defined by subscription license.

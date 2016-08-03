@@ -40,6 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Types\BillingCharge.cs" />
+    <Compile Include="Types\BillingCustomer.cs" />
+    <Compile Include="Types\BillingPlan.cs" />
+    <Compile Include="Types\BillingSubscription.cs" />
     <Compile Include="IBillingServicesInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

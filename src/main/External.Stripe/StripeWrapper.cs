@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AllyisApps.BillingServices.Common;
+using AllyisApps.BillingServices.Common.Types;
 
 namespace AllyisApps.BillingServices.Stripe
 {
@@ -44,32 +42,32 @@ namespace AllyisApps.BillingServices.Stripe
 			throw new NotImplementedException();
 		}
 
-		public List<bool> ListCustomers()
+		public List<BillingCustomer> ListCustomers()
 		{
 			throw new NotImplementedException();
 		}
 
-		public List<bool> ListSubscriptions()
+		public List<BillingSubscription> ListSubscriptions()
 		{
 			throw new NotImplementedException();
 		}
 
-		public bool RetrieveCharge()
+		public BillingCharge RetrieveCharge()
 		{
 			throw new NotImplementedException();
 		}
 
-		public bool RetrieveCustomer()
+		public BillingCustomer RetrieveCustomer()
 		{
 			throw new NotImplementedException();
 		}
 
-		public bool RetrievePlan()
+		public BillingPlan RetrievePlan()
 		{
 			throw new NotImplementedException();
 		}
 
-		public bool RetrieveSubscription()
+		public BillingSubscription RetrieveSubscription()
 		{
 			throw new NotImplementedException();
 		}
