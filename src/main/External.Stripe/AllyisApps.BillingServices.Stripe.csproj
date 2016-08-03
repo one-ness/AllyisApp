@@ -56,6 +56,12 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AllyisApps.BillingServices.Common\AllyisApps.BillingServices.Common.csproj">
+      <Project>{7829f110-92b1-4a99-9d75-1dd971b980ee}</Project>
+      <Name>AllyisApps.BillingServices.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

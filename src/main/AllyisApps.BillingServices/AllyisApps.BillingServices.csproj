@@ -52,7 +52,12 @@
     <Compile Include="BillingServicesInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\External.Stripe\AllyisApps.BillingServices.Stripe.csproj">
+      <Project>{14080904-6318-45bf-b12f-59e5aa55e3f6}</Project>
+      <Name>AllyisApps.BillingServices.Stripe</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
