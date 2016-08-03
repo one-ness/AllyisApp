@@ -38,7 +38,7 @@
 	string image_url = product_box.image_url;
 	IEnumerable<dynamic> query = product_box.query;
 	var admin_query = from row in query @*where Permissions.Can(OrgAction.ManageSubscriptions, row.OrganizationId)*@ select row;
-// this logic need fixing
+// TODO: this logic need fixing
 if (query.Any())
 {
 	<div class="panel-wrap">
@@ -57,7 +57,7 @@ if (query.Any())
 					{
 						string link_text = linkTextOverride ?? (string)row.OrganizationName;
 					    @Html.ActionLink(link_text, ActionConstants.ApplicationRedirect, ControllerConstants.Home,
-									routeValues: new { productid = product_id, organizationId = row.OrganizationId },
+									routeValues: new { productid = product_id, OrganizationId = row.OrganizationId },
 									htmlAttributes: new { @class = "list-group-item" })
 					}
 			</div>

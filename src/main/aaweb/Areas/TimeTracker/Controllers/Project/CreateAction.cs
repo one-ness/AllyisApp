@@ -38,7 +38,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 				}
 
-				return this.View(new EditProjectViewModel() { ParentCustomerId = id, ProjectUsers = new List<BasicUserInfoViewModel>(), SubscriptionUsers = subList });
+				return this.View(new EditProjectViewModel() { ParentCustomerId = id, ProjectUsers = new List<BasicUserInfoViewModel>(), SubscriptionUsers = subList, StartDate = DateTime.Today, EndDate = DateTime.Today.AddMonths(6) });
 			}
 			else
 			{

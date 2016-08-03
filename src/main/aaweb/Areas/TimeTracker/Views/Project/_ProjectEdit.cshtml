@@ -65,8 +65,8 @@
                 </div>
                 <div>
                     <div class="col-xs-8 text-left">
-                        <input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.StartDate.ToString("MM/dd/yyyy")" />
-                        <input type="hidden" id="DateRangeEnd" name="DateRangeEnd" value="@Model.EndDate.ToString("MM/dd/yyyy")" />
+                        @Html.HiddenFor(m => m.StartDate)
+                        @Html.HiddenFor(m => m.EndDate)
                         <input type="text" name="daterange" id="daterange" class="form-control" value="" />
                     </div>
 
