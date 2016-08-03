@@ -6,8 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Stripe;
 
 namespace AllyisApps.BillingServices.StripeService
@@ -23,7 +21,6 @@ namespace AllyisApps.BillingServices.StripeService
 		/// <param name="email">The Customer's email.</param>
 		/// <param name="tokenid">The Token id.</param>
 		/// <returns>The created StripeCustomer object.</returns>
-		[CLSCompliant(false)]
 		public static Stripe.StripeCustomer CreateCustomer(string email, string tokenid)
 		{
 			var customer = new StripeCustomerCreateOptions();
@@ -43,7 +40,6 @@ namespace AllyisApps.BillingServices.StripeService
 		/// <param name="cvc">Card cvc number.</param>
 		/// <param name="cust">A Customer obejct.</param>
 		/// <returns>A stripe card.</returns>
-		[CLSCompliant(false)]
 		public static StripeCard CreateCard(string number, string expirationYear, string expirationMonth, string cvc, StripeCustomer cust)
 		{
 			var card = new StripeCardCreateOptions();
@@ -66,7 +62,6 @@ namespace AllyisApps.BillingServices.StripeService
 		/// <param name="amount">The amount being charged.</param>
 		/// <param name="currency">The currency being paid in.</param>
 		/// <returns>A StripeCharge object.</returns>
-		[CLSCompliant(false)]
 		public static StripeCharge ChargeCustomer(StripeCustomer cust, int amount, string currency)
 		{
 			var charge = new StripeChargeCreateOptions();
@@ -89,7 +84,6 @@ namespace AllyisApps.BillingServices.StripeService
 		/// <param name="cust">A reference to the Customer object provided by Stripe.</param>
 		/// <param name="planName">The name of the subscription plan, to appear on Stripe invoices.</param>
 		/// <returns>Created Sstripe sub_id.</returns>
-		[CLSCompliant(false)]
 		public static string Subscription(string interval, int amount, StripeCustomer cust, string planName)
 		{
 			Random r = new Random();
@@ -123,7 +117,6 @@ namespace AllyisApps.BillingServices.StripeService
 		/// <param name="cust">The stripe Customer in question.</param>
 		/// <param name="planName">Name of subscription plan, to appear on Stripe invoices.</param>
 		/// <returns>Stripe subscription Id for the updated subscription.</returns>
-		[CLSCompliant(false)]
 		public static string SubscriptionUpdate(string id, int amount, string interval, StripeCustomer cust, string planName)
 		{
 			var planService = new StripePlanService();
@@ -168,7 +161,6 @@ namespace AllyisApps.BillingServices.StripeService
 		/// </summary>
 		/// <param name="id">The id of the susbcription to be deleted.</param>
 		/// <param name="custid">The id of the Customer who is subscribed.</param>
-		[CLSCompliant(false)]
 		public static void SubscriptionCancel(string id, string custid)
 		{
 			var subscriptionService = new StripeSubscriptionService();
@@ -180,7 +172,6 @@ namespace AllyisApps.BillingServices.StripeService
 		/// </summary>
 		/// <param name="id">The Customer id.</param>
 		/// <returns>The Customer object.</returns>
-		[CLSCompliant(false)]
 		public static StripeCustomer RetrieveCustomer(string id)
 		{
 			try
@@ -200,7 +191,6 @@ namespace AllyisApps.BillingServices.StripeService
 		/// </summary>
 		/// <param name="customerid">The id of the customer (stripe side).</param>
 		/// <returns>List of charges.</returns>
-		[CLSCompliant(false)]
 		public static IEnumerable<StripeCharge> GetCharges(string customerid)
 		{
 			var chargeService = new StripeChargeService();
@@ -222,7 +212,6 @@ namespace AllyisApps.BillingServices.StripeService
 		/// </summary>
 		/// <param name="customerid">The customer's Id (stripe side).</param>
 		/// <returns>List of invoices.</returns>
-		[CLSCompliant(false)]
 		public static IEnumerable<StripeInvoice> GetInvoices(string customerid)
 		{
 			var invoiceService = new StripeInvoiceService();
@@ -240,7 +229,6 @@ namespace AllyisApps.BillingServices.StripeService
 		/// <param name="token">The stripe token.</param>
 		/// <param name="customerId">The customer's Id.</param>
 		/// <returns>An object representing a credit card, stored in stripe's servers.</returns>
-		[CLSCompliant(false)]
 		public static StripeCard CreateCard(StripeToken token, string customerId)
 		{
 			var currentCard = new StripeCardCreateOptions();
@@ -256,7 +244,6 @@ namespace AllyisApps.BillingServices.StripeService
 		/// </summary>
 		/// <param name="token">The stripe token.</param>
 		/// <param name="customerId">The stripe customer's Id.</param>
-		[CLSCompliant(false)]
 		public static void UpdateStripeCustomer(StripeToken token, string customerId)
 		{
 			var currentCustomer = new StripeCustomerUpdateOptions();
@@ -272,7 +259,6 @@ namespace AllyisApps.BillingServices.StripeService
 		/// Gets all events.
 		/// </summary>
 		/// <returns>List of stripe events.</returns>
-		[CLSCompliant(false)]
 		public static IEnumerable<StripeEvent> GetEvents()
 		{
 			var eventService = new StripeEventService();
