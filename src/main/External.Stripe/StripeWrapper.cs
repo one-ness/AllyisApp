@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using AllyisApps.BillingServices.Common;
 using AllyisApps.BillingServices.Common.Types;
 
-namespace AllyisApps.BillingServices.Stripe
+namespace AllyisApps.BillingServices.StripeService
 {
-	class StripeWrapper : IBillingServicesInterface
+	public class StripeWrapper : IBillingServicesInterface
 	{
 		public bool CreateCharge()
 		{
@@ -57,7 +57,7 @@ namespace AllyisApps.BillingServices.Stripe
 			throw new NotImplementedException();
 		}
 
-		public BillingCustomer RetrieveCustomer()
+		public static BillingCustomer RetrieveCustomer(string id)
 		{
 			throw new NotImplementedException();
 		}

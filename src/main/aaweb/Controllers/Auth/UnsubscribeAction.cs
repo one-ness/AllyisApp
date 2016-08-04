@@ -6,7 +6,7 @@
 
 using System;
 using System.Web.Mvc;
-
+using AllyisApps.BillingServices;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Utilities;
@@ -57,13 +57,13 @@ namespace AllyisApps.Controllers
 			{
 				try
 				{
-					model.Billing.Customer = StripeWrapper.RetrieveCustomer(CrmService.GetOrgCustomer());
+					model.Billing.Customer = BillingServicesHandler.RetrieveCustomer(CrmService.GetOrgCustomer());
 					if (model.Billing.Customer != null)
 					{
 						string subscriptionId = CrmService.GetSubscriptionId(model.Billing.Customer.Id);
 						if (subscriptionId != null)
 						{
-							StripeWrapper.SubscriptionCancel(subscriptionId.Trim(), model.Billing.Customer.Id);
+							BillingServicesHandler.SubscriptionCancel(subscriptionId.Trim(), model.Billing.Customer.Id);
 							CrmService.DeleteSubscriptionPlan(subscriptionId);
 							CrmService.AddBillingHistory("Unsubscribing from product", model.SelectedSku);
 						}

@@ -7,7 +7,7 @@
     <ProjectGuid>{14080904-6318-45BF-B12F-59E5AA55E3F6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AllyisApps.BillingServices.Stripe</RootNamespace>
+    <RootNamespace>AllyisApps.BillingServices.StripeService</RootNamespace>
     <AssemblyName>AllyisApps.BillingServices.Stripe</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -5,6 +5,7 @@
 
 //------------------------------------------------------------------------------
 using System;
+using AllyisApps.BillingServices.Common.Types;
 
 namespace AllyisApps.ViewModels
 {
@@ -37,7 +38,6 @@ namespace AllyisApps.ViewModels
 		/// <summary>
 		/// Gets or sets the customer to get billed. 
 		/// </summary>
-		[CLSCompliant(false)]
-		public StripeCustomer Customer { get; set; }
+		public BillingCustomer Customer { get; set; }
 	}
 }

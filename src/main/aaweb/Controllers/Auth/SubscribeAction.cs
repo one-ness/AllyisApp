@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using Stripe;
 using System;
 using System.Linq;
 using System.Web.Mvc;
@@ -15,6 +14,8 @@ using AllyisApps.Services.BusinessObjects;
 using AllyisApps.Services.Crm;
 using AllyisApps.Utilities;
 using AllyisApps.ViewModels;
+using AllyisApps.BillingServices.Common.Types;
+using AllyisApps.BillingServices;
 
 namespace AllyisApps.Controllers
 {
@@ -137,7 +138,7 @@ namespace AllyisApps.Controllers
 			{
 				StripeToken t = CrmService.GenerateToken(stripeToken);
 
-				StripeCustomer customer = CrmService.CreateStripeCustomer(t, stripeEmail);
+				BillingCustomer customer = CrmService.CreateStripeCustomer(t, stripeEmail);
 
 				CrmService.AddOrgCustomer(customer.Id);
 				model.Billing.Customer = customer;
@@ -146,7 +147,7 @@ namespace AllyisApps.Controllers
 			}
 			else
 			{
-				model.Billing.Customer = StripeWrapper.RetrieveCustomer(CrmService.GetOrgCustomer());
+				model.Billing.Customer = BillingServicesHandler.RetrieveCustomer(CrmService.GetOrgCustomer());
 			}
 
 			if (model.Billing.Amount != 0)
@@ -164,7 +165,7 @@ namespace AllyisApps.Controllers
 				}
 				else
 				{
-					model.Billing.Customer = StripeWrapper.RetrieveCustomer(orgCustomer);
+					model.Billing.Customer = BillingServicesHandler.RetrieveCustomer(orgCustomer);
 				}
 
 				string subscriptionId = CrmService.GetSubscriptionId(model.Billing.Customer.Id);
@@ -185,7 +186,7 @@ namespace AllyisApps.Controllers
 			{
 				try
 				{
-					model.Billing.Customer = StripeWrapper.RetrieveCustomer(CrmService.GetOrgCustomer());
+					model.Billing.Customer = BillingServicesHandler.RetrieveCustomer(CrmService.GetOrgCustomer());
 
 					if (model.Billing.Customer != null)
 					{

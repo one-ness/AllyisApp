@@ -1249,6 +1249,14 @@
       <Project>{98c191a8-84a2-4e18-b678-c5647b49a953}</Project>
       <Name>AllyisApps.Services</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AllyisApps.BillingServices.Common\AllyisApps.BillingServices.Common.csproj">
+      <Project>{7829f110-92b1-4a99-9d75-1dd971b980ee}</Project>
+      <Name>AllyisApps.BillingServices.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AllyisApps.BillingServices\AllyisApps.BillingServices.csproj">
+      <Project>{0FDE35E2-5D06-41F5-B2E7-B7B0BF3028FF}</Project>
+      <Name>AllyisApps.BillingServices</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Controllers\Auth\Strings.en-GB.resx">
