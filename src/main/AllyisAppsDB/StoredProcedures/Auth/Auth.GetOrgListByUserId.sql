@@ -14,5 +14,6 @@ BEGIN
 	INNER JOIN [Auth].[Organization]	AS [O] WITH (NOLOCK) 
 		ON [O].[OrganizationId] = [OU].[OrganizationId]
 	WHERE [OU].[UserId] = @UserId
-		AND [O].[IsActive] = 1;
+		AND [O].[IsActive] = 1
+	ORDER BY [O].[Name]
 END

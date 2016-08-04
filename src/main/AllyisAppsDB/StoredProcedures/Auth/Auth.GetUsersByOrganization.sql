@@ -2,6 +2,7 @@
 	@OrganizationId INT,
 	@SubscriptionId INT
 AS
+BEGIN
 	SET NOCOUNT ON;
 SELECT [FirstName], [LastName], [ProductRoleId], [User].[UserId]
 FROM [Auth].[OrganizationUser] WITH (NOLOCK) 
@@ -12,3 +13,5 @@ LEFT JOIN (SELECT [UserId], [ProductRoleId]
 			AS [OnRoles]
 			ON [OnRoles].[UserId] = [User].[UserId]
 WHERE [OrganizationId] = @OrganizationId 
+ORDER BY [User].[LastName]
+END
