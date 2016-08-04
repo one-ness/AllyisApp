@@ -57,7 +57,7 @@ namespace AllyisApps.Controllers
 			{
 				try
 				{
-					model.Billing.Customer = BillingServicesHandler.Instance.RetrieveCustomer(CrmService.GetOrgCustomer());
+					model.Billing.Customer = BillingServicesHandler.RetrieveCustomer(CrmService.GetOrgCustomer());
 					if (model.Billing.Customer != null)
 					{
 						string subscriptionId = CrmService.GetSubscriptionId(model.Billing.Customer.Id);
