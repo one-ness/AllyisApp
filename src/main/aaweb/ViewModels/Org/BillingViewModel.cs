@@ -5,7 +5,6 @@
 
 //------------------------------------------------------------------------------
 using System;
-using Stripe;
 
 namespace AllyisApps.ViewModels
 {
