@@ -67,9 +67,7 @@ namespace AllyisApps.Controllers
 
 				OrgService.UpdateActiveOrganization(UserContext.UserId, orgId);
 
-				// Redirect the user to the details page.
-				string url = string.Format("http://{0}.{1}/{2}/{3}", model.SubdomainName, GlobalSettings.WebRoot, ControllerConstants.Account, ActionConstants.Manage);
-				return this.Redirect(url);
+				return this.RedirectToSubDomainAction(orgId, null, ActionConstants.OrgIndex);
 			}
 
 			// Something happened, reload this view
