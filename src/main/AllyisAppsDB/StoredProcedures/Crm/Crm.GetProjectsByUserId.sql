@@ -17,5 +17,6 @@ BEGIN
 		AND [Project].[IsActive] = 1
 		AND [ProjectUser].[IsActive] = 1
 		AND [ProjectUser].[UserId] = @UserId
+	ORDER BY [Project].[Name]
 	COMMIT TRANSACTION
 END

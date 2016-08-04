@@ -22,3 +22,5 @@ FROM (
 	
 WHERE [Customer].[IsActive] >= @Activity
 	AND [Project].[IsActive] >= @Activity
+
+ORDER BY [Project].[Name]

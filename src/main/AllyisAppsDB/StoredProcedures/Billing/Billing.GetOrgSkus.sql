@@ -38,4 +38,5 @@ BEGIN
 		GROUP BY [SubUser].[SubscriptionId]
 	) AS [A2]
 	ON [A1].[SubscriptionId] = [A2].[SubscriptionId]
+	ORDER BY [A1].[Name]
 END
