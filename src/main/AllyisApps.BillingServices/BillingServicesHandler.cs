@@ -8,6 +8,32 @@ namespace AllyisApps.BillingServices
 {
 	public class BillingServicesHandler : IBillingServicesInterface
 	{
+		private readonly IBillingServicesInterface Service;
+
+		public BillingServicesHandler(string service)
+		{
+			if (Enum.IsDefined(typeof(BillingServicesEnum), service))
+			{
+				BillingServicesEnum ServiceType = (BillingServicesEnum)Enum.Parse(typeof(BillingServicesEnum), service);
+				switch (ServiceType)
+				{
+					case (BillingServicesEnum.Stripe):
+						{
+							Service = new StripeService.StripeWrapper();
+							break;
+						}
+					default:
+						{
+							throw new NotImplementedException(string.Format("Billing system, {0}, is not implemented", service));
+						}
+				}
+			}
+			else
+			{
+				throw new NotImplementedException(string.Format("Billing system, {0}, is not implemented", service));
+			}
+		}
+
 		public bool CreateCharge()
 		{
 			throw new NotImplementedException();
@@ -60,18 +86,7 @@ namespace AllyisApps.BillingServices
 
 		public BillingCustomer RetrieveCustomer(string id)
 		{
-			BillingServicesEnum service = GetUsersBillingSystem();
-			switch (service)
-			{
-				case BillingServicesEnum.Stripe:
-					{
-						return StripeService.StripeWrapper.RetrieveCustomer(id);
-					}
-				default:
-					{
-						throw new NotImplementedException(string.Format("Billing system {0} is not implemented", service.ToString()));
-					}
-			}
+			return Service.RetrieveCustomer(id);
 		}
 
 		public BillingPlan RetrievePlan()
@@ -97,11 +112,6 @@ namespace AllyisApps.BillingServices
 		public bool UpdateSubscription()
 		{
 			throw new NotImplementedException();
-		}
-
-		private BillingServicesEnum GetUsersBillingSystem()
-		{
-			return BillingServicesEnum.Stripe;
 		}
 	}
 }

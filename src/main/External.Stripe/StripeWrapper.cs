@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using AllyisApps.BillingServices.Common;
 using AllyisApps.BillingServices.Common.Types;
+using Stripe;
 
 namespace AllyisApps.BillingServices.StripeService
 {
 	public class StripeWrapper : IBillingServicesInterface
 	{
+		public StripeWrapper() { }
+
 		public bool CreateCharge()
 		{
 			throw new NotImplementedException();
@@ -57,9 +60,17 @@ namespace AllyisApps.BillingServices.StripeService
 			throw new NotImplementedException();
 		}
 
-		public static BillingCustomer RetrieveCustomer(string id)
+		public BillingCustomer RetrieveCustomer(string id)
 		{
-			throw new NotImplementedException();
+			// there is almost definitely some exception handling that will need to be done here.
+
+			var customerService = new StripeCustomerService();
+			StripeCustomer stripeCustomer = customerService.Get(id);
+
+			// need to determine what stripeCustomer info is needed.
+
+			BillingCustomer customer = new BillingCustomer();
+			return customer;
 		}
 
 		public BillingPlan RetrievePlan()
