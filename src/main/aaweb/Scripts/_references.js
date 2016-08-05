@@ -1,4 +1,5 @@
 ﻿/// <autosync enabled="true" />
+/// <reference path="../areas/timetracker/scripts/time-entry-index.js" />
 /// <reference path="allyis-list-group-search.js" />
 /// <reference path="bootstrap.min.js" />
 /// <reference path="bootstrap/affix.js" />

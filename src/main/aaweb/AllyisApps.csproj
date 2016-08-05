@@ -711,6 +711,7 @@
     <Compile Include="ViewModels\Shared\LanguageViewModel.cs" />
     <Compile Include="ViewModels\Shared\LogOnPartialViewModel.cs" />
     <Compile Include="ViewModels\Shared\SubscriptionsViewModel.cs" />
+    <Content Include="Areas\TimeTracker\Scripts\time-entry-index.js" />
     <Content Include="Areas\TimeTracker\Views\Customer\Create.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Delete.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Details.cshtml" />
