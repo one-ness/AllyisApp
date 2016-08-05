@@ -19,19 +19,15 @@ namespace AllyisApps.BillingServices.StripeService
 			throw new NotImplementedException();
 		}
 
-		public BillingCustomer CreateCustomer(string email, string billingId)
+		public bool CreateCustomer(string email, string billingId)
 		{
 			StripeCustomerCreateOptions customerOptions = new StripeCustomerCreateOptions();
 			customerOptions.Email = email;
 			customerOptions.SourceToken = billingId;
 
-			StripeCustomer stripeCustomer = CustomerService.Create(customerOptions);
+			CustomerService.Create(customerOptions);
 
-			// need to determine the glue that will bind a stripe customer into a BillingCustomer.
-
-			BillingCustomer customer = new BillingCustomer();
-
-			return customer;
+			return true; // needs to return false if the operation fails
 		}
 
 		public bool CreatePlan()
