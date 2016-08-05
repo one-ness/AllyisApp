@@ -5,7 +5,7 @@ if($curCommit -ne $lastCommit)
 {
     $curCommit > ..\..\curCommit.log
     svn commit -m "$curDate"
-    git tag "Release_$curDate"
+    git tag "Releases/$curDate"
     git push --tags
 }
 exit 1
