@@ -36,52 +36,52 @@ namespace AllyisApps.BillingServices
 
 		public bool CreateCharge()
 		{
-			throw new NotImplementedException();
+			return Service.CreateCharge();
 		}
 
 		public bool CreateCustomer()
 		{
-			throw new NotImplementedException();
+			return Service.CreateCustomer();
 		}
 
 		public bool CreatePlan()
 		{
-			throw new NotImplementedException();
+			return Service.CreatePlan();
 		}
 
 		public bool CreateSubscription()
 		{
-			throw new NotImplementedException();
+			return Service.CreateSubscription();
 		}
 
 		public bool DeleteCustomer()
 		{
-			throw new NotImplementedException();
+			return Service.DeleteCustomer();
 		}
 
 		public bool DeletePlan()
 		{
-			throw new NotImplementedException();
+			return Service.DeletePlan();
 		}
 
 		public bool DeleteSubscription()
 		{
-			throw new NotImplementedException();
+			return Service.DeleteSubscription();
 		}
 
 		public List<BillingCustomer> ListCustomers()
 		{
-			throw new NotImplementedException();
+			return Service.ListCustomers();
 		}
 
 		public List<BillingSubscription> ListSubscriptions()
 		{
-			throw new NotImplementedException();
+			return Service.ListSubscriptions();
 		}
 
 		public BillingCharge RetrieveCharge()
 		{
-			throw new NotImplementedException();
+			return Service.RetrieveCharge();
 		}
 
 		public BillingCustomer RetrieveCustomer(string id)
@@ -91,27 +91,27 @@ namespace AllyisApps.BillingServices
 
 		public BillingPlan RetrievePlan()
 		{
-			throw new NotImplementedException();
+			return Service.RetrievePlan();
 		}
 
 		public BillingSubscription RetrieveSubscription()
 		{
-			throw new NotImplementedException();
+			return Service.RetrieveSubscription();
 		}
 
 		public bool UpdateCustomer()
 		{
-			throw new NotImplementedException();
+			return Service.UpdateCustomer();
 		}
 
 		public bool UpdatePlan()
 		{
-			throw new NotImplementedException();
+			return Service.UpdatePlan();
 		}
 
 		public bool UpdateSubscription()
 		{
-			throw new NotImplementedException();
+			return Service.UpdateSubscription();
 		}
 	}
 }
