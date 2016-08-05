@@ -8,16 +8,30 @@ namespace AllyisApps.BillingServices.StripeService
 {
 	public class StripeWrapper : IBillingServicesInterface
 	{
-		public StripeWrapper() { }
+		private readonly StripeCustomerService CustomerService;
+		public StripeWrapper()
+		{
+			CustomerService = new StripeCustomerService();
+		}
 
 		public bool CreateCharge()
 		{
 			throw new NotImplementedException();
 		}
 
-		public bool CreateCustomer()
+		public BillingCustomer CreateCustomer(string email, string billingId)
 		{
-			throw new NotImplementedException();
+			StripeCustomerCreateOptions customerOptions = new StripeCustomerCreateOptions();
+			customerOptions.Email = email;
+			customerOptions.SourceToken = billingId;
+
+			StripeCustomer stripeCustomer = CustomerService.Create(customerOptions);
+
+			// need to determine the glue that will bind a stripe customer into a BillingCustomer.
+
+			BillingCustomer customer = new BillingCustomer();
+
+			return customer;
 		}
 
 		public bool CreatePlan()

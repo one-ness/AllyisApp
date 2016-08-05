@@ -39,9 +39,9 @@ namespace AllyisApps.BillingServices
 			return Service.CreateCharge();
 		}
 
-		public bool CreateCustomer()
+		public BillingCustomer CreateCustomer(string email, string billingId)
 		{
-			return Service.CreateCustomer();
+			return Service.CreateCustomer(email, billingId);
 		}
 
 		public bool CreatePlan()
