@@ -120,8 +120,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnableParseDuration);
 			}
 
-			IEnumerable<TimeEntryInfo> otherEntriesToday = TimeTrackerService.GetTimeEntriesByUserOverDateRange(new List<int> { model.UserId },
-					TimeTrackerService.GetDateTimeFromDays(model.Date), TimeTrackerService.GetDateTimeFromDays(model.Date));
+			IEnumerable<TimeEntryInfo> otherEntriesToday = TimeTrackerService.GetTimeEntriesByUserOverDateRange(
+				new List<int> { model.UserId },
+				TimeTrackerService.GetDateTimeFromDays(model.Date),
+				TimeTrackerService.GetDateTimeFromDays(model.Date));
 			float durationOther = 0.0f;
 			foreach (TimeEntryInfo otherEntry in otherEntriesToday)
 			{

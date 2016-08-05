@@ -98,11 +98,11 @@ namespace AllyisApps.Core
 
 			// if no org is set for a user the default is "default" this catchs that
 			// case until the default usercontext org is looked at
-			string chosenOrg = /*OrgService.GetSubdomainById(organizationId)*/ "default"; // Handicapped for now to test on server TODO: remove once we have dns entry for subdomains
+			string chosenOrg = OrgService.GetSubdomainById(organizationId);
 			string url;
 			if (chosenOrg == "default")
 			{
-				url = string.Format("http://{0}/{1}?OrganizationId={2}", rootAndMiddle, route, organizationId); // The org id value here lets us change orgs without subdomains. TODO: When subdomains are fixed, remove the org id from here.
+				url = string.Format("http://{0}/{1}", rootAndMiddle, route);
 			}
 			else
 			{

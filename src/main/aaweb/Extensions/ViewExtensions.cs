@@ -229,10 +229,7 @@ namespace AllyisApps.Extensions.ViewExtensions
 			string host = GlobalSettings.HostName;
 			if (organizationId > 0)
 			{
-				// host = string.Format("{0}.{1}", Services.Org.OrgService.GetSubdomainById(organizationId), GlobalSettings.HostName);  Temporary handicap. TODO: Uncomment once we have dns entry for subdomains
-				// Fix for lack of subdomains. TODO: Delete once we have dns entry for subdomains
-				if (routeValues != null) routeValues.Add("OrganizationId", organizationId);
-				else routeValues = new RouteValueDictionary(new { OrganizationId = organizationId.ToString() });				
+				host = string.Format("{0}.{1}", Services.Org.OrgService.GetSubdomainById(organizationId), GlobalSettings.HostName);		
 			}
 
 			return urlHelper.Action(action, controller, routeValues, request.Url.Scheme, host);

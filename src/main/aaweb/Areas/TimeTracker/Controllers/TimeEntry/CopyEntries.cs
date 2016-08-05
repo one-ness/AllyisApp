@@ -82,12 +82,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			return this.RedirectToAction(ActionConstants.Index, new
-			{
-				userId = userId,
-				startDate = startDate,
-				endDate = endDate
-			}); // Model should be repopulated with new info at the index
+			return this.RedirectToAction(
+				ActionConstants.Index,
+				new
+				{
+					userId = userId,
+					startDate = startDate,
+					endDate = endDate
+				}); // Model should be repopulated with new info at the index
 		}
 	}
 }

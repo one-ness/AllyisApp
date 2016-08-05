@@ -39,7 +39,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					throw new UnauthorizedAccessException(AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.CantViewOtherTimeCards);
 				}
-				// For a manager editing another user, everything's fine; the next section can be skipped.
+				//// For a manager editing another user, everything's fine; the next section can be skipped.
 			}
 			else
 			{ // Either userId is -1, or it is the current user
