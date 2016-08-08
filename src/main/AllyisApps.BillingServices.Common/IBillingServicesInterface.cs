@@ -17,7 +17,7 @@ namespace AllyisApps.BillingServices.Common
 		#endregion
 
 		#region customers
-		bool CreateCustomer(string email, string billingId);
+		string CreateCustomer(string email, string billingServicesToken);
 
 		bool DeleteCustomer();
 

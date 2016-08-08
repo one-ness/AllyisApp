@@ -255,15 +255,10 @@ namespace AllyisApps.Services.Crm
 			string customerId = this.GetOrgBillingServicesCustomerId();
 			if (customerId == null)
 			{
-				StripeToken t = this.GenerateToken(billingServicesToken);
-				StripeCustomer customer = this.CreateStripeCustomer(t, billingServicesEmail);
-				this.AddOrgCustomer(customer.Id);
-				this.AddBillingHistory("Adding stripe customer data", null);
-
-
 				string service = "Stripe";
 				BillingServicesHandler handler = new BillingServicesHandler(service);
-
+				customerId = handler.CreateCustomer(billingServicesEmail, billingServicesToken);
+				this.AddOrgCustomer(customerId);
 				this.AddBillingHistory(string.Format("Adding {0} customer data", service), null);
 			}
 			else
@@ -290,11 +285,11 @@ namespace AllyisApps.Services.Crm
 		/// <summary>
 		/// Creates a billingServices customer.
 		/// </summary>
-		/// <param name="billingServicesToken">The BillingServices token for creating the customer.</param>
 		/// <param name="billingServicesEmail">The user's email.</param>
+		/// <param name="billingServicesToken">The BillingServices token for creating the customer.</param>
 		/// <returns>A new StripeCustomer.</returns>
 		[CLSCompliant(false)]
-		public void CreateBillingServicesCustomer(string billingServicesToken, string billingServicesEmail)
+		public string CreateBillingServicesCustomer(string billingServicesEmail, string billingServicesToken)
 		{
 			#region Validation
 			if (t == null)
@@ -312,7 +307,9 @@ namespace AllyisApps.Services.Crm
 			}
 			#endregion
 
-			return StripeWrapper.CreateCustomer(email, t.Id);
+			string service = "Stripe";
+			BillingServicesHandler handler = new BillingServicesHandler(service);
+			return handler.CreateCustomer(billingServicesEmail, billingServicesToken);
 		}
 
 		/// <summary>

@@ -26,15 +26,15 @@ namespace AllyisApps.BillingServices.StripeService
 			throw new NotImplementedException();
 		}
 
-		public bool CreateCustomer(string email, string billingId)
+		public string CreateCustomer(string email, string billingServicesToken)
 		{
 			StripeCustomerCreateOptions customerOptions = new StripeCustomerCreateOptions();
 			customerOptions.Email = email;
-			customerOptions.SourceToken = billingId;
+			customerOptions.SourceToken = this.GenerateToken(billingServicesToken).ToString();
 
-			CustomerService.Create(customerOptions);
+			StripeCustomer customer = CustomerService.Create(customerOptions);
 
-			return true; // needs to return false if the operation fails
+			return customer.Id;
 		}
 
 		public bool CreatePlan(int amount, string interval, string planName)
