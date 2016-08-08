@@ -85,7 +85,8 @@ namespace AllyisApps.Controllers
 					SelectedSku = selectedSku,
 					SelectedSkuName = selectedSku > 0 ? CrmService.GetSkuDetails(selectedSku).Name : string.Empty,
 					PreviousSku = selectedSku,
-					StripeToken = CrmService.GetOrgBillingServicesCustomerId()
+					CustomerId = CrmService.GetOrgBillingServicesCustomerId(),
+					Token = new BillingServicesToken(CrmService.GetOrgBillingServicesCustomerId().ToString())
 				};
 			}
 
@@ -99,14 +100,14 @@ namespace AllyisApps.Controllers
 		/// Subscribe to a product.
 		/// </summary>
 		/// <param name="model">The model.</param>
-		/// <param name="stripeToken">Response from stripe.</param>
+		/// <param name="token">Response from the billing service.</param>
 		/// <param name="stripeEmail">The billing email.</param>
 		/// <param name="cost">The cost.</param>
 		/// <returns>A page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[CLSCompliant(false)]
-		public ActionResult Subscribe(ProductSubscriptionViewModel model, string stripeToken, string stripeEmail, string cost)
+		public ActionResult Subscribe(ProductSubscriptionViewModel model, BillingServicesToken token, string stripeEmail, string cost)
 		{
 			if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
 			{
@@ -135,9 +136,7 @@ namespace AllyisApps.Controllers
 
 			if (!string.IsNullOrEmpty(stripeToken) && string.IsNullOrEmpty(model.StripeToken))
 			{
-				StripeToken t = CrmService.GenerateToken(stripeToken);
-
-				BillingCustomer customer = CrmService.CreateStripeCustomer(t, stripeEmail);
+				BillingCustomer customer = CrmService.CreateBillingServicesCustomer(t, stripeEmail);
 
 				CrmService.AddOrgCustomer(customer.Id);
 				model.Billing.Customer = customer;
@@ -159,7 +158,7 @@ namespace AllyisApps.Controllers
 				string orgCustomer = CrmService.GetOrgBillingServicesCustomerId();
 				if (orgCustomer == null)
 				{
-					model.Billing.Customer = CrmService.CreateStripeCustomer(CrmService.GenerateToken(stripeToken), stripeEmail);
+					model.Billing.Customer = CrmService.CreateBillingServicesCustomer(CrmService.GenerateToken(stripeToken), stripeEmail);
 					CrmService.AddOrgCustomer(model.Billing.Customer.Id);
 				}
 				else

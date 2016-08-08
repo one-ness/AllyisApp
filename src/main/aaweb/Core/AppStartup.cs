@@ -28,9 +28,6 @@ namespace AllyisApps.Core
 
 			// init db
 			DBModelStartup.Init();
-
-			// init stripe
-			Stripe.StripeConfiguration.SetApiKey("sk_test_6Z1XooVuPiXjbn0DwndaHF8P");
 		}
 	}
 }

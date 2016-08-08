@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Types\BillingCharge.cs" />
     <Compile Include="Types\BillingCustomer.cs" />
+    <Compile Include="Types\BillingInvoice.cs" />
     <Compile Include="Types\BillingPlan.cs" />
     <Compile Include="Types\BillingServicesCustomerId.cs" />
     <Compile Include="Types\BillingServicesToken.cs" />

@@ -8,12 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-
+using AllyisApps.BillingServices.Common.Types;
 using AllyisApps.Core;
 using AllyisApps.Services.Account;
 using AllyisApps.Services.BusinessObjects;
 using AllyisApps.Services.Crm;
-using AllyisApps.Utilities;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
@@ -70,8 +69,8 @@ namespace AllyisApps.Controllers
 				};
 			});
 
-			string s = CrmService.GetOrgBillingServicesCustomerId();
-			StripeCustomer customer = s == null ? null : StripeWrapper.RetrieveCustomer(s);
+			BillingServicesCustomerId customerId = CrmService.GetOrgBillingServicesCustomerId();
+			BillingCustomer customer = (customerId == null) ? null : CrmService.RetrieveCustomer(customerId);
 
 			return new OrganizationManageViewModel
 			{
@@ -79,7 +78,7 @@ namespace AllyisApps.Controllers
 				CanEditOrganization = canEditOrganization,
 				Details = organization,
 				Edit = this.ConstructEditOrganizationViewModel(organization, canEditOrganization, AccountService.ValidCountries()),
-				LastFour = customer == null ? string.Empty : customer.SourceList.Data[0].Last4,
+				LastFour = customer == null ? string.Empty : customer.Last4,
 				Members = new OrganizationMembersViewModel
 				{
 					AccessCode = string.Empty,
@@ -91,7 +90,7 @@ namespace AllyisApps.Controllers
 					TotalUsers = displayUsers.Count()
 				},
 				OrganizationId = UserContext.ChosenOrganizationId,
-				StripeCustomer = customer,
+				BillingCustomer = customer,
 				SubscriptionCount = subscriptions.Count(),
 				Subscriptions = subscriptions
 			};

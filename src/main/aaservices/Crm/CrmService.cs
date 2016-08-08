@@ -364,7 +364,7 @@ namespace AllyisApps.Services.Crm
 				throw new ArgumentNullException("customerId", "Billing Services customer id must have a value.");
 			}
 
-			DBHelper.AddOrgCustomer(UserContext.ChosenOrganizationId, customerId.ID);
+			DBHelper.AddOrgCustomer(UserContext.ChosenOrganizationId, customerId.Id);
 		}
 
 		/// <summary>
@@ -405,7 +405,7 @@ namespace AllyisApps.Services.Crm
 			string service = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(service);
 			string planId = handler.CreateSubscription(amount, "month", planName, customerId);
-			return DBHelper.AddCustomerSubscription(customerId.ID, planId, amount, numUsers, productId, UserContext.ChosenOrganizationId);
+			return DBHelper.AddCustomerSubscription(customerId.Id, planId, amount, numUsers, productId, UserContext.ChosenOrganizationId);
 		}
 
 		/// <summary>
@@ -446,7 +446,7 @@ namespace AllyisApps.Services.Crm
 			BillingServicesHandler handler = new BillingServicesHandler("Stripe"); // TODO: make this check the database instead of hardcoding Stripe
 
 			handler.UpdateSubscription(amount, "month", planName, subscriptionId.Trim(), customerId);
-			return DBHelper.UpdateSubscriptionPlan(customerId.ID, subscriptionId, amount, numUsers);
+			return DBHelper.UpdateSubscriptionPlan(customerId.Id, subscriptionId, amount, numUsers);
 		}
 
 		/// <summary>
@@ -927,6 +927,19 @@ namespace AllyisApps.Services.Crm
 					UserName = i.UserName
 				};
 			});
+		}
+
+		/// <summary>
+		/// Retreives the BillingCustomer object corresponding to a given customerId.
+		/// </summary>
+		/// <param name="customerId">The customerId to use when retrieving the BillingCustomer.</param>
+		/// <returns>The billing customer.</returns>
+		[CLSCompliant(false)]
+		public BillingCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
+		{
+			string service = "Stripe";
+			BillingServicesHandler handler = new BillingServicesHandler(service);
+			return handler.RetrieveCustomer(customerId);
 		}
 	}
 }

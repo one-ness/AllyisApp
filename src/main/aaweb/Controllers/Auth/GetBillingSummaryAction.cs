@@ -8,12 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-
+using AllyisApps.BillingServices.Common.Types;
 using AllyisApps.Core;
 using AllyisApps.Services.BusinessObjects;
 using AllyisApps.Utilities;
 using AllyisApps.ViewModels;
-using Stripe;
 
 namespace AllyisApps.Controllers
 {
@@ -43,10 +42,10 @@ namespace AllyisApps.Controllers
 			List<BillingHistoryItemViewModel> result = new List<BillingHistoryItemViewModel>();
 
 			// Creation of items from Stripe data
-			string stripeID = CrmService.GetOrgBillingServicesCustomerId();
-			if (stripeID != null)
+			BillingServicesCustomerId customerId = CrmService.GetOrgBillingServicesCustomerId();
+			if (customerId != null)
 			{
-				foreach (StripeInvoice invoice in StripeWrapper.GetInvoices(stripeID))
+				foreach (BillingInvoice invoice in StripeWrapper.GetInvoices(customerId))
 				{
 					result.Add(new BillingHistoryItemViewModel
 					{
@@ -58,7 +57,7 @@ namespace AllyisApps.Controllers
 					});
 				}
 
-				foreach (StripeCharge charge in StripeWrapper.GetCharges(stripeID))
+				foreach (BillingCharge charge in StripeWrapper.GetCharges(customerId))
 				{
 					result.Add(new BillingHistoryItemViewModel
 					{

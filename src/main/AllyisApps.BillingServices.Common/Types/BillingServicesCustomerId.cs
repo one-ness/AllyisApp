@@ -20,7 +20,7 @@ namespace AllyisApps.BillingServices.Common.Types
 			_ID = id;
 		}
 
-		public string ID
+		public string Id
 		{
 			get
 			{

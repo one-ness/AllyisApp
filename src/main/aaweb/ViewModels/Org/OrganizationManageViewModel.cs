@@ -6,7 +6,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using AllyisApps.BillingServices.Common.Types;
 using AllyisApps.Services.BusinessObjects;
 using AllyisApps.Services.Crm;
 
@@ -51,7 +51,7 @@ namespace AllyisApps.ViewModels
 		/// <summary>
 		/// Gets or sets the stripe Token id. 
 		/// </summary>
-		public StripeCustomer StripeCustomer { get; set; }
+		public BillingCustomer BillingCustomer { get; set; }
 
 		/// <summary>
 		/// Gets or sets the last four digits of credit card. 

@@ -15,6 +15,7 @@ namespace AllyisApps.BillingServices.StripeService
 
 		public StripeWrapper()
 		{
+			Stripe.StripeConfiguration.SetApiKey("sk_test_6Z1XooVuPiXjbn0DwndaHF8P");
 			CustomerService = new StripeCustomerService();
 			PlanService = new StripePlanService();
 			SubscriptionService = new StripeSubscriptionService();
@@ -48,7 +49,7 @@ namespace AllyisApps.BillingServices.StripeService
 		{
 			StripePlan newPlan = CreateStripePlan(amount, interval, planName);
 
-			StripeSubscription sub = SubscriptionService.Create(customerId.ID, newPlan.Id);
+			StripeSubscription sub = SubscriptionService.Create(customerId.Id, newPlan.Id);
 
 			return sub.Id;
 		}
@@ -88,11 +89,11 @@ namespace AllyisApps.BillingServices.StripeService
 			// there is almost definitely some exception handling that will need to be done here.
 
 			StripeCustomerService customerService = new StripeCustomerService();
-			StripeCustomer stripeCustomer = customerService.Get(customerId.ID);
+			StripeCustomer stripeCustomer = customerService.Get(customerId.Id);
 
-			// need to determine what stripeCustomer info is needed.
-
-			BillingCustomer customer = new BillingCustomer();
+			BillingCustomer customer = new BillingCustomer(
+				customerId,
+				last4: stripeCustomer.SourceList.Data[0].Last4);
 			return customer;
 		}
 
@@ -112,7 +113,7 @@ namespace AllyisApps.BillingServices.StripeService
 
 			currentCustomer.SourceToken = this.GenerateStripeToken(token.Token).ToString();
 
-			CustomerService.Update(customerId.ID, currentCustomer);
+			CustomerService.Update(customerId.Id, currentCustomer);
 
 			return true;  // need to return false if the operation fails.
 		}
@@ -134,13 +135,13 @@ namespace AllyisApps.BillingServices.StripeService
 			subUpdateOptions.PlanId = newPlan.Id;
 
 			StripeSubscriptionService subscriptionService = new StripeSubscriptionService();
-			StripeSubscription sub = subscriptionService.Get(customerId.ID, subscriptionId);
+			StripeSubscription sub = subscriptionService.Get(customerId.Id, subscriptionId);
 			if (sub.TrialEnd != null)
 			{
 				subUpdateOptions.TrialEnd = sub.TrialEnd;
 			}
 
-			StripeSubscription stripeSubscription = subscriptionService.Update(customerId.ID, subscriptionId, subUpdateOptions); // optional StripeSubscriptionUpdateOptions
+			StripeSubscription stripeSubscription = subscriptionService.Update(customerId.Id, subscriptionId, subUpdateOptions); // optional StripeSubscriptionUpdateOptions
 
 			return true;
 		}
