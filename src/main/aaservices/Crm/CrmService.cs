@@ -14,7 +14,6 @@ using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.Services.Account;
 using AllyisApps.Services.BusinessObjects;
-using Stripe;
 
 namespace AllyisApps.Services.Crm
 {
@@ -231,14 +230,15 @@ namespace AllyisApps.Services.Crm
 		/// <summary>
 		/// Edits or creates billing information for the current chosen organization.
 		/// </summary>
-		/// <param name="billingServicesToken">The billingServicesToken being used for this charge.</param>
 		/// <param name="billingServicesEmail">Customer email address.</param>
-		public void UpdateBillingInfo(string billingServicesToken, string billingServicesEmail)
+		/// <param name="token">The BillingServicesToken being used for this charge.</param>
+		[CLSCompliant(false)]
+		public void UpdateBillingInfo(string billingServicesEmail, BillingServicesToken token)
 		{
 			#region Validation
-			if (string.IsNullOrEmpty(billingServicesToken))
+			if (token == null)
 			{
-				throw new ArgumentNullException("billingServicesToken", "billingServicesToken must have a value.");
+				throw new ArgumentNullException("token", "billingServicesToken must have a value.");
 			}
 
 			if (string.IsNullOrEmpty(billingServicesEmail))
@@ -257,7 +257,7 @@ namespace AllyisApps.Services.Crm
 			{
 				string service = "Stripe";
 				BillingServicesHandler handler = new BillingServicesHandler(service);
-				customerId = handler.CreateCustomer(billingServicesEmail, billingServicesToken);
+				customerId = handler.CreateCustomer(billingServicesEmail, token);
 				this.AddOrgCustomer(customerId);
 				this.AddBillingHistory(string.Format("Adding {0} customer data", service), null);
 			}
@@ -265,7 +265,7 @@ namespace AllyisApps.Services.Crm
 			{
 				string service = "Stripe";
 				BillingServicesHandler handler = new BillingServicesHandler(service);
-				handler.UpdateCustomer(customerId, billingServicesToken);
+				handler.UpdateCustomer(customerId, token);
 				this.AddBillingHistory(string.Format("Updating {0} customer data", service), null);
 			}
 		}
@@ -286,22 +286,22 @@ namespace AllyisApps.Services.Crm
 		/// Creates a billingServices customer.
 		/// </summary>
 		/// <param name="billingServicesEmail">The user's email.</param>
-		/// <param name="billingServicesToken">The BillingServices token for creating the customer.</param>
+		/// <param name="token">The BillingServicesToken for creating the customer.</param>
 		/// <returns>A new StripeCustomer.</returns>
 		[CLSCompliant(false)]
-		public string CreateBillingServicesCustomer(string billingServicesEmail, string billingServicesToken)
+		public string CreateBillingServicesCustomer(string billingServicesEmail, BillingServicesToken token)
 		{
 			#region Validation
-			if (t == null)
+			if (token == null)
 			{
-				throw new ArgumentNullException("t", "Stripe token must not be null.");
+				throw new ArgumentNullException("token", "Billing Services token must not be null.");
 			}
 
-			if (string.IsNullOrEmpty(email))
+			if (string.IsNullOrEmpty(billingServicesEmail))
 			{
-				throw new ArgumentNullException("email", "Email address must have a value.");
+				throw new ArgumentNullException("billingServicesEmail", "Email address must have a value.");
 			}
-			else if (!AccountService.IsEmailAddressValid(email))
+			else if (!AccountService.IsEmailAddressValid(billingServicesEmail))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
@@ -309,7 +309,7 @@ namespace AllyisApps.Services.Crm
 
 			string service = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(service);
-			return handler.CreateCustomer(billingServicesEmail, billingServicesToken);
+			return handler.CreateCustomer(billingServicesEmail, token);
 		}
 
 		/// <summary>

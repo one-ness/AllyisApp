@@ -26,11 +26,11 @@ namespace AllyisApps.BillingServices.StripeService
 			throw new NotImplementedException();
 		}
 
-		public string CreateCustomer(string email, string billingServicesToken)
+		public string CreateCustomer(string email, BillingServicesToken token)
 		{
 			StripeCustomerCreateOptions customerOptions = new StripeCustomerCreateOptions();
 			customerOptions.Email = email;
-			customerOptions.SourceToken = this.GenerateToken(billingServicesToken).ToString();
+			customerOptions.SourceToken = this.GenerateStripeToken(token.Token).ToString();
 
 			StripeCustomer customer = CustomerService.Create(customerOptions);
 
@@ -114,11 +114,11 @@ namespace AllyisApps.BillingServices.StripeService
 			throw new NotImplementedException();
 		}
 
-		public bool UpdateCustomer(string customerId, string billingServicesToken)
+		public bool UpdateCustomer(string customerId, BillingServicesToken token)
 		{
 			var currentCustomer = new StripeCustomerUpdateOptions();
 
-			currentCustomer.SourceToken = this.GenerateToken(billingServicesToken).ToString();
+			currentCustomer.SourceToken = this.GenerateStripeToken(token.Token).ToString();
 
 			CustomerService.Update(customerId, currentCustomer);
 
@@ -165,7 +165,7 @@ namespace AllyisApps.BillingServices.StripeService
 			return true;
 		}
 
-		private StripeToken GenerateToken(string billingServicesToken)
+		private StripeToken GenerateStripeToken(string billingServicesToken)
 		{
 			return TokenService.Get(billingServicesToken);
 		}
