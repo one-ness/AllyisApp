@@ -12,7 +12,6 @@ using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services.BusinessObjects;
 using AllyisApps.Services.Crm;
-using AllyisApps.Utilities;
 using AllyisApps.ViewModels;
 using AllyisApps.BillingServices.Common.Types;
 using AllyisApps.BillingServices;
@@ -178,7 +177,7 @@ namespace AllyisApps.Controllers
 				}
 				else
 				{
-					string test = CrmService.UpdateSubscriptionPlan(subscriptionId, model.Billing.Amount, model.Billing.Customer, model.NumberOfUsers, model.ProductName);
+					string test = CrmService.UpdateSubscriptionPlan(model.Billing.Amount, model.ProductName, model.NumberOfUsers, subscriptionId, model.Billing.Customer);
 					CrmService.AddBillingHistory(string.Format("Updating subscription data for {0}", model.ProductName), model.SelectedSku);
 				}
 			}

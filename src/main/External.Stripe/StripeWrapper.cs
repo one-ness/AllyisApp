@@ -39,26 +39,18 @@ namespace AllyisApps.BillingServices.StripeService
 
 		public bool CreatePlan(int amount, string interval, string planName)
 		{
-			Random r = new Random();
-			int i = r.Next(100000000);  //wtf
-			var newPlan = new StripePlanCreateOptions();
-			newPlan.Name = planName;
-			newPlan.StatementDescriptor = planName;
-			newPlan.Amount = amount;           // all amounts on Stripe are in cents, pence, etc
-			newPlan.Currency = "usd";        // "usd" only supported right now
-			newPlan.Interval = interval;      // "month" or "year"
-			newPlan.IntervalCount = 1;
-
-			newPlan.Id = i.ToString();
-
-			StripePlan response = PlanService.Create(newPlan);
+			CreateStripePlan(amount, interval, planName);
 
 			return true;
 		}
 
-		public bool CreateSubscription()
+		public string CreateSubscription(int amount, string interval, string planName, BillingServicesCustomerId customerId)
 		{
-			throw new NotImplementedException();
+			StripePlan newPlan = CreateStripePlan(amount, interval, planName);
+
+			StripeSubscription sub = SubscriptionService.Create(customerId.ID, newPlan.Id);
+
+			return sub.Id;
 		}
 
 		public bool DeleteCustomer()
@@ -95,7 +87,7 @@ namespace AllyisApps.BillingServices.StripeService
 		{
 			// there is almost definitely some exception handling that will need to be done here.
 
-			var customerService = new StripeCustomerService();
+			StripeCustomerService customerService = new StripeCustomerService();
 			StripeCustomer stripeCustomer = customerService.Get(customerId.ID);
 
 			// need to determine what stripeCustomer info is needed.
@@ -116,7 +108,7 @@ namespace AllyisApps.BillingServices.StripeService
 
 		public bool UpdateCustomer(BillingServicesCustomerId customerId, BillingServicesToken token)
 		{
-			var currentCustomer = new StripeCustomerUpdateOptions();
+			StripeCustomerUpdateOptions currentCustomer = new StripeCustomerUpdateOptions();
 
 			currentCustomer.SourceToken = this.GenerateStripeToken(token.Token).ToString();
 
@@ -130,11 +122,39 @@ namespace AllyisApps.BillingServices.StripeService
 			throw new NotImplementedException();
 		}
 
-		public bool UpdateSubscription(string subscriptionId, int amount, string interval, BillingCustomer customer, string planName)
+		public bool UpdateSubscription(int amount, string interval, string planName, string subscriptionId, BillingServicesCustomerId customerId)
+		{
+			StripePlan newPlan = CreateStripePlan(amount, interval, planName);
+
+			StripePlanUpdateOptions planUpdateOptions = new StripePlanUpdateOptions();
+
+			planUpdateOptions.Name = newPlan.Name;
+
+			StripeSubscriptionUpdateOptions subUpdateOptions = new StripeSubscriptionUpdateOptions();
+			subUpdateOptions.PlanId = newPlan.Id;
+
+			StripeSubscriptionService subscriptionService = new StripeSubscriptionService();
+			StripeSubscription sub = subscriptionService.Get(customerId.ID, subscriptionId);
+			if (sub.TrialEnd != null)
+			{
+				subUpdateOptions.TrialEnd = sub.TrialEnd;
+			}
+
+			StripeSubscription stripeSubscription = subscriptionService.Update(customerId.ID, subscriptionId, subUpdateOptions); // optional StripeSubscriptionUpdateOptions
+
+			return true;
+		}
+
+		private StripeToken GenerateStripeToken(string billingServicesToken)
+		{
+			return TokenService.Get(billingServicesToken);
+		}
+
+		private StripePlan CreateStripePlan(int amount, string interval, string planName)
 		{
 			Random r = new Random();
 			int i = r.Next(100000000);
-			var newPlan = new StripePlanCreateOptions();
+			StripePlanCreateOptions newPlan = new StripePlanCreateOptions();
 			newPlan.Name = planName;
 			newPlan.StatementDescriptor = planName;
 			newPlan.Amount = amount;           // all amounts on Stripe are in cents, pence, etc
@@ -144,30 +164,7 @@ namespace AllyisApps.BillingServices.StripeService
 
 			newPlan.Id = i.ToString();
 
-			StripePlan response = PlanService.Create(newPlan);
-
-			var plan = new StripePlanUpdateOptions();
-
-			plan.Name = newPlan.Name;
-
-			var ss = new StripeSubscriptionUpdateOptions();
-			ss.PlanId = newPlan.Id;
-
-			var subscriptionService = new StripeSubscriptionService();
-			StripeSubscription sub = subscriptionService.Get(customer.Id, subscriptionId);
-			if (sub.TrialEnd != null)
-			{
-				ss.TrialEnd = sub.TrialEnd;
-			}
-
-			StripeSubscription stripeSubscription = subscriptionService.Update(customer.Id, subscriptionId, ss); // optional StripeSubscriptionUpdateOptions
-
-			return true;
-		}
-
-		private StripeToken GenerateStripeToken(string billingServicesToken)
-		{
-			return TokenService.Get(billingServicesToken);
+			return PlanService.Create(newPlan);
 		}
 	}
 }

@@ -9,7 +9,6 @@ using System.Collections.Generic;
 
 using AllyisApps.Services.BusinessObjects;
 using AllyisApps.Services.Crm;
-using Stripe;
 
 namespace AllyisApps.ViewModels
 {

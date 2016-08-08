@@ -371,13 +371,13 @@ namespace AllyisApps.Services.Crm
 		/// Creates a customer subscription plan and adds a monthly subscription for the current organization.
 		/// </summary>
 		/// <param name="amount">Price of subscription.</param>
-		/// <param name="customer">The StripeCustomer.</param>
-		/// <param name="numberOfUsers">Number of subscription users.</param>
+		/// <param name="customerId">The StripeCustomer.</param>
+		/// <param name="numUsers">Number of subscription users.</param>
 		/// <param name="productId">Product Id.</param>
 		/// <param name="planName">Name of subscription plan, to appear on Stripe invoices.</param>
 		/// <returns>Subscription Id.</returns>
 		[CLSCompliant(false)]
-		public string AddCustomerSubscriptionPlan(int amount, BillingCustomer customer, int numberOfUsers, int productId, string planName)
+		public string AddCustomerSubscriptionPlan(int amount, BillingServicesCustomerId customerId, int numUsers, int productId, string planName)
 		{
 			#region Validation
 			if (amount < 0)
@@ -385,14 +385,15 @@ namespace AllyisApps.Services.Crm
 				throw new ArgumentOutOfRangeException("amount", "Price cannot be negative.");
 			}
 
-			if (customer == null)
+			if (customerId == null)
 			{
-				throw new ArgumentNullException("customer", "Customer cannot be null.");
+				throw new ArgumentNullException("customerId", "customerId cannot be null.");
 			}
 
-			if (numberOfUsers < 0)
-			{ // TODO: Figure out if this can be 0 or not
-				throw new ArgumentOutOfRangeException("numberOfUsers", "Number of users cannot be negative.");
+			if (numUsers < 0)
+			{
+				// TODO: Figure out if this can be 0 or not
+				throw new ArgumentOutOfRangeException("numUsers", "Number of users cannot be negative.");
 			}
 
 			if (productId <= 0)
@@ -401,21 +402,23 @@ namespace AllyisApps.Services.Crm
 			}
 			#endregion
 
-			string planId = StripeWrapper.Subscription("month", amount, customer, planName);
-			return DBHelper.AddCustomerSubscription(customer.Id, planId, amount, numberOfUsers, productId, UserContext.ChosenOrganizationId);
+			string service = "Stripe";
+			BillingServicesHandler handler = new BillingServicesHandler(service);
+			string planId = handler.CreateSubscription(amount, "month", planName, customerId);
+			return DBHelper.AddCustomerSubscription(customerId.ID, planId, amount, numUsers, productId, UserContext.ChosenOrganizationId);
 		}
 
 		/// <summary>
 		/// Updates a customer subscription.
 		/// </summary>
-		/// <param name="subscriptionId">Subscription Id, as a string.</param>
 		/// <param name="amount">Price of subscription.</param>
-		/// <param name="customer">The StripeCustomer.</param>
-		/// <param name="numberOfUsers">Number of Users.</param>
 		/// <param name="planName">Name of subscription plan, to appear on Stripe invoices.</param>
+		/// <param name="numUsers">Number of Users.</param>
+		/// <param name="subscriptionId">Subscription Id, as a string.</param>
+		/// <param name="customerId">The Billing Services Customer ID.</param>
 		/// <returns>The customer subscription.</returns>
 		[CLSCompliant(false)]
-		public string UpdateSubscriptionPlan(string subscriptionId, int amount, BillingCustomer customer, int numberOfUsers, string planName)
+		public string UpdateSubscriptionPlan(int amount, string planName, int numUsers, string subscriptionId, BillingServicesCustomerId customerId)
 		{
 			#region Validation
 			if (string.IsNullOrEmpty(subscriptionId))
@@ -428,21 +431,22 @@ namespace AllyisApps.Services.Crm
 				throw new ArgumentOutOfRangeException("amount", "Price cannot be negative.");
 			}
 
-			if (customer == null)
+			if (customerId == null)
 			{
-				throw new ArgumentNullException("customer", "Customer cannot be null.");
+				throw new ArgumentNullException("customerId", "customerId cannot be null.");
 			}
 
-			if (numberOfUsers < 0)
-			{ // TODO: Figure out if this can be 0 or not
-				throw new ArgumentOutOfRangeException("numberOfUsers", "Number of users cannot be negative.");
+			if (numUsers < 0)
+			{
+				// TODO: Figure out if this can be 0 or not
+				throw new ArgumentOutOfRangeException("numUsers", "Number of users cannot be negative.");
 			}
 			#endregion
 
 			BillingServicesHandler handler = new BillingServicesHandler("Stripe"); // TODO: make this check the database instead of hardcoding Stripe
 
-			string s = handler.UpdateSubscription(subscriptionId.Trim(), amount, "month", customer, planName);
-			return DBHelper.UpdateSubscriptionPlan(customer.Id, subscriptionId, amount, numberOfUsers);
+			handler.UpdateSubscription(amount, "month", planName, subscriptionId.Trim(), customerId);
+			return DBHelper.UpdateSubscriptionPlan(customerId.ID, subscriptionId, amount, numUsers);
 		}
 
 		/// <summary>

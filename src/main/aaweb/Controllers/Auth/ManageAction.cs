@@ -15,7 +15,6 @@ using AllyisApps.Services.BusinessObjects;
 using AllyisApps.Services.Crm;
 using AllyisApps.Utilities;
 using AllyisApps.ViewModels;
-using Stripe;
 
 namespace AllyisApps.Controllers
 {

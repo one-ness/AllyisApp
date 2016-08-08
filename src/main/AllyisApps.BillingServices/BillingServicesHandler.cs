@@ -49,9 +49,9 @@ namespace AllyisApps.BillingServices
 			return Service.CreatePlan(amount, interval, planName);
 		}
 
-		public bool CreateSubscription()
+		public string CreateSubscription(int amount, string interval, string planName, BillingServicesCustomerId customerId)
 		{
-			return Service.CreateSubscription();
+			return Service.CreateSubscription(amount, interval, planName, customerId);
 		}
 
 		public bool DeleteCustomer()
@@ -109,9 +109,9 @@ namespace AllyisApps.BillingServices
 			return Service.UpdatePlan();
 		}
 
-		public bool UpdateSubscription(string subscriptionId, int amount, string interval, BillingCustomer customer, string planName)
+		public bool UpdateSubscription(int amount, string interval, string planName, string subscriptionId, BillingServicesCustomerId customerId)
 		{
-			return Service.UpdateSubscription(subscriptionId, amount, interval, customer, planName);
+			return Service.UpdateSubscription(amount, interval, planName, subscriptionId, customerId);
 		}
 	}
 }
