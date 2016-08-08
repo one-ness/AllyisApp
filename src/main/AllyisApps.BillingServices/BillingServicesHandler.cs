@@ -84,7 +84,7 @@ namespace AllyisApps.BillingServices
 			return Service.RetrieveCharge();
 		}
 
-		public BillingCustomer RetrieveCustomer(string customerId)
+		public BillingCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
 		{
 			return Service.RetrieveCustomer(customerId);
 		}

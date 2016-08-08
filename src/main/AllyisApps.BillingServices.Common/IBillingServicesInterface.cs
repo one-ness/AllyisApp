@@ -23,7 +23,7 @@ namespace AllyisApps.BillingServices.Common
 
 		bool UpdateCustomer(BillingServicesCustomerId customerId, BillingServicesToken token);
 
-		BillingCustomer RetrieveCustomer(string customerId);
+		BillingCustomer RetrieveCustomer(BillingServicesCustomerId customerId);
 
 		List<BillingCustomer> ListCustomers();
 		#endregion

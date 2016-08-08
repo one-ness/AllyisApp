@@ -91,12 +91,12 @@ namespace AllyisApps.BillingServices.StripeService
 			throw new NotImplementedException();
 		}
 
-		public BillingCustomer RetrieveCustomer(string customerId)
+		public BillingCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
 		{
 			// there is almost definitely some exception handling that will need to be done here.
 
 			var customerService = new StripeCustomerService();
-			StripeCustomer stripeCustomer = customerService.Get(customerId);
+			StripeCustomer stripeCustomer = customerService.Get(customerId.ID);
 
 			// need to determine what stripeCustomer info is needed.
 
