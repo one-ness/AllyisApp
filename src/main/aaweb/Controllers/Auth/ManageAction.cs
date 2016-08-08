@@ -71,7 +71,7 @@ namespace AllyisApps.Controllers
 				};
 			});
 
-			string s = CrmService.GetOrgCustomer();
+			string s = CrmService.GetOrgBillingServicesCustomerId();
 			StripeCustomer customer = s == null ? null : StripeWrapper.RetrieveCustomer(s);
 
 			return new OrganizationManageViewModel

@@ -86,7 +86,7 @@ namespace AllyisApps.Controllers
 					SelectedSku = selectedSku,
 					SelectedSkuName = selectedSku > 0 ? CrmService.GetSkuDetails(selectedSku).Name : string.Empty,
 					PreviousSku = selectedSku,
-					StripeToken = CrmService.GetOrgCustomer()
+					StripeToken = CrmService.GetOrgBillingServicesCustomerId()
 				};
 			}
 
@@ -147,7 +147,7 @@ namespace AllyisApps.Controllers
 			}
 			else
 			{
-				model.Billing.Customer = BillingServicesHandler.RetrieveCustomer(CrmService.GetOrgCustomer());
+				model.Billing.Customer = BillingServicesHandler.RetrieveCustomer(CrmService.GetOrgBillingServicesCustomerId());
 			}
 
 			if (model.Billing.Amount != 0)
@@ -157,7 +157,7 @@ namespace AllyisApps.Controllers
 					return this.View(ViewConstants.AddBillingToSubscribe, model);
 				}
 
-				string orgCustomer = CrmService.GetOrgCustomer();
+				string orgCustomer = CrmService.GetOrgBillingServicesCustomerId();
 				if (orgCustomer == null)
 				{
 					model.Billing.Customer = CrmService.CreateStripeCustomer(CrmService.GenerateToken(stripeToken), stripeEmail);
@@ -186,7 +186,7 @@ namespace AllyisApps.Controllers
 			{
 				try
 				{
-					model.Billing.Customer = BillingServicesHandler.RetrieveCustomer(CrmService.GetOrgCustomer());
+					model.Billing.Customer = BillingServicesHandler.RetrieveCustomer(CrmService.GetOrgBillingServicesCustomerId());
 
 					if (model.Billing.Customer != null)
 					{

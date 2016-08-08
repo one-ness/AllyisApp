@@ -21,7 +21,7 @@ namespace AllyisApps.BillingServices.Common
 
 		bool DeleteCustomer();
 
-		bool UpdateCustomer();
+		bool UpdateCustomer(string customerId, string billingServicesToken);
 
 		BillingCustomer RetrieveCustomer(string customerId);
 

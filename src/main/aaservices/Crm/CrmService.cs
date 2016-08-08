@@ -231,63 +231,70 @@ namespace AllyisApps.Services.Crm
 		/// <summary>
 		/// Edits or creates billing information for the current chosen organization.
 		/// </summary>
-		/// <param name="stripeToken">The stripe token being used for this charge.</param>
-		/// <param name="stripeEmail">Customer email address.</param>
-		public void UpdateBillingInfo(string stripeToken, string stripeEmail)
+		/// <param name="billingServicesToken">The billingServicesToken being used for this charge.</param>
+		/// <param name="billingServicesEmail">Customer email address.</param>
+		public void UpdateBillingInfo(string billingServicesToken, string billingServicesEmail)
 		{
 			#region Validation
-			if (string.IsNullOrEmpty(stripeToken))
+			if (string.IsNullOrEmpty(billingServicesToken))
 			{
-				throw new ArgumentNullException("stripeToken", "Stripe token must have a value.");
+				throw new ArgumentNullException("billingServicesToken", "billingServicesToken must have a value.");
 			}
 
-			if (string.IsNullOrEmpty(stripeEmail))
+			if (string.IsNullOrEmpty(billingServicesEmail))
 			{
-				throw new ArgumentNullException("stripeEmail", "Email address must have a value.");
+				throw new ArgumentNullException("billingServicesEmail", "Email address must have a value.");
 			}
-			else if (!AccountService.IsEmailAddressValid(stripeEmail))
+			else if (!AccountService.IsEmailAddressValid(billingServicesEmail))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
 			#endregion
 
-			//// Either get the existing stripe information for the org or create some if the org has none
-			string orgCustomer = this.GetOrgCustomer();
-			if (orgCustomer == null)
+			//// Either get the existing billing service information for the org or create some if the org has none
+			string customerId = this.GetOrgBillingServicesCustomerId();
+			if (customerId == null)
 			{
-				StripeToken t = this.GenerateToken(stripeToken);
-				StripeCustomer customer = this.CreateStripeCustomer(t, stripeEmail);
+				StripeToken t = this.GenerateToken(billingServicesToken);
+				StripeCustomer customer = this.CreateStripeCustomer(t, billingServicesEmail);
 				this.AddOrgCustomer(customer.Id);
 				this.AddBillingHistory("Adding stripe customer data", null);
+
+
+				string service = "Stripe";
+				BillingServicesHandler handler = new BillingServicesHandler(service);
+
+				this.AddBillingHistory(string.Format("Adding {0} customer data", service), null);
 			}
 			else
 			{
-				StripeToken t = this.GenerateToken(stripeToken);
-				StripeWrapper.UpdateStripeCustomer(t, orgCustomer);
-				this.AddBillingHistory("Updating stripe customer data", null);
+				string service = "Stripe";
+				BillingServicesHandler handler = new BillingServicesHandler(service);
+				handler.UpdateCustomer(customerId, billingServicesToken);
+				this.AddBillingHistory(string.Format("Updating {0} customer data", service), null);
 			}
 		}
 
-		/// <summary>
-		/// Generates the stripe token.
-		/// </summary>
-		/// <param name="id">The token id.</param>
-		/// <returns>A token.</returns>
-		[CLSCompliant(false)]
-		public StripeToken GenerateToken(string id)
-		{
-			var tokenService = new StripeTokenService();
-			return tokenService.Get(id);
-		}
+		/////// <summary>
+		/////// Generates the stripe token.
+		/////// </summary>
+		/////// <param name="id">The token id.</param>
+		/////// <returns>A token.</returns>
+		////[CLSCompliant(false)]
+		////public StripeToken GenerateToken(string id)
+		////{
+		////	var tokenService = new StripeTokenService();
+		////	return tokenService.Get(id);
+		////}
 
 		/// <summary>
-		/// Creates a stripe customer.
+		/// Creates a billingServices customer.
 		/// </summary>
-		/// <param name="t">The stripe token for creating the customer.</param>
-		/// <param name="email">The user's email.</param>
+		/// <param name="billingServicesToken">The BillingServices token for creating the customer.</param>
+		/// <param name="billingServicesEmail">The user's email.</param>
 		/// <returns>A new StripeCustomer.</returns>
 		[CLSCompliant(false)]
-		public void CreateStripeCustomer(string t, string email)
+		public void CreateBillingServicesCustomer(string billingServicesToken, string billingServicesEmail)
 		{
 			#region Validation
 			if (t == null)
@@ -342,7 +349,7 @@ namespace AllyisApps.Services.Crm
 		/// Gets the stripe customer Id for the current organization.
 		/// </summary>
 		/// <returns>The customer ID as a string.</returns>
-		public string GetOrgCustomer()
+		public string GetOrgBillingServicesCustomerId()
 		{
 			return DBHelper.GetOrgCustomer(UserContext.ChosenOrganizationId);
 		}

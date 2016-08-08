@@ -11,12 +11,14 @@ namespace AllyisApps.BillingServices.StripeService
 		private readonly StripeCustomerService CustomerService;
 		private readonly StripePlanService PlanService;
 		private readonly StripeSubscriptionService SubscriptionService;
+		private readonly StripeTokenService TokenService;
 
 		public StripeWrapper()
 		{
 			CustomerService = new StripeCustomerService();
 			PlanService = new StripePlanService();
 			SubscriptionService = new StripeSubscriptionService();
+			TokenService = new StripeTokenService();
 		}
 
 		public bool CreateCharge()
@@ -112,14 +114,15 @@ namespace AllyisApps.BillingServices.StripeService
 			throw new NotImplementedException();
 		}
 
-		public bool UpdateCustomer(string customerId)
+		public bool UpdateCustomer(string customerId, string billingServicesToken)
 		{
 			var currentCustomer = new StripeCustomerUpdateOptions();
 
-			// setting up the card
-			currentCustomer.SourceToken = token.ToString();
+			currentCustomer.SourceToken = this.GenerateToken(billingServicesToken).ToString();
 
-			StripeCustomer stripeCustomer = CustomerService.Update(customerId, currentCustomer);
+			CustomerService.Update(customerId, currentCustomer);
+
+			return true;  // need to return false if the operation fails.
 		}
 
 		public bool UpdatePlan()
@@ -160,6 +163,11 @@ namespace AllyisApps.BillingServices.StripeService
 			StripeSubscription stripeSubscription = subscriptionService.Update(customer.Id, subscriptionId, ss); // optional StripeSubscriptionUpdateOptions
 
 			return true;
+		}
+
+		private StripeToken GenerateToken(string billingServicesToken)
+		{
+			return TokenService.Get(billingServicesToken);
 		}
 	}
 }

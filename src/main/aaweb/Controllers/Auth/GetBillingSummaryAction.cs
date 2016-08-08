@@ -43,7 +43,7 @@ namespace AllyisApps.Controllers
 			List<BillingHistoryItemViewModel> result = new List<BillingHistoryItemViewModel>();
 
 			// Creation of items from Stripe data
-			string stripeID = CrmService.GetOrgCustomer();
+			string stripeID = CrmService.GetOrgBillingServicesCustomerId();
 			if (stripeID != null)
 			{
 				foreach (StripeInvoice invoice in StripeWrapper.GetInvoices(stripeID))
