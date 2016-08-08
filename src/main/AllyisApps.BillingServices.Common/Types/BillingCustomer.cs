@@ -30,11 +30,11 @@ namespace AllyisApps.BillingServices.Common.Types
 			_BillingServicesCustomerId = customerId;
 		}
 
-		public string Id
+		public BillingServicesCustomerId Id
 		{
 			get
 			{
-				return _BillingServicesCustomerId.Id;
+				return _BillingServicesCustomerId;
 			}
 		}
 

@@ -563,14 +563,15 @@ namespace AllyisApps.Services.Crm
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
 		/// <returns>Subscription Id.</returns>
-		public string GetSubscriptionId(string customerId)
+		[CLSCompliant(false)]
+		public string GetSubscriptionId(BillingServicesCustomerId customerId)
 		{
-			if (string.IsNullOrEmpty(customerId))
+			if (customerId == null)
 			{
 				throw new ArgumentNullException("customerId", "Customer id must have a value.");
 			}
 
-			return DBHelper.GetSubscriptionPlan(UserContext.ChosenOrganizationId, customerId);
+			return DBHelper.GetSubscriptionPlan(UserContext.ChosenOrganizationId, customerId.Id);
 		}
 
 		/// <summary>
