@@ -7,7 +7,7 @@ namespace AllyisApps.BillingServices.Common
 	{
 		// Plans are per offering, ie Time Tracker, Consulting, etc
 		#region plans
-		bool CreatePlan();
+		bool CreatePlan(int amount, string interval, string planName);
 
 		bool DeletePlan();
 
@@ -23,7 +23,7 @@ namespace AllyisApps.BillingServices.Common
 
 		bool UpdateCustomer();
 
-		BillingCustomer RetrieveCustomer(string id);
+		BillingCustomer RetrieveCustomer(string customerId);
 
 		List<BillingCustomer> ListCustomers();
 		#endregion
@@ -33,7 +33,7 @@ namespace AllyisApps.BillingServices.Common
 
 		bool DeleteSubscription();
 
-		bool UpdateSubscription();
+		bool UpdateSubscription(string subscriptionId, int amount, string interval, BillingCustomer customer, string planName);
 
 		BillingSubscription RetrieveSubscription();
 

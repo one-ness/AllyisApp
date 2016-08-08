@@ -12,5 +12,7 @@ namespace AllyisApps.BillingServices.Common.Types
 		{
 			throw new NotImplementedException("BillingCustomer has not yet been implemented.");
 		}
+
+		public string Id { get; set; }
 	}
 }

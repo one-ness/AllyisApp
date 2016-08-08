@@ -7,7 +7,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using AllyisApps.BillingServices;
+using AllyisApps.BillingServices.Common.Types;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
@@ -286,7 +287,7 @@ namespace AllyisApps.Services.Crm
 		/// <param name="email">The user's email.</param>
 		/// <returns>A new StripeCustomer.</returns>
 		[CLSCompliant(false)]
-		public StripeCustomer CreateStripeCustomer(StripeToken t, string email)
+		public void CreateStripeCustomer(string t, string email)
 		{
 			#region Validation
 			if (t == null)
@@ -370,7 +371,7 @@ namespace AllyisApps.Services.Crm
 		/// <param name="planName">Name of subscription plan, to appear on Stripe invoices.</param>
 		/// <returns>Subscription Id.</returns>
 		[CLSCompliant(false)]
-		public string AddCustomerSubscriptionPlan(int amount, StripeCustomer customer, int numberOfUsers, int productId, string planName)
+		public string AddCustomerSubscriptionPlan(int amount, BillingCustomer customer, int numberOfUsers, int productId, string planName)
 		{
 			#region Validation
 			if (amount < 0)
@@ -408,7 +409,7 @@ namespace AllyisApps.Services.Crm
 		/// <param name="planName">Name of subscription plan, to appear on Stripe invoices.</param>
 		/// <returns>The customer subscription.</returns>
 		[CLSCompliant(false)]
-		public string UpdateSubscriptionPlan(string subscriptionId, int amount, StripeCustomer customer, int numberOfUsers, string planName)
+		public string UpdateSubscriptionPlan(string subscriptionId, int amount, BillingCustomer customer, int numberOfUsers, string planName)
 		{
 			#region Validation
 			if (string.IsNullOrEmpty(subscriptionId))
@@ -432,7 +433,9 @@ namespace AllyisApps.Services.Crm
 			}
 			#endregion
 
-			string s = StripeWrapper.SubscriptionUpdate(subscriptionId.Trim(), amount, "month", customer, planName);
+			BillingServicesHandler handler = new BillingServicesHandler("Stripe"); // TODO: make this check the database instead of hardcoding Stripe
+
+			string s = handler.UpdateSubscription(subscriptionId.Trim(), amount, "month", customer, planName);
 			return DBHelper.UpdateSubscriptionPlan(customer.Id, subscriptionId, amount, numberOfUsers);
 		}
 

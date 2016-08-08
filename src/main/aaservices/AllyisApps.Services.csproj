@@ -128,6 +128,14 @@
       <Project>{448ffc61-ecf1-4312-a35b-c221f98a895c}</Project>
       <Name>AllyisApps.Lib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AllyisApps.BillingServices.Common\AllyisApps.BillingServices.Common.csproj">
+      <Project>{7829F110-92B1-4A99-9D75-1DD971B980EE}</Project>
+      <Name>AllyisApps.BillingServices.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AllyisApps.BillingServices\AllyisApps.BillingServices.csproj">
+      <Project>{0FDE35E2-5D06-41F5-B2E7-B7B0BF3028FF}</Project>
+      <Name>AllyisApps.BillingServices</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="RetiredCode.txt" />
