@@ -252,7 +252,7 @@ namespace AllyisApps.Services.Crm
 			#endregion
 
 			//// Either get the existing billing service information for the org or create some if the org has none
-			string customerId = this.GetOrgBillingServicesCustomerId();
+			BillingServicesCustomerId customerId = this.GetOrgBillingServicesCustomerId();
 			if (customerId == null)
 			{
 				string service = "Stripe";
@@ -289,7 +289,7 @@ namespace AllyisApps.Services.Crm
 		/// <param name="token">The BillingServicesToken for creating the customer.</param>
 		/// <returns>A new StripeCustomer.</returns>
 		[CLSCompliant(false)]
-		public string CreateBillingServicesCustomer(string billingServicesEmail, BillingServicesToken token)
+		public BillingServicesCustomerId CreateBillingServicesCustomer(string billingServicesEmail, BillingServicesToken token)
 		{
 			#region Validation
 			if (token == null)
@@ -345,24 +345,26 @@ namespace AllyisApps.Services.Crm
 		/// <summary>
 		/// Gets the stripe customer Id for the current organization.
 		/// </summary>
-		/// <returns>The customer ID as a string.</returns>
-		public string GetOrgBillingServicesCustomerId()
+		/// <returns>The customer ID.</returns>
+		[CLSCompliant(false)]
+		public BillingServicesCustomerId GetOrgBillingServicesCustomerId()
 		{
-			return DBHelper.GetOrgCustomer(UserContext.ChosenOrganizationId);
+			return new BillingServicesCustomerId(DBHelper.GetOrgCustomer(UserContext.ChosenOrganizationId));
 		}
 
 		/// <summary>
 		/// Adds a stripe customer for the current organization.
 		/// </summary>
-		/// <param name="stripeTokenCustomerId">Stripe token customer id.</param>
-		public void AddOrgCustomer(string stripeTokenCustomerId)
+		/// <param name="customerId">Billing Services customer id.</param>
+		[CLSCompliant(false)]
+		public void AddOrgCustomer(BillingServicesCustomerId customerId)
 		{
-			if (string.IsNullOrEmpty(stripeTokenCustomerId))
+			if (customerId == null)
 			{
-				throw new ArgumentNullException("stripeTokenCustomerId", "Stripe token customer id must have a value.");
+				throw new ArgumentNullException("customerId", "Billing Services customer id must have a value.");
 			}
 
-			DBHelper.AddOrgCustomer(UserContext.ChosenOrganizationId, stripeTokenCustomerId);
+			DBHelper.AddOrgCustomer(UserContext.ChosenOrganizationId, customerId.ID);
 		}
 
 		/// <summary>
