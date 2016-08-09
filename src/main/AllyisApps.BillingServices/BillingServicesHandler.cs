@@ -66,7 +66,7 @@ namespace AllyisApps.BillingServices
 
 		public void DeleteSubscription(BillingServicesCustomerId customerId, string subscriptionId)
 		{
-			return Service.DeleteSubscription(customerId, subscriptionId);
+			Service.DeleteSubscription(customerId, subscriptionId);
 		}
 
 		public List<BillingCustomer> ListCustomers()

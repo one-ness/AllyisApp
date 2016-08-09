@@ -101,13 +101,13 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <param name="model">The model.</param>
 		/// <param name="token">Response from the billing service.</param>
-		/// <param name="stripeEmail">The billing email.</param>
+		/// <param name="billingServicesEmail">The billing email.</param>
 		/// <param name="cost">The cost.</param>
 		/// <returns>A page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[CLSCompliant(false)]
-		public ActionResult Subscribe(ProductSubscriptionViewModel model, BillingServicesToken token, string stripeEmail, string cost)
+		public ActionResult Subscribe(ProductSubscriptionViewModel model, BillingServicesToken token, string billingServicesEmail, string cost)
 		{
 			if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
 			{
@@ -136,10 +136,10 @@ namespace AllyisApps.Controllers
 
 			if (!(token == null) && (model.Token == null))
 			{
-				BillingCustomer customer = CrmService.CreateBillingServicesCustomer(t, stripeEmail);
+				BillingServicesCustomerId customerId = CrmService.CreateBillingServicesCustomer(billingServicesEmail, token);
 
-				CrmService.AddOrgCustomer(customer.Id);
-				model.Billing.Customer = customer;
+				CrmService.AddOrgCustomer(customerId);
+				model.Billing.Customer = CrmService.RetrieveCustomer(customerId);
 				model.Token = token;
 				CrmService.AddBillingHistory("Adding stripe customer data", null);
 			}
@@ -155,15 +155,15 @@ namespace AllyisApps.Controllers
 					return this.View(ViewConstants.AddBillingToSubscribe, model);
 				}
 
-				BillingServicesCustomerId orgCustomer = CrmService.GetOrgBillingServicesCustomerId();
-				if (orgCustomer == null)
+				BillingServicesCustomerId customerId = CrmService.GetOrgBillingServicesCustomerId();
+				if (customerId == null)
 				{
-					model.Billing.Customer = CrmService.CreateBillingServicesCustomer(CrmService.GenerateToken(token), stripeEmail);
+					model.Billing.Customer = CrmService.RetrieveCustomer(CrmService.CreateBillingServicesCustomer(billingServicesEmail, token));
 					CrmService.AddOrgCustomer(model.Billing.Customer.Id);
 				}
 				else
 				{
-					model.Billing.Customer = CrmService.RetrieveCustomer(orgCustomer);
+					model.Billing.Customer = CrmService.RetrieveCustomer(customerId);
 				}
 
 				string subscriptionId = CrmService.GetSubscriptionId(model.Billing.Customer.Id);
