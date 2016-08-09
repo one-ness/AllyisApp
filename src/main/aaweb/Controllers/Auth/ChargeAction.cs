@@ -4,8 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Web.Mvc;
-
+using AllyisApps.BillingServices.Common.Types;
 using AllyisApps.Core;
 
 namespace AllyisApps.Controllers
@@ -18,14 +19,15 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Edits or creates billing information.
 		/// </summary>
-		/// <param name="stripeToken">The stripe token being used for this charge.</param>
-		/// <param name="stripeEmail">The email associated with this customer.</param>
+		/// <param name="token">The billing services token being used for this charge.</param>
+		/// <param name="billingServicesEmail">The email associated with this customer.</param>
 		/// <returns>A page.</returns>
-		public ActionResult Charge(string stripeToken, string stripeEmail)
+		[CLSCompliant(false)]
+		public ActionResult Charge(BillingServicesToken token, string billingServicesEmail)
 		{
 			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
 			{
-				if (stripeToken == null)
+				if (token == null)
 				{
 					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Controllers.Auth.Strings.Token, Core.Alert.Variety.Warning));
 
@@ -33,7 +35,7 @@ namespace AllyisApps.Controllers
 				}
 				else
 				{
-					CrmService.UpdateBillingInfo(stripeEmail, stripeToken);
+					CrmService.UpdateBillingInfo(billingServicesEmail, token);
 
 					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Controllers.Auth.Strings.Billing, Core.Alert.Variety.Success));
 					return this.RedirectToAction(ActionConstants.Manage);

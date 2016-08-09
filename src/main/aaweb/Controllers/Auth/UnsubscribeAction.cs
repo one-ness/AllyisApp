@@ -57,13 +57,13 @@ namespace AllyisApps.Controllers
 			{
 				try
 				{
-					model.Billing.Customer = BillingServicesHandler.RetrieveCustomer(CrmService.GetOrgBillingServicesCustomerId());
+					model.Billing.Customer = CrmService.RetrieveCustomer(CrmService.GetOrgBillingServicesCustomerId());
 					if (model.Billing.Customer != null)
 					{
 						string subscriptionId = CrmService.GetSubscriptionId(model.Billing.Customer.Id);
 						if (subscriptionId != null)
 						{
-							BillingServicesHandler.DeleteSubScription(subscriptionId.Trim(), model.Billing.Customer.Id);
+							CrmService.DeleteSubscription(model.Billing.Customer.Id, subscriptionId.Trim());
 							CrmService.DeleteSubscriptionPlan(subscriptionId);
 							CrmService.AddBillingHistory("Unsubscribing from product", model.SelectedSku);
 						}
