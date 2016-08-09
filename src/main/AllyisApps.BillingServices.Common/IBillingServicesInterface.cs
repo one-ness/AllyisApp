@@ -31,7 +31,7 @@ namespace AllyisApps.BillingServices.Common
 		#region subscriptions
 		string CreateSubscription(int amount, string interval, string planName, BillingServicesCustomerId customerId);
 
-		bool DeleteSubscription();
+		void DeleteSubscription(BillingServicesCustomerId customerId, string subscriptionId);
 
 		bool UpdateSubscription(int amount, string interval, string planName, string subscriptionId, BillingServicesCustomerId customerId);
 

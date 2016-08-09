@@ -64,9 +64,9 @@ namespace AllyisApps.BillingServices.StripeService
 			throw new NotImplementedException();
 		}
 
-		public bool DeleteSubscription()
+		public void DeleteSubscription(BillingServicesCustomerId customerId, string subscriptionId)
 		{
-			throw new NotImplementedException();
+			SubscriptionService.Cancel(customerId.Id, subscriptionId);
 		}
 
 		public List<BillingCustomer> ListCustomers()

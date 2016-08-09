@@ -270,6 +270,13 @@ namespace AllyisApps.Services.Crm
 			}
 		}
 
+		[CLSCompliant(false)]
+		public void DeleteSubscription(BillingServicesCustomerId id, string subscriptionId)
+		{
+			string service = "Stripe";
+			BillingServicesHandler handler = new BillingServicesHandler(service);
+		}
+
 		/////// <summary>
 		/////// Generates the stripe token.
 		/////// </summary>

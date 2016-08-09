@@ -134,13 +134,13 @@ namespace AllyisApps.Controllers
 				model.Billing.Amount = (model.NumberOfUsers - 5) * 100;
 			}
 
-			if (!string.IsNullOrEmpty(stripeToken) && string.IsNullOrEmpty(model.Token))
+			if (!(token == null) && (model.Token == null))
 			{
 				BillingCustomer customer = CrmService.CreateBillingServicesCustomer(t, stripeEmail);
 
 				CrmService.AddOrgCustomer(customer.Id);
 				model.Billing.Customer = customer;
-				model.Token = stripeToken;
+				model.Token = token;
 				CrmService.AddBillingHistory("Adding stripe customer data", null);
 			}
 			else
@@ -150,7 +150,7 @@ namespace AllyisApps.Controllers
 
 			if (model.Billing.Amount != 0)
 			{
-				if (string.IsNullOrEmpty(stripeToken) && string.IsNullOrEmpty(model.Token))
+				if ((token == null) && (model.Token == null))
 				{
 					return this.View(ViewConstants.AddBillingToSubscribe, model);
 				}
@@ -158,7 +158,7 @@ namespace AllyisApps.Controllers
 				BillingServicesCustomerId orgCustomer = CrmService.GetOrgBillingServicesCustomerId();
 				if (orgCustomer == null)
 				{
-					model.Billing.Customer = CrmService.CreateBillingServicesCustomer(CrmService.GenerateToken(stripeToken), stripeEmail);
+					model.Billing.Customer = CrmService.CreateBillingServicesCustomer(CrmService.GenerateToken(token), stripeEmail);
 					CrmService.AddOrgCustomer(model.Billing.Customer.Id);
 				}
 				else
@@ -194,7 +194,7 @@ namespace AllyisApps.Controllers
 						{
 							CrmService.DeleteSubscriptionPlan(subscriptionId);
 
-							CrmService.SubscriptionCancel(model.Billing.Customer.Id, subscriptionId);
+							CrmService.DeleteSubscription(model.Billing.Customer.Id, subscriptionId);
 							CrmService.AddBillingHistory("Switching to free subscription, canceling stripe susbcription", model.SelectedSku);
 						}
 					}
