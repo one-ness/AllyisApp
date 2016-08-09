@@ -5,8 +5,8 @@ namespace AllyisApps.BillingServices.Common
 {
 	public interface IBillingServicesInterface
 	{
-		// Plans are per offering, ie Time Tracker, Consulting, etc
 		#region plans
+		// Plans are per offering, ie Time Tracker, Consulting, etc
 		bool CreatePlan(int amount, string interval, string planName);
 
 		BillingPlan RetrievePlan();
