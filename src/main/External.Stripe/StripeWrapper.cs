@@ -259,7 +259,7 @@ namespace AllyisApps.BillingServices.StripeService
 			{
 				if (stripeCharge.CustomerId == customerId.Id)
 				{
-					billingCharges.Add(new BillingCharge());
+					billingCharges.Add(new BillingCharge(stripeCharge.Amount, stripeCharge.Created, stripeCharge.Id, stripeCharge.StatementDescriptor));
 				}
 			}
 

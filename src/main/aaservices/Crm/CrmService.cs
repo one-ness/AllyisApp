@@ -52,9 +52,19 @@ namespace AllyisApps.Services.Crm
 
 
 		[CLSCompliant(false)]
-		public IEnumerable<BillingInvoice> ListInvoices(BillingServicesCustomerId customerId)
+		public List<BillingInvoice> ListInvoices(BillingServicesCustomerId customerId)
 		{
-			throw new NotImplementedException();
+			string service = "Stripe";
+			BillingServicesHandler handler = new BillingServicesHandler(service);
+			return handler.ListInvoices(customerId);
+		}
+
+		[CLSCompliant(false)]
+		public List<BillingCharge> ListCharges(BillingServicesCustomerId customerId)
+		{
+			string service = "Stripe";
+			BillingServicesHandler handler = new BillingServicesHandler(service);
+			return handler.ListCharges(customerId);
 		}
 
 		/// <summary>
