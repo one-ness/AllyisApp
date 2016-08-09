@@ -283,7 +283,7 @@ namespace AllyisApps.BillingServices.StripeService
 			List<BillingInvoice> invoiceList = new List<BillingInvoice>();
 			foreach (StripeInvoice stripeInvoice in stripeInvoices)
 			{
-				invoiceList.Add(new BillingInvoice());
+				invoiceList.Add(new BillingInvoice(stripeInvoice.AmountDue, stripeInvoice.Date, stripeInvoice.Id, stripeInvoice.StripeInvoiceLineItems.Data[0].Plan.Name, "Stripe"));
 			}
 
 			return invoiceList;

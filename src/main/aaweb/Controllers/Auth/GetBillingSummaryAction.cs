@@ -51,8 +51,8 @@ namespace AllyisApps.Controllers
 					{
 						Date = ConvertUTCDateTimeToEpoch(invoice.Date.Value),
 						ID = invoice.Id,
-						Description = string.Format("Stripe invoice - Amount due: {0:C}", invoice.AmountDue / 100.0), // Only works for USD right now
-						ProductName = invoice.StripeInvoiceLineItems.Data[0].Plan.Name,
+						Description = string.Format("{0} invoice - Amount due: {1:C}", invoice.Service, invoice.AmountDue / 100.0), // Only works for USD right now
+						ProductName = invoice.ProductName,
 						Username = string.Empty
 					});
 				}
