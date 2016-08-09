@@ -13,15 +13,17 @@ namespace AllyisApps.BillingServices.Common.Types
 		private readonly DateTime _Created;
 		private readonly string _Id;
 		private readonly string _StatementDescriptor;
+		private readonly string _Service;
 		#endregion
 
 		#region constructor
-		public BillingCharge(int amount, DateTime created, string id, string statementDescriptor)
+		public BillingCharge(int amount, DateTime created, string id, string statementDescriptor, string service = "Stripe")
 		{
 			_Amount = amount;
 			_Created = created;
 			_Id = id;
 			_StatementDescriptor = statementDescriptor;
+			_Service = service;
 		}
 		#endregion
 
@@ -55,6 +57,14 @@ namespace AllyisApps.BillingServices.Common.Types
 			get
 			{
 				return _StatementDescriptor;
+			}
+		}
+
+		public string Service
+		{
+			get
+			{
+				return _Service;
 			}
 		}
 		#endregion

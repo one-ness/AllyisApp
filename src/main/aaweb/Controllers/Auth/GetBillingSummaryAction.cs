@@ -63,7 +63,7 @@ namespace AllyisApps.Controllers
 					{
 						Date = ConvertUTCDateTimeToEpoch(charge.Created),
 						ID = charge.Id,
-						Description = string.Format("Stripe charge - Amount paid: {0:C}", charge.Amount / 100.0), // Only works for USD right now
+						Description = string.Format("{0} charge - Amount paid: {1:C}", charge.Service, charge.Amount / 100.0), // Only works for USD right now
 						ProductName = charge.StatementDescriptor,
 						Username = string.Empty
 					});
