@@ -12,14 +12,19 @@ namespace AllyisApps.BillingServices.StripeService
 		private readonly StripePlanService PlanService;
 		private readonly StripeSubscriptionService SubscriptionService;
 		private readonly StripeTokenService TokenService;
+		private readonly StripeInvoiceService InvoiceService;
+		private readonly StripeChargeService ChargeService;
 
 		public StripeWrapper()
 		{
 			Stripe.StripeConfiguration.SetApiKey("sk_test_6Z1XooVuPiXjbn0DwndaHF8P");
+
 			CustomerService = new StripeCustomerService();
 			PlanService = new StripePlanService();
 			SubscriptionService = new StripeSubscriptionService();
 			TokenService = new StripeTokenService();
+			InvoiceService = new StripeInvoiceService();
+			ChargeService = new StripeChargeService();
 		}
 
 		public bool CreateCharge()
@@ -166,6 +171,38 @@ namespace AllyisApps.BillingServices.StripeService
 			newPlan.Id = i.ToString();
 
 			return PlanService.Create(newPlan);
+		}
+
+		public List<BillingInvoice> ListInvoices(BillingServicesCustomerId customerId)
+		{
+			StripeInvoiceListOptions invoiceListOptions = new StripeInvoiceListOptions();
+			invoiceListOptions.CustomerId = customerId.Id;
+			invoiceListOptions.Limit = 10000;
+			IEnumerable<StripeInvoice> stripeInvoices = InvoiceService.List(invoiceListOptions); // optional StripeInvoiceListOptions
+
+			List<BillingInvoice> invoiceList = new List<BillingInvoice>();
+			foreach(StripeInvoice stripeInvoice in stripeInvoices)
+			{
+				invoiceList.Add(new BillingInvoice());
+			}
+
+			return invoiceList;
+		}
+
+		public List<BillingCharge> ListCharges(BillingServicesCustomerId customerId)
+		{
+			var chargeService = new StripeChargeService();
+			IEnumerable<StripeCharge> stripeCharges = chargeService.List(); // optional StripeChargeListOptions
+			List<BillingCharge> billingCharges = new List<BillingCharge>();
+			foreach (StripeCharge stripeCharge in stripeCharges)
+			{
+				if (stripeCharge.CustomerId == customerId.Id)
+				{
+					billingCharges.Add(new BillingCharge());
+				}
+			}
+
+			return billingCharges;
 		}
 	}
 }

@@ -9,41 +9,47 @@ namespace AllyisApps.BillingServices.Common
 		#region plans
 		bool CreatePlan(int amount, string interval, string planName);
 
-		bool DeletePlan();
+		BillingPlan RetrievePlan();
 
 		bool UpdatePlan();
 
-		BillingPlan RetrievePlan();
+		bool DeletePlan();
 		#endregion
 
 		#region customers
 		BillingServicesCustomerId CreateCustomer(string email, BillingServicesToken token);
 
-		bool DeleteCustomer();
-
-		bool UpdateCustomer(BillingServicesCustomerId customerId, BillingServicesToken token);
-
 		BillingCustomer RetrieveCustomer(BillingServicesCustomerId customerId);
 
 		List<BillingCustomer> ListCustomers();
+
+		bool UpdateCustomer(BillingServicesCustomerId customerId, BillingServicesToken token);
+
+		bool DeleteCustomer();
 		#endregion
 
 		#region subscriptions
 		string CreateSubscription(int amount, string interval, string planName, BillingServicesCustomerId customerId);
 
-		void DeleteSubscription(BillingServicesCustomerId customerId, string subscriptionId);
-
-		bool UpdateSubscription(int amount, string interval, string planName, string subscriptionId, BillingServicesCustomerId customerId);
-
 		BillingSubscription RetrieveSubscription();
 
 		List<BillingSubscription> ListSubscriptions();
+
+		bool UpdateSubscription(int amount, string interval, string planName, string subscriptionId, BillingServicesCustomerId customerId);
+
+		void DeleteSubscription(BillingServicesCustomerId customerId, string subscriptionId);
 		#endregion
 
 		#region charges
 		bool CreateCharge();
 
 		BillingCharge RetrieveCharge();
+
+		List<BillingCharge> ListCharges(BillingServicesCustomerId customerId);
+		#endregion
+
+		#region invoices
+		List<BillingInvoice> ListInvoices(BillingServicesCustomerId customerId);
 		#endregion
 	}
 }

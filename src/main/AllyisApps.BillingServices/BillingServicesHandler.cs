@@ -69,9 +69,19 @@ namespace AllyisApps.BillingServices
 			Service.DeleteSubscription(customerId, subscriptionId);
 		}
 
+		public List<BillingCharge> ListCharges(BillingServicesCustomerId customerId)
+		{
+			return Service.ListCharges(customerId);
+		}
+
 		public List<BillingCustomer> ListCustomers()
 		{
 			return Service.ListCustomers();
+		}
+
+		public List<BillingInvoice> ListInvoices(BillingServicesCustomerId customerId)
+		{
+			return Service.ListInvoices(customerId);
 		}
 
 		public List<BillingSubscription> ListSubscriptions()

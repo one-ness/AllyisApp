@@ -50,6 +50,13 @@ namespace AllyisApps.Services.Crm
 			}).ToList();
 		}
 
+
+		[CLSCompliant(false)]
+		public IEnumerable<BillingInvoice> ListInvoices(BillingServicesCustomerId customerId)
+		{
+			throw new NotImplementedException();
+		}
+
 		/// <summary>
 		/// Gets the product Id from the product name.
 		/// This method is static so that it can be accessed in BaseProductController constructor initializations.
