@@ -182,7 +182,7 @@ namespace AllyisApps.BillingServices.StripeService
 		{
 			throw new NotImplementedException();
 		}
-		
+
 		/// <summary>
 		/// 
 		/// </summary>
