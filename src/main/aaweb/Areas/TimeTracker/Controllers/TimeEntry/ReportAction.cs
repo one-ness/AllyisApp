@@ -23,9 +23,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET /TimeTracker/TimeEntry/Report.
 		/// </summary>
-		/// <param name="organizationId">The Organization's Id.</param>
 		/// <returns>The reports page.</returns>
-		public ViewResult Report(int organizationId = 0)
+		public ViewResult Report()
 		{
 			int orgId = UserContext.ChosenOrganizationId;
 			ReportViewModel reportVM = null;
@@ -46,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new UnauthorizedAccessException(AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReports);
 			}
 
-			reportVM.StartOfWeek = TimeTrackerService.GetStartOfWeek(UserContext.ChosenOrganizationId);
+			reportVM.StartOfWeek = TimeTrackerService.GetStartOfWeek();
 			reportVM.UserView = this.GetUserSelectList(orgId, reportVM.Selection.Users);
 			reportVM.CustomerView = this.GetCustomerSelectList(orgId, reportVM.Selection.CustomerId);
 			reportVM.ProjectView = this.GetProjectSelectList(orgId, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);

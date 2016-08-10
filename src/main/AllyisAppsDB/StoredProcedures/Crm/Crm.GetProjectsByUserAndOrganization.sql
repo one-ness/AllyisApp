@@ -44,3 +44,4 @@ SELECT	[ProjectId],
 		0,
 		0
 		FROM [Crm].[Project] WHERE [ProjectId] = 0
+ORDER BY [Project].[Name]

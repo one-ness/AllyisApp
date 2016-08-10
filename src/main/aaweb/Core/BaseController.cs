@@ -78,27 +78,26 @@ namespace AllyisApps.Core
 		/// <summary>
 		/// Helper method for redirecting to an action in a subdomain.
 		/// </summary>
-		/// <param name="organizationId">The id of the organization.</param>
-		/// <param name="area">The target area.</param>
-		/// <param name="action">The target action.</param>
-		/// <param name="controller">The target controller.</param>
+		/// <param name="pOrganizationId">The id of the organization.</param>
+		/// <param name="pArea">The target area.</param>
+		/// <param name="pAction">The target action.</param>
+		/// <param name="pController">The target controller.</param>
 		/// <returns>Redirects to the Url defined above with new subdomain.</returns>
-		public ActionResult RedirectToSubDomainAction(int organizationId, string area = null, string action = null, string controller = null)
+		public ActionResult RedirectToSubDomainAction(int pOrganizationId, string pArea = null, string pAction = null, string pController = null)
 		{
 			string requestUrl = Request.Url.ToString();
 			string withOutControllerAction = requestUrl.Substring(0, requestUrl.IndexOf(Request.RequestContext.RouteData.Values["controller"].ToString()));
 			string rootAndMiddle = withOutControllerAction.Substring(withOutControllerAction.IndexOf(GlobalSettings.WebRoot));
 			//// rootAndMiddle contains just the webroot, set in WebConfig, and whatever segments were there before the controller name (e.g. language)
-			string route = controller == null ? string.Empty : action == null ? controller : string.Format("{0}/{1}", controller, action);
+			string route = pController == null ? string.Empty : pAction == null ? pController : string.Format("{0}/{1}", pController, pAction);
 
-			if (area != null)
+			if (pArea != null)
 			{
-				route = string.Format("{0}/{1}", area, route);
+				route = string.Format("{0}/{1}", pArea, route);
 			}
-
 			// if no org is set for a user the default is "default" this catchs that
 			// case until the default usercontext org is looked at
-			string chosenOrg = /*OrgService.GetSubdomainById(organizationId)*/ "default"; // Handicapped for now to test on server TODO: remove once we have dns entry for subdomains
+			string chosenOrg = OrgService.GetSubdomainById(pOrganizationId);
 			string url;
 			if (chosenOrg == "default")
 			{
@@ -106,12 +105,17 @@ namespace AllyisApps.Core
 			}
 			else
 			{
+				// Update the ChosenOrg in the database if necessary, so that the UserContext can grab the right one
+				if (this.UserContext.ChosenOrganizationId != pOrganizationId)
+				{
+					OrgService.UpdateActiveOrganization(UserContext.UserId, pOrganizationId);
+				}
+
 				url = string.Format("http://{0}.{1}/{2}", chosenOrg, rootAndMiddle, route);
 			}
-
 			return this.Redirect(url);
 		}
-
+		
 		/// <summary>
 		/// Redirects home.
 		/// </summary>
@@ -145,25 +149,6 @@ namespace AllyisApps.Core
 					AccountService.SignOut(Response);
 					Response.Redirect(FormsAuthentication.LoginUrl);
 					return;
-				}
-
-				// Update the ChosenOrg in the database if necessary, so that the UserContext can grab the right one
-				int chosenOrgID = 0, parsed_int;
-				string orgId = this.HttpContext.Request.Params["OrganizationId"];
-
-				// Not all actions deal with organizations; we don't want to update on unnecessary actions
-				if (orgId != null)
-				{
-					bool parsed = int.TryParse(orgId, out parsed_int);
-					if (parsed)
-					{
-						chosenOrgID = parsed_int;
-					}
-
-					if (chosenOrgID != 0 && UserContext.ChosenOrganizationId != chosenOrgID)
-					{
-						OrgService.UpdateActiveOrganization(UserContext.UserId, chosenOrgID);
-					}
 				}
 
 				// Populate the User Context with database info

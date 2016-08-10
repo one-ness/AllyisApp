@@ -17,3 +17,4 @@ LEFT JOIN [Auth].[User] WITH (NOLOCK) ON [User].[UserId] = [BillingHistory].[Use
 LEFT JOIN [Billing].[Sku] WITH (NOLOCK) ON [Sku].[SkuId] = [BillingHistory].[SkuId]
 LEFT JOIN [Billing].[Product] WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
 WHERE [OrganizationId] = @OrganizationID
+ORDER BY [Date] desc

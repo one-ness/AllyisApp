@@ -15,4 +15,5 @@ BEGIN
     INNER JOIN [Auth].[User]		AS [U] WITH (NOLOCK) 
 		ON [U].[UserId] = [OU].[UserId]
     WHERE [OU].[OrganizationId] = @OrganizationId
+	ORDER BY [U].[LastName]
 END

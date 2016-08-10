@@ -38,10 +38,5 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		/// Gets or sets the projects associated with the user.
 		/// </summary>
 		public IEnumerable<CompleteProjectInfo> UserProjects { get; set; }
-
-		/// <summary>
-		/// Gets or sets the id of the organization related to the user data.
-		/// </summary>
-		public int OrganizationId { get; set; }
 	}
 }

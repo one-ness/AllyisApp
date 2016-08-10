@@ -27,10 +27,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				return this.View(new SettingsViewModel()
 				{
-					OrganizationId = UserContext.ChosenOrganizationId,
-					StartOfWeek = TimeTrackerService.GetStartOfWeek(UserContext.ChosenOrganizationId),
-					Settings = TimeTrackerService.GetSettings(UserContext.ChosenOrganizationId),
-					PayClasses = TimeTrackerService.GetPayClasses(UserContext.ChosenOrganizationId),
+					StartOfWeek = TimeTrackerService.GetStartOfWeek(),
+					Settings = TimeTrackerService.GetSettings(),
+					PayClasses = TimeTrackerService.GetPayClasses(),
 					Holidays = TimeTrackerService.GetHolidays()
 				});
 			}

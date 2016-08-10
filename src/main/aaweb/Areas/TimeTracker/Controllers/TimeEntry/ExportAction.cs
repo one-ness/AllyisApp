@@ -22,12 +22,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Export used on TimeEntry/Index. (May be removed soon).
 		/// </summary>
-		/// <param name="organizationId">The Organization's Id.</param>
 		/// <param name="userId">The User's Id.</param>
 		/// <param name="startingDate">The Starting date of the range (nullable).</param>
 		/// <param name="endingDate">The Ending date of the range (nullable).</param>
 		/// <returns>CSV export of time entries.</returns>
-		public FileStreamResult Export(int organizationId, int userId, DateTime? startingDate = null, DateTime? endingDate = null)
+		public FileStreamResult Export(int userId, DateTime? startingDate = null, DateTime? endingDate = null)
 		{
 			if (userId == Convert.ToInt32(UserContext.UserId))
 			{
@@ -44,7 +43,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			DataExportViewModel model = this.ConstructDataExportViewModel(organizationId, new List<int> { userId }, startingDate, endingDate);
+			DataExportViewModel model = this.ConstructDataExportViewModel(new List<int> { userId }, startingDate, endingDate);
 			model.Output = PrepareCSVExport(model.Data, model.Projects);
 
 			return this.File(model.Output.BaseStream, "text/csv", "export.csv");
@@ -53,23 +52,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Uses services to initialize a new instance of the <see cref="DataExportViewModel" /> class and returns it.
 		/// </summary>
-		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="userId">An array of user ids.</param>
 		/// <param name="startingDate">The starting of the date range (nullable).</param>
 		/// <param name="endingDate">The ending of the date range (nullable).</param>
 		/// <param name="projectId">The project's Id (optional).</param>
 		/// <param name="customerId">The Customer's Id (optional).</param>
 		/// <returns>The DataExportViewModel.</returns>
-		public DataExportViewModel ConstructDataExportViewModel(int organizationId, List<int> userId = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
+		public DataExportViewModel ConstructDataExportViewModel(List<int> userId = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
 			DataExportViewModel result = new DataExportViewModel();
 			if ((userId == null) || (userId[0] == -1))
 			{
-				result.Data = TimeTrackerService.GetTimeEntriesOverDateRange(organizationId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
+				result.Data = TimeTrackerService.GetTimeEntriesOverDateRange(startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
 			}
 			else
 			{
-				result.Data = TimeTrackerService.GetTimeEntriesByUserOverDateRange(userId, organizationId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
+				result.Data = TimeTrackerService.GetTimeEntriesByUserOverDateRange(userId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
 			}
 
 			if (projectId != 0)
@@ -90,12 +88,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if ((userId.Count > 1) || (userId[0] == -1))
 				{
-					result.Projects = OrgService.GetProjectsByOrganization(organizationId);
+					result.Projects = OrgService.GetProjectsByOrganization(UserContext.ChosenOrganizationId);
 				}
 				else
 				{
 					// single user selected
-					result.Projects = ProjectService.GetProjectsByUserAndOrganization(userId[0], organizationId, false);
+					result.Projects = ProjectService.GetProjectsByUserAndOrganization(userId[0], false);
 				}
 			}
 

@@ -6,3 +6,4 @@ AS
 		   [ProjectId]
 	FROM [Crm].[Project] WITH (NOLOCK) 
 	WHERE [IsActive] = 1 AND [CustomerId] = @CustomerId
+	ORDER BY [Project].[Name]

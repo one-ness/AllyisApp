@@ -20,5 +20,5 @@ LEFT JOIN [Lookup].[Country]			WITH (NOLOCK) ON [Country].[CountryId] = [Organiz
 LEFT JOIN [Lookup].[State]				WITH (NOLOCK) ON [State].[StateId] = [Organization].[State]
 WHERE [OrganizationUser].[UserId] = @UserId 
       AND [Auth].[Organization].[IsActive] = 1
-ORDER BY [OrganizationUser].[OrgRoleId] DESC, [Organization].[CreatedUTC]
+ORDER BY [OrganizationUser].[OrgRoleId] DESC, [Organization].[Name]
 END

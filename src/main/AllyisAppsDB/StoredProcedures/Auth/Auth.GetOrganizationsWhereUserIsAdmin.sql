@@ -10,5 +10,6 @@ BEGIN
 	JOIN [Auth].[User]				WITH (NOLOCK) ON [User].[UserId] = @UserId
 	WHERE [OrganizationUser].[UserId] = @UserId
 		AND [OrganizationUser].[OrgRoleId] = 2
-		AND [Organization].[IsActive] = 1;
+		AND [Organization].[IsActive] = 1
+	ORDER BY [Organization].[Name]
 END

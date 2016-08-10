@@ -25,31 +25,32 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET: /TimeTracker/TimeEntry/Ajax?{params}.
 		/// </summary>
-		/// <param name="organizationId">The Organization's Id.</param>
 		/// <param name="userId">Another user's Id.</param>
 		/// <param name="startDate">The beginning of the Date Range.</param>
 		/// <param name="endDate">The ending of the Date Range.</param>
 		/// <returns>Provides the view for the defined user over the date range defined.</returns>
-		public ActionResult Index(int organizationId = 0, int userId = -1, DateTime? startDate = null, DateTime? endDate = null)
+		public ActionResult Index(int userId = -1, DateTime? startDate = null, DateTime? endDate = null)
 		{
 			bool manager = AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers);
-
-			if (!manager)
-			{
-				throw new UnauthorizedAccessException(AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.CantViewOtherTimeCards);
-			}
 			
-			if (!(userId != -1 && userId != Convert.ToInt32(UserContext.UserId)) && !AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
-			{
-				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
+			if (userId != -1 && userId != Convert.ToInt32(UserContext.UserId))
+			{ // Trying to edit as another user
+				if (!manager)
 				{
+					throw new UnauthorizedAccessException(AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.CantViewOtherTimeCards);
+				}
+				//// For a manager editing another user, everything's fine; the next section can be skipped.
+			}
+			else
+			{ // Either userId is -1, or it is the current user
+				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
+				{ // Current user cannot edit self
 					Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 					return this.Redirect("/");
 				}
-				else
-				{
-					userId = Convert.ToInt32(UserContext.UserId);
-				}
+
+				// Can edit self - we must ensure the userId is actually set and isn't still -1
+				userId = Convert.ToInt32(UserContext.UserId);
 			}
 
 			ViewBag.canManage = manager;
@@ -58,10 +59,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(
 													userId,
 													manager,
-													UserContext.ChosenOrganizationId,
 													startDate,
 													endDate,
-													TimeTrackerService.GetLockDate(UserContext.ChosenOrganizationId, userId));
+													TimeTrackerService.GetLockDate(userId));
 
 				return this.View(model);
 			}
@@ -76,15 +76,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="userId">The User ID.</param>
 		/// <param name="manager">The Manager.</param>
-		/// <param name="orgId">The organization ID.</param>
 		/// <param name="startingDate">The Starting Date.</param>
 		/// <param name="endingDate">The Ending date.</param>
 		/// <param name="lockDate">The lock date.</param>
 		/// <returns>The constructed TimeEntryOverDateRangeViewModel.</returns>
-		public TimeEntryOverDateRangeViewModel ConstructTimeEntryOverDataRangeViewModel(int userId, bool manager, int orgId, DateTime? startingDate, DateTime? endingDate, DateTime? lockDate)
+		public TimeEntryOverDateRangeViewModel ConstructTimeEntryOverDataRangeViewModel(int userId, bool manager, DateTime? startingDate, DateTime? endingDate, DateTime? lockDate)
 		{
 			// Get all of the projects and initialize their total hours to 0.
-			IList<CompleteProjectInfo> allProjects = ProjectService.GetProjectsByUserAndOrganization(userId, orgId, false).ToList(); // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
+			IList<CompleteProjectInfo> allProjects = ProjectService.GetProjectsByUserAndOrganization(userId, false).ToList(); // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
 			IDictionary<int, ProjectHours> hours = new Dictionary<int, ProjectHours>();
 			IEnumerable<HolidayInfo> holidays = TimeTrackerService.GetHolidays().Where(x => (startingDate < x.Date && x.Date < endingDate)); // We only care about holidays within the date range
 
@@ -96,32 +95,34 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = 0, ProjectName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
 
-			StartOfWeekEnum startOfWeek = TimeTrackerService.GetStartOfWeek(orgId);
+			StartOfWeekEnum startOfWeek = TimeTrackerService.GetStartOfWeek();
 
-			IEnumerable<UserInfo> users = CrmService.GetUsersWithSubscriptionToProductInOrganization(orgId, Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
+			IEnumerable<UserInfo> users = CrmService.GetUsersWithSubscriptionToProductInOrganization(UserContext.ChosenOrganizationId, Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
 
 			TimeEntryOverDateRangeViewModel result = new TimeEntryOverDateRangeViewModel
 			{
-				OrganizationId = orgId,
+				EntryRange = new TimeEntryRangeForUserViewModel
+				{
+					StartDate = SetStartingDate(startingDate, startOfWeek),
+					EndDate = SetEndingDate(endingDate, startOfWeek),
+					Entries = new List<EditTimeEntryViewModel>(),
+					UserId = userId
+				},
 				CanManage = manager,
 				StartOfWeek = startOfWeek,
-				PayClasses = TimeTrackerService.GetPayClasses(orgId),
+				PayClasses = TimeTrackerService.GetPayClasses(),
 				GrandTotal = new ProjectHours { Project = new CompleteProjectInfo { ProjectName = "Total" }, Hours = 0.0f },
 				Projects = allProjects.Where(x => x.IsActive == true && x.IsCustomerActive == true && x.IsUserActive == true),
 				ProjectsWithInactive = allProjects.Where(p => p.ProjectId != 0),
-				StartDate = SetStartingDate(startingDate, startOfWeek),
-				EndDate = SetEndingDate(endingDate, startOfWeek),
-				Entries = new List<EditTimeEntryViewModel>(),
 				ProjectHours = hours.Values.Where(x => x.Hours > 0),
 				Users = users,
 				TotalUsers = users.Count(),
 				CurrentUser = users.Where(x => x.UserId == userId).Single(),
-				UserId = userId,
-				LockDate = TimeTrackerService.GetLockDate(orgId, userId)
+				LockDate = TimeTrackerService.GetLockDate(userId)
 			};
 
 			// Initialize the starting dates and get all of the time entries within that date range.
-			IEnumerable<TimeEntryInfo> timeEntries = TimeTrackerService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, orgId, result.StartDate, result.EndDate);
+			IEnumerable<TimeEntryInfo> timeEntries = TimeTrackerService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, result.EntryRange.StartDate, result.EntryRange.EndDate);
 			IEnumerator<TimeEntryInfo> iter = timeEntries.GetEnumerator();
 			iter.MoveNext();
 
@@ -133,7 +134,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			bool holidayPopulated = false;
 
 			// For each date in the date range
-			for (var date = result.StartDate; date <= result.EndDate;)
+			for (var date = result.EntryRange.StartDate; date <= result.EntryRange.EndDate;)
 			{
 				// If has data for this date,
 				if (iter.Current != null && iter.Current.Date == date.Date)
@@ -152,20 +153,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					// And add its entry to Entries.
 					bool isProjectDeleted = result.Projects.Where(x => x.ProjectId == iter.Current.ProjectId).Select(x => x.ProjectName).FirstOrDefault() == null;
-					result.Entries.Add(new EditTimeEntryViewModel
+					result.EntryRange.Entries.Add(new EditTimeEntryViewModel
 					{
 						TimeEntryId = iter.Current.TimeEntryId,
 						ProjectId = iter.Current.ProjectId,
 						PayClassId = iter.Current.PayClassId,
 						UserId = iter.Current.UserId,
-						Date = iter.Current.Date,
+						Date = TimeTrackerService.GetDayFromDateTime(iter.Current.Date),
 						Duration = string.Format("{0:D2}:{1:D2}", (int)iter.Current.Duration, (int)Math.Round((iter.Current.Duration - (int)iter.Current.Duration) * 60, 0)),
 						Description = iter.Current.Description,
-						StartingDate = result.StartDate,
-						EndingDate = result.EndDate,
+						StartingDate = TimeTrackerService.GetDayFromDateTime(result.EntryRange.StartDate),
+						EndingDate = TimeTrackerService.GetDayFromDateTime(result.EntryRange.EndDate),
 						IsOffDay = (weekend % 7 == (int)iter.Current.Date.DayOfWeek || (weekend + 1) % 7 == (int)iter.Current.Date.DayOfWeek) ? true : false,
 						IsHoliday = TimeTrackerService.GetHolidays().Any(x => x.Date == date),
-						OrganizationId = orgId,
 						Projects = result.Projects,
 						ProjectsWithInactive = result.ProjectsWithInactive,
 						ProjectName = allProjects.Where(x => x.ProjectId == iter.Current.ProjectId).Select(x => x.ProjectName).FirstOrDefault(),
@@ -199,22 +199,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Duration = 8,
 						UserId = userId,
 						ProjectId = 0,
-						PayClassId = TimeTrackerService.GetPayClassByNameAndOrg("Holiday", orgId).PayClassID,
+						PayClassId = TimeTrackerService.GetPayClassByName("Holiday").PayClassID,
 						Description = holidays.Where(x => x.Date == date).First().HolidayName
 					};
 
 					int timeEntryId = TimeTrackerService.CreateTimeEntry(timeEntryInfo);
 
-					result.Entries.Add(new EditTimeEntryViewModel
+					result.EntryRange.Entries.Add(new EditTimeEntryViewModel
 					{
 						TimeEntryId = timeEntryId,
-						Date = date,
+						Date = TimeTrackerService.GetDayFromDateTime(date),
 						UserId = userId,
-						StartingDate = result.StartDate,
-						EndingDate = result.EndDate,
+						StartingDate = TimeTrackerService.GetDayFromDateTime(result.EntryRange.StartDate),
+						EndingDate = TimeTrackerService.GetDayFromDateTime(result.EntryRange.EndDate),
 						IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
 						IsHoliday = TimeTrackerService.GetHolidays().Any(x => x.Date == date),
-						OrganizationId = orgId,
 						Projects = result.Projects,
 						ProjectsWithInactive = result.ProjectsWithInactive,
 						PayClassId = timeEntryInfo.PayClassId,
@@ -227,20 +226,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				else
 				{
 					// Otherwise, create an empty entry.
-					result.Entries.Add(new EditTimeEntryViewModel
+					result.EntryRange.Entries.Add(new EditTimeEntryViewModel
 					{
 						Sample = true,
-						Date = date,
+						Date = TimeTrackerService.GetDayFromDateTime(date),
 						UserId = userId,
-						StartingDate = result.StartDate,
-						EndingDate = result.EndDate,
+						StartingDate = TimeTrackerService.GetDayFromDateTime(result.EntryRange.StartDate),
+						EndingDate = TimeTrackerService.GetDayFromDateTime(result.EntryRange.EndDate),
 						IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
 						IsHoliday = TimeTrackerService.GetHolidays().Any(x => x.Date == date),
-						OrganizationId = orgId,
 						ProjectId = -1,
 						Projects = result.Projects,
 						ProjectsWithInactive = result.ProjectsWithInactive,
-						PayClassId = TimeTrackerService.GetPayClassByNameAndOrg("Regular", orgId).PayClassID,
+						PayClassId = TimeTrackerService.GetPayClassByName("Regular").PayClassID,
 						PayClasses = result.PayClasses
 					});
 

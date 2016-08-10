@@ -31,19 +31,14 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		public IEnumerable<PayClassInfo> PayClasses { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Organization's Id.
-		/// </summary>
-		public int OrganizationId { get; set; }
-
-		/// <summary>
 		/// Gets or sets the starting date of the date range.
 		/// </summary>
-		public DateTime StartingDate { get; set; }
+		public int StartingDate { get; set; } // Note: this must be an int and not a DateTime for correct, culture-independant serialization/deserialization
 
 		/// <summary>
 		/// Gets or sets the ending date of the date range.
 		/// </summary>
-		public DateTime EndingDate { get; set; }
+		public int EndingDate { get; set; } // Note: this must be an int and not a DateTime for correct, culture-independant serialization/deserialization
 
 		/// <summary>
 		/// Gets or sets the edited reference user's id.
@@ -88,7 +83,7 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		/// <summary>
 		/// Gets or sets the date associated with this entry.
 		/// </summary>
-		public DateTime Date { get; set; }
+		public int Date { get; set; }  // Note: this must be an int and not a DateTime for correct, culture-independant serialization/deserialization
 
 		/// <summary>
 		/// Gets or sets the duration defined in this entry.
@@ -113,7 +108,7 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		/// <summary>
 		/// Gets or sets a value indicating the lock date for this time entry's organization and user.
 		/// </summary>
-		public DateTime LockDate { get; set; }
+		public int LockDate { get; set; } // Note: this must be an int and not a DateTime for correct, culture-independant serialization/deserialization
 
 		/// <summary>
 		/// Gets or sets a value indicating whether or not the entry has ever been locked due to business rules (approval) or date locking.

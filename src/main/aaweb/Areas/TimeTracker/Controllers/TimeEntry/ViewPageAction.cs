@@ -20,7 +20,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Submits page button press to view data.
 		/// </summary>
-		/// <param name="organizationId">The Organization's Id.</param>
 		/// <param name="users">Array of selected user Ids.</param>
 		/// <param name="startDate">The beginning of the date range(nullable).</param>
 		/// <param name="endDate">The end of the date range (nullable).</param>
@@ -30,7 +29,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="projectSelect">The project's id (not required).</param>
 		/// <returns>The selected page of preview data.</returns>
 		[HttpPost]
-		public ActionResult ViewPage(int organizationId, List<string> users, DateTime? startDate, DateTime? endDate, bool showExport, int customerSelect, int pageButton, int projectSelect = 0)
+		public ActionResult ViewPage(List<string> users, DateTime? startDate, DateTime? endDate, bool showExport, int customerSelect, int pageButton, int projectSelect = 0)
 		{
 			string viewDataButton = "Preview";
 			int pageNum = pageButton;
@@ -39,7 +38,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			List<string> userSelect = null;
 			this.TempData["USelect"] = users;
 
-			return this.RedirectToAction(ActionConstants.ViewReport, new { viewDataButton, organizationId, userSelect, dateRangeStart, dateRangeEnd, showExport, customerSelect, pageNum, projectSelect });
+			return this.RedirectToAction(ActionConstants.ViewReport, new { viewDataButton, userSelect, dateRangeStart, dateRangeEnd, showExport, customerSelect, pageNum, projectSelect });
 		}
 	}
 }

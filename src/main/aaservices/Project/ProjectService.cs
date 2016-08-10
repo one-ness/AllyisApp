@@ -338,25 +338,19 @@ namespace AllyisApps.Services.Project
 		}
 
 		/// <summary>
-		/// Gets all the projects a user can use in an organization.
+		/// Gets all the projects a user can use in the chosen organization.
 		/// </summary>
 		/// <param name="userId">User Id.</param>
-		/// <param name="orgId">Organization Id.</param>
 		/// <param name="isActive">True (default) to only return active projects, false to include all projects, active or not.</param>
 		/// <returns>A list of all the projects a user can access in an organization.</returns>
-		public IEnumerable<CompleteProjectInfo> GetProjectsByUserAndOrganization(int userId, int orgId, bool isActive = true)
+		public IEnumerable<CompleteProjectInfo> GetProjectsByUserAndOrganization(int userId, bool isActive = true)
 		{
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
 
-			if (orgId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
-			}
-
-			return DBHelper.GetProjectsByUserAndOrganization(userId, orgId, isActive ? 1 : 0).Select(c => BusinessObjectsHelper.InitializeCompleteProjectInfo(c));
+			return DBHelper.GetProjectsByUserAndOrganization(userId, UserContext.ChosenOrganizationId, isActive ? 1 : 0).Select(c => BusinessObjectsHelper.InitializeCompleteProjectInfo(c));
 		}
 
 		/// <summary>

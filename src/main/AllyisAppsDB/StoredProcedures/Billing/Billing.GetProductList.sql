@@ -6,4 +6,5 @@ AS
 		[Product].[Name],
 		[Product].[Description]
 	FROM [Billing].[Product] WITH (NOLOCK) 
-	WHERE [IsActive] = 1;
+	WHERE [IsActive] = 1
+	ORDER BY [Product].[Name]

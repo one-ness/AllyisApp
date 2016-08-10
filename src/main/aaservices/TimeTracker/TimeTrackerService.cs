@@ -42,16 +42,48 @@ namespace AllyisApps.Services.TimeTracker
 		}
 
 		/// <summary>
+		/// Converts a DateTime date into an int representing days since the DateTime min value (Jan 1st, 0001).
+		/// </summary>
+		/// <param name="date">The DateTime date.</param>
+		/// <returns>An int of the date as days since Jan 1st, 0001.</returns>
+		public int GetDayFromDateTime(DateTime date)
+		{
+			return (int)date.Subtract(DateTime.MinValue).TotalDays;
+		}
+
+		/// <summary>
+		/// Converts an int representing days since the DateTime min value (Jan 1st, 0001) into a DateTime date.
+		/// </summary>
+		/// <param name="days">An int of the date as days since Jan 1st, 0001.</param>
+		/// <returns>The DateTime date.</returns>
+		public DateTime GetDateTimeFromDays(int days)
+		{
+			return GetDateFromDays(days);
+		}
+
+		/// <summary>
+		/// Converts an int representing days since the DateTime min value (Jan 1st, 0001) into a DateTime date.
+		/// </summary>
+		/// <param name="days">An int of the date as days since Jan 1st, 0001.</param>
+		/// <returns>The DateTime date.</returns>
+		public static DateTime GetDateFromDays(int days)
+		{
+			return DateTime.MinValue.AddDays(days);
+		}
+
+		/// <summary>
 		/// Gets a <see cref="TimeEntryInfo"/>.
 		/// </summary>
 		/// <param name="timeEntryId">Time entry Id.</param>
 		/// <returns>A TimeEntryDBEntity.</returns>
 		public TimeEntryInfo GetTimeEntry(int timeEntryId)
 		{
+			#region Validation
 			if (timeEntryId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("timeEntryId", "Time entry id cannot be 0 or negative.");
 			}
+			#endregion
 
 			return BusinessObjectsHelper.InitializeTimeEntryInfo(DBHelper.GetTimeEntryById(timeEntryId));
 		}
@@ -63,10 +95,12 @@ namespace AllyisApps.Services.TimeTracker
 		/// <returns>Time entry id.</returns>
 		public int CreateTimeEntry(TimeEntryInfo entry)
 		{
+			#region Validation
 			if (entry == null)
 			{
 				throw new ArgumentNullException("entry", "Time entry must not be null.");
 			}
+			#endregion
 
 			return DBHelper.CreateTimeEntry(BusinessObjectsHelper.GetDBEntityFromTimeEntryInfo(entry));
 		}
@@ -77,10 +111,12 @@ namespace AllyisApps.Services.TimeTracker
 		/// <param name="entry">Updated info.</param>
 		public void UpdateTimeEntry(TimeEntryInfo entry)
 		{
+			#region Validation
 			if (entry == null)
 			{
 				throw new ArgumentNullException("entry", "Time entry must not be null.");
 			}
+			#endregion
 
 			DBHelper.UpdateTimeEntry(BusinessObjectsHelper.GetDBEntityFromTimeEntryInfo(entry));
 		}
@@ -91,10 +127,12 @@ namespace AllyisApps.Services.TimeTracker
 		/// <param name="timeEntryId">Time entry Id.</param>
 		public void DeleteTimeEntry(int timeEntryId)
 		{
+			#region Validation
 			if (timeEntryId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("timeEntryId", "Time entry id cannot be 0 or negative.");
 			}
+			#endregion
 
 			DBHelper.DeleteTimeEntry(timeEntryId);
 		}
@@ -106,6 +144,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <param name="approvalState">Approval state.</param>
 		public void SetTimeEntryApprovalStateById(int timeEntryId, int approvalState)
 		{
+			#region Validation
 			if (timeEntryId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("timeEntryId", "Time entry id cannot be 0 or negative.");
@@ -115,6 +154,7 @@ namespace AllyisApps.Services.TimeTracker
 			{ // TODO: Figure out what values of approval state are actually allowed and constrain this further.
 				throw new ArgumentOutOfRangeException("approvalState", "Approval state cannot be negative.");
 			}
+			#endregion
 
 			DBHelper.SetTimeEntryApprovalStateById(timeEntryId, approvalState);
 		}
@@ -122,18 +162,12 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Gets a list of <see cref="TimeEntryInfo"/>'s for a given organization and start/end times.
 		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
 		/// <param name="start">Starting. <see cref="DateTime"/></param>
 		/// <param name="end">Ending. <see cref="DateTime"/></param>
 		/// <returns>A list of TimeEntryInfo's for a given organization and start/end times.</returns>
-		public IEnumerable<TimeEntryInfo> GetTimeEntriesOverDateRange(int orgId, DateTime start, DateTime end)
+		public IEnumerable<TimeEntryInfo> GetTimeEntriesOverDateRange(DateTime start, DateTime end)
 		{
 			#region Validation
-			if (orgId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
-			}
-
 			if (start == null)
 			{
 				throw new ArgumentNullException("start", "Project must have a start time");
@@ -150,18 +184,17 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion
 
-			return DBHelper.GetTimeEntriesOverDateRange(orgId, start, end).Select(te => BusinessObjectsHelper.InitializeTimeEntryInfo(te));
+			return DBHelper.GetTimeEntriesOverDateRange(UserContext.ChosenOrganizationId, start, end).Select(te => BusinessObjectsHelper.InitializeTimeEntryInfo(te));
 		}
 
 		/// <summary>
 		/// Gets a list of <see cref="TimeEntryInfo"/>'s for a given set of users, organization, and start/end times.
 		/// </summary>
 		/// <param name="userIds">List of user Id's.</param>
-		/// <param name="orgId">Organization Id.</param>
 		/// <param name="start">Starting. <see cref="DateTime"/></param>
 		/// <param name="end">Ending. <see cref="DateTime"/></param>
 		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/></returns>
-		public IEnumerable<TimeEntryInfo> GetTimeEntriesByUserOverDateRange(List<int> userIds, int orgId, DateTime start, DateTime end)
+		public IEnumerable<TimeEntryInfo> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime start, DateTime end)
 		{
 			#region Validation
 			if (userIds == null || userIds.Count == 0)
@@ -174,11 +207,6 @@ namespace AllyisApps.Services.TimeTracker
 				throw new ArgumentOutOfRangeException("userIds", "User ids cannot be 0 or negative.");
 			}
 
-			if (orgId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
-			}
-
 			if (start == null)
 			{
 				throw new ArgumentNullException("start", "Project must have a start time");
@@ -195,45 +223,35 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion
 
-			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, orgId, start, end).Select(te => BusinessObjectsHelper.InitializeTimeEntryInfo(te));
+			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, UserContext.ChosenOrganizationId, start, end).Select(te => BusinessObjectsHelper.InitializeTimeEntryInfo(te));
 		}
 
 		/// <summary>
 		/// Gets the lock date for an organization/user.
 		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns>Lock date.</returns>
-		public DateTime GetLockDate(int orgId, int userId)
+		public DateTime GetLockDate(int userId)
 		{
-			if (orgId < 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
-			}
-
+			#region Validation
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
+			#endregion
 
-			return DBHelper.GetLockDate(orgId, userId);
+			return DBHelper.GetLockDate(UserContext.ChosenOrganizationId, userId);
 		}
 
 		/// <summary>
 		/// Sets the lock date for an organization/user.
 		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
 		/// <param name="userId">User Id.</param>
 		/// <param name="date">Lock date.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool SetLockDate(int orgId, int userId, DateTime date)
+		public bool SetLockDate(int userId, DateTime date)
 		{
 			#region Validation
-			if (orgId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
-			}
-
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
@@ -247,7 +265,7 @@ namespace AllyisApps.Services.TimeTracker
 
 			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
-				DBHelper.SetLockDate(orgId, userId, date);
+				DBHelper.SetLockDate(UserContext.ChosenOrganizationId, userId, date);
 
 				return true;
 			}
@@ -262,10 +280,12 @@ namespace AllyisApps.Services.TimeTracker
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool CreateHoliday(HolidayInfo holiday)
 		{
+			#region Validation
 			if (holiday == null)
 			{
 				throw new ArgumentNullException("holiday", "Holiday must not be null.");
 			}
+			#endregion
 
 			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
@@ -293,6 +313,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool DeleteHoliday(string holidayName, DateTime date)
 		{
+			#region Validation
 			if (string.IsNullOrEmpty(holidayName))
 			{
 				throw new ArgumentNullException("holidayName", "Holiday name must have a value.");
@@ -302,6 +323,7 @@ namespace AllyisApps.Services.TimeTracker
 			{
 				throw new ArgumentNullException("date", "Date must not be null.");
 			}
+			#endregion
 
 			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
@@ -320,10 +342,12 @@ namespace AllyisApps.Services.TimeTracker
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool CreatePayClass(string payClassName)
 		{
+			#region Validation
 			if (string.IsNullOrEmpty(payClassName))
 			{
 				throw new ArgumentNullException("payClassName", "Pay class name must have a value.");
 			}
+			#endregion
 
 			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
@@ -342,10 +366,12 @@ namespace AllyisApps.Services.TimeTracker
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool DeletePayClass(int payClassId)
 		{
+			#region Validation
 			if (payClassId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("payClassId", "Pay class id cannot be 0 or negative.");
 			}
+			#endregion
 
 			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
@@ -360,52 +386,36 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Gets a list of <see cref="PayClassInfo"/>'s for an organization.
 		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
 		/// <returns>List of PayClassInfo's.</returns>
-		public IEnumerable<PayClassInfo> GetPayClasses(int orgId)
+		public IEnumerable<PayClassInfo> GetPayClasses()
 		{
-			if (orgId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
-			}
-
-			return DBHelper.GetPayClasses(orgId).Select(pc => BusinessObjectsHelper.InitializePayClassInfo(pc));
+			return DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => BusinessObjectsHelper.InitializePayClassInfo(pc));
 		}
 
 		/// <summary>
 		/// Gets a <see cref="PayClassInfo"/>.
 		/// </summary>
 		/// <param name="name">Name of pay class.</param>
-		/// <param name="orgId">Organization Id.</param>
 		/// <returns>A PayClassInfo instance.</returns>
-		public PayClassInfo GetPayClassByNameAndOrg(string name, int orgId)
+		public PayClassInfo GetPayClassByName(string name)
 		{
+			#region Validation
 			if (string.IsNullOrEmpty(name))
 			{
 				throw new ArgumentNullException("name", "Name of pay class must have a value.");
 			}
+			#endregion
 
-			if (orgId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
-			}
-
-			return BusinessObjectsHelper.InitializePayClassInfo(DBHelper.GetPayClassByNameAndOrg(name, orgId));
+			return BusinessObjectsHelper.InitializePayClassInfo(DBHelper.GetPayClassByNameAndOrg(name, UserContext.ChosenOrganizationId));
 		}
 
 		/// <summary>
 		/// Gets the Start of Week for an organiztion.
 		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
 		/// <returns>Start of Week.</returns>
-		public StartOfWeekEnum GetStartOfWeek(int orgId)
+		public StartOfWeekEnum GetStartOfWeek()
 		{
-			if (orgId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
-			}
-
-			var queried = DBHelper.GetStartOfWeek(orgId);
+			var queried = DBHelper.GetStartOfWeek(UserContext.ChosenOrganizationId);
 
 			if (Enum.IsDefined(typeof(StartOfWeekEnum), queried))
 			{
@@ -420,24 +430,20 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Updates the Start of Week for an organization.
 		/// </summary>
-		/// <param name="orgId">Organizaiton Id.</param>
 		/// <param name="startOfWeek">Start of Week.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateStartOfWeek(int orgId, int startOfWeek)
+		public bool UpdateStartOfWeek(int startOfWeek)
 		{
-			if (orgId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
-			}
-
+			#region Validation
 			if (!Enum.IsDefined(typeof(StartOfWeekEnum), startOfWeek))
 			{
 				throw new ArgumentException("Start of week must correspond to a value of StartOfWeekEnum.");
 			}
+			#endregion
 
 			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
-				DBHelper.UpdateTimeTrackerStartOfWeek(orgId, startOfWeek);
+				DBHelper.UpdateTimeTrackerStartOfWeek(UserContext.ChosenOrganizationId, startOfWeek);
 
 				return true;
 			}
@@ -446,18 +452,12 @@ namespace AllyisApps.Services.TimeTracker
 		}
 
 		/// <summary>
-		/// Gets settings for an organization.
+		/// Gets settings for the chosen organization.
 		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
 		/// <returns>Organization settings.</returns>
-		public SettingsInfo GetSettings(int orgId)
+		public SettingsInfo GetSettings()
 		{
-			if (orgId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
-			}
-
-			return BusinessObjectsHelper.InitializeSettingsInfo(DBHelper.GetSettings(orgId));
+			return BusinessObjectsHelper.InitializeSettingsInfo(DBHelper.GetSettings(UserContext.ChosenOrganizationId));
 		}
 
 		/// <summary>

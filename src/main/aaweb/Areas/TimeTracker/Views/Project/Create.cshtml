@@ -378,7 +378,7 @@
         }
 
         function formChange() {
-            var date = $('#DateRangeStart').val();
+            var date = $('#StartDate').val();
         }
 
         $('form').change(function () { formChange(); });
@@ -425,8 +425,8 @@
                 applyOnMenuSelect: true,
                 onChange: function () {
                     var range = picker.daterangepicker("getRange");
-                    $('#DateRangeStart').val(moment(range.start).format("MM/DD/YYYY"));
-                    $('#DateRangeEnd').val(moment(range.end).format("MM/DD/YYYY"));
+                    $('#StartDate').val(moment(range.start).format("MM/DD/YYYY"));
+                    $('#EndDate').val(moment(range.end).format("MM/DD/YYYY"));
 
                     // timeout keeps formChange from getting stuck on using old values
                     setTimeout(
@@ -438,8 +438,8 @@
             });
             $('#daterange').daterangepicker("setRange",
             {
-                start: moment('@DateTime.Today.ToShortDateString()', 'MM/DD/YYYY').toDate(),
-                end: moment('@DateTime.Today.ToShortDateString()', 'MM/DD/YYYY').toDate(),
+                start: moment('@Model.StartDate.ToShortDateString()', 'MM/DD/YYYY').toDate(),
+                end: moment('@Model.EndDate.ToShortDateString()', 'MM/DD/YYYY').toDate(),
             });
         });
     </script>

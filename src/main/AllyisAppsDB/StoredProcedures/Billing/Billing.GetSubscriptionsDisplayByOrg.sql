@@ -21,3 +21,4 @@ SELECT	[Product].[ProductId],
   LEFT JOIN [Billing].[Product]		WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
   WHERE [Subscription].[OrganizationId] = @OrganizationId
 	AND [Subscription].[IsActive] = 1
+ORDER BY [Product].[Name]

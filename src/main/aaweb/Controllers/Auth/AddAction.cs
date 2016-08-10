@@ -57,7 +57,7 @@ namespace AllyisApps.Controllers
 
 			List<SubscriptionRoleSelectionModel> roles = new List<SubscriptionRoleSelectionModel>();
 			IEnumerable<InvitationSubRoleInfo> invitedSubs = OrgService.GetInvitationSubRoles();
-			IEnumerable<SubscriptionDisplayInfo> subscriptions = CrmService.GetSubscriptionsDisplayByOrg(UserContext.ChosenOrganizationId);
+			IEnumerable<SubscriptionDisplayInfo> subscriptions = CrmService.GetSubscriptionsDisplay();
 
 			foreach (SubscriptionDisplayInfo subscription in subscriptions)
 			{

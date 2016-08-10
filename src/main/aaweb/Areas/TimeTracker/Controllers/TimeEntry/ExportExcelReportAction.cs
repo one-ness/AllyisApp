@@ -22,14 +22,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Exports a Excel report file.
 		/// </summary>
-		/// <param name="organizationId">The Organization's Id.</param>
 		/// <param name="userId">Array of user Ids.</param>
 		/// <param name="dateRangeStart">The beginning of the date range(nullable).</param>
 		/// <param name="dateRangeEnd">The end of the date range (nullable).</param>
 		/// <param name="customerId">The Customer's id (not required).</param>
 		/// <param name="projectId">The project's id (not required).</param>
 		/// <returns>An excel extract of the requested data.</returns>
-		public ActionResult ExportExcelReport(int organizationId, List<int> userId, DateTime? dateRangeStart = null, DateTime? dateRangeEnd = null, int customerId = 0, int projectId = 0)
+		public ActionResult ExportExcelReport(List<int> userId, DateTime? dateRangeStart = null, DateTime? dateRangeEnd = null, int customerId = 0, int projectId = 0)
 		{
 			/* NOT CURRENTLY IN USE */
 
@@ -48,7 +47,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			DataExportViewModel model = this.ConstructDataExportViewModel(organizationId, userId, dateRangeStart, dateRangeEnd, projectId, customerId);
+			DataExportViewModel model = this.ConstructDataExportViewModel(userId, dateRangeStart, dateRangeEnd, projectId, customerId);
 			////model.CreateExcelFileOutput();
 			PrepareExcelExport(model.Data, model.Projects, 1, 0);
 			Response.ClearContent();
@@ -65,7 +64,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.NoDataToExport, Variety.Warning));
 			}
 
-			return this.RedirectToAction(ActionConstants.Report, new { organizationId = organizationId });
+			return this.RedirectToAction(ActionConstants.Report);
 		}
 	}
 }

@@ -42,11 +42,6 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		public DateTime EndingDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Organization's Id.
-		/// </summary>
-		public int OrganizationId { get; set; }
-
-		/// <summary>
 		/// Gets or sets the id of the time entry.
 		/// </summary>
 		public int TimeEntryId { get; set; }

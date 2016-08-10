@@ -22,4 +22,5 @@ BEGIN
 											ON [SubscriptionUser].[UserId] = [User].[UserId]
 											AND [SubscriptionUser].[SubscriptionId] = [Subscription].[SubscriptionId]
 	WHERE [OrganizationUser].[OrganizationId] = @OrgId
+	ORDER BY [User].[LastName]
 END

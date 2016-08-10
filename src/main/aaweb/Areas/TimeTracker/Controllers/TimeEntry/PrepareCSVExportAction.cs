@@ -38,22 +38,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Resources.TimeTracker.Controllers.TimeEntry.Strings.Duration,
 					Resources.TimeTracker.Controllers.TimeEntry.Strings.Project,
 					Resources.TimeTracker.Controllers.TimeEntry.Strings.Customer,
-					Resources.TimeTracker.Controllers.TimeEntry.Strings.Description
-				)
-			);
+					Resources.TimeTracker.Controllers.TimeEntry.Strings.Description));
 			try
 			{
 				foreach (TimeEntryInfo entry in data)
 				{
-					output.WriteLine(string.Format(
-						"\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\"",
-						entry.LastName,
-						entry.FirstName,
-						entry.Date.ToShortDateString(),
-						entry.Duration,
-						projects.Where(x => x.ProjectId == entry.ProjectId).SingleOrDefault().ProjectName ?? string.Empty,
-						projects.Where(x => x.ProjectId == entry.ProjectId).SingleOrDefault().CustomerName ?? string.Empty,
-						entry.Description));
+					output.WriteLine(
+						string.Format(
+							"\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\"",
+							entry.LastName,
+							entry.FirstName,
+							entry.Date.ToShortDateString(),
+							entry.Duration,
+							projects.Where(x => x.ProjectId == entry.ProjectId).SingleOrDefault().ProjectName ?? string.Empty,
+							projects.Where(x => x.ProjectId == entry.ProjectId).SingleOrDefault().CustomerName ?? string.Empty,
+							entry.Description));
 				}
 			}
 			catch (Exception)

@@ -120,7 +120,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnableParseDuration);
 			}
 
-			IEnumerable<TimeEntryInfo> otherEntriesToday = TimeTrackerService.GetTimeEntriesByUserOverDateRange(new List<int> { model.UserId }, model.OrganizationId, model.Date, model.Date);
+			IEnumerable<TimeEntryInfo> otherEntriesToday = TimeTrackerService.GetTimeEntriesByUserOverDateRange(
+				new List<int> { model.UserId },
+				TimeTrackerService.GetDateTimeFromDays(model.Date),
+				TimeTrackerService.GetDateTimeFromDays(model.Date));
 			float durationOther = 0.0f;
 			foreach (TimeEntryInfo otherEntry in otherEntriesToday)
 			{
@@ -170,7 +173,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public EditTimeEntryViewModel ConstructEditTimeEntryViewModel(int timeEntryId)
 		{
 			TimeEntryInfo entry = TimeTrackerService.GetTimeEntry(timeEntryId);
-			int organizationId = ProjectService.GetOrganizationFromProject(entry.ProjectId);
 
 			return new EditTimeEntryViewModel
 			{
@@ -178,13 +180,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				TimeEntryId = entry.TimeEntryId,
 				ProjectId = entry.ProjectId,
 				PayClassId = entry.PayClassId,
-				Date = entry.Date,
+				Date = TimeTrackerService.GetDayFromDateTime(entry.Date),
 				Duration = string.Format("{0:D2}:{1:D2}", (int)entry.Duration, (int)Math.Round((entry.Duration - (int)entry.Duration) * MinutesInHour, 0)),
 				Description = entry.Description,
 				LockSaved = entry.LockSaved,
-				LockDate = TimeTrackerService.GetLockDate(organizationId, entry.UserId),
-				OrganizationId = organizationId,
-				IsManager = CrmService.GetProductRoleForUser(ProductNameKeyConstants.TimeTracker, organizationId, entry.UserId) == "Manager"
+				LockDate = TimeTrackerService.GetDayFromDateTime(TimeTrackerService.GetLockDate(entry.UserId)),
+				IsManager = CrmService.GetProductRoleForUser(ProductNameKeyConstants.TimeTracker, entry.UserId) == "Manager"
 			};
 		}
 

@@ -27,8 +27,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="startDateCopy">The start (inclusive) of the date range for the entries to be copied.</param>
 		/// <param name="endDateCopy">The end (inclusive) of the date range for the entries to be copied.</param>
 		/// <param name="userId">The id for the user whose entries are being edited.</param>
+		/// <param name="startDate">The start of the date range of the TimeEntry index page.</param>
+		/// <param name="endDate">The end of the date range of the TimeEntry index page.</param>
 		/// <returns>The action result.</returns>
-		public ActionResult CopyEntries(DateTime startDateTarget, DateTime startDateCopy, DateTime endDateCopy, int userId)
+		public ActionResult CopyEntries(DateTime startDateTarget, DateTime startDateCopy, DateTime endDateCopy, int userId, DateTime startDate, DateTime endDate)
 		{
 			#region Validation
 			// TODO flesh these out
@@ -53,7 +55,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			// Authorized to edit this entry
-			IEnumerable<TimeEntryInfo> entriesCopy = TimeTrackerService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, UserContext.ChosenOrganizationId, startDateCopy, endDateCopy);
+			// Remove existing entries in target range
+			DateTime endDateTarget = startDateTarget.AddDays(endDateCopy.Subtract(startDateCopy).Days);
+			IEnumerable<TimeEntryInfo> entriesRemove = TimeTrackerService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateTarget, endDateTarget);
+			foreach (TimeEntryInfo entry in entriesRemove)
+			{
+				TimeTrackerService.DeleteTimeEntry(entry.TimeEntryId);
+			}
+
+			// Add copied entries
+			IEnumerable<TimeEntryInfo> entriesCopy = TimeTrackerService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateCopy, endDateCopy);
 			for (int i = 0; startDateCopy.Date.AddDays(i) <= endDateCopy.Date; ++i)
 			{
 				// Cover all entries for that day
@@ -71,7 +82,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			return this.RedirectToAction(ActionConstants.Index); // Model should be repopulated with new info at the index
+			return this.RedirectToAction(
+				ActionConstants.Index,
+				new
+				{
+					userId = userId,
+					startDate = startDate,
+					endDate = endDate
+				}); // Model should be repopulated with new info at the index
 		}
 	}
 }

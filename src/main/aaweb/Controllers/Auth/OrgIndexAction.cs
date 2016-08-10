@@ -27,7 +27,7 @@ namespace AllyisApps.Controllers
 			{
 				SubscriptionsViewModel subscriptions = new SubscriptionsViewModel
 				{
-					Subscriptions = CrmService.GetSubscriptionsDisplayByOrg(UserContext.ChosenOrganizationId),
+					Subscriptions = CrmService.GetSubscriptionsDisplay(),
 					ProductList = Services.Crm.CrmService.GetProductInfoList(),
 					OrgInfo = OrgService.GetOrganization(UserContext.ChosenOrganizationId),
 					CanEditOrganization = AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization),

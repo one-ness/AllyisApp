@@ -21,4 +21,5 @@ AS
 	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Customer].[State]
 	WHERE [Customer].[OrganizationId] = @OrgId
 	AND [Customer].[IsActive] = 1
+	ORDER BY [Customer].[Name]
 END 

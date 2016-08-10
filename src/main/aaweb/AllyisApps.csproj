@@ -175,6 +175,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryRangeForUserViewModel.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -706,6 +707,7 @@
     <Compile Include="ViewModels\Shared\LanguageViewModel.cs" />
     <Compile Include="ViewModels\Shared\LogOnPartialViewModel.cs" />
     <Compile Include="ViewModels\Shared\SubscriptionsViewModel.cs" />
+    <Content Include="Areas\TimeTracker\Scripts\time-entry-index.js" />
     <Content Include="Areas\TimeTracker\Views\Customer\Create.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Delete.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Details.cshtml" />
@@ -825,14 +827,11 @@
     <None Include="Resources\628px-achtung-svg.png" />
     <Content Include="Scripts\allyis-list-group-search.js" />
     <Content Include="Scripts\bootstrap.js" />
-    <None Include="Scripts\jquery-3.1.0.intellisense.js" />
-    <Content Include="Scripts\jquery-3.1.0.js" />
-    <Content Include="Scripts\jquery-3.1.0.min.js" />
-    <Content Include="Scripts\jquery-3.1.0.slim.js" />
-    <Content Include="Scripts\jquery-3.1.0.slim.min.js" />
+    <None Include="Scripts\jquery-2.2.0.intellisense.js" />
+    <Content Include="Scripts\jquery-2.2.0.js" />
+    <Content Include="Scripts\jquery-2.2.0.min.js" />
     <Content Include="Scripts\jquery.comiseo.daterangepicker.js" />
-    <Content Include="Scripts\jquery-3.1.0.slim.min.map" />
-    <Content Include="Scripts\jquery-3.1.0.min.map" />
+    <Content Include="Scripts\jquery-2.2.0.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />

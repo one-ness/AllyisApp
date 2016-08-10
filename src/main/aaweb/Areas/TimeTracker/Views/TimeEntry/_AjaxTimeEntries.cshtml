@@ -1,22 +1,23 @@
 ﻿@using AllyisApps.Areas.TimeTracker.Models;
 @using AllyisApps.Areas.TimeTracker.Core;
+@using AllyisApps.Services.TimeTracker;
 @using System.Globalization;
-@model IEnumerable<EditTimeEntryViewModel>
+@model TimeEntryRangeForUserViewModel
 
 @{
     System.DayOfWeek startOfWeek = (System.DayOfWeek)ViewBag.startOfWeek;
-    Func<DateTime, int> weekProjector =
+    Func<int, int> weekProjector =
         d => CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(
-            d,
+            TimeTrackerService.GetDateFromDays(d),
             CalendarWeekRule.FirstFourDayWeek,
             startOfWeek);
-    var query2 = from entry in Model orderby entry.Date.Date group entry by entry.Date.Date;
-    var weekQuery = from entry in Model orderby entry.Date.Date group entry by weekProjector(entry.Date.Date);
+    var query2 = from entry in Model.Entries orderby entry.Date group entry by entry.Date;
+    var weekQuery = from entry in Model.Entries orderby entry.Date group entry by weekProjector(entry.Date);
 }
 
 @foreach (var weekGroup in weekQuery)
 {
-    var dateQuery = from entry in weekGroup orderby entry.Date.Date group entry by entry.Date.Date;
+    var dateQuery = from entry in weekGroup orderby entry.Date group entry by entry.Date;
     <div class="panel panel-default timesheet-grouping">
         @foreach (var dateGroup in dateQuery)
 	   {
@@ -42,7 +43,7 @@
 		   string selectorClass = allVotedWereApproved ? "approved" :
 							 allVotedWereRejected ? "rejected" : "";
 
-		   var currentDate = dateGroup.First().Date.Date;
+		   var currentDate = TimeTrackerService.GetDateFromDays(dateGroup.First().Date);
 		   string dateStringNums = currentDate.ToShortDateString();
 		   string dateStringDayLong = currentDate.DayOfWeek.ToString();
 		   string dateStringDayShort = DateTimeFormatInfo.CurrentInfo.AbbreviatedDayNames[(int)currentDate.DayOfWeek].ToString();
@@ -100,21 +101,49 @@
 				    </div>
 				}*@
 		  	<label style="display: block;">@dateStringNums</label>
-		  <label style="display: block;">@dateStringDayShort</label>
-			   	<div class="panel-right table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
-			   		<table align="center">
-						   <tr>
-			   			@if (currentDate.DayOfWeek == startOfWeek)
-				    {
-			   			<td style="padding-right:5px;">
-			   				<a href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new {startDateTarget=currentDate, startDateCopy=currentDate.AddDays(-7), endDateCopy=currentDate.AddDays(-1), userId=Model.First().UserId})" class="btn btn-primary" style="width:100%" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyWeek"><i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.WeekInitial</a>
-			   			</td>
-				    }
-			   		<td style="padding-bottom:5px;">
-			   			<a href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new {startDateTarget=currentDate, startDateCopy=currentDate.AddDays(-1), endDateCopy=currentDate.AddDays(-1), userId=Model.First().UserId})" class="btn btn-primary" style="width:100%;" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyDay"><i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DayInitial</a>
-			   		</td>
-			   	</tr>
-			   </table>
+		       <label style="display: block;">@dateStringDayShort</label>
+			   <div class="panel-right table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
+			   	    <table align="center">
+						<tr>
+			   			    @if (currentDate.DayOfWeek == startOfWeek)
+				            {
+			   			        <td style="padding-right:5px; padding-bottom:5px;">
+                                  <a class="btn btn-primary"
+                                     href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
+                                      {
+                                          startDateTarget=currentDate,
+                                          startDateCopy=currentDate.AddDays(-7),
+                                          endDateCopy = currentDate.AddDays(-1),
+                                          userId = Model.UserId,
+                                          startDate = Model.StartDate,
+                                          endDate = Model.EndDate
+                                      })"
+                                     style="width:100%"
+                                     title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyWeek">
+                                       <i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.WeekInitial
+                                  </a>
+			   				        @*<a href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new {startDateTarget=currentDate, startDateCopy=currentDate.AddDays(-7), endDateCopy=currentDate.AddDays(-1), userId=Model.Entries.First().UserId})" class="btn btn-primary" style="width:100%" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyWeek"><i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.WeekInitial</a>*@
+			   			        </td>
+				            }
+			   		        <td style="padding-bottom:5px;">
+                              <a class="btn btn-primary"
+                                 href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
+                                    {
+                                        startDateTarget=currentDate,
+                                        startDateCopy=currentDate.AddDays(-1),
+                                        endDateCopy = currentDate.AddDays(-1),
+                                        userId = Model.UserId,
+                                        startDate = Model.StartDate,
+                                        endDate = Model.EndDate
+                                    })"
+                                 style="width:100%"
+                                 title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyDay">
+                                  <i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DayInitial
+                              </a>
+			   			        @*<a href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new {startDateTarget=currentDate, startDateCopy=currentDate.AddDays(-1), endDateCopy=currentDate.AddDays(-1), userId=Model.Entries.First().UserId})" class="btn btn-primary" style="width:100%;" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyDay"><i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DayInitial</a>*@
+			   		        </td>
+			   	        </tr>
+			       </table>
 
 			   </div>
 		  </div>

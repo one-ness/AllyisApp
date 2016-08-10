@@ -17,11 +17,6 @@ namespace AllyisApps.Areas.TimeTracker.Models
 	public class SettingsViewModel
 	{
 		/// <summary>
-		/// Gets the id of the organization related to the settings data.
-		/// </summary>
-		public int OrganizationId { get; internal set; }
-
-		/// <summary>
 		/// Gets the start of week for an organization.
 		/// </summary>
 		public StartOfWeekEnum StartOfWeek { get; internal set; }

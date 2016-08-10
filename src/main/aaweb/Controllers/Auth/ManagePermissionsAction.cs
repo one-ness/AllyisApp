@@ -52,7 +52,7 @@ namespace AllyisApps.Controllers
 			{
 				TimeTrackerId = Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker)
 			};
-			result.Subscriptions = CrmService.GetSubscriptionsDisplayByOrg(UserContext.ChosenOrganizationId);
+			result.Subscriptions = CrmService.GetSubscriptionsDisplay();
 
 			List<UserPermissionsManagement> permissions = new List<UserPermissionsManagement>();
 			IEnumerable<UserRolesInfo> users = OrgService.GetUserRoles();

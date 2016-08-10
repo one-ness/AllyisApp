@@ -2,6 +2,7 @@
 	@OrganizationId INT,
 	@ProductId INT 
 AS
+BEGIN
 	SET NOCOUNT ON;
 SELECT [User].[UserId],
 	   [User].[FirstName],
@@ -20,3 +21,5 @@ WHERE
 		AND [Sku].[ProductId] = @ProductId
 		AND [Subscription].[IsActive] = 1
 	)
+ORDER BY [User].[LastName]
+END
