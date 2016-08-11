@@ -160,13 +160,13 @@ namespace AllyisApps.BillingServices.StripeService
 		/// <param name="planName"></param>
 		/// <param name="customerId"></param>
 		/// <returns></returns>
-		public string CreateSubscription(int amount, string interval, string planName, BillingServicesCustomerId customerId)
+		public BillingServicesSubscriptionId CreateSubscription(int amount, string interval, string planName, BillingServicesCustomerId customerId)
 		{
 			StripePlan newPlan = this.CreateStripePlan(amount, interval, planName);
 
 			StripeSubscription sub = this.subscriptionService.Create(customerId.Id, newPlan.Id);
 
-			return sub.Id;
+			return new BillingServicesSubscriptionId(sub.Id);
 		}
 
 		/// <summary>

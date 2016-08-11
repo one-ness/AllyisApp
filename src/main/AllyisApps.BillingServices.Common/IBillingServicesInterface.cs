@@ -85,7 +85,7 @@ namespace AllyisApps.BillingServices.Common
 		/// <param name="planName"></param>
 		/// <param name="customerId"></param>
 		/// <returns></returns>
-		string CreateSubscription(int amount, string interval, string planName, BillingServicesCustomerId customerId);
+		BillingServicesSubscriptionId CreateSubscription(int amount, string interval, string planName, BillingServicesCustomerId customerId);
 
 		/// <summary>
 		/// 

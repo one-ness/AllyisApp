@@ -442,8 +442,8 @@ namespace AllyisApps.Services.Crm
 
 			string service = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(service);
-			string planId = handler.CreateSubscription(amount, "month", planName, customerId);
-			return DBHelper.AddCustomerSubscription(customerId.Id, planId, amount, numUsers, productId, UserContext.ChosenOrganizationId);
+			BillingServicesSubscriptionId subId = handler.CreateSubscription(amount, "month", planName, customerId);
+			return DBHelper.AddCustomerSubscription(customerId.Id, subId.Id, amount, numUsers, productId, UserContext.ChosenOrganizationId);
 		}
 
 		/// <summary>

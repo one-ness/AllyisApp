@@ -1,4 +1,10 @@
-﻿using System;
+﻿//------------------------------------------------------------------------------
+// <copyright file="BillingServicesEnum.cs" company="Allyis, Inc.">
+//     Copyright (c) Allyis, Inc.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +18,7 @@ namespace AllyisApps.BillingServices
 	internal enum BillingServicesEnum
 	{
 		/// <summary>
-		/// 
+		/// I mean, this is pretty self-explanatory, no?.
 		/// </summary>
 		Stripe
 	}
