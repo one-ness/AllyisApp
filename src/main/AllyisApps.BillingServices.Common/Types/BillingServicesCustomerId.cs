@@ -6,10 +6,20 @@ using System.Threading.Tasks;
 
 namespace AllyisApps.BillingServices.Common.Types
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class BillingServicesCustomerId
 	{
-		private readonly string _ID;
+		#region private fields
+		private readonly string id;
+		#endregion
 
+		#region constructor
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="id"></param>
 		public BillingServicesCustomerId(string id)
 		{
 			if (string.IsNullOrEmpty(id))
@@ -17,16 +27,21 @@ namespace AllyisApps.BillingServices.Common.Types
 				throw new ArgumentNullException("id", "id must have a value.");
 			}
 
-			_ID = id;
+			this.id = id;
 		}
+		#endregion
 
+		#region accessor properties
+		/// <summary>
+		/// 
+		/// </summary>
 		public string Id
 		{
 			get
 			{
-				return _ID;
+				return this.id;
 			}
-
 		}
+		#endregion
 	}
 }

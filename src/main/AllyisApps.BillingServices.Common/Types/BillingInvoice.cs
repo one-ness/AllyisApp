@@ -6,65 +6,91 @@ using System.Threading.Tasks;
 
 namespace AllyisApps.BillingServices.Common.Types
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class BillingInvoice
 	{
 		#region private fields
-		private readonly int _AmountDue;
-		private readonly DateTime? _Date;
-		private readonly string _Id;
-		private readonly string _ProductName;
-		private readonly string _Service;
+		private readonly int amountDue;
+		private readonly DateTime? date;
+		private readonly string id;
+		private readonly string productName;
+		private readonly string service;
 		#endregion
 
 		#region constructor
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="amountDue"></param>
+		/// <param name="date"></param>
+		/// <param name="id"></param>
+		/// <param name="productName"></param>
+		/// <param name="service"></param>
 		public BillingInvoice(int amountDue, DateTime? date, string id, string productName, string service)
 		{
-			_AmountDue = amountDue;
-			_Date = date;
-			_Id = id;
-			_ProductName = productName;
-			_Service = service;
+			this.amountDue = amountDue;
+			this.date = date;
+			this.id = id;
+			this.productName = productName;
+			this.service = service;
 		}
 		#endregion
 
 		#region accessor properties
+		/// <summary>
+		/// 
+		/// </summary>
 		public int AmountDue
 		{
 			get
 			{
-				return _AmountDue;
+				return this.amountDue;
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public DateTime? Date
 		{
 			get
 			{
-				return _Date;
+				return this.date;
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public string Id
 		{
 			get
 			{
-				return _Id;
+				return this.id;
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public string ProductName
 		{
 			get
 			{
-				return _ProductName;
+				return this.productName;
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public string Service
 		{
 			get
 			{
-				return _Service;
+				return this.service;
 			}
 		}
 		#endregion

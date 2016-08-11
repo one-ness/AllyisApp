@@ -50,23 +50,6 @@ namespace AllyisApps.Services.Crm
 			}).ToList();
 		}
 
-
-		[CLSCompliant(false)]
-		public List<BillingInvoice> ListInvoices(BillingServicesCustomerId customerId)
-		{
-			string service = "Stripe";
-			BillingServicesHandler handler = new BillingServicesHandler(service);
-			return handler.ListInvoices(customerId);
-		}
-
-		[CLSCompliant(false)]
-		public List<BillingCharge> ListCharges(BillingServicesCustomerId customerId)
-		{
-			string service = "Stripe";
-			BillingServicesHandler handler = new BillingServicesHandler(service);
-			return handler.ListCharges(customerId);
-		}
-
 		/// <summary>
 		/// Gets the product Id from the product name.
 		/// This method is static so that it can be accessed in BaseProductController constructor initializations.
@@ -83,6 +66,32 @@ namespace AllyisApps.Services.Crm
 			return DBHelper.Instance.GetProductIDByName(name);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="customerId"></param>
+		/// <returns></returns>
+		[CLSCompliant(false)]
+		public List<BillingInvoice> ListInvoices(BillingServicesCustomerId customerId)
+		{
+			string serviceType = "Stripe";
+			BillingServicesHandler handler = new BillingServicesHandler(serviceType);
+			return handler.ListInvoices(customerId);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="customerId"></param>
+		/// <returns></returns>
+		[CLSCompliant(false)]
+		public List<BillingCharge> ListCharges(BillingServicesCustomerId customerId)
+		{
+			string serviceType = "Stripe";
+			BillingServicesHandler handler = new BillingServicesHandler(serviceType);
+			return handler.ListCharges(customerId);
+		}
+		
 		/// <summary>
 		/// Sets the UserContext.
 		/// </summary>
@@ -272,26 +281,31 @@ namespace AllyisApps.Services.Crm
 			BillingServicesCustomerId customerId = this.GetOrgBillingServicesCustomerId();
 			if (customerId == null)
 			{
-				string service = "Stripe";
-				BillingServicesHandler handler = new BillingServicesHandler(service);
+				string serviceType = "Stripe";
+				BillingServicesHandler handler = new BillingServicesHandler(serviceType);
 				customerId = handler.CreateCustomer(billingServicesEmail, token);
 				this.AddOrgCustomer(customerId);
-				this.AddBillingHistory(string.Format("Adding {0} customer data", service), null);
+				this.AddBillingHistory(string.Format("Adding {0} customer data", serviceType), null);
 			}
 			else
 			{
-				string service = "Stripe";
-				BillingServicesHandler handler = new BillingServicesHandler(service);
+				string serviceType = "Stripe";
+				BillingServicesHandler handler = new BillingServicesHandler(serviceType);
 				handler.UpdateCustomer(customerId, token);
-				this.AddBillingHistory(string.Format("Updating {0} customer data", service), null);
+				this.AddBillingHistory(string.Format("Updating {0} customer data", serviceType), null);
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="subscriptionId"></param>
 		[CLSCompliant(false)]
 		public void DeleteSubscription(BillingServicesCustomerId id, string subscriptionId)
 		{
-			string service = "Stripe";
-			BillingServicesHandler handler = new BillingServicesHandler(service);
+			string serviceType = "Stripe";
+			BillingServicesHandler handler = new BillingServicesHandler(serviceType);
 		}
 
 		/////// <summary>
@@ -331,8 +345,8 @@ namespace AllyisApps.Services.Crm
 			}
 			#endregion
 
-			string service = "Stripe";
-			BillingServicesHandler handler = new BillingServicesHandler(service);
+			string serviceType = "Stripe";
+			BillingServicesHandler handler = new BillingServicesHandler(serviceType);
 			return handler.CreateCustomer(billingServicesEmail, token);
 		}
 
@@ -467,7 +481,8 @@ namespace AllyisApps.Services.Crm
 			}
 			#endregion
 
-			BillingServicesHandler handler = new BillingServicesHandler("Stripe"); // TODO: make this check the database instead of hardcoding Stripe
+			string serviceType = "Stripe";
+			BillingServicesHandler handler = new BillingServicesHandler(serviceType); // TODO: make this check the database instead of hardcoding Stripe
 
 			handler.UpdateSubscription(amount, "month", planName, subscriptionId.Trim(), customerId);
 			return DBHelper.UpdateSubscriptionPlan(customerId.Id, subscriptionId, amount, numUsers);
@@ -950,8 +965,8 @@ namespace AllyisApps.Services.Crm
 		[CLSCompliant(false)]
 		public BillingCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
 		{
-			string service = "Stripe";
-			BillingServicesHandler handler = new BillingServicesHandler(service);
+			string serviceType = "Stripe";
+			BillingServicesHandler handler = new BillingServicesHandler(serviceType);
 			return handler.RetrieveCustomer(customerId);
 		}
 	}

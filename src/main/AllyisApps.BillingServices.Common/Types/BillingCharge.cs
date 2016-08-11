@@ -6,65 +6,91 @@ using System.Threading.Tasks;
 
 namespace AllyisApps.BillingServices.Common.Types
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class BillingCharge
 	{
 		#region private fields
-		private readonly int _Amount;
-		private readonly DateTime _Created;
-		private readonly string _Id;
-		private readonly string _StatementDescriptor;
-		private readonly string _Service;
+		private readonly int amount;
+		private readonly DateTime created;
+		private readonly string id;
+		private readonly string statementDescriptor;
+		private readonly string service;
 		#endregion
 
 		#region constructor
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="amount"></param>
+		/// <param name="created"></param>
+		/// <param name="id"></param>
+		/// <param name="statementDescriptor"></param>
+		/// <param name="service"></param>
 		public BillingCharge(int amount, DateTime created, string id, string statementDescriptor, string service = "Stripe")
 		{
-			_Amount = amount;
-			_Created = created;
-			_Id = id;
-			_StatementDescriptor = statementDescriptor;
-			_Service = service;
+			this.amount = amount;
+			this.created = created;
+			this.id = id;
+			this.statementDescriptor = statementDescriptor;
+			this.service = service;
 		}
 		#endregion
 
 		#region accessor properties
+		/// <summary>
+		/// 
+		/// </summary>
 		public int Amount
 		{
 			get
 			{
-				return _Amount;
+				return this.amount;
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public DateTime Created
 		{
 			get
 			{
-				return _Created;
+				return this.created;
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public string Id
 		{
 			get
 			{
-				return _Id;
+				return this.id;
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public string StatementDescriptor
 		{
 			get
 			{
-				return _StatementDescriptor;
+				return this.statementDescriptor;
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public string Service
 		{
 			get
 			{
-				return _Service;
+				return this.service;
 			}
 		}
 		#endregion

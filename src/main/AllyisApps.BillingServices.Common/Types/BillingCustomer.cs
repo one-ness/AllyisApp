@@ -6,11 +6,22 @@ using System.Threading.Tasks;
 
 namespace AllyisApps.BillingServices.Common.Types
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class BillingCustomer
 	{
-		private readonly BillingServicesCustomerId _BillingServicesCustomerId;
-		private readonly string _Last4;
+		#region private fields
+		private readonly BillingServicesCustomerId billingServicesCustomerId;
+		private readonly string last4;
+		#endregion
 
+		#region constructor
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="customerId"></param>
+		/// <param name="last4"></param>
 		public BillingCustomer(BillingServicesCustomerId customerId, string last4 = "nnnn")
 		{
 			#region last4 validation
@@ -20,30 +31,39 @@ namespace AllyisApps.BillingServices.Common.Types
 			}
 
 			int num;
-			if (last4 != "nnnn" && !(int.TryParse(last4, out num)))
+			if (last4 != "nnnn" && !int.TryParse(last4, out num))
 			{
 				throw new ArgumentException("last4", "last 4 must be exactly 4 numbers");
 			}
 			#endregion
 
-			_Last4 = last4;
-			_BillingServicesCustomerId = customerId;
+			this.last4 = last4;
+			this.billingServicesCustomerId = customerId;
 		}
+		#endregion
 
+		#region accessor properties
+		/// <summary>
+		/// 
+		/// </summary>
 		public BillingServicesCustomerId Id
 		{
 			get
 			{
-				return _BillingServicesCustomerId;
+				return this.billingServicesCustomerId;
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public string Last4
 		{
 			get
 			{
-				return _Last4;
+				return this.last4;
 			}
 		}
+		#endregion
 	}
 }

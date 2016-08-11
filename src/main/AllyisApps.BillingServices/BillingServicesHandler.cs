@@ -6,34 +6,42 @@ using AllyisApps.BillingServices.Common.Types;
 
 namespace AllyisApps.BillingServices
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class BillingServicesHandler : IBillingServicesInterface
 	{
 		#region fields
-		private readonly IBillingServicesInterface Service;
+		private readonly IBillingServicesInterface service;
 		#endregion
 
 		#region constructor
-		public BillingServicesHandler(string service)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="serviceType"></param>
+		public BillingServicesHandler(string serviceType)
 		{
-			if (Enum.IsDefined(typeof(BillingServicesEnum), service))
+			if (Enum.IsDefined(typeof(BillingServicesEnum), serviceType))
 			{
-				BillingServicesEnum ServiceType = (BillingServicesEnum)Enum.Parse(typeof(BillingServicesEnum), service);
-				switch (ServiceType)
+				BillingServicesEnum serviceTypeAsEnum = (BillingServicesEnum)Enum.Parse(typeof(BillingServicesEnum), serviceType);
+				switch (serviceTypeAsEnum)
 				{
-					case (BillingServicesEnum.Stripe):
+					case BillingServicesEnum.Stripe:
 						{
-							Service = new StripeService.StripeWrapper();
+							this.service = new StripeService.StripeWrapper();
 							break;
 						}
+
 					default:
 						{
-							throw new NotImplementedException(string.Format("Billing system, {0}, is not implemented", service));
+							throw new NotImplementedException(string.Format("Billing system, {0}, is not implemented", serviceType));
 						}
 				}
 			}
 			else
 			{
-				throw new NotImplementedException(string.Format("Billing system, {0}, is not implemented", service));
+				throw new NotImplementedException(string.Format("Billing system, {0}, is not implemented", serviceType));
 			}
 		}
 		#endregion
@@ -49,7 +57,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public bool CreatePlan(int amount, string interval, string planName)
 		{
-			return Service.CreatePlan(amount, interval, planName);
+			return this.service.CreatePlan(amount, interval, planName);
 		}
 
 
@@ -61,7 +69,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public BillingPlan RetrievePlan()
 		{
-			return Service.RetrievePlan();
+			return this.service.RetrievePlan();
 		}
 
 
@@ -73,7 +81,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public bool UpdatePlan()
 		{
-			return Service.UpdatePlan();
+			return this.service.UpdatePlan();
 		}
 
 
@@ -85,7 +93,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public bool DeletePlan()
 		{
-			return Service.DeletePlan();
+			return this.service.DeletePlan();
 		}
 		#endregion
 
@@ -98,7 +106,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public BillingServicesCustomerId CreateCustomer(string email, BillingServicesToken token)
 		{
-			return Service.CreateCustomer(email, token);
+			return this.service.CreateCustomer(email, token);
 		}
 
 
@@ -111,7 +119,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public BillingCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
 		{
-			return Service.RetrieveCustomer(customerId);
+			return this.service.RetrieveCustomer(customerId);
 		}
 
 
@@ -123,7 +131,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public List<BillingCustomer> ListCustomers()
 		{
-			return Service.ListCustomers();
+			return this.service.ListCustomers();
 		}
 
 
@@ -137,7 +145,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public bool UpdateCustomer(BillingServicesCustomerId customerId, BillingServicesToken token)
 		{
-			return Service.UpdateCustomer(customerId, token);
+			return this.service.UpdateCustomer(customerId, token);
 		}
 
 
@@ -149,7 +157,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public bool DeleteCustomer()
 		{
-			return Service.DeleteCustomer();
+			return this.service.DeleteCustomer();
 		}
 		#endregion
 
@@ -164,7 +172,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public string CreateSubscription(int amount, string interval, string planName, BillingServicesCustomerId customerId)
 		{
-			return Service.CreateSubscription(amount, interval, planName, customerId);
+			return this.service.CreateSubscription(amount, interval, planName, customerId);
 		}
 
 
@@ -176,7 +184,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public BillingSubscription RetrieveSubscription()
 		{
-			return Service.RetrieveSubscription();
+			return this.service.RetrieveSubscription();
 		}
 
 
@@ -188,7 +196,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public List<BillingSubscription> ListSubscriptions()
 		{
-			return Service.ListSubscriptions();
+			return this.service.ListSubscriptions();
 		}
 
 
@@ -205,7 +213,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public bool UpdateSubscription(int amount, string interval, string planName, string subscriptionId, BillingServicesCustomerId customerId)
 		{
-			return Service.UpdateSubscription(amount, interval, planName, subscriptionId, customerId);
+			return this.service.UpdateSubscription(amount, interval, planName, subscriptionId, customerId);
 		}
 
 
@@ -218,7 +226,7 @@ namespace AllyisApps.BillingServices
 		/// <param name="subscriptionId"></param>
 		public void DeleteSubscription(BillingServicesCustomerId customerId, string subscriptionId)
 		{
-			Service.DeleteSubscription(customerId, subscriptionId);
+			this.service.DeleteSubscription(customerId, subscriptionId);
 		}
 
 		#endregion
@@ -230,7 +238,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public bool CreateCharge()
 		{
-			return Service.CreateCharge();
+			return this.service.CreateCharge();
 		}
 
 
@@ -242,7 +250,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public BillingCharge RetrieveCharge()
 		{
-			return Service.RetrieveCharge();
+			return this.RetrieveCharge();
 		}
 
 
@@ -255,7 +263,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public List<BillingCharge> ListCharges(BillingServicesCustomerId customerId)
 		{
-			return Service.ListCharges(customerId);
+			return this.service.ListCharges(customerId);
 		}
 		#endregion
 
@@ -267,7 +275,7 @@ namespace AllyisApps.BillingServices
 		/// <returns></returns>
 		public List<BillingInvoice> ListInvoices(BillingServicesCustomerId customerId)
 		{
-			return Service.ListInvoices(customerId);
+			return this.service.ListInvoices(customerId);
 		}
 		#endregion
 		#endregion

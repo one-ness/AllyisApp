@@ -6,22 +6,37 @@ using System.Threading.Tasks;
 
 namespace AllyisApps.BillingServices.Common.Types
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class BillingServicesToken
 	{
-		private readonly string _token;
+		#region private fields
+		private readonly string token;
+		#endregion
 
+		#region constructor
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="token"></param>
 		public BillingServicesToken(string token)
 		{
-			_token = token;
+			this.token = token;
 		}
+		#endregion
 
+		#region accessor properties
+		/// <summary>
+		/// 
+		/// </summary>
 		public string Token
 		{
 			get
 			{
-				return _token;
+				return this.token;
 			}
-
 		}
+		#endregion
 	}
 }

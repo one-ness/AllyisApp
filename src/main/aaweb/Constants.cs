@@ -202,7 +202,7 @@ namespace AllyisApps
 		public const string PrivacyPolicy = "PrivacyPolicy";
 
 		/// <summary>
-		/// Action-Name: RedirectToSubdomainAction
+		/// Action-Name: RedirectToSubdomainAction.
 		/// </summary>
 		public const string RedirectToSubdomainAction = "RedirectToSubdomainAction";
 

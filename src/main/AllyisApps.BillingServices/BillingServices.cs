@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace AllyisApps.BillingServices
 {
-	enum BillingServicesEnum
+	/// <summary>
+	/// This enum is the be-all-end-all location for keeping track of what services we support.  If it isn't here, the code won't try.
+	/// </summary>
+	internal enum BillingServicesEnum
 	{
+		/// <summary>
+		/// 
+		/// </summary>
 		Stripe
 	}
 }

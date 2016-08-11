@@ -175,16 +175,16 @@ namespace AllyisApps.Extensions.ViewExtensions
 			return MvcHtmlString.Create(regex.Replace(element, string.Empty));
 		}
 
-		 /// <summary>
-		 /// Extension for creating Urls using subdomains.
-		 /// </summary>
-		 /// <param name = "urlHelper" > The object being extended.</param>
-		 /// <param name = "action" > The name of the action being performed.</param>
-		 /// <param name = "controller" > The name of the controller.</param>
-		 /// <param name = "routeValues" > The dictionary of route values.</param>
-		 /// <param name = "organizationId" > The organiztion's Id. Use 0 to get a top domain link.</param>
-		 /// <param name = "request" > The HttpRequestBase.</param>
-		 /// <returns>A link to the correct action in the organization's subdomain.</returns>
+		/// <summary>
+		/// Extension for creating Urls using subdomains.
+		/// </summary>
+		/// <param name = "urlHelper" > The object being extended.</param>
+		/// <param name = "action" > The name of the action being performed.</param>
+		/// <param name = "controller" > The name of the controller.</param>
+		/// <param name = "routeValues" > The dictionary of route values.</param>
+		/// <param name = "organizationId" > The organiztion's Id. Use 0 to get a top domain link.</param>
+		/// <param name = "request" > The HttpRequestBase.</param>
+		/// <returns>A link to the correct action in the organization's subdomain.</returns>
 		public static string SubdomainLink(
 								this UrlHelper urlHelper,
 								string action,
@@ -194,75 +194,82 @@ namespace AllyisApps.Extensions.ViewExtensions
 								HttpRequestBase request)
 		{
 			string area = null;
-			if (routeValues != null) if (routeValues.ContainsKey("area")) area = routeValues["area"].ToString();
-			return urlHelper.Action(ActionConstants.RedirectToSubdomainAction, new RouteValueDictionary(new { pOrganizationId = organizationId, pArea = area, pAction = action, pController = controller}));
 
-		////// SEPARATING OUT THE MIDDLE
-		////string middle = request.Url.ToString();
-		////string area = ((SubdomainRoute)request.RequestContext.RouteData.Route).Area;
-		////string startOfRelativePath = area ?? request.RequestContext.RouteData.Values["controller"].ToString();
-		////int relativeIndex = middle.IndexOf(startOfRelativePath);
-		////if (relativeIndex >= 0)
-		////{ // Sometimes there is no controller in the request URL
-		////	middle = middle.Substring(0, relativeIndex);
-		////}
+			// it is safe to check for null and then reference that same object in the next check because of short circuiting.
+			// routeValues.ContainsKey will not even be evaluated if routeValues != null comes back false.
+			if (routeValues != null && routeValues.ContainsKey("area"))
+			{
+				area = routeValues["area"].ToString();
+			}
 
-		////middle = middle.Substring(middle.IndexOf(GlobalSettings.WebRoot)).Replace(GlobalSettings.WebRoot, string.Empty); // Remove scheme/subdomain/host
-		////if (middle.Length > 0)
-		////{ // If there is no middle, we'll now have an empty string
-		////	middle = middle.Substring(1, Math.Max(middle.Length - 2, 0)); // Otherwise, remove leading and trailing '/'s
-		////}
+			return urlHelper.Action(ActionConstants.RedirectToSubdomainAction, new RouteValueDictionary(new { pOrganizationId = organizationId, pArea = area, pAction = action, pController = controller }));
 
-		////// ADDING MIDDLE INTO URL
-		////if (!string.IsNullOrEmpty(middle))
+			////// SEPARATING OUT THE MIDDLE
+			////string middle = request.Url.ToString();
+			////string area = ((SubdomainRoute)request.RequestContext.RouteData.Route).Area;
+			////string startOfRelativePath = area ?? request.RequestContext.RouteData.Values["controller"].ToString();
+			////int relativeIndex = middle.IndexOf(startOfRelativePath);
+			////if (relativeIndex >= 0)
+			////{ // Sometimes there is no controller in the request URL
+			////	middle = middle.Substring(0, relativeIndex);
+			////}
+
+			////middle = middle.Substring(middle.IndexOf(GlobalSettings.WebRoot)).Replace(GlobalSettings.WebRoot, string.Empty); // Remove scheme/subdomain/host
+			////if (middle.Length > 0)
+			////{ // If there is no middle, we'll now have an empty string
+			////	middle = middle.Substring(1, Math.Max(middle.Length - 2, 0)); // Otherwise, remove leading and trailing '/'s
+			////}
+
+			////// ADDING MIDDLE INTO URL
+			////if (!string.IsNullOrEmpty(middle))
+			////{
+			////	// Middle is tacked onto controller, or area if it exists in the link url
+			////	string toArea = routeValues == null ? null : routeValues["area"].ToString();
+			////	if (string.IsNullOrEmpty(toArea))
+			////	{
+			////		controller = string.Format("{0}/{1}", middle, controller);
+			////	}
+			////	else
+			////	{
+			////		routeValues["area"] = string.Format("{0}/{1}", middle, toArea);
+			////	}
+			////}
+
+			////// ADDING SUBDOMAIN
+			////string host = GlobalSettings.HostName;
+			////if (organizationId > 0)
+			////{
+			////	host = string.Format("{0}.{1}", Services.Org.OrgService.GetSubdomainById(organizationId), GlobalSettings.HostName);
+			////}
+
+			////return urlHelper.Action(action, controller, routeValues, request.Url.Scheme, host);
+		}
+
+		// Use SubdomainLink now, with 0 for the orgId
+		/////// <summary>
+		/////// Extension for linking to the root domain.
+		/////// </summary>
+		/////// <param name="urlHelper">The urlhelper object being extended.</param>
+		/////// <param name="action">The name of the action to execute.</param>
+		/////// <param name="controller">The name of the controller to use.</param>
+		/////// <param name="urlScheme">The url scheme.</param>
+		/////// <param name="request">The HttpRequestBase.</param>
+		/////// <returns>Link to the action in the root domain.</returns>
+		////public static string TopDomainLink(
+		////						this UrlHelper urlHelper,
+		////						string action,
+		////						string controller,
+		////						string urlScheme,
+		////						HttpRequestBase request)
 		////{
-		////	// Middle is tacked onto controller, or area if it exists in the link url
-		////	string toArea = routeValues == null ? null : routeValues["area"].ToString();
-		////	if (string.IsNullOrEmpty(toArea))
+		////	string middle = GetMiddle(request);
+		////	if(!string.IsNullOrEmpty(middle))
 		////	{
 		////		controller = string.Format("{0}/{1}", middle, controller);
 		////	}
-		////	else
-		////	{
-		////		routeValues["area"] = string.Format("{0}/{1}", middle, toArea);
-		////	}
+		////	return urlHelper.Action(action, controller, new RouteValueDictionary(new { area = string.Empty }), urlScheme, GlobalSettings.HostName);
 		////}
-
-		////// ADDING SUBDOMAIN
-		////string host = GlobalSettings.HostName;
-		////if (organizationId > 0)
-		////{
-		////	host = string.Format("{0}.{1}", Services.Org.OrgService.GetSubdomainById(organizationId), GlobalSettings.HostName);
-		////}
-
-		////return urlHelper.Action(action, controller, routeValues, request.Url.Scheme, host);
 	}
-
-	// Use SubdomainLink now, with 0 for the orgId
-	/////// <summary>
-	/////// Extension for linking to the root domain.
-	/////// </summary>
-	/////// <param name="urlHelper">The urlhelper object being extended.</param>
-	/////// <param name="action">The name of the action to execute.</param>
-	/////// <param name="controller">The name of the controller to use.</param>
-	/////// <param name="urlScheme">The url scheme.</param>
-	/////// <param name="request">The HttpRequestBase.</param>
-	/////// <returns>Link to the action in the root domain.</returns>
-	////public static string TopDomainLink(
-	////						this UrlHelper urlHelper,
-	////						string action,
-	////						string controller,
-	////						string urlScheme,
-	////						HttpRequestBase request)
-	////{
-	////	string middle = GetMiddle(request);
-	////	if(!string.IsNullOrEmpty(middle))
-	////	{
-	////		controller = string.Format("{0}/{1}", middle, controller);
-	////	}
-	////	return urlHelper.Action(action, controller, new RouteValueDictionary(new { area = string.Empty }), urlScheme, GlobalSettings.HostName);
-	////}
-}
 
 	/// <summary>
 	/// Required Label Extensions. Based on code found here http://stackoverflow.com/questions/5940506/how-can-i-modify-labelfor-to-display-an-asterisk-on-required-fields.

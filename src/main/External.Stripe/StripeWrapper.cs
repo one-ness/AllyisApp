@@ -6,28 +6,34 @@ using Stripe;
 
 namespace AllyisApps.BillingServices.StripeService
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class StripeWrapper : IBillingServicesInterface
 	{
 		#region fields
-		private readonly StripeCustomerService CustomerService;
-		private readonly StripePlanService PlanService;
-		private readonly StripeSubscriptionService SubscriptionService;
-		private readonly StripeTokenService TokenService;
-		private readonly StripeInvoiceService InvoiceService;
-		private readonly StripeChargeService ChargeService;
+		private readonly StripeCustomerService customerService;
+		private readonly StripePlanService planService;
+		private readonly StripeSubscriptionService subscriptionService;
+		private readonly StripeTokenService tokenService;
+		private readonly StripeInvoiceService invoiceService;
+		private readonly StripeChargeService chargeService;
 		#endregion
 
 		#region constructor
+		/// <summary>
+		/// 
+		/// </summary>
 		public StripeWrapper()
 		{
 			Stripe.StripeConfiguration.SetApiKey("sk_test_6Z1XooVuPiXjbn0DwndaHF8P");
 
-			CustomerService = new StripeCustomerService();
-			PlanService = new StripePlanService();
-			SubscriptionService = new StripeSubscriptionService();
-			TokenService = new StripeTokenService();
-			InvoiceService = new StripeInvoiceService();
-			ChargeService = new StripeChargeService();
+			this.customerService = new StripeCustomerService();
+			this.planService = new StripePlanService();
+			this.subscriptionService = new StripeSubscriptionService();
+			this.tokenService = new StripeTokenService();
+			this.invoiceService = new StripeInvoiceService();
+			this.chargeService = new StripeChargeService();
 		}
 		#endregion
 
@@ -42,7 +48,7 @@ namespace AllyisApps.BillingServices.StripeService
 		/// <returns></returns>
 		public bool CreatePlan(int amount, string interval, string planName)
 		{
-			CreateStripePlan(amount, interval, planName);
+			this.CreateStripePlan(amount, interval, planName);
 
 			return true;
 		}
@@ -88,7 +94,7 @@ namespace AllyisApps.BillingServices.StripeService
 			customerOptions.Email = email;
 			customerOptions.SourceToken = this.GenerateStripeToken(token.Token).ToString();
 
-			StripeCustomer customer = CustomerService.Create(customerOptions);
+			StripeCustomer customer = this.customerService.Create(customerOptions);
 
 			return new BillingServicesCustomerId(customer.Id);
 		}
@@ -101,9 +107,7 @@ namespace AllyisApps.BillingServices.StripeService
 		public BillingCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
 		{
 			// there is almost definitely some exception handling that will need to be done here.
-
-			StripeCustomerService customerService = new StripeCustomerService();
-			StripeCustomer stripeCustomer = customerService.Get(customerId.Id);
+			StripeCustomer stripeCustomer = this.customerService.Get(customerId.Id);
 
 			BillingCustomer customer = new BillingCustomer(
 				customerId,
@@ -132,7 +136,7 @@ namespace AllyisApps.BillingServices.StripeService
 
 			currentCustomer.SourceToken = this.GenerateStripeToken(token.Token).ToString();
 
-			CustomerService.Update(customerId.Id, currentCustomer);
+			this.customerService.Update(customerId.Id, currentCustomer);
 
 			return true;  // need to return false if the operation fails.
 		}
@@ -158,9 +162,9 @@ namespace AllyisApps.BillingServices.StripeService
 		/// <returns></returns>
 		public string CreateSubscription(int amount, string interval, string planName, BillingServicesCustomerId customerId)
 		{
-			StripePlan newPlan = CreateStripePlan(amount, interval, planName);
+			StripePlan newPlan = this.CreateStripePlan(amount, interval, planName);
 
-			StripeSubscription sub = SubscriptionService.Create(customerId.Id, newPlan.Id);
+			StripeSubscription sub = this.subscriptionService.Create(customerId.Id, newPlan.Id);
 
 			return sub.Id;
 		}
@@ -194,7 +198,7 @@ namespace AllyisApps.BillingServices.StripeService
 		/// <returns></returns>
 		public bool UpdateSubscription(int amount, string interval, string planName, string subscriptionId, BillingServicesCustomerId customerId)
 		{
-			StripePlan newPlan = CreateStripePlan(amount, interval, planName);
+			StripePlan newPlan = this.CreateStripePlan(amount, interval, planName);
 
 			StripePlanUpdateOptions planUpdateOptions = new StripePlanUpdateOptions();
 
@@ -202,15 +206,14 @@ namespace AllyisApps.BillingServices.StripeService
 
 			StripeSubscriptionUpdateOptions subUpdateOptions = new StripeSubscriptionUpdateOptions();
 			subUpdateOptions.PlanId = newPlan.Id;
-
-			StripeSubscriptionService subscriptionService = new StripeSubscriptionService();
-			StripeSubscription sub = subscriptionService.Get(customerId.Id, subscriptionId);
+			
+			StripeSubscription sub = this.subscriptionService.Get(customerId.Id, subscriptionId);
 			if (sub.TrialEnd != null)
 			{
 				subUpdateOptions.TrialEnd = sub.TrialEnd;
 			}
 
-			StripeSubscription stripeSubscription = subscriptionService.Update(customerId.Id, subscriptionId, subUpdateOptions); // optional StripeSubscriptionUpdateOptions
+			StripeSubscription stripeSubscription = this.subscriptionService.Update(customerId.Id, subscriptionId, subUpdateOptions); // optional StripeSubscriptionUpdateOptions
 
 			return true;
 		}
@@ -222,7 +225,7 @@ namespace AllyisApps.BillingServices.StripeService
 		/// <param name="subscriptionId"></param>
 		public void DeleteSubscription(BillingServicesCustomerId customerId, string subscriptionId)
 		{
-			SubscriptionService.Cancel(customerId.Id, subscriptionId);
+			this.subscriptionService.Cancel(customerId.Id, subscriptionId);
 		}
 		#endregion
 
@@ -253,7 +256,7 @@ namespace AllyisApps.BillingServices.StripeService
 		public List<BillingCharge> ListCharges(BillingServicesCustomerId customerId)
 		{
 			var chargeService = new StripeChargeService();
-			IEnumerable<StripeCharge> stripeCharges = chargeService.List(); // optional StripeChargeListOptions
+			IEnumerable<StripeCharge> stripeCharges = this.chargeService.List(); // optional StripeChargeListOptions
 			List<BillingCharge> billingCharges = new List<BillingCharge>();
 			foreach (StripeCharge stripeCharge in stripeCharges)
 			{
@@ -278,7 +281,7 @@ namespace AllyisApps.BillingServices.StripeService
 			StripeInvoiceListOptions invoiceListOptions = new StripeInvoiceListOptions();
 			invoiceListOptions.CustomerId = customerId.Id;
 			invoiceListOptions.Limit = 10000;
-			IEnumerable<StripeInvoice> stripeInvoices = InvoiceService.List(invoiceListOptions); // optional StripeInvoiceListOptions
+			IEnumerable<StripeInvoice> stripeInvoices = this.invoiceService.List(invoiceListOptions); // optional StripeInvoiceListOptions
 
 			List<BillingInvoice> invoiceList = new List<BillingInvoice>();
 			foreach (StripeInvoice stripeInvoice in stripeInvoices)
@@ -299,7 +302,7 @@ namespace AllyisApps.BillingServices.StripeService
 		/// <returns></returns>
 		private StripeToken GenerateStripeToken(string billingServicesToken)
 		{
-			return TokenService.Get(billingServicesToken);
+			return this.tokenService.Get(billingServicesToken);
 		}
 
 		/// <summary>
@@ -323,7 +326,7 @@ namespace AllyisApps.BillingServices.StripeService
 
 			newPlan.Id = i.ToString();
 
-			return PlanService.Create(newPlan);
+			return this.planService.Create(newPlan);
 		}
 		#endregion
 	}
