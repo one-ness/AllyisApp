@@ -27,12 +27,16 @@ BEGIN
 				FROM [Billing].[Subscription] WITH (NOLOCK)  
 				WHERE [Subscription].[SkuId] IN (SELECT [SkuId] FROM #SKUIDs))
 			
-			UPDATE #Tmp SET [FirstProject] = 
-				(SELECT TOP 1 [ProjectId] 
-				FROM [Crm].[ProjectUser] 
+			Declare @FirstProject as int
+			set @FirstProject = (SELECT TOP 1 [ProjectId] 
+				FROM [Crm].[ProjectUser], #Tmp
 				WITH (NOLOCK) 
-				WHERE [UserId] = [#Tmp].[UserId] 
-					AND [IsActive] = 1);
+				WHERE [ProjectUser].[UserId] = [#Tmp].[UserId] AND [ProjectUser].[IsActive] = 1);
+
+			if @FirstProject is null begin set @FirstProject = 0 end
+			UPDATE #Tmp SET [FirstProject] = @FirstProject
+
+				
 
 			IF(@Overwrite = 1)
 				BEGIN
@@ -85,15 +89,19 @@ BEGIN
 			INTO #OrgTmp 
 			FROM [Billing].[SubscriptionUser] WITH (NOLOCK) WHERE [SubscriptionId] = @SubscriptionID;
 
-			UPDATE #OrgTmp SET [FirstProject] = 
-				(SELECT TOP 1 [ProjectId] 
-				FROM [Crm].[ProjectUser] WITH (NOLOCK) 
-				WHERE [UserId] = [#OrgTmp].[UserId] AND [IsActive] = 1 
+			Declare @FirstProejct as int
+			set @FirstProject = (SELECT TOP 1 [ProjectId] 
+				FROM [Crm].[ProjectUser], #OrgTmp WITH (NOLOCK) 
+				WHERE [ProjectUser].[UserId] = [#OrgTmp].[UserId] AND [ProjectUser].[IsActive] = 1 
 					AND [ProjectId] IN 
 						(SELECT [ProjectId] 
 						FROM [Crm].[Project] WITH (NOLOCK) 
 						JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId] WHERE [Customer].[OrganizationId] = @OrganizationId));
 			--^^^ Sets the column that contains the first project id for each user for the specified org
+
+			if (@FirstProject is null) begin set @FirstProject = 0 end
+			UPDATE #OrgTmp SET [FirstProject] = @FirstProject
+				
 			IF (@Overwrite = 1)
 				BEGIN
 					UPDATE [TimeTracker].[TimeEntry] SET [Duration] = @Duration, [Description] = @Description, [PayClassId] = @PayClassId WHERE [Date] = @Date AND [UserId] IN (SELECT [UserId] FROM #OrgTmp);
@@ -108,4 +116,3 @@ BEGIN
 		END
 		DROP TABLE #SKUIDs;
 END
-
