@@ -26,9 +26,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="lockDate">The Date.</param>
 		/// <returns>Provides the view for the user.</returns>
 		[HttpPost]
-		public ActionResult SetLockDate(int userId, DateTime startDate, DateTime endDate, DateTime lockDate)
+		public ActionResult SetLockDate(int userId, int startDate, int endDate, int lockDate)
 		{
-			if (!TimeTrackerService.SetLockDate(userId, lockDate))
+			if (!TimeTrackerService.SetLockDate(userId, TimeTrackerService.GetDateTimeFromDays(lockDate)))
 			{
 				// Should only be here because of permission failures
 				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));

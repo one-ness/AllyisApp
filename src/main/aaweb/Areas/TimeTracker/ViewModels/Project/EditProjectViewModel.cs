@@ -58,14 +58,14 @@ namespace AllyisApps.ViewModels
 		public string PriceType { get; set; }
 
 		/// <summary>
-		/// Gets or sets Project Start Date.
+		/// Gets or sets Project Start Date. Note: must be int and not DateTime for Json serialization to work correctly in different cultures.
 		/// </summary>
-		public DateTime StartDate { get; set; }
+		public int StartDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets Project End Date.
+		/// Gets or sets Project End Date. Note: must be int and not DateTime for Json serialization to work correctly in different cultures.
 		/// </summary>
-		public DateTime EndDate { get; set; }
+		public int EndDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Customer's name.

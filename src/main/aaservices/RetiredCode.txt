@@ -5003,3 +5003,120 @@ From: Manage.cshtml
                 //$('#ddlState').prop("disabled", true);
             }
         }*@
+
+From TimeTracker/Views/TimeEntry/_TimeEntryTable.cshtml
+		@using AllyisApps.Areas.TimeTracker.Models
+
+		@model IList<EditTimeEntryViewModel>
+
+		@{var currentDate = DateTime.MinValue;}
+
+		<form action="/TimeEntry/EditTimeEntries" method="post" role="form" class="form-horizontal col-lg-11">
+			@Html.AntiForgeryToken()
+			<table class="allyis-table">
+				<thead>
+					<tr>
+						<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Date</th>
+						<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Duration</th>
+						<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Project</th>
+						<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.PClass</th>
+						<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Description</th>
+						<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					@for (var i = 0; i < Model.Count(); i++)
+					{
+						<tr>
+							@Html.HiddenFor(m => Model[i].TimeEntryId)
+							@Html.HiddenFor(m => Model[i].UserId)
+							@Html.HiddenFor(m => Model[i].Date)
+							@Html.HiddenFor(m => Model[i].StartingDate)
+							@Html.HiddenFor(m => Model[i].EndingDate)
+							@Html.HiddenFor(m => Model[i].OrganizationId)
+							<td>
+								@if (Model[i].Date.Date != currentDate)
+								{
+									@Html.Label(string.Format("{0} {1}", Model[i].Date.ToShortDateString(), Model[i].Date.DayOfWeek.ToString()))
+									currentDate = Model[i].Date;
+								}
+							</td>
+							<td>
+								@Html.TextBoxFor(m => Model[i].Duration, new { @class = "form-control", @onblur = "changeOccur()"})
+							</td>
+							<td>
+								@Html.DropDownList(string.Format("[{0}].ProjectId", i), from c in Model[i].Projects
+																			select new SelectListItem
+																			{
+																				Selected = (Model[i].ProjectId == c.ProjectId),
+																				Text = c.ProjectName,
+																				Value = c.ProjectId.ToString()
+																			}, new { @class = "form-control", @onblur = "changeOccur()" })
+
+							</td>
+							<td>
+								@Html.DropDownList(string.Format("[{0}].PayClassName", i), from c in Model[i].PayClasses
+																			select new SelectListItem
+																			{
+																				Selected = (Model[i].PayClassId == c.PayClassID),
+																				Text = c.Name,
+																				Value = c.PayClassID.ToString()
+																			}, new { @class = "form-control", @onblur = "changeOccur()" })
+							</td>
+							<td>
+								@Html.TextBoxFor(m => Model[i].Description, new { @class = "form-control", @onblur = "changeOccur()" })
+							</td>
+							<td>
+								@if (Model[i].TimeEntryId != 0)
+								{
+									<a href="@Url.Action(ActionConstants.DeleteEntry, routeValues: new
+										{
+											timeEntryId = Model[i].TimeEntryId,
+											startingDate = Model[i].StartingDate,
+											endingDate = Model[i].EndingDate,
+											orgId = Model[i].OrganizationId
+										})">
+										<span class="glyphicon glyphicon-remove"></span>
+									</a>
+								}
+							</td>
+						</tr>
+						if (Model[i].Date.DayOfWeek == DayOfWeek.Sunday && i != Model.Count - 1)
+						{
+						<tr><td></td><td></td><td></td><td></td><td></td></tr>
+						<tr>
+							<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Date</th>
+							<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Duration</th>
+							<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Project</th>
+							<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.PClass</th>
+							<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Description</th>
+							<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Actions</th>
+						</tr>
+						}
+					}
+				</tbody>
+			</table>
+			<div class="allyis-action-buttons">
+				<input type="button" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Clear class="btn btn-danger" onclick="promptForUnsavedChanges()" />
+				<input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save class="btn btn-primary" />
+			</div>
+		</form>
+
+		<script type="text/javascript">
+			var isChanged = false;
+
+			function changeOccur(){
+				isChanged = true;
+			}
+
+			function promptForUnsavedChanges() {
+				if (isChanged) {
+					var result = confirm("You have unsaved changes. Would you like to continue removing them?");
+					if (result) {
+						window.location.href = window.location.href;
+					}
+				}
+			}
+		</script>
+
+

@@ -23,11 +23,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (model.OrganizationId == null)
 			{
-				return ProjectService.CreateProjectFromCustomerIdOnly(model.ParentCustomerId, model.ProjectName, model.PriceType, model.StartDate, model.EndDate);
+				return ProjectService.CreateProjectFromCustomerIdOnly(
+					model.ParentCustomerId, 
+					model.ProjectName, 
+					model.PriceType, 
+					TimeTrackerService.GetDateTimeFromDays(model.StartDate), 
+					TimeTrackerService.GetDateTimeFromDays(model.EndDate));
 			}
 			else
 			{
-				return ProjectService.CreateProject((int)model.OrganizationId, model.ParentCustomerId, model.ProjectName, model.PriceType, model.StartDate, model.EndDate);
+				return ProjectService.CreateProject(
+					(int)model.OrganizationId, 
+					model.ParentCustomerId, 
+					model.ProjectName, 
+					model.PriceType, 
+					TimeTrackerService.GetDateTimeFromDays(model.StartDate), 
+					TimeTrackerService.GetDateTimeFromDays(model.EndDate));
 			}
 		}
 	}

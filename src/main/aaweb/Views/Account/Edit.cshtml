@@ -12,62 +12,8 @@
 @section scripts
 {
     <script type="text/javascript">
-        $(document).ready(function () {
-            var preserveState = '@(Model != null ? (AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';
-            //$('#State').prop("disabled", true);
-
-            if ($('#Country').val() != "") {
-                updateStateDDL(function () {
-                    if (preserveState != "") {
-                        var ddl = document.getElementById('State');
-                        for (var i = 0; i < ddl.options.length; i++) {
-                            if (ddl.options[i].text === preserveState) {
-                                ddl.selectedIndex = i;
-                            }
-                        }
-                    }
-                });
-            }
-
-            $('#Country').change(updateStateDDL);
-        });
-
-        function updateStateDDL(successCallback) {
-            if ($('#Country').val() != "") {
-                $.ajax({
-                    type: "POST",
-                    url: "/Home/GetStates",
-                    data: JSON.stringify({ country: $('#Country').val() }),
-                    datatype: "json",
-                    contentType: "application/json",
-                    success: function (states) {
-                        $('#State').empty();
-                        $('#State').append("<option value=\"\">" + "@AllyisApps.Resources.Views.Account.Strings.DropDownEmpty" + "</option>");
-                        Object.keys(states).forEach(function (key) {
-                            $('#State').append("<option value=\"" + key + "\">" + states[key] + "</option>");
-                        });
-                        $('#State').prop("disabled", false);
-
-                        successCallback();
-                    },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert("Error: " + errorThrown)
-                    }
-                });
-            } else {
-                $('#State').empty();
-                $('#State').append("<option value=\"\">" + "@AllyisApps.Resources.Views.Account.Strings.DropDownEmpty" + "</option>");
-                //$('#State').prop("disabled", true);
-            }
-        }
-
-        function element_change(where, add, remove) {
-            var $el = $(where);
-            if ($el.hasClass(add) || $el.hasClass(remove)) {
-                $el.addClass('was-set');
-            }
-            $el.addClass(add).removeClass(remove);
-        }
-
+        var preserveState = '@(Model != null ? (AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';
+        var dropdownempty = "@AllyisApps.Resources.Views.Account.Strings.DropDownEmpty";
     </script>
+    @Scripts.Render("~/bundles/UpdateStateDDL");
 }

@@ -53,9 +53,9 @@
 
                 </div>
                 <input type="text" name="daterange" id="daterange" class="form-control" value="" />
-                <div class="input-group-btn">
+                @*<div class="input-group-btn">
                     <input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.View class="btn btn-primary" style="width: 56px" />
-                </div>
+                </div>*@
             </div>
         </div>
     }
@@ -131,11 +131,11 @@ ViewBag.RenderSidebar = true;}
                         pageCount = 1 + (count / Model.PageUserSize);
                         if (count >= 0 && count <= (Model.PageUserSize - 1))
                         {
-                            hide = "";
+                            hide = "flex";
                         }
                         else
                         {
-                            hide = "hidden";
+                            hide = "none";
                         }
 
                         string active = "";
@@ -147,7 +147,7 @@ ViewBag.RenderSidebar = true;}
                         }
                         <div data-page="@pageCount" class="@(active)"
                              onmouseover='this.style.backgroundColor="#c4e3f3"' onmouseout="@resetBackground"
-                             style="width: 95%; display: flex; justify-content: flex-end;" @hide>
+                             style="width: 95%; display: @hide; justify-content: flex-end;">
                             <a class="col-xs-11 text-left" data-search="@user.Email"
                                href="@Url.Action(ActionConstants.Index, routeValues: new
                             {
@@ -188,305 +188,19 @@ ViewBag.RenderSidebar = true;}
 
 @section scripts
 {
-    <script type="text/javascript" src="~/Areas/TimeTracker/Scripts/time-entry-index.js"></script>
+    @*Date range picker dependencies:*@
+    @Scripts.Render("~/bundles/jqueryui");
+    @Scripts.Render("~/bundles/moment");  
 
-    @* Date Range Picker *@
-    <script type="text/javascript" src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="~/Scripts/jquery.comiseo.daterangepicker.js"></script>
     <script type="text/javascript">
-        $( document ).ready(function() {
-            var MODULE = new ListGroupSearch();
-            MODULE.init({
-                $target: $("#viewasuser-list")
-            });
-            $("#viewasuser-search").keyup(_.debounce(
-                function(key) {
-                    if (key.which == 13 || key.keyCode == 13) {
-                        //alert("keypress val:" + this.value);
-                        if (this.value== "")
-                            MODULE.search(" "); //search on a value that is present in all entries
-                        else
-                            MODULE.search(this.value);
-                        //after search, set new page numbers
-                        paginate();
-                    }
-                },
-                200
-            ));
-            $('ProjectId').each(function(e){     //Used for model binding with custom ddl option selection
-                eval($(this).data('onload'));
-            });
-            focusFirstDuration();
-        });
-
-        function paginate() {
-            //alert("paginate");
-            var pcount = 0;
-            var page = 1;
-            var excludeval = -1;
-            var buttonCount = 1;
-            var pageSize = @Model.PageUserSize;
-
-            $('#viewasuser-list').find('div').each(function () {
-                if (pcount >= pageSize) {
-                    //alert("paginate page " + page + "++");
-                    page++;
-                    pcount = 0;
-                }
-
-                if ($(this).hasClass('excluded')) {
-                    //alert("excluded pcount=" + pcount);
-                    $(this).data('page', excludeval);
-                }
-                else {
-                    //alert("not excluded pcount=" + pcount);
-                    $(this).data('page', page);
-                    pcount++;
-                }
-            });
-
-            //alert("paginate pt2");
-            //hide extra page buttons
-            $("input[name='pageButton']").each(function () {
-                if (buttonCount > page) {
-                    $(this).hide();
-                }
-                else {
-                    $(this).show();
-                }
-                buttonCount++;
-            });
-
-            //alert("paginate pt3");
-            //build list based on page
-            showPage(1);
-        }
-
-        //show members for page: pageNum
-        function showPage(pageNum) {
-            var pageStr = "" + pageNum;
-            var dPage = "";
-
-            //hide other pages and show selected
-            $('#viewasuser-list').find('div').hide();
-            $('#viewasuser-list').find('div').each(function () {
-                dPage = $(this).data('page');
-                if (dPage == pageStr) {
-                    if ($(this).not('.excluded')) {
-                        $(this).show();
-                    }
-                    else {
-                        $(this).data('page', excludeval);
-                    }
-                }
-            });
-            select_page(pageNum);
-        }
-
-        //disable selected page button
-        function select_page(pageNum) {
-            var pcount = 1;
-            $("input[name='pageButton']").prop('disabled', false);
-            $("input[name='pageButton']").each(function () {
-                if (pcount == pageNum) {
-                    $(this).prop('disabled', true);
-                }
-                pcount++;
-            });
-        }
-
-        function focusFirstDuration(){
-            $("[name='Duration'][value='']:first").focus();
-        }
-
-        function focusNextDuration(form_child){
-            var tb = $("[name='Duration']");
-            for (var i = 0; i < tb.length; i++) {
-                if(tb[i] == form_child) {
-                    if(tb[i+1].parentNode.parentNode.parentNode.className.indexOf('hidden-sample') > -1)
-                    {
-                        if(tb.length >= i+2){
-                            tb[i+2].focus();
-                        }
-                    }
-                    else
-                    {
-                        if(tb.length >= i+1){
-                            tb[i+1].focus();
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-
-        function focusPreviousDuration(form_child){
-            var tb = $("[name='Duration']");
-            for(var i = 0; i < tb.length; i++) {
-                if(tb[i] == form_child) {
-                    if(tb[i-1].parentNode.parentNode.parentNode.className.indexOf('hidden-sample') > -1)
-                    {
-                        if(i-2 >= 0){
-                            tb[i-2].focus();
-                        }
-                    }
-                    else
-                    {
-                        if(i-1 >= 0){
-                            tb[i-1].focus();
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-
-        //$("#TimeEntryBody").submit(function () {
-        //    alert("Submitted!");
-        //    $("#Duration[value='']:first").focus();
-        //});
-
-        $( function() {
-            var picker = $('#daterange').daterangepicker(
-            {
-                initialText: 'Select period...',
-                datepickerOptions: {
-                    minDate: null,
-                    maxDate: null,
-                    numberOfMonths : 2
-                },
-                presetRanges: [{
-                    text: "Today",
-                    dateStart: function() { return moment() },
-                    dateEnd: function() { return moment() }
-                }, {
-                    text: "Yesterday",
-                    dateStart: function() { return moment().subtract(1, 'days') },
-                    dateEnd: function() { return moment().subtract(1, 'days') }
-                }, {
-                    text: "Last 7 Days",
-                    dateStart: function() { return moment().subtract(6, 'days') },
-                    dateEnd: function() { return moment() }
-                }, {
-                    text: "Last 30 Days",
-                    dateStart: function() { return moment().subtract(29, 'days') },
-                    dateEnd: function() { return moment() }
-                }, {
-                    text: "This Month",
-                    dateStart: function() { return moment().startOf('month') },
-                    dateEnd: function() { return moment().endOf('month') }
-                }, {
-                    text: "Last Month",
-                    dateStart: function() { return moment().subtract(1, 'month').startOf('month') },
-                    dateEnd: function() { return moment().subtract(1, 'month').endOf('month') }
-                }],
-                applyOnMenuSelect: true,
-                onChange: function() {
-                    var range = picker.daterangepicker("getRange");
-                    $('#StartDate').val(moment(range.start).format("MM/DD/YYYY"));
-                    $('#EndDate').val(moment(range.end).format("MM/DD/YYYY"));
-                    if(this.notFirstTime) {
-                        $(picker).parents("form:first").submit();
-                    }
-                    this.notFirstTime = true;
-                }
-            });
-            $('#daterange').daterangepicker("setRange",
-            {
-                start: moment((@Model.EntryRange.StartDate.ToUniversalTime().Ticks - 621355968000000000) / 10000).toDate(),
-                end:   moment((@Model.EntryRange.EndDate.ToUniversalTime().Ticks - 621355968000000000) / 10000).toDate()
-            });
-        });
-
-        $( function() {
-            var picker2 = $('#LockDate').daterangepicker(
-            {
-                initialText: '@Model.LockDate.ToShortDateString()',
-                datepickerOptions: {
-                    minDate: null,
-                    maxDate: null,
-                    numberOfMonths : 1
-                },
-                presetRanges: [{
-                    text: "Today",
-                    dateStart: function() { return moment() },
-                    dateEnd: function() { return moment() }
-                }, {
-                    text: "Two Weeks Ago",
-                    dateStart: function() { return moment().subtract(6, 'days') },
-                    dateEnd: function() { return moment().subtract(6, 'days') }
-                }],
-                applyOnMenuSelect: true,
-                onChange: function() {
-                    debugger;
-                    var range = picker2.daterangepicker("getRange");
-                    $('#LockDate').val(moment(range.start).format("MM/DD/YYYY"));
-
-                    //if(this.notFirstTime2) {
-                    //    alert("Submit");
-                    $(picker2).parents("form:first").submit();
-                    //}
-                    //this.notFirstTime2 = true;
-                }
-            });
-            $('#lockdate').daterangepicker("setRange",
-            {
-                start: moment((@Model.LockDate.ToUniversalTime().Ticks - 621355968000000000) / 10000).toDate()
-            });
-        });
-
-        function drp_nextWeek() {
-            var drp = $('#daterange');
-            var rangeObj = drp.daterangepicker("getRange");
-            var newStart = new Date();
-            var newEnd = new Date();
-            var oldStart = new Date();
-            var oldEnd = new Date();
-
-            oldStart.setTime(rangeObj.start.getTime());
-            oldEnd.setTime(rangeObj.end.getTime());
-            newStart.setTime(rangeObj.start.getTime() + (7 * 86400000 ));
-            newEnd.setTime(rangeObj.end.getTime() + (7 * 86400000));
-
-            // get offset hours from standard time (changes during DST)
-            var oldStartOffset = oldStart.getTimezoneOffset( ) / 60;
-            var oldEndOffset = oldEnd.getTimezoneOffset( ) / 60;
-            var newStartOffset = newStart.getTimezoneOffset( ) / 60;
-            var newEndOffset = newEnd.getTimezoneOffset( ) / 60;
-            var startOffsetChange = newStartOffset - oldStartOffset; // = 0, -1, or 1
-            var endOffsetChange = newEndOffset - oldEndOffset; // = 0, -1, or 1
-
-            newStart.setTime(newStart.getTime() + (startOffsetChange * 3600000));
-            newEnd.setTime(newEnd.getTime() + (endOffsetChange * 3600000));
-
-            drp.daterangepicker("setRange", {start: newStart, end: newEnd });
-        }
-        function drp_prevWeek() {
-            var drp = $('#daterange');
-            var rangeObj = drp.daterangepicker("getRange");
-            var newStart = new Date();
-            var newEnd = new Date();
-            var oldStart = new Date();
-            var oldEnd = new Date();
-
-            oldStart.setTime(rangeObj.start.getTime());
-            oldEnd.setTime(rangeObj.end.getTime());
-            newStart.setTime(rangeObj.start.getTime() - (7 * 86400000 ));
-            newEnd.setTime(rangeObj.end.getTime() - (7 * 86400000));
-
-            // get offset hours from standard time (changes during DST)
-            var oldStartOffset = oldStart.getTimezoneOffset( ) / 60;
-            var oldEndOffset = oldEnd.getTimezoneOffset( ) / 60;
-            var newStartOffset = newStart.getTimezoneOffset( ) / 60;
-            var newEndOffset = newEnd.getTimezoneOffset( ) / 60;
-            var startOffsetChange = newStartOffset - oldStartOffset; // = 0, -1, or 1
-            var endOffsetChange = newEndOffset - oldEndOffset; // = 0, -1, or 1
-
-            newStart.setTime(newStart.getTime() + (startOffsetChange * 3600000));
-            newEnd.setTime(newEnd.getTime() + (endOffsetChange * 3600000));
-            console.log("setrange: " + newStart + ", " + newEnd);
-            drp.daterangepicker("setRange", {start: newStart, end: newEnd });
-        }
+        var model_startdate = @Model.EntryRange.StartDate;
+        var model_enddate = @Model.EntryRange.EndDate;
+        var model_lockdate = @Model.LockDate;
+        var pageSize = @Model.PageUserSize;
+        var page_container_id = "viewasuser-list";
+        var page_item_tag = "div";
     </script>
+    @Scripts.Render("~/bundles/daterangepicker");
+    @Scripts.Render("~/bundles/pageswithsearch");
+    @Scripts.Render("~/bundles/TTTimeEntryIndex");
 }

@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="startDate">The beginning of the Date Range.</param>
 		/// <param name="endDate">The ending of the Date Range.</param>
 		/// <returns>Provides the view for the defined user over the date range defined.</returns>
-		public ActionResult Index(int userId = -1, DateTime? startDate = null, DateTime? endDate = null)
+		public ActionResult Index(int userId = -1, int? startDate = null, int? endDate = null)
 		{
 			bool manager = AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers);
 			
@@ -80,12 +80,26 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="endingDate">The Ending date.</param>
 		/// <param name="lockDate">The lock date.</param>
 		/// <returns>The constructed TimeEntryOverDateRangeViewModel.</returns>
-		public TimeEntryOverDateRangeViewModel ConstructTimeEntryOverDataRangeViewModel(int userId, bool manager, DateTime? startingDate, DateTime? endingDate, DateTime? lockDate)
+		public TimeEntryOverDateRangeViewModel ConstructTimeEntryOverDataRangeViewModel(int userId, bool manager, int? startingDate, int? endingDate, DateTime? lockDate)
 		{
+			DateTime? startingDateTime = null;
+			if (startingDate.HasValue)
+			{
+				startingDateTime = TimeTrackerService.GetDateFromDays(startingDate.Value);
+			}
+			DateTime? endingDateTime = null;
+			if (endingDate.HasValue)
+			{
+				endingDateTime = TimeTrackerService.GetDateFromDays(endingDate.Value);
+			}
+			StartOfWeekEnum startOfWeek = TimeTrackerService.GetStartOfWeek();
+			DateTime startDate = SetStartingDate(startingDateTime, startOfWeek);
+			DateTime endDate = SetEndingDate(endingDateTime, startOfWeek);
+
 			// Get all of the projects and initialize their total hours to 0.
 			IList<CompleteProjectInfo> allProjects = ProjectService.GetProjectsByUserAndOrganization(userId, false).ToList(); // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
 			IDictionary<int, ProjectHours> hours = new Dictionary<int, ProjectHours>();
-			IEnumerable<HolidayInfo> holidays = TimeTrackerService.GetHolidays().Where(x => (startingDate < x.Date && x.Date < endingDate)); // We only care about holidays within the date range
+			IEnumerable<HolidayInfo> holidays = TimeTrackerService.GetHolidays().Where(x => (startDate < x.Date && x.Date < endDate)); // We only care about holidays within the date range
 
 			foreach (CompleteProjectInfo proj in allProjects.Where(p => p.ProjectId > 0))
 			{
@@ -94,17 +108,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = 0, ProjectName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
-
-			StartOfWeekEnum startOfWeek = TimeTrackerService.GetStartOfWeek();
-
+			
 			IEnumerable<UserInfo> users = CrmService.GetUsersWithSubscriptionToProductInOrganization(UserContext.ChosenOrganizationId, Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
 
 			TimeEntryOverDateRangeViewModel result = new TimeEntryOverDateRangeViewModel
 			{
 				EntryRange = new TimeEntryRangeForUserViewModel
 				{
-					StartDate = SetStartingDate(startingDate, startOfWeek),
-					EndDate = SetEndingDate(endingDate, startOfWeek),
+					StartDate = TimeTrackerService.GetDayFromDateTime(startDate),
+					EndDate = TimeTrackerService.GetDayFromDateTime(endDate),
 					Entries = new List<EditTimeEntryViewModel>(),
 					UserId = userId
 				},
@@ -118,11 +130,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Users = users,
 				TotalUsers = users.Count(),
 				CurrentUser = users.Where(x => x.UserId == userId).Single(),
-				LockDate = TimeTrackerService.GetLockDate(userId)
+				LockDate = TimeTrackerService.GetDayFromDateTime(TimeTrackerService.GetLockDate(userId))
 			};
 
 			// Initialize the starting dates and get all of the time entries within that date range.
-			IEnumerable<TimeEntryInfo> timeEntries = TimeTrackerService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, result.EntryRange.StartDate, result.EntryRange.EndDate);
+			IEnumerable<TimeEntryInfo> timeEntries = TimeTrackerService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDate, endDate);
 			IEnumerator<TimeEntryInfo> iter = timeEntries.GetEnumerator();
 			iter.MoveNext();
 
@@ -134,7 +146,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			bool holidayPopulated = false;
 
 			// For each date in the date range
-			for (var date = result.EntryRange.StartDate; date <= result.EntryRange.EndDate;)
+			for (DateTime date = startDate; date <= endDate;)
 			{
 				// If has data for this date,
 				if (iter.Current != null && iter.Current.Date == date.Date)
@@ -162,8 +174,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Date = TimeTrackerService.GetDayFromDateTime(iter.Current.Date),
 						Duration = string.Format("{0:D2}:{1:D2}", (int)iter.Current.Duration, (int)Math.Round((iter.Current.Duration - (int)iter.Current.Duration) * 60, 0)),
 						Description = iter.Current.Description,
-						StartingDate = TimeTrackerService.GetDayFromDateTime(result.EntryRange.StartDate),
-						EndingDate = TimeTrackerService.GetDayFromDateTime(result.EntryRange.EndDate),
+						StartingDate = TimeTrackerService.GetDayFromDateTime(startDate),
+						EndingDate = TimeTrackerService.GetDayFromDateTime(endDate),
 						IsOffDay = (weekend % 7 == (int)iter.Current.Date.DayOfWeek || (weekend + 1) % 7 == (int)iter.Current.Date.DayOfWeek) ? true : false,
 						IsHoliday = TimeTrackerService.GetHolidays().Any(x => x.Date == date),
 						Projects = result.Projects,
@@ -210,8 +222,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						TimeEntryId = timeEntryId,
 						Date = TimeTrackerService.GetDayFromDateTime(date),
 						UserId = userId,
-						StartingDate = TimeTrackerService.GetDayFromDateTime(result.EntryRange.StartDate),
-						EndingDate = TimeTrackerService.GetDayFromDateTime(result.EntryRange.EndDate),
+						StartingDate = TimeTrackerService.GetDayFromDateTime(startDate),
+						EndingDate = TimeTrackerService.GetDayFromDateTime(endDate),
 						IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
 						IsHoliday = TimeTrackerService.GetHolidays().Any(x => x.Date == date),
 						Projects = result.Projects,
@@ -231,8 +243,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Sample = true,
 						Date = TimeTrackerService.GetDayFromDateTime(date),
 						UserId = userId,
-						StartingDate = TimeTrackerService.GetDayFromDateTime(result.EntryRange.StartDate),
-						EndingDate = TimeTrackerService.GetDayFromDateTime(result.EntryRange.EndDate),
+						StartingDate = TimeTrackerService.GetDayFromDateTime(startDate),
+						EndingDate = TimeTrackerService.GetDayFromDateTime(endDate),
 						IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
 						IsHoliday = TimeTrackerService.GetHolidays().Any(x => x.Date == date),
 						ProjectId = -1,

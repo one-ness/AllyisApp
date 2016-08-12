@@ -121,7 +121,7 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		/// <summary>
 		/// Gets or sets the start of week.
 		/// </summary>
-		public StartOfWeekEnum StartOfWeek { get; set; }
+		public int StartOfWeek { get; set; }
 	}
 
 	/// <summary>
@@ -145,14 +145,14 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		public int ProjectId { get; internal set; }
 
 		/// <summary>
-		/// Gets the Start Date selection.
+		/// Gets the Start Date selection. Note: must be int and not DateTime for Json serialization to work correctly in different cultures.
 		/// </summary>
-		public DateTime? StartDate { get; internal set; }
+		public int? StartDate { get; internal set; }
 
 		/// <summary>
-		/// Gets the End Date selection.
+		/// Gets the End Date selection. Note: must be int and not DateTime for Json serialization to work correctly in different cultures.
 		/// </summary>
-		public DateTime? EndDate { get; internal set; }
+		public int? EndDate { get; internal set; }
 
 		/// <summary>
 		/// Gets the Page selection.

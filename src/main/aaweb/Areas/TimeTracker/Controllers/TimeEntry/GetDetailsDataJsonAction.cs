@@ -56,7 +56,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			// Authorized for viewing details
-			TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(userId, manager, startingDate, endingDate, TimeTrackerService.GetLockDate(userId));
+			TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(
+				userId,
+				manager, 
+				TimeTrackerService.GetDayFromDateTime(startingDate), 
+				TimeTrackerService.GetDayFromDateTime(endingDate), 
+				TimeTrackerService.GetLockDate(userId));
 			if (model.Projects.Count() == 0 || model.Projects == null)
 			{
 				return this.Json(new

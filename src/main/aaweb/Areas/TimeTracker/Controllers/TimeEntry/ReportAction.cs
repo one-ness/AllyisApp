@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new UnauthorizedAccessException(AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReports);
 			}
 
-			reportVM.StartOfWeek = TimeTrackerService.GetStartOfWeek();
+			reportVM.StartOfWeek = (int)TimeTrackerService.GetStartOfWeek();
 			reportVM.UserView = this.GetUserSelectList(orgId, reportVM.Selection.Users);
 			reportVM.CustomerView = this.GetCustomerSelectList(orgId, reportVM.Selection.CustomerId);
 			reportVM.ProjectView = this.GetProjectSelectList(orgId, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
@@ -82,10 +82,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Selection = previousSelections ?? new ReportSelectionModel
 				{
 					CustomerId = 0,
-					EndDate = DateTime.Today,
+					EndDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today),
 					Page = 1,
 					ProjectId = 0,
-					StartDate = DateTime.Today,
+					StartDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today),
 					Users = new List<int>()
 				}
 			};
