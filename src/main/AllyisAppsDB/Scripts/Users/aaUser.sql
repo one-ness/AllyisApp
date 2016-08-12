@@ -1,4 +1,5 @@
-﻿IF NOT EXISTS (SELECT name from [AllyisAppsDB].[sys].[database_principals] WHERE name = 'aaUser')
+﻿
+IF NOT EXISTS (SELECT name from [sys].[database_principals] WHERE name = 'aaUser')
 BEGIN
 CREATE USER aaUser
 	FOR LOGIN aaUser
