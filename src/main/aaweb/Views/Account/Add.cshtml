@@ -147,70 +147,10 @@
                 <p id="cannotAddMessage">@AllyisApps.Resources.Views.Account.Strings.CannotAddMessage<br />@AllyisApps.Resources.Views.Account.Strings.CannotAddMessage2</p>
                 <p id="noProjectMessage">@AllyisApps.Resources.Views.Account.Strings.NoProjectMessage</p>
             </div>
-        </div>            }
-
+        </div>
+    }
 </div>
 
 @section Scripts {
-    <script type="text/javascript">
-
-        function clearMessagesAndEnableAdd() {
-            $('#addMember').prop('disabled', false);
-            $('#cannotAddMessage').hide();
-            $('#noProjectMessage').hide();
-        }
-
-        function showNoProjectMessage() {
-            $('#noProjectMessage').show();
-            $('#cannotAddMessage').hide();
-            $('#addMember').prop('disabled', true);
-        }
-
-        function showMustBeOwnerOrUserMessage() {
-            $('#noProjectMessage').hide();
-            $('#cannotAddMessage').show();
-            $('#addMember').prop('disabled', true);
-        }
-
-        function checkAddConditions() {
-            if ($('#AddAsOwner').is(':checked')) { // Adding as owner;
-                if ($('.role-selector option:selected').val() != 0) { // Time Tracker role selected: must check for project
-                    if ($('.project-selector option:selected').val() == "") { // No project selected
-                        showNoProjectMessage();
-                    } else { // Project selected
-                        clearMessagesAndEnableAdd();
-                    }
-                } else { // Time Tracker role is None, just adding as owner
-                    clearMessagesAndEnableAdd();
-                }
-            } else { // Not an owner
-                if ($('.role-selector option:selected').val() == 0) { // Selected role is None
-                    showMustBeOwnerOrUserMessage();
-                } else { // Role selected
-                    if ($('.project-selector option:selected').val() == "") { // No project selected
-                        showNoProjectMessage();
-                    } else { // Role and project selected
-                        clearMessagesAndEnableAdd();
-                    }
-                }
-            }
-        }
-
-        $(document).ready(function () {
-            $('#addMember').prop('disabled', true);
-            $('#noProjectMessage').hide();
-
-            $('.project-selector').change(function () {
-                checkAddConditions();
-            });
-
-            $('#AddAsOwner').change(function () {
-                checkAddConditions();
-            });
-
-            $('.role-selector').change(function () {
-                checkAddConditions();
-            });
-        });
-    </script>
+    @Scripts.Render("~/bundles/AccountAdd");
 }

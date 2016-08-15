@@ -53,7 +53,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			// Update project table
-			ProjectService.UpdateProject(project.ProjectId, project.ProjectName, project.PriceType, project.StartDate, project.EndDate);
+			ProjectService.UpdateProject(
+				project.ProjectId, 
+				project.ProjectName, 
+				project.PriceType, 
+				TimeTrackerService.GetDateTimeFromDays(project.StartDate), 
+				TimeTrackerService.GetDateTimeFromDays(project.EndDate));
 		}
 	}
 }

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -175,6 +175,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\TimeTracker\Controllers\Project\GetProjectsAction.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryRangeForUserViewModel.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -707,7 +708,14 @@
     <Compile Include="ViewModels\Shared\LanguageViewModel.cs" />
     <Compile Include="ViewModels\Shared\LogOnPartialViewModel.cs" />
     <Compile Include="ViewModels\Shared\SubscriptionsViewModel.cs" />
-    <Content Include="Areas\TimeTracker\Scripts\time-entry-index.js" />
+    <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
+    <Content Include="Scripts\allyis-paginate.js" />
+    <Content Include="Scripts\allyis-updateStateDDL.js" />
+    <Content Include="Areas\TimeTracker\Scripts\allyis-customer-index.js" />
+    <Content Include="Areas\TimeTracker\Scripts\allyis-project-editcreate.js" />
+    <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-index.js" />
+    <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-report.js" />
+    <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-useredit.js" />
     <Content Include="Areas\TimeTracker\Views\Customer\Create.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Delete.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Details.cshtml" />
@@ -825,6 +833,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Resources\628px-achtung-svg.png" />
+    <Content Include="Scripts\allyis-account-add.js" />
+    <Content Include="Scripts\allyis-account-createorg.js" />
+    <Content Include="Scripts\allyis-capscheck.js" />
+    <Content Include="Scripts\allyis-account-manage.js" />
+    <Content Include="Scripts\allyis-account-permission.js" />
+    <Content Include="Scripts\allyis-account-subscribe.js" />
     <Content Include="Scripts\allyis-list-group-search.js" />
     <Content Include="Scripts\bootstrap.js" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
@@ -832,12 +846,18 @@
     <Content Include="Scripts\jquery-2.2.0.min.js" />
     <Content Include="Scripts\jquery.comiseo.daterangepicker.js" />
     <Content Include="Scripts\jquery-2.2.0.min.map" />
+    <Content Include="Scripts\jquery.ui-1.11.4.js" />
+    <Content Include="Scripts\jquery.ui-1.11.4.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jQuery.transit-0.9.12.js" />
+    <Content Include="Scripts\jQuery.transit-0.9.12.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js.map">
       <DependentUpon>jquery.validate.unobtrusive.min.js</DependentUpon>
     </Content>
+    <Content Include="Scripts\moment-2.14.1.js" />
+    <Content Include="Scripts\moment-2.14.1.min.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js.map">
       <DependentUpon>respond.matchmedia.addListener.min.js</DependentUpon>
     </Content>
@@ -845,6 +865,8 @@
       <DependentUpon>respond.min.js</DependentUpon>
     </Content>
     <Content Include="favicon.ico" />
+    <Content Include="Scripts\underscore-1.8.3.js" />
+    <Content Include="Scripts\underscore-1.8.3.min.js" />
     <Content Include="Views\Account\_Terms.cshtml" />
     <Content Include="Views\Shared\ErrorQuiet.cshtml" />
     <Content Include="Views\Account\OrgIndex.cshtml" />
@@ -1089,7 +1111,6 @@
     </Content>
     <Content Include="Content\bootstrap\LICENSE" />
     <Content Include="Content\bootstrap\README.md" />
-    <Content Include="Areas\TimeTracker\Views\TimeEntry\_TimeEntryTable.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\_ClearRow.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
     <Content Include="Content\less\offcanvas.less" />
@@ -1230,6 +1251,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\TimeTracker\Views\GetProjectsAction\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>

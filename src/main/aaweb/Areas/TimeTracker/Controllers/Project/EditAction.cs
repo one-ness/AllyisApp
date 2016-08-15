@@ -105,8 +105,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ProjectUsers = projectUsers,
 				SubscriptionUsers = subscriptionUsers.Where(user => !projectUsers.Any(pu => (pu.UserId == user.UserId))), // Grab users that are not part of the project
 				PriceType = projectInfo.PriceType,
-				StartDate = projectInfo.StartDate,
-				EndDate = projectInfo.EndDate
+				StartDate = TimeTrackerService.GetDayFromDateTime(projectInfo.StartDate),
+				EndDate = TimeTrackerService.GetDayFromDateTime(projectInfo.EndDate)
 			};
 		}
 	}

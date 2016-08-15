@@ -21,16 +21,14 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		public IList<EditTimeEntryViewModel> Entries { get; internal set; }
 
 		/// <summary>
-		/// Gets the starting date of the date range.
+		/// Gets the starting date of the date range. Note: must be int and not DateTime for Json serialization to work correctly in different cultures.
 		/// </summary>
-		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-		public DateTime StartDate { get; internal set; }
+		public int StartDate { get; internal set; }
 
 		/// <summary>
-		/// Gets the ending date of the date range.
+		/// Gets the ending date of the date range. Note: must be int and not DateTime for Json serialization to work correctly in different cultures.
 		/// </summary>
-		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-		public DateTime EndDate { get; internal set; }
+		public int EndDate { get; internal set; }
 
 		/// <summary>
 		/// Gets the user's Id.

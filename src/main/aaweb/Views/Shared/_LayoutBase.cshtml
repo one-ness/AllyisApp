@@ -17,11 +17,10 @@
     <link rel="icon" href="/Content/icons/fav16.png?v=2" sizes="16x16" type="image/png" />
     <link rel="shortcut icon" href="favicon.ico?v=2" />
     <title>@title</title>
-    @*<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">*@
     @*@Styles.Render(DisplayHints.LayoutThemeBundle)*@
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    @Styles.Render("~/Content/Bootstrap");
+    @Styles.Render("~/Content/FontAwesome");
+    @Scripts.Render("~/bundles/underscore");
     @RenderSection("css", required: false)
     <link href="@Url.Content(DisplayHints.LayoutThemeBundle + ".css")" rel="stylesheet" />
     <meta name="description" content="@AllyisApps.Resources.Views.Shared.Strings.MetaDescription" />
@@ -43,10 +42,9 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/allyis")
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.transit/0.9.12/jquery.transit.min.js"></script>
-    @*@Scripts.Render("~/bundles/bootstrap")*@
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    @Scripts.Render("~/bundles/jqueryuoval")
+    @Scripts.Render("~/bundles/jquerytransit")
+    @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
 </html>

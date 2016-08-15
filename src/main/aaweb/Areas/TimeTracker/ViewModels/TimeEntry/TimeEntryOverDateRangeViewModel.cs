@@ -20,9 +20,9 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		private const int PageUserLimit = 35;
 		
 		/// <summary>
-		/// Gets or sets the lock date for the entry.
+		/// Gets or sets the lock date for the entry. Note: must be int and not DateTime for Json serialization to work correctly in different cultures.
 		/// </summary>
-		public DateTime LockDate { get; set; }
+		public int LockDate { get; set; }
 
 		/// <summary>
 		/// Gets the list of entries, start and end dates, and user/org id's.

@@ -146,7 +146,7 @@
                 @for (int u = 0; u < Model.Selection.Users.Count; u++)
                 {
                     @Html.Hidden(string.Format("Users[{0}]", u), Model.Selection.Users[u])
-}
+                }
                 @Html.Hidden("StartDate", Model.Selection.StartDate)
                 @Html.Hidden("EndDate", Model.Selection.EndDate)
                 @Html.Hidden("ShowExport", Model.ShowExport)
@@ -157,11 +157,11 @@
                     if (i == Model.PreviewPageNum)
                     {
                         <input class="btn btn-primary btn-sm" id="page @i" name="pageButton" type="button" value="@i" disabled="disabled" />
-}
+                    }
                     else
                     {
                         <input class="btn btn-primary btn-sm" id="page @i" name="pageButton" type="submit" value="@i" />
-}
+                    }
                 }
             </div>
         }
@@ -175,118 +175,15 @@
 
 @section scripts
 {
+    @*Date range picker dependencies:*@
+    @Scripts.Render("~/bundles/jqueryui");
+    @Scripts.Render("~/bundles/moment");  
 
-    <script type="text/javascript" src="//code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="~/Scripts/jquery.comiseo.daterangepicker.js"></script>
     <script type="text/javascript">
-        @* Date Range Picker *@
-        function updateDates(control) {
-            var stringOutput = control.value.split("-->");
-            document.getElementById("DateRangeStart").value = stringOutput[0];
-            document.getElementById("DateRangeEnd").value = stringOutput[1];
-        }
-
-        $(function () {
-            var picker = $('#daterange').daterangepicker(
-            {
-                initialText: 'Select period...',
-                datepickerOptions: {
-                    minDate: null,
-                    maxDate: null,
-                    numberOfMonths: 2
-                },
-                presetRanges: [{
-                    text: "Today",
-                    dateStart: function () { return moment() },
-                    dateEnd: function () { return moment() }
-                }, {
-                    text: "Yesterday",
-                    dateStart: function () { return moment().subtract(1, 'days') },
-                    dateEnd: function () { return moment().subtract(1, 'days') }
-                }, {
-                    text: "Last Week",
-                    dateStart: function () {
-                        weekStart = 0 + @Model.StartOfWeek;
-                        if ( weekStart <= moment().day() )
-                            return ( moment().day(weekStart-7) );
-                        else
-                            return ( moment().day(weekStart-14) );
-                    },
-                    dateEnd: function() {
-                        weekStart = 0 + @Model.StartOfWeek;
-                        if ( weekStart <= moment().day() )
-                            return ( moment().day(weekStart-1) );
-                        else
-                            return ( moment().day(weekStart-8) );
-                    }
-                },{
-                    text: "This Month",
-                    dateStart: function () { return moment().startOf('month') },
-                    dateEnd: function () { return moment().endOf('month') }
-                }, {
-                    text: "Last Month",
-                    dateStart: function () { return moment().subtract(1, 'month').startOf('month') },
-                    dateEnd: function () { return moment().subtract(1, 'month').endOf('month') }
-                }, {
-                    text: "This quarter",
-                    dateStart: function () { return moment().startOf('quarter') },
-                    dateEnd: function () { return moment().endOf('quarter') }
-                }, {
-                    text: "Last quarter",
-                    dateStart: function () { return moment().subtract(1, 'quarter').startOf('quarter') },
-                    dateEnd: function () { return moment().subtract(1, 'quarter').endOf('quarter') }
-                }
-                ],
-                applyOnMenuSelect: true,
-                onChange: function () {
-                    var range = picker.daterangepicker("getRange");
-                    $('#DateRangeStart').val(moment(range.start).format("MM/DD/YYYY"));
-                    $('#DateRangeEnd').val(moment(range.end).format("MM/DD/YYYY"));
-                }
-            });
-            $('#daterange').daterangepicker("setRange",
-            {
-                start: moment('@Model.Selection.StartDate', 'MM/DD/YYYY').toDate(),
-                end:  moment('@Model.Selection.EndDate', 'MM/DD/YYYY').toDate()
-            });
-        });
-
-        function submitFormForCSV() {
-            $("#reportForm").attr("action", "/TimeTracker/TimeEntry/ExportReport");
-            $("#reportForm").submit();
-        }
-
-        /*function submitFormForExcel() {
-            $("#reportForm").attr("action", "/TimeTracker/TimeEntry/ExportExcelReport");
-            $("#reportForm").submit();
-        }*/
-
-        // $( document ).ready()
-        $(function () {
-            $("#ddl-customers").change(function () {
-                $.ajax({
-                    url: "/TimeTracker/Project/GetProjects?customerId=" + this.value,
-                    method: "POST",
-                    datatype: JSON,
-                    success: function (data) {
-                        var ddl = $("#ddl-projects");
-                        ddl.empty();
-                        ddl.prop('disabled', true);
-                        if (!$.isEmptyObject(data)) {
-                            ddl.append($("<option />").val(0).text("No Filter"));
-                            $.each(data, function () {
-                                ddl.append($("<option />").val(this.ProjectId).text(this.Name));
-                            });
-                            ddl.prop('disabled', false);
-                        }
-                    },
-                    failure: $(function () {
-                        $("#ddl-projects").empty();
-                        $("#ddl-projects").prop('disabled', true);
-                    })
-                });
-            });
-        });
+        var model_startofweek = @Model.StartOfWeek;
+        var model_startdate = @Model.Selection.StartDate.Value;
+        var model_enddate = @Model.Selection.EndDate.Value;
     </script>
+    @Scripts.Render("~/bundles/daterangepicker");
+    @Scripts.Render("~/bundles/TTTimeEntryReport");
 }

@@ -99,7 +99,7 @@
             </tbody>
         </table>
     </div>
-    <div id="footPager" data-psize="@Model.PageSize" style="display: flex; justify-content: space-around;">
+    <div id="footPager" style="display: flex; justify-content: space-around;">
         @if (Model.TotalUsers > Model.PageSize)
         {
             var page = 1;
@@ -112,4 +112,10 @@
             }
         }
     </div>
+    <script type="text/javascript">
+        var pageSize = @Model.PageSize;
+        var page_container_id = "org-members-list";
+        var page_item_tag = "tr";
+    </script>
+    @Scripts.Render("~/bundles/pageswithsearch");
 }
