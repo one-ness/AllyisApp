@@ -3,7 +3,7 @@
     ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.BillingInformation;
 }
 
-@if (Model.StripeCustomer != null)
+@if (Model.BillingCustomer != null)
 {
     <input id="hdnCurrentOrg" type="hidden" />
     <input id="hdnSelectedUser" type="hidden" />
@@ -23,7 +23,7 @@
                     @AllyisApps.Resources.Views.Account.Strings.BillingEmail
                 </th>
                 <td>
-                    @Model.StripeCustomer.Email
+                    @Model.BillingCustomer.Email
                 </td>
             </tr>
         </tbody>
@@ -32,7 +32,7 @@
 
 
 <div class="modal-body">
-    @if (Model.StripeCustomer == null)
+    @if (Model.BillingCustomer == null)
     {
         using (Html.BeginForm(ActionConstants.Charge, ControllerConstants.Account, FormMethod.Post, new { @style = "display: inline-block" }))
         {

@@ -117,6 +117,7 @@ namespace AllyisApps.BillingServices.StripeService
 
 			BillingServicesCustomer customer = new BillingServicesCustomer(
 				customerId,
+				stripeCustomer.Email,
 				last4: stripeCustomer.SourceList.Data[0].Last4);
 			return customer;
 		}

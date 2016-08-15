@@ -16,6 +16,7 @@ namespace AllyisApps.BillingServices.Common.Types
 		#region private fields
 		private readonly BillingServicesCustomerId billingServicesCustomerId;
 		private readonly string last4;
+		private readonly string email;
 		#endregion
 
 		#region constructor
@@ -24,7 +25,7 @@ namespace AllyisApps.BillingServices.Common.Types
 		/// </summary>
 		/// <param name="customerId">The billing services customer ID.</param>
 		/// <param name="last4">The last 4 digits of the customer's payment card.</param>
-		public BillingServicesCustomer(BillingServicesCustomerId customerId, string last4 = "nnnn")
+		public BillingServicesCustomer(BillingServicesCustomerId customerId,string email, string last4 = "nnnn")
 		{
 			#region last4 validation
 			if (last4.Length != 4)
@@ -41,6 +42,7 @@ namespace AllyisApps.BillingServices.Common.Types
 
 			this.last4 = last4;
 			this.billingServicesCustomerId = customerId;
+			this.email = email;
 		}
 		#endregion
 
@@ -64,6 +66,17 @@ namespace AllyisApps.BillingServices.Common.Types
 			get
 			{
 				return this.last4;
+			}
+		}
+
+		/// <summary>
+		/// Gets email.
+		/// </summary>
+		public string Email
+		{
+			get
+			{
+				return this.email;
 			}
 		}
 		#endregion
