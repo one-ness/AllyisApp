@@ -39,14 +39,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 
 				return this.View(
-					new EditProjectViewModel() {
+					new EditProjectViewModel()
+					{
 						ParentCustomerId = id,
 						ProjectUsers = new List<BasicUserInfoViewModel>(),
 						SubscriptionUsers = subList,
 						StartDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today),
 						EndDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today.AddMonths(6))
-					}
-				);
+					});
 			}
 			else
 			{

@@ -32,7 +32,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult Index(int userId = -1, int? startDate = null, int? endDate = null)
 		{
 			bool manager = AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers);
-			
+
 			if (userId != -1 && userId != Convert.ToInt32(UserContext.UserId))
 			{ // Trying to edit as another user
 				if (!manager)
@@ -87,11 +87,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				startingDateTime = TimeTrackerService.GetDateFromDays(startingDate.Value);
 			}
+
 			DateTime? endingDateTime = null;
 			if (endingDate.HasValue)
 			{
 				endingDateTime = TimeTrackerService.GetDateFromDays(endingDate.Value);
 			}
+
 			StartOfWeekEnum startOfWeek = TimeTrackerService.GetStartOfWeek();
 			DateTime startDate = SetStartingDate(startingDateTime, startOfWeek);
 			DateTime endDate = SetEndingDate(endingDateTime, startOfWeek);
@@ -108,7 +110,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = 0, ProjectName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
-			
+
 			IEnumerable<UserInfo> users = CrmService.GetUsersWithSubscriptionToProductInOrganization(UserContext.ChosenOrganizationId, Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
 
 			TimeEntryOverDateRangeViewModel result = new TimeEntryOverDateRangeViewModel
@@ -187,6 +189,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						PayClasses = result.PayClasses,
 						Locked = iter.Current.ApprovalState == (int)Core.ApprovalState.Approved || isProjectDeleted
 					});
+
 					if (holidays.Where(x => x.Date == iter.Current.Date).FirstOrDefault() != null)
 					{
 						holidayPopulated = true;

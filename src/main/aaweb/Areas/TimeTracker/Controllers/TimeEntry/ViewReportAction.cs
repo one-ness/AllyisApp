@@ -38,7 +38,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				case "Preview":
 					{
-
 						ReportSelectionModel reportVMselect = new ReportSelectionModel
 						{
 							CustomerId = customerSelect,
