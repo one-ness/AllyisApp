@@ -83,7 +83,7 @@ namespace AllyisApps.BillingServices.Common
 
 		#region subscriptions
 		/// <summary>
-		/// Creats a billing services subscription.
+		/// Creates a billing services subscription.
 		/// </summary>
 		/// <param name="amount">The amount for the new billing services subscription.</param>
 		/// <param name="interval">The billing interval for the new billing services subscription.</param>

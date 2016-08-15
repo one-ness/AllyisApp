@@ -1,4 +1,10 @@
-﻿using System.Reflection;
+﻿//------------------------------------------------------------------------------
+// <copyright file="AssemblyInfo.cs" company="Allyis, Inc.">
+//     Copyright (c) Allyis, Inc.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 

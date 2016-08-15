@@ -1,4 +1,10 @@
-﻿using System;
+﻿//------------------------------------------------------------------------------
+// <copyright file="StripeWrapper.cs" company="Allyis, Inc.">
+//     Copyright (c) Allyis, Inc.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using AllyisApps.BillingServices.Common;
 using AllyisApps.BillingServices.Common.Types;
@@ -7,7 +13,7 @@ using Stripe;
 namespace AllyisApps.BillingServices.StripeService
 {
 	/// <summary>
-	/// 
+	/// The Stripe Billing Service implementation of the IBillingServicesInterface.
 	/// </summary>
 	public class StripeWrapper : IBillingServicesInterface
 	{
@@ -22,7 +28,7 @@ namespace AllyisApps.BillingServices.StripeService
 
 		#region constructor
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the <see cref="StripeWrapper"/> class.
 		/// </summary>
 		public StripeWrapper()
 		{
@@ -40,12 +46,12 @@ namespace AllyisApps.BillingServices.StripeService
 		#region IBillingServicesInterface implementation
 		#region plans
 		/// <summary>
-		/// 
+		/// Creates a stripe plan.  Plans are per offering, i.e. Time Tracker, Consulting, and etc.
 		/// </summary>
-		/// <param name="amount"></param>
-		/// <param name="interval"></param>
-		/// <param name="planName"></param>
-		/// <returns></returns>
+		/// <param name="amount">The plan amount.</param>
+		/// <param name="interval">The plan billing interval.</param>
+		/// <param name="planName">The plan name.</param>
+		/// <returns>A bool representing the success state of the plan creation.</returns>
 		public bool CreatePlan(int amount, string interval, string planName)
 		{
 			this.CreateStripePlan(amount, interval, planName);
@@ -54,27 +60,27 @@ namespace AllyisApps.BillingServices.StripeService
 		}
 
 		/// <summary>
-		/// 
+		/// Retrieves a stripe plan.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>An info object for the stripe plan.</returns>
 		public BillingServicesPlan RetrievePlan()
 		{
 			throw new NotImplementedException();
 		}
 
 		/// <summary>
-		/// 
+		/// Updates the stripe Plan.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>A bool representing the success state of updating the plan.</returns>
 		public bool UpdatePlan()
 		{
 			throw new NotImplementedException();
 		}
 
 		/// <summary>
-		/// 
+		/// Deletes a stripe plan.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>A bool representing the success state of deleting the plan.</returns>
 		public bool DeletePlan()
 		{
 			throw new NotImplementedException();
@@ -83,11 +89,11 @@ namespace AllyisApps.BillingServices.StripeService
 
 		#region customers
 		/// <summary>
-		/// 
+		/// Creates a stripe customer.
 		/// </summary>
-		/// <param name="email"></param>
-		/// <param name="token"></param>
-		/// <returns></returns>
+		/// <param name="email">The email to be associated with this customer.</param>
+		/// <param name="token">A billiong services token to be associated with this customer.</param>
+		/// <returns>The id of the newly created stripe customer.</returns>
 		public BillingServicesCustomerId CreateCustomer(string email, BillingServicesToken token)
 		{
 			StripeCustomerCreateOptions customerOptions = new StripeCustomerCreateOptions();
@@ -100,10 +106,10 @@ namespace AllyisApps.BillingServices.StripeService
 		}
 
 		/// <summary>
-		/// 
+		/// Retrieves a stripe customer.
 		/// </summary>
-		/// <param name="customerId"></param>
-		/// <returns></returns>
+		/// <param name="customerId">The id of the customer to retrieve.</param>
+		/// <returns>An info object for the stripe customer.</returns>
 		public BillingServicesCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
 		{
 			// there is almost definitely some exception handling that will need to be done here.
@@ -116,20 +122,20 @@ namespace AllyisApps.BillingServices.StripeService
 		}
 
 		/// <summary>
-		/// 
+		/// Lists the customers for stripe.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>A list of info objects for stripe customers.</returns>
 		public List<BillingServicesCustomer> ListCustomers()
 		{
 			throw new NotImplementedException();
 		}
 
 		/// <summary>
-		/// 
+		/// Updates a stripe customer.
 		/// </summary>
-		/// <param name="customerId"></param>
-		/// <param name="token"></param>
-		/// <returns></returns>
+		/// <param name="customerId">The customer id of the customer to update.</param>
+		/// <param name="token">The stripe customer's token.</param>
+		/// <returns>A bool representing the success state of updating the customer.</returns>
 		public bool UpdateCustomer(BillingServicesCustomerId customerId, BillingServicesToken token)
 		{
 			StripeCustomerUpdateOptions currentCustomer = new StripeCustomerUpdateOptions();
@@ -142,9 +148,9 @@ namespace AllyisApps.BillingServices.StripeService
 		}
 
 		/// <summary>
-		/// 
+		/// Deletes a stripe customer.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>A bool representing the success state of deleting the customer.</returns>
 		public bool DeleteCustomer()
 		{
 			throw new NotImplementedException();
@@ -153,13 +159,13 @@ namespace AllyisApps.BillingServices.StripeService
 
 		#region subscriptions
 		/// <summary>
-		/// 
+		/// Creates a stripe subscription.
 		/// </summary>
-		/// <param name="amount"></param>
-		/// <param name="interval"></param>
-		/// <param name="planName"></param>
-		/// <param name="customerId"></param>
-		/// <returns></returns>
+		/// <param name="amount">The amount for the new stripe subscription.</param>
+		/// <param name="interval">The billing interval for the new stripe subscription.</param>
+		/// <param name="planName">The name of the plan associated with the new stripe subscription.</param>
+		/// <param name="customerId">The stripe customer id of the customer subscribing to a new billing service.</param>
+		/// <returns>The id of the newly created stripe subscription.</returns>
 		public BillingServicesSubscriptionId CreateSubscription(int amount, string interval, string planName, BillingServicesCustomerId customerId)
 		{
 			StripePlan newPlan = this.CreateStripePlan(amount, interval, planName);
@@ -170,32 +176,32 @@ namespace AllyisApps.BillingServices.StripeService
 		}
 
 		/// <summary>
-		/// 
+		/// Retrieves a stripe subscription.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>An info object for the requested stripe subscription.</returns>
 		public BillingServicesSubscription RetrieveSubscription()
 		{
 			throw new NotImplementedException();
 		}
 
 		/// <summary>
-		/// 
+		/// Lists the stripe subscriptions for stripe.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>A list of info objects for stripe subsriptions for stripe.</returns>
 		public List<BillingServicesSubscription> ListSubscriptions()
 		{
 			throw new NotImplementedException();
 		}
 
 		/// <summary>
-		/// 
+		/// Updates a stripe subscription.
 		/// </summary>
-		/// <param name="amount"></param>
-		/// <param name="interval"></param>
-		/// <param name="planName"></param>
-		/// <param name="subscriptionId"></param>
-		/// <param name="customerId"></param>
-		/// <returns></returns>
+		/// <param name="amount">The new amount for the stripe subscription.</param>
+		/// <param name="interval">The new billing interval for the stripe subscription.</param>
+		/// <param name="planName">The new plan name for the stripe subscription.</param>
+		/// <param name="subscriptionId">The id of the stripe subscription to ID.</param>
+		/// <param name="customerId">The id of the customer whom is associated witht the billing subscription being updated.</param>
+		/// <returns>A bool representing the success state of updating the subscription.</returns>
 		public bool UpdateSubscription(int amount, string interval, string planName, string subscriptionId, BillingServicesCustomerId customerId)
 		{
 			StripePlan newPlan = this.CreateStripePlan(amount, interval, planName);
@@ -206,7 +212,7 @@ namespace AllyisApps.BillingServices.StripeService
 
 			StripeSubscriptionUpdateOptions subUpdateOptions = new StripeSubscriptionUpdateOptions();
 			subUpdateOptions.PlanId = newPlan.Id;
-			
+
 			StripeSubscription sub = this.subscriptionService.Get(customerId.Id, subscriptionId);
 			if (sub.TrialEnd != null)
 			{
@@ -219,10 +225,10 @@ namespace AllyisApps.BillingServices.StripeService
 		}
 
 		/// <summary>
-		/// 
+		/// Deletes a stripe subscription.
 		/// </summary>
-		/// <param name="customerId"></param>
-		/// <param name="subscriptionId"></param>
+		/// <param name="customerId">The stripe customer id associated with the subscription to delete.</param>
+		/// <param name="subscriptionId">The id of the stripe subscription to delete.</param>
 		public void DeleteSubscription(BillingServicesCustomerId customerId, string subscriptionId)
 		{
 			this.subscriptionService.Cancel(customerId.Id, subscriptionId);
@@ -231,28 +237,28 @@ namespace AllyisApps.BillingServices.StripeService
 
 		#region charges
 		/// <summary>
-		/// 
+		/// Creates a stripe charge.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>A bool representing the success state of creating the charge.</returns>
 		public bool CreateCharge()
 		{
 			throw new NotImplementedException();
 		}
 
 		/// <summary>
-		/// 
+		/// Retrieves a stripe charge.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>An info object for a stripe charge.</returns>
 		public BillingServicesCharge RetrieveCharge()
 		{
 			throw new NotImplementedException();
 		}
 
 		/// <summary>
-		/// 
+		/// Lists the stripe charges for a stripe customer.
 		/// </summary>
-		/// <param name="customerId"></param>
-		/// <returns></returns>
+		/// <param name="customerId">The stripe customer id of the customer for which the charges shall be listed.</param>
+		/// <returns>A list of info objects for stripe charges.</returns>
 		public List<BillingServicesCharge> ListCharges(BillingServicesCustomerId customerId)
 		{
 			var chargeService = new StripeChargeService();
@@ -272,10 +278,10 @@ namespace AllyisApps.BillingServices.StripeService
 
 		#region invoices
 		/// <summary>
-		/// 
+		/// Lists the stripe invoices for a stripe customer.
 		/// </summary>
-		/// <param name="customerId"></param>
-		/// <returns></returns>
+		/// <param name="customerId">The stripe customer id of the customer for which the invoices shall be listed.</param>
+		/// <returns>A list of info objects for stripe invoices.</returns>
 		public List<BillingServicesInvoice> ListInvoices(BillingServicesCustomerId customerId)
 		{
 			StripeInvoiceListOptions invoiceListOptions = new StripeInvoiceListOptions();
@@ -295,23 +301,11 @@ namespace AllyisApps.BillingServices.StripeService
 		#endregion
 
 		#region helper methods
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="billingServicesToken"></param>
-		/// <returns></returns>
 		private StripeToken GenerateStripeToken(string billingServicesToken)
 		{
 			return this.tokenService.Get(billingServicesToken);
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="amount"></param>
-		/// <param name="interval"></param>
-		/// <param name="planName"></param>
-		/// <returns></returns>
 		private StripePlan CreateStripePlan(int amount, string interval, string planName)
 		{
 			Random r = new Random();
