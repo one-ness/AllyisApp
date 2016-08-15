@@ -1,10 +1,12 @@
-﻿//function element_change(where, add, remove) {
-//    var $el = $(where);
-//    if ($el.hasClass(add) || $el.hasClass(remove)) {
-//        $el.addClass('was-set');
-//    }
-//    $el.addClass(add).removeClass(remove);
-//}
+﻿function element_change(where, add, remove) {
+    var el = $(where);
+    console.log(where);
+    console.log(el);
+    if (el.hasClass(add) || el.hasClass(remove)) {
+        el.addClass('was-set');
+    }
+    el.addClass(add).removeClass(remove);
+}
 
 //Validate subdomain both when it autofills and when user edits it themself
 $("#SubdomainName").on("paste keyup", _.debounce(validateSubdomain, 250));

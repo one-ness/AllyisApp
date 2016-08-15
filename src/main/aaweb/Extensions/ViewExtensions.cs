@@ -194,8 +194,19 @@ namespace AllyisApps.Extensions.ViewExtensions
 								HttpRequestBase request)
 		{
 			string area = null;
-			if (routeValues != null) if (routeValues.ContainsKey("area")) area = routeValues["area"].ToString();
-			return urlHelper.Action(ActionConstants.RedirectToSubdomainAction, new RouteValueDictionary(new { pOrganizationId = organizationId, pArea = area, pAction = action, pController = controller}));
+			if (routeValues != null) // Any passed in route values are preserved.
+			{
+				if (routeValues.ContainsKey("area")) area = routeValues["area"].ToString();
+			} else
+			{
+				routeValues = new RouteValueDictionary();
+			}
+			routeValues.Add("pOrganizationId", organizationId);
+			routeValues.Add("pArea", area);
+			routeValues.Add("pAction", action);
+			routeValues.Add("pController", controller);
+			
+			return urlHelper.Action(ActionConstants.RedirectToSubdomainAction, routeValues);
 
 		////// SEPARATING OUT THE MIDDLE
 		////string middle = request.Url.ToString();
