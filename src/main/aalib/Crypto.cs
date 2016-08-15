@@ -71,28 +71,19 @@ namespace AllyisApps.Lib
 		/// <returns>The decrypted data.</returns>
 		public static string Unprotect(string base64Input, string base64Key, string base64Iv)
 		{
-            try
-            {
-                byte[] from = Convert.FromBase64String(base64Input);
-                byte[] keyBytes = Convert.FromBase64String(base64Key);
-                byte[] ivBytes = Convert.FromBase64String(base64Iv);
+			try
+			{
+				byte[] from = Convert.FromBase64String(base64Input);
+				byte[] keyBytes = Convert.FromBase64String(base64Key);
+				byte[] ivBytes = Convert.FromBase64String(base64Iv);
 
-                byte[] decrypted = Decrypt(keyBytes, ivBytes, from);
-                return encoding.GetString(decrypted);
-            }
-            // when statement will not compile with msbuild, split into separate catch blocks instead
-            catch (EncoderFallbackException ex) //when (ex is EncoderFallbackException || ex is DecoderFallbackException || ex is FormatException)
-            {
-                throw new AllyisAppsLibraryException("Decryption Failed.", ex);
-            }
-            catch (DecoderFallbackException ex)
-            {
-                throw new AllyisAppsLibraryException("Decryption Failed.", ex);
-            }
-            catch (FormatException ex)
-            {
-                throw new AllyisAppsLibraryException("Decryption Failed.", ex);
-            }
+				byte[] decrypted = Decrypt(keyBytes, ivBytes, from);
+				return encoding.GetString(decrypted);
+			}
+			catch (Exception ex) when (ex is EncoderFallbackException || ex is DecoderFallbackException || ex is FormatException)
+			{
+				throw new AllyisAppsLibraryException("Decryption Failed.", ex);
+			}
 		}
 
 		/// <summary>
@@ -105,37 +96,32 @@ namespace AllyisApps.Lib
 		[SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "BrainSlugs83 said so on StackOverflow.")]
 		private static byte[] Encrypt(byte[] key, byte[] iv, byte[] to)
 		{
-            try
-            {
-                // Get an encryptor.
-                using (RijndaelManaged algorithm = new RijndaelManaged())
-                {
-                    using (ICryptoTransform encryptor = algorithm.CreateEncryptor(key, iv))
-                    {
-                        // Encrypt the data.
-                        using (MemoryStream msEncrypt = new MemoryStream())
-                        {
-                            using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                            {
-                                // Write all data to the crypto stream and flush it.
-                                csEncrypt.Write(to, 0, to.Length);
-                                csEncrypt.FlushFinalBlock();
+			try
+			{
+				// Get an encryptor.
+				using (RijndaelManaged algorithm = new RijndaelManaged())
+				{
+					using (ICryptoTransform encryptor = algorithm.CreateEncryptor(key, iv))
+					{
+						// Encrypt the data.
+						using (MemoryStream msEncrypt = new MemoryStream())
+						{
+							using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+							{
+								// Write all data to the crypto stream and flush it.
+								csEncrypt.Write(to, 0, to.Length);
+								csEncrypt.FlushFinalBlock();
 
-                                return msEncrypt.ToArray();
-                            }
-                        }
-                    }
-                }
-            }
-            // when statement will not compile with msbuild, split into separate catch blocks instead
-            catch (CryptographicException ex) //when (ex is CryptographicException || ex is NotSupportedException)
-            {
-                throw new AllyisAppsLibraryException("Encryption Failed.", ex);
-            }
-            catch (NotSupportedException ex)
-            {
-                throw new AllyisAppsLibraryException("Encryption Failed.", ex);
-            }
+								return msEncrypt.ToArray();
+							}
+						}
+					}
+				}
+			}
+			catch (Exception ex) when (ex is CryptographicException || ex is NotSupportedException)
+			{
+				throw new AllyisAppsLibraryException("Encryption Failed.", ex);
+			}
 		}
 
 		/// <summary>
@@ -148,41 +134,36 @@ namespace AllyisApps.Lib
 		[SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "BrainSlugs83 said so on StackOverflow.")]
 		private static byte[] Decrypt(byte[] key, byte[] iv, byte[] from)
 		{
-            try
-            {
-                // Get a decryptor.
-                using (RijndaelManaged algorithm = new RijndaelManaged())
-                {
-                    using (ICryptoTransform decryptor = algorithm.CreateDecryptor(key, iv))
-                    {
-                        // Decrypt the data.
-                        using (MemoryStream msDecrypt = new MemoryStream(from))
-                        {
-                            using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                            {
-                                byte[] decrypted = new byte[from.Length];
+			try
+			{
+				// Get a decryptor.
+				using (RijndaelManaged algorithm = new RijndaelManaged())
+				{
+					using (ICryptoTransform decryptor = algorithm.CreateDecryptor(key, iv))
+					{
+						// Decrypt the data.
+						using (MemoryStream msDecrypt = new MemoryStream(from))
+						{
+							using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+							{
+								byte[] decrypted = new byte[from.Length];
 
-                                // Read all data from crypto stream.
-                                int readCount = csDecrypt.Read(decrypted, 0, decrypted.Length);
+								// Read all data from crypto stream.
+								int readCount = csDecrypt.Read(decrypted, 0, decrypted.Length);
 
-                                // get bytes read and create array.
-                                byte[] retValue = new byte[readCount];
-                                Array.Copy(decrypted, retValue, readCount);
-                                return retValue;
-                            }
-                        }
-                    }
-                }
-            }
-            // when statement will not compile with msbuild, split into separate catch blocks instead
-            catch (CryptographicException ex) //when (ex is CryptographicException || ex is NotSupportedException)
-            {
-                throw new AllyisAppsLibraryException("Decryption Failed.", ex);
-            }
-            catch (NotSupportedException ex)
-            {
-                throw new AllyisAppsLibraryException("Decryption Failed.", ex);
-            }
+								// get bytes read and create array.
+								byte[] retValue = new byte[readCount];
+								Array.Copy(decrypted, retValue, readCount);
+								return retValue;
+							}
+						}
+					}
+				}
+			}
+			catch (Exception ex) when (ex is CryptographicException || ex is NotSupportedException)
+			{
+				throw new AllyisAppsLibraryException("Decryption Failed.", ex);
+			}
 		}
 	}
 }
