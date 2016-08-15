@@ -77,7 +77,7 @@ namespace AllyisApps.BillingServices
 		/// Currently not supported.
 		/// </summary>
 		/// <returns>The requested BillingPlan.</returns>
-		public BillingPlan RetrievePlan()
+		public BillingServicesPlan RetrievePlan()
 		{
 			return this.service.RetrievePlan();
 		}
@@ -129,7 +129,7 @@ namespace AllyisApps.BillingServices
 		/// </summary>
 		/// <param name="customerId">The customer id associated with the customer you are trying to retrieve.</param>
 		/// <returns>The billing customer object.</returns>
-		public BillingCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
+		public BillingServicesCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
 		{
 			return this.service.RetrieveCustomer(customerId);
 		}
@@ -141,7 +141,7 @@ namespace AllyisApps.BillingServices
 		/// Calls the ListCustomers method in the appropriate BillingServicesInterface implementing object.
 		/// </summary>
 		/// <returns>A list of BillingCustomer objects.</returns>
-		public List<BillingCustomer> ListCustomers()
+		public List<BillingServicesCustomer> ListCustomers()
 		{
 			return this.service.ListCustomers();
 		}
@@ -194,7 +194,7 @@ namespace AllyisApps.BillingServices
 		/// Calls the RetrieveSubscription method in the appropriate BillingServicesInterface implementing object.
 		/// </summary>
 		/// <returns>The billing subscription object.</returns>
-		public BillingSubscription RetrieveSubscription()
+		public BillingServicesSubscription RetrieveSubscription()
 		{
 			return this.service.RetrieveSubscription();
 		}
@@ -206,7 +206,7 @@ namespace AllyisApps.BillingServices
 		/// Calls the ListSubscriptions method in the appropriate BillingServicesInterface implementing object.
 		/// </summary>
 		/// <returns>A list of billing subscription objects.</returns>
-		public List<BillingSubscription> ListSubscriptions()
+		public List<BillingServicesSubscription> ListSubscriptions()
 		{
 			return this.service.ListSubscriptions();
 		}
@@ -260,7 +260,7 @@ namespace AllyisApps.BillingServices
 		/// Calls the RetrieveCharge method in the appropriate BillingServicesInterface implementing object.
 		/// </summary>
 		/// <returns>The billing charge.</returns>
-		public BillingCharge RetrieveCharge()
+		public BillingServicesCharge RetrieveCharge()
 		{
 			return this.RetrieveCharge();
 		}
@@ -273,7 +273,7 @@ namespace AllyisApps.BillingServices
 		/// </summary>
 		/// <param name="customerId">The customer id for which the charges shall be listed.</param>
 		/// <returns>A list of Billing charge objects.</returns>
-		public List<BillingCharge> ListCharges(BillingServicesCustomerId customerId)
+		public List<BillingServicesCharge> ListCharges(BillingServicesCustomerId customerId)
 		{
 			return this.service.ListCharges(customerId);
 		}
@@ -285,7 +285,7 @@ namespace AllyisApps.BillingServices
 		/// </summary>
 		/// <param name="customerId">The customer ID for the customer whose invoices are being requested.</param>
 		/// <returns>A list of billing invoice objects.</returns>
-		public List<BillingInvoice> ListInvoices(BillingServicesCustomerId customerId)
+		public List<BillingServicesInvoice> ListInvoices(BillingServicesCustomerId customerId)
 		{
 			return this.service.ListInvoices(customerId);
 		}

@@ -1,11 +1,17 @@
-﻿using System;
+﻿//------------------------------------------------------------------------------
+// <copyright file="BillingServicesInvoice.cs" company="Allyis, Inc.">
+//     Copyright (c) Allyis, Inc.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System;
 
 namespace AllyisApps.BillingServices.Common.Types
 {
 	/// <summary>
-	/// 
+	/// An info object for a Billing services Invoice.
 	/// </summary>
-	public class BillingInvoice
+	public class BillingServicesInvoice
 	{
 		#region private fields
 		private readonly int amountDue;
@@ -17,14 +23,14 @@ namespace AllyisApps.BillingServices.Common.Types
 
 		#region constructor
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the <see cref="BillingServicesInvoice"/> class.
 		/// </summary>
-		/// <param name="amountDue"></param>
-		/// <param name="date"></param>
-		/// <param name="id"></param>
-		/// <param name="productName"></param>
-		/// <param name="service"></param>
-		public BillingInvoice(int amountDue, DateTime? date, string id, string productName, string service)
+		/// <param name="amountDue">The ammount due.</param>
+		/// <param name="date">The invoice date.</param>
+		/// <param name="id">The invoice id.</param>
+		/// <param name="productName">The product name.</param>
+		/// <param name="service">The service handling the invoice.</param>
+		public BillingServicesInvoice(int amountDue, DateTime? date, string id, string productName, string service)
 		{
 			this.amountDue = amountDue;
 			this.date = date;
@@ -36,7 +42,7 @@ namespace AllyisApps.BillingServices.Common.Types
 
 		#region accessor properties
 		/// <summary>
-		/// 
+		/// Gets the amount due.
 		/// </summary>
 		public int AmountDue
 		{
@@ -47,7 +53,7 @@ namespace AllyisApps.BillingServices.Common.Types
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the date. Nullable.
 		/// </summary>
 		public DateTime? Date
 		{
@@ -58,7 +64,7 @@ namespace AllyisApps.BillingServices.Common.Types
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the invoice id.
 		/// </summary>
 		public string Id
 		{
@@ -69,7 +75,7 @@ namespace AllyisApps.BillingServices.Common.Types
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the product name.
 		/// </summary>
 		public string ProductName
 		{
@@ -80,7 +86,7 @@ namespace AllyisApps.BillingServices.Common.Types
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the billing service assoiated with the invoice.
 		/// </summary>
 		public string Service
 		{

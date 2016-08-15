@@ -57,7 +57,7 @@ namespace AllyisApps.BillingServices.StripeService
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public BillingPlan RetrievePlan()
+		public BillingServicesPlan RetrievePlan()
 		{
 			throw new NotImplementedException();
 		}
@@ -104,12 +104,12 @@ namespace AllyisApps.BillingServices.StripeService
 		/// </summary>
 		/// <param name="customerId"></param>
 		/// <returns></returns>
-		public BillingCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
+		public BillingServicesCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
 		{
 			// there is almost definitely some exception handling that will need to be done here.
 			StripeCustomer stripeCustomer = this.customerService.Get(customerId.Id);
 
-			BillingCustomer customer = new BillingCustomer(
+			BillingServicesCustomer customer = new BillingServicesCustomer(
 				customerId,
 				last4: stripeCustomer.SourceList.Data[0].Last4);
 			return customer;
@@ -119,7 +119,7 @@ namespace AllyisApps.BillingServices.StripeService
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public List<BillingCustomer> ListCustomers()
+		public List<BillingServicesCustomer> ListCustomers()
 		{
 			throw new NotImplementedException();
 		}
@@ -173,7 +173,7 @@ namespace AllyisApps.BillingServices.StripeService
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public BillingSubscription RetrieveSubscription()
+		public BillingServicesSubscription RetrieveSubscription()
 		{
 			throw new NotImplementedException();
 		}
@@ -182,7 +182,7 @@ namespace AllyisApps.BillingServices.StripeService
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public List<BillingSubscription> ListSubscriptions()
+		public List<BillingServicesSubscription> ListSubscriptions()
 		{
 			throw new NotImplementedException();
 		}
@@ -243,7 +243,7 @@ namespace AllyisApps.BillingServices.StripeService
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public BillingCharge RetrieveCharge()
+		public BillingServicesCharge RetrieveCharge()
 		{
 			throw new NotImplementedException();
 		}
@@ -253,16 +253,16 @@ namespace AllyisApps.BillingServices.StripeService
 		/// </summary>
 		/// <param name="customerId"></param>
 		/// <returns></returns>
-		public List<BillingCharge> ListCharges(BillingServicesCustomerId customerId)
+		public List<BillingServicesCharge> ListCharges(BillingServicesCustomerId customerId)
 		{
 			var chargeService = new StripeChargeService();
 			IEnumerable<StripeCharge> stripeCharges = this.chargeService.List(); // optional StripeChargeListOptions
-			List<BillingCharge> billingCharges = new List<BillingCharge>();
+			List<BillingServicesCharge> billingCharges = new List<BillingServicesCharge>();
 			foreach (StripeCharge stripeCharge in stripeCharges)
 			{
 				if (stripeCharge.CustomerId == customerId.Id)
 				{
-					billingCharges.Add(new BillingCharge(stripeCharge.Amount, stripeCharge.Created, stripeCharge.Id, stripeCharge.StatementDescriptor));
+					billingCharges.Add(new BillingServicesCharge(stripeCharge.Amount, stripeCharge.Created, stripeCharge.Id, stripeCharge.StatementDescriptor));
 				}
 			}
 
@@ -276,17 +276,17 @@ namespace AllyisApps.BillingServices.StripeService
 		/// </summary>
 		/// <param name="customerId"></param>
 		/// <returns></returns>
-		public List<BillingInvoice> ListInvoices(BillingServicesCustomerId customerId)
+		public List<BillingServicesInvoice> ListInvoices(BillingServicesCustomerId customerId)
 		{
 			StripeInvoiceListOptions invoiceListOptions = new StripeInvoiceListOptions();
 			invoiceListOptions.CustomerId = customerId.Id;
 			invoiceListOptions.Limit = 10000;
 			IEnumerable<StripeInvoice> stripeInvoices = this.invoiceService.List(invoiceListOptions); // optional StripeInvoiceListOptions
 
-			List<BillingInvoice> invoiceList = new List<BillingInvoice>();
+			List<BillingServicesInvoice> invoiceList = new List<BillingServicesInvoice>();
 			foreach (StripeInvoice stripeInvoice in stripeInvoices)
 			{
-				invoiceList.Add(new BillingInvoice(stripeInvoice.AmountDue, stripeInvoice.Date, stripeInvoice.Id, stripeInvoice.StripeInvoiceLineItems.Data[0].Plan.Name, "Stripe"));
+				invoiceList.Add(new BillingServicesInvoice(stripeInvoice.AmountDue, stripeInvoice.Date, stripeInvoice.Id, stripeInvoice.StripeInvoiceLineItems.Data[0].Plan.Name, "Stripe"));
 			}
 
 			return invoiceList;

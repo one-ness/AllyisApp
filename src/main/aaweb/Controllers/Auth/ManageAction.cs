@@ -70,7 +70,7 @@ namespace AllyisApps.Controllers
 			});
 
 			BillingServicesCustomerId customerId = CrmService.GetOrgBillingServicesCustomerId();
-			BillingCustomer customer = (customerId == null) ? null : CrmService.RetrieveCustomer(customerId);
+			BillingServicesCustomer customer = (customerId == null) ? null : CrmService.RetrieveCustomer(customerId);
 
 			return new OrganizationManageViewModel
 			{

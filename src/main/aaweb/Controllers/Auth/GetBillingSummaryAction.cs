@@ -44,7 +44,7 @@ namespace AllyisApps.Controllers
 			BillingServicesCustomerId customerId = CrmService.GetOrgBillingServicesCustomerId();
 			if (customerId != null)
 			{
-				foreach (BillingInvoice invoice in CrmService.ListInvoices(customerId))
+				foreach (BillingServicesInvoice invoice in CrmService.ListInvoices(customerId))
 				{
 					result.Add(new BillingHistoryItemViewModel
 					{
@@ -56,7 +56,7 @@ namespace AllyisApps.Controllers
 					});
 				}
 
-				foreach (BillingCharge charge in CrmService.ListCharges(customerId))
+				foreach (BillingServicesCharge charge in CrmService.ListCharges(customerId))
 				{
 					result.Add(new BillingHistoryItemViewModel
 					{

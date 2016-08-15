@@ -17,9 +17,9 @@ namespace AllyisApps.BillingServices.Common.Types
 
 		#region constructor
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the <see cref="BillingServicesToken"/> class.
 		/// </summary>
-		/// <param name="token"></param>
+		/// <param name="token">The token for the container.</param>
 		public BillingServicesToken(string token)
 		{
 			this.token = token;
@@ -28,7 +28,7 @@ namespace AllyisApps.BillingServices.Common.Types
 
 		#region accessor properties
 		/// <summary>
-		/// 
+		/// Gets the Token.
 		/// </summary>
 		public string Token
 		{

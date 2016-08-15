@@ -1,11 +1,17 @@
-﻿using System;
+﻿//------------------------------------------------------------------------------
+// <copyright file="BillingServicesCustomer.cs" company="Allyis, Inc.">
+//     Copyright (c) Allyis, Inc.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System;
 
 namespace AllyisApps.BillingServices.Common.Types
 {
 	/// <summary>
-	/// 
+	/// An info object for a Billing Services Customer.
 	/// </summary>
-	public class BillingCustomer
+	public class BillingServicesCustomer
 	{
 		#region private fields
 		private readonly BillingServicesCustomerId billingServicesCustomerId;
@@ -14,11 +20,11 @@ namespace AllyisApps.BillingServices.Common.Types
 
 		#region constructor
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the <see cref="BillingServicesCustomer"/> class.
 		/// </summary>
-		/// <param name="customerId"></param>
-		/// <param name="last4"></param>
-		public BillingCustomer(BillingServicesCustomerId customerId, string last4 = "nnnn")
+		/// <param name="customerId">The billing services customer ID.</param>
+		/// <param name="last4">The last 4 digits of the customer's payment card.</param>
+		public BillingServicesCustomer(BillingServicesCustomerId customerId, string last4 = "nnnn")
 		{
 			#region last4 validation
 			if (last4.Length != 4)
@@ -40,7 +46,7 @@ namespace AllyisApps.BillingServices.Common.Types
 
 		#region accessor properties
 		/// <summary>
-		/// 
+		/// Gets the ID.
 		/// </summary>
 		public BillingServicesCustomerId Id
 		{
@@ -51,7 +57,7 @@ namespace AllyisApps.BillingServices.Common.Types
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the Last 4.
 		/// </summary>
 		public string Last4
 		{

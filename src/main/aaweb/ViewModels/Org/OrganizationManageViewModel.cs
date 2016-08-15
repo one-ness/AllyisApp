@@ -50,7 +50,7 @@ namespace AllyisApps.ViewModels
 		/// <summary>
 		/// Gets or sets the stripe Token id. 
 		/// </summary>
-		public BillingCustomer BillingCustomer { get; set; }
+		public BillingServicesCustomer BillingCustomer { get; set; }
 
 		/// <summary>
 		/// Gets or sets the last four digits of credit card. 

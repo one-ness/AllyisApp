@@ -1,11 +1,17 @@
-﻿using System;
+﻿//------------------------------------------------------------------------------
+// <copyright file="BillingServicesCharge.cs" company="Allyis, Inc.">
+//     Copyright (c) Allyis, Inc.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System;
 
 namespace AllyisApps.BillingServices.Common.Types
 {
 	/// <summary>
-	/// 
+	/// An info object for a Billing Services Charge.
 	/// </summary>
-	public class BillingCharge
+	public class BillingServicesCharge
 	{
 		#region private fields
 		private readonly int amount;
@@ -17,14 +23,14 @@ namespace AllyisApps.BillingServices.Common.Types
 
 		#region constructor
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the <see cref="BillingServicesCharge"/> class.
 		/// </summary>
-		/// <param name="amount"></param>
-		/// <param name="created"></param>
-		/// <param name="id"></param>
-		/// <param name="statementDescriptor"></param>
-		/// <param name="service"></param>
-		public BillingCharge(int amount, DateTime created, string id, string statementDescriptor, string service = "Stripe")
+		/// <param name="amount">The charge amount.</param>
+		/// <param name="created">The date for the charge.</param>
+		/// <param name="id">The charge ID.</param>
+		/// <param name="statementDescriptor">Description text for the charge.</param>
+		/// <param name="service">The billing service associated with the charge.</param>
+		public BillingServicesCharge(int amount, DateTime created, string id, string statementDescriptor, string service = "Stripe")
 		{
 			this.amount = amount;
 			this.created = created;
@@ -36,7 +42,7 @@ namespace AllyisApps.BillingServices.Common.Types
 
 		#region accessor properties
 		/// <summary>
-		/// 
+		/// Gets the charge amount.
 		/// </summary>
 		public int Amount
 		{
@@ -47,7 +53,7 @@ namespace AllyisApps.BillingServices.Common.Types
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the charge date.
 		/// </summary>
 		public DateTime Created
 		{
@@ -58,7 +64,7 @@ namespace AllyisApps.BillingServices.Common.Types
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the charge ID.
 		/// </summary>
 		public string Id
 		{
@@ -69,7 +75,7 @@ namespace AllyisApps.BillingServices.Common.Types
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the description statement for the charge.
 		/// </summary>
 		public string StatementDescriptor
 		{
@@ -80,7 +86,7 @@ namespace AllyisApps.BillingServices.Common.Types
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the service associated with the charge.
 		/// </summary>
 		public string Service
 		{

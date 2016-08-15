@@ -38,6 +38,6 @@ namespace AllyisApps.ViewModels
 		/// <summary>
 		/// Gets or sets the customer to get billed. 
 		/// </summary>
-		public BillingCustomer Customer { get; set; }
+		public BillingServicesCustomer Customer { get; set; }
 	}
 }

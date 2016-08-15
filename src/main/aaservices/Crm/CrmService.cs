@@ -72,7 +72,7 @@ namespace AllyisApps.Services.Crm
 		/// <param name="customerId"></param>
 		/// <returns></returns>
 		[CLSCompliant(false)]
-		public List<BillingInvoice> ListInvoices(BillingServicesCustomerId customerId)
+		public List<BillingServicesInvoice> ListInvoices(BillingServicesCustomerId customerId)
 		{
 			string serviceType = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(serviceType);
@@ -85,7 +85,7 @@ namespace AllyisApps.Services.Crm
 		/// <param name="customerId"></param>
 		/// <returns></returns>
 		[CLSCompliant(false)]
-		public List<BillingCharge> ListCharges(BillingServicesCustomerId customerId)
+		public List<BillingServicesCharge> ListCharges(BillingServicesCustomerId customerId)
 		{
 			string serviceType = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(serviceType);
@@ -963,7 +963,7 @@ namespace AllyisApps.Services.Crm
 		/// <param name="customerId">The customerId to use when retrieving the BillingCustomer.</param>
 		/// <returns>The billing customer.</returns>
 		[CLSCompliant(false)]
-		public BillingCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
+		public BillingServicesCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
 		{
 			string serviceType = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(serviceType);

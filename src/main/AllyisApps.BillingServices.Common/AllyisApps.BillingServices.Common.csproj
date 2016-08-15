@@ -40,14 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Types\BillingCharge.cs" />
-    <Compile Include="Types\BillingCustomer.cs" />
-    <Compile Include="Types\BillingInvoice.cs" />
-    <Compile Include="Types\BillingPlan.cs" />
+    <Compile Include="Types\BillingServicesCharge.cs" />
+    <Compile Include="Types\BillingServicesCustomer.cs" />
+    <Compile Include="Types\BillingServicesInvoice.cs" />
+    <Compile Include="Types\BillingServicesPlan.cs" />
     <Compile Include="Types\BillingServicesCustomerId.cs" />
     <Compile Include="Types\BillingServicesSubscriptionId.cs" />
     <Compile Include="Types\BillingServicesToken.cs" />
-    <Compile Include="Types\BillingSubscription.cs" />
+    <Compile Include="Types\BillingServicesSubscription.cs" />
     <Compile Include="IBillingServicesInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

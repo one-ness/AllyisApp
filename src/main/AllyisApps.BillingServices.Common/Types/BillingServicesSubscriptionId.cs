@@ -21,7 +21,7 @@ namespace AllyisApps.BillingServices.Common.Types
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BillingServicesSubscriptionId"/> class.
 		/// </summary>
-		/// <param name="id">The id for the container.</param>
+		/// <param name="id">The ID for the container.</param>
 		public BillingServicesSubscriptionId(string id)
 		{
 			if (string.IsNullOrEmpty(id))
