@@ -67,10 +67,10 @@ namespace AllyisApps.Services.Crm
 		}
 
 		/// <summary>
-		/// 
+		/// Lists Billing Service invoices for a given customer.
 		/// </summary>
-		/// <param name="customerId"></param>
-		/// <returns></returns>
+		/// <param name="customerId">The id of the customer for which the invoices should be listed.</param>
+		/// <returns>The list of invoices.</returns>
 		[CLSCompliant(false)]
 		public List<BillingServicesInvoice> ListInvoices(BillingServicesCustomerId customerId)
 		{
@@ -80,10 +80,10 @@ namespace AllyisApps.Services.Crm
 		}
 
 		/// <summary>
-		/// 
+		/// Lists Billing Service charges for a given customer.
 		/// </summary>
-		/// <param name="customerId"></param>
-		/// <returns></returns>
+		/// <param name="customerId">The id of the customer for which the charges should be listed.</param>
+		/// <returns>The list of charges.</returns>
 		[CLSCompliant(false)]
 		public List<BillingServicesCharge> ListCharges(BillingServicesCustomerId customerId)
 		{
@@ -297,28 +297,16 @@ namespace AllyisApps.Services.Crm
 		}
 
 		/// <summary>
-		/// 
+		/// Deletes a billing services subscription.
 		/// </summary>
-		/// <param name="id"></param>
-		/// <param name="subscriptionId"></param>
+		/// <param name="id">The customer id associated with the subscription to be deleted.</param>
+		/// <param name="subscriptionId">The id of the subscription to delete.</param>
 		[CLSCompliant(false)]
 		public void DeleteSubscription(BillingServicesCustomerId id, string subscriptionId)
 		{
 			string serviceType = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(serviceType);
 		}
-
-		/////// <summary>
-		/////// Generates the stripe token.
-		/////// </summary>
-		/////// <param name="id">The token id.</param>
-		/////// <returns>A token.</returns>
-		////[CLSCompliant(false)]
-		////public StripeToken GenerateToken(string id)
-		////{
-		////	var tokenService = new StripeTokenService();
-		////	return tokenService.Get(id);
-		////}
 
 		/// <summary>
 		/// Creates a billingServices customer.
