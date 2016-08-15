@@ -24,11 +24,6 @@ namespace AllyisApps.BillingServices.Common.Types
 		/// <param name="id">The ID for the container.</param>
 		public BillingServicesCustomerId(string id)
 		{
-			if (string.IsNullOrEmpty(id))
-			{
-				throw new ArgumentNullException("id", "id must have a value.");
-			}
-
 			this.id = id;
 		}
 		#endregion

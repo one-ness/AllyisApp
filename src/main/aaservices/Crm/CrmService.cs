@@ -375,7 +375,8 @@ namespace AllyisApps.Services.Crm
 		[CLSCompliant(false)]
 		public BillingServicesCustomerId GetOrgBillingServicesCustomerId()
 		{
-			return new BillingServicesCustomerId(DBHelper.GetOrgCustomer(UserContext.ChosenOrganizationId));
+			string id = DBHelper.GetOrgCustomer(UserContext.ChosenOrganizationId);
+			return new BillingServicesCustomerId(id);
 		}
 
 		/// <summary>
@@ -953,6 +954,12 @@ namespace AllyisApps.Services.Crm
 		[CLSCompliant(false)]
 		public BillingServicesCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
 		{
+			if(string.IsNullOrEmpty(customerId.Id))
+			{
+				//return null, as there is no customer.
+				return null;
+			}
+
 			string serviceType = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(serviceType);
 			return handler.RetrieveCustomer(customerId);
