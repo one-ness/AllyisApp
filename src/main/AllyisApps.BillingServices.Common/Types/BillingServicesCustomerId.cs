@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//------------------------------------------------------------------------------
+// <copyright file="BillingServicesCustomerId.cs" company="Allyis, Inc.">
+//     Copyright (c) Allyis, Inc.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System;
 
 namespace AllyisApps.BillingServices.Common.Types
 {
 	/// <summary>
-	/// 
+	/// Container class for a Billing Services Customer ID.
 	/// </summary>
 	public class BillingServicesCustomerId
 	{
@@ -17,7 +19,7 @@ namespace AllyisApps.BillingServices.Common.Types
 
 		#region constructor
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the <see cref="BillingServicesCustomerId"/> class.
 		/// </summary>
 		/// <param name="id"></param>
 		public BillingServicesCustomerId(string id)
@@ -33,7 +35,7 @@ namespace AllyisApps.BillingServices.Common.Types
 
 		#region accessor properties
 		/// <summary>
-		/// 
+		/// Gets the customer ID.
 		/// </summary>
 		public string Id
 		{

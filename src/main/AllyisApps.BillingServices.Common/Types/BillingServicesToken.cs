@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//------------------------------------------------------------------------------
+// <copyright file="BillingServicesToken.cs" company="Allyis, Inc.">
+//     Copyright (c) Allyis, Inc.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
 
 namespace AllyisApps.BillingServices.Common.Types
 {
 	/// <summary>
-	/// 
+	/// Container class for a Billing Services Token.
 	/// </summary>
 	public class BillingServicesToken
 	{

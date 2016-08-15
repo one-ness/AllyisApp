@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//------------------------------------------------------------------------------
+// <copyright file="BillingServicesSubscriptionId.cs" company="Allyis, Inc.">
+//     Copyright (c) Allyis, Inc.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System;
 
 namespace AllyisApps.BillingServices.Common.Types
 {
 	/// <summary>
-	/// 
+	/// Container class for a Billing Services Subscription ID.
 	/// </summary>
 	public class BillingServicesSubscriptionId
 	{
@@ -17,9 +19,9 @@ namespace AllyisApps.BillingServices.Common.Types
 
 		#region constructor
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the <see cref="BillingServicesSubscriptionId"/> class.
 		/// </summary>
-		/// <param name="id"></param>
+		/// <param name="id">The id for the container.</param>
 		public BillingServicesSubscriptionId(string id)
 		{
 			if (string.IsNullOrEmpty(id))
@@ -33,7 +35,7 @@ namespace AllyisApps.BillingServices.Common.Types
 
 		#region accessor properties
 		/// <summary>
-		/// 
+		/// Gets the subscription id.
 		/// </summary>
 		public string Id
 		{
