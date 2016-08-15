@@ -4,8 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Auth;
-
 namespace AllyisApps.Services.Account
 {
 	/// <summary>

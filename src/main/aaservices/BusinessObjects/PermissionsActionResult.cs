@@ -4,17 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace AllyisApps.BusinessObjects
 {
-    /// <summary>
-    /// An object representing the results of a PermissionsAction.
-    /// </summary>
-    public class PermissionsActionResult
+	/// <summary>
+	/// An object representing the results of a PermissionsAction.
+	/// </summary>
+	public class PermissionsActionResult
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PermissionsActionResult" /> class.

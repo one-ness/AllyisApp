@@ -4,9 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Text.RegularExpressions;
-
 namespace AllyisApps.Areas.TimeTracker.Models
 {
 	/// <summary>

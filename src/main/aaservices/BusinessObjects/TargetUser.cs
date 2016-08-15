@@ -4,19 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Web;
-using AllyisApps.DBModel;
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.Services.BusinessObjects;
-
 namespace AllyisApps.BusinessObjects
-{	
+{
 	/// <summary>
 	/// A user to perform actions on.
 	/// </summary>

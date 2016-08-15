@@ -4,19 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Services.Account;
-using Dapper;
 
 namespace AllyisApps.Services.BusinessObjects
 {

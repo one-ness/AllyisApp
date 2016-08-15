@@ -7,7 +7,6 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
-using AllyisApps.BillingServices;
 using AllyisApps.BillingServices.Common.Types;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;

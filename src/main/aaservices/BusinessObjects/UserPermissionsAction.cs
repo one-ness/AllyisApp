@@ -4,17 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using AllyisApps.DBModel;
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
 
 namespace AllyisApps.BusinessObjects
 {
-    /// <summary>
+	/// <summary>
 	/// Object represnting a list of users and the actions to perform on them.
 	/// </summary>
 	public class UserPermissionsAction

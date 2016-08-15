@@ -4,18 +4,16 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 using AllyisApps.Services.BusinessObjects;
 
 namespace AllyisApps.Areas.TimeTracker.Models
 {
-    /// <summary>
-    /// Representation of a Time Entry to edit.
-    /// </summary>
-    public class EditTimeEntryViewModel
+	/// <summary>
+	/// Representation of a Time Entry to edit.
+	/// </summary>
+	public class EditTimeEntryViewModel
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EditTimeEntryViewModel" /> class.

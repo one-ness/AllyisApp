@@ -5,17 +5,13 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AllyisApps.DBModel.TimeTracker
 {
-    /// <summary>
-    /// Pay class.
-    /// </summary>
-    public class PayClassDBEntity : BasePoco
+	/// <summary>
+	/// Pay class.
+	/// </summary>
+	public class PayClassDBEntity : BasePoco
     {
         private int pPayClassID;
         private string pName;

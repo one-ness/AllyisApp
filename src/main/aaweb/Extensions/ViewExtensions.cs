@@ -14,8 +14,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
-
-using AllyisApps.Core;
 using AllyisApps.Utilities;
 
 namespace AllyisApps.Extensions.ViewExtensions

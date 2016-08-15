@@ -6,7 +6,6 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
-using AllyisApps.Utilities;
 
 namespace AllyisApps.Utilities
 {

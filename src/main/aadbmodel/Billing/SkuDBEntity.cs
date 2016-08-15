@@ -4,8 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Diagnostics;
-
 namespace AllyisApps.DBModel.Billing
 {
 	/// <summary>

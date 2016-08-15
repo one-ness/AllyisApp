@@ -6,10 +6,8 @@
 
 using System;
 using System.Web.Mvc;
-using AllyisApps.BillingServices;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
-using AllyisApps.Utilities;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers

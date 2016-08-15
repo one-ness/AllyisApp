@@ -9,10 +9,10 @@ using AllyisApps.Services.BusinessObjects;
 
 namespace AllyisApps.Areas.TimeTracker.Models
 {
-    /// <summary>
-    /// Model for the UserEdit view.
-    /// </summary>
-    public class UserEditViewModel
+	/// <summary>
+	/// Model for the UserEdit view.
+	/// </summary>
+	public class UserEditViewModel
 	{
 		/// <summary>
 		/// Gets or sets the id of the user.
