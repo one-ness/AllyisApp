@@ -3,9 +3,9 @@ $curCommit = git log -n1 --oneline
 $lastCommit = type ..\curCommit.log
 if($curCommit -ne $lastCommit)
 {
-    $curCommit > ..\curCommit.log
     svn commit -m "$curDate"
     git tag "Releases/$curDate"
     git push --tags
+	$curCommit > ..\curCommit.log
 }
 exit 1
