@@ -24,8 +24,9 @@ namespace AllyisApps.BillingServices.Common.Types
 		/// Initializes a new instance of the <see cref="BillingServicesCustomer"/> class.
 		/// </summary>
 		/// <param name="customerId">The billing services customer ID.</param>
+		/// <param name="email">The customer's email.</param>
 		/// <param name="last4">The last 4 digits of the customer's payment card.</param>
-		public BillingServicesCustomer(BillingServicesCustomerId customerId,string email, string last4 = "nnnn")
+		public BillingServicesCustomer(BillingServicesCustomerId customerId, string email, string last4 = "nnnn")
 		{
 			#region last4 validation
 			if (last4.Length != 4)

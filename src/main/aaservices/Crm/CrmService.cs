@@ -91,7 +91,7 @@ namespace AllyisApps.Services.Crm
 			BillingServicesHandler handler = new BillingServicesHandler(serviceType);
 			return handler.ListCharges(customerId);
 		}
-		
+
 		/// <summary>
 		/// Sets the UserContext.
 		/// </summary>
@@ -954,9 +954,9 @@ namespace AllyisApps.Services.Crm
 		[CLSCompliant(false)]
 		public BillingServicesCustomer RetrieveCustomer(BillingServicesCustomerId customerId)
 		{
-			if(string.IsNullOrEmpty(customerId.Id))
+			if (string.IsNullOrEmpty(customerId.Id))
 			{
-				//return null, as there is no customer.
+				// return null, as there is no customer.
 				return null;
 			}
 

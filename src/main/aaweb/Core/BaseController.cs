@@ -118,14 +118,15 @@ namespace AllyisApps.Core
 			string remainingQueryParameters = string.Empty;
 			foreach (string key in Request.QueryString.AllKeys)
 			{
-				if (!key.Equals("pOrganizationId") && !key.Equals("pArea")&& !key.Equals("pAction") && !key.Equals("pController"))
+				if (!key.Equals("pOrganizationId") && !key.Equals("pArea") && !key.Equals("pAction") && !key.Equals("pController"))
 				{
-					remainingQueryParameters = remainingQueryParameters + "&" + key + "=" + Request.QueryString[key];
+					remainingQueryParameters = string.Format("{0}&{1}={2}", remainingQueryParameters, key, Request.QueryString[key]);
 				}
 			}
+
 			if (!remainingQueryParameters.Equals(string.Empty))
 			{
-				remainingQueryParameters = "?" + remainingQueryParameters.Substring(1);
+				remainingQueryParameters = string.Format("?{0}", remainingQueryParameters.Substring(1));
 			}
 
 			return this.Redirect(url + remainingQueryParameters);
