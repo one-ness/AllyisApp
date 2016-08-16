@@ -709,6 +709,7 @@
     <Compile Include="ViewModels\Shared\LogOnPartialViewModel.cs" />
     <Compile Include="ViewModels\Shared\SubscriptionsViewModel.cs" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
+    <Content Include="Content\icons\bg_stars.gif" />
     <Content Include="Scripts\allyis-paginate.js" />
     <Content Include="Scripts\allyis-updateStateDDL.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-customer-index.js" />

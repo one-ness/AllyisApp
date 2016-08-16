@@ -1,12 +1,4 @@
-﻿//function element_change(where, add, remove) {
-//    var $el = $(where);
-//    if ($el.hasClass(add) || $el.hasClass(remove)) {
-//        $el.addClass('was-set');
-//    }
-//    $el.addClass(add).removeClass(remove);
-//}
-
-//Validate subdomain both when it autofills and when user edits it themself
+﻿//Validate subdomain both when it autofills and when user edits it themself
 $("#SubdomainName").on("paste keyup", _.debounce(validateSubdomain, 250));
 
 //Generate subdomain name as user types in company name
@@ -29,10 +21,10 @@ function validateSubdomain() {
             url: isSubdomainNameUniqueAction + subdomain,
             success: function (data) {
                 if ("False" === data) {
-                    element_change('#subdomain-wrap', 'no', 'yes');
+                    $('#subdomainTaken').show();
                     $("#submit").prop('disabled', true);
                 } else {
-                    element_change('#subdomain-wrap', 'yes', 'no');
+                    $('#subdomainTaken').hide();
                     $("#submit").prop('disabled', false);
                 }
             },
@@ -44,7 +36,7 @@ function validateSubdomain() {
 
         })
     } else {  //Not a valid subdomain
-        element_change('#subdomain-wrap', 'no', 'yes');
+        $('#subdomainTaken').hide();
         $("#submit").prop('disabled', true);
     }
 }

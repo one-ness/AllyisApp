@@ -95,7 +95,7 @@ namespace AllyisApps.Core
 			{
 				route = string.Format("{0}/{1}", pArea, route);
 			}
-			
+
 			// if no org is set for a user the default is "default" this catchs that
 			// case until the default usercontext org is looked at
 			string url, chosenOrg = OrgService.GetSubdomainById(pOrganizationId);
@@ -114,7 +114,21 @@ namespace AllyisApps.Core
 				url = string.Format("http://{0}.{1}/{2}", chosenOrg, rootAndMiddle, route);
 			}
 
-			return this.Redirect(url);
+			// Any other miscellaneous route parameters need to remain in the query string
+			string remainingQueryParameters = string.Empty;
+			foreach (string key in Request.QueryString.AllKeys)
+			{
+				if (!key.Equals("pOrganizationId") && !key.Equals("pArea")&& !key.Equals("pAction") && !key.Equals("pController"))
+				{
+					remainingQueryParameters = remainingQueryParameters + "&" + key + "=" + Request.QueryString[key];
+				}
+			}
+			if (!remainingQueryParameters.Equals(string.Empty))
+			{
+				remainingQueryParameters = "?" + remainingQueryParameters.Substring(1);
+			}
+
+			return this.Redirect(url + remainingQueryParameters);
 		}
 
 		/// <summary>

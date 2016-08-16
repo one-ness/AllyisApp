@@ -1186,6 +1186,15 @@ namespace AllyisApps.Resources.Views.Account
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The subdomain name provided has already been taken..
+        /// </summary>
+        public static string SubdomainTaken {
+            get {
+                return ResourceManager.GetString("SubdomainTaken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Submit Billing Info.
         /// </summary>
         public static string SubmitBillingInfo {
