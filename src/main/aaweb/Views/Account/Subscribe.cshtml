@@ -16,7 +16,7 @@
     @Html.HiddenFor(m => m.ProductName)
     @Html.Hidden("SelectedSku", 1)
     @Html.HiddenFor(m => m.PreviousSku)
-    @Html.HiddenFor(m => m.StripeToken)
+    @Html.HiddenFor(m => m.Token)
     @Html.Hidden("currentUserCount", (int)Model.CurrentUsers)
     <p>@AllyisApps.Resources.Views.Account.Strings.FirstUserOffer</p>
     <p id="notice" style="color:red"></p>
