@@ -117,38 +117,6 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Updates the name of the defined project.
-		/// </summary>
-		/// <param name="projectId">The Project's Id.</param>
-		/// <param name="name">The new name of the project.</param>
-		/// <param name="type">The pricing type of the project.</param>
-		/// <param name="start">The start date assigned to the project.</param>
-		/// <param name="end">The end date assigned to the project.</param>
-		public void UpdateProject(int projectId, string name, string type, DateTime start, DateTime end)
-		{
-			if (string.IsNullOrWhiteSpace(name))
-			{
-				throw new ArgumentException("Name cannot be null, empty, or whitespace.");
-			}
-
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ProjectId", projectId);
-			parameters.Add("@Name", name);
-			parameters.Add("@PriceType", type);
-			parameters.Add("@StartingDate", start.ToShortDateString());
-			parameters.Add("@EndingDate", end.ToShortDateString());
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				connection.Execute(
-					////"[Crm].[UpdateProjectName]",
-					"[Crm].[UpdateProject]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
 		/// Gets all the projects associated with a specific customer.
 		/// </summary>
 		/// <param name="customerID">The id of the customer.</param>

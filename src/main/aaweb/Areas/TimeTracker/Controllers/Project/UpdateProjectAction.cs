@@ -37,8 +37,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				project.OrganizationId = UserContext.ChosenOrganizationId;
 			}
-
-			// Update ProjectUser table
+			
 			ProjectService.UpdateProjectAndUsers(
 				project.ProjectId,
 				project.ProjectName,
@@ -46,27 +45,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				TimeTrackerService.GetDateTimeFromDays(project.StartDate),
 				TimeTrackerService.GetDateTimeFromDays(project.EndDate),
 				project.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString)));
-
-			//var oldUserList = ProjectService.GetUsersByProjectId(project.ProjectId);
-			//foreach (var id in project.SelectedProjectUserIds.Where(user => !oldUserList.Any(oldUser => (int.Parse(user) == oldUser.UserId))))
-			//{
-			//	// For each new user that is not included in the old user list
-			//	ProjectService.CreateProjectUser(project.ProjectId, int.Parse(id));
-			//}
-
-			//foreach (var user in oldUserList.Where(oldUser => !project.SelectedProjectUserIds.Any(user => (int.Parse(user) == oldUser.UserId))))
-			//{
-			//	// For each old user that is not included in the new user list
-			//	ProjectService.DeleteProjectUser(project.ProjectId, user.UserId);
-			//}
-
-			//// Update project table
-			//ProjectService.UpdateProject(
-			//	project.ProjectId, 
-			//	project.ProjectName, 
-			//	project.PriceType, 
-			//	TimeTrackerService.GetDateTimeFromDays(project.StartDate), 
-			//	TimeTrackerService.GetDateTimeFromDays(project.EndDate));
 		}
 	}
 }
