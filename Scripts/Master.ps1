@@ -1,10 +1,27 @@
 Start-Transcript -Append -Path ..\ExecLog.log -IncludeInvocationHeader
-PowerShell -NonInteractive -NoProfile -Command {Scripts\Pull.ps1; exit $LASTEXITCODE}
-if($LASTEXITCODE -ne 1) { exit "Failed on Pull" } else { Write-Host "Pull Succeeded"}
-PowerShell -NonInteractive -NoProfile -Command {Scripts\Build.ps1; exit $LASTEXITCODE}
-if($LASTEXITCODE -NE 1) { exit "Failed on Build" } else { Write-Host "Build Succeeded"}
-PowerShell -NonInteractive -NoProfile -Command {Scripts\Commit.ps1; exit $LASTEXITCODE}
-if($LASTEXITCODE -NE 1) { exit "Failed on Commit" } else { Write-Host "Commit Succeeded"}
-PowerShell -NonInteractive -NoProfile -Command {Scripts\Deploy.ps1; exit $LASTEXITCODE}
-if($LASTEXITCODE -NE 1) { exit "Failed on Deploy" } else { Write-Host "Deploy Succeeded"}
+.\Scripts\Pull.ps1
+if($LASTEXITCODE -EQ 1) 
+{ 
+	Write-Host "Pull Succeeded"
+	.\Scripts\Build.ps1
+	if($LASTEXITCODE -EQ 1) 
+	{
+		Write-Host "Build Succeeded"
+		.\Scripts\Commit.ps1
+		if($LASTEXITCODE -EQ 1) 
+		{ 
+			Write-Host "Commit Succeeded"
+			.\Scripts\Deploy.ps1
+			if($LASTEXITCODE -EQ 1)
+			{
+				Write-Host "Deploy Succeeded"
+			}
+			else { Write-Host "Failed on Deploy"; exit } 
+		}
+		else { Write-Host "Failed on Commit"; exit } 
+	}
+	else { Write-Host "Failed on Build" } 
+}
+else { Write-Host "Failed on Pull" } 
+
 Stop-Transcript
