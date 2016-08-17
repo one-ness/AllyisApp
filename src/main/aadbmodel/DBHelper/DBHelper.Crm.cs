@@ -472,20 +472,17 @@ namespace AllyisApps.DBModel
 				throw new ArgumentException("Name cannot be null, empty, or whitespace.");
 			}
 
+			// DataTable is used to pass in the userIDs array as a parameter. Essentially, a 1-dimensional table is made to hold the values.
 			DataTable userIDsTable = new DataTable();
-			userIDsTable.Columns.Add("UserId", typeof(int));
-			userIDs.Select(userID => userIDsTable.Rows.Add(userID));
-
-			//DynamicParameters parameters = new DynamicParameters();
-			//parameters.Add("@ProjectId", projectId);
-			//parameters.Add("@Name", name);
-			//parameters.Add("@PriceType", type);
-			//parameters.Add("@StartingDate", start.ToShortDateString());
-			//parameters.Add("@EndingDate", end.ToShortDateString());
-			//parameters.Add("@UserIDs", userIDsTable);
+			userIDsTable.Columns.Add("UserID", typeof(int));
+			foreach (int userID in userIDs)
+			{
+				userIDsTable.Rows.Add(userID);
+			}
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
+				// Use of the SqlCommand object (as opposed to dynamic parameters) is necessary to add information to the DataTable parameter below.
 				connection.Open();
 
 				SqlCommand command = connection.CreateCommand();
@@ -499,15 +496,10 @@ namespace AllyisApps.DBModel
 				command.Parameters.AddWithValue("@EndingDate", end.ToShortDateString());
 
 				SqlParameter userIDsParameter = command.Parameters.AddWithValue("@UserIDs", userIDsTable);
-				userIDsParameter.SqlDbType = SqlDbType.Structured;
-				userIDsParameter.TypeName = "dbo.UserIDTable";
+				userIDsParameter.SqlDbType = SqlDbType.Structured; // These two lines are important for the DataTable to 
+				userIDsParameter.TypeName = "dbo.UserIDTable"; // be mapped to the table type used in the procedure.
 
 				command.ExecuteNonQuery();
-
-				//connection.Execute(
-				//	"[Crm].[UpdateProjectAndUsers]",
-				//	parameters,
-				//	commandType: CommandType.StoredProcedure);
 			}
 		}
 	}
