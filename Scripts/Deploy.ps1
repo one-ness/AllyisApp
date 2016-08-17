@@ -1,6 +1,7 @@
 $srcPath = ".\src\Main\aaweb\"
 $destPath = "c:\aa\"
 
+Write-Host "Copying Files"
 Copy-Item -Path ($srcPath + "App_Data\") -Destination $destPath -Recurse -Force
 Copy-Item -Path ($srcPath + "Areas\") -Destination $destPath -Recurse -Force
 Copy-Item -Path ($srcPath + "bin\") -Destination $destPath -Recurse -Force
