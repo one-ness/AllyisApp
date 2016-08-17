@@ -224,6 +224,64 @@ namespace AllyisApps.Services.Project
 		}
 
 		/// <summary>
+		/// Updates a project's properties and user list.
+		/// </summary>
+		/// <param name="projectId">Project Id.</param>
+		/// <param name="name">Project name.</param>
+		/// <param name="type">Project type.</param>
+		/// <param name="start">Starting date. <see cref="DateTime"/></param>
+		/// <param name="end">Ending date. <see cref="DateTime"/></param>
+		/// <param name="UserIDs">Updated on-project user list.</param>
+		/// <returns>Returns false if authorization fails.</returns>
+		public bool UpdateProjectAndUsers (int projectId, string name, string type, DateTime start, DateTime end, IEnumerable<int> UserIDs)
+		{
+			#region Validation
+			if (projectId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
+			}
+
+			if (string.IsNullOrWhiteSpace(name))
+			{
+				throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
+			}
+
+			if (string.IsNullOrEmpty(type))
+			{
+				throw new ArgumentNullException("type", "Type must have a value.");
+			}
+
+			if (start == null)
+			{
+				throw new ArgumentNullException("start", "Project must have a start time");
+			}
+
+			if (end == null)
+			{
+				throw new ArgumentNullException("end", "Project must have an end time");
+			}
+
+			if (DateTime.Compare(start, end) > 0)
+			{
+				throw new ArgumentException("Project cannot end before it starts.");
+			}
+
+			if (UserIDs == null)
+			{
+				UserIDs = new List<int>();
+			}
+			#endregion
+
+			if (this.authorizationService.Can(Services.Account.Actions.CoreAction.EditProject))
+			{
+				DBHelper.UpdateProjectAndUsers(projectId, name, type, start, end, UserIDs);
+				return true;
+			}
+
+			return false;
+		}
+
+		/// <summary>
 		/// Deletes a project.
 		/// </summary>
 		/// <param name="projectId">Project Id.</param>

@@ -455,5 +455,60 @@ namespace AllyisApps.DBModel
 					commandType: CommandType.StoredProcedure);
 			}
 		}
+
+		/// <summary>
+		/// Updates all of a project's properties and its users in one go.
+		/// </summary>
+		/// <param name="projectId">The Project's Id.</param>
+		/// <param name="name">The new name of the project.</param>
+		/// <param name="type">The pricing type of the project.</param>
+		/// <param name="start">The start date assigned to the project.</param>
+		/// <param name="end">The end date assigned to the project.</param>
+		/// <param name="userIDs">The updated list of project users, by their IDs.</param>
+		public void UpdateProjectAndUsers(int projectId, string name, string type, DateTime start, DateTime end, IEnumerable<int> userIDs)
+		{
+			if (string.IsNullOrWhiteSpace(name))
+			{
+				throw new ArgumentException("Name cannot be null, empty, or whitespace.");
+			}
+
+			DataTable userIDsTable = new DataTable();
+			userIDsTable.Columns.Add("UserId", typeof(int));
+			userIDs.Select(userID => userIDsTable.Rows.Add(userID));
+
+			//DynamicParameters parameters = new DynamicParameters();
+			//parameters.Add("@ProjectId", projectId);
+			//parameters.Add("@Name", name);
+			//parameters.Add("@PriceType", type);
+			//parameters.Add("@StartingDate", start.ToShortDateString());
+			//parameters.Add("@EndingDate", end.ToShortDateString());
+			//parameters.Add("@UserIDs", userIDsTable);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Open();
+
+				SqlCommand command = connection.CreateCommand();
+				command.CommandText = "[Crm].[UpdateProjectAndUsers]";
+				command.CommandType = CommandType.StoredProcedure;
+
+				command.Parameters.AddWithValue("@ProjectId", projectId);
+				command.Parameters.AddWithValue("@Name", name);
+				command.Parameters.AddWithValue("@PriceType", type);
+				command.Parameters.AddWithValue("@StartingDate", start.ToShortDateString());
+				command.Parameters.AddWithValue("@EndingDate", end.ToShortDateString());
+
+				SqlParameter userIDsParameter = command.Parameters.AddWithValue("@UserIDs", userIDsTable);
+				userIDsParameter.SqlDbType = SqlDbType.Structured;
+				userIDsParameter.TypeName = "dbo.UserIDTable";
+
+				command.ExecuteNonQuery();
+
+				//connection.Execute(
+				//	"[Crm].[UpdateProjectAndUsers]",
+				//	parameters,
+				//	commandType: CommandType.StoredProcedure);
+			}
+		}
 	}
 }
