@@ -1,17 +1,17 @@
 Start-Transcript -Append -Path ..\ExecLog.log -IncludeInvocationHeader
-PowerShell -NonInteractive -NoProfile -Command {Scripts\Pull.ps1; exit $LASTEXITCODE}
+.\Scripts\Pull.ps1
 if($LASTEXITCODE -EQ 1) 
 { 
 	Write-Host "Pull Succeeded"
-	PowerShell -NonInteractive -NoProfile -Command {Scripts\Build.ps1; exit $LASTEXITCODE}
+	.\Scripts\Build.ps1
 	if($LASTEXITCODE -EQ 1) 
 	{
 		Write-Host "Build Succeeded"
-		PowerShell -NonInteractive -NoProfile -Command {Scripts\Commit.ps1; exit $LASTEXITCODE}
+		.\Scripts\Commit.ps1
 		if($LASTEXITCODE -EQ 1) 
 		{ 
 			Write-Host "Commit Succeeded"
-			PowerShell -NonInteractive -NoProfile -Command {Scripts\Deploy.ps1; exit $LASTEXITCODE}
+			.\Scripts\Deploy.ps1
 			if($LASTEXITCODE -EQ 1)
 			{
 				Write-Host "Deploy Succeeded"
