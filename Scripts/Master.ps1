@@ -18,6 +18,7 @@ Write-Host "Restore"
 Write-Host "Build"
 $result = &"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" /m /nologo .\src\Main\AllyisApps.sln /t:Build /p:Configuration=Release
 Write-Host $result
+$res = ""
 foreach($s in $result) {if($s.Contains("FAILED")) {$res+=$s}}
 
     $curDate = Get-Date -Format "MM-dd-yyyy_HH.mm.ss"
@@ -53,7 +54,7 @@ if($res -EQ "" -and $curCommit -ne $lastCommit )
     Copy-Item -Path ($srcPath + "Global.asax") -Destination $destPath -Recurse -Force
     Copy-Item -Path ($srcPath + "packages.config") -Destination $destPath -Recurse -Force
     Copy-Item -Path ($srcPath + "Parameters.xml") -Destination $destPath -Recurse -Force
-    Copy-Item -Path ("c:\gitWeb.config") -Destination $destPath -Recurse -Force
+    Copy-Item -Path ("c:\Web.config") -Destination $destPath -Recurse -Force
 }
 else 
 {
