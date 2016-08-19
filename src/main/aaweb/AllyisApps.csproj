@@ -181,7 +181,6 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\Customer\DetailsAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\IndexAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\DeleteAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\EditAction.cs" />
@@ -719,7 +718,6 @@
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-useredit.js" />
     <Content Include="Areas\TimeTracker\Views\Customer\Create.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Delete.cshtml" />
-    <Content Include="Areas\TimeTracker\Views\Customer\Details.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Edit.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\Index.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Project\_ProjectEdit.cshtml">

@@ -95,6 +95,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					// single user selected
 					result.Projects = ProjectService.GetProjectsByUserAndOrganization(userId[0], false);
 				}
+
+				//Add default project in case there are holiday entries
+				List<Services.BusinessObjects.CompleteProjectInfo> defaultProject = new List<Services.BusinessObjects.CompleteProjectInfo>();
+				defaultProject.Add(ProjectService.GetProject(0));
+				result.Projects = result.Projects.Concat(defaultProject);
 			}
 
 			return result;

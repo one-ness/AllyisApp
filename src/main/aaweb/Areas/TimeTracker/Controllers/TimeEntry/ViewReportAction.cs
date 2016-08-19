@@ -76,7 +76,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 							IList<TablePreviewEntry> pEntries = new List<TablePreviewEntry>();
 							foreach (TimeEntryInfo data in dataVM.PreviewData)
 							{
-								CompleteProjectInfo orgProj = orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
+								CompleteProjectInfo orgProj = data.ProjectId == 0 ? ProjectService.GetProject(0) : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
 								TablePreviewEntry previewData = new TablePreviewEntry
 								{
 									CustomerName = orgProj.CustomerName,
