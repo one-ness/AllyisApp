@@ -19,6 +19,7 @@ Write-Output "Restore"
 Write-Output "Build"
 $result = &"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" /m /nologo .\src\Main\AllyisApps.sln /t:Build /p:Configuration=Release
 Write-Output $result
+$res = ""
 foreach($s in $result) {if($s.Contains("FAILED")) {$res+=$s}}
 
     $curDate = Get-Date -Format "MM-dd-yyyy_HH.mm.ss"
@@ -27,10 +28,13 @@ foreach($s in $result) {if($s.Contains("FAILED")) {$res+=$s}}
 
 if($res -EQ "" -and $curCommit -ne $lastCommit ) 
 {
-	Write-Output "Build Succeeded" $curDate + ": " + $curCommit + ": " + $lastCommit
+    $oStr = $curDate + ": " + $curCommit + ": " + $lastCommit
+	Write-Output "Build Succeeded" $oStr
     #Commit.ps1
     Write-Output "Commiting"
+    svn cleanup
     svn commit -m "$curDate" | Write-Output
+    svn status | Write-Output
     Write-Output "Tagging"
     git tag "Releases/$curDate" | Write-Output
     Write-Output "Pushing Tags"
@@ -52,7 +56,7 @@ if($res -EQ "" -and $curCommit -ne $lastCommit )
 
     #Deploy.ps1
 	Write-Output "Commit Finished:"
-    svn status | Write-Output
+    
 
 	$srcPath = ".\src\Main\aaweb\"
     $destPath = "c:\aa\"
@@ -69,7 +73,7 @@ if($res -EQ "" -and $curCommit -ne $lastCommit )
     Copy-Item -Path ($srcPath + "Global.asax") -Destination $destPath -Recurse -Force
     Copy-Item -Path ($srcPath + "packages.config") -Destination $destPath -Recurse -Force
     Copy-Item -Path ($srcPath + "Parameters.xml") -Destination $destPath -Recurse -Force
-    Copy-Item -Path ("c:\gitWeb.config") -Destination $destPath -Recurse -Force
+    Copy-Item -Path ("c:\Web.config") -Destination $destPath -Recurse -Force
     Write-Output "Copying Finished"
 }
 else 
