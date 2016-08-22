@@ -38,7 +38,8 @@ if($res -EQ "" -and $curCommit -ne $lastCommit )
     $gitJob = Start-Job  -ErrorAction SilentlyContinue {
     git push --tags
     }
-    Get-Job -Id $gitJob.Id | Wait-Job $gitJob.Id  -Timeout 5
+    
+    Wait-Job -Id $gitJob.Id -Timeout 5
 
     if($gitJob.State -ne "Completed")
     {
@@ -67,13 +68,13 @@ if($res -EQ "" -and $curCommit -ne $lastCommit )
     Copy-Item -Path ($srcPath + "packages.config") -Destination $destPath -Recurse -Force
     Copy-Item -Path ($srcPath + "Parameters.xml") -Destination $destPath -Recurse -Force
     Copy-Item -Path ("c:\gitWeb.config") -Destination $destPath -Recurse -Force
+    Write-Output "Copying Finished"
 }
 else 
 {
     if($curCommit -eq $lastCommit)
     {
-        Write-Output "No changes to branch"
-        Write-Output "Nothing to commit/deploy"
+        Write-Output "No changes to branch" "Nothing to commit/deploy"
     }
     else
     {
