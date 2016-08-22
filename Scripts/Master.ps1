@@ -9,7 +9,8 @@ foreach ($t in dir -Directory | Select-Object Name) {if($t.Name -ne "Scripts") {
 Write-Output "Reset to master"
 git reset --hard origin/master
 
-Write-Output "Pull Finished`r`nBegin Build`r`nClean"
+Write-Output "Pull Finished" "Begin Build" "Clean"
+
 
 #Build.ps1
 &"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" /m /nologo /noconlog .\src\Main\AllyisApps.sln /t:Clean /p:Configuration=Release
@@ -27,14 +28,26 @@ foreach($s in $result) {if($s.Contains("FAILED")) {$res+=$s}}
 
 if($res -EQ "" -and $curCommit -ne $lastCommit ) 
 {
-	Write-Output "Build Succeeded`r`n" + $curDate + ": " + $curCommit + ": " + $lastCommit
+	Write-Output "Build Succeeded" $curDate + ": " + $curCommit + ": " + $lastCommit
     #Commit.ps1
     Write-Output "Commiting"
     svn commit -m "$curDate"
     Write-Output "Tagging"
     git tag "Releases/$curDate"
     Write-Output "Pushing Tags"
+
+    $gitJob = Start-Job  -ErrorAction SilentlyContinue {
     git push --tags
+    }
+    Get-Job -Id $gitJob.Id | Wait-Job $gitJob.Id  -Timeout 5
+
+    if($gitJob.State -ne "Completed")
+    {
+        Get-Job -Id $gitJob.Id | Remove-Job -Force
+        Write-Output "Tag push failed after 5 seconds"
+        Receive-Job -Id $gitJob.Id | Write-Output
+        Remove-Job $gitJob.Id
+    }
     $curCommit > ..\curCommit.log
 
     #Deploy.ps1
@@ -60,7 +73,8 @@ else
 {
     if($curCommit -eq $lastCommit)
     {
-        Write-Output "No changes to branch`r`nNothing to commit/deploy"
+        Write-Output "No changes to branch"
+        Write-Output "Nothing to commit/deploy"
     }
     else
     {
