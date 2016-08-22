@@ -155,6 +155,8 @@ namespace AllyisApps.Core
 			base.OnActionExecuting(filterContext);
 
 			int languageID = 0;
+			const string TempDataKey = "language";
+
 			if (Request.IsAuthenticated)
 			{
 				// an authenticated request MUST have user context in the cookie.
@@ -179,7 +181,6 @@ namespace AllyisApps.Core
 			}
 			else
 			{
-				const string TempDataKey = "language";
 				if (TempData[TempDataKey] != null)
 				{
 					languageID = (int)TempData[TempDataKey];
@@ -194,6 +195,7 @@ namespace AllyisApps.Core
 				Thread.CurrentThread.CurrentCulture = cInfo;
 				Thread.CurrentThread.CurrentUICulture = cInfo;
 				ViewBag.languageName = language.LanguageName;
+				TempData[TempDataKey] = language.LanguageID; // Store it for next request.
 			}
 		}
 	}

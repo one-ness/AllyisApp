@@ -190,7 +190,6 @@
     <Compile Include="Areas\TimeTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Manage\UsersAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\CreateAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\Project\CreateProjectAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\EditAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\DeleteAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\DetailsAction.cs" />
@@ -199,7 +198,6 @@
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\CopyEntries.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\PrepareCSVExportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\PrepareExcelExportAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\SetPreviewDataAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UpdateUserAJAXAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UserEditAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UpdateStartOfWeekAction.cs" />
