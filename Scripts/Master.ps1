@@ -30,9 +30,9 @@ if($res -EQ "" -and $curCommit -ne $lastCommit )
 	Write-Output "Build Succeeded" $curDate + ": " + $curCommit + ": " + $lastCommit
     #Commit.ps1
     Write-Output "Commiting"
-    svn commit -m "$curDate"
+    svn commit -m "$curDate" | Write-Output
     Write-Output "Tagging"
-    git tag "Releases/$curDate"
+    git tag "Releases/$curDate" | Write-Output
     Write-Output "Pushing Tags"
 
     $gitJob = Start-Job  -ErrorAction SilentlyContinue {
@@ -45,13 +45,15 @@ if($res -EQ "" -and $curCommit -ne $lastCommit )
     {
         Get-Job -Id $gitJob.Id | Remove-Job -Force
         Write-Output "Tag push failed after 5 seconds"
-        Receive-Job -Id $gitJob.Id | Write-Output
+        Write-Output $gitJob.State
         Remove-Job $gitJob.Id
     }
     $curCommit > ..\curCommit.log
 
     #Deploy.ps1
-	Write-Output "Commit Finished"
+	Write-Output "Commit Finished:"
+    svn status | Write-Output
+
 	$srcPath = ".\src\Main\aaweb\"
     $destPath = "c:\aa\"
 
