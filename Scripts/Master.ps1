@@ -41,11 +41,13 @@ if($curCommit -ne $lastCommit)
         {
             if($s[0] -eq "?")
             {
-                svn add $s
+                svn add $s --non-interactive
+                Write-Output "Add" $s
             }
             elseif($s[0] -eq "!")
             {
-                svn delete $s
+                svn delete $s --non-interactive
+                Write-Output "Delete" $s
             }
         }
 
