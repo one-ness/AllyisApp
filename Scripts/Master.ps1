@@ -55,12 +55,12 @@ if($curCommit -ne $lastCommit)
 
         svn commit -m "$curDate" | Write-Output
         Write-Output "Tagging"
-        git tag "Releases/$curDate" | Write-Output
+        git tag -m "$curDate" "Releases/$curDate" | Write-Output
         Write-Output "Pushing Tags"
 
-        $gitJob = Start-Job  -ErrorAction Stop
+        $gitJob = Start-Job  -ErrorAction SilentlyContinue
         {
-            git push --tags
+            git push origin --tags | Write-Output
         }
     
         Wait-Job -Id $gitJob.Id -Timeout 5
