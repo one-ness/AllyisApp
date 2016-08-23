@@ -58,8 +58,7 @@ if($curCommit -ne $lastCommit)
         git tag -m "$curDate" "Releases/$curDate" | Write-Output
         Write-Output "Pushing Tags"
 
-        $gitJob = Start-Job  -ErrorAction SilentlyContinue
-        {
+        $gitJob = Start-Job  -ErrorAction SilentlyContinue {
             git push origin --tags | Write-Output
         }
     
