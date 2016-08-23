@@ -39,15 +39,16 @@ if($curCommit -ne $lastCommit)
         
         foreach($s in $curStatus)
         {
+        $file = $s.SubString(8)
             if($s[0] -eq "?")
             {
-                svn add $s --non-interactive
-                Write-Output "Add" $s
+                svn add $file --non-interactive
+                Write-Output "Add" $file
             }
             elseif($s[0] -eq "!")
             {
-                svn delete $s --non-interactive
-                Write-Output "Delete" $s
+                svn delete $file --non-interactive
+                Write-Output "Delete" $file
             }
         }
 
