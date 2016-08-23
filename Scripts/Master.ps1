@@ -31,7 +31,8 @@ if($curCommit -ne $lastCommit)
 
     if($res -EQ "") 
     {
-	    Write-Output "Build Succeeded" $curDate + ": " + $curCommit + ": " + $lastCommit
+        $oStr = $curDate + ": " + $curCommit + ": " + $lastCommit
+	    Write-Output "Build Succeeded" $oStr
         #Commit.ps1
         Write-Output "Commiting"
         svn cleanup
@@ -57,19 +58,28 @@ if($curCommit -ne $lastCommit)
         git tag "Releases/$curDate" | Write-Output
         Write-Output "Pushing Tags"
 
-        $gitJob = Start-Job  -ErrorAction SilentlyContinue {
-        git push --tags
+        $gitJob = Start-Job  -ErrorAction Continue
+        {
+            git push --tags
         }
     
         Wait-Job -Id $gitJob.Id -Timeout 5
+
+        $oStr = Receive-Job $gitJob.Id
 
         if($gitJob.State -ne "Completed")
         {
             Get-Job -Id $gitJob.Id | Remove-Job -Force
             Write-Output "Tag push failed after 5 seconds"
-            Write-Output $gitJob.State
+            
+            Write-Output $oStr
             Remove-Job $gitJob.Id
         }
+        else
+        {
+            Write-Output "Tag push complete" $oStr
+        }
+
         $curCommit > ..\curCommit.log
 
         #Deploy.ps1
