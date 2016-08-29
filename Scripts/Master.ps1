@@ -57,8 +57,10 @@ if($curCommit -ne $lastCommit)
         Write-Output "Tagging"
         git tag -m "$curDate" "Releases/$curDate" | Write-Output
         Write-Output "Pushing Tags"
-
-        $gitJob = Start-Job  -ErrorAction SilentlyContinue {
+        $curDir = pwd
+        $gitJob = Start-Job -ErrorAction SilentlyContinue -ArgumentList $curDir -InitializationScript {
+            cd $curDir
+        } -ScriptBlock {
             git push origin --tags | Write-Output
         }
     
