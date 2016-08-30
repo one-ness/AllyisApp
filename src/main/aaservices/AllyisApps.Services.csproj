@@ -134,7 +134,7 @@
       <Project>{7829f110-92b1-4a99-9d75-1dd971b980ee}</Project>
       <Name>AllyisApps.Services.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\External.Stripe\BillingServices.Stripe.csproj">
+    <ProjectReference Include="..\BillingServices.Stripe\BillingServices.Stripe.csproj">
       <Project>{14080904-6318-45bf-b12f-59e5aa55e3f6}</Project>
       <Name>BillingServices.Stripe</Name>
     </ProjectReference>
