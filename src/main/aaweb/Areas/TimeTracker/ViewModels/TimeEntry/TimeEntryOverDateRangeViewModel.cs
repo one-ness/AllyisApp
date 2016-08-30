@@ -4,10 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services.BusinessObjects;
-using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
+
+using AllyisApps.Services.BusinessObjects;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Areas.TimeTracker.Models
 {

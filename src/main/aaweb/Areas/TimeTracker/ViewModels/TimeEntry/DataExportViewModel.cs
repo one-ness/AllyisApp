@@ -4,9 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services.BusinessObjects;
 using System.Collections.Generic;
 using System.IO;
+
+using AllyisApps.Services.BusinessObjects;
 
 namespace AllyisApps.Areas.TimeTracker.Models
 {
@@ -86,25 +87,25 @@ namespace AllyisApps.Areas.TimeTracker.Models
 			this.Output.BaseStream.Seek(0, SeekOrigin.Begin);
 		}
 
-        /// <summary>
+		/// <summary>
 		/// Prepares the Excel file for output.
 		/// </summary>
 		/// <param name="limit">The max number of values to return.</param>
 		/// <param name="page">The page of results to view.</param>
 		public void CreateExcelFileOutput(int limit = 0, int page = 1)
 		{
-            int skipNum = limit * (page - 1);
-            limit = limit == 0 ? this.Data.Count() : limit;
+			int skipNum = limit * (page - 1);
+			limit = limit == 0 ? this.Data.Count() : limit;
 
-            GridView output = new GridView();
+			GridView output = new GridView();
 
-            var dataSkip = (from j in Data
-                            select j).Skip(skipNum).Take(limit);
+			var dataSkip = (from j in Data
+							select j).Skip(skipNum).Take(limit);
 
-            // only process data values for current page
+			// only process data values for current page
 
-            // get output column data
-            DOES NOT WORK WITH "ALL USERS" SELECTION FOR NO APPARENT REASON
+			// get output column data
+			DOES NOT WORK WITH "ALL USERS" SELECTION FOR NO APPARENT REASON
 			var dataMod = from i in dataSkip
 						  select new
 						  {
@@ -122,7 +123,7 @@ namespace AllyisApps.Areas.TimeTracker.Models
 			this.ExcelOutput = new StringWriter();
 			HtmlTextWriter htw = new HtmlTextWriter(this.ExcelOutput);
 			output.RenderControl(htw);
-        }
+		}
 
 		/// <summary>
 		/// Prepares the page data to view.

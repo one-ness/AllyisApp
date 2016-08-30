@@ -4,10 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
-using AllyisApps.Core.Alert;
 using System.Linq;
 using System.Web.Mvc;
+
+using AllyisApps.Core;
+using AllyisApps.Core.Alert;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
