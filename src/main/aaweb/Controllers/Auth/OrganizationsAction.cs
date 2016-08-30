@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Web.Mvc;
 using AllyisApps.Core;
 using AllyisApps.Services.Account;
 using AllyisApps.ViewModels.Auth;
-using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {

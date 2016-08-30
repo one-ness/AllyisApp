@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using AllyisApps.ViewModels;
 using CsvHelper.Configuration;
-using System;
 
 namespace AllyisApps.Utilities
 {

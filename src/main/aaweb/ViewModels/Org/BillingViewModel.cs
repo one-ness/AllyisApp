@@ -4,8 +4,8 @@
 // </copyright>
 
 //------------------------------------------------------------------------------
-using AllyisApps.BillingServices.Common.Types;
 using System;
+using AllyisApps.BillingServices.Common.Types;
 
 namespace AllyisApps.ViewModels
 {

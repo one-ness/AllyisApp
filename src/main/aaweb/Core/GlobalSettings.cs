@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Utilities;
 using System.Configuration;
+using AllyisApps.Utilities;
 
 namespace AllyisApps.Core
 {

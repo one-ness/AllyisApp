@@ -4,6 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using AllyisApps.BusinessObjects;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
@@ -12,10 +16,6 @@ using AllyisApps.Services.Account;
 using AllyisApps.Services.BusinessObjects;
 using AllyisApps.ViewModels;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {

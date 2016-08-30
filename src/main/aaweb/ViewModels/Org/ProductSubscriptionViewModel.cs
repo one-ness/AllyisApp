@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.BillingServices.Common.Types;
-using AllyisApps.Services.BusinessObjects;
 using System;
 using System.Collections.Generic;
+using AllyisApps.BillingServices.Common.Types;
+using AllyisApps.Services.BusinessObjects;
 
 namespace AllyisApps.ViewModels
 {

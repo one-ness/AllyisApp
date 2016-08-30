@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using DataAnnotationsExtensions;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using DataAnnotationsExtensions;
 
 namespace AllyisApps.ViewModels
 {
