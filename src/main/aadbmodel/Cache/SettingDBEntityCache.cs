@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.TimeTracker;
 using System.Collections.Generic;
 using System.Linq;
+using AllyisApps.DBModel.TimeTracker;
 
 namespace AllyisApps.DBModel.Cache
 {

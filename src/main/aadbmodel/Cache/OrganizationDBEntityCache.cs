@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Auth;
 using System.Collections.Generic;
 using System.Linq;
+using AllyisApps.DBModel.Auth;
 
 namespace AllyisApps.DBModel.Cache
 {
