@@ -4,11 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using System;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -20,21 +19,21 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// POST: Deletes current organization.
 		/// </summary>
-		/// <param name="orgId">Organization Id.</param>        
+		/// <param name="orgId">Organization Id.</param>
 		/// <returns>Redirection to account index, or an error page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult DeleteOrg(string orgId)
 		{
 			// Method includes permissions check
-			if (OrgService.DeleteOrganization()) 
+			if (OrgService.DeleteOrganization())
 			{
 				string notification = string.Format("{0} {1}", Resources.Controllers.Auth.Strings.YourOrg, Resources.Controllers.Auth.Strings.OrganizationDeleteNotification);
 				Notifications.Add(new BootstrapAlert(notification, Variety.Success));
 
 				// TODO: we shouldnt be hard coding http...
 				string url = string.Format("http://{0}/{1}/{2}", GlobalSettings.WebRoot, ControllerConstants.Account, ActionConstants.Index);
-				return this.Redirect(url); 
+				return this.Redirect(url);
 			}
 
 			// Permissions failed

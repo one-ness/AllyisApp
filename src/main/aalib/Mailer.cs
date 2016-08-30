@@ -43,9 +43,9 @@ namespace AllyisApps.Lib
 		public static void Init(string serverName, int port, string username, string password)
 		{
 			ServerName = serverName;
-			Port       = port;
-			Username   = username;
-			Password   = password;
+			Port = port;
+			Username = username;
+			Password = password;
 		}
 
 		/// <summary>

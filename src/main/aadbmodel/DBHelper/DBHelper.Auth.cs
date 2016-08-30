@@ -4,6 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.Cache;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,10 +15,6 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Cache;
-using Dapper;
 
 namespace AllyisApps.DBModel
 {

@@ -11,7 +11,6 @@
     Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
 }
 
-
 @section css {
     <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
 
@@ -34,9 +33,8 @@
                 <input type="radio" name="startOfWeek" id="sow" value="6" @(Model.StartOfWeek == StartOfWeekEnum.Saturday  ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Saturday</text><br />
                 <input type="radio" name="startOfWeek" id="sow" value="0" @(Model.StartOfWeek == StartOfWeekEnum.Sunday    ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Sunday</text><br />
 
-
                 <br />
-                <input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save class="btn btn-primary"/>
+                <input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save class="btn btn-primary" />
             }
         </div>
     </div>

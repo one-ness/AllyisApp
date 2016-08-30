@@ -1033,7 +1033,6 @@ $(function () {
         assert.ok(!$tooltip.data('bs.tooltip').$tip.is('.in'), '200ms: tooltip removed')
         done()
       }, 200)
-
     }, 0)
 
     $tooltip.trigger('mouseenter')
@@ -1321,5 +1320,4 @@ $(function () {
       }
     })
   })
-
 })

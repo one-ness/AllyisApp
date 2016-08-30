@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,13 +16,10 @@ using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
 
-using AllyisApps.Core;
-using AllyisApps.Utilities;
-
 namespace AllyisApps.Extensions.ViewExtensions
 {
 	/// <summary>
-	/// View extension class. 
+	/// View extension class.
 	/// </summary>
 	public static class ViewExtensions
 	{

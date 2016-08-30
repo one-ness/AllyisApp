@@ -16,7 +16,6 @@
 
             @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
 
-
             <div class="form-group">
                 @Html.ReqLabelFor(model => model.Name, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.Name)
                 @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })

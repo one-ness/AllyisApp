@@ -52,7 +52,7 @@ namespace AllyisApps.Services.Account
 				orgInfo = UserContext.UserOrganizationInfoList.Where(x => x.OrganizationId == UserContext.ChosenOrganizationId).FirstOrDefault();
 
 				// Info should never be null
-				if (orgInfo != null) 
+				if (orgInfo != null)
 				{
 					// Has the user chosen a subscription
 					if (UserContext.ChosenSubscriptionId > 0)
@@ -80,12 +80,14 @@ namespace AllyisApps.Services.Account
 							case OrganizationRole.Owner:
 								result = true;
 								break;
+
 							default:
 								break;
 						}
 					}
 
 					break;
+
 				case Actions.CoreAction.EditOrganization:
 					if (orgInfo != null)
 					{
@@ -94,6 +96,7 @@ namespace AllyisApps.Services.Account
 							case OrganizationRole.Owner:
 								result = true;
 								break;
+
 							default:
 								break;
 						}
@@ -119,12 +122,14 @@ namespace AllyisApps.Services.Account
 							case ProductRole.ConsultingAdmin:
 								result = true;
 								break;
+
 							default:
 								break;
 						}
 					}
 
 					break;
+
 				case Actions.CoreAction.EditCustomer:
 					if (subInfo != null)
 					{
@@ -136,6 +141,7 @@ namespace AllyisApps.Services.Account
 							case ProductRole.ConsultingAdmin:
 								result = true;
 								break;
+
 							default:
 								break;
 						}
@@ -157,6 +163,7 @@ namespace AllyisApps.Services.Account
 							case ProductRole.ConsultingAdmin:
 								result = true;
 								break;
+
 							default:
 								break;
 						}
@@ -178,12 +185,14 @@ namespace AllyisApps.Services.Account
 							case ProductRole.TimeTrackerAdmin:
 								result = true;
 								break;
+
 							default:
 								break;
 						}
 					}
 
 					break;
+
 				case Actions.CoreAction.TimeTrackerEditOthers:
 					if (subInfo != null)
 					{
@@ -193,12 +202,14 @@ namespace AllyisApps.Services.Account
 							case ProductRole.TimeTrackerAdmin:
 								result = true;
 								break;
+
 							default:
 								break;
 						}
 					}
 
 					break;
+
 				default:
 					break;
 			}

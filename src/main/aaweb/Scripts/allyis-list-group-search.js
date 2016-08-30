@@ -13,7 +13,7 @@
 ////     function() {MODULE.search(this.value);},
 ////     200
 ////   ));
-//// Demo: 
+//// Demo:
 var ListGroupSearch = function () {
     //// conf
     function regex_escape(text) {
@@ -73,7 +73,6 @@ var ListGroupSearch = function () {
                                search_regex: search_regex
                            })
     }
-
 
     function email_or_text_filter_function(obj) {
         // force boolean

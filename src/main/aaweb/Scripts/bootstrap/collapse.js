@@ -6,7 +6,6 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
-
 +function ($) {
   'use strict';
 
@@ -162,7 +161,6 @@
     return $(target)
   }
 
-
   // COLLAPSE PLUGIN DEFINITION
   // ==========================
 
@@ -183,7 +181,6 @@
   $.fn.collapse             = Plugin
   $.fn.collapse.Constructor = Collapse
 
-
   // COLLAPSE NO CONFLICT
   // ====================
 
@@ -191,7 +188,6 @@
     $.fn.collapse = old
     return this
   }
-
 
   // COLLAPSE DATA-API
   // =================
@@ -207,5 +203,4 @@
 
     Plugin.call($target, option)
   })
-
 }(jQuery);

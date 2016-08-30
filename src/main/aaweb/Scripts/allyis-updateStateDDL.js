@@ -15,7 +15,6 @@
     $('#Country').change(updateStateDDL);
 });
 
-
 function updateStateDDL(successCallback) {
     if ($('#Country').val() != "") {
         $.ajax({

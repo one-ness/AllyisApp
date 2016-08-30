@@ -212,5 +212,4 @@ $(function () {
     assert.strictEqual($tabs.find('.active a').attr('aria-expanded'), 'true', 'after second show event, shown tab still has aria-expanded = true')
     assert.strictEqual($tabs.find('li:not(.active) a').attr('aria-expanded'), 'false', 'after second show event, hidden tab has aria-expanded = false')
   })
-
 })

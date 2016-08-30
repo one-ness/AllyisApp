@@ -4,11 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Linq;
-
 using AllyisApps.Core;
 using AllyisApps.ViewModels;
+using System;
+using System.Linq;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -37,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				project.OrganizationId = UserContext.ChosenOrganizationId;
 			}
-			
+
 			ProjectService.UpdateProjectAndUsers(
 				project.ProjectId,
 				project.ProjectName,

@@ -4,10 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-
 using AllyisApps.ViewModels;
 using CsvHelper.Configuration;
+using System;
 
 namespace AllyisApps.Utilities
 {
@@ -26,5 +25,5 @@ namespace AllyisApps.Utilities
 			this.Map(m => m.LastName);
 			this.Map(m => m.Email);
 		}
-	}	
+	}
 }

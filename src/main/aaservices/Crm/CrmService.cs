@@ -4,9 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using AllyisApps.BillingServices;
 using AllyisApps.BillingServices.Common.Types;
 using AllyisApps.DBModel;
@@ -14,6 +11,9 @@ using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.Services.Account;
 using AllyisApps.Services.BusinessObjects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AllyisApps.Services.Crm
 {
@@ -262,6 +262,7 @@ namespace AllyisApps.Services.Crm
 		public void UpdateBillingInfo(string billingServicesEmail, BillingServicesToken token)
 		{
 			#region Validation
+
 			if (token == null)
 			{
 				throw new ArgumentNullException("token", "billingServicesToken must have a value.");
@@ -275,7 +276,8 @@ namespace AllyisApps.Services.Crm
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			//// Either get the existing billing service information for the org or create some if the org has none
 			BillingServicesCustomerId customerId = this.GetOrgBillingServicesCustomerId();
@@ -318,6 +320,7 @@ namespace AllyisApps.Services.Crm
 		public BillingServicesCustomerId CreateBillingServicesCustomer(string billingServicesEmail, BillingServicesToken token)
 		{
 			#region Validation
+
 			if (token == null)
 			{
 				throw new ArgumentNullException("token", "Billing Services token must not be null.");
@@ -331,7 +334,8 @@ namespace AllyisApps.Services.Crm
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			string serviceType = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(serviceType);
@@ -407,6 +411,7 @@ namespace AllyisApps.Services.Crm
 		public string AddCustomerSubscriptionPlan(int amount, BillingServicesCustomerId customerId, int numUsers, int productId, string planName)
 		{
 			#region Validation
+
 			if (amount < 0)
 			{
 				throw new ArgumentOutOfRangeException("amount", "Price cannot be negative.");
@@ -427,7 +432,8 @@ namespace AllyisApps.Services.Crm
 			{
 				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			string service = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(service);
@@ -448,6 +454,7 @@ namespace AllyisApps.Services.Crm
 		public string UpdateSubscriptionPlan(int amount, string planName, int numUsers, string subscriptionId, BillingServicesCustomerId customerId)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(subscriptionId))
 			{
 				throw new ArgumentNullException("subscriptionId", "Subscription id must have a value.");
@@ -468,7 +475,8 @@ namespace AllyisApps.Services.Crm
 				// TODO: Figure out if this can be 0 or not
 				throw new ArgumentOutOfRangeException("numUsers", "Number of users cannot be negative.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			string serviceType = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(serviceType); // TODO: make this check the database instead of hardcoding Stripe
@@ -825,6 +833,7 @@ namespace AllyisApps.Services.Crm
 		public void AddSubscriptionOfSkuToOrganization(int orgId, int selectedSku, int productId, int numberOfUsers)
 		{
 			#region Validation
+
 			if (orgId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
@@ -844,7 +853,8 @@ namespace AllyisApps.Services.Crm
 			{ // TODO: Figure out if this can be 0 or not
 				throw new ArgumentOutOfRangeException("numberOfUsers", "Number of users cannot be negative.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			int subID = DBHelper.ChangeSubscription(orgId, selectedSku, productId, numberOfUsers);
 			if (subID != 0)
@@ -894,6 +904,7 @@ namespace AllyisApps.Services.Crm
 		public string GetProductRoleForUser(string productName, int userId)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(productName))
 			{
 				throw new ArgumentNullException("productName", "Product name must have a value.");
@@ -903,7 +914,8 @@ namespace AllyisApps.Services.Crm
 			{
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			return DBHelper.GetProductRoleForUser(productName, UserContext.ChosenOrganizationId, userId);
 		}

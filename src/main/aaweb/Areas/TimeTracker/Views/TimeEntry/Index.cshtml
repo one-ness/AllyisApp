@@ -50,7 +50,6 @@
                        href="javascript: void(0);" onclick="return drp_nextWeek()">
                         <i class="fa fa-chevron-right"></i>
                     </a>
-
                 </div>
                 <input type="text" name="daterange" id="daterange" class="form-control" value="" />
                 @*<div class="input-group-btn">
@@ -190,7 +189,7 @@ ViewBag.RenderSidebar = true;}
 {
     @*Date range picker dependencies:*@
     @Scripts.Render("~/bundles/jqueryui");
-    @Scripts.Render("~/bundles/moment");  
+    @Scripts.Render("~/bundles/moment");
 
     <script type="text/javascript">
         var model_startdate = @Model.EntryRange.StartDate;

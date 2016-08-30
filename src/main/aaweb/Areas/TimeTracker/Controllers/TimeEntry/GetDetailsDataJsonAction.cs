@@ -4,13 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Areas.TimeTracker.Models;
+using AllyisApps.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-
-using AllyisApps.Areas.TimeTracker.Models;
-using AllyisApps.Core;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -58,9 +57,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// Authorized for viewing details
 			TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(
 				userId,
-				manager, 
-				TimeTrackerService.GetDayFromDateTime(startingDate), 
-				TimeTrackerService.GetDayFromDateTime(endingDate), 
+				manager,
+				TimeTrackerService.GetDayFromDateTime(startingDate),
+				TimeTrackerService.GetDayFromDateTime(endingDate),
 				TimeTrackerService.GetLockDate(userId));
 			if (model.Projects.Count() == 0 || model.Projects == null)
 			{

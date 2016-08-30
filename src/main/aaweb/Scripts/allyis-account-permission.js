@@ -11,13 +11,10 @@ if (!String.prototype.format) {
     };
 }
 
-
 var cur_filter = []
 var cur_search = ""
 
 var all_user_$ele = []
-
-
 
 // set the data for a dropdown filter (1,3,4,5,7,9)
 function makeFilter(option, list) {

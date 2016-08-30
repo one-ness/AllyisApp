@@ -29,11 +29,8 @@ function validateSubdomain() {
                 }
             },
             error: function (xhr) {
-
                 console.log("Unexpected error occured.")
-
             }
-
         })
     } else {  //Not a valid subdomain
         $('#subdomainTaken').hide();

@@ -1,13 +1,10 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.RemoveBilling;
     Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
 }
 
-
-
 <p>
-    @AllyisApps.Resources.Views.Account.Strings.ConfirmRemoveBilling 
+    @AllyisApps.Resources.Views.Account.Strings.ConfirmRemoveBilling
 </p>
 
 @using (Html.BeginForm(ActionConstants.RemoveBilling, ControllerConstants.Account, FormMethod.Post))

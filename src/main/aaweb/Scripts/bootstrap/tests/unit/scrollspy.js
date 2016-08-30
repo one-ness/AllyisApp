@@ -274,5 +274,4 @@ $(function () {
       .then(function () { return testElementIsActiveAfterScroll('#li-100-2', '#div-100-2') })
       .then(function () { return testElementIsActiveAfterScroll('#li-100-1', '#div-100-1') })
   })
-
 })

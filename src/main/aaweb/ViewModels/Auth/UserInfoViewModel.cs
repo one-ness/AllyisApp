@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
 using AllyisApps.Services.BusinessObjects;
 using AllyisApps.ViewModels.Shared;
+using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels
 {
@@ -28,7 +28,7 @@ namespace AllyisApps.ViewModels
 		/// <summary>
 		/// Gets or sets A list of pending invitations to organizations.
 		/// </summary>
-		public List<InvitationViewModel> Invitations { get; set; }	
+		public List<InvitationViewModel> Invitations { get; set; }
 	}
 
 	/// <summary>

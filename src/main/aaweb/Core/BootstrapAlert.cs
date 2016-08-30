@@ -118,15 +118,19 @@ namespace AllyisApps.Core.Alert
 				case "primary":
 					result = Variety.Primary;
 					break;
+
 				case "success":
 					result = Variety.Success;
 					break;
+
 				case "info":
 					result = Variety.Info;
 					break;
+
 				case "warning":
 					result = Variety.Warning;
 					break;
+
 				case "Danger":
 					result = Variety.Danger;
 					break;

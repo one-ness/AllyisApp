@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 using AllyisApps.Core;
 using AllyisApps.Services.BusinessObjects;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Shared;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -24,7 +24,7 @@ namespace AllyisApps.Controllers
 		/// GET: /Account/Index.
 		/// Displays the account index page.
 		/// </summary>
-		/// <returns>The async task responsible for this action.</returns> 
+		/// <returns>The async task responsible for this action.</returns>
 		public ActionResult Index()
 		{
 			UserInfoViewModel model = new UserInfoViewModel
@@ -86,7 +86,7 @@ namespace AllyisApps.Controllers
 		public ActionResult Reject(int invitationId)
 		{
 			var invitation = AccountService.GetInvitationsByUser(UserContext.Email).Where(x => x.InvitationId == invitationId).FirstOrDefault();
-			if (invitation != null)   
+			if (invitation != null)
 			{
 				// Validate that the user does have the requested pending invitation
 				Notifications.Add(new Core.Alert.BootstrapAlert(AccountService.RejectUserInvitation(invitation), Core.Alert.Variety.Success));

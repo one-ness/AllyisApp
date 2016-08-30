@@ -34,7 +34,7 @@ namespace AllyisApps.Services.BusinessObjects
 		public DateTime Date { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Date that holliday was added. 
+		/// Gets or sets the Date that holliday was added.
 		/// </summary>
 		public DateTime CreatedUTC { get; set; }
 

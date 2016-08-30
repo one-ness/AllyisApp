@@ -4,11 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Core;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-
-using AllyisApps.Core;
 
 namespace AllyisApps.Controllers
 {
@@ -41,7 +40,7 @@ namespace AllyisApps.Controllers
 				string stateKey = Clean(state);
 				localizedStates.Add(state, AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(stateKey) ?? state);
 			}
-			
+
 			return this.Json(localizedStates);
 		}
 

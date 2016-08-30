@@ -1,5 +1,5 @@
 ﻿@using AllyisApps.Core;
-@{ 
+@{
 	//Prevent the browser from caching any private page
 	Response.Cache.SetExpires(DateTime.UtcNow.AddMinutes(-1));
 	Response.Cache.SetCacheability(HttpCacheability.NoCache);
@@ -32,7 +32,6 @@
 							Html.RenderPartial(DisplayHints.BreadcrumbNavPartialLocation);
 						}
 					@Html.Action(ActionConstants.LogOnPartial, ControllerConstants.Shared, new { returnUrl = ViewBag.ReturnUrl, area = "" })
-
 				</ul>
 			</div>
 		</div>

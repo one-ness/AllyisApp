@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using Microsoft.AspNet.Identity;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
 
 namespace AllyisApps.Services
 {

@@ -14,10 +14,13 @@ namespace AllyisApps.BillingServices.Common.Types
 	public class BillingServicesSubscriptionId
 	{
 		#region private fields
+
 		private readonly string id;
-		#endregion
+
+		#endregion private fields
 
 		#region constructor
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BillingServicesSubscriptionId"/> class.
 		/// </summary>
@@ -31,9 +34,11 @@ namespace AllyisApps.BillingServices.Common.Types
 
 			this.id = id;
 		}
-		#endregion
+
+		#endregion constructor
 
 		#region accessor properties
+
 		/// <summary>
 		/// Gets the subscription id.
 		/// </summary>
@@ -44,6 +49,7 @@ namespace AllyisApps.BillingServices.Common.Types
 				return this.id;
 			}
 		}
-		#endregion
+
+		#endregion accessor properties
 	}
 }

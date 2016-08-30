@@ -66,7 +66,7 @@ namespace AllyisApps.DBModel.Auth
 				this.ApplyPropertyChange<OrganizationUserDBEntity, int>(ref this.pOrgRoleId, (OrganizationUserDBEntity x) => x.OrgRoleId, value);
 			}
 		}
-		
+
 		/// <summary>
 		/// Gets the OrganizationName associated with this orguser.
 		/// </summary>

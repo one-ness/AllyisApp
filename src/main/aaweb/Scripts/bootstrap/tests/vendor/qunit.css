@@ -23,14 +23,12 @@
 	font-size: smaller;
 }
 
-
 /** Resets */
 
 #qunit-tests, #qunit-header, #qunit-banner, #qunit-userAgent, #qunit-testresult, #qunit-modulefilter {
 	margin: 0;
 	padding: 0;
 }
-
 
 /** Header */
 

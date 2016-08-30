@@ -14,14 +14,17 @@ namespace AllyisApps.BillingServices.Common.Types
 	public class BillingServicesInvoice
 	{
 		#region private fields
+
 		private readonly int amountDue;
 		private readonly DateTime? date;
 		private readonly string id;
 		private readonly string productName;
 		private readonly string service;
-		#endregion
+
+		#endregion private fields
 
 		#region constructor
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BillingServicesInvoice"/> class.
 		/// </summary>
@@ -38,9 +41,11 @@ namespace AllyisApps.BillingServices.Common.Types
 			this.productName = productName;
 			this.service = service;
 		}
-		#endregion
+
+		#endregion constructor
 
 		#region accessor properties
+
 		/// <summary>
 		/// Gets the amount due.
 		/// </summary>
@@ -95,6 +100,7 @@ namespace AllyisApps.BillingServices.Common.Types
 				return this.service;
 			}
 		}
-		#endregion
+
+		#endregion accessor properties
 	}
 }

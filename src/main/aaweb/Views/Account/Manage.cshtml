@@ -29,12 +29,10 @@
                     {
                         @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Edit, ActionConstants.Edit, null, new { @class = "pull-right text-muted" })
 }
-
                 </h1>
             </div>
             @Html.Partial("_OrgDetails", Model.Details)
         </div>
-
     </div>
     <div class="panel panel-default sub-panel">
         <div class="panel-heading">
@@ -62,7 +60,7 @@
                     @if (Model.CanEditOrganization)
                     {
                         <a href="@Url.Action(ActionConstants.ManagePermissions)" title=@AllyisApps.Resources.Views.Account.Strings.ManagePermissions><span class="fa fa-fw fa-lg fa-users text-warning"></span></a>}
-                    @if (Model.CanEditOrganization && Model.SubscriptionCount > 0) 
+                    @if (Model.CanEditOrganization && Model.SubscriptionCount > 0)
                     {
                         <a href="@Url.Action(ActionConstants.Add)" title=@AllyisApps.Resources.Views.Account.Strings.AddMembers><span class="fa fa-fw fa-plus fa-lg text-info"></span></a>}
                 </span>

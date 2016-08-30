@@ -4,13 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using AllyisApps.DBModel.Crm;
 using AllyisApps.Services.Account;
 using AllyisApps.Services.BusinessObjects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AllyisApps.Services.Project
 {
@@ -86,6 +85,7 @@ namespace AllyisApps.Services.Project
 		public int CreateProject(int orgId, int customerId, string name, string type, DateTime start, DateTime end)
 		{
 			#region Validation
+
 			if (orgId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
@@ -120,7 +120,8 @@ namespace AllyisApps.Services.Project
 			{
 				throw new ArgumentException("Project cannot end before it starts.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			return DBHelper.CreateProject(orgId, customerId, name, type, start, end);
 		}
@@ -137,6 +138,7 @@ namespace AllyisApps.Services.Project
 		public int CreateProjectFromCustomerIdOnly(int customerId, string name, string type, DateTime start, DateTime end)
 		{
 			#region Validation
+
 			if (customerId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
@@ -166,7 +168,8 @@ namespace AllyisApps.Services.Project
 			{
 				throw new ArgumentException("Project cannot end before it starts.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			return DBHelper.CreateProjectFromCustomerIdOnly(customerId, name, type, start, end);
 		}
@@ -181,9 +184,10 @@ namespace AllyisApps.Services.Project
 		/// <param name="end">Ending date. <see cref="DateTime"/></param>
 		/// <param name="UserIDs">Updated on-project user list.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateProjectAndUsers (int projectId, string name, string type, DateTime start, DateTime end, IEnumerable<int> UserIDs)
+		public bool UpdateProjectAndUsers(int projectId, string name, string type, DateTime start, DateTime end, IEnumerable<int> UserIDs)
 		{
 			#region Validation
+
 			if (projectId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
@@ -218,7 +222,8 @@ namespace AllyisApps.Services.Project
 			{
 				UserIDs = new List<int>();
 			}
-			#endregion
+
+			#endregion Validation
 
 			if (this.authorizationService.Can(Services.Account.Actions.CoreAction.EditProject))
 			{
@@ -324,7 +329,7 @@ namespace AllyisApps.Services.Project
 			{
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
 			}
-			
+
 			return DBHelper.GetUsersByProjectId(projectId).Select(u => BusinessObjectsHelper.InitializeUserInfo(u));
 		}
 

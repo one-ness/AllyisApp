@@ -51,7 +51,7 @@ namespace AllyisApps.Services.Account
 			// Project Actions also require a subscription id .
 			// Product roles were previously used for both subscription action permissions and project, so we'll keep doing that to avoid breaking anything.
 			// Project actions use to require ids, but now the ids will be filtered separately from permissions with some sort of project filter service object.
-			 
+
 			/// <summary>
 			/// Permissions for editing details of a project, assigning users to the project, deleting the project, etc.
 			/// </summary>

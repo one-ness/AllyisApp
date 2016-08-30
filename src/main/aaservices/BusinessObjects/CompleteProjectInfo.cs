@@ -14,7 +14,7 @@ namespace AllyisApps.Services.BusinessObjects
 	public class CompleteProjectInfo
 	{
 		/// <summary>
-		/// Gets or sets the Project Id. 
+		/// Gets or sets the Project Id.
 		/// </summary>
 		public int ProjectId { get; set; }
 
@@ -24,7 +24,7 @@ namespace AllyisApps.Services.BusinessObjects
 		public bool IsActive { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Customer Id that the project belongs to. 
+		/// Gets or sets the Customer Id that the project belongs to.
 		/// </summary>
 		public int CustomerId { get; set; }
 
@@ -34,32 +34,32 @@ namespace AllyisApps.Services.BusinessObjects
 		public bool IsCustomerActive { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Oorganization Id that the customer belongs to. 
+		/// Gets or sets the Oorganization Id that the customer belongs to.
 		/// </summary>
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Date/time of creation. 
+		/// Gets or sets the Date/time of creation.
 		/// </summary>
 		public DateTime CreatedUTC { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Name of the project. 
+		/// Gets or sets the Name of the project.
 		/// </summary>
 		public string ProjectName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Name of the customer. 
+		/// Gets or sets the Name of the customer.
 		/// </summary>
 		public string CustomerName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Name of the organization. 
+		/// Gets or sets the Name of the organization.
 		/// </summary>
 		public string OrganizationName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Id of the organization role. 
+		/// Gets or sets the Id of the organization role.
 		/// </summary>
 		public int OrgRoleId { get; set; }
 

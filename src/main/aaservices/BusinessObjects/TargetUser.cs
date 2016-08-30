@@ -33,5 +33,5 @@ namespace AllyisApps.BusinessObjects
 		/// Gets or sets a return message about the user.
 		/// </summary>
 		public string Message { get; set; }
-	}	
+	}
 }

@@ -14,7 +14,7 @@ namespace AllyisApps.DBModel.Crm
 	public class CompleteProjectDBEntity
 	{
 		/// <summary>
-		/// Gets or sets The project's id. 
+		/// Gets or sets The project's id.
 		/// </summary>
 		public int ProjectId { get; set; }
 
@@ -24,7 +24,7 @@ namespace AllyisApps.DBModel.Crm
 		public bool IsActive { get; set; }
 
 		/// <summary>
-		/// Gets or sets The id of the customer that the project belongs to. 
+		/// Gets or sets The id of the customer that the project belongs to.
 		/// </summary>
 		public int CustomerId { get; set; }
 
@@ -34,32 +34,32 @@ namespace AllyisApps.DBModel.Crm
 		public bool IsCustomerActive { get; set; }
 
 		/// <summary>
-		/// Gets or sets The id of the organization that the customer belongs to. 
+		/// Gets or sets The id of the organization that the customer belongs to.
 		/// </summary>
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets The date/time of creation. 
+		/// Gets or sets The date/time of creation.
 		/// </summary>
 		public DateTime CreatedUTC { get; set; }
 
 		/// <summary>
-		/// Gets or sets The name of the project. 
+		/// Gets or sets The name of the project.
 		/// </summary>
 		public string ProjectName { get; set; }
 
 		/// <summary>
-		/// Gets or sets The name of the customer. 
+		/// Gets or sets The name of the customer.
 		/// </summary>
 		public string CustomerName { get; set; }
 
 		/// <summary>
-		/// Gets or sets The name of the organization. 
+		/// Gets or sets The name of the organization.
 		/// </summary>
 		public string OrganizationName { get; set; }
 
 		/// <summary>
-		/// Gets or sets The id of the organization role. 
+		/// Gets or sets The id of the organization role.
 		/// </summary>
 		public int OrgRoleId { get; set; }
 

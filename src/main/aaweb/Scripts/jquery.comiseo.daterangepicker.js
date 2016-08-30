@@ -10,7 +10,6 @@
  */
 
 (function ($, window, undefined) {
-
 	var uniqueId = 0; // used for unique ID generation within multiple plugin instances
 
 	$.widget('comiseo.daterangepicker', {
@@ -671,5 +670,4 @@
 			getContainer: getContainer
 		};
 	}
-
 })(jQuery, window);

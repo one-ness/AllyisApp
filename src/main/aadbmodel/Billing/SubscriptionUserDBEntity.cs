@@ -38,7 +38,7 @@ namespace AllyisApps.DBModel.Billing
 		public int UserId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the date the subscription user was added. 
+		/// Gets or sets the date the subscription user was added.
 		/// </summary>
 		public DateTime CreatedUTC { get; set; }
 

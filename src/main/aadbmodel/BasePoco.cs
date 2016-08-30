@@ -22,7 +22,7 @@ namespace AllyisApps.DBModel
 	/// <remarks>
 	/// 1. Uses reflection to get the property name. Possible performance issues!
 	/// 2. Based on code found here: http://www.codeproject.com/Articles/41791/Almost-automatic-INotifyPropertyChanged-automatic.
-	/// </remarks>	
+	/// </remarks>
 	[DataContract]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "This is not mis-spelled")]
 	public class BasePoco : INotifyPropertyChanged
@@ -95,7 +95,7 @@ namespace AllyisApps.DBModel
 		/// <param name="property">An expression representing the base object and field being changed.</param>
 		/// <param name="value">The new value of the field.</param>
 		/// <typeparam name="T">The derived class type.</typeparam>
-		/// <typeparam name="TF">The type of field being modified.</typeparam>		
+		/// <typeparam name="TF">The type of field being modified.</typeparam>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Required.")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "F", Justification = "Typeparam.")]
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Must do it this way to record historical data of properties without code re-design")]
@@ -142,7 +142,7 @@ namespace AllyisApps.DBModel
 
 		/// <summary>
 		/// Get the name of the given property in the given object.
-		/// </summary>		
+		/// </summary>
 		/// <param name="property">An expression representing the source object and property modified.</param>
 		/// <typeparam name="T">The type of the class containing the property.</typeparam>
 		/// <returns>The name of the property being changed.</returns>

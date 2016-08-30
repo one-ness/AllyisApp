@@ -29,7 +29,7 @@ namespace AllyisApps.ViewModels
 		/// <summary>
 		/// Gets or sets the user's permissions in string readable format.  Used as a key for resource localization.
 		/// </summary>
-		public string PermissionLevel { get; set;  }
+		public string PermissionLevel { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user Id.

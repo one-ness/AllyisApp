@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.Cache;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Cache;
-using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -175,7 +175,7 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Gets the date that the user joined the subscription. 
+		/// Gets the date that the user joined the subscription.
 		/// </summary>
 		/// <param name="userId">The user in question.</param>
 		/// <param name="subId">The subscription in question.</param>
@@ -319,7 +319,7 @@ namespace AllyisApps.DBModel
 			{
 				parameters.Add("@ProductId", productId);
 			}
-			else 
+			else
 			{ */
 			parameters.Add("@ProductId", null);
 			////}
@@ -534,7 +534,7 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Adds entry to billing history table. 
+		/// Adds entry to billing history table.
 		/// </summary>
 		/// <param name="description">What is happening.</param>
 		/// <param name="orgid">The associated organization id.</param>

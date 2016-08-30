@@ -206,7 +206,7 @@ namespace AllyisApps.DBModel.Auth
 				this.ApplyPropertyChange<OrganizationDBEntity, DateTime>(ref this.pDateCreated, (OrganizationDBEntity x) => x.CreatedUTC, value);
 			}
 		}
-		
+
 		/// <summary>
 		/// Gets or sets subdomain.
 		/// </summary>

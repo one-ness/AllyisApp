@@ -10,7 +10,6 @@
  */
 
 (function( window ) {
-
 var QUnit,
 	config,
 	onErrorFnPrev,
@@ -187,7 +186,6 @@ config.modules.push( config.currentModule );
 
 	config.testId = [];
 	if ( urlParams.testId ) {
-
 		// Ensure that urlParams.testId is an array
 		urlParams.testId = [].concat( urlParams.testId );
 		for ( i = 0; i < urlParams.testId.length; i++ ) {
@@ -202,7 +200,6 @@ config.modules.push( config.currentModule );
 // Root QUnit object.
 // `QUnit` initialized at top of scope
 extend( QUnit, {
-
 	// call on start of module test to prepend name to all tests
 	module: function( name, testEnvironment ) {
 		var currentModule = {
@@ -279,13 +276,11 @@ extend( QUnit, {
 				throw new Error( "Called start() outside of a test context when " +
 					"QUnit.config.autostart was true" );
 			} else if ( !config.pageLoaded ) {
-
 				// The page isn't completely loaded yet, so bail out and let `QUnit.load` handle it
 				config.autostart = true;
 				return;
 			}
 		} else {
-
 			// If a test is running, adjust its semaphore
 			config.current.semaphore -= count || 1;
 
@@ -311,7 +306,6 @@ extend( QUnit, {
 
 	// DEPRECATED: QUnit.stop() will be removed in QUnit 2.0.
 	stop: function( count ) {
-
 		// If there isn't a test running, don't allow QUnit.stop() to be called
 		if ( !config.current ) {
 			throw new Error( "Called stop() outside of a test context" );
@@ -492,11 +486,9 @@ function extractStacktrace( e, offset ) {
 	var stack, include, i;
 
 	if ( e.stacktrace ) {
-
 		// Opera 12.x
 		return e.stacktrace.split( "\n" )[ offset + 3 ];
 	} else if ( e.stack ) {
-
 		// Firefox, Chrome, Safari 6+, IE10+, PhantomJS and Node
 		stack = e.stack.split( "\n" );
 		if ( /^error$/i.test( stack[ 0 ] ) ) {
@@ -516,7 +508,6 @@ function extractStacktrace( e, offset ) {
 		}
 		return stack[ offset ];
 	} else if ( e.sourceURL ) {
-
 		// Safari < 6
 		// exclude useless self-reference for generated Error objects
 		if ( /qunit.js$/.test( e.sourceURL ) ) {
@@ -566,7 +557,6 @@ function process( last ) {
 		if ( !defined.setTimeout || config.updateRate <= 0 ||
 				( ( now() - start ) < config.updateRate ) ) {
 			if ( config.current ) {
-
 				// Reset async tracking for each phase of the Test lifecycle
 				config.current.usedAsync = false;
 			}
@@ -588,7 +578,6 @@ function begin() {
 
 	// If the test run hasn't officially begun yet
 	if ( !config.started ) {
-
 		// Record the time of the test run's beginning
 		config.started = now();
 
@@ -709,7 +698,6 @@ function diff( a, b ) {
 function extend( a, b, undefOnly ) {
 	for ( var prop in b ) {
 		if ( hasOwn.call( b, prop ) ) {
-
 			// Avoid "Member not found" error in IE8 caused by messing with window.constructor
 			if ( !( prop === "constructor" && a === window ) ) {
 				if ( b[ prop ] === undefined ) {
@@ -741,7 +729,6 @@ function verifyLoggingCallbacks() {
 
 	for ( loggingCallback in loggingCallbacks ) {
 		if ( QUnit[ loggingCallback ] !== loggingCallbacks[ loggingCallback ] ) {
-
 			userCallback = QUnit[ loggingCallback ];
 
 			// Restore the callback function
@@ -803,7 +790,6 @@ function Test( settings ) {
 	});
 
 	if ( settings.skip ) {
-
 		// Skipped tests will fully ignore any sent callback
 		this.callback = function() {};
 		this.async = false;
@@ -1001,7 +987,6 @@ Test.prototype = {
 		}
 
 		function run() {
-
 			// each of these can by async
 			synchronize([
 				function() {
@@ -1157,7 +1142,6 @@ Test.prototype = {
 		// Otherwise, do the opposite
 		return !include;
 	}
-
 };
 
 // Resets the test setup. Useful for tests that modify the DOM.
@@ -1167,7 +1151,6 @@ Use testStart or testDone for custom cleanup.
 This method will throw an error in 2.0, and will be removed in 2.1
 */
 QUnit.reset = function() {
-
 	// Return on non-browser environments
 	// This is necessary to not break on node tests
 	if ( typeof window === "undefined" ) {
@@ -1224,7 +1207,6 @@ function Assert( testContext ) {
 
 // Assert helpers
 QUnit.assert = Assert.prototype = {
-
 	// Specify the number of expected assertions to guarantee that failed test
 	// (no assertions are run at all) don't slip through.
 	expect: function( asserts ) {
@@ -1437,7 +1419,6 @@ QUnit.assert = Assert.prototype = {
 // Test for equality any JavaScript type.
 // Author: Philippe Rathé <prathe@gmail.com>
 QUnit.equiv = (function() {
-
 	// Call the o related callback with the given arguments.
 	function bindCallbacks( o, callbacks, args ) {
 		var prop = QUnit.objectType( o );
@@ -1465,13 +1446,10 @@ QUnit.equiv = (function() {
 			return obj.__proto__;
 		},
 		callbacks = (function() {
-
 			// for string, boolean, number and null
 			function useStrictEquality( b, a ) {
-
 				/*jshint eqeqeq:false */
 				if ( b instanceof a.constructor || a instanceof b.constructor ) {
-
 					// to catch short annotation VS 'new' annotation of a
 					// declaration
 					// e.g. var i = 1;
@@ -1564,7 +1542,6 @@ QUnit.equiv = (function() {
 				},
 
 				"object": function( b, a ) {
-
 					/*jshint forin:false */
 					var i, j, loop, aCircular, bCircular,
 						// Default to true
@@ -1575,7 +1552,6 @@ QUnit.equiv = (function() {
 					// comparing constructors is more strict than using
 					// instanceof
 					if ( a.constructor !== b.constructor ) {
-
 						// Allow objects with no prototype to be equivalent to
 						// objects with Object as their constructor.
 						if ( !( ( getProto( a ) === null && getProto( b ) === Object.prototype ) ||
@@ -1639,7 +1615,6 @@ QUnit.equiv = (function() {
 			} else if ( a === null || b === null || typeof a === "undefined" ||
 					typeof b === "undefined" ||
 					QUnit.objectType( a ) !== QUnit.objectType( b ) ) {
-
 				// don't lose time with error prone cases
 				return false;
 			} else {
@@ -1693,7 +1668,6 @@ QUnit.dump = (function() {
 
 	var reName = /^function (\w+)/,
 		dump = {
-
 			// objType is used mostly internally, you can fix a (custom) type in advance
 			parse: function( obj, objType, stack ) {
 				stack = stack || [];
@@ -1886,7 +1860,6 @@ QUnit.dump = (function() {
 
 					args = new Array( l );
 					while ( l-- ) {
-
 						// 97 is 'a'
 						args[ l ] = String.fromCharCode( 97 + l );
 					}
@@ -1920,7 +1893,6 @@ QUnit.jsDump = QUnit.dump;
 
 // For browser, export only select globals
 if ( typeof window !== "undefined" ) {
-
 	// Deprecated
 	// Extend assert methods to QUnit and Global scope through Backwards compatibility
 	(function() {
@@ -2049,7 +2021,6 @@ QUnit.diff = (function() {
 		for ( i = 0; i < n.length - 1; i++ ) {
 			if ( n[ i ].text != null && n[ i + 1 ].text == null && n[ i ].row + 1 < o.length && o[ n[ i ].row + 1 ].text == null &&
 				n[ i + 1 ] == o[ n[ i ].row + 1 ] ) {
-
 				n[ i + 1 ] = {
 					text: n[ i + 1 ],
 					row: n[ i ].row + 1
@@ -2064,7 +2035,6 @@ QUnit.diff = (function() {
 		for ( i = n.length - 1; i > 0; i-- ) {
 			if ( n[ i ].text != null && n[ i - 1 ].text == null && n[ i ].row > 0 && o[ n[ i ].row - 1 ].text == null &&
 				n[ i - 1 ] == o[ n[ i ].row - 1 ] ) {
-
 				n[ i - 1 ] = {
 					text: n[ i - 1 ],
 					row: n[ i ].row - 1
@@ -2119,7 +2089,6 @@ QUnit.diff = (function() {
 				if ( out.n[ i ].text == null ) {
 					str += "<ins>" + out.n[ i ] + nSpace[ i ] + "</ins>";
 				} else {
-
 					// `pre` initialized at top of scope
 					pre = "";
 
@@ -2137,7 +2106,6 @@ QUnit.diff = (function() {
 // jscs:enable
 
 (function() {
-
 // Deprecated QUnit.init - Ref #530
 // Re-initialize the configuration options
 QUnit.init = function() {
@@ -2250,11 +2218,9 @@ function escapeText( s ) {
  */
 function addEvent( elem, type, fn ) {
 	if ( elem.addEventListener ) {
-
 		// Standards-based browsers
 		elem.addEventListener( type, fn, false );
 	} else if ( elem.attachEvent ) {
-
 		// support: IE <9
 		elem.attachEvent( "on" + type, fn );
 	}
@@ -2695,7 +2661,6 @@ QUnit.done(function( details ) {
 	}
 
 	if ( config.altertitle && defined.document && document.title ) {
-
 		// show ✖ for good, ✔ for bad suite result in title
 		// use escape sequences in case file gets loaded with non-utf-8-charset
 		document.title = [
@@ -2739,7 +2704,6 @@ QUnit.testStart(function( details ) {
 	if ( testBlock ) {
 		testBlock.className = "running";
 	} else {
-
 		// Report later registered tests
 		appendTest( details.name, details.testId, details.module );
 	}
@@ -2748,7 +2712,6 @@ QUnit.testStart(function( details ) {
 	if ( running ) {
 		running.innerHTML = "Running: <br />" + getNameHtml( details.name, details.module );
 	}
-
 });
 
 QUnit.log(function( details ) {
@@ -2871,5 +2834,4 @@ if ( !defined.document || document.readyState === "complete" ) {
 if ( defined.document ) {
 	addEvent( window, "load", QUnit.load );
 }
-
 })();

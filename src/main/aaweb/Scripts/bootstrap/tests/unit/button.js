@@ -164,5 +164,4 @@ $(function () {
     assert.ok($btn2.hasClass('active'), 'btn2 has active class')
     assert.ok($btn2.find('input').prop('checked'), 'btn2 is checked')
   })
-
 })

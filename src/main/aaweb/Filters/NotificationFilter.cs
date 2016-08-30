@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Core;
 using System;
 using System.Web.Mvc;
-using AllyisApps.Core;
 
 namespace AllyisApps.Utilities
 {

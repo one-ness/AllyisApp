@@ -521,13 +521,11 @@ $(function () {
 
     assert.strictEqual($template.find('.item')[0], $template.find('.active')[0], 'first item active')
 
-
     $input.trigger($.Event('keydown', { which: 39 }))
     assert.strictEqual($template.find('.item')[0], $template.find('.active')[0], 'first item still active after right arrow press in <input>')
 
     $input.trigger($.Event('keydown', { which: 37 }))
     assert.strictEqual($template.find('.item')[0], $template.find('.active')[0], 'first item still active after left arrow press in <input>')
-
 
     $textarea.trigger($.Event('keydown', { which: 39 }))
     assert.strictEqual($template.find('.item')[0], $template.find('.active')[0], 'first item still active after right arrow press in <textarea>')

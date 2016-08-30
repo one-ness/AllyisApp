@@ -4,12 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Core;
+using AllyisApps.ViewModels;
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
-using AllyisApps.Core;
-using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
 {
@@ -27,7 +26,7 @@ namespace AllyisApps.Controllers
 		[AllowAnonymous]
 		public ActionResult ResetPassword(string userId, string code)
 		{
-			 return code == null || userId == null ? this.View(ViewConstants.Error, new HandleErrorInfo(new ArgumentException(@Resources.Errors.ParameterErrorMessage), ControllerConstants.Subscription, ActionConstants.Subscribe)) : this.View();
+			return code == null || userId == null ? this.View(ViewConstants.Error, new HandleErrorInfo(new ArgumentException(@Resources.Errors.ParameterErrorMessage), ControllerConstants.Subscription, ActionConstants.Subscribe)) : this.View();
 		}
 
 		/// <summary>

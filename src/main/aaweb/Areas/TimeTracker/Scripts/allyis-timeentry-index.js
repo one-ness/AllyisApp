@@ -1,7 +1,4 @@
-﻿
-
-document.getElementById("title-row").style.marginBottom = "1px"; //Don't want to mess with any other tables but this one
-
+﻿document.getElementById("title-row").style.marginBottom = "1px"; //Don't want to mess with any other tables but this one
 
 // permission check and grab data
 //function ajaxUpdateUserSummary() {
@@ -263,7 +260,6 @@ function keyDown(e, form_child) {
     else if (!e.shiftKey && unicode == 38) {
         focusPreviousDuration(form_child);
     }
-
 }
 
 $( document ).ready(function() {

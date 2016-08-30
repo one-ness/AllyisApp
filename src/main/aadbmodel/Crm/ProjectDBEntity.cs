@@ -7,12 +7,12 @@
 namespace AllyisApps.DBModel.Crm
 {
 	/// <summary>
-	/// The project table. 
+	/// The project table.
 	/// </summary>
 	public class ProjectDBEntity : BasePoco
 	{
 		/// <summary>
-		/// Gets or sets the project id. 
+		/// Gets or sets the project id.
 		/// </summary>
 		public int ProjectId { get; set; }
 
@@ -27,7 +27,7 @@ namespace AllyisApps.DBModel.Crm
 		public int CustomerId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the project name. 
+		/// Gets or sets the project name.
 		/// </summary>
 		public string Name { get; set; }
 	}

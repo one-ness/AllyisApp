@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
 using AllyisApps.BillingServices.Common.Types;
 using AllyisApps.Services.BusinessObjects;
+using System;
+using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels
 {
@@ -73,7 +73,7 @@ namespace AllyisApps.ViewModels
 		public bool IsValid { get; set; }
 
 		/// <summary>
-		/// Gets or sets the customer Id. 
+		/// Gets or sets the customer Id.
 		/// </summary>
 		public BillingServicesCustomerId CustomerId { get; set; }
 

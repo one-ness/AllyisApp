@@ -9,7 +9,7 @@ using AllyisApps.DBModel;
 namespace AllyisApps.Services.BusinessObjects
 {
 	/// <summary>
-	/// LastUsedDBEntity obj for getting the last subscription used by user.  
+	/// LastUsedDBEntity obj for getting the last subscription used by user.
 	/// </summary>
 	public class LastUsed : BasePoco
 	{

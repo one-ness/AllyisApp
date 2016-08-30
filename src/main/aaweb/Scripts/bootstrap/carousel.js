@@ -6,7 +6,6 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
-
 +function ($) {
   'use strict';
 
@@ -169,7 +168,6 @@
     return this
   }
 
-
   // CAROUSEL PLUGIN DEFINITION
   // ==========================
 
@@ -192,7 +190,6 @@
   $.fn.carousel             = Plugin
   $.fn.carousel.Constructor = Carousel
 
-
   // CAROUSEL NO CONFLICT
   // ====================
 
@@ -200,7 +197,6 @@
     $.fn.carousel = old
     return this
   }
-
 
   // CAROUSEL DATA-API
   // =================
@@ -233,5 +229,4 @@
       Plugin.call($carousel, $carousel.data())
     })
   })
-
 }(jQuery);

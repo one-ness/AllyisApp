@@ -4,11 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-
 using AllyisApps.Services.BusinessObjects;
 using AllyisApps.Services.TimeTracker;
+using System;
+using System.Collections.Generic;
 
 namespace AllyisApps.Areas.TimeTracker.Models
 {
@@ -18,7 +17,7 @@ namespace AllyisApps.Areas.TimeTracker.Models
 	public class TimeEntryOverDateRangeViewModel
 	{
 		private const int PageUserLimit = 35;
-		
+
 		/// <summary>
 		/// Gets or sets the lock date for the entry. Note: must be int and not DateTime for Json serialization to work correctly in different cultures.
 		/// </summary>
@@ -28,12 +27,12 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		/// Gets the list of entries, start and end dates, and user/org id's.
 		/// </summary>
 		public TimeEntryRangeForUserViewModel EntryRange { get; internal set; }
-		
+
 		/// <summary>
 		/// Gets a value indicating whether or not user can manage other users.
 		/// </summary>
 		public bool CanManage { get; internal set; }
-		
+
 		/// <summary>
 		/// Gets the user's Id.
 		/// </summary>
@@ -60,7 +59,7 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		public ProjectHours GrandTotal { get; internal set; }
 
 		/// <summary>
-		/// Gets the list of users for the defined organization. 
+		/// Gets the list of users for the defined organization.
 		/// </summary>
 		public IEnumerable<UserInfo> Users { get; internal set; }
 
@@ -99,7 +98,7 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		/// <summary>
 		/// Gets pay classes for an org.
 		/// </summary>
-		public IEnumerable<PayClassInfo> PayClasses { get; internal set; }        
+		public IEnumerable<PayClassInfo> PayClasses { get; internal set; }
 	}
 
 	/// <summary>

@@ -4,14 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-
 using AllyisApps.Services.BusinessObjects;
+using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels
 {
 	/// <summary>
-	/// Object for displaying and capturing Subscription Role selections. 
+	/// Object for displaying and capturing Subscription Role selections.
 	/// </summary>
 	public class SubscriptionRoleSelectionModel : BaseViewModel
 	{

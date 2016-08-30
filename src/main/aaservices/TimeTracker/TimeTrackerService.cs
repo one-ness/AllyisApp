@@ -4,12 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Services.Account;
+using AllyisApps.Services.BusinessObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using AllyisApps.Services.Account;
-using AllyisApps.Services.BusinessObjects;
 
 namespace AllyisApps.Services.TimeTracker
 {
@@ -70,7 +69,7 @@ namespace AllyisApps.Services.TimeTracker
 		{
 			return GetDateFromDays(days);
 		}
-		
+
 		/// <summary>
 		/// Gets a <see cref="TimeEntryInfo"/>.
 		/// </summary>
@@ -79,11 +78,13 @@ namespace AllyisApps.Services.TimeTracker
 		public TimeEntryInfo GetTimeEntry(int timeEntryId)
 		{
 			#region Validation
+
 			if (timeEntryId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("timeEntryId", "Time entry id cannot be 0 or negative.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			return BusinessObjectsHelper.InitializeTimeEntryInfo(DBHelper.GetTimeEntryById(timeEntryId));
 		}
@@ -96,11 +97,13 @@ namespace AllyisApps.Services.TimeTracker
 		public int CreateTimeEntry(TimeEntryInfo entry)
 		{
 			#region Validation
+
 			if (entry == null)
 			{
 				throw new ArgumentNullException("entry", "Time entry must not be null.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			return DBHelper.CreateTimeEntry(BusinessObjectsHelper.GetDBEntityFromTimeEntryInfo(entry));
 		}
@@ -112,11 +115,13 @@ namespace AllyisApps.Services.TimeTracker
 		public void UpdateTimeEntry(TimeEntryInfo entry)
 		{
 			#region Validation
+
 			if (entry == null)
 			{
 				throw new ArgumentNullException("entry", "Time entry must not be null.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			DBHelper.UpdateTimeEntry(BusinessObjectsHelper.GetDBEntityFromTimeEntryInfo(entry));
 		}
@@ -128,11 +133,13 @@ namespace AllyisApps.Services.TimeTracker
 		public void DeleteTimeEntry(int timeEntryId)
 		{
 			#region Validation
+
 			if (timeEntryId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("timeEntryId", "Time entry id cannot be 0 or negative.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			DBHelper.DeleteTimeEntry(timeEntryId);
 		}
@@ -145,6 +152,7 @@ namespace AllyisApps.Services.TimeTracker
 		public void SetTimeEntryApprovalStateById(int timeEntryId, int approvalState)
 		{
 			#region Validation
+
 			if (timeEntryId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("timeEntryId", "Time entry id cannot be 0 or negative.");
@@ -154,7 +162,8 @@ namespace AllyisApps.Services.TimeTracker
 			{ // TODO: Figure out what values of approval state are actually allowed and constrain this further.
 				throw new ArgumentOutOfRangeException("approvalState", "Approval state cannot be negative.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			DBHelper.SetTimeEntryApprovalStateById(timeEntryId, approvalState);
 		}
@@ -168,6 +177,7 @@ namespace AllyisApps.Services.TimeTracker
 		public IEnumerable<TimeEntryInfo> GetTimeEntriesOverDateRange(DateTime start, DateTime end)
 		{
 			#region Validation
+
 			if (start == null)
 			{
 				throw new ArgumentNullException("start", "Project must have a start time");
@@ -182,7 +192,8 @@ namespace AllyisApps.Services.TimeTracker
 			{
 				throw new ArgumentException("Project cannot end before it starts.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			return DBHelper.GetTimeEntriesOverDateRange(UserContext.ChosenOrganizationId, start, end).Select(te => BusinessObjectsHelper.InitializeTimeEntryInfo(te));
 		}
@@ -197,6 +208,7 @@ namespace AllyisApps.Services.TimeTracker
 		public IEnumerable<TimeEntryInfo> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime start, DateTime end)
 		{
 			#region Validation
+
 			if (userIds == null || userIds.Count == 0)
 			{
 				throw new ArgumentNullException("userIds", "There must be at least one provided user id.");
@@ -221,7 +233,8 @@ namespace AllyisApps.Services.TimeTracker
 			{
 				throw new ArgumentException("Project cannot end before it starts.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, UserContext.ChosenOrganizationId, start, end).Select(te => BusinessObjectsHelper.InitializeTimeEntryInfo(te));
 		}
@@ -234,11 +247,13 @@ namespace AllyisApps.Services.TimeTracker
 		public DateTime GetLockDate(int userId)
 		{
 			#region Validation
+
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			return DBHelper.GetLockDate(UserContext.ChosenOrganizationId, userId);
 		}
@@ -252,6 +267,7 @@ namespace AllyisApps.Services.TimeTracker
 		public bool SetLockDate(int userId, DateTime date)
 		{
 			#region Validation
+
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
@@ -261,7 +277,8 @@ namespace AllyisApps.Services.TimeTracker
 			{
 				throw new ArgumentNullException("date", "Lock date must not be null.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
@@ -281,11 +298,13 @@ namespace AllyisApps.Services.TimeTracker
 		public bool CreateHoliday(HolidayInfo holiday)
 		{
 			#region Validation
+
 			if (holiday == null)
 			{
 				throw new ArgumentNullException("holiday", "Holiday must not be null.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
@@ -314,6 +333,7 @@ namespace AllyisApps.Services.TimeTracker
 		public bool DeleteHoliday(string holidayName, DateTime date)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(holidayName))
 			{
 				throw new ArgumentNullException("holidayName", "Holiday name must have a value.");
@@ -323,7 +343,8 @@ namespace AllyisApps.Services.TimeTracker
 			{
 				throw new ArgumentNullException("date", "Date must not be null.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
@@ -343,11 +364,13 @@ namespace AllyisApps.Services.TimeTracker
 		public bool CreatePayClass(string payClassName)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(payClassName))
 			{
 				throw new ArgumentNullException("payClassName", "Pay class name must have a value.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
@@ -367,11 +390,13 @@ namespace AllyisApps.Services.TimeTracker
 		public bool DeletePayClass(int payClassId)
 		{
 			#region Validation
+
 			if (payClassId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("payClassId", "Pay class id cannot be 0 or negative.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
@@ -400,11 +425,13 @@ namespace AllyisApps.Services.TimeTracker
 		public PayClassInfo GetPayClassByName(string name)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(name))
 			{
 				throw new ArgumentNullException("name", "Name of pay class must have a value.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			return BusinessObjectsHelper.InitializePayClassInfo(DBHelper.GetPayClassByNameAndOrg(name, UserContext.ChosenOrganizationId));
 		}
@@ -435,11 +462,13 @@ namespace AllyisApps.Services.TimeTracker
 		public bool UpdateStartOfWeek(int startOfWeek)
 		{
 			#region Validation
+
 			if (!Enum.IsDefined(typeof(StartOfWeekEnum), startOfWeek))
 			{
 				throw new ArgumentException("Start of week must correspond to a value of StartOfWeekEnum.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
@@ -471,6 +500,7 @@ namespace AllyisApps.Services.TimeTracker
 		public bool UpdateSettings(StartOfWeekEnum startOfWeek, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
 		{
 			#region Validation
+
 			if (Enum.IsDefined(typeof(StartOfWeekEnum), startOfWeek))
 			{
 				throw new ArgumentException("Start of week must correspond to a value of StartOfWeekEnum.");
@@ -490,7 +520,8 @@ namespace AllyisApps.Services.TimeTracker
 			{
 				throw new ArgumentOutOfRangeException("overtimeMultiplier", "Overtime rate cannot be less than regular rate (i.e. overtimeMultiplier less than one).");
 			}
-			#endregion
+
+			#endregion Validation
 
 			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{

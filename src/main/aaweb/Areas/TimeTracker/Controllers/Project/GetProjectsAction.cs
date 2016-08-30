@@ -4,9 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
-
 using AllyisApps.Core;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -21,8 +20,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="customerID">The customer ID.</param>
 		/// <returns>A JsonResult of an IEnumberable of ProjectInfo's containing projects for the customer.</returns>
 		public ActionResult GetProjects(int customerID)
-        {
+		{
 			return Json(ProjectService.GetProjectsByCustomer(customerID));
-        }
-    }
+		}
+	}
 }

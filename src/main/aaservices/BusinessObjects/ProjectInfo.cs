@@ -27,7 +27,7 @@ namespace AllyisApps.Services.BusinessObjects
 		public int CustomerId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the project name. 
+		/// Gets or sets the project name.
 		/// </summary>
 		public string Name { get; set; }
 	}

@@ -14,7 +14,6 @@ function moveSelectedProjectEditModal(direction) {
             i++;
         }
     }
-
 }
 
 var selectAll = function () {
@@ -260,7 +259,6 @@ var selectAll = function () {
 //        ]
 //    })
 //});
-
 
 var project_assign_module = function () {
     var modal;

@@ -4,14 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Areas.TimeTracker.Models;
+using AllyisApps.Core;
+using AllyisApps.Services.BusinessObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-
-using AllyisApps.Areas.TimeTracker.Models;
-using AllyisApps.Core;
-using AllyisApps.Services.BusinessObjects;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -157,7 +156,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		private IEnumerable<SelectListItem> GetProjectSelectList(int organizationId, int customerSelected, int projectSelected)
 		{
 			var pSelectList = new List<SelectListItem>();
-			
+
 			// disable project selection if no customer selected
 			if (customerSelected == 0)
 			{

@@ -4,6 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Shared;
+using AllyisApps.Lib;
+using AllyisApps.Services.BusinessObjects;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,11 +18,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Security;
-using AllyisApps.DBModel;
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Shared;
-using AllyisApps.Lib;
-using AllyisApps.Services.BusinessObjects;
 
 namespace AllyisApps.Services.Account
 {
@@ -27,6 +27,7 @@ namespace AllyisApps.Services.Account
 	public partial class AccountService : BaseService
 	{
 		#region constructor
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AccountService"/> class.
 		/// </summary>
@@ -34,7 +35,8 @@ namespace AllyisApps.Services.Account
 		public AccountService(string connectionString) : base(connectionString)
 		{
 		}
-		#endregion
+
+		#endregion constructor
 
 		#region public static
 
@@ -125,9 +127,11 @@ namespace AllyisApps.Services.Account
 			Uri result;
 			return Uri.TryCreate(url, UriKind.Absolute, out result) && (result.Scheme == Uri.UriSchemeHttp || result.Scheme == Uri.UriSchemeHttps);
 		}
-		#endregion
+
+		#endregion public static
 
 		#region public
+
 		/// <summary>
 		/// Returns a collection of valid states/provinces for the given country.
 		/// </summary>
@@ -174,11 +178,13 @@ namespace AllyisApps.Services.Account
 		public List<InvitationInfo> GetInvitationsByUser(string userEmail)
 		{
 			#region Validation
+
 			if (!AccountService.IsEmailAddressValid(userEmail))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			var invitationsDB = DBHelper.GetUserInvitationsByUserData(new UserDBEntity()
 			{
@@ -213,11 +219,13 @@ namespace AllyisApps.Services.Account
 		public async Task<string> AcceptUserInvitation(InvitationInfo invite)
 		{
 			#region Validation
+
 			if (invite == null)
 			{
 				throw new ArgumentOutOfRangeException("invite", "The invitation is null.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			var user = await this.GetUserByEmail(invite.Email);
 			if (invite.ProjectId.HasValue)
@@ -274,6 +282,7 @@ namespace AllyisApps.Services.Account
 		public async Task<List<string>> AddToPendingOrganizations(int userId, string email)
 		{
 			#region Validation
+
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
@@ -287,7 +296,8 @@ namespace AllyisApps.Services.Account
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			List<string> notificationMessages = new List<string>();
 			foreach (InvitationInfo invite in this.GetInvitationsByUser(email))
@@ -322,6 +332,7 @@ namespace AllyisApps.Services.Account
 			int chosenLanguageID = 0)
 		{
 			#region Validation
+
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
@@ -355,7 +366,8 @@ namespace AllyisApps.Services.Account
 			{
 				throw new ArgumentOutOfRangeException("chosenLanguageID", "Language ID cannot be negative.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			UserContext context = new UserContext(userId, userName, email, chosenOrganizationId, chosenSubscriptionId, userOrganizationInfoList, chosenLanguageID);
 			this.SetAuthCookie(context, response, isPersisted);
@@ -402,6 +414,7 @@ namespace AllyisApps.Services.Account
 			DateTime? lockOutEndDateUtc = null)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName))
 			{
 				throw new ArgumentException("User name must have a value.");
@@ -420,7 +433,8 @@ namespace AllyisApps.Services.Account
 			{
 				throw new ArgumentNullException("password", "Password must have a value.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			int result = 0;
 			try
@@ -473,6 +487,7 @@ namespace AllyisApps.Services.Account
 		public async Task<UserContext> ValidateLogin(string email, string password)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(email))
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
@@ -486,7 +501,8 @@ namespace AllyisApps.Services.Account
 			{
 				throw new ArgumentNullException("password", "Password must have a value.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			UserContext result = null;
 			var user = await this.DBHelper.GetUserByEmailAsync(email);
@@ -561,7 +577,7 @@ namespace AllyisApps.Services.Account
 
 				result.ChosenLanguageID = user.LanguagePreference;
 
-				// If a user deletes an organization or is otherwise removed from one, he should not have it saved as his last active org 
+				// If a user deletes an organization or is otherwise removed from one, he should not have it saved as his last active org
 			}
 
 			this.SetUserContext(result);
@@ -735,6 +751,7 @@ namespace AllyisApps.Services.Account
 		public async Task<bool> ResetPassword(int userId, string code, string password)
 		{
 			#region Validation
+
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
@@ -757,7 +774,8 @@ namespace AllyisApps.Services.Account
 			{
 				throw new ArgumentNullException("password", "Password must have a value.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			return await Task<bool>.Run(() =>
 			{
@@ -853,6 +871,7 @@ namespace AllyisApps.Services.Account
 		public async Task SendConfirmationEmail(string from, string to, string confirmEmailUrl)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(from))
 			{
 				throw new ArgumentNullException("from", "From email address must have a value.");
@@ -879,7 +898,8 @@ namespace AllyisApps.Services.Account
 			{
 				throw new FormatException("Confirm email url must be in a valid format.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			string bodyHtml = string.Format("Please confirm your email by clicking <a href=\"{0}\">here</a>", confirmEmailUrl);
 			await Mailer.SendEmailAsync(from, to, "Confirm Email", bodyHtml);
@@ -894,6 +914,7 @@ namespace AllyisApps.Services.Account
 		public async Task<bool> ConfirmEmailAsync(int userId, string code)
 		{
 			#region Validation
+
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("user Id", "User ID cannot be 0 or negative.");
@@ -911,7 +932,8 @@ namespace AllyisApps.Services.Account
 					throw new ArgumentException("Code must be a valid Guid.");
 				}
 			}
-			#endregion
+
+			#endregion Validation
 
 			if (DBHelper.GetUserInfo(userId).EmailConfirmed)
 			{
@@ -952,13 +974,15 @@ namespace AllyisApps.Services.Account
 		{
 			return DBHelper.GetOrganizationsByUserId(UserContext.UserId).Select(o => BusinessObjectsHelper.InitializeOrganizationInfo(o));
 		}
-		#endregion
+
+		#endregion public
 
 		#region private
+
 		/// <summary>
 		/// Serialize the given CookieData object and set it to auth cookie
 		/// - forms authentication module will have its own cookie, and set the given information to HttpContext.User object for each request, which will
-		/// -   make the Request.IsAuthenticated to true 
+		/// -   make the Request.IsAuthenticated to true
 		/// - sample code here: https://msdn.microsoft.com/en-us/library/system.web.security.formsauthentication.encrypt(v=vs.110).aspx .
 		/// </summary>
 		/// <param name="context">The UserContext.</param>
@@ -985,6 +1009,7 @@ namespace AllyisApps.Services.Account
 			//// set the cookie to response
 			response.Cookies.Add(cookie);
 		}
-		#endregion
+
+		#endregion private
 	}
 }

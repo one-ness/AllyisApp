@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.Auth;
 using System.Collections.Generic;
 using System.Linq;
-using AllyisApps.DBModel.Auth;
 
 namespace AllyisApps.DBModel.Cache
 {
@@ -67,7 +67,7 @@ namespace AllyisApps.DBModel.Cache
 		{
 			return this.Items().Where(x => x.ProductId == itemId).FirstOrDefault();
 		}
-		
+
 		//-------------------------------------------------------------------//
 		//---------------------------Sets------------------------------------//
 		//-------------------------------------------------------------------//

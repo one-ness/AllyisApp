@@ -84,7 +84,7 @@ namespace AllyisApps.Lib
 		}
 
 		/// <summary>
-		/// Encrypts "to" using key and initialization vector and returns that stream. 
+		/// Encrypts "to" using key and initialization vector and returns that stream.
 		/// </summary>
 		/// <param name="key">The encryption key.</param>
 		/// <param name="iv">The initialization vector.</param>
@@ -122,7 +122,7 @@ namespace AllyisApps.Lib
 		}
 
 		/// <summary>
-		/// Decrypts from using key and initialization vector and returns that stream. 
+		/// Decrypts from using key and initialization vector and returns that stream.
 		/// </summary>
 		/// <param name="key">The decryption key.</param>
 		/// <param name="iv">The initialization vector.</param>

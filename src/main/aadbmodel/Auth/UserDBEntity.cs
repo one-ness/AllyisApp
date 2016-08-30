@@ -15,8 +15,10 @@ namespace AllyisApps.DBModel.Auth
 	public class UserDBEntity : BasePoco
 	{ // TODO: Add language field once we have language in DB
 		private int pUserId;
+
 		////private string pAspnetUserId;
 		private string pFirstName;
+
 		private string pLastName;
 		private DateTime? pDateOfBirth;
 		private string pAddress;

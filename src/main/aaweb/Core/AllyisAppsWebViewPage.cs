@@ -13,7 +13,7 @@ namespace AllyisApps.Core
 	/// </summary>
 	/// <typeparam name="TModel">Generic for the Model passed to the view.</typeparam>
 	public abstract class AllyisAppsWebViewPage<TModel> : WebViewPage<TModel>
-	{       
+	{
 		/// <summary>
 		/// Gets rendering hints for the layout.
 		/// </summary>

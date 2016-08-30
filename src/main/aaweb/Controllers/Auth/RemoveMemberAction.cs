@@ -4,11 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using System;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -20,7 +19,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// POST: Organization/RemoveUser.
 		/// </summary>
-		/// <param name="userId">The user's ID.</param>        
+		/// <param name="userId">The user's ID.</param>
 		/// <returns>The result of this action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]

@@ -9,12 +9,12 @@ using System;
 namespace AllyisApps.DBModel.Billing
 {
 	/// <summary>
-	/// The table to display the subscription information. 
+	/// The table to display the subscription information.
 	/// </summary>
 	public class SubscriptionDisplayDBEntity
 	{
 		/// <summary>
-		/// Gets or sets The id of the subscription product. 
+		/// Gets or sets The id of the subscription product.
 		/// </summary>
 		public int ProductId { get; set; }
 
@@ -24,17 +24,17 @@ namespace AllyisApps.DBModel.Billing
 		public string ProductName { get; set; }
 
 		/// <summary>
-		/// Gets or sets The subscription id. 
+		/// Gets or sets The subscription id.
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
 		/// <summary>
-		/// Gets or sets The organization id. 
+		/// Gets or sets The organization id.
 		/// </summary>
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets The Sku id. 
+		/// Gets or sets The Sku id.
 		/// </summary>
 		public int SkuId { get; set; }
 
@@ -49,17 +49,17 @@ namespace AllyisApps.DBModel.Billing
 		public int SubscriptionsUsed { get; set; }
 
 		/// <summary>
-		/// Gets or sets The name of the organization. 
+		/// Gets or sets The name of the organization.
 		/// </summary>
 		public string OrganizationName { get; set; }
 
 		/// <summary>
-		/// Gets or sets The name of the Sku. 
+		/// Gets or sets The name of the Sku.
 		/// </summary>
 		public string SkuName { get; set; }
 
 		/// <summary>
-		/// Gets or sets Date the entry was added. 
+		/// Gets or sets Date the entry was added.
 		/// </summary>
 		public DateTime CreatedUTC { get; set; }
 

@@ -4,9 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.Areas.TimeTracker.Models
 {

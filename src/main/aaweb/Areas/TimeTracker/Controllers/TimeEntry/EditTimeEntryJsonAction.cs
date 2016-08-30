@@ -4,15 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Web.Mvc;
-
 using AllyisApps.Areas.TimeTracker.Core;
 using AllyisApps.Areas.TimeTracker.Models;
 using AllyisApps.Core;
 using AllyisApps.Services.BusinessObjects;
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {

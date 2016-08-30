@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.TimeTracker;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using AllyisApps.DBModel.TimeTracker;
-using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -283,7 +283,7 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Gets a specific time entry. 
+		/// Gets a specific time entry.
 		/// </summary>
 		/// <param name="timeEntryId">The id of the time entry.</param>
 		/// <returns>The time entry.</returns>
@@ -345,7 +345,7 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Deletes a time entry. 
+		/// Deletes a time entry.
 		/// </summary>
 		/// <param name="timeEntryId">The time entry to be deleted.</param>
 		public void DeleteTimeEntry(int timeEntryId)

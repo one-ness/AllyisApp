@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using AllyisApps.Utilities;
 
 namespace AllyisApps.ViewModels
 {
@@ -35,7 +35,6 @@ namespace AllyisApps.ViewModels
 		[Required(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "EmailValidation")]
 		[EmailAddress(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "EmailFormatValidation")]
 		[Display(Name = "Email")]
-
 		public string Email { get; set; }
 
 		/// <summary>

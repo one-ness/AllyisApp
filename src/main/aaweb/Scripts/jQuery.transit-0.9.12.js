@@ -10,7 +10,6 @@
 /* jshint expr: true */
 
 ; (function (root, factory) {
-
     if (typeof define === 'function' && define.amd) {
         define(['jquery'], factory);
     } else if (typeof exports === 'object') {
@@ -18,9 +17,7 @@
     } else {
         factory(root.jQuery);
     }
-
 }(this, function ($) {
-
     $.transit = {
         version: "0.9.12",
 
@@ -696,7 +693,6 @@
                 $(elem).css({ 'transit:transform': t });
             }
         };
-
     }
 
     // ### uncamel(str)
@@ -727,7 +723,7 @@
     // toMS('fast') => $.fx.speeds[i] => "200ms"
     // toMS('normal') //=> $.fx.speeds._default => "400ms"
     // toMS(10) //=> '10ms'
-    // toMS('100ms') //=> '100ms'  
+    // toMS('100ms') //=> '100ms'
     //
     function toMS(duration) {
         var i = duration;

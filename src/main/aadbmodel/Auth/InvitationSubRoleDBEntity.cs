@@ -15,10 +15,10 @@ namespace AllyisApps.DBModel.Auth
 		private int pSubscriptionId;
 		private int pProductRoleId;
 
-        /// <summary>
-        /// Gets or sets the id of the invitation. 
-        /// </summary>
-        public int InvitationId
+		/// <summary>
+		/// Gets or sets the id of the invitation.
+		/// </summary>
+		public int InvitationId
 		{
 			get
 			{
@@ -31,10 +31,10 @@ namespace AllyisApps.DBModel.Auth
 			}
 		}
 
-        /// <summary>
-        /// Gets or sets the subscription id. 
-        /// </summary>
-        public int SubscriptionId
+		/// <summary>
+		/// Gets or sets the subscription id.
+		/// </summary>
+		public int SubscriptionId
 		{
 			get
 			{
@@ -47,10 +47,10 @@ namespace AllyisApps.DBModel.Auth
 			}
 		}
 
-        /// <summary>
-        /// Gets or sets the product role id. 
-        /// </summary>
-        public int ProductRoleId
+		/// <summary>
+		/// Gets or sets the product role id.
+		/// </summary>
+		public int ProductRoleId
 		{
 			get
 			{

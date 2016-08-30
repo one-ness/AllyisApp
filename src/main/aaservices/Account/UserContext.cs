@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace AllyisApps.Services.Account
 {
 	/// <summary>
-	/// Logged in user context. 
+	/// Logged in user context.
 	/// An instance must be created for every HTTP request to the application.
 	/// This is also used as the cookie data.
 	/// </summary>

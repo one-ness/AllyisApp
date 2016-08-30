@@ -4,12 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.ViewModels;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -67,7 +66,7 @@ namespace AllyisApps.Controllers
 
 					if (AccountService.GetInvitationsByUser(model.Email).Count > 0)
 					{
-						// If the user was invited, redirect to the index page to display invitations 
+						// If the user was invited, redirect to the index page to display invitations
 						return this.RedirectToAction(ActionConstants.Index);
 					}
 					else

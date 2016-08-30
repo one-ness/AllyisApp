@@ -4,9 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-
 using AllyisApps.Services.BusinessObjects;
+using System.Collections.Generic;
 
 namespace AllyisApps.Areas.TimeTracker.Models
 {
@@ -68,10 +67,10 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		/// </summary>
 		public bool IsOffDay { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the entry is a holiday.
-        /// </summary>
-        public bool IsHoliday { get; set; }
+		/// <summary>
+		/// Gets or sets a value indicating whether the entry is a holiday.
+		/// </summary>
+		public bool IsHoliday { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the project is deleted or not.

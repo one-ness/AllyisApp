@@ -9,12 +9,12 @@ using System;
 namespace AllyisApps.Services.BusinessObjects
 {
 	/// <summary>
-	/// Represents a subscription's information. 
+	/// Represents a subscription's information.
 	/// </summary>
 	public class SubscriptionDisplayInfo
 	{
 		/// <summary>
-		/// Gets or sets a Product Id. 
+		/// Gets or sets a Product Id.
 		/// </summary>
 		public int ProductId { get; set; }
 
@@ -24,17 +24,17 @@ namespace AllyisApps.Services.BusinessObjects
 		public string ProductName { get; set; }
 
 		/// <summary>
-		/// Gets or sets a Subscription id. 
+		/// Gets or sets a Subscription id.
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
 		/// <summary>
-		/// Gets or sets a Organization id. 
+		/// Gets or sets a Organization id.
 		/// </summary>
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets a Sku Id. 
+		/// Gets or sets a Sku Id.
 		/// </summary>
 		public int SkuId { get; set; }
 
@@ -49,17 +49,17 @@ namespace AllyisApps.Services.BusinessObjects
 		public int SubscriptionsUsed { get; set; }
 
 		/// <summary>
-		/// Gets or sets a Name of the organization. 
+		/// Gets or sets a Name of the organization.
 		/// </summary>
 		public string OrganizationName { get; set; }
 
 		/// <summary>
-		/// Gets or sets a Name of the Sku. 
+		/// Gets or sets a Name of the Sku.
 		/// </summary>
 		public string SkuName { get; set; }
 
 		/// <summary>
-		/// Gets or sets a Date the entry was added. 
+		/// Gets or sets a Date the entry was added.
 		/// </summary>
 		public DateTime CreatedUTC { get; set; }
 

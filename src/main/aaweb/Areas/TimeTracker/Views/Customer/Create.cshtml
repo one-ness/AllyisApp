@@ -16,7 +16,6 @@
 
             @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
 
-
             <div class="form-group">
                 @Html.ReqLabelFor(model => model.Name, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.Name)
                 @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
@@ -92,7 +91,6 @@
     </div>
 </div>
 
-
 @section Scripts {
     <script type="text/javascript">
         var preserveState = "@(Model != null ? (AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : string.Empty)";
@@ -100,4 +98,3 @@
     </script>
     <script type="text/javascript" src="~/Scripts/allyis-updateStateDDL.js"></script>
 }
-

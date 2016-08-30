@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
 using AllyisApps.BillingServices.Common.Types;
 using AllyisApps.Services.BusinessObjects;
+using System;
+using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels
 {
@@ -48,12 +48,12 @@ namespace AllyisApps.ViewModels
 		public OrganizationAddMembersViewModel Add { get; set; }
 
 		/// <summary>
-		/// Gets or sets the stripe Token id. 
+		/// Gets or sets the stripe Token id.
 		/// </summary>
 		public BillingServicesCustomer BillingCustomer { get; set; }
 
 		/// <summary>
-		/// Gets or sets the last four digits of credit card. 
+		/// Gets or sets the last four digits of credit card.
 		/// </summary>
 		public string LastFour { get; set; }
 

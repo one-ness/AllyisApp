@@ -4,9 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-
 using AllyisApps.Services.BusinessObjects;
+using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels
 {

@@ -4,11 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Globalization;
-using System.Threading;
-using System.Web.Mvc;
-using System.Web.Security;
 using AllyisApps.Core.Alert;
 using AllyisApps.DBModel;
 using AllyisApps.Services.Account;
@@ -16,6 +11,11 @@ using AllyisApps.Services.BusinessObjects;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Org;
 using AllyisApps.Utilities;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Threading;
+using System.Web.Mvc;
+using System.Web.Security;
 
 namespace AllyisApps.Core
 {

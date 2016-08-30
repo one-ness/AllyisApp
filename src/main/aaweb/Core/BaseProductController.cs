@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
 using AllyisApps.Services.BusinessObjects;
 using AllyisApps.Services.Project;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.Utilities;
+using System.Web.Mvc;
 
 namespace AllyisApps.Core
 {
@@ -55,7 +55,7 @@ namespace AllyisApps.Core
 			}
 
 			// Null subscription means this organization does not have this product, so no subscription exists and subId should stay 0
-			// We want to update subId even if it is 0 to prevent inappropriately accessing subscriptions across companies 
+			// We want to update subId even if it is 0 to prevent inappropriately accessing subscriptions across companies
 			// (e.g. prevent the following: login to company with timetracker, then swap companies to one without timetracker, then login to timetracker from the wrong company)
 			if (UserContext.ChosenSubscriptionId != subId)
 			{

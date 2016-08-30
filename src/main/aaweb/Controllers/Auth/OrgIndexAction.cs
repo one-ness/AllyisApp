@@ -4,10 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.ViewModels.Shared;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -33,7 +32,7 @@ namespace AllyisApps.Controllers
 					CanEditOrganization = AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization),
 					TimeTrackerViewSelf = AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf)
 				};
-				
+
 				return this.View(subscriptions);
 			}
 

@@ -38,12 +38,13 @@ namespace AllyisApps.DBModel.Billing
 		/// Gets or sets Name.
 		/// </summary>
 		public string Name { get; set; }
+
 		/*{
             get
             {
                 return this.pName;
             }
-            
+
             set
             {
                 this.ApplyPropertyChange<ProductDBEntity, string>(ref this.pName, (ProductDBEntity x) => x.Name, value);

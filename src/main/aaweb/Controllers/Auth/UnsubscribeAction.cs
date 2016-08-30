@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Web.Mvc;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.ViewModels;
+using System;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -29,7 +29,7 @@ namespace AllyisApps.Controllers
 			{
 				ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(id);
 
-				return this.View(model);	
+				return this.View(model);
 			}
 
 			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
@@ -69,7 +69,7 @@ namespace AllyisApps.Controllers
 				}
 				catch (Exception e)
 				{
-					Notifications.Add(new BootstrapAlert(e.ToString(), Variety.Warning)); 
+					Notifications.Add(new BootstrapAlert(e.ToString(), Variety.Warning));
 				}
 
 				if (model.CurrentSubscription != null)

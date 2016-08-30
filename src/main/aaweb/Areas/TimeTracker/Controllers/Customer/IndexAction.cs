@@ -4,14 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services.BusinessObjects;
 using AllyisApps.ViewModels;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -46,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ManageCustomerViewModel ConstructManageCustomerViewModel(int userId, int orgId)
 		{
 			bool canEditProjects = AuthorizationService.Can(Services.Account.Actions.CoreAction.EditProject);
-			IEnumerable<CompleteProjectInfo> projects = canEditProjects ?	// Show all of a customer's projects for managers, but only projects one belongs to for users
+			IEnumerable<CompleteProjectInfo> projects = canEditProjects ?   // Show all of a customer's projects for managers, but only projects one belongs to for users
 				OrgService.GetProjectsByOrganization(orgId) : ProjectService.GetProjectsByUserId(userId);
 			IEnumerable<CustomerInfo> customers = CrmService.GetCustomerList(orgId);
 			////IEnumerable<CustomerInfo> customers = new List<CustomerInfo>();                           // TODO: Should we be showing all customers to all users? Probably need to filter this out by projects that the user is part of for non-managers

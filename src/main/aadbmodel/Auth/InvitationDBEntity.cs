@@ -8,7 +8,7 @@ using System;
 namespace AllyisApps.DBModel.Auth
 {
 	/// <summary>
-	/// The model for the invitations table. 
+	/// The model for the invitations table.
 	/// </summary>
 	public class InvitationDBEntity : BasePoco
 	{
@@ -23,7 +23,7 @@ namespace AllyisApps.DBModel.Auth
 		private int? pProjectId;
 
 		/// <summary>
-		/// Gets or sets the id of the invitation. 
+		/// Gets or sets the id of the invitation.
 		/// </summary>
 		public int InvitationId
 		{
@@ -39,7 +39,7 @@ namespace AllyisApps.DBModel.Auth
 		}
 
 		/// <summary>
-		/// Gets or sets the email address that the invitation is being sent to. 
+		/// Gets or sets the email address that the invitation is being sent to.
 		/// </summary>
 		public string Email
 		{
@@ -74,7 +74,7 @@ namespace AllyisApps.DBModel.Auth
 		}
 
 		/// <summary>
-		/// Gets or sets the first name of the recipiant. 
+		/// Gets or sets the first name of the recipiant.
 		/// </summary>
 		public string FirstName
 		{
@@ -90,7 +90,7 @@ namespace AllyisApps.DBModel.Auth
 		}
 
 		/// <summary>
-		/// Gets or sets the last name of the recipiant. 
+		/// Gets or sets the last name of the recipiant.
 		/// </summary>
 		public string LastName
 		{
@@ -106,7 +106,7 @@ namespace AllyisApps.DBModel.Auth
 		}
 
 		/// <summary>
-		/// Gets or sets the birthday of the recipiant. 
+		/// Gets or sets the birthday of the recipiant.
 		/// </summary>
 		public DateTime DateOfBirth
 		{
@@ -122,7 +122,7 @@ namespace AllyisApps.DBModel.Auth
 		}
 
 		/// <summary>
-		/// Gets or sets the id of the inviting organization. 
+		/// Gets or sets the id of the inviting organization.
 		/// </summary>
 		public int OrganizationId
 		{
@@ -138,7 +138,7 @@ namespace AllyisApps.DBModel.Auth
 		}
 
 		/// <summary>
-		/// Gets or sets the access code associated with the invitation. 
+		/// Gets or sets the access code associated with the invitation.
 		/// </summary>
 		public string AccessCode
 		{
@@ -170,7 +170,7 @@ namespace AllyisApps.DBModel.Auth
 		}
 
 		/// <summary>
-		/// Gets or sets the id of the org role the user will be assigned. 
+		/// Gets or sets the id of the org role the user will be assigned.
 		/// </summary>
 		public int OrgRole
 		{

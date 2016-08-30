@@ -4,14 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Services.BusinessObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Web;
-
-using AllyisApps.Services.BusinessObjects;
 
 namespace AllyisApps.ViewModels
 {
@@ -53,7 +52,7 @@ namespace AllyisApps.ViewModels
 				{
 					output.Append(",");
 					output.Append(string.Format("\"{0}\":{1}", this.UserPermissions.ElementAt(i).UserId, "{"));
-					output.Append(string.Format("name:\"{0}\",", this.UserPermissions.ElementAt(i).UserName));					
+					output.Append(string.Format("name:\"{0}\",", this.UserPermissions.ElementAt(i).UserName));
 					output.Append(string.Format("search:\"{0} {1}\"", this.UserPermissions.ElementAt(i).UserName, this.UserPermissions.ElementAt(i).Email));
 					output.Append("}");
 				}

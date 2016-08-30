@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Services.BusinessObjects;
 using System.Collections.Generic;
 using System.IO;
-using AllyisApps.Services.BusinessObjects;
 
 namespace AllyisApps.Areas.TimeTracker.Models
 {
@@ -52,8 +52,9 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		/// </summary>
 		public StringWriter ExcelOutput { get; internal set; }
 
-        #region Oldcode
-        /* This was replaced by PrepareCSV/PrepareExcelExportAction and SetPreviewDataAction  
+		#region Oldcode
+
+		/* This was replaced by PrepareCSV/PrepareExcelExportAction and SetPreviewDataAction
 
 		/// <summary>
 		/// Prepares the CSV file for output.
@@ -84,8 +85,7 @@ namespace AllyisApps.Areas.TimeTracker.Models
 			this.Output.Flush();
 			this.Output.BaseStream.Seek(0, SeekOrigin.Begin);
 		}
-        
-		
+
         /// <summary>
 		/// Prepares the Excel file for output.
 		/// </summary>
@@ -93,7 +93,6 @@ namespace AllyisApps.Areas.TimeTracker.Models
 		/// <param name="page">The page of results to view.</param>
 		public void CreateExcelFileOutput(int limit = 0, int page = 1)
 		{
-
             int skipNum = limit * (page - 1);
             limit = limit == 0 ? this.Data.Count() : limit;
 
@@ -105,7 +104,7 @@ namespace AllyisApps.Areas.TimeTracker.Models
             // only process data values for current page
 
             // get output column data
-            DOES NOT WORK WITH "ALL USERS" SELECTION FOR NO APPARENT REASON 
+            DOES NOT WORK WITH "ALL USERS" SELECTION FOR NO APPARENT REASON
 			var dataMod = from i in dataSkip
 						  select new
 						  {
@@ -123,7 +122,7 @@ namespace AllyisApps.Areas.TimeTracker.Models
 			this.ExcelOutput = new StringWriter();
 			HtmlTextWriter htw = new HtmlTextWriter(this.ExcelOutput);
 			output.RenderControl(htw);
-        }   
+        }
 
 		/// <summary>
 		/// Prepares the page data to view.
@@ -149,6 +148,7 @@ namespace AllyisApps.Areas.TimeTracker.Models
 			this.PreviewData = (from p in this.Data
 								select p).Skip(skipNum).Take(limit);
 		}*/
-        #endregion Oldcode
-    }
+
+		#endregion Oldcode
+	}
 }

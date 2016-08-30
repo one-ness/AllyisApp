@@ -6,7 +6,6 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 
-
 +function ($) {
   'use strict';
 
@@ -71,7 +70,6 @@
     }
   }
 
-
   // BUTTON PLUGIN DEFINITION
   // ========================
 
@@ -93,7 +91,6 @@
   $.fn.button             = Plugin
   $.fn.button.Constructor = Button
 
-
   // BUTTON NO CONFLICT
   // ==================
 
@@ -101,7 +98,6 @@
     $.fn.button = old
     return this
   }
-
 
   // BUTTON DATA-API
   // ===============
@@ -116,5 +112,4 @@
     .on('focus.bs.button.data-api blur.bs.button.data-api', '[data-toggle^="button"]', function (e) {
       $(e.target).closest('.btn').toggleClass('focus', /^focus(in)?$/.test(e.type))
     })
-
 }(jQuery);

@@ -155,7 +155,6 @@ $(function () {
     assert.ok($dropdown.parent('.dropdown').hasClass('open'), '"open" class added on click')
   })
 
-
   QUnit.test('should remove "open" class if body is clicked', function (assert) {
     assert.expect(2)
     var dropdownHTML = '<ul class="tabs">'
@@ -250,7 +249,6 @@ $(function () {
     $dropdown.trigger('click')
     $(document.body).trigger('click')
   })
-
 
   QUnit.test('should fire shown and hidden event', function (assert) {
     assert.expect(2)

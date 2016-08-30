@@ -50,7 +50,6 @@
                             Items are added and removed from this list via Javascript and the add / remove buttons
                         *@
                         @Html.ListBoxFor(m => m.SelectedProjectUserIds, new MultiSelectList(Model.ProjectUsers, "UserId", "Name"), new { @name = "Included", @id = "included-users", @class = "filter-list", @Multiple = "multiple" })
-
                     </div>
                 </div>
                 <div class="form-group">
@@ -68,7 +67,7 @@
                         <input type="text" name="daterange" id="daterange" class="form-control" value="" />
                     </div>
 
-                    @{   
+                    @{
                         <div class="col-xs-4 text-right">
                             @Html.RadioButtonFor(m => m.PriceType, AllyisApps.Resources.TimeTracker.Views.Project.Strings.Hourly, new { @checked = "checked" }) @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Hourly <br />
                             @Html.RadioButtonFor(m => m.PriceType, AllyisApps.Resources.TimeTracker.Views.Project.Strings.Fixed) @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Fixed

@@ -4,11 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-
 using AllyisApps.BusinessObjects;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
@@ -17,6 +12,10 @@ using AllyisApps.Services.Account;
 using AllyisApps.Services.BusinessObjects;
 using AllyisApps.ViewModels;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -63,10 +62,10 @@ namespace AllyisApps.Controllers
 				subRoles.Add(temp);
 				permissions.Add(new UserPermissionsManagement()
 				{
-					UserId             = user.UserId,
-					UserName           = string.Format("{0} {1}", user.FirstName, user.LastName),
+					UserId = user.UserId,
+					UserName = string.Format("{0} {1}", user.FirstName, user.LastName),
 					OrganizationRoleId = user.OrgRoleId,
-					SubscriptionRoles  = subRoles
+					SubscriptionRoles = subRoles
 				});
 			}
 

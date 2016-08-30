@@ -4,8 +4,8 @@
 // </copyright>
 
 //------------------------------------------------------------------------------
-using System;
 using AllyisApps.BillingServices.Common.Types;
+using System;
 
 namespace AllyisApps.ViewModels
 {
@@ -16,7 +16,7 @@ namespace AllyisApps.ViewModels
 	public class BillingViewModel : BaseViewModel
 	{
 		/// <summary>
-		/// Gets or sets the billing email address. 
+		/// Gets or sets the billing email address.
 		/// </summary>
 		public string Email { get; set; }
 
@@ -31,12 +31,12 @@ namespace AllyisApps.ViewModels
 		public int Amount { get; set; }
 
 		/// <summary>
-		/// Gets or sets the type of currency being paid. 
+		/// Gets or sets the type of currency being paid.
 		/// </summary>
 		public string Currency { get; set; }
 
 		/// <summary>
-		/// Gets or sets the customer to get billed. 
+		/// Gets or sets the customer to get billed.
 		/// </summary>
 		public BillingServicesCustomer Customer { get; set; }
 	}

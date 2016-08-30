@@ -4,8 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-
 namespace AllyisApps.BillingServices.Common.Types
 {
 	/// <summary>
@@ -14,10 +12,13 @@ namespace AllyisApps.BillingServices.Common.Types
 	public class BillingServicesCustomerId
 	{
 		#region private fields
+
 		private readonly string id;
-		#endregion
+
+		#endregion private fields
 
 		#region constructor
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BillingServicesCustomerId"/> class.
 		/// </summary>
@@ -26,9 +27,11 @@ namespace AllyisApps.BillingServices.Common.Types
 		{
 			this.id = id;
 		}
-		#endregion
+
+		#endregion constructor
 
 		#region accessor properties
+
 		/// <summary>
 		/// Gets the customer ID.
 		/// </summary>
@@ -39,6 +42,7 @@ namespace AllyisApps.BillingServices.Common.Types
 				return this.id;
 			}
 		}
-		#endregion
+
+		#endregion accessor properties
 	}
 }

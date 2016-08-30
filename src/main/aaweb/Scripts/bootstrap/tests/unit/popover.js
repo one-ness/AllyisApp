@@ -126,7 +126,6 @@ $(function () {
     assert.strictEqual($('.popover').length, 0, 'popover was removed')
   })
 
-
   QUnit.test('should get title and content from attributes ignoring options passed via js', function (assert) {
     assert.expect(4)
     var $popover = $('<a href="#" title="@mdo" data-content="loves data attributes (づ｡◕‿‿◕｡)づ ︵ ┻━┻" >@mdo</a>')
@@ -286,5 +285,4 @@ $(function () {
       })
       .bootstrapPopover('show')
   })
-
 })

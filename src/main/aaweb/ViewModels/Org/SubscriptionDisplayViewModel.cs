@@ -9,19 +9,19 @@ using AllyisApps.Services.BusinessObjects;
 namespace AllyisApps.ViewModels
 {
 	/// <summary>
-	/// View Model for display of subscription info on the organization manage page. 
+	/// View Model for display of subscription info on the organization manage page.
 	/// </summary>
 	public class SubscriptionDisplayViewModel : BaseViewModel
 	{
 		/// <summary>
-		/// Gets or sets the subscription info object. 
+		/// Gets or sets the subscription info object.
 		/// </summary>
 		public SubscriptionDisplayInfo Info { get; set; } // TODO: Move this information into view model directly?
-		
+
 		/// <summary>
 		/// Gets or sets a value indicating whether the user has permission to edit this subscription.
 		/// </summary>
-		public bool CanEditSubscriptions { get; set; } 
+		public bool CanEditSubscriptions { get; set; }
 
 		/// <summary>
 		/// Gets or sets the id for the product this subscription is for.
