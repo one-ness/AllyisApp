@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using AllyisApps.BillingServices.Common;
 using AllyisApps.BillingServices.Common.Types;
 
@@ -19,13 +20,10 @@ namespace AllyisApps.BillingServices
 	public class BillingServicesHandler : IBillingServicesInterface
 	{
 		#region fields
-
 		private readonly IBillingServicesInterface service;
-
 		#endregion fields
 
 		#region constructor
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BillingServicesHandler"/> class.
 		/// Given the input of which service the user has chosen, builds the appropriate BillingServiceInterface implementing wrapper object.
@@ -56,13 +54,10 @@ namespace AllyisApps.BillingServices
 				throw new NotImplementedException(string.Format("Billing system, {0}, is not implemented", serviceType));
 			}
 		}
-
 		#endregion constructor
 
 		#region IBillingServicesInterface implementation
-
 		#region plans
-
 		/// <summary>
 		/// Calls the CreatePlan method in the appropriate BillingServicesInterface implementing object.
 		/// </summary>
@@ -104,11 +99,9 @@ namespace AllyisApps.BillingServices
 		{
 			return this.service.DeletePlan();
 		}
-
 		#endregion plans
 
 		#region customers
-
 		/// <summary>
 		/// Calls the CreateCustomer method in the appropriate BillingServicesInterface implementing object.
 		/// </summary>
@@ -158,11 +151,9 @@ namespace AllyisApps.BillingServices
 		{
 			return this.service.DeleteCustomer();
 		}
-
 		#endregion customers
 
 		#region subscriptions
-
 		/// <summary>
 		/// Calls the CreateSubscription method in the appropriate BillingServicesInterface implementing object.
 		/// </summary>
@@ -217,11 +208,9 @@ namespace AllyisApps.BillingServices
 		{
 			this.service.DeleteSubscription(customerId, subscriptionId);
 		}
-
 		#endregion subscriptions
 
 		#region charges
-
 		/// <summary>
 		/// Calls the CreateCharge method in the appropriate BillingServicesInterface implementing object.
 		/// </summary>
@@ -249,11 +238,9 @@ namespace AllyisApps.BillingServices
 		{
 			return this.service.ListCharges(customerId);
 		}
-
 		#endregion charges
 
 		#region invoices
-
 		/// <summary>
 		/// Calls the ListInvoices method in the appropriate BillingServicesInterface implementing object.
 		/// </summary>
@@ -263,9 +250,7 @@ namespace AllyisApps.BillingServices
 		{
 			return this.service.ListInvoices(customerId);
 		}
-
 		#endregion invoices
-
 		#endregion IBillingServicesInterface implementation
 	}
 }
