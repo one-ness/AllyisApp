@@ -1255,13 +1255,13 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\aalib\AllyisApps.Lib.csproj">
-      <Project>{448ffc61-ecf1-4312-a35b-c221f98a895c}</Project>
-      <Name>AllyisApps.Lib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AllyisApps.DBModel\AllyisApps.DBModel.csproj">
       <Project>{15549511-d542-4592-9c4a-dcd10f4c0c45}</Project>
       <Name>AllyisApps.DBModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AllyisApps.Lib\AllyisApps.Lib.csproj">
+      <Project>{448ffc61-ecf1-4312-a35b-c221f98a895c}</Project>
+      <Name>AllyisApps.Lib</Name>
     </ProjectReference>
     <ProjectReference Include="..\AllyisApps.Services.Common\AllyisApps.Services.Common.csproj">
       <Project>{7829f110-92b1-4a99-9d75-1dd971b980ee}</Project>
