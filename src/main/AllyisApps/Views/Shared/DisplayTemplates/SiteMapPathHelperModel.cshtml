@@ -1,0 +1,13 @@
+﻿@model MvcSiteMapProvider.Web.Html.Models.SiteMapPathHelperModel
+@using System.Web.Mvc.Html
+@using System.Linq
+
+<ol class="breadcrumbs-nav breadcrumbs-left-nav" id="menu">
+    @foreach (var node in Model.Skip(1)) {
+    if (node.IsCurrentNode) {
+        <li class="active">@Html.DisplayFor(m => node)</li>
+    } else {
+        <li>@Html.DisplayFor(m => node)</li>
+    }
+}
+</ol>

@@ -1,0 +1,15 @@
+﻿@model System.DateTime
+@{
+string date = DateTime.Today.ToShortDateString();
+if (Model != null)
+{
+    date = string.Format("{0}-{1}-{2}",
+                         Model.Year,
+                        Model.Month >= 10 ? Model.Month.ToString() : string.Format("0{0}", Model.Month),
+                        Model.Day >= 10 ? Model.Day.ToString() : string.Format("0{0}", Model.Day));
+}
+}
+@Html.TextBox(
+    string.Empty,
+    date,
+    new { @class = "form-control", @type = "date" })

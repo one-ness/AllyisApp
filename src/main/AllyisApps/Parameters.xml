@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<parameters>
+	<parameter name="DefaultConnection-Web.config Connection String"
+		description="DefaultConnection"
+		defaultValue="Data Source=ALLYISAPPS\SQLEXPRESS;Initial Catalog=AllyisApps.Database;Persist Security Info=True;MultipleActiveResultSets=True;User Id=aaUser;password=BlueSky23#;" tags="" />
+</parameters>

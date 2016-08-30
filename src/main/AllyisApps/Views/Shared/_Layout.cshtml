@@ -1,0 +1,22 @@
+﻿@{ Layout = "_LayoutBase.cshtml"; }
+
+<div class="row" id="title-row">
+	@if(!string.IsNullOrWhiteSpace(ViewBag.Title)) {<h1 class="text-center">@ViewBag.Title</h1>}
+	@if(!string.IsNullOrWhiteSpace(ViewBag.Subtitle)) {<h2 class="text-center">@ViewBag.Subtitle</h2>}
+	@if(!string.IsNullOrWhiteSpace(ViewBag.Description)) {<p class="text-center">@ViewBag.Description</p>}
+</div>
+<div id="content-wrap">
+	@RenderBody()
+</div>
+
+@section css {@*chain the section to the next layout*@
+@RenderSection("css", required: false)
+}
+
+@section scripts {@*chain the section to the next layout*@
+@RenderSection("scripts", required: false)
+}
+
+@section modals {@*chain the section to the next layout*@
+@RenderSection("modals", required: false)
+}
