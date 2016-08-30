@@ -26,7 +26,6 @@ namespace AllyisApps.DBModel.Cache
 		private List<OrgRoleDBEntity> items;
 
 		#region inits
-
 		/// <summary>
 		/// Prevents a default instance of the <see cref="OrgRoleDBEntityCache" /> class from being created.
 		/// </summary>
@@ -42,11 +41,9 @@ namespace AllyisApps.DBModel.Cache
 		{
 			this.items = this.Load();
 		}
-
 		#endregion inits
 
 		#region gets
-
 		/// <summary>
 		/// Get items function.
 		/// </summary>
@@ -65,11 +62,9 @@ namespace AllyisApps.DBModel.Cache
 		{
 			return this.Items().Where(x => x.OrgRoleId == itemId).FirstOrDefault();
 		}
-
 		#endregion gets
 
 		#region sets
-
 		/// <summary>
 		/// Updates the local instance with the new orgRole entity.
 		/// </summary>
@@ -96,7 +91,6 @@ namespace AllyisApps.DBModel.Cache
 		{
 			return DBHelper.Instance.GetOrgRoleList();
 		}
-
 		#endregion sets
 	}
 }

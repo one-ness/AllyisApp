@@ -198,7 +198,6 @@ namespace AllyisApps.Services.Org
 		public void AddToOrganization(int userId, int orgId, int projectId, int orgRole)
 		{
 			#region Validation
-
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
@@ -218,7 +217,6 @@ namespace AllyisApps.Services.Org
 			{
 				throw new ArgumentOutOfRangeException("orgRole", "Organization role value must correspond to a defined role in OrganizationRoleIdEnum.");
 			}
-
 			#endregion Validation
 
 			DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity() // ...add them to that organization as a member
@@ -257,7 +255,6 @@ namespace AllyisApps.Services.Org
 		public async Task<int> InviteNewUser(string requestingUserFullName, string webRoot, InvitationInfo invitationInfo)
 		{
 			#region Validation
-
 			if (string.IsNullOrEmpty(requestingUserFullName))
 			{
 				throw new ArgumentNullException("requestingUserFullName", "Requesting user full name must have a value.");
@@ -272,7 +269,6 @@ namespace AllyisApps.Services.Org
 			{
 				throw new ArgumentNullException("invitationInfo", "Invitation info object must not be null.");
 			}
-
 			#endregion Validation
 
 			EmailService mail = new EmailService();
@@ -347,7 +343,6 @@ namespace AllyisApps.Services.Org
 		public void CreateInvitationSubRole(int invitationId, int subscriptionId, int selectedRole)
 		{
 			#region Validation
-
 			if (invitationId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("invitationId", "Invitation Id cannot be 0 or negative.");
@@ -362,7 +357,6 @@ namespace AllyisApps.Services.Org
 			{ // TODO: Figure out if there is any further validation that can be done for this number.
 				throw new ArgumentOutOfRangeException("selectedRole", "Selected role cannot be negative.");
 			}
-
 			#endregion Validation
 
 			DBHelper.CreateInvitationSubRole(invitationId, subscriptionId, selectedRole);
@@ -377,7 +371,6 @@ namespace AllyisApps.Services.Org
 		public void UpdateSubscriptionUserProductRole(int selectedRole, int subscriptionId, int userId)
 		{
 			#region Validation
-
 			if (selectedRole <= 0)
 			{ // TODO: Figure out if there is any further validation that can be done for this number.
 				throw new ArgumentOutOfRangeException("selectedRole", "Selected role cannot be negative.");
@@ -392,7 +385,6 @@ namespace AllyisApps.Services.Org
 			{
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
-
 			#endregion Validation
 
 			DBHelper.UpdateSubscriptionUserProductRole(selectedRole, subscriptionId, userId);
@@ -423,7 +415,6 @@ namespace AllyisApps.Services.Org
 		public string GetOrgUserFirstName(string email)
 		{
 			#region Validation
-
 			if (string.IsNullOrEmpty(email))
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
@@ -432,7 +423,6 @@ namespace AllyisApps.Services.Org
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
-
 			#endregion Validation
 
 			return DBHelper.GetOrgUserFirstName(UserContext.ChosenOrganizationId, email);
@@ -477,7 +467,6 @@ namespace AllyisApps.Services.Org
 		public void UpdateOrganizationUser(int userId, int orgId, int orgRoleId)
 		{
 			#region Validation
-
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
@@ -492,7 +481,6 @@ namespace AllyisApps.Services.Org
 			{
 				throw new ArgumentOutOfRangeException("orgRoleId", "Organization role value must correspond to a defined role in OrganizationRoleIdEnum.");
 			}
-
 			#endregion Validation
 
 			DBHelper.UpdateOrganizationUser(new OrganizationUserDBEntity

@@ -33,7 +33,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult CopyEntries(DateTime startDateTarget, DateTime startDateCopy, DateTime endDateCopy, int userId, DateTime startDate, DateTime endDate)
 		{
 			#region Validation
-
 			// TODO flesh these out
 			if (startDateCopy > endDateCopy)
 			{
@@ -43,7 +42,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				return this.View(ViewConstants.Error);
 			}
-
 			#endregion Validation
 
 			// Check for permission failures TODO flesh these out
