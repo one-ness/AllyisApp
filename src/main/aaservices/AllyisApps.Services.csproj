@@ -73,6 +73,8 @@
     <Compile Include="Account\UserOrganizationInfo.cs" />
     <Compile Include="Account\UserSubscriptionInfo.cs" />
     <Compile Include="BaseService.cs" />
+    <Compile Include="Billing\BillingServicesEnum.cs" />
+    <Compile Include="Billing\BillingServicesHandler.cs" />
     <Compile Include="BusinessObjects\BillingHistoryItemInfo.cs" />
     <Compile Include="BusinessObjects\BusinessObjectsHelper.cs" />
     <Compile Include="BusinessObjects\CustomerInfo.cs" />
@@ -128,13 +130,13 @@
       <Project>{448ffc61-ecf1-4312-a35b-c221f98a895c}</Project>
       <Name>AllyisApps.Lib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AllyisApps.BillingServices.Common\AllyisApps.BillingServices.Common.csproj">
-      <Project>{7829F110-92B1-4A99-9D75-1DD971B980EE}</Project>
-      <Name>AllyisApps.BillingServices.Common</Name>
+    <ProjectReference Include="..\AllyisApps.Services.Common\AllyisApps.Services.Common.csproj">
+      <Project>{7829f110-92b1-4a99-9d75-1dd971b980ee}</Project>
+      <Name>AllyisApps.Services.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AllyisApps.BillingServices\AllyisApps.BillingServices.csproj">
-      <Project>{0FDE35E2-5D06-41F5-B2E7-B7B0BF3028FF}</Project>
-      <Name>AllyisApps.BillingServices</Name>
+    <ProjectReference Include="..\External.Stripe\BillingServices.Stripe.csproj">
+      <Project>{14080904-6318-45bf-b12f-59e5aa55e3f6}</Project>
+      <Name>BillingServices.Stripe</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

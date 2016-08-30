@@ -18,11 +18,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllyisApps.Services", "aase
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "AllyisAppsDB", "AllyisAppsDB\AllyisAppsDB.sqlproj", "{D5DFB873-FF09-4041-86F3-B8A47AD8503D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllyisApps.BillingServices", "AllyisApps.BillingServices\AllyisApps.BillingServices.csproj", "{0FDE35E2-5D06-41F5-B2E7-B7B0BF3028FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BillingServices.Stripe", "External.Stripe\BillingServices.Stripe.csproj", "{14080904-6318-45BF-B12F-59E5AA55E3F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllyisApps.BillingServices.Stripe", "External.Stripe\AllyisApps.BillingServices.Stripe.csproj", "{14080904-6318-45BF-B12F-59E5AA55E3F6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllyisApps.BillingServices.Common", "AllyisApps.BillingServices.Common\AllyisApps.BillingServices.Common.csproj", "{7829F110-92B1-4A99-9D75-1DD971B980EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllyisApps.Services.Common", "AllyisApps.Services.Common\AllyisApps.Services.Common.csproj", "{7829F110-92B1-4A99-9D75-1DD971B980EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +51,6 @@ Global
 		{D5DFB873-FF09-4041-86F3-B8A47AD8503D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5DFB873-FF09-4041-86F3-B8A47AD8503D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D5DFB873-FF09-4041-86F3-B8A47AD8503D}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{0FDE35E2-5D06-41F5-B2E7-B7B0BF3028FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0FDE35E2-5D06-41F5-B2E7-B7B0BF3028FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0FDE35E2-5D06-41F5-B2E7-B7B0BF3028FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0FDE35E2-5D06-41F5-B2E7-B7B0BF3028FF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{14080904-6318-45BF-B12F-59E5AA55E3F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{14080904-6318-45BF-B12F-59E5AA55E3F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14080904-6318-45BF-B12F-59E5AA55E3F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
