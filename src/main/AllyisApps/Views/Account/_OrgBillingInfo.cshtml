@@ -1,4 +1,5 @@
-﻿@model AllyisApps.ViewModels.OrganizationManageViewModel
+﻿@using AllyisApps.Services.Billing
+@model AllyisApps.ViewModels.OrganizationManageViewModel
 @{
     ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.BillingInformation;
 }
@@ -35,6 +36,7 @@
     {
         using (Html.BeginForm(ActionConstants.Charge, ControllerConstants.Account, FormMethod.Post, new { @style = "display: inline-block" }))
         {
+		    @Html.Hidden("billingType", BillingServicesEnum.Stripe)
         <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
                 data-name="Allyis Apps"
