@@ -96,7 +96,7 @@ namespace AllyisApps.Services.Org
 				throw new ArgumentOutOfRangeException("ownerId", "Organization owner's user id cannot be 0 or negative.");
 			}
 
-			return DBHelper.CreateOrganization(BusinessObjectsHelper.GetDBEntityFromOrganizationInfo(organization), ownerId, (int)OrganizationRole.Owner);
+			return DBHelper.CreateOrganization(InfoObjectsUtility.GetDBEntityFromOrganizationInfo(organization), ownerId, (int)OrganizationRole.Owner);
 		}
 
 		/// <summary>
@@ -111,7 +111,7 @@ namespace AllyisApps.Services.Org
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
 			}
 
-			return BusinessObjectsHelper.InitializeOrganizationInfo(DBHelper.GetOrganization(orgId));
+			return InfoObjectsUtility.InitializeOrganizationInfo(DBHelper.GetOrganization(orgId));
 		}
 
 		/// <summary>
@@ -128,7 +128,7 @@ namespace AllyisApps.Services.Org
 
 			if (this.authorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
 			{
-				DBHelper.UpdateOrganization(BusinessObjectsHelper.GetDBEntityFromOrganizationInfo(organization));
+				DBHelper.UpdateOrganization(InfoObjectsUtility.GetDBEntityFromOrganizationInfo(organization));
 
 				return true;
 			}
@@ -288,7 +288,7 @@ namespace AllyisApps.Services.Org
 								invitationInfo.Email,
 								"Join Allyis Apps!");
 
-			return DBHelper.CreateUserInvitation(BusinessObjectsHelper.GetDBEntityFromInvitationInfo(invitationInfo));
+			return DBHelper.CreateUserInvitation(InfoObjectsUtility.GetDBEntityFromInvitationInfo(invitationInfo));
 		}
 
 		/// <summary>
@@ -307,8 +307,8 @@ namespace AllyisApps.Services.Org
 			{
 				IEnumerable<InvitationInfo> invites = this.GetUserInvitations();
 				InvitationInfo thisInvite = invites.Where(x => x.InvitationId == invitationId).SingleOrDefault();
-				IEnumerable<SubscriptionDisplayInfo> subs = this.DBHelper.GetSubscriptionsDisplayByOrg(UserContext.ChosenOrganizationId).Select(s => BusinessObjectsHelper.InitializeSubscriptionDisplayInfo(s));
-				IEnumerable<InvitationSubRoleInfo> subRoles = DBHelper.GetInvitationSubRolesByInvitationId(invitationId).Select(i => BusinessObjectsHelper.InitializeInvitationSubRoleInfo(i));
+				IEnumerable<SubscriptionDisplayInfo> subs = this.DBHelper.GetSubscriptionsDisplayByOrg(UserContext.ChosenOrganizationId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s));
+				IEnumerable<InvitationSubRoleInfo> subRoles = DBHelper.GetInvitationSubRolesByInvitationId(invitationId).Select(i => InfoObjectsUtility.InitializeInvitationSubRoleInfo(i));
 				foreach (InvitationSubRoleInfo subRole in subRoles)
 				{
 					SubscriptionDisplayInfo currentSub = subs.Where(x => x.SubscriptionId == subRole.SubscriptionId).SingleOrDefault();
@@ -331,7 +331,7 @@ namespace AllyisApps.Services.Org
 		/// <returns>List of InvitationInfos of organization's user invitations.</returns>
 		public IEnumerable<InvitationInfo> GetUserInvitations()
 		{
-			return DBHelper.GetUserInvitationsByOrgId(UserContext.ChosenOrganizationId).Select(i => BusinessObjectsHelper.InitializeInvitationInfo(i));
+			return DBHelper.GetUserInvitationsByOrgId(UserContext.ChosenOrganizationId).Select(i => InfoObjectsUtility.InitializeInvitationInfo(i));
 		}
 
 		/// <summary>
@@ -402,7 +402,7 @@ namespace AllyisApps.Services.Org
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
 			}
 
-			return DBHelper.GetOrganizationMemberList(orgId).Select(o => BusinessObjectsHelper.InitializeOrganizationUserInfo(o));
+			return DBHelper.GetOrganizationMemberList(orgId).Select(o => InfoObjectsUtility.InitializeOrganizationUserInfo(o));
 		}
 
 		// TODO: Look more closely at the use of this method in UploadCsvFileAction to see if some other existing service method can be used instead, and this one retired.
@@ -517,7 +517,7 @@ namespace AllyisApps.Services.Org
 		/// <returns>List of InvitationSubRoleInfos.</returns>
 		public IEnumerable<InvitationSubRoleInfo> GetInvitationSubRoles()
 		{
-			return DBHelper.GetInvitationSubRolesByOrganizationId(UserContext.ChosenOrganizationId).Select(i => BusinessObjectsHelper.InitializeInvitationSubRoleInfo(i));
+			return DBHelper.GetInvitationSubRolesByOrganizationId(UserContext.ChosenOrganizationId).Select(i => InfoObjectsUtility.InitializeInvitationSubRoleInfo(i));
 		}
 
 		/// <summary>
@@ -565,7 +565,7 @@ namespace AllyisApps.Services.Org
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
 			}
 
-			return DBHelper.GetProjectsByOrgId(orgId, isActive ? 1 : 0).Select(c => BusinessObjectsHelper.InitializeCompleteProjectInfo(c));
+			return DBHelper.GetProjectsByOrgId(orgId, isActive ? 1 : 0).Select(c => InfoObjectsUtility.InitializeCompleteProjectInfo(c));
 		}
 
 		/// <summary>
@@ -574,7 +574,7 @@ namespace AllyisApps.Services.Org
 		/// <returns>List of UserRolesInfos.</returns>
 		public IEnumerable<UserRolesInfo> GetUserRoles()
 		{
-			return DBHelper.GetRoles(UserContext.ChosenOrganizationId).Select(o => BusinessObjectsHelper.InitializeUserRolesInfo(o));
+			return DBHelper.GetRoles(UserContext.ChosenOrganizationId).Select(o => InfoObjectsUtility.InitializeUserRolesInfo(o));
 		}
 	}
 }

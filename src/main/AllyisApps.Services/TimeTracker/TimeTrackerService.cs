@@ -85,7 +85,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			return BusinessObjectsHelper.InitializeTimeEntryInfo(DBHelper.GetTimeEntryById(timeEntryId));
+			return InfoObjectsUtility.InitializeTimeEntryInfo(DBHelper.GetTimeEntryById(timeEntryId));
 		}
 
 		/// <summary>
@@ -102,7 +102,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			return DBHelper.CreateTimeEntry(BusinessObjectsHelper.GetDBEntityFromTimeEntryInfo(entry));
+			return DBHelper.CreateTimeEntry(InfoObjectsUtility.GetDBEntityFromTimeEntryInfo(entry));
 		}
 
 		/// <summary>
@@ -118,7 +118,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			DBHelper.UpdateTimeEntry(BusinessObjectsHelper.GetDBEntityFromTimeEntryInfo(entry));
+			DBHelper.UpdateTimeEntry(InfoObjectsUtility.GetDBEntityFromTimeEntryInfo(entry));
 		}
 
 		/// <summary>
@@ -181,7 +181,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			return DBHelper.GetTimeEntriesOverDateRange(UserContext.ChosenOrganizationId, start, end).Select(te => BusinessObjectsHelper.InitializeTimeEntryInfo(te));
+			return DBHelper.GetTimeEntriesOverDateRange(UserContext.ChosenOrganizationId, start, end).Select(te => InfoObjectsUtility.InitializeTimeEntryInfo(te));
 		}
 
 		/// <summary>
@@ -216,7 +216,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, UserContext.ChosenOrganizationId, start, end).Select(te => BusinessObjectsHelper.InitializeTimeEntryInfo(te));
+			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, UserContext.ChosenOrganizationId, start, end).Select(te => InfoObjectsUtility.InitializeTimeEntryInfo(te));
 		}
 
 		/// <summary>
@@ -286,7 +286,7 @@ namespace AllyisApps.Services.TimeTracker
 
 			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
-				DBHelper.CreateHoliday(BusinessObjectsHelper.GetDBEntityFromHolidayInfo(holiday));
+				DBHelper.CreateHoliday(InfoObjectsUtility.GetDBEntityFromHolidayInfo(holiday));
 				return true;
 			}
 
@@ -299,7 +299,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <returns>A list of HolidayInfo's for the holidays in the organization.</returns>
 		public IEnumerable<HolidayInfo> GetHolidays()
 		{
-			return DBHelper.GetHolidays(UserContext.ChosenOrganizationId).Select(hol => BusinessObjectsHelper.InitializeHolidayInfo(hol));
+			return DBHelper.GetHolidays(UserContext.ChosenOrganizationId).Select(hol => InfoObjectsUtility.InitializeHolidayInfo(hol));
 		}
 
 		/// <summary>
@@ -385,7 +385,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <returns>List of PayClassInfo's.</returns>
 		public IEnumerable<PayClassInfo> GetPayClasses()
 		{
-			return DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => BusinessObjectsHelper.InitializePayClassInfo(pc));
+			return DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InfoObjectsUtility.InitializePayClassInfo(pc));
 		}
 
 		/// <summary>
@@ -402,7 +402,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			return BusinessObjectsHelper.InitializePayClassInfo(DBHelper.GetPayClassByNameAndOrg(name, UserContext.ChosenOrganizationId));
+			return InfoObjectsUtility.InitializePayClassInfo(DBHelper.GetPayClassByNameAndOrg(name, UserContext.ChosenOrganizationId));
 		}
 
 		/// <summary>
@@ -453,7 +453,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <returns>Organization settings.</returns>
 		public SettingsInfo GetSettings()
 		{
-			return BusinessObjectsHelper.InitializeSettingsInfo(DBHelper.GetSettings(UserContext.ChosenOrganizationId));
+			return InfoObjectsUtility.InitializeSettingsInfo(DBHelper.GetSettings(UserContext.ChosenOrganizationId));
 		}
 
 		/// <summary>

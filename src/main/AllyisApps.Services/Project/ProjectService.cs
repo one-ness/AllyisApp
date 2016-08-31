@@ -325,7 +325,7 @@ namespace AllyisApps.Services.Project
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.GetUsersByProjectId(projectId).Select(u => BusinessObjectsHelper.InitializeUserInfo(u));
+			return DBHelper.GetUsersByProjectId(projectId).Select(u => InfoObjectsUtility.InitializeUserInfo(u));
 		}
 
 		/// <summary>
@@ -356,7 +356,7 @@ namespace AllyisApps.Services.Project
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.GetProjectsByUserAndOrganization(userId, UserContext.ChosenOrganizationId, isActive ? 1 : 0).Select(c => BusinessObjectsHelper.InitializeCompleteProjectInfo(c));
+			return DBHelper.GetProjectsByUserAndOrganization(userId, UserContext.ChosenOrganizationId, isActive ? 1 : 0).Select(c => InfoObjectsUtility.InitializeCompleteProjectInfo(c));
 		}
 
 		/// <summary>
@@ -371,7 +371,7 @@ namespace AllyisApps.Services.Project
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be negative.");
 			}
 
-			return BusinessObjectsHelper.InitializeCompleteProjectInfo(DBHelper.GetProjectById(projectId));
+			return InfoObjectsUtility.InitializeCompleteProjectInfo(DBHelper.GetProjectById(projectId));
 		}
 
 		/// <summary>
@@ -386,7 +386,7 @@ namespace AllyisApps.Services.Project
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.GetProjectsByUserId(userId).Select(p => BusinessObjectsHelper.InitializeCompleteProjectInfo(p));
+			return DBHelper.GetProjectsByUserId(userId).Select(p => InfoObjectsUtility.InitializeCompleteProjectInfo(p));
 		}
 	}
 }

@@ -644,7 +644,7 @@ namespace AllyisApps.Services.Crm
 				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Select(u => BusinessObjectsHelper.InitializeUserInfo(u));
+			return DBHelper.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Select(u => InfoObjectsUtility.InitializeUserInfo(u));
 		}
 
 		/// <summary>
@@ -715,7 +715,7 @@ namespace AllyisApps.Services.Crm
 		/// <returns>List of SubscriptionDisplayInfos.</returns>
 		public IEnumerable<SubscriptionDisplayInfo> GetUserSubscriptionOrganizationList()
 		{
-			return DBHelper.GetUserSubscriptionOrganizationList(UserContext.UserId).Select(s => BusinessObjectsHelper.InitializeSubscriptionDisplayInfo(s));
+			return DBHelper.GetUserSubscriptionOrganizationList(UserContext.UserId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s));
 		}
 
 		/// <summary>
@@ -724,7 +724,7 @@ namespace AllyisApps.Services.Crm
 		/// <returns>List of SubscriptionDisplayInfos.</returns>
 		public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplay()
 		{
-			return DBHelper.Instance.GetSubscriptionsDisplayByOrg(UserContext.ChosenOrganizationId).Select(s => BusinessObjectsHelper.InitializeSubscriptionDisplayInfo(s));
+			return DBHelper.Instance.GetSubscriptionsDisplayByOrg(UserContext.ChosenOrganizationId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s));
 		}
 
 		/// <summary>

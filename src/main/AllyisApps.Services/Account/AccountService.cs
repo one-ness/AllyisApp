@@ -232,8 +232,8 @@ namespace AllyisApps.Services.Account
 				OrgRoleId = invite.OrgRole,
 			});
 
-			IEnumerable<InvitationSubRoleInfo> roles = this.DBHelper.GetInvitationSubRolesByInvitationId(invite.InvitationId).Select(i => BusinessObjectsHelper.InitializeInvitationSubRoleInfo(i));
-			IEnumerable<SubscriptionDisplayInfo> subs = this.DBHelper.GetSubscriptionsDisplayByOrg(invite.OrganizationId).Select(s => BusinessObjectsHelper.InitializeSubscriptionDisplayInfo(s));
+			IEnumerable<InvitationSubRoleInfo> roles = this.DBHelper.GetInvitationSubRolesByInvitationId(invite.InvitationId).Select(i => InfoObjectsUtility.InitializeInvitationSubRoleInfo(i));
+			IEnumerable<SubscriptionDisplayInfo> subs = this.DBHelper.GetSubscriptionsDisplayByOrg(invite.OrganizationId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s));
 
 			foreach (InvitationSubRoleInfo role in roles)
 			{
@@ -574,7 +574,7 @@ namespace AllyisApps.Services.Account
 		/// <returns>A UserInfo instance with the current user's info.</returns>
 		public UserInfo GetUserInfo()
 		{
-			return BusinessObjectsHelper.InitializeUserInfo(DBHelper.GetUserInfo(UserContext.UserId));
+			return InfoObjectsUtility.InitializeUserInfo(DBHelper.GetUserInfo(UserContext.UserId));
 		}
 
 		/// <summary>
@@ -589,7 +589,7 @@ namespace AllyisApps.Services.Account
 				throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
 			}
 
-			return BusinessObjectsHelper.InitializeUserInfo(DBHelper.GetUserInfo(userId));
+			return InfoObjectsUtility.InitializeUserInfo(DBHelper.GetUserInfo(userId));
 		}
 
 		/// <summary>
@@ -608,7 +608,7 @@ namespace AllyisApps.Services.Account
 				throw new FormatException("Email address must be in a valid format.");
 			}
 
-			return BusinessObjectsHelper.InitializeUserInfo(await DBHelper.GetUserByEmailAsync(email));
+			return InfoObjectsUtility.InitializeUserInfo(await DBHelper.GetUserByEmailAsync(email));
 		}
 
 		/// <summary>
@@ -950,7 +950,7 @@ namespace AllyisApps.Services.Account
 		/// <returns>Collection of OrganizationInfos.</returns>
 		public IEnumerable<OrganizationInfo> GetOrganizationsByUserId()
 		{
-			return DBHelper.GetOrganizationsByUserId(UserContext.UserId).Select(o => BusinessObjectsHelper.InitializeOrganizationInfo(o));
+			return DBHelper.GetOrganizationsByUserId(UserContext.UserId).Select(o => InfoObjectsUtility.InitializeOrganizationInfo(o));
 		}
 		#endregion public
 

@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="BusinessObjectsHelper.cs" company="Allyis, Inc.">
+// <copyright file="InfoObjectsUtility.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -13,9 +13,9 @@ using AllyisApps.Services.Account;
 namespace AllyisApps.Services.BusinessObjects
 {
 	/// <summary>
-	/// The BusinessObjectsHelper class.
+	/// The InfoObjectsUtility class.
 	/// </summary>
-	public class BusinessObjectsHelper
+	public class InfoObjectsUtility
 	{
 		/// <summary>
 		/// Translates a UserDBEntity into a UserInfo business object.

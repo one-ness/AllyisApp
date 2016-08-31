@@ -75,44 +75,44 @@
     <Compile Include="BaseService.cs" />
     <Compile Include="Billing\BillingServicesEnum.cs" />
     <Compile Include="Billing\BillingServicesHandler.cs" />
-    <Compile Include="BusinessObjects\BillingHistoryItemInfo.cs" />
-    <Compile Include="BusinessObjects\BusinessObjectsHelper.cs" />
-    <Compile Include="BusinessObjects\CustomerInfo.cs" />
-    <Compile Include="BusinessObjects\HolidayInfo.cs" />
-    <Compile Include="BusinessObjects\InvitationInfo.cs" />
-    <Compile Include="BusinessObjects\InvitationSubRoleInfo.cs" />
-    <Compile Include="BusinessObjects\LanguageInfo.cs" />
-    <Compile Include="BusinessObjects\LastUsed.cs" />
-    <Compile Include="BusinessObjects\OrganizationInfo.cs" />
-    <Compile Include="BusinessObjects\OrganizationUserInfo.cs" />
-    <Compile Include="BusinessObjects\OrgRoleInfo.cs" />
-    <Compile Include="BusinessObjects\PasswordResetInfo.cs" />
-    <Compile Include="BusinessObjects\PayClassInfo.cs" />
-    <Compile Include="BusinessObjects\PermissionsAction.cs" />
-    <Compile Include="BusinessObjects\PermissionsActionResult.cs" />
-    <Compile Include="BusinessObjects\PermissionsActionsResults.cs" />
-    <Compile Include="BusinessObjects\ProductRoleInfo.cs" />
-    <Compile Include="BusinessObjects\CompleteProjectInfo.cs" />
-    <Compile Include="BusinessObjects\ProjectInfo.cs" />
-    <Compile Include="BusinessObjects\SettingsInfo.cs" />
-    <Compile Include="BusinessObjects\SkuIdEnum.cs" />
-    <Compile Include="BusinessObjects\SkuInfo.cs" />
-    <Compile Include="BusinessObjects\StartOfWeekEnum.cs" />
-    <Compile Include="BusinessObjects\SubscriptionDisplayInfo.cs" />
-    <Compile Include="BusinessObjects\SubscriptionInfo.cs" />
-    <Compile Include="BusinessObjects\SubscriptionRoleInfo.cs" />
-    <Compile Include="BusinessObjects\SubscriptionUserInfo.cs" />
-    <Compile Include="BusinessObjects\TablePermissions.cs">
+    <Compile Include="Billing\BillingHistoryItemInfo.cs" />
+    <Compile Include="Utilities\InfoObjectsUtility.cs" />
+    <Compile Include="Project\CustomerInfo.cs" />
+    <Compile Include="Org\HolidayInfo.cs" />
+    <Compile Include="Org\InvitationInfo.cs" />
+    <Compile Include="Org\InvitationSubRoleInfo.cs" />
+    <Compile Include="Account\LanguageInfo.cs" />
+    <Compile Include="Account\LastUsed.cs" />
+    <Compile Include="Org\OrganizationInfo.cs" />
+    <Compile Include="Org\OrganizationUserInfo.cs" />
+    <Compile Include="Org\OrgRoleInfo.cs" />
+    <Compile Include="Account\PasswordResetInfo.cs" />
+    <Compile Include="TimeTracker\PayClassInfo.cs" />
+    <Compile Include="Account\PermissionsAction.cs" />
+    <Compile Include="Account\PermissionsActionResult.cs" />
+    <Compile Include="Account\PermissionsActionsResults.cs" />
+    <Compile Include="Crm\ProductRoleInfo.cs" />
+    <Compile Include="Project\CompleteProjectInfo.cs" />
+    <Compile Include="Project\ProjectInfo.cs" />
+    <Compile Include="TimeTracker\SettingsInfo.cs" />
+    <Compile Include="Billing\SkuIdEnum.cs" />
+    <Compile Include="Crm\SkuInfo.cs" />
+    <Compile Include="Org\StartOfWeekEnum.cs" />
+    <Compile Include="Billing\SubscriptionDisplayInfo.cs" />
+    <Compile Include="Billing\SubscriptionInfo.cs" />
+    <Compile Include="Billing\SubscriptionRoleInfo.cs" />
+    <Compile Include="Account\SubscriptionUserInfo.cs" />
+    <Compile Include="Account\TablePermissions.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="BusinessObjects\TargetUser.cs" />
-    <Compile Include="BusinessObjects\TimeEntryInfo.cs" />
-    <Compile Include="BusinessObjects\UserInfo.cs" />
-    <Compile Include="BusinessObjects\UserMembershipInfo.cs" />
-    <Compile Include="BusinessObjects\UserPermissionsAction.cs" />
-    <Compile Include="BusinessObjects\UserRolesInfo.cs" />
+    <Compile Include="Account\TargetUser.cs" />
+    <Compile Include="TimeTracker\TimeEntryInfo.cs" />
+    <Compile Include="Account\UserInfo.cs" />
+    <Compile Include="Account\UserMembershipInfo.cs" />
+    <Compile Include="Account\UserPermissionsAction.cs" />
+    <Compile Include="Account\UserRolesInfo.cs" />
     <Compile Include="Crm\CrmService.cs" />
-    <Compile Include="BusinessObjects\ProductInfo.cs" />
+    <Compile Include="Crm\ProductInfo.cs" />
     <Compile Include="Crm\ProductIdEnum.cs" />
     <Compile Include="EmailService.cs" />
     <Compile Include="Account\OrganizationRoleIdEnum.cs" />
@@ -146,9 +146,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utilities\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
