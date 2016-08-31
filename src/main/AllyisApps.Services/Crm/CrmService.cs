@@ -8,13 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using AllyisApps.BillingServices;
-using AllyisApps.BillingServices.Common.Types;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.Services.Account;
-using AllyisApps.Services.BusinessObjects;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Common.Types;
+using AllyisApps.Services.Project;
+using AllyisApps.Services.Utilities;
 
 namespace AllyisApps.Services.Crm
 {

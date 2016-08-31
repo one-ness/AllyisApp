@@ -8,9 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using AllyisApps.BillingServices.Common.Types;
 using AllyisApps.Core;
-using AllyisApps.Services.BusinessObjects;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers

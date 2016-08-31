@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.Services.BusinessObjects
+namespace AllyisApps.Services.Account
 {
 	/// <summary>
 	/// Represents a user.

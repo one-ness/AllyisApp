@@ -7,8 +7,8 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core;
-using AllyisApps.Services;
-using AllyisApps.Services.BusinessObjects;
+using AllyisApps.Services.Account;
+using AllyisApps.Services.Utilities;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers

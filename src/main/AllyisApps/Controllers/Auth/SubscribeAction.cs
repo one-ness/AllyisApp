@@ -7,10 +7,10 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
-using AllyisApps.BillingServices.Common.Types;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services.BusinessObjects;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Common.Types;
 using AllyisApps.Services.Crm;
 using AllyisApps.ViewModels;
 

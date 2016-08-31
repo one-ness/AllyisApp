@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.TimeTracker
+namespace AllyisApps.Services.Org
 {
 	/// <summary>
 	/// An enum to keep track of the starting day selection.

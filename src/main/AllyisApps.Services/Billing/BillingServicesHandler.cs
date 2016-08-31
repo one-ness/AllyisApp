@@ -7,10 +7,10 @@
 using System;
 using System.Collections.Generic;
 
-using AllyisApps.BillingServices.Common;
-using AllyisApps.BillingServices.Common.Types;
+using AllyisApps.Services.Common;
+using AllyisApps.Services.Common.Types;
 
-namespace AllyisApps.BillingServices
+namespace AllyisApps.Services.Billing
 {
 	/// <summary>
 	/// Interfaces between the CrmService and the actual billing service implementation wrapper so that the CrmService
@@ -39,7 +39,7 @@ namespace AllyisApps.BillingServices
 				{
 					case BillingServicesEnum.Stripe:
 						{
-							this.service = new StripeService.StripeWrapper();
+							this.service = new BillingServices.StripeService.StripeWrapper();
 							break;
 						}
 
@@ -75,7 +75,7 @@ namespace AllyisApps.BillingServices
 		/// Currently not supported.
 		/// </summary>
 		/// <returns>The requested BillingPlan.</returns>
-		[CLSCompliant(false)]  
+		[CLSCompliant(false)]
 		public BillingServicesPlan RetrievePlan()
 		{
 			return this.service.RetrievePlan();

@@ -5,7 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using AllyisApps.Services.BusinessObjects;
+using AllyisApps.Services.Org;
 
 namespace AllyisApps.ViewModels.Auth
 {

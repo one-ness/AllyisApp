@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.BusinessObjects
+namespace AllyisApps.Services.Account
 {
 	/// <summary>
 	/// Table that contains the user permissions for a given subscription.

@@ -5,7 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using AllyisApps.Services.BusinessObjects;
+using AllyisApps.Services.Account;
 using AllyisApps.ViewModels.Shared;
 
 namespace AllyisApps.ViewModels

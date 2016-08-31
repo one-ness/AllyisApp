@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.BusinessObjects
+namespace AllyisApps.Services.Billing
 {
 	/// <summary>
 	/// Subscription Role obj.

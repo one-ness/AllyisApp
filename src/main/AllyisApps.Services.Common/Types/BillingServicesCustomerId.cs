@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.BillingServices.Common.Types
+namespace AllyisApps.Services.Common.Types
 {
 	/// <summary>
 	/// Container class for a Billing Services Customer ID.

@@ -6,8 +6,9 @@
 
 using System;
 using System.Collections.Generic;
-using AllyisApps.BillingServices.Common.Types;
-using AllyisApps.Services.BusinessObjects;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Common.Types;
+using AllyisApps.Services.Crm;
 
 namespace AllyisApps.ViewModels
 {

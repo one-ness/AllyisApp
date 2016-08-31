@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.Services.BusinessObjects
+namespace AllyisApps.Services.Billing
 {
 	/// <summary>
 	/// Represents an item in the billing history of an organization.

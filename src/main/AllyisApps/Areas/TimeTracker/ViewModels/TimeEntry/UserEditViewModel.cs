@@ -5,8 +5,8 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-
-using AllyisApps.Services.BusinessObjects;
+using AllyisApps.Services.Account;
+using AllyisApps.Services.Project;
 
 namespace AllyisApps.Areas.TimeTracker.Models
 {

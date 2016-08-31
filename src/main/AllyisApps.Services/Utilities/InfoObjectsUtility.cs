@@ -9,8 +9,13 @@ using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Services.Account;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Crm;
+using AllyisApps.Services.Org;
+using AllyisApps.Services.Project;
+using AllyisApps.Services.TimeTracker;
 
-namespace AllyisApps.Services.BusinessObjects
+namespace AllyisApps.Services.Utilities
 {
 	/// <summary>
 	/// The InfoObjectsUtility class.

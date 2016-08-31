@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.BillingServices.Common.Types
+namespace AllyisApps.Services.Common.Types
 {
 	/// <summary>
 	/// An info object for a Billing Services Plan.

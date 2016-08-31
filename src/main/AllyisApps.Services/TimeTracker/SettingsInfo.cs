@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.BusinessObjects
+namespace AllyisApps.Services.TimeTracker
 {
 	/// <summary>
 	/// An object for keeping track of the settings for a time tracker.

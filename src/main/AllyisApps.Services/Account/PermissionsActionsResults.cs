@@ -6,7 +6,7 @@
 
 using System.Collections.Generic;
 
-namespace AllyisApps.BusinessObjects
+namespace AllyisApps.Services.Account
 {
 	/// <summary>
 	/// Object for all results related to the actions that were requested.

@@ -7,7 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using AllyisApps.Services.BusinessObjects;
+using AllyisApps.Services.Org;
 
 namespace AllyisApps.ViewModels
 {

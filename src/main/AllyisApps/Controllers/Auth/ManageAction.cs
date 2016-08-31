@@ -8,11 +8,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using AllyisApps.BillingServices.Common.Types;
 using AllyisApps.Core;
 using AllyisApps.Services.Account;
-using AllyisApps.Services.BusinessObjects;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Common.Types;
 using AllyisApps.Services.Crm;
+using AllyisApps.Services.Org;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
@@ -58,7 +59,7 @@ namespace AllyisApps.Controllers
 			});
 
 			IEnumerable<SubscriptionDisplayInfo> subs = CrmService.GetSubscriptionsDisplay();
-			IEnumerable<SubscriptionDisplayViewModel> subscriptions = Services.Crm.CrmService.GetProductInfoList().Select(p =>
+			IEnumerable<SubscriptionDisplayViewModel> subscriptions = CrmService.GetProductInfoList().Select(p =>
 			{
 				return new SubscriptionDisplayViewModel
 				{

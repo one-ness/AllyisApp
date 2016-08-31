@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.BusinessObjects
+namespace AllyisApps.Services.Account
 {
 	/// <summary>
 	/// Represents all the roles held by a user.

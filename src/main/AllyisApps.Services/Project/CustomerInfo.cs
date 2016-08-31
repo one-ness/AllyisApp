@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.BusinessObjects
+namespace AllyisApps.Services.Project
 {
 	/// <summary>
 	/// An object for keeping track of all the info related to a given customer.

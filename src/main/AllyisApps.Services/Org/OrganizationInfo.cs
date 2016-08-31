@@ -7,7 +7,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace AllyisApps.Services.BusinessObjects
+namespace AllyisApps.Services.Org
 {
 	/// <summary>
 	/// An object for keeping track of all the info related to a given organization.

@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.Services.BusinessObjects
+namespace AllyisApps.Services.TimeTracker
 {
 	/// <summary>
 	/// An object for keeping track of all the info related to a given Time entry.

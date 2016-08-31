@@ -6,9 +6,9 @@
 
 using System.Collections.Generic;
 
-using AllyisApps.BillingServices.Common.Types;
+using AllyisApps.Services.Common.Types;
 
-namespace AllyisApps.BillingServices.Common
+namespace AllyisApps.Services.Common
 {
 	/// <summary>
 	/// An interface describing the basic functions a billing service must be able to implement in a generalized sense

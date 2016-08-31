@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.Services.BusinessObjects
+namespace AllyisApps.Services.Billing
 {
 	/// <summary>
 	/// Represents a subscription's information.

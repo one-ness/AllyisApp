@@ -6,9 +6,8 @@
 
 using System;
 using System.Web.Mvc;
-
-using AllyisApps.BillingServices.Common.Types;
 using AllyisApps.Core;
+using AllyisApps.Services.Common.Types;
 
 namespace AllyisApps.Controllers
 {

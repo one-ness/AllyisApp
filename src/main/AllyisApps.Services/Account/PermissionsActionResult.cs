@@ -6,7 +6,7 @@
 
 using System.Collections.Generic;
 
-namespace AllyisApps.BusinessObjects
+namespace AllyisApps.Services.Account
 {
 	/// <summary>
 	/// An object representing the results of a PermissionsAction.

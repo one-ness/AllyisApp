@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.Services.BusinessObjects
+namespace AllyisApps.Services.Org
 {
 	/// <summary>
 	/// Represents an invitation.

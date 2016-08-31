@@ -6,12 +6,11 @@
 
 using System;
 using System.Collections.Generic;
-
-using AllyisApps.BillingServices.Common;
-using AllyisApps.BillingServices.Common.Types;
+using AllyisApps.Services.Common;
+using AllyisApps.Services.Common.Types;
 using Stripe;
 
-namespace AllyisApps.BillingServices.StripeService
+namespace BillingServices.StripeService
 {
 	/// <summary>
 	/// The Stripe Billing Service implementation of the IBillingServicesInterface.

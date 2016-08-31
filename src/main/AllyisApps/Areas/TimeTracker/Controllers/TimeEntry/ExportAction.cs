@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Areas.TimeTracker.Models;
 using AllyisApps.Core;
+using AllyisApps.Services.Project;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -97,7 +98,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 
 				// Add default project in case there are holiday entries
-				List<Services.BusinessObjects.CompleteProjectInfo> defaultProject = new List<Services.BusinessObjects.CompleteProjectInfo>();
+				List<CompleteProjectInfo> defaultProject = new List<CompleteProjectInfo>();
 				defaultProject.Add(ProjectService.GetProject(0));
 				result.Projects = result.Projects.Concat(defaultProject);
 			}

@@ -5,7 +5,7 @@
 
 //------------------------------------------------------------------------------
 using System;
-using AllyisApps.BillingServices.Common.Types;
+using AllyisApps.Services.Common.Types;
 
 namespace AllyisApps.ViewModels
 {

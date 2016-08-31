@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNet.Identity;
 
-namespace AllyisApps.Services
+namespace AllyisApps.Services.Utilities
 {
 	/// <summary>
 	/// Class which represents an e-mailer (SMTP service).

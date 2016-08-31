@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.BusinessObjects
+namespace AllyisApps.Services.Account
 {
 	/// <summary>
 	/// A user to perform actions on.
