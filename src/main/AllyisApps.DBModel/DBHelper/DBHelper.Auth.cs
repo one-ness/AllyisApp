@@ -15,7 +15,6 @@ using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Cache;
 using Dapper;
-using AllyisApps.Services.Billing;
 
 namespace AllyisApps.DBModel
 {
