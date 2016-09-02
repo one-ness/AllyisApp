@@ -1247,7 +1247,6 @@
     <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Areas\TimeTracker\Views\GetProjectsAction\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>

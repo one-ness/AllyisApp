@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-
 namespace AllyisApps.Services.Common.Types
 {
 	/// <summary>
