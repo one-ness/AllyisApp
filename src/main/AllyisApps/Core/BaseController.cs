@@ -139,7 +139,7 @@ namespace AllyisApps.Core
 		{
 			if (Request.IsAuthenticated)
 			{
-				return this.RedirectToSubDomainAction(UserContext.ChosenOrganizationId, null, null, ControllerConstants.Home);
+				return this.RedirectToSubDomainAction(UserContext.ChosenOrganizationId, null, ActionConstants.Index, ControllerConstants.Home);
 			}
 
 			return this.RedirectToAction(ActionConstants.Index);
