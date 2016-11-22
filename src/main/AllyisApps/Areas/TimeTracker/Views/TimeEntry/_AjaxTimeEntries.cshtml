@@ -20,144 +20,147 @@
     var dateQuery = from entry in weekGroup orderby entry.Date group entry by entry.Date;
     <div class="panel panel-default timesheet-grouping">
         @foreach (var dateGroup in dateQuery)
-	   {
-		   var theEntries = from entry in dateGroup where !entry.Sample select entry;
-		   var theSample = (from entry in dateGroup where entry.Sample select entry).FirstOrDefault();
-		   int totalCount = theEntries.Count();
-		   int allVotedCount = (from e in theEntries where e.ApprovalState != (int)ApprovalState.NoApprovalState select e).Count();
-		   int allApprovedCount = (from e in theEntries where e.ApprovalState == (int)ApprovalState.Approved select e).Count();
-		   int allRejectedCount = (from e in theEntries where e.ApprovalState == (int)ApprovalState.NotApproved select e).Count();
-		   bool noneExist = totalCount == 0;
-		   bool noneWereVoted = allVotedCount == 0;
-		   bool allVotedWereApproved = allVotedCount > 0 && allVotedCount == allApprovedCount;
-		   bool allVotedWereRejected = allVotedCount > 0 && allVotedCount == allRejectedCount;
-		   bool allWereApproved = allVotedCount > 0 && totalCount == allApprovedCount;
-		   bool allWereRejected = allVotedCount > 0 && totalCount == allRejectedCount;
-		   bool anyWereChanged = (from e in theEntries where e.ModSinceApproval == true select e).Any();
-		   string containerClass = noneExist ? "" :
-							  noneWereVoted ? "" :
-							  anyWereChanged ? "pending" :
-							  allWereApproved ? "approved" :
-							  allWereRejected ? "rejected" : "pending";
-		   string headerClass = containerClass;
-		   string selectorClass = allVotedWereApproved ? "approved" :
-							 allVotedWereRejected ? "rejected" : "";
+        {
+            var theEntries = from entry in dateGroup where !entry.Sample select entry;
+            var theSample = (from entry in dateGroup where entry.Sample select entry).FirstOrDefault();
+            int totalCount = theEntries.Count();
+            int allVotedCount = (from e in theEntries where e.ApprovalState != (int)ApprovalState.NoApprovalState select e).Count();
+            int allApprovedCount = (from e in theEntries where e.ApprovalState == (int)ApprovalState.Approved select e).Count();
+            int allRejectedCount = (from e in theEntries where e.ApprovalState == (int)ApprovalState.NotApproved select e).Count();
+            bool noneExist = totalCount == 0;
+            bool noneWereVoted = allVotedCount == 0;
+            bool allVotedWereApproved = allVotedCount > 0 && allVotedCount == allApprovedCount;
+            bool allVotedWereRejected = allVotedCount > 0 && allVotedCount == allRejectedCount;
+            bool allWereApproved = allVotedCount > 0 && totalCount == allApprovedCount;
+            bool allWereRejected = allVotedCount > 0 && totalCount == allRejectedCount;
+            bool anyWereChanged = (from e in theEntries where e.ModSinceApproval == true select e).Any();
+            string containerClass = noneExist ? "" :
+					            noneWereVoted ? "" :
+					            anyWereChanged ? "pending" :
+					            allWereApproved ? "approved" :
+					            allWereRejected ? "rejected" : "pending";
+            string headerClass = containerClass;
+            string selectorClass = allVotedWereApproved ? "approved" :
+					            allVotedWereRejected ? "rejected" : "";
 
-		   var currentDate = TimeTrackerService.GetDateFromDays(dateGroup.First().Date);
-		   string dateStringNums = currentDate.ToShortDateString();
-		   string dateStringDayLong = currentDate.DayOfWeek.ToString();
-		   string dateStringDayShort = DateTimeFormatInfo.CurrentInfo.AbbreviatedDayNames[(int)currentDate.DayOfWeek].ToString();
+            var currentDate = TimeTrackerService.GetDateFromDays(dateGroup.First().Date);
+            string dateStringNums = currentDate.ToShortDateString();
+            string dateStringDayLong = currentDate.DayOfWeek.ToString();
+            string dateStringDayShort = DateTimeFormatInfo.CurrentInfo.AbbreviatedDayNames[(int)currentDate.DayOfWeek].ToString();
 
-		   string offDayClass = "";
-		   string holidayClass = "";
+            string offDayClass = "";
+            string holidayClass = "";
 
-		   if (theSample.IsOffDay)
-		   { // Note: To change the color of offdays/offday entries, edit TimeTracker.css rules for '.table-row .offDay'/'.offDay .form-control', respectively.
-			   offDayClass = "offDay";
-		   }
-		   if (theSample.IsHoliday && !theSample.IsOffDay)
-		   {
-			   holidayClass = "holiday";
-		   }
+            if (theSample.IsOffDay)
+            { // Note: To change the color of offdays/offday entries, edit TimeTracker.css rules for '.table-row .offDay'/'.offDay .form-control', respectively.
+	            offDayClass = "offDay";
+            }
+            if (theSample.IsHoliday && !theSample.IsOffDay)
+            {
+	            holidayClass = "holiday";
+            }
 
             <div class="panel-heading hidden visible-xs @(headerClass)">
-
-                <label>@(dateStringNums) @(dateStringDayLong)</label>
-                @*
-                if (canApproveReject)
-                {
-
-                        //This section of code displays a pair of thumbs-up/down to managers in order to approve time entries.
-                        //The remainder of the JS and actions remain functional, however there is no interface for them in the application.
-                        //Uncomment to restore approval functionality..
-                        <div class="approval btn-group btn-group-xs pull-right @(selectorClass)">
-                            <a href="javascript:void(0)" class="btn btn-sm text-success up" onclick="return ajaxApproveDay($(this).parents('.panel-heading:first').next())">
-                                <i class="fa fa-thumbs-up fa-fw fa-2x"></i>
-                            </a>
-                            <a href="javascript:void(0)" class="btn btn-sm text-danger down" onclick="return ajaxRejectDay($(this).parents('.panel-heading:first').next())">
-                                <i class="fa fa-thumbs-down fa-flip-horizontal fa-fw fa-2x"></i>
-                            </a>
-                        </div>
-
-                }
-                *@
-            </div>
-            <div class="table-container @(containerClass)">
-		  	<div class="table-row">
-		  		<div class="panel-left hidden-xs table-col text-center @offDayClass @holidayClass">
-		  			@*
-				//This section of code displays a pair of thumbs-up/down to managers in order to approve time entries.
-				//The remainder of the JS and actions remain functional, however there is no interface for them in the application.
-				//Uncomment to restore approval functionality.
-				@if (canApproveReject)
-				{
-				    <div class="approval btn-group btn-group-xs btn-group-vertical @(selectorClass)">
-					   <a href="javascript:void(0)" class="btn btn-sm text-success up" onclick="return ajaxApproveDay($(this).parents('.table-container:first'))">
-						  <i class="fa fa-thumbs-up fa-fw fa-2x"></i>
-					   </a>
-					   <a href="javascript:void(0)" class="btn btn-sm text-danger down" onclick="return ajaxRejectDay($(this).parents('.table-container:first'))">
-						  <i class="fa fa-thumbs-down fa-flip-horizontal fa-fw fa-2x"></i>
-					   </a>
-				    </div>
-				}*@
-		  	<label style="display: block;">@dateStringNums</label>
-		       <label style="display: block;">@dateStringDayShort</label>
-			   <div class="panel-right table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
-			   	    <table align="center">
-						<tr>
-			   			    @if (currentDate.DayOfWeek == startOfWeek)
-				            {
-			   			        <td style="padding-right:5px; padding-bottom:5px;">
-                                  <a class="btn btn-primary"
-                                     href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
-                                      {
-                                          startDateTarget=currentDate,
-                                          startDateCopy=currentDate.AddDays(-7),
-                                          endDateCopy = currentDate.AddDays(-1),
-                                          userId = Model.UserId,
-                                          startDate = Model.StartDate,
-                                          endDate = Model.EndDate
-                                      })"
-                                     style="width:100%"
-                                     title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyWeek">
-                                       <i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.WeekInitial
-                                  </a>
-			   				        @*<a href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new {startDateTarget=currentDate, startDateCopy=currentDate.AddDays(-7), endDateCopy=currentDate.AddDays(-1), userId=Model.Entries.First().UserId})" class="btn btn-primary" style="width:100%" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyWeek"><i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.WeekInitial</a>*@
-			   			        </td>
-				            }
-			   		        <td style="padding-bottom:5px;">
-                              <a class="btn btn-primary"
-                                 href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
+                <div class="panel-right table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
+                    <label style="margin-right:2em;">@(dateStringNums) @(dateStringDayLong)</label>
+                    @if (currentDate.DayOfWeek == startOfWeek)
+                    {
+                        <span style="padding-right:5px; padding-bottom:5px;">
+                            <a class="btn btn-primary"
+                                href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
                                     {
                                         startDateTarget=currentDate,
-                                        startDateCopy=currentDate.AddDays(-1),
+                                        startDateCopy=currentDate.AddDays(-7),
                                         endDateCopy = currentDate.AddDays(-1),
                                         userId = Model.UserId,
                                         startDate = Model.StartDate,
                                         endDate = Model.EndDate
-                                    })"
-                                 style="width:100%"
-                                 title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyDay">
-                                  <i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DayInitial
-                              </a>
-			   			        @*<a href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new {startDateTarget=currentDate, startDateCopy=currentDate.AddDays(-1), endDateCopy=currentDate.AddDays(-1), userId=Model.Entries.First().UserId})" class="btn btn-primary" style="width:100%;" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyDay"><i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DayInitial</a>*@
-			   		        </td>
-			   	        </tr>
-			       </table>
-			   </div>
-		  </div>
-		  <div class="panel-right table-col @offDayClass @holidayClass">
-		  	@{
-			    foreach (var entry in theEntries)
-			    {
-		  		@Html.Partial("_AjaxTimeEntryBody", entry)
-			    }
-		  	@Html.Partial("_AjaxTimeEntryBody", theSample);
-			    theSample.Hidden = true;
-		  	@Html.Partial("_AjaxTimeEntryBody", theSample);
-		  }
-		  </div>
-		  </div>
+                                    }
+                                )"
+                                title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyWeek">
+                                <i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.WeekInitial
+                            </a>
+                        </span>
+                    }
+                    <span style="padding-bottom:5px;">
+                        <a class="btn btn-primary"
+                            href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
+                                {
+                                    startDateTarget=currentDate,
+                                    startDateCopy=currentDate.AddDays(-1),
+                                    endDateCopy = currentDate.AddDays(-1),
+                                    userId = Model.UserId,
+                                    startDate = Model.StartDate,
+                                    endDate = Model.EndDate
+                                }
+                            )"
+                            title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyDay">
+                            <i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DayInitial
+                        </a>
+                    </span>
+                </div>
+            </div>
+            <div class="table-container @(containerClass)">
+		  	    <div class="table-row">
+		  		    <div class="panel-left hidden-xs table-col text-center @offDayClass @holidayClass">
+            		  	<label style="display: block;">@dateStringNums</label>
+		                <label style="display: block;">@dateStringDayShort</label>
+			                <div class="panel-right table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
+			   	                <table align="center">
+						            <tr>
+			   			                @if (currentDate.DayOfWeek == startOfWeek)
+				                        {
+			   			                    <td style="padding-right:5px; padding-bottom:5px;">
+                                                <a class="btn btn-primary"
+                                                    href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
+                                                        {
+                                                            startDateTarget=currentDate,
+                                                            startDateCopy=currentDate.AddDays(-7),
+                                                            endDateCopy = currentDate.AddDays(-1),
+                                                            userId = Model.UserId,
+                                                            startDate = Model.StartDate,
+                                                            endDate = Model.EndDate
+                                                        }
+                                                    )"
+                                                    style="width:100%"
+                                                    title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyWeek">
+                                                    <i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.WeekInitial
+                                                </a>
+			   				                </td>
+				                        }
+			   		                    <td style="padding-bottom:5px;">
+                                            <a class="btn btn-primary"
+                                                href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
+                                                    {
+                                                        startDateTarget=currentDate,
+                                                        startDateCopy=currentDate.AddDays(-1),
+                                                        endDateCopy = currentDate.AddDays(-1),
+                                                        userId = Model.UserId,
+                                                        startDate = Model.StartDate,
+                                                        endDate = Model.EndDate
+                                                    }
+                                                )"
+                                                style="width:100%"
+                                                title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyDay">
+                                                <i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DayInitial
+                                            </a>
+			   			                </td>
+			   	                    </tr>
+			                    </table>
+			                </div>
+		                </div>
+		            <div class="panel-right table-col @offDayClass @holidayClass">
+		  	        @{
+			            foreach (var entry in theEntries)
+			            {
+		  		            @Html.Partial("_AjaxTimeEntryBody", entry)
+			            }
+		  	            @Html.Partial("_AjaxTimeEntryBody", theSample);
+			            theSample.Hidden = true;
+		  	            @Html.Partial("_AjaxTimeEntryBody", theSample);
+		            }
+		            </div>
+		        </div>
             </div>
         }
     </div>

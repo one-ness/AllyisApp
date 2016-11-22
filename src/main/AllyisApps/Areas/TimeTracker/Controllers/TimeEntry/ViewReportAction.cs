@@ -34,87 +34,161 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The data in a view dependent on the button's value.</returns>
 		public ActionResult ViewReport(string viewDataButton, List<int> userSelect, int? dateRangeStart, int? dateRangeEnd, bool showExport, int customerSelect, int pageNum, int projectSelect = 0)
 		{
-			switch (viewDataButton)
-			{
-				case "Preview":
-					{
-						ReportSelectionModel reportVMselect = new ReportSelectionModel
-						{
-							CustomerId = customerSelect,
-							EndDate = dateRangeEnd,
-							Page = pageNum,
-							ProjectId = projectSelect,
-							StartDate = dateRangeStart,
-							Users = userSelect ?? (List<int>)this.TempData["USelect"]
-						};
+            if (viewDataButton.Equals(Resources.TimeTracker.Views.TimeEntry.Strings.Preview))
+            {
+                ReportSelectionModel reportVMselect = new ReportSelectionModel
+                {
+                    CustomerId = customerSelect,
+                    EndDate = dateRangeEnd,
+                    Page = pageNum,
+                    ProjectId = projectSelect,
+                    StartDate = dateRangeStart,
+                    Users = userSelect ?? (List<int>)this.TempData["USelect"]
+                };
 
-						// when selecting page
-						if (userSelect == null)
-						{
-							reportVMselect.Users = (List<int>)this.TempData["USelect"];
-						}
-						else
-						{
-							reportVMselect.Users = userSelect;
-						}
+                // when selecting page
+                if (userSelect == null)
+                {
+                    reportVMselect.Users = (List<int>)this.TempData["USelect"];
+                }
+                else
+                {
+                    reportVMselect.Users = userSelect;
+                }
 
-						ReportViewModel reportVM = this.ConstructReportViewModel(UserContext.UserId, UserContext.ChosenOrganizationId, AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers), showExport, reportVMselect);
+                ReportViewModel reportVM = this.ConstructReportViewModel(UserContext.UserId, UserContext.ChosenOrganizationId, AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers), showExport, reportVMselect);
 
-						DataExportViewModel dataVM = this.ConstructDataExportViewModel(reportVMselect.Users, TimeTrackerService.GetDateTimeFromDays(dateRangeStart.Value), TimeTrackerService.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
+                DataExportViewModel dataVM = this.ConstructDataExportViewModel(reportVMselect.Users, TimeTrackerService.GetDateTimeFromDays(dateRangeStart.Value), TimeTrackerService.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
 
-						dataVM.PageTotal = SetPageTotal(dataVM.Data, reportVM.PreviewPageSize, pageNum); // must set PageTotal first and seperately like this.
-						dataVM.PreviewData = SetPreviewData(dataVM.Data, reportVM.PreviewPageSize, pageNum);
+                dataVM.PageTotal = SetPageTotal(dataVM.Data, reportVM.PreviewPageSize, pageNum); // must set PageTotal first and seperately like this.
+                dataVM.PreviewData = SetPreviewData(dataVM.Data, reportVM.PreviewPageSize, pageNum);
 
-						float total = (from d in dataVM.Data select d.Duration).Sum();
-						int dataCount = dataVM.PreviewData.Count();
+                float total = (from d in dataVM.Data select d.Duration).Sum();
+                int dataCount = dataVM.PreviewData.Count();
 
-						reportVM.PreviewTotal = string.Format("{0} {1}", total, Resources.TimeTracker.Controllers.TimeEntry.Strings.HoursTotal);
+                reportVM.PreviewTotal = string.Format("{0} {1}", total, Resources.TimeTracker.Controllers.TimeEntry.Strings.HoursTotal);
 
-						IEnumerable<CompleteProjectInfo> orgProjects = OrgService.GetProjectsByOrganization(UserContext.ChosenOrganizationId);
-						if (dataCount > 0)
-						{
-							IList<TablePreviewEntry> pEntries = new List<TablePreviewEntry>();
-							foreach (TimeEntryInfo data in dataVM.PreviewData)
-							{
-								CompleteProjectInfo orgProj = data.ProjectId == 0 ? ProjectService.GetProject(0) : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
-								TablePreviewEntry previewData = new TablePreviewEntry
-								{
-									CustomerName = orgProj.CustomerName,
-									ProjectName = orgProj.ProjectName,
-									TimeEntry = data
-								};
-								pEntries.Add(previewData);
-							}
+                IEnumerable<CompleteProjectInfo> orgProjects = OrgService.GetProjectsByOrganization(UserContext.ChosenOrganizationId);
+                if (dataCount > 0)
+                {
+                    IList<TablePreviewEntry> pEntries = new List<TablePreviewEntry>();
+                    foreach (TimeEntryInfo data in dataVM.PreviewData)
+                    {
+                        CompleteProjectInfo orgProj = data.ProjectId == 0 ? ProjectService.GetProject(0) : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
+                        TablePreviewEntry previewData = new TablePreviewEntry
+                        {
+                            CustomerName = orgProj.CustomerName,
+                            ProjectName = orgProj.ProjectName,
+                            TimeEntry = data
+                        };
+                        pEntries.Add(previewData);
+                    }
 
-							reportVM.PreviewEntries = pEntries;
-							reportVM.PreviewMessage = string.Empty;
-							reportVM.PreviewPageTotal = dataVM.PageTotal;
-							reportVM.PreviewPageNum = dataCount <= reportVM.PreviewPageSize
-												? 1
-												: 1 + ((dataCount - 1) / reportVM.PreviewPageSize);
-						}
-						else
-						{
-							reportVM.PreviewEntries = null;
-							reportVM.PreviewMessage = Resources.TimeTracker.Controllers.TimeEntry.Strings.NoDataPreview;
-							reportVM.PreviewPageTotal = 1;
-							reportVM.PreviewPageNum = 1;
-						}
+                    reportVM.PreviewEntries = pEntries;
+                    reportVM.PreviewMessage = string.Empty;
+                    reportVM.PreviewPageTotal = dataVM.PageTotal;
+                    reportVM.PreviewPageNum = dataCount <= reportVM.PreviewPageSize
+                                        ? 1
+                                        : 1 + ((dataCount - 1) / reportVM.PreviewPageSize);
+                }
+                else
+                {
+                    reportVM.PreviewEntries = null;
+                    reportVM.PreviewMessage = Resources.TimeTracker.Controllers.TimeEntry.Strings.NoDataPreview;
+                    reportVM.PreviewPageTotal = 1;
+                    reportVM.PreviewPageNum = 1;
+                }
 
-						this.TempData["RVM"] = reportVM;
-						return this.RedirectToAction(ActionConstants.Report);
-					}
+                this.TempData["RVM"] = reportVM;
+                return this.RedirectToAction(ActionConstants.Report);
+            } else if (viewDataButton.Equals(Resources.TimeTracker.Views.TimeEntry.Strings.Export))
+            {
+                return this.ExportReport(userSelect, TimeTrackerService.GetDateTimeFromDays(dateRangeStart.Value), TimeTrackerService.GetDateTimeFromDays(dateRangeEnd.Value), customerSelect, projectSelect);
+            }
+            return this.RedirectToAction(ActionConstants.Report);
 
-				case "Export":
-					{
-						return this.ExportReport(userSelect, TimeTrackerService.GetDateTimeFromDays(dateRangeStart.Value), TimeTrackerService.GetDateTimeFromDays(dateRangeEnd.Value), customerSelect, projectSelect);
-					}
+   //         switch (viewDataButton)
+			//{
+   //             case Resources.TimeTracker.Views.TimeEntry.Strings.Preview:
+			//	//case "Preview":
+			//		{
+			//			ReportSelectionModel reportVMselect = new ReportSelectionModel
+			//			{
+			//				CustomerId = customerSelect,
+			//				EndDate = dateRangeEnd,
+			//				Page = pageNum,
+			//				ProjectId = projectSelect,
+			//				StartDate = dateRangeStart,
+			//				Users = userSelect ?? (List<int>)this.TempData["USelect"]
+			//			};
 
-				default:
-					{
-						return this.RedirectToAction(ActionConstants.Report);
-					}
-			}
+			//			// when selecting page
+			//			if (userSelect == null)
+			//			{
+			//				reportVMselect.Users = (List<int>)this.TempData["USelect"];
+			//			}
+			//			else
+			//			{
+			//				reportVMselect.Users = userSelect;
+			//			}
+
+			//			ReportViewModel reportVM = this.ConstructReportViewModel(UserContext.UserId, UserContext.ChosenOrganizationId, AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers), showExport, reportVMselect);
+
+			//			DataExportViewModel dataVM = this.ConstructDataExportViewModel(reportVMselect.Users, TimeTrackerService.GetDateTimeFromDays(dateRangeStart.Value), TimeTrackerService.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
+
+			//			dataVM.PageTotal = SetPageTotal(dataVM.Data, reportVM.PreviewPageSize, pageNum); // must set PageTotal first and seperately like this.
+			//			dataVM.PreviewData = SetPreviewData(dataVM.Data, reportVM.PreviewPageSize, pageNum);
+
+			//			float total = (from d in dataVM.Data select d.Duration).Sum();
+			//			int dataCount = dataVM.PreviewData.Count();
+
+			//			reportVM.PreviewTotal = string.Format("{0} {1}", total, Resources.TimeTracker.Controllers.TimeEntry.Strings.HoursTotal);
+
+			//			IEnumerable<CompleteProjectInfo> orgProjects = OrgService.GetProjectsByOrganization(UserContext.ChosenOrganizationId);
+			//			if (dataCount > 0)
+			//			{
+			//				IList<TablePreviewEntry> pEntries = new List<TablePreviewEntry>();
+			//				foreach (TimeEntryInfo data in dataVM.PreviewData)
+			//				{
+			//					CompleteProjectInfo orgProj = data.ProjectId == 0 ? ProjectService.GetProject(0) : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
+			//					TablePreviewEntry previewData = new TablePreviewEntry
+			//					{
+			//						CustomerName = orgProj.CustomerName,
+			//						ProjectName = orgProj.ProjectName,
+			//						TimeEntry = data
+			//					};
+			//					pEntries.Add(previewData);
+			//				}
+
+			//				reportVM.PreviewEntries = pEntries;
+			//				reportVM.PreviewMessage = string.Empty;
+			//				reportVM.PreviewPageTotal = dataVM.PageTotal;
+			//				reportVM.PreviewPageNum = dataCount <= reportVM.PreviewPageSize
+			//									? 1
+			//									: 1 + ((dataCount - 1) / reportVM.PreviewPageSize);
+			//			}
+			//			else
+			//			{
+			//				reportVM.PreviewEntries = null;
+			//				reportVM.PreviewMessage = Resources.TimeTracker.Controllers.TimeEntry.Strings.NoDataPreview;
+			//				reportVM.PreviewPageTotal = 1;
+			//				reportVM.PreviewPageNum = 1;
+			//			}
+
+			//			this.TempData["RVM"] = reportVM;
+			//			return this.RedirectToAction(ActionConstants.Report);
+			//		}
+
+			//	case "Export":
+			//		{
+			//			return this.ExportReport(userSelect, TimeTrackerService.GetDateTimeFromDays(dateRangeStart.Value), TimeTrackerService.GetDateTimeFromDays(dateRangeEnd.Value), customerSelect, projectSelect);
+			//		}
+
+			//	default:
+			//		{
+			//			return this.RedirectToAction(ActionConstants.Report);
+			//		}
+			//}
 		}
 
 		/// <summary>

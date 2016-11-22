@@ -38,17 +38,17 @@ namespace AllyisApps.Controllers
 
 					foreach (string user in org.AddedUsers)
 					{
-						Notifications.Add(new BootstrapAlert(user + Resources.Controllers.Auth.Strings.UserAddedSuccessfully, Variety.Success));
+						Notifications.Add(new BootstrapAlert(user + " " + Resources.Controllers.Auth.Strings.UserAddedSuccessfully, Variety.Success));
 					}
 
 					foreach (string user in org.EmailedUsers)
 					{
-						Notifications.Add(new BootstrapAlert(user + Resources.Controllers.Auth.Strings.UserEmailed, Variety.Info));
+						Notifications.Add(new BootstrapAlert(user + " " + Resources.Controllers.Auth.Strings.UserEmailed, Variety.Info));
 					}
 
 					foreach (string user in org.UsersAlreadyExisting)
 					{
-						Notifications.Add(new BootstrapAlert(user + Resources.Controllers.Auth.Strings.UserAlreadyExists, Variety.Warning));
+						Notifications.Add(new BootstrapAlert(user + " " + Resources.Controllers.Auth.Strings.UserAlreadyExists, Variety.Warning));
 					}
 
 					return this.RedirectToAction(ActionConstants.Manage);
