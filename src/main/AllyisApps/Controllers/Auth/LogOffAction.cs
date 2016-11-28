@@ -23,7 +23,7 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult LogOff()
 		{
-			Services.Account.AccountService.SignOut(Response);
+			this.SignOut(Response);
 
 			// display success message to user
 			Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.LogOffSuccess, Variety.Success));
@@ -32,5 +32,5 @@ namespace AllyisApps.Controllers
 			// TODO: we shouldnt be hard coding http
 			return this.Redirect(string.Format("http://{0}", GlobalSettings.WebRoot));
 		}
-	}
+    }
 }

@@ -4,13 +4,16 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+
 using AllyisApps.Core.Alert;
-using AllyisApps.DBModel;
+using AllyisApps.Lib;
 using AllyisApps.Services.Account;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Org;
@@ -144,13 +147,61 @@ namespace AllyisApps.Core
 			}
 
 			return this.RedirectToAction(ActionConstants.Index);
-		}
+        }
 
-		/// <summary>
-		/// On action executing - executed before every action.
+        /// <summary>
+		/// Get user context from cookie.
 		/// </summary>
-		/// <param name="filterContext">The ActionExecutingContext.</param>
-		protected override void OnActionExecuting(ActionExecutingContext filterContext)
+		/// <param name="request">The HttpResponseBase.</param>
+		/// <returns>The UserContext, or null on error.</returns>
+		public UserContext GetCookieData(HttpRequestBase request)
+        {
+            if (request == null)
+            {
+                throw new NullReferenceException("Http request must not be null");
+            }
+
+            UserContext result = null;
+            HttpCookie cookie = request.Cookies[FormsAuthentication.FormsCookieName];
+            if (cookie != null)
+            {
+                try
+                {
+                    if (!string.IsNullOrWhiteSpace(cookie.Value))
+                    {
+                        //// decrypt and deserialize the UserContext from the cookie data
+                        FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
+                        result = Serializer.DeserializeFromJson<UserContext>(ticket.UserData);
+                    }
+                }
+                catch
+                {
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+		/// Sign out.
+		/// </summary>
+		/// <param name="response">The Response object passed in from a controller.</param>
+		public void SignOut(HttpResponseBase response)
+        {
+            FormsAuthentication.SignOut();
+
+            // TODO: check if this action is really required. Sometimes the SignOut call above is not deleting the cookie
+            //// get the cookie, set expire time in the past, and set it in response to delete it
+            HttpCookie cookie = FormsAuthentication.GetAuthCookie(FormsAuthentication.FormsCookieName, false);
+            cookie.Expires = DateTime.UtcNow.AddDays(-5);
+            response.Cookies.Add(cookie);
+        }
+
+        /// <summary>
+        /// On action executing - executed before every action.
+        /// </summary>
+        /// <param name="filterContext">The ActionExecutingContext.</param>
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
 			base.OnActionExecuting(filterContext);
 
@@ -160,11 +211,11 @@ namespace AllyisApps.Core
 			if (Request.IsAuthenticated)
 			{
 				// an authenticated request MUST have user context in the cookie.
-				this.UserContext = AccountService.GetCookieData(Request);
-				if (this.UserContext == null || DBHelper.Instance.GetUserInfo(this.UserContext.UserId) == null)
+				this.UserContext = this.GetCookieData(Request);
+				if (this.UserContext == null || AccountService.GetUserInfo(this.UserContext.UserId) == null)
 				{
 					// user context not found. can't proceed, redirect to login page.
-					AccountService.SignOut(Response);
+					this.SignOut(Response);
 					Response.Redirect(FormsAuthentication.LoginUrl);
 					return;
 				}
@@ -198,5 +249,5 @@ namespace AllyisApps.Core
 				TempData[TempDataKey] = language.LanguageID; // Store it for next request.
 			}
 		}
-	}
+    }
 }
