@@ -7,6 +7,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data;
+using System.Data.OleDb;
 
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Billing;
@@ -168,6 +170,54 @@ namespace AllyisApps.Services.Crm
 
 			return null;
 		}
+
+        /// <summary>
+        /// Imports customers into the database from an excel file
+        /// Excel file connection code based on http://stackoverflow.com/questions/14261655/best-fastest-way-to-read-an-excel-sheet-into-a-datatable
+        /// </summary>
+        /// <param name="filepath">The path to the excel file</param>
+        public void ImportCustomers(string filepath)
+        {
+            #region OleDbSetup
+            string sSheetName = null;
+            string sConnection = null;
+            DataTable dtTablesList = default(DataTable);
+            OleDbCommand oleExcelCommand = default(OleDbCommand);
+            OleDbDataReader oleExcelReader = default(OleDbDataReader);
+            OleDbConnection oleExcelConnection = default(OleDbConnection);
+
+            sConnection = String.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0;HDR=No;IMEX=1\"", filepath);
+
+            oleExcelConnection = new OleDbConnection(sConnection);
+            oleExcelConnection.Open();
+
+            dtTablesList = oleExcelConnection.GetSchema("Tables");
+
+            if (dtTablesList.Rows.Count > 0)
+            {
+                sSheetName = dtTablesList.Rows[0]["TABLE_NAME"].ToString();
+            }
+
+            dtTablesList.Clear();
+            dtTablesList.Dispose();
+            #endregion OledbSetup
+
+            if (!string.IsNullOrEmpty(sSheetName))
+            {
+                oleExcelCommand = oleExcelConnection.CreateCommand();
+                oleExcelCommand.CommandText = "Select * From [" + sSheetName + "]";
+                oleExcelCommand.CommandType = CommandType.Text;
+                oleExcelReader = oleExcelCommand.ExecuteReader();
+                //nOutputRow = 0;
+
+                while (oleExcelReader.Read())
+                {
+                    // TODO: Import into database logic goes here
+                }
+                oleExcelReader.Close();
+            }
+            oleExcelConnection.Close();
+        }
 
 		/// <summary>
 		/// Updates a customer in the database.
