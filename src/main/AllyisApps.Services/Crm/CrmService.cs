@@ -178,6 +178,7 @@ namespace AllyisApps.Services.Crm
         /// <param name="filepath">The path to the excel file</param>
         public void ImportCustomers(string filepath)
         {
+            // TODO: Clean up this and other ImportThings code, moving redundancies to shared functions, etc.
             #region OleDbSetup
             string sSheetName = null;
             string sConnection = null;
@@ -210,9 +211,23 @@ namespace AllyisApps.Services.Crm
                 oleExcelReader = oleExcelCommand.ExecuteReader();
                 //nOutputRow = 0;
 
-                while (oleExcelReader.Read())
+                //Get existing customers
+                IEnumerable<CustomerInfo> customerList = this.GetCustomerList(this.UserContext.ChosenOrganizationId);
+
+                while (oleExcelReader.Read()) // Reads one row at a time, starting just before the first row, so call it once before doing anything
                 {
-                    // TODO: Import into database logic goes here
+                    string customerName = oleExcelReader.GetString(oleExcelReader.GetOrdinal(ColumnHeaders.CustomerName));
+                    if (!customerList.Any(C => C.Name == customerName)) // Only create customers that do not already exist in the org
+                        this.CreateCustomer(new CustomerInfo()
+                        {
+                            /* TODO: Once we know more about what the imported file will look like (specifically, column names for data),
+                            we can add more CustomerInfo values from the imported file. To do so, go to ServiceConstants.cs and
+                            add a constant variable under the ColumnHeaders class for the excel file's column header, then use it to grab the column
+                            ordinal to grab the value. See grabbing the customer name, above.
+                            */
+                            Name = customerName,
+                            OrganizationId = this.UserContext.ChosenOrganizationId
+                        });
                 }
                 oleExcelReader.Close();
             }

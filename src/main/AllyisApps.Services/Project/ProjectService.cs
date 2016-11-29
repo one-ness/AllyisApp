@@ -13,6 +13,7 @@ using System.Data.OleDb;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.Services.Account;
 using AllyisApps.Services.Utilities;
+using AllyisApps.Services.Crm;
 
 namespace AllyisApps.Services.Project
 {
@@ -25,6 +26,11 @@ namespace AllyisApps.Services.Project
 		/// Authorization in use for select methods.
 		/// </summary>
 		private AuthorizationService authorizationService;
+
+        /// <summary>
+        /// Crm Service in use for select methods
+        /// </summary>
+        private CrmService CrmService;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProjectService"/> class.
@@ -212,9 +218,36 @@ namespace AllyisApps.Services.Project
                 oleExcelReader = oleExcelCommand.ExecuteReader();
                 //nOutputRow = 0;
 
+                //Get existing customers just once
+                IEnumerable<CustomerInfo> customerList = CrmService.GetCustomerList(this.UserContext.ChosenOrganizationId);
                 while (oleExcelReader.Read())
                 {
-                    // TODO: Import into database logic goes here
+                    /* Projects are dependant on Customers; so, to import a project, we must ensure that the associated customer
+                    also gets imported first. */
+                    string customerName = oleExcelReader.GetString(oleExcelReader.GetOrdinal(ColumnHeaders.CustomerName));
+                    string projectName = oleExcelReader.GetString(oleExcelReader.GetOrdinal(ColumnHeaders.ProjectName));
+                    int? id;
+
+                    /* TODO: Once we know more about what the imported file will look like (specifically, column names for data),
+                    we can add more CustomerInfo values from the imported file. To do so, go to ServiceConstants.cs and
+                    add a constant variable under the ColumnHeaders class for the excel file's column header, then use it to grab the column
+                    ordinal to grab the value. See grabbing the customer name and project name, above.
+                    */
+                    if (!(id = customerList.Where(C => C.Name == customerName).SingleOrDefault().CustomerId).HasValue) // Only create customers that do not already exist in the org; get the id if they do
+                        id = CrmService.CreateCustomer(new CustomerInfo()
+                        {
+                            Name = customerName,
+                            OrganizationId = this.UserContext.ChosenOrganizationId
+                        });
+                    if (!this.GetProjectsByCustomer(id.Value).Any(P => P.Name == projectName)) // Only create projects that do not already exist under the customer
+                        this.CreateProject(
+                            this.UserContext.ChosenOrganizationId,
+                            id.Value,
+                            projectName,
+                            oleExcelReader.GetString(oleExcelReader.GetOrdinal(ColumnHeaders.ProjectType)),
+                            oleExcelReader.GetDateTime(oleExcelReader.GetOrdinal(ColumnHeaders.ProjectStartDate)),
+                            oleExcelReader.GetDateTime(oleExcelReader.GetOrdinal(ColumnHeaders.ProjectEndDate))
+                            );
                 }
                 oleExcelReader.Close();
             }
