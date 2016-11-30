@@ -3,9 +3,26 @@
 @model TestViewModel
 
 @{
+    Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
     ViewBag.Title = "Test";
 }
 
 <h2>Test</h2>
-<h3>SENDGRID_APIKEY: @Model.ApiKey</h3>
+@using (Html.BeginForm("Test", ControllerConstants.Account, null, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.Label("Email: ")
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Email, string.Empty, new { @class = "text-danger" })
+    </div>
+    
+    <div class="form-group allyis-action-buttons">
+        <p>
+            <input type="submit" value="Send Test Email" class="btn btn-primary" />
+        </p>
+    </div>
+}
 

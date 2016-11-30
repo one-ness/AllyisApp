@@ -1,7 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿//------------------------------------------------------------------------------
+// <copyright file="TestViewModel.cs" company="Allyis, Inc.">
+//     Copyright (c) Allyis, Inc.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
+using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -11,8 +14,11 @@ namespace AllyisApps.ViewModels.Auth
     public class TestViewModel
     {
         /// <summary>
-        /// Gets or sets the value of the SENDGRID_APIKEY environment variable in the current deployment.
+        /// Gets or sets the email address to send a test email to.
         /// </summary>
-        public string ApiKey { get; set; }
+        [Required(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "EmailValidation")]
+        [Display(Name = "Email")]
+        [EmailAddress]
+        public string Email { get; set; }
     }
 }
