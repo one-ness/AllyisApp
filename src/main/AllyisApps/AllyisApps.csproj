@@ -246,6 +246,7 @@
     <Compile Include="Controllers\Auth\OrganizationsAction.cs" />
     <Compile Include="Controllers\Auth\RegisterAction.cs" />
     <Compile Include="Controllers\Auth\ResetPasswordAction.cs" />
+    <Compile Include="Controllers\Auth\TestAction.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
     <Compile Include="Controllers\Home\AboutAction.cs" />
     <Compile Include="Controllers\Home\ApplicationRedirectAction.cs" />
@@ -684,6 +685,7 @@
     <Compile Include="ViewModels\Auth\EditProfileViewModel.cs" />
     <Compile Include="ViewModels\Auth\ForgotPasswordViewModel.cs" />
     <Compile Include="ViewModels\Auth\LogOnViewModel.cs" />
+    <Compile Include="ViewModels\Auth\TestViewModel.cs" />
     <Compile Include="ViewModels\Org\BillingHistoryItemViewModel.cs" />
     <Compile Include="ViewModels\Org\PermissionsManagementViewModel.cs" />
     <Compile Include="ViewModels\Auth\ResetPasswordViewModel.cs" />
@@ -891,6 +893,7 @@
     <Content Include="Views\Account\ConfirmRemoveBillingInformation.cshtml" />
     <Content Include="Views\Account\Permission.cshtml" />
     <Content Include="Views\Account\Edit.cshtml" />
+    <Content Include="Views\Account\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">
