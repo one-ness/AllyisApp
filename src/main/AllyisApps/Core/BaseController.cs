@@ -99,9 +99,10 @@ namespace AllyisApps.Core
 				route = string.Format("{0}/{1}", pArea, route);
 			}
 
-			// if no org is set for a user the default is "default" this catchs that
-			// case until the default usercontext org is looked at
-			string url, chosenOrg = OrgService.GetSubdomainById(pOrganizationId);
+            // if no org is set for a user the default is "default" this catchs that
+            // case until the default usercontext org is looked at
+            string url, chosenOrg = "default"; // OrgService.GetSubdomainById(pOrganizationId);                                   SUBDOMAINS DISABLED
+                                                //                                                                                Remove "default" and uncomment GetSub.. method to enable
 			if (chosenOrg == "default")
 			{
 				url = string.Format("http://{0}/{1}", rootAndMiddle, route);
