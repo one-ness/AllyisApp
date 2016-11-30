@@ -48,6 +48,7 @@ namespace AllyisApps.Services.Project
 		public ProjectService(string connectionString, UserContext userContext) : base(connectionString, userContext)
 		{
 			this.authorizationService = new AuthorizationService(connectionString, userContext);
+            this.CrmService = new CrmService(connectionString);
 		}
 
 		/// <summary>

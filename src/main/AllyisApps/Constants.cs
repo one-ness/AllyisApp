@@ -146,6 +146,11 @@
 		/// </summary>
 		public const string GetDetailsDataJson = "GetDetailsDataJson";
 
+        /// <summary>
+        /// Action-Name: Import
+        /// </summary>
+        public const string Import = "Import";
+
 		/// <summary>
 		/// Action-Name: Index.
 		/// </summary>

@@ -186,4 +186,10 @@
   <data name="State" xml:space="preserve">
     <value>State</value>
   </data>
+  <data name="CustomersFile" xml:space="preserve">
+    <value>Customers File</value>
+  </data>
+  <data name="ProjectsFile" xml:space="preserve">
+    <value>Projects File</value>
+  </data>
 </root>
