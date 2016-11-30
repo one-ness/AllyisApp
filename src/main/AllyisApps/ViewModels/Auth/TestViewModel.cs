@@ -11,8 +11,8 @@ namespace AllyisApps.ViewModels.Auth
     public class TestViewModel
     {
         /// <summary>
-        /// The value of the SENDGRID_APIKEY environment variable in the current deployment.
+        /// Gets or sets the value of the SENDGRID_APIKEY environment variable in the current deployment.
         /// </summary>
-        public string apiKey { get; set; }
+        public string ApiKey { get; set; }
     }
 }

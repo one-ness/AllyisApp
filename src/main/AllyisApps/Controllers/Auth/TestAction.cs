@@ -7,6 +7,7 @@
 using System.Web.Mvc;
 
 using AllyisApps.Core;
+using AllyisApps.Utilities;
 using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
@@ -25,7 +26,7 @@ namespace AllyisApps.Controllers
         {
             TestViewModel model = new TestViewModel
             {
-                apiKey = System.Environment.GetEnvironmentVariable("SENDGRID_APIKEY")
+                ApiKey = Helpers.ReadAppSetting("sendGridApiKey")
             };
             return this.View(model);
         }
