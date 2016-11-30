@@ -179,80 +179,42 @@ namespace AllyisApps.Services.Project
 			return DBHelper.CreateProjectFromCustomerIdOnly(customerId, name, type, start, end);
 		}
 
-        /// <summary>
-        /// Imports customers into the database from an excel file
-        /// Excel file connection code based on http://stackoverflow.com/questions/14261655/best-fastest-way-to-read-an-excel-sheet-into-a-datatable
-        /// </summary>
-        /// <param name="filepath">The path to the excel file</param>
-        public void ImportProjects(string filepath)
+        public void ImportProjects(DataTable projectData)
         {
-            #region OleDbSetup
-            string sSheetName = null;
-            string sConnection = null;
-            DataTable dtTablesList = default(DataTable);
-            OleDbCommand oleExcelCommand = default(OleDbCommand);
-            OleDbDataReader oleExcelReader = default(OleDbDataReader);
-            OleDbConnection oleExcelConnection = default(OleDbConnection);
+            // Get existing customers
+            IEnumerable<CustomerInfo> customerList = CrmService.GetCustomerList(this.UserContext.ChosenOrganizationId);
 
-            sConnection = String.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0;HDR=No;IMEX=1\"", filepath);
-
-            oleExcelConnection = new OleDbConnection(sConnection);
-            oleExcelConnection.Open();
-
-            dtTablesList = oleExcelConnection.GetSchema("Tables");
-
-            if (dtTablesList.Rows.Count > 0)
+            foreach (DataRow row in projectData.Rows)
             {
-                sSheetName = dtTablesList.Rows[0]["TABLE_NAME"].ToString();
-            }
-
-            dtTablesList.Clear();
-            dtTablesList.Dispose();
-            #endregion OledbSetup
-
-            if (!string.IsNullOrEmpty(sSheetName))
-            {
-                oleExcelCommand = oleExcelConnection.CreateCommand();
-                oleExcelCommand.CommandText = "Select * From [" + sSheetName + "]";
-                oleExcelCommand.CommandType = CommandType.Text;
-                oleExcelReader = oleExcelCommand.ExecuteReader();
-                //nOutputRow = 0;
-
-                //Get existing customers just once
-                IEnumerable<CustomerInfo> customerList = CrmService.GetCustomerList(this.UserContext.ChosenOrganizationId);
-                while (oleExcelReader.Read())
-                {
-                    /* Projects are dependant on Customers; so, to import a project, we must ensure that the associated customer
+                /* Projects are dependant on Customers; so, to import a project, we must ensure that the associated customer
                     also gets imported first. */
-                    string customerName = oleExcelReader.GetString(oleExcelReader.GetOrdinal(ColumnHeaders.CustomerName));
-                    string projectName = oleExcelReader.GetString(oleExcelReader.GetOrdinal(ColumnHeaders.ProjectName));
-                    int? id;
+                string customerName = row[ColumnHeaders.CustomerName].ToString();
+                string projectName = row[ColumnHeaders.ProjectName].ToString();
+                int? id;
 
-                    /* TODO: Once we know more about what the imported file will look like (specifically, column names for data),
-                    we can add more CustomerInfo values from the imported file. To do so, go to ServiceConstants.cs and
-                    add a constant variable under the ColumnHeaders class for the excel file's column header, then use it to grab the column
-                    ordinal to grab the value. See grabbing the customer name and project name, above.
-                    */
-                    if (!(id = customerList.Where(C => C.Name == customerName).SingleOrDefault().CustomerId).HasValue) // Only create customers that do not already exist in the org; get the id if they do
-                        id = CrmService.CreateCustomer(new CustomerInfo()
-                        {
-                            Name = customerName,
-                            OrganizationId = this.UserContext.ChosenOrganizationId
-                        });
-                    if (!this.GetProjectsByCustomer(id.Value).Any(P => P.Name == projectName)) // Only create projects that do not already exist under the customer
-                        this.CreateProject(
-                            this.UserContext.ChosenOrganizationId,
-                            id.Value,
-                            projectName,
-                            oleExcelReader.GetString(oleExcelReader.GetOrdinal(ColumnHeaders.ProjectType)),
-                            oleExcelReader.GetDateTime(oleExcelReader.GetOrdinal(ColumnHeaders.ProjectStartDate)),
-                            oleExcelReader.GetDateTime(oleExcelReader.GetOrdinal(ColumnHeaders.ProjectEndDate))
-                            );
-                }
-                oleExcelReader.Close();
+                /* TODO: Once we know more about what the imported file will look like (specifically, column names for data),
+                we can add more CustomerInfo values from the imported file. To do so, go to ServiceConstants.cs and
+                add a constant variable under the ColumnHeaders class for the excel file's column header, then use it to grab the column
+                ordinal to grab the value. See grabbing the customer name and project name, above.
+                */
+                if (!(id = customerList.Where(C => C.Name == customerName).SingleOrDefault().CustomerId).HasValue) // Only create customers that do not already exist in the org; get the id if they do
+                    id = CrmService.CreateCustomer(new CustomerInfo()
+                    {
+                        Name = customerName,
+                        OrganizationId = this.UserContext.ChosenOrganizationId
+                    });
+                if (!this.GetProjectsByCustomer(id.Value).Any(P => P.Name == projectName)) // Only create projects that do not already exist under the customer
+                    this.CreateProject(
+                        this.UserContext.ChosenOrganizationId,
+                        id.Value,                             
+                        projectName,
+                        row[ColumnHeaders.ProjectType].ToString(),
+                        Convert.ToDateTime(row[ColumnHeaders.ProjectStartDate]),
+                        Convert.ToDateTime(row[ColumnHeaders.ProjectEndDate])
+                        );
             }
-            oleExcelConnection.Close();
         }
+        
 
         /// <summary>
         /// Updates a project's properties and user list.
