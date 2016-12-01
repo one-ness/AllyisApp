@@ -172,51 +172,32 @@ namespace AllyisApps.Services.Crm
 		}
 
         /// <summary>
-        /// Imports customers into the database from an excel file
-        /// Excel file connection code based on http://stackoverflow.com/questions/14261655/best-fastest-way-to-read-an-excel-sheet-into-a-datatable
+        /// Given a dataset with customer data that matches the column headers described in
+        /// ServiceConstants.cs, this function creates customers from the data, skipping any customers
+        /// that already exist.
         /// </summary>
-        /// <param name="filepath">The path to the excel file</param>
-        public void ImportCustomers(string filepath)
+        /// <param name="customerData">A DataTable representing customer data</param>
+        public void ImportCustomers(DataTable customerData)
         {
-            #region OleDbSetup
-            string sSheetName = null;
-            string sConnection = null;
-            DataTable dtTablesList = default(DataTable);
-            OleDbCommand oleExcelCommand = default(OleDbCommand);
-            OleDbDataReader oleExcelReader = default(OleDbDataReader);
-            OleDbConnection oleExcelConnection = default(OleDbConnection);
+            // Get existing customers
+            IEnumerable<CustomerInfo> customerList = this.GetCustomerList(this.UserContext.ChosenOrganizationId);
 
-            sConnection = String.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0;HDR=No;IMEX=1\"", filepath);
-
-            oleExcelConnection = new OleDbConnection(sConnection);
-            oleExcelConnection.Open();
-
-            dtTablesList = oleExcelConnection.GetSchema("Tables");
-
-            if (dtTablesList.Rows.Count > 0)
+            foreach (DataRow row in customerData.Rows)
             {
-                sSheetName = dtTablesList.Rows[0]["TABLE_NAME"].ToString();
-            }
+                if (row.ItemArray.All(i => string.IsNullOrEmpty(i?.ToString()))) break; // Avoid iterating through empty rows
 
-            dtTablesList.Clear();
-            dtTablesList.Dispose();
-            #endregion OledbSetup
-
-            if (!string.IsNullOrEmpty(sSheetName))
-            {
-                oleExcelCommand = oleExcelConnection.CreateCommand();
-                oleExcelCommand.CommandText = "Select * From [" + sSheetName + "]";
-                oleExcelCommand.CommandType = CommandType.Text;
-                oleExcelReader = oleExcelCommand.ExecuteReader();
-                //nOutputRow = 0;
-
-                while (oleExcelReader.Read())
+                /* TODO: Once we know more about what the imported file will look like (specifically, column names for data),
+                we can add more CustomerInfo values from the imported file. To do so, go to ServiceConstants.cs and
+                add a constant variable under the ColumnHeaders class for the excel file's column header.
+                */
+                string customerName = row[ColumnHeaders.CustomerName].ToString();
+                if (!customerList.Any(C => C.Name == customerName)) // Only import customers that do not exist already
                 {
-                    // TODO: Import into database logic goes here
+                    CustomerInfo newCustomer = new CustomerInfo() { Name = customerName, OrganizationId = this.UserContext.ChosenOrganizationId };
+                    this.CreateCustomer(newCustomer);
+                    customerList = customerList.Concat(new[] { newCustomer });
                 }
-                oleExcelReader.Close();
             }
-            oleExcelConnection.Close();
         }
 
 		/// <summary>
