@@ -49,6 +49,7 @@ namespace AllyisApps.Services.Project
 		{
 			this.authorizationService = new AuthorizationService(connectionString, userContext);
             this.CrmService = new CrmService(connectionString);
+            this.CrmService.SetUserContext(userContext);
 		}
 
 		/// <summary>
@@ -187,23 +188,25 @@ namespace AllyisApps.Services.Project
 
             foreach (DataRow row in projectData.Rows)
             {
+                if (row.ItemArray.All(i => string.IsNullOrEmpty(i?.ToString()))) break; // Avoid iterating through empty rows
+
                 /* Projects are dependant on Customers; so, to import a project, we must ensure that the associated customer
                     also gets imported first. */
                 string customerName = row[ColumnHeaders.CustomerName].ToString();
                 string projectName = row[ColumnHeaders.ProjectName].ToString();
-                int? id;
+                int? id = 0;
 
                 /* TODO: Once we know more about what the imported file will look like (specifically, column names for data),
                 we can add more CustomerInfo values from the imported file. To do so, go to ServiceConstants.cs and
-                add a constant variable under the ColumnHeaders class for the excel file's column header, then use it to grab the column
-                ordinal to grab the value. See grabbing the customer name and project name, above.
+                add a constant variable under the ColumnHeaders class for the excel file's column header.
                 */
-                if (!(id = customerList.Where(C => C.Name == customerName).SingleOrDefault().CustomerId).HasValue) // Only create customers that do not already exist in the org; get the id if they do
-                    id = CrmService.CreateCustomer(new CustomerInfo()
-                    {
-                        Name = customerName,
-                        OrganizationId = this.UserContext.ChosenOrganizationId
-                    });
+                if (customerList.Count() == 0 || 
+                    (id = customerList.Where(C=>C.Name == customerName).Select(C => C.CustomerId).DefaultIfEmpty(0).FirstOrDefault()) == 0) // Only create customers that do not already exist in the org; get the id if they do
+                {
+                    CustomerInfo newCustomer = new CustomerInfo() { Name = customerName, OrganizationId = this.UserContext.ChosenOrganizationId };
+                    id = CrmService.CreateCustomer(newCustomer);
+                    customerList = customerList.Concat(new[] { newCustomer });
+                }
                 if (!this.GetProjectsByCustomer(id.Value).Any(P => P.Name == projectName)) // Only create projects that do not already exist under the customer
                     this.CreateProject(
                         this.UserContext.ChosenOrganizationId,

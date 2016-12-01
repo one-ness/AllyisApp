@@ -184,17 +184,19 @@ namespace AllyisApps.Services.Crm
 
             foreach (DataRow row in customerData.Rows)
             {
+                if (row.ItemArray.All(i => string.IsNullOrEmpty(i?.ToString()))) break; // Avoid iterating through empty rows
+
+                /* TODO: Once we know more about what the imported file will look like (specifically, column names for data),
+                we can add more CustomerInfo values from the imported file. To do so, go to ServiceConstants.cs and
+                add a constant variable under the ColumnHeaders class for the excel file's column header.
+                */
                 string customerName = row[ColumnHeaders.CustomerName].ToString();
                 if (!customerList.Any(C => C.Name == customerName)) // Only import customers that do not exist already
-                    this.CreateCustomer(new CustomerInfo()
-                    {
-                        //  TODO: Once we know more about what the imported file will look like (specifically, column names for data),
-                        //  we can add more CustomerInfo values from the imported file.To do so, go to ServiceConstants.cs and
-                        //  add a constant variable under the ColumnHeaders class for the excel file's column header, then use it to grab the column.
-                        //  See grabbing the customer name, above.
-                        Name = customerName,
-                        OrganizationId = this.UserContext.ChosenOrganizationId
-                    });
+                {
+                    CustomerInfo newCustomer = new CustomerInfo() { Name = customerName, OrganizationId = this.UserContext.ChosenOrganizationId };
+                    this.CreateCustomer(newCustomer);
+                    customerList = customerList.Concat(new[] { newCustomer });
+                }
             }
         }
 
