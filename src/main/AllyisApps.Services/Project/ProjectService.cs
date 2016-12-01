@@ -12,8 +12,8 @@ using System.Data.OleDb;
 
 using AllyisApps.DBModel.Crm;
 using AllyisApps.Services.Account;
-using AllyisApps.Services.Utilities;
 using AllyisApps.Services.Crm;
+using AllyisApps.Services.Utilities;
 
 namespace AllyisApps.Services.Project
 {
@@ -32,6 +32,11 @@ namespace AllyisApps.Services.Project
         /// </summary>
         private CrmService CrmService;
 
+        /// <summary>
+        /// Account Service in use for select methods
+        /// </summary>
+        private AccountService AccountService;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProjectService"/> class.
 		/// </summary>
@@ -48,9 +53,20 @@ namespace AllyisApps.Services.Project
 		public ProjectService(string connectionString, UserContext userContext) : base(connectionString, userContext)
 		{
 			this.authorizationService = new AuthorizationService(connectionString, userContext);
-            this.CrmService = new CrmService(connectionString);
-            this.CrmService.SetUserContext(userContext);
+            //this.CrmService = new CrmService(connectionString);
+            //this.CrmService.SetUserContext(userContext);
 		}
+
+        /// <summary>
+        /// Provides links to account and crm service objects
+        /// </summary>
+        /// <param name="accountService"></param>
+        /// <param name="crmService"></param>
+        public void SetServices(AccountService accountService, CrmService crmService)
+        {
+            this.AccountService = accountService;
+            this.CrmService = crmService;
+        }
 
 		/// <summary>
 		/// Gets a list of <see cref="ProjectInfo"/>'s for a customer.
@@ -277,6 +293,153 @@ namespace AllyisApps.Services.Project
 
 			return false;
 		}
+
+        /// <summary>
+        /// Import project user information from a data table. If a Project Name in the data table does not exist already, it will be created
+        /// as long as there is also a corresponding Customer Name column with information in it. Otherwise, it will be ignored and the user
+        /// information for that project will also be ignored. If a row has a value for Customer Name, the project(s) listed in that row will
+        /// be only for that customer.
+        /// </summary>
+        public void ImportProjectUsers(DataTable projectUserData)
+        {
+            List<Tuple<CustomerInfo, List<ProjectInfo>>> projects = new List<Tuple<CustomerInfo, List<ProjectInfo>>>();
+
+            foreach(CustomerInfo customer in CrmService.GetCustomerList(this.UserContext.ChosenOrganizationId))
+            {
+                projects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(
+                    customer,
+                    this.GetProjectsByCustomer(customer.CustomerId).ToList()
+                ));
+            }
+
+            foreach(DataRow row in projectUserData.Rows)
+            {
+                if (row.ItemArray.All(i => string.IsNullOrEmpty(i?.ToString()))) break; // Avoid iterating through empty rows
+
+                // Multiples are allowed in either column, separated by commas. Adding users can be one-to-one, one-to-many by user or project, or
+                // many-to-many (each user in list is added to each project in list). These two columns must be supplied and filled out in each row.
+                string[] projectNameData;
+                string[] userEmailData;
+                try
+                {
+                    projectNameData = row[ColumnHeaders.ProjectName].ToString().Split(',');
+                } catch (ArgumentException)
+                {
+                    throw new ArgumentException("The supplied spreadsheet has no column for " + ColumnHeaders.ProjectName);
+                }
+                try
+                {
+                    userEmailData = row[ColumnHeaders.UserEmail].ToString().Split(',');
+                }
+                catch (ArgumentException)
+                {
+                    throw new ArgumentException("The supplied spreadsheet has no column for " + ColumnHeaders.UserEmail);
+                }
+                // Rows missing data for user email or project name will simply be skippped.
+                if (string.IsNullOrEmpty(projectNameData[0]))
+                {
+                    break; // TODO: Add this a returned error list
+                }
+                if (string.IsNullOrEmpty(userEmailData[0]))
+                {
+                    break; // TODO: Add this a returned error list
+                }
+
+                // Optional customer name specification.
+                string customerName = "";
+                bool customerIsSpecified = false;
+                try
+                {
+                    customerName = row[ColumnHeaders.CustomerName].ToString();
+                    customerIsSpecified = true;
+                }
+                catch (ArgumentException) { }
+                
+                foreach(string projectName in projectNameData)
+                {
+                    int projectId = 0;
+                    if (customerIsSpecified) // Adding project users for a specific customer. If the customer doesn't exist, it will be added. If the project doesn't exist, it will be added.
+                    {
+                        int? customerId = 0;
+                        if (projects.Count() == 0 ||
+                            (customerId = projects.Where(t => t.Item1.Name == customerName).Select(t => t.Item1.CustomerId).DefaultIfEmpty(0).FirstOrDefault()) == 0) // Only create customers that do not already exist in the org; get the id if they do
+                        {
+                            CustomerInfo newCustomer = new CustomerInfo() { Name = customerName, OrganizationId = this.UserContext.ChosenOrganizationId };
+                            customerId = CrmService.CreateCustomer(newCustomer);
+                            projects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(newCustomer, new List<ProjectInfo>()));
+                        }
+
+                        List<ProjectInfo> projectList = projects.Where(t => t.Item1.CustomerId == customerId).Select(t => t.Item2).Single(); // Projects under this customer
+                        if (projectList.Count() == 0 ||
+                            (projectId = projectList.Where(p => p.Name == projectName).Select(p => p.ProjectId).DefaultIfEmpty(0).FirstOrDefault()) == 0) // Only create projects that do not already exist in the customer; get the id if they do
+                        {
+                            // If adding a new project, default values will be used for type, start date, and end date unless those column headers are also present and filled out.
+                            string projectType = "Hourly";
+                            DateTime projectStartDate = DateTime.Now.Date;
+                            DateTime projectEndDate = projectStartDate.AddMonths(6);
+                            try
+                            {
+                                string projectTypeData = row[ColumnHeaders.ProjectType].ToString();
+                                projectType = string.IsNullOrEmpty(projectTypeData) ? projectType : projectTypeData;
+                            }
+                            catch (ArgumentException) { }
+                            try
+                            {
+                                projectStartDate = Convert.ToDateTime(row[ColumnHeaders.ProjectStartDate]);
+                            }
+                            catch (ArgumentException) { }
+                            catch (FormatException) { }
+                            try
+                            {
+                                projectEndDate = Convert.ToDateTime(row[ColumnHeaders.ProjectEndDate]);
+                            }
+                            catch (ArgumentException) { }
+                            catch (FormatException) { }
+
+                            projectId = this.CreateProject(
+                                this.UserContext.ChosenOrganizationId,
+                                customerId.Value,
+                                projectName,
+                                projectType,
+                                projectStartDate,
+                                projectEndDate
+                            );
+
+                            projectList.Add(new ProjectInfo
+                            {
+                                ProjectId = projectId,
+                                OrganizationId = this.UserContext.ChosenOrganizationId,
+                                CustomerId = customerId.Value,
+                                Name = projectName
+                            });
+                        }
+                    }
+                    else // Customer is not specified. Project name must exist under some customer in the organization. If not, the project is skipped.
+                    {
+                        projectId = projects.Select(                    // In the tuples
+                            t => t.Item2.Where(                         // in the project lists
+                                p => p.Name.Equals(projectName)         // take the projects where the name matches
+                            ).Select(                                   // and return their id's
+                                p => p.ProjectId                        // then take just the first one (or 0 if none)
+                            ).DefaultIfEmpty(0).FirstOrDefault()).Where( // resulting in a single list of ints, one for each tuple
+                                i => i > 0                              // Then, take all those that aren't 0
+                            ).DefaultIfEmpty(0).FirstOrDefault();       // and return the first, or just 0 if all were 0
+                    }
+
+                    if (projectId == 0) // No matching project found, skip to next project.
+                    {
+                        break;
+                    }
+
+                    // Finally, we are ready to add users to the selected (or created) project.
+
+                    foreach(string userEmail in userEmailData)
+                    {
+
+                    }
+                }
+            }
+        }
 
 		/// <summary>
 		/// Deletes a project.

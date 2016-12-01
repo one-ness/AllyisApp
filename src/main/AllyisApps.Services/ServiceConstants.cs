@@ -33,5 +33,12 @@
         /// </summary>
         public const string ProjectEndDate = "Project End Date";
         #endregion project
+
+        #region projectUser
+        /// <summary>
+        /// User-Property: Email
+        /// </summary>
+        public const string UserEmail = "User Email";
+        #endregion
     }
 }
