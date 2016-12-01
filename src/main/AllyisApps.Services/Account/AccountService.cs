@@ -11,8 +11,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Security;
 
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Auth;
@@ -40,54 +38,6 @@ namespace AllyisApps.Services.Account
 		#endregion constructor
 
 		#region public static
-		/// <summary>
-		/// Get user context from cookie.
-		/// </summary>
-		/// <param name="request">The HttpResponseBase.</param>
-		/// <returns>The UserContext, or null on error.</returns>
-		public static UserContext GetCookieData(HttpRequestBase request)
-		{
-			if (request == null)
-			{
-				throw new NullReferenceException("Http request must not be null");
-			}
-
-			UserContext result = null;
-			HttpCookie cookie = request.Cookies[FormsAuthentication.FormsCookieName];
-			if (cookie != null)
-			{
-				try
-				{
-					if (!string.IsNullOrWhiteSpace(cookie.Value))
-					{
-						//// decrypt and deserialize the UserContext from the cookie data
-						FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
-						result = Serializer.DeserializeFromJson<UserContext>(ticket.UserData);
-					}
-				}
-				catch
-				{
-				}
-			}
-
-			return result;
-		}
-
-		/// <summary>
-		/// Sign out.
-		/// </summary>
-		/// <param name="response">The Response object passed in from a controller.</param>
-		public static void SignOut(HttpResponseBase response)
-		{
-			FormsAuthentication.SignOut();
-
-			// TODO: check if this action is really required. Sometimes the SignOut call above is not deleting the cookie
-			//// get the cookie, set expire time in the past, and set it in response to delete it
-			HttpCookie cookie = FormsAuthentication.GetAuthCookie(FormsAuthentication.FormsCookieName, false);
-			cookie.Expires = DateTime.UtcNow.AddDays(-5);
-			response.Cookies.Add(cookie);
-		}
-
 		/// <summary>
 		/// Returns a compressed version of the given email address if it is too long.
 		/// </summary>
@@ -298,69 +248,6 @@ namespace AllyisApps.Services.Account
 			}
 
 			return notificationMessages;
-		}
-
-		/// <summary>
-		/// Sign in the given user.
-		/// </summary>
-		/// <param name="userId">The user ID.</param>
-		/// <param name="userName">The user name.</param>
-		/// <param name="email">The user's email.</param>
-		/// <param name="response">The Response object passed in from a controller.</param>
-		/// <param name="isPersisted">Whether to set a persistent cookie or not (i.e. whether "Remember Me" is checked).</param>
-		/// <param name="chosenOrganizationId">The organization ID.</param>
-		/// <param name="chosenSubscriptionId">The subsription ID.</param>
-		/// <param name="userOrganizationInfoList">The user organization info list.</param>
-		/// <param name="chosenLanguageID">The language ID.</param>
-		public void SignIn(
-			int userId,
-			string userName,
-			string email,
-			HttpResponseBase response,
-			bool isPersisted = false,
-			int chosenOrganizationId = 0,
-			int chosenSubscriptionId = 0,
-			List<UserOrganizationInfo> userOrganizationInfoList = null,
-			int chosenLanguageID = 0)
-		{
-			#region Validation
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
-			}
-
-			if (string.IsNullOrEmpty(userName))
-			{
-				throw new ArgumentException("User name must have a value.");
-			}
-
-			if (string.IsNullOrEmpty(email))
-			{
-				throw new ArgumentNullException("email", "Email address must have a value.");
-			}
-			else if (!AccountService.IsEmailAddressValid(email))
-			{
-				throw new FormatException("Email address must be in a valid format.");
-			}
-
-			if (chosenOrganizationId < 0)
-			{
-				throw new ArgumentOutOfRangeException("chosenOrganizationId", "Organization ID cannot be negative.");
-			}
-
-			if (chosenSubscriptionId < 0)
-			{
-				throw new ArgumentOutOfRangeException("chosenSubscriptionId", "Subscription ID cannot be negative.");
-			}
-
-			if (chosenLanguageID < 0)
-			{
-				throw new ArgumentOutOfRangeException("chosenLanguageID", "Language ID cannot be negative.");
-			}
-			#endregion Validation
-
-			UserContext context = new UserContext(userId, userName, email, chosenOrganizationId, chosenSubscriptionId, userOrganizationInfoList, chosenLanguageID);
-			this.SetAuthCookie(context, response, isPersisted);
 		}
 
 		/// <summary>
@@ -955,38 +842,5 @@ namespace AllyisApps.Services.Account
 			return DBHelper.GetOrganizationsByUserId(UserContext.UserId).Select(o => InfoObjectsUtility.InitializeOrganizationInfo(o));
 		}
 		#endregion public
-
-		#region private
-		/// <summary>
-		/// Serialize the given CookieData object and set it to auth cookie
-		/// - forms authentication module will have its own cookie, and set the given information to HttpContext.User object for each request, which will
-		/// -   make the Request.IsAuthenticated to true
-		/// - sample code here: https://msdn.microsoft.com/en-us/library/system.web.security.formsauthentication.encrypt(v=vs.110).aspx .
-		/// </summary>
-		/// <param name="context">The UserContext.</param>
-		/// <param name="response">The Response object passed in from a controller.</param>
-		/// <param name="isPersisted">Whether to set a persistent cookie or not.</param>
-		private void SetAuthCookie(UserContext context, HttpResponseBase response, bool isPersisted = false)
-		{
-			//// serialize the cookie data object, then ecnrypt it using formsauthentication module
-			string serialized = Serializer.SerilalizeToJson(context);
-			FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
-				/*AuthenticationTicketVersion*/1,
-				context.UserName,
-				DateTime.UtcNow,
-				DateTime.UtcNow.AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
-				isPersisted,
-				serialized);
-			string encryptedTicket = FormsAuthentication.Encrypt(ticket);
-
-			//// create the cookie (not set in response yet) and set its value
-			HttpCookie cookie = FormsAuthentication.GetAuthCookie(FormsAuthentication.FormsCookieName, isPersisted);
-			cookie.HttpOnly = true;
-			cookie.Value = encryptedTicket;
-
-			//// set the cookie to response
-			response.Cookies.Add(cookie);
-		}
-		#endregion private
 	}
 }

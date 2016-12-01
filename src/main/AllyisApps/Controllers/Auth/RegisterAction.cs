@@ -57,7 +57,7 @@ namespace AllyisApps.Controllers
 				if (userID > 0)
 				{
 					// sign in (and set cookie)
-					AccountService.SignIn(userID, model.FirstName, model.Email, Response);
+					this.SignIn(userID, model.FirstName, model.Email, Response);
 
 					// send confirmation email
 					string confirmCode = await AccountService.GetConfirmEmailCode(userID);

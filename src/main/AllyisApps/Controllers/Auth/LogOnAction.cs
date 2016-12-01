@@ -4,10 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
+
 using AllyisApps.Core;
+using AllyisApps.Lib;
 using AllyisApps.Services.Account;
 using AllyisApps.ViewModels;
 
@@ -52,7 +57,7 @@ namespace AllyisApps.Controllers
 				if ((result = await AccountService.ValidateLogin(model.Email, model.Password)) != null)
 				{
 					// sign in
-					AccountService.SignIn(result.UserId, result.UserName, result.Email, Response, model.RememberMe, result.ChosenOrganizationId, result.ChosenSubscriptionId, result.UserOrganizationInfoList);
+					this.SignIn(result.UserId, result.UserName, result.Email, Response, model.RememberMe);
 
 					this.UserContext = this.AccountService.PopulateUserContext(result.UserId);
 
@@ -66,9 +71,49 @@ namespace AllyisApps.Controllers
 
 			// login failed
 			return this.View(model);
-		}
+        }
 
-		private ActionResult HandleRedirects(string returnURL)
+        /// <summary>
+		/// Sign in the given user.
+		/// </summary>
+		/// <param name="userId">The user ID.</param>
+		/// <param name="userName">The user name.</param>
+		/// <param name="email">The user's email.</param>
+		/// <param name="response">The Response object passed in from a controller.</param>
+		/// <param name="isPersisted">Whether to set a persistent cookie or not (i.e. whether "Remember Me" is checked).</param>
+		public void SignIn(
+            int userId,
+            string userName,
+            string email,
+            HttpResponseBase response,
+            bool isPersisted = false)
+        {
+            #region Validation
+            if (userId <= 0)
+            {
+                throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
+            }
+
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentException("User name must have a value.");
+            }
+
+            if (string.IsNullOrEmpty(email))
+            {
+                throw new ArgumentNullException("email", "Email address must have a value.");
+            }
+            else if (!AccountService.IsEmailAddressValid(email))
+            {
+                throw new FormatException("Email address must be in a valid format.");
+            }
+            #endregion Validation
+
+            UserContext context = new UserContext(userId, userName, email);
+            this.SetAuthCookie(context, response, isPersisted);
+        }
+
+        private ActionResult HandleRedirects(string returnURL)
 		{
 			// take user to return url, if supplied
 			if ((returnURL != null) && (string.Empty != returnURL))
@@ -137,5 +182,36 @@ namespace AllyisApps.Controllers
 				return this.RedirectToLocal();
 			}
 		}
-	}
+
+        /// <summary>
+		/// Serialize the given CookieData object and set it to auth cookie
+		/// - forms authentication module will have its own cookie, and set the given information to HttpContext.User object for each request, which will
+		/// -   make the Request.IsAuthenticated to true
+		/// - sample code here: https://msdn.microsoft.com/en-us/library/system.web.security.formsauthentication.encrypt(v=vs.110).aspx .
+		/// </summary>
+		/// <param name="context">The UserContext.</param>
+		/// <param name="response">The Response object passed in from a controller.</param>
+		/// <param name="isPersisted">Whether to set a persistent cookie or not.</param>
+		private void SetAuthCookie(UserContext context, HttpResponseBase response, bool isPersisted = false)
+        {
+            //// serialize the cookie data object, then ecnrypt it using formsauthentication module
+            string serialized = Serializer.SerilalizeToJson(context);
+            FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
+                /*AuthenticationTicketVersion*/1,
+                context.UserName,
+                DateTime.UtcNow,
+                DateTime.UtcNow.AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
+                isPersisted,
+                serialized);
+            string encryptedTicket = FormsAuthentication.Encrypt(ticket);
+
+            //// create the cookie (not set in response yet) and set its value
+            HttpCookie cookie = FormsAuthentication.GetAuthCookie(FormsAuthentication.FormsCookieName, isPersisted);
+            cookie.HttpOnly = true;
+            cookie.Value = encryptedTicket;
+
+            //// set the cookie to response
+            response.Cookies.Add(cookie);
+        }
+    }
 }
