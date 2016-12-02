@@ -273,7 +273,7 @@ namespace AllyisApps.Services.Org
 			}
 			#endregion Validation
 
-			EmailService mail = new EmailService();
+			//EmailService mail = new EmailService();
 			OrganizationInfo orgInfo = this.GetOrganization(invitationInfo.OrganizationId);
 
 			string htmlbody = string.Format(
@@ -285,10 +285,15 @@ namespace AllyisApps.Services.Org
 				invitationInfo.AccessCode);
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
-			await mail.CreateMessage(
-								msgbody,
-								invitationInfo.Email,
-								"Join Allyis Apps!");
+            await Lib.Mailer.SendEmailAsync(
+                "noreply@allyis.com",
+                invitationInfo.Email,
+                "Join Allyis Apps!",
+                msgbody);
+			//await mail.CreateMessage(
+								//msgbody,
+								//invitationInfo.Email,
+								//"Join Allyis Apps!");
 
 			return DBHelper.CreateUserInvitation(InfoObjectsUtility.GetDBEntityFromInvitationInfo(invitationInfo));
 		}

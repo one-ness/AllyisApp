@@ -14,14 +14,14 @@
 <div>
     <h4 class="modal-title">@AllyisApps.Resources.Views.Account.Strings.InviteMember</h4>
 
-    @using (Html.BeginForm(ActionConstants.UploadCSVFile, ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @*@using (Html.BeginForm(ActionConstants.UploadCSVFile, ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <div class="bulk">
             <h4>@AllyisApps.Resources.Views.Account.Strings.MultipleMembers</h4>
             <p>
                 @AllyisApps.Resources.Views.Account.Strings.InviteMoreThanOne <a href="@Url.Action(ActionConstants.DownloadImportUsersTemplate, ControllerConstants.Account)">@AllyisApps.Resources.Views.Account.Strings.ExampleFile</a>.
             </p>
-            @*Custom styled buttons wired to browser default upload*@
+            @*Custom styled buttons wired to browser default upload*@@*
             <input type="file" id="upload-box" name="upload" style="display:none;"
                    onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
             <input id="upload-file-name-display" class="form-control"
@@ -39,7 +39,7 @@
                 </p>
             </div>
         </div>
-    }
+    }*@
 
     @using (Html.BeginForm(ActionConstants.Invite, ControllerConstants.Account, FormMethod.Post, new { @class = "form-horizontal", id = "OrgAddForm" }))
     {
