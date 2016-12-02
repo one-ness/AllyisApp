@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					e = new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntry)
 				});
 			}
-			else if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
+			else if (model.UserId != Convert.ToInt32(UserContext.UserId) && !AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				return this.Json(new
 				{

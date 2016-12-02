@@ -46,17 +46,17 @@ namespace AllyisApps.Services.Project
 		{
 		}
 
-		///// <summary>
-		///// Initializes a new instance of the <see cref="ProjectService"/> class.
-		///// </summary>
-		///// <param name="connectionString">The connection string.</param>
-		///// <param name="userContext">The user context.</param>
-		//public ProjectService(string connectionString, UserContext userContext) : base(connectionString, userContext)
-		//{
-		//	this.authorizationService = new AuthorizationService(connectionString, userContext);
-  //          //this.CrmService = new CrmService(connectionString);
-  //          //this.CrmService.SetUserContext(userContext);
-		//}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProjectService"/> class.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="userContext">The user context.</param>
+        public ProjectService(string connectionString, UserContext userContext) : base(connectionString, userContext)
+        {
+            //this.authorizationService = new AuthorizationService(connectionString, userContext);
+            //this.CrmService = new CrmService(connectionString);
+            //this.CrmService.SetUserContext(userContext);
+        }
 
         /// <summary>
         /// Provides links to account and crm service objects

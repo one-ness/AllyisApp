@@ -72,7 +72,7 @@ namespace AllyisApps.Core
 			}
 
 			// Init product services with latest user info
-			this.ProjectService = new ProjectService(GlobalSettings.SqlConnectionString/*, this.UserContext*/);
+			this.ProjectService = new ProjectService(GlobalSettings.SqlConnectionString, this.UserContext);
             this.ProjectService.SetServices(this.AuthorizationService, this.AccountService, this.CrmService);
 			this.TimeTrackerService = new TimeTrackerService(GlobalSettings.SqlConnectionString, this.UserContext);
 		}
