@@ -14,6 +14,7 @@ using AllyisApps.DBModel.Crm;
 using AllyisApps.Services.Account;
 using AllyisApps.Services.Crm;
 using AllyisApps.Services.Utilities;
+using System.Threading.Tasks;
 
 namespace AllyisApps.Services.Project
 {
@@ -45,25 +46,27 @@ namespace AllyisApps.Services.Project
 		{
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ProjectService"/> class.
-		/// </summary>
-		/// <param name="connectionString">The connection string.</param>
-		/// <param name="userContext">The user context.</param>
-		public ProjectService(string connectionString, UserContext userContext) : base(connectionString, userContext)
-		{
-			this.authorizationService = new AuthorizationService(connectionString, userContext);
-            //this.CrmService = new CrmService(connectionString);
-            //this.CrmService.SetUserContext(userContext);
-		}
+		///// <summary>
+		///// Initializes a new instance of the <see cref="ProjectService"/> class.
+		///// </summary>
+		///// <param name="connectionString">The connection string.</param>
+		///// <param name="userContext">The user context.</param>
+		//public ProjectService(string connectionString, UserContext userContext) : base(connectionString, userContext)
+		//{
+		//	this.authorizationService = new AuthorizationService(connectionString, userContext);
+  //          //this.CrmService = new CrmService(connectionString);
+  //          //this.CrmService.SetUserContext(userContext);
+		//}
 
         /// <summary>
         /// Provides links to account and crm service objects
         /// </summary>
+        /// <param name="authorizationService"></param>
         /// <param name="accountService"></param>
         /// <param name="crmService"></param>
-        public void SetServices(AccountService accountService, CrmService crmService)
+        public void SetServices(AuthorizationService authorizationService, AccountService accountService, CrmService crmService)
         {
+            this.authorizationService = authorizationService;
             this.AccountService = accountService;
             this.CrmService = crmService;
         }
@@ -300,9 +303,10 @@ namespace AllyisApps.Services.Project
         /// information for that project will also be ignored. If a row has a value for Customer Name, the project(s) listed in that row will
         /// be only for that customer.
         /// </summary>
-        public void ImportProjectUsers(DataTable projectUserData)
+        public async Task ImportProjectUsers(DataTable projectUserData)
         {
-            List<Tuple<CustomerInfo, List<ProjectInfo>>> projects = new List<Tuple<CustomerInfo, List<ProjectInfo>>>();
+            List<Tuple<CustomerInfo, List<ProjectInfo>>> projects = new List<Tuple<CustomerInfo, List<ProjectInfo>>>(); // Structure for customer and project relationships
+            List<Tuple<int, List<int>>> projectUsers = new List<Tuple<int, List<int>>>(); // (<projectId, List<userId's>>) Structure for final userId lists to add to projects
 
             foreach(CustomerInfo customer in CrmService.GetCustomerList(this.UserContext.ChosenOrganizationId))
             {
@@ -431,11 +435,38 @@ namespace AllyisApps.Services.Project
                         break;
                     }
 
-                    // Finally, we are ready to add users to the selected (or created) project.
-
                     foreach(string userEmail in userEmailData)
                     {
+                        UserInfo userInfo = await AccountService.GetUserByEmail(userEmail);
+                        int userId = userInfo == null ? 0 : userInfo.UserId;
+                        if(userInfo == null)
+                        {
+                            string userFirstName;
+                            string userLastName;
+                            try
+                            {
+                                userFirstName = row[ColumnHeaders.UserFirstName].ToString();
+                                userLastName = row[ColumnHeaders.UserLastName].ToString();
+                            }
+                            catch (ArgumentException) // If first and last name data are not supplied for a non-existing user, it cannot be added
+                            {
+                                break;
+                            }
 
+                            userId = AccountService.SetupNewUser(
+                                userEmail,
+                                userFirstName,
+                                userLastName,
+                                null,
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "Password", // TODO: Create system of setting up default password and emailing it to new user
+                                UserContext.ChosenLanguageID);
+                        }
                     }
                 }
             }
