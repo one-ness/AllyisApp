@@ -49,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				return this.View(ViewConstants.Error);
 			}
-			else if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
+			else if (userId != UserContext.UserId && !AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				return this.View(ViewConstants.Error);
 			}

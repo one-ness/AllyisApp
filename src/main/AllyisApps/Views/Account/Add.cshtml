@@ -11,7 +11,7 @@
 @{ ViewData.Add(ControllerConstants.Controller, ControllerConstants.Account); }
 @{ ViewData.Add(ActionConstants.Action, ActionConstants.Add); }
 
-<div>
+<div style="width:500px">
     <h4 class="modal-title">@AllyisApps.Resources.Views.Account.Strings.InviteMember</h4>
 
     @*@using (Html.BeginForm(ActionConstants.UploadCSVFile, ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -143,7 +143,7 @@
                 {
                     <input type="submit" id="addMember" value="@AllyisApps.Resources.Views.Account.Strings.Add" class="btn btn-primary" disabled="disabled" />}
             </div>
-            <div class="@right">
+            <div @*class="@right"*@ style="width:375px;">
                 <p id="cannotAddMessage">@AllyisApps.Resources.Views.Account.Strings.CannotAddMessage<br />@AllyisApps.Resources.Views.Account.Strings.CannotAddMessage2</p>
                 <p id="noProjectMessage">@AllyisApps.Resources.Views.Account.Strings.NoProjectMessage</p>
             </div>
