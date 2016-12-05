@@ -324,6 +324,7 @@ namespace AllyisApps.Services.Project
                 string customerName = "";
                 int? customerId = 0;
                 bool customerIsSpecified = this.readColumn(row, ColumnHeaders.CustomerName, val => customerName = val);
+                List<ProjectInfo> customerProjectList = new List<ProjectInfo>();
 
                 // Creating customer & importing info
                 if (customerIsSpecified)
@@ -336,6 +337,9 @@ namespace AllyisApps.Services.Project
                         CustomerInfo newCustomer = new CustomerInfo() { Name = customerName, OrganizationId = this.UserContext.ChosenOrganizationId };
                         customerId = CrmService.CreateCustomer(newCustomer);
                         projects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(newCustomer, new List<ProjectInfo>()));
+                    } else
+                    {
+                        customerProjectList = projects.Where(t => t.Item1.CustomerId == customerId).Select(t => t.Item2).Single(); // Projects under this customer
                     }
 
                     //Updating customer info
@@ -359,130 +363,47 @@ namespace AllyisApps.Services.Project
                     }
                 }
 
-                // Multiples are allowed in either column, separated by commas. Adding users can be one-to-one, one-to-many by user or project, or
-                // many-to-many (each user in list is added to each project in list). These two columns must be supplied and filled out in each row.
-                string[] projectNameData = null;
-                string[] userEmailData = null;
-                try
-                {
-                    projectNameData = row[ColumnHeaders.ProjectName].ToString().Split(',');
-                } catch (ArgumentException) { }
-                try
-                {
-                    userEmailData = row[ColumnHeaders.UserEmail].ToString().Split(',');
-                }
-                catch (ArgumentException) { }
-                
-                foreach(string projectName in projectNameData)
-                {
-                    int projectId = 0;
-                    if (customerIsSpecified) // Adding project users for a specific customer. If the customer doesn't exist, it will be added. If the project doesn't exist, it will be added.
-                    {
-                        int? customerId = 0;
-                        if (projects.Count() == 0 ||
-                            (customerId = projects.Where(t => t.Item1.Name == customerName).Select(t => t.Item1.CustomerId).DefaultIfEmpty(0).FirstOrDefault()) == 0) // Only create customers that do not already exist in the org; get the id if they do
-                        {
-                            CustomerInfo newCustomer = new CustomerInfo() { Name = customerName, OrganizationId = this.UserContext.ChosenOrganizationId };
-                            customerId = CrmService.CreateCustomer(newCustomer);
-                            projects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(newCustomer, new List<ProjectInfo>()));
-                        }
+                // Project name(s)
+                string projectNameData = "";
+                this.readColumn(row, ColumnHeaders.ProjectName, val => projectNameData = val);
+                string[] projectNames = projectNameData.Split(',');
 
-                        List<ProjectInfo> projectList = projects.Where(t => t.Item1.CustomerId == customerId).Select(t => t.Item2).Single(); // Projects under this customer
-                        if (projectList.Count() == 0 ||
-                            (projectId = projectList.Where(p => p.Name == projectName).Select(p => p.ProjectId).DefaultIfEmpty(0).FirstOrDefault()) == 0) // Only create projects that do not already exist in the customer; get the id if they do
+                // User email(s)
+                string userEmailData = "";
+                this.readColumn(row, ColumnHeaders.UserEmail, val => userEmailData = val);
+                string[] userEmails = userEmailData.Split(',');
+
+                if(projectNameData != "")
+                {
+                    foreach (string projectName in projectNames)
+                    {
+                        int projectId = 0;
+                        // Only create projects that do not already exist in the customer; get the id if they do
+                        if (customerProjectList.Count() == 0 ||
+                            (projectId = customerProjectList.Where(p => p.Name == projectName).Select(p => p.ProjectId).DefaultIfEmpty(0).FirstOrDefault()) == 0)
                         {
-                            // If adding a new project, default values will be used for type, start date, and end date unless those column headers are also present and filled out.
+                            // Projects being created, even if there are many, will share project information data from other columns. If none is provided, defaults are used.
                             string projectType = "Hourly";
-                            DateTime projectStartDate = DateTime.Now.Date;
-                            DateTime projectEndDate = projectStartDate.AddMonths(6);
-                            try
-                            {
-                                string projectTypeData = row[ColumnHeaders.ProjectType].ToString();
-                                projectType = string.IsNullOrEmpty(projectTypeData) ? projectType : projectTypeData;
-                            }
-                            catch (ArgumentException) { }
-                            try
-                            {
-                                projectStartDate = Convert.ToDateTime(row[ColumnHeaders.ProjectStartDate]);
-                            }
-                            catch (ArgumentException) { }
-                            catch (FormatException) { }
-                            try
-                            {
-                                projectEndDate = Convert.ToDateTime(row[ColumnHeaders.ProjectEndDate]);
-                            }
-                            catch (ArgumentException) { }
-                            catch (FormatException) { }
+                            string projectStartDate = DateTime.Now.Date.ToString();
+                            string projectEndDate = DateTime.Now.Date.AddMonths(6).ToString();
+                            this.readColumn(row, ColumnHeaders.ProjectType, val => projectType = val);
+                            this.readColumn(row, ColumnHeaders.ProjectStartDate, val => projectStartDate = val);
+                            this.readColumn(row, ColumnHeaders.ProjectEndDate, val => projectEndDate = val);
 
                             projectId = this.CreateProject(
-                                this.UserContext.ChosenOrganizationId,
+                                UserContext.ChosenOrganizationId,
                                 customerId.Value,
                                 projectName,
                                 projectType,
-                                projectStartDate,
-                                projectEndDate
+                                DateTime.Parse(projectStartDate),
+                                DateTime.Parse(projectEndDate)
                             );
-
-                            projectList.Add(new ProjectInfo
-                            {
-                                ProjectId = projectId,
-                                OrganizationId = this.UserContext.ChosenOrganizationId,
-                                CustomerId = customerId.Value,
-                                Name = projectName
-                            });
-                        }
-                    }
-                    else // Customer is not specified. Project name must exist under some customer in the organization. If not, the project is skipped.
-                    {
-                        projectId = projects.Select(                    // In the tuples
-                            t => t.Item2.Where(                         // in the project lists
-                                p => p.Name.Equals(projectName)         // take the projects where the name matches
-                            ).Select(                                   // and return their id's
-                                p => p.ProjectId                        // then take just the first one (or 0 if none)
-                            ).DefaultIfEmpty(0).FirstOrDefault()).Where( // resulting in a single list of ints, one for each tuple
-                                i => i > 0                              // Then, take all those that aren't 0
-                            ).DefaultIfEmpty(0).FirstOrDefault();       // and return the first, or just 0 if all were 0
-                    }
-
-                    if (projectId == 0) // No matching project found, skip to next project.
-                    {
-                        break;
-                    }
-
-                    foreach(string userEmail in userEmailData)
-                    {
-                        UserInfo userInfo = await AccountService.GetUserByEmail(userEmail);
-                        int userId = userInfo == null ? 0 : userInfo.UserId;
-                        if(userInfo == null)
-                        {
-                            string userFirstName;
-                            string userLastName;
-                            try
-                            {
-                                userFirstName = row[ColumnHeaders.UserFirstName].ToString();
-                                userLastName = row[ColumnHeaders.UserLastName].ToString();
-                            }
-                            catch (ArgumentException) // If first and last name data are not supplied for a non-existing user, it cannot be added
-                            {
-                                break;
-                            }
-
-                            userId = AccountService.SetupNewUser(
-                                userEmail,
-                                userFirstName,
-                                userLastName,
-                                null,
-                                "",
-                                "",
-                                "",
-                                "",
-                                "",
-                                "",
-                                "Password", // TODO: Create system of setting up default password and emailing it to new user
-                                UserContext.ChosenLanguageID);
                         }
                     }
                 }
+
+
+                
             }
         }
 
