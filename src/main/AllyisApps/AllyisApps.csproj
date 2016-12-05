@@ -823,7 +823,7 @@
     <Content Include="Content\less\sale.min.css">
       <DependentUpon>sale.css</DependentUpon>
     </Content>
-    <None Include="Content\icons\allyislogo.png" />
+    <Content Include="Content\icons\allyislogo.png" />
     <Content Include="Content\less\swapper-ui.css">
       <DependentUpon>swapper-ui.less</DependentUpon>
     </Content>

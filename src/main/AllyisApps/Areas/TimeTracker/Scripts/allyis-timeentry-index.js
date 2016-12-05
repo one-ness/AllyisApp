@@ -51,7 +51,7 @@ function ajaxDelete(form_child, delete_action_url) {
         type: "post",
         url: delete_action_url,
         data: data,
-        timeout: 500,
+        timeout: 5000,
         dataType: "json"})
     .done(function(res) {
         if (res.status == 'success')
@@ -79,7 +79,7 @@ function ajaxCreate(form_element, create_action_url) {
         type: "post",
         url: create_action_url,
         data: data,
-        timeout: 500,
+        timeout: 5000,
         dataType: "json"})
     .done(function(res) {
         ajaxHandleOverridingResponses(res, { form_element: form_element});
@@ -139,7 +139,7 @@ function ajaxEdit(form_element, edit_action_url) {
         type: "post",
         url: edit_action_url,
         data: data,
-        timeout: 500,
+        timeout: 5000,
         dataType: "json"})
     .done(function(res) {
         ajaxHandleOverridingResponses(res, { form_element: form_element});

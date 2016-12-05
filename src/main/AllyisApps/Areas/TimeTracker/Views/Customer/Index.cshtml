@@ -75,7 +75,7 @@
         <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Customer)" class="btn btn-default">@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.AddCustomer <i class="fa fa-plus"></i></a>
     </div>
 }
-@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+@*@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken();
     <div>
@@ -92,7 +92,7 @@
             <input type="submit" value="Upload File" class="btn btn-default" />
         </div>
     </div>
-}
+}*@
 
 @section Scripts{
     @Scripts.Render("~/bundles/TTCustomerIndex");
