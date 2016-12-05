@@ -49,11 +49,12 @@ namespace AllyisApps.Controllers
 		/// <returns>The OrganizationAddMembersViewModel.</returns>
 		public OrganizationAddMembersViewModel ConstructOrganizationAddMembersViewModel()
 		{
-			OrganizationAddMembersViewModel result = new OrganizationAddMembersViewModel
-			{
-				Organization = OrgService.GetOrganization(UserContext.ChosenOrganizationId),
-				OrganizationId = UserContext.ChosenOrganizationId,
-				OrganizationProjects = OrgService.GetProjectsByOrganization(UserContext.ChosenOrganizationId)
+            OrganizationAddMembersViewModel result = new OrganizationAddMembersViewModel
+            {
+                Organization = OrgService.GetOrganization(UserContext.ChosenOrganizationId),
+                OrganizationId = UserContext.ChosenOrganizationId,
+                OrganizationProjects = OrgService.GetProjectsByOrganization(UserContext.ChosenOrganizationId),
+                EmployeeId = OrgService.GetRecommendedEmployeeId(UserContext.ChosenOrganizationId)
 			};
 
 			List<SubscriptionRoleSelectionModel> roles = new List<SubscriptionRoleSelectionModel>();

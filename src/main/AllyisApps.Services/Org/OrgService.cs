@@ -590,5 +590,14 @@ namespace AllyisApps.Services.Org
 		{
 			return DBHelper.GetRoles(UserContext.ChosenOrganizationId).Select(o => InfoObjectsUtility.InitializeUserRolesInfo(o));
 		}
+        /// <summary>
+        /// Gets a recommended EmployeeId that does not yet exist in the org
+        /// </summary>
+        /// <param name="orgId">The ID of the organization</param>
+        /// <returns></returns>
+        public string GetRecommendedEmployeeId(int orgId)
+        {
+            return this.IncrementAlphanumericCharArray(this.GetOrganizationMemberList(orgId).LastOrDefault().EmployeeId.ToCharArray()).ToString();
+        }
 	}
 }
