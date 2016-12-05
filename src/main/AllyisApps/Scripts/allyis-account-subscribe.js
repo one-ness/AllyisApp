@@ -18,8 +18,9 @@ function fixUserCount() {
     } else {
         $("#notice").text("");
     }
+    if (result > 500) result = 500; // Remove this once billing and pricing is fixed
     $("#user-count").val(result);
-    var costOut = result - 5 > 0 ? result - 5 : 0;
+    var costOut = result - 500 > 0 ? result - 500 : 0;
     $("#sub-price").text("$" + costOut.toFixed(2));
     $("#SelectedSku").val(costOut == 0 ? 1 : 2);
 }

@@ -1,7 +1,8 @@
 ﻿@using AllyisApps.ViewModels
 
 @model SubscriptionDisplayViewModel
-
+@*TODO: Currently mentions of pricing are commented out. When pricing is properly implemented, restore these mentions.
+    Also remove the damn hardcoded "free users" numbers.*@
 @{
     ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.Subscriptions;
     ViewBag.ShowAll = true;
@@ -12,7 +13,8 @@
     if (Model.Info != null)
     {
         userDisplay = string.Format("{0}/{1} {2}", Model.Info.SubscriptionsUsed, Model.Info.NumberOfUsers, AllyisApps.Resources.Views.Account.Strings.Users);
-        price = (Model.Info.NumberOfUsers - 5) == 0 ? AllyisApps.Resources.Views.Account.Strings.Free : (Model.Info.NumberOfUsers - 5).ToString("c");
+        // price = (Model.Info.NumberOfUsers - 500) <= 0 ? AllyisApps.Resources.Views.Account.Strings.Free : (Model.Info.NumberOfUsers - 500).ToString("c");
+        price = "";
     }
 }
 
