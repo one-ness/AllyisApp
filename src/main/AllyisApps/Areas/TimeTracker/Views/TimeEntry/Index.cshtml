@@ -188,8 +188,8 @@ ViewBag.RenderSidebar = true;}
 @section scripts
 {
     @*Date range picker dependencies:*@
-    @Scripts.Render("~/bundles/jqueryui");
-    @Scripts.Render("~/bundles/moment");
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/moment")
 
     <script type="text/javascript">
         var model_startdate = @Model.EntryRange.StartDate;
@@ -199,7 +199,7 @@ ViewBag.RenderSidebar = true;}
         var page_container_id = "viewasuser-list";
         var page_item_tag = "div";
     </script>
-    @Scripts.Render("~/bundles/daterangepicker");
-    @Scripts.Render("~/bundles/pageswithsearch");
-    @Scripts.Render("~/bundles/TTTimeEntryIndex");
+    @Scripts.Render("~/bundles/daterangepicker")
+    @Scripts.Render("~/bundles/pageswithsearch")
+    @Scripts.Render("~/bundles/TTTimeEntryIndex")
 }

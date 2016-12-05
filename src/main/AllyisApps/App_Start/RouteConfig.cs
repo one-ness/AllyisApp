@@ -34,14 +34,14 @@ namespace AllyisApps
 			routes.MapSubdomainRoute(
 				name: "Subdomain_Default",
 				url: "{controller}/{action}/{id}",
-				defaults: new { controller = /*string.Empty*/ "Home", /*determined by route*/ action = "Index", id = UrlParameter.Optional },
+				defaults: new { controller = /*string.Empty*/ "Account", /*determined by route*/ action = "RouteHome", id = UrlParameter.Optional },
 				namespaces: new string[] { "AllyisApps.Controllers" });
 
 			routes.Add(
 				"Default",
 				new Route(
 					url: "{controller}/{action}/{id}",
-					defaults: new RouteValueDictionary(new { controller = "Home", action = "Index", id = UrlParameter.Optional }),
+					defaults: new RouteValueDictionary(new { controller = "Account", action = "RouteHome", id = UrlParameter.Optional }),
 					constraints: null,
 					dataTokens: new RouteValueDictionary(
 						new

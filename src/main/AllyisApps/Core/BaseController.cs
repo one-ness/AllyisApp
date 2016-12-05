@@ -88,7 +88,8 @@ namespace AllyisApps.Core
 		public ActionResult RedirectToSubDomainAction(int pOrganizationId, string pArea = null, string pAction = null, string pController = null)
 		{
 			string requestUrl = Request.Url.ToString();
-			string withOutControllerAction = requestUrl.Substring(0, requestUrl.IndexOf(Request.RequestContext.RouteData.Values["controller"].ToString()));
+            int indexOfController = requestUrl.IndexOf(Request.RequestContext.RouteData.Values["controller"].ToString());
+            string withOutControllerAction = indexOfController > -1 ? requestUrl.Substring(0, requestUrl.IndexOf(Request.RequestContext.RouteData.Values["controller"].ToString())) : requestUrl;
 			string rootAndMiddle = withOutControllerAction.Substring(withOutControllerAction.IndexOf(GlobalSettings.WebRoot));
             
             //// rootAndMiddle contains just the webroot, set in WebConfig, and whatever segments were there before the controller name (e.g. language)
@@ -141,12 +142,12 @@ namespace AllyisApps.Core
 		/// <returns>The proper redirect for the product.</returns>
 		public ActionResult RouteHome()
 		{
-			if (Request.IsAuthenticated)
-			{
-				return this.RedirectToSubDomainAction(UserContext.ChosenOrganizationId, null, ActionConstants.Index, ControllerConstants.Home);
-			}
+            if (Request.IsAuthenticated)
+            {
+                return this.RedirectToSubDomainAction(UserContext.ChosenOrganizationId, null, ActionConstants.Index, ControllerConstants.Account);
+            }
 
-			return this.RedirectToAction(ActionConstants.Index);
+            return this.RedirectToAction(ActionConstants.LogOn);
         }
 
         /// <summary>
