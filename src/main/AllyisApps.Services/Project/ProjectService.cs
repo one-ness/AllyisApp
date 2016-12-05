@@ -303,7 +303,7 @@ namespace AllyisApps.Services.Project
         /// information for that project will also be ignored. If a row has a value for Customer Name, the project(s) listed in that row will
         /// be only for that customer.
         /// </summary>
-        public async Task ImportProjectUsers(DataTable projectUserData)
+        public async Task ImportUsersProjectsCustomers(DataTable importData)
         {
             List<Tuple<CustomerInfo, List<ProjectInfo>>> projects = new List<Tuple<CustomerInfo, List<ProjectInfo>>>(); // Structure for customer and project relationships
             List<Tuple<int, List<int>>> projectUsers = new List<Tuple<int, List<int>>>(); // (<projectId, List<userId's>>) Structure for final userId lists to add to projects
@@ -316,46 +316,60 @@ namespace AllyisApps.Services.Project
                 ));
             }
 
-            foreach(DataRow row in projectUserData.Rows)
+            foreach(DataRow row in importData.Rows)
             {
                 if (row.ItemArray.All(i => string.IsNullOrEmpty(i?.ToString()))) break; // Avoid iterating through empty rows
 
+                // Customer name
+                string customerName = "";
+                int? customerId = 0;
+                bool customerIsSpecified = this.readColumn(row, ColumnHeaders.CustomerName, val => customerName = val);
+
+                // Creating customer & importing info
+                if (customerIsSpecified)
+                {
+                    // Only create customers that do not already exist in the org; get the id if they do
+                    if (projects.Count() == 0 ||
+                        (customerId = projects.Where(t => t.Item1.Name == customerName).Select(t => t.Item1.CustomerId).DefaultIfEmpty(0).FirstOrDefault()) == 0) 
+                    {
+                        // Customer creation
+                        CustomerInfo newCustomer = new CustomerInfo() { Name = customerName, OrganizationId = this.UserContext.ChosenOrganizationId };
+                        customerId = CrmService.CreateCustomer(newCustomer);
+                        projects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(newCustomer, new List<ProjectInfo>()));
+                    }
+
+                    //Updating customer info
+
+                    CustomerInfo updateCustomer = CrmService.GetCustomer(customerId.Value);
+                    bool updated = false;
+
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => updateCustomer.Address = val);
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerCity, val => updateCustomer.City = val);
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerCountry, val => updateCustomer.Country = val);
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerState, val => updateCustomer.State = val);
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => updateCustomer.PostalCode = val);
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerEmail, val => updateCustomer.ContactEmail = val);
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerPhoneNumber, val => updateCustomer.ContactPhoneNumber = val);
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerFaxNumber, val => updateCustomer.FaxNumber = val);
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerEIN, val => updateCustomer.EIN = val);
+                    
+                    if(updated)
+                    {
+                        CrmService.UpdateCustomer(updateCustomer);
+                    }
+                }
+
                 // Multiples are allowed in either column, separated by commas. Adding users can be one-to-one, one-to-many by user or project, or
                 // many-to-many (each user in list is added to each project in list). These two columns must be supplied and filled out in each row.
-                string[] projectNameData;
-                string[] userEmailData;
+                string[] projectNameData = null;
+                string[] userEmailData = null;
                 try
                 {
                     projectNameData = row[ColumnHeaders.ProjectName].ToString().Split(',');
-                } catch (ArgumentException)
-                {
-                    throw new ArgumentException("The supplied spreadsheet has no column for " + ColumnHeaders.ProjectName);
-                }
+                } catch (ArgumentException) { }
                 try
                 {
                     userEmailData = row[ColumnHeaders.UserEmail].ToString().Split(',');
-                }
-                catch (ArgumentException)
-                {
-                    throw new ArgumentException("The supplied spreadsheet has no column for " + ColumnHeaders.UserEmail);
-                }
-                // Rows missing data for user email or project name will simply be skippped.
-                if (string.IsNullOrEmpty(projectNameData[0]))
-                {
-                    break; // TODO: Add this a returned error list
-                }
-                if (string.IsNullOrEmpty(userEmailData[0]))
-                {
-                    break; // TODO: Add this a returned error list
-                }
-
-                // Optional customer name specification.
-                string customerName = "";
-                bool customerIsSpecified = false;
-                try
-                {
-                    customerName = row[ColumnHeaders.CustomerName].ToString();
-                    customerIsSpecified = true;
                 }
                 catch (ArgumentException) { }
                 
@@ -472,12 +486,36 @@ namespace AllyisApps.Services.Project
             }
         }
 
-		/// <summary>
-		/// Deletes a project.
-		/// </summary>
-		/// <param name="projectId">Project Id.</param>
-		/// <returns>Returns false if authorization fails.</returns>
-		public bool DeleteProject(int projectId)
+        /// <summary>
+        /// Helper method for reading column data from a spreadsheet. It will try to read data in the given column name from the given
+        /// DataRow. If it exists and there is data there (it's not blank), it will then execute the lambda function using the discovered
+        /// data, and return true. If either the column does not exist or the row has nothing in that column, the lambda will never be
+        /// executed and the function will return false.
+        /// </summary>
+        /// <param name="row">DataRow.</param>
+        /// <param name="columnName">Column name to read.</param>
+        /// <param name="useValue">Function to execute using data from column, if present.</param>
+        /// <returns>True is data found and function executed, false otherwise.</returns>
+        private bool readColumn(DataRow row, string columnName, Func<string, string> useValue)
+        {
+            try
+            {
+                string value = row[columnName].ToString();
+                if (!string.IsNullOrEmpty(value))
+                {
+                    useValue(value);
+                    return true;
+                }
+            } catch (ArgumentException) { }
+            return false;
+        }
+
+        /// <summary>
+        /// Deletes a project.
+        /// </summary>
+        /// <param name="projectId">Project Id.</param>
+        /// <returns>Returns false if authorization fails.</returns>
+        public bool DeleteProject(int projectId)
 		{
 			if (projectId <= 0)
 			{

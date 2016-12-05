@@ -10,6 +10,51 @@
         /// Customer-Property: Name
         /// </summary>
         public const string CustomerName = "Customer Name";
+
+        /// <summary>
+        /// Customer-Property: Street Address
+        /// </summary>
+        public const string CustomerStreetAddress = "Customer Street Address";
+
+        /// <summary>
+        /// Customer-Property: City
+        /// </summary>
+        public const string CustomerCity = "Customer City";
+
+        /// <summary>
+        /// Customer-Property: Country
+        /// </summary>
+        public const string CustomerCountry = "Customer Country";
+
+        /// <summary>
+        /// Customer-Property: State
+        /// </summary>
+        public const string CustomerState = "Customer State";
+
+        /// <summary>
+        /// Customer-Property: Postal Code
+        /// </summary>
+        public const string CustomerPostalCode = "Customer Postal Code";
+
+        /// <summary>
+        /// Customer-Property: Email
+        /// </summary>
+        public const string CustomerEmail = "Customer Email";
+
+        /// <summary>
+        /// Customer-Property: Phone Number
+        /// </summary>
+        public const string CustomerPhoneNumber = "Customer Phone Number";
+
+        /// <summary>
+        /// Customer-Property: Fax Number
+        /// </summary>
+        public const string CustomerFaxNumber = "Customer Fax Number";
+
+        /// <summary>
+        /// Customer-Property: EIN
+        /// </summary>
+        public const string CustomerEIN = "Customer EIN";
         #endregion customer
 
         #region project
