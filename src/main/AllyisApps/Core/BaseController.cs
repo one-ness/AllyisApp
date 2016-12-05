@@ -101,22 +101,21 @@ namespace AllyisApps.Core
 
             // if no org is set for a user the default is "default" this catchs that
             // case until the default usercontext org is looked at
-            string url, chosenOrg = "default"; // OrgService.GetSubdomainById(pOrganizationId);                                   SUBDOMAINS DISABLED
-                                                //                                                                                Remove "default" and uncomment GetSub.. method to enable
-			if (chosenOrg == "default")
-			{
+            string url, chosenOrg = OrgService.GetSubdomainById(pOrganizationId);
+			//if (chosenOrg == "default")       SUBDOMAINS DISABLED - to reenable, uncomment this if/else block and the "url =..." line at the end of the else
+			//{
 				url = string.Format("http://{0}/{1}", rootAndMiddle, route);
-			}
-			else
-			{
+			//}
+			//else
+			//{
 				// Update the ChosenOrg in the database if necessary, so that the UserContext can grab the right one
 				if (this.UserContext.ChosenOrganizationId != pOrganizationId)
 				{
 					OrgService.UpdateActiveOrganization(UserContext.UserId, pOrganizationId);
 				}
 
-				url = string.Format("http://{0}.{1}/{2}", chosenOrg, rootAndMiddle, route);
-			}
+				//url = string.Format("http://{0}.{1}/{2}", chosenOrg, rootAndMiddle, route);
+			//}
 
 			// Any other miscellaneous route parameters need to remain in the query string
 			string remainingQueryParameters = string.Empty;
