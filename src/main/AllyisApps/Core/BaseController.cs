@@ -88,7 +88,8 @@ namespace AllyisApps.Core
 		public ActionResult RedirectToSubDomainAction(int pOrganizationId, string pArea = null, string pAction = null, string pController = null)
 		{
 			string requestUrl = Request.Url.ToString();
-			string withOutControllerAction = requestUrl.Substring(0, requestUrl.IndexOf(Request.RequestContext.RouteData.Values["controller"].ToString()));
+            int indexOfController = requestUrl.IndexOf(Request.RequestContext.RouteData.Values["controller"].ToString());
+            string withOutControllerAction = indexOfController > -1 ? requestUrl.Substring(0, requestUrl.IndexOf(Request.RequestContext.RouteData.Values["controller"].ToString())) : requestUrl;
 			string rootAndMiddle = withOutControllerAction.Substring(withOutControllerAction.IndexOf(GlobalSettings.WebRoot));
             
             //// rootAndMiddle contains just the webroot, set in WebConfig, and whatever segments were there before the controller name (e.g. language)
@@ -101,22 +102,21 @@ namespace AllyisApps.Core
 
             // if no org is set for a user the default is "default" this catchs that
             // case until the default usercontext org is looked at
-            string url, chosenOrg = "default"; // OrgService.GetSubdomainById(pOrganizationId);                                   SUBDOMAINS DISABLED
-                                                //                                                                                Remove "default" and uncomment GetSub.. method to enable
-			if (chosenOrg == "default")
-			{
+            string url, chosenOrg = OrgService.GetSubdomainById(pOrganizationId);
+			//if (chosenOrg == "default")       SUBDOMAINS DISABLED - to reenable, uncomment this if/else block and the "url =..." line at the end of the else
+			//{
 				url = string.Format("http://{0}/{1}", rootAndMiddle, route);
-			}
-			else
-			{
+			//}
+			//else
+			//{
 				// Update the ChosenOrg in the database if necessary, so that the UserContext can grab the right one
 				if (this.UserContext.ChosenOrganizationId != pOrganizationId)
 				{
 					OrgService.UpdateActiveOrganization(UserContext.UserId, pOrganizationId);
 				}
 
-				url = string.Format("http://{0}.{1}/{2}", chosenOrg, rootAndMiddle, route);
-			}
+				//url = string.Format("http://{0}.{1}/{2}", chosenOrg, rootAndMiddle, route);
+			//}
 
 			// Any other miscellaneous route parameters need to remain in the query string
 			string remainingQueryParameters = string.Empty;
@@ -142,12 +142,12 @@ namespace AllyisApps.Core
 		/// <returns>The proper redirect for the product.</returns>
 		public ActionResult RouteHome()
 		{
-			if (Request.IsAuthenticated)
-			{
-				return this.RedirectToSubDomainAction(UserContext.ChosenOrganizationId, null, ActionConstants.Index, ControllerConstants.Home);
-			}
+            if (Request.IsAuthenticated)
+            {
+                return this.RedirectToSubDomainAction(UserContext.ChosenOrganizationId, null, ActionConstants.Index, ControllerConstants.Account);
+            }
 
-			return this.RedirectToAction(ActionConstants.Index);
+            return this.RedirectToAction(ActionConstants.LogOn);
         }
 
         /// <summary>

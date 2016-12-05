@@ -129,7 +129,7 @@ namespace AllyisApps.Controllers
 
 			if (model.Billing.Amount == 0)
 			{
-				model.Billing.Amount = (model.NumberOfUsers - 5) * 100;
+				model.Billing.Amount = (model.NumberOfUsers - 500) * 100;
 			}
 
 			if (!(token == null) && (model.Token == null))
@@ -146,7 +146,7 @@ namespace AllyisApps.Controllers
 				model.Billing.Customer = CrmService.RetrieveCustomer(CrmService.GetOrgBillingServicesCustomerId());
 			}
 
-			if (model.Billing.Amount != 0)
+			if (model.Billing.Amount > 0) // Users >= 500 (the hardcoded free amount) will not trigger this
 			{
 				if ((token == null) && (model.Token == null))
 				{

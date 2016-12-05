@@ -79,7 +79,7 @@
         <input type="checkbox" name="terms" value=@AllyisApps.Resources.Views.Account.Strings.Accept onchange="document.getElementById('registerSubmit').disabled = !this.checked;">
         @AllyisApps.Resources.Views.Account.Strings.IAgree @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.TOS, ActionConstants.PrivacyPolicy, ControllerConstants.Home, null, new { @style = "color:#0000FF;" }).
         <br /><br />
-        <a href="/Account/Index" class="btn btn-default">@AllyisApps.Resources.Views.Account.Strings.Cancel</a>
+        <a href=@Url.Action(ActionConstants.RouteHome, ControllerConstants.Account, new RouteValueDictionary(new { area = "" })) class="btn btn-default">@AllyisApps.Resources.Views.Account.Strings.Cancel</a>
         <button type="submit" value=@AllyisApps.Resources.Views.Account.Strings.Register class="btn btn-primary" id="registerSubmit" disabled="disabled">@AllyisApps.Resources.Views.Account.Strings.Register</button>
     </div>
 
@@ -91,6 +91,6 @@
         var preserveState = '@(Model != null ? (AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';
         var dropdownempty = "@AllyisApps.Resources.Views.Account.Strings.DropDownEmpty";
     </script>
-    @Scripts.Render("~/bundles/CapsCheck");
-    @Scripts.Render("~/bundles/UpdateStateDDL");
+    @Scripts.Render("~/bundles/CapsCheck")
+    @Scripts.Render("~/bundles/UpdateStateDDL")
 }
