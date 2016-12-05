@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core;
@@ -33,6 +34,11 @@ namespace AllyisApps.Controllers
 			{
 				if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
 				{
+                    if (OrgService.GetOrganizationMemberList(org.OrganizationId).Any(user => user.EmployeeId == org.EmployeeId)) // Employee Id must be unique
+                    {
+                        Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.EmployeeIdNotUniqueError));
+                        return this.View(org);
+                    }
 					org.Organization = OrgService.GetOrganization(org.OrganizationId);
 					org = await this.ProcessUserInput(org);
 
@@ -107,7 +113,8 @@ namespace AllyisApps.Controllers
 							AccessCode = code.ToString(),
 							DateOfBirth = DateTime.MinValue.AddYears(1754),
 							OrgRole = (int)(orgAddMembers.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member),
-							ProjectId = orgAddMembers.SubscriptionProjectId
+							ProjectId = orgAddMembers.SubscriptionProjectId,
+                            EmployeeId = orgAddMembers.EmployeeId
 						});
 
 					orgAddMembers.AccessCode = code.ToString();

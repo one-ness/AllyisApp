@@ -66,6 +66,13 @@
                         @Html.ReqLabelFor(m => m.PostalCode, AllyisApps.Resources.Views.Account.Strings.PostalCode)
                         @Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
                     </div>
+                    @if (Model.IsCreating)
+                    {
+                    <div class="form-group">
+                        @Html.ReqLabelFor(m => m.EmployeeId, AllyisApps.Resources.Views.Account.Strings.EmployeeId)
+                        @Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control", @maxlength = "16" })
+                    </div> 
+                    }
 
                     @Html.HiddenFor(m => m.OrganizationId)
                     @Html.HiddenFor(m => m.SubdomainName)

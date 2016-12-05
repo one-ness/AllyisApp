@@ -60,7 +60,7 @@ namespace AllyisApps.Controllers
 						FaxNumber = model.FaxNumber,
 						Subdomain = model.SubdomainName
 					},
-					UserContext.UserId);
+					UserContext.UserId, model.EmployeeId);
 
 				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.OrganizationCreatedNotification, Variety.Success));
 

@@ -12,6 +12,7 @@
     [ProjectId] INT NULL DEFAULT NULL, 
     [CreatedUTC] DATETIME2(0) NOT NULL DEFAULT GETUTCDATE(), 
     [ModifiedUTC] DATETIME2(0) NOT NULL DEFAULT GETUTCDATE(), 
+    [EmployeeId] NVARCHAR(16) NOT NULL, 
     CONSTRAINT [FK_Invitation_InvitationId] FOREIGN KEY ([InvitationId]) REFERENCES [Auth].[Invitation]([InvitationId]),
     CONSTRAINT [FK_Invitation_OrgRole] FOREIGN KEY ([OrgRole]) REFERENCES [Auth].[OrgRole]([OrgRoleId]),
     CONSTRAINT [FK_Invitation_ProjectId] FOREIGN KEY ([ProjectId]) REFERENCES [Crm].[Project]([ProjectId]),

@@ -21,6 +21,7 @@ namespace AllyisApps.DBModel.Auth
 		private string pAccessCode;
 		private int pOrgRole;
 		private int? pProjectId;
+        private string pEmployeeId;
 
 		/// <summary>
 		/// Gets or sets the id of the invitation.
@@ -184,5 +185,20 @@ namespace AllyisApps.DBModel.Auth
 				this.ApplyPropertyChange<InvitationDBEntity, int>(ref this.pOrgRole, (InvitationDBEntity x) => x.OrgRole, value);
 			}
 		}
-	}
+        /// <summary>
+		/// Gets or sets the employee id of the user.
+		/// </summary>
+		public string EmployeeId
+        {
+            get
+            {
+                return this.pEmployeeId;
+            }
+
+            set
+            {
+                this.ApplyPropertyChange<InvitationDBEntity, string>(ref this.pEmployeeId, (InvitationDBEntity x) => x.EmployeeId, value);
+            }
+        }
+    }
 }

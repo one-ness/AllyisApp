@@ -10,6 +10,7 @@
 
  CONSTRAINT [FK_Crm.Project_Customer] FOREIGN KEY([CustomerId]) REFERENCES [Crm].[Customer] ([CustomerId]) NOT NULL,
  [ModifiedUTC] DATETIME2(0) NOT NULL DEFAULT GETUTCDATE(), 
+    [ProjectOrgId] NVARCHAR(16) NOT NULL, 
 )
 GO
 

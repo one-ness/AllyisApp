@@ -17,7 +17,8 @@
 	[IsActive] BIT DEFAULT 1 NOT NULL,
 	[ModifiedUTC] DATETIME2(0) NOT NULL DEFAULT GETUTCDATE(),
 
-	CONSTRAINT [FK_Customer_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization]([OrganizationId]),
+	[CustomerOrgId] NVARCHAR(16) NOT NULL, 
+    CONSTRAINT [FK_Customer_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization]([OrganizationId]),
     CONSTRAINT [FK_Customer_Country] FOREIGN KEY ([Country]) REFERENCES [Lookup].[Country]([CountryId]),
 	CONSTRAINT [FK_Customer_State] FOREIGN KEY ([State]) REFERENCES [Lookup].[State]([StateId])
 

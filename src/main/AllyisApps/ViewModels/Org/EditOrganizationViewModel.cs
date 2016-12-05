@@ -26,6 +26,7 @@ namespace AllyisApps.ViewModels
 			// Note: this is included soley to keep the model constructed during a POST from complaining about a null reference
 			//   as it builds the countries list, even though the list isn't used anymore.
 			this.ValidCountries = new List<string>();
+            this.IsCreating = false;
 		}
 
 		/// <summary>
@@ -104,6 +105,14 @@ namespace AllyisApps.ViewModels
 		[Display(Name = "Fax Number")]
 		public string FaxNumber { get; set; }
 
+        /// <summary>
+        /// Gets or sets the owner's Employee Id. Only use on creating orgs.
+        /// </summary>
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Owner Employee ID")]
+        public string EmployeeId { get; set; }
+
 		/// <summary>
 		/// Gets the organization's ID.
 		/// </summary>
@@ -113,7 +122,10 @@ namespace AllyisApps.ViewModels
 		/// Gets or sets a value indicating whether a user has permition to delete the org.
 		/// </summary>
 		public bool CanDelete { get; set; }
-
+        /// <summary>
+        /// Returns true if the model is being used for creating an org, and false if otherwise (e.g. editing an existing org)
+        /// </summary>
+        public bool IsCreating { get; set; }
 		/// <summary>
 		/// Gets a list of valid countries.
 		/// </summary>
