@@ -1005,7 +1005,7 @@ namespace AllyisApps.Services.Crm
         {
             // return this.IncrementAlphanumericCharArray(this.GetOrganizationMemberList(orgId).LastOrDefault().EmployeeId.ToCharArray()).ToString();
             var customers = this.GetCustomerList(this.UserContext.ChosenOrganizationId);
-            if (customers.Count() > 0) return this.IncrementAlphanumericCharArray(customers.Select(c => c.CustomerOrgId).ToList().OrderBy(id => id).LastOrDefault().ToCharArray()).ToString();
+            if (customers.Count() > 0) return this.IncrementAlphanumericCharArray(customers.OrderBy(c => c.CustomerOrgId).LastOrDefault().CustomerOrgId.ToCharArray()).ToString();
             else return "0000000000000000"; // 16 character max, arbitrary default id
         }
     }

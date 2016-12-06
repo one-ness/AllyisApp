@@ -75,7 +75,8 @@ namespace AllyisApps.Services.Project
 						ProjectId = dbe.ProjectId,
 						CustomerId = dbe.CustomerId,
 						OrganizationId = dbe.OrganizationId,
-						Name = dbe.Name
+						Name = dbe.Name,
+                        ProjectOrgId = dbe.ProjectOrgId
 					});
 				}
 			}
@@ -83,17 +84,18 @@ namespace AllyisApps.Services.Project
 			return list;
 		}
 
-		/// <summary>
-		/// Creates a new project.
-		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
-		/// <param name="customerId">Customer Id.</param>
-		/// <param name="name">Project name.</param>
-		/// <param name="type">Project type.</param>
-		/// <param name="start">Starting. <see cref="DateTime"/></param>
-		/// <param name="end">Ending.<see cref="DateTime"/></param>
-		/// <returns>Project Id.</returns>
-		public int CreateProject(int orgId, int customerId, string name, string type, DateTime start, DateTime end)
+        /// <summary>
+        /// Creates a new project.
+        /// </summary>
+        /// <param name="orgId">Organization Id.</param>
+        /// <param name="customerId">Customer Id.</param>
+        /// <param name="name">Project name.</param>
+        /// <param name="type">Project type.</param>
+        /// <param name="projectOrgId">The project ID as used by the organization</param>
+        /// <param name="start">Starting. <see cref="DateTime"/></param>
+        /// <param name="end">Ending.<see cref="DateTime"/></param>
+        /// <returns>Project Id.</returns>
+        public int CreateProject(int orgId, int customerId, string name, string type, string projectOrgId, DateTime start, DateTime end)
 		{
 			#region Validation
 			if (orgId <= 0)
@@ -116,6 +118,11 @@ namespace AllyisApps.Services.Project
 				throw new ArgumentNullException("type", "Type must have a value.");
 			}
 
+            if (string.IsNullOrEmpty(projectOrgId))
+            {
+                throw new ArgumentNullException("projectOrgId", "Project must have an ID");
+            }
+
 			if (start == null)
 			{
 				throw new ArgumentNullException("start", "Project must have a start time");
@@ -132,19 +139,20 @@ namespace AllyisApps.Services.Project
 			}
 			#endregion Validation
 
-			return DBHelper.CreateProject(orgId, customerId, name, type, start, end);
+			return DBHelper.CreateProject(orgId, customerId, name, type, projectOrgId, start, end);
 		}
 
-		/// <summary>
-		/// Creates a new project.
-		/// </summary>
-		/// <param name="customerId">Customer Id.</param>
-		/// <param name="name">Project name.</param>
-		/// <param name="type">Project type.</param>
-		/// <param name="start">Starting. <see cref="DateTime"/></param>
-		/// <param name="end">Ending. <see cref="DateTime"/></param>
-		/// <returns>Project Id.</returns>
-		public int CreateProjectFromCustomerIdOnly(int customerId, string name, string type, DateTime start, DateTime end)
+        /// <summary>
+        /// Creates a new project.
+        /// </summary>
+        /// <param name="customerId">Customer Id.</param>
+        /// <param name="name">Project name.</param>
+        /// <param name="type">Project type.</param>
+        /// <param name="projectOrgId">The ID of the project used by the organization</param>
+        /// <param name="start">Starting. <see cref="DateTime"/></param>
+        /// <param name="end">Ending. <see cref="DateTime"/></param>
+        /// <returns>Project Id.</returns>
+        public int CreateProjectFromCustomerIdOnly(int customerId, string name, string type, string projectOrgId, DateTime start, DateTime end)
 		{
 			#region Validation
 			if (customerId <= 0)
@@ -171,14 +179,18 @@ namespace AllyisApps.Services.Project
 			{
 				throw new ArgumentNullException("end", "Project must have an end time");
 			}
-
+            
+            if (string.IsNullOrEmpty(projectOrgId))
+            {
+                throw new ArgumentNullException("projectOrgId", "Project must have an ID");
+            }
 			if (DateTime.Compare(start, end) > 0)
 			{
 				throw new ArgumentException("Project cannot end before it starts.");
 			}
 			#endregion Validation
 
-			return DBHelper.CreateProjectFromCustomerIdOnly(customerId, name, type, start, end);
+			return DBHelper.CreateProjectFromCustomerIdOnly(customerId, name, type, projectOrgId, start, end);
 		}
 
         public void ImportProjects(DataTable projectData)
@@ -213,6 +225,7 @@ namespace AllyisApps.Services.Project
                         id.Value,                             
                         projectName,
                         row[ColumnHeaders.ProjectType].ToString(),
+                        "",
                         Convert.ToDateTime(row[ColumnHeaders.ProjectStartDate]),
                         Convert.ToDateTime(row[ColumnHeaders.ProjectEndDate])
                         );
@@ -437,5 +450,26 @@ namespace AllyisApps.Services.Project
 
 			return DBHelper.GetProjectsByUserId(userId).Select(p => InfoObjectsUtility.InitializeCompleteProjectInfo(p));
 		}
-	}
+
+        /// <summary>
+        /// Returns a recommended available Project Org ID
+        /// </summary>
+        /// <returns></returns>
+        public string GetRecommendedProjectId()
+        {
+            var projects = GetAllProjectsForOrganization(this.UserContext.ChosenOrganizationId);
+            if (projects.Count() > 0) return IncrementAlphanumericCharArray(projects.OrderBy(p => p.ProjectOrgId).LastOrDefault().ProjectOrgId.ToCharArray()).ToString();
+            else return "0000000000000000"; // 16 max chars, arbitrary default value
+        }
+
+        public IEnumerable<ProjectInfo> GetAllProjectsForOrganization(int orgId)
+        {
+            var result = new List<ProjectInfo>();
+            foreach (var customer in this.CrmService.GetCustomerList(orgId))
+            {
+                result.AddRange(this.GetProjectsByCustomer(customer.CustomerId));
+            }
+            return result;
+        }
+    }
 }

@@ -30,5 +30,10 @@ namespace AllyisApps.DBModel.Crm
 		/// Gets or sets the project name.
 		/// </summary>
 		public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the project's ID as used by the organization
+        /// </summary>
+        public string ProjectOrgId { get; set; }
 	}
 }

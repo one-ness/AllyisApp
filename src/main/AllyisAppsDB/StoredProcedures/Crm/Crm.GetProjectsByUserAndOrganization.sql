@@ -14,7 +14,8 @@ AS
 			[Customer].[Name] AS [CustomerName],
 			[Customer].[IsActive] AS [IsCustomerActive],
 			[ProjectUser].[IsActive] AS [IsUserActive],
-			[OrgRoleId]
+			[OrgRoleId],
+			[ProjectOrgId]
 FROM (
 	(SELECT [OrganizationId], [UserId], [OrgRoleId]
 	FROM [Auth].[OrganizationUser] WITH (NOLOCK) WHERE [UserId] = @UserId AND [OrganizationId] = @OrgId)

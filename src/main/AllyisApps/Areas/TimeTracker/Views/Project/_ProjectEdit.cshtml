@@ -23,6 +23,13 @@
                     @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
                     @Html.ValidationMessageFor(x => x.ProjectName)
                 </div>
+                @if (Model.IsCreating)
+                {
+                <div class="form-group">
+                    @Html.ReqLabelFor(m => m.ProjectOrgId, AllyisApps.Resources.TimeTracker.Views.Project.Strings.ProjectOrgId)
+                    @Html.TextBoxFor(m => m.ProjectOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.ProjectOrgId })
+                </div>
+                }
                 <div id="swapper-ui" class="swapper-ui">
                     <div class="left">
                         <label>@AllyisApps.Resources.TimeTracker.Views.Project.Strings.OffProj</label>

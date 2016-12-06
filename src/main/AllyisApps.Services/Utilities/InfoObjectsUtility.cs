@@ -383,7 +383,8 @@ namespace AllyisApps.Services.Utilities
 				PriceType = completeProject.PriceType,
 				ProjectId = completeProject.ProjectId,
 				ProjectName = completeProject.ProjectName,
-				StartDate = completeProject.StartDate
+				StartDate = completeProject.StartDate,
+                ProjectOrgId = completeProject.ProjectOrgId
 			};
 		}
 

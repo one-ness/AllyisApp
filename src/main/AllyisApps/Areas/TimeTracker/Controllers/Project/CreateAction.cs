@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using System.Linq;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
@@ -38,14 +39,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 				}
 
-				return this.View(
-					new EditProjectViewModel()
-					{
-						ParentCustomerId = id,
-						ProjectUsers = new List<BasicUserInfoViewModel>(),
-						SubscriptionUsers = subList,
-						StartDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today),
-						EndDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today.AddMonths(6))
+                return this.View(
+                    new EditProjectViewModel()
+                    {
+                        ParentCustomerId = id,
+                        ProjectUsers = new List<BasicUserInfoViewModel>(),
+                        SubscriptionUsers = subList,
+                        StartDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today),
+                        EndDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today.AddMonths(6)),
+                        ProjectOrgId = ProjectService.GetRecommendedProjectId()
 					});
 			}
 			else
@@ -74,6 +76,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					{
 						throw new ArgumentNullException("model");
 					}
+                    if (ProjectService.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Any(project => project.ProjectOrgId == model.ProjectOrgId))
+                    {
+                        Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ProjectOrgIdNotUnique, Variety.Danger));
+                        return this.View(model);
+                    }
 
 					model.ProjectId = CreateProject(model);
 					this.UpdateProject(model);
@@ -109,6 +116,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					model.ParentCustomerId,
 					model.ProjectName,
 					model.PriceType,
+                    model.ProjectOrgId,
 					TimeTrackerService.GetDateTimeFromDays(model.StartDate),
 					TimeTrackerService.GetDateTimeFromDays(model.EndDate));
 			}
@@ -119,6 +127,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					model.ParentCustomerId,
 					model.ProjectName,
 					model.PriceType,
+                    model.ProjectOrgId,
 					TimeTrackerService.GetDateTimeFromDays(model.StartDate),
 					TimeTrackerService.GetDateTimeFromDays(model.EndDate));
 			}

@@ -11,7 +11,8 @@ AS
 			[Customer].[Name] AS [CustomerName],
 			[Project].[Type] AS [PriceType],
 			[Project].[StartUTC] AS [StartDate],
-			[Project].[EndUTC] AS [EndDate]
+			[Project].[EndUTC] AS [EndDate],
+			[Project].[ProjectId]
 			FROM (
 		(SELECT [ProjectId], [CustomerId], [Name], [Type], [StartUTC], [EndUTC], [IsActive], 
 				[CreatedUTC], [ModifiedUTC] FROM [Crm].[Project] WITH (NOLOCK) WHERE [ProjectId] = @ProjectId) AS [Project]

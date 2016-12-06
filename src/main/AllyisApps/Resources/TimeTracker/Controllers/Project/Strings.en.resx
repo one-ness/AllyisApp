@@ -120,6 +120,9 @@
   <data name="ActionUnauthorizedMessage" xml:space="preserve">
     <value>You are not authorized to perform this action.</value>
   </data>
+  <data name="ProjectOrgIdNotUnique" xml:space="preserve">
+    <value>The chosen Project ID already exists. The value must be a unique value.</value>
+  </data>
   <data name="SuccessProjectCreated" xml:space="preserve">
     <value>Your project was created.</value>
   </data>
