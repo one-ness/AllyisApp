@@ -43,6 +43,7 @@ SELECT	[ProjectId],
 		(SELECT [Name] FROM [Crm].[Customer] WHERE [CustomerId] = 0),
 		0,
 		0,
-		0
+		0,
+		[ProjectOrgId]
 		FROM [Crm].[Project] WHERE [ProjectId] = 0
 ORDER BY [Project].[Name]

@@ -10,15 +10,11 @@
     CONSTRAINT [FK_OrganizationUser_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization]([OrganizationId]),
     CONSTRAINT [FK_OrganizationUser_User] FOREIGN KEY ([UserId]) REFERENCES [Auth].[User]([UserId]),
     CONSTRAINT [FK_OrganizationUser_OrgRole] FOREIGN KEY ([OrgRoleId]) REFERENCES [Auth].[OrgRole]([OrgRoleId]), 
-    CONSTRAINT [PK_OrganizationUser] PRIMARY KEY ([UserId], [OrganizationId]),
-	CONSTRAINT [AK_EmployeeId] UNIQUE ([EmployeeId])
+    CONSTRAINT [PK_OrganizationUser] PRIMARY KEY ([UserId], [OrganizationId])
 )
 GO
 
 CREATE UNIQUE INDEX [IX_OrganizationId_EmployeeId] ON [Auth].[OrganizationUser]([OrganizationId], [EmployeeId]) WHERE [EmployeeId] IS NOT NULL
-GO
-
-CREATE CLUSTERED INDEX [IX_UserId_OrganizationId] ON [Auth].[OrganizationUser]([UserId], [OrganizationId]);
 GO
 
 CREATE INDEX [IX_EmployeeId] ON [Auth].[OrganizationUser]([EmployeeId]);

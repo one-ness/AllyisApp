@@ -6,14 +6,14 @@ SET IDENTITY_INSERT [Auth].[Organization] OFF
 
 --Insert Default Customer
 SET IDENTITY_INSERT [Crm].[Customer] ON
-INSERT INTO [CRM].[Customer] ([CustomerId], [Name], [OrganizationId], [IsActive])
-VALUES (0, 'Default', 0, 0)
+INSERT INTO [CRM].[Customer] ([CustomerId], [Name], [OrganizationId], [CustomerOrgId], [IsActive])
+VALUES (0, 'Default', 0, 0, '0000000000000000')
 SET IDENTITY_INSERT [Crm].[Customer] OFF
 
 --Insert Default Project
 SET IDENTITY_INSERT [Crm].[Project] ON
-INSERT INTO [CRM].[Project] ([ProjectId], [Name], [CustomerId], [IsActive])
-VALUES (0, 'Default', 0, 0)
+INSERT INTO [CRM].[Project] ([ProjectId], [Name], [CustomerId], [ProjectOrgId], [IsActive])
+VALUES (0, 'Default', 0, 0, '0000000000000000')
 SET IDENTITY_INSERT [Crm].[Project] OFF
 
 

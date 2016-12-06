@@ -593,7 +593,6 @@ namespace AllyisApps.Services.Org
         /// <summary>
         /// Gets a recommended EmployeeId that does not yet exist in the org
         /// </summary>
-        /// <param name="orgId">The ID of the organization</param>
         /// <returns></returns>
         public string GetRecommendedEmployeeId()
         {
