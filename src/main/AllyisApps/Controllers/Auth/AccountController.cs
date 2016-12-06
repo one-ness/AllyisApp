@@ -7,6 +7,7 @@
 using System.Web.Mvc;
 
 using AllyisApps.Core;
+using AllyisApps.Services;
 
 namespace AllyisApps.Controllers
 {
@@ -23,7 +24,7 @@ namespace AllyisApps.Controllers
 		/// <returns>True if the subdomain has not been used, else false.</returns>
 		public bool IsSubdomainNameUnique(string subdomainName)
 		{
-			int id = Services.Org.OrgService.GetIdBySubdomain(subdomainName);
+			int id = Service.GetIdBySubdomain(subdomainName);
 			return id == 0;
 		}
 

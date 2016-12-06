@@ -9,6 +9,7 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using AllyisApps.Services;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
@@ -25,9 +26,9 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult RemoveBilling()
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
-				IEnumerable<int> subs = CrmService.GetSubscriptionPlanPrices();
+				IEnumerable<int> subs = Service.GetSubscriptionPlanPrices();
 
 				if (subs != null && subs.Count() > 0)
 				{
@@ -52,7 +53,7 @@ namespace AllyisApps.Controllers
 		[HttpPost]
 		public ActionResult RemoveBilling(BaseViewModel m)
 		{
-			if (CrmService.RemoveBilling())
+			if (Service.RemoveBilling())
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.BillingRemoved, Variety.Success));
 				return this.Redirect(ActionConstants.Manage);

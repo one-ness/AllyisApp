@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.Project
+namespace AllyisApps.Services
 {
 	/// <summary>
 	/// An object for keeping track of all the info related to a given project.

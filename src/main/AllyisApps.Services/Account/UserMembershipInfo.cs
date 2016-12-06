@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.Account
+namespace AllyisApps.Services
 {
 	/// <summary>
 	/// Contains information about a user's membership in organizations and subscriptions.

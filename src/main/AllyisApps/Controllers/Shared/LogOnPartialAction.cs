@@ -7,7 +7,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+
 using AllyisApps.Core;
+using AllyisApps.Services;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
@@ -33,7 +35,7 @@ namespace AllyisApps.Controllers
 					UserName = UserContext.UserName,
 					ChosenOrganizationId = UserContext.ChosenOrganizationId,
 					ChosenOrganizationName = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).Select(o => o.OrganizationName).FirstOrDefault(),
-					CanEditOrganization = AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization, false),
+					CanEditOrganization = Service.Can(Actions.CoreAction.EditOrganization, false),
 					UserOrganizationBriefInfoList = new List<OrganizationBriefInfo>()
 				};
 

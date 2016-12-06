@@ -6,7 +6,7 @@
 
 using AllyisApps.DBModel;
 
-namespace AllyisApps.Services.Account
+namespace AllyisApps.Services
 {
 	/// <summary>
 	/// LastUsedDBEntity obj for getting the last subscription used by user.

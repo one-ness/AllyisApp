@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.Account
+namespace AllyisApps.Services
 {
 	/// <summary>
 	/// Role of the user in an organization.

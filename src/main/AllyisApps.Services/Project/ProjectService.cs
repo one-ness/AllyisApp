@@ -11,65 +11,16 @@ using System.Data;
 using System.Data.OleDb;
 
 using AllyisApps.DBModel.Crm;
-using AllyisApps.Services.Account;
-using AllyisApps.Services.Crm;
 using AllyisApps.Services.Utilities;
 using System.Threading.Tasks;
 
-namespace AllyisApps.Services.Project
+namespace AllyisApps.Services
 {
 	/// <summary>
 	/// The Poject Service.
 	/// </summary>
-	public class ProjectService : BaseService
+	public partial class Service : BaseService
 	{
-		/// <summary>
-		/// Authorization in use for select methods.
-		/// </summary>
-		private AuthorizationService authorizationService;
-
-        /// <summary>
-        /// Crm Service in use for select methods
-        /// </summary>
-        private CrmService CrmService;
-
-        /// <summary>
-        /// Account Service in use for select methods
-        /// </summary>
-        private AccountService AccountService;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ProjectService"/> class.
-		/// </summary>
-		/// <param name="connectionString">The connectionString.</param>
-		public ProjectService(string connectionString) : base(connectionString)
-		{
-		}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ProjectService"/> class.
-        /// </summary>
-        /// <param name="connectionString">The connection string.</param>
-        /// <param name="userContext">The user context.</param>
-        public ProjectService(string connectionString, UserContext userContext) : base(connectionString, userContext)
-        {
-            //this.authorizationService = new AuthorizationService(connectionString, userContext);
-            //this.CrmService = new CrmService(connectionString);
-            //this.CrmService.SetUserContext(userContext);
-        }
-
-        /// <summary>
-        /// Provides links to account and crm service objects
-        /// </summary>
-        /// <param name="authorizationService"></param>
-        /// <param name="accountService"></param>
-        /// <param name="crmService"></param>
-        public void SetServices(AuthorizationService authorizationService, AccountService accountService, CrmService crmService)
-        {
-            this.authorizationService = authorizationService;
-            this.AccountService = accountService;
-            this.CrmService = crmService;
-        }
 
 		/// <summary>
 		/// Gets a list of <see cref="ProjectInfo"/>'s for a customer.
@@ -203,7 +154,7 @@ namespace AllyisApps.Services.Project
         public void ImportProjects(DataTable projectData)
         {
             // Get existing customers
-            IEnumerable<CustomerInfo> customerList = CrmService.GetCustomerList(this.UserContext.ChosenOrganizationId);
+            IEnumerable<CustomerInfo> customerList = this.GetCustomerList(this.UserContext.ChosenOrganizationId);
 
             foreach (DataRow row in projectData.Rows)
             {
@@ -223,7 +174,7 @@ namespace AllyisApps.Services.Project
                     (id = customerList.Where(C=>C.Name == customerName).Select(C => C.CustomerId).DefaultIfEmpty(0).FirstOrDefault()) == 0) // Only create customers that do not already exist in the org; get the id if they do
                 {
                     CustomerInfo newCustomer = new CustomerInfo() { Name = customerName, OrganizationId = this.UserContext.ChosenOrganizationId };
-                    id = CrmService.CreateCustomer(newCustomer);
+                    id = this.CreateCustomer(newCustomer);
                     customerList = customerList.Concat(new[] { newCustomer });
                 }
                 if (!this.GetProjectsByCustomer(id.Value).Any(P => P.Name == projectName)) // Only create projects that do not already exist under the customer
@@ -288,7 +239,7 @@ namespace AllyisApps.Services.Project
 			}
 			#endregion Validation
 
-			if (this.authorizationService.Can(Services.Account.Actions.CoreAction.EditProject))
+			if (this.Can(Actions.CoreAction.EditProject))
 			{
 				DBHelper.UpdateProjectAndUsers(projectId, name, type, start, end, userIDs);
 				return true;
@@ -303,12 +254,12 @@ namespace AllyisApps.Services.Project
         /// information for that project will also be ignored. If a row has a value for Customer Name, the project(s) listed in that row will
         /// be only for that customer.
         /// </summary>
-        public async Task ImportUsersProjectsCustomers(DataTable importData)
+        public void ImportUsersProjectsCustomers(DataTable importData)
         {
             List<Tuple<CustomerInfo, List<ProjectInfo>>> projects = new List<Tuple<CustomerInfo, List<ProjectInfo>>>(); // Structure for customer and project relationships
             List<Tuple<int, List<int>>> projectUsers = new List<Tuple<int, List<int>>>(); // (<projectId, List<userId's>>) Structure for final userId lists to add to projects
 
-            foreach(CustomerInfo customer in CrmService.GetCustomerList(this.UserContext.ChosenOrganizationId))
+            foreach(CustomerInfo customer in this.GetCustomerList(this.UserContext.ChosenOrganizationId))
             {
                 projects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(
                     customer,
@@ -335,7 +286,7 @@ namespace AllyisApps.Services.Project
                     {
                         // Customer creation
                         CustomerInfo newCustomer = new CustomerInfo() { Name = customerName, OrganizationId = this.UserContext.ChosenOrganizationId };
-                        customerId = CrmService.CreateCustomer(newCustomer);
+                        customerId = this.CreateCustomer(newCustomer);
                         projects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(newCustomer, new List<ProjectInfo>()));
                     } else
                     {
@@ -344,7 +295,7 @@ namespace AllyisApps.Services.Project
 
                     //Updating customer info
 
-                    CustomerInfo updateCustomer = CrmService.GetCustomer(customerId.Value);
+                    CustomerInfo updateCustomer = this.GetCustomer(customerId.Value);
                     bool updated = false;
 
                     updated = updated || this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => updateCustomer.Address = val);
@@ -359,7 +310,7 @@ namespace AllyisApps.Services.Project
                     
                     if(updated)
                     {
-                        CrmService.UpdateCustomer(updateCustomer);
+                        this.UpdateCustomer(updateCustomer);
                     }
                 }
 
@@ -443,7 +394,7 @@ namespace AllyisApps.Services.Project
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
 			}
 
-			if (this.authorizationService.Can(Services.Account.Actions.CoreAction.EditProject))
+			if (this.Can(Actions.CoreAction.EditProject))
 			{
 				DBHelper.DeleteProject(projectId);
 				return true;

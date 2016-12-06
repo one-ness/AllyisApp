@@ -8,7 +8,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+
 using AllyisApps.Core;
+using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Shared;
@@ -29,24 +31,24 @@ namespace AllyisApps.Controllers
 		{
 			UserInfoViewModel model = new UserInfoViewModel
 			{
-				UserInfo = AccountService.GetUserInfo(),
+				UserInfo = Service.GetUserInfo(),
 				Subscriptions = new SubscriptionsViewModel
 				{
-					Subscriptions = CrmService.GetUserSubscriptionOrganizationList(),
-					ProductList = Services.Crm.CrmService.GetProductInfoList()
+					Subscriptions = Service.GetUserSubscriptionOrganizationList(),
+					ProductList = Service.GetProductInfoList()
 				},
-				Invitations = AccountService.GetInvitationsByUser(UserContext.Email).Select(x => new InvitationViewModel
+				Invitations = Service.GetInvitationsByUser(UserContext.Email).Select(x => new InvitationViewModel
 				{
 					InvitationId = x.InvitationId,
 					OrganizationId = x.OrganizationId,
-					OrganizationName = OrgService.GetOrganization(x.OrganizationId).Name,
+					OrganizationName = Service.GetOrganization(x.OrganizationId).Name,
 				}).ToList()
 			};
-			model.UserInfo.Email = Services.Account.AccountService.GetCompressedEmail(model.UserInfo.Email);
+			model.UserInfo.Email = Service.GetCompressedEmail(model.UserInfo.Email);
 
 			foreach (SubscriptionDisplayInfo row in model.Subscriptions.Subscriptions)
 			{
-				DateTime date = AccountService.GetDateAddedToSubscriptionByUserId(row.SubscriptionId);
+				DateTime date = Service.GetDateAddedToSubscriptionByUserId(row.SubscriptionId);
 				row.CreatedUTC = date;
 			}
 
@@ -61,12 +63,12 @@ namespace AllyisApps.Controllers
 		[HttpPost]
 		public async Task<ActionResult> Accept(int invitationId)
 		{
-			var invitation = AccountService.GetInvitationsByUser(UserContext.Email).Where(x => x.InvitationId == invitationId).FirstOrDefault();
+			var invitation = Service.GetInvitationsByUser(UserContext.Email).Where(x => x.InvitationId == invitationId).FirstOrDefault();
 			if (invitation != null)
 			{
 				// Validate that the user does have the requested pending invitation
 				Notifications.Add(new Core.Alert.BootstrapAlert(
-					await AccountService.AcceptUserInvitation(invitation), Core.Alert.Variety.Success));
+					await Service.AcceptUserInvitation(invitation), Core.Alert.Variety.Success));
 			}
 			else
 			{
@@ -85,11 +87,11 @@ namespace AllyisApps.Controllers
 		[HttpPost]
 		public ActionResult Reject(int invitationId)
 		{
-			var invitation = AccountService.GetInvitationsByUser(UserContext.Email).Where(x => x.InvitationId == invitationId).FirstOrDefault();
+			var invitation = Service.GetInvitationsByUser(UserContext.Email).Where(x => x.InvitationId == invitationId).FirstOrDefault();
 			if (invitation != null)
 			{
 				// Validate that the user does have the requested pending invitation
-				Notifications.Add(new Core.Alert.BootstrapAlert(AccountService.RejectUserInvitation(invitation), Core.Alert.Variety.Success));
+				Notifications.Add(new Core.Alert.BootstrapAlert(Service.RejectUserInvitation(invitation), Core.Alert.Variety.Success));
 			}
 			else
 			{

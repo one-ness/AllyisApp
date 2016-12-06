@@ -6,8 +6,9 @@
 
 using System.Threading.Tasks;
 using System.Web.Mvc;
+
 using AllyisApps.Core;
-using AllyisApps.Services.Account;
+using AllyisApps.Services;
 using AllyisApps.Services.Utilities;
 using AllyisApps.ViewModels;
 
@@ -41,7 +42,7 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				PasswordResetInfo info = await AccountService.GetPasswordResetInfo(model.Email);
+				PasswordResetInfo info = await Service.GetPasswordResetInfo(model.Email);
 				if (info != null)
 				{
 					// user exists, reset code is generated.

@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.Crm
+namespace AllyisApps.Services
 {
 	/// <summary>
 	/// List of products offered by us. These should match the product ids in the database.

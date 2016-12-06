@@ -12,32 +12,16 @@ using System.Threading.Tasks;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
-using AllyisApps.Services.Account;
 using AllyisApps.Services.Billing;
-using AllyisApps.Services.Project;
 using AllyisApps.Services.Utilities;
 
-namespace AllyisApps.Services.Org
+namespace AllyisApps.Services
 {
 	/// <summary>
 	/// Business logic for all Organization related services.
 	/// </summary>
-	public partial class OrgService : BaseService
+	public partial class Service : BaseService
 	{
-		/// <summary>
-		/// Authorization in use for select methods.
-		/// </summary>
-		private AuthorizationService authorizationService;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="OrgService"/> class.
-		/// </summary>
-		/// <param name="connectionString">The connection string.</param>
-		public OrgService(string connectionString) : base(connectionString)
-		{
-			this.authorizationService = new AuthorizationService(connectionString);
-		}
-
 		/// <summary>
 		/// Gets the subdomain name from the organization Id.
 		/// </summary>
@@ -68,16 +52,6 @@ namespace AllyisApps.Services.Org
 			////}
 
 			return DBHelper.Instance.GetIdBySubdomain(subdomain);
-		}
-
-		/// <summary>
-		/// Sets the UserContext.
-		/// </summary>
-		/// <param name="userContext">The UserContext.</param>
-		public new void SetUserContext(UserContext userContext)
-		{
-			base.SetUserContext(userContext);
-			this.authorizationService.SetUserContext(userContext);
 		}
 
 		/// <summary>
@@ -128,7 +102,7 @@ namespace AllyisApps.Services.Org
 				throw new ArgumentNullException("organization", "Organization must not be null.");
 			}
 
-			if (this.authorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+			if (this.Can(Actions.CoreAction.EditOrganization))
 			{
 				DBHelper.UpdateOrganization(InfoObjectsUtility.GetDBEntityFromOrganizationInfo(organization));
 
@@ -237,7 +211,7 @@ namespace AllyisApps.Services.Org
 		/// <returns>Returns false if permissions fail.</returns>
 		public bool DeleteOrganization()
 		{
-			if (this.authorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+			if (this.Can(Actions.CoreAction.EditOrganization))
 			{
 				DBHelper.DeleteOrganization(UserContext.ChosenOrganizationId);
 
@@ -310,7 +284,7 @@ namespace AllyisApps.Services.Org
 				throw new ArgumentOutOfRangeException("invitationId", "Invitation Id cannot be 0 or negative.");
 			}
 
-			if (this.authorizationService.Can(Actions.CoreAction.EditOrganization))
+			if (this.Can(Actions.CoreAction.EditOrganization))
 			{
 				IEnumerable<InvitationInfo> invites = this.GetUserInvitations();
 				InvitationInfo thisInvite = invites.Where(x => x.InvitationId == invitationId).SingleOrDefault();
@@ -426,7 +400,7 @@ namespace AllyisApps.Services.Org
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
 			}
-			else if (!AccountService.IsEmailAddressValid(email))
+			else if (!Service.IsEmailAddressValid(email))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}

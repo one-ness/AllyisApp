@@ -6,8 +6,10 @@
 
 using System;
 using System.Web.Mvc;
+
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using AllyisApps.Services;
 
 namespace AllyisApps.Controllers
 {
@@ -25,9 +27,9 @@ namespace AllyisApps.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult RemoveMember(int userId)
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
-				OrgService.RemoveOrganizationUser(UserContext.ChosenOrganizationId, userId);
+				Service.RemoveOrganizationUser(UserContext.ChosenOrganizationId, userId);
 
 				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.UserDeletedSuccessfully, Variety.Success));
 

@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+
 using AllyisApps.Core;
 using AllyisApps.ViewModels;
 
@@ -24,7 +25,7 @@ namespace AllyisApps.Controllers
 		[ChildActionOnly]
 		public ActionResult FooterPartial()
 		{
-			List<LanguageViewModel> model = AccountService.ValidLanguages().Select(l => new LanguageViewModel
+			List<LanguageViewModel> model = Service.ValidLanguages().Select(l => new LanguageViewModel
 			{
 				LanguageID = l.LanguageID,
 				LanguageName = l.LanguageName,

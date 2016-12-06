@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.Crm
+namespace AllyisApps.Services
 {
 	/// <summary>
 	/// An enum of ints of possible SKUs.

@@ -9,11 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Core;
-using AllyisApps.Services.Account;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
-using AllyisApps.Services.Crm;
-using AllyisApps.Services.Org;
+using AllyisApps.Services;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
@@ -30,7 +28,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The organization's management page.</returns>
 		public ActionResult Manage()
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
 				OrganizationManageViewModel model = this.ConstructOrganizationManageViewModel();
 				return this.View(model);
@@ -47,19 +45,19 @@ namespace AllyisApps.Controllers
 		[CLSCompliant(false)]
 		public OrganizationManageViewModel ConstructOrganizationManageViewModel()
 		{
-			OrganizationInfo organization = OrgService.GetOrganization(UserContext.ChosenOrganizationId);
-			bool canEditOrganization = AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization);
-			IEnumerable<OrganizationUserViewModel> displayUsers = OrgService.GetOrganizationMemberList(UserContext.ChosenOrganizationId).Select(x => new OrganizationUserViewModel()
+			OrganizationInfo organization = Service.GetOrganization(UserContext.ChosenOrganizationId);
+			bool canEditOrganization = Service.Can(Actions.CoreAction.EditOrganization);
+			IEnumerable<OrganizationUserViewModel> displayUsers = Service.GetOrganizationMemberList(UserContext.ChosenOrganizationId).Select(x => new OrganizationUserViewModel()
 			{
 				EmployeeId = x.EmployeeId,
-				FullName = (new[] { AccountService.GetUserInfo(x.UserId) }).Select(u => string.Format("{0} {1}", u.FirstName, u.LastName)).Single(),
+				FullName = (new[] { Service.GetUserInfo(x.UserId) }).Select(u => string.Format("{0} {1}", u.FirstName, u.LastName)).Single(),
 				OrganizationId = x.OrganizationId,
 				PermissionLevel = ((OrganizationRole)x.OrgRoleId).ToString(),
 				UserId = x.UserId
 			});
 
-			IEnumerable<SubscriptionDisplayInfo> subs = CrmService.GetSubscriptionsDisplay();
-			IEnumerable<SubscriptionDisplayViewModel> subscriptions = CrmService.GetProductInfoList().Select(p =>
+			IEnumerable<SubscriptionDisplayInfo> subs = Service.GetSubscriptionsDisplay();
+			IEnumerable<SubscriptionDisplayViewModel> subscriptions = Service.GetProductInfoList().Select(p =>
 			{
 				return new SubscriptionDisplayViewModel
 				{
@@ -70,15 +68,15 @@ namespace AllyisApps.Controllers
 				};
 			});
 
-			BillingServicesCustomerId customerId = CrmService.GetOrgBillingServicesCustomerId();
-			BillingServicesCustomer customer = (customerId == null) ? null : CrmService.RetrieveCustomer(customerId);
+			BillingServicesCustomerId customerId = Service.GetOrgBillingServicesCustomerId();
+			BillingServicesCustomer customer = (customerId == null) ? null : Service.RetrieveCustomer(customerId);
 
 			return new OrganizationManageViewModel
 			{
 				Add = this.ConstructOrganizationAddMembersViewModel(),
 				CanEditOrganization = canEditOrganization,
 				Details = organization,
-				Edit = this.ConstructEditOrganizationViewModel(organization, canEditOrganization, AccountService.ValidCountries()),
+				Edit = this.ConstructEditOrganizationViewModel(organization, canEditOrganization, Service.ValidCountries()),
 				LastFour = customer == null ? string.Empty : customer.Last4,
 				Members = new OrganizationMembersViewModel
 				{
@@ -86,8 +84,8 @@ namespace AllyisApps.Controllers
 					CurrentUserId = UserContext.UserId,
 					DisplayUsers = displayUsers,
 					OrganizationId = UserContext.ChosenOrganizationId,
-					OrganizationName = OrgService.GetOrganization(UserContext.ChosenOrganizationId).Name,
-					PendingInvitation = OrgService.GetUserInvitations(),
+					OrganizationName = Service.GetOrganization(UserContext.ChosenOrganizationId).Name,
+					PendingInvitation = Service.GetUserInvitations(),
 					TotalUsers = displayUsers.Count()
 				},
 				OrganizationId = UserContext.ChosenOrganizationId,

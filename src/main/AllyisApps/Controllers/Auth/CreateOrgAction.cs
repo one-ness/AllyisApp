@@ -8,8 +8,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services.Account;
-using AllyisApps.Services.Org;
+using AllyisApps.Services;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
@@ -27,7 +26,7 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult CreateOrg()
 		{
-			return this.View(new EditOrganizationViewModel() { ValidCountries = AccountService.ValidCountries() });
+			return this.View(new EditOrganizationViewModel() { ValidCountries = Service.ValidCountries() });
 		}
 
 		/// <summary>
@@ -46,7 +45,7 @@ namespace AllyisApps.Controllers
 
 			if (model != null && ModelState.IsValid)
 			{
-				int orgId = OrgService.CreateOrganization(
+				int orgId = Service.CreateOrganization(
 					new OrganizationInfo()
 					{
 						Address = model.Address,
@@ -64,7 +63,7 @@ namespace AllyisApps.Controllers
 
 				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.OrganizationCreatedNotification, Variety.Success));
 
-				OrgService.UpdateActiveOrganization(UserContext.UserId, orgId);
+				Service.UpdateActiveOrganization(UserContext.UserId, orgId);
 
 				return this.RedirectToSubDomainAction(orgId, null, ActionConstants.OrgIndex, ControllerConstants.Account);
 			}

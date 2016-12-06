@@ -6,7 +6,7 @@
 
 using System.Web.Mvc;
 using AllyisApps.Core;
-using AllyisApps.Services.Crm;
+using AllyisApps.Services;
 
 namespace AllyisApps.Controllers
 {
@@ -25,7 +25,7 @@ namespace AllyisApps.Controllers
 		{
 			if (Request.IsAuthenticated)
 			{
-				ProductInfo product = CrmService.GetProductById(productId);
+				ProductInfo product = Service.GetProductById(productId);
 				if (product != null && !string.IsNullOrWhiteSpace(product.ProductName))
 				{
 					return this.RedirectToSubDomainAction(organizationId, product.ProductName, null, ControllerConstants.Home);

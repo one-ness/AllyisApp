@@ -11,7 +11,7 @@ using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
-using AllyisApps.Services.Crm;
+using AllyisApps.Services;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
@@ -35,7 +35,7 @@ namespace AllyisApps.Controllers
 
 			// ViewBag.Products = Services.Crm.CrmService.GetProductInfoList();
 
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
 				ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(productId);
 				if (!model.IsValid)
@@ -43,11 +43,11 @@ namespace AllyisApps.Controllers
 					return this.View(ViewConstants.Details, orgId);
 				}
 
-				CrmService.InitializeSettingsForProduct(model.ProductId);
+				Service.InitializeSettingsForProduct(model.ProductId);
 
 				// SubscriptionInfo sub = CrmService.CheckSubscription(orgId, productId);
 
-				model.CurrentUsers = CrmService.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Count();
+				model.CurrentUsers = Service.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Count();
 
 				return this.View(ViewConstants.Subscribe, model);
 			}
@@ -65,10 +65,10 @@ namespace AllyisApps.Controllers
 		[CLSCompliant(false)]
 		public ProductSubscriptionViewModel ConstructProductSubscriptionViewModel(int productId)
 		{
-			ProductInfo productInfo = CrmService.GetProductById(productId);
+			ProductInfo productInfo = Service.GetProductById(productId);
 			if (productInfo != null)
 			{
-				SubscriptionInfo currentSubscription = CrmService.CheckSubscription(productId);
+				SubscriptionInfo currentSubscription = Service.CheckSubscription(productId);
 				int selectedSku = currentSubscription == null ? 0 : currentSubscription.SkuId;
 
 				return new ProductSubscriptionViewModel
@@ -79,12 +79,12 @@ namespace AllyisApps.Controllers
 					ProductName = productInfo.ProductName,
 					ProductDescription = productInfo.ProductDescription,
 					CurrentSubscription = currentSubscription,
-					Skus = CrmService.GetSkuForProduct(productId),
+					Skus = Service.GetSkuForProduct(productId),
 					SelectedSku = selectedSku,
-					SelectedSkuName = selectedSku > 0 ? CrmService.GetSkuDetails(selectedSku).Name : string.Empty,
+					SelectedSkuName = selectedSku > 0 ? Service.GetSkuDetails(selectedSku).Name : string.Empty,
 					PreviousSku = selectedSku,
-					CustomerId = CrmService.GetOrgBillingServicesCustomerId(),
-					Token = new BillingServicesToken(CrmService.GetOrgBillingServicesCustomerId().ToString())
+					CustomerId = Service.GetOrgBillingServicesCustomerId(),
+					Token = new BillingServicesToken(Service.GetOrgBillingServicesCustomerId().ToString())
 				};
 			}
 
@@ -107,7 +107,7 @@ namespace AllyisApps.Controllers
 		[CLSCompliant(false)]
 		public ActionResult Subscribe(ProductSubscriptionViewModel model, BillingServicesToken token, string billingServicesEmail, string cost)
 		{
-			if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+			if (!Service.Can(Actions.CoreAction.EditOrganization))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 				ViewBag.ErrorInfo = "Permission";
@@ -120,7 +120,7 @@ namespace AllyisApps.Controllers
 				return this.View(ViewConstants.Error, new HandleErrorInfo(new ArgumentNullException(@Resources.Errors.ModelNullMessage), ControllerConstants.Account, ActionConstants.Subscribe));
 			}
 
-			if (model.NumberOfUsers < CrmService.GetUsersWithSubscriptionToProductInOrganization(model.OrganizationId, model.ProductId).Count())
+			if (model.NumberOfUsers < Service.GetUsersWithSubscriptionToProductInOrganization(model.OrganizationId, model.ProductId).Count())
 			{
 				Notifications.Add(new BootstrapAlert("You must first remove users from your subscription before reducing the number of users.", Variety.Danger));
 
@@ -134,16 +134,16 @@ namespace AllyisApps.Controllers
 
 			if (!(token == null) && (model.Token == null))
 			{
-				BillingServicesCustomerId customerId = CrmService.CreateBillingServicesCustomer(billingServicesEmail, token);
+				BillingServicesCustomerId customerId = Service.CreateBillingServicesCustomer(billingServicesEmail, token);
 
-				CrmService.AddOrgCustomer(customerId);
-				model.Billing.Customer = CrmService.RetrieveCustomer(customerId);
+				Service.AddOrgCustomer(customerId);
+				model.Billing.Customer = Service.RetrieveCustomer(customerId);
 				model.Token = token;
-				CrmService.AddBillingHistory("Adding stripe customer data", null);
+				Service.AddBillingHistory("Adding stripe customer data", null);
 			}
 			else
 			{
-				model.Billing.Customer = CrmService.RetrieveCustomer(CrmService.GetOrgBillingServicesCustomerId());
+				model.Billing.Customer = Service.RetrieveCustomer(Service.GetOrgBillingServicesCustomerId());
 			}
 
 			if (model.Billing.Amount > 0) // Users >= 500 (the hardcoded free amount) will not trigger this
@@ -153,47 +153,47 @@ namespace AllyisApps.Controllers
 					return this.View(ViewConstants.AddBillingToSubscribe, model);
 				}
 
-				BillingServicesCustomerId customerId = CrmService.GetOrgBillingServicesCustomerId();
+				BillingServicesCustomerId customerId = Service.GetOrgBillingServicesCustomerId();
 				if (customerId == null)
 				{
-					model.Billing.Customer = CrmService.RetrieveCustomer(CrmService.CreateBillingServicesCustomer(billingServicesEmail, token));
-					CrmService.AddOrgCustomer(model.Billing.Customer.Id);
+					model.Billing.Customer = Service.RetrieveCustomer(Service.CreateBillingServicesCustomer(billingServicesEmail, token));
+					Service.AddOrgCustomer(model.Billing.Customer.Id);
 				}
 				else
 				{
-					model.Billing.Customer = CrmService.RetrieveCustomer(customerId);
+					model.Billing.Customer = Service.RetrieveCustomer(customerId);
 				}
 
-				string subscriptionId = CrmService.GetSubscriptionId(model.Billing.Customer.Id);
+				string subscriptionId = Service.GetSubscriptionId(model.Billing.Customer.Id);
 
 				if (subscriptionId == null)
 				{
-					CrmService.AddCustomerSubscriptionPlan(model.Billing.Amount, model.Billing.Customer.Id, model.NumberOfUsers, model.ProductId, model.ProductName);
-					CrmService.InitializeSettingsForProduct(model.ProductId);
-					CrmService.AddBillingHistory(string.Format("Adding new subscription data for {0}.", model.ProductName), model.SelectedSku);
+					Service.AddCustomerSubscriptionPlan(model.Billing.Amount, model.Billing.Customer.Id, model.NumberOfUsers, model.ProductId, model.ProductName);
+					Service.InitializeSettingsForProduct(model.ProductId);
+					Service.AddBillingHistory(string.Format("Adding new subscription data for {0}.", model.ProductName), model.SelectedSku);
 				}
 				else
 				{
-					string test = CrmService.UpdateSubscriptionPlan(model.Billing.Amount, model.ProductName, model.NumberOfUsers, subscriptionId, model.Billing.Customer.Id);
-					CrmService.AddBillingHistory(string.Format("Updating subscription data for {0}", model.ProductName), model.SelectedSku);
+					string test = Service.UpdateSubscriptionPlan(model.Billing.Amount, model.ProductName, model.NumberOfUsers, subscriptionId, model.Billing.Customer.Id);
+					Service.AddBillingHistory(string.Format("Updating subscription data for {0}", model.ProductName), model.SelectedSku);
 				}
 			}
 			else
 			{
 				try
 				{
-					model.Billing.Customer = CrmService.RetrieveCustomer(CrmService.GetOrgBillingServicesCustomerId());
+					model.Billing.Customer = Service.RetrieveCustomer(Service.GetOrgBillingServicesCustomerId());
 
 					if (model.Billing.Customer != null)
 					{
 						// check if there is a subscription to cancel
-						string subscriptionId = CrmService.GetSubscriptionId(model.Billing.Customer.Id);
+						string subscriptionId = Service.GetSubscriptionId(model.Billing.Customer.Id);
 						if (subscriptionId != null)
 						{
-							CrmService.DeleteSubscriptionPlan(subscriptionId);
+							Service.DeleteSubscriptionPlan(subscriptionId);
 
-							CrmService.DeleteSubscription(model.Billing.Customer.Id, subscriptionId);
-							CrmService.AddBillingHistory("Switching to free subscription, canceling stripe susbcription", model.SelectedSku);
+							Service.DeleteSubscription(model.Billing.Customer.Id, subscriptionId);
+							Service.AddBillingHistory("Switching to free subscription, canceling stripe susbcription", model.SelectedSku);
 						}
 					}
 				}
@@ -205,11 +205,11 @@ namespace AllyisApps.Controllers
 
 			if (model.SelectedSku != model.PreviousSku)
 			{
-				CrmService.AddSubscriptionOfSkuToOrganization(model.OrganizationId, model.SelectedSku, model.ProductId, model.NumberOfUsers);
+				Service.AddSubscriptionOfSkuToOrganization(model.OrganizationId, model.SelectedSku, model.ProductId, model.NumberOfUsers);
 			}
 			else
 			{
-				CrmService.UpdateSubscriptionUsers(model.SelectedSku, model.NumberOfUsers);
+				Service.UpdateSubscriptionUsers(model.SelectedSku, model.NumberOfUsers);
 			}
 
 			return this.RedirectToAction(ActionConstants.Manage);

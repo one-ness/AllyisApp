@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services.Account;
+using AllyisApps.Services;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The result of this action.</returns>
 		public ActionResult EditProfile(string returnUrl)
 		{
-			UserInfo userInfo = AccountService.GetUserInfo();
+			UserInfo userInfo = Service.GetUserInfo();
 			EditProfileViewModel model = new EditProfileViewModel
 			{
 				Email = userInfo.Email,
@@ -39,7 +39,7 @@ namespace AllyisApps.Controllers
 				PostalCode = userInfo.PostalCode,
 				PhoneNumber = userInfo.PhoneNumber,
 				DateOfBirth = userInfo.DateOfBirth,
-				ValidCountries = AccountService.ValidCountries()
+				ValidCountries = Service.ValidCountries()
 			};
 
 			ViewBag.returnUrl = returnUrl;
@@ -59,7 +59,7 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				await Task.Factory.StartNew(() => AccountService.SaveUserInfo(new UserInfo
+				await Task.Factory.StartNew(() => Service.SaveUserInfo(new UserInfo
 				{
 					UserId = UserContext.UserId,
 					Email = model.Email,

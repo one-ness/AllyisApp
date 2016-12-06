@@ -63,7 +63,7 @@ namespace AllyisApps.Controllers
 				List<OrganizationAddMembersViewModel> rvites = new List<OrganizationAddMembersViewModel>();
 				foreach (OrganizationAddMembersViewModel invite in invites)
 				{
-					if (emails.Contains(invite.Email) || OrgService.GetOrgUserFirstName(invite.Email) != null)
+					if (emails.Contains(invite.Email) || Service.GetOrgUserFirstName(invite.Email) != null)
 					{
 						emails.Add(invite.Email);
 						rvites.Add(invite);
@@ -84,7 +84,7 @@ namespace AllyisApps.Controllers
 				{
 					try
 					{
-						invite.Organization = OrgService.GetOrganization(UserContext.ChosenOrganizationId);
+						invite.Organization = Service.GetOrganization(UserContext.ChosenOrganizationId);
 						await this.ProcessUserInput(invite);
 					}
 					catch

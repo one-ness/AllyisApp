@@ -23,7 +23,7 @@ namespace AllyisApps.Controllers
 		{
 			if (Request.IsAuthenticated)
 			{
-				AccountService.SetLanguage(languageID);
+				Service.SetLanguage(languageID);
 			}
 			else
 			{

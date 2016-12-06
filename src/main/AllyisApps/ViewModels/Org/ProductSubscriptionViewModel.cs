@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
-using AllyisApps.Services.Crm;
+using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels
 {

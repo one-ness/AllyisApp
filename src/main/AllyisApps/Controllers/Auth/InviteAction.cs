@@ -9,8 +9,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services.Account;
-using AllyisApps.Services.Org;
+using AllyisApps.Services;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
@@ -31,9 +30,9 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+				if (Service.Can(Actions.CoreAction.EditOrganization))
 				{
-					org.Organization = OrgService.GetOrganization(org.OrganizationId);
+					org.Organization = Service.GetOrganization(org.OrganizationId);
 					org = await this.ProcessUserInput(org);
 
 					foreach (string user in org.AddedUsers)
@@ -75,13 +74,13 @@ namespace AllyisApps.Controllers
 			if (!string.IsNullOrEmpty(orgAddMembers.Email))
 			{
 				string userEmail = orgAddMembers.Email.Trim();
-				if (AccountService.IsEmailAddressValid(userEmail))
+				if (Service.IsEmailAddressValid(userEmail))
 				{ // If input string kinda looks like an email..
-					UserInfo user = await AccountService.GetUserByEmail(userEmail); // ...Attempt to get the user data by email.
+					UserInfo user = await Service.GetUserByEmail(userEmail); // ...Attempt to get the user data by email.
 																					// If that doesn't return null...
 					if (user != null)
 					{
-						OrgRoleInfo role = OrgService.GetOrgRole(orgAddMembers.OrganizationId, user.UserId); // ...see if they have permissions in this organization already
+						OrgRoleInfo role = Service.GetOrgRole(orgAddMembers.OrganizationId, user.UserId); // ...see if they have permissions in this organization already
 																											 // If not...
 						if (role != null)
 						{
@@ -93,9 +92,9 @@ namespace AllyisApps.Controllers
 					// input string is not associated with an existing user
 					// so send them an email and let them know of the request
 					orgAddMembers.EmailedUsers.Add(userEmail);
-					UserInfo requestingUser = AccountService.GetUserInfo();
+					UserInfo requestingUser = Service.GetUserInfo();
 					int code = new Random().Next(100000);
-					int invitationId = await OrgService.InviteNewUser(
+					int invitationId = await Service.InviteNewUser(
 						string.Format("{0} {1}", requestingUser.FirstName, requestingUser.LastName),
 						GlobalSettings.WebRoot,
 						new InvitationInfo
@@ -118,7 +117,7 @@ namespace AllyisApps.Controllers
 						{
 							if (!role.Disabled && role.SelectedRole != 0)
 							{
-								OrgService.CreateInvitationSubRole(invitationId, role.SubscriptionId, role.SelectedRole);
+								Service.CreateInvitationSubRole(invitationId, role.SubscriptionId, role.SelectedRole);
 							}
 						}
 					}
@@ -138,7 +137,7 @@ namespace AllyisApps.Controllers
 		[HttpPost]
 		public ActionResult RemoveInvitation(int invitationId)
 		{
-			if (OrgService.RemoveInvitation(invitationId))
+			if (Service.RemoveInvitation(invitationId))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.InvitationDeleteNotification, Variety.Success));
 

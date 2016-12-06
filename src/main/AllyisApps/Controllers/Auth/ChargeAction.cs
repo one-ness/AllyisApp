@@ -6,7 +6,9 @@
 
 using System;
 using System.Web.Mvc;
+
 using AllyisApps.Core;
+using AllyisApps.Services;
 using AllyisApps.Services.Common.Types;
 
 namespace AllyisApps.Controllers
@@ -25,7 +27,7 @@ namespace AllyisApps.Controllers
 		[CLSCompliant(false)]
 		public ActionResult Charge(BillingServicesToken token, string billingServicesEmail)
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
 				if (token == null)
 				{
@@ -35,7 +37,7 @@ namespace AllyisApps.Controllers
 				}
 				else
 				{
-					CrmService.UpdateBillingInfo(billingServicesEmail, token);
+					Service.UpdateBillingInfo(billingServicesEmail, token);
 
 					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Controllers.Auth.Strings.Billing, Core.Alert.Variety.Success));
 					return this.RedirectToAction(ActionConstants.Manage);

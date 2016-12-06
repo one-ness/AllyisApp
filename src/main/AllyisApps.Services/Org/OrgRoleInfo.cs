@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.Org
+namespace AllyisApps.Services
 {
 	/// <summary>
 	/// Represents an organization role.

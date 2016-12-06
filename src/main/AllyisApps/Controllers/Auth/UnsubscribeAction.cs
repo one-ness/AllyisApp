@@ -8,6 +8,7 @@ using System;
 using System.Web.Mvc;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using AllyisApps.Services;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
@@ -25,7 +26,7 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult Unsubscribe(int id)
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
 				ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(id);
 
@@ -51,19 +52,19 @@ namespace AllyisApps.Controllers
 				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Errors.ModelNullMessage), ControllerConstants.Subscription, ActionConstants.Unsubscribe));
 			}
 
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
 				try
 				{
-					model.Billing.Customer = CrmService.RetrieveCustomer(CrmService.GetOrgBillingServicesCustomerId());
+					model.Billing.Customer = Service.RetrieveCustomer(Service.GetOrgBillingServicesCustomerId());
 					if (model.Billing.Customer != null)
 					{
-						string subscriptionId = CrmService.GetSubscriptionId(model.Billing.Customer.Id);
+						string subscriptionId = Service.GetSubscriptionId(model.Billing.Customer.Id);
 						if (subscriptionId != null)
 						{
-							CrmService.DeleteSubscription(model.Billing.Customer.Id, subscriptionId.Trim());
-							CrmService.DeleteSubscriptionPlan(subscriptionId);
-							CrmService.AddBillingHistory("Unsubscribing from product", model.SelectedSku);
+							Service.DeleteSubscription(model.Billing.Customer.Id, subscriptionId.Trim());
+							Service.DeleteSubscriptionPlan(subscriptionId);
+							Service.AddBillingHistory("Unsubscribing from product", model.SelectedSku);
 						}
 					}
 				}
@@ -74,8 +75,8 @@ namespace AllyisApps.Controllers
 
 				if (model.CurrentSubscription != null)
 				{
-					CrmService.Unsubscribe(model.CurrentSubscription.SubscriptionId);
-					string formattedNotificationString = string.Format("{0} has been unsubscribed from the license {1}.", OrgService.GetOrganization(model.OrganizationId).Name, CrmService.GetSkuDetails(model.PreviousSku).Name);
+					Service.Unsubscribe(model.CurrentSubscription.SubscriptionId);
+					string formattedNotificationString = string.Format("{0} has been unsubscribed from the license {1}.", Service.GetOrganization(model.OrganizationId).Name, Service.GetSkuDetails(model.PreviousSku).Name);
 					Notifications.Add(new BootstrapAlert(formattedNotificationString, Variety.Success));
 				}
 

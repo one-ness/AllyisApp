@@ -7,6 +7,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+
 using AllyisApps.Core;
 using AllyisApps.ViewModels;
 
@@ -41,7 +42,7 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				if (await AccountService.ResetPassword(int.Parse(model.UserId), model.Code, model.Password))
+				if (await Service.ResetPassword(int.Parse(model.UserId), model.Code, model.Password))
 				{
 					return this.RedirectToAction(ActionConstants.ResetPasswordConfirmation, ControllerConstants.Account);
 				}

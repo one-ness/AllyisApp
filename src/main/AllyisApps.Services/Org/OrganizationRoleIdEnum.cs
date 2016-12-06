@@ -6,7 +6,7 @@
 
 #pragma warning disable 1591
 
-namespace AllyisApps.Services.Account
+namespace AllyisApps.Services
 {
 	/// <summary>
 	/// Organization roles of a user.

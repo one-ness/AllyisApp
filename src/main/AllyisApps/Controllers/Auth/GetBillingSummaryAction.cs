@@ -41,10 +41,10 @@ namespace AllyisApps.Controllers
 			List<BillingHistoryItemViewModel> result = new List<BillingHistoryItemViewModel>();
 
 			// Creation of items from Stripe data
-			BillingServicesCustomerId customerId = CrmService.GetOrgBillingServicesCustomerId();
+			BillingServicesCustomerId customerId = Service.GetOrgBillingServicesCustomerId();
 			if (customerId != null)
 			{
-				foreach (BillingServicesInvoice invoice in CrmService.ListInvoices(customerId))
+				foreach (BillingServicesInvoice invoice in Service.ListInvoices(customerId))
 				{
 					result.Add(new BillingHistoryItemViewModel
 					{
@@ -56,7 +56,7 @@ namespace AllyisApps.Controllers
 					});
 				}
 
-				foreach (BillingServicesCharge charge in CrmService.ListCharges(customerId))
+				foreach (BillingServicesCharge charge in Service.ListCharges(customerId))
 				{
 					result.Add(new BillingHistoryItemViewModel
 					{
@@ -70,7 +70,7 @@ namespace AllyisApps.Controllers
 			}
 
 			// Creation of items from our database
-			foreach (BillingHistoryItemInfo item in CrmService.GetBillingHistory())
+			foreach (BillingHistoryItemInfo item in Service.GetBillingHistory())
 			{
 				result.Add(new BillingHistoryItemViewModel
 				{

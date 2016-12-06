@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.Org
+namespace AllyisApps.Services
 {
 	/// <summary>
 	/// An enum to keep track of the starting day selection.

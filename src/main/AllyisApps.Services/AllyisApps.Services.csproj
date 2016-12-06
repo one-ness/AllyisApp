@@ -77,6 +77,7 @@
     <Compile Include="Billing\BillingServicesHandler.cs" />
     <Compile Include="Billing\BillingHistoryItemInfo.cs" />
     <Compile Include="ServiceConstants.cs" />
+    <Compile Include="Service.cs" />
     <Compile Include="Utilities\InfoObjectsUtility.cs" />
     <Compile Include="Project\CustomerInfo.cs" />
     <Compile Include="Org\HolidayInfo.cs" />

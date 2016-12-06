@@ -8,8 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using AllyisApps.Services.Account;
-using AllyisApps.Services.Org;
 using AllyisApps.Services.Utilities;
 
 namespace AllyisApps.Services.TimeTracker

@@ -6,6 +6,7 @@
 
 using System.Web.Mvc;
 using AllyisApps.Core;
+using AllyisApps.Services;
 using AllyisApps.ViewModels.Shared;
 
 namespace AllyisApps.Controllers
@@ -22,15 +23,15 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult OrgIndex()
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.ViewOrganization))
+			if (Service.Can(Actions.CoreAction.ViewOrganization))
 			{
 				SubscriptionsViewModel subscriptions = new SubscriptionsViewModel
 				{
-					Subscriptions = CrmService.GetSubscriptionsDisplay(),
-					ProductList = Services.Crm.CrmService.GetProductInfoList(),
-					OrgInfo = OrgService.GetOrganization(UserContext.ChosenOrganizationId),
-					CanEditOrganization = AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization),
-					TimeTrackerViewSelf = AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf)
+					Subscriptions = Service.GetSubscriptionsDisplay(),
+					ProductList = Service.GetProductInfoList(),
+					OrgInfo = Service.GetOrganization(UserContext.ChosenOrganizationId),
+					CanEditOrganization = Service.Can(Actions.CoreAction.EditOrganization),
+					TimeTrackerViewSelf = Service.Can(Actions.CoreAction.TimeTrackerEditSelf)
 				};
 
 				return this.View(subscriptions);

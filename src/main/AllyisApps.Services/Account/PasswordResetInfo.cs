@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.Services.Account
+namespace AllyisApps.Services
 {
 	/// <summary>
 	/// Password reset information.

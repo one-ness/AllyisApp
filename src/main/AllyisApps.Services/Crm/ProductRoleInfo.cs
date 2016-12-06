@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.Services.Crm
+namespace AllyisApps.Services
 {
 	/// <summary>
 	/// Represents a product role.

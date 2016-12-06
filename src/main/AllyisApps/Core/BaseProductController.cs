@@ -5,10 +5,9 @@
 //------------------------------------------------------------------------------
 
 using System.Web.Mvc;
-using AllyisApps.Services.Crm;
-using AllyisApps.Services.Project;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.Utilities;
+using AllyisApps.Services;
 
 namespace AllyisApps.Core
 {
@@ -35,11 +34,6 @@ namespace AllyisApps.Core
 		protected TimeTrackerService TimeTrackerService { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Project service.
-		/// </summary>
-		protected ProjectService ProjectService { get; set; }
-
-		/// <summary>
 		/// Override method for updating chosen subscription id for user context.
 		/// </summary>
 		/// <param name="filterContext">The ActionExecutingContext.</param>
@@ -48,7 +42,7 @@ namespace AllyisApps.Core
 			base.OnActionExecuting(filterContext);
 
 			int? subId = null;
-			SkuInfo subscription = CrmService.GetSubscriptionByOrgAndProduct((int)this.cProductId);
+			SkuInfo subscription = this.Service.GetSubscriptionByOrgAndProduct((int)this.cProductId);
 			if (subscription != null)
 			{
 				subId = subscription.SubscriptionId;
@@ -68,12 +62,10 @@ namespace AllyisApps.Core
 					this.UserContext.ChosenSubscriptionId = 0;
 				}
 
-				CrmService.UpdateActiveSubscription(subId); // Active subscription column in the database won't allow a subId of 0, but it will allow NULL
+				this.Service.UpdateActiveSubscription(subId); // Active subscription column in the database won't allow a subId of 0, but it will allow NULL
 			}
 
 			// Init product services with latest user info
-			this.ProjectService = new ProjectService(GlobalSettings.SqlConnectionString, this.UserContext);
-            this.ProjectService.SetServices(this.AuthorizationService, this.AccountService, this.CrmService);
 			this.TimeTrackerService = new TimeTrackerService(GlobalSettings.SqlConnectionString, this.UserContext);
 		}
 	}

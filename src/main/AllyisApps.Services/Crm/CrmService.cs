@@ -13,33 +13,16 @@ using System.Data.OleDb;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
-using AllyisApps.Services.Account;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
-using AllyisApps.Services.Project;
 using AllyisApps.Services.Utilities;
 
-namespace AllyisApps.Services.Crm
-{
+namespace AllyisApps.Services { 
 	/// <summary>
 	/// Services for Cutomer Relationship Management related functions (billing, subscriptions).
 	/// </summary>
-	public partial class CrmService : BaseService
+	public partial class Service : BaseService
 	{
-		/// <summary>
-		/// Authorization in use for select methods.
-		/// </summary>
-		private AuthorizationService authorizationService;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CrmService"/> class.
-		/// </summary>
-		/// <param name="connectionString">The connection string.</param>
-		public CrmService(string connectionString) : base(connectionString)
-		{
-			this.authorizationService = new AuthorizationService(connectionString);
-		}
-
 		/// <summary>
 		/// Gets a list of <see cref="ProductInfo"/>s for all available products.
 		/// </summary>
@@ -97,16 +80,6 @@ namespace AllyisApps.Services.Crm
 		}
 
 		/// <summary>
-		/// Sets the UserContext.
-		/// </summary>
-		/// <param name="userContext">The UserContext.</param>
-		public new void SetUserContext(UserContext userContext)
-		{
-			base.SetUserContext(userContext);
-			this.authorizationService.SetUserContext(userContext);
-		}
-
-		/// <summary>
 		/// Gets a <see cref="CustomerInfo"/>.
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
@@ -145,7 +118,7 @@ namespace AllyisApps.Services.Crm
 		/// <returns>Customer id.</returns>
 		public int? CreateCustomer(CustomerInfo customer)
 		{
-			if (this.authorizationService.Can(Actions.CoreAction.EditCustomer) && customer != null)
+			if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
 			{
 				CustomerDBEntity dbe = new CustomerDBEntity
 				{
@@ -207,7 +180,7 @@ namespace AllyisApps.Services.Crm
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool UpdateCustomer(CustomerInfo customer)
 		{
-			if (this.authorizationService.Can(Actions.CoreAction.EditCustomer) && customer != null)
+			if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
 			{
 				CustomerDBEntity dbe = new CustomerDBEntity
 				{
@@ -241,7 +214,7 @@ namespace AllyisApps.Services.Crm
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool DeleteCustomer(int customerId)
 		{
-			if (this.authorizationService.Can(Actions.CoreAction.EditCustomer))
+			if (this.Can(Actions.CoreAction.EditCustomer))
 			{
 				DBHelper.DeleteCustomer(customerId);
 				return true;
@@ -304,7 +277,7 @@ namespace AllyisApps.Services.Crm
 			{
 				throw new ArgumentNullException("billingServicesEmail", "Email address must have a value.");
 			}
-			else if (!AccountService.IsEmailAddressValid(billingServicesEmail))
+			else if (!Service.IsEmailAddressValid(billingServicesEmail))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
@@ -360,7 +333,7 @@ namespace AllyisApps.Services.Crm
 			{
 				throw new ArgumentNullException("billingServicesEmail", "Email address must have a value.");
 			}
-			else if (!AccountService.IsEmailAddressValid(billingServicesEmail))
+			else if (!Service.IsEmailAddressValid(billingServicesEmail))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
@@ -392,7 +365,7 @@ namespace AllyisApps.Services.Crm
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool RemoveBilling()
 		{
-			if (this.authorizationService.Can(Actions.CoreAction.EditOrganization))
+			if (this.Can(Actions.CoreAction.EditOrganization))
 			{
 				DBHelper.RemoveBilling(UserContext.ChosenOrganizationId);
 				return true;
@@ -912,7 +885,7 @@ namespace AllyisApps.Services.Crm
 				throw new ArgumentOutOfRangeException("productId", "Product ID cannot be 0 or negative.");
 			}
 
-			if (productId == CrmService.GetProductIdByName("TimeTracker"))
+			if (productId == Service.GetProductIdByName("TimeTracker"))
 			{
 				DBHelper.InitializeTimeTrackerSettings(UserContext.ChosenOrganizationId);
 			}

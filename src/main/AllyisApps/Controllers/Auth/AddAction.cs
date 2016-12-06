@@ -10,9 +10,8 @@ using System.Linq;
 using System.Web.Mvc;
 
 using AllyisApps.Core;
-using AllyisApps.Services.Account;
+using AllyisApps.Services;
 using AllyisApps.Services.Billing;
-using AllyisApps.Services.Org;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
@@ -31,7 +30,7 @@ namespace AllyisApps.Controllers
 		public ActionResult Add(string returnUrl)
 		{
 			// Only owners should view this page
-			if (AuthorizationService.Can(Actions.CoreAction.EditOrganization))
+			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
 				OrganizationAddMembersViewModel model = ConstructOrganizationAddMembersViewModel();
 
@@ -51,18 +50,18 @@ namespace AllyisApps.Controllers
 		{
 			OrganizationAddMembersViewModel result = new OrganizationAddMembersViewModel
 			{
-				Organization = OrgService.GetOrganization(UserContext.ChosenOrganizationId),
+				Organization = Service.GetOrganization(UserContext.ChosenOrganizationId),
 				OrganizationId = UserContext.ChosenOrganizationId,
-				OrganizationProjects = OrgService.GetProjectsByOrganization(UserContext.ChosenOrganizationId)
+				OrganizationProjects = Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId)
 			};
 
 			List<SubscriptionRoleSelectionModel> roles = new List<SubscriptionRoleSelectionModel>();
-			IEnumerable<InvitationSubRoleInfo> invitedSubs = OrgService.GetInvitationSubRoles();
-			IEnumerable<SubscriptionDisplayInfo> subscriptions = CrmService.GetSubscriptionsDisplay();
+			IEnumerable<InvitationSubRoleInfo> invitedSubs = Service.GetInvitationSubRoles();
+			IEnumerable<SubscriptionDisplayInfo> subscriptions = Service.GetSubscriptionsDisplay();
 
 			foreach (SubscriptionDisplayInfo subscription in subscriptions)
 			{
-				List<SubscriptionRoleInfo> subRoles = CrmService.GetProductRolesFromSubscription(subscription.SubscriptionId).ToList();
+				List<SubscriptionRoleInfo> subRoles = Service.GetProductRolesFromSubscription(subscription.SubscriptionId).ToList();
 				subRoles.Insert(
 					0,
 					new SubscriptionRoleInfo

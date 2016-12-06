@@ -6,7 +6,7 @@
 
 using System.Web.Mvc;
 using AllyisApps.Core;
-using AllyisApps.Services.Account;
+using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
@@ -25,7 +25,7 @@ namespace AllyisApps.Controllers
 		{
 			var model = new AccountOrgsViewModel
 			{
-				Organizations = AccountService.GetOrganizationsByUserId()
+				Organizations = Service.GetOrganizationsByUserId()
 			};
 
 			return this.View(model);

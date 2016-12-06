@@ -14,9 +14,7 @@ using System.Web.Security;
 
 using AllyisApps.Core.Alert;
 using AllyisApps.Lib;
-using AllyisApps.Services.Account;
-using AllyisApps.Services.Crm;
-using AllyisApps.Services.Org;
+using AllyisApps.Services;
 using AllyisApps.Utilities;
 
 namespace AllyisApps.Core
@@ -32,11 +30,8 @@ namespace AllyisApps.Core
 		/// </summary>
 		public BaseController()
 		{
-			// init the services
-			// TODO: See note near end of OnActionExecuting()
-			this.AccountService = new AccountService(GlobalSettings.SqlConnectionString);
-			this.CrmService = new CrmService(GlobalSettings.SqlConnectionString);
-			this.OrgService = new OrgService(GlobalSettings.SqlConnectionString);
+			// init the service
+			this.Service = new Service(GlobalSettings.SqlConnectionString);
 		}
 
 		/// <summary>
@@ -58,24 +53,9 @@ namespace AllyisApps.Core
 		}
 
 		/// <summary>
-		/// Gets or sets the Account service.
+		/// Gets or sets the service.
 		/// </summary>
-		protected AccountService AccountService { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Org service.
-		/// </summary>
-		protected OrgService OrgService { get; set; }
-
-		/// <summary>
-		/// Gets or sets the CRM service.
-		/// </summary>
-		protected CrmService CrmService { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Authorization service.
-		/// </summary>
-		protected AuthorizationService AuthorizationService { get; set; }
+		protected Service Service { get; set; }
 
 		/// <summary>
 		/// Helper method for redirecting to an action in a subdomain.
@@ -102,7 +82,7 @@ namespace AllyisApps.Core
 
             // if no org is set for a user the default is "default" this catchs that
             // case until the default usercontext org is looked at
-            string url, chosenOrg = OrgService.GetSubdomainById(pOrganizationId);
+            string url, chosenOrg = Service.GetSubdomainById(pOrganizationId);
 			//if (chosenOrg == "default")       SUBDOMAINS DISABLED - to reenable, uncomment this if/else block and the "url =..." line at the end of the else
 			//{
 				url = string.Format("http://{0}/{1}", rootAndMiddle, route);
@@ -112,7 +92,7 @@ namespace AllyisApps.Core
 				// Update the ChosenOrg in the database if necessary, so that the UserContext can grab the right one
 				if (this.UserContext.ChosenOrganizationId != pOrganizationId)
 				{
-					OrgService.UpdateActiveOrganization(UserContext.UserId, pOrganizationId);
+					this.Service.UpdateActiveOrganization(UserContext.UserId, pOrganizationId);
 				}
 
 				//url = string.Format("http://{0}.{1}/{2}", chosenOrg, rootAndMiddle, route);
@@ -213,7 +193,7 @@ namespace AllyisApps.Core
 			{
 				// an authenticated request MUST have user context in the cookie.
 				this.UserContext = this.GetCookieData(Request);
-				if (this.UserContext == null || AccountService.GetUserInfo(this.UserContext.UserId) == null)
+				if (this.UserContext == null || this.Service.GetUserInfo(this.UserContext.UserId) == null)
 				{
 					// user context not found. can't proceed, redirect to login page.
 					this.SignOut(Response);
@@ -222,14 +202,12 @@ namespace AllyisApps.Core
 				}
 
 				// Populate the User Context with database info
-				this.UserContext = this.AccountService.PopulateUserContext(this.UserContext.UserId);
+				this.UserContext = this.Service.PopulateUserContext(this.UserContext.UserId);
 
 				languageID = this.UserContext.ChosenLanguageID;
 
-				// init services which requires user context
-				this.AuthorizationService = new AuthorizationService(GlobalSettings.SqlConnectionString, this.UserContext);
-				this.CrmService.SetUserContext(this.UserContext);
-				this.OrgService.SetUserContext(this.UserContext);
+				// Update service user context
+				this.Service.SetUserContext(this.UserContext);
 			}
 			else
 			{
@@ -240,7 +218,7 @@ namespace AllyisApps.Core
 				}
 			}
 
-			LanguageInfo language = AccountService.GetLanguageInfo(languageID);
+			LanguageInfo language = this.Service.GetLanguageInfo(languageID);
 			if (language != null)
 			{
 				CultureInfo cInfo = CultureInfo.CreateSpecificCulture(language.CultureName);

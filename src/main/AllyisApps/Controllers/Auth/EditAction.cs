@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services.Org;
+using AllyisApps.Services;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
@@ -31,7 +31,7 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				if (OrgService.UpdateOrganization(
+				if (Service.UpdateOrganization(
 					new OrganizationInfo()
 					{
 						OrganizationId = UserContext.ChosenOrganizationId,
@@ -67,12 +67,12 @@ namespace AllyisApps.Controllers
 		/// <returns>The result of this action.</returns>
 		public ActionResult Edit(string returnUrl)
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
 				EditOrganizationViewModel model = this.ConstructEditOrganizationViewModel(
-					OrgService.GetOrganization(UserContext.ChosenOrganizationId),
-					AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization),
-					AccountService.ValidCountries());
+					Service.GetOrganization(UserContext.ChosenOrganizationId),
+					Service.Can(Actions.CoreAction.EditOrganization),
+					Service.ValidCountries());
 
 				ViewBag.returnUrl = returnUrl;
 

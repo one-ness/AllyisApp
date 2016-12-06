@@ -11,7 +11,7 @@ using System.Web.Mvc;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Extensions.IEnumerableExtensions;
-using AllyisApps.Services.Account;
+using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels;
 using Newtonsoft.Json;
@@ -30,7 +30,7 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult ManagePermissions()
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
 				PermissionsManagementViewModel model = this.ConstructPermissionsManagementViewModel();
 				return this.View("Permission", model);
@@ -48,12 +48,12 @@ namespace AllyisApps.Controllers
 		{
 			PermissionsManagementViewModel result = new PermissionsManagementViewModel()
 			{
-				TimeTrackerId = Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker)
+				TimeTrackerId = Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker)
 			};
-			result.Subscriptions = CrmService.GetSubscriptionsDisplay();
+			result.Subscriptions = Service.GetSubscriptionsDisplay();
 
 			List<UserPermissionsManagement> permissions = new List<UserPermissionsManagement>();
-			IEnumerable<UserRolesInfo> users = OrgService.GetUserRoles();
+			IEnumerable<UserRolesInfo> users = Service.GetUserRoles();
 			foreach (UserRolesInfo user in users)
 			{
 				List<SubscriptionRoleInfo> subRoles = new List<SubscriptionRoleInfo>();
@@ -95,7 +95,7 @@ namespace AllyisApps.Controllers
 		public ActionResult ManagePermissions(string data)
 		{
 			UserPermissionsAction model = JsonConvert.DeserializeObject<UserPermissionsAction>(data);
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
 				if (model.SelectedActions == null)
 				{
@@ -110,7 +110,7 @@ namespace AllyisApps.Controllers
 				}
 
 				model.SelectedActions.OrganizationId = UserContext.ChosenOrganizationId;
-				model.SelectedActions.TimeTrackerSubscriptionId = OrgService.GetSubscriptionDetails()
+				model.SelectedActions.TimeTrackerSubscriptionId = Service.GetSubscriptionDetails()
 					.Select(x => x.SubscriptionId)
 					.SingleOrDefault();
 
@@ -178,7 +178,7 @@ namespace AllyisApps.Controllers
 		/// <param name="result">The instance of PermissionsActionResultViewModel to store result data.</param>
 		private void PerformOrganizationAssignmentAction(PermissionsAction selectedAction, IEnumerable<TargetUser> users, PermissionsActionsResults result)
 		{
-			selectedAction.OrganizationMembers = selectedAction.OrganizationMembers ?? new HashSet<int>(OrgService.GetOrganizationMemberList(selectedAction.OrganizationId).Select(x => x.UserId));
+			selectedAction.OrganizationMembers = selectedAction.OrganizationMembers ?? new HashSet<int>(Service.GetOrganizationMemberList(selectedAction.OrganizationId).Select(x => x.UserId));
 			bool containsCurrentUser = users.Select(x => x.UserId).Contains(Convert.ToInt32(UserContext.UserId));
 			if (users == null || users.Count() == 0)
 			{
@@ -234,10 +234,10 @@ namespace AllyisApps.Controllers
 						// }
 						if (selectedAction.OrgRoleTarget.Value == -1)
 						{
-							OrgService.RemoveOrganizationUser(selectedAction.OrganizationId, user.UserId);
+							Service.RemoveOrganizationUser(selectedAction.OrganizationId, user.UserId);
 							if (selectedAction.TimeTrackerSubscriptionId != 0)
 							{
-								CrmService.DeleteSubscriptionUser(selectedAction.TimeTrackerSubscriptionId, user.UserId);
+								Service.DeleteSubscriptionUser(selectedAction.TimeTrackerSubscriptionId, user.UserId);
 							}
 						}
 						else if (!selectedAction.OrganizationMembers.Contains(user.UserId))
@@ -246,7 +246,7 @@ namespace AllyisApps.Controllers
 						}
 						else
 						{
-							OrgService.UpdateOrganizationUser(user.UserId, selectedAction.OrganizationId, selectedAction.OrgRoleTarget.Value);
+							Service.UpdateOrganizationUser(user.UserId, selectedAction.OrganizationId, selectedAction.OrgRoleTarget.Value);
 						}
 
 						successResult.AffectedUserCount += 1;
@@ -283,11 +283,11 @@ namespace AllyisApps.Controllers
 		/// <param name="result">The instance of PermissionsActionResultViewModel to store result data.</param>
 		private void PerformTimeTrackerAssignmentAction(PermissionsAction selectedAction, IEnumerable<TargetUser> users, PermissionsActionsResults result)
 		{
-			selectedAction.OrganizationMembers = selectedAction.OrganizationMembers ?? new HashSet<int>(OrgService.GetOrganizationMemberList(selectedAction.OrganizationId).Select(x => x.UserId));
+			selectedAction.OrganizationMembers = selectedAction.OrganizationMembers ?? new HashSet<int>(Service.GetOrganizationMemberList(selectedAction.OrganizationId).Select(x => x.UserId));
 			SubscriptionInfo subDetails = null;
 			if (selectedAction.TimeTrackerSubscriptionId != 0)
 			{
-				subDetails = CrmService.GetSubscription(selectedAction.TimeTrackerSubscriptionId);
+				subDetails = Service.GetSubscription(selectedAction.TimeTrackerSubscriptionId);
 			}
 
 			if (subDetails == null)
@@ -297,7 +297,7 @@ namespace AllyisApps.Controllers
 				selectedAction.TimeTrackerSubscriptionId = 0;
 			}
 
-			IEnumerable<UserInfo> currentUsers = CrmService.GetUsersWithSubscriptionToProductInOrganization(selectedAction.OrganizationId, Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
+			IEnumerable<UserInfo> currentUsers = Service.GetUsersWithSubscriptionToProductInOrganization(selectedAction.OrganizationId, Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
 			IEnumerable<int> userIds = currentUsers.Select(user => user.UserId);
 
 			int alteringUsers = users.Where(x => !userIds.Contains(x.UserId)).Count();
@@ -352,7 +352,7 @@ namespace AllyisApps.Controllers
 						// }
 						if (selectedAction.TimeTrackerRoleTarget.Value == -1)
 						{
-							CrmService.DeleteSubscriptionUser(selectedAction.TimeTrackerSubscriptionId, user.UserId);
+							Service.DeleteSubscriptionUser(selectedAction.TimeTrackerSubscriptionId, user.UserId);
 						}
 						else if (!selectedAction.OrganizationMembers.Contains(user.UserId))
 						{
@@ -360,7 +360,7 @@ namespace AllyisApps.Controllers
 						}
 						else
 						{
-							OrgService.UpdateSubscriptionUserProductRole(selectedAction.TimeTrackerRoleTarget.Value, selectedAction.TimeTrackerSubscriptionId, user.UserId);
+							Service.UpdateSubscriptionUserProductRole(selectedAction.TimeTrackerRoleTarget.Value, selectedAction.TimeTrackerSubscriptionId, user.UserId);
 						}
 
 						successResult.AffectedUserCount += 1;

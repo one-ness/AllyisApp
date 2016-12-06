@@ -7,30 +7,13 @@
 using System;
 using System.Linq;
 
-namespace AllyisApps.Services.Account
+namespace AllyisApps.Services
 {
 	/// <summary>
 	/// Business logic for all authorization related operations.
 	/// </summary>
-	public class AuthorizationService : BaseService
+	public partial class Service : BaseService
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AuthorizationService"/> class.
-		/// </summary>
-		/// <param name="connectionString">The connection string.</param>
-		/// <param name="userContext">The user context.</param>
-		public AuthorizationService(string connectionString, UserContext userContext) : base(connectionString, userContext)
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AuthorizationService"/> class.
-		/// </summary>
-		/// <param name="connectionString">The connection string.</param>
-		public AuthorizationService(string connectionString) : base(connectionString)
-		{
-		}
-
 		/// <summary>
 		/// Check if the logged in user can perform the target core action.
 		/// </summary>

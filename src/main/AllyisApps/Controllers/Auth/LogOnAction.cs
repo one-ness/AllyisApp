@@ -13,7 +13,7 @@ using System.Web.Security;
 
 using AllyisApps.Core;
 using AllyisApps.Lib;
-using AllyisApps.Services.Account;
+using AllyisApps.Services;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
@@ -54,12 +54,12 @@ namespace AllyisApps.Controllers
 			if (ModelState.IsValid)
 			{
 				UserContext result = null;
-				if ((result = await AccountService.ValidateLogin(model.Email, model.Password)) != null)
+				if ((result = await Service.ValidateLogin(model.Email, model.Password)) != null)
 				{
 					// sign in
 					this.SignIn(result.UserId, result.UserName, result.Email, Response, model.RememberMe);
 
-					this.UserContext = this.AccountService.PopulateUserContext(result.UserId);
+					this.UserContext = this.Service.PopulateUserContext(result.UserId);
 
 					return this.HandleRedirects(returnUrl);
 				}
@@ -103,7 +103,7 @@ namespace AllyisApps.Controllers
             {
                 throw new ArgumentNullException("email", "Email address must have a value.");
             }
-            else if (!AccountService.IsEmailAddressValid(email))
+            else if (!Service.IsEmailAddressValid(email))
             {
                 throw new FormatException("Email address must be in a valid format.");
             }
@@ -132,7 +132,7 @@ namespace AllyisApps.Controllers
 
 				if (subIsInOrg)
 				{
-					string area = CrmService.GetProductNameBySubscriptionID(subscriptionID);
+					string area = Service.GetProductNameBySubscriptionID(subscriptionID);
 					return this.RedirectToSubDomainAction(organizationID, area);
 				}
 
@@ -151,7 +151,7 @@ namespace AllyisApps.Controllers
 						}
 						else
 						{
-							string area = CrmService.GetProductNameBySubscriptionID(this.UserContext.UserOrganizationInfoList.First().UserSubscriptionInfoList.First().SubscriptionId);
+							string area = Service.GetProductNameBySubscriptionID(this.UserContext.UserOrganizationInfoList.First().UserSubscriptionInfoList.First().SubscriptionId);
 							return this.RedirectToSubDomainAction(this.UserContext.UserOrganizationInfoList.First().OrganizationId, area);
 						}
 					}
