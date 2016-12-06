@@ -16,7 +16,8 @@ BEGIN
 		   [Customer].[Website],
 		   [Customer].[EIN],
 		   [Customer].[CreatedUTC],
-		   [Customer].[OrganizationId]
+		   [Customer].[OrganizationId],
+		   [Customer].[CustomerOrgId]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 
 	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Customer].[Country]
 	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Customer].[State]

@@ -192,4 +192,7 @@
   <data name="ProjectsFile" xml:space="preserve">
     <value>Projects File</value>
   </data>
+  <data name="CustomerOrgId" xml:space="preserve">
+    <value>Customer ID</value>
+  </data>
 </root>

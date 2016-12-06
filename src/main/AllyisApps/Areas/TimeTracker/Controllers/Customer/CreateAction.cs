@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Web.Mvc;
+using System.Linq;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
@@ -27,9 +28,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditCustomer))
 			{
-				return this.View(new EditCustomerInfoViewModel
-				{
-					ValidCountries = AccountService.ValidCountries()
+                return this.View(new EditCustomerInfoViewModel
+                {
+                    ValidCountries = AccountService.ValidCountries(),
+                    IsCreating = true,
+                    CustomerOrgId = CrmService.GetRecommendedCustomerId()
 				});
 			}
 
@@ -48,6 +51,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (ModelState.IsValid)
 			{
+                if (CrmService.GetCustomerList(this.UserContext.ChosenOrganizationId).Any(customer => customer.CustomerOrgId == model.CustomerOrgId)) // CustomerOrgId must be unique
+                {
+                    Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.CustomerOrgIdNotUnique, Variety.Danger));
+                    return this.View(model);
+                }
 				int? customerId = CrmService.CreateCustomer(new CustomerInfo()
 				{
 					ContactEmail = model.ContactEmail,
@@ -61,7 +69,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					FaxNumber = model.FaxNumber,
 					Website = model.Website,
 					EIN = model.EIN,
-					OrganizationId = this.UserContext.ChosenOrganizationId
+					OrganizationId = this.UserContext.ChosenOrganizationId,
+                    CustomerOrgId = model.CustomerOrgId
 				});
 
 				if (customerId.HasValue)

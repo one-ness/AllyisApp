@@ -122,6 +122,7 @@ namespace AllyisApps.ViewModels
 		/// Gets or sets a value indicating whether a user has permition to delete the org.
 		/// </summary>
 		public bool CanDelete { get; set; }
+
         /// <summary>
         /// Returns true if the model is being used for creating an org, and false if otherwise (e.g. editing an existing org)
         /// </summary>

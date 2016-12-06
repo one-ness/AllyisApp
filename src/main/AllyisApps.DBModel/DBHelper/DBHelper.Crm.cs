@@ -248,7 +248,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@Website", customer.Website);
 			parameters.Add("@EIN", customer.EIN);
 			parameters.Add("@OrganizationID", customer.OrganizationId);
-			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("@CustomerOrgId", customer.CustomerOrgId);
+            parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{

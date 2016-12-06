@@ -27,6 +27,7 @@ namespace AllyisApps.DBModel.Crm
 		private string cEIN;
 		private string cDateCreated;
 		private int cOrganizationId;
+        private string cCustomerOrgId;
 
 		/// <summary>
 		/// Gets or sets CustomerId.
@@ -260,5 +261,20 @@ namespace AllyisApps.DBModel.Crm
 				this.ApplyPropertyChange<CustomerDBEntity, int>(ref this.cOrganizationId, (CustomerDBEntity x) => x.cOrganizationId, value);
 			}
 		}
+
+        /// <summary>
+        /// Gets or sets the id of the customer to be used by users within the organization
+        /// </summary>
+        public string CustomerOrgId
+        {
+            get
+            {
+                return this.cCustomerOrgId;
+            }
+            set
+            {
+                this.ApplyPropertyChange<CustomerDBEntity, string>(ref this.cCustomerOrgId, (CustomerDBEntity x) => x.cCustomerOrgId, value);
+            }
+        }
 	}
 }

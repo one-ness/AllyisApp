@@ -160,6 +160,15 @@ namespace AllyisApps.Resources.TimeTracker.Views.Customer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Customer ID.
+        /// </summary>
+        public static string CustomerOrgId {
+            get {
+                return ResourceManager.GetString("CustomerOrgId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Customers File.
         /// </summary>
         public static string CustomersFile {

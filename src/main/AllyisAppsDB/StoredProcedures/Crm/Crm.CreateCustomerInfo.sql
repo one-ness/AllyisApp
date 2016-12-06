@@ -11,15 +11,16 @@
 	@Website NVARCHAR(50),
 	@EIN NVARCHAR(50),
 	@OrganizationID INT,
+	@CustomerOrgId NVARCHAR(16),
 	@retId INT OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
-	INSERT INTO [Crm].[Customer] ([Name], [Address], [City], [State], [Country], [PostalCode], [ContactEmail], [ContactPhoneNumber], [FaxNumber], [Website], [EIN], [OrganizationId])
+	INSERT INTO [Crm].[Customer] ([Name], [Address], [City], [State], [Country], [PostalCode], [ContactEmail], [ContactPhoneNumber], [FaxNumber], [Website], [EIN], [OrganizationId], [CustomerOrgId])
 	VALUES (@Name, @Address, @City,
 		(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
 		(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
-		@PostalCode, @ContactEmail, @ContactPhoneNumber, @FaxNumber, @Website, @EIN, @OrganizationID);
+		@PostalCode, @ContactEmail, @ContactPhoneNumber, @FaxNumber, @Website, @EIN, @OrganizationID, @CustomerOrgId);
 	SET @retId = SCOPE_IDENTITY();
 	SELECT SCOPE_IDENTITY();
 END

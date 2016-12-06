@@ -80,5 +80,10 @@ namespace AllyisApps.Services.Project
 		/// Gets or sets the id of the organization associated with the customer.
 		/// </summary>
 		public int OrganizationId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the id of the customer to be used by the users within the organization
+        /// </summary>
+        public string CustomerOrgId { get; set; }
 	}
 }

@@ -43,7 +43,7 @@ namespace AllyisApps.Controllers
 						Country = model.Country,
 						PostalCode = model.PostalCode,
 						PhoneNumber = model.PhoneNumber,
-						FaxNumber = model.FaxNumber
+						FaxNumber = model.FaxNumber,
 					}))
 				{
 					// Organization updated successfully
