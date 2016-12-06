@@ -34,7 +34,8 @@ namespace AllyisApps.Controllers
 			{
 				if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
 				{
-                    if (OrgService.GetOrganizationMemberList(org.OrganizationId).Any(user => user.EmployeeId == org.EmployeeId)) // Employee Id must be unique
+                    if (OrgService.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Select(user => user.EmployeeId).ToList().Union( // Employee Id must be unique; check in a union of invites and current org members
+                        OrgService.GetUserInvitations().Select(invitation => invitation.EmployeeId).ToList()).Any(id => id == org.EmployeeId))      // TODO: Make a db procedure and all subsequent methods to simply grab all of the ids instead of using this list union
                     {
                         Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.EmployeeIdNotUniqueError));
                         return this.View(org);

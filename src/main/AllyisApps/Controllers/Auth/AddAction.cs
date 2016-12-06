@@ -54,7 +54,7 @@ namespace AllyisApps.Controllers
                 Organization = OrgService.GetOrganization(UserContext.ChosenOrganizationId),
                 OrganizationId = UserContext.ChosenOrganizationId,
                 OrganizationProjects = OrgService.GetProjectsByOrganization(UserContext.ChosenOrganizationId),
-                EmployeeId = OrgService.GetRecommendedEmployeeId(UserContext.ChosenOrganizationId)
+                EmployeeId = OrgService.GetRecommendedEmployeeId()
 			};
 
 			List<SubscriptionRoleSelectionModel> roles = new List<SubscriptionRoleSelectionModel>();

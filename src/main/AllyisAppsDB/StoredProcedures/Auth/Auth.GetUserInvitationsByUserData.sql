@@ -12,7 +12,8 @@ SELECT
 	[OrganizationId], 
 	[AccessCode], 
 	[OrgRole],
-	[ProjectId] 
+	[ProjectId],
+	[EmployeeId] 
 FROM [Auth].[Invitation]
 WITH (NOLOCK)
 WHERE [Email] = @Email AND [IsActive] = 1
