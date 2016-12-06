@@ -54,7 +54,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// Permissions failure
 				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
-				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Home);
+				return this.RouteHome();
 			}
 		}
 

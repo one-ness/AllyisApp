@@ -30,13 +30,9 @@ namespace AllyisApps.Controllers
 				{
 					return this.RedirectToSubDomainAction(organizationId, product.ProductName, null, ControllerConstants.Home);
 				}
-				else
-				{
-					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Home);
-				}
 			}
 
-			return this.RedirectToAction(ActionConstants.Index);
+			return this.RouteHome();
 		}
 	}
 }

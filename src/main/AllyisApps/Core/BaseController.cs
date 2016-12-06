@@ -16,6 +16,7 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Utilities;
+using AllyisApps.Core;
 
 namespace AllyisApps.Core
 {
@@ -68,8 +69,17 @@ namespace AllyisApps.Core
 		public ActionResult RedirectToSubDomainAction(int pOrganizationId, string pArea = null, string pAction = null, string pController = null)
 		{
 			string requestUrl = Request.Url.ToString();
-            int indexOfController = requestUrl.IndexOf(Request.RequestContext.RouteData.Values["controller"].ToString());
-            string withOutControllerAction = indexOfController > -1 ? requestUrl.Substring(0, requestUrl.IndexOf(Request.RequestContext.RouteData.Values["controller"].ToString())) : requestUrl;
+            var routeData = Request.RequestContext.RouteData;
+
+            // Check for presence of area - this is a little messy, but areas are suprisingly hard to detect
+            int indexOfArea = -1;
+            if (routeData.Route.GetType() == typeof(SubdomainRoute)) {
+                string area = ((SubdomainRoute)routeData.Route).Area;
+                indexOfArea = area == null ? -1 : requestUrl.IndexOf(area);
+            }
+
+            int indexOfController = requestUrl.IndexOf(routeData.Values["controller"].ToString());
+            string withOutControllerAction = indexOfArea > -1 ? requestUrl.Substring(0, indexOfArea) : indexOfController > -1 ? requestUrl.Substring(0, indexOfController) : requestUrl;
 			string rootAndMiddle = withOutControllerAction.Substring(withOutControllerAction.IndexOf(GlobalSettings.WebRoot));
             
             //// rootAndMiddle contains just the webroot, set in WebConfig, and whatever segments were there before the controller name (e.g. language)

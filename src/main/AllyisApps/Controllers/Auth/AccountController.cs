@@ -41,7 +41,7 @@ namespace AllyisApps.Controllers
 			}
 			else
 			{
-				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Home);
+                return this.RouteHome();
 			}
 		}
 	}
