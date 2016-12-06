@@ -5,8 +5,9 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using AllyisApps.Services.Billing;
+
 using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Shared
 {

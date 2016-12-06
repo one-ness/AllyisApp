@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Areas.TimeTracker.Models;
 using AllyisApps.Core;
-using AllyisApps.Services.Project;
+using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -56,7 +56,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                     reportVMselect.Users = userSelect;
                 }
 
-                ReportViewModel reportVM = this.ConstructReportViewModel(UserContext.UserId, UserContext.ChosenOrganizationId, AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers), showExport, reportVMselect);
+                ReportViewModel reportVM = this.ConstructReportViewModel(UserContext.UserId, UserContext.ChosenOrganizationId, Service.Can(Actions.CoreAction.TimeTrackerEditOthers), showExport, reportVMselect);
 
                 DataExportViewModel dataVM = this.ConstructDataExportViewModel(reportVMselect.Users, TimeTrackerService.GetDateTimeFromDays(dateRangeStart.Value), TimeTrackerService.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
 
@@ -68,13 +68,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
                 reportVM.PreviewTotal = string.Format("{0} {1}", total, Resources.TimeTracker.Controllers.TimeEntry.Strings.HoursTotal);
 
-                IEnumerable<CompleteProjectInfo> orgProjects = OrgService.GetProjectsByOrganization(UserContext.ChosenOrganizationId);
+                IEnumerable<CompleteProjectInfo> orgProjects = Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId);
                 if (dataCount > 0)
                 {
                     IList<TablePreviewEntry> pEntries = new List<TablePreviewEntry>();
                     foreach (TimeEntryInfo data in dataVM.PreviewData)
                     {
-                        CompleteProjectInfo orgProj = data.ProjectId == 0 ? ProjectService.GetProject(0) : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
+                        CompleteProjectInfo orgProj = data.ProjectId == 0 ? Service.GetProject(0) : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
                         TablePreviewEntry previewData = new TablePreviewEntry
                         {
                             CustomerName = orgProj.CustomerName,

@@ -5,7 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using AllyisApps.Services.Org;
+using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Areas.TimeTracker.Models

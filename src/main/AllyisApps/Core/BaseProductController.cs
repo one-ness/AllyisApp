@@ -5,9 +5,10 @@
 //------------------------------------------------------------------------------
 
 using System.Web.Mvc;
+
+using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.Utilities;
-using AllyisApps.Services;
 
 namespace AllyisApps.Core
 {
@@ -67,6 +68,7 @@ namespace AllyisApps.Core
 
 			// Init product services with latest user info
 			this.TimeTrackerService = new TimeTrackerService(GlobalSettings.SqlConnectionString, this.UserContext);
+            this.TimeTrackerService.SetService(this.Service);
 		}
 	}
 }

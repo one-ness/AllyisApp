@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services.Account;
+using AllyisApps.Services;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -32,14 +32,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			int subscriptionId = UserContext.ChosenSubscriptionId;
 
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
 				if (model == null)
 				{
 					return this.Users();
 				}
 
-				model.InvitationCount = OrgService.GetInvitationSubRoles().Where(i => i.SubscriptionId == subscriptionId).Count();
+				model.InvitationCount = Service.GetInvitationSubRoles().Where(i => i.SubscriptionId == subscriptionId).Count();
 
 				IEnumerable<SubscriptionUserInfo> users = model.Users.Where(x => int.Parse(x.ProductRoleId) != 1);
 				IEnumerable<SubscriptionUserInfo> usersToRemove = model.Users.Where(x => int.Parse(x.ProductRoleId) == 1);
@@ -48,12 +48,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					foreach (SubscriptionUserInfo user in users)
 					{
-						OrgService.UpdateSubscriptionUserProductRole(int.Parse(user.ProductRoleId), subscriptionId, user.UserId);
+						Service.UpdateSubscriptionUserProductRole(int.Parse(user.ProductRoleId), subscriptionId, user.UserId);
 					}
 
 					foreach (SubscriptionUserInfo user in usersToRemove)
 					{
-						CrmService.DeleteSubscriptionUser(subscriptionId, user.UserId);
+						Service.DeleteSubscriptionUser(subscriptionId, user.UserId);
 					}
 
 					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Manage.Strings.OrganizationUserRolesUpdated, Variety.Success));
@@ -79,7 +79,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult Users()
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditOrganization))
+			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
 				EditSubscriptionUsersViewModel model = this.ConstructEditSubcriptionUsersViewModel();
 
@@ -97,7 +97,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public EditSubscriptionUsersViewModel ConstructEditSubcriptionUsersViewModel()
 		{
 			EditSubscriptionUsersViewModel result = new EditSubscriptionUsersViewModel();
-			result.Details = CrmService.GetSubscription(UserContext.ChosenSubscriptionId);
+			result.Details = Service.GetSubscription(UserContext.ChosenSubscriptionId);
 			if (result.Details == null)
 			{
 				result.IsValid = false;
@@ -107,9 +107,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				result.Details.OrganizationId = UserContext.ChosenOrganizationId;
 				result.IsValid = true;
 				result.MaxUsers = result.Details.NumberOfUsers;
-				result.InvitationCount = OrgService.GetInvitationSubRoles().Where(i => i.SubscriptionId == UserContext.ChosenSubscriptionId).Count();
-				result.Users = OrgService.GetUsers();
-				result.Roles = CrmService.GetProductRolesFromSubscription(UserContext.ChosenSubscriptionId);
+				result.InvitationCount = Service.GetInvitationSubRoles().Where(i => i.SubscriptionId == UserContext.ChosenSubscriptionId).Count();
+				result.Users = Service.GetUsers();
+				result.Roles = Service.GetProductRolesFromSubscription(UserContext.ChosenSubscriptionId);
 			}
 
 			return result;

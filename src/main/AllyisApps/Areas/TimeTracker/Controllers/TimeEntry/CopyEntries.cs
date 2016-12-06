@@ -10,6 +10,7 @@ using System.Linq;
 using System.Web.Mvc;
 
 using AllyisApps.Core;
+using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -45,11 +46,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			#endregion Validation
 
 			// Check for permission failures TODO flesh these out
-			if (userId == UserContext.UserId && !AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
+			if (userId == UserContext.UserId && !Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 			{
 				return this.View(ViewConstants.Error);
 			}
-			else if (userId != UserContext.UserId && !AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
+			else if (userId != UserContext.UserId && !Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				return this.View(ViewConstants.Error);
 			}

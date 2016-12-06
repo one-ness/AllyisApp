@@ -6,7 +6,7 @@
 
 using System.Collections.Generic;
 using System.Web.Mvc;
-using AllyisApps.Services.Project;
+using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Areas.TimeTracker.Models

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 
 using AllyisApps.Core;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -27,15 +28,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[ValidateAntiForgeryToken]
 		public JsonResult UpdateUserAJAX(int userId, List<int> offUser, List<int> onUser)
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditProject))
+			if (Service.Can(Actions.CoreAction.EditProject))
 			{
 				if (offUser != null)
 				{
 					foreach (int proj_id in offUser)
 					{
-						if (ProjectService.UpdateProjectUser(proj_id, userId, false).Equals(0))
+						if (Service.UpdateProjectUser(proj_id, userId, false).Equals(0))
 						{
-							ProjectService.DeleteProjectUser(proj_id, userId);
+							Service.DeleteProjectUser(proj_id, userId);
 						}
 					}
 				}
@@ -44,9 +45,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					foreach (int proj_id in onUser)
 					{
-						if (ProjectService.UpdateProjectUser(proj_id, userId, true).Equals(0))
+						if (Service.UpdateProjectUser(proj_id, userId, true).Equals(0))
 						{
-							ProjectService.CreateProjectUser(proj_id, userId);
+							Service.CreateProjectUser(proj_id, userId);
 						}
 					}
 				}

@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -25,11 +26,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The details view of the project.</returns>
 		public ActionResult Details(int projectId)
 		{   // Unless the user is a manager, the user shouldn't view a project he is not assigned to
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditProject) ||
-				(ProjectService.GetUsersByProjectId(projectId).Where(x => x.UserId == UserContext.UserId).FirstOrDefault() != null))
+			if (Service.Can(Actions.CoreAction.EditProject) ||
+				(Service.GetUsersByProjectId(projectId).Where(x => x.UserId == UserContext.UserId).FirstOrDefault() != null))
 			{
-				var model = ProjectService.GetProject(projectId);
-				model.CanEditProject = AuthorizationService.Can(Services.Account.Actions.CoreAction.EditProject);
+				var model = Service.GetProject(projectId);
+				model.CanEditProject = Service.Can(Actions.CoreAction.EditProject);
 				return this.View(model);
 			}
 			else

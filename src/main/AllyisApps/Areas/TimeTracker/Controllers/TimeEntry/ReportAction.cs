@@ -11,8 +11,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Areas.TimeTracker.Models;
 using AllyisApps.Core;
-using AllyisApps.Services.Account;
-using AllyisApps.Services.Project;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -38,10 +37,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
-				reportVM = this.ConstructReportViewModel(UserContext.UserId, orgId, AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers));
+				reportVM = this.ConstructReportViewModel(UserContext.UserId, orgId, Service.Can(Actions.CoreAction.TimeTrackerEditOthers));
 			}
 
-			if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
+			if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 			{
 				throw new UnauthorizedAccessException(AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReports);
 			}
@@ -72,8 +71,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				CanManage = canManage,
 				OrganizationId = organizationId,
 				ShowExport = showExport,
-				Projects = OrgService.GetProjectsByOrganization(organizationId, false),
-				Customers = CrmService.GetCustomerList(organizationId),
+				Projects = Service.GetProjectsByOrganization(organizationId, false),
+				Customers = Service.GetCustomerList(organizationId),
 				PreviewPageSize = 20,
 				PreviewTotal = string.Format("{0} {1}", 0, AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.HoursTotal),
 				PreviewEntries = null,
@@ -100,7 +99,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The user list.</returns>
 		private IEnumerable<SelectListItem> GetUserSelectList(int organizationId, List<int> usersSelected)
 		{
-			IList<UserInfo> users = (IList<UserInfo>)CrmService.GetUsersWithSubscriptionToProductInOrganization(organizationId, Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker)).ToList<UserInfo>();
+			IList<UserInfo> users = (IList<UserInfo>)Service.GetUsersWithSubscriptionToProductInOrganization(organizationId, Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker)).ToList<UserInfo>();
 			users.Insert(0, new UserInfo { FirstName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.AllUsersFirst, LastName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.AllUsersLast, UserId = -1 });
 
 			// select current user by default
@@ -131,7 +130,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The customer list.</returns>
 		private IEnumerable<SelectListItem> GetCustomerSelectList(int organizationId, int customerSelected)
 		{
-			IList<CustomerInfo> customerData = CrmService.GetCustomerList(organizationId).ToList<CustomerInfo>();
+			IList<CustomerInfo> customerData = Service.GetCustomerList(organizationId).ToList<CustomerInfo>();
 			customerData.Insert(0, new CustomerInfo { Name = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.NoFilter, CustomerId = 0 });
 
 			var cSelectList = new List<SelectListItem>();
@@ -180,7 +179,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Disabled = false
 				});
 
-				IList<ProjectInfo> projectData = ProjectService.GetProjectsByCustomer(customerSelected).ToList<ProjectInfo>();
+				IList<ProjectInfo> projectData = Service.GetProjectsByCustomer(customerSelected).ToList<ProjectInfo>();
 				foreach (var project in projectData)
 				{
 					pSelectList.Add(new SelectListItem

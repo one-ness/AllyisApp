@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using AllyisApps.Areas.TimeTracker.Core;
 using AllyisApps.Areas.TimeTracker.Models;
 using AllyisApps.Core;
+using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -31,14 +32,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			TimeEntryInfo entry = TimeTrackerService.GetTimeEntry(model.TimeEntryId);
 			if (entry.UserId == Convert.ToInt32(UserContext.UserId))
 			{
-				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
+				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{
 					return this.Json(new { status = "error", message = Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntryDelete, e = new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntryDelete) });
 				}
 			}
 			else
 			{
-				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
+				if (!Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 				{
 					return this.Json(new
 					{

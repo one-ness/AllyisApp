@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using AllyisApps.Services;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -28,9 +29,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult Create(int id)
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditProject))
+			if (Service.Can(Actions.CoreAction.EditProject))
 			{
-				var list = OrgService.GetUsers();
+				var list = Service.GetUsers();
 				var subList = new List<BasicUserInfoViewModel>();
 
 				foreach (var user in list)
@@ -68,7 +69,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditProject))
+				if (Service.Can(Actions.CoreAction.EditProject))
 				{
 					if (model == null)
 					{
@@ -105,7 +106,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (model.OrganizationId == null)
 			{
-				return ProjectService.CreateProjectFromCustomerIdOnly(
+				return Service.CreateProjectFromCustomerIdOnly(
 					model.ParentCustomerId,
 					model.ProjectName,
 					model.PriceType,
@@ -114,7 +115,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
-				return ProjectService.CreateProject(
+				return Service.CreateProject(
 					(int)model.OrganizationId,
 					model.ParentCustomerId,
 					model.ProjectName,

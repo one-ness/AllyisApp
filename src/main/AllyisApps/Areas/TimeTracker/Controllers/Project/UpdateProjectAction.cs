@@ -38,7 +38,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				project.OrganizationId = UserContext.ChosenOrganizationId;
 			}
 
-			ProjectService.UpdateProjectAndUsers(
+			Service.UpdateProjectAndUsers(
 				project.ProjectId,
 				project.ProjectName,
 				project.PriceType,

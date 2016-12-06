@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using AllyisApps.Areas.TimeTracker.Models;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -40,7 +41,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (userId.Count == 1 && userId[0] == Convert.ToInt32(UserContext.UserId))
 			{
 				// if (Permissions.Cannot(ProductAction.TimeTrackerCreateReportSelf, OrganizationId, TimeTrackerID))
-				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
+				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{
 					throw new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReports);
 				}
@@ -48,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			else
 			{
 				// if (Permissions.Cannot(ProductAction.TimeTrackerCreateReportOthers, OrganizationId, TimeTrackerID))
-				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
+				if (!Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 				{
 					throw new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReportsOtherUser);
 				}

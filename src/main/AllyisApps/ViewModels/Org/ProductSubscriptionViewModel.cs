@@ -6,9 +6,10 @@
 
 using System;
 using System.Collections.Generic;
+
+using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
-using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels
 {

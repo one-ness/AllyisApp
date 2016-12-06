@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using AllyisApps.Areas.TimeTracker.Core;
 using AllyisApps.Areas.TimeTracker.Models;
 using AllyisApps.Core;
+using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -48,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// Check permissions
 			if (model.UserId == Convert.ToInt32(UserContext.UserId))
 			{
-				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
+				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{
 					EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId);
 					return this.Json(new
@@ -62,7 +63,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
-				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
+				if (!Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 				{
 					EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId);
 					return this.Json(new
@@ -185,7 +186,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Description = entry.Description,
 				LockSaved = entry.LockSaved,
 				LockDate = TimeTrackerService.GetDayFromDateTime(TimeTrackerService.GetLockDate(entry.UserId)),
-				IsManager = CrmService.GetProductRoleForUser(ProductNameKeyConstants.TimeTracker, entry.UserId) == "Manager"
+				IsManager = Service.GetProductRoleForUser(ProductNameKeyConstants.TimeTracker, entry.UserId) == "Manager"
 			};
 		}
 

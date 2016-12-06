@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services.Project;
+using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels
 {

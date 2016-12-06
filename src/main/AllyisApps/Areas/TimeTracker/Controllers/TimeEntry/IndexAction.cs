@@ -12,9 +12,7 @@ using System.Web.Mvc;
 using AllyisApps.Areas.TimeTracker.Models;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services.Account;
-using AllyisApps.Services.Org;
-using AllyisApps.Services.Project;
+using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -33,7 +31,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Provides the view for the defined user over the date range defined.</returns>
 		public ActionResult Index(int userId = -1, int? startDate = null, int? endDate = null)
 		{
-			bool manager = AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers);
+			bool manager = Service.Can(Actions.CoreAction.TimeTrackerEditOthers);
 
 			if (userId != -1 && userId != Convert.ToInt32(UserContext.UserId))
 			{ // Trying to edit as another user
@@ -45,7 +43,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{ // Either userId is -1, or it is the current user
-				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
+				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{ // Current user cannot edit self
 					Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 					return this.Redirect("/");
@@ -101,7 +99,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DateTime endDate = SetEndingDate(endingDateTime, startOfWeek);
 
 			// Get all of the projects and initialize their total hours to 0.
-			IList<CompleteProjectInfo> allProjects = ProjectService.GetProjectsByUserAndOrganization(userId, false).ToList(); // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
+			IList<CompleteProjectInfo> allProjects = Service.GetProjectsByUserAndOrganization(userId, false).ToList(); // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
 			IDictionary<int, ProjectHours> hours = new Dictionary<int, ProjectHours>();
 			IEnumerable<HolidayInfo> holidays = TimeTrackerService.GetHolidays().Where(x => (startDate < x.Date && x.Date < endDate)); // We only care about holidays within the date range
 
@@ -113,7 +111,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = 0, ProjectName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
 
-			IEnumerable<UserInfo> users = CrmService.GetUsersWithSubscriptionToProductInOrganization(UserContext.ChosenOrganizationId, Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
+			IEnumerable<UserInfo> users = Service.GetUsersWithSubscriptionToProductInOrganization(UserContext.ChosenOrganizationId, Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
 
 			TimeEntryOverDateRangeViewModel result = new TimeEntryOverDateRangeViewModel
 			{

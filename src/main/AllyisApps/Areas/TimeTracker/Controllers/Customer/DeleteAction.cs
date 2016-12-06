@@ -23,7 +23,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The Customer index.</returns>
 		public ActionResult Delete(int id)
 		{
-			if (CrmService.DeleteCustomer(id))
+			if (Service.DeleteCustomer(id))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.CustomerDeleteNotification, Variety.Success));
 

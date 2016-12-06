@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Areas.TimeTracker.Models;
 using AllyisApps.Core;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -36,7 +37,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				});
 			}
 
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
+			if (Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				IList<object> result = new List<object>();
 				foreach (ApprovalDataModel data in model)

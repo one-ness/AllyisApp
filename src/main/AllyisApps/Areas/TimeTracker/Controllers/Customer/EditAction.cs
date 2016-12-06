@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services.Project;
+using AllyisApps.Services;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -26,9 +26,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult Edit(int id)
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditCustomer))
+			if (Service.Can(Actions.CoreAction.EditCustomer))
 			{
-				CustomerInfo customer = CrmService.GetCustomer(id);
+				CustomerInfo customer = Service.GetCustomer(id);
 				return this.View(new EditCustomerInfoViewModel
 				{
 					ContactEmail = customer.ContactEmail,
@@ -43,9 +43,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Website = customer.Website,
 					EIN = customer.EIN,
 					OrganizationId = customer.OrganizationId,
-					OrganizationName = OrgService.GetOrganization(customer.OrganizationId).Name,
+					OrganizationName = Service.GetOrganization(customer.OrganizationId).Name,
 					CustomerID = id,
-					ValidCountries = AccountService.ValidCountries()
+					ValidCountries = Service.ValidCountries()
 				});
 			}
 
@@ -64,7 +64,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				if (CrmService.UpdateCustomer(new CustomerInfo()
+				if (Service.UpdateCustomer(new CustomerInfo()
 				{
 					CustomerId = model.CustomerID,
 					ContactEmail = model.ContactEmail,

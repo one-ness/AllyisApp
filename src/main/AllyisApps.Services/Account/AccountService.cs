@@ -17,7 +17,6 @@ using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Shared;
 using AllyisApps.Lib;
 using AllyisApps.Services.Billing;
-using AllyisApps.Services.Org;
 using AllyisApps.Services.Utilities;
 
 namespace AllyisApps.Services

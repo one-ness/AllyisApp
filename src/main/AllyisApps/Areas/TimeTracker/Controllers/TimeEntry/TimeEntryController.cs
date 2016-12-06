@@ -7,6 +7,7 @@
 using System.Web.Mvc;
 
 using AllyisApps.Core;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -19,7 +20,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TimeEntryController" /> class.
 		/// </summary>
-		public TimeEntryController() : base(Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker))
+		public TimeEntryController() : base(Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker))
 		{
 		}
 	}

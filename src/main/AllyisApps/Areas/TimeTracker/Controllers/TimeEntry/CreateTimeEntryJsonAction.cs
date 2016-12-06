@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Areas.TimeTracker.Models;
 using AllyisApps.Core;
+using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -27,7 +28,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult CreateTimeEntryJson(CreateTimeEntryViewModel model)
 		{
 			// Check for permission failures
-			if (model.UserId == Convert.ToInt32(UserContext.UserId) && !AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
+			if (model.UserId == Convert.ToInt32(UserContext.UserId) && !Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 			{
 				return this.Json(new
 				{
@@ -36,7 +37,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					e = new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntry)
 				});
 			}
-			else if (model.UserId != Convert.ToInt32(UserContext.UserId) && !AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
+			else if (model.UserId != Convert.ToInt32(UserContext.UserId) && !Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				return this.Json(new
 				{

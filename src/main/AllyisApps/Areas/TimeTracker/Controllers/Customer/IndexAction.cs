@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services.Project;
+using AllyisApps.Services;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult Index()
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.ViewCustomer))
+			if (Service.Can(Actions.CoreAction.ViewCustomer))
 			{
 				return this.View(this.ConstructManageCustomerViewModel(UserContext.UserId, UserContext.ChosenOrganizationId));
 			}
@@ -45,10 +45,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The ManageCustomerViewModel.</returns>
 		public ManageCustomerViewModel ConstructManageCustomerViewModel(int userId, int orgId)
 		{
-			bool canEditProjects = AuthorizationService.Can(Services.Account.Actions.CoreAction.EditProject);
+			bool canEditProjects = Service.Can(Actions.CoreAction.EditProject);
 			IEnumerable<CompleteProjectInfo> projects = canEditProjects ?   // Show all of a customer's projects for managers, but only projects one belongs to for users
-				OrgService.GetProjectsByOrganization(orgId) : ProjectService.GetProjectsByUserId(userId);
-			IEnumerable<CustomerInfo> customers = CrmService.GetCustomerList(orgId);
+				Service.GetProjectsByOrganization(orgId) : Service.GetProjectsByUserId(userId);
+			IEnumerable<CustomerInfo> customers = Service.GetCustomerList(orgId);
 			////IEnumerable<CustomerInfo> customers = new List<CustomerInfo>();                           // TODO: Should we be showing all customers to all users? Probably need to filter this out by projects that the user is part of for non-managers
 			//  if(AuthorizationService.Can(Services.Account.Actions.CoreAction.EditProject){           something like this? someone who can actually check might try this out?
 			//  customers = CrmService.GetCustomerList(orgId)

@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -17,7 +18,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	[Authorize]
 	public class HomeController : BaseProductController
 	{
-		private static readonly int TimeTrackerID = Services.Crm.CrmService.GetProductIdByName(ProductNameKeyConstants.TimeTracker);
+		private static readonly int TimeTrackerID = Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker);
 
 		#region default constructor
 		/// <summary>
@@ -34,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The view.</returns>
 		public ActionResult Index()
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
+			if (Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 			{
 				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
 			}

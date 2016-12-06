@@ -5,7 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using AllyisApps.Services.Project;
+using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels
 {

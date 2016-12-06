@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using AllyisApps.Areas.TimeTracker.Models;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -23,7 +24,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The settings page.</returns>
 		public ActionResult Settings()
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
+			if (Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				return this.View(new SettingsViewModel()
 				{

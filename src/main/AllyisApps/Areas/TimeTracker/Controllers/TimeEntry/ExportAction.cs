@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Areas.TimeTracker.Models;
 using AllyisApps.Core;
-using AllyisApps.Services.Project;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -31,14 +31,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (userId == Convert.ToInt32(UserContext.UserId))
 			{
-				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
+				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{
 					throw new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReports);
 				}
 			}
 			else
 			{
-				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers))
+				if (!Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 				{
 					throw new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReportsOtherUser);
 				}
@@ -79,7 +79,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else if (customerId != 0)
 			{
-				IEnumerable<int> projects = ProjectService.GetProjectsByCustomer(customerId).Select(proj => proj.ProjectId).ToList();
+				IEnumerable<int> projects = Service.GetProjectsByCustomer(customerId).Select(proj => proj.ProjectId).ToList();
 				result.Data = from c in result.Data
 							  where projects.Contains(c.ProjectId)
 							  select c;
@@ -89,17 +89,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if ((userId.Count > 1) || (userId[0] == -1))
 				{
-					result.Projects = OrgService.GetProjectsByOrganization(UserContext.ChosenOrganizationId);
+					result.Projects = Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId);
 				}
 				else
 				{
 					// single user selected
-					result.Projects = ProjectService.GetProjectsByUserAndOrganization(userId[0], false);
+					result.Projects = Service.GetProjectsByUserAndOrganization(userId[0], false);
 				}
 
 				// Add default project in case there are holiday entries
 				List<CompleteProjectInfo> defaultProject = new List<CompleteProjectInfo>();
-				defaultProject.Add(ProjectService.GetProject(0));
+				defaultProject.Add(Service.GetProject(0));
 				result.Projects = result.Projects.Concat(defaultProject);
 			}
 

@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using AllyisApps.Areas.TimeTracker.Models;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services.Account;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -25,16 +25,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The user edit page.</returns>
 		public ActionResult UserEdit(int userId = -1)
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditProject))
+			if (Service.Can(Actions.CoreAction.EditProject))
 			{
-				UserInfo userInfo = AccountService.GetUserInfo(userId);
+				UserInfo userInfo = Service.GetUserInfo(userId);
 				return this.View(new UserEditViewModel
 				{
 					UserId = userId,
 					UserInfo = userInfo,
 
-					UserProjects = userInfo == null ? null : ProjectService.GetProjectsByUserId(userId),
-					AllProjects = userInfo == null ? null : OrgService.GetProjectsByOrganization(UserContext.ChosenOrganizationId),
+					UserProjects = userInfo == null ? null : Service.GetProjectsByUserId(userId),
+					AllProjects = userInfo == null ? null : Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId),
 
 					UserName = (userInfo == null) ? null : string.Format("{0} {1}", userInfo.FirstName, userInfo.LastName)
 				});

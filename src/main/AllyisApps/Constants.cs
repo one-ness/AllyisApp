@@ -147,7 +147,7 @@
 		public const string GetDetailsDataJson = "GetDetailsDataJson";
 
         /// <summary>
-        /// Action-Name: Import
+        /// Action-Name: Import.
         /// </summary>
         public const string Import = "Import";
 

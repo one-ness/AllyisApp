@@ -8,11 +8,7 @@ using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.TimeTracker;
-using AllyisApps.Services.Account;
 using AllyisApps.Services.Billing;
-using AllyisApps.Services.Crm;
-using AllyisApps.Services.Org;
-using AllyisApps.Services.Project;
 using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Services.Utilities
@@ -320,7 +316,7 @@ namespace AllyisApps.Services.Utilities
 				AccessCode = invitation.AccessCode,
 				DateOfBirth = invitation.DateOfBirth,
 				Email = invitation.Email,
-				CompressedEmail = AccountService.GetCompressedEmail(invitation.Email),
+				CompressedEmail = Service.GetCompressedEmail(invitation.Email),
 				FirstName = invitation.FirstName,
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,

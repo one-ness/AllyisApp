@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Areas.TimeTracker.Models;
 using AllyisApps.Core;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -29,12 +30,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public ActionResult GetDetailsDataJson(int userId, DateTime startingDate, DateTime endingDate)
 		{
-			bool manager = AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditOthers);
+			bool manager = Service.Can(Actions.CoreAction.TimeTrackerEditOthers);
 
 			// Permissiosn checking
 			if (userId == Convert.ToInt32(UserContext.UserId))
 			{
-				if (!AuthorizationService.Can(Services.Account.Actions.CoreAction.TimeTrackerEditSelf))
+				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{
 					return this.Json(new
 					{

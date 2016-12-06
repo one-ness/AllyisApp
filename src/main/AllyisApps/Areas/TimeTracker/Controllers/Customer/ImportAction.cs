@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="CreateAction.cs" company="Allyis, Inc.">
+// <copyright file="ImportAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -20,11 +20,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
     /// </summary>
     public partial class CustomerController : BaseProductController
     {
-
         /// <summary>
         /// POST: Customer/Import.
-        /// Code adapted from http://techbrij.com/read-excel-xls-xlsx-asp-net-mvc-upload
+        /// Code adapted from http://techbrij.com/read-excel-xls-xlsx-asp-net-mvc-upload.
         /// </summary>
+        /// <param name="FileType"></param>
+        /// <param name="upload"></param>
         /// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -66,9 +67,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                     // Import function depends on filetype selected by user
                     // Would love to have this be a Switch-Case, but the Resource strings aren't technically constants
                     if (FileType == Resources.TimeTracker.Views.Customer.Strings.CustomersFile)
-                        CrmService.ImportCustomers(result.Tables[0]);
+                        Service.ImportCustomers(result.Tables[0]);
                     else if (FileType == Resources.TimeTracker.Views.Customer.Strings.ProjectsFile)
-                        ProjectService.ImportProjects(result.Tables[0]);
+                        Service.ImportProjects(result.Tables[0]);
                     else ModelState.AddModelError("File", "Please Select a File Type");
                 }
                 else

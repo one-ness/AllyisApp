@@ -10,8 +10,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
-using AllyisApps.Services.Account;
-using AllyisApps.Services.Project;
+using AllyisApps.Services;
 using AllyisApps.ViewModels;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -29,7 +28,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The ActionResult for the Edit view.</returns>
 		public ActionResult Edit(int id)
 		{
-			if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditProject))
+			if (Service.Can(Actions.CoreAction.EditProject))
 			{
 				return this.View(this.ConstructEditProjectViewModel(id));
 			}
@@ -52,7 +51,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				if (AuthorizationService.Can(Services.Account.Actions.CoreAction.EditProject))
+				if (Service.Can(Actions.CoreAction.EditProject))
 				{
 					UpdateProject(model);
 					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.SuccessProjectEdited, Variety.Success));
@@ -79,15 +78,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The EditProjectViewModel.</returns>
 		public EditProjectViewModel ConstructEditProjectViewModel(int projectId)
 		{
-			CompleteProjectInfo projectInfo = ProjectService.GetProject(projectId);
-			IEnumerable<UserInfo> projectUserInfos = ProjectService.GetUsersByProjectId(projectInfo.ProjectId);
+			CompleteProjectInfo projectInfo = Service.GetProject(projectId);
+			IEnumerable<UserInfo> projectUserInfos = Service.GetUsersByProjectId(projectInfo.ProjectId);
 			var projectUsers = new List<BasicUserInfoViewModel>();
 			foreach (var projectUser in projectUserInfos)
 			{
 				projectUsers.Add(new BasicUserInfoViewModel(projectUser.FirstName, projectUser.LastName, projectUser.UserId)); // Simplify list for model binding
 			}
 
-			IEnumerable<SubscriptionUserInfo> subscriptionUserInfos = OrgService.GetUsers();
+			IEnumerable<SubscriptionUserInfo> subscriptionUserInfos = Service.GetUsers();
 			var subscriptionUsers = new List<BasicUserInfoViewModel>();
 
 			foreach (var su in subscriptionUserInfos)

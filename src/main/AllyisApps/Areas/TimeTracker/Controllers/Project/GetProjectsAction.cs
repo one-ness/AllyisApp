@@ -22,7 +22,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>A JsonResult of an IEnumberable of ProjectInfo's containing projects for the customer.</returns>
 		public ActionResult GetProjects(int customerID)
 		{
-			return Json(ProjectService.GetProjectsByCustomer(customerID));
+			return Json(Service.GetProjectsByCustomer(customerID));
 		}
 	}
 }

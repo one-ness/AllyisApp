@@ -20,7 +20,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Authorization in use for select methods.
 		/// </summary>
-		private AuthorizationService authorizationService;
+		private Service Service;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TimeTrackerService"/> class.
@@ -35,10 +35,16 @@ namespace AllyisApps.Services.TimeTracker
 		/// </summary>
 		/// <param name="connectionString">The connection string.</param>
 		/// <param name="userContext">The user context.</param>
-		public TimeTrackerService(string connectionString, UserContext userContext) : base(connectionString, userContext)
-		{
-			this.authorizationService = new AuthorizationService(connectionString, userContext);
-		}
+		public TimeTrackerService(string connectionString, UserContext userContext) : base(connectionString, userContext) { }
+
+        /// <summary>
+        /// Sets the service instance.
+        /// </summary>
+        /// <param name="service">Service instance from BaseController.</param>
+        public void SetService(Service service)
+        {
+            this.Service = service;
+        }
 
 		/// <summary>
 		/// Converts an int representing days since the DateTime min value (Jan 1st, 0001) into a DateTime date.
@@ -257,7 +263,7 @@ namespace AllyisApps.Services.TimeTracker
 
 			#endregion Validation
 
-			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				DBHelper.SetLockDate(UserContext.ChosenOrganizationId, userId, date);
 
@@ -283,7 +289,7 @@ namespace AllyisApps.Services.TimeTracker
 
 			#endregion Validation
 
-			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				DBHelper.CreateHoliday(InfoObjectsUtility.GetDBEntityFromHolidayInfo(holiday));
 				return true;
@@ -320,7 +326,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				DBHelper.DeleteHoliday(holidayName, date, UserContext.ChosenOrganizationId);
 
@@ -344,7 +350,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				DBHelper.CreatePayClass(payClassName, UserContext.ChosenOrganizationId);
 
@@ -368,7 +374,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				DBHelper.DeletePayClass(payClassId);
 
@@ -436,7 +442,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				DBHelper.UpdateTimeTrackerStartOfWeek(UserContext.ChosenOrganizationId, startOfWeek);
 
@@ -484,7 +490,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			if (this.authorizationService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				DBHelper.UpdateSettings(UserContext.ChosenOrganizationId, (int)startOfWeek, overtimeHours, overtimePeriod, overtimeMultiplier);
 
