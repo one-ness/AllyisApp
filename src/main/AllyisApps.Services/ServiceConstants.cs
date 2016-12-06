@@ -12,6 +12,11 @@
         public const string CustomerName = "Customer Name";
 
         /// <summary>
+        /// Customer-Property: Id
+        /// </summary>
+        public const string CustomerId = "Customer Id";
+
+        /// <summary>
         /// Customer-Property: Street Address
         /// </summary>
         public const string CustomerStreetAddress = "Customer Street Address";
@@ -64,6 +69,11 @@
         public const string ProjectName = "Project Name";
 
         /// <summary>
+        /// Project-Property: Id
+        /// </summary>
+        public const string ProjectId = "Project Id";
+
+        /// <summary>
         /// Project-Property: Type
         /// </summary>
         public const string ProjectType = "Project Type";
@@ -94,6 +104,11 @@
         /// User-Property: Last Name
         /// </summary>
         public const string UserLastName = "User Last Name";
+
+        /// <summary>
+        /// User-Property: Employee Id
+        /// </summary>
+        public const string EmployeeId = "Employee Id";
         #endregion
     }
 }

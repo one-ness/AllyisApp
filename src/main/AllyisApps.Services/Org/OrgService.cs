@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -556,6 +557,233 @@ namespace AllyisApps.Services
 		public IEnumerable<UserRolesInfo> GetUserRoles()
 		{
 			return DBHelper.GetRoles(UserContext.ChosenOrganizationId).Select(o => InfoObjectsUtility.InitializeUserRolesInfo(o));
-		}
-	}
+        }
+
+        /// <summary>
+        /// Import data from a workbook. Imports customers, projects, users, project/user relationships, and/or time entry data.
+        /// </summary>
+        /// <param name="importData">Workbook with data to import.</param>
+        public void Import(DataSet importData)
+        {
+            #region Table Links
+
+            // First, we sweep through the worksheets present and look at what types of data (column headers) are on each, noting
+            // which sheets provide crucial links between required properties.                                             
+
+            // Customer and project basic properties
+            List<DataTable> customerNameAndId = new List<DataTable>();
+            List<DataTable> projectNameAndId = new List<DataTable>();
+
+            // Project-customer link: can be either name or id for either
+            List<DataTable> projectAndCustomer = new List<DataTable>();
+            List<bool> projectUsesName = new List<bool>(); // These values correspond to the same index in the projectAndCustomer table lists.
+            List<bool> customerUsesName = new List<bool>(); // True if the name column is present (or both), false if the id column is present.
+
+            // User properties: four are necessary, so there are six possible links that are checked in turn as needed.
+            List<DataTable> userEmailAndId = new List<DataTable>();
+            List<DataTable> userEmailAndFirstName = new List<DataTable>();
+            List<DataTable> userEmailAndLastName = new List<DataTable>();
+            List<DataTable> userIdAndFirstName = new List<DataTable>();
+            List<DataTable> userIdAndLastName = new List<DataTable>();
+            List<DataTable> userFirstNameAndLastName = new List<DataTable>();
+
+            // TODO: Fill out time entry requirement
+
+            foreach (DataTable table in importData.Tables)
+            {
+                List<string> columnHeaders = new List<string>();
+                foreach(DataColumn column in table.Columns)
+                {
+                    columnHeaders.Add(column.ColumnName);
+                }
+
+                if (columnHeaders.Contains(ColumnHeaders.CustomerName) && columnHeaders.Contains(ColumnHeaders.CustomerId))
+                {
+                    customerNameAndId.Add(table);
+                }
+
+                if (columnHeaders.Contains(ColumnHeaders.ProjectName) && columnHeaders.Contains(ColumnHeaders.ProjectId))
+                {
+                    projectNameAndId.Add(table);
+                }
+
+                if ((columnHeaders.Contains(ColumnHeaders.CustomerName) || columnHeaders.Contains(ColumnHeaders.CustomerId)) &&
+                    (columnHeaders.Contains(ColumnHeaders.ProjectName) || columnHeaders.Contains(ColumnHeaders.ProjectId)))
+                {
+                    projectAndCustomer.Add(table);
+                    projectUsesName.Add(columnHeaders.Contains(ColumnHeaders.ProjectName));
+                    customerUsesName.Add(columnHeaders.Contains(ColumnHeaders.CustomerName));
+                }
+
+                if (columnHeaders.Contains(ColumnHeaders.UserEmail) && columnHeaders.Contains(ColumnHeaders.EmployeeId))
+                {
+                    userEmailAndId.Add(table);
+                }
+
+                if (columnHeaders.Contains(ColumnHeaders.UserEmail) && columnHeaders.Contains(ColumnHeaders.UserFirstName))
+                {
+                    userEmailAndFirstName.Add(table);
+                }
+
+                if (columnHeaders.Contains(ColumnHeaders.UserEmail) && columnHeaders.Contains(ColumnHeaders.UserLastName))
+                {
+                    userEmailAndLastName.Add(table);
+                }
+
+                if (columnHeaders.Contains(ColumnHeaders.EmployeeId) && columnHeaders.Contains(ColumnHeaders.UserFirstName))
+                {
+                    userIdAndFirstName.Add(table);
+                }
+
+                if (columnHeaders.Contains(ColumnHeaders.EmployeeId) && columnHeaders.Contains(ColumnHeaders.UserLastName))
+                {
+                    userIdAndLastName.Add(table);
+                }
+
+                if (columnHeaders.Contains(ColumnHeaders.UserFirstName) && columnHeaders.Contains(ColumnHeaders.UserLastName))
+                {
+                    userFirstNameAndLastName.Add(table);
+                }
+            }
+
+            #endregion
+
+            // Retrieval of existing customer and project data
+            List<Tuple<CustomerInfo, List<ProjectInfo>>> projects = new List<Tuple<CustomerInfo, List<ProjectInfo>>>();
+            foreach (CustomerInfo customer in this.GetCustomerList(this.UserContext.ChosenOrganizationId))
+            {
+                projects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(
+                    customer,
+                    this.GetProjectsByCustomer(customer.CustomerId).ToList()
+                ));
+            }
+
+            // (<projectId, List<userId's>>) Structure for final userId lists to add to projects
+            List<Tuple<int, List<int>>> projectUsers = new List<Tuple<int, List<int>>>();
+
+            // Looping through tables
+            foreach(DataTable table in importData.Tables)
+            {
+                
+            }
+
+            #region old code
+            foreach (DataRow row in importData.Tables[0].Rows)
+            {
+                if (row.ItemArray.All(i => string.IsNullOrEmpty(i?.ToString()))) break; // Avoid iterating through empty rows
+
+                // Customer name
+                string customerName = "";
+                int? customerId = 0;
+                bool customerIsSpecified = this.readColumn(row, ColumnHeaders.CustomerName, val => customerName = val);
+                List<ProjectInfo> customerProjectList = new List<ProjectInfo>();
+
+                // Creating customer & importing info
+                if (customerIsSpecified)
+                {
+                    // Only create customers that do not already exist in the org; get the id if they do
+                    if (projects.Count() == 0 ||
+                        (customerId = projects.Where(t => t.Item1.Name == customerName).Select(t => t.Item1.CustomerId).DefaultIfEmpty(0).FirstOrDefault()) == 0)
+                    {
+                        // Customer creation
+                        CustomerInfo newCustomer = new CustomerInfo() { Name = customerName, OrganizationId = this.UserContext.ChosenOrganizationId };
+                        customerId = this.CreateCustomer(newCustomer);
+                        projects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(newCustomer, new List<ProjectInfo>()));
+                    }
+                    else
+                    {
+                        customerProjectList = projects.Where(t => t.Item1.CustomerId == customerId).Select(t => t.Item2).Single(); // Projects under this customer
+                    }
+
+                    //Updating customer info
+
+                    CustomerInfo updateCustomer = this.GetCustomer(customerId.Value);
+                    bool updated = false;
+
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => updateCustomer.Address = val);
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerCity, val => updateCustomer.City = val);
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerCountry, val => updateCustomer.Country = val);
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerState, val => updateCustomer.State = val);
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => updateCustomer.PostalCode = val);
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerEmail, val => updateCustomer.ContactEmail = val);
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerPhoneNumber, val => updateCustomer.ContactPhoneNumber = val);
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerFaxNumber, val => updateCustomer.FaxNumber = val);
+                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerEIN, val => updateCustomer.EIN = val);
+
+                    if (updated)
+                    {
+                        this.UpdateCustomer(updateCustomer);
+                    }
+                }
+
+                // Project name(s)
+                string projectNameData = "";
+                this.readColumn(row, ColumnHeaders.ProjectName, val => projectNameData = val);
+                string[] projectNames = projectNameData.Split(',');
+
+                // User email(s)
+                string userEmailData = "";
+                this.readColumn(row, ColumnHeaders.UserEmail, val => userEmailData = val);
+                string[] userEmails = userEmailData.Split(',');
+
+                if (projectNameData != "")
+                {
+                    foreach (string projectName in projectNames)
+                    {
+                        int projectId = 0;
+                        // Only create projects that do not already exist in the customer; get the id if they do
+                        if (customerProjectList.Count() == 0 ||
+                            (projectId = customerProjectList.Where(p => p.Name == projectName).Select(p => p.ProjectId).DefaultIfEmpty(0).FirstOrDefault()) == 0)
+                        {
+                            // Projects being created, even if there are many, will share project information data from other columns. If none is provided, defaults are used.
+                            string projectType = "Hourly";
+                            string projectStartDate = DateTime.Now.Date.ToString();
+                            string projectEndDate = DateTime.Now.Date.AddMonths(6).ToString();
+                            this.readColumn(row, ColumnHeaders.ProjectType, val => projectType = val);
+                            this.readColumn(row, ColumnHeaders.ProjectStartDate, val => projectStartDate = val);
+                            this.readColumn(row, ColumnHeaders.ProjectEndDate, val => projectEndDate = val);
+
+                            projectId = this.CreateProject(
+                                UserContext.ChosenOrganizationId,
+                                customerId.Value,
+                                projectName,
+                                projectType,
+                                DateTime.Parse(projectStartDate),
+                                DateTime.Parse(projectEndDate)
+                            );
+                        }
+                    }
+                }
+
+
+
+            }
+            #endregion
+        }
+
+        /// <summary>
+        /// Helper method for reading column data from a spreadsheet. It will try to read data in the given column name from the given
+        /// DataRow. If it exists and there is data there (it's not blank), it will then execute the lambda function using the discovered
+        /// data, and return true. If either the column does not exist or the row has nothing in that column, the lambda will never be
+        /// executed and the function will return false.
+        /// </summary>
+        /// <param name="row">DataRow.</param>
+        /// <param name="columnName">Column name to read.</param>
+        /// <param name="useValue">Function to execute using data from column, if present.</param>
+        /// <returns>True is data found and function executed, false otherwise.</returns>
+        private bool readColumn(DataRow row, string columnName, Func<string, string> useValue)
+        {
+            try
+            {
+                string value = row[columnName].ToString();
+                if (!string.IsNullOrEmpty(value))
+                {
+                    useValue(value);
+                    return true;
+                }
+            }
+            catch (ArgumentException) { }
+            return false;
+        }
+    }
 }
