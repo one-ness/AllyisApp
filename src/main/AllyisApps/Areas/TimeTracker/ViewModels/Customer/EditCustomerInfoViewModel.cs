@@ -104,6 +104,7 @@ namespace AllyisApps.ViewModels
         [DataType(DataType.Text)]
         [Display(Name = "Customer ID")]
         public string CustomerOrgId { get; set; }
+
         /// <summary>
         /// Gets or sets the Customer's organization id.
         /// </summary>
@@ -125,7 +126,7 @@ namespace AllyisApps.ViewModels
 		public string Website { get; set; }
 
         /// <summary>
-        /// Returns true if the model is being used for creating a customer, and false if otherwise (e.g. editing an existing customer)
+        /// Gets or sets a value indicating whether the model is being used for creating a customer (true) or editing an existing customer (false).
         /// </summary>
         public bool IsCreating { get; set; }
 

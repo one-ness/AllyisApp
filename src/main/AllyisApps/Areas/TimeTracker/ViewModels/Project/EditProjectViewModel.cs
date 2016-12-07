@@ -86,7 +86,7 @@ namespace AllyisApps.ViewModels
         public string ProjectOrgId { get; set; }
 
         /// <summary>
-        /// Returns true if the model is being used for creating a project, and false if otherwise (e.g. editing an existing project)
+        /// Gets or sets a value indicating whether the model is being used for creating a project (true), or editing an existing project (false).
         /// </summary>
         public bool IsCreating { get; set; }
 

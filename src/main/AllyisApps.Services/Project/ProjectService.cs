@@ -435,7 +435,7 @@ namespace AllyisApps.Services
         public IEnumerable<ProjectInfo> GetAllProjectsForOrganization(int orgId)
         {
             var result = new List<ProjectInfo>();
-            foreach (var customer in this.CrmService.GetCustomerList(orgId))
+            foreach (var customer in this.GetCustomerList(orgId))
             {
                 result.AddRange(this.GetProjectsByCustomer(customer.CustomerId));
             }

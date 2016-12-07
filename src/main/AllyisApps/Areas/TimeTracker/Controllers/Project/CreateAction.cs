@@ -6,8 +6,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Web.Mvc;
 using System.Linq;
+using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
@@ -49,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                         SubscriptionUsers = subList,
                         StartDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today),
                         EndDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today.AddMonths(6)),
-                        ProjectOrgId = ProjectService.GetRecommendedProjectId()
+                        ProjectOrgId = Service.GetRecommendedProjectId()
 					});
 			}
 			else
@@ -78,7 +78,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					{
 						throw new ArgumentNullException("model");
 					}
-                    if (ProjectService.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Any(project => project.ProjectOrgId == model.ProjectOrgId))
+
+                    if (Service.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Any(project => project.ProjectOrgId == model.ProjectOrgId))
                     {
                         Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ProjectOrgIdNotUnique, Variety.Danger));
                         return this.View(model);

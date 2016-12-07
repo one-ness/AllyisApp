@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
 using System.Linq;
+using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
@@ -30,9 +30,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
                 return this.View(new EditCustomerInfoViewModel
                 {
-					ValidCountries = Service.ValidCountries()
+					ValidCountries = Service.ValidCountries(),
                     IsCreating = true,
-                    CustomerOrgId = CrmService.GetRecommendedCustomerId()
+                    CustomerOrgId = Service.GetRecommendedCustomerId()
 				});
 			}
 
@@ -51,11 +51,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-                if (CrmService.GetCustomerList(this.UserContext.ChosenOrganizationId).Any(customer => customer.CustomerOrgId == model.CustomerOrgId)) // CustomerOrgId must be unique
+                // CustomerOrgId must be unique
+                if (Service.GetCustomerList(this.UserContext.ChosenOrganizationId).Any(customer => customer.CustomerOrgId == model.CustomerOrgId))
                 {
                     Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.CustomerOrgIdNotUnique, Variety.Danger));
                     return this.View(model);
                 }
+
+                int? customerId = Service.CreateCustomer(new CustomerInfo()
 				{
 					ContactEmail = model.ContactEmail,
 					Name = model.Name,

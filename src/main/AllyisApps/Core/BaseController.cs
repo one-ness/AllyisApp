@@ -16,7 +16,6 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Utilities;
-using AllyisApps.Core;
 
 namespace AllyisApps.Core
 {
@@ -73,7 +72,8 @@ namespace AllyisApps.Core
 
             // Check for presence of area - this is a little messy, but areas are suprisingly hard to detect
             int indexOfArea = -1;
-            if (routeData.Route.GetType() == typeof(SubdomainRoute)) {
+            if (routeData.Route.GetType() == typeof(SubdomainRoute))
+            {
                 string area = ((SubdomainRoute)routeData.Route).Area;
                 indexOfArea = area == null ? -1 : requestUrl.IndexOf(area);
             }

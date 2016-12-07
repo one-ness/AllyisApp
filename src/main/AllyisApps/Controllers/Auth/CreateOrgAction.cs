@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult CreateOrg()
 		{
-            return this.View(new EditOrganizationViewModel() { ValidCountries = AccountService.ValidCountries(), IsCreating = true });
+            return this.View(new EditOrganizationViewModel() { ValidCountries = Service.ValidCountries(), IsCreating = true });
 		}
 
 		/// <summary>
@@ -46,8 +46,8 @@ namespace AllyisApps.Controllers
 			if (model != null && ModelState.IsValid)
 			{
 				int orgId = Service.CreateOrganization(
-					new OrganizationInfo()
-					{
+                    new OrganizationInfo()
+                    {
 						Address = model.Address,
 						City = model.City,
 						Country = model.Country,
@@ -59,7 +59,8 @@ namespace AllyisApps.Controllers
 						FaxNumber = model.FaxNumber,
 						Subdomain = model.SubdomainName
 					},
-					UserContext.UserId, model.EmployeeId);
+                    UserContext.UserId, model.EmployeeId
+                );
 
 				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.OrganizationCreatedNotification, Variety.Success));
 

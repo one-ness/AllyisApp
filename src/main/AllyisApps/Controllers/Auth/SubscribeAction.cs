@@ -147,7 +147,8 @@ namespace AllyisApps.Controllers
 				model.Billing.Customer = Service.RetrieveCustomer(Service.GetOrgBillingServicesCustomerId());
 			}
 
-			if (model.Billing.Amount > 0) // Users >= 500 (the hardcoded free amount) will not trigger this
+            // Users >= 500 (the hardcoded free amount) will not trigger this
+            if (model.Billing.Amount > 0)
 			{
 				if ((token == null) && (model.Token == null))
 				{

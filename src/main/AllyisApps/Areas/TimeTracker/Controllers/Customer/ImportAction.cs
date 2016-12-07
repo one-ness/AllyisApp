@@ -24,12 +24,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// POST: Customer/Import.
         /// Code adapted from http://techbrij.com/read-excel-xls-xlsx-asp-net-mvc-upload.
         /// </summary>
-        /// <param name="FileType"></param>
-        /// <param name="upload"></param>
+        /// <param name="upload">File to upload.</param>
+        /// <param name="fileType">Type of uploaded file.</param>
         /// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Import(HttpPostedFileBase upload, string FileType)
+        public ActionResult Import(HttpPostedFileBase upload, string fileType)
         {
             // TODO: Replace ModelState errors with exception catches and notifications
             // TODO: Buff up the error handling (catch errors from import functions, etc.)
@@ -43,8 +43,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
                     // We return the interface, so that
                     IExcelDataReader reader = null;
-
-
+                    
                     if (upload.FileName.EndsWith(".xls"))
                     {
                         reader = ExcelReaderFactory.CreateBinaryReader(stream);
@@ -65,12 +64,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                     reader.Close();
 
                     Service.Import(result);
+
                     // Import function depends on filetype selected by user
                     // Would love to have this be a Switch-Case, but the Resource strings aren't technically constants
                     /*
-                    if (FileType == Resources.TimeTracker.Views.Customer.Strings.CustomersFile)
+                    if (fileType == Resources.TimeTracker.Views.Customer.Strings.CustomersFile)
                         Service.ImportCustomers(result.Tables[0]);
-                    else if (FileType == Resources.TimeTracker.Views.Customer.Strings.ProjectsFile)
+                    else if (fileType == Resources.TimeTracker.Views.Customer.Strings.ProjectsFile)
                         Service.ImportProjects(result.Tables[0]);
                     else ModelState.AddModelError("File", "Please Select a File Type");
                     */
@@ -80,6 +80,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                     ModelState.AddModelError("File", "Please Upload Your file");
                 }
             }
+
             return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
         }
     }

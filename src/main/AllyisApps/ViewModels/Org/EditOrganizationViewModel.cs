@@ -124,9 +124,10 @@ namespace AllyisApps.ViewModels
 		public bool CanDelete { get; set; }
 
         /// <summary>
-        /// Returns true if the model is being used for creating an org, and false if otherwise (e.g. editing an existing org)
+        /// Gets or sets a value indicating whether the model is being used for creating an org (true), or editing an existing org (false).
         /// </summary>
         public bool IsCreating { get; set; }
+
 		/// <summary>
 		/// Gets a list of valid countries.
 		/// </summary>

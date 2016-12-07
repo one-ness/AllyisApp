@@ -107,8 +107,7 @@ namespace AllyisApps.Services {
 				Website = dbe.Website,
 				EIN = dbe.EIN,
 				CreatedUTC = dbe.CreatedUTC,
-				OrganizationId = dbe.OrganizationId,
-                CustomerOrgId = dbe.CustomerOrgId
+				OrganizationId = dbe.OrganizationId
 			};
 		}
 
@@ -136,8 +135,7 @@ namespace AllyisApps.Services {
 					Website = customer.Website,
 					EIN = customer.EIN,
 					CreatedUTC = customer.CreatedUTC,
-					OrganizationId = customer.OrganizationId,
-                    CustomerOrgId = customer.CustomerOrgId
+					OrganizationId = customer.OrganizationId
 				};
 
 				return DBHelper.CreateCustomerInfo(dbe);
@@ -253,8 +251,7 @@ namespace AllyisApps.Services {
 						Website = dbe.Website,
 						EIN = dbe.EIN,
 						CreatedUTC = dbe.CreatedUTC,
-						OrganizationId = dbe.OrganizationId,
-                        CustomerOrgId = dbe.CustomerOrgId
+						OrganizationId = dbe.OrganizationId
 					});
 				}
 			}
@@ -974,12 +971,21 @@ namespace AllyisApps.Services {
 			return handler.RetrieveCustomer(customerId);
 		}
 
+        /// <summary>
+        /// Gets the next recommended customer id, by incrementing the highest one that currently exists, or returning all 0's if none exist.
+        /// </summary>
+        /// <returns>The next logical unique customer id.</returns>
         public string GetRecommendedCustomerId()
         {
-            // return this.IncrementAlphanumericCharArray(this.GetOrganizationMemberList(orgId).LastOrDefault().EmployeeId.ToCharArray()).ToString();
             var customers = this.GetCustomerList(this.UserContext.ChosenOrganizationId);
-            if (customers.Count() > 0) return new string(this.IncrementAlphanumericCharArray(customers.OrderBy(c => c.CustomerOrgId).LastOrDefault().CustomerOrgId.ToCharArray()));
-            else return "0000000000000000"; // 16 character max, arbitrary default id
+            if (customers.Count() > 0)
+            {
+                return this.IncrementAlphanumericCharArray(customers.Select(c => c.CustomerOrgId).ToList().OrderBy(id => id).LastOrDefault().ToCharArray()).ToString();
+            }
+            else
+            {
+                return "0000000000000000"; // 16 character max, arbitrary default id
+            }
         }
-    }
+	}
 }

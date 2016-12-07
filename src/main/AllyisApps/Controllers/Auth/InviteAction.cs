@@ -33,12 +33,15 @@ namespace AllyisApps.Controllers
 			{
 				if (Service.Can(Actions.CoreAction.EditOrganization))
 				{
-                    if (OrgService.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Select(user => user.EmployeeId).ToList().Union( // Employee Id must be unique; check in a union of invites and current org members
-                        OrgService.GetUserInvitations().Select(invitation => invitation.EmployeeId).ToList()).Any(id => id == org.EmployeeId))      // TODO: Make a db procedure and all subsequent methods to simply grab all of the ids instead of using this list union
+                    // Employee Id must be unique; check in a union of invites and current org members
+                    // TODO: Make a db procedure and all subsequent methods to simply grab all of the ids instead of using this list union
+                    if (Service.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Select(user => user.EmployeeId).ToList().Union(
+                        Service.GetUserInvitations().Select(invitation => invitation.EmployeeId).ToList()).Any(id => id == org.EmployeeId))
                     {
                         Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.EmployeeIdNotUniqueError, Variety.Danger));
                         return this.RedirectToAction(ActionConstants.Add);
                     }
+
 					org = await this.ProcessUserInput(org);
 
 					foreach (string user in org.AddedUsers)
