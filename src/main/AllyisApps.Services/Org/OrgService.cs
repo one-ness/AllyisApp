@@ -565,6 +565,102 @@ namespace AllyisApps.Services
         /// <param name="importData">Workbook with data to import.</param>
         public void Import(DataSet importData)
         {
+            // For some reason, linq won't work directly with DataSets, so we start by just moving the tables over to a linq-able List
+            List<DataTable> tables = new List<DataTable>();
+            foreach(DataTable table in importData.Tables)
+            {
+                tables.Add(table);
+            }
+
+            // Retrieval of existing customer and project data
+            List<Tuple<CustomerInfo, List<ProjectInfo>>> customersProjects = new List<Tuple<CustomerInfo, List<ProjectInfo>>>();
+            foreach (CustomerInfo customer in this.GetCustomerList(this.UserContext.ChosenOrganizationId))
+            {
+                customersProjects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(
+                    customer,
+                    this.GetProjectsByCustomer(customer.CustomerId).ToList()
+                ));
+            }
+
+            // Then, we loop through and see what can be imported from each table in turn. Order doesn't matter, since missing information
+            // will be sought from other tables as needed.
+            foreach (DataTable table in tables)
+            {
+                // Customer importing: requires both customer name and customer id. Other information is optional, and can be filled in later.
+                // First, we check if both required fields are present in this table, or if only one is, whether both are on another table.
+                bool hasCustomerName = table.Columns.Contains(ColumnHeaders.CustomerName);
+                bool hasCustomerId = table.Columns.Contains(ColumnHeaders.CustomerId);
+                bool canCreateCustomers = hasCustomerName && hasCustomerId;
+                DataTable customerImportLink = null;
+                if (hasCustomerName ^ hasCustomerId)
+                {
+                    customerImportLink = tables.Where(t => t.Columns.Contains(ColumnHeaders.CustomerName) && t.Columns.Contains(ColumnHeaders.CustomerId)).FirstOrDefault();
+                    if (customerImportLink != null)
+                    {
+                        canCreateCustomers = true;
+                    }
+                }
+
+                // Finally, after all checks are complete, we go through row by row and import the information
+                foreach (DataRow row in table.Rows)
+                {
+                    if (row.ItemArray.All(i => string.IsNullOrEmpty(i?.ToString()))) break; // Avoid iterating through empty rows
+
+                    // If there is no identifying information for customers, all customer related importing is skipped.
+                    if (canCreateCustomers)
+                    {
+                        // Customer: find the existing customer using name, or id of name isn't on this sheet.
+                        CustomerInfo customer = customersProjects.Select(tup => tup.Item1).Where(c => hasCustomerName ? c.Name.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerOrgId.Equals(row[ColumnHeaders.CustomerId].ToString())).FirstOrDefault();
+                        if (customer == null)
+                        {
+                            var idbool = hasCustomerId;
+                            var thissheet = row[ColumnHeaders.CustomerName].ToString();
+                            var idheader = ColumnHeaders.CustomerName;
+                            var selectstring = string.Format("'{0}' = '{1}'", idheader, row[ColumnHeaders.CustomerName].ToString());
+                            var selectresult = customerImportLink.Select(selectstring);
+                            var selectresultfirst = selectresult[0];
+                            var selectresultlookup = selectresultfirst[ColumnHeaders.CustomerId].ToString();
+
+                            // No customer was found, so a new one is created.
+                            CustomerInfo newCustomer = new CustomerInfo
+                            {
+                                // For each required field, if it is not present on this sheet, then the linked sheet is used to look it up based on the other value.
+                                Name = hasCustomerName ? row[ColumnHeaders.CustomerName].ToString() : customerImportLink.Select(
+                                    string.Format("{0} = {1}", ColumnHeaders.CustomerId, row[ColumnHeaders.CustomerId].ToString()))[0][ColumnHeaders.CustomerName].ToString(),
+                                CustomerOrgId = hasCustomerId ? row[ColumnHeaders.CustomerId].ToString() : customerImportLink.Select(
+                                    string.Format("{0} = {1}", ColumnHeaders.CustomerName, row[ColumnHeaders.CustomerName].ToString()))[0][ColumnHeaders.CustomerId].ToString()
+                            };
+                            //newCustomer.CustomerId = this.CreateCustomer(newCustomer).Value;
+                            customersProjects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(
+                                newCustomer,
+                                new List<ProjectInfo>()
+                            ));
+                            customer = newCustomer;
+                        }
+
+                        // Importing non-required customer data
+                        bool updated = false;
+
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address = val);
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerCity, val => customer.City = val);
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerCountry, val => customer.Country = val);
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerState, val => customer.State = val);
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => customer.PostalCode = val);
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerEmail, val => customer.ContactEmail = val);
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerPhoneNumber, val => customer.ContactPhoneNumber = val);
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerFaxNumber, val => customer.FaxNumber = val);
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerEIN, val => customer.EIN = val);
+
+                        if (updated)
+                        {
+                            //this.UpdateCustomer(customer);
+                        }
+                    }
+                }
+            }
+            
+            #region old code
+            /*
             #region Table Links
 
             // First, we sweep through the worksheets present and look at what types of data (column headers) are on each, noting
@@ -661,13 +757,59 @@ namespace AllyisApps.Services
             // (<projectId, List<userId's>>) Structure for final userId lists to add to projects
             List<Tuple<int, List<int>>> projectUsers = new List<Tuple<int, List<int>>>();
 
-            // Looping through tables
+            // Looping through rows in tables
             foreach(DataTable table in importData.Tables)
             {
-                
+                foreach(DataRow row in table.Rows)
+                {
+                    if (row.ItemArray.All(i => string.IsNullOrEmpty(i?.ToString()))) break; // Avoid iterating through empty rows
+
+                    // Customer name                                                                                                                    // NEXT: Use name or customer id column
+                    string customerName = "";
+                    int? customerId = 0;
+                    bool customerIsSpecified = this.readColumn(row, ColumnHeaders.CustomerName, val => customerName = val);
+                    List<ProjectInfo> customerProjectList = new List<ProjectInfo>();
+
+                    // Creating customer & importing info
+                    if (customerIsSpecified)
+                    {
+                        // Only create customers that do not already exist in the org; get the id if they do
+                        if (projects.Count() == 0 ||
+                            (customerId = projects.Where(t => t.Item1.Name == customerName).Select(t => t.Item1.CustomerId).DefaultIfEmpty(0).FirstOrDefault()) == 0)
+                        {
+                            // Customer creation
+                            CustomerInfo newCustomer = new CustomerInfo() { Name = customerName, OrganizationId = this.UserContext.ChosenOrganizationId };
+                            customerId = this.CreateCustomer(newCustomer);
+                            projects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(newCustomer, new List<ProjectInfo>()));
+                        }
+                        else
+                        {
+                            customerProjectList = projects.Where(t => t.Item1.CustomerId == customerId).Select(t => t.Item2).Single(); // Projects under this customer
+                        }
+
+                        //Updating customer info
+
+                        CustomerInfo updateCustomer = this.GetCustomer(customerId.Value);
+                        bool updated = false;
+
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => updateCustomer.Address = val);
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerCity, val => updateCustomer.City = val);
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerCountry, val => updateCustomer.Country = val);
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerState, val => updateCustomer.State = val);
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => updateCustomer.PostalCode = val);
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerEmail, val => updateCustomer.ContactEmail = val);
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerPhoneNumber, val => updateCustomer.ContactPhoneNumber = val);
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerFaxNumber, val => updateCustomer.FaxNumber = val);
+                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerEIN, val => updateCustomer.EIN = val);
+
+                        if (updated)
+                        {
+                            this.UpdateCustomer(updateCustomer);
+                        }
+                    }
+                }
             }
 
-            #region old code
             foreach (DataRow row in importData.Tables[0].Rows)
             {
                 if (row.ItemArray.All(i => string.IsNullOrEmpty(i?.ToString()))) break; // Avoid iterating through empty rows
@@ -758,6 +900,7 @@ namespace AllyisApps.Services
 
 
             }
+            */
             #endregion
         }
 

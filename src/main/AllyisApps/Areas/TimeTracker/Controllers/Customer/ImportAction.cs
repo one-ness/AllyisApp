@@ -64,13 +64,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                     DataSet result = reader.AsDataSet();
                     reader.Close();
 
+                    Service.Import(result);
                     // Import function depends on filetype selected by user
                     // Would love to have this be a Switch-Case, but the Resource strings aren't technically constants
+                    /*
                     if (FileType == Resources.TimeTracker.Views.Customer.Strings.CustomersFile)
                         Service.ImportCustomers(result.Tables[0]);
                     else if (FileType == Resources.TimeTracker.Views.Customer.Strings.ProjectsFile)
                         Service.ImportProjects(result.Tables[0]);
                     else ModelState.AddModelError("File", "Please Select a File Type");
+                    */
                 }
                 else
                 {
