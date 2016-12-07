@@ -135,7 +135,8 @@ namespace AllyisApps.Services {
 					Website = customer.Website,
 					EIN = customer.EIN,
 					CreatedUTC = customer.CreatedUTC,
-					OrganizationId = customer.OrganizationId
+					OrganizationId = customer.OrganizationId,
+                    CustomerOrgId = customer.CustomerOrgId
 				};
 
 				return DBHelper.CreateCustomerInfo(dbe);
