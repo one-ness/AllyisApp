@@ -213,4 +213,7 @@
   <data name="YourOrg" xml:space="preserve">
     <value>Your Organization</value>
   </data>
+  <data name="EmployeeIdNotUniqueError" xml:space="preserve">
+    <value>The Employee ID is not unique.</value>
+  </data>
 </root>

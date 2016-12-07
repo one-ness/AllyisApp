@@ -14,7 +14,8 @@ AS
 			[Customer].[Name] AS [CustomerName],
 			[Customer].[IsActive] AS [IsCustomerActive],
 			[ProjectUser].[IsActive] AS [IsUserActive],
-			[OrgRoleId]
+			[OrgRoleId],
+			[ProjectOrgId]
 FROM (
 	(SELECT [OrganizationId], [UserId], [OrgRoleId]
 	FROM [Auth].[OrganizationUser] WITH (NOLOCK) WHERE [UserId] = @UserId AND [OrganizationId] = @OrgId)
@@ -42,6 +43,7 @@ SELECT	[ProjectId],
 		(SELECT [Name] FROM [Crm].[Customer] WHERE [CustomerId] = 0),
 		0,
 		0,
-		0
+		0,
+		[ProjectOrgId]
 		FROM [Crm].[Project] WHERE [ProjectId] = 0
 ORDER BY [Project].[Name]

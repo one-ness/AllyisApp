@@ -174,4 +174,7 @@
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Búsqueda de usuario 🔎</value>
   </data>
+  <data name="ProjectOrgId" xml:space="preserve">
+    <value>Project ID</value>
+  </data>
 </root>

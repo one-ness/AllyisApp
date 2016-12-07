@@ -87,5 +87,10 @@ namespace AllyisApps.Services
 		/// Gets or sets a value indicating whether the current user can edit the project.
 		/// </summary>
 		public bool CanEditProject { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ID of the project to be used by the organization
+        /// </summary>
+        public string ProjectOrgId { get; set; }
 	}
 }

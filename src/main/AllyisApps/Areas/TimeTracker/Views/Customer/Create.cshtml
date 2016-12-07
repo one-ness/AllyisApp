@@ -72,8 +72,16 @@
                 @Html.EditorFor(model => model.EIN, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.EIN, string.Empty, new { @class = "text-danger" })
             </div>
+            if (Model.IsCreating)
+            {
+            <div class="form-group">
+                @Html.ReqLabelFor(m => m.CustomerOrgId, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.CustomerOrgId)
+                @Html.TextBoxFor(m => m.CustomerOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.CustomerOrgId })
+            </div>
+            }
             @Html.HiddenFor(m => m.OrganizationId)
             @Html.HiddenFor(m => m.CustomerID)
+            @Html.HiddenFor(m => m.IsCreating)
 
             <div class="form-group allyis-action-buttons">
                 @if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)

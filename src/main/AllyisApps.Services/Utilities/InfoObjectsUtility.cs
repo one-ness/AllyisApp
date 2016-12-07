@@ -322,7 +322,8 @@ namespace AllyisApps.Services.Utilities
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
 				OrgRole = invitation.OrgRole,
-				ProjectId = invitation.ProjectId
+				ProjectId = invitation.ProjectId,
+                EmployeeId = invitation.EmployeeId
 			};
 		}
 
@@ -348,7 +349,8 @@ namespace AllyisApps.Services.Utilities
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
 				OrgRole = invitation.OrgRole,
-				ProjectId = invitation.ProjectId
+				ProjectId = invitation.ProjectId,
+                EmployeeId = invitation.EmployeeId
 			};
 		}
 
@@ -379,7 +381,8 @@ namespace AllyisApps.Services.Utilities
 				PriceType = completeProject.PriceType,
 				ProjectId = completeProject.ProjectId,
 				ProjectName = completeProject.ProjectName,
-				StartDate = completeProject.StartDate
+				StartDate = completeProject.StartDate,
+                ProjectOrgId = completeProject.ProjectOrgId
 			};
 		}
 

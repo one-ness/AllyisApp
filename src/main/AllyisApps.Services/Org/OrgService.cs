@@ -60,8 +60,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="organization">Organization info.</param>
 		/// <param name="ownerId">Organization owner user Id.</param>
+        /// <param name="employeeId">Organization owner employee Id.</param>
 		/// <returns>Organizaiton Id.</returns>
-		public int CreateOrganization(OrganizationInfo organization, int ownerId)
+		public int CreateOrganization(OrganizationInfo organization, int ownerId, string employeeId)
 		{
 			if (organization == null)
 			{
@@ -73,7 +74,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("ownerId", "Organization owner's user id cannot be 0 or negative.");
 			}
 
-			return DBHelper.CreateOrganization(InfoObjectsUtility.GetDBEntityFromOrganizationInfo(organization), ownerId, (int)OrganizationRole.Owner);
+			return DBHelper.CreateOrganization(InfoObjectsUtility.GetDBEntityFromOrganizationInfo(organization), ownerId, (int)OrganizationRole.Owner, employeeId);
 		}
 
 		/// <summary>
@@ -172,7 +173,8 @@ namespace AllyisApps.Services
 		/// <param name="orgId">Id of organization to add user to.</param>
 		/// <param name="projectId">Id of project to add user to.</param>
 		/// <param name="orgRole">The role to add the user as.</param>
-		public void AddToOrganization(int userId, int orgId, int projectId, int orgRole)
+        /// <param name="employeeId">An Id for the employee to be used by the organization</param>
+		public void AddToOrganization(int userId, int orgId, int projectId, int orgRole, string employeeId)
 		{
 			#region Validation
 			if (userId <= 0)
@@ -194,13 +196,18 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentOutOfRangeException("orgRole", "Organization role value must correspond to a defined role in OrganizationRoleIdEnum.");
 			}
+            if (employeeId == null)
+            {
+                throw new ArgumentOutOfRangeException("employeeId", "The EmployeeId must not be null");
+            }
 			#endregion Validation
 
 			DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity() // ...add them to that organization as a member
 			{
 				UserId = userId,
 				OrganizationId = orgId,
-				OrgRoleId = orgRole
+				OrgRoleId = orgRole,
+                EmployeeId = employeeId
 			});
 
 			DBHelper.CreateProjectUser(projectId, userId);
@@ -557,6 +564,17 @@ namespace AllyisApps.Services
 		public IEnumerable<UserRolesInfo> GetUserRoles()
 		{
 			return DBHelper.GetRoles(UserContext.ChosenOrganizationId).Select(o => InfoObjectsUtility.InitializeUserRolesInfo(o));
+        }
+        /// <summary>
+        /// Gets a recommended EmployeeId that does not yet exist in the org
+        /// </summary>
+        /// <returns></returns>
+        public string GetRecommendedEmployeeId()
+        {
+            // return this.IncrementAlphanumericCharArray(this.GetOrganizationMemberList(orgId).LastOrDefault().EmployeeId.ToCharArray()).ToString();
+            return new string(this.IncrementAlphanumericCharArray(this.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Select(user => user.EmployeeId).ToList().Union( // Get a list of all employee ids in the org combined with
+                this.GetUserInvitations().Select(invitation => invitation.EmployeeId).ToList()).OrderBy(id => id).LastOrDefault().ToCharArray()));                // the invitations of the org, then look at the latest one and increment it
+            // TODO: Make a db procedure and all subsequent methods to simply grab all of the ids instead of using this list union
         }
 
         /// <summary>

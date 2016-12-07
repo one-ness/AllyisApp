@@ -62,5 +62,9 @@ namespace AllyisApps.Services
 		/// Gets or sets the Project Id.
 		/// </summary>
 		public int? ProjectId { get; set; }
-	}
+        /// <summary>
+		/// Gets or sets the Employee Id.
+		/// </summary>
+		public string EmployeeId { get; set; }
+    }
 }

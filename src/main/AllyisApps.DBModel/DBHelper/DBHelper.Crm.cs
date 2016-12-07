@@ -28,10 +28,11 @@ namespace AllyisApps.DBModel
 		/// <param name="customerId">The id of the customer the project is for.</param>
 		/// <param name="name">The name of project.</param>
 		/// <param name="type">The type of project pricing type.</param>
+        /// <param name="projectOrgId">The project ID as used by the organization</param>
 		/// <param name="start">The start date of the project.</param>
 		/// <param name="end">The end date of the project.</param>
 		/// <returns>Returns the id of the created project, else returns -1.</returns>
-		public int CreateProject(int organizationId, int customerId, string name, string type, DateTime start, DateTime end)
+		public int CreateProject(int organizationId, int customerId, string name, string type, string projectOrgId, DateTime start, DateTime end)
 		{
 			if (string.IsNullOrWhiteSpace(name))
 			{
@@ -48,6 +49,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@customerID", customerId);
 			parameters.Add("@Name", name);
 			parameters.Add("@PriceType", type);
+            parameters.Add("@ProjectOrgId", projectOrgId);
 			parameters.Add("@StartingDate", start.ToShortDateString());
 			parameters.Add("@EndingDate", end.ToShortDateString());
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
@@ -69,10 +71,11 @@ namespace AllyisApps.DBModel
 		/// <param name="customerId">The id of the customer the project is for.</param>
 		/// <param name="name">The name of project.</param>
 		/// <param name="type">The type of project pricing type.</param>
+        /// <param name="projectOrgId">The ID of the project used by the organization</param>
 		/// <param name="start">The start date of the project.</param>
 		/// <param name="end">The end date of the project.</param>
 		/// <returns>Returns the id of the created project, else returns -1.</returns>
-		public int CreateProjectFromCustomerIdOnly(int customerId, string name, string type, DateTime start, DateTime end)
+		public int CreateProjectFromCustomerIdOnly(int customerId, string name, string type, string projectOrgId, DateTime start, DateTime end)
 		{
 			if (string.IsNullOrWhiteSpace(name))
 			{
@@ -83,6 +86,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@customerID", customerId);
 			parameters.Add("@Name", name);
 			parameters.Add("@PriceType", type);
+            parameters.Add("@ProjectOrgId", projectOrgId);
 			parameters.Add("@StartingDate", start.ToShortDateString());
 			parameters.Add("@EndingDate", end.ToShortDateString());
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
@@ -248,7 +252,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@Website", customer.Website);
 			parameters.Add("@EIN", customer.EIN);
 			parameters.Add("@OrganizationID", customer.OrganizationId);
-			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("@CustomerOrgId", customer.CustomerOrgId);
+            parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{

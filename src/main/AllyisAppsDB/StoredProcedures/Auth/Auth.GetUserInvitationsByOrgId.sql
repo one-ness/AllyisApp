@@ -11,7 +11,8 @@ AS
 		[OrganizationId], 
 		[AccessCode], 
 		[OrgRole],
-		[ProjectId] 
+		[ProjectId],
+		[EmployeeId]
 	FROM [Auth].[Invitation]
 	WITH (NOLOCK)
 	WHERE [OrganizationId] = @OrganizationId AND [IsActive] = 1

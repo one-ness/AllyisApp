@@ -47,6 +47,13 @@ namespace AllyisApps.ViewModels
 		[EmailAddress]
 		public string Email { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Employee Id.
+        /// </summary>
+        [Required]
+        [Display(Name = "Employee ID")]
+        public string EmployeeId { get; set; }
+
 		/// <summary>
 		/// Gets or sets Organization Id.
 		/// </summary>

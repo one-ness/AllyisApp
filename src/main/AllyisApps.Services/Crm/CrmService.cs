@@ -107,7 +107,8 @@ namespace AllyisApps.Services {
 				Website = dbe.Website,
 				EIN = dbe.EIN,
 				CreatedUTC = dbe.CreatedUTC,
-				OrganizationId = dbe.OrganizationId
+				OrganizationId = dbe.OrganizationId,
+                CustomerOrgId = dbe.CustomerOrgId
 			};
 		}
 
@@ -135,7 +136,8 @@ namespace AllyisApps.Services {
 					Website = customer.Website,
 					EIN = customer.EIN,
 					CreatedUTC = customer.CreatedUTC,
-					OrganizationId = customer.OrganizationId
+					OrganizationId = customer.OrganizationId,
+                    CustomerOrgId = customer.CustomerOrgId
 				};
 
 				return DBHelper.CreateCustomerInfo(dbe);
@@ -251,7 +253,8 @@ namespace AllyisApps.Services {
 						Website = dbe.Website,
 						EIN = dbe.EIN,
 						CreatedUTC = dbe.CreatedUTC,
-						OrganizationId = dbe.OrganizationId
+						OrganizationId = dbe.OrganizationId,
+                        CustomerOrgId = dbe.CustomerOrgId
 					});
 				}
 			}
@@ -970,5 +973,13 @@ namespace AllyisApps.Services {
 			BillingServicesHandler handler = new BillingServicesHandler(serviceType);
 			return handler.RetrieveCustomer(customerId);
 		}
-	}
+
+        public string GetRecommendedCustomerId()
+        {
+            // return this.IncrementAlphanumericCharArray(this.GetOrganizationMemberList(orgId).LastOrDefault().EmployeeId.ToCharArray()).ToString();
+            var customers = this.GetCustomerList(this.UserContext.ChosenOrganizationId);
+            if (customers.Count() > 0) return new string(this.IncrementAlphanumericCharArray(customers.OrderBy(c => c.CustomerOrgId).LastOrDefault().CustomerOrgId.ToCharArray()));
+            else return "0000000000000000"; // 16 character max, arbitrary default id
+        }
+    }
 }

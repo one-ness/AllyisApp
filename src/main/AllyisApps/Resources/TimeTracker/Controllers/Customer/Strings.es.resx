@@ -129,4 +129,7 @@
   <data name="CustomerDetailsUpdated" xml:space="preserve">
     <value>Detalles del cliente se han actualizado correctamente.</value>
   </data>
+  <data name="CustomerOrgIdNotUnique" xml:space="preserve">
+    <value>This Customer ID is already in use. The Customer ID must be a unique value.</value>
+  </data>
 </root>

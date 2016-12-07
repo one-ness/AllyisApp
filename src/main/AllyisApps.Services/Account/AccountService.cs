@@ -139,7 +139,8 @@ namespace AllyisApps.Services
 					OrganizationId = invite.OrganizationId,
 					AccessCode = invite.AccessCode,
 					OrgRole = invite.OrgRole,
-					ProjectId = invite.ProjectId
+					ProjectId = invite.ProjectId,
+                    EmployeeId = invite.EmployeeId
 				});
 			}
 
@@ -171,6 +172,7 @@ namespace AllyisApps.Services
 				UserId = user.UserId,
 				OrganizationId = invite.OrganizationId,
 				OrgRoleId = invite.OrgRole,
+                EmployeeId = invite.EmployeeId
 			});
 
 			IEnumerable<InvitationSubRoleInfo> roles = this.DBHelper.GetInvitationSubRolesByInvitationId(invite.InvitationId).Select(i => InfoObjectsUtility.InitializeInvitationSubRoleInfo(i));

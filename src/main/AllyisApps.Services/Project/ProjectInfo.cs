@@ -30,5 +30,10 @@ namespace AllyisApps.Services
 		/// Gets or sets the project name.
 		/// </summary>
 		public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the project's org id
+        /// </summary>
+        public string ProjectOrgId { get; set; }
 	}
 }

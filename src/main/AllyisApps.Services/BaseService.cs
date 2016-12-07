@@ -4,6 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+
 using AllyisApps.DBModel;
 
 namespace AllyisApps.Services
@@ -51,5 +53,33 @@ namespace AllyisApps.Services
 		{
 			this.UserContext = userContext;
 		}
+
+        /// <summary>
+        /// Given a previous alphanumeric Id, increments to the next Id.
+        /// Increments numeric, then upper-case, then lower-case, then repeats.
+        /// 0000 -> 0001, 009A -> 009B, 1Bjz -> 1Bk0, etc.
+        /// </summary>
+        /// <param name="previousId">The ID string to increment</param>
+        /// <returns>A Char[] of the previous ID, incremented by one</returns>
+        protected char[] IncrementAlphanumericCharArray(char[] previousId)
+        {
+            // Define legal characters
+            var characters = new List<char>();
+            for (char c = '0'; c <= '9'; c++) characters.Add(c); // Add numeric characters first
+            for (char c = 'A'; c <= 'Z'; c++) characters.Add(c); // Add upper-case next
+            for (char c = 'a'; c <= 'z'; c++) characters.Add(c); // Add lower-case last
+            
+            // Increment the string
+            for (int i = previousId.Length -1; i>=0; --i)
+            {
+                if (previousId[i] == characters[characters.Count - 1]) previousId[i] = characters[0]; // If last value, round it to the first one and continue the loop to the next index
+                else // The value can simply be incremented, so break out of the loop
+                {
+                    previousId[i] = characters[characters.IndexOf(previousId[i]) + 1];
+                    break;
+                }
+            }
+            return previousId;
+        }
 	}
 }

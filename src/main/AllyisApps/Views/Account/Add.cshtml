@@ -74,6 +74,15 @@
                     @Html.ValidationMessageFor(model => model.LastName)
                 </div>
             </div>
+            <div class="form-group">
+                <div class="@left">
+                    @Html.ReqLabelFor(model => model.EmployeeId, AllyisApps.Resources.Views.Account.Strings.EmployeeId)
+                </div>
+                <div class="@right">
+                    @Html.TextBoxFor(model => model.EmployeeId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.EmployeeId })
+                    @Html.ValidationMessageFor(model => model.EmployeeId)
+                </div>
+            </div>
             @{var count = 0;
                 var roomInSubscription = true;
             }

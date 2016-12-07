@@ -22,12 +22,13 @@ namespace AllyisApps.ViewModels
 			this.ProjectUsers = new List<BasicUserInfoViewModel>();
 			this.SubscriptionUsers = new List<BasicUserInfoViewModel>();
 			this.SelectedProjectUserIds = new string[] { };
-		}
+            this.IsCreating = false;
+        }
 
-		/// <summary>
-		/// Gets or sets Project Name.
-		/// </summary>
-		[Required]
+        /// <summary>
+        /// Gets or sets Project Name.
+        /// </summary>
+        [Required]
 		[DataType(DataType.Text)]
 		[Display(Name = "Project Name")]
 		public string ProjectName { get; set; }
@@ -76,10 +77,23 @@ namespace AllyisApps.ViewModels
 		/// </summary>
 		public string OrganizationName { get; set; }
 
-		/// <summary>
-		/// Gets or sets the UserInfo collection of users assigned to this project.
-		/// </summary>
-		public IEnumerable<BasicUserInfoViewModel> ProjectUsers { get; set; }
+        /// <summary>
+        /// Gets or sets the Project's Organization ID.
+        /// </summary>
+        [Required]
+        [DataType(DataType.Text)]
+        [Display(Name = "Project ID")]
+        public string ProjectOrgId { get; set; }
+
+        /// <summary>
+        /// Returns true if the model is being used for creating a project, and false if otherwise (e.g. editing an existing project)
+        /// </summary>
+        public bool IsCreating { get; set; }
+
+        /// <summary>
+        /// Gets or sets the UserInfo collection of users assigned to this project.
+        /// </summary>
+        public IEnumerable<BasicUserInfoViewModel> ProjectUsers { get; set; }
 
 		/// <summary>
 		/// Gets or sets the SubscriptionUserInfo of users who are not a part of this project, but are a part of this subscription.

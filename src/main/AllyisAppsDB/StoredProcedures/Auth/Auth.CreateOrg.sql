@@ -11,7 +11,8 @@
     @PhoneNumber VARCHAR(50),
     @FaxNumber VARCHAR(50),
     @Subdomain NVARCHAR(40),
-    @retId INT OUTPUT
+    @retId INT OUTPUT,
+	@EmployeeId NVARCHAR(16)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -42,7 +43,7 @@ BEGIN
 
         SET @retId = SCOPE_IDENTITY();
 
-        EXEC [Auth].[CreateOrgUser] @UserId, @retId, @RoleId;
+        EXEC [Auth].[CreateOrgUser] @UserId, @retId, @RoleId, @EmployeeId;
     COMMIT TRANSACTION
 
     SELECT SCOPE_IDENTITY();

@@ -8,7 +8,8 @@ BEGIN
 		   [Project].[Name] AS [ProjectName],
 		   [Customer].[OrganizationId],
 		   [Customer].[CustomerId],
-		   [Customer].[Name] AS [CustomerName]
+		   [Customer].[Name] AS [CustomerName],
+		   [Project].[ProjectOrgId]
 	FROM [Crm].[ProjectUser]  WITH (NOLOCK) 
 	LEFT JOIN [Crm].[Project]	WITH (NOLOCK) ON [Project].[ProjectId] = [ProjectUser].[ProjectId]
 	LEFT JOIN [Crm].[Customer]	WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId]

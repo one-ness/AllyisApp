@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core;
@@ -32,7 +33,12 @@ namespace AllyisApps.Controllers
 			{
 				if (Service.Can(Actions.CoreAction.EditOrganization))
 				{
-					org.Organization = Service.GetOrganization(org.OrganizationId);
+                    if (OrgService.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Select(user => user.EmployeeId).ToList().Union( // Employee Id must be unique; check in a union of invites and current org members
+                        OrgService.GetUserInvitations().Select(invitation => invitation.EmployeeId).ToList()).Any(id => id == org.EmployeeId))      // TODO: Make a db procedure and all subsequent methods to simply grab all of the ids instead of using this list union
+                    {
+                        Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.EmployeeIdNotUniqueError, Variety.Danger));
+                        return this.RedirectToAction(ActionConstants.Add);
+                    }
 					org = await this.ProcessUserInput(org);
 
 					foreach (string user in org.AddedUsers)
@@ -106,7 +112,8 @@ namespace AllyisApps.Controllers
 							AccessCode = code.ToString(),
 							DateOfBirth = DateTime.MinValue.AddYears(1754),
 							OrgRole = (int)(orgAddMembers.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member),
-							ProjectId = orgAddMembers.SubscriptionProjectId
+							ProjectId = orgAddMembers.SubscriptionProjectId,
+                            EmployeeId = orgAddMembers.EmployeeId
 						});
 
 					orgAddMembers.AccessCode = code.ToString();

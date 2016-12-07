@@ -464,8 +464,9 @@ namespace AllyisApps.DBModel
 		/// <param name="org">The OrganizationDBEntity to create.</param>
 		/// <param name="ownerId">The owner's user ID.</param>
 		/// <param name="roleId">The role associated with the creator of the organization.</param>
+        /// <param name="employeeId">The employee ID for the user creating the organization.</param>
 		/// <returns>The id of the created organization or -1.</returns>
-		public int CreateOrganization(OrganizationDBEntity org, int ownerId, int roleId)
+		public int CreateOrganization(OrganizationDBEntity org, int ownerId, int roleId, string employeeId)
 		{
 			if (org == null)
 			{
@@ -486,6 +487,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@FaxNumber", org.FaxNumber);
 			parameters.Add("@Subdomain", org.Subdomain);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("@EmployeeId", employeeId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -773,6 +775,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@OrgRole", invitation.OrgRole);
 			parameters.Add("@ProjectId", invitation.ProjectId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("@EmployeeId", invitation.EmployeeId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[Auth].[CreateUserInvitation]", parameters, commandType: CommandType.StoredProcedure);
