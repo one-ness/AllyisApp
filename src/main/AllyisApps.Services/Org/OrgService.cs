@@ -613,22 +613,14 @@ namespace AllyisApps.Services
                         CustomerInfo customer = customersProjects.Select(tup => tup.Item1).Where(c => hasCustomerName ? c.Name.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerOrgId.Equals(row[ColumnHeaders.CustomerId].ToString())).FirstOrDefault();
                         if (customer == null)
                         {
-                            var idbool = hasCustomerId;
-                            var thissheet = row[ColumnHeaders.CustomerName].ToString();
-                            var idheader = ColumnHeaders.CustomerName;
-                            var selectstring = string.Format("'{0}' = '{1}'", idheader, row[ColumnHeaders.CustomerName].ToString());
-                            var selectresult = customerImportLink.Select(selectstring);
-                            var selectresultfirst = selectresult[0];
-                            var selectresultlookup = selectresultfirst[ColumnHeaders.CustomerId].ToString();
-
                             // No customer was found, so a new one is created.
                             CustomerInfo newCustomer = new CustomerInfo
                             {
                                 // For each required field, if it is not present on this sheet, then the linked sheet is used to look it up based on the other value.
                                 Name = hasCustomerName ? row[ColumnHeaders.CustomerName].ToString() : customerImportLink.Select(
-                                    string.Format("{0} = {1}", ColumnHeaders.CustomerId, row[ColumnHeaders.CustomerId].ToString()))[0][ColumnHeaders.CustomerName].ToString(),
+                                    string.Format("[{0}] = '{1}'", ColumnHeaders.CustomerId, row[ColumnHeaders.CustomerId].ToString()))[0][ColumnHeaders.CustomerName].ToString(),
                                 CustomerOrgId = hasCustomerId ? row[ColumnHeaders.CustomerId].ToString() : customerImportLink.Select(
-                                    string.Format("{0} = {1}", ColumnHeaders.CustomerName, row[ColumnHeaders.CustomerName].ToString()))[0][ColumnHeaders.CustomerId].ToString()
+                                    string.Format("[{0}] = '{1}'", ColumnHeaders.CustomerName, row[ColumnHeaders.CustomerName].ToString()))[0][ColumnHeaders.CustomerId].ToString()
                             };
                             //newCustomer.CustomerId = this.CreateCustomer(newCustomer).Value;
                             customersProjects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(
