@@ -27,7 +27,7 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult CreateOrg()
 		{
-			return this.View(new EditOrganizationViewModel() { ValidCountries = AccountService.ValidCountries() });
+            return this.View(new EditOrganizationViewModel() { ValidCountries = AccountService.ValidCountries(), IsCreating = true });
 		}
 
 		/// <summary>

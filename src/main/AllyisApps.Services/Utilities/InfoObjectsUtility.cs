@@ -326,7 +326,8 @@ namespace AllyisApps.Services.Utilities
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
 				OrgRole = invitation.OrgRole,
-				ProjectId = invitation.ProjectId
+				ProjectId = invitation.ProjectId,
+                EmployeeId = invitation.EmployeeId
 			};
 		}
 
@@ -352,7 +353,8 @@ namespace AllyisApps.Services.Utilities
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
 				OrgRole = invitation.OrgRole,
-				ProjectId = invitation.ProjectId
+				ProjectId = invitation.ProjectId,
+                EmployeeId = invitation.EmployeeId
 			};
 		}
 

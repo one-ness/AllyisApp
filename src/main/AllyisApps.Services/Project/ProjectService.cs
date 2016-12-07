@@ -458,7 +458,7 @@ namespace AllyisApps.Services.Project
         public string GetRecommendedProjectId()
         {
             var projects = GetAllProjectsForOrganization(this.UserContext.ChosenOrganizationId);
-            if (projects.Count() > 0) return IncrementAlphanumericCharArray(projects.OrderBy(p => p.ProjectOrgId).LastOrDefault().ProjectOrgId.ToCharArray()).ToString();
+            if (projects.Count() > 0) return new string (this.IncrementAlphanumericCharArray(projects.OrderBy(p => p.ProjectOrgId).LastOrDefault().ProjectOrgId.ToCharArray()));
             else return "0000000000000000"; // 16 max chars, arbitrary default value
         }
 

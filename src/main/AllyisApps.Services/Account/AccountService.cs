@@ -150,7 +150,8 @@ namespace AllyisApps.Services.Account
 					OrganizationId = invite.OrganizationId,
 					AccessCode = invite.AccessCode,
 					OrgRole = invite.OrgRole,
-					ProjectId = invite.ProjectId
+					ProjectId = invite.ProjectId,
+                    EmployeeId = invite.EmployeeId
 				});
 			}
 

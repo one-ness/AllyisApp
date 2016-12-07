@@ -42,6 +42,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                 return this.View(
                     new EditProjectViewModel()
                     {
+                        IsCreating = true,
                         ParentCustomerId = id,
                         ProjectUsers = new List<BasicUserInfoViewModel>(),
                         SubscriptionUsers = subList,

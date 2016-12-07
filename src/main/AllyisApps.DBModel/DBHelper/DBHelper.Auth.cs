@@ -775,7 +775,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@OrgRole", invitation.OrgRole);
 			parameters.Add("@ProjectId", invitation.ProjectId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("@EmployeeId");
+            parameters.Add("@EmployeeId", invitation.EmployeeId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[Auth].[CreateUserInvitation]", parameters, commandType: CommandType.StoredProcedure);

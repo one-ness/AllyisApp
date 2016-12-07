@@ -38,7 +38,7 @@ namespace AllyisApps.Controllers
                         OrgService.GetUserInvitations().Select(invitation => invitation.EmployeeId).ToList()).Any(id => id == org.EmployeeId))      // TODO: Make a db procedure and all subsequent methods to simply grab all of the ids instead of using this list union
                     {
                         Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.EmployeeIdNotUniqueError, Variety.Danger));
-                        return this.View(org);
+                        return this.RedirectToAction(ActionConstants.Add);
                     }
 					org.Organization = OrgService.GetOrganization(org.OrganizationId);
 					org = await this.ProcessUserInput(org);
