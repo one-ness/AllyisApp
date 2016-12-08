@@ -252,7 +252,8 @@ namespace AllyisApps.Services {
 						Website = dbe.Website,
 						EIN = dbe.EIN,
 						CreatedUTC = dbe.CreatedUTC,
-						OrganizationId = dbe.OrganizationId
+						OrganizationId = dbe.OrganizationId,
+                        CustomerOrgId = dbe.CustomerOrgId
 					});
 				}
 			}
