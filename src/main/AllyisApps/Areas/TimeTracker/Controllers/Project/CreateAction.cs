@@ -106,34 +106,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 		}
 
-		/// <summary>
-		/// Creates a new project using a <see cref="EditProjectViewModel"/>.
-		/// </summary>
-		/// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
-		/// <returns>The Project ID.</returns>
-		public int CreateProject(EditProjectViewModel model)
-		{
-			if (model.OrganizationId == null)
-			{
-				return Service.CreateProjectFromCustomerIdOnly(
-					model.ParentCustomerId,
-					model.ProjectName,
-					model.PriceType,
-                    model.ProjectOrgId,
-					TimeTrackerService.GetDateTimeFromDays(model.StartDate),
-					TimeTrackerService.GetDateTimeFromDays(model.EndDate));
-			}
-			else
-			{
-				return Service.CreateProject(
-					(int)model.OrganizationId,
-					model.ParentCustomerId,
-					model.ProjectName,
-					model.PriceType,
-                    model.ProjectOrgId,
-					TimeTrackerService.GetDateTimeFromDays(model.StartDate),
-					TimeTrackerService.GetDateTimeFromDays(model.EndDate));
-			}
+        /// <summary>
+        /// Creates a new project using a <see cref="EditProjectViewModel"/>.
+        /// </summary>
+        /// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
+        /// <returns>The Project ID.</returns>
+        public int CreateProject(EditProjectViewModel model)
+        {
+            return Service.CreateProject(new ProjectInfo()
+            {
+                CustomerId = model.ParentCustomerId,
+                Name = model.ProjectName,
+                Type = model.PriceType,
+                ProjectOrgId = model.ProjectOrgId,
+                StartingDate = TimeTrackerService.GetDateTimeFromDays(model.StartDate),
+                EndingDate = TimeTrackerService.GetDateTimeFromDays(model.EndDate)
+            });
 		}
 	}
 }

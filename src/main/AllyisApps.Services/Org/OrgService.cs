@@ -740,11 +740,14 @@ namespace AllyisApps.Services
                                         CustomerId = customer.CustomerId,
                                         Name = hasProjectName ? row[ColumnHeaders.ProjectName].ToString() : projectImportLink.Select(
                                             string.Format("[{0}] = '{1}'", ColumnHeaders.ProjectId, row[ColumnHeaders.ProjectId].ToString()))[0][ColumnHeaders.ProjectName].ToString(),
+                                        Type = "Hourly",
                                         OrganizationId = this.UserContext.ChosenOrganizationId,
                                         ProjectOrgId = hasProjectId ? row[ColumnHeaders.ProjectId].ToString() : projectImportLink.Select(
-                                            string.Format("[{0}] = '{1}'", ColumnHeaders.ProjectName, row[ColumnHeaders.ProjectName].ToString()))[0][ColumnHeaders.ProjectId].ToString()
+                                            string.Format("[{0}] = '{1}'", ColumnHeaders.ProjectName, row[ColumnHeaders.ProjectName].ToString()))[0][ColumnHeaders.ProjectId].ToString(),
+                                        StartingDate = DateTime.Now,
+                                        EndingDate = DateTime.Now.AddMonths(6)
                                     };
-                                    project.ProjectId = this.CreateProject(project.OrganizationId, project.CustomerId, project.Name, "Hourly", project.ProjectOrgId, DateTime.Now, DateTime.Now.AddMonths(6));
+                                    project.ProjectId = this.CreateProject(project);
                                     if (project.ProjectId == -1)
                                     {
                                         project = null;
@@ -770,14 +773,18 @@ namespace AllyisApps.Services
                         if(project != null)
                         {
                             bool updated = false;
+                            string startDate = null;
+                            string endDate = null;
 
-                            updated = updated || this.readColumn(row, ColumnHeaders.ProjectType, val => project. = val);
-                            updated = updated || this.readColumn(row, ColumnHeaders.CustomerCity, val => customer.City = val);
-                            updated = updated || this.readColumn(row, ColumnHeaders.CustomerCountry, val => customer.Country = val);
+                            updated = updated || this.readColumn(row, ColumnHeaders.ProjectType, val => project.Type = val);
+                            updated = updated || this.readColumn(row, ColumnHeaders.ProjectStartDate, val => startDate = val);
+                            updated = updated || this.readColumn(row, ColumnHeaders.CustomerCountry, val => endDate = val);
+                            if (startDate != null) project.StartingDate = DateTime.Parse(startDate);
+                            if (endDate != null) project.EndingDate = DateTime.Parse(endDate);
 
                             if (updated)
                             {
-                                this.UpdateProjectAndUsers()
+                                //this.UpdateProject(project);
                             }
                         }
                     }
