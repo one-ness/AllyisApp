@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
@@ -58,12 +59,44 @@ namespace AllyisApps.Services.Utilities
 			};
 		}
 
-		/// <summary>
-		/// Initialized holiday info with a given HolidayDBEntity.
-		/// </summary>
-		/// <param name="hol">The HolidayDBEntity to use.</param>
-		/// <returns>A holiday info object.</returns>
-		public static HolidayInfo InitializeHolidayInfo(HolidayDBEntity hol)
+        /// <summary>
+        /// Initializes a <see cref="CustomerInfo"/> from a <see cref="CustomerDBEntity"/>.
+        /// </summary>
+        /// <param name="customer">The CustomerDBEntity to use.</param>
+        /// <returns>A CustomerInfo object.</returns>
+        public static CustomerInfo InitializeCustomerInfo(CustomerDBEntity customer)
+        {
+            if (customer == null)
+            {
+                return null;
+            }
+
+            return new CustomerInfo()
+            {
+                Address = customer.Address,
+                City = customer.City,
+                ContactEmail = customer.ContactEmail,
+                ContactPhoneNumber = customer.ContactPhoneNumber,
+                Country = customer.Country,
+                CreatedUTC = customer.CreatedUTC,
+                CustomerId = customer.CustomerId,
+                CustomerOrgId = customer.CustomerOrgId,
+                EIN = customer.EIN,
+                FaxNumber = customer.FaxNumber,
+                Name = customer.Name,
+                OrganizationId = customer.OrganizationId,
+                PostalCode = customer.PostalCode,
+                State = customer.State,
+                Website = customer.Website
+            };
+        }
+
+        /// <summary>
+        /// Initialized holiday info with a given HolidayDBEntity.
+        /// </summary>
+        /// <param name="hol">The HolidayDBEntity to use.</param>
+        /// <returns>A holiday info object.</returns>
+        public static HolidayInfo InitializeHolidayInfo(HolidayDBEntity hol)
 		{
 			return new HolidayInfo
 			{
@@ -250,12 +283,12 @@ namespace AllyisApps.Services.Utilities
 			};
 		}
 
-		/// <summary>
-		/// Translates an OrganizationInfo business object into an OrganizationDBEntity.
-		/// </summary>
-		/// <param name="organization">OrganizationInfo instance.</param>
-		/// <returns>OrganizationDBEntity instance.</returns>
-		public static OrganizationDBEntity GetDBEntityFromOrganizationInfo(OrganizationInfo organization)
+        /// <summary>
+        /// Translates an OrganizationInfo business object into an OrganizationDBEntity.
+        /// </summary>
+        /// <param name="organization">OrganizationInfo instance.</param>
+        /// <returns>OrganizationDBEntity instance.</returns>
+        public static OrganizationDBEntity GetDBEntityFromOrganizationInfo(OrganizationInfo organization)
 		{
 			if (organization == null)
 			{

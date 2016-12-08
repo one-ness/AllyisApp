@@ -237,23 +237,7 @@ namespace AllyisApps.Services {
 			{
 				if (dbe != null)
 				{
-					list.Add(new CustomerInfo
-					{
-						CustomerId = dbe.CustomerId,
-						Name = dbe.Name,
-						Address = dbe.Address,
-						City = dbe.City,
-						State = dbe.State,
-						Country = dbe.Country,
-						PostalCode = dbe.PostalCode,
-						ContactEmail = dbe.ContactEmail,
-						ContactPhoneNumber = dbe.ContactPhoneNumber,
-						FaxNumber = dbe.FaxNumber,
-						Website = dbe.Website,
-						EIN = dbe.EIN,
-						CreatedUTC = dbe.CreatedUTC,
-						OrganizationId = dbe.OrganizationId
-					});
+                    list.Add(InfoObjectsUtility.InitializeCustomerInfo(dbe));
 				}
 			}
 

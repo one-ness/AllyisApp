@@ -40,15 +40,7 @@ namespace AllyisApps.Services
 			{
 				if (dbe != null)
 				{
-					list.Add(new ProjectInfo
-					{
-						ProjectId = dbe.ProjectId,
-						CustomerId = dbe.CustomerId,
-						// OrganizationId = dbe.OrganizationId, - not retrieved by stored procedure
-						Name = dbe.Name,
-                        Type = dbe.Type,
-                        ProjectOrgId = dbe.ProjectOrgId
-					});
+                    list.Add(InfoObjectsUtility.InitializeProjectInfo(dbe));
 				}
 			}
 
