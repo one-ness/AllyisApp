@@ -604,6 +604,8 @@ namespace AllyisApps.Services
             // will be sought from other tables as needed.
             foreach (DataTable table in tables)
             {
+                #region Column Header Checks
+
                 // Customer importing: requires both customer name and customer id. Other information is optional, and can be filled in later.
                 // First, we check if both required fields are present in this table, or if only one is, whether both are on another table.
                 bool hasCustomerName = table.Columns.Contains(ColumnHeaders.CustomerName);
@@ -619,299 +621,162 @@ namespace AllyisApps.Services
                     }
                 }
 
+                // Project importing: requires both project name and project id, as well as one identifying field for a customer (name or id)
+                bool hasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
+                bool hasProjectId = table.Columns.Contains(ColumnHeaders.ProjectId);
+                bool canCreateProjects = hasProjectName && hasProjectId && (hasCustomerName || hasCustomerId);
+                DataTable projectImportLink = null;
+                DataTable projectCustomerLink = null;
+                if (!canCreateProjects && (hasProjectName || hasProjectId))
+                {
+                    // If one of these two connections exists on this table, that's ok; it won't get used. The variable will simply be set to this table redundantly.
+                    projectImportLink = tables.Where(t => t.Columns.Contains(ColumnHeaders.ProjectName) && t.Columns.Contains(ColumnHeaders.ProjectId)).FirstOrDefault();
+                    projectCustomerLink = tables.Where(t => (t.Columns.Contains(ColumnHeaders.ProjectName) || t.Columns.Contains(ColumnHeaders.ProjectId)) &&
+                                                            (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerId))).FirstOrDefault();
+
+                    // Even if one of these isn't necessary (because both items are on this table), it won't be null. Therefore, if either is null, a connection is missing.
+                    if (projectImportLink != null && projectCustomerLink != null)
+                    {
+                        canCreateProjects = true;
+                    }
+                }
+
+                #endregion
+
                 // Finally, after all checks are complete, we go through row by row and import the information
                 foreach (DataRow row in table.Rows)
                 {
                     if (row.ItemArray.All(i => string.IsNullOrEmpty(i?.ToString()))) break; // Avoid iterating through empty rows
 
+                    #region Customer Import
+
                     // If there is no identifying information for customers, all customer related importing is skipped.
-                    if (canCreateCustomers)
+                    if (hasCustomerName || hasCustomerId)
                     {
-                        // Customer: find the existing customer using name, or id of name isn't on this sheet.
+                        // Find the existing customer using name, or id if name isn't on this sheet.
                         CustomerInfo customer = customersProjects.Select(tup => tup.Item1).Where(c => hasCustomerName ? c.Name.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerOrgId.Equals(row[ColumnHeaders.CustomerId].ToString())).FirstOrDefault();
                         if (customer == null)
                         {
-                            // No customer was found, so a new one is created.
-                            CustomerInfo newCustomer = new CustomerInfo
+                            if (canCreateCustomers)
                             {
-                                // For each required field, if it is not present on this sheet, then the linked sheet is used to look it up based on the other value.
-                                Name = hasCustomerName ? row[ColumnHeaders.CustomerName].ToString() : customerImportLink.Select(
-                                    string.Format("[{0}] = '{1}'", ColumnHeaders.CustomerId, row[ColumnHeaders.CustomerId].ToString()))[0][ColumnHeaders.CustomerName].ToString(),
-                                CustomerOrgId = hasCustomerId ? row[ColumnHeaders.CustomerId].ToString() : customerImportLink.Select(
-                                    string.Format("[{0}] = '{1}'", ColumnHeaders.CustomerName, row[ColumnHeaders.CustomerName].ToString()))[0][ColumnHeaders.CustomerId].ToString()
-                            };
-                            //newCustomer.CustomerId = this.CreateCustomer(newCustomer).Value;
-                            customersProjects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(
-                                newCustomer,
-                                new List<ProjectInfo>()
-                            ));
-                            customer = newCustomer;
+                                // No customer was found, so a new one is created.
+                                CustomerInfo newCustomer = new CustomerInfo
+                                {
+                                    // For each required field, if it is not present on this sheet, then the linked sheet is used to look it up based on the other value.
+                                    Name = hasCustomerName ? row[ColumnHeaders.CustomerName].ToString() : customerImportLink.Select(
+                                        string.Format("[{0}] = '{1}'", ColumnHeaders.CustomerId, row[ColumnHeaders.CustomerId].ToString()))[0][ColumnHeaders.CustomerName].ToString(),
+                                    CustomerOrgId = hasCustomerId ? row[ColumnHeaders.CustomerId].ToString() : customerImportLink.Select(
+                                        string.Format("[{0}] = '{1}'", ColumnHeaders.CustomerName, row[ColumnHeaders.CustomerName].ToString()))[0][ColumnHeaders.CustomerId].ToString()
+                                };
+                                //newCustomer.CustomerId = this.CreateCustomer(newCustomer).Value;
+                                customersProjects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(
+                                    newCustomer,
+                                    new List<ProjectInfo>()
+                                ));
+                                customer = newCustomer;
+                            }
                         }
 
                         // Importing non-required customer data
-                        bool updated = false;
-
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address = val);
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerCity, val => customer.City = val);
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerCountry, val => customer.Country = val);
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerState, val => customer.State = val);
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => customer.PostalCode = val);
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerEmail, val => customer.ContactEmail = val);
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerPhoneNumber, val => customer.ContactPhoneNumber = val);
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerFaxNumber, val => customer.FaxNumber = val);
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerEIN, val => customer.EIN = val);
-
-                        if (updated)
+                        if (customer != null)
                         {
-                            //this.UpdateCustomer(customer);
+                            bool updated = false;
+
+                            updated = updated || this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address = val);
+                            updated = updated || this.readColumn(row, ColumnHeaders.CustomerCity, val => customer.City = val);
+                            updated = updated || this.readColumn(row, ColumnHeaders.CustomerCountry, val => customer.Country = val);
+                            updated = updated || this.readColumn(row, ColumnHeaders.CustomerState, val => customer.State = val);
+                            updated = updated || this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => customer.PostalCode = val);
+                            updated = updated || this.readColumn(row, ColumnHeaders.CustomerEmail, val => customer.ContactEmail = val);
+                            updated = updated || this.readColumn(row, ColumnHeaders.CustomerPhoneNumber, val => customer.ContactPhoneNumber = val);
+                            updated = updated || this.readColumn(row, ColumnHeaders.CustomerFaxNumber, val => customer.FaxNumber = val);
+                            updated = updated || this.readColumn(row, ColumnHeaders.CustomerEIN, val => customer.EIN = val);
+
+                            if (updated)
+                            {
+                                //this.UpdateCustomer(customer);
+                            }
                         }
                     }
-                }
-            }
-            
-            #region old code
-            /*
-            #region Table Links
 
-            // First, we sweep through the worksheets present and look at what types of data (column headers) are on each, noting
-            // which sheets provide crucial links between required properties.                                             
+                    #endregion
 
-            // Customer and project basic properties
-            List<DataTable> customerNameAndId = new List<DataTable>();
-            List<DataTable> projectNameAndId = new List<DataTable>();
+                    #region Project Import
 
-            // Project-customer link: can be either name or id for either
-            List<DataTable> projectAndCustomer = new List<DataTable>();
-            List<bool> projectUsesName = new List<bool>(); // These values correspond to the same index in the projectAndCustomer table lists.
-            List<bool> customerUsesName = new List<bool>(); // True if the name column is present (or both), false if the id column is present.
-
-            // User properties: four are necessary, so there are six possible links that are checked in turn as needed.
-            List<DataTable> userEmailAndId = new List<DataTable>();
-            List<DataTable> userEmailAndFirstName = new List<DataTable>();
-            List<DataTable> userEmailAndLastName = new List<DataTable>();
-            List<DataTable> userIdAndFirstName = new List<DataTable>();
-            List<DataTable> userIdAndLastName = new List<DataTable>();
-            List<DataTable> userFirstNameAndLastName = new List<DataTable>();
-
-            // TODO: Fill out time entry requirement
-
-            foreach (DataTable table in importData.Tables)
-            {
-                List<string> columnHeaders = new List<string>();
-                foreach(DataColumn column in table.Columns)
-                {
-                    columnHeaders.Add(column.ColumnName);
-                }
-
-                if (columnHeaders.Contains(ColumnHeaders.CustomerName) && columnHeaders.Contains(ColumnHeaders.CustomerId))
-                {
-                    customerNameAndId.Add(table);
-                }
-
-                if (columnHeaders.Contains(ColumnHeaders.ProjectName) && columnHeaders.Contains(ColumnHeaders.ProjectId))
-                {
-                    projectNameAndId.Add(table);
-                }
-
-                if ((columnHeaders.Contains(ColumnHeaders.CustomerName) || columnHeaders.Contains(ColumnHeaders.CustomerId)) &&
-                    (columnHeaders.Contains(ColumnHeaders.ProjectName) || columnHeaders.Contains(ColumnHeaders.ProjectId)))
-                {
-                    projectAndCustomer.Add(table);
-                    projectUsesName.Add(columnHeaders.Contains(ColumnHeaders.ProjectName));
-                    customerUsesName.Add(columnHeaders.Contains(ColumnHeaders.CustomerName));
-                }
-
-                if (columnHeaders.Contains(ColumnHeaders.UserEmail) && columnHeaders.Contains(ColumnHeaders.EmployeeId))
-                {
-                    userEmailAndId.Add(table);
-                }
-
-                if (columnHeaders.Contains(ColumnHeaders.UserEmail) && columnHeaders.Contains(ColumnHeaders.UserFirstName))
-                {
-                    userEmailAndFirstName.Add(table);
-                }
-
-                if (columnHeaders.Contains(ColumnHeaders.UserEmail) && columnHeaders.Contains(ColumnHeaders.UserLastName))
-                {
-                    userEmailAndLastName.Add(table);
-                }
-
-                if (columnHeaders.Contains(ColumnHeaders.EmployeeId) && columnHeaders.Contains(ColumnHeaders.UserFirstName))
-                {
-                    userIdAndFirstName.Add(table);
-                }
-
-                if (columnHeaders.Contains(ColumnHeaders.EmployeeId) && columnHeaders.Contains(ColumnHeaders.UserLastName))
-                {
-                    userIdAndLastName.Add(table);
-                }
-
-                if (columnHeaders.Contains(ColumnHeaders.UserFirstName) && columnHeaders.Contains(ColumnHeaders.UserLastName))
-                {
-                    userFirstNameAndLastName.Add(table);
-                }
-            }
-
-            #endregion
-
-            // Retrieval of existing customer and project data
-            List<Tuple<CustomerInfo, List<ProjectInfo>>> projects = new List<Tuple<CustomerInfo, List<ProjectInfo>>>();
-            foreach (CustomerInfo customer in this.GetCustomerList(this.UserContext.ChosenOrganizationId))
-            {
-                projects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(
-                    customer,
-                    this.GetProjectsByCustomer(customer.CustomerId).ToList()
-                ));
-            }
-
-            // (<projectId, List<userId's>>) Structure for final userId lists to add to projects
-            List<Tuple<int, List<int>>> projectUsers = new List<Tuple<int, List<int>>>();
-
-            // Looping through rows in tables
-            foreach(DataTable table in importData.Tables)
-            {
-                foreach(DataRow row in table.Rows)
-                {
-                    if (row.ItemArray.All(i => string.IsNullOrEmpty(i?.ToString()))) break; // Avoid iterating through empty rows
-
-                    // Customer name                                                                                                                    // NEXT: Use name or customer id column
-                    string customerName = "";
-                    int? customerId = 0;
-                    bool customerIsSpecified = this.readColumn(row, ColumnHeaders.CustomerName, val => customerName = val);
-                    List<ProjectInfo> customerProjectList = new List<ProjectInfo>();
-
-                    // Creating customer & importing info
-                    if (customerIsSpecified)
+                    // If there is no identifying information for projects, all project related importing is skipped.
+                    if (hasProjectName || hasProjectId)
                     {
-                        // Only create customers that do not already exist in the org; get the id if they do
-                        if (projects.Count() == 0 ||
-                            (customerId = projects.Where(t => t.Item1.Name == customerName).Select(t => t.Item1.CustomerId).DefaultIfEmpty(0).FirstOrDefault()) == 0)
+                        // Find the customer this project is under, from this sheet if possible, or from the link sheet if needed. 
+                        CustomerInfo customer = customersProjects.Select(tup => tup.Item1).Where(c => hasCustomerName ? c.Name.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerOrgId.Equals(row[ColumnHeaders.CustomerId].ToString())).FirstOrDefault();
+                        if (customer == null)
                         {
-                            // Customer creation
-                            CustomerInfo newCustomer = new CustomerInfo() { Name = customerName, OrganizationId = this.UserContext.ChosenOrganizationId };
-                            customerId = this.CreateCustomer(newCustomer);
-                            projects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(newCustomer, new List<ProjectInfo>()));
+                            if (projectCustomerLink != null)
+                            {
+                                // If that information is not on this sheet, we'll use the project-customer link sheet
+                                bool linkHasCustomerName = projectCustomerLink.Columns.Contains(ColumnHeaders.CustomerName);
+                                bool linkHasProjectName = projectCustomerLink.Columns.Contains(ColumnHeaders.ProjectName);
+                                string customerIdentity = projectCustomerLink.Select(string.Format("[{0}] = '{1}'",
+                                    linkHasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId,
+                                    linkHasProjectName ? row[ColumnHeaders.ProjectName].ToString() : row[ColumnHeaders.ProjectId].ToString())
+                                )[0][linkHasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId].ToString();
+                                customer = customersProjects.Select(tup => tup.Item1).Where(c => linkHasCustomerName ? c.Name.Equals(customerIdentity) : c.CustomerOrgId.Equals(customerIdentity)).FirstOrDefault();
+                            }
+                        }
+
+                        // Find the existing project.
+                        ProjectInfo project = null;
+                        if (customer != null)
+                        {
+                            // This project has a customer specified, so we find the existing project under that customer or create it if it doesn't exist.
+                            project = customersProjects.Where(tup => tup.Item1 == customer).FirstOrDefault().Item2.Where(
+                                p => hasProjectName ? p.Name.Equals(row[ColumnHeaders.ProjectName].ToString()) : p.ProjectOrgId.Equals(row[ColumnHeaders.ProjectId].ToString())).FirstOrDefault();
+                            if (project == null)
+                            {
+                                if (canCreateProjects)
+                                {
+                                    // No project was found, so a new one is created.                                    
+                                    project = new ProjectInfo
+                                    {
+                                        CustomerId = customer.CustomerId,
+                                        Name = hasProjectName ? row[ColumnHeaders.ProjectName].ToString() : projectImportLink.Select(
+                                            string.Format("[{0}] = '{1}'", ColumnHeaders.ProjectId, row[ColumnHeaders.ProjectId].ToString()))[0][ColumnHeaders.ProjectName].ToString(),
+                                        OrganizationId = this.UserContext.ChosenOrganizationId,
+                                        ProjectOrgId = hasProjectId ? row[ColumnHeaders.ProjectId].ToString() : projectImportLink.Select(
+                                            string.Format("[{0}] = '{1}'", ColumnHeaders.ProjectName, row[ColumnHeaders.ProjectName].ToString()))[0][ColumnHeaders.ProjectId].ToString()
+                                    };
+                                    project.ProjectId = this.CreateProject(project.OrganizationId, project.CustomerId, project.Name, "Hourly", project.ProjectOrgId, DateTime.Now, DateTime.Now.AddMonths(6));
+                                    if (project.ProjectId == -1)
+                                    {
+                                        project = null;
+                                    }
+                                    else
+                                    {
+                                        customersProjects.Where(tup => tup.Item1 == customer).FirstOrDefault().Item2.Add(project);
+                                    }
+                                }
+                            }
                         }
                         else
                         {
-                            customerProjectList = projects.Where(t => t.Item1.CustomerId == customerId).Select(t => t.Item2).Single(); // Projects under this customer
+                            // No customer can be specified, so we try to find the project under any customer.
+                            project = customersProjects.Select(tup => tup.Item2).Select(
+                                plist => plist.Where(
+                                    p => hasProjectName ? p.Name.Equals(row[ColumnHeaders.ProjectName].ToString()) : p.ProjectOrgId.Equals(row[ColumnHeaders.ProjectId].ToString())
+                                ).FirstOrDefault()
+                            ).FirstOrDefault();
                         }
 
-                        //Updating customer info
-
-                        CustomerInfo updateCustomer = this.GetCustomer(customerId.Value);
-                        bool updated = false;
-
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => updateCustomer.Address = val);
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerCity, val => updateCustomer.City = val);
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerCountry, val => updateCustomer.Country = val);
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerState, val => updateCustomer.State = val);
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => updateCustomer.PostalCode = val);
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerEmail, val => updateCustomer.ContactEmail = val);
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerPhoneNumber, val => updateCustomer.ContactPhoneNumber = val);
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerFaxNumber, val => updateCustomer.FaxNumber = val);
-                        updated = updated || this.readColumn(row, ColumnHeaders.CustomerEIN, val => updateCustomer.EIN = val);
-
-                        if (updated)
+                        // Importing non-required project data
+                        if(project != null)
                         {
-                            this.UpdateCustomer(updateCustomer);
+
                         }
                     }
+
+                    #endregion
                 }
             }
-
-            foreach (DataRow row in importData.Tables[0].Rows)
-            {
-                if (row.ItemArray.All(i => string.IsNullOrEmpty(i?.ToString()))) break; // Avoid iterating through empty rows
-
-                // Customer name
-                string customerName = "";
-                int? customerId = 0;
-                bool customerIsSpecified = this.readColumn(row, ColumnHeaders.CustomerName, val => customerName = val);
-                List<ProjectInfo> customerProjectList = new List<ProjectInfo>();
-
-                // Creating customer & importing info
-                if (customerIsSpecified)
-                {
-                    // Only create customers that do not already exist in the org; get the id if they do
-                    if (projects.Count() == 0 ||
-                        (customerId = projects.Where(t => t.Item1.Name == customerName).Select(t => t.Item1.CustomerId).DefaultIfEmpty(0).FirstOrDefault()) == 0)
-                    {
-                        // Customer creation
-                        CustomerInfo newCustomer = new CustomerInfo() { Name = customerName, OrganizationId = this.UserContext.ChosenOrganizationId };
-                        customerId = this.CreateCustomer(newCustomer);
-                        projects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(newCustomer, new List<ProjectInfo>()));
-                    }
-                    else
-                    {
-                        customerProjectList = projects.Where(t => t.Item1.CustomerId == customerId).Select(t => t.Item2).Single(); // Projects under this customer
-                    }
-
-                    //Updating customer info
-
-                    CustomerInfo updateCustomer = this.GetCustomer(customerId.Value);
-                    bool updated = false;
-
-                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => updateCustomer.Address = val);
-                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerCity, val => updateCustomer.City = val);
-                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerCountry, val => updateCustomer.Country = val);
-                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerState, val => updateCustomer.State = val);
-                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => updateCustomer.PostalCode = val);
-                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerEmail, val => updateCustomer.ContactEmail = val);
-                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerPhoneNumber, val => updateCustomer.ContactPhoneNumber = val);
-                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerFaxNumber, val => updateCustomer.FaxNumber = val);
-                    updated = updated || this.readColumn(row, ColumnHeaders.CustomerEIN, val => updateCustomer.EIN = val);
-
-                    if (updated)
-                    {
-                        this.UpdateCustomer(updateCustomer);
-                    }
-                }
-
-                // Project name(s)
-                string projectNameData = "";
-                this.readColumn(row, ColumnHeaders.ProjectName, val => projectNameData = val);
-                string[] projectNames = projectNameData.Split(',');
-
-                // User email(s)
-                string userEmailData = "";
-                this.readColumn(row, ColumnHeaders.UserEmail, val => userEmailData = val);
-                string[] userEmails = userEmailData.Split(',');
-
-                if (projectNameData != "")
-                {
-                    foreach (string projectName in projectNames)
-                    {
-                        int projectId = 0;
-                        // Only create projects that do not already exist in the customer; get the id if they do
-                        if (customerProjectList.Count() == 0 ||
-                            (projectId = customerProjectList.Where(p => p.Name == projectName).Select(p => p.ProjectId).DefaultIfEmpty(0).FirstOrDefault()) == 0)
-                        {
-                            // Projects being created, even if there are many, will share project information data from other columns. If none is provided, defaults are used.
-                            string projectType = "Hourly";
-                            string projectStartDate = DateTime.Now.Date.ToString();
-                            string projectEndDate = DateTime.Now.Date.AddMonths(6).ToString();
-                            this.readColumn(row, ColumnHeaders.ProjectType, val => projectType = val);
-                            this.readColumn(row, ColumnHeaders.ProjectStartDate, val => projectStartDate = val);
-                            this.readColumn(row, ColumnHeaders.ProjectEndDate, val => projectEndDate = val);
-
-                            projectId = this.CreateProject(
-                                UserContext.ChosenOrganizationId,
-                                customerId.Value,
-                                projectName,
-                                projectType,
-                                DateTime.Parse(projectStartDate),
-                                DateTime.Parse(projectEndDate)
-                            );
-                        }
-                    }
-                }
-
-
-
-            }
-            */
-            #endregion
+            
         }
 
         /// <summary>
