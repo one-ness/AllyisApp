@@ -641,6 +641,50 @@ namespace AllyisApps.Services
                     }
                 }
 
+                // User importing: requires user email, user id, user first name, and user last name.
+                bool[] hasRequiredValues =
+                {
+                    table.Columns.Contains(ColumnHeaders.UserEmail),
+                    table.Columns.Contains(ColumnHeaders.UserId),
+                    table.Columns.Contains(ColumnHeaders.UserFirstName),
+                    table.Columns.Contains(ColumnHeaders.UserLastName)
+                };
+                string[] columnNames = { ColumnHeaders.UserEmail, ColumnHeaders.UserId, ColumnHeaders.UserFirstName, ColumnHeaders.UserLastName };
+                bool canCreateUser = hasRequiredValues.All(b => b);
+                List<List<DataTable>>[] userFieldLinks = new List<List<DataTable>>[4];
+                List<DataTable> userEmailIdLinks = new List<DataTable>();
+                userFieldLinks[0].Add(userEmailIdLinks);
+                userFieldLinks[1].Add(userEmailIdLinks);
+                List<DataTable> userEmailFirstNameLinks = new List<DataTable>();
+                List<DataTable> userEmailLastNameLinks = new List<DataTable>();
+                List<DataTable> userIdFirstNameLinks = new List<DataTable>();
+                List<DataTable> userIdLastNameLinks = new List<DataTable>();
+                List<DataTable> userFirstNameLastNameLinks = new List<DataTable>();
+
+                for (int i = 0; i < 4; i++)                                                                                                 // NEXT: this approach is good, but go breadth-first
+                {                                                                                                                           // starting from what you do have
+                    if (!hasRequiredValues[i])
+                    {
+                        for (int j = 0; j < 4; j++)
+                        {
+                            if (j == i) continue;
+                            if (hasRequiredValues[j])
+                            {
+                                // We don't have i, but we do have j
+                                if (userFieldLinks[i][j] == null)
+                                {
+                                    userFieldLinks[i][j] = tables.Where(t => t.Columns.Contains(columnNames[i]) && t.Columns.Contains(columnNames[j])).ToList();
+                                }
+
+                                if (userFieldLinks[i][j].Count > 0)
+                                {
+                                    // And we have a link from j to i, so we can get i
+                                }
+                            }
+                        }
+                    }
+                }
+
                 #endregion
 
                 // Finally, after all checks are complete, we go through row by row and import the information

@@ -96,6 +96,11 @@
         public const string UserEmail = "User Email";
 
         /// <summary>
+        /// User-Property: Id
+        /// </summary>
+        public const string UserId = "User Id";
+
+        /// <summary>
         /// User-Property: First Name
         /// </summary>
         public const string UserFirstName = "User First Name";
