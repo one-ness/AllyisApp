@@ -769,7 +769,16 @@ namespace AllyisApps.Services
                         // Importing non-required project data
                         if(project != null)
                         {
+                            bool updated = false;
 
+                            updated = updated || this.readColumn(row, ColumnHeaders.ProjectType, val => project. = val);
+                            updated = updated || this.readColumn(row, ColumnHeaders.CustomerCity, val => customer.City = val);
+                            updated = updated || this.readColumn(row, ColumnHeaders.CustomerCountry, val => customer.Country = val);
+
+                            if (updated)
+                            {
+                                this.UpdateProjectAndUsers()
+                            }
                         }
                     }
 

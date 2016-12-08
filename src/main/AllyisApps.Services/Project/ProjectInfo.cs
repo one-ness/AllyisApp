@@ -4,6 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+
 namespace AllyisApps.Services
 {
 	/// <summary>
@@ -32,8 +34,23 @@ namespace AllyisApps.Services
 		public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the project type.
+        /// </summary>
+        public string Type { get; set; }
+
+        /// <summary>
         /// Gets or sets the project's org id
         /// </summary>
         public string ProjectOrgId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the project's starting date.
+        /// </summary>
+        public DateTime StartingDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the project's ending date.
+        /// </summary>
+        public DateTime EndingDate { get; set; }
 	}
 }

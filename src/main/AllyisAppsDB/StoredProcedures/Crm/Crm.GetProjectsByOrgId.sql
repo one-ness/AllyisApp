@@ -11,7 +11,8 @@ SELECT	[Project].[ProjectId],
 		[Project].[IsActive],
 		[Organization].[Name] AS [OrganizationName],
 		[Customer].[Name] AS [CustomerName],
-		[Customer].[IsActive] AS [IsCustomerActive]
+		[Customer].[IsActive] AS [IsCustomerActive],
+		[Project].[Type] AS [PriceType]
 		--[OrgRoleId]
 FROM (
 --(SELECT [OrganizationId], [OrgRoleId] FROM [Auth].[OrganizationUser] WHERE [OrganizationId] = @orgId) AS OrganizationUser

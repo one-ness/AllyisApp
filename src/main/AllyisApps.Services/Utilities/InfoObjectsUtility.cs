@@ -354,6 +354,56 @@ namespace AllyisApps.Services.Utilities
 			};
 		}
 
+        /// <summary>
+        /// Translates a <see cref="ProjectDBEntity"/> into a <see cref="ProjectInfo"/>.
+        /// </summary>
+        /// <param name="project">ProjectDBEntity instance.</param>
+        /// <returns>ProjectInfo instance.</returns>
+        public static ProjectInfo InitializeProjectInfo(ProjectDBEntity project)
+        {
+            if (project == null)
+            {
+                return null;
+            }
+
+            return new ProjectInfo
+            {
+                CustomerId = project.CustomerId,
+                EndingDate = project.EndingDate,
+                Name = project.Name,
+                OrganizationId = project.OrganizationId,
+                ProjectId = project.ProjectId,
+                ProjectOrgId = project.ProjectOrgId,
+                StartingDate = project.StartingDate,
+                Type = project.Type
+            };
+        }
+
+        /// <summary>
+        /// Translates a <see cref="ProjectInfo"/> into a <see cref="ProjectDBEntity"/>.
+        /// </summary>
+        /// <param name="project">ProjectInfo instance.</param>
+        /// <returns>ProjectDBEntity instance.</returns>
+        public static ProjectDBEntity GetDBEntityFromProjectInfo(ProjectInfo project)
+        {
+            if (project == null)
+            {
+                return null;
+            }
+
+            return new ProjectDBEntity
+            {
+                CustomerId = project.CustomerId,
+                EndingDate = project.EndingDate,
+                Name = project.Name,
+                OrganizationId = project.OrganizationId,
+                ProjectId = project.ProjectId,
+                ProjectOrgId = project.ProjectOrgId,
+                StartingDate = project.StartingDate,
+                Type = project.Type
+            };
+        }
+
 		/// <summary>
 		/// Translates a <see cref="CompleteProjectDBEntity"/> into a <see cref="CompleteProjectInfo"/>.
 		/// </summary>

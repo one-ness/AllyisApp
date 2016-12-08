@@ -44,8 +44,9 @@ namespace AllyisApps.Services
 					{
 						ProjectId = dbe.ProjectId,
 						CustomerId = dbe.CustomerId,
-						OrganizationId = dbe.OrganizationId,
+						// OrganizationId = dbe.OrganizationId, - not retrieved by stored procedure
 						Name = dbe.Name,
+                        Type = dbe.Type,
                         ProjectOrgId = dbe.ProjectOrgId
 					});
 				}
@@ -202,6 +203,49 @@ namespace AllyisApps.Services
             }
         }
         
+        /// <summary>
+        /// Updates a project's properties.
+        /// </summary>
+        /// <param name="project">ProjectInfo with updated properties.</param>
+        public void UpdateProject(ProjectInfo project)
+        {
+            #region Validation
+            if (project.ProjectId <= 0)
+            {
+                throw new ArgumentOutOfRangeException("ProjectId", "Project Id cannot be 0 or negative.");
+            }
+
+            if (string.IsNullOrWhiteSpace(project.Name))
+            {
+                throw new ArgumentNullException("Name", "Project name must have a value and cannot be whitespace.");
+            }
+
+            if (string.IsNullOrEmpty(project.Type))
+            {
+                throw new ArgumentNullException("Type", "Type must have a value.");
+            }
+
+            if (project.StartingDate == null)
+            {
+                throw new ArgumentNullException("StartingDate", "Project must have a start time");
+            }
+
+            if (project.EndingDate == null)
+            {
+                throw new ArgumentNullException("EndingDate", "Project must have an end time");
+            }
+
+            if (DateTime.Compare(project.StartingDate, project.EndingDate) > 0)
+            {
+                throw new ArgumentException("Project cannot end before it starts.");
+            }
+            #endregion
+
+            if (this.Can(Actions.CoreAction.EditProject))
+            {
+                DBHelper.UpdateProject(InfoObjectsUtility.GetDBEntityFromProjectInfo(project));
+            }
+        }
 
         /// <summary>
         /// Updates a project's properties and user list.

@@ -10,6 +10,7 @@ AS
 			[Project].[CreatedUTC],
 			[Project].[Name] AS [ProjectName],
 			[Project].[IsActive],
+			[Project].[Type] AS [PriceType],
 			[Organization].[Name] AS [OrganizationName],
 			[Customer].[Name] AS [CustomerName],
 			[Customer].[IsActive] AS [IsCustomerActive],

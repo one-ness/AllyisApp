@@ -120,6 +120,29 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+        /// <summary>
+        /// Updates project properties.
+        /// </summary>
+        /// <param name="project">The ProjectDBEntity with the updated properties.</param>
+        public void UpdateProject(ProjectDBEntity project)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@ProjectId", project.ProjectId);
+            parameters.Add("@Name", project.Name);
+            parameters.Add("@PriceType", project.Type);
+            parameters.Add("@ProjectOrgId", project.ProjectOrgId);
+            parameters.Add("@StartingDate", project.StartingDate);
+            parameters.Add("@EndingDate", project.EndingDate);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                connection.Execute(
+                    "[Crm].[UpdateProject]",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
 		/// <summary>
 		/// Gets all the projects associated with a specific customer.
 		/// </summary>
