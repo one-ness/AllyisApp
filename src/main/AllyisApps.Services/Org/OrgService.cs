@@ -600,6 +600,9 @@ namespace AllyisApps.Services
                 ));
             }
 
+            // Retrieval of existing user data
+            List<Tuple<string, UserInfo>> users = this.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Select(o => new Tuple<string, UserInfo>(o.EmployeeId, this.GetUserInfo(o.UserId))).ToList();
+
             // Then, we loop through and see what can be imported from each table in turn. Order doesn't matter, since missing information
             // will be sought from other tables as needed.
             foreach (DataTable table in tables)
@@ -641,50 +644,25 @@ namespace AllyisApps.Services
                     }
                 }
 
-                // User importing: requires user email, user id, user first name, and user last name.
-                bool[] hasRequiredValues =
-                {
-                    table.Columns.Contains(ColumnHeaders.UserEmail),
-                    table.Columns.Contains(ColumnHeaders.UserId),
-                    table.Columns.Contains(ColumnHeaders.UserFirstName),
-                    table.Columns.Contains(ColumnHeaders.UserLastName)
-                };
+                // User importing: requires email, id, first name, and last name
+                bool hasUserEmail = table.Columns.Contains(ColumnHeaders.UserEmail);
+                bool hasUserId = table.Columns.Contains(ColumnHeaders.UserId);
+                bool hasUserFirstName = table.Columns.Contains(ColumnHeaders.UserFirstName);
+                bool hasUserLastName = table.Columns.Contains(ColumnHeaders.UserLastName);
                 string[] columnNames = { ColumnHeaders.UserEmail, ColumnHeaders.UserId, ColumnHeaders.UserFirstName, ColumnHeaders.UserLastName };
-                bool canCreateUser = hasRequiredValues.All(b => b);
-                List<List<DataTable>>[] userFieldLinks = new List<List<DataTable>>[4];
-                List<DataTable> userEmailIdLinks = new List<DataTable>();
-                userFieldLinks[0].Add(userEmailIdLinks);
-                userFieldLinks[1].Add(userEmailIdLinks);
-                List<DataTable> userEmailFirstNameLinks = new List<DataTable>();
-                List<DataTable> userEmailLastNameLinks = new List<DataTable>();
-                List<DataTable> userIdFirstNameLinks = new List<DataTable>();
-                List<DataTable> userIdLastNameLinks = new List<DataTable>();
-                List<DataTable> userFirstNameLastNameLinks = new List<DataTable>();
-
-                for (int i = 0; i < 4; i++)                                                                                                 // NEXT: this approach is good, but go breadth-first
-                {                                                                                                                           // starting from what you do have
-                    if (!hasRequiredValues[i])
-                    {
-                        for (int j = 0; j < 4; j++)
-                        {
-                            if (j == i) continue;
-                            if (hasRequiredValues[j])
-                            {
-                                // We don't have i, but we do have j
-                                if (userFieldLinks[i][j] == null)
-                                {
-                                    userFieldLinks[i][j] = tables.Where(t => t.Columns.Contains(columnNames[i]) && t.Columns.Contains(columnNames[j])).ToList();
-                                }
-
-                                if (userFieldLinks[i][j].Count > 0)
-                                {
-                                    // And we have a link from j to i, so we can get i
-                                }
-                            }
-                        }
-                    }
-                }
-
+                List<DataTable>[,] userLinks = new List<DataTable>[4, 4];
+                userLinks[0, 1] = userLinks[1, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.UserId)).ToList();
+                userLinks[0, 2] = userLinks[2, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.UserFirstName)).ToList();
+                userLinks[0, 3] = userLinks[3, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
+                userLinks[1, 2] = userLinks[2, 1] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserId) && t.Columns.Contains(ColumnHeaders.UserFirstName)).ToList();
+                userLinks[1, 3] = userLinks[3, 1] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserId) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
+                userLinks[2, 3] = userLinks[3, 2] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserFirstName) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
+                // This check isn't fool proof: rigorous checking is left for row-by-row importing. But, this skips the obvious case where a required field is missing entirely.
+                bool canImportUsers =
+                    (hasUserEmail ? true : userLinks[0, 1].Count > 0 || userLinks[0, 2].Count > 0 || userLinks[0, 3].Count > 0) &&
+                    (hasUserId ? true : userLinks[1, 0].Count > 0 || userLinks[1, 2].Count > 0 || userLinks[1, 3].Count > 0) &&
+                    (hasUserFirstName ? true : userLinks[2, 0].Count > 0 || userLinks[2, 1].Count > 0 || userLinks[2, 3].Count > 0) &&
+                    (hasUserLastName ? true : userLinks[3, 0].Count > 0 || userLinks[3, 1].Count > 0 || userLinks[3, 2].Count > 0);
                 #endregion
 
                 // Finally, after all checks are complete, we go through row by row and import the information
@@ -880,6 +858,81 @@ namespace AllyisApps.Services
                         }
                     }
 
+                    #endregion
+
+                    #region User Import
+
+                    if (hasUserEmail || hasUserId || hasUserFirstName || hasUserLastName)
+                    {
+                        // Find all required fields, if they exist
+                        string[] fields =
+                        {
+                            hasUserEmail ? row[ColumnHeaders.UserEmail].ToString() : null,
+                            hasUserId ? row[ColumnHeaders.UserId].ToString() : null,
+                            hasUserFirstName ? row[ColumnHeaders.UserFirstName].ToString() : null,
+                            hasUserLastName ? row[ColumnHeaders.UserLastName].ToString() : null
+                        };
+                        // Three passes, since it will take at most 3 links to get all required fields.
+                        for (int i = 0; i < 3; i++)
+                        {
+                            // i = pass, out of 3
+                            for (int j = 0; j < 4; j++)
+                            {
+                                // j = field we are currently trying to find
+                                if(fields[j] == null)
+                                {
+                                    for (int k = 0; k < 4; k++)
+                                    {
+                                        // k = field we are trying to find j from, using a link
+                                        if (j == k) continue;
+                                        if (fields[k] != null)
+                                        {
+                                            foreach(DataTable link in userLinks[j, k])
+                                            {
+                                                try
+                                                {
+                                                    fields[j] = link.Select(string.Format("[{0}] = '{1}'", columnNames[k], fields[k]))[0][columnNames[j]].ToString();
+                                                    break;
+                                                } catch(IndexOutOfRangeException) { }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // All passes for linking fields are complete. At this point we either have the info to create the user, or we can't get it.
+                        // Find existing user. Must match email, OR employeeId, OR both first AND last name.
+                        UserInfo user = users.Where(tup =>
+                            fields[0] != null ? tup.Item2.Email.Equals(fields[0]) :
+                            fields[1] != null ? tup.Item1.Equals(fields[1]) :
+                            tup.Item2.FirstName.Equals(fields[2]) && tup.Item2.LastName.Equals(fields[3])).FirstOrDefault().Item2;
+                        if(user == null)
+                        {
+                            if(fields.All(s => s != null))
+                            {
+                                // User does not exist, so we create it
+                                user = new UserInfo()
+                                {
+                                    Email = fields[0],
+                                    FirstName = fields[2],
+                                    LastName = fields[3]
+                                };
+                                //Create method for adding user directly w/o invitation process
+                                //Get back id, add org user role with fields[1]
+                                users.Add(new Tuple<string, UserInfo>(fields[1], user));
+                            }
+                            else
+                            {
+                                // Raise error: cannot create user, missing information
+                            }
+                        }
+
+                        if(user != null)
+                        {
+                            // Non-required data
+                        }
+                    }
                     #endregion
                 }
             }
