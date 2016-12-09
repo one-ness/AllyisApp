@@ -74,7 +74,7 @@ namespace AllyisApps.Controllers
                     }
                 }
             }
-            return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
+            return RedirectToAction(ActionConstants.Add, ControllerConstants.Account);
         }
     }
 }
