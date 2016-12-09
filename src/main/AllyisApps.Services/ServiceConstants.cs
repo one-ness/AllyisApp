@@ -96,11 +96,6 @@
         public const string UserEmail = "User Email";
 
         /// <summary>
-        /// User-Property: Id
-        /// </summary>
-        public const string UserId = "User Id";
-
-        /// <summary>
         /// User-Property: First Name
         /// </summary>
         public const string UserFirstName = "User First Name";
@@ -114,6 +109,51 @@
         /// User-Property: Employee Id
         /// </summary>
         public const string EmployeeId = "Employee Id";
+
+        /// <summary>
+        /// User-Property: Username
+        /// </summary>
+        public const string UserName = "User Name";
+
+        /// <summary>
+        /// User-Property: Date Of Birth
+        /// </summary>
+        public const string UserDateOfBirth = "User Date Of Birth";
+
+        /// <summary>
+        /// User-Property: Address
+        /// </summary>
+        public const string UserAddress = "User Address";
+
+        /// <summary>
+        /// User-Property: City
+        /// </summary>
+        public const string UserCity = "User City";
+
+        /// <summary>
+        /// User-Property: State
+        /// </summary>
+        public const string UserState = "User State";
+
+        /// <summary>
+        /// User-Property: Country
+        /// </summary>
+        public const string UserCountry = "User Country";
+
+        /// <summary>
+        /// User-Property: Postal Code
+        /// </summary>
+        public const string UserPostalCode = "User Postal Code";
+
+        /// <summary>
+        /// User-Property: Phone Number
+        /// </summary>
+        public const string UserPhoneNumber = "User Phone Number";
+
+        /// <summary>
+        /// User-Property: Phone Extension
+        /// </summary>
+        public const string UserPhoneExtension = "User Phone Extension";
         #endregion
     }
 }

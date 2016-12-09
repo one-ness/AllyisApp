@@ -646,21 +646,21 @@ namespace AllyisApps.Services
 
                 // User importing: requires email, id, first name, and last name
                 bool hasUserEmail = table.Columns.Contains(ColumnHeaders.UserEmail);
-                bool hasUserId = table.Columns.Contains(ColumnHeaders.UserId);
+                bool hasEmployeeId = table.Columns.Contains(ColumnHeaders.EmployeeId);
                 bool hasUserFirstName = table.Columns.Contains(ColumnHeaders.UserFirstName);
                 bool hasUserLastName = table.Columns.Contains(ColumnHeaders.UserLastName);
-                string[] columnNames = { ColumnHeaders.UserEmail, ColumnHeaders.UserId, ColumnHeaders.UserFirstName, ColumnHeaders.UserLastName };
+                string[] columnNames = { ColumnHeaders.UserEmail, ColumnHeaders.EmployeeId, ColumnHeaders.UserFirstName, ColumnHeaders.UserLastName };
                 List<DataTable>[,] userLinks = new List<DataTable>[4, 4];
-                userLinks[0, 1] = userLinks[1, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.UserId)).ToList();
+                userLinks[0, 1] = userLinks[1, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.EmployeeId)).ToList();
                 userLinks[0, 2] = userLinks[2, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.UserFirstName)).ToList();
                 userLinks[0, 3] = userLinks[3, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
-                userLinks[1, 2] = userLinks[2, 1] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserId) && t.Columns.Contains(ColumnHeaders.UserFirstName)).ToList();
-                userLinks[1, 3] = userLinks[3, 1] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserId) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
+                userLinks[1, 2] = userLinks[2, 1] = tables.Where(t => t.Columns.Contains(ColumnHeaders.EmployeeId) && t.Columns.Contains(ColumnHeaders.UserFirstName)).ToList();
+                userLinks[1, 3] = userLinks[3, 1] = tables.Where(t => t.Columns.Contains(ColumnHeaders.EmployeeId) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
                 userLinks[2, 3] = userLinks[3, 2] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserFirstName) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
                 // This check isn't fool proof: rigorous checking is left for row-by-row importing. But, this skips the obvious case where a required field is missing entirely.
                 bool canImportUsers =
                     (hasUserEmail ? true : userLinks[0, 1].Count > 0 || userLinks[0, 2].Count > 0 || userLinks[0, 3].Count > 0) &&
-                    (hasUserId ? true : userLinks[1, 0].Count > 0 || userLinks[1, 2].Count > 0 || userLinks[1, 3].Count > 0) &&
+                    (hasEmployeeId ? true : userLinks[1, 0].Count > 0 || userLinks[1, 2].Count > 0 || userLinks[1, 3].Count > 0) &&
                     (hasUserFirstName ? true : userLinks[2, 0].Count > 0 || userLinks[2, 1].Count > 0 || userLinks[2, 3].Count > 0) &&
                     (hasUserLastName ? true : userLinks[3, 0].Count > 0 || userLinks[3, 1].Count > 0 || userLinks[3, 2].Count > 0);
                 #endregion
@@ -862,65 +862,96 @@ namespace AllyisApps.Services
 
                     #region User Import
 
-                    if (hasUserEmail || hasUserId || hasUserFirstName || hasUserLastName)
+                    if (hasUserEmail || hasEmployeeId || hasUserFirstName || hasUserLastName)
                     {
                         // Find all required fields, if they exist
                         string[] fields =
                         {
                             hasUserEmail ? row[ColumnHeaders.UserEmail].ToString() : null,
-                            hasUserId ? row[ColumnHeaders.UserId].ToString() : null,
+                            hasEmployeeId ? row[ColumnHeaders.EmployeeId].ToString() : null,
                             hasUserFirstName ? row[ColumnHeaders.UserFirstName].ToString() : null,
                             hasUserLastName ? row[ColumnHeaders.UserLastName].ToString() : null
                         };
-                        // Three passes, since it will take at most 3 links to get all required fields.
+                        /*  This function is a lot to take in, so here's an overview:
+                            There are 4 required fields, so in the worst case scenario we'll be using 3 different links to get them all (e.g. one sheet has email & id, another
+                            has id & last name, and a third has last name and first name). This is far too complicated if we try to navigate all the possibilities explicitly, like
+                            with projects above. Instead, we start with the field(s) that we don't have and use any sheets discovered above that link from that field to fields we do
+                            have. If one of them gives us a match, we store the found value and move on. This process is done in 3 passes (each pass only checks missing fields, so
+                            if they're all found, the pass does nothing and quickly finishes), allowing for the case of needing 3 links to get a value. If all four values haven't
+                            been found after that, we can be sure they can't all be found.
+                        */
                         for (int i = 0; i < 3; i++)
                         {
                             // i = pass, out of 3
                             for (int j = 0; j < 4; j++)
                             {
                                 // j = field we are currently trying to find
-                                if(fields[j] == null)
+                                for (int k = 0; k < 4; k++)
                                 {
-                                    for (int k = 0; k < 4; k++)
+                                    // k = field we are trying to find j from, using a link
+                                    if (fields[j] == null)
                                     {
-                                        // k = field we are trying to find j from, using a link
                                         if (j == k) continue;
                                         if (fields[k] != null)
                                         {
-                                            foreach(DataTable link in userLinks[j, k])
+                                            foreach (DataTable link in userLinks[j, k])
                                             {
                                                 try
                                                 {
                                                     fields[j] = link.Select(string.Format("[{0}] = '{1}'", columnNames[k], fields[k]))[0][columnNames[j]].ToString();
                                                     break;
-                                                } catch(IndexOutOfRangeException) { }
+                                                }
+                                                catch (IndexOutOfRangeException) { }
                                             }
                                         }
                                     }
                                 }
+                                
                             }
                         }
 
                         // All passes for linking fields are complete. At this point we either have the info to create the user, or we can't get it.
                         // Find existing user. Must match email, OR employeeId, OR both first AND last name.
-                        UserInfo user = users.Where(tup =>
+                        var userTuple = users.Where(tup =>
                             fields[0] != null ? tup.Item2.Email.Equals(fields[0]) :
                             fields[1] != null ? tup.Item1.Equals(fields[1]) :
-                            tup.Item2.FirstName.Equals(fields[2]) && tup.Item2.LastName.Equals(fields[3])).FirstOrDefault().Item2;
+                            tup.Item2.FirstName.Equals(fields[2]) && tup.Item2.LastName.Equals(fields[3])).FirstOrDefault();
+                        UserInfo user = userTuple == null ? null : userTuple.Item2;
                         if(user == null)
                         {
                             if(fields.All(s => s != null))
                             {
                                 // User does not exist, so we create it
-                                user = new UserInfo()
+                                if (Service.IsEmailAddressValid(fields[0]))
                                 {
-                                    Email = fields[0],
-                                    FirstName = fields[2],
-                                    LastName = fields[3]
-                                };
-                                //Create method for adding user directly w/o invitation process
-                                //Get back id, add org user role with fields[1]
-                                users.Add(new Tuple<string, UserInfo>(fields[1], user));
+                                    user = new UserInfo()
+                                    {
+                                        Email = fields[0],
+                                        FirstName = fields[2],
+                                        LastName = fields[3],
+                                        PasswordHash = Lib.Crypto.ComputeSHA512Hash("password") // TODO: Figure out a better default password generation system
+                                    };
+                                    //user.UserId = DBHelper.CreateUser(InfoObjectsUtility.GetDBEntityFromUserInfo(user));
+                                    //if (user.UserId != -1)
+                                    //{
+                                    //    DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
+                                    //    {
+                                    //        EmployeeId = fields[1],
+                                    //        OrganizationId = this.UserContext.ChosenOrganizationId,
+                                    //        OrgRoleId = (int)(OrganizationRole.Member),
+                                    //        UserId = user.UserId
+                                    //    });
+                                        users.Add(new Tuple<string, UserInfo>(fields[1], user));
+                                    //}
+                                    //else
+                                    //{
+                                    //    // Raise error: error creating new user
+                                    //}
+                                }
+                                else
+                                {
+                                    // Raise error: invalid email for user
+                                }
                             }
                             else
                             {
@@ -928,9 +959,25 @@ namespace AllyisApps.Services
                             }
                         }
 
-                        if(user != null)
+                        // Importing non-required user data
+                        if (user != null)
                         {
-                            // Non-required data
+                            bool updated = false;
+
+                            updated = this.readColumn(row, ColumnHeaders.UserAddress, val => user.Address = val) || updated;
+                            updated = this.readColumn(row, ColumnHeaders.UserCity, val => user.City = val) || updated;
+                            updated = this.readColumn(row, ColumnHeaders.UserCountry, val => user.Country = val) || updated;
+                            updated = this.readColumn(row, ColumnHeaders.UserDateOfBirth, val => user.State = val) || updated;
+                            updated = this.readColumn(row, ColumnHeaders.UserName, val => user.UserName = val) || updated;
+                            updated = this.readColumn(row, ColumnHeaders.UserPhoneExtension, val => user.PhoneExtension = val) || updated;
+                            updated = this.readColumn(row, ColumnHeaders.UserPhoneNumber, val => user.PhoneNumber = val) || updated;
+                            updated = this.readColumn(row, ColumnHeaders.UserPostalCode, val => user.PostalCode = val) || updated;
+                            updated = this.readColumn(row, ColumnHeaders.UserState, val => user.State = val) || updated;
+                            
+                            if (updated)
+                            {
+                                //this.SaveUserInfo(user);
+                            }
                         }
                     }
                     #endregion

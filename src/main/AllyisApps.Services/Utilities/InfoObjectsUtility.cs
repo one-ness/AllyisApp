@@ -60,6 +60,46 @@ namespace AllyisApps.Services.Utilities
 		}
 
         /// <summary>
+		/// Translates a UserInfo into a UserDBEntity.
+		/// </summary>
+		/// <param name="user">UserInfo instance.</param>
+		/// <returns>UserDBEntity instance.</returns>
+		public static UserDBEntity GetDBEntityFromUserInfo(UserInfo user)
+        {
+            if (user == null)
+            {
+                return null;
+            }
+
+            return new UserDBEntity
+            {
+                AccessFailedCount = user.AccessFailedCount,
+                ActiveOrganizationId = user.ActiveOrganizationId,
+                Address = user.Address,
+                City = user.City,
+                Country = user.Country,
+                DateOfBirth = user.DateOfBirth,
+                Email = user.Email,
+                EmailConfirmed = user.EmailConfirmed,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                LastSubscriptionId = user.LastSubscriptionId,
+                LockoutEnabled = user.LockoutEnabled,
+                LockoutEndDateUtc = user.LockoutEndDateUtc,
+                PasswordHash = user.PasswordHash,
+                PasswordResetCode = user.PasswordResetCode,
+                PhoneExtension = user.PhoneExtension,
+                PhoneNumber = user.PhoneNumber,
+                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+                State = user.State,
+                TwoFactorEnabled = user.TwoFactorEnabled,
+                UserId = user.UserId,
+                UserName = user.UserName,
+                PostalCode = user.PostalCode
+            };
+        }
+
+        /// <summary>
         /// Initializes a <see cref="CustomerInfo"/> from a <see cref="CustomerDBEntity"/>.
         /// </summary>
         /// <param name="customer">The CustomerDBEntity to use.</param>
