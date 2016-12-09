@@ -155,5 +155,29 @@
         /// </summary>
         public const string UserPhoneExtension = "User Phone Extension";
         #endregion
+
+        #region Time Entry
+
+        /// <summary>
+        /// Time Entry-Property: Date
+        /// </summary>
+        public const string Date = "Date";
+
+        /// <summary>
+        /// Time Entry-Property: Duration
+        /// </summary>
+        public const string Duration = "Duration";
+
+        /// <summary>
+        /// Time Entry-Property: Description
+        /// </summary>
+        public const string Description = "Description";
+
+        /// <summary>
+        /// Time Entry-Property: Pay Class
+        /// </summary>
+        public const string PayClass = "Pay Class";
+
+        #endregion
     }
 }

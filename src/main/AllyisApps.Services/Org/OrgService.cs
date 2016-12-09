@@ -15,6 +15,7 @@ using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Utilities;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Services
 {
@@ -663,6 +664,16 @@ namespace AllyisApps.Services
                     (hasEmployeeId ? true : userLinks[1, 0].Count > 0 || userLinks[1, 2].Count > 0 || userLinks[1, 3].Count > 0) &&
                     (hasUserFirstName ? true : userLinks[2, 0].Count > 0 || userLinks[2, 1].Count > 0 || userLinks[2, 3].Count > 0) &&
                     (hasUserLastName ? true : userLinks[3, 0].Count > 0 || userLinks[3, 1].Count > 0 || userLinks[3, 2].Count > 0);
+
+                // Project-user importing: perfomed when identifying information for both project and user are present
+                bool canImportProjectUser = (hasProjectName || hasProjectId) && (hasUserEmail || hasEmployeeId || (hasUserFirstName && hasUserLastName));
+
+                // Time Entry importing: unlike customers, projects, and users, time entry data must have all time entry information on the same sheet
+                // Requires indentifying data for user and project, as well as date, duration, and pay class
+                bool hasTTDate = table.Columns.Contains(ColumnHeaders.Date);
+                bool hasTTDuration = table.Columns.Contains(ColumnHeaders.Duration);
+                bool hasTTPayClass = table.Columns.Contains(ColumnHeaders.PayClass);
+                bool canImportTimeEntry = canImportProjectUser && hasTTDate && hasTTDuration && hasTTPayClass;
                 #endregion
 
                 // Finally, after all checks are complete, we go through row by row and import the information
@@ -737,6 +748,8 @@ namespace AllyisApps.Services
 
                     #region Project Import
 
+                    ProjectInfo project = null;
+
                     // If there is no identifying information for projects, all project related importing is skipped.
                     if (hasProjectName || hasProjectId)
                     {
@@ -790,7 +803,6 @@ namespace AllyisApps.Services
                         }
 
                         // Find the existing project.
-                        ProjectInfo project = null;
                         if (customer != null)
                         {
                             // This project has a customer specified, so we find the existing project under that customer or create it if it doesn't exist.
@@ -862,6 +874,7 @@ namespace AllyisApps.Services
 
                     #region User Import
 
+                    UserInfo user = null;
                     if (hasUserEmail || hasEmployeeId || hasUserFirstName || hasUserLastName)
                     {
                         // Find all required fields, if they exist
@@ -916,7 +929,7 @@ namespace AllyisApps.Services
                             fields[0] != null ? tup.Item2.Email.Equals(fields[0]) :
                             fields[1] != null ? tup.Item1.Equals(fields[1]) :
                             tup.Item2.FirstName.Equals(fields[2]) && tup.Item2.LastName.Equals(fields[3])).FirstOrDefault();
-                        UserInfo user = userTuple == null ? null : userTuple.Item2;
+                        user = userTuple == null ? null : userTuple.Item2;
                         if(user == null)
                         {
                             if(fields.All(s => s != null))
@@ -977,6 +990,88 @@ namespace AllyisApps.Services
                             if (updated)
                             {
                                 //this.SaveUserInfo(user);
+                            }
+                        }
+                    }
+                    #endregion
+
+                    #region Project-user and Time Entry Import
+                    if(canImportProjectUser)
+                    {
+                        // Double-check that previous adding/finding of project and user didn't fail
+                        if(project != null && user != null)
+                        {
+                            // Find existing project user
+                            if (!this.GetProjectsByUserAndOrganization(user.UserId).Where(p => p.ProjectId == project.ProjectId).Any())
+                            {
+                                // If no project user entry exists for this user and project, we create one.
+                                this.CreateProjectUser(project.ProjectId, user.UserId);
+                            }
+
+                            // Time Entry Import
+                            if(canImportTimeEntry)
+                            {
+                                // Check for subscription role
+                                bool canImportThisEntry = false;
+                                int timeTrackerProductId = Service.GetProductIdByName("TimeTracker");
+                                if (!this.GetUsersWithSubscriptionToProductInOrganization(this.UserContext.ChosenOrganizationId, timeTrackerProductId).Where(u => u.UserId == user.UserId).Any())
+                                {
+                                    // No existing subscription for this user, so we create one.
+                                    var ttSub = DBHelper.GetSubscriptionsDisplayByOrg(this.UserContext.ChosenOrganizationId).Where(s => s.ProductId == timeTrackerProductId).SingleOrDefault();
+                                    if(ttSub != null && ttSub.SubscriptionsUsed < ttSub.NumberOfUsers)
+                                    {
+                                        this.DBHelper.UpdateSubscriptionUserProductRole((int)(ProductRole.TimeTrackerUser), ttSub.SubscriptionId, user.UserId);
+                                        canImportThisEntry = true; // Successfully created.
+                                    }
+                                    else
+                                    {
+                                        // Raise error: Not enough slots left in Time Tracker subscription
+                                    }
+                                }
+                                else
+                                {
+                                    // Found existing subscription user.
+                                    canImportThisEntry = true;
+                                }
+
+                                // Import entry
+                                if(canImportThisEntry)
+                                {
+                                    DBModel.TimeTracker.TimeEntryDBEntity entry = new DBModel.TimeTracker.TimeEntryDBEntity();
+                                    string date = null;
+                                    string duration = null;
+                                    string description = "";
+                                    string payclass = "";
+                                    this.readColumn(row, ColumnHeaders.Date, val => date = val);
+                                    this.readColumn(row, ColumnHeaders.Duration, val => duration = val);
+                                    this.readColumn(row, ColumnHeaders.Description, val => description = val);
+                                    this.readColumn(row, ColumnHeaders.PayClass, val => payclass = val);
+                                    PayClassInfo payClass = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InfoObjectsUtility.InitializePayClassInfo(pc)).Where(p => p.Name.Equals(payclass)).SingleOrDefault();
+                                    if(date != null && duration != null & payClass != null)
+                                    {
+                                        // All required information is present
+                                        try
+                                        {
+                                            if (DBHelper.CreateTimeEntry(new DBModel.TimeTracker.TimeEntryDBEntity
+                                            {
+                                                Date = DateTime.Parse(date),
+                                                Description = description,
+                                                Duration = float.Parse(duration),
+                                                FirstName = user.FirstName,
+                                                LastName = user.LastName,
+                                                PayClassId = payClass.PayClassID,
+                                                ProjectId = project.ProjectId,
+                                                UserId = user.UserId
+                                            }) == -1)
+                                            {
+                                                // Raise error: could not create time entry
+                                            }
+                                        } catch (FormatException)
+                                        {
+                                            // Raise error: date or duration has bad format
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
