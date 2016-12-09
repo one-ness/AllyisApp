@@ -95,7 +95,8 @@ namespace AllyisApps.Services.Utilities
                 TwoFactorEnabled = user.TwoFactorEnabled,
                 UserId = user.UserId,
                 UserName = user.UserName,
-                PostalCode = user.PostalCode
+                PostalCode = user.PostalCode,
+                LanguagePreference = 1          // TODO: Put this into UserInfo and do proper lookup
             };
         }
 

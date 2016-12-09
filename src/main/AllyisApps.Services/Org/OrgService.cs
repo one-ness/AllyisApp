@@ -705,7 +705,7 @@ namespace AllyisApps.Services
                                             CustomerOrgId = hasCustomerId ? row[ColumnHeaders.CustomerId].ToString() : link.Select(
                                                 string.Format("[{0}] = '{1}'", ColumnHeaders.CustomerName, row[ColumnHeaders.CustomerName].ToString()))[0][ColumnHeaders.CustomerId].ToString()
                                         };
-                                        //newCustomer.CustomerId = this.CreateCustomer(newCustomer).Value;
+                                        newCustomer.CustomerId = this.CreateCustomer(newCustomer).Value;
                                         customersProjects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(
                                             newCustomer,
                                             new List<ProjectInfo>()
@@ -739,7 +739,7 @@ namespace AllyisApps.Services
 
                             if (updated)
                             {
-                                //this.UpdateCustomer(customer);
+                                this.UpdateCustomer(customer);
                             }
                         }
                     }
@@ -828,15 +828,15 @@ namespace AllyisApps.Services
                                         StartingDate = DateTime.Now,
                                         EndingDate = DateTime.Now.AddMonths(6)
                                     };
-                                    //project.ProjectId = this.CreateProject(project);
-                                    //if (project.ProjectId == -1)
-                                    //{
-                                    //    project = null;
-                                    //}
-                                    //else
-                                    //{
+                                    project.ProjectId = this.CreateProject(project);
+                                    if (project.ProjectId == -1)
+                                    {
+                                        project = null;
+                                    }
+                                    else
+                                    {
                                         customersProjects.Where(tup => tup.Item1 == customer).FirstOrDefault().Item2.Add(project);
-                                    //}
+                                    }
                                 }
                             }
                         }
@@ -865,7 +865,7 @@ namespace AllyisApps.Services
 
                             if (updated)
                             {
-                                //this.UpdateProject(project);
+                                this.UpdateProject(project);
                             }
                         }
                     }
@@ -944,22 +944,22 @@ namespace AllyisApps.Services
                                         LastName = fields[3],
                                         PasswordHash = Lib.Crypto.ComputeSHA512Hash("password") // TODO: Figure out a better default password generation system
                                     };
-                                    //user.UserId = DBHelper.CreateUser(InfoObjectsUtility.GetDBEntityFromUserInfo(user));
-                                    //if (user.UserId != -1)
-                                    //{
-                                    //    DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
-                                    //    {
-                                    //        EmployeeId = fields[1],
-                                    //        OrganizationId = this.UserContext.ChosenOrganizationId,
-                                    //        OrgRoleId = (int)(OrganizationRole.Member),
-                                    //        UserId = user.UserId
-                                    //    });
+                                    user.UserId = DBHelper.CreateUser(InfoObjectsUtility.GetDBEntityFromUserInfo(user));
+                                    if (user.UserId != -1)
+                                    {
+                                        DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
+                                        {
+                                            EmployeeId = fields[1],
+                                            OrganizationId = this.UserContext.ChosenOrganizationId,
+                                            OrgRoleId = (int)(OrganizationRole.Member),
+                                            UserId = user.UserId
+                                        });
                                         users.Add(new Tuple<string, UserInfo>(fields[1], user));
-                                    //}
-                                    //else
-                                    //{
-                                    //    // Raise error: error creating new user
-                                    //}
+                                    }
+                                    else
+                                    {
+                                        // Raise error: error creating new user
+                                    }
                                 }
                                 else
                                 {
@@ -989,7 +989,7 @@ namespace AllyisApps.Services
                             
                             if (updated)
                             {
-                                //this.SaveUserInfo(user);
+                                this.SaveUserInfo(user);
                             }
                         }
                     }
@@ -1037,16 +1037,15 @@ namespace AllyisApps.Services
                                 // Import entry
                                 if(canImportThisEntry)
                                 {
-                                    DBModel.TimeTracker.TimeEntryDBEntity entry = new DBModel.TimeTracker.TimeEntryDBEntity();
                                     string date = null;
                                     string duration = null;
-                                    string description = "";
-                                    string payclass = "";
+                                    string description = "";        // Blank by default
+                                    string payclass = "Regular";    // Regular by default
                                     this.readColumn(row, ColumnHeaders.Date, val => date = val);
                                     this.readColumn(row, ColumnHeaders.Duration, val => duration = val);
                                     this.readColumn(row, ColumnHeaders.Description, val => description = val);
                                     this.readColumn(row, ColumnHeaders.PayClass, val => payclass = val);
-                                    PayClassInfo payClass = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InfoObjectsUtility.InitializePayClassInfo(pc)).Where(p => p.Name.Equals(payclass)).SingleOrDefault();
+                                    PayClassInfo payClass = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InfoObjectsUtility.InitializePayClassInfo(pc)).Where(p => p.Name.ToUpper().Equals(payclass.ToUpper())).SingleOrDefault();
                                     if(date != null && duration != null & payClass != null)
                                     {
                                         // All required information is present
