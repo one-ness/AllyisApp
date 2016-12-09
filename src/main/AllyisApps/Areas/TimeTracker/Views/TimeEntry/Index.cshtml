@@ -177,6 +177,28 @@ ViewBag.RenderSidebar = true;}
             </div>
         </div>
     }
+    @if (Model.CanManage)
+    {
+        using (Html.BeginForm(ActionConstants.Import, ControllerConstants.TimeEntry, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken();
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h1 class="panel-title">@AllyisApps.Resources.Views.Account.Strings.Upload</h1>
+                </div>
+                <div>
+                    <input type="file" id="upload-box" name="upload" style="display:none;"
+                           onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                    <input id="upload-file-name-display" class="form-control"
+                           onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                </div>
+                <div style="width:70%; margin:0 auto">
+                    <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@AllyisApps.Resources.Views.Account.Strings.ChooseFile</a>
+                    <input style="margin-left: 5px" type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
+                </div>
+            </div>
+        }
+    }
 }
 
 @section css

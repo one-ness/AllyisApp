@@ -195,4 +195,7 @@
   <data name="CustomerOrgId" xml:space="preserve">
     <value>Customer ID</value>
   </data>
+  <data name="ImportCustomers" xml:space="preserve">
+    <value>Upload an Excel file with information about customers and projects to import more than one at a time.</value>
+  </data>
 </root>

@@ -185,6 +185,7 @@
   <ItemGroup>
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\GetProjectsAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryRangeForUserViewModel.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="Controllers\Auth\CreateOrgAction.cs" />
     <Compile Include="Controllers\Auth\EditProfileAction.cs" />
     <Compile Include="Controllers\Auth\ForgotPasswordAction.cs" />
+    <Compile Include="Controllers\Auth\ImportAction.cs" />
     <Compile Include="Controllers\Auth\IndexAction.cs" />
     <Compile Include="Controllers\Auth\LogOffAction.cs" />
     <Compile Include="Controllers\Auth\LogOnAction.cs" />
