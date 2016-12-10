@@ -648,25 +648,28 @@ namespace AllyisApps.Services
                 // User importing: requires email, id, first name, and last name
                 bool hasUserEmail = table.Columns.Contains(ColumnHeaders.UserEmail);
                 bool hasEmployeeId = table.Columns.Contains(ColumnHeaders.EmployeeId);
-                bool hasUserFirstName = table.Columns.Contains(ColumnHeaders.UserFirstName);
-                bool hasUserLastName = table.Columns.Contains(ColumnHeaders.UserLastName);
-                string[] columnNames = { ColumnHeaders.UserEmail, ColumnHeaders.EmployeeId, ColumnHeaders.UserFirstName, ColumnHeaders.UserLastName };
-                List<DataTable>[,] userLinks = new List<DataTable>[4, 4];
+                bool hasUserName = table.Columns.Contains(ColumnHeaders.UserFirstName) && table.Columns.Contains(ColumnHeaders.UserLastName);
+                //bool hasUserFirstName = table.Columns.Contains(ColumnHeaders.UserFirstName);
+                //bool hasUserLastName = table.Columns.Contains(ColumnHeaders.UserLastName);
+                List<DataTable>[,] userLinks = new List<DataTable>[3, 3];
                 userLinks[0, 1] = userLinks[1, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.EmployeeId)).ToList();
-                userLinks[0, 2] = userLinks[2, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.UserFirstName)).ToList();
-                userLinks[0, 3] = userLinks[3, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
-                userLinks[1, 2] = userLinks[2, 1] = tables.Where(t => t.Columns.Contains(ColumnHeaders.EmployeeId) && t.Columns.Contains(ColumnHeaders.UserFirstName)).ToList();
-                userLinks[1, 3] = userLinks[3, 1] = tables.Where(t => t.Columns.Contains(ColumnHeaders.EmployeeId) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
-                userLinks[2, 3] = userLinks[3, 2] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserFirstName) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
+                userLinks[0, 2] = userLinks[2, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.UserFirstName) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
+                userLinks[1, 2] = userLinks[2, 1] = tables.Where(t => t.Columns.Contains(ColumnHeaders.EmployeeId) && t.Columns.Contains(ColumnHeaders.UserFirstName) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
+                //List<DataTable>[,] userLinks = new List<DataTable>[4, 4];
+                //userLinks[0, 1] = userLinks[1, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.EmployeeId)).ToList();
+                //userLinks[0, 2] = userLinks[2, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.UserFirstName)).ToList();
+                //userLinks[0, 3] = userLinks[3, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
+                //userLinks[1, 2] = userLinks[2, 1] = tables.Where(t => t.Columns.Contains(ColumnHeaders.EmployeeId) && t.Columns.Contains(ColumnHeaders.UserFirstName)).ToList();
+                //userLinks[1, 3] = userLinks[3, 1] = tables.Where(t => t.Columns.Contains(ColumnHeaders.EmployeeId) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
+                //userLinks[2, 3] = userLinks[3, 2] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserFirstName) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
                 // This check isn't fool proof: rigorous checking is left for row-by-row importing. But, this skips the obvious case where a required field is missing entirely.
                 bool canImportUsers =
-                    (hasUserEmail ? true : userLinks[0, 1].Count > 0 || userLinks[0, 2].Count > 0 || userLinks[0, 3].Count > 0) &&
-                    (hasEmployeeId ? true : userLinks[1, 0].Count > 0 || userLinks[1, 2].Count > 0 || userLinks[1, 3].Count > 0) &&
-                    (hasUserFirstName ? true : userLinks[2, 0].Count > 0 || userLinks[2, 1].Count > 0 || userLinks[2, 3].Count > 0) &&
-                    (hasUserLastName ? true : userLinks[3, 0].Count > 0 || userLinks[3, 1].Count > 0 || userLinks[3, 2].Count > 0);
+                    (hasUserEmail ? true : userLinks[0, 1].Count > 0 || userLinks[0, 2].Count > 0) &&
+                    (hasEmployeeId ? true : userLinks[1, 0].Count > 0 || userLinks[1, 2].Count > 0) &&
+                    (hasUserName ? true : userLinks[2, 0].Count > 0 || userLinks[2, 1].Count > 0);
 
                 // Project-user importing: perfomed when identifying information for both project and user are present
-                bool canImportProjectUser = (hasProjectName || hasProjectId) && (hasUserEmail || hasEmployeeId || (hasUserFirstName && hasUserLastName));
+                bool canImportProjectUser = (hasProjectName || hasProjectId) && (hasUserEmail || hasEmployeeId || hasUserName);
 
                 // Time Entry importing: unlike customers, projects, and users, time entry data must have all time entry information on the same sheet
                 // Requires indentifying data for user and project, as well as date, duration, and pay class
@@ -875,31 +878,29 @@ namespace AllyisApps.Services
                     #region User Import
 
                     UserInfo user = null;
-                    if (hasUserEmail || hasEmployeeId || hasUserFirstName || hasUserLastName)
+                    if (hasUserEmail || hasEmployeeId || hasUserName)
                     {
                         // Find all required fields, if they exist
                         string[] fields =
                         {
                             hasUserEmail ? row[ColumnHeaders.UserEmail].ToString() : null,
                             hasEmployeeId ? row[ColumnHeaders.EmployeeId].ToString() : null,
-                            hasUserFirstName ? row[ColumnHeaders.UserFirstName].ToString() : null,
-                            hasUserLastName ? row[ColumnHeaders.UserLastName].ToString() : null
+                            hasUserName ? row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString() : null
                         };
                         /*  This function is a lot to take in, so here's an overview:
-                            There are 4 required fields, so in the worst case scenario we'll be using 3 different links to get them all (e.g. one sheet has email & id, another
-                            has id & last name, and a third has last name and first name). This is far too complicated if we try to navigate all the possibilities explicitly, like
-                            with projects above. Instead, we start with the field(s) that we don't have and use any sheets discovered above that link from that field to fields we do
-                            have. If one of them gives us a match, we store the found value and move on. This process is done in 3 passes (each pass only checks missing fields, so
-                            if they're all found, the pass does nothing and quickly finishes), allowing for the case of needing 3 links to get a value. If all four values haven't
+                            There are 4 required fields, two of which must be together. In the worst case scenario we'll be using 2 different links to get them all (e.g. one sheet has
+                            email & id, another has id, last name, and first name). We start with the field(s) that we don't have and use any sheets discovered above that link from that field 
+                            to fields we do have. If one of them gives us a match, we store the found value and move on. This process is done in 2 passes (each pass only checks missing fields, so
+                            if they're all found, the pass does nothing and quickly finishes), allowing for the case of needing 2 links to get a value. If all four values haven't
                             been found after that, we can be sure they can't all be found.
                         */
-                        for (int i = 0; i < 3; i++)
+                        for (int i = 0; i < 2; i++)
                         {
-                            // i = pass, out of 3
-                            for (int j = 0; j < 4; j++)
+                            // i = pass, out of 2
+                            for (int j = 0; j < 3; j++)
                             {
                                 // j = field we are currently trying to find
-                                for (int k = 0; k < 4; k++)
+                                for (int k = 0; k < 3; k++)
                                 {
                                     // k = field we are trying to find j from, using a link
                                     if (fields[j] == null)
@@ -911,7 +912,7 @@ namespace AllyisApps.Services
                                             {
                                                 try
                                                 {
-                                                    fields[j] = link.Select(string.Format("[{0}] = '{1}'", columnNames[k], fields[k]))[0][columnNames[j]].ToString();
+                                                    fields[j] = this.readUserDataColumn(k, j, link, fields[k]);
                                                     break;
                                                 }
                                                 catch (IndexOutOfRangeException) { }
@@ -925,10 +926,11 @@ namespace AllyisApps.Services
 
                         // All passes for linking fields are complete. At this point we either have the info to create the user, or we can't get it.
                         // Find existing user. Must match email, OR employeeId, OR both first AND last name.
+                        string[] names = fields[2].Split(new string[] { "__IMPORT__" }, StringSplitOptions.None);
                         var userTuple = users.Where(tup =>
                             fields[0] != null ? tup.Item2.Email.Equals(fields[0]) :
                             fields[1] != null ? tup.Item1.Equals(fields[1]) :
-                            tup.Item2.FirstName.Equals(fields[2]) && tup.Item2.LastName.Equals(fields[3])).FirstOrDefault();
+                            tup.Item2.FirstName.Equals(names[0]) && tup.Item2.LastName.Equals(names[1])).FirstOrDefault();
                         user = userTuple == null ? null : userTuple.Item2;
                         if(user == null)
                         {
@@ -940,8 +942,8 @@ namespace AllyisApps.Services
                                     user = new UserInfo()
                                     {
                                         Email = fields[0],
-                                        FirstName = fields[2],
-                                        LastName = fields[3],
+                                        FirstName = names[0],
+                                        LastName = names[1],
                                         PasswordHash = Lib.Crypto.ComputeSHA512Hash("password") // TODO: Figure out a better default password generation system
                                     };
                                     user.UserId = DBHelper.CreateUser(InfoObjectsUtility.GetDBEntityFromUserInfo(user));
@@ -1103,6 +1105,44 @@ namespace AllyisApps.Services
             }
             catch (ArgumentException) { }
             return false;
+        }
+
+        /// <summary>
+        /// Reads user required fields from matches in a linking data table.
+        /// </summary>
+        /// <param name="fieldIdFrom">Field index for value linking from (0 = email, 1 = employee id, 2 = name).</param>
+        /// <param name="fieldIdTo">Field index for value linking to.</param>
+        /// <param name="link">DataTable linking fields.</param>
+        /// <param name="fromValue">Value of field linking from.</param>
+        /// <returns>Matching value of field linking to, or null.</returns>
+        private string readUserDataColumn(int fieldIdFrom, int fieldIdTo, DataTable link, string fromValue)
+        {
+            try
+            {
+                fromValue = fromValue.Replace("'", "''"); //Escape any 's in the names
+                string selectText = null;
+                if (fieldIdFrom == 2)
+                {
+                    string[] names = fromValue.Split(new string[] { "__IMPORT__" }, StringSplitOptions.None);
+                    selectText = string.Format("[{0}] = '{1}' AND [{2}] = '{3}'", ColumnHeaders.UserFirstName, names[0], ColumnHeaders.UserLastName, names[1]);
+                }
+                else
+                {
+                    selectText = string.Format("[{0}] = '{1}'", fieldIdFrom == 0 ? ColumnHeaders.UserEmail : ColumnHeaders.EmployeeId, fromValue);
+                }
+                DataRow row = link.Select(selectText)[0];
+                if (fieldIdTo == 2)
+                {
+                    return row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString();
+                }
+                else
+                {
+                    return row[fieldIdTo == 0 ? ColumnHeaders.UserEmail : ColumnHeaders.EmployeeId].ToString();
+                }
+            } catch (IndexOutOfRangeException)
+            {
+                return null;
+            }
         }
     }
 }
