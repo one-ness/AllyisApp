@@ -687,27 +687,52 @@ namespace AllyisApps.Services
                             if (canCreateCustomers)
                             {
                                 // No customer was found, so a new one is created.
-                                foreach (DataTable link in customerImportLinks)
+                                CustomerInfo newCustomer = null;
+                                if (customerImportLinks.Count == 0)
                                 {
+                                    // If customerImportLinks is empty, it's because all the information is on this sheet.
                                     try
                                     {
-                                        CustomerInfo newCustomer = new CustomerInfo
+                                        newCustomer = new CustomerInfo
                                         {
                                             // For each required field, if it is not present on this sheet, then the linked sheet is used to look it up based on the other value.
-                                            Name = hasCustomerName ? row[ColumnHeaders.CustomerName].ToString() : link.Select(
-                                                string.Format("[{0}] = '{1}'", ColumnHeaders.CustomerId, row[ColumnHeaders.CustomerId].ToString()))[0][ColumnHeaders.CustomerName].ToString(),
-                                            CustomerOrgId = hasCustomerId ? row[ColumnHeaders.CustomerId].ToString() : link.Select(
-                                                string.Format("[{0}] = '{1}'", ColumnHeaders.CustomerName, row[ColumnHeaders.CustomerName].ToString()))[0][ColumnHeaders.CustomerId].ToString(),
+                                            Name = row[ColumnHeaders.CustomerName].ToString(),
+                                            CustomerOrgId = row[ColumnHeaders.CustomerId].ToString(),
                                             OrganizationId = this.UserContext.ChosenOrganizationId
                                         };
-                                        newCustomer.CustomerId = this.CreateCustomer(newCustomer).Value;
-                                        customersProjects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(
-                                            newCustomer,
-                                            new List<ProjectInfo>()
-                                        ));
-                                        customer = newCustomer;
-                                        break;
-                                    } catch (IndexOutOfRangeException) { }
+                                    }
+                                    catch (IndexOutOfRangeException) { }
+                                }
+                                else
+                                {
+                                    // If customerImportLinks has been set, we have to grab some information from another sheet.
+                                    foreach (DataTable link in customerImportLinks)
+                                    {
+                                        try
+                                        {
+                                            newCustomer = new CustomerInfo
+                                            {
+                                                // For each required field, if it is not present on this sheet, then the linked sheet is used to look it up based on the other value.
+                                                Name = hasCustomerName ? row[ColumnHeaders.CustomerName].ToString() : link.Select(
+                                                    string.Format("[{0}] = '{1}'", ColumnHeaders.CustomerId, row[ColumnHeaders.CustomerId].ToString()))[0][ColumnHeaders.CustomerName].ToString(),
+                                                CustomerOrgId = hasCustomerId ? row[ColumnHeaders.CustomerId].ToString() : link.Select(
+                                                    string.Format("[{0}] = '{1}'", ColumnHeaders.CustomerName, row[ColumnHeaders.CustomerName].ToString()))[0][ColumnHeaders.CustomerId].ToString(),
+                                                OrganizationId = this.UserContext.ChosenOrganizationId
+                                            };
+                                            
+                                            break;
+                                        }
+                                        catch (IndexOutOfRangeException) { }
+                                    }
+                                }
+                                if (newCustomer != null)
+                                {
+                                    newCustomer.CustomerId = this.CreateCustomer(newCustomer).Value;
+                                    customersProjects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(
+                                        newCustomer,
+                                        new List<ProjectInfo>()
+                                    ));
+                                    customer = newCustomer;
                                 }
 
                                 if (customer == null)
