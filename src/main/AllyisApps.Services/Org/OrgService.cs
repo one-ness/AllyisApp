@@ -605,20 +605,20 @@ namespace AllyisApps.Services
             // Retrieval of existing user data
             List<Tuple<string, UserInfo>> users = this.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Select(o => new Tuple<string, UserInfo>(o.EmployeeId, this.GetUserInfo(o.UserId))).ToList();
 
-            // Then, we loop through and see what can be imported from each table in turn. Order doesn't matter, since missing information
+            // Loop through and see what can be imported from each table in turn. Order doesn't matter, since missing information
             // will be sought from other tables as needed.
             foreach (DataTable table in tables)
             {
                 #region Column Header Checks
 
                 // Customer importing: requires both customer name and customer id. Other information is optional, and can be filled in later.
-                // First, we check if both required fields are present in this table, or if only one is, whether both are on another table.
                 bool hasCustomerName = table.Columns.Contains(ColumnHeaders.CustomerName);
                 bool hasCustomerId = table.Columns.Contains(ColumnHeaders.CustomerId);
                 bool canCreateCustomers = hasCustomerName && hasCustomerId;
                 List<DataTable> customerImportLinks = new List<DataTable>();
                 if (hasCustomerName ^ hasCustomerId)
                 {
+                    // If only one thing is on this sheet, we see if both exist together on another sheet
                     customerImportLinks = tables.Where(t => t.Columns.Contains(ColumnHeaders.CustomerName) && t.Columns.Contains(ColumnHeaders.CustomerId)).ToList();
                     if (customerImportLinks.Count() > 0)
                     {
@@ -646,7 +646,7 @@ namespace AllyisApps.Services
                     }
                 }
 
-                // User importing: requires email, id, first name, and last name
+                // User importing: requires email, id, first and last name
                 bool hasUserEmail = table.Columns.Contains(ColumnHeaders.UserEmail);
                 bool hasEmployeeId = table.Columns.Contains(ColumnHeaders.EmployeeId);
                 bool hasUserName = table.Columns.Contains(ColumnHeaders.UserFirstName) && table.Columns.Contains(ColumnHeaders.UserLastName);
@@ -670,7 +670,7 @@ namespace AllyisApps.Services
                 bool canImportTimeEntry = canImportProjectUser && hasTTDate && hasTTDuration && hasTTPayClass;
                 #endregion
 
-                // Finally, after all checks are complete, we go through row by row and import the information
+                // After all checks are complete, we go through row by row and import the information
                 foreach (DataRow row in table.Rows)
                 {
                     if (row.ItemArray.All(i => string.IsNullOrEmpty(i?.ToString()))) break; // Avoid iterating through empty rows
@@ -901,6 +901,8 @@ namespace AllyisApps.Services
                                 {
                                     hasUserEmail ? row[ColumnHeaders.UserEmail].ToString() : null,
                                     hasEmployeeId ? row[ColumnHeaders.EmployeeId].ToString() : null,
+                                    // Since first and last name must be together and treated as one piece of information, they are joined in this datastructure. Hopefully, we'll never
+                                    // have a user who's name includes the text __IMPORT__
                                     hasUserName ? row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString() : null
                                 };
 
@@ -909,7 +911,7 @@ namespace AllyisApps.Services
                                     email & id, another has id, last name, and first name). We start with the field(s) that we don't have and use any sheets discovered above that link from that field 
                                     to fields we do have. If one of them gives us a match, we store the found value and move on. This process is done in 2 passes (each pass only checks missing fields, so
                                     if they're all found, the pass does nothing and quickly finishes), allowing for the case of needing 2 links to get a value. If all four values haven't
-                                    been found after that, we can be sure they can't all be found.
+                                    been found after that, we can be sure that they can't all be found.
                                 */
                                 for (int i = 0; i < 2; i++)
                                 {
@@ -929,7 +931,7 @@ namespace AllyisApps.Services
                                                     {
                                                         try
                                                         {
-                                                            fields[j] = this.readUserDataColumn(k, j, link, fields[k]);
+                                                            fields[j] = this.readUserDataColumn(k, j, link, fields[k]); // A private method that can handle reading one column or the case of both name columns, with no difference in usage here.
                                                             if(fields[j] != null)
                                                             {
                                                                 break;
@@ -1064,8 +1066,8 @@ namespace AllyisApps.Services
                                 {
                                     string date = null;
                                     string duration = null;
-                                    string description = "";        // Blank by default
-                                    string payclass = "Regular";    // Regular by default
+                                    string description = "";
+                                    string payclass = "Regular";
                                     this.readColumn(row, ColumnHeaders.Date, val => date = val);
                                     this.readColumn(row, ColumnHeaders.Duration, val => duration = val);
                                     this.readColumn(row, ColumnHeaders.Description, val => description = val);
@@ -1110,7 +1112,6 @@ namespace AllyisApps.Services
                     #endregion
                 }
             }
-            
         }
 
         /// <summary>

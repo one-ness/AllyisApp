@@ -145,35 +145,6 @@ namespace AllyisApps.Services {
 			return null;
 		}
 
-        /// <summary>
-        /// Given a dataset with customer data that matches the column headers described in
-        /// ServiceConstants.cs, this function creates customers from the data, skipping any customers
-        /// that already exist.
-        /// </summary>
-        /// <param name="customerData">A DataTable representing customer data</param>
-        public void ImportCustomers(DataTable customerData)
-        {
-            // Get existing customers
-            IEnumerable<CustomerInfo> customerList = this.GetCustomerList(this.UserContext.ChosenOrganizationId);
-
-            foreach (DataRow row in customerData.Rows)
-            {
-                if (row.ItemArray.All(i => string.IsNullOrEmpty(i?.ToString()))) break; // Avoid iterating through empty rows
-
-                /* TODO: Once we know more about what the imported file will look like (specifically, column names for data),
-                we can add more CustomerInfo values from the imported file. To do so, go to ServiceConstants.cs and
-                add a constant variable under the ColumnHeaders class for the excel file's column header.
-                */
-                string customerName = row[ColumnHeaders.CustomerName].ToString();
-                if (!customerList.Any(C => C.Name == customerName)) // Only import customers that do not exist already
-                {
-                    CustomerInfo newCustomer = new CustomerInfo() { Name = customerName, OrganizationId = this.UserContext.ChosenOrganizationId };
-                    this.CreateCustomer(newCustomer);
-                    customerList = customerList.Concat(new[] { newCustomer });
-                }
-            }
-        }
-
 		/// <summary>
 		/// Updates a customer in the database.
 		/// </summary>
@@ -238,7 +209,6 @@ namespace AllyisApps.Services {
 				if (dbe != null)
 				{
                     list.Add(InfoObjectsUtility.InitializeCustomerInfo(dbe));
-                        CustomerOrgId = dbe.CustomerOrgId
 				}
 			}
 

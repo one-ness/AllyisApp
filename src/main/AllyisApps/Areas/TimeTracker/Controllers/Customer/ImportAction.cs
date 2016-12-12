@@ -12,7 +12,6 @@ using System.Web.Mvc;
 using AllyisApps.Core;
 using AllyisApps.Services;
 
-
 using Excel;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -36,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
             // TODO: Buff up the error handling (catch errors from import functions, etc.)
             if (ModelState.IsValid)
             {
-                if(Service.Can(Actions.CoreAction.EditCustomer))
+                if (Service.Can(Actions.CoreAction.EditCustomer))
                 {
                     if (upload != null && upload.ContentLength > 0)
                     {
@@ -74,6 +73,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                     }
                 }
             }
+
             return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
         }
     }

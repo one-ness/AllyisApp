@@ -93,44 +93,6 @@ namespace AllyisApps.Services
 
             return DBHelper.CreateProject(InfoObjectsUtility.GetDBEntityFromProjectInfo(newProject));
         }
-
-        //public void ImportProjects(DataTable projectData)
-        //{
-        //    // Get existing customers
-        //    IEnumerable<CustomerInfo> customerList = this.GetCustomerList(this.UserContext.ChosenOrganizationId);
-
-        //    foreach (DataRow row in projectData.Rows)
-        //    {
-        //        if (row.ItemArray.All(i => string.IsNullOrEmpty(i?.ToString()))) break; // Avoid iterating through empty rows
-
-        //        /* Projects are dependant on Customers; so, to import a project, we must ensure that the associated customer
-        //            also gets imported first. */
-        //        string customerName = row[ColumnHeaders.CustomerName].ToString();
-        //        string projectName = row[ColumnHeaders.ProjectName].ToString();
-        //        int? id = 0;
-
-        //        /* TODO: Once we know more about what the imported file will look like (specifically, column names for data),
-        //        we can add more CustomerInfo values from the imported file. To do so, go to ServiceConstants.cs and
-        //        add a constant variable under the ColumnHeaders class for the excel file's column header.
-        //        */
-        //        if (customerList.Count() == 0 || 
-        //            (id = customerList.Where(C=>C.Name == customerName).Select(C => C.CustomerId).DefaultIfEmpty(0).FirstOrDefault()) == 0) // Only create customers that do not already exist in the org; get the id if they do
-        //        {
-        //            CustomerInfo newCustomer = new CustomerInfo() { Name = customerName, OrganizationId = this.UserContext.ChosenOrganizationId };
-        //            id = this.CreateCustomer(newCustomer);
-        //            customerList = customerList.Concat(new[] { newCustomer });
-        //        }
-        //        if (!this.GetProjectsByCustomer(id.Value).Any(P => P.Name == projectName)) // Only create projects that do not already exist under the customer
-        //            this.CreateProject(
-        //                id.Value,                             
-        //                projectName,
-        //                row[ColumnHeaders.ProjectType].ToString(),
-        //                "",
-        //                Convert.ToDateTime(row[ColumnHeaders.ProjectStartDate]),
-        //                Convert.ToDateTime(row[ColumnHeaders.ProjectEndDate])
-        //                );
-        //    }
-        //}
         
         /// <summary>
         /// Updates a project's properties.
