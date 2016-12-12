@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Utilities;
 using AllyisApps.Services.TimeTracker;
@@ -649,20 +650,10 @@ namespace AllyisApps.Services
                 bool hasUserEmail = table.Columns.Contains(ColumnHeaders.UserEmail);
                 bool hasEmployeeId = table.Columns.Contains(ColumnHeaders.EmployeeId);
                 bool hasUserName = table.Columns.Contains(ColumnHeaders.UserFirstName) && table.Columns.Contains(ColumnHeaders.UserLastName);
-                //bool hasUserFirstName = table.Columns.Contains(ColumnHeaders.UserFirstName);
-                //bool hasUserLastName = table.Columns.Contains(ColumnHeaders.UserLastName);
                 List<DataTable>[,] userLinks = new List<DataTable>[3, 3];
                 userLinks[0, 1] = userLinks[1, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.EmployeeId)).ToList();
                 userLinks[0, 2] = userLinks[2, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.UserFirstName) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
                 userLinks[1, 2] = userLinks[2, 1] = tables.Where(t => t.Columns.Contains(ColumnHeaders.EmployeeId) && t.Columns.Contains(ColumnHeaders.UserFirstName) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
-                //List<DataTable>[,] userLinks = new List<DataTable>[4, 4];
-                //userLinks[0, 1] = userLinks[1, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.EmployeeId)).ToList();
-                //userLinks[0, 2] = userLinks[2, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.UserFirstName)).ToList();
-                //userLinks[0, 3] = userLinks[3, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserEmail) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
-                //userLinks[1, 2] = userLinks[2, 1] = tables.Where(t => t.Columns.Contains(ColumnHeaders.EmployeeId) && t.Columns.Contains(ColumnHeaders.UserFirstName)).ToList();
-                //userLinks[1, 3] = userLinks[3, 1] = tables.Where(t => t.Columns.Contains(ColumnHeaders.EmployeeId) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
-                //userLinks[2, 3] = userLinks[3, 2] = tables.Where(t => t.Columns.Contains(ColumnHeaders.UserFirstName) && t.Columns.Contains(ColumnHeaders.UserLastName)).ToList();
-                // This check isn't fool proof: rigorous checking is left for row-by-row importing. But, this skips the obvious case where a required field is missing entirely.
                 bool canImportUsers =
                     (hasUserEmail ? true : userLinks[0, 1].Count > 0 || userLinks[0, 2].Count > 0) &&
                     (hasEmployeeId ? true : userLinks[1, 0].Count > 0 || userLinks[1, 2].Count > 0) &&
@@ -706,7 +697,8 @@ namespace AllyisApps.Services
                                             Name = hasCustomerName ? row[ColumnHeaders.CustomerName].ToString() : link.Select(
                                                 string.Format("[{0}] = '{1}'", ColumnHeaders.CustomerId, row[ColumnHeaders.CustomerId].ToString()))[0][ColumnHeaders.CustomerName].ToString(),
                                             CustomerOrgId = hasCustomerId ? row[ColumnHeaders.CustomerId].ToString() : link.Select(
-                                                string.Format("[{0}] = '{1}'", ColumnHeaders.CustomerName, row[ColumnHeaders.CustomerName].ToString()))[0][ColumnHeaders.CustomerId].ToString()
+                                                string.Format("[{0}] = '{1}'", ColumnHeaders.CustomerName, row[ColumnHeaders.CustomerName].ToString()))[0][ColumnHeaders.CustomerId].ToString(),
+                                            OrganizationId = this.UserContext.ChosenOrganizationId
                                         };
                                         newCustomer.CustomerId = this.CreateCustomer(newCustomer).Value;
                                         customersProjects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(
@@ -797,7 +789,7 @@ namespace AllyisApps.Services
                                         customerIdentity = link.Select(string.Format("[{0}] = '{1}'",
                                             linkHasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId,
                                             linkHasProjectName ? name : orgId)
-                                        )[0][linkHasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId].ToString();
+                                        )[0][linkHasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId].ToString().Trim();
                                         customer = customersProjects.Select(tup => tup.Item1).Where(c => linkHasCustomerName ? c.Name.Equals(customerIdentity) : c.CustomerOrgId.Equals(customerIdentity)).FirstOrDefault();
                                         break; // Match found.
                                     } catch (IndexOutOfRangeException) { }
@@ -809,7 +801,7 @@ namespace AllyisApps.Services
                         if (customer != null)
                         {
                             // This project has a customer specified, so we find the existing project under that customer or create it if it doesn't exist.
-                            project = customersProjects.Where(tup => tup.Item1 == customer).FirstOrDefault().Item2.Where(
+                            project = customersProjects.Where(tup => tup.Item1.CustomerId == customer.CustomerId).FirstOrDefault().Item2.Where(
                                 p => hasProjectName ? p.Name.Equals(row[ColumnHeaders.ProjectName].ToString()) : p.ProjectOrgId.Equals(row[ColumnHeaders.ProjectId].ToString())).FirstOrDefault();
                             if (project == null)
                             {
@@ -880,97 +872,128 @@ namespace AllyisApps.Services
                     UserInfo user = null;
                     if (hasUserEmail || hasEmployeeId || hasUserName)
                     {
-                        // Find all required fields, if they exist
-                        string[] fields =
+                        // Find existing user by whatever information we have
+                        Tuple<string, UserInfo> userTuple = null;
+                        if(hasUserEmail)
                         {
-                            hasUserEmail ? row[ColumnHeaders.UserEmail].ToString() : null,
-                            hasEmployeeId ? row[ColumnHeaders.EmployeeId].ToString() : null,
-                            hasUserName ? row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString() : null
-                        };
-                        /*  This function is a lot to take in, so here's an overview:
-                            There are 4 required fields, two of which must be together. In the worst case scenario we'll be using 2 different links to get them all (e.g. one sheet has
-                            email & id, another has id, last name, and first name). We start with the field(s) that we don't have and use any sheets discovered above that link from that field 
-                            to fields we do have. If one of them gives us a match, we store the found value and move on. This process is done in 2 passes (each pass only checks missing fields, so
-                            if they're all found, the pass does nothing and quickly finishes), allowing for the case of needing 2 links to get a value. If all four values haven't
-                            been found after that, we can be sure they can't all be found.
-                        */
-                        for (int i = 0; i < 2; i++)
-                        {
-                            // i = pass, out of 2
-                            for (int j = 0; j < 3; j++)
-                            {
-                                // j = field we are currently trying to find
-                                for (int k = 0; k < 3; k++)
-                                {
-                                    // k = field we are trying to find j from, using a link
-                                    if (fields[j] == null)
-                                    {
-                                        if (j == k) continue;
-                                        if (fields[k] != null)
-                                        {
-                                            foreach (DataTable link in userLinks[j, k])
-                                            {
-                                                try
-                                                {
-                                                    fields[j] = this.readUserDataColumn(k, j, link, fields[k]);
-                                                    break;
-                                                }
-                                                catch (IndexOutOfRangeException) { }
-                                            }
-                                        }
-                                    }
-                                }
-                                
-                            }
+                            userTuple = users.Where(tup => tup.Item2.Email.Equals(row[ColumnHeaders.UserEmail].ToString())).FirstOrDefault();
                         }
-
-                        // All passes for linking fields are complete. At this point we either have the info to create the user, or we can't get it.
-                        // Find existing user. Must match email, OR employeeId, OR both first AND last name.
-                        string[] names = fields[2].Split(new string[] { "__IMPORT__" }, StringSplitOptions.None);
-                        var userTuple = users.Where(tup =>
-                            fields[0] != null ? tup.Item2.Email.Equals(fields[0]) :
-                            fields[1] != null ? tup.Item1.Equals(fields[1]) :
-                            tup.Item2.FirstName.Equals(names[0]) && tup.Item2.LastName.Equals(names[1])).FirstOrDefault();
-                        user = userTuple == null ? null : userTuple.Item2;
-                        if(user == null)
+                        else
                         {
-                            if(fields.All(s => s != null))
+                            if(hasEmployeeId)
                             {
-                                // User does not exist, so we create it
-                                if (Service.IsEmailAddressValid(fields[0]))
-                                {
-                                    user = new UserInfo()
-                                    {
-                                        Email = fields[0],
-                                        FirstName = names[0],
-                                        LastName = names[1],
-                                        PasswordHash = Lib.Crypto.ComputeSHA512Hash("password") // TODO: Figure out a better default password generation system
-                                    };
-                                    user.UserId = DBHelper.CreateUser(InfoObjectsUtility.GetDBEntityFromUserInfo(user));
-                                    if (user.UserId != -1)
-                                    {
-                                        DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
-                                        {
-                                            EmployeeId = fields[1],
-                                            OrganizationId = this.UserContext.ChosenOrganizationId,
-                                            OrgRoleId = (int)(OrganizationRole.Member),
-                                            UserId = user.UserId
-                                        });
-                                        users.Add(new Tuple<string, UserInfo>(fields[1], user));
-                                    }
-                                    else
-                                    {
-                                        // Raise error: error creating new user
-                                    }
-                                }
-                                else
-                                {
-                                    // Raise error: invalid email for user
-                                }
+                                userTuple = users.Where(tup => tup.Item1.Equals(row[ColumnHeaders.EmployeeId].ToString())).FirstOrDefault();
                             }
                             else
                             {
-                                // Raise error: cannot create user, missing information
+                                userTuple = users.Where(tup => tup.Item2.FirstName.Equals(row[ColumnHeaders.UserFirstName].ToString()) && tup.Item2.LastName.Equals(row[ColumnHeaders.UserLastName].ToString())).FirstOrDefault();
+                            }
+                        }
+                        user = userTuple == null ? null : userTuple.Item2;
+
+                        if (user == null)
+                        {
+                            if (canImportUsers)
+                            {
+                                // No user found, create one if possible
+                                // Find all required fields, if they exist
+                                string[] fields =
+                                {
+                                    hasUserEmail ? row[ColumnHeaders.UserEmail].ToString() : null,
+                                    hasEmployeeId ? row[ColumnHeaders.EmployeeId].ToString() : null,
+                                    hasUserName ? row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString() : null
+                                };
+
+                                /*  This function is a lot to take in, so here's an overview:
+                                    There are 4 required fields, two of which must be together. In the worst case scenario we'll be using 2 different links to get them all (e.g. one sheet has
+                                    email & id, another has id, last name, and first name). We start with the field(s) that we don't have and use any sheets discovered above that link from that field 
+                                    to fields we do have. If one of them gives us a match, we store the found value and move on. This process is done in 2 passes (each pass only checks missing fields, so
+                                    if they're all found, the pass does nothing and quickly finishes), allowing for the case of needing 2 links to get a value. If all four values haven't
+                                    been found after that, we can be sure they can't all be found.
+                                */
+                                for (int i = 0; i < 2; i++)
+                                {
+                                    // i = pass, out of 2
+                                    for (int j = 0; j < 3; j++)
+                                    {
+                                        // j = field we are currently trying to find
+                                        for (int k = 0; k < 3; k++)
+                                        {
+                                            // k = field we are trying to find j from, using a link
+                                            if (fields[j] == null)
+                                            {
+                                                if (j == k) continue;
+                                                if (fields[k] != null)
+                                                {
+                                                    foreach (DataTable link in userLinks[j, k])
+                                                    {
+                                                        try
+                                                        {
+                                                            fields[j] = this.readUserDataColumn(k, j, link, fields[k]);
+                                                            if(fields[j] != null)
+                                                            {
+                                                                break;
+                                                            }
+                                                        }
+                                                        catch (IndexOutOfRangeException) { }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+
+                                if(fields.All(s => !string.IsNullOrEmpty(s)))
+                                {
+                                    // All required info was found successfully
+                                    if (Service.IsEmailAddressValid(fields[0]))
+                                    {
+                                        string[] names = fields[2].Split(new string[] { "__IMPORT__" }, StringSplitOptions.None);
+                                        try
+                                        {
+                                            user = new UserInfo()
+                                            {
+                                                Email = fields[0],
+                                                FirstName = names[0],
+                                                LastName = names[1],
+                                                PasswordHash = Lib.Crypto.ComputeSHA512Hash("password") // TODO: Figure out a better default password generation system
+                                            };
+                                            user.UserId = DBHelper.CreateUser(InfoObjectsUtility.GetDBEntityFromUserInfo(user));
+                                            if (user.UserId != -1)
+                                            {
+                                                try
+                                                {
+                                                    DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
+                                                    {
+                                                        EmployeeId = fields[1],
+                                                        OrganizationId = this.UserContext.ChosenOrganizationId,
+                                                        OrgRoleId = (int)(OrganizationRole.Member),
+                                                        UserId = user.UserId
+                                                    });
+                                                }
+                                                catch (System.Data.SqlClient.SqlException)
+                                                {
+                                                    // Raise error: error creating org user (in test, it's always a duplicate employee id)
+                                                }
+                                                users.Add(new Tuple<string, UserInfo>(fields[1], user));
+                                            }
+                                            else
+                                            {
+                                                // Raise error: error creating new user
+                                            }
+                                        }
+                                        catch (System.Data.SqlClient.SqlException)
+                                        {
+                                            // Raise error: error creating new user
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // Raise error: invalid email for user
+                                    }
+                                }
+
                             }
                         }
 
@@ -1048,28 +1071,36 @@ namespace AllyisApps.Services
                                     this.readColumn(row, ColumnHeaders.Description, val => description = val);
                                     this.readColumn(row, ColumnHeaders.PayClass, val => payclass = val);
                                     PayClassInfo payClass = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InfoObjectsUtility.InitializePayClassInfo(pc)).Where(p => p.Name.ToUpper().Equals(payclass.ToUpper())).SingleOrDefault();
+                                    DateTime theDate = DateTime.Parse(date);
+                                    float theDuration = float.Parse(duration);
                                     if(date != null && duration != null & payClass != null)
                                     {
-                                        // All required information is present
-                                        try
+                                        // Find existing entry. If none, create new one
+                                        List<TimeEntryDBEntity> entries = DBHelper.GetTimeEntriesByUserOverDateRange(new List<int> { user.UserId }, this.UserContext.ChosenOrganizationId, theDate, theDate).ToList();
+                                        if (!entries.Where(e => e.Description.Equals(description) && e.Duration == theDuration && e.PayClassId == payClass.PayClassID && e.ProjectId == project.ProjectId).Any())
                                         {
-                                            if (DBHelper.CreateTimeEntry(new DBModel.TimeTracker.TimeEntryDBEntity
+                                            // All required information is present
+                                            try
                                             {
-                                                Date = DateTime.Parse(date),
-                                                Description = description,
-                                                Duration = float.Parse(duration),
-                                                FirstName = user.FirstName,
-                                                LastName = user.LastName,
-                                                PayClassId = payClass.PayClassID,
-                                                ProjectId = project.ProjectId,
-                                                UserId = user.UserId
-                                            }) == -1)
-                                            {
-                                                // Raise error: could not create time entry
+                                                if (DBHelper.CreateTimeEntry(new DBModel.TimeTracker.TimeEntryDBEntity
+                                                {
+                                                    Date = DateTime.Parse(date),
+                                                    Description = description,
+                                                    Duration = float.Parse(duration),
+                                                    FirstName = user.FirstName,
+                                                    LastName = user.LastName,
+                                                    PayClassId = payClass.PayClassID,
+                                                    ProjectId = project.ProjectId,
+                                                    UserId = user.UserId
+                                                }) == -1)
+                                                {
+                                                    // Raise error: could not create time entry
+                                                }
                                             }
-                                        } catch (FormatException)
-                                        {
-                                            // Raise error: date or duration has bad format
+                                            catch (FormatException)
+                                            {
+                                                // Raise error: date or duration has bad format
+                                            }
                                         }
                                     }
                                 }
