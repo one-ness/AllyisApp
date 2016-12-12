@@ -12,7 +12,6 @@ using System.Web.Mvc;
 using AllyisApps.Core;
 using AllyisApps.Services;
 
-
 using Excel;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -20,10 +19,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
     /// <summary>
     /// Represents pages for the management of a Customer.
     /// </summary>
-    public partial class CustomerController : BaseProductController
+    public partial class TimeEntryController : BaseProductController
     {
         /// <summary>
-        /// POST: Customer/Import.
+        /// POST: TimeEntry/Import
         /// Code adapted from http://techbrij.com/read-excel-xls-xlsx-asp-net-mvc-upload.
         /// </summary>
         /// <param name="upload">File to upload.</param>
@@ -36,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
             // TODO: Buff up the error handling (catch errors from import functions, etc.)
             if (ModelState.IsValid)
             {
-                if(Service.Can(Actions.CoreAction.EditCustomer))
+                if(Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
                 {
                     if (upload != null && upload.ContentLength > 0)
                     {
@@ -74,7 +73,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                     }
                 }
             }
-            return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
+            return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
         }
     }
 }

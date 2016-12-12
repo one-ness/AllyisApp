@@ -238,6 +238,7 @@ namespace AllyisApps.Services {
 				if (dbe != null)
 				{
                     list.Add(InfoObjectsUtility.InitializeCustomerInfo(dbe));
+                        CustomerOrgId = dbe.CustomerOrgId
 				}
 			}
 

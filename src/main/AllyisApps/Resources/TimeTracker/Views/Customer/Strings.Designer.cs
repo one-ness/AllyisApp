@@ -241,6 +241,15 @@ namespace AllyisApps.Resources.TimeTracker.Views.Customer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Upload an Excel file with information about customers and projects to import more than one at a time..
+        /// </summary>
+        public static string ImportCustomers {
+            get {
+                return ResourceManager.GetString("ImportCustomers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string Name {
