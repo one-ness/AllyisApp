@@ -583,7 +583,7 @@ namespace AllyisApps.Services
         /// Import data from a workbook. Imports customers, projects, users, project/user relationships, and/or time entry data.
         /// </summary>
         /// <param name="importData">Workbook with data to import.</param>
-        public void Import(DataSet importData)
+        public ImportActionResult Import(DataSet importData)
         {
             // For some reason, linq won't work directly with DataSets, so we start by just moving the tables over to a linq-able List
             List<DataTable> tables = new List<DataTable>();
@@ -605,6 +605,9 @@ namespace AllyisApps.Services
             // Retrieval of existing user data
             List<Tuple<string, UserInfo>> users = this.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Select(o => new Tuple<string, UserInfo>(o.EmployeeId, this.GetUserInfo(o.UserId))).ToList();
 
+            // Result object
+            ImportActionResult result = new ImportActionResult();
+
             // Loop through and see what can be imported from each table in turn. Order doesn't matter, since missing information
             // will be sought from other tables as needed.
             foreach (DataTable table in tables)
@@ -625,6 +628,19 @@ namespace AllyisApps.Services
                         canCreateCustomers = true;
                     }
                 }
+
+                // Non-required customer columns. This is checked ahead of time to eliminate useless column lookups on each row and save a lot of time.
+                bool hasCustomerStreetAddress = table.Columns.Contains(ColumnHeaders.CustomerStreetAddress);
+                bool hasCustomerCity = table.Columns.Contains(ColumnHeaders.CustomerCity);
+                bool hasCustomerCountry = table.Columns.Contains(ColumnHeaders.CustomerCountry);
+                bool hasCustomerState = table.Columns.Contains(ColumnHeaders.CustomerState);
+                bool hasCustomerPostalCode = table.Columns.Contains(ColumnHeaders.CustomerPostalCode);
+                bool hasCustomerEmail = table.Columns.Contains(ColumnHeaders.CustomerEmail);
+                bool hasCustomerPhoneNumber = table.Columns.Contains(ColumnHeaders.CustomerPhoneNumber);
+                bool hasCustomerFaxNumber = table.Columns.Contains(ColumnHeaders.CustomerFaxNumber);
+                bool hasCustomerEIN = table.Columns.Contains(ColumnHeaders.CustomerEIN);
+                bool hasNonRequiredCustomerInfo = hasCustomerStreetAddress || hasCustomerCity || hasCustomerCountry || hasCustomerState ||
+                         hasCustomerPostalCode || hasCustomerEmail || hasCustomerPhoneNumber || hasCustomerFaxNumber || hasCustomerEIN;
 
                 // Project importing: requires both project name and project id, as well as one identifying field for a customer (name or id)
                 bool hasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
@@ -701,7 +717,9 @@ namespace AllyisApps.Services
                                             OrganizationId = this.UserContext.ChosenOrganizationId
                                         };
                                     }
-                                    catch (IndexOutOfRangeException) { }
+                                    catch (IndexOutOfRangeException) {
+                                        result.CustomerFailures.Add(string.Format("Error importing customer on sheet {0}, row {1}: one or both of {2} and {3} cannot be read.", table.TableName, table.Rows.IndexOf(row), ColumnHeaders.CustomerName, ColumnHeaders.CustomerId));
+                                    }
                                 }
                                 else
                                 {
@@ -733,29 +751,35 @@ namespace AllyisApps.Services
                                         new List<ProjectInfo>()
                                     ));
                                     customer = newCustomer;
+                                    result.CustomersImported += 1;
                                 }
 
                                 if (customer == null)
                                 {
-                                    // Raise error: could not find name/id for customer id/name
+                                    result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", row[hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId].ToString(), hasCustomerName ? ColumnHeaders.CustomerId : ColumnHeaders.CustomerName));
                                 }
+                            }
+                            else
+                            {
+                                // Not enough information to create customer
+                                result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", row[hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId].ToString(), hasCustomerName ? ColumnHeaders.CustomerId : ColumnHeaders.CustomerName));
                             }
                         }
 
                         // Importing non-required customer data
-                        if (customer != null)
+                        if (customer != null && hasNonRequiredCustomerInfo)
                         {
                             bool updated = false;
-
-                            updated = this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.CustomerCity, val => customer.City = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.CustomerCountry, val => customer.Country = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.CustomerState, val => customer.State = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => customer.PostalCode = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.CustomerEmail, val => customer.ContactEmail = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.CustomerPhoneNumber, val => customer.ContactPhoneNumber = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.CustomerFaxNumber, val => customer.FaxNumber = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.CustomerEIN, val => customer.EIN = val) || updated;
+                            
+                            if (hasCustomerStreetAddress) updated = this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address = val) || updated;
+                            if (hasCustomerCity) updated = this.readColumn(row, ColumnHeaders.CustomerCity, val => customer.City = val) || updated;
+                            if (hasCustomerCountry) updated = this.readColumn(row, ColumnHeaders.CustomerCountry, val => customer.Country = val) || updated;
+                            if (hasCustomerState) updated = this.readColumn(row, ColumnHeaders.CustomerState, val => customer.State = val) || updated;
+                            if (hasCustomerPostalCode) updated = this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => customer.PostalCode = val) || updated;
+                            if (hasCustomerEmail) updated = this.readColumn(row, ColumnHeaders.CustomerEmail, val => customer.ContactEmail = val) || updated;
+                            if (hasCustomerPhoneNumber) updated = this.readColumn(row, ColumnHeaders.CustomerPhoneNumber, val => customer.ContactPhoneNumber = val) || updated;
+                            if (hasCustomerFaxNumber) updated = this.readColumn(row, ColumnHeaders.CustomerFaxNumber, val => customer.FaxNumber = val) || updated;
+                            if (hasCustomerEIN) updated = this.readColumn(row, ColumnHeaders.CustomerEIN, val => customer.EIN = val) || updated;
 
                             if (updated)
                             {
@@ -1137,6 +1161,8 @@ namespace AllyisApps.Services
                     #endregion
                 }
             }
+
+            return result;
         }
 
         /// <summary>
