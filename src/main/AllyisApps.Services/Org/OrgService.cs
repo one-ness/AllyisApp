@@ -707,56 +707,79 @@ namespace AllyisApps.Services
                                 if (customerImportLinks.Count == 0)
                                 {
                                     // If customerImportLinks is empty, it's because all the information is on this sheet.
-                                    try
+                                    string name = null;
+                                    string orgId = null;
+                                    this.readColumn(row, ColumnHeaders.CustomerName, n => name = n);
+                                    this.readColumn(row, ColumnHeaders.CustomerId, n => orgId = n);
+                                    if (name == null && orgId == null)
                                     {
-                                        newCustomer = new CustomerInfo
-                                        {
-                                            // For each required field, if it is not present on this sheet, then the linked sheet is used to look it up based on the other value.
-                                            Name = row[ColumnHeaders.CustomerName].ToString(),
-                                            CustomerOrgId = row[ColumnHeaders.CustomerId].ToString(),
-                                            OrganizationId = this.UserContext.ChosenOrganizationId
-                                        };
+                                        result.CustomerFailures.Add(string.Format("Error importing customer on sheet {0}, row {1}: both {2} and {3} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.CustomerName, ColumnHeaders.CustomerId));
+                                        continue;
                                     }
-                                    catch (IndexOutOfRangeException) {
-                                        result.CustomerFailures.Add(string.Format("Error importing customer on sheet {0}, row {1}: one or both of {2} and {3} cannot be read.", table.TableName, table.Rows.IndexOf(row), ColumnHeaders.CustomerName, ColumnHeaders.CustomerId));
+
+                                    if (name == null || orgId == null)
+                                    {
+                                        result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", name == null ? orgId : name, name == null ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId));
+                                        continue;
                                     }
+
+                                    newCustomer = new CustomerInfo
+                                    {
+                                        Name = name,
+                                        CustomerOrgId = orgId,
+                                        OrganizationId = this.UserContext.ChosenOrganizationId
+                                    };
                                 }
                                 else
                                 {
                                     // If customerImportLinks has been set, we have to grab some information from another sheet.
+                                    string knownValue = null;
+                                    string readValue = null;
+                                    this.readColumn(row, hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId, n => knownValue = n);
+                                    if (knownValue == null)
+                                    {
+                                        result.CustomerFailures.Add(string.Format("Error importing customer on sheet {0}, row {1}: {2} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId));
+                                        continue;
+                                    }
+
                                     foreach (DataTable link in customerImportLinks)
                                     {
                                         try
                                         {
-                                            newCustomer = new CustomerInfo
-                                            {
-                                                // For each required field, if it is not present on this sheet, then the linked sheet is used to look it up based on the other value.
-                                                Name = hasCustomerName ? row[ColumnHeaders.CustomerName].ToString() : link.Select(
-                                                    string.Format("[{0}] = '{1}'", ColumnHeaders.CustomerId, row[ColumnHeaders.CustomerId].ToString()))[0][ColumnHeaders.CustomerName].ToString(),
-                                                CustomerOrgId = hasCustomerId ? row[ColumnHeaders.CustomerId].ToString() : link.Select(
-                                                    string.Format("[{0}] = '{1}'", ColumnHeaders.CustomerName, row[ColumnHeaders.CustomerName].ToString()))[0][ColumnHeaders.CustomerId].ToString(),
-                                                OrganizationId = this.UserContext.ChosenOrganizationId
-                                            };
-                                            
-                                            break;
+                                            readValue = link.Select(string.Format("[{0}] = '{1}'", hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId, knownValue))[0][hasCustomerName ? ColumnHeaders.CustomerId : ColumnHeaders.CustomerName].ToString();
+                                            if (readValue != null) break;
                                         }
                                         catch (IndexOutOfRangeException) { }
                                     }
+
+                                    if (readValue == null)
+                                    {
+                                        result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", knownValue, hasCustomerName ? ColumnHeaders.CustomerId : ColumnHeaders.CustomerName));
+                                        continue;
+                                    }
+
+                                    newCustomer = new CustomerInfo
+                                    {
+                                        Name = hasCustomerName ? knownValue : readValue,
+                                        CustomerOrgId = hasCustomerName ? readValue : knownValue,
+                                        OrganizationId = this.UserContext.ChosenOrganizationId
+                                    };
                                 }
+
                                 if (newCustomer != null)
                                 {
                                     newCustomer.CustomerId = this.CreateCustomer(newCustomer).Value;
+                                    if (newCustomer.CustomerId == -1)
+                                    {
+                                        result.CustomerFailures.Add(string.Format("Database error while creating customer {0}.", newCustomer.Name));
+                                    }
+
                                     customersProjects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(
                                         newCustomer,
                                         new List<ProjectInfo>()
                                     ));
                                     customer = newCustomer;
                                     result.CustomersImported += 1;
-                                }
-
-                                if (customer == null)
-                                {
-                                    result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", row[hasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId].ToString(), hasCustomerName ? ColumnHeaders.CustomerId : ColumnHeaders.CustomerName));
                                 }
                             }
                             else
