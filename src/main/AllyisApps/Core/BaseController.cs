@@ -13,9 +13,9 @@ using System.Web.Mvc;
 using System.Web.Security;
 
 using AllyisApps.Core.Alert;
+using AllyisApps.Filters;
 using AllyisApps.Lib;
 using AllyisApps.Services;
-using AllyisApps.Utilities;
 
 namespace AllyisApps.Core
 {
