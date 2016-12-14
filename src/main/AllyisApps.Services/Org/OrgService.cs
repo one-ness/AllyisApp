@@ -645,22 +645,40 @@ namespace AllyisApps.Services
                 // Project importing: requires both project name and project id, as well as one identifying field for a customer (name or id)
                 bool hasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
                 bool hasProjectId = table.Columns.Contains(ColumnHeaders.ProjectId);
-                bool canCreateProjects = hasProjectName && hasProjectId && (hasCustomerName || hasCustomerId);
+                bool canCreateProjects = false; // hasProjectName && hasProjectId && (hasCustomerName || hasCustomerId);
                 List<DataTable> projectImportLinks = new List<DataTable>();
                 List<DataTable> projectCustomerLinks = new List<DataTable>();
-                if (!canCreateProjects && (hasProjectName || hasProjectId))
+                if (hasProjectName || hasProjectId)
                 {
-                    // If one of these two connections exists on this table, that's ok; it won't get used. The variable will simply be set to this table redundantly.
+                    // We want to grab these links even if both columns are present, in case reading one of them fails.
                     projectImportLinks = tables.Where(t => t.Columns.Contains(ColumnHeaders.ProjectName) && t.Columns.Contains(ColumnHeaders.ProjectId)).ToList();
-                    projectCustomerLinks = tables.Where(t => (t.Columns.Contains(ColumnHeaders.ProjectName) || t.Columns.Contains(ColumnHeaders.ProjectId)) &&
-                                                            (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerId))).ToList();
 
-                    // Even if one of these isn't necessary (because both items are on this table), it won't be empty. Therefore, if either is emtpy, a connection is missing.
+                    if (hasCustomerName || hasCustomerId)
+                    {
+                        projectCustomerLinks = tables.Where(t => (t.Columns.Contains(ColumnHeaders.ProjectName) || t.Columns.Contains(ColumnHeaders.ProjectId)) &&
+                                                            (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerId))).ToList();
+                    }
+                    
+                    // Note: this check returns true even when this sheet contains all required information, since this sheet would then be in both lists
                     if (projectImportLinks.Count() > 0 && projectCustomerLinks.Count > 0)
                     {
                         canCreateProjects = true;
                     }
                 }
+
+                //if (!canCreateProjects && (hasProjectName || hasProjectId))
+                //{
+                //    // If one of these two connections exists on this table, that's ok; it won't get used. The variable will simply be set to this table redundantly.
+                //    projectImportLinks = tables.Where(t => t.Columns.Contains(ColumnHeaders.ProjectName) && t.Columns.Contains(ColumnHeaders.ProjectId)).ToList();
+                //    projectCustomerLinks = tables.Where(t => (t.Columns.Contains(ColumnHeaders.ProjectName) || t.Columns.Contains(ColumnHeaders.ProjectId)) &&
+                //                                            (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerId))).ToList();
+
+                //    // Even if one of these isn't necessary (because both items are on this table), it won't be empty. Therefore, if either is emtpy, a connection is missing.
+                //    if (projectImportLinks.Count() > 0 && projectCustomerLinks.Count > 0)
+                //    {
+                //        canCreateProjects = true;
+                //    }
+                //}
 
                 // Non-required project columns
                 bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
@@ -699,11 +717,13 @@ namespace AllyisApps.Services
 
                     #region Customer Import
 
+                    CustomerInfo customer = null;
+
                     // If there is no identifying information for customers, all customer related importing is skipped.
                     if (hasCustomerName || hasCustomerId)
                     {
                         // Find the existing customer using name, or id if name isn't on this sheet.
-                        CustomerInfo customer = customersProjects.Select(tup => tup.Item1).Where(c => hasCustomerName ? c.Name.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerOrgId.Equals(row[ColumnHeaders.CustomerId].ToString())).FirstOrDefault();
+                        customer = customersProjects.Select(tup => tup.Item1).Where(c => hasCustomerName ? c.Name.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerOrgId.Equals(row[ColumnHeaders.CustomerId].ToString())).FirstOrDefault();
                         if (customer == null)
                         {
                             if (canCreateCustomers)
@@ -826,139 +846,139 @@ namespace AllyisApps.Services
                     // If there is no identifying information for projects, all project related importing is skipped.
                     if (hasProjectName || hasProjectId)
                     {
-                        //string knownValue = null;                                                                                                 // Next: examine logic for when to populate links above, continue
-                        //string readValue = null;
-                        //this.readColumn(row, hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId, p => knownValue = p);
-                        //if (hasProjectName && hasProjectId)
-                        //{
-                        //    this.readColumn(row, hasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName, p => readValue = p);
-                        //    if (readValue == null)
-                        //    {
-                        //        if (knownValue == null)
-                        //        {
-                        //            result.ProjectFailures.Add(string.Format("Error importing project on sheet {0}, row {1}: both {2} and {3} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.ProjectName, ColumnHeaders.ProjectId));
-                        //            continue;
-                        //        }
-
-                        //        // Both columns exist, so knownValue is Project Name and it is not null. readValue came up null, so the data couldn't be read for Project Id.
-                        //        hasProjectId = false;
-                        //    }
-
-                        //    if (knownValue == null)
-                        //    {
-                        //        // Both columns exists, knownValue is Project name and it came up null. readValue was read successfully, so the data is only missing for Project name.
-                        //        hasProjectName = false;
-                        //    }
-
-                        //}
-
-                        // Find name and id for the project, if both exist
-                        string name = null;
-                        string orgId = null;
+                        // Start with getting the project information that is known from this sheet
+                        string knownValue = null;
+                        string readValue = null;
+                        this.readColumn(row, hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId, p => knownValue = p);
                         if (hasProjectName && hasProjectId)
                         {
-                            name = row[ColumnHeaders.ProjectName].ToString();
-                            orgId = row[ColumnHeaders.ProjectId].ToString();
-                        }
-                        else
-                        {
-                            foreach (DataTable link in projectImportLinks)
+                            // If both columns exist, knownValue is Name and readValue will be Id
+                            if (!this.readColumn(row, ColumnHeaders.ProjectId, p => readValue = p))
                             {
-                                try
+                                if (knownValue == null)
                                 {
-                                    name = hasProjectName ? row[ColumnHeaders.ProjectName].ToString() : link.Select(
-                                        string.Format("[{0}] = '{1}'", ColumnHeaders.ProjectId, row[ColumnHeaders.ProjectId].ToString()))[0][ColumnHeaders.ProjectName].ToString();
-                                    orgId = hasProjectId ? row[ColumnHeaders.ProjectId].ToString() : link.Select(
-                                        string.Format("[{0}] = '{1}'", ColumnHeaders.ProjectName, row[ColumnHeaders.ProjectName].ToString()))[0][ColumnHeaders.ProjectId].ToString();
-                                    break;
+                                    // Failed to read both values
+                                    result.ProjectFailures.Add(string.Format("Error importing project on sheet {0}, row {1}: both {2} and {3} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.ProjectName, ColumnHeaders.ProjectId));
+                                    continue;
                                 }
-                                catch (IndexOutOfRangeException) { }
+
+                                // Failed to read Id, but read Name successfully.
+                                hasProjectId = false;
+                            }
+
+                            if (knownValue == null)
+                            {
+                                // Failed to read Name. If reading the Id also failed, the continue above would have been hit, so it must have succeeded.
+                                // This means that knownValue should now be Id.
+                                hasProjectName = false;
+                                knownValue = readValue;
+                                readValue = null;
                             }
                         }
 
-                        // Find the customer this project is under, from this sheet if possible, or from the link sheet if needed. 
-                        CustomerInfo customer = customersProjects.Select(tup => tup.Item1).Where(c => hasCustomerName ? c.Name.Equals(row[ColumnHeaders.CustomerName].ToString()) : hasCustomerId ? c.CustomerOrgId.Equals(row[ColumnHeaders.CustomerId].ToString()) : c.Equals(null)).FirstOrDefault();
                         if (customer == null)
                         {
-                            if (projectCustomerLinks.Count() > 0)
+                            // Customer was not found or created (above) from this sheet. Maybe we can link this project to it on another.
+                            if (projectCustomerLinks.Count > 0)
                             {
-                                foreach (DataTable link in projectCustomerLinks)
+                                foreach(DataTable link in projectCustomerLinks)
                                 {
-                                    // If that information is not on this sheet, we'll use the project-customer link sheet
-                                    bool linkHasCustomerName = link.Columns.Contains(ColumnHeaders.CustomerName);
                                     bool linkHasProjectName = link.Columns.Contains(ColumnHeaders.ProjectName);
+                                    bool usingProjectName = linkHasProjectName && hasProjectName;
+                                    // If the link doesn't have the same project-identifying column this sheet does, it is skipped.
+                                    if (!usingProjectName && !(hasProjectId && link.Columns.Contains(ColumnHeaders.ProjectId))) continue;
+                                    bool linkHasCustomerName = link.Columns.Contains(ColumnHeaders.CustomerName);
+                                    
                                     string customerIdentity = null;
                                     try
                                     {
-                                        customerIdentity = link.Select(string.Format("[{0}] = '{1}'",
-                                            linkHasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId,
-                                            linkHasProjectName ? name : orgId)
-                                        )[0][linkHasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId].ToString().Trim();
+                                        customerIdentity = link.Select(string.Format("[{0}] = '{1}'", usingProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId, knownValue)
+                                            )[0][linkHasCustomerName ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId].ToString().Trim();
                                         customer = customersProjects.Select(tup => tup.Item1).Where(c => linkHasCustomerName ? c.Name.Equals(customerIdentity) : c.CustomerOrgId.Equals(customerIdentity)).FirstOrDefault();
                                         break; // Match found.
-                                    } catch (IndexOutOfRangeException) { }
+                                    }
+                                    catch (IndexOutOfRangeException) { }
                                 }
                             }
                         }
 
                         // Find the existing project.
-                        if (customer != null)
+                        if (customer == null)
                         {
-                            // This project has a customer specified, so we find the existing project under that customer or create it if it doesn't exist.
-                            project = customersProjects.Where(tup => tup.Item1.CustomerId == customer.CustomerId).FirstOrDefault().Item2.Where(
-                                p => hasProjectName ? p.Name.Equals(row[ColumnHeaders.ProjectName].ToString()) : p.ProjectOrgId.Equals(row[ColumnHeaders.ProjectId].ToString())).FirstOrDefault();
-                            if (project == null)
-                            {
-                                if (canCreateProjects)
-                                {
-                                    // No project was found, so a new one is created.
-                                    if (name == null || orgId == null)
-                                    {
-                                        // Raise error: Could not find name/id for project id/name
-                                        continue;
-                                    }
-                                    project = new ProjectInfo
-                                    {
-                                        CustomerId = customer.CustomerId,
-                                        Name = name,
-                                        Type = "Hourly",
-                                        OrganizationId = this.UserContext.ChosenOrganizationId,
-                                        ProjectOrgId = orgId,
-                                        StartingDate = DateTime.Now,
-                                        EndingDate = DateTime.Now.AddMonths(6)
-                                    };
-                                    project.ProjectId = this.CreateProject(project);
-                                    if (project.ProjectId == -1)
-                                    {
-                                        project = null;
-                                    }
-                                    else
-                                    {
-                                        customersProjects.Where(tup => tup.Item1 == customer).FirstOrDefault().Item2.Add(project);
-                                    }
-                                }
-                            }
+                            // This project has no customer specified, so we try to find a matching project under any existing customer
+                            project = customersProjects.Select(
+                                tup => tup.Item2).Select(
+                                    plst => plst.Where(
+                                        p => hasProjectName ? p.Name.Equals(knownValue) && (hasProjectId ? p.ProjectOrgId.Equals(readValue) : true) : p.ProjectOrgId.Equals(knownValue)
+                                    ).FirstOrDefault()
+                                ).Where(p => p != null).FirstOrDefault();
                         }
                         else
                         {
-                            // No customer can be specified, so we try to find the project under any customer.
-                            project = customersProjects.Select(tup => tup.Item2).Select(
-                                plist => plist.Where(
-                                    p => hasProjectName ? p.Name.Equals(row[ColumnHeaders.ProjectName].ToString()) : p.ProjectOrgId.Equals(row[ColumnHeaders.ProjectId].ToString())
-                                ).FirstOrDefault()
-                            ).FirstOrDefault();
+                            // This project has a customer specified, so we find the existing project under that customer if it exists
+                            project = customersProjects.Where(tup => tup.Item1.CustomerId == customer.CustomerId).FirstOrDefault().Item2.Where(
+                                p => hasProjectName ? p.Name.Equals(knownValue) : p.ProjectOrgId.Equals(knownValue)).FirstOrDefault();
+                        }
+                        
+                        if (project == null && customer != null)
+                        {
+                            if (canCreateProjects)
+                            {
+                                // No project was found, so a new one is created.
+                                if (string.IsNullOrEmpty(readValue))
+                                {
+                                    // We still haven't linked the rest of the project information
+                                    foreach (DataTable link in projectImportLinks)
+                                    {
+                                        try
+                                        {
+                                            readValue = link.Select(string.Format("[{0}] = '{1}'", hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId, knownValue)
+                                                )[0][hasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName].ToString().Trim();
+                                            if (!string.IsNullOrEmpty(readValue)) break; // Match found.
+                                        }
+                                        catch (IndexOutOfRangeException) { }
+                                    }
+
+                                    if (string.IsNullOrEmpty(readValue))
+                                    {
+                                        result.ProjectFailures.Add(string.Format("Could not import project {0}: no matching {1}", knownValue, hasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName));
+                                        continue;
+                                    }
+                                }
+
+                                project = new ProjectInfo
+                                {
+                                    CustomerId = customer.CustomerId,
+                                    Name = hasProjectName ? knownValue : readValue,
+                                    Type = "Hourly",
+                                    OrganizationId = this.UserContext.ChosenOrganizationId,
+                                    ProjectOrgId = hasProjectName ? readValue : knownValue,
+                                    StartingDate = DateTime.Now,
+                                    EndingDate = DateTime.Now.AddMonths(6)
+                                };
+                                project.ProjectId = this.CreateProject(project);
+                                if (project.ProjectId == -1)
+                                {
+                                    result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.Name));
+                                    project = null;
+                                }
+                                else
+                                {
+                                    customersProjects.Where(tup => tup.Item1 == customer).FirstOrDefault().Item2.Add(project);
+                                }
+                            }
                         }
 
                         // Importing non-required project data
-                        if(project != null)
+                        if(project != null && hasNonRequiredProjectInfo)
                         {
                             bool updated = false;
                             string startDate = null;
                             string endDate = null;
 
-                            updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.Type = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.ProjectStartDate, val => startDate = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.ProjectEndDate, val => endDate = val) || updated;
+                            if (hasProjectType) updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.Type = val) || updated;
+                            if (hasProjectStartDate) updated = this.readColumn(row, ColumnHeaders.ProjectStartDate, val => startDate = val) || updated;
+                            if (hasProjectEndDate) updated = this.readColumn(row, ColumnHeaders.ProjectEndDate, val => endDate = val) || updated;
                             if (startDate != null) project.StartingDate = DateTime.Parse(startDate);
                             if (endDate != null) project.EndingDate = DateTime.Parse(endDate);
 
