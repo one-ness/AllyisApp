@@ -6,9 +6,9 @@
 
 using System.Web.Mvc;
 
+using AllyisApps.Filters;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
-using AllyisApps.Utilities;
 
 namespace AllyisApps.Core
 {
