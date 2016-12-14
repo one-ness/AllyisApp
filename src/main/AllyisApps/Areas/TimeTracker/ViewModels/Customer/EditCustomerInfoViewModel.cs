@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.TimeTracker.Customer
 {
 	/// <summary>
 	/// Represents an editable view of user information.

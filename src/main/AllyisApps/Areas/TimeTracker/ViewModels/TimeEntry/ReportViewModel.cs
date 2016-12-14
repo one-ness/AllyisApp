@@ -9,12 +9,12 @@ using System.Web.Mvc;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 
-namespace AllyisApps.Areas.TimeTracker.Models
+namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
-	/// <summary>
-	/// Adds name fields to TimeEntries for preview.
-	/// </summary>
-	public struct TablePreviewEntry
+    /// <summary>
+    /// Adds name fields to TimeEntries for preview.
+    /// </summary>
+    public struct TablePreviewEntry
 	{
 		/// <summary>
 		/// TimeEntry field.

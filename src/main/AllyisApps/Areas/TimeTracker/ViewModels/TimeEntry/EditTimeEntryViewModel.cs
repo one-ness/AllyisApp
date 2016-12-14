@@ -8,12 +8,12 @@ using System.Collections.Generic;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 
-namespace AllyisApps.Areas.TimeTracker.Models
+namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
-	/// <summary>
-	/// Representation of a Time Entry to edit.
-	/// </summary>
-	public class EditTimeEntryViewModel
+    /// <summary>
+    /// Representation of a Time Entry to edit.
+    /// </summary>
+    public class EditTimeEntryViewModel
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EditTimeEntryViewModel" /> class.

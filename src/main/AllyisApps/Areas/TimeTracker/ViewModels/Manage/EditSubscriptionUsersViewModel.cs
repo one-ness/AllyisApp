@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.TimeTracker.Manage
 {
 	/// <summary>
 	/// Represents basic user info.

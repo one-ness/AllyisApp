@@ -7,7 +7,7 @@
 using System.Collections.Generic;
 using AllyisApps.Services;
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.TimeTracker.Customer
 {
 	/// <summary>
 	/// ViewModel for displaying Customer and project data.
