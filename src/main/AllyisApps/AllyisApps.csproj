@@ -855,18 +855,14 @@
     <Content Include="Scripts\allyis-account-subscribe.js" />
     <Content Include="Scripts\allyis-list-group-search.js" />
     <Content Include="Scripts\bootstrap.js" />
-    <None Include="Scripts\jquery-2.2.0.intellisense.js" />
-    <Content Include="Scripts\jquery-2.2.0.js" />
-    <Content Include="Scripts\jquery-2.2.0.min.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
-    <Content Include="Scripts\jquery.comiseo.daterangepicker.js" />
-    <Content Include="Scripts\jquery-2.2.0.min.map" />
-    <Content Include="Scripts\jquery.ui-1.11.4.js" />
-    <Content Include="Scripts\jquery.ui-1.11.4.min.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery.comiseo.daterangepicker-0.5.0.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -1218,10 +1214,6 @@
     </Content>
     <None Include="Resources\Files\ImportUserTemplate.csv" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\jquery-2.1.4.min.js" />
-    <Content Include="Scripts\jquery-2.1.4.min.js.map">
-      <DependentUpon>jquery-2.1.4.min.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\respond.js" />

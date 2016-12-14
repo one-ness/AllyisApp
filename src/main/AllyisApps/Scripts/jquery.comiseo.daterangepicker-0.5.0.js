@@ -1,6 +1,6 @@
-/*!
+﻿/*!
  * jQuery UI date range picker widget
- * Copyright (c) 2015 Tamble, Inc.
+ * Copyright (c) 2016 Tamble, Inc.
  * Licensed under MIT (https://github.com/tamble/jquery-ui-daterangepicker/raw/master/LICENSE.txt)
  *
  * Depends:
@@ -9,81 +9,88 @@
  *   - moment.js 2.3.0+
  */
 
-(function ($, window, undefined) {
+(function($, window, undefined) {
+
 	var uniqueId = 0; // used for unique ID generation within multiple plugin instances
 
 	$.widget('comiseo.daterangepicker', {
-		version: '0.4.3',
+		version: '0.5.0',
 
 		options: {
 			// presetRanges: array of objects; each object describes an item in the presets menu
 			// and must have the properties: text, dateStart, dateEnd.
 			// dateStart, dateEnd are functions returning a moment object
 			presetRanges: [
-						{ text: 'Today', dateStart: function () { return moment() }, dateEnd: function () { return moment() } },
-						{ text: 'Yesterday', dateStart: function () { return moment().subtract('days', 1) }, dateEnd: function () { return moment().subtract('days', 1) } },
-						{ text: 'Last 7 Days', dateStart: function () { return moment().subtract('days', 6) }, dateEnd: function () { return moment() } },
-						{ text: 'Last Week (Mo-Su)', dateStart: function () { return moment().subtract('days', 7).isoWeekday(1) }, dateEnd: function () { return moment().subtract('days', 7).isoWeekday(7) } },
-						{ text: 'Month to Date', dateStart: function () { return moment().startOf('month') }, dateEnd: function () { return moment() } },
-						{ text: 'Previous Month', dateStart: function () { return moment().subtract('month', 1).startOf('month') }, dateEnd: function () { return moment().subtract('month', 1).endOf('month') } },
-						{ text: 'Year to Date', dateStart: function () { return moment().startOf('year') }, dateEnd: function () { return moment() } }
+				{text: 'Today', dateStart: function() { return moment() }, dateEnd: function() { return moment() } },
+				{text: 'Yesterday', dateStart: function() { return moment().subtract('days', 1) }, dateEnd: function() { return moment().subtract('days', 1) } },
+				{text: 'Last 7 Days', dateStart: function() { return moment().subtract('days', 6) }, dateEnd: function() { return moment() } },
+				{text: 'Last Week (Mo-Su)', dateStart: function() { return moment().subtract('days', 7).isoWeekday(1) }, dateEnd: function() { return moment().subtract('days', 7).isoWeekday(7) } },
+				{text: 'Month to Date', dateStart: function() { return moment().startOf('month') }, dateEnd: function() { return moment() } },
+				{text: 'Previous Month', dateStart: function() { return moment().subtract('month', 1).startOf('month') }, dateEnd: function() { return moment().subtract('month', 1).endOf('month') } },
+				{text: 'Year to Date', dateStart: function() { return moment().startOf('year') }, dateEnd: function() { return moment() } }
 			],
-			verticalOffset: 0,
 			initialText: 'Select date range...', // placeholder text - shown when nothing is selected
 			icon: 'ui-icon-triangle-1-s',
-			applyButtonText: 'Apply',
-			clearButtonText: 'Clear',
-			cancelButtonText: 'Cancel',
+			applyButtonText: 'Apply', // use '' to get rid of the button
+			clearButtonText: 'Clear', // use '' to get rid of the button
+			cancelButtonText: 'Cancel', // use '' to get rid of the button
 			rangeSplitter: ' - ', // string to use between dates
 			dateFormat: 'M d, yy', // displayed date format. Available formats: http://api.jqueryui.com/datepicker/#utility-formatDate
 			altFormat: 'yy-mm-dd', // submitted date format - inside JSON {"start":"...","end":"..."}
+			verticalOffset: 0, // offset of the dropdown relative to the closest edge of the trigger button
 			mirrorOnCollision: true, // reverse layout when there is not enough space on the right
-			applyOnMenuSelect: true, // auto apply menu selections
-			autoFitCalendars: true, // override numberOfMonths option in order to fit widget width
-			onOpen: null, // callback that executes when the dropdown opens
-			onClose: null, // callback that executes when the dropdown closes
-			onChange: null, // callback that executes when the date range changes
+			autoFitCalendars: true, // override datepicker's numberOfMonths option in order to fit widget width
+			applyOnMenuSelect: true, // whether to auto apply menu selections
+			open: null, // callback that executes when the dropdown opens
+			close: null, // callback that executes when the dropdown closes
+			change: null, // callback that executes when the date range changes
+			clear: null, // callback that executes when the clear button is used
+			cancel: null, // callback that executes when the cancel button is used
+			onOpen: null, // @deprecated callback that executes when the dropdown opens
+			onClose: null, // @deprecated callback that executes when the dropdown closes
+			onChange: null, // @deprecated callback that executes when the date range changes
+			onClear: null, // @deprecated callback that executes when the clear button is used
 			datepickerOptions: { // object containing datepicker options. See http://api.jqueryui.com/datepicker/#options
 				numberOfMonths: 3,
-				//				showCurrentAtPos: 1 // bug; use maxDate instead
+//				showCurrentAtPos: 1 // bug; use maxDate instead
 				maxDate: 0 // the maximum selectable date is today (also current month is displayed on the last position)
 			}
 		},
 
-		_create: function () {
-			this._dateRangePicker = buildDateRangePicker(this.element, this.options);
+		_create: function() {
+			this._dateRangePicker = buildDateRangePicker(this.element, this, this.options);
 		},
 
-		_destroy: function () {
+		_destroy: function() {
 			this._dateRangePicker.destroy();
 		},
 
-		_setOptions: function (options) {
+		_setOptions: function(options) {
 			this._super(options);
 			this._dateRangePicker.enforceOptions();
 		},
 
-		open: function () {
+		open: function() {
 			this._dateRangePicker.open();
 		},
 
-		close: function () {
+		close: function() {
 			this._dateRangePicker.close();
 		},
 
-		setRange: function (range) {
+		setRange: function(range) {
 			this._dateRangePicker.setRange(range);
 		},
 
-		getRange: function () {
+		getRange: function() {
 			return this._dateRangePicker.getRange();
 		},
 
-		clearRange: function () {
+		clearRange: function() {
 			this._dateRangePicker.clearRange();
 		},
 
-		widget: function () {
+		widget: function() {
 			return this._dateRangePicker.getContainer();
 		}
 	});
@@ -108,7 +115,7 @@
 			fixReferences();
 			$self = $('<button type="button"></button>')
 				.addClass(classnameContext + '-triggerbutton')
-				.attr({ 'title': $originalElement.attr('title'), 'tabindex': $originalElement.attr('tabindex'), id: id })
+				.attr({'title': $originalElement.attr('title'), 'tabindex': $originalElement.attr('tabindex'), id: id})
 				.button({
 					icons: {
 						secondary: options.icon
@@ -141,7 +148,7 @@
 
 		init();
 		return {
-			getElement: function () { return $self; },
+			getElement: function() { return $self; },
 			getLabel: getLabel,
 			setLabel: setLabel,
 			reset: reset,
@@ -166,7 +173,7 @@
 
 			$menu = $('<ul></ul>');
 
-			$.each(options.presetRanges, function () {
+			$.each(options.presetRanges, function() {
 				$('<li><a href="#">' + this.text + '</a></li>')
 				.data('dateStart', this.dateStart)
 				.data('dateEnd', this.dateEnd)
@@ -182,7 +189,7 @@
 
 		init();
 		return {
-			getElement: function () { return $self; }
+			getElement: function() { return $self; }
 		};
 	}
 
@@ -194,17 +201,17 @@
 	 */
 	function buildCalendar(classnameContext, options) {
 		var $self,
-			range = { start: null, end: null }; // selected range
+			range = {start: null, end: null}; // selected range
 
 		function init() {
-			$self = $('<div></div>', { 'class': classnameContext + '-calendar ui-widget-content' });
+			$self = $('<div></div>', {'class': classnameContext + '-calendar ui-widget-content'});
 
-			$self.datepicker($.extend({}, options.datepickerOptions, { beforeShowDay: beforeShowDay, onSelect: onSelectDay }));
+			$self.datepicker($.extend({}, options.datepickerOptions, {beforeShowDay: beforeShowDay, onSelect: onSelectDay}));
 			updateAtMidnight();
 		}
 
 		function enforceOptions() {
-			$self.datepicker('option', $.extend({}, options.datepickerOptions, { beforeShowDay: beforeShowDay, onSelect: onSelectDay }));
+			$self.datepicker('option', $.extend({}, options.datepickerOptions, {beforeShowDay: beforeShowDay, onSelect: onSelectDay}));
 		}
 
 		// called when a day is selected
@@ -231,20 +238,21 @@
 			var result = [
 					true, // selectable
 					range.start && ((+date === +range.start) || (range.end && range.start <= date && date <= range.end)) ? 'ui-state-highlight' : '' // class to be added
-			],
-				userResult = [true, ''];
+				],
+				userResult = [true, '', ''];
 
 			if (options.datepickerOptions.hasOwnProperty('beforeShowDay')) {
 				userResult = options.datepickerOptions.beforeShowDay(date);
 			}
 			return [
-					result[0] && userResult[0],
-					result[1] + ' ' + userResult[1]
+				result[0] && userResult[0],
+				result[1] + ' ' + userResult[1],
+				userResult[2]
 			];
 		}
 
 		function updateAtMidnight() {
-			setTimeout(function () {
+			setTimeout(function() {
 				refresh();
 				updateAtMidnight();
 			}, moment().endOf('day') - moment());
@@ -262,16 +270,16 @@
 		}
 
 		function reset() {
-			range = { start: null, end: null };
+			range = {start: null, end: null};
 			refresh();
 		}
 
 		init();
 		return {
-			getElement: function () { return $self; },
-			scrollToRangeStart: function () { return scrollToRangeStart(); },
-			getRange: function () { return range; },
-			setRange: function (value) { range = value; refresh(); },
+			getElement: function() { return $self; },
+			scrollToRangeStart: function() { return scrollToRangeStart(); },
+			getRange: function() { return range; },
+			setRange: function(value) { range = value; refresh(); },
 			refresh: refresh,
 			reset: reset,
 			enforceOptions: enforceOptions
@@ -354,7 +362,7 @@
 
 		init();
 		return {
-			getElement: function () { return $self; },
+			getElement: function() { return $self; },
 			enforceOptions: enforceOptions
 		};
 	}
@@ -363,9 +371,10 @@
 	 * factory for the widget
 	 *
 	 * @param {jQuery} $originalElement jQuery object containing the input form element used to instantiate this widget instance
+	 * @param {Object} instance
 	 * @param {Object} options
 	 */
-	function buildDateRangePicker($originalElement, options) {
+	function buildDateRangePicker($originalElement, instance, options) {
 		var classname = 'comiseo-daterangepicker',
 			$container, // the dropdown
 			$mask, // ui helper (z-index fix)
@@ -392,16 +401,17 @@
 				options.autoFitCalendars = false;
 			}
 			buttonPanel = buildButtonPanel(classname, options, {
-				onApply: function () {
-					close();
-					setRange();
+				onApply: function (event) {
+					close(event);
+					setRange(null, event);
 				},
-				onClear: function () {
-					close();
-					clearRange();
+				onClear: function (event) {
+					close(event);
+					clearRange(event);
 				},
-				onCancel: function () {
-					close();
+				onCancel: function (event) {
+					instance._trigger('cancel', event, {instance: instance});
+					close(event);
 					reset();
 				}
 			});
@@ -412,15 +422,15 @@
 		}
 
 		function render() {
-			$container = $('<div></div>', { 'class': classname + ' ' + classname + '-' + sides[hSide] + ' ui-widget ui-widget-content ui-corner-all ui-front' })
-				.append($('<div></div>', { 'class': classname + '-main ui-widget-content' })
+			$container = $('<div></div>', {'class': classname + ' ' + classname + '-' + sides[hSide] + ' ui-widget ui-widget-content ui-corner-all ui-front'})
+				.append($('<div></div>', {'class': classname + '-main ui-widget-content'})
 					.append(presetsMenu.getElement())
 					.append(calendar.getElement()))
 				.append($('<div class="ui-helper-clearfix"></div>')
 					.append(buttonPanel.getElement()))
 				.hide();
 			$originalElement.hide().after(triggerButton.getElement());
-			$mask = $('<div></div>', { 'class': 'ui-front ' + classname + '-mask' }).hide();
+			$mask = $('<div></div>', {'class': 'ui-front ' + classname + '-mask'}).hide();
 			$('body').append($mask).append($container);
 		}
 
@@ -459,8 +469,11 @@
 		function bindEvents() {
 			triggerButton.getElement().click(toggle);
 			triggerButton.getElement().keydown(keyPressTriggerOpenOrClose);
-			$mask.click(close);
-			$(window).resize(function () { isOpen ? autoFit() : autoFitNeeded = true; });
+			$mask.click(function(event) {
+				close(event);
+				reset();
+			});
+			$(window).resize(function() { isOpen ? autoFit() : autoFitNeeded = true; });
 		}
 
 		function formatRangeForDisplay(range) {
@@ -483,7 +496,7 @@
 				range = null;
 			if (text) {
 				try {
-					range = JSON.parse(text, function (key, value) {
+					range = JSON.parse(text, function(key, value) {
 						return key ? $.datepicker.parseDate(dateFormat, value) : value;
 					});
 				} catch (e) {
@@ -502,7 +515,7 @@
 			}
 		}
 
-		function setRange(value) {
+		function setRange(value, event) {
 			var range = value || calendar.getRange();
 			if (!range.start) {
 				return;
@@ -516,27 +529,31 @@
 			if (options.onChange) {
 				options.onChange();
 			}
+			instance._trigger('change', event, {instance: instance});
 		}
 
 		function getRange() {
 			return parseRange($originalElement.val());
 		}
 
-		function clearRange() {
+		function clearRange(event) {
 			triggerButton.reset();
 			calendar.reset();
-			$originalElement.val('');
+			if (options.onClear) {
+				options.onClear();
+			}
+			instance._trigger('clear', event, {instance: instance});
 		}
 
 		// callback - used when the user clicks a preset range
-		function usePreset() {
+		function usePreset(event) {
 			var $this = $(this),
 				start = $this.data('dateStart')().startOf('day').toDate(),
 				end = $this.data('dateEnd')().startOf('day').toDate();
 			calendar.setRange({ start: start, end: end });
 			if (options.applyOnMenuSelect) {
-				close();
-				setRange();
+				close(event);
+				setRange(null, event);
 			}
 			return false;
 		}
@@ -547,8 +564,8 @@
 				my: 'left top',
 				at: 'left bottom' + (options.verticalOffset < 0 ? options.verticalOffset : '+' + options.verticalOffset),
 				of: triggerButton.getElement(),
-				collision: 'flipfit flipfit',
-				using: function (coords, feedback) {
+				collision : 'flipfit flipfit',
+				using: function(coords, feedback) {
 					var containerCenterX = feedback.element.left + feedback.element.width / 2,
 						triggerButtonCenterX = feedback.target.left + feedback.target.width / 2,
 						prevHSide = hSide,
@@ -596,19 +613,20 @@
 				case $.ui.keyCode.UP:
 				case $.ui.keyCode.DOWN:
 					killEvent(event);
-					open();
+					open(event);
 					return;
 				case $.ui.keyCode.ESCAPE:
 					killEvent(event);
-					close();
+					close(event);
+					reset();
 					return;
 				case $.ui.keyCode.TAB:
-					close();
+					close(event);
 					return;
 			}
 		}
 
-		function open() {
+		function open(event) {
 			if (!isOpen) {
 				triggerButton.getElement().addClass(classname + '-active');
 				$mask.show();
@@ -621,9 +639,10 @@
 			if (options.onOpen) {
 				options.onOpen();
 			}
+			instance._trigger('open', event, {instance: instance});
 		}
 
-		function close() {
+		function close(event) {
 			if (isOpen) {
 				$container.hide();
 				$mask.hide();
@@ -633,13 +652,20 @@
 			if (options.onClose) {
 				options.onClose();
 			}
+			instance._trigger('close', event, {instance: instance});
 		}
 
-		function toggle() {
-			isOpen ? close() : open();
+		function toggle(event) {
+			if (isOpen) {
+				close(event);
+				reset();
+			}
+			else {
+				open(event);
+			}
 		}
 
-		function getContainer() {
+		function getContainer(){
 			return $container;
 		}
 
@@ -670,4 +696,5 @@
 			getContainer: getContainer
 		};
 	}
+
 })(jQuery, window);

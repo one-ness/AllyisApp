@@ -28,7 +28,7 @@ namespace AllyisApps
 
 			// Time Tracker
 			bundles.Add(new ScriptBundle("~/bundles/daterangepicker").Include(
-				"~/Scripts/jquery.comiseo.daterangepicker.js",
+				"~/Scripts/jquery.comiseo.daterangepicker-0.5.0.js",
 				"~/Areas/TimeTracker/Scripts/allyis-drp-init.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/TTCustomerIndex").Include(
@@ -73,12 +73,12 @@ namespace AllyisApps
 				"~/Scripts/allyis-updateStateDDL.js"));
 
 			// CDN links with fallbacks
-			Bundle jQueryBundle = new ScriptBundle("~/bundles/jquery", "//ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js").Include(
+			Bundle jQueryBundle = new ScriptBundle("~/bundles/jquery", "//ajax.aspnetcdn.com/ajax/jquery/jquery-3.1.1.min.js").Include(
 						"~/Scripts/jquery-{version}.js");
 			jQueryBundle.CdnFallbackExpression = "window.jQuery";
 			bundles.Add(jQueryBundle);
 
-			Bundle jQueryValBundle = new ScriptBundle("~/bundles/jqueryval", "//ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js").Include(
+			Bundle jQueryValBundle = new ScriptBundle("~/bundles/jqueryval", "//ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js").Include(
 						"~/Scripts/jquery.validate.js", "~/Scripts/jquery.validate.min.js");
 			jQueryValBundle.CdnFallbackExpression = "$.validator";
 			bundles.Add(jQueryValBundle);
@@ -93,12 +93,12 @@ namespace AllyisApps
 			jQueryTransitBundle.CdnFallbackExpression = "$.transit";
 			bundles.Add(jQueryTransitBundle);
 
-			Bundle jQueryUIBundle = new ScriptBundle("~/bundles/jqueryui", "//code.jquery.com/ui/1.11.4/jquery-ui.min.js").Include(
-						"~/Scripts/jquery.ui-{version}.js");
-			jQueryUIBundle.CdnFallbackExpression = "window.jQuery.ui";
-			bundles.Add(jQueryUIBundle);
+            Bundle jQueryUIBundle = new ScriptBundle("~/bundles/jqueryui", "//code.jquery.com/ui/1.12.1/jquery-ui.min.js").Include(
+                        "~/Scripts/jquery-ui.js");
+            jQueryUIBundle.CdnFallbackExpression = "window.jQuery.ui";
+            bundles.Add(jQueryUIBundle);
 
-			Bundle momentBundle = new ScriptBundle("~/bundles/moment", "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js").Include(
+            Bundle momentBundle = new ScriptBundle("~/bundles/moment", "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js").Include(
 						"~/Scripts/moment-{version}.js");
 			momentBundle.CdnFallbackExpression = "window.moment";
 			bundles.Add(momentBundle);
@@ -108,7 +108,7 @@ namespace AllyisApps
 			underscore.CdnFallbackExpression = "window._";
 			bundles.Add(underscore);
 
-			Bundle bootstrapJSBundle = new ScriptBundle("~/bundles/bootstrap", "//ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js").Include(
+			Bundle bootstrapJSBundle = new ScriptBundle("~/bundles/bootstrap", "//ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js").Include(
 						"~/Scripts/bootstrap/*.js");
 			bootstrapJSBundle.CdnFallbackExpression = "$.fn.modal";
 			bundles.Add(bootstrapJSBundle);
