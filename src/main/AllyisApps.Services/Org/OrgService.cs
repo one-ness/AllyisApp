@@ -662,6 +662,12 @@ namespace AllyisApps.Services
                     }
                 }
 
+                // Non-required project columns
+                bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
+                bool hasProjectStartDate = table.Columns.Contains(ColumnHeaders.ProjectStartDate);
+                bool hasProjectEndDate = table.Columns.Contains(ColumnHeaders.ProjectEndDate);
+                bool hasNonRequiredProjectInfo = hasProjectType || hasProjectStartDate || hasProjectEndDate;
+
                 // User importing: requires email, id, first and last name
                 bool hasUserEmail = table.Columns.Contains(ColumnHeaders.UserEmail);
                 bool hasEmployeeId = table.Columns.Contains(ColumnHeaders.EmployeeId);
@@ -820,6 +826,32 @@ namespace AllyisApps.Services
                     // If there is no identifying information for projects, all project related importing is skipped.
                     if (hasProjectName || hasProjectId)
                     {
+                        //string knownValue = null;                                                                                                 // Next: examine logic for when to populate links above, continue
+                        //string readValue = null;
+                        //this.readColumn(row, hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId, p => knownValue = p);
+                        //if (hasProjectName && hasProjectId)
+                        //{
+                        //    this.readColumn(row, hasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName, p => readValue = p);
+                        //    if (readValue == null)
+                        //    {
+                        //        if (knownValue == null)
+                        //        {
+                        //            result.ProjectFailures.Add(string.Format("Error importing project on sheet {0}, row {1}: both {2} and {3} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.ProjectName, ColumnHeaders.ProjectId));
+                        //            continue;
+                        //        }
+
+                        //        // Both columns exist, so knownValue is Project Name and it is not null. readValue came up null, so the data couldn't be read for Project Id.
+                        //        hasProjectId = false;
+                        //    }
+
+                        //    if (knownValue == null)
+                        //    {
+                        //        // Both columns exists, knownValue is Project name and it came up null. readValue was read successfully, so the data is only missing for Project name.
+                        //        hasProjectName = false;
+                        //    }
+
+                        //}
+
                         // Find name and id for the project, if both exist
                         string name = null;
                         string orgId = null;
@@ -926,7 +958,7 @@ namespace AllyisApps.Services
 
                             updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.Type = val) || updated;
                             updated = this.readColumn(row, ColumnHeaders.ProjectStartDate, val => startDate = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.CustomerCountry, val => endDate = val) || updated;
+                            updated = this.readColumn(row, ColumnHeaders.ProjectEndDate, val => endDate = val) || updated;
                             if (startDate != null) project.StartingDate = DateTime.Parse(startDate);
                             if (endDate != null) project.EndingDate = DateTime.Parse(endDate);
 
