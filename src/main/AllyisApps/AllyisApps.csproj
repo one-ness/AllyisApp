@@ -749,7 +749,7 @@
     <Compile Include="Controllers\Home\HomeController.cs" />
     <Compile Include="Core\BootstrapAlert.cs" />
     <Compile Include="Areas\TimeTracker\Core\ApprovalState.cs" />
-    <Compile Include="Auth\ValidateAntiForgeryTokenOnAllPosts.cs" />
+    <Compile Include="Core\ValidateAntiForgeryTokenOnAllPosts.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
