@@ -28,7 +28,7 @@
                             if (!(gOptGroup == ProductNameKeyConstants.TimeTracker && !hasTimeTracker)) // don't display option group for TimeTracker if Org doesn't have TimeTracker
                             {
                                 <optgroup label="@(AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(gOptGroup.Replace(" ", string.Empty) ?? gOptGroup))">
-                                    @foreach (AllyisApps.ViewModels.Filter filt in group.Filters)
+                                    @foreach (AllyisApps.ViewModels.Auth.Filter filt in group.Filters)
                                     {
                                         <option value="@filt.UsersValue()">@(AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(filt.Name.Replace(" ", string.Empty) ?? filt.Name))</option>
 }
