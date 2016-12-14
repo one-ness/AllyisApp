@@ -12,7 +12,7 @@ using System.Web.Mvc;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.TimeTracker.Manage;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {

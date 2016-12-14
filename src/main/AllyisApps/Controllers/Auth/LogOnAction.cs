@@ -14,7 +14,7 @@ using System.Web.Security;
 using AllyisApps.Core;
 using AllyisApps.Lib;
 using AllyisApps.Services;
-using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {

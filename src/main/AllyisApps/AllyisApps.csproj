@@ -701,24 +701,24 @@
     <Compile Include="ViewModels\Auth\ForgotPasswordViewModel.cs" />
     <Compile Include="ViewModels\Auth\LogOnViewModel.cs" />
     <Compile Include="ViewModels\Auth\TestViewModel.cs" />
-    <Compile Include="ViewModels\Org\BillingHistoryItemViewModel.cs" />
-    <Compile Include="ViewModels\Org\PermissionsManagementViewModel.cs" />
+    <Compile Include="ViewModels\Auth\BillingHistoryItemViewModel.cs" />
+    <Compile Include="ViewModels\Auth\PermissionsManagementViewModel.cs" />
     <Compile Include="ViewModels\Auth\ResetPasswordViewModel.cs" />
     <Compile Include="ViewModels\Auth\UserInfoViewModel.cs" />
-    <Compile Include="ViewModels\Org\BillingViewModel.cs" />
-    <Compile Include="ViewModels\Org\EditOrganizationViewModel.cs" />
-    <Compile Include="ViewModels\Org\EditUserPermissionViewModel.cs" />
-    <Compile Include="ViewModels\Org\OrganizationAddMembersViewModel.cs" />
-    <Compile Include="ViewModels\Org\OrganizationMembersViewModel.cs" />
-    <Compile Include="ViewModels\Org\OrganizationUserViewModel.cs" />
-    <Compile Include="ViewModels\Org\OrganizationManageViewModel.cs" />
+    <Compile Include="ViewModels\Auth\BillingViewModel.cs" />
+    <Compile Include="ViewModels\Auth\EditOrganizationViewModel.cs" />
+    <Compile Include="ViewModels\Auth\EditUserPermissionViewModel.cs" />
+    <Compile Include="ViewModels\Auth\OrganizationAddMembersViewModel.cs" />
+    <Compile Include="ViewModels\Auth\OrganizationMembersViewModel.cs" />
+    <Compile Include="ViewModels\Auth\OrganizationUserViewModel.cs" />
+    <Compile Include="ViewModels\Auth\OrganizationManageViewModel.cs" />
     <Compile Include="Resources\Files\Files.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Files.resx</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\Org\SubscriptionDisplayViewModel.cs" />
-    <Compile Include="ViewModels\Org\SubscriptionRoleSelectionModel.cs" />
+    <Compile Include="ViewModels\Auth\SubscriptionDisplayViewModel.cs" />
+    <Compile Include="ViewModels\Auth\SubscriptionRoleSelectionModel.cs" />
     <Compile Include="ViewModels\Shared\LanguageViewModel.cs" />
     <Compile Include="ViewModels\Shared\LogOnPartialViewModel.cs" />
     <Compile Include="ViewModels\Shared\SubscriptionsViewModel.cs" />
@@ -756,7 +756,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Core\BaseViewModel.cs" />
     <Compile Include="Utilities\InviteMap.cs" />
-    <Compile Include="ViewModels\Org\ProductSubscriptionViewModel.cs" />
+    <Compile Include="ViewModels\Auth\ProductSubscriptionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Errors.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -855,18 +855,14 @@
     <Content Include="Scripts\allyis-account-subscribe.js" />
     <Content Include="Scripts\allyis-list-group-search.js" />
     <Content Include="Scripts\bootstrap.js" />
-    <None Include="Scripts\jquery-2.2.0.intellisense.js" />
-    <Content Include="Scripts\jquery-2.2.0.js" />
-    <Content Include="Scripts\jquery-2.2.0.min.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
-    <Content Include="Scripts\jquery.comiseo.daterangepicker.js" />
-    <Content Include="Scripts\jquery-2.2.0.min.map" />
-    <Content Include="Scripts\jquery.ui-1.11.4.js" />
-    <Content Include="Scripts\jquery.ui-1.11.4.min.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery.comiseo.daterangepicker-0.5.0.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -1218,10 +1214,6 @@
     </Content>
     <None Include="Resources\Files\ImportUserTemplate.csv" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\jquery-2.1.4.min.js" />
-    <Content Include="Scripts\jquery-2.1.4.min.js.map">
-      <DependentUpon>jquery-2.1.4.min.js</DependentUpon>
-    </Content>
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\respond.js" />

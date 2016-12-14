@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Services;
-using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.Shared;
 
 namespace AllyisApps.Controllers
 {

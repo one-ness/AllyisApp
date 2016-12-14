@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 using System.Web.Mvc;
 
 using AllyisApps.Areas.TimeTracker.Core;
-using AllyisApps.Areas.TimeTracker.Models;
+using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using AllyisApps.Core;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;

@@ -6,7 +6,7 @@
 
 using AllyisApps.Services.Billing;
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
 	/// View Model for display of subscription info on the organization manage page.

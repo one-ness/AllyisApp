@@ -9,12 +9,12 @@ using System.Collections.Generic;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 
-namespace AllyisApps.Areas.TimeTracker.Models
+namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
-	/// <summary>
-	/// Representation of the Time entries defined over the specified date range.
-	/// </summary>
-	public class TimeEntryOverDateRangeViewModel
+    /// <summary>
+    /// Representation of the Time entries defined over the specified date range.
+    /// </summary>
+    public class TimeEntryOverDateRangeViewModel
 	{
 		private const int PageUserLimit = 35;
 

@@ -1,9 +1,8 @@
-﻿@using AllyisApps.Areas.TimeTracker.Models
+﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 @model DeleteTimeEntryViewModel
 
 @using (Html.BeginForm(ActionConstants.DeleteTimeEntry, ControllerConstants.TimeEntry, FormMethod.Post))
 {
-	@Html.HiddenFor(m => m.OrganizationId)
 	@Html.HiddenFor(m => m.TimeEntryId)
 	@Html.HiddenFor(m => m.StartingDate)
 	@Html.HiddenFor(m => m.EndingDate)

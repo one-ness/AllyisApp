@@ -6,7 +6,7 @@
 
 using System.Collections.Generic;
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.TimeTracker.Customer
 {
 	/// <summary>
 	/// ViewModel for the Customer management page.

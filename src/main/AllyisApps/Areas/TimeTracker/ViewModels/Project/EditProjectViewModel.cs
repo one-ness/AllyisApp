@@ -7,7 +7,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.TimeTracker.Project
 {
 	/// <summary>
 	/// View Model for Project Editing.

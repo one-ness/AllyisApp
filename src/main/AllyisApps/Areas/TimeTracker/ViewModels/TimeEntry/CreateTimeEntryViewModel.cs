@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Areas.TimeTracker.Models
+namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
 	/// <summary>
 	/// Represents a time entry for creation into the database.

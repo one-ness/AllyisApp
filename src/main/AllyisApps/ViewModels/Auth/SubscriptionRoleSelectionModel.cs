@@ -7,7 +7,7 @@
 using System.Collections.Generic;
 using AllyisApps.Services.Billing;
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
 	/// Object for displaying and capturing Subscription Role selections.

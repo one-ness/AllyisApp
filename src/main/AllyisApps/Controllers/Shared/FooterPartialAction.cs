@@ -9,7 +9,7 @@ using System.Linq;
 using System.Web.Mvc;
 
 using AllyisApps.Core;
-using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.Shared;
 
 namespace AllyisApps.Controllers
 {

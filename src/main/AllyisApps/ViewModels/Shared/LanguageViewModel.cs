@@ -6,7 +6,7 @@
 
 using System.Linq;
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.Shared
 {
 	/// <summary>
 	/// View model for a language setting.

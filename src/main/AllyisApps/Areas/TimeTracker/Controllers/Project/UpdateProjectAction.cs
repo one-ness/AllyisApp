@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 
 using AllyisApps.Core;
-using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
