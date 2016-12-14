@@ -763,7 +763,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Errors.resx</DependentUpon>
     </Compile>
-    <Compile Include="Startup.cs" />
     <Compile Include="Filters\NotificationFilter.cs" />
     <Compile Include="Core\SQLDateProtectorAttribute.cs" />
     <Compile Include="Core\MinAgeAttribute.cs" />
