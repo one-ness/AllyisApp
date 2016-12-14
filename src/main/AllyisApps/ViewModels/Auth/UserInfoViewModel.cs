@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Shared;
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
 	/// Represents basic user info.

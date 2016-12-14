@@ -6,7 +6,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
 	/// Represents an editable view of user's information, complete with password.

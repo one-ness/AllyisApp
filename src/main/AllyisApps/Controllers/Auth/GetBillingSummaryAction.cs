@@ -11,7 +11,7 @@ using System.Web.Mvc;
 using AllyisApps.Core;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
-using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {

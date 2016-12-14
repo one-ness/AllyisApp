@@ -13,7 +13,7 @@ using System.Web.Mvc;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Utilities;
-using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.Auth;
 using CsvHelper;
 
 namespace AllyisApps.Controllers

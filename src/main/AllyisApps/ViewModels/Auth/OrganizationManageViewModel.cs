@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using AllyisApps.Services;
 using AllyisApps.Services.Common.Types;
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
 	/// The org management view model.

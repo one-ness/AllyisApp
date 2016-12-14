@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 
 using AllyisApps.Services;
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
 	/// OrganizationAddMembersModel class.
