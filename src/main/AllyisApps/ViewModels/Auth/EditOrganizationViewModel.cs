@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using DataAnnotationsExtensions;
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
 	/// Represents the organization profile edit form.

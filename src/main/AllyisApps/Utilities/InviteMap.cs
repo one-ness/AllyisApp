@@ -5,7 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
-using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.Auth;
 using CsvHelper.Configuration;
 
 namespace AllyisApps.Utilities

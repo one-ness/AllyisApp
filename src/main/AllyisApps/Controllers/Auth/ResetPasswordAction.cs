@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 
 using AllyisApps.Core;
-using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {

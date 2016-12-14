@@ -13,7 +13,7 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
-using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {

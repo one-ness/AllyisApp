@@ -13,7 +13,7 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Extensions.IEnumerableExtensions;
 using AllyisApps.Services;
 using AllyisApps.Services.Billing;
-using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.Auth;
 using Newtonsoft.Json;
 
 namespace AllyisApps.Controllers
@@ -71,17 +71,17 @@ namespace AllyisApps.Controllers
 			result.UserPermissions = permissions.DistinctBy(u => u.UserId).OrderBy(u => u.UserName).ToList();   // UserRoles are unique via SubscriptionId and UserId, but UserPermissionsManagement does not track SubscriptionId, causing duplicate users to be stored
 
 			result.Filters = new FilterDataModel();
-			result.Filters.UnassignedUsers = new ViewModels.Filter("Unassigned", users, x => x.ProductRoleId == 0);
-			result.Filters.AllUsers = new ViewModels.Filter("All Users", users);
+			result.Filters.UnassignedUsers = new ViewModels.Auth.Filter("Unassigned", users, x => x.ProductRoleId == 0);
+			result.Filters.AllUsers = new ViewModels.Auth.Filter("All Users", users);
 			FilterGroup orgFilters = result.Filters.AddNewFilterGroup("Organization");
-			orgFilters.Filters.Add(new ViewModels.Filter("Owner", users, x => x.OrgRoleId == (int)OrganizationRole.Owner));
-			orgFilters.Filters.Add(new ViewModels.Filter("Member", users, x => x.OrgRoleId == (int)OrganizationRole.Member));
+			orgFilters.Filters.Add(new ViewModels.Auth.Filter("Owner", users, x => x.OrgRoleId == (int)OrganizationRole.Owner));
+			orgFilters.Filters.Add(new ViewModels.Auth.Filter("Member", users, x => x.OrgRoleId == (int)OrganizationRole.Member));
 
 			FilterGroup timeTrackerFilters = result.Filters.AddNewFilterGroup("TimeTracker");
-			timeTrackerFilters.Filters.Add(new ViewModels.Filter("Any", users, x => x.ProductRoleId != 0));
-			timeTrackerFilters.Filters.Add(new ViewModels.Filter("Manager", users, u => u.ProductRoleId == (int)ProductRole.TimeTrackerManager));
-			timeTrackerFilters.Filters.Add(new ViewModels.Filter("User", users, u => u.ProductRoleId == (int)ProductRole.TimeTrackerUser));
-			timeTrackerFilters.Filters.Add(new ViewModels.Filter("Unassigned", users, x => x.ProductRoleId == 0));
+			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("Any", users, x => x.ProductRoleId != 0));
+			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("Manager", users, u => u.ProductRoleId == (int)ProductRole.TimeTrackerManager));
+			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("User", users, u => u.ProductRoleId == (int)ProductRole.TimeTrackerUser));
+			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("Unassigned", users, x => x.ProductRoleId == 0));
 
 			return result;
 		}

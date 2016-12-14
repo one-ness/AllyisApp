@@ -6,7 +6,7 @@
 
 using System.Collections.Generic;
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.Shared
 {
 	/// <summary>
 	/// LogOnPartial View Model.

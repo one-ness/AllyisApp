@@ -6,7 +6,7 @@
 
 using AllyisApps.Services;
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.TimeTracker.Customer
 {
 	/// <summary>
 	/// Represents basic Customer info.

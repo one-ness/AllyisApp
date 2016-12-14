@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
 	/// View model for one item in the _OrgMembers partial on Account/Manage. Part of OrganizationMembersViewModel.

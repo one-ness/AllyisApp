@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
 	/// The billing history model.

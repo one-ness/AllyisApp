@@ -7,7 +7,7 @@
 using System;
 using AllyisApps.Services.Common.Types;
 
-namespace AllyisApps.ViewModels
+namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
 	/// The billing model.
