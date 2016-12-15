@@ -5,7 +5,7 @@
 	@if(!string.IsNullOrWhiteSpace(ViewBag.Subtitle)) {<h2 class="text-center">@ViewBag.Subtitle</h2>}
 	@if(!string.IsNullOrWhiteSpace(ViewBag.Description)) {<p class="text-center">@ViewBag.Description</p>}
 </div>
-<div id="content-wrap">
+<div id="content-wrap" class="container">
 	@RenderBody()
 </div>
 

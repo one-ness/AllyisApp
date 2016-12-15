@@ -76,12 +76,14 @@ namespace AllyisApps.Controllers
 
 				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.UpdateProfileSuccessMessage, Variety.Success));
 
-				if (!string.IsNullOrWhiteSpace(returnUrl))
-				{
-					return this.RedirectToLocal(returnUrl);
-				}
+                if (!string.IsNullOrWhiteSpace(returnUrl))
+                {
+                    return this.RedirectToLocal(returnUrl);
+                }
+                else return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 			}
 
+            // Invalid Model
 			return this.View(model);
 		}
 	}
