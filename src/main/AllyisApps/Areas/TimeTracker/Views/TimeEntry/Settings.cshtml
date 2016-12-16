@@ -25,13 +25,13 @@
             {
                 @Html.AntiForgeryToken();
 
-                <input type="radio" name="startOfWeek" id="sow" value="1" @(Model.StartOfWeek == StartOfWeekEnum.Monday    ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Monday</text><br />
-                <input type="radio" name="startOfWeek" id="sow" value="2" @(Model.StartOfWeek == StartOfWeekEnum.Tuesday   ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Tuesday</text><br />
-                <input type="radio" name="startOfWeek" id="sow" value="3" @(Model.StartOfWeek == StartOfWeekEnum.Wednesday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Wednesday</text><br />
-                <input type="radio" name="startOfWeek" id="sow" value="4" @(Model.StartOfWeek == StartOfWeekEnum.Thursday  ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Thursday</text><br />
-                <input type="radio" name="startOfWeek" id="sow" value="5" @(Model.StartOfWeek == StartOfWeekEnum.Friday    ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Friday</text><br />
-                <input type="radio" name="startOfWeek" id="sow" value="6" @(Model.StartOfWeek == StartOfWeekEnum.Saturday  ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Saturday</text><br />
-                <input type="radio" name="startOfWeek" id="sow" value="0" @(Model.StartOfWeek == StartOfWeekEnum.Sunday    ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Sunday</text><br />
+                <input type="radio" name="startOfWeek" style="margin:10px" id="sow" value="1" @(Model.StartOfWeek == StartOfWeekEnum.Monday    ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Monday</text><br />
+                <input type="radio" name="startOfWeek" style="margin:10px" id="sow" value="2" @(Model.StartOfWeek == StartOfWeekEnum.Tuesday   ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Tuesday</text><br />
+                <input type="radio" name="startOfWeek" style="margin:10px" id="sow" value="3" @(Model.StartOfWeek == StartOfWeekEnum.Wednesday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Wednesday</text><br />
+                <input type="radio" name="startOfWeek" style="margin:10px" id="sow" value="4" @(Model.StartOfWeek == StartOfWeekEnum.Thursday  ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Thursday</text><br />
+                <input type="radio" name="startOfWeek" style="margin:10px" id="sow" value="5" @(Model.StartOfWeek == StartOfWeekEnum.Friday    ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Friday</text><br />
+                <input type="radio" name="startOfWeek" style="margin:10px" id="sow" value="6" @(Model.StartOfWeek == StartOfWeekEnum.Saturday  ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Saturday</text><br />
+                <input type="radio" name="startOfWeek" style="margin:10px" id="sow" value="0" @(Model.StartOfWeek == StartOfWeekEnum.Sunday    ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Sunday</text><br />
 
                 <br />
                 <input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save class="btn btn-primary" />
@@ -76,7 +76,7 @@
             {
                 @Html.AntiForgeryToken();
 
-                <div id="OTCheck">
+                <div id="OTCheck" style="margin:10px">
                     @{    bool overTimeUsed = Model.Settings.OvertimeHours > 0;
                     }
                     <input type="radio" name="setting" id="setting" value="Yes" onclick="hideOT(false)" @(overTimeUsed ? " checked" : string.Empty) /><text> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Yes</text>
@@ -84,15 +84,19 @@
                 </div>
 
                 <div id="OTSettings" style="visibility: @(overTimeUsed ? "visible" : "hidden")">
-                    @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.After
-                    <input type="text" id="hours" name="hours" value='@(Model.Settings.OvertimeHours < 0 ? 40 : Model.Settings.OvertimeHours)' style="width: 40px; text-align: right" /> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.HoursPer
-                    <select id="period" name="period" value='@Model.Settings.OvertimePeriod'>
-                        <option value="Day" @(Model.Settings.OvertimePeriod == "Day" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Day</option>
-                        <option value="Week" @(Model.Settings.OvertimePeriod == "Week" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Week</option>
-                        <option value="Month" @(Model.Settings.OvertimePeriod == "Month" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Month</option>
-                    </select><br />
-                    @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.WithAMultiplierOf
-                    <input type="text" id="mult" name="mult" value='@Model.Settings.OvertimeMultiplier.ToString("G10")' style="width: 60px; text-align: right" />
+                    <div style="margin:10px">
+                        @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.After
+                        <input type="text" id="hours" name="hours" value='@(Model.Settings.OvertimeHours < 0 ? 40 : Model.Settings.OvertimeHours)' style="width: 40px; text-align: right" /> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.HoursPer
+                        <select id="period" name="period" value='@Model.Settings.OvertimePeriod'>
+                            <option value="Day" @(Model.Settings.OvertimePeriod == "Day" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Day</option>
+                            <option value="Week" @(Model.Settings.OvertimePeriod == "Week" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Week</option>
+                            <option value="Month" @(Model.Settings.OvertimePeriod == "Month" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Month</option>
+                        </select><br />
+                    </div>
+                    <div style="margin:10px">
+                        @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.WithAMultiplierOf
+                        <input type="text" id="mult" name="mult" value='@Model.Settings.OvertimeMultiplier.ToString("G10")' style="width: 60px; text-align: right" />
+                    </div>
                 </div>
                 <div>
                     <input class="pull-right btn btn-primary" type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save />
