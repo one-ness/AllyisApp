@@ -610,6 +610,14 @@ namespace AllyisApps.Services
             // Retrieval of existing user data
             List<Tuple<string, UserInfo>> users = this.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Select(o => new Tuple<string, UserInfo>(o.EmployeeId, this.GetUserInfo(o.UserId))).ToList();
 
+            // Retrieval of existing user product subscription data
+            int ttProductId = Service.GetProductIdByName("TimeTracker");
+            SubscriptionDisplayDBEntity ttSub = DBHelper.GetSubscriptionsDisplayByOrg(this.UserContext.ChosenOrganizationId).Where(s => s.ProductId == ttProductId).SingleOrDefault();
+            List<UserInfo> userSubs = this.GetUsersWithSubscriptionToProductInOrganization(this.UserContext.ChosenOrganizationId, ttProductId).ToList();
+
+            // Retrieval of existing pay class data
+            List<PayClassInfo> payClasses = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InfoObjectsUtility.InitializePayClassInfo(pc)).ToList();
+
             // Result object
             ImportActionResult result = new ImportActionResult();
 
@@ -699,6 +707,12 @@ namespace AllyisApps.Services
                 bool hasTTDuration = table.Columns.Contains(ColumnHeaders.Duration);
                 bool hasTTPayClass = table.Columns.Contains(ColumnHeaders.PayClass);
                 bool canImportTimeEntry = canImportProjectUser && hasTTDate && hasTTDuration && hasTTPayClass;
+                if (canImportTimeEntry && ttSub == null)
+                {
+                    // No Time Tracker subscription
+                    result.TimeEntryFailures.Add("Cannot import time entries: no subscription to Time Tracker.");
+                    canImportTimeEntry = false;
+                }
 
                 // Non-required time entry column
                 bool hasTTDescription = table.Columns.Contains(ColumnHeaders.Description);
@@ -1264,19 +1278,20 @@ namespace AllyisApps.Services
                             {
                                 // Check for subscription role
                                 bool canImportThisEntry = false;
-                                int timeTrackerProductId = Service.GetProductIdByName("TimeTracker");
-                                if (!this.GetUsersWithSubscriptionToProductInOrganization(this.UserContext.ChosenOrganizationId, timeTrackerProductId).Where(u => u.UserId == user.UserId).Any())
+                                if (userSubs.Where(u => u.UserId == user.UserId).Any())
                                 {
                                     // No existing subscription for this user, so we create one.
-                                    var ttSub = DBHelper.GetSubscriptionsDisplayByOrg(this.UserContext.ChosenOrganizationId).Where(s => s.ProductId == timeTrackerProductId).SingleOrDefault();
-                                    if(ttSub != null && ttSub.SubscriptionsUsed < ttSub.NumberOfUsers)
+                                    if(ttSub.SubscriptionsUsed < ttSub.NumberOfUsers)
                                     {
                                         this.DBHelper.UpdateSubscriptionUserProductRole((int)(ProductRole.TimeTrackerUser), ttSub.SubscriptionId, user.UserId);
+                                        userSubs.Add(user);
+                                        result.UsersAddedToSubscription += 1;
                                         canImportThisEntry = true; // Successfully created.
                                     }
                                     else
                                     {
-                                        // Raise error: Not enough slots left in Time Tracker subscription
+                                        result.UserSubscriptionFailures.Add(string.Format("Cannot add user {0} {1} to Time Tracker subscription: number of users for subscription is at maximum ({2}).", user.FirstName, user.LastName, ttSub.SubscriptionsUsed));
+                                        continue;
                                     }
                                 }
                                 else
@@ -1296,37 +1311,57 @@ namespace AllyisApps.Services
                                     this.readColumn(row, ColumnHeaders.Duration, val => duration = val);
                                     if (hasTTDescription) this.readColumn(row, ColumnHeaders.Description, val => description = val);
                                     this.readColumn(row, ColumnHeaders.PayClass, val => payclass = val);
-                                    PayClassInfo payClass = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InfoObjectsUtility.InitializePayClassInfo(pc)).Where(p => p.Name.ToUpper().Equals(payclass.ToUpper())).SingleOrDefault();
-                                    DateTime theDate = DateTime.Parse(date);
-                                    float theDuration = float.Parse(duration);
-                                    if(date != null && duration != null & payClass != null)
+                                    PayClassInfo payClass = payClasses.Where(p => p.Name.ToUpper().Equals(payclass.ToUpper())).SingleOrDefault();
+                                    DateTime theDate;
+                                    float theDuration;
+                                    try
                                     {
-                                        // Find existing entry. If none, create new one
-                                        List<TimeEntryDBEntity> entries = DBHelper.GetTimeEntriesByUserOverDateRange(new List<int> { user.UserId }, this.UserContext.ChosenOrganizationId, theDate, theDate).ToList();
-                                        if (!entries.Where(e => e.Description.Equals(description) && e.Duration == theDuration && e.PayClassId == payClass.PayClassID && e.ProjectId == project.ProjectId).Any())
+                                        theDate = DateTime.Parse(date);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: bad date format ({2}).", table.TableName, table.Rows.IndexOf(row) + 2, date));
+                                        continue;
+                                    }
+
+                                    try
+                                    {
+                                        theDuration = float.Parse(duration);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: bad duration format ({2}).", table.TableName, table.Rows.IndexOf(row) + 2, duration));
+                                        continue;
+                                    }
+
+                                    // Find existing entry. If none, create new one     TODO: See if there's a good way to populate this by sheet rather than by row, or once at the top
+                                    List<TimeEntryDBEntity> entries = DBHelper.GetTimeEntriesByUserOverDateRange(new List<int> { user.UserId }, this.UserContext.ChosenOrganizationId, theDate, theDate).ToList();
+                                    if (!entries.Where(e => e.Description.Equals(description) && e.Duration == theDuration && e.PayClassId == payClass.PayClassID && e.ProjectId == project.ProjectId).Any())
+                                    {
+                                        if (entries.Select(e => e.Duration).Sum() + theDuration > 24)
                                         {
-                                            // All required information is present
-                                            try
-                                            {
-                                                if (DBHelper.CreateTimeEntry(new DBModel.TimeTracker.TimeEntryDBEntity
-                                                {
-                                                    Date = DateTime.Parse(date),
-                                                    Description = description,
-                                                    Duration = float.Parse(duration),
-                                                    FirstName = user.FirstName,
-                                                    LastName = user.LastName,
-                                                    PayClassId = payClass.PayClassID,
-                                                    ProjectId = project.ProjectId,
-                                                    UserId = user.UserId
-                                                }) == -1)
-                                                {
-                                                    // Raise error: could not create time entry
-                                                }
-                                            }
-                                            catch (FormatException)
-                                            {
-                                                // Raise error: date or duration has bad format
-                                            }
+                                            result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: cannot have more than 24 hours of work in one day.", table.TableName, table.Rows.IndexOf(row) + 2));
+                                            continue;
+                                        }
+
+                                        // All required information is present and valid
+                                        if (DBHelper.CreateTimeEntry(new DBModel.TimeTracker.TimeEntryDBEntity
+                                        {
+                                            Date = theDate,
+                                            Description = description,
+                                            Duration = theDuration,
+                                            FirstName = user.FirstName,
+                                            LastName = user.LastName,
+                                            PayClassId = payClass.PayClassID,
+                                            ProjectId = project.ProjectId,
+                                            UserId = user.UserId
+                                        }) == -1)
+                                        {
+                                            result.TimeEntryFailures.Add(string.Format("Database error importing time entry on sheet {0}, row {1}.", table.TableName, table.Rows.IndexOf(row) + 2));
+                                        }
+                                        else
+                                        {
+                                            result.TimeEntriesImported += 1;
                                         }
                                     }
                                 }
