@@ -146,7 +146,7 @@ ViewBag.RenderSidebar = true;}
                         }
                         <div data-page="@pageCount" class="@(active)"
                              onmouseover='this.style.backgroundColor="#c4e3f3"' onmouseout="@resetBackground"
-                             style="width: 95%; display: @hide; justify-content: flex-end;">
+                             style="width: 100%; display: @hide; justify-content: flex-end;">
                             <a class="col-xs-11 text-left" data-search="@user.Email"
                                href="@Url.Action(ActionConstants.Index, routeValues: new
                             {
@@ -159,7 +159,7 @@ ViewBag.RenderSidebar = true;}
                             </a>
                             <a href="@Url.Action(ActionConstants.UserEdit, routeValues: new {
                                 userId = user.UserId })"
-                               style="text-decoration: none; color: #0066AA;"><i class="fa fa-cog"></i></a>
+                               style="text-decoration: none; color: #0066AA; padding-right:5%"><i class="fa fa-cog"></i></a>
                         </div>count++;
                     }
                 }
@@ -192,9 +192,10 @@ ViewBag.RenderSidebar = true;}
                     <input id="upload-file-name-display" class="form-control"
                            onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
                 </div>
-                <div style="width:70%; margin:0 auto">
+                @*<div style="width:70%; margin:0 auto">*@
+                <div id="footUpload" class="panel-footer" style="display: flex; justify-content: space-around; flex-wrap: wrap">
                     <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@AllyisApps.Resources.Views.Account.Strings.ChooseFile</a>
-                    <input style="margin-left: 5px" type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
+                    <input type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
                 </div>
             </div>
         }
