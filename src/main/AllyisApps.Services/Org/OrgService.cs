@@ -1155,60 +1155,71 @@ namespace AllyisApps.Services
                                                 }
                                             }
                                         }
-
                                     }
                                 }
 
-                                if(fields.All(s => !string.IsNullOrEmpty(s)))
+                                if (fields.Any(s => string.IsNullOrEmpty(s)))
                                 {
-                                    // All required info was found successfully
-                                    if (Service.IsEmailAddressValid(fields[0]))
+                                    // Couldn't get all the information
+                                    bool[] fieldStatuses = fields.Select(f => string.IsNullOrEmpty(f)).ToArray();
+                                    result.UserFailures.Add(string.Format("Could not create user {0}: missing {1}{2}.", (fieldStatuses[0] ? fieldStatuses[1] ?
+                                        string.Join(" ", fields[2].Split(new string[] { "__IMPORT__" }, StringSplitOptions.None)) : fields[1] : fields[0]),
+                                        fieldStatuses[0] ? ColumnHeaders.UserEmail : fieldStatuses[1] ? ColumnHeaders.EmployeeId : string.Format("{0}/{1}", ColumnHeaders.UserFirstName, ColumnHeaders.UserLastName),
+                                        fieldStatuses.Where(s => s).Count() == 2 ? string.Format(" and {0}", !fieldStatuses[2] ? ColumnHeaders.EmployeeId : string.Format("{0}/{1}", ColumnHeaders.UserFirstName, ColumnHeaders.UserLastName)) : ""));
+                                    continue;
+                                }
+
+                                // All required info was found successfully
+                                string[] names = fields[2].Split(new string[] { "__IMPORT__" }, StringSplitOptions.None);
+
+                                if (!Service.IsEmailAddressValid(fields[0]))
+                                {
+                                    result.UserFailures.Add(string.Format("Could not create user {0} {1}: invalid email format ({2}).", names[0], names[1], fields[0]));
+                                    continue;
+                                }
+
+                                try
+                                {
+                                    user = new UserInfo()
                                     {
-                                        string[] names = fields[2].Split(new string[] { "__IMPORT__" }, StringSplitOptions.None);
+                                        Email = fields[0],
+                                        FirstName = names[0],
+                                        LastName = names[1],
+                                        PasswordHash = Lib.Crypto.ComputeSHA512Hash("password") // TODO: Figure out a better default password generation system
+                                    };
+                                    user.UserId = DBHelper.CreateUser(InfoObjectsUtility.GetDBEntityFromUserInfo(user));
+                                    result.UsersImported += 1;
+                                    if (user.UserId != -1)
+                                    {
                                         try
                                         {
-                                            user = new UserInfo()
+                                            DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
                                             {
-                                                Email = fields[0],
-                                                FirstName = names[0],
-                                                LastName = names[1],
-                                                PasswordHash = Lib.Crypto.ComputeSHA512Hash("password") // TODO: Figure out a better default password generation system
-                                            };
-                                            user.UserId = DBHelper.CreateUser(InfoObjectsUtility.GetDBEntityFromUserInfo(user));
-                                            if (user.UserId != -1)
-                                            {
-                                                try
-                                                {
-                                                    DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
-                                                    {
-                                                        EmployeeId = fields[1],
-                                                        OrganizationId = this.UserContext.ChosenOrganizationId,
-                                                        OrgRoleId = (int)(OrganizationRole.Member),
-                                                        UserId = user.UserId
-                                                    });
-                                                }
-                                                catch (System.Data.SqlClient.SqlException)
-                                                {
-                                                    // Raise error: error creating org user (in test, it's always a duplicate employee id)
-                                                }
-                                                users.Add(new Tuple<string, UserInfo>(fields[1], user));
-                                            }
-                                            else
-                                            {
-                                                // Raise error: error creating new user
-                                            }
+                                                EmployeeId = fields[1],
+                                                OrganizationId = this.UserContext.ChosenOrganizationId,
+                                                OrgRoleId = (int)(OrganizationRole.Member),
+                                                UserId = user.UserId
+                                            });
+                                            result.UsersAddedToOrganization += 1;
                                         }
                                         catch (System.Data.SqlClient.SqlException)
                                         {
-                                            // Raise error: error creating new user
+                                            result.OrgUserFailures.Add(string.Format("Database error assigning user {0}{1} to organization. Could be a duplicate employee id ({2}).", names[0], names[1], fields[1]));
+                                            continue;
                                         }
+                                        users.Add(new Tuple<string, UserInfo>(fields[1], user));
                                     }
                                     else
                                     {
-                                        // Raise error: invalid email for user
+                                        result.UserFailures.Add(string.Format("Database error creating user {0}{1}.", names[0], names[1]));
+                                        continue;
                                     }
                                 }
-
+                                catch (System.Data.SqlClient.SqlException)
+                                {
+                                    result.UserFailures.Add(string.Format("Database error creating user {0}{1}.", names[0], names[1]));
+                                    continue;
+                                }
                             }
                         }
 
