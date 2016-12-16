@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
             // TODO: Buff up the error handling (catch errors from import functions, etc.)
             if (ModelState.IsValid)
             {
-                if(Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
+                if (Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
                 {
                     if (upload != null && upload.ContentLength > 0)
                     {
@@ -73,6 +73,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                     }
                 }
             }
+
             return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
         }
     }

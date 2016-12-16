@@ -586,11 +586,16 @@ namespace AllyisApps.Services
         public ImportActionResult Import(DataSet importData)
         {
             // For some reason, linq won't work directly with DataSets, so we start by just moving the tables over to a linq-able List
+            // The tables are ranked and sorted in order to get customers to import first, before projects, avoiding some very complicated look-up logic.
             List<DataTable> tables = new List<DataTable>();
+            List<Tuple<DataTable, int>> sortableTables = new List<Tuple<DataTable, int>>();
             foreach(DataTable table in importData.Tables)
             {
-                tables.Add(table);
+                int rank = (table.Columns.Contains(ColumnHeaders.CustomerName) || table.Columns.Contains(ColumnHeaders.CustomerId) ? 3 : 0);
+                rank = table.Columns.Contains(ColumnHeaders.ProjectName) || table.Columns.Contains(ColumnHeaders.ProjectId) ? rank == 3 ? 2 : 1 : rank;
+                sortableTables.Add(new Tuple<DataTable, int>(table, rank));
             }
+            tables = sortableTables.OrderBy(tup => tup.Item2 * -1).Select(tup => tup.Item1).ToList();
 
             // Retrieval of existing customer and project data
             List<Tuple<CustomerInfo, List<ProjectInfo>>> customersProjects = new List<Tuple<CustomerInfo, List<ProjectInfo>>>();
@@ -645,9 +650,6 @@ namespace AllyisApps.Services
                 // Project importing: requires both project name and project id, as well as one identifying field for a customer (name or id)
                 bool hasProjectName = table.Columns.Contains(ColumnHeaders.ProjectName);
                 bool hasProjectId = table.Columns.Contains(ColumnHeaders.ProjectId);
-                //bool canCreateProjects = false; // hasProjectName && hasProjectId && (hasCustomerName || hasCustomerId);
-                //List<DataTable> projectImportLinks = new List<DataTable>();
-                //List<DataTable> projectCustomerLinks = new List<DataTable>();
                 List<DataTable>[,] projectLinks = new List<DataTable>[3, 3];
                 projectLinks[0, 1] = projectLinks[1, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.ProjectName) && t.Columns.Contains(ColumnHeaders.ProjectId)).ToList();
                 projectLinks[0, 2] = projectLinks[2, 0] = tables.Where(t => t.Columns.Contains(ColumnHeaders.ProjectName) && (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerId))).ToList();
@@ -655,35 +657,6 @@ namespace AllyisApps.Services
                 bool canImportProjects = (hasProjectName || projectLinks[0, 1].Count > 0 || projectLinks[0, 2].Count > 0) &&
                     (hasProjectId || projectLinks[1, 0].Count > 0 || projectLinks[1, 2].Count > 0) &&
                     (hasCustomerName || hasCustomerId || projectLinks[2, 0].Count > 0 || projectLinks[2, 1].Count > 0);
-
-                //if (hasProjectName || hasProjectId)
-                //{
-                //    // We want to grab these links even if both columns are present, in case reading one of them fails.
-                //    projectImportLinks = tables.Where(t => t.Columns.Contains(ColumnHeaders.ProjectName) && t.Columns.Contains(ColumnHeaders.ProjectId)).ToList();
-                //    projectCustomerLinks = tables.Where(t => (t.Columns.Contains(ColumnHeaders.ProjectName) || t.Columns.Contains(ColumnHeaders.ProjectId)) &&
-                //        (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerId))).ToList();
-                    
-                    
-                //    // Note: this check returns true even when this sheet contains all required information, since this sheet would then be in both lists
-                //    if (projectImportLinks.Count > 0 && projectCustomerLinks.Count > 0)
-                //    {
-                //        canCreateProjects = true;
-                //    }
-                //}
-
-                //if (!canCreateProjects && (hasProjectName || hasProjectId))
-                //{
-                //    // If one of these two connections exists on this table, that's ok; it won't get used. The variable will simply be set to this table redundantly.
-                //    projectImportLinks = tables.Where(t => t.Columns.Contains(ColumnHeaders.ProjectName) && t.Columns.Contains(ColumnHeaders.ProjectId)).ToList();
-                //    projectCustomerLinks = tables.Where(t => (t.Columns.Contains(ColumnHeaders.ProjectName) || t.Columns.Contains(ColumnHeaders.ProjectId)) &&
-                //                                            (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerId))).ToList();
-
-                //    // Even if one of these isn't necessary (because both items are on this table), it won't be empty. Therefore, if either is emtpy, a connection is missing.
-                //    if (projectImportLinks.Count() > 0 && projectCustomerLinks.Count > 0)
-                //    {
-                //        canCreateProjects = true;
-                //    }
-                //}
 
                 // Non-required project columns
                 bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
@@ -871,14 +844,14 @@ namespace AllyisApps.Services
                                 }
 
                                 // Failed to read Id, but read Name successfully.
-                                thisRowHasProjectId = false;                                   // 'all' 'TestProjectBothBadId'
+                                thisRowHasProjectId = false;
                             }
 
                             if (knownValue == null)
                             {
                                 // Failed to read Name. If reading the Id also failed, the continue above would have been hit, so it must have succeeded.
                                 // This means that we should change knownValue to Id.
-                                thisRowHasProjectName = false;                                 // 'all' 'PR-tpbbadnm'
+                                thisRowHasProjectName = false;
                                 knownValue = readValue;
                                 readValue = null;
                             }
@@ -914,34 +887,34 @@ namespace AllyisApps.Services
                                         catch (IndexOutOfRangeException) { }
                                     }
 
-                                    if(string.IsNullOrEmpty(readValue))
+                                    if (string.IsNullOrEmpty(readValue))
                                     {
                                         result.ProjectFailures.Add(string.Format("Could not create project {0}: no corresponding {1}.", knownValue, thisRowHasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName));
                                         continue;
                                     }
+                                }
 
-                                    // All required information is known: time to create the project
-                                    project = new ProjectInfo
-                                    {
-                                        CustomerId = customer.CustomerId,
-                                        Name = thisRowHasProjectName ? knownValue : readValue,
-                                        Type = "Hourly",
-                                        OrganizationId = this.UserContext.ChosenOrganizationId,
-                                        ProjectOrgId = thisRowHasProjectName ? readValue : knownValue,
-                                        StartingDate = DateTime.Now,
-                                        EndingDate = DateTime.Now.AddMonths(6)
-                                    };
-                                    project.ProjectId = this.CreateProject(project);
-                                    if (project.ProjectId == -1)
-                                    {
-                                        result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.Name));
-                                        project = null;
-                                    }
-                                    else
-                                    {
-                                        customersProjects.Where(tup => tup.Item1 == customer).FirstOrDefault().Item2.Add(project);
-                                        result.ProjectsImported += 1;
-                                    }
+                                // All required information is known: time to create the project
+                                project = new ProjectInfo
+                                {
+                                    CustomerId = customer.CustomerId,
+                                    Name = thisRowHasProjectName ? knownValue : readValue,
+                                    Type = "Hourly",
+                                    OrganizationId = this.UserContext.ChosenOrganizationId,
+                                    ProjectOrgId = thisRowHasProjectName ? readValue : knownValue,
+                                    StartingDate = DateTime.Now,
+                                    EndingDate = DateTime.Now.AddMonths(6)
+                                };
+                                project.ProjectId = this.CreateProject(project);
+                                if (project.ProjectId == -1)
+                                {
+                                    result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.Name));
+                                    project = null;
+                                }
+                                else
+                                {
+                                    customersProjects.Where(tup => tup.Item1 == customer).FirstOrDefault().Item2.Add(project);
+                                    result.ProjectsImported += 1;
                                 }
                             }
                         }
@@ -966,7 +939,7 @@ namespace AllyisApps.Services
                                 There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
                                 the needed information. To solve this, we do 2 passes (i), each time checking for the missing information (j) using the links we've found to the information
                                 we already have (k). On each pass, any known information is skipped, so time won't be wasted if the first pass succeeds. This way, any combination of paths
-                                to acquire the missing information from the known informatoin is covered.
+                                to acquire the missing information from the known information is covered.
                             */
                             for (int i = 0; i < 2; i++)
                             {
@@ -1013,17 +986,11 @@ namespace AllyisApps.Services
 
                                 if (customer == null)
                                 {
-                                    // Corresponding customer hasn't been created yet.
-                                    //TODO: abstract out customer creation so it can be called here
-                                }
-
-                                if (customer == null) // or above abstraction returns false or something
-                                {
                                     result.ProjectFailures.Add(string.Format("Could not create project {0}: No customer to create it under.", knownValue));
                                     continue;
                                 }
 
-                                project = customersProjects.Where(tup => tup.Item1.CustomerId == customer.CustomerId).FirstOrDefault().Item2.Where(p => p.Name.Equals(knownValue)).FirstOrDefault();
+                                project = customersProjects.Where(tup => tup.Item1.CustomerId == customer.CustomerId).FirstOrDefault().Item2.Where(p => p.Name.Equals(fields[0])).FirstOrDefault();
                                 if (project == null)
                                 {
                                     // Project does not exist, so we should create it
@@ -1141,7 +1108,7 @@ namespace AllyisApps.Services
                                     There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
                                     the needed information. To solve this, we do 2 passes (i), each time checking for the missing information (j) using the links we've found to the information
                                     we already have (k). On each pass, any known information is skipped, so time won't be wasted if the first pass succeeds. This way, any combination of paths
-                                    to acquire the missing information from the known informatoin is covered.
+                                    to acquire the missing information from the known information is covered.
                                 */
                                 for (int i = 0; i < 2; i++)
                                 {
