@@ -677,6 +677,19 @@ namespace AllyisApps.Services
                     (hasEmployeeId ? true : userLinks[1, 0].Count > 0 || userLinks[1, 2].Count > 0) &&
                     (hasUserName ? true : userLinks[2, 0].Count > 0 || userLinks[2, 1].Count > 0);
 
+                // Non-required user columns
+                bool hasUserAddress = table.Columns.Contains(ColumnHeaders.UserAddress);
+                bool hasUserCity = table.Columns.Contains(ColumnHeaders.UserCity);
+                bool hasUserCountry = table.Columns.Contains(ColumnHeaders.UserCountry);
+                bool hasUserDateOfBirth = table.Columns.Contains(ColumnHeaders.UserDateOfBirth);
+                bool hasUserUsername = table.Columns.Contains(ColumnHeaders.UserName);
+                bool hasUserPhoneExtension = table.Columns.Contains(ColumnHeaders.UserPhoneExtension);
+                bool hasUserPhoneNumber = table.Columns.Contains(ColumnHeaders.UserPhoneNumber);
+                bool hasUserPostalCode = table.Columns.Contains(ColumnHeaders.UserPostalCode);
+                bool hasUserState = table.Columns.Contains(ColumnHeaders.UserState);
+                bool hasNonRequiredUserInfo = hasUserAddress || hasUserCity || hasUserCountry || hasUserDateOfBirth || hasUserUsername ||
+                    hasUserPhoneExtension || hasUserPhoneNumber || hasUserPostalCode || hasUserState;
+
                 // Project-user importing: perfomed when identifying information for both project and user are present
                 bool canImportProjectUser = (hasProjectName || hasProjectId) && (hasUserEmail || hasEmployeeId || hasUserName);
 
@@ -686,6 +699,9 @@ namespace AllyisApps.Services
                 bool hasTTDuration = table.Columns.Contains(ColumnHeaders.Duration);
                 bool hasTTPayClass = table.Columns.Contains(ColumnHeaders.PayClass);
                 bool canImportTimeEntry = canImportProjectUser && hasTTDate && hasTTDuration && hasTTPayClass;
+
+                // Non-required time entry column
+                bool hasTTDescription = table.Columns.Contains(ColumnHeaders.Description);
                 #endregion
 
                 // After all checks are complete, we go through row by row and import the information
@@ -1197,19 +1213,19 @@ namespace AllyisApps.Services
                         }
 
                         // Importing non-required user data
-                        if (user != null)
+                        if (user != null && hasNonRequiredUserInfo)
                         {
                             bool updated = false;
 
-                            updated = this.readColumn(row, ColumnHeaders.UserAddress, val => user.Address = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.UserCity, val => user.City = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.UserCountry, val => user.Country = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.UserDateOfBirth, val => user.State = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.UserName, val => user.UserName = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.UserPhoneExtension, val => user.PhoneExtension = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.UserPhoneNumber, val => user.PhoneNumber = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.UserPostalCode, val => user.PostalCode = val) || updated;
-                            updated = this.readColumn(row, ColumnHeaders.UserState, val => user.State = val) || updated;
+                            if (hasUserAddress) updated = this.readColumn(row, ColumnHeaders.UserAddress, val => user.Address = val) || updated;
+                            if (hasUserCity) updated = this.readColumn(row, ColumnHeaders.UserCity, val => user.City = val) || updated;
+                            if (hasUserCountry) updated = this.readColumn(row, ColumnHeaders.UserCountry, val => user.Country = val) || updated;
+                            if (hasUserDateOfBirth) updated = this.readColumn(row, ColumnHeaders.UserDateOfBirth, val => user.State = val) || updated;
+                            if (hasUserUsername) updated = this.readColumn(row, ColumnHeaders.UserName, val => user.UserName = val) || updated;
+                            if (hasUserPhoneExtension) updated = this.readColumn(row, ColumnHeaders.UserPhoneExtension, val => user.PhoneExtension = val) || updated;
+                            if (hasUserPhoneNumber) updated = this.readColumn(row, ColumnHeaders.UserPhoneNumber, val => user.PhoneNumber = val) || updated;
+                            if (hasUserPostalCode) updated = this.readColumn(row, ColumnHeaders.UserPostalCode, val => user.PostalCode = val) || updated;
+                            if (hasUserState) updated = this.readColumn(row, ColumnHeaders.UserState, val => user.State = val) || updated;
                             
                             if (updated)
                             {
@@ -1267,7 +1283,7 @@ namespace AllyisApps.Services
                                     string payclass = "Regular";
                                     this.readColumn(row, ColumnHeaders.Date, val => date = val);
                                     this.readColumn(row, ColumnHeaders.Duration, val => duration = val);
-                                    this.readColumn(row, ColumnHeaders.Description, val => description = val);
+                                    if (hasTTDescription) this.readColumn(row, ColumnHeaders.Description, val => description = val);
                                     this.readColumn(row, ColumnHeaders.PayClass, val => payclass = val);
                                     PayClassInfo payClass = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InfoObjectsUtility.InitializePayClassInfo(pc)).Where(p => p.Name.ToUpper().Equals(payclass.ToUpper())).SingleOrDefault();
                                     DateTime theDate = DateTime.Parse(date);
