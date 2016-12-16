@@ -12,10 +12,10 @@ AS
 			[Project].[Type] AS [PriceType],
 			[Project].[StartUTC] AS [StartDate],
 			[Project].[EndUTC] AS [EndDate],
-			[Project].[ProjectId]
+			[Project].[ProjectOrgId]
 			FROM (
 		(SELECT [ProjectId], [CustomerId], [Name], [Type], [StartUTC], [EndUTC], [IsActive], 
-				[CreatedUTC], [ModifiedUTC] FROM [Crm].[Project] WITH (NOLOCK) WHERE [ProjectId] = @ProjectId) AS [Project]
+				[CreatedUTC], [ModifiedUTC], [ProjectOrgId] FROM [Crm].[Project] WITH (NOLOCK) WHERE [ProjectId] = @ProjectId) AS [Project]
 			JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId]
 			JOIN [Auth].[Organization] WITH (NOLOCK) ON [Organization].[OrganizationId] = [Customer].[OrganizationId]
 	)

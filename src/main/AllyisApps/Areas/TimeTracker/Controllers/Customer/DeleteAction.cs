@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -23,17 +24,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The Customer index.</returns>
 		public ActionResult Delete(int id)
 		{
-			if (Service.DeleteCustomer(id))
-			{
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.CustomerDeleteNotification, Variety.Success));
+            CustomerInfo customer = Service.GetCustomer(id);
 
-				return this.RedirectToAction(ActionConstants.Index);
-			}
+            if (customer != null) {
 
-			// Permission failure
-			Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.ActionUnauthorizedMessage, Variety.Warning));
+                if (Service.DeleteCustomer(id))
+                {
+                    Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", customer.Name, Resources.TimeTracker.Controllers.Customer.Strings.CustomerDeleteNotification), Variety.Success));
 
-			return this.RedirectToAction(ActionConstants.Index);
+                    return this.RedirectToAction(ActionConstants.Index);
+                }
+
+                // Permission failure
+                Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.ActionUnauthorizedMessage, Variety.Warning));
+            }
+
+            return this.RedirectToAction(ActionConstants.Index);
 		}
 	}
 }

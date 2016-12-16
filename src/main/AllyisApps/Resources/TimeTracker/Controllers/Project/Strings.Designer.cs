@@ -70,6 +70,15 @@ namespace AllyisApps.Resources.TimeTracker.Controllers.Project {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to has been deleted successfully..
+        /// </summary>
+        public static string ProjectDeleteNotification {
+            get {
+                return ResourceManager.GetString("ProjectDeleteNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The chosen Project ID already exists. The value must be a unique value..
         /// </summary>
         public static string ProjectOrgIdNotUnique {

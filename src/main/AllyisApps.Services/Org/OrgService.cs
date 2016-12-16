@@ -652,15 +652,12 @@ namespace AllyisApps.Services
                 {
                     // We want to grab these links even if both columns are present, in case reading one of them fails.
                     projectImportLinks = tables.Where(t => t.Columns.Contains(ColumnHeaders.ProjectName) && t.Columns.Contains(ColumnHeaders.ProjectId)).ToList();
-
-                    if (hasCustomerName || hasCustomerId)
-                    {
-                        projectCustomerLinks = tables.Where(t => (t.Columns.Contains(ColumnHeaders.ProjectName) || t.Columns.Contains(ColumnHeaders.ProjectId)) &&
-                                                            (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerId))).ToList();
-                    }
+                    projectCustomerLinks = tables.Where(t => (t.Columns.Contains(ColumnHeaders.ProjectName) || t.Columns.Contains(ColumnHeaders.ProjectId)) &&
+                        (t.Columns.Contains(ColumnHeaders.CustomerName) || t.Columns.Contains(ColumnHeaders.CustomerId))).ToList();
+                    
                     
                     // Note: this check returns true even when this sheet contains all required information, since this sheet would then be in both lists
-                    if (projectImportLinks.Count() > 0 && projectCustomerLinks.Count > 0)
+                    if (projectImportLinks.Count > 0 && projectCustomerLinks.Count > 0)
                     {
                         canCreateProjects = true;
                     }
@@ -846,6 +843,9 @@ namespace AllyisApps.Services
                     // If there is no identifying information for projects, all project related importing is skipped.
                     if (hasProjectName || hasProjectId)
                     {
+                        bool thisRowHasProjectName = hasProjectName;
+                        bool thisRowHasProjectId = hasProjectId;
+
                         // Start with getting the project information that is known from this sheet
                         string knownValue = null;
                         string readValue = null;
@@ -858,19 +858,19 @@ namespace AllyisApps.Services
                                 if (knownValue == null)
                                 {
                                     // Failed to read both values
-                                    result.ProjectFailures.Add(string.Format("Error importing project on sheet {0}, row {1}: both {2} and {3} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.ProjectName, ColumnHeaders.ProjectId));
+                                    result.ProjectFailures.Add(string.Format("Error importing project on sheet {0}, row {1}: both {2} and {3} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.ProjectName, ColumnHeaders.ProjectId)); //'all', line 5
                                     continue;
                                 }
 
                                 // Failed to read Id, but read Name successfully.
-                                hasProjectId = false;
+                                thisRowHasProjectId = false;                                   // 'all' 'TestProjectBothBadId'
                             }
 
                             if (knownValue == null)
                             {
                                 // Failed to read Name. If reading the Id also failed, the continue above would have been hit, so it must have succeeded.
-                                // This means that knownValue should now be Id.
-                                hasProjectName = false;
+                                // This means that we should change knownValue to Id.
+                                thisRowHasProjectName = false;                                 // 'all' 'PR-tpbbadnm'
                                 knownValue = readValue;
                                 readValue = null;
                             }
@@ -884,11 +884,11 @@ namespace AllyisApps.Services
                                 foreach(DataTable link in projectCustomerLinks)
                                 {
                                     bool linkHasProjectName = link.Columns.Contains(ColumnHeaders.ProjectName);
-                                    bool usingProjectName = linkHasProjectName && hasProjectName;
+                                    bool usingProjectName = linkHasProjectName && thisRowHasProjectName;                   // 'NmIdLk' 'TestProjectCstLkNN', 'TestProjectCstLkNI'
                                     // If the link doesn't have the same project-identifying column this sheet does, it is skipped.
-                                    if (!usingProjectName && !(hasProjectId && link.Columns.Contains(ColumnHeaders.ProjectId))) continue;
-                                    bool linkHasCustomerName = link.Columns.Contains(ColumnHeaders.CustomerName);
-                                    
+                                    if (!usingProjectName && !(thisRowHasProjectId && link.Columns.Contains(ColumnHeaders.ProjectId))) continue; // Goes on below for 'NmIdLk' 'TestProjectCstLkIN', 'TestProjectCstLkII'
+                                    bool linkHasCustomerName = link.Columns.Contains(ColumnHeaders.CustomerName);   // 'NmIdLk' T-'TestProjectCstLkNN', 'TestProjectCstLkIN', F-'TestProjectCstLkNI', 'TestProjectCstLkII'
+
                                     string customerIdentity = null;
                                     try
                                     {
@@ -905,11 +905,11 @@ namespace AllyisApps.Services
                         // Find the existing project.
                         if (customer == null)
                         {
-                            // This project has no customer specified, so we try to find a matching project under any existing customer
+                            // This project has no customer specified, so we try to find a matching project under any existing customer                 'ExsPrUp' 'PR-tpbg'
                             project = customersProjects.Select(
                                 tup => tup.Item2).Select(
                                     plst => plst.Where(
-                                        p => hasProjectName ? p.Name.Equals(knownValue) && (hasProjectId ? p.ProjectOrgId.Equals(readValue) : true) : p.ProjectOrgId.Equals(knownValue)
+                                        p => thisRowHasProjectName ? p.Name.Equals(knownValue) && (thisRowHasProjectId ? p.ProjectOrgId.Equals(readValue) : true) : p.ProjectOrgId.Equals(knownValue)
                                     ).FirstOrDefault()
                                 ).Where(p => p != null).FirstOrDefault();
                         }
@@ -917,7 +917,7 @@ namespace AllyisApps.Services
                         {
                             // This project has a customer specified, so we find the existing project under that customer if it exists
                             project = customersProjects.Where(tup => tup.Item1.CustomerId == customer.CustomerId).FirstOrDefault().Item2.Where(
-                                p => hasProjectName ? p.Name.Equals(knownValue) : p.ProjectOrgId.Equals(knownValue)).FirstOrDefault();
+                                p => thisRowHasProjectName ? p.Name.Equals(knownValue) : p.ProjectOrgId.Equals(knownValue)).FirstOrDefault();
                         }
                         
                         if (project == null && customer != null)
@@ -932,8 +932,8 @@ namespace AllyisApps.Services
                                     {
                                         try
                                         {
-                                            readValue = link.Select(string.Format("[{0}] = '{1}'", hasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId, knownValue)
-                                                )[0][hasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName].ToString().Trim();
+                                            readValue = link.Select(string.Format("[{0}] = '{1}'", thisRowHasProjectName ? ColumnHeaders.ProjectName : ColumnHeaders.ProjectId, knownValue)
+                                                )[0][thisRowHasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName].ToString().Trim();
                                             if (!string.IsNullOrEmpty(readValue)) break; // Match found.
                                         }
                                         catch (IndexOutOfRangeException) { }
@@ -941,7 +941,7 @@ namespace AllyisApps.Services
 
                                     if (string.IsNullOrEmpty(readValue))
                                     {
-                                        result.ProjectFailures.Add(string.Format("Could not import project {0}: no matching {1}", knownValue, hasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName));
+                                        result.ProjectFailures.Add(string.Format("Could not import project {0}: no matching {1}", knownValue, thisRowHasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName));
                                         continue;
                                     }
                                 }
@@ -949,10 +949,10 @@ namespace AllyisApps.Services
                                 project = new ProjectInfo
                                 {
                                     CustomerId = customer.CustomerId,
-                                    Name = hasProjectName ? knownValue : readValue,
+                                    Name = thisRowHasProjectName ? knownValue : readValue,
                                     Type = "Hourly",
                                     OrganizationId = this.UserContext.ChosenOrganizationId,
-                                    ProjectOrgId = hasProjectName ? readValue : knownValue,
+                                    ProjectOrgId = thisRowHasProjectName ? readValue : knownValue,
                                     StartingDate = DateTime.Now,
                                     EndingDate = DateTime.Now.AddMonths(6)
                                 };

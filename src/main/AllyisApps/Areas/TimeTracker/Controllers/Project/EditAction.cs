@@ -101,6 +101,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ParentCustomerId = projectInfo.CustomerId,
 				OrganizationId = projectInfo.OrganizationId,
 				ProjectId = projectInfo.ProjectId,
+                ProjectOrgId = projectInfo.ProjectOrgId,
 				ProjectName = projectInfo.ProjectName,
 				ProjectUsers = projectUsers,
 				SubscriptionUsers = subscriptionUsers.Where(user => !projectUsers.Any(pu => (pu.UserId == user.UserId))), // Grab users that are not part of the project

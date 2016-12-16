@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -22,13 +23,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Deletes the project from the database.</returns>
 		public ActionResult Delete(int id)
 		{
-			if (Service.DeleteProject(id))
-			{
-				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
-			}
+            CompleteProjectInfo project = Service.GetProject(id);
 
-			// Permissions failure
-			Notifications.Add(new BootstrapAlert("You do not have permission to delete projects", Variety.Warning));
+            if (project != null)
+            {
+
+                if (Service.DeleteProject(id))
+                {
+                    Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", project.ProjectName, Resources.TimeTracker.Controllers.Project.Strings.ProjectDeleteNotification), Variety.Success));
+                    return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
+                }
+
+                // Permissions failure
+                Notifications.Add(new BootstrapAlert("You do not have permission to delete projects", Variety.Warning));
+            }
+
 			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
 		}
 	}
