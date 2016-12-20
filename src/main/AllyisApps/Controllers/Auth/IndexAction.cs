@@ -61,14 +61,14 @@ namespace AllyisApps.Controllers
 		/// <param name="invitationId">The id of the accepted invitation.</param>
 		/// <returns>The action result.</returns>
 		[HttpPost]
-		public async Task<ActionResult> Accept(int invitationId)
+		public ActionResult Accept(int invitationId)
 		{
 			var invitation = Service.GetInvitationsByUser(UserContext.Email).Where(x => x.InvitationId == invitationId).FirstOrDefault();
 			if (invitation != null)
 			{
 				// Validate that the user does have the requested pending invitation
 				Notifications.Add(new Core.Alert.BootstrapAlert(
-					await Service.AcceptUserInvitation(invitation), Core.Alert.Variety.Success));
+					Service.AcceptUserInvitation(invitation), Core.Alert.Variety.Success));
 			}
 			else
 			{

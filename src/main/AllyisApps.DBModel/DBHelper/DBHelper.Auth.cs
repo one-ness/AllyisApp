@@ -73,12 +73,12 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="email">Parameter @email.</param>
 		/// <returns>UserDBEntity obj.</returns>
-		public async Task<UserDBEntity> GetUserByEmailAsync(string email)
+		public UserDBEntity GetUserByEmail(string email)
 		{
 			Trace.WriteLine("GetUserByEmail");
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var result = await connection.QueryAsync<UserDBEntity>("[Auth].[GetUserFromEmail] @a", new { a = email });
+				var result = connection.Query<UserDBEntity>("[Auth].[GetUserFromEmail] @a", new { a = email });
 				return result.FirstOrDefault();
 			}
 		}

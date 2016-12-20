@@ -34,13 +34,13 @@ namespace AllyisApps.Controllers
 		/// <returns>The async task responsible for this action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
+		public ActionResult ChangePassword(ChangePasswordViewModel model)
 		{
 			if (!ModelState.IsValid)
 			{
 				return this.View(model);
 			}
-			else if (model.NewPassword.CompareTo(model.ConfirmPassword) == 0 && await Service.ChangePassword(model.OldPassword, model.NewPassword))
+			else if (model.NewPassword.CompareTo(model.ConfirmPassword) == 0 && Service.ChangePassword(model.OldPassword, model.NewPassword))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.ChangePasswordSuccessMessage, Variety.Success));
 

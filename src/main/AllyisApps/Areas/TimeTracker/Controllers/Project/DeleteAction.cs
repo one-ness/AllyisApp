@@ -27,7 +27,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
             if (project != null)
             {
-
                 if (Service.DeleteProject(id))
                 {
                     Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", project.ProjectName, Resources.TimeTracker.Controllers.Project.Strings.ProjectDeleteNotification), Variety.Success));

@@ -152,7 +152,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invite">The invite.</param>
 		/// <returns>The resulting action message.</returns>
-		public async Task<string> AcceptUserInvitation(InvitationInfo invite)
+		public string AcceptUserInvitation(InvitationInfo invite)
 		{
 			#region Validation
 			if (invite == null)
@@ -161,7 +161,7 @@ namespace AllyisApps.Services
 			}
 			#endregion Validation
 
-			var user = await this.GetUserByEmail(invite.Email);
+			var user = this.GetUserByEmail(invite.Email);
 			if (invite.ProjectId.HasValue)
 			{
 				this.DBHelper.CreateProjectUser(invite.ProjectId.Value, user.UserId);
@@ -214,7 +214,7 @@ namespace AllyisApps.Services
 		/// <param name="userId">The user id.</param>
 		/// <param name="email">The user's email.</param>
 		/// <returns>A list of notification messages for each fulfilled invitation.</returns>
-		public async Task<List<string>> AddToPendingOrganizations(int userId, string email)
+		public List<string> AddToPendingOrganizations(int userId, string email)
 		{
 			#region Validation
 			if (userId <= 0)
@@ -235,7 +235,7 @@ namespace AllyisApps.Services
 			List<string> notificationMessages = new List<string>();
 			foreach (InvitationInfo invite in this.GetInvitationsByUser(email))
 			{
-				notificationMessages.Add(await this.AcceptUserInvitation(invite));
+				notificationMessages.Add(this.AcceptUserInvitation(invite));
 			}
 
 			return notificationMessages;
@@ -349,8 +349,8 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">The login email.</param>
 		/// <param name="password">The login password.</param>
-		/// <returns>The async login task.</returns>
-		public async Task<UserContext> ValidateLogin(string email, string password)
+		/// <returns>The  login task.</returns>
+		public UserContext ValidateLogin(string email, string password)
 		{
 			#region Validation
 			if (string.IsNullOrEmpty(email))
@@ -369,7 +369,7 @@ namespace AllyisApps.Services
 			#endregion Validation
 
 			UserContext result = null;
-			var user = await this.DBHelper.GetUserByEmailAsync(email);
+			var user = this.DBHelper.GetUserByEmail(email);
 			if (user != null && string.Compare(Crypto.ComputeSHA512Hash(password), user.PasswordHash, true) == 0)
 			{
 				result = new UserContext(user.UserId, user.UserName, email);
@@ -477,7 +477,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">Email address.</param>
 		/// <returns>A UserInfo instance with the user's info.</returns>
-		public async Task<UserInfo> GetUserByEmail(string email)
+		public UserInfo GetUserByEmail(string email)
 		{
 			if (string.IsNullOrEmpty(email))
 			{
@@ -488,7 +488,7 @@ namespace AllyisApps.Services
 				throw new FormatException("Email address must be in a valid format.");
 			}
 
-			return InfoObjectsUtility.InitializeUserInfo(await DBHelper.GetUserByEmailAsync(email));
+			return InfoObjectsUtility.InitializeUserInfo(DBHelper.GetUserByEmail(email));
 		}
 
 		/// <summary>
@@ -576,7 +576,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">The email string.</param>
 		/// <returns>The password reset info task.</returns>
-		public async Task<PasswordResetInfo> GetPasswordResetInfo(string email)
+		public PasswordResetInfo GetPasswordResetInfo(string email)
 		{
 			if (string.IsNullOrEmpty(email))
 			{
@@ -588,7 +588,7 @@ namespace AllyisApps.Services
 			}
 
 			PasswordResetInfo result = null;
-			var user = await this.DBHelper.GetUserByEmailAsync(email);
+			var user = this.DBHelper.GetUserByEmail(email);
 			if (user != null)
 			{
 				// user exists. create a password reset code
@@ -655,7 +655,7 @@ namespace AllyisApps.Services
 		/// <param name="oldPassword">Old password, for verification.</param>
 		/// <param name="newPassword">New password to change it to.</param>
 		/// <returns>True for a successful change, false if anything fails.</returns>
-		public async Task<bool> ChangePassword(string oldPassword, string newPassword)
+		public bool ChangePassword(string oldPassword, string newPassword)
 		{
 			if (string.IsNullOrEmpty(oldPassword))
 			{
@@ -667,12 +667,12 @@ namespace AllyisApps.Services
 			}
 
 			var userInfo = DBHelper.Instance.GetUserInfo(Convert.ToInt32(UserContext.UserId));
-			UserDBEntity user = await DBHelper.Instance.GetUserByEmailAsync(userInfo.Email);
+			UserDBEntity user = DBHelper.Instance.GetUserByEmail(userInfo.Email);
 			if (user != null && string.Compare(this.GetPasswordHash(oldPassword), user.PasswordHash, true) == 0)
 			{
 				DBHelper.UpdateUserPassword(UserContext.UserId, this.GetPasswordHash(newPassword));
 
-				user = await DBHelper.GetUserByEmailAsync(userInfo.Email);
+				user = DBHelper.GetUserByEmail(userInfo.Email);
 
 				if (user != null)
 				{

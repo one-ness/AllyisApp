@@ -1100,21 +1100,33 @@ namespace AllyisApps.Services
                     UserInfo user = null;
                     if (hasUserEmail || hasEmployeeId || hasUserName)
                     {
-                        // Find existing user by whatever information we have
                         Tuple<string, UserInfo> userTuple = null;
-                        if(hasUserEmail)
+
+                        // Find existing user by whatever information we have
+                        string readValue = null;
+                        if (hasUserEmail)
                         {
-                            userTuple = users.Where(tup => tup.Item2.Email.Equals(row[ColumnHeaders.UserEmail].ToString())).FirstOrDefault();
-                        }
-                        else
-                        {
-                            if(hasEmployeeId)
+                            if (this.readColumn(row, ColumnHeaders.UserEmail, e => readValue = e))
                             {
-                                userTuple = users.Where(tup => tup.Item1.Equals(row[ColumnHeaders.EmployeeId].ToString())).FirstOrDefault();
+                                userTuple = users.Where(tup => tup.Item2.Email.Equals(readValue)).FirstOrDefault();
                             }
-                            else
+                        }
+                        if (userTuple == null)
+                        {
+                            if (hasEmployeeId)
                             {
-                                userTuple = users.Where(tup => tup.Item2.FirstName.Equals(row[ColumnHeaders.UserFirstName].ToString()) && tup.Item2.LastName.Equals(row[ColumnHeaders.UserLastName].ToString())).FirstOrDefault();
+                                if (this.readColumn(row, ColumnHeaders.EmployeeId, e => readValue = e))
+                                {
+                                    userTuple = users.Where(tup => tup.Item1.Equals(readValue)).FirstOrDefault();
+                                }
+                            }
+                            if (userTuple == null)
+                            {
+                                string readLastName = null;
+                                if (this.readColumn(row, ColumnHeaders.UserFirstName, e => readValue = e) && this.readColumn(row, ColumnHeaders.UserLastName, e => readLastName = e))
+                                {
+                                    userTuple = users.Where(tup => tup.Item2.FirstName.Equals(readValue) && tup.Item2.LastName.Equals(readLastName)).FirstOrDefault();
+                                }
                             }
                         }
                         user = userTuple == null ? null : userTuple.Item2;
@@ -1194,15 +1206,20 @@ namespace AllyisApps.Services
 
                                 try
                                 {
-                                    user = new UserInfo()
+                                    
+                                    user = this.GetUserByEmail(fields[0]); // User may already exist, but not be a member of this organization
+                                    if (user == null)
                                     {
-                                        Email = fields[0],
-                                        FirstName = names[0],
-                                        LastName = names[1],
-                                        PasswordHash = Lib.Crypto.ComputeSHA512Hash("password") // TODO: Figure out a better default password generation system
-                                    };
-                                    user.UserId = DBHelper.CreateUser(InfoObjectsUtility.GetDBEntityFromUserInfo(user));
-                                    result.UsersImported += 1;
+                                        user = new UserInfo()
+                                        {
+                                            Email = fields[0],
+                                            FirstName = names[0],
+                                            LastName = names[1],
+                                            PasswordHash = Lib.Crypto.ComputeSHA512Hash("password") // TODO: Figure out a better default password generation system
+                                        };
+                                        user.UserId = DBHelper.CreateUser(InfoObjectsUtility.GetDBEntityFromUserInfo(user));
+                                        result.UsersImported += 1;
+                                    }
                                     if (user.UserId != -1)
                                     {
                                         try
@@ -1278,7 +1295,7 @@ namespace AllyisApps.Services
                             {
                                 // Check for subscription role
                                 bool canImportThisEntry = false;
-                                if (userSubs.Where(u => u.UserId == user.UserId).Any())
+                                if (!userSubs.Where(u => u.UserId == user.UserId).Any())
                                 {
                                     // No existing subscription for this user, so we create one.
                                     if(ttSub.SubscriptionsUsed < ttSub.NumberOfUsers)
@@ -1307,16 +1324,26 @@ namespace AllyisApps.Services
                                     string duration = null;
                                     string description = "";
                                     string payclass = "Regular";
+
                                     this.readColumn(row, ColumnHeaders.Date, val => date = val);
                                     this.readColumn(row, ColumnHeaders.Duration, val => duration = val);
                                     if (hasTTDescription) this.readColumn(row, ColumnHeaders.Description, val => description = val);
                                     this.readColumn(row, ColumnHeaders.PayClass, val => payclass = val);
+
                                     PayClassInfo payClass = payClasses.Where(p => p.Name.ToUpper().Equals(payclass.ToUpper())).SingleOrDefault();
                                     DateTime theDate;
                                     float theDuration;
+
+                                    if (payClass == null)
+                                    {
+                                        result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: unknown {2} ({3}).", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.PayClass, date));
+                                        continue;
+                                    }
+
                                     try
                                     {
                                         theDate = DateTime.Parse(date);
+                                        if (theDate.Year < 1753) throw new FormatException();
                                     }
                                     catch (Exception)
                                     {

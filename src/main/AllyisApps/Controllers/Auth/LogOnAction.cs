@@ -49,12 +49,12 @@ namespace AllyisApps.Controllers
 		[HttpPost]
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> LogOn(LogOnViewModel model, string returnUrl)
+		public ActionResult LogOn(LogOnViewModel model, string returnUrl)
 		{
 			if (ModelState.IsValid)
 			{
 				UserContext result = null;
-				if ((result = await Service.ValidateLogin(model.Email, model.Password)) != null)
+				if ((result = Service.ValidateLogin(model.Email, model.Password)) != null)
 				{
 					// sign in
 					this.SignIn(result.UserId, result.UserName, result.Email, Response, model.RememberMe);

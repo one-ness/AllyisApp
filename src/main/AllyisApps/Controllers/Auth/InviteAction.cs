@@ -85,7 +85,7 @@ namespace AllyisApps.Controllers
 				string userEmail = orgAddMembers.Email.Trim();
 				if (Service.IsEmailAddressValid(userEmail))
 				{ // If input string kinda looks like an email..
-					UserInfo user = await Service.GetUserByEmail(userEmail); // ...Attempt to get the user data by email.
+					UserInfo user = Service.GetUserByEmail(userEmail); // ...Attempt to get the user data by email.
 																					// If that doesn't return null...
 					if (user != null)
 					{

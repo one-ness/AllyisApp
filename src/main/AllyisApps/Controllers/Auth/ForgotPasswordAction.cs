@@ -42,7 +42,7 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				PasswordResetInfo info = await Service.GetPasswordResetInfo(model.Email);
+				PasswordResetInfo info = Service.GetPasswordResetInfo(model.Email);
 				if (info != null)
 				{
 					// user exists, reset code is generated.

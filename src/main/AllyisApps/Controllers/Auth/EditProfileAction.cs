@@ -80,7 +80,10 @@ namespace AllyisApps.Controllers
                 {
                     return this.RedirectToLocal(returnUrl);
                 }
-                else return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
+                else
+                {
+                    return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
+                }
 			}
 
             // Invalid Model
