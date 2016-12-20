@@ -1336,7 +1336,7 @@ namespace AllyisApps.Services
 
                                     if (payClass == null)
                                     {
-                                        result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: unknown {2} ({3}).", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.PayClass, date));
+                                        result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: unknown {2} ({3}).", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.PayClass, payclass));
                                         continue;
                                     }
 

@@ -36,6 +36,7 @@ namespace AllyisApps.Core.Alert
 		{
 			this.Text = text;
 			this.Type = variety;
+            this.IsHtmlString = false;
 		}
 
 		/// <summary>
@@ -47,7 +48,8 @@ namespace AllyisApps.Core.Alert
 		{
 			this.Text = text;
 			this.Type = Variety.GetByName(varietyName);
-		}
+            this.IsHtmlString = false;
+        }
 
 		/// <summary>
 		/// Gets the text to display.
@@ -58,6 +60,11 @@ namespace AllyisApps.Core.Alert
 		/// Gets the type of the alert.
 		/// </summary>
 		public Variety Type { get; internal set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this alert's message has html markup in it.
+        /// </summary>
+        public bool IsHtmlString { get; set; }
 	}
 
 	/// <summary>

@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Services;
+using AllyisApps.Utilities;
 
 using Excel;
 
@@ -65,7 +66,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                         DataSet result = reader.AsDataSet();
                         reader.Close();
 
-                        Service.Import(result);
+                        string[] formattedResult = ImportMessageFormatter.FormatImportResult(Service.Import(result));
+                        if (!string.IsNullOrEmpty(formattedResult[0]))
+                        {
+                            Notifications.Add(new AllyisApps.Core.Alert.BootstrapAlert(formattedResult[0], AllyisApps.Core.Alert.Variety.Success));
+                        }
+
+                        if (!string.IsNullOrEmpty(formattedResult[1]))
+                        {
+                            AllyisApps.Core.Alert.BootstrapAlert alert = new AllyisApps.Core.Alert.BootstrapAlert(formattedResult[1], AllyisApps.Core.Alert.Variety.Warning);
+                            alert.IsHtmlString = true;
+                            Notifications.Add(alert);
+                        }
                     }
                     else
                     {
