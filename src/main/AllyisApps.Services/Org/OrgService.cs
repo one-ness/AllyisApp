@@ -1243,20 +1243,20 @@ namespace AllyisApps.Services
                                         }
                                         catch (System.Data.SqlClient.SqlException)
                                         {
-                                            result.OrgUserFailures.Add(string.Format("Database error assigning user {0}{1} to organization. Could be a duplicate employee id ({2}).", names[0], names[1], fields[1]));
+                                            result.OrgUserFailures.Add(string.Format("Database error assigning user {0} {1} to organization. Could be a duplicate employee id ({2}).", names[0], names[1], fields[1]));
                                             continue;
                                         }
                                         users.Add(new Tuple<string, UserInfo>(fields[1], user));
                                     }
                                     else
                                     {
-                                        result.UserFailures.Add(string.Format("Database error creating user {0}{1}.", names[0], names[1]));
+                                        result.UserFailures.Add(string.Format("Database error creating user {0} {1}.", names[0], names[1]));
                                         continue;
                                     }
                                 }
                                 catch (System.Data.SqlClient.SqlException)
                                 {
-                                    result.UserFailures.Add(string.Format("Database error creating user {0}{1}.", names[0], names[1]));
+                                    result.UserFailures.Add(string.Format("Database error creating user {0} {1}.", names[0], names[1]));
                                     continue;
                                 }
                             }
