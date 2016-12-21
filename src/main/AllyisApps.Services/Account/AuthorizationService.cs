@@ -37,12 +37,21 @@ namespace AllyisApps.Services
 				// Info should never be null
 				if (orgInfo != null)
 				{
+                    // TODO: Instead of using chosen subscription, we should be using the target action to choose a subscription of the matching product. This will address bugs
+                    // where permissions are being checked for actions related to a different subscription, e.g. during an Import.
+
 					// Has the user chosen a subscription
 					if (UserContext.ChosenSubscriptionId > 0)
 					{
 						// Grab the user's sub role
 						subInfo = orgInfo.UserSubscriptionInfoList.Where(x => x.SubscriptionId == UserContext.ChosenSubscriptionId).FirstOrDefault();
 					}
+                    else
+                    {
+                        // If there's only one subscription, we'll use that in lieu of a chosen subscription. This quick fix can be removed once we're using the target action to
+                        // pick what subscription to use.
+                        if (orgInfo.UserSubscriptionInfoList.Count == 1) subInfo = orgInfo.UserSubscriptionInfoList.Single();
+                    }
 				}
 			}
 
