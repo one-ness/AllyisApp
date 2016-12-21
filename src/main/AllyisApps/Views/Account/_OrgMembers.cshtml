@@ -99,15 +99,15 @@
             </tbody>
         </table>
     </div>
-    <div id="footPager" style="display: flex; justify-content: space-around;">
+    <div id="footPager" style="display: flex; justify-content: center;">
         @if (Model.TotalUsers > Model.PageSize)
         {
             var page = 1;
-            <input id="page @page" name="pageButton" type="button" value="@page" onClick="showPage(@page)" disabled="" />
+            <input id="page @page" name="pageButton" type="button" value="@page" onClick="showPage(@page)" style="margin: 5px;" disabled="" />
             page++;
             while (page <= Model.PageCount)
             {
-            <input id="page @page" name="pageButton" type="button" value="@page" onClick="showPage(@page)" />
+            <input id="page @page" name="pageButton" type="button" value="@page" onClick="showPage(@page)" style="margin: 5px;" />
                 page++;
             }
         }

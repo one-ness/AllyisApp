@@ -128,14 +128,7 @@ ViewBag.RenderSidebar = true;}
                     foreach (UserInfo user in Model.Users)
                     {
                         pageCount = 1 + (count / Model.PageUserSize);
-                        if (count >= 0 && count <= (Model.PageUserSize - 1))
-                        {
-                            hide = "flex";
-                        }
-                        else
-                        {
-                            hide = "none";
-                        }
+                        hide = "flex"; // All are originally shown so that the widths get calculated correctly (accounting for scroll bar). Pages after page 1 are then hidden when page loads.
 
                         string active = "";
                         var resetBackground = "this.style.backgroundColor=\"#FFFFFF\"";
@@ -225,4 +218,8 @@ ViewBag.RenderSidebar = true;}
     @Scripts.Render("~/bundles/daterangepicker")
     @Scripts.Render("~/bundles/pageswithsearch")
     @Scripts.Render("~/bundles/TTTimeEntryIndex")
+
+    <script type="text/javascript">
+        showPage(1); // This is important to call at the very end; otherwise all pages will be shown until the user clicks a page button.
+    </script>
 }

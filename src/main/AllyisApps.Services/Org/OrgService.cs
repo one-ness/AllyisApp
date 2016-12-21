@@ -802,10 +802,18 @@ namespace AllyisApps.Services
 
                                 if (newCustomer != null)
                                 {
-                                    newCustomer.CustomerId = this.CreateCustomer(newCustomer).Value;
+                                    int? newCustomerId = this.CreateCustomer(newCustomer);
+                                    if (newCustomerId == null)
+                                    {
+                                        result.CustomerFailures.Add(string.Format("Could not create customer {0}: permission failure.", newCustomer.Name));
+                                        continue;
+                                    }
+
+                                    newCustomer.CustomerId = newCustomerId.Value;
                                     if (newCustomer.CustomerId == -1)
                                     {
                                         result.CustomerFailures.Add(string.Format("Database error while creating customer {0}.", newCustomer.Name));
+                                        continue;
                                     }
 
                                     customersProjects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(

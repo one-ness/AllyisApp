@@ -75,7 +75,7 @@ namespace AllyisApps.Controllers
 
                         if (!string.IsNullOrEmpty(formattedResult[1]))
                         {
-                            AllyisApps.Core.Alert.BootstrapAlert alert = new AllyisApps.Core.Alert.BootstrapAlert(formattedResult[1], AllyisApps.Core.Alert.Variety.Warning);
+                            Core.Alert.BootstrapAlert alert = new Core.Alert.BootstrapAlert(formattedResult[1], Core.Alert.Variety.Warning);
                             alert.IsHtmlString = true;
                             Notifications.Add(alert);
                         }
