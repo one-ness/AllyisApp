@@ -102,14 +102,17 @@
             </div>
             <div class="table-container @(containerClass)">
 		  	    <div class="table-row">
-                    <div class="panel-left hidden-xs table-col text-center @offDayClass @holidayClass">
-                        <table align="center">
-                            <tr>
-                                @if (currentDate.DayOfWeek == startOfWeek)
-                                {
-                                    <td style="padding-right:5px; padding-bottom:5px;">
-                                        <a class="btn btn-primary"
-                                           href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
+		  		    <div class="panel-left hidden-xs table-col text-center @offDayClass @holidayClass">
+            		  	<label >@dateStringNums</label>
+		                <label >@dateStringDayShort</label>
+			                <div class="panel-right table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
+			   	                <table align="center">
+						            <tr>
+			   			                @if (currentDate.DayOfWeek == startOfWeek)
+				                        {
+			   			                    <td style="padding-right:5px; padding-bottom:5px;">
+                                                <a class="btn btn-primary"
+                                                    href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
                                                         {
                                                             startDateTarget=currentDate,
                                                             startDateCopy=currentDate.AddDays(-7),
@@ -119,15 +122,15 @@
                                                             endDate = Model.EndDate
                                                         }
                                                     )"
-                                           style="width:100%"
-                                           title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyWeek">
-                                            <i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.WeekInitial
-                                        </a>
-                                    </td>
-                                }
-                                <td style="padding-bottom:5px;">
-                                    <a class="btn btn-primary"
-                                       href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
+                                                    style="width:100%"
+                                                    title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyWeek">
+                                                    <i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.WeekInitial
+                                                </a>
+			   				                </td>
+				                        }
+			   		                    <td style="padding-bottom:5px;">
+                                            <a class="btn btn-primary"
+                                                href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
                                                     {
                                                         startDateTarget=currentDate,
                                                         startDateCopy=currentDate.AddDays(-1),
@@ -137,18 +140,15 @@
                                                         endDate = Model.EndDate
                                                     }
                                                 )"
-                                       style="width:100%"
-                                       title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyDay">
-                                        <i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DayInitial
-                                    </a>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-		  		    <div class="panel-left hidden-xs table-col text-center @offDayClass @holidayClass">
-            		  	<label style="display: block;">@dateStringNums</label>
-		                <label style="display: block;">@dateStringDayShort</label>
-		            </div>
+                                                style="width:100%"
+                                                title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyDay">
+                                                <i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DayInitial
+                                            </a>
+			   			                </td>
+			   	                    </tr>
+			                    </table>
+			                </div>
+		                </div>
 		            <div class="panel-right table-col @offDayClass @holidayClass">
 		  	        @{
 			            foreach (var entry in theEntries)
