@@ -103,8 +103,8 @@
             <div class="table-container @(containerClass)">
 		  	    <div class="table-row">
 		  		    <div class="panel-left hidden-xs table-col text-center @offDayClass @holidayClass">
-            		  	<label >@dateStringNums</label>
-		                <label >@dateStringDayShort</label>
+            		  	<label style="margin: 0px 5px;">@dateStringNums</label>
+		                <label style="margin: 0px 5px;">@dateStringDayShort</label>
 			                <div class="panel-right table-col @offDayClass @holidayClass" style="display: block; background-color:transparent;">
 			   	                <table align="center">
 						            <tr>
@@ -122,7 +122,7 @@
                                                             endDate = Model.EndDate
                                                         }
                                                     )"
-                                                    style="width:100%"
+                                                    style="width:100%; padding: 5px 7px;"
                                                     title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyWeek">
                                                     <i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.WeekInitial
                                                 </a>
@@ -140,7 +140,7 @@
                                                         endDate = Model.EndDate
                                                     }
                                                 )"
-                                                style="width:100%"
+                                                style="width:100%; padding: 5px 7px;"
                                                 title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.CopyDay">
                                                 <i class="fa fa-files-o"></i> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DayInitial
                                             </a>
