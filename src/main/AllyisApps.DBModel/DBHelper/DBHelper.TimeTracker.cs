@@ -469,7 +469,7 @@ namespace AllyisApps.DBModel
 
 				// Init the actaul settings
 				parameters.Add("@organizationID", orgId);
-				parameters.Add("@StartOfWeek", 0);
+				parameters.Add("@StartOfWeek", 1);
 				parameters.Add("@OverTimeHours", 40);
 				parameters.Add("@OverTimePeriod", "Week");
 				parameters.Add("@OverTimeMultiplier", 1.5);

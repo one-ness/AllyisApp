@@ -72,5 +72,10 @@ namespace AllyisApps.Services.Billing
 		/// Gets or sets a value indicating whether a user has permission to edit subscriptions.
 		/// </summary>
 		public bool CanEditSubscriptions { get; set; } // TODO: is nothing.
+
+        /// <summary>
+        /// Gets or sets a value indicating the user's role in this subscription.
+        /// </summary>
+        public ProductRole ProductRole { get; set; }
 	}
 }

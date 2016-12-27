@@ -51,11 +51,11 @@
                         }
 
                     <tr data-page="@pageCount" @hide>
-                        <td>
+                        <td class="text-left">
                             @firstName @lastName<span class="user-email">(@displayEmail)</span>
                         </td>
                         <td></td>
-                        <td class="text-center text-info">
+                        <td class="text-left text-info">
                             @AllyisApps.Resources.Views.Account.Strings.Invited
                         </td>
                     </tr>
@@ -76,13 +76,13 @@
                         }
 
                     <tr data-page="@pageCount" @hide>
-                        <td>
+                        <td class="text-left">
                             @user.FullName @*<span class="user-email">(@user.UserInfo.Email)</span>*@
                         </td>
-                        <td>
+                        <td class="text-left">
                             @user.EmployeeId
                         </td>
-                        <td class="text-center">
+                        <td class="text-left">
                             @AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(user.PermissionLevel)
                         </td>
                         <td class="text-right icon-strip">

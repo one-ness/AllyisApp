@@ -517,7 +517,7 @@
     <value>Submit Billing Info</value>
   </data>
   <data name="TrackProject" xml:space="preserve">
-    <value>Track Project</value>
+    <value>TimeTracker Project</value>
   </data>
   <data name="Upgrade" xml:space="preserve">
     <value>Upgrade</value>
@@ -529,7 +529,7 @@
     <value>Caps Lock is on.</value>
   </data>
   <data name="TimeTracker" xml:space="preserve">
-    <value>Time Tracker</value>
+    <value>TimeTracker</value>
   </data>
   <data name="Member" xml:space="preserve">
     <value>Member</value>

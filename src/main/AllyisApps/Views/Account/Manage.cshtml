@@ -4,7 +4,7 @@
 
 @{
     DisplayHints.PageBodyId = "org-manage";
-    ViewBag.TitleBar = AllyisApps.Resources.Views.Account.Strings.Manage;
+    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.Manage;
     Layout = "~/Views/Shared/_Layout.cshtml";
     InvitationInfo emptyInvite = new InvitationInfo()
     {
@@ -58,7 +58,7 @@
                 <span class="pull-right panel-title">
                     @if (Model.CanEditOrganization)
                     {
-                        <a href="@Url.Action(ActionConstants.ManagePermissions)" title=@AllyisApps.Resources.Views.Account.Strings.ManagePermissions><span class="fa fa-fw fa-lg fa-users text-warning"></span></a>}
+                        <a href="@Url.Action(ActionConstants.ManagePermissions)" title="@AllyisApps.Resources.Views.Account.Strings.ManagePermissions"><span class="fa fa-fw fa-lg fa-users text-warning"></span></a>}
                     @if (Model.CanEditOrganization && Model.SubscriptionCount > 0)
                     {
                         <a href="@Url.Action(ActionConstants.Add)" title=@AllyisApps.Resources.Views.Account.Strings.AddMembers><span class="fa fa-fw fa-plus fa-lg text-info"></span></a>}

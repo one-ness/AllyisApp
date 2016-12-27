@@ -17,7 +17,7 @@ function showMustBeOwnerOrUserMessage() {
 }
 
 function checkAddConditions() {
-    if ($('#AddAsOwner').is(':checked')) { // Adding as owner;
+    //if ($('#AddAsOwner').is(':checked')) { // Adding as owner;
         if ($('.role-selector option:selected').val() != 0) { // Time Tracker role selected: must check for project
             if ($('.project-selector option:selected').val() == "") { // No project selected
                 showNoProjectMessage();
@@ -27,17 +27,17 @@ function checkAddConditions() {
         } else { // Time Tracker role is None, just adding as owner
             clearMessagesAndEnableAdd();
         }
-    } else { // Not an owner
-        if ($('.role-selector option:selected').val() == 0) { // Selected role is None
-            showMustBeOwnerOrUserMessage();
-        } else { // Role selected
-            if ($('.project-selector option:selected').val() == "") { // No project selected
-                showNoProjectMessage();
-            } else { // Role and project selected
-                clearMessagesAndEnableAdd();
-            }
-        }
-    }
+    //} else { // Not an owner
+    //    if ($('.role-selector option:selected').val() == 0) { // Selected role is None
+    //        showMustBeOwnerOrUserMessage();
+    //    } else { // Role selected
+    //        if ($('.project-selector option:selected').val() == "") { // No project selected
+    //            showNoProjectMessage();
+    //        } else { // Role and project selected
+    //            clearMessagesAndEnableAdd();
+    //        }
+    //    }
+    //}
 }
 
 $(document).ready(function () {

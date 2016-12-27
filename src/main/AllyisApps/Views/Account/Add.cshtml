@@ -11,17 +11,18 @@
 @{ ViewData.Add(ControllerConstants.Controller, ControllerConstants.Account); }
 @{ ViewData.Add(ActionConstants.Action, ActionConstants.Add); }
 
-<div>
-    <h4 class="modal-title">@AllyisApps.Resources.Views.Account.Strings.InviteMember</h4>
+<div class="col-md-8 col-md-push-2">
 
     @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken();
         <div class="bulk">
-            <h4>@AllyisApps.Resources.Views.Account.Strings.MultipleMembers</h4>
-            <p>
-                @AllyisApps.Resources.Views.Account.Strings.InviteMoreThanOne <a href="@Url.Action(ActionConstants.DownloadImportUsersTemplate, ControllerConstants.Account)">@AllyisApps.Resources.Views.Account.Strings.ExampleFile</a>.
-            </p>
+            <div class="col-xs-12">
+                <h4>@AllyisApps.Resources.Views.Account.Strings.MultipleMembers</h4>
+                <p>
+                    @AllyisApps.Resources.Views.Account.Strings.InviteMoreThanOne <a href="@Url.Action(ActionConstants.DownloadImportUsersTemplate, ControllerConstants.Account)">@AllyisApps.Resources.Views.Account.Strings.ExampleFile</a>.
+                </p>
+            </div>
             @*Custom styled buttons wired to browser default upload*@
             <input type="file" id="upload-box" name="upload" style="display:none;"
                    onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
