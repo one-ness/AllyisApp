@@ -22,6 +22,11 @@ namespace AllyisApps.DBModel.Billing
 		/// </summary>
 		public string LastName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the ProductId.
+        /// </summary>
+        public int ProductId { get; set; }
+
 		/// <summary>
 		/// Gets or sets ProductRoleId.
 		/// </summary>

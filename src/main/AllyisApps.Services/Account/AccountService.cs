@@ -410,6 +410,7 @@ namespace AllyisApps.Services
 							{
 								SubscriptionId = subUser.SubscriptionId,
 								SkuId = subUser.SkuId,
+                                ProductId = (ProductIdEnum)(subUser.ProductId),
 								ProductName = DBHelper.GetProductAreaBySubscription(subUser.SubscriptionId),
 								ProductRole = (ProductRole)Enum.Parse(typeof(ProductRole), subUser.ProductRoleId)
 							});

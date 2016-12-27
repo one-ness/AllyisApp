@@ -11,6 +11,11 @@ namespace AllyisApps.Services
 	/// </summary>
 	public enum ProductIdEnum : int
 	{
+        /// <summary>
+        /// ID for no product.
+        /// </summary>
+        None = 0,
+
 		/// <summary>
 		/// ID for TimeTracker.
 		/// </summary>

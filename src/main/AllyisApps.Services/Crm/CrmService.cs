@@ -688,6 +688,16 @@ namespace AllyisApps.Services {
 			return DBHelper.Instance.GetSubscriptionsDisplayByOrg(UserContext.ChosenOrganizationId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s));
 		}
 
+        /// <summary>
+        /// Gets a list of <see cref="SubscriptionDisplayInfo"/>s for all subscriptions in the given organizaiton.
+        /// </summary>
+        /// <param name="orgId">Organization Id.</param>
+        /// <returns>List of SubscriptionDisplayInfos.</returns>
+        public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplayByOrg(int orgId)
+        {
+            return DBHelper.Instance.GetSubscriptionsDisplayByOrg(orgId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s));
+        }
+
 		/// <summary>
 		/// Gets a list of available <see cref="SubscriptionRoleInfo"/>s for a subscription.
 		/// </summary>

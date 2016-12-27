@@ -1,19 +1,24 @@
 ﻿@using AllyisApps.Extensions.ViewExtensions;
 @using AllyisApps.Services;
 @using AllyisApps.ViewModels.Auth;
+@using AllyisApps.ViewModels.Shared;
 
 @model AccountOrgsViewModel
 @{
-    ViewBag.BarTitle = AllyisApps.Resources.Views.Account.Strings.Organizations;
-    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.Organizations;
+    //ViewBag.BarTitle = AllyisApps.Resources.Views.Account.Strings.YourOrganizations;
+    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.YourOrganizations;
 }
 <div class="col-md-push-2 col-md-8">
+    @foreach (SubscriptionsViewModel org in Model.Organizations)
+    {
+        @Html.Partial("OrgIndex", org);
+    }
     <div class="panel panel-default">
         <div class="panel-heading panel-heading-inline">
-            <h2>@AllyisApps.Resources.Views.Account.Strings.YourOrganizations</h2>
+            @*<h2>@AllyisApps.Resources.Views.Account.Strings.YourOrganizations</h2>*@
             <a href="@Url.SubdomainLink(ActionConstants.CreateOrg, ControllerConstants.Account, null, 0, this.Request)" class="btn btn-default">@AllyisApps.Resources.Views.Account.Strings.CreateOrganization</a>
         </div>
-        <div class="list-group list-group-with-buttons">
+        @*<div class="list-group list-group-with-buttons">
             @foreach (OrganizationInfo org in Model.Organizations)
             {
                 <div class="list-group-item">
@@ -21,6 +26,6 @@
                         @org.Name
                     </a>
                 </div>}
-        </div>
+        </div>*@
     </div>
 </div>

@@ -9,6 +9,7 @@ BEGIN
 	[Subscription].[SubscriptionId],
 	[Subscription].[OrganizationId],
 	[Subscription].[SkuId],
+	[ProductRole].[ProductId],
 	[ProductRole].[ProductRoleId],
 	[ProductRole].[Name] AS [ProductRoleName],
 	[ProductRole].[PermissionAdmin]

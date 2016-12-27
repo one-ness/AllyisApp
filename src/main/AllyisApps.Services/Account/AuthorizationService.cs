@@ -19,39 +19,46 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="targetAction">The action for which to check authorization.</param>
 		/// <param name="throwException">Whether or not to throw an exception based upon the check results.</param>
+        /// <param name="organizationId">The organization to use for checking permissions. Defaults to the chosen organization.</param>
 		/// <returns>Whether or not the user has Authorization for the given action.</returns>
-		public bool Can(Actions.CoreAction targetAction, bool throwException = false)
+		public bool Can(Actions.CoreAction targetAction, bool throwException = false, int organizationId = -1)
 		{
 			// TODO: throwException defaults to True, result defaults to True, adjust bottom return result accordingly
 			bool result = false;
 			UserOrganizationInfo orgInfo = null;
 			UserSubscriptionInfo subInfo = null;
 
+            if (organizationId == -1) organizationId = UserContext.ChosenOrganizationId;
+
 			// Get role information
 			// has the user chosen an organization
-			if (UserContext.ChosenOrganizationId > 0)
+			if (organizationId > 0)
 			{
 				// get the user role in chosen organization
-				orgInfo = UserContext.UserOrganizationInfoList.Where(x => x.OrganizationId == UserContext.ChosenOrganizationId).FirstOrDefault();
+				orgInfo = UserContext.UserOrganizationInfoList.Where(x => x.OrganizationId == organizationId).FirstOrDefault();
 
 				// Info should never be null
 				if (orgInfo != null)
 				{
-                    // TODO: Instead of using chosen subscription, we should be using the target action to choose a subscription of the matching product. This will address bugs
-                    // where permissions are being checked for actions related to a different subscription, e.g. during an Import.
-
-					// Has the user chosen a subscription
-					if (UserContext.ChosenSubscriptionId > 0)
-					{
-						// Grab the user's sub role
-						subInfo = orgInfo.UserSubscriptionInfoList.Where(x => x.SubscriptionId == UserContext.ChosenSubscriptionId).FirstOrDefault();
-					}
-                    else
+                    // Find the subscription that is relevant to the target action, if it exists.
+                    ProductIdEnum product = Actions.GetProductForAction(targetAction);
+                    if (product != ProductIdEnum.None)
                     {
-                        // If there's only one subscription, we'll use that in lieu of a chosen subscription. This quick fix can be removed once we're using the target action to
-                        // pick what subscription to use.
-                        if (orgInfo.UserSubscriptionInfoList.Count == 1) subInfo = orgInfo.UserSubscriptionInfoList.Single();
+                        subInfo = orgInfo.UserSubscriptionInfoList.Where(s => s.ProductId == product).FirstOrDefault();
                     }
+
+					//// Has the user chosen a subscription
+					//if (UserContext.ChosenSubscriptionId > 0)
+					//{
+					//	// Grab the user's sub role
+					//	subInfo = orgInfo.UserSubscriptionInfoList.Where(x => x.SubscriptionId == UserContext.ChosenSubscriptionId).FirstOrDefault();
+					//}
+     //               else
+     //               {
+     //                   // If there's only one subscription, we'll use that in lieu of a chosen subscription. This quick fix can be removed once we're using the target action to
+     //                   // pick what subscription to use.
+     //                   if (orgInfo.UserSubscriptionInfoList.Count == 1) subInfo = orgInfo.UserSubscriptionInfoList.Single();
+     //               }
 				}
 			}
 

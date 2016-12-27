@@ -4,10 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Web.Mvc;
+
 using AllyisApps.Core;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.ViewModels.Shared;
 
 namespace AllyisApps.Controllers
 {
@@ -23,12 +26,28 @@ namespace AllyisApps.Controllers
 		/// <returns>What to do.</returns>
 		public ActionResult Organizations()
 		{
-			var model = new AccountOrgsViewModel
-			{
-				Organizations = Service.GetOrganizationsByUserId()
-			};
+            List<SubscriptionsViewModel> modelList = new List<SubscriptionsViewModel>();
 
-			return this.View(model);
+            IEnumerable<OrganizationInfo> orgs = Service.GetOrganizationsByUserId();
+            List<ProductInfo> productList = Service.GetProductInfoList();
+            foreach(OrganizationInfo org in orgs)
+            {
+                modelList.Add(new SubscriptionsViewModel
+                {
+                    Subscriptions = Service.GetSubscriptionsDisplayByOrg(org.OrganizationId),
+                    ProductList = productList,
+                    OrgInfo = org,
+                    CanEditOrganization = Service.Can(Actions.CoreAction.EditOrganization, false, org.OrganizationId),
+                    TimeTrackerViewSelf = Service.Can(Actions.CoreAction.TimeTrackerEditSelf, false, org.OrganizationId)
+                });
+            }
+
+            AccountOrgsViewModel model = new AccountOrgsViewModel
+            {
+                Organizations = modelList
+            };
+
+            return this.View(model);
 		}
 	}
 }
