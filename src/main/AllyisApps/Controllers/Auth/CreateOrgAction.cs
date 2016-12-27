@@ -66,7 +66,7 @@ namespace AllyisApps.Controllers
 
 				Service.UpdateActiveOrganization(UserContext.UserId, orgId);
 
-				return this.RedirectToSubDomainAction(orgId, null, ActionConstants.OrgIndex, ControllerConstants.Account);
+				return this.RedirectToSubDomainAction(orgId, null, ActionConstants.Organizations, ControllerConstants.Account);
 			}
 
 			// Something happened, reload this view

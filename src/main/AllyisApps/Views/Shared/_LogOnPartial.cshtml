@@ -9,7 +9,7 @@
     <li>
         @if (Model.ChosenOrganizationId > 0)
         {
-            <a href="@Url.SubdomainLink(ActionConstants.OrgIndex, ControllerConstants.Account, null, Model.ChosenOrganizationId, this.Request)">@Model.ChosenOrganizationName</a>
+            <a href="@Url.SubdomainLink(ActionConstants.Organizations, ControllerConstants.Account, null, Model.ChosenOrganizationId, this.Request)">@Model.ChosenOrganizationName</a>
         }
     </li>
 

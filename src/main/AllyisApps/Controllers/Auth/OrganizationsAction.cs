@@ -30,11 +30,11 @@ namespace AllyisApps.Controllers
 
             IEnumerable<OrganizationInfo> orgs = Service.GetOrganizationsByUserId();
             List<ProductInfo> productList = Service.GetProductInfoList();
-            foreach(OrganizationInfo org in orgs)
+            foreach (OrganizationInfo org in orgs)
             {
                 modelList.Add(new SubscriptionsViewModel
                 {
-                    Subscriptions = Service.GetSubscriptionsDisplayByOrg(org.OrganizationId),
+                    Subscriptions = Service.GetSubscriptionsDisplay(org.OrganizationId),
                     ProductList = productList,
                     OrgInfo = org,
                     CanEditOrganization = Service.Can(Actions.CoreAction.EditOrganization, false, org.OrganizationId),

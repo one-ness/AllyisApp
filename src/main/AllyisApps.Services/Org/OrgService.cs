@@ -506,9 +506,11 @@ namespace AllyisApps.Services
 		/// Gets a list of <see cref="InvitationSubRoleInfo"/>s for the current organization.
 		/// </summary>
 		/// <returns>List of InvitationSubRoleInfos.</returns>
-		public IEnumerable<InvitationSubRoleInfo> GetInvitationSubRoles()
+		public IEnumerable<InvitationSubRoleInfo> GetInvitationSubRoles(int organizationId = -1)
 		{
-			return DBHelper.GetInvitationSubRolesByOrganizationId(UserContext.ChosenOrganizationId).Select(i => InfoObjectsUtility.InitializeInvitationSubRoleInfo(i));
+            if (organizationId == -1) organizationId = UserContext.ChosenOrganizationId;
+
+			return DBHelper.GetInvitationSubRolesByOrganizationId(organizationId).Select(i => InfoObjectsUtility.InitializeInvitationSubRoleInfo(i));
 		}
 
 		/// <summary>

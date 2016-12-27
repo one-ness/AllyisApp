@@ -16,11 +16,6 @@ namespace AllyisApps.ViewModels.Auth
 	/// </summary>
 	public class AccountOrgsViewModel
 	{
-		///// <summary>
-		///// Gets or sets a list of Organizations for display. Used with MVC.
-		///// </summary>
-		//public IEnumerable<OrganizationInfo> Organizations { get; set; }
-
         /// <summary>
         /// Gets or sets a list of Organizations and this user's subscription info in each for display.
         /// </summary>

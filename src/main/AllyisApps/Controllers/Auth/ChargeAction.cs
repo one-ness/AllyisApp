@@ -33,7 +33,7 @@ namespace AllyisApps.Controllers
 				{
 					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Controllers.Auth.Strings.Token, Core.Alert.Variety.Warning));
 
-					return this.RedirectToAction(ActionConstants.OrgIndex);
+					return this.RedirectToAction(ActionConstants.Manage);
 				}
 				else
 				{
@@ -47,7 +47,7 @@ namespace AllyisApps.Controllers
 			{
 				// Incorrect permissions
 				Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
-				return this.RedirectToAction(ActionConstants.OrgIndex);
+				return this.RedirectToAction(ActionConstants.Organizations);
 			}
 		}
 	}

@@ -35,7 +35,7 @@ namespace AllyisApps.Controllers
 
 			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 
-			return this.RedirectToAction(ActionConstants.OrgIndex);
+			return this.RedirectToAction(ActionConstants.Manage);
 		}
 
 		/// <summary>

@@ -339,7 +339,7 @@ namespace AllyisApps.Services {
 		{
 			string id = DBHelper.GetOrgCustomer(UserContext.ChosenOrganizationId);
 			return new BillingServicesCustomerId(id);
-		}
+        }
 
 		/// <summary>
 		/// Adds a stripe customer for the current organization.
@@ -683,9 +683,11 @@ namespace AllyisApps.Services {
 		/// Gets a list of <see cref="SubscriptionDisplayInfo"/>s for all subscriptions in the chosen organization.
 		/// </summary>
 		/// <returns>List of SubscriptionDisplayInfos.</returns>
-		public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplay()
+		public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplay(int organizationId = -1)
 		{
-			return DBHelper.Instance.GetSubscriptionsDisplayByOrg(UserContext.ChosenOrganizationId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s));
+            if (organizationId == -1) organizationId = UserContext.ChosenOrganizationId;
+
+            return DBHelper.Instance.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s));
 		}
 
         /// <summary>

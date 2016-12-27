@@ -27,18 +27,16 @@ namespace AllyisApps.Controllers
 		/// The management page for an organization, displays billing, subscriptions, etc.
 		/// </summary>
 		/// <returns>The organization's management page.</returns>
-		public ActionResult Manage(int organizationId = -1)
+		public ActionResult Manage()
 		{
-            if (organizationId == -1) organizationId = UserContext.ChosenOrganizationId;
-
-			if (Service.Can(Actions.CoreAction.EditOrganization, false, organizationId))
+			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
-				OrganizationManageViewModel model = this.ConstructOrganizationManageViewModel(organizationId);
+				OrganizationManageViewModel model = this.ConstructOrganizationManageViewModel();
 				return this.View(model);
 			}
 
 			Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
-			return this.RedirectToAction(ActionConstants.OrgIndex);
+			return this.RedirectToAction(ActionConstants.Organizations);
 		}
 
 		/// <summary>
@@ -46,11 +44,11 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <returns>The OrganizationManageViewModel.</returns>
 		[CLSCompliant(false)]
-		public OrganizationManageViewModel ConstructOrganizationManageViewModel(int organizationId)
+		public OrganizationManageViewModel ConstructOrganizationManageViewModel()
 		{
-			OrganizationInfo organization = Service.GetOrganization(organizationId);
+			OrganizationInfo organization = Service.GetOrganization(UserContext.ChosenOrganizationId);
 			bool canEditOrganization = Service.Can(Actions.CoreAction.EditOrganization);
-			IEnumerable<OrganizationUserViewModel> displayUsers = Service.GetOrganizationMemberList(organizationId).Select(x => new OrganizationUserViewModel()
+			IEnumerable<OrganizationUserViewModel> displayUsers = Service.GetOrganizationMemberList(UserContext.ChosenOrganizationId).Select(x => new OrganizationUserViewModel()
 			{
 				EmployeeId = x.EmployeeId,
 				FullName = (new[] { Service.GetUserInfo(x.UserId) }).Select(u => string.Format("{0} {1}", u.FirstName, u.LastName)).Single(),
@@ -86,12 +84,12 @@ namespace AllyisApps.Controllers
 					AccessCode = string.Empty,
 					CurrentUserId = UserContext.UserId,
 					DisplayUsers = displayUsers,
-					OrganizationId = organizationId,
-					OrganizationName = Service.GetOrganization(organizationId).Name,
+					OrganizationId = UserContext.ChosenOrganizationId,
+					OrganizationName = Service.GetOrganization(UserContext.ChosenOrganizationId).Name,
 					PendingInvitation = Service.GetUserInvitations(),
 					TotalUsers = displayUsers.Count()
 				},
-				OrganizationId = organizationId,
+				OrganizationId = UserContext.ChosenOrganizationId,
 				BillingCustomer = customer,
 				SubscriptionCount = subscriptions.Count(),
 				Subscriptions = subscriptions
