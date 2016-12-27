@@ -218,6 +218,8 @@ namespace AllyisApps.Core
 
 				// Update service user context
 				this.Service.SetUserContext(this.UserContext);
+
+                ViewBag.ShowOrganizationPartial = true;
 			}
 			else
 			{

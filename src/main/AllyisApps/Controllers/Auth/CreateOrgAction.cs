@@ -25,7 +25,8 @@ namespace AllyisApps.Controllers
 		/// <returns>Presents a page for the creation of a new organization.</returns>
 		[HttpGet]
 		public ActionResult CreateOrg()
-		{
+        {
+            ViewBag.ShowOrganizationPartial = false;
             return this.View(new EditOrganizationViewModel() { ValidCountries = Service.ValidCountries(), IsCreating = true });
 		}
 

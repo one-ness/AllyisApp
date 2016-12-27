@@ -19,13 +19,14 @@ namespace AllyisApps.Controllers
 	/// </summary>
 	public partial class SharedController : BaseController
 	{
-		/// <summary>
-		/// Gets the log on partial.
-		/// </summary>
-		/// <param name="returnUrl">The return URL.</param>
-		/// <returns>The ActionResult.</returns>
-		[ChildActionOnly]
-		public ActionResult LogOnPartial(string returnUrl)
+        /// <summary>
+        /// Gets the log on partial.
+        /// </summary>
+        /// <param name="returnUrl">The return URL.</param>
+        /// <param name="showOrganizationPartial">Whether to show the organization.</param>
+        /// <returns>The ActionResult.</returns>
+        [ChildActionOnly]
+        public ActionResult LogOnPartial(string returnUrl, bool showOrganizationPartial = false)
 		{
 			LogOnPartialViewModel model = null;
 			if (this.UserContext != null)
@@ -36,7 +37,8 @@ namespace AllyisApps.Controllers
 					ChosenOrganizationId = UserContext.ChosenOrganizationId,
 					ChosenOrganizationName = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).Select(o => o.OrganizationName).FirstOrDefault(),
 					CanEditOrganization = Service.Can(Actions.CoreAction.EditOrganization, false),
-					UserOrganizationBriefInfoList = new List<OrganizationBriefInfo>()
+					UserOrganizationBriefInfoList = new List<OrganizationBriefInfo>(),
+                    ShowOrganizationPartial = showOrganizationPartial
 				};
 
 				foreach (var orgInfo in UserContext.UserOrganizationInfoList)

@@ -31,7 +31,7 @@
 						{
 							Html.RenderPartial(DisplayHints.BreadcrumbNavPartialLocation);
 						}
-					@Html.Action(ActionConstants.LogOnPartial, ControllerConstants.Shared, new { returnUrl = ViewBag.ReturnUrl, area = "" })
+					@Html.Action(ActionConstants.LogOnPartial, ControllerConstants.Shared, new { returnUrl = ViewBag.ReturnUrl, showOrganizationPartial = ViewBag.ShowOrganizationPartial, area = "" })
 				</ul>
 			</div>
 		</div>

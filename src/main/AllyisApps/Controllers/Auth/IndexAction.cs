@@ -52,7 +52,8 @@ namespace AllyisApps.Controllers
 				row.CreatedUTC = date;
 			}
 
-			return this.View(model);
+            ViewBag.ShowOrganizationPartial = false;
+            return this.View(model);
 		}
 
 		/// <summary>

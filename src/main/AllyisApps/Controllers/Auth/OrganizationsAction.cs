@@ -47,6 +47,7 @@ namespace AllyisApps.Controllers
                 Organizations = modelList
             };
 
+            ViewBag.ShowOrganizationPartial = false;
             return this.View(model);
 		}
 	}

@@ -43,8 +43,9 @@ namespace AllyisApps.Controllers
 			};
 
 			ViewBag.returnUrl = returnUrl;
+            ViewBag.ShowOrganizationPartial = false;
 
-			return this.View(model);
+            return this.View(model);
 		}
 
 		/// <summary>

@@ -7,7 +7,7 @@
 @if (!string.IsNullOrEmpty(Model.UserName))
 {
     <li>
-        @if (Model.ChosenOrganizationId > 0)
+        @if (Model.ChosenOrganizationId > 0 && Model.ShowOrganizationPartial)
         {
             <a href="@Url.SubdomainLink(ActionConstants.Organizations, ControllerConstants.Account, null, Model.ChosenOrganizationId, this.Request)">@Model.ChosenOrganizationName</a>
         }
@@ -15,7 +15,7 @@
 
     <li>
         @{
-                <a href="@Url.SubdomainLink(ActionConstants.Index, ControllerConstants.Account, new RouteValueDictionary(new {area = ""}), Model.ChosenOrganizationId, this.Request)">@Model.UserName</a>
+            <a href="@Url.SubdomainLink(ActionConstants.Index, ControllerConstants.Account, new RouteValueDictionary(new {area = ""}), Model.ChosenOrganizationId, this.Request)">@Model.UserName</a>
         }
     </li>
     <li>
@@ -26,12 +26,12 @@
             <i class="fa fa-sign-out"></i>
         </a>
     </li>
-            }
-            else
-            {
-                <li>@Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.Register, ActionConstants.Register, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, htmlAttributes: new { id = "registerLink" })</li>
-                <li>@Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.SignIn, ActionConstants.LogOn, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, htmlAttributes: new { id = "loginLink" })</li>
-            }
+}
+else
+{
+    <li>@Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.Register, ActionConstants.Register, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, htmlAttributes: new { id = "registerLink" })</li>
+    <li>@Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.SignIn, ActionConstants.LogOn, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, htmlAttributes: new { id = "loginLink" })</li>
+}
 
 <script>
     function promptForLogOff() {
