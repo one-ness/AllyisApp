@@ -188,8 +188,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ImportAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Customer\TemplateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\GetProjectsAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ImportAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TemplateAction.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryRangeForUserViewModel.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -261,6 +263,7 @@
     <Compile Include="Controllers\Auth\OrganizationsAction.cs" />
     <Compile Include="Controllers\Auth\RegisterAction.cs" />
     <Compile Include="Controllers\Auth\ResetPasswordAction.cs" />
+    <Compile Include="Controllers\Auth\TemplateAction.cs" />
     <Compile Include="Controllers\Auth\TestAction.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
     <Compile Include="Controllers\Home\AboutAction.cs" />
@@ -856,6 +859,9 @@
     <Content Include="Scripts\allyis-account-subscribe.js" />
     <Content Include="Scripts\allyis-list-group-search.js" />
     <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Resources\Files\CustomerProjectImportTemplate.csv" />
+    <None Include="Resources\Files\TimeEntryImportTemplate.csv" />
+    <None Include="Resources\Files\UserImportTemplate.csv" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />

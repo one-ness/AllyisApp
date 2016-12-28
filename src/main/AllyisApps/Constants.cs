@@ -346,13 +346,18 @@
 		/// Action-Name: ViewReport.
 		/// </summary>
 		public const string ViewReport = "ViewReport";
-		#endregion TimeEntry
 
-		#region subscription
-		/// <summary>
-		/// Action-Name: Add.
-		/// </summary>
-		public const string EditUsers = "EditUsers";
+        /// <summary>
+        /// Action-Name: Template.
+        /// </summary>
+        public const string Template = "Template";
+        #endregion TimeEntry
+
+        #region subscription
+        /// <summary>
+        /// Action-Name: Add.
+        /// </summary>
+        public const string EditUsers = "EditUsers";
 		#endregion subscription
 	}
 

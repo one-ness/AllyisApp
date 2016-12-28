@@ -76,12 +76,13 @@
         <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Customer)" class="btn btn-default">@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.AddCustomer <i class="fa fa-plus"></i></a>
     </div>*@
 }
-@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken();
-    <div class="bulk col-xs-12 col-md-8" style="float:left;">
-        <h4>@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ImportCustomersTitle</h4>
-        <p>@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ImportCustomers</p>
+
+@Html.AntiForgeryToken();
+<div class="bulk col-xs-12 col-md-8" style="float:left;">
+    <h4>@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ImportCustomersTitle</h4>
+    <p>@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ImportCustomers</p>
+    @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
         <div style="float:left; width:100%;">
             <input type="file" id="upload-box" name="upload" style="display:none;"
                    onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
@@ -90,10 +91,16 @@
         </div>
         <div style="float:left">
             <a class="btn btn-primary" style ="margin-top:10px; margin-right: 10px;" onclick="$('input[id=upload-box]').click();">@AllyisApps.Resources.Views.Account.Strings.ChooseFile</a>
-            <input style="margin-top: 10px" type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
+            <input style="margin-top: 10px; margin-right: 10px;" type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
         </div>
-    </div>
-}
+    }
+    @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get))
+    {
+        <div style="float:right">
+            <input style="margin-top: 10px;" type="submit" id="template-button" value="@AllyisApps.Resources.Views.Account.Strings.Template" class="btn btn-primary" />
+        </div>
+    }
+</div>
 
 @section Scripts{
     @Scripts.Render("~/bundles/TTCustomerIndex");

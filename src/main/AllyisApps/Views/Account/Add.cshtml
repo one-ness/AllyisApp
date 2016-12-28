@@ -12,36 +12,42 @@
 @{ ViewData.Add(ActionConstants.Action, ActionConstants.Add); }
 
 <div class="col-md-8 col-md-push-2">
-
-    @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        @Html.AntiForgeryToken();
-        <div class="bulk">
-            <div class="col-xs-12">
-                <h4>@AllyisApps.Resources.Views.Account.Strings.MultipleMembers</h4>
-                <p>
-                    @AllyisApps.Resources.Views.Account.Strings.InviteMoreThanOne <a href="@Url.Action(ActionConstants.DownloadImportUsersTemplate, ControllerConstants.Account)">@AllyisApps.Resources.Views.Account.Strings.ExampleFile</a>.
-                </p>
-            </div>
-            @*Custom styled buttons wired to browser default upload*@
+    <div class="bulk">
+        <div class="col-xs-12">
+            <h4>@AllyisApps.Resources.Views.Account.Strings.MultipleMembers</h4>
+            <p>
+                @AllyisApps.Resources.Views.Account.Strings.InviteMoreThanOne <a href="@Url.Action(ActionConstants.DownloadImportUsersTemplate, ControllerConstants.Account)">@AllyisApps.Resources.Views.Account.Strings.ExampleFile</a>.
+            </p>
+        </div>
+        @*Custom styled buttons wired to browser default upload*@
+        @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken();
             <input type="file" id="upload-box" name="upload" style="display:none;"
                    onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
             <input id="upload-file-name-display" class="form-control"
                    onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-            <div style="margin-top: 10px; float:right;">
+            <div style="margin-top: 10px; float:left;">
                 <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@AllyisApps.Resources.Views.Account.Strings.ChooseFile</a>
-                <input style="margin-left: 5px" type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
+                <input style="margin-left: 10px" type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
             </div>
-        </div>
-        <div class="bulk clearfix">
-            <div class="col-xs-12 modal-divider">
-                <h4>@AllyisApps.Resources.Views.Account.Strings.SingleMember</h4>
-                <p>
-                    @AllyisApps.Resources.Views.Account.Strings.InviteSomeone
-                </p>
+        }
+        @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Account, null, FormMethod.Get))
+        {
+            <div style="float:right; margin-top: 10px;">
+                <input type="submit" id="template-button" value="@AllyisApps.Resources.Views.Account.Strings.Template" class="btn btn-primary" />
             </div>
+        }
+    </div>
+
+    <div class="bulk clearfix">
+        <div class="col-xs-12 modal-divider">
+            <h4>@AllyisApps.Resources.Views.Account.Strings.SingleMember</h4>
+            <p>
+                @AllyisApps.Resources.Views.Account.Strings.InviteSomeone
+            </p>
         </div>
-    }
+    </div>
 
     @using (Html.BeginForm(ActionConstants.Invite, ControllerConstants.Account, FormMethod.Post, new { @class = "form-horizontal", id = "OrgAddForm" }))
     {

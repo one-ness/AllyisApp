@@ -555,4 +555,7 @@
   <data name="SubdomainTaken" xml:space="preserve">
     <value>El nombre del subdominio proporcionado ya ha sido tomada.</value>
   </data>
+  <data name="Template" xml:space="preserve">
+    <value>Modelo</value>
+  </data>
 </root>

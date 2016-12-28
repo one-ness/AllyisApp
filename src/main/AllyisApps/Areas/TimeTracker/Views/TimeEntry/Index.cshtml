@@ -172,26 +172,32 @@ ViewBag.RenderSidebar = true;}
     }
     @if (Model.CanManage)
     {
-        using (Html.BeginForm(ActionConstants.Import, ControllerConstants.TimeEntry, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.AntiForgeryToken();
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h1 class="panel-title">@AllyisApps.Resources.Views.Account.Strings.Upload</h1>
-                </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h1 class="panel-title">@AllyisApps.Resources.Views.Account.Strings.Upload</h1>
+            </div>
+            @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.TimeEntry, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken();
                 <div>
                     <input type="file" id="upload-box" name="upload" style="display:none;"
-                           onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                            onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
                     <input id="upload-file-name-display" class="form-control"
-                           onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                            onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
                 </div>
                 @*<div style="width:70%; margin:0 auto">*@
                 <div id="footUpload" class="panel-footer" style="display: flex; justify-content: space-around; flex-wrap: wrap">
                     <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@AllyisApps.Resources.Views.Account.Strings.ChooseFile</a>
                     <input type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
                 </div>
-            </div>
-        }
+            }
+            @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.TimeEntry, null, FormMethod.Get))
+            {
+                <div style="float:right; margin-top: 10px;">
+                    <input type="submit" id="template-button" value="@AllyisApps.Resources.Views.Account.Strings.Template" class="btn btn-primary" />
+                </div>
+            }
+        </div>
     }
 }
 
