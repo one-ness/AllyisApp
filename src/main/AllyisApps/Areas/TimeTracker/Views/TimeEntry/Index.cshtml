@@ -173,9 +173,11 @@ ViewBag.RenderSidebar = true;}
     @if (Model.CanManage)
     {
         <div class="panel panel-info">
-            <div class="panel-heading">
-                <h1 class="panel-title">@AllyisApps.Resources.Views.Account.Strings.Upload</h1>
-            </div>
+            @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.TimeEntry, null, FormMethod.Get, new { @class = "panel-heading", style = "display: flex; justify-content: space-between;" }))
+            {
+                <span class="panel-title">@AllyisApps.Resources.Views.Account.Strings.Upload</span>
+                <input type="submit" id="template-button" value="@AllyisApps.Resources.Views.Account.Strings.Template" class="btn btn-primary"/>
+            }
             @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.TimeEntry, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken();
@@ -189,12 +191,6 @@ ViewBag.RenderSidebar = true;}
                 <div id="footUpload" class="panel-footer" style="display: flex; justify-content: space-around; flex-wrap: wrap">
                     <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@AllyisApps.Resources.Views.Account.Strings.ChooseFile</a>
                     <input type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
-                </div>
-            }
-            @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.TimeEntry, null, FormMethod.Get))
-            {
-                <div style="float:right; margin-top: 10px;">
-                    <input type="submit" id="template-button" value="@AllyisApps.Resources.Views.Account.Strings.Template" class="btn btn-primary" />
                 </div>
             }
         </div>
