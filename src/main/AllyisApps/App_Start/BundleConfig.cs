@@ -73,7 +73,7 @@ namespace AllyisApps
 				"~/Scripts/allyis-updateStateDDL.js"));
 
 			// CDN links with fallbacks
-			Bundle jQueryBundle = new ScriptBundle("~/bundles/jquery", "//ajax.aspnetcdn.com/ajax/jquery/jquery-3.1.1.min.js").Include(
+			Bundle jQueryBundle = new ScriptBundle("~/bundles/jquery"/*, "//ajax.aspnetcdn.com/ajax/jquery/jquery-3.1.1.min.js"*/).Include(
 						"~/Scripts/jquery-{version}.js");
 			jQueryBundle.CdnFallbackExpression = "window.jQuery";
 			bundles.Add(jQueryBundle);

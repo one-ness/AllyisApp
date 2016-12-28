@@ -151,7 +151,7 @@ namespace AllyisApps.Resources.TimeTracker.Views.Customer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Customer List.
+        ///   Looks up a localized string similar to Customers.
         /// </summary>
         public static string CustomerList {
             get {
@@ -246,6 +246,15 @@ namespace AllyisApps.Resources.TimeTracker.Views.Customer {
         public static string ImportCustomers {
             get {
                 return ResourceManager.GetString("ImportCustomers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Customers and Projects.
+        /// </summary>
+        public static string ImportCustomersTitle {
+            get {
+                return ResourceManager.GetString("ImportCustomersTitle", resourceCulture);
             }
         }
         

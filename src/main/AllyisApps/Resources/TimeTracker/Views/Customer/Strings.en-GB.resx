@@ -148,7 +148,7 @@
     <value>Customer Details</value>
   </data>
   <data name="CustomerList" xml:space="preserve">
-    <value>Customer List</value>
+    <value>Customers</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -197,5 +197,8 @@
   </data>
   <data name="ImportCustomers" xml:space="preserve">
     <value>Upload an Excel file with information about customers and projects to import more than one at a time.</value>
+  </data>
+  <data name="ImportCustomersTitle" xml:space="preserve">
+    <value>Import Customers and Projects</value>
   </data>
 </root>

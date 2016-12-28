@@ -6,7 +6,7 @@
 
 @{
     DisplayHints.PageBodyId = "tt-customer";
-    ViewBag.TitleBar = AllyisApps.Resources.TimeTracker.Views.Customer.Strings.CustomerList;
+    ViewBag.Title = AllyisApps.Resources.TimeTracker.Views.Customer.Strings.CustomerList;
     Layout = "~/Areas/TimeTracker/Views/Shared/_Layout.cshtml";
     var customerCount = 0;
     var empty = new EditCustomerInfoViewModel() { OrganizationId = Model.OrganizationId };
@@ -72,24 +72,25 @@
             </div>customerCount += 1;
         }
     </div>
-    <div class="allyis-action-buttons">
+    @*<div class="allyis-action-buttons">
         <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Customer)" class="btn btn-default">@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.AddCustomer <i class="fa fa-plus"></i></a>
-    </div>
+    </div>*@
 }
 @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken();
-    <div class="bulk" style="float:left; clear:right; margin:20px">
+    <div class="bulk col-xs-12 col-md-8" style="float:left;">
+        <h4>@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ImportCustomersTitle</h4>
         <p>@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ImportCustomers</p>
-        <div style="float:left; min-width:70%">
+        <div style="float:left; width:100%;">
             <input type="file" id="upload-box" name="upload" style="display:none;"
                    onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
             <input id="upload-file-name-display" class="form-control"
                    onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
         </div>
-        <div style="float:left; min-width: 30% ">
-            <a class="btn btn-primary" style ="margin-left:10px"onclick="$('input[id=upload-box]').click();">@AllyisApps.Resources.Views.Account.Strings.ChooseFile</a>
-            <input style="margin-left: 5px" type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
+        <div style="float:left">
+            <a class="btn btn-primary" style ="margin-top:10px; margin-right: 10px;" onclick="$('input[id=upload-box]').click();">@AllyisApps.Resources.Views.Account.Strings.ChooseFile</a>
+            <input style="margin-top: 10px" type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
         </div>
     </div>
 }
