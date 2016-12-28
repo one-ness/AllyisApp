@@ -524,6 +524,7 @@ namespace AllyisApps.Services.Utilities
 
 			return new SubscriptionDisplayInfo
 			{
+                CanViewSubscription = subscriptionDisplay.CanViewSubscription,
 				CreatedUTC = subscriptionDisplay.CreatedUTC,
 				NumberOfUsers = subscriptionDisplay.NumberOfUsers,
 				OrganizationId = subscriptionDisplay.OrganizationId,

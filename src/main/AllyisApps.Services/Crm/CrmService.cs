@@ -676,7 +676,7 @@ namespace AllyisApps.Services {
 		/// <returns>List of SubscriptionDisplayInfos.</returns>
 		public IEnumerable<SubscriptionDisplayInfo> GetUserSubscriptionOrganizationList()
 		{
-			return DBHelper.GetUserSubscriptionOrganizationList(UserContext.UserId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s));
+			return DBHelper.GetUserSubscriptionOrganizationList(UserContext.UserId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s)).ToList();
 		}
 
 		/// <summary>
@@ -687,7 +687,7 @@ namespace AllyisApps.Services {
 		{
             if (organizationId == -1) organizationId = UserContext.ChosenOrganizationId;
 
-            return DBHelper.Instance.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s));
+            return DBHelper.Instance.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s)).ToList();
 		}
 
         /// <summary>

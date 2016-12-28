@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
 using AllyisApps.ViewModels.Shared;
 
@@ -40,6 +41,17 @@ namespace AllyisApps.Controllers
                     CanEditOrganization = Service.Can(Actions.CoreAction.EditOrganization, false, org.OrganizationId),
                     TimeTrackerViewSelf = Service.Can(Actions.CoreAction.TimeTrackerEditSelf, false, org.OrganizationId)
                 });
+            }
+
+            foreach (SubscriptionsViewModel subVM in modelList)
+            {
+                foreach (SubscriptionDisplayInfo sub in subVM.Subscriptions)
+                {
+                    if (sub.ProductId == (int)ProductIdEnum.TimeTracker)
+                    {
+                        sub.CanViewSubscription = Service.Can(Actions.CoreAction.TimeTrackerEditSelf, false, sub.OrganizationId) || Service.Can(Actions.CoreAction.TimeTrackerEditOthers, false, sub.OrganizationId);
+                    }
+                }
             }
 
             AccountOrgsViewModel model = new AccountOrgsViewModel

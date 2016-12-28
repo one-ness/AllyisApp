@@ -69,13 +69,8 @@ namespace AllyisApps.Services.Billing
 		public string Tier { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether a user has permission to edit subscriptions.
+		/// Gets or sets a value indicating whether a user has permission to view this subscription.
 		/// </summary>
-		public bool CanEditSubscriptions { get; set; } // TODO: is nothing.
-
-        /// <summary>
-        /// Gets or sets a value indicating the user's role in this subscription.
-        /// </summary>
-        public ProductRole ProductRole { get; set; }
+		public bool CanViewSubscription { get; set; }
 	}
 }

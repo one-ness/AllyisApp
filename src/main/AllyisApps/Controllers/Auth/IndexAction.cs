@@ -44,6 +44,15 @@ namespace AllyisApps.Controllers
 					OrganizationName = Service.GetOrganization(x.OrganizationId).Name,
 				}).ToList()
 			};
+
+            foreach (SubscriptionDisplayInfo sub in model.Subscriptions.Subscriptions)
+            {
+                if (sub.ProductId == (int)ProductIdEnum.TimeTracker)
+                {
+                    sub.CanViewSubscription = Service.Can(Actions.CoreAction.TimeTrackerEditSelf, false, sub.OrganizationId) || Service.Can(Actions.CoreAction.TimeTrackerEditOthers, false, sub.OrganizationId);
+                }
+            }
+
 			model.UserInfo.Email = Service.GetCompressedEmail(model.UserInfo.Email);
 
 			foreach (SubscriptionDisplayInfo row in model.Subscriptions.Subscriptions)

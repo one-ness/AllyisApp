@@ -12,7 +12,7 @@
             title = title,
             image_url = image,
             query = (from entry in Model.Subscriptions
-                     where entry.ProductId == product_id
+                     where entry.ProductId == product_id && entry.CanViewSubscription
                      orderby entry.OrganizationName
                      select new
                      {
