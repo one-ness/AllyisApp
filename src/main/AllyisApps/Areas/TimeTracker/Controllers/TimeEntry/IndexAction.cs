@@ -67,7 +67,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			catch (InvalidOperationException e)
 			{
-				return this.View(ViewConstants.Error, new HandleErrorInfo(e, ControllerConstants.Home, ActionConstants.Index));
+				return this.View(ViewConstants.Error, new HandleErrorInfo(e, ControllerConstants.Account, ActionConstants.Index));
 			}
 		}
 
