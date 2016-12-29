@@ -325,6 +325,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\Files\Files.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Files.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\TimeTracker\Controllers\Customer\Strings.en-GB.Designer.cs">
       <DependentUpon>Strings.en-GB.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -716,11 +721,6 @@
     <Compile Include="ViewModels\Auth\OrganizationMembersViewModel.cs" />
     <Compile Include="ViewModels\Auth\OrganizationUserViewModel.cs" />
     <Compile Include="ViewModels\Auth\OrganizationManageViewModel.cs" />
-    <Compile Include="Resources\Files\Files.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Files.resx</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\Auth\SubscriptionDisplayViewModel.cs" />
     <Compile Include="ViewModels\Auth\SubscriptionRoleSelectionModel.cs" />
     <Compile Include="ViewModels\Shared\LanguageViewModel.cs" />
@@ -860,8 +860,11 @@
     <Content Include="Scripts\allyis-list-group-search.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Resources\Files\CustomerProjectImportTemplate.csv" />
+    <None Include="Resources\Files\CustomerProjectImportTemplate.xlsx" />
     <None Include="Resources\Files\TimeEntryImportTemplate.csv" />
+    <None Include="Resources\Files\TimeEntryImportTemplate.xlsx" />
     <None Include="Resources\Files\UserImportTemplate.csv" />
+    <None Include="Resources\Files\UserImportTemplate.xlsx" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />

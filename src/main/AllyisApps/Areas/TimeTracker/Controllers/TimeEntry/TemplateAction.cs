@@ -21,15 +21,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>A file object of TimeEntryImportTemplate.csv.</returns>
 		public ActionResult Template()
         {
-            string dir = (string)Resources.Files.Files.ResourceManager.GetObject("TimeEntryImportTemplate");
-            var cd = new System.Net.Mime.ContentDisposition()
-            {
-                FileName = "TimeEntryImportTemplateTemplate.csv",
-                Inline = false
-            };
-
-            Response.AppendHeader("Content-Disposition", cd.ToString());
-            return this.File(new System.Text.UTF8Encoding().GetBytes(dir), "text/csv");
+            byte[] fileBytes = (byte[])Resources.Files.Files.ResourceManager.GetObject("TimeEntryImportTemplate1");
+            return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
     }
 }

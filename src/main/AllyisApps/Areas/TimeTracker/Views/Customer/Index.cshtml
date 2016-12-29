@@ -77,12 +77,12 @@
     </div>*@
 }
 
-@Html.AntiForgeryToken();
 <div class="bulk col-xs-12 col-md-8" style="float:left;">
     <h4>@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ImportCustomersTitle</h4>
     <p>@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ImportCustomers</p>
     @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
+        @Html.AntiForgeryToken();
         <div style="float:left; width:100%;">
             <input type="file" id="upload-box" name="upload" style="display:none;"
                    onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />

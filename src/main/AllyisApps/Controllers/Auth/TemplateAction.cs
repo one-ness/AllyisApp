@@ -21,15 +21,8 @@ namespace AllyisApps.Controllers
 		/// <returns>A file object of UserImportTemplate.csv.</returns>
 		public ActionResult Template()
         {
-            string dir = (string)Resources.Files.Files.ResourceManager.GetObject("UserImportTemplate");
-            var cd = new System.Net.Mime.ContentDisposition()
-            {
-                FileName = "UserImportTemplateTemplate.csv",
-                Inline = false
-            };
-
-            Response.AppendHeader("Content-Disposition", cd.ToString());
-            return this.File(new System.Text.UTF8Encoding().GetBytes(dir), "text/csv");
+            byte[] fileBytes = (byte[])Resources.Files.Files.ResourceManager.GetObject("UserImportTemplate1");
+            return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
     }
 }
