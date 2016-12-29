@@ -61,18 +61,6 @@ namespace AllyisApps.Resources.Files {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (Required:)	Customer Name	Customer Id		(Optional:)	Customer Street Address	Customer City	Customer Country	Customer State	Customer Postal Code	Customer Email	Customer Phone Number	Customer Fax Number	Customer EIN
-        ///	ExampleCorp	CUST-0001			1234 Example st	Anytown	United States	WA	98765	contace@examplecorp.com	123-456-7890	123-456-7899	12-3456789
-        ///	FakeDataCorp	CUST-0002			1111 Fake st	Fakeville	United States	WA	99999	fake@notreal.com	111-111-1111	111-111-1119	11-1111111
-        ///.
-        /// </summary>
-        public static string CustomerProjectImportTemplate {
-            get {
-                return ResourceManager.GetString("CustomerProjectImportTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         public static byte[] CustomerProjectImportTemplate1 {
@@ -97,32 +85,12 @@ namespace AllyisApps.Resources.Files {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This workbook explains how to import Time Entries to AllyisApps
-        ///.
-        /// </summary>
-        public static string TimeEntryImportTemplate {
-            get {
-                return ResourceManager.GetString("TimeEntryImportTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         public static byte[] TimeEntryImportTemplate1 {
             get {
                 object obj = ResourceManager.GetObject("TimeEntryImportTemplate1", resourceCulture);
                 return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This workbook explains how to import Users to AllyisApps
-        ///.
-        /// </summary>
-        public static string UserImportTemplate {
-            get {
-                return ResourceManager.GetString("UserImportTemplate", resourceCulture);
             }
         }
         

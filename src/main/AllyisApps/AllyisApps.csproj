@@ -859,11 +859,8 @@
     <Content Include="Scripts\allyis-account-subscribe.js" />
     <Content Include="Scripts\allyis-list-group-search.js" />
     <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Resources\Files\CustomerProjectImportTemplate.csv" />
     <None Include="Resources\Files\CustomerProjectImportTemplate.xlsx" />
-    <None Include="Resources\Files\TimeEntryImportTemplate.csv" />
     <None Include="Resources\Files\TimeEntryImportTemplate.xlsx" />
-    <None Include="Resources\Files\UserImportTemplate.csv" />
     <None Include="Resources\Files\UserImportTemplate.xlsx" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />

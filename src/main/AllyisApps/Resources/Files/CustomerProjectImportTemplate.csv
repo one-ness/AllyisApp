@@ -1,3 +1,0 @@
-(Required:)	Customer Name	Customer Id		(Optional:)	Customer Street Address	Customer City	Customer Country	Customer State	Customer Postal Code	Customer Email	Customer Phone Number	Customer Fax Number	Customer EIN
-	ExampleCorp	CUST-0001			1234 Example st	Anytown	United States	WA	98765	contace@examplecorp.com	123-456-7890	123-456-7899	12-3456789
-	FakeDataCorp	CUST-0002			1111 Fake st	Fakeville	United States	WA	99999	fake@notreal.com	111-111-1111	111-111-1119	11-1111111
