@@ -63,9 +63,9 @@ namespace AllyisApps.Resources.Files {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] CustomerProjectImportTemplate1 {
+        public static byte[] CustomerProjectImportTemplate {
             get {
-                object obj = ResourceManager.GetObject("CustomerProjectImportTemplate1", resourceCulture);
+                object obj = ResourceManager.GetObject("CustomerProjectImportTemplate", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -87,9 +87,9 @@ namespace AllyisApps.Resources.Files {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] TimeEntryImportTemplate1 {
+        public static byte[] TimeEntryImportTemplate {
             get {
-                object obj = ResourceManager.GetObject("TimeEntryImportTemplate1", resourceCulture);
+                object obj = ResourceManager.GetObject("TimeEntryImportTemplate", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -97,9 +97,9 @@ namespace AllyisApps.Resources.Files {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] UserImportTemplate1 {
+        public static byte[] UserImportTemplate {
             get {
-                object obj = ResourceManager.GetObject("UserImportTemplate1", resourceCulture);
+                object obj = ResourceManager.GetObject("UserImportTemplate", resourceCulture);
                 return ((byte[])(obj));
             }
         }

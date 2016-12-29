@@ -1272,7 +1272,12 @@ namespace AllyisApps.Services
                             if (hasUserAddress) updated = this.readColumn(row, ColumnHeaders.UserAddress, val => user.Address = val) || updated;
                             if (hasUserCity) updated = this.readColumn(row, ColumnHeaders.UserCity, val => user.City = val) || updated;
                             if (hasUserCountry) updated = this.readColumn(row, ColumnHeaders.UserCountry, val => user.Country = val) || updated;
-                            if (hasUserDateOfBirth) updated = this.readColumn(row, ColumnHeaders.UserDateOfBirth, val => user.State = val) || updated;
+                            string dateOfBirth = null;
+                            if (hasUserDateOfBirth) updated = this.readColumn(row, ColumnHeaders.UserDateOfBirth, val => dateOfBirth = val) || updated;
+                            if (!string.IsNullOrEmpty(dateOfBirth))
+                            {
+                                user.DateOfBirth = DateTime.Parse(dateOfBirth);
+                            }
                             if (hasUserUsername) updated = this.readColumn(row, ColumnHeaders.UserName, val => user.UserName = val) || updated;
                             if (hasUserPhoneExtension) updated = this.readColumn(row, ColumnHeaders.UserPhoneExtension, val => user.PhoneExtension = val) || updated;
                             if (hasUserPhoneNumber) updated = this.readColumn(row, ColumnHeaders.UserPhoneNumber, val => user.PhoneNumber = val) || updated;

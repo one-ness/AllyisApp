@@ -21,7 +21,7 @@ namespace AllyisApps.Controllers
 		/// <returns>A file object of UserImportTemplate.csv.</returns>
 		public ActionResult Template()
         {
-            byte[] fileBytes = (byte[])Resources.Files.Files.ResourceManager.GetObject("UserImportTemplate1");
+            byte[] fileBytes = (byte[])Resources.Files.Files.ResourceManager.GetObject("UserImportTemplate");
             return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
     }

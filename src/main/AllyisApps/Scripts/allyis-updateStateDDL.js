@@ -24,7 +24,6 @@ function updateStateDDL(successCallback) {
             datatype: "json",
             contentType: "application/json",
             success: function (states) {
-                debugger
                 $('#State').empty();
                 $('#State').append("<option value=\"\">" + dropdownempty + "</option>");
                 Object.keys(states).forEach(function (key) {

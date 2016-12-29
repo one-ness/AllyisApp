@@ -21,7 +21,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>A file object of TimeEntryImportTemplate.csv.</returns>
 		public ActionResult Template()
         {
-            byte[] fileBytes = (byte[])Resources.Files.Files.ResourceManager.GetObject("TimeEntryImportTemplate1");
+            byte[] fileBytes = (byte[])Resources.Files.Files.ResourceManager.GetObject("TimeEntryImportTemplate");
             return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
     }
