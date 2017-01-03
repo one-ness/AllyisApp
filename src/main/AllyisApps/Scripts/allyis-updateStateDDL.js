@@ -12,7 +12,9 @@
         });
     }
 
-    $('#Country').change(updateStateDDL);
+    $('#Country').change(function () {
+        updateStateDDL(null);
+    });
 });
 
 function updateStateDDL(successCallback) {
@@ -31,7 +33,7 @@ function updateStateDDL(successCallback) {
                 });
                 $('#State').prop("disabled", false);
 
-                successCallback();
+                if(successCallback != null) successCallback();
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 alert("Error: " + errorThrown)
