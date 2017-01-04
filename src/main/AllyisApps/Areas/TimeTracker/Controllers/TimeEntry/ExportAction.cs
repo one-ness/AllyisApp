@@ -27,9 +27,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="startingDate">The Starting date of the range (nullable).</param>
 		/// <param name="endingDate">The Ending date of the range (nullable).</param>
 		/// <returns>CSV export of time entries.</returns>
-		public FileStreamResult Export(int userId, DateTime? startingDate = null, DateTime? endingDate = null)
+		public FileStreamResult Export(int userId, int? startingDate = null, int? endingDate = null)
 		{
-			if (userId == Convert.ToInt32(UserContext.UserId))
+            if (userId == Convert.ToInt32(UserContext.UserId))
 			{
 				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{
@@ -44,10 +44,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			//DataExportViewModel model = this.ConstructDataExportViewModel(new List<int> { userId }, startingDate, endingDate);
-			//model.Output = TimeTrackerService.PrepareCSVExport(new List<int> { userId }, startingDate, endingDate);
+            DateTime? start = startingDate.HasValue ? (DateTime?)TimeTrackerService.GetDateTimeFromDays(startingDate.Value) : null;
+            DateTime? end = endingDate.HasValue ? (DateTime?)TimeTrackerService.GetDateTimeFromDays(endingDate.Value) : null;
 
-			return this.File(TimeTrackerService.PrepareCSVExport(new List<int> { userId }, startingDate, endingDate).BaseStream, "text/csv", "export.csv");
+            return this.File(TimeTrackerService.PrepareCSVExport(new List<int> { userId }, start, end).BaseStream, "text/csv", "export.csv");
 		}
 
 		/// <summary>

@@ -539,7 +539,7 @@ namespace AllyisApps.Services.TimeTracker
                 }
             }
 
-            if (userIds != null && userIds.Count == 1)
+            if (userIds != null && userIds.Count == 1 && userIds[0] > 0)
             {
                 projects = Service.GetProjectsByUserAndOrganization(userIds[0], false);
             }
@@ -556,12 +556,14 @@ namespace AllyisApps.Services.TimeTracker
             StreamWriter output = new StreamWriter(new MemoryStream());
             output.WriteLine(
                 string.Format(
-                    "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\"",
+                    "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"",
                     ColumnHeaders.UserLastName,
                     ColumnHeaders.UserFirstName,
                     ColumnHeaders.EmployeeId,
+                    ColumnHeaders.UserEmail,
                     ColumnHeaders.Date,
                     ColumnHeaders.Duration,
+                    ColumnHeaders.PayClass,
                     ColumnHeaders.ProjectName,
                     ColumnHeaders.ProjectId,
                     ColumnHeaders.CustomerName,
@@ -573,22 +575,28 @@ namespace AllyisApps.Services.TimeTracker
             {
                 try
                 {
-                    var project = projects.Where(x => x.ProjectId == entry.ProjectId).SingleOrDefault();
+
+                    var project = projects.Where(x => x.ProjectId == entry.ProjectId).FirstOrDefault();
                     output.WriteLine(
                         string.Format(
-                            "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\"",
+                            "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"",
                             entry.LastName,
                             entry.FirstName,
                             entry.EmployeeId,
+                            entry.Email,
                             entry.Date.ToShortDateString(),
                             entry.Duration,
+                            entry.PayClassName,
                             project.ProjectName ?? string.Empty,
                             project.ProjectOrgId ?? string.Empty,
                             project.CustomerName ?? string.Empty,
                             project.CustomerOrgId ?? string.Empty,
                             entry.Description));
                 }
-                catch (Exception) { }
+                catch (Exception ex) {
+                    string blah = ex.Message;
+
+                }
             }
 
             output.Flush();

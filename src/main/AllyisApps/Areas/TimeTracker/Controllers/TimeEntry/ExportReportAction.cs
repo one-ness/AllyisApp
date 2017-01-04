@@ -56,15 +56,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			// Authorized for report exporting
-			DataExportViewModel model = this.ConstructDataExportViewModel(userId, dateRangeStart, dateRangeEnd, projectId, customerId);
-			if (model.Data.Count() == 0)
-			{
-				Notifications.Add(new AllyisApps.Core.Alert.BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.NoDataToExport, Variety.Warning));
-				return this.RedirectToAction(ActionConstants.Report);
-			}
+			//DataExportViewModel model = this.ConstructDataExportViewModel(userId, dateRangeStart, dateRangeEnd, projectId, customerId);
+			//if (model.Data.Count() == 0)
+			//{
+			//	Notifications.Add(new AllyisApps.Core.Alert.BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.NoDataToExport, Variety.Warning));
+			//	return this.RedirectToAction(ActionConstants.Report);
+			//}
 
-			model.Output = PrepareCSVExport(model.Data, model.Projects);
-			return this.File(model.Output.BaseStream, "text/csv", "export.csv");
+			//TimeTrackerService.PrepareCSVExport(userId, dateRangeStart, dateRangeEnd, projectId, customerId);
+			return this.File(TimeTrackerService.PrepareCSVExport(userId, dateRangeStart, dateRangeEnd, projectId, customerId).BaseStream, "text/csv", "export.csv");
 		}
 	}
 }
