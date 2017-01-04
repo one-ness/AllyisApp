@@ -472,7 +472,7 @@ namespace AllyisApps.Services.TimeTracker
 		public bool UpdateSettings(StartOfWeekEnum startOfWeek, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
 		{
 			#region Validation
-			if (Enum.IsDefined(typeof(StartOfWeekEnum), startOfWeek))
+			if (!Enum.IsDefined(typeof(StartOfWeekEnum), startOfWeek))
 			{
 				throw new ArgumentException("Start of week must correspond to a value of StartOfWeekEnum.");
 			}

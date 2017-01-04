@@ -73,6 +73,10 @@
                         @Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control", @maxlength = "16" })
                     </div> 
                     }
+                    else
+                    {
+                        @Html.HiddenFor(m => m.EmployeeId);
+                    }
 
                     @Html.HiddenFor(m => m.OrganizationId)
                     @Html.HiddenFor(m => m.SubdomainName)

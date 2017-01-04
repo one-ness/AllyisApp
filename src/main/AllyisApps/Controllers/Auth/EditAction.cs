@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 using AllyisApps.Core;
@@ -74,6 +75,8 @@ namespace AllyisApps.Controllers
 					Service.Can(Actions.CoreAction.EditOrganization),
 					Service.ValidCountries());
 
+                model.EmployeeId = Service.GetOrganizationMemberList(UserContext.ChosenOrganizationId).Where(u => u.UserId == UserContext.UserId).Select(u => u.EmployeeId).FirstOrDefault();
+
 				ViewBag.returnUrl = returnUrl;
 
 				return this.View(model);
@@ -106,7 +109,7 @@ namespace AllyisApps.Controllers
 				FaxNumber = organization.FaxNumber,
 				SubdomainName = organization.Subdomain,
 				CanDelete = canDelete,
-				ValidCountries = validCountries
+				ValidCountries = validCountries,
 			};
 		}
 	}
