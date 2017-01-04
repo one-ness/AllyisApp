@@ -53,10 +53,15 @@ namespace AllyisApps.Services.TimeTracker
 		/// </summary>
 		public int PayClassId { get; set; }
 
-		/// <summary>
-		/// Gets or sets the Date.
-		/// </summary>
-		public DateTime Date { get; set; }
+        /// <summary>
+        /// Gets or sets the pay class name.
+        /// </summary>
+        public string PayClassName{ get; set; }
+
+        /// <summary>
+        /// Gets or sets the Date.
+        /// </summary>
+        public DateTime Date { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Duration.

@@ -9,6 +9,7 @@ AS
 			[Project].[Name] AS [ProjectName],
 			[Organization].[Name] AS [OrganizationName],
 			[Customer].[Name] AS [CustomerName],
+			[Customer].[CustomerOrgId],
 			[Project].[Type] AS [PriceType],
 			[Project].[StartUTC] AS [StartDate],
 			[Project].[EndUTC] AS [EndDate],

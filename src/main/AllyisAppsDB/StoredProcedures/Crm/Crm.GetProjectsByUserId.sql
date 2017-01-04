@@ -9,6 +9,7 @@ BEGIN
 		   [Customer].[OrganizationId],
 		   [Customer].[CustomerId],
 		   [Customer].[Name] AS [CustomerName],
+		   [Customer].[CustomerOrgId],
 		   [Project].[ProjectOrgId],
 		   [Project].[Type] AS [PriceType]
 	FROM [Crm].[ProjectUser]  WITH (NOLOCK) 

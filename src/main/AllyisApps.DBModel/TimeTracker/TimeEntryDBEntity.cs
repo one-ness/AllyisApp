@@ -21,6 +21,7 @@ namespace AllyisApps.DBModel.TimeTracker
         private string pEmployeeId;
 		private int pProjectId;
 		private int pPayClassId;
+        private string pPayClassName;
 		private DateTime pDate;
 		private float pDuration;
 		private string pDescription;
@@ -154,12 +155,28 @@ namespace AllyisApps.DBModel.TimeTracker
 			{
 				this.ApplyPropertyChange<TimeEntryDBEntity, int>(ref this.pPayClassId, (TimeEntryDBEntity x) => x.pPayClassId, value);
 			}
-		}
+        }
 
-		/// <summary>
-		/// Gets or sets the Date.
-		/// </summary>
-		public DateTime Date
+        /// <summary>
+        /// Gets or sets the pay class name.
+        /// </summary>
+        public string PayClassName
+        {
+            get
+            {
+                return this.pPayClassName;
+            }
+
+            set
+            {
+                this.ApplyPropertyChange<TimeEntryDBEntity, string>(ref this.pPayClassName, (TimeEntryDBEntity x) => x.PayClassName, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the Date.
+        /// </summary>
+        public DateTime Date
 		{
 			get
 			{

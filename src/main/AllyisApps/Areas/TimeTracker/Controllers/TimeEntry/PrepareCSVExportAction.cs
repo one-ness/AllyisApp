@@ -30,7 +30,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:ClosingParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
 		public StreamWriter PrepareCSVExport(IEnumerable<TimeEntryInfo> data, IEnumerable<CompleteProjectInfo> projects)
 		{
-            return TimeTrackerService.PrepareCSVExport(data, projects);
+            return null;
+            //return TimeTrackerService.PrepareCSVExport(data, projects);
 
 			//StreamWriter output = new StreamWriter(new MemoryStream());
 			//output.WriteLine(

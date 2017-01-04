@@ -12,6 +12,7 @@ SELECT	[Project].[ProjectId],
 		[ProjectOrgId],
 		[Organization].[Name] AS [OrganizationName],
 		[Customer].[Name] AS [CustomerName],
+		[Customer].[CustomerOrgId],
 		[Customer].[IsActive] AS [IsCustomerActive],
 		[Project].[Type] AS [PriceType]
 		--[OrgRoleId]

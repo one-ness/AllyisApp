@@ -44,10 +44,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			DataExportViewModel model = this.ConstructDataExportViewModel(new List<int> { userId }, startingDate, endingDate);
-			model.Output = TimeTrackerService.PrepareCSVExport(model.Data, model.Projects);
+			//DataExportViewModel model = this.ConstructDataExportViewModel(new List<int> { userId }, startingDate, endingDate);
+			//model.Output = TimeTrackerService.PrepareCSVExport(new List<int> { userId }, startingDate, endingDate);
 
-			return this.File(model.Output.BaseStream, "text/csv", "export.csv");
+			return this.File(TimeTrackerService.PrepareCSVExport(new List<int> { userId }, startingDate, endingDate).BaseStream, "text/csv", "export.csv");
 		}
 
 		/// <summary>
