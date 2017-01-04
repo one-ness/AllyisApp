@@ -35,6 +35,7 @@
                     <div class="form-group">
                         @Html.LabelFor(m => m.ProjectOrgId, AllyisApps.Resources.TimeTracker.Views.Project.Strings.ProjectOrgId)
                         <span class="form-control">@Model.ProjectOrgId</span>
+                        @Html.HiddenFor(m => m.ProjectOrgId)
                     </div>
                 }
                 <div id="swapper-ui" class="swapper-ui">
