@@ -55,4 +55,6 @@ $(document).ready(function () {
     $('.role-selector').change(function () {
         checkAddConditions();
     });
+
+    checkAddConditions();
 });
