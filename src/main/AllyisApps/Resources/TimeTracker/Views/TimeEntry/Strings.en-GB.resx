@@ -348,4 +348,7 @@
   <data name="WeekInitial" xml:space="preserve">
     <value>W</value>
   </data>
+  <data name="PayClass" xml:space="preserve">
+    <value>Pay Class</value>
+  </data>
 </root>
