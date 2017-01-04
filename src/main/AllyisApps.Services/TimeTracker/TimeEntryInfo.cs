@@ -33,10 +33,20 @@ namespace AllyisApps.Services.TimeTracker
 		/// </summary>
 		public string LastName { get; set; }
 
-		/// <summary>
-		/// Gets or sets the ProjectId.
-		/// </summary>
-		public int ProjectId { get; set; }
+        /// <summary>
+        /// Gets or sets the EmployeeId.
+        /// </summary>
+        public string EmployeeId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Email address.
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ProjectId.
+        /// </summary>
+        public int ProjectId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the PayClassId.

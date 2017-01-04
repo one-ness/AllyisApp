@@ -8,14 +8,18 @@ SELECT DISTINCT [TimeEntryId]
 	,[User].[UserId] AS [UserId]
 	,[User].[FirstName] AS [FirstName]
 	,[User].[LastName] AS [LastName]
+	,[User].[Email]
+	,[OrganizationUser].[EmployeeId]
     ,[TimeEntry].[ProjectId]
 	,[TimeEntry].[PayClassId]
+	,[PayClass].[Name] AS [PayClassName]
     ,[Date]
     ,[Duration]
     ,[Description]
 FROM [TimeTracker].[TimeEntry] WITH (NOLOCK)
 JOIN [TimeTracker].[PayClass] WITH (NOLOCK) ON [PayClass].[PayClassID] = [TimeEntry].[PayClassId]
 JOIN [Auth].[User] WITH (NOLOCK) ON [User].[UserId] = [TimeEntry].[UserId]
+JOIN [Auth].[OrganizationUser] WITH (NOLOCK) ON [User].[UserId] = [OrganizationUser].[UserId] AND [OrganizationUser].[OrganizationId] = @OrganizationId
 WHERE [Date] >= @StartingDate
 	AND [Date] <= @EndingDate
 	AND [PayClass].[OrganizationId] = @OrganizationId

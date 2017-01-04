@@ -6,6 +6,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 
 using AllyisApps.Services.Utilities;
@@ -499,5 +501,100 @@ namespace AllyisApps.Services.TimeTracker
 
 			return false;
 		}
-	}
+
+        /// <summary>
+		/// Prepares the Excel file for output of time entry information.
+		/// </summary>
+		/// <param name="userIds">List of user ids to filter by.</param>
+        /// <param name="startingDate">Start of date range.</param>
+        /// <param name="endingDate">End of date range.</param>
+        /// <param name="projectId">Project id to filter by.</param>
+        /// <param name="customerId">Customer id to filter by.</param>
+		/// <returns>The stream writer.</returns>
+        public StreamWriter PrepareCSVExport(List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
+        {
+            //Preparing data
+            IEnumerable<TimeEntryInfo> data = new List<TimeEntryInfo>();
+            IEnumerable<CompleteProjectInfo> projects = new List<CompleteProjectInfo>();
+
+            if (userIds == null || userIds.Count == 0 || userIds[0] == -1)
+            {
+                data = this.GetTimeEntriesOverDateRange(startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
+            }
+            else
+            {
+                data = this.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
+            }
+
+            if (projectId > 0)
+            {
+                data = data.Where(t => t.ProjectId == projectId);
+            } 
+            else
+            {
+                if (customerId > 0)
+                {
+                    IEnumerable<int> customerProjects = Service.GetProjectsByCustomer(customerId).Select(p => p.CustomerId);
+                    data = data.Where(t => customerProjects.Contains(t.ProjectId));
+                }
+            }
+
+            if (userIds != null && userIds.Count == 1)
+            {
+                projects = Service.GetProjectsByUserAndOrganization(userIds[0], false);
+            }
+            else
+            {
+                projects = Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId, false);
+            }
+
+            // Add default project in case there are holiday entries
+            List<CompleteProjectInfo> defaultProject = new List<CompleteProjectInfo>();
+            defaultProject.Add(Service.GetProject(0));
+            projects = projects.Concat(defaultProject);
+
+            StreamWriter output = new StreamWriter(new MemoryStream());
+            output.WriteLine(
+                string.Format(
+                    "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\"",
+                    ColumnHeaders.UserLastName,
+                    ColumnHeaders.UserFirstName,
+                    ColumnHeaders.EmployeeId,
+                    ColumnHeaders.Date,
+                    ColumnHeaders.Duration,
+                    ColumnHeaders.ProjectName,
+                    ColumnHeaders.ProjectId,
+                    ColumnHeaders.CustomerName,
+                    ColumnHeaders.CustomerId,
+                    ColumnHeaders.Description
+                ));
+
+            foreach (TimeEntryInfo entry in data)
+            {
+                try
+                {
+                    var project = projects.Where(x => x.ProjectId == entry.ProjectId).SingleOrDefault();
+                    output.WriteLine(
+                        string.Format(
+                            "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\"",
+                            entry.LastName,
+                            entry.FirstName,
+                            this.Service.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Where(u => u.UserId == entry.UserId).FirstOrDefault().EmployeeId,
+                            entry.Date.ToShortDateString(),
+                            entry.Duration,
+                            project.ProjectName ?? string.Empty,
+                            project.ProjectOrgId ?? string.Empty,
+                            project.CustomerName ?? string.Empty,
+                            this.Service.GetCustomerList(this.UserContext.ChosenOrganizationId).Where(c => c.Name == project.CustomerName).FirstOrDefault().CustomerOrgId ?? string.Empty,
+                            entry.Description));
+                }
+                catch (Exception) { }
+            }
+
+            output.Flush();
+            output.BaseStream.Seek(0, SeekOrigin.Begin);
+
+            return output;
+        }
+    }
 }

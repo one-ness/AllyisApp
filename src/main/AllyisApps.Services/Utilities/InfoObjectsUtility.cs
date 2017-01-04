@@ -204,7 +204,9 @@ namespace AllyisApps.Services.Utilities
 				PayClassId = entity.PayClassId,
 				ProjectId = entity.ProjectId,
 				TimeEntryId = entity.TimeEntryId,
-				UserId = entity.UserId
+				UserId = entity.UserId,
+                EmployeeId = entity.EmployeeId,
+                Email = entity.Email
 			};
 		}
 

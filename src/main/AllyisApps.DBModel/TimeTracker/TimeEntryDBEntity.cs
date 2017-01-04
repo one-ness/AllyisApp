@@ -17,6 +17,8 @@ namespace AllyisApps.DBModel.TimeTracker
 		private int pUserId;
 		private string pFirstName;
 		private string pLastName;
+        private string pEmail;
+        private string pEmployeeId;
 		private int pProjectId;
 		private int pPayClassId;
 		private DateTime pDate;
@@ -59,7 +61,7 @@ namespace AllyisApps.DBModel.TimeTracker
 		}
 
 		/// <summary>
-		/// Gets or sets the TimeEntryId.
+		/// Gets or sets the first name.
 		/// </summary>
 		public string FirstName
 		{
@@ -75,7 +77,7 @@ namespace AllyisApps.DBModel.TimeTracker
 		}
 
 		/// <summary>
-		/// Gets or sets the TimeEntryId.
+		/// Gets or sets the Last name.
 		/// </summary>
 		public string LastName
 		{
@@ -88,12 +90,44 @@ namespace AllyisApps.DBModel.TimeTracker
 			{
 				this.ApplyPropertyChange<TimeEntryDBEntity, string>(ref this.pLastName, (TimeEntryDBEntity x) => x.LastName, value);
 			}
-		}
+        }
 
-		/// <summary>
-		/// Gets or sets the ProjectId.
-		/// </summary>
-		public int ProjectId
+        /// <summary>
+        /// Gets or sets the Email.
+        /// </summary>
+        public string Email
+        {
+            get
+            {
+                return this.pEmail;
+            }
+
+            set
+            {
+                this.ApplyPropertyChange<TimeEntryDBEntity, string>(ref this.pEmail, (TimeEntryDBEntity x) => x.Email, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the EmployeeId.
+        /// </summary>
+        public string EmployeeId
+        {
+            get
+            {
+                return this.pEmployeeId;
+            }
+
+            set
+            {
+                this.ApplyPropertyChange<TimeEntryDBEntity, string>(ref this.pEmployeeId, (TimeEntryDBEntity x) => x.EmployeeId, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the ProjectId.
+        /// </summary>
+        public int ProjectId
 		{
 			get
 			{

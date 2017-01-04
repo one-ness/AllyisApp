@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			DataExportViewModel model = this.ConstructDataExportViewModel(new List<int> { userId }, startingDate, endingDate);
-			model.Output = PrepareCSVExport(model.Data, model.Projects);
+			model.Output = TimeTrackerService.PrepareCSVExport(model.Data, model.Projects);
 
 			return this.File(model.Output.BaseStream, "text/csv", "export.csv");
 		}
@@ -53,22 +53,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Uses services to initialize a new instance of the <see cref="DataExportViewModel" /> class and returns it.
 		/// </summary>
-		/// <param name="userId">An array of user ids.</param>
+		/// <param name="userIds">An array of user ids.</param>
 		/// <param name="startingDate">The starting of the date range (nullable).</param>
 		/// <param name="endingDate">The ending of the date range (nullable).</param>
 		/// <param name="projectId">The project's Id (optional).</param>
 		/// <param name="customerId">The Customer's Id (optional).</param>
 		/// <returns>The DataExportViewModel.</returns>
-		public DataExportViewModel ConstructDataExportViewModel(List<int> userId = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
+		public DataExportViewModel ConstructDataExportViewModel(List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
 			DataExportViewModel result = new DataExportViewModel();
-			if ((userId == null) || (userId[0] == -1))
+			if ((userIds == null) || (userIds[0] == -1))
 			{
 				result.Data = TimeTrackerService.GetTimeEntriesOverDateRange(startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
 			}
 			else
 			{
-				result.Data = TimeTrackerService.GetTimeEntriesByUserOverDateRange(userId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
+				result.Data = TimeTrackerService.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
 			}
 
 			if (projectId != 0)
@@ -85,16 +85,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 							  select c;
 			}
 
-			if (userId != null && userId.Count > 0)
+			if (userIds != null && userIds.Count > 0)
 			{
-				if ((userId.Count > 1) || (userId[0] == -1))
+				if ((userIds.Count > 1) || (userIds[0] == -1))
 				{
 					result.Projects = Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId);
 				}
 				else
 				{
 					// single user selected
-					result.Projects = Service.GetProjectsByUserAndOrganization(userId[0], false);
+					result.Projects = Service.GetProjectsByUserAndOrganization(userIds[0], false);
 				}
 
 				// Add default project in case there are holiday entries

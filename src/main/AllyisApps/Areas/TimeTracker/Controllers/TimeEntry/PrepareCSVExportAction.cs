@@ -30,48 +30,50 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:ClosingParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
 		public StreamWriter PrepareCSVExport(IEnumerable<TimeEntryInfo> data, IEnumerable<CompleteProjectInfo> projects)
 		{
-			StreamWriter output = new StreamWriter(new MemoryStream());
-			output.WriteLine(
-				string.Format(
-                    "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\"",
-					Resources.TimeTracker.Controllers.TimeEntry.Strings.LastName,
-					Resources.TimeTracker.Controllers.TimeEntry.Strings.FirstName,
-                    "Employee ID",
-					Resources.TimeTracker.Controllers.TimeEntry.Strings.Date,
-					Resources.TimeTracker.Controllers.TimeEntry.Strings.Duration,
-					Resources.TimeTracker.Controllers.TimeEntry.Strings.Project,
-                    "Project ID",
-					Resources.TimeTracker.Controllers.TimeEntry.Strings.Customer,
-                    "Customer ID",
-					Resources.TimeTracker.Controllers.TimeEntry.Strings.Description));
-			try
-			{
-				foreach (TimeEntryInfo entry in data)
-				{
-                    var project = projects.Where(x => x.ProjectId == entry.ProjectId).SingleOrDefault();
-                    output.WriteLine(
-                        string.Format(
-                            "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\"",
-                            entry.LastName,
-                            entry.FirstName,
-                            this.Service.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Where(u => u.UserId == entry.UserId).FirstOrDefault().EmployeeId,
-                            entry.Date.ToShortDateString(),
-                            entry.Duration,
-                            project.ProjectName ?? string.Empty,
-                            project.ProjectOrgId ?? string.Empty,
-                            project.CustomerName ?? string.Empty,
-                            this.Service.GetCustomerList(this.UserContext.ChosenOrganizationId).Where(c => c.Name == project.CustomerName).FirstOrDefault().CustomerOrgId ?? string.Empty,
-							entry.Description));
-				}
-			}
-			catch (Exception)
-			{
-			}
+            return TimeTrackerService.PrepareCSVExport(data, projects);
 
-			output.Flush();
-			output.BaseStream.Seek(0, SeekOrigin.Begin);
+			//StreamWriter output = new StreamWriter(new MemoryStream());
+			//output.WriteLine(
+			//	string.Format(
+   //                 "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\"",
+			//		Resources.TimeTracker.Controllers.TimeEntry.Strings.LastName,
+			//		Resources.TimeTracker.Controllers.TimeEntry.Strings.FirstName,
+   //                 "Employee ID",
+			//		Resources.TimeTracker.Controllers.TimeEntry.Strings.Date,
+			//		Resources.TimeTracker.Controllers.TimeEntry.Strings.Duration,
+			//		Resources.TimeTracker.Controllers.TimeEntry.Strings.Project,
+   //                 "Project ID",
+			//		Resources.TimeTracker.Controllers.TimeEntry.Strings.Customer,
+   //                 "Customer ID",
+			//		Resources.TimeTracker.Controllers.TimeEntry.Strings.Description));
+			//try
+			//{
+			//	foreach (TimeEntryInfo entry in data)
+			//	{
+   //                 var project = projects.Where(x => x.ProjectId == entry.ProjectId).SingleOrDefault();
+   //                 output.WriteLine(
+   //                     string.Format(
+   //                         "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\"",
+   //                         entry.LastName,
+   //                         entry.FirstName,
+   //                         this.Service.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Where(u => u.UserId == entry.UserId).FirstOrDefault().EmployeeId,
+   //                         entry.Date.ToShortDateString(),
+   //                         entry.Duration,
+   //                         project.ProjectName ?? string.Empty,
+   //                         project.ProjectOrgId ?? string.Empty,
+   //                         project.CustomerName ?? string.Empty,
+   //                         this.Service.GetCustomerList(this.UserContext.ChosenOrganizationId).Where(c => c.Name == project.CustomerName).FirstOrDefault().CustomerOrgId ?? string.Empty,
+			//				entry.Description));
+			//	}
+			//}
+			//catch (Exception)
+			//{
+			//}
 
-			return output;
+			//output.Flush();
+			//output.BaseStream.Seek(0, SeekOrigin.Begin);
+
+			//return output;
 		}
 	}
 }

@@ -92,5 +92,10 @@ namespace AllyisApps.Services
         /// Gets or sets the ID of the project to be used by the organization
         /// </summary>
         public string ProjectOrgId { get; set; }
-	}
+
+        /// <summary>
+        /// Gets or sets the ID of the customer to be used by the organization
+        /// </summary>
+        public string CustomerOrgId { get; set; }
+    }
 }
