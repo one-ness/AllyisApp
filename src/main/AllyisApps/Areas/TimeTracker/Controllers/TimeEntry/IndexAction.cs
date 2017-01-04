@@ -101,7 +101,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// Get all of the projects and initialize their total hours to 0.
 			IList<CompleteProjectInfo> allProjects = Service.GetProjectsByUserAndOrganization(userId, false).ToList(); // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
 			IDictionary<int, ProjectHours> hours = new Dictionary<int, ProjectHours>();
-			IEnumerable<HolidayInfo> holidays = TimeTrackerService.GetHolidays().Where(x => (startDate < x.Date && x.Date < endDate)); // We only care about holidays within the date range
+			IEnumerable<HolidayInfo> holidays = TimeTrackerService.GetHolidays().Where(x => (startDate <= x.Date.Date && x.Date.Date <= endDate)); // We only care about holidays within the date range
 
 			foreach (CompleteProjectInfo proj in allProjects.Where(p => p.ProjectId > 0))
 			{
@@ -278,7 +278,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				date = today.AddDays(-daysIntoTheWeek);
 			}
 
-			return date.Value;
+			return date.Value.Date;
 		}
 
 		private DateTime SetEndingDate(DateTime? date, StartOfWeekEnum startOfWeek)
@@ -294,7 +294,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				date = today.AddDays(daysLeftInWeek);
 			}
 
-			return date.Value;
+			return date.Value.Date;
 		}
 	}
 }
