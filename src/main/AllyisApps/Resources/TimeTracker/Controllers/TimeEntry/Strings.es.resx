@@ -243,4 +243,10 @@
   <data name="SuccessfulSOW" xml:space="preserve">
     <value>Successfully updated start of week.</value>
   </data>
+  <data name="LockDateUpdate" xml:space="preserve">
+    <value>Successfully updated lock date settings.</value>
+  </data>
+  <data name="LockDateUpdateFail" xml:space="preserve">
+    <value>Failed to update lock date settings.</value>
+  </data>
 </root>

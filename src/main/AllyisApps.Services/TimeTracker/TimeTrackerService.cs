@@ -604,5 +604,27 @@ namespace AllyisApps.Services.TimeTracker
 
             return output;
         }
+
+        /// <summary>
+        /// Updates the lock date setttings.
+        /// </summary>
+        /// <param name="lockDateUsed">Whether or not to use a lock date.</param>
+        /// <param name="lockDatePeriod">The lock date period (days/weeks/months).</param>
+        /// <param name="lockDateQuantity">The quantity of the selected period.</param>
+        /// <returns></returns>
+        public bool UpdateLockDate (bool lockDateUsed, string lockDatePeriod, int lockDateQuantity)
+        {
+            if (!new string[] { "Days", "Weeks", "Months" }.Contains(lockDatePeriod))
+            {
+                throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", lockDatePeriod));
+            }
+
+            if (lockDateQuantity < 0)
+            {
+                throw new ArgumentException("Lock date quantity cannot be less than zero.");
+            }
+
+            return DBHelper.UpdateLockDate(this.UserContext.ChosenOrganizationId, lockDateUsed, lockDatePeriod, lockDateQuantity);
+        }
     }
 }

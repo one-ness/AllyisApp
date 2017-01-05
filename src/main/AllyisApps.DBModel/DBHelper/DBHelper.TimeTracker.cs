@@ -520,5 +520,29 @@ namespace AllyisApps.DBModel
 				}
 			}
 		}
+
+        /// <summary>
+        /// Updates lock date settings.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        /// <param name="lockDateUsed"></param>
+        /// <param name="lockDatePeriod"></param>
+        /// <param name="lockDateQuantity"></param>
+        /// <returns></returns>
+        public bool UpdateLockDate (int organizationId, bool lockDateUsed, string lockDatePeriod, int lockDateQuantity)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@organizationID", organizationId);
+            parameters.Add("@LockDateUsed", lockDateUsed);
+            parameters.Add("@LockDatePeriod", lockDatePeriod);
+            parameters.Add("@LockDateQuantity", lockDateQuantity);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                connection.Execute("[TimeTracker].[UpdateLockDate]", parameters, commandType: CommandType.StoredProcedure);
+            }
+
+            return true;
+        }
 	}
 }

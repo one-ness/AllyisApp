@@ -74,15 +74,15 @@
             {
                 @Html.AntiForgeryToken();
                 <div id="NoLockDate" style="margin: 10px">
-                    <input type="radio" name="LDsetting" id="LDsetting" value="NoLD" onclick="disableLD(true)" @(!Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.NoLockDate</text>
+                    <input type="radio" name="LDsetting" id="LDsetting" value="false" onclick="disableLD(true)" @(!Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.NoLockDate</text>
                 </div>
                 <div id="LockDate" style="margin: 10px">
-                    <input type="radio" name="LDsetting" id="LDsetting" value="LD" onclick="disableLD(false)" @(Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.UseLockDate</text>
+                    <input type="radio" name="LDsetting" id="LDsetting" value="true" onclick="disableLD(false)" @(Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.UseLockDate</text>
                     <input type="text" id="LDquantity" name="LDquantity" value="@Model.Settings.LockDateQuantity" style="width: 40px; text-align: right" />
                     <select id="LDperiod" name="LDperiod" value='@(Model.Settings.LockDatePeriod)' >
                         <option value="Days" @(Model.Settings.LockDatePeriod == "Days" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Days</option>
-                        <option value="Days" @(Model.Settings.LockDatePeriod == "Weeks" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Weeks</option>
-                        <option value="Days" @(Model.Settings.LockDatePeriod == "Months" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Months</option>
+                        <option value="Weeks" @(Model.Settings.LockDatePeriod == "Weeks" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Weeks</option>
+                        <option value="Months" @(Model.Settings.LockDatePeriod == "Months" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Months</option>
                     </select>
                 </div>
                 <div>

@@ -17,23 +17,38 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	public partial class TimeEntryController : BaseProductController
 	{
 		/// <summary>
-		/// Sets the lock date for a specific user.
+		/// Sets the lock date for an organization.
 		/// </summary>
-		/// <param name="userId">The User.</param>
-		/// <param name="startDate">The currently-selected start Date.</param>
-		/// <param name="endDate">The currently-selected end Date.</param>
-		/// <param name="lockDate">The Date.</param>
+		/// <param name="LDsetting">Whether or not to use a lock date.</param>
+		/// <param name="LDperiod">The currently-selected period (days/weeks/months).</param>
+		/// <param name="LDquantity">The quantity of the selected period.</param>
 		/// <returns>Provides the view for the user.</returns>
 		[HttpPost]
-		public ActionResult SetLockDate(int userId, int startDate, int endDate, int lockDate)
+		public ActionResult SetLockDate(bool LDsetting, string LDperiod, int LDquantity)
 		{
-			if (!TimeTrackerService.SetLockDate(userId, TimeTrackerService.GetDateTimeFromDays(lockDate)))
-			{
-				// Should only be here because of permission failures
-				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
-			}
-
-			return this.RedirectToAction(ActionConstants.Index, new { userId, startDate, endDate });
+            if (Service.Can(Services.Actions.CoreAction.TimeTrackerEditOthers))
+            {
+                try
+                {
+                    if (TimeTrackerService.UpdateLockDate(LDsetting, LDperiod, LDquantity))
+                    {
+                        Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.LockDateUpdate, Variety.Success));
+                    }
+                    else
+                    {
+                        Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.LockDateUpdateFail, Variety.Warning));
+                    }
+                } catch (System.ArgumentException ex)
+                {
+                    Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.LockDateUpdateFail + ": " + ex.Message, Variety.Warning));
+                }
+                return this.RedirectToAction(ActionConstants.Settings);
+            }
+            else
+            {
+                Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+                return this.RedirectToAction(ActionConstants.Index);
+            }
 		}
 	}
 }
