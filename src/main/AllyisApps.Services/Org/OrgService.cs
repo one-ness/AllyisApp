@@ -960,11 +960,11 @@ namespace AllyisApps.Services
                         }
                         else
                         {
-                            if(!canImportProjects)
-                            {
-                                result.ProjectFailures.Add(string.Format("Could not create project {0}: no corresponding {1}.", knownValue, thisRowHasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName));
-                                continue;
-                            }
+                            //if(!canImportProjects)
+                            //{
+                            //    result.ProjectFailures.Add(string.Format("Could not create project {0}: no corresponding {1}.", knownValue, thisRowHasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName));
+                            //    continue;
+                            //}
 
                             // No customer yet specified. Now, we have to use all the links to try and get customer and the complete project info
                             string[] fields =
