@@ -115,7 +115,6 @@ namespace AllyisApps.Services
 						{
 							case ProductRole.TimeTrackerUser:
 							case ProductRole.TimeTrackerManager:
-							case ProductRole.TimeTrackerAdmin:
 							case ProductRole.ConsultingUser:
 							case ProductRole.ConsultingManager:
 							case ProductRole.ConsultingAdmin:
@@ -135,7 +134,6 @@ namespace AllyisApps.Services
 						switch (subInfo.ProductRole)
 						{
 							case ProductRole.TimeTrackerManager:
-							case ProductRole.TimeTrackerAdmin:
 							case ProductRole.ConsultingManager:
 							case ProductRole.ConsultingAdmin:
 								result = true;
@@ -157,7 +155,6 @@ namespace AllyisApps.Services
 						switch (subInfo.ProductRole)
 						{
 							case ProductRole.TimeTrackerManager:
-							case ProductRole.TimeTrackerAdmin:
 							case ProductRole.ConsultingManager:
 							case ProductRole.ConsultingAdmin:
 								result = true;
@@ -181,7 +178,6 @@ namespace AllyisApps.Services
 						{
 							case ProductRole.TimeTrackerUser:
 							case ProductRole.TimeTrackerManager:
-							case ProductRole.TimeTrackerAdmin:
 								result = true;
 								break;
 
@@ -198,7 +194,6 @@ namespace AllyisApps.Services
 						switch (subInfo.ProductRole)
 						{
 							case ProductRole.TimeTrackerManager:
-							case ProductRole.TimeTrackerAdmin:
 								result = true;
 								break;
 

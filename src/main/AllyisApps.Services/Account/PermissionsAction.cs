@@ -28,7 +28,7 @@ namespace AllyisApps.Services
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the subscription Id for Timetracker if this organization has one.
+		/// Gets or sets the subscription Id for Timetracker if this organization has one.TimeTrackerRole
 		/// </summary>
 		public int TimeTrackerSubscriptionId { get; set; }
 

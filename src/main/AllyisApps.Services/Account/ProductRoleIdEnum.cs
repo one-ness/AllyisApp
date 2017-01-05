@@ -25,11 +25,6 @@ namespace AllyisApps.Services
 		TimetrackerManager = 2,
 
 		/// <summary>
-		/// Role: Admin.
-		/// </summary>
-		TimetrackerAdmin = 3,
-
-		/// <summary>
 		/// Role: User.
 		/// </summary>
 		ConsultingUser = 4,

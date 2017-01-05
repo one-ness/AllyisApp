@@ -27,11 +27,6 @@ namespace AllyisApps.Services
 		TimeTrackerManager = ProductRoleIdEnum.TimetrackerManager,
 
 		/// <summary>
-		/// TimeTracker Admin.
-		/// </summary>
-		TimeTrackerAdmin = ProductRoleIdEnum.TimetrackerAdmin,
-
-		/// <summary>
 		/// TimerTracker User.
 		/// </summary>
 		ConsultingUser = ProductRoleIdEnum.ConsultingUser,
