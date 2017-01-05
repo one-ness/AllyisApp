@@ -139,7 +139,7 @@
     <value>Duration cannot exceed 24 hours in a day.</value>
   </data>
   <data name="CanOnlyEdit" xml:space="preserve">
-    <value>You can only edit last week, this week, and any date up till the end of next month.</value>
+    <value>You can only edit dates after</value>
   </data>
   <data name="CantViewOtherTimeCards" xml:space="preserve">
     <value>You do not have the privelege of viewing other people's time cards.</value>

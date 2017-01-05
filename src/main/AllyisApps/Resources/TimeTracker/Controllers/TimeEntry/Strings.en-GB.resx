@@ -157,7 +157,7 @@
     <value>Duration cannot exceed 24 hours in a day.</value>
   </data>
   <data name="CanOnlyEdit" xml:space="preserve">
-    <value>You can only edit last week, this week, and any date up till the end of next month.</value>
+    <value>You can only edit dates after</value>
   </data>
   <data name="DurationFormat" xml:space="preserve">
     <value>You must enter the time duration as HH:MM or H.HH format.</value>

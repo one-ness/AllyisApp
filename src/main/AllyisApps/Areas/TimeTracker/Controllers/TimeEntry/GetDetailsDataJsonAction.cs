@@ -62,7 +62,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				manager,
 				TimeTrackerService.GetDayFromDateTime(startingDate),
 				TimeTrackerService.GetDayFromDateTime(endingDate),
-				TimeTrackerService.GetLockDate(userId));
+				TimeTrackerService.GetLockDate());
 			if (model.Projects.Count() == 0 || model.Projects == null)
 			{
 				return this.Json(new

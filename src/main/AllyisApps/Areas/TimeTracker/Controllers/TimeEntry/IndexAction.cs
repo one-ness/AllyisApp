@@ -61,7 +61,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 													manager,
 													startDate,
 													endDate,
-													TimeTrackerService.GetLockDate(userId));
+													TimeTrackerService.GetLockDate());
 
 				return this.View(model);
 			}
@@ -132,7 +132,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Users = users,
 				TotalUsers = users.Count(),
 				CurrentUser = users.Where(x => x.UserId == userId).Single(),
-				LockDate = TimeTrackerService.GetDayFromDateTime(TimeTrackerService.GetLockDate(userId))
+				LockDate = lockDate == null ? -1 : TimeTrackerService.GetDayFromDateTime(lockDate.Value)
 			};
 
 			// Initialize the starting dates and get all of the time entries within that date range.

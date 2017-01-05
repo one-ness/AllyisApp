@@ -175,6 +175,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			TimeEntryInfo entry = TimeTrackerService.GetTimeEntry(timeEntryId);
 
+            DateTime? lockDate = TimeTrackerService.GetLockDate();
 			return new EditTimeEntryViewModel
 			{
 				UserId = entry.UserId,
@@ -185,7 +186,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Duration = string.Format("{0:D2}:{1:D2}", (int)entry.Duration, (int)Math.Round((entry.Duration - (int)entry.Duration) * MinutesInHour, 0)),
 				Description = entry.Description,
 				LockSaved = entry.LockSaved,
-				LockDate = TimeTrackerService.GetDayFromDateTime(TimeTrackerService.GetLockDate(entry.UserId)),
+				LockDate = lockDate == null ? -1 : TimeTrackerService.GetDayFromDateTime(lockDate.Value),
 				IsManager = Service.GetProductRoleForUser(ProductNameKeyConstants.TimeTracker, entry.UserId) == "Manager"
 			};
 		}

@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [TimeTracker].[GetLockDate]
-	@OrganizationId INT,
-	@UserId INT
+	@OrganizationId INT
 AS
 	SET NOCOUNT ON;
-	SELECT [TTLockDate] FROM [Auth].[OrganizationUser] WITH (NOLOCK) WHERE [OrganizationId] = @OrganizationId AND [UserId] = @UserId;
+	SELECT [LockDateUsed], [LockDatePeriod], [LockDateQuantity] FROM [TimeTracker].[Setting] WITH (NOLOCK) WHERE [OrganizationId] = @OrganizationId;

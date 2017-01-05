@@ -40,7 +40,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                     }
                 } catch (System.ArgumentException ex)
                 {
-                    Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.LockDateUpdateFail + ": " + ex.Message, Variety.Warning));
+                    Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.LockDateUpdateFail + " " + ex.Message, Variety.Warning));
                 }
                 return this.RedirectToAction(ActionConstants.Settings);
             }

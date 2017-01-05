@@ -99,6 +99,7 @@
     <Compile Include="Billing\SkuDBEntity.cs" />
     <Compile Include="Shared\LanguageDBEntity.cs" />
     <Compile Include="TimeTracker\HolidayDBEntity.cs" />
+    <Compile Include="TimeTracker\LockDateDBEntity.cs" />
     <Compile Include="TimeTracker\PayClassDBEntity.cs" />
     <Compile Include="TimeTracker\SettingDBEntity.cs" />
     <Compile Include="TimeTracker\TimeEntryDBEntity.cs" />

@@ -142,7 +142,7 @@ namespace AllyisApps.Resources.TimeTracker.Controllers.TimeEntry {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can only edit last week, this week, and any date up till the end of next month..
+        ///   Looks up a localized string similar to You can only edit dates after.
         /// </summary>
         public static string CanOnlyEdit {
             get {

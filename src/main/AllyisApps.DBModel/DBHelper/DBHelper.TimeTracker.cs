@@ -47,30 +47,34 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Returns the lock date for a specific organization/user.
+		/// Returns the lock date for a specific organization.
 		/// </summary>
 		/// <param name="organizationID">The Organization Id.</param>
-		/// <param name="userID">The User Id.</param>
 		/// <returns>The lock date.</returns>
-		public DateTime GetLockDate(int organizationID, int userID)
+		public DateTime? GetLockDate(int organizationID)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationID", organizationID);
-			parameters.Add("@userID", userID);
-			if (organizationID < 1)
-			{
-				return DateTime.Now.AddDays(-7 - (int)DateTime.Now.DayOfWeek);
-			}
+			//if (organizationID < 1)
+			//{
+			//	return DateTime.Now.AddDays(-7 - (int)DateTime.Now.DayOfWeek);
+			//}
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				DateTime? lockDate = connection.Query<DateTime?>("[TimeTracker].[GetLockDate]", parameters, commandType: CommandType.StoredProcedure).Single();
-				if (!lockDate.HasValue)
-				{
-					return DateTime.Now.AddDays(-7 - (int)DateTime.Now.DayOfWeek);
-				}
+				LockDateDBEntity lockDate = connection.Query<LockDateDBEntity>("[TimeTracker].[GetLockDate]", parameters, commandType: CommandType.StoredProcedure).Single();
+				//if (!lockDate.HasValue)
+				//{
+				//	return DateTime.Now.AddDays(-7 - (int)DateTime.Now.DayOfWeek);
+				//}
 
-				return lockDate.Value;
+                if (lockDate != null && lockDate.LockDateUsed)
+                {
+                    DateTime date = lockDate.LockDatePeriod.Equals("Months") ? DateTime.Now.AddMonths(-1 * lockDate.LockDateQuantity) :
+                        DateTime.Now.AddDays(-1 * lockDate.LockDateQuantity * (lockDate.LockDatePeriod.Equals("Weeks") ? 7 : 1));
+                    return date;
+                }
+				return null;
 			}
 		}
 

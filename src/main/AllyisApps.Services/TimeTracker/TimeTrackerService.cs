@@ -227,20 +227,12 @@ namespace AllyisApps.Services.TimeTracker
 		}
 
 		/// <summary>
-		/// Gets the lock date for an organization/user.
+		/// Gets the lock date for the current organization.
 		/// </summary>
-		/// <param name="userId">User Id.</param>
 		/// <returns>Lock date.</returns>
-		public DateTime GetLockDate(int userId)
+		public DateTime? GetLockDate()
 		{
-			#region Validation
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-			}
-			#endregion Validation
-
-			return DBHelper.GetLockDate(UserContext.ChosenOrganizationId, userId);
+			return DBHelper.GetLockDate(UserContext.ChosenOrganizationId);
 		}
 
 		/// <summary>

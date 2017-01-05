@@ -65,7 +65,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					durationOther += otherEntry.Duration;
 				}
 
-				if (durationResult + durationOther > 24.00)
+                DateTime? lockDate = TimeTrackerService.GetLockDate();
+                if (durationResult + durationOther > 24.00)
 				{
 					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotExceed24);
 				}
@@ -77,9 +78,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.MustSelectPayClass);
 				}
-				else if (model.Date <= TimeTrackerService.GetDayFromDateTime(TimeTrackerService.GetLockDate(model.UserId)))
+				else if (model.Date <= (lockDate == null ? -1 : TimeTrackerService.GetDayFromDateTime(lockDate.Value)))
 				{
-					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.CanOnlyEdit);
+					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 				}
 
 				int id = TimeTrackerService.CreateTimeEntry(new TimeEntryInfo()
