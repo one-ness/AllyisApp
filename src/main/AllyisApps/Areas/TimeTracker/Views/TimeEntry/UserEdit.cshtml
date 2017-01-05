@@ -18,8 +18,8 @@
                 @Html.HiddenFor(m => m.UserId)
                 <div class="form-group">
                     <label for="Name">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Name</label>
-                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(x => x.UserName)
+                    @Html.HiddenFor(m => m.UserName)
+                    <span class="form-control">@Model.UserName</span>
                 </div>
                 <div id="swapper-ui" class="swapper-ui">
                     <div class="left">

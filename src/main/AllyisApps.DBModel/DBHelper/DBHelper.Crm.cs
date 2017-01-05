@@ -263,6 +263,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@FaxNumber", customer.FaxNumber);
 			parameters.Add("@Website", customer.Website);
 			parameters.Add("@EIN", customer.EIN);
+            parameters.Add("@OrgId", customer.CustomerOrgId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -408,18 +409,24 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="projectId">The Project's Id.</param>
 		/// <param name="name">The new name of the project.</param>
+        /// <param name="orgId">The new orgId of the project.</param>
 		/// <param name="type">The pricing type of the project.</param>
 		/// <param name="start">The start date assigned to the project.</param>
 		/// <param name="end">The end date assigned to the project.</param>
 		/// <param name="userIDs">The updated list of project users, by their IDs.</param>
-		public void UpdateProjectAndUsers(int projectId, string name, string type, DateTime start, DateTime end, IEnumerable<int> userIDs)
+		public void UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime start, DateTime end, IEnumerable<int> userIDs)
 		{
 			if (string.IsNullOrWhiteSpace(name))
 			{
 				throw new ArgumentException("Name cannot be null, empty, or whitespace.");
-			}
+            }
 
-			DataTable userIDsTable = new DataTable();
+            if (string.IsNullOrWhiteSpace(orgId))
+            {
+                throw new ArgumentException("OrgId cannot be null, empty, or whitespace.");
+            }
+
+            DataTable userIDsTable = new DataTable();
 			userIDsTable.Columns.Add("userId", typeof(int));
 			foreach (int userID in userIDs)
 			{
@@ -429,7 +436,8 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@ProjectId", projectId);
 			parameters.Add("@Name", name);
-			parameters.Add("@PriceType", type);
+            parameters.Add("@OrgId", orgId);
+            parameters.Add("@PriceType", type);
 			parameters.Add("@StartingDate", start.ToShortDateString());
 			parameters.Add("@EndingDate", end.ToShortDateString());
 			parameters.Add("@UserIDs", userIDsTable.AsTableValuedParameter("[Auth].[UserTable]"));

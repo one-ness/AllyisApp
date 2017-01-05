@@ -45,7 +45,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					OrganizationId = customer.OrganizationId,
 					OrganizationName = Service.GetOrganization(customer.OrganizationId).Name,
 					CustomerID = id,
-					ValidCountries = Service.ValidCountries()
+					ValidCountries = Service.ValidCountries(),
+                    CustomerOrgId = customer.CustomerOrgId
 				});
 			}
 
@@ -77,7 +78,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					ContactPhoneNumber = model.ContactPhoneNumber,
 					FaxNumber = model.FaxNumber,
 					Website = model.Website,
-					EIN = model.EIN
+					EIN = model.EIN,
+                    CustomerOrgId = model.CustomerOrgId
 				}))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.CustomerDetailsUpdated, Variety.Success));

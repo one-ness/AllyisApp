@@ -10,7 +10,8 @@
     @ContactPhoneNumber VARCHAR(50),
 	@FaxNumber VARCHAR(50),
 	@Website NVARCHAR(50),
-	@EIN NVARCHAR(50)
+	@EIN NVARCHAR(50),
+	@OrgId NVARCHAR(16)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -25,7 +26,8 @@ BEGIN
 		[ContactPhoneNumber] = @ContactPhoneNumber, 
 		[FaxNumber] = @FaxNumber,
 		[Website] = @Website,
-		[EIN] = @EIN
+		[EIN] = @EIN,
+		[CustomerOrgId] = @OrgId
 	WHERE [CustomerId] = @CustomerId 
 		AND [IsActive] = 1
 END

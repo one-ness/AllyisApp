@@ -19,17 +19,19 @@
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true)
                 <div class="form-group">
-                    <label for="Name">@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Name</label>
+                    @Html.ReqLabelFor(m => m.ProjectName, @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Name)
+                    @*<label for="Name">@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Name</label>*@
                     @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
                     @Html.ValidationMessageFor(x => x.ProjectName)
                 </div>
-                @if (Model.IsCreating)
-                {
+                @*@if (Model.IsCreating)
+                {*@
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.ProjectOrgId, AllyisApps.Resources.TimeTracker.Views.Project.Strings.ProjectOrgId)
                         @Html.TextBoxFor(m => m.ProjectOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.ProjectOrgId })
+                        @Html.ValidationMessageFor(x => x.ProjectOrgId)
                     </div>
-                }
+                @*}
                 else
                 {
                     <div class="form-group">
@@ -37,7 +39,7 @@
                         <span class="form-control">@Model.ProjectOrgId</span>
                         @Html.HiddenFor(m => m.ProjectOrgId)
                     </div>
-                }
+                }*@
                 <div id="swapper-ui" class="swapper-ui">
                     <div class="left">
                         <label>@AllyisApps.Resources.TimeTracker.Views.Project.Strings.OffProj</label>

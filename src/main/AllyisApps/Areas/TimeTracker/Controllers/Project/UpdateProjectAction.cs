@@ -26,9 +26,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (string.IsNullOrWhiteSpace(project.ProjectName))
 			{
 				throw new InvalidOperationException("Project requires a name. Cannot update.");
-			}
+            }
 
-			if (project.OrganizationId == null)
+            if (string.IsNullOrWhiteSpace(project.ProjectOrgId))
+            {
+                throw new InvalidOperationException("Project requires a project id. Cannot update.");
+            }
+
+            if (project.OrganizationId == null)
 			{
 				if (UserContext.ChosenOrganizationId == 0)
 				{
@@ -41,6 +46,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			Service.UpdateProjectAndUsers(
 				project.ProjectId,
 				project.ProjectName,
+                project.ProjectOrgId,
 				project.PriceType,
 				TimeTrackerService.GetDateTimeFromDays(project.StartDate),
 				TimeTrackerService.GetDateTimeFromDays(project.EndDate),

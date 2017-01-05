@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [Crm].[UpdateProjectAndUsers]
 	@ProjectId INT,
 	@Name NVARCHAR(MAX),
+	@OrgId NVARCHAR(16),
 	@PriceType NVARCHAR(20),
     @StartingDate DATE,
     @EndingDate DATE,
@@ -35,6 +36,7 @@ BEGIN
 		UPDATE [Crm].[Project]
 		SET 
 			[Name] = @Name,
+			[ProjectOrgId] = @OrgId,
 			[Type] = @PriceType,
 			[StartUTC] = @StartingDate,
 			[EndUTC] = @EndingDate
