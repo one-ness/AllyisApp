@@ -223,6 +223,15 @@ namespace AllyisApps.Resources.TimeTracker.Views.TimeEntry {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to days.
+        /// </summary>
+        public static string Days {
+            get {
+                return ResourceManager.GetString("Days", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
@@ -421,6 +430,15 @@ namespace AllyisApps.Resources.TimeTracker.Views.TimeEntry {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to months.
+        /// </summary>
+        public static string Months {
+            get {
+                return ResourceManager.GetString("Months", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string Name {
@@ -453,6 +471,15 @@ namespace AllyisApps.Resources.TimeTracker.Views.TimeEntry {
         public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No lock date.
+        /// </summary>
+        public static string NoLockDate {
+            get {
+                return ResourceManager.GetString("NoLockDate", resourceCulture);
             }
         }
         
@@ -700,6 +727,15 @@ namespace AllyisApps.Resources.TimeTracker.Views.TimeEntry {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow editing of the past.
+        /// </summary>
+        public static string UseLockDate {
+            get {
+                return ResourceManager.GetString("UseLockDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Users.
         /// </summary>
         public static string Users {
@@ -741,6 +777,15 @@ namespace AllyisApps.Resources.TimeTracker.Views.TimeEntry {
         public static string WeekInitial {
             get {
                 return ResourceManager.GetString("WeekInitial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to weeks.
+        /// </summary>
+        public static string Weeks {
+            get {
+                return ResourceManager.GetString("Weeks", resourceCulture);
             }
         }
         

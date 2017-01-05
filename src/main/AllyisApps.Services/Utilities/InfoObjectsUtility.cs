@@ -180,7 +180,10 @@ namespace AllyisApps.Services.Utilities
 				OvertimeHours = settings.OvertimeHours,
 				OvertimeMultiplier = settings.OvertimeMultiplier,
 				OvertimePeriod = settings.OvertimePeriod,
-				StartOfWeek = settings.StartOfWeek
+				StartOfWeek = settings.StartOfWeek,
+                LockDatePeriod = settings.LockDatePeriod,
+                LockDateQuantity = settings.LockDateQuantity,
+                LockDateUsed = settings.LockDateUsed
 			};
 		}
 

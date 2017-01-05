@@ -16,6 +16,9 @@ namespace AllyisApps.DBModel.TimeTracker
 		private int pOvertimeHours;
 		private string pOvertimePeriod;
 		private decimal pOvertimeMultiplier;
+        private bool pLockDateUsed;
+        private string pLockDatePeriod;
+        private int pLockDateQuantity;
 
 		/// <summary>
 		/// Gets or sets the OrganizationId.
@@ -95,6 +98,54 @@ namespace AllyisApps.DBModel.TimeTracker
 			{
 				this.ApplyPropertyChange<SettingDBEntity, decimal>(ref this.pOvertimeMultiplier, (SettingDBEntity x) => x.OvertimeMultiplier, value);
 			}
-		}
-	}
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to use a lock date.
+        /// </summary>
+        public bool LockDateUsed
+        {
+            get
+            {
+                return pLockDateUsed;
+            }
+
+            set
+            {
+                this.ApplyPropertyChange<SettingDBEntity, bool>(ref this.pLockDateUsed, (SettingDBEntity x) => x.LockDateUsed, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the LockDatePeriod.
+        /// </summary>
+        public string LockDatePeriod
+        {
+            get
+            {
+                return pLockDatePeriod;
+            }
+
+            set
+            {
+                this.ApplyPropertyChange<SettingDBEntity, string>(ref this.pLockDatePeriod, (SettingDBEntity x) => x.LockDatePeriod, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the LockDateQuantity.
+        /// </summary>
+        public int LockDateQuantity
+        {
+            get
+            {
+                return pLockDateQuantity;
+            }
+
+            set
+            {
+                this.ApplyPropertyChange<SettingDBEntity, int>(ref this.pLockDateQuantity, (SettingDBEntity x) => x.LockDateQuantity, value);
+            }
+        }
+    }
 }

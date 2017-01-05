@@ -65,6 +65,32 @@
             </div>
         </div>
     </div>
+    <div class="panel panel-info" style="width: 400px; margin: 10px auto;">
+        <div class="panel-heading">
+            <h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.LockDate</h1>
+        </div>
+        <div class="panel-body" id="LockDate">
+            @using (Html.BeginForm(ActionConstants.SetLockDate, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken();
+                <div id="NoLockDate" style="margin: 10px">
+                    <input type="radio" name="LDsetting" id="LDsetting" value="NoLD" onclick="disableLD(true)" @(!Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.NoLockDate</text>
+                </div>
+                <div id="LockDate" style="margin: 10px">
+                    <input type="radio" name="LDsetting" id="LDsetting" value="LD" onclick="disableLD(false)" @(Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.UseLockDate</text>
+                    <input type="text" id="LDquantity" name="LDquantity" value="@Model.Settings.LockDateQuantity" style="width: 40px; text-align: right" />
+                    <select id="LDperiod" name="LDperiod" value='@(Model.Settings.LockDatePeriod)' >
+                        <option value="Days" @(Model.Settings.LockDatePeriod == "Days" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Days</option>
+                        <option value="Days" @(Model.Settings.LockDatePeriod == "Weeks" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Weeks</option>
+                        <option value="Days" @(Model.Settings.LockDatePeriod == "Months" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Months</option>
+                    </select>
+                </div>
+                <div>
+                    <input class="pull-right btn btn-primary" type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save />
+                </div>
+            }
+        </div>
+    </div>
 </div>
 <div class="col-md-6">
     <div class="panel panel-info" style="width: 400px; margin: 10px auto;">
@@ -152,6 +178,9 @@
     <script type="text/javascript">
         function hideOT(hideIt) {
             $('#OTSettings').css('visibility', hideIt ? 'hidden' : 'visible');
+        }
+        function disableLD(isDisabling) {
+
         }
     </script>
 }

@@ -35,5 +35,20 @@ namespace AllyisApps.Services.TimeTracker
 		/// Gets or sets the OvertimeMultiplier.
 		/// </summary>
 		public decimal OvertimeMultiplier { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to use a lock date.
+        /// </summary>
+        public bool LockDateUsed { get; set; }
+
+        /// <summary>
+        /// Gets or sets the lock date period (days/weeks/months).
+        /// </summary>
+        public string LockDatePeriod { get; set; }
+
+        /// <summary>
+        /// Gets or sets the lock date quantity.
+        /// </summary>
+        public int LockDateQuantity { get; set; }
 	}
 }

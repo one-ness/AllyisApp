@@ -354,4 +354,19 @@
   <data name="PayClass" xml:space="preserve">
     <value>Pay Class</value>
   </data>
+  <data name="NoLockDate" xml:space="preserve">
+    <value>No lock date</value>
+  </data>
+  <data name="UseLockDate" xml:space="preserve">
+    <value>Allow editing of the past</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>days</value>
+  </data>
+  <data name="Months" xml:space="preserve">
+    <value>months</value>
+  </data>
+  <data name="Weeks" xml:space="preserve">
+    <value>weeks</value>
+  </data>
 </root>

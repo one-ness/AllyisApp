@@ -351,4 +351,19 @@
   <data name="PayClass" xml:space="preserve">
     <value>Clase de Pago</value>
   </data>
+  <data name="NoLockDate" xml:space="preserve">
+    <value>Sin fecha de bloqueo</value>
+  </data>
+  <data name="UseLockDate" xml:space="preserve">
+    <value>Permitir la edición del pasado</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>días</value>
+  </data>
+  <data name="Months" xml:space="preserve">
+    <value>meses</value>
+  </data>
+  <data name="Weeks" xml:space="preserve">
+    <value>semanas</value>
+  </data>
 </root>
