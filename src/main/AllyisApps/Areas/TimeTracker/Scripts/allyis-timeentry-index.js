@@ -53,7 +53,8 @@ function ajaxDelete(form_child, delete_action_url) {
         data: data,
         timeout: 5000,
         dataType: "json"})
-    .done(function(res) {
+    .done(function (res) {
+        ajaxHandleOverridingResponses(res, { form_element: form_element });
         if (res.status == 'success')
         {
             form_wrap.css({ 'z-index': -1000 }).transition({ 'max-height': 0, duration: 500, easing: 'linear' },
@@ -448,6 +449,5 @@ function drp_prevWeek() {
 
     newStart.setTime(newStart.getTime() + (startOffsetChange * 3600000));
     newEnd.setTime(newEnd.getTime() + (endOffsetChange * 3600000));
-    console.log("setrange: " + newStart + ", " + newEnd);
     drp.daterangepicker("setRange", {start: newStart, end: newEnd });
 }

@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Web.Mvc;
 
 using AllyisApps.Areas.TimeTracker.Core;
@@ -27,9 +28,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>JSON Status. {status: 'success|error', message: 'a string'}.</returns>
 		[HttpPost]
 		public ActionResult DeleteTimeEntryJson(DeleteTimeEntryViewModel model)
-		{
-			// Check for permissions
-			TimeEntryInfo entry = TimeTrackerService.GetTimeEntry(model.TimeEntryId);
+        {
+            ProductRole role = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).SingleOrDefault()
+                .UserSubscriptionInfoList.Where(s => s.SubscriptionId == UserContext.ChosenSubscriptionId).FirstOrDefault().ProductRole;
+
+            // Check for permissions
+            TimeEntryInfo entry = TimeTrackerService.GetTimeEntry(model.TimeEntryId);
 			if (entry.UserId == Convert.ToInt32(UserContext.UserId))
 			{
 				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
@@ -60,9 +64,23 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					e = new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.AlreadyApprovedCannotEdit),
 					reason = "ALREADY_APPROVED"
 				});
-			}
+            }
 
-			TimeTrackerService.DeleteTimeEntry(model.TimeEntryId);
+            // Time entry is locked
+            DateTime? lockDate = TimeTrackerService.GetLockDate();
+            if (role != ProductRole.TimeTrackerManager && entry.Date <= (lockDate == null ? DateTime.MinValue : lockDate.Value))
+            {
+                string errorMessage = Resources.TimeTracker.Controllers.TimeEntry.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture);
+                return this.Json(new
+                {
+                    status = "error",
+                    message = errorMessage,
+                    e = new ArgumentException(errorMessage),
+                    reason = "DATE_LOCKED"
+                });
+            }
+
+            TimeTrackerService.DeleteTimeEntry(model.TimeEntryId);
 			return this.Json(new { status = "success" });
 		}
 	}

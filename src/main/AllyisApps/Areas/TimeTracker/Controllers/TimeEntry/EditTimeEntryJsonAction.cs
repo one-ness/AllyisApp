@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 
@@ -113,8 +114,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="model"><see cref="EditTimeEntryViewModel"/> to use for edit.</param>
 		/// <param name="canManage">Whether user has permission to manage time entry.</param>
 		public void EditTimeEntry(EditTimeEntryViewModel model, bool canManage)
-		{
-			float? durationResult;
+        {
+            ProductRole role = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).SingleOrDefault()
+                .UserSubscriptionInfoList.Where(s => s.SubscriptionId == UserContext.ChosenSubscriptionId).FirstOrDefault().ProductRole;
+
+            float? durationResult;
 			model.IsManager = canManage;
 			if (!(durationResult = this.ParseDuration(model.Duration)).HasValue)
 			{
@@ -149,12 +153,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.MustSelectPayClass);
 			}
 
-			if (model.Date <= model.LockDate && !canManage)
-			{
-				throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotEditDate);
-			}
+            DateTime? lockDate = TimeTrackerService.GetLockDate();
+            if (role != ProductRole.TimeTrackerManager && model.Date <= (lockDate == null ? -1 : TimeTrackerService.GetDayFromDateTime(lockDate.Value)))
+            {
+                throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
+            }
 
-			TimeTrackerService.UpdateTimeEntry(new TimeEntryInfo()
+            TimeTrackerService.UpdateTimeEntry(new TimeEntryInfo()
 			{
 				TimeEntryId = model.TimeEntryId,
 				ProjectId = model.ProjectId,
