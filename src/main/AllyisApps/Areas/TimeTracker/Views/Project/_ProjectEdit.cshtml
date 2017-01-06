@@ -43,7 +43,7 @@
                 <div id="swapper-ui" class="swapper-ui">
                     <div class="left">
                         <label>@AllyisApps.Resources.TimeTracker.Views.Project.Strings.OffProj</label>
-                        <input type="text" placeholder=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder class="form-control" />
+                        @*<input type="text" placeholder=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder class="form-control" />*@
                         @*
                             Create a multi-select list that is populated from SubscriptionUsers
                             Uses Javascript and the add/remove buttons to add and remove items from this listbox
@@ -60,7 +60,7 @@
                     </div>
                     <div class="right">
                         <label>@AllyisApps.Resources.TimeTracker.Views.Project.Strings.OnProj</label>
-                        <input type="text" placeholder="@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder" class="form-control" />
+                        @*<input type="text" placeholder="@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder" class="form-control" />*@
                         @*
                             Create a multi-select list that is populated from ProjectUsers and binds all selected items to SelectedProjectUserIds
                             On Submit, all items in this list become selected, so the whole list is bound to the model
@@ -81,7 +81,9 @@
                     <div class="col-xs-8 text-left">
                         @Html.HiddenFor(m => m.StartDate)
                         @Html.HiddenFor(m => m.EndDate)
-                        <input type="text" name="daterange" id="daterange" class="form-control" value="" />
+                        <span class="col-xs-5" style="padding: 0px;"><input type="text" name="startdate" id="startdate" class="form-control" value="" /></span>
+                        <span class="col-xs-1" style="vertical-align: middle; height: 34px; line-height: 34px;">-</span>
+                        <span class="col-xs-5" style="padding: 0px;"><input type="text" name="enddate" id="enddate" class="form-control" value="" /></span>
                     </div>
 
                     @{

@@ -375,29 +375,29 @@ init_drp(
 );
 
 // Date range picker for lock date
-init_drp(
-    "LockDate",
-    [{
-        text: "Today",
-        dateStart: function() { return moment() },
-        dateEnd: function() { return moment() }
-    }, {
-        text: "Two Weeks Ago",
-        dateStart: function() { return moment().subtract(6, 'days') },
-        dateEnd: function() { return moment().subtract(6, 'days') }
-    }],
-    "LockDate",
-    null,
-    1,
-    function () {
-        if (this.notFirstTimeLockDate) {
-            $('#LockDate').parents("form:first").submit();
-        }
-        this.notFirstTimeLockDate = true;
-    },
-    model_lockdate,
-    null
-);
+//init_drp(
+//    "LockDate",
+//    [{
+//        text: "Today",
+//        dateStart: function() { return moment() },
+//        dateEnd: function() { return moment() }
+//    }, {
+//        text: "Two Weeks Ago",
+//        dateStart: function() { return moment().subtract(6, 'days') },
+//        dateEnd: function() { return moment().subtract(6, 'days') }
+//    }],
+//    "LockDate",
+//    null,
+//    1,
+//    function () {
+//        if (this.notFirstTimeLockDate) {
+//            $('#LockDate').parents("form:first").submit();
+//        }
+//        this.notFirstTimeLockDate = true;
+//    },
+//    model_lockdate,
+//    null
+//);
 
 function drp_nextWeek() {
     var drp = $('#daterange');

@@ -346,41 +346,33 @@ function formChange() {
 
 $('form').change(function () { formChange(); });
 
-// Date range picker
+// Date range pickers
 init_drp(
-    "daterange",
+    "startdate",
     [{
         text: "All Time",
-        dateStart: function () { return moment(mindate_shortstring, 'MM/DD/YYYY') },
-        dateEnd: function () { return moment(maxdate_shortstring, 'MM/DD/YYYY') }
-    }, {
-        text: "Reset Start",
-        dateStart: function () { return moment(mindate_shortstring, 'MM/DD/YYYY') },
-        dateEnd: function () { return moment($('#daterange').daterangepicker("getRange").end) }
-    }, {
-        text: "Reset End",
-        dateStart: function () { return moment($('#daterange').daterangepicker("getRange").start) },
-        dateEnd: function () { return moment(maxdate_shortstring, 'MM/DD/YYYY') }
+        dateStart: function () { return moment('1754-01-01 00:00:00') },
+        dateEnd: function () { return moment('1754-01-01 00:00:00') }
     },{
         text: "This Month",
         dateStart: function () { return moment().startOf('month') },
-        dateEnd: function () { return moment().endOf('month') }
+        dateEnd: function () { return moment().startOf('month') }
     }, {
         text: "Last Month",
         dateStart: function () { return moment().subtract(1, 'month').startOf('month') },
-        dateEnd: function () { return moment().subtract(1, 'month').endOf('month') }
+        dateEnd: function () { return moment().subtract(1, 'month').startOf('month') }
     }, {
         text: "This quarter",
         dateStart: function () { return moment().startOf('quarter') },
-        dateEnd: function () { return moment().endOf('quarter') }
+        dateEnd: function () { return moment().startOf('quarter') }
     }, {
         text: "Last quarter",
         dateStart: function () { return moment().subtract(1, 'quarter').startOf('quarter') },
-        dateEnd: function () { return moment().subtract(1, 'quarter').endOf('quarter') }
+        dateEnd: function () { return moment().subtract(1, 'quarter').startOf('quarter') }
     }],
     "StartDate",
-    "EndDate",
-    2,
+    null,
+    1,
     function () {
         setTimeout(
             function () {
@@ -389,5 +381,85 @@ init_drp(
         );
     },
     model_startdate,
-    model_enddate
+    null
 );
+init_drp(
+    "enddate",
+    [{
+        text: "All Time",
+        dateStart: function () { return moment(maxdate_shortstring, 'MM/DD/YYYY') },
+        dateEnd: function () { return moment(maxdate_shortstring, 'MM/DD/YYYY') }
+    }, {
+        text: "This Month",
+        dateStart: function () { return moment().endOf('month') },
+        dateEnd: function () { return moment().endOf('month') }
+    }, {
+        text: "Last Month",
+        dateStart: function () { return moment().subtract(1, 'month').endOf('month') },
+        dateEnd: function () { return moment().subtract(1, 'month').endOf('month') }
+    }, {
+        text: "This quarter",
+        dateStart: function () { return moment().endOf('quarter') },
+        dateEnd: function () { return moment().endOf('quarter') }
+    }, {
+        text: "Last quarter",
+        dateStart: function () { return moment().subtract(1, 'quarter').endOf('quarter') },
+        dateEnd: function () { return moment().subtract(1, 'quarter').endOf('quarter') }
+    }],
+    "EndDate",
+    null,
+    1,
+    function () {
+        setTimeout(
+            function () {
+                formChange();
+            }, 100
+        );
+    },
+    model_enddate,
+    null
+);
+//init_drp(
+//    "daterange",
+//    [{
+//        text: "All Time",
+//        dateStart: function () { return moment(mindate_shortstring, 'MM/DD/YYYY') },
+//        dateEnd: function () { return moment(maxdate_shortstring, 'MM/DD/YYYY') }
+//    }, {
+//        text: "Reset Start",
+//        dateStart: function () { return moment(mindate_shortstring, 'MM/DD/YYYY') },
+//        dateEnd: function () { return moment($('#daterange').daterangepicker("getRange").end) }
+//    }, {
+//        text: "Reset End",
+//        dateStart: function () { return moment($('#daterange').daterangepicker("getRange").start) },
+//        dateEnd: function () { return moment(maxdate_shortstring, 'MM/DD/YYYY') }
+    //},{
+    //    text: "This Month",
+    //    dateStart: function () { return moment().startOf('month') },
+    //    dateEnd: function () { return moment().endOf('month') }
+    //}, {
+    //    text: "Last Month",
+    //    dateStart: function () { return moment().subtract(1, 'month').startOf('month') },
+    //    dateEnd: function () { return moment().subtract(1, 'month').endOf('month') }
+    //}, {
+    //    text: "This quarter",
+    //    dateStart: function () { return moment().startOf('quarter') },
+    //    dateEnd: function () { return moment().endOf('quarter') }
+    //}, {
+    //    text: "Last quarter",
+    //    dateStart: function () { return moment().subtract(1, 'quarter').startOf('quarter') },
+    //    dateEnd: function () { return moment().subtract(1, 'quarter').endOf('quarter') }
+    //}],
+//    "StartDate",
+//    "EndDate",
+//    2,
+//    function () {
+//        setTimeout(
+//            function () {
+//                formChange();
+//            }, 100
+//        );
+//    },
+//    model_startdate,
+//    model_enddate
+//);
