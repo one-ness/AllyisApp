@@ -5,17 +5,17 @@
 
 @model AccountOrgsViewModel
 @{
-    ViewBag.BarTitle = AllyisApps.Resources.Views.Account.Strings.YourOrganizations;
-    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.YourOrganizations;
+    ViewBag.TitleBar = AllyisApps.Resources.Views.Account.Strings.YourOrganizations;
 }
 <div class="col-md-push-2 col-md-8">
+    @*<div class="panel panel-default">
+        <div class="panel-heading panel-heading-inline">*@
+            <h1 style="float: left">@AllyisApps.Resources.Views.Account.Strings.YourOrganizations</h1>
+            <a href="@Url.SubdomainLink(ActionConstants.CreateOrg, ControllerConstants.Account, null, 0, this.Request)" class="btn btn-default" style="float: right; margin-top: 20px;">@AllyisApps.Resources.Views.Account.Strings.CreateOrganization</a>
+        @*</div>
+    </div>*@
     @foreach (SubscriptionsViewModel org in Model.Organizations)
     {
         @Html.Partial("OrgIndex", org);
     }
-    <div class="panel panel-default">
-        <div class="panel-heading panel-heading-inline">
-            <a href="@Url.SubdomainLink(ActionConstants.CreateOrg, ControllerConstants.Account, null, 0, this.Request)" class="btn btn-default">@AllyisApps.Resources.Views.Account.Strings.CreateOrganization</a>
-        </div>
-    </div>
 </div>
