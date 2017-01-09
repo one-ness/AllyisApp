@@ -205,6 +205,15 @@ namespace AllyisApps.Resources.Controllers.Auth {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A message containing a password reset link has been sent to.
+        /// </summary>
+        public static string ResetEmailHasBeenSent {
+            get {
+                return ResourceManager.GetString("ResetEmailHasBeenSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error has occured..
         /// </summary>
         public static string StatusErrorMessage {

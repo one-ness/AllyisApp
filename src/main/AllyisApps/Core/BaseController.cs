@@ -95,7 +95,7 @@ namespace AllyisApps.Core
             string url, chosenOrg = Service.GetSubdomainById(pOrganizationId);
 			//if (chosenOrg == "default")       SUBDOMAINS DISABLED - to reenable, uncomment this if/else block and the "url =..." line at the end of the else
 			//{
-				url = string.Format("http://{0}/{1}", rootAndMiddle, route);
+				url = string.Format("{0}/{1}", rootAndMiddle, route);
 			//}
 			//else
 			//{
@@ -105,7 +105,7 @@ namespace AllyisApps.Core
 					this.Service.UpdateActiveOrganization(UserContext.UserId, pOrganizationId);
 				}
 
-				//url = string.Format("http://{0}.{1}/{2}", chosenOrg, rootAndMiddle, route);
+				//url = string.Format("{0}.{1}/{2}", chosenOrg, rootAndMiddle, route);
 			//}
 
 			// Any other miscellaneous route parameters need to remain in the query string
@@ -123,7 +123,9 @@ namespace AllyisApps.Core
 				remainingQueryParameters = string.Format("?{0}", remainingQueryParameters.Substring(1));
 			}
 
-			return this.Redirect(url + remainingQueryParameters);
+            string finalUrl = (url + remainingQueryParameters).Replace("//", "/");
+
+			return this.Redirect("http://" + finalUrl);
 		}
 
 		/// <summary>

@@ -9,7 +9,6 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Services;
-using AllyisApps.Services.Utilities;
 using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
@@ -47,27 +46,23 @@ namespace AllyisApps.Controllers
 				{
 					// user exists, reset code is generated.
 					string callbackUrl = Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, new { userId = info.UserId, code = info.Code.ToString() }, protocol: Request.Url.Scheme);
-
-					EmailService mail = new EmailService();
 					string msgbody = new System.Web.HtmlString(string.Format("Please reset your password by clicking <a href=\"{0}\">here</a>", callbackUrl)).ToString();
-					await mail.CreateMessage(msgbody, model.Email, "Reset password");
-				}
+                    await Lib.Mailer.SendEmailAsync("noreply@allyisapps.com", model.Email, "Reset password", msgbody);
 
-				// irrespective of failure/success, show the confirmation
-				return this.View(ViewConstants.ForgotPasswordConfirmation);
+                    Notifications.Add(new Core.Alert.BootstrapAlert(string.Format("{0} {1}.", Resources.Controllers.Auth.Strings.ResetEmailHasBeenSent, model.Email), Core.Alert.Variety.Success));
+				}
+                else
+                {
+                    // user does not exist, should figure out what to do. Could either:
+                    //    a) Show notification stating that the user doesn't exist, or
+                    //    b) Send email to entered email address stating that they don't have an account
+                }
+
+                // irrespective of failure/success, go back to sign in
+                return this.RedirectToAction(ActionConstants.LogOn);
 			}
 
 			return this.View(model);
-		}
-
-		/// <summary>
-		/// GET: /Account/ForgotPasswordConfirmation.
-		/// </summary>
-		/// <returns>The ActionResult.</returns>
-		[AllowAnonymous]
-		public ActionResult ForgotPasswordConfirmation()
-		{
-			return this.View();
 		}
 	}
 }

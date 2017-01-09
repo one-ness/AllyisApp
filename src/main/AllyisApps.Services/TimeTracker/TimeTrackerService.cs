@@ -569,6 +569,7 @@ namespace AllyisApps.Services.TimeTracker
                 {
 
                     var project = projects.Where(x => x.ProjectId == entry.ProjectId).FirstOrDefault();
+                    if (project.ProjectId == 0) project = null;
                     output.WriteLine(
                         string.Format(
                             "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"",
@@ -579,10 +580,10 @@ namespace AllyisApps.Services.TimeTracker
                             entry.Date.ToShortDateString(),
                             entry.Duration,
                             entry.PayClassName,
-                            project.ProjectName ?? string.Empty,
-                            project.ProjectOrgId ?? string.Empty,
-                            project.CustomerName ?? string.Empty,
-                            project.CustomerOrgId ?? string.Empty,
+                            project != null ? (project.ProjectName ?? string.Empty) : string.Empty,
+                            project != null ? (project.ProjectOrgId ?? string.Empty) : string.Empty,
+                            project != null ? (project.CustomerName ?? string.Empty) : string.Empty,
+                            project != null ? (project.CustomerOrgId ?? string.Empty) : string.Empty,
                             entry.Description));
                 }
                 catch (Exception ex) {

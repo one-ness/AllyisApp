@@ -216,4 +216,7 @@
   <data name="EmployeeIdNotUniqueError" xml:space="preserve">
     <value>The Employee ID is not unique.</value>
   </data>
+  <data name="ResetEmailHasBeenSent" xml:space="preserve">
+    <value>A message containing a password reset link has been sent to</value>
+  </data>
 </root>
