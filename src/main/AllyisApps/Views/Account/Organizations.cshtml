@@ -10,8 +10,10 @@
 <div class="col-md-push-2 col-md-8">
     @*<div class="panel panel-default">
         <div class="panel-heading panel-heading-inline">*@
+        <div class="row col-md-12">
             <h1 style="float: left">@AllyisApps.Resources.Views.Account.Strings.YourOrganizations</h1>
-            <a href="@Url.SubdomainLink(ActionConstants.CreateOrg, ControllerConstants.Account, null, 0, this.Request)" class="btn btn-default" style="float: right; margin-top: 20px;">@AllyisApps.Resources.Views.Account.Strings.CreateOrganization</a>
+            <a href="@Url.SubdomainLink(ActionConstants.CreateOrg, ControllerConstants.Account, null, 0, this.Request)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">@AllyisApps.Resources.Views.Account.Strings.CreateOrganization</a>
+        </div>
         @*</div>
     </div>*@
     @foreach (SubscriptionsViewModel org in Model.Organizations)

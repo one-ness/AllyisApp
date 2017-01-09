@@ -8,8 +8,8 @@
 
 <footer class="footer">
     <div class="container-fluid text-center text-muted">
-        <p class="footer-links col-sm-6">
-            <select id="languageSelect" onchange="OnLanguageSelect()" value=@ViewBag.language>
+        <p class="footer-links col-xs-8 col-sm-6">
+            <select class="col-xs-12 col-sm-6" id="languageSelect" onchange="OnLanguageSelect()" value=@ViewBag.language>
                 @foreach(LanguageViewModel language in Model)
                 {
                     string languageKey = LanguageViewModel.Clean(language.LanguageName);
@@ -24,11 +24,12 @@
                     }
                 }
             </select>
-            &nbsp;
-            @Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.PrivacyPolicy, ActionConstants.PrivacyPolicy, ControllerConstants.Home)
-            @Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.Help, ActionConstants.Help, ControllerConstants.Home)
+            <span class="col-xs-12 col-sm-6">
+                @Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.PrivacyPolicy, ActionConstants.PrivacyPolicy, ControllerConstants.Home)
+                @Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.Help, ActionConstants.Help, ControllerConstants.Home)
+            </span>
         </p>
-        <p class="col-xs-4 col-sm-5">
+        <p class="col-xs-4 col-sm-6" style="text-align: right">
             &copy; @DateTime.Now.Year - Allyis, Inc.
         </p>
     </div>
