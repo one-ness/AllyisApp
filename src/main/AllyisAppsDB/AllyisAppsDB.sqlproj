@@ -266,6 +266,7 @@
     <Build Include="StoredProcedures\Auth\Auth.UpdateUserLanguagePreference.sql" />
     <Build Include="StoredProcedures\Crm\Crm.UpdateProjectAndUsers.sql" />
     <Build Include="StoredProcedures\TimeTracker\TimeTracker.UpdateLockDate.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.UpdateOvertime.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -417,14 +417,35 @@ namespace AllyisApps.DBModel
 			{
 				connection.Execute("[TimeTracker].[UpdateSettings]", parameters, commandType: CommandType.StoredProcedure);
 			}
-		}
+        }
 
-		/// <summary>
-		/// Get start of week for organization.
-		/// </summary>
-		/// <param name="orgId">The organization Id for which the StartOfWeek is to be retrieved.</param>
-		/// <returns>The start of week int.</returns>
-		public int GetStartOfWeek(int orgId)
+        /// <summary>
+        /// Update overtime settings for an Organization.
+        /// </summary>
+        /// <param name="orgId">The Id of the time entry to be updated.</param>
+        /// <param name="overtimeHours">Hours until overtime.</param>
+        /// <param name="overtimePeriod">Time period for hours until overtime.</param>
+        /// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
+        public void UpdateOvertime(int orgId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@organizationID", orgId);
+            parameters.Add("@OvertimeHours", overtimeHours);
+            parameters.Add("@OvertimePeriod", overtimePeriod);
+            parameters.Add("@OvertimeMultiplier", overtimeMultiplier);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                connection.Execute("[TimeTracker].[UpdateOvertime]", parameters, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        /// <summary>
+        /// Get start of week for organization.
+        /// </summary>
+        /// <param name="orgId">The organization Id for which the StartOfWeek is to be retrieved.</param>
+        /// <returns>The start of week int.</returns>
+        public int GetStartOfWeek(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationID", orgId);

@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			int actualHours = string.Equals(setting, "No") ? -1 : hours;
 
-			if (TimeTrackerService.UpdateSettings(TimeTrackerService.GetStartOfWeek(), actualHours, period, mult))
+			if (TimeTrackerService.UpdateOvertime(actualHours, period, mult))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.OvertimeUpdate, Variety.Success));
 			}

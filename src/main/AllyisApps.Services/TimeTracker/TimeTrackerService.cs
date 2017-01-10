@@ -470,15 +470,18 @@ namespace AllyisApps.Services.TimeTracker
 			{
 				throw new ArgumentException("Start of week must correspond to a value of StartOfWeekEnum.");
 			}
-			else if (overtimeHours < -1)
+
+			if (overtimeHours < -1)
 			{
 				throw new ArgumentOutOfRangeException("overtimeHours", "Overtime hours cannot be negative, unless it is -1 to indicate overtime unavailable.");
 			}
-			else if (overtimePeriod == null)
-			{ // TODO: Figure out what this even is and what the allowable values are.
-				throw new ArgumentNullException("overtimePeriod", "Overtime period must not be null.");
-			}
-			else if (overtimeMultiplier < 1.0)
+
+            if (!new string[] { "Day", "Week", "Month" }.Contains(overtimePeriod))
+            {
+                throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", overtimePeriod));
+            }
+
+            if (overtimeMultiplier < 1.0)
 			{
 				throw new ArgumentOutOfRangeException("overtimeMultiplier", "Overtime rate cannot be less than regular rate (i.e. overtimeMultiplier less than one).");
 			}
@@ -492,7 +495,43 @@ namespace AllyisApps.Services.TimeTracker
 			}
 
 			return false;
-		}
+        }
+
+        /// <summary>
+        /// Updates overtime settings for an organization.
+        /// </summary>
+        /// <param name="overtimeHours">Hours until overtime.</param>
+        /// <param name="overtimePeriod">Time period for hours until overtime.</param>
+        /// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
+        /// <returns>Returns false if authorization fails.</returns>
+        public bool UpdateOvertime(int overtimeHours, string overtimePeriod, float overtimeMultiplier)
+        {
+            #region Validation
+            if (overtimeHours < -1)
+            {
+                throw new ArgumentOutOfRangeException("overtimeHours", "Overtime hours cannot be negative, unless it is -1 to indicate overtime unavailable.");
+            }
+
+            if (!new string[] { "Day", "Week", "Month" }.Contains(overtimePeriod))
+            {
+                throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", overtimePeriod));
+            }
+
+            if (overtimeMultiplier < 1.0)
+            {
+                throw new ArgumentOutOfRangeException("overtimeMultiplier", "Overtime rate cannot be less than regular rate (i.e. overtimeMultiplier less than one).");
+            }
+            #endregion Validation
+
+            if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
+            {
+                DBHelper.UpdateOvertime(UserContext.ChosenOrganizationId, overtimeHours, overtimePeriod, overtimeMultiplier);
+
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
 		/// Prepares the Excel file for output of time entry information.
