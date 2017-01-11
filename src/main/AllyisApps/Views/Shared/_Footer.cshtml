@@ -6,34 +6,37 @@
     Layout = string.Empty;
 }
 
-<footer class="footer">
-    <div class="container-fluid text-center text-muted">
-        <p class="footer-links col-xs-8 col-sm-6">
-            <select class="col-xs-12 col-sm-6" id="languageSelect" onchange="OnLanguageSelect()" value=@ViewBag.language>
-                @foreach(LanguageViewModel language in Model)
-                {
-                    string languageKey = LanguageViewModel.Clean(language.LanguageName);
+@*<footer class="footer">
+    <div class="container-fluid text-center text-muted">*@
+<div class="row footer">
+    <p class="footer-links col-xs-8 col-sm-6">
+        <select class="col-xs-12 col-sm-6" id="languageSelect" onchange="OnLanguageSelect()" value=@ViewBag.language>
+            @foreach (LanguageViewModel language in Model)
+            {
+                string languageKey = LanguageViewModel.Clean(language.LanguageName);
 
-                    if (ViewBag.languageName == language.LanguageName)
-                    {
-                        <option value="@language.LanguageID" selected>@(AllyisApps.Resources.Views.Shared.Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
-                    }
-                    else
-                    {
-                        <option value="@language.LanguageID">@(AllyisApps.Resources.Views.Shared.Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
-                    }
+                if (ViewBag.languageName == language.LanguageName)
+                {
+                    <option value="@language.LanguageID" selected>@(AllyisApps.Resources.Views.Shared.Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
                 }
-            </select>
-            <span class="col-xs-12 col-sm-6">
-                @Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.PrivacyPolicy, ActionConstants.PrivacyPolicy, ControllerConstants.Home)
-                @Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.Help, ActionConstants.Help, ControllerConstants.Home)
-            </span>
-        </p>
-        <p class="col-xs-4 col-sm-6" style="text-align: right">
-            &copy; @DateTime.Now.Year - Allyis, Inc.
-        </p>
-    </div>
-</footer>
+                else
+                {
+                    <option value="@language.LanguageID">@(AllyisApps.Resources.Views.Shared.Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
+                }
+            }
+        </select>
+        <span class="col-xs-12 col-sm-6">
+            @Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.PrivacyPolicy, ActionConstants.PrivacyPolicy, ControllerConstants.Home)
+            @Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.Help, ActionConstants.Help, ControllerConstants.Home)
+        </span>
+    </p>
+    <p class="col-xs-4 col-sm-6" style="text-align: right">
+        &copy; @DateTime.Now.Year - Allyis, Inc.
+    </p>
+</div>
+
+    @*</div>
+</footer>*@
 
 <script type="text/javascript">
     OnLanguageSelect = function () {
