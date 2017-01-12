@@ -202,7 +202,7 @@
     <value>Se le ha invitado a unirse a una organización:</value>
   </data>
   <data name="InviteMoreThanOne" xml:space="preserve">
-    <value>Puede invitar a más de un miembro a la vez mediante la importación de un archivo de la siguiente manera:</value>
+    <value>Puede invitar a más de un miembro a la vez cargando un archivo.</value>
   </data>
   <data name="Invites" xml:space="preserve">
     <value>Se le ha invitado a unirse a las organizaciones:</value>

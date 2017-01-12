@@ -250,7 +250,7 @@ namespace AllyisApps.Resources.TimeTracker.Views.Customer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import Customers and Projects.
+        ///   Looks up a localized string similar to Upload Customers and Projects.
         /// </summary>
         public static string ImportCustomersTitle {
             get {

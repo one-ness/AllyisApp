@@ -199,6 +199,6 @@
     <value>Cargue un archivo de Excel con información sobre clientes y proyectos para importar más de uno a la vez.</value>
   </data>
   <data name="ImportCustomersTitle" xml:space="preserve">
-    <value>Importar Clientes y Proyectos</value>
+    <value>Cargar Clientes y Proyectos</value>
   </data>
 </root>

@@ -610,7 +610,7 @@ namespace AllyisApps.Resources.Views.Account {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can invite more than one member at a time by importing a file like this:.
+        ///   Looks up a localized string similar to You can invite more than one member at a time by uploading a file..
         /// </summary>
         public static string InviteMoreThanOne {
             get {
