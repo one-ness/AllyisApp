@@ -881,7 +881,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js.map">
       <DependentUpon>jquery.validate.unobtrusive.min.js</DependentUpon>
     </Content>
-    <Content Include="Content\less\less.js" />
+    <Content Include="Scripts\less.js" />
     <Content Include="Scripts\moment-2.14.1.js" />
     <Content Include="Scripts\moment-2.14.1.min.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js.map">
