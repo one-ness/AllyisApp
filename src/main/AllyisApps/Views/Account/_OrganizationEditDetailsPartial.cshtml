@@ -8,7 +8,7 @@
             @Html.ValidationSummary(string.Empty, new { @class = "text-danger" })
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 min300">
 
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.Name, AllyisApps.Resources.Views.Account.Strings.Name)
@@ -40,7 +40,7 @@
                         @Html.TextBoxFor(m => m.FaxNumber, new { @class = "form-control" })
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 min300">
 
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.Address, AllyisApps.Resources.Views.Account.Strings.Address)
@@ -94,9 +94,8 @@
     {
         using (Html.BeginForm(ActionConstants.DeleteOrg, ControllerConstants.Account, FormMethod.Post, new { @onsubmit = "return confirm(\"" + AllyisApps.Resources.Views.Account.Strings.ConfirmDeleteOrg + "\");" }))
         {
-            <br />
             @Html.AntiForgeryToken()
-            <input type="submit" value="@AllyisApps.Resources.Views.Account.Strings.DeleteOrganization" class="btn btn-danger" id="submitDelete" />
+            <input type="submit" value="@AllyisApps.Resources.Views.Account.Strings.DeleteOrganization" class="btn btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
         }
     }
 </div>
