@@ -17,12 +17,14 @@
     <link rel="icon" href="/Content/icons/fav16.png?v=2" sizes="16x16" type="image/png" />
     <link rel="shortcut icon" href="favicon.ico?v=2" />
     <title>@title</title>
-    @*@Styles.Render(DisplayHints.LayoutThemeBundle)*@
     @Styles.Render("~/Content/Bootstrap")
     @Styles.Render("~/Content/FontAwesome")
     @Scripts.Render("~/bundles/underscore")
     @RenderSection("css", required: false)
-    <link href="@Url.Content(DisplayHints.LayoutThemeBundle + ".css")" rel="stylesheet" />
+    @*@Styles.Render(DisplayHints.LayoutThemeBundle)*@
+    @*<link href="@Url.Content(DisplayHints.LayoutThemeBundle + ".less")" rel="stylesheet/less" type="text/css" />*@
+    <link href="@Url.Content("~/Content/Site.less")" rel="stylesheet/less" type="text/css" />
+    <script type="text/javascript" src="@Url.Content("~/Content/less/less.js")"></script>
     <meta name="description" content="@AllyisApps.Resources.Views.Shared.Strings.MetaDescription" />
 </head>
 <body id="@DisplayHints.PageBodyId" class="@DisplayHints.PageBodyClasses">
