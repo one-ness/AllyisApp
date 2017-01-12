@@ -850,6 +850,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Areas\TimeTracker\Views\Customer\_CustomerEdit.cshtml" />
+    <Content Include="Content\less\inputs.less" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
     <None Include="Resources\628px-achtung-svg.png" />
     <Content Include="Scripts\allyis-account-add.js" />
