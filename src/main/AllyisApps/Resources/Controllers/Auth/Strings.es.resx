@@ -219,4 +219,7 @@
   <data name="ResetEmailHasBeenSent" xml:space="preserve">
     <value>Un mensaje que contiene un enlace de restablecimiento de contraseña ha sido enviada a</value>
   </data>
+  <data name="NoAccountForEmail" xml:space="preserve">
+    <value>No hay ninguna cuenta registrada para esa dirección de correo electrónico.</value>
+  </data>
 </root>

@@ -53,9 +53,7 @@ namespace AllyisApps.Controllers
 				}
                 else
                 {
-                    // user does not exist, should figure out what to do. Could either:
-                    //    a) Show notification stating that the user doesn't exist, or
-                    //    b) Send email to entered email address stating that they don't have an account
+                    Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Controllers.Auth.Strings.NoAccountForEmail, Core.Alert.Variety.Info));
                 }
 
                 // irrespective of failure/success, go back to sign in

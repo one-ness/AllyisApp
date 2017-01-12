@@ -160,6 +160,15 @@ namespace AllyisApps.Resources.Controllers.Auth {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is no account registered for that email address..
+        /// </summary>
+        public static string NoAccountForEmail {
+            get {
+                return ResourceManager.GetString("NoAccountForEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your Email has been confirmed..
         /// </summary>
         public static string NotifyYourEmailIsConfirmed {

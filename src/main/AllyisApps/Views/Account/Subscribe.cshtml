@@ -26,17 +26,21 @@
             <div class="col-md-12">
                 <div class="panel panel-default" style="min-width:350px;">
                     <div class="panel-heading">
-                        <h2 style="margin-top: 0; margin-bottom: 0;">
+                        <h3 style="margin-top: 0; margin-bottom: 0;">
                             @Model.ProductName
-                        </h2>
+                        </h3>
                     </div>
                     <div class="panel-body">
-                        <div class="col-xs-5">
+                        <div class="form-group">
+                            <label>@AllyisApps.Resources.Views.Account.Strings.NumberOfUsers</label>
+                            <input class="form-control" name="NumberOfUsers" type="number" min="5" step="5" max="500" id="user-count" value="@userCount" onchange="fixUserCount(this)" />
+                        </div>
+                        @*<div class="col-xs-5">
                             <label>@AllyisApps.Resources.Views.Account.Strings.NumberOfUsers</label>
                         </div>
                         <div class="col-xs-5">
                             <input class="form-control" name="NumberOfUsers" type="number" min="5" step="5" max="500" id="user-count" value="@userCount" onchange="fixUserCount(this)" />
-                        </div>
+                        </div>*@
                         @*<div class="col-xs-3">
                             <label>@AllyisApps.Resources.Views.Account.Strings.Price</label>
                         </div>
