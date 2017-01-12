@@ -142,7 +142,7 @@
     <value>País</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Crear</value>
+    <value>Crear Cliente</value>
   </data>
   <data name="CustomerDetails" xml:space="preserve">
     <value>Detalles del cliente</value>
@@ -163,7 +163,7 @@
     <value>Seleccionar...</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Editar</value>
+    <value>Editar Cliente</value>
   </data>
   <data name="EIN" xml:space="preserve">
     <value>NIE</value>
@@ -187,13 +187,13 @@
     <value>Estado</value>
   </data>
   <data name="CustomersFile" xml:space="preserve">
-    <value>Customers File</value>
+    <value>Archivo de Clientes</value>
   </data>
   <data name="ProjectsFile" xml:space="preserve">
-    <value>Projects File</value>
+    <value>Archivo de Proyectos</value>
   </data>
   <data name="CustomerOrgId" xml:space="preserve">
-    <value>Customer ID</value>
+    <value>Cliente ID</value>
   </data>
   <data name="ImportCustomers" xml:space="preserve">
     <value>Cargue un archivo de Excel con información sobre clientes y proyectos para importar más de uno a la vez.</value>

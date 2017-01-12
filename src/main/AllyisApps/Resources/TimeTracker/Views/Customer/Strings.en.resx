@@ -142,7 +142,7 @@
     <value>Country</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Create</value>
+    <value>Create Customer</value>
   </data>
   <data name="CustomerDetails" xml:space="preserve">
     <value>Customer Details</value>
@@ -163,7 +163,7 @@
     <value>Select...</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Edit Customer</value>
   </data>
   <data name="EIN" xml:space="preserve">
     <value>EIN</value>

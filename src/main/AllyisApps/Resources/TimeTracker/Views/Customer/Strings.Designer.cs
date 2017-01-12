@@ -133,7 +133,7 @@ namespace AllyisApps.Resources.TimeTracker.Views.Customer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create.
+        ///   Looks up a localized string similar to Create Customer.
         /// </summary>
         public static string Create {
             get {
@@ -214,7 +214,7 @@ namespace AllyisApps.Resources.TimeTracker.Views.Customer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit.
+        ///   Looks up a localized string similar to Edit Customer.
         /// </summary>
         public static string Edit {
             get {
