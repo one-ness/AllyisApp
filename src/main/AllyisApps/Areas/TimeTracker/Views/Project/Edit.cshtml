@@ -21,8 +21,8 @@
 
 @section Scripts {
     @*Date range picker dependencies*@
-    @Scripts.Render("~/bundles/jqueryui");
-    @Scripts.Render("~/bundles/moment");
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/moment")
 
     <script type="text/javascript">
         var mindate_shortstring = "@DateTime.MinValue.ToShortDateString()";
@@ -30,6 +30,6 @@
         var model_startdate = @Model.StartDate;
         var model_enddate = @Model.EndDate;
     </script>
-    @Scripts.Render("~/bundles/daterangepicker");
-    @Scripts.Render("~/bundles/TTProjectEditCreate");
+    @Scripts.Render("~/bundles/daterangepicker")
+    @Scripts.Render("~/bundles/TTProjectEditCreate")
 }
