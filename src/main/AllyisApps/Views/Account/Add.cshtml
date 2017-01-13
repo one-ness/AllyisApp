@@ -11,7 +11,131 @@
 @{ ViewData.Add(ControllerConstants.Controller, ControllerConstants.Account); }
 @{ ViewData.Add(ActionConstants.Action, ActionConstants.Add); }
 
-<div class="col-md-8 col-md-push-2">
+
+<div class="row">
+    @using (Html.BeginForm(ActionConstants.Invite, ControllerConstants.Account, FormMethod.Post, new { id = "OrgAddForm" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.OrganizationId)
+        @Html.ValidationSummary(true)
+
+        <div class="col-md-6 min300">
+            <div class="form-group">
+                @Html.ReqLabelFor(model => model.Email, AllyisApps.Resources.Views.Account.Strings.Email)
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
+            <div class="form-group">
+                @Html.ReqLabelFor(model => model.FirstName, AllyisApps.Resources.Views.Account.Strings.FirstName)
+                @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.FirstName)
+            </div>
+            <div class="form-group">
+                @Html.ReqLabelFor(model => model.LastName, AllyisApps.Resources.Views.Account.Strings.LastName)
+                @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.LastName)
+            </div>
+            <div class="form-group">
+                @Html.ReqLabelFor(model => model.EmployeeId, AllyisApps.Resources.Views.Account.Strings.EmployeeId)
+                @Html.TextBoxFor(model => model.EmployeeId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.EmployeeId })
+                @Html.ValidationMessageFor(model => model.EmployeeId)
+            </div>
+            <div class="form-group">
+            @*<div class="@left">*@
+                <div class="text-right">
+            <span style="margin-right: 5px;">@AllyisApps.Resources.Views.Account.Strings.AddAsOwner</span>
+            @*</div>
+            <div class="@right">*@
+                @Html.CheckBoxFor(m => m.AddAsOwner, new { @style="display: inline;"})
+                </div>
+            @*</div>*@
+            </div>
+        </div>
+        <div class="col-md-6 min300">
+            @{var count = 0;
+                var roomInSubscription = true;
+            }
+            @foreach (SubscriptionRoleSelectionModel sub in Model.SubscriptionRoles)
+            {
+                @Html.Hidden(string.Format("SubscriptionRoles[{0}].SubscriptionId", count), sub.SubscriptionId)
+                <div class="form-group">
+                    @if (sub.ProductName == ProductNameKeyConstants.TimeTracker)
+                    {
+                        <label>@(string.Format("{0} {1}", AllyisApps.Resources.Views.Account.Strings.TimeTracker, AllyisApps.Resources.Views.Account.Strings.Role))</label>
+                    }
+                    @Html.DropDownListDisabled(string.Format("SubscriptionRoles[{0}].SelectedRole", count), new SelectList(sub.Roles, "ProductRoleId", "Name", sub.Roles.Where(x => x.Name == "None").FirstOrDefault()), sub.Disabled, new { @class = "form-control role-selector" })
+                    @if (sub.Disabled)
+                    {
+                        <p>@AllyisApps.Resources.Views.Account.Strings.TooManyUsers</p>roomInSubscription = false;
+                    }
+                </div>
+
+                if ((sub.ProductName == ProductNameKeyConstants.TimeTracker) && roomInSubscription) //TimeTracker with room
+                {
+                    <div class="form-group">
+                        <label>@AllyisApps.Resources.Views.Account.Strings.TrackProject</label>
+                        @{    //outputs list of available projects
+                            List<SelectListItem> selectProjects = new List<SelectListItem>();
+                            foreach (CompleteProjectInfo pInfo in Model.OrganizationProjects)
+                            {
+                                selectProjects.Add(new SelectListItem
+                                {
+                                    Text = (pInfo.ProjectName),
+                                    Value = (pInfo.ProjectId.ToString())
+                                });
+                            }
+
+                            @Html.DropDownList("SubscriptionProjectId", selectProjects, AllyisApps.Resources.Views.Account.Strings.DropDownEmpty, new { @class = "form-control project-selector" });
+                        }
+                    </div>
+                }
+                count += 1;
+            }
+
+            <div class="form-group allyis-action-buttons pull-right">
+                @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
+
+                @if (roomInSubscription)
+                {
+                    <input type="submit" id="addMember" value="@AllyisApps.Resources.Views.Account.Strings.Add" class="btn btn-primary" />}
+                else
+                {
+                    <input type="submit" id="addMember" value="@AllyisApps.Resources.Views.Account.Strings.Add" class="btn btn-primary" disabled="disabled" />}
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+    }
+
+
+    <div class="col-md-6 min300">
+        @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken();
+            <label>@AllyisApps.Resources.Views.Account.Strings.Upload</label>
+            <p>
+                @AllyisApps.Resources.Views.Account.Strings.InviteMoreThanOne
+            </p>
+            <input type="file" id="upload-box" name="upload" style="display:none;"
+                   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                <input id="upload-file-name-display" class="form-control"
+                       onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                <div style="margin-top: 10px; margin-bottom: 15px; float:left;">
+                    <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@AllyisApps.Resources.Views.Account.Strings.ChooseFile</a>
+                    <input style="margin-left: 10px" type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
+                </div>
+        }
+        @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Account, null, FormMethod.Get))
+        {
+            <div style="float:right; margin-top: 10px;">
+                <input type="submit" id="template-button" value="@AllyisApps.Resources.Views.Account.Strings.Template" class="btn btn-primary" />
+            </div>
+        }
+    </div>
+</div>
+
+
+@*<div class="col-md-8 col-md-push-2">
     <div class="bulk">
         <div class="col-xs-12">
             <h4>@AllyisApps.Resources.Views.Account.Strings.MultipleMembers</h4>
@@ -20,7 +144,7 @@
             </p>
         </div>
         @*Custom styled buttons wired to browser default upload*@
-        @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @*@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken();
             <input type="file" id="upload-box" name="upload" style="display:none;"
@@ -166,7 +290,7 @@
             </div>
         </div>
     }
-</div>
+</div>*@
 
 @section Scripts {
     @Scripts.Render("~/bundles/AccountAdd");
