@@ -12067,11 +12067,11 @@ li.list-placeholder {
 	height: 70px;
 }
 
-@media (max-width: 768px) {
+/*@media (max-width: 768px) {
 	.footer {
 		height: 100px;
 	}
-}
+}*/
 
 .footer p {
 	margin: 5px 0;

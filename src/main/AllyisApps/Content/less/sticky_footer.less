@@ -24,6 +24,9 @@ body {
 	background-color: @navbar-default-bg;
 	border-top: 1px @navbar-default-border solid;
 
+    position: absolute;
+    bottom: 0px;
+
 	& > .container {
 		padding-right: 15px;
 		padding-left: 15px;
@@ -37,6 +40,14 @@ body {
 			margin-left: @grid-gutter-width/2;
 		}
 	}
+
+    @media (max-width: @screen-xs-max) {
+        width: 100%;
+    }
+
+    @media (max-width: @screen-md-min) {
+        height: 70px !important;
+    }
 }
 
 #title-row {
