@@ -68,6 +68,31 @@ body {
 	z-index: auto;
 }
 
+.tt-template {
+    @media (max-width: @screen-sm-max) {
+        @media (min-width: @screen-sm-min) {
+            padding: 6px 6px;
+        }
+    }
+}
+
+.table-row {
+    .offDay {
+        background-color: @timetracker-offday;
+    }
+    .holiday {
+        background-color: @timetracker-holiday;
+    }
+}
+
+.offDay .form-control {
+    background-color: @timetracker-offday;
+}
+
+.holiday .form-control {
+    background-color: @timetracker-holiday;
+}
+
 // wireframe
 /**, * > *, * > * > *, * > * > * > *, * > * > * > * > *, * > * > * > * > * > * > * {
     background-color: @zone-body-bg !important;

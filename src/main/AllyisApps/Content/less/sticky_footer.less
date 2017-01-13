@@ -6,8 +6,8 @@ html {
 }
 
 body {
-	/* Margin bottom by footer height */
-	/*margin-bottom: calc(60px + @grid-gutter-width);*/
+	// Margin bottom by footer height 
+	margin-bottom: calc(@footer-height + 15px);
 }
 
 .footer .text-muted {
@@ -26,6 +26,7 @@ body {
 
     position: absolute;
     bottom: 0px;
+    height: @footer-height !important;
 
 	& > .container {
 		padding-right: 15px;
@@ -45,9 +46,9 @@ body {
         width: 100%;
     }
 
-    @media (max-width: @screen-md-min) {
+    /*@media (max-width: @screen-md-min) {
         height: 70px !important;
-    }
+    }*/
 }
 
 #title-row {
