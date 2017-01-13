@@ -50,6 +50,15 @@
                 </div>
             @*</div>*@
             </div>
+
+            @if (Model.SubscriptionRoles.Count() == 0)
+            {
+                <div class="form-group allyis-action-buttons pull-right">
+                    @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
+                    <input type="submit" id="addMember" value="@AllyisApps.Resources.Views.Account.Strings.Add" class="btn btn-primary" />
+                </div>
+                <div class="clearfix"></div>
+            }
         </div>
         <div class="col-md-6 min300">
             @{var count = 0;
@@ -92,18 +101,21 @@
                 count += 1;
             }
 
-            <div class="form-group allyis-action-buttons pull-right">
-                @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
+            @if (Model.SubscriptionRoles.Count() > 0)
+            {
+                <div class="form-group allyis-action-buttons pull-right">
+                    @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
 
-                @if (roomInSubscription)
-                {
-                    <input type="submit" id="addMember" value="@AllyisApps.Resources.Views.Account.Strings.Add" class="btn btn-primary" />}
-                else
-                {
-                    <input type="submit" id="addMember" value="@AllyisApps.Resources.Views.Account.Strings.Add" class="btn btn-primary" disabled="disabled" />}
-            </div>
+                    @if (roomInSubscription)
+                    {
+                        <input type="submit" id="addMember" value="@AllyisApps.Resources.Views.Account.Strings.Add" class="btn btn-primary" />}
+                    else
+                    {
+                        <input type="submit" id="addMember" value="@AllyisApps.Resources.Views.Account.Strings.Add" class="btn btn-primary" disabled="disabled" />}
+                </div>
 
-            <div class="clearfix"></div>
+                <div class="clearfix"></div>
+            }
         </div>
     }
 

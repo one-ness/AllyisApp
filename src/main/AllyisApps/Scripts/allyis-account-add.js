@@ -18,7 +18,7 @@ function showMustBeOwnerOrUserMessage() {
 
 function checkAddConditions() {
     //if ($('#AddAsOwner').is(':checked')) { // Adding as owner;
-        if ($('.role-selector option:selected').val() != 0) { // Time Tracker role selected: must check for project
+        if ($('.role-selector option:selected').val() == 1) { // Time Tracker role is User: must check for project
             if ($('.project-selector option:selected').val() == "") { // No project selected
                 showNoProjectMessage();
             } else { // Project selected
