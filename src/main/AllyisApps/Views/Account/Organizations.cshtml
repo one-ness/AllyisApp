@@ -7,9 +7,10 @@
 @{
     ViewBag.TitleBar = AllyisApps.Resources.Views.Account.Strings.YourOrganizations;
 }
-<div class="col-md-push-2 col-md-8">
-    @*<div class="panel panel-default">
-        <div class="panel-heading panel-heading-inline">*@
+<div class="row">
+    <div class="col-md-push-2 col-md-8">
+        @*<div class="panel panel-default">
+            <div class="panel-heading panel-heading-inline">*@
         <div class="row">
             <div class="col-xs-12">
                 <h1 style="float: left">@AllyisApps.Resources.Views.Account.Strings.YourOrganizations</h1>
@@ -17,9 +18,10 @@
             </div>
         </div>
         @*</div>
-    </div>*@
-    @foreach (SubscriptionsViewModel org in Model.Organizations)
-    {
-        @Html.Partial("OrgIndex", org);
-    }
+            </div>*@
+        @foreach (SubscriptionsViewModel org in Model.Organizations)
+        {
+            @Html.Partial("OrgIndex", org);
+        }
+    </div>
 </div>
