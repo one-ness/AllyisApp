@@ -17,13 +17,13 @@
 }
 <div class="flexbox-row flexbox-row-2-col-collapse">
     @*<div class="col-md-6">*@
-        <div class="panel panel-info" @*style="width: 400px; margin: 10px auto;"*@>
+        <div class="panel panel-info" style="position: relative;" @*style="width: 400px; margin: 10px auto;"*@>
             <div class="panel-heading">
                 <h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.OrgSOW</h1>
             </div>
             <div class="panel-body" id="SOWSetting">
                 @using (Html.BeginForm(ActionConstants.UpdateStartOfWeek, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
+                {
                     @Html.AntiForgeryToken();
 
                     <input type="radio" name="startOfWeek" style="margin:10px" id="sow" value="1" @(Model.StartOfWeek == StartOfWeekEnum.Monday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Monday</text><br />
@@ -35,7 +35,7 @@
                     <input type="radio" name="startOfWeek" style="margin:10px" id="sow" value="0" @(Model.StartOfWeek == StartOfWeekEnum.Sunday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Sunday</text><br />
 
                     <br />
-                    <input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save class="btn btn-primary" />
+                    <input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save class="btn btn-primary tt-bottom-right" />
                 }
             </div>
         </div>
@@ -62,11 +62,12 @@
                     @using (Html.BeginForm(ActionConstants.CreatePayClass, ControllerConstants.TimeEntry, FormMethod.Post))
                     {
                         @Html.AntiForgeryToken();
-                        <input type="text" name="NewPayClass" /><input class="pull-right btn btn-primary" type="submit" value="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Add" />}
+                        <input type="text" name="NewPayClass" /><input class="pull-right btn btn-primary" type="submit" value="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Add" />
+                    }
                 </div>
             </div>
         </div>
-        <div class="panel panel-info" @*style="width: 400px; margin: 10px auto;"*@>
+        <div class="panel panel-info" style="position: relative; padding-bottom: 40px;" @*style="width: 400px; margin: 10px auto;"*@>
             <div class="panel-heading">
                 <h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.LockDate</h1>
             </div>
@@ -87,14 +88,14 @@
                         </select>
                     </div>
                     <div>
-                        <input class="pull-right btn btn-primary" type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save />
+                        <input class="tt-bottom-right btn btn-primary" type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save />
                     </div>
                 }
             </div>
         </div>
     @*</div>*@
     @*<div class="col-md-6">*@
-        <div class="panel panel-info" @*style="width: 400px; margin: 10px auto;"*@>
+        <div class="panel panel-info" style="position: relative;" @*style="width: 400px; margin: 10px auto;"*@>
             <div class="panel-heading">
                 <h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Overtime</h1>
             </div>
@@ -126,7 +127,7 @@
                         </div>
                     </div>
                     <div>
-                        <input class="pull-right btn btn-primary" type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save />
+                        <input class="btn btn-primary tt-bottom-right" type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save />
                     </div>
                             }
             </div>
@@ -155,7 +156,7 @@
                                 @Holiday.Date.ToShortDateString()
                             </td>
                             <td>
-                                <a href="@Url.Action(ActionConstants.DeleteHoliday, ControllerConstants.TimeEntry, new { HolidayName = Holiday.HolidayName, Date = Holiday.Date})">
+                                <a href="@Url.Action(ActionConstants.DeleteHoliday, ControllerConstants.TimeEntry, new { HolidayName = Holiday.HolidayName, Date = Holiday.Date})" class="pull-right">
                                     <i class="fa fa-fw fa-remove text-danger"></i>
                                 </a>
                             </td>

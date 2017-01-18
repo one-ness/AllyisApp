@@ -132,17 +132,11 @@
   <data name="Help" xml:space="preserve">
     <value>Help</value>
   </data>
-  <data name="HelpText" xml:space="preserve">
-    <value>Suspendisse semper velit iaculis sem egestas, vel faucibus justo aliquet. Nulla id purus ut lacus dignissim condimentum a at lacus. Suspendisse vitae sapien at eros congue accumsan. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus pharetra vel lectus non tincidunt. Proin eget elit in neque venenatis faucibus non sed quam. Ut condimentum, lorem vitae consequat facilisis, neque ante mattis velit, eget iaculis mauris ipsum eu lacus. Proin efficitur odio metus. Ut ipsum augue, rhoncus a suscipit quis, malesuada eu ex. Etiam elit ipsum, luctus et pretium id, porta vel lacus. Donec cursus porttitor consequat. Duis ullamcorper interdum eros quis suscipit.</value>
-  </data>
   <data name="Invoice" xml:space="preserve">
     <value>Factura</value>
   </data>
   <data name="Marketing" xml:space="preserve">
     <value>Márketing</value>
-  </data>
-  <data name="PPContents" xml:space="preserve">
-    <value>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse at enim vel enim vestibulum tristique. Suspendisse molestie sem vitae ipsum interdum, eget posuere massa dignissim. Sed et nulla est. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean odio mi, porttitor eu pellentesque ut, volutpat quis libero. Pellentesque interdum imperdiet orci in maximus. Vestibulum quis varius libero. Phasellus egestas consectetur neque quis tempor. Nam in mi ac massa gravida lobortis quis ullamcorper metus.</value>
   </data>
   <data name="PPTitle" xml:space="preserve">
     <value>Política de Privacidad y Condiciones de Uso</value>
@@ -158,5 +152,11 @@
   </data>
   <data name="TimeTracker" xml:space="preserve">
     <value>Rastreador de Tiempo</value>
+  </data>
+  <data name="HelpText" xml:space="preserve">
+    <value>¡Nuestra página de ayuda todavía está en construcción! Mientras tanto, si necesita ayuda, por favor haga una solicitud a través de su gerente.</value>
+  </data>
+  <data name="PPContents" xml:space="preserve">
+    <value>Nuestra página de política de privacidad todavía está en construcción.</value>
   </data>
 </root>
