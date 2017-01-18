@@ -19,7 +19,7 @@
         @Html.HiddenFor(m => m.OrganizationId)
         @Html.ValidationSummary(true)
 
-        <div class="col-md-6 min300">
+        <div class="col-md-6">
             <div class="form-group">
                 @Html.ReqLabelFor(model => model.Email, AllyisApps.Resources.Views.Account.Strings.Email)
                 @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
@@ -60,7 +60,7 @@
                 <div class="clearfix"></div>
             }
         </div>
-        <div class="col-md-6 min300">
+        <div class="col-md-6">
             @{var count = 0;
                 var roomInSubscription = true;
             }
@@ -120,14 +120,14 @@
     }
 
 
-    <div class="col-md-6 min300">
+    <div class="col-md-6">
         @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken();
             <label>@AllyisApps.Resources.Views.Account.Strings.Upload</label>
-            <p>
+            @*<p>
                 @AllyisApps.Resources.Views.Account.Strings.InviteMoreThanOne
-            </p>
+            </p>*@
             <input type="file" id="upload-box" name="upload" style="display:none;"
                    onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
                 <input id="upload-file-name-display" class="form-control"
