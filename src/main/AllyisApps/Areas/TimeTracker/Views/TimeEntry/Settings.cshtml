@@ -43,10 +43,43 @@
             <div class="panel-heading">
                 <h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.PClasses</h1>
             </div>
-            <div class="panel-body" id="PayClasses">
+            <div id="PayClasses">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Pay Class</th>
+                            <th><span class="pull-right">Delete</span></th>
+                        </tr>
+                    </thead>
+                    @foreach (PayClassInfo PayClass in Model.PayClasses)
+                    {
+                        <tr>
+                            <td>@(AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString((PayClass.Name).Replace(" ", string.Empty)) ?? PayClass.Name)</td>
+                            <td>
+                                <a href="@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { PayClassId = PayClass.PayClassID })" class="pull-right">
+                                    <i class="fa fa-fw fa-remove text-danger"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                    @using (Html.BeginForm(ActionConstants.CreatePayClass, ControllerConstants.TimeEntry, FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken();
+                        <tr>
+                            <td>
+                                <input type="text" name="NewPayClass" />
+                            </td>
+                            <td>
+                                <input class="pull-right btn btn-primary" type="submit" value="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Add" />
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            @*<div class="panel-body" id="PayClasses">
                 @foreach (PayClassInfo PayClass in Model.PayClasses)
             {
-                    <div style="margin:10px">
+                    <div style="border-bottom: 1px solid #ddd;">
                         <div class="pull-left">
                             @(AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString((PayClass.Name).Replace(" ", string.Empty)) ?? PayClass.Name)
                         </div>
@@ -58,7 +91,7 @@
                         <br />
                     </div>
                 }
-                <div style="margin:10px">
+                <div @*style="margin:10px"*@@*>
                     @using (Html.BeginForm(ActionConstants.CreatePayClass, ControllerConstants.TimeEntry, FormMethod.Post))
                     {
                         @Html.AntiForgeryToken();
@@ -66,6 +99,7 @@
                     }
                 </div>
             </div>
+        </div>*@
         </div>
         <div class="panel panel-info" style="position: relative; padding-bottom: 40px;" @*style="width: 400px; margin: 10px auto;"*@>
             <div class="panel-heading">
@@ -138,12 +172,12 @@
             </div>
             <div id="Holidays">
 
-                <table class="table table-condensed"">
+                <table class="table table-condensed">
                     <thead>
                         <tr>
                             <th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Holiday</th>
                             <th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Date</th>
-                            <th></th>
+                            <th><span class="pull-right">Delete</span></th>
                         </tr>
                     </thead>
                     @foreach (HolidayInfo Holiday in Model.Holidays)
