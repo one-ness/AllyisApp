@@ -20,5 +20,10 @@ namespace AllyisApps.Services.Billing
 		/// Gets or sets ProductRoleId.
 		/// </summary>
 		public int ProductRoleId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Product Id.
+        /// </summary>
+        public int ProductId { get; set; }
 	}
 }

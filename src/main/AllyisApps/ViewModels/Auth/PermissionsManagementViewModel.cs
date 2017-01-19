@@ -21,7 +21,7 @@ namespace AllyisApps.ViewModels.Auth
 	public class PermissionsManagementViewModel : BaseViewModel
 	{
 		/// <summary>
-		/// Gets a value representing the TimeTracker ID.
+		/// Gets a value representing the TimeTracker product ID.
 		/// </summary>
 		public int TimeTrackerId { get; internal set; }
 
@@ -97,7 +97,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets the list of Subscription roles the user has.
 		/// </summary>
-		public IEnumerable<SubscriptionRoleInfo> SubscriptionRoles { get; internal set; }
+		public List<SubscriptionRoleInfo> SubscriptionRoles { get; internal set; }
 	}
 
 	/// <summary>

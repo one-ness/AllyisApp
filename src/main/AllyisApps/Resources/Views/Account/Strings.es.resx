@@ -558,4 +558,7 @@
   <data name="Template" xml:space="preserve">
     <value>Modelo</value>
   </data>
+  <data name="Back" xml:space="preserve">
+    <value>Regreso</value>
+  </data>
 </root>

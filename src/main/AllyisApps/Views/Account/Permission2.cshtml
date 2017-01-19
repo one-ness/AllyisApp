@@ -1,0 +1,90 @@
+﻿@using AllyisApps.ViewModels.Auth;
+
+@model PermissionsManagementViewModel
+
+@{
+    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.Permissions;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int productId = Model.TimeTrackerId;
+    var query = (from entry in Model.Subscriptions where entry.ProductId == productId select entry).FirstOrDefault();
+    bool hasTimeTracker = query != null ? true : false;
+
+    Dictionary<int, string> orgRoles = new Dictionary<int, string>
+    {
+        { (int)AllyisApps.Services.OrganizationRole.Member, AllyisApps.Resources.Views.Account.Strings.Member },
+        { (int)AllyisApps.Services.OrganizationRole.Owner, AllyisApps.Resources.Views.Account.Strings.Owner }
+    };
+    Dictionary<int, string> ttRoles = new Dictionary<int, string>
+    {
+        { (int)AllyisApps.Services.ProductRole.TimeTrackerUser, AllyisApps.Resources.Views.Account.Strings.User },
+        { (int)AllyisApps.Services.ProductRole.TimeTrackerManager, AllyisApps.Resources.Views.Account.Strings.Manager },
+        { (int)AllyisApps.Services.ProductRole.NotInProduct, AllyisApps.Resources.Views.Account.Strings.Unassigned }
+    };
+}
+
+@Html.AntiForgeryToken()
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+    </div>
+    <div class="panel-body" style="padding: 0px;">
+        <table class="table table-hover table-condensed">
+            <thead>
+                <tr class="no-border">
+                    <th></th>
+                    <th>User</th>
+                    <th>Organization Role</th>
+                    @if (hasTimeTracker)
+                    {
+                        <th>TimeTracker Role</th>
+                    }
+                </tr>
+                <tr class="double-bottom-border">
+                    <td>Filter:</td>
+                    <td>
+                        <input type="text" placeholder="@AllyisApps.Resources.Views.Account.Strings.UserSearchPlaceholder" id="userSearch" class="form-control"/>
+                    </td>
+                    <td>
+                        <select id="orgRoleFilter">
+                            <option>Owner</option>
+                            <option>Member</option>
+                        </select>
+                    </td>
+                    @if (hasTimeTracker)
+                    {
+                        <td>
+                            <select id="ttRoleFilter">
+                                <option>None</option>
+                                <option>Manager</option>
+                                <option>User</option>
+                            </select>
+                        </td>
+                    }
+                </tr>
+            </thead>
+            
+            @foreach (UserPermissionsManagement user in Model.UserPermissions)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" id="@(user.UserId + "_check")" />
+                    </td>
+                    <td>@user.UserName</td>
+                    <td>@orgRoles[user.OrganizationRoleId]</td>
+                    @if (hasTimeTracker)
+                    {
+                        <td>@ttRoles[user.SubscriptionRoles.Where(s => s.ProductId == productId).Single().ProductRoleId]</td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="panel-footer">
+        <span class="btn" style="visibility:hidden">Placeholder</span>
+        <div class="pull-right">
+            <a href="" class="btn btn-primary">@AllyisApps.Resources.Views.Account.Strings.Save</a>
+            @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Back, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
+        </div>
+    </div>
+</div>

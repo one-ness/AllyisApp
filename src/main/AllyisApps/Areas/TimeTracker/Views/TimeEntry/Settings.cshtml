@@ -26,13 +26,13 @@
                 {
                     @Html.AntiForgeryToken();
 
-                    <input type="radio" name="startOfWeek" style="margin:10px" id="sow" value="1" @(Model.StartOfWeek == StartOfWeekEnum.Monday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Monday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:10px" id="sow" value="2" @(Model.StartOfWeek == StartOfWeekEnum.Tuesday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Tuesday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:10px" id="sow" value="3" @(Model.StartOfWeek == StartOfWeekEnum.Wednesday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Wednesday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:10px" id="sow" value="4" @(Model.StartOfWeek == StartOfWeekEnum.Thursday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Thursday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:10px" id="sow" value="5" @(Model.StartOfWeek == StartOfWeekEnum.Friday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Friday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:10px" id="sow" value="6" @(Model.StartOfWeek == StartOfWeekEnum.Saturday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Saturday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:10px" id="sow" value="0" @(Model.StartOfWeek == StartOfWeekEnum.Sunday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Sunday</text><br />
+                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="1" @(Model.StartOfWeek == StartOfWeekEnum.Monday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Monday</text><br />
+                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="2" @(Model.StartOfWeek == StartOfWeekEnum.Tuesday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Tuesday</text><br />
+                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="3" @(Model.StartOfWeek == StartOfWeekEnum.Wednesday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Wednesday</text><br />
+                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="4" @(Model.StartOfWeek == StartOfWeekEnum.Thursday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Thursday</text><br />
+                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="5" @(Model.StartOfWeek == StartOfWeekEnum.Friday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Friday</text><br />
+                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="6" @(Model.StartOfWeek == StartOfWeekEnum.Saturday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Saturday</text><br />
+                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="0" @(Model.StartOfWeek == StartOfWeekEnum.Sunday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Sunday</text><br />
 
                     <br />
                     <input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save class="btn btn-primary tt-bottom-right" />
