@@ -853,7 +853,7 @@ namespace AllyisApps.Resources.Views.Account {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Permissions.
+        ///   Looks up a localized string similar to Edit Permissions.
         /// </summary>
         public static string Permissions {
             get {
@@ -993,6 +993,15 @@ namespace AllyisApps.Resources.Views.Account {
         public static string RemoveFromOrgEnd {
             get {
                 return ResourceManager.GetString("RemoveFromOrgEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you would like to remove the selected user(s) from your organization?.
+        /// </summary>
+        public static string RemoveFromOrgNoName {
+            get {
+                return ResourceManager.GetString("RemoveFromOrgNoName", resourceCulture);
             }
         }
         

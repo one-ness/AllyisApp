@@ -385,7 +385,7 @@
     <value>Organizations</value>
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value>Permissions</value>
+    <value>Edit Permissions</value>
   </data>
   <data name="Price" xml:space="preserve">
     <value>Price</value>
@@ -563,5 +563,8 @@
   </data>
   <data name="Back" xml:space="preserve">
     <value>Back</value>
+  </data>
+  <data name="RemoveFromOrgNoName" xml:space="preserve">
+    <value>Are you sure you would like to remove the selected user(s) from your organization?</value>
   </data>
 </root>

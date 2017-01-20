@@ -207,7 +207,7 @@ namespace AllyisApps.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
-			return RedirectToAction(ActionConstants.Manage);
+			return RedirectToAction(ActionConstants.ManagePermissions);
 		}
 
 		/// <summary>

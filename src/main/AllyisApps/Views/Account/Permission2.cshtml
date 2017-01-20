@@ -21,16 +21,29 @@
         { (int)AllyisApps.Services.ProductRole.TimeTrackerManager, AllyisApps.Resources.Views.Account.Strings.Manager },
         { (int)AllyisApps.Services.ProductRole.NotInProduct, AllyisApps.Resources.Views.Account.Strings.Unassigned }
     };
+
+    Dictionary<string, int> setOrgRoles = new Dictionary<string, int>
+    {
+        { AllyisApps.Resources.Views.Account.Strings.RemoveOrg, -1 },
+        { AllyisApps.Resources.Views.Account.Strings.SetMember, (int)AllyisApps.Services.OrganizationRole.Member },
+        { AllyisApps.Resources.Views.Account.Strings.SetOwner, (int)AllyisApps.Services.OrganizationRole.Owner }
+    };
+    Dictionary<string, int> setTTRoles = new Dictionary<string, int>
+    {
+        { AllyisApps.Resources.Views.Account.Strings.RemoveSubscription, -1 },
+        { AllyisApps.Resources.Views.Account.Strings.SetUser, (int)AllyisApps.Services.ProductRole.TimeTrackerUser },
+        { AllyisApps.Resources.Views.Account.Strings.SetManager, (int)AllyisApps.Services.ProductRole.TimeTrackerManager }
+    };
 }
 
 @Html.AntiForgeryToken()
 
 <div class="panel panel-default">
-    <div class="panel-heading">
-    </div>
+    @*<div class="panel-heading">
+    </div>*@
     <div class="panel-body" style="padding: 0px;">
         <table class="table table-hover table-condensed">
-            <thead>
+            <thead class="panel-heading">
                 <tr class="no-border">
                     <th></th>
                     <th>User</th>
@@ -71,7 +84,7 @@
             
             @foreach (UserPermissionsManagement user in Model.UserPermissions)
             {
-                <tr class="userRow">
+                <tr class="userRow" data-id="@user.UserId" data-name="@user.UserName">
                     <td id="checked" style="text-align: center;">
                         <input type="checkbox" id="@(user.UserId + "_check")" />
                     </td>
@@ -85,7 +98,7 @@
             }
 
             @*This last blank row is just an easy way to have a border at the bottom of the table content*@
-            <tr>
+            <tr class="nohover">
                 <td></td>
                 <td></td>
                 <td></td>
@@ -93,11 +106,34 @@
             </tr>
         </table>
     </div>
-    <div class="panel-footer">
-        <span class="btn" style="visibility:hidden">Placeholder</span>
-        <div class="pull-right">
-            <a href="" class="btn btn-primary">@AllyisApps.Resources.Views.Account.Strings.Save</a>
-            @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Back, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
+    <div class="panel-footer" style="height: 54px; position: relative;">
+        @*<span>@AllyisApps.Resources.Views.Account.Strings.Actions</span>*@
+        <div class="col-xs-2 col-sm-1 col-md-1" style="text-align: right; vertical-align: middle; line-height: 33px; padding-right: 0px;">
+            @AllyisApps.Resources.Views.Account.Strings.Actions
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-5 col-lg-4">
+            <select class="form-control" id="actionSelect">
+                <optgroup label="@AllyisApps.Resources.Views.Account.Strings.Organization">
+                    @foreach (string setOrgRole in setOrgRoles.Keys)
+                    {
+                        <option>@setOrgRole</option>
+                    }
+                </optgroup>
+                @if (hasTimeTracker)
+                {
+                    <optgroup label="@AllyisApps.Resources.Views.Account.Strings.TimeTracker">
+                        @foreach (string setTTRole in setTTRoles.Keys)
+                        {
+                            <option>@setTTRole</option>
+                        }
+                    </optgroup>
+                }
+            </select>
+        </div>
+
+        <div class="bottom-right">
+            <input type="button" class="btn btn-primary" id="do-it" value="@AllyisApps.Resources.Views.Account.Strings.Save" />
+            @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
         </div>
     </div>
 </div>
@@ -106,6 +142,9 @@
     <script type="text/javascript">
         hasTT = '@hasTimeTracker' == 'True';
         anyValue = "@AllyisApps.Resources.Views.Account.Strings.Any";
+        orgActions = @Html.Raw(Json.Encode(setOrgRoles));
+        ttActions = @Html.Raw(Json.Encode(setTTRoles));
+        confirmMessage = "@AllyisApps.Resources.Views.Account.Strings.RemoveFromOrgNoName";
     </script>
     <script src="~/Scripts/allyis-account-permission2.js" type="text/javascript"></script>
     @*@Scripts.Render("~/bundles/AccountPermission2");*@

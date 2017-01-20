@@ -449,13 +449,36 @@ namespace AllyisApps.Services
 			return list;
 		}
 
-		/// <summary>
-		/// Updates an organization User.
-		/// </summary>
-		/// <param name="userId">The updated user ID.</param>
-		/// <param name="orgId">The updated org id.</param>
-		/// <param name="orgRoleId">The updated org role id.</param>
-		public void UpdateOrganizationUser(int userId, int orgId, int orgRoleId)
+        /// <summary>
+        /// Gets the EmployeeId for the given user and org.
+        /// </summary>
+        /// <param name="userId">The userId.</param>
+        /// <param name="orgId">The orgId.</param>
+        /// <returns>The employeeId.</returns>
+        public string GetEmployeeId(int userId, int orgId)
+        {
+            #region Validation
+            if (userId <= 0)
+            {
+                throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+            }
+
+            if (orgId < 0)
+            {
+                throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
+            }
+            #endregion
+
+            return DBHelper.GetEmployeeId(userId, orgId);
+        }
+
+        /// <summary>
+        /// Updates an organization User.
+        /// </summary>
+        /// <param name="userId">The updated user ID.</param>
+        /// <param name="orgId">The updated org id.</param>
+        /// <param name="orgRoleId">The updated org role id.</param>
+        public void UpdateOrganizationUser(int userId, int orgId, int orgRoleId)
 		{
 			#region Validation
 			if (userId <= 0)
@@ -478,7 +501,8 @@ namespace AllyisApps.Services
 			{
 				UserId = userId,
 				OrganizationId = orgId,
-				OrgRoleId = orgRoleId
+				OrgRoleId = orgRoleId,
+                EmployeeId = this.GetEmployeeId(userId, orgId)
 			});
 		}
 

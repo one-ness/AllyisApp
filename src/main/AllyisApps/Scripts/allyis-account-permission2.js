@@ -53,6 +53,51 @@
     });
 }
 
+gatherData = function () {
+    var checked_users = [];
+
+    $('.userRow').each(function () {
+        var userEle = $(this);
+        if (userEle.find("#checked > input")[0].checked) {
+            var userResult = {};
+            userResult.userid = userEle.attr("data-id");
+            userResult.name = userEle.attr("data-name");
+            checked_users.push(userResult);
+        }
+    });
+    if (checked_users.length == 0) return null;
+    
+    var selectedAction = {};
+    var value = orgActions[$('#actionSelect').val()];
+    if (!value) {
+        value = ttActions[$('#actionSelect').val()];
+        selectedAction["TimeTrackerRoleTarget"] = value;
+    }
+    else {
+        if (value == -1) {
+            if (!confirm(confirmMessage)) return null;
+        }
+        selectedAction["OrgRoleTarget"] = value;
+    }
+    
+    result = {};
+    result.SelectedUsers = checked_users;
+    result.SelectedActions = selectedAction;
+    return result;
+}
+
+formSubmit = function() {
+    var form = $(document.createElement("form")).attr({ "method": "POST", "action": "ManagePermissions" });
+    var data = gatherData();
+    if (!data) {
+        return;
+    }
+    var datajson = JSON.stringify(data);
+
+    $(document.createElement("input")).attr({ "type": "hidden", "name": "data", "value": datajson }).appendTo(form);
+    form.appendTo(document.body).submit();
+}
+
 $(document).ready(function () {
     orgRoleDD = $('#orgRoleFilter');
     orgRoleDD.change(function () {
@@ -70,4 +115,8 @@ $(document).ready(function () {
     userSearch.on('input', _.debounce(function () {
         filterRows();
     }, 200));
+
+    $('#do-it').on("click", function () {
+        formSubmit();
+    });
 });
