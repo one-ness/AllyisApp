@@ -9,6 +9,7 @@
 /// <reference path="allyis-account-createorg.js" />
 /// <reference path="allyis-account-manage.js" />
 /// <reference path="allyis-account-permission.js" />
+/// <reference path="allyis-account-permission2.js" />
 /// <reference path="allyis-account-subscribe.js" />
 /// <reference path="allyis-capscheck.js" />
 /// <reference path="allyis-list-group-search.js" />

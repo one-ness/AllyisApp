@@ -63,7 +63,10 @@ namespace AllyisApps
 			bundles.Add(new ScriptBundle("~/bundles/AccountPermission").Include(
 				"~/Scripts/allyis-account-permission.js"));
 
-			bundles.Add(new ScriptBundle("~/bundles/AccountSubscribe").Include(
+            bundles.Add(new ScriptBundle("~/bundles/AccountPermission2").Include(
+                "~/Scripts/allyis-account-permission2.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/AccountSubscribe").Include(
 				"~/Scripts/allyis-account-subscribe.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/CapsCheck").Include(

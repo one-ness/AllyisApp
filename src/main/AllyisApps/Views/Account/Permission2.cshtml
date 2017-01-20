@@ -41,23 +41,28 @@
                     }
                 </tr>
                 <tr class="double-bottom-border">
-                    <td>Filter:</td>
+                    <td style="text-align: right;">Filter:</td>
                     <td>
-                        <input type="text" placeholder="@AllyisApps.Resources.Views.Account.Strings.UserSearchPlaceholder" id="userSearch" class="form-control"/>
+                        <input type="search" placeholder="@AllyisApps.Resources.Views.Account.Strings.UserSearchPlaceholder" id="userSearch" class="form-control"/>
                     </td>
                     <td>
                         <select id="orgRoleFilter">
-                            <option>Owner</option>
-                            <option>Member</option>
+                            <option>@AllyisApps.Resources.Views.Account.Strings.Any</option>
+                            @foreach (string role in orgRoles.Values)
+                            {
+                                <option>@role</option>
+                            }
                         </select>
                     </td>
                     @if (hasTimeTracker)
                     {
                         <td>
                             <select id="ttRoleFilter">
-                                <option>None</option>
-                                <option>Manager</option>
-                                <option>User</option>
+                                <option>@AllyisApps.Resources.Views.Account.Strings.Any</option>
+                                @foreach (string ttrole in ttRoles.Values)
+                                {
+                                    <option>@ttrole</option>
+                                }
                             </select>
                         </td>
                     }
@@ -66,18 +71,26 @@
             
             @foreach (UserPermissionsManagement user in Model.UserPermissions)
             {
-                <tr>
-                    <td>
+                <tr class="userRow">
+                    <td id="checked" style="text-align: center;">
                         <input type="checkbox" id="@(user.UserId + "_check")" />
                     </td>
-                    <td>@user.UserName</td>
-                    <td>@orgRoles[user.OrganizationRoleId]</td>
+                    <td id="name">@user.UserName</td>
+                    <td id="orgRole">@orgRoles[user.OrganizationRoleId]</td>
                     @if (hasTimeTracker)
                     {
-                        <td>@ttRoles[user.SubscriptionRoles.Where(s => s.ProductId == productId).Single().ProductRoleId]</td>
+                        <td id="ttRole">@ttRoles[user.SubscriptionRoles.Where(s => s.ProductId == productId).Single().ProductRoleId]</td>
                     }
                 </tr>
             }
+
+            @*This last blank row is just an easy way to have a border at the bottom of the table content*@
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                @if (hasTimeTracker) { <td></td> }
+            </tr>
         </table>
     </div>
     <div class="panel-footer">
@@ -88,3 +101,12 @@
         </div>
     </div>
 </div>
+
+@section scripts {
+    <script type="text/javascript">
+        hasTT = '@hasTimeTracker' == 'True';
+        anyValue = "@AllyisApps.Resources.Views.Account.Strings.Any";
+    </script>
+    <script src="~/Scripts/allyis-account-permission2.js" type="text/javascript"></script>
+    @*@Scripts.Render("~/bundles/AccountPermission2");*@
+}
