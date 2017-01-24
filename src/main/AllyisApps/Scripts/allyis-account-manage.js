@@ -34,7 +34,7 @@ $.fn.clearErrors = function () {
 
 // Members
 function removeUser(orgId, userId, fullName) {
-    var result = confirm(removeFromOrg + fullName + removeFromOrgEnd);
+    var result = confirm(removeFromOrg + " " + fullName + " " + removeFromOrgEnd);
     if (result == true) {
         var url = removeMemberAction + userId;
 

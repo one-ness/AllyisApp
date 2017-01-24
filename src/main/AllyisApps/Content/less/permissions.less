@@ -318,7 +318,7 @@
     }
 }
 
-.no-match {
+.no-match, .off-page {
     display: none;
 }
 
@@ -338,4 +338,20 @@
 
 .nohover {
     pointer-events: none;
+}
+
+td#checked {
+    text-align: center;
+}
+
+.pageContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .page-btn {
+        margin: -20px 5px 5px 5px;
+        width: 25px;
+        padding: 2px;
+    }
 }
