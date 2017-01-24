@@ -54,7 +54,9 @@
                     }
                 </tr>
                 <tr class="double-bottom-border">
-                    <td style="text-align: right;">Filter:</td>
+                    <td id="checked">
+                        <input type="checkbox" id="all_check" />
+                    </td>
                     <td>
                         <input type="search" placeholder="@AllyisApps.Resources.Views.Account.Strings.UserSearchPlaceholder" id="userSearch" class="form-control"/>
                     </td>
@@ -106,10 +108,7 @@
             </tr>
         </table>
         <div class="pageContainer">
-            <input id="page-1" type="button" class="page-btn btn btn-primary btn-xs" disabled="" value="1" />
-            <input id="page-2" type="button" class="page-btn btn btn-primary btn-xs" value="2" />
-            <input id="page-3" type="button" class="page-btn btn btn-primary btn-xs" value="3" />
-            <input id="page-4" type="button" class="page-btn btn btn-primary btn-xs" value="4" />
+            @*This container is populated by javascript in allyis-account-permission2.js*@
         </div>
     </div>
     <div class="panel-footer" style="height: 54px; position: relative;">
@@ -151,7 +150,7 @@
         orgActions = @Html.Raw(Json.Encode(setOrgRoles));
         ttActions = @Html.Raw(Json.Encode(setTTRoles));
         confirmMessage = "@AllyisApps.Resources.Views.Account.Strings.RemoveFromOrgNoName";
-        pageLimit = 3;
+        pageLimit = 16;
     </script>
     <script src="~/Scripts/allyis-account-permission2.js" type="text/javascript"></script>
     @*@Scripts.Render("~/bundles/AccountPermission2");*@

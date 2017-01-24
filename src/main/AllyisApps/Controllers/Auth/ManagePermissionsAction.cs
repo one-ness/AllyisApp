@@ -108,7 +108,7 @@ namespace AllyisApps.Controllers
                 }
             }
 
-			result.UserPermissions = permissions.DistinctBy(u => u.UserId).OrderBy(u => u.UserName).ToList();   // UserRoles are unique via SubscriptionId and UserId, but UserPermissionsManagement does not track SubscriptionId, causing duplicate users to be stored
+			result.UserPermissions = permissions.DistinctBy(u => u.UserId).OrderBy(u => u.UserName.Split(' ').Last()).ToList();   // UserRoles are unique via SubscriptionId and UserId, but UserPermissionsManagement does not track SubscriptionId, causing duplicate users to be stored
 
 			result.Filters = new FilterDataModel();
 			result.Filters.UnassignedUsers = new ViewModels.Auth.Filter("Unassigned", users, x => x.ProductRoleId == 0);

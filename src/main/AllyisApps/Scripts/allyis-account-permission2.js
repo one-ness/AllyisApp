@@ -2,7 +2,7 @@
 // Note: specified in view is global variable pageLimit
 thisPage = 0;
 totalPages = 1;
-anchorUser = null;
+anchorUser = null; // This is the row element that is used to decide what page to show when pagination changes
 
 // Goes to the specified page by toggling the 'offPage' class
 goToPage = function (pageNum) {
@@ -18,22 +18,16 @@ goToPage = function (pageNum) {
         }
     });
 
+    // Enable/disable page buttons
     thisPage = pageNum;
     $('.page-btn').prop('disabled', false);
     $('#page-' + pageNum).prop('disabled', true);
 }
 
-// Creates a button element for paging and returns it
-makePageButton = function (pageNum) {
-    return $('<input/>', {
-        id: "page-" + pageNum,
-        type: "button",
-        "class": "page-btn btn btn-primary btn-xs",
-        value: pageNum
-    }).click(function () {
-        goToPage(pageNum);
-        anchorUser = findFirstRow();
-    });
+// Changes to the specified page. Same as 'goToPage()' but also updates anchor user
+changePage = function (pageNum) {
+    goToPage(pageNum);
+    anchorUser = findFirstRow(); // Anchor user updated on page change
 }
 
 // Finds the first user row that is shown at the current page with the current filters
@@ -48,6 +42,28 @@ findFirstRow = function () {
     return result;
 }
 
+// Creates a button element for paging and returns it
+makePageButton = function (pageNum) {
+    return $('<input/>', {
+        id: "page-" + pageNum,
+        type: "button",
+        "class": "page-btn btn btn-primary btn-xs",
+        value: pageNum
+    }).click(function () {
+        changePage(pageNum);
+    });
+}
+
+// Checks or un-checks all rows that aren't filtered out
+allCheck = function (isChecked) {
+    $('.userRow').each(function () {
+        var ele = $(this);
+        if (!ele.hasClass("no-match")) {
+            ele.find("#checked > input").prop('checked', isChecked);
+        }
+    });
+}
+
 // Updates the classes on each row item according to the current filter settings, and
 //  assigns page numbers to each row based on their display status.
 filterRows = function () {
@@ -58,9 +74,7 @@ filterRows = function () {
         ttRole = ttRoleDD.val();
     }
 
-    // Start off the paging process. We start with a full page 0. That way, if there are no rows,
-    //  the page count stays at 0, but if there's even 1, we get a page 1. Also, if the last row
-    //  perfectly fills up a page, it won't make the next page.
+    // Start off the paging process.
     var currentPage = 0;
     var currentPageTotal = pageLimit - 1;
     var pageContainer = $('.pageContainer');
@@ -117,18 +131,25 @@ filterRows = function () {
             }
         }
 
+        // Assign page. Paging starts at end of "page 0" with incrementation before
+        // page assignment. So, the first element becomes the first item on page 1. This way,
+        // if the last element perfectly fills the last page, it doesn't make another page
+        // yet.
         if (isShown) {
             currentPageTotal += 1;
-            if (currentPageTotal >= pageLimit) {
+            if (currentPageTotal >= pageLimit) { // New page
                 currentPageTotal = 0;
                 currentPage += 1;
                 pageContainer.append(makePageButton(currentPage));
             }
         }
-        ele.attr("data-page", currentPage);
+        ele.attr("data-page", Math.max(currentPage, 1)); // We don't want hidden elements with page 0
     });
 
     totalPages = currentPage;
+
+    // After pagination is recalculated, the anchor user is used to decide which page to show. This way,
+    // if a user is changing the filters a lot, their place in the list is roughly constant.
     if (anchorUser) {
         goToPage(anchorUser.attr("data-page"));
     }
@@ -210,6 +231,10 @@ $(document).ready(function () {
 
     $('#do-it').on("click", function () {
         formSubmit();
+    });
+
+    $('#all_check').change(function () {
+        allCheck($(this)[0].checked);
     });
 
     filterRows();
