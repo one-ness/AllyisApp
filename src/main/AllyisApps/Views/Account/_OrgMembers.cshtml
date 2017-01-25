@@ -19,6 +19,7 @@
             <thead>
                 <tr>
                     <th>@AllyisApps.Resources.Views.Account.Strings.Name</th>
+                    <th>@AllyisApps.Resources.Views.Account.Strings.Email</th>
                     <th>@AllyisApps.Resources.Views.Account.Strings.EmployeeId</th>
                     <th>@AllyisApps.Resources.Views.Account.Strings.Role</th>
                     <th></th>
@@ -41,6 +42,10 @@
                         var displayEmail = invite.CompressedEmail;
                         var accessCode = invite.AccessCode;
 
+                        var displayName = (string.IsNullOrWhiteSpace(firstName) ? string.IsNullOrWhiteSpace(lastName) ? "" : lastName + " " :
+                                string.IsNullOrWhiteSpace(lastName) ? firstName + " " : string.Format("{0} {1} ", firstName, lastName)) + "(" +
+                                AllyisApps.Resources.Views.Account.Strings.Invited + ")";
+
                         pageCount = 1 + (count / Model.PageSize);
                         if (count >= minGroupSpot && count <= maxGroupSpot)
                         {
@@ -52,14 +57,21 @@
                         }
 
                     <tr data-page="@pageCount" @hide>
-                        <td class="text-left">
+                        <td>
+                            @displayName
+                        </td>
+                        @*<td class="text-left">
                             @firstName @lastName<span class="user-email">(@displayEmail)</span>
+                        </td>*@
+                        <td>@displayEmail</td>
+                        <td>@invite.EmployeeId</td>
+                        <td class="text-left">
+                            @invite.OrgRole
                         </td>
-                        <td></td>
-                        <td class="text-left text-info">
-                            @AllyisApps.Resources.Views.Account.Strings.Invited
+                        <td class="text-right icon-strip">
+                            <a href="javascript: void(0);" class="text-muted" title=@AllyisApps.Resources.Views.Account.Strings.RemoveInvitation
+                               onclick='deleteInvitation("@invite.OrganizationId", "@invite.InvitationId")'><span class="fa fa-fw fa-remove text-danger"></span></a>
                         </td>
-                        <td></td>
                     </tr>
                         count++;
                     }
@@ -80,6 +92,9 @@
                     <tr data-page="@pageCount" @hide>
                         <td class="text-left">
                             @user.FullName @*<span class="user-email">(@user.UserInfo.Email)</span>*@
+                        </td>
+                        <td>
+                            -email address-
                         </td>
                         <td class="text-left">
                             @user.EmployeeId

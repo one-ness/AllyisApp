@@ -146,12 +146,21 @@
 @section scripts {
     <script type="text/javascript">
         hasTT = '@hasTimeTracker' == 'True';
-        anyValue = "@AllyisApps.Resources.Views.Account.Strings.Any";
+        //anyValue = "@AllyisApps.Resources.Views.Account.Strings.Any";
         orgActions = @Html.Raw(Json.Encode(setOrgRoles));
         ttActions = @Html.Raw(Json.Encode(setTTRoles));
         confirmMessage = "@AllyisApps.Resources.Views.Account.Strings.RemoveFromOrgNoName";
+
         pageLimit = 16;
+        pageContainer = $('.pageContainer');
     </script>
     <script src="~/Scripts/allyis-account-permission2.js" type="text/javascript"></script>
     @*@Scripts.Render("~/bundles/AccountPermission2");*@
+    <script type="text/javascript">        @*Filters can only be set up after the above script is loaded*@
+        rowSelector = ".userRow";
+        checkBoxSelector = "#checked > input";
+        addFilter("#userSearch", "search", "#name");
+        addFilter('#orgRoleFilter', 'dropDown', "#orgRole", "@AllyisApps.Resources.Views.Account.Strings.Any");
+        if(hasTT) addFilter('#ttRoleFilter', 'dropDown', "#ttRole", "@AllyisApps.Resources.Views.Account.Strings.Any");
+    </script>
 }

@@ -1,8 +1,15 @@
 ﻿// Globals for page info
-// Note: specified in view is global variable pageLimit
+// Note: specified in view are global variables:
+// pageLimit - how many rows per page
+// pageContainer - the div element to contain page buttons
 thisPage = 0;
 totalPages = 1;
-anchorUser = null; // This is the row element that is used to decide what page to show when pagination changes
+anchorRow = null; // This is the row element that is used to decide what page to show when pagination changes
+
+// Globals for filtering
+// Note: specified in view are global variables:
+// rowSelector - css selector to grab all row elements
+// checkBoxSelector - css selector to find check boxes within rows. Leave null if you are not using checkboxes.
 
 // Goes to the specified page by toggling the 'offPage' class
 goToPage = function (pageNum) {
@@ -27,7 +34,7 @@ goToPage = function (pageNum) {
 // Changes to the specified page. Same as 'goToPage()' but also updates anchor user
 changePage = function (pageNum) {
     goToPage(pageNum);
-    anchorUser = findFirstRow(); // Anchor user updated on page change
+    anchorRow = findFirstRow(); // Anchor row updated on page change
 }
 
 // Finds the first user row that is shown at the current page with the current filters
@@ -64,62 +71,147 @@ allCheck = function (isChecked) {
     });
 }
 
+// Data sructure to store filters in use and their types
+filters = [];
+
+// Registers an element to act as a search filter.
+//  filterElementSelector - a css selector to find the input element that controls this filter
+//  filterType - either "search" or "dropDown", indicating what kind of filter it is
+//  rowFilteredPropertySelector - a css selector to find the element within a row that this filter acts on
+//  noneValue - for drop down filters, this is the text of the 'none' option (e.g. "Any", "None", "Select...", etc.)
+addFilter = function (filterElementSelector, filterType, rowFilteredPropertySelector, noneValue) {
+    // validate type
+    if (["search", "dropDown"].indexOf(filterType) == -1) {
+        console.log("Error registering filter for " + filterElementSelector + "; '" + filterType + "' is not a valid filter type. Use 'search' or 'dropDown'");
+        return;
+    }
+
+    // create filter (no validation of selectors)
+    var newFilter = {};
+    newFilter.selector = filterElementSelector;
+    newFilter.type = filterType;
+    newFilter.find = rowFilteredPropertySelector;
+    if (noneValue) newFilter.noneValue = noneValue;
+    filters.push(newFilter);
+
+    // add event listener
+    if (filterType == "search") {
+        $(filterElementSelector).on('input', _.debounce(function () { // The 'input' actions catches changes AND clicking the X to clear
+            filterRows();
+        }, 400));
+    }
+    else {
+        $(filterElementSelector).change(function () {
+            filterRows();
+        });
+    }
+
+    console.log("Added filter:");
+    console.log(newFilter);
+}
+
 // Updates the classes on each row item according to the current filter settings, and
 //  assigns page numbers to each row based on their display status.
 filterRows = function () {
+    console.log('filtering rows');
+
     // Grab all filter values
-    var userFilter = userSearch.val().toLowerCase();
-    var orgRole = orgRoleDD.val();
-    if(hasTT) {
-        ttRole = ttRoleDD.val();
+    var filterValues = [];
+    for (var i = 0; i < filters.length; i++) {
+        filterValues[i] = $(filters[i].selector).val();
+        if (filters[i].type == "search") filterValues[i] = filterValues[i].toLowerCase();
     }
+
+    //// Grab all filter values
+    //var userFilter = userSearch.val().toLowerCase();
+    //var orgRole = orgRoleDD.val();
+    //if(hasTT) {
+    //    ttRole = ttRoleDD.val();
+    //}
 
     // Start off the paging process.
     var currentPage = 0;
     var currentPageTotal = pageLimit - 1;
-    var pageContainer = $('.pageContainer');
+    //var pageContainer = $('.pageContainer');
     pageContainer.empty();
 
     // Evaluate each row and update classes
-    $('.userRow').each(function (index) {
+    // $('.userRow').each(function (index) {
+    $(rowSelector).each(function (index) {
         var ele = $(this);
-        var eleCheckBox = ele.find("#checked > input")[0];
-        var eleUser = ele.find("#name");
-        var eleOrgRole = ele.find("#orgRole");
-        var eleTTRole;
-        if (hasTT) eleTTRole = ele.find("#ttRole");
 
-        // This array represents the result of each filter check
-        // [checked, match name search, match org role, match tt role]
-        var display = [false, true, true, true];
-
-        display[0] = (eleCheckBox.checked);
-
-        if (userFilter && userFilter != "") {
-            display[1] = (eleUser.html().toLowerCase().search(userFilter) > -1);
+        var checked = true;
+        if (checkBoxSelector) {
+            checked = ele.find(checkBoxSelector)[0].checked;
         }
 
-        if (orgRole != anyValue) {
-            display[2] = (eleOrgRole.html() == orgRole);
-        }
-
-        if (hasTT) {
-            if (ttRole != anyValue) {
-                display[3] = (eleTTRole.html() == ttRole);
+        // Go through registered filters
+        var display = [];
+        for (var i = 0; i < filters.length; i++) {
+            var thisItemText = ele.find(filters[i].find).html();
+            if (filters[i].type == "search") {
+                if (!filterValues[i] || filterValues[i] == "")
+                {
+                    display[i] = true; // Display all when no search text entered
+                }
+                else
+                {
+                    display[i] = thisItemText.toLowerCase().search(filterValues[i]) > -1;
+                }
+            }
+            else {
+                if (filters[i].noneValue && filterValues[i] == filters[i].noneValue)
+                {
+                    display[i] = true; // Display all when no filter option selected
+                }
+                else {
+                    display[i] = thisItemText == filterValues[i];
+                }
             }
         }
 
-        // Anything that matches all 3 filters is displayed normally
+        //var eleCheckBox = ele.find("#checked > input")[0];
+        //var eleUser = ele.find("#name");
+        //var eleOrgRole = ele.find("#orgRole");
+        //var eleTTRole;
+        //if (hasTT) eleTTRole = ele.find("#ttRole");
+
+        // This array represents the result of each filter check
+        // [checked, match name search, match org role, match tt role]
+        //var display = [false, true, true, true];
+
+        //display[0] = (eleCheckBox.checked);
+
+        //if (userFilter && userFilter != "") {
+        //    display[1] = (eleUser.html().toLowerCase().search(userFilter) > -1);
+        //}
+
+        //if (orgRole != anyValue) {
+        //    display[2] = (eleOrgRole.html() == orgRole);
+        //}
+
+        //if (hasTT) {
+        //    if (ttRole != anyValue) {
+        //        display[3] = (eleTTRole.html() == ttRole);
+        //    }
+        //}
+
+        // Anything that matches all filters is displayed normally
         // Anything else that is checked is still displayed, but with alternate style
         // Anything else is hidden
         var isShown = true;
-        if (display[1] && display[2] && display[3]) {
+        var matchesAllFilters = true;
+        for (var i = 0; i < display.length; i++) {
+            if (!display[i]) matchesAllFilters = false;
+        }
+
+        if (matchesAllFilters) {
             ele.toggleClass("check-no-match", false);
             ele.toggleClass("no-match", false);
         }
         else
         {
-            if (display[0]) {
+            if (checked) {
                 ele.toggleClass("check-no-match", true);
                 ele.toggleClass("no-match", false);
             }
@@ -148,15 +240,15 @@ filterRows = function () {
 
     totalPages = currentPage;
 
-    // After pagination is recalculated, the anchor user is used to decide which page to show. This way,
+    // After pagination is recalculated, the anchor row is used to decide which page to show. This way,
     // if a user is changing the filters a lot, their place in the list is roughly constant.
-    if (anchorUser) {
-        goToPage(anchorUser.attr("data-page"));
+    if (anchorRow) {
+        goToPage(anchorRow.attr("data-page"));
     }
     else
     {
         goToPage(1);
-        anchorUser = findFirstRow();
+        anchorRow = findFirstRow();
     }
 }
 
@@ -212,22 +304,22 @@ formSubmit = function() {
 }
 
 $(document).ready(function () {
-    orgRoleDD = $('#orgRoleFilter');
-    orgRoleDD.change(function () {
-        filterRows();
-    });
+    //orgRoleDD = $('#orgRoleFilter');
+    //orgRoleDD.change(function () {
+    //    filterRows();
+    //});
 
-    if(hasTT) {
-        ttRoleDD = $('#ttRoleFilter');
-        ttRoleDD.change(function () {
-            filterRows();
-        });
-    }
+    //if(hasTT) {
+    //    ttRoleDD = $('#ttRoleFilter');
+    //    ttRoleDD.change(function () {
+    //        filterRows();
+    //    });
+    //}
 
-    userSearch = $("#userSearch");
-    userSearch.on('input', _.debounce(function () { // The 'input' actions catches changes AND clicking the X to clear
-        filterRows();
-    }, 200));
+    //userSearch = $("#userSearch");
+    //userSearch.on('input', _.debounce(function () { // The 'input' actions catches changes AND clicking the X to clear
+    //    filterRows();
+    //}, 200));
 
     $('#do-it').on("click", function () {
         formSubmit();
