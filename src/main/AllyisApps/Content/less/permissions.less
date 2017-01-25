@@ -1,4 +1,5 @@
 ﻿@import (reference) "_root.less";
+@import "allyis-pages-with-filter.less";
 
 #permissions-wrap {
 	min-height: 200px;
@@ -318,14 +319,6 @@
     }
 }
 
-.no-match, .off-page {
-    display: none;
-}
-
-.check-no-match {
-    color: #888;
-}
-
 .bottom-right {
     position: absolute;
     bottom: 10px;
@@ -340,22 +333,3 @@
     pointer-events: none;
 }
 
-td#checked {
-    text-align: center;
-}
-
-.pageContainer {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-
-    .page-btn {
-        margin: -20px 5px 5px 5px;
-        width: 25px;
-        padding: 2px;
-    }
-}
-
-#all_check {
-    outline: 1px solid black;
-}

@@ -13,6 +13,7 @@
 /// <reference path="allyis-account-subscribe.js" />
 /// <reference path="allyis-capscheck.js" />
 /// <reference path="allyis-list-group-search.js" />
+/// <reference path="allyis-pages-with-filter.js" />
 /// <reference path="allyis-paginate.js" />
 /// <reference path="allyis-updatestateddl.js" />
 /// <reference path="bootstrap.min.js" />
