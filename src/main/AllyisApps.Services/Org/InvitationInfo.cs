@@ -58,6 +58,11 @@ namespace AllyisApps.Services
 		/// </summary>
 		public int OrgRole { get; set; }
 
+        /// <summary>
+        /// Gest or sets the Organization Role name.
+        /// </summary>
+        public string OrgRoleName { get; set; }
+
 		/// <summary>
 		/// Gets or sets the Project Id.
 		/// </summary>

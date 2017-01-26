@@ -18,6 +18,7 @@ namespace AllyisApps.DBModel.Auth
 		private int pOrgRoleId;
 		private DateTime pCreatedUTC;
 		private string pEmployeeId;
+        private string pEmail;
 
 		/// <summary>
 		/// Gets or sets UserId.
@@ -109,6 +110,22 @@ namespace AllyisApps.DBModel.Auth
 			{
 				this.ApplyPropertyChange<OrganizationUserDBEntity, string>(ref this.pEmployeeId, (OrganizationUserDBEntity x) => x.pEmployeeId, value);
 			}
-		}
-	}
+        }
+
+        /// <summary>
+        /// Gets or sets the email for this user.
+        /// </summary>
+        public string Email
+        {
+            get
+            {
+                return this.pEmail;
+            }
+
+            set
+            {
+                this.ApplyPropertyChange<OrganizationUserDBEntity, string>(ref this.pEmail, (OrganizationUserDBEntity x) => x.pEmail, value);
+            }
+        }
+    }
 }

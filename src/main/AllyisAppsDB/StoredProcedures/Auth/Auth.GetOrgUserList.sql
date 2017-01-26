@@ -9,7 +9,8 @@ BEGIN
 		   [OU].[OrgRoleId],
 		   [U].[FirstName],
 		   [U].[LastName],
-		   [OU].[EmployeeId]
+		   [OU].[EmployeeId],
+		   [U].[Email]
     FROM [Auth].[OrganizationUser]	AS [OU]
 	WITH (NOLOCK)
     INNER JOIN [Auth].[User]		AS [U] WITH (NOLOCK) 

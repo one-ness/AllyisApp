@@ -26,7 +26,7 @@ has class="all-check". This checkbox will have a darker outline, and checking/un
     Use these methods to tell the module what class/id/other selector to use for the rows and checkboxes, if they are different than
 the defaults:
     pwf.setRowSelector(newRowSelector);
-    pwf.setCheckBoxSelector(newCheckBoxSelector);
+    pwf.setCheckBoxSelector(newCheckBoxSelector); - If you aren't using check boxes, there's no need to set this to anything.
 Also, you can change the internal page limit. The default is 16 rows per page. The set value can be any postive number.
     pwf.setPageLimit(newPageLimit);
 */
@@ -42,7 +42,8 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
     // Filtering variables
     var rowSelector = ".pwfRow" // css selector to grab all row elements
     var checkBoxSelector = ".pwfCheck" // css selector to find check boxes within rows. Leave null if you are not using checkboxes.
-    filters = []; // Data sructure to store filters in use and their types
+    var hasCheckBoxes = false; // Whether the check box selector actually was found on the page on load.
+    var filters = []; // Data sructure to store filters in use and their types
 
     // Mutators for variables
     exports.setPageLimit = function (newPageLimit) {
@@ -164,20 +165,23 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
         $(rowSelector).each(function (index) {
             var ele = $(this);
 
-            var checked = true;
-            if (checkBoxSelector) {
+            var checked = false;
+            if (hasCheckBoxes) {
                 checked = ele.find(checkBoxSelector)[0].checked;
             }
 
             // Go through registered filters
             var display = [];
             for (var i = 0; i < filters.length; i++) {
-                var thisItemText = ele.find(filters[i].find).html();
                 if (filters[i].type == "search") {
                     if (!filterValues[i] || filterValues[i] == "") {
                         display[i] = true; // Display all when no search text entered
                     }
                     else {
+                        var thisItemText = ele.find(filters[i].find).html();
+                        ele.find(filters[i].find).each(function (index) {
+                            thisItemText += $(this).html();
+                        });
                         display[i] = thisItemText.toLowerCase().search(filterValues[i]) > -1;
                     }
                 }
@@ -186,7 +190,7 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
                         display[i] = true; // Display all when no filter option selected
                     }
                     else {
-                        display[i] = thisItemText == filterValues[i];
+                        display[i] = ele.find(filters[i].find).html() == filterValues[i];
                     }
                 }
             }
@@ -245,8 +249,12 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
     }
 
     $(document).ready(function () {
+        if ($(checkBoxSelector).length > 0) {
+            hasCheckBoxes = true;
+        }
+
         if ($('.all-check').length == 1) {
-            if (checkBoxSelector) {
+            if (hasCheckBoxes) {
                 $('.all-check').change(function () {
                     $(rowSelector).each(function () {
                         var ele = $(this);

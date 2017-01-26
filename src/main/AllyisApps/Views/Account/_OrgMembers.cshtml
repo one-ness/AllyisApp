@@ -66,7 +66,7 @@
                         <td>@displayEmail</td>
                         <td>@invite.EmployeeId</td>
                         <td class="text-left">
-                            @invite.OrgRole
+                            @invite.OrgRoleName
                         </td>
                         <td class="text-right icon-strip">
                             <a href="javascript: void(0);" class="text-muted" title=@AllyisApps.Resources.Views.Account.Strings.RemoveInvitation
@@ -94,7 +94,7 @@
                             @user.FullName @*<span class="user-email">(@user.UserInfo.Email)</span>*@
                         </td>
                         <td>
-                            -email address-
+                            @user.Email
                         </td>
                         <td class="text-left">
                             @user.EmployeeId

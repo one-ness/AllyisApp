@@ -54,7 +54,8 @@ namespace AllyisApps.Controllers
 				FullName = (new[] { Service.GetUserInfo(x.UserId) }).Select(u => string.Format("{0} {1}", u.FirstName, u.LastName)).Single(),
 				OrganizationId = x.OrganizationId,
 				PermissionLevel = ((OrganizationRole)x.OrgRoleId).ToString(),
-				UserId = x.UserId
+				UserId = x.UserId,
+                Email = x.Email
 			});
 
 			IEnumerable<SubscriptionDisplayInfo> subs = Service.GetSubscriptionsDisplay();

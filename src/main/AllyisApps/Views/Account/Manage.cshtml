@@ -52,7 +52,7 @@
         </div>
     </div>
     <div class="panel panel-default members-panel">
-        <div class="panel-heading">
+        @*<div class="panel-heading">
             <h1 class="panel-title">
                 @AllyisApps.Resources.Views.Account.Strings.Members
                 <span class="pull-right panel-title">
@@ -67,8 +67,8 @@
         </div>
         <div>
             <input id="org-members-search" type="text" class="form-control" placeholder="🔍 " style="border: none;" />
-        </div>
-        @Html.Partial("_OrgMembers", Model.Members)
+        </div>*@
+        @Html.Partial("_OrgMembers2", Model.Members)
     </div>
 
     @*<div class="panel panel-default billing-panel" style="height: 100%;">
@@ -91,4 +91,11 @@
         var removeInviationAction = "@Url.Action(ActionConstants.RemoveInvitation, ControllerConstants.Account)?invitationId=";
     </script>
     @Scripts.Render("~/bundles/AccountManage")
+    <script type="text/javascript" src="~/Scripts/allyis-pages-with-filter.js"></script>
+    <script type="text/javascript">
+        pwf.setPageLimit(15);
+        pwf.setRowSelector(".memberRow");
+        pwf.addFilter('#org-members-search', "search", '.memberSearchProperty');
+        pwf.addFilter('#org-members-role', "dropDown", '.memberOrgRole', "Any");
+    </script>
 }

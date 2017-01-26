@@ -58,7 +58,8 @@ namespace AllyisApps
 				"~/Scripts/allyis-account-createorg.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/AccountManage").Include(
-				"~/Scripts/allyis-account-manage.js"));
+				"~/Scripts/allyis-account-manage.js"/*,
+                "~/Scripts/allyis-pages-with-filter.js"*/));
 
 			bundles.Add(new ScriptBundle("~/bundles/AccountPermission").Include(
 				"~/Scripts/allyis-account-permission.js"));

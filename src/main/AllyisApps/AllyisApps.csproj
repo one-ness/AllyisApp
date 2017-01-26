@@ -925,6 +925,7 @@
     <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\Account\Test.cshtml" />
     <Content Include="Views\Account\Permission2.cshtml" />
+    <Content Include="Views\Account\_OrgMembers2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">
