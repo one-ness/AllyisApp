@@ -153,11 +153,11 @@
     <script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
     @*@Scripts.Render("~/bundles/AccountPermission2");*@
     <script type="text/javascript">        @*Filters can only be set up after the above script is loaded*@
-        //pageLimit = 12;
-        rowSelector = ".userRow";
-        checkBoxSelector = "#check";
-        addFilter("#userSearch", "search", "#name");
-        addFilter('#orgRoleFilter', 'dropDown', "#orgRole", "@AllyisApps.Resources.Views.Account.Strings.Any");
-        if('@hasTimeTracker' == 'True') addFilter('#ttRoleFilter', 'dropDown', "#ttRole", "@AllyisApps.Resources.Views.Account.Strings.Any");
+        pwf.setPageLimit(15);
+        pwf.setRowSelector(".userRow");
+        pwf.setCheckBoxSelector("#check");
+        pwf.addFilter("#userSearch", "search", "#name");
+        pwf.addFilter('#orgRoleFilter', 'dropDown', "#orgRole", "@AllyisApps.Resources.Views.Account.Strings.Any");
+        if('@hasTimeTracker' == 'True') pwf.addFilter('#ttRoleFilter', 'dropDown', "#ttRole", "@AllyisApps.Resources.Views.Account.Strings.Any");
     </script>
 }
