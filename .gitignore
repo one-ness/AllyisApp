@@ -256,3 +256,5 @@ paket-files/
 .svn/
 
 *.cache
+GitGuide.docx
+.gitignore
