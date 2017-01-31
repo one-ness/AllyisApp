@@ -108,6 +108,24 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Gets a version of an email address that is collapsed with elipses if it exceeds 50 characters.
+		/// </summary>
+		/// <param name="email">The full email address.</param>
+		/// <returns>The compressed email address.</returns>
+		public string CompressedEmail(string email)
+		{
+			if (!string.IsNullOrEmpty(email) && email.Length > 50)
+			{
+				string cemail = string.Format("{0}...{1}", email.Substring(0, 20), email.Substring(email.Length - 15));
+				return cemail;
+			}
+			else
+			{
+				return email;
+			}
+		}
+
+		/// <summary>
 		/// Retrieves a list of all pending invitations for a given user by the user's email.
 		/// </summary>
 		/// <param name="userEmail">The user's email address.</param>
@@ -132,7 +150,7 @@ namespace AllyisApps.Services
 				{
 					InvitationId = invite.InvitationId,
 					Email = invite.Email,
-					CompressedEmail = invite.CompressedEmail,
+					CompressedEmail = Service.GetCompressedEmail(invite.Email),
 					FirstName = invite.FirstName,
 					LastName = invite.LastName,
 					DateOfBirth = invite.DateOfBirth,

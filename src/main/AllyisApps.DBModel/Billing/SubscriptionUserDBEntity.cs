@@ -10,7 +10,7 @@ namespace AllyisApps.DBModel.Billing
 	/// <summary>
 	/// Subscription User object.
 	/// </summary>
-	public class SubscriptionUserDBEntity : BasePoco // Remodel after OrganizationUserDBEntity? (only if we decide that logging every entry change is a good idea; see how orgUserDBE does logging)
+	public class SubscriptionUserDBEntity
 	{
 		/// <summary>
 		/// Gets or sets FirstName.

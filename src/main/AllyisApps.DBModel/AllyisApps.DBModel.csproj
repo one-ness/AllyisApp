@@ -57,9 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auth\UserRolesDBEntity.cs" />
-    <Compile Include="BasePoco.cs">
-      <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
-    </Compile>
     <Compile Include="Billing\BillingHistoryItemDBEntity.cs" />
     <Compile Include="Billing\SubscriptionDisplayDBEntity.cs" />
     <Compile Include="Billing\SubscriptionRoleDBEntity.cs" />

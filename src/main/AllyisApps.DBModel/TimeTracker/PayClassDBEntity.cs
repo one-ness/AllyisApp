@@ -11,92 +11,31 @@ namespace AllyisApps.DBModel.TimeTracker
 	/// <summary>
 	/// Pay class.
 	/// </summary>
-	public class PayClassDBEntity : BasePoco
+	public class PayClassDBEntity
 	{
-		private int pPayClassID;
-		private string pName;
-		private int pOrganizationId;
-		private DateTime pCreatedUTC;
-		private DateTime pModifiedUTC;
+		/// <summary>
+		/// Gets or sets.
+		/// </summary>
+		public int PayClassID { get; set; }
 
 		/// <summary>
 		/// Gets or sets.
 		/// </summary>
-		public int PayClassID
-		{
-			get
-			{
-				return pPayClassID;
-			}
-
-			set
-			{
-				this.ApplyPropertyChange<PayClassDBEntity, int>(ref this.pPayClassID, (PayClassDBEntity x) => x.pPayClassID, value);
-			}
-		}
+		public string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets.
 		/// </summary>
-		public string Name
-		{
-			get
-			{
-				return pName;
-			}
-
-			set
-			{
-				this.ApplyPropertyChange<PayClassDBEntity, string>(ref this.pName, (PayClassDBEntity x) => x.Name, value);
-			}
-		}
+		public int OrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets.
 		/// </summary>
-		public int OrganizationId
-		{
-			get
-			{
-				return pOrganizationId;
-			}
-
-			set
-			{
-				this.ApplyPropertyChange<PayClassDBEntity, int>(ref this.pOrganizationId, (PayClassDBEntity x) => x.pOrganizationId, value);
-			}
-		}
+		public DateTime CreatedUTC { get; set; }
 
 		/// <summary>
 		/// Gets or sets.
 		/// </summary>
-		public DateTime CreatedUTC
-		{
-			get
-			{
-				return pCreatedUTC;
-			}
-
-			set
-			{
-				this.ApplyPropertyChange<PayClassDBEntity, DateTime>(ref this.pCreatedUTC, (PayClassDBEntity x) => x.pCreatedUTC, value);
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets.
-		/// </summary>
-		public DateTime ModifiedUTC
-		{
-			get
-			{
-				return pModifiedUTC;
-			}
-
-			set
-			{
-				this.ApplyPropertyChange<PayClassDBEntity, DateTime>(ref this.pModifiedUTC, (PayClassDBEntity x) => x.pModifiedUTC, value);
-			}
-		}
+		public DateTime ModifiedUTC { get; set; }
 	}
 }

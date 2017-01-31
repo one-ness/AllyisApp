@@ -85,7 +85,6 @@
     <Compile Include="Org\InvitationInfo.cs" />
     <Compile Include="Org\InvitationSubRoleInfo.cs" />
     <Compile Include="Account\LanguageInfo.cs" />
-    <Compile Include="Account\LastUsed.cs" />
     <Compile Include="Org\OrganizationInfo.cs" />
     <Compile Include="Org\OrganizationUserInfo.cs" />
     <Compile Include="Org\OrgRoleInfo.cs" />

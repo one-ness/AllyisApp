@@ -11,62 +11,22 @@ namespace AllyisApps.DBModel.Auth
 	/// <summary>
 	/// Represents the OrganizationUser Table.
 	/// </summary>
-	public class OrganizationUserDBEntity : BasePoco
+	public class OrganizationUserDBEntity
 	{
-		private int pUserId;
-		private int pOrganizationId;
-		private int pOrgRoleId;
-		private DateTime pCreatedUTC;
-		private string pEmployeeId;
-        private string pEmail;
-
 		/// <summary>
 		/// Gets or sets UserId.
 		/// </summary>
-		public int UserId
-		{
-			get
-			{
-				return this.pUserId;
-			}
-
-			set
-			{
-				this.ApplyPropertyChange<OrganizationUserDBEntity, int>(ref this.pUserId, (OrganizationUserDBEntity x) => x.UserId, value);
-			}
-		}
+		public int UserId { get; set; }
 
 		/// <summary>
 		/// Gets or sets OrganizationId.
 		/// </summary>
-		public int OrganizationId
-		{
-			get
-			{
-				return this.pOrganizationId;
-			}
-
-			set
-			{
-				this.ApplyPropertyChange<OrganizationUserDBEntity, int>(ref this.pOrganizationId, (OrganizationUserDBEntity x) => x.OrganizationId, value);
-			}
-		}
+		public int OrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets OrgRoleId.
 		/// </summary>
-		public int OrgRoleId
-		{
-			get
-			{
-				return this.pOrgRoleId;
-			}
-
-			set
-			{
-				this.ApplyPropertyChange<OrganizationUserDBEntity, int>(ref this.pOrgRoleId, (OrganizationUserDBEntity x) => x.OrgRoleId, value);
-			}
-		}
+		public int OrgRoleId { get; set; }
 
 		/// <summary>
 		/// Gets the OrganizationName associated with this orguser.
@@ -83,49 +43,16 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets the date this user was added to the organization.
 		/// </summary>
-		public DateTime CreatedUTC
-		{
-			get
-			{
-				return this.pCreatedUTC;
-			}
-
-			set
-			{
-				this.ApplyPropertyChange<OrganizationUserDBEntity, DateTime>(ref this.pCreatedUTC, (OrganizationUserDBEntity x) => x.CreatedUTC, value);
-			}
-		}
+		public DateTime CreatedUTC { get; set; }
 
 		/// <summary>
 		/// Gets or sets the employee id for this user.
 		/// </summary>
-		public string EmployeeId
-		{
-			get
-			{
-				return this.pEmployeeId;
-			}
+		public string EmployeeId { get; set; }
 
-			set
-			{
-				this.ApplyPropertyChange<OrganizationUserDBEntity, string>(ref this.pEmployeeId, (OrganizationUserDBEntity x) => x.pEmployeeId, value);
-			}
-        }
-
-        /// <summary>
-        /// Gets or sets the email for this user.
-        /// </summary>
-        public string Email
-        {
-            get
-            {
-                return this.pEmail;
-            }
-
-            set
-            {
-                this.ApplyPropertyChange<OrganizationUserDBEntity, string>(ref this.pEmail, (OrganizationUserDBEntity x) => x.pEmail, value);
-            }
-        }
-    }
+		/// <summary>
+		/// Gets or sets the email for this user.
+		/// </summary>
+		public string Email { get; set; }
+	}
 }

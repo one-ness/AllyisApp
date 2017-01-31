@@ -11,7 +11,7 @@ namespace AllyisApps.DBModel.Crm
 	/// <summary>
 	/// The project table.
 	/// </summary>
-	public class ProjectDBEntity : BasePoco
+	public class ProjectDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the project id.
