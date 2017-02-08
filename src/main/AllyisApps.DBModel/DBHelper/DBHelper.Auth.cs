@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AllyisApps.DBModel.Auth;
@@ -30,8 +29,6 @@ namespace AllyisApps.DBModel
 		/// <returns>The ID of the user if one was created -1 if not.</returns>
 		public int CreateUser(UserDBEntity user)
 		{
-			Trace.WriteLine("CreateUserInfo");
-
 			if (user == null)
 			{
 				throw new ArgumentException("user cannot be null.");
@@ -63,8 +60,7 @@ namespace AllyisApps.DBModel
 				// default null
 				user.UserId = (int)connection.Query<int>("[Auth].[CreateUserInfo]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
-
-			Trace.WriteLine("CreateUserInfoFinished");
+			
 			return user.UserId;
 		}
 
@@ -75,7 +71,6 @@ namespace AllyisApps.DBModel
 		/// <returns>UserDBEntity obj.</returns>
 		public UserDBEntity GetUserByEmail(string email)
 		{
-			Trace.WriteLine("GetUserByEmail");
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var result = connection.Query<UserDBEntity>("[Auth].[GetUserFromEmail] @a", new { a = email });
@@ -231,7 +226,6 @@ namespace AllyisApps.DBModel
 		/// <param name="user">The table with the user to create.</param>
 		public void UpdateUser(UserDBEntity user)
 		{
-			Trace.WriteLine("UpdateUser");
 			if (user == null)
 			{
 				throw new ArgumentException("user cannot be null.");
@@ -254,8 +248,6 @@ namespace AllyisApps.DBModel
 			{
 				connection.Execute("[Auth].[UpdateUserInfo]", parameters, commandType: CommandType.StoredProcedure);
 			}
-
-			Trace.WriteLine("UpdateUserFinished");
 		}
 
 		/// <summary>
@@ -265,8 +257,6 @@ namespace AllyisApps.DBModel
 		/// <returns>The TableUsers containing the user's information, null if call fails.</returns>
 		public UserDBEntity GetUserInfo(int userId)
 		{
-			////Trace.WriteLine("GetUserInfo");
-
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default null
@@ -342,7 +332,6 @@ namespace AllyisApps.DBModel
 		/// <returns>The collection of organizations this user is a part of.</returns>
 		public List<OrganizationUserDBEntity> GetUserOrganizationList(int userId)
 		{
-			Trace.WriteLine("GetUserOrganizationList");
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default null
@@ -359,7 +348,6 @@ namespace AllyisApps.DBModel
 		/// <returns>The collection of subscriptions this user is a part of for the given organization.</returns>
 		public List<SubscriptionUserDBEntity> GetUserSubscriptionList(int userId, int orgId)
 		{
-			Trace.WriteLine("GetUserSubscriptionList");
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default null

@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Crm;
@@ -206,8 +205,6 @@ namespace AllyisApps.DBModel
 		/// <returns>The ID of the customer if one was created -1 if not.</returns>
 		public int CreateCustomerInfo(CustomerDBEntity customer)
 		{
-			Trace.WriteLine("CreateUserInfo");
-
 			if (customer == null)
 			{
 				throw new ArgumentException("customer cannot be null.");
@@ -244,7 +241,6 @@ namespace AllyisApps.DBModel
 		/// <param name="customer">The table with the customer to create.</param>
 		public void UpdateCustomer(CustomerDBEntity customer)
 		{
-			Trace.WriteLine("UpdateUser");
 			if (customer == null)
 			{
 				throw new ArgumentException("customer cannot be null.");
@@ -269,8 +265,6 @@ namespace AllyisApps.DBModel
 			{
 				connection.Execute("[Crm].[UpdateCustomerInfo]", parameters, commandType: CommandType.StoredProcedure);
 			}
-
-			Trace.WriteLine("UpdateCusomterFinished");
 		}
 
 		/// <summary>
@@ -280,8 +274,6 @@ namespace AllyisApps.DBModel
 		/// <returns>The CustomerDBEntity containing the customer's information, null if call fails.</returns>
 		public IEnumerable<CustomerDBEntity> GetCustomerList(int orgId)
 		{
-			Trace.WriteLine("GetCustomers");
-
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default null
@@ -299,8 +291,6 @@ namespace AllyisApps.DBModel
 		/// <returns>The CustomerDBEntity containing the customer's information, null if call fails.</returns>
 		public CustomerDBEntity GetCustomerInfo(int customerID)
 		{
-			////Trace.WriteLine("GetCustomerInfo");
-
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default null
@@ -315,7 +305,6 @@ namespace AllyisApps.DBModel
 		/// <returns>True if successful.</returns>
 		public bool DeleteCustomer(int customerID)
 		{
-			Trace.WriteLine("DeleteCustomer");
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default null
