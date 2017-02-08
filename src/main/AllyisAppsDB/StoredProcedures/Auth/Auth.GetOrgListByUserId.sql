@@ -8,7 +8,9 @@ BEGIN
 		[O].[OrganizationId],
 		[UserId],
 		[Name] AS [OrganizationName],
-		[OrgRoleId]
+		[OrgRoleId],
+		[OU].[CreatedUTC],
+		[OU].[EmployeeId]
 	FROM [Auth].[OrganizationUser]		AS [OU]
 	WITH (NOLOCK)
 	INNER JOIN [Auth].[Organization]	AS [O] WITH (NOLOCK) 

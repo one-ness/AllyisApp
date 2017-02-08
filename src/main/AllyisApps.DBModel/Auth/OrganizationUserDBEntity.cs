@@ -31,14 +31,7 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets the OrganizationName associated with this orguser.
 		/// </summary>
-		public string OrganizationName
-		{
-			get
-			{
-				OrganizationDBEntity org = DBHelper.Instance.GetOrganization(this.OrganizationId);
-				return org.Name;
-			}
-		}
+		public string OrganizationName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the date this user was added to the organization.

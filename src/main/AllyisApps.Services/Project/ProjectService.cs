@@ -40,7 +40,7 @@ namespace AllyisApps.Services
 			{
 				if (dbe != null)
 				{
-                    list.Add(InfoObjectsUtility.InitializeProjectInfo(dbe));
+                    list.Add(InitializeProjectInfo(dbe));
 				}
 			}
 
@@ -91,7 +91,7 @@ namespace AllyisApps.Services
             }
             #endregion Validation
 
-            return DBHelper.CreateProject(InfoObjectsUtility.GetDBEntityFromProjectInfo(newProject));
+            return DBHelper.CreateProject(GetDBEntityFromProjectInfo(newProject));
         }
         
         /// <summary>
@@ -134,7 +134,7 @@ namespace AllyisApps.Services
 
             if (this.Can(Actions.CoreAction.EditProject))
             {
-                DBHelper.UpdateProject(InfoObjectsUtility.GetDBEntityFromProjectInfo(project));
+                DBHelper.UpdateProject(GetDBEntityFromProjectInfo(project));
             }
         }
 
@@ -298,7 +298,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.GetUsersByProjectId(projectId).Select(u => InfoObjectsUtility.InitializeUserInfo(u));
+			return DBHelper.GetUsersByProjectId(projectId).Select(u => InitializeUserInfo(u));
 		}
 
 		/// <summary>
@@ -329,7 +329,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.GetProjectsByUserAndOrganization(userId, UserContext.ChosenOrganizationId, isActive ? 1 : 0).Select(c => InfoObjectsUtility.InitializeCompleteProjectInfo(c));
+			return DBHelper.GetProjectsByUserAndOrganization(userId, UserContext.ChosenOrganizationId, isActive ? 1 : 0).Select(c => InitializeCompleteProjectInfo(c));
 		}
 
 		/// <summary>
@@ -344,7 +344,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be negative.");
 			}
 
-			return InfoObjectsUtility.InitializeCompleteProjectInfo(DBHelper.GetProjectById(projectId));
+			return InitializeCompleteProjectInfo(DBHelper.GetProjectById(projectId));
 		}
 
 		/// <summary>
@@ -359,7 +359,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.GetProjectsByUserId(userId).Select(p => InfoObjectsUtility.InitializeCompleteProjectInfo(p));
+			return DBHelper.GetProjectsByUserId(userId).Select(p => InitializeCompleteProjectInfo(p));
 		}
 
         /// <summary>
@@ -382,5 +382,88 @@ namespace AllyisApps.Services
             }
             return result;
         }
-    }
+
+		/// <summary>
+		/// Translates a <see cref="ProjectDBEntity"/> into a <see cref="ProjectInfo"/>.
+		/// </summary>
+		/// <param name="project">ProjectDBEntity instance.</param>
+		/// <returns>ProjectInfo instance.</returns>
+		public static ProjectInfo InitializeProjectInfo(ProjectDBEntity project)
+		{
+			if (project == null)
+			{
+				return null;
+			}
+
+			return new ProjectInfo
+			{
+				CustomerId = project.CustomerId,
+				EndingDate = project.EndingDate,
+				Name = project.Name,
+				OrganizationId = project.OrganizationId,
+				ProjectId = project.ProjectId,
+				ProjectOrgId = project.ProjectOrgId,
+				StartingDate = project.StartingDate,
+				Type = project.Type
+			};
+		}
+
+		/// <summary>
+		/// Translates a <see cref="ProjectInfo"/> into a <see cref="ProjectDBEntity"/>.
+		/// </summary>
+		/// <param name="project">ProjectInfo instance.</param>
+		/// <returns>ProjectDBEntity instance.</returns>
+		public static ProjectDBEntity GetDBEntityFromProjectInfo(ProjectInfo project)
+		{
+			if (project == null)
+			{
+				return null;
+			}
+
+			return new ProjectDBEntity
+			{
+				CustomerId = project.CustomerId,
+				EndingDate = project.EndingDate,
+				Name = project.Name,
+				OrganizationId = project.OrganizationId,
+				ProjectId = project.ProjectId,
+				ProjectOrgId = project.ProjectOrgId,
+				StartingDate = project.StartingDate,
+				Type = project.Type
+			};
+		}
+
+		/// <summary>
+		/// Translates a <see cref="CompleteProjectDBEntity"/> into a <see cref="CompleteProjectInfo"/>.
+		/// </summary>
+		/// <param name="completeProject">CompleteProjectDBEntity instance.</param>
+		/// <returns>CompleteProjectInfo instance.</returns>
+		public static CompleteProjectInfo InitializeCompleteProjectInfo(CompleteProjectDBEntity completeProject)
+		{
+			if (completeProject == null)
+			{
+				return null;
+			}
+
+			return new CompleteProjectInfo
+			{
+				CreatedUTC = completeProject.CreatedUTC,
+				CustomerId = completeProject.CustomerId,
+				CustomerName = completeProject.CustomerName,
+				CustomerOrgId = completeProject.CustomerOrgId,
+				EndDate = completeProject.EndDate,
+				IsActive = completeProject.IsActive,
+				IsCustomerActive = completeProject.IsCustomerActive,
+				IsUserActive = completeProject.IsUserActive,
+				OrganizationId = completeProject.OrganizationId,
+				OrganizationName = completeProject.OrganizationName,
+				OrgRoleId = completeProject.OrgRoleId,
+				PriceType = completeProject.PriceType,
+				ProjectId = completeProject.ProjectId,
+				ProjectName = completeProject.ProjectName,
+				StartDate = completeProject.StartDate,
+				ProjectOrgId = completeProject.ProjectOrgId
+			};
+		}
+	}
 }

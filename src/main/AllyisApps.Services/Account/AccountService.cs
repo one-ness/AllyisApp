@@ -193,8 +193,8 @@ namespace AllyisApps.Services
                 EmployeeId = invite.EmployeeId
 			});
 
-			IEnumerable<InvitationSubRoleInfo> roles = this.DBHelper.GetInvitationSubRolesByInvitationId(invite.InvitationId).Select(i => InfoObjectsUtility.InitializeInvitationSubRoleInfo(i));
-			IEnumerable<SubscriptionDisplayInfo> subs = this.DBHelper.GetSubscriptionsDisplayByOrg(invite.OrganizationId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s));
+			IEnumerable<InvitationSubRoleInfo> roles = this.DBHelper.GetInvitationSubRolesByInvitationId(invite.InvitationId).Select(i => InitializeInvitationSubRoleInfo(i));
+			IEnumerable<SubscriptionDisplayInfo> subs = this.DBHelper.GetSubscriptionsDisplayByOrg(invite.OrganizationId).Select(s => InitializeSubscriptionDisplayInfo(s));
 
 			foreach (InvitationSubRoleInfo role in roles)
 			{
@@ -409,41 +409,46 @@ namespace AllyisApps.Services
 			}
 
 			UserContext result = null;
-			var user = this.DBHelper.GetUserInfo(userId);
-			if (user != null)
+
+			List<UserContextDBEntity> contextInfo = this.DBHelper.GetUserContextInfo(userId);
+			if (contextInfo.Count > 0) // Count will be 0 if the user is not part of any organizations.
 			{
-				result = new UserContext(userId, user.UserName, user.Email, user.ActiveOrganizationId, user.LastSubscriptionId);
-				var userOrganizationList = this.DBHelper.GetUserOrganizationList(user.UserId);
+				UserContextDBEntity firstRow = contextInfo[0];
+				result = new UserContext(userId, firstRow.UserName, firstRow.Email, firstRow.ActiveOrganizationId == null ? 0 : firstRow.ActiveOrganizationId.Value, firstRow.LastSubscriptionId == null ? 0 : firstRow.LastSubscriptionId.Value);
+				result.ChosenLanguageID = firstRow.LanguagePreference.Value;
 				result.UserOrganizationInfoList = new List<UserOrganizationInfo>();
-				foreach (var orgUser in userOrganizationList)
+				foreach (UserContextDBEntity row in contextInfo)
 				{
-					// Populate new subscription list for every org user
-					var userSubscriptionInfoList = this.DBHelper.GetUserSubscriptionList(orgUser.UserId, orgUser.OrganizationId);
-					var tempList = new List<UserSubscriptionInfo>();
-					foreach (var subUser in userSubscriptionInfoList)
+					// Get the org for this row
+					if (row.OrganizationId != null)
 					{
-						if (subUser != null)
+						UserOrganizationInfo orgInfo = result.UserOrganizationInfoList.Where(o => o.OrganizationId == row.OrganizationId.Value).FirstOrDefault();
+
+						// If the org for this row isn't added yet, add it
+						if (orgInfo == null)
 						{
-							tempList.Add(new UserSubscriptionInfo
+							orgInfo = new UserOrganizationInfo
 							{
-								SubscriptionId = subUser.SubscriptionId,
-								SkuId = subUser.SkuId,
-                                ProductId = (ProductIdEnum)(subUser.ProductId),
-								ProductName = DBHelper.GetProductAreaBySubscription(subUser.SubscriptionId),
-								ProductRole = (ProductRole)Enum.Parse(typeof(ProductRole), subUser.ProductRoleId)
+								OrganizationId = row.OrganizationId.Value,
+								OrganizationName = row.OrganizationName,
+								OrganizationRole = (OrganizationRole)row.OrgRoleId.Value,
+								UserSubscriptionInfoList = new List<UserSubscriptionInfo>()
+							};
+							result.UserOrganizationInfoList.Add(orgInfo);
+						}
+						
+						// If there is subscription info on this line, at it to the org
+						if (row.SubscriptionId != null)
+						{
+							orgInfo.UserSubscriptionInfoList.Add(new UserSubscriptionInfo
+							{
+								SubscriptionId = row.SubscriptionId.Value,
+								ProductId = (ProductIdEnum)row.ProductId.Value,
+								ProductName = row.ProductName,
+								ProductRole = (ProductRole)row.ProductRoleId.Value,
+								SkuId = row.SkuId.Value
 							});
 						}
-					}
-
-					if (orgUser != null)
-					{
-						result.UserOrganizationInfoList.Add(new UserOrganizationInfo
-						{
-							OrganizationId = orgUser.OrganizationId,
-							OrganizationName = orgUser.OrganizationName,
-							OrganizationRole = orgUser.OrgRoleId == 1 ? OrganizationRole.Member : OrganizationRole.Owner,
-							UserSubscriptionInfoList = tempList
-						});
 					}
 				}
 
@@ -457,10 +462,6 @@ namespace AllyisApps.Services
 					// if there is only one org, make that their chosen
 					result.ChosenOrganizationId = result.UserOrganizationInfoList.First().OrganizationId;
 				}
-
-				result.ChosenLanguageID = user.LanguagePreference;
-
-				// If a user deletes an organization or is otherwise removed from one, he should not have it saved as his last active org
 			}
 
 			this.SetUserContext(result);
@@ -473,7 +474,7 @@ namespace AllyisApps.Services
 		/// <returns>A UserInfo instance with the current user's info.</returns>
 		public UserInfo GetUserInfo()
 		{
-			return InfoObjectsUtility.InitializeUserInfo(DBHelper.GetUserInfo(UserContext.UserId));
+			return InitializeUserInfo(DBHelper.GetUserInfo(UserContext.UserId));
 		}
 
 		/// <summary>
@@ -488,7 +489,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
 			}
 
-			return InfoObjectsUtility.InitializeUserInfo(DBHelper.GetUserInfo(userId));
+			return InitializeUserInfo(DBHelper.GetUserInfo(userId));
 		}
 
 		/// <summary>
@@ -507,7 +508,7 @@ namespace AllyisApps.Services
 				throw new FormatException("Email address must be in a valid format.");
 			}
 
-			return InfoObjectsUtility.InitializeUserInfo(DBHelper.GetUserByEmail(email));
+			return InitializeUserInfo(DBHelper.GetUserByEmail(email));
 		}
 
 		/// <summary>
@@ -849,8 +850,114 @@ namespace AllyisApps.Services
 		/// <returns>Collection of OrganizationInfos.</returns>
 		public IEnumerable<OrganizationInfo> GetOrganizationsByUserId()
 		{
-			return DBHelper.GetOrganizationsByUserId(UserContext.UserId).Select(o => InfoObjectsUtility.InitializeOrganizationInfo(o));
+			return DBHelper.GetOrganizationsByUserId(UserContext.UserId).Select(o => InitializeOrganizationInfo(o));
 		}
 		#endregion public
+
+		/// <summary>
+		/// Translates a UserDBEntity into a UserInfo business object.
+		/// </summary>
+		/// <param name="user">UserDBEntity instance.</param>
+		/// <returns>UserInfo instance.</returns>
+		public static UserInfo InitializeUserInfo(UserDBEntity user)
+		{
+			if (user == null)
+			{
+				return null;
+			}
+
+			return new UserInfo
+			{
+				AccessFailedCount = user.AccessFailedCount,
+				ActiveOrganizationId = user.ActiveOrganizationId,
+				Address = user.Address,
+				City = user.City,
+				Country = user.Country,
+				DateOfBirth = user.DateOfBirth,
+				Email = user.Email,
+				EmailConfirmed = user.EmailConfirmed,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				LastSubscriptionId = user.LastSubscriptionId,
+				LockoutEnabled = user.LockoutEnabled,
+				LockoutEndDateUtc = user.LockoutEndDateUtc,
+				PasswordHash = user.PasswordHash,
+				PasswordResetCode = user.PasswordResetCode,
+				PhoneExtension = user.PhoneExtension,
+				PhoneNumber = user.PhoneNumber,
+				PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+				State = user.State,
+				TwoFactorEnabled = user.TwoFactorEnabled,
+				UserId = user.UserId,
+				UserName = user.UserName,
+				PostalCode = user.PostalCode
+			};
+		}
+
+		/// <summary>
+		/// Translates a UserInfo into a UserDBEntity.
+		/// </summary>
+		/// <param name="user">UserInfo instance.</param>
+		/// <returns>UserDBEntity instance.</returns>
+		public static UserDBEntity GetDBEntityFromUserInfo(UserInfo user)
+		{
+			if (user == null)
+			{
+				return null;
+			}
+
+			return new UserDBEntity
+			{
+				AccessFailedCount = user.AccessFailedCount,
+				ActiveOrganizationId = user.ActiveOrganizationId,
+				Address = user.Address,
+				City = user.City,
+				Country = user.Country,
+				DateOfBirth = user.DateOfBirth,
+				Email = user.Email,
+				EmailConfirmed = user.EmailConfirmed,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				LastSubscriptionId = user.LastSubscriptionId,
+				LockoutEnabled = user.LockoutEnabled,
+				LockoutEndDateUtc = user.LockoutEndDateUtc,
+				PasswordHash = user.PasswordHash,
+				PasswordResetCode = user.PasswordResetCode,
+				PhoneExtension = user.PhoneExtension,
+				PhoneNumber = user.PhoneNumber,
+				PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+				State = user.State,
+				TwoFactorEnabled = user.TwoFactorEnabled,
+				UserId = user.UserId,
+				UserName = user.UserName,
+				PostalCode = user.PostalCode,
+				LanguagePreference = 1          // TODO: Put this into UserInfo and do proper lookup
+			};
+		}
+
+		/// <summary>
+		/// Translates a <see cref="UserRolesDBEntity"/> into a <see cref="UserRolesInfo"/>.
+		/// </summary>
+		/// <param name="userRoles">UserRolesDBEntity instance.</param>
+		/// <returns>UserRolesInfo instance.</returns>
+		public static UserRolesInfo InitializeUserRolesInfo(UserRolesDBEntity userRoles)
+		{
+			if (userRoles == null)
+			{
+				return null;
+			}
+
+			return new UserRolesInfo
+			{
+				Email = userRoles.Email,
+				FirstName = userRoles.FirstName,
+				LastName = userRoles.LastName,
+				Name = userRoles.Name,
+				OrgRoleId = userRoles.OrgRoleId,
+				ProductRoleId = userRoles.ProductRoleId,
+				SubscriptionId = userRoles.SubscriptionId,
+				UserId = userRoles.UserId
+			};
+		}
 	}
 }

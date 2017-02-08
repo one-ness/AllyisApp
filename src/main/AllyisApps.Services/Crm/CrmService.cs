@@ -16,6 +16,7 @@ using AllyisApps.DBModel.Crm;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 using AllyisApps.Services.Utilities;
+using AllyisApps.DBModel.Auth;
 
 namespace AllyisApps.Services { 
 	/// <summary>
@@ -210,7 +211,7 @@ namespace AllyisApps.Services {
 			{
 				if (dbe != null)
 				{
-                    list.Add(InfoObjectsUtility.InitializeCustomerInfo(dbe));
+                    list.Add(InitializeCustomerInfo(dbe));
 				}
 			}
 
@@ -607,7 +608,7 @@ namespace AllyisApps.Services {
 				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Select(u => InfoObjectsUtility.InitializeUserInfo(u));
+			return DBHelper.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Select(u => InitializeUserInfo(u));
 		}
 
 		/// <summary>
@@ -678,7 +679,7 @@ namespace AllyisApps.Services {
 		/// <returns>List of SubscriptionDisplayInfos.</returns>
 		public IEnumerable<SubscriptionDisplayInfo> GetUserSubscriptionOrganizationList()
 		{
-			return DBHelper.GetUserSubscriptionOrganizationList(UserContext.UserId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s)).ToList();
+			return DBHelper.GetUserSubscriptionOrganizationList(UserContext.UserId).Select(s => InitializeSubscriptionDisplayInfo(s)).ToList();
 		}
 
 		/// <summary>
@@ -689,7 +690,7 @@ namespace AllyisApps.Services {
 		{
             if (organizationId == -1) organizationId = UserContext.ChosenOrganizationId;
 
-            return DBHelper.Instance.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s)).ToList();
+            return DBHelper.Instance.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InitializeSubscriptionDisplayInfo(s)).ToList();
 		}
 
         /// <summary>
@@ -699,7 +700,7 @@ namespace AllyisApps.Services {
         /// <returns>List of SubscriptionDisplayInfos.</returns>
         public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplayByOrg(int orgId)
         {
-            return DBHelper.Instance.GetSubscriptionsDisplayByOrg(orgId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s));
+            return DBHelper.Instance.GetSubscriptionsDisplayByOrg(orgId).Select(s => InitializeSubscriptionDisplayInfo(s));
         }
 
 		/// <summary>
@@ -957,5 +958,90 @@ namespace AllyisApps.Services {
                 return "0000000000000000"; // 16 character max, arbitrary default id
             }
         }
+
+
+		/// <summary>
+		/// Initializes a <see cref="CustomerInfo"/> from a <see cref="CustomerDBEntity"/>.
+		/// </summary>
+		/// <param name="customer">The CustomerDBEntity to use.</param>
+		/// <returns>A CustomerInfo object.</returns>
+		public static CustomerInfo InitializeCustomerInfo(CustomerDBEntity customer)
+		{
+			if (customer == null)
+			{
+				return null;
+			}
+
+			return new CustomerInfo()
+			{
+				Address = customer.Address,
+				City = customer.City,
+				ContactEmail = customer.ContactEmail,
+				ContactPhoneNumber = customer.ContactPhoneNumber,
+				Country = customer.Country,
+				CreatedUTC = customer.CreatedUTC,
+				CustomerId = customer.CustomerId,
+				CustomerOrgId = customer.CustomerOrgId,
+				EIN = customer.EIN,
+				FaxNumber = customer.FaxNumber,
+				Name = customer.Name,
+				OrganizationId = customer.OrganizationId,
+				PostalCode = customer.PostalCode,
+				State = customer.State,
+				Website = customer.Website
+			};
+		}
+
+		/// <summary>
+		/// Translates a ProductRoleDBEntity into a ProductRoleInfo business object.
+		/// </summary>
+		/// <param name="productRole">ProductRoleDBEntity instance.</param>
+		/// <returns>ProductRoleInfo instance.</returns>
+		public static ProductRoleInfo InitializeProductRoleInfo(ProductRoleDBEntity productRole)
+		{
+			if (productRole == null)
+			{
+				return null;
+			}
+
+			return new ProductRoleInfo
+			{
+				CreatedUTC = productRole.CreatedUTC,
+				ModifiedUTC = productRole.ModifiedUTC,
+				ProductRoleName = productRole.Name,
+				PermissionAdmin = productRole.PermissionAdmin,
+				ProductId = productRole.ProductId,
+				ProductRoleId = productRole.ProductRoleId
+			};
+		}
+
+		/// <summary>
+		/// Translates a <see cref="SubscriptionDisplayDBEntity"/> into a <see cref="SubscriptionDisplayInfo"/>.
+		/// </summary>
+		/// <param name="subscriptionDisplay">SubscriptionDisplayDBEntity instance.</param>
+		/// <returns>SubscriptionDisplay instance.</returns>
+		public static SubscriptionDisplayInfo InitializeSubscriptionDisplayInfo(SubscriptionDisplayDBEntity subscriptionDisplay)
+		{
+			if (subscriptionDisplay == null)
+			{
+				return null;
+			}
+
+			return new SubscriptionDisplayInfo
+			{
+				CanViewSubscription = subscriptionDisplay.CanViewSubscription,
+				CreatedUTC = subscriptionDisplay.CreatedUTC,
+				NumberOfUsers = subscriptionDisplay.NumberOfUsers,
+				OrganizationId = subscriptionDisplay.OrganizationId,
+				OrganizationName = subscriptionDisplay.OrganizationName,
+				ProductId = subscriptionDisplay.ProductId,
+				ProductName = subscriptionDisplay.ProductName,
+				SkuId = subscriptionDisplay.SkuId,
+				SkuName = subscriptionDisplay.SkuName,
+				SubscriptionId = subscriptionDisplay.SubscriptionId,
+				SubscriptionsUsed = subscriptionDisplay.SubscriptionsUsed,
+				Tier = subscriptionDisplay.Tier
+			};
+		}
 	}
 }

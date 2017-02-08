@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 
 using AllyisApps.Services.Utilities;
+using AllyisApps.DBModel.TimeTracker;
 
 namespace AllyisApps.Services.TimeTracker
 {
@@ -92,7 +93,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			return InfoObjectsUtility.InitializeTimeEntryInfo(DBHelper.GetTimeEntryById(timeEntryId));
+			return InitializeTimeEntryInfo(DBHelper.GetTimeEntryById(timeEntryId));
 		}
 
 		/// <summary>
@@ -109,7 +110,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			return DBHelper.CreateTimeEntry(InfoObjectsUtility.GetDBEntityFromTimeEntryInfo(entry));
+			return DBHelper.CreateTimeEntry(GetDBEntityFromTimeEntryInfo(entry));
 		}
 
 		/// <summary>
@@ -125,7 +126,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			DBHelper.UpdateTimeEntry(InfoObjectsUtility.GetDBEntityFromTimeEntryInfo(entry));
+			DBHelper.UpdateTimeEntry(GetDBEntityFromTimeEntryInfo(entry));
 		}
 
 		/// <summary>
@@ -188,7 +189,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			return DBHelper.GetTimeEntriesOverDateRange(UserContext.ChosenOrganizationId, start, end).Select(te => InfoObjectsUtility.InitializeTimeEntryInfo(te));
+			return DBHelper.GetTimeEntriesOverDateRange(UserContext.ChosenOrganizationId, start, end).Select(te => InitializeTimeEntryInfo(te));
 		}
 
 		/// <summary>
@@ -223,7 +224,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, UserContext.ChosenOrganizationId, start, end).Select(te => InfoObjectsUtility.InitializeTimeEntryInfo(te));
+			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, UserContext.ChosenOrganizationId, start, end).Select(te => InitializeTimeEntryInfo(te));
 		}
 
 		/// <summary>
@@ -285,7 +286,7 @@ namespace AllyisApps.Services.TimeTracker
 
 			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
-				DBHelper.CreateHoliday(InfoObjectsUtility.GetDBEntityFromHolidayInfo(holiday));
+				DBHelper.CreateHoliday(GetDBEntityFromHolidayInfo(holiday));
 				return true;
 			}
 
@@ -298,7 +299,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <returns>A list of HolidayInfo's for the holidays in the organization.</returns>
 		public IEnumerable<HolidayInfo> GetHolidays()
 		{
-			return DBHelper.GetHolidays(UserContext.ChosenOrganizationId).Select(hol => InfoObjectsUtility.InitializeHolidayInfo(hol));
+			return DBHelper.GetHolidays(UserContext.ChosenOrganizationId).Select(hol => InitializeHolidayInfo(hol));
 		}
 
 		/// <summary>
@@ -384,7 +385,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <returns>List of PayClassInfo's.</returns>
 		public IEnumerable<PayClassInfo> GetPayClasses()
 		{
-			return DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InfoObjectsUtility.InitializePayClassInfo(pc));
+			return DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => Service.InitializePayClassInfo(pc));
 		}
 
 		/// <summary>
@@ -401,7 +402,7 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			#endregion Validation
 
-			return InfoObjectsUtility.InitializePayClassInfo(DBHelper.GetPayClassByNameAndOrg(name, UserContext.ChosenOrganizationId));
+			return Service.InitializePayClassInfo(DBHelper.GetPayClassByNameAndOrg(name, UserContext.ChosenOrganizationId));
 		}
 
 		/// <summary>
@@ -452,7 +453,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <returns>Organization settings.</returns>
 		public SettingsInfo GetSettings()
 		{
-			return InfoObjectsUtility.InitializeSettingsInfo(DBHelper.GetSettings(UserContext.ChosenOrganizationId));
+			return InitializeSettingsInfo(DBHelper.GetSettings(UserContext.ChosenOrganizationId));
 		}
 
 		/// <summary>
@@ -658,5 +659,112 @@ namespace AllyisApps.Services.TimeTracker
 
             return DBHelper.UpdateLockDate(this.UserContext.ChosenOrganizationId, lockDateUsed, lockDatePeriod, lockDateQuantity);
         }
-    }
+
+		/// <summary>
+		/// Initialized holiday info with a given HolidayDBEntity.
+		/// </summary>
+		/// <param name="hol">The HolidayDBEntity to use.</param>
+		/// <returns>A holiday info object.</returns>
+		public static HolidayInfo InitializeHolidayInfo(HolidayDBEntity hol)
+		{
+			return new HolidayInfo
+			{
+				CreatedUTC = hol.CreatedUTC,
+				ModifiedUTC = hol.ModifiedUTC,
+				Date = hol.Date,
+				HolidayId = hol.HolidayId,
+				HolidayName = hol.HolidayName,
+				OrganizationId = hol.OrganizationId
+			};
+		}
+
+		/// <summary>
+		/// Initialized a SettingsInfo object based on a given SettingDBEntity.
+		/// </summary>
+		/// <param name="settings">The SettingsDBEntity to use.</param>
+		/// <returns>The initialized SettingsInfo object.</returns>
+		public static SettingsInfo InitializeSettingsInfo(SettingDBEntity settings)
+		{
+			return new SettingsInfo
+			{
+				OrganizationId = settings.OrganizationId,
+				OvertimeHours = settings.OvertimeHours,
+				OvertimeMultiplier = settings.OvertimeMultiplier,
+				OvertimePeriod = settings.OvertimePeriod,
+				StartOfWeek = settings.StartOfWeek,
+				LockDatePeriod = settings.LockDatePeriod,
+				LockDateQuantity = settings.LockDateQuantity,
+				LockDateUsed = settings.LockDateUsed
+			};
+		}
+
+		/// <summary>
+		/// Initializes a TimeEntryInfo object based on a given TimeEntryDBEntity.
+		/// </summary>
+		/// <param name="entity">The TimeEntryDBEntity to use.</param>
+		/// <returns>The initialized TimeEntryInfo object.</returns>
+		public static TimeEntryInfo InitializeTimeEntryInfo(TimeEntryDBEntity entity)
+		{
+			return new TimeEntryInfo
+			{
+				ApprovalState = entity.ApprovalState,
+				Date = entity.Date,
+				Description = entity.Description,
+				Duration = entity.Duration,
+				FirstName = entity.FirstName,
+				LastName = entity.LastName,
+				LockSaved = entity.LockSaved,
+				ModSinceApproval = entity.ModSinceApproval,
+				PayClassId = entity.PayClassId,
+				PayClassName = entity.PayClassName,
+				ProjectId = entity.ProjectId,
+				TimeEntryId = entity.TimeEntryId,
+				UserId = entity.UserId,
+				EmployeeId = entity.EmployeeId,
+				Email = entity.Email
+			};
+		}
+
+		/// <summary>
+		/// Builds a TimeEntryDBEntity based on a given TimeEntryInfo object.
+		/// </summary>
+		/// <param name="info">The TimeEntryInfo to use.</param>
+		/// <returns>The built TimeEntryDBEntity based on the TimeEntryInfo object.</returns>
+		public static TimeEntryDBEntity GetDBEntityFromTimeEntryInfo(TimeEntryInfo info)
+		{
+			return new TimeEntryDBEntity
+			{
+				ApprovalState = info.ApprovalState,
+				Date = info.Date,
+				Description = info.Description,
+				Duration = info.Duration,
+				FirstName = info.FirstName,
+				LastName = info.LastName,
+				LockSaved = info.LockSaved,
+				ModSinceApproval = info.ModSinceApproval,
+				PayClassId = info.PayClassId,
+				ProjectId = info.ProjectId,
+				TimeEntryId = info.TimeEntryId,
+				UserId = info.UserId
+			};
+		}
+		
+		/// <summary>
+		/// Creates a HolidayDBEntity based on a HolidayInfo object.
+		/// </summary>
+		/// <param name="holiday">The HolidayInfo to use to creat the DB entity.</param>
+		/// <returns>The created HolidayDBEntity object.</returns>
+		public static HolidayDBEntity GetDBEntityFromHolidayInfo(HolidayInfo holiday)
+		{
+			return new HolidayDBEntity()
+			{
+				CreatedUTC = holiday.CreatedUTC,
+				Date = holiday.Date,
+				HolidayId = holiday.HolidayId,
+				HolidayName = holiday.HolidayName,
+				ModifiedUTC = holiday.ModifiedUTC,
+				OrganizationId = holiday.OrganizationId,
+			};
+		}
+	}
 }

@@ -76,7 +76,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("ownerId", "Organization owner's user id cannot be 0 or negative.");
 			}
 
-			return DBHelper.CreateOrganization(InfoObjectsUtility.GetDBEntityFromOrganizationInfo(organization), ownerId, (int)OrganizationRole.Owner, employeeId);
+			return DBHelper.CreateOrganization(GetDBEntityFromOrganizationInfo(organization), ownerId, (int)OrganizationRole.Owner, employeeId);
 		}
 
 		/// <summary>
@@ -91,7 +91,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
 			}
 
-			return InfoObjectsUtility.InitializeOrganizationInfo(DBHelper.GetOrganization(orgId));
+			return InitializeOrganizationInfo(DBHelper.GetOrganization(orgId));
 		}
 
 		/// <summary>
@@ -108,7 +108,7 @@ namespace AllyisApps.Services
 
 			if (this.Can(Actions.CoreAction.EditOrganization))
 			{
-				DBHelper.UpdateOrganization(InfoObjectsUtility.GetDBEntityFromOrganizationInfo(organization));
+				DBHelper.UpdateOrganization(GetDBEntityFromOrganizationInfo(organization));
 
 				return true;
 			}
@@ -279,7 +279,7 @@ namespace AllyisApps.Services
 								//invitationInfo.Email,
 								//"Join Allyis Apps!");
 
-			return DBHelper.CreateUserInvitation(InfoObjectsUtility.GetDBEntityFromInvitationInfo(invitationInfo));
+			return DBHelper.CreateUserInvitation(GetDBEntityFromInvitationInfo(invitationInfo));
 		}
 
 		/// <summary>
@@ -298,8 +298,8 @@ namespace AllyisApps.Services
 			{
 				IEnumerable<InvitationInfo> invites = this.GetUserInvitations();
 				InvitationInfo thisInvite = invites.Where(x => x.InvitationId == invitationId).SingleOrDefault();
-				IEnumerable<SubscriptionDisplayInfo> subs = this.DBHelper.GetSubscriptionsDisplayByOrg(UserContext.ChosenOrganizationId).Select(s => InfoObjectsUtility.InitializeSubscriptionDisplayInfo(s));
-				IEnumerable<InvitationSubRoleInfo> subRoles = DBHelper.GetInvitationSubRolesByInvitationId(invitationId).Select(i => InfoObjectsUtility.InitializeInvitationSubRoleInfo(i));
+				IEnumerable<SubscriptionDisplayInfo> subs = this.DBHelper.GetSubscriptionsDisplayByOrg(UserContext.ChosenOrganizationId).Select(s => InitializeSubscriptionDisplayInfo(s));
+				IEnumerable<InvitationSubRoleInfo> subRoles = DBHelper.GetInvitationSubRolesByInvitationId(invitationId).Select(i => InitializeInvitationSubRoleInfo(i));
 				foreach (InvitationSubRoleInfo subRole in subRoles)
 				{
 					SubscriptionDisplayInfo currentSub = subs.Where(x => x.SubscriptionId == subRole.SubscriptionId).SingleOrDefault();
@@ -322,7 +322,7 @@ namespace AllyisApps.Services
 		/// <returns>List of InvitationInfos of organization's user invitations.</returns>
 		public IEnumerable<InvitationInfo> GetUserInvitations()
 		{
-			return DBHelper.GetUserInvitationsByOrgId(UserContext.ChosenOrganizationId).Select(i => InfoObjectsUtility.InitializeInvitationInfo(i));
+			return DBHelper.GetUserInvitationsByOrgId(UserContext.ChosenOrganizationId).Select(i => InitializeInvitationInfo(i));
 		}
 
 		/// <summary>
@@ -393,7 +393,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
 			}
 
-			return DBHelper.GetOrganizationMemberList(orgId).Select(o => InfoObjectsUtility.InitializeOrganizationUserInfo(o));
+			return DBHelper.GetOrganizationMemberList(orgId).Select(o => InitializeOrganizationUserInfo(o));
 		}
 
 		// TODO: Look more closely at the use of this method in UploadCsvFileAction to see if some other existing service method can be used instead, and this one retired.
@@ -534,7 +534,7 @@ namespace AllyisApps.Services
 		{
             if (organizationId == -1) organizationId = UserContext.ChosenOrganizationId;
 
-			return DBHelper.GetInvitationSubRolesByOrganizationId(organizationId).Select(i => InfoObjectsUtility.InitializeInvitationSubRoleInfo(i));
+			return DBHelper.GetInvitationSubRolesByOrganizationId(organizationId).Select(i => InitializeInvitationSubRoleInfo(i));
 		}
 
 		/// <summary>
@@ -582,7 +582,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
 			}
 
-			return DBHelper.GetProjectsByOrgId(orgId, isActive ? 1 : 0).Select(c => InfoObjectsUtility.InitializeCompleteProjectInfo(c));
+			return DBHelper.GetProjectsByOrgId(orgId, isActive ? 1 : 0).Select(c => InitializeCompleteProjectInfo(c));
 		}
 
 		/// <summary>
@@ -591,7 +591,7 @@ namespace AllyisApps.Services
 		/// <returns>List of UserRolesInfos.</returns>
 		public IEnumerable<UserRolesInfo> GetUserRoles()
 		{
-			return DBHelper.GetRoles(UserContext.ChosenOrganizationId).Select(o => InfoObjectsUtility.InitializeUserRolesInfo(o));
+			return DBHelper.GetRoles(UserContext.ChosenOrganizationId).Select(o => InitializeUserRolesInfo(o));
         }
         /// <summary>
         /// Gets a recommended EmployeeId that does not yet exist in the org
@@ -642,7 +642,7 @@ namespace AllyisApps.Services
             List<UserInfo> userSubs = this.GetUsersWithSubscriptionToProductInOrganization(this.UserContext.ChosenOrganizationId, ttProductId).ToList();
 
             // Retrieval of existing pay class data
-            List<PayClassInfo> payClasses = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InfoObjectsUtility.InitializePayClassInfo(pc)).ToList();
+            List<PayClassInfo> payClasses = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InitializePayClassInfo(pc)).ToList();
 
             // Result object
             ImportActionResult result = new ImportActionResult();
@@ -1251,7 +1251,7 @@ namespace AllyisApps.Services
                                             LastName = names[1],
                                             PasswordHash = Lib.Crypto.ComputeSHA512Hash("password") // TODO: Figure out a better default password generation system
                                         };
-                                        user.UserId = DBHelper.CreateUser(InfoObjectsUtility.GetDBEntityFromUserInfo(user));
+                                        user.UserId = DBHelper.CreateUser(GetDBEntityFromUserInfo(user));
                                         result.UsersImported += 1;
                                     }
                                     if (user.UserId != -1)
@@ -1504,5 +1504,179 @@ namespace AllyisApps.Services
                 return null;
             }
         }
-    }
+
+		/// <summary>
+		/// Translates an OrganizationUserDBEntity into an OrganizationUserInfo business object.
+		/// </summary>
+		/// <param name="organizationUser">OrganizationUserDBEntity instance.</param>
+		/// <returns>OrganizationUserInfo instance.</returns>
+		public static OrganizationUserInfo InitializeOrganizationUserInfo(OrganizationUserDBEntity organizationUser)
+		{
+			if (organizationUser == null)
+			{
+				return null;
+			}
+
+			return new OrganizationUserInfo
+			{
+				CreatedUTC = organizationUser.CreatedUTC,
+				EmployeeId = organizationUser.EmployeeId,
+				OrganizationId = organizationUser.OrganizationId,
+				OrgRoleId = organizationUser.OrgRoleId,
+				UserId = organizationUser.UserId,
+				Email = organizationUser.Email
+			};
+		}
+
+		/// <summary>
+		/// Translates an OrganizationDBEntity into an OrganizationInfo business object.
+		/// </summary>
+		/// <param name="organization">OrganizationDBEntity instance.</param>
+		/// <returns>OrganizationInfo instance.</returns>
+		public static OrganizationInfo InitializeOrganizationInfo(OrganizationDBEntity organization)
+		{
+			if (organization == null)
+			{
+				return null;
+			}
+
+			return new OrganizationInfo
+			{
+				Address = organization.Address,
+				City = organization.City,
+				Country = organization.Country,
+				DateCreated = organization.CreatedUTC,
+				FaxNumber = organization.FaxNumber,
+				Name = organization.Name,
+				OrganizationId = organization.OrganizationId,
+				PhoneNumber = organization.PhoneNumber,
+				SiteUrl = organization.SiteUrl,
+				State = organization.State,
+				Subdomain = organization.Subdomain,
+				PostalCode = organization.PostalCode
+			};
+		}
+
+		/// <summary>
+		/// Translates an OrganizationInfo business object into an OrganizationDBEntity.
+		/// </summary>
+		/// <param name="organization">OrganizationInfo instance.</param>
+		/// <returns>OrganizationDBEntity instance.</returns>
+		public static OrganizationDBEntity GetDBEntityFromOrganizationInfo(OrganizationInfo organization)
+		{
+			if (organization == null)
+			{
+				return null;
+			}
+
+			return new OrganizationDBEntity
+			{
+				Address = organization.Address,
+				City = organization.City,
+				Country = organization.Country,
+				CreatedUTC = organization.DateCreated,
+				FaxNumber = organization.FaxNumber,
+				Name = organization.Name,
+				OrganizationId = organization.OrganizationId,
+				PhoneNumber = organization.PhoneNumber,
+				SiteUrl = organization.SiteUrl,
+				State = organization.State,
+				Subdomain = organization.Subdomain,
+				PostalCode = organization.PostalCode
+			};
+		}
+
+		/// <summary>
+		/// Translates an InvitationSubRoleDBEntity into an InvitationSubRoleInfo business object.
+		/// </summary>
+		/// <param name="invitationSubRole">InvitationSubRoleDBEntity instance.</param>
+		/// <returns>InvitationSubRoleInfo instance.</returns>
+		public static InvitationSubRoleInfo InitializeInvitationSubRoleInfo(InvitationSubRoleDBEntity invitationSubRole)
+		{
+			if (invitationSubRole == null)
+			{
+				return null;
+			}
+
+			return new InvitationSubRoleInfo
+			{
+				InvitationId = invitationSubRole.InvitationId,
+				ProductRoleId = invitationSubRole.ProductRoleId,
+				SubscriptionId = invitationSubRole.SubscriptionId
+			};
+		}
+
+		/// <summary>
+		/// Translates an InvitationDBEntity into an InvitationInfo business object.
+		/// </summary>
+		/// <param name="invitation">InvitationDBEntity instance.</param>
+		/// <returns>InvitationInfo instance.</returns>
+		public static InvitationInfo InitializeInvitationInfo(InvitationDBEntity invitation)
+		{
+			if (invitation == null)
+			{
+				return null;
+			}
+
+			return new InvitationInfo
+			{
+				AccessCode = invitation.AccessCode,
+				DateOfBirth = invitation.DateOfBirth,
+				Email = invitation.Email,
+				CompressedEmail = Service.GetCompressedEmail(invitation.Email),
+				FirstName = invitation.FirstName,
+				InvitationId = invitation.InvitationId,
+				LastName = invitation.LastName,
+				OrganizationId = invitation.OrganizationId,
+				OrgRole = invitation.OrgRole,
+				OrgRoleName = invitation.OrgRoleName,
+				ProjectId = invitation.ProjectId,
+				EmployeeId = invitation.EmployeeId
+			};
+		}
+
+		/// <summary>
+		/// Translates an InvitationInfo business object into an InvitationDBEntity.
+		/// </summary>
+		/// <param name="invitation">InvitationInfo instance.</param>
+		/// <returns>InvitationDBEntity instance.</returns>
+		public static InvitationDBEntity GetDBEntityFromInvitationInfo(InvitationInfo invitation)
+		{
+			if (invitation == null)
+			{
+				return null;
+			}
+
+			return new InvitationDBEntity
+			{
+				AccessCode = invitation.AccessCode,
+				DateOfBirth = invitation.DateOfBirth,
+				Email = invitation.Email,
+				FirstName = invitation.FirstName,
+				InvitationId = invitation.InvitationId,
+				LastName = invitation.LastName,
+				OrganizationId = invitation.OrganizationId,
+				OrgRole = invitation.OrgRole,
+				ProjectId = invitation.ProjectId,
+				EmployeeId = invitation.EmployeeId
+			};
+		}
+		
+		/// <summary>
+		/// Initialized PayClassInfo object based on a given PayClassDBEntity.
+		/// </summary>
+		/// <param name="payClass">The PayClassDBEntity object to use.</param>
+		/// <returns>The initialied PayClassInfo object.</returns>
+		public static PayClassInfo InitializePayClassInfo(PayClassDBEntity payClass)
+		{
+			return new PayClassInfo
+			{
+				OrganizationId = payClass.OrganizationId,
+				CreatedUTC = payClass.CreatedUTC,
+				Name = payClass.Name,
+				ModifiedUTC = payClass.ModifiedUTC,
+				PayClassID = payClass.PayClassID
+			};
+		}
+	}
 }

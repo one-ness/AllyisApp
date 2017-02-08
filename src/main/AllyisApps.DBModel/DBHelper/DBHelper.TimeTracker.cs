@@ -191,20 +191,20 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Get play class by id.
-		/// </summary>
-		/// <param name="id">Id of pay class.</param>
-		/// <returns>The PayClassDBEntity.</returns>
-		public PayClassDBEntity GetPayClassById(int id)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ID", id);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<PayClassDBEntity>("[TimeTracker].[GetPayClassById]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
-			}
-		}
+		///// <summary>
+		///// Get play class by id.
+		///// </summary>
+		///// <param name="id">Id of pay class.</param>
+		///// <returns>The PayClassDBEntity.</returns>
+		//public PayClassDBEntity GetPayClassById(int id)
+		//{
+		//	DynamicParameters parameters = new DynamicParameters();
+		//	parameters.Add("@ID", id);
+		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+		//	{
+		//		return connection.Query<PayClassDBEntity>("[TimeTracker].[GetPayClassById]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+		//	}
+		//}
 
 		/// <summary>
 		/// Get a pay class by name and org.

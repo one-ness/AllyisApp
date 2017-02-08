@@ -205,23 +205,43 @@ namespace AllyisApps.Core
 			{
 				// an authenticated request MUST have user context in the cookie.
 				this.UserContext = this.GetCookieData(Request);
-				if (this.UserContext == null || this.Service.GetUserInfo(this.UserContext.UserId) == null)
+				if(this.UserContext != null)
 				{
-					// user context not found. can't proceed, redirect to login page.
+					this.UserContext = this.Service.PopulateUserContext(this.UserContext.UserId);
+				}
+
+				if(this.UserContext != null)
+				{
+					// User context successfully populated
+					languageID = this.UserContext.ChosenLanguageID;
+					this.Service.SetUserContext(this.UserContext);
+					ViewBag.ShowOrganizationPartial = true;
+				}
+				else
+				{
+					// User context not found
 					this.SignOut(Response);
 					Response.Redirect(FormsAuthentication.LoginUrl);
 					return;
 				}
 
-				// Populate the User Context with database info
-				this.UserContext = this.Service.PopulateUserContext(this.UserContext.UserId);
+				//if (this.UserContext == null || this.Service.GetUserInfo(this.UserContext.UserId) == null)
+				//{
+				//	// user context not found. can't proceed, redirect to login page.
+				//	this.SignOut(Response);
+				//	Response.Redirect(FormsAuthentication.LoginUrl);
+				//	return;
+				//}
 
-				languageID = this.UserContext.ChosenLanguageID;
+				//// Populate the User Context with database info
+				//this.UserContext = this.Service.PopulateUserContext(this.UserContext.UserId);
 
-				// Update service user context
-				this.Service.SetUserContext(this.UserContext);
+				//languageID = this.UserContext.ChosenLanguageID;
 
-                ViewBag.ShowOrganizationPartial = true;
+				//// Update service user context
+				//this.Service.SetUserContext(this.UserContext);
+
+    //            ViewBag.ShowOrganizationPartial = true;
 			}
 			else
 			{
