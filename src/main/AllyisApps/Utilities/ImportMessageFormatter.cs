@@ -70,6 +70,15 @@ namespace AllyisApps.Utilities
                 formattedResult[0] = successMessage + " imported.";
             }
 
+			if (result.UsersAddedToOrganization > 0)
+			{
+				int difference = result.UsersAddedToOrganization - result.UsersImported;
+				if (difference > 0)
+				{
+					formattedResult[0] = formattedResult[0] + " " + difference + " existing users added to organization.";
+				}
+			}
+
             // formattedResult[1]: Fail notification - simply joins all the fail messages into one, separated by newlines
             List<string> failures = result.CustomerFailures.Union(
                 result.ProjectFailures).Union(

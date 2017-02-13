@@ -854,6 +854,7 @@
     <Content Include="Areas\TimeTracker\Views\Customer\_CustomerEdit.cshtml" />
     <Content Include="Content\less\inputs.less" />
     <Content Include="Content\less\allyis-pages-with-filter.less" />
+    <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
     <None Include="Resources\628px-achtung-svg.png" />
     <Content Include="Scripts\allyis-account-add.js" />

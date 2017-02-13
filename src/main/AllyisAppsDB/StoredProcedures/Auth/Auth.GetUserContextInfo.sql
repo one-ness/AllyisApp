@@ -11,6 +11,7 @@ BEGIN
 		   [U].[Email],
 		   [U].[LastSubscriptionId],
 		   [U].[ActiveOrganizationId],
+		   [U].[LanguagePreference],
 		   [O].[OrganizationId],
 		   [O].[Name] AS 'OrganizationName',
 		   [OU].[OrgRoleId],
