@@ -100,7 +100,7 @@
             }
 
             @*This last blank row is just an easy way to have a border at the bottom of the table content*@
-            <tr class="nohover">
+            <tr id="tableEnd" class="nohover">
                 <td></td>
                 <td></td>
                 <td></td>
@@ -154,7 +154,7 @@
     @*@Scripts.Render("~/bundles/AccountPermission2");*@
     <script type="text/javascript">        @*Filters can only be set up after the above script is loaded*@
         pwf.setPageLimit(15);
-        pwf.setRowSelector(".userRow");
+        pwf.setRowClass("userRow");
         pwf.setCheckBoxSelector("#check");
         pwf.addFilter("#userSearch", "search", "#name");
         pwf.addFilter('#orgRoleFilter', 'dropDown', "#orgRole", "@AllyisApps.Resources.Views.Account.Strings.Any");
