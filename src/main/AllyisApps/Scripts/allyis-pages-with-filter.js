@@ -7,6 +7,8 @@ To use:
 to each item within the row that you will use to match to some filter. By default, this module uses the class "pwfRow". If you would
 like to include check boxes in the filtering (i.e. any checked rows will remain visible even when they don't match the filters), then
 you should also have an id or class for them (the default is the class "pwfCheck").
+	You should also include a final row that simply has the id "tableEnd". This will produce a bottom border until the last row of
+data, and be used as a reference for adding filler rows.
     At the bottom (or top, or wherever), include a div with class="pageContainer" - this will hold the page buttons (they will
 auto-populate; all you need is the empty div).
     Filters can be text boxes or select inputs (drop-down menus). Make sure each filter you will use has an id or unique class to
@@ -25,7 +27,7 @@ on. This is the syntax:
 has class="all-check". This checkbox will have a darker outline, and checking/unchecking it will check/uncheck all visible rows.
     Use these methods to tell the module what class/id/other selector to use for the rows and checkboxes, if they are different than
 the defaults:
-    pwf.setRowSelector(newRowSelector);
+    pwf.setRowClass(newRowClass);
     pwf.setCheckBoxSelector(newCheckBoxSelector); - If you aren't using check boxes, there's no need to set this to anything.
 Also, you can change the internal page limit. The default is 16 rows per page. The set value can be any postive number.
     pwf.setPageLimit(newPageLimit);
@@ -40,10 +42,12 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
     var anchorRow = null; // This is the row element that is used to decide what page to show when pagination changes
 
     // Filtering variables
-    var rowSelector = ".pwfRow" // css selector to grab all row elements
-    var checkBoxSelector = ".pwfCheck" // css selector to find check boxes within rows. Leave null if you are not using checkboxes.
+    var rowClass = "pwfRow"; // css selector to grab all row elements
+    var fillerClass = "pwfFillerRow"; // css selector to grab the blank filler rows at the end
+    var checkBoxSelector = ".pwfCheck"; // css selector to find check boxes within rows. Leave null if you are not using checkboxes.
     var hasCheckBoxes = false; // Whether the check box selector actually was found on the page on load.
     var filters = []; // Data sructure to store filters in use and their types
+    var scrollBufferCreated = false;
 
     // Mutators for variables
     exports.setPageLimit = function (newPageLimit) {
@@ -53,8 +57,8 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
             console.log("pwf - Error setting page limit: Page limit must be greater than 0.");
         }
     }
-    exports.setRowSelector = function (newRowSelector) {
-        rowSelector = newRowSelector;
+    exports.setRowClass = function (newRowClass) {
+        rowClass = newRowClass;
     }
     exports.setCheckBoxSelector = function (newCheckBoxSelector) {
         checkBoxSelector = newCheckBoxSelector;
@@ -64,7 +68,7 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
     _goToPage = function (pageNum) {
         if (!pageNum || pageNum <= 0 || pageNum > totalPages) return;
 
-        $(rowSelector).each(function () {
+        $('.' + rowClass).each(function () {
             var ele = $(this);
             if (ele.attr("data-page") == pageNum) {
                 ele.toggleClass("off-page", false);
@@ -72,6 +76,15 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
             else {
                 ele.toggleClass("off-page", true);
             }
+        });
+        $('.' + fillerClass).each(function () {
+        	var ele = $(this);
+        	if (ele.attr("data-page") == pageNum) {
+        		ele.toggleClass("off-page", false);
+        	}
+        	else {
+        		ele.toggleClass("off-page", true);
+        	}
         });
 
         // Enable/disable page buttons
@@ -88,7 +101,7 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
     // Finds the first user row that is shown at the current page with the current filters
     findFirstRow = function () {
         var result = null;
-        $(rowSelector).each(function () {
+        $('.' + rowClass).each(function () {
             if (!$(this).hasClass("off-page") && !$(this).hasClass("no-match")) {
                 result = $(this);
                 return false;
@@ -148,6 +161,15 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
     // Updates the classes on each row item according to the current filter settings, and
     //  assigns page numbers to each row based on their display status.
     filterRows = function () {
+    	var fillerRowHeight = Math.floor($('.' + rowClass).height());
+    	if (!scrollBufferCreated) {
+    		for (var i = 0; i < pageLimit; i++) {
+    			$('#tableEnd').after(generateFillerRow(fillerRowHeight, 1000000, true));
+    		}
+    		scrollBufferCreated = true;
+    	}
+
+    	$('.scrollBuffer').toggleClass('off-page', false);
 
         // Grab all filter values
         var filterValues = [];
@@ -162,7 +184,7 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
         pageContainer.empty();
 
         // Evaluate each row and update classes
-        $(rowSelector).each(function (index) {
+        $('.' + rowClass).each(function (index) {
             var ele = $(this);
 
             var checked = false;
@@ -235,6 +257,20 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
             ele.attr("data-page", Math.max(currentPage, 1)); // We don't want hidden elements with page 0
         });
 
+		// Removal/addition of filler rows for keeping constant table height.
+        var fillerRowCount = pageLimit - currentPageTotal - 1
+        $('.' + fillerClass).remove();
+        //console.log("Need " + fillerRowCount + " filler rows.");
+        //$('.' + fillerClass).addClass("fillerTemp");
+        //$('.' + fillerClass).toggleClass("off-page", false);
+        //$('.' + fillerClass).remove();
+    	//console.log($('.' + rowClass).parent());
+        //var fillerRowHeight = $('.' + rowClass).eq(0).height();
+        //var fillerRowHeight = Math.floor($('.' + rowClass).height());
+        for (var i = 0; i < fillerRowCount; i++) {
+        	$('#tableEnd').after(generateFillerRow(fillerRowHeight, currentPage));
+        }
+
         totalPages = currentPage;
 
         // After pagination is recalculated, the anchor row is used to decide which page to show. This way,
@@ -246,6 +282,16 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
             _goToPage(1);
             anchorRow = findFirstRow();
         }
+    	//$('.fillerTemp').remove();
+
+        $('.scrollBuffer').toggleClass('off-page', true);
+    }
+
+    generateFillerRow = function (height, page, isScrollBuffer) {
+    	if (typeof isScrollBuffer === 'undefined') {
+    		isScrollBuffer = false;
+    	}
+		return '<tr class="nohover ' + (isScrollBuffer ? 'scrollBuffer' : fillerClass) + '" data-page="' + page + '" style="height: ' + height + 'px;"></tr>'
     }
 
     $(document).ready(function () {
@@ -256,7 +302,7 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
         if ($('.all-check').length == 1) {
             if (hasCheckBoxes) {
                 $('.all-check').change(function () {
-                    $(rowSelector).each(function () {
+                	$('.' + rowClass).each(function () {
                         var ele = $(this);
                         if (!ele.hasClass("no-match")) {
                             ele.find(checkBoxSelector).prop('checked', $('.all-check')[0].checked);
