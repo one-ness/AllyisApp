@@ -31,6 +31,20 @@ the defaults:
     pwf.setCheckBoxSelector(newCheckBoxSelector); - If you aren't using check boxes, there's no need to set this to anything.
 Also, you can change the internal page limit. The default is 16 rows per page. The set value can be any postive number.
     pwf.setPageLimit(newPageLimit);
+
+A few notes on filler rows:
+	One issue faced by paging/filtering is that whenever the number of displayed rows jumps from a higher number to a lower
+number, the height of the table changes. If it's at the bottom of your page, then your scroll position will also jump. This can
+be very annoying when you switch between the last page and previous pages, or when you filter down the list to one or two rows and then
+clear the filter.
+	To keep the table the same constant height, filler rows are added at the end of the list to fill up the last page. On each call
+of the filter rows event (when the pages are recalculated), the method clears all filler rows, figures out how many are now needed,
+and adds them.
+	This isn't enough, though. The number of rows still jumps for an instant down before filling back up, so your scroll position
+still gets jumped upward. So, in addition to the filler rows, there is 1 full page of 'scrollBuffer' rows. They are just like filler
+rows, except they remain in place always. They are usually not displayed. When a filter event occurs, they're display is turned on, extending
+the table to double its height. Then the filtering/paging is done, and the filler rows created. Then, before you have time
+to notice them, the buffer rows' display is turned off again. And your scroll position is unaffected.
 */
 
 (function (exports) {
@@ -112,13 +126,17 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
 
     // Creates a button element for paging and returns it
     makePageButton = function (pageNum) {
+    	var fillerClass = "";
+    	if (pageNum == 0) {
+    		fillerClass = " pageButtonFiller";
+    	}
         return $('<input/>', {
             id: "page-" + pageNum,
             type: "button",
-            "class": "page-btn btn btn-primary btn-xs",
+            "class": "page-btn btn btn-primary btn-xs" + fillerClass,
             value: pageNum
         }).click(function () {
-            exports.goToPage(pageNum);
+			if (pageNum > 0) exports.goToPage(pageNum);
         });
     }
 
@@ -161,7 +179,8 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
     // Updates the classes on each row item according to the current filter settings, and
     //  assigns page numbers to each row based on their display status.
     filterRows = function () {
-    	var fillerRowHeight = $('.' + rowClass).height();
+    	var fillerRowHeight = $('.' + rowClass).eq(1).height(); //using the 2nd item, because the 1st sometimes has a different top border thickness
+    	console.log(fillerRowHeight);
     	if (!scrollBufferCreated) {
     		for (var i = 0; i < pageLimit; i++) {
     			$('#tableEnd').after(generateFillerRow(fillerRowHeight, 1000000, true));
@@ -257,6 +276,10 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
             ele.attr("data-page", Math.max(currentPage, 1)); // We don't want hidden elements with page 0
         });
 
+        if (currentPage == 0) {
+        	pageContainer.append(makePageButton(0)); // Generates filler page button for keeping table height constant
+        }
+
 		// Removal/addition of filler rows for keeping constant table height.
         var fillerRowCount = currentPage == 0 ? pageLimit : pageLimit - currentPageTotal - 1;
         $('.' + fillerClass).remove();
@@ -283,7 +306,7 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
     	if (typeof isScrollBuffer === 'undefined') {
     		isScrollBuffer = false;
     	}
-		return '<tr class="nohover ' + (isScrollBuffer ? 'scrollBuffer' : fillerClass) + '" data-page="' + page + '" style="height: ' + height + 'px;"></tr>'
+		return '<tr class="nohover ' + (isScrollBuffer ? 'scrollBuffer' : fillerClass) + '" data-page="' + page + '" style="height: ' + height + 'px"><td class="whitetext">|</td></tr>'
     }
 
     $(document).ready(function () {
