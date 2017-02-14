@@ -1,10 +1,10 @@
 ﻿@using AllyisApps.ViewModels.Auth;
-@model AllyisApps.ViewModels.Auth.UserInfoViewModel
+@model AllyisApps.ViewModels.Auth.IndexAndOrgsViewModel
 @{
     DisplayHints.ShowBreadcrumbs = false;
     DisplayHints.PageBodyId = "paneled-index";
     ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.MyAccount;
-    var cityState = Model.UserInfo.City != null && Model.UserInfo.State != null ? Model.UserInfo.City + ", " + Model.UserInfo.State : string.Empty;
+    var cityState = Model.UserModel.UserInfo.City != null && Model.UserModel.UserInfo.State != null ? Model.UserModel.UserInfo.City + ", " + Model.UserModel.UserInfo.State : string.Empty;
 }
 
 <div class="row">
@@ -12,9 +12,9 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h2 style="margin-top: 0px; margin-bottom: 0px;">
-                    @Model.UserInfo.FirstName @Model.UserInfo.LastName
+                    @Model.UserModel.UserInfo.FirstName @Model.UserModel.UserInfo.LastName
                     <span class="small text-muted" style="margin-left: 10px;">
-                        (@Model.UserInfo.Email)
+                        (@Model.UserModel.UserInfo.Email)
                     </span>
                 </h2>
             </div>
@@ -22,28 +22,28 @@
                 <div class="col-sm-8 index-details">
                     <p>
                         <label>@AllyisApps.Resources.Views.Account.Strings.PhoneNumber:</label>
-                        @Model.UserInfo.PhoneNumber @Model.UserInfo.PhoneExtension
+                        @Model.UserModel.UserInfo.PhoneNumber @Model.UserModel.UserInfo.PhoneExtension
                     </p>
                     <p>
                         <label>@AllyisApps.Resources.Views.Account.Strings.Address:</label>
-                        <span class="address-row">@Model.UserInfo.Address</span>
-                        <span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
+                        <span class="address-row">@Model.UserModel.UserInfo.Address</span>
+                        <span class="address-row">@cityState @Model.UserModel.UserInfo.PostalCode</span>
                     </p>
                 </div>
                 <div class="col-sm-4 vertically-stacked-buttons text-right">
                     @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.ChangePassword,    ActionConstants.ChangePassword, ControllerConstants.Account, null, new { @class = "btn btn-default" })
                     @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.EditProfile,       ActionConstants.EditProfile,    null, new { @class = "btn btn-default" })
-                    @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.YourOrganizations, ActionConstants.Organizations,  null, new { @class = "btn btn-default" })
+                    @*@Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.YourOrganizations, ActionConstants.Organizations,  null, new { @class = "btn btn-default" })*@
                 </div>
             </div>
 
-            @if (Model.Invitations.Count > 0)
+            @if (Model.UserModel.Invitations.Count > 0)
             {
                 <div class="panel-body">
                     <div class="index-details" style="padding-left: 15px">
                         <p>
                             <label>Invitations</label>
-                            @if (Model.Invitations.Count == 1)
+                            @if (Model.UserModel.Invitations.Count == 1)
                             {
                                 @AllyisApps.Resources.Views.Account.Strings.Invite
                             }
@@ -52,7 +52,7 @@
                                 @AllyisApps.Resources.Views.Account.Strings.Invites
                             }
                         </p>
-                        @foreach (InvitationViewModel invite in Model.Invitations)
+                        @foreach (InvitationViewModel invite in Model.UserModel.Invitations)
                         {
                             <div>
                                 <span class="col-xs-4 col-sm-6">@invite.OrganizationName</span>
@@ -77,8 +77,10 @@
     </div>
 </div>
 
-<div class="row">
+@*<div class="row">
         <div class="col-md-8 col-md-push-2" style="height: 100%; display: flex; flex-wrap: wrap; justify-content: space-around;">
-            @Html.Partial("_ProductPanels", Model.Subscriptions)
+            @Html.Partial("_ProductPanels", Model.UserModel.Subscriptions)
         </div>
-    </div>
+    </div>*@
+
+@Html.Partial("Organizations", Model.OrgModel)

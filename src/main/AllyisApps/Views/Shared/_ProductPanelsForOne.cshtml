@@ -3,32 +3,32 @@
 @model SubscriptionsViewModel
 
 @{
-    string linkTextOverride = ViewBag.ProductPanelLinkTextOverride;
+	string linkTextOverride = ViewBag.ProductPanelLinkTextOverride;
 
-    Func<int, string, string, dynamic> package = (product_id, title, image) =>
-        new
-        {
-            product_id = product_id,
-            title = title,
-            image_url = image,
-            query = (from entry in Model.Subscriptions
-                     where entry.ProductId == product_id && entry.CanViewSubscription
-                     orderby entry.OrganizationName
-                     select new
-                     {
-                         ProductId = entry.ProductId,
-                         OrganizationId = entry.OrganizationId,
-                         OrganizationName = entry.OrganizationName,
-                         MemberSince = entry.CreatedUTC.ToLocalTime()
-                     }).ToArray(),
-        };
+	Func<int, string, string, dynamic> package = (product_id, title, image) =>
+		new
+		{
+			product_id = product_id,
+			title = title,
+			image_url = image,
+			query = (from entry in Model.Subscriptions
+					 where entry.ProductId == product_id && entry.CanViewSubscription
+					 orderby entry.OrganizationName
+					 select new
+					 {
+						 ProductId = entry.ProductId,
+						 OrganizationId = entry.OrganizationId,
+						 OrganizationName = entry.OrganizationName//,
+						 //MemberSince = entry.CreatedUTC.ToLocalTime()
+					 }).ToArray(),
+		};
 
-    List<dynamic> product_boxes = new List<dynamic>();
+	List<dynamic> product_boxes = new List<dynamic>();
 
-    foreach (ProductInfo prod in Model.ProductList)
-    {
-        product_boxes.Add(package(prod.ProductId, prod.ProductName, string.Format("Content/icons/{0}.png", prod.ProductName)));
-    }
+	foreach (ProductInfo prod in Model.ProductList)
+	{
+		product_boxes.Add(package(prod.ProductId, prod.ProductName, string.Format("Content/icons/{0}.png", prod.ProductName)));
+	}
 }
 
 @foreach (var product_box in product_boxes)

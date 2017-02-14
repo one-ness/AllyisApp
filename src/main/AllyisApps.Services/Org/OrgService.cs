@@ -478,7 +478,8 @@ namespace AllyisApps.Services
         /// <param name="userId">The updated user ID.</param>
         /// <param name="orgId">The updated org id.</param>
         /// <param name="orgRoleId">The updated org role id.</param>
-        public void UpdateOrganizationUser(int userId, int orgId, int orgRoleId)
+		/// <param name="EmployeeId">The updated employee id. If left null, it will be the current employee id.</param>
+        public void UpdateOrganizationUser(int userId, int orgId, int orgRoleId, string EmployeeId = null)
 		{
 			#region Validation
 			if (userId <= 0)
@@ -502,7 +503,7 @@ namespace AllyisApps.Services
 				UserId = userId,
 				OrganizationId = orgId,
 				OrgRoleId = orgRoleId,
-                EmployeeId = this.GetEmployeeId(userId, orgId)
+                EmployeeId = EmployeeId == null ? this.GetEmployeeId(userId, orgId) : EmployeeId
 			});
 		}
 

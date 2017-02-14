@@ -96,5 +96,24 @@ namespace AllyisApps.Controllers
 				Subscriptions = subscriptions
 			};
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="user"></param>
+		/// <param name="org"></param>
+		/// <param name="employeeId"></param>
+		/// <returns></returns>
+		public bool SaveEmployeeId (int user, int org, string employeeId)
+		{
+			UserOrganizationInfo userOrgInfo = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == org).SingleOrDefault();
+			if (userOrgInfo == null)
+			{
+				return false;
+			}
+
+			Service.UpdateOrganizationUser(user, org, (int)userOrgInfo.OrganizationRole, employeeId);
+			return true;
+		}
 	}
 }

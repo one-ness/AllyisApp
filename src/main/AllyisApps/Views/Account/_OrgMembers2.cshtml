@@ -43,7 +43,7 @@
                 <tr class="memberRow">
                     <td class="memberSearchProperty">@displayName</td>
                     <td class="memberSearchProperty">@invite.CompressedEmail</td>
-                    <td class="memberSearchProperty">@invite.EmployeeId</td>
+                    <td class="memberSearchProperty"><span class="empId">@invite.EmployeeId</span></td>
                     <td class="memberOrgRole">@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(invite.OrgRoleName)</td>
                     <td class="text-right icon-strip">
                         <a href="javascript: void(0);" class="text-muted" title=@AllyisApps.Resources.Views.Account.Strings.RemoveInvitation
@@ -56,7 +56,11 @@
                 <tr class="memberRow">
                     <td class="memberSearchProperty">@user.FullName</td>
                     <td class="memberSearchProperty">@user.Email</td>
-                    <td class="memberSearchProperty">@user.EmployeeId</td>
+                    <td class="memberSearchProperty" id="empId-@user.UserId">
+						<span class="empId">@user.EmployeeId</span>
+						<a href="javascript: void(0);" class="text-muted" title="Edit Employee Id"
+						   onclick='editEmployeeId("@user.OrganizationId", "@user.UserId", "@user.EmployeeId")'><span class="fa fa-fw fa-edit"></span></a>
+					</td>
                     <td class="memberOrgRole">@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(user.PermissionLevel)</td>
                     <td class="text-right icon-strip">
                         @if (Model.CurrentUserId != user.UserId)

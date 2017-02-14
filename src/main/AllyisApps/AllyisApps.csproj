@@ -705,6 +705,8 @@
     <Compile Include="ViewModels\Auth\AccountOrgsViewModel.cs" />
     <Compile Include="ViewModels\Auth\ChangePasswordViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\Manage\EditSubscriptionUsersViewModel.cs" />
+    <Compile Include="ViewModels\Auth\IndexAndOrgsViewModel.cs" />
+    <Compile Include="ViewModels\Auth\InvitationViewModel.cs" />
     <Compile Include="ViewModels\Auth\RegisterViewModel.cs" />
     <Compile Include="ViewModels\Auth\EditProfileViewModel.cs" />
     <Compile Include="ViewModels\Auth\ForgotPasswordViewModel.cs" />

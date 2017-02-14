@@ -76,6 +76,7 @@
         </div>
     </div>
     <div class="form-group allyis-action-buttons">
+		<span class="requiredStar">*</span>
         <input type="checkbox" name="terms" value=@AllyisApps.Resources.Views.Account.Strings.Accept onchange="document.getElementById('registerSubmit').disabled = !this.checked;">
         @AllyisApps.Resources.Views.Account.Strings.IAgree @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.TOS, ActionConstants.PrivacyPolicy, ControllerConstants.Home, null, new { @style = "color:#0000FF;" }).
         <br /><br />
