@@ -857,6 +857,7 @@
     <Content Include="Areas\TimeTracker\Views\Customer\_CustomerEdit.cshtml" />
     <Content Include="Content\less\inputs.less" />
     <Content Include="Content\less\allyis-pages-with-filter.less" />
+    <Content Include="Content\less\allyis-tabs.less" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
     <None Include="Resources\628px-achtung-svg.png" />

@@ -38,6 +38,13 @@
 
 @Html.AntiForgeryToken()
 
+<ul class="nav allyis-tabs">
+	<li class="selected" id="OrganizationTab">Organization</li>
+	@if (hasTimeTracker)
+	{
+		<li id="TimeTrackerTab">TimeTracker</li>
+	}
+</ul>
 <div class="panel panel-default">
     @*<div class="panel-heading">
     </div>*@
@@ -47,10 +54,10 @@
                 <tr class="no-border">
                     <th></th>
                     <th>User</th>
-                    <th>Organization Role</th>
+                    <th class="tab-OrganizationTab">Organization Role</th>
                     @if (hasTimeTracker)
                     {
-                        <th>TimeTracker Role</th>
+                        <th class="tab-TimeTrackerTab" style="display: none;">TimeTracker Role</th>
                     }
                 </tr>
                 <tr class="double-bottom-border">
@@ -60,7 +67,7 @@
                     <td>
                         <input type="search" placeholder="@AllyisApps.Resources.Views.Account.Strings.UserSearchPlaceholder" id="userSearch" class="form-control"/>
                     </td>
-                    <td>
+                    <td class="tab-OrganizationTab">
                         <select id="orgRoleFilter">
                             <option>@AllyisApps.Resources.Views.Account.Strings.Any</option>
                             @foreach (string role in orgRoles.Values)
@@ -71,7 +78,7 @@
                     </td>
                     @if (hasTimeTracker)
                     {
-                        <td>
+                        <td class="tab-TimeTrackerTab" style="display: none;">
                             <select id="ttRoleFilter">
                                 <option>@AllyisApps.Resources.Views.Account.Strings.Any</option>
                                 @foreach (string ttrole in ttRoles.Values)
@@ -91,10 +98,10 @@
                         <input type="checkbox" id="check" />
                     </td>
                     <td id="name">@user.UserName</td>
-                    <td id="orgRole">@orgRoles[user.OrganizationRoleId]</td>
+                    <td id="orgRole" class="tab-OrganizationTab">@orgRoles[user.OrganizationRoleId]</td>
                     @if (hasTimeTracker)
                     {
-                        <td id="ttRole">@ttRoles[user.SubscriptionRoles.Where(s => s.ProductId == productId).Single().ProductRoleId]</td>
+                        <td id="ttRole" class="tab-TimeTrackerTab" style="display: none;">@ttRoles[user.SubscriptionRoles.Where(s => s.ProductId == productId).Single().ProductRoleId]</td>
                     }
                 </tr>
             }
@@ -103,8 +110,8 @@
             <tr id="tableEnd" class="nohover">
                 <td></td>
                 <td></td>
-                <td></td>
-                @if (hasTimeTracker) { <td></td> }
+                <td class="tab-OrganizationTab"></td>
+                @if (hasTimeTracker) { <td class="tab-TimeTrackerTab" style="display: none;"></td> }
             </tr>
         </table>
         <div class="pageContainer">
@@ -112,28 +119,30 @@
         </div>
     </div>
     <div class="panel-footer" style="height: 54px; position: relative;">
-        @*<span>@AllyisApps.Resources.Views.Account.Strings.Actions</span>*@
         <div class="col-xs-2 col-sm-1 col-md-1" style="text-align: right; vertical-align: middle; line-height: 33px; padding-right: 0px;">
             @AllyisApps.Resources.Views.Account.Strings.Actions
         </div>
         <div class="col-xs-6 col-sm-6 col-md-5 col-lg-4">
-            <select class="form-control" id="actionSelect">
+            <select class="form-control tab-OrganizationTab" id="orgActionSelect">
                 <optgroup label="@AllyisApps.Resources.Views.Account.Strings.Organization">
                     @foreach (string setOrgRole in setOrgRoles.Keys)
                     {
                         <option>@setOrgRole</option>
                     }
                 </optgroup>
-                @if (hasTimeTracker)
-                {
-                    <optgroup label="@AllyisApps.Resources.Views.Account.Strings.TimeTracker">
-                        @foreach (string setTTRole in setTTRoles.Keys)
-                        {
-                            <option>@setTTRole</option>
-                        }
-                    </optgroup>
-                }
             </select>
+			@if (hasTimeTracker)
+			{
+				<select class="form-control tab-TimeTrackerTab" id="ttActionSelect" style="display: none;">				
+					<optgroup label="@AllyisApps.Resources.Views.Account.Strings.TimeTracker">
+						@foreach (string setTTRole in setTTRoles.Keys)
+						{
+							<option>@setTTRole</option>
+						}
+					</optgroup>
+				</select>
+			}
+
         </div>
 
         <div class="bottom-right">

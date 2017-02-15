@@ -17,16 +17,18 @@ gatherData = function () {
     
     // Add in target action information
     var selectedAction = {};
-    var value = orgActions[$('#actionSelect').val()];
-    if (!value) {
-        value = ttActions[$('#actionSelect').val()];
-        selectedAction["TimeTrackerRoleTarget"] = value;
-    }
-    else {
-        if (value == -1) {
-            if (!confirm(confirmMessage)) return null;
-        }
-        selectedAction["OrgRoleTarget"] = value;
+    var value = -2;
+    if (currentTabTitle == "OrganizationTab") {
+    	var value = orgActions[$('#orgActionSelect').val()];
+    	if (value == -1) {
+    		if (!confirm(confirmMessage)) return null;
+    	}
+    	selectedAction["OrgRoleTarget"] = value;
+    } else {
+    	if (currentTabTitle == "TimeTrackerTab") {
+    		value = ttActions[$('#ttActionSelect').val()];
+    		selectedAction["TimeTrackerRoleTarget"] = value;
+    	}
     }
     
     // Assemble and return UserPermissionsAction object of data
@@ -49,8 +51,26 @@ formSubmit = function() {
     form.appendTo(document.body).submit();
 }
 
+// Tabs
+var currentTabTitle = "OrganizationTab";
+function goToTab(tabTitle) {
+	$('#' + currentTabTitle).toggleClass("selected", false);
+	$('.tab-' + currentTabTitle).hide();
+	currentTabTitle = tabTitle;
+	$('#' + currentTabTitle).toggleClass("selected", true);
+	$('.tab-' + currentTabTitle).show();
+}
+
 $(document).ready(function () {
     $('#do-it').on("click", function () {
         formSubmit();
     });
+
+	// Tabs
+    $('.allyis-tabs > li').on("click", function () {
+    	var tabTitle = $(this).attr("id");
+    	if (currentTabTitle != tabTitle) {
+    		goToTab(tabTitle);
+    	}
+    })
 });

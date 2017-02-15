@@ -1,0 +1,29 @@
+﻿@import (reference) "_root.less";
+
+.allyis-tabs {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+
+	li {
+		display: inline;
+		border: solid;
+		border-width: 1px 1px 0px 1px;
+		border-top-left-radius: 3px;
+		border-top-right-radius: 3px;
+		border-color: #ddd;
+		margin: 0 0 0 5px;
+		padding: 8px 12px 2px 12px;
+		background-color: #e5e5e5;
+
+		&.selected {
+			padding-bottom: 3px;
+			background-color: #f5f5f5;
+		}
+	}
+
+	li:hover:not(.selected) {
+		background-color: #f5f5f5;
+		cursor: pointer;
+	}
+}
