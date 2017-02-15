@@ -33,6 +33,23 @@ namespace AllyisApps.Controllers
 			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
 				PermissionsManagementViewModel model = this.ConstructPermissionsManagementViewModel();
+				return this.View("Permission", model);
+			}
+
+			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+			return this.RedirectToAction("OrgIndex");
+		}
+
+		/// <summary>
+		/// GET Account/ManagePermissions.
+		/// </summary>
+		/// <returns>Action result.</returns>
+		[HttpGet]
+		public ActionResult ManagePermissions2()
+		{
+			if (Service.Can(Actions.CoreAction.EditOrganization))
+			{
+				PermissionsManagementViewModel model = this.ConstructPermissionsManagementViewModel();
 				return this.View("Permission2", model);
 			}
 
