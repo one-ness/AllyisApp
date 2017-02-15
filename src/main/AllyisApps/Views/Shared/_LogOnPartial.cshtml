@@ -9,8 +9,9 @@
     <li>
         @if (Model.ChosenOrganizationId > 0 && Model.ShowOrganizationPartial)
         {
-            <a href="@Url.SubdomainLink(ActionConstants.Organizations, ControllerConstants.Account, null, Model.ChosenOrganizationId, this.Request)">@Model.ChosenOrganizationName</a>
-        }
+            @*<a href="@Url.SubdomainLink(ActionConstants.Organizations, ControllerConstants.Account, null, Model.ChosenOrganizationId, this.Request)">@Model.ChosenOrganizationName</a>*@
+			<span class="headerOrgName">@Model.ChosenOrganizationName</span>
+		}
     </li>
 
     <li>

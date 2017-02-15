@@ -1402,7 +1402,7 @@ namespace AllyisApps.Resources.Views.Account {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your Organizations.
+        ///   Looks up a localized string similar to My Organizations.
         /// </summary>
         public static string YourOrganizations {
             get {

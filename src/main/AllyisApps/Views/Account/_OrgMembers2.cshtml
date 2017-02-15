@@ -64,7 +64,8 @@
                     <td class="memberOrgRole">@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(user.PermissionLevel)</td>
                     <td class="text-right icon-strip">
                         @if (Model.CurrentUserId != user.UserId)
-                        {
+						{
+							<a href="~/Account/ViewUser/@user.UserId" class="text-muted" title="View Member"><span class="fa fa-fw fa-eye"></span></a>
                             <a href="javascript: void(0);" class="text-muted" title=@AllyisApps.Resources.Views.Account.Strings.RemoveMember
                                onclick='removeUser("@user.OrganizationId", "@user.UserId", "@user.FullName")'><span class="fa fa-fw fa-remove text-danger"></span></a>
                         }

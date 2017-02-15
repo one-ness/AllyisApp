@@ -265,6 +265,7 @@
     <Compile Include="Controllers\Auth\ResetPasswordAction.cs" />
     <Compile Include="Controllers\Auth\TemplateAction.cs" />
     <Compile Include="Controllers\Auth\TestAction.cs" />
+    <Compile Include="Controllers\Auth\ViewUser.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
     <Compile Include="Controllers\Home\AboutAction.cs" />
     <Compile Include="Controllers\Home\ApplicationRedirectAction.cs" />
@@ -929,6 +930,7 @@
     <Content Include="Views\Account\Test.cshtml" />
     <Content Include="Views\Account\Permission2.cshtml" />
     <Content Include="Views\Account\_OrgMembers2.cshtml" />
+    <Content Include="Views\Account\ViewUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">

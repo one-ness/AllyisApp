@@ -414,9 +414,6 @@
   <data name="Website" xml:space="preserve">
     <value>Sitio web</value>
   </data>
-  <data name="YourOrganizations" xml:space="preserve">
-    <value>sus Organizaciones</value>
-  </data>
   <data name="AddMember" xml:space="preserve">
     <value>Añadir miembro</value>
   </data>
@@ -563,5 +560,8 @@
   </data>
   <data name="RemoveFromOrgNoName" xml:space="preserve">
     <value>¿Está seguro de que desea eliminar los usuarios seleccionados de su organización?</value>
+  </data>
+  <data name="YourOrganizations" xml:space="preserve">
+    <value>mis Organizaciones</value>
   </data>
 </root>

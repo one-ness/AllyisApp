@@ -1,0 +1,64 @@
+﻿@model AllyisApps.ViewModels.Auth.EditProfileViewModel
+
+@{
+	Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
+	ViewBag.Title = Model.FirstName + " " + Model.LastName;
+}
+@{ ViewData.Add(ControllerConstants.Controller, ControllerConstants.Account); }
+@{ ViewData.Add(ActionConstants.Action, ActionConstants.EditProfile); }
+@using (Html.BeginForm((string)(ViewData[ActionConstants.Action]), (string)ViewData[ControllerConstants.Controller], new { ReturnUrl = (string)(ViewBag.ReturnUrl) }, FormMethod.Post, new { @class = "form", role = "form" }))
+{
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary(string.Empty, new { @class = "text-danger" })
+	<div class="row">
+		<div class="col-md-6 min300">
+			<div class="form-group">
+				@Html.LabelFor(m => m.Email, AllyisApps.Resources.Views.Account.Strings.Email)
+				@Html.TextBoxFor(m => m.Email, new { @readonly = "readonly", @class = "form-control" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.FirstName, AllyisApps.Resources.Views.Account.Strings.FirstName)
+				@Html.TextBoxFor(m => m.FirstName, new { @readonly = "readonly", @class = "form-control" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.LastName, AllyisApps.Resources.Views.Account.Strings.LastName)
+				@Html.TextBoxFor(m => m.LastName, new { @readonly = "readonly", @class = "form-control" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.DateOfBirth, AllyisApps.Resources.Views.Account.Strings.DateOfBirth)
+				@Html.EditorFor(m => m.DateOfBirth, new { htmlattributes = new { @readonly = "readonly", @class = "form-control" } })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.PhoneNumber, AllyisApps.Resources.Views.Account.Strings.PhoneNumber)
+				@Html.TextBoxFor(m => m.PhoneNumber, new { @readonly = "readonly", @class = "form-control" })
+			</div>
+		</div>
+		<div class="col-md-6 min300">
+			<div class="form-group">
+				@Html.LabelFor(m => m.Address, AllyisApps.Resources.Views.Account.Strings.Address)
+				@Html.TextBoxFor(m => m.Address, new { @readonly = "readonly", @class = "form-control" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Country, AllyisApps.Resources.Views.Account.Strings.Country)
+				@Html.TextBoxFor(m => m.Country, new { @readonly = "readonly", @class = "form-control" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.State, AllyisApps.Resources.Views.Account.Strings.State)
+				@Html.TextBoxFor(m => m.State, new { @readonly = "readonly", @class = "form-control" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.City, AllyisApps.Resources.Views.Account.Strings.City)
+				@Html.TextBoxFor(m => m.City, new { @readonly = "readonly", @class = "form-control" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.PostalCode, AllyisApps.Resources.Views.Account.Strings.PostalCode)
+				@Html.TextBoxFor(m => m.PostalCode, new { @readonly = "readonly", @class = "form-control" })
+			</div>
+		</div>
+	</div>
+
+	
+	<div class="form-group allyis-action-buttons">
+		<a href="/Account/Manage" class="btn btn-default">@AllyisApps.Resources.Views.Account.Strings.Back</a>
+	</div>
+}

@@ -1,14 +1,22 @@
 ﻿@using AllyisApps.ViewModels.Auth;
 @model AllyisApps.ViewModels.Auth.IndexAndOrgsViewModel
 @{
-    DisplayHints.ShowBreadcrumbs = false;
-    DisplayHints.PageBodyId = "paneled-index";
-    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.MyAccount;
-    var cityState = Model.UserModel.UserInfo.City != null && Model.UserModel.UserInfo.State != null ? Model.UserModel.UserInfo.City + ", " + Model.UserModel.UserInfo.State : string.Empty;
+	DisplayHints.ShowBreadcrumbs = false;
+	DisplayHints.PageBodyId = "paneled-index";
+	ViewBag.TitleBar = AllyisApps.Resources.Views.Account.Strings.MyAccount;
+	//ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.MyAccount;
+	var cityState = Model.UserModel.UserInfo.City != null && Model.UserModel.UserInfo.State != null ? Model.UserModel.UserInfo.City + ", " + Model.UserModel.UserInfo.State : string.Empty;
 }
 
 <div class="row">
     <div class="col-md-8 col-md-push-2">
+
+		<div class="row">
+			<div class="col-xs-12">
+				<h1 style="float: left">@AllyisApps.Resources.Views.Account.Strings.MyAccount</h1>
+			</div>
+		</div>
+
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h2 style="margin-top: 0px; margin-bottom: 0px;">
