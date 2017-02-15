@@ -49,11 +49,14 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
 
 (function (exports) {
 
-    // Pageing variables
-    var pageLimit = 16; // Rows per page
+    // Paging variables
+	var pageLimit = 16; // Rows per page
+	var pageButtonLimit = 10; // Max page buttons to display at once
+	var currentPageButtonStart = 1; // The first displayed page button
     var pageContainer = $('.pageContainer'); // Place a div on your page with the class pageContainer - it will auto-populate with page buttons
     var totalPages = 1; // Page count, recalculated on each filter
     var anchorRow = null; // This is the row element that is used to decide what page to show when pagination changes
+    var maxPageButtonStart = 0;
 
     // Filtering variables
     var rowClass = "pwfRow"; // class for all row elements
@@ -70,6 +73,13 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
         } else {
             console.log("pwf - Error setting page limit: Page limit must be greater than 0.");
         }
+    }
+    exports.setPageButtonLimit = function (newPageButtonLimit) {
+    	if (newPageButtonLimit > 0) {
+			pageButtonLimit = newPageButtonLimit;
+    	} else {
+    		console.log("pwf - Error setting page button limit: Page button limit must be greater than 0.");
+    	}
     }
     exports.setRowClass = function (newRowClass) {
         rowClass = newRowClass;
@@ -140,6 +150,66 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
         });
     }
 
+	// Creates a button element for scrolling through page buttons
+	// -2 = <<, -1 = <, 1 = >, 2 = >>
+    var chevrons = ["<<", "<", "", ">", ">>"];
+    makeChevronButton = function (type) {
+    	if (type < -2 || type > 2) return null;
+    	return $('<input/>', {
+			id: "chevron_" + type,
+			type: "button",
+			"class": "chevron-btn btn btn-primary btn-xs",
+			value: chevrons[type + 2]
+    	}).click(function () {
+    		scrollPageButtons(type);
+    	})
+    }
+    scrollPageButtons = function (how) {
+    	switch(how) {
+    		case -2:
+				setPageButtonPosition(1);
+				break;
+    		case -1:
+    			setPageButtonPosition(Math.max(currentPageButtonStart - pageButtonLimit, 1));
+    			break;
+			case 1:
+				setPageButtonPosition(Math.min(currentPageButtonStart + pageButtonLimit, maxPageButtonStart));
+				break;
+			case 2:
+				setPageButtonPosition(maxPageButtonStart);
+				break;
+    	}
+    }
+    setPageButtonPosition = function (newPageButtonStart) {
+    	var newPageButtonEnd = newPageButtonStart + pageButtonLimit;
+    	$('.page-btn').each(function (index, elem) {
+    		var ele = $(this);
+    		var pageNum = ele.val();
+    		if (pageNum >= newPageButtonStart && pageNum < newPageButtonEnd) {
+				ele.show();
+    		}
+    		else {
+				ele.hide();
+    		}
+    	});
+    	if (newPageButtonStart == 1) {
+    		$("#chevron_-2").hide();
+    		$("#chevron_-1").hide();
+    	} else {
+    		$("#chevron_-2").show();
+    		$("#chevron_-1").show();
+    	}
+    	console.log(maxPageButtonStart);
+    	if (newPageButtonStart == maxPageButtonStart) {
+    		$("#chevron_2").hide();
+    		$("#chevron_1").hide();
+    	} else {
+    		$("#chevron_2").show();
+    		$("#chevron_1").show();
+    	}
+    	currentPageButtonStart = newPageButtonStart;
+    }
+
     // Registers an element to act as a search filter.
     //  filterElementSelector - a css selector to find the input element that controls this filter
     //  filterType - either "search" or "dropDown", indicating what kind of filter it is
@@ -201,6 +271,8 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
         var currentPage = 0;
         var currentPageTotal = pageLimit - 1;
         pageContainer.empty();
+        pageContainer.append(makeChevronButton(-2));
+        pageContainer.append(makeChevronButton(-1));
 
         // Evaluate each row and update classes
         $('.' + rowClass).each(function (index) {
@@ -280,6 +352,12 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
         	pageContainer.append(makePageButton(0)); // Generates filler page button for keeping table height constant
         }
 
+        totalPages = currentPage;
+        maxPageButtonStart = (Math.ceil(totalPages / pageButtonLimit) - 1) * pageButtonLimit + 1;
+        pageContainer.append(makeChevronButton(1));
+        pageContainer.append(makeChevronButton(2));
+        setPageButtonPosition(1);
+
 		// Removal/addition of filler rows for keeping constant table height.
         var fillerRowCount = currentPage == 0 ? pageLimit : pageLimit - currentPageTotal - 1;
         $('.' + fillerClass).remove();
@@ -287,7 +365,6 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
         	$('#tableEnd').after(generateFillerRow(fillerRowHeight, currentPage));
         }
 
-        totalPages = currentPage;
 
         // After pagination is recalculated, the anchor row is used to decide which page to show. This way,
         // if a user is changing the filters a lot, their place in the list is roughly constant.

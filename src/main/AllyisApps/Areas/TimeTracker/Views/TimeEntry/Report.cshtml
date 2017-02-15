@@ -91,7 +91,66 @@
 }
         </div>
         <br />
-        <!--Preview panel-->
+
+		<div class="panel panel-default">
+			<div class="panel-body" style="padding: 0px">
+				@if (Model.PreviewMessage == "")
+				{
+					<table class="table table-hover table-condensed">
+						<thead class="panel-heading">
+							<tr class="double-bottom-border">
+								<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.LastName</th>
+								<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.FirstName</th>
+								<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Date</th>
+								<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Duration</th>
+								<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.PayClass</th>
+								<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Project</th>
+								<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Customer</th>
+								<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (TablePreviewEntry pe in Model.PreviewEntries)
+							{
+								<tr class="previewRow">
+									<td>@pe.TimeEntry.LastName</td>
+									<td>@pe.TimeEntry.FirstName</td>
+									<td>@pe.TimeEntry.Date.ToShortDateString()</td>
+									<td>@pe.TimeEntry.Duration</td>
+									<td>@pe.TimeEntry.PayClassName</td>
+									<td>@pe.ProjectName</td>
+									<td>@pe.CustomerName</td>
+									<td>@pe.TimeEntry.Description</td>
+								</tr>
+							}
+
+							<tr id="tableEnd" class="nohover">
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="pageContainer"></div>
+				}
+				else
+				{
+					<p>
+						&hellip;
+					</p>
+				}
+			</div>
+			<div id="data-message" class="panel-footer">
+				@Model.PreviewMessage
+			</div>
+		</div>
+
+        @*<!--Preview panel-->
         <div class="panel panel-default">
             <div class="panel-heading">
                 @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.LRP
@@ -166,7 +225,7 @@
                     }
                 }
             </div>
-        }
+        }*@
     </div>
 </div>
 
@@ -178,14 +237,20 @@
 @section scripts
 {
     @*Date range picker dependencies:*@
-    @Scripts.Render("~/bundles/jqueryui");
-    @Scripts.Render("~/bundles/moment");
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/moment")
 
     <script type="text/javascript">
         var model_startofweek = @Model.StartOfWeek;
         var model_startdate = @Model.Selection.StartDate.Value;
         var model_enddate = @Model.Selection.EndDate.Value;
     </script>
-    @Scripts.Render("~/bundles/daterangepicker");
-    @Scripts.Render("~/bundles/TTTimeEntryReport");
+	<script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
+    @Scripts.Render("~/bundles/daterangepicker")
+    @Scripts.Render("~/bundles/TTTimeEntryReport")
+	<script type="text/javascript">
+		pwf.setPageLimit(15);
+		pwf.setPageButtonLimit(10);
+		pwf.setRowClass("previewRow");
+	</script>
 }

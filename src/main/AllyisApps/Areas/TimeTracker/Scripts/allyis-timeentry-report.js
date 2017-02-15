@@ -41,6 +41,10 @@ init_drp(
         text: "Last quarter",
         dateStart: function () { return moment().subtract(1, 'quarter').startOf('quarter') },
         dateEnd: function () { return moment().subtract(1, 'quarter').endOf('quarter') }
+    }, {
+    	text: "All time",
+    	dateStart: function () { return moment().subtract(100, 'year') },
+    	dateEnd: function () { return moment().add(100, 'year') }
     }],
     "DateRangeStart",
     "DateRangeEnd",
