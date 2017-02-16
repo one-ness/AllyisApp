@@ -147,14 +147,14 @@ namespace AllyisApps.Core
 		/// </summary>
 		/// <param name="request">The HttpResponseBase.</param>
 		/// <returns>The UserContext, or null on error.</returns>
-		public UserContext GetCookieData(HttpRequestBase request)
+		public CookieData GetCookieData(HttpRequestBase request)
         {
             if (request == null)
             {
                 throw new NullReferenceException("Http request must not be null");
             }
 
-            UserContext result = null;
+            CookieData result = null;
             HttpCookie cookie = request.Cookies[FormsAuthentication.FormsCookieName];
             if (cookie != null)
             {
@@ -164,7 +164,7 @@ namespace AllyisApps.Core
                     {
                         //// decrypt and deserialize the UserContext from the cookie data
                         FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
-                        result = Serializer.DeserializeFromJson<UserContext>(ticket.UserData);
+						result = Service.DeserializeCookie(ticket.UserData);
                     }
                 }
                 catch
@@ -204,17 +204,16 @@ namespace AllyisApps.Core
 			if (Request.IsAuthenticated)
 			{
 				// an authenticated request MUST have user context in the cookie.
-				this.UserContext = this.GetCookieData(Request);
-				if(this.UserContext != null)
+				CookieData cookie = this.GetCookieData(Request);
+				if(cookie != null && cookie.userId > 0)
 				{
-					this.UserContext = this.Service.PopulateUserContext(this.UserContext.UserId);
+					this.UserContext = this.Service.PopulateUserContext(cookie.userId);
 				}
 
 				if(this.UserContext != null)
 				{
 					// User context successfully populated
 					languageID = this.UserContext.ChosenLanguageID;
-					this.Service.SetUserContext(this.UserContext);
 					ViewBag.ShowOrganizationPartial = true;
 				}
 				else
@@ -224,24 +223,6 @@ namespace AllyisApps.Core
 					Response.Redirect(FormsAuthentication.LoginUrl);
 					return;
 				}
-
-				//if (this.UserContext == null || this.Service.GetUserInfo(this.UserContext.UserId) == null)
-				//{
-				//	// user context not found. can't proceed, redirect to login page.
-				//	this.SignOut(Response);
-				//	Response.Redirect(FormsAuthentication.LoginUrl);
-				//	return;
-				//}
-
-				//// Populate the User Context with database info
-				//this.UserContext = this.Service.PopulateUserContext(this.UserContext.UserId);
-
-				//languageID = this.UserContext.ChosenLanguageID;
-
-				//// Update service user context
-				//this.Service.SetUserContext(this.UserContext);
-
-    //            ViewBag.ShowOrganizationPartial = true;
 			}
 			else
 			{

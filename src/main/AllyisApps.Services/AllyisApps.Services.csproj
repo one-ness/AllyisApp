@@ -66,6 +66,7 @@
     <Compile Include="Account\AccountService.cs" />
     <Compile Include="Account\Actions.cs" />
     <Compile Include="Account\AuthorizationService.cs" />
+    <Compile Include="Account\CookieData.cs" />
     <Compile Include="Org\ImportActionResult.cs" />
     <Compile Include="Org\OrganizationRole.cs" />
     <Compile Include="Account\ProductRole.cs" />

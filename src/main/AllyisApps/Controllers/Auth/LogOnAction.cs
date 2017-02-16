@@ -194,8 +194,8 @@ namespace AllyisApps.Controllers
 		/// <param name="isPersisted">Whether to set a persistent cookie or not.</param>
 		private void SetAuthCookie(UserContext context, HttpResponseBase response, bool isPersisted = false)
         {
-            //// serialize the cookie data object, then ecnrypt it using formsauthentication module
-            string serialized = Serializer.SerilalizeToJson(context);
+			//// serialize the cookie data object, then ecnrypt it using formsauthentication module
+			string serialized = Service.SerializeCookie(Service.GetCookieDataFromUserContext(context));
             FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
                 /*AuthenticationTicketVersion*/1,
                 context.UserName,

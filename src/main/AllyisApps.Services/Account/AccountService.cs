@@ -397,6 +397,49 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Gets a CookieData object from a UserContext.
+		/// </summary>
+		/// <param name="context">The UserContext to use. (If null, the current context is used.)</param>
+		/// <returns>A CookieData for that UserContext.</returns>
+		public CookieData GetCookieDataFromUserContext(UserContext context = null)
+		{
+			UserContext contextToUse;
+			if (context == null)
+			{
+				contextToUse = this.UserContext;
+			}
+			else
+			{
+				contextToUse = context;
+			}
+
+			return new CookieData
+			{
+				userId = contextToUse.UserId
+			};
+		}
+
+		/// <summary>
+		/// Serializes a CookieData.
+		/// </summary>
+		/// <param name="cookie">The CookieData</param>
+		/// <returns>The serialized string</returns>
+		public string SerializeCookie(CookieData cookie)
+		{
+			return Serializer.SerilalizeToJson(cookie);
+		}
+
+		/// <summary>
+		/// Deserializes a CookieData
+		/// </summary>
+		/// <param name="serializedCookie">The serialized CookieData string</param>
+		/// <returns>The CookieData</returns>
+		public CookieData DeserializeCookie(string serializedCookie)
+		{
+			return Serializer.DeserializeFromJson<CookieData>(serializedCookie);
+		}
+
+		/// <summary>
 		/// Uses the database to return a fully populated UserContext from the userId.
 		/// </summary>
 		/// <param name="userId">The user Id to look up.</param>

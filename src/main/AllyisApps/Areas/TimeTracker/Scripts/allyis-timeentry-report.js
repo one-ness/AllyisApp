@@ -68,11 +68,17 @@ $('#datePickerStart').datepicker({
 	}
 });
 $('#datePickerStart').on("change", function () {
-	console.log(DateConvert.GetDaysFromMoment(moment($(this).val())));
+	$('#DateRangeStart').val(DateConvert.GetDaysFromMoment(moment($(this).val())));
 });
-$('#DateRangeEnd').datepicker({
+$('#datePickerEnd').datepicker({
 	showOn: "button",
-	buttonImageOnly: true
+	buttonImageOnly: true,
+	onSelect: function () {
+		$(this).change();
+	}
+});
+$('#datePickerEnd').on("change", function () {
+	$('#DateRangeEnd').val(DateConvert.GetDaysFromMoment(moment($(this).val())));
 });
 
 // $( document ).ready()
@@ -103,11 +109,13 @@ $(function () {
             })
         });
     });
+    $('#datePickerStart').datepicker("setDate", DateConvert.GetMomentFromDays(model_startdate).toDate());
+    $('#datePickerEnd').datepicker("setDate", DateConvert.GetMomentFromDays(model_enddate).toDate());
     $('.ui-datepicker-trigger').remove();
     $('#datePickerStartButton').on("click", function () {
     	$('#datePickerStart').datepicker("show");
     });
     $('#datePickerEndButton').on("click", function () {
-    	$('#DateRangeEnd').datepicker("show");
+    	$('#datePickerEnd').datepicker("show");
     });
 });
