@@ -366,4 +366,10 @@
   <data name="Weeks" xml:space="preserve">
     <value>semanas</value>
   </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>Fecha Final</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Fecha de Inicio</value>
+  </data>
 </root>

@@ -369,4 +369,10 @@
   <data name="Weeks" xml:space="preserve">
     <value>weeks</value>
   </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>State Date</value>
+  </data>
 </root>

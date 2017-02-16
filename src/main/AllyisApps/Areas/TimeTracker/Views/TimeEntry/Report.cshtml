@@ -65,27 +65,49 @@
                             </div>
 }
                     </div>
-                    <div class="row">
-                        <div class="form-group col-md-6 col-lg-6">
-                            <label>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DateRange</label>
-                            <input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@DateTime.Today.ToString("MM/dd/yyyy")" />
-                            <input type="hidden" id="DateRangeEnd" name="DateRangeEnd" value="@DateTime.Today.ToString("MM/dd/yyyy")" />
-                            <input type="text" name="daterange" id="daterange" class="form-control" value="" />
-                        </div>
-                        <br />
-                        <div class="col-md-6 col-lg-6" style="display: flex; justify-content: space-around;">
-                            <div>
-                                <input class="btn btn-primary" type="submit" name="viewDataButton" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Preview />
-                            </div>
-                            @Html.Hidden("ShowExport", Model.ShowExport)
-                            @if (Model.ShowExport)
-                            {
-                                <div>
-                                    <input class="btn btn-primary" type="submit" name="viewDataButton" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Export />
-                                </div>
-}
-                        </div>
-                    </div>
+					<div class="row">
+						<div class="form-group col-md-6 col-lg-6">
+
+							<label>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.StartDate</label>
+							@*<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@DateTime.Today.ToString("MM/dd/yyyy")" />
+				<input type="hidden" id="DateRangeEnd" name="DateRangeEnd" value="@DateTime.Today.ToString("MM/dd/yyyy")" />
+				<input type="text" name="daterange" id="daterange" class="form-control" value="" />*@
+							@*@Html.TextBox("DateRangeStart",
+										DateTime.Today.ToString("MM/dd/yyyy"),
+										htmlAttributes: new { @class = "form-control", @id = "DateRangeStart", @style = "width: 90%; display: inline-block;"})*@
+							<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.Selection.StartDate" />
+							<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerStart" />
+							<span class="fa fa-fw fa-calendar" id="datePickerStartButton"></span>
+
+						</div>
+						<div class="form-group col-md-6 col-lg-6">
+
+							<label>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.EndDate</label>
+							@*<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@DateTime.Today.ToString("MM/dd/yyyy")" />
+				<input type="hidden" id="DateRangeEnd" name="DateRangeEnd" value="@DateTime.Today.ToString("MM/dd/yyyy")" />
+				<input type="text" name="daterange" id="daterange" class="form-control" value="" />*@
+
+							<input type="text" class="form-control" name="DateRangeEnd" style="width: 90%; display: inline-block;" id="DateRangeEnd" />
+							<span class="fa fa-fw fa-calendar" id="datePickerEndButton"></span>
+
+						</div>
+					</div>
+					<div class="row">
+						@*<br />*@
+						<div class="col-xs-12">
+							@Html.Hidden("ShowExport", Model.ShowExport)
+							@if (Model.ShowExport)
+							{
+								<div>
+									<input class="btn btn-primary pull-right" type="submit" name="viewDataButton" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Export />
+								</div>
+							}
+							<div>
+								<input class="btn btn-primary pull-right" type="submit" name="viewDataButton" style="margin-right: 15px;" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Preview />
+							</div>
+						</div>
+					</div>
+
                 </div>
                 @Html.Hidden("PageNum", Model.PreviewPageNum)
 }
