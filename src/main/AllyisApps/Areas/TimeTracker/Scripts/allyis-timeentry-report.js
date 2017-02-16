@@ -1,58 +1,54 @@
-﻿// Date range picker
-init_drp(
-    "daterange",
-    [{
-        text: "Today",
-        dateStart: function () { return moment() },
-        dateEnd: function () { return moment() }
-    }, {
-        text: "Yesterday",
-        dateStart: function () { return moment().subtract(1, 'days') },
-        dateEnd: function () { return moment().subtract(1, 'days') }
-    }, {
-        text: "Last Week",
-        dateStart: function () {
-            weekStart = 0 + model_startofweek;
-            if (weekStart <= moment().day())
-                return (moment().day(weekStart - 7));
-            else
-                return (moment().day(weekStart - 14));
-        },
-        dateEnd: function () {
-            weekStart = 0 + model_startofweek;
-            if (weekStart <= moment().day())
-                return (moment().day(weekStart - 1));
-            else
-                return (moment().day(weekStart - 8));
-        }
-    }, {
-        text: "This Month",
-        dateStart: function () { return moment().startOf('month') },
-        dateEnd: function () { return moment().endOf('month') }
-    }, {
-        text: "Last Month",
-        dateStart: function () { return moment().subtract(1, 'month').startOf('month') },
-        dateEnd: function () { return moment().subtract(1, 'month').endOf('month') }
-    }, {
-        text: "This quarter",
-        dateStart: function () { return moment().startOf('quarter') },
-        dateEnd: function () { return moment().endOf('quarter') }
-    }, {
-        text: "Last quarter",
-        dateStart: function () { return moment().subtract(1, 'quarter').startOf('quarter') },
-        dateEnd: function () { return moment().subtract(1, 'quarter').endOf('quarter') }
-    }, {
-    	text: "All time",
-    	dateStart: function () { return moment().subtract(100, 'year') },
-    	dateEnd: function () { return moment().add(100, 'year') }
-    }],
-    "DateRangeStart",
-    "DateRangeEnd",
-    2,
-    null,
-    model_startdate,
-    model_enddate
-);
+﻿//// Date range picker
+//init_drp(
+//    "daterange",
+//    [{
+//        text: "Today",
+//        dateStart: function () { return moment() },
+//        dateEnd: function () { return moment() }
+//    }, {
+//        text: "Yesterday",
+//        dateStart: function () { return moment().subtract(1, 'days') },
+//        dateEnd: function () { return moment().subtract(1, 'days') }
+//    }, {
+//        text: "Last Week",
+//        dateStart: function () {
+//            weekStart = 0 + model_startofweek;
+//            if (weekStart <= moment().day())
+//                return (moment().day(weekStart - 7));
+//            else
+//                return (moment().day(weekStart - 14));
+//        },
+//        dateEnd: function () {
+//            weekStart = 0 + model_startofweek;
+//            if (weekStart <= moment().day())
+//                return (moment().day(weekStart - 1));
+//            else
+//                return (moment().day(weekStart - 8));
+//        }
+//    }, {
+//        text: "This Month",
+//        dateStart: function () { return moment().startOf('month') },
+//        dateEnd: function () { return moment().endOf('month') }
+//    }, {
+//        text: "Last Month",
+//        dateStart: function () { return moment().subtract(1, 'month').startOf('month') },
+//        dateEnd: function () { return moment().subtract(1, 'month').endOf('month') }
+//    }, {
+//        text: "This quarter",
+//        dateStart: function () { return moment().startOf('quarter') },
+//        dateEnd: function () { return moment().endOf('quarter') }
+//    }, {
+//        text: "Last quarter",
+//        dateStart: function () { return moment().subtract(1, 'quarter').startOf('quarter') },
+//        dateEnd: function () { return moment().subtract(1, 'quarter').endOf('quarter') }
+//    }],
+//    "DateRangeStart",
+//    "DateRangeEnd",
+//    2,
+//    null,
+//    model_startdate,
+//    model_enddate
+//);
 
 function submitFormForCSV() {
     $("#reportForm").attr("action", "/TimeTracker/TimeEntry/ExportReport");
@@ -63,6 +59,21 @@ function submitFormForCSV() {
     $("#reportForm").attr("action", "/TimeTracker/TimeEntry/ExportExcelReport");
     $("#reportForm").submit();
 }*/
+
+$('#datePickerStart').datepicker({
+	showOn: "button",
+	buttonImageOnly: true,
+	onSelect: function () {
+		$(this).change();
+	}
+});
+$('#datePickerStart').on("change", function () {
+	console.log(DateConvert.GetDaysFromMoment(moment($(this).val())));
+});
+$('#DateRangeEnd').datepicker({
+	showOn: "button",
+	buttonImageOnly: true
+});
 
 // $( document ).ready()
 $(function () {
@@ -91,5 +102,12 @@ $(function () {
                 $("#ddl-projects").prop('disabled', true);
             })
         });
+    });
+    $('.ui-datepicker-trigger').remove();
+    $('#datePickerStartButton').on("click", function () {
+    	$('#datePickerStart').datepicker("show");
+    });
+    $('#datePickerEndButton').on("click", function () {
+    	$('#DateRangeEnd').datepicker("show");
     });
 });
