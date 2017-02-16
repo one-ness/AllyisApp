@@ -100,7 +100,7 @@ namespace AllyisApps.Core
 			//else
 			//{
 				// Update the ChosenOrg in the database if necessary, so that the UserContext can grab the right one
-				if (this.UserContext.ChosenOrganizationId != pOrganizationId)
+				if (this.UserContext != null && this.UserContext.ChosenOrganizationId != pOrganizationId)
 				{
 					this.Service.UpdateActiveOrganization(UserContext.UserId, pOrganizationId);
 				}

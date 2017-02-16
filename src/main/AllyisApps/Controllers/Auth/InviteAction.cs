@@ -51,7 +51,7 @@ namespace AllyisApps.Controllers
 
 					foreach (string user in org.EmailedUsers)
 					{
-						Notifications.Add(new BootstrapAlert(user + " " + Resources.Controllers.Auth.Strings.UserEmailed, Variety.Info));
+						Notifications.Add(new BootstrapAlert(user + " " + Resources.Controllers.Auth.Strings.UserEmailed, Variety.Success));
 					}
 
 					foreach (string user in org.UsersAlreadyExisting)

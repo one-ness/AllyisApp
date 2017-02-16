@@ -11,7 +11,7 @@
 <div class="footer container">
     <div class="row">
         <p class="footer-links col-xs-8 col-sm-6">
-            <select class="col-xs-12 col-sm-6" id="languageSelect" onchange="OnLanguageSelect()" value=@ViewBag.language>
+            <select class="col-xs-12 col-sm-6 form-control" id="languageSelect" onchange="OnLanguageSelect()" value=@ViewBag.language style="width: inherit;">
                 @foreach (LanguageViewModel language in Model)
             {
                 string languageKey = LanguageViewModel.Clean(language.LanguageName);

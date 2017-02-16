@@ -68,7 +68,7 @@
                         <input type="search" placeholder="@AllyisApps.Resources.Views.Account.Strings.UserSearchPlaceholder" id="userSearch" class="form-control"/>
                     </td>
                     <td class="tab-OrganizationTab">
-                        <select id="orgRoleFilter">
+                        <select id="orgRoleFilter" class="form-control">
                             <option>@AllyisApps.Resources.Views.Account.Strings.Any</option>
                             @foreach (string role in orgRoles.Values)
                             {
@@ -79,7 +79,7 @@
                     @if (hasTimeTracker)
                     {
                         <td class="tab-TimeTrackerTab" style="display: none;">
-                            <select id="ttRoleFilter">
+                            <select id="ttRoleFilter" class="form-control">
                                 <option>@AllyisApps.Resources.Views.Account.Strings.Any</option>
                                 @foreach (string ttrole in ttRoles.Values)
                                 {
@@ -146,8 +146,8 @@
         </div>
 
         <div class="bottom-right">
+			@Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
             <input type="button" class="btn btn-primary" id="do-it" value="@AllyisApps.Resources.Views.Account.Strings.Save" />
-            @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
         </div>
     </div>
 </div>

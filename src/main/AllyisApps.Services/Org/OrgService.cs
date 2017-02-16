@@ -260,11 +260,18 @@ namespace AllyisApps.Services
 			//EmailService mail = new EmailService();
 			OrganizationInfo orgInfo = this.GetOrganization(invitationInfo.OrganizationId);
 
+			//string htmlbody = string.Format(
+			//	"{0} has requested you join their organization on Allyis Apps, {1}!<br /> Click <a href=http://{2}.{3}/Account/Index?accessCode={4}>Here</a> to create an account and join!",
+			//	requestingUserFullName,
+			//	orgInfo.Name,
+			//	GetSubdomainById(invitationInfo.OrganizationId),
+			//	webRoot,
+			//	invitationInfo.AccessCode);
+
 			string htmlbody = string.Format(
-				"{0} has requested you join their organization on Allyis Apps, {1}!<br /> Click <a href=http://{2}.{3}/Account/Index?accessCode={4}>Here</a> to create an account and join!",
+				"{0} has requested you join their organization on Allyis Apps, {1}!<br /> Click <a href=http://{2}/Account/Index?accessCode={3}>Here</a> to create an account and join!",
 				requestingUserFullName,
 				orgInfo.Name,
-				GetSubdomainById(invitationInfo.OrganizationId),
 				webRoot,
 				invitationInfo.AccessCode);
 
