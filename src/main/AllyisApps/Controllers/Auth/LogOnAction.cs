@@ -195,7 +195,7 @@ namespace AllyisApps.Controllers
 		private void SetAuthCookie(UserContext context, HttpResponseBase response, bool isPersisted = false)
         {
 			//// serialize the cookie data object, then ecnrypt it using formsauthentication module
-			string serialized = Service.SerializeCookie(Service.GetCookieDataFromUserContext(context));
+			string serialized = this.SerializeCookie(this.GetCookieDataFromUserContext(context));
             FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
                 /*AuthenticationTicketVersion*/1,
                 context.UserName,
