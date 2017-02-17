@@ -298,7 +298,6 @@
     <Compile Include="Controllers\Shared\SharedController.cs" />
     <Compile Include="Controllers\Shared\UpdateLanguageAction.cs" />
     <Compile Include="App_Start\AppStartup.cs" />
-    <Compile Include="Core\BaseProductController.cs" />
     <Compile Include="Core\CookieData.cs" />
     <Compile Include="Core\CustomRoutes.cs" />
     <Compile Include="Core\GlobalSettings.cs" />

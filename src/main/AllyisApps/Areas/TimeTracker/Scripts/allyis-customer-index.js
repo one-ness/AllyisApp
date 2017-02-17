@@ -6,10 +6,6 @@ $.fn.clearErrors = function () {
     });
 };
 
-if (location.hash) {
-    $(location.hash).collapse('show');
-    $(location.hash).parents('.accordion-body').collapse('show');
-}
 
 var ArbitrarySearcher = function () {
     var my = {};
@@ -249,5 +245,13 @@ MODULE.init({
         }
     ]
 })
+
+$(document).ready(function () {
+
+	if (location.hash) {
+		$(location.hash).collapse('show');
+		$(location.hash).parents('.accordion-body').collapse('show');
+	}
+});
 
 //$('#Country').change(updateStateDDL);
