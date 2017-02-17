@@ -19,7 +19,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// <summary>
 	/// The controller for managing all Project-related actions.
 	/// </summary>
-	public partial class ProjectController : BaseProductController
+	public partial class ProjectController: BaseController
 	{
 		/// <summary>
 		/// GET: Project/Create.

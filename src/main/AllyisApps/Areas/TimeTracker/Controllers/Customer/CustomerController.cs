@@ -15,7 +15,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// Represents pages for the management of a Customer.
 	/// </summary>
 	[Authorize]
-	public partial class CustomerController : BaseProductController
+	public partial class CustomerController: BaseController
 	{
 		private static readonly int TimeTrackerID = Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker);
 

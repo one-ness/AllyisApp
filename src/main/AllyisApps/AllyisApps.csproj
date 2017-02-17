@@ -193,6 +193,7 @@
   <ItemGroup>
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\TemplateAction.cs" />
+    <Compile Include="Areas\TimeTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\GetProjectsAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TemplateAction.cs" />
@@ -206,9 +207,6 @@
     <Compile Include="Areas\TimeTracker\Controllers\Customer\EditAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\CreateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\CustomerController.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\Manage\ManageController.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\Home\HomeController.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\Manage\UsersAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\CreateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\EditAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\DeleteAction.cs" />
@@ -752,7 +750,6 @@
     <Content Include="Areas\TimeTracker\Views\Project\_ProjectEdit.cshtml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Areas\TimeTracker\Views\Manage\Users.cshtml" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Parameters.xml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\Settings.cshtml" />
@@ -1287,9 +1284,7 @@
     <Content Include="Views\Shared\_Breadcrumbs.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Areas\TimeTracker\Views\GetProjectsAction\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
