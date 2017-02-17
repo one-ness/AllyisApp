@@ -69,35 +69,50 @@
                         @Html.ListBoxFor(m => m.SelectedProjectUserIds, new MultiSelectList(Model.ProjectUsers, "UserId", "Name"), new { @name = "Included", @id = "included-users", @class = "filter-list", @Multiple = "multiple" })
                     </div>
                 </div>
-                <div class="form-group row" style="margin-bottom: 0px; margin-top: 15px;">
-                    <div class="col-xs-6 text-left">
-                        <label for="daterange" style="text-align:center">@AllyisApps.Resources.TimeTracker.Views.Project.Strings.DateRange</label>
-                    </div>
-                    <div class="col-xs-6 text-right">
-                        <label for="price" style="text-align:center">@AllyisApps.Resources.TimeTracker.Views.Project.Strings.PriceType</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-8 text-left">
-                        @Html.HiddenFor(m => m.StartDate)
-                        @Html.HiddenFor(m => m.EndDate)
-                        <input type="text" name="daterange" id="daterange" class="form-control" value="" />
-                        @*<span class="col-xs-5" style="padding: 0px;"><input type="text" name="startdate" id="startdate" class="form-control" value="" /></span>
-                        <span class="col-xs-1" style="vertical-align: middle; height: 34px; line-height: 34px;">-</span>
-                        <span class="col-xs-5" style="padding: 0px;"><input type="text" name="enddate" id="enddate" class="form-control" value="" /></span>*@
-                    </div>
+				<div class="form-group row" style="margin-bottom: 0px; margin-top: 15px;">
+					@*<div class="col-xs-6 text-left">
+						<label for="daterange" style="text-align:center">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.StartDate</label>
+					</div>
+					<div class="col-xs-6 text-left">
+						<label for="daterange" style="text-align:center">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.EndDate</label>
+					</div>*@
 
-                    @{
-                        <div class="col-xs-4 text-right">
-                            @Html.RadioButtonFor(m => m.PriceType, AllyisApps.Resources.TimeTracker.Views.Project.Strings.Hourly, new { @checked = "checked"}) @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Hourly
-                            @Html.RadioButtonFor(m => m.PriceType, AllyisApps.Resources.TimeTracker.Views.Project.Strings.Fixed) @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Fixed
-                        </div>
-                    }
-                </div>
+					<div class="form-group col-xs-6">
+						<label>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.StartDate</label>
+						@Html.HiddenFor(m => m.StartDate)
+						<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerStart" />
+						<span class="fa fa-fw fa-calendar" id="datePickerStartButton"></span>
+					</div>
+					<div class="form-group col-xs-6">
+						<label>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.EndDate</label>
+						@Html.HiddenFor(m => m.EndDate)
+						<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerEnd" />
+						<span class="fa fa-fw fa-calendar" id="datePickerEndButton"></span>
+					</div>
+
+				</div>
                 @Html.HiddenFor(m => m.ParentCustomerId)
                 @Html.HiddenFor(m => m.ProjectId)
                 @Html.HiddenFor(m => m.IsCreating)
             </div>
+
+			<div class="form-group row" style="margin-bottom: 0px; margin-top: 15px;">
+				<div class="col-xs-6 text-left">
+					<label for="price" style="text-align:center">@AllyisApps.Resources.TimeTracker.Views.Project.Strings.PriceType</label>
+					<br />
+					@Html.RadioButtonFor(m => m.PriceType, AllyisApps.Resources.TimeTracker.Views.Project.Strings.Hourly, new { @checked = "checked" }) @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Hourly
+					@Html.RadioButtonFor(m => m.PriceType, AllyisApps.Resources.TimeTracker.Views.Project.Strings.Fixed) @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Fixed
+				</div>
+			</div>
+
+
+			@*<div class="form-group row" style="margin-bottom: 0px; margin-top: 15px;">
+				<div class="col-xs-4 text-left">
+					@Html.RadioButtonFor(m => m.PriceType, AllyisApps.Resources.TimeTracker.Views.Project.Strings.Hourly, new { @checked = "checked" }) @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Hourly
+					@Html.RadioButtonFor(m => m.PriceType, AllyisApps.Resources.TimeTracker.Views.Project.Strings.Fixed) @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Fixed
+				</div>
+			</div>*@
+
             <div class="text-right" style="padding-top: 15px; padding-bottom: 15px;">
                 <input type="button" class="btn btn-default" value=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer)'" />
                 <input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Save class="btn btn-primary" id="submitProject" />

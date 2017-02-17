@@ -419,47 +419,80 @@ $('form').change(function () { formChange(); });
 //    model_enddate,
 //    null
 //);
-init_drp(
-    "daterange",
-    [{
-        text: "All Time",
-        dateStart: function () { return moment(mindate_shortstring, 'MM/DD/YYYY') },
-        dateEnd: function () { return moment(maxdate_shortstring, 'MM/DD/YYYY') }
-    }, {
-        text: "Reset Start",
-        dateStart: function () { return moment(mindate_shortstring, 'MM/DD/YYYY') },
-        dateEnd: function () { return moment($('#daterange').daterangepicker("getRange").end) }
-    }, {
-        text: "Reset End",
-        dateStart: function () { return moment($('#daterange').daterangepicker("getRange").start) },
-        dateEnd: function () { return moment(maxdate_shortstring, 'MM/DD/YYYY') }
-    },{
-        text: "This Month",
-        dateStart: function () { return moment().startOf('month') },
-        dateEnd: function () { return moment().endOf('month') }
-    }, {
-        text: "Last Month",
-        dateStart: function () { return moment().subtract(1, 'month').startOf('month') },
-        dateEnd: function () { return moment().subtract(1, 'month').endOf('month') }
-    }, {
-        text: "This quarter",
-        dateStart: function () { return moment().startOf('quarter') },
-        dateEnd: function () { return moment().endOf('quarter') }
-    }, {
-        text: "Last quarter",
-        dateStart: function () { return moment().subtract(1, 'quarter').startOf('quarter') },
-        dateEnd: function () { return moment().subtract(1, 'quarter').endOf('quarter') }
-    }],
-    "StartDate",
-    "EndDate",
-    2,
-    function () {
-        setTimeout(
-            function () {
-                formChange();
-            }, 100
-        );
-    },
-    model_startdate,
-    model_enddate
-);
+//init_drp(
+//    "daterange",
+//    [{
+//        text: "All Time",
+//        dateStart: function () { return moment(mindate_shortstring, 'MM/DD/YYYY') },
+//        dateEnd: function () { return moment(maxdate_shortstring, 'MM/DD/YYYY') }
+//    }, {
+//        text: "Reset Start",
+//        dateStart: function () { return moment(mindate_shortstring, 'MM/DD/YYYY') },
+//        dateEnd: function () { return moment($('#daterange').daterangepicker("getRange").end) }
+//    }, {
+//        text: "Reset End",
+//        dateStart: function () { return moment($('#daterange').daterangepicker("getRange").start) },
+//        dateEnd: function () { return moment(maxdate_shortstring, 'MM/DD/YYYY') }
+//    },{
+//        text: "This Month",
+//        dateStart: function () { return moment().startOf('month') },
+//        dateEnd: function () { return moment().endOf('month') }
+//    }, {
+//        text: "Last Month",
+//        dateStart: function () { return moment().subtract(1, 'month').startOf('month') },
+//        dateEnd: function () { return moment().subtract(1, 'month').endOf('month') }
+//    }, {
+//        text: "This quarter",
+//        dateStart: function () { return moment().startOf('quarter') },
+//        dateEnd: function () { return moment().endOf('quarter') }
+//    }, {
+//        text: "Last quarter",
+//        dateStart: function () { return moment().subtract(1, 'quarter').startOf('quarter') },
+//        dateEnd: function () { return moment().subtract(1, 'quarter').endOf('quarter') }
+//    }],
+//    "StartDate",
+//    "EndDate",
+//    2,
+//    function () {
+//        setTimeout(
+//            function () {
+//                formChange();
+//            }, 100
+//        );
+//    },
+//    model_startdate,
+//    model_enddate
+//);
+
+$('#datePickerStart').datepicker({
+	showOn: "button",
+	buttonImageOnly: true,
+	onSelect: function () {
+		$(this).change();
+	}
+});
+$('#datePickerStart').on("change", function () {
+	$('#StartDate').val(DateConvert.GetDaysFromMoment(moment($(this).val())));
+});
+$('#datePickerEnd').datepicker({
+	showOn: "button",
+	buttonImageOnly: true,
+	onSelect: function () {
+		$(this).change();
+	}
+});
+$('#datePickerEnd').on("change", function () {
+	$('#EndDate').val(DateConvert.GetDaysFromMoment(moment($(this).val())));
+});
+
+$(function () {
+	$('#datePickerStart').datepicker("setDate", DateConvert.GetMomentFromDays(model_startdate).toDate());
+    $('#datePickerEnd').datepicker("setDate", DateConvert.GetMomentFromDays(model_enddate).toDate());
+    $('.ui-datepicker-trigger').remove();
+    $('#datePickerStartButton').on("click", function () {
+    	$('#datePickerStart').datepicker("show");
+    });
+    $('#datePickerEndButton').on("click", function () {
+    	$('#datePickerEnd').datepicker("show");
+    });
+});

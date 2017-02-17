@@ -55,11 +55,6 @@ function submitFormForCSV() {
     $("#reportForm").submit();
 }
 
-/*function submitFormForExcel() {
-    $("#reportForm").attr("action", "/TimeTracker/TimeEntry/ExportExcelReport");
-    $("#reportForm").submit();
-}*/
-
 $('#datePickerStart').datepicker({
 	showOn: "button",
 	buttonImageOnly: true,
@@ -109,6 +104,7 @@ $(function () {
             })
         });
     });
+
     $('#datePickerStart').datepicker("setDate", DateConvert.GetMomentFromDays(model_startdate).toDate());
     $('#datePickerEnd').datepicker("setDate", DateConvert.GetMomentFromDays(model_enddate).toDate());
     $('.ui-datepicker-trigger').remove();
