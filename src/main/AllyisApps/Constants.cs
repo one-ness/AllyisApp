@@ -187,6 +187,11 @@
 		public const string ManagePermissions = "ManagePermissions";
 
 		/// <summary>
+		/// Action-Name: ManagePermissions.
+		/// </summary>
+		public const string ManagePermissions2 = "ManagePermissions2";
+
+		/// <summary>
 		/// Action-Name: Organizations.
 		/// </summary>
 		public const string Organizations = "Organizations";

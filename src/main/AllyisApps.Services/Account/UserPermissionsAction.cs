@@ -29,5 +29,10 @@ namespace AllyisApps.Services
 		/// Gets or sets the actions to be performed.
 		/// </summary>
 		public PermissionsAction SelectedActions { get; set; }
+
+		/// <summary>
+		/// TODO: Delete this once there's only one permissions management page
+		/// </summary>
+		public bool isPermissions2 { get; set; }
 	}
 }

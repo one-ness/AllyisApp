@@ -127,6 +127,9 @@ function do_it_gather_data() {
         var value = split[1];
         result.SelectedActions[category] = value;
     })
+
+    result.isPermissions2 = false; // Delete this once there's only one permissions management page
+
     return result;
 }
 

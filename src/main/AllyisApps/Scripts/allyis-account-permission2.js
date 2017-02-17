@@ -35,6 +35,9 @@ gatherData = function () {
     result = {};
     result.SelectedUsers = checked_users;
     result.SelectedActions = selectedAction;
+
+    result.isPermissions2 = true; // Delete this once there's only one permissions management page
+
     return result;
 }
 

@@ -224,6 +224,10 @@ namespace AllyisApps.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
+			if (model.isPermissions2) // TODO: Delete once there's only one manage permissions page (also delete the action constant)
+			{
+				return RedirectToAction(ActionConstants.ManagePermissions2);
+			}
 			return RedirectToAction(ActionConstants.ManagePermissions);
 		}
 
