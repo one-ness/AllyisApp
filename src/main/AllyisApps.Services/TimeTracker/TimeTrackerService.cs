@@ -212,15 +212,15 @@ namespace AllyisApps.Services.TimeTracker
 			}
 			else if (start == null)
 			{
-				throw new ArgumentNullException("start", "Project must have a start time");
+				throw new ArgumentNullException("start", "Date range must have a start date.");
 			}
 			else if (end == null)
 			{
-				throw new ArgumentNullException("end", "Project must have an end time");
+				throw new ArgumentNullException("end", "Date range must have an end date.");
 			}
 			else if (DateTime.Compare(start, end) > 0)
 			{
-				throw new ArgumentException("Project cannot end before it starts.");
+				throw new ArgumentException("Date range cannot end before it starts.");
 			}
 			#endregion Validation
 

@@ -63,7 +63,11 @@ $('#datePickerStart').datepicker({
 	}
 });
 $('#datePickerStart').on("change", function () {
-	$('#DateRangeStart').val(DateConvert.GetDaysFromMoment(moment($(this).val())));
+	var enteredDate = moment($(this).val());
+	if (enteredDate.year() < 2000) {
+		enteredDate.add(100, 'years');
+	}
+	$('#DateRangeStart').val(DateConvert.GetDaysFromMoment(enteredDate));
 });
 $('#datePickerEnd').datepicker({
 	showOn: "button",
@@ -73,7 +77,11 @@ $('#datePickerEnd').datepicker({
 	}
 });
 $('#datePickerEnd').on("change", function () {
-	$('#DateRangeEnd').val(DateConvert.GetDaysFromMoment(moment($(this).val())));
+	var enteredDate = moment($(this).val());
+	if (enteredDate.year() < 2000) {
+		enteredDate.add(100, 'years');
+	}
+	$('#DateRangeEnd').val(DateConvert.GetDaysFromMoment(enteredDate));
 });
 
 // $( document ).ready()

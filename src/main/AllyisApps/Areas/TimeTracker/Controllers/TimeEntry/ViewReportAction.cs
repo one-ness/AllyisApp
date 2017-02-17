@@ -13,6 +13,7 @@ using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using System;
+using AllyisApps.Core.Alert;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -59,9 +60,25 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
                 ReportViewModel reportVM = this.ConstructReportViewModel(this.UserContext.UserId, UserContext.ChosenOrganizationId, Service.Can(Actions.CoreAction.TimeTrackerEditOthers), showExport, reportVMselect);
 
-                DataExportViewModel dataVM = this.ConstructDataExportViewModel(reportVMselect.Users, TimeTrackerService.GetDateTimeFromDays(dateRangeStart.Value), TimeTrackerService.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
+				DataExportViewModel dataVM = null;
+				try
+				{
+					dataVM = this.ConstructDataExportViewModel(reportVMselect.Users, TimeTrackerService.GetDateTimeFromDays(dateRangeStart.Value), TimeTrackerService.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
+				}
+				catch (Exception ex)
+				{
+					string message = "Could not create report.";
+					if (ex.Message != null)
+					{
+						message = string.Format("{0} {1}", message, ex.Message);
+					}
 
-                dataVM.PageTotal = SetPageTotal(dataVM.Data, reportVM.PreviewPageSize, pageNum); // must set PageTotal first and seperately like this.
+					//Update failure
+					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
+					return this.RedirectToAction(ActionConstants.Report, ControllerConstants.TimeEntry);
+				}
+
+				dataVM.PageTotal = SetPageTotal(dataVM.Data, reportVM.PreviewPageSize, pageNum); // must set PageTotal first and seperately like this.
                 dataVM.PreviewData = SetPreviewData(dataVM.Data, reportVM.PreviewPageSize, pageNum);
 
                 float total = (from d in dataVM.Data select d.Duration).Sum();

@@ -84,9 +84,23 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                         Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ProjectOrgIdNotUnique, Variety.Danger));
                         return this.View(model);
                     }
-
-					model.ProjectId = CreateProject(model);
-					this.UpdateProject(model);
+					try
+					{
+						model.ProjectId = CreateProject(model);
+					}
+					catch (Exception ex)
+					{
+						string message = "Could not create project.";
+						if (ex.Message != null)
+						{
+							message = string.Format("{0} {1}", message, ex.Message);
+						}
+					
+						//Create failure
+						Notifications.Add(new BootstrapAlert(message, Variety.Danger));
+						return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
+					}
+					//this.UpdateProject(model);
 					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.SuccessProjectCreated, Variety.Success));
 
 					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer), model.ParentCustomerId));

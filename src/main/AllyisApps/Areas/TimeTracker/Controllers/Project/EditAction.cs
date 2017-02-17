@@ -12,6 +12,7 @@ using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Project;
+using System;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -53,7 +54,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if (Service.Can(Actions.CoreAction.EditProject))
 				{
-					UpdateProject(model);
+					try
+					{ 
+						UpdateProject(model);
+					}
+					catch (Exception ex)
+					{
+						string message = "Could not update project.";
+						if (ex.Message != null)
+						{
+							message = string.Format("{0} {1}", message, ex.Message);
+						}
+
+						//Update failure
+						Notifications.Add(new BootstrapAlert(message, Variety.Danger));
+						return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
+					}
 					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.SuccessProjectEdited, Variety.Success));
 
 					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer), model.ParentCustomerId));
