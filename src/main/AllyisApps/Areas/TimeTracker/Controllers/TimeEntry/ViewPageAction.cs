@@ -15,7 +15,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// <summary>
 	/// Class which manages Time Entry objects.
 	/// </summary>
-	public partial class TimeEntryController : BaseProductController
+	public partial class TimeEntryController : BaseController
 	{
 		/// <summary>
 		/// Submits page button press to view data.

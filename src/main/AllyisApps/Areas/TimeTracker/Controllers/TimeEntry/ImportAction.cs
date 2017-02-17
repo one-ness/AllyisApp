@@ -20,8 +20,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
     /// <summary>
     /// Represents pages for the management of a Customer.
     /// </summary>
-    public partial class TimeEntryController : BaseProductController
-    {
+    public partial class TimeEntryController : BaseController
+	{
         /// <summary>
         /// POST: TimeEntry/Import
         /// Code adapted from http://techbrij.com/read-excel-xls-xlsx-asp-net-mvc-upload.

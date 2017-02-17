@@ -13,8 +13,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
     /// <summary>
     /// Represents pages for the management of a Customer.
     /// </summary>
-    public partial class TimeEntryController : BaseProductController
-    {
+    public partial class TimeEntryController : BaseController
+	{
         /// <summary>
 		/// Downloads the TimeEntryImportTemplate.csv file.
 		/// </summary>

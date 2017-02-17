@@ -29,10 +29,10 @@ namespace AllyisApps.Core
 			this.cProductId = productId;
 		}
 
-		/// <summary>
-		/// Gets or sets the Time Tracker service.
-		/// </summary>
-		protected TimeTrackerService TimeTrackerService { get; set; }
+		///// <summary>
+		///// Gets or sets the Time Tracker service.
+		///// </summary>
+		//protected TimeTrackerService TimeTrackerService { get; set; }
 
 		/// <summary>
 		/// Override method for updating chosen subscription id for user context.

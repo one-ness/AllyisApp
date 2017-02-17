@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Globalization;
 using System.Threading;
 using System.Web;
@@ -16,6 +17,7 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Filters;
 using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Core
 {
@@ -32,6 +34,17 @@ namespace AllyisApps.Core
 		{
 			// init the service
 			this.Service = new Service(GlobalSettings.SqlConnectionString);
+			this.TimeTrackerService = new TimeTrackerService(GlobalSettings.SqlConnectionString);
+			this.TimeTrackerService.SetService(this.Service);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BaseController"/> class with a product id.
+		/// </summary>
+		/// <param name="productId">Product id.</param>
+		public BaseController(int productId) : this()
+		{
+			this.cProductId = productId;
 		}
 
 		/// <summary>
@@ -56,6 +69,14 @@ namespace AllyisApps.Core
 		/// Gets or sets the service.
 		/// </summary>
 		protected Service Service { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		protected TimeTrackerService TimeTrackerService { get; set; }
+
+		// Product id used by controllers in product areas. 0 by default, for no product.
+		private readonly int cProductId = 0;
 
 		/// <summary>
 		/// Helper method for redirecting to an action in a subdomain.
@@ -213,8 +234,24 @@ namespace AllyisApps.Core
 				if(this.UserContext != null)
 				{
 					// User context successfully populated
+					this.TimeTrackerService.SetUserContext(this.UserContext);
 					languageID = this.UserContext.ChosenLanguageID;
 					ViewBag.ShowOrganizationPartial = true;
+
+					// Update Chosen Subscription if we are in a product area
+					if(cProductId > 0)
+					{
+						UserOrganizationInfo org = this.UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == this.UserContext.ChosenOrganizationId).SingleOrDefault();
+						if (org != null)
+						{
+							UserSubscriptionInfo sub = org.UserSubscriptionInfoList.Where(s => (int)s.ProductId == cProductId).SingleOrDefault();
+							if (sub != null && this.UserContext.ChosenSubscriptionId != sub.SubscriptionId)
+							{
+								Service.UpdateActiveSubscription(sub.SubscriptionId == 0 ? null : (int?)sub.SubscriptionId);
+								this.UserContext.ChosenSubscriptionId = sub.SubscriptionId;
+							}
+						}
+					}
 				}
 				else
 				{

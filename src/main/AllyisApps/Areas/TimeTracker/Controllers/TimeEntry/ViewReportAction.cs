@@ -19,7 +19,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// <summary>
 	/// Class which manages Time Entry objects.
 	/// </summary>
-	public partial class TimeEntryController : BaseProductController
+	public partial class TimeEntryController : BaseController
 	{
 		/// <summary>
 		/// Submits form to view data.
@@ -57,7 +57,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                     reportVMselect.Users = userSelect;
                 }
 
-                ReportViewModel reportVM = this.ConstructReportViewModel(UserContext.UserId, UserContext.ChosenOrganizationId, Service.Can(Actions.CoreAction.TimeTrackerEditOthers), showExport, reportVMselect);
+                ReportViewModel reportVM = this.ConstructReportViewModel(this.UserContext.UserId, UserContext.ChosenOrganizationId, Service.Can(Actions.CoreAction.TimeTrackerEditOthers), showExport, reportVMselect);
 
                 DataExportViewModel dataVM = this.ConstructDataExportViewModel(reportVMselect.Users, TimeTrackerService.GetDateTimeFromDays(dateRangeStart.Value), TimeTrackerService.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
 
