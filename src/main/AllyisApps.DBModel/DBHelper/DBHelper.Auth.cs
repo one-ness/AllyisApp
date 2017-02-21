@@ -988,5 +988,27 @@ namespace AllyisApps.DBModel
 					commandType: CommandType.StoredProcedure).ToList();
 			}
 		}
+
+		/// <summary>
+		/// Returns a UserDBEntity for the given user, along with a list of OrganizationDBEntities for the organizations that
+		/// the user is a member of, and a list of InvititationDBEntities for any invitations for that user.
+		/// </summary>
+		/// <param name="userId">The User Id</param>
+		public Tuple<UserDBEntity, List<OrganizationDBEntity>, List<InvitationDBEntity>> GetUserOrgsAndInvitations(int userId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@userId", userId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Auth].[GetUserOrgsAndInvitationInfo]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create<UserDBEntity, List<OrganizationDBEntity>, List<InvitationDBEntity>>(
+					results.Read<UserDBEntity>().SingleOrDefault(),
+					results.Read<OrganizationDBEntity>().ToList(),
+					results.Read<InvitationDBEntity>().ToList());
+			}
+		}
 	}
 }

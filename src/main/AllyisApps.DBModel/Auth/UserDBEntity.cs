@@ -127,11 +127,6 @@ namespace AllyisApps.DBModel.Auth
 		public int ActiveOrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the language preference.
-		/// </summary>
-		public int LanguagePreference { get; set; }
-
-		/// <summary>
 		/// Gets or sets LockoutEndDateUtc.
 		/// </summary>
 		public DateTime? LockoutEndDateUtc { get; set; }
@@ -140,5 +135,10 @@ namespace AllyisApps.DBModel.Auth
 		/// Gets or sets the password reset code.
 		/// </summary>
 		public Guid? PasswordResetCode { get; set; }
+
+		/// <summary>
+		/// Gets or sets the language preference.
+		/// </summary>
+		public int LanguagePreference { get; set; }
 	}
 }

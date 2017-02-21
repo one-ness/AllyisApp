@@ -478,6 +478,20 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Gets the UserInfo for the current user, along with OrganizationInfos for each organization the
+		/// user is a member of, and InvitationInfos for any invitations for the user.
+		/// </summary>
+		/// <returns></returns>
+		public Tuple<UserInfo, List<OrganizationInfo>, List<InvitationInfo>> GetUserOrgsAndInvitationInfo()
+		{
+			var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
+			return Tuple.Create<UserInfo, List<OrganizationInfo>, List<InvitationInfo>>(
+				InitializeUserInfo(spResults.Item1),
+				spResults.Item2.Select(odb => InitializeOrganizationInfo(odb)).ToList(),
+				spResults.Item3.Select(idb => InitializeInvitationInfo(idb)).ToList());
+		}
+
+		/// <summary>
 		/// Gets the user info for a specific user.
 		/// </summary>
 		/// <param name="userId">User Id.</param>

@@ -30,6 +30,8 @@ namespace AllyisApps.Controllers
 		/// <returns>The async task responsible for this action.</returns>
 		public ActionResult Index()
 		{
+			var infos = Service.GetUserOrgsAndInvitationInfo();
+
 			UserInfoViewModel accountModel = new UserInfoViewModel
 			{
 				UserInfo = Service.GetUserInfo(),
