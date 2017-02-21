@@ -56,24 +56,26 @@
                         <tr>
                             <td>@(AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString((PayClass.Name).Replace(" ", string.Empty)) ?? PayClass.Name)</td>
                             <td>
-                                <a href="@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { PayClassId = PayClass.PayClassID })" class="pull-right">
+                                <span class="pull-right deletePayClass" id="@PayClass.PayClassID" @*onclick="deletePayClass(@PayClass.PayClassID)"*@>
                                     <i class="fa fa-fw fa-remove text-danger"></i>
-                                </a>
+                                </span>
                             </td>
                         </tr>
                     }
+					<tr>
                     @using (Html.BeginForm(ActionConstants.CreatePayClass, ControllerConstants.TimeEntry, FormMethod.Post))
                     {
                         @Html.AntiForgeryToken();
-                        <tr>
+                        
                             <td>
                                 <input type="text" name="NewPayClass" class="form-control"/>
                             </td>
                             <td>
                                 <input class="pull-right btn btn-primary" type="submit" value="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Add" />
                             </td>
-                        </tr>
+                        
                     }
+					</tr>
                 </table>
             </div>
             @*<div class="panel-body" id="PayClasses">
