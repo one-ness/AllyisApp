@@ -508,6 +508,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@PostalCode", org.PostalCode);
 			parameters.Add("@PhoneNumber", org.PhoneNumber);
 			parameters.Add("@FaxNumber", org.FaxNumber);
+			parameters.Add("@SubdomainName", org.Subdomain);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[Auth].[UpdateOrg]", parameters, commandType: CommandType.StoredProcedure);

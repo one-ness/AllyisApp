@@ -31,6 +31,14 @@ namespace AllyisApps.ViewModels.Auth
 		}
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public EditProfileViewModel() {
+			this.ValidCountries = new List<string>();
+			this.isEditing = true;
+		}
+
+		/// <summary>
 		/// Gets or sets the account e-mail.
 		/// </summary>
 		[Required(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "EmailValidation")]

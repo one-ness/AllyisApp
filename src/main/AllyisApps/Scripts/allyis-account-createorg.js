@@ -13,27 +13,33 @@ $("#Name").on("paste keyup", _.debounce(function () {
 function validateSubdomain() {
     var subdomain = $("#SubdomainName").val();
     subdomain = subdomain.trim();
-    var legalPatt = /^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/;
-    var isLegal = legalPatt.test(subdomain);
-    //console.log(isLegal);
-    if (isLegal) {
-        $.ajax({
-            url: isSubdomainNameUniqueAction + subdomain,
-            success: function (data) {
-                if ("False" === data) {
-                    $('#subdomainTaken').show();
-                    $("#submit").prop('disabled', true);
-                } else {
-                    $('#subdomainTaken').hide();
-                    $("#submit").prop('disabled', false);
-                }
-            },
-            error: function (xhr) {
-                console.log("Unexpected error occured.")
-            }
-        })
-    } else {  //Not a valid subdomain
-        $('#subdomainTaken').hide();
-        $("#submit").prop('disabled', true);
+    if (subdomain == oldSubdomainName) {
+    	$('#subdomainTaken').hide();
+    	$("#submit").prop('disabled', false);
+    }
+    else {
+    	var legalPatt = /^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/;
+    	var isLegal = legalPatt.test(subdomain);
+    	//console.log(isLegal);
+    	if (isLegal) {
+    		$.ajax({
+    			url: isSubdomainNameUniqueAction + subdomain,
+    			success: function (data) {
+    				if ("False" === data) {
+    					$('#subdomainTaken').show();
+    					$("#submit").prop('disabled', true);
+    				} else {
+    					$('#subdomainTaken').hide();
+    					$("#submit").prop('disabled', false);
+    				}
+    			},
+    			error: function (xhr) {
+    				console.log("Unexpected error occured.")
+    			}
+    		})
+    	} else {  //Not a valid subdomain
+    		$('#subdomainTaken').hide();
+    		$("#submit").prop('disabled', true);
+    	}
     }
 }

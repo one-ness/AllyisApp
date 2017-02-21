@@ -8,7 +8,8 @@
     @Country NVARCHAR(100), 
     @PostalCode NVARCHAR(50),
 	@PhoneNumber VARCHAR (50),
-	@FaxNumber VARCHAR (50)
+	@FaxNumber VARCHAR (50),
+	@SubdomainName NVARCHAR (40)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -21,6 +22,7 @@ BEGIN
 		[Country] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
 		[PostalCode] = @PostalCode,
 		[PhoneNumber] = @PhoneNumber,
-		[FaxNumber] = @FaxNumber
+		[FaxNumber] = @FaxNumber,
+		[Subdomain] = @SubdomainName
 	WHERE [OrganizationId] = @Id	
 END
