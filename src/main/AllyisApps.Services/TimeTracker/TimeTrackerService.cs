@@ -318,7 +318,7 @@ namespace AllyisApps.Services.TimeTracker
 
 			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
-				HolidayDBEntity deletedHoliday = DBHelper.GetHolidays().Where(h => h.HolidayId == holidayId).SingleOrDefault();
+				HolidayDBEntity deletedHoliday = DBHelper.GetHolidays(UserContext.ChosenOrganizationId).Where(h => h.HolidayId == holidayId).SingleOrDefault();
 				if(deletedHoliday != null)
 				{
 					DBHelper.DeleteHoliday(deletedHoliday.HolidayName, deletedHoliday.Date, UserContext.ChosenOrganizationId);
