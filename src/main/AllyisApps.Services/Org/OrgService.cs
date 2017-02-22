@@ -1641,6 +1641,7 @@ namespace AllyisApps.Services
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
+				OrganizationName = invitation.OrganizationName,
 				OrgRole = invitation.OrgRole,
 				OrgRoleName = invitation.OrgRoleName,
 				ProjectId = invitation.ProjectId,

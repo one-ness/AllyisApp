@@ -30,8 +30,6 @@ namespace AllyisApps.Controllers
 		/// <returns>The async task responsible for this action.</returns>
 		public ActionResult Index()
 		{
-			var infos = Service.GetUserOrgsAndInvitationInfo();
-
 			UserInfoViewModel accountModel = new UserInfoViewModel
 			{
 				UserInfo = Service.GetUserInfo(),
@@ -101,12 +99,19 @@ namespace AllyisApps.Controllers
 
 			ViewBag.ShowOrganizationPartial = false;
 
+
+			
+			var infos = Service.GetUserOrgsAndInvitationInfo();
+
 			IndexAndOrgsViewModel model = new IndexAndOrgsViewModel
 			{
 				UserModel = accountModel,
-				OrgModel = orgmodel
+				OrgModel = orgmodel,
+				UserInfo = infos.Item1,
+				OrgInfos = infos.Item2,
+				InviteInfos = infos.Item3
 			};
-
+			
 			return this.View(model);
 		}
 

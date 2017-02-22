@@ -51,13 +51,15 @@ BEGIN
 		[Invitation].[FirstName], 
 		[Invitation].[LastName], 
 		[Invitation].[DateOfBirth], 
-		[OrganizationId], 
+		[Invitation].[OrganizationId],
+		[Organization].[Name] AS 'OrganizationName',
 		[AccessCode], 
 		[OrgRole],
 		[ProjectId],
 		[EmployeeId] 
 	FROM [Auth].[User] WITH (NOLOCK)
 	LEFT JOIN [Auth].[Invitation] WITH (NOLOCK) ON [User].[Email] = [Invitation].[Email]
+	LEFT JOIN [Auth].[Organization] WITH (NOLOCK) ON [Invitation].[OrganizationId] = [Organization].[OrganizationId]
 
-	WHERE [User].[UserId] = @userId AND [IsActive] = 1
+	WHERE [User].[UserId] = @userId AND [Invitation].[IsActive] = 1
 END

@@ -1,11 +1,12 @@
 ﻿@using AllyisApps.ViewModels.Auth;
+@using AllyisApps.Services;
 @model AllyisApps.ViewModels.Auth.IndexAndOrgsViewModel
 @{
 	DisplayHints.ShowBreadcrumbs = false;
 	DisplayHints.PageBodyId = "paneled-index";
 	ViewBag.TitleBar = AllyisApps.Resources.Views.Account.Strings.MyAccount;
 	//ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.MyAccount;
-	var cityState = Model.UserModel.UserInfo.City != null && Model.UserModel.UserInfo.State != null ? Model.UserModel.UserInfo.City + ", " + Model.UserModel.UserInfo.State : string.Empty;
+	var cityState = Model.UserInfo.City != null && Model.UserInfo.State != null ? Model.UserInfo.City + ", " + Model.UserInfo.State : string.Empty;
 }
 
 <div class="row">
@@ -20,9 +21,9 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h2 style="margin-top: 0px; margin-bottom: 0px;">
-                    @Model.UserModel.UserInfo.FirstName @Model.UserModel.UserInfo.LastName
+                    @Model.UserInfo.FirstName @Model.UserInfo.LastName
                     <span class="small text-muted" style="margin-left: 10px;">
-                        (@Model.UserModel.UserInfo.Email)
+                        (@Model.UserInfo.Email)
                     </span>
                 </h2>
             </div>
@@ -30,12 +31,12 @@
                 <div class="col-sm-8 index-details">
                     <p>
                         <label>@AllyisApps.Resources.Views.Account.Strings.PhoneNumber:</label>
-                        @Model.UserModel.UserInfo.PhoneNumber @Model.UserModel.UserInfo.PhoneExtension
+                        @Model.UserInfo.PhoneNumber @Model.UserInfo.PhoneExtension
                     </p>
                     <p>
                         <label>@AllyisApps.Resources.Views.Account.Strings.Address:</label>
-                        <span class="address-row">@Model.UserModel.UserInfo.Address</span>
-                        <span class="address-row">@cityState @Model.UserModel.UserInfo.PostalCode</span>
+                        <span class="address-row">@Model.UserInfo.Address</span>
+                        <span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
                     </p>
                 </div>
                 <div class="col-sm-4 vertically-stacked-buttons text-right">
@@ -45,7 +46,7 @@
                 </div>
             </div>
 
-            @if (Model.UserModel.Invitations.Count > 0)
+            @if (Model.InviteInfos.Count > 0)
             {
                 <div class="panel-body">
                     <div class="index-details" style="padding-left: 15px">
@@ -60,7 +61,7 @@
                                 @AllyisApps.Resources.Views.Account.Strings.Invites
                             }
                         </p>
-                        @foreach (InvitationViewModel invite in Model.UserModel.Invitations)
+                        @foreach (InvitationInfo invite in Model.InviteInfos)
                         {
                             <div>
                                 <span class="col-xs-4 col-sm-6">@invite.OrganizationName</span>

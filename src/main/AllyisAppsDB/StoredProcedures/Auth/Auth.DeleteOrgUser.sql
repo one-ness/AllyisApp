@@ -12,7 +12,7 @@ BEGIN
 	DELETE FROM [Billing].[SubscriptionUser] WHERE [UserId] = @UserId AND [SubscriptionId] IN 
 		(SELECT [SubscriptionId] FROM [Billing].[Subscription] WHERE [OrganizationId] = @OrganizationId);
 	
-	DELETE FROM [Auth].[OrganizationUser] WHERE [OrganizationUser].[UserId] = @UserId;
+	DELETE FROM [Auth].[OrganizationUser] WHERE [OrganizationUser].[UserId] = @UserId AND [OrganizationUser].[OrganizationId] = @OrganizationId
 
 	
 	--DECLARE @SubscriptionId INT = 
