@@ -20,13 +20,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Deletes a holiday from an org.
 		/// </summary>
-		/// <param name="holidayName">The name of the holiday to remove.</param>
-		/// <param name="date">The holiday's date.</param>
+		/// <param name="holidayId">The id of the holiday to remove.</param>
 		/// <returns>Redirects to the settings view.</returns>
-		public ActionResult DeleteHoliday(string holidayName, DateTime date)
+		public ActionResult DeleteHoliday(int holidayId)
 		{
-			if (!TimeTrackerService.DeleteHoliday(holidayName, date))
+			if (TimeTrackerService.DeleteHoliday(holidayId))
 			{
+				Notifications.Add(new BootstrapAlert("Holiday deleted successfully.", Variety.Success));
+			}
+			else { 
 				// premissions handled in service level
 				// Should only get here on permission failure
 				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));

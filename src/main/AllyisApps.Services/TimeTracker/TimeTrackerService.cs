@@ -305,26 +305,25 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Deletes a holiday and related time entries for the current organization.
 		/// </summary>
-		/// <param name="holidayName">Name of holiday to delete.</param>
-		/// <param name="date">Date of holiday.</param>
+		/// <param name="holidayId">Id of holiday to delete.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool DeleteHoliday(string holidayName, DateTime date)
+		public bool DeleteHoliday(int holidayId)
 		{
 			#region Validation
-			if (string.IsNullOrEmpty(holidayName))
+			if (holidayId <= 0)
 			{
-				throw new ArgumentNullException("holidayName", "Holiday name must have a value.");
-			}
-			else if (date == null)
-			{
-				throw new ArgumentNullException("date", "Date must not be null.");
+				throw new ArgumentNullException("holidayId", "Holiday Id cannot be negative or 0.");
 			}
 			#endregion Validation
 
 			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
-				DBHelper.DeleteHoliday(holidayName, date, UserContext.ChosenOrganizationId);
-
+				HolidayDBEntity deletedHoliday = DBHelper.GetHolidays().Where(h => h.HolidayId == holidayId).SingleOrDefault();
+				if(deletedHoliday != null)
+				{
+					DBHelper.DeleteHoliday(deletedHoliday.HolidayName, deletedHoliday.Date, UserContext.ChosenOrganizationId);
+				}
+				
 				return true;
 			}
 
@@ -342,6 +341,11 @@ namespace AllyisApps.Services.TimeTracker
 			if (string.IsNullOrEmpty(payClassName))
 			{
 				throw new ArgumentNullException("payClassName", "Pay class name must have a value.");
+			}
+
+			if (this.GetPayClasses().Where(p => p.Name.Equals(payClassName)).Any())
+			{
+				throw new ArgumentException("payClassName", "Pay class name must be unique for the organization.");
 			}
 			#endregion Validation
 

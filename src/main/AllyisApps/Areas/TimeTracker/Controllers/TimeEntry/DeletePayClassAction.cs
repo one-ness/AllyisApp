@@ -23,8 +23,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Redirects to the settings view.</returns>
 		public ActionResult DeletePayClass(int payClassId)
 		{
-			if (!TimeTrackerService.DeletePayClass(payClassId))
+			if (TimeTrackerService.DeletePayClass(payClassId))
 			{
+				Notifications.Add(new BootstrapAlert("Pay class deleted successfully", Variety.Success));
+			}
+			else
+			{ 
 				// Should only be here because of permission failures
 				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 			}

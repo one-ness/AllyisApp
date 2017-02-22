@@ -8,6 +8,7 @@ using System.Web.Mvc;
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using System;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -28,10 +29,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotCreateBlankPayClass, Variety.Warning));
 			}
 
-			if (!TimeTrackerService.CreatePayClass(newPayClass))
+			try
 			{
-				// Should only get here on permissions failure
-				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+				if (TimeTrackerService.CreatePayClass(newPayClass))
+				{
+					Notifications.Add(new BootstrapAlert("Pay class created successfully.", Variety.Success));
+				}
+				else
+				{ 
+					// Should only get here on permissions failure
+					Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+				}
+			} catch (ArgumentException)
+			{
+				// Pay class already exists
+				Notifications.Add(new BootstrapAlert("Could not create pay class: that pay class name already exists.", Variety.Danger));
 			}
 
 			return this.RedirectToAction(ActionConstants.Settings);

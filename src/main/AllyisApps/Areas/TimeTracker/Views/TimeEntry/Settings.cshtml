@@ -56,25 +56,18 @@
                         <tr>
                             <td>@(AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString((PayClass.Name).Replace(" ", string.Empty)) ?? PayClass.Name)</td>
                             <td>
-                                <span class="pull-right deletePayClass" id="@PayClass.PayClassID" @*onclick="deletePayClass(@PayClass.PayClassID)"*@>
-                                    <i class="fa fa-fw fa-remove text-danger"></i>
-                                </span>
+								<a href="javascript: void(0);" class="text-muted" title="Delete Pay Class"
+								   onclick='deletePayClass("@PayClass.PayClassID", "@PayClass.Name")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
                             </td>
                         </tr>
                     }
 					<tr>
-                    @using (Html.BeginForm(ActionConstants.CreatePayClass, ControllerConstants.TimeEntry, FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken();
-                        
-                            <td>
-                                <input type="text" name="NewPayClass" class="form-control"/>
-                            </td>
-                            <td>
-                                <input class="pull-right btn btn-primary" type="submit" value="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Add" />
-                            </td>
-                        
-                    }
+						@using (Html.BeginForm(ActionConstants.CreatePayClass, ControllerConstants.TimeEntry, FormMethod.Post))
+						{
+							@Html.AntiForgeryToken();
+							<td><input type="text" name="NewPayClass" class="form-control" /></td>
+							<td><input class="pull-right btn btn-primary" type="submit" value="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Add" /></td>
+						}
 					</tr>
                 </table>
             </div>
@@ -192,9 +185,11 @@
                                 @Holiday.Date.ToShortDateString()
                             </td>
                             <td>
-                                <a href="@Url.Action(ActionConstants.DeleteHoliday, ControllerConstants.TimeEntry, new { HolidayName = Holiday.HolidayName, Date = Holiday.Date})" class="pull-right">
+                                @*<a href="@Url.Action(ActionConstants.DeleteHoliday, ControllerConstants.TimeEntry, new { HolidayName = Holiday.HolidayName, Date = Holiday.Date})" class="pull-right">
                                     <i class="fa fa-fw fa-remove text-danger"></i>
-                                </a>
+                                </a>*@
+								<a href="javascript: void(0);" class="text-muted" title="Delete Holiday"
+								   onclick='deleteHoliday("@Holiday.HolidayId", "@Holiday.HolidayName")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
                             </td>
                         </tr>
                     }
@@ -214,14 +209,12 @@
 </div>
 
 @section scripts{
-    <script type="text/javascript">
-        function hideOT(hideIt) {
-            $('#OTSettings').css('visibility', hideIt ? 'hidden' : 'visible');
-        }
-        function disableLD(isDisabling) {
+	<script type="text/javascript">
+		deletePayClassWarning = "Are you sure you want to delete the pay class {0}?";
+		deletePayClassUrl = "@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { PayClassId = -1 })"
+		deleteHolidayWarning = "Are you sure you want to delete the holiday {0}?";
+		deleteHolidayUrl = "@Url.Action(ActionConstants.DeleteHoliday, ControllerConstants.TimeEntry, new { HolidayId = -1 })"
+	</script>
 
-        }
-
-    </script>
 	@Scripts.Render("~/bundles/TTTimeEntrySettings")
 }
