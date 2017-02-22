@@ -13,7 +13,10 @@
 {
     <script type="text/javascript">
         var preserveState = '@(Model != null ? (AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';
-        var dropdownempty = "@AllyisApps.Resources.Views.Account.Strings.DropDownEmpty";
+		var dropdownempty = "@AllyisApps.Resources.Views.Account.Strings.DropDownEmpty";
+		var isSubdomainNameUniqueAction = "@(Url.Action(ActionConstants.IsSubdomainNameUnique))?subdomainName=";
+		var oldSubdomainName = '@Model.SubdomainName';
     </script>
     @Scripts.Render("~/bundles/UpdateStateDDL");
+	@Scripts.Render("~/bundles/AccountCreateOrg");
 }

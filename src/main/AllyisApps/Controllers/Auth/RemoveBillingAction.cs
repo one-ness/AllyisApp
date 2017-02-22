@@ -42,7 +42,7 @@ namespace AllyisApps.Controllers
 			}
 
 			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
-			return this.RedirectToAction(ActionConstants.Organizations);
+			return this.RedirectToAction(ActionConstants.Index);
 		}
 
 		/// <summary>
@@ -59,7 +59,7 @@ namespace AllyisApps.Controllers
 				return this.Redirect(ActionConstants.Manage);
 			}
 
-			return this.RedirectToAction(ActionConstants.Organizations);
+			return this.RedirectToAction(ActionConstants.Index);
 		}
 	}
 }

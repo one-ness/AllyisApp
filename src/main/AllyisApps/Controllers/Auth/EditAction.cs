@@ -32,24 +32,32 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				if (Service.UpdateOrganization(
-					new OrganizationInfo()
-					{
-						OrganizationId = UserContext.ChosenOrganizationId,
-						Name = model.Name,
-						SiteUrl = model.SiteUrl,
-						Address = model.Address,
-						City = model.City,
-						State = model.State,
-						Country = model.Country,
-						PostalCode = model.PostalCode,
-						PhoneNumber = model.PhoneNumber,
-						FaxNumber = model.FaxNumber,
-					}))
+				try
 				{
-					// Organization updated successfully
-					Notifications.Add(new BootstrapAlert(@Resources.Controllers.Auth.Strings.OrganizationDetailsUpdated, Variety.Success));
-					return this.RedirectToAction(ActionConstants.Manage);
+					if (Service.UpdateOrganization(
+						new OrganizationInfo()
+						{
+							OrganizationId = UserContext.ChosenOrganizationId,
+							Name = model.Name,
+							SiteUrl = model.SiteUrl,
+							Address = model.Address,
+							City = model.City,
+							State = model.State,
+							Country = model.Country,
+							PostalCode = model.PostalCode,
+							PhoneNumber = model.PhoneNumber,
+							FaxNumber = model.FaxNumber,
+							Subdomain = model.SubdomainName
+						}))
+					{
+						// Organization updated successfully
+						Notifications.Add(new BootstrapAlert(@Resources.Controllers.Auth.Strings.OrganizationDetailsUpdated, Variety.Success));
+						return this.RedirectToAction(ActionConstants.Manage);
+					}
+				} catch (ArgumentException)
+				{
+					Notifications.Add(new BootstrapAlert("Error updating organization: subdomain name is already taken.", Variety.Danger));
+					return this.RedirectToAction(ActionConstants.Edit);
 				}
 
 				// Organization update failed due to invalid permissions

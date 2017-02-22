@@ -166,7 +166,7 @@ namespace AllyisApps.Controllers
 						else
 						{
 							// otherwise send them to select an org
-							return this.RedirectToAction(ActionConstants.Organizations, ControllerConstants.Account);
+							return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 						}
 					}
 				}

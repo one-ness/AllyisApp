@@ -105,6 +105,11 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("organization", "Organization must not be null.");
 			}
+			int existingSubdomainId = Service.GetIdBySubdomain(organization.Subdomain);
+			if (existingSubdomainId != 0 && existingSubdomainId != organization.OrganizationId)
+			{
+				throw new ArgumentException("organization", "Subdomain is already taken.");
+			}
 
 			if (this.Can(Actions.CoreAction.EditOrganization))
 			{

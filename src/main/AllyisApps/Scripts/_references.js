@@ -4,6 +4,7 @@
 /// <reference path="../areas/timetracker/scripts/allyis-project-editcreate.js" />
 /// <reference path="../areas/timetracker/scripts/allyis-timeentry-index.js" />
 /// <reference path="../areas/timetracker/scripts/allyis-timeentry-report.js" />
+/// <reference path="../areas/timetracker/scripts/allyis-timeentry-settings.js" />
 /// <reference path="../areas/timetracker/scripts/allyis-timeentry-useredit.js" />
 /// <reference path="allyis-account-add.js" />
 /// <reference path="allyis-account-createorg.js" />

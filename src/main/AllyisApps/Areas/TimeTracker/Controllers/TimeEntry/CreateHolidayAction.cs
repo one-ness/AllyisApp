@@ -37,8 +37,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotCreateHolidayWithInvalidDate, Variety.Warning));
 			}
 
-			if (!TimeTrackerService.CreateHoliday(new HolidayInfo() { OrganizationId = UserContext.ChosenOrganizationId, HolidayName = newHolidayName, Date = holidayDate }))
+			if (TimeTrackerService.CreateHoliday(new HolidayInfo() { OrganizationId = UserContext.ChosenOrganizationId, HolidayName = newHolidayName, Date = holidayDate }))
 			{
+				Notifications.Add(new BootstrapAlert("Created holiday successfully.", Variety.Success));
+			}
+			else { 
 				// This should only be a permissions failure
 				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 			}
