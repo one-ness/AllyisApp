@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{99597E3F-6EA0-4082-BF89-C0595919615D}"
 	ProjectSection(SolutionItems) = preProject
@@ -21,6 +21,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllyisApps", "AllyisApps\AllyisApps.csproj", "{D9935994-9520-4495-8CF8-99F38EE080BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllyisApps.Lib", "AllyisApps.Lib\AllyisApps.Lib.csproj", "{448FFC61-ECF1-4312-A35B-C221F98A895C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllyisApps.Tests", "aaweb.tests\AllyisApps.Tests.csproj", "{7A1F4E55-626F-498A-9ACC-DCF6ADE6380B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{448FFC61-ECF1-4312-A35B-C221F98A895C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{448FFC61-ECF1-4312-A35B-C221F98A895C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{448FFC61-ECF1-4312-A35B-C221F98A895C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A1F4E55-626F-498A-9ACC-DCF6ADE6380B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A1F4E55-626F-498A-9ACC-DCF6ADE6380B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A1F4E55-626F-498A-9ACC-DCF6ADE6380B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A1F4E55-626F-498A-9ACC-DCF6ADE6380B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
