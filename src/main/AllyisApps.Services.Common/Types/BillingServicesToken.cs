@@ -12,10 +12,13 @@ namespace AllyisApps.Services.Common.Types
 	public class BillingServicesToken
 	{
 		#region private fields
+
 		private readonly string token;
+
 		#endregion private fields
 
 		#region constructor
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BillingServicesToken"/> class.
 		/// </summary>
@@ -24,9 +27,11 @@ namespace AllyisApps.Services.Common.Types
 		{
 			this.token = token;
 		}
+
 		#endregion constructor
 
 		#region accessor properties
+
 		/// <summary>
 		/// Gets the Token.
 		/// </summary>
@@ -37,6 +42,7 @@ namespace AllyisApps.Services.Common.Types
 				return this.token;
 			}
 		}
+
 		#endregion accessor properties
 	}
 }

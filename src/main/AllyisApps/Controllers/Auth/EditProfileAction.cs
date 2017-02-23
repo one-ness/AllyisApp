@@ -4,13 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -43,9 +42,9 @@ namespace AllyisApps.Controllers
 			};
 
 			ViewBag.returnUrl = returnUrl;
-            ViewBag.ShowOrganizationPartial = false;
+			ViewBag.ShowOrganizationPartial = false;
 
-            return this.View(model);
+			return this.View(model);
 		}
 
 		/// <summary>
@@ -77,17 +76,17 @@ namespace AllyisApps.Controllers
 
 				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.UpdateProfileSuccessMessage, Variety.Success));
 
-                if (!string.IsNullOrWhiteSpace(returnUrl))
-                {
-                    return this.RedirectToLocal(returnUrl);
-                }
-                else
-                {
-                    return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
-                }
+				if (!string.IsNullOrWhiteSpace(returnUrl))
+				{
+					return this.RedirectToLocal(returnUrl);
+				}
+				else
+				{
+					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
+				}
 			}
 
-            // Invalid Model
+			// Invalid Model
 			return this.View(model);
 		}
 	}

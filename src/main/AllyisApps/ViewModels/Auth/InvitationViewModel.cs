@@ -1,5 +1,4 @@
-﻿
-namespace AllyisApps.ViewModels.Auth
+﻿namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
 	/// Represents a pending invitation to an organization.

@@ -67,10 +67,10 @@ namespace AllyisApps
 			bundles.Add(new ScriptBundle("~/bundles/AccountPermission").Include(
 				"~/Scripts/allyis-account-permission.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/AccountPermission2").Include(
-                "~/Scripts/allyis-account-permission2.js"));
+			bundles.Add(new ScriptBundle("~/bundles/AccountPermission2").Include(
+				"~/Scripts/allyis-account-permission2.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/AccountSubscribe").Include(
+			bundles.Add(new ScriptBundle("~/bundles/AccountSubscribe").Include(
 				"~/Scripts/allyis-account-subscribe.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/CapsCheck").Include(
@@ -100,12 +100,12 @@ namespace AllyisApps
 			jQueryTransitBundle.CdnFallbackExpression = "$.transit";
 			bundles.Add(jQueryTransitBundle);
 
-            Bundle jQueryUIBundle = new ScriptBundle("~/bundles/jqueryui", "//code.jquery.com/ui/1.12.1/jquery-ui.min.js").Include(
-                        "~/Scripts/jquery-ui.js");
-            jQueryUIBundle.CdnFallbackExpression = "window.jQuery.ui";
-            bundles.Add(jQueryUIBundle);
+			Bundle jQueryUIBundle = new ScriptBundle("~/bundles/jqueryui", "//code.jquery.com/ui/1.12.1/jquery-ui.min.js").Include(
+						"~/Scripts/jquery-ui.js");
+			jQueryUIBundle.CdnFallbackExpression = "window.jQuery.ui";
+			bundles.Add(jQueryUIBundle);
 
-            Bundle momentBundle = new ScriptBundle("~/bundles/moment", "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js").Include(
+			Bundle momentBundle = new ScriptBundle("~/bundles/moment", "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js").Include(
 						"~/Scripts/moment-{version}.js");
 			momentBundle.CdnFallbackExpression = "window.moment";
 			bundles.Add(momentBundle);

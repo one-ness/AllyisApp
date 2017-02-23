@@ -4,16 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -55,7 +54,7 @@ namespace AllyisApps.Controllers
 				OrganizationId = x.OrganizationId,
 				PermissionLevel = ((OrganizationRole)x.OrgRoleId).ToString(),
 				UserId = x.UserId,
-                Email = x.Email
+				Email = x.Email
 			});
 
 			IEnumerable<SubscriptionDisplayInfo> subs = Service.GetSubscriptionsDisplay();
@@ -98,13 +97,13 @@ namespace AllyisApps.Controllers
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="user"></param>
 		/// <param name="org"></param>
 		/// <param name="employeeId"></param>
 		/// <returns></returns>
-		public bool SaveEmployeeId (int user, int org, string employeeId)
+		public bool SaveEmployeeId(int user, int org, string employeeId)
 		{
 			UserOrganizationInfo userOrgInfo = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == org).SingleOrDefault();
 			if (userOrgInfo == null)

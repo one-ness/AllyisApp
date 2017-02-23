@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.Billing;
 using System.Collections.Generic;
 using System.Linq;
-using AllyisApps.DBModel.Billing;
 
 namespace AllyisApps.DBModel.Cache
 {

@@ -4,10 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Services;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -41,7 +40,7 @@ namespace AllyisApps.Controllers
 			}
 			else
 			{
-                return this.RouteHome();
+				return this.RouteHome();
 			}
 		}
 	}

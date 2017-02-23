@@ -4,10 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -26,29 +25,30 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public ActionResult SetLockDate(bool LDsetting, string LDperiod, int LDquantity)
 		{
-            if (Service.Can(Services.Actions.CoreAction.TimeTrackerEditOthers))
-            {
-                try
-                {
-                    if (TimeTrackerService.UpdateLockDate(LDsetting, LDperiod, LDquantity))
-                    {
-                        Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.LockDateUpdate, Variety.Success));
-                    }
-                    else
-                    {
-                        Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.LockDateUpdateFail, Variety.Warning));
-                    }
-                } catch (System.ArgumentException ex)
-                {
-                    Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.LockDateUpdateFail + " " + ex.Message, Variety.Warning));
-                }
-                return this.RedirectToAction(ActionConstants.Settings);
-            }
-            else
-            {
-                Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
-                return this.RedirectToAction(ActionConstants.Index);
-            }
+			if (Service.Can(Services.Actions.CoreAction.TimeTrackerEditOthers))
+			{
+				try
+				{
+					if (TimeTrackerService.UpdateLockDate(LDsetting, LDperiod, LDquantity))
+					{
+						Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.LockDateUpdate, Variety.Success));
+					}
+					else
+					{
+						Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.LockDateUpdateFail, Variety.Warning));
+					}
+				}
+				catch (System.ArgumentException ex)
+				{
+					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.LockDateUpdateFail + " " + ex.Message, Variety.Warning));
+				}
+				return this.RedirectToAction(ActionConstants.Settings);
+			}
+			else
+			{
+				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+				return this.RedirectToAction(ActionConstants.Index);
+			}
 		}
 	}
 }

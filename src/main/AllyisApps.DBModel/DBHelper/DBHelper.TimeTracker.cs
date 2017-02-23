@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.TimeTracker;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using AllyisApps.DBModel.TimeTracker;
-using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -68,12 +68,12 @@ namespace AllyisApps.DBModel
 				//	return DateTime.Now.AddDays(-7 - (int)DateTime.Now.DayOfWeek);
 				//}
 
-                if (lockDate != null && lockDate.LockDateUsed)
-                {
-                    DateTime date = lockDate.LockDatePeriod.Equals("Months") ? DateTime.Now.AddMonths(-1 * lockDate.LockDateQuantity) :
-                        DateTime.Now.AddDays(-1 * lockDate.LockDateQuantity * (lockDate.LockDatePeriod.Equals("Weeks") ? 7 : 1));
-                    return date;
-                }
+				if (lockDate != null && lockDate.LockDateUsed)
+				{
+					DateTime date = lockDate.LockDatePeriod.Equals("Months") ? DateTime.Now.AddMonths(-1 * lockDate.LockDateQuantity) :
+						DateTime.Now.AddDays(-1 * lockDate.LockDateQuantity * (lockDate.LockDatePeriod.Equals("Weeks") ? 7 : 1));
+					return date;
+				}
 				return null;
 			}
 		}
@@ -417,35 +417,35 @@ namespace AllyisApps.DBModel
 			{
 				connection.Execute("[TimeTracker].[UpdateSettings]", parameters, commandType: CommandType.StoredProcedure);
 			}
-        }
+		}
 
-        /// <summary>
-        /// Update overtime settings for an Organization.
-        /// </summary>
-        /// <param name="orgId">The Id of the time entry to be updated.</param>
-        /// <param name="overtimeHours">Hours until overtime.</param>
-        /// <param name="overtimePeriod">Time period for hours until overtime.</param>
-        /// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
-        public void UpdateOvertime(int orgId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
-        {
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@organizationID", orgId);
-            parameters.Add("@OvertimeHours", overtimeHours);
-            parameters.Add("@OvertimePeriod", overtimePeriod);
-            parameters.Add("@OvertimeMultiplier", overtimeMultiplier);
+		/// <summary>
+		/// Update overtime settings for an Organization.
+		/// </summary>
+		/// <param name="orgId">The Id of the time entry to be updated.</param>
+		/// <param name="overtimeHours">Hours until overtime.</param>
+		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
+		/// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
+		public void UpdateOvertime(int orgId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationID", orgId);
+			parameters.Add("@OvertimeHours", overtimeHours);
+			parameters.Add("@OvertimePeriod", overtimePeriod);
+			parameters.Add("@OvertimeMultiplier", overtimeMultiplier);
 
-            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-            {
-                connection.Execute("[TimeTracker].[UpdateOvertime]", parameters, commandType: CommandType.StoredProcedure);
-            }
-        }
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Execute("[TimeTracker].[UpdateOvertime]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
 
-        /// <summary>
-        /// Get start of week for organization.
-        /// </summary>
-        /// <param name="orgId">The organization Id for which the StartOfWeek is to be retrieved.</param>
-        /// <returns>The start of week int.</returns>
-        public int GetStartOfWeek(int orgId)
+		/// <summary>
+		/// Get start of week for organization.
+		/// </summary>
+		/// <param name="orgId">The organization Id for which the StartOfWeek is to be retrieved.</param>
+		/// <returns>The start of week int.</returns>
+		public int GetStartOfWeek(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationID", orgId);
@@ -546,28 +546,28 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-        /// <summary>
-        /// Updates lock date settings.
-        /// </summary>
-        /// <param name="organizationId"></param>
-        /// <param name="lockDateUsed"></param>
-        /// <param name="lockDatePeriod"></param>
-        /// <param name="lockDateQuantity"></param>
-        /// <returns></returns>
-        public bool UpdateLockDate (int organizationId, bool lockDateUsed, string lockDatePeriod, int lockDateQuantity)
-        {
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@organizationID", organizationId);
-            parameters.Add("@LockDateUsed", lockDateUsed);
-            parameters.Add("@LockDatePeriod", lockDatePeriod);
-            parameters.Add("@LockDateQuantity", lockDateQuantity);
+		/// <summary>
+		/// Updates lock date settings.
+		/// </summary>
+		/// <param name="organizationId"></param>
+		/// <param name="lockDateUsed"></param>
+		/// <param name="lockDatePeriod"></param>
+		/// <param name="lockDateQuantity"></param>
+		/// <returns></returns>
+		public bool UpdateLockDate(int organizationId, bool lockDateUsed, string lockDatePeriod, int lockDateQuantity)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationID", organizationId);
+			parameters.Add("@LockDateUsed", lockDateUsed);
+			parameters.Add("@LockDatePeriod", lockDatePeriod);
+			parameters.Add("@LockDateQuantity", lockDateQuantity);
 
-            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-            {
-                connection.Execute("[TimeTracker].[UpdateLockDate]", parameters, commandType: CommandType.StoredProcedure);
-            }
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Execute("[TimeTracker].[UpdateLockDate]", parameters, commandType: CommandType.StoredProcedure);
+			}
 
-            return true;
-        }
+			return true;
+		}
 	}
 }

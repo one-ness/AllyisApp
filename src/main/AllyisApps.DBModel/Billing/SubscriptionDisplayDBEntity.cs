@@ -68,9 +68,9 @@ namespace AllyisApps.DBModel.Billing
 		/// </summary>
 		public string Tier { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether a user has permission to view this subscription.
-        /// </summary>
-        public bool CanViewSubscription { get; set; }
-    }
+		/// <summary>
+		/// Gets or sets a value indicating whether a user has permission to view this subscription.
+		/// </summary>
+		public bool CanViewSubscription { get; set; }
+	}
 }

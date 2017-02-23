@@ -14,14 +14,17 @@ namespace AllyisApps.Services.Common.Types
 	public class BillingServicesCharge
 	{
 		#region private fields
+
 		private readonly int amount;
 		private readonly DateTime created;
 		private readonly string id;
 		private readonly string statementDescriptor;
 		private readonly string service;
+
 		#endregion private fields
 
 		#region constructor
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BillingServicesCharge"/> class.
 		/// </summary>
@@ -38,9 +41,11 @@ namespace AllyisApps.Services.Common.Types
 			this.statementDescriptor = statementDescriptor;
 			this.service = service;
 		}
+
 		#endregion constructor
 
 		#region accessor properties
+
 		/// <summary>
 		/// Gets the charge amount.
 		/// </summary>
@@ -95,6 +100,7 @@ namespace AllyisApps.Services.Common.Types
 				return this.service;
 			}
 		}
+
 		#endregion accessor properties
 	}
 }

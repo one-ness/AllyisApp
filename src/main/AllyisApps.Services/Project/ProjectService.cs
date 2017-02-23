@@ -4,15 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.Crm;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data;
-using System.Data.OleDb;
-
-using AllyisApps.DBModel.Crm;
-using AllyisApps.Services.Utilities;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace AllyisApps.Services
 {
@@ -21,7 +17,6 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class Service : BaseService
 	{
-
 		/// <summary>
 		/// Gets a list of <see cref="ProjectInfo"/>'s for a customer.
 		/// </summary>
@@ -40,118 +35,123 @@ namespace AllyisApps.Services
 			{
 				if (dbe != null)
 				{
-                    list.Add(InitializeProjectInfo(dbe));
+					list.Add(InitializeProjectInfo(dbe));
 				}
 			}
 
 			return list;
 		}
 
-        /// <summary>
-        /// Creates a new project.
-        /// </summary>
-        /// <param name="newProject">ProjectInfo with project information.</param>
-        /// <returns>Project Id.</returns>
-        public int CreateProject(ProjectInfo newProject)
-        {
-            #region Validation
-            if (newProject.CustomerId <= 0)
-            {
-                throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
-            }
-
-            if (string.IsNullOrWhiteSpace(newProject.Name))
-            {
-                throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
-            }
-
-            if (string.IsNullOrEmpty(newProject.Type))
-            {
-                throw new ArgumentNullException("type", "Type must have a value.");
-            }
-
-            if (string.IsNullOrEmpty(newProject.ProjectOrgId))
-            {
-                throw new ArgumentNullException("projectOrgId", "Project must have an ID");
-            }
-
-            if (newProject.StartingDate == null)
-            {
-                throw new ArgumentNullException("start", "Project must have a start time");
-            }
-
-            if (newProject.EndingDate == null)
-            {
-                throw new ArgumentNullException("end", "Project must have an end time");
-            }
-
-            if (DateTime.Compare(newProject.StartingDate, newProject.EndingDate) > 0)
-            {
-                throw new ArgumentException("Project cannot end before it starts.");
-            }
-            #endregion Validation
-
-            return DBHelper.CreateProject(GetDBEntityFromProjectInfo(newProject));
-        }
-        
-        /// <summary>
-        /// Updates a project's properties.
-        /// </summary>
-        /// <param name="project">ProjectInfo with updated properties.</param>
-        public void UpdateProject(ProjectInfo project)
-        {
-            #region Validation
-            if (project.ProjectId <= 0)
-            {
-                throw new ArgumentOutOfRangeException("ProjectId", "Project Id cannot be 0 or negative.");
-            }
-
-            if (string.IsNullOrWhiteSpace(project.Name))
-            {
-                throw new ArgumentNullException("Name", "Project name must have a value and cannot be whitespace.");
-            }
-
-            if (string.IsNullOrEmpty(project.Type))
-            {
-                throw new ArgumentNullException("Type", "Type must have a value.");
-            }
-
-            if (project.StartingDate == null)
-            {
-                throw new ArgumentNullException("StartingDate", "Project must have a start time");
-            }
-
-            if (project.EndingDate == null)
-            {
-                throw new ArgumentNullException("EndingDate", "Project must have an end time");
-            }
-
-            if (DateTime.Compare(project.StartingDate, project.EndingDate) > 0)
-            {
-                throw new ArgumentException("Project cannot end before it starts.");
-            }
-            #endregion
-
-            if (this.Can(Actions.CoreAction.EditProject))
-            {
-                DBHelper.UpdateProject(GetDBEntityFromProjectInfo(project));
-            }
-        }
-
-        /// <summary>
-        /// Updates a project's properties and user list.
-        /// </summary>
-        /// <param name="projectId">Project Id.</param>
-        /// <param name="name">Project name.</param>
-        /// <param name="orgId">Project org id.</param>
-        /// <param name="type">Project type.</param>
-        /// <param name="start">Starting date. <see cref="DateTime"/></param>
-        /// <param name="end">Ending date. <see cref="DateTime"/></param>
-        /// <param name="userIDs">Updated on-project user list.</param>
-        /// <returns>Returns false if authorization fails.</returns>
-        public bool UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime start, DateTime end, IEnumerable<int> userIDs)
+		/// <summary>
+		/// Creates a new project.
+		/// </summary>
+		/// <param name="newProject">ProjectInfo with project information.</param>
+		/// <returns>Project Id.</returns>
+		public int CreateProject(ProjectInfo newProject)
 		{
 			#region Validation
+
+			if (newProject.CustomerId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
+			}
+
+			if (string.IsNullOrWhiteSpace(newProject.Name))
+			{
+				throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
+			}
+
+			if (string.IsNullOrEmpty(newProject.Type))
+			{
+				throw new ArgumentNullException("type", "Type must have a value.");
+			}
+
+			if (string.IsNullOrEmpty(newProject.ProjectOrgId))
+			{
+				throw new ArgumentNullException("projectOrgId", "Project must have an ID");
+			}
+
+			if (newProject.StartingDate == null)
+			{
+				throw new ArgumentNullException("start", "Project must have a start time");
+			}
+
+			if (newProject.EndingDate == null)
+			{
+				throw new ArgumentNullException("end", "Project must have an end time");
+			}
+
+			if (DateTime.Compare(newProject.StartingDate, newProject.EndingDate) > 0)
+			{
+				throw new ArgumentException("Project cannot end before it starts.");
+			}
+
+			#endregion Validation
+
+			return DBHelper.CreateProject(GetDBEntityFromProjectInfo(newProject));
+		}
+
+		/// <summary>
+		/// Updates a project's properties.
+		/// </summary>
+		/// <param name="project">ProjectInfo with updated properties.</param>
+		public void UpdateProject(ProjectInfo project)
+		{
+			#region Validation
+
+			if (project.ProjectId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("ProjectId", "Project Id cannot be 0 or negative.");
+			}
+
+			if (string.IsNullOrWhiteSpace(project.Name))
+			{
+				throw new ArgumentNullException("Name", "Project name must have a value and cannot be whitespace.");
+			}
+
+			if (string.IsNullOrEmpty(project.Type))
+			{
+				throw new ArgumentNullException("Type", "Type must have a value.");
+			}
+
+			if (project.StartingDate == null)
+			{
+				throw new ArgumentNullException("StartingDate", "Project must have a start time");
+			}
+
+			if (project.EndingDate == null)
+			{
+				throw new ArgumentNullException("EndingDate", "Project must have an end time");
+			}
+
+			if (DateTime.Compare(project.StartingDate, project.EndingDate) > 0)
+			{
+				throw new ArgumentException("Project cannot end before it starts.");
+			}
+
+			#endregion Validation
+
+			if (this.Can(Actions.CoreAction.EditProject))
+			{
+				DBHelper.UpdateProject(GetDBEntityFromProjectInfo(project));
+			}
+		}
+
+		/// <summary>
+		/// Updates a project's properties and user list.
+		/// </summary>
+		/// <param name="projectId">Project Id.</param>
+		/// <param name="name">Project name.</param>
+		/// <param name="orgId">Project org id.</param>
+		/// <param name="type">Project type.</param>
+		/// <param name="start">Starting date. <see cref="DateTime"/></param>
+		/// <param name="end">Ending date. <see cref="DateTime"/></param>
+		/// <param name="userIDs">Updated on-project user list.</param>
+		/// <returns>Returns false if authorization fails.</returns>
+		public bool UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime start, DateTime end, IEnumerable<int> userIDs)
+		{
+			#region Validation
+
 			if (projectId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
@@ -160,14 +160,14 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(name))
 			{
 				throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
-            }
+			}
 
-            if (string.IsNullOrWhiteSpace(orgId))
-            {
-                throw new ArgumentNullException("orgId", "Project Org Id must have a value and cannot be whitespace.");
-            }
+			if (string.IsNullOrWhiteSpace(orgId))
+			{
+				throw new ArgumentNullException("orgId", "Project Org Id must have a value and cannot be whitespace.");
+			}
 
-            if (string.IsNullOrEmpty(type))
+			if (string.IsNullOrEmpty(type))
 			{
 				throw new ArgumentNullException("type", "Type must have a value.");
 			}
@@ -191,6 +191,7 @@ namespace AllyisApps.Services
 			{
 				userIDs = new List<int>();
 			}
+
 			#endregion Validation
 
 			if (this.Can(Actions.CoreAction.EditProject))
@@ -202,12 +203,12 @@ namespace AllyisApps.Services
 			return false;
 		}
 
-        /// <summary>
-        /// Deletes a project.
-        /// </summary>
-        /// <param name="projectId">Project Id.</param>
-        /// <returns>Returns false if authorization fails.</returns>
-        public bool DeleteProject(int projectId)
+		/// <summary>
+		/// Deletes a project.
+		/// </summary>
+		/// <param name="projectId">Project Id.</param>
+		/// <returns>Returns false if authorization fails.</returns>
+		public bool DeleteProject(int projectId)
 		{
 			if (projectId <= 0)
 			{
@@ -362,26 +363,26 @@ namespace AllyisApps.Services
 			return DBHelper.GetProjectsByUserId(userId).Select(p => InitializeCompleteProjectInfo(p));
 		}
 
-        /// <summary>
-        /// Returns a recommended available Project Org ID
-        /// </summary>
-        /// <returns></returns>
-        public string GetRecommendedProjectId()
-        {
-            var projects = GetAllProjectsForOrganization(this.UserContext.ChosenOrganizationId);
-            if (projects.Count() > 0) return new string (this.IncrementAlphanumericCharArray(projects.OrderBy(p => p.ProjectOrgId).LastOrDefault().ProjectOrgId.ToCharArray()));
-            else return "0000000000000000"; // 16 max chars, arbitrary default value
-        }
+		/// <summary>
+		/// Returns a recommended available Project Org ID
+		/// </summary>
+		/// <returns></returns>
+		public string GetRecommendedProjectId()
+		{
+			var projects = GetAllProjectsForOrganization(this.UserContext.ChosenOrganizationId);
+			if (projects.Count() > 0) return new string(this.IncrementAlphanumericCharArray(projects.OrderBy(p => p.ProjectOrgId).LastOrDefault().ProjectOrgId.ToCharArray()));
+			else return "0000000000000000"; // 16 max chars, arbitrary default value
+		}
 
-        public IEnumerable<ProjectInfo> GetAllProjectsForOrganization(int orgId)
-        {
-            var result = new List<ProjectInfo>();
-            foreach (var customer in this.GetCustomerList(orgId))
-            {
-                result.AddRange(this.GetProjectsByCustomer(customer.CustomerId));
-            }
-            return result;
-        }
+		public IEnumerable<ProjectInfo> GetAllProjectsForOrganization(int orgId)
+		{
+			var result = new List<ProjectInfo>();
+			foreach (var customer in this.GetCustomerList(orgId))
+			{
+				result.AddRange(this.GetProjectsByCustomer(customer.CustomerId));
+			}
+			return result;
+		}
 
 		/// <summary>
 		/// Translates a <see cref="ProjectDBEntity"/> into a <see cref="ProjectInfo"/>.

@@ -4,17 +4,17 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.IO;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
+using System.Collections.Generic;
+using System.IO;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
-    /// <summary>
-    /// Model for exporting Time Entries as CSV or Excel files.
-    /// </summary>
-    public class DataExportViewModel
+	/// <summary>
+	/// Model for exporting Time Entries as CSV or Excel files.
+	/// </summary>
+	public class DataExportViewModel
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DataExportViewModel" /> class.

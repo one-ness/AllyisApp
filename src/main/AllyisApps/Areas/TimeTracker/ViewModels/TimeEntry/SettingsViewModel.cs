@@ -4,16 +4,16 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
+using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
-    /// <summary>
-    /// Model for the Settings view.
-    /// </summary>
-    public class SettingsViewModel
+	/// <summary>
+	/// Model for the Settings view.
+	/// </summary>
+	public class SettingsViewModel
 	{
 		/// <summary>
 		/// Gets the start of week for an organization.

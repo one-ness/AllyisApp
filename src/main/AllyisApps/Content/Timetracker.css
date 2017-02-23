@@ -11419,11 +11419,11 @@ label.required:after {
 	}
 
 .table-row .offDay {
-    background-color: #F2DEDE;
+	background-color: #F2DEDE;
 }
 
 .offDay .form-control {
-    background-color: rgba(245, 245, 245, 0.5);
+	background-color: rgba(245, 245, 245, 0.5);
 }
 
 .table-row .holiday {
@@ -12067,24 +12067,24 @@ li.list-placeholder {
 	height: 70px;
 }
 
-/*@media (max-width: 768px) {
+	/*@media (max-width: 768px) {
 	.footer {
 		height: 100px;
 	}
 }*/
 
-.footer p {
-	margin: 5px 0;
-}
-
-.footer .footer-links {
-	margin: 5px 0;
-}
-
-	.footer .footer-links a {
-		margin: 0;
-		padding-right: 15px;
+	.footer p {
+		margin: 5px 0;
 	}
+
+	.footer .footer-links {
+		margin: 5px 0;
+	}
+
+		.footer .footer-links a {
+			margin: 0;
+			padding-right: 15px;
+		}
 
 .bulk {
 	padding: 0px 15px 0px;
@@ -12757,7 +12757,7 @@ li.list-placeholder {
 	.navbar-nav {
 		float: left;
 		margin: 0;
-        margin-right: 15px;
+		margin-right: 15px;
 	}
 
 		.navbar-nav > li {

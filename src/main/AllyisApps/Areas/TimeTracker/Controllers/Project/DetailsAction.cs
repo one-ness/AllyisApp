@@ -4,19 +4,18 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Linq;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
 	/// <summary>
 	/// The controller for managing all Project-related actions.
 	/// </summary>
-	public partial class ProjectController: BaseController
+	public partial class ProjectController : BaseController
 	{
 		/// <summary>
 		/// GET: Project/Details.

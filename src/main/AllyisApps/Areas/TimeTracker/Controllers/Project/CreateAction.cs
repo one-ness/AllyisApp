@@ -4,22 +4,21 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Project;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
 	/// <summary>
 	/// The controller for managing all Project-related actions.
 	/// </summary>
-	public partial class ProjectController: BaseController
+	public partial class ProjectController : BaseController
 	{
 		/// <summary>
 		/// GET: Project/Create.
@@ -40,16 +39,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 				}
 
-                return this.View(
-                    new EditProjectViewModel()
-                    {
-                        IsCreating = true,
-                        ParentCustomerId = id,
-                        ProjectUsers = new List<BasicUserInfoViewModel>(),
-                        SubscriptionUsers = subList,
-                        StartDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today),
-                        EndDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today.AddMonths(6)),
-                        ProjectOrgId = Service.GetRecommendedProjectId()
+				return this.View(
+					new EditProjectViewModel()
+					{
+						IsCreating = true,
+						ParentCustomerId = id,
+						ProjectUsers = new List<BasicUserInfoViewModel>(),
+						SubscriptionUsers = subList,
+						StartDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today),
+						EndDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today.AddMonths(6)),
+						ProjectOrgId = Service.GetRecommendedProjectId()
 					});
 			}
 			else
@@ -79,11 +78,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						throw new ArgumentNullException("model");
 					}
 
-                    if (Service.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Any(project => project.ProjectOrgId == model.ProjectOrgId))
-                    {
-                        Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ProjectOrgIdNotUnique, Variety.Danger));
-                        return this.View(model);
-                    }
+					if (Service.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Any(project => project.ProjectOrgId == model.ProjectOrgId))
+					{
+						Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ProjectOrgIdNotUnique, Variety.Danger));
+						return this.View(model);
+					}
 					try
 					{
 						model.ProjectId = CreateProject(model);
@@ -95,7 +94,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						{
 							message = string.Format("{0} {1}", message, ex.Message);
 						}
-					
+
 						//Create failure
 						Notifications.Add(new BootstrapAlert(message, Variety.Danger));
 						return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
@@ -120,22 +119,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 		}
 
-        /// <summary>
-        /// Creates a new project using a <see cref="EditProjectViewModel"/>.
-        /// </summary>
-        /// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
-        /// <returns>The Project ID.</returns>
-        public int CreateProject(EditProjectViewModel model)
-        {
-            return Service.CreateProject(new ProjectInfo()
-            {
-                CustomerId = model.ParentCustomerId,
-                Name = model.ProjectName,
-                Type = model.PriceType,
-                ProjectOrgId = model.ProjectOrgId,
-                StartingDate = TimeTrackerService.GetDateTimeFromDays(model.StartDate),
-                EndingDate = TimeTrackerService.GetDateTimeFromDays(model.EndDate)
-            });
+		/// <summary>
+		/// Creates a new project using a <see cref="EditProjectViewModel"/>.
+		/// </summary>
+		/// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
+		/// <returns>The Project ID.</returns>
+		public int CreateProject(EditProjectViewModel model)
+		{
+			return Service.CreateProject(new ProjectInfo()
+			{
+				CustomerId = model.ParentCustomerId,
+				Name = model.ProjectName,
+				Type = model.PriceType,
+				ProjectOrgId = model.ProjectOrgId,
+				StartingDate = TimeTrackerService.GetDateTimeFromDays(model.StartDate),
+				EndingDate = TimeTrackerService.GetDateTimeFromDays(model.EndDate)
+			});
 		}
 	}
 }

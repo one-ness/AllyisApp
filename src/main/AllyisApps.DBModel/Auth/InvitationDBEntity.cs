@@ -17,7 +17,7 @@ namespace AllyisApps.DBModel.Auth
 		/// Gets or sets the id of the invitation.
 		/// </summary>
 		public int InvitationId { get; set; }
-		
+
 		/// <summary>
 		/// Gets or sets the email address that the invitation is being sent to.
 		/// </summary>
@@ -61,7 +61,7 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets the name of the org role the user will be assigned.
 		/// </summary>
-        public string OrgRoleName { get; set; }
+		public string OrgRoleName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Project for which a user is assigned.

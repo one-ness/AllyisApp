@@ -4,15 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
 using AllyisApps.Services;
+using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
-    /// <summary>
-    /// Model for the UserEdit view.
-    /// </summary>
-    public class UserEditViewModel
+	/// <summary>
+	/// Model for the UserEdit view.
+	/// </summary>
+	public class UserEditViewModel
 	{
 		/// <summary>
 		/// Gets or sets the id of the user.

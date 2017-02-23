@@ -12,10 +12,13 @@ namespace AllyisApps.Services.Common.Types
 	public class BillingServicesCustomerId
 	{
 		#region private fields
+
 		private readonly string id;
+
 		#endregion private fields
 
 		#region constructor
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BillingServicesCustomerId"/> class.
 		/// </summary>
@@ -24,9 +27,11 @@ namespace AllyisApps.Services.Common.Types
 		{
 			this.id = id;
 		}
+
 		#endregion constructor
 
 		#region accessor properties
+
 		/// <summary>
 		/// Gets the customer ID.
 		/// </summary>
@@ -37,6 +42,7 @@ namespace AllyisApps.Services.Common.Types
 				return this.id;
 			}
 		}
+
 		#endregion accessor properties
 	}
 }

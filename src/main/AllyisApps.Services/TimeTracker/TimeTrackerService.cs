@@ -4,14 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.TimeTracker;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-
-using AllyisApps.Services.Utilities;
-using AllyisApps.DBModel.TimeTracker;
 
 namespace AllyisApps.Services.TimeTracker
 {
@@ -40,14 +37,14 @@ namespace AllyisApps.Services.TimeTracker
 		/// <param name="userContext">The user context.</param>
 		public TimeTrackerService(string connectionString, UserContext userContext) : base(connectionString, userContext) { }
 
-        /// <summary>
-        /// Sets the service instance.
-        /// </summary>
-        /// <param name="service">Service instance from BaseController.</param>
-        public void SetService(Service service)
-        {
-            this.Service = service;
-        }
+		/// <summary>
+		/// Sets the service instance.
+		/// </summary>
+		/// <param name="service">Service instance from BaseController.</param>
+		public void SetService(Service service)
+		{
+			this.Service = service;
+		}
 
 		/// <summary>
 		/// Converts an int representing days since the DateTime min value (Jan 1st, 0001) into a DateTime date.
@@ -87,10 +84,12 @@ namespace AllyisApps.Services.TimeTracker
 		public TimeEntryInfo GetTimeEntry(int timeEntryId)
 		{
 			#region Validation
+
 			if (timeEntryId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("timeEntryId", "Time entry id cannot be 0 or negative.");
 			}
+
 			#endregion Validation
 
 			return InitializeTimeEntryInfo(DBHelper.GetTimeEntryById(timeEntryId));
@@ -104,10 +103,12 @@ namespace AllyisApps.Services.TimeTracker
 		public int CreateTimeEntry(TimeEntryInfo entry)
 		{
 			#region Validation
+
 			if (entry == null)
 			{
 				throw new ArgumentNullException("entry", "Time entry must not be null.");
 			}
+
 			#endregion Validation
 
 			return DBHelper.CreateTimeEntry(GetDBEntityFromTimeEntryInfo(entry));
@@ -120,10 +121,12 @@ namespace AllyisApps.Services.TimeTracker
 		public void UpdateTimeEntry(TimeEntryInfo entry)
 		{
 			#region Validation
+
 			if (entry == null)
 			{
 				throw new ArgumentNullException("entry", "Time entry must not be null.");
 			}
+
 			#endregion Validation
 
 			DBHelper.UpdateTimeEntry(GetDBEntityFromTimeEntryInfo(entry));
@@ -136,10 +139,12 @@ namespace AllyisApps.Services.TimeTracker
 		public void DeleteTimeEntry(int timeEntryId)
 		{
 			#region Validation
+
 			if (timeEntryId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("timeEntryId", "Time entry id cannot be 0 or negative.");
 			}
+
 			#endregion Validation
 
 			DBHelper.DeleteTimeEntry(timeEntryId);
@@ -153,6 +158,7 @@ namespace AllyisApps.Services.TimeTracker
 		public void SetTimeEntryApprovalStateById(int timeEntryId, int approvalState)
 		{
 			#region Validation
+
 			if (timeEntryId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("timeEntryId", "Time entry id cannot be 0 or negative.");
@@ -161,6 +167,7 @@ namespace AllyisApps.Services.TimeTracker
 			{ // TODO: Figure out what values of approval state are actually allowed and constrain this further.
 				throw new ArgumentOutOfRangeException("approvalState", "Approval state cannot be negative.");
 			}
+
 			#endregion Validation
 
 			DBHelper.SetTimeEntryApprovalStateById(timeEntryId, approvalState);
@@ -175,6 +182,7 @@ namespace AllyisApps.Services.TimeTracker
 		public IEnumerable<TimeEntryInfo> GetTimeEntriesOverDateRange(DateTime start, DateTime end)
 		{
 			#region Validation
+
 			if (start == null)
 			{
 				throw new ArgumentNullException("start", "Project must have a start time");
@@ -187,6 +195,7 @@ namespace AllyisApps.Services.TimeTracker
 			{
 				throw new ArgumentException("Project cannot end before it starts.");
 			}
+
 			#endregion Validation
 
 			return DBHelper.GetTimeEntriesOverDateRange(UserContext.ChosenOrganizationId, start, end).Select(te => InitializeTimeEntryInfo(te));
@@ -202,6 +211,7 @@ namespace AllyisApps.Services.TimeTracker
 		public IEnumerable<TimeEntryInfo> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime start, DateTime end)
 		{
 			#region Validation
+
 			if (userIds == null || userIds.Count == 0)
 			{
 				throw new ArgumentNullException("userIds", "There must be at least one provided user id.");
@@ -222,6 +232,7 @@ namespace AllyisApps.Services.TimeTracker
 			{
 				throw new ArgumentException("Date range cannot end before it starts.");
 			}
+
 			#endregion Validation
 
 			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, UserContext.ChosenOrganizationId, start, end).Select(te => InitializeTimeEntryInfo(te));
@@ -310,20 +321,22 @@ namespace AllyisApps.Services.TimeTracker
 		public bool DeleteHoliday(int holidayId)
 		{
 			#region Validation
+
 			if (holidayId <= 0)
 			{
 				throw new ArgumentNullException("holidayId", "Holiday Id cannot be negative or 0.");
 			}
+
 			#endregion Validation
 
 			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				HolidayDBEntity deletedHoliday = DBHelper.GetHolidays(UserContext.ChosenOrganizationId).Where(h => h.HolidayId == holidayId).SingleOrDefault();
-				if(deletedHoliday != null)
+				if (deletedHoliday != null)
 				{
 					DBHelper.DeleteHoliday(deletedHoliday.HolidayName, deletedHoliday.Date, UserContext.ChosenOrganizationId);
 				}
-				
+
 				return true;
 			}
 
@@ -338,6 +351,7 @@ namespace AllyisApps.Services.TimeTracker
 		public bool CreatePayClass(string payClassName)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(payClassName))
 			{
 				throw new ArgumentNullException("payClassName", "Pay class name must have a value.");
@@ -347,6 +361,7 @@ namespace AllyisApps.Services.TimeTracker
 			{
 				throw new ArgumentException("payClassName", "Pay class name must be unique for the organization.");
 			}
+
 			#endregion Validation
 
 			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
@@ -367,10 +382,12 @@ namespace AllyisApps.Services.TimeTracker
 		public bool DeletePayClass(int payClassId)
 		{
 			#region Validation
+
 			if (payClassId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("payClassId", "Pay class id cannot be 0 or negative.");
 			}
+
 			#endregion Validation
 
 			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
@@ -400,10 +417,12 @@ namespace AllyisApps.Services.TimeTracker
 		public PayClassInfo GetPayClassByName(string name)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(name))
 			{
 				throw new ArgumentNullException("name", "Name of pay class must have a value.");
 			}
+
 			#endregion Validation
 
 			return Service.InitializePayClassInfo(DBHelper.GetPayClassByNameAndOrg(name, UserContext.ChosenOrganizationId));
@@ -435,10 +454,12 @@ namespace AllyisApps.Services.TimeTracker
 		public bool UpdateStartOfWeek(int startOfWeek)
 		{
 			#region Validation
+
 			if (!Enum.IsDefined(typeof(StartOfWeekEnum), startOfWeek))
 			{
 				throw new ArgumentException("Start of week must correspond to a value of StartOfWeekEnum.");
 			}
+
 			#endregion Validation
 
 			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
@@ -471,6 +492,7 @@ namespace AllyisApps.Services.TimeTracker
 		public bool UpdateSettings(StartOfWeekEnum startOfWeek, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
 		{
 			#region Validation
+
 			if (!Enum.IsDefined(typeof(StartOfWeekEnum), startOfWeek))
 			{
 				throw new ArgumentException("Start of week must correspond to a value of StartOfWeekEnum.");
@@ -481,15 +503,16 @@ namespace AllyisApps.Services.TimeTracker
 				throw new ArgumentOutOfRangeException("overtimeHours", "Overtime hours cannot be negative, unless it is -1 to indicate overtime unavailable.");
 			}
 
-            if (!new string[] { "Day", "Week", "Month" }.Contains(overtimePeriod))
-            {
-                throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", overtimePeriod));
-            }
+			if (!new string[] { "Day", "Week", "Month" }.Contains(overtimePeriod))
+			{
+				throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", overtimePeriod));
+			}
 
-            if (overtimeMultiplier < 1.0)
+			if (overtimeMultiplier < 1.0)
 			{
 				throw new ArgumentOutOfRangeException("overtimeMultiplier", "Overtime rate cannot be less than regular rate (i.e. overtimeMultiplier less than one).");
 			}
+
 			#endregion Validation
 
 			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
@@ -500,169 +523,170 @@ namespace AllyisApps.Services.TimeTracker
 			}
 
 			return false;
-        }
+		}
 
-        /// <summary>
-        /// Updates overtime settings for an organization.
-        /// </summary>
-        /// <param name="overtimeHours">Hours until overtime.</param>
-        /// <param name="overtimePeriod">Time period for hours until overtime.</param>
-        /// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
-        /// <returns>Returns false if authorization fails.</returns>
-        public bool UpdateOvertime(int overtimeHours, string overtimePeriod, float overtimeMultiplier)
-        {
-            #region Validation
-            if (overtimeHours < -1)
-            {
-                throw new ArgumentOutOfRangeException("overtimeHours", "Overtime hours cannot be negative, unless it is -1 to indicate overtime unavailable.");
-            }
+		/// <summary>
+		/// Updates overtime settings for an organization.
+		/// </summary>
+		/// <param name="overtimeHours">Hours until overtime.</param>
+		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
+		/// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
+		/// <returns>Returns false if authorization fails.</returns>
+		public bool UpdateOvertime(int overtimeHours, string overtimePeriod, float overtimeMultiplier)
+		{
+			#region Validation
 
-            if (!new string[] { "Day", "Week", "Month" }.Contains(overtimePeriod))
-            {
-                throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", overtimePeriod));
-            }
+			if (overtimeHours < -1)
+			{
+				throw new ArgumentOutOfRangeException("overtimeHours", "Overtime hours cannot be negative, unless it is -1 to indicate overtime unavailable.");
+			}
 
-            if (overtimeMultiplier < 1.0)
-            {
-                throw new ArgumentOutOfRangeException("overtimeMultiplier", "Overtime rate cannot be less than regular rate (i.e. overtimeMultiplier less than one).");
-            }
-            #endregion Validation
+			if (!new string[] { "Day", "Week", "Month" }.Contains(overtimePeriod))
+			{
+				throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", overtimePeriod));
+			}
 
-            if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
-            {
-                DBHelper.UpdateOvertime(UserContext.ChosenOrganizationId, overtimeHours, overtimePeriod, overtimeMultiplier);
+			if (overtimeMultiplier < 1.0)
+			{
+				throw new ArgumentOutOfRangeException("overtimeMultiplier", "Overtime rate cannot be less than regular rate (i.e. overtimeMultiplier less than one).");
+			}
 
-                return true;
-            }
+			#endregion Validation
 
-            return false;
-        }
+			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			{
+				DBHelper.UpdateOvertime(UserContext.ChosenOrganizationId, overtimeHours, overtimePeriod, overtimeMultiplier);
 
-        /// <summary>
+				return true;
+			}
+
+			return false;
+		}
+
+		/// <summary>
 		/// Prepares the Excel file for output of time entry information.
 		/// </summary>
 		/// <param name="userIds">List of user ids to filter by.</param>
-        /// <param name="startingDate">Start of date range.</param>
-        /// <param name="endingDate">End of date range.</param>
-        /// <param name="projectId">Project id to filter by.</param>
-        /// <param name="customerId">Customer id to filter by.</param>
+		/// <param name="startingDate">Start of date range.</param>
+		/// <param name="endingDate">End of date range.</param>
+		/// <param name="projectId">Project id to filter by.</param>
+		/// <param name="customerId">Customer id to filter by.</param>
 		/// <returns>The stream writer.</returns>
-        public StreamWriter PrepareCSVExport(List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
-        {
-            //Preparing data
-            IEnumerable<TimeEntryInfo> data = new List<TimeEntryInfo>();
-            IEnumerable<CompleteProjectInfo> projects = new List<CompleteProjectInfo>();
+		public StreamWriter PrepareCSVExport(List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
+		{
+			//Preparing data
+			IEnumerable<TimeEntryInfo> data = new List<TimeEntryInfo>();
+			IEnumerable<CompleteProjectInfo> projects = new List<CompleteProjectInfo>();
 
-            if (userIds == null || userIds.Count == 0 || userIds[0] == -1)
-            {
-                data = this.GetTimeEntriesOverDateRange(startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
-            }
-            else
-            {
-                data = this.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
-            }
+			if (userIds == null || userIds.Count == 0 || userIds[0] == -1)
+			{
+				data = this.GetTimeEntriesOverDateRange(startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
+			}
+			else
+			{
+				data = this.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
+			}
 
-            if (projectId > 0)
-            {
-                data = data.Where(t => t.ProjectId == projectId);
-            } 
-            else
-            {
-                if (customerId > 0)
-                {
-                    IEnumerable<int> customerProjects = Service.GetProjectsByCustomer(customerId).Select(p => p.CustomerId);
-                    data = data.Where(t => customerProjects.Contains(t.ProjectId));
-                }
-            }
+			if (projectId > 0)
+			{
+				data = data.Where(t => t.ProjectId == projectId);
+			}
+			else
+			{
+				if (customerId > 0)
+				{
+					IEnumerable<int> customerProjects = Service.GetProjectsByCustomer(customerId).Select(p => p.CustomerId);
+					data = data.Where(t => customerProjects.Contains(t.ProjectId));
+				}
+			}
 
-            if (userIds != null && userIds.Count == 1 && userIds[0] > 0)
-            {
-                projects = Service.GetProjectsByUserAndOrganization(userIds[0], false);
-            }
-            else
-            {
-                projects = Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId, false);
-            }
+			if (userIds != null && userIds.Count == 1 && userIds[0] > 0)
+			{
+				projects = Service.GetProjectsByUserAndOrganization(userIds[0], false);
+			}
+			else
+			{
+				projects = Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId, false);
+			}
 
-            // Add default project in case there are holiday entries
-            List<CompleteProjectInfo> defaultProject = new List<CompleteProjectInfo>();
-            defaultProject.Add(Service.GetProject(0));
-            projects = projects.Concat(defaultProject);
+			// Add default project in case there are holiday entries
+			List<CompleteProjectInfo> defaultProject = new List<CompleteProjectInfo>();
+			defaultProject.Add(Service.GetProject(0));
+			projects = projects.Concat(defaultProject);
 
-            StreamWriter output = new StreamWriter(new MemoryStream());
-            output.WriteLine(
-                string.Format(
-                    "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"",
-                    ColumnHeaders.UserLastName,
-                    ColumnHeaders.UserFirstName,
-                    ColumnHeaders.EmployeeId,
-                    ColumnHeaders.UserEmail,
-                    ColumnHeaders.Date,
-                    ColumnHeaders.Duration,
-                    ColumnHeaders.PayClass,
-                    ColumnHeaders.ProjectName,
-                    ColumnHeaders.ProjectId,
-                    ColumnHeaders.CustomerName,
-                    ColumnHeaders.CustomerId,
-                    ColumnHeaders.Description
-                ));
+			StreamWriter output = new StreamWriter(new MemoryStream());
+			output.WriteLine(
+				string.Format(
+					"\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"",
+					ColumnHeaders.UserLastName,
+					ColumnHeaders.UserFirstName,
+					ColumnHeaders.EmployeeId,
+					ColumnHeaders.UserEmail,
+					ColumnHeaders.Date,
+					ColumnHeaders.Duration,
+					ColumnHeaders.PayClass,
+					ColumnHeaders.ProjectName,
+					ColumnHeaders.ProjectId,
+					ColumnHeaders.CustomerName,
+					ColumnHeaders.CustomerId,
+					ColumnHeaders.Description
+				));
 
-            foreach (TimeEntryInfo entry in data)
-            {
-                try
-                {
+			foreach (TimeEntryInfo entry in data)
+			{
+				try
+				{
+					var project = projects.Where(x => x.ProjectId == entry.ProjectId).FirstOrDefault();
+					if (project.ProjectId == 0) project = null;
+					output.WriteLine(
+						string.Format(
+							"\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"",
+							entry.LastName,
+							entry.FirstName,
+							entry.EmployeeId,
+							entry.Email,
+							entry.Date.ToShortDateString(),
+							entry.Duration,
+							entry.PayClassName,
+							project != null ? (project.ProjectName ?? string.Empty) : string.Empty,
+							project != null ? (project.ProjectOrgId ?? string.Empty) : string.Empty,
+							project != null ? (project.CustomerName ?? string.Empty) : string.Empty,
+							project != null ? (project.CustomerOrgId ?? string.Empty) : string.Empty,
+							entry.Description));
+				}
+				catch (Exception ex)
+				{
+					string blah = ex.Message;
+				}
+			}
 
-                    var project = projects.Where(x => x.ProjectId == entry.ProjectId).FirstOrDefault();
-                    if (project.ProjectId == 0) project = null;
-                    output.WriteLine(
-                        string.Format(
-                            "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\",\"{8}\",\"{9}\",\"{10}\",\"{11}\"",
-                            entry.LastName,
-                            entry.FirstName,
-                            entry.EmployeeId,
-                            entry.Email,
-                            entry.Date.ToShortDateString(),
-                            entry.Duration,
-                            entry.PayClassName,
-                            project != null ? (project.ProjectName ?? string.Empty) : string.Empty,
-                            project != null ? (project.ProjectOrgId ?? string.Empty) : string.Empty,
-                            project != null ? (project.CustomerName ?? string.Empty) : string.Empty,
-                            project != null ? (project.CustomerOrgId ?? string.Empty) : string.Empty,
-                            entry.Description));
-                }
-                catch (Exception ex) {
-                    string blah = ex.Message;
+			output.Flush();
+			output.BaseStream.Seek(0, SeekOrigin.Begin);
 
-                }
-            }
+			return output;
+		}
 
-            output.Flush();
-            output.BaseStream.Seek(0, SeekOrigin.Begin);
+		/// <summary>
+		/// Updates the lock date setttings.
+		/// </summary>
+		/// <param name="lockDateUsed">Whether or not to use a lock date.</param>
+		/// <param name="lockDatePeriod">The lock date period (days/weeks/months).</param>
+		/// <param name="lockDateQuantity">The quantity of the selected period.</param>
+		/// <returns></returns>
+		public bool UpdateLockDate(bool lockDateUsed, string lockDatePeriod, int lockDateQuantity)
+		{
+			if (!new string[] { "Days", "Weeks", "Months" }.Contains(lockDatePeriod))
+			{
+				throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", lockDatePeriod));
+			}
 
-            return output;
-        }
+			if (lockDateQuantity < 0)
+			{
+				throw new ArgumentException("Lock date quantity cannot be less than zero.");
+			}
 
-        /// <summary>
-        /// Updates the lock date setttings.
-        /// </summary>
-        /// <param name="lockDateUsed">Whether or not to use a lock date.</param>
-        /// <param name="lockDatePeriod">The lock date period (days/weeks/months).</param>
-        /// <param name="lockDateQuantity">The quantity of the selected period.</param>
-        /// <returns></returns>
-        public bool UpdateLockDate (bool lockDateUsed, string lockDatePeriod, int lockDateQuantity)
-        {
-            if (!new string[] { "Days", "Weeks", "Months" }.Contains(lockDatePeriod))
-            {
-                throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", lockDatePeriod));
-            }
-
-            if (lockDateQuantity < 0)
-            {
-                throw new ArgumentException("Lock date quantity cannot be less than zero.");
-            }
-
-            return DBHelper.UpdateLockDate(this.UserContext.ChosenOrganizationId, lockDateUsed, lockDatePeriod, lockDateQuantity);
-        }
+			return DBHelper.UpdateLockDate(this.UserContext.ChosenOrganizationId, lockDateUsed, lockDatePeriod, lockDateQuantity);
+		}
 
 		/// <summary>
 		/// Initialized holiday info with a given HolidayDBEntity.
@@ -752,7 +776,7 @@ namespace AllyisApps.Services.TimeTracker
 				UserId = info.UserId
 			};
 		}
-		
+
 		/// <summary>
 		/// Creates a HolidayDBEntity based on a HolidayInfo object.
 		/// </summary>

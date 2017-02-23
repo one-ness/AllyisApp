@@ -4,14 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Core;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-
-using AllyisApps.Core;
-using AllyisApps.Services;
-using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -29,7 +28,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>CSV export of time entries.</returns>
 		public FileStreamResult Export(int userId, int? startingDate = null, int? endingDate = null)
 		{
-            if (userId == Convert.ToInt32(UserContext.UserId))
+			if (userId == Convert.ToInt32(UserContext.UserId))
 			{
 				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{
@@ -44,10 +43,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-            DateTime? start = startingDate.HasValue ? (DateTime?)TimeTrackerService.GetDateTimeFromDays(startingDate.Value) : null;
-            DateTime? end = endingDate.HasValue ? (DateTime?)TimeTrackerService.GetDateTimeFromDays(endingDate.Value) : null;
+			DateTime? start = startingDate.HasValue ? (DateTime?)TimeTrackerService.GetDateTimeFromDays(startingDate.Value) : null;
+			DateTime? end = endingDate.HasValue ? (DateTime?)TimeTrackerService.GetDateTimeFromDays(endingDate.Value) : null;
 
-            return this.File(TimeTrackerService.PrepareCSVExport(new List<int> { userId }, start, end).BaseStream, "text/csv", "export.csv");
+			return this.File(TimeTrackerService.PrepareCSVExport(new List<int> { userId }, start, end).BaseStream, "text/csv", "export.csv");
 		}
 
 		/// <summary>

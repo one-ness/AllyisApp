@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AllyisApps.DBModel.Auth
+﻿namespace AllyisApps.DBModel.Auth
 {
 	/// <summary>
 	/// The model for rows returned by Auth.GetUserContextInfo.

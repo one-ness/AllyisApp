@@ -4,13 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Shared;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -19,14 +18,14 @@ namespace AllyisApps.Controllers
 	/// </summary>
 	public partial class SharedController : BaseController
 	{
-        /// <summary>
-        /// Gets the log on partial.
-        /// </summary>
-        /// <param name="returnUrl">The return URL.</param>
-        /// <param name="showOrganizationPartial">Whether to show the organization.</param>
-        /// <returns>The ActionResult.</returns>
-        [ChildActionOnly]
-        public ActionResult LogOnPartial(string returnUrl, bool showOrganizationPartial = false)
+		/// <summary>
+		/// Gets the log on partial.
+		/// </summary>
+		/// <param name="returnUrl">The return URL.</param>
+		/// <param name="showOrganizationPartial">Whether to show the organization.</param>
+		/// <returns>The ActionResult.</returns>
+		[ChildActionOnly]
+		public ActionResult LogOnPartial(string returnUrl, bool showOrganizationPartial = false)
 		{
 			LogOnPartialViewModel model = null;
 			if (this.UserContext != null)
@@ -38,7 +37,7 @@ namespace AllyisApps.Controllers
 					ChosenOrganizationName = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).Select(o => o.OrganizationName).FirstOrDefault(),
 					CanEditOrganization = Service.Can(Actions.CoreAction.EditOrganization, false),
 					UserOrganizationBriefInfoList = new List<OrganizationBriefInfo>(),
-                    ShowOrganizationPartial = showOrganizationPartial
+					ShowOrganizationPartial = showOrganizationPartial
 				};
 
 				foreach (var orgInfo in UserContext.UserOrganizationInfoList)

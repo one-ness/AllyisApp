@@ -4,21 +4,19 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Data;
-using System.Data.OleDb;
-
 using AllyisApps.DBModel;
+using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
-using AllyisApps.Services.Utilities;
-using AllyisApps.DBModel.Auth;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 
-namespace AllyisApps.Services { 
+namespace AllyisApps.Services
+{
 	/// <summary>
 	/// Services for Cutomer Relationship Management related functions (billing, subscriptions).
 	/// </summary>
@@ -109,7 +107,7 @@ namespace AllyisApps.Services {
 				EIN = dbe.EIN,
 				CreatedUTC = dbe.CreatedUTC,
 				OrganizationId = dbe.OrganizationId,
-                CustomerOrgId = dbe.CustomerOrgId
+				CustomerOrgId = dbe.CustomerOrgId
 			};
 		}
 
@@ -138,7 +136,7 @@ namespace AllyisApps.Services {
 					EIN = customer.EIN,
 					CreatedUTC = customer.CreatedUTC,
 					OrganizationId = customer.OrganizationId,
-                    CustomerOrgId = customer.CustomerOrgId
+					CustomerOrgId = customer.CustomerOrgId
 				};
 
 				return DBHelper.CreateCustomerInfo(dbe);
@@ -172,7 +170,7 @@ namespace AllyisApps.Services {
 					EIN = customer.EIN,
 					CreatedUTC = customer.CreatedUTC,
 					OrganizationId = customer.OrganizationId,
-                    CustomerOrgId = customer.CustomerOrgId
+					CustomerOrgId = customer.CustomerOrgId
 				};
 
 				DBHelper.UpdateCustomer(dbe);
@@ -211,7 +209,7 @@ namespace AllyisApps.Services {
 			{
 				if (dbe != null)
 				{
-                    list.Add(InitializeCustomerInfo(dbe));
+					list.Add(InitializeCustomerInfo(dbe));
 				}
 			}
 
@@ -227,6 +225,7 @@ namespace AllyisApps.Services {
 		public void UpdateBillingInfo(string billingServicesEmail, BillingServicesToken token)
 		{
 			#region Validation
+
 			if (token == null)
 			{
 				throw new ArgumentNullException("token", "billingServicesToken must have a value.");
@@ -240,6 +239,7 @@ namespace AllyisApps.Services {
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
+
 			#endregion Validation
 
 			//// Either get the existing billing service information for the org or create some if the org has none
@@ -283,6 +283,7 @@ namespace AllyisApps.Services {
 		public BillingServicesCustomerId CreateBillingServicesCustomer(string billingServicesEmail, BillingServicesToken token)
 		{
 			#region Validation
+
 			if (token == null)
 			{
 				throw new ArgumentNullException("token", "Billing Services token must not be null.");
@@ -296,6 +297,7 @@ namespace AllyisApps.Services {
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
+
 			#endregion Validation
 
 			string serviceType = "Stripe";
@@ -342,7 +344,7 @@ namespace AllyisApps.Services {
 		{
 			string id = DBHelper.GetOrgCustomer(UserContext.ChosenOrganizationId);
 			return new BillingServicesCustomerId(id);
-        }
+		}
 
 		/// <summary>
 		/// Adds a stripe customer for the current organization.
@@ -372,6 +374,7 @@ namespace AllyisApps.Services {
 		public string AddCustomerSubscriptionPlan(int amount, BillingServicesCustomerId customerId, int numUsers, int productId, string planName)
 		{
 			#region Validation
+
 			if (amount < 0)
 			{
 				throw new ArgumentOutOfRangeException("amount", "Price cannot be negative.");
@@ -392,6 +395,7 @@ namespace AllyisApps.Services {
 			{
 				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
 			}
+
 			#endregion Validation
 
 			string service = "Stripe";
@@ -413,6 +417,7 @@ namespace AllyisApps.Services {
 		public string UpdateSubscriptionPlan(int amount, string planName, int numUsers, string subscriptionId, BillingServicesCustomerId customerId)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(subscriptionId))
 			{
 				throw new ArgumentNullException("subscriptionId", "Subscription id must have a value.");
@@ -433,6 +438,7 @@ namespace AllyisApps.Services {
 				// TODO: Figure out if this can be 0 or not
 				throw new ArgumentOutOfRangeException("numUsers", "Number of users cannot be negative.");
 			}
+
 			#endregion Validation
 
 			string serviceType = "Stripe";
@@ -688,20 +694,20 @@ namespace AllyisApps.Services {
 		/// <returns>List of SubscriptionDisplayInfos.</returns>
 		public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplay(int organizationId = -1)
 		{
-            if (organizationId == -1) organizationId = UserContext.ChosenOrganizationId;
+			if (organizationId == -1) organizationId = UserContext.ChosenOrganizationId;
 
-            return DBHelper.Instance.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InitializeSubscriptionDisplayInfo(s)).ToList();
+			return DBHelper.Instance.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InitializeSubscriptionDisplayInfo(s)).ToList();
 		}
 
-        /// <summary>
-        /// Gets a list of <see cref="SubscriptionDisplayInfo"/>s for all subscriptions in the given organizaiton.
-        /// </summary>
-        /// <param name="orgId">Organization Id.</param>
-        /// <returns>List of SubscriptionDisplayInfos.</returns>
-        public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplayByOrg(int orgId)
-        {
-            return DBHelper.Instance.GetSubscriptionsDisplayByOrg(orgId).Select(s => InitializeSubscriptionDisplayInfo(s));
-        }
+		/// <summary>
+		/// Gets a list of <see cref="SubscriptionDisplayInfo"/>s for all subscriptions in the given organizaiton.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns>List of SubscriptionDisplayInfos.</returns>
+		public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplayByOrg(int orgId)
+		{
+			return DBHelper.Instance.GetSubscriptionsDisplayByOrg(orgId).Select(s => InitializeSubscriptionDisplayInfo(s));
+		}
 
 		/// <summary>
 		/// Gets a list of available <see cref="SubscriptionRoleInfo"/>s for a subscription.
@@ -802,6 +808,7 @@ namespace AllyisApps.Services {
 		public void AddSubscriptionOfSkuToOrganization(int orgId, int selectedSku, int productId, int numberOfUsers)
 		{
 			#region Validation
+
 			if (orgId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
@@ -821,6 +828,7 @@ namespace AllyisApps.Services {
 			{ // TODO: Figure out if this can be 0 or not
 				throw new ArgumentOutOfRangeException("numberOfUsers", "Number of users cannot be negative.");
 			}
+
 			#endregion Validation
 
 			int subID = DBHelper.ChangeSubscription(orgId, selectedSku, productId, numberOfUsers);
@@ -871,6 +879,7 @@ namespace AllyisApps.Services {
 		public string GetProductRoleForUser(string productName, int userId)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(productName))
 			{
 				throw new ArgumentNullException("productName", "Product name must have a value.");
@@ -880,6 +889,7 @@ namespace AllyisApps.Services {
 			{
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
+
 			#endregion Validation
 
 			return DBHelper.GetProductRoleForUser(productName, UserContext.ChosenOrganizationId, userId);
@@ -942,23 +952,22 @@ namespace AllyisApps.Services {
 			return handler.RetrieveCustomer(customerId);
 		}
 
-        /// <summary>
-        /// Gets the next recommended customer id, by incrementing the highest one that currently exists, or returning all 0's if none exist.
-        /// </summary>
-        /// <returns>The next logical unique customer id.</returns>
-        public string GetRecommendedCustomerId()
-        {
-            var customers = this.GetCustomerList(this.UserContext.ChosenOrganizationId);
-            if (customers.Count() > 0)
-            {
-                return new string(this.IncrementAlphanumericCharArray(customers.Select(c => c.CustomerOrgId).ToList().OrderBy(id => id).LastOrDefault().ToCharArray()));
-            }
-            else
-            {
-                return "0000000000000000"; // 16 character max, arbitrary default id
-            }
-        }
-
+		/// <summary>
+		/// Gets the next recommended customer id, by incrementing the highest one that currently exists, or returning all 0's if none exist.
+		/// </summary>
+		/// <returns>The next logical unique customer id.</returns>
+		public string GetRecommendedCustomerId()
+		{
+			var customers = this.GetCustomerList(this.UserContext.ChosenOrganizationId);
+			if (customers.Count() > 0)
+			{
+				return new string(this.IncrementAlphanumericCharArray(customers.Select(c => c.CustomerOrgId).ToList().OrderBy(id => id).LastOrDefault().ToCharArray()));
+			}
+			else
+			{
+				return "0000000000000000"; // 16 character max, arbitrary default id
+			}
+		}
 
 		/// <summary>
 		/// Initializes a <see cref="CustomerInfo"/> from a <see cref="CustomerDBEntity"/>.

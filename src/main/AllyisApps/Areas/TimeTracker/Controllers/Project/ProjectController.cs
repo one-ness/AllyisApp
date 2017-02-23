@@ -4,10 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Services;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -15,7 +14,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// The controller for managing all Project-related actions.
 	/// </summary>
 	[Authorize]
-	public partial class ProjectController: BaseController
+	public partial class ProjectController : BaseController
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ProjectController"/> class.

@@ -4,17 +4,17 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
+using System;
+using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
-    /// <summary>
-    /// Representation of the Time entries defined over the specified date range.
-    /// </summary>
-    public class TimeEntryOverDateRangeViewModel
+	/// <summary>
+	/// Representation of the Time entries defined over the specified date range.
+	/// </summary>
+	public class TimeEntryOverDateRangeViewModel
 	{
 		private const int PageUserLimit = 35;
 

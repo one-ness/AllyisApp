@@ -176,7 +176,7 @@ ViewBag.RenderSidebar = true;}
             @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.TimeEntry, null, FormMethod.Get, new { @class = "panel-heading", style = "display: flex; justify-content: space-between;" }))
             {
                 <span class="panel-title">@AllyisApps.Resources.Views.Account.Strings.Upload</span>
-                <input type="submit" id="template-button" value="@AllyisApps.Resources.Views.Account.Strings.Template" class="btn btn-primary tt-template"/>
+                <input type="submit" id="template-button" value="@AllyisApps.Resources.Views.Account.Strings.Template" class="btn btn-primary tt-template" />
             }
             @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.TimeEntry, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {

@@ -4,15 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -48,12 +47,12 @@ namespace AllyisApps.Controllers
 		/// <returns>The OrganizationAddMembersViewModel.</returns>
 		public OrganizationAddMembersViewModel ConstructOrganizationAddMembersViewModel()
 		{
-            OrganizationAddMembersViewModel result = new OrganizationAddMembersViewModel
-            {
+			OrganizationAddMembersViewModel result = new OrganizationAddMembersViewModel
+			{
 				Organization = Service.GetOrganization(UserContext.ChosenOrganizationId),
-                OrganizationId = UserContext.ChosenOrganizationId,
+				OrganizationId = UserContext.ChosenOrganizationId,
 				OrganizationProjects = Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId),
-                EmployeeId = Service.GetRecommendedEmployeeId()
+				EmployeeId = Service.GetRecommendedEmployeeId()
 			};
 
 			List<SubscriptionRoleSelectionModel> roles = new List<SubscriptionRoleSelectionModel>();

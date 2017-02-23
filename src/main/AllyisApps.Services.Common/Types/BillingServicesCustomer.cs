@@ -14,12 +14,15 @@ namespace AllyisApps.Services.Common.Types
 	public class BillingServicesCustomer
 	{
 		#region private fields
+
 		private readonly BillingServicesCustomerId billingServicesCustomerId;
 		private readonly string last4;
 		private readonly string email;
+
 		#endregion private fields
 
 		#region constructor
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BillingServicesCustomer"/> class.
 		/// </summary>
@@ -29,6 +32,7 @@ namespace AllyisApps.Services.Common.Types
 		public BillingServicesCustomer(BillingServicesCustomerId customerId, string email, string last4 = "nnnn")
 		{
 			#region last4 validation
+
 			if (last4.Length != 4)
 			{
 				throw new ArgumentException("last4", "last 4 must be exactly 4 numbers");
@@ -39,15 +43,18 @@ namespace AllyisApps.Services.Common.Types
 			{
 				throw new ArgumentException("last4", "last 4 must be exactly 4 numbers");
 			}
+
 			#endregion last4 validation
 
 			this.last4 = last4;
 			this.billingServicesCustomerId = customerId;
 			this.email = email;
 		}
+
 		#endregion constructor
 
 		#region accessor properties
+
 		/// <summary>
 		/// Gets the ID.
 		/// </summary>
@@ -80,6 +87,7 @@ namespace AllyisApps.Services.Common.Types
 				return this.email;
 			}
 		}
+
 		#endregion accessor properties
 	}
 }

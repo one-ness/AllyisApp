@@ -8,10 +8,10 @@ using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
-    /// <summary>
-    /// Representation of the Time entries defined over the specified date range for a given user.
-    /// </summary>
-    public class TimeEntryRangeForUserViewModel
+	/// <summary>
+	/// Representation of the Time entries defined over the specified date range for a given user.
+	/// </summary>
+	public class TimeEntryRangeForUserViewModel
 	{
 		/// <summary>
 		/// Gets the list of entries.

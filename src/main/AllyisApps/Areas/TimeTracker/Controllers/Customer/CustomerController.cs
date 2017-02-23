@@ -4,10 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Services;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -15,7 +14,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// Represents pages for the management of a Customer.
 	/// </summary>
 	[Authorize]
-	public partial class CustomerController: BaseController
+	public partial class CustomerController : BaseController
 	{
 		private static readonly int TimeTrackerID = Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker);
 

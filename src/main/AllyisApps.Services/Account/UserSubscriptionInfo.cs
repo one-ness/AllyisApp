@@ -61,10 +61,10 @@ namespace AllyisApps.Services
 		/// </summary>
 		public int SkuId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Product Id.
-        /// </summary>
-        public ProductIdEnum ProductId { get; set; }
+		/// <summary>
+		/// Gets or sets the Product Id.
+		/// </summary>
+		public ProductIdEnum ProductId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Product name.

@@ -4,19 +4,18 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Customer;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
 	/// <summary>
 	/// Represents pages for the management of a Customer.
 	/// </summary>
-	public partial class CustomerController: BaseController
+	public partial class CustomerController : BaseController
 	{
 		/// <summary>
 		/// GET: Customer/Edit.
@@ -46,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					OrganizationName = Service.GetOrganization(customer.OrganizationId).Name,
 					CustomerID = id,
 					ValidCountries = Service.ValidCountries(),
-                    CustomerOrgId = customer.CustomerOrgId
+					CustomerOrgId = customer.CustomerOrgId
 				});
 			}
 
@@ -79,7 +78,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					FaxNumber = model.FaxNumber,
 					Website = model.Website,
 					EIN = model.EIN,
-                    CustomerOrgId = model.CustomerOrgId
+					CustomerOrgId = model.CustomerOrgId
 				}))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.CustomerDetailsUpdated, Variety.Success));

@@ -4,11 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using System;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -36,11 +35,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert("Pay class created successfully.", Variety.Success));
 				}
 				else
-				{ 
+				{
 					// Should only get here on permissions failure
 					Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 				}
-			} catch (ArgumentException)
+			}
+			catch (ArgumentException)
 			{
 				// Pay class already exists
 				Notifications.Add(new BootstrapAlert("Could not create pay class: that pay class name already exists.", Variety.Danger));

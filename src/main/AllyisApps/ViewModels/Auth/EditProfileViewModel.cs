@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using AllyisApps.Utilities;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -31,9 +31,10 @@ namespace AllyisApps.ViewModels.Auth
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		public EditProfileViewModel() {
+		public EditProfileViewModel()
+		{
 			this.ValidCountries = new List<string>();
 			this.isEditing = true;
 		}

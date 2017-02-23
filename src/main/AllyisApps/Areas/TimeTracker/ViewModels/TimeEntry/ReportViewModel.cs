@@ -4,17 +4,17 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Web.Mvc;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
-    /// <summary>
-    /// Adds name fields to TimeEntries for preview.
-    /// </summary>
-    public struct TablePreviewEntry
+	/// <summary>
+	/// Adds name fields to TimeEntries for preview.
+	/// </summary>
+	public struct TablePreviewEntry
 	{
 		/// <summary>
 		/// TimeEntry field.

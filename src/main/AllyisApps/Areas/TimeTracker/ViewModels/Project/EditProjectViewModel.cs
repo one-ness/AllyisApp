@@ -22,13 +22,13 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 			this.ProjectUsers = new List<BasicUserInfoViewModel>();
 			this.SubscriptionUsers = new List<BasicUserInfoViewModel>();
 			this.SelectedProjectUserIds = new string[] { };
-            this.IsCreating = false;
-        }
+			this.IsCreating = false;
+		}
 
-        /// <summary>
-        /// Gets or sets Project Name.
-        /// </summary>
-        [Required]
+		/// <summary>
+		/// Gets or sets Project Name.
+		/// </summary>
+		[Required]
 		[DataType(DataType.Text)]
 		[Display(Name = "Project Name")]
 		public string ProjectName { get; set; }
@@ -77,23 +77,23 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// </summary>
 		public string OrganizationName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Project's Organization ID.
-        /// </summary>
-        [Required]
-        [DataType(DataType.Text)]
-        [Display(Name = "Project ID")]
-        public string ProjectOrgId { get; set; }
+		/// <summary>
+		/// Gets or sets the Project's Organization ID.
+		/// </summary>
+		[Required]
+		[DataType(DataType.Text)]
+		[Display(Name = "Project ID")]
+		public string ProjectOrgId { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the model is being used for creating a project (true), or editing an existing project (false).
-        /// </summary>
-        public bool IsCreating { get; set; }
+		/// <summary>
+		/// Gets or sets a value indicating whether the model is being used for creating a project (true), or editing an existing project (false).
+		/// </summary>
+		public bool IsCreating { get; set; }
 
-        /// <summary>
-        /// Gets or sets the UserInfo collection of users assigned to this project.
-        /// </summary>
-        public IEnumerable<BasicUserInfoViewModel> ProjectUsers { get; set; }
+		/// <summary>
+		/// Gets or sets the UserInfo collection of users assigned to this project.
+		/// </summary>
+		public IEnumerable<BasicUserInfoViewModel> ProjectUsers { get; set; }
 
 		/// <summary>
 		/// Gets or sets the SubscriptionUserInfo of users who are not a part of this project, but are a part of this subscription.

@@ -4,20 +4,19 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Linq;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Customer;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
 	/// <summary>
 	/// Represents pages for the management of a Customer.
 	/// </summary>
-	public partial class CustomerController: BaseController
+	public partial class CustomerController : BaseController
 	{
 		/// <summary>
 		/// GET: Customer/Create.
@@ -28,11 +27,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (Service.Can(Actions.CoreAction.EditCustomer))
 			{
-                return this.View(new EditCustomerInfoViewModel
-                {
+				return this.View(new EditCustomerInfoViewModel
+				{
 					ValidCountries = Service.ValidCountries(),
-                    IsCreating = true,
-                    CustomerOrgId = Service.GetRecommendedCustomerId()
+					IsCreating = true,
+					CustomerOrgId = Service.GetRecommendedCustomerId()
 				});
 			}
 
@@ -51,14 +50,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-                // CustomerOrgId must be unique
-                if (Service.GetCustomerList(this.UserContext.ChosenOrganizationId).Any(customer => customer.CustomerOrgId == model.CustomerOrgId))
-                {
-                    Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.CustomerOrgIdNotUnique, Variety.Danger));
-                    return this.View(model);
-                }
+				// CustomerOrgId must be unique
+				if (Service.GetCustomerList(this.UserContext.ChosenOrganizationId).Any(customer => customer.CustomerOrgId == model.CustomerOrgId))
+				{
+					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.CustomerOrgIdNotUnique, Variety.Danger));
+					return this.View(model);
+				}
 
-                int? customerId = Service.CreateCustomer(new CustomerInfo()
+				int? customerId = Service.CreateCustomer(new CustomerInfo()
 				{
 					ContactEmail = model.ContactEmail,
 					Name = model.Name,
@@ -72,7 +71,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Website = model.Website,
 					EIN = model.EIN,
 					OrganizationId = this.UserContext.ChosenOrganizationId,
-                    CustomerOrgId = model.CustomerOrgId
+					CustomerOrgId = model.CustomerOrgId
 				});
 
 				if (customerId.HasValue)
