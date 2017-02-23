@@ -24,10 +24,10 @@
             <div class="panel-heading">
                 <h1 class="panel-title">
                     @AllyisApps.Resources.Views.Account.Strings.OrganizationDetails
-                    @if (Model.CanEditOrganization)
-                    {
+                    @*@if (Model.CanEditOrganization)
+                    {*@
                         @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Edit, ActionConstants.Edit, null, new { @class = "pull-right text-muted" })
-}
+					@*}*@
                 </h1>
             </div>
             @Html.Partial("_OrgDetails", Model.Details)

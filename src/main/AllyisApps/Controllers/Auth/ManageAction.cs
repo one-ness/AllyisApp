@@ -45,54 +45,52 @@ namespace AllyisApps.Controllers
 		[CLSCompliant(false)]
 		public OrganizationManageViewModel ConstructOrganizationManageViewModel()
 		{
-			OrganizationInfo organization = Service.GetOrganization(UserContext.ChosenOrganizationId);
-			bool canEditOrganization = Service.Can(Actions.CoreAction.EditOrganization);
-			IEnumerable<OrganizationUserViewModel> displayUsers = Service.GetOrganizationMemberList(UserContext.ChosenOrganizationId).Select(x => new OrganizationUserViewModel()
-			{
-				EmployeeId = x.EmployeeId,
-				FullName = (new[] { Service.GetUserInfo(x.UserId) }).Select(u => string.Format("{0} {1}", u.FirstName, u.LastName)).Single(),
-				OrganizationId = x.OrganizationId,
-				PermissionLevel = ((OrganizationRole)x.OrgRoleId).ToString(),
-				UserId = x.UserId,
-				Email = x.Email
-			});
+			var infos = Service.GetOrganizationManagementInfo();
 
-			IEnumerable<SubscriptionDisplayInfo> subs = Service.GetSubscriptionsDisplay();
-			IEnumerable<SubscriptionDisplayViewModel> subscriptions = Service.GetProductInfoList().Select(p =>
-			{
-				return new SubscriptionDisplayViewModel
-				{
-					CanEditSubscriptions = canEditOrganization,
-					Info = subs.Where(x => x.ProductId == p.ProductId).SingleOrDefault(),
-					ProductId = p.ProductId,
-					ProductName = p.ProductName
-				};
-			});
-
-			BillingServicesCustomerId customerId = Service.GetOrgBillingServicesCustomerId();
-			BillingServicesCustomer customer = (customerId == null) ? null : Service.RetrieveCustomer(customerId);
+			BillingServicesCustomer customer = (infos.Item5 == null) ? null : Service.RetrieveCustomer(new BillingServicesCustomerId(infos.Item5));
 
 			return new OrganizationManageViewModel
 			{
-				Add = this.ConstructOrganizationAddMembersViewModel(),
-				CanEditOrganization = canEditOrganization,
-				Details = organization,
-				Edit = this.ConstructEditOrganizationViewModel(organization, canEditOrganization, Service.ValidCountries()),
+				Details = infos.Item1,
 				LastFour = customer == null ? string.Empty : customer.Last4,
 				Members = new OrganizationMembersViewModel
 				{
-					AccessCode = string.Empty,
 					CurrentUserId = UserContext.UserId,
-					DisplayUsers = displayUsers,
-					OrganizationId = UserContext.ChosenOrganizationId,
-					OrganizationName = Service.GetOrganization(UserContext.ChosenOrganizationId).Name,
-					PendingInvitation = Service.GetUserInvitations(),
-					TotalUsers = displayUsers.Count()
+					DisplayUsers = infos.Item2.Select(oui => new OrganizationUserViewModel
+					{
+						Email = oui.Email,
+						EmployeeId = oui.EmployeeId,
+						FullName = string.Format("{0} {1}", oui.FirstName, oui.LastName),
+						OrganizationId = oui.OrganizationId,
+						PermissionLevel = ((OrganizationRole)oui.OrgRoleId).ToString(),
+						UserId = oui.UserId
+					}),
+					OrganizationId = infos.Item1.OrganizationId,
+					OrganizationName = infos.Item1.Name,
+					PendingInvitation = infos.Item4,
+					TotalUsers = infos.Item2.Count
 				},
 				OrganizationId = UserContext.ChosenOrganizationId,
 				BillingCustomer = customer,
-				SubscriptionCount = subscriptions.Count(),
-				Subscriptions = subscriptions
+				SubscriptionCount = infos.Item3.Count,
+				Subscriptions = infos.Item6.Select(p =>
+				{
+					SubscriptionDisplayInfo sub = infos.Item3.Where(s => s.ProductId == p.ProductId).SingleOrDefault();
+					if (sub == null)
+					{
+						return null;
+					}
+					else
+					{
+						return new SubscriptionDisplayViewModel
+						{
+							Info = sub,
+							ProductId = p.ProductId,
+							ProductName = p.ProductName,
+							ProductDescription = p.ProductDescription
+						};
+					}
+				})
 			};
 		}
 

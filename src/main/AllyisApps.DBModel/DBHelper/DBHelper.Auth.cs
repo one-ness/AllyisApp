@@ -1003,10 +1003,36 @@ namespace AllyisApps.DBModel
 					"[Auth].[GetUserOrgsAndInvitationInfo]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
-				return Tuple.Create<UserDBEntity, List<OrganizationDBEntity>, List<InvitationDBEntity>>(
+				return Tuple.Create(
 					results.Read<UserDBEntity>().SingleOrDefault(),
 					results.Read<OrganizationDBEntity>().ToList(),
 					results.Read<InvitationDBEntity>().ToList());
+			}
+		}
+
+		/// <summary>
+		/// Returns an OrganizationDBEntity for the given organization, along with a list of OrganizationUserDBEntities for the organization users
+		/// in the organization, a list of SubscriptionDisplayDBEntities for any subscriptions for the organization, a list of InvitiationDBEntities
+		/// for any invitations pending in the organization, the organization's billing stripe handle, and the complete list of products.
+		/// </summary>
+		/// <param name="organizationId">The organization Id</param>
+		public Tuple<OrganizationDBEntity, List<OrganizationUserDBEntity>, List<SubscriptionDisplayDBEntity>, List<InvitationDBEntity>, string, List<ProductDBEntity>> GetOrganizationManagementInfo(int organizationId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@OrganizationId", organizationId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Auth].[GetOrgManagementInfo]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<OrganizationDBEntity>().SingleOrDefault(),
+					results.Read<OrganizationUserDBEntity>().ToList(),
+					results.Read<SubscriptionDisplayDBEntity>().ToList(),
+					results.Read<InvitationDBEntity>().ToList(),
+					results.Read<string>().SingleOrDefault(),
+					results.Read<ProductDBEntity>().ToList());
 			}
 		}
 	}

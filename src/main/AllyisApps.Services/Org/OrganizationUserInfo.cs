@@ -42,5 +42,15 @@ namespace AllyisApps.Services
 		/// Gets or sets the user email.
 		/// </summary>
 		public string Email { get; set; }
+
+		/// <summary>
+		/// Gets or sets the user's first name.
+		/// </summary>
+		public string FirstName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the user's last name.
+		/// </summary>
+		public string LastName { get; set; }
 	}
 }

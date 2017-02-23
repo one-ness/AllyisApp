@@ -47,5 +47,15 @@ namespace AllyisApps.DBModel.Auth
 		/// Gets or sets the email for this user.
 		/// </summary>
 		public string Email { get; set; }
+
+		/// <summary>
+		/// Gets or sets the user's first name.
+		/// </summary>
+		public string FirstName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the user's last name.
+		/// </summary>
+		public string LastName { get; set; }
 	}
 }

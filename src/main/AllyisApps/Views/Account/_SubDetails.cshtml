@@ -33,17 +33,17 @@
                 @price
             </td>
             <td class="text-right icon-strip">
-                @if (Model.CanEditSubscriptions)
-                {
+                @*@if (Model.CanEditSubscriptions)
+                {*@
                     <a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { ProductId = @Model.ProductId })"
                        class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.EditSubscription"><span class="fa fa-fw fa-dollar text-success"></span></a>
 
-                    using (Html.BeginForm(ActionConstants.Unsubscribe, ControllerConstants.Account, FormMethod.Get, new { @style = "display: inline", @onsubmit = "return confirmUnsubscribe(\"" + @Model.ProductName + "\")" }))
+                    @using (Html.BeginForm(ActionConstants.Unsubscribe, ControllerConstants.Account, FormMethod.Get, new { @style = "display: inline", @onsubmit = "return confirmUnsubscribe(\"" + @Model.ProductName + "\")" }))
                     {
                         <input data-val="true" id="ID" name="ID" type="hidden" value="@Model.ProductId" />
                         <a href="javascript:void(0);" class="text-danger" title="@AllyisApps.Resources.Views.Account.Strings.DropSubcription" onclick="$(this).closest('form').submit()"><span class="fa fa-fw fa-remove text-danger" title=@AllyisApps.Resources.Views.Account.Strings.RemoveSubscription ></span></a>
                     }
-                }
+                @*}*@
             </td>
         }
         else

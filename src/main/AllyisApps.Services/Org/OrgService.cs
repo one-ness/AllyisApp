@@ -93,6 +93,24 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Gets the OrganizationInfo for the current chosen organization, along with OrganizationUserInfos for each user in the
+		/// organization, SubscriptionDisplayInfos for any subscriptions in the organization, InvitationInfos for any invitiations
+		/// pending in the organization, and the organization's billing stripe handle.
+		/// </summary>
+		/// <returns></returns>
+		public Tuple<OrganizationInfo, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string, List<ProductInfo>> GetOrganizationManagementInfo()
+		{
+			var spResults = DBHelper.GetOrganizationManagementInfo(UserContext.ChosenOrganizationId);
+			return Tuple.Create(
+				InitializeOrganizationInfo(spResults.Item1),
+				spResults.Item2.Select(oudb => InitializeOrganizationUserInfo(oudb)).ToList(),
+				spResults.Item3.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
+				spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList(),
+				spResults.Item5,
+				spResults.Item6.Select(pdb => InitializeProductInfo(pdb)).ToList());
+		}
+
+		/// <summary>
 		/// Updates an organization chosen by the current user.
 		/// </summary>
 		/// <param name="organization">Updated organization info.</param>
@@ -1552,7 +1570,9 @@ namespace AllyisApps.Services
 				OrganizationId = organizationUser.OrganizationId,
 				OrgRoleId = organizationUser.OrgRoleId,
 				UserId = organizationUser.UserId,
-				Email = organizationUser.Email
+				Email = organizationUser.Email,
+				FirstName = organizationUser.FirstName,
+				LastName = organizationUser.LastName
 			};
 		}
 
@@ -1661,6 +1681,26 @@ namespace AllyisApps.Services
 				OrgRoleName = invitation.OrgRoleName,
 				ProjectId = invitation.ProjectId,
 				EmployeeId = invitation.EmployeeId
+			};
+		}
+
+		/// <summary>
+		/// Translates a ProductDBEntity into a ProductInfo business object.
+		/// </summary>
+		/// <param name="product">ProductDBEntity instance.</param>
+		/// <returns>ProductInfo instance.</returns>
+		public static ProductInfo InitializeProductInfo(ProductDBEntity product)
+		{
+			if (product == null)
+			{
+				return null;
+			}
+
+			return new ProductInfo
+			{
+				ProductDescription = product.Description,
+				ProductId = product.ProductId,
+				ProductName = product.Name
 			};
 		}
 
