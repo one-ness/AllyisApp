@@ -270,6 +270,7 @@
     <Build Include="StoredProcedures\Auth\Auth.GetUserContextInfo.sql" />
     <Build Include="StoredProcedures\Auth\Auth.GetUserOrgsAndInvitationInfo.sql" />
     <Build Include="StoredProcedures\Auth\Auth.GetOrgManagementInfo.sql" />
+    <Build Include="StoredProcedures\Auth\GetOrgWithCountriesAndEmployeeId.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

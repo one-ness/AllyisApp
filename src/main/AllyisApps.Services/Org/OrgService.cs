@@ -111,6 +111,20 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Gets the OrganizationInfo for the current chosen organization, along with the list of valid countries and the
+		/// employee id for the current user in the current chosen organization.
+		/// </summary>
+		/// <returns></returns>
+		public Tuple<OrganizationInfo, List<string>, string> GetOrgWithCountriesAndEmployeeId()
+		{
+			var spResults = DBHelper.GetOrgWithCountriesAndEmployeeId(UserContext.ChosenOrganizationId, UserContext.UserId);
+			return Tuple.Create(
+				InitializeOrganizationInfo(spResults.Item1),
+				spResults.Item2,
+				spResults.Item3);
+		}
+
+		/// <summary>
 		/// Updates an organization chosen by the current user.
 		/// </summary>
 		/// <param name="organization">Updated organization info.</param>

@@ -1035,5 +1035,30 @@ namespace AllyisApps.DBModel
 					results.Read<ProductDBEntity>().ToList());
 			}
 		}
+
+		/// <summary>
+		/// Returns an OrganizationDBEntity, the list of valid countries, and the employee id of the given employee in
+		/// the given organization.
+		/// </summary>
+		/// <param name="orgId">Organization id.</param>
+		/// <param name="userId">User id.</param>
+		/// <returns></returns>
+		public Tuple<OrganizationDBEntity, List<string>, string> GetOrgWithCountriesAndEmployeeId(int orgId, int userId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@OrganizationId", orgId);
+			parameters.Add("@UserId", userId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Auth].[GetOrgWithCountriesAndEmployeeId]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<OrganizationDBEntity>().SingleOrDefault(),
+					results.Read<string>().ToList(),
+					results.Read<string>().SingleOrDefault());
+			}
+		}
 	}
 }

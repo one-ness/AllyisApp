@@ -78,12 +78,13 @@ namespace AllyisApps.Controllers
 		{
 			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
+				var infos = Service.GetOrgWithCountriesAndEmployeeId();
 				EditOrganizationViewModel model = this.ConstructEditOrganizationViewModel(
-					Service.GetOrganization(UserContext.ChosenOrganizationId),
-					Service.Can(Actions.CoreAction.EditOrganization),
-					Service.ValidCountries());
+					infos.Item1,
+					true,
+					infos.Item2);
 
-				model.EmployeeId = Service.GetOrganizationMemberList(UserContext.ChosenOrganizationId).Where(u => u.UserId == UserContext.UserId).Select(u => u.EmployeeId).FirstOrDefault();
+				model.EmployeeId = infos.Item3;
 
 				ViewBag.returnUrl = returnUrl;
 
