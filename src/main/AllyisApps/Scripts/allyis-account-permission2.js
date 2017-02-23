@@ -14,7 +14,7 @@ gatherData = function () {
         }
     });
     if (checked_users.length == 0) return null;
-    
+
     // Add in target action information
     var selectedAction = {};
     var value = -2;
@@ -30,7 +30,7 @@ gatherData = function () {
     		selectedAction["TimeTrackerRoleTarget"] = value;
     	}
     }
-    
+
     // Assemble and return UserPermissionsAction object of data
     result = {};
     result.SelectedUsers = checked_users;

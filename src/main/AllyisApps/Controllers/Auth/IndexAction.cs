@@ -4,17 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
 using AllyisApps.ViewModels.Shared;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -46,13 +44,13 @@ namespace AllyisApps.Controllers
 				}).ToList()
 			};
 
-            foreach (SubscriptionDisplayInfo sub in accountModel.Subscriptions.Subscriptions)
-            {
-                if (sub.ProductId == (int)ProductIdEnum.TimeTracker)
-                {
-                    sub.CanViewSubscription = Service.Can(Actions.CoreAction.TimeTrackerEditSelf, false, sub.OrganizationId) || Service.Can(Actions.CoreAction.TimeTrackerEditOthers, false, sub.OrganizationId);
-                }
-            }
+			foreach (SubscriptionDisplayInfo sub in accountModel.Subscriptions.Subscriptions)
+			{
+				if (sub.ProductId == (int)ProductIdEnum.TimeTracker)
+				{
+					sub.CanViewSubscription = Service.Can(Actions.CoreAction.TimeTrackerEditSelf, false, sub.OrganizationId) || Service.Can(Actions.CoreAction.TimeTrackerEditOthers, false, sub.OrganizationId);
+				}
+			}
 
 			accountModel.UserInfo.Email = Service.GetCompressedEmail(accountModel.UserInfo.Email);
 
@@ -62,7 +60,7 @@ namespace AllyisApps.Controllers
 				row.CreatedUTC = date;
 			}
 
-            ViewBag.ShowOrganizationPartial = false;
+			ViewBag.ShowOrganizationPartial = false;
 
 			// Old OrganizationsAction
 			List<SubscriptionsViewModel> modelList = new List<SubscriptionsViewModel>();

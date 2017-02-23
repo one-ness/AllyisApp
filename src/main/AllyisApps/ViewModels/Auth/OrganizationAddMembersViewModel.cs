@@ -4,10 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Services;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
-using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -47,12 +46,12 @@ namespace AllyisApps.ViewModels.Auth
 		[EmailAddress]
 		public string Email { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Employee Id.
-        /// </summary>
-        [Required]
-        [Display(Name = "Employee ID")]
-        public string EmployeeId { get; set; }
+		/// <summary>
+		/// Gets or sets the Employee Id.
+		/// </summary>
+		[Required]
+		[Display(Name = "Employee ID")]
+		public string EmployeeId { get; set; }
 
 		/// <summary>
 		/// Gets or sets Organization Id.

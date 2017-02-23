@@ -8,10 +8,10 @@ using System;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
-    /// <summary>
-    /// Representation of the entry to delete.
-    /// </summary>
-    public class DeleteTimeEntryViewModel
+	/// <summary>
+	/// Representation of the entry to delete.
+	/// </summary>
+	public class DeleteTimeEntryViewModel
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DeleteTimeEntryViewModel" /> class.

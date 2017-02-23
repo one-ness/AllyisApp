@@ -25,13 +25,13 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 			// Note: this is included soley to keep the model constructed during a POST from complaining about a null reference
 			//   as it builds the countries list, even though the list isn't used anymore.
 			this.ValidCountries = new List<string>();
-            this.IsCreating = false;
-        }
+			this.IsCreating = false;
+		}
 
-        /// <summary>
-        /// Gets or sets the account e-mail.
-        /// </summary>
-        [EmailAddress]
+		/// <summary>
+		/// Gets or sets the account e-mail.
+		/// </summary>
+		[EmailAddress]
 		[Display(Name = "Contact Email")]
 		public string ContactEmail { get; set; }
 
@@ -97,18 +97,18 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		[Display(Name = "Postal Code")]
 		public string PostalCode { get; set; }
 
-        /// <summary>
+		/// <summary>
 		/// Gets or sets the Customer's Organization ID.
 		/// </summary>
 		[Required]
-        [DataType(DataType.Text)]
-        [Display(Name = "Customer ID")]
-        public string CustomerOrgId { get; set; }
+		[DataType(DataType.Text)]
+		[Display(Name = "Customer ID")]
+		public string CustomerOrgId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Customer's organization id.
-        /// </summary>
-        public int OrganizationId { get; set; }
+		/// <summary>
+		/// Gets or sets the Customer's organization id.
+		/// </summary>
+		public int OrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name of the organization that the Customer belongs too.
@@ -125,15 +125,15 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// </summary>
 		public string Website { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the model is being used for creating a customer (true) or editing an existing customer (false).
-        /// </summary>
-        public bool IsCreating { get; set; }
+		/// <summary>
+		/// Gets or sets a value indicating whether the model is being used for creating a customer (true) or editing an existing customer (false).
+		/// </summary>
+		public bool IsCreating { get; set; }
 
-        /// <summary>
-        /// Gets or sets List of valid countries.
-        /// </summary>
-        public IEnumerable<string> ValidCountries { get; set; }
+		/// <summary>
+		/// Gets or sets List of valid countries.
+		/// </summary>
+		public IEnumerable<string> ValidCountries { get; set; }
 
 		/// <summary>
 		/// Localized valid countries.

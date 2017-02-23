@@ -4,12 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -25,9 +24,9 @@ namespace AllyisApps.Controllers
 		/// <returns>Presents a page for the creation of a new organization.</returns>
 		[HttpGet]
 		public ActionResult CreateOrg()
-        {
-            ViewBag.ShowOrganizationPartial = false;
-            return this.View(new EditOrganizationViewModel() { ValidCountries = Service.ValidCountries(), IsCreating = true });
+		{
+			ViewBag.ShowOrganizationPartial = false;
+			return this.View(new EditOrganizationViewModel() { ValidCountries = Service.ValidCountries(), IsCreating = true });
 		}
 
 		/// <summary>
@@ -47,8 +46,8 @@ namespace AllyisApps.Controllers
 			if (model != null && ModelState.IsValid)
 			{
 				int orgId = Service.CreateOrganization(
-                    new OrganizationInfo()
-                    {
+					new OrganizationInfo()
+					{
 						Address = model.Address,
 						City = model.City,
 						Country = model.Country,
@@ -60,8 +59,8 @@ namespace AllyisApps.Controllers
 						FaxNumber = model.FaxNumber,
 						Subdomain = model.SubdomainName
 					},
-                    UserContext.UserId,
-                    model.EmployeeId);
+					UserContext.UserId,
+					model.EmployeeId);
 
 				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.OrganizationCreatedNotification, Variety.Success));
 

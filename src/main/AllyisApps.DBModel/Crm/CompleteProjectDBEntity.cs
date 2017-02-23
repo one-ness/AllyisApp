@@ -53,10 +53,10 @@ namespace AllyisApps.DBModel.Crm
 		/// </summary>
 		public string CustomerName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the customer org id.
-        /// </summary>
-        public string CustomerOrgId { get; set; }
+		/// <summary>
+		/// Gets or sets the customer org id.
+		/// </summary>
+		public string CustomerOrgId { get; set; }
 
 		/// <summary>
 		/// Gets or sets The name of the organization.
@@ -88,9 +88,9 @@ namespace AllyisApps.DBModel.Crm
 		/// </summary>
 		public DateTime EndDate { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Project's ID as used by the organization
-        /// </summary>
-        public string ProjectOrgId { get; set; }
+		/// <summary>
+		/// Gets or sets the Project's ID as used by the organization
+		/// </summary>
+		public string ProjectOrgId { get; set; }
 	}
 }

@@ -4,12 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Core;
+using AllyisApps.ViewModels.Shared;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-
-using AllyisApps.Core;
-using AllyisApps.ViewModels.Shared;
 
 namespace AllyisApps.Controllers
 {

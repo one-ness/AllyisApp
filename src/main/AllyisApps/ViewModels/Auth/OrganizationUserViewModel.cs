@@ -36,9 +36,9 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public int UserId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the user email.
-        /// </summary>
-        public string Email { get; set; }
+		/// <summary>
+		/// Gets or sets the user email.
+		/// </summary>
+		public string Email { get; set; }
 	}
 }

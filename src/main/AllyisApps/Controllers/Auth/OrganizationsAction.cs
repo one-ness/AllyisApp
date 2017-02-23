@@ -4,14 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
 using AllyisApps.ViewModels.Shared;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -27,40 +26,40 @@ namespace AllyisApps.Controllers
 		/// <returns>What to do.</returns>
 		public ActionResult Organizations()
 		{
-            List<SubscriptionsViewModel> modelList = new List<SubscriptionsViewModel>();
+			List<SubscriptionsViewModel> modelList = new List<SubscriptionsViewModel>();
 
-            IEnumerable<OrganizationInfo> orgs = Service.GetOrganizationsByUserId();
-            List<ProductInfo> productList = Service.GetProductInfoList();
-            foreach (OrganizationInfo org in orgs)
-            {
-                modelList.Add(new SubscriptionsViewModel
-                {
-                    Subscriptions = Service.GetSubscriptionsDisplay(org.OrganizationId),
-                    ProductList = productList,
-                    OrgInfo = org,
-                    CanEditOrganization = Service.Can(Actions.CoreAction.EditOrganization, false, org.OrganizationId),
-                    TimeTrackerViewSelf = Service.Can(Actions.CoreAction.TimeTrackerEditSelf, false, org.OrganizationId)
-                });
-            }
+			IEnumerable<OrganizationInfo> orgs = Service.GetOrganizationsByUserId();
+			List<ProductInfo> productList = Service.GetProductInfoList();
+			foreach (OrganizationInfo org in orgs)
+			{
+				modelList.Add(new SubscriptionsViewModel
+				{
+					Subscriptions = Service.GetSubscriptionsDisplay(org.OrganizationId),
+					ProductList = productList,
+					OrgInfo = org,
+					CanEditOrganization = Service.Can(Actions.CoreAction.EditOrganization, false, org.OrganizationId),
+					TimeTrackerViewSelf = Service.Can(Actions.CoreAction.TimeTrackerEditSelf, false, org.OrganizationId)
+				});
+			}
 
-            foreach (SubscriptionsViewModel subVM in modelList)
-            {
-                foreach (SubscriptionDisplayInfo sub in subVM.Subscriptions)
-                {
-                    if (sub.ProductId == (int)ProductIdEnum.TimeTracker)
-                    {
-                        sub.CanViewSubscription = Service.Can(Actions.CoreAction.TimeTrackerEditSelf, false, sub.OrganizationId) || Service.Can(Actions.CoreAction.TimeTrackerEditOthers, false, sub.OrganizationId);
-                    }
-                }
-            }
+			foreach (SubscriptionsViewModel subVM in modelList)
+			{
+				foreach (SubscriptionDisplayInfo sub in subVM.Subscriptions)
+				{
+					if (sub.ProductId == (int)ProductIdEnum.TimeTracker)
+					{
+						sub.CanViewSubscription = Service.Can(Actions.CoreAction.TimeTrackerEditSelf, false, sub.OrganizationId) || Service.Can(Actions.CoreAction.TimeTrackerEditOthers, false, sub.OrganizationId);
+					}
+				}
+			}
 
-            AccountOrgsViewModel model = new AccountOrgsViewModel
-            {
-                Organizations = modelList
-            };
+			AccountOrgsViewModel model = new AccountOrgsViewModel
+			{
+				Organizations = modelList
+			};
 
-            ViewBag.ShowOrganizationPartial = false;
-            return this.View(model);
+			ViewBag.ShowOrganizationPartial = false;
+			return this.View(model);
 		}
 	}
 }

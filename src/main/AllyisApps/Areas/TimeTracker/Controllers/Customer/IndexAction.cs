@@ -4,21 +4,20 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Customer;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
 	/// <summary>
 	/// Represents pages for the management of a Customer.
 	/// </summary>
-	public partial class CustomerController: BaseController
+	public partial class CustomerController : BaseController
 	{
 		/// <summary>
 		/// GET: Customer/Index.

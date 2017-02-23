@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -33,14 +33,14 @@ namespace AllyisApps.Controllers
 			{
 				if (Service.Can(Actions.CoreAction.EditOrganization))
 				{
-                    // Employee Id must be unique; check in a union of invites and current org members
-                    // TODO: Make a db procedure and all subsequent methods to simply grab all of the ids instead of using this list union
-                    if (Service.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Select(user => user.EmployeeId).ToList().Union(
-                        Service.GetUserInvitations().Select(invitation => invitation.EmployeeId).ToList()).Any(id => id == org.EmployeeId))
-                    {
-                        Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.EmployeeIdNotUniqueError, Variety.Danger));
-                        return this.RedirectToAction(ActionConstants.Add);
-                    }
+					// Employee Id must be unique; check in a union of invites and current org members
+					// TODO: Make a db procedure and all subsequent methods to simply grab all of the ids instead of using this list union
+					if (Service.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Select(user => user.EmployeeId).ToList().Union(
+						Service.GetUserInvitations().Select(invitation => invitation.EmployeeId).ToList()).Any(id => id == org.EmployeeId))
+					{
+						Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.EmployeeIdNotUniqueError, Variety.Danger));
+						return this.RedirectToAction(ActionConstants.Add);
+					}
 
 					org = await this.ProcessUserInput(org);
 
@@ -86,11 +86,11 @@ namespace AllyisApps.Controllers
 				if (Service.IsEmailAddressValid(userEmail))
 				{ // If input string kinda looks like an email..
 					UserInfo user = Service.GetUserByEmail(userEmail); // ...Attempt to get the user data by email.
-																					// If that doesn't return null...
+																	   // If that doesn't return null...
 					if (user != null)
 					{
 						OrgRoleInfo role = Service.GetOrgRole(orgAddMembers.OrganizationId, user.UserId); // ...see if they have permissions in this organization already
-																											 // If not...
+																										  // If not...
 						if (role != null)
 						{
 							orgAddMembers.UsersAlreadyExisting.Add(userEmail);
@@ -116,7 +116,7 @@ namespace AllyisApps.Controllers
 							DateOfBirth = DateTime.MinValue.AddYears(1754),
 							OrgRole = (int)(orgAddMembers.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member),
 							ProjectId = orgAddMembers.SubscriptionProjectId,
-                            EmployeeId = orgAddMembers.EmployeeId
+							EmployeeId = orgAddMembers.EmployeeId
 						});
 
 					orgAddMembers.AccessCode = code.ToString();

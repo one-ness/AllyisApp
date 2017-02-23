@@ -4,22 +4,21 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Project;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
 	/// <summary>
 	/// The controller for managing all Project-related actions.
 	/// </summary>
-	public partial class ProjectController: BaseController
+	public partial class ProjectController : BaseController
 	{
 		/// <summary>
 		/// GET: Project/Edit.
@@ -55,7 +54,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				if (Service.Can(Actions.CoreAction.EditProject))
 				{
 					try
-					{ 
+					{
 						UpdateProject(model);
 					}
 					catch (Exception ex)
@@ -117,7 +116,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ParentCustomerId = projectInfo.CustomerId,
 				OrganizationId = projectInfo.OrganizationId,
 				ProjectId = projectInfo.ProjectId,
-                ProjectOrgId = projectInfo.ProjectOrgId,
+				ProjectOrgId = projectInfo.ProjectOrgId,
 				ProjectName = projectInfo.ProjectName,
 				ProjectUsers = projectUsers,
 				SubscriptionUsers = subscriptionUsers.Where(user => !projectUsers.Any(pu => (pu.UserId == user.UserId))), // Grab users that are not part of the project

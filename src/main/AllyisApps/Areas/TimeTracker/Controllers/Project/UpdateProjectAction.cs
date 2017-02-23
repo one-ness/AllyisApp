@@ -4,18 +4,17 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Linq;
-
 using AllyisApps.Core;
 using AllyisApps.ViewModels.TimeTracker.Project;
+using System;
+using System.Linq;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
 	/// <summary>
 	/// The controller for managing all Project-related actions.
 	/// </summary>
-	public partial class ProjectController: BaseController
+	public partial class ProjectController : BaseController
 	{
 		/// <summary>
 		/// Updates a project.
@@ -26,14 +25,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (string.IsNullOrWhiteSpace(project.ProjectName))
 			{
 				throw new InvalidOperationException("Project requires a name. Cannot update.");
-            }
+			}
 
-            if (string.IsNullOrWhiteSpace(project.ProjectOrgId))
-            {
-                throw new InvalidOperationException("Project requires a project id. Cannot update.");
-            }
+			if (string.IsNullOrWhiteSpace(project.ProjectOrgId))
+			{
+				throw new InvalidOperationException("Project requires a project id. Cannot update.");
+			}
 
-            if (project.OrganizationId == null)
+			if (project.OrganizationId == null)
 			{
 				if (UserContext.ChosenOrganizationId == 0)
 				{
@@ -42,7 +41,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				project.OrganizationId = UserContext.ChosenOrganizationId;
 			}
-			
+
 			Service.UpdateProjectAndUsers(
 				project.ProjectId,
 				project.ProjectName,
@@ -51,7 +50,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				TimeTrackerService.GetDateTimeFromDays(project.StartDate),
 				TimeTrackerService.GetDateTimeFromDays(project.EndDate),
 				project.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString)));
-			
 		}
 	}
 }

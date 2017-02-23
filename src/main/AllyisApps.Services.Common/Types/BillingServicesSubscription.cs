@@ -14,6 +14,7 @@ namespace AllyisApps.Services.Common.Types
 	public class BillingServicesSubscription
 	{
 		#region constructor
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BillingServicesSubscription"/> class.
 		/// </summary>
@@ -21,6 +22,7 @@ namespace AllyisApps.Services.Common.Types
 		{
 			throw new NotImplementedException();
 		}
+
 		#endregion constructor
 	}
 }

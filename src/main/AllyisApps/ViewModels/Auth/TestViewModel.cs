@@ -8,17 +8,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.ViewModels.Auth
 {
-    /// <summary>
-    /// A simple view model for passing desired information to the view for testing.
-    /// </summary>
-    public class TestViewModel
-    {
-        /// <summary>
-        /// Gets or sets the email address to send a test email to.
-        /// </summary>
-        [Required(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "EmailValidation")]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
-    }
+	/// <summary>
+	/// A simple view model for passing desired information to the view for testing.
+	/// </summary>
+	public class TestViewModel
+	{
+		/// <summary>
+		/// Gets or sets the email address to send a test email to.
+		/// </summary>
+		[Required(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "EmailValidation")]
+		[Display(Name = "Email")]
+		[EmailAddress]
+		public string Email { get; set; }
+	}
 }

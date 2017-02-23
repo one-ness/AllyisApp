@@ -33,10 +33,10 @@ namespace AllyisApps.ViewModels.Shared
 		/// </summary>
 		public bool CanEditOrganization { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether to show the organization.
-        /// </summary>
-        public bool ShowOrganizationPartial { get; set; }
+		/// <summary>
+		/// Gets or sets a value indicating whether to show the organization.
+		/// </summary>
+		public bool ShowOrganizationPartial { get; set; }
 
 		/// <summary>
 		/// Gets or sets a List of the necessary information about the organizations the current user is a member of.

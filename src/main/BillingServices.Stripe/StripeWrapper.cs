@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
 using AllyisApps.Services.Common;
 using AllyisApps.Services.Common.Types;
 using Stripe;
+using System;
+using System.Collections.Generic;
 
 namespace BillingServices.StripeService
 {
@@ -18,15 +18,18 @@ namespace BillingServices.StripeService
 	public class StripeWrapper : IBillingServicesInterface
 	{
 		#region fields
+
 		private readonly StripeCustomerService customerService;
 		private readonly StripePlanService planService;
 		private readonly StripeSubscriptionService subscriptionService;
 		private readonly StripeTokenService tokenService;
 		private readonly StripeInvoiceService invoiceService;
 		private readonly StripeChargeService chargeService;
+
 		#endregion fields
 
 		#region constructor
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StripeWrapper"/> class.
 		/// </summary>
@@ -41,10 +44,13 @@ namespace BillingServices.StripeService
 			this.invoiceService = new StripeInvoiceService();
 			this.chargeService = new StripeChargeService();
 		}
+
 		#endregion constructor
 
 		#region IBillingServicesInterface implementation
+
 		#region plans
+
 		/// <summary>
 		/// Creates a stripe plan.  Plans are per offering, i.e. Time Tracker, Consulting, and etc.
 		/// </summary>
@@ -85,9 +91,11 @@ namespace BillingServices.StripeService
 		{
 			throw new NotImplementedException();
 		}
+
 		#endregion plans
 
 		#region customers
+
 		/// <summary>
 		/// Creates a stripe customer.
 		/// </summary>
@@ -156,9 +164,11 @@ namespace BillingServices.StripeService
 		{
 			throw new NotImplementedException();
 		}
+
 		#endregion customers
 
 		#region subscriptions
+
 		/// <summary>
 		/// Creates a stripe subscription.
 		/// </summary>
@@ -234,9 +244,11 @@ namespace BillingServices.StripeService
 		{
 			this.subscriptionService.Cancel(customerId.Id, subscriptionId);
 		}
+
 		#endregion subscriptions
 
 		#region charges
+
 		/// <summary>
 		/// Creates a stripe charge.
 		/// </summary>
@@ -275,9 +287,11 @@ namespace BillingServices.StripeService
 
 			return billingCharges;
 		}
+
 		#endregion charges
 
 		#region invoices
+
 		/// <summary>
 		/// Lists the stripe invoices for a stripe customer.
 		/// </summary>
@@ -298,10 +312,13 @@ namespace BillingServices.StripeService
 
 			return invoiceList;
 		}
+
 		#endregion invoices
+
 		#endregion IBillingServicesInterface implementation
 
 		#region helper methods
+
 		private StripeToken GenerateStripeToken(string billingServicesToken)
 		{
 			return this.tokenService.Get(billingServicesToken);
@@ -323,6 +340,7 @@ namespace BillingServices.StripeService
 
 			return this.planService.Create(newPlan);
 		}
+
 		#endregion helper methods
 	}
 }

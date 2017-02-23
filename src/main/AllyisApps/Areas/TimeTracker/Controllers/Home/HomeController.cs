@@ -4,11 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -21,12 +20,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		private static readonly int TimeTrackerID = Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker);
 
 		#region default constructor
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HomeController" /> class.
 		/// </summary>
 		public HomeController() : base(TimeTrackerID)
 		{
 		}
+
 		#endregion default constructor
 
 		/// <summary>

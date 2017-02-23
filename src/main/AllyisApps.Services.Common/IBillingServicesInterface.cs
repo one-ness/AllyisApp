@@ -4,9 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-
 using AllyisApps.Services.Common.Types;
+using System.Collections.Generic;
 
 namespace AllyisApps.Services.Common
 {
@@ -17,6 +16,7 @@ namespace AllyisApps.Services.Common
 	public interface IBillingServicesInterface
 	{
 		#region plans
+
 		/// <summary>
 		/// Creates a billing services plan.  Plans are per offering, i.e. Time Tracker, Consulting, and etc.
 		/// </summary>
@@ -43,9 +43,11 @@ namespace AllyisApps.Services.Common
 		/// </summary>
 		/// <returns>A bool representing the success state of deleting the plan.</returns>
 		bool DeletePlan();
+
 		#endregion plans
 
 		#region customers
+
 		/// <summary>
 		/// Creates a billing services customer.
 		/// </summary>
@@ -80,9 +82,11 @@ namespace AllyisApps.Services.Common
 		/// </summary>
 		/// <returns>A bool representing the success state of deleting the customer.</returns>
 		bool DeleteCustomer();
+
 		#endregion customers
 
 		#region subscriptions
+
 		/// <summary>
 		/// Creates a billing services subscription.
 		/// </summary>
@@ -122,9 +126,11 @@ namespace AllyisApps.Services.Common
 		/// <param name="customerId">The billing services customer id associated with the subscription to delete.</param>
 		/// <param name="subscriptionId">The id of the billing services subscription to delete.</param>
 		void DeleteSubscription(BillingServicesCustomerId customerId, string subscriptionId);
+
 		#endregion subscriptions
 
 		#region charges
+
 		/// <summary>
 		/// Creates a billing services charge.
 		/// </summary>
@@ -143,15 +149,18 @@ namespace AllyisApps.Services.Common
 		/// <param name="customerId">The billing services customer id of the customer for which the charges shall be listed.</param>
 		/// <returns>A list of info objects for billing services charges.</returns>
 		List<BillingServicesCharge> ListCharges(BillingServicesCustomerId customerId);
+
 		#endregion charges
 
 		#region invoices
+
 		/// <summary>
 		/// Lists the billing services invoices for a billing services customer.
 		/// </summary>
 		/// <param name="customerId">The billing services customer id of the customer for which the invoices shall be listed.</param>
 		/// <returns>A list of info objects for billing services invoices.</returns>
 		List<BillingServicesInvoice> ListInvoices(BillingServicesCustomerId customerId);
+
 		#endregion invoices
 	}
 }

@@ -4,16 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Threading.Tasks;
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Cache;
-using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -60,7 +58,7 @@ namespace AllyisApps.DBModel
 				// default null
 				user.UserId = (int)connection.Query<int>("[Auth].[CreateUserInfo]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
-			
+
 			return user.UserId;
 		}
 
@@ -452,7 +450,7 @@ namespace AllyisApps.DBModel
 		/// <param name="org">The OrganizationDBEntity to create.</param>
 		/// <param name="ownerId">The owner's user ID.</param>
 		/// <param name="roleId">The role associated with the creator of the organization.</param>
-        /// <param name="employeeId">The employee ID for the user creating the organization.</param>
+		/// <param name="employeeId">The employee ID for the user creating the organization.</param>
 		/// <returns>The id of the created organization or -1.</returns>
 		public int CreateOrganization(OrganizationDBEntity org, int ownerId, int roleId, string employeeId)
 		{
@@ -475,7 +473,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@FaxNumber", org.FaxNumber);
 			parameters.Add("@Subdomain", org.Subdomain);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("@EmployeeId", employeeId);
+			parameters.Add("@EmployeeId", employeeId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -764,7 +762,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@OrgRole", invitation.OrgRole);
 			parameters.Add("@ProjectId", invitation.ProjectId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("@EmployeeId", invitation.EmployeeId);
+			parameters.Add("@EmployeeId", invitation.EmployeeId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[Auth].[CreateUserInvitation]", parameters, commandType: CommandType.StoredProcedure);
@@ -972,7 +970,7 @@ namespace AllyisApps.DBModel
 
 		/// <summary>
 		/// Gets the user context information. The returned results will be for a single user, but will have a separate row for each subscription
-		/// the user is a part of. User information is repeated on each row, and organizaiton information is repeated in some rows when the user 
+		/// the user is a part of. User information is repeated on each row, and organizaiton information is repeated in some rows when the user
 		/// is a part of mulitple subscriptions in the same organization.
 		/// </summary>
 		/// <param name="userId"></param>

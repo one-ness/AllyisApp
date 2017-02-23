@@ -13,7 +13,7 @@ namespace AllyisApps.DBModel.Auth
 	/// Represents the Users table in the database.
 	/// </summary>
 	public class UserDBEntity
-	{ 
+	{
 		/// <summary>
 		/// Gets or sets UserId.
 		/// </summary>

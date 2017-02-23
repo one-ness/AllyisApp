@@ -4,12 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -38,7 +37,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// Permissions failure
 			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 
-            return this.RouteHome();
+			return this.RouteHome();
 		}
 	}
 }

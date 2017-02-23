@@ -11,6 +11,7 @@
 		public const string Action = "Action";
 
 		#region account
+
 		/// <summary>
 		/// Action-Name: Add.
 		/// </summary>
@@ -146,10 +147,10 @@
 		/// </summary>
 		public const string GetDetailsDataJson = "GetDetailsDataJson";
 
-        /// <summary>
-        /// Action-Name: Import.
-        /// </summary>
-        public const string Import = "Import";
+		/// <summary>
+		/// Action-Name: Import.
+		/// </summary>
+		public const string Import = "Import";
 
 		/// <summary>
 		/// Action-Name: Index.
@@ -290,9 +291,11 @@
 		/// Action-Name: ViewPage.
 		/// </summary>
 		public const string ViewPage = "ViewPage";
+
 		#endregion account
 
 		#region home
+
 		/// <summary>
 		/// Action-Name: ApplicationRedirect.
 		/// </summary>
@@ -307,9 +310,11 @@
 		/// Action-Name: RouteProduct.
 		/// </summary>
 		public const string RouteProduct = "RouteProduct";
+
 		#endregion home
 
 		#region shared
+
 		/// <summary>
 		/// Action-Name: FooterPartial.
 		/// </summary>
@@ -324,9 +329,11 @@
 		/// Action-Name: RouteProduct.
 		/// </summary>
 		public const string UpdateLanguage = "UpdateLanguage";
+
 		#endregion shared
 
 		#region TimeEntry
+
 		/// <summary>
 		/// Action-Name: CopyEntries.
 		/// </summary>
@@ -352,17 +359,20 @@
 		/// </summary>
 		public const string ViewReport = "ViewReport";
 
-        /// <summary>
-        /// Action-Name: Template.
-        /// </summary>
-        public const string Template = "Template";
-        #endregion TimeEntry
+		/// <summary>
+		/// Action-Name: Template.
+		/// </summary>
+		public const string Template = "Template";
 
-        #region subscription
-        /// <summary>
-        /// Action-Name: Add.
-        /// </summary>
-        public const string EditUsers = "EditUsers";
+		#endregion TimeEntry
+
+		#region subscription
+
+		/// <summary>
+		/// Action-Name: Add.
+		/// </summary>
+		public const string EditUsers = "EditUsers";
+
 		#endregion subscription
 	}
 
@@ -422,10 +432,10 @@
 	/// </summary>
 	public static class ViewConstants
 	{
-        /// <summary>
-        /// View-Name: Add.
-        /// </summary>
-        public const string Add = "Add";
+		/// <summary>
+		/// View-Name: Add.
+		/// </summary>
+		public const string Add = "Add";
 
 		/// <summary>
 		/// View-Name: AddBillingToSubscribe.

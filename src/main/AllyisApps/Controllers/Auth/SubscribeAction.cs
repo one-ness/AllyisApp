@@ -4,16 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Linq;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
+using System;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -147,8 +146,8 @@ namespace AllyisApps.Controllers
 				model.Billing.Customer = Service.RetrieveCustomer(Service.GetOrgBillingServicesCustomerId());
 			}
 
-            // Users >= 500 (the hardcoded free amount) will not trigger this
-            if (model.Billing.Amount > 0)
+			// Users >= 500 (the hardcoded free amount) will not trigger this
+			if (model.Billing.Amount > 0)
 			{
 				if ((token == null) && (model.Token == null))
 				{

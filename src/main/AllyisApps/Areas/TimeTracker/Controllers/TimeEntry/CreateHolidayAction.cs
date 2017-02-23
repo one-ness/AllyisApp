@@ -4,12 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using System;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -41,7 +40,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				Notifications.Add(new BootstrapAlert("Created holiday successfully.", Variety.Success));
 			}
-			else { 
+			else
+			{
 				// This should only be a permissions failure
 				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 			}

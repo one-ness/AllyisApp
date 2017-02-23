@@ -4,10 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Extensions.IEnumerableExtensions;
@@ -15,6 +11,10 @@ using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -71,31 +71,31 @@ namespace AllyisApps.Controllers
 
 			List<UserPermissionsManagement> permissions = new List<UserPermissionsManagement>();
 			IEnumerable<UserRolesInfo> users = Service.GetUserRoles().OrderBy(u => u.UserId); // In case of multiple subscriptions, there can be multiple items per user, one for each sub role
-            string currentUser = string.Empty;
-            UserPermissionsManagement currentUserPerm = null;
+			string currentUser = string.Empty;
+			UserPermissionsManagement currentUserPerm = null;
 			foreach (UserRolesInfo user in users)
 			{
-                if (!user.UserId.Equals(currentUser))
-                {
-                    currentUser = user.UserId;
-                    currentUserPerm = new UserPermissionsManagement()
-                    {
-                        UserId = user.UserId,
-                        UserName = string.Format("{0} {1}", user.FirstName, user.LastName),
-                        OrganizationRoleId = user.OrgRoleId,
-                        SubscriptionRoles = new List<SubscriptionRoleInfo>()
-                    };
-                    permissions.Add(currentUserPerm);
-                }
+				if (!user.UserId.Equals(currentUser))
+				{
+					currentUser = user.UserId;
+					currentUserPerm = new UserPermissionsManagement()
+					{
+						UserId = user.UserId,
+						UserName = string.Format("{0} {1}", user.FirstName, user.LastName),
+						OrganizationRoleId = user.OrgRoleId,
+						SubscriptionRoles = new List<SubscriptionRoleInfo>()
+					};
+					permissions.Add(currentUserPerm);
+				}
 
-                if (user.ProductRoleId > 0)
-                {
-                    currentUserPerm.SubscriptionRoles.Add(new SubscriptionRoleInfo
-                    {
-                        ProductRoleId = user.ProductRoleId,
-                        ProductId = result.Subscriptions.Where(s => s.SubscriptionId == user.SubscriptionId).Single().ProductId
-                    });
-                }
+				if (user.ProductRoleId > 0)
+				{
+					currentUserPerm.SubscriptionRoles.Add(new SubscriptionRoleInfo
+					{
+						ProductRoleId = user.ProductRoleId,
+						ProductId = result.Subscriptions.Where(s => s.SubscriptionId == user.SubscriptionId).Single().ProductId
+					});
+				}
 
 				//List<SubscriptionRoleInfo> subRoles = new List<SubscriptionRoleInfo>();
 				//SubscriptionRoleInfo temp = new SubscriptionRoleInfo() { ProductRoleId = user.ProductRoleId };
@@ -109,21 +109,21 @@ namespace AllyisApps.Controllers
 				//});
 			}
 
-            // Add in "Not in Product" roles for subscriptions each user is not assigned to
-            foreach (UserPermissionsManagement permission in permissions)
-            {
-                foreach (SubscriptionDisplayInfo subscription in result.Subscriptions)
-                {
-                    if (permission.SubscriptionRoles.Where(s => s.ProductId == subscription.ProductId).Count() == 0)
-                    {
-                        permission.SubscriptionRoles.Add(new SubscriptionRoleInfo
-                        {
-                            ProductId = subscription.ProductId,
-                            ProductRoleId = (int)ProductRole.NotInProduct
-                        });
-                    }
-                }
-            }
+			// Add in "Not in Product" roles for subscriptions each user is not assigned to
+			foreach (UserPermissionsManagement permission in permissions)
+			{
+				foreach (SubscriptionDisplayInfo subscription in result.Subscriptions)
+				{
+					if (permission.SubscriptionRoles.Where(s => s.ProductId == subscription.ProductId).Count() == 0)
+					{
+						permission.SubscriptionRoles.Add(new SubscriptionRoleInfo
+						{
+							ProductId = subscription.ProductId,
+							ProductRoleId = (int)ProductRole.NotInProduct
+						});
+					}
+				}
+			}
 
 			result.UserPermissions = permissions.DistinctBy(u => u.UserId).OrderBy(u => u.UserName.Split(' ').Last()).ToList();   // UserRoles are unique via SubscriptionId and UserId, but UserPermissionsManagement does not track SubscriptionId, causing duplicate users to be stored
 

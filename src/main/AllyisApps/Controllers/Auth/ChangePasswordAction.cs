@@ -4,12 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.ViewModels.Auth;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -24,7 +22,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The result of this action.</returns>
 		public ActionResult ChangePassword()
 		{
-            ViewBag.ShowOrganizationPartial = false;
+			ViewBag.ShowOrganizationPartial = false;
 			return this.View();
 		}
 

@@ -19,7 +19,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="targetAction">The action for which to check authorization.</param>
 		/// <param name="throwException">Whether or not to throw an exception based upon the check results.</param>
-        /// <param name="organizationId">The organization to use for checking permissions. Defaults to the chosen organization.</param>
+		/// <param name="organizationId">The organization to use for checking permissions. Defaults to the chosen organization.</param>
 		/// <returns>Whether or not the user has Authorization for the given action.</returns>
 		public bool Can(Actions.CoreAction targetAction, bool throwException = false, int organizationId = -1)
 		{
@@ -28,7 +28,7 @@ namespace AllyisApps.Services
 			UserOrganizationInfo orgInfo = null;
 			UserSubscriptionInfo subInfo = null;
 
-            if (organizationId == -1) organizationId = UserContext.ChosenOrganizationId;
+			if (organizationId == -1) organizationId = UserContext.ChosenOrganizationId;
 
 			// Get role information
 			// has the user chosen an organization
@@ -40,12 +40,12 @@ namespace AllyisApps.Services
 				// Info should never be null
 				if (orgInfo != null)
 				{
-                    // Find the subscription that is relevant to the target action, if it exists.
-                    ProductIdEnum product = Actions.GetProductForAction(targetAction);
-                    if (product != ProductIdEnum.None)
-                    {
-                        subInfo = orgInfo.UserSubscriptionInfoList.Where(s => s.ProductId == product).FirstOrDefault();
-                    }
+					// Find the subscription that is relevant to the target action, if it exists.
+					ProductIdEnum product = Actions.GetProductForAction(targetAction);
+					if (product != ProductIdEnum.None)
+					{
+						subInfo = orgInfo.UserSubscriptionInfoList.Where(s => s.ProductId == product).FirstOrDefault();
+					}
 
 					//// Has the user chosen a subscription
 					//if (UserContext.ChosenSubscriptionId > 0)
@@ -53,12 +53,12 @@ namespace AllyisApps.Services
 					//	// Grab the user's sub role
 					//	subInfo = orgInfo.UserSubscriptionInfoList.Where(x => x.SubscriptionId == UserContext.ChosenSubscriptionId).FirstOrDefault();
 					//}
-     //               else
-     //               {
-     //                   // If there's only one subscription, we'll use that in lieu of a chosen subscription. This quick fix can be removed once we're using the target action to
-     //                   // pick what subscription to use.
-     //                   if (orgInfo.UserSubscriptionInfoList.Count == 1) subInfo = orgInfo.UserSubscriptionInfoList.Single();
-     //               }
+					//               else
+					//               {
+					//                   // If there's only one subscription, we'll use that in lieu of a chosen subscription. This quick fix can be removed once we're using the target action to
+					//                   // pick what subscription to use.
+					//                   if (orgInfo.UserSubscriptionInfoList.Count == 1) subInfo = orgInfo.UserSubscriptionInfoList.Single();
+					//               }
 				}
 			}
 

@@ -4,10 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {

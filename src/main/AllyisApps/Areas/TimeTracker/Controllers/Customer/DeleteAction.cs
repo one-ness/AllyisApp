@@ -4,18 +4,17 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
 	/// <summary>
 	/// Represents pages for the management of a Customer.
 	/// </summary>
-	public partial class CustomerController: BaseController
+	public partial class CustomerController : BaseController
 	{
 		/// <summary>
 		/// POST: Customer/Delete.
@@ -24,22 +23,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The Customer index.</returns>
 		public ActionResult Delete(int id)
 		{
-            CustomerInfo customer = Service.GetCustomer(id);
+			CustomerInfo customer = Service.GetCustomer(id);
 
-            if (customer != null)
-            {
-                if (Service.DeleteCustomer(id))
-                {
-                    Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", customer.Name, Resources.TimeTracker.Controllers.Customer.Strings.CustomerDeleteNotification), Variety.Success));
+			if (customer != null)
+			{
+				if (Service.DeleteCustomer(id))
+				{
+					Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", customer.Name, Resources.TimeTracker.Controllers.Customer.Strings.CustomerDeleteNotification), Variety.Success));
 
-                    return this.RedirectToAction(ActionConstants.Index);
-                }
+					return this.RedirectToAction(ActionConstants.Index);
+				}
 
-                // Permission failure
-                Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.ActionUnauthorizedMessage, Variety.Warning));
-            }
+				// Permission failure
+				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.ActionUnauthorizedMessage, Variety.Warning));
+			}
 
-            return this.RedirectToAction(ActionConstants.Index);
+			return this.RedirectToAction(ActionConstants.Index);
 		}
 	}
 }

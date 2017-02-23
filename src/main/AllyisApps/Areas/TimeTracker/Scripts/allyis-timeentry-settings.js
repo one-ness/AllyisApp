@@ -14,7 +14,6 @@ function hideOT(hideIt) {
 	$('#OTSettings').css('visibility', hideIt ? 'hidden' : 'visible');
 }
 function disableLD(isDisabling) {
-
 }
 
 $(document).ready(function () {

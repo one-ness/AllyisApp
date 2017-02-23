@@ -4,6 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Shared;
+using AllyisApps.Lib;
+using AllyisApps.Services.Billing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,13 +16,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
-using AllyisApps.DBModel;
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Shared;
-using AllyisApps.Lib;
-using AllyisApps.Services.Billing;
-using AllyisApps.Services.Utilities;
 
 namespace AllyisApps.Services
 {
@@ -27,6 +25,7 @@ namespace AllyisApps.Services
 	public partial class Service : BaseService
 	{
 		#region public static
+
 		/// <summary>
 		/// Returns a compressed version of the given email address if it is too long.
 		/// </summary>
@@ -66,9 +65,11 @@ namespace AllyisApps.Services
 			Uri result;
 			return Uri.TryCreate(url, UriKind.Absolute, out result) && (result.Scheme == Uri.UriSchemeHttp || result.Scheme == Uri.UriSchemeHttps);
 		}
+
 		#endregion public static
 
 		#region public
+
 		/// <summary>
 		/// Returns a collection of valid states/provinces for the given country.
 		/// </summary>
@@ -133,10 +134,12 @@ namespace AllyisApps.Services
 		public List<InvitationInfo> GetInvitationsByUser(string userEmail)
 		{
 			#region Validation
+
 			if (!Service.IsEmailAddressValid(userEmail))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
+
 			#endregion Validation
 
 			var invitationsDB = DBHelper.GetUserInvitationsByUserData(new UserDBEntity()
@@ -158,7 +161,7 @@ namespace AllyisApps.Services
 					AccessCode = invite.AccessCode,
 					OrgRole = invite.OrgRole,
 					ProjectId = invite.ProjectId,
-                    EmployeeId = invite.EmployeeId
+					EmployeeId = invite.EmployeeId
 				});
 			}
 
@@ -173,10 +176,12 @@ namespace AllyisApps.Services
 		public string AcceptUserInvitation(InvitationInfo invite)
 		{
 			#region Validation
+
 			if (invite == null)
 			{
 				throw new ArgumentOutOfRangeException("invite", "The invitation is null.");
 			}
+
 			#endregion Validation
 
 			var user = this.GetUserByEmail(invite.Email);
@@ -190,7 +195,7 @@ namespace AllyisApps.Services
 				UserId = user.UserId,
 				OrganizationId = invite.OrganizationId,
 				OrgRoleId = invite.OrgRole,
-                EmployeeId = invite.EmployeeId
+				EmployeeId = invite.EmployeeId
 			});
 
 			IEnumerable<InvitationSubRoleInfo> roles = this.DBHelper.GetInvitationSubRolesByInvitationId(invite.InvitationId).Select(i => InitializeInvitationSubRoleInfo(i));
@@ -235,6 +240,7 @@ namespace AllyisApps.Services
 		public List<string> AddToPendingOrganizations(int userId, string email)
 		{
 			#region Validation
+
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
@@ -248,6 +254,7 @@ namespace AllyisApps.Services
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
+
 			#endregion Validation
 
 			List<string> notificationMessages = new List<string>();
@@ -300,6 +307,7 @@ namespace AllyisApps.Services
 			DateTime? lockOutEndDateUtc = null)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName))
 			{
 				throw new ArgumentException("User name must have a value.");
@@ -318,6 +326,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("password", "Password must have a value.");
 			}
+
 			#endregion Validation
 
 			int result = 0;
@@ -371,6 +380,7 @@ namespace AllyisApps.Services
 		public UserContext ValidateLogin(string email, string password)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(email))
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
@@ -384,6 +394,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("password", "Password must have a value.");
 			}
+
 			#endregion Validation
 
 			UserContext result = null;
@@ -436,7 +447,7 @@ namespace AllyisApps.Services
 							};
 							result.UserOrganizationInfoList.Add(orgInfo);
 						}
-						
+
 						// If there is subscription info on this line, at it to the org
 						if (row.SubscriptionId != null)
 						{
@@ -635,6 +646,7 @@ namespace AllyisApps.Services
 		public async Task<bool> ResetPassword(int userId, string code, string password)
 		{
 			#region Validation
+
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
@@ -657,6 +669,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("password", "Password must have a value.");
 			}
+
 			#endregion Validation
 
 			return await Task<bool>.Run(() =>
@@ -753,6 +766,7 @@ namespace AllyisApps.Services
 		public async Task SendConfirmationEmail(string from, string to, string confirmEmailUrl)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(from))
 			{
 				throw new ArgumentNullException("from", "From email address must have a value.");
@@ -779,6 +793,7 @@ namespace AllyisApps.Services
 			{
 				throw new FormatException("Confirm email url must be in a valid format.");
 			}
+
 			#endregion Validation
 
 			string bodyHtml = string.Format("Please confirm your email by clicking <a href=\"{0}\">here</a>", confirmEmailUrl);
@@ -794,6 +809,7 @@ namespace AllyisApps.Services
 		public async Task<bool> ConfirmEmailAsync(int userId, string code)
 		{
 			#region Validation
+
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("user Id", "User ID cannot be 0 or negative.");
@@ -811,6 +827,7 @@ namespace AllyisApps.Services
 					throw new ArgumentException("Code must be a valid Guid.");
 				}
 			}
+
 			#endregion Validation
 
 			if (DBHelper.GetUserInfo(userId).EmailConfirmed)
@@ -852,6 +869,7 @@ namespace AllyisApps.Services
 		{
 			return DBHelper.GetOrganizationsByUserId(UserContext.UserId).Select(o => InitializeOrganizationInfo(o));
 		}
+
 		#endregion public
 
 		/// <summary>

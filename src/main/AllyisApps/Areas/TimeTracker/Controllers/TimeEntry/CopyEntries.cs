@@ -4,14 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Core;
+using AllyisApps.Services;
+using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-
-using AllyisApps.Core;
-using AllyisApps.Services;
-using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -34,6 +33,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult CopyEntries(DateTime startDateTarget, DateTime startDateCopy, DateTime endDateCopy, int userId, int startDate, int endDate)
 		{
 			#region Validation
+
 			// TODO flesh these out
 			if (startDateCopy > endDateCopy)
 			{
@@ -43,6 +43,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				return this.View(ViewConstants.Error);
 			}
+
 			#endregion Validation
 
 			// Check for permission failures TODO flesh these out

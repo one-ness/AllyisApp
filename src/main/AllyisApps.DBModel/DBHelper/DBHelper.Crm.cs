@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Crm;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Crm;
-using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -36,7 +36,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@customerID", project.CustomerId);
 			parameters.Add("@Name", project.Name);
 			parameters.Add("@PriceType", project.Type);
-            parameters.Add("@ProjectOrgId", project.ProjectOrgId);
+			parameters.Add("@ProjectOrgId", project.ProjectOrgId);
 			parameters.Add("@StartingDate", project.StartingDate.ToShortDateString());
 			parameters.Add("@EndingDate", project.EndingDate.ToShortDateString());
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
@@ -70,28 +70,28 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-        /// <summary>
-        /// Updates project properties.
-        /// </summary>
-        /// <param name="project">The ProjectDBEntity with the updated properties.</param>
-        public void UpdateProject(ProjectDBEntity project)
-        {
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@ProjectId", project.ProjectId);
-            parameters.Add("@Name", project.Name);
-            parameters.Add("@PriceType", project.Type);
-            parameters.Add("@ProjectOrgId", project.ProjectOrgId);
-            parameters.Add("@StartingDate", project.StartingDate);
-            parameters.Add("@EndingDate", project.EndingDate);
+		/// <summary>
+		/// Updates project properties.
+		/// </summary>
+		/// <param name="project">The ProjectDBEntity with the updated properties.</param>
+		public void UpdateProject(ProjectDBEntity project)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@ProjectId", project.ProjectId);
+			parameters.Add("@Name", project.Name);
+			parameters.Add("@PriceType", project.Type);
+			parameters.Add("@ProjectOrgId", project.ProjectOrgId);
+			parameters.Add("@StartingDate", project.StartingDate);
+			parameters.Add("@EndingDate", project.EndingDate);
 
-            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-            {
-                connection.Execute(
-                    "[Crm].[UpdateProject]",
-                    parameters,
-                    commandType: CommandType.StoredProcedure);
-            }
-        }
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Execute(
+					"[Crm].[UpdateProject]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+			}
+		}
 
 		/// <summary>
 		/// Gets all the projects associated with a specific customer.
@@ -223,8 +223,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@Website", customer.Website);
 			parameters.Add("@EIN", customer.EIN);
 			parameters.Add("@OrganizationID", customer.OrganizationId);
-            parameters.Add("@CustomerOrgId", customer.CustomerOrgId);
-            parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
+			parameters.Add("@CustomerOrgId", customer.CustomerOrgId);
+			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -259,7 +259,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@FaxNumber", customer.FaxNumber);
 			parameters.Add("@Website", customer.Website);
 			parameters.Add("@EIN", customer.EIN);
-            parameters.Add("@OrgId", customer.CustomerOrgId);
+			parameters.Add("@OrgId", customer.CustomerOrgId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -398,7 +398,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="projectId">The Project's Id.</param>
 		/// <param name="name">The new name of the project.</param>
-        /// <param name="orgId">The new orgId of the project.</param>
+		/// <param name="orgId">The new orgId of the project.</param>
 		/// <param name="type">The pricing type of the project.</param>
 		/// <param name="start">The start date assigned to the project.</param>
 		/// <param name="end">The end date assigned to the project.</param>
@@ -408,14 +408,14 @@ namespace AllyisApps.DBModel
 			if (string.IsNullOrWhiteSpace(name))
 			{
 				throw new ArgumentException("Name cannot be null, empty, or whitespace.");
-            }
+			}
 
-            if (string.IsNullOrWhiteSpace(orgId))
-            {
-                throw new ArgumentException("OrgId cannot be null, empty, or whitespace.");
-            }
+			if (string.IsNullOrWhiteSpace(orgId))
+			{
+				throw new ArgumentException("OrgId cannot be null, empty, or whitespace.");
+			}
 
-            DataTable userIDsTable = new DataTable();
+			DataTable userIDsTable = new DataTable();
 			userIDsTable.Columns.Add("userId", typeof(int));
 			foreach (int userID in userIDs)
 			{
@@ -425,8 +425,8 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@ProjectId", projectId);
 			parameters.Add("@Name", name);
-            parameters.Add("@OrgId", orgId);
-            parameters.Add("@PriceType", type);
+			parameters.Add("@OrgId", orgId);
+			parameters.Add("@PriceType", type);
 			parameters.Add("@StartingDate", start.ToShortDateString());
 			parameters.Add("@EndingDate", end.ToShortDateString());
 			parameters.Add("@UserIDs", userIDsTable.AsTableValuedParameter("[Auth].[UserTable]"));

@@ -1,4 +1,4 @@
-﻿/* 
+﻿/*
 allyis-pages-with-filter.js
 Utility for providing a table of rows that can be filtered and paginated in tandem.
 
@@ -48,7 +48,6 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
 */
 
 (function (exports) {
-
     // Paging variables
 	var pageLimit = 16; // Rows per page
 	var pageButtonLimit = 10; // Max page buttons to display at once
@@ -365,7 +364,6 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
         	$('#tableEnd').after(generateFillerRow(fillerRowHeight, currentPage));
         }
 
-
         // After pagination is recalculated, the anchor row is used to decide which page to show. This way,
         // if a user is changing the filters a lot, their place in the list is roughly constant.
         if (anchorRow) {
@@ -406,5 +404,4 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
 
         filterRows();
     });
-
 })(this.pwf = {});

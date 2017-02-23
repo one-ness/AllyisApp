@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
 using AllyisApps.Core;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {

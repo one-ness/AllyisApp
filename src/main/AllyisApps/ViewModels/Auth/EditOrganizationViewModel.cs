@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using DataAnnotationsExtensions;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using DataAnnotationsExtensions;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -26,7 +26,7 @@ namespace AllyisApps.ViewModels.Auth
 			// Note: this is included soley to keep the model constructed during a POST from complaining about a null reference
 			//   as it builds the countries list, even though the list isn't used anymore.
 			this.ValidCountries = new List<string>();
-            this.IsCreating = false;
+			this.IsCreating = false;
 		}
 
 		/// <summary>
@@ -105,13 +105,13 @@ namespace AllyisApps.ViewModels.Auth
 		[Display(Name = "Fax Number")]
 		public string FaxNumber { get; set; }
 
-        /// <summary>
-        /// Gets or sets the owner's Employee Id. Only use on creating orgs.
-        /// </summary>
-        [Required]
-        [DataType(DataType.Text)]
-        [Display(Name = "Owner Employee ID")]
-        public string EmployeeId { get; set; }
+		/// <summary>
+		/// Gets or sets the owner's Employee Id. Only use on creating orgs.
+		/// </summary>
+		[Required]
+		[DataType(DataType.Text)]
+		[Display(Name = "Owner Employee ID")]
+		public string EmployeeId { get; set; }
 
 		/// <summary>
 		/// Gets the organization's ID.
@@ -123,10 +123,10 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public bool CanDelete { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the model is being used for creating an org (true), or editing an existing org (false).
-        /// </summary>
-        public bool IsCreating { get; set; }
+		/// <summary>
+		/// Gets or sets a value indicating whether the model is being used for creating an org (true), or editing an existing org (false).
+		/// </summary>
+		public bool IsCreating { get; set; }
 
 		/// <summary>
 		/// Gets a list of valid countries.

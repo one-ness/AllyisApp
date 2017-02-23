@@ -4,15 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -54,7 +53,8 @@ namespace AllyisApps.Controllers
 						Notifications.Add(new BootstrapAlert(@Resources.Controllers.Auth.Strings.OrganizationDetailsUpdated, Variety.Success));
 						return this.RedirectToAction(ActionConstants.Manage);
 					}
-				} catch (ArgumentException)
+				}
+				catch (ArgumentException)
 				{
 					Notifications.Add(new BootstrapAlert("Error updating organization: subdomain name is already taken.", Variety.Danger));
 					return this.RedirectToAction(ActionConstants.Edit);
@@ -83,7 +83,7 @@ namespace AllyisApps.Controllers
 					Service.Can(Actions.CoreAction.EditOrganization),
 					Service.ValidCountries());
 
-                model.EmployeeId = Service.GetOrganizationMemberList(UserContext.ChosenOrganizationId).Where(u => u.UserId == UserContext.UserId).Select(u => u.EmployeeId).FirstOrDefault();
+				model.EmployeeId = Service.GetOrganizationMemberList(UserContext.ChosenOrganizationId).Where(u => u.UserId == UserContext.UserId).Select(u => u.EmployeeId).FirstOrDefault();
 
 				ViewBag.returnUrl = returnUrl;
 

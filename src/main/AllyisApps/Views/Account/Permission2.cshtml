@@ -65,7 +65,7 @@
                         <input type="checkbox" class="all-check" />
                     </td>
                     <td>
-                        <input type="search" placeholder="@AllyisApps.Resources.Views.Account.Strings.UserSearchPlaceholder" id="userSearch" class="form-control"/>
+                        <input type="search" placeholder="@AllyisApps.Resources.Views.Account.Strings.UserSearchPlaceholder" id="userSearch" class="form-control" />
                     </td>
                     <td class="tab-OrganizationTab">
                         <select id="orgRoleFilter" class="form-control">
@@ -90,7 +90,7 @@
                     }
                 </tr>
             </thead>
-            
+
             @foreach (UserPermissionsManagement user in Model.UserPermissions)
             {
                 <tr class="userRow" data-id="@user.UserId" data-name="@user.UserName">
@@ -133,7 +133,7 @@
             </select>
 			@if (hasTimeTracker)
 			{
-				<select class="form-control tab-TimeTrackerTab" id="ttActionSelect" style="display: none;">				
+				<select class="form-control tab-TimeTrackerTab" id="ttActionSelect" style="display: none;">
 					<optgroup label="@AllyisApps.Resources.Views.Account.Strings.TimeTracker">
 						@foreach (string setTTRole in setTTRoles.Keys)
 						{
@@ -142,7 +142,6 @@
 					</optgroup>
 				</select>
 			}
-
         </div>
 
         <div class="bottom-right">

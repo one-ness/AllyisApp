@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
 using AllyisApps.Core;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Shared;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -38,7 +38,7 @@ namespace AllyisApps.Controllers
 			}
 
 			Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
-            return this.RouteHome();
+			return this.RouteHome();
 		}
 	}
 }

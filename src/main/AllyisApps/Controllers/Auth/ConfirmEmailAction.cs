@@ -4,11 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using System.Web.Mvc;
-
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -34,7 +33,7 @@ namespace AllyisApps.Controllers
 			else
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.WarnYourEmailHasAlreadyBeenConfirmed, Variety.Warning));
-                return this.RouteHome();
+				return this.RouteHome();
 			}
 		}
 	}
