@@ -19,16 +19,16 @@ gatherData = function () {
     var selectedAction = {};
     var value = -2;
     if (currentTabTitle == "OrganizationTab") {
-    	var value = orgActions[$('#orgActionSelect').val()];
-    	if (value == -1) {
-    		if (!confirm(confirmMessage)) return null;
-    	}
-    	selectedAction["OrgRoleTarget"] = value;
+        value = orgActions[$('#orgActionSelect').val()];
+        if (value == -1) {
+            if (!confirm(confirmMessage)) return null;
+        }
+        selectedAction["OrgRoleTarget"] = value;
     } else {
-    	if (currentTabTitle == "TimeTrackerTab") {
-    		value = ttActions[$('#ttActionSelect').val()];
-    		selectedAction["TimeTrackerRoleTarget"] = value;
-    	}
+        if (currentTabTitle == "TimeTrackerTab") {
+            value = ttActions[$('#ttActionSelect').val()];
+            selectedAction["TimeTrackerRoleTarget"] = value;
+        }
     }
 
     // Assemble and return UserPermissionsAction object of data
@@ -57,11 +57,11 @@ formSubmit = function() {
 // Tabs
 var currentTabTitle = "OrganizationTab";
 function goToTab(tabTitle) {
-	$('#' + currentTabTitle).toggleClass("selected", false);
-	$('.tab-' + currentTabTitle).hide();
-	currentTabTitle = tabTitle;
-	$('#' + currentTabTitle).toggleClass("selected", true);
-	$('.tab-' + currentTabTitle).show();
+    $('#' + currentTabTitle).toggleClass("selected", false);
+    $('.tab-' + currentTabTitle).hide();
+    currentTabTitle = tabTitle;
+    $('#' + currentTabTitle).toggleClass("selected", true);
+    $('.tab-' + currentTabTitle).show();
 }
 
 $(document).ready(function () {
@@ -69,11 +69,11 @@ $(document).ready(function () {
         formSubmit();
     });
 
-	// Tabs
+    // Tabs
     $('.allyis-tabs > li').on("click", function () {
-    	var tabTitle = $(this).attr("id");
-    	if (currentTabTitle != tabTitle) {
-    		goToTab(tabTitle);
-    	}
+        var tabTitle = $(this).attr("id");
+        if (currentTabTitle != tabTitle) {
+            goToTab(tabTitle);
+        }
     })
 });

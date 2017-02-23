@@ -1,11 +1,11 @@
-﻿@using AllyisApps.ViewModels.Auth;
+﻿@using AllyisApps.ViewModels.Shared;
 @using AllyisApps.Services;
+
 @model AllyisApps.ViewModels.Auth.IndexAndOrgsViewModel
 @{
 	DisplayHints.ShowBreadcrumbs = false;
 	DisplayHints.PageBodyId = "paneled-index";
 	ViewBag.TitleBar = AllyisApps.Resources.Views.Account.Strings.MyAccount;
-	//ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.MyAccount;
 	var cityState = Model.UserInfo.City != null && Model.UserInfo.State != null ? Model.UserInfo.City + ", " + Model.UserInfo.State : string.Empty;
 }
 
@@ -42,7 +42,6 @@
                 <div class="col-sm-4 vertically-stacked-buttons text-right">
                     @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.ChangePassword,    ActionConstants.ChangePassword, ControllerConstants.Account, null, new { @class = "btn btn-default" })
                     @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.EditProfile,       ActionConstants.EditProfile,    null, new { @class = "btn btn-default" })
-                    @*@Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.YourOrganizations, ActionConstants.Organizations,  null, new { @class = "btn btn-default" })*@
                 </div>
             </div>
 
@@ -52,7 +51,7 @@
                     <div class="index-details" style="padding-left: 15px">
                         <p>
                             <label>Invitations</label>
-                            @if (Model.UserModel.Invitations.Count == 1)
+                            @if (Model.InviteInfos.Count == 1)
                             {
                                 @AllyisApps.Resources.Views.Account.Strings.Invite
                             }
@@ -86,10 +85,18 @@
     </div>
 </div>
 
-@*<div class="row">
-        <div class="col-md-8 col-md-push-2" style="height: 100%; display: flex; flex-wrap: wrap; justify-content: space-around;">
-            @Html.Partial("_ProductPanels", Model.UserModel.Subscriptions)
-        </div>
-    </div>*@
+<div class="row">
+	<div class="col-md-push-2 col-md-8">
+		<div class="row">
+			<div class="col-xs-12">
+				<h1 style="float: left">@AllyisApps.Resources.Views.Account.Strings.YourOrganizations</h1>
+				<a href="@Url.SubdomainLink(ActionConstants.CreateOrg, ControllerConstants.Account, null, 0, this.Request)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">@AllyisApps.Resources.Views.Account.Strings.CreateOrganization</a>
+			</div>
+		</div>
+		@foreach (var org in Model.OrgInfos)
+		{
+			@Html.Partial("_OrgPanel", org);
+		}
+	</div>
+</div>
 
-@Html.Partial("Organizations", Model.OrgModel)

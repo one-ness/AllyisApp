@@ -56,32 +56,32 @@ function submitFormForCSV() {
 }
 
 $('#datePickerStart').datepicker({
-	showOn: "button",
-	buttonImageOnly: true,
-	onSelect: function () {
-		$(this).change();
-	}
+    showOn: "button",
+    buttonImageOnly: true,
+    onSelect: function () {
+        $(this).change();
+    }
 });
 $('#datePickerStart').on("change", function () {
-	var enteredDate = moment($(this).val());
-	if (enteredDate.year() < 2000) {
-		enteredDate.add(100, 'years');
-	}
-	$('#DateRangeStart').val(DateConvert.GetDaysFromMoment(enteredDate));
+    var enteredDate = moment($(this).val());
+    if (enteredDate.year() < 2000) {
+        enteredDate.add(100, 'years');
+    }
+    $('#DateRangeStart').val(DateConvert.GetDaysFromMoment(enteredDate));
 });
 $('#datePickerEnd').datepicker({
-	showOn: "button",
-	buttonImageOnly: true,
-	onSelect: function () {
-		$(this).change();
-	}
+    showOn: "button",
+    buttonImageOnly: true,
+    onSelect: function () {
+        $(this).change();
+    }
 });
 $('#datePickerEnd').on("change", function () {
-	var enteredDate = moment($(this).val());
-	if (enteredDate.year() < 2000) {
-		enteredDate.add(100, 'years');
-	}
-	$('#DateRangeEnd').val(DateConvert.GetDaysFromMoment(enteredDate));
+    var enteredDate = moment($(this).val());
+    if (enteredDate.year() < 2000) {
+        enteredDate.add(100, 'years');
+    }
+    $('#DateRangeEnd').val(DateConvert.GetDaysFromMoment(enteredDate));
 });
 
 // $( document ).ready()
@@ -117,9 +117,9 @@ $(function () {
     $('#datePickerEnd').datepicker("setDate", DateConvert.GetMomentFromDays(model_enddate).toDate());
     $('.ui-datepicker-trigger').remove();
     $('#datePickerStartButton').on("click", function () {
-    	$('#datePickerStart').datepicker("show");
+        $('#datePickerStart').datepicker("show");
     });
     $('#datePickerEndButton').on("click", function () {
-    	$('#datePickerEnd').datepicker("show");
+        $('#datePickerEnd').datepicker("show");
     });
 });

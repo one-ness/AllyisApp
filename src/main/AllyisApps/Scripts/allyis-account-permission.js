@@ -26,8 +26,9 @@ function makeFilter(option, list) {
 function generateFilters($dropdown, filter_list) {
     $dropdown.html("");
     _.each(filter_list, function (it) {
+        var element;
         if (it.optgroup) {
-            var element = document.createElement("optgroup")
+            element = document.createElement("optgroup")
             element.setAttribute("label", it.optgroup)
             $dropdown.append(element);
             var $parent = $(element);
@@ -38,7 +39,7 @@ function generateFilters($dropdown, filter_list) {
                 makeFilter(element, it2.list)
             })
         } else {
-            var element = document.createElement("option")
+            element = document.createElement("option")
             element.text = it.name
             $dropdown.append(element);
             makeFilter(element, it.list)

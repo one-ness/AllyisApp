@@ -72,6 +72,11 @@ namespace AllyisApps.Services
 		public string ProductName { get; set; }
 
 		/// <summary>
+		/// Gets or sets the Product Role name.
+		/// </summary>
+		public string RoleName { get; set; }
+
+		/// <summary>
 		/// Gets or sets the Role of the user in this subscription.
 		/// </summary>
 		public ProductRole ProductRole { get; set; }

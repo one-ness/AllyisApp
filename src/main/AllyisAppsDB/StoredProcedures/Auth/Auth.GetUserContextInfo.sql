@@ -26,7 +26,8 @@ BEGIN
 		LEFT JOIN (
 			SELECT	[S].[SubscriptionId],
 					[PR].[ProductId],
-					[PR].[Name] AS 'ProductName',
+					[P].[Name] AS 'ProductName',
+					[PR].[Name] AS 'RoleName',
 					[S].[SkuId],
 					[SU].[ProductRoleId],
 					[SU].[UserId],
@@ -34,6 +35,7 @@ BEGIN
 			FROM [Billing].[SubscriptionUser] AS [SU] WITH (NOLOCK)
 				JOIN [Billing].[Subscription] AS [S] WITH (NOLOCK) ON [SU].[SubscriptionId] = [S].SubscriptionId
 				JOIN [Auth].[ProductRole] AS [PR] WITH (NOLOCK) ON [SU].[ProductRoleId] = [PR].[ProductRoleId]
+				LEFT JOIN [Billing].[Product] AS [P] WITH (NOLOCK) ON [PR].[ProductId] = [P].[ProductId]
 		) [SUB] ON [SUB].[UserId] = [U].[UserId] AND [SUB].[OrganizationId] = [O].[OrganizationId]
 	WHERE [U].[UserId] = @UserId;
 END

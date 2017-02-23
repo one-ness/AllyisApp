@@ -33,5 +33,15 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the name of the product this subscription is for.
 		/// </summary>
 		public string ProductName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the name of the product, as it should be written in the product panel.
+		/// </summary>
+		public string ProductDisplayName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the product description.
+		/// </summary>
+		public string ProductDescription { get; set; }
 	}
 }

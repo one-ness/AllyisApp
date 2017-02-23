@@ -28,87 +28,40 @@ namespace AllyisApps.Controllers
 		/// <returns>The async task responsible for this action.</returns>
 		public ActionResult Index()
 		{
-			UserInfoViewModel accountModel = new UserInfoViewModel
-			{
-				UserInfo = Service.GetUserInfo(),
-				Subscriptions = new SubscriptionsViewModel
-				{
-					Subscriptions = Service.GetUserSubscriptionOrganizationList(),
-					ProductList = Service.GetProductInfoList()
-				},
-				Invitations = Service.GetInvitationsByUser(UserContext.Email).Select(x => new InvitationViewModel
-				{
-					InvitationId = x.InvitationId,
-					OrganizationId = x.OrganizationId,
-					OrganizationName = Service.GetOrganization(x.OrganizationId).Name,
-				}).ToList()
-			};
-
-			foreach (SubscriptionDisplayInfo sub in accountModel.Subscriptions.Subscriptions)
-			{
-				if (sub.ProductId == (int)ProductIdEnum.TimeTracker)
-				{
-					sub.CanViewSubscription = Service.Can(Actions.CoreAction.TimeTrackerEditSelf, false, sub.OrganizationId) || Service.Can(Actions.CoreAction.TimeTrackerEditOthers, false, sub.OrganizationId);
-				}
-			}
-
-			accountModel.UserInfo.Email = Service.GetCompressedEmail(accountModel.UserInfo.Email);
-
-			foreach (SubscriptionDisplayInfo row in accountModel.Subscriptions.Subscriptions)
-			{
-				DateTime date = Service.GetDateAddedToSubscriptionByUserId(row.SubscriptionId);
-				row.CreatedUTC = date;
-			}
-
 			ViewBag.ShowOrganizationPartial = false;
-
-			// Old OrganizationsAction
-			List<SubscriptionsViewModel> modelList = new List<SubscriptionsViewModel>();
-
-			IEnumerable<OrganizationInfo> orgs = Service.GetOrganizationsByUserId();
-			List<ProductInfo> productList = Service.GetProductInfoList();
-			foreach (OrganizationInfo org in orgs)
-			{
-				modelList.Add(new SubscriptionsViewModel
-				{
-					Subscriptions = Service.GetSubscriptionsDisplay(org.OrganizationId),
-					ProductList = productList,
-					OrgInfo = org,
-					CanEditOrganization = Service.Can(Actions.CoreAction.EditOrganization, false, org.OrganizationId),
-					TimeTrackerViewSelf = Service.Can(Actions.CoreAction.TimeTrackerEditSelf, false, org.OrganizationId)
-				});
-			}
-
-			foreach (SubscriptionsViewModel subVM in modelList)
-			{
-				foreach (SubscriptionDisplayInfo sub in subVM.Subscriptions)
-				{
-					if (sub.ProductId == (int)ProductIdEnum.TimeTracker)
-					{
-						sub.CanViewSubscription = Service.Can(Actions.CoreAction.TimeTrackerEditSelf, false, sub.OrganizationId) || Service.Can(Actions.CoreAction.TimeTrackerEditOthers, false, sub.OrganizationId);
-					}
-				}
-			}
-
-			AccountOrgsViewModel orgmodel = new AccountOrgsViewModel
-			{
-				Organizations = modelList
-			};
-
-			ViewBag.ShowOrganizationPartial = false;
-
-
 			
 			var infos = Service.GetUserOrgsAndInvitationInfo();
-
+			
 			IndexAndOrgsViewModel model = new IndexAndOrgsViewModel
 			{
-				UserModel = accountModel,
-				OrgModel = orgmodel,
 				UserInfo = infos.Item1,
-				OrgInfos = infos.Item2,
 				InviteInfos = infos.Item3
 			};
+
+			model.OrgInfos = infos.Item2.Select(o =>
+			{
+				OrgWithSubscriptionsForUserViewModel orgVM = new OrgWithSubscriptionsForUserViewModel
+				{
+					OrgInfo = o,
+					CanEditOrganization = Service.Can(Actions.CoreAction.EditOrganization, false, o.OrganizationId),
+					Subscriptions = new List<SubscriptionDisplayViewModel>()
+				};
+				UserOrganizationInfo userOrgInfo = UserContext.UserOrganizationInfoList.Where(uoi => uoi.OrganizationId == o.OrganizationId).SingleOrDefault();
+				if (userOrgInfo != null)
+				{
+					foreach (UserSubscriptionInfo userSubInfo in userOrgInfo.UserSubscriptionInfoList)
+					{
+						orgVM.Subscriptions.Add(new SubscriptionDisplayViewModel
+						{
+							ProductId = (int)userSubInfo.ProductId,
+							ProductName = userSubInfo.ProductName,
+							ProductDisplayName = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Views.Shared.Strings.TimeTracker : "Unknown Product",
+							ProductDescription = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Views.Shared.Strings.TimeTrackerDescription : ""
+						});
+					}
+				}
+				return orgVM;
+			}).ToList();
 			
 			return this.View(model);
 		}

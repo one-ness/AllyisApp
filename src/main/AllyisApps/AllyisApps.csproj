@@ -710,6 +710,7 @@
     <Compile Include="Areas\TimeTracker\ViewModels\Manage\EditSubscriptionUsersViewModel.cs" />
     <Compile Include="ViewModels\Auth\IndexAndOrgsViewModel.cs" />
     <Compile Include="ViewModels\Auth\InvitationViewModel.cs" />
+    <Compile Include="ViewModels\Auth\OrgWithSubscriptionsForUserViewModel.cs" />
     <Compile Include="ViewModels\Auth\RegisterViewModel.cs" />
     <Compile Include="ViewModels\Auth\EditProfileViewModel.cs" />
     <Compile Include="ViewModels\Auth\ForgotPasswordViewModel.cs" />
@@ -933,6 +934,7 @@
     <Content Include="Views\Account\Permission2.cshtml" />
     <Content Include="Views\Account\_OrgMembers2.cshtml" />
     <Content Include="Views\Account\ViewUser.cshtml" />
+    <Content Include="Views\Account\_OrgPanel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">

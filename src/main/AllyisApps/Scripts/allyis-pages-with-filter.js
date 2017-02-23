@@ -7,7 +7,7 @@ To use:
 to each item within the row that you will use to match to some filter. By default, this module uses the class "pwfRow". If you would
 like to include check boxes in the filtering (i.e. any checked rows will remain visible even when they don't match the filters), then
 you should also have an id or class for them (the default is the class "pwfCheck").
-	You should also include a final row that simply has the id "tableEnd". This will produce a bottom border under the last row of
+    You should also include a final row that simply has the id "tableEnd". This will produce a bottom border under the last row of
 data, and be used as a reference for adding filler rows.
     At the bottom (or top, or wherever), include a div with class="pageContainer" - this will hold the page buttons (they will
 auto-populate; all you need is the empty div).
@@ -33,14 +33,14 @@ Also, you can change the internal page limit. The default is 16 rows per page. T
     pwf.setPageLimit(newPageLimit);
 
 A few notes on filler rows:
-	One issue faced by paging/filtering is that whenever the number of displayed rows jumps from a higher number to a lower
+    One issue faced by paging/filtering is that whenever the number of displayed rows jumps from a higher number to a lower
 number, the height of the table changes. If it's at the bottom of your page, then your scroll position will also jump. This can
 be very annoying when you switch between the last page and previous pages, or when you filter down the list to one or two rows and then
 clear the filter.
-	To keep the table the same constant height, filler rows are added at the end of the list to fill up the last page. On each call
+    To keep the table the same constant height, filler rows are added at the end of the list to fill up the last page. On each call
 of the filter rows event (when the pages are recalculated), the method clears all filler rows, figures out how many are now needed,
 and adds them.
-	This isn't enough, though. The number of rows still jumps for an instant down before filling back up, so your scroll position
+    This isn't enough, though. The number of rows still jumps for an instant down before filling back up, so your scroll position
 still gets jumped upward. So, in addition to the filler rows, there is 1 full page of 'scrollBuffer' rows. They are just like filler
 rows, except they remain in place always. They are usually not displayed. When a filter event occurs, they're display is turned on, extending
 the table to double its height. Then the filtering/paging is done, and the filler rows created. Then, before you have time
@@ -49,9 +49,9 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
 
 (function (exports) {
     // Paging variables
-	var pageLimit = 16; // Rows per page
-	var pageButtonLimit = 10; // Max page buttons to display at once
-	var currentPageButtonStart = 1; // The first displayed page button
+    var pageLimit = 16; // Rows per page
+    var pageButtonLimit = 10; // Max page buttons to display at once
+    var currentPageButtonStart = 1; // The first displayed page button
     var pageContainer = $('.pageContainer'); // Place a div on your page with the class pageContainer - it will auto-populate with page buttons
     var totalPages = 1; // Page count, recalculated on each filter
     var anchorRow = null; // This is the row element that is used to decide what page to show when pagination changes
@@ -74,11 +74,11 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
         }
     }
     exports.setPageButtonLimit = function (newPageButtonLimit) {
-    	if (newPageButtonLimit > 0) {
-			pageButtonLimit = newPageButtonLimit;
-    	} else {
-    		console.log("pwf - Error setting page button limit: Page button limit must be greater than 0.");
-    	}
+        if (newPageButtonLimit > 0) {
+            pageButtonLimit = newPageButtonLimit;
+        } else {
+            console.log("pwf - Error setting page button limit: Page button limit must be greater than 0.");
+        }
     }
     exports.setRowClass = function (newRowClass) {
         rowClass = newRowClass;
@@ -101,13 +101,13 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
             }
         });
         $('.' + fillerClass).each(function () {
-        	var ele = $(this);
-        	if (ele.attr("data-page") == pageNum) {
-        		ele.toggleClass("off-page", false);
-        	}
-        	else {
-        		ele.toggleClass("off-page", true);
-        	}
+            var ele = $(this);
+            if (ele.attr("data-page") == pageNum) {
+                ele.toggleClass("off-page", false);
+            }
+            else {
+                ele.toggleClass("off-page", true);
+            }
         });
 
         // Enable/disable page buttons
@@ -135,78 +135,78 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
 
     // Creates a button element for paging and returns it
     makePageButton = function (pageNum) {
-    	var fillerClass = "";
-    	if (pageNum == 0) {
-    		fillerClass = " pageButtonFiller";
-    	}
+        var fillerClass = "";
+        if (pageNum == 0) {
+            fillerClass = " pageButtonFiller";
+        }
         return $('<input/>', {
             id: "page-" + pageNum,
             type: "button",
             "class": "page-btn btn btn-primary btn-xs" + fillerClass,
             value: pageNum
         }).click(function () {
-			if (pageNum > 0) exports.goToPage(pageNum);
+            if (pageNum > 0) exports.goToPage(pageNum);
         });
     }
 
-	// Creates a button element for scrolling through page buttons
-	// -2 = <<, -1 = <, 1 = >, 2 = >>
+    // Creates a button element for scrolling through page buttons
+    // -2 = <<, -1 = <, 1 = >, 2 = >>
     var chevrons = ["<<", "<", "", ">", ">>"];
     makeChevronButton = function (type) {
-    	if (type < -2 || type > 2) return null;
-    	return $('<input/>', {
-			id: "chevron_" + type,
-			type: "button",
-			"class": "chevron-btn btn btn-primary btn-xs",
-			value: chevrons[type + 2]
-    	}).click(function () {
-    		scrollPageButtons(type);
-    	})
+        if (type < -2 || type > 2) return null;
+        return $('<input/>', {
+            id: "chevron_" + type,
+            type: "button",
+            "class": "chevron-btn btn btn-primary btn-xs",
+            value: chevrons[type + 2]
+        }).click(function () {
+            scrollPageButtons(type);
+        })
     }
     scrollPageButtons = function (how) {
-    	switch(how) {
-    		case -2:
-				setPageButtonPosition(1);
-				break;
-    		case -1:
-    			setPageButtonPosition(Math.max(currentPageButtonStart - pageButtonLimit, 1));
-    			break;
-			case 1:
-				setPageButtonPosition(Math.min(currentPageButtonStart + pageButtonLimit, maxPageButtonStart));
-				break;
-			case 2:
-				setPageButtonPosition(maxPageButtonStart);
-				break;
-    	}
+        switch(how) {
+            case -2:
+                setPageButtonPosition(1);
+                break;
+            case -1:
+                setPageButtonPosition(Math.max(currentPageButtonStart - pageButtonLimit, 1));
+                break;
+            case 1:
+                setPageButtonPosition(Math.min(currentPageButtonStart + pageButtonLimit, maxPageButtonStart));
+                break;
+            case 2:
+                setPageButtonPosition(maxPageButtonStart);
+                break;
+        }
     }
     setPageButtonPosition = function (newPageButtonStart) {
-    	var newPageButtonEnd = newPageButtonStart + pageButtonLimit;
-    	$('.page-btn').each(function (index, elem) {
-    		var ele = $(this);
-    		var pageNum = ele.val();
-    		if (pageNum >= newPageButtonStart && pageNum < newPageButtonEnd) {
-				ele.show();
-    		}
-    		else {
-				ele.hide();
-    		}
-    	});
-    	if (newPageButtonStart == 1) {
-    		$("#chevron_-2").hide();
-    		$("#chevron_-1").hide();
-    	} else {
-    		$("#chevron_-2").show();
-    		$("#chevron_-1").show();
-    	}
-    	console.log(maxPageButtonStart);
-    	if (newPageButtonStart == maxPageButtonStart) {
-    		$("#chevron_2").hide();
-    		$("#chevron_1").hide();
-    	} else {
-    		$("#chevron_2").show();
-    		$("#chevron_1").show();
-    	}
-    	currentPageButtonStart = newPageButtonStart;
+        var newPageButtonEnd = newPageButtonStart + pageButtonLimit;
+        $('.page-btn').each(function (index, elem) {
+            var ele = $(this);
+            var pageNum = ele.val();
+            if (pageNum >= newPageButtonStart && pageNum < newPageButtonEnd) {
+                ele.show();
+            }
+            else {
+                ele.hide();
+            }
+        });
+        if (newPageButtonStart == 1) {
+            $("#chevron_-2").hide();
+            $("#chevron_-1").hide();
+        } else {
+            $("#chevron_-2").show();
+            $("#chevron_-1").show();
+        }
+        console.log(maxPageButtonStart);
+        if (newPageButtonStart == maxPageButtonStart) {
+            $("#chevron_2").hide();
+            $("#chevron_1").hide();
+        } else {
+            $("#chevron_2").show();
+            $("#chevron_1").show();
+        }
+        currentPageButtonStart = newPageButtonStart;
     }
 
     // Registers an element to act as a search filter.
@@ -248,22 +248,22 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
     // Updates the classes on each row item according to the current filter settings, and
     //  assigns page numbers to each row based on their display status.
     filterRows = function () {
-    	var fillerRowHeight = $('.' + rowClass).eq(1).height(); //using the 2nd item, because the 1st sometimes has a different top border thickness
-    	console.log(fillerRowHeight);
-    	if (!scrollBufferCreated) {
-    		for (var i = 0; i < pageLimit; i++) {
-    			$('#tableEnd').after(generateFillerRow(fillerRowHeight, 1000000, true));
-    		}
-    		scrollBufferCreated = true;
-    	}
+        var fillerRowHeight = $('.' + rowClass).eq(1).height(); //using the 2nd item, because the 1st sometimes has a different top border thickness
+        console.log(fillerRowHeight);
+        if (!scrollBufferCreated) {
+            for (var j = 0; j < pageLimit; j++) {
+                $('#tableEnd').after(generateFillerRow(fillerRowHeight, 1000000, true));
+            }
+            scrollBufferCreated = true;
+        }
 
-    	$('.scrollBuffer').toggleClass('off-page', false);
+        $('.scrollBuffer').toggleClass('off-page', false);
 
         // Grab all filter values
         var filterValues = [];
-        for (var i = 0; i < filters.length; i++) {
-            filterValues[i] = $(filters[i].selector).val();
-            if (filters[i].type == "search") filterValues[i] = filterValues[i].toLowerCase();
+        for (var h = 0; h < filters.length; h++) {
+            filterValues[h] = $(filters[h].selector).val();
+            if (filters[h].type == "search") filterValues[h] = filterValues[h].toLowerCase();
         }
 
         // Start off the paging process.
@@ -348,7 +348,7 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
         });
 
         if (currentPage == 0) {
-        	pageContainer.append(makePageButton(0)); // Generates filler page button for keeping table height constant
+            pageContainer.append(makePageButton(0)); // Generates filler page button for keeping table height constant
         }
 
         totalPages = currentPage;
@@ -357,11 +357,11 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
         pageContainer.append(makeChevronButton(2));
         setPageButtonPosition(1);
 
-		// Removal/addition of filler rows for keeping constant table height.
+        // Removal/addition of filler rows for keeping constant table height.
         var fillerRowCount = currentPage == 0 ? pageLimit : pageLimit - currentPageTotal - 1;
         $('.' + fillerClass).remove();
-        for (var i = 0; i < fillerRowCount; i++) {
-        	$('#tableEnd').after(generateFillerRow(fillerRowHeight, currentPage));
+        for (var k = 0; k < fillerRowCount; k++) {
+            $('#tableEnd').after(generateFillerRow(fillerRowHeight, currentPage));
         }
 
         // After pagination is recalculated, the anchor row is used to decide which page to show. This way,
@@ -378,10 +378,10 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
     }
 
     generateFillerRow = function (height, page, isScrollBuffer) {
-    	if (typeof isScrollBuffer === 'undefined') {
-    		isScrollBuffer = false;
-    	}
-		return '<tr class="nohover ' + (isScrollBuffer ? 'scrollBuffer' : fillerClass) + '" data-page="' + page + '" style="height: ' + height + 'px"><td class="whitetext">|</td></tr>'
+        if (typeof isScrollBuffer === 'undefined') {
+            isScrollBuffer = false;
+        }
+        return '<tr class="nohover ' + (isScrollBuffer ? 'scrollBuffer' : fillerClass) + '" data-page="' + page + '" style="height: ' + height + 'px"><td class="whitetext">|</td></tr>'
     }
 
     $(document).ready(function () {
@@ -392,7 +392,7 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
         if ($('.all-check').length == 1) {
             if (hasCheckBoxes) {
                 $('.all-check').change(function () {
-                	$('.' + rowClass).each(function () {
+                    $('.' + rowClass).each(function () {
                         var ele = $(this);
                         if (!ele.hasClass("no-match")) {
                             ele.find(checkBoxSelector).prop('checked', $('.all-check')[0].checked);
