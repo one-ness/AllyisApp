@@ -6,6 +6,7 @@
 
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.Crm;
 using Dapper;
 using System;
 using System.Collections.Generic;
@@ -1058,6 +1059,31 @@ namespace AllyisApps.DBModel
 					results.Read<OrganizationDBEntity>().SingleOrDefault(),
 					results.Read<string>().ToList(),
 					results.Read<string>().SingleOrDefault());
+			}
+		}
+
+		/// <summary>
+		/// Returns the next recommended employee id, a list of SubscriptionDisplayDBEntities for subscriptions in
+		/// the organization, a list of SubscriptionRoleDBEntities for roles within the subscriptions of the organization,
+		/// and a list of CompleteProjectDBEntityies for TimeTracker projects in the organization.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns></returns>
+		public Tuple<string, List<SubscriptionDisplayDBEntity>, List<SubscriptionRoleDBEntity>, List<CompleteProjectDBEntity>> GetAddMemberInfo(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@OrganizationId", orgId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Auth].[GetAddMemberInfo]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<string>().SingleOrDefault(),
+					results.Read<SubscriptionDisplayDBEntity>().ToList(),
+					results.Read<SubscriptionRoleDBEntity>().ToList(),
+					results.Read<CompleteProjectDBEntity>().ToList());
 			}
 		}
 	}

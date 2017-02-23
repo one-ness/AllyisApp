@@ -1,12 +1,13 @@
-﻿@model AllyisApps.ViewModels.Auth.OrganizationAddMembersViewModel
-@using AllyisApps.ViewModels.Auth;
+﻿@using AllyisApps.ViewModels.Auth;
 @using AllyisApps.Services
 
+@model AddMemberViewModel
+
 @{
-    Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
-    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.AddMember;
-    string left = "col-xs-3 text-right";
-    string right = "col-xs-9";
+	Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
+	ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.AddMember;
+	//string left = "col-xs-3 text-right";
+	//string right = "col-xs-9";
 }
 @{ ViewData.Add(ControllerConstants.Controller, ControllerConstants.Account); }
 @{ ViewData.Add(ActionConstants.Action, ActionConstants.Add); }
@@ -56,7 +57,7 @@
 	</div>
 	<div class="row">
 
-			@if (Model.SubscriptionRoles.Count() == 0)
+			@if (Model.Subscriptions.Count() == 0)
 			{
 				<div class="col-xs-12">
 					<div class="form-group allyis-action-buttons pull-right">
@@ -68,7 +69,7 @@
             @{var count = 0;
 				var roomInSubscription = true;
             }
-            @foreach (SubscriptionRoleSelectionModel sub in Model.SubscriptionRoles)
+            @foreach (AddMemberSubscriptionInfo sub in Model.Subscriptions)
 			{
 				<div class="col-md-6" style="min-width: 400px;">
 					@Html.Hidden(string.Format("SubscriptionRoles[{0}].SubscriptionId", count), sub.SubscriptionId)
@@ -77,8 +78,8 @@
 						{
 							<label>@(string.Format("{0} {1}", AllyisApps.Resources.Views.Account.Strings.TimeTracker, AllyisApps.Resources.Views.Account.Strings.Role))</label>
 						}
-						@Html.DropDownListDisabled(string.Format("SubscriptionRoles[{0}].SelectedRole", count), new SelectList(sub.Roles, "ProductRoleId", "Name", sub.Roles.Where(x => x.Name == "None").FirstOrDefault()), sub.Disabled, new { @class = "form-control role-selector" })
-						@if (sub.Disabled)
+						@Html.DropDownListDisabled(string.Format("SubscriptionRoles[{0}].SelectedRole", count), new SelectList(sub.ProductRoles, "ProductRoleId", "Name", sub.ProductRoles.Where(x => x.Name == "None").FirstOrDefault()), sub.hasTooManySubscribers, new { @class = "form-control role-selector" })
+						@if (sub.hasTooManySubscribers)
 						{
 							<p>@AllyisApps.Resources.Views.Account.Strings.TooManyUsers</p>roomInSubscription = false;
 						}
@@ -92,7 +93,7 @@
 								<label>@AllyisApps.Resources.Views.Account.Strings.TrackProject</label>
 								@{    //outputs list of available projects
 									List<SelectListItem> selectProjects = new List<SelectListItem>();
-									foreach (CompleteProjectInfo pInfo in Model.OrganizationProjects)
+									foreach (CompleteProjectInfo pInfo in Model.Projects)
 									{
 										selectProjects.Add(new SelectListItem
 										{

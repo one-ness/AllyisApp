@@ -706,6 +706,7 @@
     <Compile Include="Utilities\ApplicationExceptions.cs" />
     <Compile Include="Utilities\ImportMessageFormatter.cs" />
     <Compile Include="ViewModels\Auth\AccountOrgsViewModel.cs" />
+    <Compile Include="ViewModels\Auth\AddMemberViewModel.cs" />
     <Compile Include="ViewModels\Auth\ChangePasswordViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\Manage\EditSubscriptionUsersViewModel.cs" />
     <Compile Include="ViewModels\Auth\IndexAndOrgsViewModel.cs" />

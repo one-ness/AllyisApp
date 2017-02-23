@@ -1052,5 +1052,25 @@ namespace AllyisApps.Services
 				Tier = subscriptionDisplay.Tier
 			};
 		}
+
+		/// <summary>
+		/// Translates a <see cref="SubscriptionRoleDBEntity"/> into a <see cref="SubscriptionRoleInfo"/>.
+		/// </summary>
+		/// <param name="subscriptionRole">SubscriptionRoleDBEntity instance.</param>
+		/// <returns>SubscriptionRole instance.</returns>
+		public static SubscriptionRoleInfo InitializeSubscriptionRoleInfo(SubscriptionRoleDBEntity subscriptionRole)
+		{
+			if (subscriptionRole == null)
+			{
+				return null;
+			}
+
+			return new SubscriptionRoleInfo
+			{
+				Name = subscriptionRole.Name,
+				ProductRoleId = subscriptionRole.ProductRoleId,
+				ProductId = subscriptionRole.ProductId
+			};
+		}
 	}
 }

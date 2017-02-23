@@ -31,7 +31,7 @@ namespace AllyisApps.Controllers
 			// Only owners should view this page
 			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
-				OrganizationAddMembersViewModel model = ConstructOrganizationAddMembersViewModel();
+				AddMemberViewModel model = ConstructOrganizationAddMembersViewModel();
 
 				ViewBag.returnUrl = returnUrl;
 				return this.View(model);
@@ -42,44 +42,71 @@ namespace AllyisApps.Controllers
 		}
 
 		/// <summary>
-		/// Uses services to populate the lists of an <see cref="OrganizationAddMembersViewModel"/> and returns it.
+		/// Uses services to populate the lists of an <see cref="AddMemberViewModel"/> and returns it.
 		/// </summary>
 		/// <returns>The OrganizationAddMembersViewModel.</returns>
-		public OrganizationAddMembersViewModel ConstructOrganizationAddMembersViewModel()
+		public AddMemberViewModel ConstructOrganizationAddMembersViewModel()
 		{
-			OrganizationAddMembersViewModel result = new OrganizationAddMembersViewModel
+			var infos = Service.GetAddMemberInfo();
+
+			AddMemberViewModel result = new AddMemberViewModel
 			{
-				Organization = Service.GetOrganization(UserContext.ChosenOrganizationId),
-				OrganizationId = UserContext.ChosenOrganizationId,
-				OrganizationProjects = Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId),
-				EmployeeId = Service.GetRecommendedEmployeeId()
+				RecommendedEmployeeId = infos.Item1,
+				Subscriptions = new List<AddMemberSubscriptionInfo>(),
+				Projects = infos.Item4
 			};
 
-			List<SubscriptionRoleSelectionModel> roles = new List<SubscriptionRoleSelectionModel>();
-			IEnumerable<InvitationSubRoleInfo> invitedSubs = Service.GetInvitationSubRoles();
-			IEnumerable<SubscriptionDisplayInfo> subscriptions = Service.GetSubscriptionsDisplay();
-
-			foreach (SubscriptionDisplayInfo subscription in subscriptions)
+			foreach(SubscriptionDisplayInfo sub in infos.Item2)
 			{
-				List<SubscriptionRoleInfo> subRoles = Service.GetProductRolesFromSubscription(subscription.SubscriptionId).ToList();
-				subRoles.Insert(
-					0,
-					new SubscriptionRoleInfo
-					{
-						Name = "None",
-						ProductRoleId = (int)ProductRole.NotInProduct
-					});
-				roles.Add(
-					new SubscriptionRoleSelectionModel
-					{
-						SubscriptionId = subscription.SubscriptionId,
-						ProductName = subscription.ProductName,
-						Roles = subRoles,
-						Disabled = subscription.NumberOfUsers <= subscription.SubscriptionsUsed + invitedSubs.Where(i => i.SubscriptionId == subscription.SubscriptionId).Count()
-					});
+				AddMemberSubscriptionInfo subInfo = new AddMemberSubscriptionInfo
+				{
+					ProductName = sub.ProductName,
+					ProductRoles = infos.Item3.Where(r => r.ProductId == sub.ProductId).ToList(),
+					SubscriptionId = sub.SubscriptionId,
+					hasTooManySubscribers = sub.SubscriptionsUsed >= sub.NumberOfUsers
+				};
+				subInfo.ProductRoles.Insert(0, new SubscriptionRoleInfo
+				{
+					Name = "None",
+					ProductId = (int)ProductIdEnum.None,
+					ProductRoleId = (int)ProductRole.NotInProduct
+				});
+				result.Subscriptions.Add(subInfo);
 			}
 
-			result.SubscriptionRoles = roles;
+			//OrganizationAddMembersViewModel result = new OrganizationAddMembersViewModel
+			//{
+			//	Organization = Service.GetOrganization(UserContext.ChosenOrganizationId),
+			//	OrganizationId = UserContext.ChosenOrganizationId,
+			//	OrganizationProjects = Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId),
+			//	EmployeeId = Service.GetRecommendedEmployeeId()
+			//};
+
+			//List<SubscriptionRoleSelectionModel> roles = new List<SubscriptionRoleSelectionModel>();
+			//IEnumerable<InvitationSubRoleInfo> invitedSubs = Service.GetInvitationSubRoles();
+			//IEnumerable<SubscriptionDisplayInfo> subscriptions = Service.GetSubscriptionsDisplay();
+
+			//foreach (SubscriptionDisplayInfo subscription in subscriptions)
+			//{
+			//	List<SubscriptionRoleInfo> subRoles = Service.GetProductRolesFromSubscription(subscription.SubscriptionId).ToList();
+			//	subRoles.Insert(
+			//		0,
+			//		new SubscriptionRoleInfo
+			//		{
+			//			Name = "None",
+			//			ProductRoleId = (int)ProductRole.NotInProduct
+			//		});
+			//	roles.Add(
+			//		new SubscriptionRoleSelectionModel
+			//		{
+			//			SubscriptionId = subscription.SubscriptionId,
+			//			ProductName = subscription.ProductName,
+			//			Roles = subRoles,
+			//			Disabled = subscription.NumberOfUsers <= subscription.SubscriptionsUsed + invitedSubs.Where(i => i.SubscriptionId == subscription.SubscriptionId).Count()
+			//		});
+			//}
+
+			//result.SubscriptionRoles = roles;
 
 			return result;
 		}
