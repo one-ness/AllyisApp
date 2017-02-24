@@ -72,13 +72,13 @@
             @foreach (AddMemberSubscriptionInfo sub in Model.Subscriptions)
 			{
 				<div class="col-md-6" style="min-width: 400px;">
-					@Html.Hidden(string.Format("SubscriptionRoles[{0}].SubscriptionId", count), sub.SubscriptionId)
+					@Html.Hidden(string.Format("Subscriptions[{0}].SubscriptionId", count), sub.SubscriptionId)
 					<div class="form-group">
 						@if (sub.ProductName == ProductNameKeyConstants.TimeTracker)
 						{
 							<label>@(string.Format("{0} {1}", AllyisApps.Resources.Views.Account.Strings.TimeTracker, AllyisApps.Resources.Views.Account.Strings.Role))</label>
 						}
-						@Html.DropDownListDisabled(string.Format("SubscriptionRoles[{0}].SelectedRole", count), new SelectList(sub.ProductRoles, "ProductRoleId", "Name", sub.ProductRoles.Where(x => x.Name == "None").FirstOrDefault()), sub.hasTooManySubscribers, new { @class = "form-control role-selector" })
+						@Html.DropDownListDisabled(string.Format("Subscriptions[{0}].SelectedRole", count), new SelectList(sub.ProductRoles, "ProductRoleId", "Name", sub.ProductRoles.Where(x => x.Name == "None").FirstOrDefault()), sub.hasTooManySubscribers, new { @class = "form-control role-selector" })
 						@if (sub.hasTooManySubscribers)
 						{
 							<p>@AllyisApps.Resources.Views.Account.Strings.TooManyUsers</p>roomInSubscription = false;
@@ -156,162 +156,6 @@
     </div>
 </div>
 
-@*<div class="col-md-8 col-md-push-2">
-    <div class="bulk">
-        <div class="col-xs-12">
-            <h4>@AllyisApps.Resources.Views.Account.Strings.MultipleMembers</h4>
-            <p>
-                @AllyisApps.Resources.Views.Account.Strings.InviteMoreThanOne
-            </p>
-        </div>
-        @*Custom styled buttons wired to browser default upload*@
-        @*@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.AntiForgeryToken();
-            <input type="file" id="upload-box" name="upload" style="display:none;"
-                   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-            <input id="upload-file-name-display" class="form-control"
-                   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-            <div style="margin-top: 10px; float:left;">
-                <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@AllyisApps.Resources.Views.Account.Strings.ChooseFile</a>
-                <input style="margin-left: 10px" type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
-            </div>
-        }
-        @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Account, null, FormMethod.Get))
-        {
-            <div style="float:right; margin-top: 10px;">
-                <input type="submit" id="template-button" value="@AllyisApps.Resources.Views.Account.Strings.Template" class="btn btn-primary" />
-            </div>
-        }
-    </div>
-
-    <div class="bulk clearfix">
-        <div class="col-xs-12 modal-divider">
-            <h4>@AllyisApps.Resources.Views.Account.Strings.SingleMember</h4>
-            <p>
-                @AllyisApps.Resources.Views.Account.Strings.InviteSomeone
-            </p>
-        </div>
-    </div>
-
-    @using (Html.BeginForm(ActionConstants.Invite, ControllerConstants.Account, FormMethod.Post, new { @class = "form-horizontal", id = "OrgAddForm" }))
-    {
-        <div>
-            @Html.AntiForgeryToken()
-            @Html.HiddenFor(m => m.OrganizationId)
-            @Html.ValidationSummary(true)
-            <div class="form-group">
-                <div class="@left">
-                    @Html.ReqLabelFor(model => model.Email, AllyisApps.Resources.Views.Account.Strings.Email)
-                </div>
-                <div class="@right">
-                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Email)
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="@left">
-                    @Html.ReqLabelFor(model => model.FirstName, AllyisApps.Resources.Views.Account.Strings.FirstName)
-                </div>
-                <div class="@right">
-                    @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.FirstName)
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="@left">
-                    @Html.ReqLabelFor(model => model.LastName, AllyisApps.Resources.Views.Account.Strings.LastName)
-                </div>
-                <div class="@right">
-                    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.LastName)
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="@left">
-                    @Html.ReqLabelFor(model => model.EmployeeId, AllyisApps.Resources.Views.Account.Strings.EmployeeId)
-                </div>
-                <div class="@right">
-                    @Html.TextBoxFor(model => model.EmployeeId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.EmployeeId })
-                    @Html.ValidationMessageFor(model => model.EmployeeId)
-                </div>
-            </div>
-            @{var count = 0;
-                var roomInSubscription = true;
-            }
-            @foreach (SubscriptionRoleSelectionModel sub in Model.SubscriptionRoles)
-            {
-                @Html.Hidden(string.Format("SubscriptionRoles[{0}].SubscriptionId", count), sub.SubscriptionId)
-                <div class="form-group">
-                    <div class="@left">
-                        @if (sub.ProductName == ProductNameKeyConstants.TimeTracker)
-                        {
-                            <label>@(string.Format("{0} {1}", AllyisApps.Resources.Views.Account.Strings.TimeTracker, AllyisApps.Resources.Views.Account.Strings.Role))</label>
-}
-                    </div>
-                    <div class="@right">
-                        @Html.DropDownListDisabled(string.Format("SubscriptionRoles[{0}].SelectedRole", count), new SelectList(sub.Roles, "ProductRoleId", "Name", sub.Roles.Where(x => x.Name == "None").FirstOrDefault()), sub.Disabled, new { @class = "form-control role-selector" })
-                        @if (sub.Disabled)
-                        {
-                            <p>@AllyisApps.Resources.Views.Account.Strings.TooManyUsers</p>roomInSubscription = false;
-                        }
-                    </div>
-                </div>
-
-                if ((sub.ProductName == ProductNameKeyConstants.TimeTracker) && roomInSubscription) //TimeTracker with room
-                {
-                    <div class="form-group">
-                        <div class="@left">
-                            <label>@AllyisApps.Resources.Views.Account.Strings.TrackProject</label>
-                        </div>
-
-                        <div class="@right">
-                            @{    //outputs list of available projects
-                                List<SelectListItem> selectProjects = new List<SelectListItem>();
-                                foreach (CompleteProjectInfo pInfo in Model.OrganizationProjects)
-                                {
-                                    selectProjects.Add(new SelectListItem
-                                    {
-                                        Text = (pInfo.ProjectName),
-                                        Value = (pInfo.ProjectId.ToString())
-                                    });
-                                }
-
-                                @Html.DropDownList("SubscriptionProjectId", selectProjects, AllyisApps.Resources.Views.Account.Strings.DropDownEmpty, new { @class = "form-control project-selector" });
-                            }
-                        </div>
-                    </div>          }
-                                    count += 1;
-                                }
-
-            <div class="form-group">
-                <div class="@left">
-                    <p>@AllyisApps.Resources.Views.Account.Strings.AddAsOwner</p>
-                </div>
-                <div class="@right">
-                    @Html.CheckBoxFor(m => m.AddAsOwner)
-                </div>
-            </div>
-        </div>
-        <div>
-            <strong><span class="pull-left" hidden="hidden" id="accessCodeDisplay">Access Code: /code/</span></strong>
-            <div class="form-group allyis-action-buttons pull-right">
-                @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
-
-                @if (roomInSubscription)
-                {
-                    <input type="submit" id="addMember" value="@AllyisApps.Resources.Views.Account.Strings.Add" class="btn btn-primary" />}
-                else
-                {
-                    <input type="submit" id="addMember" value="@AllyisApps.Resources.Views.Account.Strings.Add" class="btn btn-primary" disabled="disabled" />}
-            </div>
-            <div class="@right">
-                <p id="cannotAddMessage">@AllyisApps.Resources.Views.Account.Strings.CannotAddMessage<br />@AllyisApps.Resources.Views.Account.Strings.CannotAddMessage2</p>
-                <p id="noProjectMessage">@AllyisApps.Resources.Views.Account.Strings.NoProjectMessage</p>
-            </div>
-        </div>
-    }
-</div>*@
 
 @section Scripts {
     @Scripts.Render("~/bundles/AccountAdd");

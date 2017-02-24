@@ -60,7 +60,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="previousId">The ID string to increment</param>
 		/// <returns>A Char[] of the previous ID, incremented by one</returns>
-		protected char[] IncrementAlphanumericCharArray(char[] previousId)
+		public char[] IncrementAlphanumericCharArray(char[] previousId)
 		{
 			// Define legal characters
 			var characters = new List<char>();

@@ -23,11 +23,11 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// POST: Account/AddUsers/1.
 		/// </summary>
-		/// <param name="org">A Model containing the organization information and the string of emails to add.</param>
+		/// <param name="add">A Model containing the new member information.</param>
 		/// <returns>Task actionResult.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Invite(OrganizationAddMembersViewModel org)
+		public async Task<ActionResult> Invite(AddMemberViewModel add)
 		{
 			if (ModelState.IsValid)
 			{
@@ -36,30 +36,68 @@ namespace AllyisApps.Controllers
 					// Employee Id must be unique; check in a union of invites and current org members
 					// TODO: Make a db procedure and all subsequent methods to simply grab all of the ids instead of using this list union
 					if (Service.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Select(user => user.EmployeeId).ToList().Union(
-						Service.GetUserInvitations().Select(invitation => invitation.EmployeeId).ToList()).Any(id => id == org.EmployeeId))
+						Service.GetUserInvitations().Select(invitation => invitation.EmployeeId).ToList()).Any(id => id == add.EmployeeId))
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.EmployeeIdNotUniqueError, Variety.Danger));
 						return this.RedirectToAction(ActionConstants.Add);
 					}
 
-					org = await this.ProcessUserInput(org);
-
-					foreach (string user in org.AddedUsers)
+					if (!string.IsNullOrEmpty(add.Email))
 					{
-						Notifications.Add(new BootstrapAlert(user + " " + Resources.Controllers.Auth.Strings.UserAddedSuccessfully, Variety.Success));
+						string userEmail = add.Email.Trim();
+						if (Service.IsEmailAddressValid(userEmail))
+						{ // If input string kinda looks like an email..
+							UserInfo user = Service.GetUserByEmail(userEmail); // ...Attempt to get the user data by email.
+																			   // If that doesn't return null...
+							if (user != null)
+							{
+								OrgRoleInfo role = Service.GetOrgRole(add.OrganizationId, user.UserId); // ...see if they have permissions in this organization already
+																												  // If not...
+								if (role != null)
+								{
+									Notifications.Add(new BootstrapAlert("This user is already a member of the organization.", Variety.Warning));
+									return this.RedirectToAction(ActionConstants.Add);
+								}
+							}
+
+							// input string is not associated with an existing user
+							// so send them an email and let them know of the request
+							UserInfo requestingUser = Service.GetUserInfo();
+							int code = new Random().Next(100000);
+							int invitationId = await Service.InviteNewUser(
+								string.Format("{0} {1}", requestingUser.FirstName, requestingUser.LastName),
+								GlobalSettings.WebRoot,
+								new InvitationInfo
+								{
+									Email = userEmail,
+									FirstName = add.FirstName,
+									LastName = add.LastName,
+									OrganizationId = add.OrganizationId,
+									AccessCode = code.ToString(),
+									DateOfBirth = DateTime.MinValue.AddYears(1754),
+									OrgRole = (int)(add.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member),
+									ProjectId = add.SubscriptionProjectId,
+									EmployeeId = add.EmployeeId
+								});
+
+							if (add.Subscriptions != null)
+							{
+								foreach (AddMemberSubscriptionInfo sub in add.Subscriptions)
+								{
+									if (!sub.hasTooManySubscribers && sub.SelectedRole != 0)
+									{
+										Service.CreateInvitationSubRole(invitationId, sub.SubscriptionId, sub.SelectedRole);
+									}
+								}
+							}
+
+							Notifications.Add(new BootstrapAlert("User has been invited to join the organization.", Variety.Success));
+							return this.RedirectToAction(ActionConstants.Manage);
+						}
 					}
 
-					foreach (string user in org.EmailedUsers)
-					{
-						Notifications.Add(new BootstrapAlert(user + " " + Resources.Controllers.Auth.Strings.UserEmailed, Variety.Success));
-					}
-
-					foreach (string user in org.UsersAlreadyExisting)
-					{
-						Notifications.Add(new BootstrapAlert(user + " " + Resources.Controllers.Auth.Strings.UserAlreadyExists, Variety.Warning));
-					}
-
-					return this.RedirectToAction(ActionConstants.Manage);
+					Notifications.Add(new BootstrapAlert("Email address in invalid.", Variety.Danger));
+					return this.RedirectToAction(ActionConstants.Add);
 				}
 
 				// Permission failure

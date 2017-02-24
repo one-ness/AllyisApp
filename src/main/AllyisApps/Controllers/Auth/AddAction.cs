@@ -51,7 +51,8 @@ namespace AllyisApps.Controllers
 
 			AddMemberViewModel result = new AddMemberViewModel
 			{
-				RecommendedEmployeeId = infos.Item1,
+				OrganizationId = UserContext.ChosenOrganizationId,
+				EmployeeId = new string(Service.IncrementAlphanumericCharArray(infos.Item1.ToCharArray())),
 				Subscriptions = new List<AddMemberSubscriptionInfo>(),
 				Projects = infos.Item4
 			};
@@ -73,40 +74,6 @@ namespace AllyisApps.Controllers
 				});
 				result.Subscriptions.Add(subInfo);
 			}
-
-			//OrganizationAddMembersViewModel result = new OrganizationAddMembersViewModel
-			//{
-			//	Organization = Service.GetOrganization(UserContext.ChosenOrganizationId),
-			//	OrganizationId = UserContext.ChosenOrganizationId,
-			//	OrganizationProjects = Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId),
-			//	EmployeeId = Service.GetRecommendedEmployeeId()
-			//};
-
-			//List<SubscriptionRoleSelectionModel> roles = new List<SubscriptionRoleSelectionModel>();
-			//IEnumerable<InvitationSubRoleInfo> invitedSubs = Service.GetInvitationSubRoles();
-			//IEnumerable<SubscriptionDisplayInfo> subscriptions = Service.GetSubscriptionsDisplay();
-
-			//foreach (SubscriptionDisplayInfo subscription in subscriptions)
-			//{
-			//	List<SubscriptionRoleInfo> subRoles = Service.GetProductRolesFromSubscription(subscription.SubscriptionId).ToList();
-			//	subRoles.Insert(
-			//		0,
-			//		new SubscriptionRoleInfo
-			//		{
-			//			Name = "None",
-			//			ProductRoleId = (int)ProductRole.NotInProduct
-			//		});
-			//	roles.Add(
-			//		new SubscriptionRoleSelectionModel
-			//		{
-			//			SubscriptionId = subscription.SubscriptionId,
-			//			ProductName = subscription.ProductName,
-			//			Roles = subRoles,
-			//			Disabled = subscription.NumberOfUsers <= subscription.SubscriptionsUsed + invitedSubs.Where(i => i.SubscriptionId == subscription.SubscriptionId).Count()
-			//		});
-			//}
-
-			//result.SubscriptionRoles = roles;
 
 			return result;
 		}
