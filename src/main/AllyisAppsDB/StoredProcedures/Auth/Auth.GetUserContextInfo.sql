@@ -36,6 +36,7 @@ BEGIN
 				JOIN [Billing].[Subscription] AS [S] WITH (NOLOCK) ON [SU].[SubscriptionId] = [S].SubscriptionId
 				JOIN [Auth].[ProductRole] AS [PR] WITH (NOLOCK) ON [SU].[ProductRoleId] = [PR].[ProductRoleId]
 				LEFT JOIN [Billing].[Product] AS [P] WITH (NOLOCK) ON [PR].[ProductId] = [P].[ProductId]
+			WHERE [S].[IsActive] = 1
 		) [SUB] ON [SUB].[UserId] = [U].[UserId] AND [SUB].[OrganizationId] = [O].[OrganizationId]
 	WHERE [U].[UserId] = @UserId;
 END

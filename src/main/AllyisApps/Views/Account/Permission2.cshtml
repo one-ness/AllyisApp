@@ -1,39 +1,37 @@
 ﻿@using AllyisApps.ViewModels.Auth;
 
-@model PermissionsManagementViewModel
+@model ManagePermissionsViewModel
 
 @{
-    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.Permissions;
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.Permissions;
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	
+	bool hasTimeTracker = Model.Subscriptions.Where(s => s.ProductId == Model.TimeTrackerId).Any();
 
-    int productId = Model.TimeTrackerId;
-    var query = (from entry in Model.Subscriptions where entry.ProductId == productId select entry).FirstOrDefault();
-    bool hasTimeTracker = query != null ? true : false;
+	Dictionary<int, string> orgRoles = new Dictionary<int, string>
+	{
+		{ (int)AllyisApps.Services.OrganizationRole.Member, AllyisApps.Resources.Views.Account.Strings.Member },
+		{ (int)AllyisApps.Services.OrganizationRole.Owner, AllyisApps.Resources.Views.Account.Strings.Owner }
+	};
+	Dictionary<int, string> ttRoles = new Dictionary<int, string>
+	{
+		{ (int)AllyisApps.Services.ProductRole.TimeTrackerUser, AllyisApps.Resources.Views.Account.Strings.User },
+		{ (int)AllyisApps.Services.ProductRole.TimeTrackerManager, AllyisApps.Resources.Views.Account.Strings.Manager },
+		{ (int)AllyisApps.Services.ProductRole.NotInProduct, AllyisApps.Resources.Views.Account.Strings.Unassigned }
+	};
 
-    Dictionary<int, string> orgRoles = new Dictionary<int, string>
-    {
-        { (int)AllyisApps.Services.OrganizationRole.Member, AllyisApps.Resources.Views.Account.Strings.Member },
-        { (int)AllyisApps.Services.OrganizationRole.Owner, AllyisApps.Resources.Views.Account.Strings.Owner }
-    };
-    Dictionary<int, string> ttRoles = new Dictionary<int, string>
-    {
-        { (int)AllyisApps.Services.ProductRole.TimeTrackerUser, AllyisApps.Resources.Views.Account.Strings.User },
-        { (int)AllyisApps.Services.ProductRole.TimeTrackerManager, AllyisApps.Resources.Views.Account.Strings.Manager },
-        { (int)AllyisApps.Services.ProductRole.NotInProduct, AllyisApps.Resources.Views.Account.Strings.Unassigned }
-    };
-
-    Dictionary<string, int> setOrgRoles = new Dictionary<string, int>
-    {
-        { AllyisApps.Resources.Views.Account.Strings.RemoveOrg, -1 },
-        { AllyisApps.Resources.Views.Account.Strings.SetMember, (int)AllyisApps.Services.OrganizationRole.Member },
-        { AllyisApps.Resources.Views.Account.Strings.SetOwner, (int)AllyisApps.Services.OrganizationRole.Owner }
-    };
-    Dictionary<string, int> setTTRoles = new Dictionary<string, int>
-    {
-        { AllyisApps.Resources.Views.Account.Strings.RemoveFromSubscription, -1 },
-        { AllyisApps.Resources.Views.Account.Strings.SetUser, (int)AllyisApps.Services.ProductRole.TimeTrackerUser },
-        { AllyisApps.Resources.Views.Account.Strings.SetManager, (int)AllyisApps.Services.ProductRole.TimeTrackerManager }
-    };
+	Dictionary<string, int> setOrgRoles = new Dictionary<string, int>
+	{
+		{ AllyisApps.Resources.Views.Account.Strings.RemoveOrg, -1 },
+		{ AllyisApps.Resources.Views.Account.Strings.SetMember, (int)AllyisApps.Services.OrganizationRole.Member },
+		{ AllyisApps.Resources.Views.Account.Strings.SetOwner, (int)AllyisApps.Services.OrganizationRole.Owner }
+	};
+	Dictionary<string, int> setTTRoles = new Dictionary<string, int>
+	{
+		{ AllyisApps.Resources.Views.Account.Strings.RemoveFromSubscription, -1 },
+		{ AllyisApps.Resources.Views.Account.Strings.SetUser, (int)AllyisApps.Services.ProductRole.TimeTrackerUser },
+		{ AllyisApps.Resources.Views.Account.Strings.SetManager, (int)AllyisApps.Services.ProductRole.TimeTrackerManager }
+	};
 }
 
 @Html.AntiForgeryToken()
@@ -46,8 +44,6 @@
 	}
 </ul>
 <div class="panel panel-default">
-    @*<div class="panel-heading">
-    </div>*@
     <div class="panel-body" style="padding: 0px;">
         <table class="table table-hover table-condensed">
             <thead class="panel-heading">
@@ -91,17 +87,19 @@
                 </tr>
             </thead>
 
-            @foreach (UserPermissionsManagement user in Model.UserPermissions)
+            @foreach (UserPermissionsViewModel user in Model.Users)
             {
-                <tr class="userRow" data-id="@user.UserId" data-name="@user.UserName">
+				var fullName = string.Format("{0} {1}", user.FirstName, user.LastName);
+
+                <tr class="userRow" data-id="@user.UserId" data-name="@user.Email">
                     <td class="checked">
                         <input type="checkbox" id="check" />
                     </td>
-                    <td id="name">@user.UserName</td>
-                    <td id="orgRole" class="tab-OrganizationTab">@orgRoles[user.OrganizationRoleId]</td>
+                    <td id="name">@fullName</td>
+                    <td id="orgRole" class="tab-OrganizationTab">@orgRoles[user.OrgRoleId]</td>
                     @if (hasTimeTracker)
-                    {
-                        <td id="ttRole" class="tab-TimeTrackerTab" style="display: none;">@ttRoles[user.SubscriptionRoles.Where(s => s.ProductId == productId).Single().ProductRoleId]</td>
+					{
+						<td id="ttRole" class="tab-TimeTrackerTab" style="display: none;">@ttRoles[user.ProductRoleIds[Model.TimeTrackerSubIndex]]</td>
                     }
                 </tr>
             }

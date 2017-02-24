@@ -49,7 +49,56 @@ namespace AllyisApps.Controllers
 		{
 			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
-				PermissionsManagementViewModel model = this.ConstructPermissionsManagementViewModel();
+				var infos = Service.GetOrgAndSubRoles();
+				ManagePermissionsViewModel model = new ManagePermissionsViewModel
+				{
+					Users = new List<UserPermissionsViewModel>(),
+					Subscriptions = infos.Item2,
+					SubIds = infos.Item2.Select(s => s.SubscriptionId).ToList(),
+					// TODO: Get rid of this once product panes in Permissions page are genericized.
+					TimeTrackerId = Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker)
+				};
+
+				// This can also be axed after finding a good way to genericize products in the Permissions page.
+				var ttsub = model.Subscriptions.Where(s => s.ProductId == model.TimeTrackerId).SingleOrDefault();
+				if (ttsub != null)
+				{
+					model.TimeTrackerSubIndex = model.Subscriptions.IndexOf(ttsub);
+				}
+				
+				foreach (UserRolesInfo role in infos.Item1)
+				{
+					UserPermissionsViewModel modelUser = model.Users.Where(u => u.UserId == int.Parse(role.UserId)).SingleOrDefault();
+					if (modelUser == null)
+					{
+						modelUser = new UserPermissionsViewModel
+						{
+							FirstName = role.FirstName,
+							LastName = role.LastName,
+							UserId = int.Parse(role.UserId),
+							Email = role.Email,
+							OrgRoleId = role.OrgRoleId,
+							ProductRoleIds = new List<int>()
+						};
+
+						// Start out with default NotInProduct role
+						foreach(SubscriptionDisplayInfo sub in model.Subscriptions)
+						{
+							modelUser.ProductRoleIds.Add((int)ProductRole.NotInProduct);
+						}
+						model.Users.Add(modelUser);
+					}
+
+					if (role.SubscriptionId != -1)
+					{
+						int index = model.SubIds.IndexOf(role.SubscriptionId);
+						if (index >= 0)
+						{
+							modelUser.ProductRoleIds[model.SubIds.IndexOf(role.SubscriptionId)] = role.ProductRoleId;
+						}
+					}
+				}
+				
 				return this.View("Permission2", model);
 			}
 
@@ -90,11 +139,14 @@ namespace AllyisApps.Controllers
 
 				if (user.ProductRoleId > 0)
 				{
-					currentUserPerm.SubscriptionRoles.Add(new SubscriptionRoleInfo
+					try
 					{
-						ProductRoleId = user.ProductRoleId,
-						ProductId = result.Subscriptions.Where(s => s.SubscriptionId == user.SubscriptionId).Single().ProductId
-					});
+						currentUserPerm.SubscriptionRoles.Add(new SubscriptionRoleInfo
+						{
+							ProductRoleId = user.ProductRoleId,
+							ProductId = result.Subscriptions.Where(s => s.SubscriptionId == user.SubscriptionId).Single().ProductId
+						});
+					} catch (InvalidOperationException) { } // Deleted subscription
 				}
 
 				//List<SubscriptionRoleInfo> subRoles = new List<SubscriptionRoleInfo>();

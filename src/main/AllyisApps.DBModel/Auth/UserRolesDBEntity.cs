@@ -44,11 +44,11 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets Their product role ids.
 		/// </summary>
-		public int ProductRoleId { get; set; }
+		public int? ProductRoleId { get; set; }
 
 		/// <summary>
 		/// Gets or sets Their subscription ids.
 		/// </summary>
-		public int SubscriptionId { get; set; }
+		public int? SubscriptionId { get; set; }
 	}
 }

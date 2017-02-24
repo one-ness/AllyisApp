@@ -987,8 +987,8 @@ namespace AllyisApps.Services
 				LastName = userRoles.LastName,
 				Name = userRoles.Name,
 				OrgRoleId = userRoles.OrgRoleId,
-				ProductRoleId = userRoles.ProductRoleId,
-				SubscriptionId = userRoles.SubscriptionId,
+				ProductRoleId = userRoles.ProductRoleId == null ? -1 : userRoles.ProductRoleId.Value,
+				SubscriptionId = userRoles.SubscriptionId == null ? -1 : userRoles.SubscriptionId.Value,
 				UserId = userRoles.UserId
 			};
 		}

@@ -272,6 +272,7 @@
     <Build Include="StoredProcedures\Auth\Auth.GetOrgManagementInfo.sql" />
     <Build Include="StoredProcedures\Auth\Auth.GetOrgWithCountriesAndEmployeeId.sql" />
     <Build Include="StoredProcedures\Auth\Auth.GetAddMemberInfo.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetOrgAndSubRoles.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

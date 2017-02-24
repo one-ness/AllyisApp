@@ -141,6 +141,20 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Gets a list of UserRolesInfos for users in the current organization and their roles/subscription roles,
+		/// and a list of SubscriptionRoles (with only SubscriptionId, ProductId, and ProductName populated) for
+		/// all subscriptions in the current organization.
+		/// </summary>
+		/// <returns></returns>
+		public Tuple<List<UserRolesInfo>, List<SubscriptionDisplayInfo>> GetOrgAndSubRoles()
+		{
+			var spResults = DBHelper.GetOrgAndSubRoles(UserContext.ChosenOrganizationId);
+			return Tuple.Create(
+				spResults.Item1.Select(urdb => InitializeUserRolesInfo(urdb)).ToList(),
+				spResults.Item2.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList());
+		}
+
+		/// <summary>
 		/// Updates an organization chosen by the current user.
 		/// </summary>
 		/// <param name="organization">Updated organization info.</param>

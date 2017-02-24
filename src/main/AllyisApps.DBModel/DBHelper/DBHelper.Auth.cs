@@ -1086,5 +1086,29 @@ namespace AllyisApps.DBModel
 					results.Read<CompleteProjectDBEntity>().ToList());
 			}
 		}
+
+		/// <summary>
+		/// Returns a list of UserRolesDBEntities for users in the organization and their roles/subscription roles,
+		/// and a list of SubscriptionDBEntites (with only SubscriptionId, ProductId, and ProductName populated) for
+		/// all subscriptions in the organization.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns></returns>
+		public Tuple<List<UserRolesDBEntity>, List<SubscriptionDisplayDBEntity>> GetOrgAndSubRoles (int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@OrganizationId", orgId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Auth].[GetOrgAndSubRoles]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<UserRolesDBEntity>().ToList(),
+					results.Read<SubscriptionDisplayDBEntity>().ToList());
+			}
+		}
+
 	}
 }
