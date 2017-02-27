@@ -100,7 +100,8 @@ namespace AllyisApps.Core
 
 			int indexOfController = requestUrl.IndexOf(routeData.Values["controller"].ToString());
 			string withOutControllerAction = indexOfArea > -1 ? requestUrl.Substring(0, indexOfArea) : indexOfController > -1 ? requestUrl.Substring(0, indexOfController) : requestUrl;
-			string rootAndMiddle = withOutControllerAction.Substring(withOutControllerAction.IndexOf(GlobalSettings.WebRoot));
+			//string rootAndMiddle = withOutControllerAction.Substring(withOutControllerAction.IndexOf(GlobalSettings.WebRoot));
+			string rootAndMiddle = withOutControllerAction.Substring(withOutControllerAction.IndexOf("//") + 2);
 
 			//// rootAndMiddle contains just the webroot, set in WebConfig, and whatever segments were there before the controller name (e.g. language)
 			string route = pController == null ? string.Empty : pAction == null ? pController : string.Format("{0}/{1}", pController, pAction);
@@ -109,26 +110,7 @@ namespace AllyisApps.Core
 			{
 				route = string.Format("{0}/{1}", pArea, route);
 			}
-			//----------------
-			// if no org is set for a user the default is "default" this catchs that
-			// case until the default usercontext org is looked at
-			//string url, chosenOrg = Service.GetSubdomainById(pOrganizationId);
-			//if (chosenOrg == "default") //SUBDOMAINS ENABLED -to disable, comment this if/else block and the "url =..." line at the end of the else
-			//{
-			//	url = string.Format("{0}/{1}", rootAndMiddle, route);
-			//}
-			//else
-			//{
-			//	// Update the ChosenOrg in the database if necessary, so that the UserContext can grab the right one
-			//	if (this.UserContext != null && this.UserContext.ChosenOrganizationId != pOrganizationId)
-			//	{
-			//		this.Service.UpdateActiveOrganization(UserContext.UserId, pOrganizationId);
-			//	}
 
-			//	url = string.Format("{0}.{1}/{2}", chosenOrg, rootAndMiddle, route);
-			//}
-
-			//-------------
 			if (this.UserContext != null && this.UserContext.ChosenOrganizationId != pOrganizationId)
 			{
 				this.Service.UpdateActiveOrganization(UserContext.UserId, pOrganizationId);
