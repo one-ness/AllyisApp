@@ -439,5 +439,31 @@ namespace AllyisApps.DBModel
 					commandType: CommandType.StoredProcedure);
 			}
 		}
+
+		/// <summary>
+		/// Returns a list of ProjectDBEntities for projects the given user is assigned to in the given organization,
+		/// another list of ProjectDBEntities for all projects in the given organization, and a UserDBEntity with the 
+		/// name and email of the user.
+		/// </summary>
+		/// <param name="userId">User Id.</param>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns></returns>
+		public Tuple<List<ProjectDBEntity>, List<ProjectDBEntity>, UserDBEntity> GetProjectsForOrgAndUser(int userId, int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@UserId", userId);
+			parameters.Add("@OrgId", orgId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Crm].[GetProjectsForOrgAndUser]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<ProjectDBEntity>().ToList(),
+					results.Read<ProjectDBEntity>().ToList(),
+					results.Read<UserDBEntity>().SingleOrDefault());
+			}
+		}
 	}
 }

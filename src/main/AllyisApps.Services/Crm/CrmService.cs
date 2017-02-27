@@ -1072,5 +1072,35 @@ namespace AllyisApps.Services
 				ProductId = subscriptionRole.ProductId
 			};
 		}
+
+		/// <summary>
+		/// Returns a list of ProjectInfos for projects the given user is assigned to in the given organization 
+		/// (current organization by default), another list of ProjectDBEntities for all projects in the organization,
+		/// the name of the user (as "Firstname Lastname"), and the user's email.
+		/// </summary>
+		/// <param name="userId">User Id.</param>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns></returns>
+		public Tuple<List<ProjectInfo>, List<ProjectInfo>, string, string> GetProjectsForOrgAndUser(int userId, int orgId = -1)
+		{
+			if (userId <= 0)
+			{
+				throw new ArgumentException("User Id cannot be zero or negative.", "userId");
+			}
+
+			if (orgId <= 0)
+			{
+				orgId = UserContext.ChosenOrganizationId;
+			}
+
+			var spResults = DBHelper.GetProjectsForOrgAndUser(userId, orgId);
+			var userDBEntity = spResults.Item3;
+			string name = string.Format("{0} {1}", userDBEntity.FirstName, userDBEntity.LastName);
+			return Tuple.Create(
+				spResults.Item1.Select(pdb => InitializeProjectInfo(pdb)).ToList(),
+				spResults.Item2.Select(pdb => InitializeProjectInfo(pdb)).ToList(),
+				name,
+				userDBEntity.Email);
+		}
 	}
 }
