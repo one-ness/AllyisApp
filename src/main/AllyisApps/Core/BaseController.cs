@@ -109,23 +109,39 @@ namespace AllyisApps.Core
 			{
 				route = string.Format("{0}/{1}", pArea, route);
 			}
-
+			//----------------
 			// if no org is set for a user the default is "default" this catchs that
 			// case until the default usercontext org is looked at
-			string url, chosenOrg = Service.GetSubdomainById(pOrganizationId);
-			if (chosenOrg == "default") //SUBDOMAINS ENABLED -to disenable, comment this if/else block and the "url =..." line at the end of the else
-			{
-				url = string.Format("{0}/{1}", rootAndMiddle, route);
-			}
-			else
-			{
-				// Update the ChosenOrg in the database if necessary, so that the UserContext can grab the right one
-				if (this.UserContext != null && this.UserContext.ChosenOrganizationId != pOrganizationId)
-				{
-					this.Service.UpdateActiveOrganization(UserContext.UserId, pOrganizationId);
-				}
+			//string url, chosenOrg = Service.GetSubdomainById(pOrganizationId);
+			//if (chosenOrg == "default") //SUBDOMAINS ENABLED -to disable, comment this if/else block and the "url =..." line at the end of the else
+			//{
+			//	url = string.Format("{0}/{1}", rootAndMiddle, route);
+			//}
+			//else
+			//{
+			//	// Update the ChosenOrg in the database if necessary, so that the UserContext can grab the right one
+			//	if (this.UserContext != null && this.UserContext.ChosenOrganizationId != pOrganizationId)
+			//	{
+			//		this.Service.UpdateActiveOrganization(UserContext.UserId, pOrganizationId);
+			//	}
 
-				url = string.Format("{0}.{1}/{2}", chosenOrg, rootAndMiddle, route);
+			//	url = string.Format("{0}.{1}/{2}", chosenOrg, rootAndMiddle, route);
+			//}
+
+			//-------------
+			if (this.UserContext != null && this.UserContext.ChosenOrganizationId != pOrganizationId)
+			{
+				this.Service.UpdateActiveOrganization(UserContext.UserId, pOrganizationId);
+			}
+
+			string url = string.Format("{0}/{1}", rootAndMiddle, route);
+			if (GlobalSettings.useSubdomains)
+			{
+				string chosenOrg = Service.GetSubdomainById(pOrganizationId);
+				if (!chosenOrg.Equals("default"))
+				{
+					url = string.Format("{0}.{1}", chosenOrg, url);
+				}
 			}
 
 			// Any other miscellaneous route parameters need to remain in the query string

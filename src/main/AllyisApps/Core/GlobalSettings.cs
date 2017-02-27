@@ -25,6 +25,11 @@ namespace AllyisApps.Core
 		public static string WebRoot { get; set; }
 
 		/// <summary>
+		/// Gest or sets a value indicating whether to use subdomains.
+		/// </summary>
+		public static bool useSubdomains { get; set; }
+
+		/// <summary>
 		/// Gets or sets the domain the cookie is set for.
 		/// </summary>
 		public static string CookieDomain { get; set; }
@@ -42,6 +47,7 @@ namespace AllyisApps.Core
 		{
 			HostName = Helpers.ReadAppSetting("hostname");
 			WebRoot = Helpers.ReadAppSetting("webroot");
+			useSubdomains = bool.Parse(Helpers.ReadAppSetting("useSubdomains"));
 			CookieDomain = WebRoot;
 
 			SqlConnectionString = ConfigurationManager.ConnectionStrings[connectionStringKey].ConnectionString;
