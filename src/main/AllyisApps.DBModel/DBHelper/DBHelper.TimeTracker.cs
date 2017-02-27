@@ -569,5 +569,29 @@ namespace AllyisApps.DBModel
 
 			return true;
 		}
+
+		/// <summary>
+		/// Returns a SettingsDBEntity with start of week, overtime, and lock date settings, a list of PayClassDBEntities,
+		/// and a list of HolidayDBEntites for the given organization.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns></returns>
+		public Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>> GetAllSettings(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationID", orgId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[TimeTracker].[GetAllSettings]", 
+					parameters, 
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<SettingDBEntity>().SingleOrDefault(),
+					results.Read<PayClassDBEntity>().ToList(),
+					results.Read<HolidayDBEntity>().ToList());
+			}
+		}
 	}
 }

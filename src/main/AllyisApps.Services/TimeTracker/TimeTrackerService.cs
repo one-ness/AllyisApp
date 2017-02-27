@@ -689,6 +689,37 @@ namespace AllyisApps.Services.TimeTracker
 		}
 
 		/// <summary>
+		/// Returns a SettingsInfo with start of week, overtime, and lock date settings, a list of PayClassInfos,
+		/// and a list of HolidayInfos for the current organization.
+		/// </summary>
+		/// <returns></returns>
+		public Tuple<SettingsInfo, List<PayClassInfo>, List<HolidayInfo>> GetAllSettings()
+		{
+			var spResults = DBHelper.GetAllSettings(UserContext.ChosenOrganizationId);
+			return Tuple.Create(
+				InitializeSettingsInfo(spResults.Item1),
+				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
+				spResults.Item3.Select(hdb => InitializeHolidayInfo(hdb)).ToList());
+		}
+
+		/// <summary>
+		/// Initializes a PayClassInfo from a PayClassDBEntity.
+		/// </summary>
+		/// <param name="pc">PayClassDBEntity.</param>
+		/// <returns>PayClassInfo.</returns>
+		public static PayClassInfo InitializePayClassInfo(PayClassDBEntity pc)
+		{
+			return new PayClassInfo
+			{
+				Name = pc.Name,
+				OrganizationId = pc.OrganizationId,
+				PayClassID = pc.PayClassID,
+				CreatedUTC = pc.CreatedUTC,
+				ModifiedUTC = pc.ModifiedUTC
+			};
+		}
+
+		/// <summary>
 		/// Initialized holiday info with a given HolidayDBEntity.
 		/// </summary>
 		/// <param name="hol">The HolidayDBEntity to use.</param>

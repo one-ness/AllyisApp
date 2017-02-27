@@ -23,14 +23,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The settings page.</returns>
 		public ActionResult Settings()
 		{
+			var infos = TimeTrackerService.GetAllSettings();
+
 			if (Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				return this.View(new SettingsViewModel()
 				{
-					StartOfWeek = TimeTrackerService.GetStartOfWeek(),
-					Settings = TimeTrackerService.GetSettings(),
-					PayClasses = TimeTrackerService.GetPayClasses(),
-					Holidays = TimeTrackerService.GetHolidays()
+					Settings = infos.Item1,
+					PayClasses = infos.Item2,
+					Holidays = infos.Item3
 				});
 			}
 
