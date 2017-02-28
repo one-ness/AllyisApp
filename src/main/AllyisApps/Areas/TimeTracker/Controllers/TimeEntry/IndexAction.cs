@@ -108,7 +108,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				hours.Add(proj.ProjectId, new ProjectHours { Project = proj, Hours = 0.0f });
 			}
 
-			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = 0, ProjectName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
+			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = -1, ProjectName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
 
 			IEnumerable<UserInfo> users = Service.GetUsersWithSubscriptionToProductInOrganization(UserContext.ChosenOrganizationId, Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
 

@@ -72,15 +72,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// Cover all entries for that day
 				foreach (TimeEntryInfo entry in entriesCopy.Where(x => x.Date == startDateCopy.Date.AddDays(i)))
 				{
-					TimeTrackerService.CreateTimeEntry(new TimeEntryInfo
+					// Don't copy holidays.
+					if (entry.ProjectId > 0)
 					{
-						UserId = userId,
-						ProjectId = entry.ProjectId,
-						PayClassId = entry.PayClassId,
-						Date = startDateTarget.Date.AddDays(i),
-						Duration = entry.Duration,
-						Description = entry.Description
-					});
+						TimeTrackerService.CreateTimeEntry(new TimeEntryInfo
+						{
+							UserId = userId,
+							ProjectId = entry.ProjectId,
+							PayClassId = entry.PayClassId,
+							Date = startDateTarget.Date.AddDays(i),
+							Duration = entry.Duration,
+							Description = entry.Description
+						});
+					}
 				}
 			}
 
