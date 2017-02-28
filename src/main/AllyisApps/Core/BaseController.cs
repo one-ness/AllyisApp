@@ -138,7 +138,7 @@ namespace AllyisApps.Core
 			if (GlobalSettings.useSubdomains)
 			{
 				string chosenOrg = Service.GetSubdomainById(pOrganizationId);
-				if (!chosenOrg.Equals("default"))
+				if (!(chosenOrg == null || chosenOrg.Equals("default")))
 				{
 					url = string.Format("{0}.{1}", chosenOrg, url);
 				}
