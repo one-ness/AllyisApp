@@ -53,6 +53,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if (Service.Can(Actions.CoreAction.EditProject))
 				{
+					ProjectInfo projIdMatch = Service.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Where(project => project.ProjectOrgId == model.ProjectOrgId).SingleOrDefault();
+					if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
+					{
+						Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ProjectOrgIdNotUnique, Variety.Danger));
+						return this.View(model);
+					}
+
 					try
 					{
 						UpdateProject(model);

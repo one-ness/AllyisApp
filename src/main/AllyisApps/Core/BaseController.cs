@@ -113,7 +113,7 @@ namespace AllyisApps.Core
 			// if no org is set for a user the default is "default" this catchs that
 			// case until the default usercontext org is looked at
 			string url, chosenOrg = Service.GetSubdomainById(pOrganizationId);
-			if (chosenOrg == "default") //SUBDOMAINS ENABLED -to disenable, comment this if/else block and the "url =..." line at the end of the else
+			if (chosenOrg == null || chosenOrg == "default") //SUBDOMAINS ENABLED -to disenable, comment this if/else block and the "url =..." line at the end of the else
 			{
 				url = string.Format("{0}/{1}", rootAndMiddle, route);
 			}
