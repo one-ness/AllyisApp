@@ -594,6 +594,32 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Sets the employee id to a given value for a user in an organization.
+		/// </summary>
+		/// <param name="userId">User id.</param>
+		/// <param name="orgId">Organization id.</param>
+		/// <param name="employeeId">New employee id.</param>
+		public void SetEmployeeId(int userId, int orgId, string employeeId)
+		{
+			if (userId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+			}
+
+			if (orgId < 0)
+			{
+				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
+			}
+
+			if (string.IsNullOrEmpty(employeeId))
+			{
+				throw new ArgumentNullException("employeeId", "Employee Id must have a value");
+			}
+
+			DBHelper.SetEmployeeId(userId, orgId, employeeId);
+		}
+
+		/// <summary>
 		/// Removes an organization user.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
