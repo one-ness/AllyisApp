@@ -29,6 +29,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult Create(int id)
 		{
+			DateTime? defaultStart = null;
+			DateTime? defaultEnd = null;
+
 			if (Service.Can(Actions.CoreAction.EditProject))
 			{
 				var list = Service.GetUsers();
@@ -46,8 +49,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ParentCustomerId = id,
 						ProjectUsers = new List<BasicUserInfoViewModel>(),
 						SubscriptionUsers = subList,
-						StartDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today),
-						EndDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today.AddMonths(6)),
+						StartDate = TimeTrackerService.GetDayFromDateTime(defaultStart),
+						EndDate = TimeTrackerService.GetDayFromDateTime(defaultEnd),
 						ProjectOrgId = Service.GetRecommendedProjectId()
 					});
 			}

@@ -494,8 +494,14 @@ $('#datePickerEnd').on("change", function () {
 });
 
 $(function () {
-    $('#datePickerStart').datepicker("setDate", DateConvert.GetMomentFromDays(model_startdate).toDate());
-    $('#datePickerEnd').datepicker("setDate", DateConvert.GetMomentFromDays(model_enddate).toDate());
+	var initStart = DateConvert.GetMomentFromDays(model_startdate);
+	if (!isNaN(initStart)) {
+		$('#datePickerStart').datepicker("setDate", initStart.toDate());
+	}
+	var initEnd = DateConvert.GetMomentFromDays(model_enddate);
+	if (!isNaN(initEnd)) {
+		$('#datePickerEnd').datepicker("setDate", initEnd.toDate());
+	}
     $('.ui-datepicker-trigger').remove();
     $('#datePickerStartButton').on("click", function () {
         $('#datePickerStart').datepicker("show");

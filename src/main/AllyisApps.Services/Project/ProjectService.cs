@@ -71,17 +71,17 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("projectOrgId", "Project must have an ID");
 			}
 
-			if (newProject.StartingDate == null)
-			{
-				throw new ArgumentNullException("start", "Project must have a start time");
-			}
+			//if (newProject.StartingDate == null)
+			//{
+			//	throw new ArgumentNullException("start", "Project must have a start time");
+			//}
 
-			if (newProject.EndingDate == null)
-			{
-				throw new ArgumentNullException("end", "Project must have an end time");
-			}
+			//if (newProject.EndingDate == null)
+			//{
+			//	throw new ArgumentNullException("end", "Project must have an end time");
+			//}
 
-			if (DateTime.Compare(newProject.StartingDate, newProject.EndingDate) > 0)
+			if (newProject.StartingDate.HasValue && newProject.EndingDate.HasValue && DateTime.Compare(newProject.StartingDate.Value, newProject.EndingDate.Value) > 0)
 			{
 				throw new ArgumentException("Project cannot end before it starts.");
 			}
@@ -114,17 +114,17 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("Type", "Type must have a value.");
 			}
 
-			if (project.StartingDate == null)
-			{
-				throw new ArgumentNullException("StartingDate", "Project must have a start time");
-			}
+			//if (project.StartingDate == null)
+			//{
+			//	throw new ArgumentNullException("StartingDate", "Project must have a start time");
+			//}
 
-			if (project.EndingDate == null)
-			{
-				throw new ArgumentNullException("EndingDate", "Project must have an end time");
-			}
+			//if (project.EndingDate == null)
+			//{
+			//	throw new ArgumentNullException("EndingDate", "Project must have an end time");
+			//}
 
-			if (DateTime.Compare(project.StartingDate, project.EndingDate) > 0)
+			if (project.StartingDate.HasValue && project.EndingDate.HasValue && DateTime.Compare(project.StartingDate.Value, project.EndingDate.Value) > 0)
 			{
 				throw new ArgumentException("Project cannot end before it starts.");
 			}
@@ -148,7 +148,7 @@ namespace AllyisApps.Services
 		/// <param name="end">Ending date. <see cref="DateTime"/></param>
 		/// <param name="userIDs">Updated on-project user list.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime start, DateTime end, IEnumerable<int> userIDs)
+		public bool UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime? start, DateTime? end, IEnumerable<int> userIDs)
 		{
 			#region Validation
 
@@ -172,17 +172,17 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("type", "Type must have a value.");
 			}
 
-			if (start == null)
-			{
-				throw new ArgumentNullException("start", "Project must have a start time");
-			}
+			//if (start == null)
+			//{
+			//	throw new ArgumentNullException("start", "Project must have a start time");
+			//}
 
-			if (end == null)
-			{
-				throw new ArgumentNullException("end", "Project must have an end time");
-			}
+			//if (end == null)
+			//{
+			//	throw new ArgumentNullException("end", "Project must have an end time");
+			//}
 
-			if (DateTime.Compare(start, end) > 0)
+			if (start.HasValue && end.HasValue && DateTime.Compare(start.Value, end.Value) > 0)
 			{
 				throw new ArgumentException("Project cannot end before it starts.");
 			}

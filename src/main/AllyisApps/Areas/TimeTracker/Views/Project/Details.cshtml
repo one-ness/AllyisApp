@@ -27,7 +27,20 @@
         </div>
         <div class="row">
             <div class="col-xs-8 text-left">
-                <span id="projectDate">@Model.StartDate.ToShortDateString() - @Model.EndDate.ToShortDateString()</span>
+				@{ 
+					string startDateString = "";
+					if (Model.StartDate.HasValue)
+					{
+						startDateString = Model.StartDate.Value.ToShortDateString();
+					}
+
+					string endDateString = "";
+					if (Model.EndDate.HasValue)
+					{
+						endDateString = Model.EndDate.Value.ToShortDateString();
+					}
+				}
+                <span id="projectDate">@startDateString - @endDateString</span>
             </div>
 
             @{

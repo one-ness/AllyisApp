@@ -46,11 +46,11 @@ namespace AllyisApps.DBModel.Crm
 		/// <summary>
 		/// Gets or sets the project's starting date.
 		/// </summary>
-		public DateTime StartingDate { get; set; }
+		public DateTime? StartingDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets the project's ending date.
 		/// </summary>
-		public DateTime EndingDate { get; set; }
+		public DateTime? EndingDate { get; set; }
 	}
 }
