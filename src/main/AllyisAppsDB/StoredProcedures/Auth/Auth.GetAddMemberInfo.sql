@@ -59,3 +59,9 @@ AS
 		AND [Project].[IsActive] >= 1
 
 	ORDER BY [Project].[Name]
+
+	SELECT TOP 1
+		[EmployeeId]
+	FROM [Auth].[Invitation] WITH (NOLOCK)
+	WHERE [OrganizationId] = @OrganizationId AND [IsActive] = 1
+	ORDER BY [EmployeeId] DESC

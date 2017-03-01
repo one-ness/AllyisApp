@@ -1063,13 +1063,14 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Returns the next recommended employee id, a list of SubscriptionDisplayDBEntities for subscriptions in
+		/// Returns the next recommended employee id by existing employees, a list of SubscriptionDisplayDBEntities for subscriptions in
 		/// the organization, a list of SubscriptionRoleDBEntities for roles within the subscriptions of the organization,
-		/// and a list of CompleteProjectDBEntityies for TimeTracker projects in the organization.
+		/// a list of CompleteProjectDBEntityies for TimeTracker projects in the organization, and the next recommended employee id by
+		/// invitations.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns></returns>
-		public Tuple<string, List<SubscriptionDisplayDBEntity>, List<SubscriptionRoleDBEntity>, List<CompleteProjectDBEntity>> GetAddMemberInfo(int orgId)
+		public Tuple<string, List<SubscriptionDisplayDBEntity>, List<SubscriptionRoleDBEntity>, List<CompleteProjectDBEntity>, string> GetAddMemberInfo(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@OrganizationId", orgId);
@@ -1083,7 +1084,8 @@ namespace AllyisApps.DBModel
 					results.Read<string>().SingleOrDefault(),
 					results.Read<SubscriptionDisplayDBEntity>().ToList(),
 					results.Read<SubscriptionRoleDBEntity>().ToList(),
-					results.Read<CompleteProjectDBEntity>().ToList());
+					results.Read<CompleteProjectDBEntity>().ToList(),
+					results.Read<string>().SingleOrDefault());
 			}
 		}
 

@@ -125,19 +125,21 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets the next recommended employee id, a list of SubscriptionDisplayInfos for subscriptions in
+		/// Gets the next recommended employee id by existing users, a list of SubscriptionDisplayInfos for subscriptions in
 		/// the organization, a list of SubscriptionRoleInfos for roles within the subscriptions of the organization,
-		/// and a list of CompleteProjectInfos for TimeTracker projects in the organization.
+		/// a list of CompleteProjectInfos for TimeTracker projects in the organization, and the next recommended employee id
+		/// by invitations.
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<string, List<SubscriptionDisplayInfo>, List<SubscriptionRoleInfo>, List<CompleteProjectInfo>> GetAddMemberInfo()
+		public Tuple<string, List<SubscriptionDisplayInfo>, List<SubscriptionRoleInfo>, List<CompleteProjectInfo>, string> GetAddMemberInfo()
 		{
 			var spResults = DBHelper.GetAddMemberInfo(UserContext.ChosenOrganizationId);
 			return Tuple.Create(
 				spResults.Item1,
 				spResults.Item2.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
 				spResults.Item3.Select(srdb => InitializeSubscriptionRoleInfo(srdb)).ToList(),
-				spResults.Item4.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList());
+				spResults.Item4.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
+				spResults.Item5);
 		}
 
 		/// <summary>

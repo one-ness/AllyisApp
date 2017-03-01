@@ -53,6 +53,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <returns>The DateTime date.</returns>
 		public static DateTime GetDateFromDays(int days)
 		{
+			//if (days < 0) return null;
 			return DateTime.MinValue.AddDays(days);
 		}
 

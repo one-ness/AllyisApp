@@ -78,7 +78,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						throw new ArgumentNullException("model");
 					}
 
-					if (Service.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Any(project => project.ProjectOrgId == model.ProjectOrgId))
+					if (Service.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Any(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId))
 					{
 						Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ProjectOrgIdNotUnique, Variety.Danger));
 						return this.View(model);
