@@ -373,6 +373,6 @@
     <value>End Date</value>
   </data>
   <data name="StartDate" xml:space="preserve">
-    <value>State Date</value>
+    <value>Start Date</value>
   </data>
 </root>
