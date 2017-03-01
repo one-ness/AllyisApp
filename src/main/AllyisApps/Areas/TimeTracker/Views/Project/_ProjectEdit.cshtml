@@ -77,13 +77,13 @@
 						<label for="daterange" style="text-align:center">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.EndDate</label>
 					</div>*@
 
-					<div class="form-group col-xs-6">
+					<div class="form-group projectDate">
 						<label>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.StartDate</label>
 						@Html.HiddenFor(m => m.StartDate)
 						<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerStart" />
 						<span class="fa fa-fw fa-calendar" id="datePickerStartButton"></span>
 					</div>
-					<div class="form-group col-xs-6">
+					<div class="form-group projectDate" style="float: right">
 						<label>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.EndDate</label>
 						@Html.HiddenFor(m => m.EndDate)
 						<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerEnd" />

@@ -76,12 +76,12 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Project start date.
 		/// </summary>
-		public DateTime StartDate { get; set; }
+		public DateTime? StartDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Project end date.
 		/// </summary>
-		public DateTime EndDate { get; set; }
+		public DateTime? EndDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the current user can edit the project.

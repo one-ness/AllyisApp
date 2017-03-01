@@ -81,12 +81,12 @@ namespace AllyisApps.DBModel.Crm
 		/// <summary>
 		/// Gets or sets Project start date.
 		/// </summary>
-		public DateTime StartDate { get; set; }
+		public DateTime? StartDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets Project end date.
 		/// </summary>
-		public DateTime EndDate { get; set; }
+		public DateTime? EndDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Project's ID as used by the organization

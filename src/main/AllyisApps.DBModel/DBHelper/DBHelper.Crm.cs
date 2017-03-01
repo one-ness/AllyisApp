@@ -37,8 +37,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@Name", project.Name);
 			parameters.Add("@PriceType", project.Type);
 			parameters.Add("@ProjectOrgId", project.ProjectOrgId);
-			parameters.Add("@StartingDate", project.StartingDate.ToShortDateString());
-			parameters.Add("@EndingDate", project.EndingDate.ToShortDateString());
+			parameters.Add("@StartingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
+			parameters.Add("@EndingDate", project.EndingDate == null ? null : project.EndingDate.Value.ToShortDateString());
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -81,8 +81,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@Name", project.Name);
 			parameters.Add("@PriceType", project.Type);
 			parameters.Add("@ProjectOrgId", project.ProjectOrgId);
-			parameters.Add("@StartingDate", project.StartingDate);
-			parameters.Add("@EndingDate", project.EndingDate);
+			parameters.Add("@StartingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
+			parameters.Add("@EndingDate", project.EndingDate == null ? null : project.EndingDate.Value.ToShortDateString());
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -403,7 +403,7 @@ namespace AllyisApps.DBModel
 		/// <param name="start">The start date assigned to the project.</param>
 		/// <param name="end">The end date assigned to the project.</param>
 		/// <param name="userIDs">The updated list of project users, by their IDs.</param>
-		public void UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime start, DateTime end, IEnumerable<int> userIDs)
+		public void UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime? start, DateTime? end, IEnumerable<int> userIDs)
 		{
 			if (string.IsNullOrWhiteSpace(name))
 			{
@@ -427,8 +427,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@Name", name);
 			parameters.Add("@OrgId", orgId);
 			parameters.Add("@PriceType", type);
-			parameters.Add("@StartingDate", start.ToShortDateString());
-			parameters.Add("@EndingDate", end.ToShortDateString());
+			parameters.Add("@StartingDate", start == null ? null : start.Value.ToShortDateString());
+			parameters.Add("@EndingDate", end == null ? null : end.Value.ToShortDateString());
 			parameters.Add("@UserIDs", userIDsTable.AsTableValuedParameter("[Auth].[UserTable]"));
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))

@@ -48,11 +48,12 @@ namespace AllyisApps.Controllers
 		public AddMemberViewModel ConstructOrganizationAddMembersViewModel()
 		{
 			var infos = Service.GetAddMemberInfo();
+			string nextId = string.Compare(infos.Item1, infos.Item5) > 0 ? infos.Item1 : infos.Item5;
 
 			AddMemberViewModel result = new AddMemberViewModel
 			{
 				OrganizationId = UserContext.ChosenOrganizationId,
-				EmployeeId = new string(Service.IncrementAlphanumericCharArray(infos.Item1.ToCharArray())),
+				EmployeeId = new string(Service.IncrementAlphanumericCharArray(nextId.ToCharArray())),
 				Subscriptions = new List<AddMemberSubscriptionInfo>(),
 				Projects = infos.Item4
 			};

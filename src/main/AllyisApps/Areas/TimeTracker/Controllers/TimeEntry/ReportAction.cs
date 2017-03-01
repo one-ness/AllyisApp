@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.Core;
+using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using System;
@@ -23,34 +24,43 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// GET /TimeTracker/TimeEntry/Report.
 		/// </summary>
 		/// <returns>The reports page.</returns>
-		public ViewResult Report()
+		public ActionResult Report()
 		{
-			int orgId = UserContext.ChosenOrganizationId;
-			ReportViewModel reportVM = null;
-
-			const string TempDataKey = "RVM";
-			if (this.TempData[TempDataKey] != null)
+			if (Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
-				reportVM = (ReportViewModel)TempData[TempDataKey];
-				orgId = reportVM.OrganizationId;
-			}
-			else
-			{
-				reportVM = this.ConstructReportViewModel(UserContext.UserId, orgId, Service.Can(Actions.CoreAction.TimeTrackerEditOthers));
+
+				int orgId = UserContext.ChosenOrganizationId;
+				ReportViewModel reportVM = null;
+
+				const string TempDataKey = "RVM";
+				if (this.TempData[TempDataKey] != null)
+				{
+					reportVM = (ReportViewModel)TempData[TempDataKey];
+					orgId = reportVM.OrganizationId;
+				}
+				else
+				{
+					reportVM = this.ConstructReportViewModel(UserContext.UserId, orgId, Service.Can(Actions.CoreAction.TimeTrackerEditOthers));
+				}
+
+				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
+				{
+					throw new UnauthorizedAccessException(AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReports);
+				}
+
+				reportVM.StartOfWeek = (int)TimeTrackerService.GetStartOfWeek();
+				reportVM.UserView = this.GetUserSelectList(orgId, reportVM.Selection.Users);
+				reportVM.CustomerView = this.GetCustomerSelectList(orgId, reportVM.Selection.CustomerId);
+				reportVM.ProjectView = this.GetProjectSelectList(orgId, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
+				reportVM.PreviewPageNum = reportVM.Selection.Page;
+
+				return this.View(reportVM);
 			}
 
-			if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
-			{
-				throw new UnauthorizedAccessException(AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReports);
-			}
+			// Permissions failure
+			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 
-			reportVM.StartOfWeek = (int)TimeTrackerService.GetStartOfWeek();
-			reportVM.UserView = this.GetUserSelectList(orgId, reportVM.Selection.Users);
-			reportVM.CustomerView = this.GetCustomerSelectList(orgId, reportVM.Selection.CustomerId);
-			reportVM.ProjectView = this.GetProjectSelectList(orgId, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
-			reportVM.PreviewPageNum = reportVM.Selection.Page;
-
-			return this.View(reportVM);
+			return this.RouteHome();
 		}
 
 		/// <summary>

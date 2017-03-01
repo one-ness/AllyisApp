@@ -125,19 +125,21 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets the next recommended employee id, a list of SubscriptionDisplayInfos for subscriptions in
+		/// Gets the next recommended employee id by existing users, a list of SubscriptionDisplayInfos for subscriptions in
 		/// the organization, a list of SubscriptionRoleInfos for roles within the subscriptions of the organization,
-		/// and a list of CompleteProjectInfos for TimeTracker projects in the organization.
+		/// a list of CompleteProjectInfos for TimeTracker projects in the organization, and the next recommended employee id
+		/// by invitations.
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<string, List<SubscriptionDisplayInfo>, List<SubscriptionRoleInfo>, List<CompleteProjectInfo>> GetAddMemberInfo()
+		public Tuple<string, List<SubscriptionDisplayInfo>, List<SubscriptionRoleInfo>, List<CompleteProjectInfo>, string> GetAddMemberInfo()
 		{
 			var spResults = DBHelper.GetAddMemberInfo(UserContext.ChosenOrganizationId);
 			return Tuple.Create(
 				spResults.Item1,
 				spResults.Item2.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
 				spResults.Item3.Select(srdb => InitializeSubscriptionRoleInfo(srdb)).ToList(),
-				spResults.Item4.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList());
+				spResults.Item4.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
+				spResults.Item5);
 		}
 
 		/// <summary>
@@ -591,6 +593,32 @@ namespace AllyisApps.Services
 				OrgRoleId = orgRoleId,
 				EmployeeId = EmployeeId == null ? this.GetEmployeeId(userId, orgId) : EmployeeId
 			});
+		}
+
+		/// <summary>
+		/// Sets the employee id to a given value for a user in an organization.
+		/// </summary>
+		/// <param name="userId">User id.</param>
+		/// <param name="orgId">Organization id.</param>
+		/// <param name="employeeId">New employee id.</param>
+		public void SetEmployeeId(int userId, int orgId, string employeeId)
+		{
+			if (userId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+			}
+
+			if (orgId < 0)
+			{
+				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
+			}
+
+			if (string.IsNullOrEmpty(employeeId))
+			{
+				throw new ArgumentNullException("employeeId", "Employee Id must have a value");
+			}
+
+			DBHelper.SetEmployeeId(userId, orgId, employeeId);
 		}
 
 		/// <summary>

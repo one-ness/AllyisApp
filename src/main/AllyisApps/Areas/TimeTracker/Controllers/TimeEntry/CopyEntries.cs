@@ -56,13 +56,32 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.View(ViewConstants.Error);
 			}
 
+			// Reference for checking status of entries
+			List<CompleteProjectInfo> allProjects = Service.GetProjectsByUserAndOrganization(userId, false).ToList();
+			DateTime? lockDate = TimeTrackerService.GetLockDate();
+
 			// Authorized to edit this entry
 			// Remove existing entries in target range
 			DateTime endDateTarget = startDateTarget.AddDays(endDateCopy.Subtract(startDateCopy).Days);
 			IEnumerable<TimeEntryInfo> entriesRemove = TimeTrackerService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateTarget, endDateTarget);
 			foreach (TimeEntryInfo entry in entriesRemove)
 			{
-				TimeTrackerService.DeleteTimeEntry(entry.TimeEntryId);
+				// If the copying user isn't a manager, some checks are required before we let them delete/copy entries
+				if (!Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
+				{
+					CompleteProjectInfo project = allProjects.Where(p => entry.ProjectId == p.ProjectId).SingleOrDefault();
+					if (project != null && !project.IsActive)
+					{
+						continue; // A user can't delete locked entries from projects that have been removed.
+					}
+
+					if (lockDate.HasValue &&  entry.Date <= lockDate.Value)
+					{
+						continue; // A user can't delete entries from before/on the lock date.
+					}
+				}
+				
+				TimeTrackerService.DeleteTimeEntry(entry.TimeEntryId);				
 			}
 
 			// Add copied entries
@@ -72,15 +91,34 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// Cover all entries for that day
 				foreach (TimeEntryInfo entry in entriesCopy.Where(x => x.Date == startDateCopy.Date.AddDays(i)))
 				{
-					TimeTrackerService.CreateTimeEntry(new TimeEntryInfo
+					// If the copying user isn't a manager, some checks are required before we let them delete/copy entries
+					if (!Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 					{
-						UserId = userId,
-						ProjectId = entry.ProjectId,
-						PayClassId = entry.PayClassId,
-						Date = startDateTarget.Date.AddDays(i),
-						Duration = entry.Duration,
-						Description = entry.Description
-					});
+						CompleteProjectInfo project = allProjects.Where(p => entry.ProjectId == p.ProjectId).SingleOrDefault();
+						if (project != null && !project.IsActive)
+						{
+							continue; // A user can't create entries for projects that have been removed.
+						}
+
+						if (lockDate.HasValue && startDateTarget.Date.AddDays(i) <= lockDate.Value)
+						{
+							continue; // A user can't create entries before/on the lock date.
+						}
+					}
+
+					// Don't copy holidays.
+					if (entry.ProjectId > 0)
+					{
+						TimeTrackerService.CreateTimeEntry(new TimeEntryInfo
+						{
+							UserId = userId,
+							ProjectId = entry.ProjectId,
+							PayClassId = entry.PayClassId,
+							Date = startDateTarget.Date.AddDays(i),
+							Duration = entry.Duration,
+							Description = entry.Description
+						});
+					}
 				}
 			}
 

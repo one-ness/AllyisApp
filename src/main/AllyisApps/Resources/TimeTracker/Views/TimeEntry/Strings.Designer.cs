@@ -673,7 +673,7 @@ namespace AllyisApps.Resources.TimeTracker.Views.TimeEntry {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to State Date.
+        ///   Looks up a localized string similar to Start Date.
         /// </summary>
         public static string StartDate {
             get {

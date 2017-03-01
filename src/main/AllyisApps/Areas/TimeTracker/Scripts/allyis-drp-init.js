@@ -6,10 +6,17 @@ var DateConvert = (function () {
     var minimumDate = moment(-62135568000000) // This corresponds to DateTime.MinValue()
 
     return {
-        GetDaysFromMoment: function (date) {
+    	GetDaysFromMoment: function (date) {
+    		if (isNaN(date)) {
+    			return -1;
+    		}
             return date.diff(minimumDate, 'days');
         },
-        GetMomentFromDays: function (days) {
+    	GetMomentFromDays: function (days) {
+    		if (days < 0) {
+    			return Number.NaN;
+    		}
+
             // Shuffling of value necessary to preserve minimumDate, since the add method changes the moment object it's called from.
             oldval = moment(minimumDate);
             var sum = minimumDate.add(days, 'days');

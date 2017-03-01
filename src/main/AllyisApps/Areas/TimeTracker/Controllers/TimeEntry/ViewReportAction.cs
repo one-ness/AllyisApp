@@ -85,7 +85,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				reportVM.PreviewTotal = string.Format("{0} {1}", total, Resources.TimeTracker.Controllers.TimeEntry.Strings.HoursTotal);
 
-				IEnumerable<CompleteProjectInfo> orgProjects = Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId);
+				IEnumerable<CompleteProjectInfo> orgProjects = Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId, false);
 				if (dataCount > 0)
 				{
 					IList<TablePreviewEntry> pEntries = new List<TablePreviewEntry>();

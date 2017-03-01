@@ -28,7 +28,7 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <returns>Action result.</returns>
 		[HttpGet]
-		public ActionResult ManagePermissions()
+		public ActionResult ManagePermissions2()
 		{
 			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
@@ -45,7 +45,7 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <returns>Action result.</returns>
 		[HttpGet]
-		public ActionResult ManagePermissions2()
+		public ActionResult ManagePermissions()
 		{
 			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
@@ -276,7 +276,7 @@ namespace AllyisApps.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
-			if (model.isPermissions2) // TODO: Delete once there's only one manage permissions page (also delete the action constant)
+			if (!model.isPermissions2) // TODO: Delete once there's only one manage permissions page (also delete the action constant)
 			{
 				return RedirectToAction(ActionConstants.ManagePermissions2);
 			}

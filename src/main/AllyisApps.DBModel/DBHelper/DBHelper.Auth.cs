@@ -570,24 +570,24 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		///// <summary>
-		///// Sets the employee id for a user for an org.
-		///// </summary>
-		///// <param name="userID">The Id of the user.</param>
-		///// <param name="organizationID">The Id of the organization.</param>
-		///// <param name="employeeID">The value to set the employeeID to.</param>
-		//public void SetEmployeeId(int userID, int organizationID, string employeeID)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@userID", userID);
-		//	parameters.Add("@organizationID", organizationID);
-		//	parameters.Add("@employeeID", employeeID);
+		/// <summary>
+		/// Sets the employee id for a user for an org.
+		/// </summary>
+		/// <param name="userID">The Id of the user.</param>
+		/// <param name="organizationID">The Id of the organization.</param>
+		/// <param name="employeeID">The value to set the employeeID to.</param>
+		public void SetEmployeeId(int userID, int organizationID, string employeeID)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@userID", userID);
+			parameters.Add("@organizationID", organizationID);
+			parameters.Add("@employeeID", employeeID);
 
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		connection.Execute("[Auth].[UpdateOrgUserEmployeeId]", parameters, commandType: CommandType.StoredProcedure);
-		//	}
-		//}
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Execute("[Auth].[UpdateOrgUserEmployeeId]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
 
 		/// <summary>
 		/// Updates the specified user within the specified organization with a new role.
@@ -1063,13 +1063,14 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Returns the next recommended employee id, a list of SubscriptionDisplayDBEntities for subscriptions in
+		/// Returns the next recommended employee id by existing employees, a list of SubscriptionDisplayDBEntities for subscriptions in
 		/// the organization, a list of SubscriptionRoleDBEntities for roles within the subscriptions of the organization,
-		/// and a list of CompleteProjectDBEntityies for TimeTracker projects in the organization.
+		/// a list of CompleteProjectDBEntityies for TimeTracker projects in the organization, and the next recommended employee id by
+		/// invitations.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns></returns>
-		public Tuple<string, List<SubscriptionDisplayDBEntity>, List<SubscriptionRoleDBEntity>, List<CompleteProjectDBEntity>> GetAddMemberInfo(int orgId)
+		public Tuple<string, List<SubscriptionDisplayDBEntity>, List<SubscriptionRoleDBEntity>, List<CompleteProjectDBEntity>, string> GetAddMemberInfo(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@OrganizationId", orgId);
@@ -1083,7 +1084,8 @@ namespace AllyisApps.DBModel
 					results.Read<string>().SingleOrDefault(),
 					results.Read<SubscriptionDisplayDBEntity>().ToList(),
 					results.Read<SubscriptionRoleDBEntity>().ToList(),
-					results.Read<CompleteProjectDBEntity>().ToList());
+					results.Read<CompleteProjectDBEntity>().ToList(),
+					results.Read<string>().SingleOrDefault());
 			}
 		}
 
