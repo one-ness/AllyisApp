@@ -1000,6 +1000,9 @@ namespace AllyisApps.Services
 
 					#region Project Import
 
+					DateTime? defaultProjectStartDate = null;
+					DateTime? defaultProjectEndDate = null;
+
 					ProjectInfo project = null;
 
 					// If there is no identifying information for projects, all project related importing is skipped.
@@ -1083,8 +1086,8 @@ namespace AllyisApps.Services
 									Type = "Hourly",
 									OrganizationId = this.UserContext.ChosenOrganizationId,
 									ProjectOrgId = thisRowHasProjectName ? readValue : knownValue,
-									StartingDate = DateTime.Now,
-									EndingDate = DateTime.Now.AddMonths(6)
+									StartingDate = defaultProjectStartDate,
+									EndingDate = defaultProjectEndDate
 								};
 								project.ProjectId = this.CreateProject(project);
 								if (project.ProjectId == -1)
@@ -1188,8 +1191,8 @@ namespace AllyisApps.Services
 										Type = "Hourly",
 										OrganizationId = this.UserContext.ChosenOrganizationId,
 										ProjectOrgId = fields[1],
-										StartingDate = DateTime.Now,
-										EndingDate = DateTime.Now.AddMonths(6)
+										StartingDate = defaultProjectStartDate,
+										EndingDate = defaultProjectEndDate
 									};
 									project.ProjectId = this.CreateProject(project);
 									if (project.ProjectId == -1)
