@@ -376,6 +376,28 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Gets a project from its id and a user id, with the IsProjectUser field filled out
+		/// for that user.
+		/// </summary>
+		/// <param name="projectId">The project's Id.</param>
+		/// <param name="userId">The user Id.</param>
+		/// <returns>Info about the requested project.</returns>
+		public CompleteProjectDBEntity GetProjectByIdAndUser(int projectId, int userId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@ProjectId", projectId);
+			parameters.Add("@UserId", userId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<CompleteProjectDBEntity>(
+					"[Crm].[GetProjectByIdAndUser]",
+					parameters,
+					commandType: CommandType.StoredProcedure).SingleOrDefault();
+			}
+		}
+
+		/// <summary>
 		/// Gets a Collection of project data that the user can use.
 		/// </summary>
 		/// <param name="userId">The User's Id.</param>

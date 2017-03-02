@@ -11,12 +11,13 @@
     var customerCount = 0;
     var empty = new EditCustomerInfoViewModel() { OrganizationId = Model.OrganizationId };
     var emptyProj = new EditProjectViewModel();
+	var createButtonClass = !Model.canEdit ? "invisible" : "";
 }
 
 <div class="row">
     <div class="col-xs-12 col-md-8 col-md-push-2">
         <div class="allyis-action-buttons-top">
-            <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Customer)" class="btn btn-default">@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.AddCustomer <i class="fa fa-plus"></i></a>
+            <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Customer)" class="btn btn-default @createButtonClass">@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.AddCustomer <i class="fa fa-plus"></i></a>
 
             <div class="pull-right">
                 <input type="text" id="SearchInput" placeholder=@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.SearchPlaceholder class="form-control">

@@ -51,7 +51,10 @@
         </div>
         <div class="text-right" style="padding-top: 15px; padding-bottom: 15px;">
             <input type="button" class="btn btn-default" value="@AllyisApps.Resources.TimeTracker.Views.Project.Strings.ProjectList" onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer)'" />
-            <input type="button" value=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Edit class="btn btn-primary" onclick="location='@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new { id = Model.ProjectId })'" />
+			@if (Model.CanEditProject)
+			{
+				<input type="button" value=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Edit class="btn btn-primary" onclick="location='@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new { id = Model.ProjectId })'" />
+			}
         </div>
     </div>
 </div>

@@ -205,7 +205,7 @@ namespace AllyisApps.Resources.TimeTracker.Views.Project {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Project List.
+        ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string ProjectList {
             get {

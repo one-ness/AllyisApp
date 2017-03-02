@@ -349,6 +349,22 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Gets a <see cref="CompleteProjectInfo"/>, with the IsProjectUser field filled out for the
+		/// current user.
+		/// </summary>
+		/// <param name="projectId">Project Id.</param>
+		/// <returns>CompleteProjectInfo instance.</returns>
+		public CompleteProjectInfo GetProjectAsUser(int projectId)
+		{
+			if (projectId < 0)
+			{
+				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be negative.");
+			}
+
+			return InitializeCompleteProjectInfo(DBHelper.GetProjectByIdAndUser(projectId, UserContext.UserId));
+		}
+
+		/// <summary>
 		/// Gets a list of <see cref="CompleteProjectInfo"/>s for all projects a user can use.
 		/// </summary>
 		/// <param name="userId">User Id.</param>
