@@ -249,6 +249,21 @@ namespace AllyisApps.Services.TimeTracker
 		}
 
 		/// <summary>
+		/// Gets a list of CustomerInfos for all customers in the organization, a list of CompleteProjectInfos for all
+		/// projects in the organization, and a list of SubscriptionUserInfos for all users in the current subscription.
+		/// </summary>
+		/// <param name="orgId">Organization Id. If null, current organization will be used.</param>
+		/// <returns></returns>
+		public Tuple<List<CustomerInfo>, List<CompleteProjectInfo>, List<SubscriptionUserInfo>> GetReportInfo(int? orgId = null)
+		{
+			var spResults = DBHelper.GetReportInfo(orgId == null ? UserContext.ChosenOrganizationId : orgId.Value, UserContext.ChosenSubscriptionId);
+			return Tuple.Create(
+				spResults.Item1.Select(cdb => Service.InitializeCustomerInfo(cdb)).ToList(),
+				spResults.Item2.Select(cpdb => Service.InitializeCompleteProjectInfo(cpdb)).ToList(),
+				spResults.Item3.Select(sudb => Service.InitializeSubscriptionUserInfo(sudb)).ToList());
+		}
+
+		/// <summary>
 		/// Gets the lock date for the current organization.
 		/// </summary>
 		/// <returns>Lock date.</returns>

@@ -23,6 +23,6 @@ BEGIN
 			[OrganizationId]
 		FROM [Crm].[Customer]
 		WHERE [CustomerId] = @CustomerId
-	)
+	) AND [ProductRoleId] IS NOT NULL
 	ORDER BY [User].[LastName]
 END

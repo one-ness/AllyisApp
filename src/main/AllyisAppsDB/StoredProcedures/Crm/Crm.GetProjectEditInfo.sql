@@ -47,5 +47,5 @@ AS
 		FROM [Crm].[Project]
 		LEFT JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId]
 		WHERE [ProjectId] = @ProjectId
-	)
+	) AND [ProductRoleId] IS NOT NULL
 	ORDER BY [User].[LastName]

@@ -4,6 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.TimeTracker;
 using Dapper;
 using System;
@@ -591,6 +593,33 @@ namespace AllyisApps.DBModel
 					results.Read<SettingDBEntity>().SingleOrDefault(),
 					results.Read<PayClassDBEntity>().ToList(),
 					results.Read<HolidayDBEntity>().ToList());
+			}
+		}
+
+		/// <summary>
+		/// Gets a list of CutomerDBEntities for all customers in the given organization, a list of CompleteProjectDBEntities
+		/// for all projects in the given organization, and a list of SubscriptionUserDBEntities for all users in the given
+		/// subscription.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <param name="subscriptionId">Subscription Id.</param>
+		/// <returns></returns>
+		public Tuple<List<CustomerDBEntity>, List<CompleteProjectDBEntity>, List<SubscriptionUserDBEntity>> GetReportInfo(int orgId, int subscriptionId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@orgId", orgId);
+			parameters.Add("@subscriptionId", subscriptionId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[TimeTracker].[GetReportInfo]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<CustomerDBEntity>().ToList(),
+					results.Read<CompleteProjectDBEntity>().ToList(),
+					results.Read<SubscriptionUserDBEntity>().ToList());
 			}
 		}
 	}
