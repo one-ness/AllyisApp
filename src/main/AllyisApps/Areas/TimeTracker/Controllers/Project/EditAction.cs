@@ -100,15 +100,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The EditProjectViewModel.</returns>
 		public EditProjectViewModel ConstructEditProjectViewModel(int projectId)
 		{
-			CompleteProjectInfo projectInfo = Service.GetProject(projectId);
-			IEnumerable<UserInfo> projectUserInfos = Service.GetUsersByProjectId(projectInfo.ProjectId);
+			var infos = Service.GetProjectEditInfo(projectId);
+
+			//CompleteProjectInfo projectInfo = Service.GetProject(projectId);
+			IEnumerable<UserInfo> projectUserInfos = infos.Item2; //Service.GetUsersByProjectId(projectInfo.ProjectId);
 			var projectUsers = new List<BasicUserInfoViewModel>();
 			foreach (var projectUser in projectUserInfos)
 			{
 				projectUsers.Add(new BasicUserInfoViewModel(projectUser.FirstName, projectUser.LastName, projectUser.UserId)); // Simplify list for model binding
 			}
 
-			IEnumerable<SubscriptionUserInfo> subscriptionUserInfos = Service.GetUsers();
+			IEnumerable<SubscriptionUserInfo> subscriptionUserInfos = infos.Item3; //Service.GetUsers();
 			var subscriptionUsers = new List<BasicUserInfoViewModel>();
 
 			foreach (var su in subscriptionUserInfos)
@@ -118,18 +120,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			return new EditProjectViewModel
 			{
-				CustomerName = projectInfo.CustomerName,
-				OrganizationName = projectInfo.OrganizationName,
-				ParentCustomerId = projectInfo.CustomerId,
-				OrganizationId = projectInfo.OrganizationId,
-				ProjectId = projectInfo.ProjectId,
-				ProjectOrgId = projectInfo.ProjectOrgId,
-				ProjectName = projectInfo.ProjectName,
+				CustomerName = infos.Item1.CustomerName,
+				OrganizationName = infos.Item1.OrganizationName,
+				ParentCustomerId = infos.Item1.CustomerId,
+				OrganizationId = infos.Item1.OrganizationId,
+				ProjectId = infos.Item1.ProjectId,
+				ProjectOrgId = infos.Item1.ProjectOrgId,
+				ProjectName = infos.Item1.ProjectName,
 				ProjectUsers = projectUsers,
 				SubscriptionUsers = subscriptionUsers.Where(user => !projectUsers.Any(pu => (pu.UserId == user.UserId))), // Grab users that are not part of the project
-				PriceType = projectInfo.PriceType,
-				StartDate = TimeTrackerService.GetDayFromDateTime(projectInfo.StartDate),
-				EndDate = TimeTrackerService.GetDayFromDateTime(projectInfo.EndDate)
+				PriceType = infos.Item1.PriceType,
+				StartDate = TimeTrackerService.GetDayFromDateTime(infos.Item1.StartDate),
+				EndDate = TimeTrackerService.GetDayFromDateTime(infos.Item1.EndDate)
 			};
 		}
 	}

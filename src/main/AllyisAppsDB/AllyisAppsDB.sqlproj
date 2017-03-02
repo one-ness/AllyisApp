@@ -279,6 +279,8 @@
     <Build Include="StoredProcedures\Crm\Crm.GetProjectByIdAndUser.sql" />
     <Build Include="StoredProcedures\Crm\Crm.GetCustomerAndCountries.sql" />
     <Build Include="StoredProcedures\Crm\Crm.GetNextCustIdAndCountries.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetProjectEditInfo.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetNextProjectIdAndSubUsers.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
 using Dapper;
 using System;
@@ -109,6 +110,57 @@ namespace AllyisApps.DBModel
 					"[Crm].[GetProjectsByCustomer]",
 					parameters,
 				   commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Returns a CompleteProjectDBEntity for the project, a list of UserDBEntities for the project's assigned
+		/// users, and a list of SubscriptionUserDBEntities for all users of the given subscription.
+		/// </summary>
+		/// <param name="projectId">Project Id.</param>
+		/// <param name="subscriptionId">Subscription Id.</param>
+		/// <returns></returns>
+		public Tuple<CompleteProjectDBEntity, List<UserDBEntity>, List<SubscriptionUserDBEntity>> GetProjectEditInfo(int projectId, int subscriptionId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@ProjectId", projectId);
+			parameters.Add("@SubscriptionId", subscriptionId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Crm].[GetProjectEditInfo]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<CompleteProjectDBEntity>().SingleOrDefault(),
+					results.Read<UserDBEntity>().ToList(),
+					results.Read<SubscriptionUserDBEntity>().ToList());
+			}
+		}
+
+		/// <summary>
+		/// Returns the alphanumericaly topmost project id for the given customer and a list of SubscriptionUserDBEntities
+		/// for all users of the given subscription.
+		/// </summary>
+		/// <param name="customerId">Customer Id.</param>
+		/// <param name="subscriptionId">Subscription Id.</param>
+		/// <returns></returns>
+		public Tuple<string, List<SubscriptionUserDBEntity>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@CustomerId", customerId);
+			parameters.Add("@SubscriptionId", subscriptionId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Crm].[GetNextProjectIdAndSubUsers]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<string>().SingleOrDefault(),
+					results.Read<SubscriptionUserDBEntity>().ToList());
 			}
 		}
 

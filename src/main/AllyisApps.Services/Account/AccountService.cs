@@ -6,6 +6,7 @@
 
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Shared;
 using AllyisApps.Lib;
 using AllyisApps.Services.Billing;
@@ -990,6 +991,31 @@ namespace AllyisApps.Services
 				ProductRoleId = userRoles.ProductRoleId == null ? -1 : userRoles.ProductRoleId.Value,
 				SubscriptionId = userRoles.SubscriptionId == null ? -1 : userRoles.SubscriptionId.Value,
 				UserId = userRoles.UserId
+			};
+		}
+
+		/// <summary>
+		/// Translates a <see cref="SubscriptionUserDBEntity"/> into a <see cref="SubscriptionUserInfo"/>"/>.
+		/// </summary>
+		/// <param name="subUser">SubscriptionUserDBEntity instance.</param>
+		/// <returns>SubscriptionUserInfo instance.</returns>
+		public static SubscriptionUserInfo InitializeSubscriptionUserInfo(SubscriptionUserDBEntity subUser)
+		{
+			if (subUser == null)
+			{
+				return null;
+			}
+
+			return new SubscriptionUserInfo
+			{
+				CreatedUTC = subUser.CreatedUTC,
+				FirstName = subUser.FirstName,
+				LastName = subUser.LastName,
+				ProductRoleId = subUser.ProductRoleId,
+				ProductRoleName = subUser.ProductRoleName,
+				SkuId = subUser.SkuId,
+				SubscriptionId = subUser.SubscriptionId,
+				UserId = subUser.UserId
 			};
 		}
 	}
