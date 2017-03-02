@@ -86,31 +86,32 @@ namespace AllyisApps.Services
 		public CustomerInfo GetCustomer(int customerId)
 		{
 			return InitializeCustomerInfo(DBHelper.GetCustomerInfo(customerId));
+		}
 
-			//CustomerDBEntity dbe = DBHelper.GetCustomerInfo(customerId);
-			//if (dbe == null)
-			//{
-			//	return null;
-			//}
+		/// <summary>
+		/// Gets the next logical customer id for the current organization, and a list of
+		/// valid country names.
+		/// </summary>
+		/// <returns></returns>
+		public Tuple<string, List<string>> GetNextCustIdAndCountries()
+		{
+			var spResults = DBHelper.GetNextCustIdAndCountries(UserContext.ChosenOrganizationId);
+			return Tuple.Create(
+				spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray())),
+				spResults.Item2);
+		}
 
-			//return new CustomerInfo
-			//{
-			//	CustomerId = dbe.CustomerId,
-			//	Name = dbe.Name,
-			//	Address = dbe.Address,
-			//	City = dbe.City,
-			//	State = dbe.State,
-			//	Country = dbe.Country,
-			//	PostalCode = dbe.PostalCode,
-			//	ContactEmail = dbe.ContactEmail,
-			//	ContactPhoneNumber = dbe.ContactPhoneNumber,
-			//	FaxNumber = dbe.FaxNumber,
-			//	Website = dbe.Website,
-			//	EIN = dbe.EIN,
-			//	CreatedUTC = dbe.CreatedUTC,
-			//	OrganizationId = dbe.OrganizationId,
-			//	CustomerOrgId = dbe.CustomerOrgId
-			//};
+		/// <summary>
+		/// Gets a CustomerInfo for the given customer, and a list of valid country names.
+		/// </summary>
+		/// <param name="customerId">Customer Id.</param>
+		/// <returns></returns>
+		public Tuple<CustomerInfo, List<string>> GetCustomerAndCountries(int customerId)
+		{
+			var spResults = DBHelper.GetCustomerCountries(customerId);
+			return Tuple.Create(
+				InitializeCustomerInfo(spResults.Item1),
+				spResults.Item2);
 		}
 
 		/// <summary>
@@ -122,25 +123,6 @@ namespace AllyisApps.Services
 		{
 			if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
 			{
-				//CustomerDBEntity dbe = new CustomerDBEntity
-				//{
-				//	CustomerId = customer.CustomerId,
-				//	Name = customer.Name,
-				//	Address = customer.Address,
-				//	City = customer.City,
-				//	State = customer.State,
-				//	Country = customer.Country,
-				//	PostalCode = customer.PostalCode,
-				//	ContactEmail = customer.ContactEmail,
-				//	ContactPhoneNumber = customer.ContactPhoneNumber,
-				//	FaxNumber = customer.FaxNumber,
-				//	Website = customer.Website,
-				//	EIN = customer.EIN,
-				//	CreatedUTC = customer.CreatedUTC,
-				//	OrganizationId = customer.OrganizationId,
-				//	CustomerOrgId = customer.CustomerOrgId
-				//};
-
 				return DBHelper.CreateCustomerInfo(GetDBEntityFromCustomerInfo(customer));
 			}
 

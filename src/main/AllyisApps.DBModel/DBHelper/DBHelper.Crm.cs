@@ -299,6 +299,50 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Gets the alphanumerically topmost customer id for the given organization and a list of valid
+		/// country names.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns></returns>
+		public Tuple<string, List<string>> GetNextCustIdAndCountries(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@OrgId", orgId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Crm].[GetNextCustIdAndCountries]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<string>().SingleOrDefault(),
+					results.Read<string>().ToList());
+			}
+		}
+
+		/// <summary>
+		/// Gets a CustomerDBEntity for the given customer and a list of valid
+		/// country names.
+		/// </summary>
+		/// <param name="customerId">Customer Id.</param>
+		/// <returns></returns>
+		public Tuple<CustomerDBEntity, List<string>> GetCustomerCountries(int customerId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@CustomerId", customerId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Crm].[GetCustomerAndCountries]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<CustomerDBEntity>().SingleOrDefault(),
+					results.Read<string>().ToList());
+			}
+		}
+
+		/// <summary>
 		/// Delete the specified customer.
 		/// </summary>
 		/// <param name="customerID">The customer's Id.</param>

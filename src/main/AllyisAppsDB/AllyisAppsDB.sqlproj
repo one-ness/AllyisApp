@@ -277,6 +277,8 @@
     <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetAllSettings.sql" />
     <Build Include="StoredProcedures\Crm\Crm.GetProjectsAndCustomersForOrgAndUser.sql" />
     <Build Include="StoredProcedures\Crm\Crm.GetProjectByIdAndUser.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetCustomerAndCountries.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetNextCustIdAndCountries.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

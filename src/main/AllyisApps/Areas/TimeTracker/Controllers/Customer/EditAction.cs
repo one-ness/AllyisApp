@@ -28,25 +28,27 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (Service.Can(Actions.CoreAction.EditCustomer))
 			{
-				CustomerInfo customer = Service.GetCustomer(id);
+				var infos = Service.GetCustomerAndCountries(id);
+
+				//CustomerInfo customer = Service.GetCustomer(id);
 				return this.View(new EditCustomerInfoViewModel
 				{
-					ContactEmail = customer.ContactEmail,
-					Name = customer.Name,
-					Address = customer.Address,
-					City = customer.City,
-					State = customer.State,
-					Country = customer.Country,
-					PostalCode = customer.PostalCode,
-					ContactPhoneNumber = customer.ContactPhoneNumber,
-					FaxNumber = customer.FaxNumber,
-					Website = customer.Website,
-					EIN = customer.EIN,
-					OrganizationId = customer.OrganizationId,
-					OrganizationName = Service.GetOrganization(customer.OrganizationId).Name,
+					ContactEmail = infos.Item1.ContactEmail,
+					Name = infos.Item1.Name,
+					Address = infos.Item1.Address,
+					City = infos.Item1.City,
+					State = infos.Item1.State,
+					Country = infos.Item1.Country,
+					PostalCode = infos.Item1.PostalCode,
+					ContactPhoneNumber = infos.Item1.ContactPhoneNumber,
+					FaxNumber = infos.Item1.FaxNumber,
+					Website = infos.Item1.Website,
+					EIN = infos.Item1.EIN,
+					OrganizationId = infos.Item1.OrganizationId,
+					//OrganizationName = Service.GetOrganization(customer.OrganizationId).Name,
 					CustomerID = id,
-					ValidCountries = Service.ValidCountries(),
-					CustomerOrgId = customer.CustomerOrgId
+					ValidCountries = infos.Item2,
+					CustomerOrgId = infos.Item1.CustomerOrgId
 				});
 			}
 
