@@ -40,12 +40,15 @@
                                     <span class="small text-muted">(@projectCount @projectCountLabel)</span>
                                 </h4>
                             </a>
-                            <a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Customer,  new {id = customer.CustomerInfo.CustomerId})" class="pull-right">
-                                <i class="fa fa-lg fa-fw fa-cog"></i>
-                            </a>
-                            <a href="@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new {id = customer.CustomerInfo.CustomerId})" class="pull-right" style="margin-top:4px;" onclick="return confirm('Are you sure you wish to delete the customer @customer.CustomerInfo.Name?')">
-                                <i class="fa fa-2x fa-fw fa-times" ></i>
-                            </a>
+							@if (Model.canEdit)
+							{
+								<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right">
+									<i class="fa fa-lg fa-fw fa-cog"></i>
+								</a>
+								<a href="@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right" style="margin-top:4px;" onclick="return confirm('Are you sure you wish to delete the customer @customer.CustomerInfo.Name?')">
+									<i class="fa fa-2x fa-fw fa-times" ></i>
+								</a>
+							}
                         </div>
                         <div id="@collapseTarget" class="panel-collapse search-expand collapse panel-two-table-wrap" role="tabpanel">
                             <div style="width: 100%">
@@ -59,15 +62,21 @@
                                                 <span class="searchable projectname">@project.Name</span>
                                             </a>
                                             @*// This list group scheme is not possible. Review alternatives and then uncomment.*@
-                                            <a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new {id = project.ProjectId})" class="pull-right"><i class="fa fa-lg fa-fw fa-cog"></i></a>
-                                            <a href="@Url.Action(ActionConstants.Delete, ControllerConstants.Project, new {id = project.ProjectId})" class="pull-right" style="margin-left:2px;" onclick="return confirm('Are you sure you wish to Delete the project @project.Name?')">
-                                                <i class="fa fa-times"></i>
-                                            </a>
+											@if (Model.canEdit)
+											{
+												<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new { id = project.ProjectId })" class="pull-right"><i class="fa fa-lg fa-fw fa-cog"></i></a>
+												<a href="@Url.Action(ActionConstants.Delete, ControllerConstants.Project, new { id = project.ProjectId })" class="pull-right" style="margin-left:2px;" onclick="return confirm('Are you sure you wish to Delete the project @project.Name?')">
+													<i class="fa fa-times"></i>
+												</a>
+											}
                                         </div>
                                     }
-                                    <div class="list-group-item">
-                                        <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Project, new {id=customer.CustomerInfo.CustomerId})" class="list-group-item-info pull-right"><i class="fa fa-lg fa-fw fa-plus"></i> Add Project</a>
-                                    </div>
+									@if (Model.canEdit)
+									{
+										<div class="list-group-item">
+											<a href="@Url.Action(ActionConstants.Create, ControllerConstants.Project, new { id = customer.CustomerInfo.CustomerId })" class="list-group-item-info pull-right"><i class="fa fa-lg fa-fw fa-plus"></i> Add Project</a>
+										</div>
+									}
                                 </div>
                             </div>
                         </div>
@@ -78,32 +87,35 @@
                     <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Customer)" class="btn btn-default">@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.AddCustomer <i class="fa fa-plus"></i></a>
                 </div>*@
         }
-        <div class="row">
-            <div class="bulk col-xs-12 col-sm-8" style="float:left;">
-                <h4>@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ImportCustomersTitle</h4>
-                <p>@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ImportCustomers</p>
-                @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-                {
-                    @Html.AntiForgeryToken();
-                    <div style="float:left; width:100%;">
-                        <input type="file" id="upload-box" name="upload" style="display:none;"
-                               onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-                        <input id="upload-file-name-display" class="form-control"
-                               onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-                    </div>
-                    <div style="float:left; margin-bottom: 15px;">
-                        <a class="btn btn-primary" style="margin-top:10px; margin-right: 10px;" onclick="$('input[id=upload-box]').click();">@AllyisApps.Resources.Views.Account.Strings.ChooseFile</a>
-                        <input style="margin-top: 10px; margin-right: 10px;" type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
-                    </div>
-                }
-                @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get))
-                {
-                    <div style="float:right">
-                        <input style="margin-top: 10px;" type="submit" id="template-button" value="@AllyisApps.Resources.Views.Account.Strings.Template" class="btn btn-primary" />
-                    </div>
-                }
-            </div>
-        </div>
+		@if (Model.canEdit)
+		{
+			<div class="row">
+				<div class="bulk col-xs-12 col-sm-8" style="float:left;">
+					<h4>@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ImportCustomersTitle</h4>
+					<p>@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ImportCustomers</p>
+					@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+					{
+						@Html.AntiForgeryToken();
+						<div style="float:left; width:100%;">
+							<input type="file" id="upload-box" name="upload" style="display:none;"
+								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+							<input id="upload-file-name-display" class="form-control"
+								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+						</div>
+						<div style="float:left; margin-bottom: 15px;">
+							<a class="btn btn-primary" style="margin-top:10px; margin-right: 10px;" onclick="$('input[id=upload-box]').click();">@AllyisApps.Resources.Views.Account.Strings.ChooseFile</a>
+							<input style="margin-top: 10px; margin-right: 10px;" type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
+						</div>
+					}
+					@using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get))
+					{
+						<div style="float:right">
+							<input style="margin-top: 10px;" type="submit" id="template-button" value="@AllyisApps.Resources.Views.Account.Strings.Template" class="btn btn-primary" />
+						</div>
+					}
+				</div>
+			</div>
+		}
     </div>
 </div>
 

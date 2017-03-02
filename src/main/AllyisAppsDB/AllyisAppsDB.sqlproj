@@ -275,6 +275,7 @@
     <Build Include="StoredProcedures\Auth\Auth.GetOrgAndSubRoles.sql" />
     <Build Include="StoredProcedures\Crm\Crm.GetProjectsForOrgAndUser.sql" />
     <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetAllSettings.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetProjectsAndCustomersForOrgAndUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

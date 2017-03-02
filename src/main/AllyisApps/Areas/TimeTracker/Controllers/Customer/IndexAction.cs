@@ -44,14 +44,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The ManageCustomerViewModel.</returns>
 		public ManageCustomerViewModel ConstructManageCustomerViewModel(int userId, int orgId)
 		{
+			var infos = Service.GetProjectsAndCustomersForOrgAndUser();
+
 			bool canEditProjects = Service.Can(Actions.CoreAction.EditProject);
-			IEnumerable<CompleteProjectInfo> projects = canEditProjects ?   // Show all of a customer's projects for managers, but only projects one belongs to for users
-				Service.GetProjectsByOrganization(orgId) : Service.GetProjectsByUserId(userId);
-			IEnumerable<CustomerInfo> customers = Service.GetCustomerList(orgId);
-			////IEnumerable<CustomerInfo> customers = new List<CustomerInfo>();                           // TODO: Should we be showing all customers to all users? Probably need to filter this out by projects that the user is part of for non-managers
-			//  if(AuthorizationService.Can(Services.Account.Actions.CoreAction.EditProject){           something like this? someone who can actually check might try this out?
-			//  customers = CrmService.GetCustomerList(orgId)
-			//  } else { customers.Add(CrmService.GetCustomer(userId));}
+
+			List<CompleteProjectInfo> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
+			List<CustomerInfo> customers = infos.Item2;
+
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
 			foreach (CustomerInfo currentCustomer in customers)
 			{
@@ -79,7 +78,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			return new ManageCustomerViewModel
 			{
 				Customers = customersList,
-				OrganizationId = orgId
+				OrganizationId = orgId,
+				canEdit = canEditProjects
 			};
 		}
 	}

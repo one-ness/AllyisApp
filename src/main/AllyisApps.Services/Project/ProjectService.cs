@@ -463,7 +463,8 @@ namespace AllyisApps.Services
 				ProjectId = completeProject.ProjectId,
 				ProjectName = completeProject.ProjectName,
 				StartDate = completeProject.StartDate,
-				ProjectOrgId = completeProject.ProjectOrgId
+				ProjectOrgId = completeProject.ProjectOrgId,
+				IsProjectUser = completeProject.IsProjectUser
 			};
 		}
 	}
