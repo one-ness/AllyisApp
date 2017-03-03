@@ -87,17 +87,19 @@ $('#datePickerEnd').on("change", function () {
 // $( document ).ready()
 $(function () {
 	$("#ddl-customers").change(function () {
+		var ddl_ele = $('#ddl-projects');
 		var newCustId = this.value;
+		if (newCustId == 0) {
+			ddl_ele.prop('disabled', true);
+		} else {
+			ddl_ele.prop('disabled', false);
+		}
+		ddl_ele.empty();
 		$('.projectSelectOption').each(function () {
 			var ele = $(this);
 			var optionCust = ele.attr("data-cust");
-			if (optionCust != newCustId) {
-				ele.attr("selected", "");
-				ele.hide();
-				console.log("hide " + ele.attr("data-cust"));
-			} else {
-				ele.show();
-				console.log("show " + ele.attr("data-cust"));
+			if (optionCust == 0 || optionCust == newCustId) {
+				ddl_ele.append(ele.clone());
 			}
 		});
 

@@ -77,6 +77,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The ReportViewModel.</returns>
 		public ReportViewModel ConstructReportViewModel(int userId, int organizationId, bool canManage, List<CustomerInfo> customers, List<CompleteProjectInfo> projects, bool showExport = true, ReportSelectionModel previousSelections = null)
 		{
+			projects.Insert(0, new CompleteProjectInfo
+			{
+				ProjectId = 0,
+				ProjectName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.NoFilter,
+				CustomerId = 0
+			});
+
 			return new ReportViewModel
 			{
 				UserId = userId,
