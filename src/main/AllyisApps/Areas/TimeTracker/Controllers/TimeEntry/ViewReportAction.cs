@@ -57,7 +57,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					reportVMselect.Users = userSelect;
 				}
 
-				ReportViewModel reportVM = this.ConstructReportViewModel(this.UserContext.UserId, UserContext.ChosenOrganizationId, Service.Can(Actions.CoreAction.TimeTrackerEditOthers), showExport, reportVMselect);
+				var infos = TimeTrackerService.GetReportInfo();
+
+				ReportViewModel reportVM = this.ConstructReportViewModel(this.UserContext.UserId, UserContext.ChosenOrganizationId, Service.Can(Actions.CoreAction.TimeTrackerEditOthers), infos.Item1, infos.Item2, showExport, reportVMselect);
 
 				DataExportViewModel dataVM = null;
 				try
@@ -85,13 +87,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				reportVM.PreviewTotal = string.Format("{0} {1}", total, Resources.TimeTracker.Controllers.TimeEntry.Strings.HoursTotal);
 
-				IEnumerable<CompleteProjectInfo> orgProjects = Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId, false);
+				IEnumerable<CompleteProjectInfo> orgProjects = infos.Item2;//Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId, false);
+				CompleteProjectInfo defaultProject = Service.GetProject(0);
 				if (dataCount > 0)
 				{
 					IList<TablePreviewEntry> pEntries = new List<TablePreviewEntry>();
 					foreach (TimeEntryInfo data in dataVM.PreviewData)
 					{
-						CompleteProjectInfo orgProj = data.ProjectId == 0 ? Service.GetProject(0) : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
+						CompleteProjectInfo orgProj = data.ProjectId == 0 ? defaultProject : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
 						TablePreviewEntry previewData = new TablePreviewEntry
 						{
 							CustomerName = orgProj.CustomerName,

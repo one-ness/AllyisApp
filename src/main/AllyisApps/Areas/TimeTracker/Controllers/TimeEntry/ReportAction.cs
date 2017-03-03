@@ -28,9 +28,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
+				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
+				{
+					throw new UnauthorizedAccessException(AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReports);
+				}
 
 				int orgId = UserContext.ChosenOrganizationId;
 				ReportViewModel reportVM = null;
+
+				var infos = TimeTrackerService.GetReportInfo(orgId);
 
 				const string TempDataKey = "RVM";
 				if (this.TempData[TempDataKey] != null)
@@ -40,19 +46,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 				else
 				{
-					reportVM = this.ConstructReportViewModel(UserContext.UserId, orgId, Service.Can(Actions.CoreAction.TimeTrackerEditOthers));
+					reportVM = this.ConstructReportViewModel(UserContext.UserId, orgId, Service.Can(Actions.CoreAction.TimeTrackerEditOthers), infos.Item1, infos.Item2);
 				}
-
-				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
-				{
-					throw new UnauthorizedAccessException(AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReports);
-				}
-
-				reportVM.StartOfWeek = (int)TimeTrackerService.GetStartOfWeek();
-				reportVM.UserView = this.GetUserSelectList(orgId, reportVM.Selection.Users);
-				reportVM.CustomerView = this.GetCustomerSelectList(orgId, reportVM.Selection.CustomerId);
-				reportVM.ProjectView = this.GetProjectSelectList(orgId, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
-				reportVM.PreviewPageNum = reportVM.Selection.Page;
+				
+				//reportVM.StartOfWeek = (int)TimeTrackerService.GetStartOfWeek();
+				reportVM.UserView = this.GetUserSelectList(infos.Item3/*orgId*/, reportVM.Selection.Users);
+				reportVM.CustomerView = this.GetCustomerSelectList(infos.Item1/*orgId*/, reportVM.Selection.CustomerId);
+				reportVM.ProjectView = this.GetProjectSelectList(infos.Item2/*orgId*/, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
+				//reportVM.PreviewPageNum = reportVM.Selection.Page;
 
 				return this.View(reportVM);
 			}
@@ -69,10 +70,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="userId">The users's ID.</param>
 		/// <param name="organizationId">The organization's ID.</param>
 		/// <param name="canManage">Is user a manager.</param>
+		/// <param name="customers">List of CustomerInfos for organization.</param>
+		/// <param name="projects">List of CompleteProjectInfos for organization.</param>
 		/// <param name="showExport">Variable to show or hide export button.</param>
 		/// <param name="previousSelections">An object holding previous report selection data.</param>
 		/// <returns>The ReportViewModel.</returns>
-		public ReportViewModel ConstructReportViewModel(int userId, int organizationId, bool canManage, bool showExport = true, ReportSelectionModel previousSelections = null)
+		public ReportViewModel ConstructReportViewModel(int userId, int organizationId, bool canManage, List<CustomerInfo> customers, List<CompleteProjectInfo> projects, bool showExport = true, ReportSelectionModel previousSelections = null)
 		{
 			return new ReportViewModel
 			{
@@ -80,8 +83,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				CanManage = canManage,
 				OrganizationId = organizationId,
 				ShowExport = showExport,
-				Projects = Service.GetProjectsByOrganization(organizationId, false),
-				Customers = Service.GetCustomerList(organizationId),
+				Projects = projects, //Service.GetProjectsByOrganization(organizationId, false),
+				Customers = customers, //Service.GetCustomerList(organizationId),
 				PreviewPageSize = 20,
 				PreviewTotal = string.Format("{0} {1}", 0, AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.HoursTotal),
 				PreviewEntries = null,
@@ -103,13 +106,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Fills the list of users and sets selection.
 		/// </summary>
-		/// <param name="organizationId">The Organization's Id.</param>
-		/// <param name="usersSelected">The list of selected users.</param>
+		/// <param name="subUsers">List of subscription users.</param>
+		/// <param name="usersSelected">List of selected user ids.</param>
 		/// <returns>The user list.</returns>
-		private IEnumerable<SelectListItem> GetUserSelectList(int organizationId, List<int> usersSelected)
+		private IEnumerable<SelectListItem> GetUserSelectList(List<SubscriptionUserInfo> subUsers/*int organizationId*/, List<int> usersSelected)
 		{
-			IList<UserInfo> users = (IList<UserInfo>)Service.GetUsersWithSubscriptionToProductInOrganization(organizationId, Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker)).ToList<UserInfo>();
-			users.Insert(0, new UserInfo { FirstName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.AllUsersFirst, LastName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.AllUsersLast, UserId = -1 });
+			IList<SubscriptionUserInfo> users = subUsers;//(IList<UserInfo>)Service.GetUsersWithSubscriptionToProductInOrganization(organizationId, Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker)).ToList<UserInfo>();
+			users.Insert(0, new SubscriptionUserInfo { FirstName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.AllUsersFirst, LastName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.AllUsersLast, UserId = -1 });
 
 			// select current user by default
 			if (usersSelected.Count < 1)
@@ -134,12 +137,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Fills the list of customers and sets selection.
 		/// </summary>
-		/// <param name="organizationId">The Organization's Id.</param>
+		/// <param name="customers">The list of customers.</param>
 		/// <param name="customerSelected">The selected customer.</param>
 		/// <returns>The customer list.</returns>
-		private IEnumerable<SelectListItem> GetCustomerSelectList(int organizationId, int customerSelected)
+		private IEnumerable<SelectListItem> GetCustomerSelectList(List<CustomerInfo> customers/*int organizationId*/, int customerSelected)
 		{
-			IList<CustomerInfo> customerData = Service.GetCustomerList(organizationId).ToList<CustomerInfo>();
+			IList<CustomerInfo> customerData = customers;//Service.GetCustomerList(organizationId).ToList<CustomerInfo>();
 			customerData.Insert(0, new CustomerInfo { Name = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.NoFilter, CustomerId = 0 });
 
 			var cSelectList = new List<SelectListItem>();
@@ -159,15 +162,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Fills the list of projects and sets selection.
 		/// </summary>
-		/// <param name="organizationId">The Organization's Id.</param>
+		/// <param name="projects">The list of all projects.</param>
 		/// <param name="customerSelected">The selected customer.</param>
 		/// <param name="projectSelected">The selected project.</param>
 		/// <returns>The project list.</returns>
-		private IEnumerable<SelectListItem> GetProjectSelectList(int organizationId, int customerSelected, int projectSelected)
+		private IEnumerable<SelectListItem> GetProjectSelectList(List<CompleteProjectInfo> projects/*int organizationId*/, int customerSelected, int projectSelected)
 		{
 			var pSelectList = new List<SelectListItem>();
 
-			// disable project selection if no customer selected
+			//disable project selection if no customer selected
 			if (customerSelected == 0)
 			{
 				pSelectList.Add(new SelectListItem
@@ -188,13 +191,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Disabled = false
 				});
 
-				IList<ProjectInfo> projectData = Service.GetProjectsByCustomer(customerSelected).ToList<ProjectInfo>();
+				//IList<ProjectInfo> projectData = Service.GetProjectsByCustomer(customerSelected).ToList<ProjectInfo>();
+				List<CompleteProjectInfo> projectData = projects.Where(cpi => cpi.CustomerId == customerSelected).ToList();
 				foreach (var project in projectData)
 				{
 					pSelectList.Add(new SelectListItem
 					{
 						Value = project.ProjectId.ToString(),
-						Text = project.Name,
+						Text = project.ProjectName,
 						Selected = project.ProjectId == projectSelected
 					});
 				}

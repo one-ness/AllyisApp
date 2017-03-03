@@ -1,5 +1,6 @@
 ﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 @using AllyisApps.Core;
+@using AllyisApps.Services;
 
 @model ReportViewModel
 
@@ -45,25 +46,33 @@
                                               Model.CustomerView,
                                               htmlAttributes: new { @class = "form-control", @id = "ddl-customers" })
                         </div>
-                        @if (Model.Selection.CustomerId == 0)
-                        {
-                            <div class="form-group col-md-6 col-lg-6">
-                                <label for="ddl-projects">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Projects</label>
+                        @*@if (Model.Selection.CustomerId == 0)
+                        {*@
+                            @*<div class="form-group col-md-6 col-lg-6">*@
+                                @*<label for="ddl-projects">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Projects</label>*@
                                 <!--Get Projects by OrgID-->
-                                @Html.DropDownList("ProjectSelect",
+                                @*@Html.DropDownList("ProjectSelect",
                                               Model.ProjectView,
-                                              htmlAttributes: new { @class = "form-control", @id = "ddl-projects", @disabled = "disabled" })
-                            </div>
-}
-                        else
-                        {
+                                              htmlAttributes: new { @class = "form-control", @id = "ddl-projects", @disabled = "disabled" })*@
+                            @*</div>*@
+							@*}*@
+                        @*else
+                        {*@
                             <div class="form-group col-md-6 col-lg-6">
                                 <label for="ddl-projects">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Projects</label>
-                                @Html.DropDownList("ProjectSelect",
+                                @*@Html.DropDownList("ProjectSelect",
                                               Model.ProjectView,
-                                              htmlAttributes: new { @class = "form-control", @id = "ddl-projects" })
+                                              htmlAttributes: new { @class = "form-control", @id = "ddl-projects" })*@
+								<select name="ProjectSelect" class="form-control" id="ddl-projects">
+									@foreach(CompleteProjectInfo project in Model.Projects)
+									{
+										string selected = Model.Selection.ProjectId == project.ProjectId ? "selected" : "";
+										string displayed = Model.Selection.CustomerId == project.CustomerId ? "" : "display: none;";
+										<option value="@project.ProjectId" data-cust="@project.CustomerId" class="projectSelectOption" selected="@selected" style="@displayed">@project.ProjectName</option>
+									}
+								</select>
                             </div>
-}
+						@*}*@
                     </div>
 					<div class="row">
 						<div class="form-group col-md-6 col-lg-6">
