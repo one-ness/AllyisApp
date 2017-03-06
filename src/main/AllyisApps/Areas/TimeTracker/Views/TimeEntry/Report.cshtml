@@ -78,7 +78,7 @@
 										if (Model.Selection.CustomerId == project.CustomerId)
 										{
 											string selected = Model.Selection.ProjectId == project.ProjectId ? "selected" : "";
-											<option value="@project.ProjectId" data-cust="@project.CustomerId" class="projectSelectOption" selected="@selected">@project.ProjectName</option>
+											<option value="@project.ProjectId" data-cust="@project.CustomerId" class="projectSelectOption" @selected>@project.ProjectName</option>
 										}
 									}
 								</select>
@@ -116,10 +116,12 @@
 					</div>
                 </div>
                 @Html.Hidden("PageNum", Model.PreviewPageNum)
-}
+			}
         </div>
-        <br />
+		<br>
+	</div>
 
+	<div class="col-xs-12">
 		<div class="panel panel-default">
 			<div class="panel-body" style="padding: 0px">
 				@if (Model.PreviewMessage == "")
