@@ -728,6 +728,55 @@ namespace AllyisApps.Services.TimeTracker
 		}
 
 		/// <summary>
+		/// Returns a SettingsInfo for the current organization's TimeTracker settings (with only start of week and
+		/// lock date fields populated), a list of PayClassInfos for all the organization's pay classes, a list of
+		/// HolidayInfos for all the organization's holidays, a list of CompleteProjectInfos for all projects
+		/// in the current org that the given user is or has been assigned to (active or not), a list of UserInfos
+		/// for all the users in the org who are users of the time tracker subscription, and a list of TimeEntryInfos
+		/// for all time entries for the given user in the given time range.
+		/// </summary>
+		/// <param name="userId">User Id.</param>
+		/// <param name="startingDate">Start of date range.</param>
+		/// <param name="endingDate">End of date range.</param>
+		/// <returns></returns>
+		public Tuple<SettingsInfo, List<PayClassInfo>, List<HolidayInfo>, List<CompleteProjectInfo>, List<UserInfo>, List<TimeEntryInfo>>
+			GetTimeEntryIndexInfo(DateTime startingDate, DateTime endingDate, int? userId = null)
+		{
+			#region Validation
+			if (userId == null)
+			{
+				userId = UserContext.UserId;
+			}
+
+			if (userId <= 0)
+			{
+				throw new ArgumentException("User Id cannot be zero or negative.");
+			}
+			if (startingDate == null)
+			{
+				throw new ArgumentNullException("start", "Project must have a start time");
+			}
+			else if (endingDate == null)
+			{
+				throw new ArgumentNullException("end", "Project must have an end time");
+			}
+			else if (DateTime.Compare(startingDate, endingDate) > 0)
+			{
+				throw new ArgumentException("Project cannot end before it starts.");
+			}
+			#endregion
+
+			var spResults = DBHelper.GetTimeEntryIndexPageInfo(UserContext.ChosenOrganizationId, (int)ProductIdEnum.TimeTracker, userId.Value, startingDate, endingDate);
+			return Tuple.Create(
+				InitializeSettingsInfo(spResults.Item1),
+				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
+				spResults.Item3.Select(hdb => InitializeHolidayInfo(hdb)).ToList(),
+				spResults.Item4.Select(cpdb => Service.InitializeCompleteProjectInfo(cpdb)).ToList(),
+				spResults.Item5.Select(udb => Service.InitializeUserInfo(udb)).ToList(),
+				spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList());
+		}
+
+		/// <summary>
 		/// Initializes a PayClassInfo from a PayClassDBEntity.
 		/// </summary>
 		/// <param name="pc">PayClassDBEntity.</param>
