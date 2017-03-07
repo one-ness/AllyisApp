@@ -200,9 +200,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					holidayPopulated = true;
 
-					// Prepopulate holidays (TODO: Also prepopulate PTO?)
-					// TODO: There's a lot of design discussion that needs to happen before we implement this. For example, should we have an internal customer with
-					// its own projects for Holidays, PTO, etc.? Where should we store the paytypes and durations for holidays? Where do we store the IDs for these?
+					// Prepopulate holidays
 
 					result.GrandTotal.Hours += 8;
 

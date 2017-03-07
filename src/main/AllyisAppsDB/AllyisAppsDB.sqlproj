@@ -281,8 +281,9 @@
     <Build Include="StoredProcedures\Crm\Crm.GetNextCustIdAndCountries.sql" />
     <Build Include="StoredProcedures\Crm\Crm.GetProjectEditInfo.sql" />
     <Build Include="StoredProcedures\Crm\Crm.GetNextProjectIdAndSubUsers.sql" />
-    <Build Include="StoredProcedures\TimeTracker\GetReportInfo.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetReportInfo.sql" />
     <Build Include="StoredProcedures\Billing\Billing.GetProductSubscriptionInfo.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetTimeEntryIndexInfo.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
