@@ -715,5 +715,34 @@ namespace AllyisApps.DBModel
 		//		this.productIDList = connection.Query<int>("[Billing].[GetProductIds]", commandType: CommandType.StoredProcedure);
 		//	}
 		//}
+
+		/// <summary>
+		/// Returns a ProductDBEntity for the given product, a SubscriptionDBEntity for the given org's
+		/// subscription to that product (or null if none), a list of SkuDBEntities for all the skus for
+		/// that product, the Stripe billing token for the given org (or null if none), and the total
+		/// number of users in the org with roles in the subscription for the product.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <param name="productId">Product Id.</param>
+		/// <returns></returns>
+		public Tuple<ProductDBEntity, SubscriptionDBEntity, List<SkuDBEntity>, string, int> GetProductSubscriptionInfo(int orgId, int productId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@orgId", orgId);
+			parameters.Add("@productId", productId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Billing].[GetProductSubscriptionInfo]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<ProductDBEntity>().SingleOrDefault(),
+					results.Read<SubscriptionDBEntity>().SingleOrDefault(),
+					results.Read<SkuDBEntity>().ToList(),
+					results.Read<string>().SingleOrDefault(),
+					results.Read<int>().SingleOrDefault());
+			}
+		}
 	}
 }

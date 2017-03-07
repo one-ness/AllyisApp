@@ -28,7 +28,9 @@ namespace AllyisApps.Controllers
 		{
 			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
-				ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(id);
+				var infos = Service.GetProductSubscriptionInfo(id);
+
+				ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4);
 
 				return this.View(model);
 			}

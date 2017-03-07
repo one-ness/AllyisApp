@@ -967,6 +967,30 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Returns a ProductInfo for the given product, a SubscriptionInfo for the current org's
+		/// subscription to that product (or null if none), a list of SkuInfos for all the skus for
+		/// that product, the Stripe billing token for the current org (or null if none), and the total
+		/// number of users in the org with roles in the subscription for the product.
+		/// </summary>
+		/// <param name="productId">Product Id.</param>
+		/// <returns></returns>
+		public Tuple<ProductInfo, SubscriptionInfo, List<SkuInfo>, string, int> GetProductSubscriptionInfo(int productId)
+		{
+			if (productId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
+			}
+
+			var spResults = DBHelper.GetProductSubscriptionInfo(UserContext.ChosenOrganizationId, productId);
+			return Tuple.Create(
+				InitializeProductInfo(spResults.Item1),
+				InitializeSubscriptionInfo(spResults.Item2),
+				spResults.Item3.Select(sdb => InitializeSkuInfo(sdb)).ToList(),
+				spResults.Item4,
+				spResults.Item5);
+		}
+
+		/// <summary>
 		/// Initializes a <see cref="CustomerInfo"/> from a <see cref="CustomerDBEntity"/>.
 		/// </summary>
 		/// <param name="customer">The CustomerDBEntity to use.</param>
@@ -1057,7 +1081,7 @@ namespace AllyisApps.Services
 		/// Translates a <see cref="SubscriptionDisplayDBEntity"/> into a <see cref="SubscriptionDisplayInfo"/>.
 		/// </summary>
 		/// <param name="subscriptionDisplay">SubscriptionDisplayDBEntity instance.</param>
-		/// <returns>SubscriptionDisplay instance.</returns>
+		/// <returns>SubscriptionDisplayInfo instance.</returns>
 		public static SubscriptionDisplayInfo InitializeSubscriptionDisplayInfo(SubscriptionDisplayDBEntity subscriptionDisplay)
 		{
 			if (subscriptionDisplay == null)
@@ -1079,6 +1103,56 @@ namespace AllyisApps.Services
 				SubscriptionId = subscriptionDisplay.SubscriptionId,
 				SubscriptionsUsed = subscriptionDisplay.SubscriptionsUsed,
 				Tier = subscriptionDisplay.Tier
+			};
+		}
+
+		/// <summary>
+		/// Translates a <see cref="SubscriptionDBEntity"/> into a <see cref="SubscriptionInfo"/>.
+		/// </summary>
+		/// <param name="subscription">SubscriptionDBEntity instance.</param>
+		/// <returns>SubscriptionInfo instance.</returns>
+		public static SubscriptionInfo InitializeSubscriptionInfo(SubscriptionDBEntity subscription)
+		{
+			if (subscription == null)
+			{
+				return null;
+			}
+
+			return new SubscriptionInfo
+			{
+				CreatedUTC = subscription.CreatedUTC,
+				IsActive = subscription.IsActive,
+				Licenses = subscription.Licenses,
+				Name = subscription.Name,
+				NumberOfUsers = subscription.NumberOfUsers,
+				OrganizationId = subscription.OrganizationId,
+				OrganizationName = subscription.OrganizationName,
+				SkuId = subscription.SkuId,
+				SubscriptionId = subscription.SubscriptionId
+			};
+		}
+
+		/// <summary>
+		/// Translates a <see cref="SkuDBEntity"/> into a <see cref="SkuInfo"/>.
+		/// </summary>
+		/// <param name="sku">SkuDBEntity instance.</param>
+		/// <returns>SkuInfo instance.</returns>
+		public static SkuInfo InitializeSkuInfo(SkuDBEntity sku)
+		{
+			if (sku == null)
+			{
+				return null;
+			}
+
+			return new SkuInfo
+			{
+				BillingFrequency = sku.BillingFrequency,
+				Name = sku.Name,
+				Price = sku.Price,
+				ProductId = sku.ProductId,
+				SkuId = sku.SkuId,
+				SubscriptionId = sku.SubscriptionId,
+				UserLimit = sku.UserLimit
 			};
 		}
 
