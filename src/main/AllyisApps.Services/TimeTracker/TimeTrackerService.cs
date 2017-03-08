@@ -292,37 +292,37 @@ namespace AllyisApps.Services.TimeTracker
 			return date;
 		}
 
-		/// <summary>
-		/// Sets the lock date for an organization/user.
-		/// </summary>
-		/// <param name="userId">User Id.</param>
-		/// <param name="date">Lock date.</param>
-		/// <returns>Returns false if authorization fails.</returns>
-		public bool SetLockDate(int userId, DateTime date)
-		{
-			#region Validation
+		///// <summary>
+		///// Sets the lock date for an organization/user.
+		///// </summary>
+		///// <param name="userId">User Id.</param>
+		///// <param name="date">Lock date.</param>
+		///// <returns>Returns false if authorization fails.</returns>
+		//public bool SetLockDate(int userId, DateTime date)
+		//{
+		//	#region Validation
 
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-			}
+		//	if (userId <= 0)
+		//	{
+		//		throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+		//	}
 
-			if (date == null)
-			{
-				throw new ArgumentNullException("date", "Lock date must not be null.");
-			}
+		//	if (date == null)
+		//	{
+		//		throw new ArgumentNullException("date", "Lock date must not be null.");
+		//	}
 
-			#endregion Validation
+		//	#endregion Validation
 
-			if (Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
-			{
-				DBHelper.SetLockDate(UserContext.ChosenOrganizationId, userId, date);
+		//	if (Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
+		//	{
+		//		DBHelper.SetLockDate(UserContext.ChosenOrganizationId, userId, date);
 
-				return true;
-			}
+		//		return true;
+		//	}
 
-			return false;
-		}
+		//	return false;
+		//}
 
 		/// <summary>
 		/// Creates a holiday and related time entries for an organization.
@@ -349,14 +349,14 @@ namespace AllyisApps.Services.TimeTracker
 			return false;
 		}
 
-		/// <summary>
-		/// Gets a list of <see cref="HolidayInfo"/>'s for the holidays in the current organization.
-		/// </summary>
-		/// <returns>A list of HolidayInfo's for the holidays in the organization.</returns>
-		public IEnumerable<HolidayInfo> GetHolidays()
-		{
-			return DBHelper.GetHolidays(UserContext.ChosenOrganizationId).Select(hol => InitializeHolidayInfo(hol));
-		}
+		///// <summary>
+		///// Gets a list of <see cref="HolidayInfo"/>'s for the holidays in the current organization.
+		///// </summary>
+		///// <returns>A list of HolidayInfo's for the holidays in the organization.</returns>
+		//public IEnumerable<HolidayInfo> GetHolidays()
+		//{
+		//	return DBHelper.GetHolidays(UserContext.ChosenOrganizationId).Select(hol => InitializeHolidayInfo(hol));
+		//}
 
 		/// <summary>
 		/// Deletes a holiday and related time entries for the current organization.
@@ -451,45 +451,45 @@ namespace AllyisApps.Services.TimeTracker
 		/// <returns>List of PayClassInfo's.</returns>
 		public IEnumerable<PayClassInfo> GetPayClasses()
 		{
-			return DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => Service.InitializePayClassInfo(pc));
+			return DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InitializePayClassInfo(pc));
 		}
 
-		/// <summary>
-		/// Gets a <see cref="PayClassInfo"/>.
-		/// </summary>
-		/// <param name="name">Name of pay class.</param>
-		/// <returns>A PayClassInfo instance.</returns>
-		public PayClassInfo GetPayClassByName(string name)
-		{
-			#region Validation
+		///// <summary>
+		///// Gets a <see cref="PayClassInfo"/>.
+		///// </summary>
+		///// <param name="name">Name of pay class.</param>
+		///// <returns>A PayClassInfo instance.</returns>
+		//public PayClassInfo GetPayClassByName(string name)
+		//{
+		//	#region Validation
 
-			if (string.IsNullOrEmpty(name))
-			{
-				throw new ArgumentNullException("name", "Name of pay class must have a value.");
-			}
+		//	if (string.IsNullOrEmpty(name))
+		//	{
+		//		throw new ArgumentNullException("name", "Name of pay class must have a value.");
+		//	}
 
-			#endregion Validation
+		//	#endregion Validation
 
-			return Service.InitializePayClassInfo(DBHelper.GetPayClassByNameAndOrg(name, UserContext.ChosenOrganizationId));
-		}
+		//	return Service.InitializePayClassInfo(DBHelper.GetPayClassByNameAndOrg(name, UserContext.ChosenOrganizationId));
+		//}
 
-		/// <summary>
-		/// Gets the Start of Week for an organiztion.
-		/// </summary>
-		/// <returns>Start of Week.</returns>
-		public StartOfWeekEnum GetStartOfWeek()
-		{
-			var queried = DBHelper.GetStartOfWeek(UserContext.ChosenOrganizationId);
+		///// <summary>
+		///// Gets the Start of Week for an organiztion.
+		///// </summary>
+		///// <returns>Start of Week.</returns>
+		//public StartOfWeekEnum GetStartOfWeek()
+		//{
+		//	var queried = DBHelper.GetStartOfWeek(UserContext.ChosenOrganizationId);
 
-			if (Enum.IsDefined(typeof(StartOfWeekEnum), queried))
-			{
-				return (StartOfWeekEnum)queried;
-			}
-			else
-			{
-				throw new InvalidCastException(string.Format("The value \"{0}\" retrieved from the database is invalid and cannot be converted to a day of the week.", queried));
-			}
-		}
+		//	if (Enum.IsDefined(typeof(StartOfWeekEnum), queried))
+		//	{
+		//		return (StartOfWeekEnum)queried;
+		//	}
+		//	else
+		//	{
+		//		throw new InvalidCastException(string.Format("The value \"{0}\" retrieved from the database is invalid and cannot be converted to a day of the week.", queried));
+		//	}
+		//}
 
 		/// <summary>
 		/// Updates the Start of Week for an organization.
@@ -517,58 +517,58 @@ namespace AllyisApps.Services.TimeTracker
 			return false;
 		}
 
-		/// <summary>
-		/// Gets settings for the chosen organization.
-		/// </summary>
-		/// <returns>Organization settings.</returns>
-		public SettingsInfo GetSettings()
-		{
-			return InitializeSettingsInfo(DBHelper.GetSettings(UserContext.ChosenOrganizationId));
-		}
+		///// <summary>
+		///// Gets settings for the chosen organization.
+		///// </summary>
+		///// <returns>Organization settings.</returns>
+		//public SettingsInfo GetSettings()
+		//{
+		//	return InitializeSettingsInfo(DBHelper.GetSettings(UserContext.ChosenOrganizationId));
+		//}
 
-		/// <summary>
-		/// Updates settings for an organization.
-		/// </summary>
-		/// <param name="startOfWeek">Start of Week.</param>
-		/// <param name="overtimeHours">Hours until overtime.</param>
-		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
-		/// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
-		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateSettings(StartOfWeekEnum startOfWeek, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
-		{
-			#region Validation
+		///// <summary>
+		///// Updates settings for an organization.
+		///// </summary>
+		///// <param name="startOfWeek">Start of Week.</param>
+		///// <param name="overtimeHours">Hours until overtime.</param>
+		///// <param name="overtimePeriod">Time period for hours until overtime.</param>
+		///// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
+		///// <returns>Returns false if authorization fails.</returns>
+		//public bool UpdateSettings(StartOfWeekEnum startOfWeek, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
+		//{
+		//	#region Validation
 
-			if (!Enum.IsDefined(typeof(StartOfWeekEnum), startOfWeek))
-			{
-				throw new ArgumentException("Start of week must correspond to a value of StartOfWeekEnum.");
-			}
+		//	if (!Enum.IsDefined(typeof(StartOfWeekEnum), startOfWeek))
+		//	{
+		//		throw new ArgumentException("Start of week must correspond to a value of StartOfWeekEnum.");
+		//	}
 
-			if (overtimeHours < -1)
-			{
-				throw new ArgumentOutOfRangeException("overtimeHours", "Overtime hours cannot be negative, unless it is -1 to indicate overtime unavailable.");
-			}
+		//	if (overtimeHours < -1)
+		//	{
+		//		throw new ArgumentOutOfRangeException("overtimeHours", "Overtime hours cannot be negative, unless it is -1 to indicate overtime unavailable.");
+		//	}
 
-			if (!new string[] { "Day", "Week", "Month" }.Contains(overtimePeriod))
-			{
-				throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", overtimePeriod));
-			}
+		//	if (!new string[] { "Day", "Week", "Month" }.Contains(overtimePeriod))
+		//	{
+		//		throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", overtimePeriod));
+		//	}
 
-			if (overtimeMultiplier < 1.0)
-			{
-				throw new ArgumentOutOfRangeException("overtimeMultiplier", "Overtime rate cannot be less than regular rate (i.e. overtimeMultiplier less than one).");
-			}
+		//	if (overtimeMultiplier < 1.0)
+		//	{
+		//		throw new ArgumentOutOfRangeException("overtimeMultiplier", "Overtime rate cannot be less than regular rate (i.e. overtimeMultiplier less than one).");
+		//	}
 
-			#endregion Validation
+		//	#endregion Validation
 
-			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
-			{
-				DBHelper.UpdateSettings(UserContext.ChosenOrganizationId, (int)startOfWeek, overtimeHours, overtimePeriod, overtimeMultiplier);
+		//	if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
+		//	{
+		//		DBHelper.UpdateSettings(UserContext.ChosenOrganizationId, (int)startOfWeek, overtimeHours, overtimePeriod, overtimeMultiplier);
 
-				return true;
-			}
+		//		return true;
+		//	}
 
-			return false;
-		}
+		//	return false;
+		//}
 
 		/// <summary>
 		/// Updates overtime settings for an organization.
@@ -788,6 +788,7 @@ namespace AllyisApps.Services.TimeTracker
 				spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList());
 		}
 
+		#region Info-DBEntity Conversions
 		/// <summary>
 		/// Initializes a PayClassInfo from a PayClassDBEntity.
 		/// </summary>
@@ -916,5 +917,6 @@ namespace AllyisApps.Services.TimeTracker
 				OrganizationId = holiday.OrganizationId,
 			};
 		}
+		#endregion
 	}
 }

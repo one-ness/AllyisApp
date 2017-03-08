@@ -101,57 +101,6 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		///// <summary>
-		///// Gets the Organization User Database entry.
-		///// </summary>
-		///// <param name="orgId">The Organization ID.</param>
-		///// <param name="userId">The User ID.</param>
-		///// <returns>The Organization User Database entry.</returns>
-		//public OrganizationUserDBEntity GetOrganizationUser(int orgId, int userId)
-		//{
-		//	using (SqlConnection con = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		DynamicParameters parameters = new DynamicParameters();
-		//		parameters.Add("@OrgId", orgId);
-		//		parameters.Add("@UserId", userId);
-		//		return con.Query<OrganizationUserDBEntity>("[Auth].[GetOrganizationUser]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
-		//	}
-		//}
-
-		///// <summary>
-		///// Gets the org id by the access code.
-		///// </summary>
-		///// <param name="accessCode">The access code.</param>
-		///// <returns>The org id.</returns>
-		//public int GetOrgFromAccessCode(string accessCode)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@AccessCode", accessCode);
-
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		return connection.Query<int>(
-		//			"[Auth].[GetOrgFromAccessCode]",
-		//			parameters,
-		//		   commandType: CommandType.StoredProcedure).SingleOrDefault();
-		//	}
-		//}
-
-		///// <summary>
-		///// Gets the product roles for a specific product.
-		///// </summary>
-		///// <param name="productName">The name of the product to get roles for.</param>
-		///// <returns>The Product roles.</returns>
-		//public IEnumerable<ProductRoleDBEntity> GetProductRoles(string productName)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@productName", productName);
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		return connection.Query<ProductRoleDBEntity>("[Auth].[GetProductRoles]", parameters, commandType: CommandType.StoredProcedure);
-		//	}
-		//}
-
 		/// <summary>
 		/// Get all product roles from db.
 		/// </summary>
@@ -201,23 +150,6 @@ namespace AllyisApps.DBModel
 				return connection.Query<SubscriptionUserDBEntity>("[Auth].[GetUsersByOrganization]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
-
-		///// <summary>
-		///// Gets the organizations where the user Is the admin.
-		///// </summary>
-		///// <param name="userId">The User's Id.</param>
-		///// <returns>A list of the organizations the user is admin of.</returns>
-		//public IEnumerable<OrganizationDBEntity> GetOrganizationsWhereUserIsAdmin(int userId)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@userID", userId);
-
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		// default empty list
-		//		return connection.Query<OrganizationDBEntity>("[Auth].[GetOrganizationsWhereUserIsAdmin]", parameters, commandType: CommandType.StoredProcedure);
-		//	}
-		//}
 
 		/// <summary>
 		/// Updates the user with the specified ID.
@@ -323,45 +255,35 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Gets the list of organizations to which the user belongs, as well as
-		///		the user's role within each organization.
-		/// </summary>
-		/// <param name="userId">The user's ID.</param>
-		/// <returns>The collection of organizations this user is a part of.</returns>
-		public List<OrganizationUserDBEntity> GetUserOrganizationList(int userId)
-		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				// default null
-				return connection.Query<OrganizationUserDBEntity>("[Auth].[GetOrgListByUserId]", new { UserId = userId }, commandType: CommandType.StoredProcedure).ToList();
-			}
-		}
-
-		/// <summary>
-		/// Gets the list of subscriptions to which the user belongs, as well as
-		///		the user's role within each subscription.
-		/// </summary>
-		/// <param name="userId">The user's ID.</param>
-		/// <param name="orgId">The organization's ID.</param>
-		/// <returns>The collection of subscriptions this user is a part of for the given organization.</returns>
-		public List<SubscriptionUserDBEntity> GetUserSubscriptionList(int userId, int orgId)
-		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				// default null
-				return connection.Query<SubscriptionUserDBEntity>("[Auth].[GetSubscriptionsByUserAndOrg]", new { UserId = userId, OrgId = orgId }, commandType: CommandType.StoredProcedure).ToList();
-			}
-		}
+		///// <summary>
+		///// Gets the list of organizations to which the user belongs, as well as
+		/////		the user's role within each organization.
+		///// </summary>
+		///// <param name="userId">The user's ID.</param>
+		///// <returns>The collection of organizations this user is a part of.</returns>
+		//public List<OrganizationUserDBEntity> GetUserOrganizationList(int userId)
+		//{
+		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+		//	{
+		//		// default null
+		//		return connection.Query<OrganizationUserDBEntity>("[Auth].[GetOrgListByUserId]", new { UserId = userId }, commandType: CommandType.StoredProcedure).ToList();
+		//	}
+		//}
 
 		///// <summary>
-		///// Gets a list of organizations for which the given user is a member of.
+		///// Gets the list of subscriptions to which the user belongs, as well as
+		/////		the user's role within each subscription.
 		///// </summary>
-		///// <param name="userId">The user ID.</param>
-		///// <returns>A list of organizations.</returns>
-		//public List<OrganizationUserDBEntity> GetOrganizationUserListByUserId(int userId)
+		///// <param name="userId">The user's ID.</param>
+		///// <param name="orgId">The organization's ID.</param>
+		///// <returns>The collection of subscriptions this user is a part of for the given organization.</returns>
+		//public List<SubscriptionUserDBEntity> GetUserSubscriptionList(int userId, int orgId)
 		//{
-		//	return OrganizationUserDBEntityCache.Instance.Items().Where(x => x.UserId == userId).ToList();
+		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+		//	{
+		//		// default null
+		//		return connection.Query<SubscriptionUserDBEntity>("[Auth].[GetSubscriptionsByUserAndOrg]", new { UserId = userId, OrgId = orgId }, commandType: CommandType.StoredProcedure).ToList();
+		//	}
 		//}
 
 		/// <summary>

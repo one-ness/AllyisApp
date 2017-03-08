@@ -109,23 +109,23 @@ namespace AllyisApps.Services
 			});
 		}
 
-		/// <summary>
-		/// Gets a version of an email address that is collapsed with elipses if it exceeds 50 characters.
-		/// </summary>
-		/// <param name="email">The full email address.</param>
-		/// <returns>The compressed email address.</returns>
-		public string CompressedEmail(string email)
-		{
-			if (!string.IsNullOrEmpty(email) && email.Length > 50)
-			{
-				string cemail = string.Format("{0}...{1}", email.Substring(0, 20), email.Substring(email.Length - 15));
-				return cemail;
-			}
-			else
-			{
-				return email;
-			}
-		}
+		///// <summary>
+		///// Gets a version of an email address that is collapsed with elipses if it exceeds 50 characters.
+		///// </summary>
+		///// <param name="email">The full email address.</param>
+		///// <returns>The compressed email address.</returns>
+		//public string CompressedEmail(string email)
+		//{
+		//	if (!string.IsNullOrEmpty(email) && email.Length > 50)
+		//	{
+		//		string cemail = string.Format("{0}...{1}", email.Substring(0, 20), email.Substring(email.Length - 15));
+		//		return cemail;
+		//	}
+		//	else
+		//	{
+		//		return email;
+		//	}
+		//}
 
 		/// <summary>
 		/// Retrieves a list of all pending invitations for a given user by the user's email.
@@ -232,40 +232,40 @@ namespace AllyisApps.Services
 				DBHelper.GetOrganization(invite.OrganizationId).Name);
 		}
 
-		/// <summary>
-		/// Adds the user defined by userId to any organizations they have invitations for.
-		/// </summary>
-		/// <param name="userId">The user id.</param>
-		/// <param name="email">The user's email.</param>
-		/// <returns>A list of notification messages for each fulfilled invitation.</returns>
-		public List<string> AddToPendingOrganizations(int userId, string email)
-		{
-			#region Validation
+		///// <summary>
+		///// Adds the user defined by userId to any organizations they have invitations for.
+		///// </summary>
+		///// <param name="userId">The user id.</param>
+		///// <param name="email">The user's email.</param>
+		///// <returns>A list of notification messages for each fulfilled invitation.</returns>
+		//public List<string> AddToPendingOrganizations(int userId, string email)
+		//{
+		//	#region Validation
 
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
-			}
+		//	if (userId <= 0)
+		//	{
+		//		throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
+		//	}
 
-			if (string.IsNullOrEmpty(email))
-			{
-				throw new ArgumentNullException("email", "Email address must have a value.");
-			}
-			else if (!Service.IsEmailAddressValid(email))
-			{
-				throw new FormatException("Email address must be in a valid format.");
-			}
+		//	if (string.IsNullOrEmpty(email))
+		//	{
+		//		throw new ArgumentNullException("email", "Email address must have a value.");
+		//	}
+		//	else if (!Service.IsEmailAddressValid(email))
+		//	{
+		//		throw new FormatException("Email address must be in a valid format.");
+		//	}
 
-			#endregion Validation
+		//	#endregion Validation
 
-			List<string> notificationMessages = new List<string>();
-			foreach (InvitationInfo invite in this.GetInvitationsByUser(email))
-			{
-				notificationMessages.Add(this.AcceptUserInvitation(invite));
-			}
+		//	List<string> notificationMessages = new List<string>();
+		//	foreach (InvitationInfo invite in this.GetInvitationsByUser(email))
+		//	{
+		//		notificationMessages.Add(this.AcceptUserInvitation(invite));
+		//	}
 
-			return notificationMessages;
-		}
+		//	return notificationMessages;
+		//}
 
 		/// <summary>
 		/// Setup a new user.
@@ -862,20 +862,20 @@ namespace AllyisApps.Services
 		// At present, this is only used for the ProductPartials on Account/Index, and in that view this information isn't used. However, that view
 		// seems like it isn't finished yet, so until then this should probably stay.
 
-		/// <summary>
-		/// Gets the date that the user joined the subscription.
-		/// </summary>
-		/// <param name="subscriptionId">Subscription Id.</param>
-		/// <returns><see cref="DateTime"/></returns>
-		public DateTime GetDateAddedToSubscriptionByUserId(int subscriptionId)
-		{
-			if (subscriptionId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative.");
-			}
+		///// <summary>
+		///// Gets the date that the user joined the subscription.
+		///// </summary>
+		///// <param name="subscriptionId">Subscription Id.</param>
+		///// <returns><see cref="DateTime"/></returns>
+		//public DateTime GetDateAddedToSubscriptionByUserId(int subscriptionId)
+		//{
+		//	if (subscriptionId <= 0)
+		//	{
+		//		throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative.");
+		//	}
 
-			return DBHelper.GetDateAddedToSubscriptionByUserId(UserContext.UserId, subscriptionId);
-		}
+		//	return DBHelper.GetDateAddedToSubscriptionByUserId(UserContext.UserId, subscriptionId);
+		//}
 
 		/// <summary>
 		/// Gets a list of <see cref="OrganizationInfo"/>s for all organizations the user is a part of.
@@ -888,6 +888,8 @@ namespace AllyisApps.Services
 
 		#endregion public
 
+
+		#region Info-DBEntity Conversions
 		/// <summary>
 		/// Translates a UserDBEntity into a UserInfo business object.
 		/// </summary>
@@ -1018,5 +1020,6 @@ namespace AllyisApps.Services
 				UserId = subUser.UserId
 			};
 		}
+		#endregion
 	}
 }

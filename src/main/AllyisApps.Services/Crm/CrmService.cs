@@ -614,76 +614,76 @@ namespace AllyisApps.Services
 			return DBHelper.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Select(u => InitializeUserInfo(u));
 		}
 
-		/// <summary>
-		/// Gets a <see cref="SkuInfo"/> for a given product in the current organization.
-		/// </summary>
-		/// <param name="productId">Product Id.</param>
-		/// <returns>A SkuInfo.</returns>
-		public SkuInfo GetSubscriptionByOrgAndProduct(int productId)
-		{
-			if (productId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
-			}
+		///// <summary>
+		///// Gets a <see cref="SkuInfo"/> for a given product in the current organization.
+		///// </summary>
+		///// <param name="productId">Product Id.</param>
+		///// <returns>A SkuInfo.</returns>
+		//public SkuInfo GetSubscriptionByOrgAndProduct(int productId)
+		//{
+		//	if (productId <= 0)
+		//	{
+		//		throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
+		//	}
 
-			SkuDBEntity sku = DBHelper.GetSubscriptionByOrgAndProduct(UserContext.ChosenOrganizationId, productId);
-			if (sku == null)
-			{
-				return null;
-			}
+		//	SkuDBEntity sku = DBHelper.GetSubscriptionByOrgAndProduct(UserContext.ChosenOrganizationId, productId);
+		//	if (sku == null)
+		//	{
+		//		return null;
+		//	}
 
-			return new SkuInfo
-			{
-				SkuId = sku.SkuId,
-				ProductId = sku.ProductId,
-				Name = sku.Name,
-				Price = sku.Price,
-				UserLimit = sku.UserLimit,
-				BillingFrequency = sku.BillingFrequency,
-				SubscriptionId = sku.SubscriptionId
-			};
-		}
+		//	return new SkuInfo
+		//	{
+		//		SkuId = sku.SkuId,
+		//		ProductId = sku.ProductId,
+		//		Name = sku.Name,
+		//		Price = sku.Price,
+		//		UserLimit = sku.UserLimit,
+		//		BillingFrequency = sku.BillingFrequency,
+		//		SubscriptionId = sku.SubscriptionId
+		//	};
+		//}
 
-		/// <summary>
-		/// Gets a <see cref="SubscriptionInfo"/> for a given product in the current organization.
-		/// </summary>
-		/// <param name="productId">Product Id.</param>
-		/// <returns>A SubscriptionDBEntity.</returns>
-		public SubscriptionInfo CheckSubscription(int productId)
-		{
-			if (productId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
-			}
+		///// <summary>
+		///// Gets a <see cref="SubscriptionInfo"/> for a given product in the current organization.
+		///// </summary>
+		///// <param name="productId">Product Id.</param>
+		///// <returns>A SubscriptionDBEntity.</returns>
+		//public SubscriptionInfo CheckSubscription(int productId)
+		//{
+		//	if (productId <= 0)
+		//	{
+		//		throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
+		//	}
 
-			SubscriptionDBEntity si = DBHelper.CheckSubscription(UserContext.ChosenOrganizationId, productId);
-			if (si == null)
-			{
-				return null;
-			}
+		//	SubscriptionDBEntity si = DBHelper.CheckSubscription(UserContext.ChosenOrganizationId, productId);
+		//	if (si == null)
+		//	{
+		//		return null;
+		//	}
 
-			return new SubscriptionInfo
-			{
-				OrganizationName = si.OrganizationName,
-				OrganizationId = si.OrganizationId,
-				SubscriptionId = si.SubscriptionId,
-				SkuId = si.SkuId,
-				NumberOfUsers = si.NumberOfUsers,
-				Licenses = si.Licenses,
-				CreatedUTC = si.CreatedUTC,
-				IsActive = si.IsActive,
-				Name = si.Name
-			};
-		}
+		//	return new SubscriptionInfo
+		//	{
+		//		OrganizationName = si.OrganizationName,
+		//		OrganizationId = si.OrganizationId,
+		//		SubscriptionId = si.SubscriptionId,
+		//		SkuId = si.SkuId,
+		//		NumberOfUsers = si.NumberOfUsers,
+		//		Licenses = si.Licenses,
+		//		CreatedUTC = si.CreatedUTC,
+		//		IsActive = si.IsActive,
+		//		Name = si.Name
+		//	};
+		//}
 
-		/// <summary>
-		/// Gets a list of <see cref="SubscriptionDisplayInfo"/>s with subscription, organization, and role information for the current user.
-		/// </summary>
-		/// <returns>List of SubscriptionDisplayInfos.</returns>
-		public IEnumerable<SubscriptionDisplayInfo> GetUserSubscriptionOrganizationList()
-		{
-			return DBHelper.GetUserSubscriptionOrganizationList(UserContext.UserId).Select(s => InitializeSubscriptionDisplayInfo(s)).ToList();
-		}
+		///// <summary>
+		///// Gets a list of <see cref="SubscriptionDisplayInfo"/>s with subscription, organization, and role information for the current user.
+		///// </summary>
+		///// <returns>List of SubscriptionDisplayInfos.</returns>
+		//public IEnumerable<SubscriptionDisplayInfo> GetUserSubscriptionOrganizationList()
+		//{
+		//	return DBHelper.GetUserSubscriptionOrganizationList(UserContext.UserId).Select(s => InitializeSubscriptionDisplayInfo(s)).ToList();
+		//}
 
 		/// <summary>
 		/// Gets a list of <see cref="SubscriptionDisplayInfo"/>s for all subscriptions in the chosen organization.
@@ -696,15 +696,15 @@ namespace AllyisApps.Services
 			return DBHelper.Instance.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InitializeSubscriptionDisplayInfo(s)).ToList();
 		}
 
-		/// <summary>
-		/// Gets a list of <see cref="SubscriptionDisplayInfo"/>s for all subscriptions in the given organizaiton.
-		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
-		/// <returns>List of SubscriptionDisplayInfos.</returns>
-		public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplayByOrg(int orgId)
-		{
-			return DBHelper.Instance.GetSubscriptionsDisplayByOrg(orgId).Select(s => InitializeSubscriptionDisplayInfo(s));
-		}
+		///// <summary>
+		///// Gets a list of <see cref="SubscriptionDisplayInfo"/>s for all subscriptions in the given organizaiton.
+		///// </summary>
+		///// <param name="orgId">Organization Id.</param>
+		///// <returns>List of SubscriptionDisplayInfos.</returns>
+		//public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplayByOrg(int orgId)
+		//{
+		//	return DBHelper.Instance.GetSubscriptionsDisplayByOrg(orgId).Select(s => InitializeSubscriptionDisplayInfo(s));
+		//}
 
 		/// <summary>
 		/// Gets a list of available <see cref="SubscriptionRoleInfo"/>s for a subscription.
@@ -733,38 +733,38 @@ namespace AllyisApps.Services
 			});
 		}
 
-		/// <summary>
-		/// Gets a <see cref="SkuInfo"/>.
-		/// </summary>
-		/// <param name="productId">Product Id.</param>
-		/// <returns>A list of SkuInfo objects based on given productID.</returns>
-		public IEnumerable<SkuInfo> GetSkuForProduct(int productId)
-		{
-			if (productId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("productId", "Product ID cannot be 0 or negative.");
-			}
+		///// <summary>
+		///// Gets a <see cref="SkuInfo"/>.
+		///// </summary>
+		///// <param name="productId">Product Id.</param>
+		///// <returns>A list of SkuInfo objects based on given productID.</returns>
+		//public IEnumerable<SkuInfo> GetSkuForProduct(int productId)
+		//{
+		//	if (productId <= 0)
+		//	{
+		//		throw new ArgumentOutOfRangeException("productId", "Product ID cannot be 0 or negative.");
+		//	}
 
-			IEnumerable<SkuDBEntity> skus = DBHelper.GetSkuforProduct(productId);
-			List<SkuInfo> list = new List<SkuInfo>();
-			foreach (SkuDBEntity sku in skus)
-			{
-				if (sku != null)
-				{
-					list.Add(new SkuInfo
-					{
-						SkuId = sku.SkuId,
-						ProductId = sku.ProductId,
-						Name = sku.Name,
-						Price = sku.Price,
-						UserLimit = sku.UserLimit,
-						BillingFrequency = sku.BillingFrequency
-					});
-				}
-			}
+		//	IEnumerable<SkuDBEntity> skus = DBHelper.GetSkuforProduct(productId);
+		//	List<SkuInfo> list = new List<SkuInfo>();
+		//	foreach (SkuDBEntity sku in skus)
+		//	{
+		//		if (sku != null)
+		//		{
+		//			list.Add(new SkuInfo
+		//			{
+		//				SkuId = sku.SkuId,
+		//				ProductId = sku.ProductId,
+		//				Name = sku.Name,
+		//				Price = sku.Price,
+		//				UserLimit = sku.UserLimit,
+		//				BillingFrequency = sku.BillingFrequency
+		//			});
+		//		}
+		//	}
 
-			return list;
-		}
+		//	return list;
+		//}
 
 		/// <summary>
 		/// Gets a <see cref="SkuInfo"/>.
@@ -949,22 +949,22 @@ namespace AllyisApps.Services
 			return handler.RetrieveCustomer(customerId);
 		}
 
-		/// <summary>
-		/// Gets the next recommended customer id, by incrementing the highest one that currently exists, or returning all 0's if none exist.
-		/// </summary>
-		/// <returns>The next logical unique customer id.</returns>
-		public string GetRecommendedCustomerId()
-		{
-			var customers = this.GetCustomerList(this.UserContext.ChosenOrganizationId);
-			if (customers.Count() > 0)
-			{
-				return new string(this.IncrementAlphanumericCharArray(customers.Select(c => c.CustomerOrgId).ToList().OrderBy(id => id).LastOrDefault().ToCharArray()));
-			}
-			else
-			{
-				return "0000000000000000"; // 16 character max, arbitrary default id
-			}
-		}
+		///// <summary>
+		///// Gets the next recommended customer id, by incrementing the highest one that currently exists, or returning all 0's if none exist.
+		///// </summary>
+		///// <returns>The next logical unique customer id.</returns>
+		//public string GetRecommendedCustomerId()
+		//{
+		//	var customers = this.GetCustomerList(this.UserContext.ChosenOrganizationId);
+		//	if (customers.Count() > 0)
+		//	{
+		//		return new string(this.IncrementAlphanumericCharArray(customers.Select(c => c.CustomerOrgId).ToList().OrderBy(id => id).LastOrDefault().ToCharArray()));
+		//	}
+		//	else
+		//	{
+		//		return "0000000000000000"; // 16 character max, arbitrary default id
+		//	}
+		//}
 
 		/// <summary>
 		/// Returns a ProductInfo for the given product, a SubscriptionInfo for the current org's
@@ -990,6 +990,37 @@ namespace AllyisApps.Services
 				spResults.Item5);
 		}
 
+		/// <summary>
+		/// Returns a list of ProjectInfos for projects the given user is assigned to in the given organization 
+		/// (current organization by default), another list of ProjectDBEntities for all projects in the organization,
+		/// the name of the user (as "Firstname Lastname"), and the user's email.
+		/// </summary>
+		/// <param name="userId">User Id.</param>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns></returns>
+		public Tuple<List<ProjectInfo>, List<ProjectInfo>, string, string> GetProjectsForOrgAndUser(int userId, int orgId = -1)
+		{
+			if (userId <= 0)
+			{
+				throw new ArgumentException("User Id cannot be zero or negative.", "userId");
+			}
+
+			if (orgId <= 0)
+			{
+				orgId = UserContext.ChosenOrganizationId;
+			}
+
+			var spResults = DBHelper.GetProjectsForOrgAndUser(userId, orgId);
+			var userDBEntity = spResults.Item3;
+			string name = string.Format("{0} {1}", userDBEntity.FirstName, userDBEntity.LastName);
+			return Tuple.Create(
+				spResults.Item1.Select(pdb => InitializeProjectInfo(pdb)).ToList(),
+				spResults.Item2.Select(pdb => InitializeProjectInfo(pdb)).ToList(),
+				name,
+				userDBEntity.Email);
+		}
+
+		#region Info-DBEntity Conversions
 		/// <summary>
 		/// Initializes a <see cref="CustomerInfo"/> from a <see cref="CustomerDBEntity"/>.
 		/// </summary>
@@ -1175,35 +1206,6 @@ namespace AllyisApps.Services
 				ProductId = subscriptionRole.ProductId
 			};
 		}
-
-		/// <summary>
-		/// Returns a list of ProjectInfos for projects the given user is assigned to in the given organization 
-		/// (current organization by default), another list of ProjectDBEntities for all projects in the organization,
-		/// the name of the user (as "Firstname Lastname"), and the user's email.
-		/// </summary>
-		/// <param name="userId">User Id.</param>
-		/// <param name="orgId">Organization Id.</param>
-		/// <returns></returns>
-		public Tuple<List<ProjectInfo>, List<ProjectInfo>, string, string> GetProjectsForOrgAndUser(int userId, int orgId = -1)
-		{
-			if (userId <= 0)
-			{
-				throw new ArgumentException("User Id cannot be zero or negative.", "userId");
-			}
-
-			if (orgId <= 0)
-			{
-				orgId = UserContext.ChosenOrganizationId;
-			}
-
-			var spResults = DBHelper.GetProjectsForOrgAndUser(userId, orgId);
-			var userDBEntity = spResults.Item3;
-			string name = string.Format("{0} {1}", userDBEntity.FirstName, userDBEntity.LastName);
-			return Tuple.Create(
-				spResults.Item1.Select(pdb => InitializeProjectInfo(pdb)).ToList(),
-				spResults.Item2.Select(pdb => InitializeProjectInfo(pdb)).ToList(),
-				name,
-				userDBEntity.Email);
-		}
+		#endregion
 	}
 }
