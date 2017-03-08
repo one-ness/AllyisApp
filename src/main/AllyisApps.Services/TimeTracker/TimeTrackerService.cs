@@ -830,6 +830,11 @@ namespace AllyisApps.Services.TimeTracker
 		/// <returns>The initialized SettingsInfo object.</returns>
 		public static SettingsInfo InitializeSettingsInfo(SettingDBEntity settings)
 		{
+			if (settings == null)
+			{
+				return null;
+			}
+
 			return new SettingsInfo
 			{
 				OrganizationId = settings.OrganizationId,

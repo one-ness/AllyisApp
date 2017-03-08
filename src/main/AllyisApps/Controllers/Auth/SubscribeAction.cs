@@ -175,7 +175,7 @@ namespace AllyisApps.Controllers
 				if (subscriptionId == null)
 				{
 					Service.AddCustomerSubscriptionPlan(model.Billing.Amount, model.Billing.Customer.Id, model.NumberOfUsers, model.ProductId, model.ProductName);
-					Service.InitializeSettingsForProduct(model.ProductId);
+					//Service.InitializeSettingsForProduct(model.ProductId);
 					Service.AddBillingHistory(string.Format("Adding new subscription data for {0}.", model.ProductName), model.SelectedSku);
 				}
 				else
@@ -208,6 +208,8 @@ namespace AllyisApps.Controllers
 					Notifications.Add(new BootstrapAlert(e.ToString(), Variety.Warning));
 				}
 			}
+
+			Service.InitializeSettingsForProduct(model.ProductId);
 
 			if (model.SelectedSku != model.PreviousSku)
 			{
