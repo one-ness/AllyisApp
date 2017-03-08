@@ -54,7 +54,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationID">The Organization Id.</param>
 		/// <returns>The lock date.</returns>
-		public DateTime? GetLockDate(int organizationID)
+		public LockDateDBEntity GetLockDate(int organizationID)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationID", organizationID);
@@ -65,19 +65,20 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				LockDateDBEntity lockDate = connection.Query<LockDateDBEntity>("[TimeTracker].[GetLockDate]", parameters, commandType: CommandType.StoredProcedure).Single();
+				return connection.Query<LockDateDBEntity>("[TimeTracker].[GetLockDate]", parameters, commandType: CommandType.StoredProcedure).Single();
+				//LockDateDBEntity lockDate = connection.Query<LockDateDBEntity>("[TimeTracker].[GetLockDate]", parameters, commandType: CommandType.StoredProcedure).Single();
 				//if (!lockDate.HasValue)
 				//{
 				//	return DateTime.Now.AddDays(-7 - (int)DateTime.Now.DayOfWeek);
 				//}
 
-				if (lockDate != null && lockDate.LockDateUsed)
-				{
-					DateTime date = lockDate.LockDatePeriod.Equals("Months") ? DateTime.Now.AddMonths(-1 * lockDate.LockDateQuantity) :
-						DateTime.Now.AddDays(-1 * lockDate.LockDateQuantity * (lockDate.LockDatePeriod.Equals("Weeks") ? 7 : 1));
-					return date;
-				}
-				return null;
+				//if (lockDate != null && lockDate.LockDateUsed)
+				//{
+				//	DateTime date = lockDate.LockDatePeriod.Equals("Months") ? DateTime.Now.AddMonths(-1 * lockDate.LockDateQuantity) :
+				//		DateTime.Now.AddDays(-1 * lockDate.LockDateQuantity * (lockDate.LockDatePeriod.Equals("Weeks") ? 7 : 1));
+				//	return date;
+				//}
+				//return null;
 			}
 		}
 
@@ -639,7 +640,7 @@ namespace AllyisApps.DBModel
 		/// <param name="endingDate">End of date range.</param>
 		/// <returns></returns>
 		public Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>, List<CompleteProjectDBEntity>, List<UserDBEntity>, List<TimeEntryDBEntity>>
-			GetTimeEntryIndexPageInfo(int orgId, int timeTrackerProductId, int userId, DateTime startingDate, DateTime endingDate)
+			GetTimeEntryIndexPageInfo(int orgId, int timeTrackerProductId, int userId, DateTime? startingDate, DateTime? endingDate)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@OrganizationId", orgId);

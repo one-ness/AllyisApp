@@ -269,7 +269,27 @@ namespace AllyisApps.Services.TimeTracker
 		/// <returns>Lock date.</returns>
 		public DateTime? GetLockDate()
 		{
-			return DBHelper.GetLockDate(UserContext.ChosenOrganizationId);
+			LockDateDBEntity lockDate = DBHelper.GetLockDate(UserContext.ChosenOrganizationId);
+			return GetLockDateFromParameters(lockDate.LockDateUsed, lockDate.LockDatePeriod, lockDate.LockDateQuantity);
+		}
+
+		/// <summary>
+		/// Gets a nullable DateTime for the lock date, based on supplied lock date settings.
+		/// </summary>
+		/// <param name="isLockDateUsed">A value indicating whether the lock date is used.</param>
+		/// <param name="lockDatePeriod">The lock date period ("Monthd", "Weeks", or "Days").</param>
+		/// <param name="lockDateQuantity">The quantity of the time unit defined by the period.</param>
+		/// <returns>A nullable DateTime expressing the date on or before which time entries are locked.</returns>
+		public DateTime? GetLockDateFromParameters(bool isLockDateUsed, string lockDatePeriod, int lockDateQuantity)
+		{
+			if (!isLockDateUsed)
+			{
+				return null;
+			}
+
+			DateTime date = lockDatePeriod.Equals("Months") ? DateTime.Now.AddMonths(-1 * lockDateQuantity) :
+				DateTime.Now.AddDays(-1 * lockDateQuantity * (lockDatePeriod.Equals("Weeks") ? 7 : 1));
+			return date;
 		}
 
 		/// <summary>
@@ -740,7 +760,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <param name="endingDate">End of date range.</param>
 		/// <returns></returns>
 		public Tuple<SettingsInfo, List<PayClassInfo>, List<HolidayInfo>, List<CompleteProjectInfo>, List<UserInfo>, List<TimeEntryInfo>>
-			GetTimeEntryIndexInfo(DateTime startingDate, DateTime endingDate, int? userId = null)
+			GetTimeEntryIndexInfo(DateTime? startingDate, DateTime? endingDate, int? userId = null)
 		{
 			#region Validation
 			if (userId == null)
