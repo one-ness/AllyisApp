@@ -772,17 +772,9 @@ namespace AllyisApps.Services.TimeTracker
 			{
 				throw new ArgumentException("User Id cannot be zero or negative.");
 			}
-			if (startingDate == null)
+			if (startingDate.HasValue && endingDate.HasValue && DateTime.Compare(startingDate.Value, endingDate.Value) > 0)
 			{
-				throw new ArgumentNullException("start", "Project must have a start time");
-			}
-			else if (endingDate == null)
-			{
-				throw new ArgumentNullException("end", "Project must have an end time");
-			}
-			else if (DateTime.Compare(startingDate, endingDate) > 0)
-			{
-				throw new ArgumentException("Project cannot end before it starts.");
+				throw new ArgumentException("Date range cannot end before it starts.");
 			}
 			#endregion
 
