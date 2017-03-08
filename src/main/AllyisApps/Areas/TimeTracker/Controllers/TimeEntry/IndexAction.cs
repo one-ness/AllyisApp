@@ -97,10 +97,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DateTime startDate = SetStartingDate(startingDateTime, startOfWeek);
 			DateTime endDate = SetEndingDate(endingDateTime, startOfWeek);
 
+			var infos = TimeTrackerService.GetTimeEntryIndexInfo(startDate, endDate, userId);
+
 			// Get all of the projects and initialize their total hours to 0.
-			IList<CompleteProjectInfo> allProjects = Service.GetProjectsByUserAndOrganization(userId, false).ToList(); // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
+			IList<CompleteProjectInfo> allProjects = infos.Item4; //Service.GetProjectsByUserAndOrganization(userId, false).ToList(); // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
 			IDictionary<int, ProjectHours> hours = new Dictionary<int, ProjectHours>();
-			IEnumerable<HolidayInfo> holidays = TimeTrackerService.GetHolidays().Where(x => (startDate <= x.Date.Date && x.Date.Date <= endDate)); // We only care about holidays within the date range
+			IEnumerable<HolidayInfo> holidays = /*TimeTrackerService.GetHolidays()*/infos.Item3.Where(x => (startDate <= x.Date.Date && x.Date.Date <= endDate)); // We only care about holidays within the date range
 
 			foreach (CompleteProjectInfo proj in allProjects.Where(p => p.ProjectId > 0))
 			{
@@ -110,7 +112,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = -1, ProjectName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
 
-			IEnumerable<UserInfo> users = Service.GetUsersWithSubscriptionToProductInOrganization(UserContext.ChosenOrganizationId, Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
+			IEnumerable<UserInfo> users = infos.Item5;//Service.GetUsersWithSubscriptionToProductInOrganization(UserContext.ChosenOrganizationId, Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
 
 			TimeEntryOverDateRangeViewModel result = new TimeEntryOverDateRangeViewModel
 			{

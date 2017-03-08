@@ -6,10 +6,54 @@
 	@EndingDate DATE
 AS
 	SET NOCOUNT ON;
+
+	-- Settings is declared as a table here so that the StartOfWeek field can be used in other Select
+	-- blocks lower in this same stored procedure, while also letting the settings table itself be returned
+	DECLARE @Settings TABLE (
+		StartOfWeek INT,
+		LockDateUsed INT,
+		LockDatePeriod VARCHAR(10),
+		LockDateQuantity INT
+	);
+	INSERT INTO @Settings (StartOfWeek, LockDateUsed, LockDatePeriod, LockDateQuantity)
 	SELECT [StartOfWeek], [LockDateUsed], [LockDatePeriod], [LockDateQuantity]
 	FROM [TimeTracker].[Setting] 
 	WITH (NOLOCK) 
-	WHERE [OrganizationId] = @OrganizationId;
+	WHERE [OrganizationId] = @OrganizationId
+
+	-- Starting and Ending date parameters are adjusted if the input is null, using the StartOfWeek from above
+	DECLARE @StartOfWeek INT;
+	SET @StartOfWeek = (
+		SELECT TOP 1
+			[StartOfWeek]
+		FROM @Settings
+	)
+	DECLARE @TodayDayOfWeek INT;
+	SET @TodayDayOfWeek = ((6 + DATEPART(dw, GETDATE()) + @@DATEFIRST) % 7);
+
+	IF(@StartingDate IS NULL)
+	BEGIN
+		DECLARE @DaysIntoWeek INT;
+		IF (@TodayDayOfWeek < @StartOfWeek)
+			SET @DaysIntoWeek = @StartOfWeek - @TodayDayOfWeek - 7;
+		ELSE
+			SET @DaysIntoWeek = @StartOfWeek - @TodayDayOfWeek;
+		SET @StartingDate = DATEADD(dd, @DaysIntoWeek, GETDATE());
+	END
+
+	IF(@EndingDate IS NULL)
+	BEGIN
+		DECLARE @DaysLeftInWeek INT;
+		IF (@TodayDayOfWeek < @StartOfWeek)
+			SET @DaysLeftInWeek = @StartOfWeek - @TodayDayOfWeek - 1;
+		ELSE
+			SET @DaysLeftInWeek = @StartOfWeek - @TodayDayOfWeek + 6;
+		SET @EndingDate = DATEADD(dd, @DaysLeftInWeek, GETDATE());
+	END
+
+	-- Begin select statements
+
+	SELECT * FROM @Settings
 
 	IF(SELECT COUNT(*) FROM [TimeTracker].[PayClass] WHERE [OrganizationId] = @OrganizationId) > 0
 		SELECT [PayClassID], [Name], [OrganizationId] FROM [TimeTracker].[PayClass] WITH (NOLOCK) WHERE [OrganizationId] = @OrganizationId;
