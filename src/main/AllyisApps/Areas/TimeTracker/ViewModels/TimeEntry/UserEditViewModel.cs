@@ -25,18 +25,13 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public string UserName { get; set; }
 
 		/// <summary>
-		/// Gets or sets a table of user information.
-		/// </summary>
-		public UserInfo UserInfo { get; set; }
-
-		/// <summary>
 		/// Gets or sets all projects available to the user.
 		/// </summary>
-		public IEnumerable<CompleteProjectInfo> AllProjects { get; set; }
+		public IEnumerable<ProjectInfo> AllProjects { get; set; }
 
 		/// <summary>
 		/// Gets or sets the projects associated with the user.
 		/// </summary>
-		public IEnumerable<CompleteProjectInfo> UserProjects { get; set; }
+		public IEnumerable<ProjectInfo> UserProjects { get; set; }
 	}
 }

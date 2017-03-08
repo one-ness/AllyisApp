@@ -24,18 +24,23 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The user edit page.</returns>
 		public ActionResult UserEdit(int userId = -1)
 		{
+			if (userId <= 0)
+			{
+				userId = UserContext.UserId;
+			}
+
+			var infos = Service.GetProjectsForOrgAndUser(userId);
+
 			if (Service.Can(Actions.CoreAction.EditProject))
 			{
-				UserInfo userInfo = Service.GetUserInfo(userId);
 				return this.View(new UserEditViewModel
 				{
 					UserId = userId,
-					UserInfo = userInfo,
 
-					UserProjects = userInfo == null ? null : Service.GetProjectsByUserId(userId),
-					AllProjects = userInfo == null ? null : Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId),
-
-					UserName = (userInfo == null) ? null : string.Format("{0} {1}", userInfo.FirstName, userInfo.LastName)
+					UserProjects = infos.Item1,
+					AllProjects = infos.Item2,
+					UserName = infos.Item3
+					//UserName = (userInfo == null) ? null : string.Format("{0} {1}", userInfo.FirstName, userInfo.LastName)
 				});
 			}
 

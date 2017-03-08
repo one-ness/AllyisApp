@@ -1,5 +1,6 @@
 ﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 @using AllyisApps.Core;
+@using AllyisApps.Services;
 
 @model ReportViewModel
 
@@ -45,6 +46,15 @@
                                               Model.CustomerView,
                                               htmlAttributes: new { @class = "form-control", @id = "ddl-customers" })
                         </div>
+
+						<!-- A holder for all the projects, to draw from for populating the real selection list -->
+						<select id="allprojects" style="display: none;">
+							@foreach(CompleteProjectInfo proj in Model.Projects)
+							{
+								<option value="@proj.ProjectId" data-cust="@proj.CustomerId" class="projectSelectOption">@proj.ProjectName</option>
+							}
+						</select>
+
                         @if (Model.Selection.CustomerId == 0)
                         {
                             <div class="form-group col-md-6 col-lg-6">
@@ -54,16 +64,26 @@
                                               Model.ProjectView,
                                               htmlAttributes: new { @class = "form-control", @id = "ddl-projects", @disabled = "disabled" })
                             </div>
-}
+							}
                         else
                         {
                             <div class="form-group col-md-6 col-lg-6">
                                 <label for="ddl-projects">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Projects</label>
-                                @Html.DropDownList("ProjectSelect",
+                                @*@Html.DropDownList("ProjectSelect",
                                               Model.ProjectView,
-                                              htmlAttributes: new { @class = "form-control", @id = "ddl-projects" })
+                                              htmlAttributes: new { @class = "form-control", @id = "ddl-projects" })*@
+								<select name="ProjectSelect" class="form-control" id="ddl-projects">
+									@foreach(CompleteProjectInfo project in Model.Projects)
+									{
+										if (Model.Selection.CustomerId == project.CustomerId)
+										{
+											string selected = Model.Selection.ProjectId == project.ProjectId ? "selected" : "";
+											<option value="@project.ProjectId" data-cust="@project.CustomerId" class="projectSelectOption" @selected>@project.ProjectName</option>
+										}
+									}
+								</select>
                             </div>
-}
+						}
                     </div>
 					<div class="row">
 						<div class="form-group col-md-6 col-lg-6">
@@ -96,10 +116,12 @@
 					</div>
                 </div>
                 @Html.Hidden("PageNum", Model.PreviewPageNum)
-}
+			}
         </div>
-        <br />
+		<br>
+	</div>
 
+	<div class="col-xs-12">
 		<div class="panel panel-default">
 			<div class="panel-body" style="padding: 0px">
 				@if (Model.PreviewMessage == "")

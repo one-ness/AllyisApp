@@ -349,6 +349,61 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Gets a <see cref="CompleteProjectInfo"/>, with the IsProjectUser field filled out for the
+		/// current user.
+		/// </summary>
+		/// <param name="projectId">Project Id.</param>
+		/// <returns>CompleteProjectInfo instance.</returns>
+		public CompleteProjectInfo GetProjectAsUser(int projectId)
+		{
+			if (projectId < 0)
+			{
+				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be negative.");
+			}
+
+			return InitializeCompleteProjectInfo(DBHelper.GetProjectByIdAndUser(projectId, UserContext.UserId));
+		}
+
+		/// <summary>
+		/// Gets a CompleteProjectInfo for the given project, a list of UserInfos for the project's assigned
+		/// users, and a list of SubscriptionUserInfos for all users in the current subscription.
+		/// </summary>
+		/// <param name="projectId">Project Id.</param>
+		/// <returns></returns>
+		public Tuple<CompleteProjectInfo, List<UserInfo>, List<SubscriptionUserInfo>> GetProjectEditInfo(int projectId)
+		{
+			if (projectId < 0)
+			{
+				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be negative.");
+			}
+
+			var spResults = DBHelper.GetProjectEditInfo(projectId, UserContext.ChosenSubscriptionId);
+			return Tuple.Create(
+				InitializeCompleteProjectInfo(spResults.Item1),
+				spResults.Item2.Select(udb => InitializeUserInfo(udb)).ToList(),
+				spResults.Item3.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());
+		}
+
+		/// <summary>
+		/// Gets the next logical project id for the given customer and a list of SubscriptionUserInfos for
+		/// all useres in the current subscription.
+		/// </summary>
+		/// <param name="customerId">Customer Id.</param>
+		/// <returns></returns>
+		public Tuple<string, List<SubscriptionUserInfo>> GetNextProjectIdAndSubUsers(int customerId)
+		{
+			if (customerId < 0)
+			{
+				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be negative.");
+			}
+
+			var spResults = DBHelper.GetNextProjectIdAndSubUsers(customerId, UserContext.ChosenSubscriptionId);
+			return Tuple.Create(
+				spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray())),
+				spResults.Item2.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());
+		}
+
+		/// <summary>
 		/// Gets a list of <see cref="CompleteProjectInfo"/>s for all projects a user can use.
 		/// </summary>
 		/// <param name="userId">User Id.</param>
@@ -463,7 +518,8 @@ namespace AllyisApps.Services
 				ProjectId = completeProject.ProjectId,
 				ProjectName = completeProject.ProjectName,
 				StartDate = completeProject.StartDate,
-				ProjectOrgId = completeProject.ProjectOrgId
+				ProjectOrgId = completeProject.ProjectOrgId,
+				IsProjectUser = completeProject.IsProjectUser
 			};
 		}
 	}

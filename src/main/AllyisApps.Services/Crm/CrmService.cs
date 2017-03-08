@@ -85,30 +85,33 @@ namespace AllyisApps.Services
 		/// <returns>The customer entity.</returns>
 		public CustomerInfo GetCustomer(int customerId)
 		{
-			CustomerDBEntity dbe = DBHelper.GetCustomerInfo(customerId);
-			if (dbe == null)
-			{
-				return null;
-			}
+			return InitializeCustomerInfo(DBHelper.GetCustomerInfo(customerId));
+		}
 
-			return new CustomerInfo
-			{
-				CustomerId = dbe.CustomerId,
-				Name = dbe.Name,
-				Address = dbe.Address,
-				City = dbe.City,
-				State = dbe.State,
-				Country = dbe.Country,
-				PostalCode = dbe.PostalCode,
-				ContactEmail = dbe.ContactEmail,
-				ContactPhoneNumber = dbe.ContactPhoneNumber,
-				FaxNumber = dbe.FaxNumber,
-				Website = dbe.Website,
-				EIN = dbe.EIN,
-				CreatedUTC = dbe.CreatedUTC,
-				OrganizationId = dbe.OrganizationId,
-				CustomerOrgId = dbe.CustomerOrgId
-			};
+		/// <summary>
+		/// Gets the next logical customer id for the current organization, and a list of
+		/// valid country names.
+		/// </summary>
+		/// <returns></returns>
+		public Tuple<string, List<string>> GetNextCustIdAndCountries()
+		{
+			var spResults = DBHelper.GetNextCustIdAndCountries(UserContext.ChosenOrganizationId);
+			return Tuple.Create(
+				spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray())),
+				spResults.Item2);
+		}
+
+		/// <summary>
+		/// Gets a CustomerInfo for the given customer, and a list of valid country names.
+		/// </summary>
+		/// <param name="customerId">Customer Id.</param>
+		/// <returns></returns>
+		public Tuple<CustomerInfo, List<string>> GetCustomerAndCountries(int customerId)
+		{
+			var spResults = DBHelper.GetCustomerCountries(customerId);
+			return Tuple.Create(
+				InitializeCustomerInfo(spResults.Item1),
+				spResults.Item2);
 		}
 
 		/// <summary>
@@ -120,26 +123,7 @@ namespace AllyisApps.Services
 		{
 			if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
 			{
-				CustomerDBEntity dbe = new CustomerDBEntity
-				{
-					CustomerId = customer.CustomerId,
-					Name = customer.Name,
-					Address = customer.Address,
-					City = customer.City,
-					State = customer.State,
-					Country = customer.Country,
-					PostalCode = customer.PostalCode,
-					ContactEmail = customer.ContactEmail,
-					ContactPhoneNumber = customer.ContactPhoneNumber,
-					FaxNumber = customer.FaxNumber,
-					Website = customer.Website,
-					EIN = customer.EIN,
-					CreatedUTC = customer.CreatedUTC,
-					OrganizationId = customer.OrganizationId,
-					CustomerOrgId = customer.CustomerOrgId
-				};
-
-				return DBHelper.CreateCustomerInfo(dbe);
+				return DBHelper.CreateCustomerInfo(GetDBEntityFromCustomerInfo(customer));
 			}
 
 			return null;
@@ -214,6 +198,19 @@ namespace AllyisApps.Services
 			}
 
 			return list;
+		}
+
+		/// <summary>
+		/// Returns a list of CompleteProjectInfos for the current organization with the IsProjectUser field filled
+		/// out for the current user, and a list of CustomerInfos for the organization.
+		/// </summary>
+		/// <returns></returns>
+		public Tuple<List<CompleteProjectInfo>, List<CustomerInfo>> GetProjectsAndCustomersForOrgAndUser()
+		{
+			var spResults = DBHelper.GetProjectsAndCustomersForOrgAndUser(UserContext.ChosenOrganizationId, UserContext.UserId);
+			return Tuple.Create(
+				spResults.Item1.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
+				spResults.Item2.Select(cdb => InitializeCustomerInfo(cdb)).ToList());
 		}
 
 		/// <summary>
@@ -970,6 +967,30 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Returns a ProductInfo for the given product, a SubscriptionInfo for the current org's
+		/// subscription to that product (or null if none), a list of SkuInfos for all the skus for
+		/// that product, the Stripe billing token for the current org (or null if none), and the total
+		/// number of users in the org with roles in the subscription for the product.
+		/// </summary>
+		/// <param name="productId">Product Id.</param>
+		/// <returns></returns>
+		public Tuple<ProductInfo, SubscriptionInfo, List<SkuInfo>, string, int> GetProductSubscriptionInfo(int productId)
+		{
+			if (productId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
+			}
+
+			var spResults = DBHelper.GetProductSubscriptionInfo(UserContext.ChosenOrganizationId, productId);
+			return Tuple.Create(
+				InitializeProductInfo(spResults.Item1),
+				InitializeSubscriptionInfo(spResults.Item2),
+				spResults.Item3.Select(sdb => InitializeSkuInfo(sdb)).ToList(),
+				spResults.Item4,
+				spResults.Item5);
+		}
+
+		/// <summary>
 		/// Initializes a <see cref="CustomerInfo"/> from a <see cref="CustomerDBEntity"/>.
 		/// </summary>
 		/// <param name="customer">The CustomerDBEntity to use.</param>
@@ -982,6 +1003,38 @@ namespace AllyisApps.Services
 			}
 
 			return new CustomerInfo()
+			{
+				Address = customer.Address,
+				City = customer.City,
+				ContactEmail = customer.ContactEmail,
+				ContactPhoneNumber = customer.ContactPhoneNumber,
+				Country = customer.Country,
+				CreatedUTC = customer.CreatedUTC,
+				CustomerId = customer.CustomerId,
+				CustomerOrgId = customer.CustomerOrgId,
+				EIN = customer.EIN,
+				FaxNumber = customer.FaxNumber,
+				Name = customer.Name,
+				OrganizationId = customer.OrganizationId,
+				PostalCode = customer.PostalCode,
+				State = customer.State,
+				Website = customer.Website
+			};
+		}
+
+		/// <summary>
+		/// Initializes a <see cref="CustomerDBEntity"/> from a <see cref="CustomerInfo"/>.
+		/// </summary>
+		/// <param name="customer">The CustomerInfo to use.</param>
+		/// <returns>A CustomerDBEntity object.</returns>
+		public static CustomerDBEntity GetDBEntityFromCustomerInfo(CustomerInfo customer)
+		{
+			if (customer == null)
+			{
+				return null;
+			}
+
+			return new CustomerDBEntity()
 			{
 				Address = customer.Address,
 				City = customer.City,
@@ -1028,7 +1081,7 @@ namespace AllyisApps.Services
 		/// Translates a <see cref="SubscriptionDisplayDBEntity"/> into a <see cref="SubscriptionDisplayInfo"/>.
 		/// </summary>
 		/// <param name="subscriptionDisplay">SubscriptionDisplayDBEntity instance.</param>
-		/// <returns>SubscriptionDisplay instance.</returns>
+		/// <returns>SubscriptionDisplayInfo instance.</returns>
 		public static SubscriptionDisplayInfo InitializeSubscriptionDisplayInfo(SubscriptionDisplayDBEntity subscriptionDisplay)
 		{
 			if (subscriptionDisplay == null)
@@ -1054,6 +1107,56 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Translates a <see cref="SubscriptionDBEntity"/> into a <see cref="SubscriptionInfo"/>.
+		/// </summary>
+		/// <param name="subscription">SubscriptionDBEntity instance.</param>
+		/// <returns>SubscriptionInfo instance.</returns>
+		public static SubscriptionInfo InitializeSubscriptionInfo(SubscriptionDBEntity subscription)
+		{
+			if (subscription == null)
+			{
+				return null;
+			}
+
+			return new SubscriptionInfo
+			{
+				CreatedUTC = subscription.CreatedUTC,
+				IsActive = subscription.IsActive,
+				Licenses = subscription.Licenses,
+				Name = subscription.Name,
+				NumberOfUsers = subscription.NumberOfUsers,
+				OrganizationId = subscription.OrganizationId,
+				OrganizationName = subscription.OrganizationName,
+				SkuId = subscription.SkuId,
+				SubscriptionId = subscription.SubscriptionId
+			};
+		}
+
+		/// <summary>
+		/// Translates a <see cref="SkuDBEntity"/> into a <see cref="SkuInfo"/>.
+		/// </summary>
+		/// <param name="sku">SkuDBEntity instance.</param>
+		/// <returns>SkuInfo instance.</returns>
+		public static SkuInfo InitializeSkuInfo(SkuDBEntity sku)
+		{
+			if (sku == null)
+			{
+				return null;
+			}
+
+			return new SkuInfo
+			{
+				BillingFrequency = sku.BillingFrequency,
+				Name = sku.Name,
+				Price = sku.Price,
+				ProductId = sku.ProductId,
+				SkuId = sku.SkuId,
+				SubscriptionId = sku.SubscriptionId,
+				UserLimit = sku.UserLimit
+			};
+		}
+
+		/// <summary>
 		/// Translates a <see cref="SubscriptionRoleDBEntity"/> into a <see cref="SubscriptionRoleInfo"/>.
 		/// </summary>
 		/// <param name="subscriptionRole">SubscriptionRoleDBEntity instance.</param>
@@ -1071,6 +1174,36 @@ namespace AllyisApps.Services
 				ProductRoleId = subscriptionRole.ProductRoleId,
 				ProductId = subscriptionRole.ProductId
 			};
+		}
+
+		/// <summary>
+		/// Returns a list of ProjectInfos for projects the given user is assigned to in the given organization 
+		/// (current organization by default), another list of ProjectDBEntities for all projects in the organization,
+		/// the name of the user (as "Firstname Lastname"), and the user's email.
+		/// </summary>
+		/// <param name="userId">User Id.</param>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns></returns>
+		public Tuple<List<ProjectInfo>, List<ProjectInfo>, string, string> GetProjectsForOrgAndUser(int userId, int orgId = -1)
+		{
+			if (userId <= 0)
+			{
+				throw new ArgumentException("User Id cannot be zero or negative.", "userId");
+			}
+
+			if (orgId <= 0)
+			{
+				orgId = UserContext.ChosenOrganizationId;
+			}
+
+			var spResults = DBHelper.GetProjectsForOrgAndUser(userId, orgId);
+			var userDBEntity = spResults.Item3;
+			string name = string.Format("{0} {1}", userDBEntity.FirstName, userDBEntity.LastName);
+			return Tuple.Create(
+				spResults.Item1.Select(pdb => InitializeProjectInfo(pdb)).ToList(),
+				spResults.Item2.Select(pdb => InitializeProjectInfo(pdb)).ToList(),
+				name,
+				userDBEntity.Email);
 		}
 	}
 }

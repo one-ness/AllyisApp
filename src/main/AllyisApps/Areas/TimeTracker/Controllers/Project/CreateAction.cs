@@ -34,7 +34,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			if (Service.Can(Actions.CoreAction.EditProject))
 			{
-				var list = Service.GetUsers();
+				var idAndUsers = Service.GetNextProjectIdAndSubUsers(id);
+
+				var list = idAndUsers.Item2; //Service.GetUsers();
 				var subList = new List<BasicUserInfoViewModel>();
 
 				foreach (var user in list)
@@ -51,7 +53,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						SubscriptionUsers = subList,
 						StartDate = TimeTrackerService.GetDayFromDateTime(defaultStart),
 						EndDate = TimeTrackerService.GetDayFromDateTime(defaultEnd),
-						ProjectOrgId = Service.GetRecommendedProjectId()
+						ProjectOrgId = idAndUsers.Item1 //Service.GetRecommendedProjectId()
 					});
 			}
 			else

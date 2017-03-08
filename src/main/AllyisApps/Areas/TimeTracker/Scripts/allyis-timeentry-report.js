@@ -86,31 +86,47 @@ $('#datePickerEnd').on("change", function () {
 
 // $( document ).ready()
 $(function () {
-    $("#ddl-customers").change(function () {
-        console.log("Sending: " + this.value);
-        $.ajax({
-            url: "/TimeTracker/Project/GetProjects?customerId=" + this.value,
-            method: "POST",
-            datatype: JSON,
-            success: function (data) {
-                console.log(data);
-                var ddl = $("#ddl-projects");
-                ddl.empty();
-                ddl.prop('disabled', true);
-                if (!$.isEmptyObject(data)) {
-                    ddl.append($("<option />").val(0).text("No Filter"));
-                    $.each(data, function () {
-                        ddl.append($("<option />").val(this.ProjectId).text(this.Name));
-                    });
-                    ddl.prop('disabled', false);
-                }
-            },
-            failure: $(function () {
-                console.log("fail");
-                $("#ddl-projects").empty();
-                $("#ddl-projects").prop('disabled', true);
-            })
-        });
+	$("#ddl-customers").change(function () {
+		var ddl_ele = $('#ddl-projects');
+		var newCustId = this.value;
+		if (newCustId == 0) {
+			ddl_ele.prop('disabled', true);
+		} else {
+			ddl_ele.prop('disabled', false);
+		}
+		ddl_ele.empty();
+		$('.projectSelectOption').each(function () {
+			var ele = $(this);
+			var optionCust = ele.attr("data-cust");
+			if (optionCust == 0 || optionCust == newCustId) {
+				ddl_ele.append(ele.clone());
+			}
+		});
+
+        //console.log("Sending: " + this.value);
+        //$.ajax({
+        //    url: "/TimeTracker/Project/GetProjects?customerId=" + this.value,
+        //    method: "POST",
+        //    datatype: JSON,
+        //    success: function (data) {
+        //        console.log(data);
+        //        var ddl = $("#ddl-projects");
+        //        ddl.empty();
+        //        ddl.prop('disabled', true);
+        //        if (!$.isEmptyObject(data)) {
+        //            ddl.append($("<option />").val(0).text("No Filter"));
+        //            $.each(data, function () {
+        //                ddl.append($("<option />").val(this.ProjectId).text(this.Name));
+        //            });
+        //            ddl.prop('disabled', false);
+        //        }
+        //    },
+        //    failure: $(function () {
+        //        console.log("fail");
+        //        $("#ddl-projects").empty();
+        //        $("#ddl-projects").prop('disabled', true);
+        //    })
+        //});
     });
 
     $('#datePickerStart').datepicker("setDate", DateConvert.GetMomentFromDays(model_startdate).toDate());

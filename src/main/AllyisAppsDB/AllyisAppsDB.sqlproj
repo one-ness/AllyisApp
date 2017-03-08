@@ -273,6 +273,17 @@
     <Build Include="StoredProcedures\Auth\Auth.GetOrgWithCountriesAndEmployeeId.sql" />
     <Build Include="StoredProcedures\Auth\Auth.GetAddMemberInfo.sql" />
     <Build Include="StoredProcedures\Auth\Auth.GetOrgAndSubRoles.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetProjectsForOrgAndUser.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetAllSettings.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetProjectsAndCustomersForOrgAndUser.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetProjectByIdAndUser.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetCustomerAndCountries.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetNextCustIdAndCountries.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetProjectEditInfo.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.GetNextProjectIdAndSubUsers.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetReportInfo.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.GetProductSubscriptionInfo.sql" />
+    <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetTimeEntryIndexInfo.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

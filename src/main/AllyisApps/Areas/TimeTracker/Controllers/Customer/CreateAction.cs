@@ -27,11 +27,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (Service.Can(Actions.CoreAction.EditCustomer))
 			{
+				var idAndCountries = Service.GetNextCustIdAndCountries();
+
 				return this.View(new EditCustomerInfoViewModel
 				{
-					ValidCountries = Service.ValidCountries(),
+					ValidCountries = idAndCountries.Item2,
 					IsCreating = true,
-					CustomerOrgId = Service.GetRecommendedCustomerId()
+					CustomerOrgId = idAndCountries.Item1
 				});
 			}
 

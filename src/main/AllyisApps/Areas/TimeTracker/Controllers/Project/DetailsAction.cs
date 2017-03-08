@@ -24,11 +24,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="projectId">The project's Id.</param>
 		/// <returns>The details view of the project.</returns>
 		public ActionResult Details(int projectId)
-		{   // Unless the user is a manager, the user shouldn't view a project he is not assigned to
-			if (Service.Can(Actions.CoreAction.EditProject) ||
-				(Service.GetUsersByProjectId(projectId).Where(x => x.UserId == UserContext.UserId).FirstOrDefault() != null))
+		{
+			var model = Service.GetProjectAsUser(projectId);
+
+			if (Service.Can(Actions.CoreAction.EditProject) || model.IsProjectUser == true)
 			{
-				var model = Service.GetProject(projectId);
 				model.CanEditProject = Service.Can(Actions.CoreAction.EditProject);
 				return this.View(model);
 			}

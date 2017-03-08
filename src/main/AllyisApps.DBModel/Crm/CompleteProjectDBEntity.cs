@@ -92,5 +92,10 @@ namespace AllyisApps.DBModel.Crm
 		/// Gets or sets the Project's ID as used by the organization
 		/// </summary>
 		public string ProjectOrgId { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the user is a user of this project, in some contexts.
+		/// </summary>
+		public bool? IsProjectUser { get; set; }
 	}
 }

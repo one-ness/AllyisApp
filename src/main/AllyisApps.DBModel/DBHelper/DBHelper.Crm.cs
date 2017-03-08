@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
 using Dapper;
 using System;
@@ -109,6 +110,57 @@ namespace AllyisApps.DBModel
 					"[Crm].[GetProjectsByCustomer]",
 					parameters,
 				   commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Returns a CompleteProjectDBEntity for the project, a list of UserDBEntities for the project's assigned
+		/// users, and a list of SubscriptionUserDBEntities for all users of the given subscription.
+		/// </summary>
+		/// <param name="projectId">Project Id.</param>
+		/// <param name="subscriptionId">Subscription Id.</param>
+		/// <returns></returns>
+		public Tuple<CompleteProjectDBEntity, List<UserDBEntity>, List<SubscriptionUserDBEntity>> GetProjectEditInfo(int projectId, int subscriptionId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@ProjectId", projectId);
+			parameters.Add("@SubscriptionId", subscriptionId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Crm].[GetProjectEditInfo]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<CompleteProjectDBEntity>().SingleOrDefault(),
+					results.Read<UserDBEntity>().ToList(),
+					results.Read<SubscriptionUserDBEntity>().ToList());
+			}
+		}
+
+		/// <summary>
+		/// Returns the alphanumericaly topmost project id for the given customer and a list of SubscriptionUserDBEntities
+		/// for all users of the given subscription.
+		/// </summary>
+		/// <param name="customerId">Customer Id.</param>
+		/// <param name="subscriptionId">Subscription Id.</param>
+		/// <returns></returns>
+		public Tuple<string, List<SubscriptionUserDBEntity>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@CustomerId", customerId);
+			parameters.Add("@SubscriptionId", subscriptionId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Crm].[GetNextProjectIdAndSubUsers]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<string>().SingleOrDefault(),
+					results.Read<SubscriptionUserDBEntity>().ToList());
 			}
 		}
 
@@ -299,6 +351,50 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Gets the alphanumerically topmost customer id for the given organization and a list of valid
+		/// country names.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns></returns>
+		public Tuple<string, List<string>> GetNextCustIdAndCountries(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@OrgId", orgId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Crm].[GetNextCustIdAndCountries]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<string>().SingleOrDefault(),
+					results.Read<string>().ToList());
+			}
+		}
+
+		/// <summary>
+		/// Gets a CustomerDBEntity for the given customer and a list of valid
+		/// country names.
+		/// </summary>
+		/// <param name="customerId">Customer Id.</param>
+		/// <returns></returns>
+		public Tuple<CustomerDBEntity, List<string>> GetCustomerCountries(int customerId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@CustomerId", customerId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Crm].[GetCustomerAndCountries]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<CustomerDBEntity>().SingleOrDefault(),
+					results.Read<string>().ToList());
+			}
+		}
+
+		/// <summary>
 		/// Delete the specified customer.
 		/// </summary>
 		/// <param name="customerID">The customer's Id.</param>
@@ -376,6 +472,28 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Gets a project from its id and a user id, with the IsProjectUser field filled out
+		/// for that user.
+		/// </summary>
+		/// <param name="projectId">The project's Id.</param>
+		/// <param name="userId">The user Id.</param>
+		/// <returns>Info about the requested project.</returns>
+		public CompleteProjectDBEntity GetProjectByIdAndUser(int projectId, int userId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@ProjectId", projectId);
+			parameters.Add("@UserId", userId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<CompleteProjectDBEntity>(
+					"[Crm].[GetProjectByIdAndUser]",
+					parameters,
+					commandType: CommandType.StoredProcedure).SingleOrDefault();
+			}
+		}
+
+		/// <summary>
 		/// Gets a Collection of project data that the user can use.
 		/// </summary>
 		/// <param name="userId">The User's Id.</param>
@@ -437,6 +555,56 @@ namespace AllyisApps.DBModel
 					"[Crm].[UpdateProjectAndUsers]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Returns a list of ProjectDBEntities for projects the given user is assigned to in the given organization,
+		/// another list of ProjectDBEntities for all projects in the given organization, and a UserDBEntity with the 
+		/// name and email of the user.
+		/// </summary>
+		/// <param name="userId">User Id.</param>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns></returns>
+		public Tuple<List<ProjectDBEntity>, List<ProjectDBEntity>, UserDBEntity> GetProjectsForOrgAndUser(int userId, int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@UserId", userId);
+			parameters.Add("@OrgId", orgId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Crm].[GetProjectsForOrgAndUser]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<ProjectDBEntity>().ToList(),
+					results.Read<ProjectDBEntity>().ToList(),
+					results.Read<UserDBEntity>().SingleOrDefault());
+			}
+		}
+
+		/// <summary>
+		/// Returns a list of CompleteProjectDBEntities for the given organization with the IsProjectUser field filled
+		/// out for the given user, and a list of CustomerDBEntities for the organization.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <param name="userId">User Id.</param>
+		/// <returns></returns>
+		public Tuple<List<CompleteProjectDBEntity>, List<CustomerDBEntity>> GetProjectsAndCustomersForOrgAndUser(int orgId, int userId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@UserId", userId);
+			parameters.Add("@OrgId", orgId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Crm].[GetProjectsAndCustomersForOrgAndUser]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<CompleteProjectDBEntity>().ToList(),
+					results.Read<CustomerDBEntity>().ToList());
 			}
 		}
 	}

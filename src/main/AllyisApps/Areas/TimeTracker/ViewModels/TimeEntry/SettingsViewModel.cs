@@ -16,11 +16,6 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 	public class SettingsViewModel
 	{
 		/// <summary>
-		/// Gets the start of week for an organization.
-		/// </summary>
-		public StartOfWeekEnum StartOfWeek { get; internal set; }
-
-		/// <summary>
 		/// Gets or sets the settings for an organization.
 		/// </summary>
 		public SettingsInfo Settings { get; set; }

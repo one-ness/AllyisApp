@@ -22,5 +22,10 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// Gets the id of the current organization.
 		/// </summary>
 		public int OrganizationId { get; internal set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the user can edit customers/projects.
+		/// </summary>
+		public bool canEdit { get; set; }
 	}
 }

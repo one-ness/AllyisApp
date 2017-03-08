@@ -70,9 +70,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				if (!Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 				{
 					CompleteProjectInfo project = allProjects.Where(p => entry.ProjectId == p.ProjectId).SingleOrDefault();
-					if (project != null && !project.IsActive)
+					if (project != null && (!project.IsActive || !project.IsUserActive))
 					{
-						continue; // A user can't delete locked entries from projects that have been removed.
+						continue; // A user can't delete locked entries from projects that have been removed, or that the user is no longer assigned to.
 					}
 
 					if (lockDate.HasValue &&  entry.Date <= lockDate.Value)
@@ -95,9 +95,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					if (!Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 					{
 						CompleteProjectInfo project = allProjects.Where(p => entry.ProjectId == p.ProjectId).SingleOrDefault();
-						if (project != null && !project.IsActive)
+						if (project != null && (!project.IsActive || !project.IsUserActive))
 						{
-							continue; // A user can't create entries for projects that have been removed.
+							continue; // A user can't create entries for projects that have been removed, or that the user is no longer assigned to.
 						}
 
 						if (lockDate.HasValue && startDateTarget.Date.AddDays(i) <= lockDate.Value)

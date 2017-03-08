@@ -4,6 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.TimeTracker;
 using Dapper;
 using System;
@@ -51,7 +54,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationID">The Organization Id.</param>
 		/// <returns>The lock date.</returns>
-		public DateTime? GetLockDate(int organizationID)
+		public LockDateDBEntity GetLockDate(int organizationID)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationID", organizationID);
@@ -62,19 +65,20 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				LockDateDBEntity lockDate = connection.Query<LockDateDBEntity>("[TimeTracker].[GetLockDate]", parameters, commandType: CommandType.StoredProcedure).Single();
+				return connection.Query<LockDateDBEntity>("[TimeTracker].[GetLockDate]", parameters, commandType: CommandType.StoredProcedure).Single();
+				//LockDateDBEntity lockDate = connection.Query<LockDateDBEntity>("[TimeTracker].[GetLockDate]", parameters, commandType: CommandType.StoredProcedure).Single();
 				//if (!lockDate.HasValue)
 				//{
 				//	return DateTime.Now.AddDays(-7 - (int)DateTime.Now.DayOfWeek);
 				//}
 
-				if (lockDate != null && lockDate.LockDateUsed)
-				{
-					DateTime date = lockDate.LockDatePeriod.Equals("Months") ? DateTime.Now.AddMonths(-1 * lockDate.LockDateQuantity) :
-						DateTime.Now.AddDays(-1 * lockDate.LockDateQuantity * (lockDate.LockDatePeriod.Equals("Weeks") ? 7 : 1));
-					return date;
-				}
-				return null;
+				//if (lockDate != null && lockDate.LockDateUsed)
+				//{
+				//	DateTime date = lockDate.LockDatePeriod.Equals("Months") ? DateTime.Now.AddMonths(-1 * lockDate.LockDateQuantity) :
+				//		DateTime.Now.AddDays(-1 * lockDate.LockDateQuantity * (lockDate.LockDatePeriod.Equals("Weeks") ? 7 : 1));
+				//	return date;
+				//}
+				//return null;
 			}
 		}
 
@@ -568,6 +572,97 @@ namespace AllyisApps.DBModel
 			}
 
 			return true;
+		}
+
+		/// <summary>
+		/// Returns a SettingsDBEntity with start of week, overtime, and lock date settings, a list of PayClassDBEntities,
+		/// and a list of HolidayDBEntites for the given organization.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns></returns>
+		public Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>> GetAllSettings(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationID", orgId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[TimeTracker].[GetAllSettings]", 
+					parameters, 
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<SettingDBEntity>().SingleOrDefault(),
+					results.Read<PayClassDBEntity>().ToList(),
+					results.Read<HolidayDBEntity>().ToList());
+			}
+		}
+
+		/// <summary>
+		/// Gets a list of CutomerDBEntities for all customers in the given organization, a list of CompleteProjectDBEntities
+		/// for all projects in the given organization, and a list of SubscriptionUserDBEntities for all users in the given
+		/// subscription.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <param name="subscriptionId">Subscription Id.</param>
+		/// <returns></returns>
+		public Tuple<List<CustomerDBEntity>, List<CompleteProjectDBEntity>, List<SubscriptionUserDBEntity>> GetReportInfo(int orgId, int subscriptionId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@orgId", orgId);
+			parameters.Add("@subscriptionId", subscriptionId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[TimeTracker].[GetReportInfo]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<CustomerDBEntity>().ToList(),
+					results.Read<CompleteProjectDBEntity>().ToList(),
+					results.Read<SubscriptionUserDBEntity>().ToList());
+			}
+		}
+
+		/// <summary>
+		/// Returns a SettingsDBEntity for the given organization's TimeTracker settings (with only start of week and
+		/// lock date fields populated), a list of PayClassDBEntities for all the organization's pay classes, a list of
+		/// HolidayDBEntities for all the organization's holidays, a list of CompleteProjectDBEntities for all projects
+		/// in the given org that the given user is or has been assigned to (active or not), a list of UserDBEntities
+		/// for all the users in the org who are users of the time tracker subscription, and a list of TimeEntryDBEntities
+		/// for all time entries for the given user in the given time range.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <param name="timeTrackerProductId">Product Id for TimeTracker.</param>
+		/// <param name="userId">User Id.</param>
+		/// <param name="startingDate">Start of date range.</param>
+		/// <param name="endingDate">End of date range.</param>
+		/// <returns></returns>
+		public Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>, List<CompleteProjectDBEntity>, List<UserDBEntity>, List<TimeEntryDBEntity>>
+			GetTimeEntryIndexPageInfo(int orgId, int timeTrackerProductId, int userId, DateTime? startingDate, DateTime? endingDate)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@OrganizationId", orgId);
+			parameters.Add("@ProductId", timeTrackerProductId);
+			parameters.Add("@UserId", userId);
+			parameters.Add("@StartingDate", startingDate);
+			parameters.Add("@EndingDate", endingDate);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[TimeTracker].[GetTimeEntryIndexInfo]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<SettingDBEntity>().SingleOrDefault(),
+					results.Read<PayClassDBEntity>().ToList(),
+					results.Read<HolidayDBEntity>().ToList(),
+					results.Read<CompleteProjectDBEntity>().ToList(),
+					results.Read<UserDBEntity>().ToList(),
+					results.Read<TimeEntryDBEntity>().ToList());
+			}
 		}
 	}
 }

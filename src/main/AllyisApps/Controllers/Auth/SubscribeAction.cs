@@ -11,6 +11,7 @@ using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -29,7 +30,9 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult Subscribe(int productId)
 		{
-			int orgId = UserContext.ChosenOrganizationId;
+			var infos = Service.GetProductSubscriptionInfo(productId);
+
+			//int orgId = UserContext.ChosenOrganizationId;
 
 			// ViewBag.Organizations = OrgService.GetOrganizationsWhereUserIsAdmin(UserContext.UserId);
 
@@ -37,17 +40,15 @@ namespace AllyisApps.Controllers
 
 			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
-				ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(productId);
+				ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(/*productId*/infos.Item1, infos.Item2, infos.Item3, infos.Item4);
 				if (!model.IsValid)
 				{
-					return this.View(ViewConstants.Details, orgId);
+					return this.View(ViewConstants.Details, UserContext.ChosenOrganizationId);
 				}
-
-				Service.InitializeSettingsForProduct(model.ProductId);
-
+				
 				// SubscriptionInfo sub = CrmService.CheckSubscription(orgId, productId);
 
-				model.CurrentUsers = Service.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Count();
+				model.CurrentUsers = infos.Item5; //Service.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Count();
 
 				return this.View(ViewConstants.Subscribe, model);
 			}
@@ -60,16 +61,20 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Uses services to populate a <see cref="ProductSubscriptionViewModel"/> and returns it.
 		/// </summary>
-		/// <param name="productId">Product ID.</param>
+		/// <param name="productInfo">ProductInfo for product.</param>
+		/// <param name="currentSubscription">SubscriptionInfo for this org's subscription to the product.</param>
+		/// <param name="skus">List of SkuInfos for this product's skus.</param>
+		/// <param name="stripeToken">This org's billing stripe token.</param>
 		/// <returns>The ProductSubscriptionViewModel.</returns>
 		[CLSCompliant(false)]
-		public ProductSubscriptionViewModel ConstructProductSubscriptionViewModel(int productId)
+		public ProductSubscriptionViewModel ConstructProductSubscriptionViewModel(/*int productId*/ProductInfo productInfo, SubscriptionInfo currentSubscription, List<SkuInfo> skus, string stripeToken)
 		{
-			ProductInfo productInfo = Service.GetProductById(productId);
+			//ProductInfo productInfo = Service.GetProductById(productId);
 			if (productInfo != null)
 			{
-				SubscriptionInfo currentSubscription = Service.CheckSubscription(productId);
+				//SubscriptionInfo currentSubscription = Service.CheckSubscription(productId);
 				int selectedSku = currentSubscription == null ? 0 : currentSubscription.SkuId;
+				BillingServicesCustomerId customerId = new BillingServicesCustomerId(stripeToken);
 
 				return new ProductSubscriptionViewModel
 				{
@@ -79,12 +84,12 @@ namespace AllyisApps.Controllers
 					ProductName = productInfo.ProductName,
 					ProductDescription = productInfo.ProductDescription,
 					CurrentSubscription = currentSubscription,
-					Skus = Service.GetSkuForProduct(productId),
+					Skus = skus,//Service.GetSkuForProduct(productId),
 					SelectedSku = selectedSku,
-					SelectedSkuName = selectedSku > 0 ? Service.GetSkuDetails(selectedSku).Name : string.Empty,
+					SelectedSkuName = selectedSku > 0 ? skus.Where(s => s.SkuId == selectedSku).SingleOrDefault().Name /*Service.GetSkuDetails(selectedSku).Name*/ : string.Empty,
 					PreviousSku = selectedSku,
-					CustomerId = Service.GetOrgBillingServicesCustomerId(),
-					Token = new BillingServicesToken(Service.GetOrgBillingServicesCustomerId().ToString())
+					CustomerId = customerId,//Service.GetOrgBillingServicesCustomerId(),
+					Token = new BillingServicesToken(/*Service.GetOrgBillingServicesCustomerId().ToString()*/customerId.ToString()) // TODO: Does this just convert back to the stripeToken string?? Investigate.
 				};
 			}
 
@@ -170,7 +175,7 @@ namespace AllyisApps.Controllers
 				if (subscriptionId == null)
 				{
 					Service.AddCustomerSubscriptionPlan(model.Billing.Amount, model.Billing.Customer.Id, model.NumberOfUsers, model.ProductId, model.ProductName);
-					Service.InitializeSettingsForProduct(model.ProductId);
+					//Service.InitializeSettingsForProduct(model.ProductId);
 					Service.AddBillingHistory(string.Format("Adding new subscription data for {0}.", model.ProductName), model.SelectedSku);
 				}
 				else
@@ -203,6 +208,8 @@ namespace AllyisApps.Controllers
 					Notifications.Add(new BootstrapAlert(e.ToString(), Variety.Warning));
 				}
 			}
+
+			Service.InitializeSettingsForProduct(model.ProductId);
 
 			if (model.SelectedSku != model.PreviousSku)
 			{

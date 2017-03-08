@@ -249,12 +249,47 @@ namespace AllyisApps.Services.TimeTracker
 		}
 
 		/// <summary>
+		/// Gets a list of CustomerInfos for all customers in the organization, a list of CompleteProjectInfos for all
+		/// projects in the organization, and a list of SubscriptionUserInfos for all users in the current subscription.
+		/// </summary>
+		/// <param name="orgId">Organization Id. If null, current organization will be used.</param>
+		/// <returns></returns>
+		public Tuple<List<CustomerInfo>, List<CompleteProjectInfo>, List<SubscriptionUserInfo>> GetReportInfo(int? orgId = null)
+		{
+			var spResults = DBHelper.GetReportInfo(orgId == null ? UserContext.ChosenOrganizationId : orgId.Value, UserContext.ChosenSubscriptionId);
+			return Tuple.Create(
+				spResults.Item1.Select(cdb => Service.InitializeCustomerInfo(cdb)).ToList(),
+				spResults.Item2.Select(cpdb => Service.InitializeCompleteProjectInfo(cpdb)).ToList(),
+				spResults.Item3.Select(sudb => Service.InitializeSubscriptionUserInfo(sudb)).ToList());
+		}
+
+		/// <summary>
 		/// Gets the lock date for the current organization.
 		/// </summary>
 		/// <returns>Lock date.</returns>
 		public DateTime? GetLockDate()
 		{
-			return DBHelper.GetLockDate(UserContext.ChosenOrganizationId);
+			LockDateDBEntity lockDate = DBHelper.GetLockDate(UserContext.ChosenOrganizationId);
+			return GetLockDateFromParameters(lockDate.LockDateUsed, lockDate.LockDatePeriod, lockDate.LockDateQuantity);
+		}
+
+		/// <summary>
+		/// Gets a nullable DateTime for the lock date, based on supplied lock date settings.
+		/// </summary>
+		/// <param name="isLockDateUsed">A value indicating whether the lock date is used.</param>
+		/// <param name="lockDatePeriod">The lock date period ("Monthd", "Weeks", or "Days").</param>
+		/// <param name="lockDateQuantity">The quantity of the time unit defined by the period.</param>
+		/// <returns>A nullable DateTime expressing the date on or before which time entries are locked.</returns>
+		public DateTime? GetLockDateFromParameters(bool isLockDateUsed, string lockDatePeriod, int lockDateQuantity)
+		{
+			if (!isLockDateUsed)
+			{
+				return null;
+			}
+
+			DateTime date = lockDatePeriod.Equals("Months") ? DateTime.Now.AddMonths(-1 * lockDateQuantity) :
+				DateTime.Now.AddDays(-1 * lockDateQuantity * (lockDatePeriod.Equals("Weeks") ? 7 : 1));
+			return date;
 		}
 
 		/// <summary>
@@ -699,6 +734,78 @@ namespace AllyisApps.Services.TimeTracker
 		}
 
 		/// <summary>
+		/// Returns a SettingsInfo with start of week, overtime, and lock date settings, a list of PayClassInfos,
+		/// and a list of HolidayInfos for the current organization.
+		/// </summary>
+		/// <returns></returns>
+		public Tuple<SettingsInfo, List<PayClassInfo>, List<HolidayInfo>> GetAllSettings()
+		{
+			var spResults = DBHelper.GetAllSettings(UserContext.ChosenOrganizationId);
+			return Tuple.Create(
+				InitializeSettingsInfo(spResults.Item1),
+				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
+				spResults.Item3.Select(hdb => InitializeHolidayInfo(hdb)).ToList());
+		}
+
+		/// <summary>
+		/// Returns a SettingsInfo for the current organization's TimeTracker settings (with only start of week and
+		/// lock date fields populated), a list of PayClassInfos for all the organization's pay classes, a list of
+		/// HolidayInfos for all the organization's holidays, a list of CompleteProjectInfos for all projects
+		/// in the current org that the given user is or has been assigned to (active or not), a list of UserInfos
+		/// for all the users in the org who are users of the time tracker subscription, and a list of TimeEntryInfos
+		/// for all time entries for the given user in the given time range.
+		/// </summary>
+		/// <param name="userId">User Id.</param>
+		/// <param name="startingDate">Start of date range.</param>
+		/// <param name="endingDate">End of date range.</param>
+		/// <returns></returns>
+		public Tuple<SettingsInfo, List<PayClassInfo>, List<HolidayInfo>, List<CompleteProjectInfo>, List<UserInfo>, List<TimeEntryInfo>>
+			GetTimeEntryIndexInfo(DateTime? startingDate, DateTime? endingDate, int? userId = null)
+		{
+			#region Validation
+			if (userId == null)
+			{
+				userId = UserContext.UserId;
+			}
+
+			if (userId <= 0)
+			{
+				throw new ArgumentException("User Id cannot be zero or negative.");
+			}
+			if (startingDate.HasValue && endingDate.HasValue && DateTime.Compare(startingDate.Value, endingDate.Value) > 0)
+			{
+				throw new ArgumentException("Date range cannot end before it starts.");
+			}
+			#endregion
+
+			var spResults = DBHelper.GetTimeEntryIndexPageInfo(UserContext.ChosenOrganizationId, (int)ProductIdEnum.TimeTracker, userId.Value, startingDate, endingDate);
+			return Tuple.Create(
+				InitializeSettingsInfo(spResults.Item1),
+				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
+				spResults.Item3.Select(hdb => InitializeHolidayInfo(hdb)).ToList(),
+				spResults.Item4.Select(cpdb => Service.InitializeCompleteProjectInfo(cpdb)).ToList(),
+				spResults.Item5.Select(udb => Service.InitializeUserInfo(udb)).ToList(),
+				spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList());
+		}
+
+		/// <summary>
+		/// Initializes a PayClassInfo from a PayClassDBEntity.
+		/// </summary>
+		/// <param name="pc">PayClassDBEntity.</param>
+		/// <returns>PayClassInfo.</returns>
+		public static PayClassInfo InitializePayClassInfo(PayClassDBEntity pc)
+		{
+			return new PayClassInfo
+			{
+				Name = pc.Name,
+				OrganizationId = pc.OrganizationId,
+				PayClassID = pc.PayClassID,
+				CreatedUTC = pc.CreatedUTC,
+				ModifiedUTC = pc.ModifiedUTC
+			};
+		}
+
+		/// <summary>
 		/// Initialized holiday info with a given HolidayDBEntity.
 		/// </summary>
 		/// <param name="hol">The HolidayDBEntity to use.</param>
@@ -723,6 +830,11 @@ namespace AllyisApps.Services.TimeTracker
 		/// <returns>The initialized SettingsInfo object.</returns>
 		public static SettingsInfo InitializeSettingsInfo(SettingDBEntity settings)
 		{
+			if (settings == null)
+			{
+				return null;
+			}
+
 			return new SettingsInfo
 			{
 				OrganizationId = settings.OrganizationId,
