@@ -20,27 +20,6 @@ namespace AllyisApps.DBModel
 	/// </summary>
 	public partial class DBHelper
 	{
-		///// <summary>
-		///// Product ID List.
-		///// </summary>
-		//private IEnumerable<int> productIDList;
-
-		///// <summary>
-		///// Gets a list of available product IDs.
-		///// </summary>
-		//public IEnumerable<int> ProductIDList
-		//{
-		//	get
-		//	{
-		//		if (this.productIDList == null)
-		//		{
-		//			this.InitializeProducts();
-		//		}
-
-		//		return this.productIDList;
-		//	}
-		//}
-
 		/// <summary>
 		/// Retrieves the area to route to for a specific subscription.
 		/// </summary>
@@ -70,18 +49,6 @@ namespace AllyisApps.DBModel
 				return connection.Query<int>("[Billing].[GetProductIdByName]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
-
-		///// <summary>
-		///// Gets a list of all subscription users.
-		///// </summary>
-		///// <returns>List of SubscriptionUserDBEntities.</returns>
-		//public List<SubscriptionUserDBEntity> GetSubscriptionUserList()
-		//{
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		return connection.Query<SubscriptionUserDBEntity>("[Billing].[GetSubscriptionUserList]", commandType: CommandType.StoredProcedure).ToList();
-		//	}
-		//}
 
 		/// <summary>
 		/// Updates the subscriptionUser table entry for a specific user of subscription to be productRoleId.
@@ -118,25 +85,6 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		///// <summary>
-		///// Executes [Billing].[GetSubscription].
-		///// </summary>
-		///// <param name="organizationId">Sets organizationId.</param>
-		///// <param name="productId">Sets productId.</param>
-		///// <returns>Requested Organization.</returns>
-		//public SubscriptionDBEntity CheckSubscription(int organizationId, int productId)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-
-		//	parameters.Add("@OrganizationId", organizationId);
-		//	parameters.Add("@ProductId", productId);
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		// default null
-		//		return connection.Query<SubscriptionDBEntity>("[Billing].[GetSubscription]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
-		//	}
-		//}
-
 		/// <summary>
 		/// Unsubscribe method.
 		/// </summary>
@@ -151,49 +99,6 @@ namespace AllyisApps.DBModel
 				connection.Execute("[Billing].[DeleteSubscription]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
-
-		///// <summary>
-		///// Get subscription by User.
-		///// </summary>
-		///// <param name="userId">The UserId.</param>
-		///// <param name="organizationId">The organizationId.</param>
-		///// <returns>List of TableSubscriptions.</returns>
-		//public IEnumerable<SubscriptionDBEntity> GetSubscriptionByUser(int userId, int organizationId = -1)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@UserId", userId);
-		//	if (organizationId != -1)
-		//	{
-		//		parameters.Add("@OrganizationId", organizationId);
-		//	}
-
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		// default empty list
-		//		return connection.Query<SubscriptionDBEntity>("[Billing].[GetSubscriptionByUser]", parameters, commandType: CommandType.StoredProcedure);
-		//	}
-		//}
-
-		///// <summary>
-		///// Gets the date that the user joined the subscription.
-		///// </summary>
-		///// <param name="userId">The user in question.</param>
-		///// <param name="subId">The subscription in question.</param>
-		///// <returns>The date that the user was added to the subscription.</returns>
-		//public DateTime GetDateAddedToSubscriptionByUserId(int userId, int subId)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@UserId", userId);
-		//	parameters.Add("@subscriptionID", subId);
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		IEnumerable<SubscriptionUserDBEntity> result = connection.Query<SubscriptionUserDBEntity>(
-		//			"[Billing].[GetDateAddedToSubscriptionByUserId]",
-		//			parameters,
-		//			commandType: CommandType.StoredProcedure);
-		//		return result == null ? DateTime.MinValue : result.Count() == 0 ? DateTime.MinValue : result.Single().CreatedUTC;
-		//	}
-		//}
 
 		/// <summary>
 		/// Get Subscription Details by Id.
@@ -211,56 +116,6 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		///// <summary>
-		///// Executes [Billing].[GetSubscriptionsByOrg].
-		///// </summary>
-		///// <param name="organizationId">Sets OrganizationId.</param>
-		///// <returns>List of SkuDBEntity's.</returns>
-		//public IEnumerable<SkuDBEntity> GetSubscriptionsByOrg(int organizationId)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@OrganizationId", organizationId);
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		// default empty list
-		//		return connection.Query<SkuDBEntity>("[Billing].[GetSubscriptionsByOrg]", parameters, commandType: CommandType.StoredProcedure);
-		//	}
-		//}
-
-		///// <summary>
-		///// Executes [Billing].[GetSubscriptionByOrgAndProduct].
-		///// </summary>
-		///// <param name="organizationId">Sets OrganizationId.</param>
-		///// <param name="productId">Sets ProductId.</param>
-		///// <returns>List of SkuDBEntity's.</returns>
-		//public SkuDBEntity GetSubscriptionByOrgAndProduct(int organizationId, int productId)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@OrganizationId", organizationId);
-		//	parameters.Add("@ProductId", productId);
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		// default empty list
-		//		return connection.Query<SkuDBEntity>("[Billing].[GetSubscriptionByOrgAndProduct]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
-		//	}
-		//}
-
-		///// <summary>
-		///// Executes [Billing].[GetSkuforProduct].
-		///// </summary>
-		///// <param name="productID">Sets ProductID.</param>
-		///// <returns>List of SkuDBEntity's.</returns>
-		//public IEnumerable<SkuDBEntity> GetSkuforProduct(int productID)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@ProductId", productID);
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		// default empty list
-		//		return connection.Query<SkuDBEntity>("[Billing].[GetSkuforProduct]", parameters, commandType: CommandType.StoredProcedure);
-		//	}
-		//}
-
 		/// <summary>
 		/// Executes [Billing].[GetProductById].
 		/// </summary>
@@ -268,8 +123,6 @@ namespace AllyisApps.DBModel
 		/// <returns>ProductDBEntity obj.</returns>
 		public ProductDBEntity GetProductById(int productID)
 		{
-			//return ProductDBEntityCache.Instance.GetItemById(productID);
-
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@ProductId", productID);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -277,22 +130,6 @@ namespace AllyisApps.DBModel
 				return connection.Query<ProductDBEntity>("[Billing].[GetProductById]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
-
-		///// <summary>
-		///// Executes [Billing].[GetFreeSku].
-		///// </summary>
-		///// <param name="productID">Sets ProductID.</param>
-		///// <returns>SkuDBEntity obj.</returns>
-		//public SkuDBEntity GetFreeSku(int productID)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@ProductID", productID);
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		// default null
-		//		return connection.Query<SkuDBEntity>("[Billing].[GetFreeSku]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
-		//	}
-		//}
 
 		/// <summary>
 		/// Executes [Billing].[GetProductList].
@@ -357,19 +194,6 @@ namespace AllyisApps.DBModel
 				connection.Execute("[Billing].[UpdateNumberOfUsersSubscription]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
-
-		///// <summary>
-		///// Executes [Billing].[GetSkuList].
-		///// </summary>
-		///// <returns>List of SkuDBEntity's.</returns>
-		//public IEnumerable<SkuDBEntity> GetSkuList()
-		//{
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		// default empty list
-		//		return connection.Query<SkuDBEntity>("[Billing].[GetSkuList]", commandType: CommandType.StoredProcedure);
-		//	}
-		//}
 
 		/// <summary>
 		/// Executes [Billing].[GetSkuById].
@@ -521,25 +345,6 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		///// <summary>
-		///// Gets the price of the subscription.
-		///// </summary>
-		///// <param name="subscriptionid">The id of the subscription in question.</param>
-		///// <returns>The price of the subscription.</returns>
-		//public int GetSubscriptionPlanPrice(string subscriptionid)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@subscriptionID", subscriptionid);
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		// default -1
-		//		return connection.Query<int>(
-		//		   "[Billing].[GetStripeSubscriptionPlanPrice]",
-		//		   parameters,
-		//		   commandType: CommandType.StoredProcedure).SingleOrDefault();
-		//	}
-		//}
-
 		/// <summary>
 		/// Adds entry to billing history table.
 		/// </summary>
@@ -603,37 +408,6 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		///// <summary>
-		///// Gets all the susbcription ids for an organization.
-		///// </summary>
-		///// <param name="orgid">The organization id.</param>
-		///// <returns>The subscription ids.</returns>
-		//public IEnumerable<string> GetSubscriptionIds(int orgid)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@OrgId", orgid);
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		// default empty list
-		//		return connection.Query<string>(
-		//		  "[Billing].[GetAllSubscriptionsForOrganization]",
-		//		  parameters,
-		//		  commandType: CommandType.StoredProcedure);
-		//	}
-		//}
-
-		///// <summary>
-		///// Gets a list of all subscriptions.
-		///// </summary>
-		///// <returns>A list of SubscriptionDBEntity entities.</returns>
-		//public List<SubscriptionDBEntity> GetSubscriptionList()
-		//{
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		return connection.Query<SubscriptionDBEntity>("[Billing].[GetSubscriptionList]", commandType: CommandType.StoredProcedure).ToList();
-		//	}
-		//}
-
 		/// <summary>
 		/// Retrieves the collection of subscriptions for the specified organization.
 		/// </summary>
@@ -647,26 +421,6 @@ namespace AllyisApps.DBModel
 				return connection.Query<SubscriptionDBEntity>("[Billing].[GetOrgSkus]", new { OrganizationId = organizationId }, commandType: CommandType.StoredProcedure);
 			}
 		}
-
-		///// <summary>
-		///// Returns the organization information crossed with subscription and role information, from a user id.
-		///// </summary>
-		///// <param name="userId">The user ID.</param>
-		///// <returns>A collection of SubscriptionDisplay information.</returns>
-		//public IEnumerable<SubscriptionDisplayDBEntity> GetUserSubscriptionOrganizationList(int userId)
-		//{
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		// default null
-		//		return connection.Query<SubscriptionDisplayDBEntity>(
-		//			"[Billing].[GetSubscriptionDetailsByUser]",
-		//			new
-		//			{
-		//				userId = userId
-		//			},
-		//			commandType: CommandType.StoredProcedure);
-		//	}
-		//}
 
 		/// <summary>
 		/// Executes [Billing].[GetSubscriptionsDisplayByOrg].
@@ -714,14 +468,6 @@ namespace AllyisApps.DBModel
 				return connection.Query<BillingHistoryItemDBEntity>("[Billing].[GetBillingHistoryByOrg]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
-
-		//private void InitializeProducts()
-		//{
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		this.productIDList = connection.Query<int>("[Billing].[GetProductIds]", commandType: CommandType.StoredProcedure);
-		//	}
-		//}
 
 		/// <summary>
 		/// Returns a ProductDBEntity for the given product, a SubscriptionDBEntity for the given org's

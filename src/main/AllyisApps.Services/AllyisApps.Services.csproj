@@ -67,6 +67,7 @@
     <Compile Include="Account\Actions.cs" />
     <Compile Include="Account\AuthorizationService.cs" />
     <Compile Include="Org\ImportActionResult.cs" />
+    <Compile Include="Org\ImportService.cs" />
     <Compile Include="Org\OrganizationRole.cs" />
     <Compile Include="Account\ProductRole.cs" />
     <Compile Include="Account\ProductRoleIdEnum.cs" />
@@ -103,19 +104,14 @@
     <Compile Include="Billing\SubscriptionInfo.cs" />
     <Compile Include="Billing\SubscriptionRoleInfo.cs" />
     <Compile Include="Account\SubscriptionUserInfo.cs" />
-    <Compile Include="Account\TablePermissions.cs">
-      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
-    </Compile>
     <Compile Include="Account\TargetUser.cs" />
     <Compile Include="TimeTracker\TimeEntryInfo.cs" />
     <Compile Include="Account\UserInfo.cs" />
-    <Compile Include="Account\UserMembershipInfo.cs" />
     <Compile Include="Account\UserPermissionsAction.cs" />
     <Compile Include="Account\UserRolesInfo.cs" />
     <Compile Include="Crm\CrmService.cs" />
     <Compile Include="Crm\ProductInfo.cs" />
     <Compile Include="Crm\ProductIdEnum.cs" />
-    <Compile Include="Utilities\EmailService.cs" />
     <Compile Include="Org\OrganizationRoleIdEnum.cs" />
     <Compile Include="Org\OrgService.cs" />
     <Compile Include="Project\ProjectService.cs" />

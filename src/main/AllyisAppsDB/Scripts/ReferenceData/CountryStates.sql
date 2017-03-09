@@ -561,7 +561,6 @@ INSERT INTO [Lookup].[State] (Code, Name) VALUES ('BM', 'Saint George');
 INSERT INTO [Lookup].[State] (Code, Name) VALUES ('BM', 'Pembroke Parish');
 INSERT INTO [Lookup].[State] (Code, Name) VALUES ('BM', 'Paget Parish');
 INSERT INTO [Lookup].[State] (Code, Name) VALUES ('BM', 'Hamilton');
-INSERT INTO [Lookup].[State] (Code, Name) VALUES ('BM', 'Hamilton');
 INSERT INTO [Lookup].[State] (Code, Name) VALUES ('BM', 'Devonshire Parish');
 INSERT INTO [Lookup].[State] (Code, Name) VALUES ('BN', 'Tutong District');
 INSERT INTO [Lookup].[State] (Code, Name) VALUES ('BN', 'Temburong District');

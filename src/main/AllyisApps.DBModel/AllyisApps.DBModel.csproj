@@ -61,16 +61,6 @@
     <Compile Include="Billing\BillingHistoryItemDBEntity.cs" />
     <Compile Include="Billing\SubscriptionDisplayDBEntity.cs" />
     <Compile Include="Billing\SubscriptionRoleDBEntity.cs" />
-    <Compile Include="Cache\OrganizationDBEntityCache.cs" />
-    <Compile Include="Cache\OrgRoleDBEntityCache.cs" />
-    <Compile Include="Cache\OrganizationUserDBEntityCache.cs" />
-    <Compile Include="Cache\ProductDBEntityCache.cs" />
-    <Compile Include="Cache\ProductRoleDBEntityCache.cs" />
-    <Compile Include="Cache\SettingDBEntityCache.cs" />
-    <Compile Include="Cache\SkuDBEntityCache.cs" />
-    <Compile Include="Cache\SubscriptionDBEntityCache.cs" />
-    <Compile Include="Cache\SubscriptionUserDBEntityCache.cs" />
-    <Compile Include="Cache\UserDBEntityCache.cs" />
     <Compile Include="Crm\CompleteProjectDBEntity.cs" />
     <Compile Include="Crm\ProjectDBEntity.cs" />
     <Compile Include="DBHelper\DBHelper.Lookup.cs" />

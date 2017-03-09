@@ -4,11 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Crm;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+
+using AllyisApps.DBModel.Crm;
 
 namespace AllyisApps.Services
 {
@@ -287,36 +288,6 @@ namespace AllyisApps.Services
 			return DBHelper.DeleteProjectUser(projectId, userId) == 1;
 		}
 
-		///// <summary>
-		///// Gets a list of <see cref="UserInfo"/>'s for a project.
-		///// </summary>
-		///// <param name="projectId">Project Id.</param>
-		///// <returns>List of UserInfo's.</returns>
-		//public IEnumerable<UserInfo> GetUsersByProjectId(int projectId)
-		//{
-		//	if (projectId <= 0)
-		//	{
-		//		throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
-		//	}
-
-		//	return DBHelper.GetUsersByProjectId(projectId).Select(u => InitializeUserInfo(u));
-		//}
-
-		///// <summary>
-		///// Gets the organizaiton Id from a project Id.
-		///// </summary>
-		///// <param name="projectId">Project Id.</param>
-		///// <returns>Organization Id.</returns>
-		//public int GetOrganizationFromProject(int projectId)
-		//{
-		//	if (projectId <= 0)
-		//	{
-		//		throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
-		//	}
-
-		//	return DBHelper.GetOrganizationFromProject(projectId);
-		//}
-
 		/// <summary>
 		/// Gets all the projects a user can use in the chosen organization.
 		/// </summary>
@@ -402,32 +373,6 @@ namespace AllyisApps.Services
 				spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray())),
 				spResults.Item2.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());
 		}
-
-		///// <summary>
-		///// Gets a list of <see cref="CompleteProjectInfo"/>s for all projects a user can use.
-		///// </summary>
-		///// <param name="userId">User Id.</param>
-		///// <returns>List of CompleteProjectInfo objects.</returns>
-		//public IEnumerable<CompleteProjectInfo> GetProjectsByUserId(int userId)
-		//{
-		//	if (userId <= 0)
-		//	{
-		//		throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-		//	}
-
-		//	return DBHelper.GetProjectsByUserId(userId).Select(p => InitializeCompleteProjectInfo(p));
-		//}
-
-		///// <summary>
-		///// Returns a recommended available Project Org ID
-		///// </summary>
-		///// <returns></returns>
-		//public string GetRecommendedProjectId()
-		//{
-		//	var projects = GetAllProjectsForOrganization(this.UserContext.ChosenOrganizationId);
-		//	if (projects.Count() > 0) return new string(this.IncrementAlphanumericCharArray(projects.OrderBy(p => p.ProjectOrgId).LastOrDefault().ProjectOrgId.ToCharArray()));
-		//	else return "0000000000000000"; // 16 max chars, arbitrary default value
-		//}
 
 		public IEnumerable<ProjectInfo> GetAllProjectsForOrganization(int orgId)
 		{

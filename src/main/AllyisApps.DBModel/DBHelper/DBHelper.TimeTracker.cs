@@ -22,33 +22,6 @@ namespace AllyisApps.DBModel
 	/// </summary>
 	public partial class DBHelper
 	{
-		///// <summary>
-		///// Get a list of all setting items.
-		///// </summary>
-		///// <returns>A list of all setting items.</returns>
-		//public List<SettingDBEntity> GetSettingList()
-		//{
-		//	using (var conn = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		return conn.Query<SettingDBEntity>("TimeTracker.GetSettingList").ToList();
-		//	}
-		//}
-
-		///// <summary>
-		///// Returns the organizationid of the org associated with a project.
-		///// </summary>
-		///// <param name="projectID">The project.</param>
-		///// <returns>The organization id.</returns>
-		//public int GetOrganizationFromProject(int projectID)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@projectID", projectID);
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		return connection.Query<int>("[TimeTracker].[GetOrganizationFromProject]", parameters, commandType: CommandType.StoredProcedure).Single();
-		//	}
-		//}
-
 		/// <summary>
 		/// Returns the lock date for a specific organization.
 		/// </summary>
@@ -58,48 +31,12 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationID", organizationID);
-			//if (organizationID < 1)
-			//{
-			//	return DateTime.Now.AddDays(-7 - (int)DateTime.Now.DayOfWeek);
-			//}
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<LockDateDBEntity>("[TimeTracker].[GetLockDate]", parameters, commandType: CommandType.StoredProcedure).Single();
-				//LockDateDBEntity lockDate = connection.Query<LockDateDBEntity>("[TimeTracker].[GetLockDate]", parameters, commandType: CommandType.StoredProcedure).Single();
-				//if (!lockDate.HasValue)
-				//{
-				//	return DateTime.Now.AddDays(-7 - (int)DateTime.Now.DayOfWeek);
-				//}
-
-				//if (lockDate != null && lockDate.LockDateUsed)
-				//{
-				//	DateTime date = lockDate.LockDatePeriod.Equals("Months") ? DateTime.Now.AddMonths(-1 * lockDate.LockDateQuantity) :
-				//		DateTime.Now.AddDays(-1 * lockDate.LockDateQuantity * (lockDate.LockDatePeriod.Equals("Weeks") ? 7 : 1));
-				//	return date;
-				//}
-				//return null;
 			}
 		}
-
-		///// <summary>
-		///// Sets the lock date for a specific organization/user.
-		///// </summary>
-		///// <param name="organizationID">The Organization Id.</param>
-		///// <param name="userID">The User Id.</param>
-		///// <param name="date">The date.</param>
-		//public void SetLockDate(int organizationID, int userID, DateTime date)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@organizationID", organizationID);
-		//	parameters.Add("@userID", userID);
-		//	parameters.Add("@date", date);
-
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		connection.Execute("[TimeTracker].[SetLockDate]", parameters, commandType: CommandType.StoredProcedure);
-		//	}
-		//}
 
 		/// <summary>
 		/// Creates a holiday and related TimeEntries for an organization.
@@ -194,38 +131,6 @@ namespace AllyisApps.DBModel
 				return connection.Query<PayClassDBEntity>("[TimeTracker].[GetPayClasses]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
-
-		///// <summary>
-		///// Get play class by id.
-		///// </summary>
-		///// <param name="id">Id of pay class.</param>
-		///// <returns>The PayClassDBEntity.</returns>
-		//public PayClassDBEntity GetPayClassById(int id)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@ID", id);
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		return connection.Query<PayClassDBEntity>("[TimeTracker].[GetPayClassById]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
-		//	}
-		//}
-
-		///// <summary>
-		///// Get a pay class by name and org.
-		///// </summary>
-		///// <param name="name">Name of class.</param>
-		///// <param name="orgId">Id of org.</param>
-		///// <returns>The PayClassDBEntity.</returns>
-		//public PayClassDBEntity GetPayClassByNameAndOrg(string name, int orgId)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@organizationID", orgId);
-		//	parameters.Add("@Name", name);
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		return connection.Query<PayClassDBEntity>("[TimeTracker].[GetPayClassByNameAndOrg]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
-		//	}
-		//}
 
 		/// <summary>
 		/// Gets all of the time entries with the defined params.
@@ -400,29 +305,6 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		///// <summary>
-		///// Update settings for an Organization.
-		///// </summary>
-		///// <param name="orgId">The Id of the time entry to be updated.</param>
-		///// <param name="startOfWeek">The new approval state.</param>
-		///// <param name="overtimeHours">Hours until overtime.</param>
-		///// <param name="overtimePeriod">Time period for hours until overtime.</param>
-		///// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
-		//public void UpdateSettings(int orgId, int startOfWeek, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@organizationID", orgId);
-		//	parameters.Add("@StartOfWeek", startOfWeek);
-		//	parameters.Add("@OvertimeHours", overtimeHours);
-		//	parameters.Add("@OvertimePeriod", overtimePeriod);
-		//	parameters.Add("@OvertimeMultiplier", overtimeMultiplier);
-
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		connection.Execute("[TimeTracker].[UpdateSettings]", parameters, commandType: CommandType.StoredProcedure);
-		//	}
-		//}
-
 		/// <summary>
 		/// Update overtime settings for an Organization.
 		/// </summary>
@@ -443,25 +325,6 @@ namespace AllyisApps.DBModel
 				connection.Execute("[TimeTracker].[UpdateOvertime]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
-
-		///// <summary>
-		///// Get start of week for organization.
-		///// </summary>
-		///// <param name="orgId">The organization Id for which the StartOfWeek is to be retrieved.</param>
-		///// <returns>The start of week int.</returns>
-		//public int GetStartOfWeek(int orgId)
-		//{
-		//	DynamicParameters parameters = new DynamicParameters();
-		//	parameters.Add("@organizationID", orgId);
-
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		return connection.Query<int>(
-		//			"[TimeTracker].[GetStartOfWeek]",
-		//			parameters,
-		//			commandType: CommandType.StoredProcedure).Single();
-		//	}
-		//}
 
 		/// <summary>
 		/// Get settings for organization.
