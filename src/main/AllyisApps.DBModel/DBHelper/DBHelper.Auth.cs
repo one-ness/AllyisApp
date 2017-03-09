@@ -77,41 +77,41 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Get a list of all organizations.
-		/// </summary>
-		/// <returns>A list of all organizations.</returns>
-		public List<OrganizationDBEntity> GetOrganizationList()
-		{
-			using (var conn = new SqlConnection(this.SqlConnectionString))
-			{
-				return conn.Query<OrganizationDBEntity>("Auth.GetOrganizationList").ToList();
-			}
-		}
+		///// <summary>
+		///// Get a list of all organizations.
+		///// </summary>
+		///// <returns>A list of all organizations.</returns>
+		//public List<OrganizationDBEntity> GetOrganizationList()
+		//{
+		//	using (var conn = new SqlConnection(this.SqlConnectionString))
+		//	{
+		//		return conn.Query<OrganizationDBEntity>("Auth.GetOrganizationList").ToList();
+		//	}
+		//}
 
-		/// <summary>
-		/// Get a list of all organization users.
-		/// </summary>
-		/// <returns>A list of all organization users.</returns>
-		public List<OrganizationUserDBEntity> GetOrganizationUserList()
-		{
-			using (var conn = new SqlConnection(this.SqlConnectionString))
-			{
-				return conn.Query<OrganizationUserDBEntity>("Auth.GetOrganizationUserList").ToList();
-			}
-		}
+		///// <summary>
+		///// Get a list of all organization users.
+		///// </summary>
+		///// <returns>A list of all organization users.</returns>
+		//public List<OrganizationUserDBEntity> GetOrganizationUserList()
+		//{
+		//	using (var conn = new SqlConnection(this.SqlConnectionString))
+		//	{
+		//		return conn.Query<OrganizationUserDBEntity>("Auth.GetOrganizationUserList").ToList();
+		//	}
+		//}
 
-		/// <summary>
-		/// Get all product roles from db.
-		/// </summary>
-		/// <returns>A list of product roles.</returns>
-		public List<ProductRoleDBEntity> GetProductRoleList()
-		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<ProductRoleDBEntity>("[Auth].[GetProductRoleList]", null, commandType: CommandType.StoredProcedure).ToList();
-			}
-		}
+		///// <summary>
+		///// Get all product roles from db.
+		///// </summary>
+		///// <returns>A list of product roles.</returns>
+		//public List<ProductRoleDBEntity> GetProductRoleList()
+		//{
+		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+		//	{
+		//		return connection.Query<ProductRoleDBEntity>("[Auth].[GetProductRoleList]", null, commandType: CommandType.StoredProcedure).ToList();
+		//	}
+		//}
 
 		/// <summary>
 		/// Gets the product role for a user for a product.
@@ -133,23 +133,23 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Executes Auth.getUsersByOrganization.
-		/// </summary>
-		/// <param name="organizationID">Organization Id.</param>
-		/// <param name="subscriptionId">Subscription Id.</param>
-		/// <returns>List of Subscription Users.</returns>
-		public IEnumerable<SubscriptionUserDBEntity> GetUsersByOrganization(int organizationID, int subscriptionId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationID", organizationID);
-			parameters.Add("@SubscriptionId", subscriptionId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				// default empty list
-				return connection.Query<SubscriptionUserDBEntity>("[Auth].[GetUsersByOrganization]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
+		///// <summary>
+		///// Executes Auth.getUsersByOrganization.
+		///// </summary>
+		///// <param name="organizationID">Organization Id.</param>
+		///// <param name="subscriptionId">Subscription Id.</param>
+		///// <returns>List of Subscription Users.</returns>
+		//public IEnumerable<SubscriptionUserDBEntity> GetUsersByOrganization(int organizationID, int subscriptionId)
+		//{
+		//	DynamicParameters parameters = new DynamicParameters();
+		//	parameters.Add("@organizationID", organizationID);
+		//	parameters.Add("@SubscriptionId", subscriptionId);
+		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+		//	{
+		//		// default empty list
+		//		return connection.Query<SubscriptionUserDBEntity>("[Auth].[GetUsersByOrganization]", parameters, commandType: CommandType.StoredProcedure);
+		//	}
+		//}
 
 		/// <summary>
 		/// Updates the user with the specified ID.
@@ -833,21 +833,21 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Gets the roles for each subscription the organization has.
-		/// </summary>
-		/// <param name="organizationId">The organization Id.</param>
-		/// <returns>List of all roles.</returns>
-		public IEnumerable<InvitationSubRoleDBEntity> GetInvitationSubRolesByOrganizationId(int organizationId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationID", organizationId);
+		///// <summary>
+		///// Gets the roles for each subscription the organization has.
+		///// </summary>
+		///// <param name="organizationId">The organization Id.</param>
+		///// <returns>List of all roles.</returns>
+		//public IEnumerable<InvitationSubRoleDBEntity> GetInvitationSubRolesByOrganizationId(int organizationId)
+		//{
+		//	DynamicParameters parameters = new DynamicParameters();
+		//	parameters.Add("@organizationID", organizationId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<InvitationSubRoleDBEntity>("[Auth].[GetUserInvitationsByOrgId]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
+		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+		//	{
+		//		return connection.Query<InvitationSubRoleDBEntity>("[Auth].[GetUserInvitationsByOrgId]", parameters, commandType: CommandType.StoredProcedure);
+		//	}
+		//}
 
 		/// <summary>
 		/// Gets the user roles.
@@ -867,29 +867,29 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Gets all roles accross all organizations.
-		/// </summary>
-		/// <returns>A list of OrgRoleDBEntity entities.</returns>
-		public List<OrgRoleDBEntity> GetOrgRoleList()
-		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<OrgRoleDBEntity>("[Auth].[GetOrgRoleList]", null, commandType: CommandType.StoredProcedure).ToList();
-			}
-		}
+		///// <summary>
+		///// Gets all roles accross all organizations.
+		///// </summary>
+		///// <returns>A list of OrgRoleDBEntity entities.</returns>
+		//public List<OrgRoleDBEntity> GetOrgRoleList()
+		//{
+		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+		//	{
+		//		return connection.Query<OrgRoleDBEntity>("[Auth].[GetOrgRoleList]", null, commandType: CommandType.StoredProcedure).ToList();
+		//	}
+		//}
 
-		/// <summary>
-		/// Gets a user List.
-		/// </summary>
-		/// <returns>A list of UserDBEntity entities.</returns>
-		internal List<UserDBEntity> GetUserList()
-		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<UserDBEntity>("[Auth].[GetUserList]", null, commandType: CommandType.StoredProcedure).ToList();
-			}
-		}
+		///// <summary>
+		///// Gets a user List.
+		///// </summary>
+		///// <returns>A list of UserDBEntity entities.</returns>
+		//internal List<UserDBEntity> GetUserList()
+		//{
+		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+		//	{
+		//		return connection.Query<UserDBEntity>("[Auth].[GetUserList]", null, commandType: CommandType.StoredProcedure).ToList();
+		//	}
+		//}
 
 		/// <summary>
 		/// Gets the user context information. The returned results will be for a single user, but will have a separate row for each subscription

@@ -231,24 +231,24 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Gets a collection of users that currently can use the project.
-		/// </summary>
-		/// <param name="projectId">The specified project's Id.</param>
-		/// <returns>Collection of userIds.</returns>
-		public IEnumerable<UserDBEntity> GetUsersByProjectId(int projectId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ProjectId", projectId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				IEnumerable<UserDBEntity> result = connection.Query<UserDBEntity>(
-					"[Crm].[GetProjectUsersByProjectId]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
-				return result;
-			}
-		}
+		///// <summary>
+		///// Gets a collection of users that currently can use the project.
+		///// </summary>
+		///// <param name="projectId">The specified project's Id.</param>
+		///// <returns>Collection of userIds.</returns>
+		//public IEnumerable<UserDBEntity> GetUsersByProjectId(int projectId)
+		//{
+		//	DynamicParameters parameters = new DynamicParameters();
+		//	parameters.Add("@ProjectId", projectId);
+		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+		//	{
+		//		IEnumerable<UserDBEntity> result = connection.Query<UserDBEntity>(
+		//			"[Crm].[GetProjectUsersByProjectId]",
+		//			parameters,
+		//			commandType: CommandType.StoredProcedure);
+		//		return result;
+		//	}
+		//}
 
 		/// <summary>
 		/// Updates the customer with the information specified in the customer table.
@@ -493,23 +493,23 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Gets a Collection of project data that the user can use.
-		/// </summary>
-		/// <param name="userId">The User's Id.</param>
-		/// <returns>Collection of project data.</returns>
-		public IEnumerable<CompleteProjectDBEntity> GetProjectsByUserId(int userId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@UserId", userId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<CompleteProjectDBEntity>(
-					"[Crm].[GetProjectsByUserId]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
-			}
-		}
+		///// <summary>
+		///// Gets a Collection of project data that the user can use.
+		///// </summary>
+		///// <param name="userId">The User's Id.</param>
+		///// <returns>Collection of project data.</returns>
+		//public IEnumerable<CompleteProjectDBEntity> GetProjectsByUserId(int userId)
+		//{
+		//	DynamicParameters parameters = new DynamicParameters();
+		//	parameters.Add("@UserId", userId);
+		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+		//	{
+		//		return connection.Query<CompleteProjectDBEntity>(
+		//			"[Crm].[GetProjectsByUserId]",
+		//			parameters,
+		//			commandType: CommandType.StoredProcedure);
+		//	}
+		//}
 
 		/// <summary>
 		/// Updates all of a project's properties and its users in one go.
