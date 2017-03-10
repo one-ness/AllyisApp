@@ -11,3 +11,6 @@
     CONSTRAINT [FK_Settings_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization]([OrganizationId])
 )
 GO
+CREATE NONCLUSTERED INDEX [IX_FK_Setting]
+	ON [TimeTracker].[Setting](OrganizationId);
+GO

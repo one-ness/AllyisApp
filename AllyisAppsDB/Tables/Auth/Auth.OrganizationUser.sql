@@ -20,6 +20,10 @@ GO
 CREATE INDEX [IX_EmployeeId] ON [Auth].[OrganizationUser]([EmployeeId]);
 GO
 
+CREATE NONCLUSTERED INDEX [IX_FK_OrganizationUser]
+	ON [Auth].[OrganizationUser](UserId, OrganizationId, OrgRoleId);
+GO
+
 CREATE TRIGGER [Auth].trg_update_OrganizationUser ON [Auth].[OrganizationUser] FOR UPDATE AS
 BEGIN
     UPDATE [Auth].[OrganizationUser] SET [ModifiedUTC] = CONVERT(DATETIME2(0), GETUTCDATE()) FROM [Auth].[OrganizationUser] INNER JOIN [deleted] [d] ON [OrganizationUser].[OrganizationId] = [d].[OrganizationId] AND [OrganizationUser].[UserId] = [d].[UserId];

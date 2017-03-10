@@ -19,6 +19,9 @@ GO
 CREATE CLUSTERED INDEX [IX_Subscription_OrganizationId] ON [Billing].[Subscription] ([OrganizationId])
 
 GO
+CREATE NONCLUSTERED INDEX [IX_FK_Subscription]
+	ON [Billing].[Subscription](OrganizationId, SkuId);
+GO
 CREATE TRIGGER [Billing].trg_update_Subscription ON [Billing].[Subscription] FOR UPDATE AS
 BEGIN
     UPDATE [Billing].[Subscription] SET [ModifiedUTC] = CONVERT(DATETIME2(0), GETUTCDATE()) FROM [Billing].[Subscription] INNER JOIN [deleted] [d] ON [Subscription].[SubscriptionId] = [d].[SubscriptionId];

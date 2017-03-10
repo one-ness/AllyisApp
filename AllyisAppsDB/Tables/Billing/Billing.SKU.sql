@@ -18,3 +18,6 @@ GO
 
 CREATE INDEX [IX_Sku_Name] ON [Billing].[Sku]([Name])
 GO
+CREATE NONCLUSTERED INDEX [IX_FK_SKU]
+	ON [Billing].[SKU](ProductId);
+GO

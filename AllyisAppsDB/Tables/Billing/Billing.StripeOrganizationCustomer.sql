@@ -14,6 +14,9 @@ GO
 CREATE CLUSTERED INDEX [IX_OrganizationCustomer_OrganizationId] ON [Billing].[StripeOrganizationCustomer] ([OrganizationId])
 
 GO
+CREATE NONCLUSTERED INDEX [IX_FK_StripeOrganizationCustomer]
+	ON [Billing].[StripeOrganizationCustomer](OrganizationId);
+GO
 CREATE TRIGGER [Billing].trg_update_OrganizationCustomer ON [Billing].[StripeOrganizationCustomer] FOR UPDATE AS
 BEGIN
 	UPDATE [Billing].[StripeOrganizationCustomer] SET [ModifiedUTC] = CONVERT(DATETIME2(0), GETUTCDATE()) FROM [Billing].[StripeOrganizationCustomer] INNER JOIN [deleted] [d] ON [StripeOrganizationCustomer].[StripeTokenCustId] = [d].[StripeTokenCustId];

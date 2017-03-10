@@ -25,6 +25,9 @@
 )
 
 GO
+CREATE NONCLUSTERED INDEX [IX_FK_Customer]
+	ON [Crm].[Customer](OrganizationId, Country, State);
+GO
 CREATE TRIGGER [Crm].trg_update_Customer ON [Crm].[Customer] FOR UPDATE AS
 BEGIN
 	UPDATE [Crm].[Customer] SET [ModifiedUTC] = CONVERT(DATETIME2(0), GETUTCDATE()) FROM [Crm].[Customer] INNER JOIN [deleted] [d] ON [Customer].[CustomerId] = [d].[CustomerId];

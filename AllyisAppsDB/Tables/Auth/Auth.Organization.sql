@@ -25,7 +25,9 @@ CREATE UNIQUE NONCLUSTERED INDEX inx_Subdomain_notnull
 ON [Auth].[Organization](Subdomain)
 WHERE Subdomain IS NOT NULL AND IsActive = 1
 GO
-
+CREATE NONCLUSTERED INDEX [IX_FK_Organization]
+	ON [Auth].[Organization](Country, State);
+GO
 GO
 CREATE TRIGGER [Auth].trg_update_Organization ON [Auth].[Organization] FOR UPDATE AS
 BEGIN

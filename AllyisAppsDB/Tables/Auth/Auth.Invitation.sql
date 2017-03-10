@@ -23,6 +23,9 @@ GO
 CREATE INDEX [IX_Invitation_InvitationId] ON [Auth].[Invitation] ([InvitationId])
 
 GO
+CREATE NONCLUSTERED INDEX [IX_FK_Invitation]
+	ON [Auth].[Invitation](OrganizationId, OrgRole, ProjectId);
+GO
 CREATE TRIGGER [Auth].trg_update_Invitation ON [Auth].[Invitation] FOR UPDATE AS
 BEGIN
     UPDATE [Auth].[Invitation] SET [ModifiedUTC] = CONVERT(DATETIME2(0), GETUTCDATE()) FROM [Auth].[Invitation] INNER JOIN [deleted] [d] ON [Invitation].[InvitationId] = [d].[InvitationId];

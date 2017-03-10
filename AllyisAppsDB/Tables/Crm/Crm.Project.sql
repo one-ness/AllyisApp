@@ -17,6 +17,9 @@ GO
 CREATE CLUSTERED INDEX [IX_Project_CustomerId] ON [Crm].[Project] ([CustomerId])
 
 GO
+CREATE NONCLUSTERED INDEX [IX_FK_Project]
+	ON [Crm].[Project](CustomerId);
+GO
 CREATE TRIGGER [Crm].trg_update_Project ON [Crm].[Project] FOR UPDATE AS
 BEGIN
 	UPDATE [Crm].[Project] SET [ModifiedUTC] = CONVERT(DATETIME2(0), GETUTCDATE()) FROM [Crm].[Project] INNER JOIN [deleted] [d] ON [Project].[ProjectId] = [d].[ProjectId];

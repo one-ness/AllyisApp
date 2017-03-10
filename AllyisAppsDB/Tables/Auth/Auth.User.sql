@@ -39,9 +39,12 @@
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_User_EMail]
     ON [Auth].[User]([Email] ASC);
-
-
 GO
+
+CREATE NONCLUSTERED INDEX [IX_FK_User]
+	ON [Auth].[User](ActiveOrganizationId, LastSubscriptionId, LanguagePreference, Country, State);
+GO
+
 CREATE TRIGGER [Auth].trg_update_User ON [Auth].[User] FOR UPDATE AS
 BEGIN
 	UPDATE [Auth].[User] SET [ModifiedUtc] = CONVERT(DATETIME2(0), GETUTCDATE()) FROM [Auth].[User] INNER JOIN [deleted] [d] ON [User].[UserId] = [d].[UserId];

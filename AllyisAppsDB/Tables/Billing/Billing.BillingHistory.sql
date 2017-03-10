@@ -16,7 +16,9 @@
 GO
 
 CREATE CLUSTERED INDEX [IX_BillingHistory_OrganizationId_UserId] ON [Billing].[BillingHistory] ([OrganizationId], [UserId])
-
+GO
+CREATE NONCLUSTERED INDEX [IX_FK_BillingHistory]
+	ON [Billing].[BillingHistory](OrganizationId, UserId, SkuId);
 GO
 CREATE TRIGGER [Billing].trg_update_BillingHistory ON [Billing].[BillingHistory] FOR UPDATE AS
 BEGIN

@@ -20,6 +20,9 @@ GO
 CREATE INDEX [IX_SubscriptionUser_UserId] ON [Billing].[SubscriptionUser]([UserId]);
 
 GO
+CREATE NONCLUSTERED INDEX [IX_FK_SubscriptionUser]
+	ON [Billing].[SubscriptionUser](SubscriptionId, UserId, ProductRoleId);
+GO
 CREATE TRIGGER [Billing].trg_update_SubscriptionUser ON [Billing].[SubscriptionUser] FOR UPDATE AS
 BEGIN
     UPDATE [Billing].[SubscriptionUser] SET [ModifiedUTC] = CONVERT(DATETIME2(0), GETUTCDATE()) FROM [Billing].[SubscriptionUser] INNER JOIN [deleted] [d] ON [SubscriptionUser].[SubscriptionId] = [d].[SubscriptionId] AND [SubscriptionUser].[UserId] = [d].[UserId];

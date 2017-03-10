@@ -5,7 +5,8 @@
 	[OrganizationId] INT NOT NULL DEFAULT 0,
     [CreatedUTC] DATETIME2(0) NOT NULL DEFAULT GETUTCDATE(), 
     [ModifiedUTC] DATETIME2(0) NOT NULL DEFAULT GETUTCDATE(), 
-    CONSTRAINT [PK_PayClass_ID] PRIMARY KEY NONCLUSTERED ([PayClassID])
+    CONSTRAINT [PK_PayClass_ID] PRIMARY KEY NONCLUSTERED ([PayClassID]),
+	CONSTRAINT [FK_PayClass_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization]([OrganizationId])
 )
 GO
 

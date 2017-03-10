@@ -15,6 +15,11 @@ GO
 
 CREATE INDEX [IX_InvitationSubRole_SubscriptionId] ON [Auth].[InvitationSubRole] ([SubscriptionId])
 GO
+
+CREATE NONCLUSTERED INDEX [IX_FK_InvitationSubRole]
+	ON [Auth].[InvitationSubRole](InvitationId, SubscriptionId, ProductRoleId);
+GO
+
 CREATE TRIGGER [Auth].trg_update_InvitationSubRole ON [Auth].[InvitationSubRole] FOR UPDATE AS
 BEGIN
     UPDATE [Auth].[InvitationSubRole] SET [ModifiedUTC] = CONVERT(DATETIME2(0), GETUTCDATE()) FROM [Auth].[InvitationSubRole] INNER JOIN [deleted] [d] ON [InvitationSubRole].[InvitationId] = [d].[InvitationId];

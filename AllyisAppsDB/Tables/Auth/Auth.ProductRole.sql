@@ -13,3 +13,7 @@ GO
 CREATE INDEX [IX_ProductRole_ProductId] ON [Auth].[ProductRole] ([ProductId])
 
 GO
+
+CREATE NONCLUSTERED INDEX [IX_FK_ProductRole]
+	ON [Auth].[ProductRole](ProductId);
+GO

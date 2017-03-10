@@ -14,7 +14,9 @@
 )
 GO
 
-CREATE CLUSTERED INDEX [IX_TimeEntry_ProjectId] ON [TimeTracker].[TimeEntry] ([ProjectId])
+
+CREATE NONCLUSTERED INDEX [IX_FK_TimeEntry]
+	ON [TimeTracker].[TimeEntry](UserId, ProjectId);
 GO
 
 CREATE TRIGGER [TimeTracker].trg_update_TimeEntry ON [TimeTracker].[TimeEntry] FOR UPDATE AS
