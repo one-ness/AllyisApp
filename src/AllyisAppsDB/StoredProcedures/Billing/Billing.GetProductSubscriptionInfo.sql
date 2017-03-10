@@ -36,7 +36,7 @@ AS
 	SELECT COUNT([UserId])
 	FROM (
 		SELECT [SubscriptionUser].[UserId]
-		FROM [Billing].[SubscriptionUser]
+		FROM [Billing].[SubscriptionUser] WITH (NOLOCK)
 		LEFT JOIN [Billing].[Subscription] WITH (NOLOCK) ON [Subscription].[SubscriptionId] = [SubscriptionUser].[SubscriptionId]
 		WHERE 
 			[Subscription].[SubscriptionId] = (

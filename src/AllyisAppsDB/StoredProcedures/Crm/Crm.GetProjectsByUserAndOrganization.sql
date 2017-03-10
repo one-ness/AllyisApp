@@ -42,12 +42,12 @@ SELECT	[ProjectId],
 		[Name],
 		[IsActive],
 		[Type],
-		(SELECT [Name] FROM [Auth].[Organization] WHERE [OrganizationId] = 0),
-		(SELECT [Name] FROM [Crm].[Customer] WHERE [CustomerId] = 0),
+		(SELECT [Name] FROM [Auth].[Organization]  WITH (NOLOCK) WHERE [OrganizationId] = 0),
+		(SELECT [Name] FROM [Crm].[Customer]  WITH (NOLOCK) WHERE [CustomerId] = 0),
 		NULL,
 		0,
 		0,
 		0,
 		[ProjectOrgId]
-		FROM [Crm].[Project] WHERE [ProjectId] = 0
+		FROM [Crm].[Project]  WITH (NOLOCK) WHERE [ProjectId] = 0
 ORDER BY [Project].[Name]

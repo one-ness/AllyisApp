@@ -7,7 +7,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT [Name]												
-	FROM [Auth].[ProductRole]									
+	FROM [Auth].[ProductRole]
+	WITH (NOLOCK)								
 	WHERE [ProductRoleId] =										
 		(SELECT [ProductRoleId]									
 		FROM [Billing].[SubscriptionUser]

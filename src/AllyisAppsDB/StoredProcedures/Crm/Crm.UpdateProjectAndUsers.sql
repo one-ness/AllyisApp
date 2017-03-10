@@ -23,7 +23,7 @@ BEGIN
 		FROM @UserIDs
 		WHERE userId NOT IN
 			(SELECT [ProjectUser].[UserId]
-			FROM [Crm].[ProjectUser]
+			FROM [Crm].[ProjectUser] WITH (NOLOCK)
 			WHERE [ProjectUser].[ProjectId] = @ProjectId)
 
 		/* Set inactive existing users that are not in the updated users list */

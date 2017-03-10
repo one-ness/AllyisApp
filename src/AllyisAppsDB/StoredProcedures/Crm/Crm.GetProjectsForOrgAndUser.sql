@@ -22,5 +22,5 @@ AS
 	SELECT [Firstname],
 		[LastName],
 		[Email]
-	FROM [Auth].[User]
+	FROM [Auth].[User] WITH (NOLOCK)
 	WHERE [User].[UserId] = @UserId

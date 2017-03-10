@@ -5,7 +5,7 @@ BEGIN
 	SET NOCOUNT ON;
 	SELECT TOP 1
 		[CustomerOrgId]
-	FROM [Crm].[Customer]
+	FROM [Crm].[Customer] WITH (NOLOCK)
 	WHERE [Customer].[OrganizationId] = @OrgId
 	ORDER BY [CustomerOrgId] DESC
 	

@@ -24,7 +24,7 @@ AS
 			LEFT JOIN (
 				SELECT 1 AS 'IsProjectUser',
 				[ProjectUser].[ProjectId]
-				FROM [Crm].[ProjectUser]
+				FROM [Crm].[ProjectUser] WITH (NOLOCK)
 				WHERE [ProjectUser].[ProjectId] = @ProjectId AND [ProjectUser].[UserId] = @UserId
 			) [SUB] ON [SUB].[ProjectId] = @ProjectId
 		)

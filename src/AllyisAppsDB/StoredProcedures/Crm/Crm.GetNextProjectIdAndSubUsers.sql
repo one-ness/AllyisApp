@@ -21,7 +21,7 @@ BEGIN
 	WHERE [OrganizationId] = (
 		SELECT TOP 1
 			[OrganizationId]
-		FROM [Crm].[Customer]
+		FROM [Crm].[Customer] WITH (NOLOCK)
 		WHERE [CustomerId] = @CustomerId
 	) AND [ProductRoleId] IS NOT NULL
 	ORDER BY [User].[LastName]

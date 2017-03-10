@@ -24,5 +24,5 @@ AS
 	SELECT [Name] FROM [Lookup].[Country] WITH (NOLOCK)
 
 	SELECT [EmployeeId]
-	FROM [Auth].[OrganizationUser]
+	FROM [Auth].[OrganizationUser] WITH (NOLOCK)
 	WHERE [OrganizationUser].[OrganizationId] = @OrganizationId AND [OrganizationUser].[UserId] = @UserId

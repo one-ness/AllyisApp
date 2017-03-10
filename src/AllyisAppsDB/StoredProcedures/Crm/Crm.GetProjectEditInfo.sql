@@ -44,7 +44,7 @@ AS
 	WHERE [OrganizationId] = (
 		SELECT TOP 1
 			[OrganizationId]
-		FROM [Crm].[Project]
+		FROM [Crm].[Project] WITH (NOLOCK)
 		LEFT JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId]
 		WHERE [ProjectId] = @ProjectId
 	) AND [ProductRoleId] IS NOT NULL
