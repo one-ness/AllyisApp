@@ -14,11 +14,11 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Organization member.
 		/// </summary>
-		Member = OrganizationRoleIdEnum.Member,
+		Member = 1,
 
 		/// <summary>
 		/// Organization owner.
 		/// </summary>
-		Owner = OrganizationRoleIdEnum.Owner,
+		Owner = 2
 	}
 }

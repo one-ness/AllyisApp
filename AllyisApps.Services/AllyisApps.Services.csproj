@@ -106,7 +106,6 @@
     <Compile Include="Crm\CrmService.cs" />
     <Compile Include="Crm\ProductInfo.cs" />
     <Compile Include="Crm\ProductIdEnum.cs" />
-    <Compile Include="Auth\OrganizationRoleIdEnum.cs" />
     <Compile Include="Auth\OrgService.cs" />
     <Compile Include="Project\ProjectService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

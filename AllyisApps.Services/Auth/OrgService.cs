@@ -516,7 +516,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
 			}
 
-			if (!Enum.IsDefined(typeof(OrganizationRoleIdEnum), orgRoleId))
+			if (!Enum.IsDefined(typeof(OrganizationRole), orgRoleId))
 			{
 				throw new ArgumentOutOfRangeException("orgRoleId", "Organization role value must correspond to a defined role in OrganizationRoleIdEnum.");
 			}
