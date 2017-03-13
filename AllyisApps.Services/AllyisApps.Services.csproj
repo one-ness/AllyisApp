@@ -90,9 +90,6 @@
     <Compile Include="Auth\OrgRoleInfo.cs" />
     <Compile Include="Auth\PasswordResetInfo.cs" />
     <Compile Include="TimeTracker\PayClassInfo.cs" />
-    <Compile Include="Auth\PermissionsAction.cs" />
-    <Compile Include="Auth\PermissionsActionResult.cs" />
-    <Compile Include="Auth\PermissionsActionsResults.cs" />
     <Compile Include="Crm\ProductRoleInfo.cs" />
     <Compile Include="Project\CompleteProjectInfo.cs" />
     <Compile Include="Project\ProjectInfo.cs" />
@@ -104,10 +101,8 @@
     <Compile Include="Billing\SubscriptionInfo.cs" />
     <Compile Include="Billing\SubscriptionRoleInfo.cs" />
     <Compile Include="Auth\SubscriptionUserInfo.cs" />
-    <Compile Include="Auth\TargetUser.cs" />
     <Compile Include="TimeTracker\TimeEntryInfo.cs" />
     <Compile Include="Auth\UserInfo.cs" />
-    <Compile Include="Auth\UserPermissionsAction.cs" />
     <Compile Include="Auth\UserRolesInfo.cs" />
     <Compile Include="Crm\CrmService.cs" />
     <Compile Include="Crm\ProductInfo.cs" />

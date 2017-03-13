@@ -4,14 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using AllyisApps.Services.Billing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Web;
+
+using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -221,5 +222,176 @@ namespace AllyisApps.ViewModels.Auth
 
 			return string.Empty;
 		}
+	}
+
+	/// <summary>
+	/// Object represnting a list of users and the actions to perform on them. The data in a permissions management POST is
+	/// deserialized into this object.
+	/// </summary>
+	public class UserPermissionsAction
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UserPermissionsAction" /> class.
+		/// </summary>
+		public UserPermissionsAction()
+		{
+		}
+
+		/// <summary>
+		/// Gets or sets the list of selected users.
+		/// </summary>
+		public IEnumerable<TargetUser> SelectedUsers { get; set; }
+
+		/// <summary>
+		/// Gets or sets the actions to be performed.
+		/// </summary>
+		public PermissionsAction SelectedActions { get; set; }
+
+		/// <summary>
+		/// TODO: Delete this once there's only one permissions management page
+		/// </summary>
+		public bool isPermissions2 { get; set; }
+	}
+
+	/// <summary>
+	/// An object representing the actions being performed.
+	/// </summary>
+	public class PermissionsAction
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PermissionsAction" /> class.
+		/// </summary>
+		public PermissionsAction()
+		{
+			this.OrgRoleTarget = 0;
+			this.TimeTrackerRoleTarget = 0;
+		}
+
+		/// <summary>
+		/// Gets or sets the organization's Id.
+		/// </summary>
+		public int OrganizationId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the subscription Id for Timetracker if this organization has one.TimeTrackerRole
+		/// </summary>
+		public int TimeTrackerSubscriptionId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the set of userIds who are members of the organization.
+		/// </summary>
+		public ISet<int> OrganizationMembers { get; set; }
+
+		/// <summary>
+		/// Gets or sets the target role to set the organization users to.
+		/// </summary>
+		public int? OrgRoleTarget { get; set; }
+
+		/// <summary>
+		/// Gets or sets the target role to set the timetracker subscription users to.
+		/// </summary>
+		public int? TimeTrackerRoleTarget { get; set; }
+	}
+
+	/// <summary>
+	/// Object for all results related to the actions that were requested.
+	/// </summary>
+	public class PermissionsActionsResults
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PermissionsActionsResults" /> class.
+		/// </summary>
+		public PermissionsActionsResults()
+		{
+			this.Results = new List<PermissionsActionResult>();
+		}
+
+		/// <summary>
+		/// Gets or sets the overall status of the requested actions.
+		/// </summary>
+		public string Status { get; set; }
+
+		/// <summary>
+		/// Gets or sets the message to respond with.
+		/// </summary>
+		public string Message { get; set; }
+
+		/// <summary>
+		/// Gets or sets the list of Result objects that were created when executing the actions.
+		/// </summary>
+		public List<PermissionsActionResult> Results { get; set; }
+
+		/// <summary>
+		/// Gets or sets the result string to respond with.
+		/// </summary>
+		public string Result { get; set; }
+	}
+
+	/// <summary>
+	/// An object representing the results of a PermissionsAction.
+	/// </summary>
+	public class PermissionsActionResult
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PermissionsActionResult" /> class.
+		/// </summary>
+		public PermissionsActionResult()
+		{
+			this.Users = new List<TargetUser>();
+		}
+
+		/// <summary>
+		/// Gets or sets the count of users affected with this result.
+		/// </summary>
+		public int AffectedUserCount { get; set; }
+
+		/// <summary>
+		/// Gets or sets the total count of users who had the associated action performed.
+		/// </summary>
+		public int TotalUserCount { get; set; }
+
+		/// <summary>
+		/// Gets or sets the text response for this result.
+		/// </summary>
+		public string ActionText { get; set; }
+
+		/// <summary>
+		/// Gets or sets the status associated with this result.
+		/// </summary>
+		public string ActionStatus { get; set; }
+
+		/// <summary>
+		/// Gets or sets the list of users associated with this result.
+		/// </summary>
+		public List<TargetUser> Users { get; set; }
+	}
+
+	/// <summary>
+	/// A user to perform actions on.
+	/// </summary>
+	public class TargetUser
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TargetUser" /> class.
+		/// </summary>
+		public TargetUser()
+		{
+			this.Message = string.Empty;
+		}
+
+		/// <summary>
+		/// Gets or sets the user's Id.
+		/// </summary>
+		public int UserId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the user's Name.
+		/// </summary>
+		public string Name { get; set; }
+
+		/// <summary>
+		/// Gets or sets a return message about the user.
+		/// </summary>
+		public string Message { get; set; }
 	}
 }
