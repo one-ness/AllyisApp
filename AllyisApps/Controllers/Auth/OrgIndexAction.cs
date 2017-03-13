@@ -21,7 +21,7 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <returns>The organization's homepage.</returns>
 		[HttpGet]
-		public ActionResult OrgIndex()
+		public ActionResult OrgIndexOLD()
 		{
 			if (Service.Can(Actions.CoreAction.ViewOrganization))
 			{

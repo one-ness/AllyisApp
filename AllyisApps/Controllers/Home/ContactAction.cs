@@ -19,7 +19,7 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <returns>The result of this action.</returns>
 		[AllowAnonymous]
-		public ActionResult Contact()
+		public ActionResult ContactOLD()
 		{
 			ViewBag.Message = "Your contact page.";
 			return this.View();

@@ -28,7 +28,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="customerId">The Customer's id (not required).</param>
 		/// <param name="projectId">The project's id (not required).</param>
 		/// <returns>An excel extract of the requested data.</returns>
-		public ActionResult ExportExcelReport(List<int> userId, DateTime? dateRangeStart = null, DateTime? dateRangeEnd = null, int customerId = 0, int projectId = 0)
+		public ActionResult ExportExcelReportOLD(List<int> userId, DateTime? dateRangeStart = null, DateTime? dateRangeEnd = null, int customerId = 0, int projectId = 0)
 		{
 			/* NOT CURRENTLY IN USE */
 
@@ -49,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			DataExportViewModel model = this.ConstructDataExportViewModel(userId, dateRangeStart, dateRangeEnd, projectId, customerId);
 			////model.CreateExcelFileOutput();
-			PrepareExcelExport(model.Data, model.Projects, 1, 0);
+			//PrepareExcelExport(model.Data, model.Projects, 1, 0);
 			Response.ClearContent();
 			Response.AddHeader("content-disposition", "attachment;filename=export.xls");
 			Response.ContentType = "application/vnd.ms-excel";

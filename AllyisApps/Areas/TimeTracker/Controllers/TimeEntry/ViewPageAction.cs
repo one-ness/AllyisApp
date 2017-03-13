@@ -28,7 +28,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="projectSelect">The project's id (not required).</param>
 		/// <returns>The selected page of preview data.</returns>
 		[HttpPost]
-		public ActionResult ViewPage(List<string> users, DateTime? startDate, DateTime? endDate, bool showExport, int customerSelect, int pageButton, int projectSelect = 0)
+		public ActionResult ViewPageOLD(List<string> users, DateTime? startDate, DateTime? endDate, bool showExport, int customerSelect, int pageButton, int projectSelect = 0)
 		{
 			string viewDataButton = "Preview";
 			int pageNum = pageButton;

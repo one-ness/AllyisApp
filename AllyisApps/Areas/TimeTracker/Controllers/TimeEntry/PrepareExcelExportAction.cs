@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="projects">The relevant projects used to pull project name and customers.</param>
 		/// <param name="limit">The limited size of the export file as previously determined.</param>
 		/// <param name="page">Page number adjusted to skip the proper pages if nessicary.</param>
-		public void PrepareExcelExport(IEnumerable<TimeEntryInfo> data, IEnumerable<CompleteProjectInfo> projects, int limit = 0, int page = 1)
+		public void PrepareExcelExportOLD(IEnumerable<TimeEntryInfo> data, IEnumerable<CompleteProjectInfo> projects, int limit = 0, int page = 1)
 		{
 			int skipNum = limit * (page - 1);
 			limit = limit == 0 ? data.Count() : limit;

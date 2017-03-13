@@ -24,7 +24,7 @@ namespace AllyisApps.Controllers
 		/// View a list of organizations.
 		/// </summary>
 		/// <returns>What to do.</returns>
-		public ActionResult Organizations()
+		public ActionResult OrganizationsOLD()
 		{
 			List<SubscriptionsViewModel> modelList = new List<SubscriptionsViewModel>();
 

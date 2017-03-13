@@ -21,7 +21,7 @@ namespace AllyisApps.Controllers
 		/// The result of this action.
 		/// </returns>
 		[AllowAnonymous]
-		public ActionResult About()
+		public ActionResult AboutOLD()
 		{
 			ViewBag.Message = "Your application description page.";
 			return this.View();

@@ -266,7 +266,6 @@
     <Compile Include="Controllers\Auth\RegisterAction.cs" />
     <Compile Include="Controllers\Auth\ResetPasswordAction.cs" />
     <Compile Include="Controllers\Auth\TemplateAction.cs" />
-    <Compile Include="Controllers\Auth\TestAction.cs" />
     <Compile Include="Controllers\Auth\ViewUser.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
     <Compile Include="Controllers\Home\AboutAction.cs" />
@@ -932,7 +931,6 @@
     <Content Include="Views\Account\ConfirmRemoveBillingInformation.cshtml" />
     <Content Include="Views\Account\Permission.cshtml" />
     <Content Include="Views\Account\Edit.cshtml" />
-    <Content Include="Views\Account\Test.cshtml" />
     <Content Include="Views\Account\Permission2.cshtml" />
     <Content Include="Views\Account\_OrgMembers2.cshtml" />
     <Content Include="Views\Account\ViewUser.cshtml" />

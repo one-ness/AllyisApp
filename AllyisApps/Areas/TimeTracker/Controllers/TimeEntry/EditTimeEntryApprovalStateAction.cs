@@ -24,7 +24,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="model">A collection of Approval data objects.</param>
 		/// <returns>Any errors as JSON objects, else returns JSON object of status = sucess.</returns>
-		public ActionResult EditTimeEntryApprovalState(IEnumerable<ApprovalDataModel> model)
+		public ActionResult EditTimeEntryApprovalStateOLD(IEnumerable<ApprovalDataModel> model)
 		{
 			if (model == null || model.Count() == 0)
 			{

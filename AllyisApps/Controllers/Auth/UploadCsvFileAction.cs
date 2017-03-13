@@ -29,7 +29,7 @@ namespace AllyisApps.Controllers
 		/// <param name="upload">Caught file upload.</param>
 		/// <returns>An ActionResult.</returns>
 		[HttpPost]
-		public async Task<ActionResult> UploadCsvFile(HttpPostedFileBase upload)
+		public async Task<ActionResult> UploadCsvFileOLD(HttpPostedFileBase upload)
 		{
 			string[] validExtentions = { "CSV", "TXT" };
 			List<string> extentionList = new List<string>(validExtentions);

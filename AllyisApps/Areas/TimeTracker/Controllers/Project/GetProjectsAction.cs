@@ -19,7 +19,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="customerID">The customer ID.</param>
 		/// <returns>A JsonResult of an IEnumberable of ProjectInfo's containing projects for the customer.</returns>
-		public ActionResult GetProjects(int customerID)
+		public ActionResult GetProjectsOLD(int customerID)
 		{
 			return Json(Service.GetProjectsByCustomer(customerID));
 		}

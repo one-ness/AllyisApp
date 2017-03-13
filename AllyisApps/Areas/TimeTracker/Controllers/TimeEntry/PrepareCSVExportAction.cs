@@ -25,7 +25,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="projects">The projects being pulled from, for getting project name and customers.</param>
 		/// <returns>The stream writer.</returns>
 		[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1009:ClosingParenthesisMustBeSpacedCorrectly", Justification = "Reviewed.")]
-		public StreamWriter PrepareCSVExport(IEnumerable<TimeEntryInfo> data, IEnumerable<CompleteProjectInfo> projects)
+		public StreamWriter PrepareCSVExportOLD(IEnumerable<TimeEntryInfo> data, IEnumerable<CompleteProjectInfo> projects)
 		{
 			return null;
 			//return TimeTrackerService.PrepareCSVExport(data, projects);

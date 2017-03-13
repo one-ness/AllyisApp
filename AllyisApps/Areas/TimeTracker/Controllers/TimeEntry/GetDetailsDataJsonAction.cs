@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="endingDate">The ending date of the date range.</param>
 		/// <returns>Json object representing all related projects and their current hours.</returns>
 		[HttpPost]
-		public ActionResult GetDetailsDataJson(int userId, DateTime startingDate, DateTime endingDate)
+		public ActionResult GetDetailsDataJsonOLD(int userId, DateTime startingDate, DateTime endingDate)
 		{
 			bool manager = Service.Can(Actions.CoreAction.TimeTrackerEditOthers);
 
