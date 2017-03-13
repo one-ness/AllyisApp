@@ -10,7 +10,6 @@
 )
 GO
 
-
 GO
 CREATE TRIGGER [TimeTracker].trg_update_PayClass ON [TimeTracker].[PayClass] FOR UPDATE AS
 BEGIN

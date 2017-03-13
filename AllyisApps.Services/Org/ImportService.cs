@@ -661,7 +661,7 @@ namespace AllyisApps.Services
 											Email = fields[0],
 											FirstName = names[0],
 											LastName = names[1],
-											PasswordHash = Lib.Crypto.ComputeSHA512Hash("password") // TODO: Figure out a better default password generation system
+											PasswordHash = Lib.Crypto.GetPasswordHash("password")//ComputeSHA512Hash("password") // TODO: Figure out a better default password generation system
 										};
 										user.UserId = DBHelper.CreateUser(GetDBEntityFromUserInfo(user));
 										result.UsersImported += 1;

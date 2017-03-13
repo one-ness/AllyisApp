@@ -274,7 +274,7 @@ namespace AllyisApps.Services
 					Country = country,
 					PostalCode = postalCode,
 					PhoneNumber = phone,
-					PasswordHash = Crypto.ComputeSHA512Hash(password),
+					PasswordHash = Crypto.GetPasswordHash(password), //Crypto.ComputeSHA512Hash(password),
 					EmailConfirmed = emailConfirmed,
 					AccessFailedCount = accessFailedCount,
 					TwoFactorEnabled = twoFactorEnabled,
@@ -329,9 +329,16 @@ namespace AllyisApps.Services
 
 			UserContext result = null;
 			var user = this.DBHelper.GetUserByEmail(email);
-			if (user != null && string.Compare(Crypto.ComputeSHA512Hash(password), user.PasswordHash, true) == 0)
+			Tuple<bool, string> passwordValidation = Crypto.ValidateAndUpdate(password, user.PasswordHash);
+			if (user != null && passwordValidation.Item1/*string.Compare(Crypto.ComputeSHA512Hash(password), user.PasswordHash, true) == 0*/)
 			{
 				result = new UserContext(user.UserId, user.UserName, email);
+
+				// Store updated password hash if needed
+				if (passwordValidation.Item2 != null)
+				{
+					DBHelper.UpdateUserPassword(user.UserId, passwordValidation.Item2);
+				}
 			}
 
 			return result;
@@ -647,7 +654,7 @@ namespace AllyisApps.Services
 
 			var userInfo = DBHelper.Instance.GetUserInfo(Convert.ToInt32(UserContext.UserId));
 			UserDBEntity user = DBHelper.Instance.GetUserByEmail(userInfo.Email);
-			if (user != null && string.Compare(this.GetPasswordHash(oldPassword), user.PasswordHash, true) == 0)
+			if (user != null && Crypto.ValidatePassword(oldPassword, user.PasswordHash)/*string.Compare(this.GetPasswordHash(oldPassword), user.PasswordHash, true) == 0*/)
 			{
 				DBHelper.UpdateUserPassword(UserContext.UserId, this.GetPasswordHash(newPassword));
 
@@ -655,7 +662,7 @@ namespace AllyisApps.Services
 
 				if (user != null)
 				{
-					return string.Compare(this.GetPasswordHash(newPassword), user.PasswordHash) == 0;
+					return Crypto.ValidatePassword(newPassword, user.PasswordHash)/*string.Compare(this.GetPasswordHash(newPassword), user.PasswordHash) == 0*/;
 				}
 			}
 
@@ -674,7 +681,7 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("password", "Password must have a value.");
 			}
 
-			return Crypto.ComputeSHA512Hash(password);
+			return Crypto.GetPasswordHash(password)/*Crypto.ComputeSHA512Hash(password)*/;
 		}
 
 		/// <summary>

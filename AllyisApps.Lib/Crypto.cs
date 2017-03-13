@@ -17,10 +17,145 @@ namespace AllyisApps.Lib
 	/// </summary>
 	public static class Crypto
 	{
+		// Password storage is implemented as outlined in https://nakedsecurity.sophos.com/2013/11/20/serious-security-how-to-store-your-users-passwords-safely/,
+		// with the code used here paraphrased from https://cmatskas.com/-net-password-hashing-using-pbkdf2/.
+
+		// Hashing variables: feel free to update these as needed. The next time a user logs on, their password will still work,
+		// and the hash will get updated in the database to reflect the new values below.
+		private const int SaltBytes = 24;
+		private const int HashBytes = 32;
+		private const int Iterations = 20000;
+		
+		// Old password hashing
 		private const int KeyStringLength = 32;
 		private const int IVStringLength = 16;
 		private static Encoding encoding = Encoding.UTF8;
 
+		/// <summary>
+		/// Uses the PBKDF2 algorithm to hash a password, providing a salt and iteration count according
+		/// to the current values of the constants in Crypto.cs.
+		/// </summary>
+		/// <param name="password">Password to hash.</param>
+		/// <returns>String of the format "iterationCount:salt:hash".</returns>
+		public static string GetPasswordHash(string password)
+		{
+			RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
+			byte[] salt = new byte[SaltBytes];
+			provider.GetBytes(salt);
+
+			byte[] hash = GetPbkdf2Bytes(password, salt, Iterations, HashBytes);
+			return string.Format("{0}:{1}:{2}",
+				Iterations,
+				Convert.ToBase64String(salt),
+				Convert.ToBase64String(hash));
+		}
+
+		/// <summary>
+		/// Runs the PBKDF2 algorithm using the given password, salt, iteration count, and output byte count.
+		/// </summary>
+		/// <param name="password">Password string.</param>
+		/// <param name="salt">Salt bytes.</param>
+		/// <param name="iterationCount">Number of iterations to run.</param>
+		/// <param name="byteCount">Number of bytes for output byte array.</param>
+		/// <returns>Byte array for hashed password.</returns>
+		private static byte[] GetPbkdf2Bytes(string password, byte[] salt, int iterationCount, int byteCount)
+		{
+			Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(password, salt, iterationCount);
+			return pbkdf2.GetBytes(byteCount);
+		}
+
+		/// <summary>
+		/// Validates a password against the stored password hash.
+		/// </summary>
+		/// <param name="password">Entered password.</param>
+		/// <param name="correctHash">Hashed correct password.</param>
+		/// <returns></returns>
+		public static bool ValidatePassword(string password, string correctHash)
+		{
+			string[] components = correctHash.Split(':');
+			if (components.Length != 3)
+			{
+				// This password is from before the implementation of the PBKDF2 logic.
+				// For migration purposes, this will be validated the old way for now.
+				return string.Compare(Crypto.ComputeSHA512Hash(password), correctHash, true) == 0;
+			}
+
+			int hashIterations = int.Parse(components[0]);
+			byte[] hashSalt = Convert.FromBase64String(components[1]);
+			byte[] hashHash = Convert.FromBase64String(components[2]);
+
+			byte[] testHash = GetPbkdf2Bytes(password, hashSalt, hashIterations, hashHash.Length);
+			return ByteArrayEquals(hashHash, testHash);
+		}
+
+		/// <summary>
+		/// Validates a password against the stored password hash, and provides an updated password hash
+		/// if the stored password hashing is out of date.
+		/// </summary>
+		/// <param name="password">Entered password.</param>
+		/// <param name="correctHash">Hashed correct password.</param>
+		/// <returns>A Tuple: Item1 is a bool stating the success of the validation. Item2 is a string
+		/// with the updated password hash if needed, or null if not needed.</returns>
+		public static Tuple<bool, string> ValidateAndUpdate(string password, string correctHash)
+		{
+			bool updateRequired = false;
+
+			string[] components = correctHash.Split(':');
+			if (components.Length != 3)
+			{
+				// This password is from before the implementation of the PBKDF2 logic.
+				// For migration purposes, this will be validated the old way for now.
+				// A successful validation is re-hashed with the new algorithm.
+				if (!(string.Compare(Crypto.ComputeSHA512Hash(password), correctHash, true) == 0))
+				{
+					// Bad login
+					return Tuple.Create<bool, string>(false, null);
+				}
+				updateRequired = true;
+			}
+			else
+			{
+				// This password was hashed with PBKDF2
+				int hashIterations = int.Parse(components[0]);
+				byte[] hashSalt = Convert.FromBase64String(components[1]);
+				byte[] hashHash = Convert.FromBase64String(components[2]);
+				if (hashIterations != Iterations || hashSalt.Length != SaltBytes || hashHash.Length != HashBytes)
+				{
+					// But the parameters of that hashing are out of date
+					updateRequired = true;
+				}
+
+				byte[] testHash = GetPbkdf2Bytes(password, hashSalt, hashIterations, hashHash.Length);
+				if (!ByteArrayEquals(hashHash, testHash))
+				{
+					// Bad login
+					return Tuple.Create<bool, string>(false, null);
+				}
+			}
+
+			// Successful login
+			if(updateRequired)
+			{
+				// If an update is needed, the updated hash is returned
+				string newHash = GetPasswordHash(password);
+				return Tuple.Create<bool, string>(true, newHash);
+			}
+
+			// Successful login, no update needed
+			return Tuple.Create<bool, string>(true, null);
+		}
+
+		private static bool ByteArrayEquals(byte[] a, byte[] b)
+		{
+			var diff = (uint)a.Length ^ (uint)b.Length;
+			for (int i = 0; i < a.Length && i < b.Length; i++)
+			{
+				diff |= (uint)(a[i] ^ b[i]);
+			}
+			return diff == 0;
+		}
+
+		// Old password hashing
 		/// <summary>
 		/// Computes the SHA512 hash for the given data.
 		/// </summary>
