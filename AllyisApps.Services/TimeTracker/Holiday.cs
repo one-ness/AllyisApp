@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="HolidayInfo.cs" company="Allyis, Inc.">
+// <copyright file="Holiday.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// An object for keeping track of all the info related to a given holiday.
 	/// </summary>
-	public class HolidayInfo
+	public class Holiday
 	{
 		/// <summary>
 		/// Gets or sets the Holiday id.

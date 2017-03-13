@@ -86,7 +86,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets organization.
 		/// </summary>
-		public OrganizationInfo Organization { get; internal set; }
+		public Organization Organization { get; internal set; }
 
 		/// <summary>
 		/// Gets AddedUsers.

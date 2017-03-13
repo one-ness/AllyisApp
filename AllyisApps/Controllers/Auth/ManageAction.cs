@@ -95,13 +95,6 @@ namespace AllyisApps.Controllers
 		/// <returns></returns>
 		public bool SaveEmployeeId(int user, int org, string employeeId)
 		{
-			//UserOrganizationInfo userOrgInfo = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == org).SingleOrDefault();
-			//if (userOrgInfo == null)
-			//{
-			//	return false;
-			//}
-
-			//Service.UpdateOrganizationUser(user, org, (int)userOrgInfo.OrganizationRole, employeeId);
 			try
 			{
 				Service.SetEmployeeId(user, org, employeeId);

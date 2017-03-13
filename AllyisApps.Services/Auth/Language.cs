@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="LanguageInfo.cs" company="Allyis, Inc.">
+// <copyright file="Language.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -9,7 +9,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// Represents a language setting.
 	/// </summary>
-	public class LanguageInfo
+	public class Language
 	{
 		/// <summary>
 		/// Gets or sets the language ID.

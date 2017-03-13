@@ -285,7 +285,7 @@ namespace AllyisApps.Core
 				}
 			}
 
-			LanguageInfo language = this.Service.GetLanguageInfo(languageID);
+			Language language = this.Service.GetLanguage(languageID);
 			if (language != null)
 			{
 				CultureInfo cInfo = CultureInfo.CreateSpecificCulture(language.CultureName);

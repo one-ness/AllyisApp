@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="OrganizationInfo.cs" company="Allyis, Inc.">
+// <copyright file="Organization.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -12,7 +12,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// An object for keeping track of all the info related to a given organization.
 	/// </summary>
-	public class OrganizationInfo
+	public class Organization
 	{
 		/// <summary>
 		/// Gets or sets the Organization Id.

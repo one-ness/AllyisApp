@@ -920,4 +920,80 @@ namespace AllyisApps.Services
 			}
 		}
 	}
+
+	/// <summary>
+	/// An object to hold the accumulated results of an import action.
+	/// </summary>
+	public class ImportActionResult
+	{
+		/// <summary>
+		/// Number of customers successfully imported.
+		/// </summary>
+		public int CustomersImported { get; set; }
+
+		/// <summary>
+		/// Number of projects successfully imported.
+		/// </summary>
+		public int ProjectsImported { get; set; }
+
+		/// <summary>
+		/// Number of users successfully imported.
+		/// </summary>
+		public int UsersImported { get; set; }
+
+		/// <summary>
+		/// Number of users added to the organization.
+		/// </summary>
+		public int UsersAddedToOrganization { get; set; }
+
+		/// <summary>
+		/// Number of users added to the subscription.
+		/// </summary>
+		public int UsersAddedToSubscription { get; set; }
+
+		/// <summary>
+		/// Number of time entries successfully imported.
+		/// </summary>
+		public int TimeEntriesImported { get; set; }
+
+		/// <summary>
+		/// A list of error messages related to customer imports.
+		/// </summary>
+		public List<string> CustomerFailures;
+
+		/// <summary>
+		/// A list of error messages related to project imports.
+		/// </summary>
+		public List<string> ProjectFailures;
+
+		/// <summary>
+		/// A list of error messages related to user imports.
+		/// </summary>
+		public List<string> UserFailures;
+
+		/// <summary>
+		/// A list of error messages related to adding users to the organization.
+		/// </summary>
+		public List<string> OrgUserFailures;
+
+		/// <summary>
+		/// A list of error messages related to adding users to the subscription.
+		/// </summary>
+		public List<string> UserSubscriptionFailures;
+
+		/// <summary>
+		/// A list of error messages related to time entry imports.
+		/// </summary>
+		public List<string> TimeEntryFailures;
+
+		public ImportActionResult()
+		{
+			CustomerFailures = new List<string>();
+			ProjectFailures = new List<string>();
+			UserFailures = new List<string>();
+			OrgUserFailures = new List<string>();
+			UserSubscriptionFailures = new List<string>();
+			TimeEntryFailures = new List<string>();
+		}
+	}
 }

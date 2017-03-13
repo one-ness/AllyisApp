@@ -10,7 +10,7 @@
 }*@
 
 @{
-    OrganizationInfo details = Model.OrgInfo;
+    Organization details = Model.OrgInfo;
     string title = details.Name;
     string subtitle = details.SiteUrl ?? details.Subdomain ?? "";
     var cityState = details.City != null && details.State != null ? details.City + ", " + details.State : details.City + details.State;

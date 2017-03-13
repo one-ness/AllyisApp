@@ -46,7 +46,7 @@ namespace AllyisApps.Controllers
 			if (model != null && ModelState.IsValid)
 			{
 				int orgId = Service.CreateOrganization(
-					new OrganizationInfo()
+					new Organization()
 					{
 						Address = model.Address,
 						City = model.City,

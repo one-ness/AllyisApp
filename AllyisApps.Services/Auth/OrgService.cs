@@ -57,11 +57,11 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Creates an organization.
 		/// </summary>
-		/// <param name="organization">Organization info.</param>
+		/// <param name="organization">Organization.</param>
 		/// <param name="ownerId">Organization owner user Id.</param>
 		/// <param name="employeeId">Organization owner employee Id.</param>
 		/// <returns>Organizaiton Id.</returns>
-		public int CreateOrganization(OrganizationInfo organization, int ownerId, string employeeId)
+		public int CreateOrganization(Organization organization, int ownerId, string employeeId)
 		{
 			if (organization == null)
 			{
@@ -73,35 +73,35 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("ownerId", "Organization owner's user id cannot be 0 or negative.");
 			}
 
-			return DBHelper.CreateOrganization(GetDBEntityFromOrganizationInfo(organization), ownerId, (int)OrganizationRole.Owner, employeeId);
+			return DBHelper.CreateOrganization(GetDBEntityFromOrganization(organization), ownerId, (int)OrganizationRole.Owner, employeeId);
 		}
 
 		/// <summary>
-		/// Gets an <see cref="OrganizationInfo"/>.
+		/// Gets an <see cref="Organization"/>.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
-		/// <returns>The OrganizationInfo.</returns>
-		public OrganizationInfo GetOrganization(int orgId)
+		/// <returns>The Organization.</returns>
+		public Organization GetOrganization(int orgId)
 		{
 			if (orgId < 0)
 			{
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
 			}
 
-			return InitializeOrganizationInfo(DBHelper.GetOrganization(orgId));
+			return InitializeOrganization(DBHelper.GetOrganization(orgId));
 		}
 
 		/// <summary>
-		/// Gets the OrganizationInfo for the current chosen organization, along with OrganizationUserInfos for each user in the
+		/// Gets the Organization for the current chosen organization, along with OrganizationUserInfos for each user in the
 		/// organization, SubscriptionDisplayInfos for any subscriptions in the organization, InvitationInfos for any invitiations
 		/// pending in the organization, and the organization's billing stripe handle.
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<OrganizationInfo, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string, List<ProductInfo>> GetOrganizationManagementInfo()
+		public Tuple<Organization, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string, List<ProductInfo>> GetOrganizationManagementInfo()
 		{
 			var spResults = DBHelper.GetOrganizationManagementInfo(UserContext.ChosenOrganizationId);
 			return Tuple.Create(
-				InitializeOrganizationInfo(spResults.Item1),
+				InitializeOrganization(spResults.Item1),
 				spResults.Item2.Select(oudb => InitializeOrganizationUserInfo(oudb)).ToList(),
 				spResults.Item3.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
 				spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList(),
@@ -110,15 +110,15 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets the OrganizationInfo for the current chosen organization, along with the list of valid countries and the
+		/// Gets the Organization for the current chosen organization, along with the list of valid countries and the
 		/// employee id for the current user in the current chosen organization.
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<OrganizationInfo, List<string>, string> GetOrgWithCountriesAndEmployeeId()
+		public Tuple<Organization, List<string>, string> GetOrgWithCountriesAndEmployeeId()
 		{
 			var spResults = DBHelper.GetOrgWithCountriesAndEmployeeId(UserContext.ChosenOrganizationId, UserContext.UserId);
 			return Tuple.Create(
-				InitializeOrganizationInfo(spResults.Item1),
+				InitializeOrganization(spResults.Item1),
 				spResults.Item2,
 				spResults.Item3);
 		}
@@ -158,9 +158,9 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates an organization chosen by the current user.
 		/// </summary>
-		/// <param name="organization">Updated organization info.</param>
+		/// <param name="organization">Updated organization.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateOrganization(OrganizationInfo organization)
+		public bool UpdateOrganization(Organization organization)
 		{
 			if (organization == null)
 			{
@@ -174,7 +174,7 @@ namespace AllyisApps.Services
 
 			if (this.Can(Actions.CoreAction.EditOrganization))
 			{
-				DBHelper.UpdateOrganization(GetDBEntityFromOrganizationInfo(organization));
+				DBHelper.UpdateOrganization(GetDBEntityFromOrganization(organization));
 
 				return true;
 			}
@@ -278,7 +278,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			OrganizationInfo orgInfo = this.GetOrganization(invitationInfo.OrganizationId);
+			Organization orgInfo = this.GetOrganization(invitationInfo.OrganizationId);
 
 			string htmlbody = string.Format(
 				"{0} has requested you join their organization on Allyis Apps, {1}!<br /> Click <a href=http://{2}/Account/Index?accessCode={3}>Here</a> to create an account and join!",
@@ -314,8 +314,8 @@ namespace AllyisApps.Services
 				IEnumerable<InvitationInfo> invites = this.GetUserInvitations();
 				InvitationInfo thisInvite = invites.Where(x => x.InvitationId == invitationId).SingleOrDefault();
 				IEnumerable<SubscriptionDisplayInfo> subs = this.DBHelper.GetSubscriptionsDisplayByOrg(UserContext.ChosenOrganizationId).Select(s => InitializeSubscriptionDisplayInfo(s));
-				IEnumerable<InvitationSubRoleInfo> subRoles = DBHelper.GetInvitationSubRolesByInvitationId(invitationId).Select(i => InitializeInvitationSubRoleInfo(i));
-				foreach (InvitationSubRoleInfo subRole in subRoles)
+				IEnumerable<InvitationSubRole> subRoles = DBHelper.GetInvitationSubRolesByInvitationId(invitationId).Select(i => InitializeInvitationSubRole(i));
+				foreach (InvitationSubRole subRole in subRoles)
 				{
 					SubscriptionDisplayInfo currentSub = subs.Where(x => x.SubscriptionId == subRole.SubscriptionId).SingleOrDefault();
 					if (currentSub != null && currentSub.SubscriptionsUsed < currentSub.NumberOfUsers)
@@ -630,18 +630,18 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates an OrganizationDBEntity into an OrganizationInfo business object.
+		/// Translates an OrganizationDBEntity into an Organization business object.
 		/// </summary>
 		/// <param name="organization">OrganizationDBEntity instance.</param>
-		/// <returns>OrganizationInfo instance.</returns>
-		public static OrganizationInfo InitializeOrganizationInfo(OrganizationDBEntity organization)
+		/// <returns>Organization instance.</returns>
+		public static Organization InitializeOrganization(OrganizationDBEntity organization)
 		{
 			if (organization == null)
 			{
 				return null;
 			}
 
-			return new OrganizationInfo
+			return new Organization
 			{
 				Address = organization.Address,
 				City = organization.City,
@@ -659,11 +659,11 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates an OrganizationInfo business object into an OrganizationDBEntity.
+		/// Translates an Organization business object into an OrganizationDBEntity.
 		/// </summary>
-		/// <param name="organization">OrganizationInfo instance.</param>
+		/// <param name="organization">Organization instance.</param>
 		/// <returns>OrganizationDBEntity instance.</returns>
-		public static OrganizationDBEntity GetDBEntityFromOrganizationInfo(OrganizationInfo organization)
+		public static OrganizationDBEntity GetDBEntityFromOrganization(Organization organization)
 		{
 			if (organization == null)
 			{
@@ -688,18 +688,18 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates an InvitationSubRoleDBEntity into an InvitationSubRoleInfo business object.
+		/// Translates an InvitationSubRoleDBEntity into an InvitationSubRole business object.
 		/// </summary>
 		/// <param name="invitationSubRole">InvitationSubRoleDBEntity instance.</param>
-		/// <returns>InvitationSubRoleInfo instance.</returns>
-		public static InvitationSubRoleInfo InitializeInvitationSubRoleInfo(InvitationSubRoleDBEntity invitationSubRole)
+		/// <returns>InvitationSubRole instance.</returns>
+		public static InvitationSubRole InitializeInvitationSubRole(InvitationSubRoleDBEntity invitationSubRole)
 		{
 			if (invitationSubRole == null)
 			{
 				return null;
 			}
 
-			return new InvitationSubRoleInfo
+			return new InvitationSubRole
 			{
 				InvitationId = invitationSubRole.InvitationId,
 				ProductRoleId = invitationSubRole.ProductRoleId,

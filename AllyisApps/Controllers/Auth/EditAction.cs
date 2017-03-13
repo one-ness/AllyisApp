@@ -34,7 +34,7 @@ namespace AllyisApps.Controllers
 				try
 				{
 					if (Service.UpdateOrganization(
-						new OrganizationInfo()
+						new Organization()
 						{
 							OrganizationId = UserContext.ChosenOrganizationId,
 							Name = model.Name,
@@ -98,11 +98,11 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EditOrganizationViewModel"/> class.
 		/// </summary>
-		/// <param name="organization">An <see cref="OrganizationInfo"/> for the organization.</param>
+		/// <param name="organization">An <see cref="Organization"/> for the organization.</param>
 		/// <param name="canDelete">The users permission to delete.</param>
 		/// <param name="validCountries">List of valid countries.</param>
 		/// <returns>An initialized EditOrganizationViewModel.</returns>
-		public EditOrganizationViewModel ConstructEditOrganizationViewModel(OrganizationInfo organization, bool canDelete, IEnumerable<string> validCountries)
+		public EditOrganizationViewModel ConstructEditOrganizationViewModel(Organization organization, bool canDelete, IEnumerable<string> validCountries)
 		{
 			return new EditOrganizationViewModel
 			{

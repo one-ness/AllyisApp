@@ -63,10 +63,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auth\Organization.cs" />
     <Compile Include="Auth\AccountService.cs" />
     <Compile Include="Auth\Actions.cs" />
     <Compile Include="Auth\AuthorizationService.cs" />
-    <Compile Include="Auth\ImportActionResult.cs" />
     <Compile Include="Auth\ImportService.cs" />
     <Compile Include="Auth\OrganizationRole.cs" />
     <Compile Include="Auth\ProductRole.cs" />
@@ -80,11 +80,10 @@
     <Compile Include="ServiceConstants.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Project\CustomerInfo.cs" />
-    <Compile Include="Auth\HolidayInfo.cs" />
+    <Compile Include="TimeTracker\Holiday.cs" />
     <Compile Include="Auth\InvitationInfo.cs" />
-    <Compile Include="Auth\InvitationSubRoleInfo.cs" />
-    <Compile Include="Auth\LanguageInfo.cs" />
-    <Compile Include="Auth\OrganizationInfo.cs" />
+    <Compile Include="Auth\InvitationSubRole.cs" />
+    <Compile Include="Auth\Language.cs" />
     <Compile Include="Auth\OrganizationUserInfo.cs" />
     <Compile Include="Auth\OrgRoleInfo.cs" />
     <Compile Include="Auth\PasswordResetInfo.cs" />

@@ -28,6 +28,6 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets the holidays for an organization.
 		/// </summary>
-		public IEnumerable<HolidayInfo> Holidays { get; set; }
+		public IEnumerable<Holiday> Holidays { get; set; }
 	}
 }

@@ -194,7 +194,6 @@
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\TemplateAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Home\HomeController.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\Project\GetProjectsAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\TemplateAction.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\TimeEntryRangeForUserViewModel.cs" />
@@ -214,23 +213,17 @@
     <Compile Include="Areas\TimeTracker\Controllers\Project\ProjectController.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\UpdateProjectAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\CopyEntries.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\PrepareCSVExportAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\PrepareExcelExportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UpdateUserAJAXAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UserEditAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UpdateStartOfWeekAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UpdateOvertimeAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ExportExcelReportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ExportReportAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ViewPageAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ViewReportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\DeleteTimeEntryJsonAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\ExportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\IndexAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\EditTimeEntryJsonAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\CreateTimeEntryJsonAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\EditTimeEntryApprovalStateAction.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\GetDetailsDataJsonAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\CreatePayClassAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\CreateHolidayAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\DeletePayClassAction.cs" />
@@ -262,7 +255,6 @@
     <Compile Include="Controllers\Auth\IndexAction.cs" />
     <Compile Include="Controllers\Auth\LogOffAction.cs" />
     <Compile Include="Controllers\Auth\LogOnAction.cs" />
-    <Compile Include="Controllers\Auth\OrganizationsAction.cs" />
     <Compile Include="Controllers\Auth\RegisterAction.cs" />
     <Compile Include="Controllers\Auth\ResetPasswordAction.cs" />
     <Compile Include="Controllers\Auth\TemplateAction.cs" />
@@ -283,7 +275,6 @@
     <Compile Include="Controllers\Auth\DownloadImportUsersTemplateAction.cs" />
     <Compile Include="Controllers\Auth\EditAction.cs" />
     <Compile Include="Controllers\Auth\GetBillingSummaryAction.cs" />
-    <Compile Include="Controllers\Auth\OrgIndexAction.cs" />
     <Compile Include="Controllers\Auth\InviteAction.cs" />
     <Compile Include="Controllers\Auth\ManageAction.cs" />
     <Compile Include="Controllers\Auth\ManagePermissionsAction.cs" />
@@ -291,7 +282,6 @@
     <Compile Include="Controllers\Auth\RemoveMemberAction.cs" />
     <Compile Include="Controllers\Auth\SubscribeAction.cs" />
     <Compile Include="Controllers\Auth\UnsubscribeAction.cs" />
-    <Compile Include="Controllers\Auth\UploadCsvFileAction.cs" />
     <Compile Include="Controllers\Shared\FooterPartialAction.cs" />
     <Compile Include="Controllers\Shared\LogOnPartialAction.cs" />
     <Compile Include="Controllers\Shared\SharedController.cs" />

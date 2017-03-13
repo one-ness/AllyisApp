@@ -92,15 +92,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			var infos = TimeTrackerService.GetTimeEntryIndexInfo(startingDateTime, endingDateTime, userId);
-			/*StartOfWeekEnum*/int startOfWeek = infos.Item1.StartOfWeek; //TimeTrackerService.GetStartOfWeek();
+			int startOfWeek = infos.Item1.StartOfWeek;
 			DateTime startDate = SetStartingDate(startingDateTime, startOfWeek);
 			DateTime endDate = SetEndingDate(endingDateTime, startOfWeek);
 
 
 			// Get all of the projects and initialize their total hours to 0.
-			IList<CompleteProjectInfo> allProjects = infos.Item4; //Service.GetProjectsByUserAndOrganization(userId, false).ToList(); // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
+			IList<CompleteProjectInfo> allProjects = infos.Item4; // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
 			IDictionary<int, ProjectHours> hours = new Dictionary<int, ProjectHours>();
-			IEnumerable<HolidayInfo> holidays = /*TimeTrackerService.GetHolidays()*/infos.Item3.Where(x => (startDate <= x.Date.Date && x.Date.Date <= endDate)); // We only care about holidays within the date range
+			IEnumerable<Holiday> holidays = infos.Item3.Where(x => (startDate <= x.Date.Date && x.Date.Date <= endDate)); // We only care about holidays within the date range
 
 			foreach (CompleteProjectInfo proj in allProjects.Where(p => p.ProjectId > 0))
 			{
@@ -110,7 +110,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = -1, ProjectName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
 
-			IEnumerable<UserInfo> users = infos.Item5;//Service.GetUsersWithSubscriptionToProductInOrganization(UserContext.ChosenOrganizationId, Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
+			IEnumerable<UserInfo> users = infos.Item5;
 			
 			TimeEntryOverDateRangeViewModel result = new TimeEntryOverDateRangeViewModel
 			{
@@ -123,7 +123,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				},
 				CanManage = manager,
 				StartOfWeek = (StartOfWeekEnum)startOfWeek,
-				PayClasses = infos.Item2,//TimeTrackerService.GetPayClasses(),
+				PayClasses = infos.Item2,
 				GrandTotal = new ProjectHours { Project = new CompleteProjectInfo { ProjectName = "Total" }, Hours = 0.0f },
 				Projects = allProjects.Where(x => x.IsActive == true && x.IsCustomerActive == true && x.IsUserActive == true),
 				ProjectsWithInactive = allProjects.Where(p => p.ProjectId != 0),
@@ -178,7 +178,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						StartingDate = TimeTrackerService.GetDayFromDateTime(startDate),
 						EndingDate = TimeTrackerService.GetDayFromDateTime(endDate),
 						IsOffDay = (weekend % 7 == (int)iter.Current.Date.DayOfWeek || (weekend + 1) % 7 == (int)iter.Current.Date.DayOfWeek) ? true : false,
-						IsHoliday = /*TimeTrackerService.GetHolidays()*/holidays.Any(x => x.Date.Date == date.Date),
+						IsHoliday = holidays.Any(x => x.Date.Date == date.Date),
 						Projects = result.Projects,
 						ProjectsWithInactive = result.ProjectsWithInactive,
 						ProjectName = allProjects.Where(x => x.ProjectId == iter.Current.ProjectId).Select(x => x.ProjectName).FirstOrDefault(),
@@ -211,7 +211,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Duration = 8,
 						UserId = userId,
 						ProjectId = 0,
-						PayClassId = infos.Item2.Where(p => p.Name.Equals("Holiday")).FirstOrDefault().PayClassID,//TimeTrackerService.GetPayClassByName("Holiday").PayClassID,
+						PayClassId = infos.Item2.Where(p => p.Name.Equals("Holiday")).FirstOrDefault().PayClassID,
 						Description = holidays.Where(x => x.Date == date).First().HolidayName
 					};
 
@@ -225,7 +225,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						StartingDate = TimeTrackerService.GetDayFromDateTime(startDate),
 						EndingDate = TimeTrackerService.GetDayFromDateTime(endDate),
 						IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
-						IsHoliday = true,//TimeTrackerService.GetHolidays().Any(x => x.Date.Date == date.Date),
+						IsHoliday = true,
 						Projects = result.Projects,
 						ProjectsWithInactive = result.ProjectsWithInactive,
 						PayClassId = timeEntryInfo.PayClassId,
@@ -246,11 +246,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						StartingDate = TimeTrackerService.GetDayFromDateTime(startDate),
 						EndingDate = TimeTrackerService.GetDayFromDateTime(endDate),
 						IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
-						IsHoliday = /*TimeTrackerService.GetHolidays()*/holidays.Any(x => x.Date.Date == date.Date),
+						IsHoliday = holidays.Any(x => x.Date.Date == date.Date),
 						ProjectId = -1,
 						Projects = result.Projects,
 						ProjectsWithInactive = result.ProjectsWithInactive,
-						PayClassId = infos.Item2.Where(p => p.Name.Equals("Regular")).FirstOrDefault().PayClassID,//TimeTrackerService.GetPayClassByName("Regular").PayClassID,
+						PayClassId = infos.Item2.Where(p => p.Name.Equals("Regular")).FirstOrDefault().PayClassID,
 						PayClasses = result.PayClasses
 					});
 

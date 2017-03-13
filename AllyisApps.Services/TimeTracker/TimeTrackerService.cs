@@ -296,9 +296,9 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Creates a holiday and related time entries for an organization.
 		/// </summary>
-		/// <param name="holiday">Holiday info.</param>
+		/// <param name="holiday">Holiday.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool CreateHoliday(HolidayInfo holiday)
+		public bool CreateHoliday(Holiday holiday)
 		{
 			#region Validation
 
@@ -311,7 +311,7 @@ namespace AllyisApps.Services.TimeTracker
 
 			if (this.Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
-				DBHelper.CreateHoliday(GetDBEntityFromHolidayInfo(holiday));
+				DBHelper.CreateHoliday(GetDBEntityFromHoliday(holiday));
 				return true;
 			}
 
@@ -605,22 +605,22 @@ namespace AllyisApps.Services.TimeTracker
 
 		/// <summary>
 		/// Returns a SettingsInfo with start of week, overtime, and lock date settings, a list of PayClassInfos,
-		/// and a list of HolidayInfos for the current organization.
+		/// and a list of Holidays for the current organization.
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<SettingsInfo, List<PayClassInfo>, List<HolidayInfo>> GetAllSettings()
+		public Tuple<SettingsInfo, List<PayClassInfo>, List<Holiday>> GetAllSettings()
 		{
 			var spResults = DBHelper.GetAllSettings(UserContext.ChosenOrganizationId);
 			return Tuple.Create(
 				InitializeSettingsInfo(spResults.Item1),
 				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
-				spResults.Item3.Select(hdb => InitializeHolidayInfo(hdb)).ToList());
+				spResults.Item3.Select(hdb => InitializeHoliday(hdb)).ToList());
 		}
 
 		/// <summary>
 		/// Returns a SettingsInfo for the current organization's TimeTracker settings (with only start of week and
 		/// lock date fields populated), a list of PayClassInfos for all the organization's pay classes, a list of
-		/// HolidayInfos for all the organization's holidays, a list of CompleteProjectInfos for all projects
+		/// Holidays for all the organization's holidays, a list of CompleteProjectInfos for all projects
 		/// in the current org that the given user is or has been assigned to (active or not), a list of UserInfos
 		/// for all the users in the org who are users of the time tracker subscription, and a list of TimeEntryInfos
 		/// for all time entries for the given user in the given time range.
@@ -629,7 +629,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
 		/// <returns></returns>
-		public Tuple<SettingsInfo, List<PayClassInfo>, List<HolidayInfo>, List<CompleteProjectInfo>, List<UserInfo>, List<TimeEntryInfo>>
+		public Tuple<SettingsInfo, List<PayClassInfo>, List<Holiday>, List<CompleteProjectInfo>, List<UserInfo>, List<TimeEntryInfo>>
 			GetTimeEntryIndexInfo(DateTime? startingDate, DateTime? endingDate, int? userId = null)
 		{
 			#region Validation
@@ -652,7 +652,7 @@ namespace AllyisApps.Services.TimeTracker
 			return Tuple.Create(
 				InitializeSettingsInfo(spResults.Item1),
 				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
-				spResults.Item3.Select(hdb => InitializeHolidayInfo(hdb)).ToList(),
+				spResults.Item3.Select(hdb => InitializeHoliday(hdb)).ToList(),
 				spResults.Item4.Select(cpdb => Service.InitializeCompleteProjectInfo(cpdb)).ToList(),
 				spResults.Item5.Select(udb => Service.InitializeUserInfo(udb)).ToList(),
 				spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList());
@@ -677,13 +677,13 @@ namespace AllyisApps.Services.TimeTracker
 		}
 
 		/// <summary>
-		/// Initialized holiday info with a given HolidayDBEntity.
+		/// Initialized holiday with a given HolidayDBEntity.
 		/// </summary>
 		/// <param name="hol">The HolidayDBEntity to use.</param>
-		/// <returns>A holiday info object.</returns>
-		public static HolidayInfo InitializeHolidayInfo(HolidayDBEntity hol)
+		/// <returns>A holiday object.</returns>
+		public static Holiday InitializeHoliday(HolidayDBEntity hol)
 		{
-			return new HolidayInfo
+			return new Holiday
 			{
 				CreatedUTC = hol.CreatedUTC,
 				ModifiedUTC = hol.ModifiedUTC,
@@ -771,11 +771,11 @@ namespace AllyisApps.Services.TimeTracker
 		}
 
 		/// <summary>
-		/// Creates a HolidayDBEntity based on a HolidayInfo object.
+		/// Creates a HolidayDBEntity based on a Holiday object.
 		/// </summary>
-		/// <param name="holiday">The HolidayInfo to use to creat the DB entity.</param>
+		/// <param name="holiday">The Holiday to use to creat the DB entity.</param>
 		/// <returns>The created HolidayDBEntity object.</returns>
-		public static HolidayDBEntity GetDBEntityFromHolidayInfo(HolidayInfo holiday)
+		public static HolidayDBEntity GetDBEntityFromHoliday(Holiday holiday)
 		{
 			return new HolidayDBEntity()
 			{

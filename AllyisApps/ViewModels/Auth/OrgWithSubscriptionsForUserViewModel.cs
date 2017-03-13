@@ -22,7 +22,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets an OrgInfo object for this organization.
 		/// </summary>
-		public OrganizationInfo OrgInfo { get; set; }
+		public Organization OrgInfo { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether this user can edit the organization.

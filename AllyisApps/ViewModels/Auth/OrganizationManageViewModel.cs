@@ -25,7 +25,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the organization's details viewmodel.
 		/// </summary>
-		public OrganizationInfo Details { get; set; }
+		public Organization Details { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's edit viewmodel.

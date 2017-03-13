@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="InvitationSubRoleInfo.cs" company="Allyis, Inc.">
+// <copyright file="InvitationSubRole.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -9,7 +9,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// Represents an invitation sub role.
 	/// </summary>
-	public class InvitationSubRoleInfo
+	public class InvitationSubRole
 	{
 		/// <summary>
 		/// Gets or sets the Invitation Id.

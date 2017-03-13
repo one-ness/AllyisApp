@@ -98,10 +98,10 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the list of valid languages selections.
 		/// </summary>
-		/// <returns>A list of language names.</returns>
-		public IEnumerable<LanguageInfo> ValidLanguages()
+		/// <returns>A list of languages.</returns>
+		public IEnumerable<Language> ValidLanguages()
 		{
-			return DBHelper.ValidLanguages().Select(s => new LanguageInfo
+			return DBHelper.ValidLanguages().Select(s => new Language
 			{
 				LanguageID = s.LanguageID,
 				LanguageName = s.LanguageName,
@@ -163,10 +163,10 @@ namespace AllyisApps.Services
 				EmployeeId = invite.EmployeeId
 			});
 
-			IEnumerable<InvitationSubRoleInfo> roles = this.DBHelper.GetInvitationSubRolesByInvitationId(invite.InvitationId).Select(i => InitializeInvitationSubRoleInfo(i));
+			IEnumerable<InvitationSubRole> roles = this.DBHelper.GetInvitationSubRolesByInvitationId(invite.InvitationId).Select(i => InitializeInvitationSubRole(i));
 			IEnumerable<SubscriptionDisplayInfo> subs = this.DBHelper.GetSubscriptionsDisplayByOrg(invite.OrganizationId).Select(s => InitializeSubscriptionDisplayInfo(s));
 
-			foreach (InvitationSubRoleInfo role in roles)
+			foreach (InvitationSubRole role in roles)
 			{
 				SubscriptionDisplayInfo currentSub = subs.Where(x => x.SubscriptionId == role.SubscriptionId).SingleOrDefault();
 				if (currentSub != null && currentSub.SubscriptionsUsed < currentSub.NumberOfUsers)
@@ -427,16 +427,16 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets the UserInfo for the current user, along with OrganizationInfos for each organization the
+		/// Gets the UserInfo for the current user, along with Organizations for each organization the
 		/// user is a member of, and InvitationInfos for any invitations for the user.
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<UserInfo, List<OrganizationInfo>, List<InvitationInfo>> GetUserOrgsAndInvitationInfo()
+		public Tuple<UserInfo, List<Organization>, List<InvitationInfo>> GetUserOrgsAndInvitationInfo()
 		{
 			var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
-			return Tuple.Create<UserInfo, List<OrganizationInfo>, List<InvitationInfo>>(
+			return Tuple.Create<UserInfo, List<Organization>, List<InvitationInfo>>(
 				InitializeUserInfo(spResults.Item1),
-				spResults.Item2.Select(odb => InitializeOrganizationInfo(odb)).ToList(),
+				spResults.Item2.Select(odb => InitializeOrganization(odb)).ToList(),
 				spResults.Item3.Select(idb => InitializeInvitationInfo(idb)).ToList());
 		}
 
@@ -533,7 +533,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="languageID">The language ID. May use 0 to indicate no language setting.</param>
 		/// <returns>Culture string.</returns>
-		public LanguageInfo GetLanguageInfo(int languageID)
+		public Language GetLanguage(int languageID)
 		{
 			if (languageID < 0)
 			{
@@ -547,7 +547,7 @@ namespace AllyisApps.Services
 			}
 
 			LanguageDBEntity language = DBHelper.GetLanguage(languageID);
-			return new LanguageInfo
+			return new Language
 			{
 				LanguageID = language.LanguageID,
 				LanguageName = language.LanguageName,
@@ -793,12 +793,12 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets a list of <see cref="OrganizationInfo"/>s for all organizations the user is a part of.
+		/// Gets a list of <see cref="Organization"/>s for all organizations the user is a part of.
 		/// </summary>
-		/// <returns>Collection of OrganizationInfos.</returns>
-		public IEnumerable<OrganizationInfo> GetOrganizationsByUserId()
+		/// <returns>Collection of Organizations.</returns>
+		public IEnumerable<Organization> GetOrganizationsByUserId()
 		{
-			return DBHelper.GetOrganizationsByUserId(UserContext.UserId).Select(o => InitializeOrganizationInfo(o));
+			return DBHelper.GetOrganizationsByUserId(UserContext.UserId).Select(o => InitializeOrganization(o));
 		}
 
 		#endregion public

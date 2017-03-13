@@ -26,9 +26,9 @@ namespace AllyisApps.ViewModels.Shared
 		public IEnumerable<ProductInfo> ProductList { get; set; }
 
 		/// <summary>
-		/// Gets an OrganizationInfo instance for the organization these subscriptions are attached to.
+		/// Gets an Organization instance for the organization these subscriptions are attached to.
 		/// </summary>
-		public OrganizationInfo OrgInfo { get; internal set; }
+		public Organization OrgInfo { get; internal set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether user has permissions for editing the organization.
