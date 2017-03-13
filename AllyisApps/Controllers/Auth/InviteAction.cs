@@ -51,7 +51,7 @@ namespace AllyisApps.Controllers
 																			   // If that doesn't return null...
 							if (user != null)
 							{
-								OrgRoleInfo role = Service.GetOrgRole(add.OrganizationId, user.UserId); // ...see if they have permissions in this organization already
+								OrgRole role = Service.GetOrgRole(add.OrganizationId, user.UserId); // ...see if they have permissions in this organization already
 																												  // If not...
 								if (role != null)
 								{
@@ -127,7 +127,7 @@ namespace AllyisApps.Controllers
 																	   // If that doesn't return null...
 					if (user != null)
 					{
-						OrgRoleInfo role = Service.GetOrgRole(orgAddMembers.OrganizationId, user.UserId); // ...see if they have permissions in this organization already
+						OrgRole role = Service.GetOrgRole(orgAddMembers.OrganizationId, user.UserId); // ...see if they have permissions in this organization already
 																										  // If not...
 						if (role != null)
 						{

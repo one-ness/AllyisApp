@@ -208,8 +208,8 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="userId">User Id.</param>
-		/// <returns>An OrgRoleInfo instance.</returns>
-		public OrgRoleInfo GetOrgRole(int orgId, int userId)
+		/// <returns>An OrgRole instance.</returns>
+		public OrgRole GetOrgRole(int orgId, int userId)
 		{
 			if (orgId < 0)
 			{
@@ -227,7 +227,7 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-			return new OrgRoleInfo
+			return new OrgRole
 			{
 				OrgRoleId = role.OrgRoleId,
 				OrgRoleName = role.Name

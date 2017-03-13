@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="OrgRoleInfo.cs" company="Allyis, Inc.">
+// <copyright file="OrgRole.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -9,7 +9,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// Represents an organization role.
 	/// </summary>
-	public class OrgRoleInfo
+	public class OrgRole
 	{
 		/// <summary>
 		/// Gets or sets the Organization role Id.

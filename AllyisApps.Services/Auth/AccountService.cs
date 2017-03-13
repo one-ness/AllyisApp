@@ -556,12 +556,14 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Send an email with password reset link to the given email address.
+		/// Sends an email with password reset link to the given email address.
 		/// </summary>
-		/// <param name="email">The email string.</param>
-		/// <returns>The password reset info task.</returns>
-		public PasswordResetInfo GetPasswordResetInfo(string email)
+		/// <param name="email">The user email address.</param>
+		/// <param name="callbackUrl">The Url to include as the "click here" link, with stand-ins for userid and code (as "{userid}" and "{code}".</param>
+		/// <returns>A value indicating whether the given email address matched with an existing user.</returns>
+		public async Task<bool> SendPasswordResetMessage(string email, string callbackUrl)
 		{
+			#region Validation
 			if (string.IsNullOrEmpty(email))
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
@@ -570,23 +572,23 @@ namespace AllyisApps.Services
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
+			#endregion
 
-			PasswordResetInfo result = null;
 			var user = this.DBHelper.GetUserByEmail(email);
-			if (user != null)
+			if (user == null)
 			{
-				// user exists. create a password reset code
-				Guid code = Guid.NewGuid();
-				result = new PasswordResetInfo
-				{
-					Code = code,
-					UserId = user.UserId
-				};
-
-				this.DBHelper.UpdateUserPasswordResetCode(user.UserId, code.ToString());
+				return false;
 			}
 
-			return result;
+			Guid code = Guid.NewGuid();
+			this.DBHelper.UpdateUserPasswordResetCode(user.UserId, code.ToString());
+
+			// Send reset email
+			string filledInCallbackUrl = callbackUrl.Replace("{userid}", user.UserId.ToString()).Replace("{code}", code.ToString());
+			string msgbody = new System.Web.HtmlString(string.Format("Please reset your password by clicking <a href=\"{0}\">here</a>", filledInCallbackUrl)).ToString();
+			await Lib.Mailer.SendEmailAsync("noreply@allyisapps.com", email, "Reset password", msgbody);
+
+			return true;
 		}
 
 		/// <summary>

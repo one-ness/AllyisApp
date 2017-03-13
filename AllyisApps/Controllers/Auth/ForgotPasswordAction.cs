@@ -40,14 +40,7 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				PasswordResetInfo info = Service.GetPasswordResetInfo(model.Email);
-				if (info != null)
-				{
-					// user exists, reset code is generated.
-					string callbackUrl = Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, new { userId = info.UserId, code = info.Code.ToString() }, protocol: Request.Url.Scheme);
-					string msgbody = new System.Web.HtmlString(string.Format("Please reset your password by clicking <a href=\"{0}\">here</a>", callbackUrl)).ToString();
-					await Lib.Mailer.SendEmailAsync("noreply@allyisapps.com", model.Email, "Reset password", msgbody);
-
+				if (await Service.SendPasswordResetMessage(model.Email, Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, new { userId = "{userid}", code = "{code}"}, protocol: Request.Url.Scheme))) { 
 					Notifications.Add(new Core.Alert.BootstrapAlert(string.Format("{0} {1}.", Resources.Controllers.Auth.Strings.ResetEmailHasBeenSent, model.Email), Core.Alert.Variety.Success));
 				}
 				else
