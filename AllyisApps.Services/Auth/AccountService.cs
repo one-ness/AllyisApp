@@ -394,7 +394,7 @@ namespace AllyisApps.Services
 								ProductId = (ProductIdEnum)row.ProductId.Value,
 								ProductName = row.ProductName,
 								RoleName  = row.RoleName,
-								ProductRole = (ProductRole)row.ProductRoleId.Value,
+								ProductRole = (ProductRoleIdEnum)row.ProductRoleId.Value,
 								SkuId = row.SkuId.Value
 							});
 						}

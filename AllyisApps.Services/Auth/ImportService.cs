@@ -753,7 +753,7 @@ namespace AllyisApps.Services
 									// No existing subscription for this user, so we create one.
 									if (ttSub.SubscriptionsUsed < ttSub.NumberOfUsers)
 									{
-										this.DBHelper.UpdateSubscriptionUserProductRole((int)(ProductRole.TimeTrackerUser), ttSub.SubscriptionId, user.UserId);
+										this.DBHelper.UpdateSubscriptionUserProductRole((int)(ProductRoleIdEnum.TimeTrackerUser), ttSub.SubscriptionId, user.UserId);
 										userSubs.Add(user);
 										result.UsersAddedToSubscription += 1;
 										canImportThisEntry = true; // Successfully created.

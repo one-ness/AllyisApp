@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="ProductRole.cs" company="Allyis, Inc.">
+// <copyright file="ProductRoleIdEnum.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -9,7 +9,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// Subscription role.
 	/// </summary>
-	public enum ProductRole : int
+	public enum ProductRoleIdEnum : int
 	{
 		/// <summary>
 		/// Not in product.

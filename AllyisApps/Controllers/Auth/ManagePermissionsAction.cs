@@ -84,7 +84,7 @@ namespace AllyisApps.Controllers
 						// Start out with default NotInProduct role
 						foreach(SubscriptionDisplayInfo sub in model.Subscriptions)
 						{
-							modelUser.ProductRoleIds.Add((int)ProductRole.NotInProduct);
+							modelUser.ProductRoleIds.Add((int)ProductRoleIdEnum.NotInProduct);
 						}
 						model.Users.Add(modelUser);
 					}
@@ -148,17 +148,6 @@ namespace AllyisApps.Controllers
 						});
 					} catch (InvalidOperationException) { } // Deleted subscription
 				}
-
-				//List<SubscriptionRoleInfo> subRoles = new List<SubscriptionRoleInfo>();
-				//SubscriptionRoleInfo temp = new SubscriptionRoleInfo() { ProductRoleId = user.ProductRoleId };
-				//subRoles.Add(temp);
-				//permissions.Add(new UserPermissionsManagement()
-				//{
-				//	UserId = user.UserId,
-				//	UserName = string.Format("{0} {1}", user.FirstName, user.LastName),
-				//	OrganizationRoleId = user.OrgRoleId,
-				//	SubscriptionRoles = subRoles
-				//});
 			}
 
 			// Add in "Not in Product" roles for subscriptions each user is not assigned to
@@ -171,7 +160,7 @@ namespace AllyisApps.Controllers
 						permission.SubscriptionRoles.Add(new SubscriptionRole
 						{
 							ProductId = subscription.ProductId,
-							ProductRoleId = (int)ProductRole.NotInProduct
+							ProductRoleId = (int)ProductRoleIdEnum.NotInProduct
 						});
 					}
 				}
@@ -188,8 +177,8 @@ namespace AllyisApps.Controllers
 
 			FilterGroup timeTrackerFilters = result.Filters.AddNewFilterGroup("TimeTracker");
 			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("Any", users, x => x.ProductRoleId != 0));
-			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("Manager", users, u => u.ProductRoleId == (int)ProductRole.TimeTrackerManager));
-			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("User", users, u => u.ProductRoleId == (int)ProductRole.TimeTrackerUser));
+			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("Manager", users, u => u.ProductRoleId == (int)ProductRoleIdEnum.TimeTrackerManager));
+			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("User", users, u => u.ProductRoleId == (int)ProductRoleIdEnum.TimeTrackerUser));
 			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("Unassigned", users, x => x.ProductRoleId == 0));
 
 			return result;

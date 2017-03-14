@@ -18,7 +18,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public UserSubscriptionInfo()
 		{
-			this.ProductRole = ProductRole.NotInProduct;
+			this.ProductRole = ProductRoleIdEnum.NotInProduct;
 		}
 
 		/// <summary>
@@ -28,7 +28,7 @@ namespace AllyisApps.Services
 		/// <param name="skuId">The SKU ID.</param>
 		/// <param name="productName">The product name.</param>
 		/// <param name="role">The role.</param>
-		public UserSubscriptionInfo(int subscriptionId, int skuId, string productName, ProductRole role)
+		public UserSubscriptionInfo(int subscriptionId, int skuId, string productName, ProductRoleIdEnum role)
 		{
 			if (subscriptionId < 1)
 			{
@@ -79,6 +79,6 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Role of the user in this subscription.
 		/// </summary>
-		public ProductRole ProductRole { get; set; }
+		public ProductRoleIdEnum ProductRole { get; set; }
 	}
 }

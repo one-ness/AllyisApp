@@ -15,9 +15,9 @@
 	};
 	Dictionary<int, string> ttRoles = new Dictionary<int, string>
 	{
-		{ (int)AllyisApps.Services.ProductRole.TimeTrackerUser, AllyisApps.Resources.Views.Account.Strings.User },
-		{ (int)AllyisApps.Services.ProductRole.TimeTrackerManager, AllyisApps.Resources.Views.Account.Strings.Manager },
-		{ (int)AllyisApps.Services.ProductRole.NotInProduct, AllyisApps.Resources.Views.Account.Strings.Unassigned }
+		{ (int)AllyisApps.Services.ProductRoleIdEnum.TimeTrackerUser, AllyisApps.Resources.Views.Account.Strings.User },
+		{ (int)AllyisApps.Services.ProductRoleIdEnum.TimeTrackerManager, AllyisApps.Resources.Views.Account.Strings.Manager },
+		{ (int)AllyisApps.Services.ProductRoleIdEnum.NotInProduct, AllyisApps.Resources.Views.Account.Strings.Unassigned }
 	};
 
 	Dictionary<string, int> setOrgRoles = new Dictionary<string, int>
@@ -29,8 +29,8 @@
 	Dictionary<string, int> setTTRoles = new Dictionary<string, int>
 	{
 		{ AllyisApps.Resources.Views.Account.Strings.RemoveFromSubscription, -1 },
-		{ AllyisApps.Resources.Views.Account.Strings.SetUser, (int)AllyisApps.Services.ProductRole.TimeTrackerUser },
-		{ AllyisApps.Resources.Views.Account.Strings.SetManager, (int)AllyisApps.Services.ProductRole.TimeTrackerManager }
+		{ AllyisApps.Resources.Views.Account.Strings.SetUser, (int)AllyisApps.Services.ProductRoleIdEnum.TimeTrackerUser },
+		{ AllyisApps.Resources.Views.Account.Strings.SetManager, (int)AllyisApps.Services.ProductRoleIdEnum.TimeTrackerManager }
 	};
 }
 

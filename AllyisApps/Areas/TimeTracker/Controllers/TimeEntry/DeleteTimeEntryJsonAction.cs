@@ -28,7 +28,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public ActionResult DeleteTimeEntryJson(DeleteTimeEntryViewModel model)
 		{
-			ProductRole role = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).SingleOrDefault()
+			ProductRoleIdEnum role = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).SingleOrDefault()
 				.UserSubscriptionInfoList.Where(s => s.SubscriptionId == UserContext.ChosenSubscriptionId).FirstOrDefault().ProductRole;
 
 			// Check for permissions
@@ -67,7 +67,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			// Time entry is locked
 			DateTime? lockDate = TimeTrackerService.GetLockDate();
-			if (role != ProductRole.TimeTrackerManager && entry.Date <= (lockDate == null ? DateTime.MinValue : lockDate.Value))
+			if (role != ProductRoleIdEnum.TimeTrackerManager && entry.Date <= (lockDate == null ? DateTime.MinValue : lockDate.Value))
 			{
 				string errorMessage = Resources.TimeTracker.Controllers.TimeEntry.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture);
 				return this.Json(new

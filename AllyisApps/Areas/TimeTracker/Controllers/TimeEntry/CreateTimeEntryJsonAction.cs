@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>A JSON object with the results of the action.</returns>
 		public ActionResult CreateTimeEntryJson(CreateTimeEntryViewModel model)
 		{
-			ProductRole role = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).SingleOrDefault()
+			ProductRoleIdEnum role = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).SingleOrDefault()
 				.UserSubscriptionInfoList.Where(s => s.SubscriptionId == UserContext.ChosenSubscriptionId).FirstOrDefault().ProductRole;
 
 			// Check for permission failures
@@ -81,7 +81,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.MustSelectPayClass);
 				}
-				else if (role != ProductRole.TimeTrackerManager && model.Date <= (lockDate == null ? -1 : TimeTrackerService.GetDayFromDateTime(lockDate.Value)))
+				else if (role != ProductRoleIdEnum.TimeTrackerManager && model.Date <= (lockDate == null ? -1 : TimeTrackerService.GetDayFromDateTime(lockDate.Value)))
 				{
 					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 				}

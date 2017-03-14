@@ -71,7 +71,7 @@ namespace AllyisApps.Controllers
 				{
 					Name = "None",
 					ProductId = (int)ProductIdEnum.None,
-					ProductRoleId = (int)ProductRole.NotInProduct
+					ProductRoleId = (int)ProductRoleIdEnum.NotInProduct
 				});
 				result.Subscriptions.Add(subInfo);
 			}

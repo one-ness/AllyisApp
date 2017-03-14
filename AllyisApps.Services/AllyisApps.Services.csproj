@@ -69,7 +69,7 @@
     <Compile Include="Auth\AuthorizationService.cs" />
     <Compile Include="Auth\ImportService.cs" />
     <Compile Include="Auth\OrganizationRole.cs" />
-    <Compile Include="Auth\ProductRole.cs" />
+    <Compile Include="Auth\ProductRoleIdEnum.cs" />
     <Compile Include="Auth\UserContext.cs" />
     <Compile Include="Auth\UserOrganizationInfo.cs" />
     <Compile Include="Auth\UserSubscriptionInfo.cs" />
@@ -92,7 +92,7 @@
     <Compile Include="TimeTracker\Setting.cs" />
     <Compile Include="Billing\SkuIdEnum.cs" />
     <Compile Include="Billing\SkuInfo.cs" />
-    <Compile Include="Auth\StartOfWeekEnum.cs" />
+    <Compile Include="TimeTracker\StartOfWeekEnum.cs" />
     <Compile Include="Billing\SubscriptionDisplayInfo.cs" />
     <Compile Include="Billing\SubscriptionInfo.cs" />
     <Compile Include="Billing\SubscriptionRole.cs" />
