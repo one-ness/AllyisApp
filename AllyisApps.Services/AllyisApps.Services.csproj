@@ -77,6 +77,7 @@
     <Compile Include="Billing\BillingServicesEnum.cs" />
     <Compile Include="Billing\BillingServicesHandler.cs" />
     <Compile Include="Billing\BillingHistoryItemInfo.cs" />
+    <Compile Include="Billing\BillingService.cs" />
     <Compile Include="ServiceConstants.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Crm\Customer.cs" />
@@ -95,7 +96,7 @@
     <Compile Include="TimeTracker\StartOfWeekEnum.cs" />
     <Compile Include="Billing\SubscriptionDisplayInfo.cs" />
     <Compile Include="Billing\SubscriptionInfo.cs" />
-    <Compile Include="Billing\ProductRole.cs" />
+    <Compile Include="Auth\ProductRole.cs" />
     <Compile Include="Billing\SubscriptionUserInfo.cs" />
     <Compile Include="TimeTracker\TimeEntryInfo.cs" />
     <Compile Include="Auth\User.cs" />

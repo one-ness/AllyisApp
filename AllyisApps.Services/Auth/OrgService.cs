@@ -603,6 +603,31 @@ namespace AllyisApps.Services
 			return DBHelper.GetRoles(UserContext.ChosenOrganizationId).Select(o => InitializeUserRolesInfo(o));
 		}
 
+		/// <summary>
+		/// Gets the product role for a user.
+		/// </summary>
+		/// <param name="productName">Product name.</param>
+		/// <param name="userId">User Id.</param>
+		/// <returns>The product role.</returns>
+		public string GetProductRoleForUser(string productName, int userId)
+		{
+			#region Validation
+
+			if (string.IsNullOrEmpty(productName))
+			{
+				throw new ArgumentNullException("productName", "Product name must have a value.");
+			}
+
+			if (userId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+			}
+
+			#endregion Validation
+
+			return DBHelper.GetProductRoleForUser(productName, UserContext.ChosenOrganizationId, userId);
+		}
+
 		#region Info-DBEntity Conversions
 		/// <summary>
 		/// Translates an OrganizationUserDBEntity into an OrganizationUserInfo business object.
