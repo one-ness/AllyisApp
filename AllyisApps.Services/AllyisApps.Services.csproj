@@ -95,7 +95,7 @@
     <Compile Include="TimeTracker\StartOfWeekEnum.cs" />
     <Compile Include="Billing\SubscriptionDisplayInfo.cs" />
     <Compile Include="Billing\SubscriptionInfo.cs" />
-    <Compile Include="Billing\SubscriptionRole.cs" />
+    <Compile Include="Billing\ProductRole.cs" />
     <Compile Include="Billing\SubscriptionUserInfo.cs" />
     <Compile Include="TimeTracker\TimeEntryInfo.cs" />
     <Compile Include="Auth\User.cs" />

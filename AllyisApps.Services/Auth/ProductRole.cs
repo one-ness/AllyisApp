@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="SubscriptionRoleInfo.cs" company="Allyis, Inc.">
+// <copyright file="ProductRole.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -9,7 +9,7 @@ namespace AllyisApps.Services.Billing
 	/// <summary>
 	/// Subscription Role obj.
 	/// </summary>
-	public class SubscriptionRole
+	public class ProductRole
 	{
 		/// <summary>
 		/// Gets or sets Name.

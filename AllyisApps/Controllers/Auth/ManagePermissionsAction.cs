@@ -132,7 +132,7 @@ namespace AllyisApps.Controllers
 						UserId = user.UserId,
 						UserName = string.Format("{0} {1}", user.FirstName, user.LastName),
 						OrganizationRoleId = user.OrgRoleId,
-						SubscriptionRoles = new List<SubscriptionRole>()
+						SubscriptionRoles = new List<ProductRole>()
 					};
 					permissions.Add(currentUserPerm);
 				}
@@ -141,7 +141,7 @@ namespace AllyisApps.Controllers
 				{
 					try
 					{
-						currentUserPerm.SubscriptionRoles.Add(new SubscriptionRole
+						currentUserPerm.SubscriptionRoles.Add(new ProductRole
 						{
 							ProductRoleId = user.ProductRoleId,
 							ProductId = result.Subscriptions.Where(s => s.SubscriptionId == user.SubscriptionId).Single().ProductId
@@ -157,7 +157,7 @@ namespace AllyisApps.Controllers
 				{
 					if (permission.SubscriptionRoles.Where(s => s.ProductId == subscription.ProductId).Count() == 0)
 					{
-						permission.SubscriptionRoles.Add(new SubscriptionRole
+						permission.SubscriptionRoles.Add(new ProductRole
 						{
 							ProductId = subscription.ProductId,
 							ProductRoleId = (int)ProductRoleIdEnum.NotInProduct

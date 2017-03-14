@@ -85,7 +85,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the list of product roles.
 		/// </summary>
-		public List<SubscriptionRole> ProductRoles { get; set; }
+		public List<ProductRole> ProductRoles { get; set; }
 
 		/// <summary>
 		/// Gets or sets the role selected in the drop down menu.

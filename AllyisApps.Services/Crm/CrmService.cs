@@ -605,11 +605,11 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets a list of available <see cref="SubscriptionRole"/>s for a subscription.
+		/// Gets a list of available <see cref="ProductRole"/>s for a subscription.
 		/// </summary>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>List of SubscriptionRoleInfos.</returns>
-		public IEnumerable<SubscriptionRole> GetProductRolesFromSubscription(int subscriptionId)
+		public IEnumerable<ProductRole> GetProductRolesFromSubscription(int subscriptionId)
 		{
 			if (subscriptionId <= 0)
 			{
@@ -623,7 +623,7 @@ namespace AllyisApps.Services
 					return null;
 				}
 
-				return new SubscriptionRole
+				return new ProductRole
 				{
 					Name = s.Name,
 					ProductRoleId = s.ProductRoleId
@@ -1013,18 +1013,18 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates a <see cref="SubscriptionRoleDBEntity"/> into a <see cref="SubscriptionRole"/>.
+		/// Translates a <see cref="SubscriptionRoleDBEntity"/> into a <see cref="ProductRole"/>.
 		/// </summary>
 		/// <param name="subscriptionRole">SubscriptionRoleDBEntity instance.</param>
 		/// <returns>SubscriptionRole instance.</returns>
-		public static SubscriptionRole InitializeSubscriptionRoleInfo(SubscriptionRoleDBEntity subscriptionRole)
+		public static ProductRole InitializeSubscriptionRoleInfo(SubscriptionRoleDBEntity subscriptionRole)
 		{
 			if (subscriptionRole == null)
 			{
 				return null;
 			}
 
-			return new SubscriptionRole
+			return new ProductRole
 			{
 				Name = subscriptionRole.Name,
 				ProductRoleId = subscriptionRole.ProductRoleId,

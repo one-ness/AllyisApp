@@ -67,7 +67,7 @@ namespace AllyisApps.Controllers
 					SubscriptionId = sub.SubscriptionId,
 					hasTooManySubscribers = sub.SubscriptionsUsed >= sub.NumberOfUsers
 				};
-				subInfo.ProductRoles.Insert(0, new SubscriptionRole
+				subInfo.ProductRoles.Insert(0, new ProductRole
 				{
 					Name = "None",
 					ProductId = (int)ProductIdEnum.None,

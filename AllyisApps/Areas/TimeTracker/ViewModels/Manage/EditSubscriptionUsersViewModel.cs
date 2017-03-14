@@ -28,7 +28,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Manage
 		/// <summary>
 		/// Gets possible roles for the product the user is subscribed to.
 		/// </summary>
-		public IEnumerable<SubscriptionRole> Roles { get; internal set; }
+		public IEnumerable<ProductRole> Roles { get; internal set; }
 
 		/// <summary>
 		/// Gets or sets list of all users in the organization this subscription is used by.

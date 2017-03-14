@@ -98,7 +98,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets the list of Subscription roles the user has.
 		/// </summary>
-		public List<SubscriptionRole> SubscriptionRoles { get; internal set; }
+		public List<ProductRole> SubscriptionRoles { get; internal set; }
 	}
 
 	/// <summary>

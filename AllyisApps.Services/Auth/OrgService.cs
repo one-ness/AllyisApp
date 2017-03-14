@@ -130,7 +130,7 @@ namespace AllyisApps.Services
 		/// by invitations.
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<string, List<SubscriptionDisplayInfo>, List<SubscriptionRole>, List<CompleteProjectInfo>, string> GetAddMemberInfo()
+		public Tuple<string, List<SubscriptionDisplayInfo>, List<ProductRole>, List<CompleteProjectInfo>, string> GetAddMemberInfo()
 		{
 			var spResults = DBHelper.GetAddMemberInfo(UserContext.ChosenOrganizationId);
 			return Tuple.Create(
