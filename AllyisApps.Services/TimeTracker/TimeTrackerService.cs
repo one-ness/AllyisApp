@@ -406,10 +406,10 @@ namespace AllyisApps.Services.TimeTracker
 		}
 
 		/// <summary>
-		/// Gets a list of <see cref="PayClassInfo"/>'s for an organization.
+		/// Gets a list of <see cref="PayClass"/>'s for an organization.
 		/// </summary>
 		/// <returns>List of PayClassInfo's.</returns>
-		public IEnumerable<PayClassInfo> GetPayClasses()
+		public IEnumerable<PayClass> GetPayClasses()
 		{
 			return DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InitializePayClassInfo(pc));
 		}
@@ -608,7 +608,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// and a list of Holidays for the current organization.
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<SettingsInfo, List<PayClassInfo>, List<Holiday>> GetAllSettings()
+		public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings()
 		{
 			var spResults = DBHelper.GetAllSettings(UserContext.ChosenOrganizationId);
 			return Tuple.Create(
@@ -629,7 +629,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
 		/// <returns></returns>
-		public Tuple<SettingsInfo, List<PayClassInfo>, List<Holiday>, List<CompleteProjectInfo>, List<User>, List<TimeEntryInfo>>
+		public Tuple<Setting, List<PayClass>, List<Holiday>, List<CompleteProjectInfo>, List<User>, List<TimeEntryInfo>>
 			GetTimeEntryIndexInfo(DateTime? startingDate, DateTime? endingDate, int? userId = null)
 		{
 			#region Validation
@@ -664,9 +664,9 @@ namespace AllyisApps.Services.TimeTracker
 		/// </summary>
 		/// <param name="pc">PayClassDBEntity.</param>
 		/// <returns>PayClassInfo.</returns>
-		public static PayClassInfo InitializePayClassInfo(PayClassDBEntity pc)
+		public static PayClass InitializePayClassInfo(PayClassDBEntity pc)
 		{
-			return new PayClassInfo
+			return new PayClass
 			{
 				Name = pc.Name,
 				OrganizationId = pc.OrganizationId,
@@ -699,14 +699,14 @@ namespace AllyisApps.Services.TimeTracker
 		/// </summary>
 		/// <param name="settings">The SettingsDBEntity to use.</param>
 		/// <returns>The initialized SettingsInfo object.</returns>
-		public static SettingsInfo InitializeSettingsInfo(SettingDBEntity settings)
+		public static Setting InitializeSettingsInfo(SettingDBEntity settings)
 		{
 			if (settings == null)
 			{
 				return null;
 			}
 
-			return new SettingsInfo
+			return new Setting
 			{
 				OrganizationId = settings.OrganizationId,
 				OvertimeHours = settings.OvertimeHours,

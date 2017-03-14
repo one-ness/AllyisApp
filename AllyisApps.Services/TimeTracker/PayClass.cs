@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="PayClassInfo.cs" company="Allyis, Inc.">
+// <copyright file="PayClass.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ namespace AllyisApps.Services.TimeTracker
 	/// <summary>
 	/// An object for keeping track of all the info related to a given pay class.
 	/// </summary>
-	public class PayClassInfo
+	public class PayClass
 	{
 		/// <summary>
 		/// Gets or sets the pay class id.

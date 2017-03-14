@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="SettingsInfo.cs" company="Allyis, Inc.">
+// <copyright file="Setting.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -9,7 +9,7 @@ namespace AllyisApps.Services.TimeTracker
 	/// <summary>
 	/// An object for keeping track of the settings for a time tracker.
 	/// </summary>
-	public class SettingsInfo
+	public class Setting
 	{
 		/// <summary>
 		/// Gets or sets the OrganizationId.

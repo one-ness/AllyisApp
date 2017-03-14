@@ -26,7 +26,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets the payClasses for an org.
 		/// </summary>
-		public IEnumerable<PayClassInfo> PayClasses { get; set; }
+		public IEnumerable<PayClass> PayClasses { get; set; }
 
 		/// <summary>
 		/// Gets or sets the starting date of the date range.

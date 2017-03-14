@@ -52,7 +52,7 @@ namespace AllyisApps.Services
 			List<User> userSubs = this.GetUsersWithSubscriptionToProductInOrganization(this.UserContext.ChosenOrganizationId, ttProductId).ToList();
 
 			// Retrieval of existing pay class data
-			List<PayClassInfo> payClasses = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => TimeTrackerService.InitializePayClassInfo(pc)).ToList();
+			List<PayClass> payClasses = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => TimeTrackerService.InitializePayClassInfo(pc)).ToList();
 
 			// Result object
 			ImportActionResult result = new ImportActionResult();
@@ -783,7 +783,7 @@ namespace AllyisApps.Services
 									if (hasTTDescription) this.readColumn(row, ColumnHeaders.Description, val => description = val);
 									this.readColumn(row, ColumnHeaders.PayClass, val => payclass = val);
 
-									PayClassInfo payClass = payClasses.Where(p => p.Name.ToUpper().Equals(payclass.ToUpper())).SingleOrDefault();
+									PayClass payClass = payClasses.Where(p => p.Name.ToUpper().Equals(payclass.ToUpper())).SingleOrDefault();
 									DateTime theDate;
 									float theDuration;
 

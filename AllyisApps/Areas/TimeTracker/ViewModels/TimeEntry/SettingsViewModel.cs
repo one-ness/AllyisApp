@@ -18,12 +18,12 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets the settings for an organization.
 		/// </summary>
-		public SettingsInfo Settings { get; set; }
+		public Setting Settings { get; set; }
 
 		/// <summary>
 		/// Gets or sets the pay classes for an organization.
 		/// </summary>
-		public IEnumerable<PayClassInfo> PayClasses { get; set; }
+		public IEnumerable<PayClass> PayClasses { get; set; }
 
 		/// <summary>
 		/// Gets or sets the holidays for an organization.

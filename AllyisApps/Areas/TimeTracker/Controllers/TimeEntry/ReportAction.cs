@@ -88,8 +88,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				CanManage = canManage,
 				OrganizationId = organizationId,
 				ShowExport = showExport,
-				Projects = projects, //Service.GetProjectsByOrganization(organizationId, false),
-				Customers = customers, //Service.GetCustomerList(organizationId),
+				Projects = projects,
+				Customers = customers,
 				PreviewPageSize = 20,
 				PreviewTotal = string.Format("{0} {1}", 0, AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.HoursTotal),
 				PreviewEntries = null,
@@ -114,9 +114,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subUsers">List of subscription users.</param>
 		/// <param name="usersSelected">List of selected user ids.</param>
 		/// <returns>The user list.</returns>
-		private IEnumerable<SelectListItem> GetUserSelectList(List<SubscriptionUserInfo> subUsers/*int organizationId*/, List<int> usersSelected)
+		private IEnumerable<SelectListItem> GetUserSelectList(List<SubscriptionUserInfo> subUsers, List<int> usersSelected)
 		{
-			IList<SubscriptionUserInfo> users = subUsers;//(IList<UserInfo>)Service.GetUsersWithSubscriptionToProductInOrganization(organizationId, Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker)).ToList<UserInfo>();
+			IList<SubscriptionUserInfo> users = subUsers;
 			users.Insert(0, new SubscriptionUserInfo { FirstName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.AllUsersFirst, LastName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.AllUsersLast, UserId = -1 });
 
 			// select current user by default
@@ -145,9 +145,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="customers">The list of customers.</param>
 		/// <param name="customerSelected">The selected customer.</param>
 		/// <returns>The customer list.</returns>
-		private IEnumerable<SelectListItem> GetCustomerSelectList(List<Customer> customers/*int organizationId*/, int customerSelected)
+		private IEnumerable<SelectListItem> GetCustomerSelectList(List<Customer> customers, int customerSelected)
 		{
-			IList<Customer> customerData = customers;//Service.GetCustomerList(organizationId).ToList<CustomerInfo>();
+			IList<Customer> customerData = customers;
 			customerData.Insert(0, new Customer { Name = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.NoFilter, CustomerId = 0 });
 
 			var cSelectList = new List<SelectListItem>();
@@ -171,7 +171,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="customerSelected">The selected customer.</param>
 		/// <param name="projectSelected">The selected project.</param>
 		/// <returns>The project list.</returns>
-		private IEnumerable<SelectListItem> GetProjectSelectList(List<CompleteProjectInfo> projects/*int organizationId*/, int customerSelected, int projectSelected)
+		private IEnumerable<SelectListItem> GetProjectSelectList(List<CompleteProjectInfo> projects, int customerSelected, int projectSelected)
 		{
 			var pSelectList = new List<SelectListItem>();
 

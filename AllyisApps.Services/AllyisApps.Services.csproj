@@ -79,17 +79,17 @@
     <Compile Include="Billing\BillingHistoryItemInfo.cs" />
     <Compile Include="ServiceConstants.cs" />
     <Compile Include="Service.cs" />
-    <Compile Include="Project\Customer.cs" />
+    <Compile Include="Crm\Customer.cs" />
     <Compile Include="TimeTracker\Holiday.cs" />
     <Compile Include="Auth\InvitationInfo.cs" />
     <Compile Include="Auth\InvitationSubRole.cs" />
     <Compile Include="Auth\Language.cs" />
     <Compile Include="Auth\OrganizationUserInfo.cs" />
     <Compile Include="Auth\OrgRole.cs" />
-    <Compile Include="TimeTracker\PayClassInfo.cs" />
-    <Compile Include="Project\CompleteProjectInfo.cs" />
-    <Compile Include="Project\Project.cs" />
-    <Compile Include="TimeTracker\SettingsInfo.cs" />
+    <Compile Include="TimeTracker\PayClass.cs" />
+    <Compile Include="Crm\CompleteProjectInfo.cs" />
+    <Compile Include="Crm\Project.cs" />
+    <Compile Include="TimeTracker\Setting.cs" />
     <Compile Include="Billing\SkuIdEnum.cs" />
     <Compile Include="Billing\SkuInfo.cs" />
     <Compile Include="Auth\StartOfWeekEnum.cs" />
@@ -104,7 +104,7 @@
     <Compile Include="Billing\Product.cs" />
     <Compile Include="Billing\ProductIdEnum.cs" />
     <Compile Include="Auth\OrgService.cs" />
-    <Compile Include="Project\ProjectService.cs" />
+    <Compile Include="Crm\ProjectService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimeTracker\TimeTrackerService.cs" />
   </ItemGroup>

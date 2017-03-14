@@ -16,8 +16,7 @@
 
 }
 <div class="flexbox-row flexbox-row-2-col-collapse">
-    @*<div class="col-md-6">*@
-        <div class="panel panel-info" style="position: relative;" @*style="width: 400px; margin: 10px auto;"*@>
+        <div class="panel panel-info" style="position: relative;">
             <div class="panel-heading">
                 <h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.OrgSOW</h1>
             </div>
@@ -39,7 +38,7 @@
                 }
             </div>
         </div>
-        <div class="panel panel-info" @*style="width: 400px; margin: 10px auto;"*@>
+        <div class="panel panel-info">
             <div class="panel-heading">
                 <h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.PClasses</h1>
             </div>
@@ -51,7 +50,7 @@
                             <th><span class="pull-right">Delete</span></th>
                         </tr>
                     </thead>
-                    @foreach (PayClassInfo PayClass in Model.PayClasses)
+                    @foreach (PayClass PayClass in Model.PayClasses)
                     {
                         <tr>
                             <td>@(AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString((PayClass.Name).Replace(" ", string.Empty)) ?? PayClass.Name)</td>
@@ -71,30 +70,6 @@
 					</tr>
                 </table>
             </div>
-            @*<div class="panel-body" id="PayClasses">
-                @foreach (PayClassInfo PayClass in Model.PayClasses)
-            {
-                    <div style="border-bottom: 1px solid #ddd;">
-                        <div class="pull-left">
-                            @(AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString((PayClass.Name).Replace(" ", string.Empty)) ?? PayClass.Name)
-                        </div>
-                        <div class="pull-right">
-                            <a href="@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { PayClassId = PayClass.PayClassID })">
-                                <i class="fa fa-fw fa-remove text-danger"></i>
-                            </a>
-                        </div>
-                        <br />
-                    </div>
-                }
-                <div @*style="margin:10px"*@@*>
-                    @using (Html.BeginForm(ActionConstants.CreatePayClass, ControllerConstants.TimeEntry, FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken();
-                        <input type="text" name="NewPayClass" /><input class="pull-right btn btn-primary" type="submit" value="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Add" />
-                    }
-                </div>
-            </div>
-        </div>*@
         </div>
         <div class="panel panel-info" style="position: relative; padding-bottom: 40px;" @*style="width: 400px; margin: 10px auto;"*@>
             <div class="panel-heading">
@@ -122,9 +97,7 @@
                 }
             </div>
         </div>
-    @*</div>*@
-    @*<div class="col-md-6">*@
-        <div class="panel panel-info" style="position: relative;" @*style="width: 400px; margin: 10px auto;"*@>
+        <div class="panel panel-info" style="position: relative;">
             <div class="panel-heading">
                 <h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Overtime</h1>
             </div>
@@ -161,7 +134,7 @@
                             }
             </div>
         </div>
-        <div class="panel panel-info" @*style="width: 400px; margin: 10px auto;"*@>
+        <div class="panel panel-info">
             <div class="panel-heading">
                 <h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Holidays</h1>
             </div>
@@ -185,9 +158,6 @@
                                 @Holiday.Date.ToShortDateString()
                             </td>
                             <td>
-                                @*<a href="@Url.Action(ActionConstants.DeleteHoliday, ControllerConstants.TimeEntry, new { HolidayName = Holiday.HolidayName, Date = Holiday.Date})" class="pull-right">
-                                    <i class="fa fa-fw fa-remove text-danger"></i>
-                                </a>*@
 								<a href="javascript: void(0);" class="text-muted" title="Delete Holiday"
 								   onclick='deleteHoliday("@Holiday.HolidayId", "@Holiday.HolidayName")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
                             </td>
@@ -205,7 +175,6 @@
                 </table>
             </div>
         </div>
-    @*</div>*@
 </div>
 
 @section scripts{
