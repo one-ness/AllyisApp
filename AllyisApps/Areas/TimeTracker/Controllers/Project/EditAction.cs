@@ -53,7 +53,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if (Service.Can(Actions.CoreAction.EditProject))
 				{
-					ProjectInfo projIdMatch = Service.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId).SingleOrDefault();
+					Project projIdMatch = Service.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId).SingleOrDefault();
 					if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 					{
 						Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ProjectOrgIdNotUnique, Variety.Danger));
@@ -101,21 +101,20 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public EditProjectViewModel ConstructEditProjectViewModel(int projectId)
 		{
 			var infos = Service.GetProjectEditInfo(projectId);
-
-			//CompleteProjectInfo projectInfo = Service.GetProject(projectId);
-			IEnumerable<UserInfo> projectUserInfos = infos.Item2; //Service.GetUsersByProjectId(projectInfo.ProjectId);
+			
+			IEnumerable<User> projectUserInfos = infos.Item2;
 			var projectUsers = new List<BasicUserInfoViewModel>();
 			foreach (var projectUser in projectUserInfos)
 			{
-				projectUsers.Add(new BasicUserInfoViewModel(projectUser.FirstName, projectUser.LastName, projectUser.UserId)); // Simplify list for model binding
+				projectUsers.Add(new BasicUserInfoViewModel(projectUser.FirstName, projectUser.LastName, projectUser.UserId));
 			}
 
-			IEnumerable<SubscriptionUserInfo> subscriptionUserInfos = infos.Item3; //Service.GetUsers();
+			IEnumerable<SubscriptionUserInfo> subscriptionUserInfos = infos.Item3;
 			var subscriptionUsers = new List<BasicUserInfoViewModel>();
 
 			foreach (var su in subscriptionUserInfos)
 			{
-				subscriptionUsers.Add(new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId)); // Simplify list for model binding
+				subscriptionUsers.Add(new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId));
 			}
 
 			return new EditProjectViewModel

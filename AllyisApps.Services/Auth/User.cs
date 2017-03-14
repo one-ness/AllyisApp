@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="UserInfo.cs" company="Allyis, Inc.">
+// <copyright file="User.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// Represents a user.
 	/// </summary>
-	public class UserInfo
+	public class User
 	{
 		/// <summary>
 		/// Gets or sets User Id.

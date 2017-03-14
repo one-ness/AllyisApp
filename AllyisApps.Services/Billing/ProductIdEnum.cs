@@ -19,11 +19,6 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// ID for TimeTracker.
 		/// </summary>
-		TimeTracker = 1,
-
-		/// <summary>
-		/// ID for Consulting.
-		/// </summary>
-		Consulting,
+		TimeTracker = 1
 	}
 }

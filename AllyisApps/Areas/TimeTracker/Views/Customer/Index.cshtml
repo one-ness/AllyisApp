@@ -54,7 +54,7 @@
                         <div id="@collapseTarget" class="panel-collapse search-expand collapse panel-two-table-wrap" role="tabpanel">
                             <div style="width: 100%">
                                 <div class="list-group list-group-with-buttons project-list">
-                                    @foreach (ProjectInfo project in customer.Projects)
+                                    @foreach (Project project in customer.Projects)
                                     {
                                         var projectID = string.Format("project{0}", project.ProjectId);
                                         <div class="list-group-item" id="@projectID">

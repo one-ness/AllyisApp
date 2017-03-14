@@ -21,6 +21,6 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// <summary>
 		/// Gets the Customer's info object.
 		/// </summary>
-		public CustomerInfo CustomerInfo { get; internal set; }
+		public Services.Customer CustomerInfo { get; internal set; }
 	}
 }

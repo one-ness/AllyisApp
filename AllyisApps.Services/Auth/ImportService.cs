@@ -34,22 +34,22 @@ namespace AllyisApps.Services
 			tables = sortableTables.OrderBy(tup => tup.Item2 * -1).Select(tup => tup.Item1).ToList();
 
 			// Retrieval of existing customer and project data
-			List<Tuple<CustomerInfo, List<ProjectInfo>>> customersProjects = new List<Tuple<CustomerInfo, List<ProjectInfo>>>();
-			foreach (CustomerInfo customer in this.GetCustomerList(this.UserContext.ChosenOrganizationId))
+			List<Tuple<Customer, List<Project>>> customersProjects = new List<Tuple<Customer, List<Project>>>();
+			foreach (Customer customer in this.GetCustomerList(this.UserContext.ChosenOrganizationId))
 			{
-				customersProjects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(
+				customersProjects.Add(new Tuple<Customer, List<Project>>(
 					customer,
 					this.GetProjectsByCustomer(customer.CustomerId).ToList()
 				));
 			}
 
 			// Retrieval of existing user data
-			List<Tuple<string, UserInfo>> users = this.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Select(o => new Tuple<string, UserInfo>(o.EmployeeId, this.GetUserInfo(o.UserId))).ToList();
+			List<Tuple<string, User>> users = this.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Select(o => new Tuple<string, User>(o.EmployeeId, this.GetUser(o.UserId))).ToList();
 
 			// Retrieval of existing user product subscription data
 			int ttProductId = Service.GetProductIdByName("TimeTracker");
 			SubscriptionDisplayDBEntity ttSub = DBHelper.GetSubscriptionsDisplayByOrg(this.UserContext.ChosenOrganizationId).Where(s => s.ProductId == ttProductId).SingleOrDefault();
-			List<UserInfo> userSubs = this.GetUsersWithSubscriptionToProductInOrganization(this.UserContext.ChosenOrganizationId, ttProductId).ToList();
+			List<User> userSubs = this.GetUsersWithSubscriptionToProductInOrganization(this.UserContext.ChosenOrganizationId, ttProductId).ToList();
 
 			// Retrieval of existing pay class data
 			List<PayClassInfo> payClasses = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => TimeTrackerService.InitializePayClassInfo(pc)).ToList();
@@ -162,7 +162,7 @@ namespace AllyisApps.Services
 
 					#region Customer Import
 
-					CustomerInfo customer = null;
+					Customer customer = null;
 
 					// If there is no identifying information for customers, all customer related importing is skipped.
 					if (hasCustomerName || hasCustomerId)
@@ -174,7 +174,7 @@ namespace AllyisApps.Services
 							if (canCreateCustomers)
 							{
 								// No customer was found, so a new one is created.
-								CustomerInfo newCustomer = null;
+								Customer newCustomer = null;
 								if (customerImportLinks.Count == 0)
 								{
 									// If customerImportLinks is empty, it's because all the information is on this sheet.
@@ -194,7 +194,7 @@ namespace AllyisApps.Services
 										continue;
 									}
 
-									newCustomer = new CustomerInfo
+									newCustomer = new Customer
 									{
 										Name = name,
 										CustomerOrgId = orgId,
@@ -229,7 +229,7 @@ namespace AllyisApps.Services
 										continue;
 									}
 
-									newCustomer = new CustomerInfo
+									newCustomer = new Customer
 									{
 										Name = hasCustomerName ? knownValue : readValue,
 										CustomerOrgId = hasCustomerName ? readValue : knownValue,
@@ -253,9 +253,9 @@ namespace AllyisApps.Services
 										continue;
 									}
 
-									customersProjects.Add(new Tuple<CustomerInfo, List<ProjectInfo>>(
+									customersProjects.Add(new Tuple<Customer, List<Project>>(
 										newCustomer,
-										new List<ProjectInfo>()
+										new List<Project>()
 									));
 									customer = newCustomer;
 									result.CustomersImported += 1;
@@ -297,7 +297,7 @@ namespace AllyisApps.Services
 					DateTime? defaultProjectStartDate = null;
 					DateTime? defaultProjectEndDate = null;
 
-					ProjectInfo project = null;
+					Project project = null;
 
 					// If there is no identifying information for projects, all project related importing is skipped.
 					if (hasProjectName || hasProjectId)
@@ -373,7 +373,7 @@ namespace AllyisApps.Services
 								}
 
 								// All required information is known: time to create the project
-								project = new ProjectInfo
+								project = new Project
 								{
 									CustomerId = customer.CustomerId,
 									Name = thisRowHasProjectName ? knownValue : readValue,
@@ -478,7 +478,7 @@ namespace AllyisApps.Services
 									}
 
 									// All required information is known: time to create the project
-									project = new ProjectInfo
+									project = new Project
 									{
 										CustomerId = customer.CustomerId,
 										Name = fields[0],
@@ -544,10 +544,10 @@ namespace AllyisApps.Services
 
 					#region User Import
 
-					UserInfo user = null;
+					User user = null;
 					if (hasUserEmail || hasEmployeeId || hasUserName)
 					{
-						Tuple<string, UserInfo> userTuple = null;
+						Tuple<string, User> userTuple = null;
 
 						// Find existing user by whatever information we have
 						string readValue = null;
@@ -656,14 +656,14 @@ namespace AllyisApps.Services
 									user = this.GetUserByEmail(fields[0]); // User may already exist, but not be a member of this organization
 									if (user == null)
 									{
-										user = new UserInfo()
+										user = new User()
 										{
 											Email = fields[0],
 											FirstName = names[0],
 											LastName = names[1],
 											PasswordHash = Lib.Crypto.GetPasswordHash("password")//ComputeSHA512Hash("password") // TODO: Figure out a better default password generation system
 										};
-										user.UserId = DBHelper.CreateUser(GetDBEntityFromUserInfo(user));
+										user.UserId = DBHelper.CreateUser(GetDBEntityFromUser(user));
 										result.UsersImported += 1;
 									}
 									if (user.UserId != -1)
@@ -684,7 +684,7 @@ namespace AllyisApps.Services
 											result.OrgUserFailures.Add(string.Format("Database error assigning user {0} {1} to organization. Could be a duplicate employee id ({2}).", names[0], names[1], fields[1]));
 											continue;
 										}
-										users.Add(new Tuple<string, UserInfo>(fields[1], user));
+										users.Add(new Tuple<string, User>(fields[1], user));
 									}
 									else
 									{

@@ -132,7 +132,7 @@ namespace AllyisApps.Controllers
 						UserId = user.UserId,
 						UserName = string.Format("{0} {1}", user.FirstName, user.LastName),
 						OrganizationRoleId = user.OrgRoleId,
-						SubscriptionRoles = new List<SubscriptionRoleInfo>()
+						SubscriptionRoles = new List<SubscriptionRole>()
 					};
 					permissions.Add(currentUserPerm);
 				}
@@ -141,7 +141,7 @@ namespace AllyisApps.Controllers
 				{
 					try
 					{
-						currentUserPerm.SubscriptionRoles.Add(new SubscriptionRoleInfo
+						currentUserPerm.SubscriptionRoles.Add(new SubscriptionRole
 						{
 							ProductRoleId = user.ProductRoleId,
 							ProductId = result.Subscriptions.Where(s => s.SubscriptionId == user.SubscriptionId).Single().ProductId
@@ -168,7 +168,7 @@ namespace AllyisApps.Controllers
 				{
 					if (permission.SubscriptionRoles.Where(s => s.ProductId == subscription.ProductId).Count() == 0)
 					{
-						permission.SubscriptionRoles.Add(new SubscriptionRoleInfo
+						permission.SubscriptionRoles.Add(new SubscriptionRole
 						{
 							ProductId = subscription.ProductId,
 							ProductRoleId = (int)ProductRole.NotInProduct
@@ -410,7 +410,7 @@ namespace AllyisApps.Controllers
 				selectedAction.TimeTrackerSubscriptionId = 0;
 			}
 
-			IEnumerable<UserInfo> currentUsers = Service.GetUsersWithSubscriptionToProductInOrganization(selectedAction.OrganizationId, Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
+			IEnumerable<User> currentUsers = Service.GetUsersWithSubscriptionToProductInOrganization(selectedAction.OrganizationId, Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker));
 			IEnumerable<int> userIds = currentUsers.Select(user => user.UserId);
 
 			int alteringUsers = users.Where(x => !userIds.Contains(x.UserId)).Count();

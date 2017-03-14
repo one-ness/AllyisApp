@@ -32,23 +32,15 @@ namespace AllyisApps.Controllers
 		{
 			var infos = Service.GetProductSubscriptionInfo(productId);
 
-			//int orgId = UserContext.ChosenOrganizationId;
-
-			// ViewBag.Organizations = OrgService.GetOrganizationsWhereUserIsAdmin(UserContext.UserId);
-
-			// ViewBag.Products = Services.Crm.CrmService.GetProductInfoList();
-
 			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
-				ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(/*productId*/infos.Item1, infos.Item2, infos.Item3, infos.Item4);
+				ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4);
 				if (!model.IsValid)
 				{
 					return this.View(ViewConstants.Details, UserContext.ChosenOrganizationId);
 				}
-				
-				// SubscriptionInfo sub = CrmService.CheckSubscription(orgId, productId);
 
-				model.CurrentUsers = infos.Item5; //Service.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Count();
+				model.CurrentUsers = infos.Item5;
 
 				return this.View(ViewConstants.Subscribe, model);
 			}
@@ -61,18 +53,16 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Uses services to populate a <see cref="ProductSubscriptionViewModel"/> and returns it.
 		/// </summary>
-		/// <param name="productInfo">ProductInfo for product.</param>
+		/// <param name="productInfo">Product for product.</param>
 		/// <param name="currentSubscription">SubscriptionInfo for this org's subscription to the product.</param>
 		/// <param name="skus">List of SkuInfos for this product's skus.</param>
 		/// <param name="stripeToken">This org's billing stripe token.</param>
 		/// <returns>The ProductSubscriptionViewModel.</returns>
 		[CLSCompliant(false)]
-		public ProductSubscriptionViewModel ConstructProductSubscriptionViewModel(/*int productId*/ProductInfo productInfo, SubscriptionInfo currentSubscription, List<SkuInfo> skus, string stripeToken)
+		public ProductSubscriptionViewModel ConstructProductSubscriptionViewModel(Product productInfo, SubscriptionInfo currentSubscription, List<SkuInfo> skus, string stripeToken)
 		{
-			//ProductInfo productInfo = Service.GetProductById(productId);
 			if (productInfo != null)
 			{
-				//SubscriptionInfo currentSubscription = Service.CheckSubscription(productId);
 				int selectedSku = currentSubscription == null ? 0 : currentSubscription.SkuId;
 				BillingServicesCustomerId customerId = new BillingServicesCustomerId(stripeToken);
 
@@ -84,12 +74,12 @@ namespace AllyisApps.Controllers
 					ProductName = productInfo.ProductName,
 					ProductDescription = productInfo.ProductDescription,
 					CurrentSubscription = currentSubscription,
-					Skus = skus,//Service.GetSkuForProduct(productId),
+					Skus = skus,
 					SelectedSku = selectedSku,
-					SelectedSkuName = selectedSku > 0 ? skus.Where(s => s.SkuId == selectedSku).SingleOrDefault().Name /*Service.GetSkuDetails(selectedSku).Name*/ : string.Empty,
+					SelectedSkuName = selectedSku > 0 ? skus.Where(s => s.SkuId == selectedSku).SingleOrDefault().Name : string.Empty,
 					PreviousSku = selectedSku,
-					CustomerId = customerId,//Service.GetOrgBillingServicesCustomerId(),
-					Token = new BillingServicesToken(/*Service.GetOrgBillingServicesCustomerId().ToString()*/customerId.ToString()) // TODO: Does this just convert back to the stripeToken string?? Investigate.
+					CustomerId = customerId,
+					Token = new BillingServicesToken(customerId.ToString()) // TODO: Does this just convert back to the stripeToken string?? Investigate.
 				};
 			}
 

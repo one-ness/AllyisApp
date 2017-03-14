@@ -49,17 +49,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			bool canEditProjects = Service.Can(Actions.CoreAction.EditProject);
 
 			List<CompleteProjectInfo> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
-			List<CustomerInfo> customers = infos.Item2;
+			List<Customer> customers = infos.Item2;
 
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
-			foreach (CustomerInfo currentCustomer in customers)
+			foreach (Customer currentCustomer in customers)
 			{
 				CustomerProjectViewModel customerResult = new CustomerProjectViewModel()
 				{
 					CustomerInfo = currentCustomer,
 					Projects = from p in projects
 							   where p.CustomerId == currentCustomer.CustomerId
-							   select new ProjectInfo
+							   select new Project
 							   {
 								   CustomerId = p.CustomerId,
 								   OrganizationId = p.OrganizationId,

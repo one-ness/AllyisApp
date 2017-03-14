@@ -23,7 +23,7 @@ namespace AllyisApps.ViewModels.Shared
 		/// <summary>
 		/// Gets or sets a List of available products.
 		/// </summary>
-		public IEnumerable<ProductInfo> ProductList { get; set; }
+		public IEnumerable<Product> ProductList { get; set; }
 
 		/// <summary>
 		/// Gets an Organization instance for the organization these subscriptions are attached to.

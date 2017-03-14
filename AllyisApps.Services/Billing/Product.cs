@@ -1,29 +1,29 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="SubscriptionRoleInfo.cs" company="Allyis, Inc.">
+// <copyright file="Product.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.Services.Billing
+namespace AllyisApps.Services
 {
 	/// <summary>
-	/// Subscription Role obj.
+	/// Represents a product.
 	/// </summary>
-	public class SubscriptionRoleInfo
+	public class Product
 	{
 		/// <summary>
-		/// Gets or sets Name.
-		/// </summary>
-		public string Name { get; set; }
-
-		/// <summary>
-		/// Gets or sets ProductRoleId.
-		/// </summary>
-		public int ProductRoleId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Product Id.
+		/// Gets or sets the product Id.
 		/// </summary>
 		public int ProductId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the product Name.
+		/// </summary>
+		public string ProductName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the product description.
+		/// </summary>
+		public string ProductDescription { get; set; }
 	}
 }

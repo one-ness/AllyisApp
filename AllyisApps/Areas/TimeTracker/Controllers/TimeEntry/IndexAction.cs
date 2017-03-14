@@ -110,7 +110,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = -1, ProjectName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
 
-			IEnumerable<UserInfo> users = infos.Item5;
+			IEnumerable<User> users = infos.Item5;
 			
 			TimeEntryOverDateRangeViewModel result = new TimeEntryOverDateRangeViewModel
 			{

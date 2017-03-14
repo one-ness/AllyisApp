@@ -47,7 +47,7 @@ namespace AllyisApps.Controllers
 						string userEmail = add.Email.Trim();
 						if (Service.IsEmailAddressValid(userEmail))
 						{ // If input string kinda looks like an email..
-							UserInfo user = Service.GetUserByEmail(userEmail); // ...Attempt to get the user data by email.
+							User user = Service.GetUserByEmail(userEmail); // ...Attempt to get the user data by email.
 																			   // If that doesn't return null...
 							if (user != null)
 							{
@@ -62,7 +62,7 @@ namespace AllyisApps.Controllers
 
 							// input string is not associated with an existing user
 							// so send them an email and let them know of the request
-							UserInfo requestingUser = Service.GetUserInfo();
+							User requestingUser = Service.GetUser();
 							int code = new Random().Next(100000);
 							int invitationId = await Service.InviteNewUser(
 								string.Format("{0} {1}", requestingUser.FirstName, requestingUser.LastName),
@@ -123,7 +123,7 @@ namespace AllyisApps.Controllers
 				string userEmail = orgAddMembers.Email.Trim();
 				if (Service.IsEmailAddressValid(userEmail))
 				{ // If input string kinda looks like an email..
-					UserInfo user = Service.GetUserByEmail(userEmail); // ...Attempt to get the user data by email.
+					User user = Service.GetUserByEmail(userEmail); // ...Attempt to get the user data by email.
 																	   // If that doesn't return null...
 					if (user != null)
 					{
@@ -139,7 +139,7 @@ namespace AllyisApps.Controllers
 					// input string is not associated with an existing user
 					// so send them an email and let them know of the request
 					orgAddMembers.EmailedUsers.Add(userEmail);
-					UserInfo requestingUser = Service.GetUserInfo();
+					User requestingUser = Service.GetUser();
 					int code = new Random().Next(100000);
 					int invitationId = await Service.InviteNewUser(
 						string.Format("{0} {1}", requestingUser.FirstName, requestingUser.LastName),

@@ -14,7 +14,7 @@ namespace AllyisApps.ViewModels.Auth
 	/// </summary>
 	public class SubscriptionRoleSelectionModel : BaseViewModel
 	{
-		private IEnumerable<SubscriptionRoleInfo> roles;
+		private IEnumerable<SubscriptionRole> roles;
 
 		/// <summary>
 		/// Gets or sets the subscriptionId.
@@ -29,7 +29,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets the role objects associated with this subscription.
 		/// </summary>
-		public IEnumerable<SubscriptionRoleInfo> Roles
+		public IEnumerable<SubscriptionRole> Roles
 		{
 			get
 			{
@@ -38,7 +38,7 @@ namespace AllyisApps.ViewModels.Auth
 
 			internal set
 			{
-				foreach (SubscriptionRoleInfo role in value)
+				foreach (SubscriptionRole role in value)
 				{
 					role.Name = AllyisApps.Resources.ViewModels.Org.Strings.ResourceManager.GetString(role.Name.Replace(" ", string.Empty)) ?? role.Name;
 				}

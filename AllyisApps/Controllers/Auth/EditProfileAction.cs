@@ -25,7 +25,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The result of this action.</returns>
 		public ActionResult EditProfile(string returnUrl)
 		{
-			UserInfo userInfo = Service.GetUserInfo();
+			User userInfo = Service.GetUser();
 			EditProfileViewModel model = new EditProfileViewModel
 			{
 				Email = userInfo.Email,
@@ -59,7 +59,7 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				await Task.Factory.StartNew(() => Service.SaveUserInfo(new UserInfo
+				await Task.Factory.StartNew(() => Service.SaveUserInfo(new User
 				{
 					UserId = UserContext.UserId,
 					Email = model.Email,

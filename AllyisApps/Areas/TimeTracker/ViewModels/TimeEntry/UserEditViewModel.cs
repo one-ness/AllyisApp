@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
 using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
@@ -27,11 +26,11 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets all projects available to the user.
 		/// </summary>
-		public IEnumerable<ProjectInfo> AllProjects { get; set; }
+		public IEnumerable<Services.Project> AllProjects { get; set; }
 
 		/// <summary>
 		/// Gets or sets the projects associated with the user.
 		/// </summary>
-		public IEnumerable<ProjectInfo> UserProjects { get; set; }
+		public IEnumerable<Services.Project> UserProjects { get; set; }
 	}
 }

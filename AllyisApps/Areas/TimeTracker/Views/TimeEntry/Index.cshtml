@@ -125,7 +125,7 @@ ViewBag.RenderSidebar = true;}
                 @{ var count = 0;
                     var pageCount = 1;
                     var hide = "";
-                    foreach (UserInfo user in Model.Users)
+                    foreach (User user in Model.Users)
                     {
                         pageCount = 1 + (count / Model.PageUserSize);
                         hide = "flex"; // All are originally shown so that the widths get calculated correctly (accounting for scroll bar). Pages after page 1 are then hidden when page loads.

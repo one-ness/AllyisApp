@@ -250,16 +250,16 @@ namespace AllyisApps.Services.TimeTracker
 		}
 
 		/// <summary>
-		/// Gets a list of CustomerInfos for all customers in the organization, a list of CompleteProjectInfos for all
+		/// Gets a list of Customers for all customers in the organization, a list of CompleteProjectInfos for all
 		/// projects in the organization, and a list of SubscriptionUserInfos for all users in the current subscription.
 		/// </summary>
 		/// <param name="orgId">Organization Id. If null, current organization will be used.</param>
 		/// <returns></returns>
-		public Tuple<List<CustomerInfo>, List<CompleteProjectInfo>, List<SubscriptionUserInfo>> GetReportInfo(int? orgId = null)
+		public Tuple<List<Customer>, List<CompleteProjectInfo>, List<SubscriptionUserInfo>> GetReportInfo(int? orgId = null)
 		{
 			var spResults = DBHelper.GetReportInfo(orgId == null ? UserContext.ChosenOrganizationId : orgId.Value, UserContext.ChosenSubscriptionId);
 			return Tuple.Create(
-				spResults.Item1.Select(cdb => Service.InitializeCustomerInfo(cdb)).ToList(),
+				spResults.Item1.Select(cdb => Service.InitializeCustomer(cdb)).ToList(),
 				spResults.Item2.Select(cpdb => Service.InitializeCompleteProjectInfo(cpdb)).ToList(),
 				spResults.Item3.Select(sudb => Service.InitializeSubscriptionUserInfo(sudb)).ToList());
 		}
@@ -621,7 +621,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// Returns a SettingsInfo for the current organization's TimeTracker settings (with only start of week and
 		/// lock date fields populated), a list of PayClassInfos for all the organization's pay classes, a list of
 		/// Holidays for all the organization's holidays, a list of CompleteProjectInfos for all projects
-		/// in the current org that the given user is or has been assigned to (active or not), a list of UserInfos
+		/// in the current org that the given user is or has been assigned to (active or not), a list of Users
 		/// for all the users in the org who are users of the time tracker subscription, and a list of TimeEntryInfos
 		/// for all time entries for the given user in the given time range.
 		/// </summary>
@@ -629,7 +629,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
 		/// <returns></returns>
-		public Tuple<SettingsInfo, List<PayClassInfo>, List<Holiday>, List<CompleteProjectInfo>, List<UserInfo>, List<TimeEntryInfo>>
+		public Tuple<SettingsInfo, List<PayClassInfo>, List<Holiday>, List<CompleteProjectInfo>, List<User>, List<TimeEntryInfo>>
 			GetTimeEntryIndexInfo(DateTime? startingDate, DateTime? endingDate, int? userId = null)
 		{
 			#region Validation
@@ -654,7 +654,7 @@ namespace AllyisApps.Services.TimeTracker
 				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
 				spResults.Item3.Select(hdb => InitializeHoliday(hdb)).ToList(),
 				spResults.Item4.Select(cpdb => Service.InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item5.Select(udb => Service.InitializeUserInfo(udb)).ToList(),
+				spResults.Item5.Select(udb => Service.InitializeUser(udb)).ToList(),
 				spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList());
 		}
 

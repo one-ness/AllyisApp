@@ -59,7 +59,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return this.View(model);
 				}
 
-				int? customerId = Service.CreateCustomer(new CustomerInfo()
+				int? customerId = Service.CreateCustomer(new Customer()
 				{
 					ContactEmail = model.ContactEmail,
 					Name = model.Name,

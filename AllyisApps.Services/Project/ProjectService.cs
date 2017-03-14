@@ -19,11 +19,11 @@ namespace AllyisApps.Services
 	public partial class Service : BaseService
 	{
 		/// <summary>
-		/// Gets a list of <see cref="ProjectInfo"/>'s for a customer.
+		/// Gets a list of <see cref="Project"/>'s for a customer.
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
 		/// <returns>List of ProjectInfo's.</returns>
-		public IEnumerable<ProjectInfo> GetProjectsByCustomer(int customerId)
+		public IEnumerable<Project> GetProjectsByCustomer(int customerId)
 		{
 			if (customerId <= 0)
 			{
@@ -31,12 +31,12 @@ namespace AllyisApps.Services
 			}
 
 			IEnumerable<ProjectDBEntity> dbeList = DBHelper.GetProjectsByCustomer(customerId);
-			List<ProjectInfo> list = new List<ProjectInfo>();
+			List<Project> list = new List<Project>();
 			foreach (ProjectDBEntity dbe in dbeList)
 			{
 				if (dbe != null)
 				{
-					list.Add(InitializeProjectInfo(dbe));
+					list.Add(InitializeProject(dbe));
 				}
 			}
 
@@ -46,9 +46,9 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Creates a new project.
 		/// </summary>
-		/// <param name="newProject">ProjectInfo with project information.</param>
+		/// <param name="newProject">Project with project information.</param>
 		/// <returns>Project Id.</returns>
-		public int CreateProject(ProjectInfo newProject)
+		public int CreateProject(Project newProject)
 		{
 			#region Validation
 
@@ -89,14 +89,14 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.CreateProject(GetDBEntityFromProjectInfo(newProject));
+			return DBHelper.CreateProject(GetDBEntityFromProject(newProject));
 		}
 
 		/// <summary>
 		/// Updates a project's properties.
 		/// </summary>
-		/// <param name="project">ProjectInfo with updated properties.</param>
-		public void UpdateProject(ProjectInfo project)
+		/// <param name="project">Project with updated properties.</param>
+		public void UpdateProject(Project project)
 		{
 			#region Validation
 
@@ -134,7 +134,7 @@ namespace AllyisApps.Services
 
 			if (this.Can(Actions.CoreAction.EditProject))
 			{
-				DBHelper.UpdateProject(GetDBEntityFromProjectInfo(project));
+				DBHelper.UpdateProject(GetDBEntityFromProject(project));
 			}
 		}
 
@@ -341,7 +341,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="projectId">Project Id.</param>
 		/// <returns></returns>
-		public Tuple<CompleteProjectInfo, List<UserInfo>, List<SubscriptionUserInfo>> GetProjectEditInfo(int projectId)
+		public Tuple<CompleteProjectInfo, List<User>, List<SubscriptionUserInfo>> GetProjectEditInfo(int projectId)
 		{
 			if (projectId < 0)
 			{
@@ -351,7 +351,7 @@ namespace AllyisApps.Services
 			var spResults = DBHelper.GetProjectEditInfo(projectId, UserContext.ChosenSubscriptionId);
 			return Tuple.Create(
 				InitializeCompleteProjectInfo(spResults.Item1),
-				spResults.Item2.Select(udb => InitializeUserInfo(udb)).ToList(),
+				spResults.Item2.Select(udb => InitializeUser(udb)).ToList(),
 				spResults.Item3.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());
 		}
 
@@ -374,9 +374,14 @@ namespace AllyisApps.Services
 				spResults.Item2.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());
 		}
 
-		public IEnumerable<ProjectInfo> GetAllProjectsForOrganization(int orgId)
+		/// <summary>
+		/// Gets all the projects in every customer in the entire organization.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns>All the projects in the organization.</returns>
+		public IEnumerable<Project> GetAllProjectsForOrganization(int orgId)
 		{
-			var result = new List<ProjectInfo>();
+			var result = new List<Project>();
 			foreach (var customer in this.GetCustomerList(orgId))
 			{
 				result.AddRange(this.GetProjectsByCustomer(customer.CustomerId));
@@ -386,18 +391,18 @@ namespace AllyisApps.Services
 
 		#region Info-DBEntity Conversions
 		/// <summary>
-		/// Translates a <see cref="ProjectDBEntity"/> into a <see cref="ProjectInfo"/>.
+		/// Translates a <see cref="ProjectDBEntity"/> into a <see cref="Project"/>.
 		/// </summary>
 		/// <param name="project">ProjectDBEntity instance.</param>
-		/// <returns>ProjectInfo instance.</returns>
-		public static ProjectInfo InitializeProjectInfo(ProjectDBEntity project)
+		/// <returns>Project instance.</returns>
+		public static Project InitializeProject(ProjectDBEntity project)
 		{
 			if (project == null)
 			{
 				return null;
 			}
 
-			return new ProjectInfo
+			return new Project
 			{
 				CustomerId = project.CustomerId,
 				EndingDate = project.EndingDate,
@@ -411,11 +416,11 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates a <see cref="ProjectInfo"/> into a <see cref="ProjectDBEntity"/>.
+		/// Translates a <see cref="Project"/> into a <see cref="ProjectDBEntity"/>.
 		/// </summary>
-		/// <param name="project">ProjectInfo instance.</param>
+		/// <param name="project">Project instance.</param>
 		/// <returns>ProjectDBEntity instance.</returns>
-		public static ProjectDBEntity GetDBEntityFromProjectInfo(ProjectInfo project)
+		public static ProjectDBEntity GetDBEntityFromProject(Project project)
 		{
 			if (project == null)
 			{

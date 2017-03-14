@@ -18,7 +18,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the user's info object.
 		/// </summary>
-		public UserInfo UserInfo { get; set; }
+		public User UserInfo { get; set; }
 
 		/// <summary>
 		/// Gets or sets the users subscriptions.

@@ -55,7 +55,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the list of Customers for this organization.
 		/// </summary>
-		public IEnumerable<CustomerInfo> Customers { get; internal set; }
+		public IEnumerable<Services.Customer> Customers { get; internal set; }
 
 		/// <summary>
 		/// Gets the Select List of Customers for this organization.

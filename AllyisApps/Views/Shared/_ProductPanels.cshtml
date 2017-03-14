@@ -25,7 +25,7 @@
 
     List<dynamic> product_boxes = new List<dynamic>();
 
-    foreach (ProductInfo prod in Model.ProductList)
+    foreach (Product prod in Model.ProductList)
     {
         product_boxes.Add(package(prod.ProductId, prod.ProductName, string.Format("/Content/icons/{0}.png", prod.ProductName)));
     }

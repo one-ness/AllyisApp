@@ -49,11 +49,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					reportVM = this.ConstructReportViewModel(UserContext.UserId, orgId, Service.Can(Actions.CoreAction.TimeTrackerEditOthers), infos.Item1, infos.Item2);
 				}
 				
-				//reportVM.StartOfWeek = (int)TimeTrackerService.GetStartOfWeek();
-				reportVM.UserView = this.GetUserSelectList(infos.Item3/*orgId*/, reportVM.Selection.Users);
-				reportVM.CustomerView = this.GetCustomerSelectList(infos.Item1/*orgId*/, reportVM.Selection.CustomerId);
-				reportVM.ProjectView = this.GetProjectSelectList(infos.Item2/*orgId*/, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
-				//reportVM.PreviewPageNum = reportVM.Selection.Page;
+				reportVM.UserView = this.GetUserSelectList(infos.Item3, reportVM.Selection.Users);
+				reportVM.CustomerView = this.GetCustomerSelectList(infos.Item1, reportVM.Selection.CustomerId);
+				reportVM.ProjectView = this.GetProjectSelectList(infos.Item2, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
 
 				return this.View(reportVM);
 			}
@@ -70,12 +68,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="userId">The users's ID.</param>
 		/// <param name="organizationId">The organization's ID.</param>
 		/// <param name="canManage">Is user a manager.</param>
-		/// <param name="customers">List of CustomerInfos for organization.</param>
+		/// <param name="customers">List of Customers for organization.</param>
 		/// <param name="projects">List of CompleteProjectInfos for organization.</param>
 		/// <param name="showExport">Variable to show or hide export button.</param>
 		/// <param name="previousSelections">An object holding previous report selection data.</param>
 		/// <returns>The ReportViewModel.</returns>
-		public ReportViewModel ConstructReportViewModel(int userId, int organizationId, bool canManage, List<CustomerInfo> customers, List<CompleteProjectInfo> projects, bool showExport = true, ReportSelectionModel previousSelections = null)
+		public ReportViewModel ConstructReportViewModel(int userId, int organizationId, bool canManage, List<Customer> customers, List<CompleteProjectInfo> projects, bool showExport = true, ReportSelectionModel previousSelections = null)
 		{
 			projects.Insert(0, new CompleteProjectInfo
 			{
@@ -147,10 +145,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="customers">The list of customers.</param>
 		/// <param name="customerSelected">The selected customer.</param>
 		/// <returns>The customer list.</returns>
-		private IEnumerable<SelectListItem> GetCustomerSelectList(List<CustomerInfo> customers/*int organizationId*/, int customerSelected)
+		private IEnumerable<SelectListItem> GetCustomerSelectList(List<Customer> customers/*int organizationId*/, int customerSelected)
 		{
-			IList<CustomerInfo> customerData = customers;//Service.GetCustomerList(organizationId).ToList<CustomerInfo>();
-			customerData.Insert(0, new CustomerInfo { Name = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.NoFilter, CustomerId = 0 });
+			IList<Customer> customerData = customers;//Service.GetCustomerList(organizationId).ToList<CustomerInfo>();
+			customerData.Insert(0, new Customer { Name = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.NoFilter, CustomerId = 0 });
 
 			var cSelectList = new List<SelectListItem>();
 			foreach (var customer in customerData)
@@ -197,8 +195,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Selected = projectSelected == 0,
 					Disabled = false
 				});
-
-				//IList<ProjectInfo> projectData = Service.GetProjectsByCustomer(customerSelected).ToList<ProjectInfo>();
+				
 				List<CompleteProjectInfo> projectData = projects.Where(cpi => cpi.CustomerId == customerSelected).ToList();
 				foreach (var project in projectData)
 				{

@@ -131,7 +131,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The Project ID.</returns>
 		public int CreateProject(EditProjectViewModel model)
 		{
-			return Service.CreateProject(new ProjectInfo()
+			return Service.CreateProject(new Project()
 			{
 				CustomerId = model.ParentCustomerId,
 				Name = model.ProjectName,

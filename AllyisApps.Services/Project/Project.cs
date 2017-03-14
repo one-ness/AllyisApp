@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="ProjectInfo.cs" company="Allyis, Inc.">
+// <copyright file="Project.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// An object for keeping track of all the info related to a given project.
 	/// </summary>
-	public class ProjectInfo
+	public class Project
 	{
 		/// <summary>
 		/// Gets or sets the projects ID number.

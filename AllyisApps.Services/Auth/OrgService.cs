@@ -94,10 +94,10 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the Organization for the current chosen organization, along with OrganizationUserInfos for each user in the
 		/// organization, SubscriptionDisplayInfos for any subscriptions in the organization, InvitationInfos for any invitiations
-		/// pending in the organization, and the organization's billing stripe handle.
+		/// pending in the organization, the organization's billing stripe handle, and a list of all products.
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<Organization, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string, List<ProductInfo>> GetOrganizationManagementInfo()
+		public Tuple<Organization, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string, List<Product>> GetOrganizationManagementInfo()
 		{
 			var spResults = DBHelper.GetOrganizationManagementInfo(UserContext.ChosenOrganizationId);
 			return Tuple.Create(
@@ -106,7 +106,7 @@ namespace AllyisApps.Services
 				spResults.Item3.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
 				spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList(),
 				spResults.Item5,
-				spResults.Item6.Select(pdb => InitializeProductInfo(pdb)).ToList());
+				spResults.Item6.Select(pdb => InitializeProduct(pdb)).ToList());
 		}
 
 		/// <summary>
@@ -130,7 +130,7 @@ namespace AllyisApps.Services
 		/// by invitations.
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<string, List<SubscriptionDisplayInfo>, List<SubscriptionRoleInfo>, List<CompleteProjectInfo>, string> GetAddMemberInfo()
+		public Tuple<string, List<SubscriptionDisplayInfo>, List<SubscriptionRole>, List<CompleteProjectInfo>, string> GetAddMemberInfo()
 		{
 			var spResults = DBHelper.GetAddMemberInfo(UserContext.ChosenOrganizationId);
 			return Tuple.Create(
@@ -738,18 +738,18 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates a ProductDBEntity into a ProductInfo business object.
+		/// Translates a ProductDBEntity into a Product business object.
 		/// </summary>
 		/// <param name="product">ProductDBEntity instance.</param>
-		/// <returns>ProductInfo instance.</returns>
-		public static ProductInfo InitializeProductInfo(ProductDBEntity product)
+		/// <returns>Product instance.</returns>
+		public static Product InitializeProduct(ProductDBEntity product)
 		{
 			if (product == null)
 			{
 				return null;
 			}
 
-			return new ProductInfo
+			return new Product
 			{
 				ProductDescription = product.Description,
 				ProductId = product.ProductId,

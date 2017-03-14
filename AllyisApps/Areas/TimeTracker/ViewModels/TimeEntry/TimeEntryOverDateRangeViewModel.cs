@@ -36,7 +36,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the user's Id.
 		/// </summary>
-		public UserInfo CurrentUser { get; internal set; }
+		public User CurrentUser { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of active projects available.
@@ -61,7 +61,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the list of users for the defined organization.
 		/// </summary>
-		public IEnumerable<UserInfo> Users { get; internal set; }
+		public IEnumerable<User> Users { get; internal set; }
 
 		/// <summary>
 		/// Gets the total number of users.

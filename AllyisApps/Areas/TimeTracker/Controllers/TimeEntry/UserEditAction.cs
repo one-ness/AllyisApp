@@ -40,7 +40,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					UserProjects = infos.Item1,
 					AllProjects = infos.Item2,
 					UserName = infos.Item3
-					//UserName = (userInfo == null) ? null : string.Format("{0} {1}", userInfo.FirstName, userInfo.LastName)
 				});
 			}
 

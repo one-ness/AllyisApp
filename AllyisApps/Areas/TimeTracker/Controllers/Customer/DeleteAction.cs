@@ -23,7 +23,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The Customer index.</returns>
 		public ActionResult Delete(int id)
 		{
-			CustomerInfo customer = Service.GetCustomer(id);
+			Customer customer = Service.GetCustomer(id);
 
 			if (customer != null)
 			{

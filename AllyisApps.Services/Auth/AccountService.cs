@@ -420,22 +420,22 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the user info for the current user.
 		/// </summary>
-		/// <returns>A UserInfo instance with the current user's info.</returns>
-		public UserInfo GetUserInfo()
+		/// <returns>A User instance with the current user's info.</returns>
+		public User GetUser()
 		{
-			return InitializeUserInfo(DBHelper.GetUserInfo(UserContext.UserId));
+			return GetUser(UserContext.UserId);
 		}
 
 		/// <summary>
-		/// Gets the UserInfo for the current user, along with Organizations for each organization the
+		/// Gets the User for the current user, along with Organizations for each organization the
 		/// user is a member of, and InvitationInfos for any invitations for the user.
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<UserInfo, List<Organization>, List<InvitationInfo>> GetUserOrgsAndInvitationInfo()
+		public Tuple<User, List<Organization>, List<InvitationInfo>> GetUserOrgsAndInvitationInfo()
 		{
 			var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
-			return Tuple.Create<UserInfo, List<Organization>, List<InvitationInfo>>(
-				InitializeUserInfo(spResults.Item1),
+			return Tuple.Create<User, List<Organization>, List<InvitationInfo>>(
+				InitializeUser(spResults.Item1),
 				spResults.Item2.Select(odb => InitializeOrganization(odb)).ToList(),
 				spResults.Item3.Select(idb => InitializeInvitationInfo(idb)).ToList());
 		}
@@ -444,15 +444,15 @@ namespace AllyisApps.Services
 		/// Gets the user info for a specific user.
 		/// </summary>
 		/// <param name="userId">User Id.</param>
-		/// <returns>A UserInfo instance with the current user's info.</returns>
-		public UserInfo GetUserInfo(int userId)
+		/// <returns>A User instance with the current user's info.</returns>
+		public User GetUser(int userId)
 		{
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
 			}
 
-			return InitializeUserInfo(DBHelper.GetUserInfo(userId));
+			return InitializeUser(DBHelper.GetUserInfo(userId));
 		}
 
 		/// <summary>
@@ -460,7 +460,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">Email address.</param>
 		/// <returns>A UserInfo instance with the user's info.</returns>
-		public UserInfo GetUserByEmail(string email)
+		public User GetUserByEmail(string email)
 		{
 			if (string.IsNullOrEmpty(email))
 			{
@@ -471,14 +471,14 @@ namespace AllyisApps.Services
 				throw new FormatException("Email address must be in a valid format.");
 			}
 
-			return InitializeUserInfo(DBHelper.GetUserByEmail(email));
+			return InitializeUser(DBHelper.GetUserByEmail(email));
 		}
 
 		/// <summary>
 		/// Saves the user info in the database.
 		/// </summary>
 		/// <param name="model">UserInfo containing updated info.</param>
-		public void SaveUserInfo(UserInfo model)
+		public void SaveUserInfo(User model)
 		{
 			if (model == null)
 			{
@@ -808,18 +808,18 @@ namespace AllyisApps.Services
 
 		#region Info-DBEntity Conversions
 		/// <summary>
-		/// Translates a UserDBEntity into a UserInfo business object.
+		/// Translates a UserDBEntity into a User business object.
 		/// </summary>
 		/// <param name="user">UserDBEntity instance.</param>
-		/// <returns>UserInfo instance.</returns>
-		public static UserInfo InitializeUserInfo(UserDBEntity user)
+		/// <returns>User instance.</returns>
+		public static User InitializeUser(UserDBEntity user)
 		{
 			if (user == null)
 			{
 				return null;
 			}
 
-			return new UserInfo
+			return new User
 			{
 				AccessFailedCount = user.AccessFailedCount,
 				ActiveOrganizationId = user.ActiveOrganizationId,
@@ -848,11 +848,11 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates a UserInfo into a UserDBEntity.
+		/// Translates a User into a UserDBEntity.
 		/// </summary>
-		/// <param name="user">UserInfo instance.</param>
+		/// <param name="user">User instance.</param>
 		/// <returns>UserDBEntity instance.</returns>
-		public static UserDBEntity GetDBEntityFromUserInfo(UserInfo user)
+		public static UserDBEntity GetDBEntityFromUser(User user)
 		{
 			if (user == null)
 			{
