@@ -250,6 +250,7 @@
     <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetReportInfo.sql" />
     <Build Include="StoredProcedures\Billing\Billing.GetProductSubscriptionInfo.sql" />
     <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetTimeEntryIndexInfo.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.AcceptInvitation.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

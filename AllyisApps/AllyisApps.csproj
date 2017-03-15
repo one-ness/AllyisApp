@@ -260,9 +260,7 @@
     <Compile Include="Controllers\Auth\TemplateAction.cs" />
     <Compile Include="Controllers\Auth\ViewUser.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
-    <Compile Include="Controllers\Home\AboutAction.cs" />
     <Compile Include="Controllers\Home\ApplicationRedirectAction.cs" />
-    <Compile Include="Controllers\Home\ContactAction.cs" />
     <Compile Include="Controllers\Home\ErrorAction.cs" />
     <Compile Include="Controllers\Home\GetStatesAction.cs" />
     <Compile Include="Controllers\Home\HelpAction.cs" />

@@ -136,51 +136,55 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Accepts an invitation, adding the user to the invitation's organization, subscriptions, and projects, then deletes the invitations.
 		/// </summary>
-		/// <param name="invite">The invite.</param>
+		/// <param name="invitationId">The invitationId.</param>
 		/// <returns>The resulting action message.</returns>
-		public string AcceptUserInvitation(InvitationInfo invite)
+		public string AcceptUserInvitation(int invitationId)
 		{
 			#region Validation
 
-			if (invite == null)
+			if (invitationId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("invite", "The invitation is null.");
+				throw new ArgumentOutOfRangeException("invitationId", "The invitation id cannot be zero or negative.");
 			}
 
 			#endregion Validation
 
-			var user = this.GetUserByEmail(invite.Email);
-			if (invite.ProjectId.HasValue)
+			var results = DBHelper.AcceptInvitation(invitationId);
+
+			//var user = this.GetUserByEmail(invite.Email);
+			//if (invite.ProjectId.HasValue)
+			//{
+			//	this.DBHelper.CreateProjectUser(invite.ProjectId.Value, user.UserId);
+			//}
+
+			//this.DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity() // ...add them to that organization as their organization role.
+			//{
+			//	UserId = user.UserId,
+			//	OrganizationId = invite.OrganizationId,
+			//	OrgRoleId = invite.OrgRole,
+			//	EmployeeId = invite.EmployeeId
+			//});
+
+			//IEnumerable<InvitationSubRole> roles = this.DBHelper.GetInvitationSubRolesByInvitationId(invite.InvitationId).Select(i => InitializeInvitationSubRole(i));
+			//IEnumerable<SubscriptionDisplayInfo> subs = this.DBHelper.GetSubscriptionsDisplayByOrg(invite.OrganizationId).Select(s => InitializeSubscriptionDisplayInfo(s));
+
+			//foreach (InvitationSubRole role in roles)
+			//{
+			//	SubscriptionDisplayInfo currentSub = subs.Where(x => x.SubscriptionId == role.SubscriptionId).SingleOrDefault();
+			//	if (currentSub != null && currentSub.SubscriptionsUsed < currentSub.NumberOfUsers)
+			//	{
+			//		this.DBHelper.UpdateSubscriptionUserProductRole(role.ProductRoleId, role.SubscriptionId, user.UserId);
+			//	}
+			//}
+
+			//this.DBHelper.RemoveUserInvitation(invite.InvitationId);
+
+			if (results == null)
 			{
-				this.DBHelper.CreateProjectUser(invite.ProjectId.Value, user.UserId);
+				return null;
 			}
 
-			this.DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity() // ...add them to that organization as their organization role.
-			{
-				UserId = user.UserId,
-				OrganizationId = invite.OrganizationId,
-				OrgRoleId = invite.OrgRole,
-				EmployeeId = invite.EmployeeId
-			});
-
-			IEnumerable<InvitationSubRole> roles = this.DBHelper.GetInvitationSubRolesByInvitationId(invite.InvitationId).Select(i => InitializeInvitationSubRole(i));
-			IEnumerable<SubscriptionDisplayInfo> subs = this.DBHelper.GetSubscriptionsDisplayByOrg(invite.OrganizationId).Select(s => InitializeSubscriptionDisplayInfo(s));
-
-			foreach (InvitationSubRole role in roles)
-			{
-				SubscriptionDisplayInfo currentSub = subs.Where(x => x.SubscriptionId == role.SubscriptionId).SingleOrDefault();
-				if (currentSub != null && currentSub.SubscriptionsUsed < currentSub.NumberOfUsers)
-				{
-					this.DBHelper.UpdateSubscriptionUserProductRole(role.ProductRoleId, role.SubscriptionId, user.UserId);
-				}
-			}
-
-			this.DBHelper.RemoveUserInvitation(invite.InvitationId);
-			return string.Format(
-				"You have successfully joined {0} as a{1}{2}.",
-				DBHelper.GetOrganization(invite.OrganizationId).Name,
-				invite.OrgRole == (int)OrganizationRole.Member ? " " : "n ",
-				OrganizationRole.Member.ToString());
+			return string.Format("You have successfully joined {0} in the role of {1}.",	results.Item1, results.Item2);
 		}
 
 		/// <summary>

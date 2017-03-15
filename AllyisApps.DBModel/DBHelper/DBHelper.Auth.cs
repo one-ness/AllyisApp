@@ -596,6 +596,36 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Accepts a user invitation, creating records with appropriate roles for organization user,
+		/// project user, and subscription user. Removes invitation and invitation sub roles on success.
+		/// </summary>
+		/// <param name="invitationId">Invitation Id.</param>
+		/// <returns>On success, returns the name of the organization and the name of the organization role.
+		/// If an error occurred, returns null.</returns>
+		public Tuple<string, string> AcceptInvitation(int invitationId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@InvitationId", invitationId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Auth].[AcceptInvitation]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+				if (results == null)
+				{
+					return null;
+				}
+				else
+				{
+					return Tuple.Create(
+						results.Read<string>().FirstOrDefault(),
+						results.Read<string>().FirstOrDefault());
+				}
+			}
+		}
+
+		/// <summary>
 		/// Gets all of the invitations based off of user data.
 		/// </summary>
 		/// <param name="user">A representation of the User's data.</param>
