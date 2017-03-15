@@ -600,12 +600,14 @@ namespace AllyisApps.DBModel
 		/// project user, and subscription user. Removes invitation and invitation sub roles on success.
 		/// </summary>
 		/// <param name="invitationId">Invitation Id.</param>
+		/// <param name="userId">User Id for invited user.</param>
 		/// <returns>On success, returns the name of the organization and the name of the organization role.
 		/// If an error occurred, returns null.</returns>
-		public Tuple<string, string> AcceptInvitation(int invitationId)
+		public Tuple<string, string> AcceptInvitation(int invitationId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@InvitationId", invitationId);
+			parameters.Add("@CallingUserId", userId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
@@ -622,6 +624,27 @@ namespace AllyisApps.DBModel
 						results.Read<string>().FirstOrDefault(),
 						results.Read<string>().FirstOrDefault());
 				}
+			}
+		}
+
+		/// <summary>
+		/// Removes a user invitation and related invitation sub roles.
+		/// </summary>
+		/// <param name="invitationId">Invitation Id.</param>
+		/// <param name="userId">User Id for invited user.</param>
+		/// <returns>True for success, false for error.</returns>
+		public bool RemoveInvitation(int invitationId, int userId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@InvitationId", invitationId);
+			parameters.Add("@CallingUserId", userId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				int success = connection.Query<int>(
+					"[Auth].[RemoveInvitation]",
+					parameters,
+					commandType: CommandType.StoredProcedure).FirstOrDefault();
+				return success == 1;
 			}
 		}
 

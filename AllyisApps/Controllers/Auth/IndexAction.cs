@@ -109,11 +109,12 @@ namespace AllyisApps.Controllers
 		[HttpPost]
 		public ActionResult Reject(int invitationId)
 		{
-			var invitation = Service.GetInvitationsByUser(UserContext.Email).Where(x => x.InvitationId == invitationId).FirstOrDefault();
-			if (invitation != null)
+			//var invitation = Service.GetInvitationsByUser(UserContext.Email).Where(x => x.InvitationId == invitationId).FirstOrDefault();
+			string result = Service.RejectUserInvitation(invitationId);
+			if (result != null)
 			{
 				// Validate that the user does have the requested pending invitation
-				Notifications.Add(new Core.Alert.BootstrapAlert(Service.RejectUserInvitation(invitation), Core.Alert.Variety.Success));
+				Notifications.Add(new Core.Alert.BootstrapAlert(result, Core.Alert.Variety.Success));
 			}
 			else
 			{

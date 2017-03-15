@@ -296,7 +296,7 @@ namespace AllyisApps.Services
 
 			return DBHelper.CreateUserInvitation(GetDBEntityFromInvitationInfo(invitationInfo));
 		}
-
+		
 		/// <summary>
 		/// Removes an invitation.
 		/// </summary>

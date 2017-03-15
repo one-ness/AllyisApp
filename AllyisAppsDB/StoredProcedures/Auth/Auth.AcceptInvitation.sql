@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [Auth].[AcceptInvitation]
-	@InvitationId INT
+	@InvitationId INT,
+	@CallingUserId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -31,8 +32,8 @@ BEGIN
 			WHERE [User].[Email] = @Email
 		)
 
-		IF @UserId IS NOT NULL
-		BEGIN -- Invited user found
+		IF @UserId IS NOT NULL AND @UserId = @CallingUserId
+		BEGIN -- Invited user found and matches calling user id
 			BEGIN TRANSACTION
 
 			-- Add user to organization

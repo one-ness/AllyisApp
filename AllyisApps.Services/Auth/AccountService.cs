@@ -149,7 +149,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			var results = DBHelper.AcceptInvitation(invitationId);
+			var results = DBHelper.AcceptInvitation(invitationId, UserContext.UserId);
 
 			//var user = this.GetUserByEmail(invite.Email);
 			//if (invite.ProjectId.HasValue)
@@ -190,14 +190,19 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Rejects an invitation, deleting it from a user's pending invites.
 		/// </summary>
-		/// <param name="invite">The invitation to reject.</param>
+		/// <param name="invitationId">The id of the invitation to reject.</param>
 		/// <returns>The resulting message.</returns>
-		public string RejectUserInvitation(InvitationInfo invite)
+		public string RejectUserInvitation(int invitationId)
 		{
-			this.DBHelper.RemoveUserInvitation(invite.InvitationId);
-			return string.Format(
-				"The invitation to join {0} has been rejected.",
-				DBHelper.GetOrganization(invite.OrganizationId).Name);
+			//this.DBHelper.RemoveUserInvitation(invite.InvitationId);
+			if (DBHelper.RemoveInvitation(invitationId, UserContext.UserId))
+			{
+				return "The invitation has been rejected.";
+			}
+			else
+			{
+				return null;
+			}
 		}		
 
 		/// <summary>
