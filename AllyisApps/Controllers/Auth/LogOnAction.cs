@@ -144,9 +144,9 @@ namespace AllyisApps.Controllers
 						if (this.UserContext.UserOrganizationInfoList.First().UserSubscriptionInfoList.Count == 0 ||
 							this.UserContext.UserOrganizationInfoList.First().UserSubscriptionInfoList.Count > 1)
 						{
-							// no subs or multiple subs, redirect to subscription management
+							// no subs or multiple subs, redirect to account index
 							this.UserContext.ChosenOrganizationId = this.UserContext.UserOrganizationInfoList.First().OrganizationId;
-							return this.RedirectToSubDomainAction(this.UserContext.UserOrganizationInfoList.First().OrganizationId, null, ActionConstants.Manage, ControllerConstants.Account);
+							return this.RedirectToSubDomainAction(this.UserContext.UserOrganizationInfoList.First().OrganizationId, null, ActionConstants.Index, ControllerConstants.Account);
 						}
 						else
 						{
@@ -156,17 +156,17 @@ namespace AllyisApps.Controllers
 					}
 					else
 					{
-						// They have multiple Organizations, check if any of them match the chosenID
-						var org = this.UserContext.UserOrganizationInfoList.Find(x => x.OrganizationId == this.UserContext.ChosenOrganizationId);
-						if (org != null)
-						{
-							return this.RedirectToSubDomainAction(org.OrganizationId, null, ActionConstants.Manage, ControllerConstants.Account);
-						}
-						else
-						{
+						// They have multiple Organizations, redirect to account index
+						//var org = this.UserContext.UserOrganizationInfoList.Find(x => x.OrganizationId == this.UserContext.ChosenOrganizationId);
+						//if (org != null)
+						//{
+						//	return this.RedirectToSubDomainAction(org.OrganizationId, null, ActionConstants.Manage, ControllerConstants.Account);
+						//}
+						//else
+						//{
 							// otherwise send them to select an org
 							return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
-						}
+						//}
 					}
 				}
 				else

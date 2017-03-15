@@ -25,8 +25,9 @@ namespace AllyisApps.DBModel
 		/// Updates the user with the information specified in the user table.
 		/// </summary>
 		/// <param name="user">The table with the user to create.</param>
+		/// <param name="emailConfirmationCode">The email confirmation code to put in for the user.</param>
 		/// <returns>The ID of the user if one was created -1 if not.</returns>
-		public int CreateUser(UserDBEntity user)
+		public Tuple<int, int> CreateUser(UserDBEntity user, Guid emailConfirmationCode)
 		{
 			if (user == null)
 			{
@@ -46,10 +47,9 @@ namespace AllyisApps.DBModel
 			parameters.Add("@PhoneNumber", user.PhoneNumber);
 			parameters.Add("@DateOfBirth", user.DateOfBirth);
 			parameters.Add("@UserName", user.UserName);
-			parameters.Add("@EmailConfirmed", user.EmailConfirmed);
+			parameters.Add("@EmailConfirmationCode", emailConfirmationCode);
 			parameters.Add("@PasswordHash", user.PasswordHash);
 			parameters.Add("@TwoFactorEnabled", user.TwoFactorEnabled);
-			parameters.Add("@AccessFailedCount", user.AccessFailedCount);
 			parameters.Add("@LockoutEnabled", user.LockoutEnabled);
 			parameters.Add("@LockoutEndDateUtc", user.LockoutEndDateUtc);
 			parameters.Add("@LanguageID", user.LanguagePreference);
@@ -57,10 +57,18 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default null
-				user.UserId = (int)connection.Query<int>("[Auth].[CreateUserInfo]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				//user.UserId = (int)connection.Query<int>("[Auth].[CreateUserInfo]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+
+				var results = connection.QueryMultiple(
+					"[Auth].[CreateUserInfo]", 
+					parameters, 
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<int>().FirstOrDefault(),
+					results.Read<int>().FirstOrDefault());
 			}
 
-			return user.UserId;
+			//return user.UserId;
 		}
 
 		/// <summary>

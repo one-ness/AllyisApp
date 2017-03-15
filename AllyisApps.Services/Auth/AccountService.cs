@@ -219,14 +219,13 @@ namespace AllyisApps.Services
 		/// <param name="postalCode">The new user's postal code.</param>
 		/// <param name="phone">The new user's phone number.</param>
 		/// <param name="password">The new user's password.</param>
+		/// <param name="confirmUrl">The template of the Url for the confirm email link, with userId and code replaced by "{userId}" and "{code}".</param>
 		/// <param name="languagePreference">The new user's language preference.</param>
-		/// <param name="emailConfirmed">A boolean representing whether the new user's email has been confirmed.  Defaults to false.</param>
-		/// <param name="accessFailedCount">A count of the number of times the user has failed to access their account. Defaults to 0.</param>
 		/// <param name="twoFactorEnabled">A boolean representing whether the new user has enabled 2FA. Defaults to false.</param>
 		/// <param name="lockOutEnabled">A boolean representing whether the new user is locked out from failed access attempts.  Defaults to false.</param>
 		/// <param name="lockOutEndDateUtc">The time whent the user's lockout will end.  Defaults to null.</param>
 		/// <returns>Returns 0 if user already exists, 0 if there is failure.</returns>
-		public int SetupNewUser(
+		public async Task<Tuple<int, int>> SetupNewUser(
 			string email,
 			string firstName,
 			string lastName,
@@ -239,8 +238,7 @@ namespace AllyisApps.Services
 			string phone,
 			string password,
 			int languagePreference,
-			bool emailConfirmed = false,
-			int accessFailedCount = 0,
+			string confirmUrl,
 			bool twoFactorEnabled = false,
 			bool lockOutEnabled = false,
 			DateTime? lockOutEndDateUtc = null)
@@ -268,7 +266,8 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			int result = 0;
+			//int result = 0;
+			Tuple<int, int> result = null;
 			try
 			{
 				UserDBEntity entity = new UserDBEntity()
@@ -284,22 +283,24 @@ namespace AllyisApps.Services
 					PostalCode = postalCode,
 					PhoneNumber = phone,
 					PasswordHash = Crypto.GetPasswordHash(password), //Crypto.ComputeSHA512Hash(password),
-					EmailConfirmed = emailConfirmed,
-					AccessFailedCount = accessFailedCount,
 					TwoFactorEnabled = twoFactorEnabled,
 					LockoutEnabled = lockOutEnabled,
 					LockoutEndDateUtc = lockOutEndDateUtc,
 					LanguagePreference = languagePreference
 				};
+				Guid emailConfirmCode = Guid.NewGuid();
+				result = this.DBHelper.CreateUser(entity, emailConfirmCode);
 
-				result = this.DBHelper.CreateUser(entity);
+				// send confirmation email
+				string url = confirmUrl.Replace("%7BuserId%7D", result.Item1.ToString()).Replace("%7Bcode%7D", emailConfirmCode.ToString());
+				await SendConfirmationEmail("support@allyisapps.com", email, url);
 			}
 			catch (SqlException ex)
 			{
 				if (ex.Message.ToLower().Contains("unique"))
 				{
 					// unique constraint violation of email
-					result = 0;
+					result = null;
 				}
 				else
 				{

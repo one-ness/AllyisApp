@@ -11,8 +11,7 @@
 	@DateOfBirth DATETIME2(0),
 	@UserName NVARCHAR(256),
 	@PasswordHash NVARCHAR(MAX),
-	@EmailConfirmed BIT,
-	@AccessFailedCount INT,
+	@EmailConfirmationCode UNIQUEIDENTIFIER,
 	@TwoFactorEnabled BIT,
 	@LockoutEnabled BIT,
 	@LockoutEndDateUtc DATE,
@@ -36,6 +35,7 @@ BEGIN
 		[DateOfBirth],
 		[UserName],
 		[PasswordHash],
+		[EmailConfirmationCode],
 		[EmailConfirmed],
 		[TwoFactorEnabled],
 		[AccessFailedCount],
@@ -55,12 +55,17 @@ BEGIN
 		@DateOfBirth, 
 		@Email, 
 		@PasswordHash, 
-		COALESCE(@EmailConfirmed,0),
+		@EmailConfirmationCode,
+		0,
 		COALESCE(@TwoFactorEnabled,0),
-		COALESCE(@AccessFailedCount,0),
+		0,
 		COALESCE(@LockoutEnabled,0),
 		COALESCE(@LockoutEndDateUtc,NULL),
 		@LanguageID);
 
 	SELECT SCOPE_IDENTITY();
+
+	SELECT COUNT(*)
+	FROM [Auth].[Invitation] 
+	WHERE [Invitation].[Email] = @Email
 END

@@ -663,8 +663,15 @@ namespace AllyisApps.Services
 											LastName = names[1],
 											PasswordHash = Lib.Crypto.GetPasswordHash("password")//ComputeSHA512Hash("password") // TODO: Figure out a better default password generation system
 										};
-										user.UserId = DBHelper.CreateUser(GetDBEntityFromUser(user));
-										result.UsersImported += 1;
+										Tuple<int, int> userIdAndInviteCount = DBHelper.CreateUser(GetDBEntityFromUser(user), Guid.NewGuid());
+										if (userIdAndInviteCount != null)
+										{
+											result.UsersImported += 1;
+										}
+										else
+										{
+											result.UserFailures.Add(string.Format("Could not create user {0} {1}: error adding user to database.", names[0], names[1]));
+										}
 									}
 									if (user.UserId != -1)
 									{

@@ -51,20 +51,18 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				// create new user in the db.
-				int userID = Service.SetupNewUser(model.Email, model.FirstName, model.LastName, model.DateOfBirth, model.Address, model.City, model.State, model.Country, model.PostalCode, model.PhoneNumber, model.Password, 1); // TODO: Change language preference from 1 to a value grabbed from session/URL
+				// generate confirm email url template
+				string confirmUrl = Url.Action(ActionConstants.ConfirmEmail, ControllerConstants.Account, new { userId = "{userId}", code = "{code}" }, protocol: Request.Url.Scheme);
 
-				if (userID > 0)
+				// create new user in the db and get back the userId and count of invitations
+				System.Tuple<int, int> userIDandInviteCount = await Service.SetupNewUser(model.Email, model.FirstName, model.LastName, model.DateOfBirth, model.Address, model.City, model.State, model.Country, model.PostalCode, model.PhoneNumber, model.Password, 1, confirmUrl); // TODO: Change language preference from 1 to a value grabbed from session/URL
+				
+				if (userIDandInviteCount != null)
 				{
 					// sign in (and set cookie)
-					this.SignIn(userID, model.FirstName, model.Email, Response);
+					this.SignIn(userIDandInviteCount.Item1, model.FirstName, model.Email, Response);
 
-					// send confirmation email
-					string confirmCode = await Service.GetConfirmEmailCode(userID);
-					string url = Url.Action(ActionConstants.ConfirmEmail, ControllerConstants.Account, new { userId = userID, code = confirmCode }, protocol: Request.Url.Scheme);
-					await Service.SendConfirmationEmail("support@allyisapps.com", model.Email, url);
-
-					if (Service.GetInvitationsByUser(model.Email).Count > 0)
+					if (userIDandInviteCount.Item2 > 0)
 					{
 						// If the user was invited, redirect to the index page to display invitations
 						return this.RedirectToAction(ActionConstants.Index);
