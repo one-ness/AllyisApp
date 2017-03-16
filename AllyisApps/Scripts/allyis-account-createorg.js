@@ -10,7 +10,7 @@ $("#Name").on("paste keyup", _.debounce(function () {
     validateSubdomain();
 }, 250));
 
-function validateSubdomainTEMP() {
+function validateSubdomain() {
     var subdomain = $("#SubdomainName").val();
     subdomain = subdomain.trim();
     if (subdomain == oldSubdomainName) {

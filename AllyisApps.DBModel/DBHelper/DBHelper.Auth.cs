@@ -355,7 +355,8 @@ namespace AllyisApps.DBModel
 		/// Updates the specified organization with new information.
 		/// </summary>
 		/// <param name="org">The organization table with updates.</param>
-		public void UpdateOrganization(OrganizationDBEntity org)
+		/// <returns>True for success, false if the subdomain name is changed to something already taken.</returns>
+		public bool UpdateOrganization(OrganizationDBEntity org)
 		{
 			if (org == null)
 			{
@@ -376,7 +377,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@SubdomainName", org.Subdomain);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Auth].[UpdateOrg]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<int>("[Auth].[UpdateOrg]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault() == 1;
 			}
 		}
 

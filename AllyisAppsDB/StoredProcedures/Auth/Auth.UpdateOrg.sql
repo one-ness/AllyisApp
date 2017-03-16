@@ -12,17 +12,31 @@
 	@SubdomainName NVARCHAR (40)
 AS
 BEGIN
-	SET NOCOUNT ON;
-	UPDATE [Auth].[Organization]
-	SET [Name] = @Name,
-		[SiteUrl] = @SiteUrl,
-		[Address] = @Address,
-		[City] = @City,
-		[State] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
-		[Country] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
-		[PostalCode] = @PostalCode,
-		[PhoneNumber] = @PhoneNumber,
-		[FaxNumber] = @FaxNumber,
-		[Subdomain] = @SubdomainName
-	WHERE [OrganizationId] = @Id	
+	IF EXISTS (
+		SELECT * FROM [Auth].[Organization] WITH (NOLOCK)
+		WHERE [Subdomain] = @SubdomainName AND [OrganizationId] != @Id
+	)
+	BEGIN
+		-- Subdomain is not unique
+		SELECT 0;
+	END
+	ELSE
+	BEGIN
+
+		SET NOCOUNT ON;
+		UPDATE [Auth].[Organization]
+		SET [Name] = @Name,
+			[SiteUrl] = @SiteUrl,
+			[Address] = @Address,
+			[City] = @City,
+			[State] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
+			[Country] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
+			[PostalCode] = @PostalCode,
+			[PhoneNumber] = @PhoneNumber,
+			[FaxNumber] = @FaxNumber,
+			[Subdomain] = @SubdomainName
+		WHERE [OrganizationId] = @Id
+		
+		SELECT 1;
+	END	
 END
