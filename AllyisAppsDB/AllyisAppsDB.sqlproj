@@ -252,6 +252,7 @@
     <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetTimeEntryIndexInfo.sql" />
     <Build Include="StoredProcedures\Auth\Auth.AcceptInvitation.sql" />
     <Build Include="StoredProcedures\Auth\Auth.RemoveInvitation.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.GetPasswordHashFromUserId.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

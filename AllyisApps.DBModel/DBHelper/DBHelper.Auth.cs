@@ -228,22 +228,42 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Updates new password in Auth.User table.
+		/// Returns the password hash for the given user.
 		/// </summary>
-		/// <param name = "userId">Target user's ID.</param>
-		/// <param name = "password">The subscription's ID.</param>
-		public void UpdateUserPassword(int userId, string password)
+		/// <param name="userId">User id.</param>
+		/// <returns>Password hash.</returns>
+		public string GetPasswordHashById(int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userID", userId);
-			parameters.Add("@PasswordHash", password);
+			parameters.Add("@UserId", userId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute(
+				return connection.Query<string>(
+					"[Auth].[GetPasswordHashFromUserId]",
+					parameters,
+					commandType: CommandType.StoredProcedure).FirstOrDefault();
+			}
+		}
+
+		/// <summary>
+		/// Updates new password in Auth.User table.
+		/// </summary>
+		/// <param name = "userId">Target user's ID.</param>
+		/// <param name = "passwordHash">The new password hash.</param>
+		/// <returns>The password hash retreived independently after the update, for verification.</returns>
+		public string UpdateUserPassword(int userId, string passwordHash)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@userID", userId);
+			parameters.Add("@PasswordHash", passwordHash);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<string>(
 					"[Auth].[UpdateUserPassword]",
 					parameters,
-					commandType: CommandType.StoredProcedure);
+					commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 

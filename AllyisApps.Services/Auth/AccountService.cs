@@ -655,6 +655,7 @@ namespace AllyisApps.Services
 		/// <returns>True for a successful change, false if anything fails.</returns>
 		public bool ChangePassword(string oldPassword, string newPassword)
 		{
+			#region Validation
 			if (string.IsNullOrEmpty(oldPassword))
 			{
 				throw new ArgumentNullException("oldPassword", "Old password must have a value.");
@@ -663,18 +664,16 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("newPassword", "New password must have a value.");
 			}
+			#endregion
 
-			var userInfo = DBHelper.Instance.GetUserInfo(Convert.ToInt32(UserContext.UserId));
-			UserDBEntity user = DBHelper.Instance.GetUserByEmail(userInfo.Email);
-			if (user != null && Crypto.ValidatePassword(oldPassword, user.PasswordHash)/*string.Compare(this.GetPasswordHash(oldPassword), user.PasswordHash, true) == 0*/)
+			string passwordHash = DBHelper.GetPasswordHashById(UserContext.UserId);
+			if (passwordHash != null && Crypto.ValidatePassword(oldPassword, passwordHash))
 			{
-				DBHelper.UpdateUserPassword(UserContext.UserId, this.GetPasswordHash(newPassword));
+				string updatedHash = DBHelper.UpdateUserPassword(UserContext.UserId, this.GetPasswordHash(newPassword));
 
-				user = DBHelper.GetUserByEmail(userInfo.Email);
-
-				if (user != null)
+				if (updatedHash != null)
 				{
-					return Crypto.ValidatePassword(newPassword, user.PasswordHash)/*string.Compare(this.GetPasswordHash(newPassword), user.PasswordHash) == 0*/;
+					return Crypto.ValidatePassword(newPassword, updatedHash);
 				}
 			}
 

@@ -6,4 +6,8 @@ BEGIN
 	UPDATE [Auth].[User]
 	SET [PasswordHash] = @PasswordHash
 	WHERE [UserId] = @UserId
+
+	SELECT [PasswordHash]
+	FROM [Auth].[User] WITH (NOLOCK)
+	WHERE [UserId] = @UserId
 END
