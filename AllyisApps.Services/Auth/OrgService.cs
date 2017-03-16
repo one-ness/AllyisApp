@@ -60,7 +60,7 @@ namespace AllyisApps.Services
 		/// <param name="organization">Organization.</param>
 		/// <param name="ownerId">Organization owner user Id.</param>
 		/// <param name="employeeId">Organization owner employee Id.</param>
-		/// <returns>Organizaiton Id.</returns>
+		/// <returns>Organizaiton Id, or -1 if the subdomain name is taken.</returns>
 		public int CreateOrganization(Organization organization, int ownerId, string employeeId)
 		{
 			if (organization == null)

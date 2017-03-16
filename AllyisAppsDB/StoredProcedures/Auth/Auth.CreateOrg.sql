@@ -18,33 +18,51 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
 
-    BEGIN TRANSACTION
-        INSERT INTO [Auth].[Organization] 
-                ([Name], 
-                [SiteUrl], 
-                [Address], 
-                [City], 
-                [State], 
-                [Country], 
-                [PostalCode], 
-                [PhoneNumber], 
-                [FaxNumber], 
-                [Subdomain])
-        VALUES (@Name,
-                @SiteUrl,
-                @Address,
-                @City, 
-                (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State), 
-                (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
-                @PostalCode,
-                @PhoneNumber,
-                @FaxNumber,
-                @Subdomain);
+	IF EXISTS (
+		SELECT * FROM [Auth].[Organization] WITH (NOLOCK)
+		WHERE [Subdomain] = @Subdomain
+	)
+	BEGIN
+		-- Subdomain is not unique
+		SET @retId = -1;
+	END
+	ELSE
+	BEGIN
+		BEGIN TRANSACTION
+			-- Create org
+			INSERT INTO [Auth].[Organization] 
+					([Name], 
+					[SiteUrl], 
+					[Address], 
+					[City], 
+					[State], 
+					[Country], 
+					[PostalCode], 
+					[PhoneNumber], 
+					[FaxNumber], 
+					[Subdomain])
+			VALUES (@Name,
+					@SiteUrl,
+					@Address,
+					@City, 
+					(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State), 
+					(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
+					@PostalCode,
+					@PhoneNumber,
+					@FaxNumber,
+					@Subdomain);
 
-        SET @retId = SCOPE_IDENTITY();
+			SET @retId = SCOPE_IDENTITY();
 
-        EXEC [Auth].[CreateOrgUser] @UserId, @retId, @RoleId, @EmployeeId;
-    COMMIT TRANSACTION
+			EXEC [Auth].[CreateOrgUser] @UserId, @retId, @RoleId, @EmployeeId;
 
-    SELECT SCOPE_IDENTITY();
+			-- Set users's chosen organization to new org
+			UPDATE [Auth].[User]
+			SET [ActiveOrganizationId] = @retId
+			WHERE [UserId] = @UserId
+
+		COMMIT TRANSACTION
+
+		SELECT @retId;
+	END
 END

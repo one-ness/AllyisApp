@@ -312,13 +312,13 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Adds an organization to the database.
+		/// Adds an organization to the database and sets the owner's chosen organization to the new org.
 		/// </summary>
 		/// <param name="org">The OrganizationDBEntity to create.</param>
 		/// <param name="ownerId">The owner's user ID.</param>
 		/// <param name="roleId">The role associated with the creator of the organization.</param>
 		/// <param name="employeeId">The employee ID for the user creating the organization.</param>
-		/// <returns>The id of the created organization or -1.</returns>
+		/// <returns>The id of the created organization or -1 if the subdomain name is taken.</returns>
 		public int CreateOrganization(OrganizationDBEntity org, int ownerId, int roleId, string employeeId)
 		{
 			if (org == null)

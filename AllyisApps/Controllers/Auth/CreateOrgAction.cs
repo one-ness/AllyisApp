@@ -38,10 +38,10 @@ namespace AllyisApps.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult CreateOrg(EditOrganizationViewModel model)
 		{
-			if (!this.IsSubdomainNameUnique(model.SubdomainName))
-			{
-				ModelState.AddModelError(string.Empty, Resources.Controllers.Auth.Strings.SubdomainTaken);
-			}
+			//if (!this.IsSubdomainNameUnique(model.SubdomainName))
+			//{
+			//	ModelState.AddModelError(string.Empty, Resources.Controllers.Auth.Strings.SubdomainTaken);
+			//}
 
 			if (model != null && ModelState.IsValid)
 			{
@@ -62,11 +62,22 @@ namespace AllyisApps.Controllers
 					UserContext.UserId,
 					model.EmployeeId);
 
-				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.OrganizationCreatedNotification, Variety.Success));
+				if (orgId == -1)
+				{
+					ModelState.AddModelError(string.Empty, Resources.Controllers.Auth.Strings.SubdomainTaken);
+					return this.View(model);
+				}
+				else
+				{
+					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.OrganizationCreatedNotification, Variety.Success));
+					return this.RedirectToSubDomainAction(orgId, null, ActionConstants.Index, ControllerConstants.Account);
+				}
 
-				Service.UpdateActiveOrganization(UserContext.UserId, orgId);
+				//Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.OrganizationCreatedNotification, Variety.Success));
 
-				return this.RedirectToSubDomainAction(orgId, null, ActionConstants.Index, ControllerConstants.Account);
+				//Service.UpdateActiveOrganization(UserContext.UserId, orgId);
+
+				//return this.RedirectToSubDomainAction(orgId, null, ActionConstants.Index, ControllerConstants.Account);
 			}
 
 			// Something happened, reload this view
