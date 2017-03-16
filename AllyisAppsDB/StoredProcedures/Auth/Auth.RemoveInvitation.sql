@@ -26,7 +26,7 @@ BEGIN
 			WHERE [User].[Email] = @Email
 		)
 
-		IF @UserId IS NOT NULL AND @UserId = @CallingUserId
+		IF @UserId IS NOT NULL AND (@UserId = @CallingUserId OR @CallingUserId = -1)
 		BEGIN -- Invited user found and matches calling user
 			BEGIN TRANSACTION
 

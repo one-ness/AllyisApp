@@ -661,7 +661,7 @@ namespace AllyisApps.DBModel
 		/// Removes a user invitation and related invitation sub roles.
 		/// </summary>
 		/// <param name="invitationId">Invitation Id.</param>
-		/// <param name="userId">User Id for invited user.</param>
+		/// <param name="userId">User Id for invited user, or -1 to skip that check.</param>
 		/// <returns>True for success, false for error.</returns>
 		public bool RemoveInvitation(int invitationId, int userId)
 		{

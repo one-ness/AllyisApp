@@ -314,20 +314,7 @@ namespace AllyisApps.Services
 
 			if (this.Can(Actions.CoreAction.EditOrganization))
 			{
-				IEnumerable<InvitationInfo> invites = this.GetUserInvitations();
-				InvitationInfo thisInvite = invites.Where(x => x.InvitationId == invitationId).SingleOrDefault();
-				IEnumerable<SubscriptionDisplayInfo> subs = this.DBHelper.GetSubscriptionsDisplayByOrg(UserContext.ChosenOrganizationId).Select(s => InitializeSubscriptionDisplayInfo(s));
-				IEnumerable<InvitationSubRole> subRoles = DBHelper.GetInvitationSubRolesByInvitationId(invitationId).Select(i => InitializeInvitationSubRole(i));
-				foreach (InvitationSubRole subRole in subRoles)
-				{
-					SubscriptionDisplayInfo currentSub = subs.Where(x => x.SubscriptionId == subRole.SubscriptionId).SingleOrDefault();
-					if (currentSub != null && currentSub.SubscriptionsUsed < currentSub.NumberOfUsers)
-					{
-						DBHelper.Instance.DeleteInvitationSubRole(subRole.InvitationId, subRole.SubscriptionId);
-					}
-				}
-
-				DBHelper.RemoveUserInvitation(invitationId);
+				DBHelper.RemoveInvitation(invitationId, -1);
 				return true;
 			}
 
