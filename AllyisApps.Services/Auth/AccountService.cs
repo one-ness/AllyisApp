@@ -584,21 +584,19 @@ namespace AllyisApps.Services
 			}
 			#endregion
 
-			var user = this.DBHelper.GetUserByEmail(email);
-			if (user == null)
+			Guid code = Guid.NewGuid();
+			int accountUserId = this.DBHelper.UpdateUserPasswordResetCode(email, code.ToString());
+			if (accountUserId > -1)
 			{
-				return false;
+				// Send reset email
+				string filledInCallbackUrl = callbackUrl.Replace("%7Buserid%7D", accountUserId.ToString()).Replace("%7Bcode%7D", code.ToString());
+				string msgbody = new System.Web.HtmlString(string.Format("Please reset your password by clicking <a href=\"{0}\">here</a>", filledInCallbackUrl)).ToString();
+				await Lib.Mailer.SendEmailAsync("noreply@allyisapps.com", email, "Reset password", msgbody);
+
+				return true;
 			}
 
-			Guid code = Guid.NewGuid();
-			this.DBHelper.UpdateUserPasswordResetCode(user.UserId, code.ToString());
-
-			// Send reset email
-			string filledInCallbackUrl = callbackUrl.Replace("{userid}", user.UserId.ToString()).Replace("{code}", code.ToString());
-			string msgbody = new System.Web.HtmlString(string.Format("Please reset your password by clicking <a href=\"{0}\">here</a>", filledInCallbackUrl)).ToString();
-			await Lib.Mailer.SendEmailAsync("noreply@allyisapps.com", email, "Reset password", msgbody);
-
-			return true;
+			return false;
 		}
 
 		/// <summary>

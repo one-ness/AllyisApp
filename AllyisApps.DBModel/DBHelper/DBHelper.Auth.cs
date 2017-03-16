@@ -293,20 +293,21 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates password reset code in Auth.User table.
 		/// </summary>
-		/// <param name = "userId">Target user's ID.</param>
+		/// <param name = "email">Target user's email address.</param>
 		/// <param name = "resetCode">The resetCode.</param>
-		public void UpdateUserPasswordResetCode(int userId, string resetCode)
+		/// <returns>UserId of updated account, or -1 if no account is found for the given email.</returns>
+		public int UpdateUserPasswordResetCode(string email, string resetCode)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@UserId", userId);
+			parameters.Add("@Email", email);
 			parameters.Add("@PasswordResetCode", resetCode);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute(
+				return connection.Query<int>(
 					"[Auth].[UpdateUserPasswordResetCode]",
 					parameters,
-					commandType: CommandType.StoredProcedure);
+					commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 
