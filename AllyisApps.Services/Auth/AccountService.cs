@@ -151,34 +151,6 @@ namespace AllyisApps.Services
 
 			var results = DBHelper.AcceptInvitation(invitationId, UserContext.UserId);
 
-			//var user = this.GetUserByEmail(invite.Email);
-			//if (invite.ProjectId.HasValue)
-			//{
-			//	this.DBHelper.CreateProjectUser(invite.ProjectId.Value, user.UserId);
-			//}
-
-			//this.DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity() // ...add them to that organization as their organization role.
-			//{
-			//	UserId = user.UserId,
-			//	OrganizationId = invite.OrganizationId,
-			//	OrgRoleId = invite.OrgRole,
-			//	EmployeeId = invite.EmployeeId
-			//});
-
-			//IEnumerable<InvitationSubRole> roles = this.DBHelper.GetInvitationSubRolesByInvitationId(invite.InvitationId).Select(i => InitializeInvitationSubRole(i));
-			//IEnumerable<SubscriptionDisplayInfo> subs = this.DBHelper.GetSubscriptionsDisplayByOrg(invite.OrganizationId).Select(s => InitializeSubscriptionDisplayInfo(s));
-
-			//foreach (InvitationSubRole role in roles)
-			//{
-			//	SubscriptionDisplayInfo currentSub = subs.Where(x => x.SubscriptionId == role.SubscriptionId).SingleOrDefault();
-			//	if (currentSub != null && currentSub.SubscriptionsUsed < currentSub.NumberOfUsers)
-			//	{
-			//		this.DBHelper.UpdateSubscriptionUserProductRole(role.ProductRoleId, role.SubscriptionId, user.UserId);
-			//	}
-			//}
-
-			//this.DBHelper.RemoveUserInvitation(invite.InvitationId);
-
 			if (results == null)
 			{
 				return null;
@@ -194,7 +166,6 @@ namespace AllyisApps.Services
 		/// <returns>The resulting message.</returns>
 		public string RejectUserInvitation(int invitationId)
 		{
-			//this.DBHelper.RemoveUserInvitation(invite.InvitationId);
 			if (DBHelper.RemoveInvitation(invitationId, UserContext.UserId))
 			{
 				return "The invitation has been rejected.";

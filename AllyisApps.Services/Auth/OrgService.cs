@@ -256,6 +256,68 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
 		/// </summary>
+		/// <param name="url">The url for Account/Index with the accessCode value as "{accessCode}".</param>
+		/// <param name="invitationInfo">An <see cref="InvitationInfo"/> with invitee information filled out.</param>
+		/// <param name="subscriptionId">The subscription id, if user is invited with role in subscription.</param>
+		/// <param name="productRoleId">The product role id, if user in invited with role in subscription.</param>
+		/// <returns>The invitation Id, or -1 if the employee id is already taken.</returns>
+		public async Task<int> InviteUser(string url, InvitationInfo invitationInfo, int? subscriptionId, int? productRoleId)
+		{
+			#region Validation
+			if (string.IsNullOrEmpty(url))
+			{
+				throw new ArgumentNullException("url", "Url must have a value.");
+			}
+
+			if (invitationInfo == null)
+			{
+				throw new ArgumentNullException("invitationInfo", "Invitation info object must not be null.");
+			}
+
+			if (string.IsNullOrEmpty(invitationInfo.Email) || !Service.IsEmailAddressValid(invitationInfo.Email))
+			{
+				throw new ArgumentException("Email address is not valid", "invitationInfo.Email");
+			}
+			#endregion Validation
+
+			// Generation of access code
+			string code = Guid.NewGuid().ToString();
+			invitationInfo.AccessCode = code;
+
+			// Creation of invitation & sub roles
+			var spResults = DBHelper.CreateInvitation(UserContext.UserId, GetDBEntityFromInvitationInfo(invitationInfo), subscriptionId, productRoleId);
+			if(spResults.Item1 == -1)
+			{
+				throw new InvalidOperationException("User is already a member of the organization.");
+			}
+
+			if(spResults.Item1 == -2)
+			{
+				throw new DuplicateNameException("Employee Id is already taken.");
+			}
+
+			// Send invitation email
+			string htmlbody = string.Format(
+				"{0} {1} has requested you join their organization on Allyis Apps, {2}!<br /> Click <a href={3}>Here</a> to create an account and join!",
+				spResults.Item2,
+				spResults.Item3,
+				UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).FirstOrDefault().OrganizationName,
+				url.Replace("%7BaccessCode%7D", code));
+
+			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
+			await Lib.Mailer.SendEmailAsync(
+				"support@allyisapps.com",
+				invitationInfo.Email,
+				"Join Allyis Apps!",
+				msgbody);
+
+			// Return invitation id
+			return spResults.Item1;
+		}
+
+		/// <summary>
+		/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
+		/// </summary>
 		/// <param name="requestingUserFullName">Full name of requesting user (not invitee).</param>
 		/// <param name="webRoot">The url webroot, taken from Global Settings.</param>
 		/// <param name="invitationInfo">An <see cref="InvitationInfo"/> with invitee information filled out.</param>

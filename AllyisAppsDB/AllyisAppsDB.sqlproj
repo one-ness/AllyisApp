@@ -253,6 +253,7 @@
     <Build Include="StoredProcedures\Auth\Auth.AcceptInvitation.sql" />
     <Build Include="StoredProcedures\Auth\Auth.RemoveInvitation.sql" />
     <Build Include="StoredProcedures\Auth\Auth.GetPasswordHashFromUserId.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.InviteUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -626,6 +626,50 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Adds an Invitation to the invitations table and invitation sub roles table.
+		/// </summary>
+		/// <param name="invitingUserId">The id of the user sending the invitation.</param>
+		/// <param name="invitation">A representation of the invitation to create.</param>
+		/// <param name="subscriptionId">The subscription id.</param>
+		/// <param name="productRoleId">The product role id.</param>
+		/// <returns>The id of the newly created invitation (or -1 if the employee id is taken), and the
+		/// first and last name of the inviting user</returns>
+		public Tuple<int, string, string> CreateInvitation(int invitingUserId, InvitationDBEntity invitation, int? subscriptionId, int? productRoleId)
+		{
+			if (invitation == null)
+			{
+				throw new ArgumentException("invitation cannot be null.");
+			}
+
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@UserId", invitingUserId);
+			parameters.Add("@Email", invitation.Email);
+			parameters.Add("@FirstName", invitation.FirstName);
+			parameters.Add("@LastName", invitation.LastName);
+			parameters.Add("@organizationID", invitation.OrganizationId);
+			parameters.Add("@AccessCode", invitation.AccessCode);
+			parameters.Add("@OrgRole", invitation.OrgRole);
+			parameters.Add("@ProjectId", invitation.ProjectId);
+			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
+			parameters.Add("@EmployeeId", invitation.EmployeeId);
+			parameters.Add("@SubscriptionId", subscriptionId);
+			parameters.Add("@SubRoleId", productRoleId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple("[Auth].[InviteUser]", parameters, commandType: CommandType.StoredProcedure);
+				int inviteId = results.Read<int>().FirstOrDefault();
+				if (inviteId < 0)
+				{
+					return new Tuple<int, string, string>(inviteId, inviteId == -1 ? "User is already in organization." : "Employee Id is taken.", null);
+				}
+				return Tuple.Create(
+					inviteId,
+					results.Read<string>().FirstOrDefault(),
+					results.Read<string>().FirstOrDefault());
+			}
+		}
+
+		/// <summary>
 		/// Accepts a user invitation, creating records with appropriate roles for organization user,
 		/// project user, and subscription user. Removes invitation and invitation sub roles on success.
 		/// </summary>
