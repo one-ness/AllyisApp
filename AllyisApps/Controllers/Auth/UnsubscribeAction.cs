@@ -9,7 +9,6 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
 using System;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
@@ -41,7 +40,6 @@ namespace AllyisApps.Controllers
 			return this.RedirectToAction(ActionConstants.Manage);
 		}
 
-		//TODO: Test this more systematically when stripe billing is reinstated.
 		/// <summary>
 		/// Removes the selected subscription from the database.
 		/// </summary>
@@ -63,25 +61,13 @@ namespace AllyisApps.Controllers
 					model.Billing.Customer = Service.RetrieveCustomer(Service.GetOrgBillingServicesCustomerId());
 					if (model.Billing.Customer != null)
 					{
-						int? subId = null;
-						if (model.CurrentSubscription != null)
+						string subscriptionId = Service.GetSubscriptionId(model.Billing.Customer.Id);
+						if (subscriptionId != null)
 						{
-							subId = model.CurrentSubscription.SubscriptionId;
+							Service.DeleteSubscription(model.Billing.Customer.Id, subscriptionId.Trim());
+							Service.DeleteSubscriptionPlan(subscriptionId);
+							Service.AddBillingHistory("Unsubscribing from product", model.SelectedSku);
 						}
-						string notificationString = Service.UnsubscribeAndRemoveBillingSubscription(model.SelectedSku, subId);
-
-						if (notificationString != null)
-						{
-							Notifications.Add(new BootstrapAlert(notificationString, Variety.Success));
-						}
-
-						//string subscriptionId = Service.GetSubscriptionId(model.Billing.Customer.Id);
-						//if (subscriptionId != null)
-						//{
-						//	Service.DeleteSubscription(model.Billing.Customer.Id, subscriptionId.Trim());
-						//	Service.DeleteSubscriptionPlan(subscriptionId);
-						//	Service.AddBillingHistory("Unsubscribing from product", model.SelectedSku);
-						//}
 					}
 				}
 				catch (Exception e)
@@ -89,12 +75,12 @@ namespace AllyisApps.Controllers
 					Notifications.Add(new BootstrapAlert(e.ToString(), Variety.Warning));
 				}
 
-				//if (model.CurrentSubscription != null)
-				//{
-					//Service.Unsubscribe(model.CurrentSubscription.SubscriptionId);
-					//string formattedNotificationString = string.Format("{0} has been unsubscribed from the license {1}.", Service.GetOrganization(model.OrganizationId).Name, Service.GetSkuDetails(model.PreviousSku).Name);
-					//Notifications.Add(new BootstrapAlert(formattedNotificationString, Variety.Success));
-				//}
+				if (model.CurrentSubscription != null)
+				{
+					Service.Unsubscribe(model.CurrentSubscription.SubscriptionId);
+					string formattedNotificationString = string.Format("{0} has been unsubscribed from the license {1}.", Service.GetOrganization(model.OrganizationId).Name, Service.GetSkuDetails(model.PreviousSku).Name);
+					Notifications.Add(new BootstrapAlert(formattedNotificationString, Variety.Success));
+				}
 
 				return this.RedirectToAction(ActionConstants.Manage);
 			}
