@@ -63,10 +63,16 @@ namespace AllyisApps.Controllers
 					model.Billing.Customer = Service.RetrieveCustomer(Service.GetOrgBillingServicesCustomerId());
 					if (model.Billing.Customer != null)
 					{
-						string subscriptionPlanId = Service.DeleteSubscriptionPlanAndAddHistory(model.Billing.Customer.Id.Id, model.SelectedSku, "Unsubscribing from product.");
-						if (subscriptionPlanId != null)
+						int? subId = null;
+						if (model.CurrentSubscription != null)
 						{
-							Service.DeleteSubscription(model.Billing.Customer.Id, subscriptionPlanId);
+							subId = model.CurrentSubscription.SubscriptionId;
+						}
+						string notificationString = Service.UnsubscribeAndRemoveBillingSubscription(model.SelectedSku, subId);
+
+						if (notificationString != null)
+						{
+							Notifications.Add(new BootstrapAlert(notificationString, Variety.Success));
 						}
 
 						//string subscriptionId = Service.GetSubscriptionId(model.Billing.Customer.Id);
@@ -83,16 +89,12 @@ namespace AllyisApps.Controllers
 					Notifications.Add(new BootstrapAlert(e.ToString(), Variety.Warning));
 				}
 
-				if (model.CurrentSubscription != null)
-				{
-					string skuName = Service.Unsubscribe(model.CurrentSubscription.SubscriptionId);
-					string formattedNotificationString = string.Format("{0} has been unsubscribed from the license {1}.", UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).First().OrganizationName, skuName);
-					Notifications.Add(new BootstrapAlert(formattedNotificationString, Variety.Success));
-
+				//if (model.CurrentSubscription != null)
+				//{
 					//Service.Unsubscribe(model.CurrentSubscription.SubscriptionId);
 					//string formattedNotificationString = string.Format("{0} has been unsubscribed from the license {1}.", Service.GetOrganization(model.OrganizationId).Name, Service.GetSkuDetails(model.PreviousSku).Name);
 					//Notifications.Add(new BootstrapAlert(formattedNotificationString, Variety.Success));
-				}
+				//}
 
 				return this.RedirectToAction(ActionConstants.Manage);
 			}

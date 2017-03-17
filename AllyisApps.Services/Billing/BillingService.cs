@@ -610,6 +610,35 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Removes the billing subscription plan for the current organization and adds a billing history
+		/// item. If the supllied subscription id has a value, also removes that subscription and returns
+		/// a message to place in a notification.
+		/// </summary>
+		/// <param name="SelectedSku">Sku id, for the billing history item.</param>
+		/// <param name="subscriptionId">Subscription id to unsubscribe from.</param>
+		/// <returns>A notification string, or null.</returns>
+		public string UnsubscribeAndRemoveBillingSubscription(int SelectedSku, int? subscriptionId)
+		{
+			BillingServicesCustomer custId = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId());
+			if (custId != null)
+			{
+				string subscriptionPlanId = this.DeleteSubscriptionPlanAndAddHistory(custId.Id.Id, SelectedSku, "Unsubscribing from product.");
+				if (subscriptionPlanId != null)
+				{
+					this.DeleteSubscription(custId.Id, subscriptionPlanId);
+				}
+			}
+
+			if (subscriptionId != null)
+			{
+				string skuName = this.Unsubscribe(subscriptionId.Value);
+				return string.Format("{0} has been unsubscribed from the license {1}.", UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).First().OrganizationName, skuName);
+			}
+
+			return null;
+		}
+
+		/// <summary>
 		/// Unsubscribes a subscription.
 		/// </summary>
 		/// <param name="subscriptionId">Subscription Id.</param>
