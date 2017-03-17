@@ -25,7 +25,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the user's new password.
 		/// </summary>
 		[Required]
-		[StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+		[StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 12)]
 		[DataType(DataType.Password)]
 		[Display(Name = "New Password")]
 		public string NewPassword { get; set; }

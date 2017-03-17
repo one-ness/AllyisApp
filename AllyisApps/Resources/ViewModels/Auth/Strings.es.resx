@@ -139,7 +139,7 @@
     <value>Las contraseñas no coinciden dadas.</value>
   </data>
   <data name="PasswordLengthValidation" xml:space="preserve">
-    <value>Su contraseña debe tener al menos 6 caracteres.</value>
+    <value>Su contraseña debe tener al menos 12 caracteres.</value>
   </data>
   <data name="PasswordValidation" xml:space="preserve">
     <value>Por favor, dar su contraseña.</value>

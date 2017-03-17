@@ -17,7 +17,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the user's password.
 		/// </summary>
 		[Required(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "CreatePasswordValidation")]
-		[StringLength(100, ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "PasswordLengthValidation", MinimumLength = 6)]  // If you change this minimum length value, please update the string resource.
+		[StringLength(100, ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "PasswordLengthValidation", MinimumLength = 12)]  // If you change this minimum length value, please update the string resource.
 		[DataType(DataType.Password)]
 		[Display(Name = "Password")]
 		public string Password { get; set; }
