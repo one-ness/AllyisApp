@@ -35,7 +35,7 @@ AS
 	FROM [Billing].[Subscription] WITH (NOLOCK) 
 	LEFT JOIN [Billing].[Sku] WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
 	RIGHT JOIN [Auth].[ProductRole]  WITH (NOLOCK) ON [ProductRole].[ProductId] = [Sku].[ProductId]
-	WHERE [Subscription].[OrganizationId] = @OrganizationId
+	WHERE [Subscription].[OrganizationId] = @OrganizationId AND [Subscription].[IsActive] = 1
 
 	SELECT	[Project].[ProjectId],
 		[Project].[CustomerId],

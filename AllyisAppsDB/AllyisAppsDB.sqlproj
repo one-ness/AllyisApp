@@ -254,6 +254,7 @@
     <Build Include="StoredProcedures\Auth\Auth.RemoveInvitation.sql" />
     <Build Include="StoredProcedures\Auth\Auth.GetPasswordHashFromUserId.sql" />
     <Build Include="StoredProcedures\Auth\Auth.InviteUser.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.DeleteSubPlanAndAddHistory.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

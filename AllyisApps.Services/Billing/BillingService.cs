@@ -131,6 +131,33 @@ namespace AllyisApps.Services
 		{
 			string serviceType = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(serviceType);
+
+			//TODO complete this
+		}
+
+		/// <summary>
+		/// Deletes a subscription plan for the current organization with the given stripe customer id, if one exists.
+		/// On success, adds a billing history item with the given sku id and description (and current user Id).
+		/// </summary>
+		/// <param name="stripeCustomerId">Stripe customer id.</param>
+		/// <param name="skuId">Sku it for billing history item.</param>
+		/// <param name="description">Description for billing history item.</param>
+		/// <returns>The subscription plan id of the deleted subscription plan, or null if none found.</returns>
+		public string DeleteSubscriptionPlanAndAddHistory(string stripeCustomerId, int skuId, string description)
+		{
+			#region Validation
+			if (string.IsNullOrEmpty(stripeCustomerId))
+			{
+				throw new ArgumentNullException("stripeCustomerId", "Stripe customer id must have a value.");
+			}
+
+			if (skuId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("skuId", "Sku id cannot be zero or negative");
+			}
+			#endregion
+
+			return DBHelper.DeleteSubscriptionPlanAndAddHistory(UserContext.ChosenOrganizationId, stripeCustomerId, UserContext.UserId, skuId, description);
 		}
 
 		/// <summary>
@@ -586,14 +613,15 @@ namespace AllyisApps.Services
 		/// Unsubscribes a subscription.
 		/// </summary>
 		/// <param name="subscriptionId">Subscription Id.</param>
-		public void Unsubscribe(int subscriptionId)
+		/// <return>The name of the sku for the removed subscription.</return>
+		public string Unsubscribe(int subscriptionId)
 		{
 			if (subscriptionId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription ID cannot be 0 or negative.");
 			}
 
-			DBHelper.Unsubscribe(subscriptionId);
+			return DBHelper.Unsubscribe(subscriptionId);
 		}
 
 		/// <summary>

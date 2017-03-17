@@ -89,14 +89,15 @@ namespace AllyisApps.DBModel
 		/// Unsubscribe method.
 		/// </summary>
 		/// <param name="subscriptionId">Subscription id.</param>
-		public void Unsubscribe(int subscriptionId)
+		/// <returns>The name of the Sku for the deleted subscription, or null if none was found.</returns>
+		public string Unsubscribe(int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 
 			parameters.Add("@subscriptionID", subscriptionId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Billing].[DeleteSubscription]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<string>("[Billing].[DeleteSubscription]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 
@@ -323,6 +324,33 @@ namespace AllyisApps.DBModel
 				   "[Billing].[UpdateCustomerSubscription]",
 				   parameters,
 				   commandType: CommandType.StoredProcedure).SingleOrDefault();
+			}
+		}
+
+		/// <summary>
+		/// Looks for a subscription plan with the given organization Id and stripe customer Id. If found,
+		/// deletes it and adds a history item using the given user Id, skuId, and description.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <param name="customerId">Customer Id.</param>
+		/// <param name="userId">User Id for the history item.</param>
+		/// <param name="skuId">Sku Id for the history item.</param>
+		/// <param name="description">Description for the history item.</param>
+		/// <returns>The subscription plan id of the delted subscription, or null if none found.</returns>
+		public string DeleteSubscriptionPlanAndAddHistory(int orgId, string customerId, int userId, int skuId, string description)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@OrganizationId", orgId);
+			parameters.Add("@customerID", customerId);
+			parameters.Add("@UserId", userId);
+			parameters.Add("@SkuId", skuId);
+			parameters.Add("@Description", description);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<string>(
+				   "[Billing].[DeleteSubPlanAndAddHistory]",
+				   parameters,
+				   commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 
