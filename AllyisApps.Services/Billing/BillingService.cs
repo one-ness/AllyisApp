@@ -121,19 +121,19 @@ namespace AllyisApps.Services
 			}
 		}
 
-		/// <summary>
-		/// Deletes a billing services subscription.
-		/// </summary>
-		/// <param name="id">The customer id associated with the subscription to be deleted.</param>
-		/// <param name="subscriptionId">The id of the subscription to delete.</param>
-		[CLSCompliant(false)]
-		public void DeleteSubscription(BillingServicesCustomerId id, string subscriptionId)
-		{
-			string serviceType = "Stripe";
-			BillingServicesHandler handler = new BillingServicesHandler(serviceType);
+		///// <summary>
+		///// Deletes a billing services subscription.
+		///// </summary>
+		///// <param name="id">The customer id associated with the subscription to be deleted.</param>
+		///// <param name="subscriptionId">The id of the subscription to delete.</param>
+		//[CLSCompliant(false)]
+		//public void DeleteSubscription(BillingServicesCustomerId id, string subscriptionId)
+		//{
+		//	string serviceType = "Stripe";
+		//	BillingServicesHandler handler = new BillingServicesHandler(serviceType);
 
-			//TODO complete this
-		}
+		//	//TODO complete this
+		//}
 
 		/// <summary>
 		/// Deletes a subscription plan for the current organization with the given stripe customer id, if one exists.
@@ -471,13 +471,25 @@ namespace AllyisApps.Services
 		/// Deletes a subscription plan.
 		/// </summary>
 		/// <param name="subscriptionId">Subscription Id.</param>
-		public void DeleteSubscriptionPlan(string subscriptionId)
+		/// <param name="customerId">The Billing Services Customer ID.</param>
+		[CLSCompliant(false)]
+		public void DeleteSubscriptionPlan(string subscriptionId, BillingServicesCustomerId customerId)
 		{
+			#region Validation
 			if (string.IsNullOrEmpty(subscriptionId))
 			{
 				throw new ArgumentNullException("subscriptionId", "Subscriptoin id must have a value.");
 			}
 
+			if (customerId == null)
+			{
+				throw new ArgumentNullException("customerId", "customerId cannot be null.");
+			}
+			#endregion
+
+			string service = "Stripe";
+			BillingServicesHandler handler = new BillingServicesHandler(service);
+			handler.DeleteSubscription(customerId, subscriptionId);
 			DBHelper.DeleteSubscriptionPlan(subscriptionId);
 		}
 
@@ -622,11 +634,12 @@ namespace AllyisApps.Services
 			BillingServicesCustomer custId = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId());
 			if (custId != null)
 			{
-				string subscriptionPlanId = this.DeleteSubscriptionPlanAndAddHistory(custId.Id.Id, SelectedSku, "Unsubscribing from product.");
-				if (subscriptionPlanId != null)
-				{
-					this.DeleteSubscription(custId.Id, subscriptionPlanId);
-				}
+				this.DeleteSubscriptionPlanAndAddHistory(custId.Id.Id, SelectedSku, "Unsubscribing from product.");
+				//string subscriptionPlanId = this.DeleteSubscriptionPlanAndAddHistory(custId.Id.Id, SelectedSku, "Unsubscribing from product.");
+				//if (subscriptionPlanId != null)
+				//{
+				//	this.DeleteSubscription(custId.Id, subscriptionPlanId);
+				//}
 			}
 
 			if (subscriptionId != null)

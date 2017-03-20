@@ -186,9 +186,9 @@ namespace AllyisApps.Controllers
 						string subscriptionId = Service.GetSubscriptionId(model.Billing.Customer.Id);
 						if (subscriptionId != null)
 						{
-							Service.DeleteSubscriptionPlan(subscriptionId);
+							Service.DeleteSubscriptionPlan(subscriptionId, model.Billing.Customer.Id);
 
-							Service.DeleteSubscription(model.Billing.Customer.Id, subscriptionId);
+							//Service.DeleteSubscription(model.Billing.Customer.Id, subscriptionId);
 							Service.AddBillingHistory("Switching to free subscription, canceling stripe susbcription", model.SelectedSku);
 						}
 					}
