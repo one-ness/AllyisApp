@@ -14,45 +14,45 @@
 		<div class="col-md-6 min300">
 			<div class="form-group">
 				@Html.LabelFor(m => m.Email, AllyisApps.Resources.Views.Account.Strings.Email)
-                <div class="text-box-blue">@Html.DisplayTextFor(m => m.Email)</div>
+                <div class="text-box-padded">@Html.DisplayTextFor(m => m.Email)</div>
 			</div>
 			<div class="form-group">
 				@Html.LabelFor(m => m.FirstName, AllyisApps.Resources.Views.Account.Strings.FirstName)
-                <div class="text-box-blue">@Html.DisplayTextFor(m => m.FirstName)</div>
+                <div class="text-box-padded">@Html.DisplayTextFor(m => m.FirstName)</div>
 			</div>
 			<div class="form-group">
 				@Html.LabelFor(m => m.LastName, AllyisApps.Resources.Views.Account.Strings.LastName)
-                <div class="text-box-blue">@Html.DisplayTextFor(m => m.LastName)</div>
+                <div class="text-box-padded">@Html.DisplayTextFor(m => m.LastName)</div>
 			</div>
 			<div class="form-group">
 				@Html.LabelFor(m => m.DateOfBirth, AllyisApps.Resources.Views.Account.Strings.DateOfBirth)
-                <div class="text-box-blue">@Html.DisplayTextFor(m => m.DateOfBirth)</div>
+                <div class="text-box-padded">@Html.ViewData.Model.DateOfBirth.Value.ToShortDateString()</div>
 			</div>
 			<div class="form-group">
 				@Html.LabelFor(m => m.PhoneNumber, AllyisApps.Resources.Views.Account.Strings.PhoneNumber)
-                <div class="text-box-blue">@Html.DisplayTextFor(m => m.PhoneNumber)</div>
+                <div class="text-box-padded">@Html.DisplayTextFor(m => m.PhoneNumber)</div>
 			</div>
 		</div>
 		<div class="col-md-6 min300">
 			<div class="form-group">
 				@Html.LabelFor(m => m.Address, AllyisApps.Resources.Views.Account.Strings.Address)
-                <div class="text-box-blue">@Html.DisplayTextFor(m => m.Address)</div>
+                <div class="text-box-padded">@Html.DisplayTextFor(m => m.Address)</div>
 			</div>
 			<div class="form-group">
 				@Html.LabelFor(m => m.Country, AllyisApps.Resources.Views.Account.Strings.Country)
-                <div class="text-box-blue">@Html.DisplayTextFor(m => m.Country)</div>
+                <div class="text-box-padded">@Html.DisplayTextFor(m => m.Country)</div>
 			</div>
 			<div class="form-group">
 				@Html.LabelFor(m => m.State, AllyisApps.Resources.Views.Account.Strings.State)
-                <div class="text-box-blue">@Html.DisplayTextFor(m => m.State)</div>
+                <div class="text-box-padded">@Html.DisplayTextFor(m => m.State)</div>
 			</div>
 			<div class="form-group">
 				@Html.LabelFor(m => m.City, AllyisApps.Resources.Views.Account.Strings.City)
-                <div class="text-box-blue">@Html.DisplayTextFor(m => m.City)</div>
+                <div class="text-box-padded">@Html.DisplayTextFor(m => m.City)</div>
 			</div>
 			<div class="form-group">
 				@Html.LabelFor(m => m.PostalCode, AllyisApps.Resources.Views.Account.Strings.PostalCode)
-                <div class="text-box-blue">@Html.DisplayTextFor(m => m.PostalCode)</div>
+                <div class="text-box-padded">@Html.DisplayTextFor(m => m.PostalCode)</div>
 			</div>
 		</div>
 	</div>
