@@ -78,8 +78,8 @@
 						{
 							<label>@(string.Format("{0} {1}", AllyisApps.Resources.Views.Account.Strings.TimeTracker, AllyisApps.Resources.Views.Account.Strings.Role))</label>
 						}
-						@Html.DropDownListDisabled(string.Format("Subscriptions[{0}].SelectedRole", count), new SelectList(sub.ProductRoles, "ProductRoleId", "Name", sub.ProductRoles.Where(x => x.Name == "None").FirstOrDefault()), sub.hasTooManySubscribers, new { @class = "form-control role-selector" })
-						@if (sub.hasTooManySubscribers)
+						@Html.DropDownListDisabled(string.Format("Subscriptions[{0}].SelectedRole", count), new SelectList(sub.ProductRoles, "ProductRoleId", "Name", sub.SelectedRole), sub.hasTooManySubscribers, new { @class = "form-control role-selector" })
+                        @if (sub.hasTooManySubscribers)
 						{
 							<p>@AllyisApps.Resources.Views.Account.Strings.TooManyUsers</p>roomInSubscription = false;
 						}
@@ -92,15 +92,16 @@
 							<div class="form-group">
 								<label>@AllyisApps.Resources.Views.Account.Strings.TrackProject</label>
 								@{    //outputs list of available projects
-									List<SelectListItem> selectProjects = new List<SelectListItem>();
-									foreach (CompleteProjectInfo pInfo in Model.Projects)
-									{
-										selectProjects.Add(new SelectListItem
-										{
-											Text = (pInfo.ProjectName),
-											Value = (pInfo.ProjectId.ToString())
-										});
-									}
+                                    List<SelectListItem> selectProjects = new List<SelectListItem>();
+                                    foreach (CompleteProjectInfo pInfo in Model.Projects)
+                                    {
+                                        selectProjects.Add(new SelectListItem
+                                        {
+                                            Text = (pInfo.ProjectName),
+                                            Value = (pInfo.ProjectId.ToString()),
+                                            Selected = (Model.SubscriptionProjectId == pInfo.ProjectId)
+                                    });
+                                }
 
 									@Html.DropDownList("SubscriptionProjectId", selectProjects, AllyisApps.Resources.Views.Account.Strings.DropDownEmpty, new { @class = "form-control project-selector" });
 								}

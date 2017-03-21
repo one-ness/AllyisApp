@@ -70,7 +70,15 @@ namespace AllyisApps.Controllers
 						if (ex.ParamName.Equals("invitationInfo.Email"))
 						{
 							Notifications.Add(new BootstrapAlert("Email address in invalid.", Variety.Danger));
-							return this.RedirectToAction(ActionConstants.Add);
+							return this.RedirectToAction(ActionConstants.Add, new
+                            {
+                                FirstName = add.FirstName,
+                                LastName = add.LastName,
+                                Email = add.Email,
+                                AddAsOwner = add.AddAsOwner,
+                                SelectedRole = subRoleId,
+                                SelectedProject = add.SubscriptionProjectId
+                            });
 						}
 
 						throw ex;
@@ -78,11 +86,27 @@ namespace AllyisApps.Controllers
 					} catch (InvalidOperationException)
 					{
 						Notifications.Add(new BootstrapAlert("This user is already a member of the organization.", Variety.Warning));
-						return this.RedirectToAction(ActionConstants.Add);
+                        return this.RedirectToAction(ActionConstants.Add, new
+                        {
+                            FirstName = add.FirstName,
+                            LastName = add.LastName,
+                            Email = add.Email,
+                            AddAsOwner = add.AddAsOwner,
+                            SelectedRole = subRoleId,
+                            SelectedProject = add.SubscriptionProjectId
+                        });
 					} catch (System.Data.DuplicateNameException)
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.EmployeeIdNotUniqueError, Variety.Danger));
-						return this.RedirectToAction(ActionConstants.Add);
+                        return this.RedirectToAction(ActionConstants.Add,new
+                        {
+                            FirstName = add.FirstName,
+                            LastName = add.LastName,
+                            Email = add.Email,
+                            AddAsOwner = add.AddAsOwner,
+                            SelectedRole = subRoleId,
+                            SelectedProject = add.SubscriptionProjectId
+                        });
 					}
 
 
@@ -157,8 +181,16 @@ namespace AllyisApps.Controllers
 				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.CannotEditMembersMessage), ControllerConstants.Account, ActionConstants.Invite));
 			}
 
-			// Invalid model; try again
-			return this.RedirectToAction(ActionConstants.Add);
+            // Invalid model; try again
+            return this.RedirectToAction(ActionConstants.Add, new
+            {
+                FirstName = add.FirstName,
+                LastName = add.LastName,
+                Email = add.Email,
+                AddAsOwner = add.AddAsOwner,
+                SelectedRole = add.Subscriptions.First().SelectedRole,
+                SelectedProject = add.SubscriptionProjectId
+            });
 		}
 
 		//// TODO: If the services get consolidated into one class, this method could be moved to Services and a business object created to mirror OrganizationAddMembersViewModel.
