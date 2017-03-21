@@ -257,9 +257,10 @@ namespace AllyisApps.Services
 		/// <param name="numUsers">Number of subscription users.</param>
 		/// <param name="productId">Product Id.</param>
 		/// <param name="planName">Name of subscription plan, to appear on Stripe invoices.</param>
-		/// <returns>Subscription Id.</returns>
+		/// <param name="skuId">Selected sku id, for the billing history item.</param>
+		/// <param name="productName">Name of product, for the billing history item.</param>
 		[CLSCompliant(false)]
-		public string AddCustomerSubscriptionPlan(int amount, BillingServicesCustomerId customerId, int numUsers, int productId, string planName)
+		public void AddCustomerSubscriptionPlan(int amount, BillingServicesCustomerId customerId, int numUsers, int productId, string planName, int? skuId, string productName)
 		{
 			#region Validation
 
@@ -289,20 +290,21 @@ namespace AllyisApps.Services
 			string service = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(service);
 			BillingServicesSubscriptionId subId = handler.CreateSubscription(amount, "month", planName, customerId);
-			return DBHelper.AddCustomerSubscription(customerId.Id, subId.Id, amount, numUsers, productId, UserContext.ChosenOrganizationId);
+			DBHelper.AddCustomerSubscription(customerId.Id, subId.Id, amount, numUsers, productId, UserContext.ChosenOrganizationId, UserContext.UserId, skuId, string.Format("Adding new subscription data for {0}.", productName));
 		}
 
 		/// <summary>
-		/// Updates a customer subscription.
+		/// Updates a customer subscription, and adds a billing history item.
 		/// </summary>
 		/// <param name="amount">Price of subscription.</param>
 		/// <param name="planName">Name of subscription plan, to appear on Stripe invoices.</param>
 		/// <param name="numUsers">Number of Users.</param>
 		/// <param name="subscriptionId">Subscription Id, as a string.</param>
 		/// <param name="customerId">The Billing Services Customer ID.</param>
-		/// <returns>The customer subscription.</returns>
+		/// <param name="skuId">Selected sku id, for the billing history item.</param>
+		/// <param name="productName">Name of product, for the billing history item.</param>
 		[CLSCompliant(false)]
-		public string UpdateSubscriptionPlan(int amount, string planName, int numUsers, string subscriptionId, BillingServicesCustomerId customerId)
+		public void UpdateSubscriptionPlan(int amount, string planName, int numUsers, string subscriptionId, BillingServicesCustomerId customerId, int? skuId, string productName)
 		{
 			#region Validation
 
@@ -333,7 +335,7 @@ namespace AllyisApps.Services
 			BillingServicesHandler handler = new BillingServicesHandler(serviceType); // TODO: make this check the database instead of hardcoding Stripe
 
 			handler.UpdateSubscription(amount, "month", planName, subscriptionId.Trim(), customerId);
-			return DBHelper.UpdateSubscriptionPlan(customerId.Id, subscriptionId, amount, numUsers);
+			DBHelper.UpdateSubscriptionPlan(customerId.Id, subscriptionId, amount, numUsers, UserContext.ChosenOrganizationId, UserContext.UserId, skuId, string.Format("Updating subscription data for {0}", productName));
 		}
 
 		/// <summary>
@@ -473,8 +475,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <param name="customerId">The Billing Services Customer ID.</param>
+		/// <param name="skuId">Selected sku id, for the billing history item.</param>
 		[CLSCompliant(false)]
-		public void DeleteSubscriptionPlan(string subscriptionId, BillingServicesCustomerId customerId)
+		public void DeleteSubscriptionPlan(string subscriptionId, BillingServicesCustomerId customerId, int? skuId)
 		{
 			#region Validation
 			if (string.IsNullOrEmpty(subscriptionId))
@@ -491,7 +494,8 @@ namespace AllyisApps.Services
 			string service = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(service);
 			handler.DeleteSubscription(customerId, subscriptionId);
-			DBHelper.DeleteSubscriptionPlan(subscriptionId);
+			//DBHelper.DeleteSubscriptionPlan(subscriptionId);
+			DBHelper.DeleteSubscriptionPlanAndAddHistory(UserContext.ChosenOrganizationId, customerId.Id, UserContext.UserId, skuId, "Switching to free subscription, canceling stripe susbcription");
 		}
 
 		/// <summary>

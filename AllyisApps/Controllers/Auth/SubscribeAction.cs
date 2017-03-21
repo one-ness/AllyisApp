@@ -164,14 +164,14 @@ namespace AllyisApps.Controllers
 
 				if (subscriptionId == null)
 				{
-					Service.AddCustomerSubscriptionPlan(model.Billing.Amount, model.Billing.Customer.Id, model.NumberOfUsers, model.ProductId, model.ProductName);
+					Service.AddCustomerSubscriptionPlan(model.Billing.Amount, model.Billing.Customer.Id, model.NumberOfUsers, model.ProductId, model.ProductName, model.SelectedSku, model.ProductName);
 					//Service.InitializeSettingsForProduct(model.ProductId);
-					Service.AddBillingHistory(string.Format("Adding new subscription data for {0}.", model.ProductName), model.SelectedSku);
+					//Service.AddBillingHistory(string.Format("Adding new subscription data for {0}.", model.ProductName), model.SelectedSku);
 				}
 				else
 				{
-					string test = Service.UpdateSubscriptionPlan(model.Billing.Amount, model.ProductName, model.NumberOfUsers, subscriptionId, model.Billing.Customer.Id);
-					Service.AddBillingHistory(string.Format("Updating subscription data for {0}", model.ProductName), model.SelectedSku);
+					Service.UpdateSubscriptionPlan(model.Billing.Amount, model.ProductName, model.NumberOfUsers, subscriptionId, model.Billing.Customer.Id, model.SelectedSku, model.ProductName);
+					//Service.AddBillingHistory(string.Format("Updating subscription data for {0}", model.ProductName), model.SelectedSku);
 				}
 			}
 			else
@@ -186,10 +186,10 @@ namespace AllyisApps.Controllers
 						string subscriptionId = Service.GetSubscriptionId(model.Billing.Customer.Id);
 						if (subscriptionId != null)
 						{
-							Service.DeleteSubscriptionPlan(subscriptionId, model.Billing.Customer.Id);
+							Service.DeleteSubscriptionPlan(subscriptionId, model.Billing.Customer.Id, model.SelectedSku);
 
 							//Service.DeleteSubscription(model.Billing.Customer.Id, subscriptionId);
-							Service.AddBillingHistory("Switching to free subscription, canceling stripe susbcription", model.SelectedSku);
+							//Service.AddBillingHistory("Switching to free subscription, canceling stripe susbcription", model.SelectedSku);
 						}
 					}
 				}
