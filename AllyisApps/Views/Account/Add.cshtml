@@ -12,7 +12,7 @@
 @{ ViewData.Add(ControllerConstants.Controller, ControllerConstants.Account); }
 @{ ViewData.Add(ActionConstants.Action, ActionConstants.Add); }
 
-@using (Html.BeginForm(ActionConstants.Invite, ControllerConstants.Account, FormMethod.Post, new { id = "OrgAddForm" }))
+@using (Html.BeginForm(ActionConstants.Add, ControllerConstants.Account, FormMethod.Post, new { id = "OrgAddForm" }))
 {
 	<div class="row">
         @Html.AntiForgeryToken()
