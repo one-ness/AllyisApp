@@ -258,9 +258,8 @@ namespace AllyisApps.Services
 		/// <param name="productId">Product Id.</param>
 		/// <param name="planName">Name of subscription plan, to appear on Stripe invoices.</param>
 		/// <param name="skuId">Selected sku id, for the billing history item.</param>
-		/// <param name="productName">Name of product, for the billing history item.</param>
 		[CLSCompliant(false)]
-		public void AddCustomerSubscriptionPlan(int amount, BillingServicesCustomerId customerId, int numUsers, int productId, string planName, int? skuId, string productName)
+		public void AddCustomerSubscriptionPlan(int amount, BillingServicesCustomerId customerId, int numUsers, int productId, string planName, int? skuId)
 		{
 			#region Validation
 
@@ -290,7 +289,7 @@ namespace AllyisApps.Services
 			string service = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(service);
 			BillingServicesSubscriptionId subId = handler.CreateSubscription(amount, "month", planName, customerId);
-			DBHelper.AddCustomerSubscription(customerId.Id, subId.Id, amount, numUsers, productId, UserContext.ChosenOrganizationId, UserContext.UserId, skuId, string.Format("Adding new subscription data for {0}.", productName));
+			DBHelper.AddCustomerSubscription(customerId.Id, subId.Id, amount, numUsers, productId, UserContext.ChosenOrganizationId, UserContext.UserId, skuId, string.Format("Adding new subscription data for {0}.", planName));
 		}
 
 		/// <summary>
@@ -302,9 +301,8 @@ namespace AllyisApps.Services
 		/// <param name="subscriptionId">Subscription Id, as a string.</param>
 		/// <param name="customerId">The Billing Services Customer ID.</param>
 		/// <param name="skuId">Selected sku id, for the billing history item.</param>
-		/// <param name="productName">Name of product, for the billing history item.</param>
 		[CLSCompliant(false)]
-		public void UpdateSubscriptionPlan(int amount, string planName, int numUsers, string subscriptionId, BillingServicesCustomerId customerId, int? skuId, string productName)
+		public void UpdateSubscriptionPlan(int amount, string planName, int numUsers, string subscriptionId, BillingServicesCustomerId customerId, int? skuId)
 		{
 			#region Validation
 
@@ -335,7 +333,7 @@ namespace AllyisApps.Services
 			BillingServicesHandler handler = new BillingServicesHandler(serviceType); // TODO: make this check the database instead of hardcoding Stripe
 
 			handler.UpdateSubscription(amount, "month", planName, subscriptionId.Trim(), customerId);
-			DBHelper.UpdateSubscriptionPlan(customerId.Id, subscriptionId, amount, numUsers, UserContext.ChosenOrganizationId, UserContext.UserId, skuId, string.Format("Updating subscription data for {0}", productName));
+			DBHelper.UpdateSubscriptionPlan(customerId.Id, subscriptionId, amount, numUsers, UserContext.ChosenOrganizationId, UserContext.UserId, skuId, string.Format("Updating subscription data for {0}", planName));
 		}
 
 		/// <summary>
@@ -654,6 +652,99 @@ namespace AllyisApps.Services
 			}
 
 			return null;
+		}
+
+		/// <summary>
+		/// Subscribes the current organization to a product or updates the organization's subscription to the product, 
+		/// and creates/updates/removes the billing subscription plan accordingly.
+		/// </summary>
+		/// <param name="numberOfUsers">Number of users.</param>
+		/// <param name="productId">Product id.</param>
+		/// <param name="productName">Product name.</param>
+		/// <param name="selectedSku">Selected sku id.</param>
+		/// <param name="previousSku">The previous sku id.</param>
+		/// <param name="billingAmount">Billing amount, as an int in cents.</param>
+		/// <param name="existingToken">The existing BillingServicesToken, if any.</param>
+		/// <param name="addingBillingCustomer">A value indicating whether a new billing customer is being added.</param>
+		/// <param name="newBillingEmail">The email for the new billing customer, if being added.</param>
+		/// <param name="newBillingToken">The new BillingServicesToken, if being added.</param>
+		/// <returns></returns>
+		[CLSCompliant(false)]
+		public bool Subscribe(int numberOfUsers, int productId, string productName, int selectedSku, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken)
+		{
+			if (numberOfUsers < this.GetUsersWithSubscriptionToProductInOrganization(UserContext.ChosenOrganizationId, productId).Count())
+			{
+				return false;
+			}
+
+			BillingServicesCustomer customer;
+			BillingServicesToken token;
+			if (addingBillingCustomer)
+			{
+				BillingServicesCustomerId customerId = this.CreateBillingServicesCustomer(newBillingEmail, newBillingToken);
+
+				this.AddOrgCustomer(customerId, null);
+				customer = this.RetrieveCustomer(customerId);
+				token = newBillingToken;
+			}
+			else
+			{
+				customer = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId());
+				token = existingToken;
+			}
+
+			// Users >= 500 (the hardcoded free amount) will not trigger this
+			if (billingAmount > 0)
+			{
+				BillingServicesCustomerId customerId = this.GetOrgBillingServicesCustomerId();
+				if (customerId == null)
+				{
+					customer = this.RetrieveCustomer(this.CreateBillingServicesCustomer(newBillingEmail, token));
+					this.AddOrgCustomer(customer.Id, null);
+				}
+				else
+				{
+					customer = this.RetrieveCustomer(customerId);
+				}
+
+				string subscriptionId = this.GetSubscriptionId(customer.Id);
+
+				if (subscriptionId == null)
+				{
+					this.AddCustomerSubscriptionPlan(billingAmount, customer.Id, numberOfUsers, productId, productName, selectedSku);
+				}
+				else
+				{
+					this.UpdateSubscriptionPlan(billingAmount, productName, numberOfUsers, subscriptionId, customer.Id, selectedSku);
+				}
+			}
+			else
+			{
+				customer = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId());
+
+				if (customer != null)
+				{
+					// check if there is a subscription to cancel
+					string subscriptionId = this.GetSubscriptionId(customer.Id);
+					if (subscriptionId != null)
+					{
+						this.DeleteSubscriptionPlan(subscriptionId, customer.Id, selectedSku);
+					}
+				}
+			}
+
+			this.InitializeSettingsForProduct(productId);
+
+			if (selectedSku != previousSku)
+			{
+				this.AddSubscriptionOfSkuToOrganization(UserContext.ChosenOrganizationId, selectedSku, productId, numberOfUsers);
+			}
+			else
+			{
+				this.UpdateSubscriptionUsers(selectedSku, numberOfUsers);
+			}
+
+			return true;
 		}
 
 		/// <summary>
