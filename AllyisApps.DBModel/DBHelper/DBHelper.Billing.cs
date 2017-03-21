@@ -243,19 +243,24 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Adds an entry to the organization customer table.
+		/// Adds an entry to the organization customer table, and adds a billing history item.
 		/// </summary>
 		/// <param name="orgId">The id of the organization.</param>
-		/// <param name="customerID">The id of the customer object.</param>
-		public void AddOrgCustomer(int orgId, string customerID)
+		/// <param name="userId">The id of the user adding the billing customer.</param>
+		/// <param name="customerId">The id of the customer object.</param>
+		/// <param name="skuId">The id of the selected sku, for the billing history item.</param>
+		/// <param name="description">A description for the billing history item.</param>
+		public void AddOrgCustomer(int orgId, int userId, string customerId, int? skuId, string description)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@OrgId", orgId);
-			parameters.Add("@customerID", customerID);
+			parameters.Add("@UserId", userId);
+			parameters.Add("@customerID", customerId);
+			parameters.Add("@SkuId", skuId);
+			parameters.Add("@Description", description);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				// default -1
-				connection.Query<int>(
+				connection.Query(
 				   "[Billing].[CreateStripeOrgCustomer]",
 				   parameters,
 				   commandType: CommandType.StoredProcedure);

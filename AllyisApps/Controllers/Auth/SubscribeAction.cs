@@ -131,10 +131,10 @@ namespace AllyisApps.Controllers
 			{
 				BillingServicesCustomerId customerId = Service.CreateBillingServicesCustomer(billingServicesEmail, token);
 
-				Service.AddOrgCustomer(customerId);
+				Service.AddOrgCustomer(customerId, null);
 				model.Billing.Customer = Service.RetrieveCustomer(customerId);
 				model.Token = token;
-				Service.AddBillingHistory("Adding stripe customer data", null);
+				//Service.AddBillingHistory("Adding stripe customer data", null);
 			}
 			else
 			{
@@ -153,7 +153,7 @@ namespace AllyisApps.Controllers
 				if (customerId == null)
 				{
 					model.Billing.Customer = Service.RetrieveCustomer(Service.CreateBillingServicesCustomer(billingServicesEmail, token));
-					Service.AddOrgCustomer(model.Billing.Customer.Id);
+					Service.AddOrgCustomer(model.Billing.Customer.Id, null);
 				}
 				else
 				{
