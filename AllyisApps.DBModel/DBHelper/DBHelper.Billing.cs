@@ -213,7 +213,7 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Adds an entry to the customer subscription table.
+		/// Adds an entry to the customer subscription table, and adds a billing history item.
 		/// </summary>
 		/// <param name="stripeTokenCustId">The id of the stripe customer.</param>
 		/// <param name="stripeTokenSubId">The id of the stripe subscription.</param>
@@ -221,8 +221,11 @@ namespace AllyisApps.DBModel
 		/// <param name="numberOfUsers">The number of users for the subscription.</param>
 		/// <param name="productID">The id of the subscription product.</param>
 		/// <param name="organizationID">The id of the organization that the subscription belongs to.</param>
+		/// <param name="userId">The id of the user adding the subscription plan.</param>
+		/// <param name="skuId">The selected sku id, for the billing history item.</param>
+		/// <param name="description">A description for the billing history item.</param>
 		/// <returns>Subscription ID.</returns>
-		public string AddCustomerSubscription(string stripeTokenCustId, string stripeTokenSubId, int price, int numberOfUsers, int productID, int organizationID)
+		public void AddCustomerSubscription(string stripeTokenCustId, string stripeTokenSubId, int price, int numberOfUsers, int productID, int organizationID, int userId, int? skuId, string description)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@OrganizationId", organizationID);
@@ -231,11 +234,13 @@ namespace AllyisApps.DBModel
 			parameters.Add("@Price", price);
 			parameters.Add("@NumberOfUsers", numberOfUsers);
 			parameters.Add("@ProductId", productID);
+			parameters.Add("@UserId", productID);
+			parameters.Add("@SkuId", productID);
+			parameters.Add("@Description", productID);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				// default -1
-				return connection.Query<string>(
+				connection.Query(
 				   "[Billing].[CreateSubscriptionPlan]",
 				   parameters,
 				   commandType: CommandType.StoredProcedure).SingleOrDefault();
@@ -243,19 +248,24 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Adds an entry to the organization customer table.
+		/// Adds an entry to the organization customer table, and adds a billing history item.
 		/// </summary>
 		/// <param name="orgId">The id of the organization.</param>
-		/// <param name="customerID">The id of the customer object.</param>
-		public void AddOrgCustomer(int orgId, string customerID)
+		/// <param name="userId">The id of the user adding the billing customer.</param>
+		/// <param name="customerId">The id of the customer object.</param>
+		/// <param name="skuId">The id of the selected sku, for the billing history item.</param>
+		/// <param name="description">A description for the billing history item.</param>
+		public void AddOrgCustomer(int orgId, int userId, string customerId, int? skuId, string description)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@OrgId", orgId);
-			parameters.Add("@customerID", customerID);
+			parameters.Add("@UserId", userId);
+			parameters.Add("@customerID", customerId);
+			parameters.Add("@SkuId", skuId);
+			parameters.Add("@Description", description);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				// default -1
-				connection.Query<int>(
+				connection.Query(
 				   "[Billing].[CreateStripeOrgCustomer]",
 				   parameters,
 				   commandType: CommandType.StoredProcedure);
@@ -303,24 +313,31 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Gets the subscription id for the organization.
+		/// Updates the subscription plan for the organization, and adds a billing history item.
 		/// </summary>
 		/// <param name="customerID">The id of the customer.</param>
 		/// <param name="subscriptionPlanID">The id of the subscription plan to be updated.</param>
 		/// <param name="price">The price of the subscription.</param>
 		/// <param name="numberOfUsers">The number of users for the subscription.</param>
+		/// <param name="orgId">The organization id, for the billing history item.</param>
+		/// <param name="userId">The id of the user updating the subscription plan, for the billing history item.</param>
+		/// <param name="skuId">The selected sku id, for the billing history item.</param>
+		/// <param name="description">A description for the billing history item.</param>
 		/// <returns>The subscription ID.</returns>
-		public string UpdateSubscriptionPlan(string customerID, string subscriptionPlanID, int price, int numberOfUsers)
+		public void UpdateSubscriptionPlan(string customerID, string subscriptionPlanID, int price, int numberOfUsers, int orgId, int userId, int? skuId, string description)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerID", customerID);
 			parameters.Add("@SubPlanId", subscriptionPlanID);
 			parameters.Add("@NumberOfUsers", numberOfUsers);
 			parameters.Add("@Price", price);
+			parameters.Add("@OrganizationId", orgId);
+			parameters.Add("@UserId", userId);
+			parameters.Add("@SkuId", skuId);
+			parameters.Add("@Description", description);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				// default -1
-				return connection.Query<string>(
+				connection.Query(
 				   "[Billing].[UpdateCustomerSubscription]",
 				   parameters,
 				   commandType: CommandType.StoredProcedure).SingleOrDefault();
@@ -337,7 +354,7 @@ namespace AllyisApps.DBModel
 		/// <param name="skuId">Sku Id for the history item.</param>
 		/// <param name="description">Description for the history item.</param>
 		/// <returns>The subscription plan id of the delted subscription, or null if none found.</returns>
-		public string DeleteSubscriptionPlanAndAddHistory(int orgId, string customerId, int userId, int skuId, string description)
+		public string DeleteSubscriptionPlanAndAddHistory(int orgId, string customerId, int userId, int? skuId, string description)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@OrganizationId", orgId);

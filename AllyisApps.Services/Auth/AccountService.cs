@@ -310,6 +310,11 @@ namespace AllyisApps.Services
 
 			UserContext result = null;
 			var user = this.DBHelper.GetUserByEmail(email);
+			if (user == null)
+			{
+				return null;
+			}
+
 			Tuple<bool, string> passwordValidation = Crypto.ValidateAndUpdate(password, user.PasswordHash);
 			if (user != null && passwordValidation.Item1/*string.Compare(Crypto.ComputeSHA512Hash(password), user.PasswordHash, true) == 0*/)
 			{

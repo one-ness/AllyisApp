@@ -614,3 +614,11 @@ textarea.comiseo-daterangepicker-triggerbutton {
 	display: none;
 }
 /*# sourceMappingURL=form.css.map */
+
+.text-box-blue{
+    padding: 5px;
+    border-radius: 6px;
+    cursor: default;
+    background: rgba(217,237,247,.4);
+    word-break: break-all;
+}
