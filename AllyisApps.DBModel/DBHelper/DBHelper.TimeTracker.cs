@@ -519,14 +519,12 @@ namespace AllyisApps.DBModel
 					parameters,
 					commandType: CommandType.StoredProcedure);
 
-                var setting = results.Read<SettingDBEntity>().SingleOrDefault();
-                var payClass = results.Read<PayClassDBEntity>().ToList();
-                var holiday = results.Read<HolidayDBEntity>().ToList();
-                var completeProj = results.Read<CompleteProjectDBEntity>().ToList();
-                var user = results.Read<UserDBEntity>().ToList();
-                var timeEntry = results.Read<TimeEntryDBEntity>().ToList();
-
-                return Tuple.Create(setting, payClass, holiday, completeProj, user, timeEntry);
+                return Tuple.Create(results.Read<SettingDBEntity>().SingleOrDefault(), 
+                    results.Read<PayClassDBEntity>().ToList(),
+                    results.Read<HolidayDBEntity>().ToList(),
+                    results.Read<CompleteProjectDBEntity>().ToList(),
+                    results.Read<UserDBEntity>().ToList(),
+                    results.Read<TimeEntryDBEntity>().ToList());
             }
 		}
 	}

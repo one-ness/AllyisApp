@@ -144,9 +144,9 @@ AS
 	FROM [TimeTracker].[TimeEntry] WITH (NOLOCK) 
 	JOIN [Auth].[User] WITH (NOLOCK) ON [User].[UserId] = [TimeEntry].[UserId]
 	JOIN [TimeTracker].[PayClass] WITH (NOLOCK) ON [PayClass].[PayClassID] = [TimeEntry].[PayClassId]
-	JOIN [Auth].[OrganizationUser] WITH (NOLOCK) ON [User].[UserId] = [OrganizationUser].[UserId]
+	JOIN [Auth].[OrganizationUser] WITH (NOLOCK) ON [User].[UserId] = [OrganizationUser].[UserId] AND [OrganizationUser].[OrganizationId] = @OrganizationId
 	WHERE [User].[UserId] = @UserId
 		AND [Date] >= @StartingDate
 		AND [Date] <= @EndingDate
-		AND [OrganizationUser].[OrganizationId] = @OrganizationId
+		AND [PayClass].[OrganizationId] = @OrganizationId
 	ORDER BY [Date] ASC
