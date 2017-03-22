@@ -27,9 +27,8 @@ namespace AllyisApps.Controllers
         /// The page for adding members to an organization.
         /// </summary>
         /// <param name="returnUrl">The return url to redirect to after form submit.</param>
-        /// <param name="add">The View Model of user info passed from Add.cshtml</param>
         /// <returns>The result of this action.</returns>
-        public ActionResult Add(string returnUrl,  AddMemberViewModel add)
+        public ActionResult Add(string returnUrl)
 		{
 			// Only owners should view this page
 			if (Service.Can(Actions.CoreAction.EditOrganization))
