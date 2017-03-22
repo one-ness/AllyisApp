@@ -649,14 +649,16 @@ namespace AllyisApps.Services.TimeTracker
 			#endregion
 
 			var spResults = DBHelper.GetTimeEntryIndexPageInfo(UserContext.ChosenOrganizationId, (int)ProductIdEnum.TimeTracker, userId.Value, startingDate, endingDate);
-			return Tuple.Create(
-				InitializeSettingsInfo(spResults.Item1),
-				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
-				spResults.Item3.Select(hdb => InitializeHoliday(hdb)).ToList(),
-				spResults.Item4.Select(cpdb => Service.InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item5.Select(udb => Service.InitializeUser(udb)).ToList(),
-				spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList());
-		}
+
+            var settings = InitializeSettingsInfo(spResults.Item1);
+            var payClassInfo = spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList();
+            var holiday = spResults.Item3.Select(hdb => InitializeHoliday(hdb)).ToList();
+            var completeProj = spResults.Item4.Select(cpdb => Service.InitializeCompleteProjectInfo(cpdb)).ToList();
+            var user = spResults.Item5.Select(udb => Service.InitializeUser(udb)).ToList();
+            var timeEntry = spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList();
+
+            return Tuple.Create(settings, payClassInfo, holiday, completeProj, user, timeEntry);
+        }
 
 		#region Info-DBEntity Conversions
 		/// <summary>
