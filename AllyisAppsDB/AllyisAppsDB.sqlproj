@@ -256,6 +256,7 @@
     <Build Include="StoredProcedures\Auth\Auth.InviteUser.sql" />
     <Build Include="StoredProcedures\Billing\Billing.DeleteSubPlanAndAddHistory.sql" />
     <Build Include="StoredProcedures\Auth\Auth.EditOrgUsers.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.EditSubscriptionUsers.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
