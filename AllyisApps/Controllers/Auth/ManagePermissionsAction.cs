@@ -190,22 +190,65 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <param name="data">The JSON string of the model of actions and users.</param>
 		/// <returns>A Json object representing the results of the actions.</returns>
+		[HttpPost]
 		public ActionResult ManagePermissions(string data)
 		{
 			UserPermissionsAction model = JsonConvert.DeserializeObject<UserPermissionsAction>(data);
 			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
-				if (model.SelectedActions == null)
-				{
-					Notifications.Add(new BootstrapAlert("No actions were selected.", Variety.Danger));
-					return RedirectToAction(ActionConstants.Manage);
-				}
 
-				if (model.SelectedUsers == null)
+				if (model.SelectedUsers == null || model.SelectedUsers.Count() == 0)
 				{
 					Notifications.Add(new BootstrapAlert("No users were selected.", Variety.Danger));
 					return RedirectToAction(ActionConstants.Manage);
 				}
+
+				if (model.SelectedActions == null)
+				{
+					Notifications.Add(new BootstrapAlert("No actions were selected.", Variety.Danger));
+					return RedirectToAction(ActionConstants.ManagePermissions);
+				}
+
+				if (model.SelectedActions.OrgRoleTarget != 0)
+				{
+					// Changing organization roles
+					if (!Enum.IsDefined(typeof(OrganizationRole), model.SelectedActions.OrgRoleTarget) && model.SelectedActions.OrgRoleTarget != -1)
+					{
+						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Controllers.Auth.Strings.YouDidNotDefineATargetRole, Variety.Danger));
+						return RedirectToAction(ActionConstants.ManagePermissions);
+					}
+
+					if (model.SelectedUsers.Select(tu => tu.UserId == UserContext.UserId).Any())
+					{
+						if (model.SelectedActions.OrgRoleTarget == -1)
+						{
+							Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Controllers.Auth.Strings.YouAreUnableToRemoveYourself, Variety.Danger));
+						}
+						else
+						{
+							Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Controllers.Auth.Strings.YouAreUnableToChangeYourOwnRole, Variety.Danger));
+						}
+						model.SelectedUsers = model.SelectedUsers.Where(tu => tu.UserId != UserContext.UserId);
+					}
+
+					int numberChanged = Service.ChangeUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.OrgRoleTarget.Value);
+					if (model.SelectedActions.OrgRoleTarget == -1)
+					{
+						Notifications.Add(new BootstrapAlert(string.Format("{0} users were removed from the organization.", numberChanged), Variety.Success));
+					}
+					else
+					{
+						Notifications.Add(new BootstrapAlert(string.Format("{0} users changed roles in the organization.", numberChanged), Variety.Success));
+					}
+				}
+				else
+				{
+					// Changing time tracker roles
+
+
+				}
+
+
 
 				model.SelectedActions.OrganizationId = UserContext.ChosenOrganizationId;
 				model.SelectedActions.TimeTrackerSubscriptionId = Service.GetSubscriptionDetails()
@@ -215,7 +258,7 @@ namespace AllyisApps.Controllers
 				PermissionsActionsResults result = new PermissionsActionsResults();
 				if (model.SelectedActions.OrgRoleTarget != 0)
 				{
-					PerformOrganizationAssignmentAction(model.SelectedActions, model.SelectedUsers, result);
+					//PerformOrganizationAssignmentAction(model.SelectedActions, model.SelectedUsers, result);
 				}
 
 				if (model.SelectedActions.TimeTrackerRoleTarget != 0)
