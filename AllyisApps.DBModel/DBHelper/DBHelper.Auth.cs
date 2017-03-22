@@ -497,6 +497,36 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Assigns an organization role to a list of users.
+		/// </summary>
+		/// <param name="userIds">List of user Ids.</param>
+		/// <param name="organizationId">The Organization Id.</param>
+		/// <param name="orgRoleId">Organization role to assign (or -1 to remove from organization).</param>
+		/// <returns>The number of affected users.</returns>
+		public int EditOrganizationUsers(List<int> userIds, int organizationId, int orgRoleId)
+		{
+			DataTable userIdsTable = new DataTable();
+			userIdsTable.Columns.Add("userId", typeof(int));
+			foreach (int userId in userIds)
+			{
+				userIdsTable.Rows.Add(userId);
+			}
+
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@UserIDs", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
+			parameters.Add("@OrganizationId", organizationId);
+			parameters.Add("@OrgRole", orgRoleId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<int>(
+					"[Auth].[EditOrgUsers]",
+					parameters,
+					commandType: CommandType.StoredProcedure).SingleOrDefault();
+			}
+		}
+
+		/// <summary>
 		/// Retrieves the specified user's permissions in the specified organization.
 		/// </summary>
 		/// <param name="organizationId">The organization's ID.</param>

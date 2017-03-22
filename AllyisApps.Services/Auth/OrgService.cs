@@ -656,6 +656,28 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Assigns a new organization role to the given users for the current organization.
+		/// </summary>
+		/// <param name="userIds">List of user Ids.</param>
+		/// <param name="newOrganizationRole">Organization role to assign, or -1 to remove from organization.</param>
+		/// <returns>The number of affected users.</returns>
+		public int ChangeUserRoles(List<int> userIds, int newOrganizationRole)
+		{
+			#region Validation
+			if (!Enum.IsDefined(typeof(OrganizationRole), newOrganizationRole) && newOrganizationRole != -1)
+			{
+				throw new ArgumentOutOfRangeException("newOrganizationRole", "Organization role must either be -1 or match a value of the OrganizationRole enum.");
+			}
+			if (userIds == null || userIds.Count == 0)
+			{
+				throw new ArgumentException("No user ids provided.", "userIds");
+			}
+			#endregion
+
+			return DBHelper.EditOrganizationUsers(userIds, UserContext.ChosenOrganizationId, newOrganizationRole);
+		}
+
+		/// <summary>
 		/// Gets the product role for a user.
 		/// </summary>
 		/// <param name="productName">Product name.</param>
