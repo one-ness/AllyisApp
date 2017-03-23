@@ -281,3 +281,13 @@ label.required:after {
     word-break: break-all;
     height:2em;
 }
+
+// dynamic width control of form columns
+.sm-control-width{
+    width: 320px;
+}
+@media (min-width: @screen-md-min){
+    .sm-control-width{
+        width: 420px;
+    }
+}
