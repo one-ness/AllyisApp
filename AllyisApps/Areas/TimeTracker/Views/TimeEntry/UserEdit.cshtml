@@ -9,7 +9,7 @@
 }
 
 <div class="shrink-wrap-center">
-    <div class="md-control-width">
+    <div id="user-edit-div">
         @using (Html.BeginForm(ActionConstants.UserEdit, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = string.Empty, id = "form1", role = "form", onsubmit = "return userSubmit(this);", name = "EditForm" }))
         {
             <div>
