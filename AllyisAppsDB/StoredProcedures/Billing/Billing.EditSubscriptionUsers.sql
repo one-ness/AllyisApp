@@ -59,7 +59,7 @@ BEGIN TRANSACTION
 			-- Check that there is room for users being added
 			IF @ExistingUsers + (SELECT COUNT(*) FROM @AddingUsers) > @NumberOfUsers
 			BEGIN
-				SELECT -2 -- Not enough room in subscription
+				SELECT -1 -- Not enough room in subscription
 			END
 			ELSE
 			BEGIN
