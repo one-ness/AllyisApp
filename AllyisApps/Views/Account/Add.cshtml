@@ -12,7 +12,7 @@
 @{ ViewData.Add(ControllerConstants.Controller, ControllerConstants.Account); }
 @{ ViewData.Add(ActionConstants.Action, ActionConstants.Add); }
 
-@using (Html.BeginForm(ActionConstants.Invite, ControllerConstants.Account, FormMethod.Post, new { id = "OrgAddForm" }))
+@using (Html.BeginForm(ActionConstants.Add, ControllerConstants.Account, FormMethod.Post, new { id = "OrgAddForm" }))
 {
 	<div class="row">
         @Html.AntiForgeryToken()
@@ -23,12 +23,12 @@
 			<div class="form-group">
 				@Html.ReqLabelFor(model => model.Email, AllyisApps.Resources.Views.Account.Strings.Email)
 				@Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
-				@Html.ValidationMessageFor(model => model.Email)
+				@Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger"} )
 			</div>
 			<div class="form-group">
 				@Html.ReqLabelFor(model => model.EmployeeId, AllyisApps.Resources.Views.Account.Strings.EmployeeId)
 				@Html.TextBoxFor(model => model.EmployeeId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.EmployeeId })
-				@Html.ValidationMessageFor(model => model.EmployeeId)
+				@Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger"} )
 			</div>
 		</div>
 		<div class="col-md-6" style="min-width: 400px;">
@@ -36,12 +36,12 @@
 			<div class="form-group">
 				@Html.ReqLabelFor(model => model.FirstName, AllyisApps.Resources.Views.Account.Strings.FirstName)
 				@Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
-				@Html.ValidationMessageFor(model => model.FirstName)
+				@Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger"} )
 			</div>
 			<div class="form-group">
 				@Html.ReqLabelFor(model => model.LastName, AllyisApps.Resources.Views.Account.Strings.LastName)
 				@Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
-				@Html.ValidationMessageFor(model => model.LastName)
+				@Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger"} )
 			</div>
 			<div class="form-group">
 				@*<div class="@left">*@
@@ -78,8 +78,8 @@
 						{
 							<label>@(string.Format("{0} {1}", AllyisApps.Resources.Views.Account.Strings.TimeTracker, AllyisApps.Resources.Views.Account.Strings.Role))</label>
 						}
-						@Html.DropDownListDisabled(string.Format("Subscriptions[{0}].SelectedRole", count), new SelectList(sub.ProductRoles, "ProductRoleId", "Name", sub.ProductRoles.Where(x => x.Name == "None").FirstOrDefault()), sub.hasTooManySubscribers, new { @class = "form-control role-selector" })
-						@if (sub.hasTooManySubscribers)
+						@Html.DropDownListDisabled(string.Format("Subscriptions[{0}].SelectedRole", count), new SelectList(sub.ProductRoles, "ProductRoleId", "Name", sub.SelectedRole), sub.hasTooManySubscribers, new { @class = "form-control role-selector" })
+                        @if (sub.hasTooManySubscribers)
 						{
 							<p>@AllyisApps.Resources.Views.Account.Strings.TooManyUsers</p>roomInSubscription = false;
 						}
@@ -92,15 +92,16 @@
 							<div class="form-group">
 								<label>@AllyisApps.Resources.Views.Account.Strings.TrackProject</label>
 								@{    //outputs list of available projects
-									List<SelectListItem> selectProjects = new List<SelectListItem>();
-									foreach (CompleteProjectInfo pInfo in Model.Projects)
-									{
-										selectProjects.Add(new SelectListItem
-										{
-											Text = (pInfo.ProjectName),
-											Value = (pInfo.ProjectId.ToString())
-										});
-									}
+                                    List<SelectListItem> selectProjects = new List<SelectListItem>();
+                                    foreach (CompleteProjectInfo pInfo in Model.Projects)
+                                    {
+                                        selectProjects.Add(new SelectListItem
+                                        {
+                                            Text = (pInfo.ProjectName),
+                                            Value = (pInfo.ProjectId.ToString()),
+                                            Selected = (Model.SubscriptionProjectId == pInfo.ProjectId)
+                                    });
+                                }
 
 									@Html.DropDownList("SubscriptionProjectId", selectProjects, AllyisApps.Resources.Views.Account.Strings.DropDownEmpty, new { @class = "form-control project-selector" });
 								}
