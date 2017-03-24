@@ -518,14 +518,14 @@ namespace AllyisApps.DBModel
 					"[TimeTracker].[GetTimeEntryIndexInfo]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
-				return Tuple.Create(
-					results.Read<SettingDBEntity>().SingleOrDefault(),
-					results.Read<PayClassDBEntity>().ToList(),
-					results.Read<HolidayDBEntity>().ToList(),
-					results.Read<CompleteProjectDBEntity>().ToList(),
-					results.Read<UserDBEntity>().ToList(),
-					results.Read<TimeEntryDBEntity>().ToList());
-			}
+
+                return Tuple.Create(results.Read<SettingDBEntity>().SingleOrDefault(), 
+                    results.Read<PayClassDBEntity>().ToList(),
+                    results.Read<HolidayDBEntity>().ToList(),
+                    results.Read<CompleteProjectDBEntity>().ToList(),
+                    results.Read<UserDBEntity>().ToList(),
+                    results.Read<TimeEntryDBEntity>().ToList());
+            }
 		}
 	}
 }
