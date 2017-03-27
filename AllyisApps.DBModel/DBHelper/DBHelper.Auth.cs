@@ -451,7 +451,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@employeeID", employeeID);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Execute("[Auth].[UpdateOrgUserEmployeeId]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<int>("[Auth].[UpdateOrgUserEmployeeId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 
@@ -469,7 +469,7 @@ namespace AllyisApps.DBModel
             parameters.Add("@employeeID", employeeID);
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
-                return connection.Execute("[Auth].[UpdateOrgInvitationEmployeeId]", parameters, commandType: CommandType.StoredProcedure);
+                return connection.Query<int>("[Auth].[UpdateOrgInvitationEmployeeId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
             }
         }
 

@@ -46,7 +46,7 @@
                     <td class="memberSearchProperty" id="invId-@invite.InvitationId">
                         <span class="empId">@invite.EmployeeId</span>
                         <a href="javascript: void(0);" class="text-muted" title="Edit Employee Id"
-                           onclick='editInvitationId("@invite.OrganizationId", "@invite.InvitationId", "@invite.EmployeeId")'><span class="fa fa-fw fa-edit"></span></a>
+                           onclick='editEmployeeId("@invite.OrganizationId", "@invite.InvitationId", "@invite.EmployeeId",false)'><span class="fa fa-fw fa-edit"></span></a>
                     </td>
                     <td class="memberOrgRole">@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(invite.OrgRoleName)</td>
                     <td class="text-right icon-strip">
@@ -63,7 +63,7 @@
                     <td class="memberSearchProperty" id="empId-@user.UserId">
 						<span class="empId">@user.EmployeeId</span>
 						<a href="javascript: void(0);" class="text-muted" title="Edit Employee Id"
-						   onclick='editEmployeeId("@user.OrganizationId", "@user.UserId", "@user.EmployeeId")'><span class="fa fa-fw fa-edit"></span></a>
+						   onclick='editEmployeeId("@user.OrganizationId", "@user.UserId", "@user.EmployeeId",true)'><span class="fa fa-fw fa-edit"></span></a>
 					</td>
                     <td class="memberOrgRole">@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(user.PermissionLevel)</td>
                     <td class="text-right icon-strip">

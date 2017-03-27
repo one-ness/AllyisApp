@@ -635,8 +635,9 @@ namespace AllyisApps.Services
             {
                 throw new ArgumentNullException("employeeId", "Employee Id must have a value");
             }
+            var result = DBHelper.SetInvitationEmployeeId(invitationId, orgId, employeeId);
             //Change Employee Id if it is not already taken
-            if (DBHelper.SetInvitationEmployeeId(invitationId, orgId, employeeId) == 1)
+            if (result == 1)
             {
                 return false;
             };

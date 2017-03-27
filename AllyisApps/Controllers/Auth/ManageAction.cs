@@ -93,11 +93,16 @@ namespace AllyisApps.Controllers
 		/// <param name="org"></param>
 		/// <param name="employeeId"></param>
 		/// <returns></returns>
+        [HttpPost]
 		public bool SaveEmployeeId(int user, int org, string employeeId)
 		{
 			try
 			{
-				Service.SetEmployeeId(user, org, employeeId);
+				var result = Service.SetEmployeeId(user, org, employeeId);
+                if (!result)
+                {
+                    return false;
+                }
 			}
 			catch (Exception)
 			{
@@ -128,7 +133,6 @@ namespace AllyisApps.Controllers
             {
                 return false;
             }
-            
             return true;
         }
     }
