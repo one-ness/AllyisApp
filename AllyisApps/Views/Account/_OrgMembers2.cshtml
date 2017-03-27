@@ -43,7 +43,11 @@
                 <tr class="memberRow">
                     <td class="memberSearchProperty">@displayName</td>
                     <td class="memberSearchProperty">@invite.CompressedEmail</td>
-                    <td class="memberSearchProperty"><span class="empId">@invite.EmployeeId</span></td>
+                    <td class="memberSearchProperty" id="invId-@invite.InvitationId">
+                        <span class="empId">@invite.EmployeeId</span>
+                        <a href="javascript: void(0);" class="text-muted" title="Edit Employee Id"
+                           onclick='editInvitationId("@invite.OrganizationId", "@invite.InvitationId", "@invite.EmployeeId")'><span class="fa fa-fw fa-edit"></span></a>
+                    </td>
                     <td class="memberOrgRole">@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(invite.OrgRoleName)</td>
                     <td class="text-right icon-strip">
                         <a href="javascript: void(0);" class="text-muted" title=@AllyisApps.Resources.Views.Account.Strings.RemoveInvitation

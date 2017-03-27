@@ -443,18 +443,35 @@ namespace AllyisApps.DBModel
 		/// <param name="userID">The Id of the user.</param>
 		/// <param name="organizationID">The Id of the organization.</param>
 		/// <param name="employeeID">The value to set the employeeID to.</param>
-		public void SetEmployeeId(int userID, int organizationID, string employeeID)
+		public int SetEmployeeId(int userID, int organizationID, string employeeID)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userID", userID);
 			parameters.Add("@organizationID", organizationID);
 			parameters.Add("@employeeID", employeeID);
-
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Auth].[UpdateOrgUserEmployeeId]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Execute("[Auth].[UpdateOrgUserEmployeeId]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
+
+        /// <summary>
+        /// Sets the Employee Id for a invitation in a org
+        /// </summary>
+        /// <param name="invitationID">Id of the invitation</param>
+        /// <param name="organizationID">Id of the organization</param>
+        /// <param name="employeeID">The value to set the employeeID to</param>
+        public int SetInvitationEmployeeId(int invitationID, int organizationID, string employeeID)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@invitationID", invitationID);
+            parameters.Add("@organizationID", organizationID);
+            parameters.Add("@employeeID", employeeID);
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                return connection.Execute("[Auth].[UpdateOrgInvitationEmployeeId]", parameters, commandType: CommandType.StoredProcedure);
+            }
+        }
 
 		/// <summary>
 		/// Updates the specified user within the specified organization with a new role.
@@ -1004,6 +1021,5 @@ namespace AllyisApps.DBModel
 					results.Read<SubscriptionDisplayDBEntity>().ToList());
 			}
 		}
-
-	}
+    }
 }
