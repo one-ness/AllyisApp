@@ -8,7 +8,7 @@
             @Html.ValidationSummary(string.Empty, new { @class = "text-danger" })
 
             <div class="row">
-                <div class="col-md-6 min300">
+                <div class="col-md-6 sm-control-width">
 
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.Name, AllyisApps.Resources.Views.Account.Strings.Name)
@@ -40,7 +40,7 @@
                         @Html.TextBoxFor(m => m.FaxNumber, new { @class = "form-control" })
                     </div>
                 </div>
-                <div class="col-md-6 min300">
+                <div class="col-md-6 sm-control-width">
 
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.Address, AllyisApps.Resources.Views.Account.Strings.Address)

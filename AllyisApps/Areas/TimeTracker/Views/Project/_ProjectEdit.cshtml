@@ -22,14 +22,14 @@
                     @Html.ReqLabelFor(m => m.ProjectName, @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Name)
                     @*<label for="Name">@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Name</label>*@
                     @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(x => x.ProjectName)
+                    @Html.ValidationMessageFor(x => x.ProjectName, "", new { @class = "text-danger" })
                 </div>
                 @*@if (Model.IsCreating)
                 {*@
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.ProjectOrgId, AllyisApps.Resources.TimeTracker.Views.Project.Strings.ProjectOrgId)
                         @Html.TextBoxFor(m => m.ProjectOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.ProjectOrgId })
-                        @Html.ValidationMessageFor(x => x.ProjectOrgId)
+                        @Html.ValidationMessageFor(x => x.ProjectOrgId, "", new { @class = "text-danger"})
                     </div>
                 @*}
                 else
