@@ -243,6 +243,9 @@ function changeOccur(form_child) {
 
     form_submit_element = form_element.find("button");
     form_submit_element.removeAttr("disabled");
+
+    form_element.removeClass("error");
+    form_element.removeClass("error-submit");
 }
 
 function changeRemove(form_element) {
