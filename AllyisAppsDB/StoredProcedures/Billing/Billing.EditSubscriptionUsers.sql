@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[EditSubscriptionUsers]
+﻿CREATE PROCEDURE [Billing].[EditSubscriptionUsers]
 	@OrganizationId	INT,
 	@UserIDs [Auth].[UserTable] READONLY,
 	@TimeTrackerRole INT
@@ -47,13 +47,13 @@ BEGIN TRANSACTION
 				[UserId] INT
 			);
 			INSERT INTO @AddingUsers ([UserId])
-			SELECT @UserIds.[userId]
-			FROM @UserIDs
+			SELECT [UID].[userId]
+			FROM @UserIDs AS [UID]
 			LEFT OUTER JOIN (
 				SELECT [SubscriptionId], [UserId]
 				FROM [Billing].[SubscriptionUser] WITH (NOLOCK)
 				WHERE [SubscriptionId] = @SubId
-			) [SubUsers] ON [SubUsers].[UserId] = @UserIDs.[userId]
+			) [SubUsers] ON [SubUsers].[UserId] = [UID].[userId]
 			WHERE [SubscriptionId] IS NULL
 
 			-- Check that there is room for users being added

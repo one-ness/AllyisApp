@@ -120,7 +120,8 @@ namespace AllyisApps.DBModel
 				int usersUpdated = results.Read<int>().SingleOrDefault();
 				if (usersUpdated == -1)
 				{
-					throw new InvalidOperationException("No subscription to TimeTracker for this organization.");
+					return Tuple.Create(-1, 0); // Indicates no subscription to TimeTracker for this organization.
+					//throw new InvalidOperationException("No subscription to TimeTracker for this organization.");
 				}
 
 				if (timeTrackerRoleId == -1) // If removing from subscription, return only the number of users succesfully removed.

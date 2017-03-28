@@ -218,7 +218,7 @@ namespace AllyisApps.Controllers
 						return RedirectToAction(ActionConstants.ManagePermissions);
 					}
 
-					if (model.SelectedUsers.Select(tu => tu.UserId == UserContext.UserId).Any())
+					if (model.SelectedUsers.Where(tu => tu.UserId == UserContext.UserId).Any())
 					{
 						if (model.SelectedActions.OrgRoleTarget == -1)
 						{
@@ -244,68 +244,37 @@ namespace AllyisApps.Controllers
 				else
 				{
 					// Changing time tracker roles
+					if (!Enum.IsDefined(typeof(ProductRoleIdEnum), model.SelectedActions.TimeTrackerRoleTarget) && model.SelectedActions.TimeTrackerRoleTarget != -1)
+					{
+						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Controllers.Auth.Strings.YouDidNotDefineATargetRole, Variety.Danger));
+						return RedirectToAction(ActionConstants.ManagePermissions);
+					}
 
+					Tuple<int, int> updatedAndAdded = Service.ChangeSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value);
+					if (updatedAndAdded.Item1 == -1)
+					{
+						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Controllers.Auth.Strings.YouDontHaveASubscriptionToTimeTracker, Variety.Danger));
+						return RedirectToAction(ActionConstants.ManagePermissions);
+					}
 
+					if (updatedAndAdded.Item1 != 0)
+					{
+						Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", updatedAndAdded.Item1, model.SelectedActions.TimeTrackerRoleTarget == -1 ? 
+							"users removed from TimeTracker." : AllyisApps.Resources.Controllers.Auth.Strings.UsersChangedRolesInTimeTracker), Variety.Success));
+					}
+					
+					if (updatedAndAdded.Item2 == -1)
+					{
+						Notifications.Add(new BootstrapAlert(string.Format("You have too many users in your subscription to add {0} more.", model.SelectedUsers.Count()), Variety.Danger));
+					}
+					else
+					{
+						if (updatedAndAdded.Item2 != 0)
+						{
+							Notifications.Add(new BootstrapAlert(string.Format("{0} users added to TimeTracker.", updatedAndAdded.Item2), Variety.Success));
+						}
+					}
 				}
-
-
-
-				model.SelectedActions.OrganizationId = UserContext.ChosenOrganizationId;
-				model.SelectedActions.TimeTrackerSubscriptionId = Service.GetSubscriptionDetails()
-					.Select(x => x.SubscriptionId)
-					.SingleOrDefault();
-
-				PermissionsActionsResults result = new PermissionsActionsResults();
-				if (model.SelectedActions.OrgRoleTarget != 0)
-				{
-					//PerformOrganizationAssignmentAction(model.SelectedActions, model.SelectedUsers, result);
-				}
-
-				if (model.SelectedActions.TimeTrackerRoleTarget != 0)
-				{
-					PerformTimeTrackerAssignmentAction(model.SelectedActions, model.SelectedUsers, result);
-				}
-
-				// Constructing notification
-				// TODO: This largely mirros the way the Permission.cshtml page used to construct the notifications, but
-				//  without quite as much detail. We could either a) restore that detail to notifications here, or b) remove
-				//  some of the now uneccessary structure in all the PermissionResultetc objects.
-				//  Also, the logic behind what to write and what variety to use may need to be reexamined.
-				int totalResults = result.Results.Count();
-				Variety variety = null;
-				if (totalResults == result.Results.Where(x => x.ActionStatus == "success").Count())
-				{
-					result.Status = "success"; // full Success case
-					variety = Variety.Success;
-				}
-				else if (totalResults == result.Results.Where(x => x.ActionStatus == "failure").Count())
-				{
-					result.Status = "failure"; // full failure case
-					variety = Variety.Danger;
-				}
-				else if (totalResults == result.Results.Where(x => x.ActionStatus == "error").Count())
-				{
-					result.Status = "error"; // full error case
-					variety = Variety.Warning;
-				}
-				else
-				{
-					result.Status = "partial"; // partial failure case
-					variety = Variety.Info;
-				}
-
-				System.Text.StringBuilder sb = new System.Text.StringBuilder();
-				sb.Append(string.IsNullOrEmpty(result.Result) ? string.Empty : string.Format("{0}\n\r", result.Result));
-				foreach (var res in result.Results)
-				{
-					sb.AppendLine(string.Format("{0}/{1}: {2}", res.AffectedUserCount, res.TotalUserCount, res.ActionText));
-				}
-
-				Notifications.Add(new BootstrapAlert(sb.ToString(), variety));
-			}
-			else
-			{
-				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
 			if (!model.isPermissions2) // TODO: Delete once there's only one manage permissions page (also delete the action constant)
@@ -313,6 +282,71 @@ namespace AllyisApps.Controllers
 				return RedirectToAction(ActionConstants.ManagePermissions2);
 			}
 			return RedirectToAction(ActionConstants.ManagePermissions);
+
+
+			//	model.SelectedActions.OrganizationId = UserContext.ChosenOrganizationId;
+			//	model.SelectedActions.TimeTrackerSubscriptionId = Service.GetSubscriptionDetails()
+			//		.Select(x => x.SubscriptionId)
+			//		.SingleOrDefault();
+
+			//	PermissionsActionsResults result = new PermissionsActionsResults();
+			//	if (model.SelectedActions.OrgRoleTarget != 0)
+			//	{
+			//		//PerformOrganizationAssignmentAction(model.SelectedActions, model.SelectedUsers, result);
+			//	}
+
+			//	if (model.SelectedActions.TimeTrackerRoleTarget != 0)
+			//	{
+			//		PerformTimeTrackerAssignmentAction(model.SelectedActions, model.SelectedUsers, result);
+			//	}
+
+			//	// Constructing notification
+			//	// TODO: This largely mirros the way the Permission.cshtml page used to construct the notifications, but
+			//	//  without quite as much detail. We could either a) restore that detail to notifications here, or b) remove
+			//	//  some of the now uneccessary structure in all the PermissionResultetc objects.
+			//	//  Also, the logic behind what to write and what variety to use may need to be reexamined.
+			//	int totalResults = result.Results.Count();
+			//	Variety variety = null;
+			//	if (totalResults == result.Results.Where(x => x.ActionStatus == "success").Count())
+			//	{
+			//		result.Status = "success"; // full Success case
+			//		variety = Variety.Success;
+			//	}
+			//	else if (totalResults == result.Results.Where(x => x.ActionStatus == "failure").Count())
+			//	{
+			//		result.Status = "failure"; // full failure case
+			//		variety = Variety.Danger;
+			//	}
+			//	else if (totalResults == result.Results.Where(x => x.ActionStatus == "error").Count())
+			//	{
+			//		result.Status = "error"; // full error case
+			//		variety = Variety.Warning;
+			//	}
+			//	else
+			//	{
+			//		result.Status = "partial"; // partial failure case
+			//		variety = Variety.Info;
+			//	}
+
+			//	System.Text.StringBuilder sb = new System.Text.StringBuilder();
+			//	sb.Append(string.IsNullOrEmpty(result.Result) ? string.Empty : string.Format("{0}\n\r", result.Result));
+			//	foreach (var res in result.Results)
+			//	{
+			//		sb.AppendLine(string.Format("{0}/{1}: {2}", res.AffectedUserCount, res.TotalUserCount, res.ActionText));
+			//	}
+
+			//	Notifications.Add(new BootstrapAlert(sb.ToString(), variety));
+			//}
+			//else
+			//{
+			//	Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+			//}
+
+			//if (!model.isPermissions2) // TODO: Delete once there's only one manage permissions page (also delete the action constant)
+			//{
+			//	return RedirectToAction(ActionConstants.ManagePermissions2);
+			//}
+			//return RedirectToAction(ActionConstants.ManagePermissions);
 		}
 
 		/// <summary>
