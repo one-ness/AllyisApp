@@ -1,8 +1,0 @@
-diff a/AllyisAppsDB/AllyisAppsDB.sqlproj b/AllyisAppsDB/AllyisAppsDB.sqlproj	(rejected hunks)
-@@ -257,7 +257,6 @@
-     <Build Include="StoredProcedures\Billing\Billing.DeleteSubPlanAndAddHistory.sql" />
-     <Build Include="StoredProcedures\TimeTracker\TimeTracker.CreateBulkTimeEntry.sql" />
-     <Build Include="StoredProcedures\Auth\UpdateOrgInvitationEmployeeId.sql" />
-   </ItemGroup>
-   <ItemGroup>
-     <Compile Include="Properties\AssemblyInfo.cs" />
