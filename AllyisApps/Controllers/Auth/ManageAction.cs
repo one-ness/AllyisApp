@@ -93,11 +93,16 @@ namespace AllyisApps.Controllers
 		/// <param name="org"></param>
 		/// <param name="employeeId"></param>
 		/// <returns></returns>
+        [HttpPost]
 		public bool SaveEmployeeId(int user, int org, string employeeId)
 		{
 			try
 			{
-				Service.SetEmployeeId(user, org, employeeId);
+				var result = Service.SetEmployeeId(user, org, employeeId);
+                if (!result)
+                {
+                    return false;
+                }
 			}
 			catch (Exception)
 			{
@@ -105,5 +110,30 @@ namespace AllyisApps.Controllers
 			}
 			return true;
 		}
-	}
+
+        /// <summary>
+        /// Edits the Employee Id on an Invitation
+        /// </summary>
+        /// <param name="user">The Invitation Id</param>
+        /// <param name="org">The Organization Id</param>
+        /// <param name="employeeId">The new Employee Id</param>
+        /// <returns>the result of this operation</returns>
+        [HttpPost]
+        public bool SaveInvitationEmployeeId(int user, int org, string employeeId)
+        {
+            try
+            {
+                var result = Service.SetInvitationEmployeeId(user, org, employeeId);
+                if (!result)
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+    }
 }

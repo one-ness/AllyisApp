@@ -590,7 +590,7 @@ namespace AllyisApps.Services
 		/// <param name="userId">User id.</param>
 		/// <param name="orgId">Organization id.</param>
 		/// <param name="employeeId">New employee id.</param>
-		public void SetEmployeeId(int userId, int orgId, string employeeId)
+		public bool SetEmployeeId(int userId, int orgId, string employeeId)
 		{
 			if (userId <= 0)
 			{
@@ -606,9 +606,43 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("employeeId", "Employee Id must have a value");
 			}
-
-			DBHelper.SetEmployeeId(userId, orgId, employeeId);
+            //Change Employee Id if it is not already taken
+            if (DBHelper.SetEmployeeId(userId, orgId, employeeId) == 1)
+            {
+                return false;
+            };
+            return true;
 		}
+
+        /// <summary>
+        /// sets the employee id of an invitation 
+        /// </summary>
+        /// <param name="invitationId"></param>
+        /// <param name="orgId"></param>
+        /// <param name="employeeId"></param>
+        public bool SetInvitationEmployeeId(int invitationId, int orgId, string employeeId)
+        {
+            if (invitationId <= 0)
+            {
+                throw new ArgumentOutOfRangeException("invitationId", "Invitation Id cannot be 0 or negative.");
+            }
+            if (orgId < 0)
+            {
+                throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
+            }
+
+            if (string.IsNullOrWhiteSpace(employeeId))
+            {
+                throw new ArgumentNullException("employeeId", "Employee Id must have a value");
+            }
+            var result = DBHelper.SetInvitationEmployeeId(invitationId, orgId, employeeId);
+            //Change Employee Id if it is not already taken
+            if (result == 1)
+            {
+                return false;
+            };
+            return true;
+        }
 
 		/// <summary>
 		/// Removes an organization user.

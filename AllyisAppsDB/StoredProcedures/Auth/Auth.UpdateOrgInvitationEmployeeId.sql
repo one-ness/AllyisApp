@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Auth].[UpdateOrgUserEmployeeId]
-	@UserId INT,
+﻿CREATE PROCEDURE [Auth].[UpdateOrgInvitationEmployeeId]
+	@InvitationId INT,
 	@OrganizationId INT,
 	@EmployeeId NVARCHAR(100)
 AS
@@ -16,6 +16,6 @@ AS
 	ELSE
 	BEGIN
 	SET NOCOUNT ON;
-	UPDATE [Auth].[OrganizationUser] SET [EmployeeId] = @EmployeeId WHERE [UserId] = @UserId AND [OrganizationId] = @OrganizationId;
-	SELECT 2;
+	UPDATE [Auth].[Invitation] SET [EmployeeId] = @EmployeeId WHERE [InvitationId] = @InvitationId AND [OrganizationId] = @OrganizationId
+	SELECT 2; -- Indicates employee id change was successful
 	END
