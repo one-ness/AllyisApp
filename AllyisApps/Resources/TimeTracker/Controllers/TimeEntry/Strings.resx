@@ -255,4 +255,7 @@
   <data name="LockDateUpdateFail" xml:space="preserve">
     <value>Failed to update lock date settings.</value>
   </data>
+  <data name="EnterATimeLongerThanZero" xml:space="preserve">
+    <value>You must enter a time longer than 00:00.</value>
+  </data>
 </root>
