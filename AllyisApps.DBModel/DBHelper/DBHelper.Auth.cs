@@ -443,18 +443,35 @@ namespace AllyisApps.DBModel
 		/// <param name="userID">The Id of the user.</param>
 		/// <param name="organizationID">The Id of the organization.</param>
 		/// <param name="employeeID">The value to set the employeeID to.</param>
-		public void SetEmployeeId(int userID, int organizationID, string employeeID)
+		public int SetEmployeeId(int userID, int organizationID, string employeeID)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userID", userID);
 			parameters.Add("@organizationID", organizationID);
 			parameters.Add("@employeeID", employeeID);
-
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Auth].[UpdateOrgUserEmployeeId]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<int>("[Auth].[UpdateOrgUserEmployeeId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
+
+        /// <summary>
+        /// Sets the Employee Id for a invitation in a org
+        /// </summary>
+        /// <param name="invitationID">Id of the invitation</param>
+        /// <param name="organizationID">Id of the organization</param>
+        /// <param name="employeeID">The value to set the employeeID to</param>
+        public int SetInvitationEmployeeId(int invitationID, int organizationID, string employeeID)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@invitationID", invitationID);
+            parameters.Add("@organizationID", organizationID);
+            parameters.Add("@employeeID", employeeID);
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                return connection.Query<int>("[Auth].[UpdateOrgInvitationEmployeeId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            }
+        }
 
 		/// <summary>
 		/// Updates the specified user within the specified organization with a new role.
@@ -493,6 +510,36 @@ namespace AllyisApps.DBModel
 				parameters.Add("@userID", userId);
 
 				connection.Execute("[Auth].[DeleteOrgUser]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Assigns an organization role to a list of users.
+		/// </summary>
+		/// <param name="userIds">List of user Ids.</param>
+		/// <param name="organizationId">The Organization Id.</param>
+		/// <param name="orgRoleId">Organization role to assign (or -1 to remove from organization).</param>
+		/// <returns>The number of affected users.</returns>
+		public int EditOrganizationUsers(List<int> userIds, int organizationId, int orgRoleId)
+		{
+			DataTable userIdsTable = new DataTable();
+			userIdsTable.Columns.Add("userId", typeof(int));
+			foreach (int userId in userIds)
+			{
+				userIdsTable.Rows.Add(userId);
+			}
+
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@UserIDs", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
+			parameters.Add("@OrganizationId", organizationId);
+			parameters.Add("@OrgRole", orgRoleId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<int>(
+					"[Auth].[EditOrgUsers]",
+					parameters,
+					commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
 
@@ -1004,6 +1051,5 @@ namespace AllyisApps.DBModel
 					results.Read<SubscriptionDisplayDBEntity>().ToList());
 			}
 		}
-
-	}
+    }
 }
