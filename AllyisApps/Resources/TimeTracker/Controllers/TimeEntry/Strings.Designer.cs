@@ -203,6 +203,17 @@ namespace AllyisApps.Resources.TimeTracker.Controllers.TimeEntry {
                 return ResourceManager.GetString("DurationFormat", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///  Looks up a localized string similar to You must enter a time longer than 00:00
+        /// </summary>
+        public static string EnterATimeLongerThanZero
+        {
+            get
+            {
+                return ResourceManager.GetString("EnterATimeLongerThanZero", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to FirstName.
