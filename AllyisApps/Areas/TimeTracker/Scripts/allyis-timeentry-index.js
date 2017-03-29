@@ -145,7 +145,10 @@ function ajaxEdit(form_element, edit_action_url) {
         data: data,
         timeout: 5000,
         dataType: "json"})
-    .done(function(res) {
+    .done(function (res) {
+        if (res.message != null) {
+            form_element.addClass("error error-submit");
+        }
         ajaxHandleOverridingResponses(res, { form_element: form_element});
         if (res.status == 'success')
         {

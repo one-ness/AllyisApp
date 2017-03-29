@@ -121,8 +121,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			model.IsManager = canManage;
 			if (!(durationResult = this.ParseDuration(model.Duration)).HasValue)
 			{
-				throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnableParseDuration);
+				throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.DurationFormat);
 			}
+            if (this.ParseDuration(model.Duration) == 0)
+            {
+                throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.EnterATimeLongerThanZero);
+            }
 
 			IEnumerable<TimeEntryInfo> otherEntriesToday = TimeTrackerService.GetTimeEntriesByUserOverDateRange(
 				new List<int> { model.UserId },
@@ -142,7 +146,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotExceed24);
 			}
 
-			if (model.ProjectId == 0)
+			if (model.ProjectId <= 0)
 			{
 				throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.MustSelectProject);
 			}
