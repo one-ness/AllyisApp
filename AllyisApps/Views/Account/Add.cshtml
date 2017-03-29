@@ -78,7 +78,14 @@
 						{
 							<label>@(string.Format("{0} {1}", AllyisApps.Resources.Views.Account.Strings.TimeTracker, AllyisApps.Resources.Views.Account.Strings.Role))</label>
 						}
-						@Html.DropDownListDisabled(string.Format("Subscriptions[{0}].SelectedRole", count), new SelectList(sub.ProductRoles, "ProductRoleId", "Name", sub.SelectedRole), sub.hasTooManySubscribers, new { @class = "form-control role-selector" })
+                        @{
+                            var languageAdjustment = sub.ProductRoles;
+                            foreach (var role in languageAdjustment)
+                            {
+                                role.Name = AllyisApps.Resources.ViewModels.Org.Strings.ResourceManager.GetString(role.Name);
+                            }
+                        }
+                        @Html.DropDownListDisabled(string.Format("Subscriptions[{0}].SelectedRole", count), new SelectList(languageAdjustment, "ProductRoleId", "Name", languageAdjustment.Where(x => x.Name == AllyisApps.Resources.ViewModels.Org.Strings.ResourceManager.GetString("None")).FirstOrDefault()), sub.hasTooManySubscribers, new { @class = "form-control role-selector" })
                         @if (sub.hasTooManySubscribers)
 						{
 							<p>@AllyisApps.Resources.Views.Account.Strings.TooManyUsers</p>roomInSubscription = false;

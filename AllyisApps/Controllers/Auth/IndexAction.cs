@@ -55,8 +55,8 @@ namespace AllyisApps.Controllers
 						{
 							ProductId = (int)userSubInfo.ProductId,
 							ProductName = userSubInfo.ProductName,
-							ProductDisplayName = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Views.Shared.Strings.TimeTracker : "Unknown Product",
-							ProductDescription = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Views.Shared.Strings.TimeTrackerDescription : ""
+							ProductDisplayName = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Views.Shared.Strings.TimeTracker : "Unknown Product",//LANGUAGE Update to use resource file to change message language
+                            ProductDescription = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Views.Shared.Strings.TimeTrackerDescription : ""
 						});
 					}
 				}

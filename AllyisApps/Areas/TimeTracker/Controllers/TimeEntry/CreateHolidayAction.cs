@@ -38,8 +38,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			if (TimeTrackerService.CreateHoliday(new Holiday() { OrganizationId = UserContext.ChosenOrganizationId, HolidayName = newHolidayName, Date = holidayDate }))
 			{
-				Notifications.Add(new BootstrapAlert("Created holiday successfully.", Variety.Success));
-			}
+				Notifications.Add(new BootstrapAlert("Created holiday successfully.", Variety.Success));//LANGUAGE Update to use resource file to change message language
+            }
 			else
 			{
 				// This should only be a permissions failure

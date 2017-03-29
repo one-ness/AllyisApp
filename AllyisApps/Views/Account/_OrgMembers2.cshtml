@@ -8,7 +8,7 @@
         @AllyisApps.Resources.Views.Account.Strings.Members
         <span class="pull-right panel-title">
             <a href="@Url.Action(ActionConstants.ManagePermissions)" title="@AllyisApps.Resources.Views.Account.Strings.ManagePermissions"><span class="fa fa-fw fa-lg fa-users text-warning"></span></a>
-            <a href="@Url.Action(ActionConstants.Add)" title=@AllyisApps.Resources.Views.Account.Strings.AddMembers><span class="fa fa-fw fa-plus fa-lg text-info"></span></a>
+            <a href="@Url.Action(ActionConstants.Add)" title="@AllyisApps.Resources.Views.Account.Strings.AddMembers"><span class="fa fa-fw fa-plus fa-lg text-info"></span></a>
         </span>
     </h1>
 </div>
@@ -17,9 +17,9 @@
 		<span class="col-xs-9" style="padding: 0px;"><input id="org-members-search" type="search" placeholder="🔍 " class="form-control" /></span>
 		<span class="col-xs-2 col-xs-push-1" style="vertical-align: middle; padding: 0px;">
 			<select id="org-members-role" class="form-control">
-				<option>Any</option>
-				<option>Member</option>
-				<option>Owner</option>
+				<option>@AllyisApps.Resources.Views.Account.Strings.Any</option>
+				<option>@AllyisApps.Resources.Views.Account.Strings.Member</option>
+				<option>@AllyisApps.Resources.Views.Account.Strings.Owner</option>
 			</select>
 		</span>
     </div>
@@ -45,12 +45,12 @@
                     <td class="memberSearchProperty">@invite.CompressedEmail</td>
                     <td class="memberSearchProperty" id="invId-@invite.InvitationId">
                         <span class="empId">@invite.EmployeeId</span>
-                        <a href="javascript: void(0);" class="text-muted" title="Edit Employee Id"
+                        <a href="javascript: void(0);" class="text-muted" title="Edit Employee Id"@*//LANGUAGE Update to use resource file to change message language*@
                            onclick='editEmployeeId("@invite.OrganizationId", "@invite.InvitationId", "@invite.EmployeeId",false)'><span class="fa fa-fw fa-edit"></span></a>
                     </td>
                     <td class="memberOrgRole">@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(invite.OrgRoleName)</td>
                     <td class="text-right icon-strip">
-                        <a href="javascript: void(0);" class="text-muted" title=@AllyisApps.Resources.Views.Account.Strings.RemoveInvitation
+                        <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.RemoveInvitation"
                            onclick='deleteInvitation("@invite.OrganizationId", "@invite.InvitationId")'><span class="fa fa-fw fa-remove text-danger"></span></a>
                     </td>
                 </tr>
@@ -69,7 +69,7 @@
                     <td class="text-right icon-strip">
                         @if (Model.CurrentUserId != user.UserId)
 						{
-							<a href="~/Account/ViewUser/@user.UserId" class="text-muted" title="View Member"><span class="fa fa-fw fa-eye"></span></a>
+							<a href="~/Account/ViewUser/@user.UserId" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.ViewMemberInfo"><span class="fa fa-fw fa-eye"></span></a>
                             <a href="javascript: void(0);" class="text-muted" title=@AllyisApps.Resources.Views.Account.Strings.RemoveMember
                                onclick='removeUser("@user.OrganizationId", "@user.UserId", "@user.FullName")'><span class="fa fa-fw fa-remove text-danger"></span></a>
                         }
@@ -147,7 +147,7 @@
                                 @invite.OrgRoleName
                             </td>
                             <td class="text-right icon-strip">
-                                <a href="javascript: void(0);" class="text-muted" title=@AllyisApps.Resources.Views.Account.Strings.RemoveInvitation
+                                <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.RemoveInvitation"
                                    onclick='deleteInvitation("@invite.OrganizationId", "@invite.InvitationId")'><span class="fa fa-fw fa-remove text-danger"></span></a>
                             </td>
                         </tr>
@@ -183,7 +183,7 @@
                             <td class="text-right icon-strip">
                                 @if (Model.CurrentUserId != user.UserId)
                                 {
-                                    <a href="javascript: void(0);" class="text-muted" title=@AllyisApps.Resources.Views.Account.Strings.RemoveMember
+                                    <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.RemoveMember"
                                        onclick='removeUser("@user.OrganizationId", "@user.UserId", "@user.FullName")'><span class="fa fa-fw fa-remove text-danger"></span></a>
                                 }
                             </td>

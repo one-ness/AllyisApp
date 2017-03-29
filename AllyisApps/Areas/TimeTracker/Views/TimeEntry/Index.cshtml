@@ -38,15 +38,15 @@
             <div class="input-group">
 
                 <div class="input-group-btn">
-                    <a class="btn btn-primary" title=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Previous
+                    <a class="btn btn-primary" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Previous"
                        href="javascript: void(0);" onclick="return drp_prevWeek()">
                         <i class="fa fa-chevron-left"></i>
                     </a>
-                    <a class="btn btn-primary" title=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Current
+                    <a class="btn btn-primary" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Current"
                        href="@Url.Action(ActionConstants.Index, routeValues: new { userId = Model.EntryRange.UserId })">
                         <i class="glyphicon glyphicon-flash"></i>
                     </a>
-                    <a class="btn btn-primary" title=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Next
+                    <a class="btn btn-primary" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Next"
                        href="javascript: void(0);" onclick="return drp_nextWeek()">
                         <i class="fa fa-chevron-right"></i>
                     </a>

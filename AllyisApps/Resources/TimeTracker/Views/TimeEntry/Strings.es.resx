@@ -337,16 +337,16 @@
     <value>Sin pagar Tiempo Libre</value>
   </data>
   <data name="CopyDay" xml:space="preserve">
-    <value>Copy previous day</value>
+    <value>Copiar el día anterior</value>
   </data>
   <data name="CopyWeek" xml:space="preserve">
-    <value>Copy previous week</value>
+    <value>Copiar la semana anterior</value>
   </data>
   <data name="DayInitial" xml:space="preserve">
     <value>D</value>
   </data>
   <data name="WeekInitial" xml:space="preserve">
-    <value>W</value>
+    <value>S</value>
   </data>
   <data name="PayClass" xml:space="preserve">
     <value>Clase de Pago</value>

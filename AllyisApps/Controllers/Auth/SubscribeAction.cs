@@ -133,106 +133,106 @@ namespace AllyisApps.Controllers
 			}
 			else
 			{
-				Notifications.Add(new BootstrapAlert("You must first remove users from your subscription before reducing the number of users.", Variety.Danger));
-				return this.RedirectToAction(ActionConstants.Subscribe, new { productName = model.ProductId });
+				Notifications.Add(new BootstrapAlert("You must first remove users from your subscription before reducing the number of users.", Variety.Danger));//LANGUAGE Update to use resource file to change message language
+                return this.RedirectToAction(ActionConstants.Subscribe, new { productName = model.ProductId });
 			}
 
-			//------------
-			//if (model.NumberOfUsers < Service.GetUsersWithSubscriptionToProductInOrganization(model.OrganizationId, model.ProductId).Count())
-			//{
-			//	Notifications.Add(new BootstrapAlert("You must first remove users from your subscription before reducing the number of users.", Variety.Danger));
-			//	return this.RedirectToAction(ActionConstants.Subscribe, new { productName = model.ProductId });
-			//}
+            //------------
+            //if (model.NumberOfUsers < Service.GetUsersWithSubscriptionToProductInOrganization(model.OrganizationId, model.ProductId).Count())
+            //{
+            //	Notifications.Add(new BootstrapAlert("You must first remove users from your subscription before reducing the number of users.", Variety.Danger));//LANGUAGE Update to use resource file to change message language
+            //	return this.RedirectToAction(ActionConstants.Subscribe, new { productName = model.ProductId });
+            //}
 
-			//if (model.Billing.Amount == 0)
-			//{
-			//	model.Billing.Amount = (model.NumberOfUsers - 500) * 100;
-			//}
+            //if (model.Billing.Amount == 0)
+            //{
+            //	model.Billing.Amount = (model.NumberOfUsers - 500) * 100;
+            //}
 
-			//if (!(token == null) && (model.Token == null))
-			//{
-			//	BillingServicesCustomerId customerId = Service.CreateBillingServicesCustomer(billingServicesEmail, token);
+            //if (!(token == null) && (model.Token == null))
+            //{
+            //	BillingServicesCustomerId customerId = Service.CreateBillingServicesCustomer(billingServicesEmail, token);
 
-			//	Service.AddOrgCustomer(customerId, null);
-			//	model.Billing.Customer = Service.RetrieveCustomer(customerId);
-			//	model.Token = token;
-			//	//Service.AddBillingHistory("Adding stripe customer data", null);
-			//}
-			//else
-			//{
-			//	model.Billing.Customer = Service.RetrieveCustomer(Service.GetOrgBillingServicesCustomerId());
-			//}
+            //	Service.AddOrgCustomer(customerId, null);
+            //	model.Billing.Customer = Service.RetrieveCustomer(customerId);
+            //	model.Token = token;
+            //	//Service.AddBillingHistory("Adding stripe customer data", null);
+            //}
+            //else
+            //{
+            //	model.Billing.Customer = Service.RetrieveCustomer(Service.GetOrgBillingServicesCustomerId());
+            //}
 
-			//// Users >= 500 (the hardcoded free amount) will not trigger this
-			//if (model.Billing.Amount > 0)
-			//{
-			//	if ((token == null) && (model.Token == null))
-			//	{
-			//		return this.View(ViewConstants.AddBillingToSubscribe, model);
-			//	}
+            //// Users >= 500 (the hardcoded free amount) will not trigger this
+            //if (model.Billing.Amount > 0)
+            //{
+            //	if ((token == null) && (model.Token == null))
+            //	{
+            //		return this.View(ViewConstants.AddBillingToSubscribe, model);
+            //	}
 
-			//	BillingServicesCustomerId customerId = Service.GetOrgBillingServicesCustomerId();
-			//	if (customerId == null)
-			//	{
-			//		model.Billing.Customer = Service.RetrieveCustomer(Service.CreateBillingServicesCustomer(billingServicesEmail, token));
-			//		Service.AddOrgCustomer(model.Billing.Customer.Id, null);
-			//	}
-			//	else
-			//	{
-			//		model.Billing.Customer = Service.RetrieveCustomer(customerId);
-			//	}
+            //	BillingServicesCustomerId customerId = Service.GetOrgBillingServicesCustomerId();
+            //	if (customerId == null)
+            //	{
+            //		model.Billing.Customer = Service.RetrieveCustomer(Service.CreateBillingServicesCustomer(billingServicesEmail, token));
+            //		Service.AddOrgCustomer(model.Billing.Customer.Id, null);
+            //	}
+            //	else
+            //	{
+            //		model.Billing.Customer = Service.RetrieveCustomer(customerId);
+            //	}
 
-			//	string subscriptionId = Service.GetSubscriptionId(model.Billing.Customer.Id);
+            //	string subscriptionId = Service.GetSubscriptionId(model.Billing.Customer.Id);
 
-			//	if (subscriptionId == null)
-			//	{
-			//		Service.AddCustomerSubscriptionPlan(model.Billing.Amount, model.Billing.Customer.Id, model.NumberOfUsers, model.ProductId, model.ProductName, model.SelectedSku, model.ProductName);
-			//		//Service.InitializeSettingsForProduct(model.ProductId);
-			//		//Service.AddBillingHistory(string.Format("Adding new subscription data for {0}.", model.ProductName), model.SelectedSku);
-			//	}
-			//	else
-			//	{
-			//		Service.UpdateSubscriptionPlan(model.Billing.Amount, model.ProductName, model.NumberOfUsers, subscriptionId, model.Billing.Customer.Id, model.SelectedSku, model.ProductName);
-			//		//Service.AddBillingHistory(string.Format("Updating subscription data for {0}", model.ProductName), model.SelectedSku);
-			//	}
-			//}
-			//else
-			//{
-			//	try
-			//	{
-			//		model.Billing.Customer = Service.RetrieveCustomer(Service.GetOrgBillingServicesCustomerId());
+            //	if (subscriptionId == null)
+            //	{
+            //		Service.AddCustomerSubscriptionPlan(model.Billing.Amount, model.Billing.Customer.Id, model.NumberOfUsers, model.ProductId, model.ProductName, model.SelectedSku, model.ProductName);
+            //		//Service.InitializeSettingsForProduct(model.ProductId);
+            //		//Service.AddBillingHistory(string.Format("Adding new subscription data for {0}.", model.ProductName), model.SelectedSku);
+            //	}
+            //	else
+            //	{
+            //		Service.UpdateSubscriptionPlan(model.Billing.Amount, model.ProductName, model.NumberOfUsers, subscriptionId, model.Billing.Customer.Id, model.SelectedSku, model.ProductName);
+            //		//Service.AddBillingHistory(string.Format("Updating subscription data for {0}", model.ProductName), model.SelectedSku);
+            //	}
+            //}
+            //else
+            //{
+            //	try
+            //	{
+            //		model.Billing.Customer = Service.RetrieveCustomer(Service.GetOrgBillingServicesCustomerId());
 
-			//		if (model.Billing.Customer != null)
-			//		{
-			//			// check if there is a subscription to cancel
-			//			string subscriptionId = Service.GetSubscriptionId(model.Billing.Customer.Id);
-			//			if (subscriptionId != null)
-			//			{
-			//				Service.DeleteSubscriptionPlan(subscriptionId, model.Billing.Customer.Id, model.SelectedSku);
+            //		if (model.Billing.Customer != null)
+            //		{
+            //			// check if there is a subscription to cancel
+            //			string subscriptionId = Service.GetSubscriptionId(model.Billing.Customer.Id);
+            //			if (subscriptionId != null)
+            //			{
+            //				Service.DeleteSubscriptionPlan(subscriptionId, model.Billing.Customer.Id, model.SelectedSku);
 
-			//				//Service.DeleteSubscription(model.Billing.Customer.Id, subscriptionId);
-			//				//Service.AddBillingHistory("Switching to free subscription, canceling stripe susbcription", model.SelectedSku);
-			//			}
-			//		}
-			//	}
-			//	catch (Exception e)
-			//	{
-			//		Notifications.Add(new BootstrapAlert(e.ToString(), Variety.Warning));
-			//	}
-			//}
+            //				//Service.DeleteSubscription(model.Billing.Customer.Id, subscriptionId);
+            //				//Service.AddBillingHistory("Switching to free subscription, canceling stripe susbcription", model.SelectedSku);
+            //			}
+            //		}
+            //	}
+            //	catch (Exception e)
+            //	{
+            //		Notifications.Add(new BootstrapAlert(e.ToString(), Variety.Warning));
+            //	}
+            //}
 
-			//Service.InitializeSettingsForProduct(model.ProductId);
+            //Service.InitializeSettingsForProduct(model.ProductId);
 
-			//if (model.SelectedSku != model.PreviousSku)
-			//{
-			//	Service.AddSubscriptionOfSkuToOrganization(model.OrganizationId, model.SelectedSku, model.ProductId, model.NumberOfUsers);
-			//}
-			//else
-			//{
-			//	Service.UpdateSubscriptionUsers(model.SelectedSku, model.NumberOfUsers);
-			//}
+            //if (model.SelectedSku != model.PreviousSku)
+            //{
+            //	Service.AddSubscriptionOfSkuToOrganization(model.OrganizationId, model.SelectedSku, model.ProductId, model.NumberOfUsers);
+            //}
+            //else
+            //{
+            //	Service.UpdateSubscriptionUsers(model.SelectedSku, model.NumberOfUsers);
+            //}
 
-			//return this.RedirectToAction(ActionConstants.Manage);
-		}
-	}
+            //return this.RedirectToAction(ActionConstants.Manage);
+        }
+    }
 }

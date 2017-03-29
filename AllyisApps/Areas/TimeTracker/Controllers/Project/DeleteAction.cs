@@ -33,8 +33,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 
 				// Permissions failure
-				Notifications.Add(new BootstrapAlert("You do not have permission to delete projects", Variety.Warning));
-			}
+				Notifications.Add(new BootstrapAlert("You do not have permission to delete projects", Variety.Warning)); //LANGUAGE Update to use resource file to change message language
+            }
 
 			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
 		}

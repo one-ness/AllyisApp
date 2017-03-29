@@ -56,8 +56,8 @@ namespace AllyisApps.Controllers
 				}
 				catch (ArgumentException)
 				{
-					Notifications.Add(new BootstrapAlert("Error updating organization: subdomain name is already taken.", Variety.Danger));
-					return this.RedirectToAction(ActionConstants.Edit);
+					Notifications.Add(new BootstrapAlert("Error updating organization: subdomain name is already taken.", Variety.Danger));//LANGUAGE Update to use resource file to change message language
+                    return this.RedirectToAction(ActionConstants.Edit);
 				}
 
 				// Organization update failed due to invalid permissions

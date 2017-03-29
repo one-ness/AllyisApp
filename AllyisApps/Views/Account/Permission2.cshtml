@@ -40,8 +40,8 @@
 	<li class="selected" id="OrganizationTab">Organization</li>
 	@if (hasTimeTracker)
 	{
-		<li id="TimeTrackerTab">TimeTracker</li>
-	}
+		<li id="TimeTrackerTab">TimeTracker</li>//LANGUAGE Update to use resource file to change message language
+    }
 </ul>
 <div class="panel panel-default">
     <div class="panel-body" style="padding: 0px;">
@@ -49,11 +49,11 @@
             <thead class="panel-heading">
                 <tr class="no-border">
                     <th style="width: 6%;"></th>
-                    <th style="width: 47%;">User</th>
-                    <th style="width: 47%;" class="tab-OrganizationTab">Organization Role</th>
+                    <th style="width: 47%;">User</th> @*//LANGUAGE Update to use resource file to change message language*@
+                    <th style="width: 47%;" class="tab-OrganizationTab">Organization Role</th>@*//LANGUAGE Update to use resource file to change message language*@
                     @if (hasTimeTracker)
                     {
-                        <th class="tab-TimeTrackerTab" style="display: none; width: 47%;">TimeTracker Role</th>
+                        <th class="tab-TimeTrackerTab" style="display: none; width: 47%;">TimeTracker Role</th>@*//LANGUAGE Update to use resource file to change message language*@
                     }
                 </tr>
                 <tr class="double-bottom-border">

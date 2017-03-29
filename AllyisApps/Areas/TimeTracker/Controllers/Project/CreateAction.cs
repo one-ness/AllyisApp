@@ -94,8 +94,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					}
 					catch (Exception ex)
 					{
-						string message = "Could not create project.";
-						if (ex.Message != null)
+						string message = "Could not create project.";//LANGUAGE Update to use resource file to change message language
+                        if (ex.Message != null)
 						{
 							message = string.Format("{0} {1}", message, ex.Message);
 						}
