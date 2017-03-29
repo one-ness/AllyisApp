@@ -27,7 +27,14 @@
             </div>
             <div class="form-group">
                 @Html.ReqLabelFor(m => m.DateOfBirth, AllyisApps.Resources.Views.Account.Strings.DateOfBirth)
-                @Html.EditorFor(m => m.DateOfBirth, new { htmlattributes = new { @class = "form-control" } })
+                @if (Request.UserAgent.Contains("Edge"))
+                {
+                    @Html.EditorFor(m => m.DateOfBirth, new { htmlattributes = new { @class = "form-control in-cshtml-datepicker", @type = "text" } })
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.DateOfBirth, new { htmlattributes = new { @class = "form-control" } })
+                }
             </div>
             <div class="form-group">
                 @Html.ReqLabelFor(m => m.PhoneNumber, AllyisApps.Resources.Views.Account.Strings.PhoneNumber)

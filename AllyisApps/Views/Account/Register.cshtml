@@ -43,7 +43,14 @@
             </div>
             <div class="form-group">
                 @Html.ReqLabelFor(m => m.DateOfBirth, AllyisApps.Resources.Views.Account.Strings.DateOfBirth)
-                <input class="form-control text-box single-line" id="DateOfBirth" name="DateOfBirth" type="date">
+                @if (Request.UserAgent.Contains("Edge"))
+                {
+                    <input class="form-control text-box single-line in-cshtml-datepicker" id="DateOfBirth" name="DateOfBirth" type="text">
+                }
+                else
+                {
+                    <input class="form-control text-box single-line" id="DateOfBirth" name="DateOfBirth" type="date">
+                }
             </div>
             <div id="capsWarningDiv" style="visibility:hidden; height:0px"><strong>@AllyisApps.Resources.Views.Account.Strings.CapsLock</strong></div>
         </div>
