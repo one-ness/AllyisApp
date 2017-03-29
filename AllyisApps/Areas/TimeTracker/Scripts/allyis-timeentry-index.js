@@ -83,6 +83,9 @@ function ajaxCreate(form_element, create_action_url) {
         timeout: 5000,
         dataType: "json"})
     .done(function(res) {
+        if (res.status == 'error') {
+            form_element.addClass("error error-submit");
+        }
         ajaxHandleOverridingResponses(res, { form_element: form_element});
         if (res.status == 'success')
         {
