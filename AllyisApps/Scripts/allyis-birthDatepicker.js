@@ -17,10 +17,25 @@
 // Register:
 //    <input class="in-cshtml-datepicker" type="text">
 
-$( function() {
-    $(".in-cshtml-datepicker").datepicker({
-        changeMonth: true,
-        changeYear: true,
-        yearRange: "-120:+0",
+$("#datePickerBirth").datepicker({
+    showOn: "button",
+    changeMonth: true,
+    changeYear: true,
+    yearRange: "-120:+0",
+    onSelect: function () {
+        $(this).change();
+    }
+});
+$('#datePickerBirth').on("change", function () {
+    var enteredDate = moment($(this).val());
+    if (enteredDate.year() < 2000) {
+        enteredDate.add(100, 'years');
+    }        
+});
+
+$(function () {
+    $('.ui-datepicker-trigger').remove();
+    $('#datePickerBirthButton').on("click", function () {
+        $('#datePickerBirth').datepicker("show");
     });
 });

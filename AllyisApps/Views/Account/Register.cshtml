@@ -45,7 +45,9 @@
                 @Html.ReqLabelFor(m => m.DateOfBirth, AllyisApps.Resources.Views.Account.Strings.DateOfBirth)
                 @if (Request.UserAgent.Contains("Edge"))
                 {
-                    <input class="form-control text-box single-line in-cshtml-datepicker" id="DateOfBirth" name="DateOfBirth" type="text">
+                    @Html.HiddenFor(m => m.DateOfBirth)
+                    <input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerBirth" name="DateOfBirth" />
+                    <span class="fa fa-fw fa-calendar" id="datePickerBirthButton"></span>
                 }
                 else
                 {
@@ -93,6 +95,10 @@
 
 }
 
+@section css {
+    <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+}
+
 @section Scripts {
     @*@Scripts.Render("~/bundles/jqueryval")*@
     <script type="text/javascript">
@@ -101,4 +107,6 @@
     </script>
     @Scripts.Render("~/bundles/CapsCheck")
     @Scripts.Render("~/bundles/UpdateStateDDL")
+    @Scripts.Render("~/bundles/jqueryui");
+    <script src="~/Scripts/allyis-birthDatepicker.js"></script>
 }

@@ -29,7 +29,8 @@
                 @Html.ReqLabelFor(m => m.DateOfBirth, AllyisApps.Resources.Views.Account.Strings.DateOfBirth)
                 @if (Request.UserAgent.Contains("Edge"))
                 {
-                    @Html.EditorFor(m => m.DateOfBirth, new { htmlattributes = new { @class = "form-control in-cshtml-datepicker", @type = "text" } })
+                    @Html.EditorFor(m => m.DateOfBirth, new { htmlattributes = new { @type = "text", @class = "form-control", @style = "width: 90%; display: inline-block;", @id = "datePickerBirth" } })
+                    <span class="fa fa-fw fa-calendar" id="datePickerBirthButton"></span>
                 }
                 else
                 {
@@ -72,6 +73,10 @@
     </div>
 }
 
+@section css {
+    <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+}
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript">
@@ -79,4 +84,6 @@
         var dropdownempty = "@AllyisApps.Resources.Views.Account.Strings.DropDownEmpty";
     </script>
     @Scripts.Render("~/bundles/UpdateStateDDL");
+    @Scripts.Render("~/bundels/jqueryui");
+    <script src="~/Scripts/allyis-birthDatepicker.js"></script>
 }
