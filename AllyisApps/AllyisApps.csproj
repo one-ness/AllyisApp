@@ -724,15 +724,8 @@
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
     <Content Include="Content\icons\bg_stars.gif" />
-    <Content Include="Content\jquery-ui\images\ui-icons_444444_256x240.png" />
-    <Content Include="Content\jquery-ui\images\ui-icons_555555_256x240.png" />
-    <Content Include="Content\jquery-ui\images\ui-icons_777620_256x240.png" />
-    <Content Include="Content\jquery-ui\images\ui-icons_777777_256x240.png" />
-    <Content Include="Content\jquery-ui\images\ui-icons_cc0000_256x240.png" />
-    <Content Include="Content\jquery-ui\images\ui-icons_ffffff_256x240.png" />
-    <Content Include="Content\jquery-ui\jquery-ui.css" />
     <Content Include="Scripts\allyis-account-permission2.js" />
-    <Content Include="Scripts\allyis-datepicker.js" />
+    <Content Include="Scripts\allyis-birthDatepicker.js" />
     <Content Include="Scripts\allyis-pages-with-filter.js" />
     <Content Include="Scripts\allyis-paginate.js" />
     <Content Include="Scripts\allyis-updateStateDDL.js" />
