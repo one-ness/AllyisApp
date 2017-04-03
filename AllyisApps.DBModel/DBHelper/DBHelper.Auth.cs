@@ -1005,5 +1005,27 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-	}
+        /// <summary>
+		/// Updates user's EmailConfirmed to True in Auth.User table.
+		/// </summary>
+		/// <param name = "userId">Target user's ID.</param>
+		/// <param name = "code">The email confirmation code.</param>
+		/// <returns>Return true for success, false if userId is not found or code does not match or other error</returns>
+		public bool UpdateEmailConfirmed(int userId, string code)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@userID", userId);
+            parameters.Add("@confirmCode", code);
+            string result = null;
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                result = connection.Query<string>(
+                    "[Auth].[UpdateEmailConfirmed]",
+                    parameters,
+                    commandType: CommandType.StoredProcedure).FirstOrDefault();
+            }
+            return result == null ? false : true;
+        }
+
+    }
 }

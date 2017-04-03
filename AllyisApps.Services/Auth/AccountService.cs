@@ -740,7 +740,7 @@ namespace AllyisApps.Services
 		/// <param name="userId">User Id.</param>
 		/// <param name="code">The confirmation code.</param>
 		/// <returns>True on success, false if the email is already confirmed or some other failure occurs.</returns>
-		public async Task<bool> ConfirmEmailAsync(int userId, string code)
+		public bool ConfirmUserEmail(int userId, string code)
 		{
 			#region Validation
 
@@ -762,19 +762,22 @@ namespace AllyisApps.Services
 				}
 			}
 
-			#endregion Validation
+            #endregion Validation
 
-			if (DBHelper.GetUserInfo(userId).EmailConfirmed)
+            UserDBEntity userDbEntity = DBHelper.GetUserInfo(userId);
+
+            if (userDbEntity.EmailConfirmed)
 			{
 				return false;
 			}
-
-			return await Task<bool>.Run(() =>
-			{
-				// TODO: Adjust the GetUserInfo procedure to grab the confirmation code from the table, or create one that does
-				// return DBHelper.GetUserInfo(userId).EmailConfirmationCode == code;
-				return true;
-			});
+            
+            if (userDbEntity.EmailConfirmationCode.ToString() != code)
+            {
+                return false;
+            } else
+            {
+                return DBHelper.UpdateEmailConfirmed(userId, code);
+            }
 		}
 
 		/// <summary>

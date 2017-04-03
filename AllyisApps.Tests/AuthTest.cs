@@ -1627,42 +1627,39 @@ namespace AllyisApps.Services.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException), "User ID cannot be 0 or negative.")]
-        public async Task ConfirmEmailAsync_Should_Throw_Exception_For_Invalid_UserId()
+        public void ConfirmUserEmail_Should_Throw_Exception_For_Invalid_UserId()
         {
             var service = new Service(connectionStr);
             string code = Guid.NewGuid().ToString();
-            await service.ConfirmEmailAsync(-1, code);
+            service.ConfirmUserEmail(-1, code);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "Code must have a value.")]
-        public async Task ConfirmEmailAsync_Should_Throw_Exception_For_Null_Code()
+        public void ConfirmUserEmail_Should_Throw_Exception_For_Null_Code()
         {
             var service = new Service(connectionStr);
-            await service.ConfirmEmailAsync(1, null);
+            service.ConfirmUserEmail(1, null);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException), "Code must have a value.")]
-        public async Task ConfirmEmailAsync_Should_Throw_Exception_For_Empty_Code()
+        public void ConfirmUserEmail_Should_Throw_Exception_For_Empty_Code()
         {
             var service = new Service(connectionStr);
-            await service.ConfirmEmailAsync(1, "");
+            service.ConfirmUserEmail(1, "");
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException), "Code must be a valid Guid.")]
-        public async Task ConfirmEmailAsync_Should_Throw_Exception_For_Invalid_Code()
+        public void ConfirmUserEmail_Should_Throw_Exception_For_Invalid_Code()
         {
             var service = new Service(connectionStr);
-            await service.ConfirmEmailAsync(1, "invalidcode");
+            service.ConfirmUserEmail(1, "invalidcode");
         }
 
-
-        //There's a bug in [Auth][GetUserInfo]; it doesn't retrieve EmailConfirmed data so it's always false, hence
-        //ConfirmEmailAsync always proceeds and returns true. Once the bug is fixed this test will pass.
         [TestMethod]
-        public async Task ConfirmEmailAsync_Should_Return_False_If_Email_Is_Already_Confirmed()
+        public void ConfirmUserEmail_Should_Return_False_If_Email_Is_Already_Confirmed()
         {
             //Arrange
             string email = "testuser@test.com";
@@ -1690,7 +1687,7 @@ namespace AllyisApps.Services.Tests
             string code = Guid.NewGuid().ToString();
 
             //Act
-            bool result = await service.ConfirmEmailAsync(userId, code);
+            bool result = service.ConfirmUserEmail(userId, code);
 
             //Clean up
             deleteTestUser(email);
@@ -1700,17 +1697,54 @@ namespace AllyisApps.Services.Tests
         }
 
         [TestMethod]
-        public async Task ConfirmEmailAsync_Should_Return_True_On_Success()
+        public void ConfirmUserEmail_Should_Return_False_For_Not_Matched_Code()
         {
             //Arrange
             string email = "testuser@test.com";
             int userId = createTestUser(email);
-            string code = Guid.NewGuid().ToString();
+            Guid code = Guid.NewGuid();
 
             var service = new Service(connectionStr);
 
             //Act
-            bool result = await service.ConfirmEmailAsync(userId, code);
+            bool result = service.ConfirmUserEmail(userId, code.ToString());
+
+            //Clean up
+            deleteTestUser(email);
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void ConfirmUserEmail_Should_Return_True_On_Success()
+        {
+            //Arrange
+            string email = "testuser@test.com";
+            int userId = createTestUser(email);
+            Guid code = Guid.NewGuid();
+
+            var service = new Service(connectionStr);
+
+            //put the code in the user's EmailConfirmationCode
+            string updateStmt = "UPDATE [Auth].[User] SET [EmailConfirmationCode] = @code WHERE [Email] = @email";
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                using (SqlCommand cmd = new SqlCommand(updateStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@email", SqlDbType.VarChar).Value = email;
+                    cmd.Parameters.Add("@code", SqlDbType.UniqueIdentifier).Value = code;
+
+                    // open connection, execute command, close connection
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
+
+            //Act
+            bool result = service.ConfirmUserEmail(userId, code.ToString());
 
             //Clean up
             deleteTestUser(email);

@@ -18,6 +18,8 @@ BEGIN
 		   [User].[PhoneNumber],
 		   [User].[LastSubscriptionId],
 		   [User].[ActiveOrganizationId],
+		   [User].[EmailConfirmed],
+		   [User].[EmailConfirmationCode],
 		   [LanguagePreference]
 	FROM [Auth].[User]
 	WITH (NOLOCK)
