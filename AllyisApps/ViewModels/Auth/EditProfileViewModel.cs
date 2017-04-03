@@ -110,11 +110,11 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets Date of birth.
 		/// </summary>
-		[DataType(DataType.Date)]
-		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-		[Display(Name = "Date of Birth")]
-		[SQLDateProtector]
-		public DateTime? DateOfBirth { get; set; }
+		//[DataType(DataType.Date)]
+		//[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+		//[Display(Name = "Date of Birth")]
+		//[SQLDateProtector]
+		public int DateOfBirth { get; set; } //has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view. 
 
 		/// <summary>
 		/// Gets or sets a List of valid countries.

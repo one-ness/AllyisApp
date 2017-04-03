@@ -175,6 +175,6 @@
     <value>Búsqueda de usuario 🔎</value>
   </data>
   <data name="ProjectOrgId" xml:space="preserve">
-    <value>Project ID</value>
+    <value>ID del proyecto</value>
   </data>
 </root>

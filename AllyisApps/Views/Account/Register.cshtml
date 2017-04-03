@@ -42,17 +42,10 @@
                 @Html.ValidationMessageFor(m => m.ConfirmPassword)
             </div>
             <div class="form-group">
-                @Html.ReqLabelFor(m => m.DateOfBirth, AllyisApps.Resources.Views.Account.Strings.DateOfBirth)
-                @if (Request.UserAgent.Contains("Edge"))
-                {
-                    @Html.HiddenFor(m => m.DateOfBirth)
-                    <input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerBirth" name="DateOfBirth" />
-                    <span class="fa fa-fw fa-calendar" id="datePickerBirthButton"></span>
-                }
-                else
-                {
-                    <input class="form-control text-box single-line" id="DateOfBirth" name="DateOfBirth" type="date">
-                }
+                <label>@AllyisApps.Resources.Views.Account.Strings.DateOfBirth</label>
+                @Html.HiddenFor(m => m.DateOfBirth)
+                <input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerBirth" />
+                <span class="fa fa-fw fa-calendar" id="datePickerBirthButton"></span>
             </div>
             <div id="capsWarningDiv" style="visibility:hidden; height:0px"><strong>@AllyisApps.Resources.Views.Account.Strings.CapsLock</strong></div>
         </div>
@@ -104,9 +97,11 @@
     <script type="text/javascript">
         var preserveState = '@(Model != null ? (AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';
         var dropdownempty = "@AllyisApps.Resources.Views.Account.Strings.DropDownEmpty";
+        var model_birthdate = @Model.DateOfBirth;
     </script>
     @Scripts.Render("~/bundles/CapsCheck")
     @Scripts.Render("~/bundles/UpdateStateDDL")
-    @Scripts.Render("~/bundles/jqueryui");
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/moment")
     <script src="~/Scripts/allyis-birthDatepicker.js"></script>
 }

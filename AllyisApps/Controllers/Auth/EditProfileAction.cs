@@ -37,7 +37,7 @@ namespace AllyisApps.Controllers
 				Country = userInfo.Country,
 				PostalCode = userInfo.PostalCode,
 				PhoneNumber = userInfo.PhoneNumber,
-				DateOfBirth = userInfo.DateOfBirth,
+				DateOfBirth = TimeTrackerService.GetDayFromDateTime(userInfo.DateOfBirth),
 				ValidCountries = Service.ValidCountries()
 			};
 
@@ -65,7 +65,7 @@ namespace AllyisApps.Controllers
 					Email = model.Email,
 					FirstName = model.FirstName,
 					LastName = model.LastName,
-					DateOfBirth = model.DateOfBirth,
+					DateOfBirth = TimeTrackerService.GetDateTimeFromDays(model.DateOfBirth),
 					Address = model.Address,
 					City = model.City,
 					State = model.State,
