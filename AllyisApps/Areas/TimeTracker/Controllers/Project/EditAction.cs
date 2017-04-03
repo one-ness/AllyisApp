@@ -49,7 +49,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public ActionResult Edit(EditProjectViewModel model)
 		{
-			if (ModelState.IsValid)
+            var list = Service.GetNextProjectIdAndSubUsers(model.ParentCustomerId).Item2;
+            var subList = new List<BasicUserInfoViewModel>();
+            foreach (var user in list)
+            {
+                subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
+            }
+            model.SubscriptionUsers = subList;
+            if (ModelState.IsValid)
 			{
 				if (Service.Can(Actions.CoreAction.EditProject))
 				{
@@ -74,7 +81,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 						//Update failure
 						Notifications.Add(new BootstrapAlert(message, Variety.Danger));
-						return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
+						return this.View(model);
 					}
 					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.SuccessProjectEdited, Variety.Success));
 
