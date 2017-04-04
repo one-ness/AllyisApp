@@ -13,19 +13,19 @@ gatherData = function () {
             checked_users.push(userResult);
         }
     });
-    if (checked_users.length == 0) return null;
+    if (checked_users.length === 0) return null;
 
     // Add in target action information
     var selectedAction = {};
     var value = -2;
-    if (currentTabTitle == "OrganizationTab") {
+    if (currentTabTitle === "OrganizationTab") {
         value = orgActions[$('#orgActionSelect').val()];
-        if (value == -1) {
+        if (value === -1) {
             if (!confirm(confirmMessage)) return null;
         }
         selectedAction["OrgRoleTarget"] = value;
     } else {
-        if (currentTabTitle == "TimeTrackerTab") {
+        if (currentTabTitle === "TimeTrackerTab") {
             value = ttActions[$('#ttActionSelect').val()];
             selectedAction["TimeTrackerRoleTarget"] = value;
         }
@@ -62,8 +62,9 @@ function goToTab(tabTitle) {
     currentTabTitle = tabTitle;
     $('#' + currentTabTitle).toggleClass("selected", true);
     $('.tab-' + currentTabTitle).show();
+    // update session storage with currently selected tab
+    sessionStorage.setItem("Tab",tabTitle);
 }
-
 $(document).ready(function () {
     $('#do-it').on("click", function () {
         formSubmit();
@@ -72,8 +73,19 @@ $(document).ready(function () {
     // Tabs
     $('.allyis-tabs > li').on("click", function () {
         var tabTitle = $(this).attr("id");
-        if (currentTabTitle != tabTitle) {
+        if (currentTabTitle !== tabTitle) {
             goToTab(tabTitle);
         }
     })
+
+    //If a tab was selected previously, switch to that tab
+    if (sessionStorage.getItem("Tab") != null)
+    {
+        goToTab(sessionStorage.getItem("Tab"));
+    }
+    //If a page was selected previously from this URL, go to it
+    if (sessionStorage.getItem("/ManagePermissionsPage") != null)
+    {
+        _goToPage(parseInt(sessionStorage.getItem("/ManagePermissionsPage")));
+    }
 });

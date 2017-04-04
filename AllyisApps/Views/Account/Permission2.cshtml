@@ -165,5 +165,12 @@
         pwf.addFilter("#userSearch", "search", "#name");
         pwf.addFilter('#orgRoleFilter', 'dropDown', "#orgRole", "@AllyisApps.Resources.Views.Account.Strings.Any");
         if('@hasTimeTracker' == 'True') pwf.addFilter('#ttRoleFilter', 'dropDown', "#ttRole", "@AllyisApps.Resources.Views.Account.Strings.Any");
+        // If a page was previously selected, navigate to it
+        if (sessionStorage.getItem("/ManagePermissionsPage") != null)
+        {
+            setTimeout(function () {
+                pwf.goToPage(parseInt(sessionStorage.getItem("/ManagePermissionsPage")));
+            }, 100);
+        }
     </script>
 }

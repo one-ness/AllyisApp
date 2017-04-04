@@ -46,7 +46,6 @@ rows, except they remain in place always. They are usually not displayed. When a
 the table to double its height. Then the filtering/paging is done, and the filler rows created. Then, before you have time
 to notice them, the buffer rows' display is turned off again. And your scroll position is unaffected.
 */
-
 (function (exports) {
     // Paging variables
     var pageLimit = 16; // Rows per page
@@ -113,12 +112,17 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
         // Enable/disable page buttons
         $('.page-btn').prop('disabled', false);
         $('#page-' + pageNum).prop('disabled', true);
+
     }
 
     // Changes to the specified page. Same as 'goToPage()' but also updates anchor user
     exports.goToPage = function (pageNum) {
         _goToPage(pageNum);
         anchorRow = findFirstRow(); // Anchor row updated on page change
+        //current Url
+        var _path = document.location.href;
+        //set session storage page key to view path (ie: /Manage) and value as selected page
+        sessionStorage.setItem(_path.slice(_path.lastIndexOf('/')) + "Page",pageNum);
     }
 
     // Finds the first user row that is shown at the current page with the current filters
