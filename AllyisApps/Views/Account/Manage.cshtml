@@ -81,7 +81,6 @@
         @Html.Partial("_OrgBillingInfo", Model)
     </div>*@
 </div>
-
 @section Scripts {
     <script type="text/javascript">
         var removeFromOrg = "@AllyisApps.Resources.Views.Account.Strings.RemoveFromOrg";
@@ -101,4 +100,12 @@
             pwf.setPreviouslySelectedPage(sessionStorage.getItem("/ManagePage"));
         }
     </script>
+}
+@if (Model.SubscriptionCount == 0)
+{
+    <text>
+        <script>
+            sessionStorage.removeItem("Tab");
+        </script>
+    </text>
 }
