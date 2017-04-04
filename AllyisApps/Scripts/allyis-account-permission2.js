@@ -83,9 +83,4 @@ $(document).ready(function () {
     {
         goToTab(sessionStorage.getItem("Tab"));
     }
-    //If a page was selected previously from this URL, go to it
-    if (sessionStorage.getItem("/ManagePermissionsPage") != null)
-    {
-        _goToPage(parseInt(sessionStorage.getItem("/ManagePermissionsPage")));
-    }
 });

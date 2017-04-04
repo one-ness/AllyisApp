@@ -55,6 +55,7 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
     var totalPages = 1; // Page count, recalculated on each filter
     var anchorRow = null; // This is the row element that is used to decide what page to show when pagination changes
     var maxPageButtonStart = 0;
+    var previouslySelectedPage = 0;
 
     // Filtering variables
     var rowClass = "pwfRow"; // class for all row elements
@@ -84,6 +85,9 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
     }
     exports.setCheckBoxSelector = function (newCheckBoxSelector) {
         checkBoxSelector = newCheckBoxSelector;
+    }
+    exports.setPreviouslySelectedPage = function (page) {
+        previouslySelectedPage = parseInt(page);
     }
 
     // Goes to the specified page by toggling the 'offPage' class
@@ -407,5 +411,8 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
         }
 
         filterRows();
+        if (previouslySelectedPage != 0) {
+            _goToPage(previouslySelectedPage);
+        }
     });
 })(this.pwf = {});
