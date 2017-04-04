@@ -81,6 +81,8 @@ $(document).ready(function () {
     //If a tab was selected previously, switch to that tab
     if (sessionStorage.getItem("Tab") != null)
     {
-        goToTab(sessionStorage.getItem("Tab"));
+        if ($("#TimeTrackerTab")[0].innerText == "TimeTracker") {
+            goToTab(sessionStorage.getItem("Tab"));
+        }
     }
 });
