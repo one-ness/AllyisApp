@@ -28,4 +28,4 @@ AS
 	FROM [Billing].[Subscription] WITH (NOLOCK)
 	LEFT JOIN [Billing].[Sku] WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
 	LEFT JOIN [Billing].[Product] WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
-	WHERE [OrganizationId] = @OrganizationId
+	WHERE [OrganizationId] = @OrganizationId AND [Subscription].[IsActive] = 1

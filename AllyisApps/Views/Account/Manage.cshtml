@@ -81,7 +81,6 @@
         @Html.Partial("_OrgBillingInfo", Model)
     </div>*@
 </div>
-
 @section Scripts {
     <script type="text/javascript">
         var removeFromOrg = "@AllyisApps.Resources.Views.Account.Strings.RemoveFromOrg";
@@ -97,5 +96,8 @@
         pwf.setRowClass("memberRow");
         pwf.addFilter('#org-members-search', "search", '.memberSearchProperty');
         pwf.addFilter('#org-members-role', "dropDown", '.memberOrgRole', "Any");
+        if (sessionStorage.getItem("/ManagePage") != null) {
+            pwf.setPreviouslySelectedPage(sessionStorage.getItem("/ManagePage"));
+        }
     </script>
 }
