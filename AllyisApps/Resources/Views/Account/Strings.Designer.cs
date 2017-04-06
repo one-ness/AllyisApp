@@ -1276,6 +1276,24 @@ namespace AllyisApps.Resources.Views.Account {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TimeTracker Project is required..
+        /// </summary>
+        public static string TimeTrackerProjectRequired {
+            get {
+                return ResourceManager.GetString("TimeTrackerProjectRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TimeTracker Role is required..
+        /// </summary>
+        public static string TimeTrackerRoleRequired {
+            get {
+                return ResourceManager.GetString("TimeTrackerRoleRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have too many users in this subscription to add more! Increase your subscription size to accommodate more users!.
         /// </summary>
         public static string TooManyUsers {

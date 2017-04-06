@@ -11,7 +11,7 @@ namespace AllyisApps.ViewModels.Auth
 	/// <summary>
 	/// The view model for the Add Member page.
 	/// </summary>
-	public class AddMemberViewModel : IValidatableObject
+	public class AddMemberViewModel
 	{
 		/// <summary>
 		/// Gets or sets the list of subscriptions for the organization.
@@ -66,19 +66,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public int? SubscriptionProjectId { get; set; }
 
-        /// <summary>
-        /// Custom Validation to deduce if the user entered a TimeTracker Project but no TimeTracker Role
-        /// </summary>
-        /// <param name="validationContext">Validation context</param>
-        /// <returns>List of custom errors</returns>
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var results = new List<ValidationResult>();
-            if (SubscriptionProjectId != null && Subscriptions.First().SelectedRole == 0) {
-                results.Add(new ValidationResult("Please enter a TimeTracker Role.", new string[] { "Subscriptions" }));
-            }
-            return results;
-        }
 	}
 
 	/// <summary>
