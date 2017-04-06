@@ -79,6 +79,7 @@
 							<label>@(string.Format("{0} {1}", AllyisApps.Resources.Views.Account.Strings.TimeTracker, AllyisApps.Resources.Views.Account.Strings.Role))</label>
 						}
 						@Html.DropDownListDisabled(string.Format("Subscriptions[{0}].SelectedRole", count), new SelectList(sub.ProductRoles, "ProductRoleId", "Name", sub.SelectedRole), sub.hasTooManySubscribers, new { @class = "form-control role-selector" })
+                        @Html.ValidationMessageFor(model => model.Subscriptions, "" , new { @class = "text-danger" })
                         @if (sub.hasTooManySubscribers)
 						{
 							<p>@AllyisApps.Resources.Views.Account.Strings.TooManyUsers</p>roomInSubscription = false;
