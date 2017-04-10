@@ -135,6 +135,11 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// </summary>
 		public IEnumerable<string> ValidCountries { get; set; }
 
+        /// <summary>
+        /// Gets or sets a boolean indicating whether the user can edit customers
+        /// </summary>
+        public bool canEditCustomers { get; set; }
+
 		/// <summary>
 		/// Localized valid countries.
 		/// </summary>

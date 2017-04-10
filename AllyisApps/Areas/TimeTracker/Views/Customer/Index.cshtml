@@ -41,7 +41,7 @@
                                     <span class="small text-muted">(@projectCount @projectCountLabel)</span>
                                 </h4>
                             </a>
-                            <a href="@Url.Action(ActionConstants.Details, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId, canEdit = Model.canEdit })" class="pull-right">
+                            <a href="@Url.Action(ActionConstants.Details, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right">
                                 <i class="fa fa-fw fa-lg fa-eye"></i>
                             </a>
 							@if (Model.canEdit)

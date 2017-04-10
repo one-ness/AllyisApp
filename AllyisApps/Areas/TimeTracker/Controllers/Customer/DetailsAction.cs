@@ -21,16 +21,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// Returns a details page for a customer
         /// </summary>
         /// <param name="id">id of customer</param>
-        /// <param name="canEdit">true if the user has edit permissions</param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Details(int id, bool canEdit)
+        public ActionResult Details(int id)
         {
             if (Service.Can(Actions.CoreAction.ViewCustomer))
             {
                 var infos = Service.GetCustomerAndCountries(id);
-                if (canEdit) { ViewData["canEdit"] = "True"; }
-                else { ViewData["canEdit"] = "False"; }
                 return this.View(new EditCustomerInfoViewModel
                 {
                     ContactEmail = infos.Item1.ContactEmail,
@@ -47,7 +44,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                     OrganizationId = infos.Item1.OrganizationId,
                     CustomerID = id,
                     ValidCountries = infos.Item2,
-                    CustomerOrgId = infos.Item1.CustomerOrgId
+                    CustomerOrgId = infos.Item1.CustomerOrgId,
+                    canEditCustomers = Service.Can(Actions.CoreAction.EditProject)
                 });
             }
 

@@ -56,7 +56,7 @@
 <div class="row md-control-width float-center">
     <div class="form-group allyis-action-buttons">
         <a href="/TimeTracker/Customer" class="btn btn-default">@AllyisApps.Resources.Views.Account.Strings.Back</a>
-        @if (ViewData["canEdit"].ToString() == "True")
+        @if (Model.canEditCustomers)
         {
             <a class="btn btn-primary" onclick="location='@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = Model.CustomerID })'">@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Edit</a>
         }
