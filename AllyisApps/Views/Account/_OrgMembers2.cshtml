@@ -45,7 +45,7 @@
                     <td class="memberSearchProperty">@invite.CompressedEmail</td>
                     <td class="memberSearchProperty" id="invId-@invite.InvitationId">
                         <span class="empId">@invite.EmployeeId</span>
-                        <a href="javascript: void(0);" class="text-muted" title="Edit Employee Id"@*//LANGUAGE Update to use resource file to change message language*@
+                        <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.EditEmployeeID"
                            onclick='editEmployeeId("@invite.OrganizationId", "@invite.InvitationId", "@invite.EmployeeId",false)'><span class="fa fa-fw fa-edit"></span></a>
                     </td>
                     <td class="memberOrgRole">@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(invite.OrgRoleName)</td>
@@ -62,7 +62,7 @@
                     <td class="memberSearchProperty">@user.Email</td>
                     <td class="memberSearchProperty" id="empId-@user.UserId">
 						<span class="empId">@user.EmployeeId</span>
-						<a href="javascript: void(0);" class="text-muted" title="Edit Employee Id"
+						<a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.EditEmployeeID"
 						   onclick='editEmployeeId("@user.OrganizationId", "@user.UserId", "@user.EmployeeId",true)'><span class="fa fa-fw fa-edit"></span></a>
 					</td>
                     <td class="memberOrgRole">@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(user.PermissionLevel)</td>

@@ -73,7 +73,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					}
 					catch (Exception ex)
 					{
-						string message = "Could not update project.";//LANGUAGE Update to use resource file to change message language
+						string message = Resources.TimeTracker.Controllers.Project.Strings.FailureProjectEdited;
                         if (ex.Message != null)
 						{
 							message = string.Format("{0} {1}", message, ex.Message);

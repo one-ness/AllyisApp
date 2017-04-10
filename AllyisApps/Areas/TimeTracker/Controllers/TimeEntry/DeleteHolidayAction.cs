@@ -24,7 +24,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (TimeTrackerService.DeleteHoliday(holidayId))
 			{
-				Notifications.Add(new BootstrapAlert("Holiday deleted successfully.", Variety.Success));//LANGUAGE Update to use resource file to change message language
+				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulDeleteHoliday, Variety.Success));
             }
 			else
 			{

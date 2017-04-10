@@ -28,11 +28,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotCreateBlankPayClass, Variety.Warning));
 			}
 
-			try
+			try//should put try catch in 'else'. Creating a blank pay class results in Two alerts: "Cannot create blank pay class" and "pay class already exists"
 			{
 				if (TimeTrackerService.CreatePayClass(newPayClass))
 				{
-					Notifications.Add(new BootstrapAlert("Pay class created successfully.", Variety.Success));//LANGUAGE Update to use resource file to change message language
+					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulCreatePayClass, Variety.Success));
                 }
 				else
 				{
@@ -43,7 +43,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			catch (ArgumentException)
 			{
 				// Pay class already exists
-				Notifications.Add(new BootstrapAlert("Could not create pay class: that pay class name already exists.", Variety.Danger));//LANGUAGE Update to use resource file to change message language
+				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.FailureCreatePayClassAlreadyExists, Variety.Danger));
             }
 
 			return this.RedirectToAction(ActionConstants.Settings);

@@ -133,14 +133,14 @@ namespace AllyisApps.Controllers
 			}
 			else
 			{
-				Notifications.Add(new BootstrapAlert("You must first remove users from your subscription before reducing the number of users.", Variety.Danger));//LANGUAGE Update to use resource file to change message language
+				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.ReduceNumberOfUsers, Variety.Danger));
                 return this.RedirectToAction(ActionConstants.Subscribe, new { productName = model.ProductId });
 			}
 
             //------------
             //if (model.NumberOfUsers < Service.GetUsersWithSubscriptionToProductInOrganization(model.OrganizationId, model.ProductId).Count())
             //{
-            //	Notifications.Add(new BootstrapAlert("You must first remove users from your subscription before reducing the number of users.", Variety.Danger));//LANGUAGE Update to use resource file to change message language
+            //	Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.ReduceNumberOfUsers, Variety.Danger));
             //	return this.RedirectToAction(ActionConstants.Subscribe, new { productName = model.ProductId });
             //}
 

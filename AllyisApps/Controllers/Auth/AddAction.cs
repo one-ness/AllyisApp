@@ -89,7 +89,7 @@ namespace AllyisApps.Controllers
                             subRoleId
                         );
 
-                        Notifications.Add(new BootstrapAlert("User has been invited to join the organization.", Variety.Success));//LANGUAGE Update to use resource file to change message language
+                        Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Controllers.Auth.Strings.UserEmailed, add.FirstName, add.LastName), Variety.Success));
                         return this.RedirectToAction(ActionConstants.Manage);
 
                     }
@@ -98,7 +98,7 @@ namespace AllyisApps.Controllers
                         
                         if (ex.ParamName.Equals("invitationInfo.Email"))
                         {
-                            Notifications.Add(new BootstrapAlert("Email address is invalid.", Variety.Danger));//LANGUAGE Update to use resource file to change message language
+                            Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.InvalidEmail, Variety.Danger));
                             return this.View(add);
                         }
 
@@ -107,7 +107,7 @@ namespace AllyisApps.Controllers
                     }
                     catch (InvalidOperationException)
                     {
-                        Notifications.Add(new BootstrapAlert("This user is already a member of the organization.", Variety.Warning));//LANGUAGE Update to use resource file to change message language
+                        Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Controllers.Auth.Strings.UserAlreadyExists, add.FirstName, add.LastName), Variety.Warning));
                         return this.View(add);
                     }
                     catch (System.Data.DuplicateNameException)
@@ -139,7 +139,7 @@ namespace AllyisApps.Controllers
                     //																							  // If not...
                     //			if (role != null)
                     //			{
-                    //				Notifications.Add(new BootstrapAlert("This user is already a member of the organization.", Variety.Warning));//LANGUAGE Update to use resource file to change message language
+                    //				Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Controllers.Auth.Strings.UserAlreadyExists, add.FirstName, add.LastName), Variety.Warning));
                     //				return this.RedirectToAction(ActionConstants.Add);
                     //			}
                     //		}
@@ -175,12 +175,12 @@ namespace AllyisApps.Controllers
                     //			}
                     //		}
 
-                    //		Notifications.Add(new BootstrapAlert("User has been invited to join the organization.", Variety.Success));//LANGUAGE Update to use resource file to change message language
+                    //		Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Controllers.Auth.Strings.UserEmailed, add.FirstName, add.LastName), Variety.Success));
                     //		return this.RedirectToAction(ActionConstants.Manage);
                     //	}
                     //}
 
-                    //Notifications.Add(new BootstrapAlert("Email address in invalid.", Variety.Danger));//LANGUAGE Update to use resource file to change message language
+                    //Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.InvalidEmail, Variety.Danger));
                     //return this.RedirectToAction(ActionConstants.Add);
                 }
 

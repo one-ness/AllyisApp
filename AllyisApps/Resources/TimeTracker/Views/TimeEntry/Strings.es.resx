@@ -372,4 +372,16 @@
   <data name="StartDate" xml:space="preserve">
     <value>Fecha de Inicio</value>
   </data>
+  <data name="ConfirmDeleteHoliday" xml:space="preserve">
+    <value>¿Seguro que quieres eliminar las vacaciones {0}?</value>
+  </data>
+  <data name="ConfirmDeletePayClass" xml:space="preserve">
+    <value>¿Seguro que quieres eliminar la clase de pago {0}?</value>
+  </data>
+  <data name="DeleteHoliday" xml:space="preserve">
+    <value>Eliminar vacaciones</value>
+  </data>
+  <data name="DeletePayClass" xml:space="preserve">
+    <value>Eliminar clase de pago</value>
+  </data>
 </root>

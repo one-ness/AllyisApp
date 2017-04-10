@@ -24,7 +24,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (TimeTrackerService.DeletePayClass(payClassId))
 			{
-				Notifications.Add(new BootstrapAlert("Pay class deleted successfully", Variety.Success));//LANGUAGE Update to use resource file to change message language
+				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulDeletePayClass, Variety.Success));
             }
 			else
 			{

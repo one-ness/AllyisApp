@@ -37,10 +37,10 @@
 @Html.AntiForgeryToken()
 
 <ul class="nav allyis-tabs">
-	<li class="selected" id="OrganizationTab">Organization</li>
+	<li class="selected" id="OrganizationTab">@AllyisApps.Resources.Views.Account.Strings.Organization</li>
 	@if (hasTimeTracker)
 	{
-		<li id="TimeTrackerTab">TimeTracker</li>//LANGUAGE Update to use resource file to change message language
+		<li id="TimeTrackerTab">@AllyisApps.Resources.Views.Account.Strings.TimeTracker</li>
     }
 </ul>
 <div class="panel panel-default">
@@ -49,11 +49,11 @@
             <thead class="panel-heading">
                 <tr class="no-border">
                     <th style="width: 6%;"></th>
-                    <th style="width: 47%;">User</th> @*//LANGUAGE Update to use resource file to change message language*@
-                    <th style="width: 47%;" class="tab-OrganizationTab">Organization Role</th>@*//LANGUAGE Update to use resource file to change message language*@
+                    <th style="width: 47%;">@AllyisApps.Resources.Views.Account.Strings.User</th>
+                    <th style="width: 47%;" class="tab-OrganizationTab">@AllyisApps.Resources.Views.Account.Strings.OrgRole</th>
                     @if (hasTimeTracker)
                     {
-                        <th class="tab-TimeTrackerTab" style="display: none; width: 47%;">TimeTracker Role</th>@*//LANGUAGE Update to use resource file to change message language*@
+                        <th class="tab-TimeTrackerTab" style="display: none; width: 47%;">@AllyisApps.Resources.Views.Account.Strings.TimeTrackerRole</th>
                     }
                 </tr>
                 <tr class="double-bottom-border">

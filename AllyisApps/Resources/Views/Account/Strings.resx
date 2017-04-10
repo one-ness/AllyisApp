@@ -567,4 +567,13 @@
   <data name="RemoveFromOrgNoName" xml:space="preserve">
     <value>Are you sure you would like to remove the selected user(s) from your organization?</value>
   </data>
+  <data name="EditEmployeeID" xml:space="preserve">
+    <value>Edit Employee Id</value>
+  </data>
+  <data name="OrgRole" xml:space="preserve">
+    <value>Organization Role</value>
+  </data>
+  <data name="TimeTrackerRole" xml:space="preserve">
+    <value>TimeTracker Role</value>
+  </data>
 </root>

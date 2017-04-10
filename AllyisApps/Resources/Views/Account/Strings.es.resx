@@ -564,4 +564,13 @@
   <data name="YourOrganizations" xml:space="preserve">
     <value>mis Organizaciones</value>
   </data>
+  <data name="EditEmployeeID" xml:space="preserve">
+    <value>Editar identificador de empleado</value>
+  </data>
+  <data name="OrgRole" xml:space="preserve">
+    <value>Función de la organización</value>
+  </data>
+  <data name="TimeTrackerRole" xml:space="preserve">
+    <value>Función de la Rastreador de Tiempo</value>
+  </data>
 </root>

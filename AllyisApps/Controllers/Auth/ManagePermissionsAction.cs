@@ -199,13 +199,13 @@ namespace AllyisApps.Controllers
 
 				if (model.SelectedUsers == null || model.SelectedUsers.Count() == 0)
 				{
-					Notifications.Add(new BootstrapAlert("No users were selected.", Variety.Danger));//LANGUAGE Update to use resource file to change message language
+					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.NoUsersSelected, Variety.Danger));
                     return RedirectToAction(ActionConstants.Manage);
 				}
 
 				if (model.SelectedActions == null)
 				{
-					Notifications.Add(new BootstrapAlert("No actions were selected.", Variety.Danger));//LANGUAGE Update to use resource file to change message language
+					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.NoActionsSelected, Variety.Danger));
                     return RedirectToAction(ActionConstants.ManagePermissions);
 				}
 
@@ -234,11 +234,11 @@ namespace AllyisApps.Controllers
 					int numberChanged = Service.ChangeUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.OrgRoleTarget.Value);
 					if (model.SelectedActions.OrgRoleTarget == -1)
 					{
-						Notifications.Add(new BootstrapAlert(string.Format("{0} users were removed from the organization.", numberChanged), Variety.Success));//LANGUAGE Update to use resource file to change message language
+						Notifications.Add(new BootstrapAlert(string.Format(Resources.Controllers.Auth.Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
                     }
 					else
 					{
-						Notifications.Add(new BootstrapAlert(string.Format("{0} users changed roles in the organization.", numberChanged), Variety.Success));//LANGUAGE Update to use resource file to change message language
+						Notifications.Add(new BootstrapAlert(string.Format(Resources.Controllers.Auth.Strings.UsersChangedRolesInOrg, numberChanged), Variety.Success));
                     }
 				}
 				else
@@ -260,18 +260,18 @@ namespace AllyisApps.Controllers
 					if (updatedAndAdded.Item1 != 0)
 					{
 						Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", updatedAndAdded.Item1, model.SelectedActions.TimeTrackerRoleTarget == -1 ? 
-							"users removed from TimeTracker." : AllyisApps.Resources.Controllers.Auth.Strings.UsersChangedRolesInTimeTracker), Variety.Success));//LANGUAGE Update to use resource file to change message language
+							Resources.Controllers.Auth.Strings.UsersRemovedFromTimeTracker : AllyisApps.Resources.Controllers.Auth.Strings.UsersChangedRolesInTimeTracker), Variety.Success));
                     }
 					
 					if (updatedAndAdded.Item2 == -1)
 					{
-						Notifications.Add(new BootstrapAlert(string.Format("You have too many users in your subscription to add {0} more.", model.SelectedUsers.Count()), Variety.Danger));//LANGUAGE Update to use resource file to change message language
+						Notifications.Add(new BootstrapAlert(string.Format(Resources.Controllers.Auth.Strings.TooManyUsersInSubToAdd, model.SelectedUsers.Count()), Variety.Danger));
                     }
 					else
 					{
 						if (updatedAndAdded.Item2 != 0)
 						{
-							Notifications.Add(new BootstrapAlert(string.Format("{0} users added to TimeTracker.", updatedAndAdded.Item2), Variety.Success));//LANGUAGE Update to use resource file to change message language
+							Notifications.Add(new BootstrapAlert(string.Format(Resources.Controllers.Auth.Strings.UsersAddedToTimeTracker, updatedAndAdded.Item2), Variety.Success));
                         }
 					}
 				}

@@ -372,4 +372,16 @@
   <data name="StartDate" xml:space="preserve">
     <value>Start Date</value>
   </data>
+  <data name="ConfirmDeleteHoliday" xml:space="preserve">
+    <value>Are you sure you want to delete the holiday {0}?</value>
+  </data>
+  <data name="ConfirmDeletePayClass" xml:space="preserve">
+    <value>Are you sure you want to delete the pay class {0}?</value>
+  </data>
+  <data name="DeleteHoliday" xml:space="preserve">
+    <value>Delete Holiday</value>
+  </data>
+  <data name="DeletePayClass" xml:space="preserve">
+    <value>Delete Pay Class</value>
+  </data>
 </root>

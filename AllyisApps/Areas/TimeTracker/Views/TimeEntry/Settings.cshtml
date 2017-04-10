@@ -53,15 +53,20 @@
                     @foreach (PayClass PayClass in Model.PayClasses)
                     {
                         <tr>
-                            <td>@(AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString((PayClass.Name).Replace(" ", string.Empty)) ?? PayClass.Name)</td>
+                            @{ 
+                                string _payClassName = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString((PayClass.Name).Replace(" ", string.Empty)) ?? PayClass.Name; 
+                            }
+                            <td>@_payClassName</td>
                             <td>
-								<a href="javascript: void(0);" class="text-muted" title="Delete Pay Class" @*//LANGUAGE Update to use resource file to change message language*@
-								   onclick='deletePayClass("@PayClass.PayClassID", "@PayClass.Name")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
+
+                                <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DeletePayClass"
+								   onclick='deletePayClass("@PayClass.PayClassID", "\"@_payClassName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
                             </td>
                         </tr>
                     }
 					<tr>
-						@using (Html.BeginForm(ActionConstants.CreatePayClass, ControllerConstants.TimeEntry, FormMethod.Post))
+
+                        @using (Html.BeginForm(ActionConstants.CreatePayClass, ControllerConstants.TimeEntry, FormMethod.Post))
 						{
 							@Html.AntiForgeryToken();
 							<td><input type="text" name="NewPayClass" class="form-control" /></td>
@@ -151,15 +156,18 @@
                     @foreach (Holiday Holiday in Model.Holidays)
                     {
                         <tr>
+                            @{ 
+                                string _holidayName = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString(((Holiday.HolidayName).Replace(" ", string.Empty)).Replace("'", string.Empty)) ?? Holiday.HolidayName;
+                            }
                             <td>
-                                @(AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString(((Holiday.HolidayName).Replace(" ", string.Empty)).Replace("'", string.Empty)) ?? Holiday.HolidayName)
+                                @_holidayName
                             </td>
                             <td>
                                 @Holiday.Date.ToShortDateString()
                             </td>
                             <td>
-								<a href="javascript: void(0);" class="text-muted" title="Delete Holiday"@*//LANGUAGE Update to use resource file to change message language*@
-								   onclick='deleteHoliday("@Holiday.HolidayId", "@Holiday.HolidayName")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
+								<a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DeleteHoliday"
+								   onclick='deleteHoliday("@Holiday.HolidayId", "\"@_holidayName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
                             </td>
                         </tr>
                     }
@@ -179,9 +187,9 @@
 
 @section scripts{
 	<script type="text/javascript">
-        deletePayClassWarning = "Are you sure you want to delete the pay class {0}?";@*//LANGUAGE Update to use resource file to change message language*@
+        deletePayClassWarning = "@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ConfirmDeletePayClass"
 		deletePayClassUrl = "@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { PayClassId = -1 })"
-        deleteHolidayWarning = "Are you sure you want to delete the holiday {0}?";@*//LANGUAGE Update to use resource file to change message language*@
+        deleteHolidayWarning = "@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ConfirmDeleteHoliday";
 		deleteHolidayUrl = "@Url.Action(ActionConstants.DeleteHoliday, ControllerConstants.TimeEntry, new { HolidayId = -1 })"
 	</script>
 
