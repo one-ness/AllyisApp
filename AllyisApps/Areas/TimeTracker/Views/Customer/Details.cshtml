@@ -5,8 +5,8 @@
 }
 
 <div class="row">
-    <div style="margin-left:auto;margin-right:auto;max-width:600px;">
-        <div class="col-md-6 xs-control-width" style="margin-left:auto;margin-right:auto;">
+    <div class="float-center max-600">
+        <div class="col-md-6 xs-control-width float-center">
             <div class="form-group">
                 @Html.LabelFor(m => m.Address, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.Address)
                 <div class="text-box-padded">@Html.DisplayTextFor(m => m.Address)</div>
@@ -28,7 +28,7 @@
                 <div class="text-box-padded">@Html.DisplayTextFor(m => m.PostalCode)</div>
             </div>
         </div>
-        <div class="col-md-6 xs-control-width" style="margin-left:auto;margin-right:auto;">
+        <div class="col-md-6 xs-control-width float-center">
             <div class="form-group">
                 @Html.LabelFor(m => m.ContactEmail, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ContactEmail)
                 <div class="text-box-padded">@Html.DisplayTextFor(m => m.ContactEmail)</div>
@@ -52,7 +52,7 @@
         </div>
    </div>
 </div>
-<div class="row md-control-width" style="margin-left:auto;margin-right:auto;">
+<div class="row md-control-width float-center">
     <div class="form-group allyis-action-buttons">
         <a href="/TimeTracker/Customer" class="btn btn-default">@AllyisApps.Resources.Views.Account.Strings.Back</a>
     </div>

@@ -42,15 +42,15 @@
                                 </h4>
                             </a>
                             <a href="@Url.Action(ActionConstants.Details, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right">
-                                <i class="fa fa-fw fa-lg fa-eye" style="padding-top:8.3px;margin-right:5px;"></i>
+                                <i class="fa fa-fw fa-lg fa-eye"></i>
                             </a>
 							@if (Model.canEdit)
 							{
 								<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right">
-									<i class="fa fa-lg fa-fw fa-cog" style="font-size:1.7em;"></i>
+									<i class="fa fa-lg fa-fw fa-cog" ></i>
 								</a>
-								<a href="@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right" style="margin-top:3px;" onclick="return confirm('Are you sure you wish to delete the customer @customer.CustomerInfo.Name?')">
-									<i class="fa fa-2x fa-fw fa-times"></i>
+								<a href="@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right" onclick="return confirm('Are you sure you wish to delete the customer @customer.CustomerInfo.Name?')">
+									<i class="fa fa-2x fa-fw fa-times" ></i>
 								</a>
 							}
                         </div>
