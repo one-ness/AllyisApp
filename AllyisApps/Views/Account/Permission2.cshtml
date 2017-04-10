@@ -165,5 +165,9 @@
         pwf.addFilter("#userSearch", "search", "#name");
         pwf.addFilter('#orgRoleFilter', 'dropDown', "#orgRole", "@AllyisApps.Resources.Views.Account.Strings.Any");
         if('@hasTimeTracker' == 'True') pwf.addFilter('#ttRoleFilter', 'dropDown', "#ttRole", "@AllyisApps.Resources.Views.Account.Strings.Any");
+        if (sessionStorage.getItem("/ManagePermissionsPage") != null)
+        {
+            pwf.setPreviouslySelectedPage(sessionStorage.getItem("/ManagePermissionsPage"))
+        }
     </script>
 }

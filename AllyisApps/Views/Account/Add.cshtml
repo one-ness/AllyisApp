@@ -85,7 +85,8 @@
                                 role.Name = AllyisApps.Resources.ViewModels.Org.Strings.ResourceManager.GetString(role.Name);
                             }
                         }
-                        @Html.DropDownListDisabled(string.Format("Subscriptions[{0}].SelectedRole", count), new SelectList(languageAdjustment, "ProductRoleId", "Name", languageAdjustment.Where(x => x.Name == AllyisApps.Resources.ViewModels.Org.Strings.ResourceManager.GetString("None")).FirstOrDefault()), sub.hasTooManySubscribers, new { @class = "form-control role-selector" })
+						@Html.DropDownListDisabled(string.Format("Subscriptions[{0}].SelectedRole", count), new SelectList(sub.ProductRoles, "ProductRoleId", "Name", sub.SelectedRole), sub.hasTooManySubscribers, new { @class = "form-control role-selector" })
+                        <span class="text-danger" id="roleRequiredMessage">@AllyisApps.Resources.Views.Account.Strings.TimeTrackerRoleRequired</span>
                         @if (sub.hasTooManySubscribers)
 						{
 							<p>@AllyisApps.Resources.Views.Account.Strings.TooManyUsers</p>roomInSubscription = false;
@@ -111,7 +112,8 @@
                                 }
 
 									@Html.DropDownList("SubscriptionProjectId", selectProjects, AllyisApps.Resources.Views.Account.Strings.DropDownEmpty, new { @class = "form-control project-selector" });
-								}
+                                    <span class="text-danger" id="projectRequiredMessage">@AllyisApps.Resources.Views.Account.Strings.TimeTrackerProjectRequired</span>
+                                }
 							</div>
 
 							<div class="form-group allyis-action-buttons pull-right">
