@@ -21,14 +21,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// Returns a details page for a customer
         /// </summary>
         /// <param name="id">id of customer</param>
+        /// <param name="canEdit">true if the user has edit permissions</param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Details(int id)
+        public ActionResult Details(int id, bool canEdit)
         {
             if (Service.Can(Actions.CoreAction.ViewCustomer))
             {
                 var infos = Service.GetCustomerAndCountries(id);
-
+                if (canEdit) { ViewData["canEdit"] = "True"; }
+                else { ViewData["canEdit"] = "False"; }
                 return this.View(new EditCustomerInfoViewModel
                 {
                     ContactEmail = infos.Item1.ContactEmail,
