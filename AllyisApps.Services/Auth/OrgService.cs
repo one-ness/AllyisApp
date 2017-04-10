@@ -590,7 +590,7 @@ namespace AllyisApps.Services
 		/// <param name="userId">User id.</param>
 		/// <param name="orgId">Organization id.</param>
 		/// <param name="employeeId">New employee id.</param>
-		public void SetEmployeeId(int userId, int orgId, string employeeId)
+		public bool SetEmployeeId(int userId, int orgId, string employeeId)
 		{
 			if (userId <= 0)
 			{
@@ -606,9 +606,43 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("employeeId", "Employee Id must have a value");
 			}
-
-			DBHelper.SetEmployeeId(userId, orgId, employeeId);
+            //Change Employee Id if it is not already taken
+            if (DBHelper.SetEmployeeId(userId, orgId, employeeId) == 1)
+            {
+                return false;
+            };
+            return true;
 		}
+
+        /// <summary>
+        /// sets the employee id of an invitation 
+        /// </summary>
+        /// <param name="invitationId"></param>
+        /// <param name="orgId"></param>
+        /// <param name="employeeId"></param>
+        public bool SetInvitationEmployeeId(int invitationId, int orgId, string employeeId)
+        {
+            if (invitationId <= 0)
+            {
+                throw new ArgumentOutOfRangeException("invitationId", "Invitation Id cannot be 0 or negative.");
+            }
+            if (orgId < 0)
+            {
+                throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
+            }
+
+            if (string.IsNullOrWhiteSpace(employeeId))
+            {
+                throw new ArgumentNullException("employeeId", "Employee Id must have a value");
+            }
+            var result = DBHelper.SetInvitationEmployeeId(invitationId, orgId, employeeId);
+            //Change Employee Id if it is not already taken
+            if (result == 1)
+            {
+                return false;
+            };
+            return true;
+        }
 
 		/// <summary>
 		/// Removes an organization user.
@@ -653,6 +687,28 @@ namespace AllyisApps.Services
 		public IEnumerable<UserRolesInfo> GetUserRoles()
 		{
 			return DBHelper.GetRoles(UserContext.ChosenOrganizationId).Select(o => InitializeUserRolesInfo(o));
+		}
+
+		/// <summary>
+		/// Assigns a new organization role to the given users for the current organization.
+		/// </summary>
+		/// <param name="userIds">List of user Ids.</param>
+		/// <param name="newOrganizationRole">Organization role to assign, or -1 to remove from organization.</param>
+		/// <returns>The number of affected users.</returns>
+		public int ChangeUserRoles(List<int> userIds, int newOrganizationRole)
+		{
+			#region Validation
+			if (!Enum.IsDefined(typeof(OrganizationRole), newOrganizationRole) && newOrganizationRole != -1)
+			{
+				throw new ArgumentOutOfRangeException("newOrganizationRole", "Organization role must either be -1 or match a value of the OrganizationRole enum.");
+			}
+			if (userIds == null || userIds.Count == 0)
+			{
+				throw new ArgumentException("No user ids provided.", "userIds");
+			}
+			#endregion
+
+			return DBHelper.EditOrganizationUsers(userIds, UserContext.ChosenOrganizationId, newOrganizationRole);
 		}
 
 		/// <summary>

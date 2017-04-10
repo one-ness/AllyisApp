@@ -22,14 +22,14 @@
                     @Html.ReqLabelFor(m => m.ProjectName, @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Name)
                     @*<label for="Name">@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Name</label>*@
                     @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(x => x.ProjectName)
+                    @Html.ValidationMessageFor(x => x.ProjectName, "", new { @class = "text-danger" })
                 </div>
                 @*@if (Model.IsCreating)
                 {*@
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.ProjectOrgId, AllyisApps.Resources.TimeTracker.Views.Project.Strings.ProjectOrgId)
                         @Html.TextBoxFor(m => m.ProjectOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.ProjectOrgId })
-                        @Html.ValidationMessageFor(x => x.ProjectOrgId)
+                        @Html.ValidationMessageFor(x => x.ProjectOrgId, "", new { @class = "text-danger"})
                     </div>
                 @*}
                 else
@@ -40,6 +40,19 @@
                         @Html.HiddenFor(m => m.ProjectOrgId)
                     </div>
                 }*@
+                    @if (Model.SelectedProjectUserIds.Count() > 0)
+                    {
+                        var _projectUsers = Model.ProjectUsers.ToList();
+                        var _subscriptionUsers = Model.SubscriptionUsers.ToList();
+                        foreach (var id in Model.SelectedProjectUserIds)
+                        {
+                            var choice = Model.SubscriptionUsers.Where(m => m.UserId == id).FirstOrDefault();
+                            _projectUsers.Add(choice);
+                            _subscriptionUsers.Remove(choice);
+                        }
+                        Model.ProjectUsers = _projectUsers;
+                        Model.SubscriptionUsers = _subscriptionUsers;
+                    }
                 <div id="swapper-ui" class="swapper-ui">
                     <div class="left">
                         <label>@AllyisApps.Resources.TimeTracker.Views.Project.Strings.OffProj</label>

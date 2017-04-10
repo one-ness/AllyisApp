@@ -391,6 +391,30 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Assigns a new TimeTracker role to the given users for the current organization.
+		/// </summary>
+		/// <param name="userIds">List of user Ids.</param>
+		/// <param name="newTimeTrackerRole">TimeTracker role to assign, or -1 to remove from subscription.</param>
+		/// <returns>A tuple containing the number of updated users and the number of added users. If the updated users is -1,
+		/// there is no TimeTracker subscription. If the number added is -1, there are too many subscription users already to
+		/// add the given list.</returns>
+		public Tuple<int, int> ChangeSubscriptionUserRoles(List<int> userIds, int newTimeTrackerRole)
+		{
+			#region Validation
+			if (!Enum.IsDefined(typeof(ProductRoleIdEnum), newTimeTrackerRole) && newTimeTrackerRole != -1)
+			{
+				throw new ArgumentOutOfRangeException("newTimeTrackerRole", "TimeTracker role must either be -1 or match a value of the ProductRoleIdEnum enum.");
+			}
+			if (userIds == null || userIds.Count == 0)
+			{
+				throw new ArgumentException("No user ids provided.", "userIds");
+			}
+			#endregion
+
+			return DBHelper.EditSubscriptionUsers(userIds, UserContext.ChosenOrganizationId, newTimeTrackerRole);
+		}
+
+		/// <summary>
 		/// Gets a <see cref="Product"/>.
 		/// </summary>
 		/// <param name="productId">Product Id.</param>

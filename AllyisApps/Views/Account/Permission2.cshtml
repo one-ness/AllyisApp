@@ -37,11 +37,11 @@
 @Html.AntiForgeryToken()
 
 <ul class="nav allyis-tabs">
-	<li class="selected" id="OrganizationTab">Organization</li>
+	<li class="selected" id="OrganizationTab">@AllyisApps.Resources.Views.Account.Strings.Organization</li>
 	@if (hasTimeTracker)
 	{
-		<li id="TimeTrackerTab">TimeTracker</li>
-	}
+		<li id="TimeTrackerTab">@AllyisApps.Resources.Views.Account.Strings.TimeTracker</li>
+    }
 </ul>
 <div class="panel panel-default">
     <div class="panel-body" style="padding: 0px;">
@@ -49,11 +49,11 @@
             <thead class="panel-heading">
                 <tr class="no-border">
                     <th style="width: 6%;"></th>
-                    <th style="width: 47%;">User</th>
-                    <th style="width: 47%;" class="tab-OrganizationTab">Organization Role</th>
+                    <th style="width: 47%;">@AllyisApps.Resources.Views.Account.Strings.User</th>
+                    <th style="width: 47%;" class="tab-OrganizationTab">@AllyisApps.Resources.Views.Account.Strings.OrgRole</th>
                     @if (hasTimeTracker)
                     {
-                        <th class="tab-TimeTrackerTab" style="display: none; width: 47%;">TimeTracker Role</th>
+                        <th class="tab-TimeTrackerTab" style="display: none; width: 47%;">@AllyisApps.Resources.Views.Account.Strings.TimeTrackerRole</th>
                     }
                 </tr>
                 <tr class="double-bottom-border">
@@ -165,5 +165,9 @@
         pwf.addFilter("#userSearch", "search", "#name");
         pwf.addFilter('#orgRoleFilter', 'dropDown', "#orgRole", "@AllyisApps.Resources.Views.Account.Strings.Any");
         if('@hasTimeTracker' == 'True') pwf.addFilter('#ttRoleFilter', 'dropDown', "#ttRole", "@AllyisApps.Resources.Views.Account.Strings.Any");
+        if (sessionStorage.getItem("/ManagePermissionsPage") != null)
+        {
+            pwf.setPreviouslySelectedPage(sessionStorage.getItem("/ManagePermissionsPage"))
+        }
     </script>
 }

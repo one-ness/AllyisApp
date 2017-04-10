@@ -124,6 +124,15 @@ namespace AllyisApps.Resources.TimeTracker.Controllers.TimeEntry {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not create report..
+        /// </summary>
+        public static string CannotCreateReport {
+            get {
+                return ResourceManager.GetString("CannotCreateReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You cannot edit this date..
         /// </summary>
         public static string CannotEditDate {
@@ -201,6 +210,24 @@ namespace AllyisApps.Resources.TimeTracker.Controllers.TimeEntry {
         public static string DurationFormat {
             get {
                 return ResourceManager.GetString("DurationFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must enter a time longer than 00:00..
+        /// </summary>
+        public static string EnterATimeLongerThanZero {
+            get {
+                return ResourceManager.GetString("EnterATimeLongerThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not create pay class: that pay class name already exists..
+        /// </summary>
+        public static string FailureCreatePayClassAlreadyExists {
+            get {
+                return ResourceManager.GetString("FailureCreatePayClassAlreadyExists", resourceCulture);
             }
         }
         
@@ -426,6 +453,42 @@ namespace AllyisApps.Resources.TimeTracker.Controllers.TimeEntry {
         public static string SelectProject {
             get {
                 return ResourceManager.GetString("SelectProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created holiday successfully..
+        /// </summary>
+        public static string SuccessfulCreateHoliday {
+            get {
+                return ResourceManager.GetString("SuccessfulCreateHoliday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pay class created successfully..
+        /// </summary>
+        public static string SuccessfulCreatePayClass {
+            get {
+                return ResourceManager.GetString("SuccessfulCreatePayClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Holiday deleted successfully..
+        /// </summary>
+        public static string SuccessfulDeleteHoliday {
+            get {
+                return ResourceManager.GetString("SuccessfulDeleteHoliday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pay class deleted successfully.
+        /// </summary>
+        public static string SuccessfulDeletePayClass {
+            get {
+                return ResourceManager.GetString("SuccessfulDeletePayClass", resourceCulture);
             }
         }
         

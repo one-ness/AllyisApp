@@ -255,4 +255,25 @@
   <data name="LockDateUpdateFail" xml:space="preserve">
     <value>Failed to update lock date settings.</value>
   </data>
+  <data name="EnterATimeLongerThanZero" xml:space="preserve">
+    <value>You must enter a time longer than 00:00.</value>
+  </data>
+  <data name="CannotCreateReport" xml:space="preserve">
+    <value>Could not create report.</value>
+  </data>
+  <data name="FailureCreatePayClassAlreadyExists" xml:space="preserve">
+    <value>Could not create pay class: that pay class name already exists.</value>
+  </data>
+  <data name="SuccessfulCreateHoliday" xml:space="preserve">
+    <value>Created holiday successfully.</value>
+  </data>
+  <data name="SuccessfulCreatePayClass" xml:space="preserve">
+    <value>Pay class created successfully.</value>
+  </data>
+  <data name="SuccessfulDeleteHoliday" xml:space="preserve">
+    <value>Holiday deleted successfully.</value>
+  </data>
+  <data name="SuccessfulDeletePayClass" xml:space="preserve">
+    <value>Pay class deleted successfully</value>
+  </data>
 </root>

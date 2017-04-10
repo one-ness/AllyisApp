@@ -249,4 +249,25 @@
   <data name="LockDateUpdateFail" xml:space="preserve">
     <value>Failed to update lock date settings.</value>
   </data>
+  <data name="EnterATimeLongerThanZero" xml:space="preserve">
+    <value>You must enter a time longer than 00:00.</value>
+  </data>
+  <data name="CannotCreateReport" xml:space="preserve">
+    <value>No se pudo crear el informe.</value>
+  </data>
+  <data name="FailureCreatePayClassAlreadyExists" xml:space="preserve">
+    <value>No se pudo crear la clase de pago: ese nombre de clase de pago ya existe.</value>
+  </data>
+  <data name="SuccessfulCreateHoliday" xml:space="preserve">
+    <value>Creado vacaciones con éxito.</value>
+  </data>
+  <data name="SuccessfulCreatePayClass" xml:space="preserve">
+    <value>Clase de pago creada correctamente.</value>
+  </data>
+  <data name="SuccessfulDeleteHoliday" xml:space="preserve">
+    <value>Vacaciones eliminadas correctamente.</value>
+  </data>
+  <data name="SuccessfulDeletePayClass" xml:space="preserve">
+    <value>Clase de pago eliminada correctamente</value>
+  </data>
 </root>

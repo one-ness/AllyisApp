@@ -61,7 +61,7 @@
                         <a href="@Url.Action(ActionConstants.ManagePermissions)" title="@AllyisApps.Resources.Views.Account.Strings.ManagePermissions"><span class="fa fa-fw fa-lg fa-users text-warning"></span></a>}
                     @if (Model.CanEditOrganization && Model.SubscriptionCount > 0)
                     {
-                        <a href="@Url.Action(ActionConstants.Add)" title=@AllyisApps.Resources.Views.Account.Strings.AddMembers><span class="fa fa-fw fa-plus fa-lg text-info"></span></a>}
+                        <a href="@Url.Action(ActionConstants.Add)" title="@AllyisApps.Resources.Views.Account.Strings.AddMembers"><span class="fa fa-fw fa-plus fa-lg text-info"></span></a>}
                 </span>
             </h1>
         </div>
@@ -81,7 +81,6 @@
         @Html.Partial("_OrgBillingInfo", Model)
     </div>*@
 </div>
-
 @section Scripts {
     <script type="text/javascript">
         var removeFromOrg = "@AllyisApps.Resources.Views.Account.Strings.RemoveFromOrg";
@@ -97,5 +96,8 @@
         pwf.setRowClass("memberRow");
         pwf.addFilter('#org-members-search', "search", '.memberSearchProperty');
         pwf.addFilter('#org-members-role', "dropDown", '.memberOrgRole', "Any");
+        if (sessionStorage.getItem("/ManagePage") != null) {
+            pwf.setPreviouslySelectedPage(sessionStorage.getItem("/ManagePage"));
+        }
     </script>
 }

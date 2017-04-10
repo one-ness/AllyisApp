@@ -24,8 +24,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (TimeTrackerService.DeleteHoliday(holidayId))
 			{
-				Notifications.Add(new BootstrapAlert("Holiday deleted successfully.", Variety.Success));
-			}
+				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulDeleteHoliday, Variety.Success));
+            }
 			else
 			{
 				// premissions handled in service level

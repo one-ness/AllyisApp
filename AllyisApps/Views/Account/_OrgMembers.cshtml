@@ -69,7 +69,7 @@
                             @invite.OrgRoleName
                         </td>
                         <td class="text-right icon-strip">
-                            <a href="javascript: void(0);" class="text-muted" title=@AllyisApps.Resources.Views.Account.Strings.RemoveInvitation
+                            <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.RemoveInvitation"
                                onclick='deleteInvitation("@invite.OrganizationId", "@invite.InvitationId")'><span class="fa fa-fw fa-remove text-danger"></span></a>
                         </td>
                     </tr>
@@ -105,7 +105,7 @@
                         <td class="text-right icon-strip">
                             @if (Model.CurrentUserId != user.UserId)
                                 {
-                                <a href="javascript: void(0);" class="text-muted" title=@AllyisApps.Resources.Views.Account.Strings.RemoveMember
+                                <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.RemoveMember"
                                    onclick='removeUser("@user.OrganizationId", "@user.UserId", "@user.FullName")'><span class="fa fa-fw fa-remove text-danger"></span></a>
                                 }
                         </td>

@@ -68,8 +68,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 				catch (Exception ex)
 				{
-					string message = "Could not create report.";
-					if (ex.Message != null)
+                    string message = Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotCreateReport;
+                    if (ex.Message != null)
 					{
 						message = string.Format("{0} {1}", message, ex.Message);
 					}

@@ -83,6 +83,9 @@ function ajaxCreate(form_element, create_action_url) {
         timeout: 5000,
         dataType: "json"})
     .done(function(res) {
+        if (res.status == 'error') {
+            form_element.addClass("error error-submit");
+        }
         ajaxHandleOverridingResponses(res, { form_element: form_element});
         if (res.status == 'success')
         {
@@ -142,7 +145,10 @@ function ajaxEdit(form_element, edit_action_url) {
         data: data,
         timeout: 5000,
         dataType: "json"})
-    .done(function(res) {
+    .done(function (res) {
+        if (res.message != null) {
+            form_element.addClass("error error-submit");
+        }
         ajaxHandleOverridingResponses(res, { form_element: form_element});
         if (res.status == 'success')
         {
@@ -243,6 +249,9 @@ function changeOccur(form_child) {
 
     form_submit_element = form_element.find("button");
     form_submit_element.removeAttr("disabled");
+
+    form_element.removeClass("error");
+    form_element.removeClass("error-submit");
 }
 
 function changeRemove(form_element) {

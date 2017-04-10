@@ -70,6 +70,33 @@ namespace AllyisApps.Resources.TimeTracker.Controllers.Project {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You do not have permission to delete projects.
+        /// </summary>
+        public static string DeleteUnauthorizedMessage {
+            get {
+                return ResourceManager.GetString("DeleteUnauthorizedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not create project..
+        /// </summary>
+        public static string FailureProjectCreated {
+            get {
+                return ResourceManager.GetString("FailureProjectCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not update project..
+        /// </summary>
+        public static string FailureProjectEdited {
+            get {
+                return ResourceManager.GetString("FailureProjectEdited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to has been deleted successfully..
         /// </summary>
         public static string ProjectDeleteNotification {

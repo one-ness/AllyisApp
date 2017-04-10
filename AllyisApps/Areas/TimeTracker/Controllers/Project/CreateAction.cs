@@ -74,6 +74,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public ActionResult Create(EditProjectViewModel model)
 		{
+            var list = Service.GetNextProjectIdAndSubUsers(model.ParentCustomerId).Item2;
+            var subList = new List<BasicUserInfoViewModel>();
+            foreach (var user in list)
+            {
+                subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
+            }
+            model.SubscriptionUsers = subList;
 			if (ModelState.IsValid)
 			{
 				if (Service.Can(Actions.CoreAction.EditProject))
@@ -94,15 +101,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					}
 					catch (Exception ex)
 					{
-						string message = "Could not create project.";
-						if (ex.Message != null)
+						string message = Resources.TimeTracker.Controllers.Project.Strings.FailureProjectCreated;
+                        if (ex.Message != null)
 						{
 							message = string.Format("{0} {1}", message, ex.Message);
 						}
 
 						//Create failure
 						Notifications.Add(new BootstrapAlert(message, Variety.Danger));
-						return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
+                        return this.View(model);
 					}
 					this.UpdateProject(model);
 					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.SuccessProjectCreated, Variety.Success));
@@ -113,13 +120,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					// Permissions failure
 					this.Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ActionUnauthorizedMessage, Variety.Warning));
-
 					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
 				}
 			}
 			else
 			{
-				// Invalid Model
+                // Invalid Model
 				return this.View(model);
 			}
 		}

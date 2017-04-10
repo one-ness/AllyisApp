@@ -65,6 +65,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the project id selected by the drop down menu.
 		/// </summary>
 		public int? SubscriptionProjectId { get; set; }
+
 	}
 
 	/// <summary>

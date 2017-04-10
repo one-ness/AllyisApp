@@ -257,6 +257,9 @@
     <Build Include="StoredProcedures\Billing\Billing.DeleteSubPlanAndAddHistory.sql" />
     <Build Include="StoredProcedures\TimeTracker\TimeTracker.CreateBulkTimeEntry.sql" />
     <Build Include="StoredProcedures\Auth\Auth.UpdateEmailConfirmed.sql" />
+    <Build Include="StoredProcedures\Billing\Billing.EditSubscriptionUsers.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.EditOrgUsers.sql" />
+    <Build Include="StoredProcedures\Auth\Auth.UpdateOrgInvitationEmployeeId.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

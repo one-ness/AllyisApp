@@ -169,7 +169,7 @@
     <value>has been sent an email invitation.</value>
   </data>
   <data name="UsersChangedRolesInOrg" xml:space="preserve">
-    <value>Users changed roles in organization.</value>
+    <value>{0} users changed roles in organization.</value>
   </data>
   <data name="WarnProblemSigningIn" xml:space="preserve">
     <value>There was a problem signing in.</value>
@@ -221,5 +221,29 @@
   </data>
   <data name="NoAccountForEmail" xml:space="preserve">
     <value>There is no account registered for that email address.</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Email address is invalid.</value>
+  </data>
+  <data name="NoActionsSelected" xml:space="preserve">
+    <value>No actions were selected.</value>
+  </data>
+  <data name="NoUsersSelected" xml:space="preserve">
+    <value>No users were selected.</value>
+  </data>
+  <data name="ReduceNumberOfUsers" xml:space="preserve">
+    <value>You must first remove users from your subscription before reducing the number of users.</value>
+  </data>
+  <data name="TooManyUsersInSubToAdd" xml:space="preserve">
+    <value>You have too many users in your subscription to add {0} more.</value>
+  </data>
+  <data name="UsersAddedToTimeTracker" xml:space="preserve">
+    <value>{0} users added to TimeTracker.</value>
+  </data>
+  <data name="UsersRemovedFromOrg" xml:space="preserve">
+    <value>{0} users were removed from the organization.</value>
+  </data>
+  <data name="UsersRemovedFromTimeTracker" xml:space="preserve">
+    <value>users removed from TimeTracker.</value>
   </data>
 </root>
