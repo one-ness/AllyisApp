@@ -18,7 +18,7 @@ BEGIN
 	IF EXISTS (
 		SELECT * FROM [Auth].[OrganizationUser] WITH (NOLOCK)
 		INNER JOIN [Auth].[User] WITH (NOLOCK) ON [User].[UserId] = [OrganizationUser].[UserId]
-		WHERE [Email] = @Email
+		WHERE [Email] = @Email AND [OrganizationId] = @OrganizationId
 	)
 	BEGIN
 		SELECT -1 --Indicates the user is already in the organization

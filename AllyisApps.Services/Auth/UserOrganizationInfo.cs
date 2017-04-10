@@ -50,7 +50,7 @@ namespace AllyisApps.Services
 			}
 
 			this.OrganizationId = organizationId;
-			this.OrganizationName = this.OrganizationName;
+			this.OrganizationName = organizationName;
 			this.OrganizationRole = role;
 			if (infoList == null)
 			{
