@@ -142,6 +142,15 @@ namespace AllyisApps.Resources.Controllers.Auth {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email address is invalid..
+        /// </summary>
+        public static string InvalidEmail {
+            get {
+                return ResourceManager.GetString("InvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have successfully deleted an invitation..
         /// </summary>
         public static string InvitationDeleteNotification {
@@ -169,6 +178,15 @@ namespace AllyisApps.Resources.Controllers.Auth {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No actions were selected..
+        /// </summary>
+        public static string NoActionsSelected {
+            get {
+                return ResourceManager.GetString("NoActionsSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your Email has been confirmed..
         /// </summary>
         public static string NotifyYourEmailIsConfirmed {
@@ -183,6 +201,15 @@ namespace AllyisApps.Resources.Controllers.Auth {
         public static string NoUsersHaveBeenDefined {
             get {
                 return ResourceManager.GetString("NoUsersHaveBeenDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No users were selected..
+        /// </summary>
+        public static string NoUsersSelected {
+            get {
+                return ResourceManager.GetString("NoUsersSelected", resourceCulture);
             }
         }
         
@@ -210,6 +237,15 @@ namespace AllyisApps.Resources.Controllers.Auth {
         public static string OrganizationDetailsUpdated {
             get {
                 return ResourceManager.GetString("OrganizationDetailsUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must first remove users from your subscription before reducing the number of users..
+        /// </summary>
+        public static string ReduceNumberOfUsers {
+            get {
+                return ResourceManager.GetString("ReduceNumberOfUsers", resourceCulture);
             }
         }
         
@@ -246,6 +282,15 @@ namespace AllyisApps.Resources.Controllers.Auth {
         public static string Token {
             get {
                 return ResourceManager.GetString("Token", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have too many users in your subscription to add {0} more..
+        /// </summary>
+        public static string TooManyUsersInSubToAdd {
+            get {
+                return ResourceManager.GetString("TooManyUsersInSubToAdd", resourceCulture);
             }
         }
         
@@ -295,7 +340,16 @@ namespace AllyisApps.Resources.Controllers.Auth {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Users changed roles in organization..
+        ///   Looks up a localized string similar to {0} users added to TimeTracker..
+        /// </summary>
+        public static string UsersAddedToTimeTracker {
+            get {
+                return ResourceManager.GetString("UsersAddedToTimeTracker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} users changed roles in organization..
         /// </summary>
         public static string UsersChangedRolesInOrg {
             get {
@@ -309,6 +363,24 @@ namespace AllyisApps.Resources.Controllers.Auth {
         public static string UsersChangedRolesInTimeTracker {
             get {
                 return ResourceManager.GetString("UsersChangedRolesInTimeTracker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} users were removed from the organization..
+        /// </summary>
+        public static string UsersRemovedFromOrg {
+            get {
+                return ResourceManager.GetString("UsersRemovedFromOrg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to users removed from TimeTracker..
+        /// </summary>
+        public static string UsersRemovedFromTimeTracker {
+            get {
+                return ResourceManager.GetString("UsersRemovedFromTimeTracker", resourceCulture);
             }
         }
         

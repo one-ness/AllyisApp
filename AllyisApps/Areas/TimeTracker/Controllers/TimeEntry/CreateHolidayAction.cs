@@ -35,11 +35,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotCreateHolidayWithInvalidDate, Variety.Warning));
 			}
-
+            //the following if/else should be error checked. Even if the above fails, the holiday is attempted to be created, resulting in a created holiday without a name, or a SQL excpetion because the date is out of bounds.
 			if (TimeTrackerService.CreateHoliday(new Holiday() { OrganizationId = UserContext.ChosenOrganizationId, HolidayName = newHolidayName, Date = holidayDate }))
 			{
-				Notifications.Add(new BootstrapAlert("Created holiday successfully.", Variety.Success));
-			}
+				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulCreateHoliday, Variety.Success));
+            }
 			else
 			{
 				// This should only be a permissions failure

@@ -337,16 +337,16 @@
     <value>Sin pagar Tiempo Libre</value>
   </data>
   <data name="CopyDay" xml:space="preserve">
-    <value>Copy previous day</value>
+    <value>Copiar el día anterior</value>
   </data>
   <data name="CopyWeek" xml:space="preserve">
-    <value>Copy previous week</value>
+    <value>Copiar la semana anterior</value>
   </data>
   <data name="DayInitial" xml:space="preserve">
     <value>D</value>
   </data>
   <data name="WeekInitial" xml:space="preserve">
-    <value>W</value>
+    <value>S</value>
   </data>
   <data name="PayClass" xml:space="preserve">
     <value>Clase de Pago</value>
@@ -371,5 +371,17 @@
   </data>
   <data name="StartDate" xml:space="preserve">
     <value>Fecha de Inicio</value>
+  </data>
+  <data name="ConfirmDeleteHoliday" xml:space="preserve">
+    <value>¿Seguro que quieres eliminar las vacaciones {0}?</value>
+  </data>
+  <data name="ConfirmDeletePayClass" xml:space="preserve">
+    <value>¿Seguro que quieres eliminar la clase de pago {0}?</value>
+  </data>
+  <data name="DeleteHoliday" xml:space="preserve">
+    <value>Eliminar vacaciones</value>
+  </data>
+  <data name="DeletePayClass" xml:space="preserve">
+    <value>Eliminar clase de pago</value>
   </data>
 </root>

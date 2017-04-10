@@ -169,7 +169,7 @@
     <value>se ha enviado una invitación de correo electrónico.</value>
   </data>
   <data name="UsersChangedRolesInOrg" xml:space="preserve">
-    <value>Los usuarios cambian los roles en la organización.</value>
+    <value>{0} usuarios cambian los roles en la organización.</value>
   </data>
   <data name="WarnProblemSigningIn" xml:space="preserve">
     <value>Ha habido un problema con el registro.</value>
@@ -221,5 +221,29 @@
   </data>
   <data name="NoAccountForEmail" xml:space="preserve">
     <value>No hay ninguna cuenta registrada para esa dirección de correo electrónico.</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Dirección de correo electrónico es inválida.</value>
+  </data>
+  <data name="NoActionsSelected" xml:space="preserve">
+    <value>No se seleccionaron acciones.</value>
+  </data>
+  <data name="NoUsersSelected" xml:space="preserve">
+    <value>No se seleccionaron usuarios.</value>
+  </data>
+  <data name="ReduceNumberOfUsers" xml:space="preserve">
+    <value>Primero debe quitar usuarios de su suscripción antes de reducir el número de usuarios.</value>
+  </data>
+  <data name="TooManyUsersInSubToAdd" xml:space="preserve">
+    <value>Tienes demasiados usuarios en tu suscripción para agregar {0} más.</value>
+  </data>
+  <data name="UsersAddedToTimeTracker" xml:space="preserve">
+    <value>{0} usuarios agregados a TimeTracker.</value>
+  </data>
+  <data name="UsersRemovedFromOrg" xml:space="preserve">
+    <value>Se eliminaron {0} usuarios de la organización.</value>
+  </data>
+  <data name="UsersRemovedFromTimeTracker" xml:space="preserve">
+    <value>usuarios eliminados de TimeTracker.</value>
   </data>
 </root>

@@ -120,6 +120,18 @@
   <data name="ActionUnauthorizedMessage" xml:space="preserve">
     <value>Usted no está autorizado para realizar esta acción.</value>
   </data>
+  <data name="DeleteUnauthorizedMessage" xml:space="preserve">
+    <value>No tienes permiso para eliminar proyectos</value>
+  </data>
+  <data name="FailureProjectCreated" xml:space="preserve">
+    <value>No se pudo crear el proyecto.</value>
+  </data>
+  <data name="FailureProjectEdited" xml:space="preserve">
+    <value>No se pudo actualizar el proyecto.</value>
+  </data>
+  <data name="ProjectDeleteNotification" xml:space="preserve">
+    <value>Ha sido eliminado correctamente.</value>
+  </data>
   <data name="ProjectOrgIdNotUnique" xml:space="preserve">
     <value>The chosen Project ID already exists. The value must be a unique value.</value>
   </data>

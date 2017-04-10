@@ -24,8 +24,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (TimeTrackerService.DeletePayClass(payClassId))
 			{
-				Notifications.Add(new BootstrapAlert("Pay class deleted successfully", Variety.Success));
-			}
+				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulDeletePayClass, Variety.Success));
+            }
 			else
 			{
 				// Should only be here because of permission failures

@@ -133,6 +133,24 @@ namespace AllyisApps.Resources.TimeTracker.Views.TimeEntry {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the holiday {0}?.
+        /// </summary>
+        public static string ConfirmDeleteHoliday {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteHoliday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the pay class {0}?.
+        /// </summary>
+        public static string ConfirmDeletePayClass {
+            get {
+                return ResourceManager.GetString("ConfirmDeletePayClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy previous day.
         /// </summary>
         public static string CopyDay {
@@ -237,6 +255,24 @@ namespace AllyisApps.Resources.TimeTracker.Views.TimeEntry {
         public static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Holiday.
+        /// </summary>
+        public static string DeleteHoliday {
+            get {
+                return ResourceManager.GetString("DeleteHoliday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Pay Class.
+        /// </summary>
+        public static string DeletePayClass {
+            get {
+                return ResourceManager.GetString("DeletePayClass", resourceCulture);
             }
         }
         

@@ -421,6 +421,15 @@ namespace AllyisApps.Resources.Views.Account {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit Employee Id.
+        /// </summary>
+        public static string EditEmployeeID {
+            get {
+                return ResourceManager.GetString("EditEmployeeID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit Member.
         /// </summary>
         public static string EditMember {
@@ -831,6 +840,15 @@ namespace AllyisApps.Resources.Views.Account {
         public static string Organizations {
             get {
                 return ResourceManager.GetString("Organizations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Organization Role.
+        /// </summary>
+        public static string OrgRole {
+            get {
+                return ResourceManager.GetString("OrgRole", resourceCulture);
             }
         }
         
@@ -1281,6 +1299,15 @@ namespace AllyisApps.Resources.Views.Account {
         public static string TimeTrackerProjectRequired {
             get {
                 return ResourceManager.GetString("TimeTrackerProjectRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TimeTracker Role.
+        /// </summary>
+        public static string TimeTrackerRole {
+            get {
+                return ResourceManager.GetString("TimeTrackerRole", resourceCulture);
             }
         }
         
