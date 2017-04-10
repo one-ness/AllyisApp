@@ -573,4 +573,10 @@
   <data name="TimeTrackerRole" xml:space="preserve">
     <value>Función de la Rastreador de Tiempo</value>
   </data>
+  <data name="TimeTrackerProjectRequired" xml:space="preserve">
+    <value>Proyecto de Rastreador de Tiempo es necesario.</value>
+  </data>
+  <data name="TimeTrackerRoleRequired" xml:space="preserve">
+    <value>Rastreador de Tiempo Rol es necesario.</value>
+  </data>
 </root>

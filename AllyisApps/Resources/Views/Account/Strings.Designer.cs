@@ -1294,11 +1294,29 @@ namespace AllyisApps.Resources.Views.Account {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TimeTracker Project is required..
+        /// </summary>
+        public static string TimeTrackerProjectRequired {
+            get {
+                return ResourceManager.GetString("TimeTrackerProjectRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TimeTracker Role.
         /// </summary>
         public static string TimeTrackerRole {
             get {
                 return ResourceManager.GetString("TimeTrackerRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TimeTracker Role is required..
+        /// </summary>
+        public static string TimeTrackerRoleRequired {
+            get {
+                return ResourceManager.GetString("TimeTrackerRoleRequired", resourceCulture);
             }
         }
         
