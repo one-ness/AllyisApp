@@ -132,4 +132,10 @@
   <data name="CustomerOrgIdNotUnique" xml:space="preserve">
     <value>This Customer ID is already in use. The Customer ID must be a unique value.</value>
   </data>
+  <data name="FileFormatUnsupported" xml:space="preserve">
+    <value>Este formato de archivo no es compatible.</value>
+  </data>
+  <data name="PleaseUploadFile" xml:space="preserve">
+    <value>Cargue su archivo.</value>
+  </data>
 </root>

@@ -5,7 +5,7 @@
         @using (Html.BeginForm((string)(ViewData[ActionConstants.Action]), (string)ViewData[ControllerConstants.Controller], new { ReturnUrl = (string)(ViewBag.ReturnUrl) }, FormMethod.Post, new { @class = "", role = "form" }))
         {
             @Html.AntiForgeryToken()
-            @Html.ValidationSummary(string.Empty, new { @class = "text-danger" })
+            @*@Html.ValidationSummary(string.Empty, new { @class = "text-danger" })*@
 
             <div class="row">
                 <div class="col-md-6 sm-control-width">
@@ -13,6 +13,7 @@
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.Name, AllyisApps.Resources.Views.Account.Strings.Name)
                         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="form-group">
@@ -26,18 +27,19 @@
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.SiteUrl, AllyisApps.Resources.Views.Account.Strings.SiteURL)
                         @Html.TextBoxFor(m => m.SiteUrl, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.SiteUrl)
+                        @Html.ValidationMessageFor(m => m.SiteUrl,"",new { @class = "text-danger" })
                     </div>
 
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.PhoneNumber, AllyisApps.Resources.Views.Account.Strings.PhoneNumber)
                         @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.PhoneNumber)
+                        @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.FaxNumber, AllyisApps.Resources.Views.Account.Strings.FaxNumber)
                         @Html.TextBoxFor(m => m.FaxNumber, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.FaxNumber, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="col-md-6 sm-control-width">
@@ -45,32 +47,38 @@
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.Address, AllyisApps.Resources.Views.Account.Strings.Address)
                         @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.Country, AllyisApps.Resources.Views.Account.Strings.Country)
                         @Html.DropDownListFor(m => m.Country, new SelectList(Model.ValidCountries), AllyisApps.Resources.Views.Account.Strings.DropDownEmpty, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.State, AllyisApps.Resources.Views.Account.Strings.State)
                         @Html.DropDownListFor(m => m.State, new SelectList(new List<string>()), AllyisApps.Resources.Views.Account.Strings.DropDownEmpty, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.City, AllyisApps.Resources.Views.Account.Strings.City)
                         @Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.PostalCode, AllyisApps.Resources.Views.Account.Strings.PostalCode)
                         @Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.PostalCode, "", new { @class = "text-danger" })
                     </div>
                     @if (Model.IsCreating)
                     {
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.EmployeeId, AllyisApps.Resources.Views.Account.Strings.EmployeeId)
                         @Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control", @maxlength = "16" })
+                        @Html.ValidationMessageFor(m => m.EmployeeId, "", new { @class = "text-danger" })
                     </div>
                     }
                     else
@@ -88,7 +96,7 @@
                 @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, Model.IsCreating ? ActionConstants.Index : ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
                 <input type="submit" value="@AllyisApps.Resources.Views.Account.Strings.Save" class="btn btn-primary" id="submit" />
             </div>
-        }
+        } 
     </div>
     @if (Model != null && Model.CanDelete)
     {

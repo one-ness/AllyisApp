@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.Core;
+using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Utilities;
 using Excel;
@@ -55,7 +56,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						}
 						else
 						{
-							ModelState.AddModelError("File", "This file format is not supported");
+                            Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.FileFormatUnsupported, Variety.Danger));
+							//ModelState.AddModelError("File", "This file format is not supported");
 							return View();
 						}
 
@@ -79,7 +81,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					}
 					else
 					{
-						ModelState.AddModelError("File", "Please Upload Your file");
+                        Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.PleaseUploadFile, Variety.Danger));
+						//ModelState.AddModelError("File", "Please Upload Your file");
 					}
 				}
 			}
