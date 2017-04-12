@@ -23,7 +23,6 @@
 		}
 
 		a:nth-child(2) {
-			padding: 9px 8px 7px;
 			.fa-lg;
 			color: @panel-default-text;
 
@@ -58,13 +57,26 @@
 		font-weight: bold;
 	}
 
-	.fa-cog, .fa-times {
+	.fa-cog, .fa-times, .fa-eye{
 		color: #777;
 
 		&:hover {
 			color: #333;
 		}
 	}
+    .fa-cog, .fa-eye{
+        vertical-align:-65%;
+    }
+    .fa-eye{
+        padding-top:8.5px;
+        margin-right:5px;
+    }
+    .fa-cog{
+        font-size:1.7em;
+    }
+    .fa-times{
+        margin-top:3px;
+    }
 }
 /*body#tt-customer {
     .customer-list {
@@ -82,4 +94,27 @@
 
 	margin-left: 15px;
 	margin-right: 15px;
+}
+
+// column control for customer details page
+.max-600{
+    max-width:600px;
+}
+.float-center{
+    margin-left:auto;
+    margin-right:auto;
+}
+.xs-control-width{
+    width:330px;
+}
+.md-control-width{
+    width: 300px;
+}
+@media (min-width: @screen-md-min){
+    .xs-control-width{
+        width:300px;
+    }
+    .md-control-width{
+        width: 570px;
+    }
 }
