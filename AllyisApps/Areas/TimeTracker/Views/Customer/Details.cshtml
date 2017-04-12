@@ -3,6 +3,8 @@
 @{
     ViewBag.Title = Model.Name;
     DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+    DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+    ViewData["IsManager"] = Model.canEditCustomers;
 }
 
 <div class="row">
