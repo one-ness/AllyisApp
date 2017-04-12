@@ -22,6 +22,7 @@ namespace AllyisApps.Services.Tests
     {
         public static string connectionStr = "Data Source=(local);Initial Catalog=AllyisAppsDB;User Id=aaUser;Password=BlueSky23#;";
 
+        #region Helper methods to set up test data
         /**********************************************
         ** Set up test data
         **********************************************/
@@ -395,6 +396,129 @@ namespace AllyisApps.Services.Tests
             }
         }
 
+        public static int createCustomer(string name, int orgId, int isActive, string cusOrgId)
+        {
+            var service = new Service(connectionStr);
+            string insertStmt = "INSERT INTO [Crm].[Customer]([Name], [OrganizationId], [IsActive],[CustomerOrgId]) " +
+                                "VALUES(@name, @orgId, @isActive, @cusOrgId)";
+            string selectStmt = "SELECT [CustomerId] FROM [Crm].[Customer] WHERE [Name] = @name AND [OrganizationId] = @orgId";
+            SqlDataReader reader;
+            int customerId = -1;
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(insertStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+                    cmd.Parameters.Add("@name", SqlDbType.VarChar, 100).Value = name;
+                    cmd.Parameters.Add("@cusOrgId", SqlDbType.VarChar, 100).Value = cusOrgId;
+                    cmd.Parameters.Add("@IsActive", SqlDbType.Bit).Value = isActive;
+
+                    int result = cmd.ExecuteNonQuery();
+                }
+                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+                    cmd.Parameters.Add("@name", SqlDbType.VarChar, 100).Value = name;
+
+                    // execute cmd
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        customerId = (int)reader["CustomerId"];
+                    }
+                }
+                connection.Close();
+            }
+            return customerId;
+        }
+
+        public static void deleteCustomer(int customerId)
+        {
+            var service = new Service(connectionStr);
+            string stmt = "DELETE FROM [Crm].[Customer] WHERE [CustomerId] = @customerId";
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(stmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@customerId", SqlDbType.Int).Value = customerId;
+
+                    //execute command
+                    int result = cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        public static int createProject(int customerId, string name, int isActive, string projOrgId)
+        {
+            var service = new Service(connectionStr);
+            string insertStmt = "INSERT INTO [Crm].[Project]([CustomerId], [Name], [Type], [IsActive],[ProjectOrgId]) " +
+                                "VALUES(@customerId, @name, @type, @isActive, @projOrgId)";
+            string selectStmt = "SELECT [ProjectId] FROM [Crm].[Project] WHERE [Name] = @name AND [CustomerId] = @customerId";
+            SqlDataReader reader;
+            int projId = -1;
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(insertStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@customerId", SqlDbType.Int).Value = customerId;
+                    cmd.Parameters.Add("@name", SqlDbType.VarChar, 100).Value = name;
+                    cmd.Parameters.Add("@type", SqlDbType.VarChar, 100).Value = "Hourly";
+                    cmd.Parameters.Add("@IsActive", SqlDbType.Bit).Value = isActive;
+                    cmd.Parameters.Add("@projOrgId", SqlDbType.VarChar, 100).Value = projOrgId;
+
+                    int result = cmd.ExecuteNonQuery();
+                }
+                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@customerId", SqlDbType.Int).Value = customerId;
+                    cmd.Parameters.Add("@name", SqlDbType.VarChar, 100).Value = name;
+
+                    // execute cmd
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        projId = (int)reader["ProjectId"];
+                    }
+                }
+                connection.Close();
+            }
+            return projId;
+        }
+
+        public static void deleteProject(int projectId)
+        {
+            var service = new Service(connectionStr);
+            string stmt = "DELETE FROM [Crm].[Project] WHERE [ProjectId] = @projId";
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(stmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@projId", SqlDbType.Int).Value = projectId;
+
+                    //execute command
+                    int result = cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+        #endregion
+
+        #region Unit tests for methods in AccountService.cs
         /**************************************************************************************************
         *                              Unit tests for methods in AccountService.cs
         ***************************************************************************************************/
@@ -2279,11 +2403,13 @@ namespace AllyisApps.Services.Tests
 
             Assert.AreEqual(0, failedCases, msg);
         }
+        #endregion
 
-       /**************************************************************************************************
-       *                              Unit tests for methods in Actions.cs
-       ***************************************************************************************************/
-       [TestMethod]
+        #region Unit tests for methods in Actions.cs
+        /**************************************************************************************************
+        *                              Unit tests for methods in Actions.cs
+        ***************************************************************************************************/
+        [TestMethod]
        public void GetProductForAction_Should_Return_ProductIdEnum_TimeTracker_For_Matching_Actions()
        {
             //Arrange
@@ -2343,7 +2469,9 @@ namespace AllyisApps.Services.Tests
             //Assert
             Assert.AreEqual(0, failedCases, msg);
         }
+        #endregion
 
+        #region Unit tests for methods in AuthorizationService.cs
         /**************************************************************************************************
         *                        Unit tests for methods in AuthorizationService.cs
         * TODO: Add more unit tests for thrown exceptions once the Can() method is completed/modified.
@@ -2704,12 +2832,13 @@ namespace AllyisApps.Services.Tests
             //Assert
             Assert.IsFalse(result);
         }
+        #endregion
 
         /**************************************************************************************************
         *                        Unit tests for methods in ImportService.cs
         ***************************************************************************************************/
 
-
+        #region Unit tests for methods in OrgService.cs
         /**************************************************************************************************
         *                        Unit tests for methods in OrgService.cs
         ***************************************************************************************************/
@@ -2900,8 +3029,6 @@ namespace AllyisApps.Services.Tests
         public void GetOrganization_Should_Throw_Exception_For_Negative_OrgId()
         {
             Service service = new Service(connectionStr);
-
-            //Act
             service.GetOrganization(-1);
         }
 
@@ -3702,7 +3829,7 @@ namespace AllyisApps.Services.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void UpdateSubscriptionUserProductRole_Should_Return_Exception_For_Negative_Selected_Role()
+        public void UpdateSubscriptionUserProductRole_Should_Throw_Exception_For_Negative_Selected_Role()
         {
             var service = new Service(connectionStr);
             service.UpdateSubscriptionUserProductRole(-1, 1, 1);
@@ -3710,7 +3837,7 @@ namespace AllyisApps.Services.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void UpdateSubscriptionUserProductRole_Should_Return_Exception_For_Negative_SubscriptionId()
+        public void UpdateSubscriptionUserProductRole_Should_Throw_Exception_For_Negative_SubscriptionId()
         {
             var service = new Service(connectionStr);
             service.UpdateSubscriptionUserProductRole(1, -1, 1);
@@ -3718,7 +3845,7 @@ namespace AllyisApps.Services.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void UpdateSubscriptionUserProductRole_Should_Return_Exception_For_Invalid_UserId()
+        public void UpdateSubscriptionUserProductRole_Should_Throw_Exception_For_Invalid_UserId()
         {
             var service = new Service(connectionStr);
             service.UpdateSubscriptionUserProductRole(1, 1, -1);
@@ -3813,6 +3940,591 @@ namespace AllyisApps.Services.Tests
             Assert.IsTrue(memberList.Count() == 2 && correctMember1 && correctMember2);
         }
 
-        
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GetEmployeeId_Should_Throw_Exception_For_Invalid_UserId()
+        {
+            var service = new Service(connectionStr);
+            service.GetEmployeeId(-1, 1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GetEmployeeId_Should_Throw_Exception_For_Negative_OrgId()
+        {
+            var service = new Service(connectionStr);
+            service.GetEmployeeId(1, -1);
+        }
+
+        [TestMethod]
+        public void GetEmployeeId_Should_Return_Correct_EmployeeId()
+        {
+            //Arrange
+            string user = "testuser1@test.com";
+            string orgName = "UnitTestOrg";
+            int orgId = createTestOrg(orgName);
+            int userId = createTestUser(user);
+            createOrgUser(userId, orgId, 1, "111");
+
+            var service = new Service(connectionStr);
+
+            //Act
+            string returnedId = service.GetEmployeeId(userId, orgId);
+
+            //Clean up
+            deleteOrgUser(userId, orgId);
+            deleteTestUser(user);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(returnedId == "111");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void SetEmployeeId_Should_Throw_Exception_For_Invalid_UserId()
+        {
+            var service = new Service(connectionStr);
+            service.SetEmployeeId(-1, 1, "111");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void SetEmployeeId_Should_Throw_Exception_For_Negative_OrgId()
+        {
+            var service = new Service(connectionStr);
+            service.SetEmployeeId(1, -1, "111");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void SetEmployeeId_Should_Throw_Exception_For_Null_EmployeeId()
+        {
+            var service = new Service(connectionStr);
+            service.SetEmployeeId(1, 1, null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void SetEmployeeId_Should_Throw_Exception_For_Empty_EmployeeId()
+        {
+            var service = new Service(connectionStr);
+            service.SetEmployeeId(1, 1, "");
+        }
+
+        [TestMethod]
+        public void SetEmployeeId_Should_Return_False_If_The_EmployeeId_Is_Already_Taken()
+        {
+            //Arrange
+            string user = "testuser1@test.com";
+            string orgName = "UnitTestOrg";
+            int orgId = createTestOrg(orgName);
+            int userId = createTestUser(user);
+            createUserInvitation("abc@email.com", orgId, 1, "111");  //employeeId "111" is already taken
+            createOrgUser(userId, orgId, 1, "112");
+
+            var service = new Service(connectionStr);
+
+            //Act
+            bool result = service.SetEmployeeId(userId, orgId, "111");
+
+            //Clean up
+            deleteUserInvitation("abc@email.com");
+            deleteOrgUser(userId, orgId);
+            deleteTestUser(user);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void SetEmployeeId_Should_Return_True_If_Succeed()
+        {
+            //Arrange
+            string user = "testuser1@test.com";
+            string orgName = "UnitTestOrg";
+            int orgId = createTestOrg(orgName);
+            int userId = createTestUser(user);
+            createOrgUser(userId, orgId, 1, "111");
+
+            var service = new Service(connectionStr);
+
+            //Act
+            bool result = service.SetEmployeeId(userId, orgId, "newId112");
+
+            string selectStmt = "SELECT [EmployeeId] FROM [Auth].[OrganizationUser] WHERE [UserId] = @userId AND [OrganizationId] = @orgId";
+            SqlDataReader reader;
+            bool updated = false;
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+
+                    // open connection, execute command, close connection
+                    connection.Open();
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        updated = ((string)reader["EmployeeId"] == "newId112");
+                    }
+                    reader.Close();
+                    connection.Close();
+                }
+            }
+
+            //Clean up
+            deleteOrgUser(userId, orgId);
+            deleteTestUser(user);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(result && updated);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void SetInvitationEmployeeId_Should_Throw_Exception_For_Invalid_InvitationId()
+        {
+            var service = new Service(connectionStr);
+            service.SetInvitationEmployeeId(-1, 1, "111");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void SetInvitationEmployeeId_Should_Throw_Exception_For_Negative_OrgId()
+        {
+            var service = new Service(connectionStr);
+            service.SetInvitationEmployeeId(1, -1, "111");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void SetInvitationEmployeeId_Should_Throw_Exception_For_Null_EmployeeId()
+        {
+            var service = new Service(connectionStr);
+            service.SetInvitationEmployeeId(1, 1, null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void SetInvitationEmployeeId_Should_Throw_Exception_For_Empty_EmployeeId()
+        {
+            var service = new Service(connectionStr);
+            service.SetInvitationEmployeeId(1, 1, "");
+        }
+
+        [TestMethod]
+        public void SetInvitationEmployeeId_Should_Return_False_If_The_EmployeeId_Is_Already_Taken()
+        {
+            //Arrange
+            string user = "testuser1@test.com";
+            string invitedUser = "invitation@abc.com";
+            string orgName = "UnitTestOrg";
+            int orgId = createTestOrg(orgName);
+            int userId = createTestUser(user);
+            createOrgUser(userId, orgId, 1, "111");  //employeeId "111" is already taken
+            int inviId = createUserInvitation(invitedUser, orgId, 1, "112");
+
+            var service = new Service(connectionStr);
+
+            //Act
+            bool result = service.SetInvitationEmployeeId(inviId, orgId, "111");
+
+            //Clean up
+            deleteUserInvitation(invitedUser);
+            deleteOrgUser(userId, orgId);
+            deleteTestUser(user);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void SetInvitationEmployeeId_Should_Return_True_If_Succeed()
+        {
+            //Arrange
+            string user = "testuser1@test.com";
+            string orgName = "UnitTestOrg";
+            int orgId = createTestOrg(orgName);
+            int inviId = createUserInvitation(user, orgId, 1, "111");
+
+            var service = new Service(connectionStr);
+
+            //Act
+            bool result = service.SetInvitationEmployeeId(inviId, orgId, "newId112");
+
+            string selectStmt = "SELECT [EmployeeId] FROM [Auth].[Invitation] WHERE [InvitationId] = @inviId";
+            SqlDataReader reader;
+            bool updated = false;
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@inviId", SqlDbType.Int).Value = inviId;
+
+                    // open connection, execute command, close connection
+                    connection.Open();
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        updated = ((string)reader["EmployeeId"] == "newId112");
+                    }
+                    reader.Close();
+                    connection.Close();
+                }
+            }
+
+            //Clean up
+            deleteUserInvitation(user);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(result && updated);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void RemoveOrganizationUser_Should_Throw_Exception_For_Negative_OrgId()
+        {
+            var service = new Service(connectionStr);
+            service.RemoveOrganizationUser(-1, 1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void RemoveOrganizationUser_Should_Throw_Exception_For_Invalid_UserId()
+        {
+            var service = new Service(connectionStr);
+            service.RemoveOrganizationUser(1, -1);
+        }
+
+        [TestMethod]
+        public void RemoveOrganizationUser_Should_Remove_The_Organization_User()
+        {
+            //Arrange
+            string user = "testuser1@test.com";
+            string orgName = "UnitTestOrg";
+            int orgId = createTestOrg(orgName);
+            int userId = createTestUser(user);
+            createOrgUser(userId, orgId, 1, "111");
+
+            var service = new Service(connectionStr);
+
+            //Act
+            service.RemoveOrganizationUser(orgId, userId);
+
+            string selectStmt = "SELECT [UserId] FROM [Auth].[OrganizationUser] WHERE [UserId] = @userId AND [OrganizationId] = @orgId";
+            SqlDataReader reader;
+            bool deleted = false;
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+
+                    // open connection, execute command, close connection
+                    connection.Open();
+                    reader = cmd.ExecuteReader();
+                    if (!reader.HasRows) deleted = true;
+                    reader.Close();
+                    connection.Close();
+                }
+            }
+
+            //Clean up
+            if (!deleted) deleteOrgUser(userId, orgId);
+            deleteTestUser(user);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(deleted);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GetProjectsByOrganization_Should_Throw_Exception_For_Negative_OrgId()
+        {
+            var service = new Service(connectionStr);
+            service.GetProjectsByOrganization(-1);
+        }
+
+        [TestMethod]
+        public void GetProjectsByOrganization_Should_Return_Only_Active_Projects_By_Default()
+        {
+            //Arrange
+            string orgName = "UnitTestOrg";
+            string customerName = "TestCustomer";
+            string projName1 = "TestProject1";
+            string projName2 = "TestProject2";
+            int orgId = createTestOrg(orgName);
+            int custId = createCustomer(customerName, orgId, 1, "cust001");
+            int projId1 = createProject(custId, projName1, 1, "proj001");   //active proj
+            int projId2 = createProject(custId, projName2, 0, "proj002");   //inactive proj
+            var service = new Service(connectionStr);
+
+            //Act
+            IEnumerable<CompleteProjectInfo> projInfoList = service.GetProjectsByOrganization(orgId);
+
+            //Clean up
+            deleteProject(projId2);
+            deleteProject(projId1);
+            deleteCustomer(custId);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(projInfoList.Count() == 1 && projInfoList.ElementAt(0).ProjectName == projName1);
+        }
+
+        [TestMethod]
+        public void GetProjectsByOrganization_Should_Return_All_Projects_If_Requested()
+        {
+            //Arrange
+            string orgName = "UnitTestOrg";
+            string customerName = "TestCustomer";
+            string projName1 = "TestProject1";
+            string projName2 = "TestProject2";
+            int orgId = createTestOrg(orgName);
+            int custId = createCustomer(customerName, orgId, 1, "cust001");
+            int projId1 = createProject(custId, projName1, 1, "proj001");   //active proj
+            int projId2 = createProject(custId, projName2, 0, "proj002");   //inactive proj
+            var service = new Service(connectionStr);
+
+            //Act
+            IEnumerable<CompleteProjectInfo> projInfoList = service.GetProjectsByOrganization(orgId, false);
+
+            //Clean up
+            deleteProject(projId2);
+            deleteProject(projId1);
+            deleteCustomer(custId);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(projInfoList.Count() == 2);
+        }
+
+        [TestMethod]
+        public void GetUserRoles_Should_Return_All_User_Roles_Info()
+        {
+            //Arrange
+            string orgName = "UnitTestOrg";
+            string user1 = "user1@test.com";
+            string user2 = "user2@test.com";
+            int orgId = createTestOrg(orgName);
+            int subId = createSubscription(orgId, 1, 100);
+            int userId1 = createTestUser(user1);
+            int userId2 = createTestUser(user2);
+            createOrgUser(userId1, orgId, 1, "111");    //user1 is org member
+            createSubUser(subId, userId1, 1);           //user1 is sub user
+            createOrgUser(userId2, orgId, 2, "112");    //user2 is org owner
+
+            UserContext userContext = new UserContext(userId2, user2, user2, orgId, 0, null, 1);
+            Service service = new Service(connectionStr, userContext);
+
+            //Act
+            IEnumerable<UserRolesInfo> userRolesInfoList = service.GetUserRoles();
+
+            //Clean up
+            deleteOrgUser(userId2, orgId);
+            deleteSubUser(userId1, subId);
+            deleteOrgUser(userId1, orgId);
+            deleteTestUser(user2);
+            deleteTestUser(user1);
+            deleteSubscription(subId);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(userRolesInfoList.Count() == 2);
+            UserRolesInfo userRole1 = userRolesInfoList.ElementAt(0);
+            bool correctUserRole1 = (userRole1.UserId == userId1.ToString() && userRole1.OrgRoleId == 1 && userRole1.ProductRoleId == 1 && userRole1.SubscriptionId == subId);
+            UserRolesInfo userRole2 = userRolesInfoList.ElementAt(1);
+            bool correctUserRole2 = (userRole2.UserId == userId2.ToString() && userRole2.OrgRoleId == 2 && userRole2.ProductRoleId == -1 && userRole2.SubscriptionId == -1);
+            Assert.IsTrue(correctUserRole1 && correctUserRole2);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void ChangeUserRoles_Should_Throw_Exception_For_Invalid_Organization_Role()
+        {
+            var service = new Service(connectionStr);
+            List<int> userIds = new List<int> { 1, 2, 3 };
+            service.ChangeUserRoles(userIds, 0);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ChangeUserRoles_Should_Throw_Exception_For_Empty_UserIds_List()
+        {
+            var service = new Service(connectionStr);
+            List<int> userIds = new List<int> {};
+            service.ChangeUserRoles(userIds, 1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ChangeUserRoles_Should_Throw_Exception_For_Null_UserIds_List()
+        {
+            var service = new Service(connectionStr);
+            service.ChangeUserRoles(null, 1);
+        }
+
+        [TestMethod]
+        public void ChangeUserRoles_Should_Remove_OrgUser_If_Requested()
+        {
+            //Arrange
+            string orgName = "UnitTestOrg";
+            string user = "user@test.com";
+            int orgId = createTestOrg(orgName);
+            int userId = createTestUser(user);
+            createOrgUser(userId, orgId, 1, "111");
+            List<int> userIds = new List<int> { userId };
+            UserContext userContext = new UserContext(userId, user, user, orgId, 0, null, 1);
+            var service = new Service(connectionStr, userContext);
+
+            //Act
+            int result = service.ChangeUserRoles(userIds, -1);
+
+            string selectStmt = "SELECT [UserId] FROM [Auth].[OrganizationUser] WHERE [UserId] = @userId AND [OrganizationId] = @orgId";
+            SqlDataReader reader;
+            bool deleted = false;
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+
+                    // open connection, execute command, close connection
+                    connection.Open();
+                    reader = cmd.ExecuteReader();
+                    if (!reader.HasRows) deleted = true;
+                    reader.Close();
+                    connection.Close();
+                }
+            }
+
+            //Clean up
+            if (!deleted) deleteOrgUser(userId, orgId);
+            deleteTestUser(user);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(result == 1 && deleted);
+        }
+
+        [TestMethod]
+        public void ChangeUserRoles_Should_Assign_New_Role_To_Given_Users()
+        {
+            //Arrange
+            string orgName = "UnitTestOrg";
+            string user1 = "user1@test.com";
+            string user2 = "user2@test.com";
+            int orgId = createTestOrg(orgName);
+            int userId1 = createTestUser(user1);
+            int userId2 = createTestUser(user2);
+            createOrgUser(userId1, orgId, 1, "111");
+            createOrgUser(userId2, orgId, 1, "112");    //both users are members
+            List<int> userIds = new List<int> { userId1, userId2 };
+            UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
+            var service = new Service(connectionStr, userContext);
+
+            //Act
+            int result = service.ChangeUserRoles(userIds, 2);   //assign both to role owner
+
+            string selectStmt = "SELECT [UserId], [OrgRoleId] FROM [Auth].[OrganizationUser] WHERE [OrganizationId] = @orgId";
+            SqlDataReader reader;
+            bool changed = false;
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+
+                    // open connection, execute command, close connection
+                    connection.Open();
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        changed = ((int)reader["OrgRoleId"] == 2);
+                        if (!changed) break;
+                    }
+                    reader.Close();
+                    connection.Close();
+                }
+            }
+
+            //Clean up
+            deleteOrgUser(userId2, orgId);
+            deleteOrgUser(userId1, orgId);
+            deleteTestUser(user1);
+            deleteTestUser(user2);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(result == 2 && changed);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetProductRoleForUser_Should_Throw_Exception_For_Empty_Product_Name()
+        {
+            var service = new Service(connectionStr);
+            service.GetProductRoleForUser("", 1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetProductRoleForUser_Should_Throw_Exception_For_Null_Product_Name()
+        {
+            var service = new Service(connectionStr);
+            service.GetProductRoleForUser(null, 1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GetProductRoleForUser_Should_Throw_Exception_For_Invalid_UserId()
+        {
+            var service = new Service(connectionStr);
+            service.GetProductRoleForUser("TimeTracker", -1);
+        }
+
+        [TestMethod]
+        public void GetProductRoleForUser_Should_Return_Correct_Product_Role_For_User()
+        {
+            //Arrange
+            string orgName = "UnitTestOrg";
+            string user = "user@test.com";
+            int orgId = createTestOrg(orgName);
+            int subId = createSubscription(orgId, 1, 100);
+            int userId = createTestUser(user);
+            createOrgUser(userId, orgId, 1, "111");    //user1 is org member
+            createSubUser(subId, userId, 1);           //user1 is sub user
+
+            UserContext userContext = new UserContext(userId, user, user, orgId, 0, null, 1);
+            Service service = new Service(connectionStr, userContext);
+
+            //Act
+            string role = service.GetProductRoleForUser("TimeTracker", userId);
+
+            //Clean up
+            deleteSubUser(userId, subId);
+            deleteOrgUser(userId, orgId);
+            deleteTestUser(user);
+            deleteSubscription(subId);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(role == "User");
+        }
+        #endregion
     }
 }
