@@ -3,6 +3,7 @@
 
 @{
     DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+    ViewData["IsManager"] = Model.CanEditProject;
     DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
     ViewBag.Title = AllyisApps.Resources.TimeTracker.Views.Project.Strings.ProjectDetails;
 }
