@@ -57,11 +57,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						else
 						{
                             Notifications.Add(new BootstrapAlert(AllyisApps.Resources.TimeTracker.Controllers.Customer.Strings.FileFormatUnsupported, Variety.Danger));
-							//ModelState.AddModelError("File", "This file format is not supported");
-							return View();
-						}
+                            return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
+                        }
 
-						reader.IsFirstRowAsColumnNames = true;
+                        reader.IsFirstRowAsColumnNames = true;
 
 						DataSet result = reader.AsDataSet();
 						reader.Close();

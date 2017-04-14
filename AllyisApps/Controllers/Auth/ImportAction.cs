@@ -58,11 +58,10 @@ namespace AllyisApps.Controllers
 						else
 						{
                             Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.FileFormatUnsupported, Variety.Danger));
-							//ModelState.AddModelError("File", "This file format is not supported");
-							return View();
-						}
+                            return RedirectToAction(ActionConstants.Add, ControllerConstants.Account);
+                        }
 
-						reader.IsFirstRowAsColumnNames = true;
+                        reader.IsFirstRowAsColumnNames = true;
 
 						DataSet result = reader.AsDataSet();
 						reader.Close();
@@ -83,7 +82,6 @@ namespace AllyisApps.Controllers
 					else
 					{
                         Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.PleaseUploadFile, Variety.Danger));
-						//ModelState.AddModelError("File", "Please Upload Your file");
 					}
 				}
 			}
