@@ -246,4 +246,7 @@
   <data name="UsersRemovedFromTimeTracker" xml:space="preserve">
     <value>users removed from TimeTracker.</value>
   </data>
+  <data name="UserAccountAlreadyExists" xml:space="preserve">
+    <value>User account already exists. Click on 'Forgot Password' link to reset your password.</value>
+  </data>
 </root>

@@ -31,7 +31,7 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				try
+                try
 				{
 					if (Service.UpdateOrganization(
 						new Organization()
@@ -56,7 +56,7 @@ namespace AllyisApps.Controllers
 				}
 				catch (ArgumentException)
 				{
-					Notifications.Add(new BootstrapAlert("Error updating organization: subdomain name is already taken.", Variety.Danger));
+                    Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.SubdomainTaken, Variety.Danger));
                     return this.RedirectToAction(ActionConstants.Edit);
 				}
 

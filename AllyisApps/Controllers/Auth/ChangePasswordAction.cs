@@ -45,9 +45,7 @@ namespace AllyisApps.Controllers
 
 				return this.RedirectToAction(ActionConstants.Index);
 			}
-
-			ModelState.AddModelError(string.Empty, Resources.Controllers.Auth.Strings.IncorrectPassword);
-
+            Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.IncorrectPassword, Variety.Danger));
 			return this.View(model);
 		}
 	}

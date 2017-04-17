@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.Core;
+using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
 using System;
@@ -62,7 +63,7 @@ namespace AllyisApps.Controllers
 				}
 				else
 				{
-					ModelState.AddModelError(string.Empty, @Resources.Errors.SignInFailureMessage);
+                    Notifications.Add(new BootstrapAlert(Resources.Errors.SignInFailureMessage, Variety.Danger));
 				}
 			}
 

@@ -9,7 +9,7 @@
 @using (Html.BeginForm((string)(ViewData[ActionConstants.Action]), (string)ViewData[ControllerConstants.Controller], new { ReturnUrl = (string)(ViewBag.ReturnUrl) }, FormMethod.Post, new { @class = "form", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    @Html.ValidationSummary(string.Empty, new { @class = "text-danger" })
+    @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" });
     <div class="row">
         <div class="col-md-6 min300">
             <div class="form-group">
@@ -20,43 +20,51 @@
             <div class="form-group">
                 @Html.ReqLabelFor(m => m.FirstName, AllyisApps.Resources.Views.Account.Strings.FirstName)
                 @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.FirstName,"", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 @Html.ReqLabelFor(m => m.LastName, AllyisApps.Resources.Views.Account.Strings.LastName)
                 @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.LastName,"", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 <label>@AllyisApps.Resources.Views.Account.Strings.DateOfBirth</label>
                 @Html.HiddenFor(m => m.DateOfBirth)
                 <input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerBirth" />@*Needs to be <input /> tag, not Html.EditorFor or a NULL birthday will show up as -1*@
                 <span class="fa fa-fw fa-calendar" id="datePickerBirthButton"></span>
+                @Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 @Html.ReqLabelFor(m => m.PhoneNumber, AllyisApps.Resources.Views.Account.Strings.PhoneNumber)
                 @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.PhoneNumber)
+                @Html.ValidationMessageFor(m => m.PhoneNumber,"",new { @class = "text-danger" })
             </div>            
         </div>
         <div class="col-md-6 min300">
             <div class="form-group">
                 @Html.ReqLabelFor(m => m.Address, AllyisApps.Resources.Views.Account.Strings.Address)
                 @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Address,"",new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 @Html.ReqLabelFor(m => m.Country, AllyisApps.Resources.Views.Account.Strings.Country)
                 @Html.DropDownListFor(m => m.Country, new SelectList(Model.GetLocalizedValidCoutriesDictionary(), "Key", "Value"), AllyisApps.Resources.Views.Account.Strings.DropDownEmpty, new { @id = "Country", @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 @Html.ReqLabelFor(m => m.State, AllyisApps.Resources.Views.Account.Strings.State)
                 @Html.DropDownListFor(m => m.State, new SelectList(new List<string>()), AllyisApps.Resources.Views.Account.Strings.DropDownEmpty, new { @id = "State", @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 @Html.ReqLabelFor(m => m.City, AllyisApps.Resources.Views.Account.Strings.City)
                 @Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.City,"", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 @Html.ReqLabelFor(m => m.PostalCode, AllyisApps.Resources.Views.Account.Strings.PostalCode)
                 @Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.PostalCode, "", new { @class = "text-danger" })
             </div>
         </div>
     </div>

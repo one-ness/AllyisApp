@@ -79,7 +79,7 @@ namespace AllyisApps.Controllers
 				}
 				else
 				{
-					ModelState.AddModelError("Email", "User account already exists. Click on 'Forgot Password' link to reset your password.");
+                    Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.UserAccountAlreadyExists, Variety.Danger));
 					return this.View(model);
 				}
 			}
