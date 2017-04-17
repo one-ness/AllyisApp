@@ -81,7 +81,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					else
 					{
                         Notifications.Add(new BootstrapAlert(AllyisApps.Resources.TimeTracker.Controllers.Customer.Strings.PleaseUploadFile, Variety.Danger));
-						//ModelState.AddModelError("File", "Please Upload Your file");
 					}
 				}
 			}

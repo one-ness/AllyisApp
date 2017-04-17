@@ -57,7 +57,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						else
 						{
                             Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.FileFormatUnsupported, Variety.Danger));
-							//ModelState.AddModelError("File", "This file format is not supported");
                             return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
                         }
 
@@ -82,7 +81,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					else
 					{
                         Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.PleaseUploadFile, Variety.Danger));
-						//ModelState.AddModelError("File", "Please Upload Your file");
 					}
 				}
 			}

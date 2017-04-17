@@ -64,7 +64,6 @@ namespace AllyisApps.Controllers
 				else
 				{
                     Notifications.Add(new BootstrapAlert(Resources.Errors.SignInFailureMessage, Variety.Danger));
-                    //ModelState.AddModelError(string.Empty, @Resources.Errors.SignInFailureMessage);
 				}
 			}
 
