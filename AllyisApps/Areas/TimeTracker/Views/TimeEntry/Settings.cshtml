@@ -69,7 +69,7 @@
                         @using (Html.BeginForm(ActionConstants.CreatePayClass, ControllerConstants.TimeEntry, FormMethod.Post))
 						{
 							@Html.AntiForgeryToken();
-							<td><input type="text" name="NewPayClass" class="form-control" /></td>
+							<td><input type="text" name="NewPayClass" class="form-control" required/></td>
 							<td><input class="pull-right btn btn-primary" type="submit" value="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Add" /></td>
 						}
 					</tr>
@@ -175,8 +175,8 @@
                         @using (Html.BeginForm(ActionConstants.CreateHoliday, ControllerConstants.TimeEntry, FormMethod.Post))
                         {
                             @Html.AntiForgeryToken();
-                            <td><input type="text" class="form-control" name="NewHolidayName" /></td>
-                            <td><input type="date" class="form-control" name="NewHolidayDate" /></td>
+                            <td><input type="text" class="form-control" name="NewHolidayName" required/></td>
+                            <td><input type="date" class="form-control" name="NewHolidayDate" required/></td>
                             <td><input class="pull-right btn btn-primary" type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Add /></td>
                         }
                     </tr>
