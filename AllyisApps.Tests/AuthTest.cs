@@ -9,10 +9,10 @@ using AllyisApps.Lib;
 using System.Data.SqlClient;
 using System.Data;
 using System.Threading.Tasks;
-using System.Configuration;
 using static AllyisApps.Services.Actions;
 using AllyisApps.DBModel;
 using AllyisApps.Services.Billing;
+using System.Data.OleDb;
 
 namespace AllyisApps.Services.Tests
 {
@@ -22,9 +22,9 @@ namespace AllyisApps.Services.Tests
     {
         public static string connectionStr = "Data Source=(local);Initial Catalog=AllyisAppsDB;User Id=aaUser;Password=BlueSky23#;";
 
-        #region Helper methods to set up test data
+        #region Helper methods to generate test data
         /**********************************************
-        ** Set up test data
+        ** Generate test data
         **********************************************/
 
         //create an user for testing purpose and return that user's UserId
@@ -292,6 +292,26 @@ namespace AllyisApps.Services.Tests
             }
         }
 
+        public static void deleteOrgUserByOrgId(int orgId)
+        {
+            var service = new Service(connectionStr);
+            string stmt = "DELETE FROM [Auth].[OrganizationUser] WHERE [OrganizationId] = @orgId";
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(stmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+
+                    //execute command
+                    int result = cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
         public static int createSubscription(int orgId, int skuId, int numOfUsers)
         {
             var service = new Service(connectionStr);
@@ -396,6 +416,26 @@ namespace AllyisApps.Services.Tests
             }
         }
 
+        public static void deleteSubUserBySubId(int subId)
+        {
+            var service = new Service(connectionStr);
+            string stmt = "DELETE FROM [Billing].[SubscriptionUser] WHERE [SubscriptionId] = @subId";
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(stmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@subId", SqlDbType.Int).Value = subId;
+
+                    //execute command
+                    int result = cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
         public static int createCustomer(string name, int orgId, int isActive, string cusOrgId)
         {
             var service = new Service(connectionStr);
@@ -448,6 +488,26 @@ namespace AllyisApps.Services.Tests
                 {
                     // set up the command's parameters
                     cmd.Parameters.Add("@customerId", SqlDbType.Int).Value = customerId;
+
+                    //execute command
+                    int result = cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        public static void deleteCustomersByOrgId(int orgId)
+        {
+            var service = new Service(connectionStr);
+            string stmt = "DELETE FROM [Crm].[Customer] WHERE [OrganizationId] = @orgId";
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(stmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
 
                     //execute command
                     int result = cmd.ExecuteNonQuery();
@@ -515,6 +575,329 @@ namespace AllyisApps.Services.Tests
                 }
                 connection.Close();
             }
+        }
+
+        public static void deleteProjectByCustId(int customerId)
+        {
+            var service = new Service(connectionStr);
+            string stmt = "DELETE FROM [Crm].[Project] WHERE [CustomerId] = @customerId";
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(stmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@customerId", SqlDbType.Int).Value = customerId;
+
+                    //execute command
+                    int result = cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        public static void createProjectUser(int projId, int userId, int isActive)
+        {
+            var service = new Service(connectionStr);
+            string insertStmt = "INSERT INTO [Crm].[ProjectUser]([ProjectId], [UserId], [IsActive]) " +
+                                "VALUES(@projId, @userId, @isActive)";
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(insertStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@projId", SqlDbType.Int).Value = projId;
+                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                    cmd.Parameters.Add("@IsActive", SqlDbType.Bit).Value = isActive;
+
+                    int result = cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        public static void deleteProjectUserByProjectId(int projId)
+        {
+            var service = new Service(connectionStr);
+            string stmt = "DELETE FROM [Crm].[ProjectUser] WHERE [ProjectId] = @projId";
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(stmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@projId", SqlDbType.Int).Value = projId;
+
+                    //execute command
+                    int result = cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        //create 8 pay classes for an organization, return the payClassId of its Regular payclass (which is the first one out of 8)
+        public static int createPayClass(int orgId)
+        {
+            List<string> payClassNames = new List<string> { "Regular", "Paid Time Off", "Unpaid Time Off", "Holiday", "Bereavement Leave", "Jury Duty", "Overtime", "Other Leave" };
+            var service = new Service(connectionStr);
+            string insertStmt = "INSERT INTO [TimeTracker].[PayClass]([Name], [OrganizationId]) " +
+                                "VALUES(@name, @orgId)";
+            string selectStmt = "SELECT [PayClassId] FROM [TimeTracker].[PayClass] WHERE [Name] = @name AND [OrganizationId] = @orgId";
+            SqlDataReader reader;
+            int payClassId = -1;
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                foreach (string name in payClassNames)
+                {
+                    using (SqlCommand cmd = new SqlCommand(insertStmt, connection))
+                    {
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+                        cmd.Parameters.Add("@name", SqlDbType.VarChar, 100).Value = name;
+
+                        int result = cmd.ExecuteNonQuery();
+                    }
+                }
+                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+                    cmd.Parameters.Add("@name", SqlDbType.VarChar, 100).Value = "Regular";
+
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        payClassId = (int)reader["PayClassId"];
+                    }
+                    reader.Close();
+                }
+                connection.Close();
+            }
+            return payClassId;
+        }
+
+        public static void deletePayClass(int orgId)
+        {
+            var service = new Service(connectionStr);
+            string stmt = "DELETE FROM [TimeTracker].[PayClass] WHERE [OrganizationId] = @orgId";
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(stmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+
+                    //execute command
+                    int result = cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        public static int createTimeEntry(int userId, int projId, DateTime date, int payClassId, float duration)
+        {
+            var service = new Service(connectionStr);
+            string insertStmt = "INSERT INTO [TimeTracker].[TimeEntry]([UserId], [ProjectId], [Date], [Duration], [PayClassId]) " +
+                                "VALUES(@userId, @projId, @date, @duration, @payClassId)";
+            string selectStmt = "SELECT [TimeEntryId] FROM [TimeTracker].[TimeEntry] WHERE [UserId] = @userId AND [ProjectId] = @projId AND [Date] = @date AND [Duration] = @duration AND [PayClassId] = @payClassId";
+            SqlDataReader reader;
+            int timeEntryId = -1;
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(insertStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                    cmd.Parameters.Add("@projId", SqlDbType.Int).Value = projId;
+                    cmd.Parameters.Add("@date", SqlDbType.DateTime2).Value = date;
+                    cmd.Parameters.Add("@duration", SqlDbType.Float).Value = duration;
+                    cmd.Parameters.Add("@payClassId", SqlDbType.Int).Value = payClassId;
+
+                    int result = cmd.ExecuteNonQuery();
+                }
+                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                    cmd.Parameters.Add("@projId", SqlDbType.Int).Value = projId;
+                    cmd.Parameters.Add("@date", SqlDbType.DateTime2).Value = date;
+                    cmd.Parameters.Add("@duration", SqlDbType.Float).Value = duration;
+                    cmd.Parameters.Add("@payClassId", SqlDbType.Int).Value = payClassId;
+
+                    // execute cmd
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        timeEntryId = (int)reader["TimeEntryId"];
+                    }
+                }
+                connection.Close();
+            }
+            return timeEntryId;
+        }
+
+        public static void deleteTimeEntry(int timeEntryId)
+        {
+            var service = new Service(connectionStr);
+            string stmt = "DELETE FROM [TimeTracker].[TimeEntry] WHERE [TimeEntryId] = @entryId";
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(stmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@entryId", SqlDbType.Int).Value = timeEntryId;
+
+                    //execute command
+                    int result = cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        public static void deleteTimeEntriesByProjectId(int projId)
+        {
+            var service = new Service(connectionStr);
+            string stmt = "DELETE FROM [TimeTracker].[TimeEntry] WHERE [ProjectId] = @projId";
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(stmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@projId", SqlDbType.Int).Value = projId;
+
+                    //execute command
+                    int result = cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        public static int createHoliday(string holidayName, DateTime date, int orgId)
+        {
+            var service = new Service(connectionStr);
+            string insertStmt = "INSERT INTO [TimeTracker].[Holiday]([HolidayName], [Date], [OrganizationId]) " +
+                                "VALUES(@holidayName, @date, @orgId)";
+            string selectStmt = "SELECT [HolidayId] FROM [TimeTracker].[Holiday] WHERE [OrganizationId] = @orgId AND [Date] = @date";
+            SqlDataReader reader;
+            int holidayId = -1;
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(insertStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@holidayName", SqlDbType.VarChar, 100).Value = holidayName;
+                    cmd.Parameters.Add("@date", SqlDbType.DateTime2).Value = date;
+                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+
+                    int result = cmd.ExecuteNonQuery();
+                }
+                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@date", SqlDbType.DateTime2).Value = date;
+                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+
+                    // execute cmd
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        holidayId = (int)reader["HolidayId"];
+                    }
+                }
+                connection.Close();
+            }
+            return holidayId;
+        }
+
+        public static void deleteHoliday(int holidayId)
+        {
+            var service = new Service(connectionStr);
+            string stmt = "DELETE FROM [TimeTracker].[Holiday] WHERE [HolidayId] = @holidayId";
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(stmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@holidayId", SqlDbType.Int).Value = holidayId;
+
+                    //execute command
+                    int result = cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        public static void createTimeTrackerSetting(int orgId, int lockDateUsed)
+        {
+            var service = new Service(connectionStr);
+            string insertStmt = "INSERT INTO [TimeTracker].[Setting]([OrganizationId], [StartOfWeek], [OvertimeHours], [OvertimePeriod], [OvertimeMultiplier], [LockDateUsed], [LockDatePeriod], [LockDateQuantity]) " +
+                                "VALUES(@orgId, 1, 40, 'Week', 1.5, @lockDateUsed, 'Weeks', 2)";
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(insertStmt, connection))
+                {
+                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+                    cmd.Parameters.Add("@lockDateUsed", SqlDbType.Bit).Value = lockDateUsed;
+
+                    int result = cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        public static void deleteTimeTrackerSetting(int orgId)
+        {
+            var service = new Service(connectionStr);
+            string stmt = "DELETE FROM [TimeTracker].[Setting] WHERE [OrganizationId] = @orgId";
+
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand(stmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+
+                    //execute command
+                    int result = cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        public static DataSet parseExcelFile(string sheetName)
+        {
+            string filePath = "TestData_Import.xls";   //sample excel file with test data
+            string connectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + filePath + ";Extended Properties='Excel 8.0;IMEX=1;Readonly=True'";
+            OleDbConnection con = new OleDbConnection(connectionString);
+            con.Open();
+            DataSet data = new DataSet();
+            var dataTable = new DataTable();
+            string query = string.Format("SELECT * FROM [{0}]", sheetName);
+            OleDbDataAdapter adapter = new OleDbDataAdapter(query, con);
+            adapter.Fill(dataTable);
+            data.Tables.Add(dataTable);
+            con.Close();
+            return data;
         }
         #endregion
 
@@ -2834,9 +3217,599 @@ namespace AllyisApps.Services.Tests
         }
         #endregion
 
+        #region Unit tests for methods in ImportService.cs
         /**************************************************************************************************
         *                        Unit tests for methods in ImportService.cs
         ***************************************************************************************************/
+        [TestMethod]
+        public void Import_Should_Import_Valid_Customer_Data_Correctly()
+        {
+            //Arrange
+            DataSet data = parseExcelFile("Customers$");    //excel sheet that has 2 new customers to import
+
+            string orgName = "UnitTestOrg";
+            string user = "testuser@email.com";
+            int orgId = createTestOrg(orgName);
+            int userId = createTestUser(user);
+            int subId = createSubscription(orgId, 1, 10);   //org subscribes to TimeTracker
+            createSubUser(subId, userId, 2);    //user needs to be TimeTracker Manager to have permission to create Customer
+
+            UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager);
+            subInfo.ProductId = ProductIdEnum.TimeTracker;
+            List<UserSubscriptionInfo> subInfoList = new List<UserSubscriptionInfo> { subInfo };
+            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
+            List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
+            UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
+
+            Service service = new Service(connectionStr, userContext);
+            string key = "DefaultConnection";
+            DBHelper.Instance.Init(key);
+
+            //Act
+            ImportActionResult result = service.Import(data);
+
+            //Clean up
+            deleteSubUser(userId, subId);
+            deleteSubscription(subId);
+            deleteTestUser(user);
+            deleteCustomersByOrgId(orgId);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(result.CustomerFailures.Count() == 0 && result.CustomersImported == 2);
+        }
+
+        [TestMethod]
+        public void Import_Should_Import_Only_Non_Existing_Customers()
+        {
+            //Arrange
+            DataSet data = parseExcelFile("Customers$");    //excel sheet that has 2 customers to import, 1 is already in the db
+
+            string orgName = "UnitTestOrg";
+            string user = "testuser@email.com";
+            int orgId = createTestOrg(orgName);
+            int userId = createTestUser(user);
+            int subId = createSubscription(orgId, 1, 10);   //org subscribes to TimeTracker
+            createSubUser(subId, userId, 2);    //user needs to be TimeTracker Manager to have permission to create Customer
+            createCustomer("ExampleCorp", orgId, 1, "CUST-0001"); //this customer is already in the database
+
+            UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager);
+            subInfo.ProductId = ProductIdEnum.TimeTracker;
+            List<UserSubscriptionInfo> subInfoList = new List<UserSubscriptionInfo> { subInfo };
+            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
+            List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
+            UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
+
+            Service service = new Service(connectionStr, userContext);
+            string key = "DefaultConnection";
+            DBHelper.Instance.Init(key);
+
+            //Act
+            ImportActionResult result = service.Import(data);
+
+            //Clean up
+            deleteSubUser(userId, subId);
+            deleteSubscription(subId);
+            deleteTestUser(user);
+            deleteCustomersByOrgId(orgId);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(result.CustomerFailures.Count() == 0 && result.CustomersImported == 1);
+        }
+
+        [TestMethod]
+        public void Import_Should_Not_Import_Customers_With_No_Name_Or_Id()
+        {
+            //Arrange
+            DataSet data = parseExcelFile("Customers_NoNameOrId$");    //excel sheet that has 2 new customers to import, 1 has no name, 1 has no customerId
+
+            string orgName = "UnitTestOrg";
+            string user = "testuser@email.com";
+            int orgId = createTestOrg(orgName);
+            int userId = createTestUser(user);
+            int subId = createSubscription(orgId, 1, 10);   //org subscribes to TimeTracker
+            createSubUser(subId, userId, 2);    //user needs to be TimeTracker Manager to have permission to create Customer
+
+            UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager);
+            subInfo.ProductId = ProductIdEnum.TimeTracker;
+            List<UserSubscriptionInfo> subInfoList = new List<UserSubscriptionInfo> { subInfo };
+            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
+            List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
+            UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
+
+            Service service = new Service(connectionStr, userContext);
+            string key = "DefaultConnection";
+            DBHelper.Instance.Init(key);
+
+            //Act
+            ImportActionResult result = service.Import(data);
+
+            //Clean up
+            deleteCustomersByOrgId(orgId);
+            deleteSubUser(userId, subId);
+            deleteSubscription(subId);
+            deleteTestUser(user);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(result.CustomerFailures.Count() == 2 && result.CustomersImported == 0);
+        }
+
+        [TestMethod]
+        public void Import_Should_Import_Valid_Project_Data_Correctly()
+        {
+            //Arrange
+            DataSet data = parseExcelFile("Projects$");    //excel sheet that has 4 new projects to import
+
+            string orgName = "UnitTestOrg";
+            string user = "testuser@email.com";
+            int orgId = createTestOrg(orgName);
+            int userId = createTestUser(user);
+            int subId = createSubscription(orgId, 1, 10);   //org subscribes to TimeTracker
+            createSubUser(subId, userId, 2);    //user needs to be TimeTracker Manager to have permission to create Customer
+            int custId1 = createCustomer("ExampleCorp", orgId, 1, "CUST-0001");
+            int custId2 = createCustomer("FakeDataCorp", orgId, 1, "CUST-0002");  
+
+            UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager);
+            subInfo.ProductId = ProductIdEnum.TimeTracker;
+            List<UserSubscriptionInfo> subInfoList = new List<UserSubscriptionInfo> { subInfo };
+            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
+            List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
+            UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
+
+            Service service = new Service(connectionStr, userContext);
+            string key = "DefaultConnection";
+            DBHelper.Instance.Init(key);
+
+            //Act
+            ImportActionResult result = service.Import(data);
+
+            //Clean up
+            deleteProjectByCustId(custId1);
+            deleteProjectByCustId(custId2);
+            deleteCustomersByOrgId(orgId);
+            deleteSubUser(userId, subId);
+            deleteSubscription(subId);
+            deleteTestUser(user);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(result.ProjectFailures.Count() == 0 && result.ProjectsImported == 4);
+        }
+
+        [TestMethod]
+        public void Import_Should_Import_Only_Non_Existing_Projects()
+        {
+            //Arrange
+            DataSet data = parseExcelFile("Projects$");    //excel sheet that has 4 projects to import, 1 is already in the db
+
+            string orgName = "UnitTestOrg";
+            string user = "testuser@email.com";
+            int orgId = createTestOrg(orgName);
+            int userId = createTestUser(user);
+            int subId = createSubscription(orgId, 1, 10);   //org subscribes to TimeTracker
+            createSubUser(subId, userId, 2);    //user needs to be TimeTracker Manager to have permission to create Customer
+            int custId1 = createCustomer("ExampleCorp", orgId, 1, "CUST-0001");
+            int custId2 = createCustomer("FakeDataCorp", orgId, 1, "CUST-0002");
+            int projId = createProject(custId1, "Example Project 1", 1, "PROJ-0001");   //existing project
+
+            UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager);
+            subInfo.ProductId = ProductIdEnum.TimeTracker;
+            List<UserSubscriptionInfo> subInfoList = new List<UserSubscriptionInfo> { subInfo };
+            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
+            List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
+            UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
+
+            Service service = new Service(connectionStr, userContext);
+            string key = "DefaultConnection";
+            DBHelper.Instance.Init(key);
+
+            //Act
+            ImportActionResult result = service.Import(data);
+
+            //Clean up
+            deleteProjectByCustId(custId1);
+            deleteProjectByCustId(custId2);
+            deleteCustomersByOrgId(orgId);
+            deleteSubUser(userId, subId);
+            deleteSubscription(subId);
+            deleteTestUser(user);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(result.ProjectFailures.Count() == 0 && result.ProjectsImported == 3);
+        }
+
+        [TestMethod]
+        public void Import_Should_Not_Import_Projects_With_No_Name_Or_Id()
+        {
+            //Arrange
+            DataSet data = parseExcelFile("Projects_NoNameOrId$");    //excel sheet that has 2 new projects to import, 1 has no name, 1 has no id
+
+            string orgName = "UnitTestOrg";
+            string user = "testuser@email.com";
+            int orgId = createTestOrg(orgName);
+            int userId = createTestUser(user);
+            int subId = createSubscription(orgId, 1, 10);   //org subscribes to TimeTracker
+            createSubUser(subId, userId, 2);    //user needs to be TimeTracker Manager to have permission to create Customer
+            int custId1 = createCustomer("ExampleCorp", orgId, 1, "CUST-0001");
+
+            UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager);
+            subInfo.ProductId = ProductIdEnum.TimeTracker;
+            List<UserSubscriptionInfo> subInfoList = new List<UserSubscriptionInfo> { subInfo };
+            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
+            List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
+            UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
+
+            Service service = new Service(connectionStr, userContext);
+            string key = "DefaultConnection";
+            DBHelper.Instance.Init(key);
+
+            //Act
+            ImportActionResult result = service.Import(data);
+
+            //Clean up
+            deleteProjectByCustId(custId1);
+            deleteCustomersByOrgId(orgId);
+            deleteSubUser(userId, subId);
+            deleteSubscription(subId);
+            deleteTestUser(user);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(result.ProjectFailures.Count() == 2 && result.ProjectsImported == 0);
+        }
+
+        [TestMethod]
+        public void Import_Should_Not_Import_Projects_With_No_Customer_Identification()
+        {
+            //Arrange
+            DataSet data = parseExcelFile("Projects_NoCustomerId$");    //excel sheet that has 2 new projects to import, 1 is valid, 1 has no customerId
+
+            string orgName = "UnitTestOrg";
+            string user = "testuser@email.com";
+            int orgId = createTestOrg(orgName);
+            int userId = createTestUser(user);
+            int subId = createSubscription(orgId, 1, 10);   //org subscribes to TimeTracker
+            createSubUser(subId, userId, 2);    //user needs to be TimeTracker Manager to have permission to create Customer
+            int custId1 = createCustomer("ExampleCorp", orgId, 1, "CUST-0001");
+
+            UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager);
+            subInfo.ProductId = ProductIdEnum.TimeTracker;
+            List<UserSubscriptionInfo> subInfoList = new List<UserSubscriptionInfo> { subInfo };
+            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
+            List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
+            UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
+
+            Service service = new Service(connectionStr, userContext);
+            string key = "DefaultConnection";
+            DBHelper.Instance.Init(key);
+
+            //Act
+            ImportActionResult result = service.Import(data);
+
+            //Clean up
+            deleteProjectByCustId(custId1);
+            deleteCustomersByOrgId(orgId);
+            deleteSubUser(userId, subId);
+            deleteSubscription(subId);
+            deleteTestUser(user);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(result.ProjectFailures.Count() == 1 && result.ProjectsImported == 1);
+        }
+
+        [TestMethod]
+        public void Import_Should_Import_Valid_User_Data_Correctly()
+        {
+            //Arrange
+            DataSet data = parseExcelFile("Users$");    //excel sheet that has 3 new users to import
+
+            string orgName = "UnitTestOrg";
+            string user = "testuser@email.com";
+            int orgId = createTestOrg(orgName);
+            int userId = createTestUser(user);
+            createOrgUser(userId, orgId, 2, "orgOwner");
+            
+            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, null, null);
+            List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
+            UserContext userContext = new UserContext(userId, user, user, orgId, 0, orgInfoList, 1);
+
+            Service service = new Service(connectionStr, userContext);
+            string key = "DefaultConnection";
+            DBHelper.Instance.Init(key);
+
+            //Act
+            ImportActionResult result = service.Import(data);
+
+            //Clean up
+            deleteOrgUserByOrgId(orgId);
+            deleteTestUser(user);
+            deleteTestUser("asample@import.com");
+            deleteTestUser("bsmith@import.com");
+            deleteTestUser("fexample@import.com");
+            deleteTestOrg(orgId);
+
+            //Assert
+            //3 users are imported and 3 OrganizationUsers are created
+            Assert.IsTrue(result.UserFailures.Count() == 0 && result.UsersImported == 3 && result.OrgUserFailures.Count() == 0 && result.UsersAddedToOrganization == 3);
+        }
+
+        [TestMethod]
+        public void Import_Should_Import_Only_Non_Exsiting_Users()
+        {
+            //Arrange
+            DataSet data = parseExcelFile("Users$");    //excel sheet that has 3 users to import, 1 is already in database
+
+            string orgName = "UnitTestOrg";
+            string user = "asample@import.com";
+            int orgId = createTestOrg(orgName);
+            int userId = createTestUser(user);
+            createOrgUser(userId, orgId, 2, "orgOwner");
+
+            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, null, null);
+            List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
+            UserContext userContext = new UserContext(userId, user, user, orgId, 0, orgInfoList, 1);
+
+            Service service = new Service(connectionStr, userContext);
+            string key = "DefaultConnection";
+            DBHelper.Instance.Init(key);
+
+            //Act
+            ImportActionResult result = service.Import(data);
+
+            //Clean up
+            deleteOrgUserByOrgId(orgId);
+            deleteTestUser(user);
+            deleteTestUser("bsmith@import.com");
+            deleteTestUser("fexample@import.com");
+            deleteTestOrg(orgId);
+
+            //Assert
+            //only 2 users are imported and 2 OrganizationUsers are created
+            Assert.IsTrue(result.UserFailures.Count() == 0 && result.UsersImported == 2 && result.OrgUserFailures.Count() == 0 && result.UsersAddedToOrganization == 2);
+        }
+
+        [TestMethod]
+        public void Import_Should_Not_Import_Users_With_No_Email_Or_EmployeeId_Or_FullName()
+        {
+            //Arrange
+            DataSet data = parseExcelFile("Users_NoEmailOrEmployeeIdOrName$");    //excel sheet that has 3 users to import, 1 has no email
+                                                                                  //1 has no employeeId, 1 has no last name
+
+            string orgName = "UnitTestOrg";
+            string user = "testuser@email.com";
+            int orgId = createTestOrg(orgName);
+            int userId = createTestUser(user);
+            createOrgUser(userId, orgId, 2, "orgOwner");
+
+            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, null, null);
+            List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
+            UserContext userContext = new UserContext(userId, user, user, orgId, 0, orgInfoList, 1);
+
+            Service service = new Service(connectionStr, userContext);
+            string key = "DefaultConnection";
+            DBHelper.Instance.Init(key);
+
+            //Act
+            ImportActionResult result = service.Import(data);
+
+            //Clean up
+            deleteOrgUserByOrgId(orgId);
+            deleteTestUser(user);
+            deleteTestUser("asample@import.com");
+            deleteTestUser("bsmith@import.com");
+            deleteTestUser("fexample@import.com");
+            deleteTestOrg(orgId);
+
+            //Assert
+            //only 2 users are imported and 2 OrganizationUsers are created
+            Assert.IsTrue(result.UserFailures.Count() == 3 && result.UsersImported == 0 && result.OrgUserFailures.Count() == 0 && result.UsersAddedToOrganization == 0);
+        }
+
+        [TestMethod]
+        public void Import_Should_Import_Valid_Time_Entry_Data_Correctly()
+        {
+            //Arrange
+            DataSet data = parseExcelFile("TimeEntries$");    //excel sheet that has 10 time entries to import
+
+            string orgName = "UnitTestOrg";
+            string user1 = "testuser1@email.com";
+            string user2 = "testuser2@email.com";
+            int orgId = createTestOrg(orgName);
+            int userId1 = createTestUser(user1);
+            int userId2 = createTestUser(user2);
+            createOrgUser(userId1, orgId, 1, "EMP-0001");
+            createOrgUser(userId2, orgId, 1, "EMP-0002");
+
+            int subId = createSubscription(orgId, 1, 100);   //org subscribes to TimeTracker
+            int custId = createCustomer("SampleCorp", orgId, 1, "CORP-001");
+            int projId = createProject(custId, "Project1", 1, "PROJ-0001");
+
+            UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager);
+            subInfo.ProductId = ProductIdEnum.TimeTracker;
+            List<UserSubscriptionInfo> subInfoList = new List<UserSubscriptionInfo> { subInfo };
+            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
+            List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
+            UserContext userContext = new UserContext(userId1, user1, user1, orgId, subId, orgInfoList, 1);
+
+            Service service = new Service(connectionStr, userContext);
+            string key = "DefaultConnection";
+            DBHelper.Instance.Init(key);
+
+            //Act
+            ImportActionResult result = service.Import(data);
+
+            //since no ProjectUser is in the database yet, 2 users should be added to the ProjectUser table
+            string selectStmt = "SELECT [UserId] FROM [Crm].[ProjectUser] WHERE [ProjectId] = @projId";
+            SqlDataReader reader;
+            bool projUsersAdded = false;
+            using (SqlConnection connection = new SqlConnection(connectionStr))
+            {
+                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                {
+                    // set up the command's parameters
+                    cmd.Parameters.Add("@projId", SqlDbType.Int).Value = projId;
+
+                    // open connection, execute command, close connection
+                    connection.Open();
+                    reader = cmd.ExecuteReader();
+                    int rowCount = 0;
+                    while (reader.Read())
+                    {
+                        rowCount++;
+                    }
+                    if (rowCount == 2) projUsersAdded = true;
+                    reader.Close();
+                    connection.Close();
+                }
+            }
+
+            //Clean up
+            deleteTimeEntriesByProjectId(projId);
+            deleteProjectUserByProjectId(projId);
+            deleteProject(projId);
+            deleteCustomer(custId);
+            deleteSubUserBySubId(subId);
+            deleteSubscription(subId);
+            deleteOrgUserByOrgId(orgId);
+            deleteTestUser(user1);
+            deleteTestUser(user2);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(result.TimeEntriesImported == 10 && result.TimeEntryFailures.Count() == 0 && projUsersAdded && result.UsersAddedToSubscription == 2);
+        }
+
+        [TestMethod]
+        public void Import_Should_Not_Import_When_Organization_Is_Not_Subscribed()
+        {
+            //Arrange
+            DataSet data = parseExcelFile("TimeEntries$");    //excel sheet that has 10 time entries to import
+
+            string orgName = "UnitTestOrg";
+            string user1 = "testuser1@email.com";
+            string user2 = "testuser2@email.com";
+            int orgId = createTestOrg(orgName);
+            int userId1 = createTestUser(user1);
+            int userId2 = createTestUser(user2);
+            createOrgUser(userId1, orgId, 1, "EMP-0001");
+            createOrgUser(userId2, orgId, 1, "EMP-0002");
+
+            //int subId = createSubscription(orgId, 1, 100);   //org does not subscribe to TimeTracker
+            int custId = createCustomer("SampleCorp", orgId, 1, "CORP-001");
+            int projId = createProject(custId, "Project1", 1, "PROJ-0001");
+
+            UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
+
+            Service service = new Service(connectionStr, userContext);
+            string key = "DefaultConnection";
+            DBHelper.Instance.Init(key);
+
+            //Act
+            ImportActionResult result = service.Import(data);
+
+            //Clean up
+            deleteTimeEntriesByProjectId(projId);
+            deleteProjectUserByProjectId(projId);
+            deleteProject(projId);
+            deleteCustomer(custId);
+            deleteOrgUserByOrgId(orgId);
+            deleteTestUser(user1);
+            deleteTestUser(user2);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(result.TimeEntriesImported == 0 && result.TimeEntryFailures.Count() == 1);
+        }
+
+        [TestMethod]
+        public void Import_Should_Not_Import_Duplicate_Entries()
+        {
+            //Arrange
+            DataSet data = parseExcelFile("TimeEntries_DuplicateEntries$");    //excel sheet that has 4 duplicate time entries
+
+            string orgName = "UnitTestOrg";
+            string user1 = "testuser1@email.com";
+            int orgId = createTestOrg(orgName);
+            createPayClass(orgId);
+            int userId1 = createTestUser(user1);
+            createOrgUser(userId1, orgId, 1, "EMP-0001");
+
+            int subId = createSubscription(orgId, 1, 100);
+            int custId = createCustomer("SampleCorp", orgId, 1, "CORP-001");
+            int projId = createProject(custId, "Project1", 1, "PROJ-0001");
+
+            UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
+
+            Service service = new Service(connectionStr, userContext);
+            string key = "DefaultConnection";
+            DBHelper.Instance.Init(key);
+
+            //Act
+            ImportActionResult result = service.Import(data);
+
+            //Clean up
+            deleteTimeEntriesByProjectId(projId);
+            deleteProjectUserByProjectId(projId);
+            deleteProject(projId);
+            deleteCustomer(custId);
+            deleteSubUserBySubId(subId);
+            deleteSubscription(subId);
+            deleteOrgUserByOrgId(orgId);
+            deleteTestUser(user1);
+            deletePayClass(orgId);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(result.TimeEntriesImported == 1 && result.TimeEntryFailures.Count() == 0 && result.UsersAddedToSubscription == 1);
+        }
+
+        [TestMethod]
+        public void Import_Should_Not_Import_When_Exceeding_24_Hours_A_Day()
+        {
+            //Arrange
+            DataSet data = parseExcelFile("TimeEntries_Exceed24Hours$");    //excel sheet that has 3 time entries, durations are 12 hours, 11 hours, and 8 hours respectively
+                                                                            //first 2 should be imported, last one shouldn't be.
+
+            string orgName = "UnitTestOrg";
+            string user1 = "testuser1@email.com";
+            int orgId = createTestOrg(orgName);
+            createPayClass(orgId);
+            int userId1 = createTestUser(user1);
+            createOrgUser(userId1, orgId, 1, "EMP-0001");
+
+            int subId = createSubscription(orgId, 1, 100);
+            int custId = createCustomer("SampleCorp", orgId, 1, "CORP-001");
+            int projId = createProject(custId, "Project1", 1, "PROJ-0001");
+
+            UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
+
+            Service service = new Service(connectionStr, userContext);
+            string key = "DefaultConnection";
+            DBHelper.Instance.Init(key);
+
+            //Act
+            ImportActionResult result = service.Import(data);
+
+            //Clean up
+            deleteTimeEntriesByProjectId(projId);
+            deleteProjectUserByProjectId(projId);
+            deleteProject(projId);
+            deleteCustomer(custId);
+            deleteSubUserBySubId(subId);
+            deleteSubscription(subId);
+            deleteOrgUserByOrgId(orgId);
+            deleteTestUser(user1);
+            deletePayClass(orgId);
+            deleteTestOrg(orgId);
+
+            //Assert
+            Assert.IsTrue(result.TimeEntriesImported == 2 && result.TimeEntryFailures.Count() == 1 && result.UsersAddedToSubscription == 1);
+        }
+        #endregion
 
         #region Unit tests for methods in OrgService.cs
         /**************************************************************************************************

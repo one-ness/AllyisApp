@@ -590,8 +590,9 @@ namespace AllyisApps.Services
 									hasEmployeeId ? row[ColumnHeaders.EmployeeId].ToString() : null,
                                     // Since first and last name must be together and treated as one piece of information, they are joined in this datastructure. Hopefully, we'll never
                                     // have a user who's name includes the text __IMPORT__
-                                    hasUserName ? row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString() : null
+                                    hasUserName ? (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "" ? null : row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString()) : null
 								};
+                                //if (fields[2] == "__IMPORT__") fields[2] = null;
 
 								/*
                                     There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
@@ -667,6 +668,7 @@ namespace AllyisApps.Services
 										if (userIdAndInviteCount != null)
 										{
 											result.UsersImported += 1;
+                                            user.UserId = userIdAndInviteCount.Item1;
 										}
 										else
 										{
@@ -914,7 +916,8 @@ namespace AllyisApps.Services
 				DataRow row = link.Select(selectText)[0];
 				if (fieldIdTo == 2)
 				{
-					return row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString();
+                    if (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "") return null;
+					else return row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString();
 				}
 				else
 				{
