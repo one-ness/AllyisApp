@@ -304,6 +304,15 @@ namespace AllyisApps.Resources.Controllers.Auth {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User account already exists. Click on &apos;Forgot Password&apos; link to reset your password..
+        /// </summary>
+        public static string UserAccountAlreadyExists {
+            get {
+                return ResourceManager.GetString("UserAccountAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to has been sucessfully added..
         /// </summary>
         public static string UserAddedSuccessfully {

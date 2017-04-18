@@ -104,5 +104,23 @@ namespace AllyisApps.Resources.TimeTracker.Controllers.Customer {
                 return ResourceManager.GetString("CustomerOrgIdNotUnique", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This file format is not supported..
+        /// </summary>
+        public static string FileFormatUnsupported {
+            get {
+                return ResourceManager.GetString("FileFormatUnsupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please upload your file. .
+        /// </summary>
+        public static string PleaseUploadFile {
+            get {
+                return ResourceManager.GetString("PleaseUploadFile", resourceCulture);
+            }
+        }
     }
 }
