@@ -67,18 +67,23 @@ namespace AllyisApps.Services.Tests
             int timeEntryId = AuthTest.createTimeEntry(userId, projId, date, 1, 8);
             TimeTrackerService ttService = new TimeTrackerService(connectionStr);
 
-            //Act
-            TimeEntryInfo result = ttService.GetTimeEntry(timeEntryId);
+            try
+            {
+                //Act
+                TimeEntryInfo result = ttService.GetTimeEntry(timeEntryId);
 
-            //Clean up
-            AuthTest.deleteTimeEntry(timeEntryId);
-            AuthTest.deleteProject(projId);
-            AuthTest.deleteCustomer(custId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result.Date == date && result.Duration == 8 && result.PayClassId == 1 && result.UserId == userId && result.ProjectId == projId);
+                //Assert
+                Assert.IsTrue(result.Date == date && result.Duration == 8 && result.PayClassId == 1 && result.UserId == userId && result.ProjectId == projId);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deleteTimeEntry(timeEntryId);
+                AuthTest.deleteProject(projId);
+                AuthTest.deleteCustomer(custId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -110,42 +115,47 @@ namespace AllyisApps.Services.Tests
                 ProjectId = projId,
                 UserId = userId
             };
-
-            //Act
-            int result = ttService.CreateTimeEntry(entryInfo);
-
-            string selectStmt = "SELECT [TimeEntryId] FROM [TimeTracker].[TimeEntry] WHERE [UserId] = @userId AND [ProjectId] = @projId";
-            SqlDataReader reader;
             int entryId = 0;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                int result = ttService.CreateTimeEntry(entryInfo);
+
+                string selectStmt = "SELECT [TimeEntryId] FROM [TimeTracker].[TimeEntry] WHERE [UserId] = @userId AND [ProjectId] = @projId";
+                SqlDataReader reader;
+                
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
-                    cmd.Parameters.Add("@projId", SqlDbType.Int).Value = projId;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        entryId = (int)reader["TimeEntryId"];
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                        cmd.Parameters.Add("@projId", SqlDbType.Int).Value = projId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            entryId = (int)reader["TimeEntryId"];
+                        }
+                        reader.Close();
+                        connection.Close();
                     }
-                    reader.Close();
-                    connection.Close();
                 }
+
+                //Assert
+                Assert.IsTrue(result == entryId);
             }
-
-            //Clean up
-            AuthTest.deleteTimeEntry(entryId);
-            AuthTest.deleteProject(projId);
-            AuthTest.deleteCustomer(custId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result == entryId);
+            finally
+            {
+                //Clean up
+                AuthTest.deleteTimeEntry(entryId);
+                AuthTest.deleteProject(projId);
+                AuthTest.deleteCustomer(custId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -179,41 +189,46 @@ namespace AllyisApps.Services.Tests
                 TimeEntryId = timeEntryId
             };
 
-            //Act
-            ttService.UpdateTimeEntry(updatedEntry);
-
-            string selectStmt = "SELECT [Duration] FROM [TimeTracker].[TimeEntry] WHERE [UserId] = @userId AND [ProjectId] = @projId";
-            SqlDataReader reader;
-            float duration = 0;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                ttService.UpdateTimeEntry(updatedEntry);
+
+                string selectStmt = "SELECT [Duration] FROM [TimeTracker].[TimeEntry] WHERE [UserId] = @userId AND [ProjectId] = @projId";
+                SqlDataReader reader;
+                float duration = 0;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
-                    cmd.Parameters.Add("@projId", SqlDbType.Int).Value = projId;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        duration = (float)(double)reader["Duration"];
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                        cmd.Parameters.Add("@projId", SqlDbType.Int).Value = projId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            duration = (float)(double)reader["Duration"];
+                        }
+                        reader.Close();
+                        connection.Close();
                     }
-                    reader.Close();
-                    connection.Close();
                 }
+
+                //Assert
+                Assert.IsTrue(duration == 6);
             }
-
-            //Clean up
-            AuthTest.deleteTimeEntry(timeEntryId);
-            AuthTest.deleteProject(projId);
-            AuthTest.deleteCustomer(custId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(duration == 6);
+            finally
+            {
+                //Clean up
+                AuthTest.deleteTimeEntry(timeEntryId);
+                AuthTest.deleteProject(projId);
+                AuthTest.deleteCustomer(custId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -238,38 +253,43 @@ namespace AllyisApps.Services.Tests
             int timeEntryId = AuthTest.createTimeEntry(userId, projId, date, 1, 8); //existing time entry
             TimeTrackerService ttService = new TimeTrackerService(connectionStr);
 
-            //Act
-            ttService.DeleteTimeEntry(timeEntryId);
-
-            string selectStmt = "SELECT [TimeEntryId] FROM [TimeTracker].[TimeEntry] WHERE [UserId] = @userId AND [ProjectId] = @projId";
-            SqlDataReader reader;
-            bool deleted = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                ttService.DeleteTimeEntry(timeEntryId);
+
+                string selectStmt = "SELECT [TimeEntryId] FROM [TimeTracker].[TimeEntry] WHERE [UserId] = @userId AND [ProjectId] = @projId";
+                SqlDataReader reader;
+                bool deleted = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
-                    cmd.Parameters.Add("@projId", SqlDbType.Int).Value = projId;
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                    {
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                        cmd.Parameters.Add("@projId", SqlDbType.Int).Value = projId;
 
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    if (!reader.HasRows) deleted = true;
-                    reader.Close();
-                    connection.Close();
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        if (!reader.HasRows) deleted = true;
+                        reader.Close();
+                        connection.Close();
+                    }
                 }
+
+                //Assert
+                Assert.IsTrue(deleted);
             }
-
-            //Clean up
-            AuthTest.deleteTimeEntry(timeEntryId);
-            AuthTest.deleteProject(projId);
-            AuthTest.deleteCustomer(custId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(deleted);
+            finally
+            {
+                //Clean up
+                AuthTest.deleteTimeEntry(timeEntryId);
+                AuthTest.deleteProject(projId);
+                AuthTest.deleteCustomer(custId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         //No need to test null arguments because it's not possible to pass in null DateTime
@@ -308,20 +328,25 @@ namespace AllyisApps.Services.Tests
             DateTime start = new DateTime(2017, 1, 1);
             DateTime end = new DateTime(2017, 1, 31);
 
-            //Act
-            IEnumerable<TimeEntryInfo> entryList = ttService.GetTimeEntriesOverDateRange(start, end);
+            try
+            {
+                //Act
+                IEnumerable<TimeEntryInfo> entryList = ttService.GetTimeEntriesOverDateRange(start, end);
 
-            //Clean up
-            AuthTest.deleteTimeEntriesByProjectId(projId);
-            AuthTest.deleteProject(projId);
-            AuthTest.deleteCustomer(custId);
-            AuthTest.deleteOrgUser(userId, orgId);
-            AuthTest.deletePayClass(orgId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(entryList.Count() == 2 && entryList.ElementAt(0).TimeEntryId == timeEntryId1 && entryList.ElementAt(1).TimeEntryId == timeEntryId2);
+                //Assert
+                Assert.IsTrue(entryList.Count() == 2 && entryList.ElementAt(0).TimeEntryId == timeEntryId1 && entryList.ElementAt(1).TimeEntryId == timeEntryId2);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deleteTimeEntriesByProjectId(projId);
+                AuthTest.deleteProject(projId);
+                AuthTest.deleteCustomer(custId);
+                AuthTest.deleteOrgUser(userId, orgId);
+                AuthTest.deletePayClass(orgId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -398,22 +423,27 @@ namespace AllyisApps.Services.Tests
 
             List<int> userIds = new List<int> { userId1, userId2 };
 
-            //Act
-            IEnumerable<TimeEntryInfo> entryList = ttService.GetTimeEntriesByUserOverDateRange(userIds, start, end);
+            try
+            {
+                //Act
+                IEnumerable<TimeEntryInfo> entryList = ttService.GetTimeEntriesByUserOverDateRange(userIds, start, end);
 
-            //Clean up
-            AuthTest.deleteTimeEntriesByProjectId(projId);
-            AuthTest.deleteProject(projId);
-            AuthTest.deleteCustomer(custId);
-            AuthTest.deleteOrgUser(userId1, orgId);
-            AuthTest.deleteOrgUser(userId2, orgId);
-            AuthTest.deletePayClass(orgId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email1);
-            AuthTest.deleteTestUser(email2);
-
-            //Assert
-            Assert.IsTrue(entryList.Count() == 3 && entryList.ElementAt(0).TimeEntryId == timeEntryId1 && entryList.ElementAt(1).TimeEntryId == timeEntryId2 && entryList.ElementAt(2).TimeEntryId == timeEntryId3);
+                //Assert
+                Assert.IsTrue(entryList.Count() == 3 && entryList.ElementAt(0).TimeEntryId == timeEntryId1 && entryList.ElementAt(1).TimeEntryId == timeEntryId2 && entryList.ElementAt(2).TimeEntryId == timeEntryId3);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deleteTimeEntriesByProjectId(projId);
+                AuthTest.deleteProject(projId);
+                AuthTest.deleteCustomer(custId);
+                AuthTest.deleteOrgUser(userId1, orgId);
+                AuthTest.deleteOrgUser(userId2, orgId);
+                AuthTest.deletePayClass(orgId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email1);
+                AuthTest.deleteTestUser(email2);
+            }
         }
 
         [TestMethod]
@@ -440,28 +470,33 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId1, email1, email1, orgId, subId, null, 1);
             TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
 
-            //Act
-            Tuple<List<Customer>, List<CompleteProjectInfo>, List<SubscriptionUserInfo>> tuple = ttService.GetReportInfo();
+            try
+            {
+                //Act
+                Tuple<List<Customer>, List<CompleteProjectInfo>, List<SubscriptionUserInfo>> tuple = ttService.GetReportInfo();
 
-            //Clean up
-            AuthTest.deleteSubUserBySubId(subId);
-            AuthTest.deleteSubscription(subId);
-            AuthTest.deleteProject(projId);
-            AuthTest.deleteCustomer(custId);
-            AuthTest.deleteOrgUserByOrgId(orgId);
-            AuthTest.deletePayClass(orgId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email1);
-            AuthTest.deleteTestUser(email2);
-
-            //Assert
-            List<Customer> customerList = tuple.Item1;
-            bool correctCustomerList = (customerList.Count == 1 && customerList.ElementAt(0).CustomerId == custId);
-            List<CompleteProjectInfo> projList = tuple.Item2;
-            bool correctProjList = (projList.Count == 1 && projList.ElementAt(0).ProjectId == projId);
-            List<SubscriptionUserInfo> subUserList = tuple.Item3;
-            bool correctSubUserList = (subUserList.Count == 2 && subUserList.ElementAt(0).UserId == userId1 && subUserList.ElementAt(1).UserId == userId2);
-            Assert.IsTrue(correctCustomerList && correctProjList && correctSubUserList);
+                //Assert
+                List<Customer> customerList = tuple.Item1;
+                bool correctCustomerList = (customerList.Count == 1 && customerList.ElementAt(0).CustomerId == custId);
+                List<CompleteProjectInfo> projList = tuple.Item2;
+                bool correctProjList = (projList.Count == 1 && projList.ElementAt(0).ProjectId == projId);
+                List<SubscriptionUserInfo> subUserList = tuple.Item3;
+                bool correctSubUserList = (subUserList.Count == 2 && subUserList.ElementAt(0).UserId == userId1 && subUserList.ElementAt(1).UserId == userId2);
+                Assert.IsTrue(correctCustomerList && correctProjList && correctSubUserList);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deleteSubUserBySubId(subId);
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deleteProject(projId);
+                AuthTest.deleteCustomer(custId);
+                AuthTest.deleteOrgUserByOrgId(orgId);
+                AuthTest.deletePayClass(orgId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email1);
+                AuthTest.deleteTestUser(email2);
+            }
         }
 
         [TestMethod]
@@ -499,17 +534,22 @@ namespace AllyisApps.Services.Tests
                 Date = new DateTime(2017, 12, 1)
             };
 
-            //Act
-            bool result = ttService.CreateHoliday(newHoliday);
+            try
+            {
+                //Act
+                bool result = ttService.CreateHoliday(newHoliday);
 
-            //Clean up
-            AuthTest.deleteSubUserBySubId(subId);
-            AuthTest.deleteSubscription(subId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsFalse(result);
+                //Assert
+                Assert.IsFalse(result);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deleteSubUserBySubId(subId);
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -540,53 +580,60 @@ namespace AllyisApps.Services.Tests
                 OrganizationId = orgId
             };
 
-            //Act
-            bool result = ttService.CreateHoliday(newHoliday);
-
-            //Look into Holiday table and TimeEntry table to make sure a new holiday is created and new time entry for that holiday is added
-            string selectStmt1 = "SELECT [HolidayId] FROM [TimeTracker].[Holiday] WHERE [OrganizationId] = @orgId AND [HolidayName] = @holidayName";
-            string selectStmt2 = "SELECT [TimeEntryId] FROM [TimeTracker].[TimeEntry] WHERE [UserId] = @userId AND [Description] = @holidayName";
-            SqlDataReader reader;
             int holidayId = -1;
             int timeEntryId = -1;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+
+            try
             {
-                connection.Open();
-                using (SqlCommand cmd = new SqlCommand(selectStmt1, connection))
-                {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
-                    cmd.Parameters.Add("@holidayName", SqlDbType.VarChar, 100).Value = "randomHoliday";
+                //Act
+                bool result = ttService.CreateHoliday(newHoliday);
 
-                    // open connection, execute command, close connection
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read()) { holidayId = (int)reader["HolidayId"]; }
-                    reader.Close();
-                }
-                using (SqlCommand cmd = new SqlCommand(selectStmt2, connection))
+                //Look into Holiday table and TimeEntry table to make sure a new holiday is created and new time entry for that holiday is added
+                string selectStmt1 = "SELECT [HolidayId] FROM [TimeTracker].[Holiday] WHERE [OrganizationId] = @orgId AND [HolidayName] = @holidayName";
+                string selectStmt2 = "SELECT [TimeEntryId] FROM [TimeTracker].[TimeEntry] WHERE [UserId] = @userId AND [Description] = @holidayName";
+                SqlDataReader reader;
+                
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
-                    cmd.Parameters.Add("@holidayName", SqlDbType.VarChar, 100).Value = "randomHoliday";
+                    connection.Open();
+                    using (SqlCommand cmd = new SqlCommand(selectStmt1, connection))
+                    {
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+                        cmd.Parameters.Add("@holidayName", SqlDbType.VarChar, 100).Value = "randomHoliday";
 
-                    // open connection, execute command, close connection
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read()) { timeEntryId = (int)reader["TimeEntryId"]; }
-                    reader.Close();
+                        // open connection, execute command, close connection
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read()) { holidayId = (int)reader["HolidayId"]; }
+                        reader.Close();
+                    }
+                    using (SqlCommand cmd = new SqlCommand(selectStmt2, connection))
+                    {
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                        cmd.Parameters.Add("@holidayName", SqlDbType.VarChar, 100).Value = "randomHoliday";
+
+                        // open connection, execute command, close connection
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read()) { timeEntryId = (int)reader["TimeEntryId"]; }
+                        reader.Close();
+                    }
+                    connection.Close();
                 }
-                connection.Close();
+
+                //Assert
+                Assert.IsTrue(result && holidayId != -1 && timeEntryId != -1);
             }
-
-            //Clean up
-            AuthTest.deleteTimeEntry(timeEntryId);
-            AuthTest.deleteHoliday(holidayId);
-            AuthTest.deleteSubUserBySubId(subId);
-            AuthTest.deleteSubscription(subId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result && holidayId != -1 && timeEntryId != -1);
+            finally
+            {
+                //Clean up
+                AuthTest.deleteTimeEntry(timeEntryId);
+                AuthTest.deleteHoliday(holidayId);
+                AuthTest.deleteSubUserBySubId(subId);
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -620,18 +667,23 @@ namespace AllyisApps.Services.Tests
 
             int holidayId = AuthTest.createHoliday("randomHoliday", new DateTime(2017, 12, 1), orgId);
 
-            //Act
-            bool result = ttService.DeleteHoliday(holidayId);
+            try
+            {
+                //Act
+                bool result = ttService.DeleteHoliday(holidayId);
 
-            //Clean up
-            AuthTest.deleteHoliday(holidayId);
-            AuthTest.deleteSubUserBySubId(subId);
-            AuthTest.deleteSubscription(subId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsFalse(result);
+                //Assert
+                Assert.IsFalse(result);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deleteHoliday(holidayId);
+                AuthTest.deleteSubUserBySubId(subId);
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -678,55 +730,60 @@ namespace AllyisApps.Services.Tests
             }
             int timeEntryId = AuthTest.createTimeEntry(userId, projId, new DateTime(2017, 12, 1), payClassId, 8);    //this time entry should be deleted
 
-            //Act
-            bool result = ttService.DeleteHoliday(holidayId);
-
-            //Look into Holiday table and TimeEntry table to make sure both the holiday and the related time entry are deleted
-            string selectStmt1 = "SELECT [HolidayId] FROM [TimeTracker].[Holiday] WHERE [OrganizationId] = @orgId AND [HolidayName] = @holidayName";
-            string selectStmt2 = "SELECT [TimeEntryId] FROM [TimeTracker].[TimeEntry] WHERE [UserId] = @userId AND [PayClassId] = @payClassId";
-            SqlDataReader reader;
-            bool holidayDeleted = false;
-            bool timeEntryDeleted = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                connection.Open();
-                using (SqlCommand cmd = new SqlCommand(selectStmt1, connection))
-                {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
-                    cmd.Parameters.Add("@holidayName", SqlDbType.VarChar, 100).Value = "randomHoliday";
+                //Act
+                bool result = ttService.DeleteHoliday(holidayId);
 
-                    // open connection, execute command, close connection
-                    reader = cmd.ExecuteReader();
-                    if (!reader.HasRows) { holidayDeleted = true; }
-                    reader.Close();
-                }
-                using (SqlCommand cmd = new SqlCommand(selectStmt2, connection))
+                //Look into Holiday table and TimeEntry table to make sure both the holiday and the related time entry are deleted
+                string selectStmt1 = "SELECT [HolidayId] FROM [TimeTracker].[Holiday] WHERE [OrganizationId] = @orgId AND [HolidayName] = @holidayName";
+                string selectStmt2 = "SELECT [TimeEntryId] FROM [TimeTracker].[TimeEntry] WHERE [UserId] = @userId AND [PayClassId] = @payClassId";
+                SqlDataReader reader;
+                bool holidayDeleted = false;
+                bool timeEntryDeleted = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
-                    cmd.Parameters.Add("@payClassId", SqlDbType.Int).Value = payClassId;
+                    connection.Open();
+                    using (SqlCommand cmd = new SqlCommand(selectStmt1, connection))
+                    {
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+                        cmd.Parameters.Add("@holidayName", SqlDbType.VarChar, 100).Value = "randomHoliday";
 
-                    // open connection, execute command, close connection
-                    reader = cmd.ExecuteReader();
-                    if (!reader.HasRows) { timeEntryDeleted = true; }
-                    reader.Close();
+                        // open connection, execute command, close connection
+                        reader = cmd.ExecuteReader();
+                        if (!reader.HasRows) { holidayDeleted = true; }
+                        reader.Close();
+                    }
+                    using (SqlCommand cmd = new SqlCommand(selectStmt2, connection))
+                    {
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                        cmd.Parameters.Add("@payClassId", SqlDbType.Int).Value = payClassId;
+
+                        // open connection, execute command, close connection
+                        reader = cmd.ExecuteReader();
+                        if (!reader.HasRows) { timeEntryDeleted = true; }
+                        reader.Close();
+                    }
+                    connection.Close();
                 }
-                connection.Close();
+
+                //Assert
+                Assert.IsTrue(result & holidayDeleted && timeEntryDeleted);
             }
-
-            //Clean up
-            AuthTest.deleteTimeEntry(timeEntryId);
-            AuthTest.deleteHoliday(holidayId);
-            AuthTest.deleteSubUserBySubId(subId);
-            AuthTest.deleteProject(projId);
-            AuthTest.deleteCustomer(custId);
-            AuthTest.deleteSubscription(subId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result & holidayDeleted && timeEntryDeleted);
+            finally
+            {
+                //Clean up
+                AuthTest.deleteTimeEntry(timeEntryId);
+                AuthTest.deleteHoliday(holidayId);
+                AuthTest.deleteSubUserBySubId(subId);
+                AuthTest.deleteProject(projId);
+                AuthTest.deleteCustomer(custId);
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -742,17 +799,21 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId, email, email, orgId, 0, null, 1);
             TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
 
-            //Act
-            DateTime? lockDate = ttService.GetLockDate();
-            //DateTime expected = DateTime.Now.AddDays(-14);
+            try
+            {
+                //Act
+                DateTime? lockDate = ttService.GetLockDate();
 
-            //Clean up
-            AuthTest.deleteTimeTrackerSetting(orgId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(lockDate == null);
+                //Assert
+                Assert.IsTrue(lockDate == null);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deleteTimeTrackerSetting(orgId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -768,19 +829,23 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId, email, email, orgId, 0, null, 1);
             TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
 
-            //Act
-            DateTime lockDate = ttService.GetLockDate().Value;
-            string result = lockDate.ToString("yyyy-MM-dd");
-            string expected = DateTime.Now.AddDays(-14).ToString("yyyy-MM-dd");
+            try
+            {
+                //Act
+                DateTime lockDate = ttService.GetLockDate().Value;
+                string result = lockDate.ToString("yyyy-MM-dd");
+                string expected = DateTime.Now.AddDays(-14).ToString("yyyy-MM-dd");
 
-
-            //Clean up
-            AuthTest.deleteTimeTrackerSetting(orgId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result == expected);
+                //Assert
+                Assert.IsTrue(result == expected);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deleteTimeTrackerSetting(orgId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -820,11 +885,13 @@ namespace AllyisApps.Services.Tests
             {
                 Assert.IsTrue(e is ArgumentException);
             }
-
-            //Clean up
-            AuthTest.deletePayClass(orgId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
+            finally
+            {
+                //Clean up
+                AuthTest.deletePayClass(orgId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -848,17 +915,22 @@ namespace AllyisApps.Services.Tests
             TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
             ttService.SetService(service);
 
-            //Act
-            bool result = ttService.CreatePayClass("NewPayClass");
+            try
+            {
+                //Act
+                bool result = ttService.CreatePayClass("NewPayClass");
 
-            //Clean up
-            AuthTest.deleteSubscription(subId);
-            AuthTest.deletePayClass(orgId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsFalse(result);
+                //Assert
+                Assert.IsFalse(result);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deletePayClass(orgId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -882,37 +954,42 @@ namespace AllyisApps.Services.Tests
             TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
             ttService.SetService(service);
 
-            //Act
-            bool result = ttService.CreatePayClass("NewPayClass");
-
-            string selectStmt = "SELECT [PayClassID] FROM [TimeTracker].[PayClass] WHERE [OrganizationId] = @orgId AND [Name] = @name";
-            SqlDataReader reader;
-            bool created = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                bool result = ttService.CreatePayClass("NewPayClass");
+
+                string selectStmt = "SELECT [PayClassID] FROM [TimeTracker].[PayClass] WHERE [OrganizationId] = @orgId AND [Name] = @name";
+                SqlDataReader reader;
+                bool created = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
-                    cmd.Parameters.Add("@name", SqlDbType.VarChar, 100).Value = "NewPayClass";
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                    {
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+                        cmd.Parameters.Add("@name", SqlDbType.VarChar, 100).Value = "NewPayClass";
 
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    if (reader.HasRows) created = true;
-                    reader.Close();
-                    connection.Close();
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        if (reader.HasRows) created = true;
+                        reader.Close();
+                        connection.Close();
+                    }
                 }
+
+                //Assert
+                Assert.IsTrue(result && created);
             }
-
-            //Clean up
-            AuthTest.deleteSubscription(subId);
-            AuthTest.deletePayClass(orgId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result && created);
+            finally
+            {
+                //Clean up
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deletePayClass(orgId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -944,17 +1021,22 @@ namespace AllyisApps.Services.Tests
             TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
             ttService.SetService(service);
 
-            //Act
-            bool result = ttService.DeletePayClass(regPayClassId);
+            try
+            {
+                //Act
+                bool result = ttService.DeletePayClass(regPayClassId);
 
-            //Clean up
-            AuthTest.deleteSubscription(subId);
-            AuthTest.deletePayClass(orgId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsFalse(result);
+                //Assert
+                Assert.IsFalse(result);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deletePayClass(orgId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -978,36 +1060,41 @@ namespace AllyisApps.Services.Tests
             TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
             ttService.SetService(service);
 
-            //Act
-            bool result = ttService.DeletePayClass(regPayClassId);  //delete the Regular payclass
-
-            string selectStmt = "SELECT [PayClassID] FROM [TimeTracker].[PayClass] WHERE [PayClassID] = @id";
-            SqlDataReader reader;
-            bool deleted = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                bool result = ttService.DeletePayClass(regPayClassId);  //delete the Regular payclass
+
+                string selectStmt = "SELECT [PayClassID] FROM [TimeTracker].[PayClass] WHERE [PayClassID] = @id";
+                SqlDataReader reader;
+                bool deleted = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@id", SqlDbType.Int).Value = regPayClassId;
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                    {
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@id", SqlDbType.Int).Value = regPayClassId;
 
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    if (!reader.HasRows) deleted = true;
-                    reader.Close();
-                    connection.Close();
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        if (!reader.HasRows) deleted = true;
+                        reader.Close();
+                        connection.Close();
+                    }
                 }
+
+                //Assert
+                Assert.IsTrue(result && deleted);
             }
-
-            //Clean up
-            AuthTest.deleteSubscription(subId);
-            AuthTest.deletePayClass(orgId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result && deleted);
+            finally
+            {
+                //Clean up
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deletePayClass(orgId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1023,16 +1110,21 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId, email, email, orgId, 0, null, 1);
             TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
 
-            //Act
-            IEnumerable<PayClass> payclasses = ttService.GetPayClasses();
+            try
+            {
+                //Act
+                IEnumerable<PayClass> payclasses = ttService.GetPayClasses();
 
-            //Clean up
-            AuthTest.deletePayClass(orgId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(payclasses.Count() == 8 && payclasses.ElementAt(0).PayClassID == regPayClassId);
+                //Assert
+                Assert.IsTrue(payclasses.Count() == 8 && payclasses.ElementAt(0).PayClassID == regPayClassId);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deletePayClass(orgId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1064,17 +1156,22 @@ namespace AllyisApps.Services.Tests
             TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
             ttService.SetService(service);
 
-            //Act
-            bool result = ttService.UpdateStartOfWeek(3);
+            try
+            {
+                //Act
+                bool result = ttService.UpdateStartOfWeek(3);
 
-            //Clean up
-            AuthTest.deleteTimeTrackerSetting(orgId);
-            AuthTest.deleteSubscription(subId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsFalse(result);
+                //Assert
+                Assert.IsFalse(result);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deleteTimeTrackerSetting(orgId);
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1098,39 +1195,44 @@ namespace AllyisApps.Services.Tests
             TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
             ttService.SetService(service);
 
-            //Act
-            bool result = ttService.UpdateStartOfWeek(3);   //update to Wed
-
-            string selectStmt = "SELECT [StartOfWeek] FROM [TimeTracker].[Setting] WHERE [OrganizationId] = @id";
-            SqlDataReader reader;
-            bool updated = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                bool result = ttService.UpdateStartOfWeek(3);   //update to Wed
+
+                string selectStmt = "SELECT [StartOfWeek] FROM [TimeTracker].[Setting] WHERE [OrganizationId] = @id";
+                SqlDataReader reader;
+                bool updated = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@id", SqlDbType.Int).Value = orgId;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        updated = ((int)reader["StartOfWeek"] == 3);
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@id", SqlDbType.Int).Value = orgId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            updated = ((int)reader["StartOfWeek"] == 3);
+                        }
+                        reader.Close();
+                        connection.Close();
                     }
-                    reader.Close();
-                    connection.Close();
                 }
+
+                //Assert
+                Assert.IsTrue(result && updated);
             }
-
-            //Clean up
-            AuthTest.deleteTimeTrackerSetting(orgId);
-            AuthTest.deleteSubscription(subId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result && updated);
+            finally
+            {
+                //Clean up
+                AuthTest.deleteTimeTrackerSetting(orgId);
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1178,17 +1280,22 @@ namespace AllyisApps.Services.Tests
             TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
             ttService.SetService(service);
 
-            //Act
-            bool result = ttService.UpdateOvertime(30, "Week", 2.0f);
+            try
+            {
+                //Act
+                bool result = ttService.UpdateOvertime(30, "Week", 2.0f);
 
-            //Clean up
-            AuthTest.deleteTimeTrackerSetting(orgId);
-            AuthTest.deleteSubscription(subId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsFalse(result);
+                //Assert
+                Assert.IsFalse(result);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deleteTimeTrackerSetting(orgId);
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1212,39 +1319,44 @@ namespace AllyisApps.Services.Tests
             TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
             ttService.SetService(service);
 
-            //Act
-            bool result = ttService.UpdateOvertime(8, "Day", 2.0f);
-
-            string selectStmt = "SELECT [OvertimeHours], [OvertimePeriod], [OvertimeMultiplier] FROM [TimeTracker].[Setting] WHERE [OrganizationId] = @id";
-            SqlDataReader reader;
-            bool updated = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                bool result = ttService.UpdateOvertime(8, "Day", 2.0f);
+
+                string selectStmt = "SELECT [OvertimeHours], [OvertimePeriod], [OvertimeMultiplier] FROM [TimeTracker].[Setting] WHERE [OrganizationId] = @id";
+                SqlDataReader reader;
+                bool updated = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@id", SqlDbType.Int).Value = orgId;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        updated = ((int)reader["OvertimeHours"] == 8 && (string)reader["OverTimePeriod"] == "Day" && decimal.Parse(reader["OvertimeMultiplier"].ToString()) == 2);
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@id", SqlDbType.Int).Value = orgId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            updated = ((int)reader["OvertimeHours"] == 8 && (string)reader["OverTimePeriod"] == "Day" && decimal.Parse(reader["OvertimeMultiplier"].ToString()) == 2);
+                        }
+                        reader.Close();
+                        connection.Close();
                     }
-                    reader.Close();
-                    connection.Close();
                 }
+
+                //Assert
+                Assert.IsTrue(result && updated);
             }
-
-            //Clean up
-            AuthTest.deleteTimeTrackerSetting(orgId);
-            AuthTest.deleteSubscription(subId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result && updated);
+            finally
+            {
+                //Clean up
+                AuthTest.deleteTimeTrackerSetting(orgId);
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1278,38 +1390,43 @@ namespace AllyisApps.Services.Tests
             TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
             ttService.SetService(service);
 
-            //Act
-            bool result = ttService.UpdateLockDate(false, "Months", 1);
-
-            string selectStmt = "SELECT [LockDateUsed], [LockDatePeriod], [LockDateQuantity] FROM [TimeTracker].[Setting] WHERE [OrganizationId] = @id";
-            SqlDataReader reader;
-            bool updated = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                bool result = ttService.UpdateLockDate(false, "Months", 1);
+
+                string selectStmt = "SELECT [LockDateUsed], [LockDatePeriod], [LockDateQuantity] FROM [TimeTracker].[Setting] WHERE [OrganizationId] = @id";
+                SqlDataReader reader;
+                bool updated = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@id", SqlDbType.Int).Value = orgId;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        updated = ((bool)reader["LockDateUsed"] == false && (string)reader["LockDatePeriod"] == "Months" && (int)reader["LockDateQuantity"] == 1);
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@id", SqlDbType.Int).Value = orgId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            updated = ((bool)reader["LockDateUsed"] == false && (string)reader["LockDatePeriod"] == "Months" && (int)reader["LockDateQuantity"] == 1);
+                        }
+                        reader.Close();
+                        connection.Close();
                     }
-                    reader.Close();
-                    connection.Close();
                 }
+
+                //Assert
+                Assert.IsTrue(result && updated);
             }
-
-            //Clean up
-            AuthTest.deleteTimeTrackerSetting(orgId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result && updated);
+            finally
+            {
+                //Clean up
+                AuthTest.deleteTimeTrackerSetting(orgId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1328,24 +1445,29 @@ namespace AllyisApps.Services.Tests
             TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
             ttService.SetService(service);
 
-            //Act
-            Tuple<Setting, List<PayClass>, List<Holiday>> tuple = ttService.GetAllSettings();
+            try
+            {
+                //Act
+                Tuple<Setting, List<PayClass>, List<Holiday>> tuple = ttService.GetAllSettings();
 
-            //Clean up
-            AuthTest.deletePayClass(orgId);
-            AuthTest.deleteTimeTrackerSetting(orgId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
+                //Assert
+                Setting setting = tuple.Item1;
+                bool correctSetting = (setting.OrganizationId == orgId && setting.StartOfWeek == 1 && setting.OvertimePeriod == "Week" && setting.OvertimeHours == 40);
+                List<PayClass> payclassList = tuple.Item2;
+                bool correctPayclassList = (payclassList.Count() == 8 && payclassList.ElementAt(0).PayClassID == regPayClassId);
+                List<Holiday> holidayList = tuple.Item3;
+                bool correctHoliday = (holidayList.Count() == 16 && holidayList.ElementAt(0).HolidayName == "New Year's Day");
 
-            //Assert
-            Setting setting = tuple.Item1;
-            bool correctSetting = (setting.OrganizationId == orgId && setting.StartOfWeek == 1 && setting.OvertimePeriod == "Week" && setting.OvertimeHours == 40);
-            List<PayClass> payclassList = tuple.Item2;
-            bool correctPayclassList = (payclassList.Count() == 8 && payclassList.ElementAt(0).PayClassID == regPayClassId);
-            List<Holiday> holidayList = tuple.Item3;
-            bool correctHoliday = (holidayList.Count() == 16 && holidayList.ElementAt(0).HolidayName == "New Year's Day");
-
-            Assert.IsTrue(correctSetting && correctPayclassList && correctHoliday);
+                Assert.IsTrue(correctSetting && correctPayclassList && correctHoliday);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deletePayClass(orgId);
+                AuthTest.deleteTimeTrackerSetting(orgId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1401,42 +1523,47 @@ namespace AllyisApps.Services.Tests
             DateTime start = new DateTime(2017, 1, 1);
             DateTime end = new DateTime(2017, 1, 31);
 
-            //Act
-            Tuple<Setting, List<PayClass>, List<Holiday>, List<CompleteProjectInfo>, List<User>, List<TimeEntryInfo>> tuple = ttService.GetTimeEntryIndexInfo(start, end, userId);
+            try
+            {
+                //Act
+                Tuple<Setting, List<PayClass>, List<Holiday>, List<CompleteProjectInfo>, List<User>, List<TimeEntryInfo>> tuple = ttService.GetTimeEntryIndexInfo(start, end, userId);
 
-            //Clean up
-            AuthTest.deleteTimeEntry(timeEntryId);
-            AuthTest.deleteSubUser(userId, subId);
-            AuthTest.deleteSubscription(subId);
-            AuthTest.deleteProjectUserByProjectId(projId);
-            AuthTest.deleteProject(projId);
-            AuthTest.deleteCustomer(custId);
-            AuthTest.deletePayClass(orgId);
-            AuthTest.deleteTimeTrackerSetting(orgId);
-            AuthTest.deleteOrgUser(userId, orgId);
-            AuthTest.deleteTestOrg(orgId);
-            AuthTest.deleteTestUser(email);
+                //Assert
+                Setting setting = tuple.Item1;
+                bool correctSetting = (setting.StartOfWeek == 1 && setting.LockDatePeriod == "Weeks" && setting.LockDateQuantity == 2 && setting.LockDateUsed == true);
 
-            //Assert
-            Setting setting = tuple.Item1;
-            bool correctSetting = (setting.StartOfWeek == 1 && setting.LockDatePeriod == "Weeks" && setting.LockDateQuantity == 2 && setting.LockDateUsed == true);
+                List<PayClass> payclassList = tuple.Item2;
+                bool correctPayclassList = (payclassList.Count() == 8 && payclassList.ElementAt(0).PayClassID == regPayClassId);
 
-            List<PayClass> payclassList = tuple.Item2;
-            bool correctPayclassList = (payclassList.Count() == 8 && payclassList.ElementAt(0).PayClassID == regPayClassId);
+                List<Holiday> holidayList = tuple.Item3;
+                bool correctHoliday = (holidayList.Count() == 16 && holidayList.ElementAt(0).HolidayName == "New Year's Day");
 
-            List<Holiday> holidayList = tuple.Item3;
-            bool correctHoliday = (holidayList.Count() == 16 && holidayList.ElementAt(0).HolidayName == "New Year's Day");
+                List<CompleteProjectInfo> projects = tuple.Item4;
+                bool correctProjects = (projects.Count() == 2 && projects.ElementAt(1).ProjectId == projId);    //first project returned is the default project
 
-            List<CompleteProjectInfo> projects = tuple.Item4;
-            bool correctProjects = (projects.Count() == 2 && projects.ElementAt(1).ProjectId == projId);    //first project returned is the default project
+                List<User> users = tuple.Item5;
+                bool correctUsers = (users.Count() == 1 && users.ElementAt(0).UserId == userId);
 
-            List<User> users = tuple.Item5;
-            bool correctUsers = (users.Count() == 1 && users.ElementAt(0).UserId == userId);
+                List<TimeEntryInfo> timeEntries = tuple.Item6;
+                bool correctTimeEntries = (timeEntries.Count() == 1 && timeEntries.ElementAt(0).TimeEntryId == timeEntryId);
 
-            List<TimeEntryInfo> timeEntries = tuple.Item6;
-            bool correctTimeEntries = (timeEntries.Count() == 1 && timeEntries.ElementAt(0).TimeEntryId == timeEntryId);
-
-            Assert.IsTrue(correctSetting && correctPayclassList && correctHoliday && correctProjects && correctUsers && correctTimeEntries);
+                Assert.IsTrue(correctSetting && correctPayclassList && correctHoliday && correctProjects && correctUsers && correctTimeEntries);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deleteTimeEntry(timeEntryId);
+                AuthTest.deleteSubUser(userId, subId);
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deleteProjectUserByProjectId(projId);
+                AuthTest.deleteProject(projId);
+                AuthTest.deleteCustomer(custId);
+                AuthTest.deletePayClass(orgId);
+                AuthTest.deleteTimeTrackerSetting(orgId);
+                AuthTest.deleteOrgUser(userId, orgId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
         }
     }
 }

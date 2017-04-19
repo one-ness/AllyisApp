@@ -976,16 +976,20 @@ namespace AllyisApps.Services.Tests
 
             var service = new Service(connectionStr);
 
-            //Act
-            List<InvitationInfo> invi = service.GetInvitationsByUser(userEmail);
+            try {
+                //Act
+                List<InvitationInfo> invi = service.GetInvitationsByUser(userEmail);
 
-            //Clean up
-            deleteUserInvitation(userEmail);
-            deleteTestOrg(orgId);
-            deleteTestUser(userEmail);
-
-            //Assert 
-            Assert.IsTrue(invi.Count() == 1);
+                //Assert 
+                Assert.IsTrue(invi.Count() == 1);
+            }
+            finally
+            {
+                //Clean up
+                deleteUserInvitation(userEmail);
+                deleteTestOrg(orgId);
+                deleteTestUser(userEmail);
+            }
         }
 
         [TestMethod]
@@ -1002,59 +1006,64 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId, userEmail, userEmail, 0, 0, null, 0);
             var service = new Service(connectionStr, userContext);
 
-            //Act
-            string result = service.AcceptUserInvitation(inviId);
-
-            //user should be added to the OrganizationUser table
-            string selectStmt = "SELECT [UserId] FROM [Auth].[OrganizationUser] WHERE [UserId] = @userId AND [OrganizationId] = @orgId AND [EmployeeId] = @employeeId AND [OrgRoleId] = @orgRoleId";
-            SqlDataReader reader;
-            bool addedToOrgUserTable = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
-                {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
-                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
-                    cmd.Parameters.Add("@employeeId", SqlDbType.VarChar, 16).Value = "111";
-                    cmd.Parameters.Add("@orgRoleId", SqlDbType.Int).Value = 1;
+                //Act
+                string result = service.AcceptUserInvitation(inviId);
 
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    if (reader.HasRows) { addedToOrgUserTable = true; }
-                    connection.Close();
+                //user should be added to the OrganizationUser table
+                string selectStmt = "SELECT [UserId] FROM [Auth].[OrganizationUser] WHERE [UserId] = @userId AND [OrganizationId] = @orgId AND [EmployeeId] = @employeeId AND [OrgRoleId] = @orgRoleId";
+                SqlDataReader reader;
+                bool addedToOrgUserTable = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
+                {
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                    {
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                        cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+                        cmd.Parameters.Add("@employeeId", SqlDbType.VarChar, 16).Value = "111";
+                        cmd.Parameters.Add("@orgRoleId", SqlDbType.Int).Value = 1;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        if (reader.HasRows) { addedToOrgUserTable = true; }
+                        connection.Close();
+                    }
                 }
+                //invitation is removed from Invitation table
+                string selectStmt1 = "SELECT [InvitationId] FROM [Auth].[Invitation] WHERE [InvitationId] = @inviId";
+                SqlDataReader reader1;
+                bool inviRemoved = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
+                {
+                    using (SqlCommand cmd = new SqlCommand(selectStmt1, connection))
+                    {
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@inviId", SqlDbType.Int).Value = inviId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader1 = cmd.ExecuteReader();
+                        if (!reader1.HasRows) { inviRemoved = true; }
+                        connection.Close();
+                    }
+                }
+                //returned string includes org name and role
+                string expectedStr = "You have successfully joined " + orgName + " in the role of Member.";
+
+                //Assert
+                Assert.IsTrue(addedToOrgUserTable && inviRemoved && result.Equals(expectedStr));
             }
-            //invitation is removed from Invitation table
-            string selectStmt1 = "SELECT [InvitationId] FROM [Auth].[Invitation] WHERE [InvitationId] = @inviId";
-            SqlDataReader reader1;
-            bool inviRemoved = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            finally
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt1, connection))
-                {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@inviId", SqlDbType.Int).Value = inviId;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader1 = cmd.ExecuteReader();
-                    if (!reader1.HasRows) { inviRemoved = true; }
-                    connection.Close();
-                }
+                //Clean up
+                deleteUserInvitation(userEmail);
+                deleteOrgUser(userId, orgId);
+                deleteTestUser(userEmail);
+                deleteTestOrg(orgId);
             }
-            //returned string includes org name and role
-            string expectedStr = "You have successfully joined " + orgName + " in the role of Member.";
-
-            //Clean up
-            if (inviRemoved == false) { deleteUserInvitation(userEmail); }
-            deleteOrgUser(userId, orgId);
-            deleteTestUser(userEmail);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(addedToOrgUserTable && inviRemoved && result.Equals(expectedStr));
         }
 
         [TestMethod]
@@ -1070,59 +1079,63 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId, userEmail, userEmail, 0, 0, null, 0);
             var service = new Service(connectionStr, userContext);
 
-            //Act
-            string result = service.RejectUserInvitation(inviId);
-
-            //user should NOT be added to the OrganizationUser table
-            string selectStmt = "SELECT [UserId] FROM [Auth].[OrganizationUser] WHERE [UserId] = @userId AND [OrganizationId] = @orgId AND [EmployeeId] = @employeeId AND [OrgRoleId] = @orgRoleId";
-            SqlDataReader reader;
-            bool notAddedToOrgUserTable = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
-                {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
-                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
-                    cmd.Parameters.Add("@employeeId", SqlDbType.VarChar,16).Value = "111";
-                    cmd.Parameters.Add("@orgRoleId", SqlDbType.Int).Value = 1;
+                //Act
+                string result = service.RejectUserInvitation(inviId);
 
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    if (!reader.HasRows) { notAddedToOrgUserTable = true; }
-                    connection.Close();
+                //user should NOT be added to the OrganizationUser table
+                string selectStmt = "SELECT [UserId] FROM [Auth].[OrganizationUser] WHERE [UserId] = @userId AND [OrganizationId] = @orgId AND [EmployeeId] = @employeeId AND [OrgRoleId] = @orgRoleId";
+                SqlDataReader reader;
+                bool notAddedToOrgUserTable = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
+                {
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                    {
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                        cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+                        cmd.Parameters.Add("@employeeId", SqlDbType.VarChar, 16).Value = "111";
+                        cmd.Parameters.Add("@orgRoleId", SqlDbType.Int).Value = 1;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        if (!reader.HasRows) { notAddedToOrgUserTable = true; }
+                        connection.Close();
+                    }
                 }
+                //invitation is removed from Invitation table
+                string selectStmt1 = "SELECT [InvitationId] FROM [Auth].[Invitation] WHERE [InvitationId] = @inviId";
+                SqlDataReader reader1;
+                bool inviRemoved = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
+                {
+                    using (SqlCommand cmd = new SqlCommand(selectStmt1, connection))
+                    {
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@inviId", SqlDbType.Int).Value = inviId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader1 = cmd.ExecuteReader();
+                        if (!reader1.HasRows) { inviRemoved = true; }
+                        connection.Close();
+                    }
+                }
+                //returned string
+                string expectedStr = "The invitation has been rejected.";
+
+                //Assert
+                Assert.IsTrue(notAddedToOrgUserTable && inviRemoved && result.Equals(expectedStr));
             }
-            //invitation is removed from Invitation table
-            string selectStmt1 = "SELECT [InvitationId] FROM [Auth].[Invitation] WHERE [InvitationId] = @inviId";
-            SqlDataReader reader1;
-            bool inviRemoved = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            finally
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt1, connection))
-                {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@inviId", SqlDbType.Int).Value = inviId;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader1 = cmd.ExecuteReader();
-                    if (!reader1.HasRows) { inviRemoved = true; }
-                    connection.Close();
-                }
+                //Clean up
+                deleteUserInvitation(userEmail);
+                deleteTestUser(userEmail);
+                deleteTestOrg(orgId);
             }
-            //returned string
-            string expectedStr = "The invitation has been rejected.";
-
-            //Clean up
-            if (inviRemoved == false) { deleteUserInvitation(userEmail); }
-            //deleteOrgUser(userId, orgId);
-            deleteTestUser(userEmail);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(notAddedToOrgUserTable && inviRemoved && result.Equals(expectedStr));
         }
 
         [TestMethod]
@@ -1298,9 +1311,11 @@ namespace AllyisApps.Services.Tests
             {
                 Assert.IsTrue(ex is SqlException);
             }
-
-            //Clean up
-            deleteTestUser(email);
+            finally
+            {
+                //Clean up
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1326,15 +1341,19 @@ namespace AllyisApps.Services.Tests
 
             var service = new Service(connectionStr);
 
-            //Act
-            await service.SetupNewUser(email, fname, lname, dob, address, city, state, country, postalCode, phone, password, lang, confirmUrl, twoFactorEnabled, lockOutEnabled, lockOutEndDateUtc);
-            bool userCreated = testUserExists(email);
+            try
+            {
+                //Act
+                await service.SetupNewUser(email, fname, lname, dob, address, city, state, country, postalCode, phone, password, lang, confirmUrl, twoFactorEnabled, lockOutEnabled, lockOutEndDateUtc);
+                bool userCreated = testUserExists(email);
 
-            //Clean up
-            if (userCreated) { deleteTestUser(email); } 
-
-            //Assert
-            Assert.IsTrue(userCreated);
+                //Assert
+                Assert.IsTrue(userCreated);
+            }
+            finally
+            {
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1362,14 +1381,19 @@ namespace AllyisApps.Services.Tests
             var service = new Service(connectionStr);
             UserContext expected = new UserContext(userId, email, email);
 
-            //Act
-            UserContext output = service.ValidateLogin(email, password);
+            try
+            {
+                //Act
+                UserContext output = service.ValidateLogin(email, password);
 
-            //Clean up
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(expected.UserId == output.UserId && expected.Email == output.Email);
+                //Assert
+                Assert.IsTrue(expected.UserId == output.UserId && expected.Email == output.Email);
+            }
+            finally
+            {
+                //Clean up
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1391,20 +1415,25 @@ namespace AllyisApps.Services.Tests
             int userId = createTestUser(email);
             var service = new Service(connectionStr);
 
-            //Act
-            UserContext populated = service.PopulateUserContext(userId);
+            try
+            {
+                //Act
+                UserContext populated = service.PopulateUserContext(userId);
 
-            //Cleanup
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(populated.UserId == userId
-                && populated.UserName == email
-                && populated.UserOrganizationInfoList.Count() == 0
-                && populated.Email == email
-                && populated.ChosenSubscriptionId == 0
-                && populated.ChosenOrganizationId == 0
-                && populated.ChosenLanguageID == 1);
+                //Assert
+                Assert.IsTrue(populated.UserId == userId
+                    && populated.UserName == email
+                    && populated.UserOrganizationInfoList.Count() == 0
+                    && populated.Email == email
+                    && populated.ChosenSubscriptionId == 0
+                    && populated.ChosenOrganizationId == 0
+                    && populated.ChosenLanguageID == 1);
+            }
+            finally
+            {
+                //Cleanup
+                deleteTestUser(email);
+            }
         }
 
         //Case 2: User is part of one organization
@@ -1422,22 +1451,27 @@ namespace AllyisApps.Services.Tests
 
             var service = new Service(connectionStr);
 
-            //Act
-            UserContext populated = service.PopulateUserContext(userId);
+            try
+            {
+                //Act
+                UserContext populated = service.PopulateUserContext(userId);
 
-            //Cleanup
-            deleteOrgUser(userId, orgId);
-            deleteTestOrg(orgId);
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(populated.UserId == userId
-                && populated.UserName == email
-                && populated.UserOrganizationInfoList.Count() == 1
-                && populated.Email == email
-                && populated.ChosenSubscriptionId == 0
-                && populated.ChosenOrganizationId == orgId
-                && populated.ChosenLanguageID == 1);
+                //Assert
+                Assert.IsTrue(populated.UserId == userId
+                    && populated.UserName == email
+                    && populated.UserOrganizationInfoList.Count() == 1
+                    && populated.Email == email
+                    && populated.ChosenSubscriptionId == 0
+                    && populated.ChosenOrganizationId == orgId
+                    && populated.ChosenLanguageID == 1);
+            }
+            finally
+            {
+                //Cleanup
+                deleteOrgUser(userId, orgId);
+                deleteTestOrg(orgId);
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1459,36 +1493,41 @@ namespace AllyisApps.Services.Tests
             int userId = createTestUser(email);
             var service = new Service(connectionStr);
 
-            //Act
-            User user = service.GetUser(userId);
+            try
+            {
+                //Act
+                User user = service.GetUser(userId);
 
-            //Clean up
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(user.AccessFailedCount == 0
-                && user.ActiveOrganizationId == 0
-                && user.Address == null
-                && user.City == null
-                && user.Country == null
-                && user.DateOfBirth == null
-                && user.Email == email
-                && user.EmailConfirmed == false
-                && user.FirstName == "Test"
-                && user.LastName == "User"
-                && user.LastSubscriptionId == 0
-                && user.LockoutEnabled == false
-                && user.LockoutEndDateUtc == null
-                && user.PasswordHash == null
-                && user.PasswordResetCode == null
-                && user.PhoneExtension == null
-                && user.PhoneNumber == null
-                && user.PhoneNumberConfirmed == false
-                && user.State == null
-                && user.TwoFactorEnabled == false
-                && user.UserId == userId
-                && user.UserName == email
-                && user.PostalCode == null);
+                //Assert
+                Assert.IsTrue(user.AccessFailedCount == 0
+                    && user.ActiveOrganizationId == 0
+                    && user.Address == null
+                    && user.City == null
+                    && user.Country == null
+                    && user.DateOfBirth == null
+                    && user.Email == email
+                    && user.EmailConfirmed == false
+                    && user.FirstName == "Test"
+                    && user.LastName == "User"
+                    && user.LastSubscriptionId == 0
+                    && user.LockoutEnabled == false
+                    && user.LockoutEndDateUtc == null
+                    && user.PasswordHash == null
+                    && user.PasswordResetCode == null
+                    && user.PhoneExtension == null
+                    && user.PhoneNumber == null
+                    && user.PhoneNumberConfirmed == false
+                    && user.State == null
+                    && user.TwoFactorEnabled == false
+                    && user.UserId == userId
+                    && user.UserName == email
+                    && user.PostalCode == null);
+            }
+            finally
+            {
+                //Clean up
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1511,26 +1550,32 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId, email, email);
             var service = new Service(connectionStr, userContext);
 
-            //Act
-            Tuple<User, List<Organization>, List<InvitationInfo>> userInfo = service.GetUserOrgsAndInvitationInfo();
-            var returnedUser = userInfo.Item1;
-            bool returnedCorrectUser = (returnedUser.UserId == userId && returnedUser.Email == email);
+            try
+            {
+                //Act
+                Tuple<User, List<Organization>, List<InvitationInfo>> userInfo = service.GetUserOrgsAndInvitationInfo();
 
-            var returnedOrg = userInfo.Item2;
-            bool returnedCorrectOrg = (returnedOrg.Count() == 1 && returnedOrg.ElementAt(0).OrganizationId == org1Id);
+                var returnedUser = userInfo.Item1;
+                bool returnedCorrectUser = (returnedUser.UserId == userId && returnedUser.Email == email);
 
-            var returnedInvi = userInfo.Item3;
-            bool returnedCorrectInvi = (returnedInvi.Count() == 1 && returnedInvi.ElementAt(0).InvitationId == inviId);
+                var returnedOrg = userInfo.Item2;
+                bool returnedCorrectOrg = (returnedOrg.Count() == 1 && returnedOrg.ElementAt(0).OrganizationId == org1Id);
 
-            //Clean up
-            deleteUserInvitation(email);
-            deleteOrgUser(userId, org1Id);
-            deleteTestOrg(org1Id);
-            deleteTestOrg(org2Id);
-            deleteTestUser(email);
+                var returnedInvi = userInfo.Item3;
+                bool returnedCorrectInvi = (returnedInvi.Count() == 1 && returnedInvi.ElementAt(0).InvitationId == inviId);
 
-            //Assert
-            Assert.IsTrue(returnedCorrectUser && returnedCorrectOrg && returnedCorrectInvi);
+                //Assert
+                Assert.IsTrue(returnedCorrectUser && returnedCorrectOrg && returnedCorrectInvi);
+            }
+            finally
+            {
+                //Clean up
+                deleteUserInvitation(email);
+                deleteOrgUser(userId, org1Id);
+                deleteTestOrg(org1Id);
+                deleteTestOrg(org2Id);
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1538,11 +1583,10 @@ namespace AllyisApps.Services.Tests
         public void GetUserByEmail_Should_Throw_Exception_For_Null_Email()
         {
             //Arrange
-            string email = null;
             var service = new Service(connectionStr);
 
             //Act
-            service.GetUserByEmail(email);
+            service.GetUserByEmail(null);
         }
 
         [TestMethod]
@@ -1577,35 +1621,40 @@ namespace AllyisApps.Services.Tests
             int userId = createTestUser(email);
             var service = new Service(connectionStr);
 
-            //Act
-            User user = service.GetUserByEmail(email);
+            try
+            {
+                //Act
+                User user = service.GetUserByEmail(email);
 
-            //Clean up
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(user.AccessFailedCount == 0
-                && user.ActiveOrganizationId == 0
-                && user.Address == null
-                && user.City == null
-                && user.Country == null
-                && user.DateOfBirth == null
-                && user.Email == email
-                && user.EmailConfirmed == false
-                && user.FirstName == "Test"
-                && user.LastName == "User"
-                && user.LastSubscriptionId == 0
-                && user.LockoutEnabled == false
-                && user.LockoutEndDateUtc == null
-                && user.PasswordResetCode == null
-                && user.PhoneExtension == null
-                && user.PhoneNumber == null
-                && user.PhoneNumberConfirmed == false
-                && user.State == null
-                && user.TwoFactorEnabled == false
-                && user.UserId == userId
-                && user.UserName == email
-                && user.PostalCode == null);
+                //Assert
+                Assert.IsTrue(user.AccessFailedCount == 0
+                    && user.ActiveOrganizationId == 0
+                    && user.Address == null
+                    && user.City == null
+                    && user.Country == null
+                    && user.DateOfBirth == null
+                    && user.Email == email
+                    && user.EmailConfirmed == false
+                    && user.FirstName == "Test"
+                    && user.LastName == "User"
+                    && user.LastSubscriptionId == 0
+                    && user.LockoutEnabled == false
+                    && user.LockoutEndDateUtc == null
+                    && user.PasswordResetCode == null
+                    && user.PhoneExtension == null
+                    && user.PhoneNumber == null
+                    && user.PhoneNumberConfirmed == false
+                    && user.State == null
+                    && user.TwoFactorEnabled == false
+                    && user.UserId == userId
+                    && user.UserName == email
+                    && user.PostalCode == null);
+            }
+            finally
+            {
+                //Clean up
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1655,37 +1704,42 @@ namespace AllyisApps.Services.Tests
 
             var service = new Service(connectionStr);
 
-            //Act
-            service.SaveUserInfo(updated);
-
-            string selectStmt = "SELECT [FirstName], [LastName] FROM [Auth].[User] WHERE [UserId] = @userId";
-            SqlDataReader reader;
-            string newFname = "";
-            string newLname = "";
-
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
-                {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                //Act
+                service.SaveUserInfo(updated);
 
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                string selectStmt = "SELECT [FirstName], [LastName] FROM [Auth].[User] WHERE [UserId] = @userId";
+                SqlDataReader reader;
+                string newFname = "";
+                string newLname = "";
+
+                using (SqlConnection connection = new SqlConnection(connectionStr))
+                {
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        newFname = (string)reader["FirstName"];
-                        newLname = (string)reader["LastName"];
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            newFname = (string)reader["FirstName"];
+                            newLname = (string)reader["LastName"];
+                        }
                     }
                 }
+
+                //Assert
+                Assert.IsTrue(newFname == "NewFirstName" && newLname == "NewLastName");
             }
-
-            //Clean up
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(newFname == "NewFirstName" && newLname == "NewLastName");
+            finally
+            {
+                //Clean up
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1709,34 +1763,39 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId, userEmail, userEmail, 0, 0, null, 1);
             var service = new Service(connectionStr, userContext);
 
-            //Act
-            service.SetLanguage(2); //change to Spanish
-
-            string selectStmt = "SELECT [LanguagePreference] FROM [Auth].[User] WHERE [UserId] = @userId";
-            SqlDataReader reader;
-            int langPref = 0;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
-                {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                //Act
+                service.SetLanguage(2); //change to Spanish
 
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                string selectStmt = "SELECT [LanguagePreference] FROM [Auth].[User] WHERE [UserId] = @userId";
+                SqlDataReader reader;
+                int langPref = 0;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
+                {
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        langPref = (int)reader["LanguagePreference"];
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            langPref = (int)reader["LanguagePreference"];
+                        }
                     }
                 }
+
+                //Assert
+                Assert.IsTrue(langPref == 2);
             }
-
-            //Clean up
-            deleteTestUser(userEmail);
-
-            //Assert
-            Assert.IsTrue(langPref == 2);  
+            finally
+            {
+                //Clean up
+                deleteTestUser(userEmail);
+            }
         }
 
         [TestMethod]
@@ -1826,33 +1885,38 @@ namespace AllyisApps.Services.Tests
             int userId = createTestUser(email);
             var service = new Service(connectionStr);
 
-            bool result = await service.SendPasswordResetMessage(email, callbackUrl);
-
-            string selectStmt = "SELECT [PasswordResetCode] FROM [Auth].[User] WHERE [UserId] = @userId";
-            SqlDataReader reader;
-            object pwResetCode = null;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
-                {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                bool result = await service.SendPasswordResetMessage(email, callbackUrl);
 
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                string selectStmt = "SELECT [PasswordResetCode] FROM [Auth].[User] WHERE [UserId] = @userId";
+                SqlDataReader reader;
+                object pwResetCode = null;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
+                {
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        pwResetCode = (Guid)reader["PasswordResetCode"];
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            pwResetCode = (Guid)reader["PasswordResetCode"];
+                        }
                     }
                 }
+
+                //Assert
+                Assert.IsTrue(result && pwResetCode != null);
             }
-
-            //Clean up
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result && pwResetCode != null);
+            finally
+            {
+                //Clean up
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1933,14 +1997,19 @@ namespace AllyisApps.Services.Tests
             var service = new Service(connectionStr);
             Guid code = Guid.NewGuid(); //a random new code
 
-            //Act
-            bool result = await service.ResetPassword(userId, code.ToString(), "NewPassword.123");
+            try
+            {
+                //Act
+                bool result = await service.ResetPassword(userId, code.ToString(), "NewPassword.123");
 
-            //Clean up
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsFalse(result);
+                //Assert
+                Assert.IsFalse(result);
+            }
+            finally
+            {
+                //Clean up
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -1992,38 +2061,43 @@ namespace AllyisApps.Services.Tests
                 }
             }
 
-            //Act
-            bool result = await service.ResetPassword(userId, code.ToString(), "NewPassword.123");
-
-            //get the new PasswordHash and PasswordResetCode to compare
-            string selectStmt2 = "SELECT [PasswordHash], [PasswordResetCode] FROM [Auth].[User] WHERE [Email] = @email";
-            SqlDataReader newReader;
-            string newPwHash = "";
-            string newPwResetCode = "";
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt2, connection))
+                //Act
+                bool result = await service.ResetPassword(userId, code.ToString(), "NewPassword.123");
+
+                //get the new PasswordHash and PasswordResetCode to compare
+                string selectStmt2 = "SELECT [PasswordHash], [PasswordResetCode] FROM [Auth].[User] WHERE [Email] = @email";
+                SqlDataReader newReader;
+                string newPwHash = "";
+                string newPwResetCode = "";
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@email", SqlDbType.VarChar).Value = email;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    newReader = cmd.ExecuteReader();
-                    while (newReader.Read())
+                    using (SqlCommand cmd = new SqlCommand(selectStmt2, connection))
                     {
-                        newPwHash = (string)newReader["PasswordHash"];
-                        newPwResetCode = newReader["PasswordResetCode"].ToString();
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@email", SqlDbType.VarChar).Value = email;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        newReader = cmd.ExecuteReader();
+                        while (newReader.Read())
+                        {
+                            newPwHash = (string)newReader["PasswordHash"];
+                            newPwResetCode = newReader["PasswordResetCode"].ToString();
+                        }
+                        connection.Close();
                     }
-                    connection.Close();
                 }
+
+                //Assert
+                Assert.IsTrue(result && oldPwHash != newPwHash && newPwResetCode == "");
             }
-
-            //Clean up
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result && oldPwHash != newPwHash && newPwResetCode == "");
+            finally
+            {
+                //Clean up
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -2068,14 +2142,19 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId, userEmail, userEmail, 0, 0, null, 1);
             var service = new Service(connectionStr, userContext);
 
-            //Act
-            bool result = service.ChangePassword("incorrectPw", "NewPassword.123");
+            try
+            {
+                //Act
+                bool result = service.ChangePassword("incorrectPw", "NewPassword.123");
 
-            //Clean up
-            deleteTestUser(userEmail);
-
-            //Assert
-            Assert.IsFalse(result);
+                //Assert
+                Assert.IsFalse(result);
+            }
+            finally
+            {
+                //Clean up
+                deleteTestUser(userEmail);
+            }
         }
 
         [TestMethod]
@@ -2088,36 +2167,41 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId, userEmail, userEmail, 0, 0, null, 1);
             var service = new Service(connectionStr, userContext);
 
-            //Act
-            bool result = service.ChangePassword("AllyisApps.123", "NewPassword.123");
-
-            //get the new PasswordHash to compare
-            string selectStmt = "SELECT [PasswordHash] FROM [Auth].[User] WHERE [Email] = @email";
-            SqlDataReader reader;
-            string newPwHash = "";
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                bool result = service.ChangePassword("AllyisApps.123", "NewPassword.123");
+
+                //get the new PasswordHash to compare
+                string selectStmt = "SELECT [PasswordHash] FROM [Auth].[User] WHERE [Email] = @email";
+                SqlDataReader reader;
+                string newPwHash = "";
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@email", SqlDbType.VarChar).Value = userEmail;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        newPwHash = (string)reader["PasswordHash"];
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@email", SqlDbType.VarChar).Value = userEmail;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            newPwHash = (string)reader["PasswordHash"];
+                        }
+                        connection.Close();
                     }
-                    connection.Close();
                 }
+
+                //Assert
+                Assert.IsTrue(result && Crypto.ValidatePassword("NewPassword.123", newPwHash));
             }
-
-            //Clean up
-            deleteTestUser(userEmail);
-
-            //Assert
-            Assert.IsTrue(result && Crypto.ValidatePassword("NewPassword.123", newPwHash));
+            finally
+            {
+                //Clean up
+                deleteTestUser(userEmail);
+            }
         }
 
         [TestMethod]
@@ -2300,14 +2384,19 @@ namespace AllyisApps.Services.Tests
 
             string code = Guid.NewGuid().ToString();
 
-            //Act
-            bool result = service.ConfirmUserEmail(userId, code);
+            try
+            {
+                //Act
+                bool result = service.ConfirmUserEmail(userId, code);
 
-            //Clean up
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsFalse(result);
+                //Assert
+                Assert.IsFalse(result);
+            }
+            finally
+            {
+                //Clean up
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -2320,14 +2409,18 @@ namespace AllyisApps.Services.Tests
 
             var service = new Service(connectionStr);
 
-            //Act
-            bool result = service.ConfirmUserEmail(userId, code.ToString());
+            try
+            {
+                //Act
+                bool result = service.ConfirmUserEmail(userId, code.ToString());
 
-            //Clean up
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsFalse(result);
+                //Assert
+                Assert.IsFalse(result);
+            }
+            finally
+            {
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -2357,14 +2450,19 @@ namespace AllyisApps.Services.Tests
                 }
             }
 
-            //Act
-            bool result = service.ConfirmUserEmail(userId, code.ToString());
+            try
+            {
+                //Act
+                bool result = service.ConfirmUserEmail(userId, code.ToString());
 
-            //Clean up
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result);
+                //Assert
+                Assert.IsTrue(result);
+            }
+            finally
+            {
+                //Clean up
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -2381,17 +2479,21 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId, userEmail, userEmail, 0, 0, null, 1);
             var service = new Service(connectionStr, userContext);
 
-            //Act
-            IEnumerable<Organization> orgList = service.GetOrganizationsByUserId();
+            try
+            {
+                //Act
+                IEnumerable<Organization> orgList = service.GetOrganizationsByUserId();
 
-            //Clean up
-            deleteOrgUser(userId, orgId);
-            deleteTestOrg(orgId);
-            deleteTestUser(userEmail);
-
-            //Assert
-            Assert.IsTrue(orgList.Count() == 1 && orgList.ElementAt(0).OrganizationId == orgId);
-
+                //Assert
+                Assert.IsTrue(orgList.Count() == 1 && orgList.ElementAt(0).OrganizationId == orgId);
+            }
+            finally
+            {
+                //Clean up
+                deleteOrgUser(userId, orgId);
+                deleteTestOrg(orgId);
+                deleteTestUser(userEmail);
+            }
         }
 
         [TestMethod]
@@ -2438,36 +2540,41 @@ namespace AllyisApps.Services.Tests
                 LanguagePreference = 1
             };
 
-            //Act
-            User initializedUser = Service.InitializeUser(user);
+            try
+            {
+                //Act
+                User initializedUser = Service.InitializeUser(user);
 
-            //Clean up
-            deleteTestUser(userEmail);
-
-            //Assert
-            Assert.IsTrue(initializedUser.AccessFailedCount == 0
-                && initializedUser.ActiveOrganizationId == 0
-                && initializedUser.Address == null
-                && initializedUser.City == null
-                && initializedUser.Country == null
-                && initializedUser.DateOfBirth == null
-                && initializedUser.Email == userEmail
-                && initializedUser.EmailConfirmed == false
-                && initializedUser.FirstName == "Test"
-                && initializedUser.LastName == "User"
-                && initializedUser.LastSubscriptionId == 0
-                && initializedUser.LockoutEnabled == false
-                && initializedUser.LockoutEndDateUtc == null
-                && initializedUser.PasswordHash == pwHash
-                && initializedUser.PasswordResetCode == null
-                && initializedUser.PhoneExtension == null
-                && initializedUser.PhoneNumber == null
-                && initializedUser.PhoneNumberConfirmed == false
-                && initializedUser.State == null
-                && initializedUser.TwoFactorEnabled == false
-                && initializedUser.UserId == userId
-                && initializedUser.UserName == userEmail
-                && initializedUser.PostalCode == null);
+                //Assert
+                Assert.IsTrue(initializedUser.AccessFailedCount == 0
+                    && initializedUser.ActiveOrganizationId == 0
+                    && initializedUser.Address == null
+                    && initializedUser.City == null
+                    && initializedUser.Country == null
+                    && initializedUser.DateOfBirth == null
+                    && initializedUser.Email == userEmail
+                    && initializedUser.EmailConfirmed == false
+                    && initializedUser.FirstName == "Test"
+                    && initializedUser.LastName == "User"
+                    && initializedUser.LastSubscriptionId == 0
+                    && initializedUser.LockoutEnabled == false
+                    && initializedUser.LockoutEndDateUtc == null
+                    && initializedUser.PasswordHash == pwHash
+                    && initializedUser.PasswordResetCode == null
+                    && initializedUser.PhoneExtension == null
+                    && initializedUser.PhoneNumber == null
+                    && initializedUser.PhoneNumberConfirmed == false
+                    && initializedUser.State == null
+                    && initializedUser.TwoFactorEnabled == false
+                    && initializedUser.UserId == userId
+                    && initializedUser.UserName == userEmail
+                    && initializedUser.PostalCode == null);
+            }
+            finally
+            {
+                //Clean up
+                deleteTestUser(userEmail);
+            }
         }
 
         [TestMethod]
@@ -2513,37 +2620,42 @@ namespace AllyisApps.Services.Tests
                 PasswordResetCode = null,
             };
 
-            //Act
-            UserDBEntity DbEntity = Service.GetDBEntityFromUser(user);
+            try
+            {
+                //Act
+                UserDBEntity DbEntity = Service.GetDBEntityFromUser(user);
 
-            //Clean up
-            deleteTestUser(userEmail);
-
-            //Assert
-            Assert.IsTrue(DbEntity.AccessFailedCount == 0
-                && DbEntity.ActiveOrganizationId == 0
-                && DbEntity.Address == null
-                && DbEntity.City == null
-                && DbEntity.Country == null
-                && DbEntity.DateOfBirth == null
-                && DbEntity.Email == userEmail
-                && DbEntity.EmailConfirmed == false
-                && DbEntity.FirstName == "Test"
-                && DbEntity.LastName == "User"
-                && DbEntity.LastSubscriptionId == 0
-                && DbEntity.LockoutEnabled == false
-                && DbEntity.LockoutEndDateUtc == null
-                && DbEntity.PasswordHash == pwHash
-                && DbEntity.PasswordResetCode == null
-                && DbEntity.PhoneExtension == null
-                && DbEntity.PhoneNumber == null
-                && DbEntity.PhoneNumberConfirmed == false
-                && DbEntity.State == null
-                && DbEntity.TwoFactorEnabled == false
-                && DbEntity.UserId == userId
-                && DbEntity.UserName == userEmail
-                && DbEntity.PostalCode == null
-                && DbEntity.LanguagePreference == 1);
+                //Assert
+                Assert.IsTrue(DbEntity.AccessFailedCount == 0
+                    && DbEntity.ActiveOrganizationId == 0
+                    && DbEntity.Address == null
+                    && DbEntity.City == null
+                    && DbEntity.Country == null
+                    && DbEntity.DateOfBirth == null
+                    && DbEntity.Email == userEmail
+                    && DbEntity.EmailConfirmed == false
+                    && DbEntity.FirstName == "Test"
+                    && DbEntity.LastName == "User"
+                    && DbEntity.LastSubscriptionId == 0
+                    && DbEntity.LockoutEnabled == false
+                    && DbEntity.LockoutEndDateUtc == null
+                    && DbEntity.PasswordHash == pwHash
+                    && DbEntity.PasswordResetCode == null
+                    && DbEntity.PhoneExtension == null
+                    && DbEntity.PhoneNumber == null
+                    && DbEntity.PhoneNumberConfirmed == false
+                    && DbEntity.State == null
+                    && DbEntity.TwoFactorEnabled == false
+                    && DbEntity.UserId == userId
+                    && DbEntity.UserName == userEmail
+                    && DbEntity.PostalCode == null
+                    && DbEntity.LanguagePreference == 1);
+            }
+            finally
+            {
+                //Clean up
+                deleteTestUser(userEmail);
+            }
         }
 
         [TestMethod]
@@ -3245,18 +3357,23 @@ namespace AllyisApps.Services.Tests
             string key = "DefaultConnection";
             DBHelper.Instance.Init(key);
 
-            //Act
-            ImportActionResult result = service.Import(data);
+            try
+            {
+                //Act
+                ImportActionResult result = service.Import(data);
 
-            //Clean up
-            deleteSubUser(userId, subId);
-            deleteSubscription(subId);
-            deleteTestUser(user);
-            deleteCustomersByOrgId(orgId);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(result.CustomerFailures.Count() == 0 && result.CustomersImported == 2);
+                //Assert
+                Assert.IsTrue(result.CustomerFailures.Count() == 0 && result.CustomersImported == 2);
+            }
+            finally
+            {
+                //Clean up
+                deleteSubUser(userId, subId);
+                deleteSubscription(subId);
+                deleteTestUser(user);
+                deleteCustomersByOrgId(orgId);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -3284,18 +3401,23 @@ namespace AllyisApps.Services.Tests
             string key = "DefaultConnection";
             DBHelper.Instance.Init(key);
 
-            //Act
-            ImportActionResult result = service.Import(data);
+            try
+            {
+                //Act
+                ImportActionResult result = service.Import(data);
 
-            //Clean up
-            deleteSubUser(userId, subId);
-            deleteSubscription(subId);
-            deleteTestUser(user);
-            deleteCustomersByOrgId(orgId);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(result.CustomerFailures.Count() == 0 && result.CustomersImported == 1);
+                //Assert
+                Assert.IsTrue(result.CustomerFailures.Count() == 0 && result.CustomersImported == 1);
+            }
+            finally
+            {
+                //Clean up
+                deleteSubUser(userId, subId);
+                deleteSubscription(subId);
+                deleteTestUser(user);
+                deleteCustomersByOrgId(orgId);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -3322,18 +3444,23 @@ namespace AllyisApps.Services.Tests
             string key = "DefaultConnection";
             DBHelper.Instance.Init(key);
 
-            //Act
-            ImportActionResult result = service.Import(data);
+            try
+            {
+                //Act
+                ImportActionResult result = service.Import(data);
 
-            //Clean up
-            deleteCustomersByOrgId(orgId);
-            deleteSubUser(userId, subId);
-            deleteSubscription(subId);
-            deleteTestUser(user);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(result.CustomerFailures.Count() == 2 && result.CustomersImported == 0);
+                //Assert
+                Assert.IsTrue(result.CustomerFailures.Count() == 2 && result.CustomersImported == 0);
+            }
+            finally
+            {
+                //Clean up
+                deleteCustomersByOrgId(orgId);
+                deleteSubUser(userId, subId);
+                deleteSubscription(subId);
+                deleteTestUser(user);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -3362,20 +3489,25 @@ namespace AllyisApps.Services.Tests
             string key = "DefaultConnection";
             DBHelper.Instance.Init(key);
 
-            //Act
-            ImportActionResult result = service.Import(data);
+            try
+            {
+                //Act
+                ImportActionResult result = service.Import(data);
 
-            //Clean up
-            deleteProjectByCustId(custId1);
-            deleteProjectByCustId(custId2);
-            deleteCustomersByOrgId(orgId);
-            deleteSubUser(userId, subId);
-            deleteSubscription(subId);
-            deleteTestUser(user);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(result.ProjectFailures.Count() == 0 && result.ProjectsImported == 4);
+                //Assert
+                Assert.IsTrue(result.ProjectFailures.Count() == 0 && result.ProjectsImported == 4);
+            }
+            finally
+            {
+                //Clean up
+                deleteProjectByCustId(custId1);
+                deleteProjectByCustId(custId2);
+                deleteCustomersByOrgId(orgId);
+                deleteSubUser(userId, subId);
+                deleteSubscription(subId);
+                deleteTestUser(user);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -3405,20 +3537,25 @@ namespace AllyisApps.Services.Tests
             string key = "DefaultConnection";
             DBHelper.Instance.Init(key);
 
-            //Act
-            ImportActionResult result = service.Import(data);
+            try
+            {
+                //Act
+                ImportActionResult result = service.Import(data);
 
-            //Clean up
-            deleteProjectByCustId(custId1);
-            deleteProjectByCustId(custId2);
-            deleteCustomersByOrgId(orgId);
-            deleteSubUser(userId, subId);
-            deleteSubscription(subId);
-            deleteTestUser(user);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(result.ProjectFailures.Count() == 0 && result.ProjectsImported == 3);
+                //Assert
+                Assert.IsTrue(result.ProjectFailures.Count() == 0 && result.ProjectsImported == 3);
+            }
+            finally
+            {
+                //Clean up
+                deleteProjectByCustId(custId1);
+                deleteProjectByCustId(custId2);
+                deleteCustomersByOrgId(orgId);
+                deleteSubUser(userId, subId);
+                deleteSubscription(subId);
+                deleteTestUser(user);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -3446,19 +3583,24 @@ namespace AllyisApps.Services.Tests
             string key = "DefaultConnection";
             DBHelper.Instance.Init(key);
 
-            //Act
-            ImportActionResult result = service.Import(data);
+            try
+            {
+                //Act
+                ImportActionResult result = service.Import(data);
 
-            //Clean up
-            deleteProjectByCustId(custId1);
-            deleteCustomersByOrgId(orgId);
-            deleteSubUser(userId, subId);
-            deleteSubscription(subId);
-            deleteTestUser(user);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(result.ProjectFailures.Count() == 2 && result.ProjectsImported == 0);
+                //Assert
+                Assert.IsTrue(result.ProjectFailures.Count() == 2 && result.ProjectsImported == 0);
+            }
+            finally
+            {
+                //Clean up
+                deleteProjectByCustId(custId1);
+                deleteCustomersByOrgId(orgId);
+                deleteSubUser(userId, subId);
+                deleteSubscription(subId);
+                deleteTestUser(user);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -3486,19 +3628,24 @@ namespace AllyisApps.Services.Tests
             string key = "DefaultConnection";
             DBHelper.Instance.Init(key);
 
-            //Act
-            ImportActionResult result = service.Import(data);
+            try
+            {
+                //Act
+                ImportActionResult result = service.Import(data);
 
-            //Clean up
-            deleteProjectByCustId(custId1);
-            deleteCustomersByOrgId(orgId);
-            deleteSubUser(userId, subId);
-            deleteSubscription(subId);
-            deleteTestUser(user);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(result.ProjectFailures.Count() == 1 && result.ProjectsImported == 1);
+                //Assert
+                Assert.IsTrue(result.ProjectFailures.Count() == 1 && result.ProjectsImported == 1);
+            }
+            finally
+            {
+                //Clean up
+                deleteProjectByCustId(custId1);
+                deleteCustomersByOrgId(orgId);
+                deleteSubUser(userId, subId);
+                deleteSubscription(subId);
+                deleteTestUser(user);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -3512,7 +3659,7 @@ namespace AllyisApps.Services.Tests
             int orgId = createTestOrg(orgName);
             int userId = createTestUser(user);
             createOrgUser(userId, orgId, 2, "orgOwner");
-            
+
             UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, null, null);
             List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
             UserContext userContext = new UserContext(userId, user, user, orgId, 0, orgInfoList, 1);
@@ -3521,20 +3668,25 @@ namespace AllyisApps.Services.Tests
             string key = "DefaultConnection";
             DBHelper.Instance.Init(key);
 
-            //Act
-            ImportActionResult result = service.Import(data);
+            try
+            {
+                //Act
+                ImportActionResult result = service.Import(data);
 
-            //Clean up
-            deleteOrgUserByOrgId(orgId);
-            deleteTestUser(user);
-            deleteTestUser("asample@import.com");
-            deleteTestUser("bsmith@import.com");
-            deleteTestUser("fexample@import.com");
-            deleteTestOrg(orgId);
-
-            //Assert
-            //3 users are imported and 3 OrganizationUsers are created
-            Assert.IsTrue(result.UserFailures.Count() == 0 && result.UsersImported == 3 && result.OrgUserFailures.Count() == 0 && result.UsersAddedToOrganization == 3);
+                //Assert
+                //3 users are imported and 3 OrganizationUsers are created
+                Assert.IsTrue(result.UserFailures.Count() == 0 && result.UsersImported == 3 && result.OrgUserFailures.Count() == 0 && result.UsersAddedToOrganization == 3);
+            }
+            finally
+            {
+                //Clean up
+                deleteOrgUserByOrgId(orgId);
+                deleteTestUser(user);
+                deleteTestUser("asample@import.com");
+                deleteTestUser("bsmith@import.com");
+                deleteTestUser("fexample@import.com");
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -3557,19 +3709,24 @@ namespace AllyisApps.Services.Tests
             string key = "DefaultConnection";
             DBHelper.Instance.Init(key);
 
-            //Act
-            ImportActionResult result = service.Import(data);
+            try
+            {
+                //Act
+                ImportActionResult result = service.Import(data);
 
-            //Clean up
-            deleteOrgUserByOrgId(orgId);
-            deleteTestUser(user);
-            deleteTestUser("bsmith@import.com");
-            deleteTestUser("fexample@import.com");
-            deleteTestOrg(orgId);
-
-            //Assert
-            //only 2 users are imported and 2 OrganizationUsers are created
-            Assert.IsTrue(result.UserFailures.Count() == 0 && result.UsersImported == 2 && result.OrgUserFailures.Count() == 0 && result.UsersAddedToOrganization == 2);
+                //Assert
+                //only 2 users are imported and 2 OrganizationUsers are created
+                Assert.IsTrue(result.UserFailures.Count() == 0 && result.UsersImported == 2 && result.OrgUserFailures.Count() == 0 && result.UsersAddedToOrganization == 2);
+            }
+            finally
+            {
+                //Clean up
+                deleteOrgUserByOrgId(orgId);
+                deleteTestUser(user);
+                deleteTestUser("bsmith@import.com");
+                deleteTestUser("fexample@import.com");
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -3593,20 +3750,25 @@ namespace AllyisApps.Services.Tests
             string key = "DefaultConnection";
             DBHelper.Instance.Init(key);
 
-            //Act
-            ImportActionResult result = service.Import(data);
+            try
+            {
+                //Act
+                ImportActionResult result = service.Import(data);
 
-            //Clean up
-            deleteOrgUserByOrgId(orgId);
-            deleteTestUser(user);
-            deleteTestUser("asample@import.com");
-            deleteTestUser("bsmith@import.com");
-            deleteTestUser("fexample@import.com");
-            deleteTestOrg(orgId);
-
-            //Assert
-            //only 2 users are imported and 2 OrganizationUsers are created
-            Assert.IsTrue(result.UserFailures.Count() == 3 && result.UsersImported == 0 && result.OrgUserFailures.Count() == 0 && result.UsersAddedToOrganization == 0);
+                //Assert
+                //only 2 users are imported and 2 OrganizationUsers are created
+                Assert.IsTrue(result.UserFailures.Count() == 3 && result.UsersImported == 0 && result.OrgUserFailures.Count() == 0 && result.UsersAddedToOrganization == 0);
+            }
+            finally
+            {
+                //Clean up
+                deleteOrgUserByOrgId(orgId);
+                deleteTestUser(user);
+                deleteTestUser("asample@import.com");
+                deleteTestUser("bsmith@import.com");
+                deleteTestUser("fexample@import.com");
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -3639,48 +3801,53 @@ namespace AllyisApps.Services.Tests
             string key = "DefaultConnection";
             DBHelper.Instance.Init(key);
 
-            //Act
-            ImportActionResult result = service.Import(data);
-
-            //since no ProjectUser is in the database yet, 2 users should be added to the ProjectUser table
-            string selectStmt = "SELECT [UserId] FROM [Crm].[ProjectUser] WHERE [ProjectId] = @projId";
-            SqlDataReader reader;
-            bool projUsersAdded = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                ImportActionResult result = service.Import(data);
+
+                //since no ProjectUser is in the database yet, 2 users should be added to the ProjectUser table
+                string selectStmt = "SELECT [UserId] FROM [Crm].[ProjectUser] WHERE [ProjectId] = @projId";
+                SqlDataReader reader;
+                bool projUsersAdded = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@projId", SqlDbType.Int).Value = projId;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    int rowCount = 0;
-                    while (reader.Read())
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        rowCount++;
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@projId", SqlDbType.Int).Value = projId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        int rowCount = 0;
+                        while (reader.Read())
+                        {
+                            rowCount++;
+                        }
+                        if (rowCount == 2) projUsersAdded = true;
+                        reader.Close();
+                        connection.Close();
                     }
-                    if (rowCount == 2) projUsersAdded = true;
-                    reader.Close();
-                    connection.Close();
                 }
+
+                //Assert
+                Assert.IsTrue(result.TimeEntriesImported == 10 && result.TimeEntryFailures.Count() == 0 && projUsersAdded && result.UsersAddedToSubscription == 2);
             }
-
-            //Clean up
-            deleteTimeEntriesByProjectId(projId);
-            deleteProjectUserByProjectId(projId);
-            deleteProject(projId);
-            deleteCustomer(custId);
-            deleteSubUserBySubId(subId);
-            deleteSubscription(subId);
-            deleteOrgUserByOrgId(orgId);
-            deleteTestUser(user1);
-            deleteTestUser(user2);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(result.TimeEntriesImported == 10 && result.TimeEntryFailures.Count() == 0 && projUsersAdded && result.UsersAddedToSubscription == 2);
+            finally
+            {
+                //Clean up
+                deleteTimeEntriesByProjectId(projId);
+                deleteProjectUserByProjectId(projId);
+                deleteProject(projId);
+                deleteCustomer(custId);
+                deleteSubUserBySubId(subId);
+                deleteSubscription(subId);
+                deleteOrgUserByOrgId(orgId);
+                deleteTestUser(user1);
+                deleteTestUser(user2);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -3708,21 +3875,26 @@ namespace AllyisApps.Services.Tests
             string key = "DefaultConnection";
             DBHelper.Instance.Init(key);
 
-            //Act
-            ImportActionResult result = service.Import(data);
+            try
+            {
+                //Act
+                ImportActionResult result = service.Import(data);
 
-            //Clean up
-            deleteTimeEntriesByProjectId(projId);
-            deleteProjectUserByProjectId(projId);
-            deleteProject(projId);
-            deleteCustomer(custId);
-            deleteOrgUserByOrgId(orgId);
-            deleteTestUser(user1);
-            deleteTestUser(user2);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(result.TimeEntriesImported == 0 && result.TimeEntryFailures.Count() == 1);
+                //Assert
+                Assert.IsTrue(result.TimeEntriesImported == 0 && result.TimeEntryFailures.Count() == 1);
+            }
+            finally
+            {
+                //Clean up
+                deleteTimeEntriesByProjectId(projId);
+                deleteProjectUserByProjectId(projId);
+                deleteProject(projId);
+                deleteCustomer(custId);
+                deleteOrgUserByOrgId(orgId);
+                deleteTestUser(user1);
+                deleteTestUser(user2);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -3748,23 +3920,28 @@ namespace AllyisApps.Services.Tests
             string key = "DefaultConnection";
             DBHelper.Instance.Init(key);
 
-            //Act
-            ImportActionResult result = service.Import(data);
+            try
+            {
+                //Act
+                ImportActionResult result = service.Import(data);
 
-            //Clean up
-            deleteTimeEntriesByProjectId(projId);
-            deleteProjectUserByProjectId(projId);
-            deleteProject(projId);
-            deleteCustomer(custId);
-            deleteSubUserBySubId(subId);
-            deleteSubscription(subId);
-            deleteOrgUserByOrgId(orgId);
-            deleteTestUser(user1);
-            deletePayClass(orgId);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(result.TimeEntriesImported == 1 && result.TimeEntryFailures.Count() == 0 && result.UsersAddedToSubscription == 1);
+                //Assert
+                Assert.IsTrue(result.TimeEntriesImported == 1 && result.TimeEntryFailures.Count() == 0 && result.UsersAddedToSubscription == 1);
+            }
+            finally
+            {
+                //Clean up
+                deleteTimeEntriesByProjectId(projId);
+                deleteProjectUserByProjectId(projId);
+                deleteProject(projId);
+                deleteCustomer(custId);
+                deleteSubUserBySubId(subId);
+                deleteSubscription(subId);
+                deleteOrgUserByOrgId(orgId);
+                deleteTestUser(user1);
+                deletePayClass(orgId);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -3791,23 +3968,28 @@ namespace AllyisApps.Services.Tests
             string key = "DefaultConnection";
             DBHelper.Instance.Init(key);
 
-            //Act
-            ImportActionResult result = service.Import(data);
+            try
+            {
+                //Act
+                ImportActionResult result = service.Import(data);
 
-            //Clean up
-            deleteTimeEntriesByProjectId(projId);
-            deleteProjectUserByProjectId(projId);
-            deleteProject(projId);
-            deleteCustomer(custId);
-            deleteSubUserBySubId(subId);
-            deleteSubscription(subId);
-            deleteOrgUserByOrgId(orgId);
-            deleteTestUser(user1);
-            deletePayClass(orgId);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(result.TimeEntriesImported == 2 && result.TimeEntryFailures.Count() == 1 && result.UsersAddedToSubscription == 1);
+                //Assert
+                Assert.IsTrue(result.TimeEntriesImported == 2 && result.TimeEntryFailures.Count() == 1 && result.UsersAddedToSubscription == 1);
+            }
+            finally
+            {
+                //Clean up
+                deleteTimeEntriesByProjectId(projId);
+                deleteProjectUserByProjectId(projId);
+                deleteProject(projId);
+                deleteCustomer(custId);
+                deleteSubUserBySubId(subId);
+                deleteSubscription(subId);
+                deleteOrgUserByOrgId(orgId);
+                deleteTestUser(user1);
+                deletePayClass(orgId);
+                deleteTestOrg(orgId);
+            }
         }
         #endregion
 
@@ -3831,14 +4013,19 @@ namespace AllyisApps.Services.Tests
             string key = "DefaultConnection";            
             DBHelper.Instance.Init(key);
 
-            //Act
-            string subdomain = Service.GetSubdomainById(orgId);
+            try
+            {
+                //Act
+                string subdomain = Service.GetSubdomainById(orgId);
 
-            //Clean up
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(subdomain == "unittestorg");
+                //Assert
+                Assert.IsTrue(subdomain == "unittestorg");
+            }
+            finally
+            {
+                //Clean up
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -3863,14 +4050,19 @@ namespace AllyisApps.Services.Tests
             string orgName = "UnitTestOrg";
             int orgId = createTestOrg(orgName);
 
-            //Act
-            int returnedId = Service.GetIdBySubdomain("unittestorg");
+            try
+            {
+                //Act
+                int returnedId = Service.GetIdBySubdomain("unittestorg");
 
-            //Clean up
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(orgId == returnedId);
+                //Assert
+                Assert.IsTrue(orgId == returnedId);
+            }
+            finally
+            {
+                //Clean up
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -3904,16 +4096,20 @@ namespace AllyisApps.Services.Tests
             newOrg.Subdomain = orgName.ToLower();
 
             Service service = new Service(connectionStr);
+            try
+            {
+                //Act
+                int returnedOrgId = service.CreateOrganization(newOrg, ownerId, "111");
 
-            //Act
-            int returnedOrgId = service.CreateOrganization(newOrg, ownerId, "111");
-
-            //Clean up
-            deleteTestOrg(orgId);
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(returnedOrgId == -1);
+                //Assert
+                Assert.IsTrue(returnedOrgId == -1);
+            }
+            finally
+            {
+                //Clean up
+                deleteTestOrg(orgId);
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -3929,72 +4125,77 @@ namespace AllyisApps.Services.Tests
             newOrg.Subdomain = orgName.ToLower();
 
             Service service = new Service(connectionStr);
-
-            //Act
-            int returnedOrgId = service.CreateOrganization(newOrg, ownerId, "111");
-
-            bool returnedCorrectOrgId = false;
-            bool orgUserCreated = false;
-            bool usersChosenOrgUpdated = false;
-
-            string selectStmt1 = "SELECT [OrganizationId] FROM [Auth].[Organization] WHERE [Subdomain] = @subdomain";
-            SqlDataReader reader1;
-            string selectStmt2 = "SELECT [EmployeeId], [OrgRoleId] FROM [Auth].[OrganizationUser] WHERE [UserId] = @userId AND [OrganizationId] = @orgId";
-            SqlDataReader reader2;
-            string selectStmt3 = "SELECT [ActiveOrganizationId] FROM [Auth].[User] WHERE [UserId] = @userId";
-            SqlDataReader reader3;
-
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            int returnedOrgId = -1;
+            try
             {
-                connection.Open();
-                using (SqlCommand cmd1 = new SqlCommand(selectStmt1, connection))
-                {
-                    // set up the command's parameters
-                    cmd1.Parameters.Add("@subdomain", SqlDbType.VarChar, 100).Value = orgName.ToLower();
+                //Act
+                returnedOrgId = service.CreateOrganization(newOrg, ownerId, "111");
 
-                    reader1 = cmd1.ExecuteReader();
-                    while (reader1.Read())
-                    {
-                        returnedCorrectOrgId = ((int)reader1["OrganizationId"] == returnedOrgId);
-                    }
-                    reader1.Close();
-                }
-                using (SqlCommand cmd2 = new SqlCommand(selectStmt2, connection))
-                {
-                    // set up the command's parameters
-                    cmd2.Parameters.Add("@userId", SqlDbType.Int).Value = ownerId;
-                    cmd2.Parameters.Add("@orgId", SqlDbType.Int).Value = returnedOrgId;
+                bool returnedCorrectOrgId = false;
+                bool orgUserCreated = false;
+                bool usersChosenOrgUpdated = false;
 
-                    // execute cmd
-                    reader2 = cmd2.ExecuteReader();
-                    while (reader2.Read())
-                    {
-                        orgUserCreated = ((string)reader2["EmployeeId"] == "111" && (int)reader2["OrgRoleId"] == 2);
-                    }
-                    reader2.Close();
-                }
-                using (SqlCommand cmd3 = new SqlCommand(selectStmt3, connection))
-                {
-                    // set up the command's parameters
-                    cmd3.Parameters.Add("@userId", SqlDbType.Int).Value = ownerId;
+                string selectStmt1 = "SELECT [OrganizationId] FROM [Auth].[Organization] WHERE [Subdomain] = @subdomain";
+                SqlDataReader reader1;
+                string selectStmt2 = "SELECT [EmployeeId], [OrgRoleId] FROM [Auth].[OrganizationUser] WHERE [UserId] = @userId AND [OrganizationId] = @orgId";
+                SqlDataReader reader2;
+                string selectStmt3 = "SELECT [ActiveOrganizationId] FROM [Auth].[User] WHERE [UserId] = @userId";
+                SqlDataReader reader3;
 
-                    reader3 = cmd3.ExecuteReader();
-                    while (reader3.Read())
+                using (SqlConnection connection = new SqlConnection(connectionStr))
+                {
+                    connection.Open();
+                    using (SqlCommand cmd1 = new SqlCommand(selectStmt1, connection))
                     {
-                        usersChosenOrgUpdated = ((int)reader3["ActiveOrganizationId"] == returnedOrgId);
+                        // set up the command's parameters
+                        cmd1.Parameters.Add("@subdomain", SqlDbType.VarChar, 100).Value = orgName.ToLower();
+
+                        reader1 = cmd1.ExecuteReader();
+                        while (reader1.Read())
+                        {
+                            returnedCorrectOrgId = ((int)reader1["OrganizationId"] == returnedOrgId);
+                        }
+                        reader1.Close();
                     }
-                    reader3.Close();
+                    using (SqlCommand cmd2 = new SqlCommand(selectStmt2, connection))
+                    {
+                        // set up the command's parameters
+                        cmd2.Parameters.Add("@userId", SqlDbType.Int).Value = ownerId;
+                        cmd2.Parameters.Add("@orgId", SqlDbType.Int).Value = returnedOrgId;
+
+                        // execute cmd
+                        reader2 = cmd2.ExecuteReader();
+                        while (reader2.Read())
+                        {
+                            orgUserCreated = ((string)reader2["EmployeeId"] == "111" && (int)reader2["OrgRoleId"] == 2);
+                        }
+                        reader2.Close();
+                    }
+                    using (SqlCommand cmd3 = new SqlCommand(selectStmt3, connection))
+                    {
+                        // set up the command's parameters
+                        cmd3.Parameters.Add("@userId", SqlDbType.Int).Value = ownerId;
+
+                        reader3 = cmd3.ExecuteReader();
+                        while (reader3.Read())
+                        {
+                            usersChosenOrgUpdated = ((int)reader3["ActiveOrganizationId"] == returnedOrgId);
+                        }
+                        reader3.Close();
+                    }
+                    connection.Close();
                 }
-                connection.Close();
+
+                //Assert
+                Assert.IsTrue(returnedCorrectOrgId && orgUserCreated && usersChosenOrgUpdated);
             }
-
-            //Clean up
-            deleteOrgUser(ownerId, returnedOrgId);
-            deleteTestUser(email);
-            deleteTestOrg(returnedOrgId);
-
-            //Assert
-            Assert.IsTrue(returnedCorrectOrgId && orgUserCreated && usersChosenOrgUpdated);
+            finally
+            {
+                //Clean up
+                deleteOrgUser(ownerId, returnedOrgId);
+                deleteTestUser(email);
+                deleteTestOrg(returnedOrgId);
+            }
         }
 
         [TestMethod]
@@ -4014,24 +4215,29 @@ namespace AllyisApps.Services.Tests
 
             Service service = new Service(connectionStr);
 
-            //Act
-            Organization org = service.GetOrganization(orgId);
+            try
+            {
+                //Act
+                Organization org = service.GetOrganization(orgId);
 
-            //Clean up
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(org.Address == null
-                && org.City == null
-                && org.Country == null
-                && org.FaxNumber == null
-                && org.Name == orgName
-                && org.OrganizationId == orgId
-                && org.PhoneNumber == null
-                && org.SiteUrl == null
-                && org.State == null
-                && org.Subdomain == orgName.ToLower()
-                && org.PostalCode == null);
+                //Assert
+                Assert.IsTrue(org.Address == null
+                    && org.City == null
+                    && org.Country == null
+                    && org.FaxNumber == null
+                    && org.Name == orgName
+                    && org.OrganizationId == orgId
+                    && org.PhoneNumber == null
+                    && org.SiteUrl == null
+                    && org.State == null
+                    && org.Subdomain == orgName.ToLower()
+                    && org.PostalCode == null);
+            }
+            finally
+            {
+                //Clean up
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -4069,50 +4275,55 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId1, userEmail1, userEmail1, orgId, 0, null, 1);
             var service = new Service(connectionStr, userContext);
 
-            //Act
-            Tuple<Organization, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string, List<Product>> tuple = service.GetOrganizationManagementInfo();
+            try
+            {
+                //Act
+                Tuple<Organization, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string, List<Product>> tuple = service.GetOrganizationManagementInfo();
 
-            //Clean up
-            deleteUserInvitation(userEmail2);
-            deleteOrgUser(userId1, orgId);
-            deleteTestUser(userEmail1);
-            deleteTestUser(userEmail2);
-            deleteTestOrg(orgId);
+                //Assert
+                Organization org = tuple.Item1;
+                List<OrganizationUserInfo> orgUserInfoList = tuple.Item2;
+                List<SubscriptionDisplayInfo> subInfoList = tuple.Item3;
+                List<InvitationInfo> inviInfoList = tuple.Item4;
+                string str = tuple.Item5;
+                List<Product> productList = tuple.Item6;
 
-            //Assert
-            Organization org = tuple.Item1;
-            List<OrganizationUserInfo> orgUserInfoList = tuple.Item2;
-            List<SubscriptionDisplayInfo> subInfoList = tuple.Item3;
-            List<InvitationInfo> inviInfoList = tuple.Item4;
-            string str = tuple.Item5;
-            List<Product> productList = tuple.Item6;
+                bool correctOrg = (org.OrganizationId == orgId
+                                && org.Name == orgName
+                                && org.Subdomain == orgName.ToLower());
+                bool correctOrgUserInfo = (orgUserInfoList.Count == 1
+                                        && orgUserInfoList.ElementAt(0).UserId == userId1
+                                        && orgUserInfoList.ElementAt(0).OrgRoleId == 1
+                                        && orgUserInfoList.ElementAt(0).OrganizationId == orgId
+                                        && orgUserInfoList.ElementAt(0).FirstName == "Test"
+                                        && orgUserInfoList.ElementAt(0).LastName == "User"
+                                        && orgUserInfoList.ElementAt(0).EmployeeId == "111"
+                                        && orgUserInfoList.ElementAt(0).Email == userEmail1);
+                bool correctSubInfo = (subInfoList.Count == 0);
+                bool correctInviInfo = (inviInfoList.Count == 1
+                                    && inviInfoList.ElementAt(0).Email == userEmail2
+                                    && inviInfoList.ElementAt(0).EmployeeId == "111"
+                                    && inviInfoList.ElementAt(0).FirstName == "Test"
+                                    && inviInfoList.ElementAt(0).LastName == "User"
+                                    && inviInfoList.ElementAt(0).InvitationId == inviId
+                                    && inviInfoList.ElementAt(0).OrganizationId == orgId
+                                    && inviInfoList.ElementAt(0).OrgRole == 1
+                                    && inviInfoList.ElementAt(0).OrgRoleName == "Member");
+                bool correctProduct = (productList.Count == 1
+                                    && productList.ElementAt(0).ProductId == 1
+                                    && productList.ElementAt(0).ProductName == "TimeTracker");
 
-            bool correctOrg = (org.OrganizationId == orgId 
-                            && org.Name == orgName 
-                            && org.Subdomain == orgName.ToLower());
-            bool correctOrgUserInfo = (orgUserInfoList.Count == 1
-                                    && orgUserInfoList.ElementAt(0).UserId == userId1
-                                    && orgUserInfoList.ElementAt(0).OrgRoleId == 1
-                                    && orgUserInfoList.ElementAt(0).OrganizationId == orgId
-                                    && orgUserInfoList.ElementAt(0).FirstName == "Test"
-                                    && orgUserInfoList.ElementAt(0).LastName == "User"
-                                    && orgUserInfoList.ElementAt(0).EmployeeId == "111"
-                                    && orgUserInfoList.ElementAt(0).Email == userEmail1);
-            bool correctSubInfo = (subInfoList.Count == 0);
-            bool correctInviInfo = (inviInfoList.Count == 1
-                                && inviInfoList.ElementAt(0).Email == userEmail2
-                                && inviInfoList.ElementAt(0).EmployeeId == "111"
-                                && inviInfoList.ElementAt(0).FirstName == "Test"
-                                && inviInfoList.ElementAt(0).LastName == "User"
-                                && inviInfoList.ElementAt(0).InvitationId == inviId
-                                && inviInfoList.ElementAt(0).OrganizationId == orgId
-                                && inviInfoList.ElementAt(0).OrgRole == 1
-                                && inviInfoList.ElementAt(0).OrgRoleName == "Member");
-            bool correctProduct = (productList.Count == 1
-                                && productList.ElementAt(0).ProductId == 1
-                                && productList.ElementAt(0).ProductName == "TimeTracker");
-
-            Assert.IsTrue(correctOrg && correctOrgUserInfo && correctSubInfo && correctInviInfo && correctProduct);
+                Assert.IsTrue(correctOrg && correctOrgUserInfo && correctSubInfo && correctInviInfo && correctProduct);
+            }
+            finally
+            {
+                //Clean up
+                deleteUserInvitation(userEmail2);
+                deleteOrgUser(userId1, orgId);
+                deleteTestUser(userEmail1);
+                deleteTestUser(userEmail2);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -4130,26 +4341,31 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId, userEmail, userEmail, orgId, 0, null, 1);
             var service = new Service(connectionStr, userContext);
 
-            //Act
-            Tuple<Organization, List<string>, string> tuple = service.GetOrgWithCountriesAndEmployeeId();
+            try
+            {
+                //Act
+                Tuple<Organization, List<string>, string> tuple = service.GetOrgWithCountriesAndEmployeeId();
 
-            //Clean up
-            deleteOrgUser(userId, orgId);
-            deleteTestUser(userEmail);
-            deleteTestOrg(orgId);
+                //Assert
+                Organization org = tuple.Item1;
+                List<string> countries = tuple.Item2;
+                string employeeId = tuple.Item3;
 
-            //Assert
-            Organization org = tuple.Item1;
-            List<string> countries = tuple.Item2;
-            string employeeId = tuple.Item3;
+                bool correctOrg = (org.OrganizationId == orgId
+                                && org.Name == orgName
+                                && org.Subdomain == orgName.ToLower());
+                bool correctCountries = (countries.Count == 242);
+                bool correctEmployeeId = (employeeId == "111");
 
-            bool correctOrg = (org.OrganizationId == orgId
-                            && org.Name == orgName
-                            && org.Subdomain == orgName.ToLower());
-            bool correctCountries = (countries.Count == 242);
-            bool correctEmployeeId = (employeeId == "111");
-
-            Assert.IsTrue(correctOrg && correctCountries && correctEmployeeId);
+                Assert.IsTrue(correctOrg && correctCountries && correctEmployeeId);
+            }
+            finally
+            {
+                //Clean up
+                deleteOrgUser(userId, orgId);
+                deleteTestUser(userEmail);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -4174,40 +4390,45 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
             var service = new Service(connectionStr, userContext);
 
-            //Act
-            Tuple<string, List<SubscriptionDisplayInfo>, List<ProductRole>, List<CompleteProjectInfo>, string> tuple = service.GetAddMemberInfo();
+            try
+            {
+                //Act
+                Tuple<string, List<SubscriptionDisplayInfo>, List<ProductRole>, List<CompleteProjectInfo>, string> tuple = service.GetAddMemberInfo();
 
-            //Clean up
-            deleteSubUser(userId2, subId);
-            deleteSubUser(userId1, subId);
-            deleteSubscription(subId);
-            deleteUserInvitation(user3);
-            deleteOrgUser(userId2, orgId);
-            deleteOrgUser(userId1, orgId);
-            deleteTestUser(user3);
-            deleteTestUser(user2);
-            deleteTestUser(user1);
-            deleteTestOrg(orgId);
+                //Assert
+                string recEmployeeId = tuple.Item1;
+                List<SubscriptionDisplayInfo> subInfoList = tuple.Item2;
+                List<ProductRole> productRoleList = tuple.Item3;
+                List<CompleteProjectInfo> projInfoList = tuple.Item4;
+                string inviEmployeeId = tuple.Item5;
 
-            //Assert
-            string recEmployeeId = tuple.Item1;
-            List<SubscriptionDisplayInfo> subInfoList = tuple.Item2;
-            List<ProductRole> productRoleList = tuple.Item3;
-            List<CompleteProjectInfo> projInfoList = tuple.Item4;
-            string inviEmployeeId = tuple.Item5;
+                bool correctRecEmployeeId = (recEmployeeId == "112");
+                bool correctSubInfoList = (subInfoList.Count == 1
+                                        && subInfoList.ElementAt(0).NumberOfUsers == 100
+                                        && subInfoList.ElementAt(0).OrganizationId == orgId
+                                        && subInfoList.ElementAt(0).ProductId == 1
+                                        && subInfoList.ElementAt(0).SubscriptionId == subId
+                                        && subInfoList.ElementAt(0).SubscriptionsUsed == 2);
+                bool correctProductRoleList = (productRoleList.Count == 2); //User and Manager roles
+                bool correctProjInfoList = (projInfoList.Count == 0);
+                bool correctInviEmployeeId = (inviEmployeeId == "113");
 
-            bool correctRecEmployeeId = (recEmployeeId == "112");
-            bool correctSubInfoList = (subInfoList.Count == 1
-                                    && subInfoList.ElementAt(0).NumberOfUsers == 100
-                                    && subInfoList.ElementAt(0).OrganizationId == orgId
-                                    && subInfoList.ElementAt(0).ProductId == 1
-                                    && subInfoList.ElementAt(0).SubscriptionId == subId
-                                    && subInfoList.ElementAt(0).SubscriptionsUsed == 2);
-            bool correctProductRoleList = (productRoleList.Count == 2); //User and Manager roles
-            bool correctProjInfoList = (projInfoList.Count == 0);
-            bool correctInviEmployeeId = (inviEmployeeId == "113");
-
-            Assert.IsTrue(correctRecEmployeeId && correctSubInfoList && correctProductRoleList && correctProjInfoList && correctInviEmployeeId);
+                Assert.IsTrue(correctRecEmployeeId && correctSubInfoList && correctProductRoleList && correctProjInfoList && correctInviEmployeeId);
+            }
+            finally
+            {
+                //Clean up
+                deleteSubUser(userId2, subId);
+                deleteSubUser(userId1, subId);
+                deleteSubscription(subId);
+                deleteUserInvitation(user3);
+                deleteOrgUser(userId2, orgId);
+                deleteOrgUser(userId1, orgId);
+                deleteTestUser(user3);
+                deleteTestUser(user2);
+                deleteTestUser(user1);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -4225,32 +4446,37 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
             var service = new Service(connectionStr, userContext);
 
-            //Act
-            Tuple<List<UserRolesInfo>, List<SubscriptionDisplayInfo>> tuple = service.GetOrgAndSubRoles();
+            try
+            {
+                //Act
+                Tuple<List<UserRolesInfo>, List<SubscriptionDisplayInfo>> tuple = service.GetOrgAndSubRoles();
 
-            //Clean up
-            deleteSubUser(userId1, subId);
-            deleteSubscription(subId);
-            deleteOrgUser(userId1, orgId);
-            deleteTestUser(user1);
-            deleteTestOrg(orgId);
+                //Assert
+                List<UserRolesInfo> userRolesInfoList = tuple.Item1;
+                List<SubscriptionDisplayInfo> subInfoList = tuple.Item2;
 
-            //Assert
-            List<UserRolesInfo> userRolesInfoList = tuple.Item1;
-            List<SubscriptionDisplayInfo> subInfoList = tuple.Item2;
+                bool correctUserRolesInfoList = (userRolesInfoList.Count == 1
+                                                && userRolesInfoList.ElementAt(0).UserId == userId1.ToString()
+                                                && userRolesInfoList.ElementAt(0).Name == "Member"
+                                                && userRolesInfoList.ElementAt(0).OrgRoleId == 1
+                                                && userRolesInfoList.ElementAt(0).ProductRoleId == 1
+                                                && userRolesInfoList.ElementAt(0).SubscriptionId == subId);
+                bool correctSubInfoList = (subInfoList.Count == 1
+                                        && subInfoList.ElementAt(0).SubscriptionId == subId
+                                        && subInfoList.ElementAt(0).ProductId == 1
+                                        && subInfoList.ElementAt(0).ProductName == "TimeTracker");
 
-            bool correctUserRolesInfoList = (userRolesInfoList.Count == 1
-                                            && userRolesInfoList.ElementAt(0).UserId == userId1.ToString()
-                                            && userRolesInfoList.ElementAt(0).Name == "Member"
-                                            && userRolesInfoList.ElementAt(0).OrgRoleId == 1
-                                            && userRolesInfoList.ElementAt(0).ProductRoleId == 1
-                                            && userRolesInfoList.ElementAt(0).SubscriptionId == subId);
-            bool correctSubInfoList = (subInfoList.Count == 1
-                                    && subInfoList.ElementAt(0).SubscriptionId == subId
-                                    && subInfoList.ElementAt(0).ProductId == 1
-                                    && subInfoList.ElementAt(0).ProductName == "TimeTracker");
-
-            Assert.IsTrue(correctUserRolesInfoList && correctSubInfoList);
+                Assert.IsTrue(correctUserRolesInfoList && correctSubInfoList);
+            }
+            finally
+            {
+                //Clean up
+                deleteSubUser(userId1, subId);
+                deleteSubscription(subId);
+                deleteOrgUser(userId1, orgId);
+                deleteTestUser(user1);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -4312,11 +4538,12 @@ namespace AllyisApps.Services.Tests
             {
                 Assert.IsTrue(ex is ArgumentException);
             }
-
-            //Clean up
-            deleteTestOrg(takenSubdomainId);
-            deleteTestOrg(orgId);
-            deleteTestUser(email);
+            finally
+            {
+                deleteTestOrg(takenSubdomainId);
+                deleteTestOrg(orgId);
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -4337,39 +4564,44 @@ namespace AllyisApps.Services.Tests
             updatingOrg.OrganizationId = orgId;
             updatingOrg.Subdomain = "newsubdomain";
 
-            //Act
-            bool result = service.UpdateOrganization(updatingOrg);
-
-            string selectStmt = "SELECT [Name], [Subdomain] FROM [Auth].[Organization] WHERE [OrganizationId] = @orgId";
-            SqlDataReader reader;
-            string updatedName = "";
-            string updatedSubdomain = "";
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                bool result = service.UpdateOrganization(updatingOrg);
+
+                string selectStmt = "SELECT [Name], [Subdomain] FROM [Auth].[Organization] WHERE [OrganizationId] = @orgId";
+                SqlDataReader reader;
+                string updatedName = "";
+                string updatedSubdomain = "";
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        updatedName = (string)reader["Name"];
-                        updatedSubdomain = (string)reader["Subdomain"];
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            updatedName = (string)reader["Name"];
+                            updatedSubdomain = (string)reader["Subdomain"];
+                        }
+                        reader.Close();
+                        connection.Close();
                     }
-                    reader.Close();
-                    connection.Close();
                 }
+
+                //Assert
+                Assert.IsTrue(result && updatedName == "NewName" && updatedSubdomain == "newsubdomain");
             }
-
-            //Clean up
-            deleteTestOrg(orgId);
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result && updatedName == "NewName" && updatedSubdomain == "newsubdomain");
+            finally
+            {
+                //Clean up
+                deleteTestOrg(orgId);
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -4396,36 +4628,40 @@ namespace AllyisApps.Services.Tests
             int userId = createTestUser(email);
             var service = new Service(connectionStr);
 
-            //Act
-            service.UpdateActiveOrganization(userId, 1);    //update ActiveOrgId to 1
-
-            string selectStmt = "SELECT [ActiveOrganizationId] FROM [Auth].[User] WHERE [UserId] = @userId";
-            SqlDataReader reader;
-            int activeOrgId = 0;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                service.UpdateActiveOrganization(userId, 1);    //update ActiveOrgId to 1
+
+                string selectStmt = "SELECT [ActiveOrganizationId] FROM [Auth].[User] WHERE [UserId] = @userId";
+                SqlDataReader reader;
+                int activeOrgId = 0;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        activeOrgId = (int)reader["ActiveOrganizationId"];
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            activeOrgId = (int)reader["ActiveOrganizationId"];
+                        }
+                        reader.Close();
+                        connection.Close();
                     }
-                    reader.Close();
-                    connection.Close();
                 }
+                //Assert
+                Assert.IsTrue(activeOrgId == 1);
             }
-
-            //Clean up
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(activeOrgId == 1);
+            finally
+            {
+                //Clean up
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -4452,14 +4688,19 @@ namespace AllyisApps.Services.Tests
             int userId = createTestUser(email);
             var service = new Service(connectionStr);
 
-            //Act
-            OrgRole result = service.GetOrgRole(1, userId);
+            try
+            {
+                //Act
+                OrgRole result = service.GetOrgRole(1, userId);
 
-            //Clean up
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result == null);
+                //Assert
+                Assert.IsTrue(result == null);
+            }
+            finally
+            {
+                //Clean up
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -4473,16 +4714,21 @@ namespace AllyisApps.Services.Tests
             createOrgUser(userId, orgId, 2, "111");
             var service = new Service(connectionStr);
 
-            //Act
-            OrgRole result = service.GetOrgRole(orgId, userId);
+            try
+            {
+                //Act
+                OrgRole result = service.GetOrgRole(orgId, userId);
 
-            //Clean up
-            deleteOrgUser(userId, orgId);
-            deleteTestOrg(orgId);
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result.OrgRoleId == 2 && result.OrgRoleName == "Owner");
+                //Assert
+                Assert.IsTrue(result.OrgRoleId == 2 && result.OrgRoleName == "Owner");
+            }
+            finally
+            {
+                //Clean up
+                deleteOrgUser(userId, orgId);
+                deleteTestOrg(orgId);
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -4521,37 +4767,42 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId, email, email, orgId, 0, infoList, 1);
             var service = new Service(connectionStr, userContext);
 
-            //Act
-            bool result = service.DeleteOrganization();
-
-            string selectStmt = "SELECT [IsActive] FROM [Auth].[Organization] WHERE [OrganizationId] = @orgId";
-            SqlDataReader reader;
-            bool deactivated = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                bool result = service.DeleteOrganization();
+
+                string selectStmt = "SELECT [IsActive] FROM [Auth].[Organization] WHERE [OrganizationId] = @orgId";
+                SqlDataReader reader;
+                bool deactivated = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        deactivated = ((bool)reader["IsActive"] == false);
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            deactivated = ((bool)reader["IsActive"] == false);
+                        }
+                        reader.Close();
+                        connection.Close();
                     }
-                    reader.Close();
-                    connection.Close();
                 }
+
+                //Assert
+                Assert.IsTrue(result && deactivated);
             }
-
-            //Clean up
-            deleteTestOrg(orgId);
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result && deactivated);
+            finally
+            {
+                //Clean up
+                deleteTestOrg(orgId);
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -4628,7 +4879,7 @@ namespace AllyisApps.Services.Tests
             inviInfo.LastName = "User";
             inviInfo.OrganizationId = orgId;
             inviInfo.OrgRole = 1;
-            
+
             //Act
             try
             {
@@ -4638,11 +4889,13 @@ namespace AllyisApps.Services.Tests
             {
                 Assert.IsTrue(ex is InvalidOperationException);
             }
-
-            //Clean up
-            deleteOrgUser(userId, orgId);
-            deleteTestOrg(orgId);
-            deleteTestUser(email);
+            finally
+            {
+                //Clean up
+                deleteOrgUser(userId, orgId);
+                deleteTestOrg(orgId);
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -4674,25 +4927,30 @@ namespace AllyisApps.Services.Tests
             {
                 Assert.IsTrue(ex is DuplicateNameException);
             }
-
-            //Clean up
-            deleteOrgUser(otherUserId, orgId);
-            deleteTestUser(otherMember);
-            deleteTestUser(email);
-            deleteTestOrg(orgId);
+            finally
+            {
+                //Clean up
+                deleteOrgUser(otherUserId, orgId);
+                deleteTestUser(otherMember);
+                deleteTestUser(email);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
         public async Task InviteUser_Should_Return_InvitationId_If_Succeed()
         {
             //Arrange
-            string email = "testuser@test.com";
-            string invitingUser = "othermember@test.com";
+            string email = "inviteduser@test.com";
+            string invitingUser = "invitinguser@test.com";
             string orgName = "UnitTestOrg";
+            string anotherOrg = "AnotherTestOrg";
+
             int userId = createTestUser(email);
             int invitingUserId = createTestUser(invitingUser);
             int orgId = createTestOrg(orgName);
-            createOrgUser(userId, 1, 1, "110"); //user is member of another org. This shouldn't affect the result of this method
+            int otherOrgId = createTestOrg(anotherOrg);
+            createOrgUser(userId, otherOrgId, 1, "110"); //user is member of another org. This shouldn't affect the result of this method
 
             UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, null, null);
             List<UserOrganizationInfo> userOrgInfoList = new List<UserOrganizationInfo>() { userOrgInfo };
@@ -4706,18 +4964,24 @@ namespace AllyisApps.Services.Tests
             inviInfo.FirstName = "Test";
             inviInfo.LastName = "User";
 
-            //Act
-            int inviId = await service.InviteUser("http://allyisapps.com/Account/ConfirmEmail?userId=%7BuserId%7D&code=%7BaccessCode%7D", inviInfo, null, null);
+            try
+            {
+                //Act
+                int inviId = await service.InviteUser("http://allyisapps.com/Account/ConfirmEmail?userId=%7BuserId%7D&code=%7BaccessCode%7D", inviInfo, null, null);
 
-            //Clean up
-            deleteOrgUser(userId, 1);
-            deleteUserInvitation(email);
-            deleteTestUser(invitingUser);
-            deleteTestUser(email);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(inviId > 0);
+                //Assert
+                Assert.IsTrue(inviId > 0);
+            }
+            finally
+            {
+                //Clean up
+                deleteUserInvitation(email);
+                deleteOrgUser(userId, otherOrgId);
+                deleteTestUser(invitingUser);
+                deleteTestUser(email);
+                deleteTestOrg(orgId);
+                deleteTestOrg(otherOrgId);
+            }
         }
 
         [TestMethod]
@@ -4744,16 +5008,21 @@ namespace AllyisApps.Services.Tests
             var service = new Service(connectionStr, userContext);
             Organization org = new Organization();
 
-            //Act
-            bool result = service.RemoveInvitation(inviId);
+            try
+            {
+                //Act
+                bool result = service.RemoveInvitation(inviId);
 
-            //Clean up
-            deleteUserInvitation(email);
-            deleteTestOrg(orgId);
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsFalse(result);
+                //Assert
+                Assert.IsFalse(result);
+            }
+            finally
+            {
+                //Clean up
+                deleteUserInvitation(email);
+                deleteTestOrg(orgId);
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -4770,34 +5039,39 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(1, "calling@email.com", "calling@email.com", orgId, 0, infoList, 1); //calling user has id=1
             var service = new Service(connectionStr, userContext);
 
-            //Act
-            bool result = service.RemoveInvitation(inviId);
-
-            string selectStmt = "SELECT [InvitationId] FROM [Auth].[Invitation] WHERE [InvitationId] = @inviId";
-            SqlDataReader reader;
-            bool deleted = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                bool result = service.RemoveInvitation(inviId);
+
+                string selectStmt = "SELECT [InvitationId] FROM [Auth].[Invitation] WHERE [InvitationId] = @inviId";
+                SqlDataReader reader;
+                bool deleted = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@inviId", SqlDbType.Int).Value = inviId;
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                    {
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@inviId", SqlDbType.Int).Value = inviId;
 
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    if (!reader.HasRows) deleted = true;
-                    reader.Close();
-                    connection.Close();
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        if (!reader.HasRows) deleted = true;
+                        reader.Close();
+                        connection.Close();
+                    }
                 }
+
+                //Assert
+                Assert.IsTrue(result && deleted);
             }
-
-            //Clean up
-            deleteTestOrg(orgId);
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(result && deleted);
+            finally
+            {
+                //Clean up
+                deleteTestOrg(orgId);
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -4835,41 +5109,46 @@ namespace AllyisApps.Services.Tests
             int subId = createSubscription(orgId, 1, 100);
             createSubUser(subId, userId, 1);    //this user currently has product role User
 
-            //Act
             var service = new Service(connectionStr);
-            service.UpdateSubscriptionUserProductRole(2, subId, userId);    //update to Manager role
 
-            string selectStmt = "SELECT [ProductRoleId] FROM [Billing].[SubscriptionUser] WHERE [SubscriptionId] = @SubscriptionId AND [UserId] = @UserId";
-            SqlDataReader reader;
-            bool updated = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                service.UpdateSubscriptionUserProductRole(2, subId, userId);    //update to Manager role
+
+                string selectStmt = "SELECT [ProductRoleId] FROM [Billing].[SubscriptionUser] WHERE [SubscriptionId] = @SubscriptionId AND [UserId] = @UserId";
+                SqlDataReader reader;
+                bool updated = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@SubscriptionId", SqlDbType.Int).Value = subId;
-                    cmd.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        updated = ((int)reader["ProductRoleId"] == 2);
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@SubscriptionId", SqlDbType.Int).Value = subId;
+                        cmd.Parameters.Add("@UserId", SqlDbType.Int).Value = userId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            updated = ((int)reader["ProductRoleId"] == 2);
+                        }
+                        reader.Close();
+                        connection.Close();
                     }
-                    reader.Close();
-                    connection.Close();
                 }
+
+                //Assert
+                Assert.IsTrue(updated);
             }
-
-            //Clean up
-            deleteSubUser(userId, subId);
-            deleteSubscription(subId);
-            deleteTestOrg(orgId);
-            deleteTestUser(email);
-
-            //Assert
-            Assert.IsTrue(updated);
+            finally
+            {
+                //Clean up
+                deleteSubUser(userId, subId);
+                deleteSubscription(subId);
+                deleteTestOrg(orgId);
+                deleteTestUser(email);
+            }
         }
 
         [TestMethod]
@@ -4893,24 +5172,29 @@ namespace AllyisApps.Services.Tests
             createOrgUser(userId1, orgId, 1, "111");    //member
             createOrgUser(userId2, orgId, 2, "112");    //owner
 
-            //Act
-            var service = new Service(connectionStr);
-            IEnumerable<OrganizationUserInfo> memberList = service.GetOrganizationMemberList(orgId);
+            try
+            {
+                //Act
+                var service = new Service(connectionStr);
+                IEnumerable<OrganizationUserInfo> memberList = service.GetOrganizationMemberList(orgId);
 
-            //Clean up
-            deleteOrgUser(userId2, orgId);
-            deleteOrgUser(userId1, orgId);
-            deleteTestUser(member2);
-            deleteTestUser(member1);
-            deleteTestOrg(orgId);
+                //Assert
+                OrganizationUserInfo mem1 = memberList.ElementAt(0);
+                bool correctMember1 = (mem1.UserId == userId1 && mem1.OrgRoleId == 1 && mem1.EmployeeId == "111");
+                OrganizationUserInfo mem2 = memberList.ElementAt(1);
+                bool correctMember2 = (mem2.UserId == userId2 && mem2.OrgRoleId == 2 && mem2.EmployeeId == "112");
 
-            //Assert
-            OrganizationUserInfo mem1 = memberList.ElementAt(0);
-            bool correctMember1 = (mem1.UserId == userId1 && mem1.OrgRoleId == 1 && mem1.EmployeeId == "111");
-            OrganizationUserInfo mem2 = memberList.ElementAt(1);
-            bool correctMember2 = (mem2.UserId == userId2 && mem2.OrgRoleId == 2 && mem2.EmployeeId == "112");
-
-            Assert.IsTrue(memberList.Count() == 2 && correctMember1 && correctMember2);
+                Assert.IsTrue(memberList.Count() == 2 && correctMember1 && correctMember2);
+            }
+            finally
+            {
+                //Clean up
+                deleteOrgUser(userId2, orgId);
+                deleteOrgUser(userId1, orgId);
+                deleteTestUser(member2);
+                deleteTestUser(member1);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -4941,16 +5225,21 @@ namespace AllyisApps.Services.Tests
 
             var service = new Service(connectionStr);
 
-            //Act
-            string returnedId = service.GetEmployeeId(userId, orgId);
+            try
+            {
+                //Act
+                string returnedId = service.GetEmployeeId(userId, orgId);
 
-            //Clean up
-            deleteOrgUser(userId, orgId);
-            deleteTestUser(user);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(returnedId == "111");
+                //Assert
+                Assert.IsTrue(returnedId == "111");
+            }
+            finally
+            {
+                //Clean up
+                deleteOrgUser(userId, orgId);
+                deleteTestUser(user);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -4998,17 +5287,22 @@ namespace AllyisApps.Services.Tests
 
             var service = new Service(connectionStr);
 
-            //Act
-            bool result = service.SetEmployeeId(userId, orgId, "111");
+            try
+            {
+                //Act
+                bool result = service.SetEmployeeId(userId, orgId, "111");
 
-            //Clean up
-            deleteUserInvitation("abc@email.com");
-            deleteOrgUser(userId, orgId);
-            deleteTestUser(user);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsFalse(result);
+                //Assert
+                Assert.IsFalse(result);
+            }
+            finally
+            {
+                //Clean up
+                deleteUserInvitation("abc@email.com");
+                deleteOrgUser(userId, orgId);
+                deleteTestUser(user);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -5023,39 +5317,44 @@ namespace AllyisApps.Services.Tests
 
             var service = new Service(connectionStr);
 
-            //Act
-            bool result = service.SetEmployeeId(userId, orgId, "newId112");
-
-            string selectStmt = "SELECT [EmployeeId] FROM [Auth].[OrganizationUser] WHERE [UserId] = @userId AND [OrganizationId] = @orgId";
-            SqlDataReader reader;
-            bool updated = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                bool result = service.SetEmployeeId(userId, orgId, "newId112");
+
+                string selectStmt = "SELECT [EmployeeId] FROM [Auth].[OrganizationUser] WHERE [UserId] = @userId AND [OrganizationId] = @orgId";
+                SqlDataReader reader;
+                bool updated = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
-                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        updated = ((string)reader["EmployeeId"] == "newId112");
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+                        cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            updated = ((string)reader["EmployeeId"] == "newId112");
+                        }
+                        reader.Close();
+                        connection.Close();
                     }
-                    reader.Close();
-                    connection.Close();
                 }
+
+                //Assert
+                Assert.IsTrue(result && updated);
             }
-
-            //Clean up
-            deleteOrgUser(userId, orgId);
-            deleteTestUser(user);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(result && updated);
+            finally
+            {
+                //Clean up
+                deleteOrgUser(userId, orgId);
+                deleteTestUser(user);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -5104,17 +5403,22 @@ namespace AllyisApps.Services.Tests
 
             var service = new Service(connectionStr);
 
-            //Act
-            bool result = service.SetInvitationEmployeeId(inviId, orgId, "111");
+            try
+            {
+                //Act
+                bool result = service.SetInvitationEmployeeId(inviId, orgId, "111");
 
-            //Clean up
-            deleteUserInvitation(invitedUser);
-            deleteOrgUser(userId, orgId);
-            deleteTestUser(user);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsFalse(result);
+                //Assert
+                Assert.IsFalse(result);
+            }
+            finally
+            {
+                //Clean up
+                deleteUserInvitation(invitedUser);
+                deleteOrgUser(userId, orgId);
+                deleteTestUser(user);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -5128,37 +5432,42 @@ namespace AllyisApps.Services.Tests
 
             var service = new Service(connectionStr);
 
-            //Act
-            bool result = service.SetInvitationEmployeeId(inviId, orgId, "newId112");
-
-            string selectStmt = "SELECT [EmployeeId] FROM [Auth].[Invitation] WHERE [InvitationId] = @inviId";
-            SqlDataReader reader;
-            bool updated = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                bool result = service.SetInvitationEmployeeId(inviId, orgId, "newId112");
+
+                string selectStmt = "SELECT [EmployeeId] FROM [Auth].[Invitation] WHERE [InvitationId] = @inviId";
+                SqlDataReader reader;
+                bool updated = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@inviId", SqlDbType.Int).Value = inviId;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        updated = ((string)reader["EmployeeId"] == "newId112");
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@inviId", SqlDbType.Int).Value = inviId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            updated = ((string)reader["EmployeeId"] == "newId112");
+                        }
+                        reader.Close();
+                        connection.Close();
                     }
-                    reader.Close();
-                    connection.Close();
                 }
+
+                //Assert
+                Assert.IsTrue(result && updated);
             }
-
-            //Clean up
-            deleteUserInvitation(user);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(result && updated);
+            finally
+            {
+                //Clean up
+                deleteUserInvitation(user);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -5189,36 +5498,41 @@ namespace AllyisApps.Services.Tests
 
             var service = new Service(connectionStr);
 
-            //Act
-            service.RemoveOrganizationUser(orgId, userId);
-
-            string selectStmt = "SELECT [UserId] FROM [Auth].[OrganizationUser] WHERE [UserId] = @userId AND [OrganizationId] = @orgId";
-            SqlDataReader reader;
-            bool deleted = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                service.RemoveOrganizationUser(orgId, userId);
+
+                string selectStmt = "SELECT [UserId] FROM [Auth].[OrganizationUser] WHERE [UserId] = @userId AND [OrganizationId] = @orgId";
+                SqlDataReader reader;
+                bool deleted = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
-                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                    {
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                        cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
 
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    if (!reader.HasRows) deleted = true;
-                    reader.Close();
-                    connection.Close();
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        if (!reader.HasRows) deleted = true;
+                        reader.Close();
+                        connection.Close();
+                    }
                 }
+
+                //Assert
+                Assert.IsTrue(deleted);
             }
-
-            //Clean up
-            if (!deleted) deleteOrgUser(userId, orgId);
-            deleteTestUser(user);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(deleted);
+            finally
+            {
+                //Clean up
+                deleteOrgUser(userId, orgId);
+                deleteTestUser(user);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -5243,17 +5557,22 @@ namespace AllyisApps.Services.Tests
             int projId2 = createProject(custId, projName2, 0, "proj002");   //inactive proj
             var service = new Service(connectionStr);
 
-            //Act
-            IEnumerable<CompleteProjectInfo> projInfoList = service.GetProjectsByOrganization(orgId);
+            try
+            {
+                //Act
+                IEnumerable<CompleteProjectInfo> projInfoList = service.GetProjectsByOrganization(orgId);
 
-            //Clean up
-            deleteProject(projId2);
-            deleteProject(projId1);
-            deleteCustomer(custId);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(projInfoList.Count() == 1 && projInfoList.ElementAt(0).ProjectName == projName1);
+                //Assert
+                Assert.IsTrue(projInfoList.Count() == 1 && projInfoList.ElementAt(0).ProjectName == projName1);
+            }
+            finally
+            {
+                //Clean up
+                deleteProject(projId2);
+                deleteProject(projId1);
+                deleteCustomer(custId);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -5270,17 +5589,22 @@ namespace AllyisApps.Services.Tests
             int projId2 = createProject(custId, projName2, 0, "proj002");   //inactive proj
             var service = new Service(connectionStr);
 
-            //Act
-            IEnumerable<CompleteProjectInfo> projInfoList = service.GetProjectsByOrganization(orgId, false);
+            try
+            {
+                //Act
+                IEnumerable<CompleteProjectInfo> projInfoList = service.GetProjectsByOrganization(orgId, false);
 
-            //Clean up
-            deleteProject(projId2);
-            deleteProject(projId1);
-            deleteCustomer(custId);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(projInfoList.Count() == 2);
+                //Assert
+                Assert.IsTrue(projInfoList.Count() == 2);
+            }
+            finally
+            {
+                //Clean up
+                deleteProject(projId2);
+                deleteProject(projId1);
+                deleteCustomer(custId);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -5301,25 +5625,30 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId2, user2, user2, orgId, 0, null, 1);
             Service service = new Service(connectionStr, userContext);
 
-            //Act
-            IEnumerable<UserRolesInfo> userRolesInfoList = service.GetUserRoles();
+            try
+            {
+                //Act
+                IEnumerable<UserRolesInfo> userRolesInfoList = service.GetUserRoles();
 
-            //Clean up
-            deleteOrgUser(userId2, orgId);
-            deleteSubUser(userId1, subId);
-            deleteOrgUser(userId1, orgId);
-            deleteTestUser(user2);
-            deleteTestUser(user1);
-            deleteSubscription(subId);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(userRolesInfoList.Count() == 2);
-            UserRolesInfo userRole1 = userRolesInfoList.ElementAt(0);
-            bool correctUserRole1 = (userRole1.UserId == userId1.ToString() && userRole1.OrgRoleId == 1 && userRole1.ProductRoleId == 1 && userRole1.SubscriptionId == subId);
-            UserRolesInfo userRole2 = userRolesInfoList.ElementAt(1);
-            bool correctUserRole2 = (userRole2.UserId == userId2.ToString() && userRole2.OrgRoleId == 2 && userRole2.ProductRoleId == -1 && userRole2.SubscriptionId == -1);
-            Assert.IsTrue(correctUserRole1 && correctUserRole2);
+                //Assert
+                Assert.IsTrue(userRolesInfoList.Count() == 2);
+                UserRolesInfo userRole1 = userRolesInfoList.ElementAt(0);
+                bool correctUserRole1 = (userRole1.UserId == userId1.ToString() && userRole1.OrgRoleId == 1 && userRole1.ProductRoleId == 1 && userRole1.SubscriptionId == subId);
+                UserRolesInfo userRole2 = userRolesInfoList.ElementAt(1);
+                bool correctUserRole2 = (userRole2.UserId == userId2.ToString() && userRole2.OrgRoleId == 2 && userRole2.ProductRoleId == -1 && userRole2.SubscriptionId == -1);
+                Assert.IsTrue(correctUserRole1 && correctUserRole2);
+            }
+            finally
+            {
+                //Clean up
+                deleteOrgUser(userId2, orgId);
+                deleteSubUser(userId1, subId);
+                deleteOrgUser(userId1, orgId);
+                deleteTestUser(user2);
+                deleteTestUser(user1);
+                deleteSubscription(subId);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -5361,36 +5690,41 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId, user, user, orgId, 0, null, 1);
             var service = new Service(connectionStr, userContext);
 
-            //Act
-            int result = service.ChangeUserRoles(userIds, -1);
-
-            string selectStmt = "SELECT [UserId] FROM [Auth].[OrganizationUser] WHERE [UserId] = @userId AND [OrganizationId] = @orgId";
-            SqlDataReader reader;
-            bool deleted = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                int result = service.ChangeUserRoles(userIds, -1);
+
+                string selectStmt = "SELECT [UserId] FROM [Auth].[OrganizationUser] WHERE [UserId] = @userId AND [OrganizationId] = @orgId";
+                SqlDataReader reader;
+                bool deleted = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
-                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                    {
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                        cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
 
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    if (!reader.HasRows) deleted = true;
-                    reader.Close();
-                    connection.Close();
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        if (!reader.HasRows) deleted = true;
+                        reader.Close();
+                        connection.Close();
+                    }
                 }
+
+                //Assert
+                Assert.IsTrue(result == 1 && deleted);
             }
-
-            //Clean up
-            if (!deleted) deleteOrgUser(userId, orgId);
-            deleteTestUser(user);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(result == 1 && deleted);
+            finally
+            {
+                //Clean up
+                deleteOrgUser(userId, orgId);
+                deleteTestUser(user);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -5409,41 +5743,46 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
             var service = new Service(connectionStr, userContext);
 
-            //Act
-            int result = service.ChangeUserRoles(userIds, 2);   //assign both to role owner
-
-            string selectStmt = "SELECT [UserId], [OrgRoleId] FROM [Auth].[OrganizationUser] WHERE [OrganizationId] = @orgId";
-            SqlDataReader reader;
-            bool changed = false;
-            using (SqlConnection connection = new SqlConnection(connectionStr))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
+                //Act
+                int result = service.ChangeUserRoles(userIds, 2);   //assign both to role owner
+
+                string selectStmt = "SELECT [UserId], [OrgRoleId] FROM [Auth].[OrganizationUser] WHERE [OrganizationId] = @orgId";
+                SqlDataReader reader;
+                bool changed = false;
+                using (SqlConnection connection = new SqlConnection(connectionStr))
                 {
-                    // set up the command's parameters
-                    cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
-
-                    // open connection, execute command, close connection
-                    connection.Open();
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    using (SqlCommand cmd = new SqlCommand(selectStmt, connection))
                     {
-                        changed = ((int)reader["OrgRoleId"] == 2);
-                        if (!changed) break;
+                        // set up the command's parameters
+                        cmd.Parameters.Add("@orgId", SqlDbType.Int).Value = orgId;
+
+                        // open connection, execute command, close connection
+                        connection.Open();
+                        reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            changed = ((int)reader["OrgRoleId"] == 2);
+                            if (!changed) break;
+                        }
+                        reader.Close();
+                        connection.Close();
                     }
-                    reader.Close();
-                    connection.Close();
                 }
+
+                //Assert
+                Assert.IsTrue(result == 2 && changed);
             }
-
-            //Clean up
-            deleteOrgUser(userId2, orgId);
-            deleteOrgUser(userId1, orgId);
-            deleteTestUser(user1);
-            deleteTestUser(user2);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(result == 2 && changed);
+            finally
+            {
+                //Clean up
+                deleteOrgUser(userId2, orgId);
+                deleteOrgUser(userId1, orgId);
+                deleteTestUser(user1);
+                deleteTestUser(user2);
+                deleteTestOrg(orgId);
+            }
         }
 
         [TestMethod]
@@ -5485,18 +5824,23 @@ namespace AllyisApps.Services.Tests
             UserContext userContext = new UserContext(userId, user, user, orgId, 0, null, 1);
             Service service = new Service(connectionStr, userContext);
 
-            //Act
-            string role = service.GetProductRoleForUser("TimeTracker", userId);
+            try
+            {
+                //Act
+                string role = service.GetProductRoleForUser("TimeTracker", userId);
 
-            //Clean up
-            deleteSubUser(userId, subId);
-            deleteOrgUser(userId, orgId);
-            deleteTestUser(user);
-            deleteSubscription(subId);
-            deleteTestOrg(orgId);
-
-            //Assert
-            Assert.IsTrue(role == "User");
+                //Assert
+                Assert.IsTrue(role == "User");
+            }
+            finally
+            {
+                //Clean up
+                deleteSubUser(userId, subId);
+                deleteOrgUser(userId, orgId);
+                deleteTestUser(user);
+                deleteSubscription(subId);
+                deleteTestOrg(orgId);
+            }
         }
         #endregion
     }
