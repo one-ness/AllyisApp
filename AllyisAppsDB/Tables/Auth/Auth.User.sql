@@ -25,7 +25,7 @@
     [LockoutEndDateUtc]    DATETIME       NULL,
     [PasswordResetCode] UNIQUEIDENTIFIER NULL, 
     [EmailConfirmationCode] UNIQUEIDENTIFIER NULL, 
-    [LanguagePreference] INT NULL , 
+    [LanguagePreference] INT NOT NULL , 
     CONSTRAINT [PK__User__1788CC4CFBFDD246] PRIMARY KEY CLUSTERED ([UserId] ASC),
     CONSTRAINT [UQ__User__A9D105340B029239] UNIQUE NONCLUSTERED ([Email] ASC),
     CONSTRAINT [FK_User_Organization] FOREIGN KEY ([ActiveOrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),

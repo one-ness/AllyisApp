@@ -12,7 +12,7 @@ namespace AllyisApps.Services.Tests
     [TestClass]
     public class TimeTrackerTest
     {
-        public static string connectionStr = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=AllyisAppsDB;User Id=aaUser;Password=BlueSky23#;";
+        public static string connectionStr = "Data Source=(local);Initial Catalog=AllyisAppsDB;User Id=aaUser;Password=BlueSky23#;";
 
         [TestMethod]
         public void GetDateFromDays_Should_Return_Null_For_Negative_Days()
