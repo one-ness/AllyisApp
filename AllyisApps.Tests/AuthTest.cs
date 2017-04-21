@@ -967,7 +967,7 @@ namespace AllyisApps.Services.Tests
         public void GetInvitationsByUser_Should_Retrieve_All_Invitations_For_A_User()
         {
             //Arrange
-            string userEmail = "testuser@test.com";
+            string userEmail = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
 
             createTestUser(userEmail);
@@ -997,7 +997,7 @@ namespace AllyisApps.Services.Tests
         public void AcceptUserInvitation_Should_Add_User_To_Corresponding_Tables_And_Delete_Invitation()
         {
             //Arange
-            string userEmail = "testuser@test.com";
+            string userEmail = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = createTestUser(userEmail);
             int orgId = createTestOrg(orgName);
@@ -1070,7 +1070,7 @@ namespace AllyisApps.Services.Tests
         public void RejectUserInvitation_Should_Delete_Invitation()
         {
             //Arange
-            string userEmail = "testuser@test.com";
+            string userEmail = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = createTestUser(userEmail);
             int orgId = createTestOrg(orgName);
@@ -1143,7 +1143,7 @@ namespace AllyisApps.Services.Tests
         public async Task SetUpNewUser_Should_Throw_Exception_For_Empty_First_Name()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string fname = "";
             string lname = "User";
             DateTime dob = new DateTime();
@@ -1171,7 +1171,7 @@ namespace AllyisApps.Services.Tests
         public async Task SetUpNewUser_Should_Throw_Exception_For_Empty_Last_Name()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string fname = "Test";
             string lname = "";
             DateTime dob = new DateTime();
@@ -1255,7 +1255,7 @@ namespace AllyisApps.Services.Tests
         public async Task SetUpNewUser_Should_Throw_Exception_For_Empty_Password()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string fname = "Test";
             string lname = "User";
             DateTime dob = new DateTime();
@@ -1282,7 +1282,7 @@ namespace AllyisApps.Services.Tests
         public async Task SetUpNewUser_Should_Throw_Exception_For_Duplicate_Email()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string fname = "Test";
             string lname = "User";
             DateTime dob = DateTime.Today;
@@ -1322,7 +1322,7 @@ namespace AllyisApps.Services.Tests
         public async Task SetUpNewUser_Should_Create_New_User_With_Valid_Arguments()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string fname = "Test";
             string lname = "User";
             DateTime dob = DateTime.Today;
@@ -1360,7 +1360,7 @@ namespace AllyisApps.Services.Tests
         public void ValidateLogin_Should_Return_Null_If_User_Is_Not_Found()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string password = "AllyisApps.123";
             var service = new Service(connectionStr);
 
@@ -1375,7 +1375,7 @@ namespace AllyisApps.Services.Tests
         public void ValidateLogIn_Should_Return_Correct_User_For_Valid_Login_Credentials()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string password = "AllyisApps.123";
             int userId = createTestUser(email);
             var service = new Service(connectionStr);
@@ -1411,7 +1411,7 @@ namespace AllyisApps.Services.Tests
         public void PopulateUserContext_Should_Return_Fully_Populated_UserContext_With_Zero_Org()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = createTestUser(email);
             var service = new Service(connectionStr);
 
@@ -1442,7 +1442,7 @@ namespace AllyisApps.Services.Tests
         public void PopulateUserContext_Should_Return_Fully_Populated_UserContext_With_One_Org()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
 
             int userId = createTestUser(email);
@@ -1489,7 +1489,7 @@ namespace AllyisApps.Services.Tests
         public void GetUser_Should_Return_User_Info_For_Valid_UserId()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = createTestUser(email);
             var service = new Service(connectionStr);
 
@@ -1534,7 +1534,7 @@ namespace AllyisApps.Services.Tests
         public void GetUserOrgsAndInvitationInfo_Should_Return_Info()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName1 = "UnitTestOrg1";
             string orgName2 = "UnitTestOrg2";
 
@@ -1617,7 +1617,7 @@ namespace AllyisApps.Services.Tests
         public void GetUserByEmail_Should_Return_User_Info_For_Valid_Email()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = createTestUser(email);
             var service = new Service(connectionStr);
 
@@ -1673,7 +1673,7 @@ namespace AllyisApps.Services.Tests
         public void SaveUserInfo_Should_Update_User_Info_In_Db()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = createTestUser(email); //create original user
             User updated = new User
             {
@@ -1757,7 +1757,7 @@ namespace AllyisApps.Services.Tests
         public void SetLanguage_Should_Update_Language_Preference_For_Current_User()
         {
             //Arange
-            string userEmail = "testuser@test.com";
+            string userEmail = "test_user@unittestemail.com";
             int userId = createTestUser(userEmail);
 
             UserContext userContext = new UserContext(userId, userEmail, userEmail, 0, 0, null, 1);
@@ -1868,7 +1868,7 @@ namespace AllyisApps.Services.Tests
         [TestMethod]
         public async Task SendPasswordResetMessage_Should_Return_False_For_Nonexistent_User()
         {
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string callbackUrl = "";
             var service = new Service(connectionStr);
             bool result = await service.SendPasswordResetMessage(email, callbackUrl);
@@ -1880,7 +1880,7 @@ namespace AllyisApps.Services.Tests
         [TestMethod]
         public async Task SendPasswordResetMessage_Should_Update_PasswordResetCode_For_Valid_User()
         {
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string callbackUrl = "";
             int userId = createTestUser(email);
             var service = new Service(connectionStr);
@@ -1973,7 +1973,7 @@ namespace AllyisApps.Services.Tests
         public async Task ResetPassword_Should_Return_False_For_Nonexistent_UserId()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = createTestUser(email);
             deleteTestUser(email);  //userId is now deleted from User table
 
@@ -1991,7 +1991,7 @@ namespace AllyisApps.Services.Tests
         public async Task ResetPassword_Should_Return_False_For_Not_Matched_Code()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = createTestUser(email);
 
             var service = new Service(connectionStr);
@@ -2016,7 +2016,7 @@ namespace AllyisApps.Services.Tests
         public async Task ResetPassword_Should_Return_True_And_Update_Password_For_Valid_UserId()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = createTestUser(email);
 
             var service = new Service(connectionStr);
@@ -2136,7 +2136,7 @@ namespace AllyisApps.Services.Tests
         public void ChangePassword_Should_Return_False_For_Incorrect_Old_Password()
         {
             //Arange
-            string userEmail = "testuser@test.com";
+            string userEmail = "test_user@unittestemail.com";
             int userId = createTestUser(userEmail);
 
             UserContext userContext = new UserContext(userId, userEmail, userEmail, 0, 0, null, 1);
@@ -2161,7 +2161,7 @@ namespace AllyisApps.Services.Tests
         public void ChangePassword_Should_Return_True_And_Update_Password_For_Valid_Passwords()
         {
             //Arange
-            string userEmail = "testuser@test.com";
+            string userEmail = "test_user@unittestemail.com";
             int userId = createTestUser(userEmail);
 
             UserContext userContext = new UserContext(userId, userEmail, userEmail, 0, 0, null, 1);
@@ -2360,7 +2360,7 @@ namespace AllyisApps.Services.Tests
         public void ConfirmUserEmail_Should_Return_False_If_Email_Is_Already_Confirmed()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = createTestUser(email);
 
             var service = new Service(connectionStr);
@@ -2403,7 +2403,7 @@ namespace AllyisApps.Services.Tests
         public void ConfirmUserEmail_Should_Return_False_For_Not_Matched_Code()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = createTestUser(email);
             Guid code = Guid.NewGuid();
 
@@ -2427,7 +2427,7 @@ namespace AllyisApps.Services.Tests
         public void ConfirmUserEmail_Should_Return_True_On_Success()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = createTestUser(email);
             Guid code = Guid.NewGuid();
 
@@ -2469,31 +2469,45 @@ namespace AllyisApps.Services.Tests
         public void GetOrganizationsByUserId_Should_Return_Correct_List_Of_Org()
         {
             //Arrange
-            string userEmail = "testuser@test.com";
+            string userEmail = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
-
-            int userId = createTestUser(userEmail);
-            int orgId = createTestOrg(orgName);
+            int userId = -1;
+            int orgId = -1;
+            userId = createTestUser(userEmail);
+            orgId = createTestOrg(orgName);
             createOrgUser(userId, orgId, 1, "111");    //roleId = 1 (member)
 
             UserContext userContext = new UserContext(userId, userEmail, userEmail, 0, 0, null, 1);
             var service = new Service(connectionStr, userContext);
 
+            bool testPassed = false;
+            bool cleaned = true;
+            string msg = "";
             try
             {
                 //Act
                 IEnumerable<Organization> orgList = service.GetOrganizationsByUserId();
 
-                //Assert
-                Assert.IsTrue(orgList.Count() == 1 && orgList.ElementAt(0).OrganizationId == orgId);
+                testPassed = (orgList.Count() == 1 && orgList.ElementAt(0).OrganizationId == orgId);
+                if (testPassed) msg += "Test passed. ";
+                if (!testPassed) msg += "Test failed. ";
             }
             finally
             {
-                //Clean up
-                deleteOrgUser(userId, orgId);
-                deleteTestOrg(orgId);
-                deleteTestUser(userEmail);
+                try
+                {
+                    //Clean up
+                    deleteOrgUser(userId, orgId);
+                    deleteTestOrg(orgId);
+                    deleteTestUser(userEmail);
+                }
+                catch (SqlException)
+                {
+                    cleaned = false;
+                    msg += "Cleanup failed.";
+                }
             }
+            Assert.IsTrue(testPassed & cleaned, msg);
         }
 
         [TestMethod]
@@ -2508,7 +2522,7 @@ namespace AllyisApps.Services.Tests
         public void InitializeUser_Should_Return_Correct_User_Instance_For_A_UserDBEntity_Instance()
         {
             //Arrange
-            string userEmail = "testuser@test.com";
+            string userEmail = "test_user@unittestemail.com";
             string pwHash = Crypto.GetPasswordHash("AllyisApps.123");
             int userId = createTestUser(userEmail);
 
@@ -2589,7 +2603,7 @@ namespace AllyisApps.Services.Tests
         public void GetDBEntityFromUser_Should_Return_Correct_UserDbEntity_Instance_For_A_User_Instance()
         {
             //Arrange
-            string userEmail = "testuser@test.com";
+            string userEmail = "test_user@unittestemail.com";
             string pwHash = Crypto.GetPasswordHash("AllyisApps.123");
             int userId = createTestUser(userEmail);
 
@@ -2669,7 +2683,7 @@ namespace AllyisApps.Services.Tests
         [TestMethod]
         public void InitializeUserRolesInfo_Should_Return_Correct_UserRolesInfo_For_A_UserRolesDBEntity_Instance()
         {
-            string userEmail = "testuser@test.com";
+            string userEmail = "test_user@unittestemail.com";
 
             UserRolesDBEntity dbEntity = new UserRolesDBEntity
             {
@@ -2976,7 +2990,7 @@ namespace AllyisApps.Services.Tests
         public void Can_Should_Return_False_If_No_Org_Is_Chosen()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
 
             UserContext userContext = new UserContext(userId, email, email, 0, 0, null, 1); //chosenOrganizationId = 0;
@@ -2994,7 +3008,7 @@ namespace AllyisApps.Services.Tests
         public void Can_Should_Return_True_For_Org_Member_Can_View_Organization()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
             string orgName = "UnitTestOrg";
             int orgId = 1;
@@ -3016,7 +3030,7 @@ namespace AllyisApps.Services.Tests
         public void Can_Should_Return_True_For_Org_Owner_Can_View_Organization()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
             string orgName = "UnitTestOrg";
             int orgId = 1;
@@ -3038,7 +3052,7 @@ namespace AllyisApps.Services.Tests
         public void Can_Should_Return_False_For_Org_Member_Cannot_Edit_Organization()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
             string orgName = "UnitTestOrg";
             int orgId = 1;
@@ -3060,7 +3074,7 @@ namespace AllyisApps.Services.Tests
         public void Can_Should_Return_True_For_Org_Owner_Can_Edit_Organization()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
             string orgName = "UnitTestOrg";
             int orgId = 1;
@@ -3082,7 +3096,7 @@ namespace AllyisApps.Services.Tests
         public void Can_Should_Return_True_For_TimeTracker_User_Can_View_Customer()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
             string orgName = "UnitTestOrg";
             int orgId = 1;
@@ -3107,7 +3121,7 @@ namespace AllyisApps.Services.Tests
         public void Can_Should_Return_True_For_TimeTracker_Manager_Can_View_Customer()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
             string orgName = "UnitTestOrg";
             int orgId = 1;
@@ -3132,7 +3146,7 @@ namespace AllyisApps.Services.Tests
         public void Can_Should_Return_False_For_TimeTracker_User_Cannot_Edit_Customer()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
             string orgName = "UnitTestOrg";
             int orgId = 1;
@@ -3157,7 +3171,7 @@ namespace AllyisApps.Services.Tests
         public void Can_Should_Return_True_For_TimeTracker_Manager_Can_Edit_Customer()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
             string orgName = "UnitTestOrg";
             int orgId = 1;
@@ -3182,7 +3196,7 @@ namespace AllyisApps.Services.Tests
         public void Can_Should_Return_False_For_TimeTracker_User_Cannot_Edit_Project()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
             string orgName = "UnitTestOrg";
             int orgId = 1;
@@ -3207,7 +3221,7 @@ namespace AllyisApps.Services.Tests
         public void Can_Should_Return_True_For_TimeTracker_Manager_Can_Edit_Project()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
             string orgName = "UnitTestOrg";
             int orgId = 1;
@@ -3232,7 +3246,7 @@ namespace AllyisApps.Services.Tests
         public void Can_Should_Return_True_For_TimeTracker_User_Can_Edit_Own_Entries()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
             string orgName = "UnitTestOrg";
             int orgId = 1;
@@ -3257,7 +3271,7 @@ namespace AllyisApps.Services.Tests
         public void Can_Should_Return_True_For_TimeTracker_Manager_Can_Edit_Own_Entries()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
             string orgName = "UnitTestOrg";
             int orgId = 1;
@@ -3282,7 +3296,7 @@ namespace AllyisApps.Services.Tests
         public void Can_Should_Return_True_For_TimeTracker_Manager_Can_Edit_Others_Entries()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
             string orgName = "UnitTestOrg";
             int orgId = 1;
@@ -3307,7 +3321,7 @@ namespace AllyisApps.Services.Tests
         public void Can_Should_Return_False_For_TimeTracker_User_Cannot_Edit_Others_Entries()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
             string orgName = "UnitTestOrg";
             int orgId = 1;
@@ -3334,13 +3348,14 @@ namespace AllyisApps.Services.Tests
         *                        Unit tests for methods in ImportService.cs
         ***************************************************************************************************/
         [TestMethod]
+        [DeploymentItem("..\\..\\TestData_Import.xls")]
         public void Import_Should_Import_Valid_Customer_Data_Correctly()
         {
             //Arrange
             DataSet data = parseExcelFile("Customers$");    //excel sheet that has 2 new customers to import
 
             string orgName = "UnitTestOrg";
-            string user = "testuser@email.com";
+            string user = "test_user@unittestemail.com";
             int orgId = createTestOrg(orgName);
             int userId = createTestUser(user);
             int subId = createSubscription(orgId, 1, 10);   //org subscribes to TimeTracker
@@ -3377,18 +3392,19 @@ namespace AllyisApps.Services.Tests
         }
 
         [TestMethod]
+        [DeploymentItem("..\\..\\TestData_Import.xls")]
         public void Import_Should_Import_Only_Non_Existing_Customers()
         {
             //Arrange
             DataSet data = parseExcelFile("Customers$");    //excel sheet that has 2 customers to import, 1 is already in the db
 
             string orgName = "UnitTestOrg";
-            string user = "testuser@email.com";
+            string user = "test_user@unittestemail.com";
             int orgId = createTestOrg(orgName);
             int userId = createTestUser(user);
             int subId = createSubscription(orgId, 1, 10);   //org subscribes to TimeTracker
             createSubUser(subId, userId, 2);    //user needs to be TimeTracker Manager to have permission to create Customer
-            createCustomer("ExampleCorp", orgId, 1, "CUST-0001"); //this customer is already in the database
+            createCustomer("TestCorp1", orgId, 1, "CUST-01"); //this customer is already in the database
 
             UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager);
             subInfo.ProductId = ProductIdEnum.TimeTracker;
@@ -3421,13 +3437,14 @@ namespace AllyisApps.Services.Tests
         }
 
         [TestMethod]
+        [DeploymentItem("..\\..\\TestData_Import.xls")]
         public void Import_Should_Not_Import_Customers_With_No_Name_Or_Id()
         {
             //Arrange
             DataSet data = parseExcelFile("Customers_NoNameOrId$");    //excel sheet that has 2 new customers to import, 1 has no name, 1 has no customerId
 
             string orgName = "UnitTestOrg";
-            string user = "testuser@email.com";
+            string user = "test_user@unittestemail.com";
             int orgId = createTestOrg(orgName);
             int userId = createTestUser(user);
             int subId = createSubscription(orgId, 1, 10);   //org subscribes to TimeTracker
@@ -3464,19 +3481,20 @@ namespace AllyisApps.Services.Tests
         }
 
         [TestMethod]
+        [DeploymentItem("..\\..\\TestData_Import.xls")]
         public void Import_Should_Import_Valid_Project_Data_Correctly()
         {
             //Arrange
             DataSet data = parseExcelFile("Projects$");    //excel sheet that has 4 new projects to import
 
             string orgName = "UnitTestOrg";
-            string user = "testuser@email.com";
+            string user = "test_user@unittestemail.com";
             int orgId = createTestOrg(orgName);
             int userId = createTestUser(user);
             int subId = createSubscription(orgId, 1, 10);   //org subscribes to TimeTracker
             createSubUser(subId, userId, 2);    //user needs to be TimeTracker Manager to have permission to create Customer
-            int custId1 = createCustomer("ExampleCorp", orgId, 1, "CUST-0001");
-            int custId2 = createCustomer("FakeDataCorp", orgId, 1, "CUST-0002");  
+            int custId1 = createCustomer("TestCorp1", orgId, 1, "CUST-01");
+            int custId2 = createCustomer("TestCorp2", orgId, 1, "CUST-02");  
 
             UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager);
             subInfo.ProductId = ProductIdEnum.TimeTracker;
@@ -3511,20 +3529,21 @@ namespace AllyisApps.Services.Tests
         }
 
         [TestMethod]
+        [DeploymentItem("..\\..\\TestData_Import.xls")]
         public void Import_Should_Import_Only_Non_Existing_Projects()
         {
             //Arrange
             DataSet data = parseExcelFile("Projects$");    //excel sheet that has 4 projects to import, 1 is already in the db
 
             string orgName = "UnitTestOrg";
-            string user = "testuser@email.com";
+            string user = "test_user@unittestemail.com";
             int orgId = createTestOrg(orgName);
             int userId = createTestUser(user);
             int subId = createSubscription(orgId, 1, 10);   //org subscribes to TimeTracker
             createSubUser(subId, userId, 2);    //user needs to be TimeTracker Manager to have permission to create Customer
-            int custId1 = createCustomer("ExampleCorp", orgId, 1, "CUST-0001");
-            int custId2 = createCustomer("FakeDataCorp", orgId, 1, "CUST-0002");
-            int projId = createProject(custId1, "Example Project 1", 1, "PROJ-0001");   //existing project
+            int custId1 = createCustomer("TestCorp1", orgId, 1, "CUST-01");
+            int custId2 = createCustomer("TestCorp2", orgId, 1, "CUST-02");
+            int projId = createProject(custId1, "Test Project 1", 1, "PROJ-01");   //existing project
 
             UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager);
             subInfo.ProductId = ProductIdEnum.TimeTracker;
@@ -3559,18 +3578,19 @@ namespace AllyisApps.Services.Tests
         }
 
         [TestMethod]
+        [DeploymentItem("..\\..\\TestData_Import.xls")]
         public void Import_Should_Not_Import_Projects_With_No_Name_Or_Id()
         {
             //Arrange
             DataSet data = parseExcelFile("Projects_NoNameOrId$");    //excel sheet that has 2 new projects to import, 1 has no name, 1 has no id
 
             string orgName = "UnitTestOrg";
-            string user = "testuser@email.com";
+            string user = "test_user@unittestemail.com";
             int orgId = createTestOrg(orgName);
             int userId = createTestUser(user);
             int subId = createSubscription(orgId, 1, 10);   //org subscribes to TimeTracker
             createSubUser(subId, userId, 2);    //user needs to be TimeTracker Manager to have permission to create Customer
-            int custId1 = createCustomer("ExampleCorp", orgId, 1, "CUST-0001");
+            int custId1 = createCustomer("TestCorp1", orgId, 1, "CUST-01");
 
             UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager);
             subInfo.ProductId = ProductIdEnum.TimeTracker;
@@ -3604,18 +3624,19 @@ namespace AllyisApps.Services.Tests
         }
 
         [TestMethod]
+        [DeploymentItem("..\\..\\TestData_Import.xls")]
         public void Import_Should_Not_Import_Projects_With_No_Customer_Identification()
         {
             //Arrange
             DataSet data = parseExcelFile("Projects_NoCustomerId$");    //excel sheet that has 2 new projects to import, 1 is valid, 1 has no customerId
 
             string orgName = "UnitTestOrg";
-            string user = "testuser@email.com";
+            string user = "test_user@unittestemail.com";
             int orgId = createTestOrg(orgName);
             int userId = createTestUser(user);
             int subId = createSubscription(orgId, 1, 10);   //org subscribes to TimeTracker
             createSubUser(subId, userId, 2);    //user needs to be TimeTracker Manager to have permission to create Customer
-            int custId1 = createCustomer("ExampleCorp", orgId, 1, "CUST-0001");
+            int custId1 = createCustomer("TestCorp1", orgId, 1, "CUST-01");
 
             UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager);
             subInfo.ProductId = ProductIdEnum.TimeTracker;
@@ -3649,13 +3670,14 @@ namespace AllyisApps.Services.Tests
         }
 
         [TestMethod]
+        [DeploymentItem("..\\..\\TestData_Import.xls")]
         public void Import_Should_Import_Valid_User_Data_Correctly()
         {
             //Arrange
             DataSet data = parseExcelFile("Users$");    //excel sheet that has 3 new users to import
 
             string orgName = "UnitTestOrg";
-            string user = "testuser@email.com";
+            string user = "test_user@unittestemail.com";
             int orgId = createTestOrg(orgName);
             int userId = createTestUser(user);
             createOrgUser(userId, orgId, 2, "orgOwner");
@@ -3682,21 +3704,22 @@ namespace AllyisApps.Services.Tests
                 //Clean up
                 deleteOrgUserByOrgId(orgId);
                 deleteTestUser(user);
-                deleteTestUser("asample@import.com");
-                deleteTestUser("bsmith@import.com");
-                deleteTestUser("fexample@import.com");
+                deleteTestUser("user_a@testimport.com");
+                deleteTestUser("user_b@testimport.com");
+                deleteTestUser("user_c@testimport.com");
                 deleteTestOrg(orgId);
             }
         }
 
         [TestMethod]
+        [DeploymentItem("..\\..\\TestData_Import.xls")]
         public void Import_Should_Import_Only_Non_Exsiting_Users()
         {
             //Arrange
             DataSet data = parseExcelFile("Users$");    //excel sheet that has 3 users to import, 1 is already in database
 
             string orgName = "UnitTestOrg";
-            string user = "asample@import.com";
+            string user = "user_a@testimport.com";
             int orgId = createTestOrg(orgName);
             int userId = createTestUser(user);
             createOrgUser(userId, orgId, 2, "orgOwner");
@@ -3723,13 +3746,14 @@ namespace AllyisApps.Services.Tests
                 //Clean up
                 deleteOrgUserByOrgId(orgId);
                 deleteTestUser(user);
-                deleteTestUser("bsmith@import.com");
-                deleteTestUser("fexample@import.com");
+                deleteTestUser("user_b@testimport.com");
+                deleteTestUser("user_c@testimport.com");
                 deleteTestOrg(orgId);
             }
         }
 
         [TestMethod]
+        [DeploymentItem("..\\..\\TestData_Import.xls")]
         public void Import_Should_Not_Import_Users_With_No_Email_Or_EmployeeId_Or_FullName()
         {
             //Arrange
@@ -3737,7 +3761,7 @@ namespace AllyisApps.Services.Tests
                                                                                   //1 has no employeeId, 1 has no last name
 
             string orgName = "UnitTestOrg";
-            string user = "testuser@email.com";
+            string user = "test_user@unittestemail.com";
             int orgId = createTestOrg(orgName);
             int userId = createTestUser(user);
             createOrgUser(userId, orgId, 2, "orgOwner");
@@ -3764,31 +3788,32 @@ namespace AllyisApps.Services.Tests
                 //Clean up
                 deleteOrgUserByOrgId(orgId);
                 deleteTestUser(user);
-                deleteTestUser("asample@import.com");
-                deleteTestUser("bsmith@import.com");
-                deleteTestUser("fexample@import.com");
+                deleteTestUser("user_a@testimport.com");
+                deleteTestUser("user_b@testimport.com");
+                deleteTestUser("user_c@testimport.com");
                 deleteTestOrg(orgId);
             }
         }
 
         [TestMethod]
+        [DeploymentItem("..\\..\\TestData_Import.xls")]
         public void Import_Should_Import_Valid_Time_Entry_Data_Correctly()
         {
             //Arrange
             DataSet data = parseExcelFile("TimeEntries$");    //excel sheet that has 10 time entries to import
 
             string orgName = "UnitTestOrg";
-            string user1 = "testuser1@email.com";
-            string user2 = "testuser2@email.com";
+            string user1 = "testuser1@unittestemail.com";
+            string user2 = "testuser2@unittestemail.com";
             int orgId = createTestOrg(orgName);
             int userId1 = createTestUser(user1);
             int userId2 = createTestUser(user2);
-            createOrgUser(userId1, orgId, 1, "EMP-0001");
-            createOrgUser(userId2, orgId, 1, "EMP-0002");
+            createOrgUser(userId1, orgId, 1, "EMP-01");
+            createOrgUser(userId2, orgId, 1, "EMP-02");
 
             int subId = createSubscription(orgId, 1, 100);   //org subscribes to TimeTracker
-            int custId = createCustomer("SampleCorp", orgId, 1, "CORP-001");
-            int projId = createProject(custId, "Project1", 1, "PROJ-0001");
+            int custId = createCustomer("TestCorp1", orgId, 1, "CORP-01");
+            int projId = createProject(custId, "Project1", 1, "PROJ-01");
 
             UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager);
             subInfo.ProductId = ProductIdEnum.TimeTracker;
@@ -3851,23 +3876,24 @@ namespace AllyisApps.Services.Tests
         }
 
         [TestMethod]
+        [DeploymentItem("..\\..\\TestData_Import.xls")]
         public void Import_Should_Not_Import_When_Organization_Is_Not_Subscribed()
         {
             //Arrange
             DataSet data = parseExcelFile("TimeEntries$");    //excel sheet that has 10 time entries to import
 
             string orgName = "UnitTestOrg";
-            string user1 = "testuser1@email.com";
-            string user2 = "testuser2@email.com";
+            string user1 = "testuser1@unittestemail.com";
+            string user2 = "testuser2@unittestemail.com";
             int orgId = createTestOrg(orgName);
             int userId1 = createTestUser(user1);
             int userId2 = createTestUser(user2);
-            createOrgUser(userId1, orgId, 1, "EMP-0001");
-            createOrgUser(userId2, orgId, 1, "EMP-0002");
+            createOrgUser(userId1, orgId, 1, "EMP-01");
+            createOrgUser(userId2, orgId, 1, "EMP-02");
 
             //int subId = createSubscription(orgId, 1, 100);   //org does not subscribe to TimeTracker
-            int custId = createCustomer("SampleCorp", orgId, 1, "CORP-001");
-            int projId = createProject(custId, "Project1", 1, "PROJ-0001");
+            int custId = createCustomer("TestCorp1", orgId, 1, "CORP-01");
+            int projId = createProject(custId, "Project1", 1, "PROJ-01");
 
             UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
 
@@ -3898,21 +3924,22 @@ namespace AllyisApps.Services.Tests
         }
 
         [TestMethod]
+        [DeploymentItem("..\\..\\TestData_Import.xls")]
         public void Import_Should_Not_Import_Duplicate_Entries()
         {
             //Arrange
             DataSet data = parseExcelFile("TimeEntries_DuplicateEntries$");    //excel sheet that has 4 duplicate time entries
 
             string orgName = "UnitTestOrg";
-            string user1 = "testuser1@email.com";
+            string user1 = "testuser1@unittestemail.com";
             int orgId = createTestOrg(orgName);
             createPayClass(orgId);
             int userId1 = createTestUser(user1);
-            createOrgUser(userId1, orgId, 1, "EMP-0001");
+            createOrgUser(userId1, orgId, 1, "EMP-01");
 
             int subId = createSubscription(orgId, 1, 100);
-            int custId = createCustomer("SampleCorp", orgId, 1, "CORP-001");
-            int projId = createProject(custId, "Project1", 1, "PROJ-0001");
+            int custId = createCustomer("TestCorp1", orgId, 1, "CORP-01");
+            int projId = createProject(custId, "Project1", 1, "PROJ-01");
 
             UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
 
@@ -3945,6 +3972,7 @@ namespace AllyisApps.Services.Tests
         }
 
         [TestMethod]
+        [DeploymentItem("..\\..\\TestData_Import.xls")]
         public void Import_Should_Not_Import_When_Exceeding_24_Hours_A_Day()
         {
             //Arrange
@@ -3952,15 +3980,15 @@ namespace AllyisApps.Services.Tests
                                                                             //first 2 should be imported, last one shouldn't be.
 
             string orgName = "UnitTestOrg";
-            string user1 = "testuser1@email.com";
+            string user1 = "testuser1@unittestemail.com";
             int orgId = createTestOrg(orgName);
             createPayClass(orgId);
             int userId1 = createTestUser(user1);
-            createOrgUser(userId1, orgId, 1, "EMP-0001");
+            createOrgUser(userId1, orgId, 1, "EMP-01");
 
             int subId = createSubscription(orgId, 1, 100);
-            int custId = createCustomer("SampleCorp", orgId, 1, "CORP-001");
-            int projId = createProject(custId, "Project1", 1, "PROJ-0001");
+            int custId = createCustomer("TestCorp1", orgId, 1, "CORP-01");
+            int projId = createProject(custId, "Project1", 1, "PROJ-01");
 
             UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
 
@@ -4088,7 +4116,7 @@ namespace AllyisApps.Services.Tests
             //Arrange
             string orgName = "UnitTestOrg";
             int orgId = createTestOrg(orgName); //subdomain is taken
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int ownerId = createTestUser(email);    //create owner
 
             Organization newOrg = new Organization();   //initilize Organization object
@@ -4116,7 +4144,7 @@ namespace AllyisApps.Services.Tests
         public void CreateOrganization_Should_Return_OrgId_If_Succeed()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int ownerId = createTestUser(email);    //create owner
 
             Organization newOrg = new Organization();   //initilize Organization object
@@ -4330,7 +4358,7 @@ namespace AllyisApps.Services.Tests
         public void GetOrgWithCountriesAndEmployeeId_Should_Return_Chosen_Org_And_All_Countries_And_EmployeeId()
         {
             //Arrange
-            string userEmail = "testuser@test.com";
+            string userEmail = "test_user@unittestemail.com";
             int userId = createTestUser(userEmail);
 
             string orgName = "UnitTestOrg";
@@ -4491,7 +4519,7 @@ namespace AllyisApps.Services.Tests
         public void UpdateOrganization_Should_Return_False_If_User_Is_Not_Authorized_to_Perform_Action()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
             string orgName = "UnitTestOrg";
             int orgId = 1;
@@ -4512,7 +4540,7 @@ namespace AllyisApps.Services.Tests
         [TestMethod]
         public void UpdateOrganization_Should_Throw_Exception_If_Subdomain_Is_Taken()
         {
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = createTestUser(email);
             string orgName = "UnitTestOrg";
             int orgId = createTestOrg(orgName);
@@ -4549,7 +4577,7 @@ namespace AllyisApps.Services.Tests
         [TestMethod]
         public void UpdateOrganization_Should_Return_True_If_Succeed()
         {
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = createTestUser(email);
             int orgId = createTestOrg(orgName);
@@ -4624,14 +4652,16 @@ namespace AllyisApps.Services.Tests
         public void UpdateActiveOrganization_Should_Update_Users_ActiveOrganizationId()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
+            string orgName = "UnitTestOrg";
             int userId = createTestUser(email);
+            int orgId = createTestOrg(orgName);
             var service = new Service(connectionStr);
 
             try
             {
                 //Act
-                service.UpdateActiveOrganization(userId, 1);    //update ActiveOrgId to 1
+                service.UpdateActiveOrganization(userId, orgId);    //update ActiveOrgId
 
                 string selectStmt = "SELECT [ActiveOrganizationId] FROM [Auth].[User] WHERE [UserId] = @userId";
                 SqlDataReader reader;
@@ -4655,12 +4685,13 @@ namespace AllyisApps.Services.Tests
                     }
                 }
                 //Assert
-                Assert.IsTrue(activeOrgId == 1);
+                Assert.IsTrue(activeOrgId == orgId);
             }
             finally
             {
                 //Clean up
                 deleteTestUser(email);
+                deleteTestOrg(orgId);
             }
         }
 
@@ -4684,7 +4715,7 @@ namespace AllyisApps.Services.Tests
         public void GetOrgRole_Should_Return_Null_If_User_Has_No_Role_In_The_Org()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = createTestUser(email);
             var service = new Service(connectionStr);
 
@@ -4707,7 +4738,7 @@ namespace AllyisApps.Services.Tests
         public void GetOrgRole_Should_Return_Correct_OrgRole_If_Succeed()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = createTestUser(email);
             int orgId = createTestOrg(orgName);
@@ -4735,7 +4766,7 @@ namespace AllyisApps.Services.Tests
         public void DeleteOrganization_Should_Return_False_If_User_Is_Not_Authorized_To_Perform_Action()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = 1;
             string orgName = "UnitTestOrg";
             int orgId = 1;
@@ -4757,7 +4788,7 @@ namespace AllyisApps.Services.Tests
         [TestMethod]
         public void DeleteOrganization_Should_Return_True_If_Succeed()
         {
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = createTestUser(email);
             int orgId = createTestOrg(orgName);
@@ -4864,7 +4895,7 @@ namespace AllyisApps.Services.Tests
         public async Task InviteUser_Should_Throw_Exception_For_User_Is_Already_A_Member_Of_Org()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = createTestUser(email);
             int orgId = createTestOrg(orgName);
@@ -4902,7 +4933,7 @@ namespace AllyisApps.Services.Tests
         public async Task InviteUser_Should_Throw_Exception_For_Duplicate_EmployeeId()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string otherMember = "othermember@test.com";
             string orgName = "UnitTestOrg";
             int userId = createTestUser(email);
@@ -4996,7 +5027,7 @@ namespace AllyisApps.Services.Tests
         public void RemoveInvitation_Should_Return_False_If_User_Is_Not_Authorized_To_Perform_Action()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             int userId = createTestUser(email);
             string orgName = "UnitTestOrg";
             int orgId = createTestOrg(orgName);
@@ -5028,7 +5059,7 @@ namespace AllyisApps.Services.Tests
         [TestMethod]
         public void RemoveInvitation_Should_Return_True_If_Succeed()
         {
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = createTestUser(email);
             int orgId = createTestOrg(orgName);
@@ -5036,7 +5067,7 @@ namespace AllyisApps.Services.Tests
 
             UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, null, null);    //owner can edit org
             List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
-            UserContext userContext = new UserContext(1, "calling@email.com", "calling@email.com", orgId, 0, infoList, 1); //calling user has id=1
+            UserContext userContext = new UserContext(1, "calling@unittestemail.com", "calling@unittestemail.com", orgId, 0, infoList, 1); //calling user has id=1
             var service = new Service(connectionStr, userContext);
 
             try
@@ -5102,7 +5133,7 @@ namespace AllyisApps.Services.Tests
         public void UpdateSubscriptionUserProductRole_Should_Update_Users_Sub_Product_Role_If_Succeed()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = createTestUser(email);
             int orgId = createTestOrg(orgName);
@@ -5278,11 +5309,11 @@ namespace AllyisApps.Services.Tests
         public void SetEmployeeId_Should_Return_False_If_The_EmployeeId_Is_Already_Taken()
         {
             //Arrange
-            string user = "testuser1@test.com";
+            string user = "testuser1@unittestemail.com";
             string orgName = "UnitTestOrg";
             int orgId = createTestOrg(orgName);
             int userId = createTestUser(user);
-            createUserInvitation("abc@email.com", orgId, 1, "111");  //employeeId "111" is already taken
+            createUserInvitation("abc@unittestemail.com", orgId, 1, "111");  //employeeId "111" is already taken
             createOrgUser(userId, orgId, 1, "112");
 
             var service = new Service(connectionStr);
@@ -5298,7 +5329,7 @@ namespace AllyisApps.Services.Tests
             finally
             {
                 //Clean up
-                deleteUserInvitation("abc@email.com");
+                deleteUserInvitation("abc@unittestemail.com");
                 deleteOrgUser(userId, orgId);
                 deleteTestUser(user);
                 deleteTestOrg(orgId);
@@ -5612,8 +5643,8 @@ namespace AllyisApps.Services.Tests
         {
             //Arrange
             string orgName = "UnitTestOrg";
-            string user1 = "user1@test.com";
-            string user2 = "user2@test.com";
+            string user1 = "user1@unittestemail.com";
+            string user2 = "user2@unittestemail.com";
             int orgId = createTestOrg(orgName);
             int subId = createSubscription(orgId, 1, 100);
             int userId1 = createTestUser(user1);
@@ -5732,8 +5763,8 @@ namespace AllyisApps.Services.Tests
         {
             //Arrange
             string orgName = "UnitTestOrg";
-            string user1 = "user1@test.com";
-            string user2 = "user2@test.com";
+            string user1 = "user1@unittestemail.com";
+            string user2 = "user2@unittestemail.com";
             int orgId = createTestOrg(orgName);
             int userId1 = createTestUser(user1);
             int userId2 = createTestUser(user2);
@@ -5814,7 +5845,7 @@ namespace AllyisApps.Services.Tests
         {
             //Arrange
             string orgName = "UnitTestOrg";
-            string user = "user@test.com";
+            string user = "user@unittestemail.com";
             int orgId = createTestOrg(orgName);
             int subId = createSubscription(orgId, 1, 100);
             int userId = createTestUser(user);

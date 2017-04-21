@@ -57,7 +57,7 @@ namespace AllyisApps.Services.Tests
         public void GetTimeEntry_Should_Return_Correct_TimeEntry()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             DateTime date = new DateTime(2017, 1, 1);
             int userId = AuthTest.createTestUser(email);
             string orgName = "UnitTestOrg";
@@ -98,7 +98,7 @@ namespace AllyisApps.Services.Tests
         public void CreateTimeEntry_Should_Return_The_Correct_TimeEntryId_Of_The_Entry_Created()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             DateTime date = new DateTime(2017, 1, 1);
             int userId = AuthTest.createTestUser(email);
@@ -170,7 +170,7 @@ namespace AllyisApps.Services.Tests
         public void UpdateTimeEntry_Should_Update_The_Entry_Correctly()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             DateTime date = new DateTime(2017, 1, 1);
             int userId = AuthTest.createTestUser(email);
@@ -243,7 +243,7 @@ namespace AllyisApps.Services.Tests
         public void DeleteTimeEntry_Should_Delete_The_Correct_Entry()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             DateTime date = new DateTime(2017, 1, 1);
             int userId = AuthTest.createTestUser(email);
@@ -307,7 +307,7 @@ namespace AllyisApps.Services.Tests
         public void GetTimeEntriesOverDateRange_Should_Return_Correct_Entries_For_Current_Organization()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             DateTime date1 = new DateTime(2017, 1, 1);
             DateTime date2 = new DateTime(2017, 1, 20);
@@ -511,7 +511,7 @@ namespace AllyisApps.Services.Tests
         public void CreateHoliday_Should_Return_False_If_Authorization_Fails()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -556,7 +556,7 @@ namespace AllyisApps.Services.Tests
         public void CreateHoliday_Should_Return_True_If_Succeed()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -648,7 +648,7 @@ namespace AllyisApps.Services.Tests
         public void DeleteHoliday_Should_Return_False_If_Authorization_Fails()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -690,7 +690,7 @@ namespace AllyisApps.Services.Tests
         public void DeleteHoliday_Should_Return_True_If_Succeed()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -790,7 +790,7 @@ namespace AllyisApps.Services.Tests
         public void GetLockDate_Should_Return_Null_If_LockDate_Is_Not_Used()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -820,7 +820,7 @@ namespace AllyisApps.Services.Tests
         public void GetLockDate_Should_Return_Correct_LockDate()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -868,7 +868,7 @@ namespace AllyisApps.Services.Tests
         public void CreatePayClass_Should_Throw_Exception_For_Duplicate_PayClass()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int orgId = AuthTest.createTestOrg(orgName);
             int userId = AuthTest.createTestUser(email);
@@ -898,7 +898,7 @@ namespace AllyisApps.Services.Tests
         public void CreatePayClass_Should_Return_False_If_Authorization_Fails()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -937,7 +937,7 @@ namespace AllyisApps.Services.Tests
         public void CreatePayClass_Should_Return_True_If_Succeed()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -1004,7 +1004,7 @@ namespace AllyisApps.Services.Tests
         public void DeletePayClass_Should_Return_False_If_Authorization_Fails()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -1043,7 +1043,7 @@ namespace AllyisApps.Services.Tests
         public void DeletePayClass_Should_Return_True_If_Succeed()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -1101,7 +1101,7 @@ namespace AllyisApps.Services.Tests
         public void GetPayClasses_Should_Return_A_List_Of_PayClass_For_Given_Organization()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -1139,7 +1139,7 @@ namespace AllyisApps.Services.Tests
         public void UpdateStartOfWeek_Should_Return_False_If_Authorization_Fails()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -1178,7 +1178,7 @@ namespace AllyisApps.Services.Tests
         public void UpdateStartOfWeek_Should_Return_True_If_Succeed()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -1263,7 +1263,7 @@ namespace AllyisApps.Services.Tests
         public void UpdateOvertime_Should_Return_False_If_Authorization_Fails()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -1302,7 +1302,7 @@ namespace AllyisApps.Services.Tests
         public void UpdateOvertime_Should_Return_True_If_Succeed()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -1379,7 +1379,7 @@ namespace AllyisApps.Services.Tests
         public void UpdateLockDate_Should_Return_True_If_Succeed()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -1433,7 +1433,7 @@ namespace AllyisApps.Services.Tests
         public void GetAllSettings_Should_Return_All_Setting_Info()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
@@ -1494,7 +1494,7 @@ namespace AllyisApps.Services.Tests
         public void GetTimeEntryIndexInfo_Should_Return_All_Setting_Info()
         {
             //Arrange
-            string email = "testuser@test.com";
+            string email = "test_user@unittestemail.com";
             string orgName = "UnitTestOrg";
             int userId = AuthTest.createTestUser(email);
             int orgId = AuthTest.createTestOrg(orgName);
