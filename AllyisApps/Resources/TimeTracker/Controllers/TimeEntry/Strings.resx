@@ -135,6 +135,9 @@
   <data name="CannotCreateHolidayWIthoutName" xml:space="preserve">
     <value>You cannot create a holiday without a name.</value>
   </data>
+  <data name="CannotDeletePayClass" xml:space="preserve">
+    <value>The specified pay class could not be deleted. Please consider merging it with another pay class instead.</value>
+  </data>
   <data name="CannotExceed24" xml:space="preserve">
     <value>Duration cannot exceed 24 hours in a day.</value>
   </data>
@@ -275,5 +278,11 @@
   </data>
   <data name="SuccessfulDeletePayClass" xml:space="preserve">
     <value>Pay class deleted successfully</value>
+  </data>
+  <data name="CannotMergePayClass" xml:space="preserve">
+    <value>The specified pay class cannot be merged into another pay class.</value>
+  </data>
+  <data name="SuccessfulMergePayClass" xml:space="preserve">
+    <value>Pay class merged successfully.</value>
   </data>
 </root>

@@ -405,11 +405,29 @@ namespace AllyisApps.Services.TimeTracker
 			return false;
 		}
 
-		/// <summary>
-		/// Gets a list of <see cref="PayClass"/>'s for an organization.
+        /// <summary>
+		/// Check whether a payclass is used by a time entry before.
 		/// </summary>
-		/// <returns>List of PayClassInfo's.</returns>
-		public IEnumerable<PayClass> GetPayClasses()
+		/// <param name="payClassId">Pay class Id.</param>
+		/// <returns>Returns a list of timeEntryIds that used that payclass.</returns>
+        public IEnumerable<TimeEntryDBEntity> GetTimeEntriesThatUseAPayClass(int payClassId)
+        {
+            #region Validation
+
+            if (payClassId <= 0)
+            {
+                throw new ArgumentOutOfRangeException("payClassId", "Pay class id cannot be 0 or negative.");
+            }
+            #endregion Validation
+
+            return DBHelper.GetTimeEntriesThatUseAPayClass(payClassId);
+        }
+
+        /// <summary>
+        /// Gets a list of <see cref="PayClass"/>'s for an organization.
+        /// </summary>
+        /// <returns>List of PayClassInfo's.</returns>
+        public IEnumerable<PayClass> GetPayClasses()
 		{
 			return DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InitializePayClassInfo(pc));
 		}

@@ -6,7 +6,9 @@
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
+using System.Linq;
 using System.Web.Mvc;
+using System.Web.UI;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -22,15 +24,27 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Redirects to the settings view.</returns>
 		public ActionResult DeletePayClass(int payClassId)
 		{
-			if (TimeTrackerService.DeletePayClass(payClassId))
-			{
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulDeletePayClass, Variety.Success));
+            var allPayClasses = TimeTrackerService.GetPayClasses();
+            string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassID == payClassId).ElementAt(0).Name;
+
+            //Built-in, non-editable pay classes cannot be deleted
+            //Used pay classes cannot be deleted, suggest manager to merge it with another payclass instead
+            if (sourcePayClassName == "Regular" || sourcePayClassName == "Overtime" || sourcePayClassName == "Holiday" || sourcePayClassName == "Paid Time Off" || sourcePayClassName == "Unpaid Time Off" || TimeTrackerService.GetTimeEntriesThatUseAPayClass(payClassId).Count() > 0)
+            {               
+                Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotDeletePayClass, Variety.Warning));
             }
-			else
-			{
-				// Should only be here because of permission failures
-				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
-			}
+            else
+            {
+                if (TimeTrackerService.DeletePayClass(payClassId))
+                {
+                    Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulDeletePayClass, Variety.Success));
+                }
+                else
+                {
+                    // Should only be here because of permission failures
+                    Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+                }
+            }
 
 			return this.RedirectToAction(ActionConstants.Settings);
 		}

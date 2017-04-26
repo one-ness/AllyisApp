@@ -117,6 +117,25 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+        /// <summary>
+		/// Return a list of TimeEntryIds that use the specified payClassId
+		/// </summary>
+		/// <param name="payClassId">The id of the pay class.</param>
+        public IEnumerable<TimeEntryDBEntity> GetTimeEntriesThatUseAPayClass(int payClassId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@payClassId", payClassId);
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                IEnumerable<TimeEntryDBEntity> result = connection.Query<TimeEntryDBEntity>(
+                    "[TimeTracker].[GetTimeEntriesThatUseAPayClass]",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+
+                return result == null ? new List<TimeEntryDBEntity>() : result;
+            }
+        }
+
 		/// <summary>
 		/// Returns a list of the payclasses for a given organization or a default list if there aren't any.
 		/// </summary>

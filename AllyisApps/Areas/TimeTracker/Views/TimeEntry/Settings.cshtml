@@ -47,6 +47,7 @@
                     <thead>
                         <tr>
                             <th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.PClass</th>
+                            <th><span class="pull-right">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Merge</span></th>
                             <th><span class="pull-right">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Delete</span></th>
                         </tr>
                     </thead>
@@ -58,9 +59,18 @@
                             }
                             <td>@_payClassName</td>
                             <td>
-
-                                <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DeletePayClass"
-								   onclick='deletePayClass("@PayClass.PayClassID", "\"@_payClassName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
+                                @if (_payClassName != "Regular" && _payClassName != "Overtime" && _payClassName != "Holiday" && _payClassName != "Paid Time Off" && _payClassName != "Unpaid Time Off")
+                                {
+                                    <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.MergePayClass"
+                                       onclick='mergePayClass("@PayClass.PayClassID")'><span class="fa fa-fw fa-object-group pull-right"></span></a>
+                                }
+                            </td>
+                            <td>
+                                @if (_payClassName != "Regular" && _payClassName != "Overtime" && _payClassName != "Holiday" && _payClassName != "Paid Time Off" && _payClassName != "Unpaid Time Off")
+                                {
+                                    <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DeletePayClass"
+                                       onclick='deletePayClass("@PayClass.PayClassID", "\"@_payClassName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
+                                }
                             </td>
                         </tr>
                     }
@@ -70,7 +80,8 @@
 						{
 							@Html.AntiForgeryToken();
 							<td><input type="text" name="NewPayClass" class="form-control" /></td>
-							<td><input class="pull-right btn btn-primary" type="submit" value="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Add" /></td>
+                            <td><span class="pull-right"></span></td>
+							<td><input class="btn btn-primary pull-right" type="submit" value="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Add" /></td>
 						}
 					</tr>
                 </table>
@@ -187,8 +198,9 @@
 
 @section scripts{
 	<script type="text/javascript">
+        mergePayClassUrl = "@Url.Action(ActionConstants.MergePayClass, ControllerConstants.TimeEntry, new { PayClassId = -1 })"
         deletePayClassWarning = "@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ConfirmDeletePayClass"
-		deletePayClassUrl = "@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { PayClassId = -1 })"
+        deletePayClassUrl = "@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { PayClassId = -1 })"
         deleteHolidayWarning = "@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ConfirmDeleteHoliday";
 		deleteHolidayUrl = "@Url.Action(ActionConstants.DeleteHoliday, ControllerConstants.TimeEntry, new { HolidayId = -1 })"
 	</script>

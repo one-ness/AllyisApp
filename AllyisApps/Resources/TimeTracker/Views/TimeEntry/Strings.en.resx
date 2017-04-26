@@ -321,6 +321,9 @@
   <data name="MemorialDay" xml:space="preserve">
     <value>Memorial Day</value>
   </data>
+  <data name="Merge" xml:space="preserve">
+    <value>Merge</value>
+  </data>
   <data name="NewYearsDay" xml:space="preserve">
     <value>New Year's Day</value>
   </data>
@@ -386,5 +389,11 @@
   </data>
   <data name="DeletePayClass" xml:space="preserve">
     <value>Delete Pay Class</value>
+  </data>
+  <data name="MergePayClass" xml:space="preserve">
+    <value>Merge With Another Pay Class</value>
+  </data>
+  <data name="ChoosePayClassToMerge" xml:space="preserve">
+    <value>Choose a Pay Class to Merge Into</value>
   </data>
 </root>

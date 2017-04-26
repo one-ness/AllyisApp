@@ -106,6 +106,15 @@ namespace AllyisApps.Resources.TimeTracker.Views.TimeEntry {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose a Pay Class to Merge Into.
+        /// </summary>
+        public static string ChoosePayClassToMerge {
+            get {
+                return ResourceManager.GetString("ChoosePayClassToMerge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Christmas.
         /// </summary>
         public static string Christmas {
@@ -453,6 +462,24 @@ namespace AllyisApps.Resources.TimeTracker.Views.TimeEntry {
         public static string MemorialDay {
             get {
                 return ResourceManager.GetString("MemorialDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Merge.
+        /// </summary>
+        public static string Merge {
+            get {
+                return ResourceManager.GetString("Merge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Merge With Another Pay Class.
+        /// </summary>
+        public static string MergePayClass {
+            get {
+                return ResourceManager.GetString("MergePayClass", resourceCulture);
             }
         }
         

@@ -318,6 +318,9 @@
   <data name="MemorialDay" xml:space="preserve">
     <value>Día conmemorativo</value>
   </data>
+  <data name="Merge" xml:space="preserve">
+    <value>Mancomunarse</value>
+  </data>
   <data name="NewYearsDay" xml:space="preserve">
     <value>Día de Año Nuevo</value>
   </data>
@@ -383,5 +386,11 @@
   </data>
   <data name="DeletePayClass" xml:space="preserve">
     <value>Eliminar clase de pago</value>
+  </data>
+  <data name="MergePayClass" xml:space="preserve">
+    <value>Mancomunarse Clases de Pago</value>
+  </data>
+  <data name="ChoosePayClassToMerge" xml:space="preserve">
+    <value>Elegir una clase de pago para combinar</value>
   </data>
 </root>

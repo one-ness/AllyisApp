@@ -133,6 +133,15 @@ namespace AllyisApps.Resources.TimeTracker.Controllers.TimeEntry {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The specified pay class could not be deleted. Please consider merging it with another pay class instead..
+        /// </summary>
+        public static string CannotDeletePayClass {
+            get {
+                return ResourceManager.GetString("CannotDeletePayClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You cannot edit this date..
         /// </summary>
         public static string CannotEditDate {
@@ -147,6 +156,15 @@ namespace AllyisApps.Resources.TimeTracker.Controllers.TimeEntry {
         public static string CannotExceed24 {
             get {
                 return ResourceManager.GetString("CannotExceed24", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specified pay class cannot be merged into another pay class..
+        /// </summary>
+        public static string CannotMergePayClass {
+            get {
+                return ResourceManager.GetString("CannotMergePayClass", resourceCulture);
             }
         }
         
@@ -489,6 +507,15 @@ namespace AllyisApps.Resources.TimeTracker.Controllers.TimeEntry {
         public static string SuccessfulDeletePayClass {
             get {
                 return ResourceManager.GetString("SuccessfulDeletePayClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pay class merged successfully..
+        /// </summary>
+        public static string SuccessfulMergePayClass {
+            get {
+                return ResourceManager.GetString("SuccessfulMergePayClass", resourceCulture);
             }
         }
         
