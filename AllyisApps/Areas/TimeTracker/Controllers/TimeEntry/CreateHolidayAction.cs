@@ -25,27 +25,31 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Redirects to the settings view.</returns>
 		public ActionResult CreateHoliday(string newHolidayName, string newHolidayDate)
 		{
+            bool isValid = true;
 			if (string.IsNullOrWhiteSpace(newHolidayName))
 			{
+                isValid = false;
 				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotCreateHolidayWIthoutName, Variety.Warning));
 			}
 
 			DateTime holidayDate;
 			if (!DateTime.TryParse(newHolidayDate, out holidayDate))
 			{
+                isValid = false;
 				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotCreateHolidayWithInvalidDate, Variety.Warning));
 			}
-            //the following if/else should be error checked. Even if the above fails, the holiday is attempted to be created, resulting in a created holiday without a name, or a SQL excpetion because the date is out of bounds.
-			if (TimeTrackerService.CreateHoliday(new Holiday() { OrganizationId = UserContext.ChosenOrganizationId, HolidayName = newHolidayName, Date = holidayDate }))
-			{
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulCreateHoliday, Variety.Success));
+            if (isValid)
+            {
+                if (TimeTrackerService.CreateHoliday(new Holiday() { OrganizationId = UserContext.ChosenOrganizationId, HolidayName = newHolidayName, Date = holidayDate }))
+                {
+                    Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulCreateHoliday, Variety.Success));
+                }
+                else
+                {
+                    // This should only be a permissions failure
+                    Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+                }
             }
-			else
-			{
-				// This should only be a permissions failure
-				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
-			}
-
 			return this.RedirectToAction(ActionConstants.Settings, new { OrganizationId = UserContext.ChosenOrganizationId }); // Same destination regardless of creation success
 		}
 	}

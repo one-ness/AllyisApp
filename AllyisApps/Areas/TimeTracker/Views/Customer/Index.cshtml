@@ -7,6 +7,7 @@
 @{
     DisplayHints.PageBodyId = "tt-customer";
     ViewBag.Title = AllyisApps.Resources.TimeTracker.Views.Customer.Strings.CustomerList;
+    ViewData["IsManager"] = Model.canEdit;
     Layout = "~/Areas/TimeTracker/Views/Shared/_Layout.cshtml";
     var customerCount = 0;
     var empty = new EditCustomerInfoViewModel() { OrganizationId = Model.OrganizationId };

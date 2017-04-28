@@ -1,6 +1,6 @@
 ﻿@using AllyisApps.ViewModels.Shared;
 
-@model List<LanguageViewModel>
+@model Tuple<List<LanguageViewModel>, int>
 
 @{
     Layout = string.Empty;
@@ -12,7 +12,7 @@
     <div class="row">
         <p class="footer-links col-xs-8 col-sm-6">
             <select class="col-xs-12 col-sm-6 form-control" id="languageSelect" onchange="OnLanguageSelect()" value=@ViewBag.language style="width: inherit;">
-                @foreach (LanguageViewModel language in Model)
+                @foreach (LanguageViewModel language in Model.Item1)
             {
                 string languageKey = LanguageViewModel.Clean(language.LanguageName);
 
@@ -42,6 +42,6 @@
 
 <script type="text/javascript">
     OnLanguageSelect = function () {
-        window.location.href = "@Url.SubdomainLink(ActionConstants.UpdateLanguage, ControllerConstants.Shared, null, 0, this.Request)".replace(/&amp;/g, "&") + "&languageID=" + $('#languageSelect').val();
+        window.location.href = "@Url.SubdomainLink(ActionConstants.UpdateLanguage, ControllerConstants.Shared, null, Model.Item2, this.Request)".replace(/&amp;/g, "&") + "&languageID=" + $('#languageSelect').val();
     }
 </script>

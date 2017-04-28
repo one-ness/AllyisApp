@@ -9,6 +9,7 @@
     ViewBag.startOfWeek = Model.StartOfWeek;
     ViewBag.TitleBar = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.TrackTime;
     Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
+    ViewData["IsManager"] = Model.CanManage;
 }
 
 <div class="row">
