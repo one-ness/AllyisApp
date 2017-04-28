@@ -391,6 +391,6 @@
     <value>Mancomunarse Clases de Pago</value>
   </data>
   <data name="ChoosePayClassToMerge" xml:space="preserve">
-    <value>Elegir una clase de pago para combinar</value>
+    <value>Elegir una clase de pago para combinar con {0}</value>
   </data>
 </root>

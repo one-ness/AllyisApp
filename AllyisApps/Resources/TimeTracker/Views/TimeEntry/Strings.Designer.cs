@@ -106,7 +106,7 @@ namespace AllyisApps.Resources.TimeTracker.Views.TimeEntry {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose a Pay Class to Merge Into.
+        ///   Looks up a localized string similar to Choose a pay class to merge {0} into.
         /// </summary>
         public static string ChoosePayClassToMerge {
             get {

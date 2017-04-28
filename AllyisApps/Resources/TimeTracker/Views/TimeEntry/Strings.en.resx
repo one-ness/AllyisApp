@@ -394,6 +394,6 @@
     <value>Merge With Another Pay Class</value>
   </data>
   <data name="ChoosePayClassToMerge" xml:space="preserve">
-    <value>Choose a Pay Class to Merge Into</value>
+    <value>Choose a pay class to merge {0} into</value>
   </data>
 </root>
