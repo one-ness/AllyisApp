@@ -23,11 +23,13 @@ namespace AllyisApps.Lib
 		// Hashing variables: feel free to update these as needed. The next time a user logs on, their password will still work,
 		// and the hash will get updated in the database to reflect the new values below.
 		private const int SaltBytes = 24;
+
 		private const int HashBytes = 32;
 		private const int Iterations = 20000;
-		
+
 		// Old password hashing
 		private const int KeyStringLength = 32;
+
 		private const int IVStringLength = 16;
 		private static Encoding encoding = Encoding.UTF8;
 
@@ -134,7 +136,7 @@ namespace AllyisApps.Lib
 			}
 
 			// Successful login
-			if(updateRequired)
+			if (updateRequired)
 			{
 				// If an update is needed, the updated hash is returned
 				string newHash = GetPasswordHash(password);

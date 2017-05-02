@@ -7,7 +7,6 @@
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers

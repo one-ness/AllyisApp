@@ -6,7 +6,6 @@
 
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace AllyisApps.Controllers

@@ -4,8 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Utilities;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -114,7 +112,7 @@ namespace AllyisApps.ViewModels.Auth
 		//[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
 		//[Display(Name = "Date of Birth")]
 		//[SQLDateProtector]
-		public int DateOfBirth { get; set; } //has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view. 
+		public int DateOfBirth { get; set; } //has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view.
 
 		/// <summary>
 		/// Gets or sets a List of valid countries.

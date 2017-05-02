@@ -4,13 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-
-using AllyisApps.DBModel.Crm;
-
 namespace AllyisApps.Services
 {
 	/// <summary>
@@ -18,9 +11,5 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class Service : BaseService
 	{
-		
-
-		#region Info-DBEntity Conversions
-		#endregion
 	}
 }

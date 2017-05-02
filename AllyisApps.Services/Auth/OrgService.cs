@@ -4,16 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.Services.Billing;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-
-using AllyisApps.DBModel;
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Services
 {
@@ -264,6 +263,7 @@ namespace AllyisApps.Services
 		public async Task<int> InviteUser(string url, InvitationInfo invitationInfo, int? subscriptionId, int? productRoleId)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(url))
 			{
 				throw new ArgumentNullException("url", "Url must have a value.");
@@ -278,6 +278,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentException("Email address is not valid", "invitationInfo.Email");
 			}
+
 			#endregion Validation
 
 			// Generation of access code
@@ -286,12 +287,12 @@ namespace AllyisApps.Services
 
 			// Creation of invitation & sub roles
 			var spResults = DBHelper.CreateInvitation(UserContext.UserId, GetDBEntityFromInvitationInfo(invitationInfo), subscriptionId, productRoleId);
-			if(spResults.Item1 == -1)
+			if (spResults.Item1 == -1)
 			{
 				throw new InvalidOperationException("User is already a member of the organization.");
 			}
 
-			if(spResults.Item1 == -2)
+			if (spResults.Item1 == -2)
 			{
 				throw new DuplicateNameException("Employee Id is already taken.");
 			}
@@ -361,7 +362,7 @@ namespace AllyisApps.Services
 
 			return DBHelper.CreateUserInvitation(GetDBEntityFromInvitationInfo(invitationInfo));
 		}
-		
+
 		/// <summary>
 		/// Removes an invitation.
 		/// </summary>
@@ -606,43 +607,43 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("employeeId", "Employee Id must have a value");
 			}
-            //Change Employee Id if it is not already taken
-            if (DBHelper.SetEmployeeId(userId, orgId, employeeId) == 1)
-            {
-                return false;
-            };
-            return true;
+			//Change Employee Id if it is not already taken
+			if (DBHelper.SetEmployeeId(userId, orgId, employeeId) == 1)
+			{
+				return false;
+			};
+			return true;
 		}
 
-        /// <summary>
-        /// sets the employee id of an invitation 
-        /// </summary>
-        /// <param name="invitationId"></param>
-        /// <param name="orgId"></param>
-        /// <param name="employeeId"></param>
-        public bool SetInvitationEmployeeId(int invitationId, int orgId, string employeeId)
-        {
-            if (invitationId <= 0)
-            {
-                throw new ArgumentOutOfRangeException("invitationId", "Invitation Id cannot be 0 or negative.");
-            }
-            if (orgId < 0)
-            {
-                throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
-            }
+		/// <summary>
+		/// sets the employee id of an invitation
+		/// </summary>
+		/// <param name="invitationId"></param>
+		/// <param name="orgId"></param>
+		/// <param name="employeeId"></param>
+		public bool SetInvitationEmployeeId(int invitationId, int orgId, string employeeId)
+		{
+			if (invitationId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("invitationId", "Invitation Id cannot be 0 or negative.");
+			}
+			if (orgId < 0)
+			{
+				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
+			}
 
-            if (string.IsNullOrWhiteSpace(employeeId))
-            {
-                throw new ArgumentNullException("employeeId", "Employee Id must have a value");
-            }
-            var result = DBHelper.SetInvitationEmployeeId(invitationId, orgId, employeeId);
-            //Change Employee Id if it is not already taken
-            if (result == 1)
-            {
-                return false;
-            };
-            return true;
-        }
+			if (string.IsNullOrWhiteSpace(employeeId))
+			{
+				throw new ArgumentNullException("employeeId", "Employee Id must have a value");
+			}
+			var result = DBHelper.SetInvitationEmployeeId(invitationId, orgId, employeeId);
+			//Change Employee Id if it is not already taken
+			if (result == 1)
+			{
+				return false;
+			};
+			return true;
+		}
 
 		/// <summary>
 		/// Removes an organization user.
@@ -698,6 +699,7 @@ namespace AllyisApps.Services
 		public int ChangeUserRoles(List<int> userIds, int newOrganizationRole)
 		{
 			#region Validation
+
 			if (!Enum.IsDefined(typeof(OrganizationRole), newOrganizationRole) && newOrganizationRole != -1)
 			{
 				throw new ArgumentOutOfRangeException("newOrganizationRole", "Organization role must either be -1 or match a value of the OrganizationRole enum.");
@@ -706,7 +708,8 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentException("No user ids provided.", "userIds");
 			}
-			#endregion
+
+			#endregion Validation
 
 			return DBHelper.EditOrganizationUsers(userIds, UserContext.ChosenOrganizationId, newOrganizationRole);
 		}
@@ -737,6 +740,7 @@ namespace AllyisApps.Services
 		}
 
 		#region Info-DBEntity Conversions
+
 		/// <summary>
 		/// Translates an OrganizationUserDBEntity into an OrganizationUserInfo business object.
 		/// </summary>
@@ -919,6 +923,7 @@ namespace AllyisApps.Services
                 EmployeeType = invitation.EmployeeType
 			};
 		}
-		#endregion
+
+		#endregion Info-DBEntity Conversions
 	}
 }

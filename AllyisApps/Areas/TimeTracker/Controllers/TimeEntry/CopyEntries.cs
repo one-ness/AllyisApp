@@ -75,13 +75,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						continue; // A user can't delete locked entries from projects that have been removed, or that the user is no longer assigned to.
 					}
 
-					if (lockDate.HasValue &&  entry.Date <= lockDate.Value)
+					if (lockDate.HasValue && entry.Date <= lockDate.Value)
 					{
 						continue; // A user can't delete entries from before/on the lock date.
 					}
 				}
-				
-				TimeTrackerService.DeleteTimeEntry(entry.TimeEntryId);				
+
+				TimeTrackerService.DeleteTimeEntry(entry.TimeEntryId);
 			}
 
 			// Add copied entries

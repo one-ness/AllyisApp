@@ -22,19 +22,19 @@ namespace AllyisApps.Controllers
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
-        /// <summary>
-        /// GET: /Add.
-        /// The page for adding members to an organization.
-        /// </summary>
-        /// <param name="returnUrl">The return url to redirect to after form submit.</param>
-        /// <returns>The result of this action.</returns>
-        public ActionResult Add(string returnUrl)
+		/// <summary>
+		/// GET: /Add.
+		/// The page for adding members to an organization.
+		/// </summary>
+		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
+		/// <returns>The result of this action.</returns>
+		public ActionResult Add(string returnUrl)
 		{
 			// Only owners should view this page
 			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
 				AddMemberViewModel model = ConstructOrganizationAddMembersViewModel();
-                ViewBag.returnUrl = returnUrl;
+				ViewBag.returnUrl = returnUrl;
 				return this.View(model);
 			}
 
@@ -209,8 +209,8 @@ namespace AllyisApps.Controllers
 				Subscriptions = new List<AddMemberSubscriptionInfo>(),
 				Projects = infos.Item4,
 			};
-            
-			foreach(SubscriptionDisplayInfo sub in infos.Item2)
+
+			foreach (SubscriptionDisplayInfo sub in infos.Item2)
 			{
 				AddMemberSubscriptionInfo subInfo = new AddMemberSubscriptionInfo
 				{

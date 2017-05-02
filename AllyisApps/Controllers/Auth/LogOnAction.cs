@@ -63,7 +63,7 @@ namespace AllyisApps.Controllers
 				}
 				else
 				{
-                    Notifications.Add(new BootstrapAlert(Resources.Errors.SignInFailureMessage, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Errors.SignInFailureMessage, Variety.Danger));
 				}
 			}
 
@@ -165,8 +165,8 @@ namespace AllyisApps.Controllers
 						//}
 						//else
 						//{
-							// otherwise send them to select an org
-							return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
+						// otherwise send them to select an org
+						return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 						//}
 					}
 				}

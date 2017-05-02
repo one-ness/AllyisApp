@@ -146,6 +146,7 @@ namespace AllyisApps.Services
 		public string DeleteSubscriptionPlanAndAddHistory(string stripeCustomerId, int skuId, string description)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(stripeCustomerId))
 			{
 				throw new ArgumentNullException("stripeCustomerId", "Stripe customer id must have a value.");
@@ -155,7 +156,8 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentOutOfRangeException("skuId", "Sku id cannot be zero or negative");
 			}
-			#endregion
+
+			#endregion Validation
 
 			return DBHelper.DeleteSubscriptionPlanAndAddHistory(UserContext.ChosenOrganizationId, stripeCustomerId, UserContext.UserId, skuId, description);
 		}
@@ -401,6 +403,7 @@ namespace AllyisApps.Services
 		public Tuple<int, int> ChangeSubscriptionUserRoles(List<int> userIds, int newTimeTrackerRole)
 		{
 			#region Validation
+
 			if (!Enum.IsDefined(typeof(ProductRoleIdEnum), newTimeTrackerRole) && newTimeTrackerRole != -1)
 			{
 				throw new ArgumentOutOfRangeException("newTimeTrackerRole", "TimeTracker role must either be -1 or match a value of the ProductRoleIdEnum enum.");
@@ -409,7 +412,8 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentException("No user ids provided.", "userIds");
 			}
-			#endregion
+
+			#endregion Validation
 
 			return DBHelper.EditSubscriptionUsers(userIds, UserContext.ChosenOrganizationId, newTimeTrackerRole);
 		}
@@ -502,6 +506,7 @@ namespace AllyisApps.Services
 		public void DeleteSubscriptionPlan(string subscriptionId, BillingServicesCustomerId customerId, int? skuId)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(subscriptionId))
 			{
 				throw new ArgumentNullException("subscriptionId", "Subscriptoin id must have a value.");
@@ -511,7 +516,8 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("customerId", "customerId cannot be null.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			string service = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(service);
@@ -679,7 +685,7 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Subscribes the current organization to a product or updates the organization's subscription to the product, 
+		/// Subscribes the current organization to a product or updates the organization's subscription to the product,
 		/// and creates/updates/removes the billing subscription plan accordingly.
 		/// </summary>
 		/// <param name="numberOfUsers">Number of users.</param>
@@ -985,6 +991,7 @@ namespace AllyisApps.Services
 				ProductId = subscriptionRole.ProductId
 			};
 		}
-		#endregion
+
+		#endregion Info-DBEntity Conversions
 	}
 }

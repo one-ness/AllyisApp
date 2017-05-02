@@ -7,10 +7,7 @@
 using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using AllyisApps.ViewModels.Auth;
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
@@ -20,7 +17,6 @@ namespace AllyisApps.Controllers
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
-
 		//// TODO: If the services get consolidated into one class, this method could be moved to Services and a business object created to mirror OrganizationAddMembersViewModel.
 		////        At the moment, the calls to different service objects would require one having its own reference to or instance of the others in order to move this.
 

@@ -65,7 +65,7 @@ namespace AllyisApps.Controllers
 				{
 					model.TimeTrackerSubIndex = model.Subscriptions.IndexOf(ttsub);
 				}
-				
+
 				foreach (UserRolesInfo role in infos.Item1)
 				{
 					UserPermissionsViewModel modelUser = model.Users.Where(u => u.UserId == int.Parse(role.UserId)).SingleOrDefault();
@@ -82,7 +82,7 @@ namespace AllyisApps.Controllers
 						};
 
 						// Start out with default NotInProduct role
-						foreach(SubscriptionDisplayInfo sub in model.Subscriptions)
+						foreach (SubscriptionDisplayInfo sub in model.Subscriptions)
 						{
 							modelUser.ProductRoleIds.Add((int)ProductRoleIdEnum.NotInProduct);
 						}
@@ -98,7 +98,7 @@ namespace AllyisApps.Controllers
 						}
 					}
 				}
-				
+
 				return this.View("Permission2", model);
 			}
 
@@ -146,7 +146,8 @@ namespace AllyisApps.Controllers
 							ProductRoleId = user.ProductRoleId,
 							ProductId = result.Subscriptions.Where(s => s.SubscriptionId == user.SubscriptionId).Single().ProductId
 						});
-					} catch (InvalidOperationException) { } // Deleted subscription
+					}
+					catch (InvalidOperationException) { } // Deleted subscription
 				}
 			}
 
@@ -196,17 +197,16 @@ namespace AllyisApps.Controllers
 			UserPermissionsAction model = JsonConvert.DeserializeObject<UserPermissionsAction>(data);
 			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
-
 				if (model.SelectedUsers == null || model.SelectedUsers.Count() == 0)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.NoUsersSelected, Variety.Danger));
-                    return RedirectToAction(ActionConstants.Manage);
+					return RedirectToAction(ActionConstants.Manage);
 				}
 
 				if (model.SelectedActions == null)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.NoActionsSelected, Variety.Danger));
-                    return RedirectToAction(ActionConstants.ManagePermissions);
+					return RedirectToAction(ActionConstants.ManagePermissions);
 				}
 
 				if (model.SelectedActions.OrgRoleTarget != 0)
@@ -235,11 +235,11 @@ namespace AllyisApps.Controllers
 					if (model.SelectedActions.OrgRoleTarget == -1)
 					{
 						Notifications.Add(new BootstrapAlert(string.Format(Resources.Controllers.Auth.Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
-                    }
+					}
 					else
 					{
 						Notifications.Add(new BootstrapAlert(string.Format(Resources.Controllers.Auth.Strings.UsersChangedRolesInOrg, numberChanged), Variety.Success));
-                    }
+					}
 				}
 				else
 				{
@@ -259,20 +259,20 @@ namespace AllyisApps.Controllers
 
 					if (updatedAndAdded.Item1 != 0)
 					{
-						Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", updatedAndAdded.Item1, model.SelectedActions.TimeTrackerRoleTarget == -1 ? 
+						Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", updatedAndAdded.Item1, model.SelectedActions.TimeTrackerRoleTarget == -1 ?
 							Resources.Controllers.Auth.Strings.UsersRemovedFromTimeTracker : AllyisApps.Resources.Controllers.Auth.Strings.UsersChangedRolesInTimeTracker), Variety.Success));
-                    }
-					
+					}
+
 					if (updatedAndAdded.Item2 == -1)
 					{
 						Notifications.Add(new BootstrapAlert(string.Format(Resources.Controllers.Auth.Strings.TooManyUsersInSubToAdd, model.SelectedUsers.Count()), Variety.Danger));
-                    }
+					}
 					else
 					{
 						if (updatedAndAdded.Item2 != 0)
 						{
 							Notifications.Add(new BootstrapAlert(string.Format(Resources.Controllers.Auth.Strings.UsersAddedToTimeTracker, updatedAndAdded.Item2), Variety.Success));
-                        }
+						}
 					}
 				}
 			}

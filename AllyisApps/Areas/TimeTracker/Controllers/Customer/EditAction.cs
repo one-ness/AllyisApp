@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (Service.Can(Actions.CoreAction.EditCustomer))
 			{
 				var infos = Service.GetCustomerAndCountries(id);
-				
+
 				return this.View(new EditCustomerInfoViewModel
 				{
 					ContactEmail = infos.Item1.ContactEmail,

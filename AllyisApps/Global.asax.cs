@@ -48,7 +48,7 @@ namespace AllyisApps
 			sb.AppendLine(string.Format("Error Message: {0}", objErr.Message.ToString()));
 			sb.Append(string.Format("Stack Trace:{0}", objErr.StackTrace.ToString()));
 
-			EventLog.WriteEntry("Sample_WebApp", sb.ToString(), EventLogEntryType.Error);
+			EventLog.WriteEntry("AllyisApps", sb.ToString(), EventLogEntryType.Error);
 		}
 	}
 }

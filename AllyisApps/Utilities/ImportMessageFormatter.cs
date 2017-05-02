@@ -54,7 +54,7 @@ namespace AllyisApps.Utilities
 
 				case 2:
 					successMessage = successfulImports[0] + " and " + successfulImports[1];//LANGUAGE Update to use resource file to change message language
-                    break;
+					break;
 
 				default:
 					successMessage = string.Empty;
@@ -64,13 +64,13 @@ namespace AllyisApps.Utilities
 					}
 
 					successMessage = successMessage + " and " + successfulImports[successes - 1];//LANGUAGE Update to use resource file to change message language
-                    break;
+					break;
 			}
 
 			if (successMessage != null)
 			{
 				formattedResult[0] = successMessage + " imported.";//LANGUAGE Update to use resource file to change message language
-            }
+			}
 
 			if (result.UsersAddedToOrganization > 0)
 			{
@@ -78,7 +78,7 @@ namespace AllyisApps.Utilities
 				if (difference > 0)
 				{
 					formattedResult[0] = formattedResult[0] + " " + difference + " existing users added to organization.";//LANGUAGE Update to use resource file to change message language
-                }
+				}
 			}
 
 			// formattedResult[1]: Fail notification - simply joins all the fail messages into one, separated by newlines

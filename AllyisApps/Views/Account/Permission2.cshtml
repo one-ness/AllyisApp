@@ -5,7 +5,7 @@
 @{
 	ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.Permissions;
 	Layout = "~/Views/Shared/_Layout.cshtml";
-	
+
 	bool hasTimeTracker = Model.Subscriptions.Where(s => s.ProductId == Model.TimeTrackerId).Any();
 
 	Dictionary<int, string> orgRoles = new Dictionary<int, string>

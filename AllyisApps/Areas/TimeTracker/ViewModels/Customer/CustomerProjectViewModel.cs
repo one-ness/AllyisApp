@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
 using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.TimeTracker.Customer

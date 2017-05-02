@@ -192,15 +192,15 @@
 		/// </summary>
 		public const string ManagePermissions2 = "ManagePermissions2";
 
-        ///// <summary>
-        ///// Action-Name: Organizations.
-        ///// </summary>
-        //public const string Organizations = "Organizations";
+		///// <summary>
+		///// Action-Name: Organizations.
+		///// </summary>
+		//public const string Organizations = "Organizations";
 
-        /// <summary>
-        /// Action-Name: OrgIndex.
-        /// </summary>
-        public const string OrgIndex = "OrgIndex";
+		/// <summary>
+		/// Action-Name: OrgIndex.
+		/// </summary>
+		public const string OrgIndex = "OrgIndex";
 
 		/// <summary>
 		/// Action-Name: PrivacyPolicy.
@@ -354,15 +354,15 @@
 		/// </summary>
 		public const string Settings = "Settings";
 
-        /// <summary>
+		/// <summary>
 		/// Action-Name: MergePayClass.
 		/// </summary>
 		public const string MergePayClass = "MergePayClass";
 
-        /// <summary>
-        /// Action-Name: ViewReport.
-        /// </summary>
-        public const string ViewReport = "ViewReport";
+		/// <summary>
+		/// Action-Name: ViewReport.
+		/// </summary>
+		public const string ViewReport = "ViewReport";
 
 		/// <summary>
 		/// Action-Name: Template.
@@ -487,11 +487,11 @@
 		/// </summary>
 		public const string Subscribe = "Subscribe";
 
-        /// <summary>
+		/// <summary>
 		/// View-Name: MergePayClass.
 		/// </summary>
 		public const string MergePayClass = "MergePayClass";
-    }
+	}
 
 	/// <summary>
 	/// Product name constants for use when retreiving product ID by name.

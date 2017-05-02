@@ -46,15 +46,15 @@ namespace AllyisApps.DBModel.Auth
 		/// </summary>
 		public bool EmailConfirmed { get; set; }
 
-        /// <summary>
+		/// <summary>
 		/// Gets or sets EmailConfirmationCode.
 		/// </summary>
 		public Guid? EmailConfirmationCode { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the phone number of the user has been confirmed.
-        /// </summary>
-        public bool PhoneNumberConfirmed { get; set; }
+		/// <summary>
+		/// Gets or sets a value indicating whether the phone number of the user has been confirmed.
+		/// </summary>
+		public bool PhoneNumberConfirmed { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether TwoFactorEnabled.

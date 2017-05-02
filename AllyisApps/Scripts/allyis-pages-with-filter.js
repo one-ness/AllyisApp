@@ -116,7 +116,6 @@ to notice them, the buffer rows' display is turned off again. And your scroll po
         // Enable/disable page buttons
         $('.page-btn').prop('disabled', false);
         $('#page-' + pageNum).prop('disabled', true);
-
     }
 
     // Changes to the specified page. Same as 'goToPage()' but also updates anchor user

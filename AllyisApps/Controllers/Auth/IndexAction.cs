@@ -6,10 +6,7 @@
 
 using AllyisApps.Core;
 using AllyisApps.Services;
-using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
-using AllyisApps.ViewModels.Shared;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -29,9 +26,9 @@ namespace AllyisApps.Controllers
 		public ActionResult Index()
 		{
 			ViewBag.ShowOrganizationPartial = false;
-			
+
 			var infos = Service.GetUserOrgsAndInvitationInfo();
-			
+
 			IndexAndOrgsViewModel model = new IndexAndOrgsViewModel
 			{
 				UserInfo = infos.Item1,
@@ -56,13 +53,13 @@ namespace AllyisApps.Controllers
 							ProductId = (int)userSubInfo.ProductId,
 							ProductName = userSubInfo.ProductName,
 							ProductDisplayName = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Views.Shared.Strings.TimeTracker : "Unknown Product",
-                            ProductDescription = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Views.Shared.Strings.TimeTrackerDescription : ""
+							ProductDescription = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Views.Shared.Strings.TimeTrackerDescription : ""
 						});
 					}
 				}
 				return orgVM;
 			}).ToList();
-			
+
 			return this.View(model);
 		}
 
@@ -76,7 +73,7 @@ namespace AllyisApps.Controllers
 		{
 			string result = Service.AcceptUserInvitation(invitationId);
 
-			if(result == null)
+			if (result == null)
 			{
 				Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
 			}
