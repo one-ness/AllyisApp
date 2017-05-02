@@ -22,6 +22,5 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the list of InvitationInfos for invitations for this user.
 		/// </summary>
 		public List<InvitationInfo> InviteInfos { get; set; }
-
 	}
 }

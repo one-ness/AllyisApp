@@ -48,7 +48,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					reportVM = this.ConstructReportViewModel(UserContext.UserId, orgId, Service.Can(Actions.CoreAction.TimeTrackerEditOthers), infos.Item1, infos.Item2);
 				}
-				
+
 				reportVM.UserView = this.GetUserSelectList(infos.Item3, reportVM.Selection.Users);
 				reportVM.CustomerView = this.GetCustomerSelectList(infos.Item1, reportVM.Selection.CustomerId);
 				reportVM.ProjectView = this.GetProjectSelectList(infos.Item2, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
@@ -195,7 +195,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Selected = projectSelected == 0,
 					Disabled = false
 				});
-				
+
 				List<CompleteProjectInfo> projectData = projects.Where(cpi => cpi.CustomerId == customerSelected).ToList();
 				foreach (var project in projectData)
 				{

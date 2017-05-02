@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-
-using AllyisApps.DBModel.Auth;
+﻿using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Services.TimeTracker;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 
 namespace AllyisApps.Services
 {
@@ -592,7 +591,7 @@ namespace AllyisApps.Services
                                     // have a user who's name includes the text __IMPORT__
                                     hasUserName ? (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "" ? null : row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString()) : null
 								};
-                                //if (fields[2] == "__IMPORT__") fields[2] = null;
+								//if (fields[2] == "__IMPORT__") fields[2] = null;
 
 								/*
                                     There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
@@ -668,7 +667,7 @@ namespace AllyisApps.Services
 										if (userIdAndInviteCount != null)
 										{
 											result.UsersImported += 1;
-                                            user.UserId = userIdAndInviteCount.Item1;
+											user.UserId = userIdAndInviteCount.Item1;
 										}
 										else
 										{
@@ -916,7 +915,7 @@ namespace AllyisApps.Services
 				DataRow row = link.Select(selectText)[0];
 				if (fieldIdTo == 2)
 				{
-                    if (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "") return null;
+					if (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "") return null;
 					else return row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString();
 				}
 				else

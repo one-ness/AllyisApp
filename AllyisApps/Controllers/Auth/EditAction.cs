@@ -10,7 +10,6 @@ using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
@@ -31,7 +30,7 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-                try
+				try
 				{
 					if (Service.UpdateOrganization(
 						new Organization()
@@ -56,8 +55,8 @@ namespace AllyisApps.Controllers
 				}
 				catch (ArgumentException)
 				{
-                    Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.SubdomainTaken, Variety.Danger));
-                    return this.RedirectToAction(ActionConstants.Edit);
+					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.SubdomainTaken, Variety.Danger));
+					return this.RedirectToAction(ActionConstants.Edit);
 				}
 
 				// Organization update failed due to invalid permissions

@@ -166,7 +166,6 @@ function stopEditEmployeeId(userId, newValue, isMember) {
 	);
 }
 
-
 function removeUser(orgId, userId, fullName) {
     var result = confirm(removeFromOrg + " " + fullName + " " + removeFromOrgEnd);
     if (result == true) {

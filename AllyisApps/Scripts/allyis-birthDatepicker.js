@@ -1,7 +1,7 @@
-﻿// This is a small script to format the date picker. 
+﻿// This is a small script to format the date picker.
 //
-// Currently (3/27/2017) the date picker is used on the "Account/Register" 
-// and "Account/EditProfile" pages on only the Edge browser to replace the 
+// Currently (3/27/2017) the date picker is used on the "Account/Register"
+// and "Account/EditProfile" pages on only the Edge browser to replace the
 // default date picker for the "Date of Birth" field.
 //
 // Minimum for Usage:
@@ -10,7 +10,7 @@
 //
 // in code in .cshtml:
 //    The important parts of both use cases is that the "id" attribute is
-//    "datePickerBirth" to access the jquery script, and the type is 
+//    "datePickerBirth" to access the jquery script, and the type is
 //    set to "text" for the jquery-ui script to work.
 // edit:
 //    @Html.EditorFor(m => m.A_Date_Field, new { htmlattributes = new { @id = "datePickerBirth", @type = "text" } })
@@ -28,7 +28,7 @@ $("#datePickerBirth").datepicker({
     }
 });
 $('#datePickerBirth').on("change", function () {
-    var enteredDate = moment($(this).val());    
+    var enteredDate = moment($(this).val());
     $('#DateOfBirth').val(DateConvert.GetDaysFromMoment(enteredDate));
 });
 
@@ -57,7 +57,7 @@ var DateConvert = (function () {
             }
             return date.diff(minimumDate, 'days');
         },
-        GetMomentFromDays: function (days) {            
+        GetMomentFromDays: function (days) {
             if (days < 0) {
                 return Number.NaN;
             }

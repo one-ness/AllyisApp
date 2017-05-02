@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers
 		[AllowAnonymous]
 		public ActionResult Register(string returnUrl)
 		{
-            DateTime? defaultBirthday = null;
+			DateTime? defaultBirthday = null;
 			if (Request.IsAuthenticated)
 			{
 				// already authenticated, take user to return url
@@ -34,10 +34,10 @@ namespace AllyisApps.Controllers
 			}
 
 			ViewBag.ReturnUrl = returnUrl;
-            return this.View(new RegisterViewModel
-            {
-                ValidCountries = Service.ValidCountries(),
-                DateOfBirth = TimeTrackerService.GetDayFromDateTime(defaultBirthday)
+			return this.View(new RegisterViewModel
+			{
+				ValidCountries = Service.ValidCountries(),
+				DateOfBirth = TimeTrackerService.GetDayFromDateTime(defaultBirthday)
 			});
 		}
 
@@ -57,10 +57,10 @@ namespace AllyisApps.Controllers
 				// generate confirm email url template
 				string confirmUrl = Url.Action(ActionConstants.ConfirmEmail, ControllerConstants.Account, new { userId = "{userId}", code = "{code}" }, protocol: Request.Url.Scheme);
 
-                // create new user in the db and get back the userId and count of invitations
-                var birthdate = TimeTrackerService.GetDateTimeFromDays(model.DateOfBirth);
-				System.Tuple<int, int> userIDandInviteCount = await Service.SetupNewUser(model.Email, model.FirstName, model.LastName, birthdate, model.Address, model.City, model.State, model.Country, model.PostalCode, model.PhoneNumber, model.Password, 1, confirmUrl); // TODO: Change language preference from 1 to a value grabbed from session/URL 
-				
+				// create new user in the db and get back the userId and count of invitations
+				var birthdate = TimeTrackerService.GetDateTimeFromDays(model.DateOfBirth);
+				System.Tuple<int, int> userIDandInviteCount = await Service.SetupNewUser(model.Email, model.FirstName, model.LastName, birthdate, model.Address, model.City, model.State, model.Country, model.PostalCode, model.PhoneNumber, model.Password, 1, confirmUrl); // TODO: Change language preference from 1 to a value grabbed from session/URL
+
 				if (userIDandInviteCount != null)
 				{
 					// sign in (and set cookie)
@@ -79,7 +79,7 @@ namespace AllyisApps.Controllers
 				}
 				else
 				{
-                    Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.UserAccountAlreadyExists, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.UserAccountAlreadyExists, Variety.Danger));
 					return this.View(model);
 				}
 			}

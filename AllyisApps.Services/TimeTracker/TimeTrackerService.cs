@@ -4,12 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
-using AllyisApps.DBModel.TimeTracker;
 
 namespace AllyisApps.Services.TimeTracker
 {
@@ -405,29 +404,30 @@ namespace AllyisApps.Services.TimeTracker
 			return false;
 		}
 
-        /// <summary>
+		/// <summary>
 		/// Check whether a payclass is used by a time entry before.
 		/// </summary>
 		/// <param name="payClassId">Pay class Id.</param>
 		/// <returns>Returns a list of timeEntryIds that used that payclass.</returns>
-        public IEnumerable<TimeEntryDBEntity> GetTimeEntriesThatUseAPayClass(int payClassId)
-        {
-            #region Validation
+		public IEnumerable<TimeEntryDBEntity> GetTimeEntriesThatUseAPayClass(int payClassId)
+		{
+			#region Validation
 
-            if (payClassId <= 0)
-            {
-                throw new ArgumentOutOfRangeException("payClassId", "Pay class id cannot be 0 or negative.");
-            }
-            #endregion Validation
+			if (payClassId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("payClassId", "Pay class id cannot be 0 or negative.");
+			}
 
-            return DBHelper.GetTimeEntriesThatUseAPayClass(payClassId);
-        }
+			#endregion Validation
 
-        /// <summary>
-        /// Gets a list of <see cref="PayClass"/>'s for an organization.
-        /// </summary>
-        /// <returns>List of PayClassInfo's.</returns>
-        public IEnumerable<PayClass> GetPayClasses()
+			return DBHelper.GetTimeEntriesThatUseAPayClass(payClassId);
+		}
+
+		/// <summary>
+		/// Gets a list of <see cref="PayClass"/>'s for an organization.
+		/// </summary>
+		/// <returns>List of PayClassInfo's.</returns>
+		public IEnumerable<PayClass> GetPayClasses()
 		{
 			return DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InitializePayClassInfo(pc));
 		}
@@ -651,6 +651,7 @@ namespace AllyisApps.Services.TimeTracker
 			GetTimeEntryIndexInfo(DateTime? startingDate, DateTime? endingDate, int? userId = null)
 		{
 			#region Validation
+
 			if (userId == null)
 			{
 				userId = UserContext.UserId;
@@ -664,19 +665,21 @@ namespace AllyisApps.Services.TimeTracker
 			{
 				throw new ArgumentException("Date range cannot end before it starts.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			var spResults = DBHelper.GetTimeEntryIndexPageInfo(UserContext.ChosenOrganizationId, (int)ProductIdEnum.TimeTracker, userId.Value, startingDate, endingDate);
 
-            return Tuple.Create(InitializeSettingsInfo(spResults.Item1),
-                spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
-                spResults.Item3.Select(hdb => InitializeHoliday(hdb)).ToList(),
-                spResults.Item4.Select(cpdb => Service.InitializeCompleteProjectInfo(cpdb)).ToList(),
-                spResults.Item5.Select(udb => Service.InitializeUser(udb)).ToList(),
-                spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList());
-        }
+			return Tuple.Create(InitializeSettingsInfo(spResults.Item1),
+				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
+				spResults.Item3.Select(hdb => InitializeHoliday(hdb)).ToList(),
+				spResults.Item4.Select(cpdb => Service.InitializeCompleteProjectInfo(cpdb)).ToList(),
+				spResults.Item5.Select(udb => Service.InitializeUser(udb)).ToList(),
+				spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList());
+		}
 
 		#region Info-DBEntity Conversions
+
 		/// <summary>
 		/// Initializes a PayClassInfo from a PayClassDBEntity.
 		/// </summary>
@@ -805,6 +808,7 @@ namespace AllyisApps.Services.TimeTracker
 				OrganizationId = holiday.OrganizationId,
 			};
 		}
-		#endregion
+
+		#endregion Info-DBEntity Conversions
 	}
 }

@@ -96,7 +96,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DateTime startDate = SetStartingDate(startingDateTime, startOfWeek);
 			DateTime endDate = SetEndingDate(endingDateTime, startOfWeek);
 
-
 			// Get all of the projects and initialize their total hours to 0.
 			IList<CompleteProjectInfo> allProjects = infos.Item4; // Must also grab inactive projects, or the app will crash if a user has an entry on a project he is no longer a part of
 			IDictionary<int, ProjectHours> hours = new Dictionary<int, ProjectHours>();
@@ -111,7 +110,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = -1, ProjectName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
 
 			IEnumerable<User> users = infos.Item5;
-			
+
 			TimeEntryOverDateRangeViewModel result = new TimeEntryOverDateRangeViewModel
 			{
 				EntryRange = new TimeEntryRangeForUserViewModel

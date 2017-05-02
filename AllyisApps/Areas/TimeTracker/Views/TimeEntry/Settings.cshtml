@@ -54,8 +54,8 @@
                     @foreach (PayClass PayClass in Model.PayClasses)
                     {
                         <tr>
-                            @{ 
-                                string _payClassName = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString((PayClass.Name).Replace(" ", string.Empty)) ?? PayClass.Name; 
+                            @{
+                                string _payClassName = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString((PayClass.Name).Replace(" ", string.Empty)) ?? PayClass.Name;
                             }
                             <td>@_payClassName</td>
                             <td>
@@ -79,7 +79,7 @@
                         @using (Html.BeginForm(ActionConstants.CreatePayClass, ControllerConstants.TimeEntry, FormMethod.Post))
 						{
 							@Html.AntiForgeryToken();
-							<td><input type="text" name="NewPayClass" class="form-control" required/></td>
+							<td><input type="text" name="NewPayClass" class="form-control" required /></td>
                             <td><span class="pull-right"></span></td>
 							<td><input class="btn btn-primary pull-right" type="submit" value="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Add" /></td>
 						}
@@ -167,7 +167,7 @@
                     @foreach (Holiday Holiday in Model.Holidays)
                     {
                         <tr>
-                            @{ 
+                            @{
                                 string _holidayName = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString(((Holiday.HolidayName).Replace(" ", string.Empty)).Replace("'", string.Empty)) ?? Holiday.HolidayName;
                             }
                             <td>
@@ -186,8 +186,8 @@
                         @using (Html.BeginForm(ActionConstants.CreateHoliday, ControllerConstants.TimeEntry, FormMethod.Post))
                         {
                             @Html.AntiForgeryToken();
-                            <td><input type="text" class="form-control" name="NewHolidayName" required/></td>
-                            <td><input type="date" class="form-control" name="NewHolidayDate" required/></td>
+                            <td><input type="text" class="form-control" name="NewHolidayName" required /></td>
+                            <td><input type="date" class="form-control" name="NewHolidayDate" required /></td>
                             <td><input class="pull-right btn btn-primary" type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Add /></td>
                         }
                     </tr>

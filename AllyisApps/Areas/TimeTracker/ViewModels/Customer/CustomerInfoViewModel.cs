@@ -4,8 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-
 namespace AllyisApps.ViewModels.TimeTracker.Customer
 {
 	/// <summary>

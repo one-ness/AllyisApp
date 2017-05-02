@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.DBModel.Billing;
+
 //using AllyisApps.DBModel.Cache;
 using Dapper;
 using System;
@@ -94,7 +95,7 @@ namespace AllyisApps.DBModel
 		/// <returns>The number of updated/removed users, and the number of newly added users (or -1 if subscription is too full).</returns>
 		public Tuple<int, int> EditSubscriptionUsers(List<int> userIds, int organizationId, int timeTrackerRoleId)
 		{
-			if(timeTrackerRoleId == 0)
+			if (timeTrackerRoleId == 0)
 			{
 				throw new ArgumentException("Role cannot be 0.");
 			}
@@ -121,7 +122,7 @@ namespace AllyisApps.DBModel
 				if (usersUpdated == -1)
 				{
 					return Tuple.Create(-1, 0); // Indicates no subscription to TimeTracker for this organization.
-					//throw new InvalidOperationException("No subscription to TimeTracker for this organization.");
+												//throw new InvalidOperationException("No subscription to TimeTracker for this organization.");
 				}
 
 				if (timeTrackerRoleId == -1) // If removing from subscription, return only the number of users succesfully removed.

@@ -117,24 +117,24 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-        /// <summary>
+		/// <summary>
 		/// Return a list of TimeEntryIds that use the specified payClassId
 		/// </summary>
 		/// <param name="payClassId">The id of the pay class.</param>
-        public IEnumerable<TimeEntryDBEntity> GetTimeEntriesThatUseAPayClass(int payClassId)
-        {
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@payClassId", payClassId);
-            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-            {
-                IEnumerable<TimeEntryDBEntity> result = connection.Query<TimeEntryDBEntity>(
-                    "[TimeTracker].[GetTimeEntriesThatUseAPayClass]",
-                    parameters,
-                    commandType: CommandType.StoredProcedure);
+		public IEnumerable<TimeEntryDBEntity> GetTimeEntriesThatUseAPayClass(int payClassId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@payClassId", payClassId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				IEnumerable<TimeEntryDBEntity> result = connection.Query<TimeEntryDBEntity>(
+					"[TimeTracker].[GetTimeEntriesThatUseAPayClass]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
 
-                return result == null ? new List<TimeEntryDBEntity>() : result;
-            }
-        }
+				return result == null ? new List<TimeEntryDBEntity>() : result;
+			}
+		}
 
 		/// <summary>
 		/// Returns a list of the payclasses for a given organization or a default list if there aren't any.
@@ -470,8 +470,8 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
-					"[TimeTracker].[GetAllSettings]", 
-					parameters, 
+					"[TimeTracker].[GetAllSettings]",
+					parameters,
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
 					results.Read<SettingDBEntity>().SingleOrDefault(),
@@ -538,13 +538,13 @@ namespace AllyisApps.DBModel
 					parameters,
 					commandType: CommandType.StoredProcedure);
 
-                return Tuple.Create(results.Read<SettingDBEntity>().SingleOrDefault(), 
-                    results.Read<PayClassDBEntity>().ToList(),
-                    results.Read<HolidayDBEntity>().ToList(),
-                    results.Read<CompleteProjectDBEntity>().ToList(),
-                    results.Read<UserDBEntity>().ToList(),
-                    results.Read<TimeEntryDBEntity>().ToList());
-            }
+				return Tuple.Create(results.Read<SettingDBEntity>().SingleOrDefault(),
+					results.Read<PayClassDBEntity>().ToList(),
+					results.Read<HolidayDBEntity>().ToList(),
+					results.Read<CompleteProjectDBEntity>().ToList(),
+					results.Read<UserDBEntity>().ToList(),
+					results.Read<TimeEntryDBEntity>().ToList());
+			}
 		}
 	}
 }

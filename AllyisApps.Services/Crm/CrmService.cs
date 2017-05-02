@@ -135,7 +135,7 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Returns a list of Projects for projects the given user is assigned to in the given organization 
+		/// Returns a list of Projects for projects the given user is assigned to in the given organization
 		/// (current organization by default), another list of Projects for all projects in the organization,
 		/// the name of the user (as "Firstname Lastname"), and the user's email.
 		/// </summary>
@@ -163,12 +163,12 @@ namespace AllyisApps.Services
 				name,
 				userDBEntity.Email);
 		}
-		
+
 		/// <summary>
-		 /// Gets a list of <see cref="Project"/>'s for a customer.
-		 /// </summary>
-		 /// <param name="customerId">Customer Id.</param>
-		 /// <returns>List of ProjectInfo's.</returns>
+		/// Gets a list of <see cref="Project"/>'s for a customer.
+		/// </summary>
+		/// <param name="customerId">Customer Id.</param>
+		/// <returns>List of ProjectInfo's.</returns>
 		public IEnumerable<Project> GetProjectsByCustomer(int customerId)
 		{
 			if (customerId <= 0)
@@ -506,6 +506,7 @@ namespace AllyisApps.Services
 		}
 
 		#region Info-DBEntity Conversions
+
 		/// <summary>
 		/// Initializes a <see cref="Customer"/> from a <see cref="CustomerDBEntity"/>.
 		/// </summary>
@@ -653,6 +654,7 @@ namespace AllyisApps.Services
 				IsProjectUser = completeProject.IsProjectUser
 			};
 		}
-		#endregion
+
+		#endregion Info-DBEntity Conversions
 	}
 }

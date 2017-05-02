@@ -95,7 +95,7 @@
                 @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, Model.IsCreating ? ActionConstants.Index : ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
                 <input type="submit" value="@AllyisApps.Resources.Views.Account.Strings.Save" class="btn btn-primary" id="submit" />
             </div>
-        } 
+        }
     </div>
     @if (Model != null && Model.CanDelete)
     {

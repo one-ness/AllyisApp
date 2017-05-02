@@ -51,7 +51,7 @@ namespace AllyisApps.Controllers
 						Date = ConvertUTCDateTimeToEpoch(invoice.Date.Value),
 						ID = invoice.Id,
 						Description = string.Format("{0} invoice - Amount due: {1:C}", invoice.Service, invoice.AmountDue / 100.0), // Only works for USD right now //LANGUAGE Update to use resource file to change message language
-                        ProductName = invoice.ProductName,
+						ProductName = invoice.ProductName,
 						Username = string.Empty
 					});
 				}
@@ -63,7 +63,7 @@ namespace AllyisApps.Controllers
 						Date = ConvertUTCDateTimeToEpoch(charge.Created),
 						ID = charge.Id,
 						Description = string.Format("{0} charge - Amount paid: {1:C}", charge.Service, charge.Amount / 100.0), // Only works for USD right now //LANGUAGE Update to use resource file to change message language
-                        ProductName = charge.StatementDescriptor,
+						ProductName = charge.StatementDescriptor,
 						Username = string.Empty
 					});
 				}

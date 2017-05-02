@@ -60,8 +60,8 @@ namespace AllyisApps.DBModel
 				//user.UserId = (int)connection.Query<int>("[Auth].[CreateUserInfo]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 
 				var results = connection.QueryMultiple(
-					"[Auth].[CreateUserInfo]", 
-					parameters, 
+					"[Auth].[CreateUserInfo]",
+					parameters,
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
 					results.Read<int>().FirstOrDefault(),
@@ -455,23 +455,23 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-        /// <summary>
-        /// Sets the Employee Id for a invitation in a org
-        /// </summary>
-        /// <param name="invitationID">Id of the invitation</param>
-        /// <param name="organizationID">Id of the organization</param>
-        /// <param name="employeeID">The value to set the employeeID to</param>
-        public int SetInvitationEmployeeId(int invitationID, int organizationID, string employeeID)
-        {
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@invitationID", invitationID);
-            parameters.Add("@organizationID", organizationID);
-            parameters.Add("@employeeID", employeeID);
-            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-            {
-                return connection.Query<int>("[Auth].[UpdateOrgInvitationEmployeeId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
-            }
-        }
+		/// <summary>
+		/// Sets the Employee Id for a invitation in a org
+		/// </summary>
+		/// <param name="invitationID">Id of the invitation</param>
+		/// <param name="organizationID">Id of the organization</param>
+		/// <param name="employeeID">The value to set the employeeID to</param>
+		public int SetInvitationEmployeeId(int invitationID, int organizationID, string employeeID)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@invitationID", invitationID);
+			parameters.Add("@organizationID", organizationID);
+			parameters.Add("@employeeID", employeeID);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<int>("[Auth].[UpdateOrgInvitationEmployeeId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+			}
+		}
 
 		/// <summary>
 		/// Updates the specified user within the specified organization with a new role.
@@ -1036,7 +1036,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns></returns>
-		public Tuple<List<UserRolesDBEntity>, List<SubscriptionDisplayDBEntity>> GetOrgAndSubRoles (int orgId)
+		public Tuple<List<UserRolesDBEntity>, List<SubscriptionDisplayDBEntity>> GetOrgAndSubRoles(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@OrganizationId", orgId);
@@ -1052,26 +1052,26 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-        /// <summary>
+		/// <summary>
 		/// Updates user's EmailConfirmed to True in Auth.User table.
 		/// </summary>
 		/// <param name = "userId">Target user's ID.</param>
 		/// <param name = "code">The email confirmation code.</param>
 		/// <returns>Return true for success, false if userId is not found or code does not match or other error</returns>
 		public bool UpdateEmailConfirmed(int userId, string code)
-        {
-            DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@userID", userId);
-            parameters.Add("@confirmCode", code);
-            string result = null;
-            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-            {
-                result = connection.Query<string>(
-                    "[Auth].[UpdateEmailConfirmed]",
-                    parameters,
-                    commandType: CommandType.StoredProcedure).FirstOrDefault();
-            }
-            return result == null ? false : true;
-        }
-    }
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@userID", userId);
+			parameters.Add("@confirmCode", code);
+			string result = null;
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				result = connection.Query<string>(
+					"[Auth].[UpdateEmailConfirmed]",
+					parameters,
+					commandType: CommandType.StoredProcedure).FirstOrDefault();
+			}
+			return result == null ? false : true;
+		}
+	}
 }

@@ -56,11 +56,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						}
 						else
 						{
-                            Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.FileFormatUnsupported, Variety.Danger));
-                            return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
-                        }
+							Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.FileFormatUnsupported, Variety.Danger));
+							return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
+						}
 
-                        reader.IsFirstRowAsColumnNames = true;
+						reader.IsFirstRowAsColumnNames = true;
 
 						DataSet result = reader.AsDataSet();
 						reader.Close();
@@ -80,7 +80,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					}
 					else
 					{
-                        Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.PleaseUploadFile, Variety.Danger));
+						Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.PleaseUploadFile, Variety.Danger));
 					}
 				}
 			}

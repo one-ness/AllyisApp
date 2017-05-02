@@ -1,10 +1,7 @@
 ﻿using AllyisApps.Services;
 using AllyisApps.Services.Billing;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -22,7 +19,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the list of projects in the organization.
 		/// </summary>
 		public List<CompleteProjectInfo> Projects { get; set; }
-				
+
 		/// <summary>
 		/// Gets or sets the organization id.
 		/// </summary>
@@ -65,7 +62,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the project id selected by the drop down menu.
 		/// </summary>
 		public int? SubscriptionProjectId { get; set; }
-
 	}
 
 	/// <summary>

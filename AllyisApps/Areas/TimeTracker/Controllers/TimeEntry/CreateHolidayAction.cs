@@ -25,31 +25,31 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Redirects to the settings view.</returns>
 		public ActionResult CreateHoliday(string newHolidayName, string newHolidayDate)
 		{
-            bool isValid = true;
+			bool isValid = true;
 			if (string.IsNullOrWhiteSpace(newHolidayName))
 			{
-                isValid = false;
+				isValid = false;
 				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotCreateHolidayWIthoutName, Variety.Warning));
 			}
 
 			DateTime holidayDate;
 			if (!DateTime.TryParse(newHolidayDate, out holidayDate))
 			{
-                isValid = false;
+				isValid = false;
 				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotCreateHolidayWithInvalidDate, Variety.Warning));
 			}
-            if (isValid)
-            {
-                if (TimeTrackerService.CreateHoliday(new Holiday() { OrganizationId = UserContext.ChosenOrganizationId, HolidayName = newHolidayName, Date = holidayDate }))
-                {
-                    Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulCreateHoliday, Variety.Success));
-                }
-                else
-                {
-                    // This should only be a permissions failure
-                    Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
-                }
-            }
+			if (isValid)
+			{
+				if (TimeTrackerService.CreateHoliday(new Holiday() { OrganizationId = UserContext.ChosenOrganizationId, HolidayName = newHolidayName, Date = holidayDate }))
+				{
+					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulCreateHoliday, Variety.Success));
+				}
+				else
+				{
+					// This should only be a permissions failure
+					Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+				}
+			}
 			return this.RedirectToAction(ActionConstants.Settings, new { OrganizationId = UserContext.ChosenOrganizationId }); // Same destination regardless of creation success
 		}
 	}

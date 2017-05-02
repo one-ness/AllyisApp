@@ -9,7 +9,6 @@ using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Shared;
 using AllyisApps.Lib;
-using AllyisApps.Services.Billing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -129,7 +128,7 @@ namespace AllyisApps.Services
 			{
 				Email = userEmail
 			});
-			
+
 			return invitationsDB.Select(idb => InitializeInvitationInfo(idb)).ToList();
 		}
 
@@ -156,7 +155,7 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-			return string.Format("You have successfully joined {0} in the role of {1}.",	results.Item1, results.Item2);
+			return string.Format("You have successfully joined {0} in the role of {1}.", results.Item1, results.Item2);
 		}
 
 		/// <summary>
@@ -174,7 +173,7 @@ namespace AllyisApps.Services
 			{
 				return null;
 			}
-		}		
+		}
 
 		/// <summary>
 		/// Setup a new user.
@@ -379,7 +378,7 @@ namespace AllyisApps.Services
 								SubscriptionId = row.SubscriptionId.Value,
 								ProductId = (ProductIdEnum)row.ProductId.Value,
 								ProductName = row.ProductName,
-								RoleName  = row.RoleName,
+								RoleName = row.RoleName,
 								ProductRole = (ProductRoleIdEnum)row.ProductRoleId.Value,
 								SkuId = row.SkuId.Value
 							});
@@ -550,6 +549,7 @@ namespace AllyisApps.Services
 		public async Task<bool> SendPasswordResetMessage(string email, string callbackUrl)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(email))
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
@@ -558,7 +558,8 @@ namespace AllyisApps.Services
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			Guid code = Guid.NewGuid();
 			int accountUserId = this.DBHelper.UpdateUserPasswordResetCode(email, code.ToString());
@@ -630,6 +631,7 @@ namespace AllyisApps.Services
 		public bool ChangePassword(string oldPassword, string newPassword)
 		{
 			#region Validation
+
 			if (string.IsNullOrEmpty(oldPassword))
 			{
 				throw new ArgumentNullException("oldPassword", "Old password must have a value.");
@@ -638,7 +640,8 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("newPassword", "New password must have a value.");
 			}
-			#endregion
+
+			#endregion Validation
 
 			string passwordHash = DBHelper.GetPasswordHashById(UserContext.UserId);
 			if (passwordHash != null && Crypto.ValidatePassword(oldPassword, passwordHash))
@@ -762,22 +765,23 @@ namespace AllyisApps.Services
 				}
 			}
 
-            #endregion Validation
+			#endregion Validation
 
-            UserDBEntity userDbEntity = DBHelper.GetUserInfo(userId);
+			UserDBEntity userDbEntity = DBHelper.GetUserInfo(userId);
 
-            if (userDbEntity.EmailConfirmed)
+			if (userDbEntity.EmailConfirmed)
 			{
 				return false;
 			}
-            
-            if (userDbEntity.EmailConfirmationCode.ToString() != code)
-            {
-                return false;
-            } else
-            {
-                return DBHelper.UpdateEmailConfirmed(userId, code);
-            }
+
+			if (userDbEntity.EmailConfirmationCode.ToString() != code)
+			{
+				return false;
+			}
+			else
+			{
+				return DBHelper.UpdateEmailConfirmed(userId, code);
+			}
 		}
 
 		/// <summary>
@@ -791,8 +795,8 @@ namespace AllyisApps.Services
 
 		#endregion public
 
-
 		#region Info-DBEntity Conversions
+
 		/// <summary>
 		/// Translates a UserDBEntity into a User business object.
 		/// </summary>
@@ -923,6 +927,7 @@ namespace AllyisApps.Services
 				UserId = subUser.UserId
 			};
 		}
-		#endregion
+
+		#endregion Info-DBEntity Conversions
 	}
 }

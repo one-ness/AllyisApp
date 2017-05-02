@@ -56,7 +56,6 @@ namespace AllyisApps.Controllers
 
 			if (Service.Can(Actions.CoreAction.EditOrganization))
 			{
-
 				int? subId = null;
 				if (model.CurrentSubscription != null)
 				{

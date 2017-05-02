@@ -64,7 +64,7 @@ namespace AllyisApps.Controllers
 
 				if (orgId == -1)
 				{
-                    Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.SubdomainTaken, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.SubdomainTaken, Variety.Danger));
 					return this.View(model);
 				}
 				else

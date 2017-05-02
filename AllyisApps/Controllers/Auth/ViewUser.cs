@@ -6,7 +6,6 @@
 
 using AllyisApps.Core;
 using AllyisApps.Services;
-using AllyisApps.ViewModels.Auth;
 using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
@@ -40,7 +39,7 @@ namespace AllyisApps.Controllers
 			//};
 
 			//return this.View(model);
-            return this.View(userInfo);
+			return this.View(userInfo);
 		}
 	}
 }

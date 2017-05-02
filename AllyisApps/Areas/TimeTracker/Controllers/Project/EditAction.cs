@@ -49,14 +49,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public ActionResult Edit(EditProjectViewModel model)
 		{
-            var list = Service.GetNextProjectIdAndSubUsers(model.ParentCustomerId).Item2;
-            var subList = new List<BasicUserInfoViewModel>();
-            foreach (var user in list)
-            {
-                subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
-            }
-            model.SubscriptionUsers = subList;
-            if (ModelState.IsValid)
+			var list = Service.GetNextProjectIdAndSubUsers(model.ParentCustomerId).Item2;
+			var subList = new List<BasicUserInfoViewModel>();
+			foreach (var user in list)
+			{
+				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
+			}
+			model.SubscriptionUsers = subList;
+			if (ModelState.IsValid)
 			{
 				if (Service.Can(Actions.CoreAction.EditProject))
 				{
@@ -74,7 +74,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					catch (Exception ex)
 					{
 						string message = Resources.TimeTracker.Controllers.Project.Strings.FailureProjectEdited;
-                        if (ex.Message != null)
+						if (ex.Message != null)
 						{
 							message = string.Format("{0} {1}", message, ex.Message);
 						}
@@ -108,7 +108,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public EditProjectViewModel ConstructEditProjectViewModel(int projectId)
 		{
 			var infos = Service.GetProjectEditInfo(projectId);
-			
+
 			IEnumerable<User> projectUserInfos = infos.Item2;
 			var projectUsers = new List<BasicUserInfoViewModel>();
 			foreach (var projectUser in projectUserInfos)

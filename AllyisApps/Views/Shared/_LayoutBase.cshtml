@@ -1,59 +1,59 @@
 ﻿@{
-    string title = ViewBag.TitleBar ?? ViewBag.Title;
-    //if (OrganizationInfo != null)
-    //{
-    //    title += " | " + OrganizationInfo.Name;
-    //}
+	string title = ViewBag.TitleBar ?? ViewBag.Title;
+	//if (OrganizationInfo != null)
+	//{
+	//    title += " | " + OrganizationInfo.Name;
+	//}
 }
 
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="/Content/icons/fav128.png?v=2" sizes="128x128" type="image/png" />
-    <link rel="icon" href="/Content/icons/fav64.png?v=2" sizes="64x64" type="image/png" />
-    <link rel="icon" href="/Content/icons/fav32.png?v=2" sizes="32x32" type="image/png" />
-    <link rel="icon" href="/Content/icons/fav16.png?v=2" sizes="16x16" type="image/png" />
-    <link rel="shortcut icon" href="favicon.ico?v=2" />
-    <title>@title</title>
-    @Styles.Render("~/Content/Bootstrap")
-    @Styles.Render("~/Content/FontAwesome")
-    @Scripts.Render("~/bundles/underscore")
-    @RenderSection("css", required: false)
-    @*@Styles.Render(DisplayHints.LayoutThemeBundle)*@
-    @*<link href="@Url.Content(DisplayHints.LayoutThemeBundle + ".less")" rel="stylesheet/less" type="text/css" />*@
-    <link href="@Url.Content(DisplayHints.LayoutThemeBundle + ".less")" rel="stylesheet/less" type="text/css" />
-    <script type="text/javascript" src="@Url.Content("~/Scripts/less.js")"></script>
-    <meta name="description" content="@AllyisApps.Resources.Views.Shared.Strings.MetaDescription" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="shortcut icon" href="/Content/icons/fav128.png?v=2" sizes="128x128" type="image/png" />
+	<link rel="icon" href="/Content/icons/fav64.png?v=2" sizes="64x64" type="image/png" />
+	<link rel="icon" href="/Content/icons/fav32.png?v=2" sizes="32x32" type="image/png" />
+	<link rel="icon" href="/Content/icons/fav16.png?v=2" sizes="16x16" type="image/png" />
+	<link rel="shortcut icon" href="favicon.ico?v=2" />
+	<title>@title</title>
+	@Styles.Render("~/Content/Bootstrap")
+	@Styles.Render("~/Content/FontAwesome")
+	@Scripts.Render("~/bundles/underscore")
+	@RenderSection("css", required: false)
+	@*@Styles.Render(DisplayHints.LayoutThemeBundle)*@
+	@*<link href="@Url.Content(DisplayHints.LayoutThemeBundle + ".less")" rel="stylesheet/less" type="text/css" />*@
+	<link href="@Url.Content(DisplayHints.LayoutThemeBundle + ".less")" rel="stylesheet/less" type="text/css" />
+	<script type="text/javascript" src="@Url.Content("~/Scripts/less.js")"></script>
+	<meta name="description" content="@AllyisApps.Resources.Views.Shared.Strings.MetaDescription" />
 </head>
 <body id="@DisplayHints.PageBodyId" class="@DisplayHints.PageBodyClasses">
-    <div class="container" id="body-container">
-        <div class="row" id="header-row">
-            <div class="col" id="header-col">
-                @Html.Partial("_Header")
-            </div>
-        </div>
-        <div class="row xs-row-padding" id="main-row">
-            <div class="col" id="main-col">
-                @Html.Partial("_NotificationPartial")
-                @RenderBody()
-            </div>
-        </div>
-        <div class="row" id="footer-row">
-            <div class="col" id="footer-col">
-                @Html.Action(ActionConstants.FooterPartial, ControllerConstants.Shared, new { area = "" })
-            </div>
-        </div>
-    </div>
+	<div class="container" id="body-container">
+		<div class="row" id="header-row">
+			<div class="col" id="header-col">
+				@Html.Partial("_Header")
+			</div>
+		</div>
+		<div class="row xs-row-padding" id="main-row">
+			<div class="col" id="main-col">
+				@Html.Partial("_NotificationPartial")
+				@RenderBody()
+			</div>
+		</div>
+		<div class="row" id="footer-row">
+			<div class="col" id="footer-col">
+				@Html.Action(ActionConstants.FooterPartial, ControllerConstants.Shared, new { area = "" })
+			</div>
+		</div>
+	</div>
 
-    @RenderSection("modals", required: false)
+	@RenderSection("modals", required: false)
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/jqueryuoval")
-    @Scripts.Render("~/bundles/jquerytransit")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryuoval")
+	@Scripts.Render("~/bundles/jquerytransit")
+	@Scripts.Render("~/bundles/bootstrap")
+	@RenderSection("scripts", required: false)
 </body>
 </html>
