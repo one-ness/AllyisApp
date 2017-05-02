@@ -26,10 +26,11 @@
     <table class="table table-hover table-condensed">
         <thead>
             <tr class="double-bottom-border">
-                <th style="width: 30%">@AllyisApps.Resources.Views.Account.Strings.Name</th>
-                <th style="width: 30%">@AllyisApps.Resources.Views.Account.Strings.Email</th>
-                <th style="width: 20%">@AllyisApps.Resources.Views.Account.Strings.EmployeeId</th>
-                <th style="width: 12%">@AllyisApps.Resources.Views.Account.Strings.Role</th>
+                <th style="width: 24%">@AllyisApps.Resources.Views.Account.Strings.Name</th>
+                <th style="width: 24%">@AllyisApps.Resources.Views.Account.Strings.Email</th>
+                <th style="width: 17%">@AllyisApps.Resources.Views.Account.Strings.EmployeeId</th>
+                <th style="width: 17%">@AllyisApps.Resources.Views.Account.Strings.EmployeeType</th>
+                <th style="width: 10%">@AllyisApps.Resources.Views.Account.Strings.Role</th>
                 <th style="width: 8%"></th>
             </tr>
         </thead>
@@ -48,6 +49,7 @@
                         <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.EditEmployeeID"
                            onclick='editEmployeeId("@invite.OrganizationId", "@invite.InvitationId", "@invite.EmployeeId",false)'><span class="fa fa-fw fa-edit"></span></a>
                     </td>
+                    <td>@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(invite.EmployeeType == 1 ? "Salaried" : "Hourly")</td>
                     <td class="memberOrgRole">@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(invite.OrgRoleName)</td>
                     <td class="text-right icon-strip">
                         <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.RemoveInvitation"
@@ -65,6 +67,7 @@
 						<a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.EditEmployeeID"
 						   onclick='editEmployeeId("@user.OrganizationId", "@user.UserId", "@user.EmployeeId",true)'><span class="fa fa-fw fa-edit"></span></a>
 					</td>
+                    <td>@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(user.EmployeeTypeId == 1 ? "Salaried" : "Hourly")</td>
                     <td class="memberOrgRole">@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(user.PermissionLevel)</td>
                     <td class="text-right icon-strip">
                         @if (Model.CurrentUserId != user.UserId)

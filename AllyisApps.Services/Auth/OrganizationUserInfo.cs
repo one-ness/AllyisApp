@@ -52,5 +52,10 @@ namespace AllyisApps.Services
 		/// Gets or sets the user's last name.
 		/// </summary>
 		public string LastName { get; set; }
-	}
+
+        /// <summary>
+		/// Gets or sets the Employee Type Id
+		/// </summary>
+		public int EmployeeTypeId { get; set; }
+    }
 }

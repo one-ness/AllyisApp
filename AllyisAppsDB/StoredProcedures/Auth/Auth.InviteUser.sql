@@ -6,6 +6,7 @@
 	@OrganizationId INT,
 	@AccessCode VARCHAR(50),
 	@OrgRole INT,
+	@EmployeeType INT,
 	@ProjectId INT,
 	@retId INT OUTPUT,
 	@EmployeeId NVARCHAR(16),
@@ -46,6 +47,7 @@ BEGIN
 				[AccessCode], 
 				[IsActive], 
 				[OrgRole], 
+				[EmployeeType],
 				[ProjectId],
 				[EmployeeId],
 				[DateOfBirth])
@@ -57,6 +59,7 @@ BEGIN
 				@AccessCode, 
 				1, 
 				@OrgRole, 
+				@EmployeeType,
 				@ProjectId,
 				@EmployeeId,
 				'1755-01-01');

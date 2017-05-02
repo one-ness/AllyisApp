@@ -701,7 +701,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@EmployeeId", invitation.EmployeeId);
 			parameters.Add("@SubscriptionId", subscriptionId);
 			parameters.Add("@SubRoleId", productRoleId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            parameters.Add("@EmployeeType", invitation.EmployeeType);
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple("[Auth].[InviteUser]", parameters, commandType: CommandType.StoredProcedure);
 				int inviteId = results.Read<int>().FirstOrDefault();

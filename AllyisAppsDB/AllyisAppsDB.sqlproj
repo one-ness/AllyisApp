@@ -261,6 +261,7 @@
     <Build Include="StoredProcedures\Auth\Auth.EditOrgUsers.sql" />
     <Build Include="StoredProcedures\Auth\Auth.UpdateOrgInvitationEmployeeId.sql" />
     <Build Include="StoredProcedures\TimeTracker\TimeTracker.GetTimeEntriesThatUseAPayClass.sql" />
+    <Build Include="Tables\Auth\Auth.EmployeeType.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

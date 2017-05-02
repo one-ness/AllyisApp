@@ -484,6 +484,15 @@ namespace AllyisApps.Resources.Views.Account {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Employee Type.
+        /// </summary>
+        public static string EmployeeType {
+            get {
+                return ResourceManager.GetString("EmployeeType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter your email..
         /// </summary>
         public static string EnterYourEmail {
@@ -579,6 +588,15 @@ namespace AllyisApps.Resources.Views.Account {
         public static string Help {
             get {
                 return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hourly.
+        /// </summary>
+        public static string Hourly {
+            get {
+                return ResourceManager.GetString("Hourly", resourceCulture);
             }
         }
         
@@ -1110,6 +1128,15 @@ namespace AllyisApps.Resources.Views.Account {
         public static string Role {
             get {
                 return ResourceManager.GetString("Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Salaried.
+        /// </summary>
+        public static string Salaried {
+            get {
+                return ResourceManager.GetString("Salaried", resourceCulture);
             }
         }
         

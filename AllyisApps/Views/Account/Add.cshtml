@@ -37,23 +37,31 @@
 				@Html.ReqLabelFor(model => model.FirstName, AllyisApps.Resources.Views.Account.Strings.FirstName)
 				@Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
 				@Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger"} )
-			</div>
+			</div>      
 			<div class="form-group">
 				@Html.ReqLabelFor(model => model.LastName, AllyisApps.Resources.Views.Account.Strings.LastName)
 				@Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
 				@Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger"} )
 			</div>
-			<div class="form-group">
-				@*<div class="@left">*@
-				<div class="text-right">
-					<span style="margin-right: 5px;">@AllyisApps.Resources.Views.Account.Strings.AddAsOwner</span>
-					@*</div>
-						<div class="@right">*@
-					@Html.CheckBoxFor(m => m.AddAsOwner, new { @style = "display: inline;" })
-				</div>
-				@*</div>*@
-			</div>
-		</div>
+        </div>
+        <div class="col-md-6" style="min-width: 400px;">
+            <div class="form-group">
+                @Html.ReqLabelFor(model => model.FirstName, AllyisApps.Resources.Views.Account.Strings.EmployeeType)    
+                @Html.DropDownListFor(model => model.EmployeeType, new SelectList ( new List<string> { AllyisApps.Resources.Views.Account.Strings.Salaried, AllyisApps.Resources.Views.Account.Strings.Hourly }), new { @class = "form-control" })	        
+            </div>
+        </div>
+        <div class="col-md-6" style="min-width: 400px;">
+            <div class="form-group">
+                @*<div class="@left">*@
+                <div class="text-right">
+                    <span style="margin-right: 5px;">@AllyisApps.Resources.Views.Account.Strings.AddAsOwner</span>
+                    @*</div>
+                    <div class="@right">*@
+                    @Html.CheckBoxFor(m => m.AddAsOwner, new { @style = "display: inline;" })
+                </div>
+                @*</div>*@
+            </div>
+        </div>
 	</div>
 	<div class="row">
 

@@ -758,7 +758,8 @@ namespace AllyisApps.Services
 				UserId = organizationUser.UserId,
 				Email = organizationUser.Email,
 				FirstName = organizationUser.FirstName,
-				LastName = organizationUser.LastName
+				LastName = organizationUser.LastName,
+                EmployeeTypeId = organizationUser.EmployeeTypeId
 			};
 		}
 
@@ -866,7 +867,8 @@ namespace AllyisApps.Services
 				OrgRole = invitation.OrgRole,
 				OrgRoleName = invitation.OrgRoleName,
 				ProjectId = invitation.ProjectId,
-				EmployeeId = invitation.EmployeeId
+				EmployeeId = invitation.EmployeeId,
+                EmployeeType = invitation.EmployeeType
 			};
 		}
 
@@ -913,7 +915,8 @@ namespace AllyisApps.Services
 				OrganizationId = invitation.OrganizationId,
 				OrgRole = invitation.OrgRole,
 				ProjectId = invitation.ProjectId,
-				EmployeeId = invitation.EmployeeId
+				EmployeeId = invitation.EmployeeId,
+                EmployeeType = invitation.EmployeeType
 			};
 		}
 		#endregion
