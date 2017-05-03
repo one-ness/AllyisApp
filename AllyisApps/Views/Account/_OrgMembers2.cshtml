@@ -28,9 +28,9 @@
             <tr class="double-bottom-border">
                 <th style="width: 24%">@AllyisApps.Resources.Views.Account.Strings.Name</th>
                 <th style="width: 24%">@AllyisApps.Resources.Views.Account.Strings.Email</th>
-                <th style="width: 17%">@AllyisApps.Resources.Views.Account.Strings.EmployeeId</th>
-                <th style="width: 17%">@AllyisApps.Resources.Views.Account.Strings.EmployeeType</th>
-                <th style="width: 10%">@AllyisApps.Resources.Views.Account.Strings.Role</th>
+                <th style="width: 18%">@AllyisApps.Resources.Views.Account.Strings.EmployeeId</th>
+                <th style="width: 15%">@AllyisApps.Resources.Views.Account.Strings.EmployeeType</th>
+                <th style="width: 11%">@AllyisApps.Resources.Views.Account.Strings.Role</th>
                 <th style="width: 8%"></th>
             </tr>
         </thead>
@@ -49,7 +49,11 @@
                         <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.EditEmployeeID"
                            onclick='editEmployeeId("@invite.OrganizationId", "@invite.InvitationId", "@invite.EmployeeId",false)'><span class="fa fa-fw fa-edit"></span></a>
                     </td>
-                    <td>@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(invite.EmployeeType == 1 ? "Salaried" : "Hourly")</td>
+                    <td class="memberSearchProperty" id="invType-@invite.InvitationId">
+                        <span class="empType">@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(invite.EmployeeType == 1 ? "Salaried" : (invite.EmployeeType == 2 ? "Hourly" : "N/A")) </span>
+                        <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.EditEmployeeType"
+                           onclick='editEmployeeType("@invite.OrganizationId", "@invite.InvitationId", "@invite.EmployeeType", false)'><span class="fa fa-fw fa-edit"></span></a>
+                    </td>
                     <td class="memberOrgRole">@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(invite.OrgRoleName)</td>
                     <td class="text-right icon-strip">
                         <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.RemoveInvitation"
@@ -58,7 +62,7 @@
                 </tr>
             }
             @foreach (OrganizationUserViewModel user in Model.DisplayUsers)
-            {
+                            {
                 <tr class="memberRow">
                     <td class="memberSearchProperty">@user.FullName</td>
                     <td class="memberSearchProperty">@user.Email</td>
@@ -67,12 +71,17 @@
 						<a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.EditEmployeeID"
 						   onclick='editEmployeeId("@user.OrganizationId", "@user.UserId", "@user.EmployeeId",true)'><span class="fa fa-fw fa-edit"></span></a>
 					</td>
-                    <td>@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(user.EmployeeTypeId == 1 ? "Salaried" : "Hourly")</td>
+                    <td class="memberSearchProperty" id="empType-@user.UserId">
+                        <span class="empType">@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(user.EmployeeTypeId == 1 ? "Salaried" : (user.EmployeeTypeId == 2 ? "Hourly" : "N/A")) </span>
+                        <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.EditEmployeeType"
+                           onclick='editEmployeeType("@user.OrganizationId", "@user.UserId", "@user.EmployeeTypeId", true)'><span class="fa fa-fw fa-edit"></span></a>
+                    </td>
                     <td class="memberOrgRole">@AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(user.PermissionLevel)</td>
                     <td class="text-right icon-strip">
                         @if (Model.CurrentUserId != user.UserId)
-						{
-							<a href="~/Account/ViewUser/@user.UserId" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.ViewMemberInfo"><span class="fa fa-fw fa-eye"></span></a>
+                        {
+
+                            <a href="~/Account/ViewUser/@user.UserId" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.ViewMemberInfo"><span class="fa fa-fw fa-eye"></span></a>
                             <a href="javascript: void(0);" class="text-muted" title=@AllyisApps.Resources.Views.Account.Strings.RemoveMember
                                onclick='removeUser("@user.OrganizationId", "@user.UserId", "@user.FullName")'><span class="fa fa-fw fa-remove text-danger"></span></a>
                         }

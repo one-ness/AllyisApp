@@ -591,4 +591,7 @@
   <data name="Salaried" xml:space="preserve">
     <value>Salaried</value>
   </data>
+  <data name="EditEmployeeType" xml:space="preserve">
+    <value>Edit Employee Type</value>
+  </data>
 </root>

@@ -73,7 +73,8 @@ BEGIN
 		[OrgRole],
 		[Name] AS [OrgRoleName],
 		[ProjectId],
-		[EmployeeId]
+		[EmployeeId],
+		[EmployeeType]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
 	LEFT JOIN [Auth].[OrgRole] WITH (NOLOCK) ON [OrgRole].[OrgRoleId] = [Invitation].[OrgRole]
 	WHERE [OrganizationId] = @OrganizationId AND [IsActive] = 1

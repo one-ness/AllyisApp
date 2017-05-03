@@ -85,14 +85,14 @@ namespace AllyisApps.Controllers
 			};
 		}
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="user"></param>
-		/// <param name="org"></param>
-		/// <param name="employeeId"></param>
-		/// <returns></returns>
-		[HttpPost]
+        /// <summary>
+        /// Edits the Employee Id on an OrgUser
+        /// </summary>
+        /// <param name="user">The user Id</param>
+        /// <param name="org">The organization Id</param>
+        /// <param name="employeeId">The new EmployeeId</param>
+        /// <returns></returns>
+        [HttpPost]
 		public bool SaveEmployeeId(int user, int org, string employeeId)
 		{
 			try
@@ -134,5 +134,47 @@ namespace AllyisApps.Controllers
 			}
 			return true;
 		}
-	}
+
+        /// <summary>
+        /// Edits the Employee Type Id on an OrgUser
+        /// </summary>
+        /// <param name="user">The user Id</param>
+        /// <param name="org">The organization Id</param>
+        /// <param name="employeeTypeId">The new Employee Type Id</param>
+        /// <returns></returns>
+		[HttpPost]
+        public bool SaveEmployeeTypeId(int user, int org, int employeeTypeId)
+        {
+            try
+            {
+                Service.SetEmployeeTypeId(user, org, employeeTypeId);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Edits the Employee Type Id on an Invitation
+        /// </summary>
+        /// <param name="user">The Invitation Id</param>
+        /// <param name="org">The organization Id</param>
+        /// <param name="employeeTypeId">The new Employee Type Id</param>
+        /// <returns></returns>
+		[HttpPost]
+        public bool SaveInvitationEmployeeTypeId(int user, int org, int employeeTypeId)
+        {
+            try
+            {
+                Service.SetInvitationEmployeeTypeId(user, org, employeeTypeId);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+    }
 }

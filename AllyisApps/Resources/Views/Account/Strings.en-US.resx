@@ -582,4 +582,7 @@
   <data name="TimeTrackerRoleRequired" xml:space="preserve">
     <value>TimeTracker Role is required.</value>
   </data>
+  <data name="EditEmployeeType" xml:space="preserve">
+    <value>Edit Employee Type</value>
+  </data>
 </root>

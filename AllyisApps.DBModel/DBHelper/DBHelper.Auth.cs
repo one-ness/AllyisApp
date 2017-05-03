@@ -473,11 +473,47 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Updates the specified user within the specified organization with a new role.
+        /// <summary>
+		/// Sets the employee type id for a user for an org.
 		/// </summary>
-		/// <param name="orgUser">The orgUser table with updates.</param>
-		public void UpdateOrganizationUser(OrganizationUserDBEntity orgUser)
+		/// <param name="userID">The Id of the user.</param>
+		/// <param name="organizationID">The Id of the organization.</param>
+		/// <param name="employeeTypeID">The value to set the employeeTypeId to.</param>
+		public void SetEmployeeTypeId(int userID, int organizationID, int employeeTypeID)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@userID", userID);
+            parameters.Add("@organizationID", organizationID);
+            parameters.Add("@employeeTypeID", employeeTypeID);
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                connection.Execute("[Auth].[UpdateOrgUserEmployeeTypeId]", parameters, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        /// <summary>
+		/// Sets the Employee Type Id for a invitation in a org
+		/// </summary>
+		/// <param name="invitationID">Id of the invitation</param>
+		/// <param name="organizationID">Id of the organization</param>
+		/// <param name="employeeTypeID">The value to set the employeeID to</param>
+		public void SetInvitationEmployeeTypeId(int invitationID, int organizationID, int employeeTypeID)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@invitationID", invitationID);
+            parameters.Add("@organizationID", organizationID);
+            parameters.Add("@employeeTypeID", employeeTypeID);
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                connection.Execute("[Auth].[UpdateOrgInvitationEmployeeTypeId]", parameters, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        /// <summary>
+        /// Updates the specified user within the specified organization with a new role.
+        /// </summary>
+        /// <param name="orgUser">The orgUser table with updates.</param>
+        public void UpdateOrganizationUser(OrganizationUserDBEntity orgUser)
 		{
 			if (orgUser == null)
 			{

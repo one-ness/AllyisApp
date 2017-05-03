@@ -430,6 +430,15 @@ namespace AllyisApps.Resources.Views.Account {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit Employee Type.
+        /// </summary>
+        public static string EditEmployeeType {
+            get {
+                return ResourceManager.GetString("EditEmployeeType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit Member.
         /// </summary>
         public static string EditMember {
