@@ -64,12 +64,12 @@ namespace AllyisApps.Controllers
 
 				if (orgId == -1)
 				{
-					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.SubdomainTaken, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.SubdomainTaken, Variety.Danger));
 					return this.View(model);
 				}
 				else
 				{
-					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.OrganizationCreatedNotification, Variety.Success));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.OrganizationCreatedNotification, Variety.Success));
 					return this.RedirectToSubDomainAction(orgId, null, ActionConstants.Index, ControllerConstants.Account);
 				}
 

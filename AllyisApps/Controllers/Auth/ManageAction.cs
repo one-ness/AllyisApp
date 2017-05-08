@@ -32,7 +32,7 @@ namespace AllyisApps.Controllers
 				return this.View(model);
 			}
 
-			Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
+			Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
 			return this.RedirectToAction(ActionConstants.Index);
 		}
 

@@ -16,7 +16,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the email address to send a test email to.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "EmailValidation")]
+		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "EmailValidation")]
 		[Display(Name = "Email")]
 		[EmailAddress]
 		public string Email { get; set; }

@@ -24,15 +24,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (startOfWeek < 0 || startOfWeek > 6)
 			{
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.InvalidSOW, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.InvalidSOW, Variety.Warning));
 			}
 			else if (!TimeTrackerService.UpdateStartOfWeek(startOfWeek))
 			{
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.ActionUnauthorizedMessage, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 			else
 			{
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulSOW, Variety.Success));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulSOW, Variety.Success));
 			}
 
 			return this.RedirectToAction(ActionConstants.Settings);

@@ -45,9 +45,9 @@ namespace AllyisApps.Controllers
 				return this.View(ViewConstants.Subscribe, model);
 			}
 
-			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
-			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Errors.CannotEditSubscriptionsMessage), ControllerConstants.Subscription, ActionConstants.Subscribe));
+			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditSubscriptionsMessage), ControllerConstants.Subscription, ActionConstants.Subscribe));
 		}
 
 		/// <summary>
@@ -104,15 +104,15 @@ namespace AllyisApps.Controllers
 		{
 			if (!Service.Can(Actions.CoreAction.EditOrganization))
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 				ViewBag.ErrorInfo = "Permission";
 
-				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Errors.CannotEditSubscriptionsMessage), ControllerConstants.Account, ActionConstants.Subscribe));
+				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditSubscriptionsMessage), ControllerConstants.Account, ActionConstants.Subscribe));
 			}
 
 			if (model == null)
 			{
-				return this.View(ViewConstants.Error, new HandleErrorInfo(new ArgumentNullException(@Resources.Errors.ModelNullMessage), ControllerConstants.Account, ActionConstants.Subscribe));
+				return this.View(ViewConstants.Error, new HandleErrorInfo(new ArgumentNullException(@Resources.Strings.ModelNullMessage), ControllerConstants.Account, ActionConstants.Subscribe));
 			}
 
 			if (model.Billing.Amount == 0)
@@ -133,7 +133,7 @@ namespace AllyisApps.Controllers
 			}
 			else
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.ReduceNumberOfUsers, Variety.Danger));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ReduceNumberOfUsers, Variety.Danger));
 				return this.RedirectToAction(ActionConstants.Subscribe, new { productName = model.ProductId });
 			}
 

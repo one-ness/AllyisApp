@@ -152,7 +152,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 			{
 				string countryKey = Clean(country);
 
-				string localized = AllyisApps.Resources.ViewModels.Auth.Countries.ResourceManager.GetString(countryKey) ?? country;
+				string localized = Resources.Countries.ResourceManager.GetString(countryKey) ?? country;
 
 				countries.Add(country, localized);
 			}

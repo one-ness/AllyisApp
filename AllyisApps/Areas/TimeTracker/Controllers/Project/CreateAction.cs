@@ -59,7 +59,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			else
 			{
 				// Permissions failure
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ActionUnauthorizedMessage, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
 				return this.RouteHome();
 			}
@@ -92,7 +92,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					if (Service.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Any(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId))
 					{
-						Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ProjectOrgIdNotUnique, Variety.Danger));
+						Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
 						return this.View(model);
 					}
 					try
@@ -101,7 +101,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					}
 					catch (Exception ex)
 					{
-						string message = Resources.TimeTracker.Controllers.Project.Strings.FailureProjectCreated;
+						string message = Resources.Strings.FailureProjectCreated;
 						if (ex.Message != null)
 						{
 							message = string.Format("{0} {1}", message, ex.Message);
@@ -112,14 +112,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						return this.View(model);
 					}
 					this.UpdateProject(model);
-					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.SuccessProjectCreated, Variety.Success));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessProjectCreated, Variety.Success));
 
 					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer), model.ParentCustomerId));
 				}
 				else
 				{
 					// Permissions failure
-					this.Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ActionUnauthorizedMessage, Variety.Warning));
+					this.Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
 				}
 			}

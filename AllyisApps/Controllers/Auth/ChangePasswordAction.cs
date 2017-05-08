@@ -41,11 +41,11 @@ namespace AllyisApps.Controllers
 			}
 			else if (model.NewPassword.CompareTo(model.ConfirmPassword) == 0 && Service.ChangePassword(model.OldPassword, model.NewPassword))
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.ChangePasswordSuccessMessage, Variety.Success));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ChangePasswordSuccessMessage, Variety.Success));
 
 				return this.RedirectToAction(ActionConstants.Index);
 			}
-			Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.IncorrectPassword, Variety.Danger));
+			Notifications.Add(new BootstrapAlert(Resources.Strings.IncorrectPassword, Variety.Danger));
 			return this.View(model);
 		}
 	}

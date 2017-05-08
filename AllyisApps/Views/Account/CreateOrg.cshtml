@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
-    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.CreateOrganization;
+    ViewBag.Title = Strings.CreateOrganization;
 }
 @{ ViewData.Add(ControllerConstants.Controller, ControllerConstants.Account); }
 @{ ViewData.Add(ActionConstants.Action, ActionConstants.CreateOrg); }
@@ -13,7 +13,7 @@
 {
     <script type="text/javascript">
         var preserveState = '@(Model != null ? (AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';
-        var dropdownempty = "@AllyisApps.Resources.Views.Account.Strings.DropDownEmpty";
+        var dropdownempty = "@Strings.DropDownEmpty";
 		var isSubdomainNameUniqueAction = "@(Url.Action(ActionConstants.IsSubdomainNameUnique))?subdomainName=";
 		var oldSubdomainName = "";
     </script>

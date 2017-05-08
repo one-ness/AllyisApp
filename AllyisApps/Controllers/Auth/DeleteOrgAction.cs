@@ -28,7 +28,7 @@ namespace AllyisApps.Controllers
 			// Method includes permissions check
 			if (Service.DeleteOrganization())
 			{
-				string notification = string.Format("{0} {1}", Resources.Controllers.Auth.Strings.YourOrg, Resources.Controllers.Auth.Strings.OrganizationDeleteNotification);
+				string notification = string.Format("{0} {1}", Resources.Strings.YourOrg, Resources.Strings.OrganizationDeleteNotification);
 				Notifications.Add(new BootstrapAlert(notification, Variety.Success));
 
 				// TODO: we shouldnt be hard coding http...
@@ -37,7 +37,7 @@ namespace AllyisApps.Controllers
 			}
 
 			// Permissions failed
-			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.ActionUnauthorizedMessage), ControllerConstants.Account, ActionConstants.DeleteOrg));
+			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.ActionUnauthorizedMessage), ControllerConstants.Account, ActionConstants.DeleteOrg));
 		}
 	}
 }

@@ -4,8 +4,8 @@
 @model AllyisApps.ViewModels.Auth.RegisterViewModel
 @{
     Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
-    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.Register;
-    ViewBag.Subtitle = AllyisApps.Resources.Views.Account.Strings.RegisterNewAccountDialogue;
+    ViewBag.Title = Strings.Register;
+    ViewBag.Subtitle = Strings.RegisterNewAccountDialogue;
 }
 @{ ViewData.Add(ControllerConstants.Controller, ControllerConstants.Account); }
 @{ ViewData.Add(ActionConstants.Action, ActionConstants.Register); }
@@ -17,73 +17,73 @@
     <div class="row">
         <div class="col-md-6 sm-control-width">
             <div class="form-group">
-                @Html.ReqLabelFor(m => m.FirstName, AllyisApps.Resources.Views.Account.Strings.Email)
+                @Html.ReqLabelFor(m => m.FirstName, Strings.Email)
                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.Email)
             </div>
             <div class="form-group">
-                @Html.ReqLabelFor(m => m.FirstName, AllyisApps.Resources.Views.Account.Strings.FirstName)
+                @Html.ReqLabelFor(m => m.FirstName, Strings.FirstName)
                 @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.FirstName)
             </div>
             <div class="form-group">
-                @Html.ReqLabelFor(m => m.LastName, AllyisApps.Resources.Views.Account.Strings.LastName)
+                @Html.ReqLabelFor(m => m.LastName, Strings.LastName)
                 @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.LastName)
             </div>
             <div class="form-group">
-                @Html.ReqLabelFor(m => m.Password, AllyisApps.Resources.Views.Account.Strings.Password)
+                @Html.ReqLabelFor(m => m.Password, Strings.Password)
                 @Html.PasswordFor(m => m.Password, new { @class = "form-control", @onkeypress = "capsCheck(event)", @onkeydown = "capsCheck(event)", @CssClass = "alert" })
                 @Html.ValidationMessageFor(m => m.Password)
             </div>
             <div class="form-group">
-                @Html.ReqLabelFor(m => m.ConfirmPassword, AllyisApps.Resources.Views.Account.Strings.ConfirmPassword)
+                @Html.ReqLabelFor(m => m.ConfirmPassword, Strings.ConfirmPassword)
                 @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @onkeypress = "capsCheck(event)", @onkeydown = "capsCheck(event)" })
                 @Html.ValidationMessageFor(m => m.ConfirmPassword)
             </div>
             <div class="form-group">
-                <label>@AllyisApps.Resources.Views.Account.Strings.DateOfBirth</label>
+                <label>@Strings.DateOfBirth</label>
                 @Html.HiddenFor(m => m.DateOfBirth)
                 <input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerBirth" />
                 <span class="fa fa-fw fa-calendar" id="datePickerBirthButton"></span>
             </div>
-            <div id="capsWarningDiv" style="visibility:hidden; height:0px"><strong>@AllyisApps.Resources.Views.Account.Strings.CapsLock</strong></div>
+            <div id="capsWarningDiv" style="visibility:hidden; height:0px"><strong>@Strings.CapsLock</strong></div>
         </div>
         <div class="col-md-6 sm-control-width">
             <div class="form-group">
-                @Html.ReqLabelFor(m => m.PhoneNumber, AllyisApps.Resources.Views.Account.Strings.PhoneNumber)
+                @Html.ReqLabelFor(m => m.PhoneNumber, Strings.PhoneNumber)
                 @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.PhoneNumber)
             </div>
             <div class="form-group">
-                @Html.ReqLabelFor(m => m.Address, AllyisApps.Resources.Views.Account.Strings.Address)
+                @Html.ReqLabelFor(m => m.Address, Strings.Address)
                 @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
             </div>
             <div class="form-group">
-                @Html.ReqLabelFor(m => m.Country, AllyisApps.Resources.Views.Account.Strings.Country)
-                @Html.DropDownListFor(m => m.Country, new SelectList(Model.GetLocalizedValidCoutriesDictionary(), "Key", "Value"), AllyisApps.Resources.Views.Account.Strings.DropDownEmpty, new { @class = "form-control" })
+                @Html.ReqLabelFor(m => m.Country, Strings.Country)
+                @Html.DropDownListFor(m => m.Country, new SelectList(Model.GetLocalizedValidCoutriesDictionary(), "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control" })
             </div>
             <div class="form-group">
-                @Html.ReqLabelFor(m => m.State, AllyisApps.Resources.Views.Account.Strings.State)
-                @Html.DropDownListFor(m => m.State, new SelectList(new Dictionary<string, string>(), "Key", "Value"), AllyisApps.Resources.Views.Account.Strings.DropDownEmpty, new { @class = "form-control" })
+                @Html.ReqLabelFor(m => m.State, Strings.State)
+                @Html.DropDownListFor(m => m.State, new SelectList(new Dictionary<string, string>(), "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control" })
             </div>
             <div class="form-group">
-                @Html.ReqLabelFor(m => m.City, AllyisApps.Resources.Views.Account.Strings.City)
+                @Html.ReqLabelFor(m => m.City, Strings.City)
                 @Html.TextBoxFor(m => m.City, new { @class = "form-control" })
             </div>
             <div class="form-group">
-                @Html.ReqLabelFor(m => m.PostalCode, AllyisApps.Resources.Views.Account.Strings.PostalCode)
+                @Html.ReqLabelFor(m => m.PostalCode, Strings.PostalCode)
                 @Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
             </div>
         </div>
     </div>
     <div class="form-group allyis-action-buttons">
 		<span class="requiredStar">*</span>
-        <input type="checkbox" name="terms" value=@AllyisApps.Resources.Views.Account.Strings.Accept onchange="document.getElementById('registerSubmit').disabled = !this.checked;">
-        @AllyisApps.Resources.Views.Account.Strings.IAgree @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.TOS, ActionConstants.PrivacyPolicy, ControllerConstants.Home, null, new { @style = "color:#0000FF;" }).
+        <input type="checkbox" name="terms" value=@Strings.Accept onchange="document.getElementById('registerSubmit').disabled = !this.checked;">
+        @Strings.IAgree @Html.ActionLink(Strings.TOS, ActionConstants.PrivacyPolicy, ControllerConstants.Home, null, new { @style = "color:#0000FF;" }).
         <br /><br />
-        <a href=@Url.Action(ActionConstants.RouteHome, ControllerConstants.Account, new RouteValueDictionary(new { area = "" })) class="btn btn-default">@AllyisApps.Resources.Views.Account.Strings.Cancel</a>
-        <button type="submit" value=@AllyisApps.Resources.Views.Account.Strings.Register class="btn btn-primary" id="registerSubmit" disabled="disabled">@AllyisApps.Resources.Views.Account.Strings.Register</button>
+        <a href=@Url.Action(ActionConstants.RouteHome, ControllerConstants.Account, new RouteValueDictionary(new { area = "" })) class="btn btn-default">@Strings.Cancel</a>
+        <button type="submit" value=@Strings.Register class="btn btn-primary" id="registerSubmit" disabled="disabled">@Strings.Register</button>
     </div>
 
 }
@@ -95,8 +95,8 @@
 @section Scripts {
     @*@Scripts.Render("~/bundles/jqueryval")*@
     <script type="text/javascript">
-        var preserveState = '@(Model != null ? (AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';
-        var dropdownempty = "@AllyisApps.Resources.Views.Account.Strings.DropDownEmpty";
+        var preserveState = '@(Model != null ? (States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';
+        var dropdownempty = "@Strings.DropDownEmpty";
         var model_birthdate = @Model.DateOfBirth;
     </script>
     @Scripts.Render("~/bundles/CapsCheck")

@@ -23,7 +23,7 @@ namespace AllyisApps.Utilities
 		/// </summary>
 		public SQLDateProtectorAttribute()
 		{
-			this.ErrorMessage = Resources.Errors.DateOutOfValidSQLRange; // a default value
+			this.ErrorMessage = Resources.Strings.DateOutOfValidSQLRange; // a default value
 		}
 
 		/// <summary>

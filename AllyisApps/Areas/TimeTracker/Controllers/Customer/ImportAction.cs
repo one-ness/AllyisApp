@@ -56,7 +56,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						}
 						else
 						{
-							Notifications.Add(new BootstrapAlert(AllyisApps.Resources.TimeTracker.Controllers.Customer.Strings.FileFormatUnsupported, Variety.Danger));
+							Notifications.Add(new BootstrapAlert(Resources.Strings.FileFormatUnsupported, Variety.Danger));
 							return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
 						}
 
@@ -68,19 +68,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						string[] formattedResult = ImportMessageFormatter.FormatImportResult(Service.Import(result));
 						if (!string.IsNullOrEmpty(formattedResult[0]))
 						{
-							Notifications.Add(new AllyisApps.Core.Alert.BootstrapAlert(formattedResult[0], AllyisApps.Core.Alert.Variety.Success));
+							Notifications.Add(new BootstrapAlert(formattedResult[0], Variety.Success));
 						}
 
 						if (!string.IsNullOrEmpty(formattedResult[1]))
 						{
-							AllyisApps.Core.Alert.BootstrapAlert alert = new AllyisApps.Core.Alert.BootstrapAlert(formattedResult[1], AllyisApps.Core.Alert.Variety.Warning);
+							BootstrapAlert alert = new BootstrapAlert(formattedResult[1], Variety.Warning);
 							alert.IsHtmlString = true;
 							Notifications.Add(alert);
 						}
 					}
 					else
 					{
-						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.TimeTracker.Controllers.Customer.Strings.PleaseUploadFile, Variety.Danger));
+						Notifications.Add(new BootstrapAlert(Resources.Strings.PleaseUploadFile, Variety.Danger));
 					}
 				}
 			}

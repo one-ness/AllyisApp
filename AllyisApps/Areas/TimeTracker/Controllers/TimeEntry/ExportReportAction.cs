@@ -39,7 +39,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// if (Permissions.Cannot(ProductAction.TimeTrackerCreateReportSelf, OrganizationId, TimeTrackerID))
 				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{
-					throw new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReports);
+					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReports);
 				}
 			}
 			else
@@ -47,7 +47,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// if (Permissions.Cannot(ProductAction.TimeTrackerCreateReportOthers, OrganizationId, TimeTrackerID))
 				if (!Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 				{
-					throw new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReportsOtherUser);
+					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReportsOtherUser);
 				}
 			}
 

@@ -52,8 +52,8 @@ namespace AllyisApps.Controllers
 						{
 							ProductId = (int)userSubInfo.ProductId,
 							ProductName = userSubInfo.ProductName,
-							ProductDisplayName = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Views.Shared.Strings.TimeTracker : "Unknown Product",
-							ProductDescription = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Views.Shared.Strings.TimeTrackerDescription : ""
+							ProductDisplayName = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTracker : "Unknown Product",
+							ProductDescription = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription : ""
 						});
 					}
 				}
@@ -75,7 +75,7 @@ namespace AllyisApps.Controllers
 
 			if (result == null)
 			{
-				Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
+				Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
 			}
 			else
 			{
@@ -116,7 +116,7 @@ namespace AllyisApps.Controllers
 			else
 			{
 				// Not a part of the invitation
-				Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
+				Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
 			}
 
 			return RedirectToAction(ActionConstants.Index);

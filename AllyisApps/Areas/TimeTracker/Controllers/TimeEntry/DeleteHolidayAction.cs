@@ -24,13 +24,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (TimeTrackerService.DeleteHoliday(holidayId))
 			{
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulDeleteHoliday, Variety.Success));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulDeleteHoliday, Variety.Success));
 			}
 			else
 			{
 				// premissions handled in service level
 				// Should only get here on permission failure
-				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
 			return this.RedirectToAction(ActionConstants.Settings);

@@ -5,7 +5,7 @@
 @model SettingsViewModel
 
 @{
-    ViewBag.Title = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Settings;
+    ViewBag.Title = Strings.Settings;
     DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
     DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
     Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
@@ -18,57 +18,57 @@
 <div class="flexbox-row flexbox-row-2-col-collapse">
         <div class="panel panel-info" style="position: relative;">
             <div class="panel-heading">
-                <h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.OrgSOW</h1>
+                <h1 class="panel-title">@Strings.OrgSOW</h1>
             </div>
             <div class="panel-body" id="SOWSetting">
                 @using (Html.BeginForm(ActionConstants.UpdateStartOfWeek, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken();
 
-                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="1" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Monday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Monday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="2" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Tuesday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Tuesday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="3" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Wednesday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Wednesday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="4" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Thursday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Thursday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="5" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Friday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Friday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="6" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Saturday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Saturday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="0" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Sunday ? " checked " : string.Empty)><text>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Sunday</text><br />
+                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="1" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Monday ? " checked " : string.Empty)><text>@Strings.Monday</text><br />
+                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="2" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Tuesday ? " checked " : string.Empty)><text>@Strings.Tuesday</text><br />
+                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="3" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Wednesday ? " checked " : string.Empty)><text>@Strings.Wednesday</text><br />
+                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="4" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Thursday ? " checked " : string.Empty)><text>@Strings.Thursday</text><br />
+                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="5" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Friday ? " checked " : string.Empty)><text>@Strings.Friday</text><br />
+                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="6" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Saturday ? " checked " : string.Empty)><text>@Strings.Saturday</text><br />
+                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="0" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Sunday ? " checked " : string.Empty)><text>@Strings.Sunday</text><br />
 
                     <br />
-                    <input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save class="btn btn-primary tt-bottom-right" />
+                    <input type="submit" value=@Strings.Save class="btn btn-primary tt-bottom-right" />
                 }
             </div>
         </div>
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.PClasses</h1>
+                <h1 class="panel-title">@Strings.PClasses</h1>
             </div>
             <div id="PayClasses">
                 <table class="table table-condensed">
                     <thead>
                         <tr>
-                            <th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.PClass</th>
-                            <th><span class="pull-right">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Merge</span></th>
-                            <th><span class="pull-right">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Delete</span></th>
+                            <th>@Strings.PClass</th>
+                            <th><span class="pull-right">@Strings.Merge</span></th>
+                            <th><span class="pull-right">@Strings.Delete</span></th>
                         </tr>
                     </thead>
                     @foreach (PayClass PayClass in Model.PayClasses)
                     {
                         <tr>
                             @{
-                                string _payClassName = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString((PayClass.Name).Replace(" ", string.Empty)) ?? PayClass.Name;
+                                string _payClassName = Strings.ResourceManager.GetString((PayClass.Name).Replace(" ", string.Empty)) ?? PayClass.Name;
                             }
                             <td>@_payClassName</td>
                             <td>
                                 @if (_payClassName != "Regular" && _payClassName != "Overtime" && _payClassName != "Holiday" && _payClassName != "Paid Time Off" && _payClassName != "Unpaid Time Off")
                                 {
-                                    <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.MergePayClass"
+                                    <a href="javascript: void(0);" class="text-muted" title="@Strings.MergePayClass"
                                        onclick='mergePayClass("@PayClass.PayClassID")'><span class="fa fa-fw fa-object-group pull-right"></span></a>
                                 }
                             </td>
                             <td>
                                 @if (_payClassName != "Regular" && _payClassName != "Overtime" && _payClassName != "Holiday" && _payClassName != "Paid Time Off" && _payClassName != "Unpaid Time Off")
                                 {
-                                    <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DeletePayClass"
+                                    <a href="javascript: void(0);" class="text-muted" title="@Strings.DeletePayClass"
                                        onclick='deletePayClass("@PayClass.PayClassID", "\"@_payClassName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
                                 }
                             </td>
@@ -81,7 +81,7 @@
 							@Html.AntiForgeryToken();
 							<td><input type="text" name="NewPayClass" class="form-control" required /></td>
                             <td><span class="pull-right"></span></td>
-							<td><input class="btn btn-primary pull-right" type="submit" value="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Add" /></td>
+							<td><input class="btn btn-primary pull-right" type="submit" value="@Strings.Add" /></td>
 						}
 					</tr>
                 </table>
@@ -89,33 +89,33 @@
         </div>
         <div class="panel panel-info" style="position: relative; padding-bottom: 40px;" @*style="width: 400px; margin: 10px auto;"*@>
             <div class="panel-heading">
-                <h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.LockDate</h1>
+                <h1 class="panel-title">@Strings.LockDate</h1>
             </div>
             <div class="panel-body" id="LockDate">
                 @using (Html.BeginForm(ActionConstants.SetLockDate, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                     @Html.AntiForgeryToken();
                     <div id="NoLockDate" style="margin: 10px">
-                        <input type="radio" name="LDsetting" id="LDsetting" value="false" onclick="disableLD(true)" @(!Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.NoLockDate</text>
+                        <input type="radio" name="LDsetting" id="LDsetting" value="false" onclick="disableLD(true)" @(!Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @Strings.NoLockDate</text>
                     </div>
                     <div id="LockDate" style="margin: 10px">
-                        <input type="radio" name="LDsetting" id="LDsetting" value="true" onclick="disableLD(false)" @(Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.UseLockDate</text>
+                        <input type="radio" name="LDsetting" id="LDsetting" value="true" onclick="disableLD(false)" @(Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @Strings.UseLockDate</text>
                         <input type="text" id="LDquantity" name="LDquantity" value="@Model.Settings.LockDateQuantity" class="form-control" style="width: 40px; text-align: right; display: inline-block;" />
                         <select id="LDperiod" name="LDperiod" class="form-control" value='@(Model.Settings.LockDatePeriod)' style="width: 100px; display: inline-block;">
-                            <option value="Days" @(Model.Settings.LockDatePeriod == "Days" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Days</option>
-                            <option value="Weeks" @(Model.Settings.LockDatePeriod == "Weeks" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Weeks</option>
-                            <option value="Months" @(Model.Settings.LockDatePeriod == "Months" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Months</option>
+                            <option value="Days" @(Model.Settings.LockDatePeriod == "Days" ? " selected=true" : string.Empty)>@Strings.Days</option>
+                            <option value="Weeks" @(Model.Settings.LockDatePeriod == "Weeks" ? " selected=true" : string.Empty)>@Strings.Weeks</option>
+                            <option value="Months" @(Model.Settings.LockDatePeriod == "Months" ? " selected=true" : string.Empty)>@Strings.Months</option>
                         </select>
                     </div>
                     <div>
-                        <input class="tt-bottom-right btn btn-primary" type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save />
+                        <input class="tt-bottom-right btn btn-primary" type="submit" value=@Strings.Save />
                     </div>
                 }
             </div>
         </div>
         <div class="panel panel-info" style="position: relative;">
             <div class="panel-heading">
-                <h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Overtime</h1>
+                <h1 class="panel-title">@Strings.Overtime</h1>
             </div>
             <div id="Overtime" class="panel-body">
                 @using (Html.BeginForm(ActionConstants.UpdateOvertime, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -125,50 +125,50 @@
                     <div id="OTCheck" style="margin:10px">
                         @{    bool overTimeUsed = Model.Settings.OvertimeHours > 0;
                         }
-                        <input type="radio" name="setting" id="setting" value="Yes" onclick="hideOT(false)" @(overTimeUsed ? " checked" : string.Empty) /><text> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Yes</text>
-                        <input type="radio" name="setting" id="setting" value="No" onclick="hideOT(true)" @(!overTimeUsed ? " checked" : string.Empty) /><text> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.No</text>
+                        <input type="radio" name="setting" id="setting" value="Yes" onclick="hideOT(false)" @(overTimeUsed ? " checked" : string.Empty) /><text> @Strings.Yes</text>
+                        <input type="radio" name="setting" id="setting" value="No" onclick="hideOT(true)" @(!overTimeUsed ? " checked" : string.Empty) /><text> @Strings.No</text>
                     </div>
 
                     <div id="OTSettings" style="visibility: @(overTimeUsed ? "visible" : "hidden")">
                         <div style="margin:10px">
-                            @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.After
-                            <input type="text" id="hours" name="hours" value='@(Model.Settings.OvertimeHours < 0 ? 40 : Model.Settings.OvertimeHours)' class="form-control" style="width: 50px; text-align: right; display: inline-block;" /> @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.HoursPer
+                            @Strings.After
+                            <input type="text" id="hours" name="hours" value='@(Model.Settings.OvertimeHours < 0 ? 40 : Model.Settings.OvertimeHours)' class="form-control" style="width: 50px; text-align: right; display: inline-block;" /> @Strings.HoursPer
                             <select id="period" name="period" class="form-control" value='@Model.Settings.OvertimePeriod' style="display: inline-block; width: 100px;">
-                                <option value="Day" @(Model.Settings.OvertimePeriod == "Day" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Day</option>
-                                <option value="Week" @(Model.Settings.OvertimePeriod == "Week" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Week</option>
-                                <option value="Month" @(Model.Settings.OvertimePeriod == "Month" ? " selected=true" : string.Empty)>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Month</option>
+                                <option value="Day" @(Model.Settings.OvertimePeriod == "Day" ? " selected=true" : string.Empty)>@Strings.Day</option>
+                                <option value="Week" @(Model.Settings.OvertimePeriod == "Week" ? " selected=true" : string.Empty)>@Strings.Week</option>
+                                <option value="Month" @(Model.Settings.OvertimePeriod == "Month" ? " selected=true" : string.Empty)>@Strings.Month</option>
                             </select><br />
                         </div>
                         <div style="margin:10px">
-                            @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.WithAMultiplierOf
+                            @Strings.WithAMultiplierOf
                             <input type="text" id="mult" name="mult" value='@Model.Settings.OvertimeMultiplier.ToString("G10")' class="form-control" style="width: 60px; text-align: right; display: inline-block;" />
                         </div>
                     </div>
                     <div>
-                        <input class="btn btn-primary tt-bottom-right" type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save />
+                        <input class="btn btn-primary tt-bottom-right" type="submit" value=@Strings.Save />
                     </div>
                             }
             </div>
         </div>
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Holidays</h1>
+                <h1 class="panel-title">@Strings.Holidays</h1>
             </div>
             <div id="Holidays">
 
                 <table class="table table-condensed">
                     <thead>
                         <tr>
-                            <th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Holiday</th>
-                            <th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Date</th>
-                            <th><span class="pull-right">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Delete</span></th>
+                            <th>@Strings.Holiday</th>
+                            <th>@Strings.Date</th>
+                            <th><span class="pull-right">@Strings.Delete</span></th>
                         </tr>
                     </thead>
                     @foreach (Holiday Holiday in Model.Holidays)
                     {
                         <tr>
                             @{
-                                string _holidayName = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString(((Holiday.HolidayName).Replace(" ", string.Empty)).Replace("'", string.Empty)) ?? Holiday.HolidayName;
+                                string _holidayName = Strings.ResourceManager.GetString(((Holiday.HolidayName).Replace(" ", string.Empty)).Replace("'", string.Empty)) ?? Holiday.HolidayName;
                             }
                             <td>
                                 @_holidayName
@@ -177,7 +177,7 @@
                                 @Holiday.Date.ToShortDateString()
                             </td>
                             <td>
-								<a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.DeleteHoliday"
+								<a href="javascript: void(0);" class="text-muted" title="@Strings.DeleteHoliday"
 								   onclick='deleteHoliday("@Holiday.HolidayId", "\"@_holidayName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
                             </td>
                         </tr>
@@ -188,7 +188,7 @@
                             @Html.AntiForgeryToken();
                             <td><input type="text" class="form-control" name="NewHolidayName" required /></td>
                             <td><input type="date" class="form-control" name="NewHolidayDate" required /></td>
-                            <td><input class="pull-right btn btn-primary" type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Add /></td>
+                            <td><input class="pull-right btn btn-primary" type="submit" value=@Strings.Add /></td>
                         }
                     </tr>
                 </table>
@@ -199,9 +199,9 @@
 @section scripts{
 	<script type="text/javascript">
         mergePayClassUrl = "@Url.Action(ActionConstants.MergePayClass, ControllerConstants.TimeEntry, new { PayClassId = -1 })"
-        deletePayClassWarning = "@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ConfirmDeletePayClass"
+        deletePayClassWarning = "@Strings.ConfirmDeletePayClass"
         deletePayClassUrl = "@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { PayClassId = -1 })"
-        deleteHolidayWarning = "@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ConfirmDeleteHoliday";
+        deleteHolidayWarning = "@Strings.ConfirmDeleteHoliday";
 		deleteHolidayUrl = "@Url.Action(ActionConstants.DeleteHoliday, ControllerConstants.TimeEntry, new { HolidayId = -1 })"
 	</script>
 

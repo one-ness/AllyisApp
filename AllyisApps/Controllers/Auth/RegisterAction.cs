@@ -79,13 +79,13 @@ namespace AllyisApps.Controllers
 				}
 				else
 				{
-					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.UserAccountAlreadyExists, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.UserAccountAlreadyExists, Variety.Danger));
 					return this.View(model);
 				}
 			}
 
-			Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.WarnProblemSigningIn, Variety.Warning));
-			return this.View("Error", new HandleErrorInfo(new System.Exception(Resources.Controllers.Auth.Strings.StatusErrorMessage), "Account", "Register"));
+			Notifications.Add(new BootstrapAlert(Resources.Strings.WarnProblemSigningIn, Variety.Warning));
+			return this.View("Error", new HandleErrorInfo(new System.Exception(Resources.Strings.StatusErrorMessage), "Account", "Register"));
 		}
 	}
 }

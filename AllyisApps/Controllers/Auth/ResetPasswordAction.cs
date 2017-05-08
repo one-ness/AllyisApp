@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers
 		[AllowAnonymous]
 		public ActionResult ResetPassword(string userId, string code)
 		{
-			return code == null || userId == null ? this.View(ViewConstants.Error, new HandleErrorInfo(new ArgumentException(@Resources.Errors.ParameterErrorMessage), ControllerConstants.Subscription, ActionConstants.Subscribe)) : this.View();
+			return code == null || userId == null ? this.View(ViewConstants.Error, new HandleErrorInfo(new ArgumentException(@Resources.Strings.ParameterErrorMessage), ControllerConstants.Subscription, ActionConstants.Subscribe)) : this.View();
 		}
 
 		/// <summary>

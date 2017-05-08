@@ -32,14 +32,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{
-					throw new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReports);
+					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReports);
 				}
 			}
 			else
 			{
 				if (!Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 				{
-					throw new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReportsOtherUser);
+					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReportsOtherUser);
 				}
 			}
 

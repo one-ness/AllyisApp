@@ -4,7 +4,7 @@
 
 @model AccountOrgsViewModel
 @{
-    ViewBag.TitleBar = AllyisApps.Resources.Views.Account.Strings.YourOrganizations;
+    ViewBag.TitleBar = Strings.YourOrganizations;
 }
 <div class="row">
     <div class="col-md-push-2 col-md-8">
@@ -12,8 +12,8 @@
             <div class="panel-heading panel-heading-inline">*@
         <div class="row">
             <div class="col-xs-12">
-                <h1 style="float: left">@AllyisApps.Resources.Views.Account.Strings.YourOrganizations</h1>
-                <a href="@Url.SubdomainLink(ActionConstants.CreateOrg, ControllerConstants.Account, null, 0, this.Request)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">@AllyisApps.Resources.Views.Account.Strings.CreateOrganization</a>
+                <h1 style="float: left">@Strings.YourOrganizations</h1>
+                <a href="@Url.SubdomainLink(ActionConstants.CreateOrg, ControllerConstants.Account, null, 0, this.Request)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">@Strings.CreateOrganization</a>
             </div>
         </div>
         @*</div>

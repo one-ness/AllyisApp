@@ -41,7 +41,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
 			}
 
-			Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Home.Strings.ActionUnauthorizedMessage, Variety.Warning));
+			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Home, new { area = string.Empty });
 		}
 	}

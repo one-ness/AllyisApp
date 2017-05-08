@@ -30,18 +30,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			//Used pay classes cannot be deleted, suggest manager to merge it with another payclass instead
 			if (sourcePayClassName == "Regular" || sourcePayClassName == "Overtime" || sourcePayClassName == "Holiday" || sourcePayClassName == "Paid Time Off" || sourcePayClassName == "Unpaid Time Off" || TimeTrackerService.GetTimeEntriesThatUseAPayClass(payClassId).Count() > 0)
 			{
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotDeletePayClass, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotDeletePayClass, Variety.Warning));
 			}
 			else
 			{
 				if (TimeTrackerService.DeletePayClass(payClassId))
 				{
-					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulDeletePayClass, Variety.Success));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulDeletePayClass, Variety.Success));
 				}
 				else
 				{
 					// Should only be here because of permission failures
-					Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 				}
 			}
 

@@ -38,7 +38,7 @@ namespace AllyisApps.Controllers
 			foreach (string state in Service.ValidStates(country))
 			{
 				string stateKey = Clean(state);
-				localizedStates.Add(state, AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(stateKey) ?? state);
+				localizedStates.Add(state, Resources.States.ResourceManager.GetString(stateKey) ?? state);
 			}
 
 			return this.Json(localizedStates);

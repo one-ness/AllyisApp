@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{
-					throw new UnauthorizedAccessException(AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReports);
+					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReports);
 				}
 
 				int orgId = UserContext.ChosenOrganizationId;
@@ -57,7 +57,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			// Permissions failure
-			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
 			return this.RouteHome();
 		}
@@ -78,7 +78,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			projects.Insert(0, new CompleteProjectInfo
 			{
 				ProjectId = 0,
-				ProjectName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.NoFilter,
+				ProjectName = AllyisApps.Resources.Strings.NoFilter,
 				CustomerId = 0
 			});
 
@@ -91,9 +91,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Projects = projects,
 				Customers = customers,
 				PreviewPageSize = 20,
-				PreviewTotal = string.Format("{0} {1}", 0, AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.HoursTotal),
+				PreviewTotal = string.Format("{0} {1}", 0, Resources.Strings.HoursTotal),
 				PreviewEntries = null,
-				PreviewMessage = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.NoDataPreview,
+				PreviewMessage = AllyisApps.Resources.Strings.NoDataPreview,
 				PreviewPageTotal = 1,
 				PreviewPageNum = 1,
 				Selection = previousSelections ?? new ReportSelectionModel
@@ -117,7 +117,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		private IEnumerable<SelectListItem> GetUserSelectList(List<SubscriptionUserInfo> subUsers, List<int> usersSelected)
 		{
 			IList<SubscriptionUserInfo> users = subUsers;
-			users.Insert(0, new SubscriptionUserInfo { FirstName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.AllUsersFirst, LastName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.AllUsersLast, UserId = -1 });
+			users.Insert(0, new SubscriptionUserInfo { FirstName = Resources.Strings.AllUsersFirst, LastName = Resources.Strings.AllUsersLast, UserId = -1 });
 
 			// select current user by default
 			if (usersSelected.Count < 1)
@@ -148,7 +148,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		private IEnumerable<SelectListItem> GetCustomerSelectList(List<Customer> customers, int customerSelected)
 		{
 			IList<Customer> customerData = customers;
-			customerData.Insert(0, new Customer { Name = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.NoFilter, CustomerId = 0 });
+			customerData.Insert(0, new Customer { Name = Resources.Strings.NoFilter, CustomerId = 0 });
 
 			var cSelectList = new List<SelectListItem>();
 			foreach (var customer in customerData)
@@ -181,7 +181,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				pSelectList.Add(new SelectListItem
 				{
 					Value = 0.ToString(),
-					Text = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.NoFilter,
+					Text = Resources.Strings.NoFilter,
 					Selected = true,
 					Disabled = true
 				});
@@ -191,7 +191,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				pSelectList.Add(new SelectListItem
 				{
 					Value = 0.ToString(),
-					Text = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.NoFilter,
+					Text = Resources.Strings.NoFilter,
 					Selected = projectSelected == 0,
 					Disabled = false
 				});

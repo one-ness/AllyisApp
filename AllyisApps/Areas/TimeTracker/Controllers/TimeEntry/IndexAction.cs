@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{ // Trying to edit as another user
 				if (!manager)
 				{
-					throw new UnauthorizedAccessException(AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.CantViewOtherTimeCards);
+					throw new UnauthorizedAccessException(Resources.Strings.CantViewOtherTimeCards);
 				}
 				//// For a manager editing another user, everything's fine; the next section can be skipped.
 			}
@@ -44,7 +44,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{ // Either userId is -1, or it is the current user
 				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{ // Current user cannot edit self
-					Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 					return this.Redirect("/");
 				}
 
@@ -107,7 +107,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				hours.Add(proj.ProjectId, new ProjectHours { Project = proj, Hours = 0.0f });
 			}
 
-			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = -1, ProjectName = AllyisApps.Resources.TimeTracker.Controllers.TimeEntry.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
+			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = -1, ProjectName = Resources.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
 
 			IEnumerable<User> users = infos.Item5;
 

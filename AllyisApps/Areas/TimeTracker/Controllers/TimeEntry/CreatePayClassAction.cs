@@ -25,7 +25,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (string.IsNullOrWhiteSpace(newPayClass))
 			{
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotCreateBlankPayClass, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotCreateBlankPayClass, Variety.Warning));
 			}
 			else
 			{
@@ -33,18 +33,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					if (TimeTrackerService.CreatePayClass(newPayClass))
 					{
-						Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulCreatePayClass, Variety.Success));
+						Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulCreatePayClass, Variety.Success));
 					}
 					else
 					{
 						// Should only get here on permissions failure
-						Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+						Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 					}
 				}
 				catch (ArgumentException)
 				{
 					// Pay class already exists
-					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.FailureCreatePayClassAlreadyExists, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.FailureCreatePayClassAlreadyExists, Variety.Danger));
 				}
 			}
 			return this.RedirectToAction(ActionConstants.Settings);

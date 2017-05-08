@@ -89,7 +89,7 @@
                                                               {
                                                                   Selected = (Model.PayClasses.Count() == 1) || (Model.PayClassId == c.PayClassID),
 
-                                                                  Text = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString((c.Name).Replace(" ","")) ?? c.Name,
+                                                                  Text = Strings.ResourceManager.GetString((c.Name).Replace(" ","")) ?? c.Name,
 
                                                                   Value = c.PayClassID.ToString()
                                                               }, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
@@ -97,7 +97,7 @@
                     <input type="hidden" name="PayClassId" value="" />   @*Needed for proper model binding, value changes on submit (see form above)*@
                 @*}*@
             </div>
-            @Html.TextBoxDisabledFor(m => Model.Description, locked, new { @class = "form-control stretch", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Description }).RemoveIdAttribute()
+            @Html.TextBoxDisabledFor(m => Model.Description, locked, new { @class = "form-control stretch", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description }).RemoveIdAttribute()
         if (!locked)
         {
             <div class="button-anim-wrap btn-group group right">
@@ -106,7 +106,7 @@
                             disabled="true"
                             value="Save"
                             class="btn btn-fa btn-primary"
-                            title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save"> @*Formerally "Submit"; changed to match value and because "Save" was in resources already*@
+                            title="@Strings.Save"> @*Formerally "Submit"; changed to match value and because "Save" was in resources already*@
                         <i class="allyisicon-submit"></i>
                     </button>
                     <a class="btn btn-danger btn-fa hidden-create"

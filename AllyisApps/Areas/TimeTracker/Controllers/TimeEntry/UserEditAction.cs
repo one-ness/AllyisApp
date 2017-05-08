@@ -44,7 +44,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			// Permissions failure
-			Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.ActionUnauthorizedMessage, Variety.Warning));
+			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			return this.RedirectToAction(ActionConstants.Index);
 		}
 	}

@@ -1,8 +1,8 @@
 ﻿@{
     Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
-    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.ConfirmEmail;
+    ViewBag.Title = Strings.ConfirmEmail;
 }
 
 <p>
-    @AllyisApps.Resources.Views.Account.Strings.ConfirmEmailDialogue@Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.RedirectToSignIn, ActionConstants.LogOn, ControllerConstants.Account, routeValues: null, htmlAttributes: new { id = "loginLink" })
+    @Strings.ConfirmEmailDialogue@Html.ActionLink(Strings.RedirectToSignIn, ActionConstants.LogOn, ControllerConstants.Account, routeValues: null, htmlAttributes: new { id = "loginLink" })
 </p>

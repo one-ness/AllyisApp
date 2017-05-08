@@ -5,7 +5,7 @@
 
 @{
 	Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
-	ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.AddMember;
+	ViewBag.Title = Strings.AddMember;
 	//string left = "col-xs-3 text-right";
 	//string right = "col-xs-9";
 }
@@ -21,12 +21,12 @@
 
 		<div class="col-md-6" style="min-width: 400px;">
 			<div class="form-group">
-				@Html.ReqLabelFor(model => model.Email, AllyisApps.Resources.Views.Account.Strings.Email)
+				@Html.ReqLabelFor(model => model.Email, Strings.Email)
 				@Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
 				@Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger"} )
 			</div>
 			<div class="form-group">
-				@Html.ReqLabelFor(model => model.EmployeeId, AllyisApps.Resources.Views.Account.Strings.EmployeeId)
+				@Html.ReqLabelFor(model => model.EmployeeId, Strings.EmployeeId)
 				@Html.TextBoxFor(model => model.EmployeeId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.EmployeeId })
 				@Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger"} )
 			</div>
@@ -34,27 +34,27 @@
 		<div class="col-md-6" style="min-width: 400px;">
 
 			<div class="form-group">
-				@Html.ReqLabelFor(model => model.FirstName, AllyisApps.Resources.Views.Account.Strings.FirstName)
+				@Html.ReqLabelFor(model => model.FirstName, Strings.FirstName)
 				@Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
 				@Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger"} )
 			</div>      
 			<div class="form-group">
-				@Html.ReqLabelFor(model => model.LastName, AllyisApps.Resources.Views.Account.Strings.LastName)
+				@Html.ReqLabelFor(model => model.LastName, Strings.LastName)
 				@Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
 				@Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger"} )
 			</div>
         </div>
         <div class="col-md-6" style="min-width: 400px;">
             <div class="form-group">
-                @Html.ReqLabelFor(model => model.FirstName, AllyisApps.Resources.Views.Account.Strings.EmployeeType)    
-                @Html.DropDownListFor(model => model.EmployeeType, new SelectList ( new List<string> { AllyisApps.Resources.Views.Account.Strings.Salaried, AllyisApps.Resources.Views.Account.Strings.Hourly }), new { @class = "form-control" })	        
+                @Html.ReqLabelFor(model => model.FirstName, Strings.EmployeeType)    
+                @Html.DropDownListFor(model => model.EmployeeType, new SelectList ( new List<string> { Strings.Salaried, Strings.Hourly }), new { @class = "form-control" })	        
             </div>
         </div>
         <div class="col-md-6" style="min-width: 400px;">
             <div class="form-group">
                 @*<div class="@left">*@
                 <div class="text-right">
-                    <span style="margin-right: 5px;">@AllyisApps.Resources.Views.Account.Strings.AddAsOwner</span>
+                    <span style="margin-right: 5px;">@Strings.AddAsOwner</span>
                     @*</div>
                     <div class="@right">*@
                     @Html.CheckBoxFor(m => m.AddAsOwner, new { @style = "display: inline;" })
@@ -69,8 +69,8 @@
 			{
 				<div class="col-xs-12">
 					<div class="form-group allyis-action-buttons pull-right">
-						@Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
-						<input type="submit" id="addMember" value="@AllyisApps.Resources.Views.Account.Strings.Add" class="btn btn-primary" />
+						@Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
+						<input type="submit" id="addMember" value="@Strings.Add" class="btn btn-primary" />
 					</div>
 				</div>
 			}
@@ -84,7 +84,7 @@
 					<div class="form-group">
 						@if (sub.ProductName == ProductNameKeyConstants.TimeTracker)
 						{
-							<label>@(string.Format("{0} {1}", AllyisApps.Resources.Views.Account.Strings.TimeTracker, AllyisApps.Resources.Views.Account.Strings.Role))</label>
+							<label>@(string.Format("{0} {1}", Strings.TimeTracker, Strings.Role))</label>
 						}
                         @{
                             var languageAdjustment = sub.ProductRoles;
@@ -94,10 +94,10 @@
                             }
                         }
 						@Html.DropDownListDisabled(string.Format("Subscriptions[{0}].SelectedRole", count), new SelectList(sub.ProductRoles, "ProductRoleId", "Name", sub.SelectedRole), sub.hasTooManySubscribers, new { @class = "form-control role-selector" })
-                        <span class="text-danger" id="roleRequiredMessage">@AllyisApps.Resources.Views.Account.Strings.TimeTrackerRoleRequired</span>
+                        <span class="text-danger" id="roleRequiredMessage">@Strings.TimeTrackerRoleRequired</span>
                         @if (sub.hasTooManySubscribers)
 						{
-							<p>@AllyisApps.Resources.Views.Account.Strings.TooManyUsers</p>roomInSubscription = false;
+							<p>@Strings.TooManyUsers</p>roomInSubscription = false;
 						}
 					</div>
 				</div>
@@ -106,7 +106,7 @@
 				{
 						<div class="col-md-6" style="min-width: 400px;">
 							<div class="form-group">
-								<label>@AllyisApps.Resources.Views.Account.Strings.TrackProject</label>
+								<label>@Strings.TrackProject</label>
 								@{    //outputs list of available projects
                                     List<SelectListItem> selectProjects = new List<SelectListItem>();
                                     foreach (CompleteProjectInfo pInfo in Model.Projects)
@@ -119,20 +119,20 @@
                                     });
                                 }
 
-									@Html.DropDownList("SubscriptionProjectId", selectProjects, AllyisApps.Resources.Views.Account.Strings.DropDownEmpty, new { @class = "form-control project-selector" });
-                                    <span class="text-danger" id="projectRequiredMessage">@AllyisApps.Resources.Views.Account.Strings.TimeTrackerProjectRequired</span>
+									@Html.DropDownList("SubscriptionProjectId", selectProjects, Strings.DropDownEmpty, new { @class = "form-control project-selector" });
+                                    <span class="text-danger" id="projectRequiredMessage">@Strings.TimeTrackerProjectRequired</span>
                                 }
 							</div>
 
 							<div class="form-group allyis-action-buttons pull-right">
-								@Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
+								@Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
 
 								@if (roomInSubscription)
 								{
-									<input type="submit" id="addMember" value="@AllyisApps.Resources.Views.Account.Strings.Add" class="btn btn-primary" />}
+									<input type="submit" id="addMember" value="@Strings.Add" class="btn btn-primary" />}
 								else
 								{
-									<input type="submit" id="addMember" value="@AllyisApps.Resources.Views.Account.Strings.Add" class="btn btn-primary" disabled="disabled" />}
+									<input type="submit" id="addMember" value="@Strings.Add" class="btn btn-primary" disabled="disabled" />}
 							</div>
 
 							<div class="clearfix"></div>
@@ -149,23 +149,23 @@
         @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken();
-            <label>@AllyisApps.Resources.Views.Account.Strings.Upload</label>
+            <label>@Strings.Upload</label>
             @*<p>
-                @AllyisApps.Resources.Views.Account.Strings.InviteMoreThanOne
+                @Strings.InviteMoreThanOne
             </p>*@
             <input type="file" id="upload-box" name="upload" style="display:none;"
                    onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
                 <input id="upload-file-name-display" class="form-control"
                        onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
                 <div style="margin-top: 10px; margin-bottom: 15px; float:left;">
-                    <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@AllyisApps.Resources.Views.Account.Strings.ChooseFile</a>
-                    <input style="margin-left: 10px" type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
+                    <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
+                    <input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" />
                 </div>
         }
         @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Account, null, FormMethod.Get))
         {
             <div style="float:right; margin-top: 10px;">
-                <input type="submit" id="template-button" value="@AllyisApps.Resources.Views.Account.Strings.Template" class="btn btn-primary" />
+                <input type="submit" id="template-button" value="@Strings.Template" class="btn btn-primary" />
             </div>
         }
     </div>

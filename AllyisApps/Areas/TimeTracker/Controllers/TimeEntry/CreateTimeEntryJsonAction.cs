@@ -36,8 +36,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.Json(new
 				{
 					status = "error",
-					message = Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntry,
-					e = new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntry)
+					message = Resources.Strings.NotAuthZTimeEntry,
+					e = new UnauthorizedAccessException(Resources.Strings.NotAuthZTimeEntry)
 				});
 			}
 			else if (model.UserId != Convert.ToInt32(UserContext.UserId) && !Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.Json(new
 				{
 					status = "error",
-					message = Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntryOtherUser
+					message = Resources.Strings.NotAuthZTimeEntryOtherUser
 				});
 			}
 
@@ -55,11 +55,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				float? durationResult;
 				if (!(durationResult = this.ParseDuration(model.Duration)).HasValue)
 				{
-					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.DurationFormat);
+					throw new ArgumentException(Resources.Strings.DurationFormat);
 				}
 				if (this.ParseDuration(model.Duration) == 0)
 				{
-					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.EnterATimeLongerThanZero);
+					throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
 				}
 
 				IEnumerable<TimeEntryInfo> otherEntriesToday = TimeTrackerService.GetTimeEntriesByUserOverDateRange(
@@ -75,19 +75,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				DateTime? lockDate = TimeTrackerService.GetLockDate();
 				if (durationResult + durationOther > 24.00)
 				{
-					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotExceed24);
+					throw new ArgumentException(Resources.Strings.CannotExceed24);
 				}
 				else if (model.ProjectId <= 0)
 				{
-					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.MustSelectProject);
+					throw new ArgumentException(Resources.Strings.MustSelectProject);
 				}
 				else if (model.PayClassId < 1)
 				{
-					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.MustSelectPayClass);
+					throw new ArgumentException(Resources.Strings.MustSelectPayClass);
 				}
 				else if (role != ProductRoleIdEnum.TimeTrackerManager && model.Date <= (lockDate == null ? -1 : TimeTrackerService.GetDayFromDateTime(lockDate.Value)))
 				{
-					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
+					throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 				}
 
 				int id = TimeTrackerService.CreateTimeEntry(new TimeEntryInfo()

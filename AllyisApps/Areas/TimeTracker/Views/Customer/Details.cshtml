@@ -11,45 +11,45 @@
     <div class="float-center max-600">
         <div class="col-md-6 xs-control-width float-center">
             <div class="form-group">
-                @Html.LabelFor(m => m.Address, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.Address)
+                @Html.LabelFor(m => m.Address, Strings.Address)
                 <div class="text-box-padded">@Html.DisplayTextFor(m => m.Address)</div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(m => m.City, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.City)
+                @Html.LabelFor(m => m.City, Strings.City)
                 <div class="text-box-padded">@Html.DisplayTextFor(m => m.City)</div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(m => m.Country, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.Country)
+                @Html.LabelFor(m => m.Country, Strings.Country)
                 <div class="text-box-padded">@Html.DisplayTextFor(m => m.Country)</div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(m => m.State, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.State)
+                @Html.LabelFor(m => m.State, Strings.State)
                 <div class="text-box-padded">@Html.DisplayTextFor(m => m.State)</div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(m => m.PostalCode, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.PostalCode)
+                @Html.LabelFor(m => m.PostalCode, Strings.PostalCode)
                 <div class="text-box-padded">@Html.DisplayTextFor(m => m.PostalCode)</div>
             </div>
         </div>
         <div class="col-md-6 xs-control-width float-center">
             <div class="form-group">
-                @Html.LabelFor(m => m.ContactEmail, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ContactEmail)
+                @Html.LabelFor(m => m.ContactEmail, Strings.ContactEmail)
                 <div class="text-box-padded">@Html.DisplayTextFor(m => m.ContactEmail)</div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(m => m.ContactPhoneNumber, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ContactPhoneNumber)
+                @Html.LabelFor(m => m.ContactPhoneNumber, Strings.ContactPhoneNumber)
                 <div class="text-box-padded">@Html.DisplayTextFor(m => m.ContactPhoneNumber)</div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(m => m.FaxNumber, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.FaxNumber)
+                @Html.LabelFor(m => m.FaxNumber, Strings.FaxNumber)
                 <div class="text-box-padded">@Html.DisplayTextFor(m => m.FaxNumber)</div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(m => m.EIN, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.EIN)
+                @Html.LabelFor(m => m.EIN, Strings.EIN)
                 <div class="text-box-padded">@Html.DisplayTextFor(m => m.EIN)</div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(m => m.CustomerOrgId, AllyisApps.Resources.TimeTracker.Views.Customer.Strings.CustomerOrgId)
+                @Html.LabelFor(m => m.CustomerOrgId, Strings.CustomerOrgId)
                 <div class="text-box-padded">@Html.DisplayTextFor(m => m.CustomerOrgId)</div>
             </div>
         </div>
@@ -57,10 +57,10 @@
 </div>
 <div class="row md-control-width float-center">
     <div class="form-group allyis-action-buttons">
-        <a href="/TimeTracker/Customer" class="btn btn-default">@AllyisApps.Resources.Views.Account.Strings.Back</a>
+        <a href="/TimeTracker/Customer" class="btn btn-default">@Strings.Back</a>
         @if (Model.canEditCustomers)
         {
-            <a class="btn btn-primary" onclick="location='@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = Model.CustomerID })'">@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Edit</a>
+            <a class="btn btn-primary" onclick="location='@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = Model.CustomerID })'">@Strings.Edit</a>
         }
     </div>
 </div>

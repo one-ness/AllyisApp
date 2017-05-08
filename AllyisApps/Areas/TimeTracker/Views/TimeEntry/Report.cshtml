@@ -5,7 +5,7 @@
 @model ReportViewModel
 
 @{
-    ViewBag.Title = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Report;
+    ViewBag.Title = Strings.Report;
     DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
     DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
     ViewBag.OrganizationId = Model.OrganizationId;
@@ -22,7 +22,7 @@
                 <!--Default selection: current user-->if (Model.CanManage)// was previously: (Permissions.Can(ProductAction.TimeTrackerCreateReportOthers, Model.OrganizationId, DB Helper.Instance.GetProductIDByName("TimeTracker")))
                 {
                     <div class="list-left container">
-                        <label for="UserSelect">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Employees</label>
+                        <label for="UserSelect">@Strings.Employees</label>
                         @Html.DropDownList("UserSelect",
                                               Model.UserView,
                                               htmlAttributes: new { @class = "form-control", multiple = "multiple", size = "9" })
@@ -31,7 +31,7 @@
                 else
                 {
                     <div class="list-left container" style="display: none;">
-                        <label for="UserSelect">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Employees</label>
+                        <label for="UserSelect">@Strings.Employees</label>
                         @Html.DropDownList("UserSelect",
                                               Model.UserView,
                                               htmlAttributes: new { @class = "form-control", /*disabled = "disabled",*/ multiple = "multiple", size = "9", style = "display: none;" })
@@ -41,7 +41,7 @@
                     <div class="row">
                         <div class="form-group col-md-6 col-lg-6">
                             <!--Get Customers by OrganizationId-->
-                            <label for="CustomerSelect">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Customers</label>
+                            <label for="CustomerSelect">@Strings.Customers</label>
                             @Html.DropDownList("CustomerSelect",
                                               Model.CustomerView,
                                               htmlAttributes: new { @class = "form-control", @id = "ddl-customers" })
@@ -58,7 +58,7 @@
                         @if (Model.Selection.CustomerId == 0)
                         {
                             <div class="form-group col-md-6 col-lg-6">
-                                <label for="ddl-projects">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Projects</label>
+                                <label for="ddl-projects">@Strings.Projects</label>
                                 <!--Get Projects by OrgID-->
                                 @Html.DropDownList("ProjectSelect",
                                               Model.ProjectView,
@@ -68,7 +68,7 @@
                         else
                         {
                             <div class="form-group col-md-6 col-lg-6">
-                                <label for="ddl-projects">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Projects</label>
+                                <label for="ddl-projects">@Strings.Projects</label>
                                 @*@Html.DropDownList("ProjectSelect",
                                               Model.ProjectView,
                                               htmlAttributes: new { @class = "form-control", @id = "ddl-projects" })*@
@@ -87,13 +87,13 @@
                     </div>
 					<div class="row">
 						<div class="form-group col-md-6 col-lg-6">
-							<label>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.StartDate</label>
+							<label>@Strings.StartDate</label>
 							<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.Selection.StartDate" />
 							<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerStart" />
 							<span class="fa fa-fw fa-calendar" id="datePickerStartButton"></span>
 						</div>
 						<div class="form-group col-md-6 col-lg-6">
-							<label>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.EndDate</label>
+							<label>@Strings.EndDate</label>
 							<input type="hidden" id="DateRangeEnd" name="DateRangeEnd" value="@Model.Selection.EndDate" />
 							<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerEnd" />
 							<span class="fa fa-fw fa-calendar" id="datePickerEndButton"></span>
@@ -106,11 +106,11 @@
 							@if (Model.ShowExport)
 							{
 								<div>
-									<input class="btn btn-primary pull-right" type="submit" name="viewDataButton" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Export />
+									<input class="btn btn-primary pull-right" type="submit" name="viewDataButton" value=@Strings.Export />
 								</div>
 							}
 							<div>
-								<input class="btn btn-primary pull-right" type="submit" name="viewDataButton" style="margin-right: 15px;" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Preview />
+								<input class="btn btn-primary pull-right" type="submit" name="viewDataButton" style="margin-right: 15px;" value=@Strings.Preview />
 							</div>
 						</div>
 					</div>
@@ -129,14 +129,14 @@
 					<table class="table table-hover table-condensed">
 						<thead class="panel-heading">
 							<tr class="double-bottom-border">
-								<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.LastName</th>
-								<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.FirstName</th>
-								<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Date</th>
-								<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Duration</th>
-								<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.PayClass</th>
-								<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Project</th>
-								<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Customer</th>
-								<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Description</th>
+								<th>@Strings.LastName</th>
+								<th>@Strings.FirstName</th>
+								<th>@Strings.Date</th>
+								<th>@Strings.Duration</th>
+								<th>@Strings.PayClass</th>
+								<th>@Strings.Project</th>
+								<th>@Strings.Customer</th>
+								<th>@Strings.Description</th>
 							</tr>
 						</thead>
 						<tbody>

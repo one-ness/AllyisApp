@@ -2,7 +2,7 @@
 
 @{
     Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
-    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.Subscribe;
+    ViewBag.Title = Strings.Subscribe;
     ViewBag.Description = Model.ProductDescription;
     var userCount = Model.CurrentSubscription == null ? 500 : Model.CurrentSubscription.NumberOfUsers;
     var cost = (userCount - 500).ToString("c");
@@ -20,29 +20,29 @@
     @Html.HiddenFor(m => m.PreviousSku)
     @Html.HiddenFor(m => m.Token)
     @Html.Hidden("currentUserCount", (int)Model.CurrentUsers)
-    @*<p>@AllyisApps.Resources.Views.Account.Strings.FirstUserOffer</p>*@
+    @*<p>@Strings.FirstUserOffer</p>*@
     <p id="notice" style="color:red"></p>
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default" style="min-width:350px;">
                     <div class="panel-heading">
                         <h3 style="margin-top: 0; margin-bottom: 0;">
-                            @AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(@Model.ProductName)
+                            @Strings.ResourceManager.GetString(@Model.ProductName)
                         </h3>
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
-                            <label>@AllyisApps.Resources.Views.Account.Strings.NumberOfUsers</label>
+                            <label>@Strings.NumberOfUsers</label>
                             <input class="form-control" name="NumberOfUsers" type="number" min="5" step="5" max="500" id="user-count" value="@userCount" onchange="fixUserCount(this)" />
                         </div>
                         @*<div class="col-xs-5">
-                            <label>@AllyisApps.Resources.Views.Account.Strings.NumberOfUsers</label>
+                            <label>@Strings.NumberOfUsers</label>
                         </div>
                         <div class="col-xs-5">
                             <input class="form-control" name="NumberOfUsers" type="number" min="5" step="5" max="500" id="user-count" value="@userCount" onchange="fixUserCount(this)" />
                         </div>*@
                         @*<div class="col-xs-3">
-                            <label>@AllyisApps.Resources.Views.Account.Strings.Price</label>
+                            <label>@Strings.Price</label>
                         </div>
                         <div class="col-xs-3">
                             <span id="sub-price">@cost</span>
@@ -51,8 +51,8 @@
                     </div>
                     <div class="panel-footer">
                         <div class="pull-right">
-                            @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
-                            <input type="submit" class="btn btn-primary" value=@AllyisApps.Resources.Views.Account.Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...';">
+                            @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+                            <input type="submit" class="btn btn-primary" value=@Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...';">
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -64,8 +64,8 @@
 @section Scripts {
     <script type="text/javascript">
         var model_previousSku = @Model.PreviousSku;
-        var warningWhenSwitchingToFreeSubscription = "@AllyisApps.Resources.Views.Account.Strings.WarningWhenSwitchingToFreeSubscription";
-        var cannotReduceUserCount = "@AllyisApps.Resources.Views.Account.Strings.CannotReduceUserCount";
+        var warningWhenSwitchingToFreeSubscription = "@Strings.WarningWhenSwitchingToFreeSubscription";
+        var cannotReduceUserCount = "@Strings.CannotReduceUserCount";
     </script>
     @Scripts.Render("~/bundles/AccountSubscribe");
 }

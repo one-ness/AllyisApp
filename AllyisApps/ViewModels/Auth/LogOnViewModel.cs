@@ -16,7 +16,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the account e-mail.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "EmailValidation")]
+		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "EmailValidation")]
 		[Display(Name = "Email")]
 		[EmailAddress]
 		public string Email { get; set; }
@@ -24,7 +24,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the password.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "PasswordValidation")]
+		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PasswordValidation")]
 		[DataType(DataType.Password)]
 		[Display(Name = "Password")]
 		public string Password { get; set; }

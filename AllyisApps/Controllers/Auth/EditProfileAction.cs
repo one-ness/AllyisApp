@@ -74,7 +74,7 @@ namespace AllyisApps.Controllers
 					PhoneNumber = model.PhoneNumber
 				}));
 
-				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.UpdateProfileSuccessMessage, Variety.Success));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.UpdateProfileSuccessMessage, Variety.Success));
 
 				if (!string.IsNullOrWhiteSpace(returnUrl))
 				{

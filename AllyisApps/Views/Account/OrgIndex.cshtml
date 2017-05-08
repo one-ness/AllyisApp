@@ -5,7 +5,7 @@
 @*@{
     DisplayHints.PageBodyId = "paneled-index";
     ViewBag.ProductPanelLinkTextOverride = "Do the things";
-    ViewBag.TitleBar = AllyisApps.Resources.Views.Account.Strings.Index;
+    ViewBag.TitleBar = Strings.Index;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }*@
 
@@ -23,7 +23,7 @@
                     @title
                     @if (Model.CanEditOrganization)
                     {
-                        <a href="@Url.SubdomainLink(ActionConstants.Manage, ControllerConstants.Account, null, Model.OrgInfo.OrganizationId, this.Request)" title="@AllyisApps.Resources.Views.Account.Strings.EditOrganization" class="pull-right text-muted">
+                        <a href="@Url.SubdomainLink(ActionConstants.Manage, ControllerConstants.Account, null, Model.OrgInfo.OrganizationId, this.Request)" title="@Strings.EditOrganization" class="pull-right text-muted">
                             <i class="fa fa-cog  fa-lg"></i>
                         </a>
                     }
@@ -32,22 +32,22 @@
             <div class="panel-body">
                 <div class="col-sm-8 index-details">
                     <p>
-                        <label>@AllyisApps.Resources.Views.Account.Strings.PhoneNumber:</label>
+                        <label>@Strings.PhoneNumber:</label>
                         @details.PhoneNumber
                     </p>
                     <p>
-                        <label>@AllyisApps.Resources.Views.Account.Strings.Address:</label>
+                        <label>@Strings.Address:</label>
                         <span class="address-row">@details.Address</span>
                         <span class="address-row">@cityState @details.PostalCode</span>
                     </p>
                 </div>
                 <div class="col-sm-4 index-details">
                     <p>
-                        <label>@AllyisApps.Resources.Views.Account.Strings.Website:</label>
+                        <label>@Strings.Website:</label>
                         <a href="@subtitle" target="_blank">@subtitle</a>
                     </p>
                     <p>
-                        <label>@AllyisApps.Resources.Views.Account.Strings.Fax:</label>
+                        <label>@Strings.Fax:</label>
                         @details.FaxNumber
                     </p>
                 </div>

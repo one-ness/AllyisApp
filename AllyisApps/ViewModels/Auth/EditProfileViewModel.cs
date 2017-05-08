@@ -40,15 +40,15 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the account e-mail.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "EmailValidation")]
-		[EmailAddress(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "EmailFormatValidation")]
+		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "EmailValidation")]
+		[EmailAddress(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "EmailFormatValidation")]
 		[Display(Name = "Email")]
 		public string Email { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user's first name.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "FirstNameValidation")]
+		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "FirstNameValidation")]
 		[DataType(DataType.Text)]
 		[Display(Name = "First Name")]
 		public string FirstName { get; set; }
@@ -56,7 +56,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the user's last name.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "LastNameValidation")]
+		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "LastNameValidation")]
 		[DataType(DataType.Text)]
 		[Display(Name = "Last Name")]
 		public string LastName { get; set; }
@@ -64,7 +64,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the user's phone number.
 		/// </summary>
-		[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Auth.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")] // [Phone] does not work //I am not conviced that this is a good idea either.
+		[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")] // [Phone] does not work //I am not conviced that this is a good idea either.
 		[Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
 
@@ -131,7 +131,7 @@ namespace AllyisApps.ViewModels.Auth
 			{
 				string countryKey = Clean(country);
 
-				string localized = AllyisApps.Resources.ViewModels.Auth.Countries.ResourceManager.GetString(countryKey) ?? country;
+				string localized = Resources.Countries.ResourceManager.GetString(countryKey) ?? country;
 
 				countries.Add(country, localized);
 			}

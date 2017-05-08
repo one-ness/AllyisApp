@@ -30,7 +30,7 @@ namespace AllyisApps.Controllers
 			{
 				if (token == null)
 				{
-					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Controllers.Auth.Strings.Token, Core.Alert.Variety.Warning));
+					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.Token, Core.Alert.Variety.Warning));
 
 					return this.RedirectToAction(ActionConstants.Manage);
 				}
@@ -38,14 +38,14 @@ namespace AllyisApps.Controllers
 				{
 					Service.UpdateBillingInfo(billingServicesEmail, token);
 
-					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Controllers.Auth.Strings.Billing, Core.Alert.Variety.Success));
+					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.Billing, Core.Alert.Variety.Success));
 					return this.RedirectToAction(ActionConstants.Manage);
 				}
 			}
 			else
 			{
 				// Incorrect permissions
-				Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
+				Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
 				return this.RedirectToAction(ActionConstants.Index);
 			}
 		}

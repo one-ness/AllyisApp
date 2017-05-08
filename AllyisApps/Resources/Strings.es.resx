@@ -1,0 +1,1371 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Actions" xml:space="preserve">
+    <value>Comportamiento</value>
+  </data>
+  <data name="ActionUnauthorizedMessage" xml:space="preserve">
+    <value>Usted no está autorizado para realizar esta acción.</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Añadir</value>
+  </data>
+  <data name="AddCustomer" xml:space="preserve">
+    <value>Añadir al cliente</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Dirección</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Administración</value>
+  </data>
+  <data name="After" xml:space="preserve">
+    <value>Después de</value>
+  </data>
+  <data name="AllUsersFirst" xml:space="preserve">
+    <value>TODOS</value>
+  </data>
+  <data name="AllUsersLast" xml:space="preserve">
+    <value>LOS USARIOS</value>
+  </data>
+  <data name="AlreadyApprovedCannotEdit" xml:space="preserve">
+    <value>The time entry you are attempting to edit has been approved and can no longer be edited.</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Volver a la lista</value>
+  </data>
+  <data name="BereavementLeave" xml:space="preserve">
+    <value>Dejar el duelo</value>
+  </data>
+  <data name="Billing" xml:space="preserve">
+    <value>Billing information accepted.</value>
+  </data>
+  <data name="BillingRemoved" xml:space="preserve">
+    <value>Billing information removed.</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="CannotCreateBlankPayClass" xml:space="preserve">
+    <value>You cannot create a blank pay class.</value>
+  </data>
+  <data name="CannotCreateHolidayWithInvalidDate" xml:space="preserve">
+    <value>You cannot create a holiday without a valid date.</value>
+  </data>
+  <data name="CannotCreateHolidayWIthoutName" xml:space="preserve">
+    <value>You cannot create a holiday without a name.</value>
+  </data>
+  <data name="CannotCreateReport" xml:space="preserve">
+    <value>No se pudo crear el informe.</value>
+  </data>
+  <data name="CannotDeletePayClass" xml:space="preserve">
+    <value>The specified pay class could not be deleted because it is in use. Please consider merging it with another pay class instead.</value>
+  </data>
+  <data name="CannotEditDate" xml:space="preserve">
+    <value>You cannot edit this date.</value>
+  </data>
+  <data name="CannotEditMembersMessage" xml:space="preserve">
+    <value>Usted no puede editar los miembros de esta organización.</value>
+  </data>
+  <data name="CannotEditProfileMessage" xml:space="preserve">
+    <value>Usted es incapaz de editar esta organización.</value>
+  </data>
+  <data name="CannotExceed24" xml:space="preserve">
+    <value>Duration cannot exceed 24 hours in a day.</value>
+  </data>
+  <data name="CannotMergePayClass" xml:space="preserve">
+    <value>The specified pay class cannot be merged into another pay class.</value>
+  </data>
+  <data name="CannotRemoveBilling" xml:space="preserve">
+    <value>You cannot remove your billing information while you are still paying for subscriptions!</value>
+  </data>
+  <data name="CanOnlyEdit" xml:space="preserve">
+    <value>You can only edit dates after</value>
+  </data>
+  <data name="CantViewOtherTimeCards" xml:space="preserve">
+    <value>You do not have the privelege of viewing other people's time cards.</value>
+  </data>
+  <data name="ChangePasswordSuccessMessage" xml:space="preserve">
+    <value>Su contraseña ha sido cambiada.</value>
+  </data>
+  <data name="ChoosePayClassToMerge" xml:space="preserve">
+    <value>Elegir una clase de pago para combinar con {0}</value>
+  </data>
+  <data name="Christmas" xml:space="preserve">
+    <value>Navidad</value>
+  </data>
+  <data name="ChristmasEve" xml:space="preserve">
+    <value>Nochebuena</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>Ciudad</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Borrar los cambios pendientes</value>
+  </data>
+  <data name="ConfirmDeleteHoliday" xml:space="preserve">
+    <value>¿Seguro que quieres eliminar las vacaciones {0}?</value>
+  </data>
+  <data name="ConfirmDeletePayClass" xml:space="preserve">
+    <value>¿Seguro que quieres eliminar la clase de pago {0}?</value>
+  </data>
+  <data name="ConfirmPasswordValidation" xml:space="preserve">
+    <value>Por favor, confirme su contraseña.</value>
+  </data>
+  <data name="ContactEmail" xml:space="preserve">
+    <value>Correo electrónico de contacto</value>
+  </data>
+  <data name="ContactPhoneNumber" xml:space="preserve">
+    <value>Teléfono de contacto</value>
+  </data>
+  <data name="CopyDay" xml:space="preserve">
+    <value>Copiar el día anterior</value>
+  </data>
+  <data name="CopyWeek" xml:space="preserve">
+    <value>Copiar la semana anterior</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>País</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Crear Cliente</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Creado</value>
+  </data>
+  <data name="CreatePasswordValidation" xml:space="preserve">
+    <value>Por favor, cree una contraseña.</value>
+  </data>
+  <data name="CreateProject" xml:space="preserve">
+    <value>Crear un Proyecto</value>
+  </data>
+  <data name="Current" xml:space="preserve">
+    <value>Semana actual</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>Cliente</value>
+  </data>
+  <data name="CustomerCreatedNotification" xml:space="preserve">
+    <value>Ha creado correctamente el cliente.</value>
+  </data>
+  <data name="CustomerDeleteNotification" xml:space="preserve">
+    <value>ha sido eliminado con éxito.</value>
+  </data>
+  <data name="CustomerDetails" xml:space="preserve">
+    <value>Detalles del cliente</value>
+  </data>
+  <data name="CustomerDetailsUpdated" xml:space="preserve">
+    <value>Detalles del cliente se han actualizado correctamente.</value>
+  </data>
+  <data name="CustomerList" xml:space="preserve">
+    <value>Clientes</value>
+  </data>
+  <data name="CustomerOrgId" xml:space="preserve">
+    <value>Cliente ID</value>
+  </data>
+  <data name="CustomerOrgIdNotUnique" xml:space="preserve">
+    <value>This Customer ID is already in use. The Customer ID must be a unique value.</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Clientes</value>
+  </data>
+  <data name="CustomersFile" xml:space="preserve">
+    <value>Archivo de Clientes</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Fecha</value>
+  </data>
+  <data name="DateRange" xml:space="preserve">
+    <value>Rango de fechas</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>Día</value>
+  </data>
+  <data name="DayAfterThanksgiving" xml:space="preserve">
+    <value>Acción de gracias</value>
+  </data>
+  <data name="DayInitial" xml:space="preserve">
+    <value>D</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>días</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Borrar</value>
+  </data>
+  <data name="DeleteHeader" xml:space="preserve">
+    <value>¿Estás seguro que quieres eliminar esto?</value>
+  </data>
+  <data name="DeleteHoliday" xml:space="preserve">
+    <value>Eliminar vacaciones</value>
+  </data>
+  <data name="DeletePayClass" xml:space="preserve">
+    <value>Eliminar clase de pago</value>
+  </data>
+  <data name="DeleteUnauthorizedMessage" xml:space="preserve">
+    <value>No tienes permiso para eliminar proyectos</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Detalles</value>
+  </data>
+  <data name="DropDownEmpty" xml:space="preserve">
+    <value>Seleccionar...</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="DurationFormat" xml:space="preserve">
+    <value>You must enter the time duration as HH:MM or H.HH format.</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Editar Cliente</value>
+  </data>
+  <data name="EditProject" xml:space="preserve">
+    <value>Editar Proyecto</value>
+  </data>
+  <data name="EditUser" xml:space="preserve">
+    <value>Editar Usuario</value>
+  </data>
+  <data name="EditUsersSubscriptionMaxDialogue1" xml:space="preserve">
+    <value>Suscripción vigente permite a</value>
+  </data>
+  <data name="EditUsersSubscriptionMaxDialogue2" xml:space="preserve">
+    <value>usuarios.</value>
+  </data>
+  <data name="EIN" xml:space="preserve">
+    <value>NIE</value>
+  </data>
+  <data name="EmailFormatValidation" xml:space="preserve">
+    <value>El texto introducido no es una dirección válida de correo electrónico.</value>
+  </data>
+  <data name="EmailValidation" xml:space="preserve">
+    <value>Por favor, dar una dirección de correo electrónico.</value>
+  </data>
+  <data name="EmployeeIdNotUniqueError" xml:space="preserve">
+    <value>The Employee ID is not unique.</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>Empleados</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>Fecha Final</value>
+  </data>
+  <data name="EnterATimeLongerThanZero" xml:space="preserve">
+    <value>You must enter a time longer than 00:00.</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Exportar</value>
+  </data>
+  <data name="FailureCreatePayClassAlreadyExists" xml:space="preserve">
+    <value>No se pudo crear la clase de pago: ese nombre de clase de pago ya existe.</value>
+  </data>
+  <data name="FailureProjectCreated" xml:space="preserve">
+    <value>No se pudo crear el proyecto.</value>
+  </data>
+  <data name="FailureProjectEdited" xml:space="preserve">
+    <value>No se pudo actualizar el proyecto.</value>
+  </data>
+  <data name="FaxNumber" xml:space="preserve">
+    <value>Número de fax</value>
+  </data>
+  <data name="FileFormatUnsupported" xml:space="preserve">
+    <value>Este formato de archivo no es compatible.</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Nombre de pila</value>
+  </data>
+  <data name="FirstNameValidation" xml:space="preserve">
+    <value>Por favor, dar su nombre de pila.</value>
+  </data>
+  <data name="Fixed" xml:space="preserve">
+    <value>Fijo</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>viernes</value>
+  </data>
+  <data name="Holiday" xml:space="preserve">
+    <value>Fiesta</value>
+  </data>
+  <data name="Holidays" xml:space="preserve">
+    <value>Fiestas</value>
+  </data>
+  <data name="Hourly" xml:space="preserve">
+    <value>Cada hora</value>
+  </data>
+  <data name="HoursPer" xml:space="preserve">
+    <value>Horas por</value>
+  </data>
+  <data name="HoursTotal" xml:space="preserve">
+    <value>horas en total</value>
+  </data>
+  <data name="ImportCustomers" xml:space="preserve">
+    <value>Cargue un archivo de Excel con información sobre clientes y proyectos para importar más de uno a la vez.</value>
+  </data>
+  <data name="ImportCustomersTitle" xml:space="preserve">
+    <value>Cargar Clientes y Proyectos</value>
+  </data>
+  <data name="IncorrectPassword" xml:space="preserve">
+    <value>Incorrect Password</value>
+  </data>
+  <data name="IndependenceDay" xml:space="preserve">
+    <value>Día de la Independencia</value>
+  </data>
+  <data name="InvalidApprovalState" xml:space="preserve">
+    <value>The time entry you are attempting to edit has an invalid approval state.</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Dirección de correo electrónico es inválida.</value>
+  </data>
+  <data name="InvalidSOW" xml:space="preserve">
+    <value>Invalid start of week input.</value>
+  </data>
+  <data name="InvitationCount1" xml:space="preserve">
+    <value>(</value>
+  </data>
+  <data name="InvitationCount2" xml:space="preserve">
+    <value>plazas de suscripción son utilizados por las invitaciones en la actualidad.</value>
+  </data>
+  <data name="InvitationCount3" xml:space="preserve">
+    <value>Puede administrar los de la página Administrar Organización.)</value>
+  </data>
+  <data name="InvitationDeleteNotification" xml:space="preserve">
+    <value>Ha eliminado con éxito una invitación.</value>
+  </data>
+  <data name="JuryDuty" xml:space="preserve">
+    <value>Servicio de jurado</value>
+  </data>
+  <data name="LaborDay" xml:space="preserve">
+    <value>Día laboral</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Apellido</value>
+  </data>
+  <data name="LastNameValidation" xml:space="preserve">
+    <value>Por favor, dar su apellido.</value>
+  </data>
+  <data name="LockDate" xml:space="preserve">
+    <value>Fecha de bloqueo</value>
+  </data>
+  <data name="LockDateUpdate" xml:space="preserve">
+    <value>Successfully updated lock date settings.</value>
+  </data>
+  <data name="LockDateUpdateFail" xml:space="preserve">
+    <value>Failed to update lock date settings.</value>
+  </data>
+  <data name="LogOffSuccess" xml:space="preserve">
+    <value>Has cerrado la sesión con éxito!</value>
+  </data>
+  <data name="LRP" xml:space="preserve">
+    <value>Previa Crónica actual</value>
+  </data>
+  <data name="Manager" xml:space="preserve">
+    <value>Gerente</value>
+  </data>
+  <data name="ManageTTUsers" xml:space="preserve">
+    <value>Administrar usuarios de Rastreador de Tiempo</value>
+  </data>
+  <data name="ManageUsers" xml:space="preserve">
+    <value>Administrar usuarios</value>
+  </data>
+  <data name="MemberList" xml:space="preserve">
+    <value>Lista de miembros</value>
+  </data>
+  <data name="MemorialDay" xml:space="preserve">
+    <value>Día conmemorativo</value>
+  </data>
+  <data name="Merge" xml:space="preserve">
+    <value>Mancomunarse</value>
+  </data>
+  <data name="MergePayClass" xml:space="preserve">
+    <value>Mancomunarse Clases de Pago</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>lunes</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Mes</value>
+  </data>
+  <data name="Months" xml:space="preserve">
+    <value>meses</value>
+  </data>
+  <data name="MustSelectPayClass" xml:space="preserve">
+    <value>You must select a pay class.</value>
+  </data>
+  <data name="MustSelectProject" xml:space="preserve">
+    <value>You must select a project.</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="NewYearsDay" xml:space="preserve">
+    <value>Día de Año Nuevo</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>La próxima semana</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="NoAccountForEmail" xml:space="preserve">
+    <value>No hay ninguna cuenta registrada para esa dirección de correo electrónico.</value>
+  </data>
+  <data name="NoActionsSelected" xml:space="preserve">
+    <value>No se seleccionaron acciones.</value>
+  </data>
+  <data name="NoDataPreview" xml:space="preserve">
+    <value>No hay vista previa para visualizar los datos.</value>
+  </data>
+  <data name="NoDataToExport" xml:space="preserve">
+    <value>There was no data to be exported.</value>
+  </data>
+  <data name="NoEntriesToApprove" xml:space="preserve">
+    <value>There are no entries to approve.</value>
+  </data>
+  <data name="NoFilter" xml:space="preserve">
+    <value>Sin filtro</value>
+  </data>
+  <data name="NoLockDate" xml:space="preserve">
+    <value>Sin fecha de bloqueo</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>Ninguna</value>
+  </data>
+  <data name="NotAuthZApproveTimeEntries" xml:space="preserve">
+    <value>You are not authorized to approve time entries.</value>
+  </data>
+  <data name="NotAuthZTimeEntry" xml:space="preserve">
+    <value>You are not authorized to create a time entry.</value>
+  </data>
+  <data name="NotAuthZTimeEntryDelete" xml:space="preserve">
+    <value>You are not authorized to delete a time entry.</value>
+  </data>
+  <data name="NotAuthZTimeEntryEdit" xml:space="preserve">
+    <value>You are not authorized to edit a time entry.</value>
+  </data>
+  <data name="NotAuthZTimeEntryOtherUser" xml:space="preserve">
+    <value>You are not authorized to create a time entry for another user.</value>
+  </data>
+  <data name="NotAuthZTimeEntryOtherUserDelete" xml:space="preserve">
+    <value>You are not authorized to delete a time entry for another user.</value>
+  </data>
+  <data name="NotAuthZTimeEntryOtherUserEdit" xml:space="preserve">
+    <value>You are not authorized to edit a time entry for another user.</value>
+  </data>
+  <data name="NotifyYourEmailIsConfirmed" xml:space="preserve">
+    <value>Tu correo ha sido confirmado.</value>
+  </data>
+  <data name="NoUsersHaveBeenDefined" xml:space="preserve">
+    <value>No hay usuarios se han definido para esta acción.</value>
+  </data>
+  <data name="NoUsersSelected" xml:space="preserve">
+    <value>No se seleccionaron usuarios.</value>
+  </data>
+  <data name="OffProj" xml:space="preserve">
+    <value>Usuarios no asignados</value>
+  </data>
+  <data name="OffProjects" xml:space="preserve">
+    <value>Proyectos no asignados</value>
+  </data>
+  <data name="OnProj" xml:space="preserve">
+    <value>Usuarios asignados</value>
+  </data>
+  <data name="OnProjects" xml:space="preserve">
+    <value>Proyectos asignados</value>
+  </data>
+  <data name="Org" xml:space="preserve">
+    <value>Organización</value>
+  </data>
+  <data name="OrganizationCreatedNotification" xml:space="preserve">
+    <value>Ha creado la organización</value>
+  </data>
+  <data name="OrganizationDeleteNotification" xml:space="preserve">
+    <value>se ha eliminado correctamente.</value>
+  </data>
+  <data name="OrganizationDetailsUpdated" xml:space="preserve">
+    <value>Detalles de la organización se han actualizado correctamente.</value>
+  </data>
+  <data name="OrganizationUserRolesUpdated" xml:space="preserve">
+    <value>Roles de usuario Organización se han actualizado correctamente.</value>
+  </data>
+  <data name="OrgSOW" xml:space="preserve">
+    <value>Semana de la organización comienza el:</value>
+  </data>
+  <data name="OtherLeave" xml:space="preserve">
+    <value>otro Dejar</value>
+  </data>
+  <data name="Overtime" xml:space="preserve">
+    <value>Horas Extraordinarias</value>
+  </data>
+  <data name="OvertimeUpdate" xml:space="preserve">
+    <value>Successfully updated overtime settings.</value>
+  </data>
+  <data name="PaidTimeOff" xml:space="preserve">
+    <value>Tiempo libre pagado</value>
+  </data>
+  <data name="PasswordCompareValidation" xml:space="preserve">
+    <value>Las contraseñas no coinciden dadas.</value>
+  </data>
+  <data name="PasswordLengthValidation" xml:space="preserve">
+    <value>Su contraseña debe tener al menos 12 caracteres.</value>
+  </data>
+  <data name="PasswordValidation" xml:space="preserve">
+    <value>Por favor, dar su contraseña.</value>
+  </data>
+  <data name="PayClass" xml:space="preserve">
+    <value>Clase de Pago</value>
+  </data>
+  <data name="PClass" xml:space="preserve">
+    <value>Clasificación de Pago</value>
+  </data>
+  <data name="PClasses" xml:space="preserve">
+    <value>Clasificaciones de pago</value>
+  </data>
+  <data name="PhoneFormatValidation" xml:space="preserve">
+    <value>El formato del número de teléfono dado no es válido.</value>
+  </data>
+  <data name="PleaseUploadFile" xml:space="preserve">
+    <value>Cargue su archivo.</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Código Postal</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Avance</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Semana pasada</value>
+  </data>
+  <data name="PriceType" xml:space="preserve">
+    <value>Tipo Precio</value>
+  </data>
+  <data name="Project" xml:space="preserve">
+    <value>Proyecto</value>
+  </data>
+  <data name="ProjectDeleteNotification" xml:space="preserve">
+    <value>Ha sido eliminado correctamente.</value>
+  </data>
+  <data name="ProjectDetails" xml:space="preserve">
+    <value>Detalles del Proyecto</value>
+  </data>
+  <data name="ProjectList" xml:space="preserve">
+    <value>Listo de Proyectos</value>
+  </data>
+  <data name="ProjectOrgId" xml:space="preserve">
+    <value>ID del proyecto</value>
+  </data>
+  <data name="ProjectOrgIdNotUnique" xml:space="preserve">
+    <value>The chosen Project ID already exists. The value must be a unique value.</value>
+  </data>
+  <data name="Projects" xml:space="preserve">
+    <value>Proyectos</value>
+  </data>
+  <data name="ProjectSearchPlaceholder" xml:space="preserve">
+    <value>Búsqueda de proyectos 🔎</value>
+  </data>
+  <data name="ProjectsFile" xml:space="preserve">
+    <value>Archivo de Proyectos</value>
+  </data>
+  <data name="ReduceNumberOfUsers" xml:space="preserve">
+    <value>Primero debe quitar usuarios de su suscripción antes de reducir el número de usuarios.</value>
+  </data>
+  <data name="Regular" xml:space="preserve">
+    <value>Ordinario</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>Informe</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Informes</value>
+  </data>
+  <data name="ResetEmailHasBeenSent" xml:space="preserve">
+    <value>Un mensaje que contiene un enlace de restablecimiento de contraseña ha sido enviada a</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>rol</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>sábado</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Buscar 🔎</value>
+  </data>
+  <data name="SearchPlaceholder1" xml:space="preserve">
+    <value>Búsqueda de usuario 🔎</value>
+  </data>
+  <data name="SearchPlaceholder2" xml:space="preserve">
+    <value>Encuentra miembro 🔎</value>
+  </data>
+  <data name="SelectProject" xml:space="preserve">
+    <value>Seleccione su proyecto</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Ajustes</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Fecha de Inicio</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="StatusErrorMessage" xml:space="preserve">
+    <value>Se ha producido un error.</value>
+  </data>
+  <data name="SubdomainTaken" xml:space="preserve">
+    <value>The subdomain name provided has already been taken!</value>
+  </data>
+  <data name="SuccessfulCreateHoliday" xml:space="preserve">
+    <value>Creado vacaciones con éxito.</value>
+  </data>
+  <data name="SuccessfulCreatePayClass" xml:space="preserve">
+    <value>Clase de pago creada correctamente.</value>
+  </data>
+  <data name="SuccessfulDeleteHoliday" xml:space="preserve">
+    <value>Vacaciones eliminadas correctamente.</value>
+  </data>
+  <data name="SuccessfulDeletePayClass" xml:space="preserve">
+    <value>Clase de pago eliminada correctamente</value>
+  </data>
+  <data name="SuccessfulMergePayClass" xml:space="preserve">
+    <value>Pay class merged successfully.</value>
+  </data>
+  <data name="SuccessfulSOW" xml:space="preserve">
+    <value>Successfully updated start of week.</value>
+  </data>
+  <data name="SuccessProjectCreated" xml:space="preserve">
+    <value>Su proyecto fue creado.</value>
+  </data>
+  <data name="SuccessProjectEdited" xml:space="preserve">
+    <value>Su proyecto ha sido actualizada.</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>domingo</value>
+  </data>
+  <data name="Thanksgiving" xml:space="preserve">
+    <value>Thanksgiving</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>jueves</value>
+  </data>
+  <data name="TimeEntry" xml:space="preserve">
+    <value>Hora entrada</value>
+  </data>
+  <data name="TimeTracker" xml:space="preserve">
+    <value>Rastreador de Tiempo</value>
+  </data>
+  <data name="Token" xml:space="preserve">
+    <value>Token was not assigned properly.</value>
+  </data>
+  <data name="TooManyUsersInSubToAdd" xml:space="preserve">
+    <value>Tienes demasiados usuarios en tu suscripción para agregar {0} más.</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="TrackTime" xml:space="preserve">
+    <value>Rastrear Tiempo</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>martes</value>
+  </data>
+  <data name="UnableParseDuration" xml:space="preserve">
+    <value>Unable to parse duration.</value>
+  </data>
+  <data name="UnauthorizedReports" xml:space="preserve">
+    <value>No tiene permisos para crear informes.</value>
+  </data>
+  <data name="UnauthorizedReportsOtherUser" xml:space="preserve">
+    <value>You are not authorized to create reports for other users.</value>
+  </data>
+  <data name="UnpaidTimeOff" xml:space="preserve">
+    <value>Sin pagar Tiempo Libre</value>
+  </data>
+  <data name="UpdateProfileSuccessMessage" xml:space="preserve">
+    <value>Tu perfil ha sido actualizado.</value>
+  </data>
+  <data name="UseLockDate" xml:space="preserve">
+    <value>Permitir la edición del pasado</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>Usuario</value>
+  </data>
+  <data name="UserAccountAlreadyExists" xml:space="preserve">
+    <value>Cuenta de usuario ya existe. Haga clic en el enlace "Olvidó su contraseña" para restablecer su contraseña.</value>
+  </data>
+  <data name="UserAddedSuccessfully" xml:space="preserve">
+    <value>ha sido agregado con éxito.</value>
+  </data>
+  <data name="UserAlreadyExists" xml:space="preserve">
+    <value>es ya una parte de esta organización!</value>
+  </data>
+  <data name="UserDeletedSuccessfully" xml:space="preserve">
+    <value>Usuario eliminado correctamente.</value>
+  </data>
+  <data name="UserEmailed" xml:space="preserve">
+    <value>se ha enviado una invitación de correo electrónico.</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Usuarios</value>
+  </data>
+  <data name="UsersAddedToTimeTracker" xml:space="preserve">
+    <value>{0} usuarios agregados a TimeTracker.</value>
+  </data>
+  <data name="UsersChangedRolesInOrg" xml:space="preserve">
+    <value>{0} usuarios cambian los roles en la organización.</value>
+  </data>
+  <data name="UsersChangedRolesInTimeTracker" xml:space="preserve">
+    <value>Los usuarios cambian papeles en Rastreador de tiempo.</value>
+  </data>
+  <data name="UsersRemovedFromOrg" xml:space="preserve">
+    <value>Se eliminaron {0} usuarios de la organización.</value>
+  </data>
+  <data name="UsersRemovedFromTimeTracker" xml:space="preserve">
+    <value>usuarios eliminados de TimeTracker.</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Ver</value>
+  </data>
+  <data name="WarnProblemSigningIn" xml:space="preserve">
+    <value>Ha habido un problema con el registro.</value>
+  </data>
+  <data name="WarnYourEmailHasAlreadyBeenConfirmed" xml:space="preserve">
+    <value>Su correo electrónico ya ha sido confirmada.</value>
+  </data>
+  <data name="WasAnError" xml:space="preserve">
+    <value>There was an error.</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>miércoles</value>
+  </data>
+  <data name="Week" xml:space="preserve">
+    <value>Semana</value>
+  </data>
+  <data name="WeekInitial" xml:space="preserve">
+    <value>S</value>
+  </data>
+  <data name="Weeks" xml:space="preserve">
+    <value>semanas</value>
+  </data>
+  <data name="WithAMultiplierOf" xml:space="preserve">
+    <value>con un multiplicador de</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="YouAreUnableToChangeYourOwnRole" xml:space="preserve">
+    <value>Usted no puede cambiar su propio papel en la organización.</value>
+  </data>
+  <data name="YouAreUnableToRemoveYourself" xml:space="preserve">
+    <value>Usted no puede darse de baja de una organización.</value>
+  </data>
+  <data name="YouDidNotDefineATargetRole" xml:space="preserve">
+    <value>Que no define una función objetivo para los usuarios</value>
+  </data>
+  <data name="YouDontHaveASubscriptionToTimeTracker" xml:space="preserve">
+    <value>Usted no tiene una suscripción al Rastreador de tiempo!</value>
+  </data>
+  <data name="YourOrg" xml:space="preserve">
+    <value>Your Organization</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Aceptar</value>
+  </data>
+  <data name="AddAsOwner" xml:space="preserve">
+    <value>Agregar Propietario</value>
+  </data>
+  <data name="AddBillingInformation" xml:space="preserve">
+    <value>Añadir la información de facturación</value>
+  </data>
+  <data name="AddMember" xml:space="preserve">
+    <value>Añadir miembro</value>
+  </data>
+  <data name="AddMembers" xml:space="preserve">
+    <value>Añadir miembros</value>
+  </data>
+  <data name="AllUsers" xml:space="preserve">
+    <value>Todos los usuarios</value>
+  </data>
+  <data name="Any" xml:space="preserve">
+    <value>Alguna</value>
+  </data>
+  <data name="Apps" xml:space="preserve">
+    <value>Aplicaciones</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Regreso</value>
+  </data>
+  <data name="BillingEmail" xml:space="preserve">
+    <value>Correo Electrónico de Facturas</value>
+  </data>
+  <data name="BillingHistory" xml:space="preserve">
+    <value>Historial de facturación</value>
+  </data>
+  <data name="BillingInformation" xml:space="preserve">
+    <value>Datos de facturación</value>
+  </data>
+  <data name="CannotAddMessage" xml:space="preserve">
+    <value>Con el fin de añadir un nuevo miembro a su organización,</value>
+  </data>
+  <data name="CannotAddMessage2" xml:space="preserve">
+    <value>deben ser un usuario de un servicio o un propietario!</value>
+  </data>
+  <data name="CannotReduceUserCount" xml:space="preserve">
+    <value>No se puede reducir el recuento de usuarios esta baja sin quitar primero los usuarios de su suscripción!</value>
+  </data>
+  <data name="CapsLock" xml:space="preserve">
+    <value>Bloqueo de mayúsculas está activado.</value>
+  </data>
+  <data name="Card" xml:space="preserve">
+    <value>Tarjeta de crédito</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Cambia la contraseña</value>
+  </data>
+  <data name="ChooseFile" xml:space="preserve">
+    <value>Elija el archivo</value>
+  </data>
+  <data name="ComingSoon" xml:space="preserve">
+    <value>Próximamente</value>
+  </data>
+  <data name="ConfirmDeleteOrg" xml:space="preserve">
+    <value>¿Está seguro de que desea eliminar esta organización? Esta acción no se puede deshacer.</value>
+  </data>
+  <data name="ConfirmEmail" xml:space="preserve">
+    <value>Confirmar correo electrónico</value>
+  </data>
+  <data name="ConfirmEmailDialogue" xml:space="preserve">
+    <value>Gracias por confirmar su correo electrónico usted. Por favor</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirmar contraseña</value>
+  </data>
+  <data name="ConfirmRemoveBilling" xml:space="preserve">
+    <value>¿Seguro que desea eliminar los datos de facturación?</value>
+  </data>
+  <data name="ConfirmUnsubscribe" xml:space="preserve">
+    <value>¿Seguro que desea cancelar su suscripción?</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continuar</value>
+  </data>
+  <data name="CreateOrganization" xml:space="preserve">
+    <value>Crear organización</value>
+  </data>
+  <data name="DateOfBirth" xml:space="preserve">
+    <value>Fecha de nacimiento</value>
+  </data>
+  <data name="DeleteOrganization" xml:space="preserve">
+    <value>eliminar Organización</value>
+  </data>
+  <data name="DropSubcription" xml:space="preserve">
+    <value>caída de suscripción</value>
+  </data>
+  <data name="EditEmployeeID" xml:space="preserve">
+    <value>Editar identificador de empleado</value>
+  </data>
+  <data name="EditEmployeeType" xml:space="preserve">
+    <value>Editar tipo de empleado</value>
+  </data>
+  <data name="EditOrganization" xml:space="preserve">
+    <value>Editar Organización</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Editar perfil</value>
+  </data>
+  <data name="EditSubscription" xml:space="preserve">
+    <value>Editar suscripción</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Correo Electrónico</value>
+  </data>
+  <data name="EmployeeId" xml:space="preserve">
+    <value>Identificación del empleado</value>
+  </data>
+  <data name="EnglishUnitedStates" xml:space="preserve">
+    <value>English (United States) - Inglés (Estados Unidos)</value>
+  </data>
+  <data name="EnterYourEmail" xml:space="preserve">
+    <value>Introduce tu correo electrónico.</value>
+  </data>
+  <data name="ExampleFile" xml:space="preserve">
+    <value>Ejemplo de descarga de archivos</value>
+  </data>
+  <data name="Expense" xml:space="preserve">
+    <value>Gastos</value>
+  </data>
+  <data name="Fax" xml:space="preserve">
+    <value>Fax</value>
+  </data>
+  <data name="FirstUserOffer" xml:space="preserve">
+    <value>Primeros cinco usuarios GRATIS! Los usuarios adicionales se pueden adquirir al precio de $5 para 5 usuarios.</value>
+  </data>
+  <data name="ForgotPasswordConfirmation" xml:space="preserve">
+    <value>¿Ha olvidado su contraseña Confirmación</value>
+  </data>
+  <data name="ForgotPasswordViewTitle" xml:space="preserve">
+    <value>¿Olvidaste tu contraseña?</value>
+  </data>
+  <data name="Free" xml:space="preserve">
+    <value>Gratis</value>
+  </data>
+  <data name="GetBillingHistory" xml:space="preserve">
+    <value>Obtener historial de facturación</value>
+  </data>
+  <data name="GoHome" xml:space="preserve">
+    <value>Vete a casa</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Ayuadame</value>
+  </data>
+  <data name="HelpText" xml:space="preserve">
+    <value>¡Nuestra página de ayuda todavía está en construcción! Mientras tanto, si necesita ayuda, por favor haga una solicitud a través de su gerente.</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Esconder</value>
+  </data>
+  <data name="IAgree" xml:space="preserve">
+    <value>Estoy de acuerdo con la Allyis</value>
+  </data>
+  <data name="Index" xml:space="preserve">
+    <value>Índice</value>
+  </data>
+  <data name="Invite" xml:space="preserve">
+    <value>Se le ha invitado a unirse a una organización:</value>
+  </data>
+  <data name="Invited" xml:space="preserve">
+    <value>Invitado</value>
+  </data>
+  <data name="InviteMember" xml:space="preserve">
+    <value>invitar miembro</value>
+  </data>
+  <data name="InviteMoreThanOne" xml:space="preserve">
+    <value>Puede invitar a más de un miembro a la vez cargando un archivo.</value>
+  </data>
+  <data name="Invites" xml:space="preserve">
+    <value>Se le ha invitado a unirse a las organizaciones:</value>
+  </data>
+  <data name="InviteSomeone" xml:space="preserve">
+    <value>O bien, puede invitar a alguien de abajo!</value>
+  </data>
+  <data name="Invoice" xml:space="preserve">
+    <value>Factura</value>
+  </data>
+  <data name="LockedOut" xml:space="preserve">
+    <value>Bloqueado.</value>
+  </data>
+  <data name="LockedOutExplanation" xml:space="preserve">
+    <value>Esta cuenta ha sido bloqueada, por favor intente de nuevo más tarde.</value>
+  </data>
+  <data name="LogOffPrompt" xml:space="preserve">
+    <value>¿Está seguro que desea cerrar la sesión?</value>
+  </data>
+  <data name="LoremShort" xml:space="preserve">
+    <value>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Administrar</value>
+  </data>
+  <data name="ManagePermissions" xml:space="preserve">
+    <value>Administrar permisos</value>
+  </data>
+  <data name="Marketing" xml:space="preserve">
+    <value>Márketing</value>
+  </data>
+  <data name="Member" xml:space="preserve">
+    <value>Miembro</value>
+  </data>
+  <data name="Members" xml:space="preserve">
+    <value>miembros</value>
+  </data>
+  <data name="MetaDescription" xml:space="preserve">
+    <value>THIS IS A DESCRIPTION OF THE CONTENT OF THE PAGE. PLEASE FILL.</value>
+  </data>
+  <data name="MultipleMembers" xml:space="preserve">
+    <value>varios miembros</value>
+  </data>
+  <data name="MyAccount" xml:space="preserve">
+    <value>Mi cuenta</value>
+  </data>
+  <data name="NeedBillingInfo" xml:space="preserve">
+    <value>Con el fin de añadir una suscripción de pago que necesita para enviar su información de facturación.</value>
+  </data>
+  <data name="NewAccessCode" xml:space="preserve">
+    <value>¿Está seguro de que desea crear un nuevo código de acceso? \n Nota: Esta acción eliminará todas las invitaciones actuales.</value>
+  </data>
+  <data name="NewMemberJoin" xml:space="preserve">
+    <value>IngresoNuevoMiembro</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>Nueva Contraseña</value>
+  </data>
+  <data name="NewPasswordConfirm" xml:space="preserve">
+    <value>Confirmar Nueva Contraseña</value>
+  </data>
+  <data name="NoProjectMessage" xml:space="preserve">
+    <value>Los nuevos miembros deben agregarse a un proyecto para el tiempo de seguimiento.</value>
+  </data>
+  <data name="NumberOfUsers" xml:space="preserve">
+    <value>Número de usuarios</value>
+  </data>
+  <data name="Offerings" xml:space="preserve">
+    <value>Por favor tenga a su oferta de lista para las criaturas que viven en nuestros servidores.</value>
+  </data>
+  <data name="OldPassword" xml:space="preserve">
+    <value>Contraseña anterior</value>
+  </data>
+  <data name="Oops" xml:space="preserve">
+    <value>uy ...</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organización</value>
+  </data>
+  <data name="OrganizationDetails" xml:space="preserve">
+    <value>Detalles de la organización</value>
+  </data>
+  <data name="Organizations" xml:space="preserve">
+    <value>Organizaciones</value>
+  </data>
+  <data name="OrgRole" xml:space="preserve">
+    <value>Función de la organización</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Propietario</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Contraseña</value>
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value>Editar Permisos</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Número de teléfono</value>
+  </data>
+  <data name="PleaseSubscribe" xml:space="preserve">
+    <value>Por favor, suscribirse a un producto antes de añadir nuevos miembros a la Organización</value>
+  </data>
+  <data name="PPContents" xml:space="preserve">
+    <value>Nuestra página de política de privacidad todavía está en construcción.</value>
+  </data>
+  <data name="PPTitle" xml:space="preserve">
+    <value>Política de Privacidad y Condiciones de Uso</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Precio</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Política de privacidad</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>Producto</value>
+  </data>
+  <data name="RedirectToSignIn" xml:space="preserve">
+    <value>¡Clic aquí para ingresar!</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Registro</value>
+  </data>
+  <data name="RegisterLinkText" xml:space="preserve">
+    <value>Registrarse como nuevo usuario</value>
+  </data>
+  <data name="RegisterNewAccountDialogue" xml:space="preserve">
+    <value>Crea una cuenta nueva.</value>
+  </data>
+  <data name="Reject" xml:space="preserve">
+    <value>Rechazar</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>¿Recuérdame?</value>
+  </data>
+  <data name="RemoveBilling" xml:space="preserve">
+    <value>¿Retire de facturación?</value>
+  </data>
+  <data name="RemoveFromOrg" xml:space="preserve">
+    <value>¿Seguro que desea eliminar</value>
+  </data>
+  <data name="RemoveFromOrgEnd" xml:space="preserve">
+    <value>de esta organización?</value>
+  </data>
+  <data name="RemoveFromOrgNoName" xml:space="preserve">
+    <value>¿Está seguro de que desea eliminar los usuarios seleccionados de su organización?</value>
+  </data>
+  <data name="RemoveFromSubscription" xml:space="preserve">
+    <value>Remover de suscripción</value>
+  </data>
+  <data name="RemoveInvitation" xml:space="preserve">
+    <value>¿Estás seguro de que quieres eliminar esta invitación? \nNo se puede volver a invitar a esta persona en cualquier momento.</value>
+  </data>
+  <data name="RemoveMember" xml:space="preserve">
+    <value>Eliminar miembro</value>
+  </data>
+  <data name="RemoveOrg" xml:space="preserve">
+    <value>Remover de Organización</value>
+  </data>
+  <data name="RemoveSubscription" xml:space="preserve">
+    <value>Retire suscripción</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reiniciar</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Restablecer la contraseña</value>
+  </data>
+  <data name="ResetPasswordConfirmation" xml:space="preserve">
+    <value>Confirmación de restablecimiento de contraseña</value>
+  </data>
+  <data name="ResetPasswordSuccessDialogue" xml:space="preserve">
+    <value>Tu contraseña ha sido restablecida. Por favor</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Enviar</value>
+  </data>
+  <data name="SetManager" xml:space="preserve">
+    <value>Administrador de conjuntos</value>
+  </data>
+  <data name="SetMember" xml:space="preserve">
+    <value>Conjunto Miembro</value>
+  </data>
+  <data name="SetOwner" xml:space="preserve">
+    <value>Establecer Propietario</value>
+  </data>
+  <data name="SetUser" xml:space="preserve">
+    <value>Conjunto Usuario</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Registrarse</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Desconectar</value>
+  </data>
+  <data name="SingleMember" xml:space="preserve">
+    <value>Miembro Individual</value>
+  </data>
+  <data name="SiteURL" xml:space="preserve">
+    <value>Sitio web</value>
+  </data>
+  <data name="SpanishSpain" xml:space="preserve">
+    <value>Español (España)</value>
+  </data>
+  <data name="Subdomain" xml:space="preserve">
+    <value>Subdominio</value>
+  </data>
+  <data name="SubdomainName" xml:space="preserve">
+    <value>Nombre Subdominio</value>
+  </data>
+  <data name="SubdomainTaken1" xml:space="preserve">
+    <value>El nombre del subdominio proporcionado ya ha sido tomada.</value>
+  </data>
+  <data name="SubmitBillingInfo" xml:space="preserve">
+    <value>Presentar la información de facturación</value>
+  </data>
+  <data name="Subscribe" xml:space="preserve">
+    <value>Suscribir</value>
+  </data>
+  <data name="SubscribeToProducts" xml:space="preserve">
+    <value>Aquí puede suscribirse a cualquiera de los productos Allyis Aplicaciones tiene que ofrecer!</value>
+  </data>
+  <data name="Subscriptions" xml:space="preserve">
+    <value>Suscripciones</value>
+  </data>
+  <data name="Support" xml:space="preserve">
+    <value>Apoyo</value>
+  </data>
+  <data name="Tasks" xml:space="preserve">
+    <value>Tareas</value>
+  </data>
+  <data name="TBD" xml:space="preserve">
+    <value>TBD</value>
+  </data>
+  <data name="Template" xml:space="preserve">
+    <value>Modelo</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>Suspendisse semper velit iaculis sem egestas, vel faucibus justo aliquet. Nulla id purus ut lacus dignissim condimentum a at lacus. Suspendisse vitae sapien at eros congue accumsan. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus pharetra vel lectus non tincidunt. Proin eget elit in neque venenatis faucibus non sed quam. Ut condimentum, lorem vitae consequat facilisis, neque ante mattis velit, eget iaculis mauris ipsum eu lacus. Proin efficitur odio metus. Ut ipsum augue, rhoncus a suscipit quis, malesuada eu ex. Etiam elit ipsum, luctus et pretium id, porta vel lacus. Donec cursus porttitor consequat. Duis ullamcorper interdum eros quis suscipit.</value>
+  </data>
+  <data name="TimeTrackerDescription" xml:space="preserve">
+    <value>Rastrea el tiempo gastado en sus proyectos!</value>
+  </data>
+  <data name="TimeTrackerProjectRequired" xml:space="preserve">
+    <value>Proyecto de Rastreador de Tiempo es necesario.</value>
+  </data>
+  <data name="TimeTrackerRole" xml:space="preserve">
+    <value>Función de la Rastreador de Tiempo</value>
+  </data>
+  <data name="TimeTrackerRoleRequired" xml:space="preserve">
+    <value>Rastreador de Tiempo Rol es necesario.</value>
+  </data>
+  <data name="ToggleNavigation" xml:space="preserve">
+    <value>Activar la Navegación</value>
+  </data>
+  <data name="ToggleSidebar" xml:space="preserve">
+    <value>Activar la barra lateral</value>
+  </data>
+  <data name="TooManyUsers" xml:space="preserve">
+    <value>Tiene demasiados usuarios en esta suscripción para añadir más! Aumentar el tamaño de la suscripción para dar cabida a más usuarios!</value>
+  </data>
+  <data name="TOS" xml:space="preserve">
+    <value>Términos de Servicio</value>
+  </data>
+  <data name="TrackProject" xml:space="preserve">
+    <value>Proyecto de Rastreador de Tiempo</value>
+  </data>
+  <data name="Unassigned" xml:space="preserve">
+    <value>sin asignar</value>
+  </data>
+  <data name="Unsubscribe" xml:space="preserve">
+    <value>Darse de baja</value>
+  </data>
+  <data name="Upgrade" xml:space="preserve">
+    <value>Mejorar</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Subir</value>
+  </data>
+  <data name="UserSearchPlaceholder" xml:space="preserve">
+    <value>Usuario Buscar 🔎</value>
+  </data>
+  <data name="ViewErrorMessage" xml:space="preserve">
+    <value>Ver mensaje de error</value>
+  </data>
+  <data name="ViewMemberInfo" xml:space="preserve">
+    <value>Ver Información Miembro</value>
+  </data>
+  <data name="WarningWhenSwitchingToFreeSubscription" xml:space="preserve">
+    <value>¿Seguro que desea cambiar a una suscripción gratuita?\n\nEste va a cancelar cualquier suscripción de pago.</value>
+  </data>
+  <data name="WarningWhenUnsubscribing" xml:space="preserve">
+    <value>¿Está seguro de que desea darse de baja de %subnombre%?</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Sitio web</value>
+  </data>
+  <data name="YourOrganizations" xml:space="preserve">
+    <value>mis Organizaciones</value>
+  </data>
+</root>

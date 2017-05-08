@@ -3,7 +3,7 @@
 @model PermissionsManagementViewModel
 
 @{
-    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.Permissions;
+    ViewBag.Title = Strings.Permissions;
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     int productId = Model.TimeTrackerId;
@@ -17,27 +17,27 @@
     <div id="flex-wrap">
         <div id="source-col" class="panel panel-default">
             <div class="panel-heading">
-                <h1 class="panel-title">@AllyisApps.Resources.Views.Account.Strings.Users</h1>
+                <h1 class="panel-title">@Strings.Users</h1>
                 <div class="controls">
                     <select id="filter-dropdown" class="form-control">
-                        <option value="@Model.Filters.AllUsers.UsersValue()">@(AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(Model.Filters.AllUsers.Name.Replace(" ", string.Empty) ?? Model.Filters.AllUsers.Name))</option>
-                        <option value="@Model.Filters.UnassignedUsers.UsersValue()">@(AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(Model.Filters.UnassignedUsers.Name.Replace(" ", string.Empty) ?? Model.Filters.UnassignedUsers.Name))</option>
+                        <option value="@Model.Filters.AllUsers.UsersValue()">@(Strings.ResourceManager.GetString(Model.Filters.AllUsers.Name.Replace(" ", string.Empty) ?? Model.Filters.AllUsers.Name))</option>
+                        <option value="@Model.Filters.UnassignedUsers.UsersValue()">@(Strings.ResourceManager.GetString(Model.Filters.UnassignedUsers.Name.Replace(" ", string.Empty) ?? Model.Filters.UnassignedUsers.Name))</option>
                         @foreach (FilterGroup group in Model.Filters.FilterGroups)
                         {
                             string gOptGroup = group.OptionGroup;
                             if (!(gOptGroup == ProductNameKeyConstants.TimeTracker && !hasTimeTracker)) // don't display option group for TimeTracker if Org doesn't have TimeTracker
                             {
-                                <optgroup label="@(AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(gOptGroup.Replace(" ", string.Empty) ?? gOptGroup))">
+                                <optgroup label="@(Strings.ResourceManager.GetString(gOptGroup.Replace(" ", string.Empty) ?? gOptGroup))">
                                     @foreach (AllyisApps.ViewModels.Auth.Filter filt in group.Filters)
                                     {
-                                        <option value="@filt.UsersValue()">@(AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(filt.Name.Replace(" ", string.Empty) ?? filt.Name))</option>
+                                        <option value="@filt.UsersValue()">@(Strings.ResourceManager.GetString(filt.Name.Replace(" ", string.Empty) ?? filt.Name))</option>
 }
                                 </optgroup>
 }
                         }
                     </select>
 
-                    <input id="user-search" type="text" placeholder=@AllyisApps.Resources.Views.Account.Strings.UserSearchPlaceholder class="form-control" />
+                    <input id="user-search" type="text" placeholder=@Strings.UserSearchPlaceholder class="form-control" />
                 </div>
             </div>
             <div id="user-list" class="list-group list-group-swap">
@@ -57,34 +57,34 @@
         </div>
         <div id="target-col" class="panel panel-default">
             <div class="panel-heading">
-                <h1 class="panel-title">@AllyisApps.Resources.Views.Account.Strings.Actions</h1>
+                <h1 class="panel-title">@Strings.Actions</h1>
             </div>
             <div style="padding:0;" class="panel-body">
                 <div id="actions" class="list-group">
                     <div class="list-group-item list-group-swap">
-                        @AllyisApps.Resources.Views.Account.Strings.Organization<div class="list-group-item">
+                        @Strings.Organization<div class="list-group-item">
                             <input type="checkbox" data-value="orgRoleTarget_@((int)OrganizationRole.Owner)" id="OrgSetOwner" />
-                            <label for="OrgSetOwner">@AllyisApps.Resources.Views.Account.Strings.SetOwner</label>
+                            <label for="OrgSetOwner">@Strings.SetOwner</label>
                         </div><div class="list-group-item">
                             <input type="checkbox" data-value="orgRoleTarget_@((int)OrganizationRole.Member)" id="OrgSetMember" />
-                            <label for="OrgSetMember">@AllyisApps.Resources.Views.Account.Strings.SetMember</label>
+                            <label for="OrgSetMember">@Strings.SetMember</label>
                         </div><div class="list-group-item">
                             <input type="checkbox" data-value="orgRoleTarget_-1" id="OrgRemove" class="master-check" />
-                            <label for="OrgRemove">@AllyisApps.Resources.Views.Account.Strings.RemoveOrg</label>
+                            <label for="OrgRemove">@Strings.RemoveOrg</label>
                         </div>
                     </div>
                     @if (hasTimeTracker)
                     {
                         <div class="list-group-item list-group-swap">
-                            @AllyisApps.Resources.Views.Account.Strings.TimeTracker<div class="list-group-item">
+                            @Strings.TimeTracker<div class="list-group-item">
                                 <input type="checkbox" data-value="timeTrackerRoleTarget_@((int)ProductRoleIdEnum.TimeTrackerManager)" id="TTSetManager" />
-                                <label for="TTSetManager">@AllyisApps.Resources.Views.Account.Strings.SetManager</label>
+                                <label for="TTSetManager">@Strings.SetManager</label>
                             </div><div class="list-group-item">
                                 <input type="checkbox" data-value="timeTrackerRoleTarget_@((int)ProductRoleIdEnum.TimeTrackerUser)" id="TTSetUser" />
-                                <label for="TTSetUser">@AllyisApps.Resources.Views.Account.Strings.SetUser</label>
+                                <label for="TTSetUser">@Strings.SetUser</label>
                             </div><div class="list-group-item">
                                 <input type="checkbox" data-value="timeTrackerRoleTarget_-1" id="TTRemove" />
-                                <label for="TTRemove">@AllyisApps.Resources.Views.Account.Strings.RemoveFromSubscription</label>
+                                <label for="TTRemove">@Strings.RemoveFromSubscription</label>
                             </div>
                         </div>}
                 </div>
@@ -92,8 +92,8 @@
             <div class="panel-footer">
                 <div class="form-group allyis-action-buttons status-root" id="do-it-button" style="margin: 0px;">
                     <br />
-                    @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
-                    <input type="submit" value="@AllyisApps.Resources.Views.Account.Strings.Save" class="btn btn-primary" id="actually-do-it" />
+                    @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
+                    <input type="submit" value="@Strings.Save" class="btn btn-primary" id="actually-do-it" />
                 </div>
             </div>
         </div>

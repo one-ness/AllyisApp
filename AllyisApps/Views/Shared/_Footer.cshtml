@@ -18,17 +18,17 @@
 
                 if (ViewBag.languageName == language.LanguageName)
                 {
-                        <option value="@language.LanguageID" selected>@(AllyisApps.Resources.Views.Shared.Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
+                        <option value="@language.LanguageID" selected>@(Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
                     }
                     else
                     {
-                        <option value="@language.LanguageID">@(AllyisApps.Resources.Views.Shared.Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
+                        <option value="@language.LanguageID">@(Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
                     }
                 }
             </select>
             <span class="col-xs-12 col-sm-6 footer-text">
-                @Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.PrivacyPolicy, ActionConstants.PrivacyPolicy, ControllerConstants.Home)
-                @Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.Help, ActionConstants.Help, ControllerConstants.Home)
+                @Html.ActionLink(Strings.PrivacyPolicy, ActionConstants.PrivacyPolicy, ControllerConstants.Home)
+                @Html.ActionLink(Strings.Help, ActionConstants.Help, ControllerConstants.Home)
             </span>
         </p>
         <p class="col-xs-4 col-sm-6 footer-text" style="text-align: right">

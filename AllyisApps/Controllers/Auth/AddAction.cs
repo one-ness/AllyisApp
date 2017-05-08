@@ -39,7 +39,7 @@ namespace AllyisApps.Controllers
 			}
 
 			ViewBag.ErrorInfo = "Permission";
-			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Errors.CannotEditMembersMessage), ControllerConstants.Account, ActionConstants.Add));
+			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditMembersMessage), ControllerConstants.Account, ActionConstants.Add));
 		}
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace AllyisApps.Controllers
                             subRoleId
                         );
 
-                        Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Controllers.Auth.Strings.UserEmailed, add.FirstName, add.LastName), Variety.Success));
+                        Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, add.FirstName, add.LastName), Variety.Success));
                         return this.RedirectToAction(ActionConstants.Manage);
 
                     }
@@ -99,7 +99,7 @@ namespace AllyisApps.Controllers
                         
                         if (ex.ParamName.Equals("invitationInfo.Email"))
                         {
-                            Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.InvalidEmail, Variety.Danger));
+                            Notifications.Add(new BootstrapAlert(Resources.Strings.InvalidEmail, Variety.Danger));
                             return this.View(add);
                         }
 
@@ -108,12 +108,12 @@ namespace AllyisApps.Controllers
                     }
                     catch (InvalidOperationException)
                     {
-                        Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Controllers.Auth.Strings.UserAlreadyExists, add.FirstName, add.LastName), Variety.Warning));
+                        Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserAlreadyExists, add.FirstName, add.LastName), Variety.Warning));
                         return this.View(add);
                     }
                     catch (System.Data.DuplicateNameException)
                     {
-                        Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.EmployeeIdNotUniqueError, Variety.Danger));
+                        Notifications.Add(new BootstrapAlert(Resources.Strings.EmployeeIdNotUniqueError, Variety.Danger));
                         return this.View(add);
                     }
 
@@ -186,7 +186,7 @@ namespace AllyisApps.Controllers
                 }
 
                 // Permission failure
-                return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.CannotEditMembersMessage), ControllerConstants.Account, ActionConstants.Add));
+                return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditMembersMessage), ControllerConstants.Account, ActionConstants.Add));
             }
 
             // Invalid model; try again

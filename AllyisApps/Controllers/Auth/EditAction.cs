@@ -49,18 +49,18 @@ namespace AllyisApps.Controllers
 						}))
 					{
 						// Organization updated successfully
-						Notifications.Add(new BootstrapAlert(@Resources.Controllers.Auth.Strings.OrganizationDetailsUpdated, Variety.Success));
+						Notifications.Add(new BootstrapAlert(@Resources.Strings.OrganizationDetailsUpdated, Variety.Success));
 						return this.RedirectToAction(ActionConstants.Manage);
 					}
 				}
 				catch (ArgumentException)
 				{
-					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.SubdomainTaken, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.SubdomainTaken, Variety.Danger));
 					return this.RedirectToAction(ActionConstants.Edit);
 				}
 
 				// Organization update failed due to invalid permissions
-				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.CannotEditProfileMessage), ControllerConstants.Organization, ActionConstants.Edit));
+				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditProfileMessage), ControllerConstants.Organization, ActionConstants.Edit));
 			}
 
 			// Model is invalid, try again
@@ -91,7 +91,7 @@ namespace AllyisApps.Controllers
 			}
 
 			ViewBag.ErrorInfo = "Permission";
-			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.CannotEditProfileMessage), ControllerConstants.Organization, ActionConstants.Edit));
+			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditProfileMessage), ControllerConstants.Organization, ActionConstants.Edit));
 		}
 
 		/// <summary>

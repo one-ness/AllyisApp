@@ -3,7 +3,7 @@
 @{
     DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
     DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
-    ViewBag.Title = AllyisApps.Resources.TimeTracker.Views.Customer.Strings.Edit;
+    ViewBag.Title = Strings.Edit;
     ViewData.Add(ControllerConstants.Controller, ControllerConstants.Customer);
     ViewData.Add(ActionConstants.Action, ActionConstants.Edit);
 }
@@ -14,8 +14,8 @@
 
 @section Scripts {
     <script type="text/javascript">
-        var preserveState = "@(Model != null ? (AllyisApps.Resources.ViewModels.Auth.States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : string.Empty)";
-        var dropdownempty = "@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.DropDownEmpty";
+        var preserveState = "@(Model != null ? (States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : string.Empty)";
+        var dropdownempty = "@Strings.DropDownEmpty";
     </script>
     <script type="text/javascript" src="~/Scripts/allyis-updateStateDDL.js"></script>
 }
