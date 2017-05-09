@@ -90,7 +90,7 @@
                             var languageAdjustment = sub.ProductRoles;
                             foreach (var role in languageAdjustment)
                             {
-                                role.Name = AllyisApps.Resources.ViewModels.Org.Strings.ResourceManager.GetString(role.Name);
+                                role.Name = Strings.ResourceManager.GetString(role.Name);
                             }
                         }
 						@Html.DropDownListDisabled(string.Format("Subscriptions[{0}].SelectedRole", count), new SelectList(sub.ProductRoles, "ProductRoleId", "Name", sub.SelectedRole), sub.hasTooManySubscribers, new { @class = "form-control role-selector" })

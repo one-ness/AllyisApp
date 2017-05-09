@@ -1429,4 +1429,10 @@
   <data name="YourOrganizations" xml:space="preserve">
     <value>My Organizations</value>
   </data>
+  <data name="FirstNameValidationAddMember" xml:space="preserve">
+    <value>Please enter a first name</value>
+  </data>
+  <data name="LastNameValidationAddMember" xml:space="preserve">
+    <value>Please enter a last name</value>
+  </data>
 </root>

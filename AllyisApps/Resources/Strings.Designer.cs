@@ -1375,6 +1375,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter a first name.
+        /// </summary>
+        public static string FirstNameValidationAddMember {
+            get {
+                return ResourceManager.GetString("FirstNameValidationAddMember", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to First five users FREE! Additional users can be purchased at the price of $5 for 5 users..
         /// </summary>
         public static string FirstUserOffer {
@@ -1740,6 +1749,15 @@ namespace AllyisApps.Resources {
         public static string LastNameValidation {
             get {
                 return ResourceManager.GetString("LastNameValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a last name.
+        /// </summary>
+        public static string LastNameValidationAddMember {
+            get {
+                return ResourceManager.GetString("LastNameValidationAddMember", resourceCulture);
             }
         }
         

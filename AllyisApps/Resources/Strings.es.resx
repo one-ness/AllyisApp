@@ -1417,4 +1417,10 @@
   <data name="YouAreNotSubscribedToThisProduct" xml:space="preserve">
     <value>No estás suscrito a este producto.</value>
   </data>
+  <data name="FirstNameValidationAddMember" xml:space="preserve">
+    <value>Por favor, dar un nombre de pila.</value>
+  </data>
+  <data name="LastNameValidationAddMember" xml:space="preserve">
+    <value>Por favor, dar un apellido.</value>
+  </data>
 </root>

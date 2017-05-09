@@ -1429,4 +1429,10 @@
   <data name="YouAreNotSubscribedToThisProduct" xml:space="preserve">
     <value>You are not subscribed to this product.</value>
   </data>
+  <data name="FirstNameValidationAddMember" xml:space="preserve">
+    <value>Please enter a first name</value>
+  </data>
+  <data name="LastNameValidationAddMember" xml:space="preserve">
+    <value>Please enter a last name</value>
+  </data>
 </root>
