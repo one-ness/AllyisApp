@@ -262,6 +262,7 @@
     <Compile Include="Controllers\Auth\ResetPasswordAction.cs" />
     <Compile Include="Controllers\Auth\TemplateAction.cs" />
     <Compile Include="Controllers\Auth\ViewUser.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
     <Compile Include="Controllers\Home\ApplicationRedirectAction.cs" />
     <Compile Include="Controllers\Home\ErrorAction.cs" />
@@ -346,6 +347,7 @@
     <Compile Include="ViewModels\Auth\OrganizationManageViewModel.cs" />
     <Compile Include="ViewModels\Auth\SubscriptionDisplayViewModel.cs" />
     <Compile Include="ViewModels\Auth\SubscriptionRoleSelectionModel.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\Shared\LanguageViewModel.cs" />
     <Compile Include="ViewModels\Shared\LogOnPartialViewModel.cs" />
     <Compile Include="ViewModels\Shared\SubscriptionsViewModel.cs" />
@@ -375,7 +377,6 @@
     <Content Include="Areas\TimeTracker\Views\TimeEntry\UserEdit.cshtml" />
     <Compile Include="Controllers\Auth\AccountController.cs" />
     <Compile Include="Core\AllyisAppsWebViewPage.cs" />
-    <Compile Include="Core\BaseController.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
     <Compile Include="Core\BootstrapAlert.cs" />
     <Compile Include="Areas\TimeTracker\Core\ApprovalState.cs" />
@@ -384,7 +385,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Core\BaseViewModel.cs" />
     <Compile Include="Utilities\InviteMap.cs" />
     <Compile Include="ViewModels\Auth\ProductSubscriptionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

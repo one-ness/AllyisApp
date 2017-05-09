@@ -5,7 +5,7 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.Areas.TimeTracker.Core;
-using AllyisApps.Core;
+using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
