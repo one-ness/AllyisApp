@@ -2,14 +2,16 @@
     @UserId INT,
     @OrganizationId INT,
     @RoleId INT,
-	@EmployeeId NVARCHAR(128) = NULL
+	@EmployeeId NVARCHAR(128) = NULL,
+	@EmployeeTypeId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	UPDATE [Auth].[OrganizationUser]
 	SET [OrgRoleId] = @RoleId, 
-		[EmployeeId] = @EmployeeId
+		[EmployeeId] = @EmployeeId,
+		[EmployeeTypeId] = @EmployeeTypeId
 	WHERE [UserId] = @UserId AND 
 		[OrganizationId] = @OrganizationId;
 
@@ -19,11 +21,13 @@ BEGIN
 			([UserId], 
 			[OrganizationId], 
 			[OrgRoleId], 
-			[EmployeeId])
+			[EmployeeId],
+			[EmployeeTypeId])
 		VALUES 
 			(@UserId, 
 			@OrganizationId,
 			@RoleId, 
-			@EmployeeId);
+			@EmployeeId,
+			@EmployeeTypeId);
 	END
 END

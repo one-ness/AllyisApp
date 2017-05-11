@@ -341,6 +341,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@Subdomain", org.Subdomain);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 			parameters.Add("@EmployeeId", employeeId);
+            parameters.Add("@EmployeeTypeId", 1);   //assuming Org's owner is always a salaried employee
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -412,6 +413,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userID", orgUser.UserId);
 			parameters.Add("@RoleId", orgUser.OrgRoleId);
 			parameters.Add("@employeeID", orgUser.EmployeeId);
+            parameters.Add("employeeTypeId", orgUser.EmployeeTypeId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -642,12 +644,27 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Retrieves the subdomain that is registerd with the organzation with the provided id.
+        /// <summary>
+		/// Retreives the id of the given employee type.
 		/// </summary>
-		/// <param name="id">The organization's Id.</param>
-		/// <returns>The subdomain registered with the organization.</returns>
-		public string GetSubdomainById(int id)
+		/// <param name="employeeType">The employee type's name.</param>
+		/// <returns>The id of the employee type.</returns>
+		public int GetEmployeeTypeIdByTypeName(string employeeType)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@EmployeeType", employeeType);
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                return connection.Query<int>("[Auth].[GetEmployeeTypeId]", param, commandType: CommandType.StoredProcedure).SingleOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the subdomain that is registerd with the organzation with the provided id.
+        /// </summary>
+        /// <param name="id">The organization's Id.</param>
+        /// <returns>The subdomain registered with the organization.</returns>
+        public string GetSubdomainById(int id)
 		{
 			DynamicParameters param = new DynamicParameters();
 			param.Add("@OrgId", id);
@@ -700,6 +717,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@ProjectId", invitation.ProjectId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 			parameters.Add("@EmployeeId", invitation.EmployeeId);
+            parameters.Add("@EmployeeTypeId", invitation.EmployeeType);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[Auth].[CreateUserInvitation]", parameters, commandType: CommandType.StoredProcedure);
