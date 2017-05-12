@@ -377,8 +377,7 @@ namespace AllyisApps.Services
 
 			if (this.Can(Actions.CoreAction.EditOrganization))
 			{
-				DBHelper.RemoveInvitation(invitationId, -1);
-				return true;
+				return DBHelper.RemoveInvitation(invitationId, -1);
 			}
 
 			return false;
