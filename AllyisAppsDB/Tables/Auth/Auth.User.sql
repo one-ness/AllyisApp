@@ -25,7 +25,7 @@
     [LockoutEndDateUtc]    DATETIME       NULL,
     [PasswordResetCode] UNIQUEIDENTIFIER NULL, 
     [EmailConfirmationCode] UNIQUEIDENTIFIER NULL, 
-    [LanguagePreference] INT NOT NULL , 
+    [LanguagePreference] INT NOT NULL DEFAULT 1, 
     CONSTRAINT [PK__User__1788CC4CFBFDD246] PRIMARY KEY CLUSTERED ([UserId] ASC),
     CONSTRAINT [UQ__User__A9D105340B029239] UNIQUE NONCLUSTERED ([Email] ASC),
     CONSTRAINT [FK_User_Organization] FOREIGN KEY ([ActiveOrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),
@@ -33,7 +33,7 @@
     CONSTRAINT [FK_User_State] FOREIGN KEY ([State]) REFERENCES [Lookup].[State] ([StateId]),
     CONSTRAINT [FK_User_Subscription] FOREIGN KEY ([LastSubscriptionId]) REFERENCES [Billing].[Subscription] ([SubscriptionId]),
 	CONSTRAINT [FK_User_Language] FOREIGN KEY ([LanguagePreference]) REFERENCES [Lookup].[Language] ([id])
-    ON DELETE SET NULL
+    ON DELETE SET DEFAULT
     ON UPDATE NO ACTION
 )
 GO
