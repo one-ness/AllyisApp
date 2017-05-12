@@ -47,8 +47,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				project.ProjectName,
 				project.ProjectOrgId,
 				project.PriceType,
-				TimeTrackerService.GetDateTimeFromDays(project.StartDate),
-				TimeTrackerService.GetDateTimeFromDays(project.EndDate),
+				Service.GetDateTimeFromDays(project.StartDate),
+				Service.GetDateTimeFromDays(project.EndDate),
 				project.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString)));
 		}
 	}

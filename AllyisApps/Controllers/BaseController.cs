@@ -33,9 +33,7 @@ namespace AllyisApps.Controllers
 		public BaseController()
         {
             // init the service
-            this.Service = new Service(GlobalSettings.SqlConnectionString);
-            this.TimeTrackerService = new TimeTrackerService(GlobalSettings.SqlConnectionString);
-            this.TimeTrackerService.SetService(this.Service);
+            this.Service = new Service(GlobalSettings.SqlConnectionString);         
         }
 
         /// <summary>
@@ -69,11 +67,6 @@ namespace AllyisApps.Controllers
         /// Gets or sets the service.
         /// </summary>
         protected Service Service { get; set; }
-
-        /// <summary>
-        ///
-        /// </summary>
-        protected TimeTrackerService TimeTrackerService { get; set; }
 
         // Product id used by controllers in product areas. 0 by default, for no product.
         private readonly int cProductId = 0;
@@ -250,7 +243,7 @@ namespace AllyisApps.Controllers
                 if (this.UserContext != null)
                 {
                     // User context successfully populated
-                    this.TimeTrackerService.SetUserContext(this.UserContext);
+                    this.Service.SetUserContext(this.UserContext);
                     languageID = this.UserContext.ChosenLanguageID;
                     ViewBag.ShowOrganizationPartial = true;
 

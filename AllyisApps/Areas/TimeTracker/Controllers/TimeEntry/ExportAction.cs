@@ -43,10 +43,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			DateTime? start = startingDate.HasValue ? (DateTime?)TimeTrackerService.GetDateTimeFromDays(startingDate.Value) : null;
-			DateTime? end = endingDate.HasValue ? (DateTime?)TimeTrackerService.GetDateTimeFromDays(endingDate.Value) : null;
+			DateTime? start = startingDate.HasValue ? (DateTime?)Service.GetDateTimeFromDays(startingDate.Value) : null;
+			DateTime? end = endingDate.HasValue ? (DateTime?)Service.GetDateTimeFromDays(endingDate.Value) : null;
 
-			return this.File(TimeTrackerService.PrepareCSVExport(new List<int> { userId }, start, end).BaseStream, "text/csv", "export.csv");
+			return this.File(Service.PrepareCSVExport(new List<int> { userId }, start, end).BaseStream, "text/csv", "export.csv");
 		}
 
 		/// <summary>
@@ -63,11 +63,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DataExportViewModel result = new DataExportViewModel();
 			if ((userIds == null) || (userIds[0] == -1))
 			{
-				result.Data = TimeTrackerService.GetTimeEntriesOverDateRange(startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
+				result.Data = Service.GetTimeEntriesOverDateRange(startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
 			}
 			else
 			{
-				result.Data = TimeTrackerService.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
+				result.Data = Service.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
 			}
 
 			if (projectId != 0)

@@ -58,12 +58,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			// Reference for checking status of entries
 			List<CompleteProjectInfo> allProjects = Service.GetProjectsByUserAndOrganization(userId, false).ToList();
-			DateTime? lockDate = TimeTrackerService.GetLockDate();
+			DateTime? lockDate = Service.GetLockDate();
 
 			// Authorized to edit this entry
 			// Remove existing entries in target range
 			DateTime endDateTarget = startDateTarget.AddDays(endDateCopy.Subtract(startDateCopy).Days);
-			IEnumerable<TimeEntryInfo> entriesRemove = TimeTrackerService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateTarget, endDateTarget);
+			IEnumerable<TimeEntryInfo> entriesRemove = Service.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateTarget, endDateTarget);
 			foreach (TimeEntryInfo entry in entriesRemove)
 			{
 				// If the copying user isn't a manager, some checks are required before we let them delete/copy entries
@@ -81,11 +81,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					}
 				}
 
-				TimeTrackerService.DeleteTimeEntry(entry.TimeEntryId);
+				Service.DeleteTimeEntry(entry.TimeEntryId);
 			}
 
 			// Add copied entries
-			IEnumerable<TimeEntryInfo> entriesCopy = TimeTrackerService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateCopy, endDateCopy);
+			IEnumerable<TimeEntryInfo> entriesCopy = Service.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateCopy, endDateCopy);
 			for (int i = 0; startDateCopy.Date.AddDays(i) <= endDateCopy.Date; ++i)
 			{
 				// Cover all entries for that day
@@ -109,7 +109,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					// Don't copy holidays.
 					if (entry.ProjectId > 0)
 					{
-						TimeTrackerService.CreateTimeEntry(new TimeEntryInfo
+						Service.CreateTimeEntry(new TimeEntryInfo
 						{
 							UserId = userId,
 							ProjectId = entry.ProjectId,

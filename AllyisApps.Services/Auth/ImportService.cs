@@ -51,7 +51,7 @@ namespace AllyisApps.Services
 			List<User> userSubs = this.GetUsersWithSubscriptionToProductInOrganization(this.UserContext.ChosenOrganizationId, ttProductId).ToList();
 
 			// Retrieval of existing pay class data
-			List<PayClass> payClasses = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => TimeTrackerService.InitializePayClassInfo(pc)).ToList();
+			List<PayClass> payClasses = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => Service.InitializePayClassInfo(pc)).ToList();
 
 			// Result object
 			ImportActionResult result = new ImportActionResult();

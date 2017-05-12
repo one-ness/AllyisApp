@@ -40,7 +40,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			if (isValid)
 			{
-				if (TimeTrackerService.CreateHoliday(new Holiday() { OrganizationId = UserContext.ChosenOrganizationId, HolidayName = newHolidayName, Date = holidayDate }))
+				if (Service.CreateHoliday(new Holiday() { OrganizationId = UserContext.ChosenOrganizationId, HolidayName = newHolidayName, Date = holidayDate }))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulCreateHoliday, Variety.Success));
 				}

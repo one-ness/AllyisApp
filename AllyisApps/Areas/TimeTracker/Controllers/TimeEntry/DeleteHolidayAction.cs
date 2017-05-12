@@ -22,7 +22,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Redirects to the settings view.</returns>
 		public ActionResult DeleteHoliday(int holidayId)
 		{
-			if (TimeTrackerService.DeleteHoliday(holidayId))
+			if (Service.DeleteHoliday(holidayId))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulDeleteHoliday, Variety.Success));
 			}

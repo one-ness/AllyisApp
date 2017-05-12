@@ -108,7 +108,6 @@
     <Compile Include="Auth\OrgService.cs" />
     <Compile Include="Crm\ProjectService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TimeTracker\TimeTrackerService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AllyisApps.DBModel\AllyisApps.DBModel.csproj">

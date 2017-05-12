@@ -34,7 +34,7 @@ namespace AllyisApps.Controllers
 			//	Country = userInfo.Country,
 			//	PostalCode = userInfo.PostalCode,
 			//	PhoneNumber = userInfo.PhoneNumber,
-			//	DateOfBirth = TimeTrackerService.GetDayFromDateTime(userInfo.DateOfBirth),
+			//	DateOfBirth = Service.GetDayFromDateTime(userInfo.DateOfBirth),
 			//	ValidCountries = Service.ValidCountries()
 			//};
 

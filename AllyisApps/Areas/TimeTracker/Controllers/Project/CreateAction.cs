@@ -51,8 +51,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ParentCustomerId = id,
 						ProjectUsers = new List<BasicUserInfoViewModel>(),
 						SubscriptionUsers = subList,
-						StartDate = TimeTrackerService.GetDayFromDateTime(defaultStart),
-						EndDate = TimeTrackerService.GetDayFromDateTime(defaultEnd),
+						StartDate = Service.GetDayFromDateTime(defaultStart),
+						EndDate = Service.GetDayFromDateTime(defaultEnd),
 						ProjectOrgId = idAndUsers.Item1 //Service.GetRecommendedProjectId()
 					});
 			}
@@ -143,8 +143,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Name = model.ProjectName,
 				Type = model.PriceType,
 				ProjectOrgId = model.ProjectOrgId,
-				StartingDate = TimeTrackerService.GetDateTimeFromDays(model.StartDate),
-				EndingDate = TimeTrackerService.GetDateTimeFromDays(model.EndDate)
+				StartingDate = Service.GetDateTimeFromDays(model.StartDate),
+				EndingDate = Service.GetDateTimeFromDays(model.EndDate)
 			});
 		}
 	}

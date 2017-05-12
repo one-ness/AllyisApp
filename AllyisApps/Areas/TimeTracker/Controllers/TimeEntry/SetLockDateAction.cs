@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				try
 				{
-					if (TimeTrackerService.UpdateLockDate(LDsetting, LDperiod, LDquantity))
+					if (Service.UpdateLockDate(LDsetting, LDperiod, LDquantity))
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.LockDateUpdate, Variety.Success));
 					}

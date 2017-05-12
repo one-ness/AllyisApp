@@ -23,7 +23,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The settings page.</returns>
 		public ActionResult Settings()
 		{
-			var infos = TimeTrackerService.GetAllSettings();
+			var infos = Service.GetAllSettings();
 
 			if (Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{

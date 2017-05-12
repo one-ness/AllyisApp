@@ -16,14 +16,14 @@ namespace AllyisApps.Services.Tests
 		[TestMethod]
 		public void GetDateFromDays_Should_Return_Null_For_Negative_Days()
 		{
-			var date = TimeTrackerService.GetDateFromDays(-2);
+			var date = Service.GetDateFromDays(-2);
 			Assert.IsTrue(date == null);
 		}
 
 		[TestMethod]
 		public void GetDateFromDays_Should_Return_Correct_Date()
 		{
-			var date = TimeTrackerService.GetDateFromDays(10);
+			var date = Service.GetDateFromDays(10);
 			Assert.IsTrue(date == new DateTime(0001, 01, 11));
 		}
 

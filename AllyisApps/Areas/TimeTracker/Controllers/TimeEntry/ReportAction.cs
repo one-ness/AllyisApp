@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				int orgId = UserContext.ChosenOrganizationId;
 				ReportViewModel reportVM = null;
 
-				var infos = TimeTrackerService.GetReportInfo(orgId);
+				var infos = Service.GetReportInfo(orgId);
 
 				const string TempDataKey = "RVM";
 				if (this.TempData[TempDataKey] != null)
@@ -99,10 +99,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Selection = previousSelections ?? new ReportSelectionModel
 				{
 					CustomerId = 0,
-					EndDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today),
+					EndDate = Service.GetDayFromDateTime(DateTime.Today),
 					Page = 1,
 					ProjectId = 0,
-					StartDate = TimeTrackerService.GetDayFromDateTime(DateTime.Today),
+					StartDate = Service.GetDayFromDateTime(DateTime.Today),
 					Users = new List<int>()
 				}
 			};

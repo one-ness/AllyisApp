@@ -77,7 +77,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			// Authorized for editing
-			if (TimeTrackerService.GetTimeEntry(model.TimeEntryId).ApprovalState == (int)ApprovalState.Approved)
+			if (Service.GetTimeEntry(model.TimeEntryId).ApprovalState == (int)ApprovalState.Approved)
 			{
 				EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId);
 				return this.Json(new
@@ -128,10 +128,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
 			}
 
-			IEnumerable<TimeEntryInfo> otherEntriesToday = TimeTrackerService.GetTimeEntriesByUserOverDateRange(
+			IEnumerable<TimeEntryInfo> otherEntriesToday = Service.GetTimeEntriesByUserOverDateRange(
 				new List<int> { model.UserId },
-				TimeTrackerService.GetDateTimeFromDays(model.Date).Value,
-				TimeTrackerService.GetDateTimeFromDays(model.Date).Value);
+				Service.GetDateTimeFromDays(model.Date).Value,
+				Service.GetDateTimeFromDays(model.Date).Value);
 			float durationOther = 0.0f;
 			foreach (TimeEntryInfo otherEntry in otherEntriesToday)
 			{
@@ -156,13 +156,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Resources.Strings.MustSelectPayClass);
 			}
 
-			DateTime? lockDate = TimeTrackerService.GetLockDate();
-			if (role != ProductRoleIdEnum.TimeTrackerManager && model.Date <= (lockDate == null ? -1 : TimeTrackerService.GetDayFromDateTime(lockDate.Value)))
+			DateTime? lockDate = Service.GetLockDate();
+			if (role != ProductRoleIdEnum.TimeTrackerManager && model.Date <= (lockDate == null ? -1 : Service.GetDayFromDateTime(lockDate.Value)))
 			{
 				throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 			}
 
-			TimeTrackerService.UpdateTimeEntry(new TimeEntryInfo()
+			Service.UpdateTimeEntry(new TimeEntryInfo()
 			{
 				TimeEntryId = model.TimeEntryId,
 				ProjectId = model.ProjectId,
@@ -181,20 +181,20 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The EditTimeEntryViewModel.</returns>
 		public EditTimeEntryViewModel ConstructEditTimeEntryViewModel(int timeEntryId)
 		{
-			TimeEntryInfo entry = TimeTrackerService.GetTimeEntry(timeEntryId);
+			TimeEntryInfo entry = Service.GetTimeEntry(timeEntryId);
 
-			DateTime? lockDate = TimeTrackerService.GetLockDate();
+			DateTime? lockDate = Service.GetLockDate();
 			return new EditTimeEntryViewModel
 			{
 				UserId = entry.UserId,
 				TimeEntryId = entry.TimeEntryId,
 				ProjectId = entry.ProjectId,
 				PayClassId = entry.PayClassId,
-				Date = TimeTrackerService.GetDayFromDateTime(entry.Date),
+				Date = Service.GetDayFromDateTime(entry.Date),
 				Duration = string.Format("{0:D2}:{1:D2}", (int)entry.Duration, (int)Math.Round((entry.Duration - (int)entry.Duration) * MinutesInHour, 0)),
 				Description = entry.Description,
 				LockSaved = entry.LockSaved,
-				LockDate = lockDate == null ? -1 : TimeTrackerService.GetDayFromDateTime(lockDate.Value),
+				LockDate = lockDate == null ? -1 : Service.GetDayFromDateTime(lockDate.Value),
 				IsManager = Service.GetProductRoleForUser(ProductNameKeyConstants.TimeTracker, entry.UserId) == "Manager"
 			};
 		}

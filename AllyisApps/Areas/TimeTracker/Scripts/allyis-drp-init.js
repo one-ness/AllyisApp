@@ -1,6 +1,6 @@
 ﻿// A shortcut script resource for setting up a date range picker
 
-// Helper for converting between int form of date used for communication with server (see TimeTrackerService.GetDateTimeFromDays/GetDayFromDateTime)
+// Helper for converting between int form of date used for communication with server (see Service.GetDateTimeFromDays/GetDayFromDateTime)
 // and moment.js dates
 var DateConvert = (function () {
     var minimumDate = moment(-62135568000000) // This corresponds to DateTime.MinValue()
