@@ -215,7 +215,7 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool RemoveBilling()
 		{
-			if (this.Can(Actions.CoreAction.EditOrganization))
+			if (this.Can(Actions.CoreAction.EditBilling))
 			{
 				DBHelper.RemoveBilling(UserContext.ChosenOrganizationId);
 				return true;

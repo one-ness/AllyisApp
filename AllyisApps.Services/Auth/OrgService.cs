@@ -375,9 +375,9 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("invitationId", "Invitation Id cannot be 0 or negative.");
 			}
 
-			if (this.Can(Actions.CoreAction.EditOrganization))
+            if (this.Can(Actions.CoreAction.EditInvitation))
 			{
-				DBHelper.RemoveInvitation(invitationId, -1);
+				bool result = DBHelper.RemoveInvitation(invitationId, -1);
 				return true;
 			}
 

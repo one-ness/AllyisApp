@@ -69,6 +69,16 @@ namespace AllyisApps.Services
 			/// Allow all actions for viewing, editing, etc. the entries of others.
 			/// </summary>
 			TimeTrackerEditOthers = 7,
+
+            /// <summary>
+            /// Allow all actions for editing, removing, etc. an invitation to an organization
+            /// </summary>
+            EditInvitation = 8,
+
+            /// <summary>
+            /// Allow all actions for editing, removing, etc. billing for an organization
+            /// </summary>
+            EditBilling = 9,
 		}
 
 		/// <summary>

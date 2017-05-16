@@ -88,7 +88,9 @@ namespace AllyisApps.Services
 					break;
 
 				case Actions.CoreAction.EditOrganization:
-					if (orgInfo != null)
+                case Actions.CoreAction.EditInvitation:
+                case Actions.CoreAction.EditBilling:
+                    if (orgInfo != null)
 					{
 						switch (orgInfo.OrganizationRole)
 						{
@@ -197,7 +199,7 @@ namespace AllyisApps.Services
 
 					break;
 
-				default:
+                default:
 					break;
 			}
 
