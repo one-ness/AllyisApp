@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The view.</returns>
 		public ActionResult Index()
 		{
-			if (Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
+			if (Service.Can(Actions.CoreAction.TimeTrackerViewSelf))
 			{
 				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
 			}

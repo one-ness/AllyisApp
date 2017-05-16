@@ -2934,7 +2934,9 @@ namespace AllyisApps.Services.Tests
 				CoreAction.ViewCustomer,
 				CoreAction.EditProject,
 				CoreAction.TimeTrackerEditSelf,
-				CoreAction.TimeTrackerEditOthers
+				CoreAction.TimeTrackerEditOthers,
+                CoreAction.EditBilling,
+                CoreAction.EditInvitation
 			};
 
 			string msg = "Failed on the following test cases: ";

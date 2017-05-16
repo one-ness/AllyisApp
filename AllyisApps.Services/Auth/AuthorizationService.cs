@@ -89,7 +89,6 @@ namespace AllyisApps.Services
 
 				case Actions.CoreAction.EditOrganization:
                 case Actions.CoreAction.EditInvitation:
-                case Actions.CoreAction.EditBilling:
                     if (orgInfo != null)
 					{
 						switch (orgInfo.OrganizationRole)
@@ -105,12 +104,30 @@ namespace AllyisApps.Services
 
 					break;
 
-				/*SUBSCRIPTION PERMISSIONS (requires a subscription ID)*/
 
-				// Product roles were previously used for both subscription action permissions and project, so we'll keep doing that to avoid breaking anything
-				// In the future, we should consider separating those permissions out / create new permissions, especially since the roles are tied to the product (e.g. timetracker) but the actions are not
-				// With this in mind, the customer actions and project actions are separated for now despite requiring the same permissions
-				case Actions.CoreAction.ViewCustomer:
+                /*BILLING PERMISSIONS (requires an organization ID)*/
+                case Actions.CoreAction.EditBilling:
+                    if (orgInfo != null)
+                    {
+                        switch (orgInfo.OrganizationRole)
+                        {
+                            case OrganizationRole.Owner:
+                                result = true;
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+
+                    break;
+
+                /*SUBSCRIPTION PERMISSIONS (requires a subscription ID)*/
+
+                // Product roles were previously used for both subscription action permissions and project, so we'll keep doing that to avoid breaking anything
+                // In the future, we should consider separating those permissions out / create new permissions, especially since the roles are tied to the product (e.g. timetracker) but the actions are not
+                // With this in mind, the customer actions and project actions are separated for now despite requiring the same permissions
+                case Actions.CoreAction.ViewCustomer:
 					if (subInfo != null)
 					{
 						switch (subInfo.ProductRole)
@@ -142,12 +159,13 @@ namespace AllyisApps.Services
 					}
 
 					break;
+
 				/*PROJECT PERMISSIONS (uses subscription permissions)*/
 
 				// See notes above about subscription and project permissions
 				// View Project permissions are unnecessary, since projects will be filtered to the user by project id in a project service object to be built in the future
 				case Actions.CoreAction.EditProject:
-					if (subInfo != null)
+                    if (subInfo != null)
 					{
 						switch (subInfo.ProductRole)
 						{
@@ -183,21 +201,55 @@ namespace AllyisApps.Services
 
 					break;
 
-				case Actions.CoreAction.TimeTrackerEditOthers:
-					if (subInfo != null)
-					{
-						switch (subInfo.ProductRole)
-						{
-							case ProductRoleIdEnum.TimeTrackerManager:
-								result = true;
-								break;
+                case Actions.CoreAction.TimeTrackerEditOthers:
+                    if (subInfo != null)
+                    {
+                        switch (subInfo.ProductRole)
+                        {
+                            case ProductRoleIdEnum.TimeTrackerManager:
+                                result = true;
+                                break;
 
-							default:
-								break;
-						}
-					}
+                            default:
+                                break;
+                        }
+                    }
 
-					break;
+                    break;
+
+
+                case Actions.CoreAction.TimeTrackerViewSelf:
+                    if (subInfo != null)
+                    {
+                        switch (subInfo.ProductRole)
+                        {
+                            case ProductRoleIdEnum.TimeTrackerUser:
+                            case ProductRoleIdEnum.TimeTrackerManager:
+                                result = true;
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+
+                    break;
+
+                case Actions.CoreAction.TimeTrackerViewOthers:
+                    if (subInfo != null)
+                    {
+                        switch (subInfo.ProductRole)
+                        {
+                            case ProductRoleIdEnum.TimeTrackerManager:
+                                result = true;
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+
+                    break;
 
                 default:
 					break;

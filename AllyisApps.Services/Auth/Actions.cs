@@ -71,14 +71,24 @@ namespace AllyisApps.Services
 			TimeTrackerEditOthers = 7,
 
             /// <summary>
+            /// Allow user to view their organization's Time Tracker information
+            /// </summary>
+            TimeTrackerViewSelf = 8,
+
+            /// <summary>
+            /// Allow managers, accountants, etc. to view other user's Time Tracker information within the organization
+            /// </summary>
+            TimeTrackerViewOthers = 9,
+
+            /// <summary>
             /// Allow all actions for editing, removing, etc. an invitation to an organization
             /// </summary>
-            EditInvitation = 8,
+            EditInvitation = 10,
 
             /// <summary>
             /// Allow all actions for editing, removing, etc. billing for an organization
             /// </summary>
-            EditBilling = 9,
+            EditBilling = 11,
 		}
 
 		/// <summary>
@@ -93,7 +103,9 @@ namespace AllyisApps.Services
 				action == CoreAction.ViewCustomer ||
 				action == CoreAction.EditProject ||
 				action == CoreAction.TimeTrackerEditSelf ||
-				action == CoreAction.TimeTrackerEditOthers)
+				action == CoreAction.TimeTrackerEditOthers ||
+                action == CoreAction.TimeTrackerViewSelf ||
+                action == CoreAction.TimeTrackerViewOthers)
 			{
 				return ProductIdEnum.TimeTracker;
 			}

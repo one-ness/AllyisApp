@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers
 		[CLSCompliant(false)]
 		public ActionResult Charge(BillingServicesToken token, string billingServicesEmail)
 		{
-			if (Service.Can(Actions.CoreAction.EditOrganization))
+			if (Service.Can(Actions.CoreAction.EditBilling))
 			{
 				if (token == null)
 				{

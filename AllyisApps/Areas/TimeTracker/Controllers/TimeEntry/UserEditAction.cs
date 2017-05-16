@@ -31,7 +31,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			var infos = Service.GetProjectsForOrgAndUser(userId);
 
-			if (Service.Can(Actions.CoreAction.EditProject))
+			if (Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				return this.View(new UserEditViewModel
 				{
