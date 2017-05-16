@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
+using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using System.Web.Mvc;
 
@@ -28,13 +28,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			int actualHours = string.Equals(setting, "No") ? -1 : hours;
 
-			if (TimeTrackerService.UpdateOvertime(actualHours, period, mult))
+			if (Service.UpdateOvertime(actualHours, period, mult))
 			{
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.OvertimeUpdate, Variety.Success));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.OvertimeUpdate, Variety.Success));
 			}
 			else
 			{
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.ActionUnauthorizedMessage, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
 			return this.RedirectToAction(ActionConstants.Settings);

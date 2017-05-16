@@ -4,12 +4,12 @@
 
 @{
     DisplayHints.PageBodyId = "org-manage";
-    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.Manage;
+    ViewBag.Title = Strings.Manage;
     Layout = "~/Views/Shared/_Layout.cshtml";
     InvitationInfo emptyInvite = new InvitationInfo()
     {
-        FirstName = AllyisApps.Resources.Views.Account.Strings.FirstName,
-        LastName = AllyisApps.Resources.Views.Account.Strings.LastName,
+        FirstName = Strings.FirstName,
+        LastName = Strings.LastName,
         Email = "email@allyis.com",
         AccessCode = "None"
     };
@@ -23,10 +23,10 @@
         <div class="panel panel-default org-panel" style="margin-bottom: 0px">
             <div class="panel-heading">
                 <h1 class="panel-title">
-                    @AllyisApps.Resources.Views.Account.Strings.OrganizationDetails
+                    @Strings.OrganizationDetails
                     @*@if (Model.CanEditOrganization)
                     {*@
-                        @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Edit, ActionConstants.Edit, null, new { @class = "pull-right text-muted" })
+                        @Html.ActionLink(Strings.EditOrganization, ActionConstants.Edit, null, new { @class = "pull-right text-muted" })
 					@*}*@
                 </h1>
             </div>
@@ -36,7 +36,7 @@
     <div class="panel panel-default sub-panel">
         <div class="panel-heading">
             <h1 class="panel-title">
-                @AllyisApps.Resources.Views.Account.Strings.Subscriptions
+                @Strings.Subscriptions
             </h1>
         </div>
         @foreach (SubscriptionDisplayViewModel productSub in Model.Subscriptions)
@@ -44,37 +44,37 @@
             @Html.Partial("_SubDetails", productSub);
         }
         <div class="panel-body">
-            <h4>@AllyisApps.Resources.Views.Account.Strings.Subscribe!</h4>
-            <p>@AllyisApps.Resources.Views.Account.Strings.SubscribeToProducts</p>
+            <h4>@Strings.Subscribe!</h4>
+            <p>@Strings.SubscribeToProducts</p>
             @if (Model.SubscriptionCount == 0)
             {
-                <p>@AllyisApps.Resources.Views.Account.Strings.PleaseSubscribe</p>}
+                <p>@Strings.PleaseSubscribe</p>}
         </div>
     </div>
     <div class="panel panel-default members-panel">
         @*<div class="panel-heading">
-            <h1 class="panel-title">
-                @AllyisApps.Resources.Views.Account.Strings.Members
-                <span class="pull-right panel-title">
-                    @if (Model.CanEditOrganization)
-                    {
-                        <a href="@Url.Action(ActionConstants.ManagePermissions)" title="@AllyisApps.Resources.Views.Account.Strings.ManagePermissions"><span class="fa fa-fw fa-lg fa-users text-warning"></span></a>}
-                    @if (Model.CanEditOrganization && Model.SubscriptionCount > 0)
-                    {
-                        <a href="@Url.Action(ActionConstants.Add)" title="@AllyisApps.Resources.Views.Account.Strings.AddMembers"><span class="fa fa-fw fa-plus fa-lg text-info"></span></a>}
-                </span>
-            </h1>
-        </div>
-        <div>
-            <input id="org-members-search" type="text" class="form-control" placeholder="🔍 " style="border: none;" />
-        </div>*@
+        <h1 class="panel-title">
+            @Strings.MembersAllyisApps.Resources.Views.Account.
+            <span class="pull-right panel-title">
+                @if (Model.CanEditOrganization)
+                {
+                    <a href="@Url.Action(ActionConstants.ManagePermissions)" title="@Strings.ManagePermissions"><span class="fa fa-fw fa-lg fa-users text-warning"></span></a>}
+                @if (Model.CanEditOrganization && Model.SubscriptionCount > 0)
+                {
+                    <a href="@Url.Action(ActionConstants.Add)" title="@Strings.AddMembers"><span class="fa fa-fw fa-plus fa-lg text-info"></span></a>}
+            </span>
+        </h1>
+    </div>
+    <div>
+        <input id="org-members-search" type="text" class="form-control" placeholder="🔍 " style="border: none;" />
+    </div>*@
         @Html.Partial("_OrgMembers2", Model.Members)
     </div>
 
     @*<div class="panel panel-default billing-panel" style="height: 100%;">
         <div class="panel-heading" id="stripe-panel">
             <h1 class="panel-title clearfix">
-                @AllyisApps.Resources.Views.Account.Strings.BillingInformation
+                @Strings.BillingInformation
             </h1>
             <a href="http://stripe.com"><img src="~/Content/icons/poweredbystripe.png" style="height: 30px; float: right; margin-top: -23px;" title="" alt="Stripe Logo"></a>
         </div>
@@ -83,11 +83,11 @@
 </div>
 @section Scripts {
     <script type="text/javascript">
-        var removeFromOrg = "@AllyisApps.Resources.Views.Account.Strings.RemoveFromOrg";
-        var removeFromOrgEnd = "@AllyisApps.Resources.Views.Account.Strings.RemoveFromOrgEnd";
+        var removeFromOrg = "@Strings.RemoveFromOrg";
+        var removeFromOrgEnd = "@Strings.RemoveFromOrgEnd";
         var removeMemberAction = "@Url.Action(ActionConstants.RemoveMember, ControllerConstants.Account)?userId=";
-        var removeInvitation = "@AllyisApps.Resources.Views.Account.Strings.RemoveInvitation";
-        var removeInviationAction = "@Url.Action(ActionConstants.RemoveInvitation, ControllerConstants.Account)?invitationId=";
+        var removeInvitation = "@Strings.RemoveInvitation";
+        var removeInvitationAction = "@Url.Action(ActionConstants.RemoveInvitation, ControllerConstants.Account)?invitationId=";
     </script>
     @Scripts.Render("~/bundles/AccountManage")
     <script type="text/javascript" src="~/Scripts/allyis-pages-with-filter.js"></script>

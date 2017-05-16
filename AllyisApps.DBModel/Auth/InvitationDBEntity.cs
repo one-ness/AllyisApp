@@ -72,5 +72,10 @@ namespace AllyisApps.DBModel.Auth
 		/// Gets or sets the employee id of the user.
 		/// </summary>
 		public string EmployeeId { get; set; }
-	}
+
+        /// <summary>
+		/// Gets or sets the id of the employee type the user will be assigned
+		/// </summary>
+		public int EmployeeType { get; set; }
+    }
 }

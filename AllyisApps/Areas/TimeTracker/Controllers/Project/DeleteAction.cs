@@ -3,7 +3,7 @@
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
-using AllyisApps.Core;
+using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using System.Web.Mvc;
@@ -28,12 +28,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if (Service.DeleteProject(id))
 				{
-					Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", project.ProjectName, Resources.TimeTracker.Controllers.Project.Strings.ProjectDeleteNotification), Variety.Success));
+					Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", project.ProjectName, Resources.Strings.ProjectDeleteNotification), Variety.Success));
 					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
 				}
 
 				// Permissions failure
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.DeleteUnauthorizedMessage, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.DeleteUnauthorizedMessage, Variety.Warning));
 			}
 
 			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);

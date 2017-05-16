@@ -63,7 +63,7 @@ namespace AllyisApps.Controllers
 				}
 				else
 				{
-					Notifications.Add(new BootstrapAlert(Resources.Errors.SignInFailureMessage, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.SignInFailureMessage, Variety.Danger));
 				}
 			}
 

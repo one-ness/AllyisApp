@@ -51,7 +51,7 @@ namespace AllyisApps.Services
 			List<User> userSubs = this.GetUsersWithSubscriptionToProductInOrganization(this.UserContext.ChosenOrganizationId, ttProductId).ToList();
 
 			// Retrieval of existing pay class data
-			List<PayClass> payClasses = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => TimeTrackerService.InitializePayClassInfo(pc)).ToList();
+			List<PayClass> payClasses = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => Service.InitializePayClassInfo(pc)).ToList();
 
 			// Result object
 			ImportActionResult result = new ImportActionResult();
@@ -130,6 +130,7 @@ namespace AllyisApps.Services
 				bool hasUserPhoneNumber = table.Columns.Contains(ColumnHeaders.UserPhoneNumber);
 				bool hasUserPostalCode = table.Columns.Contains(ColumnHeaders.UserPostalCode);
 				bool hasUserState = table.Columns.Contains(ColumnHeaders.UserState);
+                bool hasEmployeeType = table.Columns.Contains(ColumnHeaders.EmployeeType);  //if not provided, set to Salaried as default
 				bool hasNonRequiredUserInfo = hasUserAddress || hasUserCity || hasUserCountry || hasUserDateOfBirth || hasUserUsername ||
 					hasUserPhoneExtension || hasUserPhoneNumber || hasUserPostalCode || hasUserState;
 
@@ -678,12 +679,17 @@ namespace AllyisApps.Services
 									{
 										try
 										{
-											DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
-											{
-												EmployeeId = fields[1],
-												OrganizationId = this.UserContext.ChosenOrganizationId,
-												OrgRoleId = (int)(OrganizationRole.Member),
-												UserId = user.UserId
+                                            string employeeType = hasEmployeeType ? row[ColumnHeaders.EmployeeType].ToString() : "";
+                                            //get the id of employeeType, if not found default to Salaried
+                                            int employeeTypeId = DBHelper.GetEmployeeTypeIdByTypeName(employeeType);
+                                            if (employeeTypeId == 0) { employeeTypeId = 1; }
+                                            DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
+                                            {
+                                                EmployeeId = fields[1],
+                                                OrganizationId = this.UserContext.ChosenOrganizationId,
+                                                OrgRoleId = (int)(OrganizationRole.Member),
+                                                UserId = user.UserId,
+                                                EmployeeTypeId = employeeTypeId
 											});
 											result.UsersAddedToOrganization += 1;
 										}

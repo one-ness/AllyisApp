@@ -1,11 +1,10 @@
 ﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 @using AllyisApps.Core;
-@using AllyisApps.Services;
 @using AllyisApps.Services.TimeTracker;
 @model MergePayClassViewModel
 
 @{
-    ViewBag.Title = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Merge;
+    ViewBag.Title = Strings.Merge;
     DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
     DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
     Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
@@ -21,7 +20,7 @@
         <div class="panel panel-info" style="min-width:350px;">
             <div class="panel-heading">
                 <h3 style="margin-top: 0; margin-bottom: 0;">
-                    @String.Format(AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ChoosePayClassToMerge, "\"" + Model.sourcePayClassName + "\"")
+                    @String.Format(Strings.ChoosePayClassToMerge, "\"" + Model.sourcePayClassName + "\"")
                 </h3>
             </div>
             <div class="panel-body">
@@ -32,13 +31,13 @@
                     @Html.HiddenFor(m => m.sourcePayClassName)
                     foreach (PayClass payClass in Model.destinationPayClasses)
                     {
-                        string _payClassName = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ResourceManager.GetString((payClass.Name).Replace(" ", string.Empty)) ?? payClass.Name;
+                        string _payClassName = Strings.ResourceManager.GetString((payClass.Name).Replace(" ", string.Empty)) ?? payClass.Name;
                         <input type="radio" name="destPayClass" style="margin:5px" id="mpc" value="@payClass.PayClassID" @(payClass.Name == "Regular" ? " checked " : string.Empty)><text>@_payClassName</text><br />
                     }
                     <br />
                     <div class="pull-right">
-                        @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Settings, ControllerConstants.TimeEntry, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
-                        <input type="submit" class="btn btn-primary" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...';" />
+                        @Html.ActionLink(Strings.Cancel, ActionConstants.Settings, ControllerConstants.TimeEntry, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+                        <input type="submit" class="btn btn-primary" value=@Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...';" />
                     </div>
                 }
             </div>

@@ -2,7 +2,7 @@
 @model UserEditViewModel
 
 @{
-    ViewBag.Title = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.EditUser;
+    ViewBag.Title = Strings.EditUser;
     DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
     DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
     Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
@@ -17,13 +17,13 @@
                 @Html.ValidationSummary(true)
                 @Html.HiddenFor(m => m.UserId)
                 <div class="form-group">
-                    <label for="Name">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Name</label>
+                    <label for="Name">@Strings.Name</label>
                     @Html.HiddenFor(m => m.UserName)
                     <span class="form-control">@Model.UserName</span>
                 </div>
                 <div id="swapper-ui" class="swapper-ui">
                     <div class="left">
-                        <label>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.OffProjects</label>
+                        <label>@Strings.OffProjects</label>
                         @*<input type="text" placeholder=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.ProjectSearchPlaceholder class="form-control" />*@
                         <select name="Excluded" id="excluded-projects" multiple="multiple" class="filter-list">
                             @foreach (var project in Model.AllProjects)
@@ -49,7 +49,7 @@
                         </a>
                     </div>
                     <div class="right">
-                        <label>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.OnProjects</label>
+                        <label>@Strings.OnProjects</label>
                         @*<input type="text" placeholder="Project Search 🔎" class="form-control" />*@
                         <select name="Included" id="included-projects" multiple="multiple" class="filter-list">
                             @foreach (var project in Model.AllProjects)
@@ -67,8 +67,8 @@
                 </div>
             </div>
             <div class="text-right" style="padding-top: 15px; padding-bottom: 15px;">
-                <input type="button" class="btn btn-default" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Home)'" />
-                <input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Save class="btn btn-primary" id="submitUser" />
+                <input type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Home)'" />
+                <input type="submit" value=@Strings.Save class="btn btn-primary" id="submitUser" />
             </div>
         }
     </div><!-- /.modal-content -->

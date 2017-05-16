@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
+using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
@@ -36,8 +36,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.Json(new
 				{
 					status = "error",
-					message = Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntry,
-					e = new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntry)
+					message = Resources.Strings.NotAuthZTimeEntry,
+					e = new UnauthorizedAccessException(Resources.Strings.NotAuthZTimeEntry)
 				});
 			}
 			else if (model.UserId != Convert.ToInt32(UserContext.UserId) && !Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.Json(new
 				{
 					status = "error",
-					message = Resources.TimeTracker.Controllers.TimeEntry.Strings.NotAuthZTimeEntryOtherUser
+					message = Resources.Strings.NotAuthZTimeEntryOtherUser
 				});
 			}
 
@@ -55,47 +55,47 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				float? durationResult;
 				if (!(durationResult = this.ParseDuration(model.Duration)).HasValue)
 				{
-					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.DurationFormat);
+					throw new ArgumentException(Resources.Strings.DurationFormat);
 				}
 				if (this.ParseDuration(model.Duration) == 0)
 				{
-					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.EnterATimeLongerThanZero);
+					throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
 				}
 
-				IEnumerable<TimeEntryInfo> otherEntriesToday = TimeTrackerService.GetTimeEntriesByUserOverDateRange(
+				IEnumerable<TimeEntryInfo> otherEntriesToday = Service.GetTimeEntriesByUserOverDateRange(
 					new List<int> { model.UserId },
-					TimeTrackerService.GetDateTimeFromDays(model.Date).Value,
-					TimeTrackerService.GetDateTimeFromDays(model.Date).Value);
+					Service.GetDateTimeFromDays(model.Date).Value,
+					Service.GetDateTimeFromDays(model.Date).Value);
 				float durationOther = 0.0f;
 				foreach (TimeEntryInfo otherEntry in otherEntriesToday)
 				{
 					durationOther += otherEntry.Duration;
 				}
 
-				DateTime? lockDate = TimeTrackerService.GetLockDate();
+				DateTime? lockDate = Service.GetLockDate();
 				if (durationResult + durationOther > 24.00)
 				{
-					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotExceed24);
+					throw new ArgumentException(Resources.Strings.CannotExceed24);
 				}
 				else if (model.ProjectId <= 0)
 				{
-					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.MustSelectProject);
+					throw new ArgumentException(Resources.Strings.MustSelectProject);
 				}
 				else if (model.PayClassId < 1)
 				{
-					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.MustSelectPayClass);
+					throw new ArgumentException(Resources.Strings.MustSelectPayClass);
 				}
-				else if (role != ProductRoleIdEnum.TimeTrackerManager && model.Date <= (lockDate == null ? -1 : TimeTrackerService.GetDayFromDateTime(lockDate.Value)))
+				else if (role != ProductRoleIdEnum.TimeTrackerManager && model.Date <= (lockDate == null ? -1 : Service.GetDayFromDateTime(lockDate.Value)))
 				{
-					throw new ArgumentException(Resources.TimeTracker.Controllers.TimeEntry.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
+					throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 				}
 
-				int id = TimeTrackerService.CreateTimeEntry(new TimeEntryInfo()
+				int id = Service.CreateTimeEntry(new TimeEntryInfo()
 				{
 					UserId = model.UserId,
 					ProjectId = model.ProjectId,
 					PayClassId = model.PayClassId,
-					Date = TimeTrackerService.GetDateTimeFromDays(model.Date).Value,
+					Date = Service.GetDateTimeFromDays(model.Date).Value,
 					Duration = durationResult.Value,
 					Description = model.Description
 				});

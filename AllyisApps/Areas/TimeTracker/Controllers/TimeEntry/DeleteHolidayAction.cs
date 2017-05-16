@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
+using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using System.Web.Mvc;
 
@@ -22,15 +22,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Redirects to the settings view.</returns>
 		public ActionResult DeleteHoliday(int holidayId)
 		{
-			if (TimeTrackerService.DeleteHoliday(holidayId))
+			if (Service.DeleteHoliday(holidayId))
 			{
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulDeleteHoliday, Variety.Success));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulDeleteHoliday, Variety.Success));
 			}
 			else
 			{
 				// premissions handled in service level
 				// Should only get here on permission failure
-				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
 			return this.RedirectToAction(ActionConstants.Settings);

@@ -19,7 +19,7 @@
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true)
                 <div class="form-group">
-                    @Html.ReqLabelFor(m => m.ProjectName, @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Name)
+                    @Html.ReqLabelFor(m => m.ProjectName, @Strings.Name)
                     @*<label for="Name">@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Name</label>*@
                     @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
                     @Html.ValidationMessageFor(x => x.ProjectName, "", new { @class = "text-danger" })
@@ -27,7 +27,7 @@
                 @*@if (Model.IsCreating)
                 {*@
                     <div class="form-group">
-                        @Html.ReqLabelFor(m => m.ProjectOrgId, AllyisApps.Resources.TimeTracker.Views.Project.Strings.ProjectOrgId)
+                        @Html.ReqLabelFor(m => m.ProjectOrgId, Strings.ProjectOrgId)
                         @Html.TextBoxFor(m => m.ProjectOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.ProjectOrgId })
                         @Html.ValidationMessageFor(x => x.ProjectOrgId, "", new { @class = "text-danger"})
                     </div>
@@ -55,7 +55,7 @@
                     }
                 <div id="swapper-ui" class="swapper-ui">
                     <div class="left">
-                        <label>@AllyisApps.Resources.TimeTracker.Views.Project.Strings.OffProj</label>
+                        <label>@Strings.OffProj</label>
                         @*<input type="text" placeholder=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder class="form-control" />*@
                         @*
                             Create a multi-select list that is populated from SubscriptionUsers
@@ -72,7 +72,7 @@
                         </a>
                     </div>
                     <div class="right">
-                        <label>@AllyisApps.Resources.TimeTracker.Views.Project.Strings.OnProj</label>
+                        <label>@Strings.OnProj</label>
                         @*<input type="text" placeholder="@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder" class="form-control" />*@
                         @*
                             Create a multi-select list that is populated from ProjectUsers and binds all selected items to SelectedProjectUserIds
@@ -91,13 +91,13 @@
 					</div>*@
 
 					<div class="form-group projectDate">
-						<label>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.StartDate</label>
+						<label>@Strings.StartDate</label>
 						@Html.HiddenFor(m => m.StartDate)
 						<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerStart" />
 						<span class="fa fa-fw fa-calendar" id="datePickerStartButton"></span>
 					</div>
 					<div class="form-group projectDate" style="float: right">
-						<label>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.EndDate</label>
+						<label>@Strings.EndDate</label>
 						@Html.HiddenFor(m => m.EndDate)
 						<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerEnd" />
 						<span class="fa fa-fw fa-calendar" id="datePickerEndButton"></span>
@@ -110,10 +110,10 @@
 
 			<div class="form-group row" style="margin-bottom: 0px; margin-top: 15px;">
 				<div class="col-xs-6 text-left">
-					<label for="price" style="text-align:center">@AllyisApps.Resources.TimeTracker.Views.Project.Strings.PriceType</label>
+					<label for="price" style="text-align:center">@Strings.PriceType</label>
 					<br />
-					@Html.RadioButtonFor(m => m.PriceType, AllyisApps.Resources.TimeTracker.Views.Project.Strings.Hourly, new { @checked = "checked" }) @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Hourly
-					@Html.RadioButtonFor(m => m.PriceType, AllyisApps.Resources.TimeTracker.Views.Project.Strings.Fixed) @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Fixed
+					@Html.RadioButtonFor(m => m.PriceType, Strings.Hourly, new { @checked = "checked" }) @Strings.Hourly
+					@Html.RadioButtonFor(m => m.PriceType, Strings.Fixed) @Strings.Fixed
 				</div>
 			</div>
 
@@ -125,8 +125,8 @@
 			</div>*@
 
             <div class="text-right" style="padding-top: 15px; padding-bottom: 15px;">
-                <input type="button" class="btn btn-default" value=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer)'" />
-                <input type="submit" value=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Save class="btn btn-primary" id="submitProject" />
+                <input type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer)'" />
+                <input type="submit" value=@Strings.Save class="btn btn-primary" id="submitProject" />
             </div>
         }
     </div><!-- /.modal-content -->

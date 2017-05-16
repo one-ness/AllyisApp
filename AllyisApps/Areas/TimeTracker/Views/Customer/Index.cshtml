@@ -6,7 +6,7 @@
 
 @{
     DisplayHints.PageBodyId = "tt-customer";
-    ViewBag.Title = AllyisApps.Resources.TimeTracker.Views.Customer.Strings.CustomerList;
+    ViewBag.Title = Strings.CustomerList;
     ViewData["IsManager"] = Model.canEdit;
     Layout = "~/Areas/TimeTracker/Views/Shared/_Layout.cshtml";
     var customerCount = 0;
@@ -18,10 +18,10 @@
 <div class="row">
     <div class="col-xs-12 col-md-8 col-md-push-2">
         <div class="allyis-action-buttons-top">
-            <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Customer)" class="btn btn-default @createButtonClass">@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.AddCustomer <i class="fa fa-plus"></i></a>
+            <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Customer)" class="btn btn-default @createButtonClass">@Strings.AddCustomer <i class="fa fa-plus"></i></a>
 
             <div class="pull-right">
-                <input type="text" id="SearchInput" placeholder=@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.SearchPlaceholder class="form-control">
+                <input type="text" id="SearchInput" placeholder=@Strings.SearchPlaceholder class="form-control">
             </div>
         </div>
         @if (Model.Customers.Count() > 0)
@@ -96,8 +96,8 @@
 		{
 			<div class="row">
 				<div class="bulk col-xs-12 col-sm-8" style="float:left;">
-					<h4>@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ImportCustomersTitle</h4>
-					<p>@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.ImportCustomers</p>
+					<h4>@Strings.ImportCustomersTitle</h4>
+					<p>@Strings.ImportCustomers</p>
 					@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 					{
 						@Html.AntiForgeryToken();
@@ -108,14 +108,14 @@
 								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
 						</div>
 						<div style="float:left; margin-bottom: 15px;">
-							<a class="btn btn-primary" style="margin-top:10px; margin-right: 10px;" onclick="$('input[id=upload-box]').click();">@AllyisApps.Resources.Views.Account.Strings.ChooseFile</a>
-							<input style="margin-top: 10px; margin-right: 10px;" type="submit" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
+							<a class="btn btn-primary" style="margin-top:10px; margin-right: 10px;" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
+							<input style="margin-top: 10px; margin-right: 10px;" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" />
 						</div>
 					}
 					@using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get))
 					{
 						<div style="float:right">
-							<input style="margin-top: 10px;" type="submit" id="template-button" value="@AllyisApps.Resources.Views.Account.Strings.Template" class="btn btn-primary" />
+							<input style="margin-top: 10px;" type="submit" id="template-button" value="@Strings.Template" class="btn btn-primary" />
 						</div>
 					}
 				</div>

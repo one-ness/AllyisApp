@@ -36,7 +36,7 @@ namespace AllyisApps.Utilities
 		{
 			if (value == null)
 			{
-				return new ValidationResult(Resources.Errors.ArugmentNullMessage);
+				return new ValidationResult(Resources.Strings.ArugmentNullMessage);
 			}
 			else if ((DateTime)value <= DateTime.Now.AddYears(-this.age))
 			{
@@ -44,7 +44,7 @@ namespace AllyisApps.Utilities
 			}
 			else
 			{
-				return new ValidationResult(Resources.Errors.AgeTooLow);
+				return new ValidationResult(Resources.Strings.AgeTooLow);
 			}
 		}
 	}

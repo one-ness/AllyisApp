@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers
 			this.SignOut(Response);
 
 			// display success message to user
-			Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.LogOffSuccess, Variety.Success));
+			Notifications.Add(new BootstrapAlert(Resources.Strings.LogOffSuccess, Variety.Success));
 
 			// redirect to home
 			// TODO: we shouldnt be hard coding http

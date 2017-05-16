@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
+using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Customer;
@@ -50,7 +50,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				});
 			}
 
-			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
 			return this.RedirectToAction(ActionConstants.Index);
 		}
@@ -69,7 +69,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Customer orgIdMatch = Service.GetCustomerList(this.UserContext.ChosenOrganizationId).Where(customer => customer.CustomerOrgId == model.CustomerOrgId).SingleOrDefault();
 				if (orgIdMatch != null && orgIdMatch.CustomerId != model.CustomerID)
 				{
-					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.CustomerOrgIdNotUnique, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
 					return this.View(model);
 				}
 
@@ -90,12 +90,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					CustomerOrgId = model.CustomerOrgId
 				}))
 				{
-					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.CustomerDetailsUpdated, Variety.Success));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerDetailsUpdated, Variety.Success));
 					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index), model.CustomerID));
 				}
 
 				// Permissions failure
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Customer.Strings.ActionUnauthorizedMessage, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 				return this.RedirectToAction(ActionConstants.Index);
 			}
 

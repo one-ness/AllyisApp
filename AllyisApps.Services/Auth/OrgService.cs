@@ -377,8 +377,7 @@ namespace AllyisApps.Services
 
             if (this.Can(Actions.CoreAction.EditInvitation))
 			{
-				bool result = DBHelper.RemoveInvitation(invitationId, -1);
-				return true;
+				return DBHelper.RemoveInvitation(invitationId, -1);
 			}
 
 			return false;
@@ -645,12 +644,63 @@ namespace AllyisApps.Services
 			return true;
 		}
 
-		/// <summary>
-		/// Removes an organization user.
+        /// <summary>
+		/// Sets the employee type id to a given value for a user in an organization.
 		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
-		/// <param name="userId">User Id.</param>
-		public void RemoveOrganizationUser(int orgId, int userId)
+		/// <param name="userId">User id.</param>
+		/// <param name="orgId">Organization id.</param>
+		/// <param name="employeeTypeId">New employee id.</param>
+		public void SetEmployeeTypeId(int userId, int orgId, int employeeTypeId)
+        {
+            if (userId <= 0)
+            {
+                throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+            }
+
+            if (orgId < 0)
+            {
+                throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
+            }
+
+            if (employeeTypeId < 0)
+            {
+                throw new ArgumentOutOfRangeException("employeeTypeId", "Employee Type Id cannot be negative.");
+            }
+            //Change Employee Type Id
+            DBHelper.SetEmployeeTypeId(userId, orgId, employeeTypeId);          
+        }
+
+        /// <summary>
+		/// sets the employee type id of an invitation
+		/// </summary>
+		/// <param name="invitationId"></param>
+		/// <param name="orgId"></param>
+		/// <param name="employeeTypeId"></param>
+		public void SetInvitationEmployeeTypeId(int invitationId, int orgId, int employeeTypeId)
+        {
+            if (invitationId <= 0)
+            {
+                throw new ArgumentOutOfRangeException("invitationId", "Invitation Id cannot be 0 or negative.");
+            }
+            if (orgId < 0)
+            {
+                throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
+            }
+
+            if (employeeTypeId < 0)
+            {
+                throw new ArgumentOutOfRangeException("employeeTypeId", "Employee Type Id cannot be negative.");
+            }
+            //Change Employee Type Id
+            DBHelper.SetInvitationEmployeeTypeId(invitationId, orgId, employeeTypeId);
+        }
+
+        /// <summary>
+        /// Removes an organization user.
+        /// </summary>
+        /// <param name="orgId">Organization Id.</param>
+        /// <param name="userId">User Id.</param>
+        public void RemoveOrganizationUser(int orgId, int userId)
 		{
 			if (orgId < 0)
 			{
@@ -762,7 +812,8 @@ namespace AllyisApps.Services
 				UserId = organizationUser.UserId,
 				Email = organizationUser.Email,
 				FirstName = organizationUser.FirstName,
-				LastName = organizationUser.LastName
+				LastName = organizationUser.LastName,
+                EmployeeTypeId = organizationUser.EmployeeTypeId
 			};
 		}
 
@@ -870,7 +921,8 @@ namespace AllyisApps.Services
 				OrgRole = invitation.OrgRole,
 				OrgRoleName = invitation.OrgRoleName,
 				ProjectId = invitation.ProjectId,
-				EmployeeId = invitation.EmployeeId
+				EmployeeId = invitation.EmployeeId,
+                EmployeeType = invitation.EmployeeType
 			};
 		}
 
@@ -917,7 +969,8 @@ namespace AllyisApps.Services
 				OrganizationId = invitation.OrganizationId,
 				OrgRole = invitation.OrgRole,
 				ProjectId = invitation.ProjectId,
-				EmployeeId = invitation.EmployeeId
+				EmployeeId = invitation.EmployeeId,
+                EmployeeType = invitation.EmployeeType
 			};
 		}
 

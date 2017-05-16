@@ -57,5 +57,10 @@ namespace AllyisApps.DBModel.Auth
 		/// Gets or sets the user's last name.
 		/// </summary>
 		public string LastName { get; set; }
-	}
+
+        /// <summary>
+		/// Gets or sets EmployeeTypeId
+		/// </summary>
+		public int EmployeeTypeId { get; set; }
+    }
 }

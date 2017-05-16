@@ -37,7 +37,7 @@ namespace AllyisApps.Controllers
 				Country = userInfo.Country,
 				PostalCode = userInfo.PostalCode,
 				PhoneNumber = userInfo.PhoneNumber,
-				DateOfBirth = TimeTrackerService.GetDayFromDateTime(userInfo.DateOfBirth),
+				DateOfBirth = Service.GetDayFromDateTime(userInfo.DateOfBirth),
 				ValidCountries = Service.ValidCountries()
 			};
 
@@ -65,7 +65,7 @@ namespace AllyisApps.Controllers
 					Email = model.Email,
 					FirstName = model.FirstName,
 					LastName = model.LastName,
-					DateOfBirth = TimeTrackerService.GetDateTimeFromDays(model.DateOfBirth),
+					DateOfBirth = Service.GetDateTimeFromDays(model.DateOfBirth),
 					Address = model.Address,
 					City = model.City,
 					State = model.State,
@@ -74,7 +74,7 @@ namespace AllyisApps.Controllers
 					PhoneNumber = model.PhoneNumber
 				}));
 
-				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.UpdateProfileSuccessMessage, Variety.Success));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.UpdateProfileSuccessMessage, Variety.Success));
 
 				if (!string.IsNullOrWhiteSpace(returnUrl))
 				{

@@ -42,11 +42,11 @@ namespace AllyisApps.Controllers
 			{
 				if (await Service.SendPasswordResetMessage(model.Email, Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, new { userId = "{userid}", code = "{code}" }, protocol: Request.Url.Scheme)))
 				{
-					Notifications.Add(new Core.Alert.BootstrapAlert(string.Format("{0} {1}.", Resources.Controllers.Auth.Strings.ResetEmailHasBeenSent, model.Email), Core.Alert.Variety.Success));
+					Notifications.Add(new Core.Alert.BootstrapAlert(string.Format("{0} {1}.", Resources.Strings.ResetEmailHasBeenSent, model.Email), Core.Alert.Variety.Success));
 				}
 				else
 				{
-					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Controllers.Auth.Strings.NoAccountForEmail, Core.Alert.Variety.Info));
+					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.NoAccountForEmail, Core.Alert.Variety.Info));
 				}
 
 				// irrespective of failure/success, go back to sign in

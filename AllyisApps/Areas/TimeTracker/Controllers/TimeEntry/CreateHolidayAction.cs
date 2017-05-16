@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
+using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using System;
@@ -29,25 +29,25 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (string.IsNullOrWhiteSpace(newHolidayName))
 			{
 				isValid = false;
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotCreateHolidayWIthoutName, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotCreateHolidayWIthoutName, Variety.Warning));
 			}
 
 			DateTime holidayDate;
 			if (!DateTime.TryParse(newHolidayDate, out holidayDate))
 			{
 				isValid = false;
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotCreateHolidayWithInvalidDate, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotCreateHolidayWithInvalidDate, Variety.Warning));
 			}
 			if (isValid)
 			{
-				if (TimeTrackerService.CreateHoliday(new Holiday() { OrganizationId = UserContext.ChosenOrganizationId, HolidayName = newHolidayName, Date = holidayDate }))
+				if (Service.CreateHoliday(new Holiday() { OrganizationId = UserContext.ChosenOrganizationId, HolidayName = newHolidayName, Date = holidayDate }))
 				{
-					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulCreateHoliday, Variety.Success));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulCreateHoliday, Variety.Success));
 				}
 				else
 				{
 					// This should only be a permissions failure
-					Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 				}
 			}
 			return this.RedirectToAction(ActionConstants.Settings, new { OrganizationId = UserContext.ChosenOrganizationId }); // Same destination regardless of creation success

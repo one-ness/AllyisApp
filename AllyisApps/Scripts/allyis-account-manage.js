@@ -49,6 +49,26 @@ function editEmployeeId(orgId, userId, oldEmployeeId, isMember) {
 	);
 }
 
+function editEmployeeType(orgId, userId, oldEmployeeTypeId, isMember) {
+    var type = "";
+    var tag = "";
+    var icon = "";
+    isMember == true ? type = "#empType-" : type = "#invType-";
+    isMember == true ? tag = "empTypeedit-" : tag = "invTypeedit-";
+    isMember == true ? icon = "empIcon" : icon = "invIcon";
+    var td = $(type + userId);
+    td.empty();
+    td.html(
+		'<div>' +
+        '<select id="' + tag + userId + '" class="employeeTypeEdit" data-oldval="' + oldEmployeeTypeId + '" data-org="' + orgId + '">' +
+        '<option value=1>Salaried</option>' + 
+        '<option value=2>Hourly</option></select>' +
+		' <a href="javascript: void(0);" id="empIcon' + userId + '" class="text-muted" title="Save Changes" onclick=\x27saveEmployeeType(' + orgId + ',' + userId + ',' + isMember + ')\x27><span class="fa fa-fw fa-save"></span></a>' +
+		'<a href="javascript: void(0);" class="text-muted" title="Cancel Changes" onclick=\x27cancelEditEmployeeType(' + userId + ',' + isMember + ')\x27><span class="fa fa-fw fa-remove text-danger"></span></a>' +
+        '</div>'
+	);
+}
+
 function saveEmployeeId(orgId, userId, isMember) {
     var tag;
     var tag3;
@@ -128,11 +148,75 @@ function saveEmployeeId(orgId, userId, isMember) {
 		        else {
 		            alert('Failed to update employee ID.');
 		            cancelEditEmployeeId(userId, isMember);
-		            toggleSaveIcon(false, false, userId);
+		            toggleSaveIcon(isMember, false, userId);
 		        }
 		    });
 		}
 	}
+}
+
+function saveEmployeeType(orgId, userId, isMember) {
+    var tag;
+    var tag3;
+    isMember == true ? tag = "#empTypeedit-" : tag = "#invTypeedit-";
+    toggleSaveIcon(isMember, true, userId);
+    var inp = $(tag + userId);
+    var newId = inp.val();
+    if (newId == inp.attr("data-oldval")) {
+        cancelEditEmployeeType(userId, isMember);
+        toggleSaveIcon(isMember, false, userId);
+        return;
+    }
+
+    var data = {
+        user: userId,
+        org: orgId,
+        employeeTypeId: newId
+    };
+    if (isMember) {
+        $.ajax({
+            type: "post",
+            url: "/Account/SaveEmployeeTypeId/",
+            data: data,
+            timeout: 5000,
+            dataType: "json",
+        })
+		.fail(function (res) {
+		    console.log(res);
+		    if (res.responseText == "True") {
+		        stopEditEmployeeType(userId, newId, isMember);
+		        toggleSaveIcon(isMember, false, userId);
+		        return;
+		    }
+		    else {
+		        alert('Failed to update employee type.');
+		        cancelEditEmployeeType(userId, isMember);
+		        toggleSaveIcon(isMember, false, userId);
+		    }
+		});
+    }
+    if (!isMember) {
+        $.ajax({
+            type: "post",
+            url: "/Account/SaveInvitationEmployeeTypeId/",
+            data: data,
+            timeout: 5000,
+            dataType: "json"
+        })
+		.fail(function (res) {
+		    console.log(res);
+		    if (res.responseText == "True") {
+		        stopEditEmployeeType(userId, newId, isMember);
+		        toggleSaveIcon(isMember, false, userId);
+		        return;
+		    }
+		    else {
+		        alert('Failed to update employee type.');
+		        cancelEditEmployeeType(userId, isMember);
+		        toggleSaveIcon(isMember, false, userId);
+		    }
+		});
+    }
 }
 
 function cancelEditEmployeeId(userId, isMember) {
@@ -151,6 +235,13 @@ function cancelEditEmployeeId(userId, isMember) {
     stopEditEmployeeId(userId, oldEmployeeId, isMember);
 }
 
+function cancelEditEmployeeType(userId, isMember) {
+    var tag;
+    isMember == true ? tag = "#empTypeedit-" : tag = "#invTypeedit-";
+    var oldEmployeeTypeId = $(tag + userId).attr("data-oldval");
+    stopEditEmployeeType(userId, oldEmployeeTypeId, isMember);
+}
+
 function stopEditEmployeeId(userId, newValue, isMember) {
     var tag1 = ""
     var tag2 = ""
@@ -163,6 +254,22 @@ function stopEditEmployeeId(userId, newValue, isMember) {
 	td.html(
 		'<span class="empId">' + newValue + '</span>' +
 		' <a href="javascript: void(0);" class="text-muted" title="Edit Employee Id"	onclick=\x27editEmployeeId(' + orgId + ',' + userId + ',"' + newValue + '",'+ isMember + ')\x27><span class="fa fa-fw fa-edit"></span></a>'
+	);
+}
+
+function stopEditEmployeeType(userId, newTypeId, isMember) {
+    var tag1 = ""
+    var tag2 = ""
+    isMember == true ? tag1 = "#empTypeedit-" : tag1 = "#invTypeedit-";
+    isMember == true ? tag2 = "#empType-" : tag2 = "#invType-";
+    var inp = $(tag1 + userId);
+    var orgId = inp.attr("data-org");
+    var td = $(tag2 + userId);
+    var newType = (newTypeId == 1 ? "Salaried" : (newTypeId == 2 ? "Hourly" : "N/A"));
+    td.empty();
+    td.html(
+		'<span class="empType">' + newType + '</span>' +
+		' <a href="javascript: void(0);" class="text-muted" title="Edit Employee Type"	onclick=\x27editEmployeeType(' + orgId + ',' + userId + ',"' + newTypeId + '",' + isMember + ')\x27><span class="fa fa-fw fa-edit"></span></a>'
 	);
 }
 
@@ -192,7 +299,7 @@ function removeUser(orgId, userId, fullName) {
 function deleteInvitation(orgId, invId) {
     var result = confirm(removeInvitation);
     if (result == true) {
-        var url = removeInviationAction + invId;
+        var url = removeInvitationAction + invId;
 
         var token = $('[name="__RequestVerificationToken"]').val();
 

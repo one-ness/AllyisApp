@@ -13,13 +13,13 @@
         }
     }
     <a class="dropdown-toggle" id="TheDropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        @AllyisApps.Resources.TimeTracker.Views.Shared.Strings.TimeTracker <span class="caret"></span>
+        @Strings.TimeTracker <span class="caret"></span>
     </a>
 
     <ul class="dropdown-menu dropdown-menu-right" id="TheDropdown2">
-        <li>@Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Shared.Strings.TimeEntry, ActionConstants.Index, ControllerConstants.TimeEntry)</li>
-        @if (manager) { <li>@Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Shared.Strings.Reports, ActionConstants.Report, ControllerConstants.TimeEntry)</li> }
-        <li>@Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Shared.Strings.Customers, ActionConstants.Index, ControllerConstants.Customer)</li>
-        @if (manager) {<li>@Html.ActionLink(AllyisApps.Resources.TimeTracker.Views.Shared.Strings.Settings, ActionConstants.Settings, ControllerConstants.TimeEntry)</li> }
+        <li>@Html.ActionLink(Strings.TimeEntry, ActionConstants.Index, ControllerConstants.TimeEntry)</li>
+        @if (manager) { <li>@Html.ActionLink(Strings.Reports, ActionConstants.Report, ControllerConstants.TimeEntry)</li> }
+        <li>@Html.ActionLink(Strings.Customers, ActionConstants.Index, ControllerConstants.Customer)</li>
+        @if (manager) {<li>@Html.ActionLink(Strings.Settings, ActionConstants.Settings, ControllerConstants.TimeEntry)</li> }
     </ul>
 </li>

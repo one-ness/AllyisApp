@@ -341,6 +341,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@Subdomain", org.Subdomain);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 			parameters.Add("@EmployeeId", employeeId);
+            parameters.Add("@EmployeeTypeId", 1);   //assuming Org's owner is always a salaried employee
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -412,6 +413,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userID", orgUser.UserId);
 			parameters.Add("@RoleId", orgUser.OrgRoleId);
 			parameters.Add("@employeeID", orgUser.EmployeeId);
+            parameters.Add("employeeTypeId", orgUser.EmployeeTypeId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -473,11 +475,47 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Updates the specified user within the specified organization with a new role.
+        /// <summary>
+		/// Sets the employee type id for a user for an org.
 		/// </summary>
-		/// <param name="orgUser">The orgUser table with updates.</param>
-		public void UpdateOrganizationUser(OrganizationUserDBEntity orgUser)
+		/// <param name="userID">The Id of the user.</param>
+		/// <param name="organizationID">The Id of the organization.</param>
+		/// <param name="employeeTypeID">The value to set the employeeTypeId to.</param>
+		public void SetEmployeeTypeId(int userID, int organizationID, int employeeTypeID)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@userID", userID);
+            parameters.Add("@organizationID", organizationID);
+            parameters.Add("@employeeTypeID", employeeTypeID);
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                connection.Execute("[Auth].[UpdateOrgUserEmployeeTypeId]", parameters, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        /// <summary>
+		/// Sets the Employee Type Id for a invitation in a org
+		/// </summary>
+		/// <param name="invitationID">Id of the invitation</param>
+		/// <param name="organizationID">Id of the organization</param>
+		/// <param name="employeeTypeID">The value to set the employeeID to</param>
+		public void SetInvitationEmployeeTypeId(int invitationID, int organizationID, int employeeTypeID)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@invitationID", invitationID);
+            parameters.Add("@organizationID", organizationID);
+            parameters.Add("@employeeTypeID", employeeTypeID);
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                connection.Execute("[Auth].[UpdateOrgInvitationEmployeeTypeId]", parameters, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        /// <summary>
+        /// Updates the specified user within the specified organization with a new role.
+        /// </summary>
+        /// <param name="orgUser">The orgUser table with updates.</param>
+        public void UpdateOrganizationUser(OrganizationUserDBEntity orgUser)
 		{
 			if (orgUser == null)
 			{
@@ -606,12 +644,27 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Retrieves the subdomain that is registerd with the organzation with the provided id.
+        /// <summary>
+		/// Retreives the id of the given employee type.
 		/// </summary>
-		/// <param name="id">The organization's Id.</param>
-		/// <returns>The subdomain registered with the organization.</returns>
-		public string GetSubdomainById(int id)
+		/// <param name="employeeType">The employee type's name.</param>
+		/// <returns>The id of the employee type.</returns>
+		public int GetEmployeeTypeIdByTypeName(string employeeType)
+        {
+            DynamicParameters param = new DynamicParameters();
+            param.Add("@EmployeeType", employeeType);
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                return connection.Query<int>("[Auth].[GetEmployeeTypeId]", param, commandType: CommandType.StoredProcedure).SingleOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the subdomain that is registerd with the organzation with the provided id.
+        /// </summary>
+        /// <param name="id">The organization's Id.</param>
+        /// <returns>The subdomain registered with the organization.</returns>
+        public string GetSubdomainById(int id)
 		{
 			DynamicParameters param = new DynamicParameters();
 			param.Add("@OrgId", id);
@@ -664,6 +717,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@ProjectId", invitation.ProjectId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 			parameters.Add("@EmployeeId", invitation.EmployeeId);
+            parameters.Add("@EmployeeTypeId", invitation.EmployeeType);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[Auth].[CreateUserInvitation]", parameters, commandType: CommandType.StoredProcedure);
@@ -701,7 +755,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@EmployeeId", invitation.EmployeeId);
 			parameters.Add("@SubscriptionId", subscriptionId);
 			parameters.Add("@SubRoleId", productRoleId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            parameters.Add("@EmployeeType", invitation.EmployeeType);
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple("[Auth].[InviteUser]", parameters, commandType: CommandType.StoredProcedure);
 				int inviteId = results.Read<int>().FirstOrDefault();

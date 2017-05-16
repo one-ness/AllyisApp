@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
+using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Services;
@@ -30,14 +30,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult MergePayClass(int payClassId)
 		{
-			var allPayClasses = TimeTrackerService.GetPayClasses();
+			var allPayClasses = Service.GetPayClasses();
 			var destPayClasses = allPayClasses.Where(pc => pc.PayClassID != payClassId);
 			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassID == payClassId).ElementAt(0).Name;
 
 			//Built-in, non-editable pay classes cannot be merged
 			if (sourcePayClassName == "Regular" || sourcePayClassName == "Overtime" || sourcePayClassName == "Holiday" || sourcePayClassName == "Paid Time Off" || sourcePayClassName == "Unpaid Time Off")
 			{
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.CannotMergePayClass, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotMergePayClass, Variety.Warning));
 				return this.RedirectToAction(ActionConstants.Settings);
 			}
 
@@ -47,8 +47,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.View(ViewConstants.MergePayClass, model);
 			}
 
-			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
-			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Errors.CannotEditSubscriptionsMessage), ControllerConstants.TimeEntry, ActionConstants.MergePayClass));
+			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditSubscriptionsMessage), ControllerConstants.TimeEntry, ActionConstants.MergePayClass));
 		}
 
 		/// <summary>
@@ -89,23 +89,23 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[CLSCompliant(false)]
 		public ActionResult MergePayClass(MergePayClassViewModel model, int destPayClass)
 		{
-			IEnumerable<TimeEntryDBEntity> allEntries = TimeTrackerService.GetTimeEntriesThatUseAPayClass(model.sourcePayClassId);
+			IEnumerable<TimeEntryDBEntity> allEntries = Service.GetTimeEntriesThatUseAPayClass(model.sourcePayClassId);
 			//update the payClassId for all time entries that used the old pay class
 			foreach (TimeEntryDBEntity entity in allEntries)
 			{
-				TimeEntryInfo updatedEntry = TimeTrackerService.InitializeTimeEntryInfo(entity);
+				TimeEntryInfo updatedEntry = Service.InitializeTimeEntryInfo(entity);
 				updatedEntry.PayClassId = destPayClass;
-				TimeTrackerService.UpdateTimeEntry(updatedEntry);
+				Service.UpdateTimeEntry(updatedEntry);
 			}
 			//delete the old payclass
-			if (TimeTrackerService.DeletePayClass(model.sourcePayClassId))
+			if (Service.DeletePayClass(model.sourcePayClassId))
 			{
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.SuccessfulMergePayClass, Variety.Success));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulMergePayClass, Variety.Success));
 			}
 			else
 			{
 				// Should only be here because of permission failures
-				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 			return this.RedirectToAction(ActionConstants.Settings);
 		}

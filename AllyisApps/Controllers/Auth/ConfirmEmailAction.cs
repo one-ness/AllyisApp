@@ -26,12 +26,12 @@ namespace AllyisApps.Controllers
 		{
 			if (this.Service.ConfirmUserEmail(int.Parse(userId), code))
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.NotifyYourEmailIsConfirmed, Variety.Success));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.NotifyYourEmailIsConfirmed, Variety.Success));
 				return this.RedirectToAction(ActionConstants.LogOn, ControllerConstants.Account);
 			}
 			else
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.WarnYourEmailHasAlreadyBeenConfirmed, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.WarnYourEmailHasAlreadyBeenConfirmed, Variety.Warning));
 				return this.RouteHome();
 			}
 		}

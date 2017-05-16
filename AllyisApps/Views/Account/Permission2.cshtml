@@ -3,44 +3,44 @@
 @model ManagePermissionsViewModel
 
 @{
-	ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.Permissions;
+	ViewBag.Title = Strings.Permissions;
 	Layout = "~/Views/Shared/_Layout.cshtml";
 
 	bool hasTimeTracker = Model.Subscriptions.Where(s => s.ProductId == Model.TimeTrackerId).Any();
 
 	Dictionary<int, string> orgRoles = new Dictionary<int, string>
 	{
-		{ (int)AllyisApps.Services.OrganizationRole.Member, AllyisApps.Resources.Views.Account.Strings.Member },
-		{ (int)AllyisApps.Services.OrganizationRole.Owner, AllyisApps.Resources.Views.Account.Strings.Owner }
+		{ (int)AllyisApps.Services.OrganizationRole.Member, Strings.Member },
+		{ (int)AllyisApps.Services.OrganizationRole.Owner, Strings.Owner }
 	};
 	Dictionary<int, string> ttRoles = new Dictionary<int, string>
 	{
-		{ (int)AllyisApps.Services.ProductRoleIdEnum.TimeTrackerUser, AllyisApps.Resources.Views.Account.Strings.User },
-		{ (int)AllyisApps.Services.ProductRoleIdEnum.TimeTrackerManager, AllyisApps.Resources.Views.Account.Strings.Manager },
-		{ (int)AllyisApps.Services.ProductRoleIdEnum.NotInProduct, AllyisApps.Resources.Views.Account.Strings.Unassigned }
+		{ (int)AllyisApps.Services.ProductRoleIdEnum.TimeTrackerUser, Strings.User },
+		{ (int)AllyisApps.Services.ProductRoleIdEnum.TimeTrackerManager, Strings.Manager },
+		{ (int)AllyisApps.Services.ProductRoleIdEnum.NotInProduct, Strings.Unassigned }
 	};
 
 	Dictionary<string, int> setOrgRoles = new Dictionary<string, int>
 	{
-		{ AllyisApps.Resources.Views.Account.Strings.RemoveOrg, -1 },
-		{ AllyisApps.Resources.Views.Account.Strings.SetMember, (int)AllyisApps.Services.OrganizationRole.Member },
-		{ AllyisApps.Resources.Views.Account.Strings.SetOwner, (int)AllyisApps.Services.OrganizationRole.Owner }
+		{ Strings.RemoveOrg, -1 },
+		{ Strings.SetMember, (int)AllyisApps.Services.OrganizationRole.Member },
+		{ Strings.SetOwner, (int)AllyisApps.Services.OrganizationRole.Owner }
 	};
 	Dictionary<string, int> setTTRoles = new Dictionary<string, int>
 	{
-		{ AllyisApps.Resources.Views.Account.Strings.RemoveFromSubscription, -1 },
-		{ AllyisApps.Resources.Views.Account.Strings.SetUser, (int)AllyisApps.Services.ProductRoleIdEnum.TimeTrackerUser },
-		{ AllyisApps.Resources.Views.Account.Strings.SetManager, (int)AllyisApps.Services.ProductRoleIdEnum.TimeTrackerManager }
+		{ Strings.RemoveFromSubscription, -1 },
+		{ Strings.SetUser, (int)AllyisApps.Services.ProductRoleIdEnum.TimeTrackerUser },
+		{ Strings.SetManager, (int)AllyisApps.Services.ProductRoleIdEnum.TimeTrackerManager }
 	};
 }
 
 @Html.AntiForgeryToken()
 
 <ul class="nav allyis-tabs">
-	<li class="selected" id="OrganizationTab">@AllyisApps.Resources.Views.Account.Strings.Organization</li>
+	<li class="selected" id="OrganizationTab">@Strings.Organization</li>
 	@if (hasTimeTracker)
 	{
-		<li id="TimeTrackerTab">@AllyisApps.Resources.Views.Account.Strings.TimeTracker</li>
+		<li id="TimeTrackerTab">@Strings.TimeTracker</li>
     }
 </ul>
 <div class="panel panel-default">
@@ -49,11 +49,11 @@
             <thead class="panel-heading">
                 <tr class="no-border">
                     <th style="width: 6%;"></th>
-                    <th style="width: 47%;">@AllyisApps.Resources.Views.Account.Strings.User</th>
-                    <th style="width: 47%;" class="tab-OrganizationTab">@AllyisApps.Resources.Views.Account.Strings.OrgRole</th>
+                    <th style="width: 47%;">@Strings.User</th>
+                    <th style="width: 47%;" class="tab-OrganizationTab">@Strings.OrgRole</th>
                     @if (hasTimeTracker)
                     {
-                        <th class="tab-TimeTrackerTab" style="display: none; width: 47%;">@AllyisApps.Resources.Views.Account.Strings.TimeTrackerRole</th>
+                        <th class="tab-TimeTrackerTab" style="display: none; width: 47%;">@Strings.TimeTrackerRole</th>
                     }
                 </tr>
                 <tr class="double-bottom-border">
@@ -61,11 +61,11 @@
                         <input type="checkbox" class="all-check" />
                     </td>
                     <td>
-                        <input type="search" placeholder="@AllyisApps.Resources.Views.Account.Strings.UserSearchPlaceholder" id="userSearch" class="form-control" />
+                        <input type="search" placeholder="@Strings.UserSearchPlaceholder" id="userSearch" class="form-control" />
                     </td>
                     <td class="tab-OrganizationTab">
                         <select id="orgRoleFilter" class="form-control">
-                            <option>@AllyisApps.Resources.Views.Account.Strings.Any</option>
+                            <option>@Strings.Any</option>
                             @foreach (string role in orgRoles.Values)
                             {
                                 <option>@role</option>
@@ -76,7 +76,7 @@
                     {
                         <td class="tab-TimeTrackerTab" style="display: none;">
                             <select id="ttRoleFilter" class="form-control">
-                                <option>@AllyisApps.Resources.Views.Account.Strings.Any</option>
+                                <option>@Strings.Any</option>
                                 @foreach (string ttrole in ttRoles.Values)
                                 {
                                     <option>@ttrole</option>
@@ -118,11 +118,11 @@
     </div>
     <div class="panel-footer" style="height: 54px; position: relative;">
         <div class="col-xs-2 col-sm-1 col-md-1" style="text-align: right; vertical-align: middle; line-height: 33px; padding-right: 0px;">
-            @AllyisApps.Resources.Views.Account.Strings.Actions
+            @Strings.Actions
         </div>
         <div class="col-xs-6 col-sm-6 col-md-5 col-lg-4">
             <select class="form-control tab-OrganizationTab" id="orgActionSelect">
-                <optgroup label="@AllyisApps.Resources.Views.Account.Strings.Organization">
+                <optgroup label="@Strings.Organization">
                     @foreach (string setOrgRole in setOrgRoles.Keys)
                     {
                         <option>@setOrgRole</option>
@@ -132,7 +132,7 @@
 			@if (hasTimeTracker)
 			{
 				<select class="form-control tab-TimeTrackerTab" id="ttActionSelect" style="display: none;">
-					<optgroup label="@AllyisApps.Resources.Views.Account.Strings.TimeTracker">
+					<optgroup label="@Strings.TimeTracker">
 						@foreach (string setTTRole in setTTRoles.Keys)
 						{
 							<option>@setTTRole</option>
@@ -143,8 +143,8 @@
         </div>
 
         <div class="bottom-right">
-			@Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
-            <input type="button" class="btn btn-primary" id="do-it" value="@AllyisApps.Resources.Views.Account.Strings.Save" />
+			@Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
+            <input type="button" class="btn btn-primary" id="do-it" value="@Strings.Save" />
         </div>
     </div>
 </div>
@@ -153,7 +153,7 @@
     <script type="text/javascript">
         orgActions = @Html.Raw(Json.Encode(setOrgRoles));
         ttActions = @Html.Raw(Json.Encode(setTTRoles));
-        confirmMessage = "@AllyisApps.Resources.Views.Account.Strings.RemoveFromOrgNoName";
+        confirmMessage = "@Strings.RemoveFromOrgNoName";
     </script>
     <script src="~/Scripts/allyis-account-permission2.js" type="text/javascript"></script>
     <script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
@@ -163,8 +163,8 @@
         pwf.setRowClass("userRow");
         pwf.setCheckBoxSelector("#check");
         pwf.addFilter("#userSearch", "search", "#name");
-        pwf.addFilter('#orgRoleFilter', 'dropDown', "#orgRole", "@AllyisApps.Resources.Views.Account.Strings.Any");
-        if('@hasTimeTracker' == 'True') pwf.addFilter('#ttRoleFilter', 'dropDown', "#ttRole", "@AllyisApps.Resources.Views.Account.Strings.Any");
+        pwf.addFilter('#orgRoleFilter', 'dropDown', "#orgRole", "@Strings.Any");
+        if('@hasTimeTracker' == 'True') pwf.addFilter('#ttRoleFilter', 'dropDown', "#ttRole", "@Strings.Any");
         if (sessionStorage.getItem("/ManagePermissionsPage") != null)
         {
             pwf.setPreviouslySelectedPage(sessionStorage.getItem("/ManagePermissionsPage"))

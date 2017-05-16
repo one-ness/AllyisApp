@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
+using AllyisApps.Controllers;
 using AllyisApps.Services;
 using System;
 using System.Collections.Generic;
@@ -39,7 +39,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// if (Permissions.Cannot(ProductAction.TimeTrackerCreateReportSelf, OrganizationId, TimeTrackerID))
 				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{
-					throw new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReports);
+					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReports);
 				}
 			}
 			else
@@ -47,7 +47,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// if (Permissions.Cannot(ProductAction.TimeTrackerCreateReportOthers, OrganizationId, TimeTrackerID))
 				if (!Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 				{
-					throw new UnauthorizedAccessException(Resources.TimeTracker.Controllers.TimeEntry.Strings.UnauthorizedReportsOtherUser);
+					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReportsOtherUser);
 				}
 			}
 
@@ -60,7 +60,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			//}
 
 			//TimeTrackerService.PrepareCSVExport(userId, dateRangeStart, dateRangeEnd, projectId, customerId);
-			return this.File(TimeTrackerService.PrepareCSVExport(userId, dateRangeStart, dateRangeEnd, projectId, customerId).BaseStream, "text/csv", "export.csv");
+			return this.File(Service.PrepareCSVExport(userId, dateRangeStart, dateRangeEnd, projectId, customerId).BaseStream, "text/csv", "export.csv");
 		}
 	}
 }

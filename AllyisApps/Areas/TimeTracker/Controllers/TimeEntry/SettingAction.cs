@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
+using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
@@ -23,7 +23,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The settings page.</returns>
 		public ActionResult Settings()
 		{
-			var infos = TimeTrackerService.GetAllSettings();
+			var infos = Service.GetAllSettings();
 
 			if (Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			// Permissions failure
-			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
 			return this.RouteHome();
 		}

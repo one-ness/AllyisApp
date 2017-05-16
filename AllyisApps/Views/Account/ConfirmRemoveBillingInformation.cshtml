@@ -1,18 +1,18 @@
 ﻿@{
-    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.RemoveBilling;
+    ViewBag.Title = Strings.RemoveBilling;
     Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
 }
 
 <p>
-    @AllyisApps.Resources.Views.Account.Strings.ConfirmRemoveBilling
+    @Strings.ConfirmRemoveBilling
 </p>
 
 @using (Html.BeginForm(ActionConstants.RemoveBilling, ControllerConstants.Account, FormMethod.Post))
 {
 
     <div class="form-group allyis-action-buttons">
-        @Html.ActionLink(AllyisApps.Resources.Views.Account.Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
-        <input type="submit" class="btn btn-primary" value=@AllyisApps.Resources.Views.Account.Strings.Continue>
+        @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+        <input type="submit" class="btn btn-primary" value=@Strings.Continue>
     </div>
 
 }

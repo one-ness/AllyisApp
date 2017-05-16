@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
+using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using System.Web.Mvc;
 
@@ -29,24 +29,24 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				try
 				{
-					if (TimeTrackerService.UpdateLockDate(LDsetting, LDperiod, LDquantity))
+					if (Service.UpdateLockDate(LDsetting, LDperiod, LDquantity))
 					{
-						Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.LockDateUpdate, Variety.Success));
+						Notifications.Add(new BootstrapAlert(Resources.Strings.LockDateUpdate, Variety.Success));
 					}
 					else
 					{
-						Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.LockDateUpdateFail, Variety.Warning));
+						Notifications.Add(new BootstrapAlert(Resources.Strings.LockDateUpdateFail, Variety.Warning));
 					}
 				}
 				catch (System.ArgumentException ex)
 				{
-					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.LockDateUpdateFail + " " + ex.Message, Variety.Warning));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.LockDateUpdateFail + " " + ex.Message, Variety.Warning));
 				}
 				return this.RedirectToAction(ActionConstants.Settings);
 			}
 			else
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 				return this.RedirectToAction(ActionConstants.Index);
 			}
 		}

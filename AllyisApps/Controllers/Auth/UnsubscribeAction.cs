@@ -35,7 +35,7 @@ namespace AllyisApps.Controllers
 				return this.View(model);
 			}
 
-			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
 			return this.RedirectToAction(ActionConstants.Manage);
 		}
@@ -51,7 +51,7 @@ namespace AllyisApps.Controllers
 		{
 			if (model == null)
 			{
-				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Errors.ModelNullMessage), ControllerConstants.Subscription, ActionConstants.Unsubscribe));
+				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.ModelNullMessage), ControllerConstants.Subscription, ActionConstants.Unsubscribe));
 			}
 
 			if (Service.Can(Actions.CoreAction.EditOrganization))
@@ -109,7 +109,7 @@ namespace AllyisApps.Controllers
 				return this.RedirectToAction(ActionConstants.Manage);
 			}
 
-			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Errors.CannotEditSubscriptionsMessage), ControllerConstants.Subscription, ActionConstants.Subscribe));
+			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditSubscriptionsMessage), ControllerConstants.Subscription, ActionConstants.Subscribe));
 		}
 	}
 }

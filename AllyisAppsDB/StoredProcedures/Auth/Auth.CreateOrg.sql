@@ -12,7 +12,8 @@
     @FaxNumber VARCHAR(50),
     @Subdomain NVARCHAR(40),
     @retId INT OUTPUT,
-	@EmployeeId NVARCHAR(16)
+	@EmployeeId NVARCHAR(16),
+	@EmployeeTypeId INT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -54,7 +55,7 @@ BEGIN
 
 			SET @retId = SCOPE_IDENTITY();
 
-			EXEC [Auth].[CreateOrgUser] @UserId, @retId, @RoleId, @EmployeeId;
+			EXEC [Auth].[CreateOrgUser] @UserId, @retId, @RoleId, @EmployeeId, @EmployeeTypeId;
 
 			-- Set users's chosen organization to new org
 			UPDATE [Auth].[User]

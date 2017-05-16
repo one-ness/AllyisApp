@@ -4,7 +4,7 @@
 @model AllyisApps.ViewModels.Auth.OrganizationMembersViewModel
 
 @{
-    ViewBag.Title = string.Format("{0} - {1}", AllyisApps.Resources.Views.Account.Strings.ManageUsers, Model.OrganizationName);
+    ViewBag.Title = string.Format("{0} - {1}", Strings.ManageUsers, Model.OrganizationName);
     var query = (from u in Model.DisplayUsers
                  orderby u.FullName
                  orderby u.PermissionLevel
@@ -18,10 +18,10 @@
         <table class="table table-hover table-condensed" style="margin: 0;">
             <thead>
                 <tr>
-                    <th>@AllyisApps.Resources.Views.Account.Strings.Name</th>
-                    <th>@AllyisApps.Resources.Views.Account.Strings.Email</th>
-                    <th>@AllyisApps.Resources.Views.Account.Strings.EmployeeId</th>
-                    <th>@AllyisApps.Resources.Views.Account.Strings.Role</th>
+                    <th>@Strings.Name</th>
+                    <th>@Strings.Email</th>
+                    <th>@Strings.EmployeeId</th>
+                    <th>@Strings.Role</th>
                     <th></th>
                 </tr>
             </thead>
@@ -44,7 +44,7 @@
 
                         var displayName = (string.IsNullOrWhiteSpace(firstName) ? string.IsNullOrWhiteSpace(lastName) ? "" : lastName + " " :
                                 string.IsNullOrWhiteSpace(lastName) ? firstName + " " : string.Format("{0} {1} ", firstName, lastName)) + "(" +
-                                AllyisApps.Resources.Views.Account.Strings.Invited + ")";
+                                Strings.Invited + ")";
 
                         pageCount = 1 + (count / Model.PageSize);
                         if (count >= minGroupSpot && count <= maxGroupSpot)
@@ -69,7 +69,7 @@
                             @invite.OrgRoleName
                         </td>
                         <td class="text-right icon-strip">
-                            <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.RemoveInvitation"
+                            <a href="javascript: void(0);" class="text-muted" title="@Strings.RemoveInvitation"
                                onclick='deleteInvitation("@invite.OrganizationId", "@invite.InvitationId")'><span class="fa fa-fw fa-remove text-danger"></span></a>
                         </td>
                     </tr>
@@ -100,12 +100,12 @@
                             @user.EmployeeId
                         </td>
                         <td class="text-left">
-                            @AllyisApps.Resources.Views.Account.Strings.ResourceManager.GetString(user.PermissionLevel)
+                            @Strings.ResourceManager.GetString(user.PermissionLevel)
                         </td>
                         <td class="text-right icon-strip">
                             @if (Model.CurrentUserId != user.UserId)
                                 {
-                                <a href="javascript: void(0);" class="text-muted" title="@AllyisApps.Resources.Views.Account.Strings.RemoveMember"
+                                <a href="javascript: void(0);" class="text-muted" title="@Strings.RemoveMember"
                                    onclick='removeUser("@user.OrganizationId", "@user.UserId", "@user.FullName")'><span class="fa fa-fw fa-remove text-danger"></span></a>
                                 }
                         </td>

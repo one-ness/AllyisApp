@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
+using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Project;
@@ -51,15 +51,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ParentCustomerId = id,
 						ProjectUsers = new List<BasicUserInfoViewModel>(),
 						SubscriptionUsers = subList,
-						StartDate = TimeTrackerService.GetDayFromDateTime(defaultStart),
-						EndDate = TimeTrackerService.GetDayFromDateTime(defaultEnd),
+						StartDate = Service.GetDayFromDateTime(defaultStart),
+						EndDate = Service.GetDayFromDateTime(defaultEnd),
 						ProjectOrgId = idAndUsers.Item1 //Service.GetRecommendedProjectId()
 					});
 			}
 			else
 			{
 				// Permissions failure
-				Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ActionUnauthorizedMessage, Variety.Warning));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
 				return this.RouteHome();
 			}
@@ -92,7 +92,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					if (Service.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Any(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId))
 					{
-						Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ProjectOrgIdNotUnique, Variety.Danger));
+						Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
 						return this.View(model);
 					}
 					try
@@ -101,7 +101,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					}
 					catch (Exception ex)
 					{
-						string message = Resources.TimeTracker.Controllers.Project.Strings.FailureProjectCreated;
+						string message = Resources.Strings.FailureProjectCreated;
 						if (ex.Message != null)
 						{
 							message = string.Format("{0} {1}", message, ex.Message);
@@ -112,14 +112,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						return this.View(model);
 					}
 					this.UpdateProject(model);
-					Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.SuccessProjectCreated, Variety.Success));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessProjectCreated, Variety.Success));
 
 					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer), model.ParentCustomerId));
 				}
 				else
 				{
 					// Permissions failure
-					this.Notifications.Add(new BootstrapAlert(Resources.TimeTracker.Controllers.Project.Strings.ActionUnauthorizedMessage, Variety.Warning));
+					this.Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
 				}
 			}
@@ -143,8 +143,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Name = model.ProjectName,
 				Type = model.PriceType,
 				ProjectOrgId = model.ProjectOrgId,
-				StartingDate = TimeTrackerService.GetDateTimeFromDays(model.StartDate),
-				EndingDate = TimeTrackerService.GetDateTimeFromDays(model.EndDate)
+				StartingDate = Service.GetDateTimeFromDays(model.StartDate),
+				EndingDate = Service.GetDateTimeFromDays(model.EndDate)
 			});
 		}
 	}

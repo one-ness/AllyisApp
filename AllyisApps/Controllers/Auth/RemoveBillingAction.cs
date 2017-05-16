@@ -32,7 +32,7 @@ namespace AllyisApps.Controllers
 
 				if (subs != null && subs.Count() > 0)
 				{
-					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.CannotRemoveBilling, Variety.Warning));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.CannotRemoveBilling, Variety.Warning));
 					return this.Redirect(ActionConstants.Manage);
 				}
 				else
@@ -41,7 +41,7 @@ namespace AllyisApps.Controllers
 				}
 			}
 
-			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			return this.RedirectToAction(ActionConstants.Index);
 		}
 
@@ -55,7 +55,7 @@ namespace AllyisApps.Controllers
 		{
 			if (Service.RemoveBilling())
 			{
-				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.BillingRemoved, Variety.Success));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.BillingRemoved, Variety.Success));
 				return this.Redirect(ActionConstants.Manage);
 			}
 

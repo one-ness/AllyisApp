@@ -36,7 +36,7 @@ namespace AllyisApps.Controllers
 				return this.View("Permission", model);
 			}
 
-			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			return this.RedirectToAction("OrgIndex");
 		}
 
@@ -102,7 +102,7 @@ namespace AllyisApps.Controllers
 				return this.View("Permission2", model);
 			}
 
-			Notifications.Add(new BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Variety.Warning));
+			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			return this.RedirectToAction("OrgIndex");
 		}
 
@@ -199,13 +199,13 @@ namespace AllyisApps.Controllers
 			{
 				if (model.SelectedUsers == null || model.SelectedUsers.Count() == 0)
 				{
-					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.NoUsersSelected, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.NoUsersSelected, Variety.Danger));
 					return RedirectToAction(ActionConstants.Manage);
 				}
 
 				if (model.SelectedActions == null)
 				{
-					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.NoActionsSelected, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.NoActionsSelected, Variety.Danger));
 					return RedirectToAction(ActionConstants.ManagePermissions);
 				}
 
@@ -214,7 +214,7 @@ namespace AllyisApps.Controllers
 					// Changing organization roles
 					if (!Enum.IsDefined(typeof(OrganizationRole), model.SelectedActions.OrgRoleTarget) && model.SelectedActions.OrgRoleTarget != -1)
 					{
-						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Controllers.Auth.Strings.YouDidNotDefineATargetRole, Variety.Danger));
+						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
 						return RedirectToAction(ActionConstants.ManagePermissions);
 					}
 
@@ -222,11 +222,11 @@ namespace AllyisApps.Controllers
 					{
 						if (model.SelectedActions.OrgRoleTarget == -1)
 						{
-							Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Controllers.Auth.Strings.YouAreUnableToRemoveYourself, Variety.Danger));
+							Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouAreUnableToRemoveYourself, Variety.Danger));
 						}
 						else
 						{
-							Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Controllers.Auth.Strings.YouAreUnableToChangeYourOwnRole, Variety.Danger));
+							Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouAreUnableToChangeYourOwnRole, Variety.Danger));
 						}
 						model.SelectedUsers = model.SelectedUsers.Where(tu => tu.UserId != UserContext.UserId);
 					}
@@ -234,11 +234,11 @@ namespace AllyisApps.Controllers
 					int numberChanged = Service.ChangeUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.OrgRoleTarget.Value);
 					if (model.SelectedActions.OrgRoleTarget == -1)
 					{
-						Notifications.Add(new BootstrapAlert(string.Format(Resources.Controllers.Auth.Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
+						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
 					}
 					else
 					{
-						Notifications.Add(new BootstrapAlert(string.Format(Resources.Controllers.Auth.Strings.UsersChangedRolesInOrg, numberChanged), Variety.Success));
+						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersChangedRolesInOrg, numberChanged), Variety.Success));
 					}
 				}
 				else
@@ -246,32 +246,32 @@ namespace AllyisApps.Controllers
 					// Changing time tracker roles
 					if (!Enum.IsDefined(typeof(ProductRoleIdEnum), model.SelectedActions.TimeTrackerRoleTarget) && model.SelectedActions.TimeTrackerRoleTarget != -1)
 					{
-						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Controllers.Auth.Strings.YouDidNotDefineATargetRole, Variety.Danger));
+						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
 						return RedirectToAction(ActionConstants.ManagePermissions);
 					}
 
 					Tuple<int, int> updatedAndAdded = Service.ChangeSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value);
 					if (updatedAndAdded.Item1 == -1)
 					{
-						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Controllers.Auth.Strings.YouDontHaveASubscriptionToTimeTracker, Variety.Danger));
+						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDontHaveASubscriptionToTimeTracker, Variety.Danger));
 						return RedirectToAction(ActionConstants.ManagePermissions);
 					}
 
 					if (updatedAndAdded.Item1 != 0)
 					{
 						Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", updatedAndAdded.Item1, model.SelectedActions.TimeTrackerRoleTarget == -1 ?
-							Resources.Controllers.Auth.Strings.UsersRemovedFromTimeTracker : AllyisApps.Resources.Controllers.Auth.Strings.UsersChangedRolesInTimeTracker), Variety.Success));
+							Resources.Strings.UsersRemovedFromTimeTracker : Resources.Strings.UsersChangedRolesInTimeTracker), Variety.Success));
 					}
 
 					if (updatedAndAdded.Item2 == -1)
 					{
-						Notifications.Add(new BootstrapAlert(string.Format(Resources.Controllers.Auth.Strings.TooManyUsersInSubToAdd, model.SelectedUsers.Count()), Variety.Danger));
+						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.TooManyUsersInSubToAdd, model.SelectedUsers.Count()), Variety.Danger));
 					}
 					else
 					{
 						if (updatedAndAdded.Item2 != 0)
 						{
-							Notifications.Add(new BootstrapAlert(string.Format(Resources.Controllers.Auth.Strings.UsersAddedToTimeTracker, updatedAndAdded.Item2), Variety.Success));
+							Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersAddedToTimeTracker, updatedAndAdded.Item2), Variety.Success));
 						}
 					}
 				}

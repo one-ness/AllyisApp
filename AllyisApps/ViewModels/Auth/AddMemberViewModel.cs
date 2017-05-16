@@ -28,21 +28,21 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets user first name.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Org.Strings)), ErrorMessageResourceName = "FirstNameValidation")]
+		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "FirstNameValidationAddMember")]
 		[Display(Name = "First Name")]
 		public string FirstName { get; set; }
 
 		/// <summary>
 		/// Gets or sets user last name.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Org.Strings)), ErrorMessageResourceName = "LastNameValidation")]
+		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "LastNameValidationAddMember")]
 		[Display(Name = "Last Name")]
 		public string LastName { get; set; }
 
 		/// <summary>
 		/// Gets or sets UserInput.
 		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(AllyisApps.Resources.ViewModels.Org.Strings)), ErrorMessageResourceName = "EmailValidation")]
+		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "EmailValidation")]
 		[EmailAddress]
 		public string Email { get; set; }
 
@@ -53,10 +53,17 @@ namespace AllyisApps.ViewModels.Auth
 		[Display(Name = "Employee ID")]
 		public string EmployeeId { get; set; }
 
-		/// <summary>
-		/// Gets or sets a value indicating whether to add as an owner.
-		/// </summary>
-		public bool AddAsOwner { get; set; }
+        /// <summary>
+        /// Gets or sets the Employee Type
+        /// </summary>
+        [Required]
+        [Display(Name = "Employee Type")]
+        public string EmployeeType { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to add as an owner.
+        /// </summary>
+        public bool AddAsOwner { get; set; }
 
 		/// <summary>
 		/// Gets or sets the project id selected by the drop down menu.

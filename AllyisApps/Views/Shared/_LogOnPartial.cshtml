@@ -21,7 +21,7 @@
     </li>
     <li>
         <a href="@Url.SubdomainLink(ActionConstants.LogOff, ControllerConstants.Account, null, 0, this.Request)"
-           title="@AllyisApps.Resources.Views.Shared.Strings.SignOut"
+           title="@Strings.SignOut"
            class="btn btn-default navbar-btn col-xs-push-2 col-xs-8 col-sm-12"
            onclick="return promptForLogOff()"
            style="padding: 6px 10px;">
@@ -31,12 +31,12 @@
 }
 else
 {
-    <li>@Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.Register, ActionConstants.Register, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, htmlAttributes: new { id = "registerLink" })</li>
-    <li>@Html.ActionLink(AllyisApps.Resources.Views.Shared.Strings.SignIn, ActionConstants.LogOn, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, htmlAttributes: new { id = "loginLink" })</li>
+    <li>@Html.ActionLink(Strings.Register, ActionConstants.Register, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, htmlAttributes: new { id = "registerLink" })</li>
+    <li>@Html.ActionLink(Strings.SignIn, ActionConstants.LogOn, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, htmlAttributes: new { id = "loginLink" })</li>
 }
 
 <script>
     function promptForLogOff() {
-        return confirm("@AllyisApps.Resources.Views.Shared.Strings.LogOffPrompt");
+        return confirm("@Strings.LogOffPrompt");
     }
 </script>

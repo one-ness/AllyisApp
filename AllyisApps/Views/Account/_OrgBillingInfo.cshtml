@@ -1,7 +1,7 @@
 ﻿@using AllyisApps.Services.Billing
 @model AllyisApps.ViewModels.Auth.OrganizationManageViewModel
 @{
-    ViewBag.Title = AllyisApps.Resources.Views.Account.Strings.BillingInformation;
+    ViewBag.Title = Strings.BillingInformation;
 }
 
 @if (Model.BillingCustomer != null)
@@ -13,7 +13,7 @@
 
             <tr>
                 <th>
-                    @AllyisApps.Resources.Views.Account.Strings.Card
+                    @Strings.Card
                 </th>
                 <td>
                     *@Model.LastFour
@@ -21,7 +21,7 @@
             </tr>
             <tr>
                 <th>
-                    @AllyisApps.Resources.Views.Account.Strings.BillingEmail
+                    @Strings.BillingEmail
                 </th>
                 <td>
                     @Model.BillingCustomer.Email
@@ -44,8 +44,8 @@
                 data-description="Adding Billing Information"
                 @*data-image="/128x128.png"*@
                 data-locale="auto"
-                data-label="@AllyisApps.Resources.Views.Account.Strings.AddBillingInformation"
-                data-panel-label="@AllyisApps.Resources.Views.Account.Strings.SubmitBillingInfo"
+                data-label="@Strings.AddBillingInformation"
+                data-panel-label="@Strings.SubmitBillingInfo"
                 data-allow-remember-me="false"
                 data-billing-address="true"
                 data-zip-code="true">
@@ -74,12 +74,12 @@
 
         using (Html.BeginForm(ActionConstants.RemoveBilling, ControllerConstants.Account, FormMethod.Get, new { @style = "display: inline-block; padding: 0 12px;" }))
         {
-        <input type="submit" class="btn btn-danger" value=@AllyisApps.Resources.Views.Account.Strings.Delete>
+        <input type="submit" class="btn btn-danger" value=@Strings.Delete>
 
         }
         using (Html.BeginForm(ActionConstants.GetBillingSummary, ControllerConstants.Account, FormMethod.Get, new { @style = "display: inline-block; padding: 0 12px;" }))
         {
-        <input type="submit" class="btn btn-primary" value=@AllyisApps.Resources.Views.Account.Strings.GetBillingHistory>
+        <input type="submit" class="btn btn-primary" value=@Strings.GetBillingHistory>
         }
     }
 </div>

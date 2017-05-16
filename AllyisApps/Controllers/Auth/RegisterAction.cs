@@ -37,7 +37,7 @@ namespace AllyisApps.Controllers
 			return this.View(new RegisterViewModel
 			{
 				ValidCountries = Service.ValidCountries(),
-				DateOfBirth = TimeTrackerService.GetDayFromDateTime(defaultBirthday)
+				DateOfBirth = Service.GetDayFromDateTime(defaultBirthday)
 			});
 		}
 
@@ -58,7 +58,7 @@ namespace AllyisApps.Controllers
 				string confirmUrl = Url.Action(ActionConstants.ConfirmEmail, ControllerConstants.Account, new { userId = "{userId}", code = "{code}" }, protocol: Request.Url.Scheme);
 
 				// create new user in the db and get back the userId and count of invitations
-				var birthdate = TimeTrackerService.GetDateTimeFromDays(model.DateOfBirth);
+				var birthdate = Service.GetDateTimeFromDays(model.DateOfBirth);
 				System.Tuple<int, int> userIDandInviteCount = await Service.SetupNewUser(model.Email, model.FirstName, model.LastName, birthdate, model.Address, model.City, model.State, model.Country, model.PostalCode, model.PhoneNumber, model.Password, 1, confirmUrl); // TODO: Change language preference from 1 to a value grabbed from session/URL
 
 				if (userIDandInviteCount != null)
@@ -79,13 +79,13 @@ namespace AllyisApps.Controllers
 				}
 				else
 				{
-					Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.UserAccountAlreadyExists, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.UserAccountAlreadyExists, Variety.Danger));
 					return this.View(model);
 				}
 			}
 
-			Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.WarnProblemSigningIn, Variety.Warning));
-			return this.View("Error", new HandleErrorInfo(new System.Exception(Resources.Controllers.Auth.Strings.StatusErrorMessage), "Account", "Register"));
+			Notifications.Add(new BootstrapAlert(Resources.Strings.WarnProblemSigningIn, Variety.Warning));
+			return this.View("Error", new HandleErrorInfo(new System.Exception(Resources.Strings.StatusErrorMessage), "Account", "Register"));
 		}
 	}
 }

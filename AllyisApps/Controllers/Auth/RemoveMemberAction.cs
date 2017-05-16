@@ -30,13 +30,13 @@ namespace AllyisApps.Controllers
 			{
 				Service.RemoveOrganizationUser(UserContext.ChosenOrganizationId, userId);
 
-				Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.UserDeletedSuccessfully, Variety.Success));
+				Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
 
 				return this.RedirectToAction(ActionConstants.Manage);
 			}
 			else
 			{
-				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Controllers.Auth.Strings.CannotEditMembersMessage), ControllerConstants.Account, ActionConstants.RemoveUser));
+				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditMembersMessage), ControllerConstants.Account, ActionConstants.RemoveUser));
 			}
 		}
 	}

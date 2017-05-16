@@ -7,7 +7,7 @@
     DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
     DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
     ViewBag.startOfWeek = Model.StartOfWeek;
-    ViewBag.TitleBar = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.TrackTime;
+    ViewBag.TitleBar = Strings.TrackTime;
     Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
     ViewData["IsManager"] = Model.CanManage;
 }
@@ -26,12 +26,12 @@
                     endingDate = Model.EntryRange.EndDate
                 })">
                 @*<input type="button" value="Export" class="btn btn-primary">*@
-                <span class="btn btn-primary" style="margin-right: 15px;">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Export</span>
+                <span class="btn btn-primary" style="margin-right: 15px;">@Strings.Export</span>
             </a>
         </div>
         <!-- Temp fix for Users button for smaller viewports -->
         <div class="form-group pull-right">
-            <button type="button" class="btn btn-primary visible-xs" data-toggle="offcanvas" style="margin: 0 0 0 15px">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Users</button>
+            <button type="button" class="btn btn-primary visible-xs" data-toggle="offcanvas" style="margin: 0 0 0 15px">@Strings.Users</button>
         </div>
         @*To be moved to a separate settings page*@
 
@@ -39,15 +39,15 @@
             <div class="input-group">
 
                 <div class="input-group-btn">
-                    <a class="btn btn-primary" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Previous"
+                    <a class="btn btn-primary" title="@Strings.Previous"
                        href="javascript: void(0);" onclick="return drp_prevWeek()">
                         <i class="fa fa-chevron-left"></i>
                     </a>
-                    <a class="btn btn-primary" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Current"
+                    <a class="btn btn-primary" title="@Strings.Current"
                        href="@Url.Action(ActionConstants.Index, routeValues: new { userId = Model.EntryRange.UserId })">
                         <i class="glyphicon glyphicon-flash"></i>
                     </a>
-                    <a class="btn btn-primary" title="@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Next"
+                    <a class="btn btn-primary" title="@Strings.Next"
                        href="javascript: void(0);" onclick="return drp_nextWeek()">
                         <i class="fa fa-chevron-right"></i>
                     </a>
@@ -63,11 +63,11 @@
 
 @Html.Partial("_AjaxTimeEntries", Model.EntryRange)
 
-@{ViewBag.SidebarToggleText = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Details;
+@{ViewBag.SidebarToggleText = Strings.Details;
 ViewBag.RenderSidebar = true;}
 @if (Model.CanManage)
 {
-    ViewBag.SidebarToggleText = AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Users;
+    ViewBag.SidebarToggleText = Strings.Users;
 }
 
 @section sidebar {
@@ -90,7 +90,7 @@ ViewBag.RenderSidebar = true;}
             }
             <tr>
                 <td>
-                    <strong>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Total</strong>
+                    <strong>@Strings.Total</strong>
                 </td>
                 <td>
                     <strong>@Model.GrandTotal.GetHoursInHoursMinutes()</strong>
@@ -119,8 +119,8 @@ ViewBag.RenderSidebar = true;}
     {
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h1 class="panel-title">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.MemberList</h1>
-                <input id="viewasuser-search" type="text" class="form-control" placeholder=@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.SearchPlaceholder />
+                <h1 class="panel-title">@Strings.MemberList</h1>
+                <input id="viewasuser-search" type="text" class="form-control" placeholder=@Strings.SearchPlaceholder />
             </div>
             <div id="viewasuser-list" class="list-group allyis-search" style="max-height: 50vh; overflow-y: auto;">
                 @{ var count = 0;
@@ -176,8 +176,8 @@ ViewBag.RenderSidebar = true;}
         <div class="panel panel-info">
             @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.TimeEntry, null, FormMethod.Get, new { @class = "panel-heading", style = "display: flex; justify-content: space-between;" }))
             {
-                <span class="panel-title">@AllyisApps.Resources.Views.Account.Strings.Upload</span>
-                <input type="submit" id="template-button" value="@AllyisApps.Resources.Views.Account.Strings.Template" class="btn btn-primary tt-template" />
+                <span class="panel-title">@Strings.Upload</span>
+                <input type="submit" id="template-button" value="@Strings.Template" class="btn btn-primary tt-template" />
             }
             @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.TimeEntry, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
@@ -190,8 +190,8 @@ ViewBag.RenderSidebar = true;}
                 </div>
                 @*<div style="width:70%; margin:0 auto">*@
                 <div id="footUpload" class="panel-footer" style="display: flex; justify-content: space-around; flex-wrap: wrap; padding-bottom: 0px;">
-                    <a class="btn btn-primary" style="margin-bottom: 15px;" onclick="$('input[id=upload-box]').click();">@AllyisApps.Resources.Views.Account.Strings.ChooseFile</a>
-                    <input type="submit" style="margin-bottom: 15px;" id="upload-button" value="@AllyisApps.Resources.Views.Account.Strings.Upload" class="btn btn-primary" />
+                    <a class="btn btn-primary" style="margin-bottom: 15px;" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
+                    <input type="submit" style="margin-bottom: 15px;" id="upload-button" value="@Strings.Upload" class="btn btn-primary" />
                 </div>
             }
         </div>
