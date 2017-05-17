@@ -79,7 +79,6 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Auth\Auth.Invitation.sql" />
-    <Build Include="Tables\Auth\Auth.InvitationSubRole.sql" />
     <Build Include="Schema\Auth.sql" />
     <Build Include="Tables\Auth\Auth.Logging.sql" />
     <Build Include="Tables\Auth\Auth.Organization.sql" />
