@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers
 		public ActionResult DeleteOrg(string orgId)
 		{
 			// Method includes permissions check
-			if (Service.DeleteOrganization())
+			if (AppService.DeleteOrganization())
 			{
 				string notification = string.Format("{0} {1}", Resources.Strings.YourOrg, Resources.Strings.OrganizationDeleteNotification);
 				Notifications.Add(new BootstrapAlert(notification, Variety.Success));

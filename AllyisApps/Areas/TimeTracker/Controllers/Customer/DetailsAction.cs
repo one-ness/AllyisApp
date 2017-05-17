@@ -25,9 +25,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult Details(int id)
 		{
-			if (Service.Can(Actions.CoreAction.ViewCustomer))
+			if (AppService.Can(Actions.CoreAction.ViewCustomer))
 			{
-				var infos = Service.GetCustomerAndCountries(id);
+				var infos = AppService.GetCustomerAndCountries(id);
 				return this.View(new EditCustomerInfoViewModel
 				{
 					ContactEmail = infos.Item1.ContactEmail,
@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					CustomerID = id,
 					ValidCountries = infos.Item2,
 					CustomerOrgId = infos.Item1.CustomerOrgId,
-					canEditCustomers = Service.Can(Actions.CoreAction.EditProject)
+					canEditCustomers = AppService.Can(Actions.CoreAction.EditProject)
 				});
 			}
 

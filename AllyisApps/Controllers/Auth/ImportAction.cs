@@ -36,7 +36,7 @@ namespace AllyisApps.Controllers
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)
 			if (ModelState.IsValid)
 			{
-				if (Service.Can(Actions.CoreAction.EditOrganization))
+				if (AppService.Can(Actions.CoreAction.EditOrganization))
 				{
 					if (upload != null && upload.ContentLength > 0)
 					{
@@ -66,7 +66,7 @@ namespace AllyisApps.Controllers
 						DataSet result = reader.AsDataSet();
 						reader.Close();
 
-						string[] formattedResult = ImportMessageFormatter.FormatImportResult(Service.Import(result));
+						string[] formattedResult = ImportMessageFormatter.FormatImportResult(AppService.Import(result));
 						if (!string.IsNullOrEmpty(formattedResult[0]))
 						{
 							Notifications.Add(new BootstrapAlert(formattedResult[0], Variety.Success));

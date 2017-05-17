@@ -41,7 +41,7 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				if (await Service.ResetPassword(int.Parse(model.UserId), model.Code, model.Password))
+				if (await AppService.ResetPassword(int.Parse(model.UserId), model.Code, model.Password))
 				{
 					return this.RedirectToAction(ActionConstants.ResetPasswordConfirmation, ControllerConstants.Account);
 				}

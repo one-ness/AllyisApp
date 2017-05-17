@@ -32,17 +32,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				.UserSubscriptionInfoList.Where(s => s.SubscriptionId == UserContext.ChosenSubscriptionId).FirstOrDefault().ProductRole;
 
 			// Check for permissions
-			TimeEntryInfo entry = Service.GetTimeEntry(model.TimeEntryId);
+			TimeEntryInfo entry = AppService.GetTimeEntry(model.TimeEntryId);
 			if (entry.UserId == Convert.ToInt32(UserContext.UserId))
 			{
-				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{
 					return this.Json(new { status = "error", message = Resources.Strings.NotAuthZTimeEntryDelete, e = new UnauthorizedAccessException(Resources.Strings.NotAuthZTimeEntryDelete) });
 				}
 			}
 			else
 			{
-				if (!Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 				{
 					return this.Json(new
 					{
@@ -66,7 +66,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			// Time entry is locked
-			DateTime? lockDate = Service.GetLockDate();
+			DateTime? lockDate = AppService.GetLockDate();
 			if (role != ProductRoleIdEnum.TimeTrackerManager && entry.Date <= (lockDate == null ? DateTime.MinValue : lockDate.Value))
 			{
 				string errorMessage = Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture);
@@ -79,7 +79,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				});
 			}
 
-			Service.DeleteTimeEntry(model.TimeEntryId);
+            AppService.DeleteTimeEntry(model.TimeEntryId);
 			return this.Json(new { status = "success" });
 		}
 	}

@@ -22,7 +22,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// Business logic for all account related operations.
 	/// </summary>
-	public partial class Service : BaseService
+	public partial class AppService : BaseService
 	{
 		#region public static
 
@@ -117,7 +117,7 @@ namespace AllyisApps.Services
 		{
 			#region Validation
 
-			if (!Service.IsEmailAddressValid(userEmail))
+			if (!AppService.IsEmailAddressValid(userEmail))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
@@ -224,7 +224,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
 			}
-			else if (!Service.IsEmailAddressValid(email))
+			else if (!AppService.IsEmailAddressValid(email))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
@@ -295,7 +295,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
 			}
-			else if (!Service.IsEmailAddressValid(email))
+			else if (!AppService.IsEmailAddressValid(email))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
@@ -451,7 +451,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
 			}
-			else if (!Service.IsEmailAddressValid(email))
+			else if (!AppService.IsEmailAddressValid(email))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
@@ -554,7 +554,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
 			}
-			else if (!Service.IsEmailAddressValid(email))
+			else if (!AppService.IsEmailAddressValid(email))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
@@ -708,7 +708,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("from", "From email address must have a value.");
 			}
-			else if (!Service.IsEmailAddressValid(from))
+			else if (!AppService.IsEmailAddressValid(from))
 			{
 				throw new FormatException("From email address must be in a valid format.");
 			}
@@ -717,7 +717,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("to", "To email address must have a value.");
 			}
-			else if (!Service.IsEmailAddressValid(to))
+			else if (!AppService.IsEmailAddressValid(to))
 			{
 				throw new FormatException("To email address must be in a valid format.");
 			}
@@ -726,7 +726,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("confirmEmailUrl", "Confirm email url must have a value.");
 			}
-			else if (!Service.IsUrlValid(confirmEmailUrl))
+			else if (!AppService.IsUrlValid(confirmEmailUrl))
 			{
 				throw new FormatException("Confirm email url must be in a valid format.");
 			}

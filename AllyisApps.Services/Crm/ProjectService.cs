@@ -7,9 +7,9 @@
 namespace AllyisApps.Services
 {
 	/// <summary>
-	/// The Poject Service.
+	/// The Project Service.
 	/// </summary>
-	public partial class Service : BaseService
+	public partial class AppService : BaseService
 	{
 	}
 }

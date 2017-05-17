@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)
 			if (ModelState.IsValid)
 			{
-				if (Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
+				if (AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 				{
 					if (upload != null && upload.ContentLength > 0)
 					{
@@ -65,7 +65,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						DataSet result = reader.AsDataSet();
 						reader.Close();
 
-						string[] formattedResult = ImportMessageFormatter.FormatImportResult(Service.Import(result));
+						string[] formattedResult = ImportMessageFormatter.FormatImportResult(AppService.Import(result));
 						if (!string.IsNullOrEmpty(formattedResult[0]))
 						{
 							Notifications.Add(new AllyisApps.Core.Alert.BootstrapAlert(formattedResult[0], AllyisApps.Core.Alert.Variety.Success));

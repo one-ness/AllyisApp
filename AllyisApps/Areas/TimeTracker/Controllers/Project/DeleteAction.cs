@@ -22,11 +22,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Deletes the project from the database.</returns>
 		public ActionResult Delete(int id)
 		{
-			CompleteProjectInfo project = Service.GetProject(id);
+			CompleteProjectInfo project = AppService.GetProject(id);
 
 			if (project != null)
 			{
-				if (Service.DeleteProject(id))
+				if (AppService.DeleteProject(id))
 				{
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", project.ProjectName, Resources.Strings.ProjectDeleteNotification), Variety.Success));
 					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);

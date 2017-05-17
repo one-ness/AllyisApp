@@ -52,12 +52,12 @@ namespace AllyisApps.Controllers
 			if (ModelState.IsValid)
 			{
 				UserContext result = null;
-				if ((result = Service.ValidateLogin(model.Email, model.Password)) != null)
+				if ((result = AppService.ValidateLogin(model.Email, model.Password)) != null)
 				{
 					// sign in
 					this.SignIn(result.UserId, result.UserName, result.Email, Response, model.RememberMe);
 
-					this.UserContext = this.Service.PopulateUserContext(result.UserId);
+					this.UserContext = this.AppService.PopulateUserContext(result.UserId);
 
 					return this.HandleRedirects(returnUrl);
 				}
@@ -102,7 +102,7 @@ namespace AllyisApps.Controllers
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
 			}
-			else if (!Service.IsEmailAddressValid(email))
+			else if (!AppService.IsEmailAddressValid(email))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
@@ -132,7 +132,7 @@ namespace AllyisApps.Controllers
 
 				if (subIsInOrg)
 				{
-					string area = Service.GetProductNameBySubscriptionID(subscriptionID);
+					string area = AppService.GetProductNameBySubscriptionID(subscriptionID);
 					return this.RedirectToSubDomainAction(organizationID, area);
 				}
 
@@ -151,7 +151,7 @@ namespace AllyisApps.Controllers
 						}
 						else
 						{
-							string area = Service.GetProductNameBySubscriptionID(this.UserContext.UserOrganizationInfoList.First().UserSubscriptionInfoList.First().SubscriptionId);
+							string area = AppService.GetProductNameBySubscriptionID(this.UserContext.UserOrganizationInfoList.First().UserSubscriptionInfoList.First().SubscriptionId);
 							return this.RedirectToSubDomainAction(this.UserContext.UserOrganizationInfoList.First().OrganizationId, area);
 						}
 					}

@@ -25,7 +25,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The result of this action.</returns>
 		public ActionResult EditProfile(string returnUrl)
 		{
-			User userInfo = Service.GetUser();
+			User userInfo = AppService.GetUser();
 			EditProfileViewModel model = new EditProfileViewModel
 			{
 				Email = userInfo.Email,
@@ -37,8 +37,8 @@ namespace AllyisApps.Controllers
 				Country = userInfo.Country,
 				PostalCode = userInfo.PostalCode,
 				PhoneNumber = userInfo.PhoneNumber,
-				DateOfBirth = Service.GetDayFromDateTime(userInfo.DateOfBirth),
-				ValidCountries = Service.ValidCountries()
+				DateOfBirth = AppService.GetDayFromDateTime(userInfo.DateOfBirth),
+				ValidCountries = AppService.ValidCountries()
 			};
 
 			ViewBag.returnUrl = returnUrl;
@@ -59,13 +59,13 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				await Task.Factory.StartNew(() => Service.SaveUserInfo(new User
+				await Task.Factory.StartNew(() => AppService.SaveUserInfo(new User
 				{
 					UserId = UserContext.UserId,
 					Email = model.Email,
 					FirstName = model.FirstName,
 					LastName = model.LastName,
-					DateOfBirth = Service.GetDateTimeFromDays(model.DateOfBirth),
+					DateOfBirth = AppService.GetDateTimeFromDays(model.DateOfBirth),
 					Address = model.Address,
 					City = model.City,
 					State = model.State,

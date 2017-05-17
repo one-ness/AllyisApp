@@ -19,7 +19,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// Business logic for all Organization related services.
 	/// </summary>
-	public partial class Service : BaseService
+	public partial class AppService : BaseService
 	{
 		/// <summary>
 		/// Gets the subdomain name from the organization Id.
@@ -274,7 +274,7 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("invitationInfo", "Invitation info object must not be null.");
 			}
 
-			if (string.IsNullOrEmpty(invitationInfo.Email) || !Service.IsEmailAddressValid(invitationInfo.Email))
+			if (string.IsNullOrEmpty(invitationInfo.Email) || !AppService.IsEmailAddressValid(invitationInfo.Email))
 			{
 				throw new ArgumentException("Email address is not valid", "invitationInfo.Email");
 			}
@@ -482,7 +482,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
 			}
-			else if (!Service.IsEmailAddressValid(email))
+			else if (!AppService.IsEmailAddressValid(email))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
@@ -912,7 +912,7 @@ namespace AllyisApps.Services
 				AccessCode = invitation.AccessCode,
 				DateOfBirth = invitation.DateOfBirth,
 				Email = invitation.Email,
-				CompressedEmail = Service.GetCompressedEmail(invitation.Email),
+				CompressedEmail = AppService.GetCompressedEmail(invitation.Email),
 				FirstName = invitation.FirstName,
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,

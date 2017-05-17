@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult MergePayClass(int payClassId)
 		{
-			var allPayClasses = Service.GetPayClasses();
+			var allPayClasses = AppService.GetPayClasses();
 			var destPayClasses = allPayClasses.Where(pc => pc.PayClassID != payClassId);
 			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassID == payClassId).ElementAt(0).Name;
 
@@ -41,7 +41,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.RedirectToAction(ActionConstants.Settings);
 			}
 
-			if (Service.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization))
 			{
 				MergePayClassViewModel model = ConstructMergePayClassViewModel(payClassId, sourcePayClassName, destPayClasses);
 				return this.View(ViewConstants.MergePayClass, model);
@@ -89,16 +89,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[CLSCompliant(false)]
 		public ActionResult MergePayClass(MergePayClassViewModel model, int destPayClass)
 		{
-			IEnumerable<TimeEntryDBEntity> allEntries = Service.GetTimeEntriesThatUseAPayClass(model.sourcePayClassId);
+			IEnumerable<TimeEntryDBEntity> allEntries = AppService.GetTimeEntriesThatUseAPayClass(model.sourcePayClassId);
 			//update the payClassId for all time entries that used the old pay class
 			foreach (TimeEntryDBEntity entity in allEntries)
 			{
-				TimeEntryInfo updatedEntry = Service.InitializeTimeEntryInfo(entity);
+				TimeEntryInfo updatedEntry = AppService.InitializeTimeEntryInfo(entity);
 				updatedEntry.PayClassId = destPayClass;
-				Service.UpdateTimeEntry(updatedEntry);
+                AppService.UpdateTimeEntry(updatedEntry);
 			}
 			//delete the old payclass
-			if (Service.DeletePayClass(model.sourcePayClassId))
+			if (AppService.DeletePayClass(model.sourcePayClassId))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulMergePayClass, Variety.Success));
 			}

@@ -23,9 +23,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The settings page.</returns>
 		public ActionResult Settings()
 		{
-			var infos = Service.GetAllSettings();
+			var infos = AppService.GetAllSettings();
 
-			if (Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				return this.View(new SettingsViewModel()
 				{

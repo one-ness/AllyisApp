@@ -40,7 +40,7 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				if (await Service.SendPasswordResetMessage(model.Email, Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, new { userId = "{userid}", code = "{code}" }, protocol: Request.Url.Scheme)))
+				if (await AppService.SendPasswordResetMessage(model.Email, Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, new { userId = "{userid}", code = "{code}" }, protocol: Request.Url.Scheme)))
 				{
 					Notifications.Add(new Core.Alert.BootstrapAlert(string.Format("{0} {1}.", Resources.Strings.ResetEmailHasBeenSent, model.Email), Core.Alert.Variety.Success));
 				}

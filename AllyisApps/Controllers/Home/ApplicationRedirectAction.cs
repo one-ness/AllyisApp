@@ -25,7 +25,7 @@ namespace AllyisApps.Controllers
 		{
 			if (Request.IsAuthenticated)
 			{
-				Product product = Service.GetProductById(productId);
+				Product product = AppService.GetProductById(productId);
 				if (product != null && !string.IsNullOrWhiteSpace(product.ProductName))
 				{
 					return this.RedirectToSubDomainAction(organizationId, product.ProductName, null, ControllerConstants.Home);
