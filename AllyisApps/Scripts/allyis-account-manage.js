@@ -67,6 +67,7 @@ function editEmployeeType(orgId, userId, oldEmployeeTypeId, isMember) {
 		'<a href="javascript: void(0);" class="text-muted" title="Cancel Changes" onclick=\x27cancelEditEmployeeType(' + userId + ',' + isMember + ')\x27><span class="fa fa-fw fa-remove text-danger"></span></a>' +
         '</div>'
 	);
+    document.getElementById(tag + userId).value = oldEmployeeTypeId; //sets selected to the employee's current type
 }
 
 function saveEmployeeId(orgId, userId, isMember) {
