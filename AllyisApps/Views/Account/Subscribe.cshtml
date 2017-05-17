@@ -1,7 +1,7 @@
 ﻿@model AllyisApps.ViewModels.Auth.ProductSubscriptionViewModel
 
 @{
-    Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = Strings.Subscribe;
     ViewBag.Description = Model.ProductDescription;
     var userCount = Model.CurrentSubscription == null ? 500 : Model.CurrentSubscription.NumberOfUsers;
@@ -9,58 +9,61 @@
 }
 
 @*TODO: Currently mentions of pricing are commented out. When pricing is properly implemented, restore these mentions.
-   Also remove the damn hardcoded "free users" numbers.*@
-@using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, FormMethod.Post, new { @class = "form-inline" }))
-{
-    @Html.AntiForgeryToken()
-    @Html.HiddenFor(m => m.OrganizationId)
-    @Html.HiddenFor(m => m.ProductId)
-    @Html.HiddenFor(m => m.ProductName)
-    @Html.Hidden("SelectedSku", 1)
-    @Html.HiddenFor(m => m.PreviousSku)
-    @Html.HiddenFor(m => m.Token)
-    @Html.Hidden("currentUserCount", (int)Model.CurrentUsers)
-    @*<p>@Strings.FirstUserOffer</p>*@
-    <p id="notice" style="color:red"></p>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default" style="min-width:350px;">
-                    <div class="panel-heading">
-                        <h3 style="margin-top: 0; margin-bottom: 0;">
-                            @Strings.ResourceManager.GetString(@Model.ProductName)
-                        </h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label>@Strings.NumberOfUsers</label>
-                            <input class="form-control" name="NumberOfUsers" type="number" min="5" step="5" max="500" id="user-count" value="@userCount" onchange="fixUserCount(this)" />
+    Also remove the damn hardcoded "free users" numbers.*@
+<div class="shrink-wrap-center">
+    <div class="min300">
+        @using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, FormMethod.Post, new { @class = "form-inline" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.OrganizationId)
+            @Html.HiddenFor(m => m.ProductId)
+            @Html.HiddenFor(m => m.ProductName)
+            @Html.Hidden("SelectedSku", 1)
+            @Html.HiddenFor(m => m.PreviousSku)
+            @Html.HiddenFor(m => m.Token)
+            @Html.Hidden("currentUserCount", (int)Model.CurrentUsers)
+            @*<p>@Strings.FirstUserOffer</p>*@
+            <p id="notice" style="color:red"></p>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default" style="min-width:350px;">
+                        <div class="panel-heading">
+                            <h3 style="margin-top: 0; margin-bottom: 0;">
+                                @Strings.ResourceManager.GetString(@Model.ProductName)
+                            </h3>
                         </div>
-                        @*<div class="col-xs-5">
-                            <label>@Strings.NumberOfUsers</label>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label>@Strings.NumberOfUsers</label>
+                                <input class="form-control" name="NumberOfUsers" type="number" min="5" step="5" max="500" id="user-count" value="@userCount" onchange="fixUserCount(this)" />
+                            </div>
+                            @*<div class="col-xs-5">
+                                    <label>@Strings.NumberOfUsers</label>
+                                </div>
+                                <div class="col-xs-5">
+                                    <input class="form-control" name="NumberOfUsers" type="number" min="5" step="5" max="500" id="user-count" value="@userCount" onchange="fixUserCount(this)" />
+                                </div>*@
+                            @*<div class="col-xs-3">
+                                    <label>@Strings.Price</label>
+                                </div>
+                                <div class="col-xs-3">
+                                    <span id="sub-price">@cost</span>
+                                    <label>Select the amount of users for TimeTracker</label>
+                                </div>*@
                         </div>
-                        <div class="col-xs-5">
-                            <input class="form-control" name="NumberOfUsers" type="number" min="5" step="5" max="500" id="user-count" value="@userCount" onchange="fixUserCount(this)" />
-                        </div>*@
-                        @*<div class="col-xs-3">
-                            <label>@Strings.Price</label>
+                        <div class="panel-footer">
+                            <div class="pull-right">
+                                @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+                                <input type="submit" class="btn btn-primary" value=@Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...';">
+                            </div>
+                            <div class="clearfix"></div>
                         </div>
-                        <div class="col-xs-3">
-                            <span id="sub-price">@cost</span>
-                            <label>Select the amount of users for TimeTracker</label>
-                        </div>*@
-                    </div>
-                    <div class="panel-footer">
-                        <div class="pull-right">
-                            @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
-                            <input type="submit" class="btn btn-primary" value=@Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...';">
-                        </div>
-                        <div class="clearfix"></div>
                     </div>
                 </div>
             </div>
-        </div>
-}
-
+        }
+    </div>
+</div>
 @section Scripts {
     <script type="text/javascript">
         var model_previousSku = @Model.PreviousSku;
