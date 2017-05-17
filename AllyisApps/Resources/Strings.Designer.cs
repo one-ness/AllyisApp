@@ -2932,11 +2932,20 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you would like to remove this invitation?\nYou can reinvite this person at anytime..
+        ///   Looks up a localized string similar to Remove Invitation.
         /// </summary>
         public static string RemoveInvitation {
             get {
                 return ResourceManager.GetString("RemoveInvitation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you would like to remove this invitation?\nYou can reinvite this person at anytime..
+        /// </summary>
+        public static string RemoveInvitationConfirm {
+            get {
+                return ResourceManager.GetString("RemoveInvitationConfirm", resourceCulture);
             }
         }
         
