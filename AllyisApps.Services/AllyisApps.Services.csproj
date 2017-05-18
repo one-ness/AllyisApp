@@ -84,7 +84,6 @@
     <Compile Include="Crm\Customer.cs" />
     <Compile Include="TimeTracker\Holiday.cs" />
     <Compile Include="Auth\InvitationInfo.cs" />
-    <Compile Include="Auth\InvitationSubRole.cs" />
     <Compile Include="Auth\Language.cs" />
     <Compile Include="Auth\OrganizationUserInfo.cs" />
     <Compile Include="Auth\OrgRole.cs" />

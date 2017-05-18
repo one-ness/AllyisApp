@@ -65,7 +65,6 @@
     <Compile Include="Crm\ProjectDBEntity.cs" />
     <Compile Include="DBHelper\DBHelper.Lookup.cs" />
     <Compile Include="DBHelper\DBHelper.TimeTracker.cs" />
-    <Compile Include="Auth\InvitationSubRoleDBEntity.cs" />
     <Compile Include="Crm\CustomerDBEntity.cs" />
     <Compile Include="DBHelper\DBHelper.Billing.cs" />
     <Compile Include="DBHelper\DBHelper.cs" />

@@ -112,17 +112,14 @@
     <Build Include="Tables\TimeTracker\TimeTracker.TimeEntry.sql" />
     <Build Include="Schema\TimeTracker.sql" />
     <Build Include="Tables\AccessCodes.sql" />
-    <Build Include="StoredProcedures\Auth\Auth.CreateInvitationSubRole.sql" />
     <Build Include="StoredProcedures\Auth\Auth.CreateOrg.sql" />
     <Build Include="StoredProcedures\Auth\Auth.CreateOrgUser.sql" />
     <Build Include="StoredProcedures\Auth\Auth.CreateUserInfo.sql" />
     <Build Include="StoredProcedures\Auth\Auth.CreateUserInvitation.sql" />
-    <Build Include="StoredProcedures\Auth\Auth.DeleteInvitationSubRole.sql" />
     <Build Include="StoredProcedures\Auth\Auth.DeleteOrg.sql" />
     <Build Include="StoredProcedures\Auth\Auth.DeleteOrgUser.sql" />
     <Build Include="StoredProcedures\Auth\Auth.DeleteUserInvitation.sql" />
     <Build Include="StoredProcedures\Auth\Auth.GetActiveProductRoleForUser.sql" />
-    <Build Include="StoredProcedures\Auth\Auth.GetInvitationSubRolesByInvitationId.sql" />
     <Build Include="StoredProcedures\Auth\Auth.GetOrg.sql" />
     <Build Include="StoredProcedures\Auth\Auth.GetOrganizationsByUserId.sql" />
     <Build Include="StoredProcedures\Auth\Auth.GetOrgIdBySubdomain.sql" />
