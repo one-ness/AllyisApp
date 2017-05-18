@@ -223,13 +223,18 @@ namespace AllyisApps.Controllers
 						if (model.SelectedActions.OrgRoleTarget == -1)
 						{
 							Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouAreUnableToRemoveYourself, Variety.Danger));
-						}
+                        }
 						else
 						{
 							Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouAreUnableToChangeYourOwnRole, Variety.Danger));
-						}
+                        }
+
 						model.SelectedUsers = model.SelectedUsers.Where(tu => tu.UserId != UserContext.UserId);
-					}
+                        if (model.SelectedUsers.Count() == 0)
+                        {
+                            return RedirectToAction(ActionConstants.ManagePermissions);
+                        }
+                    }
 
 					int numberChanged = Service.ChangeUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.OrgRoleTarget.Value);
 					if (model.SelectedActions.OrgRoleTarget == -1)
