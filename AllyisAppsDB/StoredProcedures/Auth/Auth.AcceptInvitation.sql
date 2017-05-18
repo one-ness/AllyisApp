@@ -111,44 +111,44 @@ BEGIN
 			--WHERE [InvitationSubRole].[InvitationId] = @InvitationId
 			--AND [Invitation].[IsActive] = 1;
 
-			DECLARE @Inv INT;
-			DECLARE @Sub INT;
-			DECLARE @ProdRole INT;
-			DECLARE @NumUsers INT;
-			DECLARE @UserCount INT;
-			WHILE EXISTS(SELECT * FROM @SubRoles)
-			BEGIN
-				SELECT TOP 1
-					@Inv = InviteId,
-					@Sub = SubscriptionId,
-					@ProdRole = ProductRoleId,
-					@NumUsers = NumberOfUsers,
-					@UserCount = SubscriptionsUsed
-				FROM @SubRoles
-				IF @Sub IS NOT NULL AND @UserCount < @NumUsers
-				BEGIN --Only add a subscriptoin role if the subscription still exists and it is not full
-					IF EXISTS (
-						SELECT * FROM [Billing].[SubscriptionUser]
-						WHERE [SubscriptionUser].[UserId] = @UserId AND [SubscriptionUser].[SubscriptionId] = @Sub
-					)
-					BEGIN --User already part of subscription
-						UPDATE [Billing].[SubscriptionUser] 
-						SET [ProductRoleId] = @ProdRole
-						WHERE [SubscriptionId] = @Sub AND [UserId] = @UserId;
-					END
-					ELSE
-					BEGIN --User not part of subscription
-						INSERT INTO [Billing].[SubscriptionUser] ([SubscriptionId], [UserId], [ProductRoleId]) 
-						VALUES(@Sub, @UserId, @ProdRole);
-					END
-				END
-				DELETE @SubRoles
-				WHERE InviteId = @Inv AND SubscriptionId = @Sub
-			END
+			--DECLARE @Inv INT;
+			--DECLARE @Sub INT;
+			--DECLARE @ProdRole INT;
+			--DECLARE @NumUsers INT;
+			--DECLARE @UserCount INT;
+			--WHILE EXISTS(SELECT * FROM @SubRoles)
+			--BEGIN
+			--	SELECT TOP 1
+			--		@Inv = InviteId,
+			--		@Sub = SubscriptionId,
+			--		@ProdRole = ProductRoleId,
+			--		@NumUsers = NumberOfUsers,
+			--		@UserCount = SubscriptionsUsed
+			--	FROM @SubRoles
+			--	IF @Sub IS NOT NULL AND @UserCount < @NumUsers
+			--	BEGIN --Only add a subscriptoin role if the subscription still exists and it is not full
+			--		IF EXISTS (
+			--			SELECT * FROM [Billing].[SubscriptionUser]
+			--			WHERE [SubscriptionUser].[UserId] = @UserId AND [SubscriptionUser].[SubscriptionId] = @Sub
+			--		)
+			--		BEGIN --User already part of subscription
+			--			UPDATE [Billing].[SubscriptionUser] 
+			--			SET [ProductRoleId] = @ProdRole
+			--			WHERE [SubscriptionId] = @Sub AND [UserId] = @UserId;
+			--		END
+			--		ELSE
+			--		BEGIN --User not part of subscription
+			--			INSERT INTO [Billing].[SubscriptionUser] ([SubscriptionId], [UserId], [ProductRoleId]) 
+			--			VALUES(@Sub, @UserId, @ProdRole);
+			--		END
+			--	END
+			--	DELETE @SubRoles
+			--	WHERE InviteId = @Inv AND SubscriptionId = @Sub
+			--END
 
-			-- Remove invitation and its sub roles
-			DELETE FROM [Auth].[InvitationSubRole]
-			WHERE [InvitationId] = @InvitationId
+			---- Remove invitation and its sub roles
+			--DELETE FROM [Auth].[InvitationSubRole]
+			--WHERE [InvitationId] = @InvitationId
 
 			DELETE FROM [Auth].[Invitation]
 			WHERE [InvitationId] = @InvitationId
@@ -158,9 +158,9 @@ BEGIN
 			FROM [Auth].[Organization]
 			WHERE [Organization].[OrganizationId] = @OrganizationId
 
-			SELECT [OrgRole].[Name]
-			FROM [Auth].[OrgRole]
-			WHERE [OrgRole].[OrgRoleId] = @OrgRole
+			--SELECT [OrgRole].[Name]
+			--FROM [Auth].[OrgRole]
+			--WHERE [OrgRole].[OrgRoleId] = @OrgRole
 
 			COMMIT
 		END
