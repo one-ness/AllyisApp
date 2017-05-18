@@ -392,13 +392,43 @@ namespace AllyisApps.Services
 			return DBHelper.GetUserInvitationsByOrgId(UserContext.ChosenOrganizationId).Select(i => InitializeInvitationInfo(i));
 		}
 
-		/// <summary>
-		/// Updates a user's subscription product role.
-		/// </summary>
-		/// <param name="selectedRole">The Role.</param>
-		/// <param name="subscriptionId">Subscription Id.</param>
-		/// <param name="userId">User Id.</param>
-		public void UpdateSubscriptionUserProductRole(int selectedRole, int subscriptionId, int userId)
+        ///// <summary>
+        ///// Creates a subscription role for an invitation.
+        ///// </summary>
+        ///// <param name="invitationId">Invitation id.</param>
+        ///// <param name="subscriptionId">Subscription id.</param>
+        ///// <param name="selectedRole">Selected role.</param>
+        //public void CreateInvitationSubRole(int invitationId, int subscriptionId, int selectedRole)
+        //{
+        //    #region Validation
+
+        //    if (invitationId <= 0)
+        //    {
+        //        throw new ArgumentOutOfRangeException("invitationId", "Invitation Id cannot be 0 or negative.");
+        //    }
+
+        //    if (subscriptionId <= 0)
+        //    {
+        //        throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative.");
+        //    }
+
+        //    if (selectedRole <= 0)
+        //    { // TODO: Figure out if there is any further validation that can be done for this number.
+        //        throw new ArgumentOutOfRangeException("selectedRole", "Selected role cannot be negative.");
+        //    }
+
+        //    #endregion Validation
+
+        //    DBHelper.CreateInvitationSubRole(invitationId, subscriptionId, selectedRole);
+        //}
+
+        /// <summary>
+        /// Updates a user's subscription product role.
+        /// </summary>
+        /// <param name="selectedRole">The Role.</param>
+        /// <param name="subscriptionId">Subscription Id.</param>
+        /// <param name="userId">User Id.</param>
+        public void UpdateSubscriptionUserProductRole(int selectedRole, int subscriptionId, int userId)
 		{
 			#region Validation
 

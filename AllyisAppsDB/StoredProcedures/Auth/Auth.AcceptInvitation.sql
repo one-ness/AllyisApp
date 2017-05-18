@@ -69,47 +69,47 @@ BEGIN
 				);
 			END
 
-			-- Add user to project, if invited
-			IF @ProjectId IS NOT NULL
-			BEGIN
-				IF EXISTS (
-					SELECT * FROM [Crm].[ProjectUser] WITH (NOLOCK)
-					WHERE [ProjectUser].[UserId] = @UserId AND [ProjectUser].[ProjectId] = @ProjectId
-				)
-				BEGIN -- User already assigned to project at some point
-					UPDATE [Crm].[ProjectUser] SET [IsActive] = 1
-					WHERE [ProjectId] = @ProjectId AND [UserId] = @UserId;
-				END
-				ELSE
-				BEGIN -- User never assigned to project
-					INSERT INTO [Crm].[ProjectUser] ([ProjectId], [UserId], [IsActive])
-					VALUES(@ProjectId, @UserId, 1);
-				END
-			END
+			---- Add user to project, if invited
+			--IF @ProjectId IS NOT NULL
+			--BEGIN
+			--	IF EXISTS (
+			--		SELECT * FROM [Crm].[ProjectUser] WITH (NOLOCK)
+			--		WHERE [ProjectUser].[UserId] = @UserId AND [ProjectUser].[ProjectId] = @ProjectId
+			--	)
+			--	BEGIN -- User already assigned to project at some point
+			--		UPDATE [Crm].[ProjectUser] SET [IsActive] = 1
+			--		WHERE [ProjectId] = @ProjectId AND [UserId] = @UserId;
+			--	END
+			--	ELSE
+			--	BEGIN -- User never assigned to project
+			--		INSERT INTO [Crm].[ProjectUser] ([ProjectId], [UserId], [IsActive])
+			--		VALUES(@ProjectId, @UserId, 1);
+			--	END
+			--END
 
-			-- Get invitation sub roles
-			-- There may be multiple, so we will place them in a table and loop through it
-			DECLARE @SubRoles TABLE (
-				InviteId INT,
-				SubscriptionId INT,
-				ProductRoleId INT,
-				NumberOfUsers INT,
-				SubscriptionsUsed INT
-			);
-			INSERT INTO @SubRoles (InviteId, SubscriptionId, ProductRoleId, NumberOfUsers, SubscriptionsUsed)
-			SELECT 	[Invitation].[InvitationId],
-					[InvitationSubRole].[SubscriptionId],
-					[ProductRoleId],
-					[NumberOfUsers],
-					(SELECT COUNT([UserId])
-						FROM [Billing].[SubscriptionUser] WITH (NOLOCK) 
-						WHERE [SubscriptionUser].[SubscriptionId] = [Subscription].[SubscriptionId]
-					) AS [SubscriptionsUsed]
-			FROM [Auth].[InvitationSubRole] WITH (NOLOCK)
-			JOIN [Auth].[Invitation] WITH (NOLOCK) ON [Invitation].[InvitationId] = [InvitationSubRole].[InvitationId]
-			JOIN [Billing].[Subscription] WITH (NOLOCK) ON [Subscription].[SubscriptionId] = [InvitationSubRole].[SubscriptionId]
-			WHERE [InvitationSubRole].[InvitationId] = @InvitationId
-			AND [Invitation].[IsActive] = 1;
+			---- Get invitation sub roles
+			---- There may be multiple, so we will place them in a table and loop through it
+			--DECLARE @SubRoles TABLE (
+			--	InviteId INT,
+			--	SubscriptionId INT,
+			--	ProductRoleId INT,
+			--	NumberOfUsers INT,
+			--	SubscriptionsUsed INT
+			--);
+			--INSERT INTO @SubRoles (InviteId, SubscriptionId, ProductRoleId, NumberOfUsers, SubscriptionsUsed)
+			--SELECT 	[Invitation].[InvitationId],
+			--		[InvitationSubRole].[SubscriptionId],
+			--		[ProductRoleId],
+			--		[NumberOfUsers],
+			--		(SELECT COUNT([UserId])
+			--			FROM [Billing].[SubscriptionUser] WITH (NOLOCK) 
+			--			WHERE [SubscriptionUser].[SubscriptionId] = [Subscription].[SubscriptionId]
+			--		) AS [SubscriptionsUsed]
+			--FROM [Auth].[InvitationSubRole] WITH (NOLOCK)
+			--JOIN [Auth].[Invitation] WITH (NOLOCK) ON [Invitation].[InvitationId] = [InvitationSubRole].[InvitationId]
+			--JOIN [Billing].[Subscription] WITH (NOLOCK) ON [Subscription].[SubscriptionId] = [InvitationSubRole].[SubscriptionId]
+			--WHERE [InvitationSubRole].[InvitationId] = @InvitationId
+			--AND [Invitation].[IsActive] = 1;
 
 			DECLARE @Inv INT;
 			DECLARE @Sub INT;
