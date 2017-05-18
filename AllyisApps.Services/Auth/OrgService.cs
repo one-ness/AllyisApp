@@ -393,36 +393,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Creates a subscription role for an invitation.
-		/// </summary>
-		/// <param name="invitationId">Invitation id.</param>
-		/// <param name="subscriptionId">Subscription id.</param>
-		/// <param name="selectedRole">Selected role.</param>
-		public void CreateInvitationSubRole(int invitationId, int subscriptionId, int selectedRole)
-		{
-			#region Validation
-
-			if (invitationId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("invitationId", "Invitation Id cannot be 0 or negative.");
-			}
-
-			if (subscriptionId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative.");
-			}
-
-			if (selectedRole <= 0)
-			{ // TODO: Figure out if there is any further validation that can be done for this number.
-				throw new ArgumentOutOfRangeException("selectedRole", "Selected role cannot be negative.");
-			}
-
-			#endregion Validation
-
-			DBHelper.CreateInvitationSubRole(invitationId, subscriptionId, selectedRole);
-		}
-
-		/// <summary>
 		/// Updates a user's subscription product role.
 		/// </summary>
 		/// <param name="selectedRole">The Role.</param>
@@ -872,26 +842,6 @@ namespace AllyisApps.Services
 				State = organization.State,
 				Subdomain = organization.Subdomain,
 				PostalCode = organization.PostalCode
-			};
-		}
-
-		/// <summary>
-		/// Translates an InvitationSubRoleDBEntity into an InvitationSubRole business object.
-		/// </summary>
-		/// <param name="invitationSubRole">InvitationSubRoleDBEntity instance.</param>
-		/// <returns>InvitationSubRole instance.</returns>
-		public static InvitationSubRole InitializeInvitationSubRole(InvitationSubRoleDBEntity invitationSubRole)
-		{
-			if (invitationSubRole == null)
-			{
-				return null;
-			}
-
-			return new InvitationSubRole
-			{
-				InvitationId = invitationSubRole.InvitationId,
-				ProductRoleId = invitationSubRole.ProductRoleId,
-				SubscriptionId = invitationSubRole.SubscriptionId
 			};
 		}
 
