@@ -43,8 +43,9 @@ namespace AllyisApps.ViewModels.Auth
 		[Required]
 		[DataType(DataType.Text)]
 		[Display(Name = "Subdomain Name")]
-		[RegularExpression(@"^[\w\d]([\w\d\-_]+[\w\d])?$", ErrorMessage = "Must contain only letters, numbers, dashes, and understcores. Must begin and end with a letter or number.")]
-		public string SubdomainName { get; set; }
+        [RegularExpression(@"^[\w\d]([\w\d\-_]+)?$", ErrorMessage = "Must contain only letters, numbers, dashes, and understcores. Must begin and end with a letter or number.")]
+        [StringLength(40, MinimumLength = 3)]
+        public string SubdomainName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's website URL.
