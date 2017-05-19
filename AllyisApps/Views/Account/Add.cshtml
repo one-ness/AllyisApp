@@ -6,34 +6,35 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = Strings.AddMember;
-    //string left = "col-xs-3 text-right";
-    //string right = "col-xs-9";
 }
 @{ ViewData.Add(ControllerConstants.Controller, ControllerConstants.Account); }
 @{ ViewData.Add(ActionConstants.Action, ActionConstants.Add); }
 
 <div class="shrink-wrap-center">
-    <div class="min300">
+    <div>
         @using (Html.BeginForm(ActionConstants.Add, ControllerConstants.Account, FormMethod.Post, new { id = "OrgAddForm" }))
         {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.OrganizationId)
+            @Html.ValidationSummary(true)
             <div class="row">
-                @Html.AntiForgeryToken()
-                @Html.HiddenFor(m => m.OrganizationId)
-                @Html.ValidationSummary(true)
-
-                <div class="col-md-6" style="min-width: 400px;">
-                    <div class="form-group">
-                        @Html.ReqLabelFor(model => model.Email, Strings.Email)
-                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                <div class="col-md-6 sm-control-width">                       
+                        <div class="form-group">
+                            @Html.ReqLabelFor(model => model.Email, Strings.Email)
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            @Html.ReqLabelFor(model => model.EmployeeId, Strings.EmployeeId)
+                            @Html.TextBoxFor(model => model.EmployeeId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.EmployeeId })
+                            @Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            @Html.ReqLabelFor(model => model.FirstName, Strings.EmployeeType)
+                            @Html.DropDownListFor(model => model.EmployeeType, new SelectList(new List<string> { Strings.Salaried, Strings.Hourly }), new { @class = "form-control" })
+                        </div>
                     </div>
-                    <div class="form-group">
-                        @Html.ReqLabelFor(model => model.EmployeeId, Strings.EmployeeId)
-                        @Html.TextBoxFor(model => model.EmployeeId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.EmployeeId })
-                        @Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="col-md-6" style="min-width: 400px;">
+                <div class="col-md-6 sm-control-width">
 
                     <div class="form-group">
                         @Html.ReqLabelFor(model => model.FirstName, Strings.FirstName)
@@ -45,30 +46,20 @@
                         @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
                     </div>
-                </div>
-                <div class="col-md-6" style="min-width: 400px;">
+
+
                     <div class="form-group">
-                        @Html.ReqLabelFor(model => model.FirstName, Strings.EmployeeType)
-                        @Html.DropDownListFor(model => model.EmployeeType, new SelectList(new List<string> { Strings.Salaried, Strings.Hourly }), new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="col-md-6" style="min-width: 400px;">
-                    <div class="form-group">
-                        @*<div class="@left">*@
                         <div class="text-right">
                             <span style="margin-right: 5px;">@Strings.AddAsOwner</span>
-                            @*</div>
-                                <div class="@right">*@
                             @Html.CheckBoxFor(m => m.AddAsOwner, new { @style = "display: inline;" })
                         </div>
-                        @*</div>*@
                     </div>
                 </div>
             </div>
-            <div class="row">
 
+            <div class="row">
                 @if (Model.Subscriptions.Count() == 0)
-                {
+        {
                     <div class="col-xs-12">
                         <div class="form-group allyis-action-buttons pull-right">
                             @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
@@ -79,8 +70,8 @@
                     var roomInSubscription = true;
                 }
                 @foreach (AddMemberSubscriptionInfo sub in Model.Subscriptions)
-                {
-                    <div class="col-md-6" style="min-width: 400px;">
+        {
+                    <div class="col-md-6 sm-control-width">
                         @Html.Hidden(string.Format("Subscriptions[{0}].SubscriptionId", count), sub.SubscriptionId)
                         <div class="form-group">
                             @if (sub.ProductName == ProductNameKeyConstants.TimeTracker)
@@ -103,7 +94,7 @@
                         </div>
                     </div>if ((sub.ProductName == ProductNameKeyConstants.TimeTracker) && roomInSubscription) //TimeTracker with room
                                 {
-                                    <div class="col-md-6" style="min-width: 400px;">
+                                    <div class="col-md-6 sm-control-width">
                                         <div class="form-group">
                                             <label>@Strings.TrackProject</label>
                                             @{    //outputs list of available projects
@@ -141,34 +132,32 @@
                                                     count += 1;
                                                 }
             </div>}
-        <div class="row">
-            <div class="col-md-6" style="min-width: 400px;">
-                @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
-                {
-                    @Html.AntiForgeryToken();
-                    <label>@Strings.Upload</label>
-                    @*<p>
-                            @Strings.InviteMoreThanOne
-                        </p>*@
-                    <input type="file" id="upload-box" name="upload" style="display:none;"
-                           onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-                    <input id="upload-file-name-display" class="form-control"
-                           onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-                    <div style="margin-top: 10px; margin-bottom: 15px; float:left;">
-                        <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
-                        <input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" />
-                    </div>
-                }
-                @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Account, null, FormMethod.Get))
-                {
-                    <div style="float:right; margin-top: 10px;">
-                        <input type="submit" id="template-button" value="@Strings.Template" class="btn btn-primary" />
-                    </div>
-                }
+            <div class="row">
+                <div class="col-md-6 sm-control-width">
+                    @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken();
+                        <label>@Strings.Upload</label>
+                        <input type="file" id="upload-box" name="upload" style="display:none;"
+                                onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                            <input id="upload-file-name-display" class="form-control"
+                                    onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                            <div style="margin-top: 10px; margin-bottom: 15px; float:left;">
+                                <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
+                                <input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" />
+                            </div>
+                    }
+                    @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Account, null, FormMethod.Get))
+                    {
+                        <div style="float:right; margin-top: 10px;">
+                            <input type="submit" id="template-button" value="@Strings.Template" class="btn btn-primary" />
+                        </div>
+                    }
+                </div>
             </div>
-        </div>
+      </div>
 </div>
-    </div>
-        @section Scripts {
-            @Scripts.Render("~/bundles/AccountAdd");
-        }
+        
+@section Scripts {
+      @Scripts.Render("~/bundles/AccountAdd");
+}
