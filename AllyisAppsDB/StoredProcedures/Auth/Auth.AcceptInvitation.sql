@@ -158,9 +158,9 @@ BEGIN
 			FROM [Auth].[Organization]
 			WHERE [Organization].[OrganizationId] = @OrganizationId
 
-			--SELECT [OrgRole].[Name]
-			--FROM [Auth].[OrgRole]
-			--WHERE [OrgRole].[OrgRoleId] = @OrgRole
+			SELECT [OrgRole].[Name]
+			FROM [Auth].[OrgRole]
+			WHERE [OrgRole].[OrgRoleId] = @OrgRole
 
 			COMMIT
 		END
