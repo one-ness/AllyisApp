@@ -41,7 +41,7 @@
                     @using (Html.BeginForm(ActionConstants.Unsubscribe, ControllerConstants.Account, FormMethod.Get, new { @style = "display: inline", @onsubmit = "return confirmUnsubscribe(\"" + @Model.ProductName + "\")" }))
                     {
                         <input data-val="true" id="ID" name="ID" type="hidden" value="@Model.ProductId" />
-                        <a href="javascript:void(0);" class="text-danger" title="@Strings.DropSubcription" onclick="$(this).closest('form').submit()"><span class="fa fa-fw fa-remove text-danger" title=@Strings.RemoveSubscription ></span></a>
+                        <a href="javascript:void(0);" class="text-muted" title="@Strings.DropSubcription" onclick="$(this).closest('form').submit()"><span class="fa fa-fw fa-remove text-danger"></span></a>
                     }
                 @*}*@
             </td>

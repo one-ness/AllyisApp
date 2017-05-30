@@ -13,20 +13,20 @@ using System.Linq;
 
 namespace AllyisApps.Services
 {
-	public partial class Service : BaseService
+	public partial class AppService : BaseService
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Service"/> class.
-		/// </summary>
-		/// <param name="connectionString">The connection string.</param>
-		public Service(string connectionString) : base(connectionString) { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppService"/> class.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        public AppService(string connectionString) : base(connectionString) { }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Service"/> class.
-		/// </summary>
-		/// <param name="connectionString">The connection string.</param>
-		/// <param name="userContext">The user context.</param>
-		public Service(string connectionString, UserContext userContext) : base(connectionString, userContext) { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppService"/> class.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="userContext">The user context.</param>
+        public AppService(string connectionString, UserContext userContext) : base(connectionString, userContext) { }
 
         /// <summary>
 		/// Converts an int representing days since the DateTime min value (Jan 1st, 0001) into a DateTime date.
@@ -240,9 +240,9 @@ namespace AllyisApps.Services
         {
             var spResults = DBHelper.GetReportInfo(orgId == null ? UserContext.ChosenOrganizationId : orgId.Value, UserContext.ChosenSubscriptionId);
             return Tuple.Create(
-                spResults.Item1.Select(cdb => Service.InitializeCustomer(cdb)).ToList(),
-                spResults.Item2.Select(cpdb => Service.InitializeCompleteProjectInfo(cpdb)).ToList(),
-                spResults.Item3.Select(sudb => Service.InitializeSubscriptionUserInfo(sudb)).ToList());
+                spResults.Item1.Select(cdb => InitializeCustomer(cdb)).ToList(),
+                spResults.Item2.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
+                spResults.Item3.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());
         }
 
         /// <summary>
@@ -655,8 +655,8 @@ namespace AllyisApps.Services
             return Tuple.Create(InitializeSettingsInfo(spResults.Item1),
                 spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
                 spResults.Item3.Select(hdb => InitializeHoliday(hdb)).ToList(),
-                spResults.Item4.Select(cpdb => Service.InitializeCompleteProjectInfo(cpdb)).ToList(),
-                spResults.Item5.Select(udb => Service.InitializeUser(udb)).ToList(),
+                spResults.Item4.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
+                spResults.Item5.Select(udb => InitializeUser(udb)).ToList(),
                 spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList());
         }
 

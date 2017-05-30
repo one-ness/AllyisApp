@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The organization's management page.</returns>
 		public ActionResult Manage()
 		{
-			if (Service.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization))
 			{
 				OrganizationManageViewModel model = this.ConstructOrganizationManageViewModel();
 				return this.View(model);
@@ -43,9 +43,9 @@ namespace AllyisApps.Controllers
 		[CLSCompliant(false)]
 		public OrganizationManageViewModel ConstructOrganizationManageViewModel()
 		{
-			var infos = Service.GetOrganizationManagementInfo();
+			var infos = AppService.GetOrganizationManagementInfo();
 
-			BillingServicesCustomer customer = (infos.Item5 == null) ? null : Service.RetrieveCustomer(new BillingServicesCustomerId(infos.Item5));
+			BillingServicesCustomer customer = (infos.Item5 == null) ? null : AppService.RetrieveCustomer(new BillingServicesCustomerId(infos.Item5));
 
 			return new OrganizationManageViewModel
 			{
@@ -97,7 +97,7 @@ namespace AllyisApps.Controllers
 		{
 			try
 			{
-				var result = Service.SetEmployeeId(user, org, employeeId);
+				var result = AppService.SetEmployeeId(user, org, employeeId);
 				if (!result)
 				{
 					return false;
@@ -122,7 +122,7 @@ namespace AllyisApps.Controllers
 		{
 			try
 			{
-				var result = Service.SetInvitationEmployeeId(user, org, employeeId);
+				var result = AppService.SetInvitationEmployeeId(user, org, employeeId);
 				if (!result)
 				{
 					return false;
@@ -147,7 +147,7 @@ namespace AllyisApps.Controllers
         {
             try
             {
-                Service.SetEmployeeTypeId(user, org, employeeTypeId);
+                AppService.SetEmployeeTypeId(user, org, employeeTypeId);
             }
             catch (Exception)
             {
@@ -168,7 +168,7 @@ namespace AllyisApps.Controllers
         {
             try
             {
-                Service.SetInvitationEmployeeTypeId(user, org, employeeTypeId);
+                AppService.SetInvitationEmployeeTypeId(user, org, employeeTypeId);
             }
             catch (Exception)
             {

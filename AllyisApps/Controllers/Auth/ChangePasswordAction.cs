@@ -39,7 +39,7 @@ namespace AllyisApps.Controllers
 			{
 				return this.View(model);
 			}
-			else if (model.NewPassword.CompareTo(model.ConfirmPassword) == 0 && Service.ChangePassword(model.OldPassword, model.NewPassword))
+			else if (model.NewPassword.CompareTo(model.ConfirmPassword) == 0 && AppService.ChangePassword(model.OldPassword, model.NewPassword))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ChangePasswordSuccessMessage, Variety.Success));
 

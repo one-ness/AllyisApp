@@ -33,7 +33,7 @@ namespace AllyisApps.Controllers
 		public BaseController()
         {
             // init the service
-            this.Service = new Service(GlobalSettings.SqlConnectionString);         
+            this.AppService = new AppService(GlobalSettings.SqlConnectionString);         
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace AllyisApps.Controllers
         /// <summary>
         /// Gets or sets the service.
         /// </summary>
-        protected Service Service { get; set; }
+        protected AppService AppService { get; set; }
 
         // Product id used by controllers in product areas. 0 by default, for no product.
         private readonly int cProductId = 0;
@@ -125,13 +125,13 @@ namespace AllyisApps.Controllers
             //-------------
             if (this.UserContext != null && this.UserContext.ChosenOrganizationId != pOrganizationId)
             {
-                this.Service.UpdateActiveOrganization(UserContext.UserId, pOrganizationId);
+                this.AppService.UpdateActiveOrganization(UserContext.UserId, pOrganizationId);
             }
 
             string url = string.Format("{0}/{1}", rootAndMiddle, route);
             if (GlobalSettings.useSubdomains)
             {
-                string chosenOrg = Service.GetSubdomainById(pOrganizationId);
+                string chosenOrg = AppService.GetSubdomainById(pOrganizationId);
                 if (!(chosenOrg == null || chosenOrg.Equals("default")))
                 {
                     url = string.Format("{0}.{1}", chosenOrg, url);
@@ -237,13 +237,13 @@ namespace AllyisApps.Controllers
                 CookieData cookie = this.GetCookieData(Request);
                 if (cookie != null && cookie.userId > 0)
                 {
-                    this.UserContext = this.Service.PopulateUserContext(cookie.userId);
+                    this.UserContext = this.AppService.PopulateUserContext(cookie.userId);
                 }
 
                 if (this.UserContext != null)
                 {
                     // User context successfully populated
-                    this.Service.SetUserContext(this.UserContext);
+                    this.AppService.SetUserContext(this.UserContext);
                     languageID = this.UserContext.ChosenLanguageID;
                     ViewBag.ShowOrganizationPartial = true;
 
@@ -256,7 +256,7 @@ namespace AllyisApps.Controllers
                             UserSubscriptionInfo sub = org.UserSubscriptionInfoList.Where(s => (int)s.ProductId == cProductId).SingleOrDefault();
                             if (sub != null && this.UserContext.ChosenSubscriptionId != sub.SubscriptionId)
                             {
-                                Service.UpdateActiveSubscription(sub.SubscriptionId == 0 ? null : (int?)sub.SubscriptionId);
+                                AppService.UpdateActiveSubscription(sub.SubscriptionId == 0 ? null : (int?)sub.SubscriptionId);
                                 this.UserContext.ChosenSubscriptionId = sub.SubscriptionId;
                             }
                         }
@@ -279,7 +279,7 @@ namespace AllyisApps.Controllers
                 }
             }
 
-            Language language = this.Service.GetLanguage(languageID);
+            Language language = this.AppService.GetLanguage(languageID);
             if (language != null)
             {
                 CultureInfo cInfo = CultureInfo.CreateSpecificCulture(language.CultureName);

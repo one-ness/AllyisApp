@@ -24,7 +24,7 @@ namespace AllyisApps.Controllers
 		[AllowAnonymous]
 		public ActionResult ConfirmEmail(string userId, string code)
 		{
-			if (this.Service.ConfirmUserEmail(int.Parse(userId), code))
+			if (this.AppService.ConfirmUserEmail(int.Parse(userId), code))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.NotifyYourEmailIsConfirmed, Variety.Success));
 				return this.RedirectToAction(ActionConstants.LogOn, ControllerConstants.Account);

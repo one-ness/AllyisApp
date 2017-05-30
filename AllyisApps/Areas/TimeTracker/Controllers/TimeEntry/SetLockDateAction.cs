@@ -25,11 +25,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public ActionResult SetLockDate(bool LDsetting, string LDperiod, int LDquantity)
 		{
-			if (Service.Can(Services.Actions.CoreAction.TimeTrackerEditOthers))
+			if (AppService.Can(Services.Actions.CoreAction.TimeTrackerEditOthers))
 			{
 				try
 				{
-					if (Service.UpdateLockDate(LDsetting, LDperiod, LDquantity))
+					if (AppService.UpdateLockDate(LDsetting, LDperiod, LDquantity))
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.LockDateUpdate, Variety.Success));
 					}

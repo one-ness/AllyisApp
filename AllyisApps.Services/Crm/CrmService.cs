@@ -16,7 +16,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// Services for Cutomer Relationship Management related functions (customer, projects).
 	/// </summary>
-	public partial class Service : BaseService
+	public partial class AppService : BaseService
 	{
 		/// <summary>
 		/// Gets a <see cref="Customer"/>.

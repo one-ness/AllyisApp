@@ -26,7 +26,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult Index()
 		{
-			if (Service.Can(Actions.CoreAction.ViewCustomer))
+			if (AppService.Can(Actions.CoreAction.ViewCustomer))
 			{
 				return this.View(this.ConstructManageCustomerViewModel(UserContext.UserId, UserContext.ChosenOrganizationId));
 			}
@@ -44,9 +44,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The ManageCustomerViewModel.</returns>
 		public ManageCustomerViewModel ConstructManageCustomerViewModel(int userId, int orgId)
 		{
-			var infos = Service.GetProjectsAndCustomersForOrgAndUser();
+			var infos = AppService.GetProjectsAndCustomersForOrgAndUser();
 
-			bool canEditProjects = Service.Can(Actions.CoreAction.EditProject);
+			bool canEditProjects = AppService.Can(Actions.CoreAction.EditProject);
 
 			List<CompleteProjectInfo> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> customers = infos.Item2;

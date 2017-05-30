@@ -37,7 +37,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (userId.Count == 1 && userId[0] == Convert.ToInt32(UserContext.UserId))
 			{
 				// if (Permissions.Cannot(ProductAction.TimeTrackerCreateReportSelf, OrganizationId, TimeTrackerID))
-				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{
 					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReports);
 				}
@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			else
 			{
 				// if (Permissions.Cannot(ProductAction.TimeTrackerCreateReportOthers, OrganizationId, TimeTrackerID))
-				if (!Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 				{
 					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReportsOtherUser);
 				}
@@ -60,7 +60,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			//}
 
 			//TimeTrackerService.PrepareCSVExport(userId, dateRangeStart, dateRangeEnd, projectId, customerId);
-			return this.File(Service.PrepareCSVExport(userId, dateRangeStart, dateRangeEnd, projectId, customerId).BaseStream, "text/csv", "export.csv");
+			return this.File(AppService.PrepareCSVExport(userId, dateRangeStart, dateRangeEnd, projectId, customerId).BaseStream, "text/csv", "export.csv");
 		}
 	}
 }

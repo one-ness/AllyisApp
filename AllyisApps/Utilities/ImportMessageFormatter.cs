@@ -13,7 +13,7 @@ namespace AllyisApps.Utilities
 		/// Takes an ImportActionResult and produces two formatted strings: one for successfull imports and one for failures.
 		/// Note: the failure string will contain br tags, and any BootstrapAlert's containing it should have their IsHtmlString value set to true.
 		/// </summary>
-		/// <param name="result">The returned ImportActionResult from a Service.Import call.</param>
+		/// <param name="result">The returned ImportActionResult from a AppService.Import call.</param>
 		/// <returns>A two-member string array with the success and failure formatted messages.</returns>
 		public static string[] FormatImportResult(ImportActionResult result)
 		{

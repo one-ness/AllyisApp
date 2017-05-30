@@ -23,11 +23,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The Customer index.</returns>
 		public ActionResult Delete(int id)
 		{
-			Customer customer = Service.GetCustomer(id);
+			Customer customer = AppService.GetCustomer(id);
 
 			if (customer != null)
 			{
-				if (Service.DeleteCustomer(id))
+				if (AppService.DeleteCustomer(id))
 				{
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", customer.Name, Resources.Strings.CustomerDeleteNotification), Variety.Success));
 

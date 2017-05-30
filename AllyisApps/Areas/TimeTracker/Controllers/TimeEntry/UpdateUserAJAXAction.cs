@@ -27,15 +27,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[ValidateAntiForgeryToken]
 		public JsonResult UpdateUserAJAX(int userId, List<int> offUser, List<int> onUser)
 		{
-			if (Service.Can(Actions.CoreAction.EditProject))
+			if (AppService.Can(Actions.CoreAction.EditProject))
 			{
 				if (offUser != null)
 				{
 					foreach (int proj_id in offUser)
 					{
-						if (Service.UpdateProjectUser(proj_id, userId, false).Equals(0))
+						if (AppService.UpdateProjectUser(proj_id, userId, false).Equals(0))
 						{
-							Service.DeleteProjectUser(proj_id, userId);
+                            AppService.DeleteProjectUser(proj_id, userId);
 						}
 					}
 				}
@@ -44,9 +44,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					foreach (int proj_id in onUser)
 					{
-						if (Service.UpdateProjectUser(proj_id, userId, true).Equals(0))
+						if (AppService.UpdateProjectUser(proj_id, userId, true).Equals(0))
 						{
-							Service.CreateProjectUser(proj_id, userId);
+                            AppService.CreateProjectUser(proj_id, userId);
 						}
 					}
 				}

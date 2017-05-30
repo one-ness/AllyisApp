@@ -35,7 +35,7 @@ namespace AllyisApps.Controllers
 					UserName = UserContext.UserName,
 					ChosenOrganizationId = UserContext.ChosenOrganizationId,
 					ChosenOrganizationName = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).Select(o => o.OrganizationName).FirstOrDefault(),
-					CanEditOrganization = Service.Can(Actions.CoreAction.EditOrganization, false),
+					CanEditOrganization = AppService.Can(Actions.CoreAction.EditOrganization, false),
 					UserOrganizationBriefInfoList = new List<OrganizationBriefInfo>(),
 					ShowOrganizationPartial = showOrganizationPartial
 				};

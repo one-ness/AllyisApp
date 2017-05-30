@@ -3,25 +3,30 @@
 @model ProductSubscriptionViewModel
 
 @{
-	DisplayHints.PageBodyId = "org-unsubscribe";
-	ViewBag.Title = Strings.Unsubscribe;
-	Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
+    DisplayHints.PageBodyId = "org-unsubscribe";
+    ViewBag.Title = Strings.Unsubscribe;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div>
-	<p style="text-align: center;">
-		@Strings.ConfirmUnsubscribe
-	</p>
-</div>
-<div class="row">
-	@using (Html.BeginForm(ActionConstants.Unsubscribe, ControllerConstants.Account, FormMethod.Post))
-	{
-		@Html.AntiForgeryToken()
-		@Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
-		<input data-val="true" id="OrganizationId" name="OrganizationId" type="hidden" value="@Model.OrganizationId" />
-		<input data-val="true" id="ProductId" name="ProductId" type="hidden" value="@Model.ProductId" />
-		<input data-val="true" id="PreviousSku" name="PreviousSku" type="hidden" value="@Model.PreviousSku" />
-		<input data-val="true" id="CurrentSubscription" name="CurrentSubscription.SubscriptionId" type="hidden" value="@Model.CurrentSubscription.SubscriptionId" />
-		<input type="hidden" name="SelectedSku" value="0" />
-		<input type="submit" class="btn btn-primary" value=@Strings.Save>
-	}
+
+<div class="shrink-wrap-center">
+    <div class="min300">
+        <div>
+            <p style="text-align: center;">
+                @Strings.ConfirmUnsubscribe
+            </p>
+        </div>
+        <div class="row">
+            @using (Html.BeginForm(ActionConstants.Unsubscribe, ControllerConstants.Account, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+                <input data-val="true" id="OrganizationId" name="OrganizationId" type="hidden" value="@Model.OrganizationId" />
+                <input data-val="true" id="ProductId" name="ProductId" type="hidden" value="@Model.ProductId" />
+                <input data-val="true" id="PreviousSku" name="PreviousSku" type="hidden" value="@Model.PreviousSku" />
+                <input data-val="true" id="CurrentSubscription" name="CurrentSubscription.SubscriptionId" type="hidden" value="@Model.CurrentSubscription.SubscriptionId" />
+                <input type="hidden" name="SelectedSku" value="0" />
+                <input type="submit" class="btn btn-primary" value=@Strings.Save>
+            }
+        </div>
+    </div>
 </div>

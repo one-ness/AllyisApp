@@ -2,42 +2,46 @@
 
 @model LogOnViewModel
 @{
-    Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = Strings.SignIn;
 }
 
-@using (Html.BeginForm(ActionConstants.LogOn, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    @Html.AntiForgeryToken()
+<div class="shrink-wrap-center">
+    <div class="min300">
+        @using (Html.BeginForm(ActionConstants.LogOn, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
 
-    @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.Label(Strings.Email)
-        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Email, string.Empty, new { @class = "text-danger" })
+            @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.Label(Strings.Email)
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Email, string.Empty, new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.Label(Strings.Password)
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", @onkeypress = "capsCheck(event)", @onkeydown = "capsCheck(event)" })
+                @Html.ValidationMessageFor(m => m.Password, string.Empty, new { @class = "text-danger" })
+                <strong id="capsWarningDiv" style="visibility:hidden">@Strings.CapsLock</strong>
+            </div>
+            <div class="checkbox form-group pull-left">
+                @Html.CheckBoxFor(m => m.RememberMe, new { id = Html.NameFor(m => m.RememberMe), style = "margin-left: 0px" })
+                <label for="@Html.NameFor(m=>m.RememberMe)"> @Strings.RememberMe </label>
+            </div>
+            <div class="form-group allyis-action-buttons">
+                <p>
+                    <input type="submit" value="@Strings.SignIn" class="btn btn-primary" />
+                </p>
+                <p>
+                    @Html.ActionLink(Strings.RegisterLinkText, ActionConstants.Register, new { ReturnUrl = ViewBag.ReturnUrl })
+                </p>
+                <p>
+                    @Html.ActionLink(Strings.ForgotPasswordViewTitle, ActionConstants.ForgotPassword)
+                </p>
+            </div>
+        }
     </div>
-    <div class="form-group">
-        @Html.Label(Strings.Password)
-        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @onkeypress = "capsCheck(event)", @onkeydown = "capsCheck(event)" })
-        @Html.ValidationMessageFor(m => m.Password, string.Empty, new { @class = "text-danger" })
-        <strong id="capsWarningDiv" style="visibility:hidden">@Strings.CapsLock</strong>
-    </div>
-    <div class="checkbox form-group pull-left">
-        @Html.CheckBoxFor(m => m.RememberMe, new { id=Html.NameFor(m=>m.RememberMe), style="margin-left: 0px"})
-        <label for="@Html.NameFor(m=>m.RememberMe)"> @Strings.RememberMe </label>
-    </div>
-    <div class="form-group allyis-action-buttons">
-        <p>
-            <input type="submit" value="@Strings.SignIn" class="btn btn-primary" />
-        </p>
-        <p>
-            @Html.ActionLink(Strings.RegisterLinkText, ActionConstants.Register, new { ReturnUrl = ViewBag.ReturnUrl })
-        </p>
-        <p>
-            @Html.ActionLink(Strings.ForgotPasswordViewTitle, ActionConstants.ForgotPassword)
-        </p>
-    </div>
-}
+</div>
 @section Scripts {
     @Scripts.Render("~/bundles/CapsCheck");
 }

@@ -12,7 +12,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// Business logic for importing directly from spreadsheets.
 	/// </summary>
-	public partial class Service : BaseService
+	public partial class AppService : BaseService
 	{
 		/// <summary>
 		/// Import data from a workbook. Imports customers, projects, users, project/user relationships, and/or time entry data.
@@ -46,12 +46,12 @@ namespace AllyisApps.Services
 			List<Tuple<string, User>> users = this.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Select(o => new Tuple<string, User>(o.EmployeeId, this.GetUser(o.UserId))).ToList();
 
 			// Retrieval of existing user product subscription data
-			int ttProductId = Service.GetProductIdByName("TimeTracker");
+			int ttProductId = GetProductIdByName("TimeTracker");
 			SubscriptionDisplayDBEntity ttSub = DBHelper.GetSubscriptionsDisplayByOrg(this.UserContext.ChosenOrganizationId).Where(s => s.ProductId == ttProductId).SingleOrDefault();
 			List<User> userSubs = this.GetUsersWithSubscriptionToProductInOrganization(this.UserContext.ChosenOrganizationId, ttProductId).ToList();
 
 			// Retrieval of existing pay class data
-			List<PayClass> payClasses = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => Service.InitializePayClassInfo(pc)).ToList();
+			List<PayClass> payClasses = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InitializePayClassInfo(pc)).ToList();
 
 			// Result object
 			ImportActionResult result = new ImportActionResult();
@@ -646,7 +646,7 @@ namespace AllyisApps.Services
 								// All required info was found successfully
 								string[] names = fields[2].Split(new string[] { "__IMPORT__" }, StringSplitOptions.None);
 
-								if (!Service.IsEmailAddressValid(fields[0]))
+								if (!AppService.IsEmailAddressValid(fields[0]))
 								{
 									result.UserFailures.Add(string.Format("Could not create user {0} {1}: invalid email format ({2}).", names[0], names[1], fields[0]));
 									continue;
