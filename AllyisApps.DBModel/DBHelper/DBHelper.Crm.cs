@@ -379,6 +379,22 @@ namespace AllyisApps.DBModel
 		/// Delete the specified customer.
 		/// </summary>
 		/// <param name="customerID">The customer's Id.</param>
+		/// <returns>Customer's name if successful, empty string if not found.</returns>
+		public string DeleteCustomer(int customerID)
+		{
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var result = connection.Query<string>("[Crm].[DeleteCustomer]", new { CustomerId = customerID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+                if (result == null) { return ""; }
+                return result;
+            }
+		}
+
+        /*
+        /// <summary>
+		/// Delete the specified customer.
+		/// </summary>
+		/// <param name="customerID">The customer's Id.</param>
 		/// <returns>True if successful.</returns>
 		public bool DeleteCustomer(int customerID)
 		{
@@ -389,16 +405,17 @@ namespace AllyisApps.DBModel
 			}
 
 			return true;
-		}
+		}   
+    */
 
-		/// <summary>
-		/// Gets all the projects a user can use in an organization.
-		/// </summary>
-		/// <param name="userId">The user's Id.</param>
-		/// <param name="orgId">The organization's Id.</param>
-		/// <param name="activity">The level of activity you wish to allow. Specifying 0 includes inactive projects.</param>
-		/// <returns>A collection of CompleteProjectDBEntity objects for each project the user has access to within the organization.</returns>
-		public IEnumerable<CompleteProjectDBEntity> GetProjectsByUserAndOrganization(int userId, int orgId, int activity)
+        /// <summary>
+        /// Gets all the projects a user can use in an organization.
+        /// </summary>
+        /// <param name="userId">The user's Id.</param>
+        /// <param name="orgId">The organization's Id.</param>
+        /// <param name="activity">The level of activity you wish to allow. Specifying 0 includes inactive projects.</param>
+        /// <returns>A collection of CompleteProjectDBEntity objects for each project the user has access to within the organization.</returns>
+        public IEnumerable<CompleteProjectDBEntity> GetProjectsByUserAndOrganization(int userId, int orgId, int activity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@UserId", userId);

@@ -89,6 +89,21 @@ namespace AllyisApps.Services
 		/// Deletes a customer.
 		/// </summary>
 		/// <param name="customerId">Customer id.</param>
+		/// <returns>Returns null if authorization fails, empty string if customer not found, customer's name if succeeds</returns>
+		public string DeleteCustomer(int customerId)
+		{
+			if (this.Can(Actions.CoreAction.EditCustomer))
+			{
+				return DBHelper.DeleteCustomer(customerId);
+			}
+			return null;
+		}
+
+        /*
+        /// <summary>
+		/// Deletes a customer.
+		/// </summary>
+		/// <param name="customerId">Customer id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool DeleteCustomer(int customerId)
 		{
@@ -99,14 +114,15 @@ namespace AllyisApps.Services
 			}
 
 			return false;
-		}
+		}   
+    */
 
-		/// <summary>
-		/// Gets a list of <see cref="Customer"/>'s for an organization.
-		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
-		/// <returns><see cref="IEnumerable{CustomerDBEntity}"/>.</returns>
-		public IEnumerable<Customer> GetCustomerList(int orgId)
+        /// <summary>
+        /// Gets a list of <see cref="Customer"/>'s for an organization.
+        /// </summary>
+        /// <param name="orgId">Organization Id.</param>
+        /// <returns><see cref="IEnumerable{CustomerDBEntity}"/>.</returns>
+        public IEnumerable<Customer> GetCustomerList(int orgId)
 		{
 			IEnumerable<CustomerDBEntity> dbeList = DBHelper.GetCustomerList(orgId);
 			List<Customer> list = new List<Customer>();
