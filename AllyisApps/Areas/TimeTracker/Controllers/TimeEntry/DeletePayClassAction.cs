@@ -23,18 +23,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Redirects to the settings view.</returns>
 		public ActionResult DeletePayClass(int payClassId)
 		{
-			var allPayClasses = Service.GetPayClasses();
+			var allPayClasses = AppService.GetPayClasses();
 			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassID == payClassId).ElementAt(0).Name;
 
 			//Built-in, non-editable pay classes cannot be deleted
 			//Used pay classes cannot be deleted, suggest manager to merge it with another payclass instead
-			if (sourcePayClassName == "Regular" || sourcePayClassName == "Overtime" || sourcePayClassName == "Holiday" || sourcePayClassName == "Paid Time Off" || sourcePayClassName == "Unpaid Time Off" || Service.GetTimeEntriesThatUseAPayClass(payClassId).Count() > 0)
+			if (sourcePayClassName == "Regular" || sourcePayClassName == "Overtime" || sourcePayClassName == "Holiday" || sourcePayClassName == "Paid Time Off" || sourcePayClassName == "Unpaid Time Off" || AppService.GetTimeEntriesThatUseAPayClass(payClassId).Count() > 0)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotDeletePayClass, Variety.Warning));
 			}
 			else
 			{
-				if (Service.DeletePayClass(payClassId))
+				if (AppService.DeletePayClass(payClassId))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulDeletePayClass, Variety.Success));
 				}

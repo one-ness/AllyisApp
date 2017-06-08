@@ -796,10 +796,10 @@ namespace AllyisApps.DBModel
 				}
 				else
 				{
-					return Tuple.Create(
-						results.Read<string>().FirstOrDefault(),
-						results.Read<string>().FirstOrDefault());
-				}
+                    return Tuple.Create(
+                        results.Read<string>().FirstOrDefault(),
+                        results.Read<string>().FirstOrDefault());
+                }
 			}
 		}
 
@@ -861,64 +861,64 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Adds a single entry to the InvitationSubRole database.
-		/// </summary>
-		/// <param name="invitationId">The invitation Id.</param>
-		/// <param name="subscriptionId">The subscription Id.</param>
-		/// <param name="productRoleId">The Id of the product role.</param>
-		public void CreateInvitationSubRole(int invitationId, int subscriptionId, int productRoleId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@InvitationId", invitationId);
-			parameters.Add("@SubscriptionId", subscriptionId);
-			parameters.Add("@ProductRoleId", productRoleId);
+        ///// <summary>
+        ///// Adds a single entry to the InvitationSubRole database.
+        ///// </summary>
+        ///// <param name="invitationId">The invitation Id.</param>
+        ///// <param name="subscriptionId">The subscription Id.</param>
+        ///// <param name="productRoleId">The Id of the product role.</param>
+        //public void CreateInvitationSubRole(int invitationId, int subscriptionId, int productRoleId)
+        //{
+        //    DynamicParameters parameters = new DynamicParameters();
+        //    parameters.Add("@InvitationId", invitationId);
+        //    parameters.Add("@SubscriptionId", subscriptionId);
+        //    parameters.Add("@ProductRoleId", productRoleId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				connection.Execute("[Auth].[CreateInvitationSubRole]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
+        //    using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+        //    {
+        //        connection.Execute("[Auth].[CreateInvitationSubRole]", parameters, commandType: CommandType.StoredProcedure);
+        //    }
+        //}
 
-		/// <summary>
-		/// Deletes a single entry from the InvitationSubRole database.
-		/// </summary>
-		/// <param name="invitationId">The invitation Id.</param>
-		/// <param name="subscriptionId">The subscription Id.</param>
-		public void DeleteInvitationSubRole(int invitationId, int subscriptionId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@InvitationId", invitationId);
-			parameters.Add("@SubscriptionId", subscriptionId);
+        ///// <summary>
+        ///// Deletes a single entry from the InvitationSubRole database.
+        ///// </summary>
+        ///// <param name="invitationId">The invitation Id.</param>
+        ///// <param name="subscriptionId">The subscription Id.</param>
+        //public void DeleteInvitationSubRole(int invitationId, int subscriptionId)
+        //{
+        //    DynamicParameters parameters = new DynamicParameters();
+        //    parameters.Add("@InvitationId", invitationId);
+        //    parameters.Add("@SubscriptionId", subscriptionId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				connection.Execute("[Auth].[DeleteInvitationSubRole]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
+        //    using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+        //    {
+        //        connection.Execute("[Auth].[DeleteInvitationSubRole]", parameters, commandType: CommandType.StoredProcedure);
+        //    }
+        //}
 
-		/// <summary>
-		/// Gets the roles for each subscription the invited user has.
-		/// </summary>
-		/// <param name="invitationId">The invitation Id.</param>
-		/// <returns>List of all roles.</returns>
-		public IEnumerable<InvitationSubRoleDBEntity> GetInvitationSubRolesByInvitationId(int invitationId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@InvitationId", invitationId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<InvitationSubRoleDBEntity>("[Auth].[GetInvitationSubRolesByInvitationId]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
+        ///// <summary>
+        ///// Gets the roles for each subscription the invited user has.
+        ///// </summary>
+        ///// <param name="invitationId">The invitation Id.</param>
+        ///// <returns>List of all roles.</returns>
+        //public IEnumerable<InvitationSubRoleDBEntity> GetInvitationSubRolesByInvitationId(int invitationId)
+        //{
+        //    DynamicParameters parameters = new DynamicParameters();
+        //    parameters.Add("@InvitationId", invitationId);
+        //    using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+        //    {
+        //        return connection.Query<InvitationSubRoleDBEntity>("[Auth].[GetInvitationSubRolesByInvitationId]", parameters, commandType: CommandType.StoredProcedure);
+        //    }
+        //}
 
-		/// <summary>
-		/// Gets the first name of a user if they are in that organizaiton.
-		/// </summary>
-		/// <param name="organizationID">The organization id.</param>
-		/// <param name="email">The user email.</param>
-		/// <returns>The user first name.</returns>
-		public string GetOrgUserFirstName(int organizationID, string email)
+        /// <summary>
+        /// Gets the first name of a user if they are in that organizaiton.
+        /// </summary>
+        /// <param name="organizationID">The organization id.</param>
+        /// <param name="email">The user email.</param>
+        /// <returns>The user first name.</returns>
+        public string GetOrgUserFirstName(int organizationID, string email)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@Email", email);

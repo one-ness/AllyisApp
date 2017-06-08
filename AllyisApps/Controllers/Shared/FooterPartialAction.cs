@@ -25,7 +25,7 @@ namespace AllyisApps.Controllers
 		[ChildActionOnly]
 		public ActionResult FooterPartial()
 		{
-			List<LanguageViewModel> languages = Service.ValidLanguages().Select(l => new LanguageViewModel
+			List<LanguageViewModel> languages = AppService.ValidLanguages().Select(l => new LanguageViewModel
 			{
 				LanguageID = l.LanguageID,
 				LanguageName = l.LanguageName,

@@ -25,9 +25,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult Create()
 		{
-			if (Service.Can(Actions.CoreAction.EditCustomer))
+			if (AppService.Can(Actions.CoreAction.EditCustomer))
 			{
-				var idAndCountries = Service.GetNextCustIdAndCountries();
+				var idAndCountries = AppService.GetNextCustIdAndCountries();
 
 				return this.View(new EditCustomerInfoViewModel
 				{
@@ -53,13 +53,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (ModelState.IsValid)
 			{
 				// CustomerOrgId must be unique
-				if (Service.GetCustomerList(this.UserContext.ChosenOrganizationId).Any(customer => customer.CustomerOrgId == model.CustomerOrgId))
+				if (AppService.GetCustomerList(this.UserContext.ChosenOrganizationId).Any(customer => customer.CustomerOrgId == model.CustomerOrgId))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
 					return this.View(model);
 				}
 
-				int? customerId = Service.CreateCustomer(new Customer()
+				int? customerId = AppService.CreateCustomer(new Customer()
 				{
 					ContactEmail = model.ContactEmail,
 					Name = model.Name,

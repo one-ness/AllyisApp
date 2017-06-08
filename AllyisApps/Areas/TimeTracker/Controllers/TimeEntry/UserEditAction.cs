@@ -29,9 +29,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				userId = UserContext.UserId;
 			}
 
-			var infos = Service.GetProjectsForOrgAndUser(userId);
+			var infos = AppService.GetProjectsForOrgAndUser(userId);
 
-			if (Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (AppService.Can(Actions.CoreAction.EditProject))
 			{
 				return this.View(new UserEditViewModel
 				{

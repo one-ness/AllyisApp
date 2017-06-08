@@ -26,9 +26,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The reports page.</returns>
 		public ActionResult Report()
 		{
-			if (Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 			{
-				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{
 					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReports);
 				}
@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				int orgId = UserContext.ChosenOrganizationId;
 				ReportViewModel reportVM = null;
 
-				var infos = Service.GetReportInfo(orgId);
+				var infos = AppService.GetReportInfo(orgId);
 
 				const string TempDataKey = "RVM";
 				if (this.TempData[TempDataKey] != null)
@@ -46,7 +46,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 				else
 				{
-					reportVM = this.ConstructReportViewModel(UserContext.UserId, orgId, Service.Can(Actions.CoreAction.TimeTrackerEditOthers), infos.Item1, infos.Item2);
+					reportVM = this.ConstructReportViewModel(UserContext.UserId, orgId, AppService.Can(Actions.CoreAction.TimeTrackerEditOthers), infos.Item1, infos.Item2);
 				}
 
 				reportVM.UserView = this.GetUserSelectList(infos.Item3, reportVM.Selection.Users);
@@ -99,10 +99,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Selection = previousSelections ?? new ReportSelectionModel
 				{
 					CustomerId = 0,
-					EndDate = Service.GetDayFromDateTime(DateTime.Today),
+					EndDate = AppService.GetDayFromDateTime(DateTime.Today),
 					Page = 1,
 					ProjectId = 0,
-					StartDate = Service.GetDayFromDateTime(DateTime.Today),
+					StartDate = AppService.GetDayFromDateTime(DateTime.Today),
 					Users = new List<int>()
 				}
 			};

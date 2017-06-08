@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers
 		public ActionResult CreateOrg()
 		{
 			ViewBag.ShowOrganizationPartial = false;
-			return this.View(new EditOrganizationViewModel() { ValidCountries = Service.ValidCountries(), IsCreating = true });
+			return this.View(new EditOrganizationViewModel() { ValidCountries = AppService.ValidCountries(), IsCreating = true });
 		}
 
 		/// <summary>
@@ -45,7 +45,7 @@ namespace AllyisApps.Controllers
 
 			if (model != null && ModelState.IsValid)
 			{
-				int orgId = Service.CreateOrganization(
+				int orgId = AppService.CreateOrganization(
 					new Organization()
 					{
 						Address = model.Address,

@@ -2,33 +2,37 @@
 
 @{
     ViewBag.Title = Strings.AddBillingInformation;
-    Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<p>
-    @Strings.NeedBillingInfo
-</p>
+<div class="shrink-wrap-center">
+    <div class="min300">
+        <p>
+            @Strings.NeedBillingInfo
+        </p>
 
-@using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, FormMethod.Post))
-{
-    @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+        @using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, FormMethod.Post))
+        {
+            @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
 
-    @Html.AntiForgeryToken()
-    @Html.HiddenFor(m => m.OrganizationId)
-    @Html.HiddenFor(m => m.ProductId)
-    @Html.Hidden("SelectedSku", 1)
-    @Html.HiddenFor(m => m.PreviousSku)
-    @Html.HiddenFor(m=>m.NumberOfUsers)
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.OrganizationId)
+            @Html.HiddenFor(m => m.ProductId)
+            @Html.Hidden("SelectedSku", 1)
+            @Html.HiddenFor(m => m.PreviousSku)
+            @Html.HiddenFor(m => m.NumberOfUsers)
 
-    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-            data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
-            data-name="Allyis Apps"
-            data-description="Adding Billing Information"
-            @*data-image="/128x128.png"*@
-            data-locale="auto"
-            data-label="Add Billing Information"
-            data-panel-label="Submit Billing Info"
-            data-billing-address="true"
-            data-zip-code="true"
-            data-allow-remember-me="false">
-    </script>
-}
+            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                    data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
+                    data-name="Allyis Apps"
+                    data-description="Adding Billing Information"
+                    @*data-image="/128x128.png"*@
+                    data-locale="auto"
+                    data-label="Add Billing Information"
+                    data-panel-label="Submit Billing Info"
+                    data-billing-address="true"
+                    data-zip-code="true"
+                    data-allow-remember-me="false">
+            </script>
+        }
+    </div>
+</div>

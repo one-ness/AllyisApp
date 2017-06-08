@@ -31,7 +31,7 @@ namespace AllyisApps.Services.Tests
 		//precondition: a user with this email address does not exist in the database
 		public static int createTestUser(string email)
 		{
-			var service = new Service(connectionStr);
+			var service = new  AppService(connectionStr);
 			string insertStmt = "INSERT INTO [Auth].[User]([FirstName], [LastName],[Email],[UserName],[PasswordHash] ,[LanguagePreference]) " +
 								"VALUES(@fname, @lname, @email, @email, @pwHash, @langpref)";
 			string selectStmt = "SELECT [UserId] FROM [Auth].[User] WHERE [Email] = @email";
@@ -72,7 +72,7 @@ namespace AllyisApps.Services.Tests
 		//check whether a test user is already inserted into the db
 		public static bool testUserExists(string email)
 		{
-			var service = new Service(connectionStr);
+			var service = new  AppService(connectionStr);
 			string selectStmt = "SELECT [UserId] FROM [Auth].[User] WHERE [Email] = @email";
 			SqlDataReader reader;
 
@@ -96,7 +96,7 @@ namespace AllyisApps.Services.Tests
 		//delete test user from the User table after the test
 		public static void deleteTestUser(string email)
 		{
-			var service = new Service(connectionStr);
+			var service = new  AppService(connectionStr);
 			string stmt1 = "DELETE FROM [Auth].[User] WHERE [Email] = @email";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -120,7 +120,7 @@ namespace AllyisApps.Services.Tests
 		//create a test Org and return the OrganizationId
 		public static int createTestOrg(string orgName)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string insertStmt = "INSERT INTO [Auth].[Organization]([Name], [Subdomain], [IsActive]) " +
 								"VALUES(@name, @subdomain, @isActive)";
 			string selectStmt = "SELECT [OrganizationId] FROM [Auth].[Organization] WHERE [Name] = @name";
@@ -160,7 +160,7 @@ namespace AllyisApps.Services.Tests
 		//delete test org from the Organization table after the test
 		public static void deleteTestOrg(int orgId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt1 = "DELETE FROM [Auth].[Organization] WHERE [OrganizationId] = @orgId";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -184,7 +184,7 @@ namespace AllyisApps.Services.Tests
 		//create a simple invitation (without subscription or role) and return the id
 		public static int createUserInvitation(string email, int orgId, int orgRole, string employeeId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string insertStmt = "INSERT INTO [Auth].[Invitation]([OrganizationId], [FirstName], [LastName],[Email],[IsActive],[EmployeeId],[DateOfBirth],[AccessCode],[OrgRole]) " +
 								"VALUES(@orgId, @fname, @lname, @email, @isActive, @employeeId, @dob, @accessCode, @orgRole)";
 			string selectStmt = "SELECT [InvitationId] FROM [Auth].[Invitation] WHERE [OrganizationId] = @orgId AND [Email] = @email";
@@ -229,7 +229,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void deleteUserInvitation(string email)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt = "DELETE FROM [Auth].[Invitation] WHERE [Email] = @email";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -249,7 +249,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void createOrgUser(int userId, int orgId, int roleId, string employeeId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string insertStmt = "INSERT INTO [Auth].[OrganizationUser]([UserId], [OrganizationId], [EmployeeId], [OrgRoleId]) " +
 								"VALUES(@userId, @orgId, @employeeId, @orgRoleId)";
 
@@ -273,7 +273,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void deleteOrgUser(int userId, int orgId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt = "DELETE FROM [Auth].[OrganizationUser] WHERE [UserId] = @userId AND [OrganizationId] = @orgId";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -294,7 +294,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void deleteOrgUserByOrgId(int orgId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt = "DELETE FROM [Auth].[OrganizationUser] WHERE [OrganizationId] = @orgId";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -314,7 +314,7 @@ namespace AllyisApps.Services.Tests
 
 		public static int createSubscription(int orgId, int skuId, int numOfUsers)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string insertStmt = "INSERT INTO [Billing].[Subscription]([OrganizationId], [SkuId], [NumberOfUsers],[IsActive]) " +
 								"VALUES(@orgId, @skuId, @num, @isActive)";
 			string selectStmt = "SELECT [SubscriptionId] FROM [Billing].[Subscription] WHERE [OrganizationId] = @orgId AND [SkuId] = @skuId";
@@ -354,7 +354,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void deleteSubscription(int subId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt = "DELETE FROM [Billing].[Subscription] WHERE [SubscriptionId] = @subId";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -374,7 +374,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void createSubUser(int subId, int userId, int productRoleId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string insertStmt = "INSERT INTO [Billing].[SubscriptionUser]([SubscriptionId], [UserId], [ProductRoleId]) " +
 								"VALUES(@subId, @userId, @pRoleId)";
 
@@ -397,7 +397,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void deleteSubUser(int userId, int subId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt = "DELETE FROM [Billing].[SubscriptionUser] WHERE [UserId] = @userId AND [SubscriptionId] = @subId";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -418,7 +418,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void deleteSubUserBySubId(int subId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt = "DELETE FROM [Billing].[SubscriptionUser] WHERE [SubscriptionId] = @subId";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -438,7 +438,7 @@ namespace AllyisApps.Services.Tests
 
 		public static int createCustomer(string name, int orgId, int isActive, string cusOrgId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string insertStmt = "INSERT INTO [Crm].[Customer]([Name], [OrganizationId], [IsActive],[CustomerOrgId]) " +
 								"VALUES(@name, @orgId, @isActive, @cusOrgId)";
 			string selectStmt = "SELECT [CustomerId] FROM [Crm].[Customer] WHERE [Name] = @name AND [OrganizationId] = @orgId";
@@ -478,7 +478,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void deleteCustomer(int customerId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt = "DELETE FROM [Crm].[Customer] WHERE [CustomerId] = @customerId";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -498,7 +498,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void deleteCustomersByOrgId(int orgId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt = "DELETE FROM [Crm].[Customer] WHERE [OrganizationId] = @orgId";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -518,7 +518,7 @@ namespace AllyisApps.Services.Tests
 
 		public static int createProject(int customerId, string name, int isActive, string projOrgId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string insertStmt = "INSERT INTO [Crm].[Project]([CustomerId], [Name], [Type], [IsActive],[ProjectOrgId]) " +
 								"VALUES(@customerId, @name, @type, @isActive, @projOrgId)";
 			string selectStmt = "SELECT [ProjectId] FROM [Crm].[Project] WHERE [Name] = @name AND [CustomerId] = @customerId";
@@ -559,7 +559,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void deleteProject(int projectId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt = "DELETE FROM [Crm].[Project] WHERE [ProjectId] = @projId";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -579,7 +579,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void deleteProjectByCustId(int customerId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt = "DELETE FROM [Crm].[Project] WHERE [CustomerId] = @customerId";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -599,7 +599,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void createProjectUser(int projId, int userId, int isActive)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string insertStmt = "INSERT INTO [Crm].[ProjectUser]([ProjectId], [UserId], [IsActive]) " +
 								"VALUES(@projId, @userId, @isActive)";
 
@@ -621,7 +621,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void deleteProjectUserByProjectId(int projId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt = "DELETE FROM [Crm].[ProjectUser] WHERE [ProjectId] = @projId";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -643,7 +643,7 @@ namespace AllyisApps.Services.Tests
 		public static int createPayClass(int orgId)
 		{
 			List<string> payClassNames = new List<string> { "Regular", "Paid Time Off", "Unpaid Time Off", "Holiday", "Bereavement Leave", "Jury Duty", "Overtime", "Other Leave" };
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string insertStmt = "INSERT INTO [TimeTracker].[PayClass]([Name], [OrganizationId]) " +
 								"VALUES(@name, @orgId)";
 			string selectStmt = "SELECT [PayClassId] FROM [TimeTracker].[PayClass] WHERE [Name] = @name AND [OrganizationId] = @orgId";
@@ -683,7 +683,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void deletePayClass(int orgId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt = "DELETE FROM [TimeTracker].[PayClass] WHERE [OrganizationId] = @orgId";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -703,7 +703,7 @@ namespace AllyisApps.Services.Tests
 
 		public static int createTimeEntry(int userId, int projId, DateTime date, int payClassId, float duration)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string insertStmt = "INSERT INTO [TimeTracker].[TimeEntry]([UserId], [ProjectId], [Date], [Duration], [PayClassId]) " +
 								"VALUES(@userId, @projId, @date, @duration, @payClassId)";
 			string selectStmt = "SELECT [TimeEntryId] FROM [TimeTracker].[TimeEntry] WHERE [UserId] = @userId AND [ProjectId] = @projId AND [Date] = @date AND [Duration] = @duration AND [PayClassId] = @payClassId";
@@ -747,7 +747,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void deleteTimeEntry(int timeEntryId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt = "DELETE FROM [TimeTracker].[TimeEntry] WHERE [TimeEntryId] = @entryId";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -767,7 +767,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void deleteTimeEntriesByProjectId(int projId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt = "DELETE FROM [TimeTracker].[TimeEntry] WHERE [ProjectId] = @projId";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -787,7 +787,7 @@ namespace AllyisApps.Services.Tests
 
 		public static int createHoliday(string holidayName, DateTime date, int orgId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string insertStmt = "INSERT INTO [TimeTracker].[Holiday]([HolidayName], [Date], [OrganizationId]) " +
 								"VALUES(@holidayName, @date, @orgId)";
 			string selectStmt = "SELECT [HolidayId] FROM [TimeTracker].[Holiday] WHERE [OrganizationId] = @orgId AND [Date] = @date";
@@ -826,7 +826,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void deleteHoliday(int holidayId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt = "DELETE FROM [TimeTracker].[Holiday] WHERE [HolidayId] = @holidayId";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -846,7 +846,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void createTimeTrackerSetting(int orgId, int lockDateUsed)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string insertStmt = "INSERT INTO [TimeTracker].[Setting]([OrganizationId], [StartOfWeek], [OvertimeHours], [OvertimePeriod], [OvertimeMultiplier], [LockDateUsed], [LockDatePeriod], [LockDateQuantity]) " +
 								"VALUES(@orgId, 1, 40, 'Week', 1.5, @lockDateUsed, 'Weeks', 2)";
 
@@ -866,7 +866,7 @@ namespace AllyisApps.Services.Tests
 
 		public static void deleteTimeTrackerSetting(int orgId)
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt = "DELETE FROM [TimeTracker].[Setting] WHERE [OrganizationId] = @orgId";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -915,7 +915,7 @@ namespace AllyisApps.Services.Tests
 			//Arrange
 			string countryName = "";
 
-			var service = new Service(connectionStr);
+			var service = new  AppService(connectionStr);
 
 			//Act
 			IEnumerable validStates = service.ValidStates(countryName);
@@ -926,7 +926,7 @@ namespace AllyisApps.Services.Tests
 		{
 			//Arrange
 			string countryName = "United Kingdom";
-			var service = new Service(connectionStr);
+			var service = new  AppService(connectionStr);
 			IEnumerable<string> expected = new List<string>() { "Scotland", "Wales", "Northern Ireland", "England" };
 
 			//Act
@@ -942,7 +942,7 @@ namespace AllyisApps.Services.Tests
 		public void ValidCountries_Should_Return_All_Countries()
 		{
 			//Arrange
-			var service = new Service(connectionStr);
+			var service = new  AppService(connectionStr);
 
 			//Act
 			IEnumerable returnedCountries = service.ValidCountries();
@@ -956,7 +956,7 @@ namespace AllyisApps.Services.Tests
 		public void ValidLanguages_Should_Return_All_Languages()
 		{
 			//Arrange
-			var service = new Service(connectionStr);
+			var service = new  AppService(connectionStr);
 
 			//Act
 			IEnumerable<Language> returnedLang = service.ValidLanguages();
@@ -976,7 +976,7 @@ namespace AllyisApps.Services.Tests
 			int orgId = createTestOrg(orgName);
 			createUserInvitation(userEmail, orgId, 1, "111");
 
-			var service = new Service(connectionStr);
+			var service = new  AppService(connectionStr);
 
 			try
 			{
@@ -1007,7 +1007,7 @@ namespace AllyisApps.Services.Tests
 			int inviId = createUserInvitation(userEmail, orgId, 1, "111");
 
 			UserContext userContext = new UserContext(userId, userEmail, userEmail, 0, 0, null, 0);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -1080,7 +1080,7 @@ namespace AllyisApps.Services.Tests
 			int inviId = createUserInvitation(userEmail, orgId, 1, "111");
 
 			UserContext userContext = new UserContext(userId, userEmail, userEmail, 0, 0, null, 0);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -1163,7 +1163,7 @@ namespace AllyisApps.Services.Tests
 			bool lockOutEnabled = false;
 			DateTime lockOutEndDateUtc = new DateTime();
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			await service.SetupNewUser(email, fname, lname, dob, address, city, state, country, postalCode, phone, password, lang, confirmUrl, twoFactorEnabled, lockOutEnabled, lockOutEndDateUtc);
@@ -1191,7 +1191,7 @@ namespace AllyisApps.Services.Tests
 			bool lockOutEnabled = false;
 			DateTime lockOutEndDateUtc = new DateTime();
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			await service.SetupNewUser(email, fname, lname, dob, address, city, state, country, postalCode, phone, password, lang, confirmUrl, twoFactorEnabled, lockOutEnabled, lockOutEndDateUtc);
@@ -1219,7 +1219,7 @@ namespace AllyisApps.Services.Tests
 			bool lockOutEnabled = false;
 			DateTime lockOutEndDateUtc = new DateTime();
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			await service.SetupNewUser(email, fname, lname, dob, address, city, state, country, postalCode, phone, password, lang, confirmUrl, twoFactorEnabled, lockOutEnabled, lockOutEndDateUtc);
@@ -1247,7 +1247,7 @@ namespace AllyisApps.Services.Tests
 			bool lockOutEnabled = false;
 			DateTime lockOutEndDateUtc = new DateTime();
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			await service.SetupNewUser(email, fname, lname, dob, address, city, state, country, postalCode, phone, password, lang, confirmUrl, twoFactorEnabled, lockOutEnabled, lockOutEndDateUtc);
@@ -1275,7 +1275,7 @@ namespace AllyisApps.Services.Tests
 			bool lockOutEnabled = false;
 			DateTime lockOutEndDateUtc = new DateTime();
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			await service.SetupNewUser(email, fname, lname, dob, address, city, state, country, postalCode, phone, password, lang, confirmUrl, twoFactorEnabled, lockOutEnabled, lockOutEndDateUtc);
@@ -1302,7 +1302,7 @@ namespace AllyisApps.Services.Tests
 			bool lockOutEnabled = false;
 			DateTime lockOutEndDateUtc = DateTime.Today;
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			createTestUser(email);
 
 			//Act
@@ -1342,7 +1342,7 @@ namespace AllyisApps.Services.Tests
 			bool lockOutEnabled = false;
 			DateTime lockOutEndDateUtc = DateTime.Today;
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -1365,7 +1365,7 @@ namespace AllyisApps.Services.Tests
 			//Arrange
 			string email = "test_user@unittestemail.com";
 			string password = "AllyisApps.123";
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			UserContext output = service.ValidateLogin(email, password);
@@ -1381,7 +1381,7 @@ namespace AllyisApps.Services.Tests
 			string email = "test_user@unittestemail.com";
 			string password = "AllyisApps.123";
 			int userId = createTestUser(email);
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			UserContext expected = new UserContext(userId, email, email);
 
 			try
@@ -1403,7 +1403,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException), "User ID cannot be 0 or negative.")]
 		public void PopulateUserContext_Should_Throw_Exception_If_UserId_Is_Invalid()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			service.PopulateUserContext(-1);
@@ -1416,7 +1416,7 @@ namespace AllyisApps.Services.Tests
 			//Arrange
 			string email = "test_user@unittestemail.com";
 			int userId = createTestUser(email);
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -1452,7 +1452,7 @@ namespace AllyisApps.Services.Tests
 			int orgId = createTestOrg(orgName);
 			createOrgUser(userId, orgId, 1, "111");    //roleId = 1 (member)
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -1482,7 +1482,7 @@ namespace AllyisApps.Services.Tests
 		public void GetUser_Should_Throw_Exception_For_Invalid_UserId()
 		{
 			//Arrange
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			service.GetUser(0);
@@ -1494,7 +1494,7 @@ namespace AllyisApps.Services.Tests
 			//Arrange
 			string email = "test_user@unittestemail.com";
 			int userId = createTestUser(email);
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -1551,7 +1551,7 @@ namespace AllyisApps.Services.Tests
 			org2.Name = orgName2;
 
 			UserContext userContext = new UserContext(userId, email, email);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -1586,7 +1586,7 @@ namespace AllyisApps.Services.Tests
 		public void GetUserByEmail_Should_Throw_Exception_For_Null_Email()
 		{
 			//Arrange
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			service.GetUserByEmail(null);
@@ -1598,7 +1598,7 @@ namespace AllyisApps.Services.Tests
 		{
 			//Arrange
 			string email = "";
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			service.GetUserByEmail(email);
@@ -1610,7 +1610,7 @@ namespace AllyisApps.Services.Tests
 		{
 			//Arrange
 			string email = "invalidemail";
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			service.GetUserByEmail(email);
@@ -1622,7 +1622,7 @@ namespace AllyisApps.Services.Tests
 			//Arrange
 			string email = "test_user@unittestemail.com";
 			int userId = createTestUser(email);
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -1666,7 +1666,7 @@ namespace AllyisApps.Services.Tests
 		{
 			//Arrange
 			User model = null;
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			service.SaveUserInfo(model);
@@ -1705,7 +1705,7 @@ namespace AllyisApps.Services.Tests
 				PostalCode = null
 			};
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -1750,7 +1750,7 @@ namespace AllyisApps.Services.Tests
 		public void SetLanguage_Should_Throw_Exception_For_Invalid_LanguageID()
 		{
 			//Arrange
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			service.SetLanguage(-1);
@@ -1764,7 +1764,7 @@ namespace AllyisApps.Services.Tests
 			int userId = createTestUser(userEmail);
 
 			UserContext userContext = new UserContext(userId, userEmail, userEmail, 0, 0, null, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -1806,7 +1806,7 @@ namespace AllyisApps.Services.Tests
 		public void GetLanguage_Should_Throw_Exception_For_Invalid_LanguageID()
 		{
 			//Arrange
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			service.GetLanguage(-1);
@@ -1816,7 +1816,7 @@ namespace AllyisApps.Services.Tests
 		public void GetLanguage_Should_Return_Correct_Language_For_Valid_LanguageID()
 		{
 			//Arrange
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			Language lang = service.GetLanguage(1); //English
@@ -1829,7 +1829,7 @@ namespace AllyisApps.Services.Tests
 		public void GetLanguage_Should_Return_English_For_Zero_LanguageID()
 		{
 			//Arrange
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			Language lang = service.GetLanguage(0); //English
@@ -1844,7 +1844,7 @@ namespace AllyisApps.Services.Tests
 		{
 			string emptyEmail = "";
 			string callbackUrl = "";
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.SendPasswordResetMessage(emptyEmail, callbackUrl);
 		}
 
@@ -1854,7 +1854,7 @@ namespace AllyisApps.Services.Tests
 		{
 			string nullEmail = null;
 			string callbackUrl = "";
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.SendPasswordResetMessage(nullEmail, callbackUrl);
 		}
 
@@ -1864,7 +1864,7 @@ namespace AllyisApps.Services.Tests
 		{
 			string invalidEmail = "invalidemail";
 			string callbackUrl = "";
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.SendPasswordResetMessage(invalidEmail, callbackUrl);
 		}
 
@@ -1873,7 +1873,7 @@ namespace AllyisApps.Services.Tests
 		{
 			string email = "test_user@unittestemail.com";
 			string callbackUrl = "";
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			bool result = await service.SendPasswordResetMessage(email, callbackUrl);
 
 			//Assert
@@ -1886,7 +1886,7 @@ namespace AllyisApps.Services.Tests
 			string email = "test_user@unittestemail.com";
 			string callbackUrl = "";
 			int userId = createTestUser(email);
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -1926,7 +1926,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException), "User ID cannot be 0 or negative.")]
 		public async Task ResetPassword_Should_Throw_Exception_For_Invalid_UserId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.ResetPassword(0, "code", "pw");
 		}
 
@@ -1934,7 +1934,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Code must have a value.")]
 		public async Task ResetPassword_Should_Throw_Exception_For_Null_Code()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.ResetPassword(1, null, "pw");
 		}
 
@@ -1942,7 +1942,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Code must have a value.")]
 		public async Task ResetPassword_Should_Throw_Exception_For_Empty_Code()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.ResetPassword(1, "", "pw");
 		}
 
@@ -1950,7 +1950,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentException), "Code must be a valid Guid.")]
 		public async Task ResetPassword_Should_Throw_Exception_For_Invalid_Code()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.ResetPassword(1, "code", "pw");
 		}
 
@@ -1958,7 +1958,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Password must have a value.")]
 		public async Task ResetPassword_Should_Throw_Exception_For_Null_Password()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			Guid code = Guid.NewGuid();
 			await service.ResetPassword(1, code.ToString(), null);
 		}
@@ -1967,7 +1967,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Password must have a value.")]
 		public async Task ResetPassword_Should_Throw_Exception_For_Empty_Password()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			Guid code = Guid.NewGuid();
 			await service.ResetPassword(1, code.ToString(), "");
 		}
@@ -1980,7 +1980,7 @@ namespace AllyisApps.Services.Tests
 			int userId = createTestUser(email);
 			deleteTestUser(email);  //userId is now deleted from User table
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			Guid code = Guid.NewGuid();
 
 			//Act
@@ -1997,7 +1997,7 @@ namespace AllyisApps.Services.Tests
 			string email = "test_user@unittestemail.com";
 			int userId = createTestUser(email);
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			Guid code = Guid.NewGuid(); //a random new code
 
 			try
@@ -2022,7 +2022,7 @@ namespace AllyisApps.Services.Tests
 			string email = "test_user@unittestemail.com";
 			int userId = createTestUser(email);
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			Guid code = Guid.NewGuid(); //a new valid code
 
 			//put the code in the user's PasswordResetCode
@@ -2107,7 +2107,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Old password must have a value.")]
 		public void ChangePassword_Should_Throw_Exception_For_Null_Old_Password()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			bool result = service.ChangePassword(null, "NewPassword");
 		}
 
@@ -2115,7 +2115,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Old password must have a value.")]
 		public void ChangePassword_Should_Throw_Exception_For_Empty_Old_Password()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			bool result = service.ChangePassword("", "NewPassword");
 		}
 
@@ -2123,7 +2123,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "New password must have a value.")]
 		public void ChangePassword_Should_Throw_Exception_For_Null_New_Password()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			bool result = service.ChangePassword("OldPassword", null);
 		}
 
@@ -2131,7 +2131,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "New password must have a value.")]
 		public void ChangePassword_Should_Throw_Exception_For_Empty_New_Password()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			bool result = service.ChangePassword("OldPassword", "");
 		}
 
@@ -2143,7 +2143,7 @@ namespace AllyisApps.Services.Tests
 			int userId = createTestUser(userEmail);
 
 			UserContext userContext = new UserContext(userId, userEmail, userEmail, 0, 0, null, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -2168,7 +2168,7 @@ namespace AllyisApps.Services.Tests
 			int userId = createTestUser(userEmail);
 
 			UserContext userContext = new UserContext(userId, userEmail, userEmail, 0, 0, null, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -2211,7 +2211,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Password must have a value.")]
 		public void GetPasswordHash_Should_Throw_Exception_For_Null_Password()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.GetPasswordHash(null);
 		}
 
@@ -2219,7 +2219,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Password must have a value.")]
 		public void GetPasswordHash_Should_Throw_Exception_For_Empty_Password()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.GetPasswordHash("");
 		}
 
@@ -2227,7 +2227,7 @@ namespace AllyisApps.Services.Tests
 		public void GetPasswordHash_Should_Return_PasswordHash_For_Valid_Password()
 		{
 			//Arrange
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string pw = "ValidPassword.123";
 
 			//Act
@@ -2241,14 +2241,14 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException), "User ID cannot be 0 or negative.")]
 		public async Task GetConfirmEmailCode_Should_Throw_Exception_For_Invalid_UserId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.GetConfirmEmailCode(-1);
 		}
 
 		[TestMethod]
 		public async Task GetConfirmEmailCode_Should_Return_Guid_Code_For_Valid_UserId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string code = await service.GetConfirmEmailCode(1);
 
 			Assert.IsFalse(string.IsNullOrEmpty(code));
@@ -2258,7 +2258,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "From email address must have a value.")]
 		public async Task SendConfirmationEmail_Should_Throw_Exception_For_Null_From_Email()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.SendConfirmationEmail(null, "to@email.com", "http://allyisapps.com/Account/ConfirmEmail?userId=%7BuserId%7D&code=%7Bcode%7D");
 		}
 
@@ -2266,7 +2266,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "From email address must have a value.")]
 		public async Task SendConfirmationEmail_Should_Throw_Exception_For_Empty_From_Email()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.SendConfirmationEmail("", "to@email.com", "http://allyisapps.com/Account/ConfirmEmail?userId=%7BuserId%7D&code=%7Bcode%7D");
 		}
 
@@ -2274,7 +2274,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(FormatException), "From email address must be in a valid format.")]
 		public async Task SendConfirmationEmail_Should_Throw_Exception_For_Invalid_From_Email()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.SendConfirmationEmail("invalidemail", "to@email.com", "http://allyisapps.com/Account/ConfirmEmail?userId=%7BuserId%7D&code=%7Bcode%7D");
 		}
 
@@ -2282,7 +2282,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "To email address must have a value.")]
 		public async Task SendConfirmationEmail_Should_Throw_Exception_For_Null_To_Email()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.SendConfirmationEmail("from@email.com", null, "http://allyisapps.com/Account/ConfirmEmail?userId=%7BuserId%7D&code=%7Bcode%7D");
 		}
 
@@ -2290,7 +2290,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "To email address must have a value.")]
 		public async Task SendConfirmationEmail_Should_Throw_Exception_For_Empty_To_Email()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.SendConfirmationEmail("from@email.com", "", "http://allyisapps.com/Account/ConfirmEmail?userId=%7BuserId%7D&code=%7Bcode%7D");
 		}
 
@@ -2298,7 +2298,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(FormatException), "To email address must be in a valid format.")]
 		public async Task SendConfirmationEmail_Should_Throw_Exception_For_Invalid_To_Email()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.SendConfirmationEmail("from@email.com", "invalidemail", "http://allyisapps.com/Account/ConfirmEmail?userId=%7BuserId%7D&code=%7Bcode%7D");
 		}
 
@@ -2306,7 +2306,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Confirm email url must have a value.")]
 		public async Task SendConfirmationEmail_Should_Throw_Exception_For_Null_confirmEmailUrl()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.SendConfirmationEmail("from@email.com", "to@email.com", null);
 		}
 
@@ -2314,7 +2314,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Confirm email url must have a value.")]
 		public async Task SendConfirmationEmail_Should_Throw_Exception_For_Empty_confirmEmailUrl()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.SendConfirmationEmail("from@email.com", "to@email.com", "");
 		}
 
@@ -2322,7 +2322,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(FormatException), "Confirm email url must be in a valid format.")]
 		public async Task SendConfirmationEmail_Should_Throw_Exception_For_Invalid_confirmEmailUrl()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.SendConfirmationEmail("from@email.com", "to@email.com", "invalidurl");
 		}
 
@@ -2330,7 +2330,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException), "User ID cannot be 0 or negative.")]
 		public void ConfirmUserEmail_Should_Throw_Exception_For_Invalid_UserId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			string code = Guid.NewGuid().ToString();
 			service.ConfirmUserEmail(-1, code);
 		}
@@ -2339,7 +2339,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Code must have a value.")]
 		public void ConfirmUserEmail_Should_Throw_Exception_For_Null_Code()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.ConfirmUserEmail(1, null);
 		}
 
@@ -2347,7 +2347,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Code must have a value.")]
 		public void ConfirmUserEmail_Should_Throw_Exception_For_Empty_Code()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.ConfirmUserEmail(1, "");
 		}
 
@@ -2355,7 +2355,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentException), "Code must be a valid Guid.")]
 		public void ConfirmUserEmail_Should_Throw_Exception_For_Invalid_Code()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.ConfirmUserEmail(1, "invalidcode");
 		}
 
@@ -2366,7 +2366,7 @@ namespace AllyisApps.Services.Tests
 			string email = "test_user@unittestemail.com";
 			int userId = createTestUser(email);
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//set user's EmailConfirmed to true
 			string updateStmt = "UPDATE [Auth].[User] SET [EmailConfirmed] = @confirmed WHERE [Email] = @email";
@@ -2410,7 +2410,7 @@ namespace AllyisApps.Services.Tests
 			int userId = createTestUser(email);
 			Guid code = Guid.NewGuid();
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -2434,7 +2434,7 @@ namespace AllyisApps.Services.Tests
 			int userId = createTestUser(email);
 			Guid code = Guid.NewGuid();
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//put the code in the user's EmailConfirmationCode
 			string updateStmt = "UPDATE [Auth].[User] SET [EmailConfirmationCode] = @code WHERE [Email] = @email";
@@ -2481,7 +2481,7 @@ namespace AllyisApps.Services.Tests
 			createOrgUser(userId, orgId, 1, "111");    //roleId = 1 (member)
 
 			UserContext userContext = new UserContext(userId, userEmail, userEmail, 0, 0, null, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			bool testPassed = false;
 			bool cleaned = true;
@@ -2517,7 +2517,7 @@ namespace AllyisApps.Services.Tests
 		public void InitializeUser_Should_Return_Null_For_Null_UserDBEntity()
 		{
 			UserDBEntity user = null;
-			User initializedUser = Service.InitializeUser(user);
+			User initializedUser = AppService.InitializeUser(user);
 			Assert.IsTrue(initializedUser == null);
 		}
 
@@ -2560,7 +2560,7 @@ namespace AllyisApps.Services.Tests
 			try
 			{
 				//Act
-				User initializedUser = Service.InitializeUser(user);
+				User initializedUser = AppService.InitializeUser(user);
 
 				//Assert
 				Assert.IsTrue(initializedUser.AccessFailedCount == 0
@@ -2598,7 +2598,7 @@ namespace AllyisApps.Services.Tests
 		public void GetDBEntityFromUser_Should_Return_Null_For_Null_User()
 		{
 			User user = null;
-			UserDBEntity userDbEntity = Service.GetDBEntityFromUser(user);
+			UserDBEntity userDbEntity = AppService.GetDBEntityFromUser(user);
 			Assert.IsTrue(userDbEntity == null);
 		}
 
@@ -2640,7 +2640,7 @@ namespace AllyisApps.Services.Tests
 			try
 			{
 				//Act
-				UserDBEntity DbEntity = Service.GetDBEntityFromUser(user);
+				UserDBEntity DbEntity = AppService.GetDBEntityFromUser(user);
 
 				//Assert
 				Assert.IsTrue(DbEntity.AccessFailedCount == 0
@@ -2679,7 +2679,7 @@ namespace AllyisApps.Services.Tests
 		public void InitializeUserRolesInfo_Should_Return_Null_For_Null_UserRolesDBEntity()
 		{
 			UserRolesDBEntity dbEntity = null;
-			UserRolesInfo info = Service.InitializeUserRolesInfo(dbEntity);
+			UserRolesInfo info = AppService.InitializeUserRolesInfo(dbEntity);
 			Assert.IsTrue(info == null);
 		}
 
@@ -2700,7 +2700,7 @@ namespace AllyisApps.Services.Tests
 				SubscriptionId = null
 			};
 
-			UserRolesInfo info = Service.InitializeUserRolesInfo(dbEntity);
+			UserRolesInfo info = AppService.InitializeUserRolesInfo(dbEntity);
 
 			Assert.IsTrue(info.Email == userEmail
 				&& info.FirstName == "Test"
@@ -2716,7 +2716,7 @@ namespace AllyisApps.Services.Tests
 		public void InitializeSubscriptionUserInfo_Should_Return_Null_For_Null_SubscriptionUserDBEntity()
 		{
 			SubscriptionUserDBEntity subDbEntity = null;
-			SubscriptionUserInfo subUserInfo = Service.InitializeSubscriptionUserInfo(subDbEntity);
+			SubscriptionUserInfo subUserInfo = AppService.InitializeSubscriptionUserInfo(subDbEntity);
 			Assert.IsTrue(subUserInfo == null);
 		}
 
@@ -2737,7 +2737,7 @@ namespace AllyisApps.Services.Tests
 				SkuId = 1
 			};
 
-			SubscriptionUserInfo subUserInfo = Service.InitializeSubscriptionUserInfo(subDbEntity);
+			SubscriptionUserInfo subUserInfo = AppService.InitializeSubscriptionUserInfo(subDbEntity);
 
 			Assert.IsTrue(subUserInfo.CreatedUTC == time
 				&& subUserInfo.FirstName == "Test"
@@ -2753,7 +2753,7 @@ namespace AllyisApps.Services.Tests
 		public void GetCompressedEmail_Should_Return_Full_Email_For_Short_Email_Address()
 		{
 			string shortEmail = "not_too_long_address@email.com";
-			string returned = Service.GetCompressedEmail(shortEmail);
+			string returned = AppService.GetCompressedEmail(shortEmail);
 			Assert.IsTrue(returned == shortEmail);
 		}
 
@@ -2762,7 +2762,7 @@ namespace AllyisApps.Services.Tests
 		{
 			string longEmail = "first_020_characters_this_part_should_be_compressed_last_015_chars";
 			string expected = "first_020_characters..._last_015_chars";
-			string returned = Service.GetCompressedEmail(longEmail);
+			string returned = AppService.GetCompressedEmail(longEmail);
 			Assert.IsTrue(returned == expected);
 		}
 
@@ -2795,7 +2795,7 @@ namespace AllyisApps.Services.Tests
 
 			foreach (string email in invalidAddresses)
 			{
-				output = Service.IsEmailAddressValid(email);
+				output = AppService.IsEmailAddressValid(email);
 				if (output)
 				{
 					failedCases++;
@@ -2833,7 +2833,7 @@ namespace AllyisApps.Services.Tests
 
 			foreach (string email in validAddresses)
 			{
-				output = Service.IsEmailAddressValid(email);
+				output = AppService.IsEmailAddressValid(email);
 				if (!output)
 				{
 					failedCases++;
@@ -2867,7 +2867,7 @@ namespace AllyisApps.Services.Tests
 
 			foreach (string url in invalidUrls)
 			{
-				output = Service.IsUrlValid(url);
+				output = AppService.IsUrlValid(url);
 				if (output)
 				{
 					failedCases++;
@@ -2904,7 +2904,7 @@ namespace AllyisApps.Services.Tests
 
 			foreach (string url in validUrls)
 			{
-				output = Service.IsUrlValid(url);
+				output = AppService.IsUrlValid(url);
 				if (!output)
 				{
 					failedCases++;
@@ -3005,7 +3005,7 @@ namespace AllyisApps.Services.Tests
 			int userId = 1;
 
 			UserContext userContext = new UserContext(userId, email, email, 0, 0, null, 1); //chosenOrganizationId = 0;
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			CoreAction targetAction = CoreAction.ViewCustomer;
 
 			//Act
@@ -3027,7 +3027,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, null, null);
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, infoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			CoreAction targetAction = CoreAction.ViewOrganization;
 
 			//Act
@@ -3049,7 +3049,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, null, null);
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, infoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			CoreAction targetAction = CoreAction.ViewOrganization;
 
 			//Act
@@ -3071,7 +3071,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, null, null);
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, infoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			CoreAction targetAction = CoreAction.EditOrganization;
 
 			//Act
@@ -3093,7 +3093,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, null, null);
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, infoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			CoreAction targetAction = CoreAction.EditOrganization;
 
 			//Act
@@ -3118,7 +3118,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, orgInfoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			CoreAction targetAction = CoreAction.ViewCustomer;
 
 			//Act
@@ -3143,7 +3143,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, orgInfoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			CoreAction targetAction = CoreAction.ViewCustomer;
 
 			//Act
@@ -3168,7 +3168,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, orgInfoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			CoreAction targetAction = CoreAction.EditCustomer;
 
 			//Act
@@ -3193,7 +3193,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, orgInfoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			CoreAction targetAction = CoreAction.EditCustomer;
 
 			//Act
@@ -3218,7 +3218,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, orgInfoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			CoreAction targetAction = CoreAction.EditProject;
 
 			//Act
@@ -3243,7 +3243,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, orgInfoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			CoreAction targetAction = CoreAction.EditProject;
 
 			//Act
@@ -3268,7 +3268,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, orgInfoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			CoreAction targetAction = CoreAction.TimeTrackerEditSelf;
 
 			//Act
@@ -3293,7 +3293,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, orgInfoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			CoreAction targetAction = CoreAction.TimeTrackerEditSelf;
 
 			//Act
@@ -3318,7 +3318,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, orgInfoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			CoreAction targetAction = CoreAction.TimeTrackerEditOthers;
 
 			//Act
@@ -3343,7 +3343,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, orgInfoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			CoreAction targetAction = CoreAction.TimeTrackerEditOthers;
 
 			//Act
@@ -3382,7 +3382,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
 
-			Service service = new Service(connectionStr, userContext);
+            AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3427,7 +3427,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
 
-			Service service = new Service(connectionStr, userContext);
+            AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3471,7 +3471,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
 
-			Service service = new Service(connectionStr, userContext);
+            AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3517,7 +3517,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
 
-			Service service = new Service(connectionStr, userContext);
+            AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3566,7 +3566,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
 
-			Service service = new Service(connectionStr, userContext);
+            AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3613,7 +3613,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
 
-			Service service = new Service(connectionStr, userContext);
+            AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3659,7 +3659,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
 
-			Service service = new Service(connectionStr, userContext);
+            AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3700,7 +3700,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, 0, orgInfoList, 1);
 
-			Service service = new Service(connectionStr, userContext);
+            AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3742,7 +3742,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, 0, orgInfoList, 1);
 
-			Service service = new Service(connectionStr, userContext);
+            AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3784,7 +3784,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, 0, orgInfoList, 1);
 
-			Service service = new Service(connectionStr, userContext);
+            AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3836,7 +3836,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId1, user1, user1, orgId, subId, orgInfoList, 1);
 
-			Service service = new Service(connectionStr, userContext);
+            AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3911,7 +3911,7 @@ namespace AllyisApps.Services.Tests
 
 			UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
 
-			Service service = new Service(connectionStr, userContext);
+            AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3957,7 +3957,7 @@ namespace AllyisApps.Services.Tests
 
 			UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
 
-			Service service = new Service(connectionStr, userContext);
+            AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -4006,7 +4006,7 @@ namespace AllyisApps.Services.Tests
 
 			UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
 
-			Service service = new Service(connectionStr, userContext);
+            AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -4046,7 +4046,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException), "Organization Id cannot be negative.")]
 		public void GetSubdomainById_Should_Throw_Exception_For_Negative_orgId()
 		{
-			Service.GetSubdomainById(-1);
+            AppService.GetSubdomainById(-1);
 		}
 
 		[TestMethod]
@@ -4061,7 +4061,7 @@ namespace AllyisApps.Services.Tests
 			try
 			{
 				//Act
-				string subdomain = Service.GetSubdomainById(orgId);
+				string subdomain = AppService.GetSubdomainById(orgId);
 
 				//Assert
 				Assert.IsTrue(subdomain == "unittestorg");
@@ -4081,7 +4081,7 @@ namespace AllyisApps.Services.Tests
 			DBHelper.Instance.Init(key);
 
 			//Act
-			int orgId = Service.GetIdBySubdomain("fakesubdomain");
+			int orgId = AppService.GetIdBySubdomain("fakesubdomain");
 
 			//Assert
 			Assert.IsTrue(orgId == 0);
@@ -4099,7 +4099,7 @@ namespace AllyisApps.Services.Tests
 			try
 			{
 				//Act
-				int returnedId = Service.GetIdBySubdomain("unittestorg");
+				int returnedId = AppService.GetIdBySubdomain("unittestorg");
 
 				//Assert
 				Assert.IsTrue(orgId == returnedId);
@@ -4115,7 +4115,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Organization must not be null.")]
 		public void CreateOrganization_Should_Throw_Exception_For_Null_Organization_Instance()
 		{
-			Service service = new Service(connectionStr);
+            AppService service = new AppService(connectionStr);
 			service.CreateOrganization(null, 1, "111");
 		}
 
@@ -4123,7 +4123,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException), "Organization owner's user id cannot be 0 or negative.")]
 		public void CreateOrganization_Should_Throw_Exception_For_Invalid_OwnerId()
 		{
-			Service service = new Service(connectionStr);
+            AppService service = new AppService(connectionStr);
 			Organization newOrg = new Organization();
 			service.CreateOrganization(newOrg, -1, "111");
 		}
@@ -4141,7 +4141,7 @@ namespace AllyisApps.Services.Tests
 			newOrg.Name = orgName.ToUpper();
 			newOrg.Subdomain = orgName.ToLower();
 
-			Service service = new Service(connectionStr);
+            AppService service = new AppService(connectionStr);
 			try
 			{
 				//Act
@@ -4170,7 +4170,7 @@ namespace AllyisApps.Services.Tests
 			newOrg.Name = orgName;
 			newOrg.Subdomain = orgName.ToLower();
 
-			Service service = new Service(connectionStr);
+            AppService service = new AppService(connectionStr);
 			int returnedOrgId = -1;
 			try
 			{
@@ -4248,7 +4248,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException), "Organization Id cannot be negative.")]
 		public void GetOrganization_Should_Throw_Exception_For_Negative_OrgId()
 		{
-			Service service = new Service(connectionStr);
+            AppService service = new AppService(connectionStr);
 			service.GetOrganization(-1);
 		}
 
@@ -4259,7 +4259,7 @@ namespace AllyisApps.Services.Tests
 			string orgName = "UnitTestOrg";
 			int orgId = createTestOrg(orgName);
 
-			Service service = new Service(connectionStr);
+            AppService service = new AppService(connectionStr);
 
 			try
 			{
@@ -4294,7 +4294,7 @@ namespace AllyisApps.Services.Tests
 			int orgId = createTestOrg(orgName);
 			deleteTestOrg(orgId);
 
-			Service service = new Service(connectionStr);
+            AppService service = new AppService(connectionStr);
 
 			//Act
 			Organization org = service.GetOrganization(orgId);
@@ -4319,7 +4319,7 @@ namespace AllyisApps.Services.Tests
 			int inviId = createUserInvitation(userEmail2, orgId, 1, "111");
 
 			UserContext userContext = new UserContext(userId1, userEmail1, userEmail1, orgId, 0, null, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -4385,7 +4385,7 @@ namespace AllyisApps.Services.Tests
 			createOrgUser(userId, orgId, 1, "111");    //user is Org's member
 
 			UserContext userContext = new UserContext(userId, userEmail, userEmail, orgId, 0, null, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -4434,7 +4434,7 @@ namespace AllyisApps.Services.Tests
 			createSubUser(subId, userId2, 1);       //user 1 & 2 are TimeTracker sub's users
 
 			UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -4490,7 +4490,7 @@ namespace AllyisApps.Services.Tests
 			createSubUser(subId, userId1, 1);       //user1 is TimeTracker sub's users
 
 			UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -4529,7 +4529,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Organization must not be null.")]
 		public void UpdateOrganization_Should_Throw_Exception_For_Null_Organization()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.UpdateOrganization(null);
 		}
 
@@ -4545,7 +4545,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, null, null);   //member cannot edit org
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, infoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			Organization org = new Organization();
 
 			//Act
@@ -4568,7 +4568,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, null, null);    //owner can edit org
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, infoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			Organization updatingOrg = new Organization();
 			updatingOrg.Name = orgName;
@@ -4603,7 +4603,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, null, null);    //owner can edit org
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, infoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			Organization updatingOrg = new Organization();
 			updatingOrg.Name = "NewName";
@@ -4654,7 +4654,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException), "User Id cannot be 0 or negative.")]
 		public void UpdateActiveOrganization_Should_Throw_Exception_For_Invalid_UserId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.UpdateActiveOrganization(0, 1);
 		}
 
@@ -4662,7 +4662,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException), "Organization Id cannot be negative.")]
 		public void UpdateActiveOrganization_Should_Throw_Exception_For_Invalid_OrgId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.UpdateActiveOrganization(1, -1);
 		}
 
@@ -4674,7 +4674,7 @@ namespace AllyisApps.Services.Tests
 			string orgName = "UnitTestOrg";
 			int userId = createTestUser(email);
 			int orgId = createTestOrg(orgName);
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -4717,7 +4717,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException), "Organization Id cannot be negative.")]
 		public void GetOrgRole_Should_Throw_Exception_For_Invalid_OrgId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.GetOrgRole(-1, 1);
 		}
 
@@ -4725,7 +4725,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException), "User Id cannot be 0 or negative.")]
 		public void GetOrgRole_Should_Throw_Exception_For_Invalid_UserId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.GetOrgRole(1, -1);
 		}
 
@@ -4735,7 +4735,7 @@ namespace AllyisApps.Services.Tests
 			//Arrange
 			string email = "test_user@unittestemail.com";
 			int userId = createTestUser(email);
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -4761,7 +4761,7 @@ namespace AllyisApps.Services.Tests
 			int userId = createTestUser(email);
 			int orgId = createTestOrg(orgName);
 			createOrgUser(userId, orgId, 2, "111");
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -4792,7 +4792,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, null, null);   //member cannot edit org
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, infoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			Organization org = new Organization();
 
 			//Act
@@ -4814,7 +4814,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, null, null);    //owner can edit org
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, infoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -4858,7 +4858,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Url must have a value.")]
 		public async Task InviteUser_Should_Throw_Exception_For_Null_Url()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			InvitationInfo invitationInfo = new InvitationInfo();
 			await service.InviteUser(null, invitationInfo, null, null);
 		}
@@ -4867,7 +4867,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Url must have a value.")]
 		public async Task InviteUser_Should_Throw_Exception_For_Empty_Url()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			InvitationInfo invitationInfo = new InvitationInfo();
 			await service.InviteUser("", invitationInfo, null, null);
 		}
@@ -4876,7 +4876,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Invitation info object must not be null.")]
 		public async Task InviteUser_Should_Throw_Exception_For_Null_InvitationInfo()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			await service.InviteUser("http://allyisapps.com", null, null, null);
 		}
 
@@ -4884,7 +4884,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentException), "Email address is not valid")]
 		public async Task InviteUser_Should_Throw_Exception_For_Null_Email_Address()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			InvitationInfo inviInfo = new InvitationInfo();
 			await service.InviteUser("http://allyisapps.com", inviInfo, null, null);
 		}
@@ -4893,7 +4893,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentException), "Email address is not valid")]
 		public async Task InviteUser_Should_Throw_Exception_For_Empty_Email_Address()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			InvitationInfo inviInfo = new InvitationInfo();
 			inviInfo.Email = "";
 			await service.InviteUser("http://allyisapps.com", inviInfo, null, null);
@@ -4903,7 +4903,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentException), "Email address is not valid")]
 		public async Task InviteUser_Should_Throw_Exception_For_Invalid_Email_Address()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			InvitationInfo inviInfo = new InvitationInfo();
 			inviInfo.Email = "invalid";
 			await service.InviteUser("http://allyisapps.com", inviInfo, null, null);
@@ -4920,7 +4920,7 @@ namespace AllyisApps.Services.Tests
 			createOrgUser(userId, orgId, 1, "111"); //user is member of org
 
 			UserContext userContext = new UserContext(1, email, email, orgId, 0, null, 1); // invitingUserId = 1
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			InvitationInfo inviInfo = new InvitationInfo();
 			inviInfo.Email = email;
 			inviInfo.EmployeeId = "110";
@@ -4960,7 +4960,7 @@ namespace AllyisApps.Services.Tests
 			createOrgUser(otherUserId, orgId, 1, "111"); //otherUserId is member of org with employeeId 111
 
 			UserContext userContext = new UserContext(1, email, email, orgId, 0, null, 1); // invitingUserId = 1
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			InvitationInfo inviInfo = new InvitationInfo();
 			inviInfo.Email = email;
 			inviInfo.EmployeeId = "111";    //duplicate employeeId
@@ -5004,7 +5004,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, null, null);
 			List<UserOrganizationInfo> userOrgInfoList = new List<UserOrganizationInfo>() { userOrgInfo };
 			UserContext userContext = new UserContext(invitingUserId, invitingUser, invitingUser, orgId, 0, userOrgInfoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			InvitationInfo inviInfo = new InvitationInfo();
 			inviInfo.Email = email;
 			inviInfo.EmployeeId = "111";
@@ -5037,7 +5037,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException), "Invitation Id cannot be 0 or negative.")]
 		public void RemoveInvitation_Should_Throw_Exception_For_Invalid_InvitationId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.RemoveInvitation(-1);
 		}
 
@@ -5054,7 +5054,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, null, null);   //member cannot edit org
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, infoList, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 			Organization org = new Organization();
 
 			try
@@ -5086,7 +5086,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, null, null);    //owner can edit org
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(1, "calling@unittestemail.com", "calling@unittestemail.com", orgId, 0, infoList, 1); //calling user has id=1
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -5127,7 +5127,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void UpdateSubscriptionUserProductRole_Should_Throw_Exception_For_Negative_Selected_Role()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.UpdateSubscriptionUserProductRole(-1, 1, 1);
 		}
 
@@ -5135,7 +5135,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void UpdateSubscriptionUserProductRole_Should_Throw_Exception_For_Negative_SubscriptionId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.UpdateSubscriptionUserProductRole(1, -1, 1);
 		}
 
@@ -5143,7 +5143,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void UpdateSubscriptionUserProductRole_Should_Throw_Exception_For_Invalid_UserId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.UpdateSubscriptionUserProductRole(1, 1, -1);
 		}
 
@@ -5158,7 +5158,7 @@ namespace AllyisApps.Services.Tests
 			int subId = createSubscription(orgId, 1, 100);
 			createSubUser(subId, userId, 1);    //this user currently has product role User
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -5204,7 +5204,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void GetOrganizationMemberList_Should_Throw_Exception_For_Negative_OrgId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.GetOrganizationMemberList(-1);
 		}
 
@@ -5224,7 +5224,7 @@ namespace AllyisApps.Services.Tests
 			try
 			{
 				//Act
-				var service = new Service(connectionStr);
+				var service = new AppService(connectionStr);
 				IEnumerable<OrganizationUserInfo> memberList = service.GetOrganizationMemberList(orgId);
 
 				//Assert
@@ -5250,7 +5250,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void GetEmployeeId_Should_Throw_Exception_For_Invalid_UserId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.GetEmployeeId(-1, 1);
 		}
 
@@ -5258,7 +5258,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void GetEmployeeId_Should_Throw_Exception_For_Negative_OrgId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.GetEmployeeId(1, -1);
 		}
 
@@ -5272,7 +5272,7 @@ namespace AllyisApps.Services.Tests
 			int userId = createTestUser(user);
 			createOrgUser(userId, orgId, 1, "111");
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -5295,7 +5295,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void SetEmployeeId_Should_Throw_Exception_For_Invalid_UserId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.SetEmployeeId(-1, 1, "111");
 		}
 
@@ -5303,7 +5303,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void SetEmployeeId_Should_Throw_Exception_For_Negative_OrgId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.SetEmployeeId(1, -1, "111");
 		}
 
@@ -5311,7 +5311,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetEmployeeId_Should_Throw_Exception_For_Null_EmployeeId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.SetEmployeeId(1, 1, null);
 		}
 
@@ -5319,7 +5319,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetEmployeeId_Should_Throw_Exception_For_Empty_EmployeeId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.SetEmployeeId(1, 1, "");
 		}
 
@@ -5334,7 +5334,7 @@ namespace AllyisApps.Services.Tests
 			createUserInvitation("abc@unittestemail.com", orgId, 1, "111");  //employeeId "111" is already taken
 			createOrgUser(userId, orgId, 1, "112");
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -5364,7 +5364,7 @@ namespace AllyisApps.Services.Tests
 			int userId = createTestUser(user);
 			createOrgUser(userId, orgId, 1, "111");
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -5410,7 +5410,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void SetInvitationEmployeeId_Should_Throw_Exception_For_Invalid_InvitationId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.SetInvitationEmployeeId(-1, 1, "111");
 		}
 
@@ -5418,7 +5418,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void SetInvitationEmployeeId_Should_Throw_Exception_For_Negative_OrgId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.SetInvitationEmployeeId(1, -1, "111");
 		}
 
@@ -5426,7 +5426,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetInvitationEmployeeId_Should_Throw_Exception_For_Null_EmployeeId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.SetInvitationEmployeeId(1, 1, null);
 		}
 
@@ -5434,7 +5434,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SetInvitationEmployeeId_Should_Throw_Exception_For_Empty_EmployeeId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.SetInvitationEmployeeId(1, 1, "");
 		}
 
@@ -5450,7 +5450,7 @@ namespace AllyisApps.Services.Tests
 			createOrgUser(userId, orgId, 1, "111");  //employeeId "111" is already taken
 			int inviId = createUserInvitation(invitedUser, orgId, 1, "112");
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -5479,7 +5479,7 @@ namespace AllyisApps.Services.Tests
 			int orgId = createTestOrg(orgName);
 			int inviId = createUserInvitation(user, orgId, 1, "111");
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -5523,7 +5523,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void RemoveOrganizationUser_Should_Throw_Exception_For_Negative_OrgId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.RemoveOrganizationUser(-1, 1);
 		}
 
@@ -5531,7 +5531,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void RemoveOrganizationUser_Should_Throw_Exception_For_Invalid_UserId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.RemoveOrganizationUser(1, -1);
 		}
 
@@ -5545,7 +5545,7 @@ namespace AllyisApps.Services.Tests
 			int userId = createTestUser(user);
 			createOrgUser(userId, orgId, 1, "111");
 
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -5588,7 +5588,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void GetProjectsByOrganization_Should_Throw_Exception_For_Negative_OrgId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.GetProjectsByOrganization(-1);
 		}
 
@@ -5604,7 +5604,7 @@ namespace AllyisApps.Services.Tests
 			int custId = createCustomer(customerName, orgId, 1, "cust001");
 			int projId1 = createProject(custId, projName1, 1, "proj001");   //active proj
 			int projId2 = createProject(custId, projName2, 0, "proj002");   //inactive proj
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -5636,7 +5636,7 @@ namespace AllyisApps.Services.Tests
 			int custId = createCustomer(customerName, orgId, 1, "cust001");
 			int projId1 = createProject(custId, projName1, 1, "proj001");   //active proj
 			int projId2 = createProject(custId, projName2, 0, "proj002");   //inactive proj
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -5672,7 +5672,7 @@ namespace AllyisApps.Services.Tests
 			createOrgUser(userId2, orgId, 2, "112");    //user2 is org owner
 
 			UserContext userContext = new UserContext(userId2, user2, user2, orgId, 0, null, 1);
-			Service service = new Service(connectionStr, userContext);
+            AppService service = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -5704,7 +5704,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void ChangeUserRoles_Should_Throw_Exception_For_Invalid_Organization_Role()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			List<int> userIds = new List<int> { 1, 2, 3 };
 			service.ChangeUserRoles(userIds, 0);
 		}
@@ -5713,7 +5713,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentException))]
 		public void ChangeUserRoles_Should_Throw_Exception_For_Empty_UserIds_List()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			List<int> userIds = new List<int> { };
 			service.ChangeUserRoles(userIds, 1);
 		}
@@ -5722,7 +5722,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentException))]
 		public void ChangeUserRoles_Should_Throw_Exception_For_Null_UserIds_List()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.ChangeUserRoles(null, 1);
 		}
 
@@ -5737,7 +5737,7 @@ namespace AllyisApps.Services.Tests
 			createOrgUser(userId, orgId, 1, "111");
 			List<int> userIds = new List<int> { userId };
 			UserContext userContext = new UserContext(userId, user, user, orgId, 0, null, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -5790,7 +5790,7 @@ namespace AllyisApps.Services.Tests
 			createOrgUser(userId2, orgId, 1, "112");    //both users are members
 			List<int> userIds = new List<int> { userId1, userId2 };
 			UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
-			var service = new Service(connectionStr, userContext);
+			var service = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -5838,7 +5838,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void GetProductRoleForUser_Should_Throw_Exception_For_Empty_Product_Name()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.GetProductRoleForUser("", 1);
 		}
 
@@ -5846,7 +5846,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void GetProductRoleForUser_Should_Throw_Exception_For_Null_Product_Name()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.GetProductRoleForUser(null, 1);
 		}
 
@@ -5854,7 +5854,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void GetProductRoleForUser_Should_Throw_Exception_For_Invalid_UserId()
 		{
-			var service = new Service(connectionStr);
+			var service = new AppService(connectionStr);
 			service.GetProductRoleForUser("TimeTracker", -1);
 		}
 
@@ -5871,7 +5871,7 @@ namespace AllyisApps.Services.Tests
 			createSubUser(subId, userId, 1);           //user1 is sub user
 
 			UserContext userContext = new UserContext(userId, user, user, orgId, 0, null, 1);
-			Service service = new Service(connectionStr, userContext);
+            AppService service = new AppService(connectionStr, userContext);
 
 			try
 			{

@@ -27,7 +27,7 @@ namespace AllyisApps.Controllers
 		{
 			ViewBag.ShowOrganizationPartial = false;
 
-			var infos = Service.GetUserOrgsAndInvitationInfo();
+			var infos = AppService.GetUserOrgsAndInvitationInfo();
 
 			IndexAndOrgsViewModel model = new IndexAndOrgsViewModel
 			{
@@ -40,7 +40,7 @@ namespace AllyisApps.Controllers
 				OrgWithSubscriptionsForUserViewModel orgVM = new OrgWithSubscriptionsForUserViewModel
 				{
 					OrgInfo = o,
-					CanEditOrganization = Service.Can(Actions.CoreAction.EditOrganization, false, o.OrganizationId),
+					CanEditOrganization = AppService.Can(Actions.CoreAction.EditOrganization, false, o.OrganizationId),
 					Subscriptions = new List<SubscriptionDisplayViewModel>()
 				};
 				UserOrganizationInfo userOrgInfo = UserContext.UserOrganizationInfoList.Where(uoi => uoi.OrganizationId == o.OrganizationId).SingleOrDefault();
@@ -71,7 +71,7 @@ namespace AllyisApps.Controllers
 		[HttpPost]
 		public ActionResult Accept(int invitationId)
 		{
-			string result = Service.AcceptUserInvitation(invitationId);
+			string result = AppService.AcceptUserInvitation(invitationId);
 
 			if (result == null)
 			{
@@ -107,7 +107,7 @@ namespace AllyisApps.Controllers
 		public ActionResult Reject(int invitationId)
 		{
 			//var invitation = Service.GetInvitationsByUser(UserContext.Email).Where(x => x.InvitationId == invitationId).FirstOrDefault();
-			string result = Service.RejectUserInvitation(invitationId);
+			string result = AppService.RejectUserInvitation(invitationId);
 			if (result != null)
 			{
 				// Validate that the user does have the requested pending invitation

@@ -30,9 +30,9 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult Subscribe(int productId)
 		{
-			var infos = Service.GetProductSubscriptionInfo(productId);
+			var infos = AppService.GetProductSubscriptionInfo(productId);
 
-			if (Service.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization))
 			{
 				ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4);
 				if (!model.IsValid)
@@ -102,7 +102,7 @@ namespace AllyisApps.Controllers
 		[CLSCompliant(false)]
 		public ActionResult Subscribe(ProductSubscriptionViewModel model, BillingServicesToken token, string billingServicesEmail, string cost)
 		{
-			if (!Service.Can(Actions.CoreAction.EditOrganization))
+			if (!AppService.Can(Actions.CoreAction.EditOrganization))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 				ViewBag.ErrorInfo = "Permission";
@@ -127,7 +127,7 @@ namespace AllyisApps.Controllers
 
 			bool addingNewBilling = token != null && model.Token == null;
 
-			if (Service.Subscribe(model.NumberOfUsers, model.ProductId, model.ProductName, model.SelectedSku, model.PreviousSku, model.Billing.Amount, model.Token, addingNewBilling, billingServicesEmail, token))
+			if (AppService.Subscribe(model.NumberOfUsers, model.ProductId, model.ProductName, model.SelectedSku, model.PreviousSku, model.Billing.Amount, model.Token, addingNewBilling, billingServicesEmail, token))
 			{
 				return this.RedirectToAction(ActionConstants.Manage);
 			}

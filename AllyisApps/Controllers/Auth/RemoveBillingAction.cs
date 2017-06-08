@@ -26,9 +26,9 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult RemoveBilling()
 		{
-			if (Service.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization))
 			{
-				IEnumerable<int> subs = Service.GetSubscriptionPlanPrices();
+				IEnumerable<int> subs = AppService.GetSubscriptionPlanPrices();
 
 				if (subs != null && subs.Count() > 0)
 				{
@@ -53,7 +53,7 @@ namespace AllyisApps.Controllers
 		[HttpPost]
 		public ActionResult RemoveBilling(BaseViewModel m)
 		{
-			if (Service.RemoveBilling())
+			if (AppService.RemoveBilling())
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.BillingRemoved, Variety.Success));
 				return this.Redirect(ActionConstants.Manage);

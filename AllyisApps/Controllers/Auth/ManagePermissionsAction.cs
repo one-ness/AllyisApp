@@ -30,7 +30,7 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult ManagePermissions2()
 		{
-			if (Service.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization))
 			{
 				PermissionsManagementViewModel model = this.ConstructPermissionsManagementViewModel();
 				return this.View("Permission", model);
@@ -47,16 +47,16 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult ManagePermissions()
 		{
-			if (Service.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization))
 			{
-				var infos = Service.GetOrgAndSubRoles();
+				var infos = AppService.GetOrgAndSubRoles();
 				ManagePermissionsViewModel model = new ManagePermissionsViewModel
 				{
 					Users = new List<UserPermissionsViewModel>(),
 					Subscriptions = infos.Item2,
 					SubIds = infos.Item2.Select(s => s.SubscriptionId).ToList(),
 					// TODO: Get rid of this once product panes in Permissions page are genericized.
-					TimeTrackerId = Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker)
+					TimeTrackerId = AppService.GetProductIdByName(ProductNameKeyConstants.TimeTracker)
 				};
 
 				// This can also be axed after finding a good way to genericize products in the Permissions page.
@@ -114,12 +114,12 @@ namespace AllyisApps.Controllers
 		{
 			PermissionsManagementViewModel result = new PermissionsManagementViewModel()
 			{
-				TimeTrackerId = Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker)
+				TimeTrackerId = AppService.GetProductIdByName(ProductNameKeyConstants.TimeTracker)
 			};
-			result.Subscriptions = Service.GetSubscriptionsDisplay();
+			result.Subscriptions = AppService.GetSubscriptionsDisplay();
 
 			List<UserPermissionsManagement> permissions = new List<UserPermissionsManagement>();
-			IEnumerable<UserRolesInfo> users = Service.GetUserRoles().OrderBy(u => u.UserId); // In case of multiple subscriptions, there can be multiple items per user, one for each sub role
+			IEnumerable<UserRolesInfo> users = AppService.GetUserRoles().OrderBy(u => u.UserId); // In case of multiple subscriptions, there can be multiple items per user, one for each sub role
 			string currentUser = string.Empty;
 			UserPermissionsManagement currentUserPerm = null;
 			foreach (UserRolesInfo user in users)
@@ -195,7 +195,7 @@ namespace AllyisApps.Controllers
 		public ActionResult ManagePermissions(string data)
 		{
 			UserPermissionsAction model = JsonConvert.DeserializeObject<UserPermissionsAction>(data);
-			if (Service.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization))
 			{
 				if (model.SelectedUsers == null || model.SelectedUsers.Count() == 0)
 				{
@@ -236,7 +236,7 @@ namespace AllyisApps.Controllers
                         }
                     }
 
-					int numberChanged = Service.ChangeUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.OrgRoleTarget.Value);
+					int numberChanged = AppService.ChangeUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.OrgRoleTarget.Value);
 					if (model.SelectedActions.OrgRoleTarget == -1)
 					{
 						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
@@ -255,7 +255,7 @@ namespace AllyisApps.Controllers
 						return RedirectToAction(ActionConstants.ManagePermissions);
 					}
 
-					Tuple<int, int> updatedAndAdded = Service.ChangeSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value);
+					Tuple<int, int> updatedAndAdded = AppService.ChangeSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value);
 					if (updatedAndAdded.Item1 == -1)
 					{
 						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDontHaveASubscriptionToTimeTracker, Variety.Danger));

@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers
 		[CLSCompliant(false)]
 		public ActionResult Charge(BillingServicesToken token, string billingServicesEmail)
 		{
-			if (Service.Can(Actions.CoreAction.EditBilling))
+			if (AppService.Can(Actions.CoreAction.EditOrganization))
 			{
 				if (token == null)
 				{
@@ -36,7 +36,7 @@ namespace AllyisApps.Controllers
 				}
 				else
 				{
-					Service.UpdateBillingInfo(billingServicesEmail, token);
+                    AppService.UpdateBillingInfo(billingServicesEmail, token);
 
 					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.Billing, Core.Alert.Variety.Success));
 					return this.RedirectToAction(ActionConstants.Manage);

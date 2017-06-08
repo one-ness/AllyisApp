@@ -22,7 +22,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The result of this action.</returns>
 		public ActionResult ViewUser(int id)
 		{
-			User userInfo = Service.GetUser(id);
+			User userInfo = AppService.GetUser(id);
 			//EditProfileViewModel model = new EditProfileViewModel(false)
 			//{
 			//	Email = userInfo.Email,

@@ -28,7 +28,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The ActionResult for the Edit view.</returns>
 		public ActionResult Edit(int id)
 		{
-			if (Service.Can(Actions.CoreAction.EditProject))
+			if (AppService.Can(Actions.CoreAction.EditProject))
 			{
 				return this.View(this.ConstructEditProjectViewModel(id));
 			}
@@ -49,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public ActionResult Edit(EditProjectViewModel model)
 		{
-			var list = Service.GetNextProjectIdAndSubUsers(model.ParentCustomerId).Item2;
+			var list = AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId).Item2;
 			var subList = new List<BasicUserInfoViewModel>();
 			foreach (var user in list)
 			{
@@ -58,9 +58,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			model.SubscriptionUsers = subList;
 			if (ModelState.IsValid)
 			{
-				if (Service.Can(Actions.CoreAction.EditProject))
+				if (AppService.Can(Actions.CoreAction.EditProject))
 				{
-					Project projIdMatch = Service.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId).SingleOrDefault();
+					Project projIdMatch = AppService.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId).SingleOrDefault();
 					if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
@@ -107,7 +107,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The EditProjectViewModel.</returns>
 		public EditProjectViewModel ConstructEditProjectViewModel(int projectId)
 		{
-			var infos = Service.GetProjectEditInfo(projectId);
+			var infos = AppService.GetProjectEditInfo(projectId);
 
 			IEnumerable<User> projectUserInfos = infos.Item2;
 			var projectUsers = new List<BasicUserInfoViewModel>();
@@ -136,8 +136,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ProjectUsers = projectUsers,
 				SubscriptionUsers = subscriptionUsers.Where(user => !projectUsers.Any(pu => (pu.UserId == user.UserId))), // Grab users that are not part of the project
 				PriceType = infos.Item1.PriceType,
-				StartDate = Service.GetDayFromDateTime(infos.Item1.StartDate),
-				EndDate = Service.GetDayFromDateTime(infos.Item1.EndDate)
+				StartDate = AppService.GetDayFromDateTime(infos.Item1.StartDate),
+				EndDate = AppService.GetDayFromDateTime(infos.Item1.EndDate)
 			};
 		}
 	}

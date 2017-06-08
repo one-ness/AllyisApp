@@ -26,9 +26,9 @@ namespace AllyisApps.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult RemoveMember(int userId)
 		{
-			if (Service.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization))
 			{
-				Service.RemoveOrganizationUser(UserContext.ChosenOrganizationId, userId);
+                AppService.RemoveOrganizationUser(UserContext.ChosenOrganizationId, userId);
 
 				Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
 

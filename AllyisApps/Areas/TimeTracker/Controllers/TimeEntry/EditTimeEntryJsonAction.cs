@@ -49,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// Check permissions
 			if (model.UserId == Convert.ToInt32(UserContext.UserId))
 			{
-				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{
 					EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId);
 					return this.Json(new
@@ -63,7 +63,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
-				if (!Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 				{
 					EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId);
 					return this.Json(new
@@ -77,7 +77,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			// Authorized for editing
-			if (Service.GetTimeEntry(model.TimeEntryId).ApprovalState == (int)ApprovalState.Approved)
+			if (AppService.GetTimeEntry(model.TimeEntryId).ApprovalState == (int)ApprovalState.Approved)
 			{
 				EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId);
 				return this.Json(new
@@ -128,10 +128,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
 			}
 
-			IEnumerable<TimeEntryInfo> otherEntriesToday = Service.GetTimeEntriesByUserOverDateRange(
+			IEnumerable<TimeEntryInfo> otherEntriesToday = AppService.GetTimeEntriesByUserOverDateRange(
 				new List<int> { model.UserId },
-				Service.GetDateTimeFromDays(model.Date).Value,
-				Service.GetDateTimeFromDays(model.Date).Value);
+                AppService.GetDateTimeFromDays(model.Date).Value,
+                AppService.GetDateTimeFromDays(model.Date).Value);
 			float durationOther = 0.0f;
 			foreach (TimeEntryInfo otherEntry in otherEntriesToday)
 			{
@@ -156,13 +156,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Resources.Strings.MustSelectPayClass);
 			}
 
-			DateTime? lockDate = Service.GetLockDate();
-			if (role != ProductRoleIdEnum.TimeTrackerManager && model.Date <= (lockDate == null ? -1 : Service.GetDayFromDateTime(lockDate.Value)))
+			DateTime? lockDate = AppService.GetLockDate();
+			if (role != ProductRoleIdEnum.TimeTrackerManager && model.Date <= (lockDate == null ? -1 : AppService.GetDayFromDateTime(lockDate.Value)))
 			{
 				throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 			}
 
-			Service.UpdateTimeEntry(new TimeEntryInfo()
+            AppService.UpdateTimeEntry(new TimeEntryInfo()
 			{
 				TimeEntryId = model.TimeEntryId,
 				ProjectId = model.ProjectId,
@@ -181,21 +181,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The EditTimeEntryViewModel.</returns>
 		public EditTimeEntryViewModel ConstructEditTimeEntryViewModel(int timeEntryId)
 		{
-			TimeEntryInfo entry = Service.GetTimeEntry(timeEntryId);
+			TimeEntryInfo entry = AppService.GetTimeEntry(timeEntryId);
 
-			DateTime? lockDate = Service.GetLockDate();
+			DateTime? lockDate = AppService.GetLockDate();
 			return new EditTimeEntryViewModel
 			{
 				UserId = entry.UserId,
 				TimeEntryId = entry.TimeEntryId,
 				ProjectId = entry.ProjectId,
 				PayClassId = entry.PayClassId,
-				Date = Service.GetDayFromDateTime(entry.Date),
+				Date = AppService.GetDayFromDateTime(entry.Date),
 				Duration = string.Format("{0:D2}:{1:D2}", (int)entry.Duration, (int)Math.Round((entry.Duration - (int)entry.Duration) * MinutesInHour, 0)),
 				Description = entry.Description,
 				LockSaved = entry.LockSaved,
-				LockDate = lockDate == null ? -1 : Service.GetDayFromDateTime(lockDate.Value),
-				IsManager = Service.GetProductRoleForUser(ProductNameKeyConstants.TimeTracker, entry.UserId) == "Manager"
+				LockDate = lockDate == null ? -1 : AppService.GetDayFromDateTime(lockDate.Value),
+				IsManager = AppService.GetProductRoleForUser(ProductNameKeyConstants.TimeTracker, entry.UserId) == "Manager"
 			};
 		}
 
