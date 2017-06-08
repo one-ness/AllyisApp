@@ -58,7 +58,7 @@ namespace AllyisApps.Services
 		/// Creates a customer.
 		/// </summary>
 		/// <param name="customer">Customer.</param>
-		/// <returns>Customer id.</returns>
+		/// <returns>Customer id if succeed, -1 if the id already exists in the db, null if authorization fails.</returns>
 		public int? CreateCustomer(Customer customer)
 		{
 			if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
