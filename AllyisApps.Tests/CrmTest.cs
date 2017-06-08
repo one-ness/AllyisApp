@@ -149,7 +149,7 @@ namespace AllyisApps.Services.Tests
             UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerUser); //TT user cannot edit customer
             subInfo.ProductId = ProductIdEnum.TimeTracker;
             List<UserSubscriptionInfo> subInfoList = new List<UserSubscriptionInfo> { subInfo };
-            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null); 
+            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);
             List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
             UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
             AppService ttService = new AppService(connectionStr, userContext);
@@ -157,7 +157,7 @@ namespace AllyisApps.Services.Tests
             try
             {
                 //Act
-                string result = ttService.DeleteCustomer(custId);                
+                string result = ttService.DeleteCustomer(custId);
 
                 //Assert
                 Assert.IsTrue(result == null);
@@ -189,7 +189,7 @@ namespace AllyisApps.Services.Tests
             UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager); // TT manager can edit customer
             subInfo.ProductId = ProductIdEnum.TimeTracker;
             List<UserSubscriptionInfo> subInfoList = new List<UserSubscriptionInfo> { subInfo };
-            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);  
+            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Owner, subInfoList, null);
             List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
             UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
             AppService ttService = new AppService(connectionStr, userContext);
@@ -240,6 +240,131 @@ namespace AllyisApps.Services.Tests
 
                 //Assert
                 Assert.IsTrue(result == "CorpA");
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deleteSubUserBySubId(subId);
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deleteCustomer(custId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
+        }
+
+        [TestMethod]
+        public void UpdateCustomer_Should_Return_Null_If_Authorization_Fails()
+        {
+            //Arrange
+            string email = "test_user@unittestemail.com";
+            string orgName = "UnitTestOrg";
+            int userId = AuthTest.createTestUser(email);
+            int orgId = AuthTest.createTestOrg(orgName);
+            int custId = AuthTest.createCustomer("CorpA", orgId, 1, "CUST1");
+
+            int subId = AuthTest.createSubscription(orgId, 1, 50);
+            AuthTest.createSubUser(subId, userId, 1);   //user is a User of the subscription
+            UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerUser); //TT user cannot edit customer
+            subInfo.ProductId = ProductIdEnum.TimeTracker;
+            List<UserSubscriptionInfo> subInfoList = new List<UserSubscriptionInfo> { subInfo };
+            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);
+            List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
+            UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
+            AppService ttService = new AppService(connectionStr, userContext);
+
+            Customer customer = new Customer { CustomerId = custId, Name = "CorpA_update", CustomerOrgId = "CUST1", OrganizationId = orgId };
+
+            try
+            {
+                //Act
+                var result = ttService.UpdateCustomer(customer);
+
+                //Assert
+                Assert.IsTrue(result == null);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deleteSubUserBySubId(subId);
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deleteCustomer(custId);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
+        }
+
+        [TestMethod]
+        public void UpdateCustomer_Should_Return_Negative_One_If_CustOrgId_Is_Taken()
+        {
+            //Arrange
+            string email = "test_user@unittestemail.com";
+            string orgName = "UnitTestOrg";
+            int userId = AuthTest.createTestUser(email);
+            int orgId = AuthTest.createTestOrg(orgName);
+            int custId1 = AuthTest.createCustomer("CorpA", orgId, 1, "CUST1");
+            int custId2 = AuthTest.createCustomer("CorpB", orgId, 1, "CUST2");
+
+            int subId = AuthTest.createSubscription(orgId, 1, 50);
+            AuthTest.createSubUser(subId, userId, 1);   //user is a User of the subscription
+            UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager); //TT manager can edit customer
+            subInfo.ProductId = ProductIdEnum.TimeTracker;
+            List<UserSubscriptionInfo> subInfoList = new List<UserSubscriptionInfo> { subInfo };
+            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);
+            List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
+            UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
+            AppService ttService = new AppService(connectionStr, userContext);
+
+            Customer customer = new Customer { CustomerId = custId2, Name = "CorpB_update", CustomerOrgId = "CUST1", OrganizationId = orgId };
+
+            try
+            {
+                //Act
+                var result = ttService.UpdateCustomer(customer);
+
+                //Assert
+                Assert.IsTrue(result == -1);
+            }
+            finally
+            {
+                //Clean up
+                AuthTest.deleteSubUserBySubId(subId);
+                AuthTest.deleteSubscription(subId);
+                AuthTest.deleteCustomer(custId1);
+                AuthTest.deleteCustomer(custId2);
+                AuthTest.deleteTestOrg(orgId);
+                AuthTest.deleteTestUser(email);
+            }
+        }
+
+        [TestMethod]
+        public void UpdateCustomer_Should_Return_One_If_Succeed()
+        {
+            //Arrange
+            string email = "test_user@unittestemail.com";
+            string orgName = "UnitTestOrg";
+            int userId = AuthTest.createTestUser(email);
+            int orgId = AuthTest.createTestOrg(orgName);
+            int custId = AuthTest.createCustomer("CorpA", orgId, 1, "CUST1");
+
+            int subId = AuthTest.createSubscription(orgId, 1, 50);
+            AuthTest.createSubUser(subId, userId, 1);   //user is a User of the subscription
+            UserSubscriptionInfo subInfo = new UserSubscriptionInfo(subId, 1, "Time Tracker", ProductRoleIdEnum.TimeTrackerManager); //TT manager can edit customer
+            subInfo.ProductId = ProductIdEnum.TimeTracker;
+            List<UserSubscriptionInfo> subInfoList = new List<UserSubscriptionInfo> { subInfo };
+            UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);
+            List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
+            UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
+            AppService ttService = new AppService(connectionStr, userContext);
+
+            Customer customer = new Customer { CustomerId = custId, Name = "CorpB_update", CustomerOrgId = "CUST1", OrganizationId = orgId };
+
+            try
+            {
+                //Act
+                var result = ttService.UpdateCustomer(customer);
+
+                //Assert
+                Assert.IsTrue(result == 1);
             }
             finally
             {

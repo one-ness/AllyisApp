@@ -268,11 +268,47 @@ namespace AllyisApps.DBModel
 			return parameters.Get<int>("@retId");
 		}
 
-		/// <summary>
-		/// Updates the customer with the specified ID.
-		/// </summary>
-		/// <param name="customer">The table with the customer to create.</param>
-		public void UpdateCustomer(CustomerDBEntity customer)
+        /// <summary>
+        /// Updates the customer with the specified ID.
+        /// </summary>
+        /// <param name="customer">The table with the customer to create.</param>
+        /// <return>1 if succeed, -1 if fail because CustOrgId is not unique.</return>
+        public int UpdateCustomer(CustomerDBEntity customer)
+        {
+            if (customer == null)
+            {
+                throw new ArgumentException("customer cannot be null.");
+            }
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CustomerId", customer.CustomerId);
+            parameters.Add("@ContactEmail", customer.ContactEmail);
+            parameters.Add("@Name", customer.Name);
+            parameters.Add("@Address", customer.Address);
+            parameters.Add("@City", customer.City);
+            parameters.Add("@State", customer.State);
+            parameters.Add("@Country", customer.Country);
+            parameters.Add("@PostalCode", customer.PostalCode);
+            parameters.Add("@ContactPhoneNumber", customer.ContactPhoneNumber);
+            parameters.Add("@FaxNumber", customer.FaxNumber);
+            parameters.Add("@Website", customer.Website);
+            parameters.Add("@EIN", customer.EIN);
+            parameters.Add("@OrgId", customer.CustomerOrgId);
+            parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                connection.Execute("[Crm].[UpdateCustomerInfo]", parameters, commandType: CommandType.StoredProcedure);
+            }
+            return parameters.Get<int>("@retId");
+        }
+
+        /*
+        /// <summary>
+        /// Updates the customer with the specified ID.
+        /// </summary>
+        /// <param name="customer">The table with the customer to create.</param>
+        public void UpdateCustomer(CustomerDBEntity customer)
 		{
 			if (customer == null)
 			{
@@ -298,7 +334,7 @@ namespace AllyisApps.DBModel
 			{
 				connection.Execute("[Crm].[UpdateCustomerInfo]", parameters, commandType: CommandType.StoredProcedure);
 			}
-		}
+		} */
 
 		/// <summary>
 		/// Retrieves the customer's information from the database.

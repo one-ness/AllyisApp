@@ -73,6 +73,22 @@ namespace AllyisApps.Services
 		/// Updates a customer in the database.
 		/// </summary>
 		/// <param name="customer">Updated customer info.</param>
+		/// <returns>1 if succeed, -1 if CustOrgId is not unique, null if authorization fails.</returns>
+		public int? UpdateCustomer(Customer customer)
+		{
+			if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
+			{
+				return DBHelper.UpdateCustomer(GetDBEntityFromCustomer(customer));
+			}
+
+			return null;
+		}
+
+        /*
+         /// <summary>
+		/// Updates a customer in the database.
+		/// </summary>
+		/// <param name="customer">Updated customer info.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool UpdateCustomer(Customer customer)
 		{
@@ -84,13 +100,14 @@ namespace AllyisApps.Services
 
 			return false;
 		}
+            */
 
-		/// <summary>
-		/// Deletes a customer.
-		/// </summary>
-		/// <param name="customerId">Customer id.</param>
-		/// <returns>Returns null if authorization fails, empty string if customer not found, customer's name if succeeds</returns>
-		public string DeleteCustomer(int customerId)
+        /// <summary>
+        /// Deletes a customer.
+        /// </summary>
+        /// <param name="customerId">Customer id.</param>
+        /// <returns>Returns null if authorization fails, empty string if customer not found, customer's name if succeeds</returns>
+        public string DeleteCustomer(int customerId)
 		{
 			if (this.Can(Actions.CoreAction.EditCustomer))
 			{

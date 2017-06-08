@@ -20,6 +20,7 @@ BEGIN
 	IF EXISTS (
 		SELECT * FROM [Crm].[Customer] WITH (NOLOCK)
 		WHERE [CustomerOrgId] = @CustomerOrgId
+		AND [IsActive] = 1
 	)
 	BEGIN
 		-- CustomerOrgId is not unique
