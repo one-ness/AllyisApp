@@ -24,11 +24,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The details view of the project.</returns>
 		public ActionResult Details(int projectId)
 		{
-			var model = Service.GetProjectAsUser(projectId);
+			var model = AppService.GetProjectAsUser(projectId);
 
-			if (Service.Can(Actions.CoreAction.EditProject) || model.IsProjectUser == true)
+			if (AppService.Can(Actions.CoreAction.EditProject) || model.IsProjectUser == true)
 			{
-				model.CanEditProject = Service.Can(Actions.CoreAction.EditProject);
+				model.CanEditProject = AppService.Can(Actions.CoreAction.EditProject);
 				return this.View(model);
 			}
 			else

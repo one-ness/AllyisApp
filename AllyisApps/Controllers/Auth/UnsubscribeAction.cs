@@ -26,9 +26,9 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult Unsubscribe(int id)
 		{
-			if (Service.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization))
 			{
-				var infos = Service.GetProductSubscriptionInfo(id);
+				var infos = AppService.GetProductSubscriptionInfo(id);
 
 				ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4);
 
@@ -54,14 +54,14 @@ namespace AllyisApps.Controllers
 				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.ModelNullMessage), ControllerConstants.Subscription, ActionConstants.Unsubscribe));
 			}
 
-			if (Service.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization))
 			{
 				int? subId = null;
 				if (model.CurrentSubscription != null)
 				{
 					subId = model.CurrentSubscription.SubscriptionId;
 				}
-				string notificationString = Service.UnsubscribeAndRemoveBillingSubscription(model.SelectedSku, subId);
+				string notificationString = AppService.UnsubscribeAndRemoveBillingSubscription(model.SelectedSku, subId);
 
 				if (notificationString != null)
 				{

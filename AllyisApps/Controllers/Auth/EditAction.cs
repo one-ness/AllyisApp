@@ -32,7 +32,7 @@ namespace AllyisApps.Controllers
 			{
 				try
 				{
-					if (Service.UpdateOrganization(
+					if (AppService.UpdateOrganization(
 						new Organization()
 						{
 							OrganizationId = UserContext.ChosenOrganizationId,
@@ -75,9 +75,9 @@ namespace AllyisApps.Controllers
 		/// <returns>The result of this action.</returns>
 		public ActionResult Edit(string returnUrl)
 		{
-			if (Service.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization))
 			{
-				var infos = Service.GetOrgWithCountriesAndEmployeeId();
+				var infos = AppService.GetOrgWithCountriesAndEmployeeId();
 				EditOrganizationViewModel model = this.ConstructEditOrganizationViewModel(
 					infos.Item1,
 					true,

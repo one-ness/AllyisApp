@@ -23,7 +23,7 @@ namespace AllyisApps.Controllers
 		/// <returns>True if the subdomain has not been used, else false.</returns>
 		public bool IsSubdomainNameUnique(string subdomainName)
 		{
-			int id = Service.GetIdBySubdomain(subdomainName);
+			int id = AppService.GetIdBySubdomain(subdomainName);
 			return id == 0;
 		}
 

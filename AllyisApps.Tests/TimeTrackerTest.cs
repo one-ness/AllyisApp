@@ -16,21 +16,21 @@ namespace AllyisApps.Services.Tests
 		[TestMethod]
 		public void GetDateFromDays_Should_Return_Null_For_Negative_Days()
 		{
-			var date = Service.GetDateFromDays(-2);
+			var date = AppService.GetDateFromDays(-2);
 			Assert.IsTrue(date == null);
 		}
 
 		[TestMethod]
 		public void GetDateFromDays_Should_Return_Correct_Date()
 		{
-			var date = Service.GetDateFromDays(10);
+			var date = AppService.GetDateFromDays(10);
 			Assert.IsTrue(date == new DateTime(0001, 01, 11));
 		}
 
 		[TestMethod]
 		public void GetDayFromDateTime_Should_Return_Negative_One_For_Null_DateTime()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+            AppService ttService = new AppService(connectionStr);
 			int days = ttService.GetDayFromDateTime(null);
 			Assert.IsTrue(days == -1);
 		}
@@ -38,7 +38,7 @@ namespace AllyisApps.Services.Tests
 		[TestMethod]
 		public void GetDayFromDateTime_Should_Return_Correct_Days()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+            AppService ttService = new AppService(connectionStr);
 			DateTime date = new DateTime(0001, 01, 21);
 			int days = ttService.GetDayFromDateTime(date);
 			Assert.IsTrue(days == 20);
@@ -48,7 +48,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void GetTimeEntry_Should_Throw_Exception_For_Invalid_timeEntryId()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+            AppService ttService = new AppService(connectionStr);
 			ttService.GetTimeEntry(-1);
 		}
 
@@ -64,7 +64,7 @@ namespace AllyisApps.Services.Tests
 			int custId = AuthTest.createCustomer("CorpA", orgId, 1, "CUST1");
 			int projId = AuthTest.createProject(custId, "sampleProj", 1, "PROJ1");
 			int timeEntryId = AuthTest.createTimeEntry(userId, projId, date, 1, 8);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+            AppService ttService = new AppService(connectionStr);
 
 			try
 			{
@@ -89,7 +89,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void CreateTimeEntry_Should_Throw_Exception_For_Null_Entry()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+            AppService ttService = new AppService(connectionStr);
 			ttService.CreateTimeEntry(null);
 		}
 
@@ -104,7 +104,7 @@ namespace AllyisApps.Services.Tests
 			int orgId = AuthTest.createTestOrg(orgName);
 			int custId = AuthTest.createCustomer("CorpA", orgId, 1, "CUST1");
 			int projId = AuthTest.createProject(custId, "sampleProj", 1, "PROJ1");
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 
 			TimeEntryInfo entryInfo = new TimeEntryInfo
 			{
@@ -161,7 +161,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void UpdateTimeEntry_Should_Throw_Exception_For_Null_Entry()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			ttService.UpdateTimeEntry(null);
 		}
 
@@ -177,7 +177,7 @@ namespace AllyisApps.Services.Tests
 			int custId = AuthTest.createCustomer("CorpA", orgId, 1, "CUST1");
 			int projId = AuthTest.createProject(custId, "sampleProj", 1, "PROJ1");
 			int timeEntryId = AuthTest.createTimeEntry(userId, projId, date, 1, 8); //existing time entry
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 
 			TimeEntryInfo updatedEntry = new TimeEntryInfo
 			{
@@ -234,7 +234,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void DeleteTimeEntry_Should_Throw_Exception_For_Invalid_TimeEntryId()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			ttService.DeleteTimeEntry(-1);
 		}
 
@@ -250,7 +250,7 @@ namespace AllyisApps.Services.Tests
 			int custId = AuthTest.createCustomer("CorpA", orgId, 1, "CUST1");
 			int projId = AuthTest.createProject(custId, "sampleProj", 1, "PROJ1");
 			int timeEntryId = AuthTest.createTimeEntry(userId, projId, date, 1, 8); //existing time entry
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 
 			try
 			{
@@ -296,7 +296,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentException))]
 		public void GetTimeEntriesOverDateRange_Should_Throw_Exception_For_Invalid_Time_Range()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			DateTime start = new DateTime(2017, 2, 1);
 			DateTime end = new DateTime(2017, 1, 1);    //start > end
 			ttService.GetTimeEntriesOverDateRange(start, end);
@@ -322,7 +322,7 @@ namespace AllyisApps.Services.Tests
 			int timeEntryId3 = AuthTest.createTimeEntry(userId, projId, date3, regPayClassId, 3); //entry 3
 
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, null, 1);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			DateTime start = new DateTime(2017, 1, 1);
 			DateTime end = new DateTime(2017, 1, 31);
@@ -352,7 +352,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void GetTimeEntriesByUserOverDateRange_Should_Thow_Exception_For_Empty_UserIds_List()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			List<int> userIds = new List<int>();
 			DateTime start = new DateTime(2017, 1, 1);
 			DateTime end = new DateTime(2017, 1, 31);
@@ -363,7 +363,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void GetTimeEntriesByUserOverDateRange_Should_Thow_Exception_For_Null_UserIds_List()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			DateTime start = new DateTime(2017, 1, 1);
 			DateTime end = new DateTime(2017, 1, 31);
 			ttService.GetTimeEntriesByUserOverDateRange(null, start, end);
@@ -373,7 +373,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void GetTimeEntriesByUserOverDateRange_Should_Thow_Exception_For_Invalid_UserId()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			List<int> userIds = new List<int> { -1, 1 };
 			DateTime start = new DateTime(2017, 1, 1);
 			DateTime end = new DateTime(2017, 1, 31);
@@ -384,7 +384,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentException))]
 		public void GetTimeEntriesByUserOverDateRange_Should_Thow_Exception_For_Invalid_Date_Range()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			List<int> userIds = new List<int> { 1 };
 			DateTime end = new DateTime(2017, 1, 1);
 			DateTime start = new DateTime(2017, 1, 31);
@@ -415,7 +415,7 @@ namespace AllyisApps.Services.Tests
 			int timeEntryId3 = AuthTest.createTimeEntry(userId2, projId, date3, regPayClassId, 3); //entry 3
 
 			UserContext userContext = new UserContext(userId1, email1, email1, orgId, 0, null, 1);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			DateTime start = new DateTime(2017, 1, 1);
 			DateTime end = new DateTime(2017, 2, 1);
@@ -467,7 +467,7 @@ namespace AllyisApps.Services.Tests
 			AuthTest.createSubUser(subId, userId2, 2);
 
 			UserContext userContext = new UserContext(userId1, email1, email1, orgId, subId, null, 1);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -502,7 +502,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void CreateHoliday_Should_Throw_Exception_For_Null_Holiday()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			ttService.CreateHoliday(null);
 		}
 
@@ -523,9 +523,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);   //member cannot edit org
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
-			Service service = new Service(connectionStr, userContext);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
-			ttService.SetService(service);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			Holiday newHoliday = new Holiday
 			{
@@ -568,9 +566,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
-			Service service = new Service(connectionStr, userContext);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
-			ttService.SetService(service);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			Holiday newHoliday = new Holiday
 			{
@@ -639,7 +635,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void DeleteHoliday_Should_Throw_Exception_For_Invalid_HolidayId()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			ttService.DeleteHoliday(-1);
 		}
 
@@ -660,9 +656,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);   //member cannot edit org
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
-			Service service = new Service(connectionStr, userContext);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
-			ttService.SetService(service);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			int holidayId = AuthTest.createHoliday("randomHoliday", new DateTime(2017, 12, 1), orgId);
 
@@ -705,9 +699,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, projList);
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
-			Service service = new Service(connectionStr, userContext);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
-			ttService.SetService(service);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			//create holiday
 			int holidayId = AuthTest.createHoliday("randomHoliday", new DateTime(2017, 12, 1), orgId);
@@ -796,7 +788,7 @@ namespace AllyisApps.Services.Tests
 			AuthTest.createTimeTrackerSetting(orgId, 0);
 
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, null, 1);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -826,7 +818,7 @@ namespace AllyisApps.Services.Tests
 			AuthTest.createTimeTrackerSetting(orgId, 1);    //lockDate used
 
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, null, 1);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -851,7 +843,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void CreatePayClass_Should_Throw_Exception_For_Null_PayClassName()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			ttService.CreatePayClass(null);
 		}
 
@@ -859,7 +851,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void CreatePayClass_Should_Throw_Exception_For_Empty_PayClassName()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			ttService.CreatePayClass("");
 		}
 
@@ -875,7 +867,7 @@ namespace AllyisApps.Services.Tests
 
 			//Act
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, null, 1);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
+			AppService ttService = new AppService(connectionStr, userContext);
 			try
 			{
 				ttService.CreatePayClass("Regular");    //already existed
@@ -910,9 +902,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);   //member cannot edit org
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
-			Service service = new Service(connectionStr, userContext);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
-			ttService.SetService(service);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -949,9 +939,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);   //member cannot edit org
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
-			Service service = new Service(connectionStr, userContext);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
-			ttService.SetService(service);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -995,7 +983,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void DeletePayClass_Should_Throw_Exception_For_Invalid_PayClassId()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			ttService.DeletePayClass(-1);
 		}
 
@@ -1016,9 +1004,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);   //member cannot edit org
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
-			Service service = new Service(connectionStr, userContext);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
-			ttService.SetService(service);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -1055,9 +1041,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);   //member cannot edit org
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
-			Service service = new Service(connectionStr, userContext);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
-			ttService.SetService(service);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -1107,7 +1091,7 @@ namespace AllyisApps.Services.Tests
 			int regPayClassId = AuthTest.createPayClass(orgId); //8 pay classes are created
 
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, null, 1);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -1130,7 +1114,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentException))]
 		public void UpdateStartOfWeek_Should_Throw_Exception_For_Invalid_startOfWeek()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			ttService.UpdateStartOfWeek(8);
 		}
 
@@ -1151,9 +1135,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
-			Service service = new Service(connectionStr, userContext);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
-			ttService.SetService(service);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -1190,9 +1172,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
-			Service service = new Service(connectionStr, userContext);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
-			ttService.SetService(service);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -1238,7 +1218,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void UpdateOvertime_Should_Throw_Exception_For_Invalid_overtimeHours()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			ttService.UpdateOvertime(-2, "Weeks", 2);
 		}
 
@@ -1246,7 +1226,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentException))]
 		public void UpdateOvertime_Should_Throw_Exception_For_Invalid_overtimePeriod()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			ttService.UpdateOvertime(30, "Quarter", 2);
 		}
 
@@ -1254,7 +1234,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void UpdateOvertime_Should_Throw_Exception_For_Invalid_overtimeMultiplier()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			ttService.UpdateOvertime(30, "Week", 0.50f);
 		}
 
@@ -1275,9 +1255,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
-			Service service = new Service(connectionStr, userContext);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
-			ttService.SetService(service);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -1314,9 +1292,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, null);
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
-			Service service = new Service(connectionStr, userContext);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
-			ttService.SetService(service);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -1362,7 +1338,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentException))]
 		public void UpdateLockDate_Should_Throw_Exception_For_Invalid_lockDatePeriod()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			ttService.UpdateLockDate(true, "Years", 1);
 		}
 
@@ -1370,7 +1346,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentException))]
 		public void UpdateLockDate_Should_Throw_Exception_For_Invalid_lockDateQuantity()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			ttService.UpdateLockDate(true, "Months", -1);
 		}
 
@@ -1385,9 +1361,7 @@ namespace AllyisApps.Services.Tests
 			AuthTest.createTimeTrackerSetting(orgId, 1);
 
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, null, 1);
-			Service service = new Service(connectionStr, userContext);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
-			ttService.SetService(service);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -1440,9 +1414,7 @@ namespace AllyisApps.Services.Tests
 			int regPayClassId = AuthTest.createPayClass(orgId);
 
 			UserContext userContext = new UserContext(userId, email, email, orgId, 0, null, 1);
-			Service service = new Service(connectionStr, userContext);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
-			ttService.SetService(service);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -1473,7 +1445,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentException))]
 		public void GetTimeEntryIndexInfo_Should_Throw_Exception_For_Invalid_UserId()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			DateTime start = new DateTime(2017, 1, 1);
 			DateTime end = new DateTime(2017, 1, 31);
 			ttService.GetTimeEntryIndexInfo(start, end, -2);
@@ -1483,7 +1455,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentException))]
 		public void GetTimeEntryIndexInfo_Should_Throw_Exception_For_Invalid_Date_Range()
 		{
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			DateTime end = new DateTime(2017, 1, 1);
 			DateTime start = new DateTime(2017, 1, 31);
 			ttService.GetTimeEntryIndexInfo(start, end, 1);
@@ -1515,9 +1487,7 @@ namespace AllyisApps.Services.Tests
 			UserOrganizationInfo userOrgInfo = new UserOrganizationInfo(orgId, orgName, OrganizationRole.Member, subInfoList, projectList);
 			List<UserOrganizationInfo> infoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, email, email, orgId, subId, infoList, 1);
-			Service service = new Service(connectionStr, userContext);
-			TimeTrackerService ttService = new TimeTrackerService(connectionStr, userContext);
-			ttService.SetService(service);
+			AppService ttService = new AppService(connectionStr, userContext);
 
 			DateTime start = new DateTime(2017, 1, 1);
 			DateTime end = new DateTime(2017, 1, 31);

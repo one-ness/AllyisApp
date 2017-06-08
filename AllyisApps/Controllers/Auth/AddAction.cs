@@ -31,7 +31,7 @@ namespace AllyisApps.Controllers
 		public ActionResult Add(string returnUrl)
 		{
 			// Only owners should view this page
-			if (Service.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization))
 			{
 				AddMemberViewModel model = ConstructOrganizationAddMembersViewModel();
 				ViewBag.returnUrl = returnUrl;
@@ -58,7 +58,7 @@ namespace AllyisApps.Controllers
 
             if (ModelState.IsValid)
             {
-                if (Service.Can(Actions.CoreAction.EditOrganization))
+                if (AppService.Can(Actions.CoreAction.EditOrganization))
                 {
                     int? subId = null, subRoleId = null;
                     if (add.Subscriptions != null && add.Subscriptions.Count > 0)
@@ -73,7 +73,7 @@ namespace AllyisApps.Controllers
 
                     try
                     {
-                        int invitationId = await Service.InviteUser(
+                        int invitationId = await AppService.InviteUser(
                             Url.Action(ActionConstants.Index, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme),
                             new InvitationInfo
                             {
@@ -199,13 +199,13 @@ namespace AllyisApps.Controllers
         /// <returns>The OrganizationAddMembersViewModel.</returns>
         public AddMemberViewModel ConstructOrganizationAddMembersViewModel()
 		{
-			var infos = Service.GetAddMemberInfo();
+			var infos = AppService.GetAddMemberInfo();
 			string nextId = string.Compare(infos.Item1, infos.Item5) > 0 ? infos.Item1 : infos.Item5;
 
 			AddMemberViewModel result = new AddMemberViewModel
 			{
 				OrganizationId = UserContext.ChosenOrganizationId,
-				EmployeeId = new string(Service.IncrementAlphanumericCharArray(nextId.ToCharArray())),
+				EmployeeId = new string(AppService.IncrementAlphanumericCharArray(nextId.ToCharArray())),
 				Subscriptions = new List<AddMemberSubscriptionInfo>(),
 				Projects = infos.Item4,
 			};

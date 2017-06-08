@@ -30,23 +30,23 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (userId == Convert.ToInt32(UserContext.UserId))
 			{
-				if (!Service.Can(Actions.CoreAction.TimeTrackerEditSelf))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf))
 				{
 					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReports);
 				}
 			}
 			else
 			{
-				if (!Service.Can(Actions.CoreAction.TimeTrackerEditOthers))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
 				{
 					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReportsOtherUser);
 				}
 			}
 
-			DateTime? start = startingDate.HasValue ? (DateTime?)Service.GetDateTimeFromDays(startingDate.Value) : null;
-			DateTime? end = endingDate.HasValue ? (DateTime?)Service.GetDateTimeFromDays(endingDate.Value) : null;
+			DateTime? start = startingDate.HasValue ? (DateTime?)AppService.GetDateTimeFromDays(startingDate.Value) : null;
+			DateTime? end = endingDate.HasValue ? (DateTime?)AppService.GetDateTimeFromDays(endingDate.Value) : null;
 
-			return this.File(Service.PrepareCSVExport(new List<int> { userId }, start, end).BaseStream, "text/csv", "export.csv");
+			return this.File(AppService.PrepareCSVExport(new List<int> { userId }, start, end).BaseStream, "text/csv", "export.csv");
 		}
 
 		/// <summary>
@@ -63,11 +63,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DataExportViewModel result = new DataExportViewModel();
 			if ((userIds == null) || (userIds[0] == -1))
 			{
-				result.Data = Service.GetTimeEntriesOverDateRange(startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
+				result.Data = AppService.GetTimeEntriesOverDateRange(startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
 			}
 			else
 			{
-				result.Data = Service.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
+				result.Data = AppService.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
 			}
 
 			if (projectId != 0)
@@ -78,7 +78,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else if (customerId != 0)
 			{
-				IEnumerable<int> projects = Service.GetProjectsByCustomer(customerId).Select(proj => proj.ProjectId).ToList();
+				IEnumerable<int> projects = AppService.GetProjectsByCustomer(customerId).Select(proj => proj.ProjectId).ToList();
 				result.Data = from c in result.Data
 							  where projects.Contains(c.ProjectId)
 							  select c;
@@ -88,17 +88,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if ((userIds.Count > 1) || (userIds[0] == -1))
 				{
-					result.Projects = Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId);
+					result.Projects = AppService.GetProjectsByOrganization(UserContext.ChosenOrganizationId);
 				}
 				else
 				{
 					// single user selected
-					result.Projects = Service.GetProjectsByUserAndOrganization(userIds[0], false);
+					result.Projects = AppService.GetProjectsByUserAndOrganization(userIds[0], false);
 				}
 
 				// Add default project in case there are holiday entries
 				List<CompleteProjectInfo> defaultProject = new List<CompleteProjectInfo>();
-				defaultProject.Add(Service.GetProject(0));
+				defaultProject.Add(AppService.GetProject(0));
 				result.Projects = result.Projects.Concat(defaultProject);
 			}
 

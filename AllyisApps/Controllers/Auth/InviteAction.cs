@@ -94,7 +94,7 @@ namespace AllyisApps.Controllers
 		[HttpPost]
 		public ActionResult RemoveInvitation(int invitationId)
 		{
-			if (Service.RemoveInvitation(invitationId))
+			if (AppService.RemoveInvitation(invitationId))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.InvitationDeleteNotification, Variety.Success));
 

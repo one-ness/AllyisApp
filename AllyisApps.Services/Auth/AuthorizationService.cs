@@ -12,7 +12,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// Business logic for all authorization related operations.
 	/// </summary>
-	public partial class Service : BaseService
+	public partial class AppService : BaseService
 	{
 		/// <summary>
 		/// Check if the logged in user can perform the target core action.

@@ -1,18 +1,22 @@
 ﻿@{
     ViewBag.Title = Strings.RemoveBilling;
-    Layout = "~/Views/Shared/_LayoutJustAForm.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<p>
-    @Strings.ConfirmRemoveBilling
-</p>
+<div class="shrink-wrap-center">
+    <div class="min300">
+        <p>
+            @Strings.ConfirmRemoveBilling
+        </p>
 
-@using (Html.BeginForm(ActionConstants.RemoveBilling, ControllerConstants.Account, FormMethod.Post))
-{
+        @using (Html.BeginForm(ActionConstants.RemoveBilling, ControllerConstants.Account, FormMethod.Post))
+        {
 
-    <div class="form-group allyis-action-buttons">
-        @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
-        <input type="submit" class="btn btn-primary" value=@Strings.Continue>
+            <div class="form-group allyis-action-buttons">
+                @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+                <input type="submit" class="btn btn-primary" value=@Strings.Continue>
+            </div>
+
+        }
     </div>
-
-}
+</div>

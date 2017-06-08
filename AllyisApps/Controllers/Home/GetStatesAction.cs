@@ -35,7 +35,7 @@ namespace AllyisApps.Controllers
 
 			Dictionary<string, string> localizedStates = new Dictionary<string, string>();
 
-			foreach (string state in Service.ValidStates(country))
+			foreach (string state in AppService.ValidStates(country))
 			{
 				string stateKey = Clean(state);
 				localizedStates.Add(state, Resources.States.ResourceManager.GetString(stateKey) ?? state);

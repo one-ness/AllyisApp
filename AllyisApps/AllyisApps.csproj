@@ -475,6 +475,7 @@
     <Content Include="Content\less\allyis-tabs.less" />
     <Content Include="Areas\TimeTracker\Views\Customer\Details.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\MergePayClass.cshtml" />
+    <Content Include="Areas\TimeTracker\Views\Shared\_TimeTrackerSidebar.cshtml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
     <None Include="Resources\628px-achtung-svg.png" />
@@ -894,9 +895,6 @@
     <Content Include="Areas\TimeTracker\Views\Project\Details.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Project\Create.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Project\Edit.cshtml" />
-    <Content Include="Views\Shared\_LayoutBase.cshtml" />
-    <Content Include="Views\Shared\_LayoutJustAForm.cshtml" />
-    <Content Include="Views\Shared\_LayoutSidebar.cshtml" />
     <Content Include="Views\Shared\_Breadcrumbs.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
   </ItemGroup>

@@ -16,7 +16,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	[Authorize]
 	public partial class CustomerController : BaseController
 	{
-		private static readonly int TimeTrackerID = Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker);
+		private static readonly int TimeTrackerID = AppService.GetProductIdByName(ProductNameKeyConstants.TimeTracker);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CustomerController"/> class.

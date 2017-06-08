@@ -19,7 +19,7 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// Business logic for all Organization related services.
 	/// </summary>
-	public partial class Service : BaseService
+	public partial class AppService : BaseService
 	{
 		/// <summary>
 		/// Gets the subdomain name from the organization Id.
@@ -274,7 +274,7 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("invitationInfo", "Invitation info object must not be null.");
 			}
 
-			if (string.IsNullOrEmpty(invitationInfo.Email) || !Service.IsEmailAddressValid(invitationInfo.Email))
+			if (string.IsNullOrEmpty(invitationInfo.Email) || !AppService.IsEmailAddressValid(invitationInfo.Email))
 			{
 				throw new ArgumentException("Email address is not valid", "invitationInfo.Email");
 			}
@@ -392,43 +392,43 @@ namespace AllyisApps.Services
 			return DBHelper.GetUserInvitationsByOrgId(UserContext.ChosenOrganizationId).Select(i => InitializeInvitationInfo(i));
 		}
 
-		/// <summary>
-		/// Creates a subscription role for an invitation.
-		/// </summary>
-		/// <param name="invitationId">Invitation id.</param>
-		/// <param name="subscriptionId">Subscription id.</param>
-		/// <param name="selectedRole">Selected role.</param>
-		public void CreateInvitationSubRole(int invitationId, int subscriptionId, int selectedRole)
-		{
-			#region Validation
+        ///// <summary>
+        ///// Creates a subscription role for an invitation.
+        ///// </summary>
+        ///// <param name="invitationId">Invitation id.</param>
+        ///// <param name="subscriptionId">Subscription id.</param>
+        ///// <param name="selectedRole">Selected role.</param>
+        //public void CreateInvitationSubRole(int invitationId, int subscriptionId, int selectedRole)
+        //{
+        //    #region Validation
 
-			if (invitationId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("invitationId", "Invitation Id cannot be 0 or negative.");
-			}
+        //    if (invitationId <= 0)
+        //    {
+        //        throw new ArgumentOutOfRangeException("invitationId", "Invitation Id cannot be 0 or negative.");
+        //    }
 
-			if (subscriptionId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative.");
-			}
+        //    if (subscriptionId <= 0)
+        //    {
+        //        throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative.");
+        //    }
 
-			if (selectedRole <= 0)
-			{ // TODO: Figure out if there is any further validation that can be done for this number.
-				throw new ArgumentOutOfRangeException("selectedRole", "Selected role cannot be negative.");
-			}
+        //    if (selectedRole <= 0)
+        //    { // TODO: Figure out if there is any further validation that can be done for this number.
+        //        throw new ArgumentOutOfRangeException("selectedRole", "Selected role cannot be negative.");
+        //    }
 
-			#endregion Validation
+        //    #endregion Validation
 
-			DBHelper.CreateInvitationSubRole(invitationId, subscriptionId, selectedRole);
-		}
+        //    DBHelper.CreateInvitationSubRole(invitationId, subscriptionId, selectedRole);
+        //}
 
-		/// <summary>
-		/// Updates a user's subscription product role.
-		/// </summary>
-		/// <param name="selectedRole">The Role.</param>
-		/// <param name="subscriptionId">Subscription Id.</param>
-		/// <param name="userId">User Id.</param>
-		public void UpdateSubscriptionUserProductRole(int selectedRole, int subscriptionId, int userId)
+        /// <summary>
+        /// Updates a user's subscription product role.
+        /// </summary>
+        /// <param name="selectedRole">The Role.</param>
+        /// <param name="subscriptionId">Subscription Id.</param>
+        /// <param name="userId">User Id.</param>
+        public void UpdateSubscriptionUserProductRole(int selectedRole, int subscriptionId, int userId)
 		{
 			#region Validation
 
@@ -482,7 +482,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
 			}
-			else if (!Service.IsEmailAddressValid(email))
+			else if (!AppService.IsEmailAddressValid(email))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
@@ -876,26 +876,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates an InvitationSubRoleDBEntity into an InvitationSubRole business object.
-		/// </summary>
-		/// <param name="invitationSubRole">InvitationSubRoleDBEntity instance.</param>
-		/// <returns>InvitationSubRole instance.</returns>
-		public static InvitationSubRole InitializeInvitationSubRole(InvitationSubRoleDBEntity invitationSubRole)
-		{
-			if (invitationSubRole == null)
-			{
-				return null;
-			}
-
-			return new InvitationSubRole
-			{
-				InvitationId = invitationSubRole.InvitationId,
-				ProductRoleId = invitationSubRole.ProductRoleId,
-				SubscriptionId = invitationSubRole.SubscriptionId
-			};
-		}
-
-		/// <summary>
 		/// Translates an InvitationDBEntity into an InvitationInfo business object.
 		/// </summary>
 		/// <param name="invitation">InvitationDBEntity instance.</param>
@@ -912,7 +892,7 @@ namespace AllyisApps.Services
 				AccessCode = invitation.AccessCode,
 				DateOfBirth = invitation.DateOfBirth,
 				Email = invitation.Email,
-				CompressedEmail = Service.GetCompressedEmail(invitation.Email),
+				CompressedEmail = AppService.GetCompressedEmail(invitation.Email),
 				FirstName = invitation.FirstName,
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,

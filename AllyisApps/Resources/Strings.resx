@@ -1101,7 +1101,7 @@
   <data name="RemoveFromSubscription" xml:space="preserve">
     <value>Remove from Subscription</value>
   </data>
-  <data name="RemoveInvitation" xml:space="preserve">
+  <data name="RemoveInvitationConfirm" xml:space="preserve">
     <value>Are you sure you would like to remove this invitation?\nYou can reinvite this person at anytime.</value>
   </data>
   <data name="RemoveMember" xml:space="preserve">
@@ -1434,5 +1434,8 @@
   </data>
   <data name="LastNameValidationAddMember" xml:space="preserve">
     <value>Please enter a last name</value>
+  </data>
+  <data name="RemoveInvitation" xml:space="preserve">
+    <value>Remove Invitation</value>
   </data>
 </root>

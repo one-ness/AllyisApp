@@ -32,9 +32,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DateTime? defaultStart = null;
 			DateTime? defaultEnd = null;
 
-			if (Service.Can(Actions.CoreAction.EditProject))
+			if (AppService.Can(Actions.CoreAction.EditProject))
 			{
-				var idAndUsers = Service.GetNextProjectIdAndSubUsers(id);
+				var idAndUsers = AppService.GetNextProjectIdAndSubUsers(id);
 
 				var list = idAndUsers.Item2; //Service.GetUsers();
 				var subList = new List<BasicUserInfoViewModel>();
@@ -51,8 +51,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ParentCustomerId = id,
 						ProjectUsers = new List<BasicUserInfoViewModel>(),
 						SubscriptionUsers = subList,
-						StartDate = Service.GetDayFromDateTime(defaultStart),
-						EndDate = Service.GetDayFromDateTime(defaultEnd),
+						StartDate = AppService.GetDayFromDateTime(defaultStart),
+						EndDate = AppService.GetDayFromDateTime(defaultEnd),
 						ProjectOrgId = idAndUsers.Item1 //Service.GetRecommendedProjectId()
 					});
 			}
@@ -74,7 +74,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public ActionResult Create(EditProjectViewModel model)
 		{
-			var list = Service.GetNextProjectIdAndSubUsers(model.ParentCustomerId).Item2;
+			var list = AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId).Item2;
 			var subList = new List<BasicUserInfoViewModel>();
 			foreach (var user in list)
 			{
@@ -83,14 +83,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			model.SubscriptionUsers = subList;
 			if (ModelState.IsValid)
 			{
-				if (Service.Can(Actions.CoreAction.EditProject))
+				if (AppService.Can(Actions.CoreAction.EditProject))
 				{
 					if (model == null)
 					{
 						throw new ArgumentNullException("model");
 					}
 
-					if (Service.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Any(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId))
+					if (AppService.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Any(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId))
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
 						return this.View(model);
@@ -137,14 +137,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The Project ID.</returns>
 		public int CreateProject(EditProjectViewModel model)
 		{
-			return Service.CreateProject(new Project()
+			return AppService.CreateProject(new Project()
 			{
 				CustomerId = model.ParentCustomerId,
 				Name = model.ProjectName,
 				Type = model.PriceType,
 				ProjectOrgId = model.ProjectOrgId,
-				StartingDate = Service.GetDateTimeFromDays(model.StartDate),
-				EndingDate = Service.GetDateTimeFromDays(model.EndDate)
+				StartingDate = AppService.GetDateTimeFromDays(model.StartDate),
+				EndingDate = AppService.GetDateTimeFromDays(model.EndDate)
 			});
 		}
 	}

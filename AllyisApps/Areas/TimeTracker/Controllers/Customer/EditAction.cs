@@ -26,9 +26,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult Edit(int id)
 		{
-			if (Service.Can(Actions.CoreAction.EditCustomer))
+			if (AppService.Can(Actions.CoreAction.EditCustomer))
 			{
-				var infos = Service.GetCustomerAndCountries(id);
+				var infos = AppService.GetCustomerAndCountries(id);
 
 				return this.View(new EditCustomerInfoViewModel
 				{
@@ -66,14 +66,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (ModelState.IsValid)
 			{
 				// CustomerOrgId must be unique, if it has been changed
-				Customer orgIdMatch = Service.GetCustomerList(this.UserContext.ChosenOrganizationId).Where(customer => customer.CustomerOrgId == model.CustomerOrgId).SingleOrDefault();
+				Customer orgIdMatch = AppService.GetCustomerList(this.UserContext.ChosenOrganizationId).Where(customer => customer.CustomerOrgId == model.CustomerOrgId).SingleOrDefault();
 				if (orgIdMatch != null && orgIdMatch.CustomerId != model.CustomerID)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
 					return this.View(model);
 				}
 
-				if (Service.UpdateCustomer(new Customer()
+				if (AppService.UpdateCustomer(new Customer()
 				{
 					CustomerId = model.CustomerID,
 					ContactEmail = model.ContactEmail,

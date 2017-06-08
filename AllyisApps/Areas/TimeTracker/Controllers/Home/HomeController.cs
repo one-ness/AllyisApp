@@ -17,7 +17,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	[Authorize]
 	public class HomeController : BaseController
 	{
-		private static readonly int TimeTrackerID = Service.GetProductIdByName(ProductNameKeyConstants.TimeTracker);
+		private static readonly int TimeTrackerID = AppService.GetProductIdByName(ProductNameKeyConstants.TimeTracker);
 
 		#region default constructor
 
@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The view.</returns>
 		public ActionResult Index()
 		{
-			if (Service.Can(Actions.CoreAction.TimeTrackerViewSelf))
+			if (AppService.Can(Actions.CoreAction.TimeTrackerEditSelf))
 			{
 				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
 			}
