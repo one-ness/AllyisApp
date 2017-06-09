@@ -1438,4 +1438,10 @@
   <data name="RemoveInvitation" xml:space="preserve">
     <value>Remove Invitation</value>
   </data>
+  <data name="Reactivate" xml:space="preserve">
+    <value>Reactivate</value>
+  </data>
+  <data name="ProjectReactivateNotification" xml:space="preserve">
+    <value>You have successfully reactivated the project</value>
+  </data>
 </root>

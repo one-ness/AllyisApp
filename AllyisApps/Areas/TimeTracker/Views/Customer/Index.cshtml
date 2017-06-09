@@ -19,6 +19,7 @@
     <div class="col-xs-12 col-md-8 col-md-push-2">
         <div class="allyis-action-buttons-top">
             <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Customer)" class="btn btn-default @createButtonClass">@Strings.AddCustomer <i class="fa fa-plus"></i></a>
+            <a href="@Url.Action(ActionConstants.Reactivate, ControllerConstants.Customer)" class="btn btn-default @createButtonClass">@Strings.Reactivate <i class="fa fa-plus"></i></a>
 
             <div class="pull-right">
                 <input type="text" id="SearchInput" placeholder=@Strings.SearchPlaceholder class="form-control">
@@ -26,7 +27,7 @@
         </div>
         @if (Model.Customers.Count() > 0)
         {
-            <div class="panel-group customer-list" id="customer-panel" role="tablist">
+            <div class="panel-group customer-list" id="customer-panel" role="tablist">simil
                 @foreach (CustomerProjectViewModel customer in Model.Customers)
                 {
                     var collapseTarget = string.Format("customerNumber{0}", customer.CustomerInfo.CustomerId);
