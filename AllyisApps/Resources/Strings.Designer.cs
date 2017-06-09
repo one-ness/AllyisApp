@@ -2750,6 +2750,15 @@ namespace AllyisApps.Resources {
                 return ResourceManager.GetString("ProjectDeleteNotification", resourceCulture);
             }
         }
+
+        /// <summary>
+        /// Looks up a localized string similar to has been reactivated successfully
+        /// </summary>
+        public static string ProjectReactivateNotification {
+            get {
+                return ResourceManager.GetString("ProjectReactivateNotification", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Project Details.

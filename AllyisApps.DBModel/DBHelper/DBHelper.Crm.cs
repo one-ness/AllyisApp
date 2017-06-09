@@ -71,6 +71,24 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+        /// <summary>
+        /// Reactivate a project
+        /// </summary>
+        /// <param name="projectId">The id of the project to be reactivated</param>
+        public void ReactivateProject(int projectId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@ProjectId", projectId);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                connection.Execute(
+                    "[Crm].[ReactivateProject]",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
 		/// <summary>
 		/// Updates project properties.
 		/// </summary>
