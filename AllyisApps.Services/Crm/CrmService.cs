@@ -85,21 +85,19 @@ namespace AllyisApps.Services
 			return false;
 		}
 
-		/// <summary>
-		/// Deletes a customer.
-		/// </summary>
-		/// <param name="customerId">Customer id.</param>
-		/// <returns>Returns false if authorization fails.</returns>
-		public bool DeleteCustomer(int customerId)
-		{
-			if (this.Can(Actions.CoreAction.EditCustomer))
-			{
-				DBHelper.DeleteCustomer(customerId);
-				return true;
-			}
-
-			return false;
-		}
+        /// <summary>
+        /// Deletes a customer.
+        /// </summary>
+        /// <param name="customerId">Customer id.</param>
+        /// <returns>Returns false if authorization fails.</returns>
+        public string DeleteCustomer(int customerId)
+        {
+            if (this.Can(Actions.CoreAction.EditCustomer))
+            {
+                return DBHelper.DeleteCustomer(customerId);
+            }
+            return null;
+        }
 
         /// <summary>
         /// Deletes a customer.
