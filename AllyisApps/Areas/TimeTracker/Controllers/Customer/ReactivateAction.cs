@@ -25,7 +25,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
             if (customer != null)
             {
-                if (AppService.DeleteCustomer(id))
+                if (AppService.ReactivateCustomer(id))
                 {
                     Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", customer.Name, Resources.Strings.CustomerDeleteNotification), Variety.Success));
 
