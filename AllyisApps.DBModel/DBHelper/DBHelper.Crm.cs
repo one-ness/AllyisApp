@@ -411,7 +411,23 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
+        /// <summary>
+        /// Delete the specified customer.
+        /// </summary>
+        /// <param name="customerID">The customer's Id.</param>
+        /// <returns>Customer's name if successful, empty string if not found.</returns>
+        public string DeleteCustomer(int customerID)
+        {
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                var result = connection.Query<string>("[Crm].[DeleteCustomer]", new { CustomerId = customerID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+                if (result == null) { return ""; }
+                return result;
+            }
+        }
+
+        /*
+        /// <summary>
 		/// Delete the specified customer.
 		/// </summary>
 		/// <param name="customerID">The customer's Id.</param>
@@ -425,7 +441,8 @@ namespace AllyisApps.DBModel
 			}
 
 			return true;
-		}
+		}   
+    */
 
         /// <summary>
         /// Delete the specified customer.
