@@ -27,7 +27,7 @@
         </div>
         @if (Model.Customers.Count() > 0)
         {
-            <div class="panel-group customer-list" id="customer-panel" role="tablist">simil
+            <div class="panel-group customer-list" id="customer-panel" role="tablist">
                 @foreach (CustomerProjectViewModel customer in Model.Customers)
                 {
                     var collapseTarget = string.Format("customerNumber{0}", customer.CustomerInfo.CustomerId);
