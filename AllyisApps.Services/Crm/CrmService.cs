@@ -14,7 +14,7 @@ using System.Linq;
 namespace AllyisApps.Services
 {
 	/// <summary>
-	/// Services for Cutomer Relationship Management related functions (customer, projects).
+	/// Services for Customer Relationship Management related functions (customer, projects).
 	/// </summary>
 	public partial class AppService : BaseService
 	{
@@ -101,12 +101,28 @@ namespace AllyisApps.Services
 			return false;
 		}
 
-		/// <summary>
-		/// Gets a list of <see cref="Customer"/>'s for an organization.
-		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
-		/// <returns><see cref="IEnumerable{CustomerDBEntity}"/>.</returns>
-		public IEnumerable<Customer> GetCustomerList(int orgId)
+        /// <summary>
+        /// Deletes a customer.
+        /// </summary>
+        /// <param name="customerId">Customer id.</param>
+        /// <returns>Returns false if authorization fails.</returns>
+        public bool ReactivateCustomer(int customerId)
+        {
+            if (this.Can(Actions.CoreAction.EditCustomer))
+            {
+                DBHelper.ReactivateCustomer(customerId);
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Gets a list of <see cref="Customer"/>'s for an organization.
+        /// </summary>
+        /// <param name="orgId">Organization Id.</param>
+        /// <returns><see cref="IEnumerable{CustomerDBEntity}"/>.</returns>
+        public IEnumerable<Customer> GetCustomerList(int orgId)
 		{
 			IEnumerable<CustomerDBEntity> dbeList = DBHelper.GetCustomerList(orgId);
 			List<Customer> list = new List<Customer>();
