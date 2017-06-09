@@ -16,11 +16,49 @@
 AS
 BEGIN
 	SET NOCOUNT ON;
-	INSERT INTO [Crm].[Customer] ([Name], [Address], [City], [State], [Country], [PostalCode], [ContactEmail], [ContactPhoneNumber], [FaxNumber], [Website], [EIN], [OrganizationId], [CustomerOrgId])
-	VALUES (@Name, @Address, @City,
-		(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
-		(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
-		@PostalCode, @ContactEmail, @ContactPhoneNumber, @FaxNumber, @Website, @EIN, @OrganizationID, @CustomerOrgId);
-	SET @retId = SCOPE_IDENTITY();
-	SELECT SCOPE_IDENTITY();
+
+	IF EXISTS (
+		SELECT * FROM [Crm].[Customer] WITH (NOLOCK)
+		WHERE [CustomerOrgId] = @CustomerOrgId
+		AND [IsActive] = 1
+	)
+	BEGIN
+		-- CustomerOrgId is not unique
+		SET @retId = -1;
+	END
+	ELSE
+	BEGIN
+		BEGIN TRANSACTION
+			-- Create customer
+			INSERT INTO [Crm].[Customer] 
+				([Name], 
+				[Address], 
+				[City], 
+				[State], 
+				[Country], 
+				[PostalCode], 
+				[ContactEmail], 
+				[ContactPhoneNumber], 
+				[FaxNumber], 
+				[Website], 
+				[EIN], 
+				[OrganizationId], 
+				[CustomerOrgId])
+			VALUES (@Name, 
+				@Address, 
+				@City,
+				(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
+				(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
+				@PostalCode, 
+				@ContactEmail, 
+				@ContactPhoneNumber, 
+				@FaxNumber, 
+				@Website, 
+				@EIN, 
+				@OrganizationID, 
+				@CustomerOrgId);
+			SET @retId = SCOPE_IDENTITY();
+		COMMIT TRANSACTION		
+	END
+	SELECT @retId;
 END

@@ -286,11 +286,47 @@ namespace AllyisApps.DBModel
 			return parameters.Get<int>("@retId");
 		}
 
-		/// <summary>
-		/// Updates the customer with the specified ID.
-		/// </summary>
-		/// <param name="customer">The table with the customer to create.</param>
-		public void UpdateCustomer(CustomerDBEntity customer)
+        /// <summary>
+        /// Updates the customer with the specified ID.
+        /// </summary>
+        /// <param name="customer">The table with the customer to create.</param>
+        /// <return>1 if succeed, -1 if fail because CustOrgId is not unique.</return>
+        public int UpdateCustomer(CustomerDBEntity customer)
+        {
+            if (customer == null)
+            {
+                throw new ArgumentException("customer cannot be null.");
+            }
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@CustomerId", customer.CustomerId);
+            parameters.Add("@ContactEmail", customer.ContactEmail);
+            parameters.Add("@Name", customer.Name);
+            parameters.Add("@Address", customer.Address);
+            parameters.Add("@City", customer.City);
+            parameters.Add("@State", customer.State);
+            parameters.Add("@Country", customer.Country);
+            parameters.Add("@PostalCode", customer.PostalCode);
+            parameters.Add("@ContactPhoneNumber", customer.ContactPhoneNumber);
+            parameters.Add("@FaxNumber", customer.FaxNumber);
+            parameters.Add("@Website", customer.Website);
+            parameters.Add("@EIN", customer.EIN);
+            parameters.Add("@OrgId", customer.CustomerOrgId);
+            parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                connection.Execute("[Crm].[UpdateCustomerInfo]", parameters, commandType: CommandType.StoredProcedure);
+            }
+            return parameters.Get<int>("@retId");
+        }
+
+        /*
+        /// <summary>
+        /// Updates the customer with the specified ID.
+        /// </summary>
+        /// <param name="customer">The table with the customer to create.</param>
+        public void UpdateCustomer(CustomerDBEntity customer)
 		{
 			if (customer == null)
 			{
@@ -316,7 +352,7 @@ namespace AllyisApps.DBModel
 			{
 				connection.Execute("[Crm].[UpdateCustomerInfo]", parameters, commandType: CommandType.StoredProcedure);
 			}
-		}
+		} */
 
 		/// <summary>
 		/// Retrieves the customer's information from the database.
@@ -397,6 +433,22 @@ namespace AllyisApps.DBModel
 		/// Delete the specified customer.
 		/// </summary>
 		/// <param name="customerID">The customer's Id.</param>
+		/// <returns>Customer's name if successful, empty string if not found.</returns>
+		public string DeleteCustomer(int customerID)
+		{
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var result = connection.Query<string>("[Crm].[DeleteCustomer]", new { CustomerId = customerID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+                if (result == null) { return ""; }
+                return result;
+            }
+		}
+
+        /*
+        /// <summary>
+		/// Delete the specified customer.
+		/// </summary>
+		/// <param name="customerID">The customer's Id.</param>
 		/// <returns>True if successful.</returns>
 		public bool DeleteCustomer(int customerID)
 		{
@@ -407,16 +459,17 @@ namespace AllyisApps.DBModel
 			}
 
 			return true;
-		}
+		}   
+    */
 
-		/// <summary>
-		/// Gets all the projects a user can use in an organization.
-		/// </summary>
-		/// <param name="userId">The user's Id.</param>
-		/// <param name="orgId">The organization's Id.</param>
-		/// <param name="activity">The level of activity you wish to allow. Specifying 0 includes inactive projects.</param>
-		/// <returns>A collection of CompleteProjectDBEntity objects for each project the user has access to within the organization.</returns>
-		public IEnumerable<CompleteProjectDBEntity> GetProjectsByUserAndOrganization(int userId, int orgId, int activity)
+        /// <summary>
+        /// Gets all the projects a user can use in an organization.
+        /// </summary>
+        /// <param name="userId">The user's Id.</param>
+        /// <param name="orgId">The organization's Id.</param>
+        /// <param name="activity">The level of activity you wish to allow. Specifying 0 includes inactive projects.</param>
+        /// <returns>A collection of CompleteProjectDBEntity objects for each project the user has access to within the organization.</returns>
+        public IEnumerable<CompleteProjectDBEntity> GetProjectsByUserAndOrganization(int userId, int orgId, int activity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@UserId", userId);

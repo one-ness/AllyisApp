@@ -58,7 +58,7 @@ namespace AllyisApps.Services
 		/// Creates a customer.
 		/// </summary>
 		/// <param name="customer">Customer.</param>
-		/// <returns>Customer id.</returns>
+		/// <returns>Customer id if succeed, -1 if the id already exists in the db, null if authorization fails.</returns>
 		public int? CreateCustomer(Customer customer)
 		{
 			if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
@@ -73,6 +73,22 @@ namespace AllyisApps.Services
 		/// Updates a customer in the database.
 		/// </summary>
 		/// <param name="customer">Updated customer info.</param>
+		/// <returns>1 if succeed, -1 if CustOrgId is not unique, null if authorization fails.</returns>
+		public int? UpdateCustomer(Customer customer)
+		{
+			if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
+			{
+				return DBHelper.UpdateCustomer(GetDBEntityFromCustomer(customer));
+			}
+
+			return null;
+		}
+
+        /*
+         /// <summary>
+		/// Updates a customer in the database.
+		/// </summary>
+		/// <param name="customer">Updated customer info.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool UpdateCustomer(Customer customer)
 		{
@@ -84,8 +100,24 @@ namespace AllyisApps.Services
 
 			return false;
 		}
+            */
 
-		/// <summary>
+        /// <summary>
+        /// Deletes a customer.
+        /// </summary>
+        /// <param name="customerId">Customer id.</param>
+        /// <returns>Returns null if authorization fails, empty string if customer not found, customer's name if succeeds</returns>
+        public string DeleteCustomer(int customerId)
+		{
+			if (this.Can(Actions.CoreAction.EditCustomer))
+			{
+				return DBHelper.DeleteCustomer(customerId);
+			}
+			return null;
+		}
+
+        /*
+        /// <summary>
 		/// Deletes a customer.
 		/// </summary>
 		/// <param name="customerId">Customer id.</param>
@@ -99,14 +131,15 @@ namespace AllyisApps.Services
 			}
 
 			return false;
-		}
+		}   
+    */
 
-		/// <summary>
-		/// Gets a list of <see cref="Customer"/>'s for an organization.
-		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
-		/// <returns><see cref="IEnumerable{CustomerDBEntity}"/>.</returns>
-		public IEnumerable<Customer> GetCustomerList(int orgId)
+        /// <summary>
+        /// Gets a list of <see cref="Customer"/>'s for an organization.
+        /// </summary>
+        /// <param name="orgId">Organization Id.</param>
+        /// <returns><see cref="IEnumerable{CustomerDBEntity}"/>.</returns>
+        public IEnumerable<Customer> GetCustomerList(int orgId)
 		{
 			IEnumerable<CustomerDBEntity> dbeList = DBHelper.GetCustomerList(orgId);
 			List<Customer> list = new List<Customer>();
