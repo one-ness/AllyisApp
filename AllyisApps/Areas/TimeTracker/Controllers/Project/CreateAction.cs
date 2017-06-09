@@ -65,14 +65,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 		}
 
-		/// <summary>
-		/// POST: Project/Create
-		/// Method for creating a new project entry in the database.
-		/// </summary>
-		/// <param name="model">The model of user input.</param>
-		/// <returns>If successful, notifies and redirects to Project/Index. Else, returns to the create project form.</returns>
-		[HttpPost]
-		public ActionResult Create(EditProjectViewModel model)
+        /// <summary>
+        /// POST: Project/Create
+        /// Method for creating a new project entry in the database.
+        /// </summary>
+        /// <param name="model">The model of user input.</param>
+        /// <returns>If successful, notifies and redirects to Project/Index. Else, returns to the create project form.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(EditProjectViewModel model)
 		{
 			var list = AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId).Item2;
 			var subList = new List<BasicUserInfoViewModel>();

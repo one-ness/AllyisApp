@@ -61,6 +61,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="model">The Customer view model.</param>
 		/// <returns>The ActionResult.</returns>
 		[HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(EditCustomerInfoViewModel model)
         {
             if (ModelState.IsValid)

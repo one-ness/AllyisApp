@@ -21,6 +21,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// </summary>
         /// <param name="id">The Customer id.</param>
         /// <returns>The Customer index.</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
             var result = AppService.DeleteCustomer(id);
