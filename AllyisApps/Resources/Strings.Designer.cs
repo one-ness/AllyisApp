@@ -2750,15 +2750,6 @@ namespace AllyisApps.Resources {
                 return ResourceManager.GetString("ProjectDeleteNotification", resourceCulture);
             }
         }
-
-        /// <summary>
-        /// Looks up a localized string similar to has been reactivated successfully
-        /// </summary>
-        public static string ProjectReactivateNotification {
-            get {
-                return ResourceManager.GetString("ProjectReactivateNotification", resourceCulture);
-            }
-        }
         
         /// <summary>
         ///   Looks up a localized string similar to Project Details.
@@ -2797,6 +2788,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have successfully reactivated the project.
+        /// </summary>
+        public static string ProjectReactivateNotification {
+            get {
+                return ResourceManager.GetString("ProjectReactivateNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Projects.
         /// </summary>
         public static string Projects {
@@ -2820,6 +2820,15 @@ namespace AllyisApps.Resources {
         public static string ProjectsFile {
             get {
                 return ResourceManager.GetString("ProjectsFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reactivate.
+        /// </summary>
+        public static string Reactivate {
+            get {
+                return ResourceManager.GetString("Reactivate", resourceCulture);
             }
         }
         
