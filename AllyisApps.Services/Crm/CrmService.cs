@@ -341,6 +341,26 @@ namespace AllyisApps.Services
 			return false;
 		}
 
+        /// <summary>
+        /// Reactivate a project
+        /// </summary>
+        /// <param name="projectId">Project Id</param>
+        /// <returns>Returns false if authorization fails</returns>
+        public bool ReactivateProject(int projectId)
+        {
+            if (projectId <= 0)
+            {
+                throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
+            }
+
+            if (this.Can(Actions.CoreAction.EditProject))
+            {
+                DBHelper.ReactivateProject(projectId);
+                return true;
+            }
+            return false;
+        }
+
 		/// <summary>
 		/// Creates a project user.
 		/// </summary>
