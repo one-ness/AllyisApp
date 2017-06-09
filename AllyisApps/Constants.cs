@@ -207,6 +207,11 @@
 		/// </summary>
 		public const string PrivacyPolicy = "PrivacyPolicy";
 
+        /// <summary>
+        /// Action-Name: Reactivate
+        /// </summary>
+        public const string Reactivate = "Reactivate";
+
 		/// <summary>
 		/// Action-Name: RedirectToSubdomainAction.
 		/// </summary>
