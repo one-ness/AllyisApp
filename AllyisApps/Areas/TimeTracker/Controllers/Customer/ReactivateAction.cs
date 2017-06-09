@@ -38,17 +38,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
             return this.RedirectToAction(ActionConstants.Index);
         }
-    }
 
-    /// <summary>
-    /// POST: Customer/Delete.
-    /// </summary>
-    /// <param name="id">The Customer id.</param>
-    /// <returns>The Customer index.</returns>
-    public ActionResult Reactivate()
-    {
+        /// <summary>
+        /// POST: Customer/Delete.
+        /// </summary>
+        /// <returns>The Customer index.</returns>
+        public ActionResult Reactivate()
+        {
 
-        return this.RedirectToAction(ActionConstants.Index);
+            return this.RedirectToAction(ActionConstants.Index);
+        }
     }
-}
 }
