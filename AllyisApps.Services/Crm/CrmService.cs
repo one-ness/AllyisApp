@@ -183,15 +183,28 @@ namespace AllyisApps.Services
 				spResults.Item2.Select(cdb => InitializeCustomer(cdb)).ToList());
 		}
 
-		/// <summary>
-		/// Returns a list of Projects for projects the given user is assigned to in the given organization
-		/// (current organization by default), another list of Projects for all projects in the organization,
-		/// the name of the user (as "Firstname Lastname"), and the user's email.
-		/// </summary>
-		/// <param name="userId">User Id.</param>
-		/// <param name="orgId">Organization Id.</param>
-		/// <returns></returns>
-		public Tuple<List<Project>, List<Project>, string, string> GetProjectsForOrgAndUser(int userId, int orgId = -1)
+        /// <summary>
+        /// Returns a list of CompleteProjectInfos for the current organization with the IsProjectUser field filled
+        /// out for the current user, and a list of CustomerInfos for the organization.
+        /// </summary>
+        /// <returns></returns>
+        public Tuple<List<CompleteProjectInfo>, List<Customer>> GetInactiveProjectsAndCustomersForOrgAndUser()
+        {
+            var spResults = DBHelper.GetInactiveProjectsAndCustomersForOrgAndUser(UserContext.ChosenOrganizationId, UserContext.UserId);
+            return Tuple.Create(
+                spResults.Item1.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
+                spResults.Item2.Select(cdb => InitializeCustomer(cdb)).ToList());
+        }
+
+        /// <summary>
+        /// Returns a list of Projects for projects the given user is assigned to in the given organization
+        /// (current organization by default), another list of Projects for all projects in the organization,
+        /// the name of the user (as "Firstname Lastname"), and the user's email.
+        /// </summary>
+        /// <param name="userId">User Id.</param>
+        /// <param name="orgId">Organization Id.</param>
+        /// <returns></returns>
+        public Tuple<List<Project>, List<Project>, string, string> GetProjectsForOrgAndUser(int userId, int orgId = -1)
 		{
 			if (userId <= 0)
 			{

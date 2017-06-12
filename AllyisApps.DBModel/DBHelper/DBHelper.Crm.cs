@@ -657,5 +657,29 @@ namespace AllyisApps.DBModel
 					results.Read<CustomerDBEntity>().ToList());
 			}
 		}
-	}
+
+        /// <summary>
+        /// Returns a list of CompleteProjectDBEntities for the given organization with the IsProjectUser field filled
+        /// out for the given user, and a list of CustomerDBEntities for the organization.
+        /// </summary>
+        /// <param name="orgId">Organization Id.</param>
+        /// <param name="userId">User Id.</param>
+        /// <returns></returns>
+        public Tuple<List<CompleteProjectDBEntity>, List<CustomerDBEntity>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId, int userId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@UserId", userId);
+            parameters.Add("@OrgId", orgId);
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                var results = connection.QueryMultiple(
+                    "[Crm].[GetInactiveProjectsAndCustomersForOrgAndUser]",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+                return Tuple.Create(
+                    results.Read<CompleteProjectDBEntity>().ToList(),
+                    results.Read<CustomerDBEntity>().ToList());
+            }
+        }
+    }
 }
