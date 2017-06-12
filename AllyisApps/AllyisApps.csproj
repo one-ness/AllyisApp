@@ -477,6 +477,7 @@
     <Content Include="Areas\TimeTracker\Views\Customer\Details.cshtml" />
     <Content Include="Areas\TimeTracker\Views\TimeEntry\MergePayClass.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Shared\_TimeTrackerSidebar.cshtml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
     <None Include="Resources\628px-achtung-svg.png" />

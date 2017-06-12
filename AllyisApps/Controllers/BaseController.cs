@@ -18,6 +18,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Text;
 
 namespace AllyisApps.Controllers
 {
@@ -166,7 +167,8 @@ namespace AllyisApps.Controllers
         {
             if (Request.IsAuthenticated)
             {
-                return this.RedirectToSubDomainAction(UserContext.ChosenOrganizationId, null, ActionConstants.Index, ControllerConstants.Account);
+				// go to user home
+				this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
             }
 
             return this.RedirectToAction(ActionConstants.LogOn);
@@ -332,5 +334,21 @@ namespace AllyisApps.Controllers
         {
             return Serializer.DeserializeFromJson<CookieData>(serializedCookie);
         }
-    }
+
+		/// <summary>
+		/// Gets the application root url
+		/// </summary>
+		public string ApplicationRootUrl
+		{
+			get
+			{
+				var request = HttpContext.Request;
+				StringBuilder sb = new StringBuilder();
+				sb.Append(request.Url.Scheme);
+				sb.Append("://");
+				sb.Append(request.Url.Host);
+				return sb.ToString();
+			}
+		}
+	}
 }
