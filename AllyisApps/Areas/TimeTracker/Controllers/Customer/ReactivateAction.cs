@@ -14,30 +14,30 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
     /// </summary>
 	public partial class CustomerController : BaseController
     {
-        /// <summary>
-        /// POST: Customer/Delete.
-        /// </summary>
-        /// <param name="id">The Customer id.</param>
-        /// <returns>The Customer index.</returns>
-        public ActionResult Reactivate(int id)
-        {
-            Customer customer = AppService.GetCustomer(id);
+        ///// <summary>
+        ///// POST: Customer/Delete.
+        ///// </summary>
+        ///// <param name="id">The Customer id.</param>
+        ///// <returns>The Customer index.</returns>
+        //public ActionResult Reactivate(int id)
+        //{
+        //    Customer customer = AppService.GetCustomer(id);
 
-            if (customer != null)
-            {
-                if (AppService.ReactivateCustomer(id))
-                {
-                    Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", customer.Name, Resources.Strings.CustomerDeleteNotification), Variety.Success));
+        //    if (customer != null)
+        //    {
+        //        if (AppService.ReactivateCustomer(id))
+        //        {
+        //            Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", customer.Name, Resources.Strings.CustomerDeleteNotification), Variety.Success));
 
-                    return this.RedirectToAction(ActionConstants.Index);
-                }
+        //            return this.RedirectToAction(ActionConstants.Index);
+        //        }
 
-                // Permission failure
-                Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-            }
+        //        // Permission failure
+        //        Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+        //    }
 
-            return this.RedirectToAction(ActionConstants.Index);
-        }
+        //    return this.RedirectToAction(ActionConstants.Index);
+        //}
 
         /// <summary>
         /// POST: Customer/Delete.
@@ -46,7 +46,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         public ActionResult Reactivate()
         {
 
-            return this.RedirectToAction(ActionConstants.Index);
+            return View(ActionConstants.Reactivate);
         }
     }
 }

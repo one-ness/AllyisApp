@@ -24,5 +24,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public CustomerController() : base(TimeTrackerID)
 		{
 		}
-	}
+
+    }
 }
