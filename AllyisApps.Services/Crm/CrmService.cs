@@ -14,7 +14,7 @@ using System.Linq;
 namespace AllyisApps.Services
 {
 	/// <summary>
-	/// Services for Cutomer Relationship Management related functions (customer, projects).
+	/// Services for Customer Relationship Management related functions (customer, projects).
 	/// </summary>
 	public partial class AppService : BaseService
 	{
@@ -58,7 +58,7 @@ namespace AllyisApps.Services
 		/// Creates a customer.
 		/// </summary>
 		/// <param name="customer">Customer.</param>
-		/// <returns>Customer id if succeed, -1 if the id already exists in the db, null if authorization fails.</returns>
+		/// <returns>Customer id.</returns>
 		public int? CreateCustomer(Customer customer)
 		{
 			if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
@@ -69,54 +69,54 @@ namespace AllyisApps.Services
 			return null;
 		}
 
-		/// <summary>
-		/// Updates a customer in the database.
-		/// </summary>
-		/// <param name="customer">Updated customer info.</param>
-		/// <returns>1 if succeed, -1 if CustOrgId is not unique, null if authorization fails.</returns>
-		public int? UpdateCustomer(Customer customer)
-		{
-			if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
-			{
-				return DBHelper.UpdateCustomer(GetDBEntityFromCustomer(customer));
-			}
+        /// <summary>
+        /// Updates a customer in the database.
+        /// </summary>
+        /// <param name="customer">Updated customer info.</param>
+        /// <returns>Returns false if authorization fails.</returns>
+        public int? UpdateCustomer(Customer customer)
+        {
+            if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
+            {
+                return DBHelper.UpdateCustomer(GetDBEntityFromCustomer(customer));
+            }
 
-			return null;
-		}
+            return null;
+        }
 
         /*
-         /// <summary>
-		/// Updates a customer in the database.
-		/// </summary>
-		/// <param name="customer">Updated customer info.</param>
-		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateCustomer(Customer customer)
-		{
-			if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
-			{
-				DBHelper.UpdateCustomer(GetDBEntityFromCustomer(customer));
-				return true;
-			}
+        /// <summary>
+        /// Updates a customer in the database.
+        /// </summary>
+        /// <param name="customer">Updated customer info.</param>
+        /// <returns>Returns false if authorization fails.</returns>
+        public bool UpdateCustomer(Customer customer)
+        {
+            if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
+            {
+                DBHelper.UpdateCustomer(GetDBEntityFromCustomer(customer));
+                return true;
+            }
 
-			return false;
-		}
-            */
+            return false;
+        }
+        */
 
         /// <summary>
         /// Deletes a customer.
         /// </summary>
         /// <param name="customerId">Customer id.</param>
-        /// <returns>Returns null if authorization fails, empty string if customer not found, customer's name if succeeds</returns>
+        /// <returns>Returns false if authorization fails.</returns>
         public string DeleteCustomer(int customerId)
-		{
-			if (this.Can(Actions.CoreAction.EditCustomer))
-			{
-				return DBHelper.DeleteCustomer(customerId);
-			}
-			return null;
-		}
+        {
+            if (this.Can(Actions.CoreAction.EditCustomer))
+            {
+                return DBHelper.DeleteCustomer(customerId);
+            }
+            return null;
+        }
 
-        /*
+       /*
         /// <summary>
 		/// Deletes a customer.
 		/// </summary>
@@ -133,6 +133,22 @@ namespace AllyisApps.Services
 			return false;
 		}   
     */
+
+        /// <summary>
+        /// Deletes a customer.
+        /// </summary>
+        /// <param name="customerId">Customer id.</param>
+        /// <returns>Returns false if authorization fails.</returns>
+        public bool ReactivateCustomer(int customerId)
+        {
+            if (this.Can(Actions.CoreAction.EditCustomer))
+            {
+                DBHelper.ReactivateCustomer(customerId);
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Gets a list of <see cref="Customer"/>'s for an organization.
@@ -353,27 +369,6 @@ namespace AllyisApps.Services
 			return false;
 		}
 
-		/// <summary>
-		/// Deletes a project.
-		/// </summary>
-		/// <param name="projectId">Project Id.</param>
-		/// <returns>Returns false if authorization fails.</returns>
-		public bool DeleteProject(int projectId)
-		{
-			if (projectId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
-			}
-
-			if (this.Can(Actions.CoreAction.EditProject))
-			{
-				DBHelper.DeleteProject(projectId);
-				return true;
-			}
-
-			return false;
-		}
-
         /// <summary>
         /// Reactivate a project
         /// </summary>
@@ -393,6 +388,27 @@ namespace AllyisApps.Services
             }
             return false;
         }
+
+        /// <summary>
+        /// Deletes a project.
+        /// </summary>
+        /// <param name="projectId">Project Id.</param>
+        /// <returns>Returns false if authorization fails.</returns>
+        public bool DeleteProject(int projectId)
+		{
+			if (projectId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
+			}
+
+			if (this.Can(Actions.CoreAction.EditProject))
+			{
+				DBHelper.DeleteProject(projectId);
+				return true;
+			}
+
+			return false;
+		}
 
 		/// <summary>
 		/// Creates a project user.

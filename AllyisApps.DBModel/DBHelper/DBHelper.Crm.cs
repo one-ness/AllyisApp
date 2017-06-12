@@ -89,11 +89,11 @@ namespace AllyisApps.DBModel
             }
         }
 
-		/// <summary>
-		/// Updates project properties.
-		/// </summary>
-		/// <param name="project">The ProjectDBEntity with the updated properties.</param>
-		public void UpdateProject(ProjectDBEntity project)
+        /// <summary>
+        /// Updates project properties.
+        /// </summary>
+        /// <param name="project">The ProjectDBEntity with the updated properties.</param>
+        public void UpdateProject(ProjectDBEntity project)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@ProjectId", project.ProjectId);
@@ -354,12 +354,12 @@ namespace AllyisApps.DBModel
 			}
 		} */
 
-		/// <summary>
-		/// Retrieves the customer's information from the database.
-		/// </summary>
-		/// <param name="orgId">The organization's ID.</param>
-		/// <returns>The CustomerDBEntity containing the customer's information, null if call fails.</returns>
-		public IEnumerable<CustomerDBEntity> GetCustomerList(int orgId)
+        /// <summary>
+        /// Retrieves the customer's information from the database.
+        /// </summary>
+        /// <param name="orgId">The organization's ID.</param>
+        /// <returns>The CustomerDBEntity containing the customer's information, null if call fails.</returns>
+        public IEnumerable<CustomerDBEntity> GetCustomerList(int orgId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -429,20 +429,20 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Delete the specified customer.
-		/// </summary>
-		/// <param name="customerID">The customer's Id.</param>
-		/// <returns>Customer's name if successful, empty string if not found.</returns>
-		public string DeleteCustomer(int customerID)
-		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				var result = connection.Query<string>("[Crm].[DeleteCustomer]", new { CustomerId = customerID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+        /// <summary>
+        /// Delete the specified customer.
+        /// </summary>
+        /// <param name="customerID">The customer's Id.</param>
+        /// <returns>Customer's name if successful, empty string if not found.</returns>
+        public string DeleteCustomer(int customerID)
+        {
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                var result = connection.Query<string>("[Crm].[DeleteCustomer]", new { CustomerId = customerID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
                 if (result == null) { return ""; }
                 return result;
             }
-		}
+        }
 
         /*
         /// <summary>
@@ -461,6 +461,22 @@ namespace AllyisApps.DBModel
 			return true;
 		}   
     */
+
+        /// <summary>
+        /// Delete the specified customer.
+        /// </summary>
+        /// <param name="customerID">The customer's Id.</param>
+        /// <returns>True if successful.</returns>
+        public bool ReactivateCustomer(int customerID)
+        {
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                // default null
+                connection.Query<CustomerDBEntity>("[Crm].[ReactivateCustomer]", new { CustomerId = customerID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// Gets all the projects a user can use in an organization.
