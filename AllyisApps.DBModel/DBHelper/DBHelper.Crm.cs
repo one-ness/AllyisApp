@@ -467,15 +467,14 @@ namespace AllyisApps.DBModel
         /// </summary>
         /// <param name="customerID">The customer's Id.</param>
         /// <returns>True if successful.</returns>
-        public bool ReactivateCustomer(int customerID)
+        public string ReactivateCustomer(int customerID)
         {
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
-                // default null
-                connection.Query<CustomerDBEntity>("[Crm].[ReactivateCustomer]", new { CustomerId = customerID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+                var result = connection.Query<string>("[Crm].[ReactivateCustomer]", new { CustomerId = customerID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+                if (result == null) { return ""; }
+                return result;
             }
-
-            return true;
         }
 
         /// <summary>

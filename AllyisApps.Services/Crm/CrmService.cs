@@ -116,39 +116,53 @@ namespace AllyisApps.Services
             return null;
         }
 
-       /*
-        /// <summary>
-		/// Deletes a customer.
-		/// </summary>
-		/// <param name="customerId">Customer id.</param>
-		/// <returns>Returns false if authorization fails.</returns>
-		public bool DeleteCustomer(int customerId)
-		{
-			if (this.Can(Actions.CoreAction.EditCustomer))
-			{
-				DBHelper.DeleteCustomer(customerId);
-				return true;
-			}
+        /*
+         /// <summary>
+         /// Deletes a customer.
+         /// </summary>
+         /// <param name="customerId">Customer id.</param>
+         /// <returns>Returns false if authorization fails.</returns>
+         public bool DeleteCustomer(int customerId)
+         {
+             if (this.Can(Actions.CoreAction.EditCustomer))
+             {
+                 DBHelper.DeleteCustomer(customerId);
+                 return true;
+             }
 
-			return false;
-		}   
-    */
+             return false;
+         }   
+     */
 
         /// <summary>
-        /// Deletes a customer.
+        /// Reactivate a Customer
         /// </summary>
         /// <param name="customerId">Customer id.</param>
         /// <returns>Returns false if authorization fails.</returns>
-        public bool ReactivateCustomer(int customerId)
+        public string ReactivateCustomer(int customerId)
         {
             if (this.Can(Actions.CoreAction.EditCustomer))
             {
-                DBHelper.ReactivateCustomer(customerId);
-                return true;
+                return DBHelper.ReactivateCustomer(customerId);
             }
-
-            return false;
+            return null;
         }
+
+        ///// <summary>
+        ///// Deletes a customer.
+        ///// </summary>
+        ///// <param name="customerId">Customer id.</param>
+        ///// <returns>Returns false if authorization fails.</returns>
+        //public bool ReactivateCustomer(int customerId)
+        //{
+        //    if (this.Can(Actions.CoreAction.EditCustomer))
+        //    {
+        //        DBHelper.ReactivateCustomer(customerId);
+        //        return true;
+        //    }
+
+        //    return false;
+        //}
 
         /// <summary>
         /// Gets a list of <see cref="Customer"/>'s for an organization.

@@ -33,7 +33,8 @@
                             <span class="small text-muted">(@projectCount @projectCountLabel)</span>
                         </h4>
                     </a>
-                    <a href="@Url.Action(ActionConstants.Details, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right">
+                    <a href="@Url.Action(ActionConstants.ReactivateCustomer, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="btn btn-default @createButtonClass">@Strings.Reactivate <i class="fa fa-plus"></i></a>
+                    @*<a href="@Url.Action(ActionConstants.Details, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right">
                         <i class="fa fa-fw fa-lg fa-eye"></i>
                     </a>
                     @if (Model.canEdit)
@@ -44,7 +45,7 @@
                                 <a href="@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right" onclick="return confirm('Are you sure you wish to delete the customer @customer.CustomerInfo.Name?')">
                                     <i class="fa fa-2x fa-fw fa-times"></i>
                                 </a>
-                    }
+                    }*@
                 </div>
                 <div id="@collapseTarget" class="panel-collapse search-expand collapse panel-two-table-wrap" role="tabpanel">
                     <div style="width: 100%">
