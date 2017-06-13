@@ -32,6 +32,8 @@ namespace AllyisApps.Controllers
 				model = new LogOnPartialViewModel
 				{
 					UserName = UserContext.UserName,
+                    FirstName = AppService.GetUser().FirstName,
+                    LastName = AppService.GetUser().LastName,
 					ChosenOrganizationId = UserContext.ChosenOrganizationId,
 					ChosenOrganizationName = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).Select(o => o.OrganizationName).FirstOrDefault(),
 					CanEditOrganization = AppService.Can(Actions.CoreAction.EditOrganization, false),

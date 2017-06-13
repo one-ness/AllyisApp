@@ -58,8 +58,8 @@ namespace AllyisApps.Controllers
 
 					this.UserContext = this.AppService.PopulateUserContext(result.UserId);
 
-					return this.HandleRedirects(returnUrl);
-				}
+                    return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
+                }
 				else
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SignInFailureMessage, Variety.Danger));

@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
             if (result != null && result != "")
             {
-                Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", result, Resources.Strings.CustomerDeleteNotification), Variety.Success));
+                Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", Resources.Strings.CustomerReactivateNotification, AppService.GetCustomer(id).Name), Variety.Success));
             }
             // Permission failure
             else if (result == null)
