@@ -53,17 +53,17 @@ namespace AllyisApps.ViewModels.Auth
 		[Display(Name = "Employee ID")]
 		public string EmployeeId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Employee Type
-        /// </summary>
-        [Required]
-        [Display(Name = "Employee Type")]
-        public string EmployeeType { get; set; }
+		/// <summary>
+		/// Gets or sets the Employee Type
+		/// </summary>
+		[Required]
+		[Display(Name = "Employee Type")]
+		public string EmployeeType { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether to add as an owner.
-        /// </summary>
-        public bool AddAsOwner { get; set; }
+		/// <summary>
+		/// Gets or sets a value indicating whether to add as an owner.
+		/// </summary>
+		public bool AddAsOwner { get; set; }
 
 		/// <summary>
 		/// Gets or sets the project id selected by the drop down menu.

@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
 using AllyisApps.Services;
 using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
@@ -62,7 +61,7 @@ namespace AllyisApps.Controllers
 						OrganizationId = oui.OrganizationId,
 						PermissionLevel = ((OrganizationRole)oui.OrgRoleId).ToString(),
 						UserId = oui.UserId,
-                        EmployeeTypeId = oui.EmployeeTypeId
+						EmployeeTypeId = oui.EmployeeTypeId
 					}),
 					OrganizationId = infos.Item1.OrganizationId,
 					OrganizationName = infos.Item1.Name,
@@ -85,14 +84,14 @@ namespace AllyisApps.Controllers
 			};
 		}
 
-        /// <summary>
-        /// Edits the Employee Id on an OrgUser
-        /// </summary>
-        /// <param name="user">The user Id</param>
-        /// <param name="org">The organization Id</param>
-        /// <param name="employeeId">The new EmployeeId</param>
-        /// <returns></returns>
-        [HttpPost]
+		/// <summary>
+		/// Edits the Employee Id on an OrgUser
+		/// </summary>
+		/// <param name="user">The user Id</param>
+		/// <param name="org">The organization Id</param>
+		/// <param name="employeeId">The new EmployeeId</param>
+		/// <returns></returns>
+		[HttpPost]
 		public bool SaveEmployeeId(int user, int org, string employeeId)
 		{
 			try
@@ -135,46 +134,46 @@ namespace AllyisApps.Controllers
 			return true;
 		}
 
-        /// <summary>
-        /// Edits the Employee Type Id on an OrgUser
-        /// </summary>
-        /// <param name="user">The user Id</param>
-        /// <param name="org">The organization Id</param>
-        /// <param name="employeeTypeId">The new Employee Type Id</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Edits the Employee Type Id on an OrgUser
+		/// </summary>
+		/// <param name="user">The user Id</param>
+		/// <param name="org">The organization Id</param>
+		/// <param name="employeeTypeId">The new Employee Type Id</param>
+		/// <returns></returns>
 		[HttpPost]
-        public bool SaveEmployeeTypeId(int user, int org, int employeeTypeId)
-        {
-            try
-            {
-                AppService.SetEmployeeTypeId(user, org, employeeTypeId);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
-        }
+		public bool SaveEmployeeTypeId(int user, int org, int employeeTypeId)
+		{
+			try
+			{
+				AppService.SetEmployeeTypeId(user, org, employeeTypeId);
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+			return true;
+		}
 
-        /// <summary>
-        /// Edits the Employee Type Id on an Invitation
-        /// </summary>
-        /// <param name="user">The Invitation Id</param>
-        /// <param name="org">The organization Id</param>
-        /// <param name="employeeTypeId">The new Employee Type Id</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Edits the Employee Type Id on an Invitation
+		/// </summary>
+		/// <param name="user">The Invitation Id</param>
+		/// <param name="org">The organization Id</param>
+		/// <param name="employeeTypeId">The new Employee Type Id</param>
+		/// <returns></returns>
 		[HttpPost]
-        public bool SaveInvitationEmployeeTypeId(int user, int org, int employeeTypeId)
-        {
-            try
-            {
-                AppService.SetInvitationEmployeeTypeId(user, org, employeeTypeId);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
-        }
-    }
+		public bool SaveInvitationEmployeeTypeId(int user, int org, int employeeTypeId)
+		{
+			try
+			{
+				AppService.SetInvitationEmployeeTypeId(user, org, employeeTypeId);
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+			return true;
+		}
+	}
 }

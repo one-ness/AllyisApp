@@ -31,7 +31,7 @@ namespace AllyisApps.Services.Tests
 		//precondition: a user with this email address does not exist in the database
 		public static int createTestUser(string email)
 		{
-			var service = new  AppService(connectionStr);
+			var service = new AppService(connectionStr);
 			string insertStmt = "INSERT INTO [Auth].[User]([FirstName], [LastName],[Email],[UserName],[PasswordHash] ,[LanguagePreference]) " +
 								"VALUES(@fname, @lname, @email, @email, @pwHash, @langpref)";
 			string selectStmt = "SELECT [UserId] FROM [Auth].[User] WHERE [Email] = @email";
@@ -72,7 +72,7 @@ namespace AllyisApps.Services.Tests
 		//check whether a test user is already inserted into the db
 		public static bool testUserExists(string email)
 		{
-			var service = new  AppService(connectionStr);
+			var service = new AppService(connectionStr);
 			string selectStmt = "SELECT [UserId] FROM [Auth].[User] WHERE [Email] = @email";
 			SqlDataReader reader;
 
@@ -96,7 +96,7 @@ namespace AllyisApps.Services.Tests
 		//delete test user from the User table after the test
 		public static void deleteTestUser(string email)
 		{
-			var service = new  AppService(connectionStr);
+			var service = new AppService(connectionStr);
 			string stmt1 = "DELETE FROM [Auth].[User] WHERE [Email] = @email";
 
 			using (SqlConnection connection = new SqlConnection(connectionStr))
@@ -915,7 +915,7 @@ namespace AllyisApps.Services.Tests
 			//Arrange
 			string countryName = "";
 
-			var service = new  AppService(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			IEnumerable validStates = service.ValidStates(countryName);
@@ -926,7 +926,7 @@ namespace AllyisApps.Services.Tests
 		{
 			//Arrange
 			string countryName = "United Kingdom";
-			var service = new  AppService(connectionStr);
+			var service = new AppService(connectionStr);
 			IEnumerable<string> expected = new List<string>() { "Scotland", "Wales", "Northern Ireland", "England" };
 
 			//Act
@@ -942,7 +942,7 @@ namespace AllyisApps.Services.Tests
 		public void ValidCountries_Should_Return_All_Countries()
 		{
 			//Arrange
-			var service = new  AppService(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			IEnumerable returnedCountries = service.ValidCountries();
@@ -956,7 +956,7 @@ namespace AllyisApps.Services.Tests
 		public void ValidLanguages_Should_Return_All_Languages()
 		{
 			//Arrange
-			var service = new  AppService(connectionStr);
+			var service = new AppService(connectionStr);
 
 			//Act
 			IEnumerable<Language> returnedLang = service.ValidLanguages();
@@ -976,7 +976,7 @@ namespace AllyisApps.Services.Tests
 			int orgId = createTestOrg(orgName);
 			createUserInvitation(userEmail, orgId, 1, "111");
 
-			var service = new  AppService(connectionStr);
+			var service = new AppService(connectionStr);
 
 			try
 			{
@@ -2935,8 +2935,8 @@ namespace AllyisApps.Services.Tests
 				CoreAction.EditProject,
 				CoreAction.TimeTrackerEditSelf,
 				CoreAction.TimeTrackerEditOthers,
-                CoreAction.EditBilling,
-                CoreAction.EditInvitation
+				CoreAction.EditBilling,
+				CoreAction.EditInvitation
 			};
 
 			string msg = "Failed on the following test cases: ";
@@ -3382,7 +3382,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
 
-            AppService service = new AppService(connectionStr, userContext);
+			AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3427,7 +3427,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
 
-            AppService service = new AppService(connectionStr, userContext);
+			AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3471,7 +3471,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
 
-            AppService service = new AppService(connectionStr, userContext);
+			AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3517,7 +3517,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
 
-            AppService service = new AppService(connectionStr, userContext);
+			AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3566,7 +3566,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
 
-            AppService service = new AppService(connectionStr, userContext);
+			AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3613,7 +3613,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
 
-            AppService service = new AppService(connectionStr, userContext);
+			AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3659,7 +3659,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, subId, orgInfoList, 1);
 
-            AppService service = new AppService(connectionStr, userContext);
+			AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3700,7 +3700,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, 0, orgInfoList, 1);
 
-            AppService service = new AppService(connectionStr, userContext);
+			AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3742,7 +3742,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, 0, orgInfoList, 1);
 
-            AppService service = new AppService(connectionStr, userContext);
+			AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3784,7 +3784,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId, user, user, orgId, 0, orgInfoList, 1);
 
-            AppService service = new AppService(connectionStr, userContext);
+			AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3836,7 +3836,7 @@ namespace AllyisApps.Services.Tests
 			List<UserOrganizationInfo> orgInfoList = new List<UserOrganizationInfo> { userOrgInfo };
 			UserContext userContext = new UserContext(userId1, user1, user1, orgId, subId, orgInfoList, 1);
 
-            AppService service = new AppService(connectionStr, userContext);
+			AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3911,7 +3911,7 @@ namespace AllyisApps.Services.Tests
 
 			UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
 
-            AppService service = new AppService(connectionStr, userContext);
+			AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -3957,7 +3957,7 @@ namespace AllyisApps.Services.Tests
 
 			UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
 
-            AppService service = new AppService(connectionStr, userContext);
+			AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -4006,7 +4006,7 @@ namespace AllyisApps.Services.Tests
 
 			UserContext userContext = new UserContext(userId1, user1, user1, orgId, 0, null, 1);
 
-            AppService service = new AppService(connectionStr, userContext);
+			AppService service = new AppService(connectionStr, userContext);
 			string key = "DefaultConnection";
 			DBHelper.Instance.Init(key);
 
@@ -4046,7 +4046,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException), "Organization Id cannot be negative.")]
 		public void GetSubdomainById_Should_Throw_Exception_For_Negative_orgId()
 		{
-            AppService.GetSubdomainById(-1);
+			AppService.GetSubdomainById(-1);
 		}
 
 		[TestMethod]
@@ -4115,7 +4115,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException), "Organization must not be null.")]
 		public void CreateOrganization_Should_Throw_Exception_For_Null_Organization_Instance()
 		{
-            AppService service = new AppService(connectionStr);
+			AppService service = new AppService(connectionStr);
 			service.CreateOrganization(null, 1, "111");
 		}
 
@@ -4123,7 +4123,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException), "Organization owner's user id cannot be 0 or negative.")]
 		public void CreateOrganization_Should_Throw_Exception_For_Invalid_OwnerId()
 		{
-            AppService service = new AppService(connectionStr);
+			AppService service = new AppService(connectionStr);
 			Organization newOrg = new Organization();
 			service.CreateOrganization(newOrg, -1, "111");
 		}
@@ -4141,7 +4141,7 @@ namespace AllyisApps.Services.Tests
 			newOrg.Name = orgName.ToUpper();
 			newOrg.Subdomain = orgName.ToLower();
 
-            AppService service = new AppService(connectionStr);
+			AppService service = new AppService(connectionStr);
 			try
 			{
 				//Act
@@ -4170,7 +4170,7 @@ namespace AllyisApps.Services.Tests
 			newOrg.Name = orgName;
 			newOrg.Subdomain = orgName.ToLower();
 
-            AppService service = new AppService(connectionStr);
+			AppService service = new AppService(connectionStr);
 			int returnedOrgId = -1;
 			try
 			{
@@ -4248,7 +4248,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException), "Organization Id cannot be negative.")]
 		public void GetOrganization_Should_Throw_Exception_For_Negative_OrgId()
 		{
-            AppService service = new AppService(connectionStr);
+			AppService service = new AppService(connectionStr);
 			service.GetOrganization(-1);
 		}
 
@@ -4259,7 +4259,7 @@ namespace AllyisApps.Services.Tests
 			string orgName = "UnitTestOrg";
 			int orgId = createTestOrg(orgName);
 
-            AppService service = new AppService(connectionStr);
+			AppService service = new AppService(connectionStr);
 
 			try
 			{
@@ -4294,7 +4294,7 @@ namespace AllyisApps.Services.Tests
 			int orgId = createTestOrg(orgName);
 			deleteTestOrg(orgId);
 
-            AppService service = new AppService(connectionStr);
+			AppService service = new AppService(connectionStr);
 
 			//Act
 			Organization org = service.GetOrganization(orgId);
@@ -5672,7 +5672,7 @@ namespace AllyisApps.Services.Tests
 			createOrgUser(userId2, orgId, 2, "112");    //user2 is org owner
 
 			UserContext userContext = new UserContext(userId2, user2, user2, orgId, 0, null, 1);
-            AppService service = new AppService(connectionStr, userContext);
+			AppService service = new AppService(connectionStr, userContext);
 
 			try
 			{
@@ -5871,7 +5871,7 @@ namespace AllyisApps.Services.Tests
 			createSubUser(subId, userId, 1);           //user1 is sub user
 
 			UserContext userContext = new UserContext(userId, user, user, orgId, 0, null, 1);
-            AppService service = new AppService(connectionStr, userContext);
+			AppService service = new AppService(connectionStr, userContext);
 
 			try
 			{

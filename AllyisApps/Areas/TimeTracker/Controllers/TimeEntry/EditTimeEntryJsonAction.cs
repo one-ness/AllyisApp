@@ -130,8 +130,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			IEnumerable<TimeEntryInfo> otherEntriesToday = AppService.GetTimeEntriesByUserOverDateRange(
 				new List<int> { model.UserId },
-                AppService.GetDateTimeFromDays(model.Date).Value,
-                AppService.GetDateTimeFromDays(model.Date).Value);
+				AppService.GetDateTimeFromDays(model.Date).Value,
+				AppService.GetDateTimeFromDays(model.Date).Value);
 			float durationOther = 0.0f;
 			foreach (TimeEntryInfo otherEntry in otherEntriesToday)
 			{
@@ -162,7 +162,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 			}
 
-            AppService.UpdateTimeEntry(new TimeEntryInfo()
+			AppService.UpdateTimeEntry(new TimeEntryInfo()
 			{
 				TimeEntryId = model.TimeEntryId,
 				ProjectId = model.ProjectId,

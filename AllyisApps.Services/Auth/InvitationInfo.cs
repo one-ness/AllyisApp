@@ -78,9 +78,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		public string EmployeeId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Employee Type Id
-        /// </summary>
-        public int EmployeeType { get; set; }
+		/// <summary>
+		/// Gets or sets the Employee Type Id
+		/// </summary>
+		public int EmployeeType { get; set; }
 	}
 }

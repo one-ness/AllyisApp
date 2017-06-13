@@ -81,7 +81,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					}
 				}
 
-                AppService.DeleteTimeEntry(entry.TimeEntryId);
+				AppService.DeleteTimeEntry(entry.TimeEntryId);
 			}
 
 			// Add copied entries
@@ -109,7 +109,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					// Don't copy holidays.
 					if (entry.ProjectId > 0)
 					{
-                        AppService.CreateTimeEntry(new TimeEntryInfo
+						AppService.CreateTimeEntry(new TimeEntryInfo
 						{
 							UserId = userId,
 							ProjectId = entry.ProjectId,

@@ -160,19 +160,19 @@
 		/// </summary>
 		public const string UserPhoneExtension = "User Phone Extension";
 
-        /// <summary>
+		/// <summary>
 		/// User-Property: Employee Type
 		/// </summary>
 		public const string EmployeeType = "Employee Type";
 
-        #endregion user
+		#endregion user
 
-        #region Time Entry
+		#region Time Entry
 
-        /// <summary>
-        /// Time Entry-Property: Date
-        /// </summary>
-        public const string Date = "Date";
+		/// <summary>
+		/// Time Entry-Property: Date
+		/// </summary>
+		public const string Date = "Date";
 
 		/// <summary>
 		/// Time Entry-Property: Duration

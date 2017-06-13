@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using System;
@@ -28,7 +27,7 @@ namespace AllyisApps.Controllers
 		{
 			if (AppService.Can(Actions.CoreAction.EditOrganization))
 			{
-                AppService.RemoveOrganizationUser(UserContext.ChosenOrganizationId, userId);
+				AppService.RemoveOrganizationUser(UserContext.ChosenOrganizationId, userId);
 
 				Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
 

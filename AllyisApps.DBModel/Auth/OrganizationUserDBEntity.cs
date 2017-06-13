@@ -58,9 +58,9 @@ namespace AllyisApps.DBModel.Auth
 		/// </summary>
 		public string LastName { get; set; }
 
-        /// <summary>
+		/// <summary>
 		/// Gets or sets EmployeeTypeId
 		/// </summary>
 		public int EmployeeTypeId { get; set; }
-    }
+	}
 }

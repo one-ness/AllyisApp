@@ -53,9 +53,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		public string LastName { get; set; }
 
-        /// <summary>
+		/// <summary>
 		/// Gets or sets the Employee Type Id
 		/// </summary>
 		public int EmployeeTypeId { get; set; }
-    }
+	}
 }

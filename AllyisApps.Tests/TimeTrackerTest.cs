@@ -30,7 +30,7 @@ namespace AllyisApps.Services.Tests
 		[TestMethod]
 		public void GetDayFromDateTime_Should_Return_Negative_One_For_Null_DateTime()
 		{
-            AppService ttService = new AppService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			int days = ttService.GetDayFromDateTime(null);
 			Assert.IsTrue(days == -1);
 		}
@@ -38,7 +38,7 @@ namespace AllyisApps.Services.Tests
 		[TestMethod]
 		public void GetDayFromDateTime_Should_Return_Correct_Days()
 		{
-            AppService ttService = new AppService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			DateTime date = new DateTime(0001, 01, 21);
 			int days = ttService.GetDayFromDateTime(date);
 			Assert.IsTrue(days == 20);
@@ -48,7 +48,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void GetTimeEntry_Should_Throw_Exception_For_Invalid_timeEntryId()
 		{
-            AppService ttService = new AppService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			ttService.GetTimeEntry(-1);
 		}
 
@@ -64,7 +64,7 @@ namespace AllyisApps.Services.Tests
 			int custId = AuthTest.createCustomer("CorpA", orgId, 1, "CUST1");
 			int projId = AuthTest.createProject(custId, "sampleProj", 1, "PROJ1");
 			int timeEntryId = AuthTest.createTimeEntry(userId, projId, date, 1, 8);
-            AppService ttService = new AppService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 
 			try
 			{
@@ -89,7 +89,7 @@ namespace AllyisApps.Services.Tests
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void CreateTimeEntry_Should_Throw_Exception_For_Null_Entry()
 		{
-            AppService ttService = new AppService(connectionStr);
+			AppService ttService = new AppService(connectionStr);
 			ttService.CreateTimeEntry(null);
 		}
 
