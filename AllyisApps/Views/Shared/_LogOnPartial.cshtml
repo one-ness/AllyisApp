@@ -16,7 +16,7 @@
 
     <li>
         @{
-            <a href="@Url.SubdomainLink(ActionConstants.Index, ControllerConstants.Account, new RouteValueDictionary(new {area = ""}), Model.ChosenOrganizationId, this.Request)">@Model.UserName</a>
+            <a href="@Url.SubdomainLink(ActionConstants.Index, ControllerConstants.Account, new RouteValueDictionary(new {area = ""}), Model.ChosenOrganizationId, this.Request)">@Model.FirstName @Model.LastName</a>
         }
     </li>
     <li>
