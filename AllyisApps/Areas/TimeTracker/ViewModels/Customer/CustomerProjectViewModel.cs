@@ -18,9 +18,9 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// </summary>
 		public Services.Customer CustomerInfo { get; internal set; }
 
-		/// <summary>
-		/// Gets the list of projects this Customer has.
-		/// </summary>
-		public IEnumerable<Services.Project> Projects { get; internal set; }
+        /// <summary>
+        /// Gets the list of projects this Customer has.
+        /// </summary>
+        public IEnumerable<Services.Project> Projects { get; internal set; }
 	}
 }

@@ -1,4 +1,4 @@
-﻿@using AllyisApps.ViewModels.TimeTracker.Customer;
+﻿@*@using AllyisApps.ViewModels.TimeTracker.Customer;
 @using AllyisApps.ViewModels.TimeTracker.Project;
 @using AllyisApps.Services;
 
@@ -34,18 +34,6 @@
                         </h4>
                     </a>
                     <a href="@Url.Action(ActionConstants.ReactivateCustomer, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="btn btn-default @createButtonClass">@Strings.Reactivate <i class="fa fa-plus"></i></a>
-                    @*<a href="@Url.Action(ActionConstants.Details, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right">
-                            <i class="fa fa-fw fa-lg fa-eye"></i>
-                        </a>
-                        @if (Model.canEdit)
-                        {
-                            <a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right">
-                                <i class="fa fa-lg fa-fw fa-cog"></i>
-                            </a>
-                                    <a href="@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right" onclick="return confirm('Are you sure you wish to delete the customer @customer.CustomerInfo.Name?')">
-                                        <i class="fa fa-2x fa-fw fa-times"></i>
-                                    </a>
-                        }*@
                 </div>
                 <div id="@collapseTarget" class="panel-collapse search-expand collapse panel-two-table-wrap" role="tabpanel">
                     <div style="width: 100%">
@@ -57,9 +45,15 @@
                                     <a class="accordion-toggle collapsed" href="@Url.Action(ActionConstants.Details, ControllerConstants.Project, new { projectId = project.ProjectId })">
 
                                         <span class="searchable projectname">@project.Name</span>
-                                    </a>
+                                    </a>*@
+
+
+
                                     @*// This list group scheme is not possible. Review alternatives and then uncomment.*@
-                                    @if (Model.canEdit)
+
+
+
+                                    @*@if (Model.canEdit)
                                     {
                                         <a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new { id = project.ProjectId })" class="pull-right"><i class="fa fa-lg fa-fw fa-cog"></i></a>
                                         <a href="@Url.Action(ActionConstants.Delete, ControllerConstants.Project, new { id = project.ProjectId })" class="pull-right" style="margin-left:2px;" onclick="return confirm('Are you sure you wish to Delete the project @project.Name?')">
@@ -68,23 +62,13 @@
                                     }
                                 </div>
                             }
-                            @*
-                                @if (Model.canEdit)
-                                {
-                                    <div class="list-group-item">
-                                        <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Project, new { id = customer.CustomerInfo.CustomerId })" class="list-group-item-info pull-right"><i class="fa fa-lg fa-fw fa-plus"></i> Add Project</a>
-                                    </div>
-                                }
-                            *@
                         </div>
                     </div>
                 </div>
             </div>customerCount += 1;
                 }
     </div>
-    @*<div class="allyis-action-buttons">
-            <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Customer)" class="btn btn-default">@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.AddCustomer <i class="fa fa-plus"></i></a>
-        </div>*@
-}
+
+}*@
 
 
