@@ -15,6 +15,130 @@
     var createButtonClass = !Model.canEdit ? "invisible" : "";
 }
 
+<div>
+    <div>
+        @using (Html.BeginForm(action, ControllerConstants.Project, FormMethod.Post, new { @class = "", id = "ProjectForm", role = "form", name = "EditForm", onsubmit = "return selectAll()" }))
+        {
+            <div>
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                <div class="form-group">
+                    @Html.ReqLabelFor(m => m.ProjectName, @Strings.Name)
+                    @*<label for="Name">@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Name</label>*@
+                    @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(x => x.ProjectName, "", new { @class = "text-danger" })
+                </div>
+                @*@if (Model.IsCreating)
+                    {*@
+                <div class="form-group">
+                    @Html.ReqLabelFor(m => m.ProjectOrgId, Strings.ProjectOrgId)
+                    @Html.TextBoxFor(m => m.ProjectOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.ProjectOrgId })
+                    @Html.ValidationMessageFor(x => x.ProjectOrgId, "", new { @class = "text-danger" })
+                </div>
+                @*}
+                    else
+                    {
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ProjectOrgId, AllyisApps.Resources.TimeTracker.Views.Project.Strings.ProjectOrgId)
+                            <span class="form-control">@Model.ProjectOrgId</span>
+                            @Html.HiddenFor(m => m.ProjectOrgId)
+                        </div>
+                    }*@
+                @if (Model.SelectedProjectUserIds.Count() > 0)
+                {
+                    var _projectUsers = Model.ProjectUsers.ToList();
+                    var _subscriptionUsers = Model.SubscriptionUsers.ToList();
+                    foreach (var id in Model.SelectedProjectUserIds)
+                    {
+                        var choice = Model.SubscriptionUsers.Where(m => m.UserId == id).FirstOrDefault();
+                        _projectUsers.Add(choice);
+                        _subscriptionUsers.Remove(choice);
+                    }
+                    Model.ProjectUsers = _projectUsers;
+                    Model.SubscriptionUsers = _subscriptionUsers;
+                }
+                <div id="swapper-ui" class="swapper-ui">
+                    <div class="left">
+                        <label>@Strings.OffProj</label>
+                        @*<input type="text" placeholder=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder class="form-control" />*@
+                        @*
+                            Create a multi-select list that is populated from SubscriptionUsers
+                            Uses Javascript and the add/remove buttons to add and remove items from this listbox
+                        *@
+                        @Html.ListBoxFor(m => m.SubscriptionUsers, new MultiSelectList(Model.SubscriptionUsers, "UserId", "Name"), new { @name = "Excluded", @id = "excluded-users", @class = "filter-list", @Multiple = "multiple" })
+                    </div>
+                    <div class="actions">
+                        <a href="javascript: moveSelectedProjectEditModal('in')" class="btn btn-default move-in">
+                            <i class="fa fa-lg fa-arrow-right"></i>
+                        </a>
+                        <a href="javascript: moveSelectedProjectEditModal('out')" class="btn btn-default move-out">
+                            <i class="fa fa-lg fa-arrow-left"></i>
+                        </a>
+                    </div>
+                    <div class="right">
+                        <label>@Strings.OnProj</label>
+                        @*<input type="text" placeholder="@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder" class="form-control" />*@
+                        @*
+                            Create a multi-select list that is populated from ProjectUsers and binds all selected items to SelectedProjectUserIds
+                            On Submit, all items in this list become selected, so the whole list is bound to the model
+                            Items are added and removed from this list via Javascript and the add / remove buttons
+                        *@
+                        @Html.ListBoxFor(m => m.SelectedProjectUserIds, new MultiSelectList(Model.ProjectUsers, "UserId", "Name"), new { @name = "Included", @id = "included-users", @class = "filter-list", @Multiple = "multiple" })
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom: 0px; margin-top: 15px;">
+                    @*<div class="col-xs-6 text-left">
+                            <label for="daterange" style="text-align:center">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.StartDate</label>
+                        </div>
+                        <div class="col-xs-6 text-left">
+                            <label for="daterange" style="text-align:center">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.EndDate</label>
+                        </div>*@
+
+                    <div class="form-group projectDate">
+                        <label>@Strings.StartDate</label>
+                        @Html.HiddenFor(m => m.StartDate)
+                        <input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerStart" />
+                        <span class="fa fa-fw fa-calendar" id="datePickerStartButton"></span>
+                    </div>
+                    <div class="form-group projectDate" style="float: right">
+                        <label>@Strings.EndDate</label>
+                        @Html.HiddenFor(m => m.EndDate)
+                        <input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerEnd" />
+                        <span class="fa fa-fw fa-calendar" id="datePickerEndButton"></span>
+                    </div>
+                </div>
+                @Html.HiddenFor(m => m.ParentCustomerId)
+                @Html.HiddenFor(m => m.ProjectId)
+                @Html.HiddenFor(m => m.IsCreating)
+            </div>
+
+            <div class="form-group row" style="margin-bottom: 0px; margin-top: 15px;">
+                <div class="col-xs-6 text-left">
+                    <label for="price" style="text-align:center">@Strings.PriceType</label>
+                    <br />
+                    @Html.RadioButtonFor(m => m.PriceType, Strings.Hourly, new { @checked = "checked" }) @Strings.Hourly
+                    @Html.RadioButtonFor(m => m.PriceType, Strings.Fixed) @Strings.Fixed
+                </div>
+            </div>
+
+            @*<div class="form-group row" style="margin-bottom: 0px; margin-top: 15px;">
+                    <div class="col-xs-4 text-left">
+                        @Html.RadioButtonFor(m => m.PriceType, AllyisApps.Resources.TimeTracker.Views.Project.Strings.Hourly, new { @checked = "checked" }) @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Hourly
+                        @Html.RadioButtonFor(m => m.PriceType, AllyisApps.Resources.TimeTracker.Views.Project.Strings.Fixed) @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Fixed
+                    </div>
+                </div>*@
+
+            <div class="text-right" style="padding-top: 15px; padding-bottom: 15px;">
+                <input type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer)'" />
+                <input type="submit" value=@Strings.Save class="btn btn-primary" id="submitProject" />
+            </div>
+        }
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+
+@*This is the Old view that we want to replace with the above view*@
+
 @if (Model.Customers.Count() > 0)
 {
     <div class="panel-group customer-list" id="customer-panel" role="tablist">
