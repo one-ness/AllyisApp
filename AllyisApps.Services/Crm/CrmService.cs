@@ -615,23 +615,24 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-			return new Customer()
-			{
-				Address = customer.Address,
-				City = customer.City,
-				ContactEmail = customer.ContactEmail,
-				ContactPhoneNumber = customer.ContactPhoneNumber,
-				Country = customer.Country,
-				CreatedUTC = customer.CreatedUTC,
-				CustomerId = customer.CustomerId,
-				CustomerOrgId = customer.CustomerOrgId,
-				EIN = customer.EIN,
-				FaxNumber = customer.FaxNumber,
-				Name = customer.Name,
-				OrganizationId = customer.OrganizationId,
-				PostalCode = customer.PostalCode,
-				State = customer.State,
-				Website = customer.Website
+            return new Customer()
+            {
+                Address = customer.Address,
+                City = customer.City,
+                ContactEmail = customer.ContactEmail,
+                ContactPhoneNumber = customer.ContactPhoneNumber,
+                Country = customer.Country,
+                CreatedUTC = customer.CreatedUTC,
+                CustomerId = customer.CustomerId,
+                CustomerOrgId = customer.CustomerOrgId,
+                EIN = customer.EIN,
+                FaxNumber = customer.FaxNumber,
+                Name = customer.Name,
+                OrganizationId = customer.OrganizationId,
+                PostalCode = customer.PostalCode,
+                State = customer.State,
+                Website = customer.Website,
+                IsActive = customer.IsActive
 			};
 		}
 
@@ -663,8 +664,9 @@ namespace AllyisApps.Services
 				OrganizationId = customer.OrganizationId,
 				PostalCode = customer.PostalCode,
 				State = customer.State,
-				Website = customer.Website
-			};
+				Website = customer.Website,
+                IsActive = customer.IsActive
+            };
 		}
 
 		/// <summary>

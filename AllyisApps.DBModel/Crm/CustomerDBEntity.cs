@@ -96,5 +96,10 @@ namespace AllyisApps.DBModel.Crm
 		/// Gets or sets the id of the customer to be used by users within the organization
 		/// </summary>
 		public string CustomerOrgId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the IsActive bool value for the customer. True means currently active
+        /// </summary>
+        public bool IsActive { get; set; }
 	}
 }
