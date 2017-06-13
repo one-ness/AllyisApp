@@ -33,19 +33,10 @@
                             <span class="small text-muted">(@projectCount @projectCountLabel)</span>
                         </h4>
                     </a>
-                    <a href="@Url.Action(ActionConstants.ReactivateCustomer, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="btn btn-default @createButtonClass">@Strings.Reactivate <i class="fa fa-plus"></i></a>
-                    @*<a href="@Url.Action(ActionConstants.Details, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right">
-                        <i class="fa fa-fw fa-lg fa-eye"></i>
-                    </a>
-                    @if (Model.canEdit)
+                    @if (!customer.CustomerInfo.IsActive)
                     {
-                        <a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right">
-                            <i class="fa fa-lg fa-fw fa-cog"></i>
-                        </a>
-                                <a href="@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right" onclick="return confirm('Are you sure you wish to delete the customer @customer.CustomerInfo.Name?')">
-                                    <i class="fa fa-2x fa-fw fa-times"></i>
-                                </a>
-                    }*@
+                        <a href="@Url.Action(ActionConstants.ReactivateCustomer, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="btn btn-default @createButtonClass">@Strings.Reactivate <i class="fa fa-plus"></i></a>
+                    }
                 </div>
                 <div id="@collapseTarget" class="panel-collapse search-expand collapse panel-two-table-wrap" role="tabpanel">
                     <div style="width: 100%">
@@ -62,8 +53,8 @@
                                     @if (Model.canEdit)
                                     {
                                         <a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new { id = project.ProjectId })" class="pull-right"><i class="fa fa-lg fa-fw fa-cog"></i></a>
-                                                <a href="@Url.Action(ActionConstants.Delete, ControllerConstants.Project, new { id = project.ProjectId })" class="pull-right" style="margin-left:2px;" onclick="return confirm('Are you sure you wish to Delete the project @project.Name?')">
-                                                    <i class="fa fa-times"></i>
+                                                <a href="@Url.Action(ActionConstants.Reactivate, ControllerConstants.Project, new { id = project.ProjectId })" class="pull-right" style="margin-left:2px;" onclick="return confirm('Are you sure you wish to Reactivate the project @project.Name?')">
+                                                    <i class="fa fa-plus"></i>
                                                 </a>
                                     }
                                 </div>
