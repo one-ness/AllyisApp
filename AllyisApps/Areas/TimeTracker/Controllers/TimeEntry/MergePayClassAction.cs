@@ -95,7 +95,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				TimeEntryInfo updatedEntry = AppService.InitializeTimeEntryInfo(entity);
 				updatedEntry.PayClassId = destPayClass;
-                AppService.UpdateTimeEntry(updatedEntry);
+				AppService.UpdateTimeEntry(updatedEntry);
 			}
 			//delete the old payclass
 			if (AppService.DeletePayClass(model.sourcePayClassId))

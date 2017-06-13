@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
 using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
@@ -23,7 +22,7 @@ namespace AllyisApps.Controllers
 		{
 			if (Request.IsAuthenticated)
 			{
-                AppService.SetLanguage(languageID);
+				AppService.SetLanguage(languageID);
 			}
 			else
 			{

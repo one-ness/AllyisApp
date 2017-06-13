@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Shared;
 using System.Collections.Generic;

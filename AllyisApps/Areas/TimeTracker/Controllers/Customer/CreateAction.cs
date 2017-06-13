@@ -8,7 +8,6 @@ using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Customer;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -51,7 +50,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult Create(EditCustomerInfoViewModel model)
 		{
 			if (ModelState.IsValid)
-			{				
+			{
 				int? customerId = AppService.CreateCustomer(new Customer()
 				{
 					ContactEmail = model.ContactEmail,
@@ -71,12 +70,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				if (customerId.HasValue)
 				{
-                    // CustomerOrgId is not unique
-                    if (customerId == -1)
-                    {
-                        Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
-                        return this.View(model);
-                    }
+					// CustomerOrgId is not unique
+					if (customerId == -1)
+					{
+						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
+						return this.View(model);
+					}
 
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCreatedNotification, Variety.Success));
 
@@ -95,7 +94,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		}
 	}
 
-    /*
+	/*
      /// <summary>
 		/// POST: Customer/Create.
 		/// </summary>

@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
 using AllyisApps.Services;
 using AllyisApps.Services.Common.Types;
 using System;
@@ -36,7 +35,7 @@ namespace AllyisApps.Controllers
 				}
 				else
 				{
-                    AppService.UpdateBillingInfo(billingServicesEmail, token);
+					AppService.UpdateBillingInfo(billingServicesEmail, token);
 
 					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.Billing, Core.Alert.Variety.Success));
 					return this.RedirectToAction(ActionConstants.Manage);

@@ -79,7 +79,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				});
 			}
 
-            AppService.DeleteTimeEntry(model.TimeEntryId);
+			AppService.DeleteTimeEntry(model.TimeEntryId);
 			return this.Json(new { status = "success" });
 		}
 	}
