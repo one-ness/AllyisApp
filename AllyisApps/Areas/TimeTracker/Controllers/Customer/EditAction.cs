@@ -8,7 +8,6 @@ using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Customer;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -55,56 +54,56 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			return this.RedirectToAction(ActionConstants.Index);
 		}
 
-        /// <summary>
+		/// <summary>
 		/// POST: Customer/Edit.
 		/// </summary>
 		/// <param name="model">The Customer view model.</param>
 		/// <returns>The ActionResult.</returns>
 		[HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(EditCustomerInfoViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var result = AppService.UpdateCustomer(new Customer()
-                {
-                    CustomerId = model.CustomerID,
-                    ContactEmail = model.ContactEmail,
-                    Name = model.Name,
-                    Address = model.Address,
-                    City = model.City,
-                    State = model.State,
-                    Country = model.Country,
-                    PostalCode = model.PostalCode,
-                    ContactPhoneNumber = model.ContactPhoneNumber,
-                    FaxNumber = model.FaxNumber,
-                    Website = model.Website,
-                    EIN = model.EIN,
-                    CustomerOrgId = model.CustomerOrgId
-                });
+		[ValidateAntiForgeryToken]
+		public ActionResult Edit(EditCustomerInfoViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				var result = AppService.UpdateCustomer(new Customer()
+				{
+					CustomerId = model.CustomerID,
+					ContactEmail = model.ContactEmail,
+					Name = model.Name,
+					Address = model.Address,
+					City = model.City,
+					State = model.State,
+					Country = model.Country,
+					PostalCode = model.PostalCode,
+					ContactPhoneNumber = model.ContactPhoneNumber,
+					FaxNumber = model.FaxNumber,
+					Website = model.Website,
+					EIN = model.EIN,
+					CustomerOrgId = model.CustomerOrgId
+				});
 
-                if (result == -1)   //the new CustOrgId is not unique
-                {
-                    Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
-                    return this.View(model);
-                }
-                else if (result == 1) //updated successfully
-                {
-                    Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerDetailsUpdated, Variety.Success));
-                    return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index), model.CustomerID));
-                }
-                else // Permissions failure
-                {                    
-                    Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-                    return this.RedirectToAction(ActionConstants.Index);
-                }
-            }
+				if (result == -1)   //the new CustOrgId is not unique
+				{
+					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
+					return this.View(model);
+				}
+				else if (result == 1) //updated successfully
+				{
+					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerDetailsUpdated, Variety.Success));
+					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index), model.CustomerID));
+				}
+				else // Permissions failure
+				{
+					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+					return this.RedirectToAction(ActionConstants.Index);
+				}
+			}
 
-            // Invalid model
-            return this.View(model);
-        }
+			// Invalid model
+			return this.View(model);
+		}
 
-        /*
+		/*
 		/// <summary>
 		/// POST: Customer/Edit.
 		/// </summary>
@@ -152,5 +151,5 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// Invalid model
 			return this.View(model);
 		}*/
-    }
+	}
 }

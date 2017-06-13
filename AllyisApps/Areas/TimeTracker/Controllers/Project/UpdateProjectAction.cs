@@ -42,13 +42,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				project.OrganizationId = UserContext.ChosenOrganizationId;
 			}
 
-            AppService.UpdateProjectAndUsers(
+			AppService.UpdateProjectAndUsers(
 				project.ProjectId,
 				project.ProjectName,
 				project.ProjectOrgId,
 				project.PriceType,
-                AppService.GetDateTimeFromDays(project.StartDate),
-                AppService.GetDateTimeFromDays(project.EndDate),
+				AppService.GetDateTimeFromDays(project.StartDate),
+				AppService.GetDateTimeFromDays(project.EndDate),
 				project.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString)));
 		}
 	}

@@ -10,8 +10,8 @@ function showNoProjectMessage(type) {
 	$('#noProjectMessage').show();
 	$('#cannotAddMessage').hide();
 	$('#addMember').prop('disabled', true);
-    if (type) { $('#roleRequiredMessage').show(); }
-    if (!type) { $('#projectRequiredMessage').show(); }
+	if (type) { $('#roleRequiredMessage').show(); }
+	if (!type) { $('#projectRequiredMessage').show(); }
 }
 
 function showMustBeOwnerOrUserMessage() {
@@ -30,12 +30,12 @@ function checkAddConditions() {
 		}
 	}
 	else if ($('.project-selector option:selected').val() != "") { //Project is selected
-	    if ($('.role-selector option:selected').val() == 0) {  // No role is selected
-            showNoProjectMessage(true);
-	    }
-	    else { // Project selected
-	        clearMessagesAndEnableAdd();
-	    }
+		if ($('.role-selector option:selected').val() == 0) {  // No role is selected
+			showNoProjectMessage(true);
+		}
+		else { // Project selected
+			clearMessagesAndEnableAdd();
+		}
 	}
 	else { // Time Tracker role is None, just adding as owner
 		clearMessagesAndEnableAdd();

@@ -41,9 +41,9 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public string Email { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Employee type Id
-        /// </summary>
-        public int EmployeeTypeId { get; set; }
+		/// <summary>
+		/// Gets or sets the Employee type Id
+		/// </summary>
+		public int EmployeeTypeId { get; set; }
 	}
 }

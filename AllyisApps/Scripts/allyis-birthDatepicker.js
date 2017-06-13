@@ -18,29 +18,29 @@
 //    <input id="datePickerBirth" type="text">
 
 $("#datePickerBirth").datepicker({
-    showOn: "button",
-    buttonImageOnly: true,
-    changeMonth: true,
-    changeYear: true,
-    yearRange: "-120:+0",
-    onSelect: function () {
-        $(this).change();
-    }
+	showOn: "button",
+	buttonImageOnly: true,
+	changeMonth: true,
+	changeYear: true,
+	yearRange: "-120:+0",
+	onSelect: function () {
+		$(this).change();
+	}
 });
 $('#datePickerBirth').on("change", function () {
-    var enteredDate = moment($(this).val());
-    $('#DateOfBirth').val(DateConvert.GetDaysFromMoment(enteredDate));
+	var enteredDate = moment($(this).val());
+	$('#DateOfBirth').val(DateConvert.GetDaysFromMoment(enteredDate));
 });
 
 $(function () {
-    var initBirth = DateConvert.GetMomentFromDays(model_birthdate);
-    if (!isNaN(initBirth)) {
-        $('#datePickerBirth').datepicker("setDate", initBirth.toDate());
-    }
-    $('.ui-datepicker-trigger').remove();
-    $('#datePickerBirthButton').on("click", function () {
-        $('#datePickerBirth').datepicker("show");
-    });
+	var initBirth = DateConvert.GetMomentFromDays(model_birthdate);
+	if (!isNaN(initBirth)) {
+		$('#datePickerBirth').datepicker("setDate", initBirth.toDate());
+	}
+	$('.ui-datepicker-trigger').remove();
+	$('#datePickerBirthButton').on("click", function () {
+		$('#datePickerBirth').datepicker("show");
+	});
 });
 
 //the following came from Areas\TimeTracker\Scripts\allyis-drp-init.js
@@ -48,25 +48,25 @@ $(function () {
 // Helper for converting between int form of date used for communication with server (see Service.GetDateTimeFromDays/GetDayFromDateTime)
 // and moment.js dates
 var DateConvert = (function () {
-    var minimumDate = moment(-62135568000000) // This corresponds to DateTime.MinValue()
+	var minimumDate = moment(-62135568000000) // This corresponds to DateTime.MinValue()
 
-    return {
-        GetDaysFromMoment: function (date) {
-            if (isNaN(date)) {
-                return -1;
-            }
-            return date.diff(minimumDate, 'days');
-        },
-        GetMomentFromDays: function (days) {
-            if (days < 0) {
-                return Number.NaN;
-            }
+	return {
+		GetDaysFromMoment: function (date) {
+			if (isNaN(date)) {
+				return -1;
+			}
+			return date.diff(minimumDate, 'days');
+		},
+		GetMomentFromDays: function (days) {
+			if (days < 0) {
+				return Number.NaN;
+			}
 
-            // Shuffling of value necessary to preserve minimumDate, since the add method changes the moment object it's called from.
-            oldval = moment(minimumDate);
-            var sum = minimumDate.add(days, 'days');
-            minimumDate = moment(oldval);
-            return sum;
-        }
-    };
+			// Shuffling of value necessary to preserve minimumDate, since the add method changes the moment object it's called from.
+			oldval = moment(minimumDate);
+			var sum = minimumDate.add(days, 'days');
+			minimumDate = moment(oldval);
+			return sum;
+		}
+	};
 })();

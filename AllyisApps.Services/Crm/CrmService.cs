@@ -84,7 +84,7 @@ namespace AllyisApps.Services
 			return null;
 		}
 
-        /*
+		/*
          /// <summary>
 		/// Updates a customer in the database.
 		/// </summary>
@@ -102,12 +102,12 @@ namespace AllyisApps.Services
 		}
             */
 
-        /// <summary>
-        /// Deletes a customer.
-        /// </summary>
-        /// <param name="customerId">Customer id.</param>
-        /// <returns>Returns null if authorization fails, empty string if customer not found, customer's name if succeeds</returns>
-        public string DeleteCustomer(int customerId)
+		/// <summary>
+		/// Deletes a customer.
+		/// </summary>
+		/// <param name="customerId">Customer id.</param>
+		/// <returns>Returns null if authorization fails, empty string if customer not found, customer's name if succeeds</returns>
+		public string DeleteCustomer(int customerId)
 		{
 			if (this.Can(Actions.CoreAction.EditCustomer))
 			{
@@ -116,7 +116,7 @@ namespace AllyisApps.Services
 			return null;
 		}
 
-        /*
+		/*
         /// <summary>
 		/// Deletes a customer.
 		/// </summary>
@@ -131,15 +131,15 @@ namespace AllyisApps.Services
 			}
 
 			return false;
-		}   
+		}
     */
 
-        /// <summary>
-        /// Gets a list of <see cref="Customer"/>'s for an organization.
-        /// </summary>
-        /// <param name="orgId">Organization Id.</param>
-        /// <returns><see cref="IEnumerable{CustomerDBEntity}"/>.</returns>
-        public IEnumerable<Customer> GetCustomerList(int orgId)
+		/// <summary>
+		/// Gets a list of <see cref="Customer"/>'s for an organization.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns><see cref="IEnumerable{CustomerDBEntity}"/>.</returns>
+		public IEnumerable<Customer> GetCustomerList(int orgId)
 		{
 			IEnumerable<CustomerDBEntity> dbeList = DBHelper.GetCustomerList(orgId);
 			List<Customer> list = new List<Customer>();
@@ -374,25 +374,25 @@ namespace AllyisApps.Services
 			return false;
 		}
 
-        /// <summary>
-        /// Reactivate a project
-        /// </summary>
-        /// <param name="projectId">Project Id</param>
-        /// <returns>Returns false if authorization fails</returns>
-        public bool ReactivateProject(int projectId)
-        {
-            if (projectId <= 0)
-            {
-                throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
-            }
+		/// <summary>
+		/// Reactivate a project
+		/// </summary>
+		/// <param name="projectId">Project Id</param>
+		/// <returns>Returns false if authorization fails</returns>
+		public bool ReactivateProject(int projectId)
+		{
+			if (projectId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
+			}
 
-            if (this.Can(Actions.CoreAction.EditProject))
-            {
-                DBHelper.ReactivateProject(projectId);
-                return true;
-            }
-            return false;
-        }
+			if (this.Can(Actions.CoreAction.EditProject))
+			{
+				DBHelper.ReactivateProject(projectId);
+				return true;
+			}
+			return false;
+		}
 
 		/// <summary>
 		/// Creates a project user.

@@ -6,19 +6,19 @@
 
 namespace AllyisApps.Services
 {
-    /// <summary>
-    /// Type of the employee of an organization.
-    /// </summary>
-    public enum EmployeeType : int
-    {
-        /// <summary>
-        /// Salaried employee.
-        /// </summary>
-        Salaried = 1,
+	/// <summary>
+	/// Type of the employee of an organization.
+	/// </summary>
+	public enum EmployeeType : int
+	{
+		/// <summary>
+		/// Salaried employee.
+		/// </summary>
+		Salaried = 1,
 
-        /// <summary>
-        /// Hourly employee.
-        /// </summary>
-        Hourly = 2
-    }
+		/// <summary>
+		/// Hourly employee.
+		/// </summary>
+		Hourly = 2
+	}
 }

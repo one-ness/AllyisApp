@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
 using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
@@ -28,7 +27,7 @@ namespace AllyisApps.Controllers
 				// TODO: In the subscription rerouting, add error messages for usability (Check svn log if needed)
 				return this.RedirectToSubDomainAction(
 					UserContext.ChosenOrganizationId,
-                    AppService.GetProductById(productId).ProductName,
+					AppService.GetProductById(productId).ProductName,
 					ActionConstants.Index,
 					ControllerConstants.Home);
 			}

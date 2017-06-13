@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
 using AllyisApps.ViewModels.Auth;
 using System;
 using System.Threading.Tasks;

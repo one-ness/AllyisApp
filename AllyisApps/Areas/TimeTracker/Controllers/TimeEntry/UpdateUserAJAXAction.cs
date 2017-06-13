@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					{
 						if (AppService.UpdateProjectUser(proj_id, userId, false).Equals(0))
 						{
-                            AppService.DeleteProjectUser(proj_id, userId);
+							AppService.DeleteProjectUser(proj_id, userId);
 						}
 					}
 				}
@@ -46,7 +46,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					{
 						if (AppService.UpdateProjectUser(proj_id, userId, true).Equals(0))
 						{
-                            AppService.CreateProjectUser(proj_id, userId);
+							AppService.CreateProjectUser(proj_id, userId);
 						}
 					}
 				}
