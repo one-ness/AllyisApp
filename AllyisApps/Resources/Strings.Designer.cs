@@ -815,18 +815,7 @@ namespace AllyisApps.Resources {
                 return ResourceManager.GetString("CustomerDeleteNotification", resourceCulture);
             }
         }
-
-        /// <summary>
-        ///   Looks up a localized string similar to has been deleted successfully..
-        /// </summary>
-        public static string CustomerReactivateNotification
-        {
-            get
-            {
-                return ResourceManager.GetString("CustomerReactivateNotification", resourceCulture);
-            }
-        }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Customer Details.
         /// </summary>
@@ -869,6 +858,15 @@ namespace AllyisApps.Resources {
         public static string CustomerOrgIdNotUnique {
             get {
                 return ResourceManager.GetString("CustomerOrgIdNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have successfully reactivated the customer.
+        /// </summary>
+        public static string CustomerReactivateNotification {
+            get {
+                return ResourceManager.GetString("CustomerReactivateNotification", resourceCulture);
             }
         }
         

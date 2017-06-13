@@ -99,26 +99,26 @@
 				<div class="bulk col-xs-12 col-sm-8" style="float:left;">
 					<h4>@Strings.ImportCustomersTitle</h4>
 					<p>@Strings.ImportCustomers</p>
-					@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-					{
-						@Html.AntiForgeryToken();
-						<div style="float:left; width:100%;">
-							<input type="file" id="upload-box" name="upload" style="display:none;"
-								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-							<input id="upload-file-name-display" class="form-control"
-								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-						</div>
-						<div style="float:left; margin-bottom: 15px;">
-							<a class="btn btn-primary" style="margin-top:10px; margin-right: 10px;" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
-							<input style="margin-top: 10px; margin-right: 10px;" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" />
-						</div>
-					}
 					@using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get))
-					{
-						<div style="float:right">
+                    {
+                        @Html.AntiForgeryToken();
+                        <div style="float:left; width:100%;">
+                            <input type="file" id="upload-box" name="upload" style="display:none;"
+                                   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                            <input id="upload-file-name-display" class="form-control"
+                                   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                        </div>
+						<div style="float:left">
 							<input style="margin-top: 10px;" type="submit" id="template-button" value="@Strings.Template" class="btn btn-primary" />
 						</div>
 					}
+                    @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <div style="float:right; margin-bottom: 15px;">
+                            <a class="btn btn-primary" style="margin-top:10px; margin-right: 10px;" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
+                            <input style="margin-top: 10px; margin-right: 10px;" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" />
+                        </div>
+                    }
 				</div>
 			</div>
 		}

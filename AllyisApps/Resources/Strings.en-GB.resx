@@ -1444,4 +1444,7 @@
   <data name="ProjectReactivateNotification" xml:space="preserve">
     <value>You have successfully reactivated the project</value>
   </data>
+  <data name="CustomerReactivateNotification" xml:space="preserve">
+    <value>You have successfuly reactivated the customer</value>
+  </data>
 </root>
