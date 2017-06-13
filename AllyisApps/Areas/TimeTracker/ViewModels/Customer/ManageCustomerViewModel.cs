@@ -27,5 +27,17 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// Gets or sets a value indicating whether the user can edit customers/projects.
 		/// </summary>
 		public bool canEdit { get; set; }
-	}
+
+        /// <summary>
+        /// Customer name
+        /// </summary>
+        public string CustId { get; set; }
+
+        /// <summary>
+        /// Customer name
+        /// </summary>
+        public string Name { get; set; }
+
+
+    }
 }

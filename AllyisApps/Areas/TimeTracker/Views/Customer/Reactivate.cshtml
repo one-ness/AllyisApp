@@ -5,8 +5,12 @@
 @model ManageCustomerViewModel
 
 @{
+    AjaxOptions ao = new AjaxOptions
+    {
+        UpdateTargetId = "OrgEditWrap"
+    };
     DisplayHints.PageBodyId = "tt-customer";
-    ViewBag.Title = Strings.CustomerList;
+    ViewBag.Title = "Inactive Customers and Projects";
     ViewData["IsManager"] = Model.canEdit;
     Layout = "~/Areas/TimeTracker/Views/Shared/_Layout.cshtml";
     //var customerCount = 0;
@@ -21,8 +25,8 @@
             <div>
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true)
-                @{var customers = new List<Customer>();}
-                    @if (customers.Count() > 0)
+                @{ var customers = new List<Customer>();
+                    if (Model.Customers.Count() > 0)
                     {
                         var _customersprojects = Model.Customers.ToList();
 
@@ -39,7 +43,7 @@
                                 Create a multi-select list that is populated from SubscriptionUsers
                                 Uses Javascript and the add/remove buttons to add and remove items from this listbox
                             *@
-                            @Html.ListBoxFor(m => m.Customers, new MultiSelectList(customers)@*new MultiSelectList(Model.Customers, "CustomerId", "Name"), new { @name = "customers", @id = "inactive-customers", @class = "filter-list", @Multiple = "multiple" }*@)
+                            @Html.ListBoxFor(m => customers, new MultiSelectList(customers, "CustomerId", "Name"), new { @name = "customers", @id = "inactive-customers", @class = "filter-list", @Multiple = "multiple" })
                         </div>
                         @*<div class="actions">
                             <a href="javascript: moveSelectedProjectEditModal('in')" class="btn btn-default move-in">
@@ -49,7 +53,18 @@
                                 <i class="fa fa-lg fa-arrow-left"></i>
                             </a>
                         </div>*@
+                        <div class="right">
+                            <label>@*@Strings.OnProj*@InactiveProjects</label>
+                            @*<input type="text" placeholder="@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder" class="form-control" />*@
+                            @*
+            Create a multi-select list that is populated from ProjectUsers and binds all selected items to SelectedProjectUserIds
+            On Submit, all items in this list become selected, so the whole list is bound to the model
+            Items are added and removed from this list via Javascript and the add / remove buttons
+                            *@
+                            @Html.ListBoxFor(m => customers, new MultiSelectList(customers, "CustomerId", "Name")@*new MultiSelectList(Model.ProjectUsers, "UserId", "Name"), new { @name = "Included", @id = "included-users", @class = "filter-list", @Multiple = "multiple" }*@)
+                        </div>
                     </div>
+                    }
                 @*@Html.HiddenFor(m => m.ParentCustomerId)
                 @Html.HiddenFor(m => m.ProjectId)
                 @Html.HiddenFor(m => m.IsCreating)*@
