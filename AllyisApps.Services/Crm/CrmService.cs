@@ -397,6 +397,26 @@ namespace AllyisApps.Services
 		/// Deletes a project.
 		/// </summary>
 		/// <param name="projectId">Project Id.</param>
+		/// <returns>Returns null if authorization fails, project name is succeed, empty string if not found.</returns>
+		public string DeleteProject(int projectId)
+		{
+			if (projectId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
+			}
+
+            if (this.Can(Actions.CoreAction.EditCustomer))
+            {
+                return DBHelper.DeleteProject(projectId);
+            }
+            return null;
+		}
+
+        /*
+         /// <summary>
+		/// Deletes a project.
+		/// </summary>
+		/// <param name="projectId">Project Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool DeleteProject(int projectId)
 		{
@@ -413,13 +433,14 @@ namespace AllyisApps.Services
 
 			return false;
 		}
+         */
 
-		/// <summary>
-		/// Reactivate a project
-		/// </summary>
-		/// <param name="projectId">Project Id</param>
-		/// <returns>Returns false if authorization fails</returns>
-		public bool ReactivateProject(int projectId)
+        /// <summary>
+        /// Reactivate a project
+        /// </summary>
+        /// <param name="projectId">Project Id</param>
+        /// <returns>Returns false if authorization fails</returns>
+        public bool ReactivateProject(int projectId)
 		{
 			if (projectId <= 0)
 			{
