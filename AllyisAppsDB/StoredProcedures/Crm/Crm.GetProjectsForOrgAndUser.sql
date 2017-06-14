@@ -19,7 +19,7 @@ AS
 		LEFT JOIN [Auth].[Organization] AS [O] WITH (NOLOCK) ON [O].[OrganizationId] = [C].[OrganizationId]
 	WHERE [O].[OrganizationId] = @OrgId
 	
-	SELECT [Firstname],
+	SELECT [FirstName],
 		[LastName],
 		[Email]
 	FROM [Auth].[User] WITH (NOLOCK)

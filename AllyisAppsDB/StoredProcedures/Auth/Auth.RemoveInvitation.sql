@@ -30,10 +30,6 @@ BEGIN
 		BEGIN -- Invited user found and matches calling user
 			BEGIN TRANSACTION
 
-			-- Remove invitation and its sub roles
-			DELETE FROM [Auth].[InvitationSubRole]
-			WHERE [InvitationId] = @InvitationId
-
 			DELETE FROM [Auth].[Invitation]
 			WHERE [InvitationId] = @InvitationId
 

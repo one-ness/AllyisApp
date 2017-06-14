@@ -20,7 +20,7 @@ BEGIN TRANSACTION
 		BEGIN
 			DELETE [Billing].[SubscriptionUser] 
 			WHERE [SubscriptionId] = @SubId AND [UserId] IN (
-				SELECT [userId] FROM @UserIDs
+				SELECT [UserId] FROM @UserIDs
 			)
 
 			SELECT @@ROWCOUNT
@@ -31,7 +31,7 @@ BEGIN TRANSACTION
 			UPDATE [Billing].[SubscriptionUser] 
 			SET [ProductRoleId] = @TimeTrackerRole
 			WHERE [SubscriptionId] = @SubId AND [UserId] IN (
-				SELECT [userId] FROM @UserIDs
+				SELECT [UserId] FROM @UserIDs
 			)
 
 			SELECT @@ROWCOUNT
@@ -47,13 +47,13 @@ BEGIN TRANSACTION
 				[UserId] INT
 			);
 			INSERT INTO @AddingUsers ([UserId])
-			SELECT [UID].[userId]
+			SELECT [UID].[UserId]
 			FROM @UserIDs AS [UID]
 			LEFT OUTER JOIN (
 				SELECT [SubscriptionId], [UserId]
 				FROM [Billing].[SubscriptionUser] WITH (NOLOCK)
 				WHERE [SubscriptionId] = @SubId
-			) [SubUsers] ON [SubUsers].[UserId] = [UID].[userId]
+			) [SubUsers] ON [SubUsers].[UserId] = [UID].[UserId]
 			WHERE [SubscriptionId] IS NULL
 
 			-- Check that there is room for users being added
@@ -68,7 +68,7 @@ BEGIN TRANSACTION
 				INSERT INTO @SubAndRole ([SubId], [TTRoleId]) VALUES (@SubId, @TimeTrackerRole)
 
 				INSERT INTO [Billing].[SubscriptionUser] ([SubscriptionId], [UserId], [ProductRoleId])
-				SELECT [SubId], [userId], [TTRoleId]
+				SELECT [SubId], [UserId], [TTRoleId]
 				FROM @AddingUsers
 				CROSS JOIN @SubAndRole
 

@@ -23,7 +23,7 @@ BEGIN
 	WITH (NOLOCK)
 	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [User].[Country]
 	LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [User].[State]
-	WHERE [UserId] = @UserId;
+	WHERE [UserId] = @userId;
 
 	SELECT [Auth].[Organization].[OrganizationId]
 		  ,[Organization].[Name]
@@ -41,7 +41,7 @@ BEGIN
 	RIGHT JOIN [Auth].[OrganizationUser]	WITH (NOLOCK) ON [OrganizationUser].[OrganizationId] = [Organization].[OrganizationId]
 	LEFT JOIN [Lookup].[Country]			WITH (NOLOCK) ON [Country].[CountryId] = [Organization].[Country]
 	LEFT JOIN [Lookup].[State]				WITH (NOLOCK) ON [State].[StateId] = [Organization].[State]
-	WHERE [OrganizationUser].[UserId] = @UserId 
+	WHERE [OrganizationUser].[UserId] = @userId 
 		  AND [Auth].[Organization].[IsActive] = 1
 	ORDER BY [OrganizationUser].[OrgRoleId] DESC, [Organization].[Name]
 

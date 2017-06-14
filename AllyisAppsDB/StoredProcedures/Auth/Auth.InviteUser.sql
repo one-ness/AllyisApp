@@ -64,29 +64,8 @@ BEGIN
 				@EmployeeId,
 				'1755-01-01');
 
-			SET @retId = SCOPE_IDENTITY();
-
-			-- Add invitation sub roles if included
-			IF @SubscriptionId IS NOT NULL
-			BEGIN
-				-- Check subscription user count
-				IF (SELECT [Subscription].[NumberOfUsers]
-					FROM [Billing].[Subscription] WITH (NOLOCK)
-					WHERE [Subscription].[SubscriptionId] = @SubscriptionId
-				) > (SELECT COUNT(*)
-					FROM [Billing].[SubscriptionUser] WITH (NOLOCK)
-					WHERE [SubscriptionUser].[SubscriptionId] = @SubscriptionId
-				)
-				BEGIN
-					INSERT INTO [Auth].[InvitationSubRole]
-						([InvitationId], [SubscriptionId], [ProductRoleId])
-					VALUES
-						(@retId, @SubscriptionId, @SubRoleId);
-				END
-			END
-
 			-- Return invitation id
-			SELECT @retId;
+			SELECT SCOPE_IDENTITY()
 
 			-- Return first and last names of inviting user
 			SELECT [FirstName] FROM [Auth].[User] WITH (NOLOCK) WHERE [UserId] = @UserId

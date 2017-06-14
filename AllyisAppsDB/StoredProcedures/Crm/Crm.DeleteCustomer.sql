@@ -9,7 +9,7 @@ BEGIN
 	SELECT 
 		@CustomerName = [Name] 
 	FROM [Crm].[Customer] WITH (NOLOCK)
-	WHERE [CustomerId] = @CustomerID
+	WHERE [CustomerId] = @CustomerId
 
 	IF @CustomerName IS NOT NULL
 	BEGIN --Customer found

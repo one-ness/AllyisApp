@@ -9,7 +9,7 @@ BEGIN TRANSACTION
 		-- Delete project user records for these users in this organization
 		DELETE FROM [Crm].[ProjectUser] 
 		WHERE [UserId] IN (
-				SELECT [userId] FROM @UserIDs
+				SELECT [UserId] FROM @UserIDs
 			) AND
 			[ProjectId] IN (
 				SELECT [ProjectId] FROM [Crm].[Project] WITH (NOLOCK)
@@ -22,7 +22,7 @@ BEGIN TRANSACTION
 		-- Delete subscription user records for these users in this organization
 		DELETE FROM [Billing].[SubscriptionUser]
 		WHERE [UserId] IN (
-				SELECT [userId] FROM @UserIDs
+				SELECT [UserId] FROM @UserIDs
 			) AND
 			[SubscriptionId] IN (
 				SELECT [SubscriptionId] FROM [Billing].[Subscription] WITH (NOLOCK)
@@ -32,7 +32,7 @@ BEGIN TRANSACTION
 		-- Delete organization user records
 		DELETE FROM [Auth].[OrganizationUser]
 		WHERE [UserId] IN (
-				SELECT [userId] FROM @UserIDs
+				SELECT [UserId] FROM @UserIDs
 			) AND [OrganizationId] = @OrganizationId
 
 		SELECT @@ROWCOUNT
@@ -42,7 +42,7 @@ BEGIN TRANSACTION
 		UPDATE [Auth].[OrganizationUser]
 		SET [OrgRoleId] = @OrgRole
 		WHERE [UserId] IN (
-				SELECT [userId] FROM @UserIDs
+				SELECT [UserId] FROM @UserIDs
 			) AND [OrganizationId] = @OrganizationId
 
 		SELECT @@ROWCOUNT

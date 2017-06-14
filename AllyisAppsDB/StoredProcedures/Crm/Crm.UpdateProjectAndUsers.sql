@@ -14,14 +14,14 @@ BEGIN
 		/* Update new users that used to be users at some point */
 		UPDATE [Crm].[ProjectUser] SET IsActive = 1
 		WHERE [ProjectUser].[ProjectId] = @ProjectId 
-			AND [ProjectUser].[UserId] IN (SELECT userId FROM @UserIDs) 
+			AND [ProjectUser].[UserId] IN (SELECT UserId FROM @UserIDs) 
 			AND [ProjectUser].[IsActive] = 0
 
 		/* Add new users that have never been on the project */
 		INSERT INTO [Crm].[ProjectUser] ([ProjectId], [UserId], [IsActive])
-		SELECT @ProjectId, userId, 1
+		SELECT @ProjectId, UserId, 1
 		FROM @UserIDs
-		WHERE userId NOT IN
+		WHERE UserId NOT IN
 			(SELECT [ProjectUser].[UserId]
 			FROM [Crm].[ProjectUser] WITH (NOLOCK)
 			WHERE [ProjectUser].[ProjectId] = @ProjectId)
@@ -29,7 +29,7 @@ BEGIN
 		/* Set inactive existing users that are not in the updated users list */
 		UPDATE [Crm].[ProjectUser] SET IsActive = 0
 		WHERE [ProjectUser].[ProjectId] = @ProjectId
-			AND [ProjectUser].[UserId] NOT IN (SELECT userId FROM @UserIDs) 
+			AND [ProjectUser].[UserId] NOT IN (SELECT UserId FROM @UserIDs) 
 			AND [ProjectUser].[IsActive] = 1
 
 		/* Update other project properties */
