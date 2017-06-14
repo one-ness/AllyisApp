@@ -9,11 +9,11 @@
     ViewBag.Title = Strings.CustomerList;
     ViewData["IsManager"] = Model.canEdit;
     Layout = "~/Areas/TimeTracker/Views/Shared/_Layout.cshtml";
-    var customerCount = 0;
     var empty = new EditCustomerInfoViewModel() { OrganizationId = Model.OrganizationId };
     var emptyProj = new EditProjectViewModel();
-	var createButtonClass = !Model.canEdit ? "invisible" : "";
+    var createButtonClass = !Model.canEdit ? "invisible" : "";
 }
+
 
 <div class="row">
     <div class="col-xs-12 col-md-8 col-md-push-2">
@@ -25,146 +25,52 @@
                 <input type="text" id="SearchInput" placeholder=@Strings.SearchPlaceholder class="form-control">
             </div>
         </div>
-        @if (Model.Customers.Count() > 0)
-        {
-            <div class="panel-group customer-list" id="customer-panel" role="tablist">
-                @foreach (CustomerProjectViewModel customer in Model.Customers)
-                {
-                    var collapseTarget = string.Format("customerNumber{0}", customer.CustomerInfo.CustomerId);
-                    var customerDetailsTarget = string.Format("custDetails{0}", customerCount);
-                    var projectCount = customer.Projects.Count();
-                    var projectCountLabel = projectCount == 1 ? "project" : "projects";
-                    <div class="panel panel-customer">
-                        <div class="panel-heading" role="tab">
-                            <a class="accordion-toggle collapsed" role="button" data-toggle="collapse" data-target="#@collapseTarget" data-keyboard="true" href="#">
-                                <h4 class="panel-title">
-                                    <i class="chevron"></i>
-                                    <span class="searchable">@customer.CustomerInfo.Name</span>
-                                    <span class="small text-muted">(@projectCount @projectCountLabel)</span>
-                                </h4>
-                            </a>
-                            <a href="@Url.Action(ActionConstants.Details, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right">
-                                <i class="fa fa-fw fa-lg fa-eye"></i>
-                            </a>
-							@if (Model.canEdit)
-							{
-								<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right">
-									<i class="fa fa-lg fa-fw fa-cog" ></i>
-								</a>
-								<a href="@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right" onclick="return confirm('Are you sure you wish to delete the customer @customer.CustomerInfo.Name?')">
-									<i class="fa fa-2x fa-fw fa-times" ></i>
-								</a>
-							}
-                        </div>
-                        <div id="@collapseTarget" class="panel-collapse search-expand collapse panel-two-table-wrap" role="tabpanel">
-                            <div style="width: 100%">
-                                <div class="list-group list-group-with-buttons project-list">
-                                    @foreach (Project project in customer.Projects)
-                                    {
-                                        var projectID = string.Format("project{0}", project.ProjectId);
-                                        <div class="list-group-item" id="@projectID">
-                                            <a class="accordion-toggle collapsed" href="@Url.Action(ActionConstants.Details, ControllerConstants.Project, new { projectId = project.ProjectId })">
 
-                                                <span class="searchable projectname">@project.Name</span>
-                                            </a>
-                                            @*// This list group scheme is not possible. Review alternatives and then uncomment.*@
-											@if (Model.canEdit)
-											{
-												<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new { id = project.ProjectId })" class="pull-right"><i class="fa fa-lg fa-fw fa-cog"></i></a>
-												<a href="@Url.Action(ActionConstants.Delete, ControllerConstants.Project, new { id = project.ProjectId })" class="pull-right" style="margin-left:2px;" onclick="return confirm('Are you sure you wish to Delete the project @project.Name?')">
-													<i class="fa fa-times"></i>
-												</a>
-											}
-                                        </div>
-                                    }
-									@if (Model.canEdit)
-									{
-										<div class="list-group-item">
-											<a href="@Url.Action(ActionConstants.Create, ControllerConstants.Project, new { id = customer.CustomerInfo.CustomerId })" class="list-group-item-info pull-right"><i class="fa fa-lg fa-fw fa-plus"></i> Add Project</a>
-										</div>
-									}
-                                </div>
-                            </div>
-                        </div>
-                    </div>customerCount += 1;
-                }
-                <div id="swapper-ui" class="swapper-ui">
-                    <div class="left">
-                        <label>@Strings.Customer</label>
-                        <select name="customers" id="active-customers" multiple="multiple" class="filter-list" onchange="populateProjects(this.value)">
-                            @for (var i = 0; i < Model.Customers.Count(); i++)
-                            {
-                                var css_class = "out";
-                                <option value="@i" class="@css_class" data-search="@Model.Customers.ElementAt(i).CustomerInfo.Name">@Model.Customers.ElementAt(i).CustomerInfo.Name</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="right">
-                        <label>@Strings.Project</label>
-                        <select name="customers" id="active-projects" multiple="multiple" class="filter-list">
-                        </select>
-                    </div>
+        <div class="flexbox-row flexbox-row-2-col-collapse">
+            <div class="panel panel-info" style="position: relative;">
+                <div class="panel-heading">
+                    <h1 class="panel-title">@Strings.CustomerList</h1>
+                </div>
+                <div class="panel-body list-group" id="Customers">
+                    @foreach (CustomerProjectViewModel customer in Model.Customers)
+                    {
+                        <a onclick="PopulateProjects('@customer.CustomerInfo.CustomerId')" class="list-group-item"><text>@customer.CustomerInfo.Name</text></a>
+                    }
+                    <br />
                 </div>
             </div>
-            @*<div class="allyis-action-buttons">
-                    <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Customer)" class="btn btn-default">@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.AddCustomer <i class="fa fa-plus"></i></a>
-                </div>*@
-        }
-		@if (Model.canEdit)
-		{
-			<div class="row">
-				<div class="bulk col-xs-12 col-sm-8" style="float:left;">
-					<h4>@Strings.ImportCustomersTitle</h4>
-					<p>@Strings.ImportCustomers</p>
-					@using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get))
-                    {
-                        @Html.AntiForgeryToken();
-                        <div style="float:left; width:100%;">
-                            <input type="file" id="upload-box" name="upload" style="display:none;"
-                                   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-                            <input id="upload-file-name-display" class="form-control"
-                                   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-                        </div>
-						<div style="float:left">
-							<input style="margin-top: 10px;" type="submit" id="template-button" value="@Strings.Template" class="btn btn-primary" />
-						</div>
-					}
-                    @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-                    {
-                        <div style="float:right; margin-bottom: 15px;">
-                            <a class="btn btn-primary" style="margin-top:10px; margin-right: 10px;" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
-                            <input style="margin-top: 10px; margin-right: 10px;" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" />
-                        </div>
-                    }
-				</div>
-			</div>
-		}
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h1 class="panel-title">@Strings.Project</h1>
+                </div>
+                <div id="Projects">
+                    <!--projects belong to chosen customer will be populated here-->
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 @section Scripts{
     <script type="text/javascript">
-        var customers = [];
-        $(document).ready(function () {
-            $("select#active-customers option").filter(function () {
-                return $(this).val() == "0"
-            }).prop('selected', true);
-        })
-
-        @foreach(CustomerProjectViewModel cust in Model.Customers)
+        if (@Model.Customers.Count() > 0)
         {
-            @:customers.push(@cust);
-        }
-        alert(customers);
-
-        function populateProjects(index)
-        {
-            alert("HELLO!");
-
-            var select = document.getElementById("populateProjects");
-            $("#populateProjects").empty();
+            $(document).ready(function () {
+                PopulateProjects(@Model.Customers.First().CustomerInfo.CustomerId)
+            })
         }
 
-        fore</script>
-    @Scripts.Render("~/bundles/TTCustomerIndex");
+        function PopulateProjects(chosenCustomerId) {
+            $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    url: '@Url.Action("PopulateProjects", "Customer")',
+                    data: { customerId: chosenCustomerId },
+                    success: function (response) {
+                        $("#Projects").empty();
+                        $("#Projects").html(response);
+                    }
+            });
+        }
+    </script>
 }
