@@ -71,4 +71,103 @@
 
 }*@
 
+@*@using AllyisApps.ViewModels.TimeTracker.Customer;
+@using AllyisApps.ViewModels.TimeTracker.Project;
+@using AllyisApps.Services;
+
+@model ManageCustomerViewModel
+
+@{
+    AjaxOptions ao = new AjaxOptions
+    {
+        UpdateTargetId = "OrgEditWrap"
+    };
+    DisplayHints.PageBodyId = "tt-customer";
+    ViewBag.Title = "Inactive Customers and Projects";
+    ViewData["IsManager"] = Model.canEdit;
+    Layout = "~/Areas/TimeTracker/Views/Shared/_Layout.cshtml";
+    //var customerCount = 0;
+    string action = ViewBag.Action;
+    var empty = new EditCustomerInfoViewModel() { OrganizationId = Model.OrganizationId };
+    var emptyProj = new EditProjectViewModel();
+    var createButtonClass = !Model.canEdit ? "invisible" : "";
+}
+
+<div>
+    <div>
+        <div>
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @{ var customers = new List<Customer>();
+                if (Model.Customers.Count() > 0)
+                {
+                    var _customersprojects = Model.Customers.ToList();
+
+                    foreach (var customer in _customersprojects)
+                    {
+                        customers.Add(customer.CustomerInfo);
+                    }
+                }
+                <div id="swapper-ui" class="swapper-ui">
+                    <div class="left">
+                        <label>@*Strings.OffProjInactive Customers</label>
+                        @*<input type="text" placeholder=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder class="form-control" />*@
+                        @*
+                            Create a multi-select list that is populated from SubscriptionUsers
+                            Uses Javascript and the add/remove buttons to add and remove items from this listbox
+                        *@
+                        @*@Html.ListBoxFor(m => customers, new SelectList(customers, "CustomerId", "Name"), new { @name = "customers", @id = "inactive-customers", @class = "filter-list" })
+                    </div>
+                    <div class="actions">
+                        <a href="javascript: hello()" class="btn btn-default move-in">
+                            Show Projects <i class="fa fa-lg fa-arrow-right"></i>
+                        </a>
+
+                    </div>
+                    <div class="right">*@
+                        @*<label>@Strings.OnProjInactive Projects</label>
+                        @*<input type="text" placeholder="@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder" class="form-control" />*@
+                        @*
+                            Create a multi-select list that is populated from ProjectUsers and binds all selected items to SelectedProjectUserIds
+                            On Submit, all items in this list become selected, so the whole list is bound to the model
+                            Items are added and removed from this list via Javascript and the add / remove buttons
+                        *@
+                        @{
+
+                            @*var _customersprojectstwo = Model.Customers.ToList();
+                            var projects = new List<Project>();
+                            @*int isselected = @:hello();*@
+                        @*foreach (var customer in _customersprojectstwo)
+                        {
+                            foreach (var proj in customer.Projects)
+                            {
+                                //if (isselected == proj.CustomerId)
+                                projects.Add(proj);
+                            }
+                        }
+                        }
+                        }
+
+                        @Html.ListBoxFor(m => projects, new SelectList(projects, "CustomerId", "Name")@*new MultiSelectList(Model.ProjectUsers, "UserId", "Name"), new { @name = "Included", @id = "included-users", @class = "filter-list", @Multiple = "multiple" }*@)
+                    @*</div>
+                </div>*@
+            }
+        @*</div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+
+@section scripts {
+    <script type="text/javascript">
+        function hello() {
+            var customers = document.getElementById("inactive-customers");
+            var selectedCustomers = customers.options[customers.selectedIndex].value;
+            return selectedCustomers;
+        }
+
+        $('#inactive-customers option').on('click', function () {
+
+        })
+    </script>
+}*@
+
 
