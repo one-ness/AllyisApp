@@ -33,13 +33,13 @@ namespace AllyisApps.Controllers
 				{
 					UserName = UserContext.UserName,
 					ChosenOrganizationId = UserContext.ChosenOrganizationId,
-					ChosenOrganizationName = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).Select(o => o.OrganizationName).FirstOrDefault(),
+					ChosenOrganizationName = UserContext.ChosenOrganization.OrganizationName,
 					CanEditOrganization = AppService.Can(Actions.CoreAction.EditOrganization, false),
 					UserOrganizationBriefInfoList = new List<OrganizationBriefInfo>(),
 					ShowOrganizationPartial = showOrganizationPartial
 				};
 
-				foreach (var orgInfo in UserContext.UserOrganizationInfoList)
+				foreach (var orgInfo in UserContext.UserOrganizations.Values)
 				{
 					model.UserOrganizationBriefInfoList.Add(new OrganizationBriefInfo
 					{

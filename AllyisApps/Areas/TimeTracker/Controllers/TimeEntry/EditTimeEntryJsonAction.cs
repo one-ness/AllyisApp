@@ -114,8 +114,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="canManage">Whether user has permission to manage time entry.</param>
 		public void EditTimeEntry(EditTimeEntryViewModel model, bool canManage)
 		{
-			ProductRoleIdEnum role = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).SingleOrDefault()
-				.UserSubscriptionInfoList.Where(s => s.SubscriptionId == UserContext.ChosenSubscriptionId).FirstOrDefault().ProductRole;
+			ProductRoleIdEnum role = UserContext.ChosenSubscription.ProductRole;
 
 			float? durationResult;
 			model.IsManager = canManage;

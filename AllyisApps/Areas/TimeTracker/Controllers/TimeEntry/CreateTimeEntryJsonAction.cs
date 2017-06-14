@@ -27,8 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>A JSON object with the results of the action.</returns>
 		public ActionResult CreateTimeEntryJson(CreateTimeEntryViewModel model)
 		{
-			ProductRoleIdEnum role = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).SingleOrDefault()
-				.UserSubscriptionInfoList.Where(s => s.SubscriptionId == UserContext.ChosenSubscriptionId).FirstOrDefault().ProductRole;
+			ProductRoleIdEnum role = UserContext.ChosenSubscription.ProductRole;
 
 			// Check for permission failures
 			if (model.UserId == Convert.ToInt32(UserContext.UserId) && !AppService.Can(Actions.CoreAction.TimeTrackerEditSelf))

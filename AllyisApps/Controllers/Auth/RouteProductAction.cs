@@ -11,7 +11,7 @@ namespace AllyisApps.Controllers
 	/// <summary>
 	/// Controller for home pages / site-wide functions.
 	/// </summary>
-	public partial class HomeController : BaseController
+	public partial class AccountController : BaseController
 	{
 		// TODO: Add methods for getting the default action, controller and area based off of productId.
 

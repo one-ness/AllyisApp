@@ -1426,7 +1426,7 @@ namespace AllyisApps.Services.Tests
 				//Assert
 				Assert.IsTrue(populated.UserId == userId
 					&& populated.UserName == email
-					&& populated.UserOrganizationInfoList.Count() == 0
+					&& populated.UserOrganizations.Count() == 0
 					&& populated.Email == email
 					&& populated.ChosenSubscriptionId == 0
 					&& populated.ChosenOrganizationId == 0
@@ -1462,7 +1462,7 @@ namespace AllyisApps.Services.Tests
 				//Assert
 				Assert.IsTrue(populated.UserId == userId
 					&& populated.UserName == email
-					&& populated.UserOrganizationInfoList.Count() == 1
+					&& populated.UserOrganizations.Count() == 1
 					&& populated.Email == email
 					&& populated.ChosenSubscriptionId == 0
 					&& populated.ChosenOrganizationId == orgId

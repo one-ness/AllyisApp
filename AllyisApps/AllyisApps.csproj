@@ -265,13 +265,13 @@
     <Compile Include="Controllers\Auth\ViewUser.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
-    <Compile Include="Controllers\Home\ApplicationRedirectAction.cs" />
+    <Compile Include="Controllers\Auth\ApplicationRedirectAction.cs" />
     <Compile Include="Controllers\Home\ErrorAction.cs" />
     <Compile Include="Controllers\Home\GetStatesAction.cs" />
     <Compile Include="Controllers\Home\HelpAction.cs" />
     <Compile Include="Controllers\Home\IndexAction.cs" />
     <Compile Include="Controllers\Home\PrivacyPolicyAction.cs" />
-    <Compile Include="Controllers\Home\RouteProductAction.cs" />
+    <Compile Include="Controllers\Auth\RouteProductAction.cs" />
     <Compile Include="Controllers\Auth\AddAction.cs" />
     <Compile Include="Controllers\Auth\ChargeAction.cs" />
     <Compile Include="Controllers\Auth\DeleteOrgAction.cs" />

@@ -30,7 +30,7 @@ namespace AllyisApps.Controllers
 		{
 			if (Request.IsAuthenticated)
 			{
-				return this.HandleRedirects(returnURL);
+				return this.RouteHome();
 			}
 
 			ViewBag.ReturnURL = returnURL;
@@ -58,7 +58,8 @@ namespace AllyisApps.Controllers
 
 					this.UserContext = this.AppService.PopulateUserContext(result.UserId);
 
-					return this.HandleRedirects(returnUrl);
+					// todo: redirect to the last chosen subscription
+					return this.RouteHome();
 				}
 				else
 				{
@@ -112,75 +113,75 @@ namespace AllyisApps.Controllers
 			this.SetAuthCookie(context, response, isPersisted);
 		}
 
-		private ActionResult HandleRedirects(string returnURL)
-		{
-			// take user to return url, if supplied
-			if ((returnURL != null) && (string.Empty != returnURL))
-			{
-				return this.RedirectToLocal(returnURL);
-			}
-			else if (this.UserContext != null)
-			{
-				// if chosen subscription is in the current organization, go to the subscription, else go to the organization page.
-				int subscriptionID = this.UserContext.ChosenSubscriptionId;
-				int organizationID = this.UserContext.ChosenOrganizationId;
+		//private ActionResult HandleRedirects(string returnURL)
+		//{
+		//	// take user to return url, if supplied
+		//	if ((returnURL != null) && (string.Empty != returnURL))
+		//	{
+		//		return this.RedirectToLocal(returnURL);
+		//	}
+		//	else if (this.UserContext != null)
+		//	{
+		//		// if chosen subscription is in the current organization, go to the subscription, else go to the organization page.
+		//		int subscriptionID = this.UserContext.ChosenSubscriptionId;
+		//		int organizationID = this.UserContext.ChosenOrganizationId;
 
-				bool subIsInOrg = this.UserContext.UserOrganizationInfoList.Find(
-					x => x.UserSubscriptionInfoList.Any(
-					y => y.SubscriptionId == subscriptionID)) != null;
+		//		bool subIsInOrg = this.UserContext.UserOrganizations.Find(
+		//			x => x.UserSubscriptionInfoList.Any(
+		//			y => y.SubscriptionId == subscriptionID)) != null;
 
-				if (subIsInOrg)
-				{
-					string area = AppService.GetProductNameBySubscriptionID(subscriptionID);
-					return this.RedirectToSubDomainAction(organizationID, area);
-				}
+		//		if (subIsInOrg)
+		//		{
+		//			string area = AppService.GetProductNameBySubscriptionID(subscriptionID);
+		//			return this.RedirectToSubDomainAction(organizationID, area);
+		//		}
 
-				// sub is not in the org or is not set, checking if the user is a member of only one sub to send them to instead
-				if (this.UserContext.UserOrganizationInfoList.Count > 0)
-				{
-					if (this.UserContext.UserOrganizationInfoList.Count == 1)
-					{
-						// have only one organization, check for only 1 sub
-						if (this.UserContext.UserOrganizationInfoList.First().UserSubscriptionInfoList.Count == 0 ||
-							this.UserContext.UserOrganizationInfoList.First().UserSubscriptionInfoList.Count > 1)
-						{
-							// no subs or multiple subs, redirect to account index
-							this.UserContext.ChosenOrganizationId = this.UserContext.UserOrganizationInfoList.First().OrganizationId;
-							return this.RedirectToSubDomainAction(this.UserContext.UserOrganizationInfoList.First().OrganizationId, null, ActionConstants.Index, ControllerConstants.Account);
-						}
-						else
-						{
-							string area = AppService.GetProductNameBySubscriptionID(this.UserContext.UserOrganizationInfoList.First().UserSubscriptionInfoList.First().SubscriptionId);
-							return this.RedirectToSubDomainAction(this.UserContext.UserOrganizationInfoList.First().OrganizationId, area);
-						}
-					}
-					else
-					{
-						// They have multiple Organizations, redirect to account index
-						//var org = this.UserContext.UserOrganizationInfoList.Find(x => x.OrganizationId == this.UserContext.ChosenOrganizationId);
-						//if (org != null)
-						//{
-						//	return this.RedirectToSubDomainAction(org.OrganizationId, null, ActionConstants.Manage, ControllerConstants.Account);
-						//}
-						//else
-						//{
-						// otherwise send them to select an org
-						return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
-						//}
-					}
-				}
-				else
-				{
-					// They must not have an org.  Just redirect to account page so they can create one.
-					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
-				}
-			}
-			else
-			{
-				// well, that's awkward. just take the user back to the home page.
-				return this.RedirectToLocal();
-			}
-		}
+		//		// sub is not in the org or is not set, checking if the user is a member of only one sub to send them to instead
+		//		if (this.UserContext.UserOrganizations.Count > 0)
+		//		{
+		//			if (this.UserContext.UserOrganizations.Count == 1)
+		//			{
+		//				// have only one organization, check for only 1 sub
+		//				if (this.UserContext.UserOrganizations.First().UserSubscriptionInfoList.Count == 0 ||
+		//					this.UserContext.UserOrganizations.First().UserSubscriptionInfoList.Count > 1)
+		//				{
+		//					// no subs or multiple subs, redirect to account index
+		//					this.UserContext.ChosenOrganizationId = this.UserContext.UserOrganizations.First().OrganizationId;
+		//					return this.RedirectToSubDomainAction(this.UserContext.UserOrganizations.First().OrganizationId, null, ActionConstants.Index, ControllerConstants.Account);
+		//				}
+		//				else
+		//				{
+		//					string area = AppService.GetProductNameBySubscriptionID(this.UserContext.UserOrganizations.First().UserSubscriptionInfoList.First().SubscriptionId);
+		//					return this.RedirectToSubDomainAction(this.UserContext.UserOrganizations.First().OrganizationId, area);
+		//				}
+		//			}
+		//			else
+		//			{
+		//				// They have multiple Organizations, redirect to account index
+		//				//var org = this.UserContext.UserOrganizationInfoList.Find(x => x.OrganizationId == this.UserContext.ChosenOrganizationId);
+		//				//if (org != null)
+		//				//{
+		//				//	return this.RedirectToSubDomainAction(org.OrganizationId, null, ActionConstants.Manage, ControllerConstants.Account);
+		//				//}
+		//				//else
+		//				//{
+		//				// otherwise send them to select an org
+		//				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
+		//				//}
+		//			}
+		//		}
+		//		else
+		//		{
+		//			// They must not have an org.  Just redirect to account page so they can create one.
+		//			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
+		//		}
+		//	}
+		//	else
+		//	{
+		//		// well, that's awkward. just take the user back to the home page.
+		//		return this.RedirectToLocal();
+		//	}
+		//}
 
 		/// <summary>
 		/// Serialize the given CookieData object and set it to auth cookie

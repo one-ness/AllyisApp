@@ -167,7 +167,7 @@ namespace AllyisApps.Controllers
 			if (Request.IsAuthenticated)
 			{
 				// go to user home
-				this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
+				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 			}
 
 			return this.RedirectToAction(ActionConstants.LogOn);
@@ -251,10 +251,10 @@ namespace AllyisApps.Controllers
 					// Update Chosen Subscription if we are in a product area
 					if (cProductId > 0)
 					{
-						UserOrganizationInfo org = this.UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == this.UserContext.ChosenOrganizationId).SingleOrDefault();
+						UserOrganizationInfo org = this.UserContext.ChosenOrganization;
 						if (org != null)
 						{
-							UserSubscriptionInfo sub = org.UserSubscriptionInfoList.Where(s => (int)s.ProductId == cProductId).SingleOrDefault();
+							UserSubscriptionInfo sub = org.UserSubscriptions.Values.Where(s => (int)s.ProductId == cProductId).SingleOrDefault();
 							if (sub != null && this.UserContext.ChosenSubscriptionId != sub.SubscriptionId)
 							{
 								AppService.UpdateActiveSubscription(sub.SubscriptionId == 0 ? null : (int?)sub.SubscriptionId);

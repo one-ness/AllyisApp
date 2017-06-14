@@ -28,8 +28,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public ActionResult DeleteTimeEntryJson(DeleteTimeEntryViewModel model)
 		{
-			ProductRoleIdEnum role = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).SingleOrDefault()
-				.UserSubscriptionInfoList.Where(s => s.SubscriptionId == UserContext.ChosenSubscriptionId).FirstOrDefault().ProductRole;
+			ProductRoleIdEnum role = UserContext.ChosenSubscription.ProductRole;
 
 			// Check for permissions
 			TimeEntryInfo entry = AppService.GetTimeEntry(model.TimeEntryId);

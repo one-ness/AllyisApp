@@ -336,70 +336,94 @@ namespace AllyisApps.Services
 		/// <returns>The User context after population.</returns>
 		public UserContext PopulateUserContext(int userId)
 		{
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
-			}
+			if (userId <= 0) throw new ArgumentException("userId");
 
 			UserContext result = null;
-
 			List<UserContextDBEntity> contextInfo = this.DBHelper.GetUserContextInfo(userId);
-			if (contextInfo.Count > 0) // Count will be 0 if the user is not part of any organizations.
+			if (contextInfo != null)
 			{
+				// user exists in db
 				UserContextDBEntity firstRow = contextInfo[0];
-				result = new UserContext(userId, firstRow.UserName, firstRow.Email, firstRow.ActiveOrganizationId == null ? 0 : firstRow.ActiveOrganizationId.Value, firstRow.LastSubscriptionId == null ? 0 : firstRow.LastSubscriptionId.Value);
-				result.ChosenLanguageID = firstRow.LanguagePreference.Value;
-				result.UserOrganizationInfoList = new List<UserOrganizationInfo>();
-				foreach (UserContextDBEntity row in contextInfo)
-				{
-					// Get the org for this row
-					if (row.OrganizationId != null)
-					{
-						UserOrganizationInfo orgInfo = result.UserOrganizationInfoList.Where(o => o.OrganizationId == row.OrganizationId.Value).FirstOrDefault();
+				result = new UserContext(userId, firstRow.UserName, firstRow.Email, firstRow.ActiveOrganizationId == null ? 0 : firstRow.ActiveOrganizationId.Value, firstRow.LastSubscriptionId == null ? 0 : firstRow.LastSubscriptionId.Value, firstRow.LanguagePreference.Value);
+				// set result to self
+				this.SetUserContext(result);
 
-						// If the org for this row isn't added yet, add it
-						if (orgInfo == null)
+				// note: if contextInfo.Count > 0, user is part of at least one organization
+				bool chosenSubscriptionFound = false;
+				foreach (var item in contextInfo)
+				{ 
+					// user is part of at least one organization, do we have org id?
+					if (item.OrganizationId.HasValue)
+					{
+						// yes, was it already added to the list?
+						UserOrganizationInfo orgInfo = null;
+						if (!result.UserOrganizations.TryGetValue(item.OrganizationId.Value, out orgInfo))
 						{
+							// no, add it now
 							orgInfo = new UserOrganizationInfo
 							{
-								OrganizationId = row.OrganizationId.Value,
-								OrganizationName = row.OrganizationName,
-								OrganizationRole = (OrganizationRole)row.OrgRoleId.Value,
-								UserSubscriptionInfoList = new List<UserSubscriptionInfo>()
+								OrganizationId = item.OrganizationId.Value,
+								OrganizationName = item.OrganizationName,
+								OrganizationRole = (OrganizationRole)item.OrgRoleId.Value,
 							};
-							result.UserOrganizationInfoList.Add(orgInfo);
+
+							result.UserOrganizations.Add(item.OrganizationId.Value, orgInfo);
 						}
 
-						// If there is subscription info on this line, at it to the org
-						if (row.SubscriptionId != null)
+						// is there a subscription id?
+						if (item.SubscriptionId.HasValue)
 						{
-							orgInfo.UserSubscriptionInfoList.Add(new UserSubscriptionInfo
+							// yes, was it already added to the list?
+							UserSubscriptionInfo subInfo = null;
+							if (!orgInfo.UserSubscriptions.TryGetValue(item.SubscriptionId.Value, out subInfo))
 							{
-								SubscriptionId = row.SubscriptionId.Value,
-								ProductId = (ProductIdEnum)row.ProductId.Value,
-								ProductName = row.ProductName,
-								RoleName = row.RoleName,
-								ProductRole = (ProductRoleIdEnum)row.ProductRoleId.Value,
-								SkuId = row.SkuId.Value
-							});
+								subInfo = new UserSubscriptionInfo()
+								{
+									SubscriptionId = item.SubscriptionId.Value,
+									ProductId = (ProductIdEnum)item.ProductId.Value,
+									ProductName = item.ProductName,
+									RoleName = item.RoleName,
+									ProductRole = (ProductRoleIdEnum)item.ProductRoleId.Value,
+									SkuId = item.SkuId.Value
+								};
+
+								orgInfo.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
+
+								// also add it to the result
+								result.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
+							}
+							
+							// compare with chosen subscription? is user still a member of it?
+							if (result.ChosenSubscriptionId == item.SubscriptionId.Value)
+							{
+								chosenSubscriptionFound = true;
+							}
 						}
 					}
 				}
 
-				if (!result.UserOrganizationInfoList.Exists(x => x.OrganizationId == result.ChosenOrganizationId))
+				// was chosen subscription found?
+				if (!chosenSubscriptionFound && result.ChosenSubscriptionId > 0)
 				{
-					result.ChosenOrganizationId = 0;
-				}
+					// no, set it to 0
+					result.ChosenSubscriptionId = 0;
 
-				if (result.UserOrganizationInfoList.Count == 1)
-				{
-					// if there is only one org, make that their chosen
-					result.ChosenOrganizationId = result.UserOrganizationInfoList.First().OrganizationId;
+					// update database
+					this.UpdateActiveSubscription(result.ChosenSubscriptionId);
 				}
 			}
 
-			this.SetUserContext(result);
 			return result;
+		}
+
+		/// <summary>
+		/// Updates the active subsciption for the current user.
+		/// </summary>
+		/// <param name="subscriptionId">Subscription Id.</param>
+		public void UpdateActiveSubscription(int? subscriptionId)
+		{
+			if (subscriptionId.HasValue && subscriptionId.Value <= 0) throw new ArgumentException("subscriptionId");
+			DBHelper.UpdateActiveSubscription(UserContext.UserId, subscriptionId);
 		}
 
 		/// <summary>

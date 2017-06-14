@@ -43,8 +43,7 @@ namespace AllyisApps.Controllers
 							Country = model.Country,
 							PostalCode = model.PostalCode,
 							PhoneNumber = model.PhoneNumber,
-							FaxNumber = model.FaxNumber,
-							Subdomain = model.SubdomainName
+							FaxNumber = model.FaxNumber
 						}))
 					{
 						// Organization updated successfully
@@ -114,7 +113,6 @@ namespace AllyisApps.Controllers
 				PostalCode = organization.PostalCode,
 				PhoneNumber = organization.PhoneNumber,
 				FaxNumber = organization.FaxNumber,
-				SubdomainName = organization.Subdomain,
 				CanDelete = canDelete,
 				ValidCountries = validCountries,
 			};

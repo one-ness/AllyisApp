@@ -42,6 +42,6 @@
 
 <script type="text/javascript">
     OnLanguageSelect = function () {
-        window.location.href = "@Url.SubdomainLink(ActionConstants.UpdateLanguage, ControllerConstants.Shared, null, Model.Item2, this.Request)".replace(/&amp;/g, "&") + "&languageID=" + $('#languageSelect').val();
+		window.location.href = "@Url.Action(ActionConstants.UpdateLanguage, ControllerConstants.Shared)" + "/" + $("#languageSelect").val();
     }
 </script>

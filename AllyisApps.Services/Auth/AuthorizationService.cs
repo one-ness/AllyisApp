@@ -35,7 +35,7 @@ namespace AllyisApps.Services
 			if (organizationId > 0)
 			{
 				// get the user role in chosen organization
-				orgInfo = UserContext.UserOrganizationInfoList.Where(x => x.OrganizationId == organizationId).FirstOrDefault();
+				UserContext.UserOrganizations.TryGetValue(organizationId, out orgInfo);
 
 				// Info should never be null
 				if (orgInfo != null)
@@ -44,7 +44,7 @@ namespace AllyisApps.Services
 					ProductIdEnum product = Actions.GetProductForAction(targetAction);
 					if (product != ProductIdEnum.None)
 					{
-						subInfo = orgInfo.UserSubscriptionInfoList.Where(s => s.ProductId == product).FirstOrDefault();
+						orgInfo.UserSubscriptions.TryGetValue((int)product, out subInfo);
 					}
 
 					//// Has the user chosen a subscription

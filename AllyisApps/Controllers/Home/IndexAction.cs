@@ -17,10 +17,9 @@ namespace AllyisApps.Controllers
 		/// Displays the Home page.
 		/// </summary>
 		/// <returns>The result of this action.</returns>
-		[AllowAnonymous]
 		public ActionResult Index()
 		{
-			return this.View();
+			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 		}
 	}
 }

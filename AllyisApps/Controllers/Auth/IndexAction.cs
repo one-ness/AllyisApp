@@ -42,10 +42,11 @@ namespace AllyisApps.Controllers
 					CanEditOrganization = AppService.Can(Actions.CoreAction.EditOrganization, false, o.OrganizationId),
 					Subscriptions = new List<SubscriptionDisplayViewModel>()
 				};
-				UserOrganizationInfo userOrgInfo = UserContext.UserOrganizationInfoList.Where(uoi => uoi.OrganizationId == o.OrganizationId).SingleOrDefault();
+				UserOrganizationInfo userOrgInfo = null;
+				UserContext.UserOrganizations.TryGetValue(o.OrganizationId, out userOrgInfo);
 				if (userOrgInfo != null)
 				{
-					foreach (UserSubscriptionInfo userSubInfo in userOrgInfo.UserSubscriptionInfoList)
+					foreach (UserSubscriptionInfo userSubInfo in userOrgInfo.UserSubscriptions.Values)
 					{
 						orgVM.Subscriptions.Add(new SubscriptionDisplayViewModel
 						{

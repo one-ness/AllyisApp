@@ -96,9 +96,9 @@ namespace AllyisApps.Services
 		/// pending in the organization, the organization's billing stripe handle, and a list of all products.
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<Organization, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string, List<Product>> GetOrganizationManagementInfo()
+		public Tuple<Organization, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string, List<Product>> GetOrganizationManagementInfo(int orgId)
 		{
-			var spResults = DBHelper.GetOrganizationManagementInfo(UserContext.ChosenOrganizationId);
+			var spResults = DBHelper.GetOrganizationManagementInfo(orgId);
 			return Tuple.Create(
 				InitializeOrganization(spResults.Item1),
 				spResults.Item2.Select(oudb => InitializeOrganizationUserInfo(oudb)).ToList(),
@@ -302,7 +302,7 @@ namespace AllyisApps.Services
 				"{0} {1} has requested you join their organization on Allyis Apps, {2}!<br /> Click <a href={3}>Here</a> to create an account and join!",
 				spResults.Item2,
 				spResults.Item3,
-				UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).FirstOrDefault().OrganizationName,
+				UserContext.ChosenOrganization.OrganizationName,
 				url.Replace("%7BaccessCode%7D", code));
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();

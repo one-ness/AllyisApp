@@ -90,7 +90,7 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<h1 style="float: left">@Strings.YourOrganizations</h1>
-				<a href="@Url.SubdomainLink(ActionConstants.CreateOrg, ControllerConstants.Account, null, 0, this.Request)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">@Strings.CreateOrganization</a>
+				<a href="@Url.Action(ActionConstants.CreateOrg, ControllerConstants.Account)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">@Strings.CreateOrganization</a>
 			</div>
 		</div>
 		@foreach (var org in Model.OrgInfos)
