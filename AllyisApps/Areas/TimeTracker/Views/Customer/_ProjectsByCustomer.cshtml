@@ -2,5 +2,5 @@
 
     @foreach (AllyisApps.Services.Project proj in Model.Projects)
     {
-        <a href="" class="list-group-item"><text>@proj.Name</text></a>
+        <a href="@Url.Action("Edit", "Project", new { id = proj.ProjectId })" class="list-group-item"><text>@proj.Name</text></a>
     }
