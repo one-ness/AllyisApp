@@ -18,6 +18,16 @@ namespace AllyisApps.ViewModels.Shared
 		/// </summary>
 		public string UserName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the First Name of the user
+        /// </summary>
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Last Name of the user
+        /// </summary>
+        public string LastName { get; set; }
+
 		/// <summary>
 		/// Gets or sets the Chosen organization id.
 		/// </summary>

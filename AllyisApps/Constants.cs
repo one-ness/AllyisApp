@@ -207,10 +207,20 @@
 		/// </summary>
 		public const string PrivacyPolicy = "PrivacyPolicy";
 
-		/// <summary>
-		/// Action-Name: RedirectToSubdomainAction.
-		/// </summary>
-		public const string RedirectToSubdomainAction = "RedirectToSubdomainAction";
+        /// <summary>
+        /// Action-Name: Reactivate
+        /// </summary>
+        public const string Reactivate = "Reactivate";
+
+        /// <summary>
+        /// Action-Name: Reactivate Customer
+        /// </summary>
+        public const string ReactivateCustomer = "ReactivateCustomer";
+
+        /// <summary>
+        /// Action-Name: RedirectToSubdomainAction.
+        /// </summary>
+        public const string RedirectToSubdomainAction = "RedirectToSubdomainAction";
 
 		/// <summary>
 		/// Action-Name: Register.

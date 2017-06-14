@@ -53,7 +53,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						SubscriptionUsers = subList,
 						StartDate = AppService.GetDayFromDateTime(defaultStart),
 						EndDate = AppService.GetDayFromDateTime(defaultEnd),
-						ProjectOrgId = idAndUsers.Item1 //Service.GetRecommendedProjectId()
+						ProjectOrgId = idAndUsers.Item1, //Service.GetRecommendedProjectId()
+                        CustomerName = AppService.GetCustomer(id).Name
 					});
 			}
 			else

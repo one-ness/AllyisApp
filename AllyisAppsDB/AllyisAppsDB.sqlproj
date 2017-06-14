@@ -262,6 +262,8 @@
     <Build Include="StoredProcedures\Auth\Auth.UpdateOrgInvitationEmployeeTypeId.sql" />
     <Build Include="StoredProcedures\Auth\Auth.GetEmployeeTypeId.sql" />
     <Build Include="StoredProcedures\Crm\Crm.CreateProjectAndUpdateItsUserList.sql" />
+    <Build Include="StoredProcedures\Crm\ReactivateCustomer.sql" />
+    <Build Include="StoredProcedures\Crm\GetInactiveProjectsAndCustomersForOrgAndUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

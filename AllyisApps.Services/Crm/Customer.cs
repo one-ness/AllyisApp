@@ -85,5 +85,10 @@ namespace AllyisApps.Services
 		/// Gets or sets the id of the customer to be used by the users within the organization
 		/// </summary>
 		public string CustomerOrgId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the bool value indicating if this Customer is currently active
+        /// </summary>
+        public bool IsActive { get; set; }
 	}
 }
