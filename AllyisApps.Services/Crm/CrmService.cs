@@ -222,12 +222,52 @@ namespace AllyisApps.Services
 			return list;
 		}
 
-		/// <summary>
-		/// Creates a new project.
+        /// <summary>
+		/// Creates a new project and update its user list if succeed
 		/// </summary>
 		/// <param name="newProject">Project with project information.</param>
-		/// <returns>Project Id.</returns>
-		public int CreateProject(Project newProject)
+        /// <param name="userIDs">List of users being assigned to the project</param>
+		/// <returns>Project Id if succeed, -1 if ProjectOrgId is taken.</returns>
+		public int CreateProjectAndUpdateItsUserList(Project newProject, IEnumerable<int> userIDs)
+        {
+            #region Validation
+
+            if (newProject.CustomerId <= 0)
+            {
+                throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
+            }
+
+            if (string.IsNullOrWhiteSpace(newProject.Name))
+            {
+                throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
+            }
+
+            if (string.IsNullOrEmpty(newProject.Type))
+            {
+                throw new ArgumentNullException("type", "Type must have a value.");
+            }
+
+            if (string.IsNullOrEmpty(newProject.ProjectOrgId))
+            {
+                throw new ArgumentNullException("projectOrgId", "Project must have an ID");
+            }
+
+            if (newProject.StartingDate.HasValue && newProject.EndingDate.HasValue && DateTime.Compare(newProject.StartingDate.Value, newProject.EndingDate.Value) > 0)
+            {
+                throw new ArgumentException("Project cannot end before it starts.");
+            }
+
+            #endregion Validation
+
+            return DBHelper.CreateProjectAndUpdateItsUserList(GetDBEntityFromProject(newProject), userIDs);
+        }
+
+        /// <summary>
+        /// Creates a new project.
+        /// </summary>
+        /// <param name="newProject">Project with project information.</param>
+        /// <returns>Project Id.</returns>
+        public int CreateProject(Project newProject)
 		{
 			#region Validation
 

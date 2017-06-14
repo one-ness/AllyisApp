@@ -21,7 +21,48 @@ namespace AllyisApps.DBModel
 	/// </summary>
 	public partial class DBHelper
 	{
-		/// <summary>
+        /// <summary>
+        /// Method to Create a new project then update its user list.
+        /// </summary>
+        /// <param name="project">ProjectDBEntity with new project info.</param>
+        /// <param name="userIDs">List of users to be assigned to this project.</param>
+        /// <returns>Returns the id of the created project, else returns -1.</returns>
+        public int CreateProjectAndUpdateItsUserList(ProjectDBEntity project, IEnumerable<int> userIDs)
+		{
+			if (string.IsNullOrWhiteSpace(project.Name))
+			{
+				throw new ArgumentException("Name cannot be null, empty, or whitespace.");
+			}
+
+            DataTable userIDsTable = new DataTable();
+            userIDsTable.Columns.Add("userId", typeof(int));
+            foreach (int userID in userIDs)
+            {
+                userIDsTable.Rows.Add(userID);
+            }
+
+            DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@customerID", project.CustomerId);
+			parameters.Add("@Name", project.Name);
+			parameters.Add("@PriceType", project.Type);
+			parameters.Add("@ProjectOrgId", project.ProjectOrgId);
+			parameters.Add("@StartingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
+			parameters.Add("@EndingDate", project.EndingDate == null ? null : project.EndingDate.Value.ToShortDateString());
+            parameters.Add("@UserIDs", userIDsTable.AsTableValuedParameter("[Auth].[UserTable]"));
+            parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Execute(
+                    "[Crm].[CreateProjectAndUpdateItsUserList]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+			}
+
+			return parameters.Get<int>("@retId");
+		}
+       
+         /// <summary>
 		/// Method to Create a new project.
 		/// </summary>
 		/// <param name="project">ProjectDBEntity with new project info.</param>
@@ -51,13 +92,13 @@ namespace AllyisApps.DBModel
 			}
 
 			return parameters.Get<int>("@retId");
-		}
+		}       
 
-		/// <summary>
-		/// Deletes a project.
-		/// </summary>
-		/// <param name="projectId">The id of the project to be deleted.</param>
-		public void DeleteProject(int projectId)
+        /// <summary>
+        /// Deletes a project.
+        /// </summary>
+        /// <param name="projectId">The id of the project to be deleted.</param>
+        public void DeleteProject(int projectId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@ProjectId", projectId);
