@@ -28,66 +28,6 @@
         @if (Model.Customers.Count() > 0)
         {
             <div class="panel-group customer-list" id="customer-panel" role="tablist">
-                @foreach (CustomerProjectViewModel customer in Model.Customers)
-                {
-                    var collapseTarget = string.Format("customerNumber{0}", customer.CustomerInfo.CustomerId);
-                    var customerDetailsTarget = string.Format("custDetails{0}", customerCount);
-                    var projectCount = customer.Projects.Count();
-                    var projectCountLabel = projectCount == 1 ? "project" : "projects";
-                    <div class="panel panel-customer">
-                        <div class="panel-heading" role="tab">
-                            <a class="accordion-toggle collapsed" role="button" data-toggle="collapse" data-target="#@collapseTarget" data-keyboard="true" href="#">
-                                <h4 class="panel-title">
-                                    <i class="chevron"></i>
-                                    <span class="searchable">@customer.CustomerInfo.Name</span>
-                                    <span class="small text-muted">(@projectCount @projectCountLabel)</span>
-                                </h4>
-                            </a>
-                            <a href="@Url.Action(ActionConstants.Details, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right">
-                                <i class="fa fa-fw fa-lg fa-eye"></i>
-                            </a>
-							@if (Model.canEdit)
-							{
-								<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right">
-									<i class="fa fa-lg fa-fw fa-cog" ></i>
-								</a>
-								<a href="@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="pull-right" onclick="return confirm('Are you sure you wish to delete the customer @customer.CustomerInfo.Name?')">
-									<i class="fa fa-2x fa-fw fa-times" ></i>
-								</a>
-							}
-                        </div>
-                        <div id="@collapseTarget" class="panel-collapse search-expand collapse panel-two-table-wrap" role="tabpanel">
-                            <div style="width: 100%">
-                                <div class="list-group list-group-with-buttons project-list">
-                                    @foreach (Project project in customer.Projects)
-                                    {
-                                        var projectID = string.Format("project{0}", project.ProjectId);
-                                        <div class="list-group-item" id="@projectID">
-                                            <a class="accordion-toggle collapsed" href="@Url.Action(ActionConstants.Details, ControllerConstants.Project, new { projectId = project.ProjectId })">
-
-                                                <span class="searchable projectname">@project.Name</span>
-                                            </a>
-                                            @*// This list group scheme is not possible. Review alternatives and then uncomment.*@
-											@if (Model.canEdit)
-											{
-												<a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new { id = project.ProjectId })" class="pull-right"><i class="fa fa-lg fa-fw fa-cog"></i></a>
-												<a href="@Url.Action(ActionConstants.Delete, ControllerConstants.Project, new { id = project.ProjectId })" class="pull-right" style="margin-left:2px;" onclick="return confirm('Are you sure you wish to Delete the project @project.Name?')">
-													<i class="fa fa-times"></i>
-												</a>
-											}
-                                        </div>
-                                    }
-									@if (Model.canEdit)
-									{
-										<div class="list-group-item">
-											<a href="@Url.Action(ActionConstants.Create, ControllerConstants.Project, new { id = customer.CustomerInfo.CustomerId })" class="list-group-item-info pull-right"><i class="fa fa-lg fa-fw fa-plus"></i> Add Project</a>
-										</div>
-									}
-                                </div>
-                            </div>
-                        </div>
-                    </div>customerCount += 1;
-                }
                 <div id="swapper-ui" class="swapper-ui">
                     <div class="left">
                         <label>@Strings.Customer</label>
@@ -95,15 +35,20 @@
                             @for (var i = 0; i < Model.Customers.Count(); i++)
                             {
                                 var css_class = "out";
-                                <option value="@i" class="@css_class" data-search="@Model.Customers.ElementAt(i).CustomerInfo.Name">@Model.Customers.ElementAt(i).CustomerInfo.Name</option>
+                                <option value="@Model.Customers.ElementAt(i).CustomerInfo.Name" class="@css_class" data-search="@Model.Customers.ElementAt(i).CustomerInfo.Name">@Model.Customers.ElementAt(i).CustomerInfo.Name</option>
                             }
                         </select>
                     </div>
-                    <div class="right">
-                        <label>@Strings.Project</label>
-                        <select name="customers" id="active-projects" multiple="multiple" class="filter-list">
-                        </select>
-                    </div>
+                    @for (var i = 0; i < Model.Customers.Count(); i++)
+                    {
+                        for (var j = 0; j < Model.Customers.ElementAt(i).Projects.Count(); j++)
+                        {
+                            <div class="right hidden" id="@Model.Customers.ElementAt(i).CustomerInfo.Name">
+                                <label>@Strings.Project</label>
+                                @Html.ListBoxFor(m => Model.Customers.ElementAt(i).Projects, new MultiSelectList(Model.Customers.ElementAt(i).Projects, "ProjectId", "Name"), new { @name = "active", @id = "active-projects", @class = "filter-list", @Multiple = "multiple" })
+                            </div>
+                        }
+                    }
                 </div>
             </div>
             @*<div class="allyis-action-buttons">
@@ -144,27 +89,27 @@
 
 @section Scripts{
     <script type="text/javascript">
-        var customers = [];
-        $(document).ready(function () {
-            $("select#active-customers option").filter(function () {
-                return $(this).val() == "0"
-            }).prop('selected', true);
-        })
+        var showing;
 
-        @foreach(CustomerProjectViewModel cust in Model.Customers)
+        if (@Model.Customers.Count() > 0)
         {
-            @:customers.push(@cust);
-        }
-        alert(customers);
-
-        function populateProjects(index)
-        {
-            alert("HELLO!");
-
-            var select = document.getElementById("populateProjects");
-            $("#populateProjects").empty();
+            $(document).ready(function () {
+                $("select#active-customers option").filter(function () {
+                    return $(this).val() == "@Model.Customers.First().CustomerInfo.Name"
+                }).prop('selected', true);
+                $("#@Model.Customers.First().CustomerInfo.Name").removeClass('hidden');
+                showing = "#@Model.Customers.First().CustomerInfo.Name";
+            })
         }
 
-        fore</script>
+        function populateProjects(id)
+        {
+            var select = document.getElementById("active-projects");
+            $(showing).addClass('hidden');
+            $("#" + id).removeClass('hidden');
+            showing = "#" + id;
+        }
+
+    </script>
     @Scripts.Render("~/bundles/TTCustomerIndex");
 }
