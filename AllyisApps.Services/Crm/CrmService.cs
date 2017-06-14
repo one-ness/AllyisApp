@@ -148,22 +148,6 @@ namespace AllyisApps.Services
             return null;
         }
 
-        ///// <summary>
-        ///// Deletes a customer.
-        ///// </summary>
-        ///// <param name="customerId">Customer id.</param>
-        ///// <returns>Returns false if authorization fails.</returns>
-        //public bool ReactivateCustomer(int customerId)
-        //{
-        //    if (this.Can(Actions.CoreAction.EditCustomer))
-        //    {
-        //        DBHelper.ReactivateCustomer(customerId);
-        //        return true;
-        //    }
-
-        //    return false;
-        //}
-
         /// <summary>
         /// Gets a list of <see cref="Customer"/>'s for an organization.
         /// </summary>
@@ -265,12 +249,52 @@ namespace AllyisApps.Services
 			return list;
 		}
 
-		/// <summary>
-		/// Creates a new project.
+        /// <summary>
+		/// Creates a new project and update its user list if succeed
 		/// </summary>
 		/// <param name="newProject">Project with project information.</param>
-		/// <returns>Project Id.</returns>
-		public int CreateProject(Project newProject)
+        /// <param name="userIDs">List of users being assigned to the project</param>
+		/// <returns>Project Id if succeed, -1 if ProjectOrgId is taken.</returns>
+		public int CreateProjectAndUpdateItsUserList(Project newProject, IEnumerable<int> userIDs)
+        {
+            #region Validation
+
+            if (newProject.CustomerId <= 0)
+            {
+                throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
+            }
+
+            if (string.IsNullOrWhiteSpace(newProject.Name))
+            {
+                throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
+            }
+
+            if (string.IsNullOrEmpty(newProject.Type))
+            {
+                throw new ArgumentNullException("type", "Type must have a value.");
+            }
+
+            if (string.IsNullOrEmpty(newProject.ProjectOrgId))
+            {
+                throw new ArgumentNullException("projectOrgId", "Project must have an ID");
+            }
+
+            if (newProject.StartingDate.HasValue && newProject.EndingDate.HasValue && DateTime.Compare(newProject.StartingDate.Value, newProject.EndingDate.Value) > 0)
+            {
+                throw new ArgumentException("Project cannot end before it starts.");
+            }
+
+            #endregion Validation
+
+            return DBHelper.CreateProjectAndUpdateItsUserList(GetDBEntityFromProject(newProject), userIDs);
+        }
+
+        /// <summary>
+        /// Creates a new project.
+        /// </summary>
+        /// <param name="newProject">Project with project information.</param>
+        /// <returns>Project Id.</returns>
+        public int CreateProject(Project newProject)
 		{
 			#region Validation
 
@@ -420,8 +444,28 @@ namespace AllyisApps.Services
         /// Deletes a project.
         /// </summary>
         /// <param name="projectId">Project Id.</param>
-        /// <returns>Returns false if authorization fails.</returns>
-        public bool DeleteProject(int projectId)
+        /// <returns>Returns null if authorization fails, project name is succeed, empty string if not found.</returns>
+        public string DeleteProject(int projectId)
+		{
+			if (projectId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
+			}
+
+            if (this.Can(Actions.CoreAction.EditCustomer))
+            {
+                return DBHelper.DeleteProject(projectId);
+            }
+            return null;
+		}
+
+        /*
+         /// <summary>
+		/// Deletes a project.
+		/// </summary>
+		/// <param name="projectId">Project Id.</param>
+		/// <returns>Returns false if authorization fails.</returns>
+		public bool DeleteProject(int projectId)
 		{
 			if (projectId <= 0)
 			{
@@ -436,6 +480,7 @@ namespace AllyisApps.Services
 
 			return false;
 		}
+         */
 
 		/// <summary>
 		/// Creates a project user.

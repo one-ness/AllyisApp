@@ -92,6 +92,74 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						throw new ArgumentNullException("model");
 					}
 
+					try
+					{
+						var result = CreateProjectAndUpdateItsUserList(model);
+                        if (result == -1)   //duplicate projectOrgId
+                        {
+                            Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
+                        }
+                        else
+                        {
+                            model.ProjectId = result;
+                            Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessProjectCreated, Variety.Success));
+                        }
+					}
+					catch (Exception ex)
+					{
+						string message = Resources.Strings.FailureProjectCreated;
+						if (ex.Message != null)
+						{
+							message = string.Format("{0} {1}", message, ex.Message);
+						}
+
+						//Create failure
+						Notifications.Add(new BootstrapAlert(message, Variety.Danger));
+						return this.View(model);
+					}
+                    return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer), model.ParentCustomerId));
+				}
+				else
+				{
+					// Permissions failure
+					this.Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
+				}
+			}
+			else
+			{
+				// Invalid Model
+				return this.View(model);
+			}
+		}
+
+        /*
+        /// <summary>
+		/// POST: Project/Create
+		/// Method for creating a new project entry in the database.
+		/// </summary>
+		/// <param name="model">The model of user input.</param>
+		/// <returns>If successful, notifies and redirects to Project/Index. Else, returns to the create project form.</returns>
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Create(EditProjectViewModel model)
+		{
+			var list = AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId).Item2;
+			var subList = new List<BasicUserInfoViewModel>();
+			foreach (var user in list)
+			{
+				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
+			}
+			model.SubscriptionUsers = subList;
+			if (ModelState.IsValid)
+			{
+				if (AppService.Can(Actions.CoreAction.EditProject))
+				{
+					if (model == null)
+					{
+						throw new ArgumentNullException("model");
+					}
+
 					if (AppService.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Any(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId))
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
@@ -130,14 +198,35 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// Invalid Model
 				return this.View(model);
 			}
-		}
+		}   
+    */
 
-		/// <summary>
-		/// Creates a new project using a <see cref="EditProjectViewModel"/>.
-		/// </summary>
-		/// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
-		/// <returns>The Project ID.</returns>
-		public int CreateProject(EditProjectViewModel model)
+        /// <summary>
+        /// Creates a new project using a <see cref="EditProjectViewModel"/> and updates that project's properties and user list..
+        /// </summary>
+        /// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
+        /// <returns>The Project ID if succeed, -1 if the ProjectOrgId is taken by another project under the same customer.</returns>
+        public int CreateProjectAndUpdateItsUserList(EditProjectViewModel model)
+		{
+            IEnumerable<int> userIDs = model.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString));
+
+            return AppService.CreateProjectAndUpdateItsUserList(new Project()
+			{
+				CustomerId = model.ParentCustomerId,
+				Name = model.ProjectName,
+				Type = model.PriceType,
+				ProjectOrgId = model.ProjectOrgId,
+				StartingDate = AppService.GetDateTimeFromDays(model.StartDate),
+				EndingDate = AppService.GetDateTimeFromDays(model.EndDate)
+			}, userIDs);
+		}
+     
+         /// <summary>
+        /// Creates a new project using a <see cref="EditProjectViewModel"/>.
+        /// </summary>
+        /// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
+        /// <returns>The Project ID.</returns>
+        public int CreateProject(EditProjectViewModel model)
 		{
 			return AppService.CreateProject(new Project()
 			{
@@ -148,6 +237,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				StartingDate = AppService.GetDateTimeFromDays(model.StartDate),
 				EndingDate = AppService.GetDateTimeFromDays(model.EndDate)
 			});
-		}
-	}
+		}        
+    }
 }
