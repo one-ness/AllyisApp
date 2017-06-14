@@ -75,11 +75,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			return new ManageCustomerViewModel
-			{
-				Customers = customersList,
-				OrganizationId = orgId,
-				canEdit = canEditProjects
+            return new ManageCustomerViewModel
+            {
+                Customers = customersList,
+                OrganizationId = orgId,
+                canEdit = canEditProjects
 			};
 		}
 	}

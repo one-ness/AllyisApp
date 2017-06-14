@@ -12,6 +12,7 @@
     var customerCount = 0;
     var empty = new EditCustomerInfoViewModel() { OrganizationId = Model.OrganizationId };
     var emptyProj = new EditProjectViewModel();
+    var custList = Model.Customers;
     var createButtonClass = !Model.canEdit ? "invisible" : "";
 }
 
@@ -38,7 +39,7 @@
                                 </h4>
                             </a>
                             @if (!customer.CustomerInfo.IsActive)
-                    {
+                            {
                                 <a href="@Url.Action(ActionConstants.ReactivateCustomer, ControllerConstants.Customer, new { id = customer.CustomerInfo.CustomerId })" class="btn btn-default @createButtonClass">@Strings.Reactivate <i class="fa fa-plus"></i></a>
                             }
                         </div>
@@ -81,7 +82,5 @@
                 <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Customer)" class="btn btn-default">@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.AddCustomer <i class="fa fa-plus"></i></a>
             </div>*@
         }
-
-
     </div>
 </div>
