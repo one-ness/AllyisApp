@@ -36,13 +36,43 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			return this.RouteHome();
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ManageCustomerViewModel" /> class.
+        /// <summary>
+		/// GET: Customer/Index1.
 		/// </summary>
-		/// <param name="userId">The user's Id.</param>
-		/// <param name="orgId">The id of the current organization.</param>
-		/// <returns>The ManageCustomerViewModel.</returns>
-		public ManageCustomerViewModel ConstructManageCustomerViewModel(int userId, int orgId)
+		/// <returns>Customer Index1.</returns>
+		[HttpGet]
+        public ActionResult Index1()
+        {
+            if (AppService.Can(Actions.CoreAction.ViewCustomer))
+            {
+                return this.View(this.ConstructManageCustomerViewModel(UserContext.UserId, UserContext.ChosenOrganizationId));
+            }
+
+            Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+
+            return this.RouteHome();
+        }
+
+        /// <summary>
+		/// PopulateProjects.
+		/// </summary>
+		/// <returns>_ProjectByCustomer partial view.</returns>
+		[HttpPost]
+        public ActionResult PopulateProjects(int customerId)
+        {
+            var model = new CustomerProjectViewModel();
+            model.CustomerInfo = new Customer { CustomerId = customerId };
+            model.Projects = AppService.GetProjectsByCustomer(customerId);
+            return PartialView("_ProjectsByCustomer", model);
+        }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ManageCustomerViewModel" /> class.
+            /// </summary>
+            /// <param name="userId">The user's Id.</param>
+            /// <param name="orgId">The id of the current organization.</param>
+            /// <returns>The ManageCustomerViewModel.</returns>
+            public ManageCustomerViewModel ConstructManageCustomerViewModel(int userId, int orgId)
 		{
 			var infos = AppService.GetProjectsAndCustomersForOrgAndUser();
 
@@ -75,11 +105,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			return new ManageCustomerViewModel
-			{
-				Customers = customersList,
-				OrganizationId = orgId,
-				canEdit = canEditProjects
+            return new ManageCustomerViewModel
+            {
+                Customers = customersList,
+                OrganizationId = orgId,
+                canEdit = canEditProjects
 			};
 		}
 	}

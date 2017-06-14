@@ -1,0 +1,6 @@
+﻿@model AllyisApps.ViewModels.TimeTracker.Customer.CustomerProjectViewModel
+
+    @foreach (AllyisApps.Services.Project proj in Model.Projects)
+    {
+        <a href="" class="list-group-item"><text>@proj.Name</text></a>
+    }

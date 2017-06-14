@@ -88,6 +88,23 @@
                         </div>
                     </div>customerCount += 1;
                 }
+                <div id="swapper-ui" class="swapper-ui">
+                    <div class="left">
+                        <label>@Strings.Customer</label>
+                        <select name="customers" id="active-customers" multiple="multiple" class="filter-list" onchange="populateProjects(this.value)">
+                            @for (var i = 0; i < Model.Customers.Count(); i++)
+                            {
+                                var css_class = "out";
+                                <option value="@i" class="@css_class" data-search="@Model.Customers.ElementAt(i).CustomerInfo.Name">@Model.Customers.ElementAt(i).CustomerInfo.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="right">
+                        <label>@Strings.Project</label>
+                        <select name="customers" id="active-projects" multiple="multiple" class="filter-list">
+                        </select>
+                    </div>
+                </div>
             </div>
             @*<div class="allyis-action-buttons">
                     <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Customer)" class="btn btn-default">@AllyisApps.Resources.TimeTracker.Views.Customer.Strings.AddCustomer <i class="fa fa-plus"></i></a>
@@ -126,5 +143,28 @@
 </div>
 
 @section Scripts{
+    <script type="text/javascript">
+        var customers = [];
+        $(document).ready(function () {
+            $("select#active-customers option").filter(function () {
+                return $(this).val() == "0"
+            }).prop('selected', true);
+        })
+
+        @foreach(CustomerProjectViewModel cust in Model.Customers)
+        {
+            @:customers.push(@cust);
+        }
+        alert(customers);
+
+        function populateProjects(index)
+        {
+            alert("HELLO!");
+
+            var select = document.getElementById("populateProjects");
+            $("#populateProjects").empty();
+        }
+
+        fore</script>
     @Scripts.Render("~/bundles/TTCustomerIndex");
 }
