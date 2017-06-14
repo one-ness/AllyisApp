@@ -43,25 +43,41 @@
                                 Create a multi-select list that is populated from SubscriptionUsers
                                 Uses Javascript and the add/remove buttons to add and remove items from this listbox
                             *@
-                            @Html.ListBoxFor(m => customers, new MultiSelectList(customers, "CustomerId", "Name"), new { @name = "customers", @id = "inactive-customers", @class = "filter-list", @Multiple = "multiple" })
+                            @Html.ListBoxFor(m => customers, new SelectList(customers, "CustomerId", "Name"), new { @name = "customers", @id = "inactive-customers", @class = "filter-list"} )
                         </div>
-                        @*<div class="actions">
-                            <a href="javascript: moveSelectedProjectEditModal('in')" class="btn btn-default move-in">
-                                <i class="fa fa-lg fa-arrow-right"></i>
+                        <div class="actions">
+                            <a href="javascript: hello()" class="btn btn-default move-in">
+                                Show Projects <i class="fa fa-lg fa-arrow-right"></i>
                             </a>
-                            <a href="javascript: moveSelectedProjectEditModal('out')" class="btn btn-default move-out">
+                            @*<a href="javascript: moveSelectedProjectEditModal('out')" class="btn btn-default move-out">
                                 <i class="fa fa-lg fa-arrow-left"></i>
-                            </a>
-                        </div>*@
+                            </a>*@
+                        </div>
                         <div class="right">
-                            <label>@*@Strings.OnProj*@InactiveProjects</label>
+                            <label>@*@Strings.OnProj*@Inactive Projects</label>
                             @*<input type="text" placeholder="@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder" class="form-control" />*@
                             @*
             Create a multi-select list that is populated from ProjectUsers and binds all selected items to SelectedProjectUserIds
             On Submit, all items in this list become selected, so the whole list is bound to the model
             Items are added and removed from this list via Javascript and the add / remove buttons
                             *@
-                            @Html.ListBoxFor(m => customers, new MultiSelectList(customers, "CustomerId", "Name")@*new MultiSelectList(Model.ProjectUsers, "UserId", "Name"), new { @name = "Included", @id = "included-users", @class = "filter-list", @Multiple = "multiple" }*@)
+                            @{
+
+                                var _customersprojectstwo = Model.Customers.ToList();
+                                var projects = new List<Project>();
+                                @*int isselected = @:hello();*@
+                            foreach (var customer in _customersprojectstwo)
+                            {
+                                foreach (var proj in customer.Projects)
+                                {
+                                    //if (isselected == proj.CustomerId)
+                                    projects.Add(proj);
+                                }
+                            }
+                                }
+                              }
+                            
+                                    @Html.ListBoxFor(m => projects, new SelectList(projects, "CustomerId", "Name")@*new MultiSelectList(Model.ProjectUsers, "UserId", "Name"), new { @name = "Included", @id = "included-users", @class = "filter-list", @Multiple = "multiple" }*@)
                         </div>
                     </div>
                     }
@@ -71,3 +87,31 @@
             </div>
     </div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->
+
+@section scripts {
+    <script type="text/javascript">
+        function hello() {
+            var customers = document.getElementById("inactive-customers");
+            var selectedCustomers = customers.options[customers.selectedIndex].value;
+            return selectedCustomers;
+        }
+
+
+        @*@{ 
+            <text>
+            var customers = document.getElementById("inactive-customers")
+            var selectedCustomers = customers.options[customers.selectedIndex].value
+             </text>
+                var _customersprojects = Model.Customers.ToList();
+                var projects = new List<Project>();
+                foreach (var customer in _customersprojects)
+                {
+                    foreach (var proj in customer.Projects)
+                    {
+                        if ( <text> )
+                        projects.Add(proj);
+                    }
+                }
+            }*@
+        </script>
+    }
