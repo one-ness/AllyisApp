@@ -33,7 +33,7 @@ namespace AllyisApps.Controllers
 				{
 					UserName = UserContext.UserName,
 					ChosenOrganizationId = UserContext.ChosenOrganizationId,
-					ChosenOrganizationName = UserContext.ChosenOrganization.OrganizationName,
+					ChosenOrganizationName = UserContext.ChosenOrganization == null ? string.Empty : UserContext.ChosenOrganization.OrganizationName,
 					CanEditOrganization = AppService.Can(Actions.CoreAction.EditOrganization, false),
 					UserOrganizationBriefInfoList = new List<OrganizationBriefInfo>(),
 					ShowOrganizationPartial = showOrganizationPartial

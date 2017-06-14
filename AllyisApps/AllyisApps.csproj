@@ -271,7 +271,6 @@
     <Compile Include="Controllers\Home\HelpAction.cs" />
     <Compile Include="Controllers\Home\IndexAction.cs" />
     <Compile Include="Controllers\Home\PrivacyPolicyAction.cs" />
-    <Compile Include="Controllers\Auth\RouteProductAction.cs" />
     <Compile Include="Controllers\Auth\AddAction.cs" />
     <Compile Include="Controllers\Auth\ChargeAction.cs" />
     <Compile Include="Controllers\Auth\DeleteOrgAction.cs" />

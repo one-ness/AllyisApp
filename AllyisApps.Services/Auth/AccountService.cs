@@ -340,7 +340,7 @@ namespace AllyisApps.Services
 
 			UserContext result = null;
 			List<UserContextDBEntity> contextInfo = this.DBHelper.GetUserContextInfo(userId);
-			if (contextInfo != null)
+			if (contextInfo != null && contextInfo.Count > 0)
 			{
 				// user exists in db
 				UserContextDBEntity firstRow = contextInfo[0];

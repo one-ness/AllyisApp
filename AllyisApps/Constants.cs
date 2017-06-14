@@ -208,11 +208,6 @@
 		public const string PrivacyPolicy = "PrivacyPolicy";
 
 		/// <summary>
-		/// Action-Name: RedirectToSubdomainAction.
-		/// </summary>
-		public const string RedirectToSubdomainAction = "RedirectToSubdomainAction";
-
-		/// <summary>
 		/// Action-Name: Register.
 		/// </summary>
 		public const string Register = "Register";
@@ -305,11 +300,6 @@
 		/// Action-Name: Help.
 		/// </summary>
 		public const string Help = "Help";
-
-		/// <summary>
-		/// Action-Name: RouteProduct.
-		/// </summary>
-		public const string RouteProduct = "RouteProduct";
 
 		#endregion home
 

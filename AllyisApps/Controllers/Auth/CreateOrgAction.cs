@@ -70,12 +70,6 @@ namespace AllyisApps.Controllers
 					Notifications.Add(new BootstrapAlert(Resources.Strings.OrganizationCreatedNotification, Variety.Success));
 					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 				}
-
-				//Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.OrganizationCreatedNotification, Variety.Success));
-
-				//Service.UpdateActiveOrganization(UserContext.UserId, orgId);
-
-				//return this.RedirectToSubDomainAction(orgId, null, ActionConstants.Index, ControllerConstants.Account);
 			}
 
 			// Something happened, reload this view

@@ -12,7 +12,7 @@
 @{
     Organization details = Model.OrgInfo;
     string title = details.Name;
-    string subtitle = details.SiteUrl ?? details.Subdomain ?? "";
+    string subtitle = details.SiteUrl ?? "";
     var cityState = details.City != null && details.State != null ? details.City + ", " + details.State : details.City + details.State;
 }
 <div class="row">
