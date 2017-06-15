@@ -49,11 +49,13 @@
        <script type="text/javascript">
         var selected;
 
-        if (@Model.Customers.Count() > 0)
+        @if (@Model.Customers.Count() > 0)
         {
+        <text>
             $(document).ready(function () {
                     PopulateProjects(@Model.Customers.First().CustomerInfo.CustomerId)
-            })
+           })
+           </text>
         }
 
         function populateActiveForm() {
