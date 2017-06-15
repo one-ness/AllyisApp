@@ -151,7 +151,7 @@
                if (selectedCust != null)
                {
                    var link = '@Url.Action(ActionConstants.Create, ControllerConstants.Project, new { id = "-1" })';
-                   link.replace("-1", selectedCust);
+                   link = link.replace("-1", selectedCust);
                    window.location = link;
                }
            }
@@ -161,7 +161,7 @@
                if (selectedCust != null)
                {
                     var link = '@Url.Action(ActionConstants.Reactivate, ControllerConstants.Customer, new { id = "-1" })';
-                    link.replace("-1", selectedCust);
+                    link = link.replace("-1", selectedCust);
                     window.location = link;
                }
            }
@@ -171,7 +171,7 @@
                 if (selectedProj != null)
                 {
                     var link = '@Url.Action(ActionConstants.Reactivate, ControllerConstants.Project, new { id = "-1" })';
-                    link.replace("-1", selectedProj);
+                    link = link.replace("-1", selectedProj);
                     window.location = link;
                 }
            }
