@@ -37,23 +37,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		}
 
         /// <summary>
-		/// GET: Customer/Index1.
-		/// </summary>
-		/// <returns>Customer Index1.</returns>
-		[HttpGet]
-        public ActionResult Index1()
-        {
-            if (AppService.Can(Actions.CoreAction.ViewCustomer))
-            {
-                return this.View(this.ConstructManageCustomerViewModel(UserContext.UserId, UserContext.ChosenOrganizationId));
-            }
-
-            Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-
-            return this.RouteHome();
-        }
-
-        /// <summary>
 		/// PopulateProjects.
 		/// </summary>
 		/// <returns>_ProjectByCustomer partial view.</returns>

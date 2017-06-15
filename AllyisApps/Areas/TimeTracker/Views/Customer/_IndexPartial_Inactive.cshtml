@@ -6,42 +6,34 @@
 
 <div class="flexbox-row flexbox-row-2-col-collapse">
     <div class="col-md-6">
-        <div class="panel panel-info" style="position: relative;">
+        <div class="panel panel-info" style="position: relative">
             <div class="panel-heading">
                 <h1 class="panel-title">@Strings.CustomerList</h1>
             </div>
             <div class="panel-body list-group" id="Customers">
                 @foreach (CustomerProjectViewModel customer in Model.InactiveCustomerAndProjects)
-            {
-                    <a onclick="PopulateProjects('@customer.CustomerInfo.CustomerId')" class="list-group-item"><text>@customer.CustomerInfo.Name</text></a>
+                {
+                    <a onclick="PopulateProjects('@customer.CustomerInfo.CustomerId')" class="list-group-item" id="@customer.CustomerInfo.CustomerId">
+                        <text>@customer.CustomerInfo.Name</text>
+                    </a>
                 }
-                <br />
             </div>
         </div>
         <div class="pull-left">
-            <a href="#" class="btn btn-default">@Strings.Reactivate <i class="fa fa-plus"></i></a>
+            <a onclick="ReactivateCustomer()" class="glyphicon glyphicon-plus"></a>
         </div>
     </div>
     <div class="col-md-6" height="100%">
-        <div class="panel panel-info">
+        <div class="panel panel-info" style="position: relative">
             <div class="panel-heading">
-                <h1 class="panel-title">@Strings.Project</h1>
+                <h1 class="panel-title">@Strings.Projects</h1>
             </div>
-            <div id="Projects">
+            <div class="panel-body list-group" id="Projects">
                 <!--projects belong to chosen customer will be populated here-->
             </div>
         </div>
-        <div>
-            <a href="reactivateCustomerLink()" class="btn btn-default">@Strings.Reactivate <i class="fa fa-plus"></i></a>
-        </div>
+        <div class="pull-left">
+            <a onclick="ReactivateProject()" class="glyphicon glyphicon-plus"></a>
         </div>
     </div>
-
-@section scripts {
-    <script type="text/javascript">
-
-       function reactivateCustomerLink() {
-            var link = @Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = "-1" });
-        };
-    </script>
-    }
+</div>
