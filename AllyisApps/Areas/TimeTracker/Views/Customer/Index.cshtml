@@ -95,13 +95,18 @@
                         $("#Projects").html(response);
                     }
             });
-           }
+         }
 
-           function PopulateInactiveProjects(chosenCustomerId) {
+        function PopulateInactiveProjects(chosenCustomerId, isActive) {
             $("#" + selectedCust).css("font-weight", "Normal");
             $("#inactive-" +selectedCust).css("font-weight", "Normal");
             selectedCust = chosenCustomerId;
             $("#inactive-" + selectedCust).css("font-weight", "Bold");
+            if (isActive == 1) {
+                $("#reactivateCustomerButton").attr("disabled", "disabled");
+            } else {
+                $("#reactivateCustomerButton").removeAttr("disabled");
+            }
             $.ajax({
                     type: 'POST',
                     cache: false,

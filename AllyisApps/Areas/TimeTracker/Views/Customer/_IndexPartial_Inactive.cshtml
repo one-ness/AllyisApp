@@ -13,14 +13,24 @@
             <div class="panel-body list-group" id="Customers">
                 @foreach (CustomerProjectViewModel customer in Model.InactiveCustomerAndProjects)
                 {
-                    <a onclick="PopulateInactiveProjects('@customer.CustomerInfo.CustomerId')" class="list-group-item" id="inactive-@customer.CustomerInfo.CustomerId" >
+                    if (customer.CustomerInfo.IsActive)
+                    {
+                    <a onclick="PopulateInactiveProjects('@customer.CustomerInfo.CustomerId', 1)" class="list-group-item" id="inactive-@customer.CustomerInfo.CustomerId">
                         <text>@customer.CustomerInfo.Name</text>
                     </a>
+                    }
+                    else
+                    {
+                        <a onclick="PopulateInactiveProjects('@customer.CustomerInfo.CustomerId', 0)" class="list-group-item" id="@customer.CustomerInfo.CustomerId">
+                            <text>@customer.CustomerInfo.Name</text>
+                        </a>
+                    }
                 }
             </div>
         </div>
         <div class="pull-right">
-            <a onclick="ReactivateCustomer()" id="reactivate-customer" class="glyphicon glyphicon-plus"></a>
+            @*<a onclick="ReactivateCustomer()" class="glyphicon glyphicon-plus"></a>*@
+            <button type="button" onclick="ReactivateCustomer()" class="btn btn-info" id="reactivateCustomerButton"><i class="glyphicon glyphicon-plus"></i></button>
         </div>
     </div>
     <div class="col-md-6" height="100%">
@@ -29,11 +39,12 @@
                 <h1 class="panel-title">@Strings.Projects</h1>
             </div>
             <div class="panel-body list-group" id="InactiveProjects">
-                <!--projects belong to chosen customer will be populated here-->
+                <!--inactive projects belong to chosen customer will be populated here-->
             </div>
         </div>
         <div class="pull-right">
-            <a onclick="ReactivateProject()" class="glyphicon glyphicon-plus"></a>
+            @*<a onclick="ReactivateProject()" class="glyphicon glyphicon-plus"></a>*@
+            <button type="button" onclick="ReactivateProject()" class="btn btn-info" id="reactivateProjectButton"><i class="glyphicon glyphicon-plus"></i></button>
         </div>
     </div>
 </div>
