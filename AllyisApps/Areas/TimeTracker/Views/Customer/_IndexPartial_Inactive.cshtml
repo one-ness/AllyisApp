@@ -20,9 +20,7 @@
             </div>
         </div>
         <div class="pull-left">
-            <a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Customer)" class="glyphicon glyphicon-pencil"></a>
-            <a href="@Url.Action(ActionConstants.Add, ControllerConstants.Customer)" class="glyphicon glyphicon-plus"></a>
-            <a href="@Url.Action(ActionConstants.Add, ControllerConstants.Customer)" class="glyphicon glyphicon-remove" style="color:dimgrey"></a>
+            <a onclick="ReactivateCustomer()" class="glyphicon glyphicon-plus"></a>
         </div>
     </div>
     <div class="col-md-6" height="100%">
@@ -35,9 +33,7 @@
             </div>
         </div>
         <div class="pull-left">
-            <span class="glyphicon glyphicon-pencil"></span>
-            <span class="glyphicon glyphicon-plus"></span>
-            <span class="glyphicon glyphicon-remove"></span>
+            <a onclick="ReactivateProject()" class="glyphicon glyphicon-plus"></a>
         </div>
     </div>
 </div>
