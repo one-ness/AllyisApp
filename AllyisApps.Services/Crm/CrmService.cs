@@ -250,6 +250,32 @@ namespace AllyisApps.Services
 		}
 
         /// <summary>
+        /// Gets a list of <see cref="Project"/>'s for a customer.
+        /// </summary>
+        /// <param name="customerId">Customer Id.</param>
+        /// <returns>List of ProjectInfo's.</returns>
+        public IEnumerable<Project> GetInactiveProjectsByCustomer(int customerId)
+        {
+            if (customerId <= 0)
+            {
+                throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
+            }
+
+            IEnumerable<ProjectDBEntity> dbeList = DBHelper.GetInactiveProjectsByCustomer(customerId);
+            List<Project> list = new List<Project>();
+            foreach (ProjectDBEntity dbe in dbeList)
+            {
+                if (dbe != null)
+                {
+                    list.Add(InitializeProject(dbe));
+                }
+            }
+
+            return list;
+        }
+
+
+        /// <summary>
 		/// Creates a new project and update its user list if succeed
 		/// </summary>
 		/// <param name="newProject">Project with project information.</param>

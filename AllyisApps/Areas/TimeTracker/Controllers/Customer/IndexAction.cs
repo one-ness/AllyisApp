@@ -49,13 +49,26 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
             return PartialView("_ProjectsByCustomer", model);
         }
 
-            /// <summary>
-            /// Initializes a new instance of the <see cref="ManageCustomerViewModel" /> class.
-            /// </summary>
-            /// <param name="userId">The user's Id.</param>
-            /// <param name="orgId">The id of the current organization.</param>
-            /// <returns>The ManageCustomerViewModel.</returns>
-            public ManageCustomerViewModel ConstructManageCustomerViewModel(int userId, int orgId)
+        /// <summary>
+        /// PopulateProjects.
+        /// </summary>
+        /// <returns>_ProjectByCustomer partial view.</returns>
+        [HttpPost]
+        public ActionResult PopulateInactiveProjects(int customerId)
+        {
+            var model = new CustomerProjectViewModel();
+            model.CustomerInfo = new Customer { CustomerId = customerId };
+            model.Projects = AppService.GetInactiveProjectsByCustomer(customerId);
+            return PartialView("_ProjectsByCustomer", model);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ManageCustomerViewModel" /> class.
+        /// </summary>
+        /// <param name="userId">The user's Id.</param>
+        /// <param name="orgId">The id of the current organization.</param>
+        /// <returns>The ManageCustomerViewModel.</returns>
+        public ManageCustomerViewModel ConstructManageCustomerViewModel(int userId, int orgId)
 		{
 			var infos = AppService.GetProjectsAndCustomersForOrgAndUser();
             var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser();

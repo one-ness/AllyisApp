@@ -52,5 +52,10 @@ namespace AllyisApps.Services
 		/// Gets or sets the project's ending date.
 		/// </summary>
 		public DateTime? EndingDate { get; set; }
-	}
+
+        /// <summary>
+        /// Gets or sets the bool value indicating if this Customer is currently active
+        /// </summary>
+        public bool IsActive { get; set; }
+    }
 }

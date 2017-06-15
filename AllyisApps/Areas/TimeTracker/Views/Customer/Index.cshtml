@@ -94,6 +94,22 @@
             });
            }
 
+        function PopulateInactiveProjects(chosenCustomerId) {
+            $("#" +selectedCust).css("font-weight", "Normal");
+            selectedCust = chosenCustomerId;
+            $("#" + selectedCust).css("font-weight", "Bold");
+            $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    url: '@Url.Action("PopulateInactiveProjects", "Customer")',
+                    data: { customerId: chosenCustomerId },
+                    success: function (response) {
+                        $("#InactiveProjects").empty();
+                        $("#InactiveProjects").html(response);
+                    }
+            });
+           }
+
            function SelectProject(project)
            {
                $("#project-" + selectedProj).css("font-weight", "Normal");
