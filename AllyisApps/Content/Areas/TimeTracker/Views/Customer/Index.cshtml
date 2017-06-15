@@ -1,0 +1,93 @@
+﻿@using AllyisApps.ViewModels.TimeTracker.Customer;
+@using AllyisApps.ViewModels.TimeTracker.Project;
+@using AllyisApps.Services;
+
+@model ManageCustomerViewModel
+
+@{
+    DisplayHints.PageBodyId = "tt-customer";
+    ViewBag.Title = Strings.CustomerList;
+    ViewData["IsManager"] = Model.canEdit;
+    Layout = "~/Areas/TimeTracker/Views/Shared/_Layout.cshtml";
+    var empty = new EditCustomerInfoViewModel() { OrganizationId = Model.OrganizationId };
+    var emptyProj = new EditProjectViewModel();
+    var createButtonClass = !Model.canEdit ? "invisible" : "";
+}
+
+
+<div class="row">
+    @*<div class="col-xs-12 col-md-8 col-md-push-2"> *@
+    <ul class="nav nav-tabs">
+        <li id="activeTab" class="active"><a onclick="populateActiveForm()">Active</a></li>
+        <li id="inactiveTab"><a onclick="populateInactiveForm()">Inactive</a></li>
+    </ul>
+    <br/>
+        @*
+            <div class="allyis-action-buttons-top">
+                <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Customer)" class="btn btn-default @createButtonClass">@Strings.AddCustomer <i class="fa fa-plus"></i></a>
+                <a href="@Url.Action(ActionConstants.Reactivate, ControllerConstants.Customer)" class="btn btn-default @createButtonClass">@Strings.Reactivate <i class="fa fa-plus"></i></a>
+
+                <div class="pull-right">
+                    <input type="text" id="SearchInput" placeholder=@Strings.SearchPlaceholder class="form-control">
+                </div>
+            </div> *@
+
+    <form>
+        <div id="resultPartialForm" class="row">
+            <!--Partial view will be updated here every time a tab is chosen-->
+            <div id="activePartial">
+                @Html.Partial("_IndexPartial_Active")
+            </div>
+            <div id="inactivePartial" class="hidden">
+                @Html.Partial("_IndexPartial_Inactive")
+            </div>
+        </div>
+    </form>    
+</div>
+
+@section Scripts{
+       <script type="text/javascript">
+        var selected;
+
+        if (@Model.Customers.Count() > 0)
+        {
+            $(document).ready(function () {
+                PopulateProjects(@Model.Customers.First().CustomerInfo.CustomerId)
+            })
+        }
+
+        function populateActiveForm() {
+            $(function showActiveCustomers() {
+                $("#inactiveTab").removeClass('active');
+                $("#activeTab").addClass('active');
+                $("#inactivePartial").addClass('hidden');
+                $("#activePartial").removeClass('hidden');
+            });
+           }
+
+           function populateInactiveForm() {
+               $(function showInactiveCustomers() {
+                   $("#activeTab").removeClass('active');
+                   $("#inactiveTab").addClass('active');
+                   $("#activePartial").addClass('hidden');
+                   $("#inactivePartial").removeClass('hidden');
+               });
+           }
+
+        function PopulateProjects(chosenCustomerId) {
+            $(selected).css("font-weight", "Normal");
+            selected = "#" + chosenCustomerId;
+            $(selected).css("font-weight", "Bold");
+            $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    url: '@Url.Action("PopulateProjects", "Customer")',
+                    data: { customerId: chosenCustomerId },
+                    success: function (response) {
+                        $("#Projects").empty();
+                        $("#Projects").html(response);
+                    }
+            });
+        }
+</script>
+}

@@ -1,0 +1,44 @@
+﻿@using AllyisApps.ViewModels.TimeTracker.Customer;
+@using AllyisApps.ViewModels.TimeTracker.Project;
+@using AllyisApps.Services;
+
+@model ManageCustomerViewModel
+
+<div class="flexbox-row flexbox-row-2-col-collapse">
+    <div class="col-md-6">
+        <div class="panel panel-info" style="position: relative">
+            <div class="panel-heading">
+                <h1 class="panel-title">@Strings.CustomerList</h1>
+            </div>
+            <div class="panel-body list-group" id="Customers">
+                @foreach (CustomerProjectViewModel customer in Model.Customers)
+                {
+                    <a onclick="PopulateProjects('@customer.CustomerInfo.CustomerId')" class="list-group-item" id="@customer.CustomerInfo.CustomerId">
+                        <text>@customer.CustomerInfo.Name</text>
+                    </a>
+                }
+                <br />
+            </div>
+        </div>
+        <div class="pull-left">
+            <a onclick="EditCustomer()" class="glyphicon glyphicon-pencil"></a>
+            <a onclick="DeleteCustomer()" class="glyphicon glyphicon-remove"></a>
+            <a onclick="CreateCustomer()" class="glyphicon glyphicon-plus"></a>
+        </div>
+    </div>
+    <div class="col-md-6" height="100%">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h1 class="panel-title">@Strings.Projects</h1>
+            </div>
+            <div id="Projects">
+                <!--projects belong to chosen customer will be populated here-->
+            </div>
+        </div>
+        <div class="pull-left">
+            <a onclick="EditProject()" class="glyphicon glyphicon-pencil"></a>
+            <a onclick="DeleteProject()" class="glyphicon glyphicon-remove"></a>
+            <a onclick="CreateProject()" class="glyphicon glyphicon-plus"></a>
+        </div>
+    </div>
+</div>
