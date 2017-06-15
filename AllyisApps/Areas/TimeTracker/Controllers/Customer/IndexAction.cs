@@ -75,10 +75,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
             bool canEditProjects = AppService.Can(Actions.CoreAction.EditProject);
 
-
-
-
-
 			List<CompleteProjectInfo> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> customers = infos.Item2;
 
@@ -105,8 +101,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					customersList.Add(customerResult);
 				}
 			}
-
-
 
             List<CompleteProjectInfo> inactiveProjects = canEditProjects ? inactiveInfo.Item1 : inactiveInfo.Item1.Where(p => p.IsProjectUser == true).ToList();
             List<Customer> inactiveCustomers = inactiveInfo.Item2;
