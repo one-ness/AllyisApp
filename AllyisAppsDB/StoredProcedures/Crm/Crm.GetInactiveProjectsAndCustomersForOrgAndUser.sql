@@ -19,8 +19,8 @@ AS
 		[SUB].[IsProjectUser]
 	FROM (
 		[Auth].[Organization] WITH (NOLOCK) 
-		JOIN [Crm].[Customer]	WITH (NOLOCK) ON ([Customer].[OrganizationId] = [Organization].[OrganizationId] AND [Organization].[OrganizationId] = @OrgId)
-		JOIN [Crm].[Project]		WITH (NOLOCK) ON [Project].[CustomerId] = [Customer].[CustomerId]
+		JOIN [Crm].[Customer] WITH (NOLOCK) ON ([Customer].[OrganizationId] = [Organization].[OrganizationId] AND [Organization].[OrganizationId] = @OrgId)
+		JOIN [Crm].[Project] WITH (NOLOCK) ON [Project].[CustomerId] = [Customer].[CustomerId]
 		LEFT JOIN (
 			SELECT 1 AS 'IsProjectUser',
 			[ProjectUser].[ProjectId]
@@ -34,7 +34,7 @@ AS
 
 	ORDER BY [Project].[Name]
 
-	SELECT [Customer].[CustomerId],
+	SELECT DISTINCT [Customer].[CustomerId],
 		   [Customer].[Name],
 		   [Customer].[Address],
 		   [Customer].[City],
@@ -50,7 +50,10 @@ AS
 		   [Customer].[CustomerOrgId],
 		   [Customer].[IsActive]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 
+	JOIN [Crm].[Project] WITH (NOLOCK) ON [Project].[CustomerId] = [Customer].[CustomerId]
 	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Customer].[Country]
 	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Customer].[State]
 	WHERE [Customer].[OrganizationId] = @OrgId
+	AND ([Customer].[IsActive] = 0
+	OR [Project].[IsActive] = 0)
 	ORDER BY [Customer].[Name]
