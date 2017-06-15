@@ -12,7 +12,6 @@
     var empty = new EditCustomerInfoViewModel() { OrganizationId = Model.OrganizationId };
     var emptyProj = new EditProjectViewModel();
     var createButtonClass = !Model.canEdit ? "invisible" : "";
-    var active = true;
 }
 
 
@@ -67,6 +66,13 @@
                 $("#activeTab").addClass('active');
                 $("#inactivePartial").addClass('hidden');
                 $("#activePartial").removeClass('hidden');
+
+                @if (@Model.Customers.Count() > 0)
+                {
+                    <text>
+                        PopulateProjects(@Model.Customers.First().CustomerInfo.CustomerId)
+                    </text>
+                }
             });
            }
 
@@ -76,6 +82,12 @@
                 $("#inactiveTab").addClass('active');
                 $("#activePartial").addClass('hidden');
                 $("#inactivePartial").removeClass('hidden');
+                @if (@Model.Customers.Count() > 0)
+                {
+                    <text>
+                        PopulateInactiveProjects(@Model.Customers.First().CustomerInfo.CustomerId)
+                    </text>
+                }
             });
         }
 
@@ -90,7 +102,6 @@
                     url: '@Url.Action("PopulateProjects", "Customer")',
                     data: { customerId: chosenCustomerId },
                     success: function (response) {
-                        @active  = true;
                         $("#Projects").empty();
                         $("#Projects").html(response);
                     }
@@ -113,7 +124,6 @@
                     url: '@Url.Action("PopulateInactiveProjects", "Customer")',
                     data: { customerId: chosenCustomerId },
                     success: function (response) {
-                        @active  = false;
                         $("#InactiveProjects").empty();
                         $("#InactiveProjects").html(response);
                     }
@@ -129,53 +139,41 @@
 
            function EditCustomer()
            {
-               if (@active && selectedCust != null)
+               if (selectedCust != null)
                {
                     var link = '@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = "-1" })';
                     link = link.replace("-1", selectedCust);
                     window.location = link;
                }
-               else {
-                   alert("Please select an Active customer");
-               }
            }
 
            function EditProject()
            {
-               if (@active && selectedProj != null)
+               if (selectedProj != null)
                {
                     var link = '@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new { id = "-1" })';
                     link = link.replace("-1", selectedProj);
                     window.location = link;
                }
-               else {
-                   alert("Please select an Active customer");
-               }
            }
 
            function DeleteCustomer()
            {
-               if (@active && selectedCust != null && confirm("Delete customer " + $("#" + selectedCust).text().trim() + "?"))
+               if (selectedCust != null && confirm("Delete customer " + $("#" + selectedCust).text().trim() + "?"))
                {
                     var link = '@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new { id = "-1" })';
                     link = link.replace("-1", selectedCust);
                     window.location = link;
                }
-               else {
-                   alert("Please select an Active customer");
-               }
            }
 
            function DeleteProject()
            {
-               if (@active && selectedCust != null && confirm("Delete project " + $("#project-" + selectedProj).text().trim() + "?"))
+               if (selectedCust != null && confirm("Delete project " + $("#project-" + selectedProj).text().trim() + "?"))
                {
                     var link = '@Url.Action(ActionConstants.Delete, ControllerConstants.Project, new { id = "-1" })';
                     link = link.replace("-1", selectedProj);
                     window.location = link;
-               }
-               else {
-                   alert("Please select an Active customer");
                }
            }
 
@@ -186,7 +184,7 @@
 
            function CreateProject()
            {
-               if (@active && selectedCust != null)
+               if (selectedCust != null)
                {
                    var link = '@Url.Action(ActionConstants.Create, ControllerConstants.Project, new { id = "-1" })';
                    link = link.replace("-1", selectedCust);
@@ -196,28 +194,21 @@
 
            function ReactivateCustomer()
            {
-               if (!@active && selectedCust != null)
+               if (selectedCust != null)
                {
                     var link = '@Url.Action(ActionConstants.Reactivate, ControllerConstants.Customer, new { id = "-1" })';
                     link = link.replace("-1", selectedCust);
                     window.location = link;
                }
-               else
-               {
-                   alert("Please select an Inactive customer");
-               }
            }
 
            function ReactivateProject()
            {
-                if (!@active && selectedProj != null)
+                if (selectedProj != null)
                 {
                     var link = '@Url.Action(ActionConstants.Reactivate, ControllerConstants.Project, new { id = "-1" })';
                     link = link.replace("-1", selectedProj);
                     window.location = link;
-                }
-                else {
-                    alert("Please select an Inactive project");
                 }
            }
 </script>
