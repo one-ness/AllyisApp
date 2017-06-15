@@ -28,6 +28,11 @@ namespace AllyisApps.Controllers
 	public partial class BaseController : Controller
 	{
 		/// <summary>
+		/// product id
+		/// </summary>
+		public ProductIdEnum ProductId { get; set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseController" /> class.
 		/// </summary>
 		public BaseController()
@@ -40,9 +45,9 @@ namespace AllyisApps.Controllers
 		/// Initializes a new instance of the <see cref="BaseController"/> class with a product id.
 		/// </summary>
 		/// <param name="productId">Product id.</param>
-		public BaseController(int productId) : this()
+		public BaseController(ProductIdEnum productId) : this()
 		{
-			this.cProductId = productId;
+			this.ProductId = productId;
 		}
 
 		/// <summary>
@@ -67,9 +72,6 @@ namespace AllyisApps.Controllers
 		/// Gets or sets the service.
 		/// </summary>
 		protected AppService AppService { get; set; }
-
-		// Product id used by controllers in product areas. 0 by default, for no product.
-		private readonly int cProductId = 0;
 
 		/// <summary>
 		/// Redirects home.

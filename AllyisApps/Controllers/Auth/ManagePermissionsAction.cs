@@ -55,7 +55,7 @@ namespace AllyisApps.Controllers
 					Subscriptions = infos.Item2,
 					SubIds = infos.Item2.Select(s => s.SubscriptionId).ToList(),
 					// TODO: Get rid of this once product panes in Permissions page are genericized.
-					TimeTrackerId = AppService.GetProductIdByName(ProductNameKeyConstants.TimeTracker)
+					TimeTrackerId = (int)ProductIdEnum.TimeTracker
 				};
 
 				// This can also be axed after finding a good way to genericize products in the Permissions page.
@@ -113,7 +113,7 @@ namespace AllyisApps.Controllers
 		{
 			PermissionsManagementViewModel result = new PermissionsManagementViewModel()
 			{
-				TimeTrackerId = AppService.GetProductIdByName(ProductNameKeyConstants.TimeTracker)
+				TimeTrackerId = (int)ProductIdEnum.TimeTracker
 			};
 			result.Subscriptions = AppService.GetSubscriptionsDisplay();
 

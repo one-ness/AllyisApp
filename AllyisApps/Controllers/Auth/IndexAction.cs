@@ -80,19 +80,6 @@ namespace AllyisApps.Controllers
 				Notifications.Add(new Core.Alert.BootstrapAlert(result, Core.Alert.Variety.Success));
 			}
 
-			//var invitation = Service.GetInvitationsByUser(UserContext.Email).Where(x => x.InvitationId == invitationId).FirstOrDefault();
-			//if (invitation != null)
-			//{
-			//	// Validate that the user does have the requested pending invitation
-			//	Notifications.Add(new Core.Alert.BootstrapAlert(
-			//		Service.AcceptUserInvitation(invitationId), Core.Alert.Variety.Success));
-			//}
-			//else
-			//{
-			//	// Not a part of the invitation
-			//	Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
-			//}
-
 			return RedirectToAction(ActionConstants.Index);
 		}
 
