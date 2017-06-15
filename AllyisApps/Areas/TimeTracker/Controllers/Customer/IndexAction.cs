@@ -142,6 +142,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
             return new ManageCustomerViewModel
             {
                 Customers = customersList,
+                InactiveCustomerAndProjects = inactiveCustomersList,
                 OrganizationId = orgId,
                 canEdit = canEditProjects
 			};
