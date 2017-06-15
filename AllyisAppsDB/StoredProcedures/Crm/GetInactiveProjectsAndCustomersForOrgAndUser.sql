@@ -29,8 +29,8 @@ AS
 		) [SUB] ON [SUB].[ProjectId] = [Project].[ProjectId]
 	)
 	
-	WHERE [Customer].[IsActive] >= 0
-		AND [Project].[IsActive] >= 0
+	WHERE [Customer].[IsActive] = 0
+		OR [Project].[IsActive] = 0
 
 	ORDER BY [Project].[Name]
 
