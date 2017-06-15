@@ -66,6 +66,13 @@
                 $("#activeTab").addClass('active');
                 $("#inactivePartial").addClass('hidden');
                 $("#activePartial").removeClass('hidden');
+
+                @if (@Model.Customers.Count() > 0)
+                {
+                    <text>
+                        PopulateProjects(@Model.Customers.First().CustomerInfo.CustomerId)
+                    </text>
+                }
             });
            }
 
@@ -75,11 +82,18 @@
                 $("#inactiveTab").addClass('active');
                 $("#activePartial").addClass('hidden');
                 $("#inactivePartial").removeClass('hidden');
+                @if (@Model.Customers.Count() > 0)
+                {
+                    <text>
+                        PopulateInactiveProjects(@Model.Customers.First().CustomerInfo.CustomerId)
+                    </text>
+                }
             });
         }
 
         function PopulateProjects(chosenCustomerId) {
-            $("#" +selectedCust).css("font-weight", "Normal");
+            $("#" + selectedCust).css("font-weight", "Normal");
+            $("#inactive-" + selectedCust).css("font-weight", "Normal");
             selectedCust = chosenCustomerId;
             $("#" + selectedCust).css("font-weight", "Bold");
             $.ajax({
@@ -92,12 +106,13 @@
                         $("#Projects").html(response);
                     }
             });
-           }
+         }
 
         function PopulateInactiveProjects(chosenCustomerId, isActive) {
-            $("#" +selectedCust).css("font-weight", "Normal");
+            $("#" + selectedCust).css("font-weight", "Normal");
+            $("#inactive-" +selectedCust).css("font-weight", "Normal");
             selectedCust = chosenCustomerId;
-            $("#" + selectedCust).css("font-weight", "Bold");
+            $("#inactive-" + selectedCust).css("font-weight", "Bold");
             if (isActive == 1) {
                 $("#reactivateCustomerButton").attr("disabled", "disabled");
             } else {
