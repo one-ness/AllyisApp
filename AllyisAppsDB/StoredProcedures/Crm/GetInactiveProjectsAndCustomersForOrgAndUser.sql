@@ -30,7 +30,7 @@ AS
 	)
 	
 	WHERE [Customer].[IsActive] = 0
-		OR [Project].[IsActive] = 0
+	OR [Project].[IsActive] = 0
 
 	ORDER BY [Project].[Name]
 
@@ -47,10 +47,10 @@ AS
 		   [Customer].[Website],
 		   [Customer].[EIN],
 		   [Customer].[CreatedUTC],
-		   [Customer].[CustomerOrgId]
+		   [Customer].[CustomerOrgId],
+		   [Customer].[IsActive]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 
 	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Customer].[Country]
 	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Customer].[State]
 	WHERE [Customer].[OrganizationId] = @OrgId
-	AND [Customer].[IsActive] = 0
 	ORDER BY [Customer].[Name]
