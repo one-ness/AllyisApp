@@ -160,7 +160,7 @@
            {
                if (selectedCust != null)
                {
-                    var link = '@Url.Action(ActionConstants.Reactivate, ControllerConstants.Customer, new { id = "-1" })';
+                    var link = '@Url.Action(ActionConstants.ReactivateCustomer, ControllerConstants.Customer, new { id = "-1" })';
                     link.replace("-1", selectedCust);
                     window.location = link;
                }

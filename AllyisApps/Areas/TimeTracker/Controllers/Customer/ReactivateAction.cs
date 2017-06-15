@@ -34,7 +34,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
             {
                 Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
             }
-            return this.RedirectToAction(ActionConstants.Index);
+            return View(ActionConstants.Index, ControllerConstants.Customer);
         }
 
 
@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
-			return this.RouteHome();
+            return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
         }
 
         /// <summary>
