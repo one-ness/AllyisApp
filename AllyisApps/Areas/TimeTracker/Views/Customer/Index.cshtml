@@ -126,7 +126,7 @@
                if (selectedCust != null && confirm("Delete customer " + $("#" + selectedCust).text().trim() + "?"))
                {
                     var link = '@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new { id = "-1" })';
-                    link.replace("-1", selectedCust);
+                    link = link.replace("-1", selectedCust);
                     window.location = link;
                }
            }
@@ -136,14 +136,14 @@
                if (selectedCust != null && confirm("Delete project " + $("#project-" + selectedProj).text().trim() + "?"))
                {
                     var link = '@Url.Action(ActionConstants.Delete, ControllerConstants.Project, new { id = "-1" })';
-                    link.replace("-1", selectedProject);
+                    link = link.replace("-1", selectedProj);
                     window.location = link;
                }
            }
 
            function CreateCustomer()
            {
-               window.location = '@Url.Action(ActionConstants.Add, ControllerConstants.Customer)';
+               window.location = '@Url.Action(ActionConstants.Create, ControllerConstants.Customer)';
            }
 
            function CreateProject()
@@ -151,7 +151,7 @@
                if (selectedCust != null)
                {
                    var link = '@Url.Action(ActionConstants.Create, ControllerConstants.Project, new { id = "-1" })';
-                   link.replace("-1", selectedCust);
+                   link = link.replace("-1", selectedCust);
                    window.location = link;
                }
            }
@@ -160,8 +160,8 @@
            {
                if (selectedCust != null)
                {
-                    var link = '@Url.Action(ActionConstants.ReactivateCustomer, ControllerConstants.Customer, new { id = "-1" })';
-                    link.replace("-1", selectedCust);
+                    var link = '@Url.Action(ActionConstants.Reactivate, ControllerConstants.Customer, new { id = "-1" })';
+                    link = link.replace("-1", selectedCust);
                     window.location = link;
                }
            }
@@ -171,7 +171,7 @@
                 if (selectedProj != null)
                 {
                     var link = '@Url.Action(ActionConstants.Reactivate, ControllerConstants.Project, new { id = "-1" })';
-                    link.replace("-1", selectedProj);
+                    link = link.replace("-1", selectedProj);
                     window.location = link;
                 }
            }
