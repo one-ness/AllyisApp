@@ -27,41 +27,40 @@
         </div>
 
         <div class="flexbox-row flexbox-row-2-col-collapse">
-            <div class="col-md-6">
-                <div class="panel panel-info" style="position: relative">
-                    <div class="panel-heading">
-                        <h1 class="panel-title">@Strings.CustomerList</h1>
-                    </div>
-                    <div class="panel-body list-group" id="Customers">
-                        @foreach (CustomerProjectViewModel customer in Model.Customers)
-                        {
-                            <a onclick="PopulateProjects('@customer.CustomerInfo.CustomerId')" class="list-group-item" id="@customer.CustomerInfo.CustomerId">
-                                <text>@customer.CustomerInfo.Name</text>
-                            </a>
-                        }
-                        <br />
-                    </div>
+            <div class="panel panel-info" style="position: relative">
+                <div class="panel-heading">
+                    <h1 class="panel-title">@Strings.CustomerList</h1>
                 </div>
-                <div class="pull-left">
-                    <a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Customer)" class="glyphicon glyphicon-pencil"></a>
-                    <a href="@Url.Action(ActionConstants.Add, ControllerConstants.Customer)" class="glyphicon glyphicon-plus"></a>
-                    <a href="@Url.Action(ActionConstants.Add, ControllerConstants.Customer)" class="glyphicon glyphicon-remove" style="color:dimgrey"></a>
+                <div class="panel-body list-group" id="Customers">
+                    @foreach (CustomerProjectViewModel customer in Model.Customers)
+                    {
+                        <a onclick="PopulateProjects('@customer.CustomerInfo.CustomerId')" class="list-group-item" id="@customer.CustomerInfo.CustomerId">
+                            <text>@customer.CustomerInfo.Name</text>
+                        </a>
+                    }
+                    <br />
                 </div>
             </div>
-            <div class="col-md-6" height="100%">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h1 class="panel-title">@Strings.Project</h1>
-                    </div>
-                    <div id="Projects">
-                        <!--projects belong to chosen customer will be populated here-->
-                    </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h1 class="panel-title">@Strings.Project</h1>
                 </div>
-                <div class="pull-left">
-                    <span class="glyphicon glyphicon-pencil"></span>
-                    <span class="glyphicon glyphicon-plus"></span>
-                    <span class="glyphicon glyphicon-remove"></span>
+                <div class="panel-body list-group" id="Projects">
+                    <!--projects belong to chosen customer will be populated here-->
                 </div>
+            </div>
+        </div>
+        <div class="pull-left">
+            <a onclick="EditCustomer()" class="glyphicon glyphicon-pencil"></a>
+            <a onclick="DeleteCustomer()" class="glyphicon glyphicon-remove"></a>
+            <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Customer)" class="glyphicon glyphicon-plus"></a>
+        </div>
+        <div class="col-md-5 col-md-offset-5" style="padding-left: 4%">
+            <div class="pull-left">
+                <a onclick="EditProject()" class="glyphicon glyphicon-pencil"></a>
+                <a onclick="DeleteProject()" class="glyphicon glyphicon-remove"></a>
+                <a onclick="CreateProject()" class="glyphicon glyphicon-plus"></a>
             </div>
         </div>
     </div>
@@ -69,7 +68,8 @@
 
 @section Scripts{
     <script type="text/javascript">
-        var selected;
+        var selectedCust = 1;
+        var selectedProj;
 
         if (@Model.Customers.Count() > 0)
         {
@@ -78,10 +78,17 @@
             })
         }
 
+        function SelectProject(projectId)
+        {
+            $("#project-" + selectedProj).css("font-weight", "Normal");
+            selectedProj = projectId;
+            $("#project-" + selectedProj).css("font-weight", "Bold");
+        }
+
         function PopulateProjects(chosenCustomerId) {
-            $(selected).css("font-weight", "Normal");
-            selected = "#" + chosenCustomerId;
-            $(selected).css("font-weight", "Bold");
+            $("#" + selectedCust).css("font-weight", "Normal");
+            selectedCust = chosenCustomerId;
+            $("#" + selectedCust).css("font-weight", "Bold");
             $.ajax({
                     type: 'POST',
                     cache: false,
@@ -92,6 +99,47 @@
                         $("#Projects").html(response);
                     }
             });
+        }
+
+        function EditCustomer()
+        {
+            var link = '@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = "-1" })';
+            link = link.replace("-1", selectedCust);
+            window.location = link;
+        }
+
+        function DeleteCustomer()
+        {
+            if (confirm("Delete customer " + $("#" + selectedCust).text().trim() + "?"))
+            {
+                var link = '@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new { id = "-1" })';
+                link = link.replace("-1", selectedCust);
+                window.location = link;
+            }
+        }
+
+        function EditProject()
+        {
+            var link = '@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new { id = "-1" })';
+            link = link.replace("-1", selectedProj);
+            window.location = link;
+        }
+
+        function DeleteProject()
+        {
+            if (confirm("Delete project " + $("#project-" + selectedProj).text().trim() + "?"))
+            {
+                var link = '@Url.Action(ActionConstants.Delete, ControllerConstants.Project, new { id = "-1" })';
+                link = link.replace("-1", selectedProj);
+                window.location = link;
+            }
+        }
+
+        function CreateProject()
+        {
+                var link = '@Url.Action(ActionConstants.Create, ControllerConstants.Project, new { id = "-1" })';
+                link = link.replace("-1", selectedCust);
+                window.location = link;
         }
     </script>
 }
