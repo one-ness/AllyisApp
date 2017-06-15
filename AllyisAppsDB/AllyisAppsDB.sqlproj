@@ -264,6 +264,8 @@
     <Build Include="StoredProcedures\Crm\Crm.CreateProjectAndUpdateItsUserList.sql" />
     <Build Include="StoredProcedures\Crm\Crm.ReactivateCustomer.sql" />
     <Build Include="StoredProcedures\Crm\Crm.GetInactiveProjectsAndCustomersForOrgAndUser.sql" />
+    <Build Include="StoredProcedures\Crm\GetInactiveProjectsByCustomer.sql" />
+    <Build Include="StoredProcedures\Crm\Crm.ReactivateProject.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

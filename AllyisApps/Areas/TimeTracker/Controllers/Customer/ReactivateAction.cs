@@ -21,7 +21,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// </summary>
         /// <param name = "id" > The Customer id.</param>
         /// <returns>The Customer index.</returns>
-        public ActionResult ReactivateCustomer(int id)
+        public ActionResult Reactivate(int id)
         {
             var result = AppService.ReactivateCustomer(id);
 
@@ -38,21 +38,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         }
 
 
-        /// <summary>
-        /// POST: Customer/Delete.
-        /// </summary>
-        /// <returns>The Customer index.</returns>
-        public ActionResult Reactivate()
-        {
-			if (AppService.Can(Actions.CoreAction.ViewCustomer))
-			{
-				return this.View(this.ConstructManageInactiveCustomerViewModel(UserContext.UserId, UserContext.ChosenOrganizationId));
-			}
+   //     /// <summary>
+   //     /// POST: Customer/Delete.
+   //     /// </summary>
+   //     /// <returns>The Customer index.</returns>
+   //     public ActionResult Reactivate()
+   //     {
+			//if (AppService.Can(Actions.CoreAction.ViewCustomer))
+			//{
+			//	return this.View(this.ConstructManageInactiveCustomerViewModel(UserContext.UserId, UserContext.ChosenOrganizationId));
+			//}
 
-			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+			//Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
-			return this.RouteHome();
-        }
+   //         return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
+   //     }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ManageCustomerViewModel" /> class.

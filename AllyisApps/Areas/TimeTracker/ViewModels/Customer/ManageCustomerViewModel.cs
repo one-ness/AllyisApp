@@ -18,26 +18,19 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// </summary>
 		public IEnumerable<CustomerProjectViewModel> Customers { get; internal set; }
 
-		/// <summary>
-		/// Gets the id of the current organization.
-		/// </summary>
-		public int OrganizationId { get; internal set; }
+        /// <summary>
+        /// Gets the list of Customers and their project data.
+        /// </summary>
+        public IEnumerable<CustomerProjectViewModel> InactiveCustomerAndProjects { get; internal set; }
+
+        /// <summary>
+        /// Gets the id of the current organization.
+        /// </summary>
+        public int OrganizationId { get; internal set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the user can edit customers/projects.
 		/// </summary>
 		public bool canEdit { get; set; }
-
-        /// <summary>
-        /// Customer name
-        /// </summary>
-        public string CustId { get; set; }
-
-        /// <summary>
-        /// Customer name
-        /// </summary>
-        public string Name { get; set; }
-
-
     }
 }

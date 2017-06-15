@@ -11,9 +11,9 @@
                 <h1 class="panel-title">@Strings.CustomerList</h1>
             </div>
             <div class="panel-body list-group" id="Customers">
-                @foreach (CustomerProjectViewModel customer in Model.Customers)
+                @foreach (CustomerProjectViewModel customer in Model.InactiveCustomerAndProjects)
                 {
-                    <a onclick="PopulateProjects('@customer.CustomerInfo.CustomerId')" class="list-group-item" id="@customer.CustomerInfo.CustomerId">
+                    <a onclick="PopulateInactiveProjects('@customer.CustomerInfo.CustomerId')" class="list-group-item" id="@customer.CustomerInfo.CustomerId">
                         <text>@customer.CustomerInfo.Name</text>
                     </a>
                 }
@@ -28,7 +28,7 @@
             <div class="panel-heading">
                 <h1 class="panel-title">@Strings.Projects</h1>
             </div>
-            <div class="panel-body list-group" id="Projects">
+            <div class="panel-body list-group" id="InactiveProjects">
                 <!--projects belong to chosen customer will be populated here-->
             </div>
         </div>

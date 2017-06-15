@@ -188,14 +188,33 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Returns a CompleteProjectDBEntity for the project, a list of UserDBEntities for the project's assigned
-		/// users, and a list of SubscriptionUserDBEntities for all users of the given subscription.
-		/// </summary>
-		/// <param name="projectId">Project Id.</param>
-		/// <param name="subscriptionId">Subscription Id.</param>
-		/// <returns></returns>
-		public Tuple<CompleteProjectDBEntity, List<UserDBEntity>, List<SubscriptionUserDBEntity>> GetProjectEditInfo(int projectId, int subscriptionId)
+        /// <summary>
+        /// Gets all the projects associated with a specific customer.
+        /// </summary>
+        /// <param name="customerID">The id of the customer.</param>
+        /// <returns>A collection of projects with the definied customer.</returns>
+        public IEnumerable<ProjectDBEntity> GetInactiveProjectsByCustomer(int customerID)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@customerID", customerID);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                return connection.Query<ProjectDBEntity>(
+                    "[Crm].[GetInactiveProjectsByCustomer]",
+                    parameters,
+                   commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        /// <summary>
+        /// Returns a CompleteProjectDBEntity for the project, a list of UserDBEntities for the project's assigned
+        /// users, and a list of SubscriptionUserDBEntities for all users of the given subscription.
+        /// </summary>
+        /// <param name="projectId">Project Id.</param>
+        /// <param name="subscriptionId">Subscription Id.</param>
+        /// <returns></returns>
+        public Tuple<CompleteProjectDBEntity, List<UserDBEntity>, List<SubscriptionUserDBEntity>> GetProjectEditInfo(int projectId, int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@ProjectId", projectId);
