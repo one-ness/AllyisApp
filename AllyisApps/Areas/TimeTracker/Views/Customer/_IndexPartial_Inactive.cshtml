@@ -5,7 +5,7 @@
 @model ManageCustomerViewModel
 
 <div class="flexbox-row flexbox-row-2-col-collapse">
-    <div class="col-md-6">
+   
         <div class="panel panel-info" style="position: relative">
             <div class="panel-heading">
                 <h1 class="panel-title">@Strings.CustomerList</h1>
@@ -28,12 +28,7 @@
                 }
             </div>
         </div>
-        <div class="pull-right">
-            @*<a onclick="ReactivateCustomer()" class="glyphicon glyphicon-plus"></a>*@
-            <button type="button" onclick="ReactivateCustomer()" class="btn btn-info" id="reactivateCustomerButton"><i class="glyphicon glyphicon-plus"></i></button>
-        </div>
-    </div>
-    <div class="col-md-6" height="100%">
+           
         <div class="panel panel-info" style="position: relative">
             <div class="panel-heading">
                 <h1 class="panel-title">@Strings.Projects</h1>
@@ -42,8 +37,14 @@
                 <!--inactive projects belong to chosen customer will be populated here-->
             </div>
         </div>
+        
+    <div style="position: relative">
         <div class="pull-right">
-            @*<a onclick="ReactivateProject()" class="glyphicon glyphicon-plus"></a>*@
+            <button type="button" onclick="ReactivateCustomer()" class="btn btn-info" id="reactivateCustomerButton"><i class="glyphicon glyphicon-plus"></i></button>
+        </div>
+    </div>
+    <div style="position: relative">
+        <div class="pull-right">
             <button type="button" onclick="ReactivateProject()" class="btn btn-info" id="reactivateProjectButton"><i class="glyphicon glyphicon-plus"></i></button>
         </div>
     </div>
