@@ -52,9 +52,7 @@
         if (@Model.Customers.Count() > 0)
         {
             $(document).ready(function () {
-                if (@Model.Customers.First().Projects!=null) {
                     PopulateProjects(@Model.Customers.First().CustomerInfo.CustomerId)
-                }
             })
         }
 
