@@ -19,6 +19,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The result of this action.</returns>
 		public ActionResult Index()
 		{
+			// TODO: change this later, for now everyone must login and go to account home page.
 			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 		}
 	}

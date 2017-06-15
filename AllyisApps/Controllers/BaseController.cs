@@ -77,29 +77,16 @@ namespace AllyisApps.Controllers
 		/// <returns>The proper redirect for the product.</returns>
 		public ActionResult RouteHome()
 		{
-			if (Request.IsAuthenticated)
-			{
-				// go to user home
-				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
-			}
-
-			return this.RedirectToAction(ActionConstants.LogOn);
+			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Home);
 		}
 
 		/// <summary>
 		/// Get user context from cookie.
 		/// </summary>
-		/// <param name="request">The HttpResponseBase.</param>
-		/// <returns>The UserContext, or null on error.</returns>
-		public CookieData GetCookieData(HttpRequestBase request)
+		public CookieData GetCookieData()
 		{
-			if (request == null)
-			{
-				throw new NullReferenceException("Http request must not be null");
-			}
-
 			CookieData result = null;
-			HttpCookie cookie = request.Cookies[FormsAuthentication.FormsCookieName];
+			HttpCookie cookie = this.Request.Cookies[FormsAuthentication.FormsCookieName];
 			if (cookie != null)
 			{
 				try
@@ -122,8 +109,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Sign out.
 		/// </summary>
-		/// <param name="response">The Response object passed in from a controller.</param>
-		public void SignOut(HttpResponseBase response)
+		public void SignOut()
 		{
 			FormsAuthentication.SignOut();
 
@@ -131,9 +117,10 @@ namespace AllyisApps.Controllers
 			//// get the cookie, set expire time in the past, and set it in response to delete it
 			HttpCookie cookie = FormsAuthentication.GetAuthCookie(FormsAuthentication.FormsCookieName, false);
 			cookie.Expires = DateTime.UtcNow.AddDays(-5);
-			response.Cookies.Add(cookie);
+			this.Response.Cookies.Add(cookie);
 		}
 
+		private const string languageKey = "language";
 		/// <summary>
 		/// On action executing - executed before every action.
 		/// </summary>
@@ -142,36 +129,38 @@ namespace AllyisApps.Controllers
 		{
 			base.OnActionExecuting(filterContext);
 
-			int languageID = 0;
-			const string TempDataKey = "language";
+			// get the language id from TempData dictionary, which was set in previous request
+			int languageId = 0;
+			if (TempData[languageKey] != null)
+			{
+				languageId = (int)TempData[languageKey];
+			}
 
 			if (Request.IsAuthenticated)
 			{
 				// an authenticated request MUST have user context in the cookie.
-				CookieData cookie = this.GetCookieData(Request);
-				if (cookie != null && cookie.userId > 0)
+				CookieData cookie = this.GetCookieData();
+				if (cookie != null && cookie.UserId > 0)
 				{
-					this.UserContext = this.AppService.PopulateUserContext(cookie.userId);
+					this.UserContext = this.AppService.PopulateUserContext(cookie.UserId);
 				}
 
 				if (this.UserContext != null)
 				{
-					// User context successfully populated
-					this.AppService.SetUserContext(this.UserContext);
-					languageID = this.UserContext.ChosenLanguageID;
-					ViewBag.ShowOrganizationPartial = true;
-
-					// Update Chosen Subscription if we are in a product area
-					if (cProductId > 0)
+					// user context obtained. set user's language on the thread.
+					if (languageId == 0 || languageId != this.UserContext.ChosenLanguageId)
 					{
-						UserOrganizationInfo org = this.UserContext.ChosenOrganization;
-						if (org != null)
+						// user's language is either not set, or user has changed the language to a different one
+						if (this.UserContext.ChosenLanguageId > 0)
 						{
-							UserSubscriptionInfo sub = org.UserSubscriptions.Values.Where(s => (int)s.ProductId == cProductId).SingleOrDefault();
-							if (sub != null && this.UserContext.ChosenSubscriptionId != sub.SubscriptionId)
+							Language language = this.AppService.GetLanguage(this.UserContext.ChosenLanguageId);
+							if (language != null)
 							{
-								AppService.UpdateActiveSubscription(sub.SubscriptionId == 0 ? null : (int?)sub.SubscriptionId);
-								this.UserContext.ChosenSubscriptionId = sub.SubscriptionId;
+								CultureInfo cInfo = CultureInfo.CreateSpecificCulture(language.CultureName);
+								Thread.CurrentThread.CurrentCulture = cInfo;
+								Thread.CurrentThread.CurrentUICulture = cInfo;
+								ViewBag.languageName = language.LanguageName;
+								languageId = language.LanguageId;
 							}
 						}
 					}
@@ -179,52 +168,14 @@ namespace AllyisApps.Controllers
 				else
 				{
 					// User context not found
-					this.SignOut(Response);
+					this.SignOut();
 					Response.Redirect(FormsAuthentication.LoginUrl);
 					return;
 				}
 			}
-			else
-			{
-				if (TempData[TempDataKey] != null)
-				{
-					languageID = (int)TempData[TempDataKey];
-					TempData[TempDataKey] = languageID; // Store it again for next request.
-				}
-			}
 
-			Language language = this.AppService.GetLanguage(languageID);
-			if (language != null)
-			{
-				CultureInfo cInfo = CultureInfo.CreateSpecificCulture(language.CultureName);
-				Thread.CurrentThread.CurrentCulture = cInfo;
-				Thread.CurrentThread.CurrentUICulture = cInfo;
-				ViewBag.languageName = language.LanguageName;
-				TempData[TempDataKey] = language.LanguageID; // Store it for next request.
-			}
-		}
-
-		/// <summary>
-		/// Gets a CookieData object from a UserContext.
-		/// </summary>
-		/// <param name="context">The UserContext to use. (If null, the current context is used.)</param>
-		/// <returns>A CookieData for that UserContext.</returns>
-		public CookieData GetCookieDataFromUserContext(UserContext context = null)
-		{
-			UserContext contextToUse;
-			if (context == null)
-			{
-				contextToUse = this.UserContext;
-			}
-			else
-			{
-				contextToUse = context;
-			}
-
-			return new CookieData
-			{
-				userId = contextToUse.UserId
-			};
+			// store language for next request
+			TempData[languageKey] = languageId;
 		}
 
 		/// <summary>

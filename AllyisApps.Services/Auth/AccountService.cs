@@ -102,7 +102,7 @@ namespace AllyisApps.Services
 		{
 			return DBHelper.ValidLanguages().Select(s => new Language
 			{
-				LanguageID = s.LanguageID,
+				LanguageId = s.LanguageID,
 				LanguageName = s.LanguageName,
 				CultureName = s.CultureName
 			});
@@ -373,25 +373,20 @@ namespace AllyisApps.Services
 						// is there a subscription id?
 						if (item.SubscriptionId.HasValue)
 						{
-							// yes, was it already added to the list?
-							UserSubscriptionInfo subInfo = null;
-							if (!orgInfo.UserSubscriptions.TryGetValue(item.SubscriptionId.Value, out subInfo))
-							{
-								subInfo = new UserSubscriptionInfo()
-								{
-									SubscriptionId = item.SubscriptionId.Value,
-									ProductId = (ProductIdEnum)item.ProductId.Value,
-									ProductName = item.ProductName,
-									RoleName = item.RoleName,
-									ProductRole = (ProductRoleIdEnum)item.ProductRoleId.Value,
-									SkuId = item.SkuId.Value
-								};
+							UserSubscriptionInfo subInfo = new UserSubscriptionInfo() {
+								SubscriptionId = item.SubscriptionId.Value,
+								ProductId = (ProductIdEnum)item.ProductId.Value,
+								ProductName = item.ProductName,
+								RoleName = item.RoleName,
+								ProductRole = (ProductRoleIdEnum)item.ProductRoleId.Value,
+								SkuId = item.SkuId.Value
+							};
 
-								orgInfo.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
+							// add it to the list of subscriptions for this organization
+							orgInfo.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
 
-								// also add it to the result
-								result.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
-							}
+							// also add it to the result
+							result.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
 							
 							// compare with chosen subscription? is user still a member of it?
 							if (result.ChosenSubscriptionId == item.SubscriptionId.Value)
@@ -558,7 +553,7 @@ namespace AllyisApps.Services
 			LanguageDBEntity language = DBHelper.GetLanguage(languageID);
 			return new Language
 			{
-				LanguageID = language.LanguageID,
+				LanguageId = language.LanguageID,
 				LanguageName = language.LanguageName,
 				CultureName = language.CultureName
 			};

@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers
 		{
 			List<LanguageViewModel> languages = AppService.ValidLanguages().Select(l => new LanguageViewModel
 			{
-				LanguageID = l.LanguageID,
+				LanguageID = l.LanguageId,
 				LanguageName = l.LanguageName,
 				CultureName = l.CultureName
 			}).ToList();

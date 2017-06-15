@@ -1,16 +1,9 @@
 ﻿@model AllyisApps.ViewModels.Shared.LogOnPartialViewModel
 
-@{
-    Layout = string.Empty;
-}
-
 @if (!string.IsNullOrEmpty(Model.UserName))
 {
     <li>
-        @if (Model.ChosenOrganizationId > 0 && Model.ShowOrganizationPartial)
-        {
-			<span class="headerOrgName">@Model.ChosenOrganizationName</span>
-		}
+		<span class="headerOrgName">@Model.ChosenOrganizationName</span>
     </li>
 
     <li>

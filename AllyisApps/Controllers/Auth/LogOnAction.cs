@@ -54,11 +54,11 @@ namespace AllyisApps.Controllers
 				if ((result = AppService.ValidateLogin(model.Email, model.Password)) != null)
 				{
 					// sign in
-					this.SignIn(result.UserId, result.UserName, result.Email, Response, model.RememberMe);
+					this.SignIn(result.UserId, result.UserName, result.Email, model.RememberMe);
 
 					this.UserContext = this.AppService.PopulateUserContext(result.UserId);
 
-					// todo: redirect to the last chosen subscription
+					// TODO: redirect to the last chosen subscription
 					return this.RouteHome();
 				}
 				else
@@ -74,43 +74,9 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Sign in the given user.
 		/// </summary>
-		/// <param name="userId">The user ID.</param>
-		/// <param name="userName">The user name.</param>
-		/// <param name="email">The user's email.</param>
-		/// <param name="response">The Response object passed in from a controller.</param>
-		/// <param name="isPersisted">Whether to set a persistent cookie or not (i.e. whether "Remember Me" is checked).</param>
-		public void SignIn(
-			int userId,
-			string userName,
-			string email,
-			HttpResponseBase response,
-			bool isPersisted = false)
+		private void SignIn(int userId, string userName, string email, bool isPersisted = false)
 		{
-			#region Validation
-
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
-			}
-
-			if (string.IsNullOrEmpty(userName))
-			{
-				throw new ArgumentException("User name must have a value.");
-			}
-
-			if (string.IsNullOrEmpty(email))
-			{
-				throw new ArgumentNullException("email", "Email address must have a value.");
-			}
-			else if (!AppService.IsEmailAddressValid(email))
-			{
-				throw new FormatException("Email address must be in a valid format.");
-			}
-
-			#endregion Validation
-
-			UserContext context = new UserContext(userId, userName, email);
-			this.SetAuthCookie(context, response, isPersisted);
+			this.SetAuthCookie(userId, userName, isPersisted);
 		}
 
 		/// <summary>
@@ -119,16 +85,13 @@ namespace AllyisApps.Controllers
 		/// -   make the Request.IsAuthenticated to true
 		/// - sample code here: https://msdn.microsoft.com/en-us/library/system.web.security.formsauthentication.encrypt(v=vs.110).aspx .
 		/// </summary>
-		/// <param name="context">The UserContext.</param>
-		/// <param name="response">The Response object passed in from a controller.</param>
-		/// <param name="isPersisted">Whether to set a persistent cookie or not.</param>
-		private void SetAuthCookie(UserContext context, HttpResponseBase response, bool isPersisted = false)
+		private void SetAuthCookie(int userId, string userName, bool isPersisted = false)
 		{
 			//// serialize the cookie data object, then ecnrypt it using formsauthentication module
-			string serialized = this.SerializeCookie(this.GetCookieDataFromUserContext(context));
+			string serialized = this.SerializeCookie(new CookieData(userId));
 			FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
 				/*AuthenticationTicketVersion*/1,
-				context.UserName,
+				userName,
 				DateTime.UtcNow,
 				DateTime.UtcNow.AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
 				isPersisted,
@@ -140,8 +103,8 @@ namespace AllyisApps.Controllers
 			cookie.HttpOnly = true;
 			cookie.Value = encryptedTicket;
 
-			//// set the cookie to response
-			response.Cookies.Add(cookie);
+			// set the cookie to response
+			this.Response.Cookies.Add(cookie);
 		}
 	}
 }

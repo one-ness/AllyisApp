@@ -24,8 +24,6 @@ namespace AllyisApps.Controllers
 		/// <returns>The async task responsible for this action.</returns>
 		public ActionResult Index()
 		{
-			ViewBag.ShowOrganizationPartial = false;
-
 			var infos = AppService.GetUserOrgsAndInvitationInfo();
 
 			IndexAndOrgsViewModel model = new IndexAndOrgsViewModel

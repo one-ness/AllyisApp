@@ -48,7 +48,7 @@ namespace AllyisApps.Services
 			this.UserName = username;
 			this.ChosenOrganizationId = chosenOrganizationId;
 			this.ChosenSubscriptionId = chosenSubscriptionId;
-			this.ChosenLanguageID = chosenLanguageID;
+			this.ChosenLanguageId = chosenLanguageID;
 		}
 
 		/// <summary>
@@ -68,22 +68,11 @@ namespace AllyisApps.Services
 		[JsonIgnore]
 		public string Email { get; set; }
 
-		private int chosenOrganizationId;
 		/// <summary>
 		/// Gets or sets the organization id the user chooses to work on (or last worked on).
 		/// </summary>
 		[JsonIgnore]
-		public int ChosenOrganizationId
-		{
-			get
-			{
-				return this.chosenOrganizationId;
-			}
-			set
-			{
-				this.chosenOrganizationId = value;
-			}
-		}
+		public int ChosenOrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets the chosen organization
@@ -98,22 +87,11 @@ namespace AllyisApps.Services
 			}
 		}
 
-		private int chosenSubscriptionId;
 		/// <summary>
 		/// Gets or sets the subscription id the user chooses to work on (or last worked on).
 		/// </summary>
 		[JsonIgnore]
-		public int ChosenSubscriptionId
-		{
-			get
-			{
-				return this.chosenSubscriptionId;
-			}
-			set
-			{
-				this.chosenSubscriptionId = value;
-			}
-		}
+		public int ChosenSubscriptionId { get; set; }
 
 		/// <summary>
 		/// Gets the chosen subscription
@@ -144,7 +122,6 @@ namespace AllyisApps.Services
 		/// Gets or sets the preferred language for this user.
 		/// </summary>
 		[JsonIgnore]
-		public int ChosenLanguageID { get; set; }
-
+		public int ChosenLanguageId { get; set; }
 	}
 }
