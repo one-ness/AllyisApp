@@ -29,6 +29,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The result of this action.</returns>
 		public ActionResult Add(string returnUrl)
 		{
+            Console.Write(returnUrl);
 			// Only owners should view this page
 			if (AppService.Can(Actions.CoreAction.EditOrganization))
 			{
