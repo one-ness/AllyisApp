@@ -49,7 +49,7 @@
 					@foreach (SubscriptionDisplayViewModel sub in Model.Subscriptions)
 					{
 						<div class="panel-wrap panel-wrap-one" style="width: 300px;">
-							<a href="@Url.Action(ActionConstants.ApplicationRedirect, ControllerConstants.Account, routeValues: new { productId = sub.ProductId, organizationId = Model.OrgInfo.OrganizationId })" style="text-decoration: none">
+							<a href="@Url.Action(ActionConstants.ApplicationRedirect, ControllerConstants.Account, routeValues: new { id = Model.OrgInfo.OrganizationId })" style="text-decoration: none">
 								<div class="panel panel-default">
 									<div class="panel-heading" style="display: table; width: 100%; height: 100%;">
 										<div class="left" style="display: table-cell; width: 30%; text-align: center; vertical-align: middle;">
