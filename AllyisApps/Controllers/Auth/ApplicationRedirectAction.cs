@@ -31,9 +31,17 @@ namespace AllyisApps.Controllers
 				throw new AccessViolationException("invalid subscription");
 			}
 
-			// todo: get the product for the subscription and route to the product
+            // todo: get the product for the subscription and route to the product
+            if (Request.IsAuthenticated)
+            {
+                Product product = AppService.GetProductById(AppService.GetProductIdByName(subInfo.ProductName));
+                if (product != null && !string.IsNullOrWhiteSpace(product.ProductName))
+                {
+                    return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { area = subInfo.ProductName, userId = this.UserContext.UserId });
+                }
+            }
 
-			return this.RouteHome();
+            return this.RouteHome();
 		}
 	}
 }

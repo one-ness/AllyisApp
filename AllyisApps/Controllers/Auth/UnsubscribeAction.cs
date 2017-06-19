@@ -105,7 +105,7 @@ namespace AllyisApps.Controllers
 				//Notifications.Add(new BootstrapAlert(formattedNotificationString, Variety.Success));
 				//}
 
-				return this.RedirectToAction(ActionConstants.Manage);
+				return this.RedirectToAction(ActionConstants.Manage, new { id = model.OrganizationId });
 			}
 
 			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditSubscriptionsMessage), ControllerConstants.Subscription, ActionConstants.Subscribe));
