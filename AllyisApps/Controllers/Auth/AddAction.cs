@@ -54,6 +54,7 @@ namespace AllyisApps.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Add(AddMemberViewModel add, int id)
 		{
+            Console.Write(id);
 			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(id);
 			add.Subscriptions = model.Subscriptions;
 			add.Projects = model.Projects;
