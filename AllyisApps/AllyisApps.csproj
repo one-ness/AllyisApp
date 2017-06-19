@@ -17,8 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -546,7 +546,7 @@
     <Content Include="Views\Account\CreateOrg.cshtml" />
     <Content Include="Views\Account\ConfirmRemoveBillingInformation.cshtml" />
     <Content Include="Views\Account\Permission.cshtml" />
-    <Content Include="Views\Account\Edit.cshtml" />
+    <Content Include="Views\Account\EditOrg.cshtml" />
     <Content Include="Views\Account\Permission2.cshtml" />
     <Content Include="Views\Account\_OrgMembers2.cshtml" />
     <Content Include="Views\Account\ViewUser.cshtml" />

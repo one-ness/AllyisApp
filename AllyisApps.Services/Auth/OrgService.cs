@@ -108,14 +108,15 @@ namespace AllyisApps.Services
 				spResults.Item6.Select(pdb => InitializeProduct(pdb)).ToList());
 		}
 
-		/// <summary>
-		/// Gets the Organization for the current chosen organization, along with the list of valid countries and the
-		/// employee id for the current user in the current chosen organization.
-		/// </summary>
-		/// <returns></returns>
-		public Tuple<Organization, List<string>, string> GetOrgWithCountriesAndEmployeeId()
+        /// <summary>
+        /// Gets the Organization for the current chosen organization, along with the list of valid countries and the
+        /// employee id for the current user in the current chosen organization.
+        /// </summary>
+        /// <param name="orgId">Organization Id.</param>
+        /// <returns></returns>
+        public Tuple<Organization, List<string>, string> GetOrgWithCountriesAndEmployeeId(int orgId)
 		{
-			var spResults = DBHelper.GetOrgWithCountriesAndEmployeeId(UserContext.ChosenOrganizationId, UserContext.UserId);
+			var spResults = DBHelper.GetOrgWithCountriesAndEmployeeId(orgId, UserContext.UserId);
 			return Tuple.Create(
 				InitializeOrganization(spResults.Item1),
 				spResults.Item2,

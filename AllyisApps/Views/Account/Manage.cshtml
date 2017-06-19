@@ -26,7 +26,7 @@
                     @Strings.OrganizationDetails
                     @*@if (Model.CanEditOrganization)
                     {*@
-                    <a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Account)"
+                    <a href="@Url.Action(ActionConstants.EditOrg, ControllerConstants.Account, new { id = Model.OrganizationId })"
                        class = "pull-right text-muted" title="@Strings.EditOrganization"><span class="fa fa-fw fa-edit"></span></a>
 					@*}*@
                 </h1>

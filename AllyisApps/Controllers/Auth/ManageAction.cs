@@ -18,12 +18,13 @@ namespace AllyisApps.Controllers
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
-		/// <summary>
-		/// Get: Account/Manage.
-		/// The management page for an organization, displays billing, subscriptions, etc.
-		/// </summary>
-		/// <returns>The organization's management page.</returns>
-		public ActionResult Manage(int id)
+        /// <summary>
+        /// Get: Account/Manage/id
+        /// The management page for an organization, displays billing, subscriptions, etc.
+        /// </summary>
+        /// <param name="id">The organization Id</param>
+        /// <returns>The organization's management page.</returns>
+        public ActionResult Manage(int id)
 		{
 			if (AppService.Can(Actions.CoreAction.EditOrganization, true, id))
 			{
