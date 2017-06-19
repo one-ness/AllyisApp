@@ -104,10 +104,10 @@ namespace AllyisApps.ViewModels.Auth
 		[Display(Name = "Owner Employee ID")]
 		public string EmployeeId { get; set; }
 
-		/// <summary>
-		/// Gets the organization's ID.
-		/// </summary>
-		public int OrganizationId { get; internal set; }
+        /// <summary>
+        /// Gets the organization's ID.
+        /// </summary>
+        public int OrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether a user has permition to delete the org.
