@@ -15,7 +15,7 @@
         var preserveState = '@(Model != null ? (States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';
 		var dropdownempty = "@Strings.DropDownEmpty";
 		var isSubdomainNameUniqueAction = "@(Url.Action(ActionConstants.IsSubdomainNameUnique))?subdomainName=";
-		var oldSubdomainName = '@Model.SubdomainName';
+		@*var oldSubdomainName = '@Model.SubdomainName';*@
     </script>
     @Scripts.Render("~/bundles/UpdateStateDDL");
 	@Scripts.Render("~/bundles/AccountCreateOrg");

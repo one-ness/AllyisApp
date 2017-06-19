@@ -65,17 +65,18 @@ namespace AllyisApps.Controllers
 			return this.View(model);
 		}
 
-		/// <summary>
-		/// GET: /Account/Edit.
-		/// The page for editing an organization's information.
-		/// </summary>
-		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
-		/// <returns>The result of this action.</returns>
-		public ActionResult Edit(string returnUrl)
+        /// <summary>
+        /// GET: /Account/Edit.
+        /// The page for editing an organization's information.
+        /// </summary>
+        /// <param name="id">The organization id</param>
+        /// <param name="returnUrl">The return url to redirect to after form submit.</param>
+        /// <returns>The result of this action.</returns>
+        public ActionResult EditOrg(int id, string returnUrl)
 		{
-			if (AppService.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization, true, id))
 			{
-				var infos = AppService.GetOrgWithCountriesAndEmployeeId();
+				var infos = AppService.GetOrgWithCountriesAndEmployeeId(id);
 				EditOrganizationViewModel model = this.ConstructEditOrganizationViewModel(
 					infos.Item1,
 					true,
