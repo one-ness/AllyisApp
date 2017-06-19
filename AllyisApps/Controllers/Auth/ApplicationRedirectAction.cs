@@ -25,7 +25,7 @@ namespace AllyisApps.Controllers
 			if (!this.UserContext.UserSubscriptions.TryGetValue(id, out subInfo))
 			{
 				// set active subscrption to none
-				this.AppService.UpdateActiveSubscription(id);
+				this.AppService.UpdateActiveSubscription(0);
 
 				// throw exception for trying to access some other subscription
 				throw new AccessViolationException("invalid subscription");
