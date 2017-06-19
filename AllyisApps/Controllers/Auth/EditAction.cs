@@ -48,13 +48,13 @@ namespace AllyisApps.Controllers
 					{
 						// Organization updated successfully
 						Notifications.Add(new BootstrapAlert(@Resources.Strings.OrganizationDetailsUpdated, Variety.Success));
-						return this.RedirectToAction(ActionConstants.Manage);
+						return this.RedirectToAction(ActionConstants.Manage, ControllerConstants.Account, new { id = UserContext.ChosenOrganizationId });
 					}
 				}
 				catch (ArgumentException)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SubdomainTaken, Variety.Danger));
-					return this.RedirectToAction(ActionConstants.Edit);
+					return this.RedirectToAction(ActionConstants.Edit, UserContext.ChosenOrganizationId);
 				}
 
 				// Organization update failed due to invalid permissions
@@ -66,7 +66,7 @@ namespace AllyisApps.Controllers
 		}
 
         /// <summary>
-        /// GET: /Account/Edit.
+        /// GET: /Account/EditOrg.
         /// The page for editing an organization's information.
         /// </summary>
         /// <param name="id">The organization id</param>
