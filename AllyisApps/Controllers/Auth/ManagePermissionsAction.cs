@@ -44,16 +44,17 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <returns>Action result.</returns>
 		[HttpGet]
-		public ActionResult ManagePermissions()
+		public ActionResult ManagePermissions(int id)
 		{
-			if (AppService.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization, false, id))
 			{
 				var infos = AppService.GetOrgAndSubRoles();
-				ManagePermissionsViewModel model = new ManagePermissionsViewModel
-				{
-					Users = new List<UserPermissionsViewModel>(),
-					Subscriptions = infos.Item2,
-					SubIds = infos.Item2.Select(s => s.SubscriptionId).ToList(),
+                ManagePermissionsViewModel model = new ManagePermissionsViewModel
+                {
+                    Users = new List<UserPermissionsViewModel>(),
+                    Subscriptions = infos.Item2,
+                    SubIds = infos.Item2.Select(s => s.SubscriptionId).ToList(),
+                    OrganizationId = id,
 					// TODO: Get rid of this once product panes in Permissions page are genericized.
 					TimeTrackerId = (int)ProductIdEnum.TimeTracker
 				};
@@ -194,7 +195,7 @@ namespace AllyisApps.Controllers
 		public ActionResult ManagePermissions(string data)
 		{
 			UserPermissionsAction model = JsonConvert.DeserializeObject<UserPermissionsAction>(data);
-			if (AppService.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization, false, model.OrganizationId))
 			{
 				if (model.SelectedUsers == null || model.SelectedUsers.Count() == 0)
 				{
@@ -205,7 +206,7 @@ namespace AllyisApps.Controllers
 				if (model.SelectedActions == null)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.NoActionsSelected, Variety.Danger));
-					return RedirectToAction(ActionConstants.ManagePermissions);
+					return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 				}
 
 				if (model.SelectedActions.OrgRoleTarget != 0)
@@ -214,7 +215,7 @@ namespace AllyisApps.Controllers
 					if (!Enum.IsDefined(typeof(OrganizationRole), model.SelectedActions.OrgRoleTarget) && model.SelectedActions.OrgRoleTarget != -1)
 					{
 						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
-						return RedirectToAction(ActionConstants.ManagePermissions);
+						return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 					}
 
 					if (model.SelectedUsers.Where(tu => tu.UserId == UserContext.UserId).Any())
@@ -231,7 +232,7 @@ namespace AllyisApps.Controllers
 						model.SelectedUsers = model.SelectedUsers.Where(tu => tu.UserId != UserContext.UserId);
 						if (model.SelectedUsers.Count() == 0)
 						{
-							return RedirectToAction(ActionConstants.ManagePermissions);
+							return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 						}
 					}
 
@@ -251,14 +252,14 @@ namespace AllyisApps.Controllers
 					if (!Enum.IsDefined(typeof(ProductRoleIdEnum), model.SelectedActions.TimeTrackerRoleTarget) && model.SelectedActions.TimeTrackerRoleTarget != -1)
 					{
 						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
-						return RedirectToAction(ActionConstants.ManagePermissions);
+						return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 					}
 
 					Tuple<int, int> updatedAndAdded = AppService.ChangeSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value);
 					if (updatedAndAdded.Item1 == -1)
 					{
 						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDontHaveASubscriptionToTimeTracker, Variety.Danger));
-						return RedirectToAction(ActionConstants.ManagePermissions);
+						return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 					}
 
 					if (updatedAndAdded.Item1 != 0)
@@ -285,7 +286,7 @@ namespace AllyisApps.Controllers
 			{
 				return RedirectToAction(ActionConstants.ManagePermissions2);
 			}
-			return RedirectToAction(ActionConstants.ManagePermissions);
+			return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 		}
 	}
 }
