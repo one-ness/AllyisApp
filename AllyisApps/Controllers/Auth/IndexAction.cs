@@ -48,6 +48,7 @@ namespace AllyisApps.Controllers
 					{
 						orgVM.Subscriptions.Add(new SubscriptionDisplayViewModel
 						{
+                            SubscriptionId = userSubInfo.SubscriptionId,
 							ProductId = (int)userSubInfo.ProductId,
 							ProductName = userSubInfo.ProductName,
 							ProductDisplayName = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTracker : "Unknown Product",

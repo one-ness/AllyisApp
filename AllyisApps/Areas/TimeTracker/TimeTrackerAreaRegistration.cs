@@ -62,7 +62,7 @@ namespace AllyisApps.Areas.TimeTracker
 				url: "TimeTracker/{controller}/{action}/{subscriptionId}/{id}",
 				area: this.AreaName,
 				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
-				constraints: new { subscriptionId = @"\d+"},
+				constraints: new { subscriptionId = @"\d+", id = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.TimeTracker.Controllers" });
 		}
 	}

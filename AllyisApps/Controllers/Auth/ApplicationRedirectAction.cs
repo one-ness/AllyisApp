@@ -16,7 +16,7 @@ namespace AllyisApps.Controllers
 	public partial class AccountController : BaseController
 	{
 		/// <summary>
-		/// Redirects to the correct application given the productId.
+		/// Redirects to the correct application given the subscriptionId.
 		/// </summary>
 		public ActionResult ApplicationRedirect(int id)
 		{
