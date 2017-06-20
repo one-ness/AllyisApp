@@ -34,7 +34,8 @@ gatherData = function () {
 	// Assemble and return UserPermissionsAction object of data
 	result = {};
 	result.SelectedUsers = checked_users;
-	result.SelectedActions = selectedAction;
+    result.SelectedActions = selectedAction;
+    result.OrganizationId = $("#OrganizationId").val();
 
 	result.isPermissions2 = true; // Delete this once there's only one permissions management page
 

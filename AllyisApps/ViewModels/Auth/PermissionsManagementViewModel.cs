@@ -250,6 +250,11 @@ namespace AllyisApps.ViewModels.Auth
 		/// TODO: Delete this once there's only one permissions management page
 		/// </summary>
 		public bool isPermissions2 { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the Organization's ID for this action
+        /// </summary>
+        public int OrganizationId { get; set; }
 	}
 
 	/// <summary>
