@@ -252,7 +252,7 @@ namespace AllyisApps.ViewModels.Auth
 		public bool isPermissions2 { get; set; }
         
         /// <summary>
-        /// Gets or sets the Organization's ID for this action
+        /// Gets or sets the Organization's ID
         /// </summary>
         public int OrganizationId { get; set; }
 	}
