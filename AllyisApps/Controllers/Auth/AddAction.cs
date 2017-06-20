@@ -48,12 +48,13 @@ namespace AllyisApps.Controllers
         /// Adding a new member to an organization.
         /// </summary>
         /// <param name="add">The View Model of user info passed from Add.cshtml</param>
+        /// <param name="id"></param>
         /// <returns>The result of this action</returns>
         [HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Add(AddMemberViewModel add)
+		public async Task<ActionResult> Add(AddMemberViewModel add, int id)
 		{
-			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(add.OrganizationId);
+			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(id);
 			add.Subscriptions = model.Subscriptions;
 			add.Projects = model.Projects;
 
@@ -72,27 +73,27 @@ namespace AllyisApps.Controllers
 						}
 					}
 
-					try
-					{
-						int invitationId = await AppService.InviteUser(
-							Url.Action(ActionConstants.Index, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme),
-							new InvitationInfo
-							{
-								Email = add.Email.Trim(),
-								FirstName = add.FirstName,
-								LastName = add.LastName,
-								OrganizationId = add.OrganizationId,
-								OrgRole = (int)(add.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member),
-								ProjectId = add.SubscriptionProjectId,
-								EmployeeId = add.EmployeeId,
-								EmployeeType = (int)(add.EmployeeType == "Salaried" ? EmployeeType.Salaried : EmployeeType.Hourly)
-							},
-							subId,
-							subRoleId
-						);
+                    try
+                    {
+                        int invitationId = await AppService.InviteUser(
+                            Url.Action(ActionConstants.Index, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme),
+                            new InvitationInfo
+                            {
+                                Email = add.Email.Trim(),
+                                FirstName = add.FirstName,
+                                LastName = add.LastName,
+                                OrganizationId = add.OrganizationId,
+                                OrgRole = (int)(add.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member),
+                                ProjectId = add.SubscriptionProjectId,
+                                EmployeeId = add.EmployeeId,
+                                EmployeeType = (int)(add.EmployeeType == "Salaried" ? EmployeeType.Salaried : EmployeeType.Hourly)
+                            },
+                            subId,
+                            subRoleId
+                        );
 
-						Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, add.FirstName, add.LastName), Variety.Success));
-						return this.RedirectToAction(ActionConstants.Manage);
+                        Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, add.FirstName, add.LastName), Variety.Success));
+                        return this.RedirectToAction(ActionConstants.Manage, new { id = add.OrganizationId});
 					}
 					catch (ArgumentException ex)
 					{
