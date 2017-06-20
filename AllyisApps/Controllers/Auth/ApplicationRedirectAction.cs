@@ -37,7 +37,7 @@ namespace AllyisApps.Controllers
                 Product product = AppService.GetProductById(AppService.GetProductIdByName(subInfo.ProductName));
                 if (product != null && !string.IsNullOrWhiteSpace(product.ProductName))
                 {
-                    return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { area = subInfo.ProductName, userId = this.UserContext.UserId });
+                    return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { area = subInfo.ProductName, userId = this.UserContext.UserId, subscriptionId = id });
                 }
             }
 
