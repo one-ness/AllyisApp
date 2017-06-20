@@ -21,14 +21,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// </summary>
 	public partial class TimeEntryController : BaseController
 	{
-		/// <summary>
-		/// GET: /TimeTracker/TimeEntry/Ajax?{params}.
-		/// </summary>
-		/// <param name="userId">Another user's Id.</param>
-		/// <param name="startDate">The beginning of the Date Range.</param>
-		/// <param name="endDate">The ending of the Date Range.</param>
-		/// <returns>Provides the view for the defined user over the date range defined.</returns>
-		public ActionResult Index(int userId = -1, int? startDate = null, int? endDate = null)
+        /// <summary>
+        /// GET: /TimeTracker/TimeEntry/Ajax?{params}.
+        /// </summary>
+        /// <param name="userId">Another user's Id.</param>
+        /// <param name="subscriptionId">The SubscriptionId</param>
+        /// <param name="startDate">The beginning of the Date Range.</param>
+        /// <param name="endDate">The ending of the Date Range.</param>
+        /// <returns>Provides the view for the defined user over the date range defined.</returns>
+        public ActionResult Index(int userId = -1, int subscriptionId = -1, int? startDate = null, int? endDate = null)
 		{
 			bool manager = AppService.Can(Actions.CoreAction.TimeTrackerEditOthers);
 

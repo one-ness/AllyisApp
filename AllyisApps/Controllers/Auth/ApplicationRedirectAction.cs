@@ -16,7 +16,7 @@ namespace AllyisApps.Controllers
 	public partial class AccountController : BaseController
 	{
 		/// <summary>
-		/// Redirects to the correct application given the productId.
+		/// Redirects to the correct application given the subscriptionId.
 		/// </summary>
 		public ActionResult ApplicationRedirect(int id)
 		{
@@ -37,7 +37,7 @@ namespace AllyisApps.Controllers
                 Product product = AppService.GetProductById(AppService.GetProductIdByName(subInfo.ProductName));
                 if (product != null && !string.IsNullOrWhiteSpace(product.ProductName))
                 {
-                    return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { area = subInfo.ProductName, userId = this.UserContext.UserId });
+                    return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { area = subInfo.ProductName, userId = this.UserContext.UserId, subscriptionId = id });
                 }
             }
 
