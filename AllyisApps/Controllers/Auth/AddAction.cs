@@ -48,20 +48,18 @@ namespace AllyisApps.Controllers
         /// Adding a new member to an organization.
         /// </summary>
         /// <param name="add">The View Model of user info passed from Add.cshtml</param>
-        /// <param name="id"></param>
         /// <returns>The result of this action</returns>
         [HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Add(AddMemberViewModel add, int id)
+		public async Task<ActionResult> Add(AddMemberViewModel add)
 		{
-            Console.Write(id);
-			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(id);
+			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(add.OrganizationId);
 			add.Subscriptions = model.Subscriptions;
 			add.Projects = model.Projects;
 
 			if (ModelState.IsValid)
 			{
-				if (AppService.Can(Actions.CoreAction.EditOrganization, true, id))
+				if (AppService.Can(Actions.CoreAction.EditOrganization, true, add.OrganizationId))
 				{
 					int? subId = null, subRoleId = null;
 					if (add.Subscriptions != null && add.Subscriptions.Count > 0)
