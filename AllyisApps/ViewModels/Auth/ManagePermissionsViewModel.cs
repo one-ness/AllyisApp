@@ -33,6 +33,11 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the index of TimeTracker in the subscriptions list.
 		/// </summary>
 		public int TimeTrackerSubIndex { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ID of the organization associated with this manager.
+        /// </summary>
+        public int OrganizationId { get; set; }
 	}
 
 	/// <summary>
