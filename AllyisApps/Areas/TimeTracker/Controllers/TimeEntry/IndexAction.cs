@@ -31,7 +31,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <returns>Provides the view for the defined user over the date range defined.</returns>
         public ActionResult Index(int userId = -1, int subscriptionId = -1, int? startDate = null, int? endDate = null)
 		{
-			bool manager = AppService.Can(Actions.CoreAction.TimeTrackerEditOthers);
+			bool manager = AppService.Can(Actions.CoreAction.TimeTrackerEditOthers,false,-1,subscriptionId);
 
 			if (userId != -1 && userId != Convert.ToInt32(UserContext.UserId))
 			{ // Trying to edit as another user
@@ -43,7 +43,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{ // Either userId is -1, or it is the current user
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf, false, -1, subscriptionId))
 				{ // Current user cannot edit self
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 					return this.Redirect("/");
