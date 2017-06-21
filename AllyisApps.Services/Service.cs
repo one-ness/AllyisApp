@@ -304,8 +304,10 @@ namespace AllyisApps.Services
 		/// Deletes a holiday and related time entries for the current organization.
 		/// </summary>
 		/// <param name="holidayId">Id of holiday to delete.</param>
+        /// <param name="orgId">The organization's ID</param>
+        /// <param name="subscriptionId">The subscription id</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool DeleteHoliday(int holidayId)
+		public bool DeleteHoliday(int holidayId, int orgId, int subscriptionId)
 		{
 			#region Validation
 
@@ -316,12 +318,12 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId))
 			{
-				HolidayDBEntity deletedHoliday = DBHelper.GetHolidays(UserContext.ChosenOrganizationId).Where(h => h.HolidayId == holidayId).SingleOrDefault();
+				HolidayDBEntity deletedHoliday = DBHelper.GetHolidays(orgId).Where(h => h.HolidayId == holidayId).SingleOrDefault();
 				if (deletedHoliday != null)
 				{
-					DBHelper.DeleteHoliday(deletedHoliday.HolidayName, deletedHoliday.Date, UserContext.ChosenOrganizationId);
+					DBHelper.DeleteHoliday(deletedHoliday.HolidayName, deletedHoliday.Date, orgId);
 				}
 
 				return true;
@@ -346,7 +348,7 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("payClassName", "Pay class name must have a value.");
 			}
 
-			if (this.GetPayClasses().Where(p => p.Name.Equals(payClassName)).Any())
+			if (this.GetPayClasses(orgId).Where(p => p.Name.Equals(payClassName)).Any())
 			{
 				throw new ArgumentException("payClassName", "Pay class name must be unique for the organization.");
 			}
@@ -355,7 +357,7 @@ namespace AllyisApps.Services
 
 			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId))
 			{
-				DBHelper.CreatePayClass(payClassName, UserContext.ChosenOrganizationId);
+				DBHelper.CreatePayClass(payClassName, orgId);
 
 				return true;
 			}
@@ -367,8 +369,10 @@ namespace AllyisApps.Services
 		/// Deletes a pay class.
 		/// </summary>
 		/// <param name="payClassId">Pay class Id.</param>
+        /// <param name="orgId">The organization's Id</param>
+        /// <param name="subscriptionId">The subscription's Id</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool DeletePayClass(int payClassId)
+		public bool DeletePayClass(int payClassId, int orgId, int subscriptionId)
 		{
 			#region Validation
 
@@ -379,7 +383,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId))
 			{
 				DBHelper.DeletePayClass(payClassId);
 
@@ -412,9 +416,9 @@ namespace AllyisApps.Services
 		/// Gets a list of <see cref="PayClass"/>'s for an organization.
 		/// </summary>
 		/// <returns>List of PayClassInfo's.</returns>
-		public IEnumerable<PayClass> GetPayClasses()
+		public IEnumerable<PayClass> GetPayClasses(int organizationId)
 		{
-			return DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InitializePayClassInfo(pc));
+			return DBHelper.GetPayClasses(organizationId).Select(pc => InitializePayClassInfo(pc));
 		}
 
 		/// <summary>

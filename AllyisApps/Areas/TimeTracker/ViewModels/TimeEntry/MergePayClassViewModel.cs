@@ -24,6 +24,11 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// </summary>
 		public string sourcePayClassName { get; set; }
 
+        /// <summary>
+        /// The subscription's ID
+        /// </summary>
+        public int SubscriptionId { get; set; }
+
 		/// <summary>
 		/// Gets or sets the pay classes that can be merged into.
 		/// </summary>
