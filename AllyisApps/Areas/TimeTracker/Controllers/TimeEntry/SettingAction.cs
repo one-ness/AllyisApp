@@ -29,11 +29,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			if (AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId))
 			{
-				return this.View(new SettingsViewModel()
-				{
-					Settings = infos.Item1,
-					PayClasses = infos.Item2,
-					Holidays = infos.Item3
+                return this.View(new SettingsViewModel()
+                {
+                    Settings = infos.Item1,
+                    PayClasses = infos.Item2,
+                    Holidays = infos.Item3,
+                    SubscriptionId = subscriptionId,
+                    UserId = UserContext.UserId
 				});
 			}
 

@@ -10,6 +10,8 @@
     ViewBag.TitleBar = Strings.TrackTime;
     Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
     ViewData["IsManager"] = Model.CanManage;
+    ViewData["UserId"] = Model.EntryRange.UserId;
+    ViewData["SubscriptionId"] = Model.Subscriptionid;
 }
 
 <div class="row">

@@ -64,6 +64,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 													startDate,
 													endDate);
 
+                if (subscriptionId > -1) model.Subscriptionid = subscriptionId;
 				return this.View(model);
 			}
 			catch (InvalidOperationException e)

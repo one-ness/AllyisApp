@@ -11,15 +11,17 @@
         {
             manager = true;
         }
+        var userId = ViewData["UserId"];
+        var subId = ViewData["SubscriptionId"];
     }
     <a class="dropdown-toggle" id="TheDropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         @Strings.TimeTracker <span class="caret"></span>
     </a>
 
     <ul class="dropdown-menu dropdown-menu-right" id="TheDropdown2">
-        <li>@Html.ActionLink(Strings.TimeEntry, ActionConstants.Index, ControllerConstants.TimeEntry)</li>
-        @if (manager) { <li>@Html.ActionLink(Strings.Reports, ActionConstants.Report, ControllerConstants.TimeEntry, new { subscriptionId = 17, id = 20 }, "TimeTracker")</li> }
+        <li>@Html.ActionLink(Strings.TimeEntry, ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId = subId, id = userId }, "TimeTracker")</li>
+        @if (manager) { <li>@Html.ActionLink(Strings.Reports, ActionConstants.Report, ControllerConstants.TimeEntry, new { subscriptionId = subId, id = userId }, "TimeTracker")</li> }
         <li>@Html.ActionLink(Strings.Customers, ActionConstants.Index, ControllerConstants.Customer)</li>
-        @if (manager) {<li>@Html.ActionLink(Strings.Settings, ActionConstants.Settings, ControllerConstants.TimeEntry, new { subscriptionId = 17, id = 20 }, "TimeTracker")</li> }
+        @if (manager) {<li>@Html.ActionLink(Strings.Settings, ActionConstants.Settings, ControllerConstants.TimeEntry, new { subscriptionId = subId, id = userId }, "TimeTracker")</li> }
     </ul>
 </li>
