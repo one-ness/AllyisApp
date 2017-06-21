@@ -10,6 +10,8 @@
     DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
     ViewBag.OrganizationId = Model.OrganizationId;
     Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
+    ViewData["UserId"] = Model.UserId;
+    ViewData["SubscriptionId"] = Model.SubscriptionId;
 }
 
 <div class="row report-wrap">
