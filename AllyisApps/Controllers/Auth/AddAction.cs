@@ -76,7 +76,7 @@ namespace AllyisApps.Controllers
                     try
                     {
                         int invitationId = await AppService.InviteUser(
-                            Url.Action(ActionConstants.Index, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme),
+                            Url.Action(ActionConstants.Register, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme),
                             new InvitationInfo
                             {
                                 Email = add.Email.Trim(),
