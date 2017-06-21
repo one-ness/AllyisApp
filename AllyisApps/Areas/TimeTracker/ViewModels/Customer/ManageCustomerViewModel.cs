@@ -24,9 +24,19 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
         public IEnumerable<CustomerProjectViewModel> InactiveCustomerAndProjects { get; internal set; }
 
         /// <summary>
+        /// The subscription's ID
+        /// </summary>
+        public int SubscriptionId { get; set; }
+
+        /// <summary>
         /// Gets the id of the current organization.
         /// </summary>
         public int OrganizationId { get; internal set; }
+
+        /// <summary>
+        /// Gets the user's ID
+        /// </summary>
+        public int UserId { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the user can edit customers/projects.
