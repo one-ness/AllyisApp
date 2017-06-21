@@ -20,8 +20,9 @@ namespace AllyisApps.Services
 		/// <param name="targetAction">The action for which to check authorization.</param>
 		/// <param name="throwException">Whether or not to throw an exception based upon the check results.</param>
 		/// <param name="organizationId">The organization to use for checking permissions. Defaults to the chosen organization.</param>
+        /// <param name="subscriptionId">The subscription to use for checking permissions.</param>
 		/// <returns>Whether or not the user has Authorization for the given action.</returns>
-		public bool Can(Actions.CoreAction targetAction, bool throwException = false, int organizationId = -1)
+		public bool Can(Actions.CoreAction targetAction, bool throwException = false, int organizationId = -1, int subscriptionId = -1)
 		{
 			// TODO: throwException defaults to True, result defaults to True, adjust bottom return result accordingly
 			bool result = false;
@@ -29,13 +30,14 @@ namespace AllyisApps.Services
 			UserSubscriptionInfo subInfo = null;
 
 			if (organizationId == -1) organizationId = UserContext.ChosenOrganizationId;
+            if (subscriptionId == -1) subscriptionId = UserContext.ChosenSubscriptionId;
 
 			// Get role information
 			// has the user chosen an organization
 			if (organizationId > 0)
 			{
 				// get the user role in chosen organization
-				orgInfo = UserContext.UserOrganizationInfoList.Where(x => x.OrganizationId == organizationId).FirstOrDefault();
+				UserContext.UserOrganizations.TryGetValue(organizationId, out orgInfo);
 
 				// Info should never be null
 				if (orgInfo != null)
@@ -44,8 +46,9 @@ namespace AllyisApps.Services
 					ProductIdEnum product = Actions.GetProductForAction(targetAction);
 					if (product != ProductIdEnum.None)
 					{
-						subInfo = orgInfo.UserSubscriptionInfoList.Where(s => s.ProductId == product).FirstOrDefault();
-					}
+                        //orgInfo.UserSubscriptions.TryGetValue((int)product, out subInfo);
+                        orgInfo.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+                    }
 
 					//// Has the user chosen a subscription
 					//if (UserContext.ChosenSubscriptionId > 0)

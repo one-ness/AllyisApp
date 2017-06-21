@@ -1,26 +1,18 @@
 ﻿@model AllyisApps.ViewModels.Shared.LogOnPartialViewModel
 
-@{
-    Layout = string.Empty;
-}
-
 @if (!string.IsNullOrEmpty(Model.UserName))
 {
     <li>
-        @if (Model.ChosenOrganizationId > 0 && Model.ShowOrganizationPartial)
-        {
-            @*<a href="@Url.SubdomainLink(ActionConstants.Organizations, ControllerConstants.Account, null, Model.ChosenOrganizationId, this.Request)">@Model.ChosenOrganizationName</a>*@
-			<span class="headerOrgName">@Model.ChosenOrganizationName</span>
-		}
+		<span class="headerOrgName">@Model.ChosenOrganizationName</span>
     </li>
 
     <li>
         @{
-            <a href="@Url.SubdomainLink(ActionConstants.Index, ControllerConstants.Account, new RouteValueDictionary(new {area = ""}), Model.ChosenOrganizationId, this.Request)">@Model.FirstName @Model.LastName</a>
+			@Html.ActionLink(Model.UserName, ActionConstants.Index, ControllerConstants.Account)
         }
     </li>
     <li>
-        <a href="@Url.SubdomainLink(ActionConstants.LogOff, ControllerConstants.Account, null, 0, this.Request)"
+        <a href="@Url.Action(ActionConstants.LogOff, ControllerConstants.Account)"
            title="@Strings.SignOut"
            class="btn btn-default navbar-btn col-xs-push-2 col-xs-8 col-sm-12"
            onclick="return promptForLogOff()"

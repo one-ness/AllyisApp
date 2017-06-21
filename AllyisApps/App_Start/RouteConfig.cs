@@ -23,24 +23,11 @@ namespace AllyisApps
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-			routes.MapSubdomainRoute(
-				name: "Application_Redirect",
-				url: "{controller}/{action}/{productId}/{OrganizationId}",
-				defaults: new { controller = "Home", productId = UrlParameter.Optional, organizationId = UrlParameter.Optional },
-				constraints: new { action = "ApplicationRedirect" },
-				namespaces: new string[] { "AllyisApps.Controllers" });
-
-			routes.MapSubdomainRoute(
-				name: "Subdomain_Default",
-				url: "{controller}/{action}/{id}",
-				defaults: new { controller = /*string.Empty*/ "Account", /*determined by route*/ action = "RouteHome", id = UrlParameter.Optional },
-				namespaces: new string[] { "AllyisApps.Controllers" });
-
 			routes.Add(
-				"Default",
+				"default",
 				new Route(
 					url: "{controller}/{action}/{id}",
-					defaults: new RouteValueDictionary(new { controller = "Account", action = "RouteHome", id = UrlParameter.Optional }),
+					defaults: new RouteValueDictionary(new { controller = "Home", action = "Index", id = UrlParameter.Optional }),
 					constraints: null,
 					dataTokens: new RouteValueDictionary(
 						new

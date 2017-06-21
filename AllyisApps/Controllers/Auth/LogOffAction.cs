@@ -23,7 +23,7 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult LogOff()
 		{
-			this.SignOut(Response);
+			this.SignOut();
 
 			// display success message to user
 			Notifications.Add(new BootstrapAlert(Resources.Strings.LogOffSuccess, Variety.Success));

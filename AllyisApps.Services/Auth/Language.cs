@@ -14,7 +14,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the language ID.
 		/// </summary>
-		public int LanguageID { get; set; }
+		public int LanguageId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the language name.
@@ -26,5 +26,14 @@ namespace AllyisApps.Services
 		/// See https://msdn.microsoft.com/en-us/library/system.globalization.cultureinfo.aspx for more info.
 		/// </summary>
 		public string CultureName { get; set; }
+
+		/// <summary>
+		/// constructor. default language is en-us
+		/// </summary>
+		public Language()
+		{
+			this.LanguageName = "English (US)";
+			this.CultureName = "en-us";
+		}
 	}
 }

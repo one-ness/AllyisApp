@@ -21,10 +21,9 @@ namespace AllyisApps.Controllers
 		/// Gets the log on partial.
 		/// </summary>
 		/// <param name="returnUrl">The return URL.</param>
-		/// <param name="showOrganizationPartial">Whether to show the organization.</param>
 		/// <returns>The ActionResult.</returns>
 		[ChildActionOnly]
-		public ActionResult LogOnPartial(string returnUrl, bool showOrganizationPartial = false)
+		public ActionResult LogOnPartial(string returnUrl)
 		{
 			LogOnPartialViewModel model = null;
 			if (this.UserContext != null)
@@ -32,23 +31,8 @@ namespace AllyisApps.Controllers
 				model = new LogOnPartialViewModel
 				{
 					UserName = UserContext.UserName,
-                    FirstName = AppService.GetUser().FirstName,
-                    LastName = AppService.GetUser().LastName,
-					ChosenOrganizationId = UserContext.ChosenOrganizationId,
-					ChosenOrganizationName = UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).Select(o => o.OrganizationName).FirstOrDefault(),
-					CanEditOrganization = AppService.Can(Actions.CoreAction.EditOrganization, false),
-					UserOrganizationBriefInfoList = new List<OrganizationBriefInfo>(),
-					ShowOrganizationPartial = showOrganizationPartial
+					ChosenOrganizationName = UserContext.ChosenOrganization == null ? string.Empty : UserContext.ChosenOrganization.OrganizationName,
 				};
-
-				foreach (var orgInfo in UserContext.UserOrganizationInfoList)
-				{
-					model.UserOrganizationBriefInfoList.Add(new OrganizationBriefInfo
-					{
-						OrganizationID = orgInfo.OrganizationId,
-						OrganizationName = orgInfo.OrganizationName,
-					});
-				}
 			}
 			else
 			{
@@ -56,7 +40,7 @@ namespace AllyisApps.Controllers
 			}
 
 			ViewBag.ReturnUrl = returnUrl;
-			return this.View(ViewConstants.LogOnPartial, model);
+			return this.PartialView(ViewConstants.LogOnPartial, model);
 		}
 	}
 }

@@ -275,8 +275,8 @@ function stopEditEmployeeType(userId, newTypeId, isMember) {
 
 function removeUser(orgId, userId, fullName) {
 	var result = confirm(removeFromOrg + " " + fullName + " " + removeFromOrgEnd);
-	if (result == true) {
-		var url = removeMemberAction + userId;
+    if (result == true) {
+        var url = removeMemberAction + userId + "&orgId=" + orgId;
 
 		var form = document.createElement('form');
 		form.setAttribute('method', 'post');
@@ -299,7 +299,7 @@ function removeUser(orgId, userId, fullName) {
 function deleteInvitation(orgId, invId) {
 	var result = confirm(removeInvitation);
 	if (result == true) {
-		var url = removeInvitationAction + invId;
+		var url = removeInvitationAction + invId + "&orgId=" + orgId;
 
 		var token = $('[name="__RequestVerificationToken"]').val();
 

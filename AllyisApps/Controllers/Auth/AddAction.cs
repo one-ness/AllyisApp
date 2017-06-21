@@ -21,18 +21,20 @@ namespace AllyisApps.Controllers
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
-		/// <summary>
-		/// GET: /Add.
-		/// The page for adding members to an organization.
-		/// </summary>
-		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
-		/// <returns>The result of this action.</returns>
-		public ActionResult Add(string returnUrl)
+        /// <summary>
+        /// GET: /Add.
+        /// The page for adding members to an organization.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="returnUrl">The return url to redirect to after form submit.</param>
+        /// <returns>The result of this action.</returns>
+        public ActionResult Add(int id, string returnUrl)
 		{
+            //Console.Write(id);
 			// Only owners should view this page
-			if (AppService.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization, true, id))
 			{
-				AddMemberViewModel model = ConstructOrganizationAddMembersViewModel();
+				AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(id);
 				ViewBag.returnUrl = returnUrl;
 				return this.View(model);
 			}
@@ -41,23 +43,24 @@ namespace AllyisApps.Controllers
 			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditMembersMessage), ControllerConstants.Account, ActionConstants.Add));
 		}
 
-		/// <summary>
-		/// POST: /Add
-		/// Adding a new member to an organization.
-		/// </summary>
-		/// <param name="add">The View Model of user info passed from Add.cshtml</param>
-		/// <returns>The result of this action</returns>
-		[HttpPost]
+        /// <summary>
+        /// POST: /Add
+        /// Adding a new member to an organization.
+        /// </summary>
+        /// <param name="add">The View Model of user info passed from Add.cshtml</param>
+        /// <param name="id"></param>
+        /// <returns>The result of this action</returns>
+        [HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Add(AddMemberViewModel add)
+		public async Task<ActionResult> Add(AddMemberViewModel add, int id)
 		{
-			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel();
+			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(id);
 			add.Subscriptions = model.Subscriptions;
 			add.Projects = model.Projects;
 
 			if (ModelState.IsValid)
 			{
-				if (AppService.Can(Actions.CoreAction.EditOrganization))
+				if (AppService.Can(Actions.CoreAction.EditOrganization, true, add.OrganizationId))
 				{
 					int? subId = null, subRoleId = null;
 					if (add.Subscriptions != null && add.Subscriptions.Count > 0)
@@ -70,27 +73,27 @@ namespace AllyisApps.Controllers
 						}
 					}
 
-					try
-					{
-						int invitationId = await AppService.InviteUser(
-							Url.Action(ActionConstants.Index, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme),
-							new InvitationInfo
-							{
-								Email = add.Email.Trim(),
-								FirstName = add.FirstName,
-								LastName = add.LastName,
-								OrganizationId = add.OrganizationId,
-								OrgRole = (int)(add.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member),
-								ProjectId = add.SubscriptionProjectId,
-								EmployeeId = add.EmployeeId,
-								EmployeeType = (int)(add.EmployeeType == "Salaried" ? EmployeeType.Salaried : EmployeeType.Hourly)
-							},
-							subId,
-							subRoleId
-						);
+                    try
+                    {
+                        int invitationId = await AppService.InviteUser(
+                            Url.Action(ActionConstants.Register, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme),
+                            new InvitationInfo
+                            {
+                                Email = add.Email.Trim(),
+                                FirstName = add.FirstName,
+                                LastName = add.LastName,
+                                OrganizationId = add.OrganizationId,
+                                OrgRole = (int)(add.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member),
+                                ProjectId = add.SubscriptionProjectId,
+                                EmployeeId = add.EmployeeId,
+                                EmployeeType = (int)(add.EmployeeType == "Salaried" ? EmployeeType.Salaried : EmployeeType.Hourly)
+                            },
+                            subId,
+                            subRoleId
+                        );
 
-						Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, add.FirstName, add.LastName), Variety.Success));
-						return this.RedirectToAction(ActionConstants.Manage);
+                        Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, add.FirstName, add.LastName), Variety.Success));
+                        return this.RedirectToAction(ActionConstants.Manage, new { id = add.OrganizationId});
 					}
 					catch (ArgumentException ex)
 					{
@@ -192,14 +195,14 @@ namespace AllyisApps.Controllers
 		/// Uses services to populate the lists of an <see cref="AddMemberViewModel"/> and returns it.
 		/// </summary>
 		/// <returns>The OrganizationAddMembersViewModel.</returns>
-		public AddMemberViewModel ConstructOrganizationAddMembersViewModel()
+		public AddMemberViewModel ConstructOrganizationAddMembersViewModel(int id)
 		{
 			var infos = AppService.GetAddMemberInfo();
 			string nextId = string.Compare(infos.Item1, infos.Item5) > 0 ? infos.Item1 : infos.Item5;
 
 			AddMemberViewModel result = new AddMemberViewModel
 			{
-				OrganizationId = UserContext.ChosenOrganizationId,
+				OrganizationId = id,
 				EmployeeId = new string(AppService.IncrementAlphanumericCharArray(nextId.ToCharArray())),
 				Subscriptions = new List<AddMemberSubscriptionInfo>(),
 				Projects = infos.Item4,

@@ -23,17 +23,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET /TimeTracker/TimeEntry/Report.
 		/// </summary>
+        /// <param name="subscriptionId">The Subscription Id</param>
 		/// <returns>The reports page.</returns>
-		public ActionResult Report()
+		public ActionResult Report(int subscriptionId)
 		{
-			if (AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
+            if (AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId))
 			{
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf, false, orgId, subscriptionId))
 				{
 					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReports);
 				}
 
-				int orgId = UserContext.ChosenOrganizationId;
+				//int orgId = UserContext.ChosenOrganizationId;
 				ReportViewModel reportVM = null;
 
 				var infos = AppService.GetReportInfo(orgId);
@@ -46,7 +48,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 				else
 				{
-					reportVM = this.ConstructReportViewModel(UserContext.UserId, orgId, AppService.Can(Actions.CoreAction.TimeTrackerEditOthers), infos.Item1, infos.Item2);
+					reportVM = this.ConstructReportViewModel(UserContext.UserId, orgId, AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId), infos.Item1, infos.Item2);
 				}
 
 				reportVM.UserView = this.GetUserSelectList(infos.Item3, reportVM.Selection.Users);

@@ -20,8 +20,7 @@ namespace AllyisApps.Services
 		public UserOrganizationInfo()
 		{
 			this.OrganizationRole = OrganizationRole.Member;
-			this.UserSubscriptionInfoList = new List<UserSubscriptionInfo>();
-			this.UserProjectList = new List<int>();
+			this.UserSubscriptions = new Dictionary<int, UserSubscriptionInfo>();
 		}
 
 		/// <summary>
@@ -30,45 +29,14 @@ namespace AllyisApps.Services
 		/// <param name="organizationId">The Organization ID.</param>
 		/// <param name="organizationName">The organization Name.</param>
 		/// <param name="role">The role.</param>
-		/// <param name="infoList">The info list.</param>
-		/// <param name="projectList">The project list.</param>
-		public UserOrganizationInfo(
-			int organizationId,
-			string organizationName,
-			OrganizationRole role,
-			List<UserSubscriptionInfo> infoList,
-			List<int> projectList)
+		public UserOrganizationInfo(int organizationId, string organizationName, OrganizationRole role) : this()
 		{
-			if (organizationId < 1)
-			{
-				throw new ArgumentOutOfRangeException("organizationId");
-			}
-
-			if (string.IsNullOrWhiteSpace(organizationName))
-			{
-				throw new ArgumentNullException("organizationName");
-			}
+			if (organizationId <= 0) throw new ArgumentException("organizationId");
+			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentException("organizationName");
 
 			this.OrganizationId = organizationId;
 			this.OrganizationName = organizationName;
 			this.OrganizationRole = role;
-			if (infoList == null)
-			{
-				this.UserSubscriptionInfoList = new List<UserSubscriptionInfo>();
-			}
-			else
-			{
-				this.UserSubscriptionInfoList = infoList;
-			}
-
-			if (projectList == null)
-			{
-				this.UserProjectList = new List<int>();
-			}
-			else
-			{
-				this.UserProjectList = projectList;
-			}
 		}
 
 		/// <summary>
@@ -89,11 +57,6 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the List of subscriptions this organization has subscribed to and the user's role in it.
 		/// </summary>
-		public List<UserSubscriptionInfo> UserSubscriptionInfoList { get; set; }
-
-		/// <summary>
-		/// Gets or sets the List of projects this user has within this organization.
-		/// </summary>
-		public List<int> UserProjectList { get; set; } // TODO: Flesh this out into a list of UserProjectInfo objects or something
+		public Dictionary<int, UserSubscriptionInfo> UserSubscriptions { get; set; }
 	}
 }

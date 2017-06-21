@@ -63,7 +63,7 @@
         </div>
 
         <div class="form-group allyis-action-buttons">
-            <a href="/Account/Manage" class="btn btn-default">@Strings.Back</a>
+            <a href="@Url.Action(ActionConstants.Manage, ControllerConstants.Account, new { id = Model.ActiveOrganizationId })" class="btn btn-default">@Strings.Back</a>
         </div>
         }
     </div>

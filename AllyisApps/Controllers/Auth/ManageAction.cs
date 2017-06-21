@@ -18,16 +18,17 @@ namespace AllyisApps.Controllers
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
-		/// <summary>
-		/// Get: Account/Manage.
-		/// The management page for an organization, displays billing, subscriptions, etc.
-		/// </summary>
-		/// <returns>The organization's management page.</returns>
-		public ActionResult Manage()
+        /// <summary>
+        /// Get: Account/Manage/id
+        /// The management page for an organization, displays billing, subscriptions, etc.
+        /// </summary>
+        /// <param name="id">The organization Id</param>
+        /// <returns>The organization's management page.</returns>
+        public ActionResult Manage(int id)
 		{
-			if (AppService.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization, true, id))
 			{
-				OrganizationManageViewModel model = this.ConstructOrganizationManageViewModel();
+				OrganizationManageViewModel model = this.ConstructOrganizationManageViewModel(id);
 				return this.View(model);
 			}
 
@@ -40,9 +41,9 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <returns>The OrganizationManageViewModel.</returns>
 		[CLSCompliant(false)]
-		public OrganizationManageViewModel ConstructOrganizationManageViewModel()
+		public OrganizationManageViewModel ConstructOrganizationManageViewModel(int orgId)
 		{
-			var infos = AppService.GetOrganizationManagementInfo();
+			var infos = AppService.GetOrganizationManagementInfo(orgId);
 
 			BillingServicesCustomer customer = (infos.Item5 == null) ? null : AppService.RetrieveCustomer(new BillingServicesCustomerId(infos.Item5));
 
@@ -68,7 +69,7 @@ namespace AllyisApps.Controllers
 					PendingInvitation = infos.Item4,
 					TotalUsers = infos.Item2.Count
 				},
-				OrganizationId = UserContext.ChosenOrganizationId,
+				OrganizationId = orgId,
 				BillingCustomer = customer,
 				SubscriptionCount = infos.Item3.Count,
 				Subscriptions = infos.Item6.Select(p =>

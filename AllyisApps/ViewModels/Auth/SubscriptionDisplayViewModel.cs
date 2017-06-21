@@ -43,5 +43,10 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the product description.
 		/// </summary>
 		public string ProductDescription { get; set; }
-	}
+
+        /// <summary>
+		/// Gets or sets the subscriptionId
+		/// </summary>
+		public int SubscriptionId { get; set; }
+    }
 }
