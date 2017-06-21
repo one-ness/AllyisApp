@@ -339,20 +339,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Updates the active subsciption for the current user.
-		/// </summary>
-		/// <param name="subscriptionId">Subscription Id.</param>
-		public void UpdateActiveSubscription(int? subscriptionId)
-		{
-			if (subscriptionId.HasValue && subscriptionId.Value <= 0)
-			{
-				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative. Use null instead of 0.");
-			}
-
-			DBHelper.UpdateActiveSubscription(UserContext.UserId, subscriptionId);
-		}
-
-		/// <summary>
 		/// Updates the number of subscription users for a sku in the current organization.
 		/// </summary>
 		/// <param name="skuId">Sku Id.</param>
@@ -678,7 +664,7 @@ namespace AllyisApps.Services
 			if (subscriptionId != null)
 			{
 				string skuName = this.Unsubscribe(subscriptionId.Value);
-				return string.Format("{0} has been unsubscribed from the license {1}.", UserContext.UserOrganizationInfoList.Where(o => o.OrganizationId == UserContext.ChosenOrganizationId).First().OrganizationName, skuName);
+				return string.Format("{0} has been unsubscribed from the license {1}.", UserContext.ChosenOrganization.OrganizationName, skuName);
 			}
 
 			return null;

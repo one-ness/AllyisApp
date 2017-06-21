@@ -6,7 +6,7 @@
 @{
     Organization details = Model.OrgInfo;
     string title = details.Name;
-    string subtitle = details.SiteUrl ?? details.Subdomain ?? "";
+    string subtitle = details.SiteUrl ?? "";
     var cityState = details.City != null && details.State != null ? details.City + ", " + details.State : details.City + details.State;
 }
 <div class="row">
@@ -17,7 +17,7 @@
                     @title
                     @if (Model.CanEditOrganization)
                     {
-                        <a href="@Url.SubdomainLink(ActionConstants.Manage, ControllerConstants.Account, null, Model.OrgInfo.OrganizationId, this.Request)" title="@Strings.EditOrganization" class="pull-right text-muted">
+                        <a href="@Url.Action(ActionConstants.Manage, ControllerConstants.Account, new { id = Model.OrgInfo.OrganizationId })" title="@Strings.EditOrganization" class="pull-right text-muted">
                             <i class="fa fa-cog  fa-lg"></i>
                         </a>
                     }
@@ -49,7 +49,7 @@
 					@foreach (SubscriptionDisplayViewModel sub in Model.Subscriptions)
 					{
 						<div class="panel-wrap panel-wrap-one" style="width: 300px;">
-							<a href="@Url.Action(ActionConstants.ApplicationRedirect, ControllerConstants.Home, routeValues: new { productId = sub.ProductId, organizationId = Model.OrgInfo.OrganizationId })" style="text-decoration: none">
+							<a href="@Url.Action(ActionConstants.ApplicationRedirect, ControllerConstants.Account, new { id = @sub.SubscriptionId })" style="text-decoration: none">                            
 								<div class="panel panel-default">
 									<div class="panel-heading" style="display: table; width: 100%; height: 100%;">
 										<div class="left" style="display: table-cell; width: 30%; text-align: center; vertical-align: middle;">

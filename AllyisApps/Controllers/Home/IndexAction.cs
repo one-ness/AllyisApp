@@ -17,10 +17,10 @@ namespace AllyisApps.Controllers
 		/// Displays the Home page.
 		/// </summary>
 		/// <returns>The result of this action.</returns>
-		[AllowAnonymous]
 		public ActionResult Index()
 		{
-			return this.View();
+			// TODO: change this later, for now everyone must login and go to account home page.
+			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 		}
 	}
 }

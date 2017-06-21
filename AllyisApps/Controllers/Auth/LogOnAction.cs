@@ -30,7 +30,7 @@ namespace AllyisApps.Controllers
 		{
 			if (Request.IsAuthenticated)
 			{
-				return this.HandleRedirects(returnURL);
+				return this.RouteHome();
 			}
 
 			ViewBag.ReturnURL = returnURL;
@@ -54,12 +54,13 @@ namespace AllyisApps.Controllers
 				if ((result = AppService.ValidateLogin(model.Email, model.Password)) != null)
 				{
 					// sign in
-					this.SignIn(result.UserId, result.UserName, result.Email, Response, model.RememberMe);
+					this.SignIn(result.UserId, result.UserName, result.Email, model.RememberMe);
 
 					this.UserContext = this.AppService.PopulateUserContext(result.UserId);
 
-                    return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
-                }
+					// TODO: redirect to the last chosen subscription
+					return this.RouteHome();
+				}
 				else
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SignInFailureMessage, Variety.Danger));
@@ -73,113 +74,9 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Sign in the given user.
 		/// </summary>
-		/// <param name="userId">The user ID.</param>
-		/// <param name="userName">The user name.</param>
-		/// <param name="email">The user's email.</param>
-		/// <param name="response">The Response object passed in from a controller.</param>
-		/// <param name="isPersisted">Whether to set a persistent cookie or not (i.e. whether "Remember Me" is checked).</param>
-		public void SignIn(
-			int userId,
-			string userName,
-			string email,
-			HttpResponseBase response,
-			bool isPersisted = false)
+		private void SignIn(int userId, string userName, string email, bool isPersisted = false)
 		{
-			#region Validation
-
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
-			}
-
-			if (string.IsNullOrEmpty(userName))
-			{
-				throw new ArgumentException("User name must have a value.");
-			}
-
-			if (string.IsNullOrEmpty(email))
-			{
-				throw new ArgumentNullException("email", "Email address must have a value.");
-			}
-			else if (!AppService.IsEmailAddressValid(email))
-			{
-				throw new FormatException("Email address must be in a valid format.");
-			}
-
-			#endregion Validation
-
-			UserContext context = new UserContext(userId, userName, email);
-			this.SetAuthCookie(context, response, isPersisted);
-		}
-
-		private ActionResult HandleRedirects(string returnURL)
-		{
-			// take user to return url, if supplied
-			if ((returnURL != null) && (string.Empty != returnURL))
-			{
-				return this.RedirectToLocal(returnURL);
-			}
-			else if (this.UserContext != null)
-			{
-				// if chosen subscription is in the current organization, go to the subscription, else go to the organization page.
-				int subscriptionID = this.UserContext.ChosenSubscriptionId;
-				int organizationID = this.UserContext.ChosenOrganizationId;
-
-				bool subIsInOrg = this.UserContext.UserOrganizationInfoList.Find(
-					x => x.UserSubscriptionInfoList.Any(
-					y => y.SubscriptionId == subscriptionID)) != null;
-
-				if (subIsInOrg)
-				{
-					string area = AppService.GetProductNameBySubscriptionID(subscriptionID);
-					return this.RedirectToSubDomainAction(organizationID, area);
-				}
-
-				// sub is not in the org or is not set, checking if the user is a member of only one sub to send them to instead
-				if (this.UserContext.UserOrganizationInfoList.Count > 0)
-				{
-					if (this.UserContext.UserOrganizationInfoList.Count == 1)
-					{
-						// have only one organization, check for only 1 sub
-						if (this.UserContext.UserOrganizationInfoList.First().UserSubscriptionInfoList.Count == 0 ||
-							this.UserContext.UserOrganizationInfoList.First().UserSubscriptionInfoList.Count > 1)
-						{
-							// no subs or multiple subs, redirect to account index
-							this.UserContext.ChosenOrganizationId = this.UserContext.UserOrganizationInfoList.First().OrganizationId;
-							return this.RedirectToSubDomainAction(this.UserContext.UserOrganizationInfoList.First().OrganizationId, null, ActionConstants.Index, ControllerConstants.Account);
-						}
-						else
-						{
-							string area = AppService.GetProductNameBySubscriptionID(this.UserContext.UserOrganizationInfoList.First().UserSubscriptionInfoList.First().SubscriptionId);
-							return this.RedirectToSubDomainAction(this.UserContext.UserOrganizationInfoList.First().OrganizationId, area);
-						}
-					}
-					else
-					{
-						// They have multiple Organizations, redirect to account index
-						//var org = this.UserContext.UserOrganizationInfoList.Find(x => x.OrganizationId == this.UserContext.ChosenOrganizationId);
-						//if (org != null)
-						//{
-						//	return this.RedirectToSubDomainAction(org.OrganizationId, null, ActionConstants.Manage, ControllerConstants.Account);
-						//}
-						//else
-						//{
-						// otherwise send them to select an org
-						return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
-						//}
-					}
-				}
-				else
-				{
-					// They must not have an org.  Just redirect to account page so they can create one.
-					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
-				}
-			}
-			else
-			{
-				// well, that's awkward. just take the user back to the home page.
-				return this.RedirectToLocal();
-			}
+			this.SetAuthCookie(userId, userName, isPersisted);
 		}
 
 		/// <summary>
@@ -188,16 +85,13 @@ namespace AllyisApps.Controllers
 		/// -   make the Request.IsAuthenticated to true
 		/// - sample code here: https://msdn.microsoft.com/en-us/library/system.web.security.formsauthentication.encrypt(v=vs.110).aspx .
 		/// </summary>
-		/// <param name="context">The UserContext.</param>
-		/// <param name="response">The Response object passed in from a controller.</param>
-		/// <param name="isPersisted">Whether to set a persistent cookie or not.</param>
-		private void SetAuthCookie(UserContext context, HttpResponseBase response, bool isPersisted = false)
+		private void SetAuthCookie(int userId, string userName, bool isPersisted = false)
 		{
 			//// serialize the cookie data object, then ecnrypt it using formsauthentication module
-			string serialized = this.SerializeCookie(this.GetCookieDataFromUserContext(context));
+			string serialized = this.SerializeCookie(new CookieData(userId));
 			FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
 				/*AuthenticationTicketVersion*/1,
-				context.UserName,
+				userName,
 				DateTime.UtcNow,
 				DateTime.UtcNow.AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
 				isPersisted,
@@ -209,8 +103,8 @@ namespace AllyisApps.Controllers
 			cookie.HttpOnly = true;
 			cookie.Value = encryptedTicket;
 
-			//// set the cookie to response
-			response.Cookies.Add(cookie);
+			// set the cookie to response
+			this.Response.Cookies.Add(cookie);
 		}
 	}
 }

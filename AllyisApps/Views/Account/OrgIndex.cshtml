@@ -12,7 +12,7 @@
 @{
     Organization details = Model.OrgInfo;
     string title = details.Name;
-    string subtitle = details.SiteUrl ?? details.Subdomain ?? "";
+    string subtitle = details.SiteUrl ?? "";
     var cityState = details.City != null && details.State != null ? details.City + ", " + details.State : details.City + details.State;
 }
 <div class="row">
@@ -23,7 +23,7 @@
                     @title
                     @if (Model.CanEditOrganization)
                     {
-                        <a href="@Url.SubdomainLink(ActionConstants.Manage, ControllerConstants.Account, null, Model.OrgInfo.OrganizationId, this.Request)" title="@Strings.EditOrganization" class="pull-right text-muted">
+                        <a href="@Url.Action(ActionConstants.Manage, ControllerConstants.Account)" title="@Strings.EditOrganization" class="pull-right text-muted">
                             <i class="fa fa-cog  fa-lg"></i>
                         </a>
                     }

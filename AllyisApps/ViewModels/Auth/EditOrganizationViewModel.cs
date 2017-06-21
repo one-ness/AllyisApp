@@ -38,16 +38,6 @@ namespace AllyisApps.ViewModels.Auth
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets the organization's name.
-		/// </summary>
-		[Required]
-		[DataType(DataType.Text)]
-		[Display(Name = "Subdomain Name")]
-		[RegularExpression(@"^[\w\d]([\w\d\-_]+)?$", ErrorMessage = "Must contain only letters, numbers, dashes, and understcores. Must begin and end with a letter or number.")]
-		[StringLength(40, MinimumLength = 3)]
-		public string SubdomainName { get; set; }
-
-		/// <summary>
 		/// Gets or sets the organization's website URL.
 		/// </summary>
 		[DataAnnotationsExtensions.Url(UrlOptions.OptionalProtocol)]
@@ -114,10 +104,10 @@ namespace AllyisApps.ViewModels.Auth
 		[Display(Name = "Owner Employee ID")]
 		public string EmployeeId { get; set; }
 
-		/// <summary>
-		/// Gets the organization's ID.
-		/// </summary>
-		public int OrganizationId { get; internal set; }
+        /// <summary>
+        /// Gets the organization's ID.
+        /// </summary>
+        public int OrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether a user has permition to delete the org.

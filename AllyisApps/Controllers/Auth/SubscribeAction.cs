@@ -128,12 +128,12 @@ namespace AllyisApps.Controllers
 
 			if (AppService.Subscribe(model.NumberOfUsers, model.ProductId, model.ProductName, model.SelectedSku, model.PreviousSku, model.Billing.Amount, model.Token, addingNewBilling, billingServicesEmail, token))
 			{
-				return this.RedirectToAction(ActionConstants.Manage);
+				return this.RedirectToAction(ActionConstants.Manage, new { id = model.OrganizationId });
 			}
 			else
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ReduceNumberOfUsers, Variety.Danger));
-				return this.RedirectToAction(ActionConstants.Subscribe, new { productName = model.ProductId });
+				return this.RedirectToAction(ActionConstants.Subscribe, new { productId = model.ProductId });
 			}
 
 			//------------

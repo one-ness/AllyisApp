@@ -19,13 +19,13 @@ namespace AllyisApps.Controllers
 	public partial class AccountController : BaseController
 	{
 		/// <summary>
-		/// POST: Account/Edit.
+		/// POST: Account/EditOrg.
 		/// </summary>
 		/// <param name="model">The organization ViewModel POST data.</param>
 		/// <returns>Manage Page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Edit(EditOrganizationViewModel model)
+		public ActionResult EditOrg(EditOrganizationViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -34,7 +34,7 @@ namespace AllyisApps.Controllers
 					if (AppService.UpdateOrganization(
 						new Organization()
 						{
-							OrganizationId = UserContext.ChosenOrganizationId,
+							OrganizationId = model.OrganizationId,
 							Name = model.Name,
 							SiteUrl = model.SiteUrl,
 							Address = model.Address,
@@ -43,20 +43,19 @@ namespace AllyisApps.Controllers
 							Country = model.Country,
 							PostalCode = model.PostalCode,
 							PhoneNumber = model.PhoneNumber,
-							FaxNumber = model.FaxNumber,
-							Subdomain = model.SubdomainName
+							FaxNumber = model.FaxNumber
 						}))
 					{
 						// Organization updated successfully
 						Notifications.Add(new BootstrapAlert(@Resources.Strings.OrganizationDetailsUpdated, Variety.Success));
-						return this.RedirectToAction(ActionConstants.Manage);
+						return this.RedirectToAction(ActionConstants.Manage, ControllerConstants.Account, new { id = model.OrganizationId });
 					}
 				}
 				catch (ArgumentException)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SubdomainTaken, Variety.Danger));
-					return this.RedirectToAction(ActionConstants.Edit);
-				}
+					return this.RedirectToAction(ActionConstants.Edit, ControllerConstants.Account, new { id = model.OrganizationId });
+                }
 
 				// Organization update failed due to invalid permissions
 				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditProfileMessage), ControllerConstants.Organization, ActionConstants.Edit));
@@ -66,17 +65,18 @@ namespace AllyisApps.Controllers
 			return this.View(model);
 		}
 
-		/// <summary>
-		/// GET: /Account/Edit.
-		/// The page for editing an organization's information.
-		/// </summary>
-		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
-		/// <returns>The result of this action.</returns>
-		public ActionResult Edit(string returnUrl)
+        /// <summary>
+        /// GET: /Account/EditOrg.
+        /// The page for editing an organization's information.
+        /// </summary>
+        /// <param name="id">The organization id</param>
+        /// <param name="returnUrl">The return url to redirect to after form submit.</param>
+        /// <returns>The result of this action.</returns>
+        public ActionResult EditOrg(int id, string returnUrl)
 		{
-			if (AppService.Can(Actions.CoreAction.EditOrganization))
+			if (AppService.Can(Actions.CoreAction.EditOrganization, true, id))
 			{
-				var infos = AppService.GetOrgWithCountriesAndEmployeeId();
+				var infos = AppService.GetOrgWithCountriesAndEmployeeId(id);
 				EditOrganizationViewModel model = this.ConstructEditOrganizationViewModel(
 					infos.Item1,
 					true,
@@ -114,7 +114,6 @@ namespace AllyisApps.Controllers
 				PostalCode = organization.PostalCode,
 				PhoneNumber = organization.PhoneNumber,
 				FaxNumber = organization.FaxNumber,
-				SubdomainName = organization.Subdomain,
 				CanDelete = canDelete,
 				ValidCountries = validCountries,
 			};

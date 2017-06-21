@@ -107,10 +107,15 @@
 		/// </summary>
 		public const string Edit = "Edit";
 
-		/// <summary>
-		/// Action-Name: EditProfile.
+        /// <summary>
+		/// Action-Name: EditOrg.
 		/// </summary>
-		public const string EditProfile = "EditProfile";
+		public const string EditOrg = "EditOrg";
+
+        /// <summary>
+        /// Action-Name: EditProfile.
+        /// </summary>
+        public const string EditProfile = "EditProfile";
 
 		/// <summary>
 		/// Action-Name: EditTimeEntryApprovalState.
@@ -315,11 +320,6 @@
 		/// Action-Name: Help.
 		/// </summary>
 		public const string Help = "Help";
-
-		/// <summary>
-		/// Action-Name: RouteProduct.
-		/// </summary>
-		public const string RouteProduct = "RouteProduct";
 
 		#endregion home
 

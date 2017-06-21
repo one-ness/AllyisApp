@@ -24,7 +24,8 @@ namespace AllyisApps.Services
 		/// </summary>
 		public UserContext()
 		{
-			this.UserOrganizationInfoList = new List<UserOrganizationInfo>();
+			this.UserOrganizations = new Dictionary<int, UserOrganizationInfo>();
+			this.UserSubscriptions = new Dictionary<int, UserSubscriptionInfo>();
 		}
 
 		/// <summary>
@@ -35,40 +36,19 @@ namespace AllyisApps.Services
 		/// <param name="email">The email.</param>
 		/// <param name="chosenOrganizationId">The chosen Organization ID.</param>
 		/// <param name="chosenSubscriptionId">The chosen subscription ID.</param>
-		/// <param name="infoList">The organization info list.</param>
 		/// <param name="chosenLanguageID">The chosen language ID.</param>
-		public UserContext(
-			int userId,
-			string username,
-			string email,
-			int chosenOrganizationId = 0,
-			int chosenSubscriptionId = 0,
-			List<UserOrganizationInfo> infoList = null,
-			int chosenLanguageID = 0)
+		public UserContext(int userId, string username, string email, int chosenOrganizationId = 0, int chosenSubscriptionId = 0, int chosenLanguageID = 0) : this()
 		{
-			if (userId < 1)
-			{
-				throw new ArgumentOutOfRangeException("userId");
-			}
-
-			// if (string.IsNullOrWhiteSpace(username)) throw new ArgumentNullException("username");
-			// if (string.IsNullOrWhiteSpace(email)) throw new ArgumentNullException("email");
+			if (userId <= 0) throw new ArgumentException("userId");
+			if (string.IsNullOrWhiteSpace(username)) throw new ArgumentException("username");
+			if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("email");
 
 			this.Email = email;
 			this.UserId = userId;
 			this.UserName = username;
 			this.ChosenOrganizationId = chosenOrganizationId;
 			this.ChosenSubscriptionId = chosenSubscriptionId;
-			if (infoList == null)
-			{
-				this.UserOrganizationInfoList = new List<UserOrganizationInfo>();
-			}
-			else
-			{
-				this.UserOrganizationInfoList = infoList;
-			}
-
-			this.ChosenLanguageID = chosenLanguageID;
+			this.ChosenLanguageId = chosenLanguageID;
 		}
 
 		/// <summary>
@@ -92,24 +72,56 @@ namespace AllyisApps.Services
 		/// Gets or sets the organization id the user chooses to work on (or last worked on).
 		/// </summary>
 		[JsonIgnore]
-		public int ChosenOrganizationId { get; set; } // TODO: Decide whether to add logic to this and ChosenSubscriptionId's get and set methods to grab from database and update database
+		public int ChosenOrganizationId { get; set; }
+
+		/// <summary>
+		/// Gets the chosen organization
+		/// </summary>
+		public UserOrganizationInfo ChosenOrganization
+		{
+			get
+			{
+				UserOrganizationInfo result = null;
+				this.UserOrganizations.TryGetValue(this.ChosenOrganizationId, out result);
+				return result;
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the subscription id the user chooses to work on (or last worked on).
 		/// </summary>
 		[JsonIgnore]
-		public int ChosenSubscriptionId { get; set; } // TODO: Decide whether to add logic to this and ChosenOrganizationId's get and set methods to grab from database and update database
+		public int ChosenSubscriptionId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the list of organizations the user is member of, role in the organization, subscriptions each organization has subscribed to and user's role in that subscription.
+		/// Gets the chosen subscription
+		/// </summary>
+		public UserSubscriptionInfo ChosenSubscription
+		{
+			get
+			{
+				UserSubscriptionInfo result = null;
+				this.UserSubscriptions.TryGetValue(this.ChosenSubscriptionId, out result);
+				return result;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the list of organizations the user is a member of, role in the organization, subscriptions each organization has subscribed to and user's role in that subscription.
 		/// </summary>
 		[JsonIgnore]
-		public List<UserOrganizationInfo> UserOrganizationInfoList { get; set; }
+		public Dictionary<int, UserOrganizationInfo> UserOrganizations { get; set; }
+
+		/// <summary>
+		/// Gets or sets the list of subscriptions the user is a member of. This is essentially a flattened out list of each of the organization above.
+		/// </summary>
+		[JsonIgnore]
+		public Dictionary<int, UserSubscriptionInfo> UserSubscriptions { get; set; }
 
 		/// <summary>
 		/// Gets or sets the preferred language for this user.
 		/// </summary>
 		[JsonIgnore]
-		public int ChosenLanguageID { get; set; }
+		public int ChosenLanguageId { get; set; }
 	}
 }

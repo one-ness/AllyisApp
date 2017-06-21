@@ -24,8 +24,6 @@ namespace AllyisApps.Controllers
 		/// <returns>The async task responsible for this action.</returns>
 		public ActionResult Index()
 		{
-			ViewBag.ShowOrganizationPartial = false;
-
 			var infos = AppService.GetUserOrgsAndInvitationInfo();
 
 			IndexAndOrgsViewModel model = new IndexAndOrgsViewModel
@@ -42,13 +40,15 @@ namespace AllyisApps.Controllers
 					CanEditOrganization = AppService.Can(Actions.CoreAction.EditOrganization, false, o.OrganizationId),
 					Subscriptions = new List<SubscriptionDisplayViewModel>()
 				};
-				UserOrganizationInfo userOrgInfo = UserContext.UserOrganizationInfoList.Where(uoi => uoi.OrganizationId == o.OrganizationId).SingleOrDefault();
+				UserOrganizationInfo userOrgInfo = null;
+				UserContext.UserOrganizations.TryGetValue(o.OrganizationId, out userOrgInfo);
 				if (userOrgInfo != null)
 				{
-					foreach (UserSubscriptionInfo userSubInfo in userOrgInfo.UserSubscriptionInfoList)
+					foreach (UserSubscriptionInfo userSubInfo in userOrgInfo.UserSubscriptions.Values)
 					{
 						orgVM.Subscriptions.Add(new SubscriptionDisplayViewModel
 						{
+                            SubscriptionId = userSubInfo.SubscriptionId,
 							ProductId = (int)userSubInfo.ProductId,
 							ProductName = userSubInfo.ProductName,
 							ProductDisplayName = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTracker : "Unknown Product",
@@ -80,19 +80,6 @@ namespace AllyisApps.Controllers
 			{
 				Notifications.Add(new Core.Alert.BootstrapAlert(result, Core.Alert.Variety.Success));
 			}
-
-			//var invitation = Service.GetInvitationsByUser(UserContext.Email).Where(x => x.InvitationId == invitationId).FirstOrDefault();
-			//if (invitation != null)
-			//{
-			//	// Validate that the user does have the requested pending invitation
-			//	Notifications.Add(new Core.Alert.BootstrapAlert(
-			//		Service.AcceptUserInvitation(invitationId), Core.Alert.Variety.Success));
-			//}
-			//else
-			//{
-			//	// Not a part of the invitation
-			//	Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Errors.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
-			//}
 
 			return RedirectToAction(ActionConstants.Index);
 		}

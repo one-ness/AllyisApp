@@ -21,7 +21,6 @@ namespace AllyisApps.Controllers
 		/// <returns>The result of this action.</returns>
 		public ActionResult ChangePassword()
 		{
-			ViewBag.ShowOrganizationPartial = false;
 			return this.View();
 		}
 

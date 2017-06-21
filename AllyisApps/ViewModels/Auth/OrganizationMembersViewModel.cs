@@ -63,7 +63,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets OrganizationId.
 		/// </summary>
-		public int OrganizationId { get; internal set; }
+		public int OrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets Organization name.

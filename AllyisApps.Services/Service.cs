@@ -603,14 +603,15 @@ namespace AllyisApps.Services
 			return DBHelper.UpdateLockDate(this.UserContext.ChosenOrganizationId, lockDateUsed, lockDatePeriod, lockDateQuantity);
 		}
 
-		/// <summary>
-		/// Returns a SettingsInfo with start of week, overtime, and lock date settings, a list of PayClassInfos,
-		/// and a list of Holidays for the current organization.
-		/// </summary>
-		/// <returns></returns>
-		public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings()
+        /// <summary>
+        /// Returns a SettingsInfo with start of week, overtime, and lock date settings, a list of PayClassInfos,
+        /// and a list of Holidays for the current organization.
+        /// </summary>
+        /// <param name="orgId">Organization Id</param>
+        /// <returns></returns>
+        public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int orgId)
 		{
-			var spResults = DBHelper.GetAllSettings(UserContext.ChosenOrganizationId);
+			var spResults = DBHelper.GetAllSettings(orgId);
 			return Tuple.Create(
 				InitializeSettingsInfo(spResults.Item1),
 				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
@@ -626,11 +627,12 @@ namespace AllyisApps.Services
 		/// for all time entries for the given user in the given time range.
 		/// </summary>
 		/// <param name="userId">User Id.</param>
+        /// <param name="orgId">Organization Id</param>
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
 		/// <returns></returns>
 		public Tuple<Setting, List<PayClass>, List<Holiday>, List<CompleteProjectInfo>, List<User>, List<TimeEntryInfo>>
-			GetTimeEntryIndexInfo(DateTime? startingDate, DateTime? endingDate, int? userId = null)
+			GetTimeEntryIndexInfo(int orgId, DateTime? startingDate, DateTime? endingDate, int? userId = null)
 		{
 			#region Validation
 
@@ -638,19 +640,22 @@ namespace AllyisApps.Services
 			{
 				userId = UserContext.UserId;
 			}
-
-			if (userId <= 0)
+            if (userId <= 0)
 			{
 				throw new ArgumentException("User Id cannot be zero or negative.");
 			}
-			if (startingDate.HasValue && endingDate.HasValue && DateTime.Compare(startingDate.Value, endingDate.Value) > 0)
+            if (orgId <= 0)
+            {
+                throw new ArgumentException("Organization Id cannot be zero or negative.");
+            }
+            if (startingDate.HasValue && endingDate.HasValue && DateTime.Compare(startingDate.Value, endingDate.Value) > 0)
 			{
 				throw new ArgumentException("Date range cannot end before it starts.");
 			}
 
 			#endregion Validation
 
-			var spResults = DBHelper.GetTimeEntryIndexPageInfo(UserContext.ChosenOrganizationId, (int)ProductIdEnum.TimeTracker, userId.Value, startingDate, endingDate);
+			var spResults = DBHelper.GetTimeEntryIndexPageInfo(orgId, (int)ProductIdEnum.TimeTracker, userId.Value, startingDate, endingDate);
 
 			return Tuple.Create(InitializeSettingsInfo(spResults.Item1),
 				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),

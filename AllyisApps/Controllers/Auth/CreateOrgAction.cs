@@ -24,7 +24,6 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult CreateOrg()
 		{
-			ViewBag.ShowOrganizationPartial = false;
 			return this.View(new EditOrganizationViewModel() { ValidCountries = AppService.ValidCountries(), IsCreating = true });
 		}
 
@@ -55,8 +54,7 @@ namespace AllyisApps.Controllers
 						State = model.State,
 						PostalCode = model.PostalCode,
 						PhoneNumber = model.PhoneNumber,
-						FaxNumber = model.FaxNumber,
-						Subdomain = model.SubdomainName
+						FaxNumber = model.FaxNumber
 					},
 					UserContext.UserId,
 					model.EmployeeId);
@@ -69,14 +67,8 @@ namespace AllyisApps.Controllers
 				else
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.OrganizationCreatedNotification, Variety.Success));
-					return this.RedirectToSubDomainAction(orgId, null, ActionConstants.Index, ControllerConstants.Account);
+					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 				}
-
-				//Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.OrganizationCreatedNotification, Variety.Success));
-
-				//Service.UpdateActiveOrganization(UserContext.UserId, orgId);
-
-				//return this.RedirectToSubDomainAction(orgId, null, ActionConstants.Index, ControllerConstants.Account);
 			}
 
 			// Something happened, reload this view

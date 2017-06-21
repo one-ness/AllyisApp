@@ -1,7 +1,7 @@
 ﻿@using AllyisApps.ViewModels.Auth;
 
 @model ManagePermissionsViewModel
-
+@Html.HiddenFor(m => m.OrganizationId)
 @{
 	ViewBag.Title = Strings.Permissions;
 	Layout = "~/Views/Shared/_Layout.cshtml";
