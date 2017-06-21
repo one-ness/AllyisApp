@@ -81,16 +81,9 @@
     <Folder Include="DefaultData" />
     <Folder Include="TestData" />
     <Folder Include="Schema\" />
-    <Folder Include="StoredProcedures\" />
-    <Folder Include="StoredProcedures\Crm\" />
   </ItemGroup>
   <ItemGroup>
     <!--<<<<<<< HEAD-->
-    <Build Include="StoredProcedures\Crm\Crm.CreateProjectAndUpdateItsUserList.sql" />
-    <Build Include="StoredProcedures\Crm\Crm.ReactivateCustomer.sql" />
-    <Build Include="StoredProcedures\Crm\Crm.GetInactiveProjectsAndCustomersForOrgAndUser.sql" />
-    <Build Include="StoredProcedures\Crm\Crm.GetInactiveProjectsByCustomer.sql" />
-    <Build Include="StoredProcedures\Crm\Crm.ReactivateProject.sql" />
     <!--=======-->
     <Build Include="dbo\Tables\AccessCodes.sql" />
     <Build Include="TimeTracker\Tables\Holiday.sql" />
@@ -277,6 +270,11 @@
     <None Include="TestData\TestData.sql" />
     <None Include="TestData\TimeTracker.Settings.Table.sql" />
     <None Include="TestData\TimeTracker.TimeEntry.Table.sql" />
+    <Build Include="Crm\Stored Procedures\CreateProjectAndUpdateItsUserList.sql" />
+    <Build Include="Crm\Stored Procedures\GetInactiveProjectsByCustomer.sql" />
+    <Build Include="Crm\Stored Procedures\GetInactiveProjectsAndCustomersForOrgAndUser.sql" />
+    <Build Include="Crm\Stored Procedures\ReactivateCustomer.sql" />
+    <Build Include="Crm\Stored Procedures\ReactivateProject.sql" />
     <!-->>>>>>> mergeDebugandFixMaster-->
   </ItemGroup>
   <ItemGroup>
