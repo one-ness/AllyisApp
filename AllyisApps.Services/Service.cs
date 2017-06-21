@@ -278,8 +278,9 @@ namespace AllyisApps.Services
 		/// Creates a holiday and related time entries for an organization.
 		/// </summary>
 		/// <param name="holiday">Holiday.</param>
+        /// <param name="subscriptionId">Subscription ID</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool CreateHoliday(Holiday holiday)
+		public bool CreateHoliday(Holiday holiday, int subscriptionId)
 		{
 			#region Validation
 
@@ -290,7 +291,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers, false, holiday.OrganizationId, subscriptionId))
 			{
 				DBHelper.CreateHoliday(GetDBEntityFromHoliday(holiday));
 				return true;
