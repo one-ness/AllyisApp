@@ -78,9 +78,10 @@
                     }
 					<tr>
 
-                        @using (Html.BeginForm(ActionConstants.CreatePayClass, ControllerConstants.TimeEntry, FormMethod.Post))
-						{
+                        @using (Html.BeginForm(ActionConstants.CreatePayClass, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId }, FormMethod.Post, "TimeTracker"))
+                        {
 							@Html.AntiForgeryToken();
+                            @Html.HiddenFor(m => m.SubscriptionId)
 							<td><input type="text" name="NewPayClass" class="form-control" required /></td>
                             <td><span class="pull-right"></span></td>
 							<td><input class="btn btn-primary pull-right" type="submit" value="@Strings.Add" /></td>

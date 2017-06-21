@@ -334,8 +334,10 @@ namespace AllyisApps.Services
 		/// Creates a new pay class for an organization.
 		/// </summary>
 		/// <param name="payClassName">Name of pay class.</param>
+        /// <param name="orgId">Organization ID</param>
+        /// <param name="subscriptionId">Subscription ID</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool CreatePayClass(string payClassName)
+		public bool CreatePayClass(string payClassName, int orgId, int subscriptionId)
 		{
 			#region Validation
 
@@ -351,7 +353,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId))
 			{
 				DBHelper.CreatePayClass(payClassName, UserContext.ChosenOrganizationId);
 
