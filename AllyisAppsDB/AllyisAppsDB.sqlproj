@@ -80,6 +80,7 @@
     <Folder Include="Auth\User Defined Types\" />
     <Folder Include="DefaultData" />
     <Folder Include="TestData" />
+    <Folder Include="Schema\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\AccessCodes.sql" />
@@ -267,6 +268,11 @@
     <None Include="TestData\TestData.sql" />
     <None Include="TestData\TimeTracker.Settings.Table.sql" />
     <None Include="TestData\TimeTracker.TimeEntry.Table.sql" />
+    <Build Include="Crm\Stored Procedures\CreateProjectAndUpdateItsUserList.sql" />
+    <Build Include="Crm\Stored Procedures\GetInactiveProjectsByCustomer.sql" />
+    <Build Include="Crm\Stored Procedures\GetInactiveProjectsAndCustomersForOrgAndUser.sql" />
+    <Build Include="Crm\Stored Procedures\ReactivateCustomer.sql" />
+    <Build Include="Crm\Stored Procedures\ReactivateProject.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
