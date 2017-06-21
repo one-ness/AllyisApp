@@ -58,12 +58,12 @@ namespace AllyisApps.Services
 			return (int)date.Value.Subtract(DateTime.MinValue).TotalDays;
 		}
 
-		/// <summary>
-		/// Converts an int representing days since the DateTime min value (Jan 1st, 0001) into a DateTime date.
-		/// </summary>
-		/// <param name="days">An int of the date as days since Jan 1st, 0001. Use -1 for null dates.</param>
-		/// <returns>The DateTime date.</returns>
-		public DateTime? GetDateTimeFromDays(int days)
+        /// <summary>
+        /// Converts an int representing days since the DateTime min value (Jan 1st, 0001) into a DateTime date.
+        /// </summary>
+        /// <param name="days">An int of the date as days since Jan 1st, 0001. Use -1 for null dates.</param>
+        /// <returns>The DateTime date.</returns>
+        public DateTime? GetDateTimeFromDays(int days)
 		{
 			return GetDateFromDays(days);
 		}

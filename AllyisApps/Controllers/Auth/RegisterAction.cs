@@ -72,9 +72,9 @@ namespace AllyisApps.Controllers
 					}
 					else
 					{
-						// Else redirect the user to create an organization
-						return this.RedirectToAction(ActionConstants.CreateOrg);
-					}
+                        // Else redirect the user to create an organization
+                        return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
+                    }
 				}
 				else
 				{
