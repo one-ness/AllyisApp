@@ -603,14 +603,15 @@ namespace AllyisApps.Services
 			return DBHelper.UpdateLockDate(this.UserContext.ChosenOrganizationId, lockDateUsed, lockDatePeriod, lockDateQuantity);
 		}
 
-		/// <summary>
-		/// Returns a SettingsInfo with start of week, overtime, and lock date settings, a list of PayClassInfos,
-		/// and a list of Holidays for the current organization.
-		/// </summary>
-		/// <returns></returns>
-		public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings()
+        /// <summary>
+        /// Returns a SettingsInfo with start of week, overtime, and lock date settings, a list of PayClassInfos,
+        /// and a list of Holidays for the current organization.
+        /// </summary>
+        /// <param name="orgId">Organization Id</param>
+        /// <returns></returns>
+        public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int orgId)
 		{
-			var spResults = DBHelper.GetAllSettings(UserContext.ChosenOrganizationId);
+			var spResults = DBHelper.GetAllSettings(orgId);
 			return Tuple.Create(
 				InitializeSettingsInfo(spResults.Item1),
 				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),

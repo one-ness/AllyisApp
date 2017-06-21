@@ -20,12 +20,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET /TimeTracker/TimeEntry/Settings.
 		/// </summary>
+        /// <param name="subscriptionId">The subscription Id</param>
 		/// <returns>The settings page.</returns>
-		public ActionResult Settings()
+		public ActionResult Settings(int subscriptionId)
 		{
-			var infos = AppService.GetAllSettings();
+            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
+			var infos = AppService.GetAllSettings(orgId);
 
-			if (AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId))
 			{
 				return this.View(new SettingsViewModel()
 				{
@@ -36,9 +38,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			// Permissions failure
-			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-
-			return this.RouteHome();
+			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));           
+			return this.RouteHome(subscriptionId);
 		}
 	}
 }

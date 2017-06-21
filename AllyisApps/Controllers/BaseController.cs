@@ -77,8 +77,12 @@ namespace AllyisApps.Controllers
 		/// Redirects home.
 		/// </summary>
 		/// <returns>The proper redirect for the product.</returns>
-		public ActionResult RouteHome()
+		public ActionResult RouteHome(int id = -1)
 		{
+            if (this.ProductId == ProductIdEnum.TimeTracker)
+            {
+                return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Home, new { subscriptionId = id, id = 1, area = "TimeTracker" });
+            }
 			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Home);
 		}
 
