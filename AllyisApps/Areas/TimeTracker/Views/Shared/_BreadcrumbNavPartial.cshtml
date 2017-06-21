@@ -18,8 +18,8 @@
 
     <ul class="dropdown-menu dropdown-menu-right" id="TheDropdown2">
         <li>@Html.ActionLink(Strings.TimeEntry, ActionConstants.Index, ControllerConstants.TimeEntry)</li>
-        @if (manager) { <li>@Html.ActionLink(Strings.Reports, ActionConstants.Report, ControllerConstants.TimeEntry)</li> }
+        @if (manager) { <li>@Html.ActionLink(Strings.Reports, ActionConstants.Report, ControllerConstants.TimeEntry, new { subscriptionId = 17, id = 20 }, "TimeTracker")</li> }
         <li>@Html.ActionLink(Strings.Customers, ActionConstants.Index, ControllerConstants.Customer)</li>
-        @if (manager) {<li>@Html.ActionLink(Strings.Settings, ActionConstants.Settings, ControllerConstants.TimeEntry)</li> }
+        @if (manager) {<li>@Html.ActionLink(Strings.Settings, ActionConstants.Settings, ControllerConstants.TimeEntry, new { subscriptionId = 17, id = 20 }, "TimeTracker")</li> }
     </ul>
 </li>
