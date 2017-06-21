@@ -62,7 +62,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <returns>The ManageCustomerViewModel.</returns>
         public ManageCustomerViewModel ConstructManageInactiveCustomerViewModel(int userId, int orgId)
         {
-            var infos = AppService.GetInactiveProjectsAndCustomersForOrgAndUser();
+            var infos = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(orgId);
 
             bool canEditProjects = AppService.Can(Actions.CoreAction.EditProject);
 
