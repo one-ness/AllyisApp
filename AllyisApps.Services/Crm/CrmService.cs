@@ -172,10 +172,11 @@ namespace AllyisApps.Services
 		/// Returns a list of CompleteProjectInfos for the current organization with the IsProjectUser field filled
 		/// out for the current user, and a list of CustomerInfos for the organization.
 		/// </summary>
+        /// <param name="orgId">The organization Id</param>
 		/// <returns></returns>
-		public Tuple<List<CompleteProjectInfo>, List<Customer>> GetProjectsAndCustomersForOrgAndUser()
+		public Tuple<List<CompleteProjectInfo>, List<Customer>> GetProjectsAndCustomersForOrgAndUser(int orgId)
 		{
-			var spResults = DBHelper.GetProjectsAndCustomersForOrgAndUser(UserContext.ChosenOrganizationId, UserContext.UserId);
+			var spResults = DBHelper.GetProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
 			return Tuple.Create(
 				spResults.Item1.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
 				spResults.Item2.Select(cdb => InitializeCustomer(cdb)).ToList());
@@ -185,10 +186,11 @@ namespace AllyisApps.Services
         /// Returns a list of CompleteProjectInfos for the current organization with the IsProjectUser field filled
         /// out for the current user, and a list of CustomerInfos for the organization.
         /// </summary>
+        /// <param name="orgId">The Organization Id</param>
         /// <returns></returns>
-        public Tuple<List<CompleteProjectInfo>, List<Customer>> GetInactiveProjectsAndCustomersForOrgAndUser()
+        public Tuple<List<CompleteProjectInfo>, List<Customer>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId)
         {
-            var spResults = DBHelper.GetInactiveProjectsAndCustomersForOrgAndUser(UserContext.ChosenOrganizationId, UserContext.UserId);
+            var spResults = DBHelper.GetInactiveProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
             return Tuple.Create(
                 spResults.Item1.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
                 spResults.Item2.Select(cdb => InitializeCustomer(cdb)).ToList());

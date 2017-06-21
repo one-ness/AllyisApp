@@ -22,13 +22,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET: Customer/Index.
 		/// </summary>
+        /// <param name="subscriptionId">The Subscription Id</param>
 		/// <returns>Customer Index.</returns>
 		[HttpGet]
-		public ActionResult Index()
+		public ActionResult Index(int subscriptionId)
 		{
-			if (AppService.Can(Actions.CoreAction.ViewCustomer))
+            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
+            if (AppService.Can(Actions.CoreAction.ViewCustomer, false, orgId, subscriptionId))
 			{
-				return this.View(this.ConstructManageCustomerViewModel(UserContext.UserId, UserContext.ChosenOrganizationId));
+				return this.View(this.ConstructManageCustomerViewModel(UserContext.UserId, orgId, subscriptionId));
 			}
 
 			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
@@ -67,13 +69,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// </summary>
         /// <param name="userId">The user's Id.</param>
         /// <param name="orgId">The id of the current organization.</param>
+        /// <param name="subscriptionId">The id of the current subscription</param>
         /// <returns>The ManageCustomerViewModel.</returns>
-        public ManageCustomerViewModel ConstructManageCustomerViewModel(int userId, int orgId)
+        public ManageCustomerViewModel ConstructManageCustomerViewModel(int userId, int orgId, int subscriptionId)
 		{
-			var infos = AppService.GetProjectsAndCustomersForOrgAndUser();
-            var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser();
+			var infos = AppService.GetProjectsAndCustomersForOrgAndUser(orgId);
+            var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(orgId);
 
-            bool canEditProjects = AppService.Can(Actions.CoreAction.EditProject);
+            bool canEditProjects = AppService.Can(Actions.CoreAction.EditProject, false, orgId, subscriptionId);
 
 			List<CompleteProjectInfo> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> customers = infos.Item2;
