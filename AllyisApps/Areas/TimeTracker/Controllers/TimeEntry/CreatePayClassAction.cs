@@ -20,8 +20,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Creates a payclass.
 		/// </summary>
 		/// <param name="newPayClass">The pay class to create.</param>
+        /// <param name="subscriptionId">Subscription ID</param>
 		/// <returns>Redirects to the settings view.</returns>
-		public ActionResult CreatePayClass(string newPayClass)
+		public ActionResult CreatePayClass(string newPayClass, int subscriptionId)
 		{
 			if (string.IsNullOrWhiteSpace(newPayClass))
 			{
@@ -29,9 +30,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
+                int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
 				try//should put try catch in 'else'. Creating a blank pay class results in Two alerts: "Cannot create blank pay class" and "pay class already exists"
 				{
-					if (AppService.CreatePayClass(newPayClass))
+					if (AppService.CreatePayClass(newPayClass, orgId, subscriptionId))
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulCreatePayClass, Variety.Success));
 					}
@@ -47,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(Resources.Strings.FailureCreatePayClassAlreadyExists, Variety.Danger));
 				}
 			}
-			return this.RedirectToAction(ActionConstants.Settings);
+			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = UserContext.UserId });
 		}
 	}
 }

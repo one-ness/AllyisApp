@@ -26,11 +26,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Merge a pay class with another one
 		/// </summary>
 		/// <param name="payClassId">The id of the class to merge.</param>
+        /// <param name="subscriptionId">The subscription's id</param>
 		/// <returns>Redirects to the MergePayClass view.</returns>
 		[HttpGet]
-		public ActionResult MergePayClass(int payClassId)
+		public ActionResult MergePayClass(int payClassId, int subscriptionId)
 		{
-			var allPayClasses = AppService.GetPayClasses();
+            var orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
+			var allPayClasses = AppService.GetPayClasses(orgId);
 			var destPayClasses = allPayClasses.Where(pc => pc.PayClassID != payClassId);
 			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassID == payClassId).ElementAt(0).Name;
 
@@ -43,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			if (AppService.Can(Actions.CoreAction.EditOrganization))
 			{
-				MergePayClassViewModel model = ConstructMergePayClassViewModel(payClassId, sourcePayClassName, destPayClasses);
+				MergePayClassViewModel model = ConstructMergePayClassViewModel(payClassId, sourcePayClassName, subscriptionId, destPayClasses);
 				return this.View(ViewConstants.MergePayClass, model);
 			}
 
@@ -56,10 +58,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="sourcePayClassId">The id of the pay class being merged</param>
 		/// <param name="destPayClasses">List of all PayClass that can be merged into</param>
+        /// <param name="subscriptionId">The subscription's ID</param>
 		/// <param name="sourcePayClassName">The name of the pay class being merged</param>
 		/// <returns>The MergePayClassViewModel.</returns>
 		[CLSCompliant(false)]
-		public MergePayClassViewModel ConstructMergePayClassViewModel(int sourcePayClassId, string sourcePayClassName, IEnumerable<PayClass> destPayClasses)
+		public MergePayClassViewModel ConstructMergePayClassViewModel(int sourcePayClassId, string sourcePayClassName, int subscriptionId, IEnumerable<PayClass> destPayClasses)
 		{
 			if (destPayClasses != null)
 			{
@@ -67,6 +70,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					sourcePayClassId = sourcePayClassId,
 					sourcePayClassName = sourcePayClassName,
+                    SubscriptionId = subscriptionId,
 					destinationPayClasses = destPayClasses
 				};
 			}
@@ -75,6 +79,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				sourcePayClassId = sourcePayClassId,
 				sourcePayClassName = sourcePayClassName,
+                SubscriptionId = subscriptionId
 			};
 		}
 
@@ -98,7 +103,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				AppService.UpdateTimeEntry(updatedEntry);
 			}
 			//delete the old payclass
-			if (AppService.DeletePayClass(model.sourcePayClassId))
+			if (AppService.DeletePayClass(model.sourcePayClassId, AppService.GetSubscription(model.SubscriptionId).OrganizationId, model.SubscriptionId))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulMergePayClass, Variety.Success));
 			}
@@ -107,7 +112,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// Should only be here because of permission failures
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
-			return this.RedirectToAction(ActionConstants.Settings);
+			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = model.SubscriptionId, id = UserContext.UserId });
 		}
 	}
 }

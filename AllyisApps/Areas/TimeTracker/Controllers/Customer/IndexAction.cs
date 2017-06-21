@@ -137,7 +137,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                 Customers = customersList,
                 InactiveCustomerAndProjects = inactiveCustomersList,
                 OrganizationId = orgId,
-                canEdit = canEditProjects
+                canEdit = canEditProjects,
+                SubscriptionId = subscriptionId,
+                UserId = UserContext.UserId
 			};
 		}
 	}

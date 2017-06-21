@@ -22,8 +22,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="newHolidayName">The name of the holiday.</param>
 		/// <param name="newHolidayDate">The date of the holiday.</param>
+        /// <param name="subscriptionId">The ID of the subscription</param>
 		/// <returns>Redirects to the settings view.</returns>
-		public ActionResult CreateHoliday(string newHolidayName, string newHolidayDate)
+		public ActionResult CreateHoliday(string newHolidayName, string newHolidayDate, int subscriptionId)
 		{
 			bool isValid = true;
 			if (string.IsNullOrWhiteSpace(newHolidayName))
@@ -32,6 +33,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotCreateHolidayWIthoutName, Variety.Warning));
 			}
 
+            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
 			DateTime holidayDate;
 			if (!DateTime.TryParse(newHolidayDate, out holidayDate))
 			{
@@ -40,7 +42,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			if (isValid)
 			{
-				if (AppService.CreateHoliday(new Holiday() { OrganizationId = UserContext.ChosenOrganizationId, HolidayName = newHolidayName, Date = holidayDate }))
+				if (AppService.CreateHoliday(new Holiday() { OrganizationId = orgId, HolidayName = newHolidayName, Date = holidayDate }, subscriptionId))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulCreateHoliday, Variety.Success));
 				}
@@ -50,7 +52,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 				}
 			}
-			return this.RedirectToAction(ActionConstants.Settings, new { OrganizationId = UserContext.ChosenOrganizationId }); // Same destination regardless of creation success
+			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = UserContext.UserId }); // Same destination regardless of creation success
 		}
 	}
 }

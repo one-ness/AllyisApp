@@ -19,10 +19,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Deletes a holiday from an org.
 		/// </summary>
 		/// <param name="holidayId">The id of the holiday to remove.</param>
+        /// <param name="subscriptionId">The subscription ID</param>
 		/// <returns>Redirects to the settings view.</returns>
-		public ActionResult DeleteHoliday(int holidayId)
+		public ActionResult DeleteHoliday(int holidayId, int subscriptionId)
 		{
-			if (AppService.DeleteHoliday(holidayId))
+			if (AppService.DeleteHoliday(holidayId, AppService.GetSubscription(subscriptionId).OrganizationId, subscriptionId))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulDeleteHoliday, Variety.Success));
 			}
@@ -33,7 +34,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
 
-			return this.RedirectToAction(ActionConstants.Settings);
+			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = UserContext.UserId });
 		}
 	}
 }
