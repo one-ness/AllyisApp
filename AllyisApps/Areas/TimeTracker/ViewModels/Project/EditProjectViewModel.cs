@@ -39,10 +39,10 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		[Display(Name = "Organization")]
 		public int? OrganizationId { get; set; }
 
-		/// <summary>
-		/// Gets or sets Customer ID.
-		/// </summary>
-		[Required]
+        /// <summary>
+        /// Gets or sets Customer ID.
+        /// </summary>
+        [Required]
 		[Display(Name = "Customer")]
 		public int ParentCustomerId { get; set; }
 
@@ -77,10 +77,15 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		/// </summary>
 		public string OrganizationName { get; set; }
 
-		/// <summary>
-		/// Gets or sets the Project's Organization ID.
-		/// </summary>
-		[Required]
+        /// <summary>
+        /// Gets or sets SubscriptionId.
+        /// </summary>
+        public int SubscriptionId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Project's Organization ID.
+        /// </summary>
+        [Required]
 		[DataType(DataType.Text)]
 		[Display(Name = "Project ID")]
 		public string ProjectOrgId { get; set; }

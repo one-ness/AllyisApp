@@ -28,16 +28,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <param name="id">Customer Id for the project.</param>
         /// <returns>The ActionResult for the Create view.</returns>
         [HttpGet]
-		public ActionResult Create(int subscriptionId, string id)
+		public ActionResult Create(int subscriptionId, int id = 0)
 		{
-            int numId;
-            int.TryParse(id, out numId);
+            //int numId;
+            //int.TryParse(id, out numId);
 			DateTime? defaultStart = null;
 			DateTime? defaultEnd = null;
             int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
 			if (AppService.Can(Actions.CoreAction.EditProject, false, orgId, subscriptionId))
 			{
-				var idAndUsers = AppService.GetNextProjectIdAndSubUsers(numId);
+				var idAndUsers = AppService.GetNextProjectIdAndSubUsers(id);
 
 				var list = idAndUsers.Item2; //Service.GetUsers();
 				var subList = new List<BasicUserInfoViewModel>();
@@ -51,14 +51,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					new EditProjectViewModel()
 					{
 						IsCreating = true,
-						ParentCustomerId = numId,
+						ParentCustomerId = id,
 						ProjectUsers = new List<BasicUserInfoViewModel>(),
 						SubscriptionUsers = subList,
 						StartDate = AppService.GetDayFromDateTime(defaultStart),
 						EndDate = AppService.GetDayFromDateTime(defaultEnd),
 						ProjectOrgId = idAndUsers.Item1, //Service.GetRecommendedProjectId()
-                        CustomerName = AppService.GetCustomer(numId).Name
-					});
+                        CustomerName = AppService.GetCustomer(id).Name,
+                        SubscriptionId = subscriptionId,
+                        OrganizationId = orgId
+                    });
 			}
 			else
 			{
@@ -85,10 +87,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 			}
+            int orgId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
 			model.SubscriptionUsers = subList;
 			if (ModelState.IsValid)
 			{
-				if (AppService.Can(Actions.CoreAction.EditProject))
+				if (AppService.Can(Actions.CoreAction.EditProject, false, orgId, model.SubscriptionId))
 				{
 					if (model == null)
 					{

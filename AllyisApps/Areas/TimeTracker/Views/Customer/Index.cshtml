@@ -153,11 +153,7 @@
            {
                if (selectedCust != null && confirm("Delete customer " + $("#" + selectedCust).text().trim() + "?"))
                {
-                    var link = '@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, routeValues: new
-                           {
-                               subscriptionId = Model.SubscriptionId,
-                               id = "-1"
-                           })';
+                    var link = '@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new { id = "-1", subscriptionId = Model.SubscriptionId })';
                     link = link.replace("-1", selectedCust);
                     window.location = link;
                }
@@ -182,10 +178,8 @@
            {
                if (selectedCust != null)
                {
-                   var link = '@Url.Action(ActionConstants.Create, ControllerConstants.Project, new { subscriptionId = Model.SubscriptionId, id = "-1" })';
-                   link = link.replace("-1", selectedCust);
-                   console.log(link);
-                   window.location = link;
+                   window.location = '@Url.Action(ActionConstants.Create, ControllerConstants.Project, new { subscriptionId = Model.SubscriptionId, id = Model.UserId })?subscriptionId=' +
+                                    @Model.SubscriptionId + '&id=' + selectedCust;
                }
            }
 
