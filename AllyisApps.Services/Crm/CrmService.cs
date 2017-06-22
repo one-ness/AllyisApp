@@ -158,10 +158,12 @@ namespace AllyisApps.Services
         /// Reactivate a Customer
         /// </summary>
         /// <param name="customerId">Customer id.</param>
+        /// <param name="orgId">The Organization Id</param>
+        /// <param name="subscriptionId">The subscription Id</param>
         /// <returns>Returns false if authorization fails.</returns>
-        public string ReactivateCustomer(int customerId)
+        public string ReactivateCustomer(int customerId, int subscriptionId, int orgId)
         {
-            if (this.Can(Actions.CoreAction.EditCustomer))
+            if (this.Can(Actions.CoreAction.EditCustomer, false, orgId, subscriptionId))
             {
                 return DBHelper.ReactivateCustomer(customerId);
             }

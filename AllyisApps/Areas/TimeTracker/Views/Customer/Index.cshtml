@@ -185,8 +185,7 @@
            {
                if (selectedCust != null)
                {
-                   var link = '@Url.Action(ActionConstants.Reactivate, ControllerConstants.Customer, new { id = Model.UserId, subscriptionId = Model.SubscriptionId })';
-                    window.location = link;
+                    window.location = '@Url.Action(ActionConstants.Reactivate, ControllerConstants.Customer)?subscriptionId=' + @Model.SubscriptionId + '&id=' + selectedCust;
                }
            }
 

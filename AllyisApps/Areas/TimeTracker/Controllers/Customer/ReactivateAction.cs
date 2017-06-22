@@ -17,24 +17,34 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
     {
 
         /// <summary>
-        /// POST: Reactivate Customer
+        /// GET: Reactivate Customer
         /// </summary>
+        /// <param name="subscriptionId">The subscription Id</param>
         /// <param name = "id" > The Customer id.</param>
         /// <returns>The Customer index.</returns>
-        public ActionResult Reactivate(int id)
+        public ActionResult Reactivate(int subscriptionId, string id)
         {
-            var result = AppService.ReactivateCustomer(id);
+            int custId;
+            bool parsed = Int32.TryParse(id, out custId);
+
+            if (!parsed)
+            {
+                return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+            }
+
+            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
+            var result = AppService.ReactivateCustomer(custId, subscriptionId, orgId);
 
             if (result != null && result != "")
             {
-                Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", Resources.Strings.CustomerReactivateNotification, AppService.GetCustomer(id).Name), Variety.Success));
+                Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", Resources.Strings.CustomerReactivateNotification, AppService.GetCustomer(custId).Name), Variety.Success));
             }
             // Permission failure
             else if (result == null)
             {
                 Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
             }
-            return this.RedirectToAction(ActionConstants.Index);
+            return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
         }
 
 
