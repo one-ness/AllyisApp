@@ -17,22 +17,25 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// </summary>
 	public partial class CustomerController : BaseController
 	{
-		/// <summary>
-		/// GET: Customer/SubscriptionId/Delete/CustomerId
-		/// </summary>
-		/// <param name="id">The Customer id.</param>
+        /// <summary>
+        /// GET: Customer/SubscriptionId/Delete/CustomerId
+        /// </summary>
         /// <param name="subscriptionId">The Subscription Id</param>
-		/// <returns>The Customer index.</returns>
-		public ActionResult Delete(int subscriptionId, string id = null)
+        /// <param name="id">The Customer id.</param>
+        /// <returns>The Customer index.</returns>
+        [HttpGet]
+        public ActionResult Delete(int subscriptionId, string id)
 		{
-            if (id == null) //no customerId is passed in
+            int numValue;
+            bool parsed = Int32.TryParse(id, out numValue);
+
+            if (!parsed)
             {
                 return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
             }
             else
             {
-                int numId = Int32.Parse(id);
-                var result = AppService.DeleteCustomer(subscriptionId, numId);
+                var result = AppService.DeleteCustomer(subscriptionId, numValue);
                 // if deleted successfully
                 if (result != null && result != "")
                 {
