@@ -181,7 +181,7 @@
 
            function CreateCustomer()
            {
-               window.location = '@Url.Action(ActionConstants.Create, ControllerConstants.Customer)';
+               window.location = '@Url.Action(ActionConstants.Create, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId } )';
            }
 
            function CreateProject()

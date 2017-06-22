@@ -77,6 +77,7 @@
             @Html.HiddenFor(m => m.OrganizationId)
             @Html.HiddenFor(m => m.CustomerID)
             @Html.HiddenFor(m => m.IsCreating)
+            @Html.HiddenFor(m => m.SubscriptionId)
 
             <div class="form-group allyis-action-buttons">
                 @if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
@@ -86,7 +87,7 @@
                 }
                 else
                 {
-                    @Html.ActionLink(Strings.Cancel, ActionConstants.Index, ControllerConstants.Customer, new { id = Model.CustomerID }, new { @class = "btn btn-default" })
+                    @Html.ActionLink(Strings.Cancel, ActionConstants.Index, ControllerConstants.Customer, null, new { @class = "btn btn-default" })
                     <input type="submit" value="@Strings.Save" class="btn btn-primary" />
                 }
             </div>
