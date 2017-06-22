@@ -20,21 +20,24 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// </summary>
 	public partial class ProjectController : BaseController
 	{
-		/// <summary>
-		/// GET: Project/Create.
-		/// Gets the page for creating new projects.
-		/// </summary>
-		/// <param name="id">Customer Id for the project.</param>
-		/// <returns>The ActionResult for the Create view.</returns>
-		[HttpGet]
-		public ActionResult Create(int id)
+        /// <summary>
+        /// GET: Project/Create.
+        /// Gets the page for creating new projects.
+        /// </summary>
+        /// <param name="subscriptionId"></param>
+        /// <param name="id">Customer Id for the project.</param>
+        /// <returns>The ActionResult for the Create view.</returns>
+        [HttpGet]
+		public ActionResult Create(int subscriptionId, string id)
 		{
+            int numId;
+            int.TryParse(id, out numId);
 			DateTime? defaultStart = null;
 			DateTime? defaultEnd = null;
-
-			if (AppService.Can(Actions.CoreAction.EditProject))
+            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
+			if (AppService.Can(Actions.CoreAction.EditProject, false, orgId, subscriptionId))
 			{
-				var idAndUsers = AppService.GetNextProjectIdAndSubUsers(id);
+				var idAndUsers = AppService.GetNextProjectIdAndSubUsers(numId);
 
 				var list = idAndUsers.Item2; //Service.GetUsers();
 				var subList = new List<BasicUserInfoViewModel>();
@@ -48,13 +51,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					new EditProjectViewModel()
 					{
 						IsCreating = true,
-						ParentCustomerId = id,
+						ParentCustomerId = numId,
 						ProjectUsers = new List<BasicUserInfoViewModel>(),
 						SubscriptionUsers = subList,
 						StartDate = AppService.GetDayFromDateTime(defaultStart),
 						EndDate = AppService.GetDayFromDateTime(defaultEnd),
 						ProjectOrgId = idAndUsers.Item1, //Service.GetRecommendedProjectId()
-                        CustomerName = AppService.GetCustomer(id).Name
+                        CustomerName = AppService.GetCustomer(numId).Name
 					});
 			}
 			else
