@@ -90,10 +90,11 @@ namespace AllyisApps.Services
         /// Updates a customer in the database.
         /// </summary>
         /// <param name="customer">Updated customer info.</param>
-        /// <returns>Returns false if authorization fails.</returns>
-        public int? UpdateCustomer(Customer customer)
+        /// <param name="subscriptionId">The customer's subscription Id</param>
+        /// <returns>Returns 1 if succeed, -1 if fail, and null if authorization fails.</returns>
+        public int? UpdateCustomer(Customer customer, int subscriptionId)
         {
-            if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
+            if (customer != null && this.Can(Actions.CoreAction.EditCustomer, false, customer.OrganizationId, subscriptionId))
             {
                 return DBHelper.UpdateCustomer(GetDBEntityFromCustomer(customer));
             }
