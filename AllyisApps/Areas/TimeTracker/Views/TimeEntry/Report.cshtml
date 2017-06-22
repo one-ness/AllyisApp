@@ -20,6 +20,7 @@
             @using (Html.BeginForm(ActionConstants.ViewReport, ControllerConstants.TimeEntry, FormMethod.Post, htmlAttributes: new { @id = "reportForm" }))
             {
                 @Html.Hidden("OrganizationId", Model.OrganizationId)
+                @Html.HiddenFor(m => m.SubscriptionId)
                 <!--Get users By subscriptionUser-->
                 <!--Default selection: current user-->if (Model.CanManage)// was previously: (Permissions.Can(ProductAction.TimeTrackerCreateReportOthers, Model.OrganizationId, DB Helper.Instance.GetProductIDByName("TimeTracker")))
                 {

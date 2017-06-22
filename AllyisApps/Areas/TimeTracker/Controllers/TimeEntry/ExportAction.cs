@@ -23,21 +23,23 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Export used on TimeEntry/Index. (May be removed soon).
 		/// </summary>
 		/// <param name="userId">The User's Id.</param>
+        /// <param name="subscriptionId">The subscription Id</param>
 		/// <param name="startingDate">The Starting date of the range (nullable).</param>
 		/// <param name="endingDate">The Ending date of the range (nullable).</param>
 		/// <returns>CSV export of time entries.</returns>
-		public FileStreamResult Export(int userId, int? startingDate = null, int? endingDate = null)
+		public FileStreamResult Export(int userId, int subscriptionId, int? startingDate = null, int? endingDate = null)
 		{
+            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
 			if (userId == Convert.ToInt32(UserContext.UserId))
 			{
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf, false, orgId, subscriptionId))
 				{
 					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReports);
 				}
 			}
 			else
 			{
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId))
 				{
 					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReportsOtherUser);
 				}
@@ -52,14 +54,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Uses services to initialize a new instance of the <see cref="DataExportViewModel" /> class and returns it.
 		/// </summary>
+        /// <param name="subscriptionId">The subscriptionId</param>
+        /// <param name="orgId">The organization's Id</param>
 		/// <param name="userIds">An array of user ids.</param>
 		/// <param name="startingDate">The starting of the date range (nullable).</param>
 		/// <param name="endingDate">The ending of the date range (nullable).</param>
 		/// <param name="projectId">The project's Id (optional).</param>
 		/// <param name="customerId">The Customer's Id (optional).</param>
 		/// <returns>The DataExportViewModel.</returns>
-		public DataExportViewModel ConstructDataExportViewModel(List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
+		public DataExportViewModel ConstructDataExportViewModel(int subscriptionId, int orgId = -1, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
+            if (-1 <= orgId) orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
+
 			DataExportViewModel result = new DataExportViewModel();
 			if ((userIds == null) || (userIds[0] == -1))
 			{
@@ -88,12 +94,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if ((userIds.Count > 1) || (userIds[0] == -1))
 				{
-					result.Projects = AppService.GetProjectsByOrganization(UserContext.ChosenOrganizationId);
+					result.Projects = AppService.GetProjectsByOrganization(orgId);
 				}
 				else
 				{
 					// single user selected
-					result.Projects = AppService.GetProjectsByUserAndOrganization(userIds[0], false);
+					result.Projects = AppService.GetProjectsByUserAndOrganization(userIds[0], orgId, false);
 				}
 
 				// Add default project in case there are holiday entries

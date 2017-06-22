@@ -18,15 +18,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Updates the start of week for an Organization.
 		/// </summary>
+        /// <param name="subscriptionId">The subscription's id</param>
 		/// <param name="startOfWeek">Start of week selected by Organization admin.</param>
 		/// <returns>Action result.</returns>
-		public ActionResult UpdateStartOfWeek(int startOfWeek)
+		public ActionResult UpdateStartOfWeek(int subscriptionId, int startOfWeek)
 		{
+            System.Diagnostics.Debug.WriteLine("New Start Date: " + startOfWeek);
 			if (startOfWeek < 0 || startOfWeek > 6)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.InvalidSOW, Variety.Warning));
 			}
-			else if (!AppService.UpdateStartOfWeek(startOfWeek))
+			else if (!AppService.UpdateStartOfWeek(AppService.GetSubscription(subscriptionId).OrganizationId, subscriptionId, startOfWeek))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
@@ -35,7 +37,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulSOW, Variety.Success));
 			}
 
-			return this.RedirectToAction(ActionConstants.Settings);
+			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionid = subscriptionId, id = UserContext.UserId });
 		}
 	}
 }
