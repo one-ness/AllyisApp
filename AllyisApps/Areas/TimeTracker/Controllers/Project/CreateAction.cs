@@ -20,19 +20,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// </summary>
 	public partial class ProjectController : BaseController
 	{
-		/// <summary>
-		/// GET: Project/Create.
-		/// Gets the page for creating new projects.
-		/// </summary>
-		/// <param name="id">Customer Id for the project.</param>
-		/// <returns>The ActionResult for the Create view.</returns>
-		[HttpGet]
-		public ActionResult Create(int id)
+        /// <summary>
+        /// GET: Project/Create.
+        /// Gets the page for creating new projects.
+        /// </summary>
+        /// <param name="subscriptionId"></param>
+        /// <param name="id">Customer Id for the project.</param>
+        /// <returns>The ActionResult for the Create view.</returns>
+        [HttpGet]
+		public ActionResult Create(int subscriptionId, int id = 0)
 		{
+            //int numId;
+            //int.TryParse(id, out numId);
 			DateTime? defaultStart = null;
 			DateTime? defaultEnd = null;
-
-			if (AppService.Can(Actions.CoreAction.EditProject))
+            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
+			if (AppService.Can(Actions.CoreAction.EditProject, false, orgId, subscriptionId))
 			{
 				var idAndUsers = AppService.GetNextProjectIdAndSubUsers(id);
 
@@ -54,8 +57,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						StartDate = AppService.GetDayFromDateTime(defaultStart),
 						EndDate = AppService.GetDayFromDateTime(defaultEnd),
 						ProjectOrgId = idAndUsers.Item1, //Service.GetRecommendedProjectId()
-                        CustomerName = AppService.GetCustomer(id).Name
-					});
+                        CustomerName = AppService.GetCustomer(id).Name,
+                        SubscriptionId = subscriptionId,
+                        OrganizationId = orgId
+                    });
 			}
 			else
 			{
@@ -82,10 +87,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 			}
+            int orgId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
 			model.SubscriptionUsers = subList;
 			if (ModelState.IsValid)
 			{
-				if (AppService.Can(Actions.CoreAction.EditProject))
+				if (AppService.Can(Actions.CoreAction.EditProject, false, orgId, model.SubscriptionId))
 				{
 					if (model == null)
 					{
