@@ -7,6 +7,7 @@
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using System;
 using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -17,24 +18,33 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	public partial class CustomerController : BaseController
 	{
 		/// <summary>
-		/// GET: Customer/Delete.
+		/// GET: Customer/SubscriptionId/Delete/CustomerId
 		/// </summary>
 		/// <param name="id">The Customer id.</param>
+        /// <param name="subscriptionId">The Subscription Id</param>
 		/// <returns>The Customer index.</returns>
-		public ActionResult Delete(int id)
+		public ActionResult Delete(int subscriptionId, string id = null)
 		{
-			var result = AppService.DeleteCustomer(id);
-			// if deleted successfully
-			if (result != null && result != "")
-			{
-				Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", result, Resources.Strings.CustomerDeleteNotification), Variety.Success));
-			}
-			// Permission failure
-			else if (result == null)
-			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-			}
-			return this.RedirectToAction(ActionConstants.Index);
+            if (id == null) //no customerId is passed in
+            {
+                return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+            }
+            else
+            {
+                int numId = Int32.Parse(id);
+                var result = AppService.DeleteCustomer(subscriptionId, numId);
+                // if deleted successfully
+                if (result != null && result != "")
+                {
+                    Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", result, Resources.Strings.CustomerDeleteNotification), Variety.Success));
+                }
+                // Permission failure
+                else if (result == null)
+                {
+                    Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+                }
+                return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+            }
 		}
 
 		/*

@@ -14,13 +14,14 @@ using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
-	/// <summary>
-	/// Represents pages for the management of a Customer.
-	/// </summary>
-	public partial class CustomerController : BaseController
+    /// <summary>
+    /// GET: /TimeTracker/Customer/subscriptionId
+    /// Represents pages for the management of a Customer.
+    /// </summary>
+    public partial class CustomerController : BaseController
 	{
 		/// <summary>
-		/// GET: Customer/Index.
+		/// GET: Customer/subscriptionId/Index.
 		/// </summary>
         /// <param name="subscriptionId">The Subscription Id</param>
 		/// <returns>Customer Index.</returns>
