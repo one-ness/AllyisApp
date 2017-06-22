@@ -18,14 +18,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	public partial class CustomerController : BaseController
 	{
 		/// <summary>
-		/// GET: Customer/Edit.
+		/// GET: Customer/{SubscriptionId}/Edit.
 		/// </summary>
 		/// <param name="id">The Customer id.</param>
+        /// <param name="subscriptionId">The Subscription Id</param>
 		/// <returns>Presents a page to edit Customer data.</returns>
 		[HttpGet]
-		public ActionResult Edit(int id)
+		public ActionResult Edit(int subscriptionId, int id)
 		{
-			if (AppService.Can(Actions.CoreAction.EditCustomer))
+            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
+            if (AppService.Can(Actions.CoreAction.EditCustomer, false, orgId, subscriptionId))
 			{
 				var infos = AppService.GetCustomerAndCountries(id);
 
@@ -45,13 +47,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					OrganizationId = infos.Item1.OrganizationId,
 					CustomerID = id,
 					ValidCountries = infos.Item2,
-					CustomerOrgId = infos.Item1.CustomerOrgId
+					CustomerOrgId = infos.Item1.CustomerOrgId,
+                    SubscriptionId = subscriptionId
 				});
 			}
 
 			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 
-			return this.RedirectToAction(ActionConstants.Index);
+			return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
 		}
 
 		/// <summary>

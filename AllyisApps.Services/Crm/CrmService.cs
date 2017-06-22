@@ -123,10 +123,12 @@ namespace AllyisApps.Services
         /// Deletes a customer.
         /// </summary>
         /// <param name="customerId">Customer id.</param>
+        /// <param name="subscriptionId">Subscription Id</param>
         /// <returns>Returns false if authorization fails.</returns>
-        public string DeleteCustomer(int customerId)
+        public string DeleteCustomer(int subscriptionId, int customerId)
         {
-            if (this.Can(Actions.CoreAction.EditCustomer))
+            int orgId = GetSubscription(subscriptionId).OrganizationId;
+            if (this.Can(Actions.CoreAction.EditCustomer, false, orgId, subscriptionId))
             {
                 return DBHelper.DeleteCustomer(customerId);
             }
