@@ -32,12 +32,14 @@ namespace AllyisApps.Services
 		/// Initializes a new instance of the <see cref="UserContext"/> class.
 		/// </summary>
 		/// <param name="userId">The user ID.</param>
+        /// <param name="firstName">The user's first name</param>
+        /// <param name="lastName">The user's last name</param>
 		/// <param name="username">The username.</param>
 		/// <param name="email">The email.</param>
 		/// <param name="chosenOrganizationId">The chosen Organization ID.</param>
 		/// <param name="chosenSubscriptionId">The chosen subscription ID.</param>
 		/// <param name="chosenLanguageID">The chosen language ID.</param>
-		public UserContext(int userId, string username, string email, int chosenOrganizationId = 0, int chosenSubscriptionId = 0, int chosenLanguageID = 0) : this()
+		public UserContext(int userId, string username, string email, string firstName = "First", string lastName = "Last", int chosenOrganizationId = 0, int chosenSubscriptionId = 0, int chosenLanguageID = 0) : this()
 		{
 			if (userId <= 0) throw new ArgumentException("userId");
 			if (string.IsNullOrWhiteSpace(username)) throw new ArgumentException("username");
@@ -45,6 +47,8 @@ namespace AllyisApps.Services
 
 			this.Email = email;
 			this.UserId = userId;
+            this.FirstName = firstName;
+            this.LastName = lastName;
 			this.UserName = username;
 			this.ChosenOrganizationId = chosenOrganizationId;
 			this.ChosenSubscriptionId = chosenSubscriptionId;
@@ -61,6 +65,16 @@ namespace AllyisApps.Services
 		/// </summary>
 		[JsonIgnore]
 		public string UserName { get; set; }
+
+        /// <summary>
+        /// First name of the user
+        /// </summary>
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// Last name of the user
+        /// </summary>
+        public string LastName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the email of the user.
