@@ -83,7 +83,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCreatedNotification, Variety.Success));
 
 					// Redirect to the user details page
-					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index), customerId));
+					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, new { model.SubscriptionId }), customerId));
 				}
 
 				// No customer value, should only happen because of a permission failure

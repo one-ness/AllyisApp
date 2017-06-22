@@ -285,7 +285,7 @@ namespace AllyisApps.Services
 
 							if (updated)
 							{
-								this.UpdateCustomer(customer);
+								this.UpdateCustomer(customer, UserContext.ChosenSubscriptionId);
 							}
 						}
 					}
