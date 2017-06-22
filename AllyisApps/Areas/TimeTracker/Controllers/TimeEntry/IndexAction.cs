@@ -118,14 +118,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			IEnumerable<User> users = infos.Item5;
 
-			TimeEntryOverDateRangeViewModel result = new TimeEntryOverDateRangeViewModel
-			{
-				EntryRange = new TimeEntryRangeForUserViewModel
-				{
-					StartDate = AppService.GetDayFromDateTime(startDate),
-					EndDate = AppService.GetDayFromDateTime(endDate),
-					Entries = new List<EditTimeEntryViewModel>(),
-					UserId = userId
+            TimeEntryOverDateRangeViewModel result = new TimeEntryOverDateRangeViewModel
+            {
+                EntryRange = new TimeEntryRangeForUserViewModel
+                {
+                    StartDate = AppService.GetDayFromDateTime(startDate),
+                    EndDate = AppService.GetDayFromDateTime(endDate),
+                    Entries = new List<EditTimeEntryViewModel>(),
+                    UserId = userId,
+                    SubscriptionId = subId
 				},
 				CanManage = manager,
 				StartOfWeek = (StartOfWeekEnum)startOfWeek,

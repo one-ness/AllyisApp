@@ -27,12 +27,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="startDateCopy">The start (inclusive) of the date range for the entries to be copied.</param>
 		/// <param name="endDateCopy">The end (inclusive) of the date range for the entries to be copied.</param>
 		/// <param name="userId">The id for the user whose entries are being edited.</param>
+        /// <param name="subscriptionId">The subscription's Id</param>
 		/// <param name="startDate">The start of the date range of the TimeEntry index page.</param>
 		/// <param name="endDate">The end of the date range of the TimeEntry index page.</param>
 		/// <returns>The action result.</returns>
-		public ActionResult CopyEntries(DateTime startDateTarget, DateTime startDateCopy, DateTime endDateCopy, int userId, int startDate, int endDate)
+		public ActionResult CopyEntries(DateTime startDateTarget, DateTime startDateCopy, DateTime endDateCopy, int userId, int subscriptionId, int startDate, int endDate)
 		{
-			#region Validation
+            #region Validation
 
 			// TODO flesh these out
 			if (startDateCopy > endDateCopy)
@@ -44,20 +45,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.View(ViewConstants.Error);
 			}
 
-			#endregion Validation
+            #endregion Validation
 
+            int organizationId = AppService.GetSubscription(subscriptionId).OrganizationId;
 			// Check for permission failures TODO flesh these out
-			if (userId == UserContext.UserId && !AppService.Can(Actions.CoreAction.TimeTrackerEditSelf))
+			if (userId == UserContext.UserId && !AppService.Can(Actions.CoreAction.TimeTrackerEditSelf, false, organizationId, subscriptionId))
 			{
 				return this.View(ViewConstants.Error);
 			}
-			else if (userId != UserContext.UserId && !AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			else if (userId != UserContext.UserId && !AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, subscriptionId))
 			{
 				return this.View(ViewConstants.Error);
 			}
 
-			// Reference for checking status of entries
-			List<CompleteProjectInfo> allProjects = AppService.GetProjectsByUserAndOrganization(userId, isActive: false).ToList();
+            // Reference for checking status of entries
+            List<CompleteProjectInfo> allProjects = AppService.GetProjectsByUserAndOrganization(userId, isActive: false).ToList();
 			DateTime? lockDate = AppService.GetLockDate();
 
 			// Authorized to edit this entry
@@ -84,15 +86,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				AppService.DeleteTimeEntry(entry.TimeEntryId);
 			}
 
-			// Add copied entries
-			IEnumerable<TimeEntryInfo> entriesCopy = AppService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateCopy, endDateCopy);
+            // Add copied entries
+            IEnumerable<TimeEntryInfo> entriesCopy = AppService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateCopy, endDateCopy, organizationId);
 			for (int i = 0; startDateCopy.Date.AddDays(i) <= endDateCopy.Date; ++i)
 			{
 				// Cover all entries for that day
 				foreach (TimeEntryInfo entry in entriesCopy.Where(x => x.Date == startDateCopy.Date.AddDays(i)))
 				{
 					// If the copying user isn't a manager, some checks are required before we let them delete/copy entries
-					if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+					if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, subscriptionId))
 					{
 						CompleteProjectInfo project = allProjects.Where(p => entry.ProjectId == p.ProjectId).SingleOrDefault();
 						if (project != null && (!project.IsActive || !project.IsUserActive))
@@ -106,10 +108,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						}
 					}
 
-					// Don't copy holidays.
-					if (entry.ProjectId > 0)
+                    System.Diagnostics.Debug.WriteLine("WORKING: " + subscriptionId);
+                    // Don't copy holidays.
+                    if (entry.ProjectId > 0)
 					{
-						AppService.CreateTimeEntry(new TimeEntryInfo
+                        AppService.CreateTimeEntry(new TimeEntryInfo
 						{
 							UserId = userId,
 							ProjectId = entry.ProjectId,

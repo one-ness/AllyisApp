@@ -196,11 +196,12 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets a list of <see cref="TimeEntryInfo"/>'s for a given set of users, organization, and start/end times.
 		/// </summary>
+        /// <param name="organizationId">The organization's Id</param>
 		/// <param name="userIds">List of user Id's.</param>
 		/// <param name="start">Starting. <see cref="DateTime"/></param>
 		/// <param name="end">Ending. <see cref="DateTime"/></param>
 		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/></returns>
-		public IEnumerable<TimeEntryInfo> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime start, DateTime end)
+		public IEnumerable<TimeEntryInfo> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime start, DateTime end, int organizationId = -1)
 		{
 			#region Validation
 
@@ -227,7 +228,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, UserContext.ChosenOrganizationId, start, end).Select(te => InitializeTimeEntryInfo(te));
+			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, organizationId, start, end).Select(te => InitializeTimeEntryInfo(te));
 		}
 
 		/// <summary>

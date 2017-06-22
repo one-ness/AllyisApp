@@ -28,9 +28,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult CreateTimeEntryJson(CreateTimeEntryViewModel model)
 		{
 			ProductRoleIdEnum role = UserContext.ChosenSubscription.ProductRole;
-
-			// Check for permission failures
-			if (model.UserId == Convert.ToInt32(UserContext.UserId) && !AppService.Can(Actions.CoreAction.TimeTrackerEditSelf))
+            int organizationId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
+            // Check for permission failures
+            if (model.UserId == Convert.ToInt32(UserContext.UserId) && !AppService.Can(Actions.CoreAction.TimeTrackerEditSelf, false, organizationId, model.SubscriptionId))
 			{
 				return this.Json(new
 				{
@@ -39,7 +39,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					e = new UnauthorizedAccessException(Resources.Strings.NotAuthZTimeEntry)
 				});
 			}
-			else if (model.UserId != Convert.ToInt32(UserContext.UserId) && !AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			else if (model.UserId != Convert.ToInt32(UserContext.UserId) && !AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, model.SubscriptionId))
 			{
 				return this.Json(new
 				{

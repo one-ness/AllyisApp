@@ -46,10 +46,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				});
 			}
 
+            int organizationId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
 			// Check permissions
 			if (model.UserId == Convert.ToInt32(UserContext.UserId))
 			{
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf, false, organizationId, model.SubscriptionId))
 				{
 					EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId);
 					return this.Json(new
@@ -63,7 +64,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, model.SubscriptionId))
 				{
 					EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId);
 					return this.Json(new

@@ -32,16 +32,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			// Check for permissions
 			TimeEntryInfo entry = AppService.GetTimeEntry(model.TimeEntryId);
+            int organizationId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
 			if (entry.UserId == Convert.ToInt32(UserContext.UserId))
 			{
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf, false, organizationId, model.SubscriptionId))
 				{
 					return this.Json(new { status = "error", message = Resources.Strings.NotAuthZTimeEntryDelete, e = new UnauthorizedAccessException(Resources.Strings.NotAuthZTimeEntryDelete) });
 				}
 			}
 			else
 			{
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, model.SubscriptionId))
 				{
 					return this.Json(new
 					{
