@@ -33,9 +33,9 @@ namespace AllyisApps.Services
 		/// valid country names.
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<string, List<string>> GetNextCustIdAndCountries()
+		public Tuple<string, List<string>> GetNextCustIdAndCountries(int orgId)
 		{
-			var spResults = DBHelper.GetNextCustIdAndCountries(UserContext.ChosenOrganizationId);
+			var spResults = DBHelper.GetNextCustIdAndCountries(orgId);
 			return Tuple.Create(
 				spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray())),
 				spResults.Item2);
@@ -54,20 +54,37 @@ namespace AllyisApps.Services
 				spResults.Item2);
 		}
 
-		/// <summary>
-		/// Creates a customer.
-		/// </summary>
-		/// <param name="customer">Customer.</param>
-		/// <returns>Customer id.</returns>
-		public int? CreateCustomer(Customer customer)
+        /// <summary>
+        /// Creates a customer.
+        /// </summary>
+        /// <param name="customer">Customer.</param>
+        /// <returns>Customer id.</returns>
+        public int? CreateCustomer(Customer customer)
 		{
-			if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
+            if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
 			{
 				return DBHelper.CreateCustomerInfo(GetDBEntityFromCustomer(customer));
 			}
 
 			return null;
 		}
+
+        /// <summary>
+        /// Creates a customer.
+        /// </summary>
+        /// <param name="customer">Customer.</param>
+        /// <param name="subscriptionId"></param>
+        /// <returns>Customer id.</returns>
+        public int? CreateCustomer(Customer customer, int subscriptionId)
+        {
+            int orgId = GetSubscription(subscriptionId).OrganizationId;
+            if (this.Can(Actions.CoreAction.EditCustomer, false, orgId, subscriptionId) && customer != null)
+            {
+                return DBHelper.CreateCustomerInfo(GetDBEntityFromCustomer(customer));
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// Updates a customer in the database.
