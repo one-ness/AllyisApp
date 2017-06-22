@@ -22,17 +22,20 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <returns>Presents a page for the creation of a new Customer.</returns>
 		[HttpGet]
-		public ActionResult Create()
+		public ActionResult Create(int subscriptionId)
 		{
-			if (AppService.Can(Actions.CoreAction.EditCustomer))
+            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
+            if (AppService.Can(Actions.CoreAction.EditCustomer, false, orgId, subscriptionId))
 			{
-				var idAndCountries = AppService.GetNextCustIdAndCountries();
+				var idAndCountries = AppService.GetNextCustIdAndCountries(orgId);
 
 				return this.View(new EditCustomerInfoViewModel
 				{
 					ValidCountries = idAndCountries.Item2,
 					IsCreating = true,
-					CustomerOrgId = idAndCountries.Item1
+					CustomerOrgId = idAndCountries.Item1,
+                    SubscriptionId = subscriptionId,
+                    OrganizationId = orgId  
 				});
 			}
 
@@ -40,12 +43,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			return this.RedirectToAction(ActionConstants.Index);
 		}
 
-		/// <summary>
-		/// POST: Customer/Create.
-		/// </summary>
-		/// <param name="model">The Customer ViewModel.</param>
-		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
-		[HttpPost]
+        /// <summary>
+        /// POST: Customer/Create.
+        /// </summary>
+        /// <param name="model">The Customer ViewModel.</param>
+        /// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
+        [HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult Create(EditCustomerInfoViewModel model)
 		{
@@ -64,9 +67,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					FaxNumber = model.FaxNumber,
 					Website = model.Website,
 					EIN = model.EIN,
-					OrganizationId = this.UserContext.ChosenOrganizationId,
+					OrganizationId = model.OrganizationId,
 					CustomerOrgId = model.CustomerOrgId
-				});
+				}, model.SubscriptionId);
 
 				if (customerId.HasValue)
 				{

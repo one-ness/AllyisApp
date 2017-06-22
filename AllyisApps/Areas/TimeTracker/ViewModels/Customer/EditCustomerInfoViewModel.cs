@@ -110,10 +110,15 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// </summary>
 		public int OrganizationId { get; set; }
 
-		/// <summary>
-		/// Gets or sets the name of the organization that the Customer belongs too.
-		/// </summary>
-		public string OrganizationName { get; set; }
+        /// <summary>
+        /// Gets or sets the id of subscription Id that the Customer belongs too.
+        /// </summary>
+        public int SubscriptionId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the organization that the Customer belongs too.
+        /// </summary>
+        public string OrganizationName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Customer's fax number.
@@ -140,11 +145,11 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// </summary>
 		public bool canEditCustomers { get; set; }
 
-		/// <summary>
-		/// Localized valid countries.
-		/// </summary>
-		/// <returns>A Dictionary keyed with the English translation and valued with the localized version.</returns>
-		public Dictionary<string, string> GetLocalizedValidCoutriesDictionary()
+        /// <summary>
+        /// Localized valid countries.
+        /// </summary>
+        /// <returns>A Dictionary keyed with the English translation and valued with the localized version.</returns>
+        public Dictionary<string, string> GetLocalizedValidCoutriesDictionary()
 		{
 			Dictionary<string, string> countries = new Dictionary<string, string>();
 
