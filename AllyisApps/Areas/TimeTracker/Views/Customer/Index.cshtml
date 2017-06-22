@@ -24,16 +24,6 @@
             <li id="inactiveTab"><a onclick="populateInactiveForm()">Inactive</a></li>
         </ul>
         <br/>
-            @*
-                <div class="allyis-action-buttons-top">
-                    <a href="@Url.Action(ActionConstants.Create, ControllerConstants.Customer)" class="btn btn-default @createButtonClass">@Strings.AddCustomer <i class="fa fa-plus"></i></a>
-                    <a href="@Url.Action(ActionConstants.Reactivate, ControllerConstants.Customer)" class="btn btn-default @createButtonClass">@Strings.Reactivate <i class="fa fa-plus"></i></a>
-
-                    <div class="pull-right">
-                        <input type="text" id="SearchInput" placeholder=@Strings.SearchPlaceholder class="form-control">
-                    </div>
-                </div> *@
-
         <form>
             <div id="resultPartialForm" class="row">
                 <!--Partial view will be updated here every time a tab is chosen-->
@@ -163,7 +153,11 @@
            {
                if (selectedCust != null && confirm("Delete customer " + $("#" + selectedCust).text().trim() + "?"))
                {
-                    var link = '@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId, id = "-1" })';
+                    var link = '@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, routeValues: new
+                           {
+                               subscriptionId = Model.SubscriptionId,
+                               id = "-1"
+                           })';
                     link = link.replace("-1", selectedCust);
                     window.location = link;
                }
