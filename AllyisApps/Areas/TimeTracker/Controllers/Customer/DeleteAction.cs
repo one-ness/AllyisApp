@@ -17,13 +17,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	public partial class CustomerController : BaseController
 	{
 		/// <summary>
-		/// GET: Customer/Delete.
+		/// GET: Customer/SubscriptionId/Delete/CustomerId
 		/// </summary>
 		/// <param name="id">The Customer id.</param>
+        /// <param name="subscriptionId">The Subscription Id</param>
 		/// <returns>The Customer index.</returns>
-		public ActionResult Delete(int id)
+		public ActionResult Delete(int subscriptionId, int id)
 		{
-			var result = AppService.DeleteCustomer(id);
+			var result = AppService.DeleteCustomer(subscriptionId, id);
 			// if deleted successfully
 			if (result != null && result != "")
 			{
@@ -34,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
-			return this.RedirectToAction(ActionConstants.Index);
+			return this.RedirectToAction(ActionConstants.Index, new { subscriptionid = subscriptionId });
 		}
 
 		/*

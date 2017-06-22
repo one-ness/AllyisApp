@@ -18,7 +18,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	public partial class TimeEntryController : BaseController
 	{
 		/// <summary>
-		/// GET /TimeTracker/TimeEntry/Settings.
+		/// GET /TimeTracker/TimeEntry/subscriptionId/Settings.
 		/// </summary>
         /// <param name="subscriptionId">The subscription Id</param>
 		/// <returns>The settings page.</returns>

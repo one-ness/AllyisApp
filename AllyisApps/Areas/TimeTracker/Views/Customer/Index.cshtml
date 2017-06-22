@@ -163,7 +163,7 @@
            {
                if (selectedCust != null && confirm("Delete customer " + $("#" + selectedCust).text().trim() + "?"))
                {
-                    var link = '@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new { id = "-1" })';
+                    var link = '@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId, id = "-1" })';
                     link = link.replace("-1", selectedCust);
                     window.location = link;
                }
