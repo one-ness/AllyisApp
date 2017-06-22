@@ -8,6 +8,7 @@ using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Customer;
+using System;
 using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -24,12 +25,20 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <param name="subscriptionId">The Subscription Id</param>
 		/// <returns>Presents a page to edit Customer data.</returns>
 		[HttpGet]
-		public ActionResult Edit(int subscriptionId, int id)
+		public ActionResult Edit(int subscriptionId, string id)
 		{
+            int numId;
+            bool parsed = Int32.TryParse(id, out numId);
+
+            if (!parsed)
+            {
+                return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+            }
+
             int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
             if (AppService.Can(Actions.CoreAction.EditCustomer, false, orgId, subscriptionId))
 			{
-				var infos = AppService.GetCustomerAndCountries(id);
+				var infos = AppService.GetCustomerAndCountries(numId);
 
 				return this.View(new EditCustomerInfoViewModel
 				{
@@ -45,7 +54,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Website = infos.Item1.Website,
 					EIN = infos.Item1.EIN,
 					OrganizationId = infos.Item1.OrganizationId,
-					CustomerID = id,
+					CustomerID = numId,
 					ValidCountries = infos.Item2,
 					CustomerOrgId = infos.Item1.CustomerOrgId,
                     SubscriptionId = subscriptionId
@@ -82,8 +91,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					FaxNumber = model.FaxNumber,
 					Website = model.Website,
 					EIN = model.EIN,
-					CustomerOrgId = model.CustomerOrgId
-				});
+					CustomerOrgId = model.CustomerOrgId,
+                    OrganizationId = model.OrganizationId
+				}, model.SubscriptionId);
 
 				if (result == -1)   //the new CustOrgId is not unique
 				{
@@ -98,7 +108,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				else // Permissions failure
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-					return this.RedirectToAction(ActionConstants.Index);
+					return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
 				}
 			}
 

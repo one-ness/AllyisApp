@@ -135,7 +135,7 @@
                {
                     var link = '@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = "-1" })';
                     link = link.replace("-1", selectedCust);
-                    window.location = link;
+                    window.location = '@Url.Action(ActionConstants.Edit, ControllerConstants.Customer)?subscriptionId=' + @Model.SubscriptionId + '&id=' + selectedCust;
                }
            }
 
