@@ -110,10 +110,15 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// </summary>
 		public int OrganizationId { get; set; }
 
-		/// <summary>
-		/// Gets or sets the name of the organization that the Customer belongs too.
+        /// <summary>
+		/// Gets or sets the Customer's subscription id.
 		/// </summary>
-		public string OrganizationName { get; set; }
+		public int SubscriptionId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the organization that the Customer belongs too.
+        /// </summary>
+        public string OrganizationName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Customer's fax number.
