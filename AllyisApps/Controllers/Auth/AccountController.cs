@@ -15,21 +15,5 @@ namespace AllyisApps.Controllers
 	[Authorize]
 	public partial class AccountController : BaseController
 	{
-		/// <summary>
-		/// Helper for ensuring a returnUrl is local and hasn't been tampered with.
-		/// </summary>
-		/// <param name="returnUrl">The returnUrl.</param>
-		/// <returns>The redirection action, or a redirection to home if the url is bad.</returns>
-		private ActionResult RedirectToLocal(string returnUrl = "")
-		{
-			if (Url.IsLocalUrl(returnUrl))
-			{
-				return this.Redirect(returnUrl);
-			}
-			else
-			{
-				return this.RouteHome();
-			}
-		}
 	}
 }

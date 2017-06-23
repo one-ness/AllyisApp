@@ -74,6 +74,23 @@ namespace AllyisApps.Controllers
 		protected AppService AppService { get; set; }
 
 		/// <summary>
+		/// Helper for ensuring a returnUrl is local and hasn't been tampered with.
+		/// </summary>
+		/// <param name="returnUrl">The returnUrl.</param>
+		/// <returns>The redirection action, or a redirection to home if the url is bad.</returns>
+		protected ActionResult RedirectToLocal(string returnUrl = "")
+		{
+			if (Url.IsLocalUrl(returnUrl))
+			{
+				return this.Redirect(returnUrl);
+			}
+			else
+			{
+				return this.RouteHome();
+			}
+		}
+
+		/// <summary>
 		/// Redirects home.
 		/// </summary>
 		/// <returns>The proper redirect for the product.</returns>
