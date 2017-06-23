@@ -640,20 +640,21 @@ namespace AllyisApps.Services
 			return InitializeCompleteProjectInfo(DBHelper.GetProjectByIdAndUser(projectId, UserContext.UserId));
 		}
 
-		/// <summary>
-		/// Gets a CompleteProjectInfo for the given project, a list of UserInfos for the project's assigned
-		/// users, and a list of SubscriptionUserInfos for all users in the current subscription.
-		/// </summary>
-		/// <param name="projectId">Project Id.</param>
-		/// <returns></returns>
-		public Tuple<CompleteProjectInfo, List<User>, List<SubscriptionUserInfo>> GetProjectEditInfo(int projectId)
+        /// <summary>
+        /// Gets a CompleteProjectInfo for the given project, a list of UserInfos for the project's assigned
+        /// users, and a list of SubscriptionUserInfos for all users in the current subscription.
+        /// </summary>
+        /// <param name="projectId">Project Id.</param>
+        /// <param name="subscriptionId"></param>
+        /// <returns></returns>
+        public Tuple<CompleteProjectInfo, List<User>, List<SubscriptionUserInfo>> GetProjectEditInfo(int projectId, int subscriptionId)
 		{
 			if (projectId < 0)
 			{
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be negative.");
 			}
 
-			var spResults = DBHelper.GetProjectEditInfo(projectId, UserContext.ChosenSubscriptionId);
+			var spResults = DBHelper.GetProjectEditInfo(projectId, subscriptionId);
 			return Tuple.Create(
 				InitializeCompleteProjectInfo(spResults.Item1),
 				spResults.Item2.Select(udb => InitializeUser(udb)).ToList(),
