@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public ActionResult Edit(EditProjectViewModel model)
 		{
-			var list = AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId).Item2;
+			var list = AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId, model.SubscriptionId).Item2;
 			var subList = new List<BasicUserInfoViewModel>();
 			foreach (var user in list)
 			{

@@ -669,20 +669,21 @@ namespace AllyisApps.Services
 				spResults.Item3.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());
 		}
 
-		/// <summary>
-		/// Gets the next logical project id for the given customer and a list of SubscriptionUserInfos for
-		/// all useres in the current subscription.
-		/// </summary>
-		/// <param name="customerId">Customer Id.</param>
-		/// <returns></returns>
-		public Tuple<string, List<SubscriptionUserInfo>> GetNextProjectIdAndSubUsers(int customerId)
+        /// <summary>
+        /// Gets the next logical project id for the given customer and a list of SubscriptionUserInfos for
+        /// all useres in the current subscription.
+        /// </summary>
+        /// <param name="customerId">Customer Id.</param>
+        /// <param name="subscriptionId"></param>
+        /// <returns></returns>
+        public Tuple<string, List<SubscriptionUserInfo>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
 		{
 			if (customerId < 0)
 			{
 				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be negative.");
 			}
 
-			var spResults = DBHelper.GetNextProjectIdAndSubUsers(customerId, UserContext.ChosenSubscriptionId);
+			var spResults = DBHelper.GetNextProjectIdAndSubUsers(customerId, subscriptionId);
 			return Tuple.Create(
 				spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray())),
 				spResults.Item2.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());

@@ -103,7 +103,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				else if (result == 1) //updated successfully
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerDetailsUpdated, Variety.Success));
-					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index), model.CustomerID));
+					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, new { subscriptionId = model.SubscriptionId }), model.CustomerID));
 				}
 				else // Permissions failure
 				{

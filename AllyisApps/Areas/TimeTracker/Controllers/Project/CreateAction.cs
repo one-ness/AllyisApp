@@ -37,7 +37,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
             int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
 			if (AppService.Can(Actions.CoreAction.EditProject, false, orgId, subscriptionId))
 			{
-				var idAndUsers = AppService.GetNextProjectIdAndSubUsers(id);
+				var idAndUsers = AppService.GetNextProjectIdAndSubUsers(id, subscriptionId);
 
 				var list = idAndUsers.Item2; //Service.GetUsers();
 				var subList = new List<BasicUserInfoViewModel>();
@@ -81,7 +81,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Create(EditProjectViewModel model)
 		{
-			var list = AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId).Item2;
+			var list = AppService.GetNextProjectIdAndSubUsers(model.ParentCustomerId, model.SubscriptionId).Item2;
 			var subList = new List<BasicUserInfoViewModel>();
 			foreach (var user in list)
 			{
