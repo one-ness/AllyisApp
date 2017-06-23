@@ -23,6 +23,7 @@
         <div class="form-group pull-left" style="margin-bottom: 15px;">
             <a href="@Url.Action(ActionConstants.Export, ControllerConstants.TimeEntry, routeValues: new
                 {
+                    subscriptionId = Model.Subscriptionid,
                     userId = Model.EntryRange.UserId,
                     startingDate = Model.EntryRange.StartDate,
                     endingDate = Model.EntryRange.EndDate
@@ -154,6 +155,7 @@ ViewBag.RenderSidebar = true;}
                                 @user.FirstName @user.LastName
                             </a>
                             <a href="@Url.Action(ActionConstants.UserEdit, routeValues: new {
+                                subscriptionId = Model.Subscriptionid,
                                 userId = user.UserId })"
                                style="text-decoration: none; color: #0066AA; padding-right:5%"><i class="fa fa-cog"></i></a>
                         </div>count++;
@@ -181,7 +183,7 @@ ViewBag.RenderSidebar = true;}
                 <span class="panel-title">@Strings.Upload</span>
                 <input type="submit" id="template-button" value="@Strings.Template" class="btn btn-primary tt-template" />
             }
-            @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.TimeEntry, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.TimeEntry, new { subscriptionid = Model.Subscriptionid }, FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken();
                 <div>

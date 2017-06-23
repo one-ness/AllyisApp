@@ -26,6 +26,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="viewDataButton">The value of the button used to submit the form.</param>
 		/// <param name="userSelect">Array of selected user Ids.</param>
+        /// <param name="subscriptionId">The subscription's Id</param>
+        /// <param name="organizationId">The organization's Id</param>
 		/// <param name="dateRangeStart">The beginning of the date range(nullable).</param>
 		/// <param name="dateRangeEnd">The end of the date range (nullable).</param>
 		/// <param name="showExport">Export button visibility.</param>
@@ -33,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="pageNum">The page of results to view.</param>
 		/// <param name="projectSelect">The project's id (not required).</param>
 		/// <returns>The data in a view dependent on the button's value.</returns>
-		public ActionResult ViewReport(string viewDataButton, List<int> userSelect, int? dateRangeStart, int? dateRangeEnd, bool showExport, int customerSelect, int pageNum, int projectSelect = 0)
+		public ActionResult ViewReport(string viewDataButton, List<int> userSelect, int subscriptionId, int organizationId, int? dateRangeStart, int? dateRangeEnd, bool showExport, int customerSelect, int pageNum, int projectSelect = 0)
 		{
 			if (viewDataButton.Equals(Resources.Strings.Preview))
 			{
@@ -59,12 +61,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				var infos = AppService.GetReportInfo();
 
-				ReportViewModel reportVM = this.ConstructReportViewModel(this.UserContext.UserId, UserContext.ChosenOrganizationId, AppService.Can(Actions.CoreAction.TimeTrackerEditOthers), infos.Item1, infos.Item2, showExport, reportVMselect);
+				ReportViewModel reportVM = this.ConstructReportViewModel(this.UserContext.UserId, organizationId, AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, subscriptionId), infos.Item1, infos.Item2, showExport, reportVMselect);
 
 				DataExportViewModel dataVM = null;
 				try
 				{
-					dataVM = this.ConstructDataExportViewModel(reportVMselect.Users, AppService.GetDateTimeFromDays(dateRangeStart.Value), AppService.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
+					dataVM = this.ConstructDataExportViewModel(subscriptionId, organizationId, reportVMselect.Users, AppService.GetDateTimeFromDays(dateRangeStart.Value), AppService.GetDateTimeFromDays(dateRangeEnd.Value), projectSelect, customerSelect);
 				}
 				catch (Exception ex)
 				{
@@ -124,7 +126,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else if (viewDataButton.Equals(Resources.Strings.Export))
 			{
-				return this.ExportReport(userSelect, AppService.GetDateTimeFromDays(dateRangeStart.Value), AppService.GetDateTimeFromDays(dateRangeEnd.Value), customerSelect, projectSelect);
+				return this.ExportReport(subscriptionId, organizationId, userSelect, AppService.GetDateTimeFromDays(dateRangeStart.Value), AppService.GetDateTimeFromDays(dateRangeEnd.Value), customerSelect, projectSelect);
 			}
 
 			return this.RedirectToAction(ActionConstants.Report);

@@ -34,7 +34,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			if (project.OrganizationId == null)
 			{
-				if (UserContext.ChosenOrganizationId == 0)
+				if (project.OrganizationId == 0)
 				{
 					throw new InvalidOperationException("Project requires an organization. Cannot update.");
 				}
@@ -49,7 +49,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				project.PriceType,
 				AppService.GetDateTimeFromDays(project.StartDate),
 				AppService.GetDateTimeFromDays(project.EndDate),
-				project.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString)));
+				project.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString)), 
+                project.SubscriptionId);
 		}
 	}
 }

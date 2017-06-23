@@ -196,11 +196,12 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets a list of <see cref="TimeEntryInfo"/>'s for a given set of users, organization, and start/end times.
 		/// </summary>
+        /// <param name="organizationId">The organization's Id</param>
 		/// <param name="userIds">List of user Id's.</param>
 		/// <param name="start">Starting. <see cref="DateTime"/></param>
 		/// <param name="end">Ending. <see cref="DateTime"/></param>
 		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/></returns>
-		public IEnumerable<TimeEntryInfo> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime start, DateTime end)
+		public IEnumerable<TimeEntryInfo> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime start, DateTime end, int organizationId = -1)
 		{
 			#region Validation
 
@@ -227,7 +228,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, UserContext.ChosenOrganizationId, start, end).Select(te => InitializeTimeEntryInfo(te));
+			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, organizationId, start, end).Select(te => InitializeTimeEntryInfo(te));
 		}
 
 		/// <summary>
@@ -424,9 +425,11 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates the Start of Week for an organization.
 		/// </summary>
+        /// <param name="organizationId">The organization's Id</param>
+        /// <param name="subscriptionId">The subscription's Id</param>
 		/// <param name="startOfWeek">Start of Week.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateStartOfWeek(int startOfWeek)
+		public bool UpdateStartOfWeek(int organizationId, int subscriptionId, int startOfWeek)
 		{
 			#region Validation
 
@@ -437,9 +440,9 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, subscriptionId))
 			{
-				DBHelper.UpdateTimeTrackerStartOfWeek(UserContext.ChosenOrganizationId, startOfWeek);
+				DBHelper.UpdateTimeTrackerStartOfWeek(organizationId, startOfWeek);
 
 				return true;
 			}
@@ -450,11 +453,13 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates overtime settings for an organization.
 		/// </summary>
+        /// <param name="subscriptionId">The subscription's Id</param>
+        /// <param name="organizationId">The organization's Id</param>
 		/// <param name="overtimeHours">Hours until overtime.</param>
 		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
 		/// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateOvertime(int overtimeHours, string overtimePeriod, float overtimeMultiplier)
+		public bool UpdateOvertime(int subscriptionId, int organizationId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
 		{
 			#region Validation
 
@@ -475,9 +480,9 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers))
+			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, subscriptionId))
 			{
-				DBHelper.UpdateOvertime(UserContext.ChosenOrganizationId, overtimeHours, overtimePeriod, overtimeMultiplier);
+				DBHelper.UpdateOvertime(organizationId, overtimeHours, overtimePeriod, overtimeMultiplier);
 
 				return true;
 			}
@@ -524,7 +529,7 @@ namespace AllyisApps.Services
 
 			if (userIds != null && userIds.Count == 1 && userIds[0] > 0)
 			{
-				projects = GetProjectsByUserAndOrganization(userIds[0], false);
+				projects = GetProjectsByUserAndOrganization(userIds[0], isActive: false);
 			}
 			else
 			{

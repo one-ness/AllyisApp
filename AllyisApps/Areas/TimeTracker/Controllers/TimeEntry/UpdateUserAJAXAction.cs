@@ -20,14 +20,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// AJAX callback to update the projects for a user.
 		/// </summary>
 		/// <param name="userId">The ID of the user.</param>
+        /// <param name="subscriptionId">The subscription's Id</param>
 		/// <param name="offUser">The list of projects not associated with the user.</param>
 		/// <param name="onUser">The list of projects associated with the user.</param>
 		/// <returns>Json object representing the results of the action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public JsonResult UpdateUserAJAX(int userId, List<int> offUser, List<int> onUser)
+		public JsonResult UpdateUserAJAX(int userId, int subscriptionId, List<int> offUser, List<int> onUser)
 		{
-			if (AppService.Can(Actions.CoreAction.EditProject))
+            int organizationId = AppService.GetSubscription(subscriptionId).OrganizationId;
+			if (AppService.Can(Actions.CoreAction.EditProject, false, organizationId, subscriptionId))
 			{
 				if (offUser != null)
 				{

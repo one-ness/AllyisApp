@@ -20,13 +20,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Exports a CSV report file.
 		/// </summary>
+        /// <param name="subscriptionId">The subscription's Id</param>
+        /// <param name="organizationId">The organization's Id</param>
 		/// <param name="userId">Array of user Ids.</param>
 		/// <param name="dateRangeStart">The beginning of the date range(nullable).</param>
 		/// <param name="dateRangeEnd">The end of the date range (nullable).</param>
 		/// <param name="customerId">The Customer's id (not required).</param>
 		/// <param name="projectId">The project's id (not required).</param>
 		/// <returns>CSV report File.</returns>
-		public ActionResult ExportReport(List<int> userId, DateTime? dateRangeStart = null, DateTime? dateRangeEnd = null, int customerId = 0, int projectId = 0)
+		public ActionResult ExportReport(int subscriptionId, int organizationId, List<int> userId, DateTime? dateRangeStart = null, DateTime? dateRangeEnd = null, int customerId = 0, int projectId = 0)
 		{
 			if (userId == null)
 			{
@@ -37,7 +39,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (userId.Count == 1 && userId[0] == Convert.ToInt32(UserContext.UserId))
 			{
 				// if (Permissions.Cannot(ProductAction.TimeTrackerCreateReportSelf, OrganizationId, TimeTrackerID))
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf))
+				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf, false, organizationId, subscriptionId))
 				{
 					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReports);
 				}

@@ -414,18 +414,19 @@ namespace AllyisApps.Services
 			}
 		}
 
-		/// <summary>
-		/// Updates a project's properties and user list.
-		/// </summary>
-		/// <param name="projectId">Project Id.</param>
-		/// <param name="name">Project name.</param>
-		/// <param name="orgId">Project org id.</param>
-		/// <param name="type">Project type.</param>
-		/// <param name="start">Starting date. <see cref="DateTime"/></param>
-		/// <param name="end">Ending date. <see cref="DateTime"/></param>
-		/// <param name="userIDs">Updated on-project user list.</param>
-		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime? start, DateTime? end, IEnumerable<int> userIDs)
+        /// <summary>
+        /// Updates a project's properties and user list.
+        /// </summary>
+        /// <param name="projectId">Project Id.</param>
+        /// <param name="name">Project name.</param>
+        /// <param name="orgId">Project org id.</param>
+        /// <param name="type">Project type.</param>
+        /// <param name="start">Starting date. <see cref="DateTime"/></param>
+        /// <param name="end">Ending date. <see cref="DateTime"/></param>
+        /// <param name="userIDs">Updated on-project user list.</param>
+        /// <param name="subscriptionId"></param>
+        /// <returns>Returns false if authorization fails.</returns>
+        public bool UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime? start, DateTime? end, IEnumerable<int> userIDs, int subscriptionId)
 		{
 			#region Validation
 
@@ -459,9 +460,9 @@ namespace AllyisApps.Services
 				userIDs = new List<int>();
 			}
 
-			#endregion Validation
-
-			if (this.Can(Actions.CoreAction.EditProject))
+            #endregion Validation
+            int organizationId = GetSubscription(subscriptionId).OrganizationId;
+			if (this.Can(Actions.CoreAction.EditProject, false, organizationId, subscriptionId))
 			{
 				DBHelper.UpdateProjectAndUsers(projectId, name, orgId, type, start, end, userIDs);
 				return true;
@@ -601,16 +602,17 @@ namespace AllyisApps.Services
 		/// Gets all the projects a user can use in the chosen organization.
 		/// </summary>
 		/// <param name="userId">User Id.</param>
+        /// <param name="orgId">The organization's Id</param>
 		/// <param name="isActive">True (default) to only return active projects, false to include all projects, active or not.</param>
 		/// <returns>A list of all the projects a user can access in an organization.</returns>
-		public IEnumerable<CompleteProjectInfo> GetProjectsByUserAndOrganization(int userId, bool isActive = true)
+		public IEnumerable<CompleteProjectInfo> GetProjectsByUserAndOrganization(int userId, int orgId = -1, bool isActive = true)
 		{
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.GetProjectsByUserAndOrganization(userId, UserContext.ChosenOrganizationId, isActive ? 1 : 0).Select(c => InitializeCompleteProjectInfo(c));
+			return DBHelper.GetProjectsByUserAndOrganization(userId, orgId, isActive ? 1 : 0).Select(c => InitializeCompleteProjectInfo(c));
 		}
 
 		/// <summary>
@@ -644,20 +646,21 @@ namespace AllyisApps.Services
 			return InitializeCompleteProjectInfo(DBHelper.GetProjectByIdAndUser(projectId, UserContext.UserId));
 		}
 
-		/// <summary>
-		/// Gets a CompleteProjectInfo for the given project, a list of UserInfos for the project's assigned
-		/// users, and a list of SubscriptionUserInfos for all users in the current subscription.
-		/// </summary>
-		/// <param name="projectId">Project Id.</param>
-		/// <returns></returns>
-		public Tuple<CompleteProjectInfo, List<User>, List<SubscriptionUserInfo>> GetProjectEditInfo(int projectId)
+        /// <summary>
+        /// Gets a CompleteProjectInfo for the given project, a list of UserInfos for the project's assigned
+        /// users, and a list of SubscriptionUserInfos for all users in the current subscription.
+        /// </summary>
+        /// <param name="projectId">Project Id.</param>
+        /// <param name="subscriptionId"></param>
+        /// <returns></returns>
+        public Tuple<CompleteProjectInfo, List<User>, List<SubscriptionUserInfo>> GetProjectEditInfo(int projectId, int subscriptionId)
 		{
 			if (projectId < 0)
 			{
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be negative.");
 			}
 
-			var spResults = DBHelper.GetProjectEditInfo(projectId, UserContext.ChosenSubscriptionId);
+			var spResults = DBHelper.GetProjectEditInfo(projectId, subscriptionId);
 			return Tuple.Create(
 				InitializeCompleteProjectInfo(spResults.Item1),
 				spResults.Item2.Select(udb => InitializeUser(udb)).ToList(),

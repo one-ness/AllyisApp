@@ -344,7 +344,7 @@ namespace AllyisApps.Services
 			{
 				// user exists in db
 				UserContextDBEntity firstRow = contextInfo[0];
-				result = new UserContext(userId, firstRow.UserName, firstRow.Email, firstRow.ActiveOrganizationId == null ? 0 : firstRow.ActiveOrganizationId.Value, firstRow.LastSubscriptionId == null ? 0 : firstRow.LastSubscriptionId.Value, firstRow.LanguagePreference.Value);
+				result = new UserContext(userId, firstRow.UserName, firstRow.Email, firstRow.FirstName, firstRow.LastName, firstRow.ActiveOrganizationId == null ? 0 : firstRow.ActiveOrganizationId.Value, firstRow.LastSubscriptionId == null ? 0 : firstRow.LastSubscriptionId.Value, firstRow.LanguagePreference.Value);
 				// set result to self
 				this.SetUserContext(result);
 

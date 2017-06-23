@@ -20,17 +20,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// </summary>
 	public partial class ProjectController : BaseController
 	{
-		/// <summary>
-		/// GET: Project/Edit.
-		/// Gets the form for editing an existing Project.
-		/// </summary>
-		/// <param name="id">The project's Id.</param>
-		/// <returns>The ActionResult for the Edit view.</returns>
-		public ActionResult Edit(int id)
+        /// <summary>
+        /// GET: Project/Edit.
+        /// Gets the form for editing an existing Project.
+        /// </summary>
+        /// <param name="subscriptionId"></param>
+        /// <param name="id">The project's Id.</param>
+        /// <returns>The ActionResult for the Edit view.</returns>
+        public ActionResult Edit(int subscriptionId, int id = 0)
 		{
-			if (AppService.Can(Actions.CoreAction.EditProject))
-			{
-				return this.View(this.ConstructEditProjectViewModel(id));
+            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
+            if (AppService.Can(Actions.CoreAction.EditProject, false, orgId, subscriptionId))
+            {
+				return this.View(this.ConstructEditProjectViewModel(id, subscriptionId));
 			}
 			else
 			{
@@ -56,11 +58,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 			}
 			model.SubscriptionUsers = subList;
+            int orgId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
 			if (ModelState.IsValid)
 			{
-				if (AppService.Can(Actions.CoreAction.EditProject))
+				if (AppService.Can(Actions.CoreAction.EditProject, false, orgId, model.SubscriptionId))
 				{
-					Project projIdMatch = AppService.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId).SingleOrDefault();
+					Project projIdMatch = AppService.GetAllProjectsForOrganization(orgId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId).SingleOrDefault();
 					if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
@@ -85,7 +88,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					}
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessProjectEdited, Variety.Success));
 
-					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer), model.ParentCustomerId));
+					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId }), model.ParentCustomerId));
 				}
 				else
 				{
@@ -100,14 +103,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 		}
 
-		/// <summary>
-		/// Uses services to populate a new <see cref="EditProjectViewModel"/> from a project Id and returns it.
-		/// </summary>
-		/// <param name="projectId">Project ID.</param>
-		/// <returns>The EditProjectViewModel.</returns>
-		public EditProjectViewModel ConstructEditProjectViewModel(int projectId)
+        /// <summary>
+        /// Uses services to populate a new <see cref="EditProjectViewModel"/> from a project Id and returns it.
+        /// </summary>
+        /// <param name="projectId">Project ID.</param>
+        /// <param name="subscriptionId"></param>
+        /// <returns>The EditProjectViewModel.</returns>
+        public EditProjectViewModel ConstructEditProjectViewModel(int projectId, int subscriptionId)
 		{
-			var infos = AppService.GetProjectEditInfo(projectId);
+			var infos = AppService.GetProjectEditInfo(projectId, subscriptionId);
 
 			IEnumerable<User> projectUserInfos = infos.Item2;
 			var projectUsers = new List<BasicUserInfoViewModel>();

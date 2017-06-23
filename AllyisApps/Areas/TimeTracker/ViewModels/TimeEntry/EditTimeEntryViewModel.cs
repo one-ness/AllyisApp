@@ -43,6 +43,11 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// </summary>
 		public int UserId { get; set; }
 
+        /// <summary>
+        /// Gets or sets the subscription's Id
+        /// </summary>
+        public int SubscriptionId { get; set; }
+
 		/// <summary>
 		/// Gets or sets the id of the time entry.
 		/// </summary>

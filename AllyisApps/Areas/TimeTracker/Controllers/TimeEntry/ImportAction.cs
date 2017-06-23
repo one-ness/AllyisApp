@@ -26,16 +26,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Code adapted from http://techbrij.com/read-excel-xls-xlsx-asp-net-mvc-upload.
 		/// </summary>
 		/// <param name="upload">File to upload.</param>
+        /// <param name="subscriptionId">The subscription Id</param>
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Import(HttpPostedFileBase upload)
+		public ActionResult Import(HttpPostedFileBase upload, int subscriptionId)
 		{
+            int organizationId = AppService.GetSubscription(subscriptionId).OrganizationId;
 			// TODO: Replace ModelState errors with exception catches and notifications
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)
 			if (ModelState.IsValid)
 			{
-				if (AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+				if (AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, subscriptionId))
 				{
 					if (upload != null && upload.ContentLength > 0)
 					{
@@ -57,7 +59,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						else
 						{
 							Notifications.Add(new BootstrapAlert(Resources.Strings.FileFormatUnsupported, Variety.Danger));
-							return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
+							return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId = subscriptionId, id = UserContext.UserId });
 						}
 
 						reader.IsFirstRowAsColumnNames = true;
@@ -85,7 +87,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId = subscriptionId, id = UserContext.UserId });
 		}
 	}
 }
