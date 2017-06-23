@@ -44,28 +44,6 @@ namespace AllyisApps.Services
 			}
 		}
 
-		/// <summary>
-		/// Verifies an email address format.
-		/// </summary>
-		/// <param name="email">The email address.</param>
-		/// <returns>True if it is a valid format, false if not.</returns>
-		public static bool IsEmailAddressValid(string email)
-		{
-			Regex emailVerification = new Regex("^[a-zA-Z0-9!#$%^&*\\-'/=+?_{|}~`.]+@[a-zA-Z0-9!#$%^&*\\-'/=+?_{|}~`.]+\\.[a-zA-Z]+$");
-			return emailVerification.IsMatch(email);
-		}
-
-		/// <summary>
-		/// Verfies a url format for a web address (http or https).
-		/// </summary>
-		/// <param name="url">The url.</param>
-		/// <returns>True if it is a valid web url, false if not.</returns>
-		public static bool IsUrlValid(string url)
-		{
-			Uri result;
-			return Uri.TryCreate(url, UriKind.Absolute, out result) && (result.Scheme == Uri.UriSchemeHttp || result.Scheme == Uri.UriSchemeHttps);
-		}
-
 		#endregion public static
 
 		#region public
@@ -77,11 +55,7 @@ namespace AllyisApps.Services
 		/// <returns><see cref="IEnumerable"/> of valid states/provinces.</returns>
 		public IEnumerable ValidStates(string countryName)
 		{
-			if (string.IsNullOrEmpty(countryName))
-			{
-				throw new ArgumentNullException("countryName", "Country name must have a value.");
-			}
-
+			if (string.IsNullOrWhiteSpace(countryName)) throw new ArgumentException("countryName");
 			return DBHelper.ValidStates(countryName);
 		}
 
@@ -117,7 +91,7 @@ namespace AllyisApps.Services
 		{
 			#region Validation
 
-			if (!AppService.IsEmailAddressValid(userEmail))
+			if (!Utility.IsValidEmail(userEmail))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
@@ -224,7 +198,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
 			}
-			else if (!AppService.IsEmailAddressValid(email))
+			else if (!Utility.IsValidEmail(email))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
@@ -289,23 +263,8 @@ namespace AllyisApps.Services
 		/// <returns>The  login task.</returns>
 		public UserContext ValidateLogin(string email, string password)
 		{
-			#region Validation
-
-			if (string.IsNullOrEmpty(email))
-			{
-				throw new ArgumentNullException("email", "Email address must have a value.");
-			}
-			else if (!AppService.IsEmailAddressValid(email))
-			{
-				throw new FormatException("Email address must be in a valid format.");
-			}
-
-			if (string.IsNullOrEmpty(password))
-			{
-				throw new ArgumentNullException("password", "Password must have a value.");
-			}
-
-			#endregion Validation
+			if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("email");
+			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
 
 			UserContext result = null;
 			var user = this.DBHelper.GetUserByEmail(email);
@@ -356,11 +315,11 @@ namespace AllyisApps.Services
 					if (item.OrganizationId.HasValue)
 					{
 						// yes, was it already added to the list?
-						UserOrganizationInfo orgInfo = null;
+						UserOrganization orgInfo = null;
 						if (!result.UserOrganizations.TryGetValue(item.OrganizationId.Value, out orgInfo))
 						{
 							// no, add it now
-							orgInfo = new UserOrganizationInfo
+							orgInfo = new UserOrganization
 							{
 								OrganizationId = item.OrganizationId.Value,
 								OrganizationName = item.OrganizationName,
@@ -373,8 +332,9 @@ namespace AllyisApps.Services
 						// is there a subscription id?
 						if (item.SubscriptionId.HasValue)
 						{
-							UserSubscriptionInfo subInfo = new UserSubscriptionInfo() {
+							UserSubscription subInfo = new UserSubscription() {
 								SubscriptionId = item.SubscriptionId.Value,
+								OrganizationId = orgInfo.OrganizationId,
 								ProductId = (ProductIdEnum)item.ProductId.Value,
 								ProductName = item.ProductName,
 								RoleName = item.RoleName,
@@ -470,7 +430,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
 			}
-			else if (!AppService.IsEmailAddressValid(email))
+			else if (!Utility.IsValidEmail(email))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
@@ -573,7 +533,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
 			}
-			else if (!AppService.IsEmailAddressValid(email))
+			else if (!Utility.IsValidEmail(email))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
@@ -727,7 +687,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("from", "From email address must have a value.");
 			}
-			else if (!AppService.IsEmailAddressValid(from))
+			else if (!Utility.IsValidEmail(from))
 			{
 				throw new FormatException("From email address must be in a valid format.");
 			}
@@ -736,7 +696,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("to", "To email address must have a value.");
 			}
-			else if (!AppService.IsEmailAddressValid(to))
+			else if (!Utility.IsValidEmail(to))
 			{
 				throw new FormatException("To email address must be in a valid format.");
 			}
@@ -745,7 +705,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("confirmEmailUrl", "Confirm email url must have a value.");
 			}
-			else if (!AppService.IsUrlValid(confirmEmailUrl))
+			else if (!Utility.IsValidUrl(confirmEmailUrl))
 			{
 				throw new FormatException("Confirm email url must be in a valid format.");
 			}

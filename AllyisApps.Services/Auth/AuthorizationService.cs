@@ -26,8 +26,8 @@ namespace AllyisApps.Services
 		{
 			// TODO: throwException defaults to True, result defaults to True, adjust bottom return result accordingly
 			bool result = false;
-			UserOrganizationInfo orgInfo = null;
-			UserSubscriptionInfo subInfo = null;
+			UserOrganization orgInfo = null;
+			UserSubscription subInfo = null;
 
 			if (organizationId == -1) organizationId = UserContext.ChosenOrganizationId;
             if (subscriptionId == -1) subscriptionId = UserContext.ChosenSubscriptionId;
@@ -49,19 +49,6 @@ namespace AllyisApps.Services
                         //orgInfo.UserSubscriptions.TryGetValue((int)product, out subInfo);
                         orgInfo.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
                     }
-
-					//// Has the user chosen a subscription
-					//if (UserContext.ChosenSubscriptionId > 0)
-					//{
-					//	// Grab the user's sub role
-					//	subInfo = orgInfo.UserSubscriptionInfoList.Where(x => x.SubscriptionId == UserContext.ChosenSubscriptionId).FirstOrDefault();
-					//}
-					//               else
-					//               {
-					//                   // If there's only one subscription, we'll use that in lieu of a chosen subscription. This quick fix can be removed once we're using the target action to
-					//                   // pick what subscription to use.
-					//                   if (orgInfo.UserSubscriptionInfoList.Count == 1) subInfo = orgInfo.UserSubscriptionInfoList.Single();
-					//               }
 				}
 			}
 

@@ -2,6 +2,7 @@
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Services.TimeTracker;
+using AllyisApps.Lib;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -646,7 +647,7 @@ namespace AllyisApps.Services
 								// All required info was found successfully
 								string[] names = fields[2].Split(new string[] { "__IMPORT__" }, StringSplitOptions.None);
 
-								if (!AppService.IsEmailAddressValid(fields[0]))
+								if (!Utility.IsValidEmail(fields[0]))
 								{
 									result.UserFailures.Add(string.Format("Could not create user {0} {1}: invalid email format ({2}).", names[0], names[1], fields[0]));
 									continue;

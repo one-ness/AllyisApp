@@ -8,6 +8,7 @@ using AllyisApps.DBModel;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
+using AllyisApps.Lib;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -95,7 +96,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("billingServicesEmail", "Email address must have a value.");
 			}
-			else if (!AppService.IsEmailAddressValid(billingServicesEmail))
+			else if (!Utility.IsValidEmail(billingServicesEmail))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}
@@ -182,7 +183,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("billingServicesEmail", "Email address must have a value.");
 			}
-			else if (!AppService.IsEmailAddressValid(billingServicesEmail))
+			else if (!Utility.IsValidEmail(billingServicesEmail))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}

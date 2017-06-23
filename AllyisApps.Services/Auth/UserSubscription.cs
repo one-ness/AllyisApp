@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="UserSubscriptionInfo.cs" company="Allyis, Inc.">
+// <copyright file="UserSubscription.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -11,24 +11,24 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// User subscription info.
 	/// </summary>
-	public class UserSubscriptionInfo
+	public class UserSubscription
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="UserSubscriptionInfo"/> class.
+		/// Initializes a new instance of the <see cref="UserSubscription"/> class.
 		/// </summary>
-		public UserSubscriptionInfo()
+		public UserSubscription()
 		{
 			this.ProductRole = ProductRoleIdEnum.NotInProduct;
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="UserSubscriptionInfo"/> class.
+		/// Initializes a new instance of the <see cref="UserSubscription"/> class.
 		/// </summary>
 		/// <param name="subscriptionId">The subscription ID.</param>
 		/// <param name="skuId">The SKU ID.</param>
 		/// <param name="productName">The product name.</param>
 		/// <param name="role">The role.</param>
-		public UserSubscriptionInfo(int subscriptionId, int skuId, string productName, ProductRoleIdEnum role)
+		public UserSubscription(int subscriptionId, int skuId, string productName, ProductRoleIdEnum role)
 		{
 			if (subscriptionId < 1)
 			{
@@ -55,6 +55,11 @@ namespace AllyisApps.Services
 		/// Gets or sets the Subscription id.
 		/// </summary>
 		public int SubscriptionId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the organization this subscription belongs to.
+		/// </summary>
+		public int OrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Sku of this subscription.

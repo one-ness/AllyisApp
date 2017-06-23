@@ -73,8 +73,8 @@
     <Compile Include="Auth\OrganizationRole.cs" />
     <Compile Include="Auth\ProductRoleIdEnum.cs" />
     <Compile Include="Auth\UserContext.cs" />
-    <Compile Include="Auth\UserOrganizationInfo.cs" />
-    <Compile Include="Auth\UserSubscriptionInfo.cs" />
+    <Compile Include="Auth\UserOrganization.cs" />
+    <Compile Include="Auth\UserSubscription.cs" />
     <Compile Include="BaseService.cs" />
     <Compile Include="Billing\BillingServicesEnum.cs" />
     <Compile Include="Billing\BillingServicesHandler.cs" />

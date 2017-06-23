@@ -21,7 +21,7 @@ namespace AllyisApps.Controllers
 		public ActionResult ApplicationRedirect(int id)
 		{
 			// check if the user is member of the given subscription
-			UserSubscriptionInfo subInfo = null;
+			UserSubscription subInfo = null;
 			if (!this.UserContext.UserSubscriptions.TryGetValue(id, out subInfo))
 			{
 				// set active subscrption to none

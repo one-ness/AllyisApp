@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="UserOrganizationInfo.cs" company="Allyis, Inc.">
+// <copyright file="UserOrganization.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -12,24 +12,24 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// User organization info.
 	/// </summary>
-	public class UserOrganizationInfo
+	public class UserOrganization
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="UserOrganizationInfo"/> class.
+		/// Initializes a new instance of the <see cref="UserOrganization"/> class.
 		/// </summary>
-		public UserOrganizationInfo()
+		public UserOrganization()
 		{
 			this.OrganizationRole = OrganizationRole.Member;
-			this.UserSubscriptions = new Dictionary<int, UserSubscriptionInfo>();
+			this.UserSubscriptions = new Dictionary<int, UserSubscription>();
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="UserOrganizationInfo"/> class.
+		/// Initializes a new instance of the <see cref="UserOrganization"/> class.
 		/// </summary>
 		/// <param name="organizationId">The Organization ID.</param>
 		/// <param name="organizationName">The organization Name.</param>
 		/// <param name="role">The role.</param>
-		public UserOrganizationInfo(int organizationId, string organizationName, OrganizationRole role) : this()
+		public UserOrganization(int organizationId, string organizationName, OrganizationRole role) : this()
 		{
 			if (organizationId <= 0) throw new ArgumentException("organizationId");
 			if (string.IsNullOrWhiteSpace(organizationName)) throw new ArgumentException("organizationName");
@@ -57,6 +57,6 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the List of subscriptions this organization has subscribed to and the user's role in it.
 		/// </summary>
-		public Dictionary<int, UserSubscriptionInfo> UserSubscriptions { get; set; }
+		public Dictionary<int, UserSubscription> UserSubscriptions { get; set; }
 	}
 }

@@ -8,6 +8,7 @@ using AllyisApps.DBModel;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.Services.Billing;
+using AllyisApps.Lib;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -275,7 +276,7 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("invitationInfo", "Invitation info object must not be null.");
 			}
 
-			if (string.IsNullOrEmpty(invitationInfo.Email) || !AppService.IsEmailAddressValid(invitationInfo.Email))
+			if (string.IsNullOrEmpty(invitationInfo.Email) || !Utility.IsValidEmail(invitationInfo.Email))
 			{
 				throw new ArgumentException("Email address is not valid", "invitationInfo.Email");
 			}
@@ -483,7 +484,7 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("email", "Email address must have a value.");
 			}
-			else if (!AppService.IsEmailAddressValid(email))
+			else if (!Utility.IsValidEmail(email))
 			{
 				throw new FormatException("Email address must be in a valid format.");
 			}

@@ -24,8 +24,8 @@ namespace AllyisApps.Services
 		/// </summary>
 		public UserContext()
 		{
-			this.UserOrganizations = new Dictionary<int, UserOrganizationInfo>();
-			this.UserSubscriptions = new Dictionary<int, UserSubscriptionInfo>();
+			this.UserOrganizations = new Dictionary<int, UserOrganization>();
+			this.UserSubscriptions = new Dictionary<int, UserSubscription>();
 		}
 
 		/// <summary>
@@ -91,11 +91,11 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the chosen organization
 		/// </summary>
-		public UserOrganizationInfo ChosenOrganization
+		public UserOrganization ChosenOrganization
 		{
 			get
 			{
-				UserOrganizationInfo result = null;
+				UserOrganization result = null;
 				this.UserOrganizations.TryGetValue(this.ChosenOrganizationId, out result);
 				return result;
 			}
@@ -110,11 +110,11 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the chosen subscription
 		/// </summary>
-		public UserSubscriptionInfo ChosenSubscription
+		public UserSubscription ChosenSubscription
 		{
 			get
 			{
-				UserSubscriptionInfo result = null;
+				UserSubscription result = null;
 				this.UserSubscriptions.TryGetValue(this.ChosenSubscriptionId, out result);
 				return result;
 			}
@@ -124,13 +124,13 @@ namespace AllyisApps.Services
 		/// Gets or sets the list of organizations the user is a member of, role in the organization, subscriptions each organization has subscribed to and user's role in that subscription.
 		/// </summary>
 		[JsonIgnore]
-		public Dictionary<int, UserOrganizationInfo> UserOrganizations { get; set; }
+		public Dictionary<int, UserOrganization> UserOrganizations { get; set; }
 
 		/// <summary>
 		/// Gets or sets the list of subscriptions the user is a member of. This is essentially a flattened out list of each of the organization above.
 		/// </summary>
 		[JsonIgnore]
-		public Dictionary<int, UserSubscriptionInfo> UserSubscriptions { get; set; }
+		public Dictionary<int, UserSubscription> UserSubscriptions { get; set; }
 
 		/// <summary>
 		/// Gets or sets the preferred language for this user.
