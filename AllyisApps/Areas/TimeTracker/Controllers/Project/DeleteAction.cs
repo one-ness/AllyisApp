@@ -16,13 +16,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	public partial class ProjectController : BaseController
 	{
         /// <summary>
-		/// Deletes the project.
-		/// </summary>
-		/// <param name="id">The project's Id.</param>
-		/// <returns>Deletes the project from the database.</returns>
-		public ActionResult Delete(int id)
+        /// Deletes the project.
+        /// </summary>
+        /// <param name="subscriptionId"></param>
+        /// <param name="id">The project's Id.</param>
+        /// <returns>Deletes the project from the database.</returns>
+        public ActionResult Delete(int subscriptionId, int id = 0)
         {
-            var result = AppService.DeleteProject(id);
+            var result = AppService.DeleteProject(id, subscriptionId);
             // if deleted successfully
             if (result != null && result != "")
             {
@@ -33,7 +34,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
             {
                 Notifications.Add(new BootstrapAlert(Resources.Strings.DeleteUnauthorizedMessage, Variety.Warning));
             }
-            return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
+            return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subscriptionId });
         }
 
         /*
