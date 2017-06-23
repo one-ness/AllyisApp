@@ -21,28 +21,34 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <param name="subscriptionId">The subscription Id</param>
 		/// <param name="id">Project ID</param>
 		/// <returns></returns>
-		public ActionResult Reactivate(int subscriptionId, int id)
+		public ActionResult Reactivate(int subscriptionId, string id)
 		{
-			CompleteProjectInfo project = AppService.GetProject(id);
+            int projId;
+            bool parsed = System.Int32.TryParse(id, out projId);
+
+            if (!parsed)
+            {
+                return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subscriptionId });
+            }
+            CompleteProjectInfo project = AppService.GetProject(projId);
 			if (project != null)
 			{
-
                 if (!AppService.GetCustomer(project.CustomerId).IsActive)
                 {
                     AppService.ReactivateCustomer(project.CustomerId, subscriptionId, project.OrganizationId);
                 }
 
-				if (AppService.ReactivateProject(id))
+				if (AppService.ReactivateProject(projId, project.OrganizationId, subscriptionId))
 				{
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", Resources.Strings.ProjectReactivateNotification, project.ProjectName), Variety.Success));
-					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
+					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subscriptionId });
 				}
 
 				//Permission Failed
 				Notifications.Add(new BootstrapAlert(Resources.Strings.DeleteUnauthorizedMessage, Variety.Warning));
 			}
 
-			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
+			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subscriptionId });
 		}
 	}
 }
