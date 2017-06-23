@@ -115,8 +115,7 @@ namespace AllyisApps.Controllers
 				PhoneNumber = organization.PhoneNumber,
 				FaxNumber = organization.FaxNumber,
 				CanDelete = canDelete,
-				ValidCountries = validCountries,
-                SubscriptionId = 
+				ValidCountries = validCountries
 			};
 		}
 	}
