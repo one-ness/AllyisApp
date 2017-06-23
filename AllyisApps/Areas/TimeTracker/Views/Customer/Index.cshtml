@@ -186,8 +186,7 @@
            {
                if (selectedCust != null)
                {
-                   var link = '@Url.Action(ActionConstants.Reactivate, ControllerConstants.Customer, new { id = Model.UserId, subscriptionId = Model.SubscriptionId })';
-                    window.location = link;
+                    window.location = '@Url.Action(ActionConstants.Reactivate, ControllerConstants.Customer)?subscriptionId=' + @Model.SubscriptionId + '&id=' + selectedCust;
                }
            }
 
@@ -197,7 +196,8 @@
                 {
                     var link = '@Url.Action(ActionConstants.Reactivate, ControllerConstants.Project, new { id = "-1" })';
                     link = link.replace("-1", selectedProj);
-                    window.location = link;
+                    window.location = '@Url.Action(ActionConstants.Reactivate, ControllerConstants.Project, new { subscriptionId = Model.SubscriptionId })?subscriptionId=' +
+                                    @Model.SubscriptionId + '&id=' + selectedProj;
                 }
            }
 </script>

@@ -158,10 +158,12 @@ namespace AllyisApps.Services
         /// Reactivate a Customer
         /// </summary>
         /// <param name="customerId">Customer id.</param>
+        /// <param name="orgId">The Organization Id</param>
+        /// <param name="subscriptionId">The subscription Id</param>
         /// <returns>Returns false if authorization fails.</returns>
-        public string ReactivateCustomer(int customerId)
+        public string ReactivateCustomer(int customerId, int subscriptionId, int orgId)
         {
-            if (this.Can(Actions.CoreAction.EditCustomer))
+            if (this.Can(Actions.CoreAction.EditCustomer, false, orgId, subscriptionId))
             {
                 return DBHelper.ReactivateCustomer(customerId);
             }
@@ -473,15 +475,17 @@ namespace AllyisApps.Services
         /// Reactivate a project
         /// </summary>
         /// <param name="projectId">Project Id</param>
+        /// <param name="organizationId">Organization Id</param>
+        /// <param name="subscriptionId"> subscription Id</param>
         /// <returns>Returns false if authorization fails</returns>
-        public bool ReactivateProject(int projectId)
+        public bool ReactivateProject(int projectId, int organizationId, int subscriptionId)
         {
             if (projectId <= 0)
             {
                 throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
             }
 
-            if (this.Can(Actions.CoreAction.EditProject))
+            if (this.Can(Actions.CoreAction.EditProject, false, organizationId, subscriptionId))
             {
                 DBHelper.ReactivateProject(projectId);
                 return true;
