@@ -59,6 +59,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(
                                                     orgId,
+                                                    subscriptionId,
 													userId,
 													manager,
 													startDate,
@@ -77,12 +78,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Constructor for the TimeEntryOverDateRangeViewModel.
 		/// </summary>
         /// <param name="orgId">The Organization ID</param>
+        /// <param name="subId">The Subscription's ID</param>
 		/// <param name="userId">The User ID.</param>
 		/// <param name="manager">The Manager.</param>
 		/// <param name="startingDate">The Starting Date.</param>
 		/// <param name="endingDate">The Ending date.</param>
 		/// <returns>The constructed TimeEntryOverDateRangeViewModel.</returns>
-		public TimeEntryOverDateRangeViewModel ConstructTimeEntryOverDataRangeViewModel(int orgId, int userId, bool manager, int? startingDate, int? endingDate)
+		public TimeEntryOverDateRangeViewModel ConstructTimeEntryOverDataRangeViewModel(int orgId, int subId, int userId, bool manager, int? startingDate, int? endingDate)
 		{
 			DateTime? startingDateTime = null;
 			if (startingDate.HasValue)
@@ -116,14 +118,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			IEnumerable<User> users = infos.Item5;
 
-			TimeEntryOverDateRangeViewModel result = new TimeEntryOverDateRangeViewModel
-			{
-				EntryRange = new TimeEntryRangeForUserViewModel
-				{
-					StartDate = AppService.GetDayFromDateTime(startDate),
-					EndDate = AppService.GetDayFromDateTime(endDate),
-					Entries = new List<EditTimeEntryViewModel>(),
-					UserId = userId
+            TimeEntryOverDateRangeViewModel result = new TimeEntryOverDateRangeViewModel
+            {
+                EntryRange = new TimeEntryRangeForUserViewModel
+                {
+                    StartDate = AppService.GetDayFromDateTime(startDate),
+                    EndDate = AppService.GetDayFromDateTime(endDate),
+                    Entries = new List<EditTimeEntryViewModel>(),
+                    UserId = userId,
+                    SubscriptionId = subId
 				},
 				CanManage = manager,
 				StartOfWeek = (StartOfWeekEnum)startOfWeek,
@@ -176,6 +179,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ProjectId = iter.Current.ProjectId,
 						PayClassId = iter.Current.PayClassId,
 						UserId = iter.Current.UserId,
+                        SubscriptionId = subId,
 						Date = AppService.GetDayFromDateTime(iter.Current.Date),
 						Duration = string.Format("{0:D2}:{1:D2}", (int)iter.Current.Duration, (int)Math.Round((iter.Current.Duration - (int)iter.Current.Duration) * 60, 0)),
 						Description = iter.Current.Description,
@@ -226,6 +230,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						TimeEntryId = timeEntryId,
 						Date = AppService.GetDayFromDateTime(date),
 						UserId = userId,
+                        SubscriptionId = subId,
 						StartingDate = AppService.GetDayFromDateTime(startDate),
 						EndingDate = AppService.GetDayFromDateTime(endDate),
 						IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
@@ -247,6 +252,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Sample = true,
 						Date = AppService.GetDayFromDateTime(date),
 						UserId = userId,
+                        SubscriptionId = subId,
 						StartingDate = AppService.GetDayFromDateTime(startDate),
 						EndingDate = AppService.GetDayFromDateTime(endDate),
 						IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,

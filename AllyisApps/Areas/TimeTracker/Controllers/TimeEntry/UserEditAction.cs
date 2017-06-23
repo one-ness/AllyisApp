@@ -20,23 +20,24 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET /TimeTracker/TimeEntry/UserEdit.
 		/// </summary>
+        /// <param name="subscriptionId">The subscription's id</param>
 		/// <param name="userId">The User's Id.</param>
 		/// <returns>The user edit page.</returns>
-		public ActionResult UserEdit(int userId = -1)
+		public ActionResult UserEdit(int subscriptionId, int userId = -1)
 		{
 			if (userId <= 0)
 			{
 				userId = UserContext.UserId;
 			}
+            int organizationId = AppService.GetSubscription(subscriptionId).OrganizationId;
+			var infos = AppService.GetProjectsForOrgAndUser(userId, organizationId);
 
-			var infos = AppService.GetProjectsForOrgAndUser(userId);
-
-			if (AppService.Can(Actions.CoreAction.EditProject))
+			if (AppService.Can(Actions.CoreAction.EditProject, false, organizationId, subscriptionId))
 			{
 				return this.View(new UserEditViewModel
 				{
 					UserId = userId,
-
+                    SubscriptionId = subscriptionId,
 					UserProjects = infos.Item1,
 					AllProjects = infos.Item2,
 					UserName = infos.Item3

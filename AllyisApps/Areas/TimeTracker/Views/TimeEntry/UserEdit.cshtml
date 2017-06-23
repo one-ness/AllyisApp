@@ -6,6 +6,8 @@
     DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
     DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
     Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
+    ViewData["UserId"] = Model.UserId;
+    ViewData["SubscriptionId"] = Model.SubscriptionId;
 }
 
 <div class="shrink-wrap-center">
@@ -67,7 +69,7 @@
                 </div>
             </div>
             <div class="text-right" style="padding-top: 15px; padding-bottom: 15px;">
-                <input type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Home)'" />
+                <input type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.TimeEntry, new { id = Model.UserId })'" />
                 <input type="submit" value=@Strings.Save class="btn btn-primary" id="submitUser" />
             </div>
         }

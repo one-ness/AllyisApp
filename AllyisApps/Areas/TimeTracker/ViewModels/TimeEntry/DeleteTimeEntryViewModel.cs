@@ -50,5 +50,10 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets or sets the approval state of the time entry.
 		/// </summary>
 		public int ApprovalState { get; set; }
+
+        /// <summary>
+        /// Gets or sets the subscription's Id
+        /// </summary>
+        public int SubscriptionId { get; set; }
 	}
 }

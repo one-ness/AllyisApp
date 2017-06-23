@@ -21,11 +21,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="LDsetting">Whether or not to use a lock date.</param>
 		/// <param name="LDperiod">The currently-selected period (days/weeks/months).</param>
 		/// <param name="LDquantity">The quantity of the selected period.</param>
+        /// <param name="subscriptionId">The subscription's Id</param>
 		/// <returns>Provides the view for the user.</returns>
 		[HttpPost]
-		public ActionResult SetLockDate(bool LDsetting, string LDperiod, int LDquantity)
+		public ActionResult SetLockDate(bool LDsetting, string LDperiod, int LDquantity, int subscriptionId)
 		{
-			if (AppService.Can(Services.Actions.CoreAction.TimeTrackerEditOthers))
+            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
+			if (AppService.Can(Services.Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId))
 			{
 				try
 				{
@@ -42,12 +44,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.LockDateUpdateFail + " " + ex.Message, Variety.Warning));
 				}
-				return this.RedirectToAction(ActionConstants.Settings);
+				return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = UserContext.UserId });
 			}
 			else
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-				return this.RedirectToAction(ActionConstants.Index);
+				return this.RedirectToAction(ActionConstants.Index, new { subscriptionid = subscriptionId, id = UserContext.UserId });
 			}
 		}
 	}

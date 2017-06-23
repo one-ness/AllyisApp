@@ -31,6 +31,8 @@ namespace AllyisApps.Controllers
 				model = new LogOnPartialViewModel
 				{
 					UserName = UserContext.UserName,
+                    FirstName = UserContext.FirstName,
+                    LastName = UserContext.LastName,
 					ChosenOrganizationName = UserContext.ChosenOrganization == null ? string.Empty : UserContext.ChosenOrganization.OrganizationName,
 				};
 			}
