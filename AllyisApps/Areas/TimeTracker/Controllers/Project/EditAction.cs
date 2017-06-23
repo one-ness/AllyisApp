@@ -61,9 +61,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
             int orgId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
 			if (ModelState.IsValid)
 			{
-				if (AppService.Can(Actions.CoreAction.EditProject, false, model.OrganizationId, model.SubscriptionId))
+				if (AppService.Can(Actions.CoreAction.EditProject, false, orgId, model.SubscriptionId))
 				{
-					Project projIdMatch = AppService.GetAllProjectsForOrganization(UserContext.ChosenOrganizationId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId).SingleOrDefault();
+					Project projIdMatch = AppService.GetAllProjectsForOrganization(orgId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId).SingleOrDefault();
 					if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
