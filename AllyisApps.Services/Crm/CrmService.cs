@@ -412,18 +412,19 @@ namespace AllyisApps.Services
 			}
 		}
 
-		/// <summary>
-		/// Updates a project's properties and user list.
-		/// </summary>
-		/// <param name="projectId">Project Id.</param>
-		/// <param name="name">Project name.</param>
-		/// <param name="orgId">Project org id.</param>
-		/// <param name="type">Project type.</param>
-		/// <param name="start">Starting date. <see cref="DateTime"/></param>
-		/// <param name="end">Ending date. <see cref="DateTime"/></param>
-		/// <param name="userIDs">Updated on-project user list.</param>
-		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime? start, DateTime? end, IEnumerable<int> userIDs)
+        /// <summary>
+        /// Updates a project's properties and user list.
+        /// </summary>
+        /// <param name="projectId">Project Id.</param>
+        /// <param name="name">Project name.</param>
+        /// <param name="orgId">Project org id.</param>
+        /// <param name="type">Project type.</param>
+        /// <param name="start">Starting date. <see cref="DateTime"/></param>
+        /// <param name="end">Ending date. <see cref="DateTime"/></param>
+        /// <param name="userIDs">Updated on-project user list.</param>
+        /// <param name="subscriptionId"></param>
+        /// <returns>Returns false if authorization fails.</returns>
+        public bool UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime? start, DateTime? end, IEnumerable<int> userIDs, int subscriptionId)
 		{
 			#region Validation
 
@@ -457,9 +458,9 @@ namespace AllyisApps.Services
 				userIDs = new List<int>();
 			}
 
-			#endregion Validation
-
-			if (this.Can(Actions.CoreAction.EditProject))
+            #endregion Validation
+            int organizationId = GetSubscription(subscriptionId).OrganizationId;
+			if (this.Can(Actions.CoreAction.EditProject, false, organizationId, subscriptionId))
 			{
 				DBHelper.UpdateProjectAndUsers(projectId, name, orgId, type, start, end, userIDs);
 				return true;
