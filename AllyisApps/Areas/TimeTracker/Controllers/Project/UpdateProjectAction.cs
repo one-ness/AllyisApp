@@ -32,15 +32,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new InvalidOperationException("Project requires a project id. Cannot update.");
 			}
 
-			if (project.OrganizationId == null)
-			{
+			//if (project.OrganizationId == null)
+			//{
 				if (project.OrganizationId == 0)
 				{
 					throw new InvalidOperationException("Project requires an organization. Cannot update.");
 				}
-
-				project.OrganizationId = UserContext.ChosenOrganizationId;
-			}
+			//	project.OrganizationId = UserContext.ChosenOrganizationId;
+			//}
 
 			AppService.UpdateProjectAndUsers(
 				project.ProjectId,
