@@ -2,7 +2,9 @@
 
 @if (!string.IsNullOrEmpty(Model.UserName))
 {
-    <li>
+
+    //This is showing the last organization that was created. I dont think this part is actually necessary -GM
+        <li>
 		<span class="headerOrgName">@Model.ChosenOrganizationName</span>
     </li>
 

@@ -497,15 +497,17 @@ namespace AllyisApps.Services
         /// Deletes a project.
         /// </summary>
         /// <param name="projectId">Project Id.</param>
+        /// <param name="subscriptionId"></param>
         /// <returns>Returns null if authorization fails, project name is succeed, empty string if not found.</returns>
-        public string DeleteProject(int projectId)
+        public string DeleteProject(int projectId, int subscriptionId)
 		{
-			if (projectId <= 0)
+            int orgId = GetSubscription(subscriptionId).OrganizationId;
+            if (projectId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
 			}
 
-            if (this.Can(Actions.CoreAction.EditCustomer))
+            if (this.Can(Actions.CoreAction.EditCustomer, false, orgId, subscriptionId))
             {
                 return DBHelper.DeleteProject(projectId);
             }
