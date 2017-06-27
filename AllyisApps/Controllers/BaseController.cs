@@ -72,17 +72,16 @@ namespace AllyisApps.Controllers
 			}
 			else
 			{
-				return this.RouteHome();
+				return this.RouteUserHome();
 			}
 		}
 
 		/// <summary>
-		/// Redirects home.
+		/// Redirect to user home page or the return url
 		/// </summary>
-		/// <returns>The proper redirect for the product.</returns>
-		public ActionResult RouteHome()
+		public ActionResult RouteUserHome()
 		{
-			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Home);
+			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 		}
 
 		/// <summary>

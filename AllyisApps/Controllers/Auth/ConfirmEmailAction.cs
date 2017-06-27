@@ -31,7 +31,7 @@ namespace AllyisApps.Controllers
 			else
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.WarnYourEmailHasAlreadyBeenConfirmed, Variety.Warning));
-				return this.RouteHome();
+				return this.RouteUserHome();
 			}
 		}
 	}

@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
 using System.Web.Mvc;
 
 namespace AllyisApps.Controllers

@@ -226,7 +226,7 @@ namespace AllyisApps.Services
 					Country = country,
 					PostalCode = postalCode,
 					PhoneNumber = phone,
-					PasswordHash = Crypto.GetPasswordHash(password), //Crypto.ComputeSHA512Hash(password),
+					PasswordHash = Crypto.GetPasswordHash(password),
 					TwoFactorEnabled = twoFactorEnabled,
 					LockoutEnabled = lockOutEnabled,
 					LockoutEndDateUtc = lockOutEndDateUtc,
@@ -260,7 +260,6 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">The login email.</param>
 		/// <param name="password">The login password.</param>
-		/// <returns>The  login task.</returns>
 		public UserContext ValidateLogin(string email, string password)
 		{
 			if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("email");
@@ -268,20 +267,19 @@ namespace AllyisApps.Services
 
 			UserContext result = null;
 			var user = this.DBHelper.GetUserByEmail(email);
-			if (user == null)
+			if (user != null)
 			{
-				return null;
-			}
-
-			Tuple<bool, string> passwordValidation = Crypto.ValidateAndUpdate(password, user.PasswordHash);
-			if (user != null && passwordValidation.Item1/*string.Compare(Crypto.ComputeSHA512Hash(password), user.PasswordHash, true) == 0*/)
-			{
-				result = new UserContext(user.UserId, user.UserName, email);
-
-				// Store updated password hash if needed
-				if (passwordValidation.Item2 != null)
+				// email exists, hash the given password and compare with hash in db
+				Tuple<bool, string> passwordValidation = Crypto.ValidateAndUpdate(password, user.PasswordHash);
+				if (user != null && passwordValidation.Item1/*string.Compare(Crypto.ComputeSHA512Hash(password), user.PasswordHash, true) == 0*/)
 				{
-					DBHelper.UpdateUserPassword(user.UserId, passwordValidation.Item2);
+					result = new UserContext(user.UserId, user.UserName, email);
+
+					// Store updated password hash if needed
+					if (passwordValidation.Item2 != null)
+					{
+						DBHelper.UpdateUserPassword(user.UserId, passwordValidation.Item2);
+					}
 				}
 			}
 

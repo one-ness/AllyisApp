@@ -8,7 +8,6 @@ using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
 using System;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -23,18 +22,17 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/LogOn.
 		/// </summary>
-		/// <param name="returnURL">The URL the user wishes to visit.</param>
-		/// <returns>The action's result.</returns>
+		/// <param name="returnUrl">The URL the user wishes to visit.</param>
 		[AllowAnonymous]
-		public ActionResult LogOn(string returnURL)
+		public ActionResult LogOn(string returnUrl)
 		{
 			if (Request.IsAuthenticated)
 			{
-				return this.RouteHome();
+				return this.RedirectToLocal(returnUrl);
 			}
 
-			ViewBag.ReturnURL = returnURL;
-			return this.View();
+			ViewBag.ReturnUrl = returnUrl;
+			return this.View(new LogOnViewModel());
 		}
 
 		/// <summary>
@@ -42,7 +40,6 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <param name="model">The Log On view model.</param>
 		/// <param name="returnUrl">The URL the user wishes to visit.</param>
-		/// <returns>The action's result.</returns>
 		[HttpPost]
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
@@ -55,11 +52,8 @@ namespace AllyisApps.Controllers
 				{
 					// sign in
 					this.SignIn(result.UserId, result.UserName, result.Email, model.RememberMe);
-
 					this.UserContext = this.AppService.PopulateUserContext(result.UserId);
-
-					// TODO: redirect to the last chosen subscription
-					return this.RouteHome();
+					return this.Redirect(returnUrl);
 				}
 				else
 				{
@@ -87,18 +81,15 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		private void SetAuthCookie(int userId, string userName, bool isPersisted = false)
 		{
-			//// serialize the cookie data object, then ecnrypt it using formsauthentication module
+			// serialize the cookie data object, then ecnrypt it using formsauthentication module
 			string serialized = this.SerializeCookie(new CookieData(userId));
-			FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
-				/*AuthenticationTicketVersion*/1,
-				userName,
-				DateTime.UtcNow,
+			FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(/*AuthenticationTicketVersion*/ 1, userName, DateTime.UtcNow,
 				DateTime.UtcNow.AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
 				isPersisted,
 				serialized);
 			string encryptedTicket = FormsAuthentication.Encrypt(ticket);
 
-			//// create the cookie (not set in response yet) and set its value
+			// create the cookie and set encrypted ticket as its value
 			HttpCookie cookie = FormsAuthentication.GetAuthCookie(FormsAuthentication.FormsCookieName, isPersisted);
 			cookie.HttpOnly = true;
 			cookie.Value = encryptedTicket;

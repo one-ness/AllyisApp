@@ -42,7 +42,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the Logged in user context.
 		/// </summary>
-		protected UserContext UserContext { get; private set; }
+		public UserContext UserContext { get; private set; }
 
 		/// <summary>
 		/// Sets the UserContext.

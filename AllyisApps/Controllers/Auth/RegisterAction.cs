@@ -21,14 +21,11 @@ namespace AllyisApps.Controllers
 		/// GET: /Account/Register.
 		/// </summary>
 		/// <param name="returnUrl">Return Url.</param>
-		/// <returns>The result of this action.</returns>
 		[AllowAnonymous]
 		public ActionResult Register(string returnUrl)
 		{
-			DateTime? defaultBirthday = null;
 			if (Request.IsAuthenticated)
 			{
-				// already authenticated, take user to return url
 				return this.RedirectToLocal(returnUrl);
 			}
 
@@ -36,7 +33,7 @@ namespace AllyisApps.Controllers
 			return this.View(new RegisterViewModel
 			{
 				ValidCountries = AppService.ValidCountries(),
-				DateOfBirth = AppService.GetDayFromDateTime(defaultBirthday)
+				DateOfBirth = AppService.GetDayFromDateTime(null)
 			});
 		}
 

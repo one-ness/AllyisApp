@@ -41,7 +41,7 @@ namespace AllyisApps.Controllers
                 }
             }
 
-            return this.RouteHome();
+            return this.RouteUserHome();
 		}
 	}
 }

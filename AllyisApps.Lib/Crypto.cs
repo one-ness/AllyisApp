@@ -17,19 +17,16 @@ namespace AllyisApps.Lib
 	/// </summary>
 	public static class Crypto
 	{
-		// Password storage is implemented as outlined in https://nakedsecurity.sophos.com/2013/11/20/serious-security-how-to-store-your-users-passwords-safely/,
+		// password storage is implemented as outlined in https://nakedsecurity.sophos.com/2013/11/20/serious-security-how-to-store-your-users-passwords-safely/,
 		// with the code used here paraphrased from https://cmatskas.com/-net-password-hashing-using-pbkdf2/.
 
-		// Hashing variables: feel free to update these as needed. The next time a user logs on, their password will still work,
+		// password hashing: feel free to update these as needed. The next time a user logs on, their password will still work,
 		// and the hash will get updated in the database to reflect the new values below.
 		private const int SaltBytes = 24;
-
 		private const int HashBytes = 32;
 		private const int Iterations = 20000;
 
-		// Old password hashing
-		private const int KeyStringLength = 32;
-
+		// encryption
 		private const int IVStringLength = 16;
 		private static Encoding encoding = Encoding.UTF8;
 
@@ -70,22 +67,13 @@ namespace AllyisApps.Lib
 		/// Validates a password against the stored password hash.
 		/// </summary>
 		/// <param name="password">Entered password.</param>
-		/// <param name="correctHash">Hashed correct password.</param>
-		/// <returns></returns>
+		/// <param name="correctHash">Correct hash of the password.</param>
 		public static bool ValidatePassword(string password, string correctHash)
 		{
 			string[] components = correctHash.Split(':');
-			if (components.Length != 3)
-			{
-				// This password is from before the implementation of the PBKDF2 logic.
-				// For migration purposes, this will be validated the old way for now.
-				return string.Compare(Crypto.ComputeSHA512Hash(password), correctHash, true) == 0;
-			}
-
 			int hashIterations = int.Parse(components[0]);
 			byte[] hashSalt = Convert.FromBase64String(components[1]);
 			byte[] hashHash = Convert.FromBase64String(components[2]);
-
 			byte[] testHash = GetPbkdf2Bytes(password, hashSalt, hashIterations, hashHash.Length);
 			return ByteArrayEquals(hashHash, testHash);
 		}
@@ -95,56 +83,37 @@ namespace AllyisApps.Lib
 		/// if the stored password hashing is out of date.
 		/// </summary>
 		/// <param name="password">Entered password.</param>
-		/// <param name="correctHash">Hashed correct password.</param>
-		/// <returns>A Tuple: Item1 is a bool stating the success of the validation. Item2 is a string
-		/// with the updated password hash if needed, or null if not needed.</returns>
+		/// <param name="correctHash">correct hash of the password.</param>
+		/// <returns>Item1 is bool, indicates if the hash of the given password matches the given hash.
+		/// If Item1 indicates a match, then Item2 may contain the updated hash of the password, which the caller can update in database</returns>
 		public static Tuple<bool, string> ValidateAndUpdate(string password, string correctHash)
 		{
 			bool updateRequired = false;
-
+			bool result = false;
+			string newHash = null;
 			string[] components = correctHash.Split(':');
-			if (components.Length != 3)
+			int hashIterations = int.Parse(components[0]);
+			byte[] hashSalt = Convert.FromBase64String(components[1]);
+			byte[] hashHash = Convert.FromBase64String(components[2]);
+			if (hashIterations != Iterations || hashSalt.Length != SaltBytes || hashHash.Length != HashBytes)
 			{
-				// This password is from before the implementation of the PBKDF2 logic.
-				// For migration purposes, this will be validated the old way for now.
-				// A successful validation is re-hashed with the new algorithm.
-				if (!(string.Compare(Crypto.ComputeSHA512Hash(password), correctHash, true) == 0))
-				{
-					// Bad login
-					return Tuple.Create<bool, string>(false, null);
-				}
+				// parameters of the hashing are out of date
 				updateRequired = true;
 			}
-			else
-			{
-				// This password was hashed with PBKDF2
-				int hashIterations = int.Parse(components[0]);
-				byte[] hashSalt = Convert.FromBase64String(components[1]);
-				byte[] hashHash = Convert.FromBase64String(components[2]);
-				if (hashIterations != Iterations || hashSalt.Length != SaltBytes || hashHash.Length != HashBytes)
-				{
-					// But the parameters of that hashing are out of date
-					updateRequired = true;
-				}
 
-				byte[] testHash = GetPbkdf2Bytes(password, hashSalt, hashIterations, hashHash.Length);
-				if (!ByteArrayEquals(hashHash, testHash))
+			byte[] testHash = GetPbkdf2Bytes(password, hashSalt, hashIterations, hashHash.Length);
+			if (ByteArrayEquals(hashHash, testHash))
+			{
+				// good login
+				result = true;
+				if (updateRequired)
 				{
-					// Bad login
-					return Tuple.Create<bool, string>(false, null);
+					// if an update is needed, the updated hash is returned
+					newHash = GetPasswordHash(password);
 				}
 			}
 
-			// Successful login
-			if (updateRequired)
-			{
-				// If an update is needed, the updated hash is returned
-				string newHash = GetPasswordHash(password);
-				return Tuple.Create<bool, string>(true, newHash);
-			}
-
-			// Successful login, no update needed
-			return Tuple.Create<bool, string>(true, null);
+			return Tuple.Create<bool, string>(result, newHash);
 		}
 
 		private static bool ByteArrayEquals(byte[] a, byte[] b)
@@ -155,19 +124,6 @@ namespace AllyisApps.Lib
 				diff |= (uint)(a[i] ^ b[i]);
 			}
 			return diff == 0;
-		}
-
-		// Old password hashing
-		/// <summary>
-		/// Computes the SHA512 hash for the given data.
-		/// </summary>
-		/// <param name="data">The data for which the SHA512 hash is to be computed.</param>
-		/// <returns>The SHA512 hash for the given data.</returns>
-		public static string ComputeSHA512Hash(string data)
-		{
-			SHA512Managed sha = new SHA512Managed();
-			byte[] hashed = sha.ComputeHash(Encoding.UTF8.GetBytes(data));
-			return Convert.ToBase64String(hashed);
 		}
 
 		/// <summary>
