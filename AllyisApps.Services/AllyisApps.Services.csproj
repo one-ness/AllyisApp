@@ -67,7 +67,6 @@
     <Compile Include="Auth\InvitationSubRole.cs" />
     <Compile Include="Auth\Organization.cs" />
     <Compile Include="Auth\AccountService.cs" />
-    <Compile Include="Auth\Actions.cs" />
     <Compile Include="Auth\AuthorizationService.cs" />
     <Compile Include="Auth\ImportService.cs" />
     <Compile Include="Auth\OrganizationRole.cs" />

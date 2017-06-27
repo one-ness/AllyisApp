@@ -19,7 +19,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TimeEntryController" /> class.
 		/// </summary>
-		public TimeEntryController() : base(ProductIdEnum.TimeTracker)
+		public TimeEntryController()
 		{
 		}
 	}

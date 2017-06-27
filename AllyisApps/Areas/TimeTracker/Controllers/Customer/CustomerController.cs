@@ -19,7 +19,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CustomerController"/> class.
 		/// </summary>
-		public CustomerController() : base(ProductIdEnum.TimeTracker)
+		public CustomerController()
 		{
 		}
 

@@ -142,29 +142,6 @@ namespace AllyisApps.Services
 			DBHelper.DeleteTimeEntry(timeEntryId);
 		}
 
-		///// <summary>
-		///// Sets the approval state of a time entry.
-		///// </summary>
-		///// <param name="timeEntryId">Time entry Id.</param>
-		///// <param name="approvalState">Approval state.</param>
-		//public void SetTimeEntryApprovalStateById(int timeEntryId, int approvalState)
-		//{
-		//	#region Validation
-
-		//	if (timeEntryId <= 0)
-		//	{
-		//		throw new ArgumentOutOfRangeException("timeEntryId", "Time entry id cannot be 0 or negative.");
-		//	}
-		//	else if (approvalState < 0)
-		//	{ // TODO: Figure out what values of approval state are actually allowed and constrain this further.
-		//		throw new ArgumentOutOfRangeException("approvalState", "Approval state cannot be negative.");
-		//	}
-
-		//	#endregion Validation
-
-		//	DBHelper.SetTimeEntryApprovalStateById(timeEntryId, approvalState);
-		//}
-
 		/// <summary>
 		/// Gets a list of <see cref="TimeEntryInfo"/>'s for a given organization and start/end times.
 		/// </summary>

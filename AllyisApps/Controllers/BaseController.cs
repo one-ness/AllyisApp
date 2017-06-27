@@ -28,26 +28,12 @@ namespace AllyisApps.Controllers
 	public partial class BaseController : Controller
 	{
 		/// <summary>
-		/// product id
-		/// </summary>
-		public ProductIdEnum ProductId { get; set; }
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseController" /> class.
 		/// </summary>
 		public BaseController()
 		{
 			// init the service
 			this.AppService = new AppService(GlobalSettings.SqlConnectionString);
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseController"/> class with a product id.
-		/// </summary>
-		/// <param name="productId">Product id.</param>
-		public BaseController(ProductIdEnum productId) : this()
-		{
-			this.ProductId = productId;
 		}
 
 		/// <summary>
@@ -94,12 +80,8 @@ namespace AllyisApps.Controllers
 		/// Redirects home.
 		/// </summary>
 		/// <returns>The proper redirect for the product.</returns>
-		public ActionResult RouteHome(int id = -1)
+		public ActionResult RouteHome()
 		{
-            if (this.ProductId == ProductIdEnum.TimeTracker)
-            {
-                return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Home, new { subscriptionId = id, id = 1, area = "TimeTracker" });
-            }
 			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Home);
 		}
 

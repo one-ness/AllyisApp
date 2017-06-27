@@ -20,7 +20,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HomeController" /> class.
 		/// </summary>
-		public HomeController() : base(ProductIdEnum.TimeTracker)
+		public HomeController()
 		{
 		}
 
