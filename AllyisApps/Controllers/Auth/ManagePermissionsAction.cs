@@ -27,16 +27,11 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <returns>Action result.</returns>
 		[HttpGet]
-		public ActionResult ManagePermissions2()
+		public ActionResult ManagePermissions2(int id)
 		{
-			if (AppService.Can(Actions.CoreAction.EditOrganization))
-			{
-				PermissionsManagementViewModel model = this.ConstructPermissionsManagementViewModel();
-				return this.View("Permission", model);
-			}
-
-			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-			return this.RedirectToAction("OrgIndex");
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			PermissionsManagementViewModel model = this.ConstructPermissionsManagementViewModel();
+			return this.View("Permission", model);
 		}
 
 		/// <summary>
@@ -46,8 +41,7 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult ManagePermissions(int id)
 		{
-			if (AppService.Can(Actions.CoreAction.EditOrganization, false, id))
-			{
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 				var infos = AppService.GetOrgAndSubRoles();
                 ManagePermissionsViewModel model = new ManagePermissionsViewModel
                 {
@@ -84,7 +78,7 @@ namespace AllyisApps.Controllers
 						// Start out with default NotInProduct role
 						foreach (SubscriptionDisplayInfo sub in model.Subscriptions)
 						{
-							modelUser.ProductRoleIds.Add((int)ProductRoleIdEnum.NotInProduct);
+							modelUser.ProductRoleIds.Add((int)TimeTrackerRole.User);
 						}
 						model.Users.Add(modelUser);
 					}
@@ -100,10 +94,6 @@ namespace AllyisApps.Controllers
 				}
 
 				return this.View("Permission2", model);
-			}
-
-			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-			return this.RedirectToAction("OrgIndex");
 		}
 
 		/// <summary>
@@ -161,7 +151,7 @@ namespace AllyisApps.Controllers
 						permission.SubscriptionRoles.Add(new ProductRole
 						{
 							ProductId = subscription.ProductId,
-							ProductRoleId = (int)ProductRoleIdEnum.NotInProduct
+							ProductRoleId = (int)TimeTrackerRole.User
 						});
 					}
 				}
@@ -178,8 +168,8 @@ namespace AllyisApps.Controllers
 
 			FilterGroup timeTrackerFilters = result.Filters.AddNewFilterGroup("TimeTracker");
 			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("Any", users, x => x.ProductRoleId != 0));
-			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("Manager", users, u => u.ProductRoleId == (int)ProductRoleIdEnum.TimeTrackerManager));
-			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("User", users, u => u.ProductRoleId == (int)ProductRoleIdEnum.TimeTrackerUser));
+			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("Manager", users, u => u.ProductRoleId == (int)TimeTrackerRole.Manager));
+			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("User", users, u => u.ProductRoleId == (int)TimeTrackerRole.User));
 			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("Unassigned", users, x => x.ProductRoleId == 0));
 
 			return result;
@@ -249,7 +239,7 @@ namespace AllyisApps.Controllers
 				else
 				{
 					// Changing time tracker roles
-					if (!Enum.IsDefined(typeof(ProductRoleIdEnum), model.SelectedActions.TimeTrackerRoleTarget) && model.SelectedActions.TimeTrackerRoleTarget != -1)
+					if (!Enum.IsDefined(typeof(TimeTrackerRole), model.SelectedActions.TimeTrackerRoleTarget) && model.SelectedActions.TimeTrackerRoleTarget != -1)
 					{
 						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
 						return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });

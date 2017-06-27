@@ -23,46 +23,35 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET /TimeTracker/TimeEntry/Report.
 		/// </summary>
-        /// <param name="subscriptionId">The Subscription Id</param>
+		/// <param name="subscriptionId">The Subscription Id</param>
 		/// <returns>The reports page.</returns>
 		public ActionResult Report(int subscriptionId)
 		{
-            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
-            if (AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId))
+			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+
+			//int orgId = UserContext.ChosenOrganizationId;
+			ReportViewModel reportVM = null;
+
+			var infos = AppService.GetReportInfo(subscriptionId);
+
+			const string TempDataKey = "RVM";
+			if (this.TempData[TempDataKey] != null)
 			{
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf, false, orgId, subscriptionId))
-				{
-					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReports);
-				}
-
-				//int orgId = UserContext.ChosenOrganizationId;
-				ReportViewModel reportVM = null;
-
-				var infos = AppService.GetReportInfo(orgId);
-
-				const string TempDataKey = "RVM";
-				if (this.TempData[TempDataKey] != null)
-				{
-					reportVM = (ReportViewModel)TempData[TempDataKey];
-					orgId = reportVM.OrganizationId;
-				}
-				else
-				{
-					reportVM = this.ConstructReportViewModel(UserContext.UserId, orgId, AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId), infos.Item1, infos.Item2);
-				}
-
-				reportVM.UserView = this.GetUserSelectList(infos.Item3, reportVM.Selection.Users);
-				reportVM.CustomerView = this.GetCustomerSelectList(infos.Item1, reportVM.Selection.CustomerId);
-				reportVM.ProjectView = this.GetProjectSelectList(infos.Item2, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
-                reportVM.SubscriptionId = subscriptionId;
-
-				return this.View(reportVM);
+				reportVM = (ReportViewModel)TempData[TempDataKey];
+			}
+			else
+			{
+				UserSubscription subInfo = null;
+				this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+				reportVM = this.ConstructReportViewModel(UserContext.UserId, subInfo.OrganizationId, true, infos.Item1, infos.Item2);
 			}
 
-			// Permissions failure
-			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+			reportVM.UserView = this.GetUserSelectList(infos.Item3, reportVM.Selection.Users);
+			reportVM.CustomerView = this.GetCustomerSelectList(infos.Item1, reportVM.Selection.CustomerId);
+			reportVM.ProjectView = this.GetProjectSelectList(infos.Item2, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
+			reportVM.SubscriptionId = subscriptionId;
 
-			return this.RouteHome();
+			return this.View(reportVM);
 		}
 
 		/// <summary>

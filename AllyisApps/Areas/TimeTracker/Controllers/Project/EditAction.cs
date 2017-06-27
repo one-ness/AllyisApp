@@ -20,26 +20,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// </summary>
 	public partial class ProjectController : BaseController
 	{
-        /// <summary>
-        /// GET: Project/Edit.
-        /// Gets the form for editing an existing Project.
-        /// </summary>
-        /// <param name="subscriptionId"></param>
-        /// <param name="id">The project's Id.</param>
-        /// <returns>The ActionResult for the Edit view.</returns>
-        public ActionResult Edit(int subscriptionId, int id = 0)
+		/// <summary>
+		/// GET: Project/Edit.
+		/// Gets the form for editing an existing Project.
+		/// </summary>
+		/// <param name="subscriptionId"></param>
+		/// <param name="id">The project's Id.</param>
+		/// <returns>The ActionResult for the Edit view.</returns>
+		public ActionResult Edit(int subscriptionId, int id)
 		{
-            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
-            if (AppService.Can(Actions.CoreAction.EditProject, false, orgId, subscriptionId))
-            {
-				return this.View(this.ConstructEditProjectViewModel(id, subscriptionId));
-			}
-			else
-			{
-				// Permissions Failure
-				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
-			}
+			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
+			return this.View(this.ConstructEditProjectViewModel(id, subscriptionId));
 		}
 
 		/// <summary>
@@ -58,44 +49,37 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 			}
 			model.SubscriptionUsers = subList;
-            int orgId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
+			int orgId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
 			if (ModelState.IsValid)
 			{
-				if (AppService.Can(Actions.CoreAction.EditProject, false, orgId, model.SubscriptionId))
+				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
+
+				Project projIdMatch = AppService.GetAllProjectsForOrganization(orgId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId).SingleOrDefault();
+				if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
 				{
-					Project projIdMatch = AppService.GetAllProjectsForOrganization(orgId).Where(project => project.ProjectOrgId == model.ProjectOrgId && project.CustomerId == model.ParentCustomerId).SingleOrDefault();
-					if (projIdMatch != null && projIdMatch.ProjectId != model.ProjectId)
-					{
-						Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
-						return this.View(model);
-					}
-
-					try
-					{
-						UpdateProject(model);
-					}
-					catch (Exception ex)
-					{
-						string message = Resources.Strings.FailureProjectEdited;
-						if (ex.Message != null)
-						{
-							message = string.Format("{0} {1}", message, ex.Message);
-						}
-
-						//Update failure
-						Notifications.Add(new BootstrapAlert(message, Variety.Danger));
-						return this.View(model);
-					}
-					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessProjectEdited, Variety.Success));
-
-					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId }), model.ParentCustomerId));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
+					return this.View(model);
 				}
-				else
+
+				try
 				{
-					// Permissions failure
-					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
+					UpdateProject(model);
 				}
+				catch (Exception ex)
+				{
+					string message = Resources.Strings.FailureProjectEdited;
+					if (ex.Message != null)
+					{
+						message = string.Format("{0} {1}", message, ex.Message);
+					}
+
+					//Update failure
+					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
+					return this.View(model);
+				}
+				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessProjectEdited, Variety.Success));
+
+				return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId }), model.ParentCustomerId));
 			}
 			else
 			{
@@ -103,13 +87,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 		}
 
-        /// <summary>
-        /// Uses services to populate a new <see cref="EditProjectViewModel"/> from a project Id and returns it.
-        /// </summary>
-        /// <param name="projectId">Project ID.</param>
-        /// <param name="subscriptionId"></param>
-        /// <returns>The EditProjectViewModel.</returns>
-        public EditProjectViewModel ConstructEditProjectViewModel(int projectId, int subscriptionId)
+		/// <summary>
+		/// Uses services to populate a new <see cref="EditProjectViewModel"/> from a project Id and returns it.
+		/// </summary>
+		/// <param name="projectId">Project ID.</param>
+		/// <param name="subscriptionId"></param>
+		/// <returns>The EditProjectViewModel.</returns>
+		public EditProjectViewModel ConstructEditProjectViewModel(int projectId, int subscriptionId)
 		{
 			var infos = AppService.GetProjectEditInfo(projectId, subscriptionId);
 
@@ -142,7 +126,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				PriceType = infos.Item1.PriceType,
 				StartDate = AppService.GetDayFromDateTime(infos.Item1.StartDate),
 				EndDate = AppService.GetDayFromDateTime(infos.Item1.EndDate),
-                SubscriptionId = subscriptionId
+				SubscriptionId = subscriptionId
 			};
 		}
 	}

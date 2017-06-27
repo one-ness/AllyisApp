@@ -391,7 +391,7 @@ namespace AllyisApps.Services
 		{
 			#region Validation
 
-			if (!Enum.IsDefined(typeof(ProductRoleIdEnum), newTimeTrackerRole) && newTimeTrackerRole != -1)
+			if (!Enum.IsDefined(typeof(TimeTrackerRole), newTimeTrackerRole) && newTimeTrackerRole != -1)
 			{
 				throw new ArgumentOutOfRangeException("newTimeTrackerRole", "TimeTracker role must either be -1 or match a value of the ProductRoleIdEnum enum.");
 			}

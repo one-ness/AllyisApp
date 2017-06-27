@@ -25,28 +25,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The user edit page.</returns>
 		public ActionResult UserEdit(int subscriptionId, int userId = -1)
 		{
-			if (userId <= 0)
-			{
-				userId = UserContext.UserId;
-			}
-            int organizationId = AppService.GetSubscription(subscriptionId).OrganizationId;
-			var infos = AppService.GetProjectsForOrgAndUser(userId, organizationId);
-
-			if (AppService.Can(Actions.CoreAction.EditProject, false, organizationId, subscriptionId))
-			{
-				return this.View(new UserEditViewModel
-				{
-					UserId = userId,
-                    SubscriptionId = subscriptionId,
-					UserProjects = infos.Item1,
-					AllProjects = infos.Item2,
-					UserName = infos.Item3
-				});
-			}
-
-			// Permissions failure
-			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-			return this.RedirectToAction(ActionConstants.Index);
+			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
+			var infos = AppService.GetProjectsForOrgAndUser(userId, subscriptionId);
+			return this.View(new UserEditViewModel {
+				UserId = this.UserContext.UserId,
+				SubscriptionId = subscriptionId,
+				UserProjects = infos.Item1,
+				AllProjects = infos.Item2,
+				UserName = infos.Item3
+			});
 		}
 	}
 }

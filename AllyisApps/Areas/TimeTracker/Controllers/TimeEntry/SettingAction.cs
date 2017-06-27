@@ -20,28 +20,20 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET /TimeTracker/TimeEntry/subscriptionId/Settings.
 		/// </summary>
-        /// <param name="subscriptionId">The subscription Id</param>
+		/// <param name="subscriptionId">The subscription Id</param>
 		/// <returns>The settings page.</returns>
 		public ActionResult Settings(int subscriptionId)
 		{
-            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
-			var infos = AppService.GetAllSettings(orgId);
-
-			if (AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId))
+			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+			var infos = AppService.GetAllSettings(subscriptionId);
+			return this.View(new SettingsViewModel()
 			{
-                return this.View(new SettingsViewModel()
-                {
-                    Settings = infos.Item1,
-                    PayClasses = infos.Item2,
-                    Holidays = infos.Item3,
-                    SubscriptionId = subscriptionId,
-                    UserId = UserContext.UserId
-				});
-			}
-
-			// Permissions failure
-			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));           
-			return this.RouteHome(subscriptionId);
+				Settings = infos.Item1,
+				PayClasses = infos.Item2,
+				Holidays = infos.Item3,
+				SubscriptionId = subscriptionId,
+				UserId = this.UserContext.UserId
+			});
 		}
 	}
 }

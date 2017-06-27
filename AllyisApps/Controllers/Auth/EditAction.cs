@@ -74,23 +74,12 @@ namespace AllyisApps.Controllers
         /// <returns>The result of this action.</returns>
         public ActionResult EditOrg(int id, string returnUrl)
 		{
-			if (AppService.Can(Actions.CoreAction.EditOrganization, true, id))
-			{
-				var infos = AppService.GetOrgWithCountriesAndEmployeeId(id);
-				EditOrganizationViewModel model = this.ConstructEditOrganizationViewModel(
-					infos.Item1,
-					true,
-					infos.Item2);
-
-				model.EmployeeId = infos.Item3;
-
-				ViewBag.returnUrl = returnUrl;
-
-				return this.View(model);
-			}
-
-			ViewBag.ErrorInfo = "Permission";
-			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditProfileMessage), ControllerConstants.Organization, ActionConstants.Edit));
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			var infos = AppService.GetOrgWithCountriesAndEmployeeId(id);
+			EditOrganizationViewModel model = this.ConstructEditOrganizationViewModel(infos.Item1, true, infos.Item2);
+			model.EmployeeId = infos.Item3;
+			ViewBag.returnUrl = returnUrl;
+			return this.View(model);
 		}
 
 		/// <summary>

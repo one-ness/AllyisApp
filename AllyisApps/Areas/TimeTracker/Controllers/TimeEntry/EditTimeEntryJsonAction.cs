@@ -48,23 +48,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
             int organizationId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
 			// Check permissions
-			if (model.UserId == Convert.ToInt32(UserContext.UserId))
+			if (model.UserId != this.UserContext.UserId)
 			{
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf, false, organizationId, model.SubscriptionId))
-				{
-					EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId);
-					return this.Json(new
-					{
-						status = "error",
-						message = Resources.Strings.NotAuthZTimeEntryEdit,
-						action = "REVERT",
-						values = new { duration = this.GetDurationDisplay(defaults.Duration), description = defaults.Description, id = model.TimeEntryId }
-					});
-				}
-			}
-			else
-			{
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, model.SubscriptionId))
+				if (!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId))
 				{
 					EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId);
 					return this.Json(new
@@ -115,8 +101,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="canManage">Whether user has permission to manage time entry.</param>
 		public void EditTimeEntry(EditTimeEntryViewModel model, bool canManage)
 		{
-			ProductRoleIdEnum role = UserContext.ChosenSubscription.ProductRole;
-
 			float? durationResult;
 			model.IsManager = canManage;
 			if (!(durationResult = this.ParseDuration(model.Duration)).HasValue)
@@ -157,7 +141,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			DateTime? lockDate = AppService.GetLockDate();
-			if (role != ProductRoleIdEnum.TimeTrackerManager && model.Date <= (lockDate == null ? -1 : AppService.GetDayFromDateTime(lockDate.Value)))
+			if ((!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId)) && model.Date <= (lockDate == null ? -1 : AppService.GetDayFromDateTime(lockDate.Value)))
 			{
 				throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 			}

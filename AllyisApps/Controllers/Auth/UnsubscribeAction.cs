@@ -25,18 +25,10 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult Unsubscribe(int id)
 		{
-			if (AppService.Can(Actions.CoreAction.EditOrganization))
-			{
-				var infos = AppService.GetProductSubscriptionInfo(id);
-
-				ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4);
-
-				return this.View(model);
-			}
-
-			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-
-			return this.RedirectToAction(ActionConstants.Manage);
+			this.AppService.CheckOrgAction(AppService.OrgAction.UnsubscribeFromProduct, id);
+			var infos = AppService.GetProductSubscriptionInfo(id);
+			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4);
+			return this.View(model);
 		}
 
 		/// <summary>
@@ -48,67 +40,14 @@ namespace AllyisApps.Controllers
 		[CLSCompliant(false)]
 		public ActionResult Unsubscribe(ProductSubscriptionViewModel model)
 		{
-			if (model == null)
+			this.AppService.CheckOrgAction(AppService.OrgAction.UnsubscribeFromProduct, model.OrganizationId);
+			string notificationString = AppService.UnsubscribeAndRemoveBillingSubscription(model.SelectedSku, model.SubscriptionId);
+			if (notificationString != null)
 			{
-				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.ModelNullMessage), ControllerConstants.Subscription, ActionConstants.Unsubscribe));
+				Notifications.Add(new BootstrapAlert(notificationString, Variety.Success));
 			}
 
-			if (AppService.Can(Actions.CoreAction.EditOrganization))
-			{
-				int? subId = null;
-				if (model.CurrentSubscription != null)
-				{
-					subId = model.CurrentSubscription.SubscriptionId;
-				}
-				string notificationString = AppService.UnsubscribeAndRemoveBillingSubscription(model.SelectedSku, subId);
-
-				if (notificationString != null)
-				{
-					Notifications.Add(new BootstrapAlert(notificationString, Variety.Success));
-				}
-
-				//try
-				//{
-				//	model.Billing.Customer = Service.RetrieveCustomer(Service.GetOrgBillingServicesCustomerId());
-				//	if (model.Billing.Customer != null)
-				//	{
-				//		int? subId = null;
-				//		if (model.CurrentSubscription != null)
-				//		{
-				//			subId = model.CurrentSubscription.SubscriptionId;
-				//		}
-				//		string notificationString = Service.UnsubscribeAndRemoveBillingSubscription(model.SelectedSku, subId);
-
-				//		if (notificationString != null)
-				//		{
-				//			Notifications.Add(new BootstrapAlert(notificationString, Variety.Success));
-				//		}
-
-				//		//string subscriptionId = Service.GetSubscriptionId(model.Billing.Customer.Id);
-				//		//if (subscriptionId != null)
-				//		//{
-				//		//	Service.DeleteSubscription(model.Billing.Customer.Id, subscriptionId.Trim());
-				//		//	Service.DeleteSubscriptionPlan(subscriptionId);
-				//		//	Service.AddBillingHistory("Unsubscribing from product", model.SelectedSku);
-				//		//}
-				//	}
-				//}
-				//catch (Exception e)
-				//{
-				//	Notifications.Add(new BootstrapAlert(e.ToString(), Variety.Warning));
-				//}
-
-				//if (model.CurrentSubscription != null)
-				//{
-				//Service.Unsubscribe(model.CurrentSubscription.SubscriptionId);
-				//string formattedNotificationString = string.Format("{0} has been unsubscribed from the license {1}.", Service.GetOrganization(model.OrganizationId).Name, Service.GetSkuDetails(model.PreviousSku).Name);
-				//Notifications.Add(new BootstrapAlert(formattedNotificationString, Variety.Success));
-				//}
-
-				return this.RedirectToAction(ActionConstants.Manage, new { id = model.OrganizationId });
-			}
-
-			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditSubscriptionsMessage), ControllerConstants.Subscription, ActionConstants.Subscribe));
+			return this.RedirectToAction(ActionConstants.Manage, new { id = model.OrganizationId });
 		}
 	}
 }

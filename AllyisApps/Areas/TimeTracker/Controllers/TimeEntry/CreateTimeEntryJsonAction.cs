@@ -27,25 +27,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>A JSON object with the results of the action.</returns>
 		public ActionResult CreateTimeEntryJson(CreateTimeEntryViewModel model)
 		{
-			ProductRoleIdEnum role = UserContext.ChosenSubscription.ProductRole;
-            int organizationId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
-            // Check for permission failures
-            if (model.UserId == Convert.ToInt32(UserContext.UserId) && !AppService.Can(Actions.CoreAction.TimeTrackerEditSelf, false, organizationId, model.SubscriptionId))
+			if (model.UserId != this.UserContext.UserId)
 			{
-				return this.Json(new
-				{
-					status = "error",
-					message = Resources.Strings.NotAuthZTimeEntry,
-					e = new UnauthorizedAccessException(Resources.Strings.NotAuthZTimeEntry)
-				});
-			}
-			else if (model.UserId != Convert.ToInt32(UserContext.UserId) && !AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, model.SubscriptionId))
-			{
-				return this.Json(new
-				{
-					status = "error",
-					message = Resources.Strings.NotAuthZTimeEntryOtherUser
-				});
+				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId);
 			}
 
 			// Authorized to edit this entry
@@ -71,6 +55,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					durationOther += otherEntry.Duration;
 				}
 
+				UserSubscription subInfo = null;
+				this.UserContext.UserSubscriptions.TryGetValue(model.SubscriptionId, out subInfo);
 				DateTime? lockDate = AppService.GetLockDate();
 				if (durationResult + durationOther > 24.00)
 				{
@@ -84,7 +70,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					throw new ArgumentException(Resources.Strings.MustSelectPayClass);
 				}
-				else if (role != ProductRoleIdEnum.TimeTrackerManager && model.Date <= (lockDate == null ? -1 : AppService.GetDayFromDateTime(lockDate.Value)))
+				else if (subInfo.ProductRole != (int)TimeTrackerRole.Manager && model.Date <= (lockDate == null ? -1 : AppService.GetDayFromDateTime(lockDate.Value)))
 				{
 					throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 				}

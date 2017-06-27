@@ -59,7 +59,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					reportVMselect.Users = userSelect;
 				}
 
-				var infos = AppService.GetReportInfo();
+				var infos = AppService.GetReportInfo(subscriptionId);
 
 				ReportViewModel reportVM = this.ConstructReportViewModel(this.UserContext.UserId, organizationId, AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, subscriptionId), infos.Item1, infos.Item2, showExport, reportVMselect);
 

@@ -33,12 +33,14 @@ namespace AllyisApps.Services
 		/// valid country names.
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<string, List<string>> GetNextCustIdAndCountries(int orgId)
+		public Tuple<string, List<string>, int> GetNextCustIdAndCountries(int subscriptionId)
 		{
-			var spResults = DBHelper.GetNextCustIdAndCountries(orgId);
+			UserSubscription subInfo = null;
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			var spResults = DBHelper.GetNextCustIdAndCountries(subInfo.OrganizationId);
 			return Tuple.Create(
 				spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray())),
-				spResults.Item2);
+				spResults.Item2, subInfo.OrganizationId);
 		}
 
 		/// <summary>
@@ -223,29 +225,28 @@ namespace AllyisApps.Services
         /// (current organization by default), another list of Projects for all projects in the organization,
         /// the name of the user (as "Firstname Lastname"), and the user's email.
         /// </summary>
-        /// <param name="userId">User Id.</param>
-        /// <param name="orgId">Organization Id.</param>
-        /// <returns></returns>
-        public Tuple<List<Project>, List<Project>, string, string> GetProjectsForOrgAndUser(int userId, int orgId = -1)
+        public Tuple<List<Project>, List<Project>, string, string> GetProjectsForOrgAndUser(int userId, int subscriptionId)
 		{
-			if (userId <= 0)
-			{
-				throw new ArgumentException("User Id cannot be zero or negative.", "userId");
-			}
+			if (userId <= 0) throw new ArgumentException("userId");
+			if (subscriptionId <= 0) throw new ArgumentException("subscriptionId");
 
-			if (orgId <= 0)
+			UserSubscription subInfo = null;
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			if (subInfo != null)
 			{
-				orgId = UserContext.ChosenOrganizationId;
+				var spResults = DBHelper.GetProjectsForOrgAndUser(userId, subInfo.OrganizationId);
+				var userDBEntity = spResults.Item3;
+				string name = string.Format("{0} {1}", userDBEntity.FirstName, userDBEntity.LastName);
+				return Tuple.Create(
+					spResults.Item1.Select(pdb => InitializeProject(pdb)).ToList(),
+					spResults.Item2.Select(pdb => InitializeProject(pdb)).ToList(),
+					name,
+					userDBEntity.Email);
 			}
-
-			var spResults = DBHelper.GetProjectsForOrgAndUser(userId, orgId);
-			var userDBEntity = spResults.Item3;
-			string name = string.Format("{0} {1}", userDBEntity.FirstName, userDBEntity.LastName);
-			return Tuple.Create(
-				spResults.Item1.Select(pdb => InitializeProject(pdb)).ToList(),
-				spResults.Item2.Select(pdb => InitializeProject(pdb)).ToList(),
-				name,
-				userDBEntity.Email);
+			else
+			{
+				return null;
+			}
 		}
 
 		/// <summary>

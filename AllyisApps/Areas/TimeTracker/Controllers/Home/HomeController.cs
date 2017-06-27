@@ -28,15 +28,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Index page.
 		/// </summary>
 		/// <returns>The view.</returns>
-		public ActionResult Index()
+		public ActionResult Index(int subscriptionId)
 		{
-			if (AppService.Can(Actions.CoreAction.TimeTrackerEditSelf))
-			{
-				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
-			}
-
-			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Home, new { area = string.Empty });
+			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry);
 		}
 	}
 }

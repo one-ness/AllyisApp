@@ -20,22 +20,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// GET: Project/Details.
 		/// Get's details of the specified project.
 		/// </summary>
+		/// <param name="subscriptionId">the subscription that the customer belongs to, which owns the project</param>
 		/// <param name="projectId">The project's Id.</param>
 		/// <returns>The details view of the project.</returns>
-		public ActionResult Details(int projectId)
+		public ActionResult Details(int subscriptionId, int projectId)
 		{
+			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			var model = AppService.GetProjectAsUser(projectId);
-
-			if (AppService.Can(Actions.CoreAction.EditProject) || model.IsProjectUser == true)
-			{
-				model.CanEditProject = AppService.Can(Actions.CoreAction.EditProject);
-				return this.View(model);
-			}
-			else
-			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
-			}
+			model.CanEditProject = true;
+			return this.View(model);
 		}
 	}
 }

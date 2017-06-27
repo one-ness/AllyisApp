@@ -24,31 +24,24 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult Create(int subscriptionId)
 		{
-            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
-            if (AppService.Can(Actions.CoreAction.EditCustomer, false, orgId, subscriptionId))
+			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.CreateCustomer, subscriptionId);
+			var idAndCountries = AppService.GetNextCustIdAndCountries(subscriptionId);
+			return this.View(new EditCustomerInfoViewModel
 			{
-				var idAndCountries = AppService.GetNextCustIdAndCountries(orgId);
-
-				return this.View(new EditCustomerInfoViewModel
-				{
-					ValidCountries = idAndCountries.Item2,
-					IsCreating = true,
-					CustomerOrgId = idAndCountries.Item1,
-                    SubscriptionId = subscriptionId,
-                    OrganizationId = orgId  
-				});
-			}
-
-			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-			return this.RedirectToAction(ActionConstants.Index);
+				ValidCountries = idAndCountries.Item2,
+				IsCreating = true,
+				CustomerOrgId = idAndCountries.Item1,
+				SubscriptionId = subscriptionId,
+				OrganizationId = idAndCountries.Item3
+			});
 		}
 
-        /// <summary>
-        /// POST: Customer/Create.
-        /// </summary>
-        /// <param name="model">The Customer ViewModel.</param>
-        /// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
-        [HttpPost]
+		/// <summary>
+		/// POST: Customer/Create.
+		/// </summary>
+		/// <param name="model">The Customer ViewModel.</param>
+		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
+		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult Create(EditCustomerInfoViewModel model)
 		{

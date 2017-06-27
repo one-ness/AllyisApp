@@ -71,7 +71,7 @@
     <Compile Include="Auth\AuthorizationService.cs" />
     <Compile Include="Auth\ImportService.cs" />
     <Compile Include="Auth\OrganizationRole.cs" />
-    <Compile Include="Auth\ProductRoleIdEnum.cs" />
+    <Compile Include="Auth\ProductRoles.cs" />
     <Compile Include="Auth\UserContext.cs" />
     <Compile Include="Auth\UserOrganization.cs" />
     <Compile Include="Auth\UserSubscription.cs" />

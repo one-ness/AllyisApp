@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public JsonResult UpdateUserAJAX(int userId, int subscriptionId, List<int> offUser, List<int> onUser)
 		{
             int organizationId = AppService.GetSubscription(subscriptionId).OrganizationId;
-			if (AppService.Can(Actions.CoreAction.EditProject, false, organizationId, subscriptionId))
+			if (this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false))
 			{
 				if (offUser != null)
 				{

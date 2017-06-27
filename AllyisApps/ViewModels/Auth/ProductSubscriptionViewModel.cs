@@ -27,6 +27,11 @@ namespace AllyisApps.ViewModels.Auth
 		}
 
 		/// <summary>
+		/// the subscritpion that is being unsubscribed from
+		/// </summary>
+		public int SubscriptionId { get; set; }
+
+		/// <summary>
 		/// Gets or sets the current Organization's Id.
 		/// </summary>
 		public int OrganizationId { get; set; }

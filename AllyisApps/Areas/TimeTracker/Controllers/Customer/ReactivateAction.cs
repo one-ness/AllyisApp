@@ -15,7 +15,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
     /// </summary>
 	public partial class CustomerController : BaseController
     {
-
         /// <summary>
         /// GET: Reactivate Customer
         /// </summary>
@@ -45,70 +44,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                 Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
             }
             return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
-        }
-
-
-   //     /// <summary>
-   //     /// POST: Customer/Delete.
-   //     /// </summary>
-   //     /// <returns>The Customer index.</returns>
-   //     public ActionResult Reactivate()
-   //     {
-			//if (AppService.Can(Actions.CoreAction.ViewCustomer))
-			//{
-			//	return this.View(this.ConstructManageInactiveCustomerViewModel(UserContext.UserId, UserContext.ChosenOrganizationId));
-			//}
-
-			//Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-
-   //         return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
-   //     }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ManageCustomerViewModel" /> class.
-        /// </summary>
-        /// <param name="userId">The user's Id.</param>
-        /// <param name="orgId">The id of the current organization.</param>
-        /// <returns>The ManageCustomerViewModel.</returns>
-        public ManageCustomerViewModel ConstructManageInactiveCustomerViewModel(int userId, int orgId)
-        {
-            var infos = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(orgId);
-
-            bool canEditProjects = AppService.Can(Actions.CoreAction.EditProject);
-
-            List<CompleteProjectInfo> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
-            List<Customer> customers = infos.Item2;
-
-            IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
-            foreach (Customer currentCustomer in customers)
-            {
-                CustomerProjectViewModel customerResult = new CustomerProjectViewModel()
-                {
-                    CustomerInfo = currentCustomer,
-                    Projects = from p in projects
-                               where p.CustomerId == currentCustomer.CustomerId
-                               select new Project
-                               {
-                                   CustomerId = p.CustomerId,
-                                   OrganizationId = p.OrganizationId,
-                                   Name = p.ProjectName,
-                                   ProjectId = p.ProjectId
-                               }
-                };
-
-                // Only add the customer to the list if a project will be displayed to the user (i.e. user is a manager or part of one of the customer's projects)
-                if (customerResult.Projects.Count() > 0 || canEditProjects)
-                {
-                    customersList.Add(customerResult);
-                }
-            }
-
-            return new ManageCustomerViewModel
-            {
-                Customers = customersList,
-                OrganizationId = orgId,
-                canEdit = canEditProjects
-            };
         }
     }
 }

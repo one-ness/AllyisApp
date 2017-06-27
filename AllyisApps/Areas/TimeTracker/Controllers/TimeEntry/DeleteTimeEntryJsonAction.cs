@@ -28,21 +28,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpPost]
 		public ActionResult DeleteTimeEntryJson(DeleteTimeEntryViewModel model)
 		{
-			ProductRoleIdEnum role = UserContext.ChosenSubscription.ProductRole;
-
 			// Check for permissions
 			TimeEntryInfo entry = AppService.GetTimeEntry(model.TimeEntryId);
-            int organizationId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
-			if (entry.UserId == Convert.ToInt32(UserContext.UserId))
+			if (entry.UserId != this.UserContext.UserId)
 			{
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf, false, organizationId, model.SubscriptionId))
-				{
-					return this.Json(new { status = "error", message = Resources.Strings.NotAuthZTimeEntryDelete, e = new UnauthorizedAccessException(Resources.Strings.NotAuthZTimeEntryDelete) });
-				}
-			}
-			else
-			{
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, model.SubscriptionId))
+				if (!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId))
 				{
 					return this.Json(new
 					{
@@ -67,7 +57,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			// Time entry is locked
 			DateTime? lockDate = AppService.GetLockDate();
-			if (role != ProductRoleIdEnum.TimeTrackerManager && entry.Date <= (lockDate == null ? DateTime.MinValue : lockDate.Value))
+			if ((!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId)) && entry.Date <= (lockDate == null ? DateTime.MinValue : lockDate.Value))
 			{
 				string errorMessage = Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture);
 				return this.Json(new

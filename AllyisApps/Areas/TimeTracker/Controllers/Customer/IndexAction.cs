@@ -28,15 +28,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult Index(int subscriptionId)
 		{
-            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
-            if (AppService.Can(Actions.CoreAction.ViewCustomer, false, orgId, subscriptionId))
-			{
-				return this.View(this.ConstructManageCustomerViewModel(UserContext.UserId, orgId, subscriptionId));
-			}
-
-			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-
-			return this.RouteHome();
+			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
+			UserSubscription subInfo = null;
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			return this.View(this.ConstructManageCustomerViewModel(subscriptionId));
 		}
 
         /// <summary>
@@ -68,20 +63,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="ManageCustomerViewModel" /> class.
         /// </summary>
-        /// <param name="userId">The user's Id.</param>
-        /// <param name="orgId">The id of the current organization.</param>
         /// <param name="subscriptionId">The id of the current subscription</param>
         /// <returns>The ManageCustomerViewModel.</returns>
-        public ManageCustomerViewModel ConstructManageCustomerViewModel(int userId, int orgId, int subscriptionId)
+        public ManageCustomerViewModel ConstructManageCustomerViewModel(int subscriptionId)
 		{
-			var infos = AppService.GetProjectsAndCustomersForOrgAndUser(orgId);
-            var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(orgId);
-
-            bool canEditProjects = AppService.Can(Actions.CoreAction.EditProject, false, orgId, subscriptionId);
-
+			UserSubscription subInfo = null;
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			var infos = AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
+            var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
+			bool canEditProjects = subInfo.ProductRole == (int)TimeTrackerRole.Manager;
 			List<CompleteProjectInfo> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> customers = infos.Item2;
-
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
 			foreach (Customer currentCustomer in customers)
 			{
@@ -137,7 +129,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
             {
                 Customers = customersList,
                 InactiveCustomerAndProjects = inactiveCustomersList,
-                OrganizationId = orgId,
+                OrganizationId = subInfo.OrganizationId,
                 canEdit = canEditProjects,
                 SubscriptionId = subscriptionId,
                 UserId = UserContext.UserId

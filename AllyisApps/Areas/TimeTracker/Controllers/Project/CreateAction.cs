@@ -20,55 +20,43 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// </summary>
 	public partial class ProjectController : BaseController
 	{
-        /// <summary>
-        /// GET: Project/Create.
-        /// Gets the page for creating new projects.
-        /// </summary>
-        /// <param name="subscriptionId"></param>
-        /// <param name="id">Customer Id for the project.</param>
-        /// <returns>The ActionResult for the Create view.</returns>
-        [HttpGet]
-		public ActionResult Create(int subscriptionId, int id = 0)
+		/// <summary>
+		/// GET: Project/Create.
+		/// Gets the page for creating new projects.
+		/// </summary>
+		/// <param name="subscriptionId"></param>
+		/// <param name="id">Customer Id for the project.</param>
+		/// <returns>The ActionResult for the Create view.</returns>
+		[HttpGet]
+		public ActionResult Create(int subscriptionId, int id)
 		{
-            //int numId;
-            //int.TryParse(id, out numId);
+			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.CreateProject, subscriptionId);
 			DateTime? defaultStart = null;
 			DateTime? defaultEnd = null;
-            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
-			if (AppService.Can(Actions.CoreAction.EditProject, false, orgId, subscriptionId))
+			var idAndUsers = AppService.GetNextProjectIdAndSubUsers(id, subscriptionId);
+
+			var list = idAndUsers.Item2; //Service.GetUsers();
+			var subList = new List<BasicUserInfoViewModel>();
+
+			foreach (var user in list)
 			{
-				var idAndUsers = AppService.GetNextProjectIdAndSubUsers(id, subscriptionId);
+				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
+			}
 
-				var list = idAndUsers.Item2; //Service.GetUsers();
-				var subList = new List<BasicUserInfoViewModel>();
-
-				foreach (var user in list)
+			return this.View(
+				new EditProjectViewModel()
 				{
-					subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
-				}
-
-				return this.View(
-					new EditProjectViewModel()
-					{
-						IsCreating = true,
-						ParentCustomerId = id,
-						ProjectUsers = new List<BasicUserInfoViewModel>(),
-						SubscriptionUsers = subList,
-						StartDate = AppService.GetDayFromDateTime(defaultStart),
-						EndDate = AppService.GetDayFromDateTime(defaultEnd),
-						ProjectOrgId = idAndUsers.Item1, //Service.GetRecommendedProjectId()
-                        CustomerName = AppService.GetCustomer(id).Name,
-                        SubscriptionId = subscriptionId,
-                        OrganizationId = orgId
-                    });
-			}
-			else
-			{
-				// Permissions failure
-				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-
-				return this.RouteHome();
-			}
+					IsCreating = true,
+					ParentCustomerId = id,
+					ProjectUsers = new List<BasicUserInfoViewModel>(),
+					SubscriptionUsers = subList,
+					StartDate = AppService.GetDayFromDateTime(defaultStart),
+					EndDate = AppService.GetDayFromDateTime(defaultEnd),
+					ProjectOrgId = idAndUsers.Item1, //Service.GetRecommendedProjectId()
+					CustomerName = AppService.GetCustomer(id).Name,
+					SubscriptionId = subscriptionId,
+					OrganizationId = 0 // TODO: get the actual org id from user subscription
+				});
 		}
 
 		/// <summary>
@@ -87,7 +75,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 			}
-            int orgId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
+			int orgId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
 			model.SubscriptionUsers = subList;
 			if (ModelState.IsValid)
 			{
@@ -101,15 +89,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					try
 					{
 						var result = CreateProjectAndUpdateItsUserList(model);
-                        if (result == -1)   //duplicate projectOrgId
-                        {
-                            Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
-                        }
-                        else
-                        {
-                            model.ProjectId = result;
-                            Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessProjectCreated, Variety.Success));
-                        }
+						if (result == -1)   //duplicate projectOrgId
+						{
+							Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
+						}
+						else
+						{
+							model.ProjectId = result;
+							Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessProjectCreated, Variety.Success));
+						}
 					}
 					catch (Exception ex)
 					{
@@ -123,7 +111,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Notifications.Add(new BootstrapAlert(message, Variety.Danger));
 						return this.View(model);
 					}
-                    return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { model.SubscriptionId }), model.ParentCustomerId));
+					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { model.SubscriptionId }), model.ParentCustomerId));
 				}
 				else
 				{
@@ -139,7 +127,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 		}
 
-        /*
+		/*
         /// <summary>
 		/// POST: Project/Create
 		/// Method for creating a new project entry in the database.
@@ -207,16 +195,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		}   
     */
 
-        /// <summary>
-        /// Creates a new project using a <see cref="EditProjectViewModel"/> and updates that project's properties and user list..
-        /// </summary>
-        /// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
-        /// <returns>The Project ID if succeed, -1 if the ProjectOrgId is taken by another project under the same customer.</returns>
-        public int CreateProjectAndUpdateItsUserList(EditProjectViewModel model)
+		/// <summary>
+		/// Creates a new project using a <see cref="EditProjectViewModel"/> and updates that project's properties and user list..
+		/// </summary>
+		/// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
+		/// <returns>The Project ID if succeed, -1 if the ProjectOrgId is taken by another project under the same customer.</returns>
+		public int CreateProjectAndUpdateItsUserList(EditProjectViewModel model)
 		{
-            IEnumerable<int> userIDs = model.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString));
+			IEnumerable<int> userIDs = model.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString));
 
-            return AppService.CreateProjectAndUpdateItsUserList(new Project()
+			return AppService.CreateProjectAndUpdateItsUserList(new Project()
 			{
 				CustomerId = model.ParentCustomerId,
 				Name = model.ProjectName,
@@ -226,13 +214,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				EndingDate = AppService.GetDateTimeFromDays(model.EndDate)
 			}, userIDs);
 		}
-     
-         /// <summary>
-        /// Creates a new project using a <see cref="EditProjectViewModel"/>.
-        /// </summary>
-        /// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
-        /// <returns>The Project ID.</returns>
-        public int CreateProject(EditProjectViewModel model)
+
+		/// <summary>
+		/// Creates a new project using a <see cref="EditProjectViewModel"/>.
+		/// </summary>
+		/// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
+		/// <returns>The Project ID.</returns>
+		public int CreateProject(EditProjectViewModel model)
 		{
 			return AppService.CreateProject(new Project()
 			{
@@ -243,6 +231,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				StartingDate = AppService.GetDateTimeFromDays(model.StartDate),
 				EndingDate = AppService.GetDateTimeFromDays(model.EndDate)
 			});
-		}        
-    }
+		}
+	}
 }

@@ -32,36 +32,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (userId == null)
 			{
-				userId = new List<int> { Convert.ToInt32(UserContext.UserId) };
+				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
+				userId = new List<int> { this.UserContext.UserId };
 			}
 
-			// Permissions checks
-			if (userId.Count == 1 && userId[0] == Convert.ToInt32(UserContext.UserId))
-			{
-				// if (Permissions.Cannot(ProductAction.TimeTrackerCreateReportSelf, OrganizationId, TimeTrackerID))
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf, false, organizationId, subscriptionId))
-				{
-					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReports);
-				}
-			}
-			else
-			{
-				// if (Permissions.Cannot(ProductAction.TimeTrackerCreateReportOthers, OrganizationId, TimeTrackerID))
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
-				{
-					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReportsOtherUser);
-				}
-			}
-
-			// Authorized for report exporting
-			//DataExportViewModel model = this.ConstructDataExportViewModel(userId, dateRangeStart, dateRangeEnd, projectId, customerId);
-			//if (model.Data.Count() == 0)
-			//{
-			//	Notifications.Add(new AllyisApps.Core.Alert.BootstrapAlert(Resources.TimeTracker.Controllers.TimeEntry.Strings.NoDataToExport, Variety.Warning));
-			//	return this.RedirectToAction(ActionConstants.Report);
-			//}
-
-			//TimeTrackerService.PrepareCSVExport(userId, dateRangeStart, dateRangeEnd, projectId, customerId);
 			return this.File(AppService.PrepareCSVExport(userId, dateRangeStart, dateRangeEnd, projectId, customerId).BaseStream, "text/csv", "export.csv");
 		}
 	}

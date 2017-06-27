@@ -18,7 +18,6 @@ namespace AllyisApps.Services
 		/// </summary>
 		public UserSubscription()
 		{
-			this.ProductRole = ProductRoleIdEnum.NotInProduct;
 		}
 
 		/// <summary>
@@ -28,22 +27,12 @@ namespace AllyisApps.Services
 		/// <param name="skuId">The SKU ID.</param>
 		/// <param name="productName">The product name.</param>
 		/// <param name="role">The role.</param>
-		public UserSubscription(int subscriptionId, int skuId, string productName, ProductRoleIdEnum role)
+		public UserSubscription(int subscriptionId, int skuId, string productName, int role)
 		{
-			if (subscriptionId < 1)
-			{
-				throw new ArgumentOutOfRangeException("subscriptionId");
-			}
-
-			if (skuId < 1)
-			{
-				throw new ArgumentOutOfRangeException("skuId");
-			}
-
-			if (string.IsNullOrWhiteSpace(productName))
-			{
-				throw new ArgumentNullException("productName");
-			}
+			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
+			if (skuId <= 0) throw new ArgumentOutOfRangeException("skuId");
+			if (string.IsNullOrWhiteSpace(productName)) throw new ArgumentNullException("productName");
+			if (role <= 0) throw new ArgumentOutOfRangeException("role");
 
 			this.ProductName = productName;
 			this.SkuId = skuId;
@@ -84,6 +73,6 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Role of the user in this subscription.
 		/// </summary>
-		public ProductRoleIdEnum ProductRole { get; set; }
+		public int ProductRole { get; set; }
 	}
 }

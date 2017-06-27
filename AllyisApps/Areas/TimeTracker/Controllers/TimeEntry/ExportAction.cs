@@ -29,20 +29,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>CSV export of time entries.</returns>
 		public FileStreamResult Export(int userId, int subscriptionId, int? startingDate = null, int? endingDate = null)
 		{
-            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
-			if (userId == Convert.ToInt32(UserContext.UserId))
+			if (userId != this.UserContext.UserId)
 			{
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf, false, orgId, subscriptionId))
-				{
-					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReports);
-				}
-			}
-			else
-			{
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId))
-				{
-					throw new UnauthorizedAccessException(Resources.Strings.UnauthorizedReportsOtherUser);
-				}
+				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			}
 
 			DateTime? start = startingDate.HasValue ? (DateTime?)AppService.GetDateTimeFromDays(startingDate.Value) : null;

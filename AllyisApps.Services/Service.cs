@@ -235,11 +235,11 @@ namespace AllyisApps.Services
 		/// Gets a list of Customers for all customers in the organization, a list of CompleteProjectInfos for all
 		/// projects in the organization, and a list of SubscriptionUserInfos for all users in the current subscription.
 		/// </summary>
-		/// <param name="orgId">Organization Id. If null, current organization will be used.</param>
-		/// <returns></returns>
-		public Tuple<List<Customer>, List<CompleteProjectInfo>, List<SubscriptionUserInfo>> GetReportInfo(int? orgId = null)
+		public Tuple<List<Customer>, List<CompleteProjectInfo>, List<SubscriptionUserInfo>> GetReportInfo(int subscriptionId)
 		{
-			var spResults = DBHelper.GetReportInfo(orgId == null ? UserContext.ChosenOrganizationId : orgId.Value, UserContext.ChosenSubscriptionId);
+			UserSubscription subInfo = null;
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			var spResults = DBHelper.GetReportInfo(subInfo.OrganizationId, subscriptionId);
 			return Tuple.Create(
 				spResults.Item1.Select(cdb => InitializeCustomer(cdb)).ToList(),
 				spResults.Item2.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
@@ -416,10 +416,11 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets a list of <see cref="PayClass"/>'s for an organization.
 		/// </summary>
-		/// <returns>List of PayClassInfo's.</returns>
-		public IEnumerable<PayClass> GetPayClasses(int organizationId)
+		public IEnumerable<PayClass> GetPayClasses(int subscriptionId)
 		{
-			return DBHelper.GetPayClasses(organizationId).Select(pc => InitializePayClassInfo(pc));
+			UserSubscription subInfo = null;
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			return DBHelper.GetPayClasses(subInfo.OrganizationId).Select(pc => InitializePayClassInfo(pc));
 		}
 
 		/// <summary>
@@ -619,11 +620,13 @@ namespace AllyisApps.Services
         /// Returns a SettingsInfo with start of week, overtime, and lock date settings, a list of PayClassInfos,
         /// and a list of Holidays for the current organization.
         /// </summary>
-        /// <param name="orgId">Organization Id</param>
+        /// <param name="subscriptionId">Subscription Id</param>
         /// <returns></returns>
-        public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int orgId)
+        public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int subscriptionId)
 		{
-			var spResults = DBHelper.GetAllSettings(orgId);
+			UserSubscription subInfo = null;
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			var spResults = DBHelper.GetAllSettings(subInfo.OrganizationId);
 			return Tuple.Create(
 				InitializeSettingsInfo(spResults.Item1),
 				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),

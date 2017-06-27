@@ -88,20 +88,13 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Removes the provided invitation from the invitations table.
 		/// </summary>
-		/// <param name="invitationId">The Invitation's Id.</param>
-        /// <param name="orgId">The organization's ID</param>
-		/// <returns>Removing the User and redirecting to EditMembers/{id}.</returns>
 		[HttpPost]
-		public ActionResult RemoveInvitation(int invitationId, int orgId)
+		public ActionResult RemoveInvitation(int id, int invitationId)
 		{
-			if (AppService.Can(Actions.CoreAction.EditOrganization, false , orgId) && AppService.RemoveInvitation(invitationId))
-			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.InvitationDeleteNotification, Variety.Success));
-
-				return this.RedirectToAction(ActionConstants.Manage, new { id = orgId });
-			}
-
-			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditMembersMessage), ControllerConstants.Account, ActionConstants.RemoveInvitation));
+			this.AppService.CheckOrgAction(AppService.OrgAction.DeleteInvitation, id);
+			AppService.RemoveInvitation(invitationId);
+			Notifications.Add(new BootstrapAlert(Resources.Strings.InvitationDeleteNotification, Variety.Success));
+			return this.RedirectToAction(ActionConstants.Manage, new { id = id });
 		}
 	}
 }

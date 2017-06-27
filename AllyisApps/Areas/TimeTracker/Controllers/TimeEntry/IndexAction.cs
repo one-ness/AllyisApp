@@ -21,64 +21,38 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// </summary>
 	public partial class TimeEntryController : BaseController
 	{
-        /// <summary>
-        /// GET: /TimeTracker/TimeEntry/Ajax?{params}.
-        /// </summary>
-        /// <param name="userId">Another user's Id.</param>
-        /// <param name="subscriptionId">The SubscriptionId</param>
-        /// <param name="startDate">The beginning of the Date Range.</param>
-        /// <param name="endDate">The ending of the Date Range.</param>
-        /// <returns>Provides the view for the defined user over the date range defined.</returns>
-        public ActionResult Index(int userId = -1, int subscriptionId = -1, int? startDate = null, int? endDate = null)
+		/// <summary>
+		/// GET: /TimeTracker/TimeEntry/Ajax?{params}.
+		/// </summary>
+		/// <param name="subscriptionId">The SubscriptionId</param>
+		/// <param name="startDate">The beginning of the Date Range.</param>
+		/// <param name="endDate">The ending of the Date Range.</param>
+		/// <returns>Provides the view for the defined user over the date range defined.</returns>
+		public ActionResult Index(int subscriptionId, int? startDate = null, int? endDate = null)
 		{
-            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
-			bool manager = AppService.Can(Actions.CoreAction.TimeTrackerEditOthers,false,orgId,subscriptionId);
+			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
-			if (userId != -1 && userId != Convert.ToInt32(UserContext.UserId))
-			{ // Trying to edit as another user
-				if (!manager)
-				{
-					throw new UnauthorizedAccessException(Resources.Strings.CantViewOtherTimeCards);
-				}
-				//// For a manager editing another user, everything's fine; the next section can be skipped.
-			}
-			else
-			{ // Either userId is -1, or it is the current user
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditSelf, false, orgId, subscriptionId))
-				{ // Current user cannot edit self
-					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-					return this.Redirect("/");
-				}
+			UserSubscription subInfo = null;
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
-				// Can edit self - we must ensure the userId is actually set and isn't still -1
-				userId = Convert.ToInt32(UserContext.UserId);
-			}
-
+			bool manager = subInfo.ProductRole == (int)TimeTrackerRole.Manager;
 			ViewBag.canManage = manager;
-			try
-			{
-				TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(
-                                                    orgId,
-                                                    subscriptionId,
-													userId,
-													manager,
-													startDate,
-													endDate);
-
-                if (subscriptionId > -1) model.Subscriptionid = subscriptionId;
-				return this.View(model);
-			}
-			catch (InvalidOperationException e)
-			{
-				return this.View(ViewConstants.Error, new HandleErrorInfo(e, ControllerConstants.Account, ActionConstants.Index));
-			}
+			TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(
+				subInfo.OrganizationId,
+				subscriptionId,
+				this.UserContext.UserId,
+				manager,
+				startDate,
+				endDate);
+			return this.View(model);
 		}
+
 
 		/// <summary>
 		/// Constructor for the TimeEntryOverDateRangeViewModel.
 		/// </summary>
-        /// <param name="orgId">The Organization ID</param>
-        /// <param name="subId">The Subscription's ID</param>
+		/// <param name="orgId">The Organization ID</param>
+		/// <param name="subId">The Subscription's ID</param>
 		/// <param name="userId">The User ID.</param>
 		/// <param name="manager">The Manager.</param>
 		/// <param name="startingDate">The Starting Date.</param>
@@ -118,15 +92,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			IEnumerable<User> users = infos.Item5;
 
-            TimeEntryOverDateRangeViewModel result = new TimeEntryOverDateRangeViewModel
-            {
-                EntryRange = new TimeEntryRangeForUserViewModel
-                {
-                    StartDate = AppService.GetDayFromDateTime(startDate),
-                    EndDate = AppService.GetDayFromDateTime(endDate),
-                    Entries = new List<EditTimeEntryViewModel>(),
-                    UserId = userId,
-                    SubscriptionId = subId
+			TimeEntryOverDateRangeViewModel result = new TimeEntryOverDateRangeViewModel
+			{
+				EntryRange = new TimeEntryRangeForUserViewModel
+				{
+					StartDate = AppService.GetDayFromDateTime(startDate),
+					EndDate = AppService.GetDayFromDateTime(endDate),
+					Entries = new List<EditTimeEntryViewModel>(),
+					UserId = userId,
+					SubscriptionId = subId
 				},
 				CanManage = manager,
 				StartOfWeek = (StartOfWeekEnum)startOfWeek,
@@ -179,7 +153,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ProjectId = iter.Current.ProjectId,
 						PayClassId = iter.Current.PayClassId,
 						UserId = iter.Current.UserId,
-                        SubscriptionId = subId,
+						SubscriptionId = subId,
 						Date = AppService.GetDayFromDateTime(iter.Current.Date),
 						Duration = string.Format("{0:D2}:{1:D2}", (int)iter.Current.Duration, (int)Math.Round((iter.Current.Duration - (int)iter.Current.Duration) * 60, 0)),
 						Description = iter.Current.Description,
@@ -194,7 +168,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ApprovalState = iter.Current.ApprovalState,
 						ModSinceApproval = iter.Current.ModSinceApproval,
 						PayClasses = result.PayClasses,
-						Locked = iter.Current.ApprovalState == (int)Core.ApprovalState.Approved || (isProjectDeleted && !AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+						Locked = iter.Current.ApprovalState == (int)Core.ApprovalState.Approved || (isProjectDeleted && !this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subId))
 					});
 
 					if (holidays.Where(x => x.Date == iter.Current.Date).FirstOrDefault() != null)
@@ -230,7 +204,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						TimeEntryId = timeEntryId,
 						Date = AppService.GetDayFromDateTime(date),
 						UserId = userId,
-                        SubscriptionId = subId,
+						SubscriptionId = subId,
 						StartingDate = AppService.GetDayFromDateTime(startDate),
 						EndingDate = AppService.GetDayFromDateTime(endDate),
 						IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
@@ -252,7 +226,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Sample = true,
 						Date = AppService.GetDayFromDateTime(date),
 						UserId = userId,
-                        SubscriptionId = subId,
+						SubscriptionId = subId,
 						StartingDate = AppService.GetDayFromDateTime(startDate),
 						EndingDate = AppService.GetDayFromDateTime(endDate),
 						IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,

@@ -24,29 +24,23 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Subscription/Subscribe/ProductId=#.
 		/// </summary>
+		/// <param name="id">organization id</param>
 		/// <param name="productId">The product being subscribed to.</param>
 		/// <returns>The result of this action.</returns>
 		[HttpGet]
-		public ActionResult Subscribe(int productId)
+		public ActionResult Subscribe(int id, int productId)
 		{
+			this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, id);
 			var infos = AppService.GetProductSubscriptionInfo(productId);
 
-			if (AppService.Can(Actions.CoreAction.EditOrganization))
+			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4);
+			if (!model.IsValid)
 			{
-				ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4);
-				if (!model.IsValid)
-				{
-					return this.View(ViewConstants.Details, UserContext.ChosenOrganizationId);
-				}
-
-				model.CurrentUsers = infos.Item5;
-
-				return this.View(ViewConstants.Subscribe, model);
+				return this.View(ViewConstants.Details, UserContext.ChosenOrganizationId);
 			}
 
-			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-
-			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditSubscriptionsMessage), ControllerConstants.Subscription, ActionConstants.Subscribe));
+			model.CurrentUsers = infos.Item5;
+			return this.View(ViewConstants.Subscribe, model);
 		}
 
 		/// <summary>
@@ -101,18 +95,7 @@ namespace AllyisApps.Controllers
 		[CLSCompliant(false)]
 		public ActionResult Subscribe(ProductSubscriptionViewModel model, BillingServicesToken token, string billingServicesEmail, string cost)
 		{
-			if (!AppService.Can(Actions.CoreAction.EditOrganization))
-			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-				ViewBag.ErrorInfo = "Permission";
-
-				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditSubscriptionsMessage), ControllerConstants.Account, ActionConstants.Subscribe));
-			}
-
-			if (model == null)
-			{
-				return this.View(ViewConstants.Error, new HandleErrorInfo(new ArgumentNullException(@Resources.Strings.ModelNullMessage), ControllerConstants.Account, ActionConstants.Subscribe));
-			}
+			this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, model.OrganizationId);
 
 			if (model.Billing.Amount == 0)
 			{
@@ -135,103 +118,6 @@ namespace AllyisApps.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ReduceNumberOfUsers, Variety.Danger));
 				return this.RedirectToAction(ActionConstants.Subscribe, new { productId = model.ProductId });
 			}
-
-			//------------
-			//if (model.NumberOfUsers < Service.GetUsersWithSubscriptionToProductInOrganization(model.OrganizationId, model.ProductId).Count())
-			//{
-			//	Notifications.Add(new BootstrapAlert(Resources.Controllers.Auth.Strings.ReduceNumberOfUsers, Variety.Danger));
-			//	return this.RedirectToAction(ActionConstants.Subscribe, new { productName = model.ProductId });
-			//}
-
-			//if (model.Billing.Amount == 0)
-			//{
-			//	model.Billing.Amount = (model.NumberOfUsers - 500) * 100;
-			//}
-
-			//if (!(token == null) && (model.Token == null))
-			//{
-			//	BillingServicesCustomerId customerId = Service.CreateBillingServicesCustomer(billingServicesEmail, token);
-
-			//	Service.AddOrgCustomer(customerId, null);
-			//	model.Billing.Customer = Service.RetrieveCustomer(customerId);
-			//	model.Token = token;
-			//	//Service.AddBillingHistory("Adding stripe customer data", null);
-			//}
-			//else
-			//{
-			//	model.Billing.Customer = Service.RetrieveCustomer(Service.GetOrgBillingServicesCustomerId());
-			//}
-
-			//// Users >= 500 (the hardcoded free amount) will not trigger this
-			//if (model.Billing.Amount > 0)
-			//{
-			//	if ((token == null) && (model.Token == null))
-			//	{
-			//		return this.View(ViewConstants.AddBillingToSubscribe, model);
-			//	}
-
-			//	BillingServicesCustomerId customerId = Service.GetOrgBillingServicesCustomerId();
-			//	if (customerId == null)
-			//	{
-			//		model.Billing.Customer = Service.RetrieveCustomer(Service.CreateBillingServicesCustomer(billingServicesEmail, token));
-			//		Service.AddOrgCustomer(model.Billing.Customer.Id, null);
-			//	}
-			//	else
-			//	{
-			//		model.Billing.Customer = Service.RetrieveCustomer(customerId);
-			//	}
-
-			//	string subscriptionId = Service.GetSubscriptionId(model.Billing.Customer.Id);
-
-			//	if (subscriptionId == null)
-			//	{
-			//		Service.AddCustomerSubscriptionPlan(model.Billing.Amount, model.Billing.Customer.Id, model.NumberOfUsers, model.ProductId, model.ProductName, model.SelectedSku, model.ProductName);
-			//		//Service.InitializeSettingsForProduct(model.ProductId);
-			//		//Service.AddBillingHistory(string.Format("Adding new subscription data for {0}.", model.ProductName), model.SelectedSku);
-			//	}
-			//	else
-			//	{
-			//		Service.UpdateSubscriptionPlan(model.Billing.Amount, model.ProductName, model.NumberOfUsers, subscriptionId, model.Billing.Customer.Id, model.SelectedSku, model.ProductName);
-			//		//Service.AddBillingHistory(string.Format("Updating subscription data for {0}", model.ProductName), model.SelectedSku);
-			//	}
-			//}
-			//else
-			//{
-			//	try
-			//	{
-			//		model.Billing.Customer = Service.RetrieveCustomer(Service.GetOrgBillingServicesCustomerId());
-
-			//		if (model.Billing.Customer != null)
-			//		{
-			//			// check if there is a subscription to cancel
-			//			string subscriptionId = Service.GetSubscriptionId(model.Billing.Customer.Id);
-			//			if (subscriptionId != null)
-			//			{
-			//				Service.DeleteSubscriptionPlan(subscriptionId, model.Billing.Customer.Id, model.SelectedSku);
-
-			//				//Service.DeleteSubscription(model.Billing.Customer.Id, subscriptionId);
-			//				//Service.AddBillingHistory("Switching to free subscription, canceling stripe susbcription", model.SelectedSku);
-			//			}
-			//		}
-			//	}
-			//	catch (Exception e)
-			//	{
-			//		Notifications.Add(new BootstrapAlert(e.ToString(), Variety.Warning));
-			//	}
-			//}
-
-			//Service.InitializeSettingsForProduct(model.ProductId);
-
-			//if (model.SelectedSku != model.PreviousSku)
-			//{
-			//	Service.AddSubscriptionOfSkuToOrganization(model.OrganizationId, model.SelectedSku, model.ProductId, model.NumberOfUsers);
-			//}
-			//else
-			//{
-			//	Service.UpdateSubscriptionUsers(model.SelectedSku, model.NumberOfUsers);
-			//}
-
-			//return this.RedirectToAction(ActionConstants.Manage);
 		}
 	}
 }

@@ -45,17 +45,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.View(ViewConstants.Error);
 			}
 
-            #endregion Validation
+			#endregion Validation
 
-            int organizationId = AppService.GetSubscription(subscriptionId).OrganizationId;
-			// Check for permission failures TODO flesh these out
-			if (userId == UserContext.UserId && !AppService.Can(Actions.CoreAction.TimeTrackerEditSelf, false, organizationId, subscriptionId))
+			if (userId != this.UserContext.UserId)
 			{
-				return this.View(ViewConstants.Error);
-			}
-			else if (userId != UserContext.UserId && !AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, subscriptionId))
-			{
-				return this.View(ViewConstants.Error);
+				// editing the entries of another user
+				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			}
 
             // Reference for checking status of entries
@@ -69,43 +64,40 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			foreach (TimeEntryInfo entry in entriesRemove)
 			{
 				// If the copying user isn't a manager, some checks are required before we let them delete/copy entries
-				if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers))
+				CompleteProjectInfo project = allProjects.Where(p => entry.ProjectId == p.ProjectId).SingleOrDefault();
+				if (project != null && (!project.IsActive || !project.IsUserActive))
 				{
-					CompleteProjectInfo project = allProjects.Where(p => entry.ProjectId == p.ProjectId).SingleOrDefault();
-					if (project != null && (!project.IsActive || !project.IsUserActive))
-					{
-						continue; // A user can't delete locked entries from projects that have been removed, or that the user is no longer assigned to.
-					}
+					continue; // A user can't delete locked entries from projects that have been removed, or that the user is no longer assigned to.
+				}
 
-					if (lockDate.HasValue && entry.Date <= lockDate.Value)
-					{
-						continue; // A user can't delete entries from before/on the lock date.
-					}
+				if (lockDate.HasValue && entry.Date <= lockDate.Value)
+				{
+					continue; // A user can't delete entries from before/on the lock date.
 				}
 
 				AppService.DeleteTimeEntry(entry.TimeEntryId);
 			}
 
-            // Add copied entries
-            IEnumerable<TimeEntryInfo> entriesCopy = AppService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateCopy, endDateCopy, organizationId);
+			// Add copied entries
+			UserSubscription subInfo = null;
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			int organizationId = subInfo.OrganizationId;
+			IEnumerable<TimeEntryInfo> entriesCopy = AppService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateCopy, endDateCopy, organizationId);
 			for (int i = 0; startDateCopy.Date.AddDays(i) <= endDateCopy.Date; ++i)
 			{
 				// Cover all entries for that day
 				foreach (TimeEntryInfo entry in entriesCopy.Where(x => x.Date == startDateCopy.Date.AddDays(i)))
 				{
 					// If the copying user isn't a manager, some checks are required before we let them delete/copy entries
-					if (!AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, subscriptionId))
+					CompleteProjectInfo project = allProjects.Where(p => entry.ProjectId == p.ProjectId).SingleOrDefault();
+					if (project != null && (!project.IsActive || !project.IsUserActive))
 					{
-						CompleteProjectInfo project = allProjects.Where(p => entry.ProjectId == p.ProjectId).SingleOrDefault();
-						if (project != null && (!project.IsActive || !project.IsUserActive))
-						{
-							continue; // A user can't create entries for projects that have been removed, or that the user is no longer assigned to.
-						}
+						continue; // A user can't create entries for projects that have been removed, or that the user is no longer assigned to.
+					}
 
-						if (lockDate.HasValue && startDateTarget.Date.AddDays(i) <= lockDate.Value)
-						{
-							continue; // A user can't create entries before/on the lock date.
-						}
+					if (lockDate.HasValue && startDateTarget.Date.AddDays(i) <= lockDate.Value)
+					{
+						continue; // A user can't create entries before/on the lock date.
 					}
 
                     System.Diagnostics.Debug.WriteLine("WORKING: " + subscriptionId);

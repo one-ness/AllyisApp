@@ -37,7 +37,7 @@ namespace AllyisApps.Controllers
 				OrgWithSubscriptionsForUserViewModel orgVM = new OrgWithSubscriptionsForUserViewModel
 				{
 					OrgInfo = o,
-					CanEditOrganization = AppService.Can(Actions.CoreAction.EditOrganization, false, o.OrganizationId),
+					CanEditOrganization = this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, o.OrganizationId, false),
 					Subscriptions = new List<SubscriptionDisplayViewModel>()
 				};
 				UserOrganization userOrgInfo = null;

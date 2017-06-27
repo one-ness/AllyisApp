@@ -26,14 +26,9 @@ namespace AllyisApps.Controllers
         /// <returns>The organization's management page.</returns>
         public ActionResult Manage(int id)
 		{
-			if (AppService.Can(Actions.CoreAction.EditOrganization, true, id))
-			{
-				OrganizationManageViewModel model = this.ConstructOrganizationManageViewModel(id);
-				return this.View(model);
-			}
-
-			Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
-			return this.RedirectToAction(ActionConstants.Index);
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			OrganizationManageViewModel model = this.ConstructOrganizationManageViewModel(id);
+			return this.View(model);
 		}
 
 		/// <summary>

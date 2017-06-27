@@ -23,25 +23,20 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <returns>Action result.</returns>
 		[HttpGet]
-		public ActionResult RemoveBilling()
+		public ActionResult RemoveBilling(int id)
 		{
-			if (AppService.Can(Actions.CoreAction.EditOrganization))
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			IEnumerable<int> subs = AppService.GetSubscriptionPlanPrices();
+
+			if (subs != null && subs.Count() > 0)
 			{
-				IEnumerable<int> subs = AppService.GetSubscriptionPlanPrices();
-
-				if (subs != null && subs.Count() > 0)
-				{
-					Notifications.Add(new BootstrapAlert(Resources.Strings.CannotRemoveBilling, Variety.Warning));
-					return this.Redirect(ActionConstants.Manage);
-				}
-				else
-				{
-					return this.View(ViewConstants.ConfirmRemoveBillingInformation);
-				}
+				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotRemoveBilling, Variety.Warning));
+				return this.Redirect(ActionConstants.Manage);
 			}
-
-			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-			return this.RedirectToAction(ActionConstants.Index);
+			else
+			{
+				return this.View(ViewConstants.ConfirmRemoveBillingInformation);
+			}
 		}
 
 		/// <summary>

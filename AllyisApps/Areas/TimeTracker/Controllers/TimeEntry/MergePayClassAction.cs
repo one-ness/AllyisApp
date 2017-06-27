@@ -25,16 +25,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Merge a pay class with another one
 		/// </summary>
-		/// <param name="payClassId">The id of the class to merge.</param>
-        /// <param name="subscriptionId">The subscription's id</param>
-		/// <returns>Redirects to the MergePayClass view.</returns>
 		[HttpGet]
-		public ActionResult MergePayClass(int payClassId, int subscriptionId)
+		public ActionResult MergePayClass(int subscriptionId, int id)
 		{
-            var orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
-			var allPayClasses = AppService.GetPayClasses(orgId);
-			var destPayClasses = allPayClasses.Where(pc => pc.PayClassID != payClassId);
-			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassID == payClassId).ElementAt(0).Name;
+			this.AppService.CheckOrgActionForSubscriptionId(AppService.OrgAction.EditOrganization, subscriptionId);
+			var allPayClasses = AppService.GetPayClasses(subscriptionId);
+			var destPayClasses = allPayClasses.Where(pc => pc.PayClassID != id);
+			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassID == id).ElementAt(0).Name;
 
 			//Built-in, non-editable pay classes cannot be merged
 			if (sourcePayClassName == "Regular" || sourcePayClassName == "Overtime" || sourcePayClassName == "Holiday" || sourcePayClassName == "Paid Time Off" || sourcePayClassName == "Unpaid Time Off")
@@ -43,14 +40,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.RedirectToAction(ActionConstants.Settings);
 			}
 
-			if (AppService.Can(Actions.CoreAction.EditOrganization))
-			{
-				MergePayClassViewModel model = ConstructMergePayClassViewModel(payClassId, sourcePayClassName, subscriptionId, destPayClasses);
-				return this.View(ViewConstants.MergePayClass, model);
-			}
-
-			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-			return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditSubscriptionsMessage), ControllerConstants.TimeEntry, ActionConstants.MergePayClass));
+			MergePayClassViewModel model = ConstructMergePayClassViewModel(id, sourcePayClassName, subscriptionId, destPayClasses);
+			return this.View(ViewConstants.MergePayClass, model);
 		}
 
 		/// <summary>

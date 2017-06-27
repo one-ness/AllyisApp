@@ -25,20 +25,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <param name="subscriptionId">The Subscription Id</param>
 		/// <returns>Presents a page to edit Customer data.</returns>
 		[HttpGet]
-		public ActionResult Edit(int subscriptionId, string id)
+		public ActionResult Edit(int subscriptionId, int id)
 		{
-            int numId;
-            bool parsed = Int32.TryParse(id, out numId);
-
-            if (!parsed)
-            {
-                return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
-            }
-
-            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
-            if (AppService.Can(Actions.CoreAction.EditCustomer, false, orgId, subscriptionId))
-			{
-				var infos = AppService.GetCustomerAndCountries(numId);
+			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
+				var infos = AppService.GetCustomerAndCountries(id);
 
 				return this.View(new EditCustomerInfoViewModel
 				{
@@ -54,16 +44,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Website = infos.Item1.Website,
 					EIN = infos.Item1.EIN,
 					OrganizationId = infos.Item1.OrganizationId,
-					CustomerID = numId,
+					CustomerID = id,
 					ValidCountries = infos.Item2,
 					CustomerOrgId = infos.Item1.CustomerOrgId,
                     SubscriptionId = subscriptionId
 				});
-			}
-
-			Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-
-			return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
 		}
 
 		/// <summary>

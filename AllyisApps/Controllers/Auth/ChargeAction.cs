@@ -19,34 +19,17 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Edits or creates billing information.
 		/// </summary>
+		/// <param name="organizationId">the organization this billing information belongs to</param>
 		/// <param name="token">The billing services token being used for this charge.</param>
 		/// <param name="billingServicesEmail">The email associated with this customer.</param>
 		/// <returns>A page.</returns>
 		[CLSCompliant(false)]
-		public ActionResult Charge(BillingServicesToken token, string billingServicesEmail)
+		public ActionResult Charge(int id, BillingServicesToken token, string billingServicesEmail)
 		{
-			if (AppService.Can(Actions.CoreAction.EditOrganization))
-			{
-				if (token == null)
-				{
-					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.Token, Core.Alert.Variety.Warning));
-
-					return this.RedirectToAction(ActionConstants.Manage);
-				}
-				else
-				{
-					AppService.UpdateBillingInfo(billingServicesEmail, token);
-
-					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.Billing, Core.Alert.Variety.Success));
-					return this.RedirectToAction(ActionConstants.Manage);
-				}
-			}
-			else
-			{
-				// Incorrect permissions
-				Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
-				return this.RedirectToAction(ActionConstants.Index);
-			}
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditBilling, id);
+			AppService.UpdateBillingInfo(billingServicesEmail, token);
+			Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.Billing, Core.Alert.Variety.Success));
+			return this.RedirectToAction(ActionConstants.Manage);
 		}
 	}
 }
