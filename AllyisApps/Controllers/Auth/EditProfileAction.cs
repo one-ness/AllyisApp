@@ -59,7 +59,7 @@ namespace AllyisApps.Controllers
 			{
 				await Task.Factory.StartNew(() => AppService.SaveUserInfo(new User
 				{
-					UserId = UserContext.UserId,
+					UserId = this.AppService.UserContext.UserId,
 					Email = model.Email,
 					FirstName = model.FirstName,
 					LastName = model.LastName,

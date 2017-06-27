@@ -83,6 +83,18 @@ namespace AllyisApps.Services
 		public string Email { get; set; }
 
 		/// <summary>
+		/// Gets or sets the name of the organization the user is working on (this should be Company Name in pages such as in Manage, Permission pages)
+		/// </summary>
+		[JsonIgnore]
+		public string ChosenOrganizationName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the name of the subscription the user is working on (this should be Company Name - Product Name in pages such as TimeEntry pages)
+		/// </summary>
+		[JsonIgnore]
+		public string ChosenSubscriptionName { get; set; }
+
+		/// <summary>
 		/// Gets or sets the organization id the user chooses to work on (or last worked on).
 		/// </summary>
 		[JsonIgnore]
@@ -106,19 +118,6 @@ namespace AllyisApps.Services
 		/// </summary>
 		[JsonIgnore]
 		public int ChosenSubscriptionId { get; set; }
-
-		/// <summary>
-		/// Gets the chosen subscription
-		/// </summary>
-		public UserSubscription ChosenSubscription
-		{
-			get
-			{
-				UserSubscription result = null;
-				this.UserSubscriptions.TryGetValue(this.ChosenSubscriptionId, out result);
-				return result;
-			}
-		}
 
 		/// <summary>
 		/// Gets or sets the list of organizations the user is a member of, role in the organization, subscriptions each organization has subscribed to and user's role in that subscription.

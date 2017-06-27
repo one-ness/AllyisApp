@@ -41,7 +41,7 @@ namespace AllyisApps.Controllers
 					Subscriptions = new List<SubscriptionDisplayViewModel>()
 				};
 				UserOrganization userOrgInfo = null;
-				UserContext.UserOrganizations.TryGetValue(o.OrganizationId, out userOrgInfo);
+				this.AppService.UserContext.UserOrganizations.TryGetValue(o.OrganizationId, out userOrgInfo);
 				if (userOrgInfo != null)
 				{
 					foreach (UserSubscription userSubInfo in userOrgInfo.UserSubscriptions.Values)

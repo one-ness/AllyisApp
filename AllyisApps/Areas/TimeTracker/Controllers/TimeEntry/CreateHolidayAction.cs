@@ -52,7 +52,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 				}
 			}
-			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = UserContext.UserId }); // Same destination regardless of creation success
+			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId }); // Same destination regardless of creation success
 		}
 	}
 }

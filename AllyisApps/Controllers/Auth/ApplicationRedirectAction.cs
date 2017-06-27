@@ -22,7 +22,7 @@ namespace AllyisApps.Controllers
 		{
 			// check if the user is member of the given subscription
 			UserSubscription subInfo = null;
-			if (!this.UserContext.UserSubscriptions.TryGetValue(id, out subInfo))
+			if (!this.AppService.UserContext.UserSubscriptions.TryGetValue(id, out subInfo))
 			{
 				// set active subscrption to none
 				this.AppService.UpdateActiveSubscription(0);
@@ -37,7 +37,7 @@ namespace AllyisApps.Controllers
                 Product product = AppService.GetProductById(AppService.GetProductIdByName(subInfo.ProductName));
                 if (product != null && !string.IsNullOrWhiteSpace(product.ProductName))
                 {
-                    return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { area = subInfo.ProductName, userId = this.UserContext.UserId, subscriptionId = id });
+                    return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { area = subInfo.ProductName, userId = this.AppService.UserContext.UserId, subscriptionId = id });
                 }
             }
 

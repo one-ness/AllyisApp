@@ -103,7 +103,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// Should only be here because of permission failures
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
-			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = model.SubscriptionId, id = UserContext.UserId });
+			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = model.SubscriptionId, id = this.AppService.UserContext.UserId });
 		}
 	}
 }

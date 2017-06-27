@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
 			UserSubscription subInfo = null;
-			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			return this.View(this.ConstructManageCustomerViewModel(subscriptionId));
 		}
 
@@ -68,7 +68,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         public ManageCustomerViewModel ConstructManageCustomerViewModel(int subscriptionId)
 		{
 			UserSubscription subInfo = null;
-			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			var infos = AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
             var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			bool canEditProjects = subInfo.ProductRole == (int)TimeTrackerRole.Manager;
@@ -132,7 +132,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                 OrganizationId = subInfo.OrganizationId,
                 canEdit = canEditProjects,
                 SubscriptionId = subscriptionId,
-                UserId = UserContext.UserId
+                UserId = this.AppService.UserContext.UserId
 			};
 		}
 	}

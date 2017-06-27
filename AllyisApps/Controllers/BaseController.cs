@@ -37,11 +37,6 @@ namespace AllyisApps.Controllers
 		}
 
 		/// <summary>
-		/// Gets or sets the user context of the logged in user.
-		/// </summary>
-		public UserContext UserContext { get; set; }
-
-		/// <summary>
 		/// Gets a list of notifications to display in the next view render.
 		/// </summary>
 		public ICollection<BootstrapAlert> Notifications
@@ -146,18 +141,18 @@ namespace AllyisApps.Controllers
 				CookieData cookie = this.GetCookieData();
 				if (cookie != null && cookie.UserId > 0)
 				{
-					this.UserContext = this.AppService.PopulateUserContext(cookie.UserId);
+					this.AppService.PopulateUserContext(cookie.UserId);
 				}
 
-				if (this.UserContext != null)
+				if (this.AppService.UserContext != null)
 				{
 					// user context obtained. set user's language on the thread.
-					if (languageId == 0 || languageId != this.UserContext.ChosenLanguageId)
+					if (languageId == 0 || languageId != this.AppService.UserContext.ChosenLanguageId)
 					{
 						// user's language is either not set, or user has changed the language to a different one
-						if (this.UserContext.ChosenLanguageId > 0)
+						if (this.AppService.UserContext.ChosenLanguageId > 0)
 						{
-							Language language = this.AppService.GetLanguage(this.UserContext.ChosenLanguageId);
+							Language language = this.AppService.GetLanguage(this.AppService.UserContext.ChosenLanguageId);
 							if (language != null)
 							{
 								CultureInfo cInfo = CultureInfo.CreateSpecificCulture(language.CultureName);

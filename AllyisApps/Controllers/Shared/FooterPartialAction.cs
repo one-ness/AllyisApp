@@ -30,7 +30,7 @@ namespace AllyisApps.Controllers
 				LanguageName = l.LanguageName,
 				CultureName = l.CultureName
 			}).ToList();
-			int orgID = UserContext == null ? 0 : UserContext.ChosenOrganizationId;
+			int orgID = this.AppService.UserContext == null ? 0 : this.AppService.UserContext.ChosenOrganizationId;
 			var model = Tuple.Create(languages, orgID);
 			return this.View(ViewConstants.Footer, model);
 		}

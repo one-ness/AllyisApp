@@ -36,7 +36,7 @@ namespace AllyisApps.Controllers
 			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4);
 			if (!model.IsValid)
 			{
-				return this.View(ViewConstants.Details, UserContext.ChosenOrganizationId);
+				return this.View(ViewConstants.Details, this.AppService.UserContext.ChosenOrganizationId);
 			}
 
 			model.CurrentUsers = infos.Item5;
@@ -62,7 +62,7 @@ namespace AllyisApps.Controllers
 				return new ProductSubscriptionViewModel
 				{
 					IsValid = true,
-					OrganizationId = UserContext.ChosenOrganizationId,
+					OrganizationId = this.AppService.UserContext.ChosenOrganizationId,
 					ProductId = productInfo.ProductId,
 					ProductName = productInfo.ProductName,
 					ProductDescription = productInfo.ProductDescription,

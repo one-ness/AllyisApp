@@ -48,7 +48,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
             int organizationId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
 			// Check permissions
-			if (model.UserId != this.UserContext.UserId)
+			if (model.UserId != this.AppService.UserContext.UserId)
 			{
 				if (!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId))
 				{

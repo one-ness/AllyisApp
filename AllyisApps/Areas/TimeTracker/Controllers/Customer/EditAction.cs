@@ -113,7 +113,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (ModelState.IsValid)
 			{
 				// CustomerOrgId must be unique, if it has been changed
-				Customer orgIdMatch = AppService.GetCustomerList(this.UserContext.ChosenOrganizationId).Where(customer => customer.CustomerOrgId == model.CustomerOrgId).SingleOrDefault();
+				Customer orgIdMatch = AppService.GetCustomerList(this.AppService.UserContext.ChosenOrganizationId).Where(customer => customer.CustomerOrgId == model.CustomerOrgId).SingleOrDefault();
 				if (orgIdMatch != null && orgIdMatch.CustomerId != model.CustomerID)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));

@@ -28,7 +28,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			var infos = AppService.GetProjectsForOrgAndUser(userId, subscriptionId);
 			return this.View(new UserEditViewModel {
-				UserId = this.UserContext.UserId,
+				UserId = this.AppService.UserContext.UserId,
 				SubscriptionId = subscriptionId,
 				UserProjects = infos.Item1,
 				AllProjects = infos.Item2,

@@ -48,7 +48,7 @@ namespace AllyisApps.Controllers
 				LastFour = customer == null ? string.Empty : customer.Last4,
 				Members = new OrganizationMembersViewModel
 				{
-					CurrentUserId = UserContext.UserId,
+					CurrentUserId = this.AppService.UserContext.UserId,
 					DisplayUsers = infos.Item2.Select(oui => new OrganizationUserViewModel
 					{
 						Email = oui.Email,

@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>A JSON object with the results of the action.</returns>
 		public ActionResult CreateTimeEntryJson(CreateTimeEntryViewModel model)
 		{
-			if (model.UserId != this.UserContext.UserId)
+			if (model.UserId != this.AppService.UserContext.UserId)
 			{
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId);
 			}
@@ -56,7 +56,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 
 				UserSubscription subInfo = null;
-				this.UserContext.UserSubscriptions.TryGetValue(model.SubscriptionId, out subInfo);
+				this.AppService.UserContext.UserSubscriptions.TryGetValue(model.SubscriptionId, out subInfo);
 				DateTime? lockDate = AppService.GetLockDate();
 				if (durationResult + durationOther > 24.00)
 				{

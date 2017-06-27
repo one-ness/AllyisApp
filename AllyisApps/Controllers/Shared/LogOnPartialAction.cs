@@ -26,14 +26,13 @@ namespace AllyisApps.Controllers
 		public ActionResult LogOnPartial(string returnUrl)
 		{
 			LogOnPartialViewModel model = null;
-			if (this.UserContext != null)
+			if (this.AppService.UserContext != null)
 			{
 				model = new LogOnPartialViewModel
 				{
-					UserName = UserContext.UserName,
-                    FirstName = UserContext.FirstName,
-                    LastName = UserContext.LastName,
-					ChosenOrganizationName = UserContext.ChosenOrganization == null ? string.Empty : UserContext.ChosenOrganization.OrganizationName,
+					UserName = this.AppService.UserContext.UserName,
+                    FirstName = this.AppService.UserContext.FirstName,
+                    LastName = this.AppService.UserContext.LastName
 				};
 			}
 			else

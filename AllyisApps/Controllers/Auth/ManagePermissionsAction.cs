@@ -207,7 +207,7 @@ namespace AllyisApps.Controllers
 					return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 				}
 
-				if (model.SelectedUsers.Where(tu => tu.UserId == UserContext.UserId).Any())
+				if (model.SelectedUsers.Where(tu => tu.UserId == this.AppService.UserContext.UserId).Any())
 				{
 					if (model.SelectedActions.OrgRoleTarget == -1)
 					{
@@ -218,7 +218,7 @@ namespace AllyisApps.Controllers
 						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouAreUnableToChangeYourOwnRole, Variety.Danger));
 					}
 
-					model.SelectedUsers = model.SelectedUsers.Where(tu => tu.UserId != UserContext.UserId);
+					model.SelectedUsers = model.SelectedUsers.Where(tu => tu.UserId != this.AppService.UserContext.UserId);
 					if (model.SelectedUsers.Count() == 0)
 					{
 						return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });

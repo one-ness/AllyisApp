@@ -33,7 +33,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (userId == null)
 			{
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
-				userId = new List<int> { this.UserContext.UserId };
+				userId = new List<int> { this.AppService.UserContext.UserId };
 			}
 
 			return this.File(AppService.PrepareCSVExport(userId, dateRangeStart, dateRangeEnd, projectId, customerId).BaseStream, "text/csv", "export.csv");

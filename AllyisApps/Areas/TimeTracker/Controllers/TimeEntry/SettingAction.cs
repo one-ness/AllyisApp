@@ -32,7 +32,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				PayClasses = infos.Item2,
 				Holidays = infos.Item3,
 				SubscriptionId = subscriptionId,
-				UserId = this.UserContext.UserId
+				UserId = this.AppService.UserContext.UserId
 			});
 		}
 	}

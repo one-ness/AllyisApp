@@ -56,7 +56,7 @@ namespace AllyisApps.Controllers
 						PhoneNumber = model.PhoneNumber,
 						FaxNumber = model.FaxNumber
 					},
-					UserContext.UserId,
+					this.AppService.UserContext.UserId,
 					model.EmployeeId);
 
 				if (orgId == -1)

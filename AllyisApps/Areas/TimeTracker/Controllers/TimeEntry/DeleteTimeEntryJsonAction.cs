@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			// Check for permissions
 			TimeEntryInfo entry = AppService.GetTimeEntry(model.TimeEntryId);
-			if (entry.UserId != this.UserContext.UserId)
+			if (entry.UserId != this.AppService.UserContext.UserId)
 			{
 				if (!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId))
 				{

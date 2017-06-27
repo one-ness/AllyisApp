@@ -103,7 +103,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			if (ModelState.IsValid)
 			{
 				// CustomerOrgId must be unique
-				if (AppService.GetCustomerList(this.UserContext.ChosenOrganizationId).Any(customer => customer.CustomerOrgId == model.CustomerOrgId))
+				if (AppService.GetCustomerList(this.AppService.UserContext.ChosenOrganizationId).Any(customer => customer.CustomerOrgId == model.CustomerOrgId))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
 					return this.View(model);
@@ -122,7 +122,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					FaxNumber = model.FaxNumber,
 					Website = model.Website,
 					EIN = model.EIN,
-					OrganizationId = this.UserContext.ChosenOrganizationId,
+					OrganizationId = this.AppService.UserContext.ChosenOrganizationId,
 					CustomerOrgId = model.CustomerOrgId
 				});
 

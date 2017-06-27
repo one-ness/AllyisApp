@@ -29,13 +29,8 @@ namespace AllyisApps.ViewModels.Shared
         public string LastName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Chosen organization name.
+		/// Gets or sets the name of the organization or org+product name in various pages
 		/// </summary>
-		public string ChosenOrganizationName { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether the current user has permission to edit the chosen organization.
-		/// </summary>
-		public bool CanEditOrganization { get; set; }
+		public string OrgProductName { get; set; }
 	}
 }

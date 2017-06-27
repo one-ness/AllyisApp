@@ -42,8 +42,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			else
 			{
 				UserSubscription subInfo = null;
-				this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
-				reportVM = this.ConstructReportViewModel(UserContext.UserId, subInfo.OrganizationId, true, infos.Item1, infos.Item2);
+				this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+				reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, subInfo.OrganizationId, true, infos.Item1, infos.Item2);
 			}
 
 			reportVM.UserView = this.GetUserSelectList(infos.Item3, reportVM.Selection.Users);
@@ -114,7 +114,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// select current user by default
 			if (usersSelected.Count < 1)
 			{
-				usersSelected.Add(Convert.ToInt32(UserContext.UserId));
+				usersSelected.Add(Convert.ToInt32(this.AppService.UserContext.UserId));
 			}
 
 			var selectList = new List<SelectListItem>();

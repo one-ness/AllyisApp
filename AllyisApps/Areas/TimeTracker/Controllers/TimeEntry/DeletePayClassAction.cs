@@ -50,7 +50,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = UserContext.UserId });
+			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
 		}
 	}
 }

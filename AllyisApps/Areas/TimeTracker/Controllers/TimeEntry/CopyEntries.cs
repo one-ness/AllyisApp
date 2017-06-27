@@ -47,7 +47,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			#endregion Validation
 
-			if (userId != this.UserContext.UserId)
+			if (userId != this.AppService.UserContext.UserId)
 			{
 				// editing the entries of another user
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
@@ -80,7 +80,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			// Add copied entries
 			UserSubscription subInfo = null;
-			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			int organizationId = subInfo.OrganizationId;
 			IEnumerable<TimeEntryInfo> entriesCopy = AppService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateCopy, endDateCopy, organizationId);
 			for (int i = 0; startDateCopy.Date.AddDays(i) <= endDateCopy.Date; ++i)

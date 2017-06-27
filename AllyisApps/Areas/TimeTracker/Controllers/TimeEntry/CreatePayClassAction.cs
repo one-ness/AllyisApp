@@ -49,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(Resources.Strings.FailureCreatePayClassAlreadyExists, Variety.Danger));
 				}
 			}
-			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = UserContext.UserId });
+			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
 		}
 	}
 }
