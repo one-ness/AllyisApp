@@ -18,8 +18,9 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Import data from a workbook. Imports customers, projects, users, project/user relationships, and/or time entry data.
 		/// </summary>
+		/// <param name="subscriptionId">subscriptionId</param>
 		/// <param name="importData">Workbook with data to import.</param>
-		public ImportActionResult Import(DataSet importData)
+		public ImportActionResult Import(int subscriptionId, DataSet importData)
 		{
 			// For some reason, linq won't work directly with DataSets, so we start by just moving the tables over to a linq-able List
 			// The tables are ranked and sorted in order to get customers to import first, before projects, avoiding some very complicated look-up logic.
@@ -240,7 +241,7 @@ namespace AllyisApps.Services
 
 								if (newCustomer != null)
 								{
-									int? newCustomerId = this.CreateCustomer(newCustomer);
+									int? newCustomerId = this.CreateCustomer(newCustomer, subscriptionId);
 									if (newCustomerId == null)
 									{
 										result.CustomerFailures.Add(string.Format("Could not create customer {0}: permission failure.", newCustomer.Name));
@@ -536,7 +537,7 @@ namespace AllyisApps.Services
 
 							if (updated)
 							{
-								this.UpdateProject(project);
+								this.UpdateProject(subscriptionId, project);
 							}
 						}
 					}

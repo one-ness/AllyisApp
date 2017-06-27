@@ -338,7 +338,7 @@ namespace AllyisApps.Services
 								ProductId = (ProductIdEnum)item.ProductId.Value,
 								ProductName = item.ProductName,
 								RoleName = item.RoleName,
-								ProductRole = (TimeTrackerRole)item.ProductRoleId.Value,
+								ProductRole = item.ProductRoleId.Value,
 								SkuId = item.SkuId.Value
 							};
 

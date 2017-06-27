@@ -362,318 +362,318 @@ namespace AllyisApps.Services
 			return result;
 		}
 
-		/// <summary>
-		/// Check if the logged in user can perform the target core action.
-		/// </summary>
-		/// <param name="targetAction">The action for which to check authorization.</param>
-		/// <param name="throwException">Whether or not to throw an exception based upon the check results.</param>
-		/// <param name="orgId">The organization to use for checking permissions. Defaults to the chosen organization.</param>
-		/// <param name="subId">The subscription to use for checking permissions.</param>
-		/// <returns>Whether or not the user has Authorization for the given action.</returns>
-		public bool Can(Actions.CoreAction targetAction, bool throwException = true, int orgId = -1, int subId = -1)
-		{
-			bool result = false;
+		///// <summary>
+		///// Check if the logged in user can perform the target core action.
+		///// </summary>
+		///// <param name="targetAction">The action for which to check authorization.</param>
+		///// <param name="throwException">Whether or not to throw an exception based upon the check results.</param>
+		///// <param name="orgId">The organization to use for checking permissions. Defaults to the chosen organization.</param>
+		///// <param name="subId">The subscription to use for checking permissions.</param>
+		///// <returns>Whether or not the user has Authorization for the given action.</returns>
+		//public bool Can(Actions.CoreAction targetAction, bool throwException = true, int orgId = -1, int subId = -1)
+		//{
+		//	bool result = false;
 
-			// get org and sub info
-			UserOrganization orgInfo = null;
-			UserSubscription subInfo = null;
-			if (this.UserContext != null)
-			{
-				this.UserContext.UserOrganizations.TryGetValue(orgId, out orgInfo);
-				this.UserContext.UserSubscriptions.TryGetValue(subId, out subInfo);
-			}
+		//	// get org and sub info
+		//	UserOrganization orgInfo = null;
+		//	UserSubscription subInfo = null;
+		//	if (this.UserContext != null)
+		//	{
+		//		this.UserContext.UserOrganizations.TryGetValue(orgId, out orgInfo);
+		//		this.UserContext.UserSubscriptions.TryGetValue(subId, out subInfo);
+		//	}
 
-			// check permissions
-			switch (targetAction)
-			{
-				case Actions.CoreAction.EditBilling:
-					if (orgInfo != null)
-					{
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
+		//	// check permissions
+		//	switch (targetAction)
+		//	{
+		//		case Actions.CoreAction.EditBilling:
+		//			if (orgInfo != null)
+		//			{
+		//				switch (orgInfo.OrganizationRole)
+		//				{
+		//					case OrganizationRole.Owner:
+		//						result = true;
+		//						break;
 
-							default:
-								break;
-						}
-					}
+		//					default:
+		//						break;
+		//				}
+		//			}
 
-					break;
+		//			break;
 
-				case Actions.CoreAction.EditCustomer:
-					if (orgInfo != null)
-					{
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
+		//		case Actions.CoreAction.EditCustomer:
+		//			if (orgInfo != null)
+		//			{
+		//				switch (orgInfo.OrganizationRole)
+		//				{
+		//					case OrganizationRole.Owner:
+		//						result = true;
+		//						break;
 
-							default:
-								break;
-						}
-					}
+		//					default:
+		//						break;
+		//				}
+		//			}
 
-					break;
+		//			break;
 
-				case Actions.CoreAction.EditInvitation:
-					if (orgInfo != null)
-					{
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
+		//		case Actions.CoreAction.EditInvitation:
+		//			if (orgInfo != null)
+		//			{
+		//				switch (orgInfo.OrganizationRole)
+		//				{
+		//					case OrganizationRole.Owner:
+		//						result = true;
+		//						break;
 
-							default:
-								break;
-						}
-					}
+		//					default:
+		//						break;
+		//				}
+		//			}
 
-					break;
+		//			break;
 
-				case Actions.CoreAction.EditOrganization:
-					if (orgInfo != null)
-					{
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
+		//		case Actions.CoreAction.EditOrganization:
+		//			if (orgInfo != null)
+		//			{
+		//				switch (orgInfo.OrganizationRole)
+		//				{
+		//					case OrganizationRole.Owner:
+		//						result = true;
+		//						break;
 
-							default:
-								break;
-						}
-					}
+		//					default:
+		//						break;
+		//				}
+		//			}
 
-					break;
+		//			break;
 
-				case Actions.CoreAction.EditProject:
-					if (orgInfo != null)
-					{
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
+		//		case Actions.CoreAction.EditProject:
+		//			if (orgInfo != null)
+		//			{
+		//				switch (orgInfo.OrganizationRole)
+		//				{
+		//					case OrganizationRole.Owner:
+		//						result = true;
+		//						break;
 
-							default:
-								break;
-						}
-					}
+		//					default:
+		//						break;
+		//				}
+		//			}
 
-					break;
+		//			break;
 
-				case Actions.CoreAction.TimeTrackerEditOthers:
-					break;
+		//		case Actions.CoreAction.TimeTrackerEditOthers:
+		//			break;
 
-				case Actions.CoreAction.TimeTrackerEditSelf:
-					break;
+		//		case Actions.CoreAction.TimeTrackerEditSelf:
+		//			break;
 
-				case Actions.CoreAction.TimeTrackerViewOthers:
-					break;
+		//		case Actions.CoreAction.TimeTrackerViewOthers:
+		//			break;
 
-				case Actions.CoreAction.TimeTrackerViewSelf:
-					break;
+		//		case Actions.CoreAction.TimeTrackerViewSelf:
+		//			break;
 
-				case Actions.CoreAction.ViewCustomer:
-					break;
+		//		case Actions.CoreAction.ViewCustomer:
+		//			break;
 
-				case Actions.CoreAction.ViewOrganization:
-					break;
-				/*ORGANIZATIONAL PERMISSIONS (requires an organization ID)*/
-				case Actions.CoreAction.ViewOrganization:
-					if (orgInfo != null)
-					{
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Member:
-							case OrganizationRole.Owner:
-								result = true;
-								break;
+		//		case Actions.CoreAction.ViewOrganization:
+		//			break;
+		//		/*ORGANIZATIONAL PERMISSIONS (requires an organization ID)*/
+		//		case Actions.CoreAction.ViewOrganization:
+		//			if (orgInfo != null)
+		//			{
+		//				switch (orgInfo.OrganizationRole)
+		//				{
+		//					case OrganizationRole.Member:
+		//					case OrganizationRole.Owner:
+		//						result = true;
+		//						break;
 
-							default:
-								break;
-						}
-					}
+		//					default:
+		//						break;
+		//				}
+		//			}
 
-					break;
+		//			break;
 
-				case Actions.CoreAction.EditOrganization:
-				case Actions.CoreAction.EditInvitation:
-					if (orgInfo != null)
-					{
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
+		//		case Actions.CoreAction.EditOrganization:
+		//		case Actions.CoreAction.EditInvitation:
+		//			if (orgInfo != null)
+		//			{
+		//				switch (orgInfo.OrganizationRole)
+		//				{
+		//					case OrganizationRole.Owner:
+		//						result = true;
+		//						break;
 
-							default:
-								break;
-						}
-					}
+		//					default:
+		//						break;
+		//				}
+		//			}
 
-					break;
+		//			break;
 
-				/*BILLING PERMISSIONS (requires an organization ID)*/
-				case Actions.CoreAction.EditBilling:
-					if (orgInfo != null)
-					{
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
+		//		/*BILLING PERMISSIONS (requires an organization ID)*/
+		//		case Actions.CoreAction.EditBilling:
+		//			if (orgInfo != null)
+		//			{
+		//				switch (orgInfo.OrganizationRole)
+		//				{
+		//					case OrganizationRole.Owner:
+		//						result = true;
+		//						break;
 
-							default:
-								break;
-						}
-					}
+		//					default:
+		//						break;
+		//				}
+		//			}
 
-					break;
+		//			break;
 
-				/*SUBSCRIPTION PERMISSIONS (requires a subscription ID)*/
+		//		/*SUBSCRIPTION PERMISSIONS (requires a subscription ID)*/
 
-				// Product roles were previously used for both subscription action permissions and project, so we'll keep doing that to avoid breaking anything
-				// In the future, we should consider separating those permissions out / create new permissions, especially since the roles are tied to the product (e.g. timetracker) but the actions are not
-				// With this in mind, the customer actions and project actions are separated for now despite requiring the same permissions
-				case Actions.CoreAction.ViewCustomer:
-					if (subInfo != null)
-					{
-						switch (subInfo.ProductRole)
-						{
-							case TimeTrackerRole.User:
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
+		//		// Product roles were previously used for both subscription action permissions and project, so we'll keep doing that to avoid breaking anything
+		//		// In the future, we should consider separating those permissions out / create new permissions, especially since the roles are tied to the product (e.g. timetracker) but the actions are not
+		//		// With this in mind, the customer actions and project actions are separated for now despite requiring the same permissions
+		//		case Actions.CoreAction.ViewCustomer:
+		//			if (subInfo != null)
+		//			{
+		//				switch (subInfo.ProductRole)
+		//				{
+		//					case TimeTrackerRole.User:
+		//					case TimeTrackerRole.Manager:
+		//						result = true;
+		//						break;
 
-							default:
-								break;
-						}
-					}
+		//					default:
+		//						break;
+		//				}
+		//			}
 
-					break;
+		//			break;
 
-				case Actions.CoreAction.EditCustomer:
-					if (subInfo != null)
-					{
-						switch (subInfo.ProductRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
+		//		case Actions.CoreAction.EditCustomer:
+		//			if (subInfo != null)
+		//			{
+		//				switch (subInfo.ProductRole)
+		//				{
+		//					case TimeTrackerRole.Manager:
+		//						result = true;
+		//						break;
 
-							default:
-								break;
-						}
-					}
+		//					default:
+		//						break;
+		//				}
+		//			}
 
-					break;
+		//			break;
 
-				/*PROJECT PERMISSIONS (uses subscription permissions)*/
+		//		/*PROJECT PERMISSIONS (uses subscription permissions)*/
 
-				// See notes above about subscription and project permissions
-				// View Project permissions are unnecessary, since projects will be filtered to the user by project id in a project service object to be built in the future
-				case Actions.CoreAction.EditProject:
-					if (subInfo != null)
-					{
-						switch (subInfo.ProductRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
+		//		// See notes above about subscription and project permissions
+		//		// View Project permissions are unnecessary, since projects will be filtered to the user by project id in a project service object to be built in the future
+		//		case Actions.CoreAction.EditProject:
+		//			if (subInfo != null)
+		//			{
+		//				switch (subInfo.ProductRole)
+		//				{
+		//					case TimeTrackerRole.Manager:
+		//						result = true;
+		//						break;
 
-							default:
-								break;
-						}
-					}
+		//					default:
+		//						break;
+		//				}
+		//			}
 
-					break;
+		//			break;
 
-				/*TIME TRACKER PERMISSIONS (require TimeTracker subscription roles)*/
+		//		/*TIME TRACKER PERMISSIONS (require TimeTracker subscription roles)*/
 
-				// There's already seperate roles for TimeTracker and Consulting (a future product), and TimeTracker actions were already separated from other subscription actions
-				// So it makes sense to keep them separated
-				case Actions.CoreAction.TimeTrackerEditSelf:
-					if (subInfo != null)
-					{
-						switch (subInfo.ProductRole)
-						{
-							case TimeTrackerRole.User:
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
+		//		// There's already seperate roles for TimeTracker and Consulting (a future product), and TimeTracker actions were already separated from other subscription actions
+		//		// So it makes sense to keep them separated
+		//		case Actions.CoreAction.TimeTrackerEditSelf:
+		//			if (subInfo != null)
+		//			{
+		//				switch (subInfo.ProductRole)
+		//				{
+		//					case TimeTrackerRole.User:
+		//					case TimeTrackerRole.Manager:
+		//						result = true;
+		//						break;
 
-							default:
-								break;
-						}
-					}
+		//					default:
+		//						break;
+		//				}
+		//			}
 
-					break;
+		//			break;
 
-				case Actions.CoreAction.TimeTrackerEditOthers:
-					if (subInfo != null)
-					{
-						switch (subInfo.ProductRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
+		//		case Actions.CoreAction.TimeTrackerEditOthers:
+		//			if (subInfo != null)
+		//			{
+		//				switch (subInfo.ProductRole)
+		//				{
+		//					case TimeTrackerRole.Manager:
+		//						result = true;
+		//						break;
 
-							default:
-								break;
-						}
-					}
+		//					default:
+		//						break;
+		//				}
+		//			}
 
-					break;
+		//			break;
 
-				case Actions.CoreAction.TimeTrackerViewSelf:
-					if (subInfo != null)
-					{
-						switch (subInfo.ProductRole)
-						{
-							case TimeTrackerRole.User:
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
+		//		case Actions.CoreAction.TimeTrackerViewSelf:
+		//			if (subInfo != null)
+		//			{
+		//				switch (subInfo.ProductRole)
+		//				{
+		//					case TimeTrackerRole.User:
+		//					case TimeTrackerRole.Manager:
+		//						result = true;
+		//						break;
 
-							default:
-								break;
-						}
-					}
+		//					default:
+		//						break;
+		//				}
+		//			}
 
-					break;
+		//			break;
 
-				case Actions.CoreAction.TimeTrackerViewOthers:
-					if (subInfo != null)
-					{
-						switch (subInfo.ProductRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
+		//		case Actions.CoreAction.TimeTrackerViewOthers:
+		//			if (subInfo != null)
+		//			{
+		//				switch (subInfo.ProductRole)
+		//				{
+		//					case TimeTrackerRole.Manager:
+		//						result = true;
+		//						break;
 
-							default:
-								break;
-						}
-					}
+		//					default:
+		//						break;
+		//				}
+		//			}
 
-					break;
+		//			break;
 
-				default:
-					break;
-			}
+		//		default:
+		//			break;
+		//	}
 
-			/*END OF PERMISSIONS*/
-			if (!result && throwException)
-			{
-				throw new AccessViolationException();
-			}
+		//	/*END OF PERMISSIONS*/
+		//	if (!result && throwException)
+		//	{
+		//		throw new AccessViolationException();
+		//	}
 
-			return result;
-		}
+		//	return result;
+		//}
 	}
 }

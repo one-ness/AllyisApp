@@ -61,7 +61,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				var infos = AppService.GetReportInfo(subscriptionId);
 
-				ReportViewModel reportVM = this.ConstructReportViewModel(this.UserContext.UserId, organizationId, AppService.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, subscriptionId), infos.Item1, infos.Item2, showExport, reportVMselect);
+				bool canEditOthers = this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId, false);
+				ReportViewModel reportVM = this.ConstructReportViewModel(this.UserContext.UserId, organizationId, canEditOthers, infos.Item1, infos.Item2, showExport, reportVMselect);
 
 				DataExportViewModel dataVM = null;
 				try

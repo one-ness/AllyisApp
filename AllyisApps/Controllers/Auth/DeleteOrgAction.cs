@@ -23,10 +23,10 @@ namespace AllyisApps.Controllers
 		/// <returns>Redirection to account index, or an error page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult DeleteOrg(string orgId)
+		public ActionResult DeleteOrg(int orgId)
 		{
 			// Method includes permissions check
-			if (AppService.DeleteOrganization())
+			if (AppService.DeleteOrganization(orgId))
 			{
 				string notification = string.Format("{0} {1}", Resources.Strings.YourOrg, Resources.Strings.OrganizationDeleteNotification);
 				Notifications.Add(new BootstrapAlert(notification, Variety.Success));

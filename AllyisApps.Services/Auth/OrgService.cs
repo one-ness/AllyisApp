@@ -163,27 +163,9 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool UpdateOrganization(Organization organization)
 		{
-			if (organization == null)
-			{
-				throw new ArgumentNullException("organization", "Organization must not be null.");
-			}
-			//int existingSubdomainId = Service.GetIdBySubdomain(organization.Subdomain);
-			//if (existingSubdomainId != 0 && existingSubdomainId != organization.OrganizationId)
-			//{
-			//	throw new ArgumentException("organization", "Subdomain is already taken.");
-			//}
-
-			if (this.Can(Actions.CoreAction.EditOrganization))
-			{
-				if (!DBHelper.UpdateOrganization(GetDBEntityFromOrganization(organization)))
-				{
-					throw new ArgumentException("organization", "Subdomain is already taken.");
-				}
-
-				return true;
-			}
-
-			return false;
+			if (organization == null) throw new ArgumentException("organization");
+			this.CheckOrgAction(OrgAction.EditOrganization, organization.OrganizationId);
+			return DBHelper.UpdateOrganization(GetDBEntityFromOrganization(organization));
 		}
 
 		/// <summary>
@@ -242,16 +224,11 @@ namespace AllyisApps.Services
 		/// Deletes the user's current chosen organization.
 		/// </summary>
 		/// <returns>Returns false if permissions fail.</returns>
-		public bool DeleteOrganization()
+		public bool DeleteOrganization(int orgId)
 		{
-			if (this.Can(Actions.CoreAction.EditOrganization))
-			{
-				DBHelper.DeleteOrganization(UserContext.ChosenOrganizationId);
-
-				return true;
-			}
-
-			return false;
+			this.CheckOrgAction(OrgAction.DeleteOrganization, orgId);
+			DBHelper.DeleteOrganization(orgId);
+			return true;
 		}
 
 		/// <summary>
@@ -368,21 +345,15 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Removes an invitation.
 		/// </summary>
+		/// <param name="orgId">organization id</param>
 		/// <param name="invitationId">Invitation Id.</param>
 		/// <returns>Returns false if permissions fail.</returns>
-		public bool RemoveInvitation(int invitationId)
+		public bool RemoveInvitation(int orgId, int invitationId)
 		{
-			if (invitationId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("invitationId", "Invitation Id cannot be 0 or negative.");
-			}
-
-			if (this.Can(Actions.CoreAction.EditInvitation))
-			{
-				return DBHelper.RemoveInvitation(invitationId, -1);
-			}
-
-			return false;
+			if (orgId <= 0) throw new ArgumentException("orgId");
+			if (invitationId <= 0) throw new ArgumentException("invitationId");
+			this.CheckOrgAction(OrgAction.DeleteInvitation, orgId);
+			return DBHelper.RemoveInvitation(invitationId, -1);
 		}
 
 		/// <summary>

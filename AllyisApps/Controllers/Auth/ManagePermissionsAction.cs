@@ -42,58 +42,58 @@ namespace AllyisApps.Controllers
 		public ActionResult ManagePermissions(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-				var infos = AppService.GetOrgAndSubRoles();
-                ManagePermissionsViewModel model = new ManagePermissionsViewModel
-                {
-                    Users = new List<UserPermissionsViewModel>(),
-                    Subscriptions = infos.Item2,
-                    SubIds = infos.Item2.Select(s => s.SubscriptionId).ToList(),
-                    OrganizationId = id,
-					// TODO: Get rid of this once product panes in Permissions page are genericized.
-					TimeTrackerId = (int)ProductIdEnum.TimeTracker
-				};
+			var infos = AppService.GetOrgAndSubRoles();
+			ManagePermissionsViewModel model = new ManagePermissionsViewModel
+			{
+				Users = new List<UserPermissionsViewModel>(),
+				Subscriptions = infos.Item2,
+				SubIds = infos.Item2.Select(s => s.SubscriptionId).ToList(),
+				OrganizationId = id,
+				// TODO: Get rid of this once product panes in Permissions page are genericized.
+				TimeTrackerId = (int)ProductIdEnum.TimeTracker
+			};
 
-				// This can also be axed after finding a good way to genericize products in the Permissions page.
-				var ttsub = model.Subscriptions.Where(s => s.ProductId == model.TimeTrackerId).SingleOrDefault();
-				if (ttsub != null)
+			// This can also be axed after finding a good way to genericize products in the Permissions page.
+			var ttsub = model.Subscriptions.Where(s => s.ProductId == model.TimeTrackerId).SingleOrDefault();
+			if (ttsub != null)
+			{
+				model.TimeTrackerSubIndex = model.Subscriptions.IndexOf(ttsub);
+			}
+
+			foreach (UserRolesInfo role in infos.Item1)
+			{
+				UserPermissionsViewModel modelUser = model.Users.Where(u => u.UserId == int.Parse(role.UserId)).SingleOrDefault();
+				if (modelUser == null)
 				{
-					model.TimeTrackerSubIndex = model.Subscriptions.IndexOf(ttsub);
+					modelUser = new UserPermissionsViewModel
+					{
+						FirstName = role.FirstName,
+						LastName = role.LastName,
+						UserId = int.Parse(role.UserId),
+						Email = role.Email,
+						OrgRoleId = role.OrgRoleId,
+						ProductRoleIds = new List<int>()
+					};
+
+					// Start out with default NotInProduct role
+					foreach (SubscriptionDisplayInfo sub in model.Subscriptions)
+					{
+						modelUser.ProductRoleIds.Add((int)TimeTrackerRole.User);
+					}
+					model.Users.Add(modelUser);
 				}
 
-				foreach (UserRolesInfo role in infos.Item1)
+				if (role.SubscriptionId != -1)
 				{
-					UserPermissionsViewModel modelUser = model.Users.Where(u => u.UserId == int.Parse(role.UserId)).SingleOrDefault();
-					if (modelUser == null)
+					int index = model.SubIds.IndexOf(role.SubscriptionId);
+					if (index >= 0)
 					{
-						modelUser = new UserPermissionsViewModel
-						{
-							FirstName = role.FirstName,
-							LastName = role.LastName,
-							UserId = int.Parse(role.UserId),
-							Email = role.Email,
-							OrgRoleId = role.OrgRoleId,
-							ProductRoleIds = new List<int>()
-						};
-
-						// Start out with default NotInProduct role
-						foreach (SubscriptionDisplayInfo sub in model.Subscriptions)
-						{
-							modelUser.ProductRoleIds.Add((int)TimeTrackerRole.User);
-						}
-						model.Users.Add(modelUser);
-					}
-
-					if (role.SubscriptionId != -1)
-					{
-						int index = model.SubIds.IndexOf(role.SubscriptionId);
-						if (index >= 0)
-						{
-							modelUser.ProductRoleIds[model.SubIds.IndexOf(role.SubscriptionId)] = role.ProductRoleId;
-						}
+						modelUser.ProductRoleIds[model.SubIds.IndexOf(role.SubscriptionId)] = role.ProductRoleId;
 					}
 				}
+			}
 
-				return this.View("Permission2", model);
+			return this.View("Permission2", model);
 		}
 
 		/// <summary>
@@ -185,97 +185,97 @@ namespace AllyisApps.Controllers
 		public ActionResult ManagePermissions(string data)
 		{
 			UserPermissionsAction model = JsonConvert.DeserializeObject<UserPermissionsAction>(data);
-			if (AppService.Can(Actions.CoreAction.EditOrganization, false, model.OrganizationId))
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, model.OrganizationId);
+			if (model.SelectedUsers == null || model.SelectedUsers.Count() == 0)
 			{
-				if (model.SelectedUsers == null || model.SelectedUsers.Count() == 0)
-				{
-					Notifications.Add(new BootstrapAlert(Resources.Strings.NoUsersSelected, Variety.Danger));
-					return RedirectToAction(ActionConstants.Manage);
-				}
+				Notifications.Add(new BootstrapAlert(Resources.Strings.NoUsersSelected, Variety.Danger));
+				return RedirectToAction(ActionConstants.Manage);
+			}
 
-				if (model.SelectedActions == null)
+			if (model.SelectedActions == null)
+			{
+				Notifications.Add(new BootstrapAlert(Resources.Strings.NoActionsSelected, Variety.Danger));
+				return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
+			}
+
+			if (model.SelectedActions.OrgRoleTarget != 0)
+			{
+				// Changing organization roles
+				if (!Enum.IsDefined(typeof(OrganizationRole), model.SelectedActions.OrgRoleTarget) && model.SelectedActions.OrgRoleTarget != -1)
 				{
-					Notifications.Add(new BootstrapAlert(Resources.Strings.NoActionsSelected, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
 					return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 				}
 
-				if (model.SelectedActions.OrgRoleTarget != 0)
+				if (model.SelectedUsers.Where(tu => tu.UserId == UserContext.UserId).Any())
 				{
-					// Changing organization roles
-					if (!Enum.IsDefined(typeof(OrganizationRole), model.SelectedActions.OrgRoleTarget) && model.SelectedActions.OrgRoleTarget != -1)
-					{
-						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
-						return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
-					}
-
-					if (model.SelectedUsers.Where(tu => tu.UserId == UserContext.UserId).Any())
-					{
-						if (model.SelectedActions.OrgRoleTarget == -1)
-						{
-							Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouAreUnableToRemoveYourself, Variety.Danger));
-						}
-						else
-						{
-							Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouAreUnableToChangeYourOwnRole, Variety.Danger));
-						}
-
-						model.SelectedUsers = model.SelectedUsers.Where(tu => tu.UserId != UserContext.UserId);
-						if (model.SelectedUsers.Count() == 0)
-						{
-							return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
-						}
-					}
-
-					int numberChanged = AppService.ChangeUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.OrgRoleTarget.Value);
 					if (model.SelectedActions.OrgRoleTarget == -1)
 					{
-						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
+						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouAreUnableToRemoveYourself, Variety.Danger));
 					}
 					else
 					{
-						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersChangedRolesInOrg, numberChanged), Variety.Success));
+						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouAreUnableToChangeYourOwnRole, Variety.Danger));
 					}
+
+					model.SelectedUsers = model.SelectedUsers.Where(tu => tu.UserId != UserContext.UserId);
+					if (model.SelectedUsers.Count() == 0)
+					{
+						return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
+					}
+				}
+
+				int numberChanged = AppService.ChangeUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.OrgRoleTarget.Value);
+				if (model.SelectedActions.OrgRoleTarget == -1)
+				{
+					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
 				}
 				else
 				{
-					// Changing time tracker roles
-					if (!Enum.IsDefined(typeof(TimeTrackerRole), model.SelectedActions.TimeTrackerRoleTarget) && model.SelectedActions.TimeTrackerRoleTarget != -1)
-					{
-						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
-						return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
-					}
+					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersChangedRolesInOrg, numberChanged), Variety.Success));
+				}
+			}
+			else
+			{
+				// Changing time tracker roles
+				if (!Enum.IsDefined(typeof(TimeTrackerRole), model.SelectedActions.TimeTrackerRoleTarget) && model.SelectedActions.TimeTrackerRoleTarget != -1)
+				{
+					Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
+					return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
+				}
 
-					Tuple<int, int> updatedAndAdded = AppService.ChangeSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value);
-					if (updatedAndAdded.Item1 == -1)
-					{
-						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDontHaveASubscriptionToTimeTracker, Variety.Danger));
-						return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
-					}
+				Tuple<int, int> updatedAndAdded = AppService.ChangeSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value);
+				if (updatedAndAdded.Item1 == -1)
+				{
+					Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDontHaveASubscriptionToTimeTracker, Variety.Danger));
+					return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
+				}
 
-					if (updatedAndAdded.Item1 != 0)
-					{
-						Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", updatedAndAdded.Item1, model.SelectedActions.TimeTrackerRoleTarget == -1 ?
-							Resources.Strings.UsersRemovedFromTimeTracker : Resources.Strings.UsersChangedRolesInTimeTracker), Variety.Success));
-					}
+				if (updatedAndAdded.Item1 != 0)
+				{
+					Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", updatedAndAdded.Item1, model.SelectedActions.TimeTrackerRoleTarget == -1 ?
+						Resources.Strings.UsersRemovedFromTimeTracker : Resources.Strings.UsersChangedRolesInTimeTracker), Variety.Success));
+				}
 
-					if (updatedAndAdded.Item2 == -1)
+				if (updatedAndAdded.Item2 == -1)
+				{
+					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.TooManyUsersInSubToAdd, model.SelectedUsers.Count()), Variety.Danger));
+				}
+				else
+				{
+					if (updatedAndAdded.Item2 != 0)
 					{
-						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.TooManyUsersInSubToAdd, model.SelectedUsers.Count()), Variety.Danger));
-					}
-					else
-					{
-						if (updatedAndAdded.Item2 != 0)
-						{
-							Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersAddedToTimeTracker, updatedAndAdded.Item2), Variety.Success));
-						}
+						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersAddedToTimeTracker, updatedAndAdded.Item2), Variety.Success));
 					}
 				}
 			}
+
 
 			if (!model.isPermissions2) // TODO: Delete once there's only one manage permissions page (also delete the action constant)
 			{
 				return RedirectToAction(ActionConstants.ManagePermissions2);
 			}
+
 			return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 		}
 	}

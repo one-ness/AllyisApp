@@ -214,15 +214,11 @@ namespace AllyisApps.Services
 		/// Removes billing from the current organization.
 		/// </summary>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool RemoveBilling()
+		public bool RemoveBilling(int orgId)
 		{
-			if (this.Can(Actions.CoreAction.EditBilling))
-			{
-				DBHelper.RemoveBilling(UserContext.ChosenOrganizationId);
-				return true;
-			}
-
-			return false;
+			this.CheckOrgAction(OrgAction.DeleteBilling, orgId);
+			DBHelper.RemoveBilling(orgId);
+			return true;
 		}
 
 		/// <summary>

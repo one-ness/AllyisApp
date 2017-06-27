@@ -91,26 +91,26 @@ namespace AllyisApps.Services
 			EditBilling = 11,
 		}
 
-		/// <summary>
-		/// Returns a ProductIdEnum for the product matching a given action, or ProductIdEnum.None if
-		/// the action is not for a product.
-		/// </summary>
-		/// <param name="action">The action to check.</param>
-		/// <returns>The ProductIdEnum for the product matching the given action.</returns>
-		public static ProductIdEnum GetProductForAction(CoreAction action)
-		{
-			if (action == CoreAction.EditCustomer ||
-				action == CoreAction.ViewCustomer ||
-				action == CoreAction.EditProject ||
-				action == CoreAction.TimeTrackerEditSelf ||
-				action == CoreAction.TimeTrackerEditOthers ||
-				action == CoreAction.TimeTrackerViewSelf ||
-				action == CoreAction.TimeTrackerViewOthers)
-			{
-				return ProductIdEnum.TimeTracker;
-			}
+		///// <summary>
+		///// Returns a ProductIdEnum for the product matching a given action, or ProductIdEnum.None if
+		///// the action is not for a product.
+		///// </summary>
+		///// <param name="action">The action to check.</param>
+		///// <returns>The ProductIdEnum for the product matching the given action.</returns>
+		//public static ProductIdEnum GetProductForAction(CoreAction action)
+		//{
+		//	if (action == CoreAction.EditCustomer ||
+		//		action == CoreAction.ViewCustomer ||
+		//		action == CoreAction.EditProject ||
+		//		action == CoreAction.TimeTrackerEditSelf ||
+		//		action == CoreAction.TimeTrackerEditOthers ||
+		//		action == CoreAction.TimeTrackerViewSelf ||
+		//		action == CoreAction.TimeTrackerViewOthers)
+		//	{
+		//		return ProductIdEnum.TimeTracker;
+		//	}
 
-			return ProductIdEnum.None;
-		}
+		//	return ProductIdEnum.None;
+		//}
 	}
 }

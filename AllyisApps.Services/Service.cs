@@ -283,22 +283,10 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool CreateHoliday(Holiday holiday, int subscriptionId)
 		{
-			#region Validation
-
-			if (holiday == null)
-			{
-				throw new ArgumentNullException("holiday", "Holiday must not be null.");
-			}
-
-			#endregion Validation
-
-			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers, false, holiday.OrganizationId, subscriptionId))
-			{
-				DBHelper.CreateHoliday(GetDBEntityFromHoliday(holiday));
-				return true;
-			}
-
-			return false;
+			if (holiday == null) throw new ArgumentException("holiday");
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
+			DBHelper.CreateHoliday(GetDBEntityFromHoliday(holiday));
+			return true;
 		}
 
 		/// <summary>
@@ -310,27 +298,18 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool DeleteHoliday(int holidayId, int orgId, int subscriptionId)
 		{
-			#region Validation
+			if (holidayId <= 0) throw new ArgumentException("holidayId");
+			if (orgId <= 0) throw new ArgumentException("orgId");
+			if (subscriptionId <= 0) throw new ArgumentException("subscriptionId");
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 
-			if (holidayId <= 0)
+			HolidayDBEntity deletedHoliday = DBHelper.GetHolidays(orgId).Where(h => h.HolidayId == holidayId).SingleOrDefault();
+			if (deletedHoliday != null)
 			{
-				throw new ArgumentNullException("holidayId", "Holiday Id cannot be negative or 0.");
+				DBHelper.DeleteHoliday(deletedHoliday.HolidayName, deletedHoliday.Date, orgId);
 			}
 
-			#endregion Validation
-
-			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId))
-			{
-				HolidayDBEntity deletedHoliday = DBHelper.GetHolidays(orgId).Where(h => h.HolidayId == holidayId).SingleOrDefault();
-				if (deletedHoliday != null)
-				{
-					DBHelper.DeleteHoliday(deletedHoliday.HolidayName, deletedHoliday.Date, orgId);
-				}
-
-				return true;
-			}
-
-			return false;
+			return true;
 		}
 
 		/// <summary>
@@ -342,28 +321,9 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool CreatePayClass(string payClassName, int orgId, int subscriptionId)
 		{
-			#region Validation
-
-			if (string.IsNullOrEmpty(payClassName))
-			{
-				throw new ArgumentNullException("payClassName", "Pay class name must have a value.");
-			}
-
-			if (this.GetPayClasses(orgId).Where(p => p.Name.Equals(payClassName)).Any())
-			{
-				throw new ArgumentException("payClassName", "Pay class name must be unique for the organization.");
-			}
-
-			#endregion Validation
-
-			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId))
-			{
-				DBHelper.CreatePayClass(payClassName, orgId);
-
-				return true;
-			}
-
-			return false;
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
+			DBHelper.CreatePayClass(payClassName, orgId);
+			return true;
 		}
 
 		/// <summary>
@@ -375,23 +335,9 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool DeletePayClass(int payClassId, int orgId, int subscriptionId)
 		{
-			#region Validation
-
-			if (payClassId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("payClassId", "Pay class id cannot be 0 or negative.");
-			}
-
-			#endregion Validation
-
-			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers, false, orgId, subscriptionId))
-			{
-				DBHelper.DeletePayClass(payClassId);
-
-				return true;
-			}
-
-			return false;
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
+			DBHelper.DeletePayClass(payClassId);
+			return true;
 		}
 
 		/// <summary>
@@ -441,14 +387,9 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, subscriptionId))
-			{
-				DBHelper.UpdateTimeTrackerStartOfWeek(organizationId, startOfWeek);
-
-				return true;
-			}
-
-			return false;
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
+			DBHelper.UpdateTimeTrackerStartOfWeek(organizationId, startOfWeek);
+			return true;
 		}
 
 		/// <summary>
@@ -480,15 +421,9 @@ namespace AllyisApps.Services
 			}
 
 			#endregion Validation
-
-			if (this.Can(Actions.CoreAction.TimeTrackerEditOthers, false, organizationId, subscriptionId))
-			{
-				DBHelper.UpdateOvertime(organizationId, overtimeHours, overtimePeriod, overtimeMultiplier);
-
-				return true;
-			}
-
-			return false;
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
+			DBHelper.UpdateOvertime(organizationId, overtimeHours, overtimePeriod, overtimeMultiplier);
+			return true;
 		}
 
 		/// <summary>

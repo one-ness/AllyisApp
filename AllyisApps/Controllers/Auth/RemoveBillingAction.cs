@@ -47,7 +47,9 @@ namespace AllyisApps.Controllers
 		[HttpPost]
 		public ActionResult RemoveBilling(BaseViewModel m)
 		{
-			if (AppService.RemoveBilling())
+			// TODO: org id is needed
+			int orgId = 0;
+			if (AppService.RemoveBilling(orgId))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.BillingRemoved, Variety.Success));
 				return this.Redirect(ActionConstants.Manage);

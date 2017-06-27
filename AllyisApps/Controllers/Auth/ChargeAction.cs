@@ -19,7 +19,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Edits or creates billing information.
 		/// </summary>
-		/// <param name="organizationId">the organization this billing information belongs to</param>
+		/// <param name="id">the organization this billing information belongs to</param>
 		/// <param name="token">The billing services token being used for this charge.</param>
 		/// <param name="billingServicesEmail">The email associated with this customer.</param>
 		/// <returns>A page.</returns>

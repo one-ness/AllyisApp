@@ -59,16 +59,13 @@ namespace AllyisApps.Services
         /// <summary>
         /// Creates a customer.
         /// </summary>
+		/// <param name="subId">subscription id</param>
         /// <param name="customer">Customer.</param>
         /// <returns>Customer id.</returns>
-        public int? CreateCustomer(Customer customer)
+        public int? CreateCustomer(int subId, Customer customer)
 		{
-            if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
-			{
-				return DBHelper.CreateCustomerInfo(GetDBEntityFromCustomer(customer));
-			}
-
-			return null;
+			this.CheckTimeTrackerAction(TimeTrackerAction.CreateCustomer, subId);
+			return DBHelper.CreateCustomerInfo(GetDBEntityFromCustomer(customer));
 		}
 
         /// <summary>
@@ -79,13 +76,8 @@ namespace AllyisApps.Services
         /// <returns>Customer id.</returns>
         public int? CreateCustomer(Customer customer, int subscriptionId)
         {
-            int orgId = GetSubscription(subscriptionId).OrganizationId;
-            if (this.Can(Actions.CoreAction.EditCustomer, false, orgId, subscriptionId) && customer != null)
-            {
-                return DBHelper.CreateCustomerInfo(GetDBEntityFromCustomer(customer));
-            }
-
-            return null;
+			this.CheckTimeTrackerAction(TimeTrackerAction.CreateCustomer, subscriptionId);
+			return DBHelper.CreateCustomerInfo(GetDBEntityFromCustomer(customer));
         }
 
         /// <summary>
@@ -96,31 +88,9 @@ namespace AllyisApps.Services
         /// <returns>Returns 1 if succeed, -1 if fail, and null if authorization fails.</returns>
         public int? UpdateCustomer(Customer customer, int subscriptionId)
         {
-            if (customer != null && this.Can(Actions.CoreAction.EditCustomer, false, customer.OrganizationId, subscriptionId))
-            {
-                return DBHelper.UpdateCustomer(GetDBEntityFromCustomer(customer));
-            }
-
-            return null;
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			return DBHelper.UpdateCustomer(GetDBEntityFromCustomer(customer));
         }
-
-        /*
-        /// <summary>
-        /// Updates a customer in the database.
-        /// </summary>
-        /// <param name="customer">Updated customer info.</param>
-        /// <returns>Returns false if authorization fails.</returns>
-        public bool UpdateCustomer(Customer customer)
-        {
-            if (this.Can(Actions.CoreAction.EditCustomer) && customer != null)
-            {
-                DBHelper.UpdateCustomer(GetDBEntityFromCustomer(customer));
-                return true;
-            }
-
-            return false;
-        }
-        */
 
         /// <summary>
         /// Deletes a customer.
@@ -130,31 +100,9 @@ namespace AllyisApps.Services
         /// <returns>Returns false if authorization fails.</returns>
         public string DeleteCustomer(int subscriptionId, int customerId)
         {
-            int orgId = GetSubscription(subscriptionId).OrganizationId;
-            if (this.Can(Actions.CoreAction.EditCustomer, false, orgId, subscriptionId))
-            {
-                return DBHelper.DeleteCustomer(customerId);
-            }
-            return null;
+			this.CheckTimeTrackerAction(TimeTrackerAction.DeleteCustomer, subscriptionId);
+			return DBHelper.DeleteCustomer(customerId);
         }
-
-        /*
-         /// <summary>
-         /// Deletes a customer.
-         /// </summary>
-         /// <param name="customerId">Customer id.</param>
-         /// <returns>Returns false if authorization fails.</returns>
-         public bool DeleteCustomer(int customerId)
-         {
-             if (this.Can(Actions.CoreAction.EditCustomer))
-             {
-                 DBHelper.DeleteCustomer(customerId);
-                 return true;
-             }
-
-             return false;
-         }   
-     */
 
         /// <summary>
         /// Reactivate a Customer
@@ -165,11 +113,8 @@ namespace AllyisApps.Services
         /// <returns>Returns false if authorization fails.</returns>
         public string ReactivateCustomer(int customerId, int subscriptionId, int orgId)
         {
-            if (this.Can(Actions.CoreAction.EditCustomer, false, orgId, subscriptionId))
-            {
-                return DBHelper.ReactivateCustomer(customerId);
-            }
-            return null;
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+			return DBHelper.ReactivateCustomer(customerId);
         }
 
         /// <summary>
@@ -382,8 +327,9 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates a project's properties.
 		/// </summary>
+		/// <param name="subId">subscriptionId</param>
 		/// <param name="project">Project with updated properties.</param>
-		public void UpdateProject(Project project)
+		public void UpdateProject(int subId, Project project)
 		{
 			#region Validation
 
@@ -409,10 +355,8 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			if (this.Can(Actions.CoreAction.EditProject))
-			{
-				DBHelper.UpdateProject(GetDBEntityFromProject(project));
-			}
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subId);
+			DBHelper.UpdateProject(GetDBEntityFromProject(project));
 		}
 
         /// <summary>
@@ -461,15 +405,10 @@ namespace AllyisApps.Services
 				userIDs = new List<int>();
 			}
 
-            #endregion Validation
-            int organizationId = GetSubscription(subscriptionId).OrganizationId;
-			if (this.Can(Actions.CoreAction.EditProject, false, organizationId, subscriptionId))
-			{
-				DBHelper.UpdateProjectAndUsers(projectId, name, orgId, type, start, end, userIDs);
-				return true;
-			}
-
-			return false;
+			#endregion Validation
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
+			DBHelper.UpdateProjectAndUsers(projectId, name, orgId, type, start, end, userIDs);
+			return true;
 		}
 
         /// <summary>
@@ -486,12 +425,9 @@ namespace AllyisApps.Services
                 throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
             }
 
-            if (this.Can(Actions.CoreAction.EditProject, false, organizationId, subscriptionId))
-            {
-                DBHelper.ReactivateProject(projectId);
-                return true;
-            }
-            return false;
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
+			DBHelper.ReactivateProject(projectId);
+			return true;
         }
 
         /// <summary>
@@ -508,35 +444,9 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
 			}
 
-            if (this.Can(Actions.CoreAction.EditCustomer, false, orgId, subscriptionId))
-            {
-                return DBHelper.DeleteProject(projectId);
-            }
-            return null;
+			this.CheckTimeTrackerAction(TimeTrackerAction.DeleteProject, subscriptionId);
+			return DBHelper.DeleteProject(projectId);
 		}
-
-        /*
-         /// <summary>
-		/// Deletes a project.
-		/// </summary>
-		/// <param name="projectId">Project Id.</param>
-		/// <returns>Returns false if authorization fails.</returns>
-		public bool DeleteProject(int projectId)
-		{
-			if (projectId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
-			}
-
-			if (this.Can(Actions.CoreAction.EditProject))
-			{
-				DBHelper.DeleteProject(projectId);
-				return true;
-			}
-
-			return false;
-		}
-         */
 
 		/// <summary>
 		/// Creates a project user.

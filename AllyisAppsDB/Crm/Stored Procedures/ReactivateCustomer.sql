@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [Crm].[ReactivateCustomer]
-	@CustomerId INT
+	@customerId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -9,15 +9,12 @@ BEGIN
 	SELECT 
 		@CustomerName = [Name] 
 	FROM [Crm].[Customer] WITH (NOLOCK)
-	WHERE [CustomerId] = @CustomerID
+	WHERE [CustomerId] = @customerId
 
 	IF @CustomerName IS NOT NULL
 	BEGIN --Customer found
 		UPDATE [Crm].[Customer] SET [IsActive] = 1
-		WHERE [Customer].[CustomerId] = @CustomerId;
-	 
-		--UPDATE [Crm].[Project] SET [IsActive] = 0
-		--WHERE [Project].[CustomerId] IN (SELECT [CustomerId] FROM [Crm].[Customer] WHERE [IsActive] = 0);
+		WHERE [Customer].[CustomerId] = @customerId;
 	END
 	SELECT @CustomerName
 END
