@@ -47,8 +47,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				IEnumerable<TimeEntryInfo> otherEntriesToday = AppService.GetTimeEntriesByUserOverDateRange(
 					new List<int> { model.UserId },
-					AppService.GetDateTimeFromDays(model.Date).Value,
-					AppService.GetDateTimeFromDays(model.Date).Value);
+					AppService.GetDateTimeFromDays(model.Date),
+					AppService.GetDateTimeFromDays(model.Date));
 				float durationOther = 0.0f;
 				foreach (TimeEntryInfo otherEntry in otherEntriesToday)
 				{
@@ -80,7 +80,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					UserId = model.UserId,
 					ProjectId = model.ProjectId,
 					PayClassId = model.PayClassId,
-					Date = AppService.GetDateTimeFromDays(model.Date).Value,
+					Date = AppService.GetDateTimeFromDays(model.Date),
 					Duration = durationResult.Value,
 					Description = model.Description
 				});

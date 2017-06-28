@@ -33,13 +33,8 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="days">An int of the date as days since Jan 1st, 0001. Use -1 for null date.</param>
 		/// <returns>The DateTime date.</returns>
-		public static DateTime? GetDateFromDays(int days)
+		public static DateTime GetDateFromDays(int days)
 		{
-			if (days <= -1)
-			{
-				return null;
-			}
-
 			return DateTime.MinValue.AddDays(days);
 		}
 
@@ -63,7 +58,7 @@ namespace AllyisApps.Services
         /// </summary>
         /// <param name="days">An int of the date as days since Jan 1st, 0001. Use -1 for null dates.</param>
         /// <returns>The DateTime date.</returns>
-        public DateTime? GetDateTimeFromDays(int days)
+        public DateTime GetDateTimeFromDays(int days)
 		{
 			return GetDateFromDays(days);
 		}

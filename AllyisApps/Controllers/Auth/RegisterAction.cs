@@ -6,9 +6,9 @@
 
 using AllyisApps.Core.Alert;
 using AllyisApps.ViewModels.Auth;
-using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System;
 
 namespace AllyisApps.Controllers
 {
@@ -33,7 +33,7 @@ namespace AllyisApps.Controllers
 			return this.View(new RegisterViewModel
 			{
 				ValidCountries = AppService.ValidCountries(),
-				DateOfBirth = AppService.GetDayFromDateTime(null)
+				DateOfBirth = AppService.GetDayFromDateTime(DateTime.UtcNow.AddYears(-18))
 			});
 		}
 
@@ -65,12 +65,12 @@ namespace AllyisApps.Controllers
 					if (userIDandInviteCount.Item2 > 0)
 					{
 						// If the user was invited, redirect to the index page to display invitations
-						return this.RedirectToAction(ActionConstants.Index);
+						return this.RouteUserHome();
 					}
 					else
 					{
                         // Else redirect the user to create an organization
-                        return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
+                        return this.RedirectToAction(ActionConstants.CreateOrg, ControllerConstants.Account);
                     }
 				}
 				else

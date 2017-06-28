@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using AllyisApps.DBModel.Lookup;
 
 namespace AllyisApps.DBModel
 {
@@ -23,12 +24,22 @@ namespace AllyisApps.DBModel
 		/// Retrieves a collection of valid countries from the database.
 		/// </summary>
 		/// <returns>A collection of country names.</returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Called through Razor engine.")]
-		public IEnumerable<string> ValidCountries()
+		public Dictionary<int, string> GetCountriesDictionary()
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<string>("[Lookup].[GetCountries]", commandType: CommandType.StoredProcedure);
+				return connection.Query<CountryDBEntity>("[Lookup].[GetCountries]").ToDictionary(x => x.CountryId, x => x.Name);
+			}
+		}
+
+		/// <summary>
+		/// list of valid countries
+		/// </summary>
+		public List<string> ValidCountries()
+		{
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<CountryDBEntity>("[Lookup].[GetCountries]").Select(x => x.Name).ToList();
 			}
 		}
 

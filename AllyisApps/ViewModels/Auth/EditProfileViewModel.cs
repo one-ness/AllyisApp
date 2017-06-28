@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -20,21 +21,11 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EditProfileViewModel"/> class.
 		/// </summary>
-		public EditProfileViewModel(bool isEditing = true)
-		{
-			// Note: this is included soley to keep the model constructed during a POST from complaining about a null reference
-			//   as it builds the countries list, even though the list isn't used anymore.
-			this.ValidCountries = new List<string>();
-			this.isEditing = isEditing; // True by default
-		}
-
-		/// <summary>
-		///
-		/// </summary>
 		public EditProfileViewModel()
 		{
+			// Note: this is included soley to keep the model constructed during a POST from complaining about a null reference
+			// as it builds the countries list, even though the list isn't used anymore.
 			this.ValidCountries = new List<string>();
-			this.isEditing = true;
 		}
 
 		/// <summary>
@@ -155,10 +146,5 @@ namespace AllyisApps.ViewModels.Auth
 				return CharsToReplace.Aggregate(stringToClean, (str, l) => str.Replace(string.Empty + l, string.Empty));
 			}
 		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether this is for editing (true) or just display
-		/// </summary>
-		public bool isEditing { get; set; }
 	}
 }
