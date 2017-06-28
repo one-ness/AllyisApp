@@ -206,9 +206,15 @@ namespace AllyisApps.Controllers
 			{
 				var request = HttpContext.Request;
 				StringBuilder sb = new StringBuilder();
-				sb.Append(request.Url.Scheme);
-				sb.Append("://");
-				sb.Append(request.Url.Host);
+				if (request.Url.IsDefaultPort)
+				{
+					sb.AppendFormat("{0}://{1}", request.Url.Scheme, request.Url.Host);
+				}
+				else
+				{
+					sb.AppendFormat("{0}://{1}:{2}", request.Url.Scheme, request.Url.Host, request.Url.Port);
+				}
+
 				return sb.ToString();
 			}
 		}
