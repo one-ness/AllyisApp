@@ -30,10 +30,7 @@ namespace AllyisApps.Controllers
 			{
 				string notification = string.Format("{0} {1}", Resources.Strings.YourOrg, Resources.Strings.OrganizationDeleteNotification);
 				Notifications.Add(new BootstrapAlert(notification, Variety.Success));
-
-				// TODO: we shouldnt be hard coding http...
-				string url = string.Format("http://{0}/{1}/{2}", GlobalSettings.WebRoot, ControllerConstants.Account, ActionConstants.Index);
-				return this.Redirect(url);
+				this.RouteUserHome();
 			}
 
 			// Permissions failed
