@@ -51,8 +51,7 @@ namespace AllyisApps.Controllers
 				if ((result = AppService.ValidateLogin(model.Email, model.Password)) != null)
 				{
 					// sign in
-					this.SignIn(result.UserId, result.UserName, result.Email, model.RememberMe);
-					this.AppService.PopulateUserContext(result.UserId);
+					this.SignIn(result.UserId, result.Email, model.RememberMe);
 					return this.Redirect(returnUrl);
 				}
 				else
@@ -68,7 +67,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Sign in the given user.
 		/// </summary>
-		private void SignIn(int userId, string userName, string email, bool isPersisted = false)
+		private void SignIn(int userId, string userName, bool isPersisted = false)
 		{
 			this.SetAuthCookie(userId, userName, isPersisted);
 		}

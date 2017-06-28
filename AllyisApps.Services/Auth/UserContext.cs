@@ -34,22 +34,21 @@ namespace AllyisApps.Services
 		/// <param name="userId">The user ID.</param>
         /// <param name="firstName">The user's first name</param>
         /// <param name="lastName">The user's last name</param>
-		/// <param name="username">The username.</param>
 		/// <param name="email">The email.</param>
 		/// <param name="chosenOrganizationId">The chosen Organization ID.</param>
 		/// <param name="chosenSubscriptionId">The chosen subscription ID.</param>
 		/// <param name="chosenLanguageID">The chosen language ID.</param>
-		public UserContext(int userId, string username, string email, string firstName = "First", string lastName = "Last", int chosenOrganizationId = 0, int chosenSubscriptionId = 0, int chosenLanguageID = 0) : this()
+		public UserContext(int userId, string email, string firstName, string lastName, int chosenOrganizationId = 0, int chosenSubscriptionId = 0, int chosenLanguageID = 0) : this()
 		{
 			if (userId <= 0) throw new ArgumentException("userId");
-			if (string.IsNullOrWhiteSpace(username)) throw new ArgumentException("username");
+			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentException("firstName");
+			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentException("lastName");
 			if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("email");
 
 			this.Email = email;
 			this.UserId = userId;
             this.FirstName = firstName;
             this.LastName = lastName;
-			this.UserName = username;
 			this.ChosenOrganizationId = chosenOrganizationId;
 			this.ChosenSubscriptionId = chosenSubscriptionId;
 			this.ChosenLanguageId = chosenLanguageID;
@@ -59,12 +58,6 @@ namespace AllyisApps.Services
 		/// Gets or sets the database id of the user.
 		/// </summary>
 		public int UserId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the username.
-		/// </summary>
-		[JsonIgnore]
-		public string UserName { get; set; }
 
         /// <summary>
         /// First name of the user

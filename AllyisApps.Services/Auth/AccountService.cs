@@ -271,9 +271,9 @@ namespace AllyisApps.Services
 			{
 				// email exists, hash the given password and compare with hash in db
 				Tuple<bool, string> passwordValidation = Crypto.ValidateAndUpdate(password, user.PasswordHash);
-				if (user != null && passwordValidation.Item1/*string.Compare(Crypto.ComputeSHA512Hash(password), user.PasswordHash, true) == 0*/)
+				if (passwordValidation.Item1)
 				{
-					result = new UserContext(user.UserId, user.UserName, email);
+					result = new UserContext(user.UserId, email, user.FirstName, user.LastName);
 
 					// Store updated password hash if needed
 					if (passwordValidation.Item2 != null)
@@ -301,7 +301,7 @@ namespace AllyisApps.Services
 			{
 				// user exists in db
 				UserContextDBEntity firstRow = contextInfo[0];
-				result = new UserContext(userId, firstRow.UserName, firstRow.Email, firstRow.FirstName, firstRow.LastName, firstRow.ActiveOrganizationId == null ? 0 : firstRow.ActiveOrganizationId.Value, firstRow.LastSubscriptionId == null ? 0 : firstRow.LastSubscriptionId.Value, firstRow.LanguagePreference.Value);
+				result = new UserContext(userId, firstRow.Email, firstRow.FirstName, firstRow.LastName, firstRow.ActiveOrganizationId == null ? 0 : firstRow.ActiveOrganizationId.Value, firstRow.LastSubscriptionId == null ? 0 : firstRow.LastSubscriptionId.Value, firstRow.LanguagePreference.Value);
 				// set result to self
 				this.SetUserContext(result);
 
@@ -333,10 +333,11 @@ namespace AllyisApps.Services
 							UserSubscription subInfo = new UserSubscription() {
 								SubscriptionId = item.SubscriptionId.Value,
 								OrganizationId = orgInfo.OrganizationId,
+								OrganizationName = orgInfo.OrganizationName,
 								ProductId = (ProductIdEnum)item.ProductId.Value,
 								ProductName = item.ProductName,
-								RoleName = item.RoleName,
-								ProductRole = item.ProductRoleId.Value,
+								ProductRoleName = item.ProductRoleName,
+								ProductRoleId = item.ProductRoleId.Value,
 								SkuId = item.SkuId.Value
 							};
 
@@ -471,7 +472,6 @@ namespace AllyisApps.Services
 				State = model.State,
 				TwoFactorEnabled = model.TwoFactorEnabled,
 				UserId = model.UserId,
-				UserName = model.UserName,
 				PostalCode = model.PostalCode
 			});
 		}
@@ -809,7 +809,6 @@ namespace AllyisApps.Services
 				State = user.State,
 				TwoFactorEnabled = user.TwoFactorEnabled,
 				UserId = user.UserId,
-				UserName = user.UserName,
 				PostalCode = user.PostalCode
 			};
 		}
@@ -849,7 +848,6 @@ namespace AllyisApps.Services
 				State = user.State,
 				TwoFactorEnabled = user.TwoFactorEnabled,
 				UserId = user.UserId,
-				UserName = user.UserName,
 				PostalCode = user.PostalCode,
 				LanguagePreference = 1          // TODO: Put this into UserInfo and do proper lookup
 			};

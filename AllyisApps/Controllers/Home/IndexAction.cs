@@ -18,7 +18,7 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		public ActionResult Index()
 		{
-			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
+			return this.RouteUserHome();
 		}
 	}
 }

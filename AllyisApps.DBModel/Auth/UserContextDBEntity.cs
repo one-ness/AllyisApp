@@ -78,7 +78,7 @@
 		/// <summary>
 		/// Gets or sets the product role name for the subscription.
 		/// </summary>
-		public string RoleName { get; set; }
+		public string ProductRoleName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the sku id for the subscription.

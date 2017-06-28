@@ -79,11 +79,6 @@ namespace AllyisApps.Services
 		public int LastSubscriptionId { get; set; }
 
 		/// <summary>
-		/// Gets or sets Username.
-		/// </summary>
-		public string UserName { get; set; }
-
-		/// <summary>
 		/// Gets or sets a value indicating whether the email address has been confirmed.
 		/// </summary>
 		public bool EmailConfirmed { get; set; }

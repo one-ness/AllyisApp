@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			UserSubscription subInfo = null;
 			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
-			bool manager = subInfo.ProductRole == (int)TimeTrackerRole.Manager;
+			bool manager = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
 			ViewBag.canManage = manager;
 			TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(
 				subInfo.OrganizationId,

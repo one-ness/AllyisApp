@@ -7,7 +7,6 @@ SELECT
 	[BillingHistory].[CreatedUTC] AS [Date],
 	[BillingHistory].[Description],
 	[BillingHistory].[UserId],
-	[User].[UserName],
 	[BillingHistory].[SkuId],
 	[Sku].[Name] AS [SkuName],
 	[Sku].[ProductId],

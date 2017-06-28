@@ -9,7 +9,6 @@
     [TwoFactorEnabled]      BIT              DEFAULT ((0)) NOT NULL,
     [AccessFailedCount]     INT              DEFAULT ((0)) NOT NULL,
     [LockoutEnabled]        BIT              DEFAULT ((0)) NOT NULL,
-    [UserName]              NVARCHAR (256)   NOT NULL,
     [CreatedUtc]            DATETIME2 (0)    CONSTRAINT [DF__User__CreatedUTC__5070F446] DEFAULT (getutcdate()) NOT NULL,
     [ModifiedUtc]           DATETIME2 (0)    CONSTRAINT [DF__User__ModifiedUT__5165187F] DEFAULT (getutcdate()) NOT NULL,
     [DateOfBirth]           DATETIME2 (0)    NULL,

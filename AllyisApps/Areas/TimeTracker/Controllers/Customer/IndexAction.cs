@@ -71,7 +71,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			var infos = AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
             var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
-			bool canEditProjects = subInfo.ProductRole == (int)TimeTrackerRole.Manager;
+			bool canEditProjects = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
 			List<CompleteProjectInfo> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> customers = infos.Item2;
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();

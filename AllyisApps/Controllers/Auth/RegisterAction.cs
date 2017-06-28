@@ -60,7 +60,7 @@ namespace AllyisApps.Controllers
 				if (userIDandInviteCount != null)
 				{
 					// sign in (and set cookie)
-					this.SignIn(userIDandInviteCount.Item1, model.FirstName, model.Email);
+					this.SignIn(userIDandInviteCount.Item1, model.Email);
 
 					if (userIDandInviteCount.Item2 > 0)
 					{

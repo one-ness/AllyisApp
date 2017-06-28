@@ -730,7 +730,7 @@ namespace AllyisApps.Services
 							{
 								user.DateOfBirth = DateTime.Parse(dateOfBirth);
 							}
-							if (hasUserUsername) updated = this.readColumn(row, ColumnHeaders.UserName, val => user.UserName = val) || updated;
+
 							if (hasUserPhoneExtension) updated = this.readColumn(row, ColumnHeaders.UserPhoneExtension, val => user.PhoneExtension = val) || updated;
 							if (hasUserPhoneNumber) updated = this.readColumn(row, ColumnHeaders.UserPhoneNumber, val => user.PhoneNumber = val) || updated;
 							if (hasUserPostalCode) updated = this.readColumn(row, ColumnHeaders.UserPostalCode, val => user.PostalCode = val) || updated;

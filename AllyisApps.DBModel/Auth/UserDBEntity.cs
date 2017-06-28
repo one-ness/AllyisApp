@@ -72,11 +72,6 @@ namespace AllyisApps.DBModel.Auth
 		public bool LockoutEnabled { get; set; }
 
 		/// <summary>
-		/// Gets or sets UserName.
-		/// </summary>
-		public string UserName { get; set; }
-
-		/// <summary>
 		/// Gets or sets DateOfBirth.
 		/// </summary>
 		[DisplayName("Date Of Birth")]

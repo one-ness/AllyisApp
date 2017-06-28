@@ -118,12 +118,19 @@ namespace AllyisApps.Lib
 
 		private static bool ByteArrayEquals(byte[] a, byte[] b)
 		{
-			var diff = (uint)a.Length ^ (uint)b.Length;
-			for (int i = 0; i < a.Length && i < b.Length; i++)
+			if (a == b) return true;
+			if (a == null || b == null || a.Length != b.Length) return false;
+			bool result = true;
+			for(int i = 0; i < a.Length; i++)
 			{
-				diff |= (uint)(a[i] ^ b[i]);
+				if (a[i] != b[i])
+				{
+					result = false;
+					break;
+				}
 			}
-			return diff == 0;
+
+			return result;
 		}
 
 		/// <summary>

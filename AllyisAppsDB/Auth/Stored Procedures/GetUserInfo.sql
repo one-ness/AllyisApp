@@ -7,7 +7,6 @@ BEGIN
 	SELECT [User].[UserId],
 		   [User].[FirstName],
 		   [User].[LastName],
-		   [User].[UserName],
 		   [User].[DateOfBirth],
 		   [User].[Address],
 		   [User].[City],

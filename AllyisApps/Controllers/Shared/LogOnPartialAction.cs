@@ -30,7 +30,6 @@ namespace AllyisApps.Controllers
 			{
 				model = new LogOnPartialViewModel
 				{
-					UserName = this.AppService.UserContext.UserName,
                     FirstName = this.AppService.UserContext.FirstName,
                     LastName = this.AppService.UserContext.LastName
 				};

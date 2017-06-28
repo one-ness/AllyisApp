@@ -259,7 +259,7 @@ namespace AllyisApps.Services
 
 			if (subInfo != null && subInfo.ProductId == ProductIdEnum.TimeTracker)
 			{
-				TimeTrackerRole ttRole = (TimeTrackerRole)subInfo.ProductRole;
+				TimeTrackerRole ttRole = (TimeTrackerRole)subInfo.ProductRoleId;
 				switch (action)
 				{
 					case TimeTrackerAction.CreateCustomer:

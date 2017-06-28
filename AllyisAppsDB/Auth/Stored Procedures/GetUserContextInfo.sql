@@ -7,7 +7,6 @@ BEGIN
 	SELECT [U].[UserId],
 		   [U].[FirstName],
 		   [U].[LastName],
-		   [U].[UserName],
 		   [U].[Email],
 		   [U].[LastSubscriptionId],
 		   [U].[ActiveOrganizationId],

@@ -6,7 +6,6 @@ BEGIN
 	SELECT [UserId]
 		,[FirstName]
 		,[LastName]
-		,[UserName]
 		,[DateOfBirth]
 		,[Address]
 		,[City]

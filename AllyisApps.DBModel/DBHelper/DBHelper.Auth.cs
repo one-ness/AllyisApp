@@ -46,7 +46,6 @@ namespace AllyisApps.DBModel
 			parameters.Add("@PostalCode", user.PostalCode);
 			parameters.Add("@PhoneNumber", user.PhoneNumber);
 			parameters.Add("@DateOfBirth", user.DateOfBirth);
-			parameters.Add("@UserName", user.UserName);
 			parameters.Add("@EmailConfirmationCode", emailConfirmationCode);
 			parameters.Add("@PasswordHash", user.PasswordHash);
 			parameters.Add("@TwoFactorEnabled", user.TwoFactorEnabled);

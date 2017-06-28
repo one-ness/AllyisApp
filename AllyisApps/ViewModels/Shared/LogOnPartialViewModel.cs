@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Text;
 using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.Shared
@@ -14,9 +15,17 @@ namespace AllyisApps.ViewModels.Shared
 	public class LogOnPartialViewModel : BaseViewModel
 	{
 		/// <summary>
-		/// Gets or sets the Name of current user.
+		/// Gets the Name of current user.
 		/// </summary>
-		public string UserName { get; set; }
+		public string UserName
+		{
+			get
+			{
+				StringBuilder sb = new StringBuilder();
+				sb.AppendFormat("{0} {1}", this.FirstName, this.LastName);
+				return sb.ToString();
+			}
+		}
 
         /// <summary>
         /// Gets or sets the First Name of the user
@@ -29,8 +38,13 @@ namespace AllyisApps.ViewModels.Shared
         public string LastName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the name of the organization or org+product name in various pages
+		/// Gets or sets the name of the organziation the user is working in currently
 		/// </summary>
-		public string OrgProductName { get; set; }
+		public string CurrentOrganizationName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the name of the subscription the user is working in currently
+		/// </summary>
+		public string CurrentSubscriptionName { get; set; }
 	}
 }

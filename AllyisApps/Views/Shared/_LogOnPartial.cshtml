@@ -1,14 +1,13 @@
 ﻿@model AllyisApps.ViewModels.Shared.LogOnPartialViewModel
 
-@if (!string.IsNullOrEmpty(Model.UserName))
+@if (User.Identity.IsAuthenticated)
 {
 	<li>
-		<span class="headerOrgName">@Model.OrgProductName</span>
+		<span class="headerOrgName">@Model.CurrentOrganizationName</span>
 	</li>
-
 	<li>
 		@{
-			@Html.ActionLink(Model.FirstName + " " + Model.LastName, ActionConstants.Index, ControllerConstants.Account)
+			@Html.ActionLink(Model.UserName, ActionConstants.Index, ControllerConstants.Account)
 		}
 	</li>
 	<li>

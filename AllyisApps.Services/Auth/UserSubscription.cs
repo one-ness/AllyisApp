@@ -21,34 +21,33 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="UserSubscription"/> class.
-		/// </summary>
-		/// <param name="subscriptionId">The subscription ID.</param>
-		/// <param name="skuId">The SKU ID.</param>
-		/// <param name="productName">The product name.</param>
-		/// <param name="role">The role.</param>
-		public UserSubscription(int subscriptionId, int skuId, string productName, int role)
-		{
-			if (subscriptionId <= 0) throw new ArgumentOutOfRangeException("subscriptionId");
-			if (skuId <= 0) throw new ArgumentOutOfRangeException("skuId");
-			if (string.IsNullOrWhiteSpace(productName)) throw new ArgumentNullException("productName");
-			if (role <= 0) throw new ArgumentOutOfRangeException("role");
-
-			this.ProductName = productName;
-			this.SkuId = skuId;
-			this.SubscriptionId = subscriptionId;
-			this.ProductRole = role;
-		}
-
-		/// <summary>
 		/// Gets or sets the Subscription id.
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
 		/// <summary>
+		/// Gets the name of the subscription
+		/// </summary>
+		public string SubscriptionName
+		{
+			get
+			{
+				// TODO: for now, return the product name
+				// when we allow an organization to subscribe to the same product multiple times
+				// then we need the user to type in a subscription name
+				return this.ProductName;
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the organization this subscription belongs to.
 		/// </summary>
 		public int OrganizationId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the name of the organization specified by the id
+		/// </summary>
+		public string OrganizationName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Sku of this subscription.
@@ -66,13 +65,13 @@ namespace AllyisApps.Services
 		public string ProductName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Product Role name.
-		/// </summary>
-		public string RoleName { get; set; }
-
-		/// <summary>
 		/// Gets or sets the Role of the user in this subscription.
 		/// </summary>
-		public int ProductRole { get; set; }
+		public int ProductRoleId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Product Role name.
+		/// </summary>
+		public string ProductRoleName { get; set; }
 	}
 }

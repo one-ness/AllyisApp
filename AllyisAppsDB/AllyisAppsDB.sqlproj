@@ -61,8 +61,6 @@
     <Folder Include="dbo\Tables\" />
     <Folder Include="TimeTracker\" />
     <Folder Include="TimeTracker\Tables\" />
-    <Folder Include="Shared\" />
-    <Folder Include="Shared\Tables\" />
     <Folder Include="Lookup\" />
     <Folder Include="Lookup\Tables\" />
     <Folder Include="Crm\" />
@@ -88,9 +86,6 @@
     <Build Include="TimeTracker\Tables\PayClass.sql" />
     <Build Include="TimeTracker\Tables\Setting.sql" />
     <Build Include="TimeTracker\Tables\TimeEntry.sql" />
-    <Build Include="Shared\Tables\ProjectUser.sql" />
-    <Build Include="Shared\Tables\Customer.sql" />
-    <Build Include="Shared\Tables\Project.sql" />
     <Build Include="Lookup\Tables\Language.sql" />
     <Build Include="Lookup\Tables\Country.sql" />
     <Build Include="Lookup\Tables\State.sql" />
@@ -241,7 +236,6 @@
     <Build Include="Auth\Stored Procedures\GetUserOrgsAndInvitationInfo.sql" />
     <Build Include="Auth\User Defined Types\UserTable.sql" />
     <Build Include="Security\TimeTracker.sql" />
-    <Build Include="Security\Shared.sql" />
     <Build Include="Security\Lookup.sql" />
     <Build Include="Security\Crm.sql" />
     <Build Include="Security\Billing.sql" />
