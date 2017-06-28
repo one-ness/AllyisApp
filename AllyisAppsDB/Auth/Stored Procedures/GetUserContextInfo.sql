@@ -26,7 +26,7 @@ BEGIN
 			SELECT	[S].[SubscriptionId],
 					[PR].[ProductId],
 					[P].[Name] AS 'ProductName',
-					[PR].[Name] AS 'RoleName',
+					[PR].[Name] AS 'ProductRoleName',
 					[S].[SkuId],
 					[SU].[ProductRoleId],
 					[SU].[UserId],
