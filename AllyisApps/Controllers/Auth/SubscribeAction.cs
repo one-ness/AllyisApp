@@ -31,7 +31,7 @@ namespace AllyisApps.Controllers
 		public ActionResult Subscribe(int id, int productId)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, id);
-			var infos = AppService.GetProductSubscriptionInfo(productId);
+			var infos = AppService.GetProductSubscriptionInfo(id, productId);
 
 			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
 			if (!model.IsValid)
@@ -110,7 +110,7 @@ namespace AllyisApps.Controllers
 
 			bool addingNewBilling = token != null && model.Token == null;
 
-			if (AppService.Subscribe(model.NumberOfUsers, model.ProductId, model.ProductName, model.SelectedSku, model.PreviousSku, model.Billing.Amount, model.Token, addingNewBilling, billingServicesEmail, token))
+			if (AppService.Subscribe(model.NumberOfUsers, model.ProductId, model.ProductName, model.SelectedSku, model.PreviousSku, model.Billing.Amount, model.Token, addingNewBilling, billingServicesEmail, token, model.OrganizationId))
 			{
 				return this.RedirectToAction(ActionConstants.Manage, new { id = model.OrganizationId });
 			}

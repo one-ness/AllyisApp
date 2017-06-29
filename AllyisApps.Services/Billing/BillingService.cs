@@ -666,25 +666,26 @@ namespace AllyisApps.Services
 			return null;
 		}
 
-		/// <summary>
-		/// Subscribes the current organization to a product or updates the organization's subscription to the product,
-		/// and creates/updates/removes the billing subscription plan accordingly.
-		/// </summary>
-		/// <param name="numberOfUsers">Number of users.</param>
-		/// <param name="productId">Product id.</param>
-		/// <param name="productName">Product name.</param>
-		/// <param name="selectedSku">Selected sku id.</param>
-		/// <param name="previousSku">The previous sku id.</param>
-		/// <param name="billingAmount">Billing amount, as an int in cents.</param>
-		/// <param name="existingToken">The existing BillingServicesToken, if any.</param>
-		/// <param name="addingBillingCustomer">A value indicating whether a new billing customer is being added.</param>
-		/// <param name="newBillingEmail">The email for the new billing customer, if being added.</param>
-		/// <param name="newBillingToken">The new BillingServicesToken, if being added.</param>
-		/// <returns></returns>
-		[CLSCompliant(false)]
-		public bool Subscribe(int numberOfUsers, int productId, string productName, int selectedSku, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken)
+        /// <summary>
+        /// Subscribes the current organization to a product or updates the organization's subscription to the product,
+        /// and creates/updates/removes the billing subscription plan accordingly.
+        /// </summary>
+        /// <param name="numberOfUsers">Number of users.</param>
+        /// <param name="productId">Product id.</param>
+        /// <param name="productName">Product name.</param>
+        /// <param name="selectedSku">Selected sku id.</param>
+        /// <param name="previousSku">The previous sku id.</param>
+        /// <param name="billingAmount">Billing amount, as an int in cents.</param>
+        /// <param name="existingToken">The existing BillingServicesToken, if any.</param>
+        /// <param name="addingBillingCustomer">A value indicating whether a new billing customer is being added.</param>
+        /// <param name="newBillingEmail">The email for the new billing customer, if being added.</param>
+        /// <param name="newBillingToken">The new BillingServicesToken, if being added.</param>
+        /// <param name="orgId"></param>
+        /// <returns></returns>
+        [CLSCompliant(false)]
+		public bool Subscribe(int numberOfUsers, int productId, string productName, int selectedSku, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
 		{
-			if (numberOfUsers < this.GetUsersWithSubscriptionToProductInOrganization(UserContext.ChosenOrganizationId, productId).Count())
+			if (numberOfUsers < this.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Count())
 			{
 				return false;
 			}
@@ -745,11 +746,11 @@ namespace AllyisApps.Services
 				}
 			}
 
-			this.InitializeSettingsForProduct(productId);
+			this.InitializeSettingsForProduct(productId, orgId);
 
 			if (selectedSku != previousSku)
 			{
-				this.AddSubscriptionOfSkuToOrganization(UserContext.ChosenOrganizationId, selectedSku, productId, numberOfUsers);
+				this.AddSubscriptionOfSkuToOrganization(orgId, selectedSku, productId, numberOfUsers);
 			}
 			else
 			{
@@ -774,12 +775,13 @@ namespace AllyisApps.Services
 			return DBHelper.Unsubscribe(subscriptionId);
 		}
 
-		/// <summary>
-		/// Creates default settings for a product.
-		/// TODO: Is it possible to reduce hard code here?.
-		/// </summary>
-		/// <param name="productId">Product Id.</param>
-		public void InitializeSettingsForProduct(int productId)
+        /// <summary>
+        /// Creates default settings for a product.
+        /// TODO: Is it possible to reduce hard code here?.
+        /// </summary>
+        /// <param name="productId">Product Id.</param>
+        /// <param name="orgId"></param>
+        public void InitializeSettingsForProduct(int productId, int orgId)
 		{
 			if (productId <= 0)
 			{
@@ -788,7 +790,7 @@ namespace AllyisApps.Services
 
 			if (productId == AppService.GetProductIdByName("TimeTracker"))
 			{
-				DBHelper.InitializeTimeTrackerSettings(UserContext.ChosenOrganizationId);
+				DBHelper.InitializeTimeTrackerSettings(orgId);
 			}
 		}
 
@@ -849,22 +851,23 @@ namespace AllyisApps.Services
 			return handler.RetrieveCustomer(customerId);
 		}
 
-		/// <summary>
-		/// Returns a Product for the given product, a SubscriptionInfo for the current org's
-		/// subscription to that product (or null if none), a list of SkuInfos for all the skus for
-		/// that product, the Stripe billing token for the current org (or null if none), and the total
-		/// number of users in the org with roles in the subscription for the product.
-		/// </summary>
-		/// <param name="productId">Product Id.</param>
-		/// <returns></returns>
-		public Tuple<Product, SubscriptionInfo, List<SkuInfo>, string, int> GetProductSubscriptionInfo(int productId)
+        /// <summary>
+        /// Returns a Product for the given product, a SubscriptionInfo for the current org's
+        /// subscription to that product (or null if none), a list of SkuInfos for all the skus for
+        /// that product, the Stripe billing token for the current org (or null if none), and the total
+        /// number of users in the org with roles in the subscription for the product.
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <param name="productId">Product Id.</param>
+        /// <returns></returns>
+        public Tuple<Product, SubscriptionInfo, List<SkuInfo>, string, int> GetProductSubscriptionInfo(int orgId, int productId)
 		{
 			if (productId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
 			}
 
-			var spResults = DBHelper.GetProductSubscriptionInfo(UserContext.ChosenOrganizationId, productId);
+			var spResults = DBHelper.GetProductSubscriptionInfo(orgId, productId);
 			return Tuple.Create(
 				InitializeProduct(spResults.Item1),
 				InitializeSubscriptionInfo(spResults.Item2),

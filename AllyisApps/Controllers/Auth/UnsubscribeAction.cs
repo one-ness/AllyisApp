@@ -27,7 +27,7 @@ namespace AllyisApps.Controllers
 		public ActionResult Unsubscribe(int id, int productId)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.UnsubscribeFromProduct, productId);
-			var infos = AppService.GetProductSubscriptionInfo(productId);
+			var infos = AppService.GetProductSubscriptionInfo(id, productId);
 			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
 			return this.View(model);
 		}
