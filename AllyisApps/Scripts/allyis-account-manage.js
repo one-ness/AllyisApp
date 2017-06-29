@@ -276,7 +276,7 @@ function stopEditEmployeeType(userId, newTypeId, isMember) {
 function removeUser(orgId, userId, fullName) {
 	var result = confirm(removeFromOrg + " " + fullName + " " + removeFromOrgEnd);
     if (result == true) {
-        var url = removeMemberAction + userId + "&orgId=" + orgId;
+        var url = removeMemberAction + userId + "&id=" + orgId;
 
 		var form = document.createElement('form');
 		form.setAttribute('method', 'post');
