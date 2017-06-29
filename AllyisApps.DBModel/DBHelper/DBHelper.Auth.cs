@@ -251,18 +251,11 @@ namespace AllyisApps.DBModel
 		/// <param name = "userId">Target user's ID.</param>
 		/// <param name = "passwordHash">The new password hash.</param>
 		/// <returns>The password hash retreived independently after the update, for verification.</returns>
-		public string UpdateUserPassword(int userId, string passwordHash)
+		public void UpdateUserPassword(int userId, string passwordHash)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userID", userId);
-			parameters.Add("@PasswordHash", passwordHash);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<string>(
-					"[Auth].[UpdateUserPassword]",
-					parameters,
-					commandType: CommandType.StoredProcedure).FirstOrDefault();
+				con.Execute("[Auth].[UpdateUserPassword] @a, @b", new { a = userId, b = passwordHash });
 			}
 		}
 
@@ -783,22 +776,19 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@InvitationId", invitationId);
 			parameters.Add("@CallingUserId", userId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = con.QueryMultiple(
 					"[Auth].[AcceptInvitation]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
-				if (results == null)
-				{
-					return null;
-				}
-				else
-				{
-					return Tuple.Create(
-						results.Read<string>().FirstOrDefault(),
-						results.Read<string>().FirstOrDefault());
-				}
+                if (results == null) return null;
+                else
+                {
+                    return Tuple.Create(
+                        results.Read<string>().FirstOrDefault(),
+                        results.Read<string>().FirstOrDefault());
+                }
 			}
 		}
 

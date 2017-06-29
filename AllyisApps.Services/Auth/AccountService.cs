@@ -110,24 +110,16 @@ namespace AllyisApps.Services
 		/// Accepts an invitation, adding the user to the invitation's organization, subscriptions, and projects, then deletes the invitations.
 		/// </summary>
 		/// <param name="invitationId">The invitationId.</param>
-		/// <returns>The resulting action message.</returns>
+		/// <returns>The resulting action message if succeed, null if fail.</returns>
 		public string AcceptUserInvitation(int invitationId)
 		{
 			#region Validation
-
-			if (invitationId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("invitationId", "The invitation id cannot be zero or negative.");
-			}
-
+			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId", "The invitation id cannot be zero or negative.");
 			#endregion Validation
 
 			var results = DBHelper.AcceptInvitation(invitationId, UserContext.UserId);
 
-			if (results == null)
-			{
-				return null;
-			}
+            if (results == null) return null;
 
 			return string.Format("You have successfully joined {0} in the role of {1}.", results.Item1, results.Item2);
 		}
@@ -562,40 +554,16 @@ namespace AllyisApps.Services
 		/// <returns>The reset password task.</returns>
 		public async Task<bool> ResetPassword(int userId, string code, string password)
 		{
-			#region Validation
-
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
-			}
-
-			if (string.IsNullOrEmpty(code))
-			{
-				throw new ArgumentNullException("code", "Code must have a value.");
-			}
-			else
-			{
-				Guid guidOutput;
-				if (!Guid.TryParse(code, out guidOutput))
-				{
-					throw new ArgumentException("Code must be a valid Guid.");
-				}
-			}
-
-			if (string.IsNullOrEmpty(password))
-			{
-				throw new ArgumentNullException("password", "Password must have a value.");
-			}
-
-			#endregion Validation
+			if (userId <= 0) throw new ArgumentNullException("userId");
+			if (string.IsNullOrWhiteSpace(code)) throw new ArgumentNullException("code");
+			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException("password");
+			Guid guidOutput;
+			if (!Guid.TryParse(code, out guidOutput)) throw new ArgumentException("code");
 
 			return await Task<bool>.Run(() =>
 			{
-				// hash the password
-				string passwordHash = GetPasswordHash(password);
-
 				// update password for user and reset password code to null
-				return this.DBHelper.UpdateUserPasswordUsingCode(userId, passwordHash, code) == userId;
+				return this.DBHelper.UpdateUserPasswordUsingCode(userId, Crypto.GetPasswordHash(password), code) == userId;
 			});
 		}
 
@@ -607,31 +575,23 @@ namespace AllyisApps.Services
 		/// <returns>True for a successful change, false if anything fails.</returns>
 		public bool ChangePassword(string oldPassword, string newPassword)
 		{
-			#region Validation
+			if (string.IsNullOrWhiteSpace(oldPassword)) throw new ArgumentNullException("oldPassword");
+			if (string.IsNullOrWhiteSpace(newPassword)) throw new ArgumentNullException("newPassword");
 
-			if (string.IsNullOrEmpty(oldPassword))
+			bool result = false;
+			string passwordHash = this.DBHelper.GetPasswordHashById(UserContext.UserId);
+			if (!string.IsNullOrWhiteSpace(passwordHash))
 			{
-				throw new ArgumentNullException("oldPassword", "Old password must have a value.");
-			}
-			else if (string.IsNullOrEmpty(newPassword))
-			{
-				throw new ArgumentNullException("newPassword", "New password must have a value.");
-			}
-
-			#endregion Validation
-
-			string passwordHash = DBHelper.GetPasswordHashById(UserContext.UserId);
-			if (passwordHash != null && Crypto.ValidatePassword(oldPassword, passwordHash))
-			{
-				string updatedHash = DBHelper.UpdateUserPassword(UserContext.UserId, this.GetPasswordHash(newPassword));
-
-				if (updatedHash != null)
+				Tuple<bool, string> validation = Crypto.ValidateAndUpdate(oldPassword, passwordHash);
+				if (validation.Item1)
 				{
-					return Crypto.ValidatePassword(newPassword, updatedHash);
+					// old password is correct.
+					result = true;
+					this.DBHelper.UpdateUserPassword(UserContext.UserId, Crypto.GetPasswordHash(newPassword));
 				}
 			}
 
-			return false;
+			return result;
 		}
 
 		/// <summary>
@@ -641,12 +601,8 @@ namespace AllyisApps.Services
 		/// <returns>Password hash.</returns>
 		public string GetPasswordHash(string password)
 		{
-			if (string.IsNullOrEmpty(password))
-			{
-				throw new ArgumentNullException("password", "Password must have a value.");
-			}
-
-			return Crypto.GetPasswordHash(password)/*Crypto.ComputeSHA512Hash(password)*/;
+			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException("password");
+			return Crypto.GetPasswordHash(password);
 		}
 
 		/// <summary>

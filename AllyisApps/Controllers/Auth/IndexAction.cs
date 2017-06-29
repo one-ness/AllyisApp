@@ -81,7 +81,7 @@ namespace AllyisApps.Controllers
 				Notifications.Add(new Core.Alert.BootstrapAlert(result, Core.Alert.Variety.Success));
 			}
 
-			return RedirectToAction(ActionConstants.Index);
+            return this.RouteUserHome();
 		}
 
 		/// <summary>

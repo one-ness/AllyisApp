@@ -43,10 +43,9 @@ namespace AllyisApps.Lib
 			provider.GetBytes(salt);
 
 			byte[] hash = GetPbkdf2Bytes(password, salt, Iterations, HashBytes);
-			return string.Format("{0}:{1}:{2}",
-				Iterations,
-				Convert.ToBase64String(salt),
-				Convert.ToBase64String(hash));
+			StringBuilder sb = new StringBuilder();
+			sb.AppendFormat("{0}:{1}:{2}", Iterations, Convert.ToBase64String(salt), Convert.ToBase64String(hash));
+			return sb.ToString();
 		}
 
 		/// <summary>
@@ -64,21 +63,6 @@ namespace AllyisApps.Lib
 		}
 
 		/// <summary>
-		/// Validates a password against the stored password hash.
-		/// </summary>
-		/// <param name="password">Entered password.</param>
-		/// <param name="correctHash">Correct hash of the password.</param>
-		public static bool ValidatePassword(string password, string correctHash)
-		{
-			string[] components = correctHash.Split(':');
-			int hashIterations = int.Parse(components[0]);
-			byte[] hashSalt = Convert.FromBase64String(components[1]);
-			byte[] hashHash = Convert.FromBase64String(components[2]);
-			byte[] testHash = GetPbkdf2Bytes(password, hashSalt, hashIterations, hashHash.Length);
-			return ByteArrayEquals(hashHash, testHash);
-		}
-
-		/// <summary>
 		/// Validates a password against the stored password hash, and provides an updated password hash
 		/// if the stored password hashing is out of date.
 		/// </summary>
@@ -88,6 +72,9 @@ namespace AllyisApps.Lib
 		/// If Item1 indicates a match, then Item2 may contain the updated hash of the password, which the caller can update in database</returns>
 		public static Tuple<bool, string> ValidateAndUpdate(string password, string correctHash)
 		{
+			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException("password");
+			if (string.IsNullOrWhiteSpace(correctHash)) throw new ArgumentNullException("correctHash");
+
 			bool updateRequired = false;
 			bool result = false;
 			string newHash = null;

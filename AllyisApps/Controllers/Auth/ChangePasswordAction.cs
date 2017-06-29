@@ -21,7 +21,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The result of this action.</returns>
 		public ActionResult ChangePassword()
 		{
-			return this.View();
+			return this.View(new ChangePasswordViewModel());
 		}
 
 		/// <summary>
@@ -33,18 +33,28 @@ namespace AllyisApps.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult ChangePassword(ChangePasswordViewModel model)
 		{
-			if (!ModelState.IsValid)
+			ActionResult result = this.View(model);
+			if (ModelState.IsValid)
 			{
-				return this.View(model);
+				// model state is valid
+				if (string.Compare(model.NewPassword, model.ConfirmPassword, true) == 0)
+				{
+					// passwords match
+					if (AppService.ChangePassword(model.OldPassword, model.NewPassword))
+					{
+						// successfully changed
+						Notifications.Add(new BootstrapAlert(Resources.Strings.ChangePasswordSuccessMessage, Variety.Success));
+						result = this.RouteUserHome();
+					}
+					else
+					{
+						// old password incorrect
+						Notifications.Add(new BootstrapAlert(Resources.Strings.IncorrectPassword, Variety.Danger));
+					}
+				}
 			}
-			else if (model.NewPassword.CompareTo(model.ConfirmPassword) == 0 && AppService.ChangePassword(model.OldPassword, model.NewPassword))
-			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.ChangePasswordSuccessMessage, Variety.Success));
 
-				return this.RedirectToAction(ActionConstants.Index);
-			}
-			Notifications.Add(new BootstrapAlert(Resources.Strings.IncorrectPassword, Variety.Danger));
-			return this.View(model);
+			return result;
 		}
 	}
 }

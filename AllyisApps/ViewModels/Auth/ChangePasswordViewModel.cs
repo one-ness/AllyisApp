@@ -24,8 +24,8 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the user's new password.
 		/// </summary>
-		[Required]
-		[StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 12)]
+		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "CreatePasswordValidation")]
+		[StringLength(100, ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PasswordLengthValidation", MinimumLength = 12)]  // If you change this minimum length value, please update the string resource.
 		[DataType(DataType.Password)]
 		[Display(Name = "New Password")]
 		public string NewPassword { get; set; }
@@ -33,10 +33,10 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the user's confirmed password.
 		/// </summary>
-		[Required]
+		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "ConfirmPasswordValidation")]
 		[DataType(DataType.Password)]
 		[Display(Name = "Confirm New Password")]
-		[Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+		[Compare("NewPassword", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PasswordCompareValidation")]
 		public string ConfirmPassword { get; set; }
 	}
 }
