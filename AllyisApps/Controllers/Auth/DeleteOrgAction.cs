@@ -19,18 +19,18 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// POST: Deletes current organization.
 		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
+		/// <param name="id">Organization Id.</param>
 		/// <returns>Redirection to account index, or an error page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult DeleteOrg(int orgId)
+		public ActionResult DeleteOrg(int id)
 		{
 			// Method includes permissions check
-			if (AppService.DeleteOrganization(orgId))
+			if (AppService.DeleteOrganization(id))
 			{
 				string notification = string.Format("{0} {1}", Resources.Strings.YourOrg, Resources.Strings.OrganizationDeleteNotification);
 				Notifications.Add(new BootstrapAlert(notification, Variety.Success));
-				this.RouteUserHome();
+				return this.RouteUserHome();
 			}
 
 			// Permissions failed
