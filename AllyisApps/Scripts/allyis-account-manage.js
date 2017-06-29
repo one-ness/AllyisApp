@@ -299,7 +299,7 @@ function removeUser(orgId, userId, fullName) {
 function deleteInvitation(orgId, invId) {
 	var result = confirm(removeInvitation);
 	if (result == true) {
-		var url = removeInvitationAction + invId + "&orgId=" + orgId;
+		var url = removeInvitationAction + invId + "&Id=" + orgId;
 
 		var token = $('[name="__RequestVerificationToken"]').val();
 
