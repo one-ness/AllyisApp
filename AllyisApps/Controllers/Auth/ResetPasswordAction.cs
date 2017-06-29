@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Core.Alert;
 using AllyisApps.ViewModels.Auth;
 using System;
 using System.Threading.Tasks;
@@ -46,6 +47,7 @@ namespace AllyisApps.Controllers
 				}
 			}
 
+			Notifications.Add(new BootstrapAlert(Resources.Strings.IncorrectPassword, Variety.Danger));
 			return this.View(model);
 		}
 
