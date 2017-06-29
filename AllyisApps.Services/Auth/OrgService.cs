@@ -227,14 +227,7 @@ namespace AllyisApps.Services
 		public bool DeleteOrganization(int orgId)
 		{
 			this.CheckOrgAction(OrgAction.DeleteOrganization, orgId);
-            try
-            {
-                DBHelper.DeleteOrganization(orgId);
-            }
-            catch (Exception excep)
-            {
-                throw excep;
-            }
+            DBHelper.DeleteOrganization(orgId);
 			return true;
 		}
 
