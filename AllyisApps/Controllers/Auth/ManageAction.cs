@@ -69,12 +69,13 @@ namespace AllyisApps.Controllers
 				SubscriptionCount = infos.Item3.Count,
 				Subscriptions = infos.Item6.Select(p =>
 				{
-					return new SubscriptionDisplayViewModel
-					{
-						Info = infos.Item3.Where(s => s.ProductId == p.ProductId).SingleOrDefault(),
-						ProductId = p.ProductId,
-						ProductName = p.ProductName,
-						ProductDescription = p.ProductDescription
+                    return new SubscriptionDisplayViewModel
+                    {
+                        Info = infos.Item3.Where(s => s.ProductId == p.ProductId).SingleOrDefault(),
+                        ProductId = p.ProductId,
+                        ProductName = p.ProductName,
+                        ProductDescription = p.ProductDescription,
+                        OrganizationId = orgId
 					};
 				})
 			};

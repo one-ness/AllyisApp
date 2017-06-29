@@ -337,6 +337,10 @@ namespace AllyisApps.Services
 						result = true;
 						break;
 
+                    case TimeTrackerAction.ViewCustomer:
+                        result = true;
+                        break;
+
 					case TimeTrackerAction.ViewOthers:
 						switch (ttRole)
 						{

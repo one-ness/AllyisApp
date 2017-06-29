@@ -55,11 +55,16 @@ namespace AllyisApps.Services
 
         /// <summary>
         /// Converts an int representing days since the DateTime min value (Jan 1st, 0001) into a DateTime date.
+        /// If days == -1, this sets the DOB to the mininum date allowed in the database: 1/1/1753
         /// </summary>
         /// <param name="days">An int of the date as days since Jan 1st, 0001. Use -1 for null dates.</param>
         /// <returns>The DateTime date.</returns>
         public DateTime GetDateTimeFromDays(int days)
 		{
+            if (days <= -1)
+            {
+                return new DateTime(1753, 1, 1);
+            }
 			return GetDateFromDays(days);
 		}
 
