@@ -8,7 +8,7 @@
     System.DayOfWeek startOfWeek = (System.DayOfWeek)ViewBag.startOfWeek;
     Func<int, int> weekProjector =
         d => CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(
-            AppService.GetDateFromDays(d).Value,
+            AppService.GetDateFromDays(d).Date,
             CalendarWeekRule.FirstFourDayWeek,
             startOfWeek);
     var query2 = from entry in Model.Entries orderby entry.Date group entry by entry.Date;
@@ -43,7 +43,7 @@
             string selectorClass = allVotedWereApproved ? "approved" :
 					            allVotedWereRejected ? "rejected" : "";
 
-            var currentDate = AppService.GetDateFromDays(dateGroup.First().Date).Value;
+            var currentDate = AppService.GetDateFromDays(dateGroup.First().Date).Date;
             string dateStringNums = currentDate.ToShortDateString();
             string dateStringDayLong = currentDate.DayOfWeek.ToString();
             string dateStringDayShort = DateTimeFormatInfo.CurrentInfo.AbbreviatedDayNames[(int)currentDate.DayOfWeek].ToString();

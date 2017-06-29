@@ -61,7 +61,7 @@
                 {
                     <div class="col-xs-12">
                         <div class="form-group allyis-action-buttons pull-right">
-                            @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
+                            @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, new { id = 1 }, new { @class = "btn btn-default" })
                             <input type="submit" id="addMember" value="@Strings.Add" class="btn btn-primary" />
                         </div>
                     </div>}
@@ -114,7 +114,7 @@
                                         </div>*@
 
                                         <div class="form-group allyis-action-buttons pull-right">
-                                            @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, null, new { @class = "btn btn-default" })
+                                            @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, new { id = Model.OrganizationId }, new { @class = "btn btn-default" })
 
                                             @if (roomInSubscription)
                                             {
