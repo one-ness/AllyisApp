@@ -26,8 +26,8 @@ namespace AllyisApps
 			routes.Add(
 				"default",
 				new Route(
-					url: "{controller}/{action}/{id}",
-					defaults: new RouteValueDictionary(new { controller = "Home", action = "Index", id = UrlParameter.Optional }),
+					url: "{controller}/{action}/{id}/{productId}",
+					defaults: new RouteValueDictionary(new { controller = "Home", action = "Index", id = UrlParameter.Optional, productId = UrlParameter.Optional }),
 					constraints: null,
 					dataTokens: new RouteValueDictionary(
 						new
