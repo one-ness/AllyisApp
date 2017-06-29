@@ -380,10 +380,11 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="userIds">List of user Ids.</param>
 		/// <param name="newTimeTrackerRole">TimeTracker role to assign, or -1 to remove from subscription.</param>
+        /// <param name="orgId">The Organization Id</param>
 		/// <returns>A tuple containing the number of updated users and the number of added users. If the updated users is -1,
 		/// there is no TimeTracker subscription. If the number added is -1, there are too many subscription users already to
 		/// add the given list.</returns>
-		public Tuple<int, int> ChangeSubscriptionUserRoles(List<int> userIds, int newTimeTrackerRole)
+		public Tuple<int, int> ChangeSubscriptionUserRoles(List<int> userIds, int newTimeTrackerRole, int orgId)
 		{
 			#region Validation
 
@@ -398,7 +399,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.EditSubscriptionUsers(userIds, UserContext.ChosenOrganizationId, newTimeTrackerRole);
+			return DBHelper.EditSubscriptionUsers(userIds, orgId, newTimeTrackerRole);
 		}
 
 		/// <summary>
@@ -534,10 +535,8 @@ namespace AllyisApps.Services
 		/// Gets a list of <see cref="SubscriptionDisplayInfo"/>s for all subscriptions in the chosen organization.
 		/// </summary>
 		/// <returns>List of SubscriptionDisplayInfos.</returns>
-		public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplay(int organizationId = -1)
+		public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplay(int organizationId)
 		{
-			if (organizationId == -1) organizationId = UserContext.ChosenOrganizationId;
-
 			return DBHelper.Instance.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InitializeSubscriptionDisplayInfo(s)).ToList();
 		}
 

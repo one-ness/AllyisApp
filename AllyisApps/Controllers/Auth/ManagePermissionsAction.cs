@@ -22,27 +22,29 @@ namespace AllyisApps.Controllers
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
-		/// <summary>
-		/// GET Account/ManagePermissions.
-		/// </summary>
-		/// <returns>Action result.</returns>
-		[HttpGet]
+        /// <summary>
+        /// GET Account/ManagePermissions2.
+        /// </summary>
+        /// <param name="id">The Organization Id</param>
+        /// <returns>Action result.</returns>
+        [HttpGet]
 		public ActionResult ManagePermissions2(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-			PermissionsManagementViewModel model = this.ConstructPermissionsManagementViewModel();
+			PermissionsManagementViewModel model = this.ConstructPermissionsManagementViewModel(id);
 			return this.View("Permission", model);
 		}
 
-		/// <summary>
-		/// GET Account/ManagePermissions.
-		/// </summary>
-		/// <returns>Action result.</returns>
-		[HttpGet]
+        /// <summary>
+        /// GET Account/ManagePermissions.
+        /// </summary>
+        /// <param name="id">The Organization Id</param>
+        /// <returns>Action result.</returns>
+        [HttpGet]
 		public ActionResult ManagePermissions(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-			var infos = AppService.GetOrgAndSubRoles();
+			var infos = AppService.GetOrgAndSubRoles(id);
 			ManagePermissionsViewModel model = new ManagePermissionsViewModel
 			{
 				Users = new List<UserPermissionsViewModel>(),
@@ -75,10 +77,10 @@ namespace AllyisApps.Controllers
 						ProductRoleIds = new List<int>()
 					};
 
-					// Start out with default NotInProduct role
+					// Start out with default TT NotInProduct role if org is subscribed to TT.
 					foreach (SubscriptionDisplayInfo sub in model.Subscriptions)
 					{
-						modelUser.ProductRoleIds.Add((int)TimeTrackerRole.User);
+						modelUser.ProductRoleIds.Add((int)TimeTrackerRole.NotInProduct);
 					}
 					model.Users.Add(modelUser);
 				}
@@ -99,17 +101,18 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Uses services to populate a <see cref="PermissionsManagementViewModel"/> and returns it.
 		/// </summary>
+        /// <param name="id">The Organization Id</param>
 		/// <returns>The PermissionsManagementViewModel.</returns>
-		public PermissionsManagementViewModel ConstructPermissionsManagementViewModel()
+		public PermissionsManagementViewModel ConstructPermissionsManagementViewModel(int id)
 		{
 			PermissionsManagementViewModel result = new PermissionsManagementViewModel()
 			{
 				TimeTrackerId = (int)ProductIdEnum.TimeTracker
 			};
-			result.Subscriptions = AppService.GetSubscriptionsDisplay();
+			result.Subscriptions = AppService.GetSubscriptionsDisplay(id);
 
 			List<UserPermissionsManagement> permissions = new List<UserPermissionsManagement>();
-			IEnumerable<UserRolesInfo> users = AppService.GetUserRoles().OrderBy(u => u.UserId); // In case of multiple subscriptions, there can be multiple items per user, one for each sub role
+			IEnumerable<UserRolesInfo> users = AppService.GetUserRoles(id).OrderBy(u => u.UserId); // In case of multiple subscriptions, there can be multiple items per user, one for each sub role
 			string currentUser = string.Empty;
 			UserPermissionsManagement currentUserPerm = null;
 			foreach (UserRolesInfo user in users)
@@ -151,7 +154,7 @@ namespace AllyisApps.Controllers
 						permission.SubscriptionRoles.Add(new ProductRole
 						{
 							ProductId = subscription.ProductId,
-							ProductRoleId = (int)TimeTrackerRole.User
+							ProductRoleId = (int)TimeTrackerRole.NotInProduct
 						});
 					}
 				}
@@ -225,7 +228,7 @@ namespace AllyisApps.Controllers
 					}
 				}
 
-				int numberChanged = AppService.ChangeUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.OrgRoleTarget.Value);
+				int numberChanged = AppService.ChangeUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.OrgRoleTarget.Value, model.OrganizationId);
 				if (model.SelectedActions.OrgRoleTarget == -1)
 				{
 					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
@@ -244,7 +247,7 @@ namespace AllyisApps.Controllers
 					return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 				}
 
-				Tuple<int, int> updatedAndAdded = AppService.ChangeSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value);
+				Tuple<int, int> updatedAndAdded = AppService.ChangeSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value, model.OrganizationId);
 				if (updatedAndAdded.Item1 == -1)
 				{
 					Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDontHaveASubscriptionToTimeTracker, Variety.Danger));

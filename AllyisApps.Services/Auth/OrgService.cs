@@ -147,10 +147,11 @@ namespace AllyisApps.Services
 		/// and a list of SubscriptionRoles (with only SubscriptionId, ProductId, and ProductName populated) for
 		/// all subscriptions in the current organization.
 		/// </summary>
+        /// <param name="orgId">The Organization Id</param>
 		/// <returns></returns>
-		public Tuple<List<UserRolesInfo>, List<SubscriptionDisplayInfo>> GetOrgAndSubRoles()
+		public Tuple<List<UserRolesInfo>, List<SubscriptionDisplayInfo>> GetOrgAndSubRoles(int orgId)
 		{
-			var spResults = DBHelper.GetOrgAndSubRoles(UserContext.ChosenOrganizationId);
+			var spResults = DBHelper.GetOrgAndSubRoles(orgId);
 			return Tuple.Create(
 				spResults.Item1.Select(urdb => InitializeUserRolesInfo(urdb)).ToList(),
 				spResults.Item2.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList());
@@ -707,10 +708,11 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the user roles for an organization.
 		/// </summary>
+        /// <param name="orgId">The Organization Id</param>
 		/// <returns>List of UserRolesInfos.</returns>
-		public IEnumerable<UserRolesInfo> GetUserRoles()
+		public IEnumerable<UserRolesInfo> GetUserRoles(int orgId)
 		{
-			return DBHelper.GetRoles(UserContext.ChosenOrganizationId).Select(o => InitializeUserRolesInfo(o));
+			return DBHelper.GetRoles(orgId).Select(o => InitializeUserRolesInfo(o));
 		}
 
 		/// <summary>
@@ -718,8 +720,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="userIds">List of user Ids.</param>
 		/// <param name="newOrganizationRole">Organization role to assign, or -1 to remove from organization.</param>
+        /// <param name="orgId">The organization Id</param>
 		/// <returns>The number of affected users.</returns>
-		public int ChangeUserRoles(List<int> userIds, int newOrganizationRole)
+		public int ChangeUserRoles(List<int> userIds, int newOrganizationRole, int orgId)
 		{
 			#region Validation
 
@@ -734,7 +737,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.EditOrganizationUsers(userIds, UserContext.ChosenOrganizationId, newOrganizationRole);
+			return DBHelper.EditOrganizationUsers(userIds, orgId, newOrganizationRole);
 		}
 
 		/// <summary>

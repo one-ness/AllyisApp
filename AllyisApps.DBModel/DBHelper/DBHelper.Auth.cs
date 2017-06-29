@@ -944,9 +944,9 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@OrgId", orgid);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<UserRolesDBEntity>(
+				return con.Query<UserRolesDBEntity>(
 					"[Auth].[GetRolesAndPermissions]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -1084,9 +1084,9 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@OrganizationId", orgId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = con.QueryMultiple(
 					"[Auth].[GetOrgAndSubRoles]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
