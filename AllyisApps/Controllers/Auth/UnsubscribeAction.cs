@@ -17,17 +17,18 @@ namespace AllyisApps.Controllers
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
-		/// <summary>
-		/// Removes the selected subscription from the database.
-		/// </summary>
-		/// <param name="id">The id of the product being unsubscribed from.</param>
-		/// <returns>Removes selected subscription.</returns>
-		[HttpGet]
-		public ActionResult Unsubscribe(int id)
+        /// <summary>
+        /// Removes the selected subscription from the database.
+        /// </summary>
+        /// <param name="id"> Subscription Id</param>
+        /// <param name="productId">The id of the product being unsubscribed from.</param>
+        /// <returns>Removes selected subscription.</returns>
+        [HttpGet]
+		public ActionResult Unsubscribe(int id, int productId)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.UnsubscribeFromProduct, id);
-			var infos = AppService.GetProductSubscriptionInfo(id);
-			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4);
+			this.AppService.CheckOrgAction(AppService.OrgAction.UnsubscribeFromProduct, productId);
+			var infos = AppService.GetProductSubscriptionInfo(productId);
+			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
 			return this.View(model);
 		}
 
@@ -41,7 +42,7 @@ namespace AllyisApps.Controllers
 		public ActionResult Unsubscribe(ProductSubscriptionViewModel model)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.UnsubscribeFromProduct, model.OrganizationId);
-			string notificationString = AppService.UnsubscribeAndRemoveBillingSubscription(model.SelectedSku, model.SubscriptionId);
+			string notificationString = AppService.UnsubscribeAndRemoveBillingSubscription(model.SelectedSku, model.CurrentSubscription.SubscriptionId);
 			if (notificationString != null)
 			{
 				Notifications.Add(new BootstrapAlert(notificationString, Variety.Success));

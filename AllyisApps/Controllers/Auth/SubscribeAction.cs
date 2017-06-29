@@ -33,26 +33,27 @@ namespace AllyisApps.Controllers
 			this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, id);
 			var infos = AppService.GetProductSubscriptionInfo(productId);
 
-			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4);
+			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
 			if (!model.IsValid)
 			{
-				return this.View(ViewConstants.Details, this.AppService.UserContext.ChosenOrganizationId);
+				return this.View(ViewConstants.Details, id);
 			}
 
 			model.CurrentUsers = infos.Item5;
 			return this.View(ViewConstants.Subscribe, model);
 		}
 
-		/// <summary>
-		/// Uses services to populate a <see cref="ProductSubscriptionViewModel"/> and returns it.
-		/// </summary>
-		/// <param name="productInfo">Product for product.</param>
-		/// <param name="currentSubscription">SubscriptionInfo for this org's subscription to the product.</param>
-		/// <param name="skus">List of SkuInfos for this product's skus.</param>
-		/// <param name="stripeToken">This org's billing stripe token.</param>
-		/// <returns>The ProductSubscriptionViewModel.</returns>
-		[CLSCompliant(false)]
-		public ProductSubscriptionViewModel ConstructProductSubscriptionViewModel(Product productInfo, SubscriptionInfo currentSubscription, List<SkuInfo> skus, string stripeToken)
+        /// <summary>
+        /// Uses services to populate a <see cref="ProductSubscriptionViewModel"/> and returns it.
+        /// </summary>
+        /// <param name="productInfo">Product for product.</param>
+        /// <param name="currentSubscription">SubscriptionInfo for this org's subscription to the product.</param>
+        /// <param name="skus">List of SkuInfos for this product's skus.</param>
+        /// <param name="stripeToken">This org's billing stripe token.</param>
+        /// <param name="orgId"></param>
+        /// <returns>The ProductSubscriptionViewModel.</returns>
+        [CLSCompliant(false)]
+		public ProductSubscriptionViewModel ConstructProductSubscriptionViewModel(Product productInfo, SubscriptionInfo currentSubscription, List<SkuInfo> skus, string stripeToken, int orgId)
 		{
 			if (productInfo != null)
 			{
@@ -62,7 +63,7 @@ namespace AllyisApps.Controllers
 				return new ProductSubscriptionViewModel
 				{
 					IsValid = true,
-					OrganizationId = this.AppService.UserContext.ChosenOrganizationId,
+					OrganizationId = orgId,
 					ProductId = productInfo.ProductId,
 					ProductName = productInfo.ProductName,
 					ProductDescription = productInfo.ProductDescription,
