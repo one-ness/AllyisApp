@@ -110,24 +110,16 @@ namespace AllyisApps.Services
 		/// Accepts an invitation, adding the user to the invitation's organization, subscriptions, and projects, then deletes the invitations.
 		/// </summary>
 		/// <param name="invitationId">The invitationId.</param>
-		/// <returns>The resulting action message.</returns>
+		/// <returns>The resulting action message if succeed, null if fail.</returns>
 		public string AcceptUserInvitation(int invitationId)
 		{
 			#region Validation
-
-			if (invitationId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("invitationId", "The invitation id cannot be zero or negative.");
-			}
-
+			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId", "The invitation id cannot be zero or negative.");
 			#endregion Validation
 
 			var results = DBHelper.AcceptInvitation(invitationId, UserContext.UserId);
 
-			if (results == null)
-			{
-				return null;
-			}
+            if (results == null) return null;
 
 			return string.Format("You have successfully joined {0} in the role of {1}.", results.Item1, results.Item2);
 		}

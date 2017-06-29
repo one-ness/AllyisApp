@@ -60,8 +60,9 @@ namespace AllyisApps.Controllers
 				}
 			}
 
-			// login failed
-			return this.View(model);
+            // login failed
+            ViewBag.ReturnUrl = returnUrl;
+            return this.View(model);
 		}
 
 		/// <summary>

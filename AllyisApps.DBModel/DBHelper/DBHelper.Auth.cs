@@ -776,22 +776,19 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@InvitationId", invitationId);
 			parameters.Add("@CallingUserId", userId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple(
+				var results = con.QueryMultiple(
 					"[Auth].[AcceptInvitation]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
-				if (results == null)
-				{
-					return null;
-				}
-				else
-				{
-					return Tuple.Create(
-						results.Read<string>().FirstOrDefault(),
-						results.Read<string>().FirstOrDefault());
-				}
+                if (results == null) return null;
+                else
+                {
+                    return Tuple.Create(
+                        results.Read<string>().FirstOrDefault(),
+                        results.Read<string>().FirstOrDefault());
+                }
 			}
 		}
 
