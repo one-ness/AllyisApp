@@ -6,7 +6,7 @@
 
 <div class="shrink-wrap-center">
     <div class="min300">
-        @using (Html.BeginForm(ActionConstants.Register, ControllerConstants.Account, new { ReturnUrl = (string)(ViewBag.ReturnUrl) }, FormMethod.Post, new { @class = "", role = "form" }))
+        @using (Html.BeginForm(ActionConstants.Register, ControllerConstants.Account, new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })

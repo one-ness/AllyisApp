@@ -1205,7 +1205,7 @@
     <value>Holiday deleted successfully.</value>
   </data>
   <data name="SuccessfulDeletePayClass" xml:space="preserve">
-    <value>Pay class deleted successfully</value>
+    <value>Pay class {0} deleted successfully</value>
   </data>
   <data name="SuccessfulMergePayClass" xml:space="preserve">
     <value>Pay class merged successfully.</value>

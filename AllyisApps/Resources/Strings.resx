@@ -1129,7 +1129,7 @@
     <value>Reset Password Confirmation</value>
   </data>
   <data name="ResetPasswordSuccessDialogue" xml:space="preserve">
-    <value>Your password has been reset. Please</value>
+    <value>Your password has been reset successfully. Please login with your new password.</value>
   </data>
   <data name="Role" xml:space="preserve">
     <value>Role</value>
@@ -1222,7 +1222,7 @@
     <value>Holiday deleted successfully.</value>
   </data>
   <data name="SuccessfulDeletePayClass" xml:space="preserve">
-    <value>Pay class deleted successfully</value>
+    <value>Pay class {0} deleted successfully</value>
   </data>
   <data name="SuccessfulMergePayClass" xml:space="preserve">
     <value>Pay class merged successfully.</value>
@@ -1446,5 +1446,8 @@
   </data>
   <data name="CustomerReactivateNotification" xml:space="preserve">
     <value>You have successfully reactivated the customer</value>
+  </data>
+  <data name="PasswordResetError" xml:space="preserve">
+    <value>Your password reset link might have expired. Please try again.</value>
   </data>
 </root>

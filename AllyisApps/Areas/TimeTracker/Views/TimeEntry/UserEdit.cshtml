@@ -12,7 +12,7 @@
 
 <div class="shrink-wrap-center">
     <div id="user-edit-div">
-        @using (Html.BeginForm(ActionConstants.UserEdit, ControllerConstants.TimeEntry, FormMethod.Post, new { @class = string.Empty, id = "form1", role = "form", onsubmit = "return userSubmit(this);", name = "EditForm" }))
+        @using (Html.BeginForm(ActionConstants.UserEdit, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, userId = Model.UserId }, FormMethod.Post, new { @class = string.Empty, id = "form1", role = "form", onsubmit = "return userSubmit(this);", name = "EditForm" }))
         {
             <div>
                 @Html.AntiForgeryToken()
@@ -38,7 +38,7 @@
                                     @*@Html.HiddenFor(project.CustomerId)
                                         @Html.HiddenFor(project.ProjectId)*@
                                     <option value="@project.ProjectId" class="@css_class" data-search="@project.Name">@project.Name</option>
-}
+                                }
                             }
                         </select>
                     </div>
@@ -62,7 +62,7 @@
                                 {
                                     var css_class = "in";
                                     <option value="@project.ProjectId" class="@css_class" data-search="@project.Name">@project.Name</option>
-}
+                                }
                             }
                         </select>
                     </div>
@@ -78,7 +78,7 @@
 
 @section Scripts {
     <script type="text/javascript">
-        var update_link = "@Url.Action(ActionConstants.UpdateUserAJAX, ControllerConstants.TimeEntry)";
+        var update_link = "@Url.Action(ActionConstants.UserEditAJAX, ControllerConstants.TimeEntry)";
         var index_link = "@Url.Action(ActionConstants.Index, ControllerConstants.TimeEntry)";
     </script>
     @Scripts.Render("~/bundles/TTTimeEntryUserEdit");

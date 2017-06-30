@@ -5,7 +5,7 @@
 
 <div class="shrink-wrap-center">
     <div class="min300">
-        @using (Html.BeginForm(ActionConstants.LogOn, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        @using (Html.BeginForm(ActionConstants.LogOn, ControllerConstants.Account, new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             @Html.AntiForgeryToken()
 

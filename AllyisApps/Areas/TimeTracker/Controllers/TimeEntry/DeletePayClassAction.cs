@@ -19,29 +19,26 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Deletes a payclass from an org.
 		/// </summary>
-		/// <param name="payClassId">The name of the class to delete.</param>
+		/// <param name="userId">The id of the class to delete.</param> //TODO: update this after changing the route
         /// <param name="subscriptionId">The subscription's id</param>
 		/// <returns>Redirects to the settings view.</returns>
-		public ActionResult DeletePayClass(int payClassId, int subscriptionId)
+		public ActionResult DeletePayClass(int userId, int subscriptionId)
 		{
-            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
-            /*
-			var allPayClasses = AppService.GetPayClasses();
-			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassID == payClassId).ElementAt(0).Name;
-            */
-            string sourcePayClassName = AppService.GetPayClasses(orgId).First(pc => pc.PayClassID == payClassId).Name;
+            int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+
+            string sourcePayClassName = AppService.GetPayClasses(subscriptionId).First(pc => pc.PayClassID == userId).Name;
 
 			//Built-in, non-editable pay classes cannot be deleted
 			//Used pay classes cannot be deleted, suggest manager to merge it with another payclass instead
-			if (sourcePayClassName == "Regular" || sourcePayClassName == "Overtime" || sourcePayClassName == "Holiday" || sourcePayClassName == "Paid Time Off" || sourcePayClassName == "Unpaid Time Off" || AppService.GetTimeEntriesThatUseAPayClass(payClassId).Count() > 0)
+			if (sourcePayClassName == "Regular" || sourcePayClassName == "Overtime" || sourcePayClassName == "Holiday" || sourcePayClassName == "Paid Time Off" || sourcePayClassName == "Unpaid Time Off" || AppService.GetTimeEntriesThatUseAPayClass(userId).Count() > 0)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotDeletePayClass, Variety.Warning));
 			}
 			else
 			{
-				if (AppService.DeletePayClass(payClassId, orgId, subscriptionId))
+				if (AppService.DeletePayClass(userId, orgId, subscriptionId))
 				{
-					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulDeletePayClass, Variety.Success));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulDeletePayClass.Replace("{0}", sourcePayClassName), Variety.Success));
 				}
 				else
 				{
@@ -50,7 +47,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
+			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId });
 		}
 	}
 }

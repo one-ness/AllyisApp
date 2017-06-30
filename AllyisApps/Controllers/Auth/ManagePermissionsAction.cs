@@ -22,18 +22,18 @@ namespace AllyisApps.Controllers
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
-        /// <summary>
-        /// GET Account/ManagePermissions2.
-        /// </summary>
-        /// <param name="id">The Organization Id</param>
-        /// <returns>Action result.</returns>
-        [HttpGet]
-		public ActionResult ManagePermissions2(int id)
-		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-			PermissionsManagementViewModel model = this.ConstructPermissionsManagementViewModel(id);
-			return this.View("Permission", model);
-		}
+  //      /// <summary>
+  //      /// GET Account/ManagePermissions2.
+  //      /// </summary>
+  //      /// <param name="id">The Organization Id</param>
+  //      /// <returns>Action result.</returns>
+  //      [HttpGet]
+		//public ActionResult ManagePermissions2(int id)
+		//{
+		//	this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+		//	PermissionsManagementViewModel model = this.ConstructPermissionsManagementViewModel(id);
+		//	return this.View("Permission", model);
+		//}
 
         /// <summary>
         /// GET Account/ManagePermissions.
@@ -98,6 +98,7 @@ namespace AllyisApps.Controllers
 			return this.View("Permission2", model);
 		}
 
+        /*
 		/// <summary>
 		/// Uses services to populate a <see cref="PermissionsManagementViewModel"/> and returns it.
 		/// </summary>
@@ -176,7 +177,7 @@ namespace AllyisApps.Controllers
 			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("Unassigned", users, x => x.ProductRoleId == 0));
 
 			return result;
-		}
+		} */
 
 		/// <summary>
 		/// Makes changes to users' permissions in the organization.
@@ -273,11 +274,11 @@ namespace AllyisApps.Controllers
 				}
 			}
 
-
+            /*
 			if (!model.isPermissions2) // TODO: Delete once there's only one manage permissions page (also delete the action constant)
 			{
 				return RedirectToAction(ActionConstants.ManagePermissions2);
-			}
+			}*/
 
 			return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 		}
