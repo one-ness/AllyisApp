@@ -227,9 +227,9 @@ namespace AllyisApps.Services
 		/// Gets the lock date for the current organization.
 		/// </summary>
 		/// <returns>Lock date.</returns>
-		public DateTime? GetLockDate()
+		public DateTime? GetLockDate(int organizationId)
 		{
-			LockDateDBEntity lockDate = DBHelper.GetLockDate(UserContext.ChosenOrganizationId);
+			LockDateDBEntity lockDate = DBHelper.GetLockDate(organizationId);
 			return GetLockDateFromParameters(lockDate.LockDateUsed, lockDate.LockDatePeriod, lockDate.LockDateQuantity);
 		}
 
