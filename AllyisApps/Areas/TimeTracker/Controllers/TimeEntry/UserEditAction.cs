@@ -24,7 +24,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <param name="subscriptionId">The subscription's id</param>
 		/// <param name="userId">The User's Id.</param>
 		/// <returns>The user edit page.</returns>
-		public ActionResult UserEdit(int subscriptionId, int userId = -1)
+		public ActionResult UserEdit(int subscriptionId, int userId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			var infos = AppService.GetProjectsForOrgAndUser(userId, subscriptionId);

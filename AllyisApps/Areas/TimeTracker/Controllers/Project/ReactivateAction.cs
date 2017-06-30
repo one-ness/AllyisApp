@@ -21,16 +21,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <param name="subscriptionId">The subscription Id</param>
 		/// <param name="userId">Project ID</param>
 		/// <returns></returns>
-		public ActionResult Reactivate(int subscriptionId, string userId)
+		public ActionResult Reactivate(int subscriptionId, int userId)
 		{
-            int projId;
-            bool parsed = System.Int32.TryParse(userId, out projId);
-
-            if (!parsed)
-            {
-                return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subscriptionId });
-            }
-            CompleteProjectInfo project = AppService.GetProject(projId);
+            CompleteProjectInfo project = AppService.GetProject(userId);
 			if (project != null)
 			{
                 if (!AppService.GetCustomer(project.CustomerId).IsActive)
@@ -38,7 +31,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                     AppService.ReactivateCustomer(project.CustomerId, subscriptionId, project.OrganizationId);
                 }
 
-				if (AppService.ReactivateProject(projId, project.OrganizationId, subscriptionId))
+				if (AppService.ReactivateProject(userId, project.OrganizationId, subscriptionId))
 				{
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", Resources.Strings.ProjectReactivateNotification, project.ProjectName), Variety.Success));
 					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subscriptionId });
