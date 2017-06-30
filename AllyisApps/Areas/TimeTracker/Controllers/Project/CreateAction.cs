@@ -25,15 +25,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Gets the page for creating new projects.
 		/// </summary>
 		/// <param name="subscriptionId"></param>
-		/// <param name="id">Customer Id for the project.</param>
+		/// <param name="userId">Customer Id for the project.</param>
 		/// <returns>The ActionResult for the Create view.</returns>
 		[HttpGet]
-		public ActionResult Create(int subscriptionId, int id)
+		public ActionResult Create(int subscriptionId, int userId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.CreateProject, subscriptionId);
 			DateTime? defaultStart = null;
 			DateTime? defaultEnd = null;
-			var idAndUsers = AppService.GetNextProjectIdAndSubUsers(id, subscriptionId);
+			var idAndUsers = AppService.GetNextProjectIdAndSubUsers(userId, subscriptionId);
 
 			var list = idAndUsers.Item2; //Service.GetUsers();
 			var subList = new List<BasicUserInfoViewModel>();
@@ -47,13 +47,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				new EditProjectViewModel()
 				{
 					IsCreating = true,
-					ParentCustomerId = id,
+					ParentCustomerId = userId,
 					ProjectUsers = new List<BasicUserInfoViewModel>(),
 					SubscriptionUsers = subList,
 					StartDate = AppService.GetDayFromDateTime(defaultStart),
 					EndDate = AppService.GetDayFromDateTime(defaultEnd),
 					ProjectOrgId = idAndUsers.Item1, //Service.GetRecommendedProjectId()
-					CustomerName = AppService.GetCustomer(id).Name,
+					CustomerName = AppService.GetCustomer(userId).Name,
 					SubscriptionId = subscriptionId,
 					OrganizationId = 0 // TODO: get the actual org id from user subscription
 				});

@@ -19,12 +19,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Reactivates a project
 		/// </summary>
         /// <param name="subscriptionId">The subscription Id</param>
-		/// <param name="id">Project ID</param>
+		/// <param name="userId">Project ID</param>
 		/// <returns></returns>
-		public ActionResult Reactivate(int subscriptionId, string id)
+		public ActionResult Reactivate(int subscriptionId, string userId)
 		{
             int projId;
-            bool parsed = System.Int32.TryParse(id, out projId);
+            bool parsed = System.Int32.TryParse(userId, out projId);
 
             if (!parsed)
             {
