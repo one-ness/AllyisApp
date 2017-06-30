@@ -19,24 +19,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// GET: Reactivate Customer
         /// </summary>
         /// <param name="subscriptionId">The subscription Id</param>
-        /// <param name = "id" > The Customer id.</param>
+        /// <param name = "userId" > The Customer id.</param>
         /// <returns>The Customer index.</returns>
-        public ActionResult Reactivate(int subscriptionId, string id)
+        public ActionResult Reactivate(int subscriptionId, int userId)
         {
-            int custId;
-            bool parsed = Int32.TryParse(id, out custId);
-
-            if (!parsed)
-            {
-                return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
-            }
 
             int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
-            var result = AppService.ReactivateCustomer(custId, subscriptionId, orgId);
+            var result = AppService.ReactivateCustomer(userId, subscriptionId, orgId);
 
             if (result != null && result != "")
             {
-                Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", Resources.Strings.CustomerReactivateNotification, AppService.GetCustomer(custId).Name), Variety.Success));
+                Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", Resources.Strings.CustomerReactivateNotification, AppService.GetCustomer(userId).Name), Variety.Success));
             }
             // Permission failure
             else if (result == null)
