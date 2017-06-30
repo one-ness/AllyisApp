@@ -2581,6 +2581,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your password reset link might have expired. Please try again..
+        /// </summary>
+        public static string PasswordResetError {
+            get {
+                return ResourceManager.GetString("PasswordResetError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please enter your password..
         /// </summary>
         public static string PasswordValidation {
@@ -3058,7 +3067,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your password has been reset. Please.
+        ///   Looks up a localized string similar to Your password has been reset successfully. Please login with your new password..
         /// </summary>
         public static string ResetPasswordSuccessDialogue {
             get {
