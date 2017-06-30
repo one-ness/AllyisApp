@@ -7,7 +7,8 @@ namespace AllyisApps
 	/// </summary>
 	public static class ActionConstants
 	{
-		public const string Add = "add";
+        public const string Action = "action";
+        public const string Add = "add";
 		public const string ChangePassword = "changepassword";
 		public const string Charge = "charge";
 		public const string ConfirmEmail = "confirmemail";
@@ -86,7 +87,8 @@ namespace AllyisApps
 	public static class ControllerConstants
 	{
 		public const string Account = "account";
-		public const string Customer = "customer";
+        public const string Controller = "controller";
+        public const string Customer = "customer";
 		public const string Home = "home";
 		public const string Organization = "organization";
 		public const string Project = "project";
