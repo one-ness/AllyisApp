@@ -24,7 +24,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         public ActionResult Reactivate(int subscriptionId, int userId)
         {
 
-            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
+            int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId; ;
             var result = AppService.ReactivateCustomer(userId, subscriptionId, orgId);
 
             if (result != null && result != "")
