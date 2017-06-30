@@ -25,10 +25,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// GET: /TimeTracker/TimeEntry/Ajax?{params}.
 		/// </summary>
 		/// <param name="subscriptionId">The SubscriptionId</param>
+        /// <param name="userId">The id of the targeted user</param>
 		/// <param name="startDate">The beginning of the Date Range.</param>
 		/// <param name="endDate">The ending of the Date Range.</param>
 		/// <returns>Provides the view for the defined user over the date range defined.</returns>
-		public ActionResult Index(int subscriptionId, int? startDate = null, int? endDate = null)
+		public ActionResult Index(int subscriptionId, int userId, int? startDate = null, int? endDate = null)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
@@ -40,7 +41,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(
 				subInfo.OrganizationId,
 				subscriptionId,
-				this.AppService.UserContext.UserId,
+                userId,
+				//this.AppService.UserContext.UserId,
 				manager,
 				startDate,
 				endDate);
