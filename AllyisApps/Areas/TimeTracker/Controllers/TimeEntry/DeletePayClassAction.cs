@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
-				if (AppService.DeletePayClass(userId, orgId, subscriptionId))
+				if (AppService.DeletePayClass(userId, orgId, subscriptionId, null))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulDeletePayClass.Replace("{0}", sourcePayClassName), Variety.Success));
 				}

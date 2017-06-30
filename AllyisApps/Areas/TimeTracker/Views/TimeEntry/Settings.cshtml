@@ -203,7 +203,7 @@
 
 @section scripts{
 	<script type="text/javascript">
-        mergePayClassUrl = "@Url.Action(ActionConstants.MergePayClass, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, userId = -1 })"
+        mergePayClassUrl = "@Url.Action(ActionConstants.MergePayClass, ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = -1 })"
         deletePayClassWarning = "@Strings.ConfirmDeletePayClass"
         deletePayClassUrl = "@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = -1 })"
         deleteHolidayWarning = "@Strings.ConfirmDeleteHoliday";
