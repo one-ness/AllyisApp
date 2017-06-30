@@ -62,7 +62,7 @@ namespace AllyisApps.Controllers
 				{
 					// sign in (and set cookie)
 					this.SignIn(userIDandInviteCount.Item1, model.Email);
-					return this.RouteUserHome();
+					return this.RedirectToLocal(returnUrl);
 				}
 				else
 				{
