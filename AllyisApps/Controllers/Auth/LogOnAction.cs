@@ -52,7 +52,7 @@ namespace AllyisApps.Controllers
 				{
 					// sign in
 					this.SignIn(result.UserId, result.Email, model.RememberMe);
-					return this.Redirect(returnUrl);
+					return this.RedirectToLocal(returnUrl);
 				}
 				else
 				{
