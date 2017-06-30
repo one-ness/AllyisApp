@@ -22,6 +22,9 @@ namespace AllyisApps.Services
 		/// <param name="importData">Workbook with data to import.</param>
 		public ImportActionResult Import(int subscriptionId, DataSet importData)
 		{
+            UserContext.UserSubscriptions.TryGetValue(subscriptionId, out UserSubscription userSub);
+            int orgId = userSub.OrganizationId;
+
 			// For some reason, linq won't work directly with DataSets, so we start by just moving the tables over to a linq-able List
 			// The tables are ranked and sorted in order to get customers to import first, before projects, avoiding some very complicated look-up logic.
 			List<DataTable> tables = new List<DataTable>();
@@ -36,7 +39,7 @@ namespace AllyisApps.Services
 
 			// Retrieval of existing customer and project data
 			List<Tuple<Customer, List<Project>>> customersProjects = new List<Tuple<Customer, List<Project>>>();
-			foreach (Customer customer in this.GetCustomerList(this.UserContext.ChosenOrganizationId))
+			foreach (Customer customer in this.GetCustomerList(orgId))
 			{
 				customersProjects.Add(new Tuple<Customer, List<Project>>(
 					customer,
@@ -45,18 +48,18 @@ namespace AllyisApps.Services
 			}
 
 			// Retrieval of existing user data
-			List<Tuple<string, User>> users = this.GetOrganizationMemberList(this.UserContext.ChosenOrganizationId).Select(o => new Tuple<string, User>(o.EmployeeId, this.GetUser(o.UserId))).ToList();
+			List<Tuple<string, User>> users = this.GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, this.GetUser(o.UserId))).ToList();
 
 			// Retrieval of existing user product subscription data
 			int ttProductId = GetProductIdByName("TimeTracker");
-			SubscriptionDisplayDBEntity ttSub = DBHelper.GetSubscriptionsDisplayByOrg(this.UserContext.ChosenOrganizationId).Where(s => s.ProductId == ttProductId).SingleOrDefault();
-			List<User> userSubs = this.GetUsersWithSubscriptionToProductInOrganization(this.UserContext.ChosenOrganizationId, ttProductId).ToList();
+			SubscriptionDisplayDBEntity ttSub = DBHelper.GetSubscriptionsDisplayByOrg(orgId).Where(s => s.ProductId == ttProductId).SingleOrDefault();
+			List<User> userSubs = this.GetUsersWithSubscriptionToProductInOrganization(orgId, ttProductId).ToList();
 
 			// Retrieval of existing pay class data
-			List<PayClass> payClasses = DBHelper.GetPayClasses(UserContext.ChosenOrganizationId).Select(pc => InitializePayClassInfo(pc)).ToList();
+			List<PayClass> payClasses = DBHelper.GetPayClasses(orgId).Select(pc => InitializePayClassInfo(pc)).ToList();
 
-			// Result object
-			ImportActionResult result = new ImportActionResult();
+            //Result object
+            ImportActionResult result = new ImportActionResult();
 
 			// Loop through and see what can be imported from each table in turn. Order doesn't matter, since missing information
 			// will be sought from other tables as needed.
@@ -181,26 +184,26 @@ namespace AllyisApps.Services
 								{
 									// If customerImportLinks is empty, it's because all the information is on this sheet.
 									string name = null;
-									string orgId = null;
+									string custOrgId = null;
 									this.readColumn(row, ColumnHeaders.CustomerName, n => name = n);
-									this.readColumn(row, ColumnHeaders.CustomerId, n => orgId = n);
-									if (name == null && orgId == null)
+									this.readColumn(row, ColumnHeaders.CustomerId, n => custOrgId = n);
+									if (name == null && custOrgId == null)
 									{
 										result.CustomerFailures.Add(string.Format("Error importing customer on sheet {0}, row {1}: both {2} and {3} cannot be read.", table.TableName, table.Rows.IndexOf(row) + 2, ColumnHeaders.CustomerName, ColumnHeaders.CustomerId));
 										continue;
 									}
 
-									if (name == null || orgId == null)
+									if (name == null || custOrgId == null)
 									{
-										result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", name == null ? orgId : name, name == null ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId));
+										result.CustomerFailures.Add(string.Format("Could not create customer {0}: no matching {1}.", name == null ? custOrgId : name, name == null ? ColumnHeaders.CustomerName : ColumnHeaders.CustomerId));
 										continue;
 									}
 
 									newCustomer = new Customer
 									{
 										Name = name,
-										CustomerOrgId = orgId,
-										OrganizationId = this.UserContext.ChosenOrganizationId
+										CustomerOrgId = custOrgId,
+										OrganizationId = orgId
 									};
 								}
 								else
@@ -235,7 +238,7 @@ namespace AllyisApps.Services
 									{
 										Name = hasCustomerName ? knownValue : readValue,
 										CustomerOrgId = hasCustomerName ? readValue : knownValue,
-										OrganizationId = this.UserContext.ChosenOrganizationId
+										OrganizationId = orgId
 									};
 								}
 
@@ -287,7 +290,7 @@ namespace AllyisApps.Services
 
 							if (updated)
 							{
-								this.UpdateCustomer(customer, UserContext.ChosenSubscriptionId);
+								this.UpdateCustomer(customer, subscriptionId);
 							}
 						}
 					}
@@ -380,7 +383,7 @@ namespace AllyisApps.Services
 									CustomerId = customer.CustomerId,
 									Name = thisRowHasProjectName ? knownValue : readValue,
 									Type = "Hourly",
-									OrganizationId = this.UserContext.ChosenOrganizationId,
+									OrganizationId = orgId,
 									ProjectOrgId = thisRowHasProjectName ? readValue : knownValue,
 									StartingDate = defaultProjectStartDate,
 									EndingDate = defaultProjectEndDate
@@ -485,7 +488,7 @@ namespace AllyisApps.Services
 										CustomerId = customer.CustomerId,
 										Name = fields[0],
 										Type = "Hourly",
-										OrganizationId = this.UserContext.ChosenOrganizationId,
+										OrganizationId = orgId,
 										ProjectOrgId = fields[1],
 										StartingDate = defaultProjectStartDate,
 										EndingDate = defaultProjectEndDate
@@ -688,7 +691,7 @@ namespace AllyisApps.Services
 											DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
 											{
 												EmployeeId = fields[1],
-												OrganizationId = this.UserContext.ChosenOrganizationId,
+												OrganizationId = orgId,
 												OrgRoleId = (int)(OrganizationRole.Member),
 												UserId = user.UserId,
 												EmployeeTypeId = employeeTypeId

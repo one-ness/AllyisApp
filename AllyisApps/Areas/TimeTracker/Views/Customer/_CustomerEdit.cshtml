@@ -1,96 +1,128 @@
 ﻿@model AllyisApps.ViewModels.TimeTracker.Customer.EditCustomerInfoViewModel
 
-<div>
+<div class="shrink-wrap-center">
+    <div>
     @using (@Html.BeginForm((string)ViewData[ActionConstants.Action], (string)ViewData[ControllerConstants.Controller], FormMethod.Post, new { @class = string.Empty, role = "form" }))
     {
         @Html.AntiForgeryToken()
 
         @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+        <div class="row">
+            <div class="col-md-6 sm-control-width">
 
-        <div class="col-md-6 sm-control-width">
+                <div class="form-group">
+                    @Html.ReqLabelFor(model => model.Name, Strings.Name)
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Name, string.Empty, new { @class = "text-danger" })
+                </div>
 
-            <div class="form-group">
-                @Html.ReqLabelFor(model => model.Name, Strings.Name)
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, string.Empty, new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.ReqLabelFor(model => model.Address, Strings.Address)
+                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Address, string.Empty, new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.ReqLabelFor(model => model.City, Strings.City)
+                    @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.City, string.Empty, new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.ReqLabelFor(m => m.Country, Strings.Country)
+                    @Html.DropDownListFor(m => m.Country, new SelectList(Model.GetLocalizedValidCoutriesDictionary(), "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.ReqLabelFor(m => m.State, Strings.State)
+                    @Html.DropDownListFor(m => m.State, new SelectList(new Dictionary<string, string>(), "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.ReqLabelFor(model => model.PostalCode, Strings.PostalCode)
+                    @Html.EditorFor(model => model.PostalCode, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PostalCode, string.Empty, new { @class = "text-danger" })
+                </div>
             </div>
+            <div class="col-md-6 sm-control-width">
 
-            <div class="form-group">
-                @Html.ReqLabelFor(model => model.Address, Strings.Address)
-                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Address, string.Empty, new { @class = "text-danger" })
-            </div>
+                <div class="form-group">
+                    @Html.ReqLabelFor(model => model.ContactEmail, Strings.ContactEmail)
+                    @Html.EditorFor(model => model.ContactEmail, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ContactEmail, string.Empty, new { @class = "text-danger" })
+                </div>
 
-            <div class="form-group">
-                @Html.ReqLabelFor(model => model.City, Strings.City)
-                @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.City, string.Empty, new { @class = "text-danger" })
-            </div>
+                <div class="form-group">
+                    @Html.ReqLabelFor(model => model.ContactPhoneNumber, Strings.ContactPhoneNumber)
+                    @Html.EditorFor(model => model.ContactPhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ContactPhoneNumber, string.Empty, new { @class = "text-danger" })
+                </div>
 
-            <div class="form-group">
-                @Html.ReqLabelFor(m => m.Country, Strings.Country)
-                @Html.DropDownListFor(m => m.Country, new SelectList(Model.GetLocalizedValidCoutriesDictionary(), "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control" })
-            </div>
-            <div class="form-group">
-                @Html.ReqLabelFor(m => m.State, Strings.State)
-                @Html.DropDownListFor(m => m.State, new SelectList(new Dictionary<string, string>(), "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control" })
-            </div>
+                <div class="form-group">
+                    @Html.ReqLabelFor(model => model.FaxNumber, Strings.FaxNumber)
+                    @Html.EditorFor(model => model.FaxNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FaxNumber, string.Empty, new { @class = "text-danger" })
+                </div>
 
-            <div class="form-group">
-                @Html.ReqLabelFor(model => model.PostalCode, Strings.PostalCode)
-                @Html.EditorFor(model => model.PostalCode, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PostalCode, string.Empty, new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="col-md-6 sm-control-width">
+                <div class="form-group">
+                    @Html.ReqLabelFor(model => model.EIN, Strings.EIN)
+                    @Html.EditorFor(model => model.EIN, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EIN, string.Empty, new { @class = "text-danger" })
+                </div>
 
-            <div class="form-group">
-                @Html.ReqLabelFor(model => model.ContactEmail, Strings.ContactEmail)
-                @Html.EditorFor(model => model.ContactEmail, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ContactEmail, string.Empty, new { @class = "text-danger" })
-            </div>
+                <div class="form-group">
+                    @Html.ReqLabelFor(m => m.CustomerOrgId, Strings.CustomerOrgId)
+                    @Html.TextBoxFor(m => m.CustomerOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.CustomerOrgId })
+                    @Html.ValidationMessageFor(model => model.CustomerOrgId, string.Empty, new { @class = "text-danger" })
+                </div>
 
-            <div class="form-group">
-                @Html.ReqLabelFor(model => model.ContactPhoneNumber, Strings.ContactPhoneNumber)
-                @Html.EditorFor(model => model.ContactPhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ContactPhoneNumber, string.Empty, new { @class = "text-danger" })
-            </div>
+                @Html.HiddenFor(m => m.OrganizationId)
+                @Html.HiddenFor(m => m.CustomerID)
+                @Html.HiddenFor(m => m.IsCreating)
+                @Html.HiddenFor(m => m.SubscriptionId)
 
-            <div class="form-group">
-                @Html.ReqLabelFor(model => model.FaxNumber, Strings.FaxNumber)
-                @Html.EditorFor(model => model.FaxNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FaxNumber, string.Empty, new { @class = "text-danger" })
+                <div class="form-group allyis-action-buttons">
+                    @if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
+                    {
+                        @Html.ActionLink(Strings.Cancel, ActionConstants.Index, ControllerConstants.Customer, null, new { @class = "btn btn-default" })
+                        <input type="submit" value="@Strings.Create" class="btn btn-primary" />
+                    }
+                    else
+                    {
+                        @Html.ActionLink(Strings.Cancel, ActionConstants.Index, ControllerConstants.Customer, null, new { @class = "btn btn-default" })
+                        <input type="submit" value="@Strings.Save" class="btn btn-primary" />
+                    }
+                </div>
             </div>
-
-            <div class="form-group">
-                @Html.ReqLabelFor(model => model.EIN, Strings.EIN)
-                @Html.EditorFor(model => model.EIN, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EIN, string.Empty, new { @class = "text-danger" })
-            </div>
-
-            <div class="form-group">
-                @Html.ReqLabelFor(m => m.CustomerOrgId, Strings.CustomerOrgId)
-                @Html.TextBoxFor(m => m.CustomerOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.CustomerOrgId })
-                @Html.ValidationMessageFor(model => model.CustomerOrgId, string.Empty, new { @class = "text-danger" })
-            </div>
-
-            @Html.HiddenFor(m => m.OrganizationId)
-            @Html.HiddenFor(m => m.CustomerID)
-            @Html.HiddenFor(m => m.IsCreating)
-            @Html.HiddenFor(m => m.SubscriptionId)
-
-            <div class="form-group allyis-action-buttons">
-                @if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
-                {
-                    @Html.ActionLink(Strings.Cancel, ActionConstants.Index, ControllerConstants.Customer, null, new { @class = "btn btn-default" })
-                    <input type="submit" value="@Strings.Create" class="btn btn-primary" />
-                }
-                else
-                {
-                    @Html.ActionLink(Strings.Cancel, ActionConstants.Index, ControllerConstants.Customer, null, new { @class = "btn btn-default" })
-                    <input type="submit" value="@Strings.Save" class="btn btn-primary" />
-                }
-            </div>
+            
         </div>
     }
+        <br />
+        @if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
+        {
+                <div class="row">
+                    <div class="col-md-6 sm-control-width">
+                        @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get, new { @class = "panel-heading", style = "display: flex; justify-content: space-between;" }))
+                        {
+                            <label>@Strings.Upload</label>
+                            <input type="submit" id="template-button" value="@Strings.Template" class="btn btn-primary tt-template" />
+                        }
+                        @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken();
+                            <div>
+                                <input type="file" id="upload-box" name="upload" style="display:none;"
+                                       onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                                <input id="upload-file-name-display" class="form-control"
+                                       onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                            </div>
+                            <div id="footUpload" class="panel-footer" style="display: flex; justify-content: flex-end; flex-wrap: wrap; padding-bottom: 0px;">
+                                <a class="btn btn-primary pull-right" style="margin-bottom: 15px;" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
+                                &nbsp
+                                <input type="submit" style="margin-bottom: 15px;" id="upload-button" value="@Strings.Upload" class="btn btn-primary pull-right" />
+                            </div>
+                        }
+                    </div>
+                </div>
+        }
+    </div>
 </div>

@@ -57,7 +57,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					else
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.FileFormatUnsupported, Variety.Danger));
-						return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
+						return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subscriptionId });
 					}
 
 					reader.IsFirstRowAsColumnNames = true;
@@ -84,7 +84,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 			}
 
-			return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
+			return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subscriptionId });
 		}
 	}
 }
