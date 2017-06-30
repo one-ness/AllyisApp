@@ -14,7 +14,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AllyisApps.Services
@@ -517,32 +517,26 @@ namespace AllyisApps.Services
 		/// <returns>A value indicating whether the given email address matched with an existing user.</returns>
 		public async Task<bool> SendPasswordResetMessage(string email, string callbackUrl)
 		{
-			#region Validation
+			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
+			if (string.IsNullOrWhiteSpace(callbackUrl)) throw new ArgumentNullException("callbackUrl");
 
-			if (string.IsNullOrEmpty(email))
-			{
-				throw new ArgumentNullException("email", "Email address must have a value.");
-			}
-			else if (!Utility.IsValidEmail(email))
-			{
-				throw new FormatException("Email address must be in a valid format.");
-			}
-
-			#endregion Validation
-
+			bool result = false;
 			Guid code = Guid.NewGuid();
-			int accountUserId = this.DBHelper.UpdateUserPasswordResetCode(email, code.ToString());
-			if (accountUserId > -1)
+			int userId = this.DBHelper.UpdateUserPasswordResetCode(email, code.ToString());
+			if (userId > 0)
 			{
 				// Send reset email
-				string filledInCallbackUrl = callbackUrl.Replace("%7Buserid%7D", accountUserId.ToString()).Replace("%7Bcode%7D", code.ToString());
-				string msgbody = new System.Web.HtmlString(string.Format("Please reset your password by clicking <a href=\"{0}\">here</a>", filledInCallbackUrl)).ToString();
-				await Lib.Mailer.SendEmailAsync("noreply@allyisapps.com", email, "Reset password", msgbody);
-
-				return true;
+				StringBuilder sb = new StringBuilder();
+				sb.AppendFormat("{0}?userId={1}&code={2}", callbackUrl, userId, code);
+				string feedbackUrl = sb.ToString();
+				sb.Clear();
+				sb.AppendFormat("Please reset your password by clicking <a href=\"{0}\">this reset link</a>.", feedbackUrl);
+				string msgbody = new System.Web.HtmlString(sb.ToString()).ToString();
+				await Mailer.SendEmailAsync("noreply@allyisapps.com", email, "Reset password", msgbody);
+				result = true;
 			}
 
-			return false;
+			return result;
 		}
 
 		/// <summary>

@@ -1,394 +1,84 @@
-﻿namespace AllyisApps
+﻿#pragma warning disable 1591
+
+namespace AllyisApps
 {
 	/// <summary>
 	/// Constants for action strings.
 	/// </summary>
 	public static class ActionConstants
 	{
-		/// <summary>
-		/// For when you need a key for storing your action value or some such thing.
-		/// </summary>
-		public const string Action = "Action";
-
-		#region account
-
-		/// <summary>
-		/// Action-Name: Add.
-		/// </summary>
-		public const string Add = "Add";
-
-		/// <summary>
-		/// Action-Name: ChangePassword.
-		/// </summary>
-		public const string ChangePassword = "ChangePassword";
-
-		/// <summary>
-		/// Action-Name: Charge.
-		/// </summary>
-		public const string Charge = "Charge";
-
-		/// <summary>
-		/// Action-Name: ConfirmEmail.
-		/// </summary>
-		public const string ConfirmEmail = "ConfirmEmail";
-
-		/// <summary>
-		/// Action-Name: Create.
-		/// </summary>
-		public const string Create = "Create";
-
-		/// <summary>
-		/// Action-Name: CreateHoliday.
-		/// </summary>
-		public const string CreateHoliday = "CreateHoliday";
-
-		/// <summary>
-		/// Action-Name: CreateOrg.
-		/// </summary>
-		public const string CreateOrg = "CreateOrg";
-
-		/// <summary>
-		/// Action-Name: CreatePayClass.
-		/// </summary>
-		public const string CreatePayClass = "CreatePayClass";
-
-		/// <summary>
-		/// Action-Name: CreateTimeEntryJson.
-		/// </summary>
-		public const string CreateTimeEntryJson = "CreateTimeEntryJson";
-
-		/// <summary>
-		/// Action-Name: Delete.
-		/// </summary>
-		public const string Delete = "Delete";
-
-		/// <summary>
-		/// Action-Name: DeleteEntry.
-		/// </summary>
-		public const string DeleteEntry = "DeleteEntry";
-
-		/// <summary>
-		/// Action-Name: DeleteHoliday.
-		/// </summary>
-		public const string DeleteHoliday = "DeleteHoliday";
-
-		/// <summary>
-		/// Action-Name: DeleteOrg.
-		/// </summary>
-		public const string DeleteOrg = "DeleteOrg";
-
-		/// <summary>
-		/// Action-Name: DeletePayClass.
-		/// </summary>
-		public const string DeletePayClass = "DeletePayClass";
-
-		/// <summary>
-		/// Action-Name: DeleteTimeEntry.
-		/// </summary>
-		public const string DeleteTimeEntry = "DeleteTimeEntry";
-
-		/// <summary>
-		/// Action-Name: DeleteTimeEntryJson.
-		/// </summary>
-		public const string DeleteTimeEntryJson = "DeleteTimeEntryJson";
-
-		/// <summary>
-		/// Action-Name: Details.
-		/// </summary>
-		public const string Details = "Details";
-
-		/// <summary>
-		/// Action-Name: DownloadImportUsersTemplate.
-		/// </summary>
-		public const string DownloadImportUsersTemplate = "DownloadImportUsersTemplate";
-
-		/// <summary>
-		/// Action-Name: Edit.
-		/// </summary>
-		public const string Edit = "Edit";
-
-        /// <summary>
-		/// Action-Name: EditOrg.
-		/// </summary>
-		public const string EditOrg = "EditOrg";
-
-        /// <summary>
-        /// Action-Name: EditProfile.
-        /// </summary>
-        public const string EditProfile = "EditProfile";
-
-		/// <summary>
-		/// Action-Name: EditTimeEntryApprovalState.
-		/// </summary>
-		public const string EditTimeEntryApprovalState = "EditTimeEntryApprovalState";
-
-		/// <summary>
-		/// Action-Name: EditTimeEntryJson.
-		/// </summary>
-		public const string EditTimeEntryJson = "EditTimeEntryJson";
-
-		/// <summary>
-		/// Action-Name: Export.
-		/// </summary>
-		public const string Export = "Export";
-
-		/// <summary>
-		/// Action-Name: ForgotPassword.
-		/// </summary>
-		public const string ForgotPassword = "ForgotPassword";
-
-		/// <summary>
-		/// Action-Name: ForgotPasswordConfirmation.
-		/// </summary>
-		public const string ForgotPasswordConfirmation = "ForgotPasswordConfirmation";
-
-		/// <summary>
-		/// Action-Name: GetBillingSummary.
-		/// </summary>
-		public const string GetBillingSummary = "GetBillingSummary";
-
-		/// <summary>
-		/// Action-Name: GetDetailsDataJson.
-		/// </summary>
-		public const string GetDetailsDataJson = "GetDetailsDataJson";
-
-		/// <summary>
-		/// Action-Name: Import.
-		/// </summary>
-		public const string Import = "Import";
-
-		/// <summary>
-		/// Action-Name: Index.
-		/// </summary>
-		public const string Index = "Index";
-
-		/// <summary>
-		/// Action-Name: Invite.
-		/// </summary>
-		public const string Invite = "Invite";
-
-		/// <summary>
-		/// Action-Name: IsSubdomainNameUnique.
-		/// </summary>
-		public const string IsSubdomainNameUnique = "IsSubdomainNameUnique";
-
-		/// <summary>
-		/// Action-Name: LogOff.
-		/// </summary>
-		public const string LogOff = "LogOff";
-
-		/// <summary>
-		/// Action-Name: LogOn.
-		/// </summary>
-		public const string LogOn = "LogOn";
-
-		/// <summary>
-		/// Action-Name: Manage.
-		/// </summary>
-		public const string Manage = "Manage";
-
-		/// <summary>
-		/// Action-Name: ManagePermissions.
-		/// </summary>
-		public const string ManagePermissions = "ManagePermissions";
-
-		/// <summary>
-		/// Action-Name: ManagePermissions.
-		/// </summary>
-		public const string ManagePermissions2 = "ManagePermissions2";
-
-		///// <summary>
-		///// Action-Name: Organizations.
-		///// </summary>
-		//public const string Organizations = "Organizations";
-
-		/// <summary>
-		/// Action-Name: OrgIndex.
-		/// </summary>
-		public const string OrgIndex = "OrgIndex";
-
-		/// <summary>
-		/// Action-Name: PrivacyPolicy.
-		/// </summary>
-		public const string PrivacyPolicy = "PrivacyPolicy";
-
-        /// <summary>
-        /// Action-Name: Reactivate
-        /// </summary>
-        public const string Reactivate = "Reactivate";
-
-        /// <summary>
-        /// Action-Name: Reactivate Customer
-        /// </summary>
-        public const string ReactivateCustomer = "ReactivateCustomer";
-
-        /// <summary>
-        /// Action-Name: RedirectToSubdomainAction.
-        /// </summary>
-        public const string RedirectToSubdomainAction = "RedirectToSubdomainAction";
-
-		/// <summary>
-		/// Action-Name: Register.
-		/// </summary>
-		public const string Register = "Register";
-
-		/// <summary>
-		/// Action-Name: RemoveBilling.
-		/// </summary>
-		public const string RemoveBilling = "RemoveBilling";
-
-		/// <summary>
-		/// Action-Name: RemoveInvitation.
-		/// </summary>
-		public const string RemoveInvitation = "RemoveInvitation";
-
-		/// <summary>
-		/// Action-Name: RemoveMember.
-		/// </summary>
-		public const string RemoveMember = "RemoveMember";
-
-		/// <summary>
-		/// Action-Name: RemoveMember.
-		/// </summary>
-		public const string RemoveUser = "RemoveUser";
-
-		/// <summary>
-		/// Action-Name: ResetPassword.
-		/// </summary>
-		public const string ResetPassword = "ResetPassword";
-
-		/// <summary>
-		/// Action-Name: ResetPasswordConfirmation.
-		/// </summary>
-		public const string ResetPasswordConfirmation = "ResetPasswordConfirmation";
-
-		/// <summary>
-		/// Action-Name: RouteHome.
-		/// </summary>
-		public const string RouteHome = "RouteHome";
-
-		/// <summary>
-		/// Action-Name: Subscribe.
-		/// </summary>
-		public const string Subscribe = "Subscribe";
-
-		/// <summary>
-		/// Action-Name: Unsubscribe.
-		/// </summary>
-		public const string Unsubscribe = "Unsubscribe";
-
-		/// <summary>
-		/// Action-Name: UpdateOvertime.
-		/// </summary>
-		public const string UpdateOvertime = "UpdateOvertime";
-
-		/// <summary>
-		/// Action-Name: UpdateStartOfWeek.
-		/// </summary>
-		public const string UpdateStartOfWeek = "UpdateStartOfWeek";
-
-		/// <summary>
-		/// Action-Name: UpdateUserAJAX.
-		/// </summary>
-		public const string UpdateUserAJAX = "UpdateUserAJAX";
-
-		/// <summary>
-		/// Action-Name: UploadCSVFile.
-		/// </summary>
-		public const string UploadCSVFile = "UploadCSVFile";
-
-		/// <summary>
-		/// Action-Name: UserEdit.
-		/// </summary>
-		public const string UserEdit = "UserEdit";
-
-		/// <summary>
-		/// Action-Name: ViewPage.
-		/// </summary>
-		public const string ViewPage = "ViewPage";
-
-		#endregion account
-
-		#region home
-
-		/// <summary>
-		/// Action-Name: ApplicationRedirect.
-		/// </summary>
-		public const string ApplicationRedirect = "ApplicationRedirect";
-
-		/// <summary>
-		/// Action-Name: Help.
-		/// </summary>
-		public const string Help = "Help";
-
-		#endregion home
-
-		#region shared
-
-		/// <summary>
-		/// Action-Name: FooterPartial.
-		/// </summary>
-		public const string FooterPartial = "FooterPartial";
-
-		/// <summary>
-		/// Action-Name: LogOnPartial.
-		/// </summary>
-		public const string LogOnPartial = "LogOnPartial";
-
-		/// <summary>
-		/// Action-Name: RouteProduct.
-		/// </summary>
-		public const string UpdateLanguage = "UpdateLanguage";
-
-		#endregion shared
-
-		#region TimeEntry
-
-		/// <summary>
-		/// Action-Name: CopyEntries.
-		/// </summary>
-		public const string CopyEntries = "CopyEntries";
-
-		/// <summary>
-		/// Action-Name: Report.
-		/// </summary>
-		public const string Report = "Report";
-
-		/// <summary>
-		/// Action-Name: SetLockDate.
-		/// </summary>
-		public const string SetLockDate = "SetLockDate";
-
-		/// <summary>
-		/// Action-Name: Settings.
-		/// </summary>
-		public const string Settings = "Settings";
-
-		/// <summary>
-		/// Action-Name: MergePayClass.
-		/// </summary>
-		public const string MergePayClass = "MergePayClass";
-
-		/// <summary>
-		/// Action-Name: ViewReport.
-		/// </summary>
-		public const string ViewReport = "ViewReport";
-
-		/// <summary>
-		/// Action-Name: Template.
-		/// </summary>
-		public const string Template = "Template";
-
-		#endregion TimeEntry
-
-		#region subscription
-
-		/// <summary>
-		/// Action-Name: Add.
-		/// </summary>
-		public const string EditUsers = "EditUsers";
-
-		#endregion subscription
+        public const string Action = "action";
+        public const string Add = "add";
+		public const string ChangePassword = "changepassword";
+		public const string Charge = "charge";
+		public const string ConfirmEmail = "confirmemail";
+		public const string Create = "create";
+		public const string CreateHoliday = "createholiday";
+		public const string CreateOrg = "createorg";
+		public const string CreatePayClass = "createpayclass";
+		public const string CreateTimeEntryJson = "createtimeentryjson";
+		public const string Delete = "delete";
+		public const string DeleteEntry = "deleteentry";
+		public const string DeleteHoliday = "deleteholiday";
+		public const string DeleteOrg = "deleteorg";
+		public const string DeletePayClass = "deletepayclass";
+		public const string DeleteTimeEntry = "deletetimeentry";
+		public const string DeleteTimeEntryJson = "deletetimeentryjson";
+		public const string Details = "details";
+		public const string DownloadImportUsersTemplate = "downloadimportuserstemplate";
+		public const string Edit = "edit";
+		public const string EditOrg = "editorg";
+		public const string EditProfile = "editprofile";
+		public const string EditTimeEntryApprovalState = "edittimeentryapprovalstate";
+		public const string EditTimeEntryJson = "edittimeentryjson";
+		public const string Export = "export";
+		public const string ForgotPassword = "forgotpassword";
+		public const string ForgotPasswordConfirmation = "forgotpasswordconfirmation";
+		public const string GetBillingSummary = "getbillingsummary";
+		public const string GetDetailsDataJson = "getdetailsdatajson";
+		public const string Import = "import";
+		public const string Index = "index";
+		public const string Invite = "invite";
+		public const string IsSubdomainNameUnique = "issubdomainnameunique";
+		public const string LogOff = "logoff";
+		public const string LogOn = "logon";
+		public const string Manage = "manage";
+		public const string ManagePermissions = "managepermissions";
+		public const string ManagePermissions2 = "managepermissions2";
+		public const string OrgIndex = "orgindex";
+		public const string PrivacyPolicy = "privacypolicy";
+		public const string Reactivate = "reactivate";
+		public const string ReactivateCustomer = "reactivatecustomer";
+		public const string RedirectToSubdomainAction = "redirecttosubdomainaction";
+		public const string Register = "register";
+		public const string RemoveBilling = "removebilling";
+		public const string RemoveInvitation = "removeinvitation";
+		public const string RemoveMember = "removemember";
+		public const string RemoveUser = "removeuser";
+		public const string ResetPassword = "resetpassword";
+		public const string ResetPasswordConfirmation = "resetpasswordconfirmation";
+		public const string RouteHome = "routehome";
+		public const string Subscribe = "subscribe";
+		public const string Unsubscribe = "unsubscribe";
+		public const string UpdateOvertime = "updateovertime";
+		public const string UpdateStartOfWeek = "updatestartofweek";
+		public const string UpdateUserAJAX = "updateuserajax";
+		public const string UploadCSVFile = "uploadcsvfile";
+		public const string UserEdit = "useredit";
+		public const string ViewPage = "viewpage";
+		public const string ApplicationRedirect = "applicationredirect";
+		public const string Help = "help";
+		public const string FooterPartial = "footerpartial";
+		public const string LogOnPartial = "logonpartial";
+		public const string UpdateLanguage = "updatelanguage";
+		public const string CopyEntries = "copyentries";
+		public const string Report = "report";
+		public const string SetLockDate = "setlockdate";
+		public const string Settings = "settings";
+		public const string MergePayClass = "mergepayclass";
+		public const string ViewReport = "viewreport";
+		public const string Template = "template";
+		public const string EditUsers = "editusers";
 	}
 
 	/// <summary>
@@ -396,50 +86,15 @@
 	/// </summary>
 	public static class ControllerConstants
 	{
-		/// <summary>
-		/// Controller-Name: Account.
-		/// </summary>
-		public const string Account = "Account";
-
-		/// <summary>
-		/// For when you need a key for storing your Controller value or some such thing.
-		/// </summary>
-		public const string Controller = "Controller";
-
-		/// <summary>
-		/// Controller-Name: Customer.
-		/// </summary>
-		public const string Customer = "Customer";
-
-		/// <summary>
-		/// Controller-Name: Home.
-		/// </summary>
-		public const string Home = "Home";
-
-		/// <summary>
-		/// Controller-Name: Organization.
-		/// </summary>
-		public const string Organization = "Organization";
-
-		/// <summary>
-		/// Controller-Name: Project.
-		/// </summary>
-		public const string Project = "Project";
-
-		/// <summary>
-		/// Controller-Name: Shared.
-		/// </summary>
-		public const string Shared = "Shared";
-
-		/// <summary>
-		/// Controller-Name: Subscription.
-		/// </summary>
-		public const string Subscription = "Subscription";
-
-		/// <summary>
-		/// Controller-Name: TimeEntry.
-		/// </summary>
-		public const string TimeEntry = "TimeEntry";
+		public const string Account = "account";
+        public const string Controller = "controller";
+        public const string Customer = "customer";
+		public const string Home = "home";
+		public const string Organization = "organization";
+		public const string Project = "project";
+		public const string Shared = "shared";
+		public const string Subscription = "subscription";
+		public const string TimeEntry = "timeentry";
 	}
 
 	/// <summary>
@@ -447,59 +102,16 @@
 	/// </summary>
 	public static class ViewConstants
 	{
-		/// <summary>
-		/// View-Name: Add.
-		/// </summary>
 		public const string Add = "Add";
-
-		/// <summary>
-		/// View-Name: AddBillingToSubscribe.
-		/// </summary>
 		public const string AddBillingToSubscribe = "AddBillingToSubscribe";
-
-		/// <summary>
-		/// View-Name: ConfirmRemoveBillingInformation.
-		/// </summary>
 		public const string ConfirmRemoveBillingInformation = "ConfirmRemoveBillingInformation";
-
-		/// <summary>
-		/// View-Name: Details.
-		/// </summary>
 		public const string Details = "Details";
-
-		/// <summary>
-		/// View-Name: Error.
-		/// </summary>
 		public const string Error = "Error";
-
-		/// <summary>
-		/// View-Name: Footer.
-		/// </summary>
 		public const string Footer = "_Footer";
-
-		/// <summary>
-		/// View-Name: ForgotPasswordConfirmation.
-		/// </summary>
 		public const string ForgotPasswordConfirmation = "ForgotPasswordConfirmation";
-
-		/// <summary>
-		/// View-Name: ForgotPasswordConfirmation.
-		/// </summary>
 		public const string Index = "Index";
-
-		/// <summary>
-		/// View-Name: LogOnPartial.
-		/// </summary>
 		public const string LogOnPartial = "_LogOnPartial";
-
-		/// <summary>
-		/// View-Name: Subscribe.
-		/// </summary>
 		public const string Subscribe = "Subscribe";
-
-		/// <summary>
-		/// View-Name: MergePayClass.
-		/// </summary>
 		public const string MergePayClass = "MergePayClass";
 	}
 
@@ -508,9 +120,6 @@
 	/// </summary>
 	public static class ProductNameKeyConstants
 	{
-		/// <summary>
-		/// A product name key corresponding to the Time Tracker product.
-		/// </summary>
 		public const string TimeTracker = "TimeTracker";
 	}
 }

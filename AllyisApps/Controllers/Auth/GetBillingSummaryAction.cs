@@ -24,9 +24,9 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <returns>The Billing summary page.</returns>
 		[HttpGet]
-		public ActionResult GetBillingSummary()
+		public ActionResult GetBillingSummary(int orgId)
 		{
-			IEnumerable<BillingHistoryItemViewModel> model = this.ConstructBillingHistoryViewModel();
+			IEnumerable<BillingHistoryItemViewModel> model = this.ConstructBillingHistoryViewModel(orgId);
 
 			return this.View(model);
 		}
@@ -35,12 +35,12 @@ namespace AllyisApps.Controllers
 		/// Uses services and utilities to initialize an <see cref="IEnumerable{BillingHistoryItemViewModel}"/>.
 		/// </summary>
 		/// <returns>Populated list of BillingHistoryItemViewModels.</returns>
-		public IEnumerable<BillingHistoryItemViewModel> ConstructBillingHistoryViewModel()
+		public IEnumerable<BillingHistoryItemViewModel> ConstructBillingHistoryViewModel(int orgId)
 		{
 			List<BillingHistoryItemViewModel> result = new List<BillingHistoryItemViewModel>();
 
 			// Creation of items from Stripe data
-			BillingServicesCustomerId customerId = AppService.GetOrgBillingServicesCustomerId();
+			BillingServicesCustomerId customerId = AppService.GetOrgBillingServicesCustomerId(orgId);
 			if (customerId != null)
 			{
 				foreach (BillingServicesInvoice invoice in AppService.ListInvoices(customerId))

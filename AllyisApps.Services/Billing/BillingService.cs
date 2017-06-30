@@ -77,13 +77,14 @@ namespace AllyisApps.Services
 			return handler.ListCharges(customerId);
 		}
 
-		/// <summary>
-		/// Edits or creates billing information for the current chosen organization.
-		/// </summary>
-		/// <param name="billingServicesEmail">Customer email address.</param>
-		/// <param name="token">The BillingServicesToken being used for this charge.</param>
-		[CLSCompliant(false)]
-		public void UpdateBillingInfo(string billingServicesEmail, BillingServicesToken token)
+        /// <summary>
+        /// Edits or creates billing information for the current chosen organization.
+        /// </summary>
+        /// <param name="billingServicesEmail">Customer email address.</param>
+        /// <param name="token">The BillingServicesToken being used for this charge.</param>
+        /// <param name="orgId"></param>
+        [CLSCompliant(false)]
+		public void UpdateBillingInfo(string billingServicesEmail, BillingServicesToken token, int orgId)
 		{
 			#region Validation
 
@@ -104,7 +105,7 @@ namespace AllyisApps.Services
 			#endregion Validation
 
 			//// Either get the existing billing service information for the org or create some if the org has none
-			BillingServicesCustomerId customerId = this.GetOrgBillingServicesCustomerId();
+			BillingServicesCustomerId customerId = this.GetOrgBillingServicesCustomerId(orgId);
 			if (customerId == null)
 			{
 				string serviceType = "Stripe";
@@ -226,9 +227,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <returns>The customer ID.</returns>
 		[CLSCompliant(false)]
-		public BillingServicesCustomerId GetOrgBillingServicesCustomerId()
+		public BillingServicesCustomerId GetOrgBillingServicesCustomerId(int orgId)
 		{
-			string id = DBHelper.GetOrgCustomer(UserContext.ChosenOrganizationId);
+			string id = DBHelper.GetOrgCustomer(orgId);
 			return new BillingServicesCustomerId(id);
 		}
 
@@ -646,7 +647,8 @@ namespace AllyisApps.Services
 		/// <returns>A notification string, or null.</returns>
 		public string UnsubscribeAndRemoveBillingSubscription(int SelectedSku, int? subscriptionId)
 		{
-			BillingServicesCustomer custId = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId());
+            var orgId = this.UserContext.UserSubscriptions[subscriptionId.Value].OrganizationId;
+			BillingServicesCustomer custId = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId(orgId));
 			if (custId != null)
 			{
 				this.DeleteSubscriptionPlanAndAddHistory(custId.Id.Id, SelectedSku, "Unsubscribing from product.");
@@ -660,7 +662,7 @@ namespace AllyisApps.Services
 			if (subscriptionId != null)
 			{
 				string skuName = this.Unsubscribe(subscriptionId.Value);
-				return string.Format("{0} has been unsubscribed from the license {1}.", UserContext.ChosenOrganization.OrganizationName, skuName);
+				return string.Format("{0} has been unsubscribed from the license {1}.", UserContext.UserSubscriptions[subscriptionId.Value].OrganizationName, skuName);
 			}
 
 			return null;
@@ -702,14 +704,14 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				customer = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId());
+				customer = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId(orgId));
 				token = existingToken;
 			}
 
 			// Users >= 500 (the hardcoded free amount) will not trigger this
 			if (billingAmount > 0)
 			{
-				BillingServicesCustomerId customerId = this.GetOrgBillingServicesCustomerId();
+				BillingServicesCustomerId customerId = this.GetOrgBillingServicesCustomerId(orgId);
 				if (customerId == null)
 				{
 					customer = this.RetrieveCustomer(this.CreateBillingServicesCustomer(newBillingEmail, token));
@@ -733,7 +735,7 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				customer = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId());
+				customer = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId(orgId));
 
 				if (customer != null)
 				{

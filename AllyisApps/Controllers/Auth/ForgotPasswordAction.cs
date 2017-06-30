@@ -23,7 +23,7 @@ namespace AllyisApps.Controllers
 		[AllowAnonymous]
 		public ActionResult ForgotPassword()
 		{
-			return this.View();
+			return this.View(new ForgotPasswordViewModel());
 		}
 
 		/// <summary>
@@ -39,16 +39,9 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				if (await AppService.SendPasswordResetMessage(model.Email, Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, new { userId = "{userid}", code = "{code}" }, protocol: Request.Url.Scheme)))
-				{
-					Notifications.Add(new Core.Alert.BootstrapAlert(string.Format("{0} {1}.", Resources.Strings.ResetEmailHasBeenSent, model.Email), Core.Alert.Variety.Success));
-				}
-				else
-				{
-					Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.NoAccountForEmail, Core.Alert.Variety.Info));
-				}
-
-				// irrespective of failure/success, go back to sign in
+				// NOTE: do not check for failure, always display success message and redirect to login page
+				await AppService.SendPasswordResetMessage(model.Email, Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, null, protocol: Request.Url.Scheme));
+				Notifications.Add(new Core.Alert.BootstrapAlert(string.Format("{0} {1}.", Resources.Strings.ResetEmailHasBeenSent, model.Email), Core.Alert.Variety.Success));
 				return this.RedirectToAction(ActionConstants.LogOn);
 			}
 
