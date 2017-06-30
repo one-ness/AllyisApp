@@ -135,17 +135,19 @@
                 <div class="col-md-6 sm-control-width">
                     @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Account, null, FormMethod.Get, new { id = "template-form" }))
                     {
+                        <label>@Strings.Upload</label>
                     }
                     @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Account, new { id = Model.OrganizationId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
                     {
                         @Html.AntiForgeryToken();
-                        <label>@Strings.Upload</label>
-                        <input type="file" id="upload-box" name="upload" style="display:none;"
-                                onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-                        <input id="upload-file-name-display" class="form-control"
-                                onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                        <div>
+                            <input type="file" id="upload-box" name="upload" style="display:none;"
+                                   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                            <input id="upload-file-name-display" class="form-control"
+                                   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                        </div>
 
-                        <div style="float:left; margin-top: 10px;">
+                        <div style="margin-top: 10px; margin-bottom: 15px; float:left">
                             <input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary" />
                         </div>
 
