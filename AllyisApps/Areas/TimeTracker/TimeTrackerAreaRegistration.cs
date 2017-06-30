@@ -51,10 +51,10 @@ namespace AllyisApps.Areas.TimeTracker
 
 			context.Routes.MapSubdomainRoute(
 				name: "TimeEntry_Index_Current_Week",
-				url: "TimeTracker/{subscriptionId}/{controller}/{action}/{userId}",
+				url: "TimeTracker/{subscriptionId}/{controller}/{action}/{userId}/{id}",
 				area: this.AreaName,
 				defaults: new { controller = "Home", action = "Index" },
-				constraints: new { subscriptionId = @"\d+", userId = @"\d+" },
+				constraints: new { subscriptionId = @"\d+", userId = @"\d+", id = UrlParameter.Optional },
 				namespaces: new string[] { "AllyisApps.Areas.TimeTracker.Controllers" });
 
 			context.Routes.MapSubdomainRoute(
