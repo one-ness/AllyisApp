@@ -62,7 +62,7 @@ namespace AllyisApps
 		public const string Unsubscribe = "unsubscribe";
 		public const string UpdateOvertime = "updateovertime";
 		public const string UpdateStartOfWeek = "updatestartofweek";
-		public const string UpdateUserAJAX = "updateuserajax";
+		public const string UserEditAJAX = "usereditajax";
 		public const string UploadCSVFile = "uploadcsvfile";
 		public const string UserEdit = "useredit";
 		public const string ViewPage = "viewpage";
