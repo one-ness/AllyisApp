@@ -19,6 +19,7 @@ namespace AllyisApps.Lib
 		/// <returns>True if it is a valid format, false if not.</returns>
 		public static bool IsValidEmail(string email)
 		{
+			if (string.IsNullOrWhiteSpace(email)) throw new ArgumentNullException("email");
 			Regex emailVerification = new Regex("^[a-zA-Z0-9!#$%^&*\\-'/=+?_{|}~`.]+@[a-zA-Z0-9!#$%^&*\\-'/=+?_{|}~`.]+\\.[a-zA-Z]+$");
 			return emailVerification.IsMatch(email);
 		}
