@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (model.ApprovalState == -1)
 			{
-				EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId);
+				EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId, model.SubscriptionId);
 				return this.Json(new
 				{
 					status = "error",
@@ -52,7 +52,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if (!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId))
 				{
-					EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId);
+					EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId, model.SubscriptionId);
 					return this.Json(new
 					{
 						status = "error",
@@ -66,7 +66,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// Authorized for editing
 			if (AppService.GetTimeEntry(model.TimeEntryId).ApprovalState == (int)ApprovalState.Approved)
 			{
-				EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId);
+				EditTimeEntryViewModel defaults = this.ConstructEditTimeEntryViewModel(model.TimeEntryId, model.SubscriptionId);
 				return this.Json(new
 				{
 					status = "error",
@@ -140,7 +140,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Resources.Strings.MustSelectPayClass);
 			}
 
-			DateTime? lockDate = AppService.GetLockDate();
+			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId);
 			if ((!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId)) && model.Date <= (lockDate == null ? -1 : AppService.GetDayFromDateTime(lockDate.Value)))
 			{
 				throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
@@ -162,12 +162,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Uses the time entry id to construct a new EditTimeEntryViewModel.
 		/// </summary>
 		/// <param name="timeEntryId">The time entry ID.</param>
+        /// <param name="subscriptionId">The subscription's ID</param>
 		/// <returns>The EditTimeEntryViewModel.</returns>
-		public EditTimeEntryViewModel ConstructEditTimeEntryViewModel(int timeEntryId)
+		public EditTimeEntryViewModel ConstructEditTimeEntryViewModel(int timeEntryId, int subscriptionId)
 		{
 			TimeEntryInfo entry = AppService.GetTimeEntry(timeEntryId);
 
-			DateTime? lockDate = AppService.GetLockDate();
+			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId);
 			return new EditTimeEntryViewModel
 			{
 				UserId = entry.UserId,
