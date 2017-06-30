@@ -3382,7 +3382,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pay class deleted successfully.
+        ///   Looks up a localized string similar to Pay class {0} deleted successfully.
         /// </summary>
         public static string SuccessfulDeletePayClass {
             get {

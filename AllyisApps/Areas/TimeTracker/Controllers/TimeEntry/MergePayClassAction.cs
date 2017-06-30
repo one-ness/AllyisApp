@@ -26,12 +26,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Merge a pay class with another one
 		/// </summary>
 		[HttpGet]
-		public ActionResult MergePayClass(int subscriptionId, int id)
+		public ActionResult MergePayClass(int subscriptionId, int userId)
 		{
 			this.AppService.CheckOrgActionForSubscriptionId(AppService.OrgAction.EditOrganization, subscriptionId);
 			var allPayClasses = AppService.GetPayClasses(subscriptionId);
-			var destPayClasses = allPayClasses.Where(pc => pc.PayClassID != id);
-			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassID == id).ElementAt(0).Name;
+			var destPayClasses = allPayClasses.Where(pc => pc.PayClassID != userId);
+			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassID == userId).ElementAt(0).Name;
 
 			//Built-in, non-editable pay classes cannot be merged
 			if (sourcePayClassName == "Regular" || sourcePayClassName == "Overtime" || sourcePayClassName == "Holiday" || sourcePayClassName == "Paid Time Off" || sourcePayClassName == "Unpaid Time Off")
@@ -40,7 +40,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				return this.RedirectToAction(ActionConstants.Settings);
 			}
 
-			MergePayClassViewModel model = ConstructMergePayClassViewModel(id, sourcePayClassName, subscriptionId, destPayClasses);
+			MergePayClassViewModel model = ConstructMergePayClassViewModel(userId, sourcePayClassName, subscriptionId, destPayClasses);
 			return this.View(ViewConstants.MergePayClass, model);
 		}
 
