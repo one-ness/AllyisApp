@@ -309,11 +309,12 @@ namespace AllyisApps.Services
 		/// <param name="payClassId">Pay class Id.</param>
         /// <param name="orgId">The organization's Id</param>
         /// <param name="subscriptionId">The subscription's Id</param>
+        /// <param name="destPayClass">The id of the destination payclass</param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool DeletePayClass(int payClassId, int orgId, int subscriptionId)
+		public bool DeletePayClass(int payClassId, int orgId, int subscriptionId, int? destPayClass)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
-			DBHelper.DeletePayClass(payClassId);
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);            
+            DBHelper.DeletePayClass(payClassId, destPayClass);
 			return true;
 		}
 

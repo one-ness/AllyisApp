@@ -106,10 +106,22 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Deletes a pay class from the specified organization.
 		/// </summary>
-		/// <param name="payClassID">The name of the pay class to remove.</param>
-		public void DeletePayClass(int payClassID)
+		/// <param name="payClassID">The id of the pay class to remove.</param>
+        /// <param name="destPayClass">The id of the payclass to move all old entries to (nullable)</param>
+		public void DeletePayClass(int payClassID, int? destPayClass)
 		{
-			DynamicParameters parameters = new DynamicParameters();
+            //TODO: move this part in the DeletePayClass stored procedure
+            if (destPayClass != null)
+            {
+                IEnumerable<TimeEntryDBEntity> allEntries = GetTimeEntriesThatUseAPayClass(payClassID);
+                //update the payClassId for all time entries that used the old pay class
+                foreach (TimeEntryDBEntity entry in allEntries)
+                {
+                    entry.PayClassId = destPayClass.Value;
+                    UpdateTimeEntry(entry);
+                }
+            }
+            DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@ID", payClassID);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{

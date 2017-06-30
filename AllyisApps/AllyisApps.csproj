@@ -218,7 +218,6 @@
     <Compile Include="Areas\TimeTracker\Controllers\Project\ProjectController.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Project\UpdateProjectAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\CopyEntries.cs" />
-    <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UpdateUserAJAXAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UserEditAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UpdateStartOfWeekAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\TimeEntry\UpdateOvertimeAction.cs" />
