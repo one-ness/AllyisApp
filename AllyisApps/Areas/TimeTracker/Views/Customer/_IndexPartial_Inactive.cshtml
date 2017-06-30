@@ -37,15 +37,17 @@
                 <!--inactive projects belong to chosen customer will be populated here-->
             </div>
         </div>
-        
+        @if ((bool)ViewData["IsManager"])
+        {
     <div style="position: relative">
         <div class="pull-right">
-            <button type="button" onclick="ReactivateCustomer()" class="btn btn-info" id="reactivateCustomerButton"><i class="glyphicon glyphicon-plus"></i></button>
+            <button type="button" onclick="ReactivateCustomer()" class="btn btn-primary" id="reactivateCustomerButton"><i class="glyphicon glyphicon-plus"></i></button>
         </div>
     </div>
     <div style="position: relative">
         <div class="pull-right">
-            <button type="button" onclick="ReactivateProject()" class="btn btn-info" id="reactivateProjectButton"><i class="glyphicon glyphicon-plus"></i></button>
+            <button type="button" onclick="ReactivateProject()" class="btn btn-primary" id="reactivateProjectButton"><i class="glyphicon glyphicon-plus"></i></button>
         </div>
     </div>
+        }
 </div>

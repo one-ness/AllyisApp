@@ -6,12 +6,10 @@
         UpdateTargetId = "OrgEditWrap"
     };
     Layout = "~/Views/Shared/_LayoutModal.cshtml";
-    //string left = "col-xs-4 text-right";
-    //string right = "col-xs-8";
     string action = ViewBag.Action;
 }
 
-<div>
+<div class="shrink-wrap-center">
     <div>
         @using (Html.BeginForm(action, ControllerConstants.Project, FormMethod.Post, new { @class = "", id = "ProjectForm", role = "form", name = "EditForm", onsubmit = "return selectAll()" }))
         {
@@ -20,39 +18,27 @@
                 @Html.ValidationSummary(true)
                 <div class="form-group">
                     @Html.ReqLabelFor(m => m.ProjectName, @Strings.Name)
-                    @*<label for="Name">@AllyisApps.Resources.TimeTracker.Views.Project.Strings.Name</label>*@
                     @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
                     @Html.ValidationMessageFor(x => x.ProjectName, "", new { @class = "text-danger" })
                 </div>
-                @*@if (Model.IsCreating)
-                {*@
-                    <div class="form-group">
-                        @Html.ReqLabelFor(m => m.ProjectOrgId, Strings.ProjectOrgId)
-                        @Html.TextBoxFor(m => m.ProjectOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.ProjectOrgId })
-                        @Html.ValidationMessageFor(x => x.ProjectOrgId, "", new { @class = "text-danger"})
-                    </div>
-                @*}
-                else
+                <div class="form-group">
+                    @Html.ReqLabelFor(m => m.ProjectOrgId, Strings.ProjectOrgId)
+                    @Html.TextBoxFor(m => m.ProjectOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.ProjectOrgId })
+                    @Html.ValidationMessageFor(x => x.ProjectOrgId, "", new { @class = "text-danger"})
+                </div>
+                @if (Model.SelectedProjectUserIds.Count() > 0)
                 {
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.ProjectOrgId, AllyisApps.Resources.TimeTracker.Views.Project.Strings.ProjectOrgId)
-                        <span class="form-control">@Model.ProjectOrgId</span>
-                        @Html.HiddenFor(m => m.ProjectOrgId)
-                    </div>
-                }*@
-                    @if (Model.SelectedProjectUserIds.Count() > 0)
+                    var _projectUsers = Model.ProjectUsers.ToList();
+                    var _subscriptionUsers = Model.SubscriptionUsers.ToList();
+                    foreach (var id in Model.SelectedProjectUserIds)
                     {
-                        var _projectUsers = Model.ProjectUsers.ToList();
-                        var _subscriptionUsers = Model.SubscriptionUsers.ToList();
-                        foreach (var id in Model.SelectedProjectUserIds)
-                        {
-                            var choice = Model.SubscriptionUsers.Where(m => m.UserId == id).FirstOrDefault();
-                            _projectUsers.Add(choice);
-                            _subscriptionUsers.Remove(choice);
-                        }
-                        Model.ProjectUsers = _projectUsers;
-                        Model.SubscriptionUsers = _subscriptionUsers;
+                        var choice = Model.SubscriptionUsers.Where(m => m.UserId == id).FirstOrDefault();
+                        _projectUsers.Add(choice);
+                        _subscriptionUsers.Remove(choice);
                     }
+                    Model.ProjectUsers = _projectUsers;
+                    Model.SubscriptionUsers = _subscriptionUsers;
+                }
                 <div id="swapper-ui" class="swapper-ui">
                     <div class="left">
                         <label>@Strings.OffProj</label>
@@ -83,13 +69,6 @@
                     </div>
                 </div>
 				<div class="form-group row" style="margin-bottom: 0px; margin-top: 15px;">
-					@*<div class="col-xs-6 text-left">
-						<label for="daterange" style="text-align:center">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.StartDate</label>
-					</div>
-					<div class="col-xs-6 text-left">
-						<label for="daterange" style="text-align:center">@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.EndDate</label>
-					</div>*@
-
 					<div class="form-group projectDate">
 						<label>@Strings.StartDate</label>
 						@Html.HiddenFor(m => m.StartDate)
@@ -118,17 +97,38 @@
 					@Html.RadioButtonFor(m => m.PriceType, Strings.Fixed) @Strings.Fixed
 				</div>
 			</div>
-
-			@*<div class="form-group row" style="margin-bottom: 0px; margin-top: 15px;">
-				<div class="col-xs-4 text-left">
-					@Html.RadioButtonFor(m => m.PriceType, AllyisApps.Resources.TimeTracker.Views.Project.Strings.Hourly, new { @checked = "checked" }) @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Hourly
-					@Html.RadioButtonFor(m => m.PriceType, AllyisApps.Resources.TimeTracker.Views.Project.Strings.Fixed) @AllyisApps.Resources.TimeTracker.Views.Project.Strings.Fixed
-				</div>
-			</div>*@
-
             <div class="text-right" style="padding-top: 15px; padding-bottom: 15px;">
                 <input type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId })'" />
                 <input type="submit" value=@Strings.Save class="btn btn-primary" id="submitProject" />
+            </div>
+        }
+
+        <br />
+        @if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
+        {
+            <div class="row">
+                <div class="col-md-6 sm-control-width">
+                    @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get, new { @class = "panel-heading", style = "display: flex; justify-content: space-between;" }))
+                    {
+                        <label>@Strings.Upload</label>
+                            <input type="submit" id="template-button" value="@Strings.Template" class="btn btn-primary tt-template" />
+                    }
+                    @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken();
+                        <div>
+                            <input type="file" id="upload-box" name="upload" style="display:none;"
+                                   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                            <input id="upload-file-name-display" class="form-control"
+                                   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+                        </div>
+                            <div id="footUpload" class="panel-footer" style="display: flex; justify-content: flex-end; flex-wrap: wrap; padding-bottom: 0px;">
+                                <a class="btn btn-primary pull-right" style="margin-bottom: 15px;" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
+                                &nbsp
+                                <input type="submit" style="margin-bottom: 15px;" id="upload-button" value="@Strings.Upload" class="btn btn-primary pull-right" />
+                            </div>
+                    }
+                </div>
             </div>
         }
     </div><!-- /.modal-content -->

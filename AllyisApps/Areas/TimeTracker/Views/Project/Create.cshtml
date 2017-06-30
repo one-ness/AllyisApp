@@ -8,10 +8,11 @@
     string controllerName = (string)ViewContext.Controller.ValueProvider.GetValue("controller").RawValue;
     ViewBag.Title = Strings.CreateProject;
     ViewBag.Subtitle = Model.CustomerName;
-    ViewBag.Action = "Create";
+    ViewData.Add(ControllerConstants.Controller, ControllerConstants.Project);
+    ViewData.Add(ActionConstants.Action, ActionConstants.Create);
 }
 
-<div class="shrink-wrap-center">
+<div>
     @{Html.RenderPartial("_ProjectEdit", Model, ViewData);}
 </div>
 
