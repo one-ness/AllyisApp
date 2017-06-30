@@ -25,12 +25,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Gets the form for editing an existing Project.
 		/// </summary>
 		/// <param name="subscriptionId"></param>
-		/// <param name="id">The project's Id.</param>
+		/// <param name="userId">The project's Id.</param>
 		/// <returns>The ActionResult for the Edit view.</returns>
-		public ActionResult Edit(int subscriptionId, int id)
+		public ActionResult Edit(int subscriptionId, int userId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
-			return this.View(this.ConstructEditProjectViewModel(id, subscriptionId));
+			return this.View(this.ConstructEditProjectViewModel(userId, subscriptionId));
 		}
 
 		/// <summary>

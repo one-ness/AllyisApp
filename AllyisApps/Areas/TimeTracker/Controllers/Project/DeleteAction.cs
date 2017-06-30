@@ -19,11 +19,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// Deletes the project.
         /// </summary>
         /// <param name="subscriptionId"></param>
-        /// <param name="id">The project's Id.</param>
+        /// <param name="userId">The project's Id.</param>
         /// <returns>Deletes the project from the database.</returns>
-        public ActionResult Delete(int subscriptionId, int id = 0)
+        public ActionResult Delete(int subscriptionId, int userId)
         {
-            var result = AppService.DeleteProject(id, subscriptionId);
+            var result = AppService.DeleteProject(userId, subscriptionId);
             // if deleted successfully
             if (result != null && result != "")
             {
