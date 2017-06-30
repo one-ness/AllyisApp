@@ -203,9 +203,9 @@
 
 @section scripts{
 	<script type="text/javascript">
-        mergePayClassUrl = "@Url.Action(ActionConstants.MergePayClass, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId, PayClassId = -1 })"
+        mergePayClassUrl = "@Url.Action(ActionConstants.MergePayClass, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, userId = -1 })"
         deletePayClassWarning = "@Strings.ConfirmDeletePayClass"
-        deletePayClassUrl = "@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId, PayClassId = -1 })"
+        deletePayClassUrl = "@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = -1 })"
         deleteHolidayWarning = "@Strings.ConfirmDeleteHoliday";
 		deleteHolidayUrl = "@Url.Action(ActionConstants.DeleteHoliday, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId, HolidayId = -1 })"
 	</script>
