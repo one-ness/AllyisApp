@@ -21,14 +21,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET: Customer/{SubscriptionId}/Edit.
 		/// </summary>
-		/// <param name="id">The Customer id.</param>
+		/// <param name="userId">The Customer id.</param>
         /// <param name="subscriptionId">The Subscription Id</param>
 		/// <returns>Presents a page to edit Customer data.</returns>
 		[HttpGet]
-		public ActionResult Edit(int subscriptionId, int id)
+		public ActionResult Edit(int subscriptionId, int userId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
-				var infos = AppService.GetCustomerAndCountries(id);
+				var infos = AppService.GetCustomerAndCountries(userId);
 
 				return this.View(new EditCustomerInfoViewModel
 				{
@@ -44,7 +44,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Website = infos.Item1.Website,
 					EIN = infos.Item1.EIN,
 					OrganizationId = infos.Item1.OrganizationId,
-					CustomerID = id,
+					CustomerID = userId,
 					ValidCountries = infos.Item2,
 					CustomerOrgId = infos.Item1.CustomerOrgId,
                     SubscriptionId = subscriptionId
