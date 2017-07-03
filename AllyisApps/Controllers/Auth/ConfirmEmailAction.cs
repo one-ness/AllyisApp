@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.Core.Alert;
+using System;
 using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
@@ -17,13 +18,10 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/ConfirmEmail.
 		/// </summary>
-		/// <param name = "userId" > The current user's id.</param>
-		/// <param name = "code" > The authentication code.</param>
-		/// <returns>The async task responsible for confirming an e-mail.</returns>
 		[AllowAnonymous]
-		public ActionResult ConfirmEmail(string userId, string code)
+		public ActionResult ConfirmEmail(int id, Guid code)
 		{
-			if (this.AppService.ConfirmUserEmail(int.Parse(userId), code))
+			if (this.AppService.ConfirmUserEmail(id, code))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.NotifyYourEmailIsConfirmed, Variety.Success));
 				return this.RedirectToAction(ActionConstants.LogOn, ControllerConstants.Account);

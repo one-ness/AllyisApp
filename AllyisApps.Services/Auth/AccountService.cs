@@ -665,45 +665,23 @@ namespace AllyisApps.Services
 		/// <param name="userId">User Id.</param>
 		/// <param name="code">The confirmation code.</param>
 		/// <returns>True on success, false if the email is already confirmed or some other failure occurs.</returns>
-		public bool ConfirmUserEmail(int userId, string code)
+		public bool ConfirmUserEmail(int userId, Guid code)
 		{
-			#region Validation
+			if (userId <= 0) throw new ArgumentException("userId");
+			if (code == null) throw new ArgumentNullException("code");
 
-			if (userId <= 0)
+			bool result = false;
+			UserDBEntity userDbEntity = DBHelper.GetUserInfo(userId);
+			if (!userDbEntity.EmailConfirmed)
 			{
-				throw new ArgumentOutOfRangeException("user Id", "User ID cannot be 0 or negative.");
-			}
-
-			if (string.IsNullOrEmpty(code))
-			{
-				throw new ArgumentNullException("code", "Code must have a value.");
-			}
-			else
-			{
-				Guid guidOutput;
-				if (!Guid.TryParse(code, out guidOutput))
+				string guidstr = code.ToString();
+				if (string.Compare(userDbEntity.EmailConfirmationCode.ToString(), guidstr, true) == 0)
 				{
-					throw new ArgumentException("Code must be a valid Guid.");
+					result = DBHelper.UpdateEmailConfirmed(userId, guidstr);
 				}
 			}
 
-			#endregion Validation
-
-			UserDBEntity userDbEntity = DBHelper.GetUserInfo(userId);
-
-			if (userDbEntity.EmailConfirmed)
-			{
-				return false;
-			}
-
-			if (userDbEntity.EmailConfirmationCode.ToString() != code)
-			{
-				return false;
-			}
-			else
-			{
-				return DBHelper.UpdateEmailConfirmed(userId, code);
-			}
+			return result;
 		}
 
 		/// <summary>
