@@ -36,12 +36,7 @@ namespace AllyisApps.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult CreateOrg(EditOrganizationViewModel model)
 		{
-			//if (!this.IsSubdomainNameUnique(model.SubdomainName))
-			//{
-			//	ModelState.AddModelError(string.Empty, Resources.Controllers.Auth.Strings.SubdomainTaken);
-			//}
-
-			if (model != null && ModelState.IsValid)
+			if (ModelState.IsValid)
 			{
 				int orgId = AppService.CreateOrganization(
 					new Organization()
@@ -56,10 +51,9 @@ namespace AllyisApps.Controllers
 						PhoneNumber = model.PhoneNumber,
 						FaxNumber = model.FaxNumber
 					},
-					this.AppService.UserContext.UserId,
 					model.EmployeeId);
 
-				if (orgId == -1)
+				if (orgId < 0)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SubdomainTaken, Variety.Danger));
 					return this.View(model);

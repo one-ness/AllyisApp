@@ -417,14 +417,7 @@ namespace AllyisApps.Services
 		/// <returns>A UserInfo instance with the user's info.</returns>
 		public User GetUserByEmail(string email)
 		{
-			if (string.IsNullOrEmpty(email))
-			{
-				throw new ArgumentNullException("email", "Email address must have a value.");
-			}
-			else if (!Utility.IsValidEmail(email))
-			{
-				throw new FormatException("Email address must be in a valid format.");
-			}
+			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 
 			return InitializeUser(DBHelper.GetUserByEmail(email));
 		}
@@ -624,36 +617,9 @@ namespace AllyisApps.Services
 		/// <returns>The async confirmation email task.</returns>
 		public async Task SendConfirmationEmail(string from, string to, string confirmEmailUrl)
 		{
-			#region Validation
-
-			if (string.IsNullOrEmpty(from))
-			{
-				throw new ArgumentNullException("from", "From email address must have a value.");
-			}
-			else if (!Utility.IsValidEmail(from))
-			{
-				throw new FormatException("From email address must be in a valid format.");
-			}
-
-			if (string.IsNullOrEmpty(to))
-			{
-				throw new ArgumentNullException("to", "To email address must have a value.");
-			}
-			else if (!Utility.IsValidEmail(to))
-			{
-				throw new FormatException("To email address must be in a valid format.");
-			}
-
-			if (string.IsNullOrEmpty(confirmEmailUrl))
-			{
-				throw new ArgumentNullException("confirmEmailUrl", "Confirm email url must have a value.");
-			}
-			else if (!Utility.IsValidUrl(confirmEmailUrl))
-			{
-				throw new FormatException("Confirm email url must be in a valid format.");
-			}
-
-			#endregion Validation
+			if (!Utility.IsValidEmail(from)) throw new ArgumentException("from");
+			if (!Utility.IsValidEmail(to)) throw new ArgumentException("to");
+			if (string.IsNullOrWhiteSpace(confirmEmailUrl)) throw new ArgumentNullException("confirmEmailUrl");
 
 			string bodyHtml = string.Format("Please confirm your email by clicking <a href=\"{0}\">here</a>", confirmEmailUrl);
 			await Mailer.SendEmailAsync(from, to, "Confirm Email", bodyHtml);
