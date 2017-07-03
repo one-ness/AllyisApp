@@ -1450,4 +1450,7 @@
   <data name="PasswordResetError" xml:space="preserve">
     <value>Your password reset link might have expired. Please try again.</value>
   </data>
+  <data name="ApplicationTitle" xml:space="preserve">
+    <value>Allyis Apps</value>
+  </data>
 </root>

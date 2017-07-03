@@ -58,22 +58,14 @@ namespace AllyisApps.Services
 		/// Creates an organization.
 		/// </summary>
 		/// <param name="organization">Organization.</param>
-		/// <param name="ownerId">Organization owner user Id.</param>
 		/// <param name="employeeId">Organization owner employee Id.</param>
 		/// <returns>Organizaiton Id, or -1 if the subdomain name is taken.</returns>
-		public int CreateOrganization(Organization organization, int ownerId, string employeeId)
+		public int CreateOrganization(Organization organization, string employeeId)
 		{
-			if (organization == null)
-			{
-				throw new ArgumentNullException("organization", "Organization must not be null.");
-			}
+			if (organization == null) throw new ArgumentNullException("organization");
+			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
 
-			if (ownerId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("ownerId", "Organization owner's user id cannot be 0 or negative.");
-			}
-
-			return DBHelper.CreateOrganization(GetDBEntityFromOrganization(organization), ownerId, (int)OrganizationRole.Owner, employeeId);
+			return DBHelper.CreateOrganization(GetDBEntityFromOrganization(organization), this.UserContext.UserId, (int)OrganizationRole.Owner, employeeId);
 		}
 
 		/// <summary>

@@ -1,8 +1,15 @@
 ﻿@model AllyisApps.ViewModels.Auth.EditOrganizationViewModel
+@{
+	string action = ActionConstants.EditOrg;
+	if (Model.IsCreating)
+	{
+		action = ActionConstants.CreateOrg;
+	}
+}
 
 <div class="shrink-wrap-center">
 	<div>
-		@using (Html.BeginForm((string)(ViewData[ActionConstants.Action]), (string)ViewData[ControllerConstants.Controller], new { ReturnUrl = (string)(ViewBag.ReturnUrl) }, FormMethod.Post, new { @class = "", role = "form" }))
+		@using (Html.BeginForm(action, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form" }))
 		{
 			@Html.AntiForgeryToken()
 			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
@@ -80,11 +87,20 @@
 		}
 	</div>
 	@if (Model != null && Model.CanDelete)
-    {
-        using (Html.BeginForm(ActionConstants.DeleteOrg, ControllerConstants.Account, new { id = Model.OrganizationId },  FormMethod.Post, new { @onsubmit = "return confirm(\"" + Strings.ConfirmDeleteOrg + "\");" }))
+	{
+		using (Html.BeginForm(ActionConstants.DeleteOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = "return confirm(\"" + Strings.ConfirmDeleteOrg + "\");" }))
 		{
 			@Html.AntiForgeryToken()
 			<input type="submit" value="@Strings.DeleteOrganization" class="btn btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
 		}
 	}
 </div>
+@section scripts
+{
+	<script type="text/javascript">
+        var preserveState = '@(Model != null ? (States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';
+		var dropdownempty = "@Strings.DropDownEmpty";
+	</script>
+	@Scripts.Render("~/bundles/UpdateStateDDL");
+	@Scripts.Render("~/bundles/AccountCreateOrg");
+}

@@ -1,9 +1,9 @@
 ﻿@{
-    string title = ViewBag.TitleBar ?? ViewBag.Title;
-    //if (OrganizationInfo != null)
-    //{
-    //    title += " | " + OrganizationInfo.Name;
-    //}
+	string title = ViewBag.Title + " - " + Strings.ApplicationTitle;
+	if (ViewBag.Title == null)
+	{
+		title = Strings.ApplicationTitle;
+	}
 }
 
 <!DOCTYPE html>
