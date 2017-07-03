@@ -79,7 +79,7 @@
 @section Scripts {
     <script type="text/javascript">
         var update_link = "@Url.Action(ActionConstants.UserEditAJAX, ControllerConstants.TimeEntry)";
-        var index_link = "@Url.Action(ActionConstants.Index, ControllerConstants.TimeEntry)";
+        var index_link = "@Url.Action(ActionConstants.Index, ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = ViewData["UserId"] })";
     </script>
     @Scripts.Render("~/bundles/TTTimeEntryUserEdit");
 }
