@@ -72,7 +72,7 @@ namespace AllyisApps.Controllers
 			}
 
 			Notifications.Add(new BootstrapAlert(Resources.Strings.WarnProblemSigningIn, Variety.Warning));
-			return this.View("Error", new HandleErrorInfo(new System.Exception(Resources.Strings.StatusErrorMessage), "Account", "Register"));
+			return this.View("Error", new HandleErrorInfo(new System.Exception(Resources.Strings.StatusErrorMessage), ControllerConstants.Account, ActionConstants.Register));
 		}
 	}
 }

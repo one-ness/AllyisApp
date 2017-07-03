@@ -513,24 +513,22 @@ namespace AllyisApps.Services
 		/// Sends an email with password reset link to the given email address.
 		/// </summary>
 		/// <param name="email">The user email address.</param>
+		/// <param name="code">the password reset code that is </param>
 		/// <param name="callbackUrl">The Url to include as the "click here" link, with stand-ins for userid and code (as "{userid}" and "{code}".</param>
 		/// <returns>A value indicating whether the given email address matched with an existing user.</returns>
-		public async Task<bool> SendPasswordResetMessage(string email, string callbackUrl)
+		public async Task<bool> SendPasswordResetMessage(string email, string code, string callbackUrl)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
+			if (string.IsNullOrWhiteSpace(code)) throw new ArgumentNullException("code");
 			if (string.IsNullOrWhiteSpace(callbackUrl)) throw new ArgumentNullException("callbackUrl");
 
 			bool result = false;
-			Guid code = Guid.NewGuid();
-			int userId = this.DBHelper.UpdateUserPasswordResetCode(email, code.ToString());
+			int userId = this.DBHelper.UpdateUserPasswordResetCode(email, code);
 			if (userId > 0)
 			{
 				// Send reset email
 				StringBuilder sb = new StringBuilder();
-				sb.AppendFormat("{0}?userId={1}&code={2}", callbackUrl, userId, code);
-				string feedbackUrl = sb.ToString();
-				sb.Clear();
-				sb.AppendFormat("Please reset your password by clicking <a href=\"{0}\">this reset link</a>.", feedbackUrl);
+				sb.AppendFormat("Please reset your password by clicking <a href=\"{0}\">this reset link</a>.", callbackUrl);
 				string msgbody = new System.Web.HtmlString(sb.ToString()).ToString();
 				await Mailer.SendEmailAsync("noreply@allyisapps.com", email, "Reset password", msgbody);
 				result = true;
@@ -546,15 +544,12 @@ namespace AllyisApps.Services
 		/// <param name="code">The code.</param>
 		/// <param name="password">The password.</param>
 		/// <returns>The reset password task.</returns>
-		public async Task<bool> ResetPassword(int userId, string code, string password)
+		public async Task<bool> ResetPassword(int userId, Guid code, string password)
 		{
 			if (userId <= 0) throw new ArgumentNullException("userId");
-			if (string.IsNullOrWhiteSpace(code)) throw new ArgumentNullException("code");
+			if (code == null) throw new ArgumentNullException("code");
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException("password");
-			Guid guidOutput;
-			if (!Guid.TryParse(code, out guidOutput)) throw new ArgumentException("code");
-
-			return await Task<bool>.Run(() =>
+			return await Task.Run(() =>
 			{
 				// update password for user and reset password code to null
 				return this.DBHelper.UpdateUserPasswordUsingCode(userId, Crypto.GetPasswordHash(password), code) == userId;
@@ -670,45 +665,23 @@ namespace AllyisApps.Services
 		/// <param name="userId">User Id.</param>
 		/// <param name="code">The confirmation code.</param>
 		/// <returns>True on success, false if the email is already confirmed or some other failure occurs.</returns>
-		public bool ConfirmUserEmail(int userId, string code)
+		public bool ConfirmUserEmail(int userId, Guid code)
 		{
-			#region Validation
+			if (userId <= 0) throw new ArgumentException("userId");
+			if (code == null) throw new ArgumentNullException("code");
 
-			if (userId <= 0)
+			bool result = false;
+			UserDBEntity userDbEntity = DBHelper.GetUserInfo(userId);
+			if (!userDbEntity.EmailConfirmed)
 			{
-				throw new ArgumentOutOfRangeException("user Id", "User ID cannot be 0 or negative.");
-			}
-
-			if (string.IsNullOrEmpty(code))
-			{
-				throw new ArgumentNullException("code", "Code must have a value.");
-			}
-			else
-			{
-				Guid guidOutput;
-				if (!Guid.TryParse(code, out guidOutput))
+				string guidstr = code.ToString();
+				if (string.Compare(userDbEntity.EmailConfirmationCode.ToString(), guidstr, true) == 0)
 				{
-					throw new ArgumentException("Code must be a valid Guid.");
+					result = DBHelper.UpdateEmailConfirmed(userId, guidstr);
 				}
 			}
 
-			#endregion Validation
-
-			UserDBEntity userDbEntity = DBHelper.GetUserInfo(userId);
-
-			if (userDbEntity.EmailConfirmed)
-			{
-				return false;
-			}
-
-			if (userDbEntity.EmailConfirmationCode.ToString() != code)
-			{
-				return false;
-			}
-			else
-			{
-				return DBHelper.UpdateEmailConfirmed(userId, code);
-			}
+			return result;
 		}
 
 		/// <summary>

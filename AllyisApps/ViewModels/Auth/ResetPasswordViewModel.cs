@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.ViewModels.Auth
@@ -17,7 +18,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the account id.
 		/// </summary>
 		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "EmailValidation")]
-		public string UserId { get; set; }
+		public int UserId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the new password.
@@ -40,6 +41,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the verification code.
 		/// </summary>
-		public string Code { get; set; }
+		public Guid Code { get; set; }
 	}
 }
