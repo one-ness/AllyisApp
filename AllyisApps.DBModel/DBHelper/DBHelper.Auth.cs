@@ -266,12 +266,12 @@ namespace AllyisApps.DBModel
 		/// <param name = "password">The new password hash.</param>
 		/// <param name = "code">The password reset code.</param>
 		/// <returns>An int...</returns>
-		public int UpdateUserPasswordUsingCode(int userId, string password, string code)
+		public int UpdateUserPasswordUsingCode(int userId, string password, Guid code)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@UserID", userId);
 			parameters.Add("@PasswordHash", password);
-			parameters.Add("@PasswordResetCode", code);
+			parameters.Add("@PasswordResetCode", code.ToString());
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
