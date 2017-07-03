@@ -8,6 +8,8 @@ using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System;
+using System.Text;
 
 namespace AllyisApps.Controllers
 {
@@ -40,7 +42,11 @@ namespace AllyisApps.Controllers
 			if (ModelState.IsValid)
 			{
 				// NOTE: do not check for failure, always display success message and redirect to login page
-				await AppService.SendPasswordResetMessage(model.Email, Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, null, protocol: Request.Url.Scheme));
+				string code = Guid.NewGuid().ToString();
+				string callbackUrl = Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
+				StringBuilder sb = new StringBuilder();
+				sb.AppendFormat("{0}/{1}/{2}", callbackUrl, this.AppService.UserContext.UserId, code);
+				await AppService.SendPasswordResetMessage(model.Email, code, sb.ToString());
 				Notifications.Add(new Core.Alert.BootstrapAlert(string.Format("{0} {1}.", Resources.Strings.ResetEmailHasBeenSent, model.Email), Core.Alert.Variety.Success));
 				return this.RedirectToAction(ActionConstants.LogOn);
 			}
