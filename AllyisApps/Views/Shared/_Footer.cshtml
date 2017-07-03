@@ -4,6 +4,7 @@
 
 @{
     Layout = string.Empty;
+    var languageID = (int)ViewData["LanguageID"];
 }
 
 @*<footer class="footer">
@@ -13,19 +14,18 @@
         <p class="footer-links col-xs-8 col-sm-6">
             <select class="col-xs-12 col-sm-6 form-control" id="languageSelect" onchange="OnLanguageSelect()" value=@ViewBag.language style="width: inherit;">
                 @foreach (LanguageViewModel language in Model.Item1)
-            {
-                string languageKey = LanguageViewModel.Clean(language.LanguageName);
-
-                if (ViewBag.languageName == language.LanguageName)
                 {
-                        <option value="@language.LanguageID" selected>@(Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
+                    string languageKey = LanguageViewModel.Clean(language.LanguageName);
+                    if (languageID == language.LanguageID)
+                    {
+                        <option value=@language.LanguageID selected>@(Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
                     }
                     else
                     {
-                        <option value="@language.LanguageID">@(Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
+                        <option value=@language.LanguageID>@(Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
                     }
                 }
-            </select>
+            </select >
             <span class="col-xs-12 col-sm-6 footer-text">
                 @Html.ActionLink(Strings.PrivacyPolicy, ActionConstants.PrivacyPolicy, ControllerConstants.Home)
                 @Html.ActionLink(Strings.Help, ActionConstants.Help, ControllerConstants.Home)
