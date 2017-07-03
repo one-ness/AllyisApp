@@ -1,12 +1,11 @@
 ﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = Strings.ConfirmEmail;
 }
 
 <div class="shrink-wrap-center">
     <div class="min300">
         <p>
-            @Strings.ConfirmEmailDialogue@Html.ActionLink(Strings.RedirectToSignIn, ActionConstants.LogOn, ControllerConstants.Account, routeValues: null, htmlAttributes: new { id = "loginLink" })
+            @Strings.ConfirmEmailDialogue @Html.ActionLink(Strings.RedirectToSignIn, ActionConstants.LogOn, ControllerConstants.Account, routeValues: null, htmlAttributes: new { id = "loginLink" })
         </p>
     </div>
 </div>

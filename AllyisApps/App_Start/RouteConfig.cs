@@ -7,6 +7,7 @@
 using AllyisApps.Extensions.RouteExtensions;
 using System.Web.Mvc;
 using System.Web.Routing;
+using AllyisApps.Core;
 
 namespace AllyisApps
 {
@@ -23,18 +24,21 @@ namespace AllyisApps
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-			routes.Add(
-				"default",
-				new Route(
-					url: "{controller}/{action}/{id}/{productId}",
-					defaults: new RouteValueDictionary(new { controller = "Home", action = "Index", id = UrlParameter.Optional, productId = UrlParameter.Optional }),
+			// enable attribute routes
+			routes.MapMvcAttributeRoutes();
+
+			routes.Add("resetpassword",
+				new Route(url: string.Format("{0}/{1}/{{id}}/{{code}}", ControllerConstants.Account, ActionConstants.ResetPassword),
+					defaults: new RouteValueDictionary(new { controller = ControllerConstants.Account, action = ActionConstants.ResetPassword }),
+					constraints: new RouteValueDictionary(new { id = @"\d+" }),
+					dataTokens: new RouteValueDictionary(new { Namespaces = new string[] { "AllyisApps.Controllers" }, UseNamespaceFallback = false /*Use ONLY this namespace */}),
+					routeHandler: new MvcRouteHandler()));
+
+			routes.Add("default",
+				new Route(url: "{controller}/{action}/{id}",
+					defaults: new RouteValueDictionary(new { controller = ControllerConstants.Home, action = ActionConstants.Index, id = UrlParameter.Optional }),
 					constraints: null,
-					dataTokens: new RouteValueDictionary(
-						new
-						{
-							Namespaces = new string[] { "AllyisApps.Controllers" },
-							UseNamespaceFallback = false // Use ONLY this namespace.
-						}),
+					dataTokens: new RouteValueDictionary(new { Namespaces = new string[] { "AllyisApps.Controllers" }, UseNamespaceFallback = false /*Use ONLY this namespace */}),
 					routeHandler: new MvcRouteHandler()));
 		}
 	}

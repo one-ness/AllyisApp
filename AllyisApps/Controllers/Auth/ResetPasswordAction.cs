@@ -20,18 +20,17 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/ResetPassword.
 		/// </summary>
-		/// <param name="userId">The provided user's Id.</param>
+		/// <param name="id">The provided user's Id.</param>
 		/// <param name="code">The verification code.</param>
 		/// <returns>The result of this action.</returns>
+		[HttpGet]
 		[AllowAnonymous]
-		public ActionResult ResetPassword(int userId, string code)
+		public ActionResult ResetPassword(int id, Guid code)
 		{
-			if (userId < 1 || string.IsNullOrWhiteSpace(code))
-			{
-				return this.View(ViewConstants.Error, new HandleErrorInfo(new ArgumentException(@Resources.Strings.ParameterErrorMessage), ControllerConstants.Account, ActionConstants.ResetPassword));
-			}
-
-			return this.View(new ResetPasswordViewModel());
+			var model = new ResetPasswordViewModel();
+			model.UserId = id;
+			model.Code = code;
+			return this.View(model);
 		}
 
 		/// <summary>
@@ -46,7 +45,7 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				if (await AppService.ResetPassword(int.Parse(model.UserId), model.Code, model.Password))
+				if (await AppService.ResetPassword(model.UserId, model.Code, model.Password))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ResetPasswordSuccessDialogue, Variety.Success));
 					return this.RedirectToAction(ActionConstants.LogOn, ControllerConstants.Account);
