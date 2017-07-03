@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId; ;
 			try
 			{
-				if (AppService.UpdateLockDate(LDsetting, LDperiod, LDquantity))
+				if (AppService.UpdateLockDate(LDsetting, LDperiod, LDquantity, orgId))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.LockDateUpdate, Variety.Success));
 				}
