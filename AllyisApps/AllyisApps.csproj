@@ -275,7 +275,7 @@
     <Compile Include="Controllers\Auth\ChargeAction.cs" />
     <Compile Include="Controllers\Auth\DeleteOrgAction.cs" />
     <Compile Include="Controllers\Auth\DownloadImportUsersTemplateAction.cs" />
-    <Compile Include="Controllers\Auth\EditAction.cs" />
+    <Compile Include="Controllers\Auth\EditOrgAction.cs" />
     <Compile Include="Controllers\Auth\GetBillingSummaryAction.cs" />
     <Compile Include="Controllers\Auth\InviteAction.cs" />
     <Compile Include="Controllers\Auth\ManageAction.cs" />

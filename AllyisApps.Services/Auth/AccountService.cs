@@ -417,14 +417,7 @@ namespace AllyisApps.Services
 		/// <returns>A UserInfo instance with the user's info.</returns>
 		public User GetUserByEmail(string email)
 		{
-			if (string.IsNullOrEmpty(email))
-			{
-				throw new ArgumentNullException("email", "Email address must have a value.");
-			}
-			else if (!Utility.IsValidEmail(email))
-			{
-				throw new FormatException("Email address must be in a valid format.");
-			}
+			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 
 			return InitializeUser(DBHelper.GetUserByEmail(email));
 		}

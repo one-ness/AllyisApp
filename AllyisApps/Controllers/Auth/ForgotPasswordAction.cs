@@ -44,9 +44,14 @@ namespace AllyisApps.Controllers
 				// NOTE: do not check for failure, always display success message and redirect to login page
 				string code = Guid.NewGuid().ToString();
 				string callbackUrl = Url.Action(ActionConstants.ResetPassword, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
-				StringBuilder sb = new StringBuilder();
-				sb.AppendFormat("{0}/{1}/{2}", callbackUrl, this.AppService.UserContext.UserId, code);
-				await AppService.SendPasswordResetMessage(model.Email, code, sb.ToString());
+				User user = this.AppService.GetUserByEmail(model.Email);
+				if (user != null)
+				{
+					StringBuilder sb = new StringBuilder();
+					sb.AppendFormat("{0}/{1}/{2}", callbackUrl, user.UserId, code);
+					await AppService.SendPasswordResetMessage(model.Email, code, sb.ToString());
+				}
+
 				Notifications.Add(new Core.Alert.BootstrapAlert(string.Format("{0} {1}.", Resources.Strings.ResetEmailHasBeenSent, model.Email), Core.Alert.Variety.Success));
 				return this.RedirectToAction(ActionConstants.LogOn);
 			}

@@ -217,11 +217,10 @@ namespace AllyisApps.Services
 		/// Deletes the user's current chosen organization.
 		/// </summary>
 		/// <returns>Returns false if permissions fail.</returns>
-		public bool DeleteOrganization(int orgId)
+		public void DeleteOrganization(int orgId)
 		{
 			this.CheckOrgAction(OrgAction.DeleteOrganization, orgId);
             DBHelper.DeleteOrganization(orgId);
-			return true;
 		}
 
 		/// <summary>
