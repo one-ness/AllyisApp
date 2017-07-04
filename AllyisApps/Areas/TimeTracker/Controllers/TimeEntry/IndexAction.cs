@@ -171,7 +171,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ApprovalState = iter.Current.ApprovalState,
 						ModSinceApproval = iter.Current.ModSinceApproval,
 						PayClasses = result.PayClasses,
-						Locked = iter.Current.ApprovalState == (int)Core.ApprovalState.Approved || (isProjectDeleted && !this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subId))
+						Locked = iter.Current.ApprovalState == (int)Core.ApprovalState.Approved || (isProjectDeleted && !this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subId, false))
 					});
 
 					if (holidays.Where(x => x.Date == iter.Current.Date).FirstOrDefault() != null)
