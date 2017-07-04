@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				userId = new List<int> { this.AppService.UserContext.UserId };
 			}
 
-			return this.File(AppService.PrepareCSVExport(userId, dateRangeStart, dateRangeEnd, projectId, customerId).BaseStream, "text/csv", "export.csv");
+			return this.File(AppService.PrepareCSVExport(organizationId, userId, dateRangeStart, dateRangeEnd, projectId, customerId).BaseStream, "text/csv", "export.csv");
 		}
 	}
 }

@@ -29,6 +29,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>CSV export of time entries.</returns>
 		public FileStreamResult Export(int userId, int subscriptionId, int? startingDate = null, int? endingDate = null)
 		{
+            int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
 			if (userId != this.AppService.UserContext.UserId)
 			{
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
@@ -37,7 +38,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DateTime? start = startingDate.HasValue ? (DateTime?)AppService.GetDateTimeFromDays(startingDate.Value) : null;
 			DateTime? end = endingDate.HasValue ? (DateTime?)AppService.GetDateTimeFromDays(endingDate.Value) : null;
 
-			return this.File(AppService.PrepareCSVExport(new List<int> { userId }, start, end).BaseStream, "text/csv", "export.csv");
+			return this.File(AppService.PrepareCSVExport(orgId, new List<int> { userId }, start, end).BaseStream, "text/csv", "export.csv");
 		}
 
 		/// <summary>
@@ -58,7 +59,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DataExportViewModel result = new DataExportViewModel();
 			if ((userIds == null) || (userIds[0] == -1))
 			{
-				result.Data = AppService.GetTimeEntriesOverDateRange(startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
+				result.Data = AppService.GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
 			}
 			else
 			{

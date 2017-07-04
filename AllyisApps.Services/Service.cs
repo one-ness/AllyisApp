@@ -142,13 +142,14 @@ namespace AllyisApps.Services
 			DBHelper.DeleteTimeEntry(timeEntryId);
 		}
 
-		/// <summary>
-		/// Gets a list of <see cref="TimeEntryInfo"/>'s for a given organization and start/end times.
-		/// </summary>
-		/// <param name="start">Starting. <see cref="DateTime"/></param>
-		/// <param name="end">Ending. <see cref="DateTime"/></param>
-		/// <returns>A list of TimeEntryInfo's for a given organization and start/end times.</returns>
-		public IEnumerable<TimeEntryInfo> GetTimeEntriesOverDateRange(DateTime start, DateTime end)
+        /// <summary>
+        /// Gets a list of <see cref="TimeEntryInfo"/>'s for a given organization and start/end times.
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <param name="start">Starting. <see cref="DateTime"/></param>
+        /// <param name="end">Ending. <see cref="DateTime"/></param>
+        /// <returns>A list of TimeEntryInfo's for a given organization and start/end times.</returns>
+        public IEnumerable<TimeEntryInfo> GetTimeEntriesOverDateRange(int orgId, DateTime start, DateTime end)
 		{
 			#region Validation
 
@@ -167,7 +168,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.GetTimeEntriesOverDateRange(UserContext.ChosenOrganizationId, start, end).Select(te => InitializeTimeEntryInfo(te));
+			return DBHelper.GetTimeEntriesOverDateRange(orgId, start, end).Select(te => InitializeTimeEntryInfo(te));
 		}
 
 		/// <summary>
@@ -404,16 +405,17 @@ namespace AllyisApps.Services
 			return true;
 		}
 
-		/// <summary>
-		/// Prepares the Excel file for output of time entry information.
-		/// </summary>
-		/// <param name="userIds">List of user ids to filter by.</param>
-		/// <param name="startingDate">Start of date range.</param>
-		/// <param name="endingDate">End of date range.</param>
-		/// <param name="projectId">Project id to filter by.</param>
-		/// <param name="customerId">Customer id to filter by.</param>
-		/// <returns>The stream writer.</returns>
-		public StreamWriter PrepareCSVExport(List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
+        /// <summary>
+        /// Prepares the Excel file for output of time entry information.
+        /// </summary>
+        /// <param name="orgId"></param>
+        /// <param name="userIds">List of user ids to filter by.</param>
+        /// <param name="startingDate">Start of date range.</param>
+        /// <param name="endingDate">End of date range.</param>
+        /// <param name="projectId">Project id to filter by.</param>
+        /// <param name="customerId">Customer id to filter by.</param>
+        /// <returns>The stream writer.</returns>
+        public StreamWriter PrepareCSVExport(int orgId, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
 			//Preparing data
 			IEnumerable<TimeEntryInfo> data = new List<TimeEntryInfo>();
@@ -421,7 +423,7 @@ namespace AllyisApps.Services
 
 			if (userIds == null || userIds.Count == 0 || userIds[0] == -1)
 			{
-				data = this.GetTimeEntriesOverDateRange(startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
+				data = this.GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
 			}
 			else
 			{
