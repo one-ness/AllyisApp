@@ -427,7 +427,7 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				data = this.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
+				data = this.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1), orgId);
 			}
 
 			if (projectId > 0)
@@ -445,7 +445,7 @@ namespace AllyisApps.Services
 
 			if (userIds != null && userIds.Count == 1 && userIds[0] > 0)
 			{
-				projects = GetProjectsByUserAndOrganization(userIds[0], isActive: false);
+				projects = GetProjectsByUserAndOrganization(userIds[0], orgId, isActive: false);
 			}
 			else
 			{
