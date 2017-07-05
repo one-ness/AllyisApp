@@ -32,7 +32,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Import(int subscriptionId, HttpPostedFileBase upload)
 		{
-			int organizationId = AppService.GetSubscription(subscriptionId).OrganizationId;
+			int organizationId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
 			// TODO: Replace ModelState errors with exception catches and notifications
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)
 			if (ModelState.IsValid)
