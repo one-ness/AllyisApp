@@ -550,7 +550,7 @@
     <value>This file format is not supported.</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>FirstName</value>
+    <value>First Name</value>
   </data>
   <data name="FirstNameValidation" xml:space="preserve">
     <value>Please enter your first name.</value>
@@ -673,7 +673,7 @@
     <value>Labor Day</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>LastName</value>
+    <value>Last Name</value>
   </data>
   <data name="LastNameValidation" xml:space="preserve">
     <value>Please enter your last name.</value>
@@ -835,7 +835,7 @@
     <value>You are not authorized to retrieve this data.</value>
   </data>
   <data name="NotAuthZDataOtherUser" xml:space="preserve">
-    <value>You are not authorized to retrive this data for another user.</value>
+    <value>You are not authorized to retrieve this data for another user.</value>
   </data>
   <data name="NotAuthZTimeEntry" xml:space="preserve">
     <value>You are not authorized to create a time entry.</value>

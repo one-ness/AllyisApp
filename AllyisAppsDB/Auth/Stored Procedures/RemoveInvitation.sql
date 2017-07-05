@@ -18,7 +18,7 @@ BEGIN
 	IF @OrganizationId IS NOT NULL
 	BEGIN -- Invitation found
 
-		-- Retrive invited user
+		-- Retrieve invited user
 		DECLARE @UserId INT;
 		SET @UserId = (
 			SELECT [UserId]

@@ -1375,7 +1375,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to FirstName.
+        ///   Looks up a localized string similar to First Name.
         /// </summary>
         public static string FirstName {
             get {
@@ -1753,7 +1753,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to LastName.
+        ///   Looks up a localized string similar to Last Name.
         /// </summary>
         public static string LastName {
             get {
@@ -2248,7 +2248,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are not authorized to retrive this data for another user..
+        ///   Looks up a localized string similar to You are not authorized to retrieve this data for another user..
         /// </summary>
         public static string NotAuthZDataOtherUser {
             get {
