@@ -156,7 +156,7 @@ namespace AllyisApps.Controllers
 						// user's language is either not set, or user has changed the language to a different one
 						if (this.AppService.UserContext.ChosenLanguageId > 0)
 						{
-                            ChangeLanguage(this.AppService.UserContext.ChosenLanguageId);
+                            languageId = ChangeLanguage(this.AppService.UserContext.ChosenLanguageId);
 						}
 					}
 				}
@@ -170,20 +170,22 @@ namespace AllyisApps.Controllers
 			}
             else if (languageId != 1 && languageId > 0) //non logged-in user changing language
             {
-                ChangeLanguage(languageId);
+                languageId = ChangeLanguage(languageId);
             }
 
+            System.Diagnostics.Debug.WriteLine("LANGUAGE ID: " + languageId);
 			// store language for next request
 			TempData[languageKey] = languageId;
+            TempData.Keep(languageKey);
 		}
 
         /// <summary>
         /// Change the language displayed in the App
         /// </summary>
         /// <param name="languageId"></param>
-        private void ChangeLanguage(int languageId)
+        private int ChangeLanguage(int languageId)
         {
-            if (languageId <= 0) return;
+            if (languageId <= 0) return 0;
 
             Language language = this.AppService.GetLanguage(languageId);
             if (language != null)
@@ -192,8 +194,8 @@ namespace AllyisApps.Controllers
                 Thread.CurrentThread.CurrentCulture = cInfo;
                 Thread.CurrentThread.CurrentUICulture = cInfo;
                 ViewBag.languageName = language.LanguageName;
-                languageId = language.LanguageId;
             }
+            return languageId;
         }
 
 		/// <summary>
