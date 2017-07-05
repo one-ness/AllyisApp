@@ -180,7 +180,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Description = entry.Description,
 				LockSaved = entry.LockSaved,
 				LockDate = lockDate == null ? -1 : AppService.GetDayFromDateTime(lockDate.Value),
-				IsManager = AppService.GetProductRoleForUser(ProductNameKeyConstants.TimeTracker, entry.UserId) == "Manager"
+				IsManager = AppService.GetProductRoleForUser(ProductNameKeyConstants.TimeTracker, entry.UserId, AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId) == "Manager"
 			};
 		}
 

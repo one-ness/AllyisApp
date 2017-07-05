@@ -408,7 +408,7 @@ namespace AllyisApps.Services
         /// <summary>
         /// Prepares the Excel file for output of time entry information.
         /// </summary>
-        /// <param name="orgId"></param>
+        /// <param name="orgId">The current Organization Id</param>
         /// <param name="userIds">List of user ids to filter by.</param>
         /// <param name="startingDate">Start of date range.</param>
         /// <param name="endingDate">End of date range.</param>
@@ -449,7 +449,7 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				projects = GetProjectsByOrganization(UserContext.ChosenOrganizationId, false);
+				projects = GetProjectsByOrganization(orgId, false);
 			}
 
 			// Add default project in case there are holiday entries
