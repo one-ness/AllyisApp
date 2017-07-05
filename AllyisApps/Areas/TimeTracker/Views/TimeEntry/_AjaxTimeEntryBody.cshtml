@@ -44,35 +44,41 @@
         <div class="group left" style="width: 250px;">
             @if (locked)
             {
-                @Html.TextBoxDisabledFor(m => Model.ProjectName, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" })
-}
+                var proj = Model.ProjectsWithInactive.FirstOrDefault(p => p.ProjectId == Model.ProjectId);
+                if (proj == null) {
+                    @Html.TextBoxDisabledFor(m => Model.ProjectName, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" })
+                }
+                else {
+                    @Html.TextBox("NonEditableProj", string.Format("{0} - {1}", proj.CustomerName, Model.ProjectName), new { @disabled = "disabled", @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" })
+                }
+            }
             else
             {
                 if (canManage)
                 {
                     @Html.DropDownListDisabled("ProjectIdDdl", Model.ProjectId == 0 ? blankList : from c in Model.ProjectsWithInactive  //Ddl name must be different than model property name or the selected value cannot be adjusted
-                                                               select new SelectListItem
-                                                               {
-                                                                   Selected = (Model.ProjectsWithInactive.Count() == 2) ? (!(c.ProjectId < 0)) : (Model.ProjectId == c.ProjectId), //Automatically selects project if it is the only one - Select Project is a project with Id of 0
-                                                                                                                                                                                    //Selected = (Model.ProjectId == c.ProjectId),
-                                                                   Text = (c.ProjectId != 0) ? (string.Format("{0} - {1}", c.CustomerName, c.ProjectName)) : c.ProjectName,    //Only need customer - project text for project ids !=0
-                                                                                                                                                                                  //Text = ((Model.Projects.Count() == 2) ? (!(c.ProjectId == 0)) : (Model.ProjectId == c.ProjectId)).ToString(),
-                                                                   Value = c.ProjectId.ToString(),
-                                                                   //Disabled = !c.IsUserActive
-                                                               }, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
+                                                                                                  select new SelectListItem
+                                                                                                  {
+                                                                                                      Selected = (Model.ProjectsWithInactive.Count() == 2) ? (!(c.ProjectId < 0)) : (Model.ProjectId == c.ProjectId), //Automatically selects project if it is the only one - Select Project is a project with Id of 0
+                                                                                                                                                                                                                      //Selected = (Model.ProjectId == c.ProjectId),
+                                                                                                      Text = (c.ProjectId != 0) ? (string.Format("{0} - {1}", c.CustomerName, c.ProjectName)) : c.ProjectName,    //Only need customer - project text for project ids !=0
+                                                                                                                                                                                                                  //Text = ((Model.Projects.Count() == 2) ? (!(c.ProjectId == 0)) : (Model.ProjectId == c.ProjectId)).ToString(),
+                                                                                                      Value = c.ProjectId.ToString(),
+                                                                                                      //Disabled = !c.IsUserActive
+                                                                                                  }, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
 }
                 else
                 {
                     @Html.DropDownListDisabled("ProjectIdDdl", Model.ProjectId == 0 ? blankList : from c in Model.Projects  //Ddl name must be different than model property name or the selected value cannot be adjusted
-                                                               select new SelectListItem
-                                                               {
-                                                                   Selected = (Model.Projects.Count() == 2) ? (!(c.ProjectId < 0)) : (Model.ProjectId == c.ProjectId), //Automatically selects project if it is the only one - Select Project is a project with Id of 0
-                                                                                                                                                                        //Selected = (Model.ProjectId == c.ProjectId),
-                                                                   Text = (c.ProjectId != 0) ? (string.Format("{0} - {1}", c.CustomerName, c.ProjectName)) : c.ProjectName,    //Only need customer - project text for project ids !=0
-                                                                                                                                                            //Text = ((Model.Projects.Count() == 2) ? (!(c.ProjectId == 0)) : (Model.ProjectId == c.ProjectId)).ToString(),
-                                                                   Value = c.ProjectId.ToString(),
-                                                                   //Disabled = !c.IsUserActive
-                                                               }, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
+                                                                                                  select new SelectListItem
+                                                                                                  {
+                                                                                                      Selected = (Model.Projects.Count() == 2) ? (!(c.ProjectId < 0)) : (Model.ProjectId == c.ProjectId), //Automatically selects project if it is the only one - Select Project is a project with Id of 0
+                                                                                                                                                                                                          //Selected = (Model.ProjectId == c.ProjectId),
+                                                                                                      Text = (c.ProjectId != 0) ? (string.Format("{0} - {1}", c.CustomerName, c.ProjectName)) : c.ProjectName,    //Only need customer - project text for project ids !=0
+                                                                                                                                                                                                                  //Text = ((Model.Projects.Count() == 2) ? (!(c.ProjectId == 0)) : (Model.ProjectId == c.ProjectId)).ToString(),
+                                                                                                      Value = c.ProjectId.ToString(),
+                                                                                                      //Disabled = !c.IsUserActive
+                                                                                                  }, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
 }
                 <input type="hidden" name="ProjectId" value="" />   //Needed for proper model binding, value changes on submit (see form above)
             }
