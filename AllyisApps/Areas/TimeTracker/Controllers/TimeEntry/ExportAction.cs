@@ -54,7 +54,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The DataExportViewModel.</returns>
 		public DataExportViewModel ConstructDataExportViewModel(int subscriptionId, int orgId = -1, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
-            if (-1 <= orgId) orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
+            if (-1 <= orgId) orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
 
 			DataExportViewModel result = new DataExportViewModel();
 			if ((userIds == null) || (userIds[0] == -1))
