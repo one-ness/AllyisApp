@@ -173,7 +173,6 @@ namespace AllyisApps.Controllers
                 languageId = ChangeLanguage(languageId);
             }
 
-            System.Diagnostics.Debug.WriteLine("LANGUAGE ID: " + languageId);
 			// store language for next request
 			TempData[languageKey] = languageId;
             TempData.Keep(languageKey);
