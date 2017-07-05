@@ -445,7 +445,7 @@ namespace AllyisApps.Services
 
 			if (userIds != null && userIds.Count == 1 && userIds[0] > 0)
 			{
-				projects = GetProjectsByUserAndOrganization(userIds[0], isActive: false);
+				projects = GetProjectsByUserAndOrganization(userIds[0], orgId, isActive: false);
 			}
 			else
 			{
