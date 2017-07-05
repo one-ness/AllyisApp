@@ -33,7 +33,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotCreateHolidayWIthoutName, Variety.Warning));
 			}
 
-            int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
+            int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
 			DateTime holidayDate;
 			if (!DateTime.TryParse(newHolidayDate, out holidayDate))
 			{

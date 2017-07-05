@@ -122,10 +122,11 @@ namespace AllyisApps.Services
 		/// a list of CompleteProjectInfos for TimeTracker projects in the organization, and the next recommended employee id
 		/// by invitations.
 		/// </summary>
+        /// <param name="orgId">The Organization Id</param>
 		/// <returns></returns>
-		public Tuple<string, List<SubscriptionDisplayInfo>, List<ProductRole>, List<CompleteProjectInfo>, string> GetAddMemberInfo()
+		public Tuple<string, List<SubscriptionDisplayInfo>, List<ProductRole>, List<CompleteProjectInfo>, string> GetAddMemberInfo(int orgId)
 		{
-			var spResults = DBHelper.GetAddMemberInfo(UserContext.ChosenOrganizationId);
+			var spResults = DBHelper.GetAddMemberInfo(orgId);
 			return Tuple.Create(
 				spResults.Item1,
 				spResults.Item2.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
@@ -348,14 +349,14 @@ namespace AllyisApps.Services
 			return DBHelper.RemoveInvitation(invitationId, -1);
 		}
 
-		/// <summary>
-		/// Getst a list of the user invitations for the current organization.
-		/// </summary>
-		/// <returns>List of InvitationInfos of organization's user invitations.</returns>
-		public IEnumerable<InvitationInfo> GetUserInvitations()
-		{
-			return DBHelper.GetUserInvitationsByOrgId(UserContext.ChosenOrganizationId).Select(i => InitializeInvitationInfo(i));
-		}
+		///// <summary>
+		///// Getst a list of the user invitations for the current organization.
+		///// </summary>
+		///// <returns>List of InvitationInfos of organization's user invitations.</returns>
+		//public IEnumerable<InvitationInfo> GetUserInvitations()
+		//{
+		//	return DBHelper.GetUserInvitationsByOrgId(UserContext.ChosenOrganizationId).Select(i => InitializeInvitationInfo(i));
+		//}
 
 		///// <summary>
 		///// Creates a subscription role for an invitation.
@@ -434,58 +435,58 @@ namespace AllyisApps.Services
 
 		// TODO: Look more closely at the use of this method in UploadCsvFileAction to see if some other existing service method can be used instead, and this one retired.
 
-		/// <summary>
-		/// Gets the first name of a user in the current organization by email.
-		/// </summary>
-		/// <param name="email">Email address.</param>
-		/// <returns>User's first name.</returns>
-		public string GetOrgUserFirstName(string email)
-		{
-			#region Validation
+		///// <summary>
+		///// Gets the first name of a user in the current organization by email.
+		///// </summary>
+		///// <param name="email">Email address.</param>
+		///// <returns>User's first name.</returns>
+		//public string GetOrgUserFirstName(string email)
+		//{
+		//	#region Validation
 
-			if (string.IsNullOrEmpty(email))
-			{
-				throw new ArgumentNullException("email", "Email address must have a value.");
-			}
-			else if (!Utility.IsValidEmail(email))
-			{
-				throw new FormatException("Email address must be in a valid format.");
-			}
+		//	if (string.IsNullOrEmpty(email))
+		//	{
+		//		throw new ArgumentNullException("email", "Email address must have a value.");
+		//	}
+		//	else if (!Utility.IsValidEmail(email))
+		//	{
+		//		throw new FormatException("Email address must be in a valid format.");
+		//	}
 
-			#endregion Validation
+		//	#endregion Validation
 
-			return DBHelper.GetOrgUserFirstName(UserContext.ChosenOrganizationId, email);
-		}
+		//	return DBHelper.GetOrgUserFirstName(UserContext.ChosenOrganizationId, email);
+		//}
 
-		/// <summary>
-		/// Gets a list of subscription details for the current organization.
-		/// </summary>
-		/// <returns><see cref="IEnumerable{SubscriptionInfo}"/></returns>
-		public IEnumerable<SubscriptionInfo> GetSubscriptionDetails()
-		{
-			IEnumerable<SubscriptionDBEntity> subDBEList = DBHelper.GetSubscriptionDetails(UserContext.ChosenOrganizationId);
-			List<SubscriptionInfo> list = new List<SubscriptionInfo>();
-			foreach (SubscriptionDBEntity subDBE in subDBEList)
-			{
-				if (subDBE != null)
-				{
-					list.Add(new SubscriptionInfo
-					{
-						OrganizationName = subDBE.OrganizationName,
-						OrganizationId = subDBE.OrganizationId,
-						SubscriptionId = subDBE.SubscriptionId,
-						SkuId = subDBE.SkuId,
-						NumberOfUsers = subDBE.NumberOfUsers,
-						Licenses = subDBE.Licenses,
-						CreatedUTC = subDBE.CreatedUTC,
-						IsActive = subDBE.IsActive,
-						Name = subDBE.Name
-					});
-				}
-			}
+		///// <summary>
+		///// Gets a list of subscription details for the current organization.
+		///// </summary>
+		///// <returns><see cref="IEnumerable{SubscriptionInfo}"/></returns>
+		//public IEnumerable<SubscriptionInfo> GetSubscriptionDetails()
+		//{
+		//	IEnumerable<SubscriptionDBEntity> subDBEList = DBHelper.GetSubscriptionDetails(UserContext.ChosenOrganizationId);
+		//	List<SubscriptionInfo> list = new List<SubscriptionInfo>();
+		//	foreach (SubscriptionDBEntity subDBE in subDBEList)
+		//	{
+		//		if (subDBE != null)
+		//		{
+		//			list.Add(new SubscriptionInfo
+		//			{
+		//				OrganizationName = subDBE.OrganizationName,
+		//				OrganizationId = subDBE.OrganizationId,
+		//				SubscriptionId = subDBE.SubscriptionId,
+		//				SkuId = subDBE.SkuId,
+		//				NumberOfUsers = subDBE.NumberOfUsers,
+		//				Licenses = subDBE.Licenses,
+		//				CreatedUTC = subDBE.CreatedUTC,
+		//				IsActive = subDBE.IsActive,
+		//				Name = subDBE.Name
+		//			});
+		//		}
+		//	}
 
-			return list;
-		}
+		//	return list;
+		//}
 
 		/// <summary>
 		/// Gets the EmployeeId for the given user and org.
@@ -736,24 +737,19 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="productName">Product name.</param>
 		/// <param name="userId">User Id.</param>
+        /// <param name="orgId"> The Organization Id</param>
 		/// <returns>The product role.</returns>
-		public string GetProductRoleForUser(string productName, int userId)
+		public string GetProductRoleForUser(string productName, int userId, int orgId)
 		{
 			#region Validation
 
-			if (string.IsNullOrEmpty(productName))
-			{
-				throw new ArgumentNullException("productName", "Product name must have a value.");
-			}
+			if (string.IsNullOrEmpty(productName)) throw new ArgumentNullException("productName", "Product name must have a value.");
+			if (userId <= 0) throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+            if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
 
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-			}
+            #endregion Validation
 
-			#endregion Validation
-
-			return DBHelper.GetProductRoleForUser(productName, UserContext.ChosenOrganizationId, userId);
+            return DBHelper.GetProductRoleForUser(productName, orgId, userId);
 		}
 
 		#region Info-DBEntity Conversions

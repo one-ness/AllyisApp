@@ -116,10 +116,11 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Uses services to populate the lists of an <see cref="AddMemberViewModel"/> and returns it.
 		/// </summary>
+        /// <param name="id">The Organization Id</param>
 		/// <returns>The OrganizationAddMembersViewModel.</returns>
 		public AddMemberViewModel ConstructOrganizationAddMembersViewModel(int id)
 		{
-			var infos = AppService.GetAddMemberInfo();
+			var infos = AppService.GetAddMemberInfo(id);
 			string nextId = string.Compare(infos.Item1, infos.Item5) > 0 ? infos.Item1 : infos.Item5;
 
 			AddMemberViewModel result = new AddMemberViewModel

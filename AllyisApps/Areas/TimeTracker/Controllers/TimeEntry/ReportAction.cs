@@ -29,7 +29,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 
-			//int orgId = UserContext.ChosenOrganizationId;
 			ReportViewModel reportVM = null;
 
 			var infos = AppService.GetReportInfo(subscriptionId);

@@ -22,7 +22,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// GET /TimeTracker/TimeEntry/UserEdit.
 		/// </summary>
         /// <param name="subscriptionId">The subscription's id</param>
-		/// <param name="userId">The User's Id.</param>
+		/// <param name="userId">The Id of the user to edit.</param>
 		/// <returns>The user edit page.</returns>
 		public ActionResult UserEdit(int subscriptionId, int userId)
 		{
@@ -40,7 +40,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <summary>
         /// AJAX callback to update the projects for a user.
         /// </summary>
-        /// <param name="userId">The ID of the user.</param>
+        /// <param name="userId">The ID of the user to edit.</param>
         /// <param name="subscriptionId">The subscription's Id</param>
         /// <param name="offUser">The list of projects not associated with the user.</param>
         /// <param name="onUser">The list of projects associated with the user.</param>
@@ -49,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult UserEditAJAX(int userId, int subscriptionId, List<int> offUser, List<int> onUser)
         {
-            int organizationId = AppService.GetSubscription(subscriptionId).OrganizationId;
+            int organizationId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
             if (this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false))
             {
                 if (offUser != null)

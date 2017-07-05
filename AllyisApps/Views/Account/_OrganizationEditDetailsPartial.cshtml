@@ -95,12 +95,3 @@
 		}
 	}
 </div>
-@section scripts
-{
-	<script type="text/javascript">
-        var preserveState = '@(Model != null ? (States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';
-		var dropdownempty = "@Strings.DropDownEmpty";
-	</script>
-	@Scripts.Render("~/bundles/UpdateStateDDL");
-	@Scripts.Render("~/bundles/AccountCreateOrg");
-}
