@@ -119,7 +119,11 @@ namespace AllyisApps.Controllers
 			this.Response.Cookies.Add(cookie);
 		}
 
-		private const string languageKey = "language";
+        /// <summary>
+        /// Language Key
+        /// </summary>
+		protected const string languageKey = "language";
+
 		/// <summary>
 		/// On action executing - executed before every action.
 		/// </summary>
@@ -172,6 +176,18 @@ namespace AllyisApps.Controllers
 					return;
 				}
 			}
+            else if (languageId != 1 && languageId > 0) //non logged-in user changing language
+            {
+                Language language = this.AppService.GetLanguage(languageId);
+                if (language != null)
+                {
+                    CultureInfo cInfo = CultureInfo.CreateSpecificCulture(language.CultureName);
+                    Thread.CurrentThread.CurrentCulture = cInfo;
+                    Thread.CurrentThread.CurrentUICulture = cInfo;
+                    ViewBag.languageName = language.LanguageName;
+                    languageId = language.LanguageId;
+                }
+            }
 
 			// store language for next request
 			TempData[languageKey] = languageId;

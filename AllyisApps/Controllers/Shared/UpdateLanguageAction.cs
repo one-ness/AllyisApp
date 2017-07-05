@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers
 			}
 			else
 			{
-				TempData["language"] = languageID;
+				TempData[languageKey] = languageID;
 			}
 
 			return Redirect(HttpContext.Request.UrlReferrer.AbsoluteUri); // Reloads page request came from
