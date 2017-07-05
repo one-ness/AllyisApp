@@ -55,15 +55,14 @@ namespace AllyisApps.Services
 
         /// <summary>
         /// Converts an int representing days since the DateTime min value (Jan 1st, 0001) into a DateTime date.
-        /// If days == -1, this sets the DOB to the mininum date allowed in the database: 1/1/1753
         /// </summary>
         /// <param name="days">An int of the date as days since Jan 1st, 0001. Use -1 for null dates.</param>
         /// <returns>The DateTime date.</returns>
-        public DateTime GetDateTimeFromDays(int days)
+        public DateTime? GetDateTimeFromDays(int days)
 		{
             if (days <= -1)
             {
-                return new DateTime(1753, 1, 1);
+                return null;
             }
 			return GetDateFromDays(days);
 		}
@@ -179,7 +178,7 @@ namespace AllyisApps.Services
 		/// <param name="start">Starting. <see cref="DateTime"/></param>
 		/// <param name="end">Ending. <see cref="DateTime"/></param>
 		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/></returns>
-		public IEnumerable<TimeEntryInfo> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime start, DateTime end, int organizationId = -1)
+		public IEnumerable<TimeEntryInfo> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId = -1)
 		{
 			#region Validation
 
@@ -199,14 +198,14 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("end", "Date range must have an end date.");
 			}
-			else if (DateTime.Compare(start, end) > 0)
+			else if (DateTime.Compare(start ?? DateTime.Now, end ?? DateTime.Now) > 0)
 			{
 				throw new ArgumentException("Date range cannot end before it starts.");
 			}
 
 			#endregion Validation
 
-			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, organizationId, start, end).Select(te => InitializeTimeEntryInfo(te));
+			return DBHelper.GetTimeEntriesByUserOverDateRange(userIds, organizationId, start ?? DateTime.Now, end ?? DateTime.Now).Select(te => InitializeTimeEntryInfo(te));
 		}
 
 		/// <summary>
