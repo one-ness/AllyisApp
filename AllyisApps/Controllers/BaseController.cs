@@ -156,15 +156,7 @@ namespace AllyisApps.Controllers
 						// user's language is either not set, or user has changed the language to a different one
 						if (this.AppService.UserContext.ChosenLanguageId > 0)
 						{
-							Language language = this.AppService.GetLanguage(this.AppService.UserContext.ChosenLanguageId);
-							if (language != null)
-							{
-								CultureInfo cInfo = CultureInfo.CreateSpecificCulture(language.CultureName);
-								Thread.CurrentThread.CurrentCulture = cInfo;
-								Thread.CurrentThread.CurrentUICulture = cInfo;
-								ViewBag.languageName = language.LanguageName;
-								languageId = language.LanguageId;
-							}
+                            ChangeLanguage(this.AppService.UserContext.ChosenLanguageId);
 						}
 					}
 				}
@@ -178,20 +170,31 @@ namespace AllyisApps.Controllers
 			}
             else if (languageId != 1 && languageId > 0) //non logged-in user changing language
             {
-                Language language = this.AppService.GetLanguage(languageId);
-                if (language != null)
-                {
-                    CultureInfo cInfo = CultureInfo.CreateSpecificCulture(language.CultureName);
-                    Thread.CurrentThread.CurrentCulture = cInfo;
-                    Thread.CurrentThread.CurrentUICulture = cInfo;
-                    ViewBag.languageName = language.LanguageName;
-                    languageId = language.LanguageId;
-                }
+                ChangeLanguage(languageId);
             }
 
 			// store language for next request
 			TempData[languageKey] = languageId;
 		}
+
+        /// <summary>
+        /// Change the language displayed in the App
+        /// </summary>
+        /// <param name="languageId"></param>
+        private void ChangeLanguage(int languageId)
+        {
+            if (languageId <= 0) return;
+
+            Language language = this.AppService.GetLanguage(languageId);
+            if (language != null)
+            {
+                CultureInfo cInfo = CultureInfo.CreateSpecificCulture(language.CultureName);
+                Thread.CurrentThread.CurrentCulture = cInfo;
+                Thread.CurrentThread.CurrentUICulture = cInfo;
+                ViewBag.languageName = language.LanguageName;
+                languageId = language.LanguageId;
+            }
+        }
 
 		/// <summary>
 		/// Serializes a CookieData.
