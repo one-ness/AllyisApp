@@ -427,7 +427,7 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				data = this.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1));
+				data = this.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddYears(-1), orgId);
 			}
 
 			if (projectId > 0)
