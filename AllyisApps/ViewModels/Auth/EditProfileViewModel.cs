@@ -55,7 +55,7 @@ namespace AllyisApps.ViewModels.Auth
         /// <summary>
         /// Gets or sets the user's phone number.
         /// </summary>
-        [RegularExpression(@"(\+?\d\s?|)(\(\d{3}\) ?-? ?|\d{3} ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
+        [RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
         //[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")] // [Phone] does not work //I am not conviced that this is a good idea either.
         [Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }

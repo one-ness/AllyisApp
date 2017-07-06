@@ -87,7 +87,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		[DataType(DataType.Text)]
         //[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
-        [RegularExpression(@"(\+?\d\s?|)(\(\d{3}\) ?-? ?|\d{3} ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
+        [RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
         [Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
 
@@ -97,7 +97,7 @@ namespace AllyisApps.ViewModels.Auth
 		[DataType(DataType.Text)]
 		[Display(Name = "Fax Number")]
         //[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
-        [RegularExpression(@"(\+?\d\s?|)(\(\d{3}\) ?-? ?|\d{3} ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
+        [RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
         public string FaxNumber { get; set; }
 
 		/// <summary>
