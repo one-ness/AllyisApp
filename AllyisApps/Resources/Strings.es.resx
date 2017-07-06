@@ -366,6 +366,9 @@
   <data name="Employees" xml:space="preserve">
     <value>Empleados</value>
   </data>
+  <data name="EmployeeType" xml:space="preserve">
+    <value>Tipo de empleado</value>
+  </data>
   <data name="EndDate" xml:space="preserve">
     <value>Fecha Final</value>
   </data>
@@ -1366,7 +1369,7 @@
     <value>Sitio web</value>
   </data>
   <data name="YourOrganizations" xml:space="preserve">
-    <value>mis Organizaciones</value>
+    <value>Mis Organizaciones</value>
   </data>
   <data name="AgeTooLow" xml:space="preserve">
     <value>Eres demasiado joven para usar este sitio.</value>
@@ -1427,13 +1430,22 @@
     <value>Eliminar Invitación</value>
   </data>
   <data name="Reactivate" xml:space="preserve">
-    <value>Reactivate</value>
+    <value>Reactivar</value>
   </data>
   <data name="ProjectReactivateNotification" xml:space="preserve">
-    <value>You have successfully reactivated the project</value>
+    <value>Ha reactivado con éxito el proyecto</value>
   </data>
   <data name="CustomerReactivateNotification" xml:space="preserve">
-    <value>You have successfully reactivated the customer</value>
+    <value>Ha reactivado con éxito al cliente</value>
+  </data>
+  <data name="EditMember" xml:space="preserve">
+    <value>Editar miembro</value>
+  </data>
+  <data name="NotAuthZData" xml:space="preserve">
+    <value>No está autorizado a recuperar estos datos.</value>
+  </data>
+  <data name="NotAuthZDataOtherUser" xml:space="preserve">
+    <value>No está autorizado para recuperar estos datos para otro usuario.</value>
   </data>
   <data name="Salaried" xml:space="preserve">
     <value>asalariado</value>

@@ -202,7 +202,7 @@
     <value>A message containing a password reset link has been sent to</value>
   </data>
   <data name="StatusErrorMessage" xml:space="preserve">
-    <value>An error has occured.</value>
+    <value>An error has occurred.</value>
   </data>
   <data name="SubdomainTaken" xml:space="preserve">
     <value>The subdomain name provided has already been taken!</value>
@@ -220,7 +220,7 @@
     <value>User account already exists. Click on 'Forgot Password' link to reset your password.</value>
   </data>
   <data name="UserAddedSuccessfully" xml:space="preserve">
-    <value>has been sucessfully added.</value>
+    <value>has been successfully added.</value>
   </data>
   <data name="UserAlreadyExists" xml:space="preserve">
     <value>already is a part of this organization!</value>
@@ -379,7 +379,7 @@
     <value>You can only edit dates after</value>
   </data>
   <data name="CantViewOtherTimeCards" xml:space="preserve">
-    <value>You do not have the privelege of viewing other people's time cards.</value>
+    <value>You do not have the privilege of viewing other people's time cards.</value>
   </data>
   <data name="CapsLock" xml:space="preserve">
     <value>Caps Lock is on.</value>
@@ -643,7 +643,7 @@
     <value>Fax Number</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>FirstName</value>
+    <value>First Name</value>
   </data>
   <data name="FirstNameValidation" xml:space="preserve">
     <value>Please enter your first name.</value>
@@ -754,7 +754,7 @@
     <value>Labor Day</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>LastName</value>
+    <value>Last Name</value>
   </data>
   <data name="LastNameValidation" xml:space="preserve">
     <value>Please enter your last name.</value>
@@ -898,7 +898,7 @@
     <value>You are not authorized to retrieve this data.</value>
   </data>
   <data name="NotAuthZDataOtherUser" xml:space="preserve">
-    <value>You are not authorized to retrive this data for another user.</value>
+    <value>You are not authorized to retrieve this data for another user.</value>
   </data>
   <data name="NotAuthZTimeEntry" xml:space="preserve">
     <value>You are not authorized to create a time entry.</value>
@@ -1102,7 +1102,7 @@
     <value>Remove from Subscription</value>
   </data>
   <data name="RemoveInvitationConfirm" xml:space="preserve">
-    <value>Are you sure you would like to remove this invitation?\nYou can reinvite this person at anytime.</value>
+    <value>Are you sure you would like to remove this invitation?\nYou can re-invite this person at anytime.</value>
   </data>
   <data name="RemoveMember" xml:space="preserve">
     <value>Remove Member</value>

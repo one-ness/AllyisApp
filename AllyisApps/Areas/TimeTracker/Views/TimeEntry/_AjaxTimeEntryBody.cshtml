@@ -24,10 +24,10 @@
     blankList.Add(new SelectListItem() { Selected = true, Text = string.Empty, Value = string.Empty });
 
     // do not render the date add form if they can't use it
-    if (create && locked)
+    @*if (create && locked)
     {
         return;
-    }
+    }*@
 }
 <div class="inline-form-anim-wrap @(hiddensample) @(lockedClass)">
     @using (Html.BeginForm(form, ControllerConstants.TimeEntry, FormMethod.Get, new { @class = string.Format("very-inline-form edit {0} {1} {2}", extrastyle, approvalClass, lockedClass), @onsubmit = submitFunction }))
@@ -86,27 +86,41 @@
             <div class="group left" style="width: 150px;">
                 @if (locked)
                 {
-                    var PCname = Model.PayClasses.FirstOrDefault(c => c.PayClassID == Model.PayClassId).Name;
-                    @Html.TextBoxDisabledFor(m => Model.PayClasses.FirstOrDefault(c => c.PayClassID == Model.PayClassId).Name, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" })
-}
+                    if (Model.Sample == true)
+                    {
+                        @Html.TextBox("BeforeLockDatePC", "-", new { @disabled = "disabled", @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" })
+                    }
+                    else
+                    {
+                        var PCname = Model.PayClasses.FirstOrDefault(c => c.PayClassID == Model.PayClassId).Name;
+                        @Html.TextBoxDisabledFor(m => Model.PayClasses.FirstOrDefault(c => c.PayClassID == Model.PayClassId).Name, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" })
+                    }
+                }
                 else
                 {
                     @Html.DropDownListDisabled("PayClassNameDdl", from c in Model.PayClasses  //Ddl name must be different than model property name or the selected value cannot be adjusted
-                                                              select new SelectListItem
-                                                              {
-                                                                  Selected = (Model.PayClasses.Count() == 1) || (Model.PayClassId == c.PayClassID),
+                                                                  select new SelectListItem
+                                                                  {
+                                                                      Selected = (Model.PayClasses.Count() == 1) || (Model.PayClassId == c.PayClassID),
 
-                                                                  Text = Strings.ResourceManager.GetString((c.Name).Replace(" ","")) ?? c.Name,
+                                                                      Text = Strings.ResourceManager.GetString((c.Name).Replace(" ","")) ?? c.Name,
 
-                                                                  Value = c.PayClassID.ToString()
-                                                              }, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
+                                                                      Value = c.PayClassID.ToString()
+                                                                  }, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
 
                     <input type="hidden" name="PayClassId" value="" />   @*Needed for proper model binding, value changes on submit (see form above)*@
                 }
             </div>
-            @Html.TextBoxDisabledFor(m => Model.Description, locked, new { @class = "form-control stretch", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description }).RemoveIdAttribute()
-        if (!locked)
-        {
+            if (locked && Model.Sample)
+            {
+                    @Html.TextBox("BeforeLockDateDesc", "-", new { @disabled = "disabled", @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" })
+            }
+            else
+            {
+                @Html.TextBoxDisabledFor(m => Model.Description, locked, new { @class = "form-control stretch", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description }).RemoveIdAttribute()
+            }
+            if (!locked)
+            {
             <div class="button-anim-wrap btn-group group right">
                 <div>
                     <button type="submit"

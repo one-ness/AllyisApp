@@ -17,7 +17,7 @@
             </div>
             <div class="form-group">
                 @Html.Label(Strings.Password)
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control", @onkeypress = "capsCheck(event)", @onkeydown = "capsCheck(event)" })
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.Password, string.Empty, new { @class = "text-danger" })
                 <strong id="capsWarningDiv" style="visibility:hidden">@Strings.CapsLock</strong>
             </div>
@@ -40,5 +40,5 @@
     </div>
 </div>
 @section Scripts {
-    @Scripts.Render("~/bundles/CapsCheck");
+    @Scripts.Render("~/bundles/CapsCheck")
 }

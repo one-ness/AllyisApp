@@ -29,12 +29,12 @@
                     </div>
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.Password, Strings.Password)
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @onkeypress = "capsCheck(event)", @onkeydown = "capsCheck(event)", @CssClass = "alert" })
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @CssClass = "alert" })
                         @Html.ValidationMessageFor(m => m.Password)
                     </div>
                     <div class="form-group">
                         @Html.ReqLabelFor(m => m.ConfirmPassword, Strings.ConfirmPassword)
-                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @onkeypress = "capsCheck(event)", @onkeydown = "capsCheck(event)" })
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.ConfirmPassword)
                     </div>
                     <div class="form-group">
@@ -43,7 +43,7 @@
                         <input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerBirth" />
                         <span class="fa fa-fw fa-calendar" id="datePickerBirthButton"></span>
                     </div>
-                    <div id="capsWarningDiv" style="visibility:hidden; height:0px"><strong>@Strings.CapsLock</strong></div>
+                    <div class="field-validation-error" id="capsWarningDiv" style="visibility:hidden; height:0px"><span>@Strings.CapsLock</span></div>
                 </div>
                 <div class="col-md-6 sm-control-width">
                     <div class="form-group">
