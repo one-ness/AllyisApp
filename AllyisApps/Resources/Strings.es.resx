@@ -1447,4 +1447,7 @@
   <data name="NotAuthZDataOtherUser" xml:space="preserve">
     <value>No está autorizado para recuperar estos datos para otro usuario.</value>
   </data>
+  <data name="Salaried" xml:space="preserve">
+    <value>asalariado</value>
+  </data>
 </root>
