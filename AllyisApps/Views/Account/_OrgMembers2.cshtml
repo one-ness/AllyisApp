@@ -75,7 +75,7 @@
                     <td class="memberSearchProperty" id="empType-@user.UserId">
                         <span class="empType">@Strings.ResourceManager.GetString(user.EmployeeTypeId == 1 ? "Salaried" : (user.EmployeeTypeId == 2 ? "Hourly" : "N/A")) </span>
                         <a href="javascript: void(0);" class="text-muted" title="@Strings.EditEmployeeType"
-                           onclick='editEmployeeType("@user.OrganizationId", "@user.UserId", "@user.EmployeeTypeId", true)'><span class="fa fa-fw fa-edit"></span></a>
+                           onclick='editEmployeeType("@user.OrganizationId", "@user.UserId", "@user.EmployeeTypeId", true, "@Strings.Salaried", "@Strings.Hourly")'><span class="fa fa-fw fa-edit"></span></a>
                     </td>
                     <td class="memberOrgRole">@Strings.ResourceManager.GetString(user.PermissionLevel)</td>
                     <td class="text-right icon-strip">
