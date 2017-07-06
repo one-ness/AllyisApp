@@ -64,7 +64,7 @@ function editEmployeeType(orgId, userId, oldEmployeeTypeId, isMember, salaried, 
 		'<option value=1>' + salaried + '</option>' +
         '<option value=2>' + hourly + '</option></select>' +
         ' <a href="javascript: void(0);" id="empIcon' + userId + '" class="text-muted" title="Save Changes" onclick=\x27saveEmployeeType(' + orgId + ',' + userId + ',' + isMember + ', "' + salaried + '", "' + hourly + '") \x27 > <span class="fa fa-fw fa-save"></span></a > ' +
-		'<a href="javascript: void(0);" class="text-muted" title="Cancel Changes" onclick=\x27cancelEditEmployeeType(' + userId + ',' + isMember + ')\x27><span class="fa fa-fw fa-remove text-danger"></span></a>' +
+		'<a href="javascript: void(0);" class="text-muted" title="Cancel Changes" onclick=\x27cancelEditEmployeeType(' + userId + ',' + isMember + ', "' + salaried + '", "' + hourly + '")\x27><span class="fa fa-fw fa-remove text-danger"></span></a>' +
 		'</div>'
 	);
 	document.getElementById(tag + userId).value = oldEmployeeTypeId; //sets selected to the employee's current type
@@ -190,7 +190,7 @@ function saveEmployeeType(orgId, userId, isMember, salaried, hourly) {
 				}
 				else {
 					alert('Failed to update employee type.');
-					cancelEditEmployeeType(userId, isMember);
+					cancelEditEmployeeType(userId, isMember, salaried, hourly);
 					toggleSaveIcon(isMember, false, userId);
 				}
 			});
@@ -206,13 +206,13 @@ function saveEmployeeType(orgId, userId, isMember, salaried, hourly) {
 			.fail(function (res) {
 				console.log(res);
 				if (res.responseText == "True") {
-					stopEditEmployeeType(userId, newId, isMember);
+					stopEditEmployeeType(userId, newId, isMember, salaried, hourly);
 					toggleSaveIcon(isMember, false, userId);
 					return;
 				}
 				else {
 					alert('Failed to update employee type.');
-					cancelEditEmployeeType(userId, isMember);
+					cancelEditEmployeeType(userId, isMember, salaried, hourly);
 					toggleSaveIcon(isMember, false, userId);
 				}
 			});
@@ -235,11 +235,11 @@ function cancelEditEmployeeId(userId, isMember) {
 	stopEditEmployeeId(userId, oldEmployeeId, isMember);
 }
 
-function cancelEditEmployeeType(userId, isMember) {
+function cancelEditEmployeeType(userId, isMember, salaried, hourly) {
 	var tag;
 	isMember == true ? tag = "#empTypeedit-" : tag = "#invTypeedit-";
 	var oldEmployeeTypeId = $(tag + userId).attr("data-oldval");
-	stopEditEmployeeType(userId, oldEmployeeTypeId, isMember);
+	stopEditEmployeeType(userId, oldEmployeeTypeId, isMember, salaried, hourly);
 }
 
 function stopEditEmployeeId(userId, newValue, isMember) {
