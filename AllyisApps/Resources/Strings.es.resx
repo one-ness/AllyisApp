@@ -1430,13 +1430,13 @@
     <value>Eliminar Invitación</value>
   </data>
   <data name="Reactivate" xml:space="preserve">
-    <value>Reactivate</value>
+    <value>Reactivar</value>
   </data>
   <data name="ProjectReactivateNotification" xml:space="preserve">
-    <value>You have successfully reactivated the project</value>
+    <value>Ha reactivado con éxito el proyecto</value>
   </data>
   <data name="CustomerReactivateNotification" xml:space="preserve">
-    <value>You have successfully reactivated the customer</value>
+    <value>Ha reactivado con éxito al cliente</value>
   </data>
   <data name="EditMember" xml:space="preserve">
     <value>Editar miembro</value>

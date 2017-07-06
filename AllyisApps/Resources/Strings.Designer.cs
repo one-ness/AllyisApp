@@ -493,7 +493,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You do not have the privelege of viewing other people&apos;s time cards..
+        ///   Looks up a localized string similar to You do not have the privilege of viewing other people&apos;s time cards..
         /// </summary>
         public static string CantViewOtherTimeCards {
             get {
@@ -2986,7 +2986,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you would like to remove this invitation?\nYou can reinvite this person at anytime..
+        ///   Looks up a localized string similar to Are you sure you would like to remove this invitation?\nYou can re-invite this person at anytime..
         /// </summary>
         public static string RemoveInvitationConfirm {
             get {
@@ -3283,7 +3283,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error has occured..
+        ///   Looks up a localized string similar to An error has occurred..
         /// </summary>
         public static string StatusErrorMessage {
             get {
@@ -3760,7 +3760,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to has been sucessfully added..
+        ///   Looks up a localized string similar to has been successfully added..
         /// </summary>
         public static string UserAddedSuccessfully {
             get {

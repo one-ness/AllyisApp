@@ -259,7 +259,7 @@
     <value>You can only edit dates after</value>
   </data>
   <data name="CantViewOtherTimeCards" xml:space="preserve">
-    <value>You do not have the privelege of viewing other people's time cards.</value>
+    <value>You do not have the privilege of viewing other people's time cards.</value>
   </data>
   <data name="CapsLock" xml:space="preserve">
     <value>Caps Lock is on.</value>
@@ -1070,7 +1070,7 @@
     <value>Remove from Subscription</value>
   </data>
   <data name="RemoveInvitationConfirm" xml:space="preserve">
-    <value>Are you sure you would like to remove this invitation?\nYou can reinvite this person at anytime.</value>
+    <value>Are you sure you would like to remove this invitation?\nYou can re-invite this person at anytime.</value>
   </data>
   <data name="RemoveMember" xml:space="preserve">
     <value>Remove Member</value>
@@ -1169,7 +1169,7 @@
     <value>State</value>
   </data>
   <data name="StatusErrorMessage" xml:space="preserve">
-    <value>An error has occured.</value>
+    <value>An error has occurred.</value>
   </data>
   <data name="Subdomain" xml:space="preserve">
     <value>Subdomain</value>
@@ -1328,7 +1328,7 @@
     <value>User account already exists. Click on 'Forgot Password' link to reset your password.</value>
   </data>
   <data name="UserAddedSuccessfully" xml:space="preserve">
-    <value>has been sucessfully added.</value>
+    <value>has been successfully added.</value>
   </data>
   <data name="UserAlreadyExists" xml:space="preserve">
     <value>already is a part of this organization!</value>
@@ -1445,6 +1445,6 @@
     <value>You have successfully reactivated the project</value>
   </data>
   <data name="CustomerReactivateNotification" xml:space="preserve">
-    <value>You have successfuly reactivated the customer</value>
+    <value>You have successfully reactivated the customer</value>
   </data>
 </root>
