@@ -59,10 +59,10 @@ namespace AllyisApps.Controllers
 
 				// Organization update failed due to invalid permissions
 				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditProfileMessage), ControllerConstants.Organization, ActionConstants.Edit));
-			}
+            }
 
-			// Model is invalid, try again
-			return this.View(model);
+            // Model is invalid, try again
+            return this.View(model);
 		}
 
         /// <summary>

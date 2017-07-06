@@ -78,11 +78,10 @@ namespace AllyisApps.Controllers
 				{
 					return this.RedirectToLocal(returnUrl);
 				}
-				else
-				{
-					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
-				}
+				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 			}
+
+			model.ValidCountries = AppService.ValidCountries();
 
 			// Invalid Model
 			return this.View(model);
