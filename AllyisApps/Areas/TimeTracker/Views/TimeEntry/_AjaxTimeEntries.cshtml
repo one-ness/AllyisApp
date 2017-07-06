@@ -160,13 +160,16 @@
 		  		            @Html.Partial("_AjaxTimeEntryBody", entry)
 			            }
 		  	            @Html.Partial("_AjaxTimeEntryBody", theSample);
-                        if (theSample.Date > theSample.LockDate || theSample.IsManager)
+                        if (theSample.Date > theSample.LockDate || theSample.IsManager) //if the date is not locked because of lock date or logged in user is manager
                         {
-                            theSample.Hidden = true;    //not hiding the sample entries for locked dates so that we can keep the graying out consistent
+                            theSample.Hidden = true;
+                            @Html.Partial("_AjaxTimeEntryBody", theSample);
                         }
-		  	            @Html.Partial("_AjaxTimeEntryBody", theSample);
-                            
+                        else if (theEntries.Count() <= 0)//date is locked for regular user, there is no existing entry so we need 2 sample entries for styling purpose
+                        {
+		  	                @Html.Partial("_AjaxTimeEntryBody", theSample);
                         }
+                     }
 		            </div>
 		        </div>
             </div>
