@@ -111,14 +111,16 @@
                     <input type="hidden" name="PayClassId" value="" />   @*Needed for proper model binding, value changes on submit (see form above)*@
                 }
             </div>
-            if (locked && Model.Sample)
+            <div class="group left">
+            @if (locked && Model.Sample)
             {
-                    @Html.TextBox("BeforeLockDateDesc", "-", new { @disabled = "disabled", @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" })
+                @Html.TextBox("BeforeLockDateDesc", "-", new { @disabled = "disabled", @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" })
             }
             else
             {
                 @Html.TextBoxDisabledFor(m => Model.Description, locked, new { @class = "form-control stretch", @onkeypress = "changeOccur(this)", @onchange = "changeOccur(this)", @placeholder = Strings.Description }).RemoveIdAttribute()
             }
+            </div>
             if (!locked)
             {
             <div class="button-anim-wrap btn-group group right">
