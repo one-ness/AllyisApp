@@ -49,7 +49,7 @@ function editEmployeeId(orgId, userId, oldEmployeeId, isMember) {
 	);
 }
 
-function editEmployeeType(orgId, userId, oldEmployeeTypeId, isMember) {
+function editEmployeeType(orgId, userId, oldEmployeeTypeId, isMember, salaried, hourly) {
 	var type = "";
 	var tag = "";
 	var icon = "";
@@ -61,10 +61,10 @@ function editEmployeeType(orgId, userId, oldEmployeeTypeId, isMember) {
 	td.html(
 		'<div>' +
 		'<select id="' + tag + userId + '" class="employeeTypeEdit" data-oldval="' + oldEmployeeTypeId + '" data-org="' + orgId + '">' +
-		'<option value=1>Salaried</option>' +
-		'<option value=2>Hourly</option></select>' +
-		' <a href="javascript: void(0);" id="empIcon' + userId + '" class="text-muted" title="Save Changes" onclick=\x27saveEmployeeType(' + orgId + ',' + userId + ',' + isMember + ')\x27><span class="fa fa-fw fa-save"></span></a>' +
-		'<a href="javascript: void(0);" class="text-muted" title="Cancel Changes" onclick=\x27cancelEditEmployeeType(' + userId + ',' + isMember + ')\x27><span class="fa fa-fw fa-remove text-danger"></span></a>' +
+		'<option value=1>' + salaried + '</option>' +
+        '<option value=2>' + hourly + '</option></select>' +
+        ' <a href="javascript: void(0);" id="empIcon' + userId + '" class="text-muted" title="Save Changes" onclick=\x27saveEmployeeType(' + orgId + ',' + userId + ',' + isMember + ', "' + salaried + '", "' + hourly + '") \x27 > <span class="fa fa-fw fa-save"></span></a > ' +
+		'<a href="javascript: void(0);" class="text-muted" title="Cancel Changes" onclick=\x27cancelEditEmployeeType(' + userId + ',' + isMember + ', "' + salaried + '", "' + hourly + '")\x27><span class="fa fa-fw fa-remove text-danger"></span></a>' +
 		'</div>'
 	);
 	document.getElementById(tag + userId).value = oldEmployeeTypeId; //sets selected to the employee's current type
@@ -104,7 +104,7 @@ function saveEmployeeId(orgId, userId, isMember) {
 				url: "/Account/SaveEmployeeId/",
 				data: data,
 				timeout: 5000,
-				dataType: "json",
+                dataType: "json"
 			})
 				.fail(function (res) {
 					console.log(res);
@@ -155,7 +155,7 @@ function saveEmployeeId(orgId, userId, isMember) {
 	}
 }
 
-function saveEmployeeType(orgId, userId, isMember) {
+function saveEmployeeType(orgId, userId, isMember, salaried, hourly) {
 	var tag;
 	var tag3;
 	isMember == true ? tag = "#empTypeedit-" : tag = "#invTypeedit-";
@@ -184,13 +184,13 @@ function saveEmployeeType(orgId, userId, isMember) {
 			.fail(function (res) {
 				console.log(res);
 				if (res.responseText == "True") {
-					stopEditEmployeeType(userId, newId, isMember);
+					stopEditEmployeeType(userId, newId, isMember, salaried, hourly);
 					toggleSaveIcon(isMember, false, userId);
 					return;
 				}
 				else {
 					alert('Failed to update employee type.');
-					cancelEditEmployeeType(userId, isMember);
+					cancelEditEmployeeType(userId, isMember, salaried, hourly);
 					toggleSaveIcon(isMember, false, userId);
 				}
 			});
@@ -206,13 +206,13 @@ function saveEmployeeType(orgId, userId, isMember) {
 			.fail(function (res) {
 				console.log(res);
 				if (res.responseText == "True") {
-					stopEditEmployeeType(userId, newId, isMember);
+					stopEditEmployeeType(userId, newId, isMember, salaried, hourly);
 					toggleSaveIcon(isMember, false, userId);
 					return;
 				}
 				else {
 					alert('Failed to update employee type.');
-					cancelEditEmployeeType(userId, isMember);
+					cancelEditEmployeeType(userId, isMember, salaried, hourly);
 					toggleSaveIcon(isMember, false, userId);
 				}
 			});
@@ -235,11 +235,11 @@ function cancelEditEmployeeId(userId, isMember) {
 	stopEditEmployeeId(userId, oldEmployeeId, isMember);
 }
 
-function cancelEditEmployeeType(userId, isMember) {
+function cancelEditEmployeeType(userId, isMember, salaried, hourly) {
 	var tag;
 	isMember == true ? tag = "#empTypeedit-" : tag = "#invTypeedit-";
 	var oldEmployeeTypeId = $(tag + userId).attr("data-oldval");
-	stopEditEmployeeType(userId, oldEmployeeTypeId, isMember);
+	stopEditEmployeeType(userId, oldEmployeeTypeId, isMember, salaried, hourly);
 }
 
 function stopEditEmployeeId(userId, newValue, isMember) {
@@ -257,19 +257,19 @@ function stopEditEmployeeId(userId, newValue, isMember) {
 	);
 }
 
-function stopEditEmployeeType(userId, newTypeId, isMember) {
+function stopEditEmployeeType(userId, newTypeId, isMember, salaried, hourly) {
 	var tag1 = ""
 	var tag2 = ""
 	isMember == true ? tag1 = "#empTypeedit-" : tag1 = "#invTypeedit-";
 	isMember == true ? tag2 = "#empType-" : tag2 = "#invType-";
 	var inp = $(tag1 + userId);
 	var orgId = inp.attr("data-org");
-	var td = $(tag2 + userId);
-	var newType = (newTypeId == 1 ? "Salaried" : (newTypeId == 2 ? "Hourly" : "N/A"));
+    var td = $(tag2 + userId);
+    var newType = (newTypeId == 1 ? salaried : (newTypeId == 2 ? hourly : "N/A"));
 	td.empty();
 	td.html(
-		'<span class="empType">' + newType + '</span>' +
-		' <a href="javascript: void(0);" class="text-muted" title="Edit Employee Type"	onclick=\x27editEmployeeType(' + orgId + ',' + userId + ',"' + newTypeId + '",' + isMember + ')\x27><span class="fa fa-fw fa-edit"></span></a>'
+        '<span class="empType">' + newType + '</span>' +
+        ' <a href="javascript: void(0);" class="text-muted" title="Edit Employee Type"	onclick=\x27editEmployeeType(' + orgId + ',' + userId + ',"' + newTypeId + '",' + isMember + ', "' + salaried + '", "' + hourly + '")\x27><span class="fa fa-fw fa-edit"></span></a > '
 	);
 }
 

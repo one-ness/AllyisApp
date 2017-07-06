@@ -77,16 +77,18 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the organization's postal code.
 		/// </summary>
 		[DataType(DataType.PostalCode)]
-		////[RegularExpression(@"^\d{5}(-\d{4})?$", ErrorMessage = "Invalid postal code")]
-		[RegularExpression(@"([\-\s\w]{3,10})", ErrorMessage = "Invalid postal code.")]
-		[Display(Name = "Postal Code")]
+        //[RegularExpression(@"^\d{5}(-\d{4})?$", ErrorMessage = "Invalid postal code")]
+        //[RegularExpression(@"([\-\s\w]{3,10})", ErrorMessage = "Invalid postal code.")]
+        [Display(Name = "Postal Code")]
 		public string PostalCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's phone number.
 		/// </summary>
 		[DataType(DataType.Text)]
-		[Display(Name = "Phone Number")]
+        //[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
+        [RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
+        [Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
 
 		/// <summary>
@@ -94,7 +96,9 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		[DataType(DataType.Text)]
 		[Display(Name = "Fax Number")]
-		public string FaxNumber { get; set; }
+        //[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
+        [RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
+        public string FaxNumber { get; set; }
 
 		/// <summary>
 		/// Gets or sets the owner's Employee Id. Only use on creating orgs.
