@@ -133,8 +133,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// For each date in the date range
 			for (DateTime date = startDate; date <= endDate;)
 			{
-				// If has data for this date,
-				if (iter.Current != null && iter.Current.Date == date.Date)
+                bool beforeLockDate = result.LockDate > 0 && AppService.GetDayFromDateTime(date) <= result.LockDate;
+                // If has time entry data for this date,
+                if (iter.Current != null && iter.Current.Date == date.Date)
 				{
 					ProjectHours temp = null;
 
@@ -150,7 +151,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					// And add its entry to Entries.
 					bool isProjectDeleted = result.Projects.Where(x => x.ProjectId == iter.Current.ProjectId).Select(x => x.ProjectName).FirstOrDefault() == null;
-					result.EntryRange.Entries.Add(new EditTimeEntryViewModel
+                   
+                    result.EntryRange.Entries.Add(new EditTimeEntryViewModel
 					{
 						TimeEntryId = iter.Current.TimeEntryId,
 						ProjectId = iter.Current.ProjectId,
@@ -171,7 +173,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ApprovalState = iter.Current.ApprovalState,
 						ModSinceApproval = iter.Current.ModSinceApproval,
 						PayClasses = result.PayClasses,
-						Locked = iter.Current.ApprovalState == (int)Core.ApprovalState.Approved || (isProjectDeleted && !this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subId, false))
+                        LockDate = result.LockDate,
+                        Locked = iter.Current.ApprovalState == (int)Core.ApprovalState.Approved || (isProjectDeleted && !this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subId, false) || (!result.CanManage && beforeLockDate))
 					});
 
 					if (holidays.Where(x => x.Date == iter.Current.Date).FirstOrDefault() != null)
@@ -184,10 +187,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				else if ((holidays.Where(x => x.Date == date).FirstOrDefault() != null) && (iter.Current == null || iter.Current.Date != date) && !holidayPopulated)
 				{
 					holidayPopulated = true;
+                    // Prepopulate holidays
 
-					// Prepopulate holidays
-
-					result.GrandTotal.Hours += 8;
+                    result.GrandTotal.Hours += 8;
 
 					TimeEntryInfo timeEntryInfo = new TimeEntryInfo()
 					{
@@ -197,7 +199,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						UserId = userId,
 						ProjectId = 0,
 						PayClassId = infos.Item2.Where(p => p.Name.Equals("Holiday")).FirstOrDefault().PayClassID,
-						Description = holidays.Where(x => x.Date == date).First().HolidayName
+						Description = holidays.Where(x => x.Date == date).First().HolidayName,
 					};
 
 					int timeEntryId = AppService.CreateTimeEntry(timeEntryInfo);
@@ -219,27 +221,32 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Duration = string.Format("{0:D2}:{1:D2}", (int)timeEntryInfo.Duration, (int)Math.Round((timeEntryInfo.Duration - (int)timeEntryInfo.Duration) * 60, 0)),
 						Description = timeEntryInfo.Description,
 						ProjectName = allProjects.Where(x => x.ProjectId == 0).Select(x => x.ProjectName).FirstOrDefault(),
-					});
+                        Locked = (!result.CanManage && beforeLockDate),
+                        LockDate = result.LockDate
+                    });
 				}
 				else
 				{
-					// Otherwise, create an empty entry.
-					result.EntryRange.Entries.Add(new EditTimeEntryViewModel
-					{
-						Sample = true,
-						Date = AppService.GetDayFromDateTime(date),
-						UserId = userId,
-						SubscriptionId = subId,
-						StartingDate = AppService.GetDayFromDateTime(startDate),
-						EndingDate = AppService.GetDayFromDateTime(endDate),
-						IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
-						IsHoliday = holidays.Any(x => x.Date.Date == date.Date),
-						ProjectId = -1,
-						Projects = result.Projects,
-						ProjectsWithInactive = result.ProjectsWithInactive,
-						PayClassId = infos.Item2.Where(p => p.Name.Equals("Regular")).FirstOrDefault().PayClassID,
-						PayClasses = result.PayClasses
-					});
+                    // Otherwise, create an empty entry.
+                    result.EntryRange.Entries.Add(new EditTimeEntryViewModel
+                    {
+                        Sample = true,
+                        Date = AppService.GetDayFromDateTime(date),
+                        UserId = userId,
+                        SubscriptionId = subId,
+                        StartingDate = AppService.GetDayFromDateTime(startDate),
+                        EndingDate = AppService.GetDayFromDateTime(endDate),
+                        IsOffDay = (weekend % 7 == (int)date.DayOfWeek || (weekend + 1) % 7 == (int)date.DayOfWeek) ? true : false,
+                        IsHoliday = holidays.Any(x => x.Date.Date == date.Date),
+                        ProjectId = -1,
+                        Projects = result.Projects,
+                        ProjectsWithInactive = result.ProjectsWithInactive,
+                        PayClassId = infos.Item2.Where(p => p.Name.Equals("Regular")).FirstOrDefault().PayClassID,
+                        PayClasses = result.PayClasses,
+                        Locked = (!result.CanManage && beforeLockDate),  //manager can still edit entries before lockdate
+                        LockDate = result.LockDate,
+                        IsManager = result.CanManage
+                    });
 
 					// Go to the next day.
 					date = date.AddDays(1.0d);

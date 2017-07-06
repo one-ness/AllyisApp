@@ -160,9 +160,13 @@
 		  		            @Html.Partial("_AjaxTimeEntryBody", entry)
 			            }
 		  	            @Html.Partial("_AjaxTimeEntryBody", theSample);
-			            theSample.Hidden = true;
+                        if (theSample.Date > theSample.LockDate || theSample.IsManager)
+                        {
+                            theSample.Hidden = true;    //not hiding the sample entries for locked dates so that we can keep the graying out consistent
+                        }
 		  	            @Html.Partial("_AjaxTimeEntryBody", theSample);
-		            }
+                            
+                        }
 		            </div>
 		        </div>
             </div>
