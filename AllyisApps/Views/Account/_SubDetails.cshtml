@@ -38,9 +38,10 @@
                     <a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, productId = @Model.ProductId })"
                        class="text-muted" title="@Strings.EditSubscription"><span class="fa fa-fw fa-dollar text-success"></span></a>
 
-                    @using (Html.BeginForm(ActionConstants.Unsubscribe, ControllerConstants.Account, new { id = Model.OrganizationId, productId = Model.ProductId }, FormMethod.Get, new { @style = "display: inline"}))
+                    @using (Html.BeginForm(ActionConstants.Unsubscribe, ControllerConstants.Account, new { id = Model.OrganizationId }, FormMethod.Get, new { @style = "display: inline"}))
                     {
                         @*<input data-val="true" id="ID" name="ID" type="hidden" value="@Model.ProductId" />*@
+                        <input type="hidden" name="productId" value="@Model.ProductId" />
                         <a href="javascript:void(0);" class="text-muted" title="@Strings.DropSubcription" onclick="$(this).closest('form').submit()"><span class="fa fa-fw fa-remove text-danger"></span></a>
                     }
                 @*}*@
