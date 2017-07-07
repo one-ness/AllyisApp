@@ -1,5 +1,6 @@
 ﻿@model AllyisApps.ViewModels.Auth.AddMemberViewModel
 
+
 @{
     ViewBag.Title = Strings.AddMember;
 }
@@ -62,7 +63,7 @@
                 @{var count = 0;
                   var roomInSubscription = true;
                 }
-                @foreach (AddMemberSubscriptionInfo sub in Model.Subscriptions)
+                @foreach (AllyisApps.ViewModels.Auth.AddMemberSubscriptionInfo sub in Model.Subscriptions)
                 {
                     <div class="col-md-6 sm-control-width">
                         @Html.Hidden(string.Format("Subscriptions[{0}].SubscriptionId", count), sub.SubscriptionId)
