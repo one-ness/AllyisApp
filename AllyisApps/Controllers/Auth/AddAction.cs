@@ -58,11 +58,11 @@ namespace AllyisApps.Controllers
 				if (add.Subscriptions != null && add.Subscriptions.Count > 0)
 				{
 					var sub = add.Subscriptions.First();
-					if (sub.SelectedRole != 0)
-					{
-						subId = sub.SubscriptionId;
-						subRoleId = sub.SelectedRole;
-					}
+					//if (sub.SelectedRole != 0)
+					//{
+					//	subId = sub.SubscriptionId;
+					//	subRoleId = sub.SelectedRole;
+					//}
 				}
 
 				try
