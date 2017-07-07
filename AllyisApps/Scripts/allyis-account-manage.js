@@ -274,7 +274,7 @@ function stopEditEmployeeType(userId, newTypeId, isMember, salaried, hourly) {
 }
 
 function removeUser(orgId, userId, fullName) {
-	var result = confirm(removeFromOrg + " " + fullName + " " + removeFromOrgEnd);
+	var result = confirm(removeFromOrg.replace('{0}', fullName));
     if (result == true) {
         var url = removeMemberAction + userId + "&id=" + orgId;
 

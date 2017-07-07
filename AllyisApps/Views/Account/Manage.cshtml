@@ -83,10 +83,9 @@
 </div>
 @section Scripts {
     <script type="text/javascript">
-        var removeFromOrg = "@Strings.RemoveFromOrg";
-        var removeFromOrgEnd = "@Strings.RemoveFromOrgEnd";
+        var removeFromOrg = "@Html.Raw(Strings.RemoveFromOrg)";
         var removeMemberAction = "@Url.Action(ActionConstants.RemoveMember, ControllerConstants.Account)?userId=";
-        var removeInvitation = "@Strings.RemoveInvitationConfirm";
+        var removeInvitation = "@Html.Raw(Strings.RemoveInvitationConfirm)";
         var removeInvitationAction = "@Url.Action(ActionConstants.RemoveInvitation, ControllerConstants.Account)?invitationId=";
     </script>
     @Scripts.Render("~/bundles/AccountManage")
