@@ -1,13 +1,11 @@
 ﻿@model AllyisApps.ViewModels.Auth.EditProfileViewModel
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = Strings.EditProfile;
 }
-@{ ViewData.Add(ControllerConstants.Controller, ControllerConstants.Account); }
-@{ ViewData.Add(ActionConstants.Action, ActionConstants.EditProfile); }
+
 <div class="shrink-wrap-center">
     <div class="min300">
-        @using (Html.BeginForm((string)(ViewData[ActionConstants.Action]), (string)ViewData[ControllerConstants.Controller], new { ReturnUrl = (string)(ViewBag.ReturnUrl) }, FormMethod.Post, new { @class = "form", role = "form" }))
+        @using (Html.BeginForm(ActionConstants.EditProfile, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form", role = "form" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" });

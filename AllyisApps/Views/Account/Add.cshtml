@@ -1,14 +1,8 @@
-﻿@using AllyisApps.ViewModels.Auth;
-@using AllyisApps.Services
-
-@model AddMemberViewModel
+﻿@model AllyisApps.ViewModels.Auth.AddMemberViewModel
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = Strings.AddMember;
 }
-@{ ViewData.Add(ControllerConstants.Controller, ControllerConstants.Account); }
-@{ ViewData.Add(ActionConstants.Action, ActionConstants.Add); }
 
 <div class="shrink-wrap-center">
     <div>
