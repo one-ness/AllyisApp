@@ -9,6 +9,8 @@
     ViewBag.Title = Strings.EditProject;
     ViewBag.Subtitle = Model.CustomerName;
     ViewBag.Action = "Edit";
+    ViewData["UserId"] = Model.UserId;
+    ViewData["SubscriptionId"] = Model.SubscriptionId;
 }
 
 <div class="shrink-wrap-center">

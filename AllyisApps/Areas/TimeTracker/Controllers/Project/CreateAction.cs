@@ -55,7 +55,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					ProjectOrgId = idAndUsers.Item1, //Service.GetRecommendedProjectId()
 					CustomerName = AppService.GetCustomer(userId).Name,
 					SubscriptionId = subscriptionId,
-					OrganizationId = 0 // TODO: get the actual org id from user subscription
+                    UserId = userId,
+					OrganizationId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId
 				});
 		}
 

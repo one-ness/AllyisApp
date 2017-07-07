@@ -83,6 +83,11 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
         public int SubscriptionId { get; set; }
 
         /// <summary>
+        /// Gets or sets the User's ID
+        /// </summary>
+        public int UserId { get; set; }
+
+        /// <summary>
         /// Gets or sets the Project's Organization ID.
         /// </summary>
         [Required]

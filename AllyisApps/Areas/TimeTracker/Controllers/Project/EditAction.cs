@@ -112,21 +112,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subscriptionUsers.Add(new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId));
 			}
 
-			return new EditProjectViewModel
-			{
-				CustomerName = infos.Item1.CustomerName,
-				OrganizationName = infos.Item1.OrganizationName,
-				ParentCustomerId = infos.Item1.CustomerId,
-				OrganizationId = infos.Item1.OrganizationId,
-				ProjectId = infos.Item1.ProjectId,
-				ProjectOrgId = infos.Item1.ProjectOrgId,
-				ProjectName = infos.Item1.ProjectName,
-				ProjectUsers = projectUsers,
-				SubscriptionUsers = subscriptionUsers.Where(user => !projectUsers.Any(pu => (pu.UserId == user.UserId))), // Grab users that are not part of the project
-				PriceType = infos.Item1.PriceType,
-				StartDate = AppService.GetDayFromDateTime(infos.Item1.StartDate),
-				EndDate = AppService.GetDayFromDateTime(infos.Item1.EndDate),
-				SubscriptionId = subscriptionId
+            return new EditProjectViewModel
+            {
+                CustomerName = infos.Item1.CustomerName,
+                OrganizationName = infos.Item1.OrganizationName,
+                ParentCustomerId = infos.Item1.CustomerId,
+                OrganizationId = infos.Item1.OrganizationId,
+                ProjectId = infos.Item1.ProjectId,
+                ProjectOrgId = infos.Item1.ProjectOrgId,
+                ProjectName = infos.Item1.ProjectName,
+                ProjectUsers = projectUsers,
+                SubscriptionUsers = subscriptionUsers.Where(user => !projectUsers.Any(pu => (pu.UserId == user.UserId))), // Grab users that are not part of the project
+                PriceType = infos.Item1.PriceType,
+                StartDate = AppService.GetDayFromDateTime(infos.Item1.StartDate),
+                EndDate = AppService.GetDayFromDateTime(infos.Item1.EndDate),
+                SubscriptionId = subscriptionId,
+                UserId = AppService.UserContext.UserId
 			};
 		}
 	}
