@@ -81,7 +81,14 @@
 			</div>
 
 			<div class="form-group allyis-action-buttons">
-				@Html.ActionLink(Strings.Cancel, Model.IsCreating ? ActionConstants.Index : ActionConstants.Manage, ControllerConstants.Account, new { id = Model.OrganizationId }, new { @class = "btn btn-default" })
+				@if (Model.IsCreating)
+				{
+					@Html.ActionLink(Strings.Cancel, ActionConstants.Index, ControllerConstants.Account, null, new { @class = "btn btn-default" })
+				}
+				else
+				{
+					@Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, new { id = Model.OrganizationId }, new { @class = "btn btn-default" })
+				}
 				<input type="submit" value="@Strings.Save" class="btn btn-primary" id="submit" />
 			</div>
 		}

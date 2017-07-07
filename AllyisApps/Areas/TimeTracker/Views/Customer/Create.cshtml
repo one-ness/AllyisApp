@@ -6,6 +6,8 @@
     ViewBag.Title = Strings.Create;
     ViewData.Add(ControllerConstants.Controller, ControllerConstants.Customer);
     ViewData.Add(ActionConstants.Action, ActionConstants.Create);
+    ViewData["UserId"] = Model.UserId;
+    ViewData["SubscriptionId"] = Model.SubscriptionId;
 }
 
 <div>

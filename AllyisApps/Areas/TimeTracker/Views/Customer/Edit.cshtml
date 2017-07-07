@@ -6,6 +6,8 @@
     ViewBag.Title = Strings.Edit;
     ViewData.Add(ControllerConstants.Controller, ControllerConstants.Customer);
     ViewData.Add(ActionConstants.Action, ActionConstants.Edit);
+    ViewData["UserId"] = Model.UserId;
+    ViewData["SubscriptionId"] = Model.SubscriptionId;
 }
 
 <div class="shrink-wrap-center">

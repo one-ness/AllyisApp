@@ -32,7 +32,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				IsCreating = true,
 				CustomerOrgId = idAndCountries.Item1,
 				SubscriptionId = subscriptionId,
-				OrganizationId = idAndCountries.Item3
+				OrganizationId = idAndCountries.Item3,
+                UserId = AppService.UserContext.UserId
 			});
 		}
 
