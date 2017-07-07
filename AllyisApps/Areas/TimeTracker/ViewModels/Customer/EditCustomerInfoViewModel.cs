@@ -116,6 +116,11 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
         public int SubscriptionId { get; set; }
 
         /// <summary>
+        /// Gets or sets the user's id
+        /// </summary>
+        public int UserId { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the organization that the Customer belongs too.
         /// </summary>
         public string OrganizationName { get; set; }

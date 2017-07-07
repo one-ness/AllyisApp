@@ -8,6 +8,8 @@
     string controllerName = (string)ViewContext.Controller.ValueProvider.GetValue("controller").RawValue;
     ViewBag.Title = Strings.CreateProject;
     ViewBag.Subtitle = Model.CustomerName;
+    ViewData["UserId"] = Model.UserId;
+    ViewData["SubscriptionId"] = Model.SubscriptionId;
     ViewData.Add(ControllerConstants.Controller, ControllerConstants.Project);
     ViewData.Add(ActionConstants.Action, ActionConstants.Create);
 }

@@ -108,10 +108,9 @@
         {
             <div class="row">
                 <div class="col-md-6 sm-control-width">
-                    @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get, new { @class = "panel-heading", style = "display: flex; justify-content: space-between;" }))
+                    @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get, new { @class = "panel-heading", style = "display: flex; justify-content: space-between;", id = "template-form" }))
                     {
                         <label>@Strings.Upload</label>
-                            <input type="submit" id="template-button" value="@Strings.Template" class="btn btn-primary tt-template" />
                     }
                     @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
                     {
@@ -122,11 +121,15 @@
                             <input id="upload-file-name-display" class="form-control"
                                    onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
                         </div>
-                            <div id="footUpload" class="panel-footer" style="display: flex; justify-content: flex-end; flex-wrap: wrap; padding-bottom: 0px;">
-                                <a class="btn btn-primary pull-right" style="margin-bottom: 15px;" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
-                                &nbsp
-                                <input type="submit" style="margin-bottom: 15px;" id="upload-button" value="@Strings.Upload" class="btn btn-primary pull-right" />
-                            </div>
+
+                        <div style="margin-top: 10px; margin-bottom: 15px; float:left">
+                            <input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary" />
+                        </div>
+
+                        <div style="margin-top: 10px; margin-bottom: 15px; float:right;">
+                            <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
+                            <input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" />
+                        </div>
                     }
                 </div>
             </div>
