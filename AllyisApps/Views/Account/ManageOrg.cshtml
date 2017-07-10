@@ -19,7 +19,7 @@
 					   class="pull-right text-muted" title="@Strings.EditOrganization"><span class="fa fa-fw fa-edit"></span></a>
 				</h1>
 			</div>
-			@Html.Partial("_OrgDetails", Model.Details)
+			@Html.Partial("_ManageOrgDetails", Model.Details)
 		</div>
 	</div>
 	<div class="panel panel-default sub-panel">
@@ -30,7 +30,7 @@
 		</div>
 		@foreach (SubscriptionDisplayViewModel productSub in Model.Subscriptions)
 		{
-			@Html.Partial("_SubDetails", productSub);
+			@Html.Partial("_ManageOrgSubscriptions", productSub);
 		}
 		<div class="panel-body">
 			<h4>@Strings.Subscribe!</h4>
