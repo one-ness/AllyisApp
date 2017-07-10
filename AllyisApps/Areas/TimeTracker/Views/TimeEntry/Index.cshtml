@@ -221,6 +221,13 @@ ViewBag.RenderSidebar = true;}
         var pageSize = @Model.PageUserSize;
         var page_container_id = "viewasuser-list";
         var page_item_tag = "div";
+
+        $(document).ready(function () {
+            var disabledButtons = document.getElementsByName("disabledButton");
+            for (var i = 0; i < disabledButtons.length; i++) {
+                disabledButtons[i].disabled = true;
+            }
+        });
     </script>
     @Scripts.Render("~/bundles/daterangepicker")
     @Scripts.Render("~/bundles/pageswithsearch")
