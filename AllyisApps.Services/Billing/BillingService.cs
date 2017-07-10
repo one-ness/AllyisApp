@@ -593,7 +593,7 @@ namespace AllyisApps.Services
 				Name = sku.Name,
 				Price = sku.Price,
 				UserLimit = sku.UserLimit,
-				BillingFrequency = sku.BillingFrequency
+				BillingFrequency = (BillingFrequencyEnum)sku.BillingFrequency
 			};
 		}
 
@@ -949,7 +949,7 @@ namespace AllyisApps.Services
 
 			return new SkuInfo
 			{
-				BillingFrequency = sku.BillingFrequency,
+				BillingFrequency = (BillingFrequencyEnum)sku.BillingFrequency,
 				Name = sku.Name,
 				Price = sku.Price,
 				ProductId = sku.ProductId,

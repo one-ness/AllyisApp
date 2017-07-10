@@ -50,5 +50,3 @@ DBCC CHECKIDENT('Crm.Customer');
 DBCC CHECKIDENT('Billing.Subscription');
 DBCC CHECKIDENT('Lookup.State');
 DBCC CHECKIDENT('Lookup.Country');
-
-:r .\Security\aaUser.sql	--Create Login for aaUser

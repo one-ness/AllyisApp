@@ -75,10 +75,12 @@
     <Compile Include="Auth\UserOrganization.cs" />
     <Compile Include="Auth\UserSubscription.cs" />
     <Compile Include="BaseService.cs" />
+    <Compile Include="Billing\BillingFrequencyEnum.cs" />
     <Compile Include="Billing\BillingServicesEnum.cs" />
     <Compile Include="Billing\BillingServicesHandler.cs" />
     <Compile Include="Billing\BillingHistoryItemInfo.cs" />
     <Compile Include="Billing\BillingService.cs" />
+    <Compile Include="Billing\BlockBasedOnEnum.cs" />
     <Compile Include="ServiceConstants.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Crm\Customer.cs" />

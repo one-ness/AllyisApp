@@ -3,7 +3,7 @@
     [StripeTokenSubId]  NCHAR (50)    NOT NULL,
     [NumberOfUsers]     INT           NOT NULL,
     [Price]             INT           NOT NULL,
-    [ProductId]         INT           NOT NULL,
+    [ProductId]         SMALLINT	  NOT NULL,
     [IsActive]          BIT           NOT NULL,
     [OrganizationId]    INT           NOT NULL,
     [CreatedUTC]        DATETIME2 (0) DEFAULT (getutcdate()) NOT NULL,

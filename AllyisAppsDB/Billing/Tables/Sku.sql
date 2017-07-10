@@ -1,16 +1,17 @@
 ﻿CREATE TABLE [Billing].[Sku] (
-    [SkuId]             INT            NOT NULL,
-    [ProductId]         INT            NOT NULL,
-    [Name]              NVARCHAR (128) NOT NULL,
+    [SkuId]             SMALLINT            NOT NULL,
+    [ProductId]         SMALLINT            NOT NULL,
+    [Name]              NVARCHAR (64) NOT NULL,
     [CostPerBlock]      MONEY          NOT NULL,
-    [UserLimit]         INT            NOT NULL,
-    [BillingFrequency]  NVARCHAR (50)  DEFAULT ('Monthly') NOT NULL,
-    [Tier]              NVARCHAR (50)  NOT NULL,
-    [EntityName]        NVARCHAR (50)  DEFAULT ('User') NOT NULL,
-    [BlockSize]         INT            NOT NULL,
+	[BlockBasedOn]		TINYINT   NOT NULL,
+    [UserLimit]         INT            NOT NULL DEFAULT 0,
+    [BillingFrequency]  TINYINT  DEFAULT 1 NOT NULL,
+    
+    [BlockSize]         INT            NOT NULL DEFAULT 1,
+	[IsActive]          BIT            DEFAULT ((1)) NOT NULL,
+	[Description] NVARCHAR(512) NULL,
     [PromoCostPerBlock] MONEY          NULL,
-    [PromoDeadline]     DATETIME2 (0)  NULL,
-    [IsActive]          BIT            DEFAULT ((1)) NOT NULL,
+    [PromoDeadline]     DATETIME2 (0)  NULL 
     PRIMARY KEY CLUSTERED ([SkuId] ASC),
     CONSTRAINT [FK_Skus_Product] FOREIGN KEY ([ProductId]) REFERENCES [Billing].[Product] ([ProductId])
 );

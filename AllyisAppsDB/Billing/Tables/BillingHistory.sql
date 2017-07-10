@@ -3,7 +3,7 @@
     [Description]    NVARCHAR (MAX) NOT NULL,
     [OrganizationId] INT            NOT NULL,
     [UserId]         INT            NOT NULL,
-    [SkuId]          INT            NULL,
+    [SkuId]          SMALLINT            NULL,
     [CreatedUTC]     DATETIME2 (0)  DEFAULT (getutcdate()) NOT NULL,
     [ModifiedUTC]    DATETIME2 (0)  DEFAULT (getutcdate()) NOT NULL,
     PRIMARY KEY NONCLUSTERED ([Date] ASC),
