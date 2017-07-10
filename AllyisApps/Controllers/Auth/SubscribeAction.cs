@@ -112,7 +112,7 @@ namespace AllyisApps.Controllers
 
 			if (AppService.Subscribe(model.NumberOfUsers, model.ProductId, model.ProductName, model.SelectedSku, model.PreviousSku, model.Billing.Amount, model.Token, addingNewBilling, billingServicesEmail, token, model.OrganizationId))
 			{
-				return this.RedirectToAction(ActionConstants.Manage, new { id = model.OrganizationId });
+				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
 			}
 			else
 			{

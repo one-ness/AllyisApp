@@ -24,25 +24,25 @@ namespace AllyisApps.Controllers
         /// </summary>
         /// <param name="id">The organization Id</param>
         /// <returns>The organization's management page.</returns>
-        public ActionResult Manage(int id)
+        public ActionResult ManageOrg(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-			OrganizationManageViewModel model = this.ConstructOrganizationManageViewModel(id);
+			ManageOrgViewModel model = this.ConstructOrganizationManageViewModel(id);
 			return this.View(model);
 		}
 
 		/// <summary>
-		/// Uses services to populate the lists of an <see cref="OrganizationManageViewModel"/> and returns it.
+		/// Uses services to populate the lists of an <see cref="ManageOrgViewModel"/> and returns it.
 		/// </summary>
 		/// <returns>The OrganizationManageViewModel.</returns>
 		[CLSCompliant(false)]
-		public OrganizationManageViewModel ConstructOrganizationManageViewModel(int orgId)
+		public ManageOrgViewModel ConstructOrganizationManageViewModel(int orgId)
 		{
 			var infos = AppService.GetOrganizationManagementInfo(orgId);
 
 			BillingServicesCustomer customer = (infos.Item5 == null) ? null : AppService.RetrieveCustomer(new BillingServicesCustomerId(infos.Item5));
 
-			return new OrganizationManageViewModel
+			return new ManageOrgViewModel
 			{
 				Details = infos.Item1,
 				LastFour = customer == null ? string.Empty : customer.Last4,

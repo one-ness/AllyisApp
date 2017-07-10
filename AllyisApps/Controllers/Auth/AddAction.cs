@@ -85,7 +85,7 @@ namespace AllyisApps.Controllers
 					);
 
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, add.FirstName, add.LastName), Variety.Success));
-					return this.RedirectToAction(ActionConstants.Manage, new { id = add.OrganizationId });
+					return this.RedirectToAction(ActionConstants.ManageOrg, new { id = add.OrganizationId });
 				}
 				catch (ArgumentException ex)
 				{

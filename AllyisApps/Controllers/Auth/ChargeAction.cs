@@ -29,7 +29,7 @@ namespace AllyisApps.Controllers
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditBilling, id);
 			AppService.UpdateBillingInfo(billingServicesEmail, token, id);
 			Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.Billing, Core.Alert.Variety.Success));
-			return this.RedirectToAction(ActionConstants.Manage);
+			return this.RedirectToAction(ActionConstants.ManageOrg);
 		}
 	}
 }

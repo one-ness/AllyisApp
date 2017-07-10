@@ -95,7 +95,7 @@ namespace AllyisApps.Controllers
 			this.AppService.CheckOrgAction(AppService.OrgAction.DeleteInvitation, id);
 			AppService.RemoveInvitation(id, invitationId);
 			Notifications.Add(new BootstrapAlert(Resources.Strings.InvitationDeleteNotification, Variety.Success));
-			return this.RedirectToAction(ActionConstants.Manage, new { id = id });
+			return this.RedirectToAction(ActionConstants.ManageOrg, new { id = id });
 		}
 	}
 }

@@ -53,7 +53,7 @@
                         </div>
                         <div class="panel-footer">
                             <div class="pull-right">
-                                @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, new { id = Model.OrganizationId }, htmlAttributes: new { @class = "btn btn-default" })
+                                @Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, htmlAttributes: new { @class = "btn btn-default" })
                                 <input type="submit" class="btn btn-primary" value=@Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...';">
                             </div>
                             <div class="clearfix"></div>

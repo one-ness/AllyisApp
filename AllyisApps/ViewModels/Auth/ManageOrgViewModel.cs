@@ -15,7 +15,7 @@ namespace AllyisApps.ViewModels.Auth
 	/// The org management view model.
 	/// </summary>
 	[CLSCompliant(false)]
-	public class OrganizationManageViewModel : BaseViewModel
+	public class ManageOrgViewModel : BaseViewModel
 	{
 		/// <summary>
 		/// Gets or sets the organization's ID.
@@ -26,11 +26,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the organization's details viewmodel.
 		/// </summary>
 		public Organization Details { get; set; }
-
-		/// <summary>
-		/// Gets or sets the organization's edit viewmodel.
-		/// </summary>
-		public EditOrganizationViewModel Edit { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organizations members.

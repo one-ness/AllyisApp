@@ -193,7 +193,7 @@ namespace AllyisApps.Controllers
 			if (model.SelectedUsers == null || model.SelectedUsers.Count() == 0)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.NoUsersSelected, Variety.Danger));
-				return RedirectToAction(ActionConstants.Manage);
+				return RedirectToAction(ActionConstants.ManageOrg);
 			}
 
 			if (model.SelectedActions == null)
