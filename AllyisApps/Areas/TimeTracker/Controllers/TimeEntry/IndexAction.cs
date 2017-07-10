@@ -88,6 +88,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				// if ( hours.Count == 0 )
 				hours.Add(proj.ProjectId, new ProjectHours { Project = proj, Hours = 0.0f });
+
+				System.Diagnostics.Debug.WriteLine("Project: " + proj.ProjectName + ", End Date: " + proj.EndDate + " TT End Date: " +endDate);
+				System.Diagnostics.Debug.WriteLine("ENd Date Null? " + (proj.EndDate == null));
 			}
 
 			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = -1, ProjectName = Resources.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
@@ -108,8 +111,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				StartOfWeek = (StartOfWeekEnum)startOfWeek,
 				PayClasses = infos.Item2,
 				GrandTotal = new ProjectHours { Project = new CompleteProjectInfo { ProjectName = "Total" }, Hours = 0.0f },
-				Projects = allProjects.Where(x => x.IsActive == true && x.IsCustomerActive == true && x.IsUserActive == true),
-				ProjectsWithInactive = allProjects.Where(p => p.ProjectId != 0),
+				Projects = allProjects.Where(x => x.IsActive == true && x.IsCustomerActive == true && x.IsUserActive == true && ((x.EndDate.HasValue && DateTime.Compare(x.EndDate.Value, endDate) >= 0) || x.EndDate == null)),
+				ProjectsWithInactive = allProjects.Where(p => p.ProjectId != 0 && ((p.EndDate.HasValue && DateTime.Compare(p.EndDate.Value, endDate) >= 0) || p.EndDate == null)),
 				ProjectHours = hours.Values.Where(x => x.Hours > 0),
 				Users = users,
 				TotalUsers = users.Count(),
@@ -134,6 +137,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			for (DateTime date = startDate; date <= endDate;)
 			{
                 bool beforeLockDate = result.LockDate > 0 && AppService.GetDayFromDateTime(date) <= result.LockDate;
+
                 // If has time entry data for this date,
                 if (iter.Current != null && iter.Current.Date == date.Date)
 				{
