@@ -67,8 +67,8 @@
 @section Scripts {
     <script type="text/javascript">
         var model_previousSku = @Model.PreviousSku;
-        var warningWhenSwitchingToFreeSubscription = "@Strings.WarningWhenSwitchingToFreeSubscription";
-        var cannotReduceUserCount = "@Strings.CannotReduceUserCount";
+        var warningWhenSwitchingToFreeSubscription = "@Html.Raw(Strings.WarningWhenSwitchingToFreeSubscription)";
+        var cannotReduceUserCount = "@Html.Raw(Strings.CannotReduceUserCount)";
     </script>
     @Scripts.Render("~/bundles/AccountSubscribe");
 }

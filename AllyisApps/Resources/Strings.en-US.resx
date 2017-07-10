@@ -1058,10 +1058,7 @@
     <value>Remove Billing?</value>
   </data>
   <data name="RemoveFromOrg" xml:space="preserve">
-    <value>Are you sure you would like to remove</value>
-  </data>
-  <data name="RemoveFromOrgEnd" xml:space="preserve">
-    <value>from this organization?</value>
+    <value>Are you sure you would like to remove {0} from this organization?</value>
   </data>
   <data name="RemoveFromOrgNoName" xml:space="preserve">
     <value>Are you sure you would like to remove the selected user(s) from your organization?</value>
@@ -1325,7 +1322,7 @@
     <value>User</value>
   </data>
   <data name="UserAccountAlreadyExists" xml:space="preserve">
-    <value>User account already exists. Click on 'Forgot Password' link to reset your password.</value>
+    <value>User account already exists, please sign in.  If you forgot your password, click 'Forgot Password' on the sign in page.</value>
   </data>
   <data name="UserAddedSuccessfully" xml:space="preserve">
     <value>has been successfully added.</value>
@@ -1376,7 +1373,7 @@
     <value>Are you sure you want to switch to a free subscription?\n\nThis will cancel any paid subscription.</value>
   </data>
   <data name="WarningWhenUnsubscribing" xml:space="preserve">
-    <value>Are you sure you want to unsubscribe from %subname%?</value>
+    <value>Are you sure you want to unsubscribe from {0}?</value>
   </data>
   <data name="WarnProblemSigningIn" xml:space="preserve">
     <value>There was a problem signing in.</value>

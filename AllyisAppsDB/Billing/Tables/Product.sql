@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [Billing].[Product] (
-    [ProductId]   INT            NOT NULL,
+    [ProductId]   SMALLINT            NOT NULL,
     [Name]        NVARCHAR (32)  NOT NULL,
-    [Description] NVARCHAR (MAX) NULL,
+    [Description] NVARCHAR (512) NULL,
     [IsActive]    BIT            DEFAULT ((1)) NOT NULL,
     [AreaUrl]     NVARCHAR (32)  NOT NULL,
     PRIMARY KEY CLUSTERED ([ProductId] ASC)

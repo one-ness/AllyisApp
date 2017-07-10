@@ -94,11 +94,11 @@
 		}
 	</div>
 	@if (Model != null && Model.CanDelete)
-	{
-		using (Html.BeginForm(ActionConstants.DeleteOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = "return confirm(\"" + Strings.ConfirmDeleteOrg + "\");" }))
-		{
+    {
+        using (Html.BeginForm(ActionConstants.DeleteOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(Strings.ConfirmDeleteOrg)) }))
+        {
 			@Html.AntiForgeryToken()
 			<input type="submit" value="@Strings.DeleteOrganization" class="btn btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
-		}
-	}
+        }
+    }
 </div>

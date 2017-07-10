@@ -7,9 +7,9 @@
 namespace AllyisApps.Services
 {
 	/// <summary>
-	/// List of products offered by us. These should match the product ids in the database.
+	/// Products offered by us. Must match the IDs inserted in to db.
 	/// </summary>
-	public enum ProductIdEnum : int
+	public enum ProductIdEnum : short
 	{
 		/// <summary>
 		/// ID for no product.
@@ -17,13 +17,13 @@ namespace AllyisApps.Services
 		None = 0,
 
 		/// <summary>
-		/// ID for TimeTracker.
+		/// Time Tracker.
 		/// </summary>
 		TimeTracker = 1,
 
 		/// <summary>
-		/// Id for consulting
+		/// Expense Tracker
 		/// </summary>
-		Consulting = 2,
+		ExpenseTracker = 2,
 	}
 }

@@ -271,4 +271,7 @@
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="AllyisAppsDB.refactorlog" />
+  </ItemGroup>
 </Project>

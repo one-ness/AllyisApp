@@ -44,6 +44,6 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets how often the user is billed for the subscription.
 		/// </summary>
-		public string BillingFrequency { get; set; }
+		public BillingFrequencyEnum BillingFrequency { get; set; }
 	}
 }
