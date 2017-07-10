@@ -22,15 +22,13 @@ namespace AllyisApps.Lib
 			bool result = false;
 			if (!string.IsNullOrWhiteSpace(email))
 			{
-				Regex emailVerification = new Regex("^[a-zA-Z0-9!#$%^&*\\-'/=+?_{|}~`.]+@[a-zA-Z0-9!#$%^&*\\-'/=+?_{|}~`.]+\\.[a-zA-Z]+$");
-				result = emailVerification.IsMatch(email);
-			}
-
+				result = Regex.IsMatch(email, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase);
+            }
 			return result;
 		}
 
 		/// <summary>
-		/// Verfies a url format for a web address (http or https).
+		/// Verifies a url format for a web address (http or https).
 		/// </summary>
 		/// <param name="url">The url.</param>
 		/// <returns>True if it is a valid web url, false if not.</returns>

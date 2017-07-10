@@ -1322,7 +1322,7 @@
     <value>User</value>
   </data>
   <data name="UserAccountAlreadyExists" xml:space="preserve">
-    <value>User account already exists. Click on 'Forgot Password' link to reset your password.</value>
+    <value>User account already exists, please sign in.  If you forgot your password, click 'Forgot Password' on the sign in page.</value>
   </data>
   <data name="UserAddedSuccessfully" xml:space="preserve">
     <value>has been successfully added.</value>
