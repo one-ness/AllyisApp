@@ -327,6 +327,7 @@
     <Compile Include="Areas\TimeTracker\ViewModels\Manage\EditSubscriptionUsersViewModel.cs" />
     <Compile Include="ViewModels\Auth\IndexAndOrgsViewModel.cs" />
     <Compile Include="ViewModels\Auth\InvitationViewModel.cs" />
+    <Compile Include="ViewModels\Auth\ManageOrgViewModel.cs" />
     <Compile Include="ViewModels\Auth\ManagePermissionsViewModel.cs" />
     <Compile Include="ViewModels\Auth\OrgWithSubscriptionsForUserViewModel.cs" />
     <Compile Include="ViewModels\Auth\RegisterViewModel.cs" />
@@ -344,7 +345,6 @@
     <Compile Include="ViewModels\Auth\OrganizationAddMembersViewModel.cs" />
     <Compile Include="ViewModels\Auth\OrganizationMembersViewModel.cs" />
     <Compile Include="ViewModels\Auth\OrganizationUserViewModel.cs" />
-    <Compile Include="ViewModels\Auth\OrganizationManageViewModel.cs" />
     <Compile Include="ViewModels\Auth\SubscriptionDisplayViewModel.cs" />
     <Compile Include="ViewModels\Auth\SubscriptionRoleSelectionModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
