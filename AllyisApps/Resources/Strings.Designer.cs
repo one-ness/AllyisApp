@@ -3742,7 +3742,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User account already exists. Click on &apos;Forgot Password&apos; link to reset your password..
+        ///   Looks up a localized string similar to User account already exists, please sign in.  If you forgot your password, click &apos;Forgot Password&apos; on the sign in page..
         /// </summary>
         public static string UserAccountAlreadyExists {
             get {
