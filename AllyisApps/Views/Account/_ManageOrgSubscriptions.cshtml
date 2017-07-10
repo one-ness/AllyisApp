@@ -6,8 +6,6 @@
 @{
 	ViewBag.Title = Strings.Subscriptions;
 	ViewBag.ShowAll = true;
-	string productTier = Model.Info != null ? Model.Info.Tier : string.Empty;
-	string getText = string.IsNullOrWhiteSpace(productTier) ? Strings.Subscribe : productTier == "Free" ? Strings.Manage : Strings.Upgrade;
 	string userDisplay = string.Empty;
 	string price = string.Empty;
 	if (Model.Info != null)
@@ -46,7 +44,7 @@
 		else
 		{
 			<td class="text-right">
-				@Html.ActionLink(getText, ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, productId = Model.ProductId }, null)
+				@Html.ActionLink(Strings.Subscribe, ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, productId = Model.ProductId }, null)
 			</td>
 		}
 	</tr>

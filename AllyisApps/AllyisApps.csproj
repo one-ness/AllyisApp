@@ -345,6 +345,7 @@
     <Compile Include="ViewModels\Auth\OrganizationAddMembersViewModel.cs" />
     <Compile Include="ViewModels\Auth\OrganizationMembersViewModel.cs" />
     <Compile Include="ViewModels\Auth\OrganizationUserViewModel.cs" />
+    <Compile Include="ViewModels\Auth\ManageOrgViewModel.cs" />
     <Compile Include="ViewModels\Auth\SubscriptionDisplayViewModel.cs" />
     <Compile Include="ViewModels\Auth\SubscriptionRoleSelectionModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
@@ -533,8 +534,8 @@
     <Content Include="Views\Account\GetBillingSummary.cshtml" />
     <Content Include="Views\Shared\_ProductPanels.cshtml" />
     <Content Include="Views\Account\ManageOrg.cshtml" />
-    <Content Include="Views\Account\_OrgDetails.cshtml" />
-    <Content Include="Views\Account\_SubDetails.cshtml" />
+    <Content Include="Views\Account\_ManageOrgDetails.cshtml" />
+    <Content Include="Views\Account\_ManageOrgSubscriptions.cshtml" />
     <Content Include="Views\Account\_OrgMembers.cshtml" />
     <Content Include="Views\Account\_OrganizationEditDetailsPartial.cshtml" />
     <Content Include="Views\Account\Subscribe.cshtml" />
