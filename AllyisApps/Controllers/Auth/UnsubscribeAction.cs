@@ -17,13 +17,13 @@ namespace AllyisApps.Controllers
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
-        /// <summary>
-        /// Removes the selected subscription from the database.
-        /// </summary>
-        /// <param name="id"> Subscription Id</param>
-        /// <param name="productId">The id of the product being unsubscribed from.</param>
-        /// <returns>Removes selected subscription.</returns>
-        [HttpGet]
+		/// <summary>
+		/// Removes the selected subscription from the database.
+		/// </summary>
+		/// <param name="id"> Subscription Id</param>
+		/// <param name="productId">The id of the product being unsubscribed from.</param>
+		/// <returns>Removes selected subscription.</returns>
+		[HttpGet]
 		public ActionResult Unsubscribe(int id, int productId)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.UnsubscribeFromProduct, productId);

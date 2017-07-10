@@ -51,37 +51,37 @@
 //);
 
 function submitFormForCSV() {
-    $("#reportForm").attr("action", "/TimeTracker/TimeEntry/ExportReport");
-    $("#reportForm").submit();
+	$("#reportForm").attr("action", "/TimeTracker/TimeEntry/ExportReport");
+	$("#reportForm").submit();
 }
 
 $('#datePickerStart').datepicker({
-    showOn: "button",
-    buttonImageOnly: true,
-    onSelect: function () {
-        $(this).change();
-    }
+	showOn: "button",
+	buttonImageOnly: true,
+	onSelect: function () {
+		$(this).change();
+	}
 });
 $('#datePickerStart').on("change", function () {
-    var enteredDate = moment($(this).val());
-    if (enteredDate.year() < 2000) {
-        enteredDate.add(100, 'years');
-    }
-    $('#DateRangeStart').val(DateConvert.GetDaysFromMoment(enteredDate));
+	var enteredDate = moment($(this).val());
+	if (enteredDate.year() < 2000) {
+		enteredDate.add(100, 'years');
+	}
+	$('#DateRangeStart').val(DateConvert.GetDaysFromMoment(enteredDate));
 });
 $('#datePickerEnd').datepicker({
-    showOn: "button",
-    buttonImageOnly: true,
-    onSelect: function () {
-        $(this).change();
-    }
+	showOn: "button",
+	buttonImageOnly: true,
+	onSelect: function () {
+		$(this).change();
+	}
 });
 $('#datePickerEnd').on("change", function () {
-    var enteredDate = moment($(this).val());
-    if (enteredDate.year() < 2000) {
-        enteredDate.add(100, 'years');
-    }
-    $('#DateRangeEnd').val(DateConvert.GetDaysFromMoment(enteredDate));
+	var enteredDate = moment($(this).val());
+	if (enteredDate.year() < 2000) {
+		enteredDate.add(100, 'years');
+	}
+	$('#DateRangeEnd').val(DateConvert.GetDaysFromMoment(enteredDate));
 });
 
 // $( document ).ready()
@@ -103,39 +103,39 @@ $(function () {
 			}
 		});
 
-        //console.log("Sending: " + this.value);
-        //$.ajax({
-        //    url: "/TimeTracker/Project/GetProjects?customerId=" + this.value,
-        //    method: "POST",
-        //    datatype: JSON,
-        //    success: function (data) {
-        //        console.log(data);
-        //        var ddl = $("#ddl-projects");
-        //        ddl.empty();
-        //        ddl.prop('disabled', true);
-        //        if (!$.isEmptyObject(data)) {
-        //            ddl.append($("<option />").val(0).text("No Filter"));
-        //            $.each(data, function () {
-        //                ddl.append($("<option />").val(this.ProjectId).text(this.Name));
-        //            });
-        //            ddl.prop('disabled', false);
-        //        }
-        //    },
-        //    failure: $(function () {
-        //        console.log("fail");
-        //        $("#ddl-projects").empty();
-        //        $("#ddl-projects").prop('disabled', true);
-        //    })
-        //});
-    });
+		//console.log("Sending: " + this.value);
+		//$.ajax({
+		//    url: "/TimeTracker/Project/GetProjects?customerId=" + this.value,
+		//    method: "POST",
+		//    datatype: JSON,
+		//    success: function (data) {
+		//        console.log(data);
+		//        var ddl = $("#ddl-projects");
+		//        ddl.empty();
+		//        ddl.prop('disabled', true);
+		//        if (!$.isEmptyObject(data)) {
+		//            ddl.append($("<option />").val(0).text("No Filter"));
+		//            $.each(data, function () {
+		//                ddl.append($("<option />").val(this.ProjectId).text(this.Name));
+		//            });
+		//            ddl.prop('disabled', false);
+		//        }
+		//    },
+		//    failure: $(function () {
+		//        console.log("fail");
+		//        $("#ddl-projects").empty();
+		//        $("#ddl-projects").prop('disabled', true);
+		//    })
+		//});
+	});
 
-    $('#datePickerStart').datepicker("setDate", DateConvert.GetMomentFromDays(model_startdate).toDate());
-    $('#datePickerEnd').datepicker("setDate", DateConvert.GetMomentFromDays(model_enddate).toDate());
-    $('.ui-datepicker-trigger').remove();
-    $('#datePickerStartButton').on("click", function () {
-        $('#datePickerStart').datepicker("show");
-    });
-    $('#datePickerEndButton').on("click", function () {
-        $('#datePickerEnd').datepicker("show");
-    });
+	$('#datePickerStart').datepicker("setDate", DateConvert.GetMomentFromDays(model_startdate).toDate());
+	$('#datePickerEnd').datepicker("setDate", DateConvert.GetMomentFromDays(model_enddate).toDate());
+	$('.ui-datepicker-trigger').remove();
+	$('#datePickerStartButton').on("click", function () {
+		$('#datePickerStart').datepicker("show");
+	});
+	$('#datePickerEndButton').on("click", function () {
+		$('#datePickerEnd').datepicker("show");
+	});
 });

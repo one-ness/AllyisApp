@@ -6,9 +6,9 @@
 
 using AllyisApps.Core.Alert;
 using AllyisApps.ViewModels.Auth;
+using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using System;
 
 namespace AllyisApps.Controllers
 {

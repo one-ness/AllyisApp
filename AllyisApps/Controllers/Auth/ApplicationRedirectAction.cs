@@ -5,8 +5,8 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.Services;
-using System.Web.Mvc;
 using System;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -31,17 +31,17 @@ namespace AllyisApps.Controllers
 				throw new AccessViolationException("invalid subscription");
 			}
 
-            // todo: get the product for the subscription and route to the product
-            if (Request.IsAuthenticated)
-            {
-                Product product = AppService.GetProductById(AppService.GetProductIdByName(subInfo.ProductName));
-                if (product != null && !string.IsNullOrWhiteSpace(product.ProductName))
-                {
-                    return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { area = subInfo.ProductName, userId = this.AppService.UserContext.UserId, subscriptionId = id });
-                }
-            }
+			// todo: get the product for the subscription and route to the product
+			if (Request.IsAuthenticated)
+			{
+				Product product = AppService.GetProductById(AppService.GetProductIdByName(subInfo.ProductName));
+				if (product != null && !string.IsNullOrWhiteSpace(product.ProductName))
+				{
+					return RedirectToAction(ActionConstants.Index, ControllerConstants.TimeEntry, new { area = subInfo.ProductName, userId = this.AppService.UserContext.UserId, subscriptionId = id });
+				}
+			}
 
-            return this.RouteUserHome();
+			return this.RouteUserHome();
 		}
 	}
 }

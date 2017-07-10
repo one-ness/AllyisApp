@@ -26,8 +26,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="viewDataButton">The value of the button used to submit the form.</param>
 		/// <param name="userSelect">Array of selected user Ids.</param>
-        /// <param name="subscriptionId">The subscription's Id</param>
-        /// <param name="organizationId">The organization's Id</param>
+		/// <param name="subscriptionId">The subscription's Id</param>
+		/// <param name="organizationId">The organization's Id</param>
 		/// <param name="dateRangeStart">The beginning of the date range(nullable).</param>
 		/// <param name="dateRangeEnd">The end of the date range (nullable).</param>
 		/// <param name="showExport">Export button visibility.</param>

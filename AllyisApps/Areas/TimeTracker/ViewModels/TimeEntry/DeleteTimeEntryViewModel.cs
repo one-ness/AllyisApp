@@ -51,9 +51,9 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// </summary>
 		public int ApprovalState { get; set; }
 
-        /// <summary>
-        /// Gets or sets the subscription's Id
-        /// </summary>
-        public int SubscriptionId { get; set; }
+		/// <summary>
+		/// Gets or sets the subscription's Id
+		/// </summary>
+		public int SubscriptionId { get; set; }
 	}
 }

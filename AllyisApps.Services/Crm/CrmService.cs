@@ -56,73 +56,73 @@ namespace AllyisApps.Services
 				spResults.Item2);
 		}
 
-        /// <summary>
-        /// Creates a customer.
-        /// </summary>
+		/// <summary>
+		/// Creates a customer.
+		/// </summary>
 		/// <param name="subId">subscription id</param>
-        /// <param name="customer">Customer.</param>
-        /// <returns>Customer id.</returns>
-        public int? CreateCustomer(int subId, Customer customer)
+		/// <param name="customer">Customer.</param>
+		/// <returns>Customer id.</returns>
+		public int? CreateCustomer(int subId, Customer customer)
 		{
 			this.CheckTimeTrackerAction(TimeTrackerAction.CreateCustomer, subId);
 			return DBHelper.CreateCustomerInfo(GetDBEntityFromCustomer(customer));
 		}
 
-        /// <summary>
-        /// Creates a customer.
-        /// </summary>
-        /// <param name="customer">Customer.</param>
-        /// <param name="subscriptionId"></param>
-        /// <returns>Customer id.</returns>
-        public int? CreateCustomer(Customer customer, int subscriptionId)
-        {
+		/// <summary>
+		/// Creates a customer.
+		/// </summary>
+		/// <param name="customer">Customer.</param>
+		/// <param name="subscriptionId"></param>
+		/// <returns>Customer id.</returns>
+		public int? CreateCustomer(Customer customer, int subscriptionId)
+		{
 			this.CheckTimeTrackerAction(TimeTrackerAction.CreateCustomer, subscriptionId);
 			return DBHelper.CreateCustomerInfo(GetDBEntityFromCustomer(customer));
-        }
+		}
 
-        /// <summary>
-        /// Updates a customer in the database.
-        /// </summary>
-        /// <param name="customer">Updated customer info.</param>
-        /// <param name="subscriptionId">The customer's subscription Id</param>
-        /// <returns>Returns 1 if succeed, -1 if fail, and null if authorization fails.</returns>
-        public int? UpdateCustomer(Customer customer, int subscriptionId)
-        {
+		/// <summary>
+		/// Updates a customer in the database.
+		/// </summary>
+		/// <param name="customer">Updated customer info.</param>
+		/// <param name="subscriptionId">The customer's subscription Id</param>
+		/// <returns>Returns 1 if succeed, -1 if fail, and null if authorization fails.</returns>
+		public int? UpdateCustomer(Customer customer, int subscriptionId)
+		{
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
 			return DBHelper.UpdateCustomer(GetDBEntityFromCustomer(customer));
-        }
+		}
 
-        /// <summary>
-        /// Deletes a customer.
-        /// </summary>
-        /// <param name="customerId">Customer id.</param>
-        /// <param name="subscriptionId">Subscription Id</param>
-        /// <returns>Returns false if authorization fails.</returns>
-        public string DeleteCustomer(int subscriptionId, int customerId)
-        {
+		/// <summary>
+		/// Deletes a customer.
+		/// </summary>
+		/// <param name="customerId">Customer id.</param>
+		/// <param name="subscriptionId">Subscription Id</param>
+		/// <returns>Returns false if authorization fails.</returns>
+		public string DeleteCustomer(int subscriptionId, int customerId)
+		{
 			this.CheckTimeTrackerAction(TimeTrackerAction.DeleteCustomer, subscriptionId);
 			return DBHelper.DeleteCustomer(customerId);
-        }
+		}
 
-        /// <summary>
-        /// Reactivate a Customer
-        /// </summary>
-        /// <param name="customerId">Customer id.</param>
-        /// <param name="orgId">The Organization Id</param>
-        /// <param name="subscriptionId">The subscription Id</param>
-        /// <returns>Returns false if authorization fails.</returns>
-        public string ReactivateCustomer(int customerId, int subscriptionId, int orgId)
-        {
+		/// <summary>
+		/// Reactivate a Customer
+		/// </summary>
+		/// <param name="customerId">Customer id.</param>
+		/// <param name="orgId">The Organization Id</param>
+		/// <param name="subscriptionId">The subscription Id</param>
+		/// <returns>Returns false if authorization fails.</returns>
+		public string ReactivateCustomer(int customerId, int subscriptionId, int orgId)
+		{
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
 			return DBHelper.ReactivateCustomer(customerId);
-        }
+		}
 
-        /// <summary>
-        /// Gets a list of <see cref="Customer"/>'s for an organization.
-        /// </summary>
-        /// <param name="orgId">Organization Id.</param>
-        /// <returns><see cref="IEnumerable{CustomerDBEntity}"/>.</returns>
-        public IEnumerable<Customer> GetCustomerList(int orgId)
+		/// <summary>
+		/// Gets a list of <see cref="Customer"/>'s for an organization.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns><see cref="IEnumerable{CustomerDBEntity}"/>.</returns>
+		public IEnumerable<Customer> GetCustomerList(int orgId)
 		{
 			IEnumerable<CustomerDBEntity> dbeList = DBHelper.GetCustomerList(orgId);
 			List<Customer> list = new List<Customer>();
@@ -141,7 +141,7 @@ namespace AllyisApps.Services
 		/// Returns a list of CompleteProjectInfos for the current organization with the IsProjectUser field filled
 		/// out for the current user, and a list of CustomerInfos for the organization.
 		/// </summary>
-        /// <param name="orgId">The organization Id</param>
+		/// <param name="orgId">The organization Id</param>
 		/// <returns></returns>
 		public Tuple<List<CompleteProjectInfo>, List<Customer>> GetProjectsAndCustomersForOrgAndUser(int orgId)
 		{
@@ -151,26 +151,26 @@ namespace AllyisApps.Services
 				spResults.Item2.Select(cdb => InitializeCustomer(cdb)).ToList());
 		}
 
-        /// <summary>
-        /// Returns a list of CompleteProjectInfos for the current organization with the IsProjectUser field filled
-        /// out for the current user, and a list of CustomerInfos for the organization.
-        /// </summary>
-        /// <param name="orgId">The Organization Id</param>
-        /// <returns></returns>
-        public Tuple<List<CompleteProjectInfo>, List<Customer>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId)
-        {
-            var spResults = DBHelper.GetInactiveProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
-            return Tuple.Create(
-                spResults.Item1.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-                spResults.Item2.Select(cdb => InitializeCustomer(cdb)).ToList());
-        }
+		/// <summary>
+		/// Returns a list of CompleteProjectInfos for the current organization with the IsProjectUser field filled
+		/// out for the current user, and a list of CustomerInfos for the organization.
+		/// </summary>
+		/// <param name="orgId">The Organization Id</param>
+		/// <returns></returns>
+		public Tuple<List<CompleteProjectInfo>, List<Customer>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId)
+		{
+			var spResults = DBHelper.GetInactiveProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
+			return Tuple.Create(
+				spResults.Item1.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
+				spResults.Item2.Select(cdb => InitializeCustomer(cdb)).ToList());
+		}
 
-        /// <summary>
-        /// Returns a list of Projects for projects the given user is assigned to in the given organization
-        /// (current organization by default), another list of Projects for all projects in the organization,
-        /// the name of the user (as "Firstname Lastname"), and the user's email.
-        /// </summary>
-        public Tuple<List<Project>, List<Project>, string, string> GetProjectsForOrgAndUser(int userId, int subscriptionId)
+		/// <summary>
+		/// Returns a list of Projects for projects the given user is assigned to in the given organization
+		/// (current organization by default), another list of Projects for all projects in the organization,
+		/// the name of the user (as "Firstname Lastname"), and the user's email.
+		/// </summary>
+		public Tuple<List<Project>, List<Project>, string, string> GetProjectsForOrgAndUser(int userId, int subscriptionId)
 		{
 			if (userId <= 0) throw new ArgumentException("userId");
 			if (subscriptionId <= 0) throw new ArgumentException("subscriptionId");
@@ -219,78 +219,77 @@ namespace AllyisApps.Services
 			return list;
 		}
 
-        /// <summary>
-        /// Gets a list of <see cref="Project"/>'s for a customer.
-        /// </summary>
-        /// <param name="customerId">Customer Id.</param>
-        /// <returns>List of ProjectInfo's.</returns>
-        public IEnumerable<Project> GetInactiveProjectsByCustomer(int customerId)
-        {
-            if (customerId <= 0)
-            {
-                throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
-            }
+		/// <summary>
+		/// Gets a list of <see cref="Project"/>'s for a customer.
+		/// </summary>
+		/// <param name="customerId">Customer Id.</param>
+		/// <returns>List of ProjectInfo's.</returns>
+		public IEnumerable<Project> GetInactiveProjectsByCustomer(int customerId)
+		{
+			if (customerId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
+			}
 
-            IEnumerable<ProjectDBEntity> dbeList = DBHelper.GetInactiveProjectsByCustomer(customerId);
-            List<Project> list = new List<Project>();
-            foreach (ProjectDBEntity dbe in dbeList)
-            {
-                if (dbe != null)
-                {
-                    list.Add(InitializeProject(dbe));
-                }
-            }
+			IEnumerable<ProjectDBEntity> dbeList = DBHelper.GetInactiveProjectsByCustomer(customerId);
+			List<Project> list = new List<Project>();
+			foreach (ProjectDBEntity dbe in dbeList)
+			{
+				if (dbe != null)
+				{
+					list.Add(InitializeProject(dbe));
+				}
+			}
 
-            return list;
-        }
+			return list;
+		}
 
-
-        /// <summary>
+		/// <summary>
 		/// Creates a new project and update its user list if succeed
 		/// </summary>
 		/// <param name="newProject">Project with project information.</param>
-        /// <param name="userIDs">List of users being assigned to the project</param>
+		/// <param name="userIDs">List of users being assigned to the project</param>
 		/// <returns>Project Id if succeed, -1 if ProjectOrgId is taken.</returns>
 		public int CreateProjectAndUpdateItsUserList(Project newProject, IEnumerable<int> userIDs)
-        {
-            #region Validation
+		{
+			#region Validation
 
-            if (newProject.CustomerId <= 0)
-            {
-                throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
-            }
+			if (newProject.CustomerId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
+			}
 
-            if (string.IsNullOrWhiteSpace(newProject.Name))
-            {
-                throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
-            }
+			if (string.IsNullOrWhiteSpace(newProject.Name))
+			{
+				throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
+			}
 
-            if (string.IsNullOrEmpty(newProject.Type))
-            {
-                throw new ArgumentNullException("type", "Type must have a value.");
-            }
+			if (string.IsNullOrEmpty(newProject.Type))
+			{
+				throw new ArgumentNullException("type", "Type must have a value.");
+			}
 
-            if (string.IsNullOrEmpty(newProject.ProjectOrgId))
-            {
-                throw new ArgumentNullException("projectOrgId", "Project must have an ID");
-            }
+			if (string.IsNullOrEmpty(newProject.ProjectOrgId))
+			{
+				throw new ArgumentNullException("projectOrgId", "Project must have an ID");
+			}
 
-            if (newProject.StartingDate.HasValue && newProject.EndingDate.HasValue && DateTime.Compare(newProject.StartingDate.Value, newProject.EndingDate.Value) > 0)
-            {
-                throw new ArgumentException("Project cannot end before it starts.");
-            }
+			if (newProject.StartingDate.HasValue && newProject.EndingDate.HasValue && DateTime.Compare(newProject.StartingDate.Value, newProject.EndingDate.Value) > 0)
+			{
+				throw new ArgumentException("Project cannot end before it starts.");
+			}
 
-            #endregion Validation
+			#endregion Validation
 
-            return DBHelper.CreateProjectAndUpdateItsUserList(GetDBEntityFromProject(newProject), userIDs);
-        }
+			return DBHelper.CreateProjectAndUpdateItsUserList(GetDBEntityFromProject(newProject), userIDs);
+		}
 
-        /// <summary>
-        /// Creates a new project.
-        /// </summary>
-        /// <param name="newProject">Project with project information.</param>
-        /// <returns>Project Id.</returns>
-        public int CreateProject(Project newProject)
+		/// <summary>
+		/// Creates a new project.
+		/// </summary>
+		/// <param name="newProject">Project with project information.</param>
+		/// <returns>Project Id.</returns>
+		public int CreateProject(Project newProject)
 		{
 			#region Validation
 
@@ -359,19 +358,19 @@ namespace AllyisApps.Services
 			DBHelper.UpdateProject(GetDBEntityFromProject(project));
 		}
 
-        /// <summary>
-        /// Updates a project's properties and user list.
-        /// </summary>
-        /// <param name="projectId">Project Id.</param>
-        /// <param name="name">Project name.</param>
-        /// <param name="orgId">Project org id.</param>
-        /// <param name="type">Project type.</param>
-        /// <param name="start">Starting date. <see cref="DateTime"/></param>
-        /// <param name="end">Ending date. <see cref="DateTime"/></param>
-        /// <param name="userIDs">Updated on-project user list.</param>
-        /// <param name="subscriptionId"></param>
-        /// <returns>Returns false if authorization fails.</returns>
-        public bool UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime? start, DateTime? end, IEnumerable<int> userIDs, int subscriptionId)
+		/// <summary>
+		/// Updates a project's properties and user list.
+		/// </summary>
+		/// <param name="projectId">Project Id.</param>
+		/// <param name="name">Project name.</param>
+		/// <param name="orgId">Project org id.</param>
+		/// <param name="type">Project type.</param>
+		/// <param name="start">Starting date. <see cref="DateTime"/></param>
+		/// <param name="end">Ending date. <see cref="DateTime"/></param>
+		/// <param name="userIDs">Updated on-project user list.</param>
+		/// <param name="subscriptionId"></param>
+		/// <returns>Returns false if authorization fails.</returns>
+		public bool UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime? start, DateTime? end, IEnumerable<int> userIDs, int subscriptionId)
 		{
 			#region Validation
 
@@ -406,40 +405,41 @@ namespace AllyisApps.Services
 			}
 
 			#endregion Validation
+
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 			DBHelper.UpdateProjectAndUsers(projectId, name, orgId, type, start, end, userIDs);
 			return true;
 		}
 
-        /// <summary>
-        /// Reactivate a project
-        /// </summary>
-        /// <param name="projectId">Project Id</param>
-        /// <param name="organizationId">Organization Id</param>
-        /// <param name="subscriptionId"> subscription Id</param>
-        /// <returns>Returns false if authorization fails</returns>
-        public bool ReactivateProject(int projectId, int organizationId, int subscriptionId)
-        {
-            if (projectId <= 0)
-            {
-                throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
-            }
+		/// <summary>
+		/// Reactivate a project
+		/// </summary>
+		/// <param name="projectId">Project Id</param>
+		/// <param name="organizationId">Organization Id</param>
+		/// <param name="subscriptionId"> subscription Id</param>
+		/// <returns>Returns false if authorization fails</returns>
+		public bool ReactivateProject(int projectId, int organizationId, int subscriptionId)
+		{
+			if (projectId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
+			}
 
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 			DBHelper.ReactivateProject(projectId);
 			return true;
-        }
+		}
 
-        /// <summary>
-        /// Deletes a project.
-        /// </summary>
-        /// <param name="projectId">Project Id.</param>
-        /// <param name="subscriptionId"></param>
-        /// <returns>Returns null if authorization fails, project name is succeed, empty string if not found.</returns>
-        public string DeleteProject(int projectId, int subscriptionId)
+		/// <summary>
+		/// Deletes a project.
+		/// </summary>
+		/// <param name="projectId">Project Id.</param>
+		/// <param name="subscriptionId"></param>
+		/// <returns>Returns null if authorization fails, project name is succeed, empty string if not found.</returns>
+		public string DeleteProject(int projectId, int subscriptionId)
 		{
-            int orgId = GetSubscription(subscriptionId).OrganizationId;
-            if (projectId <= 0)
+			int orgId = GetSubscription(subscriptionId).OrganizationId;
+			if (projectId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
 			}
@@ -515,7 +515,7 @@ namespace AllyisApps.Services
 		/// Gets all the projects a user can use in the chosen organization.
 		/// </summary>
 		/// <param name="userId">User Id.</param>
-        /// <param name="orgId">The organization's Id</param>
+		/// <param name="orgId">The organization's Id</param>
 		/// <param name="isActive">True (default) to only return active projects, false to include all projects, active or not.</param>
 		/// <returns>A list of all the projects a user can access in an organization.</returns>
 		public IEnumerable<CompleteProjectInfo> GetProjectsByUserAndOrganization(int userId, int orgId = -1, bool isActive = true)
@@ -559,14 +559,14 @@ namespace AllyisApps.Services
 			return InitializeCompleteProjectInfo(DBHelper.GetProjectByIdAndUser(projectId, UserContext.UserId));
 		}
 
-        /// <summary>
-        /// Gets a CompleteProjectInfo for the given project, a list of UserInfos for the project's assigned
-        /// users, and a list of SubscriptionUserInfos for all users in the current subscription.
-        /// </summary>
-        /// <param name="projectId">Project Id.</param>
-        /// <param name="subscriptionId"></param>
-        /// <returns></returns>
-        public Tuple<CompleteProjectInfo, List<User>, List<SubscriptionUserInfo>> GetProjectEditInfo(int projectId, int subscriptionId)
+		/// <summary>
+		/// Gets a CompleteProjectInfo for the given project, a list of UserInfos for the project's assigned
+		/// users, and a list of SubscriptionUserInfos for all users in the current subscription.
+		/// </summary>
+		/// <param name="projectId">Project Id.</param>
+		/// <param name="subscriptionId"></param>
+		/// <returns></returns>
+		public Tuple<CompleteProjectInfo, List<User>, List<SubscriptionUserInfo>> GetProjectEditInfo(int projectId, int subscriptionId)
 		{
 			if (projectId < 0)
 			{
@@ -580,14 +580,14 @@ namespace AllyisApps.Services
 				spResults.Item3.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());
 		}
 
-        /// <summary>
-        /// Gets the next logical project id for the given customer and a list of SubscriptionUserInfos for
-        /// all useres in the current subscription.
-        /// </summary>
-        /// <param name="customerId">Customer Id.</param>
-        /// <param name="subscriptionId"></param>
-        /// <returns></returns>
-        public Tuple<string, List<SubscriptionUserInfo>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
+		/// <summary>
+		/// Gets the next logical project id for the given customer and a list of SubscriptionUserInfos for
+		/// all useres in the current subscription.
+		/// </summary>
+		/// <param name="customerId">Customer Id.</param>
+		/// <param name="subscriptionId"></param>
+		/// <returns></returns>
+		public Tuple<string, List<SubscriptionUserInfo>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
 		{
 			if (customerId < 0)
 			{
@@ -629,24 +629,24 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-            return new Customer()
-            {
-                Address = customer.Address,
-                City = customer.City,
-                ContactEmail = customer.ContactEmail,
-                ContactPhoneNumber = customer.ContactPhoneNumber,
-                Country = customer.Country,
-                CreatedUTC = customer.CreatedUTC,
-                CustomerId = customer.CustomerId,
-                CustomerOrgId = customer.CustomerOrgId,
-                EIN = customer.EIN,
-                FaxNumber = customer.FaxNumber,
-                Name = customer.Name,
-                OrganizationId = customer.OrganizationId,
-                PostalCode = customer.PostalCode,
-                State = customer.State,
-                Website = customer.Website,
-                IsActive = customer.IsActive
+			return new Customer()
+			{
+				Address = customer.Address,
+				City = customer.City,
+				ContactEmail = customer.ContactEmail,
+				ContactPhoneNumber = customer.ContactPhoneNumber,
+				Country = customer.Country,
+				CreatedUTC = customer.CreatedUTC,
+				CustomerId = customer.CustomerId,
+				CustomerOrgId = customer.CustomerOrgId,
+				EIN = customer.EIN,
+				FaxNumber = customer.FaxNumber,
+				Name = customer.Name,
+				OrganizationId = customer.OrganizationId,
+				PostalCode = customer.PostalCode,
+				State = customer.State,
+				Website = customer.Website,
+				IsActive = customer.IsActive
 			};
 		}
 
@@ -679,8 +679,8 @@ namespace AllyisApps.Services
 				PostalCode = customer.PostalCode,
 				State = customer.State,
 				Website = customer.Website,
-                IsActive = customer.IsActive
-            };
+				IsActive = customer.IsActive
+			};
 		}
 
 		/// <summary>

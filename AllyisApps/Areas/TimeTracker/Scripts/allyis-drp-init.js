@@ -3,34 +3,34 @@
 // Helper for converting between int form of date used for communication with server (see Service.GetDateTimeFromDays/GetDayFromDateTime)
 // and moment.js dates
 var DateConvert = (function () {
-    var minimumDate = moment(-62135568000000) // This corresponds to DateTime.MinValue()
+	var minimumDate = moment(-62135568000000) // This corresponds to DateTime.MinValue()
 
-    return {
-    	GetDaysFromMoment: function (date) {
-    		if (isNaN(date)) {
-    			return -1;
-    		}
-            return date.diff(minimumDate, 'days');
-        },
-    	GetMomentFromDays: function (days) {
-    		if (days < 0) {
-    			return Number.NaN;
-    		}
+	return {
+		GetDaysFromMoment: function (date) {
+			if (isNaN(date)) {
+				return -1;
+			}
+			return date.diff(minimumDate, 'days');
+		},
+		GetMomentFromDays: function (days) {
+			if (days < 0) {
+				return Number.NaN;
+			}
 
-            // Shuffling of value necessary to preserve minimumDate, since the add method changes the moment object it's called from.
-            oldval = moment(minimumDate);
-            var sum = minimumDate.add(days, 'days');
-            minimumDate = moment(oldval);
-            return sum;
-        }
-    };
+			// Shuffling of value necessary to preserve minimumDate, since the add method changes the moment object it's called from.
+			oldval = moment(minimumDate);
+			var sum = minimumDate.add(days, 'days');
+			minimumDate = moment(oldval);
+			return sum;
+		}
+	};
 })();
 
 function updateDates(control) {
-    console.log("updating");
-    var stringOutput = control.value.split("-->");
-    document.getElementById("DateRangeStart").value = stringOutput[0];
-    document.getElementById("DateRangeEnd").value = stringOutput[1];
+	console.log("updating");
+	var stringOutput = control.value.split("-->");
+	document.getElementById("DateRangeStart").value = stringOutput[0];
+	document.getElementById("DateRangeEnd").value = stringOutput[1];
 }
 
 /* Arguments:
@@ -44,39 +44,39 @@ function updateDates(control) {
  startInit - the initial start of the date range, in days since DateTime.MinValue
  endInit - the initial end of the date range (if applicable), in days since DateTime.MinValue
 */
-function init_drp (drpElementId, drpPresets, startDateId, endDateId, numberOfMonths, customChangeFunction, startInit, endInit) {
-    if (numberOfMonths == null) {
-        numberOfMonths = 2;
-    }
-    if (customChangeFunction == null) {
-        customChangeFunction = function () { };
-    }
-    var picker = $('#' + drpElementId).daterangepicker({
-        initialText: 'Select period...',
-        datepickerOptions: {
-            minDate: null,
-            maxDate: null,
-            numberOfMonths: numberOfMonths
-        },
-        presetRanges: drpPresets,
-        applyOnMenuSelect: true,
-        onChange: function () {
-            var range = picker.daterangepicker("getRange");
-            $('#' + startDateId).val(DateConvert.GetDaysFromMoment(moment(range.start)));
-            if (numberOfMonths > 1) {
-                $('#' + endDateId).val(DateConvert.GetDaysFromMoment(moment(range.end)));
-            }
-            customChangeFunction();
-        }
-    });
-    if (numberOfMonths == 1) {
-        $('#' + drpElementId).daterangepicker("setRange", {
-            start: DateConvert.GetMomentFromDays(startInit).toDate()
-        });
-    } else {
-        $('#' + drpElementId).daterangepicker("setRange", {
-            start: DateConvert.GetMomentFromDays(startInit).toDate(),
-            end: DateConvert.GetMomentFromDays(endInit).toDate()
-        });
-    }
+function init_drp(drpElementId, drpPresets, startDateId, endDateId, numberOfMonths, customChangeFunction, startInit, endInit) {
+	if (numberOfMonths == null) {
+		numberOfMonths = 2;
+	}
+	if (customChangeFunction == null) {
+		customChangeFunction = function () { };
+	}
+	var picker = $('#' + drpElementId).daterangepicker({
+		initialText: 'Select period...',
+		datepickerOptions: {
+			minDate: null,
+			maxDate: null,
+			numberOfMonths: numberOfMonths
+		},
+		presetRanges: drpPresets,
+		applyOnMenuSelect: true,
+		onChange: function () {
+			var range = picker.daterangepicker("getRange");
+			$('#' + startDateId).val(DateConvert.GetDaysFromMoment(moment(range.start)));
+			if (numberOfMonths > 1) {
+				$('#' + endDateId).val(DateConvert.GetDaysFromMoment(moment(range.end)));
+			}
+			customChangeFunction();
+		}
+	});
+	if (numberOfMonths == 1) {
+		$('#' + drpElementId).daterangepicker("setRange", {
+			start: DateConvert.GetMomentFromDays(startInit).toDate()
+		});
+	} else {
+		$('#' + drpElementId).daterangepicker("setRange", {
+			start: DateConvert.GetMomentFromDays(startInit).toDate(),
+			end: DateConvert.GetMomentFromDays(endInit).toDate()
+		});
+	}
 }

@@ -34,10 +34,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			//if (project.OrganizationId == null)
 			//{
-				if (project.OrganizationId == 0)
-				{
-					throw new InvalidOperationException("Project requires an organization. Cannot update.");
-				}
+			if (project.OrganizationId == 0)
+			{
+				throw new InvalidOperationException("Project requires an organization. Cannot update.");
+			}
 			//	project.OrganizationId = UserContext.ChosenOrganizationId;
 			//}
 
@@ -48,8 +48,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				project.PriceType,
 				AppService.GetDateTimeFromDays(project.StartDate),
 				AppService.GetDateTimeFromDays(project.EndDate),
-				project.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString)), 
-                project.SubscriptionId);
+				project.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString)),
+				project.SubscriptionId);
 		}
 	}
 }
