@@ -153,7 +153,7 @@
     <script type="text/javascript">
         orgActions = @Html.Raw(Json.Encode(setOrgRoles));
         ttActions = @Html.Raw(Json.Encode(setTTRoles));
-        confirmMessage = "@Strings.RemoveFromOrgNoName";
+        confirmMessage = "@Html.Raw(Strings.RemoveFromOrgNoName)";
     </script>
     <script src="~/Scripts/allyis-account-permission2.js" type="text/javascript"></script>
     <script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>

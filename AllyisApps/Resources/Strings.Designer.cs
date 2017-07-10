@@ -2941,20 +2941,11 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you would like to remove.
+        ///   Looks up a localized string similar to Are you sure you would like to remove {0} from this organization?.
         /// </summary>
         public static string RemoveFromOrg {
             get {
                 return ResourceManager.GetString("RemoveFromOrg", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to from this organization?.
-        /// </summary>
-        public static string RemoveFromOrgEnd {
-            get {
-                return ResourceManager.GetString("RemoveFromOrgEnd", resourceCulture);
             }
         }
         
@@ -3904,7 +3895,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to unsubscribe from %subname%?.
+        ///   Looks up a localized string similar to Are you sure you want to unsubscribe from {0}?.
         /// </summary>
         public static string WarningWhenUnsubscribing {
             get {

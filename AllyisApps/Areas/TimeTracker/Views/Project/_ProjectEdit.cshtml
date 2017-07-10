@@ -108,10 +108,7 @@
         {
             <div class="row">
                 <div class="col-md-6 sm-control-width">
-                    @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get, new { @class = "panel-heading", style = "display: flex; justify-content: space-between;", id = "template-form" }))
-                    {
-                        <label>@Strings.Upload</label>
-                    }
+                    <label>@Strings.Upload</label>
                     @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
                     {
                         @Html.AntiForgeryToken();
@@ -122,13 +119,15 @@
                                    onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
                         </div>
 
-                        <div style="margin-top: 10px; margin-bottom: 15px; float:left">
-                            <input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary" />
-                        </div>
-
                         <div style="margin-top: 10px; margin-bottom: 15px; float:right;">
                             <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
                             <input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" />
+                        </div>
+                    }
+                    @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get, new { style = "display: flex; justify-content: space-between;", id = "template-form" }))
+                    {
+                        <div style="margin-top: 10px; margin-bottom: 15px; float:left">
+                            <input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary" />
                         </div>
                     }
                 </div>
