@@ -20,7 +20,7 @@ namespace AllyisApps.Controllers
 		public ActionResult Template()
 		{
 			byte[] fileBytes = (byte[])Resources.Files.Files.ResourceManager.GetObject("UserImportTemplate");
-			return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+			return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "UserImportTemplate.xlsx");
 		}
 	}
 }
