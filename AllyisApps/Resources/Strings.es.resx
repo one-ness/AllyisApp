@@ -985,7 +985,7 @@
     <value>Fecha de nacimiento</value>
   </data>
   <data name="DeleteOrganization" xml:space="preserve">
-    <value>eliminar Organización</value>
+    <value>Eliminar Organización</value>
   </data>
   <data name="DropSubcription" xml:space="preserve">
     <value>caída de suscripción</value>
