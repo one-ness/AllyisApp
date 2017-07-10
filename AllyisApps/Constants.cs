@@ -7,8 +7,8 @@ namespace AllyisApps
 	/// </summary>
 	public static class ActionConstants
 	{
-        public const string Action = "action";
-        public const string Add = "add";
+		public const string Action = "action";
+		public const string AddMember = "addmember";
 		public const string ChangePassword = "changepassword";
 		public const string Charge = "charge";
 		public const string ConfirmEmail = "confirmemail";
@@ -87,8 +87,8 @@ namespace AllyisApps
 	public static class ControllerConstants
 	{
 		public const string Account = "account";
-        public const string Controller = "controller";
-        public const string Customer = "customer";
+		public const string Controller = "controller";
+		public const string Customer = "customer";
 		public const string Home = "home";
 		public const string Organization = "organization";
 		public const string Project = "project";
@@ -102,17 +102,16 @@ namespace AllyisApps
 	/// </summary>
 	public static class ViewConstants
 	{
-		public const string Add = "Add";
-		public const string AddBillingToSubscribe = "AddBillingToSubscribe";
-		public const string ConfirmRemoveBillingInformation = "ConfirmRemoveBillingInformation";
-		public const string Details = "Details";
-		public const string Error = "Error";
-		public const string Footer = "_Footer";
-		public const string ForgotPasswordConfirmation = "ForgotPasswordConfirmation";
-		public const string Index = "Index";
-		public const string LogOnPartial = "_LogOnPartial";
-		public const string Subscribe = "Subscribe";
-		public const string MergePayClass = "MergePayClass";
+		public const string AddBillingToSubscribe = "addbillingtosubscribe";
+		public const string ConfirmRemoveBillingInformation = "confirmremovebillinginformation";
+		public const string Details = "details";
+		public const string Error = "error";
+		public const string Footer = "_footer";
+		public const string ForgotPasswordConfirmation = "forgotpasswordconfirmation";
+		public const string Index = "index";
+		public const string LogOnPartial = "_logonpartial";
+		public const string Subscribe = "subscribe";
+		public const string MergePayClass = "mergepayclass";
 	}
 
 	/// <summary>

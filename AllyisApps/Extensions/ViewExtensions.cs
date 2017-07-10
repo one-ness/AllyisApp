@@ -11,10 +11,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
-using System.Web.Routing;
 
 namespace AllyisApps.Extensions.ViewExtensions
 {
@@ -37,7 +35,7 @@ namespace AllyisApps.Extensions.ViewExtensions
 			return string.Format("return confirm('{0}');", alertText);
 		}
 
-        /// <summary>
+		/// <summary>
 		/// Creates a confirm Dialog from the given string.
 		/// <para>
 		///   Embed it as the text for the onclick event of links and onsubmit event of forms and it will block their submission without confirmation.
@@ -46,25 +44,25 @@ namespace AllyisApps.Extensions.ViewExtensions
 		/// <param name="alertText">The string to show.</param>
 		/// <returns>Javascript of the describing the confirmation string.</returns>
 		public static string ConfirmDialog(string alertText)
-        {
-            return string.Format("return confirm('{0}');", alertText);
-        }
+		{
+			return string.Format("return confirm('{0}');", alertText);
+		}
 
-        /// <summary>
-        /// Creates a confirm Dialog from the given resource string, after replacing all variables.
-        /// <para>
-        ///   Embed it as the text for the onclick event of links and onsubmit event of forms and it will block their submission without confirmation.
-        /// </para>
-        /// <para>
-        ///   The Format of the variables construct should be "variable" => "value", where
-        ///   all instances of "%variable%" within the string will be replaced with "value"
-        /// </para>
-        /// </summary>
-        /// <param name="htmlHelper">The class this is attached to.</param>
-        /// <param name="resourceString">The resource string to process.</param>
-        /// <param name="variables">The variables to replace. Should be specified as "variable" => "value" where "%variable%" will be replaced with "value".</param>
-        /// <returns>A javascript function.</returns>
-        public static string ConfirmDialog(this HtmlHelper htmlHelper, string resourceString, Dictionary<string, string> variables)
+		/// <summary>
+		/// Creates a confirm Dialog from the given resource string, after replacing all variables.
+		/// <para>
+		///   Embed it as the text for the onclick event of links and onsubmit event of forms and it will block their submission without confirmation.
+		/// </para>
+		/// <para>
+		///   The Format of the variables construct should be "variable" => "value", where
+		///   all instances of "%variable%" within the string will be replaced with "value"
+		/// </para>
+		/// </summary>
+		/// <param name="htmlHelper">The class this is attached to.</param>
+		/// <param name="resourceString">The resource string to process.</param>
+		/// <param name="variables">The variables to replace. Should be specified as "variable" => "value" where "%variable%" will be replaced with "value".</param>
+		/// <returns>A javascript function.</returns>
+		public static string ConfirmDialog(this HtmlHelper htmlHelper, string resourceString, Dictionary<string, string> variables)
 		{
 			return ViewExtensions.ConfirmDialog(htmlHelper, Helpers.ResourceReplace(resourceString, variables));
 		}

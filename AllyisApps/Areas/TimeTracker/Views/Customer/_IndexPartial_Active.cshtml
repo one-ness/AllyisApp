@@ -15,17 +15,17 @@
                     <a onclick="PopulateProjects('@customer.CustomerInfo.CustomerId')" class="list-group-item" id="@customer.CustomerInfo.CustomerId">
                         <text>@customer.CustomerInfo.Name</text>
                     </a>
-                }                
-            </div>            
+                }
+            </div>
         </div>
-        
+
         <div class="panel panel-info" style="position: relative">
             <div class="panel-heading">
                 <h1 class="panel-title">@Strings.Projects</h1>
             </div>
             <div class="panel-body list-group" id="Projects">
                 <!--active projects belong to chosen customer will be populated here-->
-            </div>            
+            </div>
         </div>
         @if ((bool)ViewData["IsManager"])
         {

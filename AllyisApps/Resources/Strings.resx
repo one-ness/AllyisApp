@@ -1450,4 +1450,7 @@
   <data name="ApplicationTitle" xml:space="preserve">
     <value>Allyis Apps</value>
   </data>
+  <data name="AddMultipleMembers" xml:space="preserve">
+    <value>Add Multiple Members (upload a file)</value>
+  </data>
 </root>

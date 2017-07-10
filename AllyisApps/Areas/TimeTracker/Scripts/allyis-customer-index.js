@@ -43,11 +43,11 @@ var ArbitrarySearcher = function () {
 		//collapsibles = init_process_collapsibles();
 		// debounced auto search
 		conf.input && conf.input.keyup(_.debounce(
-            function () {
-            	my.search(this.value);
-            },
-            200
-            ));
+			function () {
+				my.search(this.value);
+			},
+			200
+		));
 	}
 
 	// process the conf.targets argument to init.
@@ -61,7 +61,7 @@ var ArbitrarySearcher = function () {
 			all_targets.push(res);
 			res.target = obj.target;
 			var elements = obj.elements ? obj.elements(res.target) :
-                                            TDEF.elements(res.target);
+				TDEF.elements(res.target);
 			res.elements = _.map(elements, function ($ele) {
 				$ele = $($ele);
 				return {
@@ -69,7 +69,7 @@ var ArbitrarySearcher = function () {
 					$ele: $ele,
 					// raw string
 					searchtext: (obj.searchtext ? obj.searchtext($ele) :
-                                                    TDEF.searchtext($ele)).toLowerCase(),
+						TDEF.searchtext($ele)).toLowerCase(),
 					data: obj.process && obj.process($ele),
 					before: obj.before,
 					after: obj.after,
@@ -89,14 +89,14 @@ var ArbitrarySearcher = function () {
 		// map elements to collapsibles and add to res
 		_.each(search_targets, function (target) {
 			Array.prototype.push.apply(res,
-                _.map(target.elements, function (obj) {
-                	return {
-                		$collapsible: obj.$collapsible,
-                		$collapsible_parent: obj.$collapsible_parent,
-                		$collapsible_parent_title: obj.$collapsible_parent_title
-                	}
-                })
-            )
+				_.map(target.elements, function (obj) {
+					return {
+						$collapsible: obj.$collapsible,
+						$collapsible_parent: obj.$collapsible_parent,
+						$collapsible_parent_title: obj.$collapsible_parent_title
+					}
+				})
+			)
 		})
 	}
 	// filter helper
@@ -224,24 +224,24 @@ var expando_callbacks = {
 MODULE.init({
 	input: $("#SearchInput"),
 	targets: [
-        { // customers
-        	target: $("#customer-panel"),
-        	elements: function ($target) {
-        		return $target.find("> .panel > .panel-heading > a")
-        	},
-        	before: expando_callbacks.before,
-        	included: expando_callbacks.included,
-        	after: expando_callbacks.after
-        },
-        { // unexpandable projects list
-        	target: $("#customer-panel"),
-        	elements: function ($target) {
-        		return $target.find("> .panel > .panel-collapse > div > .list-group > .list-group-item > .accordion-toggle")
-        	},
-        	before: expando_callbacks.before,
-        	included: expando_callbacks.included,
-        	after: expando_callbacks.after
-        }
+		{ // customers
+			target: $("#customer-panel"),
+			elements: function ($target) {
+				return $target.find("> .panel > .panel-heading > a")
+			},
+			before: expando_callbacks.before,
+			included: expando_callbacks.included,
+			after: expando_callbacks.after
+		},
+		{ // unexpandable projects list
+			target: $("#customer-panel"),
+			elements: function ($target) {
+				return $target.find("> .panel > .panel-collapse > div > .list-group > .list-group-item > .accordion-toggle")
+			},
+			before: expando_callbacks.before,
+			included: expando_callbacks.included,
+			after: expando_callbacks.after
+		}
 	]
 })
 

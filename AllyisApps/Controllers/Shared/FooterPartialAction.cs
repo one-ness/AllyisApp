@@ -32,7 +32,7 @@ namespace AllyisApps.Controllers
 			}).ToList();
 			int orgID = this.AppService.UserContext == null ? 0 : this.AppService.UserContext.ChosenOrganizationId;
 			var model = Tuple.Create(languages, orgID);
-            ViewData["LanguageID"] = AppService.UserContext != null ? AppService.UserContext.ChosenLanguageId : TempData["language"];
+			ViewData["LanguageID"] = AppService.UserContext != null ? AppService.UserContext.ChosenLanguageId : TempData["language"];
 			return this.View(ViewConstants.Footer, model);
 		}
 	}

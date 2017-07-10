@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System.Text;
-using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.Shared
 {
@@ -27,15 +26,15 @@ namespace AllyisApps.ViewModels.Shared
 			}
 		}
 
-        /// <summary>
-        /// Gets or sets the First Name of the user
-        /// </summary>
-        public string FirstName { get; set; }
+		/// <summary>
+		/// Gets or sets the First Name of the user
+		/// </summary>
+		public string FirstName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Last Name of the user
-        /// </summary>
-        public string LastName { get; set; }
+		/// <summary>
+		/// Gets or sets the Last Name of the user
+		/// </summary>
+		public string LastName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name of the organziation the user is working in currently
