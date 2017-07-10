@@ -3,14 +3,7 @@
 @model ManageOrgViewModel
 @{
 	DisplayHints.PageBodyId = "org-manage";
-	ViewBag.Title = Strings.Manage;
-	InvitationInfo emptyInvite = new InvitationInfo()
-	{
-		FirstName = Strings.FirstName,
-		LastName = Strings.LastName,
-		Email = "email@allyis.com",
-		AccessCode = "None"
-	};
+	ViewBag.Title = Strings.ManageOrganization;
 }
 
 @Html.AntiForgeryToken() @*Used by the javascript dynamic form methods below (for removing users/invitations)*@

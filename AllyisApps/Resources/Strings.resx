@@ -783,8 +783,8 @@
   <data name="LRP" xml:space="preserve">
     <value>Live Report Preview</value>
   </data>
-  <data name="Manage" xml:space="preserve">
-    <value>Manage</value>
+  <data name="ManageOrganization" xml:space="preserve">
+    <value>Manage Organization</value>
   </data>
   <data name="ManagePermissions" xml:space="preserve">
     <value>Manage Permissions</value>
