@@ -4,10 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Extensions.RouteExtensions;
 using System.Web.Mvc;
 using System.Web.Routing;
-using AllyisApps.Core;
 
 namespace AllyisApps
 {

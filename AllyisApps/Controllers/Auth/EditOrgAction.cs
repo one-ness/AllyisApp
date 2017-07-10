@@ -55,24 +55,24 @@ namespace AllyisApps.Controllers
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.SubdomainTaken, Variety.Danger));
 					return this.RedirectToAction(ActionConstants.Edit, ControllerConstants.Account, new { id = model.OrganizationId });
-                }
+				}
 
 				// Organization update failed due to invalid permissions
 				return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditProfileMessage), ControllerConstants.Organization, ActionConstants.Edit));
-            }
+			}
 
-            // Model is invalid, try again
-            return this.View(model);
+			// Model is invalid, try again
+			return this.View(model);
 		}
 
-        /// <summary>
-        /// GET: /Account/EditOrg.
-        /// The page for editing an organization's information.
-        /// </summary>
-        /// <param name="id">The organization id</param>
-        /// <param name="returnUrl">The return url to redirect to after form submit.</param>
-        /// <returns>The result of this action.</returns>
-        public ActionResult EditOrg(int id, string returnUrl)
+		/// <summary>
+		/// GET: /Account/EditOrg.
+		/// The page for editing an organization's information.
+		/// </summary>
+		/// <param name="id">The organization id</param>
+		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
+		/// <returns>The result of this action.</returns>
+		public ActionResult EditOrg(int id, string returnUrl)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 			var infos = AppService.GetOrgWithCountriesAndEmployeeId(id);

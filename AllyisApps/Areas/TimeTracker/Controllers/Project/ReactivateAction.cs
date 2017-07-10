@@ -18,18 +18,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Reactivates a project
 		/// </summary>
-        /// <param name="subscriptionId">The subscription Id</param>
+		/// <param name="subscriptionId">The subscription Id</param>
 		/// <param name="userId">Project ID</param>
 		/// <returns></returns>
 		public ActionResult Reactivate(int subscriptionId, int userId)
 		{
-            CompleteProjectInfo project = AppService.GetProject(userId);
+			CompleteProjectInfo project = AppService.GetProject(userId);
 			if (project != null)
 			{
-                if (!AppService.GetCustomer(project.CustomerId).IsActive)
-                {
-                    AppService.ReactivateCustomer(project.CustomerId, subscriptionId, project.OrganizationId);
-                }
+				if (!AppService.GetCustomer(project.CustomerId).IsActive)
+				{
+					AppService.ReactivateCustomer(project.CustomerId, subscriptionId, project.OrganizationId);
+				}
 
 				if (AppService.ReactivateProject(userId, project.OrganizationId, subscriptionId))
 				{

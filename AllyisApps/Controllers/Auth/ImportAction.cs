@@ -77,7 +77,7 @@ namespace AllyisApps.Controllers
 						alert.IsHtmlString = true;
 						Notifications.Add(alert);
 					}
-                    return RedirectToAction(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = id });
+					return RedirectToAction(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = id });
 				}
 				else
 				{

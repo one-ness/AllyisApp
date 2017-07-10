@@ -32,8 +32,8 @@ namespace AllyisApps.Services
 		/// Initializes a new instance of the <see cref="UserContext"/> class.
 		/// </summary>
 		/// <param name="userId">The user ID.</param>
-        /// <param name="firstName">The user's first name</param>
-        /// <param name="lastName">The user's last name</param>
+		/// <param name="firstName">The user's first name</param>
+		/// <param name="lastName">The user's last name</param>
 		/// <param name="email">The email.</param>
 		/// <param name="chosenOrganizationId">The chosen Organization ID.</param>
 		/// <param name="chosenSubscriptionId">The chosen subscription ID.</param>
@@ -47,8 +47,8 @@ namespace AllyisApps.Services
 
 			this.Email = email;
 			this.UserId = userId;
-            this.FirstName = firstName;
-            this.LastName = lastName;
+			this.FirstName = firstName;
+			this.LastName = lastName;
 			this.ChosenOrganizationId = chosenOrganizationId;
 			this.ChosenSubscriptionId = chosenSubscriptionId;
 			this.ChosenLanguageId = chosenLanguageID;
@@ -59,15 +59,15 @@ namespace AllyisApps.Services
 		/// </summary>
 		public int UserId { get; set; }
 
-        /// <summary>
-        /// First name of the user
-        /// </summary>
-        public string FirstName { get; set; }
+		/// <summary>
+		/// First name of the user
+		/// </summary>
+		public string FirstName { get; set; }
 
-        /// <summary>
-        /// Last name of the user
-        /// </summary>
-        public string LastName { get; set; }
+		/// <summary>
+		/// Last name of the user
+		/// </summary>
+		public string LastName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the email of the user.

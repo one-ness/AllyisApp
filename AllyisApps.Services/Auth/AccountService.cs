@@ -114,12 +114,14 @@ namespace AllyisApps.Services
 		public string AcceptUserInvitation(int invitationId)
 		{
 			#region Validation
+
 			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId", "The invitation id cannot be zero or negative.");
+
 			#endregion Validation
 
 			var results = DBHelper.AcceptInvitation(invitationId, UserContext.UserId);
 
-            if (results == null) return null;
+			if (results == null) return null;
 
 			return string.Format("You have successfully joined {0} in the role of {1}.", results.Item1, results.Item2);
 		}
@@ -300,7 +302,7 @@ namespace AllyisApps.Services
 				// note: if contextInfo.Count > 0, user is part of at least one organization
 				bool chosenSubscriptionFound = false;
 				foreach (var item in contextInfo)
-				{ 
+				{
 					// user is part of at least one organization, do we have org id?
 					if (item.OrganizationId.HasValue)
 					{
@@ -322,7 +324,8 @@ namespace AllyisApps.Services
 						// is there a subscription id?
 						if (item.SubscriptionId.HasValue)
 						{
-							UserSubscription subInfo = new UserSubscription() {
+							UserSubscription subInfo = new UserSubscription()
+							{
 								SubscriptionId = item.SubscriptionId.Value,
 								OrganizationId = orgInfo.OrganizationId,
 								OrganizationName = orgInfo.OrganizationName,
@@ -338,7 +341,7 @@ namespace AllyisApps.Services
 
 							// also add it to the result
 							result.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
-							
+
 							// compare with chosen subscription? is user still a member of it?
 							if (result.ChosenSubscriptionId == item.SubscriptionId.Value)
 							{

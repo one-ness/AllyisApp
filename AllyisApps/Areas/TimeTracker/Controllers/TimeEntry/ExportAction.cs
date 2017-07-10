@@ -23,13 +23,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Export used on TimeEntry/Index. (May be removed soon).
 		/// </summary>
 		/// <param name="userId">The User's Id.</param>
-        /// <param name="subscriptionId">The subscription Id</param>
+		/// <param name="subscriptionId">The subscription Id</param>
 		/// <param name="startingDate">The Starting date of the range (nullable).</param>
 		/// <param name="endingDate">The Ending date of the range (nullable).</param>
 		/// <returns>CSV export of time entries.</returns>
 		public FileStreamResult Export(int userId, int subscriptionId, int? startingDate = null, int? endingDate = null)
 		{
-            int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+			int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
 			if (userId != this.AppService.UserContext.UserId)
 			{
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
@@ -44,8 +44,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Uses services to initialize a new instance of the <see cref="DataExportViewModel" /> class and returns it.
 		/// </summary>
-        /// <param name="subscriptionId">The subscriptionId</param>
-        /// <param name="orgId">The organization's Id</param>
+		/// <param name="subscriptionId">The subscriptionId</param>
+		/// <param name="orgId">The organization's Id</param>
 		/// <param name="userIds">An array of user ids.</param>
 		/// <param name="startingDate">The starting of the date range (nullable).</param>
 		/// <param name="endingDate">The ending of the date range (nullable).</param>
@@ -54,7 +54,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The DataExportViewModel.</returns>
 		public DataExportViewModel ConstructDataExportViewModel(int subscriptionId, int orgId = -1, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
-            if (-1 <= orgId) orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+			if (-1 <= orgId) orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
 
 			DataExportViewModel result = new DataExportViewModel();
 			if ((userIds == null) || (userIds[0] == -1))

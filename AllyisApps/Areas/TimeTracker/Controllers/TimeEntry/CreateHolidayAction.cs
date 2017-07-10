@@ -22,7 +22,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="newHolidayName">The name of the holiday.</param>
 		/// <param name="newHolidayDate">The date of the holiday.</param>
-        /// <param name="subscriptionId">The ID of the subscription</param>
+		/// <param name="subscriptionId">The ID of the subscription</param>
 		/// <returns>Redirects to the settings view.</returns>
 		public ActionResult CreateHoliday(string newHolidayName, string newHolidayDate, int subscriptionId)
 		{
@@ -33,7 +33,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotCreateHolidayWIthoutName, Variety.Warning));
 			}
 
-            int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+			int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
 			DateTime holidayDate;
 			if (!DateTime.TryParse(newHolidayDate, out holidayDate))
 			{

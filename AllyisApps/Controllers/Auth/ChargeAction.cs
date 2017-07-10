@@ -16,14 +16,14 @@ namespace AllyisApps.Controllers
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
-        /// <summary>
-        /// Edits or creates billing information.
-        /// </summary>
-        /// <param name="id">the organization this billing information belongs to</param>
-        /// <param name="token">The billing services token being used for this charge.</param>
-        /// <param name="billingServicesEmail">The email associated with this customer.</param>
-        /// <returns>A page.</returns>
-        [CLSCompliant(false)]
+		/// <summary>
+		/// Edits or creates billing information.
+		/// </summary>
+		/// <param name="id">the organization this billing information belongs to</param>
+		/// <param name="token">The billing services token being used for this charge.</param>
+		/// <param name="billingServicesEmail">The email associated with this customer.</param>
+		/// <returns>A page.</returns>
+		[CLSCompliant(false)]
 		public ActionResult Charge(int id, BillingServicesToken token, string billingServicesEmail)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditBilling, id);
