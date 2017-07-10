@@ -8,7 +8,7 @@ namespace AllyisApps
 	public static class ActionConstants
 	{
         public const string Action = "action";
-        public const string Add = "add";
+        public const string AddMember = "addmember";
 		public const string ChangePassword = "changepassword";
 		public const string Charge = "charge";
 		public const string ConfirmEmail = "confirmemail";

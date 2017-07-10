@@ -28,7 +28,7 @@ namespace AllyisApps.Controllers
 		/// <param name="id"></param>
 		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
 		/// <returns>The result of this action.</returns>
-		public ActionResult Add(int id, string returnUrl)
+		public ActionResult AddMember(int id, string returnUrl)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(id);
@@ -45,7 +45,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The result of this action</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Add(AddMemberViewModel add, int id)
+		public async Task<ActionResult> AddMember(AddMemberViewModel add, int id)
 		{
 			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(id);
 			add.Subscriptions = model.Subscriptions;

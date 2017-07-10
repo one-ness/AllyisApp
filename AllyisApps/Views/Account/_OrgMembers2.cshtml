@@ -9,7 +9,7 @@
         @Strings.Members
         <span class="pull-right panel-title">
             <a href="@Url.Action(ActionConstants.ManagePermissions, new { id = Model.OrganizationId })" title="@Strings.ManagePermissions"><span class="fa fa-fw fa-unlock"></span></a>
-            <a href="@Url.Action(ActionConstants.Add, new { id = Model.OrganizationId })" title="@Strings.AddMembers"><span class="fa fa-fw fa-user-plus"></span></a>
+            <a href="@Url.Action(ActionConstants.AddMember, new { id = Model.OrganizationId })" title="@Strings.AddMembers"><span class="fa fa-fw fa-user-plus"></span></a>
         </span>
     </h1>
 </div>
