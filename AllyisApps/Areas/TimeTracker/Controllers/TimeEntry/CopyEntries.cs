@@ -53,14 +53,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			}
 
-			// Reference for checking status of entries
-			List<CompleteProjectInfo> allProjects = AppService.GetProjectsByUserAndOrganization(userId, isActive: false).ToList();
+            UserSubscription subInfo = null;
+            this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+            int organizationId = subInfo.OrganizationId;
+
+            // Reference for checking status of entries
+            List<CompleteProjectInfo> allProjects = AppService.GetProjectsByUserAndOrganization(userId, organizationId, false).ToList();
 			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId);
 
 			// Authorized to edit this entry
 			// Remove existing entries in target range
 			DateTime endDateTarget = startDateTarget.AddDays(endDateCopy.Subtract(startDateCopy).Days);
-			IEnumerable<TimeEntryInfo> entriesRemove = AppService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateTarget, endDateTarget);
+			IEnumerable<TimeEntryInfo> entriesRemove = AppService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateTarget, endDateTarget, organizationId);
 			foreach (TimeEntryInfo entry in entriesRemove)
 			{
 				// If the copying user isn't a manager, some checks are required before we let them delete/copy entries
@@ -78,10 +82,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				AppService.DeleteTimeEntry(entry.TimeEntryId);
 			}
 
-			// Add copied entries
-			UserSubscription subInfo = null;
-			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
-			int organizationId = subInfo.OrganizationId;
+			// Add copied entries			
 			IEnumerable<TimeEntryInfo> entriesCopy = AppService.GetTimeEntriesByUserOverDateRange(new List<int> { userId }, startDateCopy, endDateCopy, organizationId);
 			for (int i = 0; startDateCopy.Date.AddDays(i) <= endDateCopy.Date; ++i)
 			{

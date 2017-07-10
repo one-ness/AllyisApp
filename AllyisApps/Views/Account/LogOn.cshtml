@@ -19,7 +19,7 @@
                 @Html.Label(Strings.Password)
                 @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.Password, string.Empty, new { @class = "text-danger" })
-                <strong id="capsWarningDiv" style="visibility:hidden">@Strings.CapsLock</strong>
+                <div class="field-validation-error" id="capsWarningDiv" style="visibility:hidden; height:0px"><span>@Strings.CapsLock</span></div>
             </div>
             <div class="checkbox form-group pull-left">
                 @Html.CheckBoxFor(m => m.RememberMe, new { id = Html.NameFor(m => m.RememberMe), style = "margin-left: 0px" })
