@@ -4,10 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
 using AllyisApps.ViewModels.Shared;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
@@ -30,8 +27,8 @@ namespace AllyisApps.Controllers
 			{
 				model = new LogOnPartialViewModel
 				{
-                    FirstName = this.AppService.UserContext.FirstName,
-                    LastName = this.AppService.UserContext.LastName
+					FirstName = this.AppService.UserContext.FirstName,
+					LastName = this.AppService.UserContext.LastName
 				};
 			}
 			else

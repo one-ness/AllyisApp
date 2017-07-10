@@ -63,7 +63,7 @@ namespace AllyisApps.Services
 				switch (action)
 				{
 					case OrgAction.AddUser:
-						switch(orgInfo.OrganizationRole)
+						switch (orgInfo.OrganizationRole)
 						{
 							case OrganizationRole.Owner:
 								result = true;
@@ -263,7 +263,7 @@ namespace AllyisApps.Services
 				switch (action)
 				{
 					case TimeTrackerAction.CreateCustomer:
-						switch(ttRole)
+						switch (ttRole)
 						{
 							case TimeTrackerRole.Manager:
 								result = true;
@@ -337,9 +337,9 @@ namespace AllyisApps.Services
 						result = true;
 						break;
 
-                    case TimeTrackerAction.ViewCustomer:
-                        result = true;
-                        break;
+					case TimeTrackerAction.ViewCustomer:
+						result = true;
+						break;
 
 					case TimeTrackerAction.ViewOthers:
 						switch (ttRole)

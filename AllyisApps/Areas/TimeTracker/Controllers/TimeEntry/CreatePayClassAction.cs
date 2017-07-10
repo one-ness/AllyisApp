@@ -20,7 +20,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Creates a payclass.
 		/// </summary>
 		/// <param name="newPayClass">The pay class to create.</param>
-        /// <param name="subscriptionId">Subscription ID</param>
+		/// <param name="subscriptionId">Subscription ID</param>
 		/// <returns>Redirects to the settings view.</returns>
 		public ActionResult CreatePayClass(string newPayClass, int subscriptionId)
 		{
@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
-                int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId; ;
+				int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId; ;
 				try//should put try catch in 'else'. Creating a blank pay class results in Two alerts: "Cannot create blank pay class" and "pay class already exists"
 				{
 					if (AppService.CreatePayClass(newPayClass, orgId, subscriptionId))

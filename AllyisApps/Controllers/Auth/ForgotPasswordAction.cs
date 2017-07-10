@@ -6,10 +6,10 @@
 
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 using System;
 using System.Text;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {

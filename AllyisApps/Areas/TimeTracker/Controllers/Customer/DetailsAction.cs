@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.Controllers;
-using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Customer;
 using System.Web.Mvc;

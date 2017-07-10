@@ -17,37 +17,37 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	/// </summary>
 	public partial class CustomerController : BaseController
 	{
-        /// <summary>
-        /// GET: Customer/SubscriptionId/Delete/CustomerId
-        /// </summary>
-        /// <param name="subscriptionId">The Subscription Id</param>
-        /// <param name="userId">The Customer id.</param>
-        /// <returns>The Customer index.</returns>
-        [HttpGet]
-        public ActionResult Delete(int subscriptionId, string userId)
+		/// <summary>
+		/// GET: Customer/SubscriptionId/Delete/CustomerId
+		/// </summary>
+		/// <param name="subscriptionId">The Subscription Id</param>
+		/// <param name="userId">The Customer id.</param>
+		/// <returns>The Customer index.</returns>
+		[HttpGet]
+		public ActionResult Delete(int subscriptionId, string userId)
 		{
-            int numValue;
-            bool parsed = Int32.TryParse(userId, out numValue);
+			int numValue;
+			bool parsed = Int32.TryParse(userId, out numValue);
 
-            if (!parsed)
-            {
-                return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
-            }
-            else
-            {
-                var result = AppService.DeleteCustomer(subscriptionId, numValue);
-                // if deleted successfully
-                if (result != null && result != "")
-                {
-                    Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", result, Resources.Strings.CustomerDeleteNotification), Variety.Success));
-                }
-                // Permission failure
-                else if (result == null)
-                {
-                    Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-                }
-                return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
-            }
+			if (!parsed)
+			{
+				return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+			}
+			else
+			{
+				var result = AppService.DeleteCustomer(subscriptionId, numValue);
+				// if deleted successfully
+				if (result != null && result != "")
+				{
+					Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", result, Resources.Strings.CustomerDeleteNotification), Variety.Success));
+				}
+				// Permission failure
+				else if (result == null)
+				{
+					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
+				}
+				return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
+			}
 		}
 
 		/*

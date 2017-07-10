@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.Controllers;
-using AllyisApps.Services;
 using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -22,6 +21,5 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public CustomerController()
 		{
 		}
-
-    }
+	}
 }

@@ -34,10 +34,10 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public int TimeTrackerSubIndex { get; set; }
 
-        /// <summary>
-        /// Gets or sets the ID of the organization associated with this manager.
-        /// </summary>
-        public int OrganizationId { get; set; }
+		/// <summary>
+		/// Gets or sets the ID of the organization associated with this manager.
+		/// </summary>
+		public int OrganizationId { get; set; }
 	}
 
 	/// <summary>

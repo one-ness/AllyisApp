@@ -151,6 +151,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Multiple Members (upload a file).
+        /// </summary>
+        public static string AddMultipleMembers {
+            get {
+                return ResourceManager.GetString("AddMultipleMembers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Street Address.
         /// </summary>
         public static string Address {
@@ -1861,11 +1870,11 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage.
+        ///   Looks up a localized string similar to Manage Organization.
         /// </summary>
-        public static string Manage {
+        public static string ManageOrganization {
             get {
-                return ResourceManager.GetString("Manage", resourceCulture);
+                return ResourceManager.GetString("ManageOrganization", resourceCulture);
             }
         }
         

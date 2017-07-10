@@ -23,11 +23,13 @@ namespace AllyisApps.Lib
 		// password hashing: feel free to update these as needed. The next time a user logs on, their password will still work,
 		// and the hash will get updated in the database to reflect the new values below.
 		private const int SaltBytes = 24;
+
 		private const int HashBytes = 32;
 		private const int Iterations = 20000;
 
 		// encryption
 		private const int IVStringLength = 16;
+
 		private static Encoding encoding = Encoding.UTF8;
 
 		/// <summary>
@@ -108,7 +110,7 @@ namespace AllyisApps.Lib
 			if (a == b) return true;
 			if (a == null || b == null || a.Length != b.Length) return false;
 			bool result = true;
-			for(int i = 0; i < a.Length; i++)
+			for (int i = 0; i < a.Length; i++)
 			{
 				if (a[i] != b[i])
 				{

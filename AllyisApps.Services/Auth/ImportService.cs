@@ -1,8 +1,8 @@
 ﻿using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.TimeTracker;
-using AllyisApps.Services.TimeTracker;
 using AllyisApps.Lib;
+using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -22,8 +22,8 @@ namespace AllyisApps.Services
 		/// <param name="importData">Workbook with data to import.</param>
 		public ImportActionResult Import(int subscriptionId, DataSet importData)
 		{
-            UserContext.UserSubscriptions.TryGetValue(subscriptionId, out UserSubscription userSub);
-            int orgId = userSub.OrganizationId;
+			UserContext.UserSubscriptions.TryGetValue(subscriptionId, out UserSubscription userSub);
+			int orgId = userSub.OrganizationId;
 
 			// For some reason, linq won't work directly with DataSets, so we start by just moving the tables over to a linq-able List
 			// The tables are ranked and sorted in order to get customers to import first, before projects, avoiding some very complicated look-up logic.
@@ -58,8 +58,8 @@ namespace AllyisApps.Services
 			// Retrieval of existing pay class data
 			List<PayClass> payClasses = DBHelper.GetPayClasses(orgId).Select(pc => InitializePayClassInfo(pc)).ToList();
 
-            //Result object
-            ImportActionResult result = new ImportActionResult();
+			//Result object
+			ImportActionResult result = new ImportActionResult();
 
 			// Loop through and see what can be imported from each table in turn. Order doesn't matter, since missing information
 			// will be sought from other tables as needed.

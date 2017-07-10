@@ -48,10 +48,9 @@ namespace AllyisApps.Controllers
 					{
 						orgVM.Subscriptions.Add(new SubscriptionDisplayViewModel
 						{
-                            SubscriptionId = userSubInfo.SubscriptionId,
+							SubscriptionId = userSubInfo.SubscriptionId,
 							ProductId = (int)userSubInfo.ProductId,
 							ProductName = userSubInfo.ProductName,
-							ProductDisplayName = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTracker : "Unknown Product",
 							ProductDescription = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription : ""
 						});
 					}
@@ -81,7 +80,7 @@ namespace AllyisApps.Controllers
 				Notifications.Add(new Core.Alert.BootstrapAlert(result, Core.Alert.Variety.Success));
 			}
 
-            return this.RouteUserHome();
+			return this.RouteUserHome();
 		}
 
 		/// <summary>

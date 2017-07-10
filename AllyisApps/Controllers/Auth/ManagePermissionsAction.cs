@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.Core.Alert;
-using AllyisApps.Extensions.IEnumerableExtensions;
 using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
@@ -22,12 +21,12 @@ namespace AllyisApps.Controllers
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
-  //      /// <summary>
-  //      /// GET Account/ManagePermissions2.
-  //      /// </summary>
-  //      /// <param name="id">The Organization Id</param>
-  //      /// <returns>Action result.</returns>
-  //      [HttpGet]
+		//      /// <summary>
+		//      /// GET Account/ManagePermissions2.
+		//      /// </summary>
+		//      /// <param name="id">The Organization Id</param>
+		//      /// <returns>Action result.</returns>
+		//      [HttpGet]
 		//public ActionResult ManagePermissions2(int id)
 		//{
 		//	this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
@@ -35,12 +34,12 @@ namespace AllyisApps.Controllers
 		//	return this.View("Permission", model);
 		//}
 
-        /// <summary>
-        /// GET Account/ManagePermissions.
-        /// </summary>
-        /// <param name="id">The Organization Id</param>
-        /// <returns>Action result.</returns>
-        [HttpGet]
+		/// <summary>
+		/// GET Account/ManagePermissions.
+		/// </summary>
+		/// <param name="id">The Organization Id</param>
+		/// <returns>Action result.</returns>
+		[HttpGet]
 		public ActionResult ManagePermissions(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
@@ -98,7 +97,7 @@ namespace AllyisApps.Controllers
 			return this.View("Permission2", model);
 		}
 
-        /*
+		/*
 		/// <summary>
 		/// Uses services to populate a <see cref="PermissionsManagementViewModel"/> and returns it.
 		/// </summary>
@@ -193,7 +192,7 @@ namespace AllyisApps.Controllers
 			if (model.SelectedUsers == null || model.SelectedUsers.Count() == 0)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.NoUsersSelected, Variety.Danger));
-				return RedirectToAction(ActionConstants.Manage);
+				return RedirectToAction(ActionConstants.ManageOrg);
 			}
 
 			if (model.SelectedActions == null)
@@ -274,7 +273,7 @@ namespace AllyisApps.Controllers
 				}
 			}
 
-            /*
+			/*
 			if (!model.isPermissions2) // TODO: Delete once there's only one manage permissions page (also delete the action constant)
 			{
 				return RedirectToAction(ActionConstants.ManagePermissions2);

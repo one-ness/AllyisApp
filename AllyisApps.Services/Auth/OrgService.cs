@@ -7,8 +7,8 @@
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
-using AllyisApps.Services.Billing;
 using AllyisApps.Lib;
+using AllyisApps.Services.Billing;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -101,13 +101,13 @@ namespace AllyisApps.Services
 				spResults.Item6.Select(pdb => InitializeProduct(pdb)).ToList());
 		}
 
-        /// <summary>
-        /// Gets the Organization for the current chosen organization, along with the list of valid countries and the
-        /// employee id for the current user in the current chosen organization.
-        /// </summary>
-        /// <param name="orgId">Organization Id.</param>
-        /// <returns></returns>
-        public Tuple<Organization, List<string>, string> GetOrgWithCountriesAndEmployeeId(int orgId)
+		/// <summary>
+		/// Gets the Organization for the current chosen organization, along with the list of valid countries and the
+		/// employee id for the current user in the current chosen organization.
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns></returns>
+		public Tuple<Organization, List<string>, string> GetOrgWithCountriesAndEmployeeId(int orgId)
 		{
 			var spResults = DBHelper.GetOrgWithCountriesAndEmployeeId(orgId, UserContext.UserId);
 			return Tuple.Create(
@@ -122,7 +122,7 @@ namespace AllyisApps.Services
 		/// a list of CompleteProjectInfos for TimeTracker projects in the organization, and the next recommended employee id
 		/// by invitations.
 		/// </summary>
-        /// <param name="orgId">The Organization Id</param>
+		/// <param name="orgId">The Organization Id</param>
 		/// <returns></returns>
 		public Tuple<string, List<SubscriptionDisplayInfo>, List<ProductRole>, List<CompleteProjectInfo>, string> GetAddMemberInfo(int orgId)
 		{
@@ -140,7 +140,7 @@ namespace AllyisApps.Services
 		/// and a list of SubscriptionRoles (with only SubscriptionId, ProductId, and ProductName populated) for
 		/// all subscriptions in the current organization.
 		/// </summary>
-        /// <param name="orgId">The Organization Id</param>
+		/// <param name="orgId">The Organization Id</param>
 		/// <returns></returns>
 		public Tuple<List<UserRolesInfo>, List<SubscriptionDisplayInfo>> GetOrgAndSubRoles(int orgId)
 		{
@@ -221,7 +221,7 @@ namespace AllyisApps.Services
 		public void DeleteOrganization(int orgId)
 		{
 			this.CheckOrgAction(OrgAction.DeleteOrganization, orgId);
-            DBHelper.DeleteOrganization(orgId);
+			DBHelper.DeleteOrganization(orgId);
 		}
 
 		/// <summary>
@@ -700,7 +700,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the user roles for an organization.
 		/// </summary>
-        /// <param name="orgId">The Organization Id</param>
+		/// <param name="orgId">The Organization Id</param>
 		/// <returns>List of UserRolesInfos.</returns>
 		public IEnumerable<UserRolesInfo> GetUserRoles(int orgId)
 		{
@@ -712,7 +712,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="userIds">List of user Ids.</param>
 		/// <param name="newOrganizationRole">Organization role to assign, or -1 to remove from organization.</param>
-        /// <param name="orgId">The organization Id</param>
+		/// <param name="orgId">The organization Id</param>
 		/// <returns>The number of affected users.</returns>
 		public int ChangeUserRoles(List<int> userIds, int newOrganizationRole, int orgId)
 		{
@@ -737,7 +737,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="productName">Product name.</param>
 		/// <param name="userId">User Id.</param>
-        /// <param name="orgId"> The Organization Id</param>
+		/// <param name="orgId"> The Organization Id</param>
 		/// <returns>The product role.</returns>
 		public string GetProductRoleForUser(string productName, int userId, int orgId)
 		{
@@ -745,11 +745,11 @@ namespace AllyisApps.Services
 
 			if (string.IsNullOrEmpty(productName)) throw new ArgumentNullException("productName", "Product name must have a value.");
 			if (userId <= 0) throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-            if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
+			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
 
-            #endregion Validation
+			#endregion Validation
 
-            return DBHelper.GetProductRoleForUser(productName, orgId, userId);
+			return DBHelper.GetProductRoleForUser(productName, orgId, userId);
 		}
 
 		#region Info-DBEntity Conversions

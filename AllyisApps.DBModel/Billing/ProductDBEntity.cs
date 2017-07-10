@@ -19,11 +19,21 @@ namespace AllyisApps.DBModel.Billing
 		/// <summary>
 		/// Gets or sets ProductId.
 		/// </summary>
-		public int ProductId { get; set; }
+		public short ProductId { get; set; }
 
 		/// <summary>
 		/// Gets or sets Name.
 		/// </summary>
 		public string Name { get; set; }
+
+		/// <summary>
+		/// Gets or sets is active
+		/// </summary>
+		public bool IsActive { get; set; }
+
+		/// <summary>
+		/// Gets or sets area url
+		/// </summary>
+		public string ArealUrl { get; set; }
 	}
 }

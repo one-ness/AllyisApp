@@ -11,7 +11,6 @@ using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 
@@ -46,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				});
 			}
 
-            int organizationId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
+			int organizationId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
 			// Check permissions
 			if (model.UserId != this.AppService.UserContext.UserId)
 			{
@@ -162,7 +161,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Uses the time entry id to construct a new EditTimeEntryViewModel.
 		/// </summary>
 		/// <param name="timeEntryId">The time entry ID.</param>
-        /// <param name="subscriptionId">The subscription's ID</param>
+		/// <param name="subscriptionId">The subscription's ID</param>
 		/// <returns>The EditTimeEntryViewModel.</returns>
 		public EditTimeEntryViewModel ConstructEditTimeEntryViewModel(int timeEntryId, int subscriptionId)
 		{

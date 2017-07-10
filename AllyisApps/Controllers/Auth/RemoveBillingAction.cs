@@ -31,7 +31,7 @@ namespace AllyisApps.Controllers
 			if (subs != null && subs.Count() > 0)
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotRemoveBilling, Variety.Warning));
-				return this.Redirect(ActionConstants.Manage);
+				return this.Redirect(ActionConstants.ManageOrg);
 			}
 			else
 			{
@@ -52,7 +52,7 @@ namespace AllyisApps.Controllers
 			if (AppService.RemoveBilling(orgId))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.BillingRemoved, Variety.Success));
-				return this.Redirect(ActionConstants.Manage);
+				return this.Redirect(ActionConstants.ManageOrg);
 			}
 
 			return this.RedirectToAction(ActionConstants.Index);

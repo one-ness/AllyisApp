@@ -57,7 +57,7 @@ namespace AllyisApps.Controllers
 					else
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.FileFormatUnsupported, Variety.Danger));
-						return RedirectToAction(ActionConstants.Add, ControllerConstants.Account, new { id = id });
+						return RedirectToAction(ActionConstants.AddMember, ControllerConstants.Account, new { id = id });
 					}
 
 					reader.IsFirstRowAsColumnNames = true;
@@ -77,7 +77,7 @@ namespace AllyisApps.Controllers
 						alert.IsHtmlString = true;
 						Notifications.Add(alert);
 					}
-                    return RedirectToAction(ActionConstants.Manage, ControllerConstants.Account, new { id = id });
+					return RedirectToAction(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = id });
 				}
 				else
 				{
@@ -85,7 +85,7 @@ namespace AllyisApps.Controllers
 				}
 			}
 
-			return RedirectToAction(ActionConstants.Add, ControllerConstants.Account, new { id = id });
+			return RedirectToAction(ActionConstants.AddMember, ControllerConstants.Account, new { id = id });
 		}
 	}
 }

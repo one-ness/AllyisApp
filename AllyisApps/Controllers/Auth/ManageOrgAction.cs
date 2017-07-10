@@ -18,31 +18,31 @@ namespace AllyisApps.Controllers
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
-        /// <summary>
-        /// Get: Account/Manage/id
-        /// The management page for an organization, displays billing, subscriptions, etc.
-        /// </summary>
-        /// <param name="id">The organization Id</param>
-        /// <returns>The organization's management page.</returns>
-        public ActionResult Manage(int id)
+		/// <summary>
+		/// Get: Account/Manage/id
+		/// The management page for an organization, displays billing, subscriptions, etc.
+		/// </summary>
+		/// <param name="id">The organization Id</param>
+		/// <returns>The organization's management page.</returns>
+		public ActionResult ManageOrg(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-			OrganizationManageViewModel model = this.ConstructOrganizationManageViewModel(id);
+			ManageOrgViewModel model = this.ConstructOrganizationManageViewModel(id);
 			return this.View(model);
 		}
 
 		/// <summary>
-		/// Uses services to populate the lists of an <see cref="OrganizationManageViewModel"/> and returns it.
+		/// Uses services to populate the lists of an <see cref="ManageOrgViewModel"/> and returns it.
 		/// </summary>
 		/// <returns>The OrganizationManageViewModel.</returns>
 		[CLSCompliant(false)]
-		public OrganizationManageViewModel ConstructOrganizationManageViewModel(int orgId)
+		public ManageOrgViewModel ConstructOrganizationManageViewModel(int orgId)
 		{
 			var infos = AppService.GetOrganizationManagementInfo(orgId);
 
 			BillingServicesCustomer customer = (infos.Item5 == null) ? null : AppService.RetrieveCustomer(new BillingServicesCustomerId(infos.Item5));
 
-			return new OrganizationManageViewModel
+			return new ManageOrgViewModel
 			{
 				Details = infos.Item1,
 				LastFour = customer == null ? string.Empty : customer.Last4,
@@ -69,13 +69,13 @@ namespace AllyisApps.Controllers
 				SubscriptionCount = infos.Item3.Count,
 				Subscriptions = infos.Item6.Select(p =>
 				{
-                    return new SubscriptionDisplayViewModel
-                    {
-                        Info = infos.Item3.Where(s => s.ProductId == p.ProductId).SingleOrDefault(),
-                        ProductId = p.ProductId,
-                        ProductName = p.ProductName,
-                        ProductDescription = p.ProductDescription,
-                        OrganizationId = orgId
+					return new SubscriptionDisplayViewModel
+					{
+						Info = infos.Item3.Where(s => s.ProductId == p.ProductId).SingleOrDefault(),
+						ProductId = p.ProductId,
+						ProductName = p.ProductName,
+						ProductDescription = p.ProductDescription,
+						OrganizationId = orgId
 					};
 				})
 			};

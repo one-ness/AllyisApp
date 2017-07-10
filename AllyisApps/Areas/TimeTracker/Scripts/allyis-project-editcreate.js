@@ -1,24 +1,24 @@
 ﻿// Moves selected elements from left (subList) to right (projectList) if the direction is in
 // or right to left if direction is out
 function moveSelectedProjectEditModal(direction) {
-    // Assuming only internally called with "in" or "out"
-    var addList = direction == "in" ? document.getElementById('included-users') : document.getElementById('excluded-users');
-    var removeList = direction == "in" ? document.getElementById('excluded-users') : document.getElementById('included-users');
+	// Assuming only internally called with "in" or "out"
+	var addList = direction == "in" ? document.getElementById('included-users') : document.getElementById('excluded-users');
+	var removeList = direction == "in" ? document.getElementById('excluded-users') : document.getElementById('included-users');
 
-    for (var i = 0; i < removeList.length;) {
-        if (removeList[i].selected) {
-            var foo = removeList[i];
-            addList.add(new Option(foo.text, foo.value));
-            removeList.remove(i);
-        } else {
-            i++;
-        }
-    }
+	for (var i = 0; i < removeList.length;) {
+		if (removeList[i].selected) {
+			var foo = removeList[i];
+			addList.add(new Option(foo.text, foo.value));
+			removeList.remove(i);
+		} else {
+			i++;
+		}
+	}
 }
 
 var selectAll = function () {
-    $('#included-users option').prop("selected", "true"); // Select all users in ProjectUsers listbox for model binding
-    return true;
+	$('#included-users option').prop("selected", "true"); // Select all users in ProjectUsers listbox for model binding
+	return true;
 };
 
 //var ArbitrarySearcher = function () {
@@ -261,87 +261,87 @@ var selectAll = function () {
 //});
 
 var project_assign_module = function () {
-    var modal;
-    var left;
-    var right;
-    var left_list;
-    var right_list;
-    var left_input;
-    var right_input;
-    var left_select;
-    var right_select;
-    var actions;
-    var action_move_in;
-    var action_move_out;
+	var modal;
+	var left;
+	var right;
+	var left_list;
+	var right_list;
+	var left_input;
+	var right_input;
+	var left_select;
+	var right_select;
+	var actions;
+	var action_move_in;
+	var action_move_out;
 
-    function init() {
-        modal = $("#ProjectForm");
-        actions = modal.find(".actions");
-        action_move_in = actions.find(".move-in"); //?
-        action_move_out = actions.find(".move-out"); //?
-        left = modal.find(".swapper-ui .left");
-        right = modal.find(".swapper-ui .right");
-        left_select = left.find("select")
-        right_select = right.find("select")
-        left_input = left.find("input"); // Left search bar
-        right_input = right.find("input"); // Right search bar
+	function init() {
+		modal = $("#ProjectForm");
+		actions = modal.find(".actions");
+		action_move_in = actions.find(".move-in"); //?
+		action_move_out = actions.find(".move-out"); //?
+		left = modal.find(".swapper-ui .left");
+		right = modal.find(".swapper-ui .right");
+		left_select = left.find("select")
+		right_select = right.find("select")
+		left_input = left.find("input"); // Left search bar
+		right_input = right.find("input"); // Right search bar
 
-        // Changed parameters for filter and refilter at call to be .find() result
-        // each time to ensure the search results reflected changes made in the modal
-        left_input.keyup(_.debounce(function () {
-            filter(this.value.toLowerCase(), left.find("select option"));
-        }, 250));
-        right_input.keyup(_.debounce(function () {
-            filter(this.value.toLowerCase(), right.find("select option"));
-        }, 250));
-    }
+		// Changed parameters for filter and refilter at call to be .find() result
+		// each time to ensure the search results reflected changes made in the modal
+		left_input.keyup(_.debounce(function () {
+			filter(this.value.toLowerCase(), left.find("select option"));
+		}, 250));
+		right_input.keyup(_.debounce(function () {
+			filter(this.value.toLowerCase(), right.find("select option"));
+		}, 250));
+	}
 
-    function refilter() {
-        filter(left_input.value.toLowerCase(), left.find("select option"));
-        filter(right_input.value.toLowerCase(), right.find("select option"));
-    }
+	function refilter() {
+		filter(left_input.value.toLowerCase(), left.find("select option"));
+		filter(right_input.value.toLowerCase(), right.find("select option"));
+	}
 
-    // filters an element on a phrase
-    function filter(text, what) {
-        _.each(what, function (ele) {
-            var $ele = $(ele);
-            if (!$ele.text_lower) {
-                $ele.text_lower = $ele.text().toLowerCase();
-                if ($ele.attr("data-search"))
-                    $ele.text_lower += " " + $ele.attr("data-search").toLowerCase();
-            }
-            var val = $ele.text_lower;
-            if (val.indexOf(text) > -1) {
-                $ele.addClass("included").removeClass("excluded");
-            } else {
-                $ele.addClass("excluded").removeClass("included");
-            }
-        })
-    }
+	// filters an element on a phrase
+	function filter(text, what) {
+		_.each(what, function (ele) {
+			var $ele = $(ele);
+			if (!$ele.text_lower) {
+				$ele.text_lower = $ele.text().toLowerCase();
+				if ($ele.attr("data-search"))
+					$ele.text_lower += " " + $ele.attr("data-search").toLowerCase();
+			}
+			var val = $ele.text_lower;
+			if (val.indexOf(text) > -1) {
+				$ele.addClass("included").removeClass("excluded");
+			} else {
+				$ele.addClass("excluded").removeClass("included");
+			}
+		})
+	}
 
-    function get_in() {
-        return _.map(right_select.find("option.in"), function (ele) { return ele.value });
-    }
+	function get_in() {
+		return _.map(right_select.find("option.in"), function (ele) { return ele.value });
+	}
 
-    function get_out() {
-        return _.map(left_select.find("option.out"), function (ele) { return ele.value })
-    }
+	function get_out() {
+		return _.map(left_select.find("option.out"), function (ele) { return ele.value })
+	}
 
-    return {
-        init: init,
-        filter: filter,
-        refilter: refilter,
-        get_in: get_in,
-        get_out: get_out
-    }
+	return {
+		init: init,
+		filter: filter,
+		refilter: refilter,
+		get_in: get_in,
+		get_out: get_out
+	}
 }()
 
 $(document).ready(function () {
-    project_assign_module.init()
+	project_assign_module.init()
 });
 
 function formChange() {
-    var date = $('#StartDate').val();
+	var date = $('#StartDate').val();
 }
 
 $('form').change(function () { formChange(); });
@@ -465,32 +465,32 @@ $('form').change(function () { formChange(); });
 //);
 
 $('#datePickerStart').datepicker({
-    showOn: "button",
-    buttonImageOnly: true,
-    onSelect: function () {
-        $(this).change();
-    }
+	showOn: "button",
+	buttonImageOnly: true,
+	onSelect: function () {
+		$(this).change();
+	}
 });
 $('#datePickerStart').on("change", function () {
-    var enteredDate = moment($(this).val());
-    if (enteredDate.year() < 2000) {
-        enteredDate.add(100, 'years');
-    }
-    $('#StartDate').val(DateConvert.GetDaysFromMoment(enteredDate));
+	var enteredDate = moment($(this).val());
+	if (enteredDate.year() < 2000) {
+		enteredDate.add(100, 'years');
+	}
+	$('#StartDate').val(DateConvert.GetDaysFromMoment(enteredDate));
 });
 $('#datePickerEnd').datepicker({
-    showOn: "button",
-    buttonImageOnly: true,
-    onSelect: function () {
-        $(this).change();
-    }
+	showOn: "button",
+	buttonImageOnly: true,
+	onSelect: function () {
+		$(this).change();
+	}
 });
 $('#datePickerEnd').on("change", function () {
-    var enteredDate = moment($(this).val());
-    if (enteredDate.year() < 2000) {
-        enteredDate.add(100, 'years');
-    }
-    $('#EndDate').val(DateConvert.GetDaysFromMoment(enteredDate));
+	var enteredDate = moment($(this).val());
+	if (enteredDate.year() < 2000) {
+		enteredDate.add(100, 'years');
+	}
+	$('#EndDate').val(DateConvert.GetDaysFromMoment(enteredDate));
 });
 
 $(function () {
@@ -502,11 +502,11 @@ $(function () {
 	if (!isNaN(initEnd)) {
 		$('#datePickerEnd').datepicker("setDate", initEnd.toDate());
 	}
-    $('.ui-datepicker-trigger').remove();
-    $('#datePickerStartButton').on("click", function () {
-        $('#datePickerStart').datepicker("show");
-    });
-    $('#datePickerEndButton').on("click", function () {
-        $('#datePickerEnd').datepicker("show");
-    });
+	$('.ui-datepicker-trigger').remove();
+	$('#datePickerStartButton').on("click", function () {
+		$('#datePickerStart').datepicker("show");
+	});
+	$('#datePickerEndButton').on("click", function () {
+		$('#datePickerEnd').datepicker("show");
+	});
 });

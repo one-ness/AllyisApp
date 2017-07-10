@@ -4,6 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+
 namespace AllyisApps.DBModel.Billing
 {
 	/// <summary>
@@ -19,12 +21,12 @@ namespace AllyisApps.DBModel.Billing
 		/// <summary>
 		/// Gets or sets SkuId.
 		/// </summary>
-		public int SkuId { get; set; }
+		public short SkuId { get; set; }
 
 		/// <summary>
 		/// Gets or sets ProductId.
 		/// </summary>
-		public int ProductId { get; set; }
+		public short ProductId { get; set; }
 
 		/// <summary>
 		/// Gets or sets Name.
@@ -44,6 +46,26 @@ namespace AllyisApps.DBModel.Billing
 		/// <summary>
 		/// Gets or sets BillingFrequency.
 		/// </summary>
-		public string BillingFrequency { get; set; }
+		public byte BillingFrequency { get; set; }
+
+		/// <summary>
+		/// Gets or sets the block size
+		/// </summary>
+		public int BlockSize { get; set; }
+
+		/// <summary>
+		/// Gets or sets is active
+		/// </summary>
+		public bool IsActive { get; set; }
+
+		/// <summary>
+		/// Gets or sets promotional cost per block
+		/// </summary>
+		public decimal PromoCostPerBlock { get; set; }
+
+		/// <summary>
+		/// Gets or sets the date on which the promotional cost ends
+		/// </summary>
+		public DateTime? PromotDeadline { get; set; }
 	}
 }

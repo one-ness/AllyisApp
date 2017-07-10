@@ -43,16 +43,16 @@ namespace AllyisApps.Controllers
 			return this.View(ViewConstants.Subscribe, model);
 		}
 
-        /// <summary>
-        /// Uses services to populate a <see cref="ProductSubscriptionViewModel"/> and returns it.
-        /// </summary>
-        /// <param name="productInfo">Product for product.</param>
-        /// <param name="currentSubscription">SubscriptionInfo for this org's subscription to the product.</param>
-        /// <param name="skus">List of SkuInfos for this product's skus.</param>
-        /// <param name="stripeToken">This org's billing stripe token.</param>
-        /// <param name="orgId"></param>
-        /// <returns>The ProductSubscriptionViewModel.</returns>
-        [CLSCompliant(false)]
+		/// <summary>
+		/// Uses services to populate a <see cref="ProductSubscriptionViewModel"/> and returns it.
+		/// </summary>
+		/// <param name="productInfo">Product for product.</param>
+		/// <param name="currentSubscription">SubscriptionInfo for this org's subscription to the product.</param>
+		/// <param name="skus">List of SkuInfos for this product's skus.</param>
+		/// <param name="stripeToken">This org's billing stripe token.</param>
+		/// <param name="orgId"></param>
+		/// <returns>The ProductSubscriptionViewModel.</returns>
+		[CLSCompliant(false)]
 		public ProductSubscriptionViewModel ConstructProductSubscriptionViewModel(Product productInfo, SubscriptionInfo currentSubscription, List<SkuInfo> skus, string stripeToken, int orgId)
 		{
 			if (productInfo != null)
@@ -112,7 +112,7 @@ namespace AllyisApps.Controllers
 
 			if (AppService.Subscribe(model.NumberOfUsers, model.ProductId, model.ProductName, model.SelectedSku, model.PreviousSku, model.Billing.Amount, model.Token, addingNewBilling, billingServicesEmail, token, model.OrganizationId))
 			{
-				return this.RedirectToAction(ActionConstants.Manage, new { id = model.OrganizationId });
+				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
 			}
 			else
 			{

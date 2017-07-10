@@ -53,17 +53,17 @@ namespace AllyisApps.Services
 			return (int)date.Value.Subtract(DateTime.MinValue).TotalDays;
 		}
 
-        /// <summary>
-        /// Converts an int representing days since the DateTime min value (Jan 1st, 0001) into a DateTime date.
-        /// </summary>
-        /// <param name="days">An int of the date as days since Jan 1st, 0001. Use -1 for null dates.</param>
-        /// <returns>The DateTime date.</returns>
-        public DateTime? GetDateTimeFromDays(int days)
+		/// <summary>
+		/// Converts an int representing days since the DateTime min value (Jan 1st, 0001) into a DateTime date.
+		/// </summary>
+		/// <param name="days">An int of the date as days since Jan 1st, 0001. Use -1 for null dates.</param>
+		/// <returns>The DateTime date.</returns>
+		public DateTime? GetDateTimeFromDays(int days)
 		{
-            if (days <= -1)
-            {
-                return null;
-            }
+			if (days <= -1)
+			{
+				return null;
+			}
 			return GetDateFromDays(days);
 		}
 
@@ -141,14 +141,14 @@ namespace AllyisApps.Services
 			DBHelper.DeleteTimeEntry(timeEntryId);
 		}
 
-        /// <summary>
-        /// Gets a list of <see cref="TimeEntryInfo"/>'s for a given organization and start/end times.
-        /// </summary>
-        /// <param name="orgId"></param>
-        /// <param name="start">Starting. <see cref="DateTime"/></param>
-        /// <param name="end">Ending. <see cref="DateTime"/></param>
-        /// <returns>A list of TimeEntryInfo's for a given organization and start/end times.</returns>
-        public IEnumerable<TimeEntryInfo> GetTimeEntriesOverDateRange(int orgId, DateTime start, DateTime end)
+		/// <summary>
+		/// Gets a list of <see cref="TimeEntryInfo"/>'s for a given organization and start/end times.
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <param name="start">Starting. <see cref="DateTime"/></param>
+		/// <param name="end">Ending. <see cref="DateTime"/></param>
+		/// <returns>A list of TimeEntryInfo's for a given organization and start/end times.</returns>
+		public IEnumerable<TimeEntryInfo> GetTimeEntriesOverDateRange(int orgId, DateTime start, DateTime end)
 		{
 			#region Validation
 
@@ -173,7 +173,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets a list of <see cref="TimeEntryInfo"/>'s for a given set of users, organization, and start/end times.
 		/// </summary>
-        /// <param name="organizationId">The organization's Id</param>
+		/// <param name="organizationId">The organization's Id</param>
 		/// <param name="userIds">List of user Id's.</param>
 		/// <param name="start">Starting. <see cref="DateTime"/></param>
 		/// <param name="end">Ending. <see cref="DateTime"/></param>
@@ -256,7 +256,7 @@ namespace AllyisApps.Services
 		/// Creates a holiday and related time entries for an organization.
 		/// </summary>
 		/// <param name="holiday">Holiday.</param>
-        /// <param name="subscriptionId">Subscription ID</param>
+		/// <param name="subscriptionId">Subscription ID</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool CreateHoliday(Holiday holiday, int subscriptionId)
 		{
@@ -270,8 +270,8 @@ namespace AllyisApps.Services
 		/// Deletes a holiday and related time entries for the current organization.
 		/// </summary>
 		/// <param name="holidayId">Id of holiday to delete.</param>
-        /// <param name="orgId">The organization's ID</param>
-        /// <param name="subscriptionId">The subscription id</param>
+		/// <param name="orgId">The organization's ID</param>
+		/// <param name="subscriptionId">The subscription id</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool DeleteHoliday(int holidayId, int orgId, int subscriptionId)
 		{
@@ -293,8 +293,8 @@ namespace AllyisApps.Services
 		/// Creates a new pay class for an organization.
 		/// </summary>
 		/// <param name="payClassName">Name of pay class.</param>
-        /// <param name="orgId">Organization ID</param>
-        /// <param name="subscriptionId">Subscription ID</param>
+		/// <param name="orgId">Organization ID</param>
+		/// <param name="subscriptionId">Subscription ID</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool CreatePayClass(string payClassName, int orgId, int subscriptionId)
 		{
@@ -307,14 +307,14 @@ namespace AllyisApps.Services
 		/// Deletes a pay class.
 		/// </summary>
 		/// <param name="payClassId">Pay class Id.</param>
-        /// <param name="orgId">The organization's Id</param>
-        /// <param name="subscriptionId">The subscription's Id</param>
-        /// <param name="destPayClass">The id of the destination payclass</param>
+		/// <param name="orgId">The organization's Id</param>
+		/// <param name="subscriptionId">The subscription's Id</param>
+		/// <param name="destPayClass">The id of the destination payclass</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool DeletePayClass(int payClassId, int orgId, int subscriptionId, int? destPayClass)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);            
-            DBHelper.DeletePayClass(payClassId, destPayClass);
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
+			DBHelper.DeletePayClass(payClassId, destPayClass);
 			return true;
 		}
 
@@ -350,8 +350,8 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates the Start of Week for an organization.
 		/// </summary>
-        /// <param name="organizationId">The organization's Id</param>
-        /// <param name="subscriptionId">The subscription's Id</param>
+		/// <param name="organizationId">The organization's Id</param>
+		/// <param name="subscriptionId">The subscription's Id</param>
 		/// <param name="startOfWeek">Start of Week.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool UpdateStartOfWeek(int organizationId, int subscriptionId, int startOfWeek)
@@ -373,8 +373,8 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates overtime settings for an organization.
 		/// </summary>
-        /// <param name="subscriptionId">The subscription's Id</param>
-        /// <param name="organizationId">The organization's Id</param>
+		/// <param name="subscriptionId">The subscription's Id</param>
+		/// <param name="organizationId">The organization's Id</param>
 		/// <param name="overtimeHours">Hours until overtime.</param>
 		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
 		/// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
@@ -399,22 +399,23 @@ namespace AllyisApps.Services
 			}
 
 			#endregion Validation
+
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditOthers, subscriptionId);
 			DBHelper.UpdateOvertime(organizationId, overtimeHours, overtimePeriod, overtimeMultiplier);
 			return true;
 		}
 
-        /// <summary>
-        /// Prepares the Excel file for output of time entry information.
-        /// </summary>
-        /// <param name="orgId">The current Organization Id</param>
-        /// <param name="userIds">List of user ids to filter by.</param>
-        /// <param name="startingDate">Start of date range.</param>
-        /// <param name="endingDate">End of date range.</param>
-        /// <param name="projectId">Project id to filter by.</param>
-        /// <param name="customerId">Customer id to filter by.</param>
-        /// <returns>The stream writer.</returns>
-        public StreamWriter PrepareCSVExport(int orgId, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
+		/// <summary>
+		/// Prepares the Excel file for output of time entry information.
+		/// </summary>
+		/// <param name="orgId">The current Organization Id</param>
+		/// <param name="userIds">List of user ids to filter by.</param>
+		/// <param name="startingDate">Start of date range.</param>
+		/// <param name="endingDate">End of date range.</param>
+		/// <param name="projectId">Project id to filter by.</param>
+		/// <param name="customerId">Customer id to filter by.</param>
+		/// <returns>The stream writer.</returns>
+		public StreamWriter PrepareCSVExport(int orgId, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
 			//Preparing data
 			IEnumerable<TimeEntryInfo> data = new List<TimeEntryInfo>();
@@ -508,15 +509,15 @@ namespace AllyisApps.Services
 			return output;
 		}
 
-        /// <summary>
-        /// Updates the lock date setttings.
-        /// </summary>
-        /// <param name="lockDateUsed">Whether or not to use a lock date.</param>
-        /// <param name="lockDatePeriod">The lock date period (days/weeks/months).</param>
-        /// <param name="lockDateQuantity">The quantity of the selected period.</param>
-        /// <param name="orgId"></param>
-        /// <returns></returns>
-        public bool UpdateLockDate(bool lockDateUsed, string lockDatePeriod, int lockDateQuantity, int orgId)
+		/// <summary>
+		/// Updates the lock date setttings.
+		/// </summary>
+		/// <param name="lockDateUsed">Whether or not to use a lock date.</param>
+		/// <param name="lockDatePeriod">The lock date period (days/weeks/months).</param>
+		/// <param name="lockDateQuantity">The quantity of the selected period.</param>
+		/// <param name="orgId"></param>
+		/// <returns></returns>
+		public bool UpdateLockDate(bool lockDateUsed, string lockDatePeriod, int lockDateQuantity, int orgId)
 		{
 			if (!new string[] { "Days", "Weeks", "Months" }.Contains(lockDatePeriod))
 			{
@@ -531,13 +532,13 @@ namespace AllyisApps.Services
 			return DBHelper.UpdateLockDate(orgId, lockDateUsed, lockDatePeriod, lockDateQuantity);
 		}
 
-        /// <summary>
-        /// Returns a SettingsInfo with start of week, overtime, and lock date settings, a list of PayClassInfos,
-        /// and a list of Holidays for the current organization.
-        /// </summary>
-        /// <param name="subscriptionId">Subscription Id</param>
-        /// <returns></returns>
-        public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int subscriptionId)
+		/// <summary>
+		/// Returns a SettingsInfo with start of week, overtime, and lock date settings, a list of PayClassInfos,
+		/// and a list of Holidays for the current organization.
+		/// </summary>
+		/// <param name="subscriptionId">Subscription Id</param>
+		/// <returns></returns>
+		public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int subscriptionId)
 		{
 			UserSubscription subInfo = null;
 			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
@@ -557,7 +558,7 @@ namespace AllyisApps.Services
 		/// for all time entries for the given user in the given time range.
 		/// </summary>
 		/// <param name="userId">User Id.</param>
-        /// <param name="orgId">Organization Id</param>
+		/// <param name="orgId">Organization Id</param>
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
 		/// <returns></returns>
@@ -570,15 +571,15 @@ namespace AllyisApps.Services
 			{
 				userId = UserContext.UserId;
 			}
-            if (userId <= 0)
+			if (userId <= 0)
 			{
 				throw new ArgumentException("User Id cannot be zero or negative.");
 			}
-            if (orgId <= 0)
-            {
-                throw new ArgumentException("Organization Id cannot be zero or negative.");
-            }
-            if (startingDate.HasValue && endingDate.HasValue && DateTime.Compare(startingDate.Value, endingDate.Value) > 0)
+			if (orgId <= 0)
+			{
+				throw new ArgumentException("Organization Id cannot be zero or negative.");
+			}
+			if (startingDate.HasValue && endingDate.HasValue && DateTime.Compare(startingDate.Value, endingDate.Value) > 0)
 			{
 				throw new ArgumentException("Date range cannot end before it starts.");
 			}

@@ -6,7 +6,6 @@
 
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using System;
 using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
@@ -87,7 +86,7 @@ namespace AllyisApps.Controllers
 
 		/// <summary>
 		/// Removes the provided invitation from the invitations table.
-        /// <paramref name="id"/>Organization's id
+		/// <paramref name="id"/>Organization's id
 		/// </summary>
 		[HttpPost]
 		public ActionResult RemoveInvitation(int id, int invitationId)
@@ -95,7 +94,7 @@ namespace AllyisApps.Controllers
 			this.AppService.CheckOrgAction(AppService.OrgAction.DeleteInvitation, id);
 			AppService.RemoveInvitation(id, invitationId);
 			Notifications.Add(new BootstrapAlert(Resources.Strings.InvitationDeleteNotification, Variety.Success));
-			return this.RedirectToAction(ActionConstants.Manage, new { id = id });
+			return this.RedirectToAction(ActionConstants.ManageOrg, new { id = id });
 		}
 	}
 }
