@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 			AppService.RemoveOrganizationUser(id, userId);
 			Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
-			return this.RedirectToAction(ActionConstants.Manage, new { id = id });
+			return this.RedirectToAction(ActionConstants.ManageOrg, new { id = id });
 		}
 	}
 }

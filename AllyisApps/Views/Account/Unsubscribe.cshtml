@@ -19,7 +19,7 @@
             @using (Html.BeginForm(ActionConstants.Unsubscribe, ControllerConstants.Account, FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
-                @Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, new { id = Model.OrganizationId, productId = Model.ProductId }, htmlAttributes: new { @class = "btn btn-default" })
+                @Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId, productId = Model.ProductId }, htmlAttributes: new { @class = "btn btn-default" })
                 <input data-val="true" id="OrganizationId" name="OrganizationId" type="hidden" value="@Model.OrganizationId" />
                 <input data-val="true" id="ProductId" name="ProductId" type="hidden" value="@Model.ProductId" />
                 <input data-val="true" id="PreviousSku" name="PreviousSku" type="hidden" value="@Model.PreviousSku" />

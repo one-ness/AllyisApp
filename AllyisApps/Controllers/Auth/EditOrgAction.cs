@@ -48,7 +48,7 @@ namespace AllyisApps.Controllers
 					{
 						// Organization updated successfully
 						Notifications.Add(new BootstrapAlert(@Resources.Strings.OrganizationDetailsUpdated, Variety.Success));
-						return this.RedirectToAction(ActionConstants.Manage, ControllerConstants.Account, new { id = model.OrganizationId });
+						return this.RedirectToAction(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = model.OrganizationId });
 					}
 				}
 				catch (ArgumentException)

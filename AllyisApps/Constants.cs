@@ -42,7 +42,7 @@ namespace AllyisApps
 		public const string IsSubdomainNameUnique = "issubdomainnameunique";
 		public const string LogOff = "logoff";
 		public const string LogOn = "logon";
-		public const string Manage = "manage";
+		public const string ManageOrg = "manageorg";
 		public const string ManagePermissions = "managepermissions";
 		public const string ManagePermissions2 = "managepermissions2";
 		public const string OrgIndex = "orgindex";

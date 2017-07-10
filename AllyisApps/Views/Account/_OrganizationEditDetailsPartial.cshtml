@@ -87,7 +87,7 @@
 				}
 				else
 				{
-					@Html.ActionLink(Strings.Cancel, ActionConstants.Manage, ControllerConstants.Account, new { id = Model.OrganizationId }, new { @class = "btn btn-default" })
+					@Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, new { @class = "btn btn-default" })
 				}
 				<input type="submit" value="@Strings.Save" class="btn btn-primary" id="submit" />
 			</div>
