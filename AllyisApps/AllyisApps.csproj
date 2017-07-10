@@ -533,8 +533,8 @@
     <Content Include="Views\Account\GetBillingSummary.cshtml" />
     <Content Include="Views\Shared\_ProductPanels.cshtml" />
     <Content Include="Views\Account\ManageOrg.cshtml" />
-    <Content Include="Views\Account\_OrgDetails.cshtml" />
-    <Content Include="Views\Account\_SubDetails.cshtml" />
+    <Content Include="Views\Account\_ManageOrgDetails.cshtml" />
+    <Content Include="Views\Account\_ManageOrgSubscriptions.cshtml" />
     <Content Include="Views\Account\_OrgMembers.cshtml" />
     <Content Include="Views\Account\_OrganizationEditDetailsPartial.cshtml" />
     <Content Include="Views\Account\Subscribe.cshtml" />
