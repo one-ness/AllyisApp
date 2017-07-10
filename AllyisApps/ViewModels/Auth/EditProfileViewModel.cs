@@ -7,7 +7,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -52,12 +51,12 @@ namespace AllyisApps.ViewModels.Auth
 		[Display(Name = "Last Name")]
 		public string LastName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the user's phone number.
-        /// </summary>
-        [RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
-        //[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")] // [Phone] does not work //I am not conviced that this is a good idea either.
-        [Display(Name = "Phone Number")]
+		/// <summary>
+		/// Gets or sets the user's phone number.
+		/// </summary>
+		[RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
+		//[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")] // [Phone] does not work //I am not conviced that this is a good idea either.
+		[Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
 
 		/// <summary>

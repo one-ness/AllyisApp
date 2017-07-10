@@ -18,13 +18,13 @@ namespace AllyisApps.Controllers
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
-        /// <summary>
-        /// Get: Account/Manage/id
-        /// The management page for an organization, displays billing, subscriptions, etc.
-        /// </summary>
-        /// <param name="id">The organization Id</param>
-        /// <returns>The organization's management page.</returns>
-        public ActionResult ManageOrg(int id)
+		/// <summary>
+		/// Get: Account/Manage/id
+		/// The management page for an organization, displays billing, subscriptions, etc.
+		/// </summary>
+		/// <param name="id">The organization Id</param>
+		/// <returns>The organization's management page.</returns>
+		public ActionResult ManageOrg(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 			ManageOrgViewModel model = this.ConstructOrganizationManageViewModel(id);
@@ -69,13 +69,13 @@ namespace AllyisApps.Controllers
 				SubscriptionCount = infos.Item3.Count,
 				Subscriptions = infos.Item6.Select(p =>
 				{
-                    return new SubscriptionDisplayViewModel
-                    {
-                        Info = infos.Item3.Where(s => s.ProductId == p.ProductId).SingleOrDefault(),
-                        ProductId = p.ProductId,
-                        ProductName = p.ProductName,
-                        ProductDescription = p.ProductDescription,
-                        OrganizationId = orgId
+					return new SubscriptionDisplayViewModel
+					{
+						Info = infos.Item3.Where(s => s.ProductId == p.ProductId).SingleOrDefault(),
+						ProductId = p.ProductId,
+						ProductName = p.ProductName,
+						ProductDescription = p.ProductDescription,
+						OrganizationId = orgId
 					};
 				})
 			};

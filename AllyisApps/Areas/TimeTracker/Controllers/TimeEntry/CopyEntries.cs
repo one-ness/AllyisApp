@@ -27,13 +27,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="startDateCopy">The start (inclusive) of the date range for the entries to be copied.</param>
 		/// <param name="endDateCopy">The end (inclusive) of the date range for the entries to be copied.</param>
 		/// <param name="userId">The id for the user whose entries are being edited.</param>
-        /// <param name="subscriptionId">The subscription's Id</param>
+		/// <param name="subscriptionId">The subscription's Id</param>
 		/// <param name="startDate">The start of the date range of the TimeEntry index page.</param>
 		/// <param name="endDate">The end of the date range of the TimeEntry index page.</param>
 		/// <returns>The action result.</returns>
 		public ActionResult CopyEntries(DateTime startDateTarget, DateTime startDateCopy, DateTime endDateCopy, int userId, int subscriptionId, int startDate, int endDate)
 		{
-            #region Validation
+			#region Validation
 
 			// TODO flesh these out
 			if (startDateCopy > endDateCopy)
@@ -101,11 +101,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						continue; // A user can't create entries before/on the lock date.
 					}
 
-                    System.Diagnostics.Debug.WriteLine("WORKING: " + subscriptionId);
-                    // Don't copy holidays.
-                    if (entry.ProjectId > 0)
+					System.Diagnostics.Debug.WriteLine("WORKING: " + subscriptionId);
+					// Don't copy holidays.
+					if (entry.ProjectId > 0)
 					{
-                        AppService.CreateTimeEntry(new TimeEntryInfo
+						AppService.CreateTimeEntry(new TimeEntryInfo
 						{
 							UserId = userId,
 							ProjectId = entry.ProjectId,

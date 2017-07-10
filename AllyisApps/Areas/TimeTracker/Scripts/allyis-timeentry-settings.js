@@ -11,7 +11,7 @@ function deleteHoliday(holidayId, holidayName) {
 }
 
 function mergePayClass(payClassId) {
-    window.location = mergePayClassUrl.replace('-1', payClassId);
+	window.location = mergePayClassUrl.replace('-1', payClassId);
 }
 
 function hideOT(hideIt) {

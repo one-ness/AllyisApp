@@ -5,7 +5,7 @@
 // <strong id="capsWarningDiv" style="visibility:hidden">@AllyisApps.Resources.Views.Account.Strings.CapsLock</strong>
 
 document.addEventListener('keydown', function (event) {
-    document.msCapsLockWarningOff = true; //ie tries to give its own caps lock warning
-    var caps = event.getModifierState && event.getModifierState('CapsLock');
-    document.getElementById('capsWarningDiv').style.visibility = caps ? 'visible' : 'hidden';
+	document.msCapsLockWarningOff = true; //ie tries to give its own caps lock warning
+	var caps = event.getModifierState && event.getModifierState('CapsLock');
+	document.getElementById('capsWarningDiv').style.visibility = caps ? 'visible' : 'hidden';
 });

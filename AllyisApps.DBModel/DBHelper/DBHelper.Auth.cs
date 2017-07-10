@@ -782,13 +782,13 @@ namespace AllyisApps.DBModel
 					"[Auth].[AcceptInvitation]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
-                if (results == null) return null;
-                else
-                {
-                    return Tuple.Create(
-                        results.Read<string>().FirstOrDefault(),
-                        results.Read<string>().FirstOrDefault());
-                }
+				if (results == null) return null;
+				else
+				{
+					return Tuple.Create(
+						results.Read<string>().FirstOrDefault(),
+						results.Read<string>().FirstOrDefault());
+				}
 			}
 		}
 
