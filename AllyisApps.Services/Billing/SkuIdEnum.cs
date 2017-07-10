@@ -7,28 +7,18 @@
 namespace AllyisApps.Services
 {
 	/// <summary>
-	/// An enum of ints of possible SKUs.
+	/// SKUs offered by us. Must match the IDs inserted in to db.
 	/// </summary>
-	public enum SkuIdEnum : int
+	public enum SkuIdEnum : short
 	{
 		/// <summary>
 		/// TimeTracker SKU.
 		/// </summary>
-		TimeTracker = 1,
-
-		/// <summary>
-		/// TimeTrackerBasic SKU.
-		/// </summary>
-		TimeTrackerBasic,
-
-		/// <summary>
-		/// Consulting SKU.
-		/// </summary>
-		Consulting,
+		TimeTrackerBasic = 1,
 
 		/// <summary>
 		/// ConsultingBasic SKU.
 		/// </summary>
-		ConsultingBasic,
+		ExpenseTrackerBasic = 2,
 	}
 }
