@@ -254,6 +254,7 @@
     <Compile Include="Controllers\Auth\ConfirmEmailAction.cs" />
     <Compile Include="Controllers\Auth\CreateOrgAction.cs" />
     <Compile Include="Controllers\Auth\EditProfileAction.cs" />
+    <Compile Include="Controllers\Auth\EditSubscriptionAction.cs" />
     <Compile Include="Controllers\Auth\ForgotPasswordAction.cs" />
     <Compile Include="Controllers\Auth\ImportAction.cs" />
     <Compile Include="Controllers\Auth\IndexAction.cs" />
@@ -325,6 +326,7 @@
     <Compile Include="ViewModels\Auth\AddMemberViewModel.cs" />
     <Compile Include="ViewModels\Auth\ChangePasswordViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\Manage\EditSubscriptionUsersViewModel.cs" />
+    <Compile Include="ViewModels\Auth\EditSubscriptionViewModel.cs" />
     <Compile Include="ViewModels\Auth\IndexAndOrgsViewModel.cs" />
     <Compile Include="ViewModels\Auth\InvitationViewModel.cs" />
     <Compile Include="ViewModels\Auth\ManageOrgViewModel.cs" />
@@ -555,6 +557,7 @@
     <Content Include="Views\Account\_OrgMembers2.cshtml" />
     <Content Include="Views\Account\ViewUser.cshtml" />
     <Content Include="Views\Account\_OrgPanel.cshtml" />
+    <Content Include="Views\Account\EditSubscription.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">
@@ -902,7 +905,9 @@
     <Content Include="Views\Shared\_Breadcrumbs.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\EditSubscriptionAction\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
