@@ -1453,6 +1453,9 @@
   <data name="AddMultipleMembers" xml:space="preserve">
     <value>Add Multiple Members (upload a file)</value>
   </data>
+  <data name="Invitations" xml:space="preserve">
+    <value>Invitations</value>
+  </data>
   <data name="Products" xml:space="preserve">
     <value>Products</value>
   </data>

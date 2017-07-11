@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Auth].[User] (
-    [UserId]                INT              IDENTITY (1, 1) NOT NULL,
+    [UserId]                INT              IDENTITY (111119, 3) NOT NULL,
     [FirstName]             NVARCHAR (32)    NOT NULL,
     [LastName]              NVARCHAR (32)    NOT NULL,
     [Email]                 NVARCHAR (384)   NOT NULL,

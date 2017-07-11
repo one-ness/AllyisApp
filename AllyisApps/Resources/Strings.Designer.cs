@@ -1681,6 +1681,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invitations.
+        /// </summary>
+        public static string Invitations {
+            get {
+                return ResourceManager.GetString("Invitations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have been invited to join an organization:.
         /// </summary>
         public static string Invite {

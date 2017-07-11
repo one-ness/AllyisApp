@@ -10,7 +10,7 @@
 }
 
 <div class="row">
-    <div class="col-md-8 col-md-push-2">
+	<div class="col-md-8 col-md-push-2">
 
 		<div class="row">
 			<div class="col-xs-12">
@@ -18,71 +18,71 @@
 			</div>
 		</div>
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2 style="margin-top: 0px; margin-bottom: 0px;">
-                    @Model.UserInfo.FirstName @Model.UserInfo.LastName
-                    <span class="small text-muted" style="margin-left: 10px;">
-                        (@Model.UserInfo.Email)
-                    </span>
-                </h2>
-            </div>
-            <div class="panel-body">
-                <div class="col-sm-8 index-details">
-                    <p>
-                        <label>@Strings.PhoneNumber:</label>
-                        @Model.UserInfo.PhoneNumber @Model.UserInfo.PhoneExtension
-                    </p>
-                    <p>
-                        <label>@Strings.Address:</label>
-                        <span class="address-row">@Model.UserInfo.Address</span>
-                        <span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
-                    </p>
-                </div>
-                <div class="col-sm-4 vertically-stacked-buttons text-right">
-                    @Html.ActionLink(Strings.ChangePassword,    ActionConstants.ChangePassword, ControllerConstants.Account, null, new { @class = "btn btn-default" })
-                    @Html.ActionLink(Strings.EditProfile,       ActionConstants.EditProfile,    null, new { @class = "btn btn-default" })
-                </div>
-            </div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h2 style="margin-top: 0px; margin-bottom: 0px;">
+					@Model.UserInfo.FirstName @Model.UserInfo.LastName
+					<span class="small text-muted" style="margin-left: 10px;">
+						(@Model.UserInfo.Email)
+					</span>
+				</h2>
+			</div>
+			<div class="panel-body">
+				<div class="col-sm-8 index-details">
+					<p>
+						<label>@Strings.PhoneNumber:</label>
+						@Model.UserInfo.PhoneNumber @Model.UserInfo.PhoneExtension
+					</p>
+					<p>
+						<label>@Strings.Address:</label>
+						<span class="address-row">@Model.UserInfo.Address</span>
+						<span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
+					</p>
+				</div>
+				<div class="col-sm-4 vertically-stacked-buttons text-right">
+					@Html.ActionLink(Strings.ChangePassword, ActionConstants.ChangePassword, ControllerConstants.Account, null, new { @class = "btn btn-default" })
+					@Html.ActionLink(Strings.EditProfile, ActionConstants.EditProfile, null, new { @class = "btn btn-default" })
+				</div>
+			</div>
 
-            @if (Model.InviteInfos.Count > 0)
-            {
-                <div class="panel-body">
-                    <div class="index-details" style="padding-left: 15px">
-                        <p>
-                            <label>Invitations</label>
-                            @if (Model.InviteInfos.Count == 1)
-                            {
-                                @Strings.Invite
-                            }
-                            else
-                            {
-                                @Strings.Invites
-                            }
-                        </p>
-                        @foreach (InvitationInfo invite in Model.InviteInfos)
-                        {
-                            <div>
-                                <span class="col-xs-4 col-sm-6">@invite.OrganizationName</span>
-                                <form action="Account/Accept" method="post">
-                                    <input type="hidden" name="invitationId" value="@invite.InvitationId" />
-                                    <span class="col-xs-4 col-sm-3 padding">
-                                        <button type="submit" formmethod="post" formaction="/Account/Accept" class="btn btn-primary col-xs-12">@Strings.Accept</button>
-                                    </span>
-                                </form>
-                                <form action="Account/Reject" method="post">
-                                    <input type="hidden" name="invitationId" value="@invite.InvitationId" />
-                                    <span class="col-xs-4 col-sm-3 padding">
-                                        <button type="submit" formmethod="post" formaction="/Account/Reject" class="btn btn-danger col-xs-12">@Strings.Reject</button>
-                                    </span>
-                                </form>
-                            </div>
-                        }
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
+			@if (Model.InviteInfos.Count > 0)
+			{
+				<div class="panel-body">
+					<div class="index-details" style="padding-left: 15px">
+						<p>
+							<label>@Strings.Invitations</label>
+							@if (Model.InviteInfos.Count == 1)
+							{
+								@Strings.Invite
+							}
+							else
+							{
+								@Strings.Invites
+							}
+						</p>
+						@foreach (InvitationInfo invite in Model.InviteInfos)
+						{
+							<div>
+								<span class="col-xs-4 col-sm-6">@invite.OrganizationName</span>
+								@using (Html.BeginForm(ActionConstants.AcceptInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
+								{
+									<span class="col-xs-4 col-sm-3 padding">
+										<input type="submit" value="@Strings.Accept" class="btn btn-primary col-xs-12" />
+									</span>
+								}
+								@using (Html.BeginForm(ActionConstants.RejectInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
+								{
+									<span class="col-xs-4 col-sm-3 padding">
+										<input type="submit" value="@Strings.Reject" class="btn btn-primary col-xs-12" />
+									</span>
+								}
+							</div>
+						}
+					</div>
+				</div>
+			}
+		</div>
+	</div>
 </div>
 
 <div class="row">
