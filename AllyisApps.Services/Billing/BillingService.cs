@@ -420,7 +420,8 @@ namespace AllyisApps.Services
 			{
 				ProductId = product.ProductId,
 				ProductName = product.Name,
-				ProductDescription = product.Description
+				ProductDescription = product.Description,
+				AreaUrl = product.AreaUrl
 			};
 		}
 
@@ -790,7 +791,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("productId", "Product ID cannot be 0 or negative.");
 			}
 
-			if (productId == AppService.GetProductIdByName("TimeTracker"))
+			if (productId == AppService.GetProductIdByName("Time Tracker"))
 			{
 				DBHelper.InitializeTimeTrackerSettings(orgId);
 			}

@@ -51,7 +51,8 @@ namespace AllyisApps.Controllers
 							SubscriptionId = userSubInfo.SubscriptionId,
 							ProductId = (int)userSubInfo.ProductId,
 							ProductName = userSubInfo.ProductName,
-							ProductDescription = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription : ""
+							ProductDescription = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription : "",
+							AreaUrl = userSubInfo.AreaUrl
 						});
 					}
 				}

@@ -75,7 +75,8 @@ namespace AllyisApps.Controllers
 						ProductId = p.ProductId,
 						ProductName = p.ProductName,
 						ProductDescription = p.ProductDescription,
-						OrganizationId = orgId
+						OrganizationId = orgId,
+						AreaUrl = p.AreaUrl
 					};
 				})
 			};

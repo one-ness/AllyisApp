@@ -89,5 +89,10 @@
 		/// Gets or sets the id of the user's role in the product subscription.
 		/// </summary>
 		public int? ProductRoleId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the product area url.
+		/// </summary>
+		public string AreaUrl { get; set; }
 	}
 }
