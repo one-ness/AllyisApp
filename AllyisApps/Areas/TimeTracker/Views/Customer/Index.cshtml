@@ -51,9 +51,10 @@
            </text>
         }
 
-            function populateActiveForm() {
-                selectedCust = null;
-                selectedProj = null;
+        function populateActiveForm() {
+            $("#inactive-" + selectedCust).css("font-weight", "Normal");
+            selectedCust = null;
+            selectedProj = null;
             $(function showActiveCustomers() {
                 $("#inactiveTab").removeClass('active');
                 $("#activeTab").addClass('active');
@@ -67,11 +68,12 @@
                     </text>
                 }
             });
-           }
+        }
 
-           function populateInactiveForm() {
-               selectedCust = null;
-               selectedProj = null;
+        function populateInactiveForm() {
+            $("#" + selectedCust).css("font-weight", "Normal");
+            selectedCust = null;
+            selectedProj = null;
             $(function showInactiveCustomers() {
                 $("#activeTab").removeClass('active');
                 $("#inactiveTab").addClass('active');
