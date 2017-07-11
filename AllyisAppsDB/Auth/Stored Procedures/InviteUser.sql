@@ -46,9 +46,8 @@ BEGIN
 				[OrganizationId], 
 				[AccessCode], 
 				[IsActive], 
-				[OrgRole], 
-				[EmployeeType],
-				[ProjectId],
+				[OrgRoleId], 
+				[EmployeeTypeId],
 				[EmployeeId],
 				[DateOfBirth])
 			VALUES 

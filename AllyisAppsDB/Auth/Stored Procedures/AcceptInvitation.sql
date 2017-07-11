@@ -15,11 +15,10 @@ BEGIN
 
 	SELECT
 		@OrganizationId = [OrganizationId],
-		@OrgRole = [OrgRole],
+		@OrgRole = [OrgRoleId],
 		@Email = [Email],
-		@ProjectId = [ProjectId],
 		@EmployeeId = [EmployeeId],
-		@EmployeeTypeId = [EmployeeType]
+		@EmployeeTypeId = [EmployeeTypeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
 	WHERE [Invitation].[InvitationId] = @InvitationId AND [Invitation].[IsActive] = 1
 
