@@ -27,7 +27,7 @@
 
 	foreach (Product prod in Model.ProductList)
 	{
-		product_boxes.Add(package(prod.ProductId, prod.ProductName, string.Format("Content/icons/{0}.png", prod.ProductName)));
+		product_boxes.Add(package(prod.ProductId, prod.ProductName, string.Format("Content/icons/{0}.png", prod.AreaUrl)));
 	}
 }
 

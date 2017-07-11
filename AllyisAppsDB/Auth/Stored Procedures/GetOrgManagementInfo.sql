@@ -43,6 +43,7 @@ BEGIN
 
 	SELECT	[Product].[ProductId],
 		[Product].[Name] AS [ProductName],
+		[Product].[AreaUrl],
 		[Subscription].[SubscriptionId],
 		[Organization].[OrganizationId],
 		[Subscription].[SkuId],
@@ -84,7 +85,8 @@ BEGIN
 	SELECT
 		[Product].[ProductId],
 		[Product].[Name],
-		[Product].[Description]
+		[Product].[Description],
+		[Product].[AreaUrl]
 	FROM [Billing].[Product] WITH (NOLOCK) 
 	WHERE [IsActive] = 1
 	ORDER BY [Product].[Name]
