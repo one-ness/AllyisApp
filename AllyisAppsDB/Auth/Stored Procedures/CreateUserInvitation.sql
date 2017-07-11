@@ -23,10 +23,9 @@ BEGIN
 		[OrganizationId], 
 		[AccessCode], 
 		[IsActive], 
-		[OrgRole], 
-		[ProjectId],
+		[OrgRoleId], 
 		[EmployeeId],
-		[EmployeeType])
+		[EmployeeTypeId])
 	VALUES 
 		(@Email, 
 		@FirstName, 

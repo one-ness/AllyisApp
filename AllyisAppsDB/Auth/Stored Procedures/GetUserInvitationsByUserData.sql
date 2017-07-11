@@ -11,8 +11,7 @@ SELECT
 	[DateOfBirth], 
 	[OrganizationId], 
 	[AccessCode], 
-	[OrgRole],
-	[ProjectId],
+	[OrgRoleId],
 	[EmployeeId] 
 FROM [Auth].[Invitation]
 WITH (NOLOCK)
