@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Billing].[Subscription] (
-    [SubscriptionId]   INT           IDENTITY (1, 1) NOT NULL,
+    [SubscriptionId]   INT           IDENTITY (113969, 7) NOT NULL,
     [OrganizationId]   INT           NOT NULL,
     [SkuId]            SMALLINT           NOT NULL,
     [NumberOfUsers]    INT           NOT NULL DEFAULT 0,
