@@ -16,13 +16,12 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/EditSubscription.
 		/// </summary>
-		/// <param name="id">subscription id</param>
 		/// <returns>The result of this action.</returns>
 		[HttpGet]
-		public ActionResult EditSubscription(int id)
+		public ActionResult EditSubscription(/*int id*/)
         {
-			int orgId = AppService.UserContext.UserSubscriptions[id].OrganizationId;
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
+			//int orgId = AppService.UserContext.UserSubscriptions[id].OrganizationId;
+			//this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
 			return this.View(ViewConstants.EditSubscription);
 		}
     }

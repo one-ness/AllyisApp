@@ -16,6 +16,20 @@ namespace AllyisApps.ViewModels.Auth
 	/// </summary>
 	public class EditSubscriptionViewModel : BaseViewModel
 	{
+		/// <summary>
+		/// Gets or sets the current product's Id.
+		/// </summary>
+		public int ProductId { get; set; }
+
+		/// <summary>
+		/// Gets or sets all information relating to this product.
+		/// </summary>
+		public string ProductName { get; set; }
+
+		/// <summary>
+		/// Gets or sets a description of this product.
+		/// </summary>
+		public string ProductDescription { get; set; }
 
 		/// <summary>
 		/// the subscritpion that is being unsubscribed from

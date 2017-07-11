@@ -20,16 +20,14 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Removes the selected subscription from the database.
 		/// </summary>
-		/// <param name="id"> Subscription Id</param>
-		/// <param name="productId">The id of the product being unsubscribed from.</param>
 		/// <returns>Removes selected subscription.</returns>
 		[HttpGet]
-		public ActionResult Unsubscribe(int id, int productId)
+		public ActionResult Unsubscribe(/*int id, int productId*/)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, productId);
-			var infos = AppService.GetProductSubscriptionInfo(id, productId);
-			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
-			return this.View(model);
+			//this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, productId);
+			//var infos = AppService.GetProductSubscriptionInfo(id, productId);
+			//ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
+			return this.View(/*model*/);
 		}
 
 		/// <summary>
