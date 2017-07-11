@@ -1450,4 +1450,7 @@
   <data name="Salaried" xml:space="preserve">
     <value>asalariado</value>
   </data>
+  <data name="Products" xml:space="preserve">
+    <value>Productos</value>
+  </data>
 </root>

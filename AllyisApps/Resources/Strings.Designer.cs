@@ -2770,6 +2770,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Products.
+        /// </summary>
+        public static string Products {
+            get {
+                return ResourceManager.GetString("Products", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Project.
         /// </summary>
         public static string Project {
