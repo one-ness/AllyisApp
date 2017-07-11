@@ -33,8 +33,8 @@ namespace AllyisApps
 					routeHandler: new MvcRouteHandler()));
 
 			routes.Add("default",
-				new Route(url: "{controller}/{action}/{id}",
-					defaults: new RouteValueDictionary(new { controller = ControllerConstants.Home, action = ActionConstants.Index, id = UrlParameter.Optional }),
+				new Route(url: "{controller}/{action}/{id}/{idTwo}",
+					defaults: new RouteValueDictionary(new { controller = ControllerConstants.Home, action = ActionConstants.Index, id = UrlParameter.Optional, idTwo = UrlParameter.Optional }),
 					constraints: null,
 					dataTokens: new RouteValueDictionary(new { Namespaces = new string[] { "AllyisApps.Controllers" }, UseNamespaceFallback = false /*Use ONLY this namespace */}),
 					routeHandler: new MvcRouteHandler()));
