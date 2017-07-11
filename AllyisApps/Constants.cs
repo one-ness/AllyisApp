@@ -7,6 +7,7 @@ namespace AllyisApps
 	/// </summary>
 	public static class ActionConstants
 	{
+		public const string AcceptInvitation = "acceptinvitation";
 		public const string Action = "action";
 		public const string AddMember = "addmember";
 		public const string ChangePassword = "changepassword";
@@ -51,6 +52,7 @@ namespace AllyisApps
 		public const string ReactivateCustomer = "reactivatecustomer";
 		public const string RedirectToSubdomainAction = "redirecttosubdomainaction";
 		public const string Register = "register";
+		public const string RejectInvitation = "rejectinvitation";
 		public const string RemoveBilling = "removebilling";
 		public const string RemoveInvitation = "removeinvitation";
 		public const string RemoveMember = "removemember";
@@ -117,8 +119,9 @@ namespace AllyisApps
 	/// <summary>
 	/// Product name constants for use when retreiving product ID by name.
 	/// </summary>
-	public static class ProductNameKeyConstants
+	public static class ProductNameConstants
 	{
 		public const string TimeTracker = "TimeTracker";
+		public const string ExpenseTracker = "ExpenseTracker";
 	}
 }

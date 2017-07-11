@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Crm].[Customer] (
-    [CustomerId]         INT            IDENTITY (1, 1) NOT NULL,
+    [CustomerId]         INT            IDENTITY (115421, 3) NOT NULL,
     [Name]               NVARCHAR (50)  NOT NULL,
     [ContactEmail]       NVARCHAR (384) NULL,
     [Address]            NVARCHAR (100) NULL,

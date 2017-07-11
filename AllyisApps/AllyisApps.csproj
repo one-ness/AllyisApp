@@ -191,6 +191,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\ExpenseTracker\Controllers\ExpenseController.cs" />
+    <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\DetailsAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ReactivateAction.cs" />
@@ -250,6 +252,7 @@
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\CreateTimeEntryViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\TimeEntry\EditTimeEntryViewModel.cs" />
     <Compile Include="Areas\TimeTracker\TimeTrackerAreaRegistration.cs" />
+    <Compile Include="Controllers\Auth\AcceptInvitationAction.cs" />
     <Compile Include="Controllers\Auth\ChangePasswordAction.cs" />
     <Compile Include="Controllers\Auth\ConfirmEmailAction.cs" />
     <Compile Include="Controllers\Auth\CreateOrgAction.cs" />
@@ -260,6 +263,7 @@
     <Compile Include="Controllers\Auth\LogOffAction.cs" />
     <Compile Include="Controllers\Auth\LogOnAction.cs" />
     <Compile Include="Controllers\Auth\RegisterAction.cs" />
+    <Compile Include="Controllers\Auth\RejectInvitationAction.cs" />
     <Compile Include="Controllers\Auth\ResetPasswordAction.cs" />
     <Compile Include="Controllers\Auth\TemplateAction.cs" />
     <Compile Include="Controllers\Auth\ViewUser.cs" />

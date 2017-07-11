@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Auth].[Organization] (
-    [OrganizationId] INT            IDENTITY (1, 1) NOT NULL,
+    [OrganizationId] INT            IDENTITY (112559, 7) NOT NULL,
     [Name]           NVARCHAR (100) NOT NULL,
     [SiteUrl]        NVARCHAR (100) NULL,
     [Address]        NVARCHAR (100) NULL,
