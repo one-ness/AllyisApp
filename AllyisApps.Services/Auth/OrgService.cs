@@ -274,7 +274,7 @@ namespace AllyisApps.Services
                 "{0} {1} has requested you join their organization on Allyis Apps, {2}!<br /> Click <a href={3}>Here</a> to create an account and join!",
                 spResults.Item2,
                 spResults.Item3,
-                UserContext.UserSubscriptions[subscriptionId.Value].OrganizationName,
+                subscriptionId == null ? "" : UserContext.UserSubscriptions[subscriptionId.Value].OrganizationName,
 				url.Replace("%7BaccessCode%7D", code));
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();

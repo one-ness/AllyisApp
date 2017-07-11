@@ -67,22 +67,19 @@ namespace AllyisApps.Controllers
 
 				try
 				{
-					int invitationId = await AppService.InviteUser(
-						Url.Action(ActionConstants.Register, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme),
-						new InvitationInfo
-						{
-							Email = add.Email.Trim(),
-							FirstName = add.FirstName,
-							LastName = add.LastName,
-							OrganizationId = add.OrganizationId,
-							OrgRole = (int)(add.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member),
-							ProjectId = add.SubscriptionProjectId,
-							EmployeeId = add.EmployeeId,
-							EmployeeType = (int)(add.EmployeeType == "Salaried" ? EmployeeType.Salaried : EmployeeType.Hourly)
-						},
-						subId,
-						subRoleId
-					);
+					string url = Url.Action(ActionConstants.Register, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme);
+					InvitationInfo info = new InvitationInfo
+					{
+						Email = add.Email.Trim(),
+						FirstName = add.FirstName,
+						LastName = add.LastName,
+						OrganizationId = add.OrganizationId,
+						OrgRole = (int)(add.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member),
+						ProjectId = add.SubscriptionProjectId,
+						EmployeeId = add.EmployeeId,
+						EmployeeType = (int)(add.EmployeeType == "Salaried" ? EmployeeType.Salaried : EmployeeType.Hourly)
+					};
+					int invitationId = await AppService.InviteUser(url, info, subId, subRoleId);
 
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, add.FirstName, add.LastName), Variety.Success));
 					return this.RedirectToAction(ActionConstants.Manage, new { id = add.OrganizationId });
@@ -99,12 +96,12 @@ namespace AllyisApps.Controllers
 				}
 				catch (InvalidOperationException)
 				{
-					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserAlreadyExists, add.FirstName, add.LastName), Variety.Warning));
+					Notifications.Add(new BootstrapAlert(Resources.Strings.EmployeeIdNotUniqueError, Variety.Danger));
 					return this.View(add);
 				}
 				catch (System.Data.DuplicateNameException)
 				{
-					Notifications.Add(new BootstrapAlert(Resources.Strings.EmployeeIdNotUniqueError, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserAlreadyExists, add.FirstName, add.LastName), Variety.Warning));
 					return this.View(add);
 				}
 			}
