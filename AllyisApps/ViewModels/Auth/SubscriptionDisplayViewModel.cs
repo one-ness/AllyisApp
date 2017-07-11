@@ -48,5 +48,10 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the organization's id
 		/// </summary>
 		public int OrganizationId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the product area url
+		/// </summary>
+		public string AreaUrl { get; set; }
 	}
 }

@@ -71,5 +71,10 @@ namespace AllyisApps.Services
 		/// Gets or sets the Product Role name.
 		/// </summary>
 		public string ProductRoleName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Area URL
+		/// </summary>
+		public string AreaUrl { get; set; }
 	}
 }

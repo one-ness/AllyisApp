@@ -66,6 +66,7 @@ namespace AllyisApps.Controllers
 					OrganizationId = orgId,
 					ProductId = productInfo.ProductId,
 					ProductName = productInfo.ProductName,
+					AreaUrl = productInfo.AreaUrl,
 					ProductDescription = productInfo.ProductDescription,
 					CurrentSubscription = currentSubscription,
 					Skus = skus,

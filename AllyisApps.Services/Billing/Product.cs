@@ -25,5 +25,10 @@ namespace AllyisApps.Services
 		/// Gets or sets the product description.
 		/// </summary>
 		public string ProductDescription { get; set; }
+
+		/// <summary>
+		/// Gets or sets the area url.
+		/// </summary>
+		public string AreaUrl { get; set; }
 	}
 }

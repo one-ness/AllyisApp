@@ -333,7 +333,8 @@ namespace AllyisApps.Services
 								ProductName = item.ProductName,
 								ProductRoleName = item.ProductRoleName,
 								ProductRoleId = item.ProductRoleId.Value,
-								SkuId = item.SkuId.Value
+								SkuId = item.SkuId.Value,
+								AreaUrl = item.AreaUrl
 							};
 
 							// add it to the list of subscriptions for this organization
