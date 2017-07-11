@@ -60,51 +60,5 @@ namespace AllyisApps.Controllers
 
 			return this.View(model);
 		}
-
-		/// <summary>
-		/// Action that accepts an invitation to an organization.
-		/// </summary>
-		/// <param name="invitationId">The id of the accepted invitation.</param>
-		/// <returns>The action result.</returns>
-		[HttpPost]
-		public ActionResult Accept(int invitationId)
-		{
-			string result = AppService.AcceptUserInvitation(invitationId);
-
-			if (result == null)
-			{
-				Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
-			}
-			else
-			{
-				Notifications.Add(new Core.Alert.BootstrapAlert(result, Core.Alert.Variety.Success));
-			}
-
-			return this.RouteUserHome();
-		}
-
-		/// <summary>
-		/// Action that rejects an invitation to an organization.
-		/// </summary>
-		/// <param name="invitationId">The id of the accepted invitation.</param>
-		/// <returns>The Action result.</returns>
-		[HttpPost]
-		public ActionResult Reject(int invitationId)
-		{
-			//var invitation = Service.GetInvitationsByUser(UserContext.Email).Where(x => x.InvitationId == invitationId).FirstOrDefault();
-			string result = AppService.RejectUserInvitation(invitationId);
-			if (result != null)
-			{
-				// Validate that the user does have the requested pending invitation
-				Notifications.Add(new Core.Alert.BootstrapAlert(result, Core.Alert.Variety.Success));
-			}
-			else
-			{
-				// Not a part of the invitation
-				Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
-			}
-
-			return RedirectToAction(ActionConstants.Index);
-		}
 	}
 }
