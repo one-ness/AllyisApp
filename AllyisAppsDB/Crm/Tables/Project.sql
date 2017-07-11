@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Crm].[Project] (
-    [ProjectId]    INT            IDENTITY (1, 1) NOT NULL,
+    [ProjectId]    INT            IDENTITY (116827, 3) NOT NULL,
     [CustomerId]   INT            NOT NULL,
     [Name]         NVARCHAR (MAX) NOT NULL,
     [Type]         NVARCHAR (20)  DEFAULT ('Hourly') NOT NULL,
