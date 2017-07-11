@@ -1,22 +1,29 @@
-﻿using System;
+﻿
+using AllyisApps.Core.Alert;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.Auth;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
-namespace AllyisApps.Controllers.Auth
+namespace AllyisApps.Controllers
 {
 	/// <summary>
 	/// Controller for account and organization related actions.
 	/// </summary>
-	public class EditSubscriptionAction : BaseController
+	public partial class AccountController : BaseController
     {
 		/// <summary>
 		/// GET: /Account/EditSubscription.
 		/// </summary>
-		public ActionResult EditSubscription(int subscriptionId)
+		/// <param name="id">subscription id</param>
+		/// <returns>The result of this action.</returns>
+		[HttpGet]
+		public ActionResult EditSubscription(int id)
         {
-            return View();
-        }
+			int orgId = AppService.UserContext.UserSubscriptions[id].OrganizationId;
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
+			return this.View(ViewConstants.EditSubscription);
+		}
     }
 }

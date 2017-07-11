@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult Unsubscribe(int id, int productId)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.UnsubscribeFromProduct, productId);
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, productId);
 			var infos = AppService.GetProductSubscriptionInfo(id, productId);
 			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
 			return this.View(model);
@@ -41,7 +41,7 @@ namespace AllyisApps.Controllers
 		[CLSCompliant(false)]
 		public ActionResult Unsubscribe(ProductSubscriptionViewModel model)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.UnsubscribeFromProduct, model.OrganizationId);
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, model.OrganizationId);
 			string notificationString = AppService.UnsubscribeAndRemoveBillingSubscription(model.SelectedSku, model.CurrentSubscription.SubscriptionId);
 			if (notificationString != null)
 			{

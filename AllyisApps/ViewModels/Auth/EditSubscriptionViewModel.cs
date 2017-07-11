@@ -17,6 +17,11 @@ namespace AllyisApps.ViewModels.Auth
 	public class EditSubscriptionViewModel : BaseViewModel
 	{
 
+		/// <summary>
+		/// the subscritpion that is being unsubscribed from
+		/// </summary>
+		public int SubscriptionId { get; set; }
+
 
 	}
 }

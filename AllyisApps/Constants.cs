@@ -30,6 +30,7 @@ namespace AllyisApps
 		public const string Edit = "edit";
 		public const string EditOrg = "editorg";
 		public const string EditProfile = "editprofile";
+		public const string EditSubscription = "editsubscription";
 		public const string EditTimeEntryApprovalState = "edittimeentryapprovalstate";
 		public const string EditTimeEntryJson = "edittimeentryjson";
 		public const string Export = "export";
@@ -108,6 +109,7 @@ namespace AllyisApps
 		public const string ConfirmRemoveBillingInformation = "confirmremovebillinginformation";
 		public const string Details = "details";
 		public const string Error = "error";
+		public const string EditSubscription = "editsubscription";
 		public const string Footer = "_footer";
 		public const string ForgotPasswordConfirmation = "forgotpasswordconfirmation";
 		public const string Index = "index";

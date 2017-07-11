@@ -30,7 +30,7 @@
 			<td class="text-right icon-strip">
 				@*@if (Model.CanEditSubscriptions)
 					{*@
-				<a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, productId = @Model.ProductId })"
+				<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = Model.SubscriptionId })"
 				   class="text-muted" title="@Strings.EditSubscription"><span class="fa fa-fw fa-dollar text-success"></span></a>
 
 				@using (Html.BeginForm(ActionConstants.Unsubscribe, ControllerConstants.Account, new { id = Model.OrganizationId, productId = Model.ProductId }, FormMethod.Get, new { @style = "display: inline" }))
