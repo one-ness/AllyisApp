@@ -25,7 +25,7 @@
                         @foreach (FilterGroup group in Model.Filters.FilterGroups)
                         {
                             string gOptGroup = group.OptionGroup;
-                            if (!(gOptGroup == ProductNameKeyConstants.TimeTracker && !hasTimeTracker)) // don't display option group for TimeTracker if Org doesn't have TimeTracker
+                            if (!(gOptGroup == ProductNameConstants.TimeTracker && !hasTimeTracker)) // don't display option group for TimeTracker if Org doesn't have TimeTracker
                             {
                                 <optgroup label="@(Strings.ResourceManager.GetString(gOptGroup.Replace(" ", string.Empty) ?? gOptGroup))">
                                     @foreach (AllyisApps.ViewModels.Auth.Filter filt in group.Filters)
