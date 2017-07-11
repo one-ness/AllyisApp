@@ -47,6 +47,11 @@ namespace AllyisApps.ViewModels.Auth
 		public string ProductName { get; set; }
 
 		/// <summary>
+		/// Gets or sets product area url.
+		/// </summary>
+		public string AreaUrl { get; set; }
+
+		/// <summary>
 		/// Gets or sets a description of this product.
 		/// </summary>
 		public string ProductDescription { get; set; }

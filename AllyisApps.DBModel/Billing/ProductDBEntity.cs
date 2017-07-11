@@ -34,6 +34,6 @@ namespace AllyisApps.DBModel.Billing
 		/// <summary>
 		/// Gets or sets area url
 		/// </summary>
-		public string ArealUrl { get; set; }
+		public string AreaUrl { get; set; }
 	}
 }
