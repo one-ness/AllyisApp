@@ -51,7 +51,7 @@ namespace AllyisApps.Services
 			List<Tuple<string, User>> users = this.GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, this.GetUser(o.UserId))).ToList();
 
 			// Retrieval of existing user product subscription data
-			int ttProductId = GetProductIdByName("TimeTracker");
+			int ttProductId = GetProductIdByName("Time Tracker");
 			SubscriptionDisplayDBEntity ttSub = DBHelper.GetSubscriptionsDisplayByOrg(orgId).Where(s => s.ProductId == ttProductId).SingleOrDefault();
 			List<User> userSubs = this.GetUsersWithSubscriptionToProductInOrganization(orgId, ttProductId).ToList();
 

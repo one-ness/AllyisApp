@@ -32,5 +32,10 @@ namespace AllyisApps.Services
 		/// Gets or sets the list of Skus under this product.
 		/// </summary>
 		public List<SkuInfo> ProductSkus { get; set; }
+
+		/// <summary>
+		/// Gets or sets the area url.
+		/// </summary>
+		public string AreaUrl { get; set; }
 	}
 }

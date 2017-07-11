@@ -18,7 +18,8 @@ BEGIN
 		   [SUB].[ProductId],
 		   [SUB].[ProductName],
 		   [SUB].[SkuId],
-		   [SUB].[ProductRoleId]
+		   [SUB].[ProductRoleId],
+		   [SUB].[AreaUrl]
 	FROM [Auth].[User] AS [U] WITH (NOLOCK)
 		LEFT JOIN [Auth].[OrganizationUser] AS [OU] WITH (NOLOCK) ON [U].[UserId] = [OU].[UserId]
 		LEFT JOIN [Auth].[Organization] AS [O] WITH (NOLOCK) ON [OU].[OrganizationId] = [O].[OrganizationId]
@@ -26,6 +27,7 @@ BEGIN
 			SELECT	[S].[SubscriptionId],
 					[PR].[ProductId],
 					[P].[Name] AS 'ProductName',
+					[P].[AreaUrl],
 					[PR].[Name] AS 'ProductRoleName',
 					[S].[SkuId],
 					[SU].[ProductRoleId],
