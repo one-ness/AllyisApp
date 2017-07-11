@@ -878,6 +878,17 @@ namespace AllyisApps.Services
 				spResults.Item5);
 		}
 
+		/// <summary>
+		/// Returns a list of active products and each product's active skus
+		/// </summary>
+		public Tuple<List<Product>, List<SkuInfo>> GetAllActiveProductsAndSkus()
+		{
+			var spResults = DBHelper.GetAllActiveProductsAndSkus();
+			return Tuple.Create(
+				spResults.Item1.Select(pdb => InitializeProduct(pdb)).ToList(),
+				spResults.Item2.Select(sdb => InitializeSkuInfo(sdb)).ToList());
+		}
+
 		#region Info-DBEntity Conversions
 
 		/// <summary>

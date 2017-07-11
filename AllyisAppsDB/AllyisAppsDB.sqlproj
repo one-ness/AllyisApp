@@ -267,6 +267,7 @@
     <Build Include="Crm\Stored Procedures\GetInactiveProjectsAndCustomersForOrgAndUser.sql" />
     <Build Include="Crm\Stored Procedures\ReactivateCustomer.sql" />
     <Build Include="Crm\Stored Procedures\ReactivateProject.sql" />
+    <Build Include="Billing\Stored Procedures\GetAllActiveProductsAndSkus.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
