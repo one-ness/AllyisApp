@@ -119,8 +119,9 @@ namespace AllyisApps
 	/// <summary>
 	/// Product name constants for use when retreiving product ID by name.
 	/// </summary>
-	public static class ProductNameKeyConstants
+	public static class ProductNameConstants
 	{
 		public const string TimeTracker = "TimeTracker";
+		public const string ExpenseTracker = "ExpenseTracker";
 	}
 }

@@ -22,7 +22,7 @@ namespace AllyisApps.Areas.TimeTracker
 		{
 			get
 			{
-				return ProductNameKeyConstants.TimeTracker;
+				return ProductNameConstants.TimeTracker;
 			}
 		}
 
