@@ -12,7 +12,6 @@ AS
 
 	SELECT
 		[Product].[ProductId],
-		[Product].[Description],
 		[Sku].[SkuId],
 		[Sku].[Name],
 		[Sku].[CostPerBlock] AS 'Price',
