@@ -27,7 +27,7 @@ namespace AllyisApps.Services
 			EditOrganization,
 			DeleteOrganization,
 			SubscribeToProduct,
-			UnsubscribeFromProduct,
+			EditSubscription,
 			EditBilling,
 			DeleteBilling,
 		}
@@ -205,7 +205,7 @@ namespace AllyisApps.Services
 
 						break;
 
-					case OrgAction.UnsubscribeFromProduct:
+					case OrgAction.EditSubscription:
 						switch (orgInfo.OrganizationRole)
 						{
 							case OrganizationRole.Owner:
