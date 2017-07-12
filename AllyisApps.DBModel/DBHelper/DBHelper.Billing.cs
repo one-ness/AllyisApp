@@ -572,13 +572,13 @@ namespace AllyisApps.DBModel
 		/// number of users in the org with roles in the subscription for the product.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
-		/// <param name="productId">Product Id.</param>
+		/// <param name="skuId">Product Id.</param>
 		/// <returns></returns>
-		public Tuple<ProductDBEntity, SubscriptionDBEntity, List<SkuDBEntity>, string, int> GetProductSubscriptionInfo(int orgId, int productId)
+		public Tuple<ProductDBEntity, SubscriptionDBEntity, List<SkuDBEntity>, string, int> GetProductSubscriptionInfo(int orgId, int skuId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgId);
-			parameters.Add("@productId", productId);
+			parameters.Add("@skuId", skuId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
