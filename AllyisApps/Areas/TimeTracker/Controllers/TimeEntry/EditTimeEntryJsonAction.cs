@@ -114,7 +114,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			IEnumerable<TimeEntryInfo> otherEntriesToday = AppService.GetTimeEntriesByUserOverDateRange(
 				new List<int> { model.UserId },
 				AppService.GetDateTimeFromDays(model.Date),
-				AppService.GetDateTimeFromDays(model.Date));
+				AppService.GetDateTimeFromDays(model.Date),
+				AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId);
 			float durationOther = 0.0f;
 			foreach (TimeEntryInfo otherEntry in otherEntriesToday)
 			{

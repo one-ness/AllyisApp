@@ -75,7 +75,7 @@ namespace AllyisApps.Controllers
 						LastName = add.LastName,
 						OrganizationId = add.OrganizationId,
 						OrgRole = (int)(add.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member),
-						ProjectId = add.SubscriptionProjectId,
+						//ProjectId = add.SubscriptionProjectId,
 						EmployeeId = add.EmployeeId,
 						EmployeeType = (int)(add.EmployeeType == "Salaried" ? EmployeeType.Salaried : EmployeeType.Hourly)
 					};

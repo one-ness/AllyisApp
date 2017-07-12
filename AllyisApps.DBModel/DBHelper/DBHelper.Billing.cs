@@ -566,7 +566,7 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Returns a ProductDBEntity for the given product, a SubscriptionDBEntity for the given org's
+		/// Returns a ProductDBEntity for the product that the given SKU belongs to, a SubscriptionDBEntity for the given org's
 		/// subscription to that product (or null if none), a list of SkuDBEntities for all the skus for
 		/// that product, the Stripe billing token for the given org (or null if none), and the total
 		/// number of users in the org with roles in the subscription for the product.

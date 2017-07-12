@@ -68,10 +68,10 @@ namespace AllyisApps.Services
 		/// </summary>
 		public string OrgRoleName { get; set; }
 
-		/// <summary>
-		/// Gets or sets the Project Id.
-		/// </summary>
-		public int? ProjectId { get; set; }
+		///// <summary>
+		///// Gets or sets the Project Id.
+		///// </summary>
+		//public int? ProjectId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Employee Id.
