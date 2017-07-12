@@ -29,7 +29,7 @@
 			</h1>
 		</div>
 
-		@if (Model.Subscriptions.First().Info != null)
+		@if (Model.SubscriptionCount > 0)
 		{
 			foreach (SubscriptionDisplayViewModel productSub in Model.Subscriptions)
 			{
