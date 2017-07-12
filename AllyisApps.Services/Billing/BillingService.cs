@@ -867,7 +867,7 @@ namespace AllyisApps.Services
 		{
 			if (skuId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException("skuId", "SKU Id cannot be 0 or negative.");
 			}
 
 			var spResults = DBHelper.GetProductSubscriptionInfo(orgId, skuId);
