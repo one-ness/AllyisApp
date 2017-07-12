@@ -593,5 +593,21 @@ namespace AllyisApps.DBModel
 					results.Read<int>().SingleOrDefault());
 			}
 		}
+
+		/// <summary>
+		/// Returns a list of active products and each product's active skus
+		/// </summary>
+		public Tuple<List<ProductDBEntity>, List<SkuDBEntity>> GetAllActiveProductsAndSkus()
+		{
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[Billing].[GetAllActiveProductsAndSkus]",
+					commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<ProductDBEntity>().ToList(),
+					results.Read<SkuDBEntity>().ToList());
+			}
+		}
 	}
 }

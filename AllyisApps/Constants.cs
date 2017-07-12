@@ -29,6 +29,7 @@ namespace AllyisApps
 		public const string DownloadImportUsersTemplate = "downloadimportuserstemplate";
 		public const string Edit = "edit";
 		public const string EditOrg = "editorg";
+		public const string EditSubscription = "editsubscription";
 		public const string EditProfile = "editprofile";
 		public const string EditSubscription = "editsubscription";
 		public const string EditTimeEntryApprovalState = "edittimeentryapprovalstate";
@@ -61,6 +62,7 @@ namespace AllyisApps
 		public const string ResetPassword = "resetpassword";
 		public const string ResetPasswordConfirmation = "resetpasswordconfirmation";
 		public const string RouteHome = "routehome";
+		public const string Skus = "skus";
 		public const string Subscribe = "subscribe";
 		public const string Unsubscribe = "unsubscribe";
 		public const string UpdateOvertime = "updateovertime";

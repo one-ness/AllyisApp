@@ -266,6 +266,7 @@
     <Compile Include="Controllers\Auth\RegisterAction.cs" />
     <Compile Include="Controllers\Auth\RejectInvitationAction.cs" />
     <Compile Include="Controllers\Auth\ResetPasswordAction.cs" />
+    <Compile Include="Controllers\Auth\SkusAction.cs" />
     <Compile Include="Controllers\Auth\TemplateAction.cs" />
     <Compile Include="Controllers\Auth\ViewUser.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -340,6 +341,7 @@
     <Compile Include="ViewModels\Auth\EditProfileViewModel.cs" />
     <Compile Include="ViewModels\Auth\ForgotPasswordViewModel.cs" />
     <Compile Include="ViewModels\Auth\LogOnViewModel.cs" />
+    <Compile Include="ViewModels\Auth\SkusListViewModel.cs" />
     <Compile Include="ViewModels\Auth\TestViewModel.cs" />
     <Compile Include="ViewModels\Auth\BillingHistoryItemViewModel.cs" />
     <Compile Include="ViewModels\Auth\PermissionsManagementViewModel.cs" />
@@ -562,6 +564,7 @@
     <Content Include="Views\Account\ViewUser.cshtml" />
     <Content Include="Views\Account\_OrgPanel.cshtml" />
     <Content Include="Views\Account\EditSubscription.cshtml" />
+    <Content Include="Views\Account\Skus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">

@@ -25,13 +25,13 @@ namespace AllyisApps.Controllers
 		/// GET: /Subscription/Subscribe/ProductId=#.
 		/// </summary>
 		/// <param name="id">organization id</param>
-		/// <param name="productId">The product being subscribed to.</param>
+		/// <param name="idTwo">The id of the SKU being subscribed to.</param>
 		/// <returns>The result of this action.</returns>
 		[HttpGet]
-		public ActionResult Subscribe(int id, int productId)
+		public ActionResult Subscribe(int id, int idTwo)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, id);
-			var infos = AppService.GetProductSubscriptionInfo(id, productId);
+			var infos = AppService.GetProductSubscriptionInfo(id, idTwo);
 
 			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
 			if (!model.IsValid)

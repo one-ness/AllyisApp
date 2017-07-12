@@ -4,6 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+
 namespace AllyisApps.Services
 {
 	/// <summary>
@@ -25,6 +27,11 @@ namespace AllyisApps.Services
 		/// Gets or sets the product description.
 		/// </summary>
 		public string ProductDescription { get; set; }
+
+		/// <summary>
+		/// Gets or sets the list of Skus under this product.
+		/// </summary>
+		public List<SkuInfo> ProductSkus { get; set; }
 
 		/// <summary>
 		/// Gets or sets the area url.

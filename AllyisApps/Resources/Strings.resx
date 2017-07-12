@@ -1456,4 +1456,7 @@
   <data name="Invitations" xml:space="preserve">
     <value>Invitations</value>
   </data>
+  <data name="Products" xml:space="preserve">
+    <value>Products</value>
+  </data>
 </root>
