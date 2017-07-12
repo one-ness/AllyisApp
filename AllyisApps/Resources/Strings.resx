@@ -1459,4 +1459,7 @@
   <data name="Products" xml:space="preserve">
     <value>Products</value>
   </data>
+  <data name="SubscribedSuccessfully" xml:space="preserve">
+    <value>Your subscription to {0} was created successfully!</value>
+  </data>
 </root>
