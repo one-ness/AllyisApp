@@ -19,9 +19,10 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <returns>The result of this action.</returns>
 		[HttpGet]
-		public ActionResult EditSubscription(int id, int skuId)
+		public ActionResult EditSubscription(int id)
         {
 			int orgId = AppService.UserContext.UserSubscriptions[id].OrganizationId;
+			int skuId = AppService.UserContext.UserSubscriptions[id].SkuId;
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
 			SkuInfo sku = AppService.GetSkuDetails(skuId);
 			EditSubscriptionViewModel model = new EditSubscriptionViewModel
@@ -29,7 +30,8 @@ namespace AllyisApps.Controllers
 				SkuId = sku.SkuId,
 				Name = sku.Name,
 				Description = sku.Description,
-				SubscriptionId = sku.SubscriptionId
+				SubscriptionId = id,
+				OrganizationId = orgId
 			};
 			return this.View(ViewConstants.EditSubscription, model);
 		}

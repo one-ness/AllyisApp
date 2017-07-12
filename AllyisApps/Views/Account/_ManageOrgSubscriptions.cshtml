@@ -30,7 +30,7 @@
 			<td class="text-right icon-strip">
 				@*@if (Model.CanEditSubscriptions)
 					{*@
-				<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = Model.OrganizationId, idTwo = Model.SubscriptionId })"
+				<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = Model.Info.SubscriptionId })"
 				   class="text-muted" title="@Strings.EditSubscription"><span class="fa fa-fw fa-dollar text-success"></span></a>
 			</td>
 		}
