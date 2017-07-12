@@ -11,12 +11,12 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Action that accepts an invitation to an organization.
 		/// </summary>
-		/// <param name="invitationId">The id of the accepted invitation.</param>
+		/// <param name="id">The id of the accepted invitation.</param>
 		/// <returns>The action result.</returns>
 		[HttpPost]
-		public ActionResult AcceptInvitation(int invitationId)
+		public ActionResult AcceptInvitation(int id)
 		{
-			string result = AppService.AcceptUserInvitation(invitationId);
+			string result = AppService.AcceptUserInvitation(id);
 
 			if (result == null)
 			{

@@ -11,12 +11,12 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Action that rejects an invitation to an organization.
 		/// </summary>
-		/// <param name="invitationId">The id of the accepted invitation.</param>
+		/// <param name="id">The id of the accepted invitation.</param>
 		/// <returns>The Action result.</returns>
 		[HttpPost]
-		public ActionResult RejectInvitation(int invitationId)
+		public ActionResult RejectInvitation(int id)
 		{
-			string result = AppService.RejectUserInvitation(invitationId);
+			string result = AppService.RejectUserInvitation(id);
 			if (result != null)
 			{
 				// Validate that the user does have the requested pending invitation
