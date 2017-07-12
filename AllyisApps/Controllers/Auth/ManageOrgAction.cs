@@ -10,6 +10,7 @@ using AllyisApps.ViewModels.Auth;
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using System.Collections.Generic;
 
 namespace AllyisApps.Controllers
 {
@@ -71,7 +72,7 @@ namespace AllyisApps.Controllers
 				{
 					return new SubscriptionDisplayViewModel
 					{
-						Info = infos.Item3.Where(s => s.ProductId == p.ProductId).SingleOrDefault(),
+						Info = infos.Item3.Where(s => s.ProductId == p.ProductId).FirstOrDefault(),
 						ProductId = p.ProductId,
 						ProductName = p.ProductName,
 						ProductDescription = p.ProductDescription,

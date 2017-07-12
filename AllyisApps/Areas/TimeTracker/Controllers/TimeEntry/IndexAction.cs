@@ -35,6 +35,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			UserSubscription subInfo = null;
 			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
+			ViewBag.GetDateFromDays = new Func<int, DateTime>(AppService.GetDateFromDays);
+
 			bool manager = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
 			ViewBag.canManage = manager;
 			TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(
@@ -106,8 +108,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				StartOfWeek = (StartOfWeekEnum)startOfWeek,
 				PayClasses = infos.Item2,
 				GrandTotal = new ProjectHours { Project = new CompleteProjectInfo { ProjectName = "Total" }, Hours = 0.0f },
-				Projects = allProjects.Where(x => x.IsActive == true && x.IsCustomerActive == true && x.IsUserActive == true && ((x.EndDate.HasValue && DateTime.Compare(x.EndDate.Value, endDate) >= 0) || x.EndDate == null)),
-				ProjectsWithInactive = allProjects.Where(p => p.ProjectId != 0 && ((p.EndDate.HasValue && DateTime.Compare(p.EndDate.Value, endDate) >= 0) || p.EndDate == null)),
+				Projects = allProjects.Where(x => x.IsActive == true && x.IsCustomerActive == true && x.IsUserActive == true),
+				ProjectsWithInactive = allProjects.Where(p => p.ProjectId != 0),
 				ProjectHours = hours.Values.Where(x => x.Hours > 0),
 				Users = users,
 				TotalUsers = users.Count(),

@@ -12,13 +12,13 @@
     Also remove the damn hardcoded "free users" numbers.*@
 <div class="shrink-wrap-center">
     <div class="min300">
-        @using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, productId = Model.ProductId }, FormMethod.Post, new { @class = "form-inline" }))
+        @using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, new { token = Model.Token, billingServicesEmail = Model.Billing.Email, cost = cost }, FormMethod.Post, new { @class = "form-inline" }))
         {
             @Html.AntiForgeryToken()
             @Html.HiddenFor(m => m.OrganizationId)
             @Html.HiddenFor(m => m.ProductId)
             @Html.HiddenFor(m => m.ProductName)
-            @Html.Hidden("SelectedSku", 1)
+            @Html.HiddenFor(m => m.SelectedSku)
             @Html.HiddenFor(m => m.PreviousSku)
             @Html.HiddenFor(m => m.Token)
             @Html.Hidden("currentUserCount", (int)Model.CurrentUsers)
@@ -53,7 +53,7 @@
                         </div>
                         <div class="panel-footer">
                             <div class="pull-right">
-                                @Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, htmlAttributes: new { @class = "btn btn-default" })
+                                @Html.ActionLink(Strings.Cancel, ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId }, htmlAttributes: new { @class = "btn btn-default" })
                                 <input type="submit" class="btn btn-primary" value=@Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...';">
                             </div>
                             <div class="clearfix"></div>
