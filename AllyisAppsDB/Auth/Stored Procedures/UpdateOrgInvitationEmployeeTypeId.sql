@@ -5,5 +5,5 @@
 AS
 	BEGIN
 	SET NOCOUNT ON;
-	UPDATE [Auth].[Invitation] SET [EmployeeType] = @EmployeeTypeId WHERE [InvitationId] = @invitationId AND [OrganizationId] = @OrganizationId;
+	UPDATE [Auth].[Invitation] SET [EmployeeTypeId] = @EmployeeTypeId WHERE [InvitationId] = @invitationId AND [OrganizationId] = @OrganizationId;
 	END
