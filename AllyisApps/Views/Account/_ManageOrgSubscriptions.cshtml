@@ -31,7 +31,7 @@
 				@*@if (Model.CanEditSubscriptions)
 					{*@
 				<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = Model.OrganizationId, idTwo = Model.SubscriptionId })"
-				   class="text-muted" title="@Strings.EditSubscription"><span class="fa fa-fw fa-dollar text-success"></span></a>
+				   class="text-muted" title="@Strings.EditSubscription"><span class="glyphicon glyphicon-edit"></span></a>
 			</td>
 		}
 		else
