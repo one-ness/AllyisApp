@@ -90,6 +90,6 @@ BEGIN
 	FROM [Billing].[Product] WITH (NOLOCK) 
 	INNER JOIN [Billing].[Sku] WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
 	RIGHT JOIN [Billing].[Subscription] WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
-	WHERE [Product].[IsActive] = 1 AND [Subscription].OrganizationId = @OrganizationId
+	WHERE [Product].[IsActive] = 1 AND [Subscription].[IsActive] = 1 AND [Subscription].OrganizationId = @OrganizationId
 	ORDER BY [Product].[Name]
 END
