@@ -863,7 +863,7 @@ namespace AllyisApps.Services
 				OrganizationName = invitation.OrganizationName,
 				OrgRole = invitation.OrgRole,
 				OrgRoleName = invitation.OrgRoleName,
-				ProjectId = invitation.ProjectId,
+				//ProjectId = invitation.ProjectId,
 				EmployeeId = invitation.EmployeeId,
 				EmployeeType = invitation.EmployeeType
 			};
@@ -912,7 +912,7 @@ namespace AllyisApps.Services
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
 				OrgRole = invitation.OrgRole,
-				ProjectId = invitation.ProjectId,
+				//ProjectId = invitation.ProjectId,
 				EmployeeId = invitation.EmployeeId,
 				EmployeeType = invitation.EmployeeType
 			};
