@@ -594,7 +594,8 @@ namespace AllyisApps.Services
 				Name = sku.Name,
 				Price = sku.Price,
 				UserLimit = sku.UserLimit,
-				BillingFrequency = (BillingFrequencyEnum)sku.BillingFrequency
+				BillingFrequency = (BillingFrequencyEnum)sku.BillingFrequency,
+				Description = sku.Description
 			};
 		}
 
