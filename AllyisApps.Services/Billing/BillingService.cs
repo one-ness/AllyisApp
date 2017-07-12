@@ -861,16 +861,16 @@ namespace AllyisApps.Services
 		/// number of users in the org with roles in the subscription for the product.
 		/// </summary>
 		/// <param name="orgId"></param>
-		/// <param name="productId">Product Id.</param>
+		/// <param name="skuId">Product Id.</param>
 		/// <returns></returns>
-		public Tuple<Product, SubscriptionInfo, List<SkuInfo>, string, int> GetProductSubscriptionInfo(int orgId, int productId)
+		public Tuple<Product, SubscriptionInfo, List<SkuInfo>, string, int> GetProductSubscriptionInfo(int orgId, int skuId)
 		{
-			if (productId <= 0)
+			if (skuId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException("skuId", "SKU Id cannot be 0 or negative.");
 			}
 
-			var spResults = DBHelper.GetProductSubscriptionInfo(orgId, productId);
+			var spResults = DBHelper.GetProductSubscriptionInfo(orgId, skuId);
 			return Tuple.Create(
 				InitializeProduct(spResults.Item1),
 				InitializeSubscriptionInfo(spResults.Item2),

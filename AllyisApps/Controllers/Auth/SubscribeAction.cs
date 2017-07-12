@@ -34,6 +34,7 @@ namespace AllyisApps.Controllers
 			var infos = AppService.GetProductSubscriptionInfo(id, idTwo);
 
 			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
+			model.SelectedSku = idTwo;
 			if (!model.IsValid)
 			{
 				return this.View(ViewConstants.Details, id);
