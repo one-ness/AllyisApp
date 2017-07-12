@@ -3,13 +3,17 @@
 	ViewBag.Title = Strings.EditSubscription;
 }
 
-<div> 
-	Product
-</div>
-<div>
-	Description
-</div>
-<div>
-	@Html.ActionLink(Strings.Unsubscribe, ActionConstants.Unsubscribe, ControllerConstants.Account, null, htmlAttributes: new { @class = "btn btn-default" })
-	@Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, null, htmlAttributes: new { @class = "btn btn-default" })
+<div class="shrink-wrap-center">
+			<div class="col-md-12">
+				<div class="text-center">
+					Product Name
+				</div>
+				<div class="text-center">
+					Description
+				</div>
+				<div class="text-center">
+					@Html.ActionLink(Strings.Unsubscribe, ActionConstants.Unsubscribe, ControllerConstants.Account, null, htmlAttributes: new { @class = "btn btn-default" })
+					@Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, null, htmlAttributes: new { @class = "btn btn-default" })
+				</div>
+			</div>
 </div>
