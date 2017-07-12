@@ -64,11 +64,6 @@ namespace AllyisApps.DBModel.Auth
 		public string OrgRoleName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Project for which a user is assigned.
-		/// </summary>
-		public int? ProjectId { get; set; }
-
-		/// <summary>
 		/// Gets or sets the employee id of the user.
 		/// </summary>
 		public string EmployeeId { get; set; }
