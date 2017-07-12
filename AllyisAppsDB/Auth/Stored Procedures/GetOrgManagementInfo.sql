@@ -84,7 +84,7 @@ BEGIN
 
 	SELECT
 		[Product].[ProductId],
-		[Product].[Name],
+		[Sku].[Name],
 		[Product].[Description],
 		[Product].[AreaUrl]
 	FROM [Billing].[Product] WITH (NOLOCK) 
