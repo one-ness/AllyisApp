@@ -22,12 +22,12 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <returns>Removes selected subscription.</returns>
 		[HttpGet]
-		public ActionResult Unsubscribe(int id)
+		public ActionResult Unsubscribe(int id, int idTwo)
 		{
 			int orgId = AppService.UserContext.UserSubscriptions[id].OrganizationId;
-			int productId = AppService.UserContext.UserSubscriptions[id].ProductId;
+			int productId = (int) AppService.UserContext.UserSubscriptions[id].ProductId;
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
-			var infos = AppService.GetProductSubscriptionInfo(id, productId);
+			var infos = AppService.GetProductSubscriptionInfo(id, idTwo);
 			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
 			return this.View(model);
 		}
