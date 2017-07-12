@@ -861,11 +861,10 @@ namespace AllyisApps.Services
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
 				OrganizationName = invitation.OrganizationName,
-				OrgRole = invitation.OrgRole,
+				OrgRole = invitation.OrgRoleId,
 				OrgRoleName = invitation.OrgRoleName,
-				//ProjectId = invitation.ProjectId,
 				EmployeeId = invitation.EmployeeId,
-				EmployeeType = invitation.EmployeeType
+				EmployeeType = invitation.EmployeeTypeId
 			};
 		}
 
@@ -911,10 +910,9 @@ namespace AllyisApps.Services
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
-				OrgRole = invitation.OrgRole,
-				//ProjectId = invitation.ProjectId,
+				OrgRoleId = invitation.OrgRole,
 				EmployeeId = invitation.EmployeeId,
-				EmployeeType = invitation.EmployeeType
+				EmployeeTypeId = invitation.EmployeeType
 			};
 		}
 

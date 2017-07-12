@@ -705,10 +705,10 @@ namespace AllyisApps.DBModel
 			parameters.Add("@DateOfBirth", invitation.DateOfBirth);
 			parameters.Add("@organizationID", invitation.OrganizationId);
 			parameters.Add("@AccessCode", invitation.AccessCode);
-			parameters.Add("@OrgRole", invitation.OrgRole);
+			parameters.Add("@OrgRole", invitation.OrgRoleId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 			parameters.Add("@EmployeeId", invitation.EmployeeId);
-			parameters.Add("@EmployeeTypeId", invitation.EmployeeType);
+			parameters.Add("@EmployeeTypeId", invitation.EmployeeTypeId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[Auth].[CreateUserInvitation]", parameters, commandType: CommandType.StoredProcedure);
@@ -740,12 +740,12 @@ namespace AllyisApps.DBModel
 			parameters.Add("@LastName", invitation.LastName);
 			parameters.Add("@organizationID", invitation.OrganizationId);
 			parameters.Add("@AccessCode", invitation.AccessCode);
-			parameters.Add("@OrgRole", invitation.OrgRole);
+			parameters.Add("@OrgRole", invitation.OrgRoleId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 			parameters.Add("@EmployeeId", invitation.EmployeeId);
 			parameters.Add("@SubscriptionId", subscriptionId);
 			parameters.Add("@SubRoleId", productRoleId);
-			parameters.Add("@EmployeeType", invitation.EmployeeType);
+			parameters.Add("@EmployeeType", invitation.EmployeeTypeId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple("[Auth].[InviteUser]", parameters, commandType: CommandType.StoredProcedure);
