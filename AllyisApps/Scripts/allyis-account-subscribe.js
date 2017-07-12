@@ -22,5 +22,4 @@ function fixUserCount() {
 	$("#user-count").val(result);
 	var costOut = result - 500 > 0 ? result - 500 : 0;
 	$("#sub-price").text("$" + costOut.toFixed(2));
-	$("#SelectedSku").val(costOut == 0 ? 1 : 2);
 }
