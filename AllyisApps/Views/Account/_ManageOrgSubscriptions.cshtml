@@ -23,7 +23,7 @@
 		</td>
 		<td style="text-align: center">@userDisplay</td>
 		<td class="text-right icon-strip">
-			<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = Model.OrganizationId, idTwo = Model.SubscriptionId })"
+			<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = Model.Info.SubscriptionId })"
 			   class="text-muted" title="@Strings.EditSubscription"><span class="glyphicon glyphicon-edit"></span></a>
 		</td>
 	</tr>
