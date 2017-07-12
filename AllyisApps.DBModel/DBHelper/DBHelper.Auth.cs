@@ -706,7 +706,6 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationID", invitation.OrganizationId);
 			parameters.Add("@AccessCode", invitation.AccessCode);
 			parameters.Add("@OrgRole", invitation.OrgRole);
-			parameters.Add("@ProjectId", invitation.ProjectId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 			parameters.Add("@EmployeeId", invitation.EmployeeId);
 			parameters.Add("@EmployeeTypeId", invitation.EmployeeType);
@@ -742,7 +741,6 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationID", invitation.OrganizationId);
 			parameters.Add("@AccessCode", invitation.AccessCode);
 			parameters.Add("@OrgRole", invitation.OrgRole);
-			parameters.Add("@ProjectId", invitation.ProjectId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 			parameters.Add("@EmployeeId", invitation.EmployeeId);
 			parameters.Add("@SubscriptionId", subscriptionId);
