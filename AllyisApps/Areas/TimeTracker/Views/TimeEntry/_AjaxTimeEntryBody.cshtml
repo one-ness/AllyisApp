@@ -56,7 +56,7 @@
             {
                 if (canManage)
                 {
-                    @Html.DropDownListDisabled("ProjectIdDdl", Model.ProjectId == 0 ? blankList : from c in Model.ProjectsWithInactive //Ddl name must be different than model property name or the selected value cannot be adjusted
+                    @Html.DropDownListDisabled("ProjectIdDdl", Model.ProjectId == 0 ? blankList : from c in Model.ProjectsWithInactive.Where(p => (p.EndDate.HasValue && DateTime.Compare(p.EndDate.Value, ViewBag.GetDateFromDays(Model.Date)) >= 0) || p.EndDate == null) //Ddl name must be different than model property name or the selected value cannot be adjusted
                                                                                                   select new SelectListItem
                                                                                                   {
                                                                                                       Selected = (Model.ProjectsWithInactive.Count() == 2) ? (!(c.ProjectId < 0)) : (Model.ProjectId == c.ProjectId), //Automatically selects project if it is the only one - Select Project is a project with Id of 0
@@ -69,7 +69,7 @@
 }
                 else
                 {
-                    @Html.DropDownListDisabled("ProjectIdDdl", Model.ProjectId == 0 ? blankList : from c in Model.Projects  //Ddl name must be different than model property name or the selected value cannot be adjusted
+                    @Html.DropDownListDisabled("ProjectIdDdl", Model.ProjectId == 0 ? blankList : from c in Model.Projects.Where(p => (p.EndDate.HasValue && DateTime.Compare(p.EndDate.Value, ViewBag.GetDateFromDays(Model.Date)) >= 0) || p.EndDate == null)  //Ddl name must be different than model property name or the selected value cannot be adjusted
                                                                                                   select new SelectListItem
                                                                                                   {
                                                                                                       Selected = (Model.Projects.Count() == 2) ? (!(c.ProjectId < 0)) : (Model.ProjectId == c.ProjectId), //Automatically selects project if it is the only one - Select Project is a project with Id of 0
