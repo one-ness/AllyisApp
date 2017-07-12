@@ -31,10 +31,12 @@
 
 		@if (Model.SubscriptionCount > 0)
 		{
-			foreach (SubscriptionDisplayViewModel productSub in Model.Subscriptions)
-			{
-				@Html.Partial("_ManageOrgSubscriptions", productSub);
-			}
+			<table class="table table-striped table-sparse">
+				@foreach (SubscriptionDisplayViewModel productSub in Model.Subscriptions)
+				{
+					@Html.Partial("_ManageOrgSubscriptions", productSub);
+				}
+			</table>
 			<div class="panel-body">
 				<p>Optimize your organization further at the <a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId })" style="color:cornflowerblue">subscriptions page</a></p>
 			</div>
