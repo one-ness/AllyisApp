@@ -39,7 +39,7 @@
 											</p>											
 										</div>
 										<div class="right" style="display: table-cell">
-											<a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { productId = @sku.SkuId, id=Model.OrganizationId })" style="text-decoration: none" class="btn btn-default">@Strings.Subscribe</a>
+											<a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { productId = sku.ProductId, id = Model.OrganizationId })" style="text-decoration: none" class="btn btn-default">@Strings.Subscribe</a>
 										</div>
 									</div>
 								</div>
