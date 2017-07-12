@@ -13,9 +13,9 @@
 	<div class="col-md-6 col-md-push-3">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h3 style="margin-top: 0px; margin-bottom: 0px; text-align: center;">
+				<h2 style="margin-top: 0px; margin-bottom: 0px; text-align: center;">
 					@prod.ProductName
-				</h3>
+				</h2>
 			</div>
 
 			<div class="panel-body">
@@ -25,22 +25,22 @@
 						<div class="panel-wrap panel-wrap-one col-md-10 col-md-push-1">							
 								<div class="panel panel-default">
 									<div class="panel-heading" style="display: table; width: 100%; height: 100%;">
-										<div class="left" style="display: table-cell; width: 30%; text-align: center; vertical-align: middle;">
-											<img src="~/@string.Format("Content/icons/{0}.png", sku.Name.Replace(" ",string.Empty))" alt="@sku.Name" />
-										</div>
-										<div class="center-block" style="display: table-cell">
-											<h3>
-												@sku.Name
-											</h3>
-											<p>
-												Cost: $@sku.Price
-												<br />
-												Billing frequency: @sku.BillingFrequency
-											</p>											
-										</div>
-										<div class="right" style="display: table-cell">
-											<a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { productId = sku.ProductId, id = Model.OrganizationId })" style="text-decoration: none" class="btn btn-default">@Strings.Subscribe</a>
-										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 20px; margin-bottom: 10px;"><img src="~/Content/icons/TimeTracker.png" alt="@sku.Name" /></div>
+												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { idTwo = @sku.SkuId, id=Model.OrganizationId })" style="text-decoration: none" class="btn btn-default">@Strings.Subscribe</a></div>
+											</div>
+											<div class="col-md-8">
+												<h3>
+													@sku.Name
+												</h3>
+												<p>
+													Cost: $@sku.Price.ToString("N2")
+													<br />
+													@sku.Description
+												</p>										
+											</div>
+										</div>										
 									</div>
 								</div>
 						</div>

@@ -67,5 +67,10 @@ namespace AllyisApps.DBModel.Billing
 		/// Gets or sets the date on which the promotional cost ends
 		/// </summary>
 		public DateTime? PromotDeadline { get; set; }
+
+		/// <summary>
+		/// Gets or sets the description
+		/// </summary>
+		public string Description { get; set; }
 	}
 }

@@ -967,7 +967,8 @@ namespace AllyisApps.Services
 				ProductId = sku.ProductId,
 				SkuId = sku.SkuId,
 				SubscriptionId = sku.SubscriptionId,
-				UserLimit = sku.UserLimit
+				UserLimit = sku.UserLimit,
+				Description = sku.Description
 			};
 		}
 

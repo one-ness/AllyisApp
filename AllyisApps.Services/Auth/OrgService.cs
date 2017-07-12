@@ -269,12 +269,12 @@ namespace AllyisApps.Services
 				throw new DuplicateNameException("Employee Id is already taken.");
 			}
 
-			// Send invitation email
-			string htmlbody = string.Format(
-				"{0} {1} has requested you join their organization on Allyis Apps, {2}!<br /> Click <a href={3}>Here</a> to create an account and join!",
-				spResults.Item2,
-				spResults.Item3,
-				UserContext.ChosenOrganization.OrganizationName,
+            // Send invitation email
+            string htmlbody = string.Format(
+                "{0} {1} has requested you join their organization on Allyis Apps, {2}!<br /> Click <a href={3}>Here</a> to create an account and join!",
+                spResults.Item2,
+                spResults.Item3,
+                subscriptionId == null ? "" : UserContext.UserSubscriptions[subscriptionId.Value].OrganizationName,
 				url.Replace("%7BaccessCode%7D", code));
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
@@ -861,11 +861,10 @@ namespace AllyisApps.Services
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
 				OrganizationName = invitation.OrganizationName,
-				OrgRole = invitation.OrgRole,
+				OrgRole = invitation.OrgRoleId,
 				OrgRoleName = invitation.OrgRoleName,
-				ProjectId = invitation.ProjectId,
 				EmployeeId = invitation.EmployeeId,
-				EmployeeType = invitation.EmployeeType
+				EmployeeType = invitation.EmployeeTypeId
 			};
 		}
 
@@ -911,10 +910,9 @@ namespace AllyisApps.Services
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
-				OrgRole = invitation.OrgRole,
-				ProjectId = invitation.ProjectId,
+				OrgRoleId = invitation.OrgRole,
 				EmployeeId = invitation.EmployeeId,
-				EmployeeType = invitation.EmployeeType
+				EmployeeTypeId = invitation.EmployeeType
 			};
 		}
 

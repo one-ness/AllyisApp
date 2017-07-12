@@ -6,7 +6,6 @@
 	@OrganizationId INT,
 	@AccessCode VARCHAR(50),
 	@OrgRole INT,
-	@ProjectId INT,
 	@retId INT OUTPUT,
 	@EmployeeId NVARCHAR(16),
 	@EmployeeTypeId INT
@@ -23,10 +22,9 @@ BEGIN
 		[OrganizationId], 
 		[AccessCode], 
 		[IsActive], 
-		[OrgRole], 
-		[ProjectId],
+		[OrgRoleId], 
 		[EmployeeId],
-		[EmployeeType])
+		[EmployeeTypeId])
 	VALUES 
 		(@Email, 
 		@FirstName, 
@@ -36,7 +34,6 @@ BEGIN
 		@AccessCode, 
 		1, 
 		@OrgRole, 
-		@ProjectId,
 		@EmployeeId,
 		@EmployeeTypeId);
 
