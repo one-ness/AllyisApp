@@ -22,6 +22,11 @@ namespace AllyisApps.Services
 		public int SkuId { get; set; }
 
 		/// <summary>
+		/// Gets or sets the SkuId of the upgrade or downgrade version of the Product.
+		/// </summary>
+		public int SkuIdNext { get; set; }
+
+		/// <summary>
 		/// Gets or sets the products id number.
 		/// </summary>
 		public int ProductId { get; set; }

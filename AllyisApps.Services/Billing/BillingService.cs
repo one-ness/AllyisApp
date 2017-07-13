@@ -580,6 +580,28 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Gets a <see cref="SkuInfo"/>.
+		/// </summary>
+		/// <param name="skuId">Sku Id.</param>
+		/// <param name="productId"></param>
+		/// <returns>The SKU details.</returns>
+		public int GetSkuDetailsForEditSubscription(int skuId, int productId)
+		{
+			if (skuId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("skuId", "Sku ID cannot be 0 or negative.");
+			}
+
+			int skuNext = DBHelper.GetSkuDetailsForEditSubscription(skuId, productId);
+			//if (sku == null)
+			//{
+			//	return null;
+			//}
+
+			return skuNext;
+		}
+
+		/// <summary>
 		/// Creates a new Subscription in the database.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>

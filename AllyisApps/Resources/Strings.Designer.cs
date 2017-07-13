@@ -3749,11 +3749,22 @@ namespace AllyisApps.Resources {
                 return ResourceManager.GetString("UpdateProfileSuccessMessage", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Upgrade.
-        /// </summary>
-        public static string Upgrade {
+
+		/// <summary>
+		///   Looks up a localized string similar to Upgrade.
+		/// </summary>
+		public static string Downgrade
+		{
+			get
+			{
+				return ResourceManager.GetString("Downgrade", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to Upgrade.
+		/// </summary>
+		public static string Upgrade {
             get {
                 return ResourceManager.GetString("Upgrade", resourceCulture);
             }

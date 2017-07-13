@@ -32,9 +32,24 @@ namespace AllyisApps.ViewModels.Auth
 		public int ProductId { get; set; }
 
 		/// <summary>
+		/// Gets or sets the current product's Name.
+		/// </summary>
+		public int ProductName { get; set; }
+
+		/// <summary>
 		/// Gets or sets the current product's Id.
 		/// </summary>
 		public int SkuId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the SkuId of the upgrade or downgrade version of the Product.
+		/// </summary>
+		public int SkuIdNext { get; set; }
+
+		/// <summary>
+		/// Gets or sets the SkuId of the upgrade or downgrade version of the Product.
+		/// </summary>
+		public int SkuIdNextName { get; set; }
 
 		/// <summary>
 		/// Gets or sets all information relating to this product.

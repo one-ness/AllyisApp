@@ -112,6 +112,30 @@ namespace AllyisApps.Controllers
 			}
 		}
 
+		/// <summary>
+		/// Subscribe to a product.
+		/// </summary>
+		/// <param name="model">The model.</param>
+		/// <returns>A page.</returns>
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[CLSCompliant(false)]
+		public ActionResult Subscribe(EditSubscriptionViewModel model)
+		{
+			this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, model.OrganizationId);
+
+			if (AppService.Subscribe(model.ProductId, model.Name, model.SkuIdNext, model.SkuId, 0, null, false, null, null, model.OrganizationId))
+			{
+				Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.SubscribedSuccessfully, model.SelectedSkuName), Variety.Success));
+				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
+			}
+			else
+			{
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ReduceNumberOfUsers, Variety.Danger));
+				return this.RedirectToAction(ActionConstants.Subscribe, new { productId = model.ProductId });
+			}
+		}
+
 		/*
 		/// <summary>
 		/// Subscribe to a product.

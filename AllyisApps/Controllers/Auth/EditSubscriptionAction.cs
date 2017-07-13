@@ -23,15 +23,19 @@ namespace AllyisApps.Controllers
         {
 			int orgId = AppService.UserContext.UserSubscriptions[id].OrganizationId;
 			int skuId = AppService.UserContext.UserSubscriptions[id].SkuId;
+			int productId = (int) AppService.UserContext.UserSubscriptions[id].ProductId;
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
 			SkuInfo sku = AppService.GetSkuDetails(skuId);
+			sku.SkuIdNext = AppService.GetSkuDetailsForEditSubscription(skuId, productId);
 			EditSubscriptionViewModel model = new EditSubscriptionViewModel
 			{
 				SkuId = sku.SkuId,
+				SkuIdNext = sku.SkuIdNext,
 				Name = sku.Name,
 				Description = sku.Description,
 				SubscriptionId = id,
-				OrganizationId = orgId
+				OrganizationId = orgId,
+				ProductId = sku.ProductId
 			};
 			return this.View(ViewConstants.EditSubscription, model);
 		}

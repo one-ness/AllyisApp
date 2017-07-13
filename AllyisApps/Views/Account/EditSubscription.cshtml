@@ -14,9 +14,21 @@
 					@Model.Description
 				</div>
 				<div class="text-center" style="margin-top:10px;">
-					@using (Html.BeginForm(ActionConstants.Upgrade, ControllerConstants.Account, new { id = Model.SubscriptionId, idTwo = Model.SkuId }, FormMethod.Post, new { @style="display: inline-block", @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("You are about to Upgrade from " + Model.Name)) }))
+					@if (Model.SkuId > Model.SkuIdNext)
 					{
-						<input type="submit" value="@Strings.Upgrade" class="btn btn-default" id="submitUpgrade" />
+						using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, idTwo = Model.SkuIdNext }, FormMethod.Post, new { @style = "display: inline-block", @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("You are about to Downgrade from " + Model.Name)) }))
+						{
+							@Html.AntiForgeryToken()
+							<input type="submit" value="@Strings.Downgrade" class="btn btn-default" id="submitUpgrade" />
+						}
+					}
+					else
+					{
+						using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, idTwo = Model.SkuIdNext }, FormMethod.Post, new { @style = "display: inline-block", @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("You are about to Upgrade from " + Model.Name)) }))
+						{
+							@Html.AntiForgeryToken()
+							<input type="submit" value="@Strings.Upgrade" class="btn btn-default" id="submitUpgrade" />
+						}
 					}
 					@using (Html.BeginForm( ActionConstants.Unsubscribe, ControllerConstants.Account, new { id = Model.SubscriptionId, idTwo = Model.SkuId }, FormMethod.Post, new { @style = "display: inline-block", @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("Are you sure you want to Unsubscribe from " + Model.Name)) }))
 					{

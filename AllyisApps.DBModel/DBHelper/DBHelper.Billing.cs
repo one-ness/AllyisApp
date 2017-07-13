@@ -264,6 +264,24 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Executes [Billing].[GetSkuById].
+		/// </summary>
+		/// <param name="skuId">Sets SkuId.</param>
+		/// <param name="productId"></param>
+		/// <returns>SkuDBEntity obj.</returns>
+		public int GetSkuDetailsForEditSubscription(int skuId, int productId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@SkuId", skuId);
+			parameters.Add("@ProductId", productId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				// default empty object
+				return connection.Query<int>("[Billing].[GetSkuForSubEditById]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+			}
+		}
+
+		/// <summary>
 		/// Adds an entry to the customer subscription table, and adds a billing history item.
 		/// </summary>
 		/// <param name="stripeTokenCustId">The id of the stripe customer.</param>
