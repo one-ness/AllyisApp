@@ -796,6 +796,17 @@ namespace AllyisApps.Services
 			};
 		}
 
+		/// <summary>
+		/// Upgrade User Subscription.
+		/// </summary>
+		/// <param name="subscriptionId"></param>
+		/// <param name="skuId"></param>
+		/// <returns>SubscriptionUserInfo instance.</returns>
+		public void UpgradeSubscription(int subscriptionId, int skuId)
+		{
+	
+		}
+
 		#endregion Info-DBEntity Conversions
 	}
 }
