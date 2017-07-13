@@ -4,8 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = Strings.Subscribe;
     ViewBag.Description = Model.ProductDescription;
-    var userCount = Model.CurrentSubscription == null ? 500 : Model.CurrentSubscription.NumberOfUsers;
-    var cost = (userCount - 500).ToString("c");
 }
 
 @*TODO: Currently mentions of pricing are commented out. When pricing is properly implemented, restore these mentions.

@@ -108,11 +108,6 @@ namespace AllyisApps.ViewModels.Auth
 		public BillingViewModel Billing { get; set; }
 
 		/// <summary>
-		/// Gets or sets the number of Users for this subscription.
-		/// </summary>
-		public int NumberOfUsers { get; set; }
-
-		/// <summary>
 		/// Gets or sets the name of the Selected Sku.
 		/// </summary>
 		public string SelectedSkuName { get; set; }
