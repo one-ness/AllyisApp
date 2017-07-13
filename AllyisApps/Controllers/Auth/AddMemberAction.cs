@@ -67,7 +67,6 @@ namespace AllyisApps.Controllers
 
 				try
 				{
-					string url = Url.Action(ActionConstants.Register, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme);
 					InvitationInfo info = new InvitationInfo
 					{
 						Email = add.Email.Trim(),
@@ -75,10 +74,15 @@ namespace AllyisApps.Controllers
 						LastName = add.LastName,
 						OrganizationId = add.OrganizationId,
 						OrgRole = (int)(add.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member),
-						//ProjectId = add.SubscriptionProjectId,
 						EmployeeId = add.EmployeeId,
 						EmployeeType = (int)(add.EmployeeType == "Salaried" ? EmployeeType.Salaried : EmployeeType.Hourly)
 					};
+					
+					User usr = AppService.GetUserByEmail(info.Email);
+					string url = usr != null && usr.Email == info.Email ?
+						Url.Action(ActionConstants.Index, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme) :
+						Url.Action(ActionConstants.Register, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme);
+
 					int invitationId = await AppService.InviteUser(url, info, subId, subRoleId);
 
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, add.FirstName, add.LastName), Variety.Success));
