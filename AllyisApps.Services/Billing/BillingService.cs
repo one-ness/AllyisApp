@@ -325,15 +325,16 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates the number of subscription users for a sku in the current organization.
 		/// </summary>
+		/// <param name="orgId">The Organization Id</param>
 		/// <param name="skuId">Sku Id.</param>
-		public void UpdateSubscriptionUsers(int skuId)
+		public void UpdateSubscriptionUsers(int orgId, int skuId)
 		{
 			if (skuId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("skuId", "Sku Id cannot be 0 or negative.");
 			}
 
-			DBHelper.UpdateSubscriptionUsers(UserContext.ChosenOrganizationId, skuId, 0);
+			DBHelper.UpdateSubscriptionUsers(orgId, skuId, 0);
 		}
 
 		/// <summary>
@@ -585,7 +586,8 @@ namespace AllyisApps.Services
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="selectedSku">Selected Sku.</param>
 		/// <param name="productId">Product Id.</param>
-		public void AddSubscriptionOfSkuToOrganization(int orgId, int selectedSku, int productId)
+		/// <param name="subscriptionName">The Subscription Name</param>
+		public void AddSubscriptionOfSkuToOrganization(int orgId, int selectedSku, int productId, string subscriptionName)
 		{
 			#region Validation
 
@@ -604,9 +606,14 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
 			}
 
+			if (string.IsNullOrEmpty(subscriptionName))
+			{
+				throw new ArgumentException("subscriptionName", "Subscription Name cannot be empty.");
+			}
+
 			#endregion Validation
 
-			int subID = DBHelper.ChangeSubscription(orgId, selectedSku, productId, 0);
+			int subID = DBHelper.ChangeSubscription(orgId, selectedSku, productId, 0, subscriptionName);
 			if (subID != 0)
 			{
 				DBHelper.UpdateSubscriptionUserProductRole(this.GetProductRolesFromSubscription(subID).Where(x => x.Name == "Manager").Single().ProductRoleId, subID, UserContext.UserId);
@@ -651,6 +658,7 @@ namespace AllyisApps.Services
 		/// <param name="productId">Product id.</param>
 		/// <param name="productName">Product name.</param>
 		/// <param name="selectedSku">Selected sku id.</param>
+		/// <param name="subscriptionName">Subscription Name</param>
 		/// <param name="previousSku">The previous sku id.</param>
 		/// <param name="billingAmount">Billing amount, as an int in cents.</param>
 		/// <param name="existingToken">The existing BillingServicesToken, if any.</param>
@@ -660,7 +668,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId"></param>
 		/// <returns></returns>
 		[CLSCompliant(false)]
-		public bool Subscribe(int productId, string productName, int selectedSku, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
+		public bool Subscribe(int productId, string productName, int selectedSku, string subscriptionName, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
 		{
 			BillingServicesCustomer customer;
 			BillingServicesToken token;
@@ -722,11 +730,11 @@ namespace AllyisApps.Services
 
 			if (selectedSku != previousSku)
 			{
-				this.AddSubscriptionOfSkuToOrganization(orgId, selectedSku, productId);
+				this.AddSubscriptionOfSkuToOrganization(orgId, selectedSku, productId, subscriptionName);
 			}
 			else
 			{
-				this.UpdateSubscriptionUsers(selectedSku);
+				this.UpdateSubscriptionUsers(orgId, selectedSku);
 			}
 
 			return true;
