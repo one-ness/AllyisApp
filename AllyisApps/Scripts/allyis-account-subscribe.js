@@ -9,6 +9,7 @@
 	return true;
 }
 
+/*
 function fixUserCount() {
 	var count = $("#user-count").val();
 	var result = parseInt(count) + 4 - ((count - 1) % 5);
@@ -23,4 +24,4 @@ function fixUserCount() {
 	var costOut = result - 500 > 0 ? result - 500 : 0;
 	$("#sub-price").text("$" + costOut.toFixed(2));
 	//$("#SelectedSku").val(costOut == 0 ? 1 : 2); Not sure what this is for
-}
+}*/

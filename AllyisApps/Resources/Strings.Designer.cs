@@ -3373,6 +3373,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter the subscription name.
+        /// </summary>
+        public static string SubscriptionNameValidation {
+            get {
+                return ResourceManager.GetString("SubscriptionNameValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The specified subscription does not exist..
         /// </summary>
         public static string SubscriptionNonExistantMessage {
