@@ -34,17 +34,18 @@ SELECT
 	FROM [Billing].[Subscription] WITH (NOLOCK) 
 	WHERE [SubscriptionId] = @SubscriptionId
 
-	SELECT [SkuId]
-		,[ProductId]
-		,[Name]
-		,[CostPerBlock]
-		,[UserLimit]
-		,[BillingFrequency]
-		,[BlockBasedOn]
-		,[BlockSize]
-		,[PromoCostPerBlock]
-		,[PromoDeadline]
-		,[IsActive]
+	SELECT [SkuId],
+		[ProductId],
+		[Name],
+		[CostPerBlock],
+		[UserLimit],
+		[BillingFrequency],
+		[BlockBasedOn],
+		[BlockSize],
+		[PromoCostPerBlock],
+		[PromoDeadline],
+		[IsActive],
+		[Description]
 	FROM [Billing].[Sku] WITH (NOLOCK) 
 	WHERE [Billing].[Sku].[ProductId] = @ProductId
 
