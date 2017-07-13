@@ -43,7 +43,11 @@ namespace AllyisApps.Controllers
 		public SkusListViewModel ConstructSkusListViewModel(int orgId)
 		{
 			SkusListViewModel model = new SkusListViewModel { OrganizationId = orgId, ProductsList = new List<Product>() };
+
 			var result = AppService.GetAllActiveProductsAndSkus();
+			var activeSubscriptions = AppService.GetSubscriptionsDisplay(orgId);
+
+			model.currentSubscriptions = activeSubscriptions;
 			model.ProductsList = result.Item1;
 			foreach (Product prod in model.ProductsList)
 			{
@@ -58,6 +62,7 @@ namespace AllyisApps.Controllers
 					}
 				}
 			}
+			
 			return model;
 		}
 	}

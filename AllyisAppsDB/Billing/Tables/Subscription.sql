@@ -1,8 +1,8 @@
 ﻿CREATE TABLE [Billing].[Subscription] (
     [SubscriptionId]   INT           IDENTITY (113969, 7) NOT NULL,
     [OrganizationId]   INT           NOT NULL,
-    [SkuId]            SMALLINT           NOT NULL,
-    [SubscriptionName] NVARCHAR (64) NULL,
+    [SkuId]            SMALLINT      NOT NULL,
+	[SubscriptionName] NVARCHAR (64) NULL,
     [NumberOfUsers]    INT           NOT NULL DEFAULT 0,
     [IsActive]         BIT           DEFAULT ((1)) NOT NULL,
     [CreatedUtc]       DATETIME2 (0) DEFAULT (getutcdate()) NOT NULL,
