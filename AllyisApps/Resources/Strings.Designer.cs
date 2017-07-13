@@ -3355,6 +3355,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your subscription to {0} was created successfully!.
+        /// </summary>
+        public static string SubscribedSuccessfully {
+            get {
+                return ResourceManager.GetString("SubscribedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Here you can subscribe to any products Allyis Apps has to offer!.
         /// </summary>
         public static string SubscribeToProducts {

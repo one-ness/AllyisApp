@@ -35,6 +35,8 @@ namespace AllyisApps.Controllers
 
 			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
 			model.SelectedSku = skuId;
+			model.SelectedSkuName = infos.Item3.Where(s => s.SkuId == skuId).SingleOrDefault().Name;
+
 			if (!model.IsValid)
 			{
 				return this.View(ViewConstants.Details, id);
@@ -114,6 +116,7 @@ namespace AllyisApps.Controllers
 
 			if (AppService.Subscribe(model.NumberOfUsers, model.ProductId, model.ProductName, model.SelectedSku, model.PreviousSku, model.Billing.Amount, model.Token, addingNewBilling, billingServicesEmail, token, model.OrganizationId))
 			{
+				Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.SubscribedSuccessfully, model.SelectedSkuName), Variety.Success));
 				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
 			}
 			else

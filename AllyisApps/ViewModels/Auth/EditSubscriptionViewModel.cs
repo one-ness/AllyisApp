@@ -19,23 +19,51 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the current product's Id.
 		/// </summary>
+		public int BillingFrequency { get; set; }
+
+		/// <summary>
+		/// Gets or sets the current product's Id.
+		/// </summary>
+		public int CostPerBlock { get; set; }
+
+		/// <summary>
+		/// Gets or sets the current product's Id.
+		/// </summary>
 		public int ProductId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the current product's Id.
+		/// </summary>
+		public int SkuId { get; set; }
 
 		/// <summary>
 		/// Gets or sets all information relating to this product.
 		/// </summary>
-		public string ProductName { get; set; }
+		public string Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets a description of this product.
 		/// </summary>
-		public string ProductDescription { get; set; }
+		public string Description { get; set; }
+
+		/// <summary>
+		/// Gets or sets a description of this product.
+		/// </summary>
+		public string isActive { get; set; }
+
+		/// <summary>
+		/// the subscritpion that is being unsubscribed from
+		/// </summary>
+		public int OrganizationId { get; set; }
 
 		/// <summary>
 		/// the subscritpion that is being unsubscribed from
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
-
+		/// <summary>
+		/// Gets or sets the current product's Id.
+		/// </summary>
+		public int UserLimit { get; set; }
 	}
 }

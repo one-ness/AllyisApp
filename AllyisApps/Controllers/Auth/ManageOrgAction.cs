@@ -75,9 +75,10 @@ namespace AllyisApps.Controllers
 						Info = infos.Item3.Where(s => s.ProductId == p.ProductId).FirstOrDefault(),
 						ProductId = p.ProductId,
 						ProductName = p.ProductName,
+						SubscriptionId = infos.Item3.Where(s => s.ProductId == p.ProductId).FirstOrDefault().SubscriptionId,
 						ProductDescription = p.ProductDescription,
 						OrganizationId = orgId,
-						AreaUrl = p.AreaUrl
+						AreaUrl = p.AreaUrl,
 					};
 				})
 			};
