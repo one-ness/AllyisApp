@@ -6,7 +6,9 @@
 <div class="shrink-wrap-center">
 			<div class="col-md-12">
 				<div class="text-center">
-					@Model.Name
+					<h3>
+						@Model.Name
+					</h3>
 				</div>
 				<div class="text-center">
 					@Model.Description
@@ -16,8 +18,7 @@
 					{
 					@Html.AntiForgeryToken()
 					<input data-val="true" id="OrganizationId" name="OrganizationId" type="hidden" value="@Model.OrganizationId" />
-					<input data-val="true" id="ProductId" name="ProductId" type="hidden" value="@Model.ProductId" />
-					@*<input data-val="true" id="PreviousSku" name="PreviousSku" type="hidden" value="@Model.PreviousSku" />*@
+					<input data-val="true" id="SkuId" name="SkuId" type="hidden" value="@Model.SkuId" />
 					<input data-val="true" id="CurrentSubscription" name="CurrentSubscription.SubscriptionId" type="hidden" value="@Model.SubscriptionId" />
 					<input type="hidden" name="SelectedSku" value="0" />
 					<input type="submit" value="@Strings.Unsubscribe" class="btn btn-danger" id="submitDelete" />
