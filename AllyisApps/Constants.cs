@@ -64,6 +64,7 @@ namespace AllyisApps
 		public const string Skus = "skus";
 		public const string Subscribe = "subscribe";
 		public const string Unsubscribe = "unsubscribe";
+		public const string Upgrade= "upgrade";
 		public const string UpdateOvertime = "updateovertime";
 		public const string UpdateStartOfWeek = "updatestartofweek";
 		public const string UserEditAJAX = "usereditajax";
