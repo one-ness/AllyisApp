@@ -29,6 +29,7 @@ namespace AllyisApps.Controllers
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 			ManageOrgViewModel model = this.ConstructOrganizationManageViewModel(id);
+			ViewData["UserId"] = this.AppService.UserContext.UserId;
 			return this.View(model);
 		}
 
