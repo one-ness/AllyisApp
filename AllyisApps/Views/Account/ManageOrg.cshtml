@@ -48,9 +48,6 @@
 				<p>Start your organization's first subscription at the <a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId })" style="color:cornflowerblue">subscriptions page</a> to begin alleviating the management process</p>
 			</div>
 		}
-		<div>
-			<p style="position: absolute; bottom: 0; right: 2%">Members: @Model.Members.TotalUsers</p>
-		</div>
 	</div>
 	<div class="panel panel-default members-panel">
 		@Html.Partial("_OrgMembers2", Model.Members)
