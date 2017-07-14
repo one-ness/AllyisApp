@@ -18,7 +18,16 @@
 
 <tr>
 	<td width="33%">
-		@Model.ProductName
+		@if (Model.AreaUrl == "ExpenseTracker")
+		{
+			@Model.ProductName
+		}
+		else
+		{
+			<a href="@Url.Action(ActionConstants.Index, ControllerConstants.TimeEntry, new { area = Model.AreaUrl, subscriptionId = Model.SubscriptionId, userId = ViewData["UserId"] })" style="text-decoration: none; color: inherit">
+				@Model.ProductName
+			</a>
+		}
 	</td>
 	<td style="text-align: center">@userDisplay</td>
 	<td class="text-right icon-strip">

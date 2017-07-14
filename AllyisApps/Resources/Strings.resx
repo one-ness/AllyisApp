@@ -1465,4 +1465,7 @@
   <data name="SubscriptionNameValidation" xml:space="preserve">
     <value>Please enter the subscription name</value>
   </data>
+  <data name="Downgrade" xml:space="preserve">
+    <value>Downgrade</value>
+  </data>
 </root>
