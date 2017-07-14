@@ -53,7 +53,7 @@
                     <td class="memberSearchProperty" id="invType-@invite.InvitationId">
                         <span class="empType">@Strings.ResourceManager.GetString(invite.EmployeeType == 1 ? "Salaried" : (invite.EmployeeType == 2 ? "Hourly" : "N/A")) </span>
                         <a href="javascript: void(0);" class="text-muted" title="@Strings.EditEmployeeType"
-                           onclick='editEmployeeType("@invite.OrganizationId", "@invite.InvitationId", "@invite.EmployeeType", false)'><span class="fa fa-fw fa-edit"></span></a>
+                           onclick='editEmployeeType("@invite.OrganizationId", "@invite.InvitationId", "@invite.EmployeeType", false, "@Strings.Salaried", "@Strings.Hourly")'><span class="fa fa-fw fa-edit"></span></a>
                     </td>
                     <td class="memberOrgRole">@Strings.ResourceManager.GetString(invite.OrgRoleName)</td>
                     <td class="text-right icon-strip">
@@ -81,8 +81,8 @@
                     <td class="text-right icon-strip">
                         @if (Model.CurrentUserId != user.UserId)
                         {
-
                             <a href="~/Account/ViewUser/@user.UserId" class="text-muted" title="@Strings.ViewMemberInfo"><span class="fa fa-fw fa-eye"></span></a>
+							<a href=@Url.Action(ActionConstants.EditMember, null, new { id = user.UserId })><span class="fa fa-fw fa-edit"></span></a>
                             <a href="javascript: void(0);" class="text-muted" title="@Strings.RemoveMember"
                                onclick='removeUser("@user.OrganizationId", "@user.UserId", "@user.FullName")'><span class="fa fa-fw fa-remove text-danger"></span></a>
                         }

@@ -386,20 +386,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets the User for the current user, along with Organizations for each organization the
-		/// user is a member of, and InvitationInfos for any invitations for the user.
-		/// </summary>
-		/// <returns></returns>
-		public Tuple<User, List<Organization>, List<InvitationInfo>> GetUserOrgsAndInvitationInfo()
-		{
-			var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
-			return Tuple.Create<User, List<Organization>, List<InvitationInfo>>(
-				InitializeUser(spResults.Item1),
-				spResults.Item2.Select(odb => InitializeOrganization(odb)).ToList(),
-				spResults.Item3.Select(idb => InitializeInvitationInfo(idb)).ToList());
-		}
-
-		/// <summary>
 		/// Gets the user info for a specific user.
 		/// </summary>
 		/// <param name="userId">User Id.</param>
@@ -412,6 +398,20 @@ namespace AllyisApps.Services
 			}
 
 			return InitializeUser(DBHelper.GetUserInfo(userId));
+		}
+
+		/// <summary>
+		/// Gets the User for the current user, along with Organizations for each organization the
+		/// user is a member of, and InvitationInfos for any invitations for the user.
+		/// </summary>
+		/// <returns></returns>
+		public Tuple<User, List<Organization>, List<InvitationInfo>> GetUserOrgsAndInvitationInfo()
+		{
+			var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
+			return Tuple.Create<User, List<Organization>, List<InvitationInfo>>(
+				InitializeUser(spResults.Item1),
+				spResults.Item2.Select(odb => InitializeOrganization(odb)).ToList(),
+				spResults.Item3.Select(idb => InitializeInvitationInfo(idb)).ToList());
 		}
 
 		/// <summary>
