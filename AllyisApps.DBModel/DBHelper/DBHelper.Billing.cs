@@ -219,7 +219,7 @@ namespace AllyisApps.DBModel
 			}
 			else
 			{ */
-			parameters.Add("@ProductId", null);
+			parameters.Add("@ProductId", productId);
 			////}
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
