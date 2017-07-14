@@ -9,6 +9,7 @@ using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -30,6 +31,14 @@ namespace AllyisApps.ViewModels.Auth
 		/// the subscritpion that is being unsubscribed from
 		/// </summary>
 		public int SubscriptionId { get; set; }
+
+		/// <summary>
+		/// get or set the subscription name
+		/// </summary>
+		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "SubscriptionNameValidation")]
+		[DataType(DataType.Text)]
+		[Display(Name = "Subscription Name")]
+		public string SubscriptionName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the current Organization's Id.
@@ -99,14 +108,14 @@ namespace AllyisApps.ViewModels.Auth
 		public BillingViewModel Billing { get; set; }
 
 		/// <summary>
-		/// Gets or sets the number of Users for this subscription.
-		/// </summary>
-		public int NumberOfUsers { get; set; }
-
-		/// <summary>
 		/// Gets or sets the name of the Selected Sku.
 		/// </summary>
 		public string SelectedSkuName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the description of the Selected Sku.
+		/// </summary>
+		public string SelectedSkuDescription { get; set; }
 
 		/// <summary>
 		/// Gets the number of users currently attached to the organization.

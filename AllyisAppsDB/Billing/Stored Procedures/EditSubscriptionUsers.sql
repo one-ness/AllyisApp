@@ -12,7 +12,7 @@ BEGIN TRANSACTION
 	FROM [Billing].[Subscription] WITH (NOLOCK)
 	JOIN [Billing].[Sku] WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
 	JOIN [Billing].[Product] WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
-	WHERE [Subscription].[OrganizationId] = @OrganizationId AND [Product].[Name] = 'TimeTracker' AND [Subscription].[IsActive] = 1
+	WHERE [Subscription].[OrganizationId] = @OrganizationId AND [Product].[Name] = 'Time Tracker' AND [Subscription].[IsActive] = 1
 
 	IF @SubId IS NOT NULL
 	BEGIN

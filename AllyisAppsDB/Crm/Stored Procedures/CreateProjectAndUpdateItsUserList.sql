@@ -14,7 +14,6 @@ BEGIN
 		SELECT * FROM [Crm].[Project] WITH (NOLOCK)
 		WHERE [ProjectOrgId] = @ProjectOrgId
 		AND [CustomerId] = @CustomerId
-		AND [IsActive] = 1
 	)
 		BEGIN
 			-- ProjectOrgId is not unique

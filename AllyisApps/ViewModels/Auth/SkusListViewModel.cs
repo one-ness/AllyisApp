@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.Auth
@@ -22,5 +23,10 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the current Organization's Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the current Organization's active subscriptions
+		/// </summary>
+		public IEnumerable<SubscriptionDisplayInfo> currentSubscriptions { get; set; }
 	}
 }

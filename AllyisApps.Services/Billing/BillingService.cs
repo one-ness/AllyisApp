@@ -254,12 +254,11 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="amount">Price of subscription.</param>
 		/// <param name="customerId">The StripeCustomer.</param>
-		/// <param name="numUsers">Number of subscription users.</param>
 		/// <param name="productId">Product Id.</param>
 		/// <param name="planName">Name of subscription plan, to appear on Stripe invoices.</param>
 		/// <param name="skuId">Selected sku id, for the billing history item.</param>
 		[CLSCompliant(false)]
-		public void AddCustomerSubscriptionPlan(int amount, BillingServicesCustomerId customerId, int numUsers, int productId, string planName, int? skuId)
+		public void AddCustomerSubscriptionPlan(int amount, BillingServicesCustomerId customerId, int productId, string planName, int? skuId)
 		{
 			#region Validation
 
@@ -273,12 +272,6 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("customerId", "customerId cannot be null.");
 			}
 
-			if (numUsers < 0)
-			{
-				// TODO: Figure out if this can be 0 or not
-				throw new ArgumentOutOfRangeException("numUsers", "Number of users cannot be negative.");
-			}
-
 			if (productId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
@@ -289,7 +282,7 @@ namespace AllyisApps.Services
 			string service = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(service);
 			BillingServicesSubscriptionId subId = handler.CreateSubscription(amount, "month", planName, customerId);
-			DBHelper.AddCustomerSubscription(customerId.Id, subId.Id, amount, numUsers, productId, UserContext.ChosenOrganizationId, UserContext.UserId, skuId, string.Format("Adding new subscription data for {0}.", planName));
+			DBHelper.AddCustomerSubscription(customerId.Id, subId.Id, amount, 0, productId, UserContext.ChosenOrganizationId, UserContext.UserId, skuId, string.Format("Adding new subscription data for {0}.", planName));
 		}
 
 		/// <summary>
@@ -297,12 +290,11 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="amount">Price of subscription.</param>
 		/// <param name="planName">Name of subscription plan, to appear on Stripe invoices.</param>
-		/// <param name="numUsers">Number of Users.</param>
 		/// <param name="subscriptionId">Subscription Id, as a string.</param>
 		/// <param name="customerId">The Billing Services Customer ID.</param>
 		/// <param name="skuId">Selected sku id, for the billing history item.</param>
 		[CLSCompliant(false)]
-		public void UpdateSubscriptionPlan(int amount, string planName, int numUsers, string subscriptionId, BillingServicesCustomerId customerId, int? skuId)
+		public void UpdateSubscriptionPlan(int amount, string planName, string subscriptionId, BillingServicesCustomerId customerId, int? skuId)
 		{
 			#region Validation
 
@@ -321,39 +313,28 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("customerId", "customerId cannot be null.");
 			}
 
-			if (numUsers < 0)
-			{
-				// TODO: Figure out if this can be 0 or not
-				throw new ArgumentOutOfRangeException("numUsers", "Number of users cannot be negative.");
-			}
-
 			#endregion Validation
 
 			string serviceType = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(serviceType); // TODO: make this check the database instead of hardcoding Stripe
 
 			handler.UpdateSubscription(amount, "month", planName, subscriptionId.Trim(), customerId);
-			DBHelper.UpdateSubscriptionPlan(customerId.Id, subscriptionId, amount, numUsers, UserContext.ChosenOrganizationId, UserContext.UserId, skuId, string.Format("Updating subscription data for {0}", planName));
+			DBHelper.UpdateSubscriptionPlan(customerId.Id, subscriptionId, amount, 0, UserContext.ChosenOrganizationId, UserContext.UserId, skuId, string.Format("Updating subscription data for {0}", planName));
 		}
 
 		/// <summary>
 		/// Updates the number of subscription users for a sku in the current organization.
 		/// </summary>
+		/// <param name="orgId">The Organization Id</param>
 		/// <param name="skuId">Sku Id.</param>
-		/// <param name="numberOfUsers">New number of users.</param>
-		public void UpdateSubscriptionUsers(int skuId, int numberOfUsers)
+		public void UpdateSubscriptionUsers(int orgId, int skuId)
 		{
 			if (skuId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("skuId", "Sku Id cannot be 0 or negative.");
 			}
 
-			if (numberOfUsers < 0)
-			{
-				throw new ArgumentOutOfRangeException("numberOfUsers", "Number of users cannot be negative.");
-			}
-
-			DBHelper.UpdateSubscriptionUsers(UserContext.ChosenOrganizationId, skuId, numberOfUsers);
+			DBHelper.UpdateSubscriptionUsers(orgId, skuId, 0);
 		}
 
 		/// <summary>
@@ -605,8 +586,8 @@ namespace AllyisApps.Services
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="selectedSku">Selected Sku.</param>
 		/// <param name="productId">Product Id.</param>
-		/// <param name="numberOfUsers">The number of users.</param>
-		public void AddSubscriptionOfSkuToOrganization(int orgId, int selectedSku, int productId, int numberOfUsers)
+		/// <param name="subscriptionName">The Subscription Name</param>
+		public void AddSubscriptionOfSkuToOrganization(int orgId, int selectedSku, int productId, string subscriptionName)
 		{
 			#region Validation
 
@@ -625,14 +606,14 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
 			}
 
-			if (numberOfUsers < 0)
-			{ // TODO: Figure out if this can be 0 or not
-				throw new ArgumentOutOfRangeException("numberOfUsers", "Number of users cannot be negative.");
+			if (string.IsNullOrEmpty(subscriptionName))
+			{
+				throw new ArgumentException("subscriptionName", "Subscription Name cannot be empty.");
 			}
 
 			#endregion Validation
 
-			int subID = DBHelper.ChangeSubscription(orgId, selectedSku, productId, numberOfUsers);
+			int subID = DBHelper.ChangeSubscription(orgId, selectedSku, productId, 0, subscriptionName);
 			if (subID != 0)
 			{
 				DBHelper.UpdateSubscriptionUserProductRole(this.GetProductRolesFromSubscription(subID).Where(x => x.Name == "Manager").Single().ProductRoleId, subID, UserContext.UserId);
@@ -674,10 +655,10 @@ namespace AllyisApps.Services
 		/// Subscribes the current organization to a product or updates the organization's subscription to the product,
 		/// and creates/updates/removes the billing subscription plan accordingly.
 		/// </summary>
-		/// <param name="numberOfUsers">Number of users.</param>
 		/// <param name="productId">Product id.</param>
 		/// <param name="productName">Product name.</param>
 		/// <param name="selectedSku">Selected sku id.</param>
+		/// <param name="subscriptionName">Subscription Name</param>
 		/// <param name="previousSku">The previous sku id.</param>
 		/// <param name="billingAmount">Billing amount, as an int in cents.</param>
 		/// <param name="existingToken">The existing BillingServicesToken, if any.</param>
@@ -687,13 +668,8 @@ namespace AllyisApps.Services
 		/// <param name="orgId"></param>
 		/// <returns></returns>
 		[CLSCompliant(false)]
-		public bool Subscribe(int numberOfUsers, int productId, string productName, int selectedSku, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
+		public bool Subscribe(int productId, string productName, int selectedSku, string subscriptionName, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
 		{
-			if (numberOfUsers < this.GetUsersWithSubscriptionToProductInOrganization(orgId, productId).Count())
-			{
-				return false;
-			}
-
 			BillingServicesCustomer customer;
 			BillingServicesToken token;
 			if (addingBillingCustomer)
@@ -728,11 +704,11 @@ namespace AllyisApps.Services
 
 				if (subscriptionId == null)
 				{
-					this.AddCustomerSubscriptionPlan(billingAmount, customer.Id, numberOfUsers, productId, productName, selectedSku);
+					this.AddCustomerSubscriptionPlan(billingAmount, customer.Id, productId, productName, selectedSku);
 				}
 				else
 				{
-					this.UpdateSubscriptionPlan(billingAmount, productName, numberOfUsers, subscriptionId, customer.Id, selectedSku);
+					this.UpdateSubscriptionPlan(billingAmount, productName, subscriptionId, customer.Id, selectedSku);
 				}
 			}
 			else
@@ -754,11 +730,11 @@ namespace AllyisApps.Services
 
 			if (selectedSku != previousSku)
 			{
-				this.AddSubscriptionOfSkuToOrganization(orgId, selectedSku, productId, numberOfUsers);
+				this.AddSubscriptionOfSkuToOrganization(orgId, selectedSku, productId, subscriptionName);
 			}
 			else
 			{
-				this.UpdateSubscriptionUsers(selectedSku, numberOfUsers);
+				this.UpdateSubscriptionUsers(orgId, selectedSku);
 			}
 
 			return true;
