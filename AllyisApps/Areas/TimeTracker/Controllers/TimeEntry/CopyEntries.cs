@@ -91,7 +91,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					// If the copying user isn't a manager, some checks are required before we let them delete/copy entries
 					CompleteProjectInfo project = allProjects.Where(p => entry.ProjectId == p.ProjectId).SingleOrDefault();
-					if (project != null && (!project.IsActive || !project.IsUserActive || project.EndDate.HasValue && DateTime.Compare(project.EndDate.Value, startDateTarget.Date.AddDays(i)) <= 0))
+					if (project != null && (!project.IsActive || !project.IsUserActive || (project.EndDate.HasValue && DateTime.Compare(project.EndDate.Value, startDateTarget.Date.AddDays(i)) <= 0)))
 					{
 						continue; // A user can't create entries for projects that have been removed, that the user is no longer assigned to, or have reached their end date
 					}
