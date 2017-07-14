@@ -150,7 +150,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				TotalUsers = users.Count(),
 				CurrentUser = users.Where(x => x.UserId == userId).Single(),
 				LockDate = AppService.GetDayFromDateTime(AppService.GetLockDateFromParameters(infos.Item1.LockDateUsed, infos.Item1.LockDatePeriod, infos.Item1.LockDateQuantity)),
-				Subscriptionid = subId
+				Subscriptionid = subId,
+				ProductRole = 1
 			};
 
 			// Initialize the starting dates and get all of the time entries within that date range.
