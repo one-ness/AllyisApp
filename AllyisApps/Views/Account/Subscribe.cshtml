@@ -4,40 +4,48 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = Strings.Subscribe;
     ViewBag.Description = Model.ProductDescription;
-    var userCount = Model.CurrentSubscription == null ? 500 : Model.CurrentSubscription.NumberOfUsers;
-    var cost = (userCount - 500).ToString("c");
 }
 
 @*TODO: Currently mentions of pricing are commented out. When pricing is properly implemented, restore these mentions.
     Also remove the damn hardcoded "free users" numbers.*@
 <div class="shrink-wrap-center">
     <div class="min300">
-        @using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, new { token = Model.Token, billingServicesEmail = Model.Billing.Email, cost = cost }, FormMethod.Post, new { @class = "form-inline" }))
+        @using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, FormMethod.Post, new { @class = "form-inline" }))
         {
             @Html.AntiForgeryToken()
+			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+
             @Html.HiddenFor(m => m.OrganizationId)
             @Html.HiddenFor(m => m.ProductId)
             @Html.HiddenFor(m => m.ProductName)
             @Html.HiddenFor(m => m.SelectedSku)
+			@Html.HiddenFor(m => m.SelectedSkuName)
             @Html.HiddenFor(m => m.PreviousSku)
             @Html.HiddenFor(m => m.Token)
+			@Html.HiddenFor(m => m.Billing)
             @Html.Hidden("currentUserCount", (int)Model.CurrentUsers)
-            @*<p>@Strings.FirstUserOffer</p>*@
+           
             <p id="notice" style="color:red"></p>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6 col-md-push-3">
                     <div class="panel panel-default" style="min-width:350px;">
                         <div class="panel-heading">
-                            <h3 style="margin-top: 0; margin-bottom: 0;">
-                                @Strings.ResourceManager.GetString(@Model.ProductName)
+                            <h3 style="margin-top: 0; margin-bottom: 0; text-align: center;">
+								@Html.DisplayTextFor(m => m.SelectedSkuName)
                             </h3>
                         </div>
                         <div class="panel-body">
-                            <div class="form-group">
+							<div class="form-group">
+								<p>@Html.DisplayTextFor(m => m.SelectedSkuDescription)</p>
+								@Html.ReqLabelFor(m => m.SubscriptionName, "Subscription Name")
+								@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control", @placeholder = "Please enter subscription name" })
+								@Html.ValidationMessageFor(m => m.SubscriptionName)
+							</div>
+                           @* <div class="form-group">
                                 <label>@Strings.NumberOfUsers</label>
                                 <input class="form-control" name="NumberOfUsers" type="number" min="5" step="5" max="500" id="user-count" value="@userCount" onchange="fixUserCount(this)" />
                             </div>
-                            @*<div class="col-xs-5">
+                            <div class="col-xs-5">
                                     <label>@Strings.NumberOfUsers</label>
                                 </div>
                                 <div class="col-xs-5">

@@ -438,7 +438,6 @@ namespace AllyisApps.Services
 		/// <returns>Returns null if authorization fails, project name is succeed, empty string if not found.</returns>
 		public string DeleteProject(int projectId, int subscriptionId)
 		{
-			int orgId = GetSubscription(subscriptionId).OrganizationId;
 			if (projectId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");

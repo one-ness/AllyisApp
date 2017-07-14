@@ -32,8 +32,8 @@ namespace AllyisApps.Controllers
 			int productId = (int)userSub.ProductId;
 
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
-			var infos = AppService.GetProductSubscriptionInfo(id, idTwo);
-			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
+			var infos = AppService.GetProductSubscriptionInfo(orgId, idTwo);
+			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, orgId);
 			return this.View(model);
 		}
 

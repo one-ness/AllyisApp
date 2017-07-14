@@ -1051,6 +1051,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Downgrade.
+        /// </summary>
+        public static string Downgrade {
+            get {
+                return ResourceManager.GetString("Downgrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select....
         /// </summary>
         public static string DropDownEmpty {
@@ -3355,11 +3364,29 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your subscription to {0} was created successfully!.
+        /// </summary>
+        public static string SubscribedSuccessfully {
+            get {
+                return ResourceManager.GetString("SubscribedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Here you can subscribe to any products Allyis Apps has to offer!.
         /// </summary>
         public static string SubscribeToProducts {
             get {
                 return ResourceManager.GetString("SubscribeToProducts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the subscription name.
+        /// </summary>
+        public static string SubscriptionNameValidation {
+            get {
+                return ResourceManager.GetString("SubscriptionNameValidation", resourceCulture);
             }
         }
         

@@ -3,13 +3,44 @@
 	ViewBag.Title = Strings.EditSubscription;
 }
 
-<div> 
-	Product
-</div>
-<div>
-	Description
-</div>
-<div>
-	@Html.ActionLink(Strings.Unsubscribe, ActionConstants.Unsubscribe, ControllerConstants.Account, null, htmlAttributes: new { @class = "btn btn-default" })
-	@Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, null, htmlAttributes: new { @class = "btn btn-default" })
+<div class="shrink-wrap-center">
+			<div class="col-md-12">
+				<div class="text-center">
+					<h3>
+						@Model.Name
+					</h3>
+				</div>
+				<div class="text-center">
+					@Model.Description
+				</div>
+				<div class="text-center" style="margin-top:10px;">
+					@if (Model.SkuId > Model.SkuIdNext)
+					{
+						using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, new { productId = Model.ProductId, productName = Model.Name, selectedSku = Model.SkuIdNext, subscriptionName = Model.NextName, previousSku = Model.SkuId, organizationId = Model.OrganizationId }, FormMethod.Post, new { @style = "display: inline-block", @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("You are about to Downgrade from " + Model.Name)) }))
+						{
+							@Html.AntiForgeryToken()
+							<input type="submit" value="@Strings.Downgrade" class="btn btn-default" id="submitDowngrade" />
+						}
+					}
+					else
+					{
+						using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, new { productId = Model.ProductId, productName = Model.Name, selectedSku = Model.SkuIdNext, subscriptionName = Model.NextName, previousSku = Model.SkuId, organizationId = Model.OrganizationId }, FormMethod.Post, new { @style = "display: inline-block", @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("You are about to Upgrade from " + Model.Name)) }))
+						{
+							@Html.AntiForgeryToken()
+							<input type="submit" value="@Strings.Upgrade" class="btn btn-default" id="submitUpgrade" />
+						}
+					}
+					@using (Html.BeginForm( ActionConstants.Unsubscribe, ControllerConstants.Account, new { id = Model.SubscriptionId, idTwo = Model.SkuId }, FormMethod.Post, new { @style = "display: inline-block", @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("Are you sure you want to Unsubscribe from " + Model.Name)) }))
+					{
+						@Html.AntiForgeryToken()
+						<input data-val="true" id="OrganizationId" name="OrganizationId" type="hidden" value="@Model.OrganizationId" />
+						<input data-val="true" id="SkuId" name="SkuId" type="hidden" value="@Model.SkuId" />
+						<input data-val="true" id="CurrentSubscription" name="CurrentSubscription.SubscriptionId" type="hidden" value="@Model.SubscriptionId" />
+						<input type="hidden" name="SelectedSku" value="0" />
+						<input type="submit" value="@Strings.Unsubscribe" class="btn btn-danger" id="submitDelete" />
+						@Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, htmlAttributes: new { @class = "btn btn-default" })
+					}
+
+				</div>
+			</div>
 </div>

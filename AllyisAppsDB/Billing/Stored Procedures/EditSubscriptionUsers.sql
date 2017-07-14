@@ -12,7 +12,7 @@ BEGIN TRANSACTION
 	FROM [Billing].[Subscription] WITH (NOLOCK)
 	JOIN [Billing].[Sku] WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
 	JOIN [Billing].[Product] WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
-	WHERE [Subscription].[OrganizationId] = @OrganizationId AND [Product].[Name] = 'TimeTracker' AND [Subscription].[IsActive] = 1
+	WHERE [Subscription].[OrganizationId] = @OrganizationId AND [Product].[Name] = 'Time Tracker' AND [Subscription].[IsActive] = 1
 
 	IF @SubId IS NOT NULL
 	BEGIN
@@ -57,7 +57,7 @@ BEGIN TRANSACTION
 			WHERE [SubscriptionId] IS NULL
 
 			-- Check that there is room for users being added
-			IF @ExistingUsers + (SELECT COUNT(*) FROM @AddingUsers) > @NumberOfUsers
+			IF @ExistingUsers + (SELECT COUNT(*) FROM @AddingUsers) > @NumberOfUsers AND @NumberOfUsers != 0
 			BEGIN
 				SELECT -1 -- Not enough room in subscription
 			END

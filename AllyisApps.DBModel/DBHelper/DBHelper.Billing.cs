@@ -203,13 +203,15 @@ namespace AllyisApps.DBModel
 		/// <param name="skuId">Set to 0 for unsubscribe.</param>
 		/// <param name="productId"> Param @productId. </param>
 		/// <param name="numberOfUsers">Number of the users the subscription.</param>
+		/// <param name="subscriptionName">The subscription name</param>
 		/// <returns>The ret ID.</returns>
-		public int ChangeSubscription(int organizationId, int skuId, int productId, int numberOfUsers)
+		public int ChangeSubscription(int organizationId, int skuId, int productId, int numberOfUsers, string subscriptionName)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@OrganizationId", organizationId);
 			parameters.Add("@SkuId", skuId);
 			parameters.Add("@NumberOfUsers", numberOfUsers);
+			parameters.Add("@SubscriptionName", subscriptionName);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 			/*if (skuId == 0)
 			{
@@ -217,7 +219,7 @@ namespace AllyisApps.DBModel
 			}
 			else
 			{ */
-			parameters.Add("@ProductId", null);
+			parameters.Add("@ProductId", productId);
 			////}
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
