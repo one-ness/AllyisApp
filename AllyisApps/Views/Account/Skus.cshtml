@@ -60,41 +60,6 @@
 												}
 											</div>
 										</div>
-										@*
-										<div class="col-md-4">
-											<div class="row" style="text-align: center; vertical-align: middle; margin-top: 25px; margin-bottom: 10px;"><img src="~/Content/icons/TimeTracker.png" alt="@sku.Name" /></div>
-											@if (Model.currentSubscriptions.Where(sub => sub.SkuId == sku.SkuId).FirstOrDefault() != null)   //already subscribed to this sku
-											{
-												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="" class="btn btn-default" disabled>Subscribed</a></div>
-											}
-											else if (Model.currentSubscriptions.Where(sub => sub.ProductId == sku.ProductId).FirstOrDefault() != null)  //subscribed to another sku under the same product
-											{
-												if (Model.currentSubscriptions.Where(sub => sub.ProductId == sku.ProductId).FirstOrDefault().SkuId > sku.SkuId) //pro version always has higher skuId than basic version
-												{
-													<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, skuId = @sku.SkuId })" style="text-decoration: none" class="btn btn-default">Downgrade</a></div>
-												}
-												else
-												{
-													<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, skuId = @sku.SkuId })" style="text-decoration: none" class="btn btn-default">Upgrade</a></div>
-												}
-											}
-											else
-											{
-												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, skuId = @sku.SkuId })" style="text-decoration: none" class="btn btn-default">@Strings.Subscribe</a></div>
-											}
-
-										</div>
-										<div class="col-md-8">
-											<h3>
-												@sku.Name
-											</h3>
-											<p>
-												Cost: $@sku.Price.ToString("N2")
-												<br />
-												@sku.Description
-											</p>
-										</div>
-											*@
 									</div>
 								</div>
 							</div>
