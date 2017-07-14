@@ -5,6 +5,7 @@ using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
@@ -22,12 +23,13 @@ namespace AllyisApps.Controllers
 		public ActionResult EditSubscription(int id)
         {
 			int orgId = AppService.UserContext.UserSubscriptions[id].OrganizationId;
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
 			int skuId = AppService.UserContext.UserSubscriptions[id].SkuId;
 			int productId = (int) AppService.UserContext.UserSubscriptions[id].ProductId;
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
+			var infos = AppService.GetProductSubscriptionInfo(id, skuId);
 			SkuInfo sku = AppService.GetSkuDetails(skuId);
-			sku.SkuIdNext = AppService.GetSkuDetailsForEditSubscription(skuId, productId);
-			sku.NextName = AppService.GetSkuName(skuId, productId);
+			sku.SkuIdNext = infos.Item3.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault().SkuId;
+			sku.NextName = infos.Item3.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault().Name;
 			EditSubscriptionViewModel model = new EditSubscriptionViewModel
 			{
 				SkuId = sku.SkuId,
