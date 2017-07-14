@@ -34,13 +34,14 @@
 												}
 												else if (Model.currentSubscriptions.Where(sub => sub.ProductId == sku.ProductId).FirstOrDefault() != null)	//subscribed to another sku under the same product
 												{
+													var currentSubId = Model.currentSubscriptions.Where(sub => sub.ProductId == sku.ProductId).FirstOrDefault().SubscriptionId;
 													if (Model.currentSubscriptions.Where(sub => sub.ProductId == sku.ProductId).FirstOrDefault().SkuId > sku.SkuId) //pro version always has higher skuId than basic version
 													{
-														<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, skuId = @sku.SkuId })" style="text-decoration: none" class="btn btn-default">Downgrade</a></div>
+														<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = currentSubId })" style="text-decoration: none" class="btn btn-default">Downgrade</a></div>
 													}
 													else
 													{
-														<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="@Url.Action(ActionConstants.Subscribe, ControllerConstants.Account, new { id = Model.OrganizationId, skuId = @sku.SkuId })" style="text-decoration: none" class="btn btn-default">Upgrade</a></div>
+														<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = currentSubId })" style="text-decoration: none" class="btn btn-default">Upgrade</a></div>
 													}
 												}
 												else
