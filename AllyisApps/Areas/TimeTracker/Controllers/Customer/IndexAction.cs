@@ -33,6 +33,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			return this.View(this.ConstructManageCustomerViewModel(subscriptionId));
 		}
 
+        /// <summary>
+        /// Quick fix for new routing issue. 
+        /// </summary>
+        /// <param name="subscriptionId"></param>
+        /// <returns></returns>
+        public ActionResult IndexNoUserId(int subscriptionId)
+        {
+            this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
+            UserSubscription subInfo = null;
+            this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+            return this.View("Index", this.ConstructManageCustomerViewModel(subscriptionId));
+        }
+
 		/// <summary>
 		/// PopulateProjects.
 		/// </summary>

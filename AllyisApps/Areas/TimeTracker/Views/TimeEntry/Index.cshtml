@@ -46,10 +46,21 @@
                        href="javascript: void(0);" onclick="return drp_prevWeek()">
                         <i class="fa fa-chevron-left"></i>
                     </a>
-                    <a class="btn btn-primary" title="@Strings.Current"
-                       href="@Url.Action(ActionConstants.Index, routeValues: new { userId = Model.EntryRange.UserId })">
-                        <i class="glyphicon glyphicon-flash"></i>
-                    </a>
+                    @if (Model.EntryRange.UserId == ViewBag.SignedInUserID)
+                    {
+                        <a class="btn btn-primary" title="@Strings.Current"
+                           href="@Url.Action(ActionConstants.IndexNoUserId)">
+                            <i class="glyphicon glyphicon-flash"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary" title="@Strings.Current"
+                           href="@Url.Action(ActionConstants.Index, routeValues: new { userId = Model.EntryRange.UserId })">
+                            <i class="glyphicon glyphicon-flash"></i>
+                        </a>
+                    }
+
                     <a class="btn btn-primary" title="@Strings.Next"
                        href="javascript: void(0);" onclick="return drp_nextWeek()">
                         <i class="fa fa-chevron-right"></i>
@@ -144,16 +155,29 @@ ViewBag.RenderSidebar = true;}
                         <div data-page="@pageCount" class="@(active)"
                              onmouseover='this.style.backgroundColor="#c4e3f3"' onmouseout="@resetBackground"
                              style="width: 100%; display: @hide; justify-content: flex-end;">
-                            <a class="col-xs-11 text-left" data-search="@user.Email"
-                               href="@Url.Action(ActionConstants.Index, routeValues: new
-                            {
-                                userId = user.UserId,
-                                startDate = Model.EntryRange.StartDate,
-                                endDate = Model.EntryRange.EndDate
-                            })"
+                            @if (user.UserId == ViewBag.SignedInUserID)
+                            {<a class="col-xs-11 text-left" data-search="@user.Email"
+                               href="@Url.Action(ActionConstants.IndexNoUserId, routeValues: new
+                                {
+                                    startDate = Model.EntryRange.StartDate,
+                                    endDate = Model.EntryRange.EndDate
+                                })"
                                style="text-decoration: none; color: #000000;">
                                 @user.FirstName @user.LastName
-                            </a>
+                            </a>}
+                            else
+                            {
+                                <a class="col-xs-11 text-left" data-search="@user.Email"
+                                   href="@Url.Action(ActionConstants.Index, routeValues: new
+                                {
+                                    userId = user.UserId,
+                                    startDate = Model.EntryRange.StartDate,
+                                    endDate = Model.EntryRange.EndDate
+                                })"
+                                   style="text-decoration: none; color: #000000;">
+                                    @user.FirstName @user.LastName
+                                </a>
+                            }
                             <a href="@Url.Action(ActionConstants.UserEdit, routeValues: new {
                                 subscriptionId = Model.Subscriptionid,
                                 userId = user.UserId })"

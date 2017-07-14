@@ -1,4 +1,4 @@
-﻿@using AllyisApps.ViewModels.Shared;
+﻿@using AllyisApps.ViewModels.Auth;
 @using AllyisApps.Services;
 
 @model AllyisApps.ViewModels.Auth.IndexAndOrgsViewModel
@@ -94,8 +94,10 @@
 			</div>
 		</div>
 		@foreach (var org in Model.OrgInfos)
-		{
-			@Html.Partial("_OrgPanel", org);
-		}
+        {
+            UserOrgViewModel model = new UserOrgViewModel() { UserInfo = Model.UserInfo, PanelInfo = org };
+
+            @Html.Partial("_OrgPanel", model);
+        }
 	</div>
 </div>
