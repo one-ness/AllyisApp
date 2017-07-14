@@ -1447,4 +1447,7 @@
   <data name="Products" xml:space="preserve">
     <value>Products</value>
   </data>
+  <data name="EmployeeIdValidation" xml:space="preserve">
+    <value>Please enter an employee id.</value>
+  </data>
 </root>

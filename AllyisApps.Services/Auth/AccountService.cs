@@ -466,6 +466,44 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Updates an organization member's info
+		/// </summary>
+		/// <param name="employeeId">The member's id</param>
+		/// <param name="employeeTypeId">The member's type (Salary=1/Hourly=2)</param>
+		/// <param name="employeeRoleId">The member's role (Member=1/Owner=2)</param>
+		/// <param name="orgId">The org id</param>
+		/// <param name="userId">The user id</param>
+		public bool UpdateMember(string employeeId, int employeeTypeId, int employeeRoleId, int userId, int orgId)
+		{
+			if (userId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+			}
+
+			if (orgId < 0)
+			{
+				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
+			}
+
+			if (string.IsNullOrEmpty(employeeId))
+			{
+				throw new ArgumentNullException("employeeId", "Employee Id must have a value");
+			}
+
+			if (employeeTypeId < 0)
+			{
+				throw new ArgumentOutOfRangeException("employeeTypeId", "Employee Type Id cannot be negative.");
+			}
+
+			if (employeeRoleId < 0)
+			{
+				throw new ArgumentOutOfRangeException("employeeRoleId", "Employee Role Id cannot be negative.");
+			}
+
+			return DBHelper.UpdateMember(employeeId, employeeTypeId, employeeRoleId, userId, orgId) == 1 ? true : false;
+		}
+
+		/// <summary>
 		/// Sets the language preference for the current user.
 		/// </summary>
 		/// <param name="languageID">The language ID.</param>

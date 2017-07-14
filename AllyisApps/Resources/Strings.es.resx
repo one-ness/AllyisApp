@@ -1453,4 +1453,7 @@
   <data name="Products" xml:space="preserve">
     <value>Productos</value>
   </data>
+  <data name="EmployeeIdValidation" xml:space="preserve">
+    <value>Ingresa un ID de empleado.</value>
+  </data>
 </root>

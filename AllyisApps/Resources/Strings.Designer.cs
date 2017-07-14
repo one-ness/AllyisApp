@@ -1258,6 +1258,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter an employee id..
+        /// </summary>
+        public static string EmployeeIdValidation {
+            get {
+                return ResourceManager.GetString("EmployeeIdValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Employees.
         /// </summary>
         public static string Employees {
@@ -3747,6 +3756,15 @@ namespace AllyisApps.Resources {
         public static string Unsubscribe {
             get {
                 return ResourceManager.GetString("Unsubscribe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully updated {0} {1}.
+        /// </summary>
+        public static string UpdateMemberSuccessMessage {
+            get {
+                return ResourceManager.GetString("UpdateMemberSuccessMessage", resourceCulture);
             }
         }
         

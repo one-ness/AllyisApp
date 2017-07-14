@@ -1468,4 +1468,10 @@
   <data name="Downgrade" xml:space="preserve">
     <value>Downgrade</value>
   </data>
+  <data name="EmployeeIdValidation" xml:space="preserve">
+    <value>Please enter an employee id.</value>
+  </data>
+  <data name="UpdateMemberSuccessMessage" xml:space="preserve">
+    <value>Successfully updated {0} {1}</value>
+  </data>
 </root>
