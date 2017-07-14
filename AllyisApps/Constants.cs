@@ -42,6 +42,7 @@ namespace AllyisApps
 		public const string GetDetailsDataJson = "getdetailsdatajson";
 		public const string Import = "import";
 		public const string Index = "index";
+        public const string IndexNoUserId = "indexnouserid";
 		public const string Invite = "invite";
 		public const string IsSubdomainNameUnique = "issubdomainnameunique";
 		public const string LogOff = "logoff";

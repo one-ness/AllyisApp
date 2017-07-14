@@ -103,7 +103,7 @@ namespace AllyisApps.DBModel
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var result = connection.Query<string>("[Crm].[DeleteProject]", new { ProjectId = projectId }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				var result = connection.Query<string>("[Crm].[DeleteProject]", new { ProjectId = projectId, DeactivateDate = DateTime.Now }, commandType: CommandType.StoredProcedure).SingleOrDefault();
 				if (result == null) { return ""; }
 				return result;
 			}

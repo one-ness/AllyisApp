@@ -57,7 +57,16 @@ namespace AllyisApps.Areas.TimeTracker
 				constraints: new { subscriptionId = @"\d+", userId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.TimeTracker.Controllers" });
 
-			context.Routes.MapSubdomainRoute(
+            context.Routes.MapSubdomainRoute(
+                name: "TimeTracker_NoUserId",
+                url: "TimeTracker/{subscriptionId}/{controller}",
+                area: this.AreaName,
+                defaults: new {controller = "Home", action = "IndexNoUserId" },
+                constraints: new { subscriptionId = @"\d+" },
+                namespaces: new string[] { "AllyisApps.Areas.TimeTracker.Controllers" });
+
+
+            context.Routes.MapSubdomainRoute(
 				name: "TimeTracker_Default",
 				url: "TimeTracker/{subscriptionId}/{controller}/{action}/{id}",
 				area: this.AreaName,

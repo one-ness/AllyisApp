@@ -36,8 +36,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
 			ViewBag.GetDateFromDays = new Func<int, DateTime>(AppService.GetDateFromDays);
+            ViewBag.SignedInUserID = GetCookieData().UserId;
 
-			bool manager = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
+
+            bool manager = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
 			ViewBag.canManage = manager;
 			TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(
 				subInfo.OrganizationId,
@@ -49,6 +51,39 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				endDate);
 			return this.View(model);
 		}
+
+        /// <summary>
+        /// Get: /TimeTracker/{subscriptionId}/TimeEntry
+        /// </summary>
+        /// <param name="subscriptionId">The SubscriptionId</param>
+        /// <param name="startDate">The beginning of the Date Range.</param>
+        /// <param name="endDate">The ending of the Date Range.</param>
+        /// <returns>Provides the view for the defined user over the date range defined.</returns>
+        public ActionResult IndexNoUserId(int subscriptionId, int? startDate = null, int? endDate = null)
+        {
+            int userId = GetCookieData().UserId;
+            ViewBag.SignedInUserID = userId;
+
+            this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
+
+            UserSubscription subInfo = null;
+            this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+
+            ViewBag.GetDateFromDays = new Func<int, DateTime>(AppService.GetDateFromDays);
+
+            bool manager = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
+            ViewBag.canManage = manager;
+            TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(
+                subInfo.OrganizationId,
+                subscriptionId,
+                userId,
+                //this.AppService.UserContext.UserId,
+                manager,
+                startDate,
+                endDate);
+            return this.View("Index", model);
+
+        }
 
 		/// <summary>
 		/// Constructor for the TimeEntryOverDateRangeViewModel.
@@ -115,7 +150,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				TotalUsers = users.Count(),
 				CurrentUser = users.Where(x => x.UserId == userId).Single(),
 				LockDate = AppService.GetDayFromDateTime(AppService.GetLockDateFromParameters(infos.Item1.LockDateUsed, infos.Item1.LockDatePeriod, infos.Item1.LockDateQuantity)),
-				Subscriptionid = subId
+				Subscriptionid = subId,
+				ProductRole = 1
 			};
 
 			// Initialize the starting dates and get all of the time entries within that date range.
