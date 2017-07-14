@@ -115,24 +115,23 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Subscribe to a product.
 		/// </summary>
-		/// <param name="model">The model.</param>
 		/// <returns>A page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[CLSCompliant(false)]
-		public ActionResult Subscribe(EditSubscriptionViewModel model)
+		public ActionResult EditSubscriptionTwo(int ProductId, string Name, int SkuIdNext, string NextName, int SkuId, int orgId)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, model.OrganizationId);
+			this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, orgId);
 
-			if (AppService.Subscribe(model.ProductId, model.Name, model.SkuIdNext, model.SkuId, 0, null, false, null, null, model.OrganizationId))
+			if (AppService.Subscribe(ProductId, Name, SkuIdNext, NextName, SkuId, 0, null, false, null, null, orgId))
 			{
-				Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.SubscribedSuccessfully, model.SelectedSkuName), Variety.Success));
-				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
+				Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.SubscribedSuccessfully, NextName), Variety.Success));
+				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = orgId });
 			}
 			else
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ReduceNumberOfUsers, Variety.Danger));
-				return this.RedirectToAction(ActionConstants.Subscribe, new { productId = model.ProductId });
+				return this.RedirectToAction(ActionConstants.Subscribe, new { productId = ProductId });
 			}
 		}
 

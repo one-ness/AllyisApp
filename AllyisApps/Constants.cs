@@ -31,6 +31,7 @@ namespace AllyisApps
 		public const string EditOrg = "editorg";
 		public const string EditProfile = "editprofile";
 		public const string EditSubscription = "editsubscription";
+		public const string EditSubscriptionTwo = "editsubscriptionTwo";
 		public const string EditTimeEntryApprovalState = "edittimeentryapprovalstate";
 		public const string EditTimeEntryJson = "edittimeentryjson";
 		public const string Export = "export";

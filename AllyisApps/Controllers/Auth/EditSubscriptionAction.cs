@@ -27,6 +27,7 @@ namespace AllyisApps.Controllers
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
 			SkuInfo sku = AppService.GetSkuDetails(skuId);
 			sku.SkuIdNext = AppService.GetSkuDetailsForEditSubscription(skuId, productId);
+			sku.NextName = AppService.GetSkuName(skuId, productId);
 			EditSubscriptionViewModel model = new EditSubscriptionViewModel
 			{
 				SkuId = sku.SkuId,

@@ -37,6 +37,11 @@ namespace AllyisApps.Services
 		public string Name { get; set; }
 
 		/// <summary>
+		/// Gets or sets the SkuId of the upgrade or downgrade version of the Product.
+		/// </summary>
+		public string NextName { get; set; }
+
+		/// <summary>
 		/// Gets or sets the price.
 		/// </summary>
 		public decimal Price { get; set; }
