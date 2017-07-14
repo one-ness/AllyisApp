@@ -104,6 +104,11 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// Gets pay classes for an org.
 		/// </summary>
 		public IEnumerable<PayClass> PayClasses { get; internal set; }
+
+		/// <summary>
+		/// Gets the type of product.
+		/// </summary>
+		public int ProductRole { get; set; }
 	}
 
 	/// <summary>

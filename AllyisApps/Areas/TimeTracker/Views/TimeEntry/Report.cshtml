@@ -109,11 +109,11 @@
 							@if (Model.ShowExport)
 							{
 								<div>
-									<input class="btn btn-primary pull-right" type="submit" name="viewDataButton" value=@Strings.Export />
+									<input class="btn @ViewBag.color pull-right" type="submit" name="viewDataButton" value=@Strings.Export />
 								</div>
 							}
 							<div>
-								<input class="btn btn-primary pull-right" type="submit" name="viewDataButton" style="margin-right: 15px;" value=@Strings.Preview />
+								<input class="btn @ViewBag.color pull-right" type="submit" name="viewDataButton" style="margin-right: 15px;" value=@Strings.Preview />
 							</div>
 						</div>
 					</div>
@@ -184,81 +184,81 @@
 		</div>
 
         @*<!--Preview panel-->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                @AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.LRP
-                (<span id="data-view-sum">@Model.PreviewTotal</span>)
-            </div>
-            <div id="data-view" class="panel-body data-view">
-                @if (Model.PreviewMessage == "")
-                {
-                    <table class="table table-hover table-condensed" style="margin: 0;">
-                        <thead>
-                            <tr>
-                                <th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.LastName</th>
-                                <th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.FirstName</th>
-                                <th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Date</th>
-                                <th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Duration</th>
-                                <th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.PayClass</th>
-                                <th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Project</th>
-                                <th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Customer</th>
-                                <th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Description</th>
-                            </tr>
-                        </thead>
-                        <tbody id="preview-data">
-                            @foreach (TablePreviewEntry pe in Model.PreviewEntries)
-                            {
-                                <tr name="preview-entry">
-                                    <td>@pe.TimeEntry.LastName</td>
-                                    <td>@pe.TimeEntry.FirstName</td>
-                                    <td>@pe.TimeEntry.Date.ToShortDateString()</td>
-                                    <td>@pe.TimeEntry.Duration</td>
-                                    <td>@pe.TimeEntry.PayClassName</td>
-                                    <td>@pe.ProjectName</td>
-                                    <td>@pe.CustomerName</td>
-                                    <td>@pe.TimeEntry.Description</td>
-                                </tr>
-}
-                        </tbody>
-                    </table>}
-                else
-                {
-                    <p>
-                        &hellip;
-                    </p>}
-            </div>
-            <div id="data-message" class="panel-footer">
-                @Model.PreviewMessage
-            </div>
-        </div>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.LRP
+					(<span id="data-view-sum">@Model.PreviewTotal</span>)
+				</div>
+				<div id="data-view" class="panel-body data-view">
+					@if (Model.PreviewMessage == "")
+					{
+						<table class="table table-hover table-condensed" style="margin: 0;">
+							<thead>
+								<tr>
+									<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.LastName</th>
+									<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.FirstName</th>
+									<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Date</th>
+									<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Duration</th>
+									<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.PayClass</th>
+									<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Project</th>
+									<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Customer</th>
+									<th>@AllyisApps.Resources.TimeTracker.Views.TimeEntry.Strings.Description</th>
+								</tr>
+							</thead>
+							<tbody id="preview-data">
+								@foreach (TablePreviewEntry pe in Model.PreviewEntries)
+								{
+									<tr name="preview-entry">
+										<td>@pe.TimeEntry.LastName</td>
+										<td>@pe.TimeEntry.FirstName</td>
+										<td>@pe.TimeEntry.Date.ToShortDateString()</td>
+										<td>@pe.TimeEntry.Duration</td>
+										<td>@pe.TimeEntry.PayClassName</td>
+										<td>@pe.ProjectName</td>
+										<td>@pe.CustomerName</td>
+										<td>@pe.TimeEntry.Description</td>
+									</tr>
+	}
+							</tbody>
+						</table>}
+					else
+					{
+						<p>
+							&hellip;
+						</p>}
+				</div>
+				<div id="data-message" class="panel-footer">
+					@Model.PreviewMessage
+				</div>
+			</div>
 
-        <!--Paging panel-->
-        @using (Html.BeginForm(ActionConstants.ViewPage, ControllerConstants.TimeEntry, FormMethod.Post, htmlAttributes: new { @id = "viewPageForm" }))
-        {
-            <div class="panel panel-default" id="footPager" style="border: 0; display: flex; justify-content: space-around; flex-wrap: wrap;">
-                @Html.Hidden("OrganizationId", Model.OrganizationId)
-                @for (int u = 0; u < Model.Selection.Users.Count; u++)
-                {
-                    @Html.Hidden(string.Format("Users[{0}]", u), Model.Selection.Users[u])
-                }
-                @Html.Hidden("StartDate", Model.Selection.StartDate)
-                @Html.Hidden("EndDate", Model.Selection.EndDate)
-                @Html.Hidden("ShowExport", Model.ShowExport)
-                @Html.Hidden("CustomerSelect", Model.Selection.CustomerId)
-                @Html.Hidden("ProjectSelect", Model.Selection.ProjectId)
-                @for (int i = 1; i <= Model.PreviewPageTotal; i++)
-                {
-                    if (i == Model.PreviewPageNum)
-                    {
-                        <input class="btn btn-primary btn-sm" id="page @i" name="pageButton" type="button" value="@i" disabled="disabled" />
-                    }
-                    else
-                    {
-                        <input class="btn btn-primary btn-sm" id="page @i" name="pageButton" type="submit" value="@i" />
-                    }
-                }
-            </div>
-        }*@
+			<!--Paging panel-->
+			@using (Html.BeginForm(ActionConstants.ViewPage, ControllerConstants.TimeEntry, FormMethod.Post, htmlAttributes: new { @id = "viewPageForm" }))
+			{
+				<div class="panel panel-default" id="footPager" style="border: 0; display: flex; justify-content: space-around; flex-wrap: wrap;">
+					@Html.Hidden("OrganizationId", Model.OrganizationId)
+					@for (int u = 0; u < Model.Selection.Users.Count; u++)
+					{
+						@Html.Hidden(string.Format("Users[{0}]", u), Model.Selection.Users[u])
+					}
+					@Html.Hidden("StartDate", Model.Selection.StartDate)
+					@Html.Hidden("EndDate", Model.Selection.EndDate)
+					@Html.Hidden("ShowExport", Model.ShowExport)
+					@Html.Hidden("CustomerSelect", Model.Selection.CustomerId)
+					@Html.Hidden("ProjectSelect", Model.Selection.ProjectId)
+					@for (int i = 1; i <= Model.PreviewPageTotal; i++)
+					{
+						if (i == Model.PreviewPageNum)
+						{
+							<input class="btn @ViewBag.color btn-sm" id="page @i" name="pageButton" type="button" value="@i" disabled="disabled" />
+						}
+						else
+						{
+							<input class="btn @ViewBag.color btn-sm" id="page @i" name="pageButton" type="submit" value="@i" />
+						}
+					}
+				</div>
+			}*@
     </div>
 </div>
 

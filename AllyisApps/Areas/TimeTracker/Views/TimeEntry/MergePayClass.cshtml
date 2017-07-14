@@ -37,7 +37,7 @@
                     <br />
                     <div class="pull-right">
                         @Html.ActionLink(Strings.Cancel, ActionConstants.Settings, ControllerConstants.TimeEntry, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
-                        <input type="submit" class="btn btn-primary" value=@Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...';" />
+                        <input type="submit" class="btn @ViewBag.color" value=@Strings.Save onClick="this.form.submit(); this.disabled=true; this.value='Saving...';" />
                     </div>
                 }
             </div>

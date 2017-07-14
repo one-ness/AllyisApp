@@ -66,7 +66,7 @@
                     @if (currentDate.DayOfWeek == startOfWeek)
                     {
                         <span style="padding-right:5px; padding-bottom:5px;">
-                            <a class="btn btn-primary" name='@((theSample.Date <= theSample.LockDate && !theSample.IsManager) ? "disabledButton" : "")'
+                            <a class="btn @ViewBag.color" name='@((theSample.Date <= theSample.LockDate && !theSample.IsManager) ? "disabledButton" : "")'
                                 href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
                                     {
                                         startDateTarget=currentDate,
@@ -84,7 +84,7 @@
                         </span>
                     }
                     <span style="padding-bottom:5px;">
-                        <a class="btn btn-primary" name='@((theSample.Date <= theSample.LockDate && !theSample.IsManager) ? "disabledButton" : "")'
+                        <a class="btn @ViewBag.color" name='@((theSample.Date <= theSample.LockDate && !theSample.IsManager) ? "disabledButton" : "")'
                             href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
                                 {
                                     startDateTarget=currentDate,
@@ -113,7 +113,7 @@
 			   			                @if (currentDate.DayOfWeek == startOfWeek)
 				                        {
 			   			                    <td style="padding-right:5px; padding-bottom:5px;">
-                                                <a class="btn btn-primary" name='@((theSample.Date <= theSample.LockDate && !theSample.IsManager) ? "disabledButton" : "")'
+                                                <a class="btn @ViewBag.color" name='@((theSample.Date <= theSample.LockDate && !theSample.IsManager) ? "disabledButton" : "")'
                                                     href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
                                                         {
                                                             startDateTarget=currentDate,
@@ -132,7 +132,7 @@
 			   				                </td>
 				                        }
 			   		                    <td style="padding-bottom:5px;">
-                                            <a class="btn btn-primary" name='@((theSample.Date <= theSample.LockDate && !theSample.IsManager) ? "disabledButton" : "")'
+                                            <a class="btn @ViewBag.color" name='@((theSample.Date <= theSample.LockDate && !theSample.IsManager) ? "disabledButton" : "")'
                                                 href="@Url.Action(ActionConstants.CopyEntries, ControllerConstants.TimeEntry, new
                                                     {
                                                         startDateTarget=currentDate,
