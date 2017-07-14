@@ -1051,6 +1051,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Downgrade.
+        /// </summary>
+        public static string Downgrade {
+            get {
+                return ResourceManager.GetString("Downgrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select....
         /// </summary>
         public static string DropDownEmpty {
@@ -3749,22 +3758,11 @@ namespace AllyisApps.Resources {
                 return ResourceManager.GetString("UpdateProfileSuccessMessage", resourceCulture);
             }
         }
-
-		/// <summary>
-		///   Looks up a localized string similar to Upgrade.
-		/// </summary>
-		public static string Downgrade
-		{
-			get
-			{
-				return ResourceManager.GetString("Downgrade", resourceCulture);
-			}
-		}
-
-		/// <summary>
-		///   Looks up a localized string similar to Upgrade.
-		/// </summary>
-		public static string Upgrade {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrade.
+        /// </summary>
+        public static string Upgrade {
             get {
                 return ResourceManager.GetString("Upgrade", resourceCulture);
             }

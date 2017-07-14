@@ -112,28 +112,28 @@ namespace AllyisApps.Controllers
 			}
 		}
 
-		/// <summary>
-		/// Subscribe to a product.
-		/// </summary>
-		/// <returns>A page.</returns>
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		[CLSCompliant(false)]
-		public ActionResult EditSubscriptionTwo(int ProductId, string Name, int SkuIdNext, string NextName, int SkuId, int orgId)
-		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, orgId);
+		///// <summary>
+		///// Subscribe to a product.
+		///// </summary>
+		///// <returns>A page.</returns>
+		//[HttpPost]
+		//[ValidateAntiForgeryToken]
+		//[CLSCompliant(false)]
+		//public ActionResult EditSubscriptionTwo(int ProductId, string Name, int SkuIdNext, string NextName, int SkuId, int orgId)
+		//{
+		//	this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, orgId);
 
-			if (AppService.Subscribe(ProductId, Name, SkuIdNext, NextName, SkuId, 0, null, false, null, null, orgId))
-			{
-				Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.SubscribedSuccessfully, NextName), Variety.Success));
-				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = orgId });
-			}
-			else
-			{
-				Notifications.Add(new BootstrapAlert(Resources.Strings.ReduceNumberOfUsers, Variety.Danger));
-				return this.RedirectToAction(ActionConstants.Subscribe, new { productId = ProductId });
-			}
-		}
+		//	if (AppService.Subscribe(ProductId, Name, SkuIdNext, NextName, SkuId, 0, null, false, null, null, orgId))
+		//	{
+		//		Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.SubscribedSuccessfully, NextName), Variety.Success));
+		//		return this.RedirectToAction(ActionConstants.ManageOrg, new { id = orgId });
+		//	}
+		//	else
+		//	{
+		//		Notifications.Add(new BootstrapAlert(Resources.Strings.ReduceNumberOfUsers, Variety.Danger));
+		//		return this.RedirectToAction(ActionConstants.Subscribe, new { productId = ProductId });
+		//	}
+		//}
 
 		/*
 		/// <summary>

@@ -33,6 +33,7 @@ namespace AllyisApps.Controllers
 				SkuId = sku.SkuId,
 				SkuIdNext = sku.SkuIdNext,
 				Name = sku.Name,
+				NextName = sku.NextName,
 				Description = sku.Description,
 				SubscriptionId = id,
 				OrganizationId = orgId,

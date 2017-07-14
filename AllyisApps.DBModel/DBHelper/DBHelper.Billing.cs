@@ -219,7 +219,7 @@ namespace AllyisApps.DBModel
 			}
 			else
 			{ */
-			parameters.Add("@ProductId", null);
+			parameters.Add("@ProductId", productId);
 			////}
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -297,7 +297,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default empty object
-				return connection.Query<string>("[Billing].[GetSkuForSubEditById]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return connection.Query<string>("[Billing].[GetSkuName]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
 
