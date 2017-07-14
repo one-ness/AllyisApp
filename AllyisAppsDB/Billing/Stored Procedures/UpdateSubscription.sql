@@ -4,6 +4,7 @@ CREATE PROCEDURE [Billing].[UpdateSubscription]
 	@SkuId INT,
 	@ProductId INT,/*Leave this null unless you are trying to delete something (unsubscribe)*/
 	@NumberOfUsers INT,
+	@SubscriptionName NVARCHAR(50), 
 	@retId INT OUTPUT
 AS
 	SET NOCOUNT ON;
@@ -27,7 +28,7 @@ IF(@SkuId = 0)
 	END
 ELSE
 	BEGIN
-		UPDATE [Billing].[Subscription] SET [SkuId] = @SkuId, [NumberOfUsers] = @NumberOfUsers
+		UPDATE [Billing].[Subscription] SET [SkuId] = @SkuId, [NumberOfUsers] = @NumberOfUsers, [SubscriptionName] = @SubscriptionName
 			WHERE [OrganizationId] = @OrganizationId
 			AND [Subscription].[IsActive] = 1
 			AND [SkuId] IN (SELECT [SkuId] FROM [Billing].[Sku]
@@ -36,8 +37,8 @@ ELSE
 							AND [OrganizationId] = @OrganizationId);
 		IF(@@ROWCOUNT=0)
 			BEGIN
-				INSERT INTO [Billing].[Subscription] ([OrganizationId], [SkuId], [NumberOfUsers])
-				VALUES (@OrganizationId, @SkuId, @NumberOfUsers);
+				INSERT INTO [Billing].[Subscription] ([OrganizationId], [SkuId], [NumberOfUsers], [SubscriptionName])
+				VALUES (@OrganizationId, @SkuId, @NumberOfUsers, @SubscriptionName);
 				SET @retId = SCOPE_IDENTITY();
 			END
 		ELSE

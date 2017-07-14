@@ -36,6 +36,7 @@ namespace AllyisApps.Controllers
 			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
 			model.SelectedSku = skuId;
 			model.SelectedSkuName = infos.Item3.Where(s => s.SkuId == skuId).SingleOrDefault().Name;
+			model.SelectedSkuDescription = infos.Item3.Where(s => s.SkuId == skuId).SingleOrDefault().Description;
 
 			if (!model.IsValid)
 			{
@@ -91,30 +92,15 @@ namespace AllyisApps.Controllers
 		/// Subscribe to a product.
 		/// </summary>
 		/// <param name="model">The model.</param>
-		/// <param name="token">Response from the billing service.</param>
-		/// <param name="billingServicesEmail">The billing email.</param>
-		/// <param name="cost">The cost.</param>
 		/// <returns>A page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[CLSCompliant(false)]
-		public ActionResult Subscribe(ProductSubscriptionViewModel model, BillingServicesToken token, string billingServicesEmail, string cost)
+		public ActionResult Subscribe(ProductSubscriptionViewModel model)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, model.OrganizationId);
 
-			if (model.Billing.Amount == 0)
-			{
-				model.Billing.Amount = (model.NumberOfUsers - 500) * 100;
-			}
-
-			if (model.Billing.Amount > 0 && token == null && model.Token == null)
-			{
-				return this.View(ViewConstants.AddBillingToSubscribe, model);
-			}
-
-			bool addingNewBilling = token != null && model.Token == null;
-
-			if (AppService.Subscribe(model.NumberOfUsers, model.ProductId, model.ProductName, model.SelectedSku, model.PreviousSku, model.Billing.Amount, model.Token, addingNewBilling, billingServicesEmail, token, model.OrganizationId))
+			if (AppService.Subscribe(model.ProductId, model.ProductName, model.SelectedSku, model.SubscriptionName, model.PreviousSku, 0, model.Token, false, null, null, model.OrganizationId))
 			{
 				Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.SubscribedSuccessfully, model.SelectedSkuName), Variety.Success));
 				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
@@ -125,5 +111,40 @@ namespace AllyisApps.Controllers
 				return this.RedirectToAction(ActionConstants.Subscribe, new { productId = model.ProductId });
 			}
 		}
+
+		/*
+		/// <summary>
+		/// Subscribe to a product.
+		/// </summary>
+		/// <param name="model">The model.</param>
+		/// <param name="token">Response from the billing service.</param>
+		/// <param name="billingServicesEmail">The billing email.</param>
+		/// <returns>A page.</returns>
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[CLSCompliant(false)]
+		public ActionResult Subscribe(ProductSubscriptionViewModel model, BillingServicesToken token, string billingServicesEmail)
+		{
+			this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, model.OrganizationId);
+
+			if (model.Billing.Amount > 0 && token == null && model.Token == null)
+			{
+				return this.View(ViewConstants.AddBillingToSubscribe, model);
+			}
+
+			bool addingNewBilling = token != null && model.Token == null;
+			
+			if (AppService.Subscribe(model.ProductId, model.ProductName, model.SelectedSku, model.PreviousSku, model.Billing.Amount, model.Token, addingNewBilling, billingServicesEmail, token, model.OrganizationId))
+			{
+				Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.SubscribedSuccessfully, model.SelectedSkuName), Variety.Success));
+				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
+			}
+			else
+			{
+				Notifications.Add(new BootstrapAlert(Resources.Strings.ReduceNumberOfUsers, Variety.Danger));
+				return this.RedirectToAction(ActionConstants.Subscribe, new { productId = model.ProductId });
+			}
+		}
+		*/
 	}
 }
