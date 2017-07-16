@@ -22,7 +22,10 @@ namespace AllyisApps.Services
 		/// <param name="importData">Workbook with data to import.</param>
 		public ImportActionResult Import(int subscriptionId, DataSet importData)
 		{
-			UserContext.UserSubscriptions.TryGetValue(subscriptionId, out UserSubscription userSub);
+            UserSubscription userSub;
+
+
+            UserContext.UserSubscriptions.TryGetValue(subscriptionId, out userSub);
 			int orgId = userSub.OrganizationId;
 
 			// For some reason, linq won't work directly with DataSets, so we start by just moving the tables over to a linq-able List

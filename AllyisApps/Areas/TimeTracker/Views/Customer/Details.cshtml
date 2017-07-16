@@ -60,7 +60,7 @@
         <a href="/TimeTracker/Customer" class="btn btn-default">@Strings.Back</a>
         @if (Model.canEditCustomers)
         {
-            <a class="btn btn-primary" onclick="location='@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = Model.CustomerID })'">@Strings.Edit</a>
+            <a class="btn @ViewBag.color" onclick="location='@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { id = Model.CustomerID })'">@Strings.Edit</a>
         }
     </div>
 </div>
