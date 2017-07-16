@@ -69,7 +69,7 @@ namespace AllyisApps.Controllers
 			}
 
 			// Creation of items from our database
-			foreach (BillingHistoryItemInfo item in AppService.GetBillingHistory())
+			foreach (BillingHistoryItemInfo item in AppService.GetBillingHistory(orgId))
 			{
 				result.Add(new BillingHistoryItemViewModel
 				{

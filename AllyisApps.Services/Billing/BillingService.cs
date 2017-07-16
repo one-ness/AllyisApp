@@ -469,8 +469,9 @@ namespace AllyisApps.Services
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <param name="customerId">The Billing Services Customer ID.</param>
 		/// <param name="skuId">Selected sku id, for the billing history item.</param>
+		/// <param name="orgId"></param>
 		[CLSCompliant(false)]
-		public void DeleteSubscriptionPlan(string subscriptionId, BillingServicesCustomerId customerId, int? skuId)
+		public void DeleteSubscriptionPlan(string subscriptionId, BillingServicesCustomerId customerId, int? skuId, int orgId)
 		{
 			#region Validation
 
@@ -490,7 +491,7 @@ namespace AllyisApps.Services
 			BillingServicesHandler handler = new BillingServicesHandler(service);
 			handler.DeleteSubscription(customerId, subscriptionId);
 			//DBHelper.DeleteSubscriptionPlan(subscriptionId);
-			DBHelper.DeleteSubscriptionPlanAndAddHistory(UserContext.ChosenOrganizationId, customerId.Id, UserContext.UserId, skuId, "Switching to free subscription, canceling stripe susbcription");
+			DBHelper.DeleteSubscriptionPlanAndAddHistory(orgId, customerId.Id, UserContext.UserId, skuId, "Switching to free subscription, canceling stripe susbcription");
 		}
 
 		/// <summary>
@@ -721,7 +722,7 @@ namespace AllyisApps.Services
 					string subscriptionId = this.GetSubscriptionId(customer.Id);
 					if (subscriptionId != null)
 					{
-						this.DeleteSubscriptionPlan(subscriptionId, customer.Id, selectedSku);
+						this.DeleteSubscriptionPlan(subscriptionId, customer.Id, selectedSku, orgId);
 					}
 				}
 			}
@@ -793,9 +794,9 @@ namespace AllyisApps.Services
 		/// Gets a list of <see cref="BillingHistoryItemInfo"/>s for the billing history of the current organization.
 		/// </summary>
 		/// <returns>List of billing history items.</returns>
-		public IEnumerable<BillingHistoryItemInfo> GetBillingHistory()
+		public IEnumerable<BillingHistoryItemInfo> GetBillingHistory(int orgId)
 		{
-			return DBHelper.GetBillingHistoryByOrg(UserContext.ChosenOrganizationId).Select(i =>
+			return DBHelper.GetBillingHistoryByOrg(orgId).Select(i =>
 			{
 				return new BillingHistoryItemInfo
 				{
