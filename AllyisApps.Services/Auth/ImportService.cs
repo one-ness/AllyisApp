@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AllyisApps.Services
 {
@@ -15,6 +16,10 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
+		private const string HourMinutePattern = @"^(\d+):(\d+)$";
+		private const string DecimalPattern = @"^\d*\.?\d*$";
+		private const float MinutesInHour = 60.0f;
+
 		/// <summary>
 		/// Import data from a workbook. Imports customers, projects, users, project/user relationships, and/or time entry data.
 		/// </summary>
@@ -807,7 +812,7 @@ namespace AllyisApps.Services
 
 									PayClass payClass = payClasses.Where(p => p.Name.ToUpper().Equals(payclass.ToUpper())).SingleOrDefault();
 									DateTime theDate;
-									float theDuration;
+									float? theDuration;
 
 									if (payClass == null)
 									{
@@ -826,13 +831,14 @@ namespace AllyisApps.Services
 										continue;
 									}
 
-									try
+									if (!(theDuration = this.ParseDuration(duration)).HasValue)
 									{
-										theDuration = float.Parse(duration);
+										result.TimeEntryFailures.Add(string.Format("You must enter the duration as HH:MM or H.HH format for the date {0}", theDate));
+										continue;
 									}
-									catch (Exception)
+									if(this.ParseDuration(duration) == 0)
 									{
-										result.TimeEntryFailures.Add(string.Format("Error importing time entry on sheet {0}, row {1}: bad duration format ({2}).", table.TableName, table.Rows.IndexOf(row) + 2, duration));
+										result.TimeEntryFailures.Add(string.Format("You must enter a time larger than 00:00 for the date {0}", theDate));
 										continue;
 									}
 
@@ -851,7 +857,7 @@ namespace AllyisApps.Services
 										{
 											Date = theDate,
 											Description = description,
-											Duration = theDuration,
+											Duration = theDuration.Value, //value is verified earlier
 											FirstName = user.FirstName,
 											LastName = user.LastName,
 											PayClassId = payClass.PayClassID,
@@ -941,6 +947,31 @@ namespace AllyisApps.Services
 			{
 				return null;
 			}
+		}
+
+		/// <summary>
+		/// Parses the input duration for either HH.HH or HH:MM format.
+		/// </summary>
+		/// <param name="duration">Duration in either format.</param>
+		/// <returns>Parsed duration or null.</returns>
+		public float? ParseDuration(string duration)
+		{
+			float? durationOut = null;
+			Match theMatch;
+			if (!string.IsNullOrWhiteSpace(duration))
+			{
+				if ((theMatch = Regex.Match(duration, HourMinutePattern)).Success)
+				{
+					float minutes = int.Parse(theMatch.Groups[2].Value) / MinutesInHour;
+					durationOut = float.Parse(theMatch.Groups[1].Value) + minutes;
+				}
+				else if ((theMatch = Regex.Match(duration, DecimalPattern)).Success)
+				{
+					durationOut = float.Parse(duration);
+				}
+			}
+
+			return durationOut;
 		}
 	}
 
