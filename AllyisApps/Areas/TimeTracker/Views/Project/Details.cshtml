@@ -54,7 +54,7 @@
             <input type="button" class="btn btn-default" value="@Strings.ProjectList" onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer)'" />
 			@if (Model.CanEditProject)
 			{
-				<input type="button" value=@Strings.Edit class="btn @ViewBag.color" onclick="location='@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new { id = Model.ProjectId })'" />
+				<input type="button" value=@Strings.Edit class="btn btn-primary" onclick="location='@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new { id = Model.ProjectId })'" />
 			}
         </div>
     </div>
