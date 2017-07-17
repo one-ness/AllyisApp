@@ -453,11 +453,8 @@
   <data name="Edit" xml:space="preserve">
     <value>Edit Customer</value>
   </data>
-  <data name="EditEmployeeID" xml:space="preserve">
-    <value>Edit Employee Id</value>
-  </data>
-  <data name="EditEmployeeType" xml:space="preserve">
-    <value>Edit Employee Type</value>
+  <data name="EditEmployee" xml:space="preserve">
+    <value>Edit Employee</value>
   </data>
   <data name="EditMember" xml:space="preserve">
     <value>Edit Member</value>

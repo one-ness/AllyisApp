@@ -17,10 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -280,7 +278,6 @@
     <Compile Include="Controllers\Auth\ResetPasswordAction.cs" />
     <Compile Include="Controllers\Auth\SkusAction.cs" />
     <Compile Include="Controllers\Auth\TemplateAction.cs" />
-    <Compile Include="Controllers\Auth\ViewUser.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
     <Compile Include="Controllers\Auth\ApplicationRedirectAction.cs" />
@@ -574,7 +571,6 @@
     <Content Include="Views\Account\EditOrg.cshtml" />
     <Content Include="Views\Account\Permission2.cshtml" />
     <Content Include="Views\Account\_OrgMembers2.cshtml" />
-    <Content Include="Views\Account\ViewUser.cshtml" />
     <Content Include="Views\Account\_OrgPanel.cshtml" />
     <Content Include="Views\Account\EditSubscription.cshtml" />
     <Content Include="Views\Account\Skus.cshtml" />

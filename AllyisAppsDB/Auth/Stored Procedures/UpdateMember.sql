@@ -3,15 +3,16 @@
 	@OrgId INT,
 	@EmployeeId NVARCHAR(100),
 	@EmployeeTypeId INT,
-	@EmployeeRoleId INT
+	@EmployeeRoleId INT,
+	@IsInvited BIT
 AS
 	IF EXISTS (
 			SELECT * FROM [Auth].[OrganizationUser] WITH (NOLOCK)
-			WHERE [OrganizationId] = @OrgId AND [EmployeeId] = @EmployeeId
-		) OR EXISTS (
+			WHERE [OrganizationId] = @OrgId AND [EmployeeId] = @EmployeeId AND [UserId] != @UserId
+		) /*OR EXISTS (
 			SELECT * FROM [Auth].[Invitation] WITH (NOLOCK)
-			WHERE [OrganizationId] = @OrgId AND [IsActive] = 1 AND [EmployeeId] = @EmployeeId
-		)
+			WHERE [OrganizationId] = @OrgId AND [IsActive] = 1 AND [EmployeeId] = @EmployeeId AND [UserId] = @UserId
+		)*/
 		BEGIN
 		SELECT 0;
 		END

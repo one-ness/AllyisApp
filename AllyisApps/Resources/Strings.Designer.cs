@@ -1105,20 +1105,11 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Employee Id.
+        ///   Looks up a localized string similar to Edit Employee.
         /// </summary>
-        public static string EditEmployeeID {
+        public static string EditEmployee {
             get {
-                return ResourceManager.GetString("EditEmployeeID", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit Employee Type.
-        /// </summary>
-        public static string EditEmployeeType {
-            get {
-                return ResourceManager.GetString("EditEmployeeType", resourceCulture);
+                return ResourceManager.GetString("EditEmployee", resourceCulture);
             }
         }
         

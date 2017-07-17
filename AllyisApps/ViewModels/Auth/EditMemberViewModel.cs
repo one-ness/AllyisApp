@@ -42,5 +42,10 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the employee role.
 		/// </summary>
 		public int EmployeeRoleId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the is invited status.
+		/// </summary>
+		public bool IsInvited { get; set; }
 	}
 }

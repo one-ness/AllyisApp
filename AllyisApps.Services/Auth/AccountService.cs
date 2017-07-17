@@ -471,9 +471,10 @@ namespace AllyisApps.Services
 		/// <param name="employeeId">The member's id</param>
 		/// <param name="employeeTypeId">The member's type (Salary=1/Hourly=2)</param>
 		/// <param name="employeeRoleId">The member's role (Member=1/Owner=2)</param>
+		/// <param name="isInvited">Is the member invited or already a member?</param>
 		/// <param name="orgId">The org id</param>
 		/// <param name="userId">The user id</param>
-		public bool UpdateMember(string employeeId, int employeeTypeId, int employeeRoleId, int userId, int orgId)
+		public bool UpdateMember(string employeeId, int employeeTypeId, int employeeRoleId, bool isInvited, int userId, int orgId)
 		{
 			if (userId <= 0)
 			{
@@ -500,7 +501,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("employeeRoleId", "Employee Role Id cannot be negative.");
 			}
 
-			return DBHelper.UpdateMember(employeeId, employeeTypeId, employeeRoleId, userId, orgId) == 1 ? true : false;
+			return DBHelper.UpdateMember(employeeId, employeeTypeId, employeeRoleId, isInvited, userId, orgId) == 1 ? true : false;
 		}
 
 		/// <summary>
