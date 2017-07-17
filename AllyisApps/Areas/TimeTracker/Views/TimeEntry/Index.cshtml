@@ -5,25 +5,6 @@
 @using System.Configuration;
 @model TimeEntryOverDateRangeViewModel
 @{
-	ViewBag.color = "";
-	switch (Model.ProductRole)
-	{
-		case 1:
-			ViewBag.color = "green";
-			break;
-		case 2:
-			ViewBag.color = "blue";
-			break;
-		case 3:
-			ViewBag.color = "brown";
-			break;
-		case 4:
-			ViewBag.color = "pink";
-			break;
-		default:
-			break;
-	}
-
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
 	ViewBag.startOfWeek = Model.StartOfWeek;
