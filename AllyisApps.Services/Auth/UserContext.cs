@@ -35,10 +35,9 @@ namespace AllyisApps.Services
 		/// <param name="firstName">The user's first name</param>
 		/// <param name="lastName">The user's last name</param>
 		/// <param name="email">The email.</param>
-		/// <param name="chosenOrganizationId">The chosen Organization ID.</param>
 		/// <param name="chosenSubscriptionId">The chosen subscription ID.</param>
 		/// <param name="chosenLanguageID">The chosen language ID.</param>
-		public UserContext(int userId, string email, string firstName, string lastName, int chosenOrganizationId = 0, int chosenSubscriptionId = 0, int chosenLanguageID = 0) : this()
+		public UserContext(int userId, string email, string firstName, string lastName, int chosenSubscriptionId = 0, int chosenLanguageID = 0) : this()
 		{
 			if (userId <= 0) throw new ArgumentException("userId");
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentException("firstName");
@@ -49,7 +48,6 @@ namespace AllyisApps.Services
 			this.UserId = userId;
 			this.FirstName = firstName;
 			this.LastName = lastName;
-			this.ChosenOrganizationId = chosenOrganizationId;
 			this.ChosenSubscriptionId = chosenSubscriptionId;
 			this.ChosenLanguageId = chosenLanguageID;
 		}
@@ -93,18 +91,18 @@ namespace AllyisApps.Services
 		[JsonIgnore]
 		public int ChosenOrganizationId { get; set; }
 
-		/// <summary>
-		/// Gets the chosen organization
-		/// </summary>
-		public UserOrganization ChosenOrganization
-		{
-			get
-			{
-				UserOrganization result = null;
-				this.UserOrganizations.TryGetValue(this.ChosenOrganizationId, out result);
-				return result;
-			}
-		}
+		///// <summary>
+		///// Gets the chosen organization
+		///// </summary>
+		//public UserOrganization ChosenOrganization
+		//{
+		//	get
+		//	{
+		//		UserOrganization result = null;
+		//		this.UserOrganizations.TryGetValue(this.ChosenOrganizationId, out result);
+		//		return result;
+		//	}
+		//}
 
 		/// <summary>
 		/// Gets or sets the subscription id the user chooses to work on (or last worked on).
