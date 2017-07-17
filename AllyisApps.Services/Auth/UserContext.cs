@@ -84,11 +84,11 @@ namespace AllyisApps.Services
 		//[JsonIgnore]
 		//public string ChosenSubscriptionName { get; set; }
 
-		/// <summary>
-		/// Gets or sets the organization id the user chooses to work on (or last worked on).
-		/// </summary>
-		[JsonIgnore]
-		public int ChosenOrganizationId { get; set; }
+		///// <summary>
+		///// Gets or sets the organization id the user chooses to work on (or last worked on).
+		///// </summary>
+		//[JsonIgnore]
+		//public int ChosenOrganizationId { get; set; }
 
 		///// <summary>
 		///// Gets the chosen organization
