@@ -652,7 +652,7 @@ namespace AllyisApps.Services
 			if (subscriptionId != null)
 			{
 				string skuName = this.Unsubscribe(subscriptionId.Value);
-				return string.Format("{0} has been unsubscribed from the license {1}.", UserContext.UserSubscriptions[subscriptionId.Value].OrganizationName, skuName);
+				return string.Format("{0} has been unsubscribed from {1}.", UserContext.UserSubscriptions[subscriptionId.Value].OrganizationName, skuName);
 			}
 
 			return null;
