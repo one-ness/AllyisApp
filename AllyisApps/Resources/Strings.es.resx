@@ -990,14 +990,11 @@
   <data name="DropSubcription" xml:space="preserve">
     <value>caída de suscripción</value>
   </data>
-  <data name="EditEmployeeID" xml:space="preserve">
-    <value>Editar identificador de empleado</value>
-  </data>
-  <data name="EditEmployeeType" xml:space="preserve">
-    <value>Editar tipo de empleado</value>
+  <data name="EditEmployee" xml:space="preserve">
+    <value>Editar empleado</value>
   </data>
   <data name="EditOrganization" xml:space="preserve">
-    <value>Editar Organización</value>
+    <value>Editar organización</value>
   </data>
   <data name="EditProfile" xml:space="preserve">
     <value>Editar perfil</value>
@@ -1452,5 +1449,8 @@
   </data>
   <data name="Products" xml:space="preserve">
     <value>Productos</value>
+  </data>
+  <data name="EmployeeIdValidation" xml:space="preserve">
+    <value>Ingresa un ID de empleado.</value>
   </data>
 </root>

@@ -265,6 +265,8 @@
     <Build Include="Crm\Stored Procedures\ReactivateCustomer.sql" />
     <Build Include="Crm\Stored Procedures\ReactivateProject.sql" />
     <Build Include="Billing\Stored Procedures\GetAllActiveProductsAndSkus.sql" />
+    <Build Include="Auth\Stored Procedures\UpdateMember.sql" />
+    <None Include="DefaultData\DummyData.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
