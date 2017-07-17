@@ -151,9 +151,12 @@
 
            function EditCustomer()
            {
-               if (selectedCust != null) {
+			   if (selectedCust != null) {
                    window.location = "@Url.Action(ActionConstants.Edit, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId, id = -1 })".replace('-1', selectedCust);
-               }
+			   }
+			   else {
+				   alert("There is no Customer that was chosen to Edit");
+			   }
            }
 
            function EditProject()
@@ -164,28 +167,33 @@
                }
                else
                {
-                   alert("You did not choose a project to edit");
+                   alert("There is no project that was chosen to edit");
                }
            }
 
            function DeleteCustomer()
            {
                if (selectedCust != null && confirm("Delete Customer" + $("#customer-" + selectedCust).text().trim() + "?"))
-               {
+			   {
                    window.location = "@Url.Action(ActionConstants.Delete, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId, id = -1 })".replace('-1', selectedCust);
-               }
+			   }
+			   else if (selectedCust == null)
+			   {
+				   alert("There is no customer that was chosen to delete");
+			   }
            }
 
            function DeleteProject()
            {
                if (selectedProj!=null && confirm("Delete project " + $("#project-" + selectedProj).text().trim() + "?"))
-               {
+			   {
                    window.location = "@Url.Action(ActionConstants.Delete, ControllerConstants.Project, new { subscriptionId = Model.SubscriptionId, id = -1 })".replace('-1', selectedProj);
                }
-               else
+			   else if (selectedProj == null)
                {
-                   alert("You did not choose a project to delete");
-               }
+                   alert("There is no project that was chosen to delete");
+			   }
+
            }
 
            function CreateCustomer()
@@ -194,29 +202,35 @@
            }
 
            function CreateProject()
-           {
-               window.location = "@Url.Action(ActionConstants.Create, ControllerConstants.Project, new { subscriptionId = Model.SubscriptionId, id = -1 })".replace('-1', selectedCust);
+		   {
+			   if (selectedCust != null) {
+				   window.location = "@Url.Action(ActionConstants.Create, ControllerConstants.Project, new { subscriptionId = Model.SubscriptionId, id = -1 })".replace('-1', selectedCust);
+			   }
+			   else {
+				   alert("There is no customer that was chosen to create a project for");
+			   }
            }
 
            function ReactivateCustomer()
            {
-               if (selectedCust != null) {
+			   if (selectedCust != null && confirm("Reactivate Customer" + $("#customer-" + selectedCust).text().trim() + "?")) {
                    window.location = "@Url.Action(ActionConstants.Reactivate, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId, id = -1 })".replace('-1', selectedCust);
                }
-               else {
-                   alert("There are no customer's to reactivate");
-               }
+               else if (selectedCust == null) 
+			   {
+				   alert("There is no customer that was chosen to reactivate");
+			   }
            }
 
            function ReactivateProject()
-           {
-                if (selectedProj != null)
-                {
+		   {
+			   if (selectedProj != null && confirm("Reactivate project " + $("#project-" + selectedProj).text().trim() + "?"))
+				{
                     window.location = "@Url.Action(ActionConstants.Reactivate, ControllerConstants.Project, new { subscriptionId = Model.SubscriptionId, id = -1 })".replace('-1', selectedProj);
-               }
-                else {
-                    alert("You did not choose a project to reactivate");
                 }
+			   else if (selectedProj == null) {
+                    alert("There is no project that was chosen to reactivate");
+			   }
            }
     </script>
 }
