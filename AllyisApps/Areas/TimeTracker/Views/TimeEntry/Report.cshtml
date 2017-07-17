@@ -109,11 +109,11 @@
 							@if (Model.ShowExport)
 							{
 								<div>
-									<input class="btn @ViewBag.color pull-right" type="submit" name="viewDataButton" value=@Strings.Export />
+									<input class="btn btn-primary pull-right" type="submit" name="viewDataButton" value=@Strings.Export />
 								</div>
 							}
 							<div>
-								<input class="btn @ViewBag.color pull-right" type="submit" name="viewDataButton" style="margin-right: 15px;" value=@Strings.Preview />
+								<input class="btn btn-primary pull-right" type="submit" name="viewDataButton" style="margin-right: 15px;" value=@Strings.Preview />
 							</div>
 						</div>
 					</div>
@@ -250,11 +250,11 @@
 					{
 						if (i == Model.PreviewPageNum)
 						{
-							<input class="btn @ViewBag.color btn-sm" id="page @i" name="pageButton" type="button" value="@i" disabled="disabled" />
+							<input class="btn btn-primary btn-sm" id="page @i" name="pageButton" type="button" value="@i" disabled="disabled" />
 						}
 						else
 						{
-							<input class="btn @ViewBag.color btn-sm" id="page @i" name="pageButton" type="submit" value="@i" />
+							<input class="btn btn-primary btn-sm" id="page @i" name="pageButton" type="submit" value="@i" />
 						}
 					}
 				</div>

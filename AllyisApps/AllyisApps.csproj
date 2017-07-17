@@ -376,6 +376,7 @@
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
     <Content Include="Content\icons\bg_stars.gif" />
+    <Content Include="Content\icons\TimeTracker.png" />
     <Content Include="Scripts\allyis-account-permission2.js" />
     <Content Include="Scripts\allyis-birthDatepicker.js" />
     <Content Include="Scripts\allyis-pages-with-filter.js" />
@@ -590,7 +591,7 @@
     <Content Include="Content\bootstrap\less\bootstrap.min.css">
       <DependentUpon>bootstrap.css</DependentUpon>
     </Content>
-    <Content Include="Content\icons\TimeTracker.png" />
+    <Content Include="Content\icons\TimeTrackerOld.png" />
     <Content Include="Content\icons\expense.png" />
     <Content Include="Content\icons\invoice.png" />
     <Content Include="Content\icons\tasks-list.png" />

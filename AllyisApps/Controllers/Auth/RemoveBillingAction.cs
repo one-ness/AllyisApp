@@ -26,7 +26,7 @@ namespace AllyisApps.Controllers
 		public ActionResult RemoveBilling(int id)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-			IEnumerable<int> subs = AppService.GetSubscriptionPlanPrices();
+			IEnumerable<int> subs = AppService.GetSubscriptionPlanPrices(id);
 
 			if (subs != null && subs.Count() > 0)
 			{

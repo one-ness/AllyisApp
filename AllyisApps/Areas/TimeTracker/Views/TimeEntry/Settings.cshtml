@@ -37,7 +37,7 @@
                     <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="0" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Sunday ? " checked " : string.Empty)><text>@Strings.Sunday</text><br />
 
                     <br />
-                    <input type="submit" value=@Strings.Save class="btn @ViewBag.color tt-bottom-right" />
+                    <input type="submit" value=@Strings.Save class="btn btn-primary tt-bottom-right" />
                 }
             </div>
         </div>
@@ -86,7 +86,7 @@
                             @Html.HiddenFor(m => m.SubscriptionId)
 							<td><input type="text" name="NewPayClass" class="form-control" required /></td>
                             <td><span class="pull-right"></span></td>
-							<td><input class="btn @ViewBag.color pull-right" type="submit" value="@Strings.Add" /></td>
+							<td><input class="btn btn-primary pull-right" type="submit" value="@Strings.Add" /></td>
 						}
 					</tr>
                 </table>
@@ -113,7 +113,7 @@
                         </select>
                     </div>
                     <div>
-                        <input class="tt-bottom-right btn @ViewBag.color" type="submit" value=@Strings.Save />
+                        <input class="tt-bottom-right btn btn-primary" type="submit" value=@Strings.Save />
                     </div>
                 }
             </div>
@@ -150,7 +150,7 @@
                         </div>
                     </div>
                     <div>
-                        <input class="btn @ViewBag.color tt-bottom-right" type="submit" value=@Strings.Save />
+                        <input class="btn btn-primary tt-bottom-right" type="submit" value=@Strings.Save />
                     </div>
                             }
             </div>
@@ -194,7 +194,7 @@
                             @Html.HiddenFor(m => m.SubscriptionId)
                             <td><input type="text" class="form-control" name="NewHolidayName" required /></td>
                             <td><input type="date" class="form-control" name="NewHolidayDate" required /></td>
-                            <td><input class="pull-right btn @ViewBag.color" type="submit" value=@Strings.Add /></td>
+                            <td><input class="pull-right btn btn-primary" type="submit" value=@Strings.Add /></td>
                         }
                     </tr>
                 </table>
