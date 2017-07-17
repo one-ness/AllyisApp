@@ -35,9 +35,8 @@ namespace AllyisApps.Services
 		/// <param name="firstName">The user's first name</param>
 		/// <param name="lastName">The user's last name</param>
 		/// <param name="email">The email.</param>
-		/// <param name="chosenSubscriptionId">The chosen subscription ID.</param>
 		/// <param name="chosenLanguageID">The chosen language ID.</param>
-		public UserContext(int userId, string email, string firstName, string lastName, int chosenSubscriptionId = 0, int chosenLanguageID = 0) : this()
+		public UserContext(int userId, string email, string firstName, string lastName, /*int chosenSubscriptionId = 0,*/ int chosenLanguageID = 0) : this()
 		{
 			if (userId <= 0) throw new ArgumentException("userId");
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentException("firstName");
@@ -48,7 +47,7 @@ namespace AllyisApps.Services
 			this.UserId = userId;
 			this.FirstName = firstName;
 			this.LastName = lastName;
-			this.ChosenSubscriptionId = chosenSubscriptionId;
+			//this.ChosenSubscriptionId = chosenSubscriptionId;
 			this.ChosenLanguageId = chosenLanguageID;
 		}
 
@@ -73,17 +72,17 @@ namespace AllyisApps.Services
 		[JsonIgnore]
 		public string Email { get; set; }
 
-		/// <summary>
-		/// Gets or sets the name of the organization the user is working on (this should be Company Name in pages such as in Manage, Permission pages)
-		/// </summary>
-		[JsonIgnore]
-		public string ChosenOrganizationName { get; set; }
+		///// <summary>
+		///// Gets or sets the name of the organization the user is working on (this should be Company Name in pages such as in Manage, Permission pages)
+		///// </summary>
+		//[JsonIgnore]
+		//public string ChosenOrganizationName { get; set; }
 
-		/// <summary>
-		/// Gets or sets the name of the subscription the user is working on (this should be Company Name - Product Name in pages such as TimeEntry pages)
-		/// </summary>
-		[JsonIgnore]
-		public string ChosenSubscriptionName { get; set; }
+		///// <summary>
+		///// Gets or sets the name of the subscription the user is working on (this should be Company Name - Product Name in pages such as TimeEntry pages)
+		///// </summary>
+		//[JsonIgnore]
+		//public string ChosenSubscriptionName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization id the user chooses to work on (or last worked on).
@@ -104,11 +103,11 @@ namespace AllyisApps.Services
 		//	}
 		//}
 
-		/// <summary>
-		/// Gets or sets the subscription id the user chooses to work on (or last worked on).
-		/// </summary>
-		[JsonIgnore]
-		public int ChosenSubscriptionId { get; set; }
+		///// <summary>
+		///// Gets or sets the subscription id the user chooses to work on (or last worked on).
+		///// </summary>
+		//[JsonIgnore]
+		//public int ChosenSubscriptionId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the list of organizations the user is a member of, role in the organization, subscriptions each organization has subscribed to and user's role in that subscription.
