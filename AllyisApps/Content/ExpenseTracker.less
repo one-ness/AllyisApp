@@ -1,0 +1,133 @@
+﻿@import "less/_root.less";
+@import "less/report.less";
+@import "bootstrap/less/navbar.less";
+
+//@brand-primary: darken(#428bca, 6.5%); // blue
+@brand-primary: darken(#8bca42, 6.5%); // green
+//@brand-primary: darken(#ca428b, 6.5%); // purple
+//@brand-primary: darken(#ca8b42, 6.5%); // brown
+//@brand-primary: darken(#42ca8b, 6.5%); // turquoise
+//@brand-primary: darken(#8b42ca, 6.5%); // purple
+
+@zone-color: @brand-primary;
+@zone-color-bg: lighten(@zone-color, 25%);
+@zone-body-bg: mix(white, @zone-color-bg, 50%);
+
+//@navbar-default-bg: @zone-color-bg;
+@navbar-default-border: darken(@btn-zone-bg, 6.5%);
+
+// Get rid of the presets menu for narrow viewports
+// to prevent calendar from bleeding off the screen
+@media (max-width: @screen-sm-min) {
+	.comiseo-daterangepicker-presets {
+		display: none;
+	}
+}
+
+// For preventing the navbar, date range select bar,
+// and footer from crushing at narrow viewports
+body {
+	// For navbar
+	min-width: 300px;
+}
+
+@media (max-width: @screen-sm-min) {
+	#date-select {
+		width: 400px;
+
+		@media (max-width: 610px) {
+			width: 100%;
+		}
+	}
+
+	#day-select-wrapper {
+		width: 200px;
+
+		@media (max-width: 700px) {
+			float: right;
+		}
+	}
+}
+
+@media (max-width: 450px) {
+	#drp_autogen0 {
+		font-size: 12px;
+		padding-top: 1px;
+		padding-bottom: 1px;
+		overflow: hidden;
+		vertical-align: middle;
+	}
+}
+
+// Push out the bottom of the page to make room for
+// footer height change
+.panel {
+	margin-bottom: 30px;
+	/*@media (max-width: @screen-sm-min) {
+		margin-bottom: 60px;
+	}*/
+}
+
+.navbar-default {
+	border-width: 1px 5px;
+	z-index: auto;
+}
+
+.tt-template {
+	@media (max-width: @screen-sm-max) {
+		@media (min-width: @screen-sm-min) {
+			padding: 6px 6px;
+		}
+	}
+}
+
+.table-row {
+	.offDay {
+		background-color: @timetracker-offday;
+	}
+
+	.holiday {
+		background-color: @timetracker-holiday;
+	}
+}
+
+.offDay .form-control {
+	background-color: @timetracker-offday;
+}
+
+.holiday .form-control {
+	background-color: @timetracker-holiday;
+}
+
+.tt-bottom-right {
+	position: absolute;
+	bottom: 15px;
+	right: 15px;
+}
+
+.panel-heading {
+	color: @brand-primary !important;
+	background-color: @zone-body-bg !important;
+	border-color: @navbar-default-border !important;
+}
+
+.panel-footer {
+	color: @brand-primary !important;
+	border-color: @navbar-default-border !important;
+}
+
+a {
+	color: @brand-primary !important;
+	background-color: @zone-body-bg !important;
+	border-color: @navbar-default-border !important;
+}
+
+.panel {
+	color: @brand-primary !important;
+	border-color: @navbar-default-border !important;
+}
+
+.list-group {
+	color: @brand-primary !important;
+	border-color: @navbar-default-border !important;
+}

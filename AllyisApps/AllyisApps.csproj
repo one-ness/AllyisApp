@@ -366,6 +366,12 @@
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
     <Content Include="Content\icons\bg_stars.gif" />
     <Content Include="Content\icons\TimeTracker.png" />
+    <Content Include="Content\Timetracker - Copy.css">
+      <DependentUpon>ExpenseTracker.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Timetracker - Copy.min.css">
+      <DependentUpon>Timetracker - Copy.css</DependentUpon>
+    </Content>
     <Content Include="Scripts\allyis-account-permission2.js" />
     <Content Include="Scripts\allyis-birthDatepicker.js" />
     <Content Include="Scripts\allyis-pages-with-filter.js" />
@@ -490,6 +496,10 @@
     <Content Include="Areas\TimeTracker\Views\Customer\_ProjectsByCustomer.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\_IndexPartial_Active.cshtml" />
     <Content Include="Areas\TimeTracker\Views\Customer\_IndexPartial_Inactive.cshtml" />
+    <Content Include="Content\ExpenseTracker.less" />
+    <Content Include="Content\Timetracker - Copy.css.map">
+      <DependentUpon>Timetracker - Copy.css</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
     <None Include="Resources\628px-achtung-svg.png" />
