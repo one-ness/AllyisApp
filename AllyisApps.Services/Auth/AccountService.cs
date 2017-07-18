@@ -386,20 +386,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets the User for the current user, along with Organizations for each organization the
-		/// user is a member of, and InvitationInfos for any invitations for the user.
-		/// </summary>
-		/// <returns></returns>
-		public Tuple<User, List<Organization>, List<InvitationInfo>> GetUserOrgsAndInvitationInfo()
-		{
-			var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
-			return Tuple.Create<User, List<Organization>, List<InvitationInfo>>(
-				InitializeUser(spResults.Item1),
-				spResults.Item2.Select(odb => InitializeOrganization(odb)).ToList(),
-				spResults.Item3.Select(idb => InitializeInvitationInfo(idb)).ToList());
-		}
-
-		/// <summary>
 		/// Gets the user info for a specific user.
 		/// </summary>
 		/// <param name="userId">User Id.</param>
@@ -412,6 +398,20 @@ namespace AllyisApps.Services
 			}
 
 			return InitializeUser(DBHelper.GetUserInfo(userId));
+		}
+
+		/// <summary>
+		/// Gets the User for the current user, along with Organizations for each organization the
+		/// user is a member of, and InvitationInfos for any invitations for the user.
+		/// </summary>
+		/// <returns></returns>
+		public Tuple<User, List<Organization>, List<InvitationInfo>> GetUserOrgsAndInvitationInfo()
+		{
+			var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
+			return Tuple.Create<User, List<Organization>, List<InvitationInfo>>(
+				InitializeUser(spResults.Item1),
+				spResults.Item2.Select(odb => InitializeOrganization(odb)).ToList(),
+				spResults.Item3.Select(idb => InitializeInvitationInfo(idb)).ToList());
 		}
 
 		/// <summary>
@@ -463,6 +463,45 @@ namespace AllyisApps.Services
 				UserId = model.UserId,
 				PostalCode = model.PostalCode
 			});
+		}
+
+		/// <summary>
+		/// Updates an organization member's info
+		/// </summary>
+		/// <param name="employeeId">The member's id</param>
+		/// <param name="employeeTypeId">The member's type (Salary=1/Hourly=2)</param>
+		/// <param name="employeeRoleId">The member's role (Member=1/Owner=2)</param>
+		/// <param name="isInvited">Is the member invited or already a member?</param>
+		/// <param name="orgId">The org id</param>
+		/// <param name="userId">The user id</param>
+		public bool UpdateMember(string employeeId, int employeeTypeId, int employeeRoleId, bool isInvited, int userId, int orgId)
+		{
+			if (userId <= 0)
+			{
+				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+			}
+
+			if (orgId < 0)
+			{
+				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
+			}
+
+			if (string.IsNullOrEmpty(employeeId))
+			{
+				throw new ArgumentNullException("employeeId", "Employee Id must have a value");
+			}
+
+			if (employeeTypeId < 0)
+			{
+				throw new ArgumentOutOfRangeException("employeeTypeId", "Employee Type Id cannot be negative.");
+			}
+
+			if (employeeRoleId < 0)
+			{
+				throw new ArgumentOutOfRangeException("employeeRoleId", "Employee Role Id cannot be negative.");
+			}
+
+			return DBHelper.UpdateMember(employeeId, employeeTypeId, employeeRoleId, isInvited, userId, orgId) == 1 ? true : false;
 		}
 
 		/// <summary>

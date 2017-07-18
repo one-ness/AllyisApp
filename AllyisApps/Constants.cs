@@ -28,6 +28,7 @@ namespace AllyisApps
 		public const string Details = "details";
 		public const string DownloadImportUsersTemplate = "downloadimportuserstemplate";
 		public const string Edit = "edit";
+		public const string EditMember = "editmember";
 		public const string EditOrg = "editorg";
 		public const string EditProfile = "editprofile";
 		public const string EditSubscription = "editsubscription";

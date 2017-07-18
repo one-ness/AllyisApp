@@ -1,0 +1,113 @@
+﻿@model AllyisApps.ViewModels.Auth.EditMemberViewModel
+@{
+	ViewBag.Title = Model.UserInfo.FirstName + " " + Model.UserInfo.LastName;
+}
+
+<div class="shrink-wrap-center">
+	<div class="min300">
+		<div class="row">
+			<div class="col-md-6 min300">
+				<div class="form-group">
+					<label>@Strings.Email</label>
+					<div class="text-box-padded">@Model.UserInfo.Email</div>
+				</div>
+				<div class="form-group">
+					<label>@Strings.FirstName</label>
+					<div class="text-box-padded">@Model.UserInfo.FirstName</div>
+				</div>
+				<div class="form-group">
+					<label>@Strings.LastName</label>
+					<div class="text-box-padded">@Model.UserInfo.LastName</div>
+				</div>
+				<div class="form-group">
+					<label>@Strings.DateOfBirth</label>
+					<div class="text-box-padded">
+						@if (Html.ViewData.Model.UserInfo.DateOfBirth.HasValue)
+						{@Html.ViewData.Model.UserInfo.DateOfBirth.Value.ToShortDateString()}
+					</div>
+				</div>
+				<div class="form-group">
+					<label>@Strings.PhoneNumber</label>
+					<div class="text-box-padded">@Model.UserInfo.PhoneNumber</div>
+				</div>
+			</div>
+			<div class="col-md-6 min300">
+				<div class="form-group">
+					<label>@Strings.Address</label>
+					<div class="text-box-padded">@Model.UserInfo.Address</div>
+				</div>
+				<div class="form-group">
+					<label>@Strings.Country</label>
+					<div class="text-box-padded">@Model.UserInfo.Country</div>
+				</div>
+				<div class="form-group">
+					<label>@Strings.State</label>
+					<div class="text-box-padded">@Model.UserInfo.State</div>
+				</div>
+				<div class="form-group">
+					<label>@Strings.City</label>
+					<div class="text-box-padded">@Model.UserInfo.City</div>
+				</div>
+				<div class="form-group">
+					<label>@Strings.PostalCode</label>
+					<div class="text-box-padded">@Model.UserInfo.PostalCode</div>
+				</div>
+			</div>
+		</div>
+		@using (Html.BeginForm(ActionConstants.EditMember, ControllerConstants.Account, FormMethod.Post, new { @class = "form", role = "form" }))
+		{
+			@Html.AntiForgeryToken()
+			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" });
+			@Html.HiddenFor(m => m.OrganizationId);
+			@Html.HiddenFor(m => m.UserInfo.UserId);
+			@Html.HiddenFor(m => m.IsInvited);
+			@Html.HiddenFor(m => m.EmployeeRoleId);
+			<div class="row">
+				<div class="col-md-6 min300">
+					<div class="form-group">
+						@Html.LabelFor(m => m.EmployeeTypeId, Strings.EmployeeType)
+						@Html.DropDownListFor(m => m.EmployeeTypeId, new List<SelectListItem>
+								{ new SelectListItem { Text=Strings.Salaried, Value="1" },
+								  new SelectListItem { Text=Strings.Hourly,   Value="2" }}, new { @id = "EmployeeType", @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.EmployeeTypeId, "", new { @class = "text-danger" })
+					</div>
+					<div class="form-group">
+						@Html.ReqLabelFor(m => m.EmployeeId, Strings.EmployeeId)
+						@Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.EmployeeId, "", new { @class = "text-danger" })
+					</div>
+				</div>
+				@if (Model.UserInfo.UserId != ViewBag.SignedInUserID)
+				{
+					<div class="col-md-6 min300">
+						<div class="form-group">
+							@Html.LabelFor(m => m.EmployeeRoleId, Strings.Role)
+							@Html.DropDownListFor(m => m.EmployeeRoleId, new List<SelectListItem>
+								{ new SelectListItem { Text=Strings.Member, Value="1" },
+								  new SelectListItem { Text=Strings.Owner,   Value="2" }}, new { @id = "EmployeeRoleId", @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.EmployeeRoleId, "", new { @class = "text-danger" })
+						</div>
+					</div>
+				}
+				else
+				{
+					<div class="col-md-6 min300">
+						<div class="form-group">
+							@Html.LabelFor(m => m.EmployeeRoleId, Strings.Role)
+							<label>@Strings.Role</label>
+							<div class="text-box-padded">@(Model.EmployeeRoleId == 1 ? Strings.Member : Strings.Owner)</div>
+						</div>
+					</div>
+				}
+			</div>
+			<div class="form-group allyis-action-buttons">
+				<a href="javascript:history.back()" class="btn btn-default">@Strings.Back</a>
+				<button class="btn btn-primary" type="submit" value=@Strings.Save>@Strings.Save</button>
+			</div>
+		}
+
+		<div class="form-group allyis-action-buttons">
+			
+		</div>
+	</div>
+</div>

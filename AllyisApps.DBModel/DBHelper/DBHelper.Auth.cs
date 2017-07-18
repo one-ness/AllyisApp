@@ -432,6 +432,31 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Updates an organization member's info
+		/// </summary>
+		/// <param name="employeeId">The member's id</param>
+		/// <param name="employeeTypeId">The member's type (Salary=1/Hourly=2)</param>
+		/// <param name="employeeRoleId">The member's role (Member=1/Owner=2)</param>
+		/// <param name="isInvited">Is the member invited or already a member?</param>
+		/// <param name="orgId">The org id</param>
+		/// <param name="userId">The user id</param>
+		/// <returns>A 1 or 0 based on if the employeeId already exists or not</returns>
+		public int UpdateMember(string employeeId, int employeeTypeId, int employeeRoleId, bool isInvited, int userId, int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@userId", userId);
+			parameters.Add("@orgId", orgId);
+			parameters.Add("@employeeId", employeeId);
+			parameters.Add("@employeeTypeId", employeeTypeId);
+			parameters.Add("@employeeRoleId", employeeRoleId);
+			parameters.Add("@isInvited", isInvited);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Execute("[Auth].[UpdateMember]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
 		/// Sets the employee id for a user for an org.
 		/// </summary>
 		/// <param name="userID">The Id of the user.</param>

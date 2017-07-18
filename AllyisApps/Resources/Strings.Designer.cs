@@ -1105,20 +1105,11 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Employee Id.
+        ///   Looks up a localized string similar to Edit Employee.
         /// </summary>
-        public static string EditEmployeeID {
+        public static string EditEmployee {
             get {
-                return ResourceManager.GetString("EditEmployeeID", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit Employee Type.
-        /// </summary>
-        public static string EditEmployeeType {
-            get {
-                return ResourceManager.GetString("EditEmployeeType", resourceCulture);
+                return ResourceManager.GetString("EditEmployee", resourceCulture);
             }
         }
         
@@ -1254,6 +1245,15 @@ namespace AllyisApps.Resources {
         public static string EmployeeIdNotUniqueError {
             get {
                 return ResourceManager.GetString("EmployeeIdNotUniqueError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter an employee id..
+        /// </summary>
+        public static string EmployeeIdValidation {
+            get {
+                return ResourceManager.GetString("EmployeeIdValidation", resourceCulture);
             }
         }
         
@@ -3747,6 +3747,15 @@ namespace AllyisApps.Resources {
         public static string Unsubscribe {
             get {
                 return ResourceManager.GetString("Unsubscribe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully updated {0} {1}.
+        /// </summary>
+        public static string UpdateMemberSuccessMessage {
+            get {
+                return ResourceManager.GetString("UpdateMemberSuccessMessage", resourceCulture);
             }
         }
         

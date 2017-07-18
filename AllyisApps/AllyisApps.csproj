@@ -17,10 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -137,6 +135,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -146,6 +147,12 @@
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -258,6 +265,7 @@
     <Compile Include="Controllers\Auth\ChangePasswordAction.cs" />
     <Compile Include="Controllers\Auth\ConfirmEmailAction.cs" />
     <Compile Include="Controllers\Auth\CreateOrgAction.cs" />
+    <Compile Include="Controllers\Auth\EditMemberAction.cs" />
     <Compile Include="Controllers\Auth\EditProfileAction.cs" />
     <Compile Include="Controllers\Auth\EditSubscriptionAction.cs" />
     <Compile Include="Controllers\Auth\ForgotPasswordAction.cs" />
@@ -270,7 +278,6 @@
     <Compile Include="Controllers\Auth\ResetPasswordAction.cs" />
     <Compile Include="Controllers\Auth\SkusAction.cs" />
     <Compile Include="Controllers\Auth\TemplateAction.cs" />
-    <Compile Include="Controllers\Auth\ViewUser.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
     <Compile Include="Controllers\Auth\ApplicationRedirectAction.cs" />
@@ -333,6 +340,7 @@
     <Compile Include="ViewModels\Auth\AddMemberViewModel.cs" />
     <Compile Include="ViewModels\Auth\ChangePasswordViewModel.cs" />
     <Compile Include="Areas\TimeTracker\ViewModels\Manage\EditSubscriptionUsersViewModel.cs" />
+    <Compile Include="ViewModels\Auth\EditMemberViewModel.cs" />
     <Compile Include="ViewModels\Auth\EditSubscriptionViewModel.cs" />
     <Compile Include="ViewModels\Auth\IndexAndOrgsViewModel.cs" />
     <Compile Include="ViewModels\Auth\InvitationViewModel.cs" />
@@ -572,10 +580,10 @@
     <Content Include="Views\Account\EditOrg.cshtml" />
     <Content Include="Views\Account\Permission2.cshtml" />
     <Content Include="Views\Account\_OrgMembers2.cshtml" />
-    <Content Include="Views\Account\ViewUser.cshtml" />
     <Content Include="Views\Account\_OrgPanel.cshtml" />
     <Content Include="Views\Account\EditSubscription.cshtml" />
     <Content Include="Views\Account\Skus.cshtml" />
+    <Content Include="Views\Account\EditMember.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\Dependencies\CodeAnalysis\CustomDictionary.xml">
