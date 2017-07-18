@@ -468,40 +468,35 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates an organization member's info
 		/// </summary>
-		/// <param name="employeeId">The member's id</param>
-		/// <param name="employeeTypeId">The member's type (Salary=1/Hourly=2)</param>
-		/// <param name="employeeRoleId">The member's role (Member=1/Owner=2)</param>
-		/// <param name="isInvited">Is the member invited or already a member?</param>
-		/// <param name="orgId">The org id</param>
-		/// <param name="userId">The user id</param>
-		public bool UpdateMember(string employeeId, int employeeTypeId, int employeeRoleId, bool isInvited, int userId, int orgId)
+		/// <param name="modelData">The data from the form that the controller passed in</param>
+		public bool UpdateMember(Dictionary<string, dynamic> modelData)
 		{
-			if (userId <= 0)
+			if (modelData["userId"] <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
 
-			if (orgId < 0)
+			if (modelData["orgId"] < 0)
 			{
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
 			}
 
-			if (string.IsNullOrEmpty(employeeId))
+			if (string.IsNullOrEmpty(modelData["employeeId"]))
 			{
 				throw new ArgumentNullException("employeeId", "Employee Id must have a value");
 			}
 
-			if (employeeTypeId < 0)
+			if (modelData["employeeTypeId"] < 0)
 			{
 				throw new ArgumentOutOfRangeException("employeeTypeId", "Employee Type Id cannot be negative.");
 			}
 
-			if (employeeRoleId < 0)
+			if (modelData["employeeRoleId"] < 0)
 			{
 				throw new ArgumentOutOfRangeException("employeeRoleId", "Employee Role Id cannot be negative.");
 			}
 
-			return DBHelper.UpdateMember(employeeId, employeeTypeId, employeeRoleId, isInvited, userId, orgId) == 1 ? true : false;
+			return DBHelper.UpdateMember(modelData)	== 1 ? false : true;
 		}
 
 		/// <summary>

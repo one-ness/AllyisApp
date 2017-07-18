@@ -434,120 +434,22 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates an organization member's info
 		/// </summary>
-		/// <param name="employeeId">The member's id</param>
-		/// <param name="employeeTypeId">The member's type (Salary=1/Hourly=2)</param>
-		/// <param name="employeeRoleId">The member's role (Member=1/Owner=2)</param>
-		/// <param name="isInvited">Is the member invited or already a member?</param>
-		/// <param name="orgId">The org id</param>
-		/// <param name="userId">The user id</param>
+		/// <param name="modelData">The data from the form that the service passed in</param>
 		/// <returns>A 1 or 0 based on if the employeeId already exists or not</returns>
-		public int UpdateMember(string employeeId, int employeeTypeId, int employeeRoleId, bool isInvited, int userId, int orgId)
+		public int UpdateMember(Dictionary<string, dynamic> modelData)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userId", userId);
-			parameters.Add("@orgId", orgId);
-			parameters.Add("@employeeId", employeeId);
-			parameters.Add("@employeeTypeId", employeeTypeId);
-			parameters.Add("@employeeRoleId", employeeRoleId);
-			parameters.Add("@isInvited", isInvited);
+			parameters.Add("@userId", modelData["userId"]);
+			parameters.Add("@orgId", modelData["orgId"]);
+			parameters.Add("@employeeId", modelData["employeeId"]);
+			parameters.Add("@employeeTypeId", modelData["employeeTypeId"]);
+			parameters.Add("@employeeRoleId", modelData["employeeRoleId"]);
+			parameters.Add("@firstName", modelData["firstName"]);
+			parameters.Add("@lastName", modelData["lastName"]);
+			parameters.Add("@isInvited", modelData["isInvited"] ? 1 : 0);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Execute("[Auth].[UpdateMember]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
-		/// Sets the employee id for a user for an org.
-		/// </summary>
-		/// <param name="userID">The Id of the user.</param>
-		/// <param name="organizationID">The Id of the organization.</param>
-		/// <param name="employeeID">The value to set the employeeID to.</param>
-		public int SetEmployeeId(int userID, int organizationID, string employeeID)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userID", userID);
-			parameters.Add("@organizationID", organizationID);
-			parameters.Add("@employeeID", employeeID);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<int>("[Auth].[UpdateOrgUserEmployeeId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
-			}
-		}
-
-		/// <summary>
-		/// Sets the Employee Id for a invitation in a org
-		/// </summary>
-		/// <param name="invitationID">Id of the invitation</param>
-		/// <param name="organizationID">Id of the organization</param>
-		/// <param name="employeeID">The value to set the employeeID to</param>
-		public int SetInvitationEmployeeId(int invitationID, int organizationID, string employeeID)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@invitationID", invitationID);
-			parameters.Add("@organizationID", organizationID);
-			parameters.Add("@employeeID", employeeID);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<int>("[Auth].[UpdateOrgInvitationEmployeeId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
-			}
-		}
-
-		/// <summary>
-		/// Sets the employee type id for a user for an org.
-		/// </summary>
-		/// <param name="userID">The Id of the user.</param>
-		/// <param name="organizationID">The Id of the organization.</param>
-		/// <param name="employeeTypeID">The value to set the employeeTypeId to.</param>
-		public void SetEmployeeTypeId(int userID, int organizationID, int employeeTypeID)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userID", userID);
-			parameters.Add("@organizationID", organizationID);
-			parameters.Add("@employeeTypeID", employeeTypeID);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				connection.Execute("[Auth].[UpdateOrgUserEmployeeTypeId]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
-		/// Sets the Employee Type Id for a invitation in a org
-		/// </summary>
-		/// <param name="invitationID">Id of the invitation</param>
-		/// <param name="organizationID">Id of the organization</param>
-		/// <param name="employeeTypeID">The value to set the employeeID to</param>
-		public void SetInvitationEmployeeTypeId(int invitationID, int organizationID, int employeeTypeID)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@invitationID", invitationID);
-			parameters.Add("@organizationID", organizationID);
-			parameters.Add("@employeeTypeID", employeeTypeID);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				connection.Execute("[Auth].[UpdateOrgInvitationEmployeeTypeId]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
-		/// Updates the specified user within the specified organization with a new role.
-		/// </summary>
-		/// <param name="orgUser">The orgUser table with updates.</param>
-		public void UpdateOrganizationUser(OrganizationUserDBEntity orgUser)
-		{
-			if (orgUser == null)
-			{
-				throw new ArgumentException("orgUser cannot be null.");
-			}
-
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationID", orgUser.OrganizationId);
-			parameters.Add("@userID", orgUser.UserId);
-			parameters.Add("@RoleId", orgUser.OrgRoleId);
-			parameters.Add("@employeeID", orgUser.EmployeeId);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				connection.Execute("[Auth].[UpdateOrgUser]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<int>("[Auth].[UpdateMember]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 

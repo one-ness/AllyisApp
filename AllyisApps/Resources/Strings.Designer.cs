@@ -421,6 +421,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The employee id you entered already exists.  Please enter a unique employee id..
+        /// </summary>
+        public static string CannotEditEmployeeId {
+            get {
+                return ResourceManager.GetString("CannotEditEmployeeId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are unable to edit the members of this organization..
         /// </summary>
         public static string CannotEditMembersMessage {

@@ -29,18 +29,48 @@ namespace AllyisApps.Controllers
 		/// <returns>Returns info for a view about the member to be edited</returns>
 		public ActionResult EditMember(int userId, int orgId, bool isInvited)
 		{
-			OrganizationUserInfo userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Item2.Find(m => m.UserId == userId);
+			EditMemberViewModel model;
 			ViewBag.SignedInUserID = GetCookieData().UserId;
 
-			EditMemberViewModel model = new EditMemberViewModel
+			if (!isInvited)
 			{
-				UserInfo = AppService.GetUser(userId),
-				OrganizationId = orgId,
-				EmployeeTypeId = userOrgInfo.EmployeeTypeId,
-				EmployeeId = userOrgInfo.EmployeeId,
-				EmployeeRoleId = userOrgInfo.OrgRoleId,
-				IsInvited = isInvited
-			};
+				OrganizationUserInfo userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Item2.Find(m => m.UserId == userId);
+				User userBasicInfo = AppService.GetUser(userId);
+
+				model = new EditMemberViewModel
+				{
+					UserInfo = userBasicInfo,
+					FirstName = userBasicInfo.FirstName,
+					LastName = userBasicInfo.LastName,
+					OrganizationId = orgId,
+					EmployeeTypeId = userOrgInfo.EmployeeTypeId,
+					EmployeeId = userOrgInfo.EmployeeId,
+					EmployeeRoleId = userOrgInfo.OrgRoleId,
+					IsInvited = isInvited
+				};
+			}
+			else
+			{
+				InvitationInfo userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Item4.Find(m => m.InvitationId == userId);
+
+				model = new EditMemberViewModel
+				{
+					UserInfo = new User
+					{
+						UserId = userOrgInfo.InvitationId,
+						Email = userOrgInfo.Email,
+						DateOfBirth = userOrgInfo.DateOfBirth
+					},
+					FirstName = userOrgInfo.FirstName,
+					LastName = userOrgInfo.LastName,
+					OrganizationId = orgId,
+					EmployeeTypeId = userOrgInfo.EmployeeType,
+					EmployeeId = userOrgInfo.EmployeeId,
+					EmployeeRoleId = userOrgInfo.OrgRole,
+					IsInvited = isInvited
+				};
+			}
+
 			return View(model);
 		}
 
@@ -53,11 +83,28 @@ namespace AllyisApps.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> EditMember(EditMemberViewModel model)
 		{
+			Dictionary<string, dynamic> modelData = new Dictionary<string, dynamic>
+			{
+				{ "employeeId", model.EmployeeId },
+				{ "employeeTypeId", model.EmployeeTypeId },
+				{ "employeeRoleId", model.EmployeeRoleId },
+				{ "isInvited", model.IsInvited },
+				{ "userId", model.UserInfo.UserId },
+				{ "orgId", model.OrganizationId },
+				{ "firstName", model.FirstName },
+				{ "lastName", model.LastName }
+			};
+
 			if (ModelState.IsValid)
 			{
-				await Task.Factory.StartNew(() => AppService.UpdateMember(model.EmployeeId, model.EmployeeTypeId, model.EmployeeRoleId, model.IsInvited, model.UserInfo.UserId, model.OrganizationId));
-
-				Notifications.Add(new BootstrapAlert(String.Format(Resources.Strings.UpdateMemberSuccessMessage, model.UserInfo.FirstName, model.UserInfo.LastName), Variety.Success));
+				if (await Task.Factory.StartNew(() => AppService.UpdateMember(modelData)))
+				{
+					Notifications.Add(new BootstrapAlert(String.Format(Resources.Strings.UpdateMemberSuccessMessage, model.UserInfo.FirstName, model.UserInfo.LastName), Variety.Success));
+				}
+				else
+				{
+					Notifications.Add(new BootstrapAlert(Resources.Strings.CannotEditEmployeeId, Variety.Danger));
+				}
 
 				return this.RedirectToAction(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = model.OrganizationId });
 			}

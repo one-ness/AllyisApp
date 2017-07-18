@@ -22,6 +22,20 @@ namespace AllyisApps.ViewModels.Auth
 		public User UserInfo { get; set; }
 
 		/// <summary>
+		/// Gets or sets the user's first name.
+		/// </summary>
+		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "FirstNameValidation")]
+		[DataType(DataType.Text)]
+		public string FirstName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the user's last name.
+		/// </summary>
+		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "LastNameValidation")]
+		[DataType(DataType.Text)]
+		public string LastName { get; set; }
+
+		/// <summary>
 		/// Gets/sets the user's organization id
 		/// </summary>
 		public int OrganizationId { get; set; }
