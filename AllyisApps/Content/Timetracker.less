@@ -2,8 +2,12 @@
 @import "less/report.less";
 @import "bootstrap/less/navbar.less";
 
-// darken(#428bca, 6.5%)
-@brand-primary: darken(#ca8b42, 6.5%);
+@brand-primary: darken(#428bca, 6.5%); // blue
+//@brand-primary: darken(#8bca42, 6.5%); // green
+//@brand-primary: darken(#ca428b, 6.5%); // purple
+//@brand-primary: darken(#ca8b42, 6.5%); // brown
+//@brand-primary: darken(#42ca8b, 6.5%); // turquoise
+//@brand-primary: darken(#8b42ca, 6.5%); // purple
 
 @zone-color: @brand-primary;
 @zone-color-bg: lighten(@zone-color, 25%);
@@ -102,9 +106,33 @@ body {
 	right: 15px;
 }
 
-// wireframe
-/**, * > *, * > * > *, * > * > * > *, * > * > * > * > *, * > * > * > * > * > * > * {
-    background-color: @zone-body-bg !important;
-    color: @zone-color !important;
-    border-color: @zone-color !important;
-}*/
+.panel-heading {
+	color: @brand-primary !important;
+	background-color: @zone-body-bg !important;
+	//border-color: @navbar-default-border !important;
+}
+
+.panel-footer {
+	color: @brand-primary !important;
+	//border-color: @navbar-default-border !important;
+}
+
+/*
+a {
+	//color: @brand-primary !important;
+	//background-color: @zone-body-bg !important;
+	//border-color: @navbar-default-border !important;
+}
+*/
+
+/*
+.panel {
+	color: @brand-primary !important;
+	border-color: @navbar-default-border !important;
+}
+*/
+
+.list-group {
+	color: @brand-primary !important;
+	//border-color: @navbar-default-border !important;
+}
