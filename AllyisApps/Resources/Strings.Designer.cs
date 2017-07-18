@@ -3022,15 +3022,6 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you would like to remove this invitation?\nYou can re-invite this person at anytime..
-        /// </summary>
-        public static string RemoveInvitationConfirm {
-            get {
-                return ResourceManager.GetString("RemoveInvitationConfirm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Remove Member.
         /// </summary>
         public static string RemoveMember {
