@@ -50,7 +50,7 @@
 					<td class="memberOrgRole">@Strings.ResourceManager.GetString(invite.OrgRoleName)</td>
 					<td class="text-right icon-strip">
 						<a href="javascript: void(0);" class="text-muted" title="@Strings.RemoveInvitation"
-						   onclick='deleteInvitation("@invite.OrganizationId", "@invite.InvitationId")'><span class="fa fa-fw fa-remove text-danger"></span></a>
+						   onclick='removeUser("@invite.OrganizationId", "@invite.InvitationId", "@invite.FirstName @invite.LastName", true)'><span class="fa fa-fw fa-remove text-danger"></span></a>
 						<a href=@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { userId=invite.InvitationId, orgId=invite.OrganizationId, isInvited = true })
 						   title="@Strings.EditEmployee"><span class="fa fa-fw fa-edit"></span></a>
 					</td>
@@ -70,7 +70,7 @@
 						@if (Model.CurrentUserId != user.UserId)
 						{
 							<a href="javascript: void(0);" class="text-muted" title="@Strings.RemoveMember"
-							   onclick='removeUser("@user.OrganizationId", "@user.UserId", "@user.FullName")'><span class="fa fa-fw fa-remove text-danger"></span></a>
+							   onclick='removeUser("@user.OrganizationId", "@user.UserId", "@user.FullName", false)'><span class="fa fa-fw fa-remove text-danger"></span></a>
 						}
 					</td>
 				</tr>
