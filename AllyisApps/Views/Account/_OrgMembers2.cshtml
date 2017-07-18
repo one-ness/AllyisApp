@@ -65,13 +65,13 @@
 					<td class="memberSearchProperty">@Strings.ResourceManager.GetString(user.EmployeeTypeId == 1 ? "Salaried" : (user.EmployeeTypeId == 2 ? "Hourly" : "N/A"))</td>
 					<td class="memberOrgRole">@Strings.ResourceManager.GetString(user.PermissionLevel)</td>
 					<td class="text-right icon-strip">
-						<a href=@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { userId=user.UserId, orgId=user.OrganizationId, isInvited = false })
-						   title="@Strings.EditEmployee"><span class="fa fa-fw fa-edit"></span></a>
 						@if (Model.CurrentUserId != user.UserId)
 						{
 							<a href="javascript: void(0);" class="text-muted" title="@Strings.RemoveMember"
 							   onclick='removeUser("@user.OrganizationId", "@user.UserId", "@user.FullName", false)'><span class="fa fa-fw fa-remove text-danger"></span></a>
 						}
+						<a href=@Url.Action(ActionConstants.EditMember, ControllerConstants.Account, new { userId=user.UserId, orgId=user.OrganizationId, isInvited = false })
+						   title="@Strings.EditEmployee"><span class="fa fa-fw fa-edit"></span></a>
 					</td>
 				</tr>
 			}
