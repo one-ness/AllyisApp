@@ -197,8 +197,6 @@
     <Build Include="Auth\Stored Procedures\GetUserInvitationsByUserData.sql" />
     <Build Include="Auth\Stored Procedures\GetUsersWithSubscriptionToProductInOrganization.sql" />
     <Build Include="Auth\Stored Procedures\UpdateOrg.sql" />
-    <Build Include="Auth\Stored Procedures\UpdateOrgUser.sql" />
-    <Build Include="Auth\Stored Procedures\UpdateOrgUserEmployeeId.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserActiveOrg.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserActiveSub.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserInfo.sql" />
@@ -216,9 +214,6 @@
     <Build Include="Auth\Stored Procedures\GetOrg.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationsByUserId.sql" />
     <Build Include="Auth\Stored Procedures\EditOrgUsers.sql" />
-    <Build Include="Auth\Stored Procedures\UpdateOrgInvitationEmployeeId.sql" />
-    <Build Include="Auth\Stored Procedures\UpdateOrgUserEmployeeTypeId.sql" />
-    <Build Include="Auth\Stored Procedures\UpdateOrgInvitationEmployeeTypeId.sql" />
     <Build Include="Auth\Stored Procedures\GetEmployeeTypeId.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgWithCountriesAndEmployeeId.sql" />
     <Build Include="Auth\Stored Procedures\GetAddMemberInfo.sql" />
