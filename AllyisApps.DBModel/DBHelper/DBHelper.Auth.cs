@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AllyisApps.DBModel
 {
@@ -24,10 +25,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates the user with the information specified in the user table.
 		/// </summary>
-		/// <param name="user">The table with the user to create.</param>
-		/// <param name="emailConfirmationCode">The email confirmation code to put in for the user.</param>
-		/// <returns>The ID of the user if one was created -1 if not.</returns>
-		public Tuple<int, int> CreateUser(UserDBEntity user, Guid emailConfirmationCode)
+		public async Task<int> CreateUserAsync(UserDBEntity user)
 		{
 			if (user == null)
 			{
@@ -46,28 +44,17 @@ namespace AllyisApps.DBModel
 			parameters.Add("@PostalCode", user.PostalCode);
 			parameters.Add("@PhoneNumber", user.PhoneNumber);
 			parameters.Add("@DateOfBirth", user.DateOfBirth);
-			parameters.Add("@EmailConfirmationCode", emailConfirmationCode);
+			parameters.Add("@EmailConfirmationCode", user.EmailConfirmationCode);
 			parameters.Add("@PasswordHash", user.PasswordHash);
 			parameters.Add("@TwoFactorEnabled", user.TwoFactorEnabled);
 			parameters.Add("@LockoutEnabled", user.LockoutEnabled);
 			parameters.Add("@LockoutEndDateUtc", user.LockoutEndDateUtc);
 			parameters.Add("@LanguageID", user.LanguagePreference);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				// default null
-				//user.UserId = (int)connection.Query<int>("[Auth].[CreateUserInfo]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
-
-				var results = connection.QueryMultiple(
-					"[Auth].[CreateUserInfo]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
-				return Tuple.Create(
-					results.Read<int>().FirstOrDefault(),
-					results.Read<int>().FirstOrDefault());
+				return (await con.QueryAsync<int>("Auth.CreateUser", parameters, commandType: CommandType.StoredProcedure)).FirstOrDefault();
 			}
-
-			//return user.UserId;
 		}
 
 		/// <summary>
@@ -1024,23 +1011,17 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates user's EmailConfirmed to True in Auth.User table.
 		/// </summary>
-		/// <param name = "userId">Target user's ID.</param>
-		/// <param name = "code">The email confirmation code.</param>
-		/// <returns>Return true for success, false if userId is not found or code does not match or other error</returns>
-		public bool UpdateEmailConfirmed(int userId, string code)
+		public int UpdateEmailConfirmed(Guid code)
 		{
+			int result = 0;
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userID", userId);
-			parameters.Add("@confirmCode", code);
-			string result = null;
+			parameters.Add("@emailConfirmCode", code);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				result = connection.Query<string>(
-					"[Auth].[UpdateEmailConfirmed]",
-					parameters,
-					commandType: CommandType.StoredProcedure).FirstOrDefault();
+				result = connection.Query<int>("[Auth].[UpdateEmailConfirmed]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
-			return result == null ? false : true;
+
+			return result;
 		}
 	}
 }

@@ -122,5 +122,10 @@ namespace AllyisApps.Services
 		/// Gets or sets Code issued for password reset.
 		/// </summary>
 		public Guid? PasswordResetCode { get; set; }
+
+		/// <summary>
+		/// Gets or sets EmailConfirmationCode.
+		/// </summary>
+		public Guid? EmailConfirmationCode { get; set; }
 	}
 }

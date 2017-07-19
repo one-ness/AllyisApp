@@ -664,6 +664,24 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Thank you for joining {0}! Please confirm your email by clicking &lt;a href=&quot;{1}&quot;&gt;here&lt;/a&gt;..
+        /// </summary>
+        public static string ConfirmEmailMessage {
+            get {
+                return ResourceManager.GetString("ConfirmEmailMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome to {0}! Please confirm your email..
+        /// </summary>
+        public static string ConfirmEmailSubject {
+            get {
+                return ResourceManager.GetString("ConfirmEmailSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm Password.
         /// </summary>
         public static string ConfirmPassword {

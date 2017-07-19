@@ -1471,4 +1471,10 @@
   <data name="CannotEditEmployeeId" xml:space="preserve">
     <value>The employee id you entered already exists.  Please enter a unique employee id.</value>
   </data>
+  <data name="ConfirmEmailMessage" xml:space="preserve">
+    <value>Thank you for joining {0}! Please confirm your email by clicking &lt;a href="{1}"&gt;here&lt;/a&gt;.</value>
+  </data>
+  <data name="ConfirmEmailSubject" xml:space="preserve">
+    <value>Welcome to {0}! Please confirm your email.</value>
+  </data>
 </root>

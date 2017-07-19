@@ -9,6 +9,7 @@ using AllyisApps.ViewModels.Auth;
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AllyisApps.Resources;
 
 namespace AllyisApps.Controllers
 {
@@ -50,29 +51,33 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				// generate confirm email url template
-				string confirmUrl = Url.Action(ActionConstants.ConfirmEmail, ControllerConstants.Account, new { userId = "{userId}", code = "{code}" }, protocol: Request.Url.Scheme);
-
-				// create new user in the db and get back the userId and count of invitations
+				Guid code = Guid.NewGuid();
+				string confirmUrl = Url.Action(ActionConstants.ConfirmEmail, ControllerConstants.Account, new { id = code }, protocol: Request.Url.Scheme);
+				string confirmEmailSubject = string.Format(Strings.ConfirmEmailSubject, Strings.ApplicationTitle);
+				string confirmEmailBody = string.Format(Strings.ConfirmEmailMessage, Strings.ApplicationTitle, confirmUrl);
+				// TODO: Change language preference from 1 to a value grabbed from session/URL
+				int langPreference = 1;
+				// TODO: get support email from web.config
+				string supportEmail = "support@allyisapps.com";
+				// compute birthdate			
 				var birthdate = AppService.GetDateTimeFromDays(model.DateOfBirth);
-				// TODO: we dont need invite count, we need only user id
-				System.Tuple<int, int> userIDandInviteCount = await AppService.SetupNewUser(model.Email, model.FirstName, model.LastName, birthdate, model.Address, model.City, model.State, model.Country, model.PostalCode, model.PhoneNumber, model.Password, 1, confirmUrl); // TODO: Change language preference from 1 to a value grabbed from session/URL
-
-				if (userIDandInviteCount != null)
+				// create new user in the db and get back the userId and count of invitations
+				int userId = await AppService.SetupNewUser(model.Email, model.FirstName, model.LastName, birthdate, model.Address, model.City, model.State, model.Country, model.PostalCode, model.PhoneNumber, model.Password, langPreference, supportEmail, confirmEmailSubject, confirmEmailBody, code);
+				if (userId > 0)
 				{
 					// sign in (and set cookie)
-					this.SignIn(userIDandInviteCount.Item1, model.Email);
+					this.SignIn(userId, model.Email);
 					return this.RedirectToLocal(returnUrl);
 				}
 				else
 				{
-					Notifications.Add(new BootstrapAlert(Resources.Strings.UserAccountAlreadyExists, Variety.Danger));
+					Notifications.Add(new BootstrapAlert(Strings.UserAccountAlreadyExists, Variety.Danger));
 					return this.View(model);
 				}
 			}
 
-			Notifications.Add(new BootstrapAlert(Resources.Strings.WarnProblemSigningIn, Variety.Warning));
-			return this.View("Error", new HandleErrorInfo(new System.Exception(Resources.Strings.StatusErrorMessage), ControllerConstants.Account, ActionConstants.Register));
+			Notifications.Add(new BootstrapAlert(Strings.WarnProblemSigningIn, Variety.Warning));
+			return this.View("Error", new HandleErrorInfo(new Exception(Strings.StatusErrorMessage), ControllerConstants.Account, ActionConstants.Register));
 		}
 	}
 }

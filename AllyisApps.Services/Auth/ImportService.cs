@@ -685,15 +685,18 @@ namespace AllyisApps.Services
 											Email = fields[0],
 											FirstName = names[0],
 											LastName = names[1],
-											PasswordHash = Lib.Crypto.GetPasswordHash("password")//ComputeSHA512Hash("password") // TODO: Figure out a better default password generation system
+											EmailConfirmationCode = Guid.NewGuid(),
+											// TODO: Figure out a better default password generation system
+											PasswordHash = Crypto.GetPasswordHash("password")
 										};
-										Tuple<int, int> userIdAndInviteCount = DBHelper.CreateUser(GetDBEntityFromUser(user), Guid.NewGuid());
-										if (userIdAndInviteCount != null)
+										try
 										{
+											var task = DBHelper.CreateUserAsync(GetDBEntityFromUser(user));
+											task.RunSynchronously();
 											result.UsersImported += 1;
-											user.UserId = userIdAndInviteCount.Item1;
+											user.UserId = task.Result;
 										}
-										else
+										catch
 										{
 											result.UserFailures.Add(string.Format("Could not create user {0}, {1}: error adding user to database.", names[0], names[1]));
 										}

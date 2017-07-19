@@ -19,18 +19,18 @@ namespace AllyisApps.Controllers
 		/// GET: /Account/ConfirmEmail.
 		/// </summary>
 		[AllowAnonymous]
-		public ActionResult ConfirmEmail(int id, Guid code)
+		public ActionResult ConfirmEmail(Guid id)
 		{
-			if (this.AppService.ConfirmUserEmail(id, code))
+			if (this.AppService.ConfirmUserEmail(id))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.NotifyYourEmailIsConfirmed, Variety.Success));
-				return this.RedirectToAction(ActionConstants.LogOn, ControllerConstants.Account);
 			}
 			else
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.WarnYourEmailHasAlreadyBeenConfirmed, Variety.Warning));
-				return this.RouteUserHome();
 			}
+
+			return this.RouteUserHome();
 		}
 	}
 }

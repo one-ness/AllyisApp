@@ -1,13 +1,12 @@
 ﻿CREATE PROCEDURE [Auth].[UpdateEmailConfirmed]
-	@UserId nvarchar (40) ,
-	@confirmCode nvarchar (MAX)
+	@emailConfirmCode uniqueidentifier
 AS
 BEGIN
-	UPDATE [Auth].[User]
-	SET [EmailConfirmed] = 1
-	WHERE [UserId] = @UserId AND [EmailConfirmationCode] = @confirmCode
-
 	SELECT [UserId]
 	FROM [Auth].[User] WITH (NOLOCK)
-	WHERE [UserId] = @UserId AND [EmailConfirmationCode] = @confirmCode
+	WHERE [EmailConfirmationCode] = @emailConfirmCode and [EmailConfirmed] = 0
+
+	UPDATE [Auth].[User]
+	SET [EmailConfirmed] = 1
+	WHERE [EmailConfirmationCode] = @emailConfirmCode
 END

@@ -146,24 +146,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Setup a new user.
 		/// </summary>
-		/// <param name="email">The new user's email.</param>
-		/// <param name="firstName">The new user's first name.</param>
-		/// <param name="lastName">The new user's last name.</param>
-		/// <param name="dateOfBirth">The new user's date of birth.</param>
-		/// <param name="address">The new user's street address.</param>
-		/// <param name="city">The new user's city portion of their address.</param>
-		/// <param name="state">The new user's state portion of their address.</param>
-		/// <param name="country">The new user's country portion of their address.</param>
-		/// <param name="postalCode">The new user's postal code.</param>
-		/// <param name="phone">The new user's phone number.</param>
-		/// <param name="password">The new user's password.</param>
-		/// <param name="confirmUrl">The template of the Url for the confirm email link, with userId and code replaced by "{userId}" and "{code}".</param>
-		/// <param name="languagePreference">The new user's language preference.</param>
-		/// <param name="twoFactorEnabled">A boolean representing whether the new user has enabled 2FA. Defaults to false.</param>
-		/// <param name="lockOutEnabled">A boolean representing whether the new user is locked out from failed access attempts.  Defaults to false.</param>
-		/// <param name="lockOutEndDateUtc">The time whent the user's lockout will end.  Defaults to null.</param>
-		/// <returns>Returns 0 if user already exists, 0 if there is failure.</returns>
-		public async Task<Tuple<int, int>> SetupNewUser(
+		public async Task<int> SetupNewUser(
 			string email,
 			string firstName,
 			string lastName,
@@ -176,40 +159,26 @@ namespace AllyisApps.Services
 			string phone,
 			string password,
 			int languagePreference,
-			string confirmUrl,
+			string supportEmail,
+			string confirmEmailSubject,
+			string confirmEmailMessage,
+			Guid emailConfirmationCode,
 			bool twoFactorEnabled = false,
 			bool lockOutEnabled = false,
 			DateTime? lockOutEndDateUtc = null)
 		{
-			#region Validation
+			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
+			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName:");
+			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException("lastName");
+			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
+			if (emailConfirmationCode == null) throw new ArgumentException("emailConfirmationCode");
 
-			if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName))
-			{
-				throw new ArgumentException("User name must have a value.");
-			}
-
-			if (string.IsNullOrEmpty(email))
-			{
-				throw new ArgumentNullException("email", "Email address must have a value.");
-			}
-			else if (!Utility.IsValidEmail(email))
-			{
-				throw new FormatException("Email address must be in a valid format.");
-			}
-
-			if (string.IsNullOrEmpty(password))
-			{
-				throw new ArgumentNullException("password", "Password must have a value.");
-			}
-
-			#endregion Validation
-
-			//int result = 0;
-			Tuple<int, int> result = null;
+			int result = 0;
 			try
 			{
 				UserDBEntity entity = new UserDBEntity()
 				{
+					EmailConfirmationCode = emailConfirmationCode,
 					Email = email,
 					FirstName = firstName,
 					LastName = lastName,
@@ -226,19 +195,17 @@ namespace AllyisApps.Services
 					LockoutEndDateUtc = lockOutEndDateUtc,
 					LanguagePreference = languagePreference
 				};
-				Guid emailConfirmCode = Guid.NewGuid();
-				result = this.DBHelper.CreateUser(entity, emailConfirmCode);
+				result = await this.DBHelper.CreateUserAsync(entity);
 
 				// send confirmation email
-				string url = confirmUrl.Replace("%7BuserId%7D", result.Item1.ToString()).Replace("%7Bcode%7D", emailConfirmCode.ToString());
-				await SendConfirmationEmail("support@allyisapps.com", email, url);
+				// TODO: get support email from the parameter
+				await Mailer.SendEmailAsync(supportEmail, email, confirmEmailSubject, confirmEmailMessage);
 			}
 			catch (SqlException ex)
 			{
 				if (ex.Message.ToLower().Contains("unique"))
 				{
 					// unique constraint violation of email
-					result = null;
 				}
 				else
 				{
@@ -256,7 +223,7 @@ namespace AllyisApps.Services
 		/// <param name="password">The login password.</param>
 		public UserContext ValidateLogin(string email, string password)
 		{
-			if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("email");
+			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
 
 			UserContext result = null;
@@ -626,66 +593,12 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Send confirmation email after registration.
-		/// </summary>
-		/// <param name="userId">The user id.</param>
-		/// <returns>The async confirmation email code task.</returns>
-		public async Task<string> GetConfirmEmailCode(int userId)
-		{
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
-			}
-
-			string result = Guid.NewGuid().ToString();
-			await Task.Run(() =>
-			{
-				return;
-			});
-
-			return result;
-		}
-
-		/// <summary>
-		/// Send confirmation email.
-		/// </summary>
-		/// <param name="from">Who the message is from.</param>
-		/// <param name="to">Who the message is to.</param>
-		/// <param name="confirmEmailUrl">The URL for email confirmation.</param>
-		/// <returns>The async confirmation email task.</returns>
-		public async Task SendConfirmationEmail(string from, string to, string confirmEmailUrl)
-		{
-			if (!Utility.IsValidEmail(from)) throw new ArgumentException("from");
-			if (!Utility.IsValidEmail(to)) throw new ArgumentException("to");
-			if (string.IsNullOrWhiteSpace(confirmEmailUrl)) throw new ArgumentNullException("confirmEmailUrl");
-
-			string bodyHtml = string.Format("Please confirm your email by clicking <a href=\"{0}\">here</a>", confirmEmailUrl);
-			await Mailer.SendEmailAsync(from, to, "Confirm Email", bodyHtml);
-		}
-
-		/// <summary>
 		/// Confirms the users email.
 		/// </summary>
-		/// <param name="userId">User Id.</param>
-		/// <param name="code">The confirmation code.</param>
-		/// <returns>True on success, false if the email is already confirmed or some other failure occurs.</returns>
-		public bool ConfirmUserEmail(int userId, Guid code)
+		public bool ConfirmUserEmail(Guid code)
 		{
-			if (userId <= 0) throw new ArgumentException("userId");
 			if (code == null) throw new ArgumentNullException("code");
-
-			bool result = false;
-			UserDBEntity userDbEntity = DBHelper.GetUserInfo(userId);
-			if (!userDbEntity.EmailConfirmed)
-			{
-				string guidstr = code.ToString();
-				if (string.Compare(userDbEntity.EmailConfirmationCode.ToString(), guidstr, true) == 0)
-				{
-					result = DBHelper.UpdateEmailConfirmed(userId, guidstr);
-				}
-			}
-
-			return result;
+			return DBHelper.UpdateEmailConfirmed(code) > 0 ? true : false;
 		}
 
 		/// <summary>

@@ -262,6 +262,7 @@
     <Build Include="Billing\Stored Procedures\GetAllActiveProductsAndSkus.sql" />
     <Build Include="Auth\Stored Procedures\UpdateMember.sql" />
     <None Include="DefaultData\DummyData.sql" />
+    <Build Include="Auth\Stored Procedures\CreateUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
