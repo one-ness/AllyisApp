@@ -1,26 +1,12 @@
 ﻿@model AllyisApps.ViewModels.Auth.EditSubscriptionViewModel
 @{
 	ViewBag.Title = Strings.EditSubscription;
-	string icon;
-	if (Model.Name == "Time Tracker")
-	{
-		icon = "TimeTracker.png";
-	}
-	else if (Model.Name == "Expense Tracker")
-	{
-		icon = "expense.png";
-	}
-	else
-	{
-		icon = "";
-	}
-
 }
 
 <div class="shrink-wrap-center">
 			<div class="col-md-12">
 				<div class="text-center">
-					<img src="~/@string.Format("Content/icons/{0}", icon)" alt="@Model.Name" style="margin-right:5px;" />
+					<img src="~/@string.Format("Content/icons/{0}.png", Model.Name.Replace(" ", ""))" alt="@Model.Name" style="margin-right:5px;" />
 					<h2 style="display:inline-block;">
 						@Model.Name
 					</h2>

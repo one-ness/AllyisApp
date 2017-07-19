@@ -38,15 +38,11 @@
 		<tbody>
 			@foreach (InvitationInfo invite in Model.PendingInvitation)
 			{
-				var displayName = (string.IsNullOrWhiteSpace(invite.FirstName) ? string.IsNullOrWhiteSpace(invite.LastName) ? "" : invite.LastName + " " :
-									string.IsNullOrWhiteSpace(invite.LastName) ? invite.FirstName + " " : string.Format("{0} {1} ", invite.FirstName, invite.LastName)) + "(" +
-									Strings.Invited + ")";
-
 				<tr class="memberRow">
-					<td class="memberSearchProperty">@displayName</td>
+					<td class="memberSearchProperty">@string.Format("{0} {1} ({2})", invite.FirstName, invite.LastName, Strings.Invited)</td>
 					<td class="memberSearchProperty">@invite.CompressedEmail</td>
 					<td class="memberSearchProperty">@invite.EmployeeId</td>
-					<td class="memberSearchProperty">@Strings.ResourceManager.GetString(invite.EmployeeType == 1 ? "Salaried" : (invite.EmployeeType == 2 ? "Hourly" : "N/A"))</td>
+					<td class="memberSearchProperty">@(invite.EmployeeType == 1 ? Strings.Salaried : invite.EmployeeType == 2 ? Strings.Hourly : "N/A")</td>
 					<td class="memberOrgRole">@Strings.ResourceManager.GetString(invite.OrgRoleName)</td>
 					<td class="text-right icon-strip">
 						<a href="javascript: void(0);" class="text-muted" title="@Strings.RemoveInvitation"
@@ -62,7 +58,7 @@
 					<td class="memberSearchProperty">@user.FullName</td>
 					<td class="memberSearchProperty">@user.Email</td>
 					<td class="memberSearchProperty">@user.EmployeeId</td>
-					<td class="memberSearchProperty">@Strings.ResourceManager.GetString(user.EmployeeTypeId == 1 ? "Salaried" : (user.EmployeeTypeId == 2 ? "Hourly" : "N/A"))</td>
+					<td class="memberSearchProperty">@(user.EmployeeTypeId == 1 ? Strings.Salaried : user.EmployeeTypeId == 2 ? Strings.Hourly : "N/A")</td>
 					<td class="memberOrgRole">@Strings.ResourceManager.GetString(user.PermissionLevel)</td>
 					<td class="text-right icon-strip">
 						@if (Model.CurrentUserId != user.UserId)
