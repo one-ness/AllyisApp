@@ -6,6 +6,7 @@ using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -25,13 +26,22 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionId">subscriptionId</param>
 		/// <param name="importData">Workbook with data to import.</param>
-		public ImportActionResult Import(int subscriptionId, DataSet importData)
+		/// <param name="organizationId">The organization's Id</param>
+		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0)
 		{
-            UserSubscription userSub;
-
-
-            UserContext.UserSubscriptions.TryGetValue(subscriptionId, out userSub);
-			int orgId = userSub.OrganizationId;
+			int orgId;
+			if (subscriptionId > 0 && UserContext.UserSubscriptions[subscriptionId] != null)
+			{
+				orgId = UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+			}
+			else if (organizationId > 0 && UserContext.UserOrganizations[organizationId] != null)
+			{
+				orgId = organizationId;
+			}
+			else
+			{
+				return null; //subsciptionId and/or organization id are invalid
+			}
 
 			// For some reason, linq won't work directly with DataSets, so we start by just moving the tables over to a linq-able List
 			// The tables are ranked and sorted in order to get customers to import first, before projects, avoiding some very complicated look-up logic.
@@ -650,7 +660,7 @@ namespace AllyisApps.Services
 									// Couldn't get all the information
 									bool[] fieldStatuses = fields.Select(f => string.IsNullOrEmpty(f)).ToArray();
 									result.UserFailures.Add(string.Format("Could not create user {0}: missing {1}{2}.", (fieldStatuses[0] ? fieldStatuses[1] ?
-										string.Join(" ", fields[2].Split(new string[] { "__IMPORT__" }, StringSplitOptions.None)) : fields[1] : fields[0]),
+										fields[2] != null ? string.Join(" ", fields[2].Split(new string[] { "__IMPORT__" }, StringSplitOptions.None)) : null : fields[1] : fields[0]),
 										fieldStatuses[0] ? ColumnHeaders.UserEmail : fieldStatuses[1] ? ColumnHeaders.EmployeeId : string.Format("{0}/{1}", ColumnHeaders.UserFirstName, ColumnHeaders.UserLastName),
 										fieldStatuses.Where(s => s).Count() == 2 ? string.Format(" and {0}", !fieldStatuses[2] ? ColumnHeaders.EmployeeId : string.Format("{0}/{1}", ColumnHeaders.UserFirstName, ColumnHeaders.UserLastName)) : ""));
 									continue;
@@ -661,7 +671,7 @@ namespace AllyisApps.Services
 
 								if (!Utility.IsValidEmail(fields[0]))
 								{
-									result.UserFailures.Add(string.Format("Could not create user {0} {1}: invalid email format ({2}).", names[0], names[1], fields[0]));
+									result.UserFailures.Add(string.Format("Could not create user {0}, {1}: invalid email format ({2}).", names[0], names[1], fields[0]));
 									continue;
 								}
 
@@ -685,7 +695,7 @@ namespace AllyisApps.Services
 										}
 										else
 										{
-											result.UserFailures.Add(string.Format("Could not create user {0} {1}: error adding user to database.", names[0], names[1]));
+											result.UserFailures.Add(string.Format("Could not create user {0}, {1}: error adding user to database.", names[0], names[1]));
 										}
 									}
 									if (user.UserId != -1)
@@ -739,7 +749,16 @@ namespace AllyisApps.Services
 							if (hasUserDateOfBirth) updated = this.readColumn(row, ColumnHeaders.UserDateOfBirth, val => dateOfBirth = val) || updated;
 							if (!string.IsNullOrEmpty(dateOfBirth))
 							{
-								user.DateOfBirth = DateTime.Parse(dateOfBirth);
+								DateTime dob;
+								DateTime.TryParse(dateOfBirth, out dob);
+								if (DateTime.Compare(dob, DateTime.MinValue) <= 0)
+								{
+									result.UserFailures.Add(string.Format("The birthdate entered for {0} {1} was invalid. Please check to make sure it's in date format: dd/mm/yyyy and preferably after 1900 ", user.FirstName, user.LastName));
+								}
+								else
+								{
+									user.DateOfBirth = dob;
+								}
 							}
 
 							if (hasUserPhoneExtension) updated = this.readColumn(row, ColumnHeaders.UserPhoneExtension, val => user.PhoneExtension = val) || updated;

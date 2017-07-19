@@ -67,7 +67,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					DataSet result = reader.AsDataSet();
 					reader.Close();
 
-					string[] formattedResult = ImportMessageFormatter.FormatImportResult(AppService.Import(subscriptionId, result));
+					string[] formattedResult = ImportMessageFormatter.FormatImportResult(AppService.Import(result, subscriptionId: subscriptionId));
 					if (!string.IsNullOrEmpty(formattedResult[0]))
 					{
 						Notifications.Add(new AllyisApps.Core.Alert.BootstrapAlert(formattedResult[0], AllyisApps.Core.Alert.Variety.Success));
