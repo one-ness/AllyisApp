@@ -40,11 +40,9 @@
                     <div class="form-group">
                         <label>@Strings.DateOfBirth</label>
                         @Html.HiddenFor(m => m.DateOfBirth)
-						<div> <!--places validation msg on a new line-->
-							@Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @style = "color:red" })
-						</div>
                         <input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerBirth" />
                         <span class="fa fa-fw fa-calendar" id="datePickerBirthButton"></span>
+						@Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @style = "color:#a94442" })
                     </div>
                     <div class="field-validation-error" id="capsWarningDiv" style="visibility:hidden; height:0px"><span>@Strings.CapsLock</span></div>
                 </div>
