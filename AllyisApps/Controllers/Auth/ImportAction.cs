@@ -65,7 +65,7 @@ namespace AllyisApps.Controllers
 					DataSet result = reader.AsDataSet();
 					reader.Close();
 
-					string[] formattedResult = ImportMessageFormatter.FormatImportResult(AppService.Import(id, result));
+					string[] formattedResult = ImportMessageFormatter.FormatImportResult(AppService.Import(result, organizationId: id));
 					if (!string.IsNullOrEmpty(formattedResult[0]))
 					{
 						Notifications.Add(new BootstrapAlert(formattedResult[0], Variety.Success));
