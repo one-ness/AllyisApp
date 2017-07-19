@@ -84,12 +84,12 @@
                     @if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
                     {
                         @Html.ActionLink(Strings.Cancel, ActionConstants.Index, ControllerConstants.Customer, null, new { @class = "btn btn-default" })
-                        <input type="submit" value="@Strings.Create" class="btn btn-primary" />
+                        <input type="submit" value="@Strings.Create" class="btn btn-primary"/>
                     }
                     else
                     {
                         @Html.ActionLink(Strings.Cancel, ActionConstants.Index, ControllerConstants.Customer, null, new { @class = "btn btn-default" })
-                        <input type="submit" value="@Strings.Save" class="btn btn-primary" />
+                        <input type="submit" value="@Strings.Save" class="btn btn-primary"/>
                     }
                 </div>
             </div>
@@ -112,14 +112,14 @@
                             </div>
 
                             <div style="margin-top: 10px; margin-bottom: 15px; float:right;">
-                                <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
-                                <input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" />
+                                <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose customers Excel entries to upload">@Strings.ChooseFile</a>
+                                <input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload customers Excel entries"/>
                             </div>
                         }
                         @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get, new { style = "display: flex; justify-content: space-between;", id = "template-form" }))
                         {
                             <div style="margin-top:10px; float:left">
-                                <input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary" />
+                                <input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary" title="Download customers Excel template"/>
                             </div>
                         }
                     </div>
