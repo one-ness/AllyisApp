@@ -103,6 +103,7 @@ namespace AllyisApps.ViewModels.Auth
 		//[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
 		//[Display(Name = "Date of Birth")]
 		//[SQLDateProtector]
+		[MinDateValidation]
 		public int DateOfBirth { get; set; } //has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view.
 
 		/// <summary>
@@ -145,6 +146,27 @@ namespace AllyisApps.ViewModels.Auth
 			{
 				return CharsToReplace.Aggregate(stringToClean, (str, l) => str.Replace(string.Empty + l, string.Empty));
 			}
+		}
+	}
+
+	/// <summary>
+	/// Validates the integer reprenting the date meets a minimum requirement
+	/// </summary>
+	public class MinDateValidation : ValidationAttribute
+	{
+		/// <summary>
+		/// Validates if the value meets the minimum requirement
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="validationContext">validation context</param>
+		/// <returns></returns>
+		protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+		{
+			if ((int)value >= 639905 || (int)value <= -1) //-1 represents a null date
+			{
+				return ValidationResult.Success;
+			}
+			return new ValidationResult("Please enter a date within the last 150 years");
 		}
 	}
 }
