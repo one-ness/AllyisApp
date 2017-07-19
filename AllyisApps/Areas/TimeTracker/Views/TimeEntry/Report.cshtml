@@ -93,13 +93,13 @@
 							<label>@Strings.StartDate</label>
 							<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.Selection.StartDate" />
 							<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerStart" />
-							<span class="fa fa-fw fa-calendar" id="datePickerStartButton"></span>
+							<span class="fa fa-fw fa-calendar" id="datePickerStartButton" title="Choose start date"></span>
 						</div>
 						<div class="form-group col-md-6 col-lg-6">
 							<label>@Strings.EndDate</label>
 							<input type="hidden" id="DateRangeEnd" name="DateRangeEnd" value="@Model.Selection.EndDate" />
 							<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerEnd" />
-							<span class="fa fa-fw fa-calendar" id="datePickerEndButton"></span>
+							<span class="fa fa-fw fa-calendar" id="datePickerEndButton" title="Choose end date"></span>
 						</div>
 					</div>
 					<div class="row">
@@ -109,11 +109,11 @@
 							@if (Model.ShowExport)
 							{
 								<div>
-									<input class="btn btn-primary pull-right" type="submit" name="viewDataButton" value=@Strings.Export />
+									<input class="btn btn-primary pull-right" type="submit" name="viewDataButton" value=@Strings.Export title="Export Excel Time Tracker entries" />
 								</div>
 							}
 							<div>
-								<input class="btn btn-primary pull-right" type="submit" name="viewDataButton" style="margin-right: 15px;" value=@Strings.Preview />
+								<input class="btn btn-primary pull-right" type="submit" name="viewDataButton" style="margin-right: 15px;" value=@Strings.Preview title="Preview Excel Time Tracker entries"/>
 							</div>
 						</div>
 					</div>

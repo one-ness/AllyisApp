@@ -1218,9 +1218,6 @@
   <data name="RemoveFromSubscription" xml:space="preserve">
     <value>Remover de suscripción</value>
   </data>
-  <data name="RemoveInvitationConfirm" xml:space="preserve">
-    <value>¿Estás seguro de que quieres eliminar esta invitación? \nNo se puede volver a invitar a esta persona en cualquier momento.</value>
-  </data>
   <data name="RemoveMember" xml:space="preserve">
     <value>Eliminar miembro</value>
   </data>

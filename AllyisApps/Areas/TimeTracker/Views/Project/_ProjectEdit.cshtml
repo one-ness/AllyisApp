@@ -99,7 +99,7 @@
 			</div>
             <div class="text-right" style="padding-top: 15px; padding-bottom: 15px;">
                 <input type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId })'" />
-                <input type="submit" value=@Strings.Save class="btn btn-primary" id="submitProject" />
+                <input type="submit" value=@Strings.Save class="btn btn-primary" id="submitProject"/>
             </div>
         }
 
@@ -120,14 +120,14 @@
                         </div>
 
                         <div style="margin-top: 10px; margin-bottom: 15px; float:right;">
-                            <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();">@Strings.ChooseFile</a>
-                            <input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" />
+                            <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose project entries Excel file to upload">@Strings.ChooseFile</a>
+                            <input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload project entries from Excel"/>
                         </div>
                     }
                     @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get, new { style = "display: flex; justify-content: space-between;", id = "template-form" }))
                     {
                         <div style="margin-top: 10px; margin-bottom: 15px; float:left">
-                            <input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary" />
+                            <input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary" title="Download Excel template for project entries"/>
                         </div>
                     }
                 </div>
