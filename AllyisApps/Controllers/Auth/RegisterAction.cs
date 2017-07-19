@@ -34,7 +34,7 @@ namespace AllyisApps.Controllers
 			return this.View(new RegisterViewModel
 			{
 				ValidCountries = AppService.ValidCountries(),
-				DateOfBirth = AppService.GetDayFromDateTime(DateTime.UtcNow.AddYears(-18))
+				DateOfBirth = AppService.GetDayFromDateTime(System.Data.SqlTypes.SqlDateTime.MinValue.Value)
 			});
 		}
 
@@ -76,8 +76,7 @@ namespace AllyisApps.Controllers
 				}
 			}
 
-			Notifications.Add(new BootstrapAlert(Strings.WarnProblemSigningIn, Variety.Warning));
-			return this.View("Error", new HandleErrorInfo(new Exception(Strings.StatusErrorMessage), ControllerConstants.Account, ActionConstants.Register));
+			return View(model); // model error
 		}
 	}
 }
