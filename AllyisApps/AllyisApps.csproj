@@ -373,6 +373,8 @@
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
     <Content Include="Content\icons\bg_stars.gif" />
+    <Content Include="Content\icons\ExpenseTracker.png" />
+    <Content Include="Content\icons\TimeTrackerPro.png" />
     <Content Include="Content\icons\TimeTracker.png" />
     <Content Include="Content\Timetracker - Copy.css">
       <DependentUpon>ExpenseTracker.less</DependentUpon>
@@ -597,7 +599,7 @@
       <DependentUpon>bootstrap.css</DependentUpon>
     </Content>
     <Content Include="Content\icons\TimeTrackerOld.png" />
-    <Content Include="Content\icons\expense.png" />
+    <Content Include="Content\icons\ExpenseTrackerPro.png" />
     <Content Include="Content\icons\invoice.png" />
     <Content Include="Content\icons\tasks-list.png" />
     <Content Include="Content\less\breadcrumbs.css">

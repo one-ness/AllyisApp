@@ -5,7 +5,6 @@
 @{
 	ViewBag.Title = Strings.Products;
 	string color = "";
-	string icon = "";
 }
 
 @foreach (var prod in Model.ProductsList)
@@ -39,24 +38,13 @@
 							default:
 								break;
 						}
-						switch (prod.ProductId)
-						{
-							case 1:
-								icon = "TimeTracker.png";
-								break;
-							case 2:
-								icon = "expense.png";
-								break;
-							default:
-								break;
-						}
 						<div class="row">
 							<div class="panel-wrap panel-wrap-one col-md-10 col-md-push-1">
 								<div class="panel panel-default">
 									<div class="panel-heading" style="display: table; width: 100%; height: 100%;">
 										<div class="row">
 											<div class="col-md-4">
-												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 25px; margin-bottom: 10px;"><img src="~/Content/icons/@icon" alt="@sku.Name" /></div>
+												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 25px; margin-bottom: 10px;"><img src="~/@string.Format("Content/icons/{0}.png", @sku.Name.Replace(" ", ""))" alt="@sku.Name"/></div>
 												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><strong>$@sku.Price.ToString("N2")</strong></div>
 												@if (Model.currentSubscriptions.Where(sub => sub.SkuId == sku.SkuId).FirstOrDefault() != null)	//already subscribed to this sku
 												{
