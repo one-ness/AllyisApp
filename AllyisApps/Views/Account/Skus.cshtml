@@ -4,7 +4,6 @@
 
 @{
 	ViewBag.Title = Strings.Products;
-	string color = "";
 }
 
 @foreach (var prod in Model.ProductsList)
@@ -21,23 +20,6 @@
 				<div class="panel-body">
 					@foreach (var sku in prod.ProductSkus)
 					{
-						switch (sku.Name)
-						{
-							case "Time Tracker":
-								color = "green";
-								break;
-							case "Time Tracker Pro":
-								color = "blue";
-								break;
-							case "Expense Tracker":
-								color = "brown";
-								break;
-							case "Expense Tracker Pro":
-								color = "pink";
-								break;
-							default:
-								break;
-						}
 						<div class="row">
 							<div class="panel-wrap panel-wrap-one col-md-10 col-md-push-1">
 								<div class="panel panel-default">
@@ -48,7 +30,7 @@
 												<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><strong>$@sku.Price.ToString("N2")</strong></div>
 												@if (Model.currentSubscriptions.Where(sub => sub.SkuId == sku.SkuId).FirstOrDefault() != null)	//already subscribed to this sku
 												{
-													<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="" class="btn btn-default" disabled>Subscribed</a></div>
+													<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><p class="btn btn-default" disabled>Subscribed</p></div>
 												}
 												else if (Model.currentSubscriptions.Where(sub => sub.ProductId == sku.ProductId).FirstOrDefault() != null)	//subscribed to another sku under the same product
 												{
