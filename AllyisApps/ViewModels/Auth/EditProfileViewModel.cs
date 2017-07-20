@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -162,6 +163,9 @@ namespace AllyisApps.ViewModels.Auth
 		/// <returns></returns>
 		protected override ValidationResult IsValid(object value, ValidationContext validationContext)
 		{
+			TimeSpan t = (DateTime.Today - new DateTime(1, 1, 1));
+			int days = (int)t.TotalDays + 1;
+
 			if ((int)value >= 639905 || (int)value <= -1) //-1 represents a null date
 			{
 				return ValidationResult.Success;
