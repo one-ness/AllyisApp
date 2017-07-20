@@ -163,12 +163,12 @@ namespace AllyisApps.ViewModels.Auth
 		/// <returns></returns>
 		protected override ValidationResult IsValid(object value, ValidationContext validationContext)
 		{
-			int minAgeYears = 18;
+			int minAgeYears = 15;
 			DateTime dob = new DateTime(1 / 1 / 1).AddDays((int)value - 1);
 			DateTime minAgeDate = new DateTime(DateTime.Today.Ticks).AddYears(-minAgeYears);
 			if (dob > minAgeDate)
 			{
-				return new ValidationResult("Must be atleast 18 years of age to register");
+				return new ValidationResult("Must be atleast " + minAgeYears + " years of age to register");
 			}
 			else if ((int)value < 639905 || (int)value < 0) //-1 represents a null date
 			{
