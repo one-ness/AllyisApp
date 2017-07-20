@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -150,7 +151,7 @@ namespace AllyisApps.ViewModels.Auth
 	}
 
 	/// <summary>
-	/// Validates the integer reprenting the date meets a minimum requirement
+	/// Validates that the integer representing the birthdate meets a minimum requirement
 	/// </summary>
 	public class MinDateValidation : ValidationAttribute
 	{
@@ -162,11 +163,22 @@ namespace AllyisApps.ViewModels.Auth
 		/// <returns></returns>
 		protected override ValidationResult IsValid(object value, ValidationContext validationContext)
 		{
-			if ((int)value >= 639905 || (int)value <= -1) //-1 represents a null date
+			int minAgeYears = 15;
+			if ((int) value > -1) //-1 represents a null date
 			{
-				return ValidationResult.Success;
+				DateTime dob = new DateTime(1 / 1 / 1).AddDays((int)value);
+				dob = new DateTime(dob.Subtract(new DateTime(1 / 1 / 1)).Ticks);
+				DateTime minAgeDate = new DateTime(DateTime.Today.Ticks).AddYears(-minAgeYears);
+				if (dob > minAgeDate)
+				{
+					return new ValidationResult("Must be atleast " + minAgeYears + " years of age to register");
+				}
+				else if ((int)value < 639905) 
+				{
+					return new ValidationResult("Please enter a date within the last 150 years");
+				}
 			}
-			return new ValidationResult("Please enter a date within the last 150 years");
+			return ValidationResult.Success;
 		}
 	}
 }
