@@ -261,12 +261,12 @@ namespace AllyisApps.Services
 			var spResults = DBHelper.CreateInvitation(UserContext.UserId, GetDBEntityFromInvitationInfo(invitationInfo), subscriptionId, productRoleId);
 			if (spResults.Item1 == -1)
 			{
-				throw new InvalidOperationException("User is already a member of the organization.");
+				throw new DuplicateNameException("User is already a member of the organization.");
 			}
 
 			if (spResults.Item1 == -2)
 			{
-				throw new DuplicateNameException("Employee Id is already taken.");
+				throw new InvalidOperationException("Employee Id is already taken.");
 			}
 
             // Send invitation email
