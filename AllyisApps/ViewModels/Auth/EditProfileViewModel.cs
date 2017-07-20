@@ -150,7 +150,7 @@ namespace AllyisApps.ViewModels.Auth
 	}
 
 	/// <summary>
-	/// Validates the integer reprenting the date meets a minimum requirement
+	/// Validates that the integer representing the birthdate meets a minimum requirement
 	/// </summary>
 	public class MinDateValidation : ValidationAttribute
 	{
