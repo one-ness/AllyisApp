@@ -21,7 +21,7 @@
 		<input id="UserId" name="UserId" type="hidden" value="@Model.EntryRange.UserId" />
 		<input id="StartDate" name="StartDate" type="hidden" value="@Model.EntryRange.StartDate" />
 		<input id="EndDate" name="EndDate" type="hidden" value="@Model.EntryRange.EndDate" />
-		<div class="form-group pull-left" style="margin-bottom: 15px;">
+		<div class="form-group pull-left">
 			<a href="@Url.Action(ActionConstants.Export, ControllerConstants.TimeEntry, routeValues: new
                 {
                     subscriptionId = Model.Subscriptionid,
