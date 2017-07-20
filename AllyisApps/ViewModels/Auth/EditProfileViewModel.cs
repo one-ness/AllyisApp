@@ -164,15 +164,19 @@ namespace AllyisApps.ViewModels.Auth
 		protected override ValidationResult IsValid(object value, ValidationContext validationContext)
 		{
 			int minAgeYears = 15;
-			DateTime dob = new DateTime(1 / 1 / 1).AddDays((int)value - 1);
-			DateTime minAgeDate = new DateTime(DateTime.Today.Ticks).AddYears(-minAgeYears);
-			if (dob > minAgeDate)
+			if ((int) value > -1) //-1 represents a null date
 			{
-				return new ValidationResult("Must be atleast " + minAgeYears + " years of age to register");
-			}
-			else if ((int)value < 639905 || (int)value < 0) //-1 represents a null date
-			{
-				return new ValidationResult("Please enter a date within the last 150 years");
+				DateTime dob = new DateTime(1 / 1 / 1).AddDays((int)value);
+				dob = new DateTime(dob.Subtract(new DateTime(1 / 1 / 1)).Ticks);
+				DateTime minAgeDate = new DateTime(DateTime.Today.Ticks).AddYears(-minAgeYears);
+				if (dob > minAgeDate)
+				{
+					return new ValidationResult("Must be atleast " + minAgeYears + " years of age to register");
+				}
+				else if ((int)value < 639905) 
+				{
+					return new ValidationResult("Please enter a date within the last 150 years");
+				}
 			}
 			return ValidationResult.Success;
 		}
