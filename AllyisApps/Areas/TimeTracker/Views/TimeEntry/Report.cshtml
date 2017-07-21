@@ -15,7 +15,7 @@
 }
 
 <div class="row report-wrap">
-    <div class="col-md-10 col-md-push-1 col-lg-8 col-lg-push-2">
+    <div class="col-md-12">
         <div class="row">
             @using (Html.BeginForm(ActionConstants.ViewReport, ControllerConstants.TimeEntry, FormMethod.Post, htmlAttributes: new { @id = "reportForm" }))
             {
@@ -47,7 +47,7 @@
                             <label for="CustomerSelect">@Strings.Customers</label>
                             @Html.DropDownList("CustomerSelect",
                                               Model.CustomerView,
-                                              htmlAttributes: new { @class = "form-control", @id = "ddl-customers" })
+                                              htmlAttributes: new { @class = "form-control", @style = "width:85%", @id = "ddl-customers" })
                         </div>
 
 						<!-- A holder for all the projects, to draw from for populating the real selection list -->
@@ -65,7 +65,7 @@
                                 <!--Get Projects by OrgID-->
                                 @Html.DropDownList("ProjectSelect",
                                               Model.ProjectView,
-                                              htmlAttributes: new { @class = "form-control", @id = "ddl-projects", @disabled = "disabled" })
+                                              htmlAttributes: new { @class = "form-control", @style = "width:85%", @id = "ddl-projects", @disabled = "disabled" })
                             </div>
 							}
                         else
@@ -90,16 +90,16 @@
                     </div>
 					<div class="row">
 						<div class="form-group col-md-6 col-lg-6">
-							<label>@Strings.StartDate</label>
+							<label style="margin-right:200px">@Strings.StartDate</label>
 							<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.Selection.StartDate" />
-							<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerStart" />
-							<span class="fa fa-fw fa-calendar" id="datePickerStartButton" title="Choose start date"></span>
+							<input type="text" class="form-control" style="width: 50%; display: inline-block;" id="datePickerStart" />
+							<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id="datePickerStartButton" title="Choose start date"></span>
 						</div>
 						<div class="form-group col-md-6 col-lg-6">
-							<label>@Strings.EndDate</label>
+							<label style="margin-right:200px">@Strings.EndDate</label>
 							<input type="hidden" id="DateRangeEnd" name="DateRangeEnd" value="@Model.Selection.EndDate" />
-							<input type="text" class="form-control" style="width: 90%; display: inline-block;" id="datePickerEnd" />
-							<span class="fa fa-fw fa-calendar" id="datePickerEndButton" title="Choose end date"></span>
+							<input type="text" class="form-control" style="width: 50%; display: inline-block;" id="datePickerEnd" />
+							<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id="datePickerEndButton" title="Choose end date"></span>
 						</div>
 					</div>
 					<div class="row">
@@ -109,11 +109,11 @@
 							@if (Model.ShowExport)
 							{
 								<div>
-									<input class="btn btn-primary pull-right" type="submit" name="viewDataButton" value=@Strings.Export title="Export Excel Time Tracker entries" />
+									<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" value=@Strings.Export title="Export Excel Time Tracker entries" />
 								</div>
 							}
 							<div>
-								<input class="btn btn-primary pull-right" type="submit" name="viewDataButton" style="margin-right: 15px;" value=@Strings.Preview title="Preview Excel Time Tracker entries"/>
+								<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" style="margin-left: 15px;" value=@Strings.Preview title="Preview Excel Time Tracker entries"/>
 							</div>
 						</div>
 					</div>
