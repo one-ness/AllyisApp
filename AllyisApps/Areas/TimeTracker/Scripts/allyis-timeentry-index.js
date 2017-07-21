@@ -456,3 +456,12 @@ function drp_prevWeek() {
 	newEnd.setTime(newEnd.getTime() + (endOffsetChange * 3600000));
 	drp.daterangepicker("setRange", { start: newStart, end: newEnd });
 }
+
+(function set_copier_confirmation() {
+    $('.weekcopier').click(function () {
+        return confirm('Copying the previous week will overwrite the current entries for this week. Are you sure you want to continue?');
+    });
+    $('.daycopier').click(function () {
+        return confirm('Copying the previous day will overwrite the current entries for this day. Are you sure you want to continue?')
+    })
+})()
