@@ -28,6 +28,11 @@ namespace AllyisApps.Services
 		/// </summary>
 		public int CustomerId { get; set; }
 
+        /// <summary>
+        /// Gets or sets the name of the customer associated with the project.
+        /// </summary>
+        public string CustomerName { get; set; }
+
 		/// <summary>
 		/// Gets or sets the project name.
 		/// </summary>

@@ -694,9 +694,10 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-			return new Project
-			{
-				CustomerId = project.CustomerId,
+            return new Project
+            {
+                CustomerId = project.CustomerId,
+                CustomerName = project.CustomerName,
 				EndingDate = project.EndingDate,
 				Name = project.Name,
 				OrganizationId = project.OrganizationId,
