@@ -19,7 +19,7 @@ AS
 	FROM [Crm].[Project] AS [P] WITH (NOLOCK)
 		JOIN [Crm].[Customer] AS [C] WITH (NOLOCK) ON [C].[CustomerId] = [P].[CustomerId]
 		LEFT JOIN [Auth].[Organization] AS [O] WITH (NOLOCK) ON [O].[OrganizationId] = [C].[OrganizationId]
-	WHERE [O].[OrganizationId] = @OrgId
+	WHERE [O].[OrganizationId] = @OrgId AND [P].[ISACTIVE] = 1
 	
 	SELECT [FirstName],
 		[LastName],
