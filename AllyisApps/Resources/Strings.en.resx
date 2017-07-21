@@ -1447,4 +1447,7 @@
   <data name="CannotEditEmployeeId" xml:space="preserve">
     <value>The employee id you entered already exists.  Please enter a unique employee id.</value>
   </data>
+  <data name="ExpenseTrackerDescription" xml:space="preserve">
+	<value>Easily manages your expenses</value>
+  </data>
 </root>

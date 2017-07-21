@@ -46,7 +46,12 @@
                         @details.FaxNumber
                     </p>
                 </div>
-                <div class="col-md-8 col-md-push-2" style="height: 100%; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both">
+				<div class="col-sm-12 index-details" style="border-top: solid thin #ddd;">
+					<p>
+						<h3>@Strings.Subscriptions:</h3>
+					</p>
+				</div>
+                <div class="col-md-12" style="height: 100%; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
 					@foreach (SubscriptionDisplayViewModel sub in Model.PanelInfo.Subscriptions)
 					{
 						<div class="panel-wrap panel-wrap-one" style="width: 300px;">

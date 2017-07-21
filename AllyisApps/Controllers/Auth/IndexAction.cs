@@ -46,12 +46,18 @@ namespace AllyisApps.Controllers
 				{
 					foreach (UserSubscription userSubInfo in userOrgInfo.UserSubscriptions.Values)
 					{
+						//TODO move description info into a product description column in Billing.Product
+						string description =
+							userSubInfo.ProductId == ProductIdEnum.TimeTracker    ? Resources.Strings.TimeTrackerDescription :
+							userSubInfo.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
+							"";
+
 						orgVM.Subscriptions.Add(new SubscriptionDisplayViewModel
 						{
 							SubscriptionId = userSubInfo.SubscriptionId,
 							ProductId = (int)userSubInfo.ProductId,
 							ProductName = userSubInfo.ProductName,
-							ProductDescription = userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription : "",
+							ProductDescription = description,
 							AreaUrl = userSubInfo.AreaUrl
 						});
 					}

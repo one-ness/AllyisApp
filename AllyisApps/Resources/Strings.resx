@@ -1477,4 +1477,7 @@
   <data name="ConfirmEmailSubject" xml:space="preserve">
     <value>Welcome to {0}! Please confirm your email.</value>
   </data>
+  <data name="ExpenseTrackerDescription" xml:space="preserve">
+	<value>Easily manages your expenses</value>
+  </data>
 </root>

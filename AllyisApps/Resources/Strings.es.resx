@@ -1453,4 +1453,7 @@
   <data name="CannotEditEmployeeId" xml:space="preserve">
     <value>El ID de empleado que ha ingresado ya existe. Ingresa un ID de empleado exclusivo.</value>
   </data>
+  <data name="ExpenseTrackerDescription" xml:space="preserve">
+	<value>Gestiona fácilmente sus gastos</value>
+  </data>
 </root>

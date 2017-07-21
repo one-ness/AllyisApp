@@ -1357,6 +1357,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Easily manages your expenses.
+        /// </summary>
+        public static string ExpenseTrackerDescription {
+            get {
+                return ResourceManager.GetString("ExpenseTrackerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export.
         /// </summary>
         public static string Export {
