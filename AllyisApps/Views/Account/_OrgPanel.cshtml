@@ -48,7 +48,12 @@
                 </div>
 				<div class="col-sm-12 index-details" style="border-top: solid thin #ddd;">
 					<p>
-						<h3>@Strings.Subscriptions:</h3>
+						<h3>
+							@Strings.Subscriptions
+							<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.PanelInfo.OrgInfo.OrganizationId })" title="Add a subscription" class="btn btn-default pull-right text-muted">
+								<i class="fa fa-plus fa-lg" style="color: green"></i>
+							</a>
+						</h3>
 					</p>
 				</div>
                 <div class="col-md-12" style="height: 100%; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">

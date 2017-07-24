@@ -31,7 +31,7 @@
 									<input type="submit" value="@Strings.Upgrade" class="btn btn-primary pull-left" id="submitUpgrade" />
 								}
 							}
-							@using (Html.BeginForm(ActionConstants.Unsubscribe, ControllerConstants.Account, new { id = Model.SubscriptionId, idTwo = Model.SkuId }, FormMethod.Post, new { @class = "pull-right", @style = "display: inline-block", @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("Are you sure you want to Unsubscribe from " + Model.Name)) }))
+							@using (Html.BeginForm(ActionConstants.Unsubscribe, ControllerConstants.Account, new { id = Model.SubscriptionId, idTwo = Model.SkuId }, FormMethod.Post, new { @class = "pull-right", @style = "display: inline-block", @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(String.Format(Strings.WarningWhenUnsubscribing, Model.Name))) }))
 							{
 								@Html.AntiForgeryToken()
 								<input data-val="true" id="OrganizationId" name="OrganizationId" type="hidden" value="@Model.OrganizationId" />
@@ -41,7 +41,6 @@
 								<input type="submit" value="@Strings.Unsubscribe" class="btn btn-basic" id="submitDelete" />
 								@Html.ActionLink(Strings.Cancel, ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId }, htmlAttributes: new { @class = "btn btn-default" })
 							}
-
 						</div>
 					</div>
 				</div>
