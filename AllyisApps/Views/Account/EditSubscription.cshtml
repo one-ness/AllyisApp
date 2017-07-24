@@ -1,21 +1,23 @@
 ﻿@model AllyisApps.ViewModels.Auth.EditSubscriptionViewModel
 @{
-	ViewBag.Title = Strings.EditSubscription;
-}
+		ViewBag.Title = Strings.EditSubscription;
+		IEnumerable<SelectListItem> items = new[] { new SelectListItem() { Text = "Unsubscribe" }, new SelectListItem() { Text = "OtherSku" } };
+	}
 
 <div class="shrink-wrap-center">
 			<div class="col-md-12">
 				<div class="text-center">
 					<img src="~/@string.Format("Content/icons/{0}.png", Model.Name.Replace(" ", ""))" alt="@Model.Name" style="margin-right:5px;" />
-					<h2 style="display:inline-block;">
+					@*<h2 style="display:inline-block;">
 						@Model.Name
-					</h2>
+					</h2>*@
+					@Html.TextBox(Strings.Name, Model.Name, new { id = "", placeholder = "Subscription Name" })
 				</div>
 				<div class="text-center col-md-offset-4 col-md-4" style="margin-top:10px;">
 					@Model.Description
 				</div>
 				<div class="text-center col-md-12" style="margin-top:25px;">
-					@if (Model.SkuId > Model.SkuIdNext)
+					@*@if (Model.SkuId > Model.SkuIdNext)
 					{
 						using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, new { productId = Model.ProductId, productName = Model.Name, selectedSku = Model.SkuIdNext, subscriptionName = Model.NextName, previousSku = Model.SkuId, organizationId = Model.OrganizationId, selectedSkuName = Model.NextName }, FormMethod.Post, new { @style = "display: inline-block", @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("You are about to Downgrade from " + Model.Name + " to " + Model.NextName)) }))
 						{
@@ -30,8 +32,11 @@
 							@Html.AntiForgeryToken()
 							<input type="submit" value="@Strings.Upgrade" class="btn btn-primary" id="submitUpgrade" />
 						}
-					}
-					@using (Html.BeginForm( ActionConstants.Unsubscribe, ControllerConstants.Account, new { id = Model.SubscriptionId, idTwo = Model.SkuId }, FormMethod.Post, new { @class = "col-md-offset-1", @style = "display: inline-block", @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(String.Format(Strings.WarningWhenUnsubscribing, Model.Name))) }))
+					}*@
+					@Html.DropDownList(Strings.Subscriptions, items)
+					<input type="submit" value="@Strings.Save" class="btn btn-primary" id="save"/>
+					@Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, htmlAttributes: new { @class = "btn btn-default" })
+					@*@using (Html.BeginForm( ActionConstants.Unsubscribe, ControllerConstants.Account, new { id = Model.SubscriptionId, idTwo = Model.SkuId }, FormMethod.Post, new { @class = "col-md-offset-1", @style = "display: inline-block", @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(String.Format(Strings.WarningWhenUnsubscribing, Model.Name))) }))
 					{
 						@Html.AntiForgeryToken()
 						<input data-val="true" id="OrganizationId" name="OrganizationId" type="hidden" value="@Model.OrganizationId" />
@@ -39,8 +44,7 @@
 						<input data-val="true" id="CurrentSubscription" name="CurrentSubscription.SubscriptionId" type="hidden" value="@Model.SubscriptionId" />
 						<input type="hidden" name="SelectedSku" value="0" />
 						<input type="submit" value="@Strings.Unsubscribe" class="btn btn-basic" id="submitDelete" />
-						@Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, htmlAttributes: new { @class = "btn btn-default" })
-					}
+					}*@
 
 				</div>
 			</div>
