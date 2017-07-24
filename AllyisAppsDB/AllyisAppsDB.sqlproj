@@ -77,6 +77,10 @@
     <Folder Include="DefaultData" />
     <Folder Include="TestData" />
     <Folder Include="Schema\" />
+    <Folder Include="Finance\" />
+    <Folder Include="Finance\Tables\" />
+    <Folder Include="Expense\" />
+    <Folder Include="Expense\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TimeTracker\Tables\Holiday.sql" />
@@ -263,6 +267,12 @@
     <Build Include="Auth\Stored Procedures\UpdateMember.sql" />
     <None Include="DefaultData\DummyData.sql" />
     <Build Include="Auth\Stored Procedures\CreateUser.sql" />
+    <Build Include="Finance\Tables\Account.sql" />
+    <Build Include="Finance\Tables\AccountType.sql" />
+    <Build Include="Expense\Tables\ExpenseReport.sql" />
+    <Build Include="Expense\Tables\ExpenseItem.sql" />
+    <Build Include="Security\Finance.sql" />
+    <Build Include="Security\Expense.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
