@@ -39,7 +39,7 @@
 						<input data-val="true" id="CurrentSubscription" name="CurrentSubscription.SubscriptionId" type="hidden" value="@Model.SubscriptionId" />
 						<input type="hidden" name="SelectedSku" value="0" />
 						<input type="submit" value="@Strings.Unsubscribe" class="btn btn-basic" id="submitDelete" />
-						@Html.ActionLink(Strings.Cancel, ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId }, htmlAttributes: new { @class = "btn btn-default" })
+						@Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, htmlAttributes: new { @class = "btn btn-default" })
 					}
 
 				</div>
