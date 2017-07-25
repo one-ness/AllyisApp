@@ -24,14 +24,14 @@
 		}
 		else
 		{
-			<a class="button" href="@Url.Action(ActionConstants.Index, ControllerConstants.TimeEntry, new { area = Model.AreaUrl, subscriptionId = Model.SubscriptionId, userId = ViewData["UserId"] })" style="text-decoration: none; color:inherit">
-				@Model.ProductName <i class="fa fa-calendar-plus-o"></i>
+			<a class="button" href="@Url.Action(ActionConstants.Index, ControllerConstants.TimeEntry, new { area = Model.AreaUrl, subscriptionId = Model.SubscriptionId, userId = ViewData["UserId"] })" style="color:inherit">
+				@Model.ProductName <i class="fa fa-caret-right"></i>
 			</a>
 		}
 	</td>
 	<td style="text-align: center">@userDisplay</td>
 	<td class="text-right icon-strip">
 		<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = Model.Info.SubscriptionId })"
-			class="text-muted" title="@Strings.EditSubscription"><span class="fa fa-fw fa-edit"></span></a>
+			class="text-muted" title="@Strings.EditSubscription" style="color:inherit"><span class="fa fa-fw fa-edit"></span></a>
 	</td>
 </tr>
