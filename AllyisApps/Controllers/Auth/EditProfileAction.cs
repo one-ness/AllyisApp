@@ -21,8 +21,9 @@ namespace AllyisApps.Controllers
 		/// GET: /Account/EditProfile.
 		/// </summary>
 		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
+		/// <param name="id"></param>
 		/// <returns>The result of this action.</returns>
-		public ActionResult EditProfile(string returnUrl)
+		public ActionResult EditProfile(string returnUrl, int id)
 		{
 			User userInfo = AppService.GetUser();
 			EditProfileViewModel model = new EditProfileViewModel

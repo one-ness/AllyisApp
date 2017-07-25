@@ -66,6 +66,11 @@
 		public int? SubscriptionId { get; set; }
 
 		/// <summary>
+		/// Gets or sets the subscription name.
+		/// </summary>
+		public string SubscriptionName { get; set; }
+
+		/// <summary>
 		/// Gets or sets the product id for the subscription.
 		/// </summary>
 		public int? ProductId { get; set; }

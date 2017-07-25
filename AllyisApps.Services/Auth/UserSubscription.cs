@@ -28,13 +28,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		public string SubscriptionName
 		{
-			get
-			{
-				// TODO: for now, return the product name
-				// when we allow an organization to subscribe to the same product multiple times
-				// then we need the user to type in a subscription name
-				return this.ProductName;
-			}
+			get;
+			//{
+			//	// TODO: for now, return the product name
+			//	// when we allow an organization to subscribe to the same product multiple times
+			//	// then we need the user to type in a subscription name
+			//	return this.ProductName;
+			//}
+			set;
 		}
 
 		/// <summary>
