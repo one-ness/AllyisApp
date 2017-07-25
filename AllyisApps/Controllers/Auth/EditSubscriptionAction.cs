@@ -43,5 +43,35 @@ namespace AllyisApps.Controllers
 			};
 			return this.View(ViewConstants.EditSubscription, model);
 		}
-    }
+
+		/// <summary>
+		/// POST: /Account/EditSubscription.
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult EditSubscription(EditSubscriptionViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					if (model.ActionType == "Unsubscribe")
+					{
+						return this.RedirectToAction(ActionConstants.Unsubscribe, new { });
+					}
+
+					return this.RedirectToAction(ActionConstants.Subscribe, new { id = model.OrganizationId, skuId = model.SkuIdNext });
+				}
+				catch (Exception)
+				{
+					Notifications.Add(new BootstrapAlert(@Resources.Strings.CannotEditSubscriptionsMessage, Variety.Success));
+					return this.RedirectToAction(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = model.OrganizationId });
+				}
+				//return this.View(ViewConstants.Error, new HandleErrorInfo(new UnauthorizedAccessException(@Resources.Strings.CannotEditSubscriptionsMessage), ControllerConstants.Organization, ActionConstants.Edit));
+			}
+			return this.View(model);
+		}
+	}
 }
