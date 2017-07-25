@@ -45,6 +45,12 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public int OrganizationId { get; set; }
 
+
+		/// <summary>
+		/// Gets or sets the current Organization's Name.
+		/// </summary>
+		public string OrganizationName { get; set; }
+
 		/// <summary>
 		/// Gets or sets the current product's Id.
 		/// </summary>
@@ -121,5 +127,13 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets the number of users currently attached to the organization.
 		/// </summary>
 		public int CurrentUsers { get; internal set; }
+
+		/// <summary>
+		/// Subscription Name displayed when first subscribing.
+		/// </summary>
+		public string subscriptionNameToDisplayForSubscribing()
+		{
+			return OrganizationName + " - " + ProductName;
+		}
 	}
 }
