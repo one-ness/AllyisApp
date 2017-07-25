@@ -60,7 +60,7 @@ namespace AllyisApps.Controllers
 				{
 					if (model.ActionType == "Unsubscribe")
 					{
-						return this.RedirectToAction(ActionConstants.Unsubscribe, new { });
+						return this.RedirectToAction(ActionConstants.Unsubscribe, new { id = model.SubscriptionId, idTwo = model.SkuId });
 					}
 					var infos = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuIdNext);
 

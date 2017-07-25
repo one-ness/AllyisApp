@@ -34,7 +34,15 @@ namespace AllyisApps.Controllers
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
 			var infos = AppService.GetProductSubscriptionInfo(orgId, idTwo);
 			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, orgId);
-			return this.View(model);
+
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, model.OrganizationId);
+			string notificationString = AppService.UnsubscribeAndRemoveBillingSubscription(model.SelectedSku, model.CurrentSubscription.SubscriptionId);
+			if (notificationString != null)
+			{
+				Notifications.Add(new BootstrapAlert(notificationString, Variety.Success));
+			}
+
+			return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
 		}
 
 		/// <summary>
