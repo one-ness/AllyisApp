@@ -7,7 +7,7 @@
 namespace AllyisApps.Services
 {
 	/// <summary>
-	/// Subscription role.
+	/// Product role aka Subscription role.
 	/// </summary>
 	public enum TimeTrackerRole : int
 	{
