@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auth\EmployeeType.cs" />
-    <Compile Include="Auth\InvitationSubRole.cs" />
     <Compile Include="Auth\Organization.cs" />
     <Compile Include="Auth\AccountService.cs" />
     <Compile Include="Auth\AuthorizationService.cs" />
