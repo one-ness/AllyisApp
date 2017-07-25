@@ -103,6 +103,7 @@ namespace AllyisApps
 		public const string Shared = "shared";
 		public const string Subscription = "subscription";
 		public const string TimeEntry = "timeentry";
+		public const string Expense = "expense";
 	}
 
 	/// <summary>

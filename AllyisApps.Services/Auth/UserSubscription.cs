@@ -14,9 +14,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserSubscription"/> class.
 		/// </summary>
-		public UserSubscription()
-		{
-		}
+		public UserSubscription() { }
 
 		/// <summary>
 		/// Gets or sets the Subscription id.
@@ -27,7 +25,7 @@ namespace AllyisApps.Services
 		/// Gets the name of the subscription
 		/// </summary>
 		public string SubscriptionName { get; set; }
-
+        
 		/// <summary>
 		/// Gets or sets the organization this subscription belongs to.
 		/// </summary>

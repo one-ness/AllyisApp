@@ -26,6 +26,7 @@ namespace AllyisApps.Controllers
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
 			int skuId = AppService.UserContext.UserSubscriptions[id].SkuId;
 			int productId = (int) AppService.UserContext.UserSubscriptions[id].ProductId;
+			string subName = AppService.UserContext.UserSubscriptions[id].SubscriptionName;
 			var infos = AppService.GetProductSubscriptionInfo(id, skuId);
 			SkuInfo sku = AppService.GetSkuDetails(skuId);
 			sku.SkuIdNext = infos.Item3.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault().SkuId;
@@ -39,7 +40,8 @@ namespace AllyisApps.Controllers
 				Description = sku.Description,
 				SubscriptionId = id,
 				OrganizationId = orgId,
-				ProductId = sku.ProductId
+				ProductId = sku.ProductId,
+				SubscriptionName = subName
 			};
 			return this.View(ViewConstants.EditSubscription, model);
 		}
