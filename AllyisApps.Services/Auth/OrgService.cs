@@ -184,37 +184,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets the role of the given user in the given organization.
-		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
-		/// <param name="userId">User Id.</param>
-		/// <returns>An OrgRole instance.</returns>
-		public OrgRole GetOrgRole(int orgId, int userId)
-		{
-			if (orgId < 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
-			}
-
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-			}
-
-			OrgRoleDBEntity role = DBHelper.GetPermissionLevel(orgId, userId);
-			if (role == null)
-			{
-				return null;
-			}
-
-			return new OrgRole
-			{
-				OrgRoleId = role.OrgRoleId,
-				OrgRoleName = role.Name
-			};
-		}
-
-		/// <summary>
 		/// Deletes the user's current chosen organization.
 		/// </summary>
 		/// <returns>Returns false if permissions fail.</returns>
