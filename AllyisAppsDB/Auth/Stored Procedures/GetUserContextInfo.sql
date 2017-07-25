@@ -15,6 +15,7 @@ BEGIN
 		   [O].[Name] AS 'OrganizationName',
 		   [OU].[OrgRoleId],
 		   [SUB].[SubscriptionId],
+		   [SUB].[SubscriptionName],
 		   [SUB].[ProductId],
 		   [SUB].[ProductName],
 		   [SUB].[SkuId],
@@ -25,6 +26,7 @@ BEGIN
 		LEFT JOIN [Auth].[Organization] AS [O] WITH (NOLOCK) ON [OU].[OrganizationId] = [O].[OrganizationId]
 		LEFT JOIN (
 			SELECT	[S].[SubscriptionId],
+					[S].[SubscriptionName],
 					[PR].[ProductId],
 					[P].[Name] AS 'ProductName',
 					[P].[AreaUrl],

@@ -294,6 +294,7 @@ namespace AllyisApps.Services
 							UserSubscription subInfo = new UserSubscription()
 							{
 								SubscriptionId = item.SubscriptionId.Value,
+								SubscriptionName = item.SubscriptionName,
 								OrganizationId = orgInfo.OrganizationId,
 								OrganizationName = orgInfo.OrganizationName,
 								ProductId = (ProductIdEnum)item.ProductId.Value,

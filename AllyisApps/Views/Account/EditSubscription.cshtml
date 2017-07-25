@@ -16,21 +16,27 @@
 							<div style="margin-top:10px;">
 								@if (Model.SkuId > Model.SkuIdNext)
 								{
-									using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, new { productId = Model.ProductId, productName = Model.Name, selectedSku = Model.SkuIdNext, subscriptionName = Model.NextName, previousSku = Model.SkuId, organizationId = Model.OrganizationId, selectedSkuName = Model.NextName }, FormMethod.Post, new { @style = "display: inline-block", @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("You are about to Downgrade from " + Model.Name + " to " + Model.NextName)) }))
+									using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, new { productId = Model.ProductId, productName = Model.Name, selectedSku = Model.SkuIdNext, subscriptionName = Model.NextName, previousSku = Model.SkuId, organizationId = Model.OrganizationId, selectedSkuName = Model.NextName }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("You are about to Downgrade from " + Model.Name + " to " + Model.NextName)) }))
 									{
 										@Html.AntiForgeryToken()
-										<input type="submit" value="@Strings.Downgrade" class="btn btn-primary pull-left" id="submitDowngrade" />
+											@Html.ReqLabelFor(m => m.SubscriptionName, "Subscription Name")
+											@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control", @placeholder = Model.ProductName })
+											@Html.ValidationMessageFor(m => m.SubscriptionName)
+										<input type="submit" value="@Strings.Downgrade" class="btn btn-primary pull-left" style="margin-top:15px;" id="submitDowngrade" />
 									}
 								}
 								else
 								{
-									using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, new { productId = Model.ProductId, productName = Model.Name, selectedSku = Model.SkuIdNext, subscriptionName = Model.NextName, previousSku = Model.SkuId, organizationId = Model.OrganizationId, selectedSkuName = Model.NextName }, FormMethod.Post, new { @style = "display: inline-block", @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("You are about to Upgrade from " + Model.Name + " to " + Model.NextName)) }))
+									using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, new { productId = Model.ProductId, productName = Model.Name, selectedSku = Model.SkuIdNext, subscriptionName = Model.NextName, previousSku = Model.SkuId, organizationId = Model.OrganizationId, selectedSkuName = Model.NextName }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("You are about to Upgrade from " + Model.Name + " to " + Model.NextName)) }))
 									{
 										@Html.AntiForgeryToken()
-										<input type="submit" value="@Strings.Upgrade" class="btn btn-primary pull-left" id="submitUpgrade" />
+											@Html.ReqLabelFor(m => m.SubscriptionName, "Subscription Name")
+											@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control", @placeholder = Model.ProductName })
+											@Html.ValidationMessageFor(m => m.SubscriptionName)
+										<input type="submit" value="@Strings.Upgrade" class="btn btn-primary pull-left" style="margin-top:15px;" id="submitUpgrade" />
 									}
 								}
-								@using (Html.BeginForm(ActionConstants.Unsubscribe, ControllerConstants.Account, new { id = Model.SubscriptionId, idTwo = Model.SkuId }, FormMethod.Post, new { @class = "pull-right", @style = "display: inline-block", @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(String.Format(Strings.WarningWhenUnsubscribing, Model.Name))) }))
+								@using (Html.BeginForm(ActionConstants.Unsubscribe, ControllerConstants.Account, new { id = Model.SubscriptionId, idTwo = Model.SkuId }, FormMethod.Post, new { @style = "margin-top:15px;", @class = "pull-right", @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(String.Format(Strings.WarningWhenUnsubscribing, Model.Name))) }))
 								{
 									@Html.AntiForgeryToken()
 									<input data-val="true" id="OrganizationId" name="OrganizationId" type="hidden" value="@Model.OrganizationId" />
