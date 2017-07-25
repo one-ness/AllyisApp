@@ -24,8 +24,8 @@
 		}
 		else
 		{
-			<a href="@Url.Action(ActionConstants.Index, ControllerConstants.TimeEntry, new { area = Model.AreaUrl, subscriptionId = Model.SubscriptionId, userId = ViewData["UserId"] })" style="text-decoration: none; color: inherit">
-				@Model.ProductName
+			<a href="@Url.Action(ActionConstants.Index, ControllerConstants.TimeEntry, new { area = Model.AreaUrl, subscriptionId = Model.SubscriptionId, userId = ViewData["UserId"] })" style="text-decoration: none; color:cornflowerblue">
+				@Model.ProductName <i class="glyphicon glyphicon-time"></i>
 			</a>
 		}
 	</td>
