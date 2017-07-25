@@ -34,7 +34,7 @@ namespace AllyisApps.Areas.TimeTracker
 		{
 			context.Routes.MapSubdomainRoute(
 				name: "ExpenseTracker_Default",
-				url: "ExpenseTracker/{subscriptionId}/{controller}/{action}/{id}",
+				url: "expensetracker/{subscriptionId}/{controller}/{action}/{id}",
 				area: this.AreaName,
 				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
 				constraints: new { subscriptionId = @"\d+" },

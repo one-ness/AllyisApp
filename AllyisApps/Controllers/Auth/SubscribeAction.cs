@@ -62,12 +62,14 @@ namespace AllyisApps.Controllers
 			if (productInfo != null)
 			{
 				int selectedSku = currentSubscription == null ? 0 : currentSubscription.SkuId;
+				string orgName = AppService.UserContext.UserOrganizations[orgId].OrganizationName;
 				BillingServicesCustomerId customerId = new BillingServicesCustomerId(stripeToken);
 
 				return new ProductSubscriptionViewModel
 				{
 					IsValid = true,
 					OrganizationId = orgId,
+					OrganizationName = orgName,
 					ProductId = productInfo.ProductId,
 					ProductName = productInfo.ProductName,
 					AreaUrl = productInfo.AreaUrl,
