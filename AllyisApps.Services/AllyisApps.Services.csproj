@@ -80,6 +80,9 @@
     <Compile Include="Billing\BillingHistoryItemInfo.cs" />
     <Compile Include="Billing\BillingService.cs" />
     <Compile Include="Billing\BlockBasedOnEnum.cs" />
+    <Compile Include="Expense\ExpenseService.cs" />
+    <Compile Include="Finance\FinanceService.cs" />
+    <Compile Include="Pjm\PjmService.cs" />
     <Compile Include="ServiceConstants.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Crm\Customer.cs" />
