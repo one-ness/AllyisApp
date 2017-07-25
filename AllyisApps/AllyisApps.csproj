@@ -200,8 +200,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Areas\ExpenseTracker\Controllers\ExpenseController.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ExpenseController.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseReportsViewModel.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\DetailsAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ReactivateAction.cs" />
@@ -375,6 +377,7 @@
     <Content Include="Content\icons\ExpenseTracker.png" />
     <Content Include="Content\icons\TimeTrackerPro.png" />
     <Content Include="Content\icons\TimeTracker.png" />
+    <Content Include="Content\icons\TimeTrackerOld.png" />
     <Content Include="Content\Timetracker - Copy.css">
       <DependentUpon>ExpenseTracker.less</DependentUpon>
     </Content>
@@ -509,6 +512,11 @@
     <Content Include="Content\Timetracker - Copy.css.map">
       <DependentUpon>Timetracker - Copy.css</DependentUpon>
     </Content>
+    <Content Include="Areas\ExpenseTracker\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\Expense\Index.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\web.config" />
+    <Content Include="Areas\ExpenseTracker\Views\Shared\BreadcrumbNavPartial.cshtml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
     <None Include="Resources\628px-achtung-svg.png" />
@@ -926,9 +934,7 @@
     <Content Include="Views\Shared\_Breadcrumbs.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\EditSubscriptionAction\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>

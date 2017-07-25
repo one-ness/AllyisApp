@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auth\EmployeeType.cs" />
-    <Compile Include="Auth\InvitationSubRole.cs" />
     <Compile Include="Auth\Organization.cs" />
     <Compile Include="Auth\AccountService.cs" />
     <Compile Include="Auth\AuthorizationService.cs" />
@@ -88,7 +87,6 @@
     <Compile Include="Auth\InvitationInfo.cs" />
     <Compile Include="Auth\Language.cs" />
     <Compile Include="Auth\OrganizationUserInfo.cs" />
-    <Compile Include="Auth\OrgRole.cs" />
     <Compile Include="TimeTracker\PayClass.cs" />
     <Compile Include="Crm\CompleteProjectInfo.cs" />
     <Compile Include="Crm\Project.cs" />
