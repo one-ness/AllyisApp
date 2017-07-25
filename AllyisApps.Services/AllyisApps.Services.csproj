@@ -63,13 +63,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Auth\EmployeeType.cs" />
+    <Compile Include="Auth\EmployeeTypeEnum.cs" />
     <Compile Include="Auth\Organization.cs" />
     <Compile Include="Auth\AccountService.cs" />
     <Compile Include="Auth\AuthorizationService.cs" />
     <Compile Include="Auth\ImportService.cs" />
-    <Compile Include="Auth\OrganizationRole.cs" />
-    <Compile Include="Auth\ProductRoles.cs" />
+    <Compile Include="Auth\OrganizationRoleEnum.cs" />
+    <Compile Include="Auth\ProductRoleEnums.cs" />
     <Compile Include="Auth\UserContext.cs" />
     <Compile Include="Auth\UserOrganization.cs" />
     <Compile Include="Auth\UserSubscription.cs" />
@@ -80,6 +80,9 @@
     <Compile Include="Billing\BillingHistoryItemInfo.cs" />
     <Compile Include="Billing\BillingService.cs" />
     <Compile Include="Billing\BlockBasedOnEnum.cs" />
+    <Compile Include="Expense\ExpenseService.cs" />
+    <Compile Include="Finance\FinanceService.cs" />
+    <Compile Include="Pjm\PjmService.cs" />
     <Compile Include="ServiceConstants.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Crm\Customer.cs" />
@@ -87,7 +90,6 @@
     <Compile Include="Auth\InvitationInfo.cs" />
     <Compile Include="Auth\Language.cs" />
     <Compile Include="Auth\OrganizationUserInfo.cs" />
-    <Compile Include="Auth\OrgRole.cs" />
     <Compile Include="TimeTracker\PayClass.cs" />
     <Compile Include="Crm\CompleteProjectInfo.cs" />
     <Compile Include="Crm\Project.cs" />
@@ -105,7 +107,7 @@
     <Compile Include="Crm\CrmService.cs" />
     <Compile Include="Billing\Product.cs" />
     <Compile Include="Billing\ProductIdEnum.cs" />
-    <Compile Include="Auth\OrgService.cs" />
+    <Compile Include="Auth\OrganizationService.cs" />
     <Compile Include="Crm\ProjectService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

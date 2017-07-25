@@ -74,7 +74,6 @@ namespace AllyisApps
 		public const string UploadCSVFile = "uploadcsvfile";
 		public const string UserEdit = "useredit";
 		public const string ViewPage = "viewpage";
-		public const string ApplicationRedirect = "applicationredirect";
 		public const string Help = "help";
 		public const string FooterPartial = "footerpartial";
 		public const string LogOnPartial = "logonpartial";

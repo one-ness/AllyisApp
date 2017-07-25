@@ -44,10 +44,15 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
-		/// <summary>
-		/// Gets or sets the organization's id
-		/// </summary>
-		public int OrganizationId { get; set; }
+        /// <summary>
+        /// Gets or sets the subscriptionName
+        /// </summary>
+        public string SubscriptionName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the organization's id
+        /// </summary>
+        public int OrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the product area url
