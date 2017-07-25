@@ -21,6 +21,8 @@
 				@Html.ReqLabelFor(m => m.SubscriptionName, "Subscription Name")
 				@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control", @placeholder = Model.ProductName })
 				@Html.AntiForgeryToken()
+				<input type="hidden" name="SubscriptionId" value="@Model.SubscriptionId" />
+				<input type="hidden" name="SkuId" value="@Model.SkuId" />
 				<input type="hidden" name="ProductId" value="@Model.ProductId" />
 				<input type="hidden" name="SkuIdNext" value="@Model.SkuIdNext" />
 				<input type="hidden" name="OrganizationId" value="@Model.OrganizationId" />
