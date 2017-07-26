@@ -107,6 +107,7 @@ function ajaxCreate(form_element, create_action_url) {
 
 function ajaxUpdateValues(form_element, values) {
 	form_element = $(form_element);
+	updateTimes(values);
 	if (values.duration) {
 		form_element.find("[name='Duration']").val(values.duration);
 	}
@@ -120,6 +121,57 @@ function ajaxUpdateValues(form_element, values) {
 	if (values.PayClassName) {
 		form_element.find("[name='PayClassName']").val(values.PayClassName);
 	}
+}
+
+async function updateTimes(values) {
+	var elements = document.getElementsByName("entry-" + values.projectId);
+	var hours = 0;
+	var minutes = 0;
+	for (var i = 0; i < elements.length; i++)
+	{
+		var entry = elements[i].firstElementChild.value.split(":");
+		hours += parseInt(entry[0]);
+		minutes += parseInt(entry[1]);
+	}
+	alert("Elements " + (hours + (minutes / 60) + ":" + (minutes % 60)));
+
+	var currentVal = $('#totalHours').text().split(":"),
+	    updateVal = values.duration.split(":"),
+		projectVal = $('#' + values.projectId).text().split(":");
+
+	var projectHours = parseInt(projectVal[0]),
+		projectMinutes = parseInt(projectVal[1]),
+		totalHours = parseInt(currentVal[0]),
+		totalMinutes = parseInt(currentVal[1]),
+		hourUpdate = parseInt(updateVal[0]),
+		minuteUpdate = parseInt(updateVal[1]);
+
+	var projHour = projectHours + hourUpdate;
+	var projMinute = projectMinutes + minuteUpdate;
+	if (projMinute >= 60) {
+		projHour += projMinute / 60;
+		projMinute = projMinute % 60;
+	}
+
+	var totalHour = projectHours + hourUpdate;
+	var totalMinute = projectMinutes + minuteUpdate;
+	if (totalMinute >= 60) {
+		totalHour += totalMinute / 60;
+		totalMinute = totalMinute % 60;
+	}
+
+	$('#' + values.projectId).fadeOut(500, function () {
+		$('#' + values.projectId).text(projHour + ":" + (projMinute < 10 ? "0" + projMinute : projMinute)).fadeIn(500);
+	});
+
+	$('#totalHours').fadeOut(500, function () {
+		$('#totalHours').text(totalHour + ":" + (totalMinute < 10 ? "0" + totalMinute : totalMinute)).fadeIn(500);
+	});
+}
+
+async function subtractTimes(values)
+{
+
 }
 
 function appendNewEntryForm(container_element) {
