@@ -55,6 +55,7 @@ namespace AllyisApps.Controllers
 						orgVM.Subscriptions.Add(new SubscriptionDisplayViewModel
 						{
 							SubscriptionId = userSubInfo.SubscriptionId,
+                            SubscriptionName = userSubInfo.SubscriptionName,
 							ProductId = (int)userSubInfo.ProductId,
 							ProductName = userSubInfo.ProductName,
 							ProductDescription = description,

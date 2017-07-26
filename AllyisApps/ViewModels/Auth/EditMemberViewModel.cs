@@ -50,7 +50,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the employee type.
 		/// </summary>
-		public int EmployeeTypeId { get; set; }
+		public EmployeeType EmployeeTypeId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the employee role.
