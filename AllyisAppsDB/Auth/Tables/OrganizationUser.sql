@@ -1,4 +1,4 @@
-CREATE TABLE [Auth].[OrganizationUser] (
+﻿CREATE TABLE [Auth].[OrganizationUser] (
     [UserId]         INT           NOT NULL,
     [OrganizationId] INT           NOT NULL,
     [EmployeeId]     NVARCHAR (16) NOT NULL,
@@ -11,6 +11,8 @@ CREATE TABLE [Auth].[OrganizationUser] (
     CONSTRAINT [FK_OrganizationUser_OrgRole] FOREIGN KEY ([OrgRoleId]) REFERENCES [Auth].[OrgRole] ([OrgRoleId]),
     CONSTRAINT [FK_OrganizationUser_User] FOREIGN KEY ([UserId]) REFERENCES [Auth].[User] ([UserId])
 );
+
+
 
 
 
@@ -29,5 +31,12 @@ GO
 
 GO
 CREATE NONCLUSTERED INDEX [IX_OrganizationUser]
-    ON [Auth].[OrganizationUser]([UserId] ASC, [OrganizationId] ASC, [OrgRoleId] ASC, [EmployeeTypeId] ASC, [EmployeeId] ASC);
+    ON [Auth].[OrganizationUser]([UserId] ASC, [OrgRoleId] ASC, [EmployeeTypeId] ASC);
+
+
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_OrganizationUser_1]
+    ON [Auth].[OrganizationUser]([OrganizationId] ASC, [EmployeeId] ASC);
 
