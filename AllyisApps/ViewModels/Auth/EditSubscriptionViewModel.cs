@@ -85,5 +85,10 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the current product's Id.
 		/// </summary>
 		public int UserLimit { get; set; }
+
+		/// <summary>
+		/// Gets or sets the type of edit being done (upgrade, downgrade, unsubscribe).
+		/// </summary>
+		public string ActionType { get; set; }
 	}
 }
