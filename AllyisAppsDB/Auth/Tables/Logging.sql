@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Auth].[Logging] (
-    [LoggingId]       BIGINT         IdENTITY (1, 1) NOT NULL,
+    [LoggingId]       BIGINT         IDENTITY (1, 1) NOT NULL,
     [EntityName]      NVARCHAR (128) NOT NULL,
     [UserId]          INT            NOT NULL,
     [Action]          NVARCHAR (128) NOT NULL,

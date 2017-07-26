@@ -11,24 +11,24 @@ Post-Deployment Script Template
 */
 
 --Insert Default Org
-SET IdENTITY_INSERT [Auth].[Organization] ON
+SET IDENTITY_INSERT [Auth].[Organization] ON
 INSERT INTO [Auth].[Organization] (OrganizationId, Name, Subdomain)
 VALUES (0, 'Default', 'default')
-SET IdENTITY_INSERT [Auth].[Organization] OFF
+SET IDENTITY_INSERT [Auth].[Organization] OFF
 GO
 
 --Insert Default Customer
-SET IdENTITY_INSERT [Crm].[Customer] ON
+SET IDENTITY_INSERT [Crm].[Customer] ON
 INSERT INTO [CRM].[Customer] ([CustomerId], [Name], [OrganizationId], [CustomerOrgId], [IsActive])
 VALUES (0, 'Default', 0, 0, '0000000000000000')
-SET IdENTITY_INSERT [Crm].[Customer] OFF
+SET IDENTITY_INSERT [Crm].[Customer] OFF
 GO
 
 --Insert Default Project
-SET IdENTITY_INSERT [Crm].[Project] ON
+SET IDENTITY_INSERT [Crm].[Project] ON
 INSERT INTO [CRM].[Project] ([ProjectId], [Name], [CustomerId], [ProjectOrgId], [IsActive])
 VALUES (0, 'Default', 0, 0, '0000000000000000')
-SET IdENTITY_INSERT [Crm].[Project] OFF
+SET IDENTITY_INSERT [Crm].[Project] OFF
 GO
 
 :r .\DefaultData\CountryStates.sql

@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [TimeTracker].[PayClass] (
-    [PayClassId]     INT           IdENTITY (1, 1) NOT NULL,
+    [PayClassId]     INT           IDENTITY (1, 1) NOT NULL,
     [Name]           NVARCHAR (32) NOT NULL,
     [OrganizationId] INT           NOT NULL,
     [CreatedUtc]     DATETIME2 (0) NOT NULL,

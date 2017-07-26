@@ -1,10 +1,10 @@
 CREATE TABLE [Crm].[Project] (
-    [ProjectId]    INT           IdENTITY (116827, 3) NOT NULL,
+    [ProjectId]    INT           IDENTITY (116827, 3) NOT NULL,
     [CustomerId]   INT           NOT NULL,
     [Name]         NVARCHAR (64) NOT NULL,
     [ProjectOrgId] NVARCHAR (16) NOT NULL,
     [Type]         NVARCHAR (20) NOT NULL,
-    [IsActive]     BIT           NOT NULL,
+    [IsActive]     BIT			 NOT NULL DEFAULT 1,
     [CreatedUtc]   DATETIME2 (0) NOT NULL,
     [StartUtc]     DATETIME2 (0) NULL,
     [EndUtc]       DATETIME2 (0) NULL,

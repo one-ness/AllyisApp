@@ -1,7 +1,7 @@
 CREATE TABLE [Auth].[Organization] (
-    [OrganizationId] INT            IdENTITY (112559, 7) NOT NULL,
+    [OrganizationId] INT            IDENTITY (112559, 7) NOT NULL,
     [Name]           NVARCHAR (64)  NOT NULL,
-    [IsActive]       BIT            NOT NULL,
+    [IsActive]       BIT            NOT NULL DEFAULT 1,
     [CreatedUtc]     DATETIME2 (0)  NOT NULL,
     [SiteUrl]        NVARCHAR (384) NULL,
     [Address]        NVARCHAR (64)  NULL,
