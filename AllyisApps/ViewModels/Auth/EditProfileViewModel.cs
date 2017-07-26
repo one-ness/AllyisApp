@@ -171,7 +171,7 @@ namespace AllyisApps.ViewModels.Auth
 				DateTime minAgeDate = new DateTime(DateTime.Today.Ticks).AddYears(-minAgeYears);
 				if (dob > minAgeDate)
 				{
-					return new ValidationResult("Must be atleast " + minAgeYears + " years of age to register");
+					return new ValidationResult("Must be at least " + minAgeYears + " years of age to register");
 				}
 				else if ((int)value < 639905) 
 				{

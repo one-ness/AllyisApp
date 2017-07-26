@@ -110,7 +110,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
 					return this.View(model);
 				}
-				return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { model.SubscriptionId }), model.ParentCustomerId));
+				return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId });
 			}
 			else
 			{
