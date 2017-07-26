@@ -6,12 +6,12 @@
 	public class InvitationViewModel
 	{
 		/// <summary>
-		/// Gets or sets The ID for the invitation.
+		/// Gets or sets The Id for the invitation.
 		/// </summary>
 		public int InvitationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets The ID of the organization associated with the invitation.
+		/// Gets or sets The Id of the organization associated with the invitation.
 		/// </summary>
 		public int OrganizationId { get; set; }
 

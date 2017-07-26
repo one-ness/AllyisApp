@@ -14,7 +14,7 @@ namespace AllyisApps.Services
 	public class Project
 	{
 		/// <summary>
-		/// Gets or sets the projects ID number.
+		/// Gets or sets the projects Id number.
 		/// </summary>
 		public int ProjectId { get; set; }
 

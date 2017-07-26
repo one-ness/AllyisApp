@@ -7,7 +7,7 @@
 namespace AllyisApps.Services.Common.Types
 {
 	/// <summary>
-	/// Container class for a Billing Services Customer ID.
+	/// Container class for a Billing Services Customer Id.
 	/// </summary>
 	public class BillingServicesCustomerId
 	{
@@ -22,7 +22,7 @@ namespace AllyisApps.Services.Common.Types
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BillingServicesCustomerId"/> class.
 		/// </summary>
-		/// <param name="id">The ID for the container.</param>
+		/// <param name="id">The Id for the container.</param>
 		public BillingServicesCustomerId(string id)
 		{
 			this.id = id;
@@ -33,7 +33,7 @@ namespace AllyisApps.Services.Common.Types
 		#region accessor properties
 
 		/// <summary>
-		/// Gets the customer ID.
+		/// Gets the customer Id.
 		/// </summary>
 		public string Id
 		{

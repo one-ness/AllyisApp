@@ -17,7 +17,7 @@ SELECT DISTINCT [TimeEntryId]
     ,[Duration]
     ,[Description]
 FROM [TimeTracker].[TimeEntry] WITH (NOLOCK)
-JOIN [TimeTracker].[PayClass] WITH (NOLOCK) ON [PayClass].[PayClassID] = [TimeEntry].[PayClassId]
+JOIN [TimeTracker].[PayClass] WITH (NOLOCK) ON [PayClass].[PayClassId] = [TimeEntry].[PayClassId]
 JOIN [Auth].[User] WITH (NOLOCK) ON [User].[UserId] = [TimeEntry].[UserId]
 JOIN [Auth].[OrganizationUser] WITH (NOLOCK) ON [User].[UserId] = [OrganizationUser].[UserId] AND [OrganizationUser].[OrganizationId] = @OrganizationId
 WHERE [Date] >= @StartingDate

@@ -11,7 +11,7 @@ AS
 		DELETE FROM [TimeTracker].[TimeEntry]
 		WHERE [Date] = @Date
 		AND [Duration] = 8
-		AND [PayClassId] = (SELECT TOP 1 [PayClassID] FROM [PayClass] WITH (NOLOCK) WHERE [Name] = 'Holiday')
+		AND [PayClassId] = (SELECT TOP 1 [PayClassId] FROM [PayClass] WITH (NOLOCK) WHERE [Name] = 'Holiday')
 		AND [ProjectId] IN (SELECT [ProjectId]
 							FROM [Crm].[Project] WITH (NOLOCK) JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId]
 							WHERE [Customer].[OrganizationId] = @OrganizationId);

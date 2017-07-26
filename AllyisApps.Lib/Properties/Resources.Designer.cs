@@ -63,9 +63,9 @@ namespace AllyisApps.Lib.Properties {
         /// <summary>
         ///   Looks up a localized string similar to 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.
         /// </summary>
-        internal static string SENDGRID_APIKEY {
+        internal static string SENDGRId_APIKEY {
             get {
-                return ResourceManager.GetString("SENDGRID_APIKEY", resourceCulture);
+                return ResourceManager.GetString("SENDGRId_APIKEY", resourceCulture);
             }
         }
     }

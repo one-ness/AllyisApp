@@ -7,7 +7,7 @@ AS
 	SELECT	[Project].[ProjectId],
 		[Project].[CustomerId],
 		[Customer].[OrganizationId],
-		[Project].[CreatedUTC],
+		[Project].[CreatedUtc],
 		[Project].[Name] AS [ProjectName],
 		[Project].[IsActive],
 		[ProjectOrgId],
@@ -46,7 +46,7 @@ AS
 		   [Customer].[FaxNumber],
 		   [Customer].[Website],
 		   [Customer].[EIN],
-		   [Customer].[CreatedUTC],
+		   [Customer].[CreatedUtc],
 		   [Customer].[CustomerOrgId],
 		   [Customer].[IsActive]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 

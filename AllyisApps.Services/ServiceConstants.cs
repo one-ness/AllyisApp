@@ -82,12 +82,12 @@
 		public const string ProjectType = "Project Type";
 
 		/// <summary>
-		/// Project-Property: StartUTC
+		/// Project-Property: StartUtc
 		/// </summary>
 		public const string ProjectStartDate = "Project Start Date";
 
 		/// <summary>
-		/// Project-Property: EndUTC
+		/// Project-Property: EndUtc
 		/// </summary>
 		public const string ProjectEndDate = "Project End Date";
 

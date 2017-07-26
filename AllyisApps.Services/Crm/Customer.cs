@@ -74,7 +74,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the date the customer was created.
 		/// </summary>
-		public string CreatedUTC { get; set; }
+		public string CreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets the id of the organization associated with the customer.

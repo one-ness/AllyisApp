@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [Billing].[EditSubscriptionUsers]
 	@OrganizationId	INT,
-	@UserIDs [Auth].[UserTable] READONLY,
+	@UserIds [Auth].[UserTable] READONLY,
 	@TimeTrackerRole INT
 AS
 BEGIN TRANSACTION
@@ -20,7 +20,7 @@ BEGIN TRANSACTION
 		BEGIN
 			DELETE [Billing].[SubscriptionUser] 
 			WHERE [SubscriptionId] = @SubId AND [UserId] IN (
-				SELECT [userId] FROM @UserIDs
+				SELECT [userId] FROM @UserIds
 			)
 
 			SELECT @@ROWCOUNT
@@ -31,7 +31,7 @@ BEGIN TRANSACTION
 			UPDATE [Billing].[SubscriptionUser] 
 			SET [ProductRoleId] = @TimeTrackerRole
 			WHERE [SubscriptionId] = @SubId AND [UserId] IN (
-				SELECT [userId] FROM @UserIDs
+				SELECT [userId] FROM @UserIds
 			)
 
 			SELECT @@ROWCOUNT
@@ -48,7 +48,7 @@ BEGIN TRANSACTION
 			);
 			INSERT INTO @AddingUsers ([userId])
 			SELECT [UID].[userId]
-			FROM @UserIDs AS [UID]
+			FROM @UserIds AS [UID]
 			LEFT OUTER JOIN (
 				SELECT [SubscriptionId], [UserId]
 				FROM [Billing].[SubscriptionUser] WITH (NOLOCK)
@@ -81,7 +81,7 @@ BEGIN TRANSACTION
 			--INSERT INTO @ChangingRoles ([UserId])
 			--SELECT @UserIds.[userId]
 			--FROM [Billing].[SubscriptionUser] WITH (NOLOCK)
-			--INNER JOIN @UserIDs ON [SubscriptionUser].UserId = @UserIDs.[userId]
+			--INNER JOIN @UserIds ON [SubscriptionUser].UserId = @UserIds.[userId]
 			--WHERE [SubscriptionId] = @SubId AND [ProductRoleId] != @TimeTrackerRole
 		END
 	END

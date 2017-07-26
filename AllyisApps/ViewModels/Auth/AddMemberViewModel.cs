@@ -50,7 +50,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the Employee Id.
 		/// </summary>
 		[Required]
-		[Display(Name = "Employee ID")]
+		[Display(Name = "Employee Id")]
 		public string EmployeeId { get; set; }
 
 		/// <summary>

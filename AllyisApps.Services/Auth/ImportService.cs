@@ -866,7 +866,7 @@ namespace AllyisApps.Services
 
 									// Find existing entry. If none, create new one     TODO: See if there's a good way to populate this by sheet rather than by row, or once at the top
 									List<TimeEntryDBEntity> entries = DBHelper.GetTimeEntriesByUserOverDateRange(new List<int> { user.UserId }, orgId, theDate, theDate).ToList();
-									if (!entries.Where(e => e.Description.Equals(description) && e.Duration == theDuration && e.PayClassId == payClass.PayClassID && e.ProjectId == project.ProjectId).Any())
+									if (!entries.Where(e => e.Description.Equals(description) && e.Duration == theDuration && e.PayClassId == payClass.PayClassId && e.ProjectId == project.ProjectId).Any())
 									{
 										if (entries.Select(e => e.Duration).Sum() + theDuration > 24)
 										{
@@ -882,7 +882,7 @@ namespace AllyisApps.Services
 											Duration = theDuration.Value, //value is verified earlier
 											FirstName = user.FirstName,
 											LastName = user.LastName,
-											PayClassId = payClass.PayClassID,
+											PayClassId = payClass.PayClassId,
 											ProjectId = project.ProjectId,
 											UserId = user.UserId
 										}) == -1)

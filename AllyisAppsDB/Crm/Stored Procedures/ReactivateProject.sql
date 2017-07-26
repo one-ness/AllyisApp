@@ -3,7 +3,7 @@
 AS
 	SET NOCOUNT ON;
 	UPDATE [Crm].[Project]
-	SET [IsActive] = 1, [EndUTC] = NULL
+	SET [IsActive] = 1, [EndUtc] = NULL
 	WHERE [ProjectId] = @ProjectId
 
 	UPDATE [Crm].[ProjectUser] SET [IsActive] = 1

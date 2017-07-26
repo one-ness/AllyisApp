@@ -16,7 +16,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Gets or sets the pay class id.
 		/// </summary>
-		public int PayClassID { get; set; }
+		public int PayClassId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name.
@@ -24,18 +24,13 @@ namespace AllyisApps.Services.TimeTracker
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets the organization ID.
+		/// Gets or sets the organization Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Created time.
 		/// </summary>
-		public DateTime CreatedUTC { get; set; }
-
-		/// <summary>
-		/// Gets or sets the modified time.
-		/// </summary>
-		public DateTime ModifiedUTC { get; set; }
+		public DateTime CreatedUtc { get; set; }
 	}
 }

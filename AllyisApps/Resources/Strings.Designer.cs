@@ -889,7 +889,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Customer ID.
+        ///   Looks up a localized string similar to Customer Id.
         /// </summary>
         public static string CustomerOrgId {
             get {
@@ -898,7 +898,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This Customer ID is already in use. The Customer ID must be a unique value..
+        ///   Looks up a localized string similar to This Customer Id is already in use. The Customer Id must be a unique value..
         /// </summary>
         public static string CustomerOrgIdNotUnique {
             get {
@@ -1258,7 +1258,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Employee ID.
+        ///   Looks up a localized string similar to Employee Id.
         /// </summary>
         public static string EmployeeId {
             get {
@@ -1267,7 +1267,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Employee ID is not unique..
+        ///   Looks up a localized string similar to The Employee Id is not unique..
         /// </summary>
         public static string EmployeeIdNotUniqueError {
             get {
@@ -2869,7 +2869,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Project ID.
+        ///   Looks up a localized string similar to Project Id.
         /// </summary>
         public static string ProjectOrgId {
             get {
@@ -2878,7 +2878,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The chosen Project ID already exists. The value must be a unique value..
+        ///   Looks up a localized string similar to The chosen Project Id already exists. The value must be a unique value..
         /// </summary>
         public static string ProjectOrgIdNotUnique {
             get {

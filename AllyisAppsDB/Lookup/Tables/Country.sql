@@ -1,10 +1,12 @@
 ﻿CREATE TABLE [Lookup].[Country] (
-    [CountryId] INT            IDENTITY (1, 1) NOT NULL,
-    [Code]      CHAR (2)       NOT NULL,
+    [CountryId] INT            IdENTITY (1, 1) NOT NULL,
+    [Code]      NVARCHAR (4)   NOT NULL,
     [Name]      NVARCHAR (100) NOT NULL,
-    PRIMARY KEY CLUSTERED ([CountryId] ASC),
-    UNIQUE NONCLUSTERED ([Code] ASC)
+    CONSTRAINT [PK_Country] PRIMARY KEY CLUSTERED ([CountryId] ASC),
+    CONSTRAINT [UQ_Country] UNIQUE NONCLUSTERED ([Code] ASC)
 );
+
+
 
 
 GO

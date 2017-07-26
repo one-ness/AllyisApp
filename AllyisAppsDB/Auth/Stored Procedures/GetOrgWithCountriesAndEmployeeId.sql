@@ -14,8 +14,7 @@ AS
 		[PhoneNumber], 
 		[FaxNumber], 
 		[Subdomain],
-		[CreatedUTC], 
-		[ModifiedUTC] 
+		[CreatedUtc]
 	FROM [Auth].[Organization] WITH (NOLOCK)
 		LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Organization].[Country]
 		LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Organization].[State]

@@ -41,7 +41,7 @@ namespace AllyisApps.DBModel.Crm
 		/// <summary>
 		/// Gets or sets The date/time of creation.
 		/// </summary>
-		public DateTime CreatedUTC { get; set; }
+		public DateTime CreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets The name of the project.
@@ -89,7 +89,7 @@ namespace AllyisApps.DBModel.Crm
 		public DateTime? EndDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Project's ID as used by the organization
+		/// Gets or sets the Project's Id as used by the organization
 		/// </summary>
 		public string ProjectOrgId { get; set; }
 
