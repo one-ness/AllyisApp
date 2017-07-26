@@ -26,7 +26,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Organization role Id.
 		/// </summary>
-		public int OrgRoleId { get; set; }
+		public int OrganizationRoleId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Date this user was added to the organization.

@@ -24,9 +24,9 @@ namespace AllyisApps.DBModel.Auth
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets OrgRoleId.
+		/// Gets or sets OrganizationRoleId.
 		/// </summary>
-		public int OrgRoleId { get; set; }
+		public int OrganizationRoleId { get; set; }
 
 		/// <summary>
 		/// Gets the OrganizationName associated with this orguser.

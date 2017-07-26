@@ -7,14 +7,14 @@ BEGIN
 
 	-- Retrieve the invitation information
 	DECLARE @OrganizationId INT;
-	DECLARE @OrgRole INT;
+	DECLARE @OrganizationRole INT;
 	DECLARE @Email NVARCHAR(384);
 	DECLARE @EmployeeId NVARCHAR(16);
 	DECLARE @EmployeeTypeId INT;
 
 	SELECT
 		@OrganizationId = [OrganizationId],
-		@OrgRole = [OrgRoleId],
+		@OrganizationRole = [OrganizationRoleId],
 		@Email = [Email],
 		@EmployeeId = [EmployeeId],
 		@EmployeeTypeId = [EmployeeTypeId]
@@ -43,7 +43,7 @@ BEGIN
 			)
 			BEGIN -- User already in organization
 				UPDATE [Auth].[OrganizationUser]
-				SET [OrgRoleId] = @OrgRole,
+				SET [OrganizationRoleId] = @OrganizationRole,
 					[EmployeeId] = @EmployeeId,
 					[EmployeeTypeId] = @EmployeeTypeId
 				WHERE [UserId] = @UserId AND 
@@ -54,14 +54,14 @@ BEGIN
 				INSERT INTO [Auth].[OrganizationUser]  (
 					[UserId], 
 					[OrganizationId], 
-					[OrgRoleId], 
+					[OrganizationRoleId], 
 					[EmployeeId],
 					[EmployeeTypeId]
 				)
 				VALUES (
 					@UserId, 
 					@OrganizationId,
-					@OrgRole, 
+					@OrganizationRole, 
 					@EmployeeId,
 					@EmployeeTypeId
 				);
@@ -75,9 +75,9 @@ BEGIN
 			FROM [Auth].[Organization]
 			WHERE [Organization].[OrganizationId] = @OrganizationId
 
-			SELECT [OrgRole].[Name]
-			FROM [Auth].[OrgRole]
-			WHERE [OrgRole].[OrgRoleId] = @OrgRole
+			SELECT [OrganizationRole].[Name]
+			FROM [Auth].[OrganizationRole]
+			WHERE [OrganizationRole].[OrganizationRoleId] = @OrganizationRole
 
 			COMMIT
 		END

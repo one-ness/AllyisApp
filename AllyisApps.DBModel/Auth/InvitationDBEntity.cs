@@ -56,7 +56,7 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets the id of the org role the user will be assigned.
 		/// </summary>
-		public int OrgRoleId { get; set; }
+		public int OrganizationRoleId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the employee id of the user.

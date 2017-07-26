@@ -36,12 +36,12 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the user's current role in the organization.
 		/// </summary>
 		[Display(Name = "Organization User Role")]
-		public string OrgRole { get; set; }
+		public string OrganizationRole { get; set; }
 
 		/// <summary>
 		/// Gets or sets the available organization roles.
 		/// </summary>
-		public IList<SelectListItem> OrgRoles { get; set; }
+		public IList<SelectListItem> OrganizationRoles { get; set; }
 
 		/// <summary>
 		/// Gets or sets the product list information.

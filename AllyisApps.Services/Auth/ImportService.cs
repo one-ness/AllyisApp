@@ -713,7 +713,7 @@ namespace AllyisApps.Services
 											{
 												EmployeeId = fields[1],
 												OrganizationId = orgId,
-												OrgRoleId = (int)(OrganizationRole.Member),
+												OrganizationRoleId = (int)(OrganizationRole.Member),
 												UserId = user.UserId,
 												EmployeeTypeId = employeeTypeId
 											});

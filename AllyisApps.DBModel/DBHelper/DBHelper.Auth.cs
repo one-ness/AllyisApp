@@ -390,7 +390,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgUser.OrganizationId);
 			parameters.Add("@userId", orgUser.UserId);
-			parameters.Add("@RoleId", orgUser.OrgRoleId);
+			parameters.Add("@RoleId", orgUser.OrganizationRoleId);
 			parameters.Add("@employeeId", orgUser.EmployeeId);
 			parameters.Add("employeeTypeId", orgUser.EmployeeTypeId);
 
@@ -462,9 +462,9 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="userIds">List of user Ids.</param>
 		/// <param name="organizationId">The Organization Id.</param>
-		/// <param name="orgRoleId">Organization role to assign (or -1 to remove from organization).</param>
+		/// <param name="organizationRoleId">Organization role to assign (or -1 to remove from organization).</param>
 		/// <returns>The number of affected users.</returns>
-		public int EditOrganizationUsers(List<int> userIds, int organizationId, int orgRoleId)
+		public int EditOrganizationUsers(List<int> userIds, int organizationId, int organizationRoleId)
 		{
 			DataTable userIdsTable = new DataTable();
 			userIdsTable.Columns.Add("userId", typeof(int));
@@ -476,7 +476,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@UserIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
 			parameters.Add("@OrganizationId", organizationId);
-			parameters.Add("@OrgRole", orgRoleId);
+			parameters.Add("@OrganizationRole", organizationRoleId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -493,12 +493,12 @@ namespace AllyisApps.DBModel
 		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="userId">The user's Id.</param>
 		/// <returns>The TableOrganizationRole related to the user for the specified organization.</returns>
-		public OrgRoleDBEntity GetPermissionLevel(int organizationId, int userId)
+		public OrganizationRoleDBEntity GetPermissionLevel(int organizationId, int userId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default null
-				return connection.Query<OrgRoleDBEntity>("[Auth].[GetOrgUserRole]", new { OrganizationId = organizationId, UserId = userId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				return connection.Query<OrganizationRoleDBEntity>("[Auth].[GetOrgUserRole]", new { OrganizationId = organizationId, UserId = userId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 
@@ -619,7 +619,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@DateOfBirth", invitation.DateOfBirth);
 			parameters.Add("@organizationId", invitation.OrganizationId);
 			parameters.Add("@AccessCode", invitation.AccessCode);
-			parameters.Add("@OrgRole", invitation.OrgRoleId);
+			parameters.Add("@OrganizationRole", invitation.OrganizationRoleId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 			parameters.Add("@EmployeeId", invitation.EmployeeId);
 			parameters.Add("@EmployeeTypeId", invitation.EmployeeTypeId);
@@ -654,7 +654,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@LastName", invitation.LastName);
 			parameters.Add("@organizationId", invitation.OrganizationId);
 			parameters.Add("@AccessCode", invitation.AccessCode);
-			parameters.Add("@OrgRole", invitation.OrgRoleId);
+			parameters.Add("@OrganizationRole", invitation.OrganizationRoleId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 			parameters.Add("@EmployeeId", invitation.EmployeeId);
 			parameters.Add("@SubscriptionId", subscriptionId);

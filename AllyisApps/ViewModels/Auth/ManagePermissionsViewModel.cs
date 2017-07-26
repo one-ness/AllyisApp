@@ -68,7 +68,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets this user's role in the organization
 		/// </summary>
-		public int OrgRoleId { get; set; }
+		public int OrganizationRoleId { get; set; }
 
 		/// <summary>
 		/// Gets or sets this user's role in each product. List order should be same as in list of subscriptions.

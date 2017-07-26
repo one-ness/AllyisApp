@@ -1152,7 +1152,7 @@
   <data name="Organizations" xml:space="preserve">
     <value>Organizaciones</value>
   </data>
-  <data name="OrgRole" xml:space="preserve">
+  <data name="OrganizationRole" xml:space="preserve">
     <value>Función de la organización</value>
   </data>
   <data name="Owner" xml:space="preserve">

@@ -592,7 +592,7 @@ namespace AllyisApps.Services
 				CreatedUtc = organizationUser.CreatedUtc,
 				EmployeeId = organizationUser.EmployeeId,
 				OrganizationId = organizationUser.OrganizationId,
-				OrgRoleId = organizationUser.OrgRoleId,
+				OrganizationRoleId = organizationUser.OrganizationRoleId,
 				UserId = organizationUser.UserId,
 				Email = organizationUser.Email,
 				FirstName = organizationUser.FirstName,
@@ -682,7 +682,7 @@ namespace AllyisApps.Services
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
 				OrganizationName = invitation.OrganizationName,
-				OrganizationRole = (OrganizationRole)invitation.OrgRoleId,
+				OrganizationRole = (OrganizationRole)invitation.OrganizationRoleId,
 				EmployeeId = invitation.EmployeeId,
 				EmployeeType = (EmployeeType)invitation.EmployeeTypeId
 			};
@@ -730,7 +730,7 @@ namespace AllyisApps.Services
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
-				OrgRoleId = (int)invitation.OrganizationRole,
+				OrganizationRoleId = (int)invitation.OrganizationRole,
 				EmployeeId = invitation.EmployeeId,
 				EmployeeTypeId = (int)invitation.EmployeeType
 			};

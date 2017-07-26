@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="OrgRoleDBEntity.cs" company="Allyis, Inc.">
+// <copyright file="OrganizationRoleDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -9,12 +9,12 @@ namespace AllyisApps.DBModel.Auth
 	/// <summary>
 	/// Represents the OrganizationRole table in the Database.
 	/// </summary>
-	public class OrgRoleDBEntity
+	public class OrganizationRoleDBEntity
 	{
 		/// <summary>
-		/// Gets or sets the OrgRoleId.
+		/// Gets or sets the OrganizationRoleId.
 		/// </summary>
-		public int OrgRoleId { get; set; }
+		public int OrganizationRoleId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the role name.
