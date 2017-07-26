@@ -279,6 +279,10 @@
     <Build Include="Auth\Tables\Permission.sql" />
     <Build Include="Auth\Tables\Action.sql" />
     <Build Include="Security\Hrm.sql" />
+    <Build Include="Finance\Stored Procedures\GetAccountByAccountId.sql" />
+    <Build Include="Finance\Stored Procedures\GetAccountsByAccountTypeId.sql" />
+    <Build Include="Finance\Stored Procedures\CreateAccount.sql" />
+    <Build Include="Finance\Stored Procedures\UpdateAccount.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
