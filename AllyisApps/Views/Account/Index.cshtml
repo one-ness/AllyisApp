@@ -28,7 +28,7 @@
 				</h2>
 			</div>
 			<div class="panel-body">
-				<div class="col-sm-8 index-details">
+				<div class="col-sm-9 index-details">
 					<p>
 						<label>@Strings.PhoneNumber:</label>
 						@Model.UserInfo.PhoneNumber @Model.UserInfo.PhoneExtension
@@ -39,9 +39,9 @@
 						<span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
 					</p>
 				</div>
-				<div class="col-sm-4 vertically-stacked-buttons text-right">
-					@Html.ActionLink(Strings.ChangePassword, ActionConstants.ChangePassword, ControllerConstants.Account, null, new { @class = "btn btn-default" })
-					@Html.ActionLink(Strings.EditProfile, ActionConstants.EditProfile, null, new { @class = "btn btn-default" })
+				<div class="col-sm-3 vertically-stacked-buttons text-left">
+					@Html.ActionLink(Strings.ChangePassword, ActionConstants.ChangePassword, ControllerConstants.Account, null, new { @class = "btn btn-default", @style = "width:90%" })
+					@Html.ActionLink(Strings.EditProfile, ActionConstants.EditProfile, null, new { @class = "btn btn-default", @style="width:60%"})
 				</div>
 			</div>
 

@@ -16,9 +16,9 @@ namespace AllyisApps.ViewModels.Shared
 		private const string CharsToReplace = @"""/\[]:|<>+=; ,?*'`()@";
 
 		/// <summary>
-		/// Gets or sets the language ID.
+		/// Gets or sets the language Id.
 		/// </summary>
-		public int LanguageID { get; set; }
+		public int LanguageId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the language name.

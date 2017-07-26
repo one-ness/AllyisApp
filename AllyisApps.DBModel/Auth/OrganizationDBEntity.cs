@@ -14,7 +14,7 @@ namespace AllyisApps.DBModel.Auth
 	public class OrganizationDBEntity
 	{
 		/// <summary>
-		/// Gets or sets the organization's ID.
+		/// Gets or sets the organization's Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
 

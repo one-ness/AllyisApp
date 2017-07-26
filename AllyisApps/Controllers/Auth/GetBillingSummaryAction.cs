@@ -48,7 +48,7 @@ namespace AllyisApps.Controllers
 					result.Add(new BillingHistoryItemViewModel
 					{
 						Date = ConvertUtcDateTimeToEpoch(invoice.Date.Value),
-						ID = invoice.Id,
+						Id = invoice.Id,
 						Description = string.Format("{0} invoice - Amount due: {1:C}", invoice.Service, invoice.AmountDue / 100.0), // Only works for USD right now //LANGUAGE Update to use resource file to change message language
 						ProductName = invoice.ProductName,
 						Username = string.Empty
@@ -60,7 +60,7 @@ namespace AllyisApps.Controllers
 					result.Add(new BillingHistoryItemViewModel
 					{
 						Date = ConvertUtcDateTimeToEpoch(charge.Created),
-						ID = charge.Id,
+						Id = charge.Id,
 						Description = string.Format("{0} charge - Amount paid: {1:C}", charge.Service, charge.Amount / 100.0), // Only works for USD right now //LANGUAGE Update to use resource file to change message language
 						ProductName = charge.StatementDescriptor,
 						Username = string.Empty
@@ -74,7 +74,7 @@ namespace AllyisApps.Controllers
 				result.Add(new BillingHistoryItemViewModel
 				{
 					Date = ConvertUtcDateTimeToEpoch(item.Date),
-					ID = string.Empty,
+					Id = string.Empty,
 					Description = item.Description,
 					ProductName = item.SkuName,
 					Username = item.UserName

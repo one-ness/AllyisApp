@@ -284,6 +284,7 @@
     <Build Include="Expense\Stored Procedures\GetExpenseItemByExpenseItemId.sql" />
     <Build Include="Expense\Stored Procedures\CreateExpenseItem.sql" />
     <Build Include="Expense\Stored Procedures\UpdateExpenseItem.sql" />
+    <Build Include="Lookup\Tables\Address.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

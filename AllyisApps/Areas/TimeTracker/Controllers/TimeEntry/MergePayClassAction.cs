@@ -50,7 +50,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="sourcePayClassId">The id of the pay class being merged</param>
 		/// <param name="destPayClasses">List of all PayClass that can be merged into</param>
-		/// <param name="subscriptionId">The subscription's ID</param>
+		/// <param name="subscriptionId">The subscription's Id</param>
 		/// <param name="sourcePayClassName">The name of the pay class being merged</param>
 		/// <returns>The MergePayClassViewModel.</returns>
 		[CLSCompliant(false)]

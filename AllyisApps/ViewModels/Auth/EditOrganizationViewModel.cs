@@ -107,11 +107,11 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		[Required]
 		[DataType(DataType.Text)]
-		[Display(Name = "Owner Employee ID")]
+		[Display(Name = "Owner Employee Id")]
 		public string EmployeeId { get; set; }
 
 		/// <summary>
-		/// Gets the organization's ID.
+		/// Gets the organization's Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
 

@@ -7,7 +7,7 @@
 namespace AllyisApps.Services
 {
 	/// <summary>
-	/// SKUs offered by us. Must match the IDs inserted in to db.
+	/// SKUs offered by us. Must match the Ids inserted in to db.
 	/// </summary>
 	public enum SkuIdEnum : int
 	{

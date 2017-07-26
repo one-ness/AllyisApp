@@ -10,11 +10,11 @@
     @PhoneNumber VARCHAR(32),
 	@DateOfBirth DATETIME2(0),
 	@PasswordHash NVARCHAR(MAX),
-	@EmailConfirmationCode UNIQUEIDENTIFIER,
+	@EmailConfirmationCode UNIQUEIdENTIFIER,
 	@TwoFactorEnabled BIT,
 	@LockoutEnabled BIT,
 	@LockoutEndDateUtc DATE,
-	@LanguageID INT
+	@LanguageId INT
 
 AS
 
@@ -58,7 +58,7 @@ BEGIN
 		0,
 		COALESCE(@LockoutEnabled,0),
 		COALESCE(@LockoutEndDateUtc,NULL),
-		@LanguageID);
+		@LanguageId);
 
 	SELECT SCOPE_IDENTITY();
 END

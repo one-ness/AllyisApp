@@ -256,7 +256,7 @@ namespace AllyisApps.Services
 		/// Creates a holiday and related time entries for an organization.
 		/// </summary>
 		/// <param name="holiday">Holiday.</param>
-		/// <param name="subscriptionId">Subscription ID</param>
+		/// <param name="subscriptionId">Subscription Id</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool CreateHoliday(Holiday holiday, int subscriptionId)
 		{
@@ -270,7 +270,7 @@ namespace AllyisApps.Services
 		/// Deletes a holiday and related time entries for the current organization.
 		/// </summary>
 		/// <param name="holidayId">Id of holiday to delete.</param>
-		/// <param name="orgId">The organization's ID</param>
+		/// <param name="orgId">The organization's Id</param>
 		/// <param name="subscriptionId">The subscription id</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool DeleteHoliday(int holidayId, int orgId, int subscriptionId)
@@ -293,8 +293,8 @@ namespace AllyisApps.Services
 		/// Creates a new pay class for an organization.
 		/// </summary>
 		/// <param name="payClassName">Name of pay class.</param>
-		/// <param name="orgId">Organization ID</param>
-		/// <param name="subscriptionId">Subscription ID</param>
+		/// <param name="orgId">Organization Id</param>
+		/// <param name="subscriptionId">Subscription Id</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool CreatePayClass(string payClassName, int orgId, int subscriptionId)
 		{
@@ -611,7 +611,6 @@ namespace AllyisApps.Services
 				OrganizationId = pc.OrganizationId,
 				PayClassId = pc.PayClassId,
 				CreatedUtc = pc.CreatedUtc,
-				ModifiedUtc = pc.ModifiedUtc
 			};
 		}
 
@@ -625,7 +624,6 @@ namespace AllyisApps.Services
 			return new Holiday
 			{
 				CreatedUtc = hol.CreatedUtc,
-				ModifiedUtc = hol.ModifiedUtc,
 				Date = hol.Date,
 				HolidayId = hol.HolidayId,
 				HolidayName = hol.HolidayName,
@@ -722,7 +720,6 @@ namespace AllyisApps.Services
 				Date = holiday.Date,
 				HolidayId = holiday.HolidayId,
 				HolidayName = holiday.HolidayName,
-				ModifiedUtc = holiday.ModifiedUtc,
 				OrganizationId = holiday.OrganizationId,
 			};
 		}

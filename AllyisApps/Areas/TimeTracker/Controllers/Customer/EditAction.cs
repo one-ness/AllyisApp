@@ -43,7 +43,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Website = infos.Item1.Website,
 				EIN = infos.Item1.EIN,
 				OrganizationId = infos.Item1.OrganizationId,
-				CustomerID = userId,
+				CustomerId = userId,
 				ValidCountries = infos.Item2,
 				CustomerOrgId = infos.Item1.CustomerOrgId,
 				SubscriptionId = subscriptionId
@@ -63,7 +63,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				var result = AppService.UpdateCustomer(new Customer()
 				{
-					CustomerId = model.CustomerID,
+					CustomerId = model.CustomerId,
 					ContactEmail = model.ContactEmail,
 					Name = model.Name,
 					Address = model.Address,
@@ -87,7 +87,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				else if (result == 1) //updated successfully
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerDetailsUpdated, Variety.Success));
-					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, new { subscriptionId = model.SubscriptionId }), model.CustomerID));
+					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, new { subscriptionId = model.SubscriptionId }), model.CustomerId));
 				}
 				else // Permissions failure
 				{
@@ -113,7 +113,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				// CustomerOrgId must be unique, if it has been changed
 				Customer orgIdMatch = AppService.GetCustomerList(this.AppService.UserContext.ChosenOrganizationId).Where(customer => customer.CustomerOrgId == model.CustomerOrgId).SingleOrDefault();
-				if (orgIdMatch != null && orgIdMatch.CustomerId != model.CustomerID)
+				if (orgIdMatch != null && orgIdMatch.CustomerId != model.CustomerId)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
 					return this.View(model);
@@ -121,7 +121,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				if (AppService.UpdateCustomer(new Customer()
 				{
-					CustomerId = model.CustomerID,
+					CustomerId = model.CustomerId,
 					ContactEmail = model.ContactEmail,
 					Name = model.Name,
 					Address = model.Address,
@@ -137,7 +137,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}))
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerDetailsUpdated, Variety.Success));
-					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index), model.CustomerID));
+					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index), model.CustomerId));
 				}
 
 				// Permissions failure

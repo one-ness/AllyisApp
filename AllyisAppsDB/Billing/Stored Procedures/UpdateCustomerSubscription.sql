@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [Billing].[UpdateCustomerSubscription]
-	@customerID NVARCHAR(50),
+	@customerId NVARCHAR(50),
 	@SubPlanId NVARCHAR(50),
 	@NumberOfUsers INT,
 	@Price INT,
@@ -14,7 +14,7 @@ BEGIN
 		UPDATE [Billing].[StripeCustomerSubscriptionPlan] 
 		SET [StripeCustomerSubscriptionPlan].[NumberOfUsers] = @NumberOfUsers,
 		[StripeCustomerSubscriptionPlan].[Price] = @Price
-		WHERE [StripeTokenCustId] = @customerID
+		WHERE [StripeTokenCustId] = @customerId
 		AND [StripeTokenSubId] = @SubPlanId;
 
 		INSERT INTO [Billing].[BillingHistory] ([Date], [Description], [OrganizationId], [UserId], [SkuId])

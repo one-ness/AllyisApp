@@ -41,12 +41,12 @@ GO
 --:r .\TestData\TestData.sql
 --:r .\TestData\DuplicateTestData.sql
 
-DBCC CHECKIDENT('TimeTracker.TimeEntry');
-DBCC CHECKIDENT('Auth.Invitation');
-DBCC CHECKIDENT('TimeTracker.Holiday');
-DBCC CHECKIDENT('TimeTracker.PayClass');
-DBCC CHECKIDENT('Crm.Project');
-DBCC CHECKIDENT('Crm.Customer');
-DBCC CHECKIDENT('Billing.Subscription');
-DBCC CHECKIDENT('Lookup.State');
-DBCC CHECKIDENT('Lookup.Country');
+DBCC CHECKIdENT('TimeTracker.TimeEntry');
+DBCC CHECKIdENT('Auth.Invitation');
+DBCC CHECKIdENT('TimeTracker.Holiday');
+DBCC CHECKIdENT('TimeTracker.PayClass');
+DBCC CHECKIdENT('Crm.Project');
+DBCC CHECKIdENT('Crm.Customer');
+DBCC CHECKIdENT('Billing.Subscription');
+DBCC CHECKIdENT('Lookup.State');
+DBCC CHECKIdENT('Lookup.Country');

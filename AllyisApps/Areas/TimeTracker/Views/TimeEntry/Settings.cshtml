@@ -160,7 +160,13 @@
                 <h1 class="panel-title">@Strings.Holidays</h1>
             </div>
             <div id="Holidays">
-
+				<ul class="nav nav-tabs" style="border-bottom:none;">
+					@foreach (var year in Model.Holidays.Select(m => m.Date.Year).Distinct())
+					{
+						<li id=@year><a onclick="populateHolidayForSelectedYear(@year)">@year</a></li>
+					}
+				</ul>
+				
                 <table class="table table-condensed">
                     <thead>
                         <tr>
@@ -171,7 +177,7 @@
                     </thead>
                     @foreach (Holiday Holiday in Model.Holidays)
                     {
-                        <tr>
+                        <tr class="@Holiday.Date.Year">
                             @{
                                 string _holidayName = Strings.ResourceManager.GetString(((Holiday.HolidayName).Replace(" ", string.Empty)).Replace("'", string.Empty)) ?? Holiday.HolidayName;
                             }
@@ -209,6 +215,39 @@
         deletePayClassUrl = "@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = -1 })"
         deleteHolidayWarning = "@Html.Raw(Strings.ConfirmDeleteHoliday)";
 		deleteHolidayUrl = "@Url.Action(ActionConstants.DeleteHoliday, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId, HolidayId = -1 })"
+
+
+
+		function populateHolidayForSelectedYear(year) {
+
+			@foreach (var yearC in Model.Holidays.Select(m => m.Date.Year).Distinct())
+			{
+				<text>
+					if (@yearC != year) {
+						$('.' + @yearC).hide();
+						$('#' + @yearC).css("font-weight", "Normal");
+
+					}
+					else {
+						$('.' + @yearC).show();
+						$('#' + @yearC).css("font-weight", "Bold");
+					}
+				</text>
+			}
+		}
+            @*$.ajax({
+                    type: 'POST',
+                    cache: false,
+                    url: '@Url.Action("PopulateProjects", "Customer")',
+                    data: { customerId: chosenCustomerId },
+                    success: function (response) {
+                        $("#Projects").empty();
+                        $("#Projects").html(response);
+                    }
+            });*@
+		$('document').ready(function () {
+			populateHolidayForSelectedYear(@DateTime.Now.Year);
+		})
 	</script>
 
 	@Scripts.Render("~/bundles/TTTimeEntrySettings")

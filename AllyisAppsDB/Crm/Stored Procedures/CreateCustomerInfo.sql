@@ -10,7 +10,7 @@
 	@FaxNumber VARCHAR(50),
 	@Website NVARCHAR(50),
 	@EIN NVARCHAR(50),
-	@OrganizationID INT,
+	@OrganizationId INT,
 	@CustomerOrgId NVARCHAR(16),
 	@retId INT OUTPUT
 AS
@@ -54,7 +54,7 @@ BEGIN
 				@FaxNumber, 
 				@Website, 
 				@EIN, 
-				@OrganizationID, 
+				@OrganizationId, 
 				@CustomerOrgId);
 			SET @retId = SCOPE_IDENTITY();
 		COMMIT TRANSACTION		

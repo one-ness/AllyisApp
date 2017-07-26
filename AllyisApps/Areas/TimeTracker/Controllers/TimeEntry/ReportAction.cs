@@ -55,8 +55,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ReportViewModel" /> class.
 		/// </summary>
-		/// <param name="userId">The users's ID.</param>
-		/// <param name="organizationId">The organization's ID.</param>
+		/// <param name="userId">The users's Id.</param>
+		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="canManage">Is user a manager.</param>
 		/// <param name="customers">List of Customers for organization.</param>
 		/// <param name="projects">List of CompleteProjectInfos for organization.</param>
