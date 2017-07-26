@@ -163,6 +163,16 @@
 
                 <table class="table table-condensed">
                     <thead>
+						<tr>
+							<th>
+								<ul class="nav nav-tabs">
+									@foreach (var year in Model.Holidays.Select(m => m.Date.Year).Distinct())
+									{
+										<li id="activeTab"><a onclick="populateActiveForm()"></a> @year</li>
+									}
+								</ul>	
+							</th>
+						</tr>
                         <tr>
                             <th>@Strings.Holiday</th>
                             <th>@Strings.Date</th>
