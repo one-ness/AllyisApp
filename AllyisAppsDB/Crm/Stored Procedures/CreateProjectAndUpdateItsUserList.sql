@@ -23,7 +23,7 @@ BEGIN
 		BEGIN
 			BEGIN TRANSACTION
 				-- Create the new project in Project table
-				INSERT INTO [Crm].[Project] ([CustomerId], [Name], [Type], [ProjectOrgId], [StartUTC], [EndUTC])
+				INSERT INTO [Crm].[Project] ([CustomerId], [Name], [Type], [ProjectOrgId], [StartUtc], [EndUtc])
 				VALUES	(@CustomerId, @Name, @PriceType, @ProjectOrgId, @StartingDate, @EndingDate);
 				SET @retId = SCOPE_IDENTITY()
 

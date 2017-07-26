@@ -2,4 +2,4 @@
 	@ID INT
 AS
 	SET NOCOUNT ON;
-	DELETE FROM [TimeTracker].[PayClass] WHERE [PayClassID] = @ID;
+	DELETE FROM [TimeTracker].[PayClass] WHERE [PayClassId] = @ID;

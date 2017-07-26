@@ -38,8 +38,8 @@ BEGIN
 			[Name] = @Name,
 			[ProjectOrgId] = @OrgId,
 			[Type] = @PriceType,
-			[StartUTC] = @StartingDate,
-			[EndUTC] = @EndingDate
+			[StartUtc] = @StartingDate,
+			[EndUtc] = @EndingDate
 		WHERE [ProjectId] = @ProjectId
 
 	COMMIT TRANSACTION

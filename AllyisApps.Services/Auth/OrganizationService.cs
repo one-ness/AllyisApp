@@ -447,7 +447,7 @@ namespace AllyisApps.Services
 		//				SkuId = subDBE.SkuId,
 		//				NumberOfUsers = subDBE.NumberOfUsers,
 		//				Licenses = subDBE.Licenses,
-		//				CreatedUTC = subDBE.CreatedUTC,
+		//				CreatedUtc = subDBE.CreatedUtc,
 		//				IsActive = subDBE.IsActive,
 		//				Name = subDBE.Name
 		//			});
@@ -589,7 +589,7 @@ namespace AllyisApps.Services
 
 			return new OrganizationUserInfo
 			{
-				CreatedUTC = organizationUser.CreatedUTC,
+				CreatedUtc = organizationUser.CreatedUtc,
 				EmployeeId = organizationUser.EmployeeId,
 				OrganizationId = organizationUser.OrganizationId,
 				OrgRoleId = organizationUser.OrgRoleId,
@@ -618,7 +618,7 @@ namespace AllyisApps.Services
 				Address = organization.Address,
 				City = organization.City,
 				Country = organization.Country,
-				DateCreated = organization.CreatedUTC,
+				DateCreated = organization.CreatedUtc,
 				FaxNumber = organization.FaxNumber,
 				Name = organization.Name,
 				OrganizationId = organization.OrganizationId,
@@ -647,7 +647,7 @@ namespace AllyisApps.Services
 				Address = organization.Address,
 				City = organization.City,
 				Country = organization.Country,
-				CreatedUTC = organization.DateCreated,
+				CreatedUtc = organization.DateCreated,
 				FaxNumber = organization.FaxNumber,
 				Name = organization.Name,
 				OrganizationId = organization.OrganizationId,
@@ -683,7 +683,6 @@ namespace AllyisApps.Services
 				OrganizationId = invitation.OrganizationId,
 				OrganizationName = invitation.OrganizationName,
 				OrganizationRole = (OrganizationRole)invitation.OrgRoleId,
-				OrganizationRoleName = invitation.OrgRoleName,
 				EmployeeId = invitation.EmployeeId,
 				EmployeeType = (EmployeeType)invitation.EmployeeTypeId
 			};

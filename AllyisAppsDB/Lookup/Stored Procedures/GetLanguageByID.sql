@@ -3,10 +3,10 @@
 AS
 BEGIN
 	SELECT
-		[Language].[id] AS [LanguageID],
+		[Language].[Id] AS [LanguageID],
 		[Language].[LanguageName],
 		[Language].[CultureName]
 	FROM [Lookup].[Language] WITH (NOLOCK)
-	WHERE [Language].[id] = @LanguageID
+	WHERE [Language].[Id] = @LanguageID
 	 
 END

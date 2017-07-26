@@ -276,6 +276,9 @@
     <Build Include="Security\Expense.sql" />
     <Build Include="Security\Pjm.sql" />
     <Build Include="Finance\Stored Procedures\GetAccountsByParentId.sql" />
+    <Build Include="Auth\Tables\Permission.sql" />
+    <Build Include="Auth\Tables\Action.sql" />
+    <Build Include="Security\Hrm.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

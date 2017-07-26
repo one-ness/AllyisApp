@@ -4,7 +4,7 @@ AS
 	SET NOCOUNT ON;
 SELECT
 	[BillingHistory].[OrganizationId],
-	[BillingHistory].[CreatedUTC] AS [Date],
+	[BillingHistory].[CreatedUtc] AS [Date],
 	[BillingHistory].[Description],
 	[BillingHistory].[UserId],
 	[BillingHistory].[SkuId],

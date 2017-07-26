@@ -238,7 +238,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Duration = 8,
 						UserId = userId,
 						ProjectId = 0,
-						PayClassId = infos.Item2.Where(p => p.Name.Equals("Holiday")).FirstOrDefault().PayClassID,
+						PayClassId = infos.Item2.Where(p => p.Name.Equals("Holiday")).FirstOrDefault().PayClassId,
 						Description = holidays.Where(x => x.Date == date).First().HolidayName,
 					};
 
@@ -281,7 +281,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ProjectId = -1,
 						Projects = result.Projects,
 						ProjectsWithInactive = result.ProjectsWithInactive,
-						PayClassId = infos.Item2.Where(p => p.Name.Equals("Regular")).FirstOrDefault().PayClassID,
+						PayClassId = infos.Item2.Where(p => p.Name.Equals("Regular")).FirstOrDefault().PayClassId,
 						PayClasses = result.PayClasses,
 						Locked = (!result.CanManage && beforeLockDate),  //manager can still edit entries before lockdate
 						LockDate = result.LockDate,

@@ -6,7 +6,7 @@ AS
 SELECT	[Project].[ProjectId],
 		[Project].[CustomerId],
 		[Customer].[OrganizationId],
-		[Project].[CreatedUTC],
+		[Project].[CreatedUtc],
 		[Project].[Name] AS [ProjectName],
 		[Project].[IsActive],
 		[ProjectOrgId],

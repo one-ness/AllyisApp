@@ -45,7 +45,7 @@ namespace AllyisApps.DBModel.Billing
 		/// <summary>
 		/// Gets or sets the date the subscription user was added.
 		/// </summary>
-		public DateTime CreatedUTC { get; set; }
+		public DateTime CreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets the id of the subscription.

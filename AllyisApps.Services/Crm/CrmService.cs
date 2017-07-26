@@ -635,7 +635,7 @@ namespace AllyisApps.Services
 				ContactEmail = customer.ContactEmail,
 				ContactPhoneNumber = customer.ContactPhoneNumber,
 				Country = customer.Country,
-				CreatedUTC = customer.CreatedUTC,
+				CreatedUtc = customer.CreatedUtc,
 				CustomerId = customer.CustomerId,
 				CustomerOrgId = customer.CustomerOrgId,
 				EIN = customer.EIN,
@@ -668,7 +668,7 @@ namespace AllyisApps.Services
 				ContactEmail = customer.ContactEmail,
 				ContactPhoneNumber = customer.ContactPhoneNumber,
 				Country = customer.Country,
-				CreatedUTC = customer.CreatedUTC,
+				CreatedUtc = customer.CreatedUtc,
 				CustomerId = customer.CustomerId,
 				CustomerOrgId = customer.CustomerOrgId,
 				EIN = customer.EIN,
@@ -747,7 +747,7 @@ namespace AllyisApps.Services
 
 			return new CompleteProjectInfo
 			{
-				CreatedUTC = completeProject.CreatedUTC,
+				CreatedUtc = completeProject.CreatedUtc,
 				CustomerId = completeProject.CustomerId,
 				CustomerName = completeProject.CustomerName,
 				CustomerOrgId = completeProject.CustomerOrgId,

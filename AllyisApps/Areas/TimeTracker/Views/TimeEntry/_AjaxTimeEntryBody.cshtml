@@ -92,8 +92,8 @@
                     }
                     else
                     {
-                        var PCname = Model.PayClasses.FirstOrDefault(c => c.PayClassID == Model.PayClassId).Name;
-                        @Html.TextBoxDisabledFor(m => Model.PayClasses.FirstOrDefault(c => c.PayClassID == Model.PayClassId).Name, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" })
+                        var PCname = Model.PayClasses.FirstOrDefault(c => c.PayClassId == Model.PayClassId).Name;
+                        @Html.TextBoxDisabledFor(m => Model.PayClasses.FirstOrDefault(c => c.PayClassId == Model.PayClassId).Name, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" })
                     }
                 }
                 else
@@ -101,11 +101,11 @@
                     @Html.DropDownListDisabled("PayClassNameDdl", from c in Model.PayClasses  //Ddl name must be different than model property name or the selected value cannot be adjusted
                                                                   select new SelectListItem
                                                                   {
-                                                                      Selected = (Model.PayClasses.Count() == 1) || (Model.PayClassId == c.PayClassID),
+                                                                      Selected = (Model.PayClasses.Count() == 1) || (Model.PayClassId == c.PayClassId),
 
                                                                       Text = Strings.ResourceManager.GetString((c.Name).Replace(" ","")) ?? c.Name,
 
-                                                                      Value = c.PayClassID.ToString()
+                                                                      Value = c.PayClassId.ToString()
                                                                   }, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()
 
                     <input type="hidden" name="PayClassId" value="" />   @*Needed for proper model binding, value changes on submit (see form above)*@

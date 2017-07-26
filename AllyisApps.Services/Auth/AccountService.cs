@@ -733,7 +733,7 @@ namespace AllyisApps.Services
 
 			return new SubscriptionUserInfo
 			{
-				CreatedUTC = subUser.CreatedUTC,
+				CreatedUtc = subUser.CreatedUtc,
 				FirstName = subUser.FirstName,
 				LastName = subUser.LastName,
 				ProductRoleId = subUser.ProductRoleId,

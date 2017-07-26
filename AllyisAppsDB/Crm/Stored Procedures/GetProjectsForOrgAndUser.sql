@@ -10,7 +10,7 @@ AS
 	LEFT JOIN [Crm].[Project] AS [P] WITH (NOLOCK) ON [P].[ProjectId] = [PU].[ProjectId]
 		JOIN [Crm].[Customer] AS [C] WITH (NOLOCK) ON [C].[CustomerId] = [P].[CustomerId]
 		LEFT JOIN [Auth].[Organization] AS [O] WITH (NOLOCK) ON [O].[OrganizationId] = [C].[OrganizationId]
-	WHERE [PU].[UserId] = @UserId AND [O].[OrganizationId] = @OrgId AND [PU].[IsActive] = 1 AND [P].[ISACTIVE] = 1
+	WHERE [PU].[UserId] = @UserId AND [O].[OrganizationId] = @OrgId AND [PU].[IsActive] = 1 AND [P].[IsActive] = 1
 
 	SELECT [P].[ProjectId],
 			[P].[Name],
@@ -19,7 +19,7 @@ AS
 	FROM [Crm].[Project] AS [P] WITH (NOLOCK)
 		JOIN [Crm].[Customer] AS [C] WITH (NOLOCK) ON [C].[CustomerId] = [P].[CustomerId]
 		LEFT JOIN [Auth].[Organization] AS [O] WITH (NOLOCK) ON [O].[OrganizationId] = [C].[OrganizationId]
-	WHERE [O].[OrganizationId] = @OrgId AND [P].[ISACTIVE] = 1
+	WHERE [O].[OrganizationId] = @OrgId AND [P].[IsActive] = 1
 	
 	SELECT [FirstName],
 		[LastName],

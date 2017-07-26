@@ -437,7 +437,7 @@ namespace AllyisApps.Services
 				SkuId = si.SkuId,
 				NumberOfUsers = si.NumberOfUsers,
 				Licenses = si.Licenses,
-				CreatedUTC = si.CreatedUTC,
+				CreatedUtc = si.CreatedUtc,
 				IsActive = si.IsActive,
 				Name = si.Name
 			};
@@ -891,7 +891,7 @@ namespace AllyisApps.Services
 			return new SubscriptionDisplayInfo
 			{
 				CanViewSubscription = subscriptionDisplay.CanViewSubscription,
-				CreatedUTC = subscriptionDisplay.CreatedUTC,
+				CreatedUtc = subscriptionDisplay.CreatedUtc,
 				NumberOfUsers = subscriptionDisplay.NumberOfUsers,
 				OrganizationId = subscriptionDisplay.OrganizationId,
 				OrganizationName = subscriptionDisplay.OrganizationName,
@@ -920,7 +920,7 @@ namespace AllyisApps.Services
 
 			return new SubscriptionInfo
 			{
-				CreatedUTC = subscription.CreatedUTC,
+				CreatedUtc = subscription.CreatedUtc,
 				IsActive = subscription.IsActive,
 				Licenses = subscription.Licenses,
 				Name = subscription.Name,

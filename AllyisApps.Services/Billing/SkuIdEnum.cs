@@ -9,16 +9,21 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// SKUs offered by us. Must match the IDs inserted in to db.
 	/// </summary>
-	public enum SkuIdEnum : short
+	public enum SkuIdEnum : int
 	{
 		/// <summary>
-		/// TimeTracker SKU.
+		/// Time tracker basic
 		/// </summary>
-		TimeTrackerBasic = 1,
+		TimeTrackerBasic = 200001,
 
 		/// <summary>
-		/// ConsultingBasic SKU.
+		/// Expense tracker basic
 		/// </summary>
-		ExpenseTrackerBasic = 2,
+		ExpenseTrackerBasic = 300001,
+
+		/// <summary>
+		/// staffing manager basic
+		/// </summary>
+		StaffingManagerBasic = 400001,
 	}
 }
