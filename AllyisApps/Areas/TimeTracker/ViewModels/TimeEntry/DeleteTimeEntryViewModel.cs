@@ -47,6 +47,11 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public int TimeEntryId { get; set; }
 
 		/// <summary>
+		/// Gets or sets the duration of the time entry
+		/// </summary>
+		public string Duration { get; set; }
+
+		/// <summary>
 		/// Gets or sets the approval state of the time entry.
 		/// </summary>
 		public int ApprovalState { get; set; }

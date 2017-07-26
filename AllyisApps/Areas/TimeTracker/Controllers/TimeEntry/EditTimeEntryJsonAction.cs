@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				});
 			}
 
-			int organizationId = AppService.GetSubscription(model.SubscriptionId).OrganizationId;
+			int organizationId = AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId;
 			// Check permissions
 			if (model.UserId != this.AppService.UserContext.UserId)
 			{
@@ -79,7 +79,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				EditTimeEntry(model, true);
 
-				return this.Json(new { status = "success", values = new { duration = this.GetDurationDisplay(model.Duration), description = model.Description, id = model.TimeEntryId } });
+				return this.Json(new { status = "success", values = new { duration = this.GetDurationDisplay(model.Duration), description = model.Description, id = model.TimeEntryId, projectId = model.ProjectId } });
 			}
 			catch (ArgumentException e)
 			{
