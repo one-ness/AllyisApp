@@ -10,7 +10,6 @@ using AllyisApps.ViewModels.Auth;
 using System;
 using System.Linq;
 using System.Web.Mvc;
-using System.Collections.Generic;
 
 namespace AllyisApps.Controllers
 {
@@ -59,7 +58,7 @@ namespace AllyisApps.Controllers
 						OrganizationId = oui.OrganizationId,
 						PermissionLevel = ((OrganizationRole)oui.OrgRoleId).ToString(),
 						UserId = oui.UserId,
-						EmployeeTypeId = oui.EmployeeTypeId
+						EmployeeTypeId = (int)oui.EmployeeTypeId
 					}),
 					OrganizationId = infos.Item1.OrganizationId,
 					OrganizationName = infos.Item1.Name,

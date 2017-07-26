@@ -597,7 +597,7 @@ namespace AllyisApps.Services
 				Email = organizationUser.Email,
 				FirstName = organizationUser.FirstName,
 				LastName = organizationUser.LastName,
-				EmployeeTypeId = organizationUser.EmployeeTypeId
+				EmployeeTypeId = (EmployeeType)organizationUser.EmployeeTypeId
 			};
 		}
 
@@ -682,10 +682,10 @@ namespace AllyisApps.Services
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
 				OrganizationName = invitation.OrganizationName,
-				OrgRole = invitation.OrgRoleId,
-				OrgRoleName = invitation.OrgRoleName,
+				OrganizationRole = (OrganizationRole)invitation.OrgRoleId,
+				OrganizationRoleName = invitation.OrgRoleName,
 				EmployeeId = invitation.EmployeeId,
-				EmployeeType = invitation.EmployeeTypeId
+				EmployeeType = (EmployeeType)invitation.EmployeeTypeId
 			};
 		}
 
@@ -731,9 +731,9 @@ namespace AllyisApps.Services
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
-				OrgRoleId = invitation.OrgRole,
+				OrgRoleId = (int)invitation.OrganizationRole,
 				EmployeeId = invitation.EmployeeId,
-				EmployeeTypeId = invitation.EmployeeType
+				EmployeeTypeId = (int)invitation.EmployeeType
 			};
 		}
 
