@@ -46,14 +46,12 @@
                         @details.FaxNumber
                     </p>
                 </div>
-				<div class="col-sm-12 index-details" style="border-top: solid thin #ddd;">
+				<div class="col-sm-12 index-details" style="border-top: solid thin #ddd; padding-right: 0">
 					<p>
-						<h3>
-							@Strings.Subscriptions
-							<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.PanelInfo.OrgInfo.OrganizationId })" title="Add a subscription" class="btn btn-default pull-right text-muted">
-								<i class="fa fa-plus fa-lg" style="color: green"></i>
-							</a>
-						</h3>
+						<h3 style="float: left">@Strings.Subscriptions</h3>
+						<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.PanelInfo.OrgInfo.OrganizationId })" title="Add a subscription" class="btn btn-default" style="float: right; margin-top: 12px; margin-bottom: 10px;">
+							@Strings.CreateSubscription
+						</a>
 					</p>
 				</div>
                 <div class="col-md-12" style="height: 100%; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
