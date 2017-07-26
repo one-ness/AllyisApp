@@ -56,7 +56,7 @@ function ajaxDelete(form_child, delete_action_url) {
 	})
 		.done(function (res) {
 			ajaxHandleOverridingResponses(res, { form_element: form_element });
-			if (res.status == 'success') {
+			if (res.status === 'success') {
 				form_wrap.css({ 'z-index': -1000 }).transition({ 'max-height': 0, duration: 500, easing: 'linear' },
 					function () { form_wrap.remove(); });
 				//ajaxApproveReject_markPendingIfSet(form_element);
@@ -84,11 +84,11 @@ function ajaxCreate(form_element, create_action_url) {
 		dataType: "json"
 	})
 		.done(function (res) {
-			if (res.status == 'error') {
+			if (res.status === 'error') {
 				form_element.addClass("error error-submit");
 			}
 			ajaxHandleOverridingResponses(res, { form_element: form_element });
-			if (res.status == 'success') {
+			if (res.status === 'success') {
 				//alert('success. id=' + res.id + "\r\n" + res.duration + "\r\n" + res.message);
 				ajaxUpdateValues(form_element, res.values);
 				changeRemove(form_element);
@@ -147,11 +147,11 @@ function ajaxEdit(form_element, edit_action_url) {
 		dataType: "json"
 	})
 		.done(function (res) {
-			if (res.message != null) {
+			if (res.message !== null) {
 				form_element.addClass("error error-submit");
 			}
 			ajaxHandleOverridingResponses(res, { form_element: form_element });
-			if (res.status == 'success') {
+			if (res.status === 'success') {
 				changeRemove(form_element);
 				ajaxUpdateValues(form_element, res.values);
 				//ajaxApproveReject_markPendingIfSet(form_element);
@@ -226,7 +226,7 @@ function ajaxEditOrCreate(form_element, create_action_url, edit_action_url) {
 //}
 
 function ajaxHandleOverridingResponses(response, relevant_objects) {
-	if (response.status == "error") {
+	if (response.status === "error") {
 		alert("error: " + response.message);
 		if (response.errors) {
 			$(errors).each(function () {
@@ -234,10 +234,10 @@ function ajaxHandleOverridingResponses(response, relevant_objects) {
 			})
 		}
 	}
-	if (response.action == "REFRESH") {
+	if (response.action === "REFRESH") {
 		location.reload();
 	}
-	if (response.action == "REVERT" && relevant_objects.form_element) {
+	if (response.action === "REVERT" && relevant_objects.form_element) {
 		changeRemove(relevant_objects.form_element);
 		ajaxUpdateValues(relevant_objects.form_element, response.values);
 	}
@@ -264,10 +264,10 @@ function changeRemove(form_element) {
 function keyDown(e, form_child) {
 	changeOccur(form_child);
 	var unicode = e.keyCode ? e.keyCode : e.charCode;
-	if (!e.shiftKey && unicode == 40) {
+	if (!e.shiftKey && unicode === 40) {
 		focusNextDuration(form_child);
 	}
-	else if (!e.shiftKey && unicode == 38) {
+	else if (!e.shiftKey && unicode === 38) {
 		focusPreviousDuration(form_child);
 	}
 }
@@ -279,9 +279,9 @@ $(document).ready(function () {
 	});
 	$("#viewasuser-search").keyup(_.debounce(
 		function (key) {
-			if (key.which == 13 || key.keyCode == 13) {
+			if (key.which === 13 || key.keyCode === 13) {
 				//alert("keypress val:" + this.value);
-				if (this.value == "")
+				if (this.value === "")
 					MODULE.search(" "); //search on a value that is present in all entries
 				else
 					MODULE.search(this.value);
@@ -304,7 +304,7 @@ function focusFirstDuration() {
 function focusNextDuration(form_child) {
 	var tb = $("[name='Duration']");
 	for (var i = 0; i < tb.length; i++) {
-		if (tb[i] == form_child) {
+		if (tb[i] === form_child) {
 			if (tb[i + 1].parentNode.parentNode.parentNode.className.indexOf('hidden-sample') > -1) {
 				if (tb.length >= i + 2) {
 					tb[i + 2].focus();
@@ -323,7 +323,7 @@ function focusNextDuration(form_child) {
 function focusPreviousDuration(form_child) {
 	var tb = $("[name='Duration']");
 	for (var i = 0; i < tb.length; i++) {
-		if (tb[i] == form_child) {
+		if (tb[i] === form_child) {
 			if (tb[i - 1].parentNode.parentNode.parentNode.className.indexOf('hidden-sample') > -1) {
 				if (i - 2 >= 0) {
 					tb[i - 2].focus();

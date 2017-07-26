@@ -184,37 +184,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets the role of the given user in the given organization.
-		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
-		/// <param name="userId">User Id.</param>
-		/// <returns>An OrgRole instance.</returns>
-		public OrgRole GetOrgRole(int orgId, int userId)
-		{
-			if (orgId < 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
-			}
-
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-			}
-
-			OrgRoleDBEntity role = DBHelper.GetPermissionLevel(orgId, userId);
-			if (role == null)
-			{
-				return null;
-			}
-
-			return new OrgRole
-			{
-				OrgRoleId = role.OrgRoleId,
-				OrgRoleName = role.Name
-			};
-		}
-
-		/// <summary>
 		/// Deletes the user's current chosen organization.
 		/// </summary>
 		/// <returns>Returns false if permissions fail.</returns>
@@ -628,7 +597,7 @@ namespace AllyisApps.Services
 				Email = organizationUser.Email,
 				FirstName = organizationUser.FirstName,
 				LastName = organizationUser.LastName,
-				EmployeeTypeId = organizationUser.EmployeeTypeId
+				EmployeeTypeId = (EmployeeType)organizationUser.EmployeeTypeId
 			};
 		}
 
@@ -713,10 +682,10 @@ namespace AllyisApps.Services
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
 				OrganizationName = invitation.OrganizationName,
-				OrgRole = invitation.OrgRoleId,
-				OrgRoleName = invitation.OrgRoleName,
+				OrganizationRole = (OrganizationRole)invitation.OrgRoleId,
+				OrganizationRoleName = invitation.OrgRoleName,
 				EmployeeId = invitation.EmployeeId,
-				EmployeeType = invitation.EmployeeTypeId
+				EmployeeType = (EmployeeType)invitation.EmployeeTypeId
 			};
 		}
 
@@ -762,9 +731,9 @@ namespace AllyisApps.Services
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
-				OrgRoleId = invitation.OrgRole,
+				OrgRoleId = (int)invitation.OrganizationRole,
 				EmployeeId = invitation.EmployeeId,
-				EmployeeTypeId = invitation.EmployeeType
+				EmployeeTypeId = (int)invitation.EmployeeType
 			};
 		}
 

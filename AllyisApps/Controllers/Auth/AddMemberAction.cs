@@ -73,9 +73,9 @@ namespace AllyisApps.Controllers
 						FirstName = add.FirstName,
 						LastName = add.LastName,
 						OrganizationId = add.OrganizationId,
-						OrgRole = (int)(add.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member),
+						OrganizationRole = add.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member,
 						EmployeeId = add.EmployeeId,
-						EmployeeType = (int)(add.EmployeeType == "Salaried" ? EmployeeType.Salaried : EmployeeType.Hourly)
+						EmployeeType = add.EmployeeType == "Salaried" ? EmployeeType.Salaried : EmployeeType.Hourly
 					};
 					
 					User usr = AppService.GetUserByEmail(info.Email);

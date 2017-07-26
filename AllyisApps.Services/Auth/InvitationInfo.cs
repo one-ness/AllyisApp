@@ -61,17 +61,12 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Organization Role Id.
 		/// </summary>
-		public int OrgRole { get; set; }
+		public OrganizationRole OrganizationRole { get; set; }
 
 		/// <summary>
 		/// Gest or sets the Organization Role name.
 		/// </summary>
-		public string OrgRoleName { get; set; }
-
-		///// <summary>
-		///// Gets or sets the Project Id.
-		///// </summary>
-		//public int? ProjectId { get; set; }
+		public string OrganizationRoleName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Employee Id.
@@ -81,6 +76,6 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Employee Type Id
 		/// </summary>
-		public int EmployeeType { get; set; }
+		public EmployeeType EmployeeType { get; set; }
 	}
 }
