@@ -46,14 +46,14 @@
                     @if (ViewBag.SelectedUserId == ViewBag.SignedInUserID)
                     {
                         <a class="btn btn-primary" title="@Strings.Previous"
-                           href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
+                           href="@Url.Action(ActionConstants.IndexNoUserId, new { subscriptionId = Model.Subscriptionid, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 6 })">
                             <i class="fa fa-chevron-left"></i>
                         </a>
                     }
                     else
                     {
                         <a class="btn btn-primary" title="@Strings.Previous"
-                           href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 7 })">
+                           href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate - 7, endDate = Model.EntryRange.EndDate - 6 })">
                             <i class="fa fa-chevron-left"></i>
                         </a>
                     }
@@ -82,7 +82,7 @@
                     else
                     {
                         <a class="btn btn-primary" title="@Strings.Next"
-                           href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 7 })">
+                           href="@Url.Action(ActionConstants.Index, new { subscriptionId = Model.Subscriptionid, userId = ViewBag.SelectedUserId, startDate = Model.EntryRange.StartDate + 7, endDate = Model.EntryRange.EndDate + 6 })">
                             <i class="fa fa-chevron-right"></i>
                         </a>
                     }
