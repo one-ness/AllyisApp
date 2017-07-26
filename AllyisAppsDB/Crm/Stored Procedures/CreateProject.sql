@@ -10,7 +10,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRANSACTION
-	INSERT INTO [Crm].[Project] ([CustomerId], [Name], [Type], [ProjectOrgId], [StartUTC], [EndUTC])
+	INSERT INTO [Crm].[Project] ([CustomerId], [Name], [Type], [ProjectOrgId], [StartUtc], [EndUtc])
 	VALUES	(@CustomerId, @Name, @PriceType, @ProjectOrgId, @StartingDate, @EndingDate);
 	SET @retId = SCOPE_IDENTITY()
 	COMMIT TRANSACTION

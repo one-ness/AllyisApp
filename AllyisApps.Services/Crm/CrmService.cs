@@ -248,9 +248,9 @@ namespace AllyisApps.Services
 		/// Creates a new project and update its user list if succeed
 		/// </summary>
 		/// <param name="newProject">Project with project information.</param>
-		/// <param name="userIDs">List of users being assigned to the project</param>
+		/// <param name="userIds">List of users being assigned to the project</param>
 		/// <returns>Project Id if succeed, -1 if ProjectOrgId is taken.</returns>
-		public int CreateProjectAndUpdateItsUserList(Project newProject, IEnumerable<int> userIDs)
+		public int CreateProjectAndUpdateItsUserList(Project newProject, IEnumerable<int> userIds)
 		{
 			#region Validation
 
@@ -271,7 +271,7 @@ namespace AllyisApps.Services
 
 			if (string.IsNullOrEmpty(newProject.ProjectOrgId))
 			{
-				throw new ArgumentNullException("projectOrgId", "Project must have an ID");
+				throw new ArgumentNullException("projectOrgId", "Project must have an Id");
 			}
 
 			if (newProject.StartingDate.HasValue && newProject.EndingDate.HasValue && DateTime.Compare(newProject.StartingDate.Value, newProject.EndingDate.Value) > 0)
@@ -281,7 +281,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.CreateProjectAndUpdateItsUserList(GetDBEntityFromProject(newProject), userIDs);
+			return DBHelper.CreateProjectAndUpdateItsUserList(GetDBEntityFromProject(newProject), userIds);
 		}
 
 		/// <summary>
@@ -310,7 +310,7 @@ namespace AllyisApps.Services
 
 			if (string.IsNullOrEmpty(newProject.ProjectOrgId))
 			{
-				throw new ArgumentNullException("projectOrgId", "Project must have an ID");
+				throw new ArgumentNullException("projectOrgId", "Project must have an Id");
 			}
 
 			if (newProject.StartingDate.HasValue && newProject.EndingDate.HasValue && DateTime.Compare(newProject.StartingDate.Value, newProject.EndingDate.Value) > 0)
@@ -367,10 +367,10 @@ namespace AllyisApps.Services
 		/// <param name="type">Project type.</param>
 		/// <param name="start">Starting date. <see cref="DateTime"/></param>
 		/// <param name="end">Ending date. <see cref="DateTime"/></param>
-		/// <param name="userIDs">Updated on-project user list.</param>
+		/// <param name="userIds">Updated on-project user list.</param>
 		/// <param name="subscriptionId"></param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime? start, DateTime? end, IEnumerable<int> userIDs, int subscriptionId)
+		public bool UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime? start, DateTime? end, IEnumerable<int> userIds, int subscriptionId)
 		{
 			#region Validation
 
@@ -399,15 +399,15 @@ namespace AllyisApps.Services
 				throw new ArgumentException("Project cannot end before it starts.");
 			}
 
-			if (userIDs == null)
+			if (userIds == null)
 			{
-				userIDs = new List<int>();
+				userIds = new List<int>();
 			}
 
 			#endregion Validation
 
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
-			DBHelper.UpdateProjectAndUsers(projectId, name, orgId, type, start, end, userIDs);
+			DBHelper.UpdateProjectAndUsers(projectId, name, orgId, type, start, end, userIds);
 			return true;
 		}
 
@@ -635,7 +635,7 @@ namespace AllyisApps.Services
 				ContactEmail = customer.ContactEmail,
 				ContactPhoneNumber = customer.ContactPhoneNumber,
 				Country = customer.Country,
-				CreatedUTC = customer.CreatedUTC,
+				CreatedUtc = customer.CreatedUtc,
 				CustomerId = customer.CustomerId,
 				CustomerOrgId = customer.CustomerOrgId,
 				EIN = customer.EIN,
@@ -668,7 +668,7 @@ namespace AllyisApps.Services
 				ContactEmail = customer.ContactEmail,
 				ContactPhoneNumber = customer.ContactPhoneNumber,
 				Country = customer.Country,
-				CreatedUTC = customer.CreatedUTC,
+				CreatedUtc = customer.CreatedUtc,
 				CustomerId = customer.CustomerId,
 				CustomerOrgId = customer.CustomerOrgId,
 				EIN = customer.EIN,
@@ -747,7 +747,7 @@ namespace AllyisApps.Services
 
 			return new CompleteProjectInfo
 			{
-				CreatedUTC = completeProject.CreatedUTC,
+				CreatedUtc = completeProject.CreatedUtc,
 				CustomerId = completeProject.CustomerId,
 				CustomerName = completeProject.CustomerName,
 				CustomerOrgId = completeProject.CustomerOrgId,

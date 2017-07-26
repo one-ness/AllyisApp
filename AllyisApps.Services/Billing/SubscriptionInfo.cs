@@ -46,7 +46,7 @@ namespace AllyisApps.Services.Billing
 		/// <summary>
 		/// Gets or sets CreatedDate.
 		/// </summary>
-		public DateTime CreatedUTC { get; set; }
+		public DateTime CreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether this subscription is active.

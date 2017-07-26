@@ -48,8 +48,8 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// </summary>
 		[Required]
 		[DataType(DataType.Text)]
-		[Display(Name = "Customer ID")]
-		public int CustomerID { get; set; }
+		[Display(Name = "Customer Id")]
+		public int CustomerId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user's phone number.
@@ -104,11 +104,11 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public string PostalCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Customer's Organization ID.
+		/// Gets or sets the Customer's Organization Id.
 		/// </summary>
 		[Required]
 		[DataType(DataType.Text)]
-		[Display(Name = "Customer ID")]
+		[Display(Name = "Customer Id")]
 		public string CustomerOrgId { get; set; }
 
 		/// <summary>

@@ -124,7 +124,7 @@ namespace AllyisApps
 	}
 
 	/// <summary>
-	/// Product name constants for use when retreiving product ID by name.
+	/// Product name constants for use when retreiving product Id by name.
 	/// </summary>
 	public static class ProductNameConstants
 	{

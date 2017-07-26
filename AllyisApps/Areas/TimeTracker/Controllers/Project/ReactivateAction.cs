@@ -19,7 +19,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Reactivates a project
 		/// </summary>
 		/// <param name="subscriptionId">The subscription Id</param>
-		/// <param name="userId">Project ID</param>
+		/// <param name="userId">Project Id</param>
 		/// <returns></returns>
 		public ActionResult Reactivate(int subscriptionId, int userId)
 		{

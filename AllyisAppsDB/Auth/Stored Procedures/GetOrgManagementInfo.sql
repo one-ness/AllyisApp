@@ -16,8 +16,8 @@ BEGIN
 		[PhoneNumber], 
 		[FaxNumber], 
 		[Subdomain],
-		[CreatedUTC], 
-		[ModifiedUTC] 
+		[CreatedUtc]
+
 	FROM [Auth].[Organization] WITH (NOLOCK)
 		LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Organization].[Country]
 		LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Organization].[State]
@@ -48,7 +48,6 @@ BEGIN
 		[Organization].[OrganizationId],
 		[Subscription].[SkuId],
 		[Subscription].[NumberOfUsers],
-		[Subscription].[SubscriptionName],
 		[Organization].[Name] AS [OrganizationName],
 		[Sku].[Name] AS [SkuName],
 		(SELECT COUNT([UserId])

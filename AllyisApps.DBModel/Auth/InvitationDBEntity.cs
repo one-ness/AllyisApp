@@ -44,11 +44,6 @@ namespace AllyisApps.DBModel.Auth
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the name of the inviting organization.
-		/// </summary>
-		public string OrganizationName { get; set; }
-
-		/// <summary>
 		/// Gets or sets the access code associated with the invitation.
 		/// </summary>
 		public string AccessCode { get; set; }
@@ -57,11 +52,6 @@ namespace AllyisApps.DBModel.Auth
 		/// Gets or sets the id of the org role the user will be assigned.
 		/// </summary>
 		public int OrgRoleId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the name of the org role the user will be assigned.
-		/// </summary>
-		public string OrgRoleName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the employee id of the user.

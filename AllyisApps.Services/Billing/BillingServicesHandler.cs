@@ -269,7 +269,7 @@ namespace AllyisApps.Services.Billing
 		/// <summary>
 		/// Calls the ListInvoices method in the appropriate BillingServicesInterface implementing object.
 		/// </summary>
-		/// <param name="customerId">The customer ID for the customer whose invoices are being requested.</param>
+		/// <param name="customerId">The customer Id for the customer whose invoices are being requested.</param>
 		/// <returns>A list of billing invoice objects.</returns>
 		[CLSCompliant(false)]
 		public List<BillingServicesInvoice> ListInvoices(BillingServicesCustomerId customerId)

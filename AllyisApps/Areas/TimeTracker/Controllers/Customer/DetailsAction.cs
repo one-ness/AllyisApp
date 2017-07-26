@@ -38,7 +38,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Website = infos.Item1.Website,
 				EIN = infos.Item1.EIN,
 				OrganizationId = infos.Item1.OrganizationId,
-				CustomerID = id,
+				CustomerId = id,
 				ValidCountries = infos.Item2,
 				CustomerOrgId = infos.Item1.CustomerOrgId,
 				canEditCustomers = this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false)

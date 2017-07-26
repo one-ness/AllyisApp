@@ -15,7 +15,7 @@ AS
 		   [Customer].[FaxNumber],
 		   [Customer].[Website],
 		   [Customer].[EIN],
-		   [Customer].[CreatedUTC],
+		   [Customer].[CreatedUtc],
 		   [Customer].[CustomerOrgId]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 
 	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Customer].[Country]

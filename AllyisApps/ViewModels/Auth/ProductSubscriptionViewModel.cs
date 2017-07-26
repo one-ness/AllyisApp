@@ -84,7 +84,7 @@ namespace AllyisApps.ViewModels.Auth
 		public IEnumerable<SkuInfo> Skus { get; set; }
 
 		/// <summary>
-		/// Gets or sets the ID of the Sku that is currently selected.
+		/// Gets or sets the Id of the Sku that is currently selected.
 		/// </summary>
 		public int SelectedSku { get; set; }
 

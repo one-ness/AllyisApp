@@ -210,7 +210,7 @@ namespace BillingServices.StripeService
 		/// <param name="amount">The new amount for the stripe subscription.</param>
 		/// <param name="interval">The new billing interval for the stripe subscription.</param>
 		/// <param name="planName">The new plan name for the stripe subscription.</param>
-		/// <param name="subscriptionId">The id of the stripe subscription to ID.</param>
+		/// <param name="subscriptionId">The id of the stripe subscription to Id.</param>
 		/// <param name="customerId">The id of the customer whom is associated witht the billing subscription being updated.</param>
 		/// <returns>A bool representing the success state of updating the subscription.</returns>
 		public bool UpdateSubscription(int amount, string interval, string planName, string subscriptionId, BillingServicesCustomerId customerId)

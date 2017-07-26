@@ -7,8 +7,8 @@ AS
 		   [ProjectOrgId],
 		   [Type],
 		   [CustomerId],
-		   [StartUTC] AS [StartingDate],
-		   [EndUTC] AS [EndingDate]
+		   [StartUtc] AS [StartingDate],
+		   [EndUtc] AS [EndingDate]
 	FROM [Crm].[Project] WITH (NOLOCK) 
 	WHERE [IsActive] = 1 AND [CustomerId] = @CustomerId
 	ORDER BY [Project].[Name]

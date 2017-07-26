@@ -49,11 +49,6 @@ namespace AllyisApps.Services
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or set the Organization Name.
-		/// </summary>
-		public string OrganizationName { get; set; }
-
-		/// <summary>
 		/// Gets or sets the Access code for accepting the invitation.
 		/// </summary>
 		public string AccessCode { get; set; }
@@ -62,11 +57,6 @@ namespace AllyisApps.Services
 		/// Gets or sets the Organization Role Id.
 		/// </summary>
 		public OrganizationRole OrganizationRole { get; set; }
-
-		/// <summary>
-		/// Gest or sets the Organization Role name.
-		/// </summary>
-		public string OrganizationRoleName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Employee Id.

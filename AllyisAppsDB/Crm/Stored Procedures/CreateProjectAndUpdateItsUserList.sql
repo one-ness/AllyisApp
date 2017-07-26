@@ -5,7 +5,7 @@
 	@ProjectOrgId NVARCHAR(16),
 	@StartingDate DATETIME2(0),
 	@EndingDate DATETIME2(0),
-	@UserIDs [Auth].[UserTable] READONLY,
+	@UserIds [Auth].[UserTable] READONLY,
     @retId INT OUTPUT
 AS
 BEGIN
@@ -23,20 +23,20 @@ BEGIN
 		BEGIN
 			BEGIN TRANSACTION
 				-- Create the new project in Project table
-				INSERT INTO [Crm].[Project] ([CustomerId], [Name], [Type], [ProjectOrgId], [StartUTC], [EndUTC])
+				INSERT INTO [Crm].[Project] ([CustomerId], [Name], [Type], [ProjectOrgId], [StartUtc], [EndUtc])
 				VALUES	(@CustomerId, @Name, @PriceType, @ProjectOrgId, @StartingDate, @EndingDate);
 				SET @retId = SCOPE_IDENTITY()
 
 				/* Update new users that used to be users at some point */
 				UPDATE [Crm].[ProjectUser] SET IsActive = 1
 				WHERE [ProjectUser].[ProjectId] = @retId 
-					AND [ProjectUser].[UserId] IN (SELECT userId FROM @UserIDs) 
+					AND [ProjectUser].[UserId] IN (SELECT userId FROM @UserIds) 
 					AND [ProjectUser].[IsActive] = 0
 
 				/* Add new users that have never been on the project */
 				INSERT INTO [Crm].[ProjectUser] ([ProjectId], [UserId], [IsActive])
 				SELECT @retId, userId, 1
-				FROM @UserIDs
+				FROM @UserIds
 				WHERE userId NOT IN
 					(SELECT [ProjectUser].[UserId]
 					FROM [Crm].[ProjectUser] WITH (NOLOCK)
@@ -45,7 +45,7 @@ BEGIN
 				/* Set inactive existing users that are not in the updated users list */
 				UPDATE [Crm].[ProjectUser] SET IsActive = 0
 				WHERE [ProjectUser].[ProjectId] = @retId
-					AND [ProjectUser].[UserId] NOT IN (SELECT userId FROM @UserIDs) 
+					AND [ProjectUser].[UserId] NOT IN (SELECT userId FROM @UserIds) 
 					AND [ProjectUser].[IsActive] = 1
 
 			COMMIT TRANSACTION		

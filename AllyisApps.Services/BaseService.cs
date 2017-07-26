@@ -58,8 +58,8 @@ namespace AllyisApps.Services
 		/// Increments numeric, then upper-case, then lower-case, then repeats.
 		/// 0000 -> 0001, 009A -> 009B, 1Bjz -> 1Bk0, etc.
 		/// </summary>
-		/// <param name="previousId">The ID string to increment</param>
-		/// <returns>A Char[] of the previous ID, incremented by one</returns>
+		/// <param name="previousId">The Id string to increment</param>
+		/// <returns>A Char[] of the previous Id, incremented by one</returns>
 		public char[] IncrementAlphanumericCharArray(char[] previousId)
 		{
 			// Define legal characters

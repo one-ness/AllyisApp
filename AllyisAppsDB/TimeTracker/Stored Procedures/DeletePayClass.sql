@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [TimeTracker].[DeletePayClass]
-	@ID INT
+	@Id INT
 AS
 	SET NOCOUNT ON;
-	DELETE FROM [TimeTracker].[PayClass] WHERE [PayClassID] = @ID;
+	DELETE FROM [TimeTracker].[PayClass] WHERE [PayClassId] = @Id;

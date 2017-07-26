@@ -56,9 +56,9 @@ AS
 	SELECT * FROM @Settings
 
 	IF(SELECT COUNT(*) FROM [TimeTracker].[PayClass] WHERE [OrganizationId] = @OrganizationId) > 0
-		SELECT [PayClassID], [Name], [OrganizationId] FROM [TimeTracker].[PayClass] WITH (NOLOCK) WHERE [OrganizationId] = @OrganizationId;
+		SELECT [PayClassId], [Name], [OrganizationId] FROM [TimeTracker].[PayClass] WITH (NOLOCK) WHERE [OrganizationId] = @OrganizationId;
 	ELSE
-		SELECT [PayClassID], [Name], [OrganizationId] FROM [TimeTracker].[PayClass] WITH (NOLOCK) WHERE [OrganizationId] = 0;
+		SELECT [PayClassId], [Name], [OrganizationId] FROM [TimeTracker].[PayClass] WITH (NOLOCK) WHERE [OrganizationId] = 0;
 
 	IF(SELECT COUNT(*) FROM [TimeTracker].[Holiday] WITH (NOLOCK) WHERE [OrganizationId] = @OrganizationId) > 0
 		SELECT [HolidayId], [HolidayName], [Date], [OrganizationId] FROM [TimeTracker].[Holiday] WITH (NOLOCK) WHERE [OrganizationId] = @OrganizationId ORDER BY [Date];
@@ -68,9 +68,9 @@ AS
 	SELECT	[Project].[ProjectId],
 			[Project].[CustomerId],
 			[Customer].[OrganizationId],
-			[Project].[CreatedUTC],
-			[Project].[StartUTC] as [StartDate],
-			[Project].[EndUTC] as [EndDate],
+			[Project].[CreatedUtc],
+			[Project].[StartUtc] as [StartDate],
+			[Project].[EndUtc] as [EndDate],
 			[Project].[Name] AS [ProjectName],
 			[Project].[IsActive],
 			[Project].[Type] AS [PriceType],
@@ -98,9 +98,9 @@ AS
 	SELECT	[ProjectId],
 			[CustomerId],
 			0,
-			[CreatedUTC],
-			[StartUTC],
-			[EndUTC],
+			[CreatedUtc],
+			[StartUtc],
+			[EndUtc],
 			[Name],
 			[IsActive],
 			[Type],
@@ -147,7 +147,7 @@ AS
 		,[Description]
 	FROM [TimeTracker].[TimeEntry] WITH (NOLOCK) 
 	JOIN [Auth].[User] WITH (NOLOCK) ON [User].[UserId] = [TimeEntry].[UserId]
-	JOIN [TimeTracker].[PayClass] WITH (NOLOCK) ON [PayClass].[PayClassID] = [TimeEntry].[PayClassId]
+	JOIN [TimeTracker].[PayClass] WITH (NOLOCK) ON [PayClass].[PayClassId] = [TimeEntry].[PayClassId]
 	JOIN [Auth].[OrganizationUser] WITH (NOLOCK) ON [User].[UserId] = [OrganizationUser].[UserId] AND [OrganizationUser].[OrganizationId] = @OrganizationId
 	WHERE [User].[UserId] = @UserId
 		AND [Date] >= @StartingDate

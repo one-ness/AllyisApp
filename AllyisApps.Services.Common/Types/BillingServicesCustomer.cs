@@ -26,7 +26,7 @@ namespace AllyisApps.Services.Common.Types
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BillingServicesCustomer"/> class.
 		/// </summary>
-		/// <param name="customerId">The billing services customer ID.</param>
+		/// <param name="customerId">The billing services customer Id.</param>
 		/// <param name="email">The customer's email.</param>
 		/// <param name="last4">The last 4 digits of the customer's payment card.</param>
 		public BillingServicesCustomer(BillingServicesCustomerId customerId, string email, string last4 = "nnnn")
@@ -56,7 +56,7 @@ namespace AllyisApps.Services.Common.Types
 		#region accessor properties
 
 		/// <summary>
-		/// Gets the ID.
+		/// Gets the Id.
 		/// </summary>
 		public BillingServicesCustomerId Id
 		{

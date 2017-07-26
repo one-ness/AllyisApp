@@ -25,30 +25,30 @@ namespace AllyisApps.DBModel
 		/// Method to Create a new project then update its user list.
 		/// </summary>
 		/// <param name="project">ProjectDBEntity with new project info.</param>
-		/// <param name="userIDs">List of users to be assigned to this project.</param>
+		/// <param name="userIds">List of users to be assigned to this project.</param>
 		/// <returns>Returns the id of the created project, else returns -1.</returns>
-		public int CreateProjectAndUpdateItsUserList(ProjectDBEntity project, IEnumerable<int> userIDs)
+		public int CreateProjectAndUpdateItsUserList(ProjectDBEntity project, IEnumerable<int> userIds)
 		{
 			if (string.IsNullOrWhiteSpace(project.Name))
 			{
 				throw new ArgumentException("Name cannot be null, empty, or whitespace.");
 			}
 
-			DataTable userIDsTable = new DataTable();
-			userIDsTable.Columns.Add("userId", typeof(int));
-			foreach (int userID in userIDs)
+			DataTable userIdsTable = new DataTable();
+			userIdsTable.Columns.Add("userId", typeof(int));
+			foreach (int userId in userIds)
 			{
-				userIDsTable.Rows.Add(userID);
+				userIdsTable.Rows.Add(userId);
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@customerID", project.CustomerId);
+			parameters.Add("@customerId", project.CustomerId);
 			parameters.Add("@Name", project.Name);
 			parameters.Add("@PriceType", project.Type);
 			parameters.Add("@ProjectOrgId", project.ProjectOrgId);
 			parameters.Add("@StartingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
 			parameters.Add("@EndingDate", project.EndingDate == null ? null : project.EndingDate.Value.ToShortDateString());
-			parameters.Add("@UserIDs", userIDsTable.AsTableValuedParameter("[Auth].[UserTable]"));
+			parameters.Add("@UserIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -75,7 +75,7 @@ namespace AllyisApps.DBModel
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@customerID", project.CustomerId);
+			parameters.Add("@customerId", project.CustomerId);
 			parameters.Add("@Name", project.Name);
 			parameters.Add("@PriceType", project.Type);
 			parameters.Add("@ProjectOrgId", project.ProjectOrgId);
@@ -172,12 +172,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Gets all the projects associated with a specific customer.
 		/// </summary>
-		/// <param name="customerID">The id of the customer.</param>
+		/// <param name="customerId">The id of the customer.</param>
 		/// <returns>A collection of projects with the definied customer.</returns>
-		public IEnumerable<ProjectDBEntity> GetProjectsByCustomer(int customerID)
+		public IEnumerable<ProjectDBEntity> GetProjectsByCustomer(int customerId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@customerID", customerID);
+			parameters.Add("@customerId", customerId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -191,12 +191,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Gets all the projects associated with a specific customer.
 		/// </summary>
-		/// <param name="customerID">The id of the customer.</param>
+		/// <param name="customerId">The id of the customer.</param>
 		/// <returns>A collection of projects with the definied customer.</returns>
-		public IEnumerable<ProjectDBEntity> GetInactiveProjectsByCustomer(int customerID)
+		public IEnumerable<ProjectDBEntity> GetInactiveProjectsByCustomer(int customerId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@customerID", customerID);
+			parameters.Add("@customerId", customerId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -280,8 +280,8 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates a ProjectUser entry in the database, isActive must be specified as 0 or 1.
 		/// </summary>
-		/// <param name="projectId">The project ID.</param>
-		/// <param name="userId">The User ID.</param>
+		/// <param name="projectId">The project Id.</param>
+		/// <param name="userId">The User Id.</param>
 		/// <param name="isActive">Is active.</param>
 		/// <returns>The number of rows successfully updated.</returns>C:\Users\v-trsan\Desktop\AllyisApps\aa\src\main\aadb\StoredProcedures\TimeTracker
 		public int UpdateProjectUser(int projectId, int userId, int isActive)
@@ -329,7 +329,7 @@ namespace AllyisApps.DBModel
 		/// Updates the customer with the information specified in the customer table.
 		/// </summary>
 		/// <param name="customer">The table with the customer to create.</param>
-		/// <returns>The ID of the customer if one was created -1 if not.</returns>
+		/// <returns>The Id of the customer if one was created -1 if not.</returns>
 		public int CreateCustomerInfo(CustomerDBEntity customer)
 		{
 			if (customer == null)
@@ -349,7 +349,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@FaxNumber", customer.FaxNumber);
 			parameters.Add("@Website", customer.Website);
 			parameters.Add("@EIN", customer.EIN);
-			parameters.Add("@OrganizationID", customer.OrganizationId);
+			parameters.Add("@OrganizationId", customer.OrganizationId);
 			parameters.Add("@CustomerOrgId", customer.CustomerOrgId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 
@@ -363,7 +363,7 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Updates the customer with the specified ID.
+		/// Updates the customer with the specified Id.
 		/// </summary>
 		/// <param name="customer">The table with the customer to create.</param>
 		/// <return>1 if succeed, -1 if fail because CustOrgId is not unique.</return>
@@ -399,7 +399,7 @@ namespace AllyisApps.DBModel
 
 		/*
         /// <summary>
-        /// Updates the customer with the specified ID.
+        /// Updates the customer with the specified Id.
         /// </summary>
         /// <param name="customer">The table with the customer to create.</param>
         public void UpdateCustomer(CustomerDBEntity customer)
@@ -433,7 +433,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Retrieves the customer's information from the database.
 		/// </summary>
-		/// <param name="orgId">The organization's ID.</param>
+		/// <param name="orgId">The organization's Id.</param>
 		/// <returns>The CustomerDBEntity containing the customer's information, null if call fails.</returns>
 		public IEnumerable<CustomerDBEntity> GetCustomerList(int orgId)
 		{
@@ -450,14 +450,14 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Retrieves the customer's information from the database.
 		/// </summary>
-		/// <param name="customerID">The customer's ID.</param>
+		/// <param name="customerId">The customer's Id.</param>
 		/// <returns>The CustomerDBEntity containing the customer's information, null if call fails.</returns>
-		public CustomerDBEntity GetCustomerInfo(int customerID)
+		public CustomerDBEntity GetCustomerInfo(int customerId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default null
-				return connection.Query<CustomerDBEntity>("[Crm].[GetCustomerInfo]", new { CustomerId = customerID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return connection.Query<CustomerDBEntity>("[Crm].[GetCustomerInfo]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
 
@@ -508,13 +508,13 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Delete the specified customer.
 		/// </summary>
-		/// <param name="customerID">The customer's Id.</param>
+		/// <param name="customerId">The customer's Id.</param>
 		/// <returns>Customer's name if successful, empty string if not found.</returns>
-		public string DeleteCustomer(int customerID)
+		public string DeleteCustomer(int customerId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var result = connection.Query<string>("[Crm].[DeleteCustomer]", new { CustomerId = customerID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				var result = connection.Query<string>("[Crm].[DeleteCustomer]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure).SingleOrDefault();
 				if (result == null) { return ""; }
 				return result;
 			}
@@ -524,14 +524,14 @@ namespace AllyisApps.DBModel
         /// <summary>
 		/// Delete the specified customer.
 		/// </summary>
-		/// <param name="customerID">The customer's Id.</param>
+		/// <param name="customerId">The customer's Id.</param>
 		/// <returns>True if successful.</returns>
-		public bool DeleteCustomer(int customerID)
+		public bool DeleteCustomer(int customerId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default null
-				connection.Query<CustomerDBEntity>("[Crm].[DeleteCustomer]", new { CustomerId = customerID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				connection.Query<CustomerDBEntity>("[Crm].[DeleteCustomer]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 
 			return true;
@@ -541,13 +541,13 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Delete the specified customer.
 		/// </summary>
-		/// <param name="customerID">The customer's Id.</param>
+		/// <param name="customerId">The customer's Id.</param>
 		/// <returns>True if successful.</returns>
-		public string ReactivateCustomer(int customerID)
+		public string ReactivateCustomer(int customerId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var result = connection.Query<string>("[Crm].[ReactivateCustomer]", new { CustomerId = customerID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				var result = connection.Query<string>("[Crm].[ReactivateCustomer]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure).SingleOrDefault();
 				if (result == null) { return ""; }
 				return result;
 			}
@@ -645,8 +645,8 @@ namespace AllyisApps.DBModel
 		/// <param name="type">The pricing type of the project.</param>
 		/// <param name="start">The start date assigned to the project.</param>
 		/// <param name="end">The end date assigned to the project.</param>
-		/// <param name="userIDs">The updated list of project users, by their IDs.</param>
-		public void UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime? start, DateTime? end, IEnumerable<int> userIDs)
+		/// <param name="userIds">The updated list of project users, by their Ids.</param>
+		public void UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime? start, DateTime? end, IEnumerable<int> userIds)
 		{
 			if (string.IsNullOrWhiteSpace(name))
 			{
@@ -658,11 +658,11 @@ namespace AllyisApps.DBModel
 				throw new ArgumentException("OrgId cannot be null, empty, or whitespace.");
 			}
 
-			DataTable userIDsTable = new DataTable();
-			userIDsTable.Columns.Add("userId", typeof(int));
-			foreach (int userID in userIDs)
+			DataTable userIdsTable = new DataTable();
+			userIdsTable.Columns.Add("userId", typeof(int));
+			foreach (int userId in userIds)
 			{
-				userIDsTable.Rows.Add(userID);
+				userIdsTable.Rows.Add(userId);
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -672,7 +672,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@PriceType", type);
 			parameters.Add("@StartingDate", start == null ? null : start.Value.ToShortDateString());
 			parameters.Add("@EndingDate", end == null ? null : end.Value.ToShortDateString());
-			parameters.Add("@UserIDs", userIDsTable.AsTableValuedParameter("[Auth].[UserTable]"));
+			parameters.Add("@UserIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{

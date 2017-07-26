@@ -36,8 +36,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
 			ViewBag.GetDateFromDays = new Func<int, DateTime>(AppService.GetDateFromDays);
-            ViewBag.SignedInUserID = GetCookieData().UserId;
 
+            var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null, userId);
+
+            ViewBag.SignedInUserID = GetCookieData().UserId; ;
+            ViewBag.SelectedUserId = userId ;
+            ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infos.Item1.StartOfWeek));
+            ViewBag.WeekEnd = AppService.GetDayFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
 
             bool manager = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
 			ViewBag.canManage = manager;
@@ -63,7 +68,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         public ActionResult IndexNoUserId(int subscriptionId, int? startDate = null, int? endDate = null)
         {
             int userId = GetCookieData().UserId;
-            ViewBag.SignedInUserID = userId;
 
             this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
@@ -71,6 +75,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
             this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
             ViewBag.GetDateFromDays = new Func<int, DateTime>(AppService.GetDateFromDays);
+
+            var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null, userId);
+
+            
+            ViewBag.SignedInUserID = userId;
+            ViewBag.SelectedUserId = userId;
+            ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infos.Item1.StartOfWeek));
+            ViewBag.WeekEnd = AppService.GetDayFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
+
 
             bool manager = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
             ViewBag.canManage = manager;
@@ -90,10 +103,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <summary>
         /// Constructor for the TimeEntryOverDateRangeViewModel.
         /// </summary>
-        /// <param name="orgId">The Organization ID</param>
-        /// <param name="subId">The Subscription's ID</param>
+        /// <param name="orgId">The Organization Id</param>
+        /// <param name="subId">The Subscription's Id</param>
         /// <param name="subName">The Subscription's Name</param>
-        /// <param name="userId">The User ID.</param>
+        /// <param name="userId">The User Id.</param>
         /// <param name="manager">The Manager.</param>
         /// <param name="startingDate">The Starting Date.</param>
         /// <param name="endingDate">The Ending date.</param>
@@ -238,7 +251,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Duration = 8,
 						UserId = userId,
 						ProjectId = 0,
-						PayClassId = infos.Item2.Where(p => p.Name.Equals("Holiday")).FirstOrDefault().PayClassID,
+						PayClassId = infos.Item2.Where(p => p.Name.Equals("Holiday")).FirstOrDefault().PayClassId,
 						Description = holidays.Where(x => x.Date == date).First().HolidayName,
 					};
 
@@ -281,7 +294,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ProjectId = -1,
 						Projects = result.Projects,
 						ProjectsWithInactive = result.ProjectsWithInactive,
-						PayClassId = infos.Item2.Where(p => p.Name.Equals("Regular")).FirstOrDefault().PayClassID,
+						PayClassId = infos.Item2.Where(p => p.Name.Equals("Regular")).FirstOrDefault().PayClassId,
 						PayClasses = result.PayClasses,
 						Locked = (!result.CanManage && beforeLockDate),  //manager can still edit entries before lockdate
 						LockDate = result.LockDate,

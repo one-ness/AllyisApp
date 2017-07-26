@@ -20,7 +20,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Creates a payclass.
 		/// </summary>
 		/// <param name="newPayClass">The pay class to create.</param>
-		/// <param name="subscriptionId">Subscription ID</param>
+		/// <param name="subscriptionId">Subscription Id</param>
 		/// <returns>Redirects to the settings view.</returns>
 		public ActionResult CreatePayClass(string newPayClass, int subscriptionId)
 		{

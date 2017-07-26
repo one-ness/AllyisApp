@@ -161,8 +161,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Uses the time entry id to construct a new EditTimeEntryViewModel.
 		/// </summary>
-		/// <param name="timeEntryId">The time entry ID.</param>
-		/// <param name="subscriptionId">The subscription's ID</param>
+		/// <param name="timeEntryId">The time entry Id.</param>
+		/// <param name="subscriptionId">The subscription's Id</param>
 		/// <returns>The EditTimeEntryViewModel.</returns>
 		public EditTimeEntryViewModel ConstructEditTimeEntryViewModel(int timeEntryId, int subscriptionId)
 		{

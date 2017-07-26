@@ -14,9 +14,9 @@ namespace AllyisApps.Services.Billing
 	public class BillingHistoryItemInfo
 	{
 		/// <summary>
-		/// Gets or sets the organization ID.
+		/// Gets or sets the organization Id.
 		/// </summary>
-		public int OrganizationID { get; set; }
+		public int OrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the date.
@@ -29,9 +29,9 @@ namespace AllyisApps.Services.Billing
 		public string Description { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user ID.
+		/// Gets or sets the user Id.
 		/// </summary>
-		public int UserID { get; set; }
+		public int UserId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user name.
@@ -39,9 +39,9 @@ namespace AllyisApps.Services.Billing
 		public string UserName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the sku ID.
+		/// Gets or sets the sku Id.
 		/// </summary>
-		public int SkuID { get; set; }
+		public int SkuId { get; set; }
 
 		/// <summary>
 		/// Gets or sets sku name.
@@ -49,9 +49,9 @@ namespace AllyisApps.Services.Billing
 		public string SkuName { get; set; }
 
 		/// <summary>
-		/// Gets or sets product ID.
+		/// Gets or sets product Id.
 		/// </summary>
-		public int ProductID { get; set; }
+		public int ProductId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the product name.
