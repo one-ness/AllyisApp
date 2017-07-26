@@ -133,7 +133,7 @@ async function updateTimes(values) {
 		hours += parseInt(entry[0]);
 		minutes += parseInt(entry[1]);
 	}
-	alert("Elements " + (hours + (minutes / 60) + ":" + (minutes % 60)));
+	//alert("Elements " + (hours + (minutes / 60) + ":" + (minutes % 60)));
 
 	var currentVal = $('#totalHours').text().split(":"),
 	    updateVal = values.duration.split(":"),
