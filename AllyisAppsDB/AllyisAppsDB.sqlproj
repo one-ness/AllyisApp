@@ -82,6 +82,7 @@
     <Folder Include="Expense\" />
     <Folder Include="Expense\Tables\" />
     <Folder Include="Finance\Stored Procedures" />
+    <Folder Include="Expense\Stored Procedures" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TimeTracker\Tables\Holiday.sql" />
@@ -279,6 +280,10 @@
     <Build Include="Auth\Tables\Permission.sql" />
     <Build Include="Auth\Tables\Action.sql" />
     <Build Include="Security\Hrm.sql" />
+    <Build Include="Expense\Stored Procedures\GetExpenseItemByAccountId.sql" />
+    <Build Include="Expense\Stored Procedures\GetExpenseItemByExpenseItemId.sql" />
+    <Build Include="Expense\Stored Procedures\CreateExpenseItem.sql" />
+    <Build Include="Expense\Stored Procedures\UpdateExpenseItem.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
