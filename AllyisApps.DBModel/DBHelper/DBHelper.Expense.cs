@@ -66,7 +66,7 @@ namespace AllyisApps.DBModel
         /// <summary>
         /// Gets the Expense Item with the corresponding ID
         /// </summary>
-        /// <param name="ExpenseItemId">The id of the parent account</param>
+        /// <param name="ExpenseItemId"> the ID of the Expense Item</param>
         /// <returns>A collection of accounts.</returns>
         public ExpenseItemDBEntity GetExpenseItemByExpenseItemId(int ExpenseItemId)
 		{
@@ -83,7 +83,7 @@ namespace AllyisApps.DBModel
         /// <summary>
         /// Updates the Expense Item with the specified ID.
         /// </summary>
-        /// <param name="item">The table with the user to create.</param>
+        /// <param name="item">The expense item object that will replace the previous entry.</param>
         public void UpdateExpenseItem(ExpenseItemDBEntity item)
         {
             if (item == null)
@@ -108,5 +108,21 @@ namespace AllyisApps.DBModel
             }
         }
 
+
+        /// <summary>
+        /// Deletes an Expense Item with a given id.
+        /// </summary>
+        /// <param name="ExpenseItemId">The id of the expense item to be deleted</param>
+        /// <returns>Boolean to determine if the process succeeded in finding the item</returns>
+        public bool DeleteExpenseItem(int ExpenseItemId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@ExpenseItemId", ExpenseItemId);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                return connection.Query<int>("[Expense].[DeleteExpenseItem]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault() == 1;
+            }
+        }
     }
 }
