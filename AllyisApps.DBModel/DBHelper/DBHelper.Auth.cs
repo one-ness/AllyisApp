@@ -555,13 +555,13 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="employeeType">The employee type's name.</param>
 		/// <returns>The id of the employee type.</returns>
-		public int GetEmployeeTypeIdByTypeName(string employeeType)
+		public byte GetEmployeeTypeIdByTypeName(string employeeType)
 		{
 			DynamicParameters param = new DynamicParameters();
 			param.Add("@EmployeeType", employeeType);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<int>("[Auth].[GetEmployeeTypeId]", param, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return connection.Query<byte>("[Auth].[GetEmployeeTypeId]", param, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
 
