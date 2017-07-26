@@ -44,11 +44,6 @@ namespace AllyisApps.DBModel.Auth
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the name of the inviting organization.
-		/// </summary>
-		public string OrganizationName { get; set; }
-
-		/// <summary>
 		/// Gets or sets the access code associated with the invitation.
 		/// </summary>
 		public string AccessCode { get; set; }
