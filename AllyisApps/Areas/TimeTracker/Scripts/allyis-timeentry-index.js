@@ -59,6 +59,7 @@ function ajaxDelete(form_child, delete_action_url) {
 			if (res.status === 'success') {
 				form_wrap.css({ 'z-index': -1000 }).transition({ 'max-height': 0, duration: 500, easing: 'linear' },
 					function () { form_wrap.remove(); });
+				updateTimes(res.values);
 				//ajaxApproveReject_markPendingIfSet(form_element);
 				//ajaxUpdateUserSummary();
 			}
@@ -107,7 +108,8 @@ function ajaxCreate(form_element, create_action_url) {
 
 function ajaxUpdateValues(form_element, values) {
 	form_element = $(form_element);
-	updateTimes(values);
+
+	form_element.hasClass("create") ? updateTimes(values) : editTimes(values);
 	if (values.duration) {
 		form_element.find("[name='Duration']").val(values.duration);
 	}
@@ -123,20 +125,53 @@ function ajaxUpdateValues(form_element, values) {
 	}
 }
 
-async function updateTimes(values) {
-	var elements = document.getElementsByName("entry-" + values.projectId);
-	var hours = 0;
-	var minutes = 0;
-	for (var i = 0; i < elements.length; i++)
-	{
-		var entry = elements[i].firstElementChild.value.split(":");
-		hours += parseInt(entry[0]);
-		minutes += parseInt(entry[1]);
+async function editTimes(values) {
+	var elements = document.getElementsByName("entry-" + values.projectId),
+		totalTime = $('#totalHours').text().split(":"),
+		totalHours = parseInt(totalTime[0]),
+		totalMinutes = parseInt(totalTime[1]),
+		projectCurrentTotal = $('#' + values.projectId).text().split(":"),
+		projectCurrentHours = parseInt(projectCurrentTotal[0]),
+		projectCurrentMinutes = parseInt(projectCurrentTotal[1]),
+		updatedHours = 0,
+		updatedMinutes = 0;
+
+	for (var i = 0; i < elements.length; i++) {
+		var duration = elements[i].firstElementChild.value.split(":");
+		updatedHours += parseInt(duration[0]);
+		updatedMinutes += parseInt(duration[1]);
 	}
-	//alert("Elements " + (hours + (minutes / 60) + ":" + (minutes % 60)));
+	if (updatedMinutes >= 60) {
+		updatedHours += updatedMinutes / 60;
+		updatedMinutes = updatedMinutes % 60;
+	}
+
+
+	$('#' + values.projectId).fadeOut(500, function () {
+		$('#' + values.projectId).text(Math.floor(updatedHours) + ":" + (updatedMinutes < 10 ? "0" + updatedMinutes : updatedMinutes)).fadeIn(500);
+	});
+
+	totalHours = totalHours + (updatedHours - projectCurrentHours);
+	totalMinutes = totalMinutes + (updatedMinutes - projectCurrentMinutes);
+	if (totalMinutes >= 60)
+	{
+		totalHours += totalMinutes / 60;
+		totalMinutes = totalMinutes % 60;
+	}
+	$('#totalHours').fadeOut(500, function () {
+		$('#totalHours').text(Math.floor(totalHours) + ":" + (Math.abs(totalMinutes) < 10 ? "0" + Math.abs(totalMinutes) : Math.abs(totalMinutes))).fadeIn(500);
+	})
+}
+
+async function updateTimes(values) {
+	if ($('#' + values.projectId) === null)
+	{
+		var table = document.getElementsByClassName("table table-condensed");
+		alert("TABLE: " + table === null);
+	}
 
 	var currentVal = $('#totalHours').text().split(":"),
-	    updateVal = values.duration.split(":"),
+		updateVal = values.duration.split(":"),
 		projectVal = $('#' + values.projectId).text().split(":");
 
 	var projectHours = parseInt(projectVal[0]),
@@ -147,31 +182,26 @@ async function updateTimes(values) {
 		minuteUpdate = parseInt(updateVal[1]);
 
 	var projHour = projectHours + hourUpdate;
-	var projMinute = projectMinutes + minuteUpdate;
+	var projMinute = projectMinutes + (Math.sign(hourUpdate) === -1 ? minuteUpdate * -1 : minuteUpdate);
 	if (projMinute >= 60) {
 		projHour += projMinute / 60;
 		projMinute = projMinute % 60;
 	}
 
-	var totalHour = projectHours + hourUpdate;
-	var totalMinute = projectMinutes + minuteUpdate;
+	var totalHour = totalHours + hourUpdate;
+	var totalMinute = totalMinutes + minuteUpdate;
 	if (totalMinute >= 60) {
 		totalHour += totalMinute / 60;
 		totalMinute = totalMinute % 60;
 	}
 
 	$('#' + values.projectId).fadeOut(500, function () {
-		$('#' + values.projectId).text(projHour + ":" + (projMinute < 10 ? "0" + projMinute : projMinute)).fadeIn(500);
+		$('#' + values.projectId).text(projHour + ":" + (Math.abs(projMinute) < 10 ? "0" + Math.abs(projMinute) : Math.abs(projMinute))).fadeIn(500);
 	});
 
 	$('#totalHours').fadeOut(500, function () {
-		$('#totalHours').text(totalHour + ":" + (totalMinute < 10 ? "0" + totalMinute : totalMinute)).fadeIn(500);
+		$('#totalHours').text(Math.floor(totalHour) + ":" + (Math.abs(totalMinute) < 10 ? "0" + Math.abs(totalMinute) : Math.abs(totalMinute))).fadeIn(500);
 	});
-}
-
-async function subtractTimes(values)
-{
-
 }
 
 function appendNewEntryForm(container_element) {
@@ -180,10 +210,9 @@ function appendNewEntryForm(container_element) {
 	var new_entry = sample_element.clone().appendTo(container_element);
 	new_entry.css('height'); //read a css attribute so we can be sure it was rendered before triggering the animation
 	new_entry.removeClass("hidden-sample");
-	var delay = 300; //delay in milliseconds
 	setTimeout(function () {  //Need to delay focus while ajax makes the new row
 		new_entry.find("[name=Duration]").focus();
-	}, delay);
+	}, 300);
 }
 
 function ajaxEdit(form_element, edit_action_url) {
@@ -199,7 +228,7 @@ function ajaxEdit(form_element, edit_action_url) {
 		dataType: "json"
 	})
 		.done(function (res) {
-			if (res.message !== null) {
+			if (res.status === 'error') {
 				form_element.addClass("error error-submit");
 			}
 			ajaxHandleOverridingResponses(res, { form_element: form_element });
