@@ -140,5 +140,29 @@ namespace AllyisApps.DBModel
 
 			return parameters.Get<int>("@returnValue");
 		}
+
+
+		////////////////////////////
+		/*         DELETE         */
+		////////////////////////////
+
+		/// <summary>
+		/// Sets the given account to inactive (IsActive == false)
+		/// </summary>
+		/// <param name="AccountId">Parameter @organizationId. </param>
+		/// <returns>
+		///		True if delete was successfull
+		///		False if accountid doesn't exist OR the account is already inactive
+		/// </returns>
+		public bool DeleteAccount(int AccountId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@AccountId", AccountId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<int>("[Finance].[DeleteAccount]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault() == 1;
+			}
+		}
 	}
 }
