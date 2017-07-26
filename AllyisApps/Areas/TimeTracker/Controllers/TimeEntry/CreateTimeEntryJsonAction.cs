@@ -85,7 +85,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Description = model.Description
 				});
 
-				return this.Json(new { status = "success", values = new { duration = this.GetDurationDisplay(model.Duration), description = model.Description, projectId = model.ProjectId, id = id } });
+				return this.Json(new { status = "success", values = new { duration = this.GetDurationDisplay(model.Duration), description = model.Description, projectId = model.ProjectId, id = id, projectName = AppService.GetProject(model.ProjectId).ProjectName } });
 			}
 			catch (ArgumentException e)
 			{

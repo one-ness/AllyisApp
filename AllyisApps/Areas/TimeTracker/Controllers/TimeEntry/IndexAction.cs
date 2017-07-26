@@ -36,8 +36,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
 			ViewBag.GetDateFromDays = new Func<int, DateTime>(AppService.GetDateFromDays);
-            ViewBag.SignedInUserId = GetCookieData().UserId;
 
+            var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null, userId);
+
+            ViewBag.SignedInUserID = GetCookieData().UserId; ;
+            ViewBag.SelectedUserId = userId ;
+            ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infos.Item1.StartOfWeek));
+            ViewBag.WeekEnd = AppService.GetDayFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
 
             bool manager = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
 			ViewBag.canManage = manager;
@@ -63,7 +68,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         public ActionResult IndexNoUserId(int subscriptionId, int? startDate = null, int? endDate = null)
         {
             int userId = GetCookieData().UserId;
-            ViewBag.SignedInUserId = userId;
 
             this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
@@ -71,6 +75,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
             this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
             ViewBag.GetDateFromDays = new Func<int, DateTime>(AppService.GetDateFromDays);
+
+            var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null, userId);
+
+            
+            ViewBag.SignedInUserID = userId;
+            ViewBag.SelectedUserId = userId;
+            ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infos.Item1.StartOfWeek));
+            ViewBag.WeekEnd = AppService.GetDayFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
+
 
             bool manager = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
             ViewBag.canManage = manager;

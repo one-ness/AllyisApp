@@ -594,9 +594,6 @@ namespace AllyisApps.Services
 				OrganizationId = organizationUser.OrganizationId,
 				OrgRoleId = organizationUser.OrgRoleId,
 				UserId = organizationUser.UserId,
-				Email = organizationUser.Email,
-				FirstName = organizationUser.FirstName,
-				LastName = organizationUser.LastName,
 				EmployeeTypeId = (EmployeeType)organizationUser.EmployeeTypeId
 			};
 		}
@@ -681,7 +678,6 @@ namespace AllyisApps.Services
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
-				OrganizationName = invitation.OrganizationName,
 				OrganizationRole = (OrganizationRole)invitation.OrgRoleId,
 				EmployeeId = invitation.EmployeeId,
 				EmployeeType = (EmployeeType)invitation.EmployeeTypeId
