@@ -40,7 +40,8 @@ namespace AllyisApps.Controllers
 				Description = sku.Description,
 				SubscriptionId = id,
 				OrganizationId = orgId,
-				ProductId = sku.ProductId
+				ProductId = sku.ProductId,
+				SubscriptionName = "" // TODO: make this available in infos via stored procedure.
 			};
 			return this.View(ViewConstants.EditSubscription, model);
 		}
