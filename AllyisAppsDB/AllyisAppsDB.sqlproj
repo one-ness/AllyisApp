@@ -81,6 +81,7 @@
     <Folder Include="Finance\Tables\" />
     <Folder Include="Expense\" />
     <Folder Include="Expense\Tables\" />
+    <Folder Include="Finance\Stored Procedures" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TimeTracker\Tables\Holiday.sql" />
@@ -274,6 +275,7 @@
     <Build Include="Security\Finance.sql" />
     <Build Include="Security\Expense.sql" />
     <Build Include="Security\Pjm.sql" />
+    <Build Include="Finance\Stored Procedures\GetAccountsByParentId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
