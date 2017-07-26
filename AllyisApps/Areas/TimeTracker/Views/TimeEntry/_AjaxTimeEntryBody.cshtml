@@ -38,8 +38,8 @@
         @Html.HiddenFor(m => m.Date).RemoveIdAttribute()
         @Html.HiddenFor(m => m.StartingDate).RemoveIdAttribute()
         @Html.HiddenFor(m => m.EndingDate).RemoveIdAttribute()
-        <div class="group left" style="width: 70px;">
-            @Html.TextBoxDisabledFor(m => Model.Duration, locked, new { @class = "form-control", @onchange = "changeOccur(this)", @onkeypress = "keyDown(event, this)", @size = 5, @maxlength = 5, @placeholder = "HH:MM" }).RemoveIdAttribute()
+        <div class="group left" style="width: 70px;" name="entry-@Model.ProjectId">
+            @Html.TextBoxDisabledFor(m => Model.Duration, locked, new { @class = "form-control", @onchange = "changeOccur(this)", @onkeypress = "keyDown(event, this)", @size = 5, @maxlength = 5, @placeholder = "HH:MM", @id = "entry-" +Model.ProjectId }).RemoveIdAttribute()
         </div>
         <div class="group left" style="width: 250px;">
             @if (locked)
