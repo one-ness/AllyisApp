@@ -26,13 +26,13 @@ namespace AllyisApps.Controllers
 		{
 			List<LanguageViewModel> languages = AppService.ValidLanguages().Select(l => new LanguageViewModel
 			{
-				LanguageID = l.LanguageId,
+				LanguageId = l.LanguageId,
 				LanguageName = l.LanguageName,
 				CultureName = l.CultureName
 			}).ToList();
-			//int orgID = this.AppService.UserContext == null ? 0 : this.AppService.UserContext.ChosenOrganizationId;
+			//int orgId = this.AppService.UserContext == null ? 0 : this.AppService.UserContext.ChosenOrganizationId;
 			var model = languages;
-			ViewData["LanguageID"] = AppService.UserContext != null ? AppService.UserContext.ChosenLanguageId : TempData["language"];
+			ViewData["LanguageId"] = AppService.UserContext != null ? AppService.UserContext.ChosenLanguageId : TempData["language"];
 			return this.View(ViewConstants.Footer, model);
 		}
 	}

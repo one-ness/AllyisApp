@@ -12,7 +12,7 @@ namespace AllyisApps.DBModel.Auth
 	public class OrgRoleDBEntity
 	{
 		/// <summary>
-		/// Gets or sets the OrgRoleID.
+		/// Gets or sets the OrgRoleId.
 		/// </summary>
 		public int OrgRoleId { get; set; }
 

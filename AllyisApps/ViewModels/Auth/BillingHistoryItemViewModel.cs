@@ -17,9 +17,9 @@ namespace AllyisApps.ViewModels.Auth
 		public long Date { get; set; }
 
 		/// <summary>
-		/// Gets or sets the stipe ID of this item if it is an invoice or charge.
+		/// Gets or sets the stipe Id of this item if it is an invoice or charge.
 		/// </summary>
-		public string ID { get; set; }
+		public string Id { get; set; }
 
 		/// <summary>
 		/// Gets or sets a description of this item.

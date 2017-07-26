@@ -74,7 +74,7 @@ BEGIN
 		END
 	ELSE
 		BEGIN --Specific organization's users
-			DECLARE @SubscriptionID INT = 
+			DECLARE @SubscriptionId INT = 
 				(SELECT TOP 1 [SubscriptionId] 
 				FROM [Billing].[Subscription] WITH (NOLOCK) 
 				WHERE [OrganizationId] = @OrganizationId 
@@ -87,7 +87,7 @@ BEGIN
 				 @PayClassId AS [PayClassId], 
 				 NULL AS 'FirstProject' 
 			INTO #OrgTmp 
-			FROM [Billing].[SubscriptionUser] WITH (NOLOCK) WHERE [SubscriptionId] = @SubscriptionID;
+			FROM [Billing].[SubscriptionUser] WITH (NOLOCK) WHERE [SubscriptionId] = @SubscriptionId;
 
 			Declare @FirstProejct as int
 			set @FirstProject = (SELECT TOP 1 [ProjectId] 

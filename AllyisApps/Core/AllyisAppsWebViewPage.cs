@@ -72,7 +72,7 @@ namespace AllyisApps.Core
 		public bool ShowBreadcrumbs { get; set; }
 
 		/// <summary>
-		/// Gets or sets the HTML ID for the page's body element. Use to restrict CSS styles to specific pages.
+		/// Gets or sets the HTML Id for the page's body element. Use to restrict CSS styles to specific pages.
 		/// </summary>
 		public string PageBodyId { get; set; }
 

@@ -18,7 +18,7 @@ namespace AllyisApps.ViewModels.Auth
 	public class ManageOrgViewModel : BaseViewModel
 	{
 		/// <summary>
-		/// Gets or sets the organization's ID.
+		/// Gets or sets the organization's Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
 

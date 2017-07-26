@@ -31,12 +31,12 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public IEnumerable<Holiday> Holidays { get; set; }
 
 		/// <summary>
-		/// Subscription ID for the customer
+		/// Subscription Id for the customer
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
 		/// <summary>
-		/// User's ID
+		/// User's Id
 		/// </summary>
 		public int UserId { get; set; }
 	}

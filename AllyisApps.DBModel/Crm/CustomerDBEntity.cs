@@ -89,7 +89,7 @@ namespace AllyisApps.DBModel.Crm
 		/// <summary>
 		/// Gets or sets the id of the organization associated with the customer.
 		/// </summary>
-		[DisplayName("OrganizationID")]
+		[DisplayName("OrganizationId")]
 		public int OrganizationId { get; set; }
 
 		/// <summary>

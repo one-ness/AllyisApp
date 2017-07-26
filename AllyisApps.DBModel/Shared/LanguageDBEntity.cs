@@ -12,9 +12,9 @@ namespace AllyisApps.DBModel.Shared
 	public class LanguageDBEntity
 	{
 		/// <summary>
-		/// Gets or sets the language ID.
+		/// Gets or sets the language Id.
 		/// </summary>
-		public int LanguageID { get; set; }
+		public int LanguageId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the language name.

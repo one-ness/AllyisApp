@@ -283,6 +283,7 @@
     <Build Include="Finance\Stored Procedures\GetAccountsByAccountTypeId.sql" />
     <Build Include="Finance\Stored Procedures\CreateAccount.sql" />
     <Build Include="Finance\Stored Procedures\UpdateAccount.sql" />
+    <Build Include="Lookup\Tables\Address.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

@@ -72,13 +72,13 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Retrieves a language setting from the database.
 		/// </summary>
-		/// <param name="languageID">The language ID.</param>
+		/// <param name="languageId">The language Id.</param>
 		/// <returns>A language setting row.</returns>
-		public LanguageDBEntity GetLanguage(int languageID)
+		public LanguageDBEntity GetLanguage(int languageId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<LanguageDBEntity>("[Lookup].[GetLanguageByID]", new { LanguageID = languageID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return connection.Query<LanguageDBEntity>("[Lookup].[GetLanguageById]", new { LanguageId = languageId }, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
 	}

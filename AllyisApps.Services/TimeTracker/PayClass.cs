@@ -24,7 +24,7 @@ namespace AllyisApps.Services.TimeTracker
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets the organization ID.
+		/// Gets or sets the organization Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
 
@@ -32,10 +32,5 @@ namespace AllyisApps.Services.TimeTracker
 		/// Gets or sets the Created time.
 		/// </summary>
 		public DateTime CreatedUtc { get; set; }
-
-		/// <summary>
-		/// Gets or sets the modified time.
-		/// </summary>
-		public DateTime ModifiedUtc { get; set; }
 	}
 }

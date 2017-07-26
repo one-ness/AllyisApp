@@ -31,7 +31,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserContext"/> class.
 		/// </summary>
-		public UserContext(int userId, string email, string firstName, string lastName, int chosenLanguageID = 0) : this()
+		public UserContext(int userId, string email, string firstName, string lastName, int chosenLanguageId = 0) : this()
 		{
 			if (userId <= 0) throw new ArgumentException("userId");
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentException("firstName");
@@ -42,7 +42,7 @@ namespace AllyisApps.Services
 			this.UserId = userId;
 			this.FirstName = firstName;
 			this.LastName = lastName;
-			this.ChosenLanguageId = chosenLanguageID;
+			this.ChosenLanguageId = chosenLanguageId;
 		}
 
 		/// <summary>

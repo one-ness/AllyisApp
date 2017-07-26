@@ -4,7 +4,7 @@ CREATE TABLE [Auth].[OrganizationUser] (
     [EmployeeId]     NVARCHAR (16) NOT NULL,
     [OrgRoleId]      INT           NOT NULL,
     [EmployeeTypeId] TINYINT       NOT NULL,
-    [CreatedUtc]     DATETIME2 (0) CONSTRAINT [DF__Organizat__Creat__5629CD9C] DEFAULT (getutcdate()) NOT NULL,
+    [CreatedUtc]     DATETIME2 (0) DEFAULT (getutcdate()) NOT NULL,
     CONSTRAINT [PK_OrganizationUser] PRIMARY KEY CLUSTERED ([UserId] ASC, [OrganizationId] ASC),
     CONSTRAINT [FK_OrganizationUser_EmployeeType] FOREIGN KEY ([EmployeeTypeId]) REFERENCES [Auth].[EmployeeType] ([EmployeeTypeId]),
     CONSTRAINT [FK_OrganizationUser_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),
