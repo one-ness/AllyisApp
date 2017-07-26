@@ -31,7 +31,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Date this user was added to the organization.
 		/// </summary>
-		public DateTime CreatedUTC { get; set; }
+		public DateTime CreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Employee Id.

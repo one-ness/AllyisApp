@@ -1,6 +1,8 @@
 ﻿CREATE TABLE [Auth].[EmployeeType] (
-    [EmployeeTypeId] INT            NOT NULL,
-    [Name]           NVARCHAR (100) NOT NULL,
-    PRIMARY KEY CLUSTERED ([EmployeeTypeId] ASC)
+    [EmployeeTypeId] TINYINT       NOT NULL,
+    [Name]           NVARCHAR (16) NOT NULL,
+    CONSTRAINT [PK__Employee__1F1B6A94CED880D0] PRIMARY KEY CLUSTERED ([EmployeeTypeId] ASC)
 );
+
+
 

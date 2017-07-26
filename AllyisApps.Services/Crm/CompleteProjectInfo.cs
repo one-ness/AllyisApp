@@ -41,7 +41,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Date/time of creation.
 		/// </summary>
-		public DateTime CreatedUTC { get; set; }
+		public DateTime CreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Name of the project.

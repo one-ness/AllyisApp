@@ -34,13 +34,13 @@ namespace AllyisApps.DBModel.TimeTracker
 		public DateTime Date { get; set; }
 
 		/// <summary>
-		/// Gets or sets the CreatedUTC.
+		/// Gets or sets the CreatedUtc.
 		/// </summary>
-		public DateTime CreatedUTC { get; set; }
+		public DateTime CreatedUtc { get; set; }
 
 		/// <summary>
-		/// Gets or sets the ModifiedUTC.
+		/// Gets or sets the ModifiedUtc.
 		/// </summary>
-		public DateTime ModifiedUTC { get; set; }
+		public DateTime ModifiedUtc { get; set; }
 	}
 }

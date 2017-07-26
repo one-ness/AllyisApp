@@ -15,7 +15,7 @@ BEGIN
 	IF @ProjectName IS NOT NULL
 	BEGIN --Project found
 		UPDATE [Crm].[Project]
-		SET [IsActive] = 0, [EndUTC] = @DeactivateDate
+		SET [IsActive] = 0, [EndUtc] = @DeactivateDate
 		WHERE [ProjectId] = @ProjectId
 	 
 		UPDATE [Crm].[ProjectUser] SET [IsActive] = 0

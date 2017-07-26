@@ -66,7 +66,7 @@ namespace AllyisApps.Services.Billing
 		/// <summary>
 		/// Gets or sets a Date the entry was added.
 		/// </summary>
-		public DateTime CreatedUTC { get; set; }
+		public DateTime CreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets a String representing the tier of the subscription.

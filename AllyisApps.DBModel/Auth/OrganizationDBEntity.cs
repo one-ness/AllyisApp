@@ -76,7 +76,7 @@ namespace AllyisApps.DBModel.Auth
 		/// Gets or sets DateCreated.
 		/// </summary>
 		[DisplayName("Date Created")]
-		public DateTime CreatedUTC { get; set; }
+		public DateTime CreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the user has permissions to edit organization.

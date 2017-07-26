@@ -4,15 +4,19 @@
     [ProjectId]   INT            NOT NULL,
     [Date]        DATETIME2 (0)  NOT NULL,
     [Duration]    FLOAT (53)     NOT NULL,
-    [Description] NVARCHAR (120) NULL,
-    [LockSaved]   BIT            DEFAULT ((0)) NOT NULL,
-    [PayClassId]  INT            DEFAULT ('Regular') NOT NULL,
-    [CreatedUTC]  DATETIME2 (0)  DEFAULT (getutcdate()) NOT NULL,
-    [ModifiedUTC] DATETIME2 (0)  DEFAULT (getutcdate()) NOT NULL,
-    PRIMARY KEY NONCLUSTERED ([TimeEntryId] ASC),
+    [Description] NVARCHAR (128) NULL,
+    [LockSaved]   BIT            NOT NULL,
+    [PayClassId]  INT            NOT NULL,
+    [CreatedUtc]  DATETIME2 (0)  NOT NULL,
+    [ModifiedUtc] DATETIME2 (0)  NOT NULL,
+    CONSTRAINT [PK_TimeEntry] PRIMARY KEY NONCLUSTERED ([TimeEntryId] ASC),
     CONSTRAINT [FK_TimeEntry_Project] FOREIGN KEY ([ProjectId]) REFERENCES [Crm].[Project] ([ProjectId]),
-    CONSTRAINT [FK_TimeEntry_UserId] FOREIGN KEY ([UserId]) REFERENCES [Auth].[User] ([UserId])
+    CONSTRAINT [FK_TimeEntry_User] FOREIGN KEY ([UserId]) REFERENCES [Auth].[User] ([UserId])
 );
+
+
+
+
 
 
 GO
@@ -24,6 +28,6 @@ GO
 
 CREATE TRIGGER [TimeTracker].trg_update_TimeEntry ON [TimeTracker].[TimeEntry] FOR UPDATE AS
 BEGIN
-	UPDATE [TimeTracker].[TimeEntry] SET [ModifiedUTC] = CONVERT(DATETIME2(0), GETUTCDATE()) 
+	UPDATE [TimeTracker].[TimeEntry] SET [ModifiedUtc] = CONVERT(DATETIME2(0), GETUtcDATE()) 
 	WHERE [TimeEntryId] IN (SELECT [TimeEntryId] FROM [deleted]);
 END

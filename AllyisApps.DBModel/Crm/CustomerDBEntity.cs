@@ -83,8 +83,8 @@ namespace AllyisApps.DBModel.Crm
 		/// <summary>
 		/// Gets or sets the date the customer was created.
 		/// </summary>
-		[DisplayName("Created UTC")]
-		public string CreatedUTC { get; set; }
+		[DisplayName("Created Utc")]
+		public string CreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets the id of the organization associated with the customer.

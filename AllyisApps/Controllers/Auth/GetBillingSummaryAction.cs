@@ -47,7 +47,7 @@ namespace AllyisApps.Controllers
 				{
 					result.Add(new BillingHistoryItemViewModel
 					{
-						Date = ConvertUTCDateTimeToEpoch(invoice.Date.Value),
+						Date = ConvertUtcDateTimeToEpoch(invoice.Date.Value),
 						ID = invoice.Id,
 						Description = string.Format("{0} invoice - Amount due: {1:C}", invoice.Service, invoice.AmountDue / 100.0), // Only works for USD right now //LANGUAGE Update to use resource file to change message language
 						ProductName = invoice.ProductName,
@@ -59,7 +59,7 @@ namespace AllyisApps.Controllers
 				{
 					result.Add(new BillingHistoryItemViewModel
 					{
-						Date = ConvertUTCDateTimeToEpoch(charge.Created),
+						Date = ConvertUtcDateTimeToEpoch(charge.Created),
 						ID = charge.Id,
 						Description = string.Format("{0} charge - Amount paid: {1:C}", charge.Service, charge.Amount / 100.0), // Only works for USD right now //LANGUAGE Update to use resource file to change message language
 						ProductName = charge.StatementDescriptor,
@@ -73,7 +73,7 @@ namespace AllyisApps.Controllers
 			{
 				result.Add(new BillingHistoryItemViewModel
 				{
-					Date = ConvertUTCDateTimeToEpoch(item.Date),
+					Date = ConvertUtcDateTimeToEpoch(item.Date),
 					ID = string.Empty,
 					Description = item.Description,
 					ProductName = item.SkuName,
@@ -87,9 +87,9 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Helper method for getting history item dates into a format that javascript can convert into local time on the client side.
 		/// </summary>
-		/// <param name="utcDate">Datetime, in UTC.</param>
+		/// <param name="utcDate">Datetime, in Utc.</param>
 		/// <returns>Datetime in ms since the BEGINNING OF ALL TIME (Jan 1st, 1970).</returns>
-		public long ConvertUTCDateTimeToEpoch(DateTime utcDate)
+		public long ConvertUtcDateTimeToEpoch(DateTime utcDate)
 		{
 			return (long)utcDate.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
 		}
