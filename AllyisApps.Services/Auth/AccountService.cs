@@ -409,7 +409,6 @@ namespace AllyisApps.Services
 			DBHelper.UpdateUser(new UserDBEntity
 			{
 				AccessFailedCount = model.AccessFailedCount,
-				ActiveOrganizationId = model.ActiveOrganizationId,
 				Address = model.Address,
 				City = model.City,
 				Country = model.Country,
@@ -418,7 +417,6 @@ namespace AllyisApps.Services
 				EmailConfirmed = model.EmailConfirmed,
 				FirstName = model.FirstName,
 				LastName = model.LastName,
-				LastSubscriptionId = model.LastSubscriptionId,
 				LockoutEnabled = model.LockoutEnabled,
 				LockoutEndDateUtc = model.LockoutEndDateUtc,
 				PasswordHash = model.PasswordHash,
@@ -630,7 +628,6 @@ namespace AllyisApps.Services
 			return new User
 			{
 				AccessFailedCount = user.AccessFailedCount,
-				ActiveOrganizationId = user.ActiveOrganizationId,
 				Address = user.Address,
 				City = user.City,
 				Country = user.Country,
@@ -639,7 +636,6 @@ namespace AllyisApps.Services
 				EmailConfirmed = user.EmailConfirmed,
 				FirstName = user.FirstName,
 				LastName = user.LastName,
-				LastSubscriptionId = user.LastSubscriptionId,
 				LockoutEnabled = user.LockoutEnabled,
 				LockoutEndDateUtc = user.LockoutEndDateUtc,
 				PasswordHash = user.PasswordHash,
@@ -669,7 +665,6 @@ namespace AllyisApps.Services
 			return new UserDBEntity
 			{
 				AccessFailedCount = user.AccessFailedCount,
-				ActiveOrganizationId = user.ActiveOrganizationId,
 				Address = user.Address,
 				City = user.City,
 				Country = user.Country,
@@ -678,7 +673,6 @@ namespace AllyisApps.Services
 				EmailConfirmed = user.EmailConfirmed,
 				FirstName = user.FirstName,
 				LastName = user.LastName,
-				LastSubscriptionId = user.LastSubscriptionId,
 				LockoutEnabled = user.LockoutEnabled,
 				LockoutEndDateUtc = user.LockoutEndDateUtc,
 				PasswordHash = user.PasswordHash,
