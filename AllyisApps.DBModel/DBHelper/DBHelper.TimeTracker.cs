@@ -25,12 +25,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Returns the lock date for a specific organization.
 		/// </summary>
-		/// <param name="organizationID">The Organization Id.</param>
+		/// <param name="organizationId">The Organization Id.</param>
 		/// <returns>The lock date.</returns>
-		public LockDateDBEntity GetLockDate(int organizationID)
+		public LockDateDBEntity GetLockDate(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationID", organizationID);
+			parameters.Add("@organizationId", organizationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -47,7 +47,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@holidayName", newHoliday.HolidayName);
 			parameters.Add("@date", newHoliday.Date);
-			parameters.Add("@organizationID", newHoliday.OrganizationId);
+			parameters.Add("@organizationId", newHoliday.OrganizationId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				newHoliday.HolidayId = connection.Query<int>("[TimeTracker].[CreateHoliday]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
@@ -59,13 +59,13 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="holidayName">The HolidayDBEntity to delete.</param>
 		/// <param name="date">The HolidayDBEntity to delete.</param>
-		/// <param name="organizationID">The HolidayDBEntity to delete.</param>
-		public void DeleteHoliday(string holidayName, DateTime date, int organizationID)
+		/// <param name="organizationId">The HolidayDBEntity to delete.</param>
+		public void DeleteHoliday(string holidayName, DateTime date, int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@holidayName", holidayName);
 			parameters.Add("@date", date);
-			parameters.Add("@organizationID", organizationID);
+			parameters.Add("@organizationId", organizationId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[TimeTracker].[DeleteHoliday]", parameters, commandType: CommandType.StoredProcedure);
@@ -80,7 +80,7 @@ namespace AllyisApps.DBModel
 		public IEnumerable<HolidayDBEntity> GetHolidays(int organizationId = 0)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationID", organizationId);
+			parameters.Add("@organizationId", organizationId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<HolidayDBEntity>("[TimeTracker].[GetHolidays]", parameters, commandType: CommandType.StoredProcedure);
@@ -91,11 +91,11 @@ namespace AllyisApps.DBModel
 		/// Adds a new pay class to the specified organization.
 		/// </summary>
 		/// <param name="payClassName">The name of the pay class to add.</param>
-		/// <param name="organizationID">The organization to add the pay class to.</param>
-		public void CreatePayClass(string payClassName, int organizationID)
+		/// <param name="organizationId">The organization to add the pay class to.</param>
+		public void CreatePayClass(string payClassName, int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationID", organizationID);
+			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@Name", payClassName);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -106,14 +106,14 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Deletes a pay class from the specified organization.
 		/// </summary>
-		/// <param name="payClassID">The id of the pay class to remove.</param>
+		/// <param name="payClassId">The id of the pay class to remove.</param>
 		/// <param name="destPayClass">The id of the payclass to move all old entries to (nullable)</param>
-		public void DeletePayClass(int payClassID, int? destPayClass)
+		public void DeletePayClass(int payClassId, int? destPayClass)
 		{
 			//TODO: move this part in the DeletePayClass stored procedure
 			if (destPayClass != null)
 			{
-				IEnumerable<TimeEntryDBEntity> allEntries = GetTimeEntriesThatUseAPayClass(payClassID);
+				IEnumerable<TimeEntryDBEntity> allEntries = GetTimeEntriesThatUseAPayClass(payClassId);
 				//update the payClassId for all time entries that used the old pay class
 				foreach (TimeEntryDBEntity entry in allEntries)
 				{
@@ -122,7 +122,7 @@ namespace AllyisApps.DBModel
 				}
 			}
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ID", payClassID);
+			parameters.Add("@Id", payClassId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[TimeTracker].[DeletePayClass]", parameters, commandType: CommandType.StoredProcedure);
@@ -156,7 +156,7 @@ namespace AllyisApps.DBModel
 		public IEnumerable<PayClassDBEntity> GetPayClasses(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationID", organizationId);
+			parameters.Add("@organizationId", organizationId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<PayClassDBEntity>("[TimeTracker].[GetPayClasses]", parameters, commandType: CommandType.StoredProcedure);
@@ -178,15 +178,15 @@ namespace AllyisApps.DBModel
 			DateTime endingDate)
 		{
 			DataTable users = new DataTable();
-			users.Columns.Add("userID", typeof(string));
+			users.Columns.Add("userId", typeof(string));
 			for (int i = 0; i < userId.Count; i++)
 			{
 				users.Rows.Add(userId[i]);
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userID", users.AsTableValuedParameter("[Auth].[UserTable]"));
-			parameters.Add("@organizationID", orgId);
+			parameters.Add("@userId", users.AsTableValuedParameter("[Auth].[UserTable]"));
+			parameters.Add("@organizationId", orgId);
 			parameters.Add("@StartingDate", startingDate);
 			parameters.Add("@EndingDate", endingDate);
 
@@ -211,7 +211,7 @@ namespace AllyisApps.DBModel
 		public IEnumerable<TimeEntryDBEntity> GetTimeEntriesOverDateRange(int orgId, DateTime startingDate, DateTime endingDate)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationID", orgId);
+			parameters.Add("@organizationId", orgId);
 			parameters.Add("@StartingDate", startingDate);
 			parameters.Add("@EndingDate", endingDate);
 
@@ -253,9 +253,9 @@ namespace AllyisApps.DBModel
 		public int CreateTimeEntry(TimeEntryDBEntity entry)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userID", entry.UserId);
-			parameters.Add("@projectID", entry.ProjectId);
-			parameters.Add("@payClassID", entry.PayClassId);
+			parameters.Add("@userId", entry.UserId);
+			parameters.Add("@projectId", entry.ProjectId);
+			parameters.Add("@payClassId", entry.PayClassId);
 			parameters.Add("@date", entry.Date);
 			parameters.Add("@Duration", entry.Duration);
 			parameters.Add("@Description", entry.Description);
@@ -276,7 +276,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@TimeEntryId", entry.TimeEntryId);
-			parameters.Add("@projectID", entry.ProjectId);
+			parameters.Add("@projectId", entry.ProjectId);
 			parameters.Add("@PayClassId", entry.PayClassId);
 			parameters.Add("@Duration", entry.Duration);
 			parameters.Add("@Description", entry.Description);
@@ -323,12 +323,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updatese only the start of week for an org.
 		/// </summary>
-		/// <param name="orgId">The organization ID.</param>
+		/// <param name="orgId">The organization Id.</param>
 		/// <param name="startOfWeek">The value for which day should be the start of the week. 1-6 M-Sat, 0 Sun.</param>
 		public void UpdateTimeTrackerStartOfWeek(int orgId, int startOfWeek)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationID", orgId);
+			parameters.Add("@organizationId", orgId);
 			parameters.Add("@StartOfWeek", startOfWeek);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -346,7 +346,7 @@ namespace AllyisApps.DBModel
 		public void UpdateOvertime(int orgId, int overtimeHours, string overtimePeriod, float overtimeMultiplier)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationID", orgId);
+			parameters.Add("@organizationId", orgId);
 			parameters.Add("@OvertimeHours", overtimeHours);
 			parameters.Add("@OvertimePeriod", overtimePeriod);
 			parameters.Add("@OvertimeMultiplier", overtimeMultiplier);
@@ -365,7 +365,7 @@ namespace AllyisApps.DBModel
 		public SettingDBEntity GetSettings(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationID", orgId);
+			parameters.Add("@organizationId", orgId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -379,7 +379,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Initializes time tracker settings.
 		/// </summary>
-		/// <param name="orgId">The organization ID.</param>
+		/// <param name="orgId">The organization Id.</param>
 		public void InitializeTimeTrackerSettings(int orgId)
 		{
 			try
@@ -391,7 +391,7 @@ namespace AllyisApps.DBModel
 				DynamicParameters parameters = new DynamicParameters();
 
 				// Init the actaul settings
-				parameters.Add("@organizationID", orgId);
+				parameters.Add("@organizationId", orgId);
 				parameters.Add("@StartOfWeek", 1);
 				parameters.Add("@OverTimeHours", 40);
 				parameters.Add("@OverTimePeriod", "Week");
@@ -407,14 +407,14 @@ namespace AllyisApps.DBModel
 				using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 				{
 					parameters = new DynamicParameters();
-					parameters.Add("@organizationID", 0);
+					parameters.Add("@organizationId", 0);
 					holidays = connection.Query<HolidayDBEntity>("[TimeTracker].[GetHolidays]", parameters, commandType: CommandType.StoredProcedure);
 					if (holidays != null && holidays.Count() > 0)
 					{
 						foreach (HolidayDBEntity currentHoliday in holidays)
 						{
 							parameters = new DynamicParameters();
-							parameters.Add("@organizationID", orgId);
+							parameters.Add("@organizationId", orgId);
 							parameters.Add("@holidayName", currentHoliday.HolidayName);
 							parameters.Add("@date", currentHoliday.Date);
 							connection.Execute("[TimeTracker].[CreateHoliday]", parameters, commandType: CommandType.StoredProcedure);
@@ -428,14 +428,14 @@ namespace AllyisApps.DBModel
 				using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 				{
 					parameters = new DynamicParameters();
-					parameters.Add("@organizationID", 0);
+					parameters.Add("@organizationId", 0);
 					payClasses = connection.Query<PayClassDBEntity>("[TimeTracker].[GetPayClasses]", parameters, commandType: CommandType.StoredProcedure);
 					if (payClasses != null && payClasses.Count() > 0)
 					{
 						foreach (PayClassDBEntity currentPayClass in payClasses)
 						{
 							parameters = new DynamicParameters();
-							parameters.Add("@organizationID", orgId);
+							parameters.Add("@organizationId", orgId);
 							parameters.Add("@Name", currentPayClass.Name);
 							connection.Execute("[TimeTracker].[CreatePayClass]", parameters, commandType: CommandType.StoredProcedure);
 						}
@@ -455,7 +455,7 @@ namespace AllyisApps.DBModel
 		public bool UpdateLockDate(int organizationId, bool lockDateUsed, string lockDatePeriod, int lockDateQuantity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationID", organizationId);
+			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@LockDateUsed", lockDateUsed);
 			parameters.Add("@LockDatePeriod", lockDatePeriod);
 			parameters.Add("@LockDateQuantity", lockDateQuantity);
@@ -477,7 +477,7 @@ namespace AllyisApps.DBModel
 		public Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>> GetAllSettings(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationID", orgId);
+			parameters.Add("@organizationId", orgId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{

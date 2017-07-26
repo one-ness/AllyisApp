@@ -273,6 +273,11 @@
     <Build Include="Expense\Tables\ExpenseItem.sql" />
     <Build Include="Security\Finance.sql" />
     <Build Include="Security\Expense.sql" />
+    <Build Include="Security\Pjm.sql" />
+    <Build Include="Auth\Tables\Permission.sql" />
+    <Build Include="Auth\Tables\Action.sql" />
+    <Build Include="Security\Hrm.sql" />
+    <Build Include="Lookup\Tables\Address.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

@@ -115,7 +115,7 @@ namespace AllyisApps.Services.Common
 		/// <param name="amount">The new amount for the billing services subscription.</param>
 		/// <param name="interval">The new billing interval for the billing services subscription.</param>
 		/// <param name="planName">The new plan name for the billing services subscription.</param>
-		/// <param name="subscriptionId">The id of the billing services subscription to ID.</param>
+		/// <param name="subscriptionId">The id of the billing services subscription to Id.</param>
 		/// <param name="customerId">The id of the customer whom is associated witht the billing subscription being updated.</param>
 		/// <returns>A bool representing the success state of updating the subscription.</returns>
 		bool UpdateSubscription(int amount, string interval, string planName, string subscriptionId, BillingServicesCustomerId customerId);

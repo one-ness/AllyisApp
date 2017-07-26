@@ -34,14 +34,19 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public bool CanManage { get; internal set; }
 
 		/// <summary>
-		/// Subscription ID for the Organization
+		/// Subscription Id for the Organization
 		/// </summary>
 		public int Subscriptionid { get; set; }
 
-		/// <summary>
-		/// Gets the user's Id.
-		/// </summary>
-		public User CurrentUser { get; internal set; }
+        /// <summary>
+        /// Subscription Name for the Organizations subscription
+        /// </summary>
+        public string SubscriptionName { get; set; }
+
+        /// <summary>
+        /// Gets the user's Id.
+        /// </summary>
+        public User CurrentUser { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of active projects available.

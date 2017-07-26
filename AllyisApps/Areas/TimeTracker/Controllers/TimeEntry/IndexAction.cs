@@ -49,7 +49,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(
 				subInfo.OrganizationId,
 				subscriptionId,
-				userId,
+                subInfo.SubscriptionName,
+                userId,
 				//this.AppService.UserContext.UserId,
 				manager,
 				startDate,
@@ -89,6 +90,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
             TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(
                 subInfo.OrganizationId,
                 subscriptionId,
+                subInfo.SubscriptionName,
                 userId,
                 //this.AppService.UserContext.UserId,
                 manager,
@@ -98,17 +100,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
         }
 
-		/// <summary>
-		/// Constructor for the TimeEntryOverDateRangeViewModel.
-		/// </summary>
-		/// <param name="orgId">The Organization ID</param>
-		/// <param name="subId">The Subscription's ID</param>
-		/// <param name="userId">The User ID.</param>
-		/// <param name="manager">The Manager.</param>
-		/// <param name="startingDate">The Starting Date.</param>
-		/// <param name="endingDate">The Ending date.</param>
-		/// <returns>The constructed TimeEntryOverDateRangeViewModel.</returns>
-		public TimeEntryOverDateRangeViewModel ConstructTimeEntryOverDataRangeViewModel(int orgId, int subId, int userId, bool manager, int? startingDate, int? endingDate)
+        /// <summary>
+        /// Constructor for the TimeEntryOverDateRangeViewModel.
+        /// </summary>
+        /// <param name="orgId">The Organization Id</param>
+        /// <param name="subId">The Subscription's Id</param>
+        /// <param name="subName">The Subscription's Name</param>
+        /// <param name="userId">The User Id.</param>
+        /// <param name="manager">The Manager.</param>
+        /// <param name="startingDate">The Starting Date.</param>
+        /// <param name="endingDate">The Ending date.</param>
+        /// <returns>The constructed TimeEntryOverDateRangeViewModel.</returns>
+        public TimeEntryOverDateRangeViewModel ConstructTimeEntryOverDataRangeViewModel(int orgId, int subId, string subName, int userId, bool manager, int? startingDate, int? endingDate)
 		{
 			DateTime? startingDateTime = null;
 			if (startingDate.HasValue)
@@ -164,7 +167,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				CurrentUser = users.Where(x => x.UserId == userId).Single(),
 				LockDate = AppService.GetDayFromDateTime(AppService.GetLockDateFromParameters(infos.Item1.LockDateUsed, infos.Item1.LockDatePeriod, infos.Item1.LockDateQuantity)),
 				Subscriptionid = subId,
-				ProductRole = 1
+                SubscriptionName = subName,
+                ProductRole = 1
 			};
 
 			// Initialize the starting dates and get all of the time entries within that date range.
@@ -247,7 +251,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Duration = 8,
 						UserId = userId,
 						ProjectId = 0,
-						PayClassId = infos.Item2.Where(p => p.Name.Equals("Holiday")).FirstOrDefault().PayClassID,
+						PayClassId = infos.Item2.Where(p => p.Name.Equals("Holiday")).FirstOrDefault().PayClassId,
 						Description = holidays.Where(x => x.Date == date).First().HolidayName,
 					};
 
@@ -290,7 +294,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ProjectId = -1,
 						Projects = result.Projects,
 						ProjectsWithInactive = result.ProjectsWithInactive,
-						PayClassId = infos.Item2.Where(p => p.Name.Equals("Regular")).FirstOrDefault().PayClassID,
+						PayClassId = infos.Item2.Where(p => p.Name.Equals("Regular")).FirstOrDefault().PayClassId,
 						PayClasses = result.PayClasses,
 						Locked = (!result.CanManage && beforeLockDate),  //manager can still edit entries before lockdate
 						LockDate = result.LockDate,

@@ -14,7 +14,7 @@ namespace AllyisApps.DBModel.Auth
 	public class OrganizationDBEntity
 	{
 		/// <summary>
-		/// Gets or sets the organization's ID.
+		/// Gets or sets the organization's Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
 
@@ -76,7 +76,7 @@ namespace AllyisApps.DBModel.Auth
 		/// Gets or sets DateCreated.
 		/// </summary>
 		[DisplayName("Date Created")]
-		public DateTime CreatedUTC { get; set; }
+		public DateTime CreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the user has permissions to edit organization.

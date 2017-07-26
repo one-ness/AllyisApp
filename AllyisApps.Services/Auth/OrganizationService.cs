@@ -184,37 +184,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets the role of the given user in the given organization.
-		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
-		/// <param name="userId">User Id.</param>
-		/// <returns>An OrgRole instance.</returns>
-		public OrgRole GetOrgRole(int orgId, int userId)
-		{
-			if (orgId < 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
-			}
-
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-			}
-
-			OrgRoleDBEntity role = DBHelper.GetPermissionLevel(orgId, userId);
-			if (role == null)
-			{
-				return null;
-			}
-
-			return new OrgRole
-			{
-				OrgRoleId = role.OrgRoleId,
-				OrgRoleName = role.Name
-			};
-		}
-
-		/// <summary>
 		/// Deletes the user's current chosen organization.
 		/// </summary>
 		/// <returns>Returns false if permissions fail.</returns>
@@ -478,7 +447,7 @@ namespace AllyisApps.Services
 		//				SkuId = subDBE.SkuId,
 		//				NumberOfUsers = subDBE.NumberOfUsers,
 		//				Licenses = subDBE.Licenses,
-		//				CreatedUTC = subDBE.CreatedUTC,
+		//				CreatedUtc = subDBE.CreatedUtc,
 		//				IsActive = subDBE.IsActive,
 		//				Name = subDBE.Name
 		//			});
@@ -620,7 +589,7 @@ namespace AllyisApps.Services
 
 			return new OrganizationUserInfo
 			{
-				CreatedUTC = organizationUser.CreatedUTC,
+				CreatedUtc = organizationUser.CreatedUtc,
 				EmployeeId = organizationUser.EmployeeId,
 				OrganizationId = organizationUser.OrganizationId,
 				OrgRoleId = organizationUser.OrgRoleId,
@@ -628,7 +597,7 @@ namespace AllyisApps.Services
 				Email = organizationUser.Email,
 				FirstName = organizationUser.FirstName,
 				LastName = organizationUser.LastName,
-				EmployeeTypeId = organizationUser.EmployeeTypeId
+				EmployeeTypeId = (EmployeeType)organizationUser.EmployeeTypeId
 			};
 		}
 
@@ -649,7 +618,7 @@ namespace AllyisApps.Services
 				Address = organization.Address,
 				City = organization.City,
 				Country = organization.Country,
-				DateCreated = organization.CreatedUTC,
+				DateCreated = organization.CreatedUtc,
 				FaxNumber = organization.FaxNumber,
 				Name = organization.Name,
 				OrganizationId = organization.OrganizationId,
@@ -678,7 +647,7 @@ namespace AllyisApps.Services
 				Address = organization.Address,
 				City = organization.City,
 				Country = organization.Country,
-				CreatedUTC = organization.DateCreated,
+				CreatedUtc = organization.DateCreated,
 				FaxNumber = organization.FaxNumber,
 				Name = organization.Name,
 				OrganizationId = organization.OrganizationId,
@@ -713,10 +682,9 @@ namespace AllyisApps.Services
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
 				OrganizationName = invitation.OrganizationName,
-				OrgRole = invitation.OrgRoleId,
-				OrgRoleName = invitation.OrgRoleName,
+				OrganizationRole = (OrganizationRole)invitation.OrgRoleId,
 				EmployeeId = invitation.EmployeeId,
-				EmployeeType = invitation.EmployeeTypeId
+				EmployeeType = (EmployeeType)invitation.EmployeeTypeId
 			};
 		}
 
@@ -762,9 +730,9 @@ namespace AllyisApps.Services
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
-				OrgRoleId = invitation.OrgRole,
+				OrgRoleId = (int)invitation.OrganizationRole,
 				EmployeeId = invitation.EmployeeId,
-				EmployeeTypeId = invitation.EmployeeType
+				EmployeeTypeId = (int)invitation.EmployeeType
 			};
 		}
 

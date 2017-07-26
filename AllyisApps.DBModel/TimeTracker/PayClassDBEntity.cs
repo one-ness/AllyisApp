@@ -16,7 +16,7 @@ namespace AllyisApps.DBModel.TimeTracker
 		/// <summary>
 		/// Gets or sets.
 		/// </summary>
-		public int PayClassID { get; set; }
+		public int PayClassId { get; set; }
 
 		/// <summary>
 		/// Gets or sets.
@@ -31,11 +31,6 @@ namespace AllyisApps.DBModel.TimeTracker
 		/// <summary>
 		/// Gets or sets.
 		/// </summary>
-		public DateTime CreatedUTC { get; set; }
-
-		/// <summary>
-		/// Gets or sets.
-		/// </summary>
-		public DateTime ModifiedUTC { get; set; }
+		public DateTime CreatedUtc { get; set; }
 	}
 }

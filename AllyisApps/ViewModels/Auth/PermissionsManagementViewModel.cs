@@ -21,7 +21,7 @@ namespace AllyisApps.ViewModels.Auth
 	public class PermissionsManagementViewModel : BaseViewModel
 	{
 		/// <summary>
-		/// Gets a value representing the TimeTracker product ID.
+		/// Gets a value representing the TimeTracker product Id.
 		/// </summary>
 		public int TimeTrackerId { get; internal set; }
 
@@ -252,7 +252,7 @@ namespace AllyisApps.ViewModels.Auth
 		public bool isPermissions2 { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Organization's ID
+		/// Gets or sets the Organization's Id
 		/// </summary>
 		public int OrganizationId { get; set; }
 	}

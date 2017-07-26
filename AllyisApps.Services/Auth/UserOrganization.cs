@@ -26,7 +26,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserOrganization"/> class.
 		/// </summary>
-		/// <param name="organizationId">The Organization ID.</param>
+		/// <param name="organizationId">The Organization Id.</param>
 		/// <param name="organizationName">The organization Name.</param>
 		/// <param name="role">The role.</param>
 		public UserOrganization(int organizationId, string organizationName, OrganizationRole role) : this()

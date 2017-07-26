@@ -32,7 +32,7 @@
                     foreach (PayClass payClass in Model.destinationPayClasses)
                     {
                         string _payClassName = Strings.ResourceManager.GetString((payClass.Name).Replace(" ", string.Empty)) ?? payClass.Name;
-                        <input type="radio" name="destPayClass" style="margin:5px" id="mpc" value="@payClass.PayClassID" @(payClass.Name == "Regular" ? " checked " : string.Empty)><text>@_payClassName</text><br />
+                        <input type="radio" name="destPayClass" style="margin:5px" id="mpc" value="@payClass.PayClassId" @(payClass.Name == "Regular" ? " checked " : string.Empty)><text>@_payClassName</text><br />
                     }
                     <br />
                     <div class="pull-right">

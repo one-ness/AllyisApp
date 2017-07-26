@@ -40,7 +40,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// AJAX callback to update the projects for a user.
 		/// </summary>
-		/// <param name="userId">The ID of the user to edit.</param>
+		/// <param name="userId">The Id of the user to edit.</param>
 		/// <param name="subscriptionId">The subscription's Id</param>
 		/// <param name="offUser">The list of projects not associated with the user.</param>
 		/// <param name="onUser">The list of projects associated with the user.</param>

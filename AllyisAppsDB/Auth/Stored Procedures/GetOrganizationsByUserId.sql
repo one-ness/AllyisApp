@@ -13,7 +13,7 @@ SELECT [Auth].[Organization].[OrganizationId]
       ,[PostalCode]
       ,[PhoneNumber]
 	  ,[FaxNumber]
-      ,[Organization].[CreatedUTC]
+      ,[Organization].[CreatedUtc]
 FROM [Auth].[Organization] WITH (NOLOCK)
 RIGHT JOIN [Auth].[OrganizationUser]	WITH (NOLOCK) ON [OrganizationUser].[OrganizationId] = [Organization].[OrganizationId]
 LEFT JOIN [Lookup].[Country]			WITH (NOLOCK) ON [Country].[CountryId] = [Organization].[Country]

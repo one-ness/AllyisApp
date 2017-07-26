@@ -13,6 +13,7 @@
 	ViewData["IsManager"] = Model.CanManage;
 	ViewData["UserId"] = Model.EntryRange.UserId;
 	ViewData["SubscriptionId"] = Model.Subscriptionid;
+    ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
 <div class="row">
@@ -118,7 +119,7 @@
 					<td>
 						@ph.Project.ProjectName
 					</td>
-					<td>
+					<td id="@ph.Project.ProjectId">
 						@ph.GetHoursInHoursMinutes()
 					</td>
 				</tr>
@@ -128,7 +129,7 @@
 					<strong>@Strings.Total</strong>
 				</td>
 				<td>
-					<strong>@Model.GrandTotal.GetHoursInHoursMinutes()</strong>
+					<strong id="totalHours">@Model.GrandTotal.GetHoursInHoursMinutes()</strong>
 				</td>
 			</tr>
 		</table>

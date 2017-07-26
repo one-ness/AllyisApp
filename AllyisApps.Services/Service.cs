@@ -256,7 +256,7 @@ namespace AllyisApps.Services
 		/// Creates a holiday and related time entries for an organization.
 		/// </summary>
 		/// <param name="holiday">Holiday.</param>
-		/// <param name="subscriptionId">Subscription ID</param>
+		/// <param name="subscriptionId">Subscription Id</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool CreateHoliday(Holiday holiday, int subscriptionId)
 		{
@@ -270,7 +270,7 @@ namespace AllyisApps.Services
 		/// Deletes a holiday and related time entries for the current organization.
 		/// </summary>
 		/// <param name="holidayId">Id of holiday to delete.</param>
-		/// <param name="orgId">The organization's ID</param>
+		/// <param name="orgId">The organization's Id</param>
 		/// <param name="subscriptionId">The subscription id</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool DeleteHoliday(int holidayId, int orgId, int subscriptionId)
@@ -293,8 +293,8 @@ namespace AllyisApps.Services
 		/// Creates a new pay class for an organization.
 		/// </summary>
 		/// <param name="payClassName">Name of pay class.</param>
-		/// <param name="orgId">Organization ID</param>
-		/// <param name="subscriptionId">Subscription ID</param>
+		/// <param name="orgId">Organization Id</param>
+		/// <param name="subscriptionId">Subscription Id</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool CreatePayClass(string payClassName, int orgId, int subscriptionId)
 		{
@@ -609,9 +609,8 @@ namespace AllyisApps.Services
 			{
 				Name = pc.Name,
 				OrganizationId = pc.OrganizationId,
-				PayClassID = pc.PayClassID,
-				CreatedUTC = pc.CreatedUTC,
-				ModifiedUTC = pc.ModifiedUTC
+				PayClassId = pc.PayClassId,
+				CreatedUtc = pc.CreatedUtc,
 			};
 		}
 
@@ -624,8 +623,7 @@ namespace AllyisApps.Services
 		{
 			return new Holiday
 			{
-				CreatedUTC = hol.CreatedUTC,
-				ModifiedUTC = hol.ModifiedUTC,
+				CreatedUtc = hol.CreatedUtc,
 				Date = hol.Date,
 				HolidayId = hol.HolidayId,
 				HolidayName = hol.HolidayName,
@@ -718,11 +716,10 @@ namespace AllyisApps.Services
 		{
 			return new HolidayDBEntity()
 			{
-				CreatedUTC = holiday.CreatedUTC,
+				CreatedUtc = holiday.CreatedUtc,
 				Date = holiday.Date,
 				HolidayId = holiday.HolidayId,
 				HolidayName = holiday.HolidayName,
-				ModifiedUTC = holiday.ModifiedUTC,
 				OrganizationId = holiday.OrganizationId,
 			};
 		}

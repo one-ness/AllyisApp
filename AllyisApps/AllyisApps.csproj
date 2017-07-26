@@ -200,8 +200,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Areas\ExpenseTracker\Controllers\ExpenseController.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ExpenseController.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseReportsViewModel.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\DetailsAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ReactivateAction.cs" />
@@ -280,7 +282,6 @@
     <Compile Include="Controllers\Auth\TemplateAction.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
-    <Compile Include="Controllers\Auth\ApplicationRedirectAction.cs" />
     <Compile Include="Controllers\Home\ErrorAction.cs" />
     <Compile Include="Controllers\Home\GetStatesAction.cs" />
     <Compile Include="Controllers\Home\HelpAction.cs" />
@@ -292,7 +293,7 @@
     <Compile Include="Controllers\Auth\DownloadImportUsersTemplateAction.cs" />
     <Compile Include="Controllers\Auth\EditOrgAction.cs" />
     <Compile Include="Controllers\Auth\GetBillingSummaryAction.cs" />
-    <Compile Include="Controllers\Auth\InviteAction.cs" />
+    <Compile Include="Controllers\Auth\RemoveInvitationAction.cs" />
     <Compile Include="Controllers\Auth\ManageOrgAction.cs" />
     <Compile Include="Controllers\Auth\ManagePermissionsAction.cs" />
     <Compile Include="Controllers\Auth\RemoveBillingAction.cs" />
@@ -375,6 +376,7 @@
     <Content Include="Content\icons\ExpenseTracker.png" />
     <Content Include="Content\icons\TimeTrackerPro.png" />
     <Content Include="Content\icons\TimeTracker.png" />
+    <Content Include="Content\icons\TimeTrackerOld.png" />
     <Content Include="Content\Timetracker - Copy.css">
       <DependentUpon>ExpenseTracker.less</DependentUpon>
     </Content>
@@ -509,6 +511,11 @@
     <Content Include="Content\Timetracker - Copy.css.map">
       <DependentUpon>Timetracker - Copy.css</DependentUpon>
     </Content>
+    <Content Include="Areas\ExpenseTracker\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\Expense\Index.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\web.config" />
+    <Content Include="Areas\ExpenseTracker\Views\Shared\BreadcrumbNavPartial.cshtml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
     <None Include="Resources\628px-achtung-svg.png" />
@@ -558,16 +565,13 @@
     <Content Include="Views\Account\AddMember.cshtml" />
     <Content Include="Views\Shared\Oops.cshtml" />
     <Content Include="Views\Account\GetBillingSummary.cshtml" />
-    <Content Include="Views\Shared\_ProductPanels.cshtml" />
     <Content Include="Views\Account\ManageOrg.cshtml" />
     <Content Include="Views\Account\_ManageOrgDetails.cshtml" />
     <Content Include="Views\Account\_ManageOrgSubscriptions.cshtml" />
     <Content Include="Views\Account\_OrganizationEditDetailsPartial.cshtml" />
     <Content Include="Views\Account\Subscribe.cshtml" />
     <Content Include="Views\Account\NewMemberJoin.cshtml" />
-    <Content Include="Views\Shared\_ProductPanelsForOne.cshtml" />
     <Content Include="Views\Account\_OrgBillingInfo.cshtml" />
-    <Content Include="Views\Account\Unsubscribe.cshtml" />
     <Content Include="Views\Shared\_LayoutModal.cshtml" />
     <Content Include="Views\Account\AddBillingToSubscribe.cshtml" />
     <Content Include="Views\Home\PrivacyPolicy.cshtml" />
@@ -927,9 +931,7 @@
     <Content Include="Views\Shared\_Breadcrumbs.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\EditSubscriptionAction\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>

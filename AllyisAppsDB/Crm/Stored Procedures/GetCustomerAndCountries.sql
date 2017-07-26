@@ -15,7 +15,7 @@ BEGIN
 		   [Customer].[FaxNumber],
 		   [Customer].[Website],
 		   [Customer].[EIN],
-		   [Customer].[CreatedUTC],
+		   [Customer].[CreatedUtc],
 		   [Customer].[OrganizationId],
 		   [Customer].[CustomerOrgId]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 

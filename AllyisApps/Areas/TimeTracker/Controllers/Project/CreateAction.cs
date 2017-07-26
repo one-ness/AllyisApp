@@ -110,7 +110,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
 					return this.View(model);
 				}
-				return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { model.SubscriptionId }), model.ParentCustomerId));
+				return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId });
 			}
 			else
 			{
@@ -123,10 +123,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Creates a new project using a <see cref="EditProjectViewModel"/> and updates that project's properties and user list..
 		/// </summary>
 		/// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
-		/// <returns>The Project ID if succeed, -1 if the ProjectOrgId is taken by another project under the same customer.</returns>
+		/// <returns>The Project Id if succeed, -1 if the ProjectOrgId is taken by another project under the same customer.</returns>
 		public int CreateProjectAndUpdateItsUserList(EditProjectViewModel model)
 		{
-			IEnumerable<int> userIDs = model.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString));
+			IEnumerable<int> userIds = model.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString));
 
 			return AppService.CreateProjectAndUpdateItsUserList(new Project()
 			{
@@ -136,14 +136,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ProjectOrgId = model.ProjectOrgId,
 				StartingDate = AppService.GetDateTimeFromDays(model.StartDate),
 				EndingDate = AppService.GetDateTimeFromDays(model.EndDate)
-			}, userIDs);
+			}, userIds);
 		}
 
 		/// <summary>
 		/// Creates a new project using a <see cref="EditProjectViewModel"/>.
 		/// </summary>
 		/// <param name="model"><see cref="EditProjectViewModel"/> representing new project.</param>
-		/// <returns>The Project ID.</returns>
+		/// <returns>The Project Id.</returns>
 		public int CreateProject(EditProjectViewModel model)
 		{
 			return AppService.CreateProject(new Project()

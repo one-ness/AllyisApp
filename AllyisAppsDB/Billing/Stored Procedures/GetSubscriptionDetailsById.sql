@@ -5,7 +5,7 @@ AS
 SELECT [OrganizationId]
       ,[SkuId]
 	  ,[NumberOfUsers]
-      ,[CreatedUTC]
+      ,[CreatedUtc]
       ,[IsActive]
 FROM [Billing].[Subscription] WITH (NOLOCK) 
 WHERE [SubscriptionId] = @SubscriptionId AND [IsActive] = 1

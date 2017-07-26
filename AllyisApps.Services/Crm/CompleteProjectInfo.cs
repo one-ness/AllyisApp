@@ -41,7 +41,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Date/time of creation.
 		/// </summary>
-		public DateTime CreatedUTC { get; set; }
+		public DateTime CreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Name of the project.
@@ -89,12 +89,12 @@ namespace AllyisApps.Services
 		public bool CanEditProject { get; set; }
 
 		/// <summary>
-		/// Gets or sets the ID of the project to be used by the organization
+		/// Gets or sets the Id of the project to be used by the organization
 		/// </summary>
 		public string ProjectOrgId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the ID of the customer to be used by the organization
+		/// Gets or sets the Id of the customer to be used by the organization
 		/// </summary>
 		public string CustomerOrgId { get; set; }
 

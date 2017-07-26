@@ -56,7 +56,7 @@ function ajaxDelete(form_child, delete_action_url) {
 	})
 		.done(function (res) {
 			ajaxHandleOverridingResponses(res, { form_element: form_element });
-			if (res.status == 'success') {
+			if (res.status === 'success') {
 				form_wrap.css({ 'z-index': -1000 }).transition({ 'max-height': 0, duration: 500, easing: 'linear' },
 					function () { form_wrap.remove(); });
 				//ajaxApproveReject_markPendingIfSet(form_element);
@@ -84,11 +84,11 @@ function ajaxCreate(form_element, create_action_url) {
 		dataType: "json"
 	})
 		.done(function (res) {
-			if (res.status == 'error') {
+			if (res.status === 'error') {
 				form_element.addClass("error error-submit");
 			}
 			ajaxHandleOverridingResponses(res, { form_element: form_element });
-			if (res.status == 'success') {
+			if (res.status === 'success') {
 				//alert('success. id=' + res.id + "\r\n" + res.duration + "\r\n" + res.message);
 				ajaxUpdateValues(form_element, res.values);
 				changeRemove(form_element);
@@ -107,6 +107,7 @@ function ajaxCreate(form_element, create_action_url) {
 
 function ajaxUpdateValues(form_element, values) {
 	form_element = $(form_element);
+	updateTimes(values);
 	if (values.duration) {
 		form_element.find("[name='Duration']").val(values.duration);
 	}
@@ -120,6 +121,57 @@ function ajaxUpdateValues(form_element, values) {
 	if (values.PayClassName) {
 		form_element.find("[name='PayClassName']").val(values.PayClassName);
 	}
+}
+
+async function updateTimes(values) {
+	var elements = document.getElementsByName("entry-" + values.projectId);
+	var hours = 0;
+	var minutes = 0;
+	for (var i = 0; i < elements.length; i++)
+	{
+		var entry = elements[i].firstElementChild.value.split(":");
+		hours += parseInt(entry[0]);
+		minutes += parseInt(entry[1]);
+	}
+	//alert("Elements " + (hours + (minutes / 60) + ":" + (minutes % 60)));
+
+	var currentVal = $('#totalHours').text().split(":"),
+	    updateVal = values.duration.split(":"),
+		projectVal = $('#' + values.projectId).text().split(":");
+
+	var projectHours = parseInt(projectVal[0]),
+		projectMinutes = parseInt(projectVal[1]),
+		totalHours = parseInt(currentVal[0]),
+		totalMinutes = parseInt(currentVal[1]),
+		hourUpdate = parseInt(updateVal[0]),
+		minuteUpdate = parseInt(updateVal[1]);
+
+	var projHour = projectHours + hourUpdate;
+	var projMinute = projectMinutes + minuteUpdate;
+	if (projMinute >= 60) {
+		projHour += projMinute / 60;
+		projMinute = projMinute % 60;
+	}
+
+	var totalHour = projectHours + hourUpdate;
+	var totalMinute = projectMinutes + minuteUpdate;
+	if (totalMinute >= 60) {
+		totalHour += totalMinute / 60;
+		totalMinute = totalMinute % 60;
+	}
+
+	$('#' + values.projectId).fadeOut(500, function () {
+		$('#' + values.projectId).text(projHour + ":" + (projMinute < 10 ? "0" + projMinute : projMinute)).fadeIn(500);
+	});
+
+	$('#totalHours').fadeOut(500, function () {
+		$('#totalHours').text(totalHour + ":" + (totalMinute < 10 ? "0" + totalMinute : totalMinute)).fadeIn(500);
+	});
+}
+
+async function subtractTimes(values)
+{
+
 }
 
 function appendNewEntryForm(container_element) {
@@ -147,11 +199,11 @@ function ajaxEdit(form_element, edit_action_url) {
 		dataType: "json"
 	})
 		.done(function (res) {
-			if (res.message != null) {
+			if (res.message !== null) {
 				form_element.addClass("error error-submit");
 			}
 			ajaxHandleOverridingResponses(res, { form_element: form_element });
-			if (res.status == 'success') {
+			if (res.status === 'success') {
 				changeRemove(form_element);
 				ajaxUpdateValues(form_element, res.values);
 				//ajaxApproveReject_markPendingIfSet(form_element);
@@ -226,7 +278,7 @@ function ajaxEditOrCreate(form_element, create_action_url, edit_action_url) {
 //}
 
 function ajaxHandleOverridingResponses(response, relevant_objects) {
-	if (response.status == "error") {
+	if (response.status === "error") {
 		alert("error: " + response.message);
 		if (response.errors) {
 			$(errors).each(function () {
@@ -234,10 +286,10 @@ function ajaxHandleOverridingResponses(response, relevant_objects) {
 			})
 		}
 	}
-	if (response.action == "REFRESH") {
+	if (response.action === "REFRESH") {
 		location.reload();
 	}
-	if (response.action == "REVERT" && relevant_objects.form_element) {
+	if (response.action === "REVERT" && relevant_objects.form_element) {
 		changeRemove(relevant_objects.form_element);
 		ajaxUpdateValues(relevant_objects.form_element, response.values);
 	}
@@ -264,10 +316,10 @@ function changeRemove(form_element) {
 function keyDown(e, form_child) {
 	changeOccur(form_child);
 	var unicode = e.keyCode ? e.keyCode : e.charCode;
-	if (!e.shiftKey && unicode == 40) {
+	if (!e.shiftKey && unicode === 40) {
 		focusNextDuration(form_child);
 	}
-	else if (!e.shiftKey && unicode == 38) {
+	else if (!e.shiftKey && unicode === 38) {
 		focusPreviousDuration(form_child);
 	}
 }
@@ -279,9 +331,9 @@ $(document).ready(function () {
 	});
 	$("#viewasuser-search").keyup(_.debounce(
 		function (key) {
-			if (key.which == 13 || key.keyCode == 13) {
+			if (key.which === 13 || key.keyCode === 13) {
 				//alert("keypress val:" + this.value);
-				if (this.value == "")
+				if (this.value === "")
 					MODULE.search(" "); //search on a value that is present in all entries
 				else
 					MODULE.search(this.value);
@@ -304,7 +356,7 @@ function focusFirstDuration() {
 function focusNextDuration(form_child) {
 	var tb = $("[name='Duration']");
 	for (var i = 0; i < tb.length; i++) {
-		if (tb[i] == form_child) {
+		if (tb[i] === form_child) {
 			if (tb[i + 1].parentNode.parentNode.parentNode.className.indexOf('hidden-sample') > -1) {
 				if (tb.length >= i + 2) {
 					tb[i + 2].focus();
@@ -323,7 +375,7 @@ function focusNextDuration(form_child) {
 function focusPreviousDuration(form_child) {
 	var tb = $("[name='Duration']");
 	for (var i = 0; i < tb.length; i++) {
-		if (tb[i] == form_child) {
+		if (tb[i] === form_child) {
 			if (tb[i - 1].parentNode.parentNode.parentNode.className.indexOf('hidden-sample') > -1) {
 				if (i - 2 >= 0) {
 					tb[i - 2].focus();

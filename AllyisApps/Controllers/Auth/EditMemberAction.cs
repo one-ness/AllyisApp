@@ -30,7 +30,7 @@ namespace AllyisApps.Controllers
 		public ActionResult EditMember(int userId, int orgId, bool isInvited)
 		{
 			EditMemberViewModel model;
-			ViewBag.SignedInUserID = GetCookieData().UserId;
+			ViewBag.SignedInUserId = GetCookieData().UserId;
 
 			if (!isInvited)
 			{
@@ -66,7 +66,7 @@ namespace AllyisApps.Controllers
 					OrganizationId = orgId,
 					EmployeeTypeId = userOrgInfo.EmployeeType,
 					EmployeeId = userOrgInfo.EmployeeId,
-					EmployeeRoleId = userOrgInfo.OrgRole,
+					EmployeeRoleId = (int)userOrgInfo.OrganizationRole,
 					IsInvited = isInvited
 				};
 			}

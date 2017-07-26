@@ -48,10 +48,15 @@ namespace AllyisApps.DBModel.Billing
 		/// </summary>
 		public int SubscriptionsUsed { get; set; }
 
-		/// <summary>
-		/// Gets or sets The name of the organization.
-		/// </summary>
-		public string OrganizationName { get; set; }
+        /// <summary>
+        /// Gets or sets Subscription Name.
+        /// </summary>
+        public string SubscriptionName { get; set; }
+
+        /// <summary>
+        /// Gets or sets The name of the organization.
+        /// </summary>
+        public string OrganizationName { get; set; }
 
 		/// <summary>
 		/// Gets or sets The name of the Sku.
@@ -61,7 +66,7 @@ namespace AllyisApps.DBModel.Billing
 		/// <summary>
 		/// Gets or sets Date the entry was added.
 		/// </summary>
-		public DateTime CreatedUTC { get; set; }
+		public DateTime CreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets The string representing the tier of the subscription.

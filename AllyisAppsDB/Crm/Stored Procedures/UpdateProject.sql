@@ -11,8 +11,8 @@ AS
 	SET 
 		[Name] = @Name,
 		[Type] = @PriceType,
-		[StartUTC] = @StartingDate,
-		[EndUTC] = @EndingDate,
+		[StartUtc] = @StartingDate,
+		[EndUtc] = @EndingDate,
 		[ProjectOrgId] = @ProjectOrgId
 
 	WHERE [ProjectId] = @ProjectId

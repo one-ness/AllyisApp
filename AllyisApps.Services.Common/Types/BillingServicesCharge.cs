@@ -30,7 +30,7 @@ namespace AllyisApps.Services.Common.Types
 		/// </summary>
 		/// <param name="amount">The charge amount.</param>
 		/// <param name="created">The date for the charge.</param>
-		/// <param name="id">The charge ID.</param>
+		/// <param name="id">The charge Id.</param>
 		/// <param name="statementDescriptor">Description text for the charge.</param>
 		/// <param name="service">The billing service associated with the charge.</param>
 		public BillingServicesCharge(int amount, DateTime created, string id, string statementDescriptor, string service = "Stripe")
@@ -69,7 +69,7 @@ namespace AllyisApps.Services.Common.Types
 		}
 
 		/// <summary>
-		/// Gets the charge ID.
+		/// Gets the charge Id.
 		/// </summary>
 		public string Id
 		{

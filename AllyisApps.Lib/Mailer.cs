@@ -26,7 +26,7 @@ namespace AllyisApps.Lib
 			{
 				if (senderBack == null)
 				{
-					senderBack = new SendGridAPIClient(Properties.Resources.SENDGRID_APIKEY);
+					senderBack = new SendGridAPIClient(Properties.Resources.SENDGRId_APIKEY);
 				}
 				return senderBack;
 			}

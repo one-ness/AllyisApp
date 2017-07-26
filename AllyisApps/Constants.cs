@@ -74,7 +74,6 @@ namespace AllyisApps
 		public const string UploadCSVFile = "uploadcsvfile";
 		public const string UserEdit = "useredit";
 		public const string ViewPage = "viewpage";
-		public const string ApplicationRedirect = "applicationredirect";
 		public const string Help = "help";
 		public const string FooterPartial = "footerpartial";
 		public const string LogOnPartial = "logonpartial";
@@ -103,6 +102,7 @@ namespace AllyisApps
 		public const string Shared = "shared";
 		public const string Subscription = "subscription";
 		public const string TimeEntry = "timeentry";
+		public const string Expense = "expense";
 	}
 
 	/// <summary>
@@ -124,7 +124,7 @@ namespace AllyisApps
 	}
 
 	/// <summary>
-	/// Product name constants for use when retreiving product ID by name.
+	/// Product name constants for use when retreiving product Id by name.
 	/// </summary>
 	public static class ProductNameConstants
 	{

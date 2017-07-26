@@ -8,14 +8,14 @@
     <Property Name="NewName" Value="BlockBasedOn" />
   </Operation>
   <Operation Name="Rename Refactor" Key="d901f09c-0c58-4748-aecf-4ad1c229cec3" ChangeDateTime="07/07/2017 21:46:39">
-    <Property Name="ElementName" Value="[Billing].[Subscription].[CreatedUTC]" />
+    <Property Name="ElementName" Value="[Billing].[Subscription].[CreatedUtc]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
     <Property Name="ParentElementName" Value="[Billing].[Subscription]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="CreatedUtc" />
   </Operation>
   <Operation Name="Rename Refactor" Key="ce51f5cb-9d8b-4a7b-853c-8fc8b2053742" ChangeDateTime="07/07/2017 21:46:45">
-    <Property Name="ElementName" Value="[Billing].[Subscription].[ModifiedUTC]" />
+    <Property Name="ElementName" Value="[Billing].[Subscription].[ModifiedUtc]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
     <Property Name="ParentElementName" Value="[Billing].[Subscription]" />
     <Property Name="ParentElementType" Value="SqlTable" />

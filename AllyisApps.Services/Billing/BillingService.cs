@@ -48,7 +48,7 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("name", "Product name must have a value.");
 			}
 
-			return DBHelper.Instance.GetProductIDByName(name);
+			return DBHelper.Instance.GetProductIdByName(name);
 		}
 
 		/// <summary>
@@ -227,7 +227,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the stripe customer Id for the current organization.
 		/// </summary>
-		/// <returns>The customer ID.</returns>
+		/// <returns>The customer Id.</returns>
 		[CLSCompliant(false)]
 		public BillingServicesCustomerId GetOrgBillingServicesCustomerId(int orgId)
 		{
@@ -295,7 +295,7 @@ namespace AllyisApps.Services
 		/// <param name="amount">Price of subscription.</param>
 		/// <param name="planName">Name of subscription plan, to appear on Stripe invoices.</param>
 		/// <param name="subscriptionId">Subscription Id, as a string.</param>
-		/// <param name="customerId">The Billing Services Customer ID.</param>
+		/// <param name="customerId">The Billing Services Customer Id.</param>
 		/// <param name="skuId">Selected sku id, for the billing history item.</param>
 		/// <param name="orgId"></param>
 		[CLSCompliant(false)]
@@ -437,7 +437,7 @@ namespace AllyisApps.Services
 				SkuId = si.SkuId,
 				NumberOfUsers = si.NumberOfUsers,
 				Licenses = si.Licenses,
-				CreatedUTC = si.CreatedUTC,
+				CreatedUtc = si.CreatedUtc,
 				IsActive = si.IsActive,
 				Name = si.Name
 			};
@@ -473,7 +473,7 @@ namespace AllyisApps.Services
 		/// Deletes a subscription plan.
 		/// </summary>
 		/// <param name="subscriptionId">Subscription Id.</param>
-		/// <param name="customerId">The Billing Services Customer ID.</param>
+		/// <param name="customerId">The Billing Services Customer Id.</param>
 		/// <param name="skuId">Selected sku id, for the billing history item.</param>
 		/// <param name="orgId"></param>
 		[CLSCompliant(false)]
@@ -566,7 +566,7 @@ namespace AllyisApps.Services
 		{
 			if (skuId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("skuId", "Sku ID cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException("skuId", "Sku Id cannot be 0 or negative.");
 			}
 
 			SkuDBEntity sku = DBHelper.GetSkuDetails(skuId);
@@ -620,10 +620,10 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			int subID = DBHelper.ChangeSubscription(orgId, selectedSku, productId, 0, subscriptionName);
-			if (subID != 0)
+			int subId = DBHelper.ChangeSubscription(orgId, selectedSku, productId, 0, subscriptionName);
+			if (subId != 0)
 			{
-				DBHelper.UpdateSubscriptionUserProductRole(this.GetProductRolesFromSubscription(subID).Where(x => x.Name == "Manager").Single().ProductRoleId, subID, UserContext.UserId);
+				DBHelper.UpdateSubscriptionUserProductRole(this.GetProductRolesFromSubscription(subId).Where(x => x.Name == "Manager").Single().ProductRoleId, subId, UserContext.UserId);
 			}
 		}
 
@@ -756,7 +756,7 @@ namespace AllyisApps.Services
 		{
 			if (subscriptionId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription ID cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative.");
 			}
 
 			return DBHelper.Unsubscribe(subscriptionId);
@@ -772,7 +772,7 @@ namespace AllyisApps.Services
 		{
 			if (productId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("productId", "Product ID cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
 			}
 
 			if (productId == AppService.GetProductIdByName("Time Tracker"))
@@ -786,11 +786,11 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id for which you wish to know the product name.</param>
 		/// <returns>The product name.</returns>
-		public string GetProductNameBySubscriptionID(int subscriptionId)
+		public string GetProductNameBySubscriptionId(int subscriptionId)
 		{
 			if (subscriptionId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription ID cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException("subscriptionId", "Subscription Id cannot be 0 or negative.");
 			}
 
 			return DBHelper.GetProductAreaBySubscription(subscriptionId);
@@ -808,12 +808,12 @@ namespace AllyisApps.Services
 				{
 					Date = i.Date,
 					Description = i.Description,
-					OrganizationID = i.OrganizationID,
-					ProductID = i.ProductID,
+					OrganizationId = i.OrganizationId,
+					ProductId = i.ProductId,
 					ProductName = i.ProductName,
-					SkuID = i.SkuID,
+					SkuId = i.SkuId,
 					SkuName = i.SkuName,
-					UserID = i.UserID,
+					UserId = i.UserId,
 					UserName = i.UserName
 				};
 			});
@@ -891,7 +891,7 @@ namespace AllyisApps.Services
 			return new SubscriptionDisplayInfo
 			{
 				CanViewSubscription = subscriptionDisplay.CanViewSubscription,
-				CreatedUTC = subscriptionDisplay.CreatedUTC,
+				CreatedUtc = subscriptionDisplay.CreatedUtc,
 				NumberOfUsers = subscriptionDisplay.NumberOfUsers,
 				OrganizationId = subscriptionDisplay.OrganizationId,
 				OrganizationName = subscriptionDisplay.OrganizationName,
@@ -900,7 +900,8 @@ namespace AllyisApps.Services
 				SkuId = subscriptionDisplay.SkuId,
 				SkuName = subscriptionDisplay.SkuName,
 				SubscriptionId = subscriptionDisplay.SubscriptionId,
-				SubscriptionsUsed = subscriptionDisplay.SubscriptionsUsed,
+                SubscriptionName = subscriptionDisplay.SubscriptionName,
+                SubscriptionsUsed = subscriptionDisplay.SubscriptionsUsed,
 				Tier = subscriptionDisplay.Tier
 			};
 		}
@@ -919,7 +920,7 @@ namespace AllyisApps.Services
 
 			return new SubscriptionInfo
 			{
-				CreatedUTC = subscription.CreatedUTC,
+				CreatedUtc = subscription.CreatedUtc,
 				IsActive = subscription.IsActive,
 				Licenses = subscription.Licenses,
 				Name = subscription.Name,

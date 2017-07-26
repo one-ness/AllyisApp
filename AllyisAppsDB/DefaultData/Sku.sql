@@ -1,13 +1,11 @@
 ﻿-- Time Tracker Skus --
 INSERT INTO [Billing].[Sku] ([SkuId], [ProductId], [Name], [CostPerBlock], [BlockBasedOn], [Description])
-VALUES (1, 1, 'Time Tracker', 5.95, 1, 'Easily track the time spent by your employees in various projects. Add unlimited number of users. Only $5.95 per monthly timesheet!')
+VALUES (200001, 200000, 'Time Tracker', 1.99, 1, 'Easily track the time spent by your employees in various projects. Add unlimited number of users. Pay monthly, only for each submitted timesheet!')
 
+-- Expense Tracker Skus --
 INSERT INTO [Billing].[Sku] ([SkuId], [ProductId], [Name], [CostPerBlock], [BlockBasedOn], [Description])
-VALUES (4, 1, 'Time Tracker Pro', 10.95, 1, 'Everything in the Basic subscription plus, Customer and Project reports, Integration with purchase orders and more! Only $10.95 per monthly timesheet!')
+VALUES (300001, 300000, 'Expense Tracker', 5.99, 2, 'Effortlessly track the expenses incurred by your employees. Add unlimited number of users. Pay monthly, only for each submitted expense report!')
 
--- Expense Tracker Skus (set them to inactive for now) --
---INSERT INTO [Billing].[Sku] ([SkuId], [ProductId], [Name], [CostPerBlock], [BlockBasedOn], [Description])
---VALUES (2, 2, 'Expense Tracker', 7.95, 2, 'Effortlessly track the expenses incurred by your employees. Add unlimited number of users. Only $7.95 per submitted expense report!')
-
---INSERT INTO [Billing].[Sku] ([SkuId], [ProductId], [Name], [CostPerBlock], [BlockBasedOn], [Description])
---VALUES (3, 2, 'Expense Tracker Pro', 12.95, 2, 'Everything in the Basic subscription plus, Chart of Accounts, Reports and Analysis, Integration with major Financial Institutions and more! Only $12.95 per submitted expense report!')
+-- Staffing Skus --
+INSERT INTO [Billing].[Sku] ([SkuId], [ProductId], [Name], [CostPerBlock], [BlockBasedOn], [Description])
+VALUES (400001, 400000, 'Staffing Manager', 24.99, 2, 'Manage your job positions, candidates, interviews and offers seamlessly in one place. Add unlimited number of users. Pay monthly, only for each position or interview!')

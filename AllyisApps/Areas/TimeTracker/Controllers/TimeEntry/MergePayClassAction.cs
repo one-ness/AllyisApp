@@ -31,8 +31,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			var allPayClasses = AppService.GetPayClasses(subscriptionId);
-			var destPayClasses = allPayClasses.Where(pc => pc.PayClassID != userId);
-			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassID == userId).ElementAt(0).Name;
+			var destPayClasses = allPayClasses.Where(pc => pc.PayClassId != userId);
+			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassId == userId).ElementAt(0).Name;
 
 			//Built-in, non-editable pay classes cannot be merged
 			if (sourcePayClassName == "Regular" || sourcePayClassName == "Overtime" || sourcePayClassName == "Holiday" || sourcePayClassName == "Paid Time Off" || sourcePayClassName == "Unpaid Time Off")
@@ -50,7 +50,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="sourcePayClassId">The id of the pay class being merged</param>
 		/// <param name="destPayClasses">List of all PayClass that can be merged into</param>
-		/// <param name="subscriptionId">The subscription's ID</param>
+		/// <param name="subscriptionId">The subscription's Id</param>
 		/// <param name="sourcePayClassName">The name of the pay class being merged</param>
 		/// <returns>The MergePayClassViewModel.</returns>
 		[CLSCompliant(false)]

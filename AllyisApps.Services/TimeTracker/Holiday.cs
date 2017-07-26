@@ -29,18 +29,13 @@ namespace AllyisApps.Services
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Date of ID.
+		/// Gets or sets the Date of Id.
 		/// </summary>
 		public DateTime Date { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Date that holliday was added.
 		/// </summary>
-		public DateTime CreatedUTC { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Date holdiay was last modified.
-		/// </summary>
-		public DateTime ModifiedUTC { get; set; }
+		public DateTime CreatedUtc { get; set; }
 	}
 }
