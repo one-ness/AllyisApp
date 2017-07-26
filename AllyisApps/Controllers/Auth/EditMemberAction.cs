@@ -66,7 +66,7 @@ namespace AllyisApps.Controllers
 					OrganizationId = orgId,
 					EmployeeTypeId = userOrgInfo.EmployeeType,
 					EmployeeId = userOrgInfo.EmployeeId,
-					EmployeeRoleId = userOrgInfo.OrgRole,
+					EmployeeRoleId = (int)userOrgInfo.OrganizationRole,
 					IsInvited = isInvited
 				};
 			}
