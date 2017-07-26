@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [TimeTracker].[TimeEntry] (
-    [TimeEntryId] INT            IDENTITY (1, 1) NOT NULL,
+    [TimeEntryId] INT            IdENTITY (1, 1) NOT NULL,
     [UserId]      INT            NOT NULL,
     [ProjectId]   INT            NOT NULL,
     [Date]        DATETIME2 (0)  NOT NULL,

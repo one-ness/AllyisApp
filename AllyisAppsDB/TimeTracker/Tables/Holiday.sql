@@ -1,5 +1,5 @@
 CREATE TABLE [TimeTracker].[Holiday] (
-    [HolidayId]      INT           IDENTITY (1, 1) NOT NULL,
+    [HolidayId]      INT           IdENTITY (1, 1) NOT NULL,
     [HolidayName]    NVARCHAR (64) NOT NULL,
     [Date]           DATETIME2 (0) NOT NULL,
     [OrganizationId] INT           CONSTRAINT [DF__Holiday__Organiz__0E6E26BF] DEFAULT ((0)) NOT NULL,

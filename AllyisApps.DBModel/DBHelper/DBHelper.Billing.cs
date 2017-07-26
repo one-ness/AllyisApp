@@ -24,12 +24,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Retrieves the area to route to for a specific subscription.
 		/// </summary>
-		/// <param name="subscriptionID">The subscription ID.</param>
+		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>The product area string.</returns>
-		public string GetProductAreaBySubscription(int subscriptionID)
+		public string GetProductAreaBySubscription(int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@subscriptionID", subscriptionID);
+			parameters.Add("@subscriptionId", subscriptionId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<string>("[Billing].[GetProductAreaBySubscription]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
@@ -37,11 +37,11 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Retrieves the Product ID by Product Name.
+		/// Retrieves the Product Id by Product Name.
 		/// </summary>
 		/// <param name="productName">The name of the product.</param>
-		/// <returns>The ID of the product.</returns>
-		public int GetProductIDByName(string productName)
+		/// <returns>The Id of the product.</returns>
+		public int GetProductIdByName(string productName)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@productName", productName);
@@ -62,7 +62,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@ProductRoleId", productRoleId);
-			parameters.Add("@subscriptionID", subscriptionId);
+			parameters.Add("@subscriptionId", subscriptionId);
 			parameters.Add("@UserId", userId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -78,7 +78,7 @@ namespace AllyisApps.DBModel
 		public void DeleteSubscriptionUser(int subscriptionId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@subscriptionID", subscriptionId);
+			parameters.Add("@subscriptionId", subscriptionId);
 			parameters.Add("@UserId", userId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -108,7 +108,7 @@ namespace AllyisApps.DBModel
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@UserIDs", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
+			parameters.Add("@UserIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
 			parameters.Add("@OrganizationId", organizationId);
 			parameters.Add("@TimeTrackerRole", timeTrackerRoleId);
 
@@ -145,7 +145,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 
-			parameters.Add("@subscriptionID", subscriptionId);
+			parameters.Add("@subscriptionId", subscriptionId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<string>("[Billing].[DeleteSubscription]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
@@ -160,7 +160,7 @@ namespace AllyisApps.DBModel
 		public SubscriptionDBEntity GetSubscriptionDetailsById(int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@subscriptionID", subscriptionId);
+			parameters.Add("@subscriptionId", subscriptionId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default blank object
@@ -171,12 +171,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Executes [Billing].[GetProductById].
 		/// </summary>
-		/// <param name="productID">Sets ProductID.</param>
+		/// <param name="productId">Sets ProductId.</param>
 		/// <returns>ProductDBEntity obj.</returns>
-		public ProductDBEntity GetProductById(int productID)
+		public ProductDBEntity GetProductById(int productId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ProductId", productID);
+			parameters.Add("@ProductId", productId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<ProductDBEntity>("[Billing].[GetProductById]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
@@ -204,7 +204,7 @@ namespace AllyisApps.DBModel
 		/// <param name="productId"> Param @productId. </param>
 		/// <param name="numberOfUsers">Number of the users the subscription.</param>
 		/// <param name="subscriptionName">The subscription name</param>
-		/// <returns>The ret ID.</returns>
+		/// <returns>The ret Id.</returns>
 		public int ChangeSubscription(int organizationId, int skuId, int productId, int numberOfUsers, string subscriptionName)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -272,24 +272,24 @@ namespace AllyisApps.DBModel
 		/// <param name="stripeTokenSubId">The id of the stripe subscription.</param>
 		/// <param name="price">The price of the subscription.</param>
 		/// <param name="numberOfUsers">The number of users for the subscription.</param>
-		/// <param name="productID">The id of the subscription product.</param>
-		/// <param name="organizationID">The id of the organization that the subscription belongs to.</param>
+		/// <param name="productId">The id of the subscription product.</param>
+		/// <param name="organizationId">The id of the organization that the subscription belongs to.</param>
 		/// <param name="userId">The id of the user adding the subscription plan.</param>
 		/// <param name="skuId">The selected sku id, for the billing history item.</param>
 		/// <param name="description">A description for the billing history item.</param>
-		/// <returns>Subscription ID.</returns>
-		public void AddCustomerSubscription(string stripeTokenCustId, string stripeTokenSubId, int price, int numberOfUsers, int productID, int organizationID, int userId, int? skuId, string description)
+		/// <returns>Subscription Id.</returns>
+		public void AddCustomerSubscription(string stripeTokenCustId, string stripeTokenSubId, int price, int numberOfUsers, int productId, int organizationId, int userId, int? skuId, string description)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@OrganizationId", organizationID);
+			parameters.Add("@OrganizationId", organizationId);
 			parameters.Add("@stripeTokenCustId", stripeTokenCustId);
 			parameters.Add("@stripeTokenSubId", stripeTokenSubId);
 			parameters.Add("@Price", price);
 			parameters.Add("@NumberOfUsers", numberOfUsers);
-			parameters.Add("@ProductId", productID);
-			parameters.Add("@UserId", productID);
-			parameters.Add("@SkuId", productID);
-			parameters.Add("@Description", productID);
+			parameters.Add("@ProductId", productId);
+			parameters.Add("@UserId", productId);
+			parameters.Add("@SkuId", productId);
+			parameters.Add("@Description", productId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -313,7 +313,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@OrgId", orgId);
 			parameters.Add("@UserId", userId);
-			parameters.Add("@customerID", customerId);
+			parameters.Add("@customerId", customerId);
 			parameters.Add("@SkuId", skuId);
 			parameters.Add("@Description", description);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -354,7 +354,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@OrganizationId", orgid);
-			parameters.Add("@customerID", customerid);
+			parameters.Add("@customerId", customerid);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default -1
@@ -368,20 +368,20 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates the subscription plan for the organization, and adds a billing history item.
 		/// </summary>
-		/// <param name="customerID">The id of the customer.</param>
-		/// <param name="subscriptionPlanID">The id of the subscription plan to be updated.</param>
+		/// <param name="customerId">The id of the customer.</param>
+		/// <param name="subscriptionPlanId">The id of the subscription plan to be updated.</param>
 		/// <param name="price">The price of the subscription.</param>
 		/// <param name="numberOfUsers">The number of users for the subscription.</param>
 		/// <param name="orgId">The organization id, for the billing history item.</param>
 		/// <param name="userId">The id of the user updating the subscription plan, for the billing history item.</param>
 		/// <param name="skuId">The selected sku id, for the billing history item.</param>
 		/// <param name="description">A description for the billing history item.</param>
-		/// <returns>The subscription ID.</returns>
-		public void UpdateSubscriptionPlan(string customerID, string subscriptionPlanID, int price, int numberOfUsers, int orgId, int userId, int? skuId, string description)
+		/// <returns>The subscription Id.</returns>
+		public void UpdateSubscriptionPlan(string customerId, string subscriptionPlanId, int price, int numberOfUsers, int orgId, int userId, int? skuId, string description)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@customerID", customerID);
-			parameters.Add("@SubPlanId", subscriptionPlanID);
+			parameters.Add("@customerId", customerId);
+			parameters.Add("@SubPlanId", subscriptionPlanId);
 			parameters.Add("@NumberOfUsers", numberOfUsers);
 			parameters.Add("@Price", price);
 			parameters.Add("@OrganizationId", orgId);
@@ -411,7 +411,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@OrganizationId", orgId);
-			parameters.Add("@customerID", customerId);
+			parameters.Add("@customerId", customerId);
 			parameters.Add("@UserId", userId);
 			parameters.Add("@SkuId", skuId);
 			parameters.Add("@Description", description);
@@ -428,7 +428,7 @@ namespace AllyisApps.DBModel
 		/// Deletes a customer subscription.
 		/// </summary>
 		/// <param name="subscriptionid">The id of the subscription plan to be deleted.</param>
-		/// <returns>The deleted subscription plan ID, or -1 on failure.</returns>
+		/// <returns>The deleted subscription plan Id, or -1 on failure.</returns>
 		public string DeleteSubscriptionPlan(string subscriptionid)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -490,7 +490,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Executes [Billing].[GetSubscriptionPlanPrices].
 		/// </summary>
-		/// <param name="orgid">Sets productID.</param>
+		/// <param name="orgid">Sets productId.</param>
 		/// <returns>List of prices.</returns>
 		public IEnumerable<int> GetSubscriptionPlanPrices(int orgid)
 		{
@@ -509,7 +509,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Retrieves the collection of subscriptions for the specified organization.
 		/// </summary>
-		/// <param name="organizationId">The organization's ID.</param>
+		/// <param name="organizationId">The organization's Id.</param>
 		/// <returns>The collection of OrganizationSubscription objects for this org.</returns>
 		public IEnumerable<SubscriptionDBEntity> GetSubscriptionDetails(int organizationId)
 		{
@@ -555,12 +555,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Executes Billing.GetBillingHistoryByOrg.
 		/// </summary>
-		/// <param name="orgID">Organization ID.</param>
+		/// <param name="orgId">Organization Id.</param>
 		/// <returns>List of BillingHistoryItem.</returns>
-		public IEnumerable<BillingHistoryItemDBEntity> GetBillingHistoryByOrg(int orgID)
+		public IEnumerable<BillingHistoryItemDBEntity> GetBillingHistoryByOrg(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@OrganizationId", orgID);
+			parameters.Add("@OrganizationId", orgId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<BillingHistoryItemDBEntity>("[Billing].[GetBillingHistoryByOrg]", parameters, commandType: CommandType.StoredProcedure);

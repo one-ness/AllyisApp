@@ -90,7 +90,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Uses services to populate a new <see cref="EditProjectViewModel"/> from a project Id and returns it.
 		/// </summary>
-		/// <param name="projectId">Project ID.</param>
+		/// <param name="projectId">Project Id.</param>
 		/// <param name="subscriptionId"></param>
 		/// <returns>The EditProjectViewModel.</returns>
 		public EditProjectViewModel ConstructEditProjectViewModel(int projectId, int subscriptionId)

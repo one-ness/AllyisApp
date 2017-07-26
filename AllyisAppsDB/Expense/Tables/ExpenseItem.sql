@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Expense].[ExpenseItem] (
-    [ExpenseItemId]        INT             IDENTITY (102533, 2) NOT NULL,
+    [ExpenseItemId]        INT             IdENTITY (102533, 2) NOT NULL,
     [ItemDescription]      NVARCHAR (512)  NOT NULL,
     [TransactionDate]      DATETIME2 (0)   NOT NULL,
     [Amount]               DECIMAL (19, 4) NOT NULL,

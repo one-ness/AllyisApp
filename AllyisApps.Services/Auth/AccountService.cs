@@ -76,7 +76,7 @@ namespace AllyisApps.Services
 		{
 			return DBHelper.ValidLanguages().Select(s => new Language
 			{
-				LanguageId = s.LanguageID,
+				LanguageId = s.LanguageId,
 				LanguageName = s.LanguageName,
 				CultureName = s.CultureName
 			});
@@ -362,7 +362,7 @@ namespace AllyisApps.Services
 		{
 			if (userId <= 0)
 			{
-				throw new ArgumentOutOfRangeException("userId", "User ID cannot be 0 or negative.");
+				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
 
 			return InitializeUser(DBHelper.GetUserInfo(userId));
@@ -470,39 +470,39 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Sets the language preference for the current user.
 		/// </summary>
-		/// <param name="languageID">The language ID.</param>
-		public void SetLanguage(int languageID)
+		/// <param name="languageId">The language Id.</param>
+		public void SetLanguage(int languageId)
 		{
-			if (languageID < 0)
+			if (languageId < 0)
 			{
-				throw new ArgumentOutOfRangeException("languageID", "Language ID cannot be negative.");
+				throw new ArgumentOutOfRangeException("languageId", "Language Id cannot be negative.");
 			}
 
-			DBHelper.UpdateUserLanguagePreference(UserContext.UserId, languageID);
+			DBHelper.UpdateUserLanguagePreference(UserContext.UserId, languageId);
 		}
 
 		/// <summary>
-		/// Gets the browser-compatible universal culture language string (e.g. "en-US") based on language ID.
+		/// Gets the browser-compatible universal culture language string (e.g. "en-US") based on language Id.
 		/// </summary>
-		/// <param name="languageID">The language ID. May use 0 to indicate no language setting.</param>
+		/// <param name="languageId">The language Id. May use 0 to indicate no language setting.</param>
 		/// <returns>Culture string.</returns>
-		public Language GetLanguage(int languageID)
+		public Language GetLanguage(int languageId)
 		{
-			if (languageID < 0)
+			if (languageId < 0)
 			{
-				throw new ArgumentOutOfRangeException("languageID", "Language ID cannot be negative.");
+				throw new ArgumentOutOfRangeException("languageId", "Language Id cannot be negative.");
 			}
 
 			// No language setting, use browser setting. May return null if browser culture is unsupported in this app's database.
-			if (languageID == 0)
+			if (languageId == 0)
 			{
 				return this.ValidLanguages().Where(c => System.Globalization.CultureInfo.CurrentCulture.Name.Equals(c.CultureName)).SingleOrDefault();
 			}
 
-			LanguageDBEntity language = DBHelper.GetLanguage(languageID);
+			LanguageDBEntity language = DBHelper.GetLanguage(languageId);
 			return new Language
 			{
-				LanguageId = language.LanguageID,
+				LanguageId = language.LanguageId,
 				LanguageName = language.LanguageName,
 				CultureName = language.CultureName
 			};
@@ -539,7 +539,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Reset password.
 		/// </summary>
-		/// <param name="userId">The user ID.</param>
+		/// <param name="userId">The user Id.</param>
 		/// <param name="code">The code.</param>
 		/// <param name="password">The password.</param>
 		/// <returns>The reset password task.</returns>

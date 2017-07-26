@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Lookup].[Country] (
-    [CountryId] INT            IDENTITY (1, 1) NOT NULL,
+    [CountryId] INT            IdENTITY (1, 1) NOT NULL,
     [Code]      NVARCHAR (4)   NOT NULL,
     [Name]      NVARCHAR (100) NOT NULL,
     CONSTRAINT [PK_Country] PRIMARY KEY CLUSTERED ([CountryId] ASC),

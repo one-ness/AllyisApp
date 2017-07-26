@@ -41,7 +41,7 @@ namespace AllyisApps.ViewModels.Auth
 		}
 
 		/// <summary>
-		/// Gets the ID of the current user.
+		/// Gets the Id of the current user.
 		/// </summary>
 		public int CurrentUserId { get; internal set; }
 

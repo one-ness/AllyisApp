@@ -277,6 +277,7 @@
     <Build Include="Auth\Tables\Permission.sql" />
     <Build Include="Auth\Tables\Action.sql" />
     <Build Include="Security\Hrm.sql" />
+    <Build Include="Lookup\Tables\Address.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

@@ -1,7 +1,7 @@
 CREATE TABLE [Billing].[Subscription] (
     [SubscriptionId]         INT           NOT NULL,
     [OrganizationId]         INT           NOT NULL,
-    [SkuId]                  INT           IDENTITY (113969, 7) NOT NULL,
+    [SkuId]                  INT           IdENTITY (113969, 7) NOT NULL,
     [SubscriptionName]       NVARCHAR (64) NULL,
     [NumberOfUsers]          INT           NOT NULL,
     [IsActive]               BIT           NOT NULL,

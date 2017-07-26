@@ -1,5 +1,5 @@
 CREATE TABLE [Crm].[Customer] (
-    [CustomerId]         INT            IDENTITY (115421, 3) NOT NULL,
+    [CustomerId]         INT            IdENTITY (115421, 3) NOT NULL,
     [Name]               NVARCHAR (32)  NOT NULL,
     [OrganizationId]     INT            NOT NULL,
     [IsActive]           BIT            CONSTRAINT [DF__Customer__IsActi__797309D9] DEFAULT ((1)) NOT NULL,

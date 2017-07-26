@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
 			ViewBag.GetDateFromDays = new Func<int, DateTime>(AppService.GetDateFromDays);
-            ViewBag.SignedInUserID = GetCookieData().UserId;
+            ViewBag.SignedInUserId = GetCookieData().UserId;
 
 
             bool manager = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
@@ -63,7 +63,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         public ActionResult IndexNoUserId(int subscriptionId, int? startDate = null, int? endDate = null)
         {
             int userId = GetCookieData().UserId;
-            ViewBag.SignedInUserID = userId;
+            ViewBag.SignedInUserId = userId;
 
             this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
@@ -90,10 +90,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <summary>
         /// Constructor for the TimeEntryOverDateRangeViewModel.
         /// </summary>
-        /// <param name="orgId">The Organization ID</param>
-        /// <param name="subId">The Subscription's ID</param>
+        /// <param name="orgId">The Organization Id</param>
+        /// <param name="subId">The Subscription's Id</param>
         /// <param name="subName">The Subscription's Name</param>
-        /// <param name="userId">The User ID.</param>
+        /// <param name="userId">The User Id.</param>
         /// <param name="manager">The Manager.</param>
         /// <param name="startingDate">The Starting Date.</param>
         /// <param name="endingDate">The Ending date.</param>

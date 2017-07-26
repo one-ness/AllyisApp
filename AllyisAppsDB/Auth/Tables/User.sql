@@ -1,5 +1,5 @@
 CREATE TABLE [Auth].[User] (
-    [UserId]                INT              IDENTITY (111119, 3) NOT NULL,
+    [UserId]                INT              IdENTITY (111119, 3) NOT NULL,
     [FirstName]             NVARCHAR (32)    NOT NULL,
     [LastName]              NVARCHAR (32)    NOT NULL,
     [Email]                 NVARCHAR (384)   NOT NULL,
@@ -22,8 +22,8 @@ CREATE TABLE [Auth].[User] (
     [LastSubscriptionId]    INT              NULL,
     [ActiveOrganizationId]  INT              NULL,
     [LockoutEndDateUtc]     DATETIME2 (0)    NULL,
-    [PasswordResetCode]     UNIQUEIDENTIFIER NULL,
-    [EmailConfirmationCode] UNIQUEIDENTIFIER NULL,
+    [PasswordResetCode]     UNIQUEIdENTIFIER NULL,
+    [EmailConfirmationCode] UNIQUEIdENTIFIER NULL,
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([UserId] ASC),
     CONSTRAINT [FK_User_Country] FOREIGN KEY ([Country]) REFERENCES [Lookup].[Country] ([CountryId]),
     CONSTRAINT [FK_User_Language] FOREIGN KEY ([LanguagePreference]) REFERENCES [Lookup].[Language] ([Id]) ON DELETE SET DEFAULT,

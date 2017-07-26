@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Expense].[ExpenseReport] (
-    [ExpenseReportId]       INT            IDENTITY (104729, 2) NOT NULL,
+    [ExpenseReportId]       INT            IdENTITY (104729, 2) NOT NULL,
     [ReportTitle]           NVARCHAR (128) NOT NULL,
     [ReportDate]            DATETIME2 (0)  NOT NULL,
     [OrganizationId]        INT            NOT NULL,

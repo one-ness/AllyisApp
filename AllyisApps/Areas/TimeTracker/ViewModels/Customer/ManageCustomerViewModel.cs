@@ -24,7 +24,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public IEnumerable<CustomerProjectViewModel> InactiveCustomerAndProjects { get; internal set; }
 
 		/// <summary>
-		/// The subscription's ID
+		/// The subscription's Id
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
@@ -34,7 +34,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public int OrganizationId { get; internal set; }
 
 		/// <summary>
-		/// Gets the user's ID
+		/// Gets the user's Id
 		/// </summary>
 		public int UserId { get; set; }
 

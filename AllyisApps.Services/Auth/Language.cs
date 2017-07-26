@@ -12,7 +12,7 @@ namespace AllyisApps.Services
 	public class Language
 	{
 		/// <summary>
-		/// Gets or sets the language ID.
+		/// Gets or sets the language Id.
 		/// </summary>
 		public int LanguageId { get; set; }
 

@@ -7,12 +7,12 @@
 namespace AllyisApps.Services
 {
 	/// <summary>
-	/// Products offered by us. Must match the IDs inserted in to db.
+	/// Products offered by us. Must match the Ids inserted in to db.
 	/// </summary>
 	public enum ProductIdEnum : int
 	{
 		/// <summary>
-		/// ID for no product.
+		/// Id for no product.
 		/// </summary>
 		None = 0,
 
