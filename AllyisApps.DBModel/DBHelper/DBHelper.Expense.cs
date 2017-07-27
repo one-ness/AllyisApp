@@ -17,7 +17,10 @@ namespace AllyisApps.DBModel
 	/// DBHelper Partial.
 	/// </summary>
 	public partial class DBHelper
-	{
+    {
+        //=================//
+        /*  Expense Items  */
+        //=================//
 
         /// <summary>
         /// Adds an ExpenseItem to the database.
@@ -122,6 +125,132 @@ namespace AllyisApps.DBModel
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
                 return connection.Query<int>("[Expense].[DeleteExpenseItem]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault() == 1;
+            }
+        }
+
+        //=================//
+        /* Expense Reports */
+        //=================//
+
+        /// <summary>
+        /// Adds an ExpenseReport to the database.
+        /// </summary>
+        /// <param name="report">The ExpenseReportDBEntity to create.</param>
+        /// <returns>TODO: Should this return success/failuer codes? ? ?</returns>
+        public void CreateExpenseReport(ExpenseReportDBEntity report)
+        {
+            if (report.OrganizationId == 0 || report.SubmittedById == 0) //check if user and organization exists already
+            {
+                throw new System.ArgumentException("An Error Creating Report");
+            }
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@ReportTitle", report.ReportTitle);
+            parameters.Add("@ReportDate", report.ReportDate);
+            parameters.Add("@OrganizaitonId", report.OrganizationId);
+            parameters.Add("@SubmittedById", report.SubmittedById);
+            parameters.Add("@ReportStatus", report.ReportStatus);
+            parameters.Add("@BuisnessJustification", report.BusinessJustification);
+            parameters.Add("@CreatedUtc", report.CreatedUtc);
+            parameters.Add("@ModifiedUtc", report.ModifiedUtc);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                connection.Execute("[Expense].[CreateExpenseReport]", parameters, commandType: CommandType.StoredProcedure);
+            }
+
+        }
+
+        /// <summary>
+        /// Retrieves the Expense Reportss with specific id.
+        /// </summary>
+        /// <param name="ExpenseReportId">The id of the Report</param>
+        /// <returns>An Expense Reports.</returns>
+        public ExpenseItemDBEntity GetExpenseReportByExpenseReportId(int ExpenseReportId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@ExpenseReportId", ExpenseReportId);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseReportByExpenseReportId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Retrieves all Expense Reportss created by a user id.
+        /// </summary>
+        /// <param name="SubmittedById">The id of the parent account</param>
+        /// <returns>A collection of Expense Reports.</returns>
+        public IEnumerable<ExpenseItemDBEntity> GetExpenseReportsBySubmittedById(int SubmittedById)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@SubmittedById", SubmittedById);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseReportsBySubmittedById]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable();
+            }
+        }
+
+        /// <summary>
+        /// Retrieves all Expense Reportss created by an organization.
+        /// </summary>
+        /// <param name="OrganizationId">The id of the parent organization</param>
+        /// <returns>A collection of Expense Reports.</returns>
+        public IEnumerable<ExpenseItemDBEntity> GetExpenseReportsByOrganizationId(int OrganizationId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@OrganziationId", OrganizationId);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseReportsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable();
+            }
+        }
+
+        /// <summary>
+        /// Updates the Expense Report with the specified ID.
+        /// </summary>
+        /// <param name="report">The expense report object that will replace the previous entry.</param>
+        public void UpdateExpenseReport(ExpenseReportDBEntity report)
+        {
+            if (report == null)
+            {
+                throw new System.ArgumentException("Report cannot be null, must already exist");
+            }
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@ExpenseReportId", report.ExpenseReportId);
+            parameters.Add("@ReportTitle", report.ReportTitle);
+            parameters.Add("@ReportDate", report.ReportDate);
+            parameters.Add("@OrganizationId", report.OrganizationId);
+            parameters.Add("@SubmittedById", report.SubmittedById);
+            parameters.Add("@ReportStatus", report.ReportStatus);
+            parameters.Add("@BusinessJustification", report.BusinessJustification);
+            parameters.Add("@CreatedUtc", report.CreatedUtc);
+            parameters.Add("@ModifiedUtc", report.ModifiedUtc);
+
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                connection.Execute("[Expense].[UpdateExpenseReport]", parameters, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        /// <summary>
+        /// Deletes an Expense Report with a given id.
+        /// </summary>
+        /// <param name="ExpenseReportId">The id of the expense report to be deleted</param>
+        /// <returns>Boolean to determine if the process succeeded in finding the item</returns>
+        public bool DeleteExpenseReport(int ExpenseReportId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@ExpenseReportId", ExpenseReportId);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                return connection.Query<int>("[Expense].[DeleteExpenseReport]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault() == 1;
             }
         }
     }

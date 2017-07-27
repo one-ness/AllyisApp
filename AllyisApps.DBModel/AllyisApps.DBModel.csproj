@@ -74,6 +74,7 @@
     <Compile Include="DBHelper\DBHelper.Crm.cs" />
     <Compile Include="DBModelStartup.cs" />
     <Compile Include="Finance\AccountDBEntity.cs" />
+    <Compile Include="Finance\ExpenseReportDBEntity.cs" />
     <Compile Include="Finance\ExpenseItemDBEntity.cs" />
     <Compile Include="Lookup\CountryDBEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
