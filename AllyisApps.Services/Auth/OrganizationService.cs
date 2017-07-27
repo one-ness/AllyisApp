@@ -589,6 +589,9 @@ namespace AllyisApps.Services
 
 			return new OrganizationUserInfo
 			{
+				FirstName = organizationUser.FirstName,
+				LastName = organizationUser.LastName,
+				Email = organizationUser.Email,
 				CreatedUtc = organizationUser.CreatedUtc,
 				EmployeeId = organizationUser.EmployeeId,
 				OrganizationId = organizationUser.OrganizationId,
