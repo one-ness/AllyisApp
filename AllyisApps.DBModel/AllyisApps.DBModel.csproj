@@ -74,7 +74,7 @@
     <Compile Include="Lookup\CountryDBEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Auth\InvitationDBEntity.cs" />
-    <Compile Include="Auth\OrgRoleDBEntity.cs" />
+    <Compile Include="Auth\OrganizationRoleDBEntity.cs" />
     <Compile Include="Billing\SubscriptionUserDBEntity.cs" />
     <Compile Include="Billing\ProductDBEntity.cs" />
     <Compile Include="Billing\SubscriptionDBEntity.cs" />

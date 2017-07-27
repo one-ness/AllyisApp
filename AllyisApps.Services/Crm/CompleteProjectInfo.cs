@@ -61,7 +61,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Id of the organization role.
 		/// </summary>
-		public int OrgRoleId { get; set; }
+		public int OrganizationRoleId { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether a user is active on the project, if that project was fetched via userId.

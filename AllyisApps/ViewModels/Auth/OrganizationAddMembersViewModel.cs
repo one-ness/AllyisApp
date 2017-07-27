@@ -66,7 +66,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the organization Role to give the user once the invitation is consumed.
 		/// </summary>
-		public int OrgRole { get; set; }
+		public int OrganizationRole { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether to add the user as an Owner or not.
