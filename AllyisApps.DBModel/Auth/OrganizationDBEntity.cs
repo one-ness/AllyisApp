@@ -26,7 +26,6 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets the organization's website URL.
 		/// </summary>
-		[DisplayName("Website")]
 		public string SiteUrl { get; set; }
 
 		/// <summary>
@@ -52,19 +51,16 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets the organization's postal code.
 		/// </summary>
-		[DisplayName("Postal Code")]
 		public string PostalCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's phone number.
 		/// </summary>
-		[DisplayName("Phone Number")]
 		public string PhoneNumber { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's fax number.
 		/// </summary>
-		[DisplayName("Fax Number")]
 		public string FaxNumber { get; set; }
 
 		/// <summary>
@@ -75,7 +71,6 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets DateCreated.
 		/// </summary>
-		[DisplayName("Date Created")]
 		public DateTime CreatedUtc { get; set; }
 	}
 }

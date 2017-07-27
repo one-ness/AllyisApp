@@ -21,12 +21,12 @@ namespace AllyisApps.DBModel.Billing
 		/// <summary>
 		/// Gets or sets SkuId.
 		/// </summary>
-		public short SkuId { get; set; }
+		public int SkuId { get; set; }
 
 		/// <summary>
 		/// Gets or sets ProductId.
 		/// </summary>
-		public short ProductId { get; set; }
+		public int ProductId { get; set; }
 
 		/// <summary>
 		/// Gets or sets Name.
@@ -35,8 +35,14 @@ namespace AllyisApps.DBModel.Billing
 
 		/// <summary>
 		/// Gets or sets Price.
+		/// TODO: price must be calculated from block size and cost per block.
 		/// </summary>
 		public decimal Price { get; set; }
+
+		/// <summary>
+		/// cost per block
+		/// </summary>
+		public decimal CostPerBlock { get; set; }
 
 		/// <summary>
 		/// Gets or sets UserLimit.
