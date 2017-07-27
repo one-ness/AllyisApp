@@ -8,7 +8,7 @@
 
 	bool hasTimeTracker = Model.Subscriptions.Where(s => s.ProductId == Model.TimeTrackerId).Any();
 
-	Dictionary<int, string> orgRoles = new Dictionary<int, string>
+	Dictionary<int, string> organizationRoles = new Dictionary<int, string>
 	{
 		{ (int)AllyisApps.Services.OrganizationRole.Member, Strings.Member },
 		{ (int)AllyisApps.Services.OrganizationRole.Owner, Strings.Owner }
@@ -20,7 +20,7 @@
 		{ (int)AllyisApps.Services.TimeTrackerRole.NotInProduct, Strings.Unassigned }
 	};
 
-	Dictionary<string, int> setOrgRoles = new Dictionary<string, int>
+	Dictionary<string, int> setOrganizationRoles = new Dictionary<string, int>
 	{
 		{ Strings.RemoveOrg, -1 },
 		{ Strings.SetMember, (int)AllyisApps.Services.OrganizationRole.Member },
@@ -50,7 +50,7 @@
                 <tr class="no-border">
                     <th style="width: 6%;"></th>
                     <th style="width: 47%;">@Strings.User</th>
-                    <th style="width: 47%;" class="tab-OrganizationTab">@Strings.OrgRole</th>
+                    <th style="width: 47%;" class="tab-OrganizationTab">@Strings.OrganizationRole</th>
                     @if (hasTimeTracker)
                     {
                         <th class="tab-TimeTrackerTab" style="display: none; width: 47%;">@Strings.TimeTrackerRole</th>
@@ -64,9 +64,9 @@
                         <input type="search" placeholder="@Strings.UserSearchPlaceholder" id="userSearch" class="form-control" />
                     </td>
                     <td class="tab-OrganizationTab">
-                        <select id="orgRoleFilter" class="form-control">
+                        <select id="organizationRoleFilter" class="form-control">
                             <option>@Strings.Any</option>
-                            @foreach (string role in orgRoles.Values)
+                            @foreach (string role in organizationRoles.Values)
                             {
                                 <option>@role</option>
                             }
@@ -96,7 +96,7 @@
                         <input type="checkbox" id="check" />
                     </td>
                     <td id="name">@fullName</td>
-                    <td id="orgRole" class="tab-OrganizationTab">@orgRoles[user.OrgRoleId]</td>
+                    <td id="organizationRole" class="tab-OrganizationTab">@organizationRoles[user.OrganizationRoleId]</td>
                     @if (hasTimeTracker)
 					{
 						<td id="ttRole" class="tab-TimeTrackerTab" style="display: none;">@ttRoles[user.ProductRoleIds[Model.TimeTrackerSubIndex]]</td>
@@ -123,9 +123,9 @@
         <div class="col-xs-6 col-sm-6 col-md-5 col-lg-4">
             <select class="form-control tab-OrganizationTab" id="orgActionSelect">
                 <optgroup label="@Strings.Organization">
-                    @foreach (string setOrgRole in setOrgRoles.Keys)
+                    @foreach (string setOrganizationRole in setOrganizationRoles.Keys)
                     {
-                        <option>@setOrgRole</option>
+                        <option>@setOrganizationRole</option>
                     }
                 </optgroup>
             </select>
@@ -151,7 +151,7 @@
 
 @section scripts {
     <script type="text/javascript">
-        orgActions = @Html.Raw(Json.Encode(setOrgRoles));
+        orgActions = @Html.Raw(Json.Encode(setOrganizationRoles));
         ttActions = @Html.Raw(Json.Encode(setTTRoles));
         confirmMessage = "@Html.Raw(Strings.RemoveFromOrgNoName)";
     </script>
@@ -163,7 +163,7 @@
         pwf.setRowClass("userRow");
         pwf.setCheckBoxSelector("#check");
         pwf.addFilter("#userSearch", "search", "#name");
-        pwf.addFilter('#orgRoleFilter', 'dropDown', "#orgRole", "@Strings.Any");
+        pwf.addFilter('#organizationRoleFilter', 'dropDown', "#organizationRole", "@Strings.Any");
         if('@hasTimeTracker' == 'True') pwf.addFilter('#ttRoleFilter', 'dropDown', "#ttRole", "@Strings.Any");
         if (sessionStorage.getItem("/ManagePermissionsPage") != null)
         {

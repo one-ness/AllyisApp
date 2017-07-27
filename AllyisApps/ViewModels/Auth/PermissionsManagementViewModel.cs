@@ -267,7 +267,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public PermissionsAction()
 		{
-			this.OrgRoleTarget = 0;
+			this.OrganizationRoleTarget = 0;
 			this.TimeTrackerRoleTarget = 0;
 		}
 
@@ -289,7 +289,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the target role to set the organization users to.
 		/// </summary>
-		public int? OrgRoleTarget { get; set; }
+		public int? OrganizationRoleTarget { get; set; }
 
 		/// <summary>
 		/// Gets or sets the target role to set the timetracker subscription users to.

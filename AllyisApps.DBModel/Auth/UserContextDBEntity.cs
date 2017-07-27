@@ -21,24 +21,9 @@
 		public string LastName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user's username.
-		/// </summary>
-		public string UserName { get; set; }
-
-		/// <summary>
 		/// Gets or sets the user's email address.
 		/// </summary>
 		public string Email { get; set; }
-
-		/// <summary>
-		/// Gets or sets the user's last used subscription id.
-		/// </summary>
-		public int? LastSubscriptionId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the user's last used organization id.
-		/// </summary>
-		public int? ActiveOrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user's language preference.
@@ -58,7 +43,7 @@
 		/// <summary>
 		/// Gets or sets the id of the user's role in the organization.
 		/// </summary>
-		public int? OrgRoleId { get; set; }
+		public int? OrganizationRoleId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the subscription id.

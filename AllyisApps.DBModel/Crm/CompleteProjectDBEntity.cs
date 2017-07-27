@@ -66,7 +66,7 @@ namespace AllyisApps.DBModel.Crm
 		/// <summary>
 		/// Gets or sets The id of the organization role.
 		/// </summary>
-		public int OrgRoleId { get; set; }
+		public int OrganizationRoleId { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether a user is active on the project, If that project was fetched via userId.

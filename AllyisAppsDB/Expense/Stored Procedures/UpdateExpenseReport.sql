@@ -6,8 +6,7 @@
 	@SubmittedById INT,
 	@ReportStatus TINYINT,
 	@BuisnessJustification NVARCHAR(100),
-	@CreatedUtc DATETIME2(0),
-	@ModifiedUtc DATETIME2(0)
+	@CreatedUtc DATETIME2(0)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -20,8 +19,7 @@ BEGIN
 		[SubmittedById],
 		[ReportStatus],
 		[BusinessJustification],
-		[CreatedUtc],
-		[ModifiedUtc])
+		[CreatedUtc])
 	VALUES (@ExpenseReportId,
 		@ReportTitle,
 		@ReportDate,
@@ -29,6 +27,5 @@ BEGIN
 		@SubmittedById,
 		@ReportStatus,
 		@BuisnessJustification,
-		@CreatedUtc,
-		@ModifiedUtc);
+		@CreatedUtc);
 END

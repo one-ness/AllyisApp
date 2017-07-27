@@ -757,7 +757,7 @@ namespace AllyisApps.Services
 				IsUserActive = completeProject.IsUserActive,
 				OrganizationId = completeProject.OrganizationId,
 				OrganizationName = completeProject.OrganizationName,
-				OrgRoleId = completeProject.OrgRoleId,
+				OrganizationRoleId = completeProject.OrganizationRoleId,
 				PriceType = completeProject.PriceType,
 				ProjectId = completeProject.ProjectId,
 				ProjectName = completeProject.ProjectName,

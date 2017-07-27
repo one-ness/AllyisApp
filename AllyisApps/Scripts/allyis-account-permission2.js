@@ -23,7 +23,7 @@ gatherData = function () {
 		if (value === -1) {
 			if (!confirm(confirmMessage)) return null;
 		}
-		selectedAction["OrgRoleTarget"] = value;
+		selectedAction["OrganizationRoleTarget"] = value;
 	} else {
 		if (currentTabTitle === "TimeTrackerTab") {
 			value = ttActions[$('#ttActionSelect').val()];

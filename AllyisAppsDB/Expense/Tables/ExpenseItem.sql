@@ -11,3 +11,10 @@
     CONSTRAINT [PK_ReportItem] PRIMARY KEY CLUSTERED ([ExpenseItemId] ASC)
 );
 
+GO
+
+CREATE TRIGGER [Expense].trg_update_item_ModifiedUtc ON [Expense].[ExpenseItem] FOR UPDATE AS
+BEGIN
+    UPDATE [Expense].[ExpenseItem] SET [ModifiedUTC] = CONVERT(DATETIME2(0), GETUTCDATE())
+END
+GO 
