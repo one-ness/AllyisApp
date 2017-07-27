@@ -22,13 +22,11 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets FirstName.
 		/// </summary>
-		[DisplayName("First Name")]
 		public string FirstName { get; set; }
 
 		/// <summary>
 		/// Gets or sets LastName.
 		/// </summary>
-		[DisplayName("Last Name")]
 		public string LastName { get; set; }
 
 		/// <summary>
@@ -74,13 +72,11 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets DateOfBirth.
 		/// </summary>
-		[DisplayName("Date Of Birth")]
 		public DateTime? DateOfBirth { get; set; }
 
 		/// <summary>
 		/// Gets or sets Address.
 		/// </summary>
-		[DisplayName("Address")]
 		public string Address { get; set; }
 
 		/// <summary>
@@ -101,30 +97,27 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets PostalCode.
 		/// </summary>
-		[DisplayName("Postal Code")]
 		public string PostalCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets PhoneNumber.
 		/// </summary>
-		[DisplayName("Phone Number")]
 		public string PhoneNumber { get; set; }
 
 		/// <summary>
 		/// Gets or sets PhoneExtension.
 		/// </summary>
-		[DisplayName("Phone Extension")]
 		public string PhoneExtension { get; set; }
 
 		/// <summary>
 		/// Gets or sets the last active subscription id.
 		/// </summary>
-		public int LastSubscriptionId { get; set; }
+		public int? LastSubscriptionId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the last active organization id.
 		/// </summary>
-		public int ActiveOrganizationId { get; set; }
+		public int? ActiveOrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets LockoutEndDateUtc.

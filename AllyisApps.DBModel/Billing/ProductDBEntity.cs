@@ -19,7 +19,7 @@ namespace AllyisApps.DBModel.Billing
 		/// <summary>
 		/// Gets or sets ProductId.
 		/// </summary>
-		public short ProductId { get; set; }
+		public int ProductId { get; set; }
 
 		/// <summary>
 		/// Gets or sets Name.

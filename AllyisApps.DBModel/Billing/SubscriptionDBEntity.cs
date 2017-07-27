@@ -14,11 +14,6 @@ namespace AllyisApps.DBModel.Billing
 	public class SubscriptionDBEntity
 	{
 		/// <summary>
-		/// Gets or sets OrganizationName.
-		/// </summary>
-		public string OrganizationName { get; set; }
-
-		/// <summary>
 		/// Gets or sets SubscriptionId.
 		/// </summary>
 		public int SubscriptionId { get; set; }
@@ -34,7 +29,7 @@ namespace AllyisApps.DBModel.Billing
 		public int SkuId { get; set; }
 
 		/// <summary>
-		/// Gets or sets SkuId.
+		/// Gets or sets number of users
 		/// </summary>
 		public int NumberOfUsers { get; set; }
 
@@ -47,6 +42,16 @@ namespace AllyisApps.DBModel.Billing
 		/// Gets or sets CreatedDate.
 		/// </summary>
 		public DateTime CreatedUtc { get; set; }
+
+		/// <summary>
+		/// gets or sets modified date
+		/// </summary>
+		public DateTime ModifiedUtc { get; set; }
+
+		/// <summary>
+		/// gets or set promotion expiration date
+		/// </summary>
+		public DateTime? PromoExpirationDateUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether this subscription is active.

@@ -24,11 +24,6 @@ namespace AllyisApps.Services
 		public string LastName { get; set; }
 
 		/// <summary>
-		/// Gets or sets ProductRoleId.
-		/// </summary>
-		public string ProductRoleId { get; set; }
-
-		/// <summary>
 		/// Gets or sets the name of the subscribed product.
 		/// </summary>
 		public string ProductRoleName { get; set; }

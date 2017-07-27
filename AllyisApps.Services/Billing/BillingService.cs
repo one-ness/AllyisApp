@@ -431,7 +431,6 @@ namespace AllyisApps.Services
 
 			return new SubscriptionInfo
 			{
-				OrganizationName = si.OrganizationName,
 				OrganizationId = si.OrganizationId,
 				SubscriptionId = si.SubscriptionId,
 				SkuId = si.SkuId,
@@ -926,7 +925,6 @@ namespace AllyisApps.Services
 				Name = subscription.Name,
 				NumberOfUsers = subscription.NumberOfUsers,
 				OrganizationId = subscription.OrganizationId,
-				OrganizationName = subscription.OrganizationName,
 				SkuId = subscription.SkuId,
 				SubscriptionId = subscription.SubscriptionId
 			};
