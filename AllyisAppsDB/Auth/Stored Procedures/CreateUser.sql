@@ -1,4 +1,4 @@
-﻿create PROCEDURE [Auth].[CreateUser]
+﻿CREATE PROCEDURE [Auth].[CreateUser]
 	@FirstName NVARCHAR(32),
 	@LastName NVARCHAR(32),
     @Address NVARCHAR(100), 
@@ -25,23 +25,20 @@ BEGIN
 		([Address1],
 		[City],
 		[State],
+		[CountryId],
 		[PostalCode])
 	VALUES
 		(@Address,
 		@City,
 		(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
+		(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
 		@PostalCode);
 
-	SET @address_Identity = SCOPE_IDENTITY()
+	SET @Address_Identity = SCOPE_IDENTITY()
 
 	INSERT INTO [Auth].[User] 
 		([FirstName], 
 		[LastName], 
-		/*[Address], 
-		[City], A
-		[State], 
-		[Country], 
-		[PostalCode],*/ 
 		[AddressId],
 		[Email], 
 		[PhoneNumber], 
@@ -56,12 +53,7 @@ BEGIN
 		[LanguagePreference])
 	VALUES 
 		(@FirstName, 
-		@LastName, 
-		/*@Address, 
-		@City, 
-		(SELECT [StateId]	FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
-		(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
-		@PostalCode,*/
+		@LastName,
 		@Address_Identity,
 		@Email,
 		@PhoneNumber,

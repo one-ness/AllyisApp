@@ -184,6 +184,7 @@ namespace AllyisApps.Services
 					FirstName = firstName,
 					LastName = lastName,
                     Address = address,
+					Country = country,
                     City = city,
                     State = state,
                     PostalCode = postalCode,
@@ -410,6 +411,7 @@ namespace AllyisApps.Services
 			DBHelper.UpdateUser(new UserDBEntity
 			{
 				AccessFailedCount = model.AccessFailedCount,
+				AddressId = model.AddressId,
 				Address = model.Address,
 				City = model.City,
 				Country = model.Country,
