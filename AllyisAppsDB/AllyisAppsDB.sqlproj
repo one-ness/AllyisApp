@@ -108,7 +108,7 @@
     <Build Include="Auth\Tables\Logging.sql" />
     <Build Include="Auth\Tables\Organization.sql" />
     <Build Include="Auth\Tables\OrganizationUser.sql" />
-    <Build Include="Auth\Tables\OrgRole.sql" />
+    <Build Include="Auth\Tables\OrganizationRole.sql" />
     <Build Include="Auth\Tables\ProductRole.sql" />
     <Build Include="Auth\Tables\User.sql" />
     <Build Include="Security\aaUser.sql" />

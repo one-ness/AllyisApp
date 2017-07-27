@@ -29,7 +29,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Orgization role Id.
 		/// </summary>
-		public int OrgRoleId { get; set; }
+		public int OrganizationRoleId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Name of role.

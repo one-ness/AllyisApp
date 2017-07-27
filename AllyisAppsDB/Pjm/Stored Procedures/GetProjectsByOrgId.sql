@@ -15,9 +15,9 @@ SELECT	[Project].[ProjectId],
 		[Customer].[CustomerOrgId],
 		[Customer].[IsActive] AS [IsCustomerActive],
 		[Project].[Type] AS [PriceType]
-		--[OrgRoleId]
+		--[OrganizationRoleId]
 FROM (
---(SELECT [OrganizationId], [OrgRoleId] FROM [Auth].[OrganizationUser] WHERE [OrganizationId] = @orgId) AS OrganizationUser
+--(SELECT [OrganizationId], [OrganizationRoleId] FROM [Auth].[OrganizationUser] WHERE [OrganizationId] = @orgId) AS OrganizationUser
 	[Auth].[Organization] WITH (NOLOCK) 
 	JOIN [Crm].[Customer]	WITH (NOLOCK) ON ([Customer].[OrganizationId] = [Organization].[OrganizationId] AND [Organization].[OrganizationId] = @OrgId)
 	JOIN [Pjm].[Project]		WITH (NOLOCK) ON [Project].[CustomerId] = [Customer].[CustomerId]

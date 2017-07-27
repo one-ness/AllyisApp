@@ -6,7 +6,7 @@ BEGIN
 
 	SELECT [OU].[OrganizationId],
 	       [OU].[UserId],
-		   [OU].[OrgRoleId],
+		   [OU].[OrganizationRoleId],
 		   [O].[Name] AS [OrganizationName],
 		   [OU].[EmployeeId],
 		   [U].[Email]

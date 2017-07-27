@@ -21,4 +21,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ModifiedUtc" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="d56982a6-c07f-4906-8384-9418fed309e1" ChangeDateTime="07/26/2017 22:57:57">
+    <Property Name="ElementName" Value="[Auth].[OrganizationRole].[OrganizationRoleId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Auth].[OrganizationRole]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[OrganizationRoleId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fc38992e-deca-44cf-8bea-6d1e6d5ef351" ChangeDateTime="07/26/2017 23:03:16">
+    <Property Name="ElementName" Value="[Auth].[OrganizationUser].[OrganizationRoleId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Auth].[OrganizationUser]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[OrganizationRoleId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3ad9644e-6ddb-42f8-bba9-4f37e5ead6eb" ChangeDateTime="07/26/2017 23:21:11">
+    <Property Name="ElementName" Value="[Auth].[Invitation].[OrganizationRoleId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Auth].[Invitation]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[OrganizationRoleId]" />
+  </Operation>
 </Operations>

@@ -43,7 +43,7 @@
 		/// <summary>
 		/// Gets or sets the id of the user's role in the organization.
 		/// </summary>
-		public int? OrgRoleId { get; set; }
+		public int? OrganizationRoleId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the subscription id.

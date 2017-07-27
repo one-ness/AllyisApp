@@ -8,15 +8,15 @@ BEGIN
 		[User].[FirstName],
 		[User].[LastName],
 		[User].[UserId],
-		[OrganizationUser].[OrgRoleId],
-		[OrgRole].[Name],
+		[OrganizationUser].[OrganizationRoleId],
+		[OrganizationRole].[Name],
 		[User].[Email],
 		[SubscriptionUser].[ProductRoleId], 
 		[SubscriptionUser].[SubscriptionId]
 	FROM [Auth].[User]
 	WITH (NOLOCK)
 	INNER JOIN [Auth].[OrganizationUser]	WITH (NOLOCK) ON [OrganizationUser].[UserId] = [User].[UserId]
-	INNER JOIN [Auth].[OrgRole]				WITH (NOLOCK) ON [OrgRole].[OrgRoleId] = [OrganizationUser].[OrgRoleId]
+	INNER JOIN [Auth].[OrganizationRole]				WITH (NOLOCK) ON [OrganizationRole].[OrganizationRoleId] = [OrganizationUser].[OrganizationRoleId]
 	LEFT JOIN [Billing].[Subscription]		WITH (NOLOCK) ON [Subscription].[OrganizationId] = @OrgId
 	LEFT JOIN [Billing].[SubscriptionUser] WITH (NOLOCK) 
 											ON [SubscriptionUser].[UserId] = [User].[UserId]

@@ -6,11 +6,11 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		[OrgRole].[OrgRoleId], 
-		[OrgRole].[Name]
+		[OrganizationRole].[OrganizationRoleId], 
+		[OrganizationRole].[Name]
 	FROM [Auth].[OrganizationUser]
 	WITH (NOLOCK)
-	INNER JOIN [Auth].[OrgRole] WITH (NOLOCK) ON [OrgRole].[OrgRoleId] = [OrganizationUser].[OrgRoleId]
+	INNER JOIN [Auth].[OrganizationRole] WITH (NOLOCK) ON [OrganizationRole].[OrganizationRoleId] = [OrganizationUser].[OrganizationRoleId]
 	JOIN [Auth].[User]			WITH (NOLOCK) ON [User].[UserId] = @UserId
 	WHERE [OrganizationUser].[OrganizationId] = @OrganizationId
 		AND [OrganizationUser].[UserId] = @UserId

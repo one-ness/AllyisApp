@@ -13,7 +13,7 @@ BEGIN
 		   [U].[LanguagePreference],
 		   [O].[OrganizationId],
 		   [O].[Name] AS 'OrganizationName',
-		   [OU].[OrgRoleId],
+		   [OU].[OrganizationRoleId],
 		   [SUB].[SubscriptionId],
 		   [SUB].[SubscriptionName],
 		   [SUB].[ProductId],
