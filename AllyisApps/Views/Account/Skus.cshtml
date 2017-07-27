@@ -33,7 +33,7 @@
 													var currentSubId = Model.currentSubscriptions.Where(sub => sub.ProductId == sku.ProductId).FirstOrDefault().SubscriptionId;
 													if (Model.currentSubscriptions.Where(sub => sub.SkuId == sku.SkuId).FirstOrDefault() != null)   //already subscribed to this sku
 													{
-														<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = currentSubId })" class="btn btn-default">Unsubscribe</a></div>
+														<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = currentSubId })" class="btn btn-default">Edit</a></div>
 													}
 													else
 													{
