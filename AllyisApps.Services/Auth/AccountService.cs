@@ -284,7 +284,7 @@ namespace AllyisApps.Services
 							{
 								OrganizationId = item.OrganizationId.Value,
 								OrganizationName = item.OrganizationName,
-								OrganizationRole = (OrganizationRole)item.OrgRoleId.Value,
+								OrganizationRole = (OrganizationRole)item.OrganizationRoleId.Value,
 							};
 
 							result.UserOrganizations.Add(item.OrganizationId.Value, orgInfo);
@@ -710,7 +710,7 @@ namespace AllyisApps.Services
 				FirstName = userRoles.FirstName,
 				LastName = userRoles.LastName,
 				Name = userRoles.Name,
-				OrgRoleId = userRoles.OrgRoleId,
+				OrganizationRoleId = userRoles.OrganizationRoleId,
 				ProductRoleId = userRoles.ProductRoleId == null ? -1 : userRoles.ProductRoleId.Value,
 				SubscriptionId = userRoles.SubscriptionId == null ? -1 : userRoles.SubscriptionId.Value,
 				UserId = userRoles.UserId

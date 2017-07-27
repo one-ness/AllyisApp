@@ -29,7 +29,7 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets Their orgization role id.
 		/// </summary>
-		public int OrgRoleId { get; set; }
+		public int OrganizationRoleId { get; set; }
 
 		/// <summary>
 		/// Gets or sets Name of their role.

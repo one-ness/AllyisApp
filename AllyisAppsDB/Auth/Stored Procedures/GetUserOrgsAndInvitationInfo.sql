@@ -44,7 +44,7 @@ BEGIN
 	LEFT JOIN [Lookup].[State]				WITH (NOLOCK) ON [State].[StateId] = [Address].[State]
 	WHERE [OrganizationUser].[UserId] = @userId 
 		  AND [Auth].[Organization].[IsActive] = 1
-	ORDER BY [OrganizationUser].[OrgRoleId] DESC, [Organization].[Name]
+	ORDER BY [OrganizationUser].[OrganizationRoleId] DESC, [Organization].[Name]
 
 	SELECT 
 		[InvitationId], 
@@ -55,7 +55,7 @@ BEGIN
 		[Invitation].[OrganizationId],
 		[Organization].[Name] AS 'OrganizationName',
 		[AccessCode], 
-		[OrgRoleId],
+		[OrganizationRoleId],
 		[EmployeeId] 
 	FROM [Auth].[User] WITH (NOLOCK)
 	LEFT JOIN [Auth].[Invitation] WITH (NOLOCK) ON [User].[Email] = [Invitation].[Email]

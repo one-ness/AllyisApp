@@ -26,7 +26,7 @@ BEGIN
 
 	SELECT [OU].[OrganizationId],
 	    [OU].[UserId],
-		[OU].[OrgRoleId],
+		[OU].[OrganizationRoleId],
 		[O].[Name] AS [OrganizationName],
 		[OU].[EmployeeId],
 		[U].[Email],
@@ -71,12 +71,12 @@ BEGIN
 		[DateOfBirth], 
 		[OrganizationId], 
 		[AccessCode], 
-		[Invitation].[OrgRoleId],
-		[Name] AS [OrgRoleName],
+		[Invitation].[OrganizationRoleId],
+		[Name] AS [OrganizationRoleName],
 		[EmployeeId],
 		[EmployeeTypeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
-	LEFT JOIN [Auth].[OrgRole] WITH (NOLOCK) ON [OrgRole].[OrgRoleId] = [Invitation].[OrgRoleId]
+	LEFT JOIN [Auth].[OrganizationRole] WITH (NOLOCK) ON [OrganizationRole].[OrganizationRoleId] = [Invitation].[OrganizationRoleId]
 	WHERE [OrganizationId] = @OrganizationId AND [IsActive] = 1
 
 	SELECT [StripeTokenCustId]

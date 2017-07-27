@@ -589,10 +589,13 @@ namespace AllyisApps.Services
 
 			return new OrganizationUserInfo
 			{
+				FirstName = organizationUser.FirstName,
+				LastName = organizationUser.LastName,
+				Email = organizationUser.Email,
 				CreatedUtc = organizationUser.CreatedUtc,
 				EmployeeId = organizationUser.EmployeeId,
 				OrganizationId = organizationUser.OrganizationId,
-				OrgRoleId = organizationUser.OrgRoleId,
+				OrganizationRoleId = organizationUser.OrganizationRoleId,
 				UserId = organizationUser.UserId,
 				EmployeeTypeId = (EmployeeType)organizationUser.EmployeeTypeId
 			};
@@ -678,7 +681,7 @@ namespace AllyisApps.Services
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
-				OrganizationRole = (OrganizationRole)invitation.OrgRoleId,
+				OrganizationRole = (OrganizationRole)invitation.OrganizationRoleId,
 				EmployeeId = invitation.EmployeeId,
 				EmployeeType = (EmployeeType)invitation.EmployeeTypeId
 			};
@@ -726,7 +729,7 @@ namespace AllyisApps.Services
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
-				OrgRoleId = (int)invitation.OrganizationRole,
+				OrganizationRoleId = (int)invitation.OrganizationRole,
 				EmployeeId = invitation.EmployeeId,
 				EmployeeTypeId = (int)invitation.EmployeeType
 			};
