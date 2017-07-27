@@ -13,29 +13,9 @@ namespace AllyisApps.DBModel.Billing
 	public class SubscriptionUserDBEntity
 	{
 		/// <summary>
-		/// Gets or sets FirstName.
+		/// gets or set the product role
 		/// </summary>
-		public string FirstName { get; set; }
-
-		/// <summary>
-		/// Gets or sets LastName.
-		/// </summary>
-		public string LastName { get; set; }
-
-		/// <summary>
-		/// Gets or sets the ProductId.
-		/// </summary>
-		public int ProductId { get; set; }
-
-		/// <summary>
-		/// Gets or sets ProductRoleId.
-		/// </summary>
-		public string ProductRoleId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the name of the subscribed product.
-		/// </summary>
-		public string ProductRoleName { get; set; }
+		public int ProductRoleId { get; set; }
 
 		/// <summary>
 		/// Gets or sets UserId.
@@ -51,10 +31,5 @@ namespace AllyisApps.DBModel.Billing
 		/// Gets or sets the id of the subscription.
 		/// </summary>
 		public int SubscriptionId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the SKU of the subscription.
-		/// </summary>
-		public int SkuId { get; set; }
 	}
 }
