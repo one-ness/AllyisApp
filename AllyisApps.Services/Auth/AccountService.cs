@@ -8,6 +8,7 @@ using AllyisApps.DBModel;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Shared;
+using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
 using System;
 using System.Collections;
@@ -182,12 +183,11 @@ namespace AllyisApps.Services
 					Email = email,
 					FirstName = firstName,
 					LastName = lastName,
-					DateOfBirth = dateOfBirth,
-					Address = address,
-					City = city,
-					State = state,
-					Country = country,
-					PostalCode = postalCode,
+                    Address = address,
+                    City = city,
+                    State = state,
+                    PostalCode = postalCode,
+                    DateOfBirth = dateOfBirth,
 					PhoneNumber = phone,
 					PasswordHash = Crypto.GetPasswordHash(password),
 					TwoFactorEnabled = twoFactorEnabled,
@@ -195,6 +195,7 @@ namespace AllyisApps.Services
 					LockoutEndDateUtc = lockOutEndDateUtc,
 					LanguagePreference = languagePreference
 				};
+
 				result = await this.DBHelper.CreateUserAsync(entity);
 
 				// send confirmation email
@@ -628,6 +629,7 @@ namespace AllyisApps.Services
 			return new User
 			{
 				AccessFailedCount = user.AccessFailedCount,
+                AddressId = user.AddressId,
 				Address = user.Address,
 				City = user.City,
 				Country = user.Country,

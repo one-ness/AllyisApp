@@ -63,7 +63,7 @@
 						@foreach (InvitationInfo invite in Model.InviteInfos)
 						{
 							<div>
-								<span class="col-xs-4 col-sm-6">@invite.OrganizationName</span>
+								<span class="col-xs-4 col-sm-6">@invite.OrganizationRole</span>
 								@using (Html.BeginForm(ActionConstants.AcceptInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
 								{
 									<span class="col-xs-4 col-sm-3 padding">

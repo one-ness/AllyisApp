@@ -14,21 +14,35 @@
 	@TwoFactorEnabled BIT,
 	@LockoutEnabled BIT,
 	@LockoutEndDateUtc DATE,
-	@LanguageId INT
-
+	@LanguageId INT,
+	@Address_Identity INT
 AS
 
 BEGIN
 	SET NOCOUNT ON;
 
+	INSERT INTO [Lookup].[Address]
+		([Address1],
+		[City],
+		[State],
+		[PostalCode])
+	VALUES
+		(@Address,
+		@City,
+		(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
+		@PostalCode);
+
+	SET @address_Identity = SCOPE_IDENTITY()
+
 	INSERT INTO [Auth].[User] 
 		([FirstName], 
 		[LastName], 
-		[Address], 
-		[City], 
+		/*[Address], 
+		[City], A
 		[State], 
 		[Country], 
-		[PostalCode], 
+		[PostalCode],*/ 
+		[AddressId],
 		[Email], 
 		[PhoneNumber], 
 		[DateOfBirth],
@@ -43,11 +57,12 @@ BEGIN
 	VALUES 
 		(@FirstName, 
 		@LastName, 
-		@Address, 
+		/*@Address, 
 		@City, 
 		(SELECT [StateId]	FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
 		(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
-		@PostalCode,
+		@PostalCode,*/
+		@Address_Identity,
 		@Email,
 		@PhoneNumber,
 		@DateOfBirth, 

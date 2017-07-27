@@ -7,6 +7,7 @@
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
+using AllyisApps.DBModel.Lookup;
 using Dapper;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@FirstName", user.FirstName);
 			parameters.Add("@LastName", user.LastName);
 			parameters.Add("@Address", user.Address);
+            parameters.Add("@Address_Identity", user.AddressId);
 			parameters.Add("@City", user.City);
 			parameters.Add("@State", user.State);
 			parameters.Add("@Country", user.Country);
