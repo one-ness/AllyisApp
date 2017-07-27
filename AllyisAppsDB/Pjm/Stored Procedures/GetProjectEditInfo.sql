@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Crm].[GetProjectEditInfo]
+﻿CREATE PROCEDURE [Pjm].[GetProjectEditInfo]
 	@ProjectId INT,
 	@SubscriptionId INT
 AS
@@ -17,14 +17,14 @@ AS
 			[Project].[ProjectOrgId]
 			FROM (
 		(SELECT [ProjectId], [CustomerId], [Name], [Type], [StartUtc], [EndUtc], [IsActive], 
-				[CreatedUtc], [ProjectOrgId] FROM [Crm].[Project] WITH (NOLOCK) WHERE [ProjectId] = @ProjectId) AS [Project]
+				[CreatedUtc], [ProjectOrgId] FROM [Pjm].[Project] WITH (NOLOCK) WHERE [ProjectId] = @ProjectId) AS [Project]
 			JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId]
 			JOIN [Auth].[Organization] WITH (NOLOCK) ON [Organization].[OrganizationId] = [Customer].[OrganizationId]
 	)
 
 	SELECT [ProjectUser].[UserId], [FirstName], [LastName]
-	FROM [Crm].[ProjectUser] WITH (NOLOCK) 
-	LEFT JOIN [Crm].[Project]	WITH (NOLOCK) ON [Project].[ProjectId] = [ProjectUser].[ProjectId]
+	FROM [Pjm].[ProjectUser] WITH (NOLOCK) 
+	LEFT JOIN [Pjm].[Project]	WITH (NOLOCK) ON [Project].[ProjectId] = [ProjectUser].[ProjectId]
 	LEFT JOIN [Crm].[Customer]	WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId]
 	LEFT JOIN [Auth].[User] WITH (NOLOCK) ON [User].[UserId] = [ProjectUser].[UserId]
 	WHERE [Customer].[IsActive] = 1 
@@ -44,7 +44,7 @@ AS
 	WHERE [OrganizationId] = (
 		SELECT TOP 1
 			[OrganizationId]
-		FROM [Crm].[Project] WITH (NOLOCK)
+		FROM [Pjm].[Project] WITH (NOLOCK)
 		LEFT JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId]
 		WHERE [ProjectId] = @ProjectId
 	) AND [ProductRoleId] IS NOT NULL

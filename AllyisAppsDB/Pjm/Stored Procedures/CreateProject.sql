@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Crm].[CreateProject]
+﻿CREATE PROCEDURE [Pjm].[CreateProject]
 	@CustomerId INT,
 	@Name NVARCHAR(MAX),
 	@PriceType NVARCHAR(20),
@@ -10,7 +10,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRANSACTION
-	INSERT INTO [Crm].[Project] ([CustomerId], [Name], [Type], [ProjectOrgId], [StartUtc], [EndUtc])
+	INSERT INTO [Pjm].[Project] ([CustomerId], [Name], [Type], [ProjectOrgId], [StartUtc], [EndUtc])
 	VALUES	(@CustomerId, @Name, @PriceType, @ProjectOrgId, @StartingDate, @EndingDate);
 	SET @retId = SCOPE_IDENTITY()
 	COMMIT TRANSACTION

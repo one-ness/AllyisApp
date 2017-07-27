@@ -81,6 +81,9 @@
     <Folder Include="Finance\Tables\" />
     <Folder Include="Expense\" />
     <Folder Include="Expense\Tables\" />
+    <Folder Include="Pjm" />
+    <Folder Include="Pjm\Stored Procedures" />
+    <Folder Include="Pjm\Tables" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TimeTracker\Tables\Holiday.sql" />
@@ -137,29 +140,13 @@
     <Build Include="Lookup\Stored Procedures\GetLanguageByID.sql" />
     <Build Include="Lookup\Stored Procedures\GetCountries.sql" />
     <Build Include="Lookup\Stored Procedures\GetStatesByCountry.sql" />
-    <Build Include="Crm\Stored Procedures\GetProjectsForOrgAndUser.sql" />
-    <Build Include="Crm\Stored Procedures\GetProjectsAndCustomersForOrgAndUser.sql" />
-    <Build Include="Crm\Stored Procedures\GetProjectByIdAndUser.sql" />
     <Build Include="Crm\Stored Procedures\GetCustomerAndCountries.sql" />
     <Build Include="Crm\Stored Procedures\GetNextCustIdAndCountries.sql" />
-    <Build Include="Crm\Stored Procedures\GetProjectEditInfo.sql" />
-    <Build Include="Crm\Stored Procedures\GetNextProjectIdAndSubUsers.sql" />
-    <Build Include="Crm\Stored Procedures\UpdateProjectAndUsers.sql" />
     <Build Include="Crm\Stored Procedures\CreateCustomerInfo.sql" />
-    <Build Include="Crm\Stored Procedures\CreateProject.sql" />
-    <Build Include="Crm\Stored Procedures\CreateProjectUser.sql" />
     <Build Include="Crm\Stored Procedures\DeleteCustomer.sql" />
-    <Build Include="Crm\Stored Procedures\DeleteProject.sql" />
-    <Build Include="Crm\Stored Procedures\DeleteProjectUser.sql" />
     <Build Include="Crm\Stored Procedures\GetCustomerInfo.sql" />
     <Build Include="Crm\Stored Procedures\GetCustomersByOrgId.sql" />
-    <Build Include="Crm\Stored Procedures\GetProjectById.sql" />
-    <Build Include="Crm\Stored Procedures\GetProjectsByCustomer.sql" />
-    <Build Include="Crm\Stored Procedures\GetProjectsByOrgId.sql" />
-    <Build Include="Crm\Stored Procedures\GetProjectsByUserAndOrganization.sql" />
     <Build Include="Crm\Stored Procedures\UpdateCustomerInfo.sql" />
-    <Build Include="Crm\Stored Procedures\UpdateProject.sql" />
-    <Build Include="Crm\Stored Procedures\UpdateProjectUser.sql" />
     <Build Include="Billing\Stored Procedures\GetProductSubscriptionInfo.sql" />
     <Build Include="Billing\Stored Procedures\DeleteSubPlanAndAddHistory.sql" />
     <Build Include="Billing\Stored Procedures\EditSubscriptionUsers.sql" />
@@ -258,11 +245,8 @@
     <None Include="TestData\TestData.sql" />
     <None Include="TestData\TimeTracker.Settings.Table.sql" />
     <None Include="TestData\TimeTracker.TimeEntry.Table.sql" />
-    <Build Include="Crm\Stored Procedures\CreateProjectAndUpdateItsUserList.sql" />
-    <Build Include="Crm\Stored Procedures\GetInactiveProjectsByCustomer.sql" />
     <Build Include="Crm\Stored Procedures\GetInactiveProjectsAndCustomersForOrgAndUser.sql" />
     <Build Include="Crm\Stored Procedures\ReactivateCustomer.sql" />
-    <Build Include="Crm\Stored Procedures\ReactivateProject.sql" />
     <Build Include="Billing\Stored Procedures\GetAllActiveProductsAndSkus.sql" />
     <Build Include="Auth\Stored Procedures\UpdateMember.sql" />
     <None Include="DefaultData\DummyData.sql" />
@@ -278,6 +262,29 @@
     <Build Include="Auth\Tables\Action.sql" />
     <Build Include="Security\Hrm.sql" />
     <Build Include="Lookup\Tables\Address.sql" />
+    <Build Include="Pjm\Tables\Project.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Build>
+    <Build Include="Pjm\Tables\ProjectUser.sql" />
+    <Build Include="Pjm\Stored Procedures\CreateProject.sql" />
+    <Build Include="Pjm\Stored Procedures\CreateProjectAndUpdateItsUserList.sql" />
+    <Build Include="Pjm\Stored Procedures\CreateProjectUser.sql" />
+    <Build Include="Pjm\Stored Procedures\DeleteProject.sql" />
+    <Build Include="Pjm\Stored Procedures\DeleteProjectUser.sql" />
+    <Build Include="Pjm\Stored Procedures\GetInactiveProjectsByCustomer.sql" />
+    <Build Include="Pjm\Stored Procedures\GetNextProjectIdAndSubUsers.sql" />
+    <Build Include="Pjm\Stored Procedures\GetProjectById.sql" />
+    <Build Include="Pjm\Stored Procedures\GetProjectByIdAndUser.sql" />
+    <Build Include="Pjm\Stored Procedures\GetProjectEditInfo.sql" />
+    <Build Include="Pjm\Stored Procedures\GetProjectsAndCustomersForOrgAndUser.sql" />
+    <Build Include="Pjm\Stored Procedures\GetProjectsByCustomer.sql" />
+    <Build Include="Pjm\Stored Procedures\GetProjectsByOrgId.sql" />
+    <Build Include="Pjm\Stored Procedures\GetProjectsByUserAndOrganization.sql" />
+    <Build Include="Pjm\Stored Procedures\GetProjectsForOrgAndUser.sql" />
+    <Build Include="Pjm\Stored Procedures\ReactivateProject.sql" />
+    <Build Include="Pjm\Stored Procedures\UpdateProject.sql" />
+    <Build Include="Pjm\Stored Procedures\UpdateProjectAndUsers.sql" />
+    <Build Include="Pjm\Stored Procedures\UpdateProjectUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
