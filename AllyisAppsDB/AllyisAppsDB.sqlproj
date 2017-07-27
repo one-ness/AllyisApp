@@ -93,9 +93,7 @@
     <Build Include="Lookup\Tables\Language.sql" />
     <Build Include="Lookup\Tables\Country.sql" />
     <Build Include="Lookup\Tables\State.sql" />
-    <Build Include="Crm\Tables\ProjectUser.sql" />
     <Build Include="Crm\Tables\Customer.sql" />
-    <Build Include="Crm\Tables\Project.sql" />
     <Build Include="Billing\Tables\BillingHistory.sql" />
     <Build Include="Billing\Tables\Product.sql" />
     <Build Include="Billing\Tables\Sku.sql" />
