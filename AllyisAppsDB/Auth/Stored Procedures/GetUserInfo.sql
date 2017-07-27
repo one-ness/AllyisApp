@@ -9,7 +9,7 @@ BEGIN
 		   [User].[LastName],
 		   [User].[DateOfBirth],
 		   [User].[AddressId],
-		   [Address].[Address1],
+		   [Address].[Address1], 'Address',
 		   [Address].[City],
 		   [State].[Name] AS 'State',
 		   [Country].[Name] AS 'Country',
