@@ -707,7 +707,7 @@ namespace AllyisApps.Services
 										{
 											string employeeType = hasEmployeeType ? row[ColumnHeaders.EmployeeType].ToString() : "";
 											//get the id of employeeType, if not found default to Salaried
-											int employeeTypeId = DBHelper.GetEmployeeTypeIdByTypeName(employeeType);
+											byte employeeTypeId = DBHelper.GetEmployeeTypeIdByTypeName(employeeType);
 											if (employeeTypeId == 0) { employeeTypeId = 1; }
 											DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
 											{

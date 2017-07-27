@@ -29,11 +29,6 @@ namespace AllyisApps.DBModel.Auth
 		public int OrganizationRoleId { get; set; }
 
 		/// <summary>
-		/// Gets the OrganizationName associated with this orguser.
-		/// </summary>
-		public string OrganizationName { get; set; }
-
-		/// <summary>
 		/// Gets or sets the date this user was added to the organization.
 		/// </summary>
 		public DateTime CreatedUtc { get; set; }
@@ -44,23 +39,8 @@ namespace AllyisApps.DBModel.Auth
 		public string EmployeeId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the email for this user.
-		/// </summary>
-		public string Email { get; set; }
-
-		/// <summary>
-		/// Gets or sets the user's first name.
-		/// </summary>
-		public string FirstName { get; set; }
-
-		/// <summary>
-		/// Gets or sets the user's last name.
-		/// </summary>
-		public string LastName { get; set; }
-
-		/// <summary>
 		/// Gets or sets EmployeeTypeId
 		/// </summary>
-		public int EmployeeTypeId { get; set; }
+		public byte EmployeeTypeId { get; set; }
 	}
 }

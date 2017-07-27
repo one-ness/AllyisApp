@@ -826,6 +826,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Subscription.
+        /// </summary>
+        public static string CreateSubscription {
+            get {
+                return ResourceManager.GetString("CreateSubscription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current Week.
         /// </summary>
         public static string Current {

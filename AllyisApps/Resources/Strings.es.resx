@@ -1456,4 +1456,7 @@
   <data name="ExpenseTrackerDescription" xml:space="preserve">
 	<value>Gestiona fácilmente sus gastos</value>
   </data>
+  <data name="CreateSubscription" xml:space="preserve">
+	<value>Crear suscripción</value>
+  </data>
 </root>
