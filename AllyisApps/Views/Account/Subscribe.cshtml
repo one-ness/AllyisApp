@@ -41,23 +41,6 @@
 								@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control", @placeholder = Model.subscriptionNameToDisplayForSubscribing() })
 								@Html.ValidationMessageFor(m => m.SubscriptionName)
 							</div>
-                           @* <div class="form-group">
-                                <label>@Strings.NumberOfUsers</label>
-                                <input class="form-control" name="NumberOfUsers" type="number" min="5" step="5" max="500" id="user-count" value="@userCount" onchange="fixUserCount(this)" />
-                            </div>
-                            <div class="col-xs-5">
-                                    <label>@Strings.NumberOfUsers</label>
-                                </div>
-                                <div class="col-xs-5">
-                                    <input class="form-control" name="NumberOfUsers" type="number" min="5" step="5" max="500" id="user-count" value="@userCount" onchange="fixUserCount(this)" />
-                                </div>*@
-                            @*<div class="col-xs-3">
-                                    <label>@Strings.Price</label>
-                                </div>
-                                <div class="col-xs-3">
-                                    <span id="sub-price">@cost</span>
-                                    <label>Select the amount of users for TimeTracker</label>
-                                </div>*@
                         </div>
                         <div class="panel-footer">
                             <div class="pull-right">

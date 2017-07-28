@@ -687,9 +687,6 @@
   <data name="ProjectsFile" xml:space="preserve">
     <value>Archivo de Proyectos</value>
   </data>
-  <data name="ReduceNumberOfUsers" xml:space="preserve">
-    <value>Primero debe quitar usuarios de su suscripción antes de reducir el número de usuarios.</value>
-  </data>
   <data name="Regular" xml:space="preserve">
     <value>Ordinario</value>
   </data>

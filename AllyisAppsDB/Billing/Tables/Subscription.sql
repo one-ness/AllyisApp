@@ -13,18 +13,6 @@ CREATE TABLE [Billing].[Subscription] (
 );
 
 
-
-
-
-
-GO
-
-
-
-GO
-
-
-
 GO
 CREATE CLUSTERED INDEX [IX_Subscription_OrganizationId]
     ON [Billing].[Subscription]([OrganizationId] ASC);
@@ -33,4 +21,17 @@ CREATE CLUSTERED INDEX [IX_Subscription_OrganizationId]
 GO
 CREATE NONCLUSTERED INDEX [IX_Subscription]
     ON [Billing].[Subscription]([OrganizationId] ASC, [SkuId] ASC);
+
+
+GO
+CREATE TRIGGER [Billing].trg_update_NumberOfUsers_on_insert ON [Billing].[SubscriptionUser] FOR INSERT AS
+BEGIN
+	UPDATE [Billing].[Subscription] SET [NumberOfUsers] = COUNT(*) FROM [Billing].[SubscriptionUser] [s] INNER JOIN  [inserted] [i] ON [s].[SubscriptionId] = [i].[SubscriptionId];
+END
+
+GO
+CREATE TRIGGER [Billing].trg_update_NumberOfUsers_on_delete ON [Billing].[SubscriptionUser] FOR DELETE AS
+BEGIN
+	UPDATE [Billing].[Subscription] SET [NumberOfUsers] = COUNT(*) FROM [Billing].[SubscriptionUser] [s] INNER JOIN  [deleted] [i] ON [s].[SubscriptionId] = [i].[SubscriptionId];
+END
 

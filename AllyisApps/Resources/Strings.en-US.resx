@@ -1030,9 +1030,6 @@
   <data name="RedirectToSignIn" xml:space="preserve">
     <value>click here to sign in!</value>
   </data>
-  <data name="ReduceNumberOfUsers" xml:space="preserve">
-    <value>You must first remove users from your subscription before reducing the number of users.</value>
-  </data>
   <data name="Register" xml:space="preserve">
     <value>Register</value>
   </data>

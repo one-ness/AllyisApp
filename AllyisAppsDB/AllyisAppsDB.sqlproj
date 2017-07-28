@@ -183,7 +183,6 @@
     <Build Include="Billing\Stored Procedures\GetSubscriptionPlanPricesByOrg.sql" />
     <Build Include="Billing\Stored Procedures\GetSubscriptionsDisplayByOrg.sql" />
     <Build Include="Billing\Stored Procedures\UpdateCustomerSubscription.sql" />
-    <Build Include="Billing\Stored Procedures\UpdateNumberOfUsersSubscription.sql" />
     <Build Include="Billing\Stored Procedures\UpdateSubscription.sql" />
     <Build Include="Billing\Stored Procedures\UpdateSubscriptionUserProductRole.sql" />
     <Build Include="Billing\Stored Procedures\CreateBillingHistory.sql" />
