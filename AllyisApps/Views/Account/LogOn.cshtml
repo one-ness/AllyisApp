@@ -11,12 +11,12 @@
 
             @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
             <div class="form-group">
-                @Html.Label(Strings.Email)
+                @Html.ReqLabelFor(m => m.Email, Strings.Email)
                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.Email, string.Empty, new { @class = "text-danger" })
             </div>
             <div class="form-group">
-                @Html.Label(Strings.Password)
+                @Html.ReqLabelFor(m =>m.Password, Strings.Password)
                 @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.Password, string.Empty, new { @class = "text-danger" })
                 <div class="field-validation-error" id="capsWarningDiv" style="visibility:hidden; height:0px"><span>@Strings.CapsLock</span></div>
