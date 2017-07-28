@@ -348,7 +348,7 @@ namespace AllyisApps.Services
 		/// Gets the user info for the current user.
 		/// </summary>
 		/// <returns>A User instance with the current user's info.</returns>
-		public User GetUser()
+		public User GetCurrentUser()
 		{
 			return GetUser(UserContext.UserId);
 		}
