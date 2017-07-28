@@ -384,7 +384,7 @@ namespace AllyisApps.DBModel
 		{
 			try
 			{
-				DBHelper.Instance.GetSettings(orgId);
+				this.GetSettings(orgId);
 			}
 			catch
 			{

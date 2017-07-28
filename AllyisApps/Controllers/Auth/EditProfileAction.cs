@@ -20,12 +20,9 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/EditProfile.
 		/// </summary>
-		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
-		/// <param name="id"></param>
-		/// <returns>The result of this action.</returns>
-		public ActionResult EditProfile(string returnUrl, int id)
+		public ActionResult EditProfile()
 		{
-			User userInfo = AppService.GetUser();
+			User userInfo = AppService.GetCurrentUser();
 			EditProfileViewModel model = new EditProfileViewModel
 			{
 				Email = userInfo.Email,
@@ -41,20 +38,15 @@ namespace AllyisApps.Controllers
 				ValidCountries = AppService.ValidCountries()
 			};
 
-			ViewBag.returnUrl = returnUrl;
-
 			return this.View(model);
 		}
 
 		/// <summary>
 		/// POST: /Account/EditProfile.
 		/// </summary>
-		/// <param name="model">The Edit Profile view model.</param>
-		/// <param name="returnUrl">The return url, in case the user was redirected here from an application.</param>
-		/// <returns>The async task to redirect to the return url, or this page again if the model is invalid.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> EditProfile(EditProfileViewModel model, string returnUrl)
+		public async Task<ActionResult> EditProfile(EditProfileViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
@@ -74,12 +66,7 @@ namespace AllyisApps.Controllers
 				}));
 
 				Notifications.Add(new BootstrapAlert(Resources.Strings.UpdateProfileSuccessMessage, Variety.Success));
-
-				if (!string.IsNullOrWhiteSpace(returnUrl))
-				{
-					return this.RedirectToLocal(returnUrl);
-				}
-				return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
+				this.RouteUserHome();
 			}
 
 			model.ValidCountries = AppService.ValidCountries();

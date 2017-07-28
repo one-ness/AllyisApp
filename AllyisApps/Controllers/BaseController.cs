@@ -32,7 +32,8 @@ namespace AllyisApps.Controllers
 		public BaseController()
 		{
 			// init the service
-			this.AppService = new AppService(GlobalSettings.SqlConnectionString);
+			ServiceSettings settings = new ServiceSettings(GlobalSettings.SqlConnectionString, GlobalSettings.SupportEmail, GlobalSettings.SendGridApiKey);
+			this.AppService = new AppService(settings);
 		}
 
 		/// <summary>
