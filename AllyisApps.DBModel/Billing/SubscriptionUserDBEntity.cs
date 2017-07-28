@@ -15,6 +15,16 @@ namespace AllyisApps.DBModel.Billing
 		/// <summary>
 		/// gets or set the product role
 		/// </summary>
+		public string FirstName { get; set; }
+
+		/// <summary>
+		/// gets or set the product role
+		/// </summary>
+		public string LastName { get; set; }
+
+		/// <summary>
+		/// gets or set the product role
+		/// </summary>
 		public int ProductRoleId { get; set; }
 
 		/// <summary>
