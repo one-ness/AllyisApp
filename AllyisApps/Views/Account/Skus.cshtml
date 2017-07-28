@@ -6,7 +6,7 @@
 	ViewBag.Title = Strings.Products;
 }
 
-@foreach (var prod in Model.ProductsList)
+@foreach (var prod in Model.ProductsList.Where(i => i.ProductSkus.Any()))
 {
 	<div class="row">
 		<div class="col-md-6 col-md-push-3">
