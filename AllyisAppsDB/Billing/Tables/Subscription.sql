@@ -26,12 +26,12 @@ CREATE NONCLUSTERED INDEX [IX_Subscription]
 GO
 CREATE TRIGGER [Billing].trg_update_NumberOfUsers_on_insert ON [Billing].[SubscriptionUser] FOR INSERT AS
 BEGIN
-	UPDATE [Billing].[Subscription] SET [NumberOfUsers] = COUNT(*) FROM [Billing].[SubscriptionUser] [s] INNER JOIN  [inserted] [i] ON [s].[SubscriptionId] = [i].[SubscriptionId];
+	UPDATE [Billing].[Subscription] SET [NumberOfUsers] = (SELECT COUNT(*) FROM [Billing].[SubscriptionUser] [s] INNER JOIN  [inserted] [i] ON [s].[SubscriptionId] = [i].[SubscriptionId]);
 END
 
 GO
 CREATE TRIGGER [Billing].trg_update_NumberOfUsers_on_delete ON [Billing].[SubscriptionUser] FOR DELETE AS
 BEGIN
-	UPDATE [Billing].[Subscription] SET [NumberOfUsers] = COUNT(*) FROM [Billing].[SubscriptionUser] [s] INNER JOIN  [deleted] [i] ON [s].[SubscriptionId] = [i].[SubscriptionId];
+	UPDATE [Billing].[Subscription] SET [NumberOfUsers] = (SELECT COUNT(*) FROM [Billing].[SubscriptionUser] [s] INNER JOIN  [deleted] [d] ON [s].[SubscriptionId] = [d].[SubscriptionId]);
 END
 
