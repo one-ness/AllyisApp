@@ -2,6 +2,7 @@
 	@CustomerId INT,
 	@Name NVARCHAR(50),
 	@ContactEmail NVARCHAR(384),
+	@AddressId INT,
     @Address NVARCHAR(100), 
     @City NVARCHAR(100), 
     @State NVARCHAR(100), 
@@ -29,6 +30,14 @@ BEGIN
 	ELSE
 	BEGIN
 		BEGIN TRANSACTION
+			UPDATE [Lookup].[Address]
+			SET [Address1] = @Address,
+				[City] = @City,
+				[State] = (SELECT [StateId] FROM [Lookup].[State] WHERE [Name] = @State), 
+				[CountryId] = (SELECT [CountryId] FROM [Lookup].[Country] WHERE [Name] = @Country), 
+				[PostalCode] = @PostalCode
+			WHERE [AddressId] = @AddressId
+
 			-- update customer
 			UPDATE [Crm].[Customer]
 			SET [Name] = @Name,

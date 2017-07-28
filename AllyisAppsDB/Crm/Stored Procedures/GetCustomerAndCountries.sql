@@ -5,6 +5,7 @@ BEGIN
 	SET NOCOUNT ON;
 	SELECT [Customer].[CustomerId],
 		   [Customer].[Name],
+		   [Customer].[AddressId],
 		   [Address].[Address1] AS 'Address',
 		   [Address].[City],
 		   [State].[Name] AS 'State',

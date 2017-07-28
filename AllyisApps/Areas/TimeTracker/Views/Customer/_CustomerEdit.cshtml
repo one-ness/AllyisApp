@@ -5,7 +5,6 @@
     @using (@Html.BeginForm((string)ViewData[ActionConstants.Action], (string)ViewData[ControllerConstants.Controller], FormMethod.Post, new { @class = string.Empty, role = "form" }))
     {
         @Html.AntiForgeryToken()
-
         @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
         <div class="row">
             <div class="col-md-6 sm-control-width">
@@ -76,9 +75,10 @@
                 </div>
 
                 @Html.HiddenFor(m => m.OrganizationId)
-                @Html.HiddenFor(m => m.CustomerID)
+                @Html.HiddenFor(m => m.CustomerId)
                 @Html.HiddenFor(m => m.IsCreating)
                 @Html.HiddenFor(m => m.SubscriptionId)
+				@Html.HiddenFor(m => m.AddressId)
 
                 <div class="form-group allyis-action-buttons">
                     @if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
