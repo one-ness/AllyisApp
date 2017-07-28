@@ -48,7 +48,7 @@ namespace AllyisApps.Controllers
 				if (user != null)
 				{
 					StringBuilder sb = new StringBuilder();
-					sb.AppendFormat("{0}/{1}/{2}", callbackUrl, user.UserId, code);
+					sb.AppendFormat("{0}/{1}", callbackUrl, code);
 					await AppService.SendPasswordResetMessage(model.Email, code, sb.ToString());
 				}
 				
