@@ -5,6 +5,8 @@
 //------------------------------------------------------------------------------
 
 using System.Configuration;
+using System;
+using AllyisApps.Lib;
 
 namespace AllyisApps.Core
 {
@@ -19,12 +21,41 @@ namespace AllyisApps.Core
 		public static string SqlConnectionString { get; set; }
 
 		/// <summary>
+		/// support email
+		/// </summary>
+		public static string SupportEmail { get; set; }
+
+		/// <summary>
+		/// sendgrid api key
+		/// </summary>
+		public static string SendGridApiKey { get; set; }
+
+		/// <summary>
 		/// Initialize Global Settings.
 		/// </summary>
-		/// <param name="connectionStringKey">The connection string key.</param>
-		public static void Init(string connectionStringKey = "DefaultConnection")
+		public static void Init(string connectionStringKey = "DefaultConnection", string supportEmailKey = "SupportEmail", string sendGridApiKey = "SendGridApiKey")
 		{
 			SqlConnectionString = ConfigurationManager.ConnectionStrings[connectionStringKey].ConnectionString;
+			if (string.IsNullOrWhiteSpace(SqlConnectionString))
+			{
+				throw new ArgumentException("connection string not found");
+			}
+
+			string email = ConfigurationManager.AppSettings[supportEmailKey];
+			if (!string.IsNullOrWhiteSpace(email))
+			{
+				SupportEmail = email.Trim();
+			}
+			else
+			{
+				SupportEmail = "support@allyisapps.com";
+			}
+
+			string apiKey = ConfigurationManager.AppSettings[sendGridApiKey];
+			if (!string.IsNullOrWhiteSpace(sendGridApiKey))
+			{
+				SendGridApiKey = apiKey.Trim();
+			}
 		}
 	}
 }
