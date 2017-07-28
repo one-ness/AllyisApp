@@ -17,6 +17,6 @@ GO
 
 CREATE TRIGGER [Expense].trg_update_report_ModifiedUtc ON [Expense].[ExpenseReport] FOR UPDATE AS
 BEGIN
-    UPDATE [Expense].[ExpenseReport] SET [ModifiedUTC] = CONVERT(DATETIME2(0), GETUTCDATE())
+    UPDATE [Expense].[ExpenseReport] SET [ModifiedUTC] = CONVERT(DATETIME2(0), GETUTCDATE()) FROM [Expense].[ExpenseReport] INNER JOIN [deleted] [d] ON [ExpenseReport].[ExpenseReportId] = [d].[ExpenseReportId]
 END
 GO 
