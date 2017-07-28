@@ -374,6 +374,7 @@
     <Content Include="Areas\TimeTracker\Scripts\allyis-drp-init.js" />
     <Content Include="Areas\TimeTracker\Scripts\allyis-timeentry-settings.js" />
     <Content Include="Content\icons\ExpenseTracker.png" />
+    <Content Include="Content\icons\StaffingManager.png" />
     <Content Include="Content\icons\TimeTrackerPro.png" />
     <Content Include="Content\icons\TimeTracker.png" />
     <Content Include="Content\icons\TimeTrackerOld.png" />
