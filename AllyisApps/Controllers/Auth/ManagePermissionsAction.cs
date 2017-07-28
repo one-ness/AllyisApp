@@ -72,7 +72,7 @@ namespace AllyisApps.Controllers
 						LastName = role.LastName,
 						UserId = int.Parse(role.UserId),
 						Email = role.Email,
-						OrgRoleId = role.OrgRoleId,
+						OrganizationRoleId = role.OrganizationRoleId,
 						ProductRoleIds = new List<int>()
 					};
 
@@ -124,7 +124,7 @@ namespace AllyisApps.Controllers
 					{
 						UserId = user.UserId,
 						UserName = string.Format("{0} {1}", user.FirstName, user.LastName),
-						OrganizationRoleId = user.OrgRoleId,
+						OrganizationRoleId = user.OrganizationRoleId,
 						SubscriptionRoles = new List<ProductRole>()
 					};
 					permissions.Add(currentUserPerm);
@@ -166,8 +166,8 @@ namespace AllyisApps.Controllers
 			result.Filters.UnassignedUsers = new ViewModels.Auth.Filter("Unassigned", users, x => x.ProductRoleId == 0);
 			result.Filters.AllUsers = new ViewModels.Auth.Filter("All Users", users);
 			FilterGroup orgFilters = result.Filters.AddNewFilterGroup("Organization");
-			orgFilters.Filters.Add(new ViewModels.Auth.Filter("Owner", users, x => x.OrgRoleId == (int)OrganizationRole.Owner));
-			orgFilters.Filters.Add(new ViewModels.Auth.Filter("Member", users, x => x.OrgRoleId == (int)OrganizationRole.Member));
+			orgFilters.Filters.Add(new ViewModels.Auth.Filter("Owner", users, x => x.OrganizationRoleId == (int)OrganizationRole.Owner));
+			orgFilters.Filters.Add(new ViewModels.Auth.Filter("Member", users, x => x.OrganizationRoleId == (int)OrganizationRole.Member));
 
 			FilterGroup timeTrackerFilters = result.Filters.AddNewFilterGroup("TimeTracker");
 			timeTrackerFilters.Filters.Add(new ViewModels.Auth.Filter("Any", users, x => x.ProductRoleId != 0));
@@ -201,10 +201,10 @@ namespace AllyisApps.Controllers
 				return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 			}
 
-			if (model.SelectedActions.OrgRoleTarget != 0)
+			if (model.SelectedActions.OrganizationRoleTarget != 0)
 			{
 				// Changing organization roles
-				if (!Enum.IsDefined(typeof(OrganizationRole), model.SelectedActions.OrgRoleTarget) && model.SelectedActions.OrgRoleTarget != -1)
+				if (!Enum.IsDefined(typeof(OrganizationRole), model.SelectedActions.OrganizationRoleTarget) && model.SelectedActions.OrganizationRoleTarget != -1)
 				{
 					Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
 					return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
@@ -212,7 +212,7 @@ namespace AllyisApps.Controllers
 
 				if (model.SelectedUsers.Where(tu => tu.UserId == this.AppService.UserContext.UserId).Any())
 				{
-					if (model.SelectedActions.OrgRoleTarget == -1)
+					if (model.SelectedActions.OrganizationRoleTarget == -1)
 					{
 						Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouAreUnableToRemoveYourself, Variety.Danger));
 					}
@@ -228,8 +228,8 @@ namespace AllyisApps.Controllers
 					}
 				}
 
-				int numberChanged = AppService.ChangeUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.OrgRoleTarget.Value, model.OrganizationId);
-				if (model.SelectedActions.OrgRoleTarget == -1)
+				int numberChanged = AppService.ChangeUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.OrganizationRoleTarget.Value, model.OrganizationId);
+				if (model.SelectedActions.OrganizationRoleTarget == -1)
 				{
 					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
 				}

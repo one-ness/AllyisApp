@@ -1,6 +1,6 @@
 ﻿-- Organization roles
-INSERT INTO [Auth].[OrgRole] (OrgRoleId, Name) VALUES (1, 'Member');
-INSERT INTO [Auth].[OrgRole] (OrgRoleId, Name) VALUES (2, 'Owner');
+INSERT INTO [Auth].[OrganizationRole] (OrganizationRoleId, Name) VALUES (1, 'Member');
+INSERT INTO [Auth].[OrganizationRole] (OrganizationRoleId, Name) VALUES (2, 'Owner');
 
 -- Employee types
 INSERT INTO [Auth].[EmployeeType] (EmployeeTypeId, Name) VALUES (1, 'Salaried'); 

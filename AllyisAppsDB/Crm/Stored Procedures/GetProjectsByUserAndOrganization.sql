@@ -18,10 +18,10 @@ AS
 			[Customer].[CustomerOrgId],
 			[Customer].[IsActive] AS [IsCustomerActive],
 			[ProjectUser].[IsActive] AS [IsUserActive],
-			[OrgRoleId],
+			[OrganizationRoleId],
 			[ProjectOrgId]
 FROM (
-	(SELECT [OrganizationId], [UserId], [OrgRoleId]
+	(SELECT [OrganizationId], [UserId], [OrganizationRoleId]
 	FROM [Auth].[OrganizationUser] WITH (NOLOCK) WHERE [UserId] = @UserId AND [OrganizationId] = @OrgId)
 	AS [OrganizationUser]
 	JOIN [Auth].[Organization]		WITH (NOLOCK) ON [OrganizationUser].[OrganizationId] = [Organization].[OrganizationId]

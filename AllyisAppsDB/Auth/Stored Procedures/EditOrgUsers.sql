@@ -1,10 +1,10 @@
 ﻿CREATE PROCEDURE [Auth].[EditOrgUsers]
 	@OrganizationId	INT,
 	@UserIds [Auth].[UserTable] READONLY,
-	@OrgRole INT
+	@OrganizationRole INT
 AS
 BEGIN TRANSACTION
-	IF @OrgRole = -1 -- Removing users from org
+	IF @OrganizationRole = -1 -- Removing users from org
 	BEGIN
 		-- Delete project user records for these users in this organization
 		DELETE FROM [Crm].[ProjectUser] 
@@ -37,10 +37,10 @@ BEGIN TRANSACTION
 
 		SELECT @@ROWCOUNT
 	END
-	IF @OrgRole > 0 -- Assigning org role
+	IF @OrganizationRole > 0 -- Assigning org role
 	BEGIN
 		UPDATE [Auth].[OrganizationUser]
-		SET [OrgRoleId] = @OrgRole
+		SET [OrganizationRoleId] = @OrganizationRole
 		WHERE [UserId] IN (
 				SELECT [userId] FROM @UserIds
 			) AND [OrganizationId] = @OrganizationId

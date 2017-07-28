@@ -2545,6 +2545,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Organization Role.
+        /// </summary>
+        public static string OrganizationRole {
+            get {
+                return ResourceManager.GetString("OrganizationRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Organizations.
         /// </summary>
         public static string Organizations {
@@ -2559,15 +2568,6 @@ namespace AllyisApps.Resources {
         public static string OrganizationUserRolesUpdated {
             get {
                 return ResourceManager.GetString("OrganizationUserRolesUpdated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Organization Role.
-        /// </summary>
-        public static string OrgRole {
-            get {
-                return ResourceManager.GetString("OrgRole", resourceCulture);
             }
         }
         

@@ -951,7 +951,7 @@
   <data name="OrganizationUserRolesUpdated" xml:space="preserve">
     <value>Organization user roles have been updated successfully.</value>
   </data>
-  <data name="OrgRole" xml:space="preserve">
+  <data name="OrganizationRole" xml:space="preserve">
     <value>Organization Role</value>
   </data>
   <data name="OrgSOW" xml:space="preserve">

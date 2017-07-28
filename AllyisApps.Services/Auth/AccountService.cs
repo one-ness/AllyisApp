@@ -159,7 +159,6 @@ namespace AllyisApps.Services
 			string phone,
 			string password,
 			int languagePreference,
-			string supportEmail,
 			string confirmEmailSubject,
 			string confirmEmailMessage,
 			Guid emailConfirmationCode,
@@ -198,8 +197,7 @@ namespace AllyisApps.Services
 				result = await this.DBHelper.CreateUserAsync(entity);
 
 				// send confirmation email
-				// TODO: get support email from the parameter
-				await Mailer.SendEmailAsync(supportEmail, email, confirmEmailSubject, confirmEmailMessage);
+				await Mailer.SendEmailAsync(this.ServiceSettings.SupportEmail, email, confirmEmailSubject, confirmEmailMessage);
 			}
 			catch (SqlException ex)
 			{
@@ -282,7 +280,7 @@ namespace AllyisApps.Services
 							{
 								OrganizationId = item.OrganizationId.Value,
 								OrganizationName = item.OrganizationName,
-								OrganizationRole = (OrganizationRole)item.OrgRoleId.Value,
+								OrganizationRole = (OrganizationRole)item.OrganizationRoleId.Value,
 							};
 
 							result.UserOrganizations.Add(item.OrganizationId.Value, orgInfo);
@@ -348,7 +346,7 @@ namespace AllyisApps.Services
 		/// Gets the user info for the current user.
 		/// </summary>
 		/// <returns>A User instance with the current user's info.</returns>
-		public User GetUser()
+		public User GetCurrentUser()
 		{
 			return GetUser(UserContext.UserId);
 		}
@@ -520,37 +518,35 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(callbackUrl)) throw new ArgumentNullException("callbackUrl");
 
 			bool result = false;
-			int userId = this.DBHelper.UpdateUserPasswordResetCode(email, code);
-			if (userId > 0)
+			int rowsUpdated = this.DBHelper.UpdateUserPasswordResetCode(email, code);
+			if (rowsUpdated > 0)
 			{
 				// Send reset email
 				StringBuilder sb = new StringBuilder();
 				sb.AppendFormat("Please reset your password by clicking <a href=\"{0}\">this reset link</a>.", callbackUrl);
 				string msgbody = new System.Web.HtmlString(sb.ToString()).ToString();
-				await Mailer.SendEmailAsync("noreply@allyisapps.com", email, "Reset password", msgbody);
-				result = true;
+				result = await Mailer.SendEmailAsync(this.ServiceSettings.SupportEmail, email, "Reset password", msgbody);
 			}
 
 			return result;
 		}
 
 		/// <summary>
-		/// Reset password.
+		/// Reset password. Returns the number of rows updated in the db.
 		/// </summary>
-		/// <param name="userId">The user Id.</param>
-		/// <param name="code">The code.</param>
-		/// <param name="password">The password.</param>
-		/// <returns>The reset password task.</returns>
-		public async Task<bool> ResetPassword(int userId, Guid code, string password)
+		public async Task<int> ResetPassword(Guid code, string password)
 		{
-			if (userId <= 0) throw new ArgumentNullException("userId");
 			if (code == null) throw new ArgumentNullException("code");
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException("password");
-			return await Task.Run(() =>
+
+			int result = 0;
+			await Task.Run(() =>
 			{
 				// update password for user and reset password code to null
-				return this.DBHelper.UpdateUserPasswordUsingCode(userId, Crypto.GetPasswordHash(password), code) == userId;
+				result = this.DBHelper.UpdateUserPasswordUsingCode(Crypto.GetPasswordHash(password), code);
 			});
+
+			return result;
 		}
 
 		/// <summary>
@@ -706,7 +702,7 @@ namespace AllyisApps.Services
 				FirstName = userRoles.FirstName,
 				LastName = userRoles.LastName,
 				Name = userRoles.Name,
-				OrgRoleId = userRoles.OrgRoleId,
+				OrganizationRoleId = userRoles.OrganizationRoleId,
 				ProductRoleId = userRoles.ProductRoleId == null ? -1 : userRoles.ProductRoleId.Value,
 				SubscriptionId = userRoles.SubscriptionId == null ? -1 : userRoles.SubscriptionId.Value,
 				UserId = userRoles.UserId

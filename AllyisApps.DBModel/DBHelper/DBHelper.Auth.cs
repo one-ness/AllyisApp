@@ -247,25 +247,13 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Updates new password in Auth.User table. Requires proper reset code.
+		/// Updates new password in Auth.User table. Requires proper reset code. Returns the number of rows updated.
 		/// </summary>
-		/// <param name = "userId">Target user's Id.</param>
-		/// <param name = "password">The new password hash.</param>
-		/// <param name = "code">The password reset code.</param>
-		/// <returns>An int...</returns>
-		public int UpdateUserPasswordUsingCode(int userId, string password, Guid code)
+		public int UpdateUserPasswordUsingCode(string passwordHash, Guid code)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@UserId", userId);
-			parameters.Add("@PasswordHash", password);
-			parameters.Add("@PasswordResetCode", code.ToString());
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var conn = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<int>(
-					"[Auth].[UpdateUserPasswordUsingCode]",
-					parameters,
-					commandType: CommandType.StoredProcedure).FirstOrDefault<int>();
+				return conn.Query<int>("[Auth].[UpdateUserPasswordUsingCode] @a, @b", new { a = passwordHash, b = code }).FirstOrDefault();
 			}
 		}
 
@@ -274,22 +262,15 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name = "email">Target user's email address.</param>
 		/// <param name = "resetCode">The resetCode.</param>
-		/// <returns>UserId of updated account, or -1 if no account is found for the given email.</returns>
+		/// <returns>number of rows updated</returns>
 		public int UpdateUserPasswordResetCode(string email, string resetCode)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@Email", email);
-			parameters.Add("@PasswordResetCode", resetCode);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<int>(
-					"[Auth].[UpdateUserPasswordResetCode]",
-					parameters,
-					commandType: CommandType.StoredProcedure).FirstOrDefault();
+				return con.Query<int>("Auth.UpdateUserPasswordResetCode @a, @b", new { a = email, b = resetCode }).FirstOrDefault();
 			}
 		}
-
+	
 		/// <summary>
 		/// Adds an organization to the database and sets the owner's chosen organization to the new org.
 		/// </summary>
@@ -390,7 +371,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgUser.OrganizationId);
 			parameters.Add("@userId", orgUser.UserId);
-			parameters.Add("@RoleId", orgUser.OrgRoleId);
+			parameters.Add("@RoleId", orgUser.OrganizationRoleId);
 			parameters.Add("@employeeId", orgUser.EmployeeId);
 			parameters.Add("employeeTypeId", orgUser.EmployeeTypeId);
 
@@ -462,9 +443,9 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="userIds">List of user Ids.</param>
 		/// <param name="organizationId">The Organization Id.</param>
-		/// <param name="orgRoleId">Organization role to assign (or -1 to remove from organization).</param>
+		/// <param name="organizationRoleId">Organization role to assign (or -1 to remove from organization).</param>
 		/// <returns>The number of affected users.</returns>
-		public int EditOrganizationUsers(List<int> userIds, int organizationId, int orgRoleId)
+		public int EditOrganizationUsers(List<int> userIds, int organizationId, int organizationRoleId)
 		{
 			DataTable userIdsTable = new DataTable();
 			userIdsTable.Columns.Add("userId", typeof(int));
@@ -476,7 +457,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@UserIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
 			parameters.Add("@OrganizationId", organizationId);
-			parameters.Add("@OrgRole", orgRoleId);
+			parameters.Add("@OrganizationRole", organizationRoleId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -493,12 +474,12 @@ namespace AllyisApps.DBModel
 		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="userId">The user's Id.</param>
 		/// <returns>The TableOrganizationRole related to the user for the specified organization.</returns>
-		public OrgRoleDBEntity GetPermissionLevel(int organizationId, int userId)
+		public OrganizationRoleDBEntity GetPermissionLevel(int organizationId, int userId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default null
-				return connection.Query<OrgRoleDBEntity>("[Auth].[GetOrgUserRole]", new { OrganizationId = organizationId, UserId = userId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				return connection.Query<OrganizationRoleDBEntity>("[Auth].[GetOrgUserRole]", new { OrganizationId = organizationId, UserId = userId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 
@@ -619,7 +600,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@DateOfBirth", invitation.DateOfBirth);
 			parameters.Add("@organizationId", invitation.OrganizationId);
 			parameters.Add("@AccessCode", invitation.AccessCode);
-			parameters.Add("@OrgRole", invitation.OrgRoleId);
+			parameters.Add("@OrganizationRole", invitation.OrganizationRoleId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 			parameters.Add("@EmployeeId", invitation.EmployeeId);
 			parameters.Add("@EmployeeTypeId", invitation.EmployeeTypeId);
@@ -654,7 +635,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@LastName", invitation.LastName);
 			parameters.Add("@organizationId", invitation.OrganizationId);
 			parameters.Add("@AccessCode", invitation.AccessCode);
-			parameters.Add("@OrgRole", invitation.OrgRoleId);
+			parameters.Add("@OrganizationRole", invitation.OrganizationRoleId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 			parameters.Add("@EmployeeId", invitation.EmployeeId);
 			parameters.Add("@SubscriptionId", subscriptionId);

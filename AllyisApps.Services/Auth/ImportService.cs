@@ -69,7 +69,7 @@ namespace AllyisApps.Services
 			List<Tuple<string, User>> users = this.GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, this.GetUser(o.UserId))).ToList();
 
 			// Retrieval of existing user product subscription data
-			int ttProductId = GetProductIdByName("Time Tracker");
+			int ttProductId = (int)ProductIdEnum.TimeTracker;
 			SubscriptionDisplayDBEntity ttSub = DBHelper.GetSubscriptionsDisplayByOrg(orgId).Where(s => s.ProductId == ttProductId).SingleOrDefault();
 			List<User> userSubs = this.GetUsersWithSubscriptionToProductInOrganization(orgId, ttProductId).ToList();
 
@@ -713,7 +713,7 @@ namespace AllyisApps.Services
 											{
 												EmployeeId = fields[1],
 												OrganizationId = orgId,
-												OrgRoleId = (int)(OrganizationRole.Member),
+												OrganizationRoleId = (int)(OrganizationRole.Member),
 												UserId = user.UserId,
 												EmployeeTypeId = employeeTypeId
 											});

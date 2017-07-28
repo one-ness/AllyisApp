@@ -6,6 +6,7 @@
 
 using AllyisApps.DBModel;
 using System.Collections.Generic;
+using System;
 
 namespace AllyisApps.Services
 {
@@ -15,23 +16,25 @@ namespace AllyisApps.Services
 	public class BaseService
 	{
 		/// <summary>
+		/// service settings
+		/// </summary>
+		public ServiceSettings ServiceSettings { get; private set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseService"/> class.
 		/// </summary>
-		/// <param name="connectionString">The connection string.</param>
-		public BaseService(string connectionString)
+		public BaseService(ServiceSettings settings)
 		{
-			this.DBHelper = new DBHelper(connectionString);
+			this.ServiceSettings = settings ?? throw new ArgumentNullException("settings");
+			this.DBHelper = new DBHelper(this.ServiceSettings.SqlConnectionString);
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseService"/> class.
 		/// </summary>
-		/// <param name="connectionString">The connection string.</param>
-		/// <param name="userContext">The user context.</param>
-		public BaseService(string connectionString, UserContext userContext)
+		public BaseService(ServiceSettings settings, UserContext userContext) : this(settings)
 		{
-			this.DBHelper = new DBHelper(connectionString);
-			this.UserContext = userContext;
+			this.UserContext = userContext ?? throw new ArgumentNullException("userContext");
 		}
 
 		/// <summary>

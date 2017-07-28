@@ -1,13 +1,11 @@
 ﻿CREATE PROCEDURE [Auth].[UpdateUserPasswordUsingCode]
-	@UserId nvarchar (40) ,
-	@PasswordHash nvarchar (MAX),
-	@PasswordResetCode nvarchar (MAX)
+	@passwordHash nvarchar(512),
+	@PasswordResetCode uniqueidentifier
 AS
 BEGIN
-	SELECT [UserId] FROM [Auth].[User]
-	WHERE [UserId] = @UserId AND [PasswordResetCode] = @PasswordResetCode
-
 	UPDATE [Auth].[User]
-	SET [PasswordHash] = @PasswordHash, [PasswordResetCode] = NULL
-	WHERE [UserId] = @UserId AND [PasswordResetCode] = @PasswordResetCode
+	SET [PasswordHash] = @passwordHash, [PasswordResetCode] = NULL
+	WHERE [PasswordResetCode] = @passwordResetCode
+
+	select @@ROWCOUNT
 END
