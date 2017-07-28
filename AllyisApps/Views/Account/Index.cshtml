@@ -39,9 +39,9 @@
 						<span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
 					</p>
 				</div>
-				<div class="col-sm-3 vertically-stacked-buttons text-left">
+				<div class="col-sm-3 vertically-stacked-buttons text-right">
 					@Html.ActionLink(Strings.ChangePassword, ActionConstants.ChangePassword, ControllerConstants.Account, null, new { @class = "btn btn-default", @style = "width:90%" })
-					@Html.ActionLink(Strings.EditProfile, ActionConstants.EditProfile, null, new { @class = "btn btn-default", @style="width:60%"})
+					@Html.ActionLink(Strings.EditProfile, ActionConstants.EditProfile, null, new { @class = "btn btn-default", @style="width:90%"})
 				</div>
 			</div>
 
@@ -63,7 +63,7 @@
 						@foreach (InvitationInfo invite in Model.InviteInfos)
 						{
 							<div>
-								<span class="col-xs-4 col-sm-6">@invite.OrganizationName</span>
+								@*<span class="col-xs-4 col-sm-6">@invite.OrganizationName</span>*@
 								@using (Html.BeginForm(ActionConstants.AcceptInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
 								{
 									<span class="col-xs-4 col-sm-3 padding">

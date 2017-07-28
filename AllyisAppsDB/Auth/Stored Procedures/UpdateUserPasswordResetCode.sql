@@ -1,24 +1,9 @@
 ﻿CREATE PROCEDURE [Auth].[UpdateUserPasswordResetCode]
-	@Email nvarchar (384) ,
-	@PasswordResetCode nvarchar (MAX)
+	@email nvarchar (384) ,
+	@passwordResetCode uniqueidentifier
 AS
-BEGIN
-	IF EXISTS (
-		SELECT * FROM [Auth].[User]
-		WHERE [Email] = @Email
-	)
-	BEGIN
-		UPDATE [Auth].[User]
-		SET [PasswordResetCode] = @PasswordResetCode
-		WHERE [Email] = @Email
-
-		-- Return user id on success
-		SELECT [UserId]
-		FROM [Auth].[User] WITH (NOLOCK)
-		WHERE [Email] = @Email
-	END
-	ELSE
-	BEGIN
-		SELECT -1 --Indicates no account w/ given email
-	END
-END
+begin
+		UPDATE [User] set PasswordResetCode = @passwordResetCode
+		where Email = @email
+		select @@ROWCOUNT
+end

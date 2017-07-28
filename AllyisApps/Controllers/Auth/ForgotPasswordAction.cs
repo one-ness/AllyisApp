@@ -48,10 +48,11 @@ namespace AllyisApps.Controllers
 				if (user != null)
 				{
 					StringBuilder sb = new StringBuilder();
-					sb.AppendFormat("{0}/{1}/{2}", callbackUrl, user.UserId, code);
+					sb.AppendFormat("{0}/{1}", callbackUrl, code);
 					await AppService.SendPasswordResetMessage(model.Email, code, sb.ToString());
 				}
-
+				
+				// add a success notification, irrespective of user is null or not.
 				Notifications.Add(new Core.Alert.BootstrapAlert(string.Format("{0} {1}.", Resources.Strings.ResetEmailHasBeenSent, model.Email), Core.Alert.Variety.Success));
 				return this.RedirectToAction(ActionConstants.LogOn);
 			}

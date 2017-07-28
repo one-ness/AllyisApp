@@ -9,7 +9,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	UPDATE [Auth].[OrganizationUser]
-	SET [OrgRoleId] = @RoleId, 
+	SET [OrganizationRoleId] = @RoleId, 
 		[EmployeeId] = @EmployeeId,
 		[EmployeeTypeId] = @EmployeeTypeId
 	WHERE [UserId] = @UserId AND 
@@ -20,7 +20,7 @@ BEGIN
 		INSERT INTO [Auth].[OrganizationUser] 
 			([UserId], 
 			[OrganizationId], 
-			[OrgRoleId], 
+			[OrganizationRoleId], 
 			[EmployeeId],
 			[EmployeeTypeId])
 		VALUES 
