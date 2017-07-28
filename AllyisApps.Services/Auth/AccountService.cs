@@ -303,12 +303,14 @@ namespace AllyisApps.Services
 								AreaUrl = item.AreaUrl
 							};
 
-							// add it to the list of subscriptions for this organization
-							orgInfo.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
+							if (!orgInfo.UserSubscriptions.ContainsKey(item.SubscriptionId.Value))
+							{
+								// add it to the list of subscriptions for this organization
+								orgInfo.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
 
-							// also add it to the result
-							result.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
-
+								// also add it to the result
+								result.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
+							}
 							// compare with chosen subscription? is user still a member of it?
 							//if (result.ChosenSubscriptionId == item.SubscriptionId.Value)
 							//{
