@@ -49,11 +49,6 @@ namespace AllyisApps.Services.Billing
 		public int NumberOfUsers { get; set; }
 
 		/// <summary>
-		/// Gets or sets a Subscriptions used.
-		/// </summary>
-		public int SubscriptionsUsed { get; set; }
-
-		/// <summary>
 		/// Gets or sets a Name of the organization.
 		/// </summary>
 		public string OrganizationName { get; set; }
