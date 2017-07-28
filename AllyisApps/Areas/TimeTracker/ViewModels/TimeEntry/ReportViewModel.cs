@@ -47,10 +47,15 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
-		/// <summary>
-		/// Gets the id of the organization related to the report data.
-		/// </summary>
-		public int OrganizationId { get; internal set; }
+        /// <summary>
+        /// The Subscription Name
+        /// </summary>
+        public string SubscriptionName { get; set; }
+
+        /// <summary>
+        /// Gets the id of the organization related to the report data.
+        /// </summary>
+        public int OrganizationId { get; internal set; }
 
 		/// <summary>
 		/// Gets the Select List of Users for this organization.

@@ -29,7 +29,7 @@ BEGIN
 			
 			Declare @FirstProject as int
 			set @FirstProject = (SELECT TOP 1 [ProjectId] 
-				FROM [Crm].[ProjectUser], #Tmp
+				FROM [Pjm].[ProjectUser], #Tmp
 				WITH (NOLOCK) 
 				WHERE [ProjectUser].[UserId] = [#Tmp].[UserId] AND [ProjectUser].[IsActive] = 1);
 
@@ -91,11 +91,11 @@ BEGIN
 
 			Declare @FirstProejct as int
 			set @FirstProject = (SELECT TOP 1 [ProjectId] 
-				FROM [Crm].[ProjectUser], #OrgTmp WITH (NOLOCK) 
+				FROM [Pjm].[ProjectUser], #OrgTmp WITH (NOLOCK) 
 				WHERE [ProjectUser].[UserId] = [#OrgTmp].[UserId] AND [ProjectUser].[IsActive] = 1 
 					AND [ProjectId] IN 
 						(SELECT [ProjectId] 
-						FROM [Crm].[Project] WITH (NOLOCK) 
+						FROM [Pjm].[Project] WITH (NOLOCK) 
 						JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId] WHERE [Customer].[OrganizationId] = @OrganizationId));
 			--^^^ Sets the column that contains the first project id for each user for the specified org
 
