@@ -22,36 +22,6 @@ namespace AllyisApps.Services
 	public partial class AppService : BaseService
 	{
 		/// <summary>
-		/// Gets a list of <see cref="Product"/>s for all available products.
-		/// </summary>
-		/// <returns>A list of <see cref="Product"/>s for all available products.</returns>
-		public static List<Product> GetProductList()
-		{
-			return DBHelper.Instance.GetProductList().Select(p => new Product
-			{
-				ProductId = p.ProductId,
-				ProductName = p.Name,
-				ProductDescription = p.Description
-			}).ToList();
-		}
-
-		/// <summary>
-		/// Gets the product Id from the product name.
-		/// This method is static so that it can be accessed in BaseProductController constructor initializations.
-		/// </summary>
-		/// <param name="name">Product name.</param>
-		/// <returns>Product Id.</returns>
-		public static int GetProductIdByName(string name)
-		{
-			if (string.IsNullOrEmpty(name))
-			{
-				throw new ArgumentNullException("name", "Product name must have a value.");
-			}
-
-			return DBHelper.Instance.GetProductIdByName(name);
-		}
-
-		/// <summary>
 		/// Lists Billing Service invoices for a given customer.
 		/// </summary>
 		/// <param name="customerId">The id of the customer for which the invoices should be listed.</param>
@@ -526,7 +496,7 @@ namespace AllyisApps.Services
 		/// <returns>List of SubscriptionDisplayInfos.</returns>
 		public IEnumerable<SubscriptionDisplayInfo> GetSubscriptionsDisplay(int organizationId)
 		{
-			return DBHelper.Instance.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InitializeSubscriptionDisplayInfo(s)).ToList();
+			return this.DBHelper.GetSubscriptionsDisplayByOrg(organizationId).Select(s => InitializeSubscriptionDisplayInfo(s)).ToList();
 		}
 
 		/// <summary>
@@ -774,7 +744,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
 			}
 
-			if (productId == AppService.GetProductIdByName("Time Tracker"))
+			if (productId == (int)ProductIdEnum.TimeTracker)
 			{
 				DBHelper.InitializeTimeTrackerSettings(orgId);
 			}

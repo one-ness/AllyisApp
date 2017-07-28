@@ -23,38 +23,6 @@ namespace AllyisApps.Services
 	public partial class AppService : BaseService
 	{
 		/// <summary>
-		/// Gets the subdomain name from the organization Id.
-		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
-		/// <returns>Subdomain name.</returns>
-		public static string GetSubdomainById(int orgId)
-		{
-			if (orgId < 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
-			}
-
-			return DBHelper.Instance.GetSubdomainById(orgId);
-		}
-
-		/// <summary>
-		/// Gets the organization Id from the subdomain name.
-		/// </summary>
-		/// <param name="subdomain">Subdomain name.</param>
-		/// <returns>Organization id.</returns>
-		public static int GetIdBySubdomain(string subdomain)
-		{
-			//// This is actually checked automatically on any change of the subdomain field, even selecting (or clearing) it.
-			//// A null value needs to be allowed or an exception is thrown before you even type anything.
-			////if (subdomain == null)
-			////{
-			////	throw new ArgumentNullException("subdomain", "Subdomain name must not be null.");
-			////}
-
-			return DBHelper.Instance.GetIdBySubdomain(subdomain);
-		}
-
-		/// <summary>
 		/// Creates an organization.
 		/// </summary>
 		/// <param name="organization">Organization.</param>
@@ -248,7 +216,7 @@ namespace AllyisApps.Services
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
 			await Lib.Mailer.SendEmailAsync(
-				"support@allyisapps.com",
+				this.ServiceSettings.SupportEmail,
 				invitationInfo.Email,
 				"Join Allyis Apps!",
 				msgbody);
@@ -296,7 +264,7 @@ namespace AllyisApps.Services
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
 			await Lib.Mailer.SendEmailAsync(
-				"noreply@allyis.com",
+				this.ServiceSettings.SupportEmail,
 				invitationInfo.Email,
 				"Join Allyis Apps!",
 				msgbody);
