@@ -17,6 +17,8 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @AddressId INT
+
 	IF EXISTS (
 		SELECT * FROM [Crm].[Customer] WITH (NOLOCK)
 		WHERE [CustomerOrgId] = @CustomerOrgId
@@ -28,14 +30,24 @@ BEGIN
 	ELSE
 	BEGIN
 		BEGIN TRANSACTION
+			INSERT INTO [Lookup].[Address]
+				([Address1],
+				[City],
+				[State],
+				[CountryId],
+				[PostalCode])
+			VALUES (@Address,
+				@City,
+				(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
+				(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
+				@PostalCode)
+
+			SET @AddressId = SCOPE_IDENTITY();
+
 			-- Create customer
 			INSERT INTO [Crm].[Customer] 
 				([Name], 
-				[Address], 
-				[City], 
-				[State], 
-				[Country], 
-				[PostalCode], 
+				[AddressId],
 				[ContactEmail], 
 				[ContactPhoneNumber], 
 				[FaxNumber], 
@@ -44,11 +56,7 @@ BEGIN
 				[OrganizationId], 
 				[CustomerOrgId])
 			VALUES (@Name, 
-				@Address, 
-				@City,
-				(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
-				(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
-				@PostalCode, 
+				@AddressId,
 				@ContactEmail, 
 				@ContactPhoneNumber, 
 				@FaxNumber, 
