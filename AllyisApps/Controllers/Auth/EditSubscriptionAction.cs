@@ -29,8 +29,9 @@ namespace AllyisApps.Controllers
 			int productId = (int) AppService.UserContext.UserSubscriptions[id].ProductId;
 			var infos = AppService.GetProductSubscriptionInfo(id, skuId);
 			SkuInfo sku = AppService.GetSkuDetails(skuId);
-			sku.SkuIdNext = infos.Item3.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault().SkuId;
-			sku.NextName = infos.Item3.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault().Name;
+			SkuInfo skuNext = infos.Item3.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault();
+			sku.SkuIdNext = skuNext == null ? 0 : skuNext.SkuId;
+			sku.NextName = skuNext == null ? null : skuNext.Name;
 			EditSubscriptionViewModel model = new EditSubscriptionViewModel
 			{
 				SkuId = sku.SkuId,

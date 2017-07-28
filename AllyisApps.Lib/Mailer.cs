@@ -38,7 +38,7 @@ namespace AllyisApps.Lib
 			bool result = false;
 			Mail mail = new Mail(new Email(from), subject, new Email(to), new Content("text/html", bodyHtml));
 			dynamic response = await sender.client.mail.send.post(requestBody: mail.Get());
-			if (response != null && string.Compare(response.StatusCode, "accepted", true) == 0)
+			if (response != null && string.Compare(response.StatusCode.ToString(), "accepted", true) == 0)
 			{
 				result = true;
 			}
