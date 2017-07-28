@@ -39,9 +39,9 @@
 						<span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
 					</p>
 				</div>
-				<div class="col-sm-3 vertically-stacked-buttons text-left">
-					@Html.ActionLink(Strings.ChangePassword, ActionConstants.ChangePassword, ControllerConstants.Account, null, new { @class = "btn btn-default", @style = "width:90%" })
-					@Html.ActionLink(Strings.EditProfile, ActionConstants.EditProfile, null, new { @class = "btn btn-default", @style="width:60%"})
+				<div class="col-sm-3 vertically-stacked-buttons text-right" style="padding-right:5px">
+					@Html.ActionLink(Strings.ChangePassword, ActionConstants.ChangePassword, ControllerConstants.Account, null, new { @class = "btn btn-default"})
+					@Html.ActionLink(Strings.EditProfile, ActionConstants.EditProfile, null, new { @class = "btn btn-default"})
 				</div>
 			</div>
 

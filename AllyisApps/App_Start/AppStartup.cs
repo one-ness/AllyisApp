@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.Core;
-using AllyisApps.DBModel;
 using System.Web.Security;
 
 namespace AllyisApps
@@ -25,9 +24,6 @@ namespace AllyisApps
 
 			// init auth
 			FormsAuthentication.Initialize();
-
-			// init db
-			DBModelStartup.Init();
 		}
 	}
 }

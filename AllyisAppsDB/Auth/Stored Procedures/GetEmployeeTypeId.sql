@@ -1,11 +1,11 @@
-﻿CREATE PROCEDURE [Auth].[GetEmployeeTypeId]
+﻿CREATE PROCEDURE [Hrm].[GetEmployeeTypeId]
 	@EmployeeType NVARCHAR(32)
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	SELECT [EmployeeType].[EmployeeTypeId]
-	FROM [Auth].[EmployeeType]
+	FROM [Hrm].[EmployeeType]
 	WITH (NOLOCK)
 	WHERE [EmployeeType].[Name] = @EmployeeType
 END

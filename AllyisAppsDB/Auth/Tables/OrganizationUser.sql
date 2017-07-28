@@ -6,7 +6,7 @@
     [EmployeeTypeId] TINYINT       NOT NULL,
     [CreatedUtc]     DATETIME2 (0) DEFAULT (getutcdate()) NOT NULL,
     CONSTRAINT [PK_OrganizationUser] PRIMARY KEY CLUSTERED ([UserId] ASC, [OrganizationId] ASC),
-    CONSTRAINT [FK_OrganizationUser_EmployeeType] FOREIGN KEY ([EmployeeTypeId]) REFERENCES [Auth].[EmployeeType] ([EmployeeTypeId]),
+    CONSTRAINT [FK_OrganizationUser_EmployeeType] FOREIGN KEY ([EmployeeTypeId]) REFERENCES [Hrm].[EmployeeType] ([EmployeeTypeId]),
     CONSTRAINT [FK_OrganizationUser_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),
     CONSTRAINT [FK_OrganizationUser_OrganizationRole] FOREIGN KEY ([OrganizationRoleId]) REFERENCES [Auth].[OrganizationRole] ([OrganizationRoleId]),
     CONSTRAINT [FK_OrganizationUser_User] FOREIGN KEY ([UserId]) REFERENCES [Auth].[User] ([UserId])

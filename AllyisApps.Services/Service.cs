@@ -18,15 +18,12 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AppService"/> class.
 		/// </summary>
-		/// <param name="connectionString">The connection string.</param>
-		public AppService(string connectionString) : base(connectionString) { }
+		public AppService(ServiceSettings settings) : base(settings) { }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AppService"/> class.
 		/// </summary>
-		/// <param name="connectionString">The connection string.</param>
-		/// <param name="userContext">The user context.</param>
-		public AppService(string connectionString, UserContext userContext) : base(connectionString, userContext) { }
+		public AppService(ServiceSettings settings, UserContext userContext) : base(settings, userContext) { }
 
 		/// <summary>
 		/// Converts an int representing days since the DateTime min value (Jan 1st, 0001) into a DateTime date.

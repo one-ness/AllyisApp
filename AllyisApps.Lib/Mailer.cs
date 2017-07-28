@@ -9,6 +9,7 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 namespace AllyisApps.Lib
 {
@@ -17,22 +18,12 @@ namespace AllyisApps.Lib
 	/// </summary>
 	public static class Mailer
 	{
-		/// <summary>
-		/// SendGrid client.
-		/// </summary>
-		private static SendGridAPIClient sender
+		private static SendGridAPIClient sender;
+		public static void Init(string apiKey)
 		{
-			get
-			{
-				if (senderBack == null)
-				{
-					senderBack = new SendGridAPIClient(Properties.Resources.SENDGRId_APIKEY);
-				}
-				return senderBack;
-			}
+			if (string.IsNullOrWhiteSpace(apiKey)) throw new ArgumentNullException("apiKey");
+			sender = new SendGridAPIClient(apiKey);
 		}
-
-		private static SendGridAPIClient senderBack;
 
 		/// <summary>
 		/// Sends html message to one recipient.
@@ -42,15 +33,17 @@ namespace AllyisApps.Lib
 		/// <param name="subject">The message subject line.</param>
 		/// <param name="bodyHtml">The html body of the email.</param>
 		/// <returns>The async mailing task.</returns>
-		public static async Task<dynamic> SendEmailAsync(string from, string to, string subject, string bodyHtml)
+		public static async Task<bool> SendEmailAsync(string from, string to, string subject, string bodyHtml)
 		{
-			Mail mail = new Mail(
-				new Email(from),
-				subject,
-				new Email(to),
-				new Content("text/html", bodyHtml)
-				);
-			return await sender.client.mail.send.post(requestBody: mail.Get());
+			bool result = false;
+			Mail mail = new Mail(new Email(from), subject, new Email(to), new Content("text/html", bodyHtml));
+			dynamic response = await sender.client.mail.send.post(requestBody: mail.Get());
+			if (response != null && string.Compare(response.StatusCode.ToString(), "accepted", true) == 0)
+			{
+				result = true;
+			}
+
+			return result;
 		}
 
 		/// <summary>

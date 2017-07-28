@@ -57,12 +57,10 @@ namespace AllyisApps.Controllers
 				string confirmEmailBody = string.Format(Strings.ConfirmEmailMessage, Strings.ApplicationTitle, confirmUrl);
 				// TODO: Change language preference from 1 to a value grabbed from session/URL
 				int langPreference = 1;
-				// TODO: get support email from web.config
-				string supportEmail = "support@allyisapps.com";
 				// compute birthdate			
 				var birthdate = AppService.GetDateTimeFromDays(model.DateOfBirth);
 				// create new user in the db and get back the userId and count of invitations
-				int userId = await AppService.SetupNewUser(model.Email, model.FirstName, model.LastName, birthdate, model.Address, model.City, model.State, model.Country, model.PostalCode, model.PhoneNumber, model.Password, langPreference, supportEmail, confirmEmailSubject, confirmEmailBody, code);
+				int userId = await AppService.SetupNewUser(model.Email, model.FirstName, model.LastName, birthdate, model.Address, model.City, model.State, model.Country, model.PostalCode, model.PhoneNumber, model.Password, langPreference, confirmEmailSubject, confirmEmailBody, code);
 				if (userId > 0)
 				{
 					// sign in (and set cookie)

@@ -15,12 +15,6 @@ namespace AllyisApps.ViewModels.Auth
 	public class ResetPasswordViewModel : BaseViewModel
 	{
 		/// <summary>
-		/// Gets or sets the account id.
-		/// </summary>
-		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "EmailValidation")]
-		public int UserId { get; set; }
-
-		/// <summary>
 		/// Gets or sets the new password.
 		/// </summary>
 		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "CreatePasswordValidation")]

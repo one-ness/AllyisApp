@@ -247,25 +247,13 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Updates new password in Auth.User table. Requires proper reset code.
+		/// Updates new password in Auth.User table. Requires proper reset code. Returns the number of rows updated.
 		/// </summary>
-		/// <param name = "userId">Target user's Id.</param>
-		/// <param name = "password">The new password hash.</param>
-		/// <param name = "code">The password reset code.</param>
-		/// <returns>An int...</returns>
-		public int UpdateUserPasswordUsingCode(int userId, string password, Guid code)
+		public int UpdateUserPasswordUsingCode(string passwordHash, Guid code)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@UserId", userId);
-			parameters.Add("@PasswordHash", password);
-			parameters.Add("@PasswordResetCode", code.ToString());
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var conn = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<int>(
-					"[Auth].[UpdateUserPasswordUsingCode]",
-					parameters,
-					commandType: CommandType.StoredProcedure).FirstOrDefault<int>();
+				return conn.Query<int>("[Auth].[UpdateUserPasswordUsingCode] @a, @b", new { a = passwordHash, b = code }).FirstOrDefault();
 			}
 		}
 
@@ -274,22 +262,15 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name = "email">Target user's email address.</param>
 		/// <param name = "resetCode">The resetCode.</param>
-		/// <returns>UserId of updated account, or -1 if no account is found for the given email.</returns>
+		/// <returns>number of rows updated</returns>
 		public int UpdateUserPasswordResetCode(string email, string resetCode)
 		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@Email", email);
-			parameters.Add("@PasswordResetCode", resetCode);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<int>(
-					"[Auth].[UpdateUserPasswordResetCode]",
-					parameters,
-					commandType: CommandType.StoredProcedure).FirstOrDefault();
+				return con.Query<int>("Auth.UpdateUserPasswordResetCode @a, @b", new { a = email, b = resetCode }).FirstOrDefault();
 			}
 		}
-
+	
 		/// <summary>
 		/// Adds an organization to the database and sets the owner's chosen organization to the new org.
 		/// </summary>
@@ -561,7 +542,7 @@ namespace AllyisApps.DBModel
 			param.Add("@EmployeeType", employeeType);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<byte>("[Auth].[GetEmployeeTypeId]", param, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return connection.Query<byte>("[Hrm].[GetEmployeeTypeId]", param, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
 

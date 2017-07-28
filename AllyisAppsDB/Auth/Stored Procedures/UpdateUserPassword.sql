@@ -1,13 +1,13 @@
 ﻿CREATE PROCEDURE [Auth].[UpdateUserPassword]
-	@UserId nvarchar (40) ,
-	@PasswordHash nvarchar (MAX)
+	@userId int,
+	@passwordHash nvarchar(512)
 AS
 BEGIN
 	UPDATE [Auth].[User]
-	SET [PasswordHash] = @PasswordHash
-	WHERE [UserId] = @UserId
+	SET [PasswordHash] = @passwordHash
+	WHERE [UserId] = @userId
 
 	SELECT [PasswordHash]
 	FROM [Auth].[User] WITH (NOLOCK)
-	WHERE [UserId] = @UserId
+	WHERE [UserId] = @userId
 END
