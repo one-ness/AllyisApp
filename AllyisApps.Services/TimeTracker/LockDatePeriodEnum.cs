@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AllyisApps.Services.Auth
+namespace AllyisApps.Services
 {
 	public enum LockDatePeriodEnum : int
 	{
