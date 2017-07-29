@@ -86,16 +86,13 @@ namespace AllyisApps.Controllers
 					{
 						return this.RedirectToAction(ActionConstants.Unsubscribe, new { id = model.SubscriptionId, idTwo = model.SkuId });
 					}
+					else if (model.ActionType != model.NextName)
+					{
+						model.SkuIdNext = model.SkuId;
+						model.NextName = model.Name;
+					}
 
-					Tuple<Product, SubscriptionInfo, List<SkuInfo>, string, int> infos;
-					if (model.ActionType != model.NextName)
-					{
-						infos = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuId);
-					}
-					else
-					{
-						infos = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuIdNext);
-					}
+					Tuple<Product, SubscriptionInfo, List<SkuInfo>, string, int> infos = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuIdNext);
 
 					var id = infos.Item4;
 					var customerId = new BillingServicesCustomerId(id);
