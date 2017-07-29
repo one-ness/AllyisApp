@@ -22,16 +22,15 @@ namespace AllyisApps.Controllers
 		/// <returns>The result of this action.</returns>
 		[HttpGet]
 		public ActionResult EditSubscription(int id)
-        {
+		{
 			int orgId = AppService.UserContext.UserSubscriptions[id].OrganizationId;
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
 			int skuId = AppService.UserContext.UserSubscriptions[id].SkuId;
-			int productId = (int) AppService.UserContext.UserSubscriptions[id].ProductId;
-			var infos = AppService.GetProductSubscriptionInfo(id, skuId);
-			SkuInfo sku = AppService.GetSkuDetails(skuId);
-			SkuInfo skuNext = infos.Item3.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault();
-			sku.SkuIdNext = skuNext == null ? 0 : skuNext.SkuId;
-			sku.NextName = skuNext == null ? null : skuNext.Name;
+
+			int productId = (int)AppService.UserContext.UserSubscriptions[id].ProductId;
+			string subscriptionName = AppService.UserContext.UserSubscriptions[id].SubscriptionName;
+
+			SkuInfo sku = GetNextName(id, skuId, productId);
 			EditSubscriptionViewModel model = new EditSubscriptionViewModel
 			{
 				SkuId = sku.SkuId,
@@ -42,9 +41,32 @@ namespace AllyisApps.Controllers
 				SubscriptionId = id,
 				OrganizationId = orgId,
 				ProductId = sku.ProductId,
-				SubscriptionName = "" // TODO: make this available in infos via stored procedure.
+				SubscriptionName = subscriptionName
 			};
 			return this.View(ViewConstants.EditSubscription, model);
+		}
+
+		private SkuInfo GetNextName(int id, int skuId, int productId)
+		{
+			var infos = AppService.GetProductSubscriptionInfo(id, skuId);
+			SkuInfo sku = AppService.GetSkuDetails(skuId);
+			SkuInfo skuNext = infos.Item3.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault();
+			sku.SkuIdNext = skuNext == null ? 0 : skuNext.SkuId;
+			sku.NextName = skuNext == null ? null : skuNext.Name;
+			switch (sku.Name)
+			{
+				case "Time Tracker":
+					sku.NextName = "Time Tracker Pro";
+					sku.SkuIdNext = 300001;
+					break;
+				case "Time Tracker Pro":
+					sku.NextName = "Time Tracker";
+					sku.SkuIdNext = 200001;
+					break;
+				default:
+					break;
+			}
+			return sku;
 		}
 
 		/// <summary>
@@ -64,22 +86,17 @@ namespace AllyisApps.Controllers
 					{
 						return this.RedirectToAction(ActionConstants.Unsubscribe, new { id = model.SubscriptionId, idTwo = model.SkuId });
 					}
-					var infos = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuIdNext);
 
-					//ProductSubscriptionViewModel mod = new ProductSubscriptionViewModel()
-					//{
-					//	IsValid = true,
-					//	OrganizationId = model.OrganizationId,
-					//	OrganizationName = model.NextName,
-					//	ProductId = model.ProductId,
-					//	ProductName = model.ProductName,
-					//	ProductDescription = model.Description,
-					//	CurrentSubscription = infos.Item2,
-					//	Skus = infos.Item3,
-					//	SelectedSku = model.SkuIdNext,
-					//	SelectedSkuName = model.SkuIdNext > 0 ? infos.Item3.Where(s => s.SkuId == model.SkuIdNext).SingleOrDefault().Name : string.Empty,
-					//	PreviousSku = model.SkuId
-					//};
+					Tuple<Product, SubscriptionInfo, List<SkuInfo>, string, int> infos;
+					if (model.ActionType != model.NextName)
+					{
+						infos = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuId);
+					}
+					else
+					{
+						infos = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuIdNext);
+					}
+
 					var id = infos.Item4;
 					var customerId = new BillingServicesCustomerId(id);
 					var token = new BillingServicesToken(customerId.ToString());
@@ -97,8 +114,9 @@ namespace AllyisApps.Controllers
 						return this.RedirectToAction(ActionConstants.Subscribe, new { productId = model.ProductId });
 					}
 				}
-				catch (Exception)
+				catch (Exception ex)
 				{
+					var thing = ex;
 					Notifications.Add(new BootstrapAlert(@Resources.Strings.CannotEditSubscriptionsMessage, Variety.Warning));
 					return this.RedirectToAction(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = model.OrganizationId });
 				}
