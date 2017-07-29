@@ -137,7 +137,7 @@
                     <div id="OTSettings" style="visibility: @(overTimeUsed ? "visible" : "hidden")">
                         <div style="margin:10px">
                             @Strings.After
-                            <input type="text" id="hours" name="hours" value='@(Model.Settings.OvertimeHours < 0 ? 40 : Model.Settings.OvertimeHours)' class="form-control" style="width: 50px; text-align: right; display: inline-block;" /> @Strings.HoursPer
+                            <input type="text" id="hours" name="hours" value='@(Model.Settings.OvertimeHours < 0 ? 40 : Model.Settings.OvertimeHours)' class="form-control" style="width: 45px; text-align: center; display: inline-block;" /> @Strings.HoursPer
                             <select id="period" name="period" class="form-control" value='@Model.Settings.OvertimePeriod' style="display: inline-block; width: 100px;">
                                 <option value="Day" @(Model.Settings.OvertimePeriod == "Day" ? " selected=true" : string.Empty)>@Strings.Day</option>
                                 <option value="Week" @(Model.Settings.OvertimePeriod == "Week" ? " selected=true" : string.Empty)>@Strings.Week</option>
@@ -146,7 +146,7 @@
                         </div>
                         <div style="margin:10px">
                             @Strings.WithAMultiplierOf
-                            <input type="text" id="mult" name="mult" value='@Model.Settings.OvertimeMultiplier.ToString("G10")' class="form-control" style="width: 60px; text-align: right; display: inline-block;" />
+                            <input type="text" id="mult" name="mult" value='@Model.Settings.OvertimeMultiplier.ToString("G10")' class="form-control" style="width: 50px; text-align: center; display: inline-block;" />
                         </div>
                     </div>
                     <div>
