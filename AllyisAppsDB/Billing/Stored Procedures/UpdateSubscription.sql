@@ -44,7 +44,7 @@ ELSE
 			AND [Subscription].[IsActive] = 1
 			AND [SkuId] IN (SELECT [SkuId] FROM [Billing].[Sku]
 							WHERE [SkuId] != @SkuId
-							AND [ProductId] = (SELECT [ProductId] FROM [Billing].[Sku] WHERE [SkuId] = @SkuId)
+							AND [ProductId] != (SELECT [ProductId] FROM [Billing].[Sku] WHERE [SkuId] = @SkuId)
 							AND [OrganizationId] = @OrganizationId);
 
 		--If not exist, create new subscription and add all org members to the new subscription as sub users
