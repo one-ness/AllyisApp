@@ -5,12 +5,12 @@
     [Date]        DATETIME2 (0)  NOT NULL,
     [Duration]    FLOAT (53)     NOT NULL,
     [Description] NVARCHAR (128) NULL,
-    [LockSaved]   BIT            DEFAULT ((0)) NOT NULL,
-    [PayClassId]  INT            DEFAULT ('Regular') NOT NULL,
+    [LockSaved]   BIT            DEFAULT 0 NOT NULL,
+    [PayClassId]  INT            DEFAULT 1 NOT NULL,
     [CreatedUtc]  DATETIME2 (0)  NOT NULL DEFAULT getutcdate(),
     [ModifiedUtc] DATETIME2 (0)  NOT NULL DEFAULT getutcdate(),
     CONSTRAINT [PK_TimeEntry] PRIMARY KEY NONCLUSTERED ([TimeEntryId] ASC),
-    CONSTRAINT [FK_TimeEntry_Project] FOREIGN KEY ([ProjectId]) REFERENCES [Crm].[Project] ([ProjectId]),
+    CONSTRAINT [FK_TimeEntry_Project] FOREIGN KEY ([ProjectId]) REFERENCES [Pjm].[Project] ([ProjectId]),
     CONSTRAINT [FK_TimeEntry_User] FOREIGN KEY ([UserId]) REFERENCES [Auth].[User] ([UserId])
 );
 

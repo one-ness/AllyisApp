@@ -7,12 +7,12 @@ BEGIN TRANSACTION
 	IF @OrganizationRole = -1 -- Removing users from org
 	BEGIN
 		-- Delete project user records for these users in this organization
-		DELETE FROM [Crm].[ProjectUser] 
+		DELETE FROM [Pjm].[ProjectUser] 
 		WHERE [UserId] IN (
 				SELECT [userId] FROM @UserIds
 			) AND
 			[ProjectId] IN (
-				SELECT [ProjectId] FROM [Crm].[Project] WITH (NOLOCK)
+				SELECT [ProjectId] FROM [Pjm].[Project] WITH (NOLOCK)
 				WHERE [CustomerId] IN (
 					SELECT [CustomerId] FROM [Crm].[Customer] WITH (NOLOCK)
 					WHERE [OrganizationId] = @OrganizationId

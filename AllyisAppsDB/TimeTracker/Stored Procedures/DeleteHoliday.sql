@@ -13,6 +13,6 @@ AS
 		AND [Duration] = 8
 		AND [PayClassId] = (SELECT TOP 1 [PayClassId] FROM [PayClass] WITH (NOLOCK) WHERE [Name] = 'Holiday')
 		AND [ProjectId] IN (SELECT [ProjectId]
-							FROM [Crm].[Project] WITH (NOLOCK) JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId]
+							FROM [Pjm].[Project] WITH (NOLOCK) JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId]
 							WHERE [Customer].[OrganizationId] = @OrganizationId);
 	END
