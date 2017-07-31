@@ -735,11 +735,11 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Translates a <see cref="CompleteProjectDBEntity"/> into a <see cref="CompleteProjectInfo"/>.
+		/// Translates a <see cref="ProjectDBEntity"/> into a <see cref="CompleteProjectInfo"/>.
 		/// </summary>
 		/// <param name="completeProject">CompleteProjectDBEntity instance.</param>
 		/// <returns>CompleteProjectInfo instance.</returns>
-		public static CompleteProjectInfo InitializeCompleteProjectInfo(CompleteProjectDBEntity completeProject)
+		public static CompleteProjectInfo InitializeCompleteProjectInfo(ProjectDBEntity completeProject)
 		{
 			if (completeProject == null)
 			{

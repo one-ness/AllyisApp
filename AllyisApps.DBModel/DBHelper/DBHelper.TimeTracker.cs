@@ -500,7 +500,7 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns></returns>
-		public Tuple<List<CustomerDBEntity>, List<CompleteProjectDBEntity>, List<SubscriptionUserDBEntity>> GetReportInfo(int orgId, int subscriptionId)
+		public Tuple<List<CustomerDBEntity>, List<ProjectDBEntity>, List<SubscriptionUserDBEntity>> GetReportInfo(int orgId, int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgId);
@@ -514,7 +514,7 @@ namespace AllyisApps.DBModel
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
 					results.Read<CustomerDBEntity>().ToList(),
-					results.Read<CompleteProjectDBEntity>().ToList(),
+					results.Read<ProjectDBEntity>().ToList(),
 					results.Read<SubscriptionUserDBEntity>().ToList());
 			}
 		}
@@ -533,7 +533,7 @@ namespace AllyisApps.DBModel
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
 		/// <returns></returns>
-		public Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>, List<CompleteProjectDBEntity>, List<UserDBEntity>, List<TimeEntryDBEntity>>
+		public Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>, List<ProjectDBEntity>, List<UserDBEntity>, List<TimeEntryDBEntity>>
 			GetTimeEntryIndexPageInfo(int orgId, int timeTrackerProductId, int userId, DateTime? startingDate, DateTime? endingDate)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -553,7 +553,7 @@ namespace AllyisApps.DBModel
 				return Tuple.Create(results.Read<SettingDBEntity>().SingleOrDefault(),
 					results.Read<PayClassDBEntity>().ToList(),
 					results.Read<HolidayDBEntity>().ToList(),
-					results.Read<CompleteProjectDBEntity>().ToList(),
+					results.Read<ProjectDBEntity>().ToList(),
 					results.Read<UserDBEntity>().ToList(),
 					results.Read<TimeEntryDBEntity>().ToList());
 			}

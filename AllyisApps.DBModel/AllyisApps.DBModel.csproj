@@ -61,7 +61,6 @@
     <Compile Include="Billing\BillingHistoryItemDBEntity.cs" />
     <Compile Include="Billing\SubscriptionDisplayDBEntity.cs" />
     <Compile Include="Billing\SubscriptionRoleDBEntity.cs" />
-    <Compile Include="Crm\CompleteProjectDBEntity.cs" />
     <Compile Include="Crm\ProjectDBEntity.cs" />
     <Compile Include="DBHelper\DBHelper.Expense.cs" />
     <Compile Include="DBHelper\DBHelper.Finance.cs" />
