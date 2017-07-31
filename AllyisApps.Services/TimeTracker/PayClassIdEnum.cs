@@ -26,26 +26,6 @@ namespace AllyisApps.Services.Auth
 		/// <summary>
 		/// Holiday.
 		/// </summary>
-		Holiday = 4,
-
-		/// <summary>
-		/// Bereavement Leave.
-		/// </summary>
-		BereavementLeave = 5,
-
-		/// <summary>
-		/// Jury Duty.
-		/// </summary>
-		JuryDuty = 6,
-
-		/// <summary>
-		/// Overtime.
-		/// </summary>
-		Overtime = 7,
-
-		/// <summary>
-		/// Other Leave.
-		/// </summary>
-		OtherLeave = 8,
+		Holiday = 4
 	}
 }
