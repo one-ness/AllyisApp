@@ -683,9 +683,23 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		public void UpdateSubscriptionName()
+		/// <summary>
+		/// Updates the name of existing subscription.
+		/// </summary>
+		public void UpdateSubscriptionName(int orgId, int selectedSku, string subscriptionName)
 		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@OrganizationId", orgId);
+			parameters.Add("@SkuId", selectedSku);
+			parameters.Add("@SubscriptionName", subscriptionName);
 
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Query(
+					"[Billing].[UpdateSubscriptionName]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+			}
 		}
 
 		/// <summary>
