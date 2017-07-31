@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.DBModel.Lookup;
-using AllyisApps.DBModel.Shared;
 using Dapper;
 using System.Collections;
 using System.Collections.Generic;

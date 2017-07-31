@@ -89,7 +89,7 @@
     <Compile Include="Auth\OrganizationDBEntity.cs" />
     <Compile Include="Auth\UserDBEntity.cs" />
     <Compile Include="Billing\SkuDBEntity.cs" />
-    <Compile Include="Shared\LanguageDBEntity.cs" />
+    <Compile Include="Lookup\LanguageDBEntity.cs" />
     <Compile Include="TimeTracker\HolidayDBEntity.cs" />
     <Compile Include="TimeTracker\LockDateDBEntity.cs" />
     <Compile Include="TimeTracker\PayClassDBEntity.cs" />
@@ -103,6 +103,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Shared\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
