@@ -9,7 +9,7 @@ BEGIN
 		   [User].[LastName],
 		   [User].[DateOfBirth],
 		   [User].[AddressId],
-		   [Address].[Address1], 'Address',
+		   [Address].[Address1] AS 'Address',
 		   [Address].[City],
 		   [State].[Name] AS 'State',
 		   [Country].[Name] AS 'Country',
@@ -23,7 +23,7 @@ BEGIN
 		   [LanguagePreference]
 	FROM [Auth].[User]
 	WITH (NOLOCK)
-	JOIN [Lookup].[Address]			WITH (NOLOCK) ON [Address].[AddressId] = [User].[AddressId]
+	JOIN [Lookup].[Address]		WITH (NOLOCK) ON [Address].[AddressId] = [User].[AddressId]
 	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
 	LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[State]
 	WHERE [UserId] = @UserId;

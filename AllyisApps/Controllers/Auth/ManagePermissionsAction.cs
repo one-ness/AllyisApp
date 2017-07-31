@@ -260,16 +260,9 @@ namespace AllyisApps.Controllers
 						Resources.Strings.UsersRemovedFromTimeTracker : Resources.Strings.UsersChangedRolesInTimeTracker), Variety.Success));
 				}
 
-				if (updatedAndAdded.Item2 == -1)
+				if (updatedAndAdded.Item2 != 0 )
 				{
-					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.TooManyUsersInSubToAdd, model.SelectedUsers.Count()), Variety.Danger));
-				}
-				else
-				{
-					if (updatedAndAdded.Item2 != 0)
-					{
-						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersAddedToTimeTracker, updatedAndAdded.Item2), Variety.Success));
-					}
+					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersAddedToTimeTracker, updatedAndAdded.Item2), Variety.Success));
 				}
 			}
 

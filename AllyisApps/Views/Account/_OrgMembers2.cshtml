@@ -38,7 +38,7 @@
 		<tbody>
 			@foreach (InvitationInfo invite in Model.PendingInvitation)
 			{
-				string pars = "/" + invite.InvitationId + "/" + invite.OrganizationId + "/true";
+				string pars = "/" + invite.InvitationId + "/" + invite.OrganizationId + "/1";
 				<tr class="memberRow">
 					<td class="memberSearchProperty">@string.Format("{0} {1} ({2})", invite.FirstName, invite.LastName, Strings.Invited)</td>
 					<td class="memberSearchProperty">@invite.CompressedEmail</td>
@@ -55,7 +55,7 @@
 			}
 			@foreach (OrganizationUserViewModel user in Model.DisplayUsers)
 			{
-				string pars = "/" + user.UserId + "/" + user.OrganizationId + "/false";
+				string pars = "/" + user.UserId + "/" + user.OrganizationId + "/0";
 				<tr class="memberRow">
 					<td class="memberSearchProperty">@user.FullName</td>
 					<td class="memberSearchProperty">@user.Email</td>

@@ -9,11 +9,7 @@ SELECT	[Product].[ProductId],
 		[Subscription].[SkuId],
 		[Subscription].[NumberOfUsers],
 		[Organization].[Name] AS [OrganizationName],
-		[Sku].[Name] AS [SkuName],
-		(SELECT COUNT([UserId])
-			FROM [Billing].[SubscriptionUser] WITH (NOLOCK) 
-			WHERE [SubscriptionUser].[SubscriptionId] = [Subscription].[SubscriptionId])
-			AS SubscriptionsUsed
+		[Sku].[Name] AS [SkuName]
   FROM [Billing].[Subscription] WITH (NOLOCK) 
   LEFT JOIN [Billing].[Sku]			WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
   LEFT JOIN [Auth].[Organization]	WITH (NOLOCK) ON [Organization].[OrganizationId] = [Subscription].[OrganizationId]

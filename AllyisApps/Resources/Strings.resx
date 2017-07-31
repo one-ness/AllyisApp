@@ -195,9 +195,6 @@
   <data name="PleaseUploadFile" xml:space="preserve">
     <value>Please upload your file. </value>
   </data>
-  <data name="ReduceNumberOfUsers" xml:space="preserve">
-    <value>You must first remove users from your subscription before reducing the number of users.</value>
-  </data>
   <data name="ResetEmailHasBeenSent" xml:space="preserve">
     <value>A message containing a password reset link has been sent to</value>
   </data>
