@@ -86,16 +86,17 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Assigns a time tracker role to a list of users.
-		/// </summary>
-		/// <param name="userIds">List of user Ids.</param>
-		/// <param name="organizationId">The Organization Id.</param>
-		/// <param name="timeTrackerRoleId">Time tracker role to assign (or -1 to remove from organization).</param>
-		/// <returns>The number of updated/removed users, and the number of newly added users (or -1 if subscription is too full).</returns>
-		public Tuple<int, int> EditSubscriptionUsers(List<int> userIds, int organizationId, int timeTrackerRoleId)
+        /// <summary>
+        /// Assigns a time tracker role to a list of users.
+        /// </summary>
+        /// <param name="userIds">List of user Ids.</param>
+        /// <param name="organizationId">The Organization Id.</param>
+        /// <param name="productRoleId">Product role to assign (or -1 to remove from organization).</param>
+        /// <param name="productId">ID of Product in question.</param>
+        /// <returns>The number of updated/removed users, and the number of newly added users (or -1 if subscription is too full).</returns>
+        public Tuple<int, int> EditSubscriptionUsers(List<int> userIds, int organizationId, int productRoleId, int productId)
 		{
-			if (timeTrackerRoleId == 0)
+			if (productRoleId == 0)
 			{
 				throw new ArgumentException("Role cannot be 0.");
 			}
@@ -110,7 +111,8 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@UserIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
 			parameters.Add("@OrganizationId", organizationId);
-			parameters.Add("@TimeTrackerRole", timeTrackerRoleId);
+			parameters.Add("@ProductRoleId", productRoleId);
+            parameters.Add("@ProductId", productId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -125,7 +127,7 @@ namespace AllyisApps.DBModel
 												//throw new InvalidOperationException("No subscription to TimeTracker for this organization.");
 				}
 
-				if (timeTrackerRoleId == -1) // If removing from subscription, return only the number of users succesfully removed.
+				if (productRoleId == -1) // If removing from subscription, return only the number of users succesfully removed.
 				{
 					return Tuple.Create(usersUpdated, 0);
 				}
