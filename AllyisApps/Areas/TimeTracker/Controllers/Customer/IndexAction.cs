@@ -144,6 +144,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				OrganizationId = subInfo.OrganizationId,
 				canEdit = canEditProjects,
 				SubscriptionId = subscriptionId,
+                SubscriptionName = subInfo.SubscriptionName,
 				UserId = this.AppService.UserContext.UserId
 			};
 		}

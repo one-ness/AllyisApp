@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [TimeTracker].[UpdateLockDate]
 	@OrganizationId INT,
 	@LockDateUsed BIT,
-	@LockDatePeriod VARCHAR(10),
+	@LockDatePeriod INT,
 	@LockDateQuantity INT
 AS
 	SET NOCOUNT ON;

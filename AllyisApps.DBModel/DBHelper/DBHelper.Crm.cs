@@ -54,7 +54,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute(
-					"[Crm].[CreateProjectAndUpdateItsUserList]",
+					"[Pjm].[CreateProjectAndUpdateItsUserList]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 			}
@@ -86,7 +86,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute(
-					"[Crm].[CreateProject]",
+					"[Pjm].[CreateProject]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 			}
@@ -103,7 +103,7 @@ namespace AllyisApps.DBModel
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var result = connection.Query<string>("[Crm].[DeleteProject]", new { ProjectId = projectId, DeactivateDate = DateTime.Now }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				var result = connection.Query<string>("[Pjm].[DeleteProject]", new { ProjectId = projectId, DeactivateDate = DateTime.Now }, commandType: CommandType.StoredProcedure).SingleOrDefault();
 				if (result == null) { return ""; }
 				return result;
 			}
@@ -140,7 +140,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute(
-					"[Crm].[ReactivateProject]",
+					"[Pjm].[ReactivateProject]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 			}
@@ -163,7 +163,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute(
-					"[Crm].[UpdateProject]",
+					"[Pjm].[UpdateProject]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 			}
@@ -182,7 +182,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<ProjectDBEntity>(
-					"[Crm].[GetProjectsByCustomer]",
+					"[Pjm].[GetProjectsByCustomer]",
 					parameters,
 				   commandType: CommandType.StoredProcedure);
 			}
@@ -201,7 +201,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<ProjectDBEntity>(
-					"[Crm].[GetInactiveProjectsByCustomer]",
+					"[Pjm].[GetInactiveProjectsByCustomer]",
 					parameters,
 				   commandType: CommandType.StoredProcedure);
 			}
@@ -223,7 +223,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
-					"[Crm].[GetProjectEditInfo]",
+					"[Pjm].[GetProjectEditInfo]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
@@ -249,7 +249,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
-					"[Crm].[GetNextProjectIdAndSubUsers]",
+					"[Pjm].[GetNextProjectIdAndSubUsers]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
@@ -271,7 +271,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Query<int>(
-					"[Crm].[CreateProjectUser]",
+					"[Pjm].[CreateProjectUser]",
 					parameters,
 					commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
@@ -296,7 +296,7 @@ namespace AllyisApps.DBModel
 			{
 				int rows = 1;
 				rows = connection.Query<int>(
-					"[Crm].[UpdateProjectUser]",
+					"[Pjm].[UpdateProjectUser]",
 					parameters,
 					commandType: CommandType.StoredProcedure).SingleOrDefault();
 
@@ -319,7 +319,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<int>(
-					"[Crm].[DeleteProjectUser]",
+					"[Pjm].[DeleteProjectUser]",
 					parameters,
 					commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
@@ -569,7 +569,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<CompleteProjectDBEntity>(
-					"[Crm].[GetProjectsByUserAndOrganization]",
+					"[Pjm].[GetProjectsByUserAndOrganization]",
 					parameters,
 					 commandType: CommandType.StoredProcedure);
 			}
@@ -589,7 +589,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<CompleteProjectDBEntity>(
-					"[Crm].[GetProjectsByOrgId]",
+					"[Pjm].[GetProjectsByOrgId]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 			}
@@ -608,7 +608,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<CompleteProjectDBEntity>(
-					"[Crm].[GetProjectById]",
+					"[Pjm].[GetProjectById]",
 					parameters,
 					commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
@@ -630,7 +630,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<CompleteProjectDBEntity>(
-					"[Crm].[GetProjectByIdAndUser]",
+					"[Pjm].[GetProjectByIdAndUser]",
 					parameters,
 					commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
@@ -677,7 +677,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Query(
-					"[Crm].[UpdateProjectAndUsers]",
+					"[Pjm].[UpdateProjectAndUsers]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 			}
@@ -704,7 +704,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
-					"[Crm].[GetProjectsForOrgAndUser]",
+					"[Pjm].[GetProjectsForOrgAndUser]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
@@ -729,7 +729,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
-					"[Crm].[GetProjectsAndCustomersForOrgAndUser]",
+					"[Pjm].[GetProjectsAndCustomersForOrgAndUser]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(

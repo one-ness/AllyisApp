@@ -28,10 +28,15 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
-		/// <summary>
-		/// Gets the id of the current organization.
-		/// </summary>
-		public int OrganizationId { get; internal set; }
+        /// <summary>
+        /// The Subscription Name
+        /// </summary>
+        public string SubscriptionName { get; set; }
+
+        /// <summary>
+        /// Gets the id of the current organization.
+        /// </summary>
+        public int OrganizationId { get; internal set; }
 
 		/// <summary>
 		/// Gets the user's Id

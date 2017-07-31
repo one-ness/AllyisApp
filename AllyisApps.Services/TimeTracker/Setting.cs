@@ -44,7 +44,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Gets or sets the lock date period (days/weeks/months).
 		/// </summary>
-		public string LockDatePeriod { get; set; }
+		public int LockDatePeriod { get; set; }
 
 		/// <summary>
 		/// Gets or sets the lock date quantity.
