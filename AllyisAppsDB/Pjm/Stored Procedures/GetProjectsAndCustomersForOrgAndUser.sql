@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Crm].[GetProjectsAndCustomersForOrgAndUser]
+﻿CREATE PROCEDURE [Pjm].[GetProjectsAndCustomersForOrgAndUser]
 	@OrgId int,
 	@UserId int
 AS
@@ -20,11 +20,11 @@ AS
 	FROM (
 		[Auth].[Organization] WITH (NOLOCK) 
 		JOIN [Crm].[Customer]	WITH (NOLOCK) ON ([Customer].[OrganizationId] = [Organization].[OrganizationId] AND [Organization].[OrganizationId] = @OrgId)
-		JOIN [Crm].[Project]		WITH (NOLOCK) ON [Project].[CustomerId] = [Customer].[CustomerId]
+		JOIN [Pjm].[Project]		WITH (NOLOCK) ON [Project].[CustomerId] = [Customer].[CustomerId]
 		LEFT JOIN (
 			SELECT 1 AS 'IsProjectUser',
 			[ProjectUser].[ProjectId]
-			FROM [Crm].[ProjectUser] WITH (NOLOCK)
+			FROM [Pjm].[ProjectUser] WITH (NOLOCK)
 			WHERE [ProjectUser].[UserId] = @UserId
 		) [SUB] ON [SUB].[ProjectId] = [Project].[ProjectId]
 	)

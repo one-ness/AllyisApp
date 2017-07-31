@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Crm].[DeleteProject]
+﻿CREATE PROCEDURE [Pjm].[DeleteProject]
 	@ProjectId INT,
 	@DeactivateDate DATE
 AS
@@ -9,17 +9,17 @@ BEGIN
 
 	SELECT 
 		@ProjectName = [Name] 
-	FROM [Crm].[Project] WITH (NOLOCK)
+	FROM [Pjm].[Project] WITH (NOLOCK)
 	WHERE [ProjectId] = @ProjectId
 
 	IF @ProjectName IS NOT NULL
 	BEGIN --Project found
-		UPDATE [Crm].[Project]
+		UPDATE [Pjm].[Project]
 		SET [IsActive] = 0, [EndUtc] = @DeactivateDate
 		WHERE [ProjectId] = @ProjectId
 	 
-		UPDATE [Crm].[ProjectUser] SET [IsActive] = 0
-		WHERE [ProjectUser].[ProjectId] IN (SELECT [ProjectId] FROM [Crm].[Project] WHERE [IsActive] = 0);
+		UPDATE [Pjm].[ProjectUser] SET [IsActive] = 0
+		WHERE [ProjectUser].[ProjectId] IN (SELECT [ProjectId] FROM [Pjm].[Project] WHERE [IsActive] = 0);
 	END
 	SELECT @ProjectName
 END

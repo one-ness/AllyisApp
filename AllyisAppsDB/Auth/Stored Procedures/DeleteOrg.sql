@@ -20,18 +20,18 @@ BEGIN TRANSACTION
 		SET [IsActive] = 0
 		WHERE [OrganizationId] = @OrgId;
 
-		UPDATE [Crm].[Project] 
+		UPDATE [Pjm].[Project] 
 		SET [IsActive] = 0
 		WHERE (SELECT [OrganizationId]
 			FROM [Crm].[Customer] WITH (NOLOCK) 
 			WHERE [Customer].[CustomerId] = [Project].[CustomerId])
 		= @OrgId;
 
-		UPDATE [Crm].[ProjectUser] 
+		UPDATE [Pjm].[ProjectUser] 
 		SET [IsActive] = 0
 		WHERE [ProjectUser].[ProjectId] IN 
 			(SELECT [ProjectId] 
-			FROM [Crm].[Project] WITH (NOLOCK) 
+			FROM [Pjm].[Project] WITH (NOLOCK) 
 			WHERE [IsActive] = 0);
 
 		UPDATE [Billing].[StripeOrganizationCustomer] 

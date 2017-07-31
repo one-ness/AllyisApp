@@ -311,7 +311,6 @@ namespace AllyisApps.Services
 								// also add it to the result
 								result.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
 							}
-
 							// compare with chosen subscription? is user still a member of it?
 							//if (result.ChosenSubscriptionId == item.SubscriptionId.Value)
 							//{
@@ -726,6 +725,8 @@ namespace AllyisApps.Services
 
 			return new SubscriptionUserInfo
 			{
+				FirstName = subUser.FirstName,
+				LastName = subUser.LastName,
 				CreatedUtc = subUser.CreatedUtc,
 				SubscriptionId = subUser.SubscriptionId,
 				UserId = subUser.UserId
