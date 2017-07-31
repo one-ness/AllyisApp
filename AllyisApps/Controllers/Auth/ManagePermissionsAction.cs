@@ -247,7 +247,7 @@ namespace AllyisApps.Controllers
 					return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 				}
 
-				Tuple<int, int> updatedAndAdded = AppService.ChangeSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value, model.OrganizationId);
+				Tuple<int, int> updatedAndAdded = AppService.ChangeSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value, model.OrganizationId, (int)ProductIdEnum.TimeTracker); //TODO: this should get a product ID from the model so that this method doesnt only work on time tracker subscriptions
 				if (updatedAndAdded.Item1 == -1)
 				{
 					Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDontHaveASubscriptionToTimeTracker, Variety.Danger));

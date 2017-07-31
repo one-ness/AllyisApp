@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [TimeTracker].[CreateHoliday]
 	@HolidayName NVARCHAR(50),
-	@Date DATETIME2(0),
+	@Date DATE,
 	@OrganizationId INT
 AS
 	SET NOCOUNT ON;
