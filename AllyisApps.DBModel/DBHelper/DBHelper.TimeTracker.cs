@@ -452,7 +452,7 @@ namespace AllyisApps.DBModel
 		/// <param name="lockDatePeriod"></param>
 		/// <param name="lockDateQuantity"></param>
 		/// <returns></returns>
-		public bool UpdateLockDate(int organizationId, bool lockDateUsed, string lockDatePeriod, int lockDateQuantity)
+		public bool UpdateLockDate(int organizationId, bool lockDateUsed, int lockDatePeriod, int lockDateQuantity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);

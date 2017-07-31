@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Crm].[UpdateProjectUser]
+﻿CREATE PROCEDURE [Pjm].[UpdateProjectUser]
 	@ProjectId INT,
 	@UserId INT,
 	@IsActive BIT,
@@ -7,7 +7,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRANSACTION
-		UPDATE [Crm].[ProjectUser]
+		UPDATE [Pjm].[ProjectUser]
 		SET [IsActive] = @IsActive
 		WHERE [ProjectUser].[ProjectId] = @ProjectId AND [ProjectUser].[UserId] = @UserId
 		

@@ -546,7 +546,7 @@ namespace AllyisApps.DBModel
 			param.Add("@EmployeeType", employeeType);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<byte>("[Auth].[GetEmployeeTypeId]", param, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return connection.Query<byte>("[Hrm].[GetEmployeeTypeId]", param, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
 

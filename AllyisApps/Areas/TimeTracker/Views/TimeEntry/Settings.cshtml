@@ -11,6 +11,7 @@
     Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
     ViewData["UserId"] = Model.UserId;
     ViewData["SubscriptionId"] = Model.SubscriptionId;
+    ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
 @section css {
@@ -105,11 +106,11 @@
                     </div>
                     <div id="LockDate" style="margin: 10px">
                         <input type="radio" name="LDsetting" id="LDsetting" value="true" onclick="disableLD(false)" @(Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @Strings.UseLockDate</text>
-                        <input type="text" id="LDquantity" name="LDquantity" value="@Model.Settings.LockDateQuantity" class="form-control" style="width: 40px; text-align: right; display: inline-block;" />
+                        <input type="text" id="LDquantity" name="LDquantity" value="@Model.Settings.LockDateQuantity" class="form-control" style="width: 45px; text-align: center; display: inline-block;" />
                         <select id="LDperiod" name="LDperiod" class="form-control" value='@(Model.Settings.LockDatePeriod)' style="width: 100px; display: inline-block;">
-                            <option value="Days" @(Model.Settings.LockDatePeriod == "Days" ? " selected=true" : string.Empty)>@Strings.Days</option>
-                            <option value="Weeks" @(Model.Settings.LockDatePeriod == "Weeks" ? " selected=true" : string.Empty)>@Strings.Weeks</option>
-                            <option value="Months" @(Model.Settings.LockDatePeriod == "Months" ? " selected=true" : string.Empty)>@Strings.Months</option>
+                            <option value="1" @(Model.Settings.LockDatePeriod == (int)LockDatePeriodEnum.days ? " selected=true" : string.Empty)>@Strings.Days</option>
+                            <option value="2" @(Model.Settings.LockDatePeriod == (int)LockDatePeriodEnum.weeks ? " selected=true" : string.Empty)>@Strings.Weeks</option>
+                            <option value="3" @(Model.Settings.LockDatePeriod == (int)LockDatePeriodEnum.months? " selected=true" : string.Empty)>@Strings.Months</option>
                         </select>
                     </div>
                     <div>
@@ -137,7 +138,7 @@
                     <div id="OTSettings" style="visibility: @(overTimeUsed ? "visible" : "hidden")">
                         <div style="margin:10px">
                             @Strings.After
-                            <input type="text" id="hours" name="hours" value='@(Model.Settings.OvertimeHours < 0 ? 40 : Model.Settings.OvertimeHours)' class="form-control" style="width: 50px; text-align: right; display: inline-block;" /> @Strings.HoursPer
+                            <input type="text" id="hours" name="hours" value='@(Model.Settings.OvertimeHours < 0 ? 40 : Model.Settings.OvertimeHours)' class="form-control" style="width: 45px; text-align: center; display: inline-block;" /> @Strings.HoursPer
                             <select id="period" name="period" class="form-control" value='@Model.Settings.OvertimePeriod' style="display: inline-block; width: 100px;">
                                 <option value="Day" @(Model.Settings.OvertimePeriod == "Day" ? " selected=true" : string.Empty)>@Strings.Day</option>
                                 <option value="Week" @(Model.Settings.OvertimePeriod == "Week" ? " selected=true" : string.Empty)>@Strings.Week</option>
@@ -146,7 +147,7 @@
                         </div>
                         <div style="margin:10px">
                             @Strings.WithAMultiplierOf
-                            <input type="text" id="mult" name="mult" value='@Model.Settings.OvertimeMultiplier.ToString("G10")' class="form-control" style="width: 60px; text-align: right; display: inline-block;" />
+                            <input type="text" id="mult" name="mult" value='@Model.Settings.OvertimeMultiplier.ToString("G10")' class="form-control" style="width: 50px; text-align: center; display: inline-block;" />
                         </div>
                     </div>
                     <div>

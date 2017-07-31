@@ -24,7 +24,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="subscriptionId">The subscription's Id</param>
 		/// <returns>Provides the view for the user.</returns>
 		[HttpPost]
-		public ActionResult SetLockDate(int subscriptionId, bool LDsetting, string LDperiod, int LDquantity)
+		public ActionResult SetLockDate(int subscriptionId, bool LDsetting, int LDperiod, int LDquantity)
 		{
 			this.AppService.CheckTimeTrackerAction(Services.AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;

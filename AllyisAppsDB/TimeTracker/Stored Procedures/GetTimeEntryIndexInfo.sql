@@ -87,8 +87,8 @@ AS
 		AS [OrganizationUser]
 		JOIN [Auth].[Organization]		WITH (NOLOCK) ON [OrganizationUser].[OrganizationId] = [Organization].[OrganizationId]
 		JOIN [Crm].[Customer]		WITH (NOLOCK) ON [Customer].[OrganizationId] = [Organization].[OrganizationId]
-		JOIN ( [Crm].[Project]
-			JOIN [Crm].[ProjectUser] WITH (NOLOCK) ON [ProjectUser].[ProjectId] = [Project].[ProjectId]
+		JOIN ( [Pjm].[Project]
+			JOIN [Pjm].[ProjectUser] WITH (NOLOCK) ON [ProjectUser].[ProjectId] = [Project].[ProjectId]
 		)
 										ON [Project].[CustomerId] = [Customer].[CustomerId]
 										AND [ProjectUser].[UserId] = [OrganizationUser].[UserId]
@@ -111,7 +111,7 @@ AS
 			0,
 			0,
 			[ProjectOrgId]
-			FROM [Crm].[Project] WITH (NOLOCK) WHERE [ProjectId] = 0
+			FROM [Pjm].[Project] WITH (NOLOCK) WHERE [ProjectId] = 0
 	ORDER BY [Project].[Name]
 
 	SELECT [User].[UserId],

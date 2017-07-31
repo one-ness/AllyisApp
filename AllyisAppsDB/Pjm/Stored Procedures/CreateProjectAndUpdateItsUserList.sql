@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Crm].[CreateProjectAndUpdateItsUserList]
+﻿CREATE PROCEDURE [Pjm].[CreateProjectAndUpdateItsUserList]
 	@CustomerId INT,
 	@Name NVARCHAR(MAX),
 	@PriceType NVARCHAR(20),
@@ -11,7 +11,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	IF EXISTS (
-		SELECT * FROM [Crm].[Project] WITH (NOLOCK)
+		SELECT * FROM [Pjm].[Project] WITH (NOLOCK)
 		WHERE [ProjectOrgId] = @ProjectOrgId
 		AND [CustomerId] = @CustomerId
 	)
@@ -23,27 +23,27 @@ BEGIN
 		BEGIN
 			BEGIN TRANSACTION
 				-- Create the new project in Project table
-				INSERT INTO [Crm].[Project] ([CustomerId], [Name], [Type], [ProjectOrgId], [StartUtc], [EndUtc])
+				INSERT INTO [Pjm].[Project] ([CustomerId], [Name], [Type], [ProjectOrgId], [StartUtc], [EndUtc])
 				VALUES	(@CustomerId, @Name, @PriceType, @ProjectOrgId, @StartingDate, @EndingDate);
 				SET @retId = SCOPE_IDENTITY()
 
 				/* Update new users that used to be users at some point */
-				UPDATE [Crm].[ProjectUser] SET IsActive = 1
+				UPDATE [Pjm].[ProjectUser] SET IsActive = 1
 				WHERE [ProjectUser].[ProjectId] = @retId 
 					AND [ProjectUser].[UserId] IN (SELECT userId FROM @UserIds) 
 					AND [ProjectUser].[IsActive] = 0
 
 				/* Add new users that have never been on the project */
-				INSERT INTO [Crm].[ProjectUser] ([ProjectId], [UserId], [IsActive])
+				INSERT INTO [Pjm].[ProjectUser] ([ProjectId], [UserId], [IsActive])
 				SELECT @retId, userId, 1
 				FROM @UserIds
 				WHERE userId NOT IN
 					(SELECT [ProjectUser].[UserId]
-					FROM [Crm].[ProjectUser] WITH (NOLOCK)
+					FROM [Pjm].[ProjectUser] WITH (NOLOCK)
 					WHERE [ProjectUser].[ProjectId] = @retId)
 
 				/* Set inactive existing users that are not in the updated users list */
-				UPDATE [Crm].[ProjectUser] SET IsActive = 0
+				UPDATE [Pjm].[ProjectUser] SET IsActive = 0
 				WHERE [ProjectUser].[ProjectId] = @retId
 					AND [ProjectUser].[UserId] NOT IN (SELECT userId FROM @UserIds) 
 					AND [ProjectUser].[IsActive] = 1
