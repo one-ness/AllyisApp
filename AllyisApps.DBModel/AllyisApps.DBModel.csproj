@@ -70,7 +70,6 @@
     <Compile Include="DBHelper\DBHelper.cs" />
     <Compile Include="DBHelper\DBHelper.Auth.cs" />
     <Compile Include="DBHelper\DBHelper.Crm.cs" />
-    <Compile Include="DBModelStartup.cs" />
     <Compile Include="Lookup\AddressDBEntity.cs" />
     <Compile Include="Lookup\CountryDBEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
