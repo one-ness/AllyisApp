@@ -1,4 +1,4 @@
-CREATE TABLE [Crm].[Project] (
+﻿CREATE TABLE [Pjm].[Project] (
     [ProjectId]    INT           IDENTITY (116827, 3) NOT NULL,
     [CustomerId]   INT           NOT NULL,
     [Name]         NVARCHAR (64) NOT NULL,
@@ -25,5 +25,5 @@ GO
 
 GO
 CREATE NONCLUSTERED INDEX [IX_Project]
-    ON [Crm].[Project]([CustomerId] ASC);
+    ON [Pjm].[Project]([CustomerId] ASC);
 

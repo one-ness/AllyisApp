@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Crm].[GetProjectsByOrgId]
+﻿CREATE PROCEDURE [Pjm].[GetProjectsByOrgId]
 	@OrgId INT,
 	@Activity INT = 1
 AS
@@ -20,7 +20,7 @@ FROM (
 --(SELECT [OrganizationId], [OrganizationRoleId] FROM [Auth].[OrganizationUser] WHERE [OrganizationId] = @orgId) AS OrganizationUser
 	[Auth].[Organization] WITH (NOLOCK) 
 	JOIN [Crm].[Customer]	WITH (NOLOCK) ON ([Customer].[OrganizationId] = [Organization].[OrganizationId] AND [Organization].[OrganizationId] = @OrgId)
-	JOIN [Crm].[Project]		WITH (NOLOCK) ON [Project].[CustomerId] = [Customer].[CustomerId]
+	JOIN [Pjm].[Project]		WITH (NOLOCK) ON [Project].[CustomerId] = [Customer].[CustomerId]
 )
 	
 WHERE [Customer].[IsActive] >= @Activity

@@ -630,6 +630,7 @@ namespace AllyisApps.Services
 
 			return new Customer()
 			{
+				AddressId = customer.AddressId,
 				Address = customer.Address,
 				City = customer.City,
 				ContactEmail = customer.ContactEmail,

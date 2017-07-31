@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Crm].[GetNextProjectIdAndSubUsers]
+﻿CREATE PROCEDURE [Pjm].[GetNextProjectIdAndSubUsers]
 	@CustomerId INT,
 	@SubscriptionId INT
 AS
@@ -6,7 +6,7 @@ BEGIN
 	SET NOCOUNT ON;
 	SELECT TOP 1
 		[ProjectOrgId]
-	FROM [Crm].[Project] WITH (NOLOCK)
+	FROM [Pjm].[Project] WITH (NOLOCK)
 	WHERE [Project].[CustomerId] = @CustomerId
 	ORDER BY [ProjectOrgId] DESC
 

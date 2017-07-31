@@ -28,6 +28,7 @@ namespace AllyisApps.Controllers
 				Email = userInfo.Email,
 				FirstName = userInfo.FirstName,
 				LastName = userInfo.LastName,
+				AddressId = userInfo.AddressId,
 				Address = userInfo.Address,
 				City = userInfo.City,
 				State = userInfo.State,
@@ -57,6 +58,7 @@ namespace AllyisApps.Controllers
 					FirstName = model.FirstName,
 					LastName = model.LastName,
 					DateOfBirth = AppService.GetDateTimeFromDays(model.DateOfBirth),
+					AddressId = model.AddressId,
 					Address = model.Address,
 					City = model.City,
 					State = model.State,
@@ -72,7 +74,7 @@ namespace AllyisApps.Controllers
 			model.ValidCountries = AppService.ValidCountries();
 
 			// Invalid Model
-			return this.View(model);
+			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 		}
 	}
 }

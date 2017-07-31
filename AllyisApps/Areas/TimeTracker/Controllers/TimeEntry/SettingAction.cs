@@ -25,12 +25,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			var infos = AppService.GetAllSettings(subscriptionId);
-			return this.View(new SettingsViewModel()
+            UserSubscription subInfo = null;
+            this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+            return this.View(new SettingsViewModel()
 			{
 				Settings = infos.Item1,
 				PayClasses = infos.Item2,
 				Holidays = infos.Item3,
 				SubscriptionId = subscriptionId,
+                SubscriptionName = subInfo.SubscriptionName,
 				UserId = this.AppService.UserContext.UserId
 			});
 		}

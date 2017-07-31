@@ -25,10 +25,10 @@ SET IDENTITY_INSERT [Crm].[Customer] OFF
 GO
 
 --Insert Default Project
-SET IDENTITY_INSERT [Crm].[Project] ON
-INSERT INTO [CRM].[Project] ([ProjectId], [Name], [CustomerId], [ProjectOrgId], [IsActive])
+SET IDENTITY_INSERT [Pjm].[Project] ON
+INSERT INTO [PJM].[Project] ([ProjectId], [Name], [CustomerId], [ProjectOrgId], [IsActive])
 VALUES (0, 'Default', 0, 0, '0000000000000000')
-SET IDENTITY_INSERT [Crm].[Project] OFF
+SET IDENTITY_INSERT [Pjm].[Project] OFF
 GO
 
 :r .\DefaultData\CountryStates.sql
@@ -45,7 +45,7 @@ DBCC CHECKIdENT('TimeTracker.TimeEntry');
 DBCC CHECKIdENT('Auth.Invitation');
 DBCC CHECKIdENT('TimeTracker.Holiday');
 DBCC CHECKIdENT('TimeTracker.PayClass');
-DBCC CHECKIdENT('Crm.Project');
+DBCC CHECKIdENT('Pjm.Project');
 DBCC CHECKIdENT('Crm.Customer');
 DBCC CHECKIdENT('Billing.Subscription');
 DBCC CHECKIdENT('Lookup.State');

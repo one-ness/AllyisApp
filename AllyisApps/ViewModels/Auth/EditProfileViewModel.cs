@@ -61,6 +61,11 @@ namespace AllyisApps.ViewModels.Auth
 		public string PhoneNumber { get; set; }
 
 		/// <summary>
+		/// Gets of sets the user's address Id
+		/// </summary>
+		public int AddressId { get; set; }
+
+		/// <summary>
 		/// Gets or sets the user's street address.
 		/// </summary>
 		[DataType(DataType.Text)]
