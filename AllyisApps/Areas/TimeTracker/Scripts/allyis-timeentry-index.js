@@ -125,7 +125,7 @@ function ajaxUpdateValues(form_element, values) {
 	}
 }
 
-async function editTimes(values) {
+function editTimes(values) {
 	var elements = document.getElementsByName("entry-" + values.projectId),
 		totalTime = $('#totalHours').text().split(":"),
 		totalHours = parseInt(totalTime[0]),
@@ -163,7 +163,7 @@ async function editTimes(values) {
 	})
 }
 
-async function updateTimes(values) {
+function updateTimes(values) {
 	if ($('#' + values.projectId) === null)
 	{
 		var table = document.getElementsByClassName("table table-condensed");
@@ -182,7 +182,7 @@ async function updateTimes(values) {
 		minuteUpdate = parseInt(updateVal[1]);
 
 	var projHour = projectHours + hourUpdate;
-	var projMinute = projectMinutes + (Math.sign(hourUpdate) === -1 ? minuteUpdate * -1 : minuteUpdate);
+	var projMinute = projectMinutes + (hourUpdate < 0 ? minuteUpdate * -1 : minuteUpdate);
 	if (projMinute >= 60) {
 		projHour += projMinute / 60;
 		projMinute = projMinute % 60;
