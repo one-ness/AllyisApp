@@ -3,7 +3,7 @@
     [OrganizationId]         INT           NOT NULL,
     [SkuId]                  INT           NOT NULL,
     [SubscriptionName]       NVARCHAR (64) NULL,
-    [NumberOfUsers]          INT           NOT NULL,
+    [NumberOfUsers]          INT           NOT NULL DEFAULT ((1)),
     [IsActive]               BIT           CONSTRAINT [DF_Subscription_IsActive] DEFAULT ((1)) NOT NULL,
     [CreatedUtc]             DATETIME2 (0) CONSTRAINT [DF_Subscription_CreatedUtc] DEFAULT (getutcdate()) NOT NULL,
     [ModifiedUtc]            DATETIME2 (0) CONSTRAINT [DF_Subscription_ModifiedUtc] DEFAULT (getutcdate()) NOT NULL,
