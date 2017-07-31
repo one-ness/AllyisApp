@@ -138,8 +138,7 @@ namespace AllyisApps.Controllers
 				{
 					ProductName = sub.ProductName,
 					ProductRoles = infos.Item3.Where(r => r.ProductId == sub.ProductId).ToList(),
-					SubscriptionId = sub.SubscriptionId,
-					hasTooManySubscribers = sub.SubscriptionsUsed >= sub.NumberOfUsers
+					SubscriptionId = sub.SubscriptionId
 				};
 				subInfo.ProductRoles.Insert(0, new ProductRole
 				{

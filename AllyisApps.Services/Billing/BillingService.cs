@@ -298,21 +298,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Updates the number of subscription users for a sku in the current organization.
-		/// </summary>
-		/// <param name="orgId">The Organization Id</param>
-		/// <param name="skuId">Sku Id.</param>
-		public void UpdateSubscriptionUsers(int orgId, int skuId)
-		{
-			if (skuId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("skuId", "Sku Id cannot be 0 or negative.");
-			}
-
-			DBHelper.UpdateSubscriptionUsers(orgId, skuId, 0);
-		}
-
-		/// <summary>
 		/// Deletes a subsciption user.
 		/// </summary>
 		/// <param name="subscriptionId">Subscription Id.</param>
@@ -589,7 +574,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			int subId = DBHelper.ChangeSubscription(orgId, selectedSku, productId, 0, subscriptionName);
+			int subId = DBHelper.ChangeSubscription(orgId, selectedSku, productId, subscriptionName);
 			if (subId != 0)
 			{
 				DBHelper.UpdateSubscriptionUserProductRole(this.GetProductRolesFromSubscription(subId).Where(x => x.Name == "Manager").Single().ProductRoleId, subId, UserContext.UserId);
@@ -644,7 +629,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId"></param>
 		/// <returns></returns>
 		[CLSCompliant(false)]
-		public bool Subscribe(int productId, string productName, int selectedSku, string subscriptionName, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
+		public void Subscribe(int productId, string productName, int selectedSku, string subscriptionName, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
 		{
 			BillingServicesCustomer customer;
 			BillingServicesToken token;
@@ -711,10 +696,7 @@ namespace AllyisApps.Services
 			else
 			{
 				DBHelper.UpdateSubscriptionName(orgId, selectedSku, subscriptionName);
-				this.UpdateSubscriptionUsers(orgId, selectedSku);
 			}
-
-			return true;
 		}
 
 		/// <summary>
@@ -871,7 +853,6 @@ namespace AllyisApps.Services
 				SkuName = subscriptionDisplay.SkuName,
 				SubscriptionId = subscriptionDisplay.SubscriptionId,
                 SubscriptionName = subscriptionDisplay.SubscriptionName,
-                SubscriptionsUsed = subscriptionDisplay.SubscriptionsUsed,
 				Tier = subscriptionDisplay.Tier
 			};
 		}
