@@ -19,7 +19,7 @@ namespace AllyisApps.DBModel.TimeTracker
 		/// <summary>
 		/// Gets or sets the lock date period (Days/Weeks/Months).
 		/// </summary>
-		public string LockDatePeriod { get; set; }
+		public int LockDatePeriod { get; set; }
 
 		/// <summary>
 		/// Gets or sets the quantity of the lock date period.
