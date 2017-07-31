@@ -2,7 +2,7 @@
     [TimeEntryId] INT            IDENTITY (1, 1) NOT NULL,
     [UserId]      INT            NOT NULL,
     [ProjectId]   INT            NOT NULL,
-    [Date]        DATETIME2 (0)  NOT NULL,
+    [Date]        DATE			 NOT NULL,
     [Duration]    FLOAT (53)     NOT NULL,
     [Description] NVARCHAR (128) NULL,
     [LockSaved]   BIT            DEFAULT 0 NOT NULL,
