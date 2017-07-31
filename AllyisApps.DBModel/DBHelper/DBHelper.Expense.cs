@@ -71,14 +71,14 @@ namespace AllyisApps.DBModel
         /// </summary>
         /// <param name="ExpenseItemId"> the ID of the Expense Item</param>
         /// <returns>A collection of accounts.</returns>
-        public ExpenseItemDBEntity GetExpenseItemByExpenseItemId(int ExpenseItemId)
+        public ExpenseItemDBEntity GetExpenseItem(int ExpenseItemId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@ExpenseItemId", ExpenseItemId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseItemByExpenseItemId]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable().FirstOrDefault();
+				return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseItem]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable().FirstOrDefault();
 			}
 		}
 
@@ -166,14 +166,14 @@ namespace AllyisApps.DBModel
         /// </summary>
         /// <param name="ExpenseReportId">The id of the Report</param>
         /// <returns>An Expense Reports.</returns>
-        public ExpenseItemDBEntity GetExpenseReportByExpenseReportId(int ExpenseReportId)
+        public ExpenseItemDBEntity GetExpenseReport(int ExpenseReportId)
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@ExpenseReportId", ExpenseReportId);
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
-                return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseReportByExpenseReportId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseReport]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
             }
         }
 

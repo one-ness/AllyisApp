@@ -103,7 +103,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<AccountDBEntity>("[Finance].[GetAccountByAccountId]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable().FirstOrDefault();
+				return connection.Query<AccountDBEntity>("[Finance].[GetAccount]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable().FirstOrDefault();
 			}
 		}
 

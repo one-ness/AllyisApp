@@ -1,12 +1,12 @@
 ﻿CREATE PROCEDURE [Expense].[DeleteExpenseItem]
-	@ExpenseItemId INT
+	@expenseItemId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	IF EXISTS ( SELECT * FROM [Expense].[ExpenseItem] Where [ExpenseItemId] = @ExpenseItemId)
+	IF EXISTS ( SELECT * FROM [Expense].[ExpenseItem] Where [ExpenseItemId] = @expenseItemId)
 	BEGIN
-		DELETE FROM [Expense].[ExpenseItem] WHERE [ExpenseItemId] = @ExpenseItemId;
+		DELETE FROM [Expense].[ExpenseItem] WHERE [ExpenseItemId] = @expenseItemId;
 		SELECT 1;
 	END
 	ELSE

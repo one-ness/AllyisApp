@@ -1,11 +1,10 @@
 ﻿CREATE PROCEDURE [Expense].[UpdateExpenseItem]
-	@ExpenseItemId INT,
-	@ItemDescription NVARCHAR(100),
-	@TransactionDate DATETIME2(0),
-	@Amount DECIMAL(18, 2),
-	@ExpenseReportId INT,
-	@IsBillableToCustomer BIT,
-	@CreatedUtc DATETIME2(0)
+	@expenseItemId INT,
+	@itemDescription NVARCHAR(100),
+	@transactionDate DATETIME2(0),
+	@amount DECIMAL(18, 2),
+	@expenseReportId INT,
+	@isBillableToCustomer BIT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -16,13 +15,12 @@ BEGIN
 		[TransactionDate],
 		[Amount],
 		[ExpenseReportId],
-		[IsBillableToCustomer],
-		[CreatedUtc])
-	VALUES (@ExpenseItemId,
-		@ItemDescription,
-		@TransactionDate,
-		@Amount,
-		@ExpenseReportId,
-		@IsBillableToCustomer,
-		@CreatedUtc);
+		[IsBillableToCustomer])
+	VALUES (@expenseItemId,
+		@itemDescription,
+		@transactionDate,
+		@amount,
+		@expenseReportId,
+		@isBillableToCustomer);
 END
+
