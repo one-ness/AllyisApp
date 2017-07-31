@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [Finance].[GetAccountsByAccountTypeId]
-	@AccountTypeId INT,
-	@IsActive BIT
+	@accountTypeId INT,
+	@isActive BIT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -13,8 +13,8 @@ BEGIN
 		[T].[AccountTypeName],
 		[A].[ParentAccountId]
 	FROM [Finance].[Account] AS [A] WITH (NOLOCK)
-		LEFT JOIN (SELECT * FROM [Finance].[AccountType] WHERE [AccountTypeId] = @AccountTypeId) AS [T]
+		LEFT JOIN (SELECT * FROM [Finance].[AccountType] WHERE [AccountTypeId] = @accountTypeId) AS [T]
 			ON [T].[AccountTypeId] = [A].[AccountTypeId]
-	WHERE [A].[IsActive] = @IsActive
+	WHERE [A].[IsActive] = @isActive
 END
 

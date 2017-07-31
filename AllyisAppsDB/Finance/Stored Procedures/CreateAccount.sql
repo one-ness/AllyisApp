@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [Finance].[CreateAccount]
-	@AccountName NVARCHAR(100),
-	@IsActive BIT,
-	@AccountTypeId INT,
-	@ParentAccountId INT,
+	@accountName NVARCHAR(100),
+	@isActive BIT,
+	@accountTypeId INT,
+	@parentAccountId INT,
 	@returnValue INT
 AS
 BEGIN
@@ -10,7 +10,7 @@ BEGIN
 
 	IF EXISTS (
 		SELECT * FROM [Finance].[Account] WITH (NOLOCK)
-		WHERE [AccountName] = @AccountName
+		WHERE [AccountName] = @accountName
 	)
 	BEGIN
 		-- Account name is not unique
@@ -24,13 +24,12 @@ BEGIN
 				[IsActive], 
 				[AccountTypeId], 
 				[ParentAccountId])
-		VALUES (@AccountName,
-				@IsActive,
-				@AccountTypeId,
-				@ParentAccountId);
+		VALUES (@accountName,
+				@isActive,
+				@accountTypeId,
+				@parentAccountId);
 
 		SET @returnValue = SCOPE_IDENTITY();
 	END
-	SELECT @returnValue;
 END
 

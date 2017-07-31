@@ -1,9 +1,9 @@
 ﻿CREATE PROCEDURE [Finance].[UpdateAccount]
-	@AccountId INT,
-	@AccountName NVARCHAR(100),
-	@IsActive BIT,
-	@AccountTypeId INT,
-	@ParentAccountId INT,
+	@accountId INT,
+	@accountName NVARCHAR(100),
+	@isActive BIT,
+	@accountTypeId INT,
+	@parentAccountId INT,
 	@returnValue INT
 AS
 BEGIN
@@ -21,14 +21,13 @@ BEGIN
 	BEGIN
 		-- Create account
 		UPDATE [Finance].[Account]
-		SET [AccountName] = @AccountName, 
-			[IsActive] = @IsActive, 
-			[AccountTypeId] = @AccountTypeId, 
-			[ParentAccountId] = @ParentAccountId
-		WHERE [AccountId] = @AccountId
+		SET [AccountName]		= @accountName, 
+			[IsActive]			= @isActive, 
+			[AccountTypeId]		= @accountTypeId, 
+			[ParentAccountId]	= @parentAccountId
+		WHERE [AccountId]		= @accountId
 
 		SET @returnValue = SCOPE_IDENTITY();
 	END
-	SELECT @returnValue;
 END
 

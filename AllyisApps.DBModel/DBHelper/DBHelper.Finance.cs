@@ -25,20 +25,20 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Adds an account to the DB if there is not already another account with the same AccountName
 		/// </summary>
-		/// <param name="Account">The account object to be added to the db</param>
+		/// <param name="account">The account object to be added to the db</param>
 		/// <returns>The id of the created account or -1 if the account name is already taken.</returns>
-		public int CreateAccount(AccountDBEntity Account)
+		public int CreateAccount(AccountDBEntity account)
 		{
-			if (Account == null)
+			if (account == null)
 			{
 				throw new System.ArgumentException("Account cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@AccountName", Account.AccountName);
-			parameters.Add("@IsActive", Account.IsActive);
-			parameters.Add("@AccountTypeId", Account.AccountTypeId);
-			parameters.Add("@ParentAccountId", Account.ParentAccountId);
+			parameters.Add("@accountName", account.AccountName);
+			parameters.Add("@isActive", account.IsActive);
+			parameters.Add("@accountTypeId", account.AccountTypeId);
+			parameters.Add("@parentAccountId", account.ParentAccountId);
 			parameters.Add("@returnValue", -1, DbType.Int32, direction: ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -58,14 +58,14 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Retrieves all acounts with a given parent account id.
 		/// </summary>
-		/// <param name="ParentAccountId">The id of the parent account</param>
-		/// <param name="IsActive">Determines whether the account is "deleted" or not.  Most times we only want active accounts, so default to true</param>
+		/// <param name="parentAccountId">The id of the parent account</param>
+		/// <param name="isActive">Determines whether the account is "deleted" or not.  Most times we only want active accounts, so default to true</param>
 		/// <returns>A collection of accounts.</returns>
-		public IEnumerable<AccountDBEntity> GetAccountsByParentId(int ParentAccountId, bool IsActive = true)
+		public IEnumerable<AccountDBEntity> GetAccountsByParentId(int parentAccountId, bool isActive = true)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ParentAccountId", ParentAccountId);
-			parameters.Add("@IsActive", IsActive);
+			parameters.Add("@parentAccountId", parentAccountId);
+			parameters.Add("@isActive", isActive);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -76,14 +76,14 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Retrieves all acounts with a given account type.
 		/// </summary>
-		/// <param name="AccountTypeId">The id of the account type (TODO: what are the different account types?)</param>
-		/// <param name="IsActive">Determines whether the account is "deleted" or not.  Most times we only want active accounts, so default to true</param>
+		/// <param name="accountTypeId">The id of the account type (TODO: what are the different account types?)</param>
+		/// <param name="isActive">Determines whether the account is "deleted" or not.  Most times we only want active accounts, so default to true</param>
 		/// <returns>A collection of accounts.</returns>
-		public IEnumerable<AccountDBEntity> GetAccountsByAccountTypeId(int AccountTypeId, bool IsActive = true)
+		public IEnumerable<AccountDBEntity> GetAccountsByAccountTypeId(int accountTypeId, bool isActive = true)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@AccountTypeId", AccountTypeId);
-			parameters.Add("@IsActive", IsActive);
+			parameters.Add("@accountTypeId", accountTypeId);
+			parameters.Add("@isActive", isActive);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -94,12 +94,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Retrieves the acount with a given account id.
 		/// </summary>
-		/// <param name="AccountId">The id of the account</param>
+		/// <param name="accountId">The id of the account</param>
 		/// <returns>One account.</returns>
-		public AccountDBEntity GetAccountByAccountId(int AccountId)
+		public AccountDBEntity GetAccountByAccountId(int accountId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@AccountId", AccountId);
+			parameters.Add("@accountId", accountId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -115,21 +115,21 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates the account with the given id, if another account doesn't already have the same AccountName.
 		/// </summary>
-		/// <param name="Account">The account object to be updated</param>
-		/// <returns>-1 if the account wasn't updated, and the accountId if the account was updated</returns>
-		public int UpdateAccount(AccountDBEntity Account)
+		/// <param name="account">The account object to be updated</param>
+		/// <returns>-1 if the account wasn't updated (duplicate accountname), and the accountId if the account was updated</returns>
+		public int UpdateAccount(AccountDBEntity account)
 		{
-			if (Account == null)
+			if (account == null)
 			{
 				throw new System.ArgumentException("Account cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@AccountId", Account.AccountId);
-			parameters.Add("@AccountName", Account.AccountName);
-			parameters.Add("@IsActive", Account.IsActive);
-			parameters.Add("@AccountTypeId", Account.AccountTypeId);
-			parameters.Add("@ParentAccountId", Account.ParentAccountId);
+			parameters.Add("@accountId", account.AccountId);
+			parameters.Add("@accountName", account.AccountName);
+			parameters.Add("@isActive", account.IsActive);
+			parameters.Add("@accountTypeId", account.AccountTypeId);
+			parameters.Add("@parentAccountId", account.ParentAccountId);
 			parameters.Add("@returnValue", -1, DbType.Int32, direction: ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -147,21 +147,17 @@ namespace AllyisApps.DBModel
 		////////////////////////////
 
 		/// <summary>
-		/// Sets the given account to inactive (IsActive == false)
+		/// Sets the given account (if exists) to inactive (IsActive == false)
 		/// </summary>
-		/// <param name="AccountId">Parameter @organizationId. </param>
-		/// <returns>
-		///		True if delete was successfull
-		///		False if accountid doesn't exist OR the account is already inactive
-		/// </returns>
-		public bool DeleteAccount(int AccountId)
+		/// <param name="accountId">Parameter @organizationId. </param>
+		public void DeleteAccount(int accountId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@AccountId", AccountId);
+			parameters.Add("@accountId", accountId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<int>("[Finance].[DeleteAccount]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault() == 1;
+				connection.Execute("[Finance].[DeleteAccount]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 	}
