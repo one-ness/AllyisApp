@@ -33,6 +33,11 @@ namespace AllyisApps.Services
 		/// </summary>
 		public DateTime? DateOfBirth { get; set; }
 
+        /// <summary>
+        /// The user's address Id
+        /// </summary>
+        public int AddressId { get; set; }
+
 		/// <summary>
 		/// Gets or sets Street address.
 		/// </summary>

@@ -22,6 +22,11 @@ namespace AllyisApps.Services
 		public string Name { get; set; }
 
 		/// <summary>
+		/// Gets or sets the customer's Address id
+		/// </summary>
+		public int AddressId { get; set; }
+
+		/// <summary>
 		/// Gets or sets Address.
 		/// </summary>
 		public string Address { get; set; }
