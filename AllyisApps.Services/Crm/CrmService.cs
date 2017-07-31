@@ -6,6 +6,8 @@
 
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Crm;
+using AllyisApps.DBModel.Lookup;
+using AllyisApps.Services.Lookup;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -48,12 +50,13 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
 		/// <returns></returns>
-		public Tuple<Customer, List<string>> GetCustomerAndCountries(int customerId)
+		public Tuple<Customer, List<string>, Address> GetCustomerAndCountries(int customerId)
 		{
 			var spResults = DBHelper.GetCustomerCountries(customerId);
 			return Tuple.Create(
 				InitializeCustomer(spResults.Item1),
-				spResults.Item2);
+				spResults.Item2,
+				InitializeAddress(spResults.Item3));
 		}
 
 		/// <summary>
@@ -615,6 +618,30 @@ namespace AllyisApps.Services
 		}
 
 		#region Info-DBEntity Conversions
+
+		/// <summary>
+		/// Initializes a <see cref="Address"/> from a <see cref="AddressDBEntity"/>
+		/// </summary>
+		/// <param name="address"></param>
+		/// <returns></returns>
+		public static Address InitializeAddress(AddressDBEntity address)
+		{
+			if (address == null)
+			{
+				return null;
+			}
+
+			return new Address()
+			{
+				AddressId = address.AddressId,
+				Address1 = address.Address1,
+				Address2 = address.Address2,
+				City = address.City,
+				State = address.State,
+				PostalCode = address.PostalCode,
+				CountryId = address.CountryId
+			};
+		}
 
 		/// <summary>
 		/// Initializes a <see cref="Customer"/> from a <see cref="CustomerDBEntity"/>.

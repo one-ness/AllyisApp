@@ -44,7 +44,7 @@ namespace AllyisApps.DBModel.Lookup
         /// <summary>
         /// Gets or sets the Country Id
         /// </summary>
-        public int CountryId { get; set; }
+        public string CountryId { get; set; }
 
     }
 }
