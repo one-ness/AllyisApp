@@ -1,12 +1,11 @@
 ﻿CREATE PROCEDURE [Expense].[UpdateExpenseReport]
-	@ExpenseReportId INT,
-	@ReportTitle NVARCHAR(100),
-	@ReportDate DATETIME2(0),
-	@OrganizationId INT,
-	@SubmittedById INT,
-	@ReportStatus TINYINT,
-	@BuisnessJustification NVARCHAR(100),
-	@CreatedUtc DATETIME2(0)
+	@expenseReportId INT,
+	@reportTitle NVARCHAR(100),
+	@reportDate DATETIME2(0),
+	@organizationId INT,
+	@submittedById INT,
+	@reportStatus TINYINT,
+	@buisnessJustification NVARCHAR(100)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -18,14 +17,12 @@ BEGIN
 		[OrganizationId],
 		[SubmittedById],
 		[ReportStatus],
-		[BusinessJustification],
-		[CreatedUtc])
-	VALUES (@ExpenseReportId,
-		@ReportTitle,
-		@ReportDate,
-		@OrganizationId,
-		@SubmittedById,
-		@ReportStatus,
-		@BuisnessJustification,
-		@CreatedUtc);
+		[BusinessJustification])
+	VALUES (@expenseReportId,
+		@reportTitle,
+		@reportDate,
+		@organizationId,
+		@submittedById,
+		@reportStatus,
+		@buisnessJustification);
 END

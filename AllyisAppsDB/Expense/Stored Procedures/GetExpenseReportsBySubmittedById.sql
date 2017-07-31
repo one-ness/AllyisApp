@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [Expense].[GetExpenseReportsBySubmittedById]
-	@SubmittedById INT
+	@submittedById INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -15,5 +15,5 @@ BEGIN
 		[CreatedUtc],
 		[ModifiedUtc]
 	FROM [Expense].[ExpenseReport] WITH (NOLOCK)
-	WHERE SubmittedById = @SubmittedById
+	WHERE SubmittedById = @submittedById
 END

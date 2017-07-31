@@ -3,8 +3,6 @@
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
-using System;
-using System.ComponentModel;
 
 namespace AllyisApps.DBModel.Finance
 {
