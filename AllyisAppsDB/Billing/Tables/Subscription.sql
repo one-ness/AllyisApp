@@ -1,16 +1,17 @@
-CREATE TABLE [Billing].[Subscription] (
+﻿CREATE TABLE [Billing].[Subscription] (
     [SubscriptionId]         INT           IDENTITY (113969, 7) NOT NULL,
     [OrganizationId]         INT           NOT NULL,
     [SkuId]                  INT           NOT NULL,
     [SubscriptionName]       NVARCHAR (64) NULL,
     [NumberOfUsers]          INT           NOT NULL,
-    [IsActive]               BIT           NOT NULL,
-    [CreatedUtc]             DATETIME2 (0) NOT NULL,
-    [ModifiedUtc]            DATETIME2 (0) NOT NULL,
+    [IsActive]               BIT           CONSTRAINT [DF_Subscription_IsActive] DEFAULT ((1)) NOT NULL,
+    [CreatedUtc]             DATETIME2 (0) CONSTRAINT [DF_Subscription_CreatedUtc] DEFAULT (getutcdate()) NOT NULL,
+    [ModifiedUtc]            DATETIME2 (0) CONSTRAINT [DF_Subscription_ModifiedUtc] DEFAULT (getutcdate()) NOT NULL,
     [PromoExpirationDateUtc] DATETIME2 (0) NULL,
     CONSTRAINT [PK_Subscription] PRIMARY KEY NONCLUSTERED ([SubscriptionId] ASC),
     CONSTRAINT [FK_Subscription_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId])
 );
+
 
 
 GO
@@ -28,6 +29,7 @@ CREATE TRIGGER [Billing].trg_update_NumberOfUsers_on_insert ON [Billing].[Subscr
 BEGIN
 	UPDATE [Billing].[Subscription] SET [NumberOfUsers] = (SELECT COUNT(*) FROM [Billing].[SubscriptionUser] [s] INNER JOIN  [inserted] [i] ON [s].[SubscriptionId] = [i].[SubscriptionId]);
 END
+
 
 GO
 CREATE TRIGGER [Billing].trg_update_NumberOfUsers_on_delete ON [Billing].[SubscriptionUser] FOR DELETE AS

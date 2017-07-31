@@ -689,7 +689,7 @@ namespace AllyisApps.Services
 
 			this.InitializeSettingsForProduct(productId, orgId);
 
-			if (selectedSku != previousSku)	//previousSku is not set and always = 0 for now
+			if (selectedSku != previousSku) //previousSku is not set and always = 0 for now
 			{
 				this.AddSubscriptionOfSkuToOrganization(orgId, selectedSku, productId, subscriptionName);
 			}

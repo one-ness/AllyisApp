@@ -237,15 +237,15 @@ namespace AllyisApps.Services
 		/// <param name="lockDatePeriod">The lock date period ("Monthd", "Weeks", or "Days").</param>
 		/// <param name="lockDateQuantity">The quantity of the time unit defined by the period.</param>
 		/// <returns>A nullable DateTime expressing the date on or before which time entries are locked.</returns>
-		public DateTime? GetLockDateFromParameters(bool isLockDateUsed, string lockDatePeriod, int lockDateQuantity)
+		public DateTime? GetLockDateFromParameters(bool isLockDateUsed, int lockDatePeriod, int lockDateQuantity)
 		{
 			if (!isLockDateUsed)
 			{
 				return null;
 			}
 
-			DateTime date = lockDatePeriod.Equals("Months") ? DateTime.Now.AddMonths(-1 * lockDateQuantity) :
-				DateTime.Now.AddDays(-1 * lockDateQuantity * (lockDatePeriod.Equals("Weeks") ? 7 : 1));
+			DateTime date = lockDatePeriod.Equals(3) ? DateTime.Now.AddMonths(-1 * lockDateQuantity) :
+				DateTime.Now.AddDays(-1 * lockDateQuantity * (lockDatePeriod.Equals(2) ? 7 : 1));
 			return date;
 		}
 
@@ -514,9 +514,9 @@ namespace AllyisApps.Services
 		/// <param name="lockDateQuantity">The quantity of the selected period.</param>
 		/// <param name="orgId"></param>
 		/// <returns></returns>
-		public bool UpdateLockDate(bool lockDateUsed, string lockDatePeriod, int lockDateQuantity, int orgId)
+		public bool UpdateLockDate(bool lockDateUsed, int lockDatePeriod, int lockDateQuantity, int orgId)
 		{
-			if (!new string[] { "Days", "Weeks", "Months" }.Contains(lockDatePeriod))
+			if (!new int[] { 1, 2, 3 }.Contains(lockDatePeriod))
 			{
 				throw new ArgumentException(string.Format("{0} is not a valid value for lock date period.", lockDatePeriod));
 			}
