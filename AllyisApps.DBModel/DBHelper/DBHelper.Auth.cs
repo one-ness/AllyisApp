@@ -129,12 +129,17 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="userId">The user's Id.</param>
 		/// <returns>The TableUsers containing the user's information, null if call fails.</returns>
-		public UserDBEntity GetUserInfo(int userId)
+		public Tuple<UserDBEntity, AddressDBEntity> GetUserInfo(int userId)
 		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@UserId", userId);
+
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				// default null
-				return connection.Query<UserDBEntity>("[Auth].[GetUserInfo]", new { UserId = userId }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				var results = connection.QueryMultiple("[Auth].[GetUserInfo]", parameters, commandType: CommandType.StoredProcedure);
+				return Tuple.Create(
+					results.Read<UserDBEntity>().FirstOrDefault(),
+					results.Read<AddressDBEntity>().FirstOrDefault());
 			}
 		}
 
@@ -876,7 +881,7 @@ namespace AllyisApps.DBModel
 		/// the user is a member of, and a list of InvititationDBEntities for any invitations for that user.
 		/// </summary>
 		/// <param name="userId">The User Id</param>
-		public Tuple<UserDBEntity, List<OrganizationDBEntity>, List<InvitationDBEntity>> GetUserOrgsAndInvitations(int userId)
+		public Tuple<UserDBEntity, List<OrganizationDBEntity>, List<InvitationDBEntity>, AddressDBEntity> GetUserOrgsAndInvitations(int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
@@ -889,7 +894,8 @@ namespace AllyisApps.DBModel
 				return Tuple.Create(
 					results.Read<UserDBEntity>().SingleOrDefault(),
 					results.Read<OrganizationDBEntity>().ToList(),
-					results.Read<InvitationDBEntity>().ToList());
+					results.Read<InvitationDBEntity>().ToList(),
+					results.Read<AddressDBEntity>().SingleOrDefault());
 			}
 		}
 

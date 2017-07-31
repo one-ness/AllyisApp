@@ -745,9 +745,9 @@ namespace AllyisApps.Services
 						{
 							bool updated = false;
 
-							if (hasUserAddress) updated = this.readColumn(row, ColumnHeaders.UserAddress, val => user.Address = val) || updated;
-							if (hasUserCity) updated = this.readColumn(row, ColumnHeaders.UserCity, val => user.City = val) || updated;
-							if (hasUserCountry) updated = this.readColumn(row, ColumnHeaders.UserCountry, val => user.Country = val) || updated;
+							if (hasUserAddress) updated = this.readColumn(row, ColumnHeaders.UserAddress, val => user.Address.Address1 = val) || updated;
+							if (hasUserCity) updated = this.readColumn(row, ColumnHeaders.UserCity, val => user.Address.City = val) || updated;
+							if (hasUserCountry) updated = this.readColumn(row, ColumnHeaders.UserCountry, val => user.Address.CountryId = val) || updated;
 							string dateOfBirth = null;
 							if (hasUserDateOfBirth) updated = this.readColumn(row, ColumnHeaders.UserDateOfBirth, val => dateOfBirth = val) || updated;
 							if (!string.IsNullOrEmpty(dateOfBirth))
@@ -766,8 +766,8 @@ namespace AllyisApps.Services
 
 							if (hasUserPhoneExtension) updated = this.readColumn(row, ColumnHeaders.UserPhoneExtension, val => user.PhoneExtension = val) || updated;
 							if (hasUserPhoneNumber) updated = this.readColumn(row, ColumnHeaders.UserPhoneNumber, val => user.PhoneNumber = val) || updated;
-							if (hasUserPostalCode) updated = this.readColumn(row, ColumnHeaders.UserPostalCode, val => user.PostalCode = val) || updated;
-							if (hasUserState) updated = this.readColumn(row, ColumnHeaders.UserState, val => user.State = val) || updated;
+							if (hasUserPostalCode) updated = this.readColumn(row, ColumnHeaders.UserPostalCode, val => user.Address.PostalCode = val) || updated;
+							if (hasUserState) updated = this.readColumn(row, ColumnHeaders.UserState, val => user.Address.State = val) || updated;
 
 							if (updated)
 							{

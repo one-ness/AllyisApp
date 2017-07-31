@@ -6,6 +6,7 @@
 
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels.Auth;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -29,11 +30,11 @@ namespace AllyisApps.Controllers
 				FirstName = userInfo.FirstName,
 				LastName = userInfo.LastName,
 				AddressId = userInfo.AddressId,
-				Address = userInfo.Address,
-				City = userInfo.City,
-				State = userInfo.State,
-				Country = userInfo.Country,
-				PostalCode = userInfo.PostalCode,
+				Address = userInfo.Address.Address1,
+				City = userInfo.Address.City,
+				State = userInfo.Address.State,
+				Country = userInfo.Address.CountryId,
+				PostalCode = userInfo.Address.PostalCode,
 				PhoneNumber = userInfo.PhoneNumber,
 				DateOfBirth = AppService.GetDayFromDateTime(userInfo.DateOfBirth),
 				ValidCountries = AppService.ValidCountries()
@@ -51,7 +52,7 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				await Task.Factory.StartNew(() => AppService.SaveUserInfo(new User
+				User user = new Services.User
 				{
 					UserId = this.AppService.UserContext.UserId,
 					Email = model.Email,
@@ -59,13 +60,17 @@ namespace AllyisApps.Controllers
 					LastName = model.LastName,
 					DateOfBirth = AppService.GetDateTimeFromDays(model.DateOfBirth),
 					AddressId = model.AddressId,
-					Address = model.Address,
+					PhoneNumber = model.PhoneNumber
+				};
+				user.Address = new Address
+				{
+					Address1 = model.Address,
 					City = model.City,
 					State = model.State,
-					Country = model.Country,
-					PostalCode = model.PostalCode,
-					PhoneNumber = model.PhoneNumber
-				}));
+					CountryId = model.Country,
+					PostalCode = model.PostalCode
+				};
+				await Task.Factory.StartNew(() => AppService.SaveUserInfo(user));
 
 				Notifications.Add(new BootstrapAlert(Resources.Strings.UpdateProfileSuccessMessage, Variety.Success));
 				this.RouteUserHome();

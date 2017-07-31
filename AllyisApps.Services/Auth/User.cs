@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Services.Lookup;
 using System;
 
 namespace AllyisApps.Services
@@ -33,35 +34,15 @@ namespace AllyisApps.Services
 		/// </summary>
 		public DateTime? DateOfBirth { get; set; }
 
-        /// <summary>
-        /// The user's address Id
-        /// </summary>
-        public int AddressId { get; set; }
+		/// <summary>
+		/// Gets or sets the User's address
+		/// </summary>
+		public Address Address { get; set; }
 
 		/// <summary>
-		/// Gets or sets Street address.
+		/// Gets or sets the AddressId
 		/// </summary>
-		public string Address { get; set; }
-
-		/// <summary>
-		/// Gets or sets City.
-		/// </summary>
-		public string City { get; set; }
-
-		/// <summary>
-		/// Gets or sets State.
-		/// </summary>
-		public string State { get; set; }
-
-		/// <summary>
-		/// Gets or sets Country.
-		/// </summary>
-		public string Country { get; set; }
-
-		/// <summary>
-		/// Gets or sets Postal code.
-		/// </summary>
-		public string PostalCode { get; set; }
+		public int AddressId { get; set; }
 
 		/// <summary>
 		/// Gets or sets Email address.
