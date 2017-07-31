@@ -24,7 +24,7 @@
 		else
 		{
 			<a href="@Url.Action(ActionConstants.Index, ControllerConstants.TimeEntry, new { area = Model.AreaUrl, subscriptionId = Model.SubscriptionId, userId = ViewData["UserId"] })" style="text-decoration: none; color: inherit">
-				@string.Format("{0} - {1}", Model.SubscriptionName, Model.ProductName) <i class="fa fa-caret-right"></i>
+				@string.Format("{0}", Model.SubscriptionName) <i class="fa fa-caret-right"></i>
 			</a>
 		}
 	</td>

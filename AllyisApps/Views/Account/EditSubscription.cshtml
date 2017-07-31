@@ -1,12 +1,14 @@
 ﻿@model AllyisApps.ViewModels.Auth.EditSubscriptionViewModel
 @{
-		ViewBag.Title = Strings.EditSubscription;
-		List<SelectListItem> items = new List<SelectListItem>() { new SelectListItem() { Text = Model.Name }, new SelectListItem() { Text = "Unsubscribe" } };
-		if (!String.IsNullOrEmpty(Model.NextName))
-		{
-			items.Add(new SelectListItem() { Text = Model.NextName });
-		}
-	}
+	ViewBag.Title = Strings.EditSubscription;
+	List<SelectListItem> items = new List<SelectListItem>()
+	{
+		new SelectListItem() { Text = "Time Tracker" },
+		new SelectListItem() { Text = "Expense Tracker" },
+		new SelectListItem() { Text = "Staffing Manager" },
+		new SelectListItem() { Text = "Unsubscribe" },
+	};
+}
 
 <div class="row">
 	<div class="col-md-6 col-md-push-3">

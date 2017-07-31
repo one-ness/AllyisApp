@@ -693,6 +693,10 @@ namespace AllyisApps.Services
 			{
 				this.AddSubscriptionOfSkuToOrganization(orgId, selectedSku, productId, subscriptionName);
 			}
+			else
+			{
+				DBHelper.UpdateSubscriptionName(orgId, selectedSku, subscriptionName);
+			}
 		}
 
 		/// <summary>

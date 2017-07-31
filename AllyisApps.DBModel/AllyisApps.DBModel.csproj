@@ -63,6 +63,8 @@
     <Compile Include="Billing\SubscriptionRoleDBEntity.cs" />
     <Compile Include="Crm\CompleteProjectDBEntity.cs" />
     <Compile Include="Crm\ProjectDBEntity.cs" />
+    <Compile Include="DBHelper\DBHelper.Expense.cs" />
+    <Compile Include="DBHelper\DBHelper.Finance.cs" />
     <Compile Include="DBHelper\DBHelper.Lookup.cs" />
     <Compile Include="DBHelper\DBHelper.TimeTracker.cs" />
     <Compile Include="Crm\CustomerDBEntity.cs" />
@@ -70,6 +72,9 @@
     <Compile Include="DBHelper\DBHelper.cs" />
     <Compile Include="DBHelper\DBHelper.Auth.cs" />
     <Compile Include="DBHelper\DBHelper.Crm.cs" />
+    <Compile Include="Finance\AccountDBEntity.cs" />
+    <Compile Include="Finance\ExpenseReportDBEntity.cs" />
+    <Compile Include="Finance\ExpenseItemDBEntity.cs" />
     <Compile Include="Lookup\AddressDBEntity.cs" />
     <Compile Include="Lookup\CountryDBEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

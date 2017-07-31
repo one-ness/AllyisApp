@@ -49,6 +49,7 @@ BEGIN
 		[Organization].[OrganizationId],
 		[Subscription].[SkuId],
 		[Subscription].[NumberOfUsers],
+		[Subscription].[SubscriptionName],
 		[Organization].[Name] AS [OrganizationName],
 		[Sku].[Name] AS [SkuName]
 	FROM [Billing].[Subscription] WITH (NOLOCK) 
