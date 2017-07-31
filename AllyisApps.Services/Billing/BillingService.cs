@@ -711,6 +711,7 @@ namespace AllyisApps.Services
 			}
 			else
 			{
+				DBHelper.UpdateSubscriptionName(orgId, selectedSku, subscriptionName);
 				this.UpdateSubscriptionUsers(orgId, selectedSku);
 			}
 
