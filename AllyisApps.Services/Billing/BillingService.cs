@@ -317,22 +317,23 @@ namespace AllyisApps.Services
 			DBHelper.DeleteSubscriptionUser(subscriptionId, userId);
 		}
 
-		/// <summary>
-		/// Assigns a new TimeTracker role to the given users for the current organization.
-		/// </summary>
-		/// <param name="userIds">List of user Ids.</param>
-		/// <param name="newTimeTrackerRole">TimeTracker role to assign, or -1 to remove from subscription.</param>
-		/// <param name="orgId">The Organization Id</param>
-		/// <returns>A tuple containing the number of updated users and the number of added users. If the updated users is -1,
-		/// there is no TimeTracker subscription. If the number added is -1, there are too many subscription users already to
-		/// add the given list.</returns>
-		public Tuple<int, int> ChangeSubscriptionUserRoles(List<int> userIds, int newTimeTrackerRole, int orgId)
+        /// <summary>
+        /// Assigns a new TimeTracker role to the given users for the current organization.
+        /// </summary>
+        /// <param name="userIds">List of user Ids.</param>
+        /// <param name="newProductRole">Product role to assign, or -1 to remove from subscription.</param>
+        /// <param name="orgId">The Organization Id</param>
+        /// <param name="productId">The subscribed Product Id</param>
+        /// <returns>A tuple containing the number of updated users and the number of added users. If the updated users is -1,
+        /// there is no TimeTracker subscription. If the number added is -1, there are too many subscription users already to
+        /// add the given list.</returns>
+        public Tuple<int, int> ChangeSubscriptionUserRoles(List<int> userIds, int newProductRole, int orgId, int productId)
 		{
 			#region Validation
 
-			if (!Enum.IsDefined(typeof(TimeTrackerRole), newTimeTrackerRole) && newTimeTrackerRole != -1)
+			if (!Enum.IsDefined(typeof(TimeTrackerRole), newProductRole) && newProductRole != -1)
 			{
-				throw new ArgumentOutOfRangeException("newTimeTrackerRole", "TimeTracker role must either be -1 or match a value of the ProductRoleIdEnum enum.");
+				throw new ArgumentOutOfRangeException("newProductRole", "Product role must either be -1 or match a value of the ProductRoleIdEnum enum.");
 			}
 			if (userIds == null || userIds.Count == 0)
 			{
@@ -341,7 +342,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.EditSubscriptionUsers(userIds, orgId, newTimeTrackerRole);
+			return DBHelper.EditSubscriptionUsers(userIds, orgId, newProductRole, productId);
 		}
 
 		/// <summary>

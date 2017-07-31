@@ -12,7 +12,7 @@
     [LockoutEnabled]        BIT              CONSTRAINT [DF__User__LockoutEna__6A30C649] DEFAULT ((0)) NOT NULL,
     [CreatedUtc]            DATETIME2 (0)    CONSTRAINT [DF__User__CreatedUtc__6B24EA82] DEFAULT (getutcdate()) NOT NULL,
     [LanguagePreference]    INT              NULL,
-    [DateOfBirth]           DATETIME2 (0)    NULL,
+    [DateOfBirth]           DATE		     NULL,
     [Address]               NVARCHAR (64)    NULL,
     [City]                  NVARCHAR (32)    NULL,
     [State]                 INT              NULL,
