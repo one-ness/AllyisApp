@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [Auth].[UpdateUserInfo]
 	@Id INT,
+	@AddressId INT,
 	@FirstName NVARCHAR(32),
 	@LastName NVARCHAR(32),
     @Address NVARCHAR(32), 
@@ -15,12 +16,15 @@ BEGIN
 	UPDATE [Auth].[User]
 	SET [FirstName] = @FirstName,
 		[LastName] = @LastName,
-		[Address] = @Address,
-		[City] = @City,
-		[State] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
-		[Country] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
-		[PostalCode] = @PostalCode,
 		[PhoneNumber] = @PhoneNumber,
 		[DateOfBirth] = @DateOfBirth
 	WHERE [UserId] = @Id
+
+	UPDATE [Lookup].[Address]
+	SET [Address1] = @Address,
+		[City] = @City,
+		[State] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
+		[CountryId] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
+		[PostalCode] = @PostalCode
+	WHERE [AddressId] = @AddressId
 END

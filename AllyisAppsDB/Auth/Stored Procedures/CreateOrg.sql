@@ -13,7 +13,8 @@
     @Subdomain NVARCHAR(40),
     @retId INT OUTPUT,
 	@EmployeeId NVARCHAR(16),
-	@EmployeeTypeId INT
+	@EmployeeTypeId INT,
+	@AddressId INT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -30,25 +31,31 @@ BEGIN
 	ELSE
 	BEGIN
 		BEGIN TRANSACTION
+			INSERT INTO [Lookup].[Address]
+					([Address1],
+					[City],
+					[State], 
+					[CountryId], 
+					[PostalCode])
+			VALUES(@Address,
+					@City, 
+					(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State), 
+					(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
+					@PostalCode);	
+					
+			SET @AddressId = SCOPE_IDENTITY()
+
 			-- Create org
 			INSERT INTO [Auth].[Organization] 
 					([Name], 
 					[SiteUrl], 
-					[Address], 
-					[City], 
-					[State], 
-					[Country], 
-					[PostalCode], 
+					[AddressId],
 					[PhoneNumber], 
 					[FaxNumber], 
 					[Subdomain])
 			VALUES (@Name,
 					@SiteUrl,
-					@Address,
-					@City, 
-					(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State), 
-					(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
-					@PostalCode,
+					@AddressId,
 					@PhoneNumber,
 					@FaxNumber,
 					@Subdomain);

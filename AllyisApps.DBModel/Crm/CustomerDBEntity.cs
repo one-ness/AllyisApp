@@ -24,6 +24,11 @@ namespace AllyisApps.DBModel.Crm
 		[DisplayName("Name")]
 		public string Name { get; set; }
 
+        /// <summary>
+        /// Gets or sets the customer's Address Id.
+        /// </summary>
+        public int AddressId { get; set; }
+
 		/// <summary>
 		/// Gets or sets Address.
 		/// </summary>

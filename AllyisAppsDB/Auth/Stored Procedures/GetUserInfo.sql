@@ -8,11 +8,12 @@ BEGIN
 		   [User].[FirstName],
 		   [User].[LastName],
 		   [User].[DateOfBirth],
-		   [User].[Address],
-		   [User].[City],
+		   [User].[AddressId],
+		   [Address].[Address1], 'Address',
+		   [Address].[City],
 		   [State].[Name] AS 'State',
 		   [Country].[Name] AS 'Country',
-		   [User].[PostalCode],
+		   [Address].[PostalCode],
 		   [User].[Email],
 		   [User].[PhoneNumber],
 		   [User].[LastSubscriptionId],
@@ -22,7 +23,8 @@ BEGIN
 		   [LanguagePreference]
 	FROM [Auth].[User]
 	WITH (NOLOCK)
-	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [User].[Country]
-	LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [User].[State]
+	JOIN [Lookup].[Address]			WITH (NOLOCK) ON [Address].[AddressId] = [User].[AddressId]
+	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
+	LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[State]
 	WHERE [UserId] = @UserId;
 END

@@ -378,6 +378,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@CustomerId", customer.CustomerId);
 			parameters.Add("@ContactEmail", customer.ContactEmail);
 			parameters.Add("@Name", customer.Name);
+			parameters.Add("@AddressId", customer.AddressId);
 			parameters.Add("@Address", customer.Address);
 			parameters.Add("@City", customer.City);
 			parameters.Add("@State", customer.State);

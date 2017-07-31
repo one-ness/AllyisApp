@@ -33,6 +33,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				ContactEmail = infos.Item1.ContactEmail,
 				Name = infos.Item1.Name,
+				AddressId = infos.Item1.AddressId,
 				Address = infos.Item1.Address,
 				City = infos.Item1.City,
 				State = infos.Item1.State,
