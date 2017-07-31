@@ -37,7 +37,8 @@ BEGIN
 					[S].[OrganizationId]
 			FROM [Billing].[SubscriptionUser] AS [SU] WITH (NOLOCK)
 				JOIN [Billing].[Subscription] AS [S] WITH (NOLOCK) ON [SU].[SubscriptionId] = [S].SubscriptionId
-				JOIN [Auth].[ProductRole] AS [PR] WITH (NOLOCK) ON [SU].[ProductRoleId] = [PR].[ProductRoleId]
+				JOIN [Billing].[Sku] AS [SK] WITH (NOLOCK) ON [SK].[SkuId] = [S].[SkuId]
+				JOIN [Auth].[ProductRole] AS [PR] WITH (NOLOCK) ON [SU].[ProductRoleId] = [PR].[ProductRoleId] AND [Sk].[ProductId] = [PR].[ProductId]
 				LEFT JOIN [Billing].[Product] AS [P] WITH (NOLOCK) ON [PR].[ProductId] = [P].[ProductId]
 			WHERE [S].[IsActive] = 1
 		) [SUB] ON [SUB].[UserId] = [U].[UserId] AND [SUB].[OrganizationId] = [O].[OrganizationId]

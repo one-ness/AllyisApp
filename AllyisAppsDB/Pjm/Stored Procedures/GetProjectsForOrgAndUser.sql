@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Crm].[GetProjectsForOrgAndUser]
+﻿CREATE PROCEDURE [Pjm].[GetProjectsForOrgAndUser]
 	@UserId INT,
 	@OrgId INT
 AS
@@ -6,8 +6,8 @@ AS
 			[P].[Name],
 			[P].[ProjectOrgId],
 			[C].[Name] AS CustomerName
-	FROM [Crm].[ProjectUser] AS [PU] WITH (NOLOCK)
-	LEFT JOIN [Crm].[Project] AS [P] WITH (NOLOCK) ON [P].[ProjectId] = [PU].[ProjectId]
+	FROM [Pjm].[ProjectUser] AS [PU] WITH (NOLOCK)
+	LEFT JOIN [Pjm].[Project] AS [P] WITH (NOLOCK) ON [P].[ProjectId] = [PU].[ProjectId]
 		JOIN [Crm].[Customer] AS [C] WITH (NOLOCK) ON [C].[CustomerId] = [P].[CustomerId]
 		LEFT JOIN [Auth].[Organization] AS [O] WITH (NOLOCK) ON [O].[OrganizationId] = [C].[OrganizationId]
 	WHERE [PU].[UserId] = @UserId AND [O].[OrganizationId] = @OrgId AND [PU].[IsActive] = 1 AND [P].[IsActive] = 1
@@ -16,7 +16,7 @@ AS
 			[P].[Name],
 			[P].[ProjectOrgId],
 			[C].[Name] AS CustomerName
-	FROM [Crm].[Project] AS [P] WITH (NOLOCK)
+	FROM [Pjm].[Project] AS [P] WITH (NOLOCK)
 		JOIN [Crm].[Customer] AS [C] WITH (NOLOCK) ON [C].[CustomerId] = [P].[CustomerId]
 		LEFT JOIN [Auth].[Organization] AS [O] WITH (NOLOCK) ON [O].[OrganizationId] = [C].[OrganizationId]
 	WHERE [O].[OrganizationId] = @OrgId AND [P].[IsActive] = 1

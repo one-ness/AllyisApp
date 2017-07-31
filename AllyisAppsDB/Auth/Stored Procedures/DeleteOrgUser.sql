@@ -5,8 +5,8 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DELETE FROM [Crm].[ProjectUser] WHERE [UserId] = @UserId AND [ProjectId] IN 
-		(SELECT [ProjectId] FROM [Crm].[Project] WHERE [CustomerId] IN
+	DELETE FROM [Pjm].[ProjectUser] WHERE [UserId] = @UserId AND [ProjectId] IN 
+		(SELECT [ProjectId] FROM [Pjm].[Project] WHERE [CustomerId] IN
 			(SELECT [CustomerId] FROM [Crm].[Customer] WHERE [OrganizationId] = @OrganizationId));
 
 	DELETE FROM [Billing].[SubscriptionUser] WHERE [UserId] = @UserId AND [SubscriptionId] IN 

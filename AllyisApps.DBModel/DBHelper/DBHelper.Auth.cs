@@ -7,6 +7,7 @@
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
+using AllyisApps.DBModel.Lookup;
 using Dapper;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@FirstName", user.FirstName);
 			parameters.Add("@LastName", user.LastName);
 			parameters.Add("@Address", user.Address);
+            parameters.Add("@Address_Identity", user.AddressId);
 			parameters.Add("@City", user.City);
 			parameters.Add("@State", user.State);
 			parameters.Add("@Country", user.Country);
@@ -105,6 +107,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 
 			parameters.Add("@Id", user.UserId);
+			parameters.Add("@AddressId", user.AddressId);
 			parameters.Add("@FirstName", user.FirstName);
 			parameters.Add("@LastName", user.LastName);
 			parameters.Add("@Address", user.Address);
@@ -291,6 +294,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@RoleId", roleId);
 			parameters.Add("@Name", org.Name);
 			parameters.Add("@SiteUrl", org.SiteUrl);
+			parameters.Add("AddressId", org.AddressId);
 			parameters.Add("@Address", org.Address);
 			parameters.Add("@City", org.City);
 			parameters.Add("@State", org.State);

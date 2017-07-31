@@ -1,4 +1,4 @@
-﻿create PROCEDURE [Auth].[CreateUser]
+﻿CREATE PROCEDURE [Auth].[CreateUser]
 	@FirstName NVARCHAR(32),
 	@LastName NVARCHAR(32),
     @Address NVARCHAR(100), 
@@ -14,21 +14,32 @@
 	@TwoFactorEnabled BIT,
 	@LockoutEnabled BIT,
 	@LockoutEndDateUtc DATE,
-	@LanguageId INT
-
+	@LanguageId INT,
+	@Address_Identity INT
 AS
 
 BEGIN
 	SET NOCOUNT ON;
 
+	INSERT INTO [Lookup].[Address]
+		([Address1],
+		[City],
+		[State],
+		[CountryId],
+		[PostalCode])
+	VALUES
+		(@Address,
+		@City,
+		(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
+		(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
+		@PostalCode);
+
+	SET @Address_Identity = SCOPE_IDENTITY()
+
 	INSERT INTO [Auth].[User] 
 		([FirstName], 
 		[LastName], 
-		[Address], 
-		[City], 
-		[State], 
-		[Country], 
-		[PostalCode], 
+		[AddressId],
 		[Email], 
 		[PhoneNumber], 
 		[DateOfBirth],
@@ -42,12 +53,8 @@ BEGIN
 		[LanguagePreference])
 	VALUES 
 		(@FirstName, 
-		@LastName, 
-		@Address, 
-		@City, 
-		(SELECT [StateId]	FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
-		(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
-		@PostalCode,
+		@LastName,
+		@Address_Identity,
 		@Email,
 		@PhoneNumber,
 		@DateOfBirth, 

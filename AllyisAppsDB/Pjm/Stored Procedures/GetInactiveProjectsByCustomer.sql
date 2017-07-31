@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Crm].[GetInactiveProjectsByCustomer]
+﻿CREATE PROCEDURE [Pjm].[GetInactiveProjectsByCustomer]
 	@CustomerId INT
 AS
 	SET NOCOUNT ON;
@@ -9,6 +9,6 @@ AS
 		   [CustomerId],
 		   [StartUtc] AS [StartingDate],
 		   [EndUtc] AS [EndingDate]
-	FROM [Crm].[Project] WITH (NOLOCK) 
+	FROM [Pjm].[Project] WITH (NOLOCK) 
 	WHERE [IsActive] = 0 AND [CustomerId] = @CustomerId
 	ORDER BY [Project].[Name]
