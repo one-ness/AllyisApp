@@ -71,6 +71,11 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public string EIN { get; set; }
 
 		/// <summary>
+		/// Gets or sets the customer's Address Id
+		/// </summary>
+		public int AddressId { get; set; }
+
+		/// <summary>
 		/// Gets or sets the Customer's address.
 		/// </summary>
 		[DataType(DataType.Text)]

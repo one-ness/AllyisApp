@@ -6,6 +6,7 @@ CREATE TABLE [Crm].[Customer] (
     [CustomerOrgId]      NVARCHAR (16)  NOT NULL,
     [CreatedUtc]         DATETIME2 (0)  DEFAULT (getutcdate()) NOT NULL,
     [ContactEmail]       NVARCHAR (384) NULL,
+    [AddressId]          INT            NULL,
     [Address]            NVARCHAR (64)  NULL,
     [City]               NVARCHAR (32)  NULL,
     [State]              INT            NULL,
@@ -17,15 +18,9 @@ CREATE TABLE [Crm].[Customer] (
     [EIN]                NVARCHAR (16)  NULL,
     CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED ([CustomerId] ASC),
     CONSTRAINT [FK_Customer_Country] FOREIGN KEY ([Country]) REFERENCES [Lookup].[Country] ([CountryId]),
-    CONSTRAINT [FK_Customer_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),
-    CONSTRAINT [FK_Customer_State] FOREIGN KEY ([State]) REFERENCES [Lookup].[State] ([StateId])
+    CONSTRAINT [FK_Customer_State] FOREIGN KEY ([State]) REFERENCES [Lookup].[State] ([StateId]),
+    CONSTRAINT [FK_Customer_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId])
 );
-
-
-
-
-GO
-
 
 
 GO

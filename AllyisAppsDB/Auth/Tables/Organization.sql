@@ -1,9 +1,10 @@
 CREATE TABLE [Auth].[Organization] (
     [OrganizationId] INT            IDENTITY (112559, 7) NOT NULL,
     [Name]           NVARCHAR (64)  NOT NULL,
-    [IsActive]       BIT            NOT NULL DEFAULT 1,
-    [CreatedUtc]     DATETIME2 (0)  NOT NULL DEFAULT getutcdate(),
+    [IsActive]       BIT            DEFAULT ((1)) NOT NULL,
+    [CreatedUtc]     DATETIME2 (0)  DEFAULT (getutcdate()) NOT NULL,
     [SiteUrl]        NVARCHAR (384) NULL,
+    [AddressId]      INT            NULL,
     [Address]        NVARCHAR (64)  NULL,
     [City]           NVARCHAR (32)  NULL,
     [State]          INT            NULL,
@@ -16,16 +17,6 @@ CREATE TABLE [Auth].[Organization] (
     CONSTRAINT [FK_Organization_Country] FOREIGN KEY ([Country]) REFERENCES [Lookup].[Country] ([CountryId]),
     CONSTRAINT [FK_Organization_State] FOREIGN KEY ([State]) REFERENCES [Lookup].[State] ([StateId])
 );
-
-
-
-
-GO
-
-
-
-GO
-
 
 
 GO
