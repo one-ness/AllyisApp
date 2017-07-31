@@ -68,13 +68,13 @@ namespace AllyisApps.Controllers
 				}));
 
 				Notifications.Add(new BootstrapAlert(Resources.Strings.UpdateProfileSuccessMessage, Variety.Success));
-				this.RouteUserHome();
+				return this.RouteUserHome();
 			}
 
 			model.ValidCountries = AppService.ValidCountries();
 
 			// Invalid Model
-			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
+			return this.View(model);
 		}
 	}
 }
