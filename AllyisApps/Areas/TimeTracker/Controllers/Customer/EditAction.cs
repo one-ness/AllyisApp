@@ -67,6 +67,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					CustomerId = model.CustomerId,
 					ContactEmail = model.ContactEmail,
 					Name = model.Name,
+					AddressId = model.AddressId,
 					Address = model.Address,
 					City = model.City,
 					State = model.State,

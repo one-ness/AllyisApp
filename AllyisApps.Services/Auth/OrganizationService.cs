@@ -583,6 +583,7 @@ namespace AllyisApps.Services
 
 			return new Organization
 			{
+				AddressId = organization.AddressId,
 				Address = organization.Address,
 				City = organization.City,
 				Country = organization.Country,
@@ -612,6 +613,7 @@ namespace AllyisApps.Services
 
 			return new OrganizationDBEntity
 			{
+				AddressId = organization.AddressId,
 				Address = organization.Address,
 				City = organization.City,
 				Country = organization.Country,

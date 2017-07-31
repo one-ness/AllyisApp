@@ -332,6 +332,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@Id", org.OrganizationId);
 			parameters.Add("@Name", org.Name);
 			parameters.Add("@SiteUrl", org.SiteUrl);
+			parameters.Add("@AddressId", org.AddressId);
 			parameters.Add("@Address", org.Address);
 			parameters.Add("@City", org.City);
 			parameters.Add("@State", org.State);

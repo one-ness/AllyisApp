@@ -6,6 +6,7 @@ AS
 		[OrganizationId],
 		[Organization].[Name],
 		[SiteUrl], 
+		[Organization].[AddressId],
 		[Address].[Address1] AS 'Address',
 		[Address].[City], 
 		[State].[Name] AS 'State', 

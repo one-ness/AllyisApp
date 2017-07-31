@@ -664,6 +664,7 @@ namespace AllyisApps.Services
 
 			return new CustomerDBEntity()
 			{
+				AddressId = customer.AddressId,
 				Address = customer.Address,
 				City = customer.City,
 				ContactEmail = customer.ContactEmail,

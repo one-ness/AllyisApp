@@ -9,7 +9,8 @@
     @PostalCode NVARCHAR(50),
 	@PhoneNumber VARCHAR (50),
 	@FaxNumber VARCHAR (50),
-	@SubdomainName NVARCHAR (40)
+	@SubdomainName NVARCHAR (40),
+	@AddressId INT
 AS
 BEGIN
 	IF EXISTS (
@@ -27,15 +28,18 @@ BEGIN
 		UPDATE [Auth].[Organization]
 		SET [Name] = @Name,
 			[SiteUrl] = @SiteUrl,
-			[Address] = @Address,
-			[City] = @City,
-			[State] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
-			[Country] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
-			[PostalCode] = @PostalCode,
 			[PhoneNumber] = @PhoneNumber,
 			[FaxNumber] = @FaxNumber,
 			[Subdomain] = @SubdomainName
 		WHERE [OrganizationId] = @Id
+
+		UPDATE [Lookup].[Address]
+		SET [Address1] = @Address,
+			[City] = @City,
+			[State] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
+			[CountryId] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
+			[PostalCode] = @PostalCode
+		WHERE [AddressId] = @AddressId
 		
 		SELECT 1;
 	END	

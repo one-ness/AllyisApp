@@ -42,11 +42,6 @@ BEGIN
 			UPDATE [Crm].[Customer]
 			SET [Name] = @Name,
 				[ContactEmail] = @ContactEmail,
-				[Address] = @Address,
-				[City] = @City, 
-				[State] = (SELECT [StateId] FROM [Lookup].[State] WHERE [Name] = @State), 
-				[Country] = (SELECT [CountryId] FROM [Lookup].[Country] WHERE [Name] = @Country), 
-				[PostalCode] = @PostalCode, 
 				[ContactPhoneNumber] = @ContactPhoneNumber, 
 				[FaxNumber] = @FaxNumber,
 				[Website] = @Website,
