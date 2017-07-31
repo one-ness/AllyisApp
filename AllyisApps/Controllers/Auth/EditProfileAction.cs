@@ -72,7 +72,7 @@ namespace AllyisApps.Controllers
 			model.ValidCountries = AppService.ValidCountries();
 
 			// Invalid Model
-			return this.View(model);
+			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
 		}
 	}
 }
