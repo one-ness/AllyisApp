@@ -35,35 +35,35 @@ namespace AllyisApps.Controllers
 
             model.OrgInfos = infos.Item2.Select(o =>
             {
-            OrgWithSubscriptionsForUserViewModel orgVM = new OrgWithSubscriptionsForUserViewModel
-            {
-                OrgInfo = o,
-                CanEditOrganization = this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, o.OrganizationId, false),
-                Subscriptions = new List<SubscriptionDisplayViewModel>()
-            };
-            UserOrganization userOrgInfo = null;
-            this.AppService.UserContext.UserOrganizations.TryGetValue(o.OrganizationId, out userOrgInfo);
-            if (userOrgInfo != null)
-            {
-                foreach (UserSubscription userSubInfo in userOrgInfo.UserSubscriptions.Values)
-                {
-                    //TODO move description info into a product description column in Billing.Product
-                    string description =
-                        userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
-                        userSubInfo.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
-                        "";
+				OrgWithSubscriptionsForUserViewModel orgVM = new OrgWithSubscriptionsForUserViewModel
+				{
+					OrgInfo = o,
+					CanEditOrganization = this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, o.OrganizationId, false),
+					Subscriptions = new List<SubscriptionDisplayViewModel>()
+				};
+				UserOrganization userOrgInfo = null;
+				this.AppService.UserContext.UserOrganizations.TryGetValue(o.OrganizationId, out userOrgInfo);
+				if (userOrgInfo != null)
+				{
+					foreach (UserSubscription userSubInfo in userOrgInfo.UserSubscriptions.Values)
+					{
+						//TODO move description info into a product description column in Billing.Product
+						string description =
+							userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
+							userSubInfo.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
+							"";
 
-                    if (userSubInfo.ProductId == ProductIdEnum.TimeTracker)
-                    {
-                        int startOfWeek = AppService.GetAllSettings(userSubInfo.SubscriptionId).Item1.StartOfWeek;
-                            ViewBag.StartDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
-                            ViewBag.EndDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
-                        }
+						if (userSubInfo.ProductId == ProductIdEnum.TimeTracker)
+						{
+							int startOfWeek = AppService.GetAllSettings(userSubInfo.SubscriptionId).Item1.StartOfWeek;
+							ViewBag.StartDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
+							ViewBag.EndDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
+						}
 
 						orgVM.Subscriptions.Add(new SubscriptionDisplayViewModel
 						{
 							SubscriptionId = userSubInfo.SubscriptionId,
-                            SubscriptionName = userSubInfo.SubscriptionName,
+							SubscriptionName = userSubInfo.SubscriptionName,
 							ProductId = (int)userSubInfo.ProductId,
 							ProductName = userSubInfo.ProductName,
 							ProductDescription = description,
