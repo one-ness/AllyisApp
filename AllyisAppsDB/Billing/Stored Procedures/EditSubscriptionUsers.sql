@@ -36,12 +36,6 @@ BEGIN TRANSACTION
 
 			SELECT @@ROWCOUNT
 
-			-- Get number of users currently in subscription
-			DECLARE @ExistingUsers INT
-			SELECT @ExistingUsers = COUNT(*)
-			FROM [Billing].[SubscriptionUser] WITH (NOLOCK)
-			WHERE [SubscriptionId] = @SubId
-
 			-- Get users being added to subscription
 			DECLARE @AddingUsers TABLE (
 				[userId] INT
@@ -55,15 +49,9 @@ BEGIN TRANSACTION
 				WHERE [SubscriptionId] = @SubId
 			) [SubUsers] ON [SubUsers].[UserId] = [UID].[userId]
 			WHERE [SubscriptionId] IS NULL
-
-			-- Check that there is room for users being added
-			IF @ExistingUsers + (SELECT COUNT(*) FROM @AddingUsers) > @NumberOfUsers AND @NumberOfUsers != 0
+			
+			-- Add the new users
 			BEGIN
-				SELECT -1 -- Not enough room in subscription
-			END
-			ELSE
-			BEGIN
-				-- Add the new users
 				DECLARE @SubAndRole TABLE ([SubId] INT, [TTRoleId] INT);
 				INSERT INTO @SubAndRole ([SubId], [TTRoleId]) VALUES (@SubId, @TimeTrackerRole)
 

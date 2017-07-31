@@ -49,9 +49,12 @@
 				<div class="col-sm-12 index-details" style="border-top: solid thin #ddd; padding-right: 0">
 					<p>
 						<h3 style="float: left">@Strings.Subscriptions</h3>
-						<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.PanelInfo.OrgInfo.OrganizationId })" title="Add a subscription" class="btn btn-default" style="float: right; margin-top: 12px; margin-bottom: 10px;">
-							@Strings.CreateSubscription
-						</a>
+						@if (Model.PanelInfo.CanEditOrganization)
+						{
+							<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.PanelInfo.OrgInfo.OrganizationId })" title="Add a subscription" class="btn btn-default" style="float: right; margin-top: 12px; margin-bottom: 10px;">
+								@Strings.CreateSubscription
+							</a>
+						}
 					</p>
 				</div>
                 <div class="col-md-12" style="height: 100%; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
