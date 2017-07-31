@@ -683,6 +683,11 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+		public void UpdateSubscriptionName()
+		{
+
+		}
+
 		/// <summary>
 		/// Returns a list of ProjectDBEntities for projects the given user is assigned to in the given organization,
 		/// another list of ProjectDBEntities for all projects in the given organization, and a UserDBEntity with the
