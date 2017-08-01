@@ -36,7 +36,7 @@ BEGIN
 		UPDATE [Lookup].[Address]
 		SET [Address1] = @Address,
 			[City] = @City,
-			[State] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
+			[StateId] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
 			[CountryId] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
 			[PostalCode] = @PostalCode
 		WHERE [AddressId] = @AddressId
