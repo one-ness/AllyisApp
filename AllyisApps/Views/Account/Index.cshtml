@@ -6,7 +6,7 @@
 	DisplayHints.ShowBreadcrumbs = false;
 	DisplayHints.PageBodyId = "paneled-index";
 	ViewBag.TitleBar = Strings.MyAccount;
-	var cityState = Model.UserInfo.City != null && Model.UserInfo.State != null ? Model.UserInfo.City + ", " + Model.UserInfo.State : string.Empty;
+	var cityState = Model.UserInfo.Address.City != null && Model.UserInfo.Address.State != null ? Model.UserInfo.Address.City + ", " + Model.UserInfo.Address.State : string.Empty;
 }
 
 <div class="row">
@@ -35,8 +35,8 @@
 					</p>
 					<p>
 						<label>@Strings.Address:</label>
-						<span class="address-row">@Model.UserInfo.Address</span>
-						<span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
+						<span class="address-row">@Model.UserInfo.Address.Address1</span>
+						<span class="address-row">@cityState @Model.UserInfo.Address.PostalCode</span>
 					</p>
 				</div>
 				<div class="col-sm-3 vertically-stacked-buttons text-right" style="padding-right:5px">

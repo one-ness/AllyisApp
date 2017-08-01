@@ -17,12 +17,12 @@ namespace AllyisApps.DBModel.Lookup
         public int AddressId { get; set; }
 
         /// <summary>
-        /// Gets or sets the address1
+        /// Gets or sets address1
         /// </summary>
         public string Address1 { get; set; }
 
         /// <summary>
-        /// Gets or sets the address2
+        /// Gets or sets address2
         /// </summary>
         public string Address2 { get; set; }
 
@@ -44,7 +44,7 @@ namespace AllyisApps.DBModel.Lookup
         /// <summary>
         /// Gets or sets the Country Id
         /// </summary>
-        public int CountryId { get; set; }
+        public string CountryId { get; set; }
 
     }
 }

@@ -2,15 +2,13 @@
 	@CustomerId INT
 AS
 BEGIN
+
+	DECLARE @AddressId AS INT
+	
 	SET NOCOUNT ON;
 	SELECT [Customer].[CustomerId],
 		   [Customer].[Name],
 		   [Customer].[AddressId],
-		   [Address].[Address1] AS 'Address',
-		   [Address].[City],
-		   [State].[Name] AS 'State',
-		   [Country].[Name] AS 'Country',
-		   [Address].[PostalCode],
 		   [Customer].[ContactEmail],
 		   [Customer].[ContactPhoneNumber],
 		   [Customer].[FaxNumber],
@@ -25,5 +23,19 @@ BEGIN
 	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Address].[State]
 	WHERE [CustomerId] = @CustomerId
 	
-	SELECT [Name] FROM [Lookup].[Country] WITH (NOLOCK) ;
+	SELECT [Name] FROM [Lookup].[Country] WITH (NOLOCK);
+
+	SET @AddressId = (SELECT m.AddressId
+					FROM [Crm].[Customer] AS m
+					WHERE [CustomerId] = @CustomerId)
+
+	SELECT [Address].[Address1],
+		   [Address].[City],
+		   [State].[Name] AS 'State',
+		   [Country].[Name] AS 'CountryId',
+		   [Address].[PostalCode]
+	FROM [Lookup].[Address] AS [Address] WITH (NOLOCK)
+	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
+	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Address].[State]
+	WHERE [AddressId] = @AddressId
 END

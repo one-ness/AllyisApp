@@ -7,6 +7,7 @@
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
+using AllyisApps.DBModel.Lookup;
 using Dapper;
 using System;
 using System.Collections.Generic;
@@ -490,7 +491,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
 		/// <returns></returns>
-		public Tuple<CustomerDBEntity, List<string>> GetCustomerCountries(int customerId)
+		public Tuple<CustomerDBEntity, List<string>, AddressDBEntity> GetCustomerCountries(int customerId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@CustomerId", customerId);
@@ -502,7 +503,8 @@ namespace AllyisApps.DBModel
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
 					results.Read<CustomerDBEntity>().SingleOrDefault(),
-					results.Read<string>().ToList());
+					results.Read<string>().ToList(),
+					results.Read<AddressDBEntity>().SingleOrDefault());
 			}
 		}
 
