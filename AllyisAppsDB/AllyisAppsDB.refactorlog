@@ -42,4 +42,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[OrganizationRoleId]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="e2d5f599-b8f0-487b-bfa7-d147f7a7ae21" ChangeDateTime="07/31/2017 23:41:34">
+    <Property Name="ElementName" Value="[Auth].[User].[ActiveOrganizationId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Auth].[User]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[LastUsedOrganizationId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9e6a781f-e569-4948-9876-383c50bc3183" ChangeDateTime="07/31/2017 23:44:44">
+    <Property Name="ElementName" Value="[Auth].[User].[LastSubscriptionId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Auth].[User]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[LastUsedSubscriptionId]" />
+  </Operation>
 </Operations>

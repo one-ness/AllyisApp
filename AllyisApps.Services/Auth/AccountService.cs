@@ -7,7 +7,6 @@
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Shared;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
 using System;

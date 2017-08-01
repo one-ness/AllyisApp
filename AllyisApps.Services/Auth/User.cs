@@ -81,7 +81,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets Id of the last subscription used/viewed.
 		/// </summary>
-		public int LastSubscriptionId { get; set; }
+		public int LastUsedSubscriptionId { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the email address has been confirmed.
@@ -111,7 +111,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets Id of this user's active organization.
 		/// </summary>
-		public int ActiveOrganizationId { get; set; }
+		public int LastUsedOrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets End date for lockout.

@@ -66,7 +66,7 @@ BEGIN
 
 			-- Set users's chosen organization to new org
 			UPDATE [Auth].[User]
-			SET [ActiveOrganizationId] = @retId
+			SET [LastUsedOrganizationId] = @retId
 			WHERE [UserId] = @UserId
 
 		COMMIT TRANSACTION

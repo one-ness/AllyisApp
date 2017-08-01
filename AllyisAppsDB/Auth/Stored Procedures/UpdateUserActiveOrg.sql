@@ -5,6 +5,6 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	UPDATE [Auth].[User]
-	SET [ActiveOrganizationId] = @OrganizationId
+	SET [LastUsedOrganizationId] = @OrganizationId
 	WHERE [UserId] = @UserId
 END

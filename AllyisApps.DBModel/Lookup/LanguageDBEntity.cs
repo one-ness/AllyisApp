@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.DBModel.Shared
+namespace AllyisApps.DBModel.Lookup
 {
 	/// <summary>
 	/// The model for the language table.
