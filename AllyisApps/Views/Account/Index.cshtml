@@ -62,10 +62,11 @@
 						</p>
 						@foreach (InvitationInfo invite in Model.InviteInfos)
 						{
-							<div>
-								@*<span class="col-xs-4 col-sm-6">@invite.OrganizationName</span>*@
+							<div class="invites">
+								<span class="col-xs-4 col-sm-6">@ViewData[invite.OrganizationId.ToString()]</span>
 								@using (Html.BeginForm(ActionConstants.AcceptInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
 								{
+                                   
 									<span class="col-xs-4 col-sm-3 padding">
 										<input type="submit" value="@Strings.Accept" class="btn btn-primary col-xs-12" />
 									</span>
