@@ -1,12 +1,12 @@
 ﻿CREATE TABLE [Lookup].[State] (
-    [StateId]   INT           IDENTITY (1, 1) NOT NULL,
-    [Code]      VARCHAR (8)   NOT NULL,
-    [Name]      NVARCHAR (96) NOT NULL,
-    [CountryId] INT           NULL,
+    [StateId]     INT           IDENTITY (1, 1) NOT NULL,
+    [CountryCode] VARCHAR (8)   NOT NULL,
+    [Name]        NVARCHAR (96) NOT NULL,
     CONSTRAINT [PK_State] PRIMARY KEY NONCLUSTERED ([StateId] ASC),
-    CONSTRAINT [FK_State_Country] FOREIGN KEY ([CountryId]) REFERENCES [Lookup].[Country] ([CountryId]),
-    CONSTRAINT [FK_States_Country] FOREIGN KEY ([Code]) REFERENCES [Lookup].[Country] ([Code])
+    CONSTRAINT [FK_State_Country] FOREIGN KEY ([CountryCode]) REFERENCES [Lookup].[Country] ([CountryCode])
 );
+
+
 
 
 
@@ -17,5 +17,7 @@
 
 GO
 CREATE CLUSTERED INDEX [IX_State_Code]
-    ON [Lookup].[State]([Code] ASC);
+    ON [Lookup].[State]([CountryCode] ASC);
+
+
 
