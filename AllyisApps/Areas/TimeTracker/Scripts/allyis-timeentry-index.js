@@ -173,14 +173,18 @@ function editTimes(values) {
 function updateTimes(values) {
 	var currentVal = $('#totalHours').text().split(":"),
 		updateVal = values.duration.split(":"),
-		projectVal = $('#' + values.projectId).text().split(":");
+        projectVal = $('#' + values.projectId).text().split(":");
+
+    if (updateVal[0].startsWith('-')) {
+        updateVal[1] = '-' + updateVal[1];
+    }
 
 	var projectHours = parseInt(projectVal[0]),
 		projectMinutes = parseInt(projectVal[1]),
 		totalHours = parseInt(currentVal[0]),
 		totalMinutes = parseInt(currentVal[1]),
 		hourUpdate = parseInt(updateVal[0]),
-		minuteUpdate = parseInt(updateVal[1]);
+        minuteUpdate = parseInt(updateVal[1]);
 
 	var projHour = projectHours + hourUpdate;
 	var projMinute = projectMinutes + (hourUpdate < 0 ? minuteUpdate * -1 : minuteUpdate);

@@ -36,10 +36,11 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public string ContactEmail { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user's first name.
+		/// Gets or sets the customers displayed name.
 		/// </summary>
 		[Required]
 		[DataType(DataType.Text)]
+        [RegularExpression(@"^.{1,30}$", ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "CustomerNameWarning")]
 		[Display(Name = "Name")]
 		public string Name { get; set; }
 
@@ -54,14 +55,14 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// <summary>
 		/// Gets or sets the user's phone number.
 		/// </summary>
-		[RegularExpression(@"^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$", ErrorMessage = "Entered phone format is not valid.")] // [Phone] does not work
+		[RegularExpression(@"^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$", ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "PhoneFormatValidation")] // [Phone] does not work
 		[Display(Name = "Contact Phone Number")]
 		public string ContactPhoneNumber { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Customer's fax number.
 		/// </summary>
-		[RegularExpression(@"^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$", ErrorMessage = "Entered phone format is not valid.")] // [Phone] does not work
+		[RegularExpression(@"^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$", ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "PhoneFormatValidation")] // [Phone] does not work
 		public string FaxNumber { get; set; }
 
 		/// <summary>
