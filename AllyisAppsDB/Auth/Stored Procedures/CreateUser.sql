@@ -24,7 +24,7 @@ BEGIN
 	INSERT INTO [Lookup].[Address]
 		([Address1],
 		[City],
-		[State],
+		[StateId],
 		[CountryId],
 		[PostalCode])
 	VALUES
