@@ -95,10 +95,5 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the role selected in the drop down menu.
 		/// </summary>
 		public int SelectedRole { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether this subscription is full.
-		/// </summary>
-		public bool hasTooManySubscribers { get; set; }
 	}
 }

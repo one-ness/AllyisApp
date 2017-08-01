@@ -117,12 +117,12 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets the last active subscription id.
 		/// </summary>
-		public int? LastSubscriptionId { get; set; }
+		public int? LastUsedSubscriptionId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the last active organization id.
 		/// </summary>
-		public int? ActiveOrganizationId { get; set; }
+		public int? LastUsedOrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets LockoutEndDateUtc.

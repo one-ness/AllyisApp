@@ -215,7 +215,7 @@ namespace AllyisApps.DBModel
 		/// <param name="projectId">Project Id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns></returns>
-		public Tuple<CompleteProjectDBEntity, List<UserDBEntity>, List<SubscriptionUserDBEntity>> GetProjectEditInfo(int projectId, int subscriptionId)
+		public Tuple<ProjectDBEntity, List<UserDBEntity>, List<SubscriptionUserDBEntity>> GetProjectEditInfo(int projectId, int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@ProjectId", projectId);
@@ -228,7 +228,7 @@ namespace AllyisApps.DBModel
 					parameters,
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
-					results.Read<CompleteProjectDBEntity>().SingleOrDefault(),
+					results.Read<ProjectDBEntity>().SingleOrDefault(),
 					results.Read<UserDBEntity>().ToList(),
 					results.Read<SubscriptionUserDBEntity>().ToList());
 			}
@@ -563,7 +563,7 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">The organization's Id.</param>
 		/// <param name="activity">The level of activity you wish to allow. Specifying 0 includes inactive projects.</param>
 		/// <returns>A collection of CompleteProjectDBEntity objects for each project the user has access to within the organization.</returns>
-		public IEnumerable<CompleteProjectDBEntity> GetProjectsByUserAndOrganization(int userId, int orgId, int activity)
+		public IEnumerable<ProjectDBEntity> GetProjectsByUserAndOrganization(int userId, int orgId, int activity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@UserId", userId);
@@ -571,7 +571,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@Activity", activity);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<CompleteProjectDBEntity>(
+				return connection.Query<ProjectDBEntity>(
 					"[Pjm].[GetProjectsByUserAndOrganization]",
 					parameters,
 					 commandType: CommandType.StoredProcedure);
@@ -584,14 +584,14 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">The organization's Id.</param>
 		/// <param name="activity">The level of activity you wish to allow. Specifying 0 includes inactive projects.</param>
 		/// <returns>A collection of CompleteProjectInfo objects for each project within the organization.</returns>
-		public IEnumerable<CompleteProjectDBEntity> GetProjectsByOrgId(int orgId, int activity)
+		public IEnumerable<ProjectDBEntity> GetProjectsByOrgId(int orgId, int activity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@OrgId", orgId);
 			parameters.Add("@Activity", activity);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<CompleteProjectDBEntity>(
+				return connection.Query<ProjectDBEntity>(
 					"[Pjm].[GetProjectsByOrgId]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
@@ -603,14 +603,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="projectId">The project's Id.</param>
 		/// <returns>Info about the requested project.</returns>
-		public CompleteProjectDBEntity GetProjectById(int projectId)
+		public ProjectDBEntity GetProjectById(int projectId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@ProjectId", projectId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<CompleteProjectDBEntity>(
+				return connection.Query<ProjectDBEntity>(
 					"[Pjm].[GetProjectById]",
 					parameters,
 					commandType: CommandType.StoredProcedure).SingleOrDefault();
@@ -624,7 +624,7 @@ namespace AllyisApps.DBModel
 		/// <param name="projectId">The project's Id.</param>
 		/// <param name="userId">The user Id.</param>
 		/// <returns>Info about the requested project.</returns>
-		public CompleteProjectDBEntity GetProjectByIdAndUser(int projectId, int userId)
+		public ProjectDBEntity GetProjectByIdAndUser(int projectId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@ProjectId", projectId);
@@ -632,7 +632,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<CompleteProjectDBEntity>(
+				return connection.Query<ProjectDBEntity>(
 					"[Pjm].[GetProjectByIdAndUser]",
 					parameters,
 					commandType: CommandType.StoredProcedure).SingleOrDefault();
@@ -687,6 +687,25 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Updates the name of existing subscription.
+		/// </summary>
+		public void UpdateSubscriptionName(int orgId, int selectedSku, string subscriptionName)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@OrganizationId", orgId);
+			parameters.Add("@SkuId", selectedSku);
+			parameters.Add("@SubscriptionName", subscriptionName);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Query(
+					"[Billing].[UpdateSubscriptionName]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
 		/// Returns a list of ProjectDBEntities for projects the given user is assigned to in the given organization,
 		/// another list of ProjectDBEntities for all projects in the given organization, and a UserDBEntity with the
 		/// name and email of the user.
@@ -719,7 +738,7 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns></returns>
-		public Tuple<List<CompleteProjectDBEntity>, List<CustomerDBEntity>> GetProjectsAndCustomersForOrgAndUser(int orgId, int userId)
+		public Tuple<List<ProjectDBEntity>, List<CustomerDBEntity>> GetProjectsAndCustomersForOrgAndUser(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@UserId", userId);
@@ -731,7 +750,7 @@ namespace AllyisApps.DBModel
 					parameters,
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
-					results.Read<CompleteProjectDBEntity>().ToList(),
+					results.Read<ProjectDBEntity>().ToList(),
 					results.Read<CustomerDBEntity>().ToList());
 			}
 		}
@@ -743,7 +762,7 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns></returns>
-		public Tuple<List<CompleteProjectDBEntity>, List<CustomerDBEntity>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId, int userId)
+		public Tuple<List<ProjectDBEntity>, List<CustomerDBEntity>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@UserId", userId);
@@ -755,7 +774,7 @@ namespace AllyisApps.DBModel
 					parameters,
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
-					results.Read<CompleteProjectDBEntity>().ToList(),
+					results.Read<ProjectDBEntity>().ToList(),
 					results.Read<CustomerDBEntity>().ToList());
 			}
 		}

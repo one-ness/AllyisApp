@@ -247,7 +247,7 @@ namespace AllyisApps.Controllers
 					return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 				}
 
-				Tuple<int, int> updatedAndAdded = AppService.ChangeSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value, model.OrganizationId);
+				Tuple<int, int> updatedAndAdded = AppService.ChangeSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value, model.OrganizationId, (int)ProductIdEnum.TimeTracker); //TODO: this should get a product ID from the model so that this method doesnt only work on time tracker subscriptions
 				if (updatedAndAdded.Item1 == -1)
 				{
 					Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDontHaveASubscriptionToTimeTracker, Variety.Danger));
@@ -260,16 +260,9 @@ namespace AllyisApps.Controllers
 						Resources.Strings.UsersRemovedFromTimeTracker : Resources.Strings.UsersChangedRolesInTimeTracker), Variety.Success));
 				}
 
-				if (updatedAndAdded.Item2 == -1)
+				if (updatedAndAdded.Item2 != 0 )
 				{
-					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.TooManyUsersInSubToAdd, model.SelectedUsers.Count()), Variety.Danger));
-				}
-				else
-				{
-					if (updatedAndAdded.Item2 != 0)
-					{
-						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersAddedToTimeTracker, updatedAndAdded.Item2), Variety.Success));
-					}
+					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersAddedToTimeTracker, updatedAndAdded.Item2), Variety.Success));
 				}
 			}
 

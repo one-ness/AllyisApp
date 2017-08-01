@@ -73,7 +73,7 @@ namespace AllyisApps.Controllers
 				await Task.Factory.StartNew(() => AppService.SaveUserInfo(user));
 
 				Notifications.Add(new BootstrapAlert(Resources.Strings.UpdateProfileSuccessMessage, Variety.Success));
-				this.RouteUserHome();
+				return this.RouteUserHome();
 			}
 
 			model.ValidCountries = AppService.ValidCountries();

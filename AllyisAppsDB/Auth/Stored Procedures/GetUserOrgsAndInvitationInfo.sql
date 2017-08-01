@@ -10,8 +10,8 @@ BEGIN
 			[User].[DateOfBirth],
 			[User].[Email],
 			[User].[PhoneNumber],
-			[User].[LastSubscriptionId],
-			[User].[ActiveOrganizationId],
+			[User].[LastUsedSubscriptionId],
+			[User].[LastUsedOrganizationId],
 			[LanguagePreference]
 	FROM [Auth].[User]
 	WITH (NOLOCK)

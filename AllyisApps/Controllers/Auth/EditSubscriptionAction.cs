@@ -86,30 +86,39 @@ namespace AllyisApps.Controllers
 					{
 						return this.RedirectToAction(ActionConstants.Unsubscribe, new { id = model.SubscriptionId, idTwo = model.SkuId });
 					}
-					else if (model.ActionType != model.NextName)
+					else if (model.ActionType == model.Name)
 					{
 						model.SkuIdNext = model.SkuId;
 						model.NextName = model.Name;
 					}
+					else
+					{
+						model.NextName = model.ActionType;
+						switch (model.ActionType)
+						{
+							case "Time Tracker":
+								model.SkuIdNext = 200001;
+								break;
+							case "Expense Tracker":
+								model.SkuIdNext = 300001;
+								break;
+							case "Staffing Manager":
+								model.SkuIdNext = 400001;
+								break;
+							default:
+								break;
+						}
+					}
 
 					Tuple<Product, SubscriptionInfo, List<SkuInfo>, string, int> infos = AppService.GetProductSubscriptionInfo(model.OrganizationId, model.SkuIdNext);
-
+					
 					var id = infos.Item4;
 					var customerId = new BillingServicesCustomerId(id);
 					var token = new BillingServicesToken(customerId.ToString());
 
-					this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, model.OrganizationId);
-
-					if (AppService.Subscribe(model.ProductId, model.ProductName, model.SkuIdNext, model.SubscriptionName, model.SkuId, 0, token, false, null, null, model.OrganizationId))
-					{
-						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.SubscribedSuccessfully, model.NextName), Variety.Success));
-						return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
-					}
-					else
-					{
-						Notifications.Add(new BootstrapAlert(Resources.Strings.ReduceNumberOfUsers, Variety.Danger));
-						return this.RedirectToAction(ActionConstants.Subscribe, new { productId = model.ProductId });
-					}
+					this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, model.OrganizationId);AppService.Subscribe(model.ProductId, model.ProductName, model.SkuIdNext, model.SubscriptionName, model.SkuId, 0, token, false, null, null, model.OrganizationId);
+					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.SubscribedSuccessfully, model.NextName), Variety.Success));
+					return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });
 				}
 				catch (Exception ex)
 				{

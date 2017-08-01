@@ -800,18 +800,10 @@ namespace AllyisApps.Services
 								if (!userSubs.Where(u => u.UserId == user.UserId).Any())
 								{
 									// No existing subscription for this user, so we create one.
-									if (ttSub.SubscriptionsUsed < ttSub.NumberOfUsers)
-									{
-										this.DBHelper.UpdateSubscriptionUserProductRole((int)(TimeTrackerRole.User), ttSub.SubscriptionId, user.UserId);
-										userSubs.Add(user);
-										result.UsersAddedToSubscription += 1;
-										canImportThisEntry = true; // Successfully created.
-									}
-									else
-									{
-										result.UserSubscriptionFailures.Add(string.Format("Cannot add user {0} {1} to Time Tracker subscription: number of users for subscription is at maximum ({2}).", user.FirstName, user.LastName, ttSub.SubscriptionsUsed));
-										continue;
-									}
+									this.DBHelper.UpdateSubscriptionUserProductRole((int)(TimeTrackerRole.User), ttSub.SubscriptionId, user.UserId);
+									userSubs.Add(user);
+									result.UsersAddedToSubscription += 1;
+									canImportThisEntry = true; // Successfully created.
 								}
 								else
 								{

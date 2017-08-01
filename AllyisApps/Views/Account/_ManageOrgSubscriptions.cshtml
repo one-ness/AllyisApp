@@ -10,8 +10,7 @@
 	string price = string.Empty;
 	if (Model.Info != null)
 	{
-		userDisplay = string.Format("{0} {1}", Model.Info.SubscriptionsUsed, Strings.Users);
-		// price = (Model.Info.NumberOfUsers - 500) <= 0 ? Strings.Free : (Model.Info.NumberOfUsers - 500).ToString("c");
+		userDisplay = string.Format("{0} {1}", Model.Info.NumberOfUsers, Strings.Users);
 		price = "";
 	}
 }
@@ -24,8 +23,8 @@
 		}
 		else
 		{
-			<a href="@Url.Action(ActionConstants.Index, ControllerConstants.TimeEntry, new { area = Model.AreaUrl, subscriptionId = Model.SubscriptionId, userId = ViewData["UserId"] })" style="text-decoration: none; color: inherit">
-				@string.Format("{0} - {1}", Model.SubscriptionName, Model.ProductName) <i class="fa fa-caret-right"></i>
+			<a href="@Url.RouteUrl(RouteNameConstants.TimeTrackerNoIndex, new { subscriptionId = Model.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = ViewData["StartDate"], endDate = ViewData["EndDate"] })" style="text-decoration: none; color: inherit">
+				@string.Format("{0}", Model.SubscriptionName) <i class="fa fa-caret-right"></i>
 			</a>
 		}
 	</td>

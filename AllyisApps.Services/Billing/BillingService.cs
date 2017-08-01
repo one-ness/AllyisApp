@@ -298,21 +298,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Updates the number of subscription users for a sku in the current organization.
-		/// </summary>
-		/// <param name="orgId">The Organization Id</param>
-		/// <param name="skuId">Sku Id.</param>
-		public void UpdateSubscriptionUsers(int orgId, int skuId)
-		{
-			if (skuId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("skuId", "Sku Id cannot be 0 or negative.");
-			}
-
-			DBHelper.UpdateSubscriptionUsers(orgId, skuId, 0);
-		}
-
-		/// <summary>
 		/// Deletes a subsciption user.
 		/// </summary>
 		/// <param name="subscriptionId">Subscription Id.</param>
@@ -332,22 +317,23 @@ namespace AllyisApps.Services
 			DBHelper.DeleteSubscriptionUser(subscriptionId, userId);
 		}
 
-		/// <summary>
-		/// Assigns a new TimeTracker role to the given users for the current organization.
-		/// </summary>
-		/// <param name="userIds">List of user Ids.</param>
-		/// <param name="newTimeTrackerRole">TimeTracker role to assign, or -1 to remove from subscription.</param>
-		/// <param name="orgId">The Organization Id</param>
-		/// <returns>A tuple containing the number of updated users and the number of added users. If the updated users is -1,
-		/// there is no TimeTracker subscription. If the number added is -1, there are too many subscription users already to
-		/// add the given list.</returns>
-		public Tuple<int, int> ChangeSubscriptionUserRoles(List<int> userIds, int newTimeTrackerRole, int orgId)
+        /// <summary>
+        /// Assigns a new TimeTracker role to the given users for the current organization.
+        /// </summary>
+        /// <param name="userIds">List of user Ids.</param>
+        /// <param name="newProductRole">Product role to assign, or -1 to remove from subscription.</param>
+        /// <param name="orgId">The Organization Id</param>
+        /// <param name="productId">The subscribed Product Id</param>
+        /// <returns>A tuple containing the number of updated users and the number of added users. If the updated users is -1,
+        /// there is no TimeTracker subscription. If the number added is -1, there are too many subscription users already to
+        /// add the given list.</returns>
+        public Tuple<int, int> ChangeSubscriptionUserRoles(List<int> userIds, int newProductRole, int orgId, int productId)
 		{
 			#region Validation
 
-			if (!Enum.IsDefined(typeof(TimeTrackerRole), newTimeTrackerRole) && newTimeTrackerRole != -1)
+			if (!Enum.IsDefined(typeof(TimeTrackerRole), newProductRole) && newProductRole != -1)
 			{
-				throw new ArgumentOutOfRangeException("newTimeTrackerRole", "TimeTracker role must either be -1 or match a value of the ProductRoleIdEnum enum.");
+				throw new ArgumentOutOfRangeException("newProductRole", "Product role must either be -1 or match a value of the ProductRoleIdEnum enum.");
 			}
 			if (userIds == null || userIds.Count == 0)
 			{
@@ -356,7 +342,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.EditSubscriptionUsers(userIds, orgId, newTimeTrackerRole);
+			return DBHelper.EditSubscriptionUsers(userIds, orgId, newProductRole, productId);
 		}
 
 		/// <summary>
@@ -589,7 +575,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			int subId = DBHelper.ChangeSubscription(orgId, selectedSku, productId, 0, subscriptionName);
+			int subId = DBHelper.ChangeSubscription(orgId, selectedSku, productId, subscriptionName);
 			if (subId != 0)
 			{
 				DBHelper.UpdateSubscriptionUserProductRole(this.GetProductRolesFromSubscription(subId).Where(x => x.Name == "Manager").Single().ProductRoleId, subId, UserContext.UserId);
@@ -644,7 +630,7 @@ namespace AllyisApps.Services
 		/// <param name="orgId"></param>
 		/// <returns></returns>
 		[CLSCompliant(false)]
-		public bool Subscribe(int productId, string productName, int selectedSku, string subscriptionName, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
+		public void Subscribe(int productId, string productName, int selectedSku, string subscriptionName, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
 		{
 			BillingServicesCustomer customer;
 			BillingServicesToken token;
@@ -710,10 +696,8 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				this.UpdateSubscriptionUsers(orgId, selectedSku);
+				DBHelper.UpdateSubscriptionName(orgId, selectedSku, subscriptionName);
 			}
-
-			return true;
 		}
 
 		/// <summary>
@@ -870,7 +854,6 @@ namespace AllyisApps.Services
 				SkuName = subscriptionDisplay.SkuName,
 				SubscriptionId = subscriptionDisplay.SubscriptionId,
                 SubscriptionName = subscriptionDisplay.SubscriptionName,
-                SubscriptionsUsed = subscriptionDisplay.SubscriptionsUsed,
 				Tier = subscriptionDisplay.Tier
 			};
 		}

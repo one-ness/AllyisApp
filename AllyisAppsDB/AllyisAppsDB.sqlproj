@@ -81,6 +81,8 @@
     <Folder Include="Finance\Tables\" />
     <Folder Include="Expense\" />
     <Folder Include="Expense\Tables\" />
+    <Folder Include="Finance\Stored Procedures" />
+    <Folder Include="Expense\Stored Procedures" />
     <Folder Include="Pjm" />
     <Folder Include="Pjm\Stored Procedures" />
     <Folder Include="Pjm\Tables" />
@@ -168,7 +170,6 @@
     <Build Include="Billing\Stored Procedures\GetSubscriptionPlanPricesByOrg.sql" />
     <Build Include="Billing\Stored Procedures\GetSubscriptionsDisplayByOrg.sql" />
     <Build Include="Billing\Stored Procedures\UpdateCustomerSubscription.sql" />
-    <Build Include="Billing\Stored Procedures\UpdateNumberOfUsersSubscription.sql" />
     <Build Include="Billing\Stored Procedures\UpdateSubscription.sql" />
     <Build Include="Billing\Stored Procedures\UpdateSubscriptionUserProductRole.sql" />
     <Build Include="Billing\Stored Procedures\CreateBillingHistory.sql" />
@@ -256,9 +257,26 @@
     <Build Include="Security\Finance.sql" />
     <Build Include="Security\Expense.sql" />
     <Build Include="Security\Pjm.sql" />
+    <Build Include="Finance\Stored Procedures\GetAccountsByParentId.sql" />
     <Build Include="Auth\Tables\Permission.sql" />
     <Build Include="Auth\Tables\Action.sql" />
     <Build Include="Security\Hrm.sql" />
+    <Build Include="Finance\Stored Procedures\GetAccount.sql" />
+    <Build Include="Finance\Stored Procedures\GetAccountsByAccountTypeId.sql" />
+    <Build Include="Finance\Stored Procedures\CreateAccount.sql" />
+    <Build Include="Finance\Stored Procedures\UpdateAccount.sql" />
+    <Build Include="Finance\Stored Procedures\DeleteAccount.sql" />
+    <Build Include="Expense\Stored Procedures\GetExpenseItemByAccountId.sql" />
+    <Build Include="Expense\Stored Procedures\GetExpenseItem.sql" />
+    <Build Include="Expense\Stored Procedures\CreateExpenseItem.sql" />
+    <Build Include="Expense\Stored Procedures\UpdateExpenseItem.sql" />
+    <Build Include="Expense\Stored Procedures\DeleteExpenseItem.sql" />
+    <Build Include="Expense\Stored Procedures\CreateExpenseReport.sql" />
+    <Build Include="Expense\Stored Procedures\GetExpenseReportsBySubmittedById.sql" />
+    <Build Include="Expense\Stored Procedures\GetExpenseReportsByOrganizationId.sql" />
+    <Build Include="Expense\Stored Procedures\GetExpenseReport.sql" />
+    <Build Include="Expense\Stored Procedures\UpdateExpenseReport.sql" />
+    <Build Include="Expense\Stored Procedures\DeleteExpenseReport.sql" />
     <Build Include="Lookup\Tables\Address.sql" />
     <Build Include="Pjm\Tables\Project.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -283,6 +301,7 @@
     <Build Include="Pjm\Stored Procedures\UpdateProject.sql" />
     <Build Include="Pjm\Stored Procedures\UpdateProjectAndUsers.sql" />
     <Build Include="Pjm\Stored Procedures\UpdateProjectUser.sql" />
+    <Build Include="Billing\Stored Procedures\UpdateSubscriptionName.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

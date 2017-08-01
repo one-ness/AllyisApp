@@ -958,7 +958,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns></returns>
-		public Tuple<string, List<SubscriptionDisplayDBEntity>, List<SubscriptionRoleDBEntity>, List<CompleteProjectDBEntity>, string> GetAddMemberInfo(int orgId)
+		public Tuple<string, List<SubscriptionDisplayDBEntity>, List<SubscriptionRoleDBEntity>, List<ProjectDBEntity>, string> GetAddMemberInfo(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@OrganizationId", orgId);
@@ -972,7 +972,7 @@ namespace AllyisApps.DBModel
 					results.Read<string>().SingleOrDefault(),
 					results.Read<SubscriptionDisplayDBEntity>().ToList(),
 					results.Read<SubscriptionRoleDBEntity>().ToList(),
-					results.Read<CompleteProjectDBEntity>().ToList(),
+					results.Read<ProjectDBEntity>().ToList(),
 					results.Read<string>().SingleOrDefault());
 			}
 		}

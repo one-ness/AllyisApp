@@ -43,11 +43,6 @@ namespace AllyisApps.DBModel.Billing
 		/// </summary>
 		public int NumberOfUsers { get; set; }
 
-		/// <summary>
-		/// Gets or sets Subscriptions used.
-		/// </summary>
-		public int SubscriptionsUsed { get; set; }
-
         /// <summary>
         /// Gets or sets Subscription Name.
         /// </summary>

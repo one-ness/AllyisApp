@@ -3,7 +3,6 @@ CREATE PROCEDURE [Billing].[UpdateSubscription]
 	@OrganizationId INT,
 	@SkuId INT,
 	@ProductId INT,/*Leave this null unless you are trying to delete something (unsubscribe)*/
-	@NumberOfUsers INT,
 	@SubscriptionName NVARCHAR(50), 
 	@retId INT OUTPUT
 AS
@@ -18,9 +17,9 @@ IF(@SkuId = 0)
 			WHERE (SELECT [IsActive] FROM [Subscription]
 					WHERE [Subscription].[SubscriptionId] = [SubscriptionUser].[SubscriptionId])
 					= 0
-		UPDATE [Auth].[User] SET [User].[LastSubscriptionId] = NULL
+		UPDATE [Auth].[User] SET [User].[LastUsedSubscriptionId] = NULL
 			WHERE (SELECT [IsActive] FROM [Subscription]
-					WHERE [Subscription].[SubscriptionId] = [User].[LastSubscriptionId])
+					WHERE [Subscription].[SubscriptionId] = [User].[LastUsedSubscriptionId])
 					= 0
 		--Delete from [Billing].[Subscription] where OrganizationId=@OrganizationId and SkuId in 
 		--	(select SkuId from Billing.Sku where  ProductId=@productId);
@@ -40,7 +39,7 @@ ELSE
 
 		--Find existing subscription that has the same ProductId but different SkuId, update it to the new SkuId
 		--Because the productRoleId and subscriptionId don't change so no need to update SubscriptionUser table
-		UPDATE [Billing].[Subscription] SET [SkuId] = @SkuId, [NumberOfUsers] = @NumberOfUsers, [SubscriptionName] = @SubscriptionName
+		UPDATE [Billing].[Subscription] SET [SkuId] = @SkuId, [SubscriptionName] = @SubscriptionName
 			WHERE [OrganizationId] = @OrganizationId
 			AND [Subscription].[IsActive] = 1
 			AND [SkuId] IN (SELECT [SkuId] FROM [Billing].[Sku]
@@ -52,8 +51,8 @@ ELSE
 		IF(@@ROWCOUNT=0)
 			BEGIN
 				--Create the new subscription
-				INSERT INTO [Billing].[Subscription] ([OrganizationId], [SkuId], [NumberOfUsers], [SubscriptionName])
-				VALUES (@OrganizationId, @SkuId, @NumberOfUsers, @SubscriptionName);
+				INSERT INTO [Billing].[Subscription] ([OrganizationId], [SkuId], [SubscriptionName])
+				VALUES (@OrganizationId, @SkuId, @SubscriptionName);
 				SET @retId = SCOPE_IDENTITY();		
 
 				DECLARE @OrgMemberTable TABLE (userId INT) 
