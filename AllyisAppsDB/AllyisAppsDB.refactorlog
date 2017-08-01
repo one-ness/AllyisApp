@@ -56,4 +56,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[LastUsedSubscriptionId]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="a83ff01f-54e5-4ef4-9ae0-3530353217de" ChangeDateTime="08/01/2017 02:03:46">
+    <Property Name="ElementName" Value="[Auth].[User].[LanguagePreference]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Auth].[User]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[PreferredLanguageId]" />
+  </Operation>
 </Operations>

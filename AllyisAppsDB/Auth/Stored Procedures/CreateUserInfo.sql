@@ -53,7 +53,7 @@ BEGIN
 		[AccessFailedCount],
 		[LockoutEnabled],
 		[LockoutEndDateUtc],
-		[LanguagePreference])
+		[PreferredLanguageId])
 	VALUES 
 		(@FirstName, 
 		@LastName, 

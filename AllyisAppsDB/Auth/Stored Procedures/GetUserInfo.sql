@@ -15,7 +15,7 @@ BEGIN
 		   [User].[LastUsedOrganizationId],
 		   [User].[EmailConfirmed],
 		   [User].[EmailConfirmationCode],
-		   [LanguagePreference]
+		   [PreferredLanguageId]
 	FROM [Auth].[User]
 	WITH (NOLOCK)
 	JOIN [Lookup].[Address]			WITH (NOLOCK) ON [Address].[AddressId] = [User].[AddressId]
