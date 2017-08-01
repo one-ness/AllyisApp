@@ -40,11 +40,6 @@ namespace AllyisApps.Services
 		public Address Address { get; set; }
 
 		/// <summary>
-		/// Gets or sets the AddressId
-		/// </summary>
-		public int AddressId { get; set; }
-
-		/// <summary>
 		/// Gets or sets Email address.
 		/// </summary>
 		public string Email { get; set; }

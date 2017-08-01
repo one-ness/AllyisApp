@@ -415,7 +415,7 @@ namespace AllyisApps.Services
 			DBHelper.UpdateUser(new UserDBEntity
 			{
 				AccessFailedCount = model.AccessFailedCount,
-				AddressId = model.AddressId,
+				AddressId = model.Address.AddressId,
 				Address = model.Address.Address1,
 				City = model.Address.City,
 				Country = model.Address.CountryId,
@@ -633,7 +633,6 @@ namespace AllyisApps.Services
 			return new User
 			{
 				AccessFailedCount = user.AccessFailedCount,
-                AddressId = user.AddressId,
 				DateOfBirth = user.DateOfBirth,
 				Email = user.Email,
 				EmailConfirmed = user.EmailConfirmed,

@@ -29,7 +29,7 @@ namespace AllyisApps.Controllers
 				Email = userInfo.Email,
 				FirstName = userInfo.FirstName,
 				LastName = userInfo.LastName,
-				AddressId = userInfo.AddressId,
+				AddressId = userInfo.Address.AddressId,
 				Address = userInfo.Address.Address1,
 				City = userInfo.Address.City,
 				State = userInfo.Address.State,
@@ -59,11 +59,11 @@ namespace AllyisApps.Controllers
 					FirstName = model.FirstName,
 					LastName = model.LastName,
 					DateOfBirth = AppService.GetDateTimeFromDays(model.DateOfBirth),
-					AddressId = model.AddressId,
 					PhoneNumber = model.PhoneNumber
 				};
 				user.Address = new Address
 				{
+					AddressId = model.AddressId,
 					Address1 = model.Address,
 					City = model.City,
 					State = model.State,
