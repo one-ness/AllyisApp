@@ -33,17 +33,17 @@
 														var currentSubId = Model.currentSubscriptions.Where(sub => sub.ProductId == sku.ProductId).FirstOrDefault().SubscriptionId;
 														if (Model.currentSubscriptions.Where(sub => sub.SkuId == sku.SkuId).FirstOrDefault() != null)   //already subscribed to this sku
 														{
-															<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = currentSubId })" class="btn btn-default">Edit</a></div>
+															<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = currentSubId })" class="btn btn-default">@Strings.Edit</a></div>
 }
 														else
 														{
 															if (Model.currentSubscriptions.Where(sub => sub.ProductId == sku.ProductId).FirstOrDefault().SkuId > sku.SkuId) //pro version always has higher skuId than basic version
 															{
-																<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = currentSubId })" style="text-decoration: none" class="btn btn-default">Downgrade</a></div>
+																<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = currentSubId })" style="text-decoration: none" class="btn btn-default">@Strings.Downgrade</a></div>
 }
 															else
 															{
-																<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = currentSubId })" style="text-decoration: none" class="btn btn-default">Upgrade</a></div>
+																<div class="row" style="text-align: center; vertical-align: middle; margin-top: 10px; margin-bottom: 10px;"><a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = currentSubId })" style="text-decoration: none" class="btn btn-default">@Strings.Upgrade</a></div>
 }
 														}
 													}

@@ -5,229 +5,220 @@
 @model SettingsViewModel
 
 @{
-    ViewBag.Title = Strings.Settings;
-    DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
-    DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
-    Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
-    ViewData["UserId"] = Model.UserId;
-    ViewData["SubscriptionId"] = Model.SubscriptionId;
-    ViewData["SubscriptionName"] = Model.SubscriptionName;
+	ViewBag.Title = Strings.Settings;
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+	Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
+	ViewData["UserId"] = Model.UserId;
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
 @section css {
-    <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
-
+	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
 }
 <div class="flexbox-row flexbox-row-2-col-collapse">
-        <div class="panel panel-info" style="position: relative;">
-            <div class="panel-heading">
-                <h1 class="panel-title">@Strings.OrgSOW</h1>
-            </div>
-            <div class="panel-body" id="SOWSetting">
-                @using (Html.BeginForm(ActionConstants.UpdateStartOfWeek, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
-                {
-                    @Html.AntiForgeryToken();
-                    @Html.HiddenFor(m => m.SubscriptionId)
+	<div class="panel panel-info" style="position: relative;">
+		<div class="panel-heading">
+			<h1 class="panel-title">@Strings.OrgSOW</h1>
+		</div>
+		<div class="panel-body" id="SOWSetting">
+			@using (Html.BeginForm(ActionConstants.UpdateStartOfWeek, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
+			{
+				@Html.AntiForgeryToken();
+				@Html.HiddenFor(m => m.SubscriptionId)
 
-                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="1" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Monday ? " checked " : string.Empty)><text>@Strings.Monday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="2" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Tuesday ? " checked " : string.Empty)><text>@Strings.Tuesday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="3" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Wednesday ? " checked " : string.Empty)><text>@Strings.Wednesday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="4" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Thursday ? " checked " : string.Empty)><text>@Strings.Thursday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="5" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Friday ? " checked " : string.Empty)><text>@Strings.Friday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="6" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Saturday ? " checked " : string.Empty)><text>@Strings.Saturday</text><br />
-                    <input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="0" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Sunday ? " checked " : string.Empty)><text>@Strings.Sunday</text><br />
-
-                    <br />
-                    <input type="submit" value=@Strings.Save class="btn btn-primary tt-bottom-right" />
-                }
-            </div>
-        </div>
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h1 class="panel-title">@Strings.PClasses</h1>
-            </div>
-            <div id="PayClasses">
-                <table class="table table-condensed">
-                    <thead>
-                        <tr>
-                            <th>@Strings.PClass</th>
-                            <th><span class="pull-right">@Strings.Merge</span></th>
-                            <th><span class="pull-right">@Strings.Delete</span></th>
-                        </tr>
-                    </thead>
-                    @foreach (PayClass PayClass in Model.PayClasses)
-                    {
-                        <tr>
-                            @{
-                                string _payClassName = Strings.ResourceManager.GetString((PayClass.Name).Replace(" ", string.Empty)) ?? PayClass.Name;
-                            }
-                            <td>@_payClassName</td>
-                            @if (_payClassName != Strings.Regular && _payClassName != Strings.Overtime && _payClassName != Strings.Holiday && _payClassName != Strings.PaidTimeOff && _payClassName != Strings.UnpaidTimeOff)
-							{
-								<td>
-									<a href="javascript: void(0);" class="text-muted" title="@Strings.MergePayClass"
-									   onclick='mergePayClass("@PayClass.PayClassId")'><span class="fa fa-fw fa-object-group pull-right"></span></a>
-								</td>
-								<td>
-									<a href="javascript: void(0);" class="text-muted" title="@Strings.DeletePayClass"
-									   onclick='deletePayClass("@PayClass.PayClassId", "\"@_payClassName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
-								</td>
-							}
-							else
-							{
-								<td></td>
-								<td></td>
-							}
-                        </tr>
-                    }
+				<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="1" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Monday    ? " checked " : string.Empty)><text>@Strings.Monday</text><br />
+				<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="2" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Tuesday   ? " checked " : string.Empty)><text>@Strings.Tuesday</text><br />
+				<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="3" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Wednesday ? " checked " : string.Empty)><text>@Strings.Wednesday</text><br />
+				<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="4" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Thursday  ? " checked " : string.Empty)><text>@Strings.Thursday</text><br />
+				<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="5" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Friday    ? " checked " : string.Empty)><text>@Strings.Friday</text><br />
+				<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="6" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Saturday  ? " checked " : string.Empty)><text>@Strings.Saturday</text><br />
+				<input type="radio" name="startOfWeek" style="margin:5px" id="sow" value="0" @(Model.Settings.StartOfWeek == (int)StartOfWeekEnum.Sunday    ? " checked " : string.Empty)><text>@Strings.Sunday</text><br />
+				<br />
+				<input type="submit" value=@Strings.Save class="btn btn-primary tt-bottom-right" />
+			}
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<h1 class="panel-title">@Strings.PClasses</h1>
+		</div>
+		<div id="PayClasses">
+			<table class="table table-condensed">
+				<thead>
 					<tr>
-                        @using (Html.BeginForm(ActionConstants.CreatePayClass, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId }, FormMethod.Post))
-                        {
-							@Html.AntiForgeryToken();
-                            @Html.HiddenFor(m => m.SubscriptionId)
-							<td><input type="text" name="NewPayClass" class="form-control" required /></td>
-                            <td><span class="pull-right"></span></td>
-							<td><input class="btn btn-primary pull-right" type="submit" value="@Strings.Add" /></td>
+						<th>@Strings.PClass</th>
+						<th><span class="pull-right">@Strings.Merge</span></th>
+						<th><span class="pull-right">@Strings.Delete</span></th>
+					</tr>
+				</thead>
+				@foreach (PayClass PayClass in Model.PayClasses)
+				{
+					<tr>
+						@{
+							string _payClassName = Strings.ResourceManager.GetString((PayClass.Name).Replace(" ", string.Empty)) ?? PayClass.Name;
+						}
+						<td>@_payClassName</td>
+						@if (_payClassName != Strings.Regular && _payClassName != Strings.Overtime && _payClassName != Strings.Holiday && _payClassName != Strings.PaidTimeOff && _payClassName != Strings.UnpaidTimeOff)
+						{
+							<td>
+								<a href="javascript: void(0);" class="text-muted" title="@Strings.MergePayClass"
+								   onclick='mergePayClass("@PayClass.PayClassId")'><span class="fa fa-fw fa-object-group pull-right"></span></a>
+							</td>
+							<td>
+								<a href="javascript: void(0);" class="text-muted" title="@Strings.DeletePayClass"
+									onclick='deletePayClass("@PayClass.PayClassId", "\"@_payClassName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
+							</td>
+						}
+						else
+						{
+							<td></td>
+							<td></td>
 						}
 					</tr>
-                </table>
-            </div>
-        </div>
-        <div class="panel panel-info" style="position: relative; padding-bottom: 40px;" @*style="width: 400px; margin: 10px auto;"*@>
-            <div class="panel-heading">
-                <h1 class="panel-title">@Strings.LockDate</h1>
-            </div>
-            <div class="panel-body" id="LockDate">
-                @using (Html.BeginForm(ActionConstants.SetLockDate, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
-                    @Html.AntiForgeryToken();
-                    <div id="NoLockDate" style="margin: 10px">
-                        <input type="radio" name="LDsetting" id="LDsetting" value="false" onclick="disableLD(true)" @(!Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @Strings.NoLockDate</text>
-                    </div>
-                    <div id="LockDate" style="margin: 10px">
-                        <input type="radio" name="LDsetting" id="LDsetting" value="true" onclick="disableLD(false)" @(Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @Strings.UseLockDate</text>
-                        <input type="text" id="LDquantity" name="LDquantity" value="@Model.Settings.LockDateQuantity" class="form-control" style="width: 45px; text-align: center; display: inline-block;" />
-                        <select id="LDperiod" name="LDperiod" class="form-control" value='@(Model.Settings.LockDatePeriod)' style="width: 100px; display: inline-block;">
-                            <option value="1" @(Model.Settings.LockDatePeriod == (int)LockDatePeriodEnum.days ? " selected=true" : string.Empty)>@Strings.Days</option>
-                            <option value="2" @(Model.Settings.LockDatePeriod == (int)LockDatePeriodEnum.weeks ? " selected=true" : string.Empty)>@Strings.Weeks</option>
-                            <option value="3" @(Model.Settings.LockDatePeriod == (int)LockDatePeriodEnum.months? " selected=true" : string.Empty)>@Strings.Months</option>
-                        </select>
-                    </div>
-                    <div>
-                        <input class="tt-bottom-right btn btn-primary" type="submit" value=@Strings.Save />
-                    </div>
-                }
-            </div>
-        </div>
-        <div class="panel panel-info" style="position: relative;">
-            <div class="panel-heading">
-                <h1 class="panel-title">@Strings.Overtime</h1>
-            </div>
-            <div id="Overtime" class="panel-body">
-                @using (Html.BeginForm(ActionConstants.UpdateOvertime, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
-                    @Html.AntiForgeryToken();
-                    @Html.HiddenFor(m => m.SubscriptionId)
-                    <div id="OTCheck" style="margin:10px">
-                        @{    bool overTimeUsed = Model.Settings.OvertimeHours > 0;
-                        }
-                        <input type="radio" name="setting" id="setting" value="Yes" onclick="hideOT(false)" @(overTimeUsed ? " checked" : string.Empty) /><text> @Strings.Yes</text>
-                        <input type="radio" name="setting" id="setting" value="No" onclick="hideOT(true)" @(!overTimeUsed ? " checked" : string.Empty) /><text> @Strings.No</text>
-                    </div>
-
-                    <div id="OTSettings" style="visibility: @(overTimeUsed ? "visible" : "hidden")">
-                        <div style="margin:10px">
-                            @Strings.After
-                            <input type="text" id="hours" name="hours" value='@(Model.Settings.OvertimeHours < 0 ? 40 : Model.Settings.OvertimeHours)' class="form-control" style="width: 45px; text-align: center; display: inline-block;" /> @Strings.HoursPer
-                            <select id="period" name="period" class="form-control" value='@Model.Settings.OvertimePeriod' style="display: inline-block; width: 100px;">
-                                <option value="Day" @(Model.Settings.OvertimePeriod == "Day" ? " selected=true" : string.Empty)>@Strings.Day</option>
-                                <option value="Week" @(Model.Settings.OvertimePeriod == "Week" ? " selected=true" : string.Empty)>@Strings.Week</option>
-                                <option value="Month" @(Model.Settings.OvertimePeriod == "Month" ? " selected=true" : string.Empty)>@Strings.Month</option>
-                            </select><br />
-                        </div>
-                        <div style="margin:10px">
-                            @Strings.WithAMultiplierOf
-                            <input type="text" id="mult" name="mult" value='@Model.Settings.OvertimeMultiplier.ToString("G10")' class="form-control" style="width: 50px; text-align: center; display: inline-block;" />
-                        </div>
-                    </div>
-                    <div>
-                        <input class="btn btn-primary tt-bottom-right" type="submit" value=@Strings.Save />
-                    </div>
-                            }
-            </div>
-        </div>
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h1 class="panel-title">@Strings.Holidays</h1>
-            </div>
-            <div id="Holidays">
-				<ul class="nav nav-tabs" style="border-bottom:none;">
-					@foreach (var year in Model.Holidays.Select(m => m.Date.Year).Distinct())
+				}
+				<tr>
+					@using (Html.BeginForm(ActionConstants.CreatePayClass, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId }, FormMethod.Post))
 					{
-						<li id=@year><a onclick="populateHolidayForSelectedYear(@year)">@year</a></li>
+						@Html.AntiForgeryToken();
+						@Html.HiddenFor(m => m.SubscriptionId)
+						<td><input type="text" name="NewPayClass" class="form-control" required /></td>
+						<td><span class="pull-right"></span></td>
+						<td><input class="btn btn-primary pull-right" type="submit" value="@Strings.Add" /></td>
 					}
-				</ul>
-				
-                <table class="table table-condensed">
-                    <thead>
-                        <tr>
-                            <th>@Strings.Holiday</th>
-                            <th>@Strings.Date</th>
-                            <th><span class="pull-right">@Strings.Delete</span></th>
-                        </tr>
-                    </thead>
-                    @foreach (Holiday Holiday in Model.Holidays)
-                    {
-                        <tr class="@Holiday.Date.Year">
-                            @{
-                                string _holidayName = Strings.ResourceManager.GetString(((Holiday.HolidayName).Replace(" ", string.Empty)).Replace("'", string.Empty)) ?? Holiday.HolidayName;
-                            }
-                            <td>
-                                @_holidayName
-                            </td>
-                            <td>
-                                @Holiday.Date.ToShortDateString()
-                            </td>
-                            <td>
-								<a href="javascript: void(0);" class="text-muted" title="@Strings.DeleteHoliday"
-								   onclick='deleteHoliday("@Holiday.HolidayId", "\"@_holidayName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
-                            </td>
-                        </tr>
-                    }
-                    <tr>
-                        @using (Html.BeginForm(ActionConstants.CreateHoliday, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId }, FormMethod.Post))
-                        {
-                            @Html.AntiForgeryToken();
-                            @Html.HiddenFor(m => m.SubscriptionId)
-                            <td><input type="text" class="form-control" name="NewHolidayName" required /></td>
-                            <td><input type="date" class="form-control" name="NewHolidayDate" required /></td>
-                            <td><input class="pull-right btn btn-primary" type="submit" value=@Strings.Add /></td>
-                        }
-                    </tr>
-                </table>
-            </div>
-        </div>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="panel panel-info" style="position: relative; padding-bottom: 40px;" @*style="width: 400px; margin: 10px auto;"*@>
+		<div class="panel-heading">
+			<h1 class="panel-title">@Strings.LockDate</h1>
+		</div>
+		<div class="panel-body" id="LockDate">
+			@using (Html.BeginForm(ActionConstants.SetLockDate, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+			{
+				@Html.AntiForgeryToken();
+				<div id="NoLockDate" style="margin: 10px">
+					<input type="radio" name="LDsetting" id="LDsetting" value="false" onclick="disableLD(true)" @(!Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @Strings.NoLockDate</text>
+				</div>
+				<div id="LockDate" style="margin: 10px">
+					<input type="radio" name="LDsetting" id="LDsetting" value="true" onclick="disableLD(false)" @(Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @Strings.UseLockDate</text>
+					<input type="text" id="LDquantity" name="LDquantity" value="@Model.Settings.LockDateQuantity" class="form-control" style="width: 45px; text-align: center; display: inline-block;" />
+					<select id="LDperiod" name="LDperiod" class="form-control" value='@(Model.Settings.LockDatePeriod)' style="width: 100px; display: inline-block;">
+						<option value="1" @(Model.Settings.LockDatePeriod == (int)LockDatePeriodEnum.days ? " selected=true" : string.Empty)>@Strings.Days</option>
+						<option value="2" @(Model.Settings.LockDatePeriod == (int)LockDatePeriodEnum.weeks ? " selected=true" : string.Empty)>@Strings.Weeks</option>
+						<option value="3" @(Model.Settings.LockDatePeriod == (int)LockDatePeriodEnum.months ? " selected=true" : string.Empty)>@Strings.Months</option>
+					</select>
+				</div>
+				<div>
+					<input class="tt-bottom-right btn btn-primary" type="submit" value=@Strings.Save />
+				</div>
+			}
+		</div>
+	</div>
+	<div class="panel panel-info" style="position: relative;">
+		<div class="panel-heading">
+			<h1 class="panel-title">@Strings.Overtime</h1>
+		</div>
+		<div id="Overtime" class="panel-body">
+			@using (Html.BeginForm(ActionConstants.UpdateOvertime, ControllerConstants.TimeEntry, FormMethod.Post, new { enctype = "multipart/form-data" }))
+			{
+				@Html.AntiForgeryToken();
+				@Html.HiddenFor(m => m.SubscriptionId)
+				<div id="OTCheck" style="margin:10px">
+					@{ bool overTimeUsed = Model.Settings.OvertimeHours > 0; }
+					<input type="radio" name="setting" id="setting" value="Yes" onclick="hideOT(false)" @(overTimeUsed ? " checked" : string.Empty) /><text> @Strings.Yes</text>
+					<input type="radio" name="setting" id="setting" value="No" onclick="hideOT(true)" @(!overTimeUsed ? " checked" : string.Empty) /><text> @Strings.No</text>
+				</div>
+				<div id="OTSettings" style="visibility: @(overTimeUsed ? "visible" : "hidden")">
+					<div style="margin:10px">
+						@Strings.After
+						<input type="text" id="hours" name="hours" value='@(Model.Settings.OvertimeHours < 0 ? 40 : Model.Settings.OvertimeHours)' class="form-control" style="width: 45px; text-align: center; display: inline-block;" /> @Strings.HoursPer
+						<select id="period" name="period" class="form-control" value='@Model.Settings.OvertimePeriod' style="display: inline-block; width: 100px;">
+							<option value="Day" @(Model.Settings.OvertimePeriod == "Day" ? " selected=true" : string.Empty)>@Strings.Day</option>
+							<option value="Week" @(Model.Settings.OvertimePeriod == "Week" ? " selected=true" : string.Empty)>@Strings.Week</option>
+							<option value="Month" @(Model.Settings.OvertimePeriod == "Month" ? " selected=true" : string.Empty)>@Strings.Month</option>
+						</select><br />
+					</div>
+					<div style="margin:10px">
+						@Strings.WithAMultiplierOf
+						<input type="text" id="mult" name="mult" value='@Model.Settings.OvertimeMultiplier.ToString("G10")' class="form-control" style="width: 50px; text-align: center; display: inline-block;" />
+					</div>
+				</div>
+				<div>
+					<input class="btn btn-primary tt-bottom-right" type="submit" value=@Strings.Save />
+				</div>
+			}
+		</div>
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<h1 class="panel-title">@Strings.Holidays</h1>
+		</div>
+		<div id="Holidays">
+			<ul class="nav nav-tabs" style="border-bottom:none;">
+				@foreach (var year in Model.Holidays.Select(m => m.Date.Year).Distinct())
+				{
+					<li id=@year><a onclick="populateHolidayForSelectedYear(@year)">@year</a></li>
+				}
+			</ul>
+
+			<table class="table table-condensed">
+				<thead>
+					<tr>
+						<th>@Strings.Holiday</th>
+						<th>@Strings.Date</th>
+						<th><span class="pull-right">@Strings.Delete</span></th>
+					</tr>
+				</thead>
+				@foreach (Holiday Holiday in Model.Holidays)
+				{
+					<tr class="@Holiday.Date.Year">
+						@{
+							string _holidayName = Strings.ResourceManager.GetString(((Holiday.HolidayName).Replace(" ", string.Empty)).Replace("'", string.Empty)) ?? Holiday.HolidayName;
+						}
+						<td>@_holidayName</td>
+						<td>@Holiday.Date.ToShortDateString()</td>
+						<td>
+							<a href="javascript: void(0);" class="text-muted" title="@Strings.DeleteHoliday" onclick='deleteHoliday("@Holiday.HolidayId", "\"@_holidayName\"")'>
+								<span class="fa fa-fw fa-remove text-danger pull-right"></span>
+							</a>
+						</td>
+					</tr>
+				}
+				<tr>
+					@using (Html.BeginForm(ActionConstants.CreateHoliday, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId }, FormMethod.Post))
+					{
+						@Html.AntiForgeryToken();
+						@Html.HiddenFor(m => m.SubscriptionId)
+						<td><input type="text" class="form-control" name="NewHolidayName" required /></td>
+						<td><input type="date" class="form-control" name="NewHolidayDate" required /></td>
+						<td><input class="pull-right btn btn-primary" type="submit" value=@Strings.Add /></td>
+					}
+				</tr>
+			</table>
+		</div>
+	</div>
 </div>
 
 @section scripts{
 	<script type="text/javascript">
-        mergePayClassUrl = "@Url.Action(ActionConstants.MergePayClass, ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = -1 })"
-        deletePayClassWarning = "@Html.Raw(Strings.ConfirmDeletePayClass)"
-        deletePayClassUrl = "@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = -1 })"
-        deleteHolidayWarning = "@Html.Raw(Strings.ConfirmDeleteHoliday)";
-		deleteHolidayUrl = "@Url.Action(ActionConstants.DeleteHoliday, ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId, HolidayId = -1 })"
+		deletePayClassWarning = "@Html.Raw(Strings.ConfirmDeletePayClass)";
+		deleteHolidayWarning = "@Html.Raw(Strings.ConfirmDeleteHoliday)";
 
+		mergePayClassUrl = "@Url.Action(ActionConstants.MergePayClass , ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = -1 })";
+		deletePayClassUrl = "@Url.Action(ActionConstants.DeletePayClass, ControllerConstants.TimeEntry, new { subscriptionId = ViewData["SubscriptionId"], userId = -1 })";
+		deleteHolidayUrl = "@Url.Action(ActionConstants.DeleteHoliday , ControllerConstants.TimeEntry, new { subscriptionId = Model.SubscriptionId, id = Model.UserId, HolidayId = -1 })";
 
-
-		function populateHolidayForSelectedYear(year) {
-
+		function populateHolidayForSelectedYear(year)
+		{
 			@foreach (var yearC in Model.Holidays.Select(m => m.Date.Year).Distinct())
 			{
 				<text>
 					if (@yearC != year) {
 						$('.' + @yearC).hide();
 						$('#' + @yearC).css("font-weight", "Normal");
-
 					}
 					else {
 						$('.' + @yearC).show();
@@ -235,20 +226,11 @@
 					}
 				</text>
 			}
-		}
-            @*$.ajax({
-                    type: 'POST',
-                    cache: false,
-                    url: '@Url.Action("PopulateProjects", "Customer")',
-                    data: { customerId: chosenCustomerId },
-                    success: function (response) {
-                        $("#Projects").empty();
-                        $("#Projects").html(response);
-                    }
-            });*@
+		};
+
 		$('document').ready(function () {
 			populateHolidayForSelectedYear(@DateTime.Now.Year);
-		})
+		});
 	</script>
 
 	@Scripts.Render("~/bundles/TTTimeEntrySettings")
