@@ -566,6 +566,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Scripts\underscore-1.8.3.js" />
     <Content Include="Scripts\underscore-1.8.3.min.js" />
+    <Content Include="Sql\DefaultOrgData.sql" />
     <Content Include="Views\Account\_Terms.cshtml" />
     <Content Include="Views\Shared\ErrorQuiet.cshtml" />
     <Content Include="Views\Account\AddMember.cshtml" />
