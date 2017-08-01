@@ -18,7 +18,7 @@ BEGIN
 		,[LastUsedSubscriptionId]
 		,[LastUsedOrganizationId]
 		,[PasswordHash]
-		,[LanguagePreference]
+		,[PreferredLanguageId]
 	FROM [Auth].[User]
 	WITH (NOLOCK)
 	LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [User].[AddressId]

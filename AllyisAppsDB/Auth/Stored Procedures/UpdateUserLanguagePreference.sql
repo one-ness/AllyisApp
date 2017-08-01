@@ -5,6 +5,6 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	UPDATE [Auth].[User]
-	SET [LanguagePreference] = @LanguageId
+	SET [PreferredLanguageId] = @LanguageId
 	WHERE [UserId] = @Id
 END

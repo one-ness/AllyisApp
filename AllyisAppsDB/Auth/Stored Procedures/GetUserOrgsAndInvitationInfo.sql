@@ -12,7 +12,7 @@ BEGIN
 			[User].[PhoneNumber],
 			[User].[LastUsedSubscriptionId],
 			[User].[LastUsedOrganizationId],
-			[LanguagePreference]
+			[PreferredLanguageId]
 	FROM [Auth].[User]
 	WITH (NOLOCK)
 	LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [User].[AddressId]

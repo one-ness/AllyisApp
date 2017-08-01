@@ -28,7 +28,7 @@
 		/// <summary>
 		/// Gets or sets the user's language preference.
 		/// </summary>
-		public int? LanguagePreference { get; set; }
+		public int? PreferredLanguageId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization id.
