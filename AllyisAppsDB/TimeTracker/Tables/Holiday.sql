@@ -1,4 +1,4 @@
-CREATE TABLE [TimeTracker].[Holiday] (
+CREATE TABLE [Hrm].[Holiday] (
     [HolidayId]      INT           IDENTITY (1, 1) NOT NULL,
     [HolidayName]    NVARCHAR (64) NOT NULL,
     [Date]           DATETIME2 (0) NOT NULL,
@@ -16,5 +16,5 @@ GO
 
 GO
 CREATE CLUSTERED INDEX [IX_Holiday]
-    ON [TimeTracker].[Holiday]([OrganizationId] ASC, [Date] ASC);
+    ON [Hrm].[Holiday]([OrganizationId] ASC, [Date] ASC);
 

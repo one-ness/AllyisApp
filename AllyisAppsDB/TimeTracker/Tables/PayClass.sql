@@ -1,4 +1,4 @@
-﻿CREATE TABLE [TimeTracker].[PayClass] (
+﻿CREATE TABLE [Hrm].[PayClass] (
     [PayClassId]     INT           IDENTITY (1, 1) NOT NULL,
     [Name]           NVARCHAR (32) NOT NULL,
     [OrganizationId] INT           NOT NULL,
@@ -13,7 +13,7 @@
 
 GO
 CREATE CLUSTERED INDEX [IX_PayClass_OrganizationId]
-    ON [TimeTracker].[PayClass]([OrganizationId] ASC);
+    ON [Hrm].[PayClass]([OrganizationId] ASC);
 
 
 GO

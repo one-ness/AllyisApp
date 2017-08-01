@@ -43,8 +43,8 @@ GO
 
 DBCC CHECKIdENT('TimeTracker.TimeEntry');
 DBCC CHECKIdENT('Auth.Invitation');
-DBCC CHECKIdENT('TimeTracker.Holiday');
-DBCC CHECKIdENT('TimeTracker.PayClass');
+DBCC CHECKIdENT('Hrm.Holiday');
+DBCC CHECKIdENT('Hrm.PayClass');
 DBCC CHECKIdENT('Pjm.Project');
 DBCC CHECKIdENT('Crm.Customer');
 DBCC CHECKIdENT('Billing.Subscription');
