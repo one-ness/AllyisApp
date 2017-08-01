@@ -1478,10 +1478,13 @@
     <value>Welcome to {0}! Please confirm your email.</value>
   </data>
   <data name="ExpenseTrackerDescription" xml:space="preserve">
-	<value>Easily manages your expenses</value>
+    <value>Easily manages your expenses</value>
   </data>
   <data name="CreateSubscription" xml:space="preserve">
-	<value>Create Subscription</value>
+    <value>Create Subscription</value>
+  </data>
+  <data name="CustomerNameWarning" xml:space="preserve">
+    <value>Customer Name must be less than 30 characters long.</value>
   </data>
   <data name="ChangeSubscription" xml:space="preserve">
 	<value>Change Subscription</value>

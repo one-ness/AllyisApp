@@ -907,6 +907,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Customer Name must be less than 30 characters long..
+        /// </summary>
+        public static string CustomerNameWarning {
+            get {
+                return ResourceManager.GetString("CustomerNameWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Customer ID.
         /// </summary>
         public static string CustomerOrgId {
