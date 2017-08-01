@@ -11,7 +11,7 @@
     [AccessFailedCount]     INT              CONSTRAINT [DF__User__AccessFail__693CA210] DEFAULT ((0)) NOT NULL,
     [LockoutEnabled]        BIT              CONSTRAINT [DF__User__LockoutEna__6A30C649] DEFAULT ((0)) NOT NULL,
     [CreatedUtc]            DATETIME2 (0)    CONSTRAINT [DF__User__CreatedUtc__6B24EA82] DEFAULT (getutcdate()) NOT NULL,
-    [LanguagePreference]    INT              NULL,
+    [PreferredLanguageId]    INT              NULL,
     [DateOfBirth]           DATE		     NULL,
     [PhoneNumber]           VARCHAR (16)     NULL,
     [PhoneExtension]        VARCHAR (8)      NULL,
@@ -21,7 +21,7 @@
     [PasswordResetCode]     UNIQUEIDENTIFIER NULL,
     [EmailConfirmationCode] UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([UserId] ASC),
-    CONSTRAINT [FK_User_Language] FOREIGN KEY ([LanguagePreference]) REFERENCES [Lookup].[Language] ([Id]) ON DELETE SET DEFAULT,
+    CONSTRAINT [FK_User_Language] FOREIGN KEY ([PreferredLanguageId]) REFERENCES [Lookup].[Language] ([Id]) ON DELETE SET DEFAULT,
     CONSTRAINT [FK_User_Organization] FOREIGN KEY ([LastUsedOrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),
     CONSTRAINT [FK_User_Subscription] FOREIGN KEY ([LastUsedSubscriptionId]) REFERENCES [Billing].[Subscription] ([SubscriptionId]),
     CONSTRAINT [UQ_User] UNIQUE NONCLUSTERED ([Email] ASC)

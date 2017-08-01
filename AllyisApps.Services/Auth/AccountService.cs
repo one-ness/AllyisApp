@@ -193,7 +193,7 @@ namespace AllyisApps.Services
 					TwoFactorEnabled = twoFactorEnabled,
 					LockoutEnabled = lockOutEnabled,
 					LockoutEndDateUtc = lockOutEndDateUtc,
-					LanguagePreference = languagePreference
+					PreferredLanguageId = languagePreference
 				};
 
 				result = await this.DBHelper.CreateUserAsync(entity);
@@ -262,7 +262,7 @@ namespace AllyisApps.Services
 			{
 				// user exists in db
 				UserContextDBEntity firstRow = contextInfo[0];
-				result = new UserContext(userId, firstRow.Email, firstRow.FirstName, firstRow.LastName, firstRow.LanguagePreference.Value);
+				result = new UserContext(userId, firstRow.Email, firstRow.FirstName, firstRow.LastName, firstRow.PreferredLanguageId.Value);
 				// set result to self
 				this.SetUserContext(result);
 
@@ -683,7 +683,7 @@ namespace AllyisApps.Services
 				TwoFactorEnabled = user.TwoFactorEnabled,
 				UserId = user.UserId,
 				PostalCode = user.Address.PostalCode,
-				LanguagePreference = 1          // TODO: Put this into UserInfo and do proper lookup
+				PreferredLanguageId = 1          // TODO: Put this into UserInfo and do proper lookup
 			};
 		}
 

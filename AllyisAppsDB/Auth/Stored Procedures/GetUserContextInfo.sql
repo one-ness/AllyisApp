@@ -10,7 +10,7 @@ BEGIN
 		   [U].[Email],
 		   [U].[LastUsedSubscriptionId],
 		   [U].[LastUsedOrganizationId],
-		   [U].[LanguagePreference],
+		   [U].[PreferredLanguageId],
 		   [O].[OrganizationId],
 		   [O].[Name] AS 'OrganizationName',
 		   [OU].[OrganizationRoleId],

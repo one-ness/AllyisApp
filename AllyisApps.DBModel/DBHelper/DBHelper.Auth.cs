@@ -51,7 +51,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@TwoFactorEnabled", user.TwoFactorEnabled);
 			parameters.Add("@LockoutEnabled", user.LockoutEnabled);
 			parameters.Add("@LockoutEndDateUtc", user.LockoutEndDateUtc);
-			parameters.Add("@LanguageId", user.LanguagePreference);
+			parameters.Add("@LanguageId", user.PreferredLanguageId);
 
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
