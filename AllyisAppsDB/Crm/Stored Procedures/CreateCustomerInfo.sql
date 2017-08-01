@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [Crm].[CreateCustomerInfo]
-	@Name NVARCHAR(50),
+	@Name NVARCHAR(32),
     @Address NVARCHAR(100),
     @City NVARCHAR(100), 
     @State NVARCHAR(100), 
