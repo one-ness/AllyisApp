@@ -59,16 +59,38 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		}
 
         /// <summary>
-        /// Get: /TimeTracker/{subscriptionId}/TimeEntry
+        /// /TimeTracker/{subscriptionID}/TimeEntry
+        /// Reoutes to the TimeTracker ID 
+        /// </summary>
+        /// <param name="subscriptionId">The subscriptionID</param> 
+        /// <returns></returns>
+        public ActionResult IndexNoUserIdDate(int subscriptionId)
+        {
+            UserSubscription subInfo = null;
+            this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+
+            int userId = GetCookieData().UserId;
+            var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null, userId);
+            int startOfWeek = infos.Item1.StartOfWeek;
+            int startDate = AppService.GetDayFromDateTime(SetStartingDate(null, startOfWeek));
+            int endDate = AppService.GetDayFromDateTime(SetEndingDate(null, startOfWeek));
+            return RedirectToAction(ActionConstants.IndexNoUserId, ControllerConstants.TimeEntry,
+                new { subscriptionId = subscriptionId, startDate = startDate, endDate = endDate });
+        }
+
+
+        /// <summary>
+        /// Get: /TimeTracker/{subscriptionId}/TimeEntry/{StartDate}/{endDate}
         /// </summary>
         /// <param name="subscriptionId">The SubscriptionId</param>
         /// <param name="startDate">The beginning of the Date Range.</param>
         /// <param name="endDate">The ending of the Date Range.</param>
         /// <returns>Provides the view for the defined user over the date range defined.</returns>
-        public ActionResult IndexNoUserId(int subscriptionId, int? startDate = null, int? endDate = null)
+        public ActionResult IndexNoUserId(int subscriptionId, int startDate, int endDate)
         {
+           
             int userId = GetCookieData().UserId;
-
+           
             this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
             UserSubscription subInfo = null;
