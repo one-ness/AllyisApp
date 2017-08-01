@@ -35,7 +35,7 @@ namespace AllyisApps.Services.Lookup
 		/// <summary>
 		/// Get or sets the State
 		/// </summary>
-		public int State { get; set; }
+		public string State { get; set; }
 
 		/// <summary>
 		/// Gets or sets the PostalCode

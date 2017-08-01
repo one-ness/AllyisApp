@@ -126,50 +126,51 @@ function ajaxUpdateValues(form_element, values) {
 }
 
 function editTimes(values) {
-	var elements = document.getElementsByName("entry-" + values.projectId),
-		totalTime = $('#totalHours').text().split(":"),
-		totalHours = parseInt(totalTime[0]),
-		totalMinutes = parseInt(totalTime[1]),
-		projectCurrentTotal = $('#' + values.projectId).text().split(":"),
-		projectCurrentHours = parseInt(projectCurrentTotal[0]),
-		projectCurrentMinutes = parseInt(projectCurrentTotal[1]),
-		updatedHours = 0,
-		updatedMinutes = 0;
+	var elements = document.getElementsByName("entry-" + values.projectId);
 
-	for (var i = 0; i < elements.length; i++) {
-		var duration = elements[i].firstElementChild.value.split(":");
-		updatedHours += parseInt(duration[0]);
-		updatedMinutes += parseInt(duration[1]);
-	}
-	if (updatedMinutes >= 60) {
-		updatedHours += updatedMinutes / 60;
-		updatedMinutes = updatedMinutes % 60;
-	}
-
-
-	$('#' + values.projectId).fadeOut(500, function () {
-		$('#' + values.projectId).text(Math.floor(updatedHours) + ":" + (updatedMinutes < 10 ? "0" + updatedMinutes : updatedMinutes)).fadeIn(500);
-	});
-
-	totalHours = totalHours + (updatedHours - projectCurrentHours);
-	totalMinutes = totalMinutes + (updatedMinutes - projectCurrentMinutes);
-	if (totalMinutes >= 60)
+	/* BUG: If the user makes a new entry for a project not currently listed and
+	/* then edits the entry, the Total Time will be 0. This if will stop it but
+	/* not update the times in this case. 
+	*/
+	if (elements.length != 0)
 	{
-		totalHours += totalMinutes / 60;
-		totalMinutes = totalMinutes % 60;
+		var totalTime = $('#totalHours').text().split(":"),
+			totalHours = parseInt(totalTime[0]),
+			totalMinutes = parseInt(totalTime[1]),
+			projectCurrentTotal = $('#' + values.projectId).text().split(":"),
+			projectCurrentHours = parseInt(projectCurrentTotal[0]),
+			projectCurrentMinutes = parseInt(projectCurrentTotal[1]),
+			updatedHours = 0,
+			updatedMinutes = 0;
+
+		for (var i = 0; i < elements.length; i++) {
+			var duration = elements[i].firstElementChild.value.split(":");
+			updatedHours += parseInt(duration[0]);
+			updatedMinutes += parseInt(duration[1]);
+		}
+		if (updatedMinutes >= 60) {
+			updatedHours += updatedMinutes / 60;
+			updatedMinutes = updatedMinutes % 60;
+		}
+
+
+		$('#' + values.projectId).fadeOut(500, function () {
+			$('#' + values.projectId).text(Math.floor(updatedHours) + ":" + (updatedMinutes < 10 ? "0" + updatedMinutes : updatedMinutes)).fadeIn(500);
+		});
+
+		totalHours = totalHours + (updatedHours - projectCurrentHours);
+		totalMinutes = totalMinutes + (updatedMinutes - projectCurrentMinutes);
+		if (totalMinutes >= 60) {
+			totalHours += totalMinutes / 60;
+			totalMinutes = totalMinutes % 60;
+		}
+		$('#totalHours').fadeOut(500, function () {
+			$('#totalHours').text(Math.floor(totalHours) + ":" + (Math.abs(totalMinutes) < 10 ? "0" + Math.abs(totalMinutes) : Math.abs(totalMinutes))).fadeIn(500);
+		})
 	}
-	$('#totalHours').fadeOut(500, function () {
-		$('#totalHours').text(Math.floor(totalHours) + ":" + (Math.abs(totalMinutes) < 10 ? "0" + Math.abs(totalMinutes) : Math.abs(totalMinutes))).fadeIn(500);
-	})
 }
 
 function updateTimes(values) {
-	if ($('#' + values.projectId) === null)
-	{
-		var table = document.getElementsByClassName("table table-condensed");
-		alert("TABLE: " + table === null);
-	}
-
 	var currentVal = $('#totalHours').text().split(":"),
 		updateVal = values.duration.split(":"),
 		projectVal = $('#' + values.projectId).text().split(":");
