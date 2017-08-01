@@ -36,10 +36,11 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public string ContactEmail { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user's first name.
+		/// Gets or sets the customers displayed name.
 		/// </summary>
 		[Required]
 		[DataType(DataType.Text)]
+        [RegularExpression(@"^.{1,30}$", ErrorMessage = "Customer name must be less than 30 characters long")]
 		[Display(Name = "Name")]
 		public string Name { get; set; }
 
