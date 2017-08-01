@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [TimeTracker].[DeleteHoliday]
+﻿CREATE PROCEDURE [Hrm].[DeleteHoliday]
 	@HolidayName NVarChar(120),
 	@Date DATE,
 	@OrganizationId INT

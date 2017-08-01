@@ -50,7 +50,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", newHoliday.OrganizationId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				newHoliday.HolidayId = connection.Query<int>("[TimeTracker].[CreateHoliday]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				newHoliday.HolidayId = connection.Query<int>("[Hrm].[CreateHoliday]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 
@@ -68,7 +68,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", organizationId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[TimeTracker].[DeleteHoliday]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Hrm].[DeleteHoliday]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -83,7 +83,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", organizationId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<HolidayDBEntity>("[TimeTracker].[GetHolidays]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<HolidayDBEntity>("[Hrm].[GetHolidays]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -99,7 +99,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@Name", payClassName);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[TimeTracker].[CreatePayClass]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Hrm].[CreatePayClass]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -125,7 +125,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@Id", payClassId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[TimeTracker].[DeletePayClass]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Hrm].[DeletePayClass]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -159,7 +159,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", organizationId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<PayClassDBEntity>("[TimeTracker].[GetPayClasses]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<PayClassDBEntity>("[Hrm].[GetPayClasses]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -408,7 +408,7 @@ namespace AllyisApps.DBModel
 				{
 					parameters = new DynamicParameters();
 					parameters.Add("@organizationId", 0);
-					holidays = connection.Query<HolidayDBEntity>("[TimeTracker].[GetHolidays]", parameters, commandType: CommandType.StoredProcedure);
+					holidays = connection.Query<HolidayDBEntity>("[Hrm].[GetHolidays]", parameters, commandType: CommandType.StoredProcedure);
 					if (holidays != null && holidays.Count() > 0)
 					{
 						foreach (HolidayDBEntity currentHoliday in holidays)
@@ -417,7 +417,7 @@ namespace AllyisApps.DBModel
 							parameters.Add("@organizationId", orgId);
 							parameters.Add("@holidayName", currentHoliday.HolidayName);
 							parameters.Add("@date", currentHoliday.Date);
-							connection.Execute("[TimeTracker].[CreateHoliday]", parameters, commandType: CommandType.StoredProcedure);
+							connection.Execute("[Hrm].[CreateHoliday]", parameters, commandType: CommandType.StoredProcedure);
 						}
 					}
 				}
@@ -429,7 +429,7 @@ namespace AllyisApps.DBModel
 				{
 					parameters = new DynamicParameters();
 					parameters.Add("@organizationId", 0);
-					payClasses = connection.Query<PayClassDBEntity>("[TimeTracker].[GetPayClasses]", parameters, commandType: CommandType.StoredProcedure);
+					payClasses = connection.Query<PayClassDBEntity>("[Hrm].[GetPayClasses]", parameters, commandType: CommandType.StoredProcedure);
 					if (payClasses != null && payClasses.Count() > 0)
 					{
 						foreach (PayClassDBEntity currentPayClass in payClasses)
@@ -437,7 +437,7 @@ namespace AllyisApps.DBModel
 							parameters = new DynamicParameters();
 							parameters.Add("@organizationId", orgId);
 							parameters.Add("@Name", currentPayClass.Name);
-							connection.Execute("[TimeTracker].[CreatePayClass]", parameters, commandType: CommandType.StoredProcedure);
+							connection.Execute("[Hrm].[CreatePayClass]", parameters, commandType: CommandType.StoredProcedure);
 						}
 					}
 				}

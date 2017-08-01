@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [TimeTracker].[GetPayClasses]
+﻿CREATE PROCEDURE [Hrm].[GetPayClasses]
 	@OrganizationId INT = 0
 AS
 	SET NOCOUNT ON;
