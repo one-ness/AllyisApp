@@ -450,7 +450,7 @@
   <data name="DurationFormat" xml:space="preserve">
     <value>You must enter the time duration as HH:MM or H.HH format.</value>
   </data>
-  <data name="Edit" xml:space="preserve">
+  <data name="EditCustomer" xml:space="preserve">
     <value>Edit Customer</value>
   </data>
   <data name="EditEmployee" xml:space="preserve">
@@ -1446,5 +1446,17 @@
   </data>
   <data name="CreateSubscription" xml:space="preserve">
 	<value>Create Subscription</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+	<value>Edit</value>
+  </data>
+  <data name="Downgrade" xml:space="preserve">
+    <value>Downgrade</value>
+  </data>
+  <data name="ChangeSubscription" xml:space="preserve">
+	<value>Change Subscription</value>
+  </data>
+  <data name="SubscriptionName" xml:space="preserve">
+	<value>Subscription Name</value>
   </data>
 </root>

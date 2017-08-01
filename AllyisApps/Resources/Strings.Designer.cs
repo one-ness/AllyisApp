@@ -556,6 +556,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change Subscription.
+        /// </summary>
+        public static string ChangeSubscription {
+            get {
+                return ResourceManager.GetString("ChangeSubscription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose File.
         /// </summary>
         public static string ChooseFile {
@@ -1141,11 +1150,20 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Customer.
+        ///   Looks up a localized string similar to Edit.
         /// </summary>
         public static string Edit {
             get {
                 return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Customer.
+        /// </summary>
+        public static string EditCustomer {
+            get {
+                return ResourceManager.GetString("EditCustomer", resourceCulture);
             }
         }
         
@@ -3414,6 +3432,15 @@ namespace AllyisApps.Resources {
         public static string SubscribeToProducts {
             get {
                 return ResourceManager.GetString("SubscribeToProducts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subscription Name.
+        /// </summary>
+        public static string SubscriptionName {
+            get {
+                return ResourceManager.GetString("SubscriptionName", resourceCulture);
             }
         }
         
