@@ -17,9 +17,9 @@ IF(@SkuId = 0)
 			WHERE (SELECT [IsActive] FROM [Subscription]
 					WHERE [Subscription].[SubscriptionId] = [SubscriptionUser].[SubscriptionId])
 					= 0
-		UPDATE [Auth].[User] SET [User].[LastSubscriptionId] = NULL
+		UPDATE [Auth].[User] SET [User].[LastUsedSubscriptionId] = NULL
 			WHERE (SELECT [IsActive] FROM [Subscription]
-					WHERE [Subscription].[SubscriptionId] = [User].[LastSubscriptionId])
+					WHERE [Subscription].[SubscriptionId] = [User].[LastUsedSubscriptionId])
 					= 0
 		--Delete from [Billing].[Subscription] where OrganizationId=@OrganizationId and SkuId in 
 		--	(select SkuId from Billing.Sku where  ProductId=@productId);

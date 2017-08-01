@@ -16,8 +16,8 @@ BEGIN
 		   [Address].[PostalCode],
 		   [User].[Email],
 		   [User].[PhoneNumber],
-		   [User].[LastSubscriptionId],
-		   [User].[ActiveOrganizationId],
+		   [User].[LastUsedSubscriptionId],
+		   [User].[LastUsedOrganizationId],
 		   [User].[EmailConfirmed],
 		   [User].[EmailConfirmationCode],
 		   [LanguagePreference]
