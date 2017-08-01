@@ -60,9 +60,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 
 				var infos = AppService.GetReportInfo(subscriptionId);
+				UserSubscription subInfo = null;
+				this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
 				bool canEditOthers = this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId, false);
 				ReportViewModel reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, organizationId, canEditOthers, infos.Item1, infos.Item2, showExport, reportVMselect);
+				reportVM.SubscriptionName = subInfo.SubscriptionName;
 
 				DataExportViewModel dataVM = null;
 				try
