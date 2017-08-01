@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [TimeTracker].[GetHolidays]
+﻿CREATE PROCEDURE [Hrm].[GetHolidays]
 	@OrganizationId INT = 0
 AS
 	SET NOCOUNT ON;

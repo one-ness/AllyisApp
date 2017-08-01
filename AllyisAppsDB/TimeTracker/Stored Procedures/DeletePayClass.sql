@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [TimeTracker].[DeletePayClass]
+﻿CREATE PROCEDURE [Hrm].[DeletePayClass]
 	@Id INT
 AS
 	SET NOCOUNT ON;

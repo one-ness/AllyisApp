@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [TimeTracker].[CreatePayClass]
+﻿CREATE PROCEDURE [Hrm].[CreatePayClass]
 	@Name NVARCHAR(50),
 	@OrganizationId INT
 AS

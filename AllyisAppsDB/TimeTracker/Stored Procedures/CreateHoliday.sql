@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [TimeTracker].[CreateHoliday]
+﻿CREATE PROCEDURE [Hrm].[CreateHoliday]
 	@HolidayName NVARCHAR(50),
 	@Date DATE,
 	@OrganizationId INT
