@@ -24,7 +24,7 @@
 			<div>
 				@using (Html.BeginForm(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = Model.SubscriptionId, idTwo = Model.SkuId }, FormMethod.Post, new { @class = "col-md-12", @style = "margin-top:20px;display: inline-block" })) // , @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(String.Format(Strings.WarningWhenUnsubscribing, Model.Name))) TODO: make this only fire on unsubscribe action.
 				{
-					@Html.ReqLabelFor(m => m.SubscriptionName, "Subscription Name")
+					@Html.ReqLabelFor(m => m.SubscriptionName, Strings.SubscriptionName)
 					@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control margined", @placeholder = Model.ProductName })
 					@Html.AntiForgeryToken()
 					<input type="hidden" name="SubscriptionId" value="@Model.SubscriptionId" />
@@ -34,9 +34,8 @@
 					<input type="hidden" name="OrganizationId" value="@Model.OrganizationId" />
 					<input type="hidden" name="NextName" value="@Model.NextName" />
 					<div style="display:inline-block;">
-						<label for="subscriptionType">Change subscription: </label>
+						<label for="subscriptionType">@Strings.ChangeSubscription: </label>
 					</div>
-
 
 					<div class="pull-right" style="margin-top:10px;">
 						<input type="submit" value="@Strings.Save" class="btn btn-primary" id="save" />
@@ -45,9 +44,7 @@
 					<div>
 						@Html.DropDownListFor(m => m.ActionType, items)
 					</div>
-
-			}
-
+				}
 			</div>
 		</div>
 	</div>

@@ -336,7 +336,7 @@
   <data name="DurationFormat" xml:space="preserve">
     <value>Debe introducir la duración del tiempo como formato HH: MM o H.HH.</value>
   </data>
-  <data name="Edit" xml:space="preserve">
+  <data name="EditCustomer" xml:space="preserve">
     <value>Editar Cliente</value>
   </data>
   <data name="EditProject" xml:space="preserve">
@@ -1455,5 +1455,17 @@
   </data>
   <data name="CreateSubscription" xml:space="preserve">
 	<value>Crear suscripción</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+	<value>Editar</value>
+  </data>
+  <data name="Downgrade" xml:space="preserve">
+    <value>Degradar</value>
+  </data>
+  <data name="ChangeSubscription" xml:space="preserve">
+	<value>Cambiar suscripción</value>
+  </data>
+  <data name="SubscriptionName" xml:space="preserve">
+	<value>Nombre de la suscripción</value>
   </data>
 </root>
