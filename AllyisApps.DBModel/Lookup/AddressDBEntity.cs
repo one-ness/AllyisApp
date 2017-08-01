@@ -34,7 +34,7 @@ namespace AllyisApps.DBModel.Lookup
         /// <summary>
         /// Get or sets the State
         /// </summary>
-        public string State { get; set; }
+        public int State { get; set; }
 
         /// <summary>
         /// Gets or sets the PostalCode
