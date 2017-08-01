@@ -29,9 +29,10 @@ namespace AllyisApps.Controllers
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 			ManageOrgViewModel model = this.ConstructOrganizationManageViewModel(id);
 
-            if(model.Subscriptions.Count() > 0)
+			var sub = model.Subscriptions.Select(x => x).Where(y => y.ProductId == (int)ProductIdEnum.TimeTracker).FirstOrDefault();
+			if (sub != null && model.Subscriptions.Count() > 0)
             {
-                var subId = model.Subscriptions.Select(x => x).Where(y => y.ProductId == (int)ProductIdEnum.TimeTracker).FirstOrDefault().SubscriptionId;
+				int subId = sub.SubscriptionId;
                 int startOfWeek = AppService.GetAllSettings(subId).Item1.StartOfWeek;
                 ViewBag.StartDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
                 ViewBag.EndDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));

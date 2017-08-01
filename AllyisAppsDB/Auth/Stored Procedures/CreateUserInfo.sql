@@ -21,14 +21,28 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @AddressId INT;
+
+	INSERT INTO [Lookup].[Address]
+		([Address1],
+		[City],
+		[State],
+		[CountryId],
+		[PostalCode])
+	VALUES
+		(@Address,
+		@City,
+		(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
+		(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
+		@PostalCode);
+
+	SET @AddressId = SCOPE_IDENTITY()
+
+
 	INSERT INTO [Auth].[User] 
 		([FirstName], 
 		[LastName], 
-		[Address], 
-		[City], 
-		[State], 
-		[Country], 
-		[PostalCode], 
+		[AddressId],
 		[Email], 
 		[PhoneNumber], 
 		[DateOfBirth],
@@ -43,11 +57,7 @@ BEGIN
 	VALUES 
 		(@FirstName, 
 		@LastName, 
-		@Address, 
-		@City, 
-		(SELECT [StateId]	FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
-		(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
-		@PostalCode,
+		@AddressId,
 		@Email,
 		@PhoneNumber,
 		@DateOfBirth, 

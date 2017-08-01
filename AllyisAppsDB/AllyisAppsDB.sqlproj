@@ -76,7 +76,6 @@
     <Folder Include="Auth\User Defined Types\" />
     <Folder Include="DefaultData" />
     <Folder Include="TestData" />
-    <Folder Include="Schema\" />
     <Folder Include="Finance\" />
     <Folder Include="Finance\Tables\" />
     <Folder Include="Expense\" />

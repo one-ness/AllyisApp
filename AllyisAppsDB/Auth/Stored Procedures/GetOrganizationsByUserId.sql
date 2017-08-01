@@ -6,7 +6,7 @@ BEGIN
 SELECT [Auth].[Organization].[OrganizationId]
       ,[Organization].[Name]
       ,[SiteUrl]
-      ,[Address]
+      ,[Address1] AS 'Address'
       ,[City]
       ,[State].[Name] AS 'State'
       ,[Country].[Name] AS 'Country'
@@ -16,8 +16,9 @@ SELECT [Auth].[Organization].[OrganizationId]
       ,[Organization].[CreatedUtc]
 FROM [Auth].[Organization] WITH (NOLOCK)
 RIGHT JOIN [Auth].[OrganizationUser]	WITH (NOLOCK) ON [OrganizationUser].[OrganizationId] = [Organization].[OrganizationId]
-LEFT JOIN [Lookup].[Country]			WITH (NOLOCK) ON [Country].[CountryId] = [Organization].[Country]
-LEFT JOIN [Lookup].[State]				WITH (NOLOCK) ON [State].[StateId] = [Organization].[State]
+JOIN [Lookup].[Address]					WITH (NOLOCK) ON [Address].[AddressId] = [Organization].[AddressId]
+LEFT JOIN [Lookup].[Country]			WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
+LEFT JOIN [Lookup].[State]				WITH (NOLOCK) ON [State].[StateId] = [Address].[State]
 WHERE [OrganizationUser].[UserId] = @UserId 
       AND [Auth].[Organization].[IsActive] = 1
 ORDER BY [OrganizationUser].[OrganizationRoleId] DESC, [Organization].[Name]

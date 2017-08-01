@@ -33,6 +33,8 @@ namespace AllyisApps.Controllers
 				InviteInfos = infos.Item3
 			};
 
+			model.UserInfo.Address = infos.Item4;
+
             model.OrgInfos = infos.Item2.Select(o =>
             {
 				OrgWithSubscriptionsForUserViewModel orgVM = new OrgWithSubscriptionsForUserViewModel

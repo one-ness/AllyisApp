@@ -16,6 +16,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
 {
@@ -365,8 +366,10 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
-
-			return InitializeUser(DBHelper.GetUserInfo(userId));
+			var results = DBHelper.GetUserInfo(userId);
+			User user = InitializeUser(results.Item1);
+			user.Address = InitializeAddress(results.Item2);
+			return user;
 		}
 
 		/// <summary>
@@ -374,13 +377,14 @@ namespace AllyisApps.Services
 		/// user is a member of, and InvitationInfos for any invitations for the user.
 		/// </summary>
 		/// <returns></returns>
-		public Tuple<User, List<Organization>, List<InvitationInfo>> GetUserOrgsAndInvitationInfo()
+		public Tuple<User, List<Organization>, List<InvitationInfo>, Address> GetUserOrgsAndInvitationInfo()
 		{
 			var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
-			return Tuple.Create<User, List<Organization>, List<InvitationInfo>>(
+			return Tuple.Create<User, List<Organization>, List<InvitationInfo>, Address>(
 				InitializeUser(spResults.Item1),
 				spResults.Item2.Select(odb => InitializeOrganization(odb)).ToList(),
-				spResults.Item3.Select(idb => InitializeInvitationInfo(idb)).ToList());
+				spResults.Item3.Select(idb => InitializeInvitationInfo(idb)).ToList(),
+				InitializeAddress(spResults.Item4));
 		}
 
 		/// <summary>
@@ -410,10 +414,10 @@ namespace AllyisApps.Services
 			DBHelper.UpdateUser(new UserDBEntity
 			{
 				AccessFailedCount = model.AccessFailedCount,
-				AddressId = model.AddressId,
-				Address = model.Address,
-				City = model.City,
-				Country = model.Country,
+				AddressId = model.Address.AddressId,
+				Address = model.Address.Address1,
+				City = model.Address.City,
+				Country = model.Address.CountryId,
 				DateOfBirth = model.DateOfBirth,
 				Email = model.Email,
 				EmailConfirmed = model.EmailConfirmed,
@@ -426,10 +430,10 @@ namespace AllyisApps.Services
 				PhoneExtension = model.PhoneExtension,
 				PhoneNumber = model.PhoneNumber,
 				PhoneNumberConfirmed = model.PhoneNumberConfirmed,
-				State = model.State,
+				State = model.Address.State,
 				TwoFactorEnabled = model.TwoFactorEnabled,
 				UserId = model.UserId,
-				PostalCode = model.PostalCode
+				PostalCode = model.Address.PostalCode
 			});
 		}
 
@@ -628,10 +632,6 @@ namespace AllyisApps.Services
 			return new User
 			{
 				AccessFailedCount = user.AccessFailedCount,
-                AddressId = user.AddressId,
-				Address = user.Address,
-				City = user.City,
-				Country = user.Country,
 				DateOfBirth = user.DateOfBirth,
 				Email = user.Email,
 				EmailConfirmed = user.EmailConfirmed,
@@ -644,10 +644,8 @@ namespace AllyisApps.Services
 				PhoneExtension = user.PhoneExtension,
 				PhoneNumber = user.PhoneNumber,
 				PhoneNumberConfirmed = user.PhoneNumberConfirmed,
-				State = user.State,
 				TwoFactorEnabled = user.TwoFactorEnabled,
 				UserId = user.UserId,
-				PostalCode = user.PostalCode
 			};
 		}
 
@@ -666,9 +664,9 @@ namespace AllyisApps.Services
 			return new UserDBEntity
 			{
 				AccessFailedCount = user.AccessFailedCount,
-				Address = user.Address,
-				City = user.City,
-				Country = user.Country,
+				Address = user.Address.Address1,
+				City = user.Address.City,
+				Country = user.Address.CountryId,
 				DateOfBirth = user.DateOfBirth,
 				Email = user.Email,
 				EmailConfirmed = user.EmailConfirmed,
@@ -681,10 +679,10 @@ namespace AllyisApps.Services
 				PhoneExtension = user.PhoneExtension,
 				PhoneNumber = user.PhoneNumber,
 				PhoneNumberConfirmed = user.PhoneNumberConfirmed,
-				State = user.State,
+				State = user.Address.State,
 				TwoFactorEnabled = user.TwoFactorEnabled,
 				UserId = user.UserId,
-				PostalCode = user.PostalCode,
+				PostalCode = user.Address.PostalCode,
 				LanguagePreference = 1          // TODO: Put this into UserInfo and do proper lookup
 			};
 		}

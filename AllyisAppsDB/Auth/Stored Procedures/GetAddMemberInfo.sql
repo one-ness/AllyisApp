@@ -45,9 +45,9 @@ AS
 		[Customer].[IsActive] AS [IsCustomerActive],
 		[Project].[Type] AS [PriceType]
 	FROM (
-		[Auth].[Organization] WITH (NOLOCK) 
+		[Auth].[Organization]	WITH (NOLOCK) 
 		JOIN [Crm].[Customer]	WITH (NOLOCK) ON ([Customer].[OrganizationId] = [Organization].[OrganizationId] AND [Organization].[OrganizationId] = @OrganizationId)
-		JOIN [Pjm].[Project]		WITH (NOLOCK) ON [Project].[CustomerId] = [Customer].[CustomerId]
+		JOIN [Pjm].[Project]	WITH (NOLOCK) ON [Project].[CustomerId] = [Customer].[CustomerId]
 	)
 	
 	WHERE [Customer].[IsActive] >= 1
