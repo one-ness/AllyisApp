@@ -165,7 +165,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Users = users,
 				TotalUsers = users.Count(),
 				CurrentUser = users.Where(x => x.UserId == userId).Single(),
-				LockDate = AppService.GetDayFromDateTime(AppService.GetLockDateFromParameters(infos.Item1.LockDateUsed, infos.Item1.LockDatePeriod, infos.Item1.LockDateQuantity)),
+				LockDate = AppService.GetDayFromDateTime(AppService.GetLockDateFromParameters(infos.Item1.IsLockDateUsed, infos.Item1.LockDatePeriod, infos.Item1.LockDateQuantity)),
 				Subscriptionid = subId,
                 SubscriptionName = subName,
                 ProductRole = 1
@@ -227,7 +227,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ModSinceApproval = iter.Current.ModSinceApproval,
 						PayClasses = result.PayClasses,
 						LockDate = result.LockDate,
-						Locked = iter.Current.ApprovalState == (int)Core.ApprovalState.Approved || (isProjectDeleted && !this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subId, false) || (!result.CanManage && beforeLockDate))
+						IsLocked = iter.Current.ApprovalState == (int)Core.ApprovalState.Approved || (isProjectDeleted && !this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subId, false) || (!result.CanManage && beforeLockDate))
 					});
 
 					if (holidays.Where(x => x.Date == iter.Current.Date).FirstOrDefault() != null)
@@ -274,7 +274,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						Duration = string.Format("{0:D2}:{1:D2}", (int)timeEntryInfo.Duration, (int)Math.Round((timeEntryInfo.Duration - (int)timeEntryInfo.Duration) * 60, 0)),
 						Description = timeEntryInfo.Description,
 						ProjectName = allProjects.Where(x => x.ProjectId == 0).Select(x => x.ProjectName).FirstOrDefault(),
-						Locked = (!result.CanManage && beforeLockDate),
+						IsLocked = (!result.CanManage && beforeLockDate),
 						LockDate = result.LockDate
 					});
 				}
@@ -296,7 +296,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						ProjectsWithInactive = result.ProjectsWithInactive,
 						PayClassId = infos.Item2.Where(p => p.Name.Equals("Regular")).FirstOrDefault().PayClassId,
 						PayClasses = result.PayClasses,
-						Locked = (!result.CanManage && beforeLockDate),  //manager can still edit entries before lockdate
+						IsLocked = (!result.CanManage && beforeLockDate),  //manager can still edit entries before lockdate
 						LockDate = result.LockDate,
 						IsManager = result.CanManage
 					});

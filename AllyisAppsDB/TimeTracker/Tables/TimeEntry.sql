@@ -5,7 +5,7 @@
     [Date]        DATE			 NOT NULL,
     [Duration]    FLOAT (53)     NOT NULL,
     [Description] NVARCHAR (128) NULL,
-    [LockSaved]   BIT            DEFAULT 0 NOT NULL,
+    [IsLockSaved] BIT            DEFAULT 0 NOT NULL,
     [PayClassId]  INT            DEFAULT 1 NOT NULL,
     [CreatedUtc]  DATETIME2 (0)  NOT NULL DEFAULT getutcdate(),
     [ModifiedUtc] DATETIME2 (0)  NOT NULL DEFAULT getutcdate(),
