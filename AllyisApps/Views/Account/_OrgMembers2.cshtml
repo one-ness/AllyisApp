@@ -42,6 +42,7 @@
 					<td class="memberSearchProperty">@string.Format("{0} {1} ({2})", invite.FirstName, invite.LastName, Strings.Invited)</td>
 					<td class="memberSearchProperty">@invite.CompressedEmail</td>
 					<td class="memberSearchProperty">@invite.EmployeeId</td>
+                    <td class="memberOrgRole">-</td> 
 					<td class="text-right icon-strip">
 						<a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account)@pars"
 						   title="@Strings.EditEmployee"><span class="fa fa-fw fa-edit"></span></a>
