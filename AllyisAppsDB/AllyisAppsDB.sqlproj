@@ -301,6 +301,7 @@
     <Build Include="Pjm\Stored Procedures\UpdateProjectAndUsers.sql" />
     <Build Include="Pjm\Stored Procedures\UpdateProjectUser.sql" />
     <Build Include="Billing\Stored Procedures\UpdateSubscriptionName.sql" />
+    <Build Include="Lookup\Tables\OrganizationLocation.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

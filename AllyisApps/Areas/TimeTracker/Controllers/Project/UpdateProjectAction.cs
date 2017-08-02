@@ -38,8 +38,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				throw new InvalidOperationException("Project requires an organization. Cannot update.");
 			}
-			//	project.OrganizationId = UserContext.ChosenOrganizationId;
-			//}
 
 			AppService.UpdateProjectAndUsers(
 				project.ProjectId,
