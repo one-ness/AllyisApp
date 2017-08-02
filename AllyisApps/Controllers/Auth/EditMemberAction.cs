@@ -41,6 +41,7 @@ namespace AllyisApps.Controllers
 				model = new EditMemberViewModel
 				{
 					UserInfo = userBasicInfo,
+					CurrentUserId = this.AppService.UserContext.UserId,
 					FirstName = userBasicInfo.FirstName,
 					LastName = userBasicInfo.LastName,
 					OrganizationId = orgId,
