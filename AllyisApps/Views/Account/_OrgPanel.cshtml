@@ -38,6 +38,9 @@
                 <div class="col-sm-4 index-details">
                     <p>
                         <label>@Strings.Website:</label>
+                        @if (!subtitle.StartsWith("http")){
+                            subtitle = "http://" + subtitle;
+                        }
                         <a href="@subtitle" target="_blank">@subtitle</a>
                     </p>
                     <p>
