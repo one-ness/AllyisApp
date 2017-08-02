@@ -38,7 +38,7 @@ namespace AllyisApps.Services
 		public Tuple<string, List<string>, int> GetNextCustIdAndCountries(int subscriptionId)
 		{
 			UserSubscription subInfo = null;
-			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetNextCustIdAndCountries(subInfo.OrganizationId);
 			return Tuple.Create(
 				spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray())),
@@ -179,7 +179,7 @@ namespace AllyisApps.Services
 			if (subscriptionId <= 0) throw new ArgumentException("subscriptionId");
 
 			UserSubscription subInfo = null;
-			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			if (subInfo != null)
 			{
 				var spResults = DBHelper.GetProjectsForOrgAndUser(userId, subInfo.OrganizationId);

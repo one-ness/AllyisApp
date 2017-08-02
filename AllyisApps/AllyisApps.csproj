@@ -576,7 +576,7 @@
     <Content Include="Views\Account\ManageOrg.cshtml" />
     <Content Include="Views\Account\_ManageOrgDetails.cshtml" />
     <Content Include="Views\Account\_ManageOrgSubscriptions.cshtml" />
-    <Content Include="Views\Account\_OrganizationEditDetailsPartial.cshtml" />
+    <Content Include="Views\Account\_OrganizationEditDetails.cshtml" />
     <Content Include="Views\Account\Subscribe.cshtml" />
     <Content Include="Views\Account\NewMemberJoin.cshtml" />
     <Content Include="Views\Account\_OrgBillingInfo.cshtml" />

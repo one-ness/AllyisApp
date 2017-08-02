@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult SetLockDate(int subscriptionId, bool LDsetting, int LDperiod, int LDquantity)
 		{
 			this.AppService.CheckTimeTrackerAction(Services.AppService.TimeTrackerAction.EditOthers, subscriptionId);
-			int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+			int orgId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
 			try
 			{
 				if (AppService.UpdateLockDate(LDsetting, LDperiod, LDquantity, orgId))

@@ -23,12 +23,12 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult EditSubscription(int id)
 		{
-			int orgId = AppService.UserContext.UserSubscriptions[id].OrganizationId;
+			int orgId = AppService.UserContext.OrganizationSubscriptions[id].OrganizationId;
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
-			int skuId = AppService.UserContext.UserSubscriptions[id].SkuId;
+			int skuId = AppService.UserContext.OrganizationSubscriptions[id].SkuId;
 
-			int productId = (int)AppService.UserContext.UserSubscriptions[id].ProductId;
-			string subscriptionName = AppService.UserContext.UserSubscriptions[id].SubscriptionName;
+			int productId = (int)AppService.UserContext.OrganizationSubscriptions[id].ProductId;
+			string subscriptionName = AppService.UserContext.OrganizationSubscriptions[id].SubscriptionName;
 
 			SkuInfo sku = GetNextName(id, skuId, productId);
 			EditSubscriptionViewModel model = new EditSubscriptionViewModel

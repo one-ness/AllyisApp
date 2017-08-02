@@ -304,13 +304,13 @@ namespace AllyisApps.Services
 								AreaUrl = item.AreaUrl
 							};
 
-							if (!orgInfo.UserSubscriptions.ContainsKey(item.SubscriptionId.Value))
+							if (!orgInfo.OrganizationSubscriptions.ContainsKey(item.SubscriptionId.Value))
 							{
 								// add it to the list of subscriptions for this organization
-								orgInfo.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
+								orgInfo.OrganizationSubscriptions.Add(item.SubscriptionId.Value, subInfo);
 
 								// also add it to the result
-								result.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
+								result.OrganizationSubscriptions.Add(item.SubscriptionId.Value, subInfo);
 							}
 						}
 					}

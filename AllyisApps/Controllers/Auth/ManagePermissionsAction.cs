@@ -79,7 +79,7 @@ namespace AllyisApps.Controllers
 					// Start out with default TT NotInProduct role if org is subscribed to TT.
 					foreach (SubscriptionDisplayInfo sub in model.Subscriptions)
 					{
-						modelUser.ProductRoleIds.Add((int)TimeTrackerRole.NotInProduct);
+						modelUser.ProductRoleIds.Add(ProductRole.NotInProduct);
 					}
 					model.Users.Add(modelUser);
 				}
