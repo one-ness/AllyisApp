@@ -4,10 +4,10 @@
 @model UserOrgViewModel
 
 @{
-	Organization details = Model.PanelInfo.OrgInfo;
-	string title = details.Name;
-	string subtitle = details.SiteUrl ?? "";
-	var cityState = details.City != null && details.State != null ? details.City + ", " + details.State : details.City + details.State;
+    Organization details = Model.PanelInfo.OrgInfo;
+    string title = details.Name;
+    string subtitle = details.SiteUrl ?? "";
+    var cityState = details.City != null && details.State != null ? details.City + ", " + details.State : details.City + details.State;
 }
 <div class="row">
     <div class="col-md-12">
@@ -38,10 +38,15 @@
                 <div class="col-sm-4 index-details">
                     <p>
                         <label>@Strings.Website:</label>
-                        @if (!subtitle.StartsWith("http")){
-                            subtitle = "http://" + subtitle;
+                        @{
+                            string orgWebSite = subtitle;
+                            if (!(subtitle == null || subtitle == "")) {
+                                if (!subtitle.StartsWith("http")) {
+                                    orgWebSite = "http://" + subtitle;
+                                }
+                            <a href="@orgWebSite" target="_blank">@subtitle</a>
+                                }
                         }
-                        <a href="@subtitle" target="_blank">@subtitle</a>
                     </p>
                     <p>
                         <label>@Strings.Fax:</label>
