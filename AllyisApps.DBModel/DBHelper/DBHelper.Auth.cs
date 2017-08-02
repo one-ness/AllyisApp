@@ -280,7 +280,7 @@ namespace AllyisApps.DBModel
 		}
 	
 		/// <summary>
-		/// Adds an organization to the database and sets the owner's chosen organization to the new org.
+		/// Adds an organization to the database and sets the owner's chosen organization to th
 		/// </summary>
 		/// <param name="org">The OrganizationDBEntity to create.</param>
 		/// <param name="ownerId">The owner's user Id.</param>

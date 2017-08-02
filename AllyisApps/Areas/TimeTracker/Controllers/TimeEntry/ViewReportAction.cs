@@ -93,7 +93,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				reportVM.PreviewTotal = string.Format("{0} {1}", total, Resources.Strings.HoursTotal);
 
-				IEnumerable<CompleteProjectInfo> orgProjects = infos.Item2;//Service.GetProjectsByOrganization(UserContext.ChosenOrganizationId, false);
+				IEnumerable<CompleteProjectInfo> orgProjects = infos.Item2;
 				CompleteProjectInfo defaultProject = AppService.GetProject(0);
 				if (dataCount > 0)
 				{

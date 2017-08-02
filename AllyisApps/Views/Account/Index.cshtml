@@ -62,10 +62,11 @@
 						</p>
 						@foreach (InvitationInfo invite in Model.InviteInfos)
 						{
-							<div>
-								@*<span class="col-xs-4 col-sm-6">@invite.OrganizationName</span>*@
+							<div class="invites">
+								<span class="col-xs-4 col-sm-6">@ViewData[invite.OrganizationId.ToString()]</span>
 								@using (Html.BeginForm(ActionConstants.AcceptInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
 								{
+                                   
 									<span class="col-xs-4 col-sm-3 padding">
 										<input type="submit" value="@Strings.Accept" class="btn btn-primary col-xs-12" />
 									</span>
@@ -93,11 +94,22 @@
 				<a href="@Url.Action(ActionConstants.CreateOrg, ControllerConstants.Account)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">@Strings.CreateOrganization</a>
 			</div>
 		</div>
-		@foreach (var org in Model.OrgInfos)
-        {
-            UserOrgViewModel model = new UserOrgViewModel() { UserInfo = Model.UserInfo, PanelInfo = org };
+		@if (Model.OrgInfos.Count <= 0)
+		{
+			<div class="row">
+				 <div class="col-xs-12">
+					 You are not a member of any organization yet. Please contact your employer to send you an invitation, or you can create your own, by clicking the Create Organization button.
+				 </div>
+			</div>
+		}
+		else
+		{
+			foreach (var org in Model.OrgInfos)
+			{
+				UserOrgViewModel model = new UserOrgViewModel() { UserInfo = Model.UserInfo, PanelInfo = org };
 
-            @Html.Partial("_OrgPanel", model);
-        }
+				@Html.Partial("_OrgPanel", model);
+			}
+		}
 	</div>
 </div>

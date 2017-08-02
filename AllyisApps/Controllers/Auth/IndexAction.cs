@@ -33,6 +33,12 @@ namespace AllyisApps.Controllers
 				InviteInfos = infos.Item3
 			};
 
+            foreach(var invite in infos.Item3)
+            {
+                string orgName =  AppService.GetOrganization(invite.OrganizationId).Name;
+                ViewData[invite.OrganizationId.ToString()] = orgName;
+            }
+
 			model.UserInfo.Address = infos.Item4;
 
             model.OrgInfos = infos.Item2.Select(o =>

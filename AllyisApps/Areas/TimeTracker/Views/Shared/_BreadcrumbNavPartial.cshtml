@@ -19,7 +19,7 @@
     </a>
 
     <ul class="dropdown-menu dropdown-menu-right" id="TheDropdown2">
-        <li>@Html.ActionLink(Strings.TimeEntry, ActionConstants.IndexNoUserId, ControllerConstants.TimeEntry, new { subscriptionId = subId }, "TimeTracker")</li>
+        <li>@Html.ActionLink(Strings.TimeEntry, ActionConstants.IndexNoUserId, ControllerConstants.TimeEntry, new { subscriptionId = subId, startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd }, "TimeTracker")</li>
         @if (manager) { <li>@Html.ActionLink(Strings.Reports, ActionConstants.Report, ControllerConstants.TimeEntry, new { subscriptionId = subId }, "TimeTracker")</li> }
         <li>@Html.ActionLink(Strings.Customers, ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subId }, "TimeTracker")</li>
         @if (manager) {<li>@Html.ActionLink(Strings.Settings, ActionConstants.Settings, ControllerConstants.TimeEntry, new { subscriptionId = subId }, "TimeTracker")</li> }
