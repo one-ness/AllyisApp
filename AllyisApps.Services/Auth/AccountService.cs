@@ -442,10 +442,10 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("employeeId", "Employee Id must have a value");
 			}
 
-			if (modelData["employeeTypeId"] < 0)
-			{
-				throw new ArgumentOutOfRangeException("employeeTypeId", "Employee Type Id cannot be negative.");
-			}
+			//if (modelData["employeeTypeId"] < 0)
+			//{
+			//	throw new ArgumentOutOfRangeException("employeeTypeId", "Employee Type Id cannot be negative.");
+			//}
 
 			if (modelData["employeeRoleId"] < 0)
 			{

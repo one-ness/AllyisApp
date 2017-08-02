@@ -13,7 +13,6 @@
     @Subdomain NVARCHAR(40),
     @retId INT OUTPUT,
 	@EmployeeId NVARCHAR(16),
-	@EmployeeTypeId INT,
 	@AddressId INT
 AS
 BEGIN
@@ -62,7 +61,7 @@ BEGIN
 
 			SET @retId = SCOPE_IDENTITY();
 
-			EXEC [Auth].[CreateOrgUser] @UserId, @retId, @RoleId, @EmployeeId, @EmployeeTypeId;
+			EXEC [Auth].[CreateOrgUser] @UserId, @retId, @RoleId, @EmployeeId;
 
 			-- Set users's last used organization to new org
 			UPDATE [Auth].[User]
