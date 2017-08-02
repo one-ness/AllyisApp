@@ -62,17 +62,17 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets a value indicating whether the email address has been confirmed.
 		/// </summary>
-		public bool EmailConfirmed { get; set; }
+		public bool IsEmailConfirmed { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the phone number has been confirmed.
 		/// </summary>
-		public bool PhoneNumberConfirmed { get; set; }
+		public bool IsPhoneNumberConfirmed { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether two factor authentication has been enabled.
 		/// </summary>
-		public bool TwoFactorEnabled { get; set; }
+		public bool IsTwoFactorEnabled { get; set; }
 
 		/// <summary>
 		/// Gets or sets Number of access failures.
@@ -82,7 +82,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets a value indicating whether lockout is enabled.
 		/// </summary>
-		public bool LockoutEnabled { get; set; }
+		public bool IsLockoutEnabled { get; set; }
 
 		/// <summary>
 		/// Gets or sets Id of this user's active organization.

@@ -2,7 +2,7 @@
 	@OrganizationId INT
 AS
 	SET NOCOUNT ON;
-	SELECT [OrganizationId], [StartOfWeek], [OvertimeHours], [OvertimePeriod], [OvertimeMultiplier], [LockDateUsed], [LockDatePeriod], [LockDateQuantity]
+	SELECT [OrganizationId], [StartOfWeek], [OvertimeHours], [OvertimePeriod], [OvertimeMultiplier], [IsLockDateUsed], [LockDatePeriod], [LockDateQuantity]
 	FROM [TimeTracker].[Setting] 
 	WITH (NOLOCK) 
 	WHERE [OrganizationId] = @OrganizationId;

@@ -100,10 +100,10 @@
 			{
 				@Html.AntiForgeryToken();
 				<div id="NoLockDate" style="margin: 10px">
-					<input type="radio" name="LDsetting" id="LDsetting" value="false" onclick="disableLD(true)" @(!Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @Strings.NoLockDate</text>
+					<input type="radio" name="LDsetting" id="LDsetting" value="false" onclick="disableLD(true)" @(!Model.Settings.IsLockDateUsed ? " checked" : string.Empty) /><text> @Strings.NoLockDate</text>
 				</div>
 				<div id="LockDate" style="margin: 10px">
-					<input type="radio" name="LDsetting" id="LDsetting" value="true" onclick="disableLD(false)" @(Model.Settings.LockDateUsed ? " checked" : string.Empty) /><text> @Strings.UseLockDate</text>
+					<input type="radio" name="LDsetting" id="LDsetting" value="true" onclick="disableLD(false)" @(Model.Settings.IsLockDateUsed ? " checked" : string.Empty) /><text> @Strings.UseLockDate</text>
 					<input type="text" id="LDquantity" name="LDquantity" value="@Model.Settings.LockDateQuantity" class="form-control" style="width: 45px; text-align: center; display: inline-block;" />
 					<select id="LDperiod" name="LDperiod" class="form-control" value='@(Model.Settings.LockDatePeriod)' style="width: 100px; display: inline-block;">
 						<option value="1" @(Model.Settings.LockDatePeriod == (int)LockDatePeriodEnum.days ? " selected=true" : string.Empty)>@Strings.Days</option>

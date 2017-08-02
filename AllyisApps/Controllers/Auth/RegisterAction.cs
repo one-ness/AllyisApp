@@ -34,7 +34,7 @@ namespace AllyisApps.Controllers
 			return this.View(new RegisterViewModel
 			{
 				ValidCountries = AppService.ValidCountries(),
-				DateOfBirth = AppService.GetDayFromDateTime(DateTime.UtcNow.AddYears(-18))
+				DateOfBirth = AppService.GetDayFromDateTime(DateTime.UtcNow.AddYears(-18).AddDays(-1))
 			});
 		}
 
