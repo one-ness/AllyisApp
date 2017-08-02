@@ -1487,9 +1487,12 @@
     <value>Customer Name must be less than 30 characters long.</value>
   </data>
   <data name="ChangeSubscription" xml:space="preserve">
-	<value>Change Subscription</value>
+    <value>Change Subscription</value>
   </data>
   <data name="SubscriptionName" xml:space="preserve">
-	<value>Subscription Name</value>
+    <value>Subscription Name</value>
+  </data>
+  <data name="NoOrganizationMessage" xml:space="preserve">
+    <value>You are not a member of any organization yet. Please contact your employer to send you an invitation, or you can create your own, by clicking the Create Organization button.</value>
   </data>
 </root>

@@ -120,6 +120,8 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
+			NotifyInviteAcceptAsync(invitationId);
+
 			var results = DBHelper.AcceptInvitation(invitationId, UserContext.UserId);
 
 			if (results == null) return null;
