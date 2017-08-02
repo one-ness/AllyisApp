@@ -538,21 +538,6 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		///// <summary>
-		///// Retreives the id of the given employee type.
-		///// </summary>
-		///// <param name="employeeType">The employee type's name.</param>
-		///// <returns>The id of the employee type.</returns>
-		//public byte GetEmployeeTypeIdByTypeName(string employeeType)
-		//{
-		//	DynamicParameters param = new DynamicParameters();
-		//	param.Add("@EmployeeType", employeeType);
-		//	using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-		//	{
-		//		return connection.Query<byte>("[Hrm].[GetEmployeeTypeId]", param, commandType: CommandType.StoredProcedure).SingleOrDefault();
-		//	}
-		//}
-
 		/// <summary>
 		/// Retrieves the subdomain that is registerd with the organzation with the provided id.
 		/// </summary>
