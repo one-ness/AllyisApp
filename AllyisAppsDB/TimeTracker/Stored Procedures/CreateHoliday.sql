@@ -13,7 +13,7 @@ AS
 		SET @payClassIdForHoliday = (SELECT TOP 1 [PayClassId] FROM [Hrm].[PayClass] WITH (NOLOCK) WHERE [Name] = 'Holiday');
 	ELSE
 		BEGIN
-			EXEC [TimeTracker].[CreatePayClass] @Name = 'Holiday', @OrganizationId = @OrganizationId
+			EXEC [Hrm].[CreatePayClass] @Name = 'Holiday', @OrganizationId = @OrganizationId
 			SET @payClassIdForHoliday = (SELECT TOP 1 [PayClassId] FROM [Hrm].[PayClass] WITH (NOLOCK) WHERE [Name] = 'Holiday');
 		END
 		
