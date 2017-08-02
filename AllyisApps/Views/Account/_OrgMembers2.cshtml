@@ -43,8 +43,6 @@
 					<td class="memberSearchProperty">@invite.CompressedEmail</td>
 					<td class="memberSearchProperty">@invite.EmployeeId</td>
 					<td class="text-right icon-strip">
-						@*<a href="javascript: void(0);" class="text-muted" title="@Strings.RemoveInvitation"
-						   onclick='removeUser("@invite.OrganizationId", "@invite.InvitationId", "@invite.FirstName @invite.LastName", true)'><span class="fa fa-fw fa-remove text-danger"></span></a>*@
 						<a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account)@pars"
 						   title="@Strings.EditEmployee"><span class="fa fa-fw fa-edit"></span></a>
 					</td>
