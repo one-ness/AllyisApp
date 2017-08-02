@@ -6,7 +6,6 @@ using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlTypes;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -30,9 +29,9 @@ namespace AllyisApps.Services
 		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0)
 		{
 			int orgId;
-			if (subscriptionId > 0 && UserContext.UserSubscriptions[subscriptionId] != null)
+			if (subscriptionId > 0 && UserContext.OrganizationSubscriptions[subscriptionId] != null)
 			{
-				orgId = UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+				orgId = UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
 			}
 			else if (organizationId > 0 && UserContext.UserOrganizations[organizationId] != null)
 			{
@@ -125,10 +124,12 @@ namespace AllyisApps.Services
 					(hasCustomerName || hasCustomerId || projectLinks[2, 0].Count > 0 || projectLinks[2, 1].Count > 0);
 
 				// Non-required project columns
-				bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
+
+				//TODO use this line once project isHourly property is supported.  Currently disabled
+				//bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
 				bool hasProjectStartDate = table.Columns.Contains(ColumnHeaders.ProjectStartDate);
 				bool hasProjectEndDate = table.Columns.Contains(ColumnHeaders.ProjectEndDate);
-				bool hasNonRequiredProjectInfo = hasProjectType || hasProjectStartDate || hasProjectEndDate;
+				bool hasNonRequiredProjectInfo = /*hasProjectType ||*/ hasProjectStartDate || hasProjectEndDate;
 
 				// User importing: requires email, id, first and last name
 				bool hasUserEmail = table.Columns.Contains(ColumnHeaders.UserEmail);
@@ -153,7 +154,6 @@ namespace AllyisApps.Services
 				bool hasUserPhoneNumber = table.Columns.Contains(ColumnHeaders.UserPhoneNumber);
 				bool hasUserPostalCode = table.Columns.Contains(ColumnHeaders.UserPostalCode);
 				bool hasUserState = table.Columns.Contains(ColumnHeaders.UserState);
-				bool hasEmployeeType = table.Columns.Contains(ColumnHeaders.EmployeeType);  //if not provided, set to Salaried as default
 				bool hasNonRequiredUserInfo = hasUserAddress || hasUserCity || hasUserCountry || hasUserDateOfBirth || hasUserUsername ||
 					hasUserPhoneExtension || hasUserPhoneNumber || hasUserPostalCode || hasUserState;
 
@@ -400,7 +400,7 @@ namespace AllyisApps.Services
 								{
 									CustomerId = customer.CustomerId,
 									Name = thisRowHasProjectName ? knownValue : readValue,
-									Type = "Hourly",
+									IsHourly = false, //TODO un-hardcode once project isHourly property is supported.  Currently disabled
 									OrganizationId = orgId,
 									ProjectOrgId = thisRowHasProjectName ? readValue : knownValue,
 									StartingDate = defaultProjectStartDate,
@@ -505,7 +505,7 @@ namespace AllyisApps.Services
 									{
 										CustomerId = customer.CustomerId,
 										Name = fields[0],
-										Type = "Hourly",
+										IsHourly = false,  //TODO un-hardocode once project isHourly property is supported.  Currently disabled
 										OrganizationId = orgId,
 										ProjectOrgId = fields[1],
 										StartingDate = defaultProjectStartDate,
@@ -550,7 +550,8 @@ namespace AllyisApps.Services
 							string startDate = null;
 							string endDate = null;
 
-							if (hasProjectType) updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.Type = val) || updated;
+							//TODO use this line once project isHourly property is supported.  Currently disabled
+							//if (hasProjectType) updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.isHourly = val) || updated;
 							if (hasProjectStartDate) updated = this.readColumn(row, ColumnHeaders.ProjectStartDate, val => startDate = val) || updated;
 							if (hasProjectEndDate) updated = this.readColumn(row, ColumnHeaders.ProjectEndDate, val => endDate = val) || updated;
 							if (startDate != null) project.StartingDate = DateTime.Parse(startDate);
@@ -705,17 +706,12 @@ namespace AllyisApps.Services
 									{
 										try
 										{
-											string employeeType = hasEmployeeType ? row[ColumnHeaders.EmployeeType].ToString() : "";
 											//get the id of employeeType, if not found default to Salaried
-											byte employeeTypeId = DBHelper.GetEmployeeTypeIdByTypeName(employeeType);
-											if (employeeTypeId == 0) { employeeTypeId = 1; }
 											DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
 											{
 												EmployeeId = fields[1],
 												OrganizationId = orgId,
 												OrganizationRoleId = (int)(OrganizationRole.Member),
-												UserId = user.UserId,
-												EmployeeTypeId = employeeTypeId
 											});
 											result.UsersAddedToOrganization += 1;
 										}

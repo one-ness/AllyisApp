@@ -7,12 +7,10 @@ CREATE TABLE [Auth].[Invitation] (
     [DateOfBirth]    DATE           NOT NULL,
     [AccessCode]     VARCHAR (50)   NOT NULL,
     [IsActive]       BIT            NOT NULL,
-    [OrganizationRoleId]      INT            NOT NULL,
-    [EmployeeTypeId] TINYINT        NOT NULL,
+    [OrganizationRoleId]      INT   NOT NULL,
     [CreatedUtc]     DATETIME2 (0)  DEFAULT (getutcdate()) NOT NULL,
     [EmployeeId]     NVARCHAR (16)  NOT NULL,
     CONSTRAINT [PK_Invitation] PRIMARY KEY CLUSTERED ([InvitationId] ASC),
-    CONSTRAINT [FK_Invitation_EmployeeType] FOREIGN KEY ([EmployeeTypeId]) REFERENCES [Hrm].[EmployeeType] ([EmployeeTypeId]),
     CONSTRAINT [FK_Invitation_OrganizationId] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),
     CONSTRAINT [FK_Invitation_OrganizationRole] FOREIGN KEY ([OrganizationRoleId]) REFERENCES [Auth].[OrganizationRole] ([OrganizationRoleId])
 );

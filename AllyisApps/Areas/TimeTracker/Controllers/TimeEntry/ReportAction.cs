@@ -33,14 +33,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var infos = AppService.GetReportInfo(subscriptionId);
 
 			const string TempDataKey = "RVM";
-			if (this.TempData[TempDataKey] != null)
+            UserSubscription subInfo = null;
+            this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+            if (this.TempData[TempDataKey] != null)
 			{
 				reportVM = (ReportViewModel)TempData[TempDataKey];
 			}
 			else
 			{
-				UserSubscription subInfo = null;
-				this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+				
+				
 				reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, subInfo.OrganizationId, true, infos.Item1, infos.Item2);
                 reportVM.SubscriptionName = subInfo.SubscriptionName;
             }
@@ -49,9 +51,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			reportVM.CustomerView = this.GetCustomerSelectList(infos.Item1, reportVM.Selection.CustomerId);
 			reportVM.ProjectView = this.GetProjectSelectList(infos.Item2, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
 			reportVM.SubscriptionId = subscriptionId;
-            
 
-			return this.View(reportVM);
+            var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+            ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infoOrg.Item1.StartOfWeek));
+            ViewBag.WeekEnd = AppService.GetDayFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
+
+
+            return this.View(reportVM);
 		}
 
 		/// <summary>

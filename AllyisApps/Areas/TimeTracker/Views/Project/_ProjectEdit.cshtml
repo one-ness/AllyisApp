@@ -88,15 +88,7 @@
                 @Html.HiddenFor(m => m.OrganizationId)
                 @Html.HiddenFor(m=> m.SubscriptionId)
             </div>
-
-			<div class="form-group row" style="margin-bottom: 0px; margin-top: 15px;">
-				<div class="col-xs-6 text-left">
-					<label for="price" style="text-align:center">@Strings.PriceType</label>
-					<br />
-					@Html.RadioButtonFor(m => m.PriceType, Strings.Hourly, new { @checked = "checked" }) @Strings.Hourly
-					@Html.RadioButtonFor(m => m.PriceType, Strings.Fixed) @Strings.Fixed
-				</div>
-			</div>
+			
             <div class="text-right" style="padding-top: 15px; padding-bottom: 15px;">
                 <input type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId })'" />
                 <input type="submit" value=@Strings.Save class="btn btn-primary" id="submitProject"/>

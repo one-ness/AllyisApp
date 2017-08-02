@@ -267,7 +267,6 @@ namespace AllyisApps.Services
 				this.SetUserContext(result);
 
 				// note: if contextInfo.Count > 0, user is part of at least one organization
-				//bool chosenSubscriptionFound = false;
 				foreach (var item in contextInfo)
 				{
 					// user is part of at least one organization, do we have org id?
@@ -305,32 +304,17 @@ namespace AllyisApps.Services
 								AreaUrl = item.AreaUrl
 							};
 
-							if (!orgInfo.UserSubscriptions.ContainsKey(item.SubscriptionId.Value))
+							if (!orgInfo.OrganizationSubscriptions.ContainsKey(item.SubscriptionId.Value))
 							{
 								// add it to the list of subscriptions for this organization
-								orgInfo.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
+								orgInfo.OrganizationSubscriptions.Add(item.SubscriptionId.Value, subInfo);
 
 								// also add it to the result
-								result.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
+								result.OrganizationSubscriptions.Add(item.SubscriptionId.Value, subInfo);
 							}
-							// compare with chosen subscription? is user still a member of it?
-							//if (result.ChosenSubscriptionId == item.SubscriptionId.Value)
-							//{
-							//	chosenSubscriptionFound = true;
-							//}
 						}
 					}
 				}
-
-				// was chosen subscription found?
-				//if (!chosenSubscriptionFound && result.ChosenSubscriptionId > 0)
-				//{
-				//	// no, set it to 0
-				//	result.ChosenSubscriptionId = 0;
-
-				//	// update database
-				//	this.UpdateActiveSubscription(result.ChosenSubscriptionId);
-				//}
 			}
 
 			return result;
@@ -456,11 +440,6 @@ namespace AllyisApps.Services
 			if (string.IsNullOrEmpty(modelData["employeeId"]))
 			{
 				throw new ArgumentNullException("employeeId", "Employee Id must have a value");
-			}
-
-			if (modelData["employeeTypeId"] < 0)
-			{
-				throw new ArgumentOutOfRangeException("employeeTypeId", "Employee Type Id cannot be negative.");
 			}
 
 			if (modelData["employeeRoleId"] < 0)
