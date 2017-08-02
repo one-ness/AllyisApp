@@ -32,8 +32,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new InvalidOperationException("Project requires a project id. Cannot update.");
 			}
 
-			//if (project.OrganizationId == null)
-			//{
 			if (project.OrganizationId == 0)
 			{
 				throw new InvalidOperationException("Project requires an organization. Cannot update.");
@@ -42,11 +40,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			AppService.UpdateProjectAndUsers(
 				project.ProjectId,
 				project.ProjectName,
-				project.ProjectOrgId,  //TODO: add an isHourly parameter to update the project's isHourly column
+				project.ProjectOrgId,
 				AppService.GetDateTimeFromDays(project.StartDate),
 				AppService.GetDateTimeFromDays(project.EndDate),
 				project.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString)),
 				project.SubscriptionId);
+				//project.IsHourly; //TODO: add an isHourly parameter to update the project's isHourly column.  Currently disabled feature
 		}
 	}
 }

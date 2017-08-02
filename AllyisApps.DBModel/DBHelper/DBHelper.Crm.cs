@@ -672,7 +672,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@ProjectId", projectId);
 			parameters.Add("@Name", name);
 			parameters.Add("@OrgId", orgId);
-			parameters.Add("@isHourly", isHourly);
+			parameters.Add("@IsHourly", isHourly);
 			parameters.Add("@StartingDate", start == null ? null : start.Value.ToShortDateString());
 			parameters.Add("@EndingDate", end == null ? null : end.Value.ToShortDateString());
 			parameters.Add("@UserIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));

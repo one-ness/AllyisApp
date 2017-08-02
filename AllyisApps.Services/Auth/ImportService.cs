@@ -402,7 +402,7 @@ namespace AllyisApps.Services
 								{
 									CustomerId = customer.CustomerId,
 									Name = thisRowHasProjectName ? knownValue : readValue,
-									IsHourly = true,
+									IsHourly = false, //TODO un-hardcode once project isHourly property is supported.  Currently disabled
 									OrganizationId = orgId,
 									ProjectOrgId = thisRowHasProjectName ? readValue : knownValue,
 									StartingDate = defaultProjectStartDate,
@@ -507,7 +507,7 @@ namespace AllyisApps.Services
 									{
 										CustomerId = customer.CustomerId,
 										Name = fields[0],
-										IsHourly = true,
+										IsHourly = false,  //TODO un-hardocode once project isHourly property is supported.  Currently disabled
 										OrganizationId = orgId,
 										ProjectOrgId = fields[1],
 										StartingDate = defaultProjectStartDate,
