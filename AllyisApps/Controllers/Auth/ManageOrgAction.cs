@@ -67,8 +67,7 @@ namespace AllyisApps.Controllers
 						FullName = string.Format("{0} {1}", oui.FirstName, oui.LastName),
 						OrganizationId = oui.OrganizationId,
 						PermissionLevel = ((OrganizationRole)oui.OrganizationRoleId).ToString(),
-						UserId = oui.UserId,
-						EmployeeTypeId = (int)oui.EmployeeTypeId
+						UserId = oui.UserId
 					}),
 					OrganizationId = infos.Item1.OrganizationId,
 					OrganizationName = infos.Item1.Name,

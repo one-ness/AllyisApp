@@ -102,7 +102,6 @@
     <Build Include="Billing\Tables\StripeOrganizationCustomer.sql" />
     <Build Include="Billing\Tables\Subscription.sql" />
     <Build Include="Billing\Tables\SubscriptionUser.sql" />
-    <Build Include="Auth\Tables\EmployeeType.sql" />
     <Build Include="Auth\Tables\Invitation.sql" />
     <Build Include="Auth\Tables\Logging.sql" />
     <Build Include="Auth\Tables\Organization.sql" />
@@ -203,7 +202,6 @@
     <Build Include="Auth\Stored Procedures\GetOrg.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationsByUserId.sql" />
     <Build Include="Auth\Stored Procedures\EditOrgUsers.sql" />
-    <Build Include="Auth\Stored Procedures\GetEmployeeTypeId.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgWithCountriesAndEmployeeId.sql" />
     <Build Include="Auth\Stored Procedures\GetAddMemberInfo.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgAndSubRoles.sql" />

@@ -89,13 +89,6 @@
 						</div>
 					} else { @Html.HiddenFor(m => m.FirstName); }
 					<div class="form-group">
-						@Html.LabelFor(m => m.EmployeeTypeId, Strings.EmployeeType)
-						@Html.DropDownListFor(m => m.EmployeeTypeId, new List<SelectListItem>
-						{ new SelectListItem { Text=Strings.Salaried, Value="1" },
-							new SelectListItem { Text=Strings.Hourly,   Value="2" }}, new { @id = "EmployeeType", @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.EmployeeTypeId, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
 						@Html.ReqLabelFor(m => m.EmployeeId, Strings.EmployeeId)
 						@Html.TextBoxFor(m => m.EmployeeId, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.EmployeeId, "", new { @class = "text-danger" })
@@ -125,7 +118,6 @@
 						@Html.HiddenFor(m => m.EmployeeRoleId);
 						<div class="form-group">
 							@Html.LabelFor(m => m.EmployeeRoleId, Strings.Role)
-							<label>@Strings.Role</label>
 							<div class="text-box-padded">@(Model.EmployeeRoleId == 1 ? Strings.Member : Strings.Owner)</div>
 						</div>
 					}

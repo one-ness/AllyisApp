@@ -34,6 +34,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			const string TempDataKey = "RVM";
             UserSubscription subInfo = null;
+            this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
             if (this.TempData[TempDataKey] != null)
 			{
 				reportVM = (ReportViewModel)TempData[TempDataKey];
@@ -41,7 +42,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			else
 			{
 				
-				this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+				
 				reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, subInfo.OrganizationId, true, infos.Item1, infos.Item2);
                 reportVM.SubscriptionName = subInfo.SubscriptionName;
             }

@@ -31,8 +31,7 @@ BEGIN
 		[OU].[EmployeeId],
 		[U].[Email],
 		[U].[FirstName],
-		[U].[LastName],
-		[OU].[EmployeeTypeId]
+		[U].[LastName]
     FROM [Auth].[OrganizationUser]	AS [OU]
 	WITH (NOLOCK)
     INNER JOIN [Auth].[User]		AS [U] WITH (NOLOCK) 
@@ -70,8 +69,7 @@ BEGIN
 		[AccessCode], 
 		[Invitation].[OrganizationRoleId],
 		[Name] AS [OrganizationRoleName],
-		[EmployeeId],
-		[EmployeeTypeId]
+		[EmployeeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
 	LEFT JOIN [Auth].[OrganizationRole] WITH (NOLOCK) ON [OrganizationRole].[OrganizationRoleId] = [Invitation].[OrganizationRoleId]
 	WHERE [OrganizationId] = @OrganizationId AND [IsActive] = 1
