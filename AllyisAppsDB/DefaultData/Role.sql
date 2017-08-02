@@ -2,9 +2,6 @@
 INSERT INTO [Auth].[OrganizationRole] (OrganizationRoleId, Name) VALUES (1, 'Member');
 INSERT INTO [Auth].[OrganizationRole] (OrganizationRoleId, Name) VALUES (2, 'Owner');
 
--- Employee types
-INSERT INTO [Hrm].[EmployeeType] (EmployeeTypeId, Name) VALUES (1, 'Salaried'); 
-INSERT INTO [Hrm].[EmployeeType] (EmployeeTypeId, Name) VALUES (2, 'Hourly');
 
 -- Product roles -- Time Tracker
 INSERT INTO [Auth].[ProductRole] (ProductRoleId, ProductId, Name) VALUES (1, 200000, 'User');

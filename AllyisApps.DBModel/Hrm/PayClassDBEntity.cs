@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.DBModel.TimeTracker
+namespace AllyisApps.DBModel.Hrm
 {
 	/// <summary>
 	/// Pay class.

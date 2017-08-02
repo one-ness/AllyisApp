@@ -2,7 +2,6 @@
 	@UserId INT,
 	@OrgId INT,
 	@EmployeeId NVARCHAR(100),
-	@EmployeeTypeId INT,
 	@EmployeeRoleId INT,
 	@IsInvited BIT,
 	@FirstName NVARCHAR(100),
@@ -21,16 +20,14 @@ BEGIN
 		BEGIN
 			SET NOCOUNT ON;
 			UPDATE [Auth].[OrganizationUser]
-			SET [EmployeeTypeId] = @EmployeeTypeId,
-				[OrganizationRoleId] = @EmployeeRoleId
+			SET [OrganizationRoleId] = @EmployeeRoleId
 			WHERE [UserId] = @UserId AND [OrganizationId] = @OrgId;
 		END
 		ELSE
 		BEGIN
 			SET NOCOUNT ON;
 			UPDATE [Auth].[Invitation]
-			SET [EmployeeTypeId] = @EmployeeTypeId,
-				[OrganizationRoleId] = @EmployeeRoleId,
+			SET [OrganizationRoleId] = @EmployeeRoleId,
 				[FirstName] = @FirstName,
 				[LastName] = @LastName
 			WHERE [InvitationId] = @UserId AND [OrganizationId] = @OrgId;
@@ -44,7 +41,6 @@ BEGIN
 			SET NOCOUNT ON;
 			UPDATE [Auth].[OrganizationUser]
 			SET [EmployeeId] = @EmployeeId,
-				[EmployeeTypeId] = @EmployeeTypeId,
 				[OrganizationRoleId] = @EmployeeRoleId
 			WHERE [UserId] = @UserId AND [OrganizationId] = @OrgId;
 		END
@@ -53,7 +49,6 @@ BEGIN
 			SET NOCOUNT ON;
 			UPDATE [Auth].[Invitation]
 			SET [EmployeeId] = @EmployeeId,
-				[EmployeeTypeId] = @EmployeeTypeId,
 				[OrganizationRoleId] = @EmployeeRoleId,
 				[FirstName] = @FirstName,
 				[LastName] = @LastName

@@ -41,10 +41,10 @@ namespace AllyisApps.Controllers
 				model = new EditMemberViewModel
 				{
 					UserInfo = userBasicInfo,
+					CurrentUserId = this.AppService.UserContext.UserId,
 					FirstName = userBasicInfo.FirstName,
 					LastName = userBasicInfo.LastName,
 					OrganizationId = orgId,
-					EmployeeTypeId = userOrgInfo.EmployeeTypeId,
 					EmployeeId = userOrgInfo.EmployeeId,
 					EmployeeRoleId = userOrgInfo.OrganizationRoleId,
 					IsInvited = isInvited
@@ -65,7 +65,6 @@ namespace AllyisApps.Controllers
 					FirstName = userOrgInfo.FirstName,
 					LastName = userOrgInfo.LastName,
 					OrganizationId = orgId,
-					EmployeeTypeId = userOrgInfo.EmployeeType,
 					EmployeeId = userOrgInfo.EmployeeId,
 					EmployeeRoleId = (int)userOrgInfo.OrganizationRole,
 					IsInvited = isInvited
@@ -87,7 +86,6 @@ namespace AllyisApps.Controllers
 			Dictionary<string, dynamic> modelData = new Dictionary<string, dynamic>
 			{
 				{ "employeeId", model.EmployeeId },
-				{ "employeeTypeId", model.EmployeeTypeId },
 				{ "employeeRoleId", model.EmployeeRoleId },
 				{ "isInvited", model.IsInvited },
 				{ "userId", model.UserInfo.UserId },
