@@ -98,7 +98,7 @@
 		{
 			<div class="row">
 				 <div class="col-xs-12">
-					 You are not a member of any organization yet. Please contact your employer to send you an invitation, or you can create your own, by clicking the Create Organization button.
+					 @Strings.NoOrganizationMessage
 				 </div>
 			</div>
 		}
@@ -108,7 +108,7 @@
 			{
 				UserOrgViewModel model = new UserOrgViewModel() { UserInfo = Model.UserInfo, PanelInfo = org };
 
-				@Html.Partial("_OrgPanel", model);
+				@Html.Partial("_OrganizationPanel", model);
 			}
 		}
 	</div>
