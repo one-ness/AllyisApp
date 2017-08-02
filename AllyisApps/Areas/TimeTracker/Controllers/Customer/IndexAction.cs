@@ -7,6 +7,7 @@
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Customer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -43,6 +44,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
             this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
             UserSubscription subInfo = null;
             this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+
+            var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+            ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infos.Item1.StartOfWeek));
+            ViewBag.WeekEnd = AppService.GetDayFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
+
             return this.View("Index", this.ConstructManageCustomerViewModel(subscriptionId));
         }
 
@@ -148,5 +154,36 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				UserId = this.AppService.UserContext.UserId
 			};
 		}
-	}
+
+        private DateTime SetStartingDate(DateTime? date, int startOfWeek)
+        {
+            if (date == null && !date.HasValue)
+            {
+                DateTime today = DateTime.Now;
+                int daysIntoTheWeek = (int)today.DayOfWeek < startOfWeek
+                    ? (int)today.DayOfWeek + (7 - startOfWeek)
+                    : (int)today.DayOfWeek - startOfWeek;
+
+                date = today.AddDays(-daysIntoTheWeek);
+            }
+
+            return date.Value.Date;
+        }
+
+        private DateTime SetEndingDate(DateTime? date, int startOfWeek)
+        {
+            if (date == null && !date.HasValue)
+            {
+                DateTime today = DateTime.Now;
+
+                int daysLeftInWeek = (int)today.DayOfWeek < startOfWeek
+                    ? startOfWeek - (int)today.DayOfWeek - 1
+                    : (6 - (int)today.DayOfWeek) + startOfWeek;
+
+                date = today.AddDays(daysLeftInWeek);
+            }
+
+            return date.Value.Date;
+        }
+    }
 }

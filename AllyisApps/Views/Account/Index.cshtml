@@ -94,11 +94,22 @@
 				<a href="@Url.Action(ActionConstants.CreateOrg, ControllerConstants.Account)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">@Strings.CreateOrganization</a>
 			</div>
 		</div>
-		@foreach (var org in Model.OrgInfos)
-        {
-            UserOrgViewModel model = new UserOrgViewModel() { UserInfo = Model.UserInfo, PanelInfo = org };
+		@if (Model.OrgInfos.Count <= 0)
+		{
+			<div class="row">
+				 <div class="col-xs-12">
+					 You are not a member of any organization yet. Please contact your employer to send you an invitation, or you can create your own, by clicking the Create Organization button.
+				 </div>
+			</div>
+		}
+		else
+		{
+			foreach (var org in Model.OrgInfos)
+			{
+				UserOrgViewModel model = new UserOrgViewModel() { UserInfo = Model.UserInfo, PanelInfo = org };
 
-            @Html.Partial("_OrgPanel", model);
-        }
+				@Html.Partial("_OrgPanel", model);
+			}
+		}
 	</div>
 </div>
