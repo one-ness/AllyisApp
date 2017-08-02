@@ -48,8 +48,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@DateOfBirth", user.DateOfBirth);
 			parameters.Add("@EmailConfirmationCode", user.EmailConfirmationCode);
 			parameters.Add("@PasswordHash", user.PasswordHash);
-			parameters.Add("@TwoFactorEnabled", user.TwoFactorEnabled);
-			parameters.Add("@LockoutEnabled", user.LockoutEnabled);
+			parameters.Add("@IsTwoFactorEnabled", user.IsTwoFactorEnabled);
+			parameters.Add("@IsLockoutEnabled", user.IsLockoutEnabled);
 			parameters.Add("@LockoutEndDateUtc", user.LockoutEndDateUtc);
 			parameters.Add("@LanguageId", user.PreferredLanguageId);
 
@@ -1005,7 +1005,7 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Updates user's EmailConfirmed to True in Auth.User table.
+		/// Updates user's IsEmailConfirmed to True in Auth.User table.
 		/// </summary>
 		public int UpdateEmailConfirmed(Guid code)
 		{

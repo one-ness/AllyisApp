@@ -38,6 +38,7 @@
                 <div class="col-sm-4 index-details">
                     <p>
                         <label>@Strings.Website:</label>
+<<<<<<< HEAD:AllyisApps/Views/Account/_OrgPanel.cshtml
                         @{
                             string orgWebSite = subtitle;
                             if (!(subtitle == null || subtitle == "")) {
@@ -46,6 +47,10 @@
                                 }
                             <a href="@orgWebSite" target="_blank">@subtitle</a>
                                 }
+=======
+                        @if (!string.IsNullOrEmpty(subtitle) && !subtitle.StartsWith("http")){
+                            subtitle = "http://" + subtitle;
+>>>>>>> 1c8ef15a34fb9aede9cde72d57209b5b23950e68:AllyisApps/Views/Account/_OrganizationPanel.cshtml
                         }
                     </p>
                     <p>

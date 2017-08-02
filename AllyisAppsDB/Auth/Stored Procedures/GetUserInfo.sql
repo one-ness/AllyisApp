@@ -13,7 +13,7 @@ BEGIN
 		   [User].[PhoneNumber],
 		   [User].[LastUsedSubscriptionId],
 		   [User].[LastUsedOrganizationId],
-		   [User].[EmailConfirmed],
+		   [User].[IsEmailConfirmed],
 		   [User].[EmailConfirmationCode],
 		   [PreferredLanguageId]
 	FROM [Auth].[User]

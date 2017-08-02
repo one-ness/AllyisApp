@@ -8,6 +8,6 @@ AS
 		[Date],
 		[Duration],
 		[Description],
-		[LockSaved]
+		[IsLockSaved]
 	FROM [TimeTracker].[TimeEntry] WITH (NOLOCK) 
 	WHERE [TimeEntryId] = @TimeEntryId
