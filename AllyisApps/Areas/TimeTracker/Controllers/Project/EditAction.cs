@@ -49,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 			}
 			model.SubscriptionUsers = subList;
-			int orgId = AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId; ;
+			int orgId = AppService.UserContext.OrganizationSubscriptions[model.SubscriptionId].OrganizationId; ;
 			if (ModelState.IsValid)
 			{
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);

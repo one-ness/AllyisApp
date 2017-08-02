@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>CSV export of time entries.</returns>
 		public FileStreamResult Export(int userId, int subscriptionId, int? startingDate = null, int? endingDate = null)
 		{
-			int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+			int orgId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
 			if (userId != this.AppService.UserContext.UserId)
 			{
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
@@ -54,7 +54,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The DataExportViewModel.</returns>
 		public DataExportViewModel ConstructDataExportViewModel(int subscriptionId, int orgId = -1, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
-			if (-1 <= orgId) orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+			if (-1 <= orgId) orgId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
 
 			DataExportViewModel result = new DataExportViewModel();
 			if ((userIds == null) || (userIds[0] == -1))

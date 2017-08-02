@@ -56,7 +56,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					CustomerName = AppService.GetCustomer(userId).Name,
 					SubscriptionId = subscriptionId,
 					UserId = userId,
-					OrganizationId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId
+					OrganizationId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId
 				});
 		}
 

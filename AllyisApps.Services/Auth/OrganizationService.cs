@@ -211,7 +211,7 @@ namespace AllyisApps.Services
                 "{0} {1} has requested you join their organization on Allyis Apps{2}!<br /> Click <a href={3}>Here</a> to create an account and join!",
                 spResults.Item2,
                 spResults.Item3,
-                subscriptionId == null ? "" : ", " + UserContext.UserSubscriptions[subscriptionId.Value].OrganizationName,
+                subscriptionId == null ? "" : ", " + UserContext.OrganizationSubscriptions[subscriptionId.Value].OrganizationName,
 				url.Replace("%7BaccessCode%7D", code));
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
@@ -586,7 +586,7 @@ namespace AllyisApps.Services
 				Address = organization.Address,
 				City = organization.City,
 				Country = organization.Country,
-				DateCreated = organization.CreatedUtc,
+				CreatedUtc = organization.CreatedUtc,
 				FaxNumber = organization.FaxNumber,
 				Name = organization.Name,
 				OrganizationId = organization.OrganizationId,
@@ -616,7 +616,7 @@ namespace AllyisApps.Services
 				Address = organization.Address,
 				City = organization.City,
 				Country = organization.Country,
-				CreatedUtc = organization.DateCreated,
+				CreatedUtc = organization.CreatedUtc,
 				FaxNumber = organization.FaxNumber,
 				Name = organization.Name,
 				OrganizationId = organization.OrganizationId,
