@@ -225,6 +225,28 @@ namespace AllyisApps.Services
 			return spResults.Item1;
 		}
 
+		public async void NotifyInviteAcceptAsync(int inviteId)
+		{
+			InvitationDBEntity invitation = DBHelper.GetUserInvitationsByInviteId(inviteId).FirstOrDefault();
+			OrganizationDBEntity org = DBHelper.GetOrganization(invitation.OrganizationId);
+			IEnumerable<dynamic> owners = DBHelper.GetOrgOwnerEmails(invitation.OrganizationId);
+
+			string htmlbody = string.Format(
+				"{0} has joined the organization {1} on Allyis Apps.",
+				invitation.FirstName + " " + invitation.LastName,
+				org.Name);
+
+			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
+			foreach (dynamic owner in owners)
+			{
+				await Mailer.SendEmailAsync(
+					this.ServiceSettings.SupportEmail,
+					owner.Email,
+					"Join Allyis Apps!",
+					msgbody);
+			}
+		}
+
 		/// <summary>
 		/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
 		/// </summary>

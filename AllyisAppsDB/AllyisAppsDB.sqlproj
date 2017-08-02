@@ -300,6 +300,8 @@
     <Build Include="Billing\Stored Procedures\UpdateSubscriptionName.sql" />
     <Build Include="TimeTracker\Stored Procedures\CreateDefaultPayClass.sql" />
     <Build Include="Lookup\Tables\OrganizationLocation.sql" />
+    <Build Include="Auth\Stored Procedures\GetUserInvitationsByInviteId.sql" />
+    <Build Include="Auth\Stored Procedures\GetOrganizationOwnerEmails.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
