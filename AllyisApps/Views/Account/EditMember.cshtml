@@ -130,28 +130,27 @@
 				</div>
 			</div>
 		}
-		<div class="pull-left">
-			@if (!Model.IsInvited)
-			{
-				using (Html.BeginForm(ActionConstants.RemoveMember, ControllerConstants.Account, new { id = Model.OrganizationId, userId = Model.UserInfo.UserId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("Delete User?")) }))
+		@if (Model.CurrentUserId != Model.UserInfo.UserId)
+		{
+			<div class="pull-left">
+				@if (!Model.IsInvited)
 				{
-					@Html.AntiForgeryToken()
-					<input type="submit" value="@Strings.Delete" class="btn btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
+					using (Html.BeginForm(ActionConstants.RemoveMember, ControllerConstants.Account, new { id = Model.OrganizationId, userId = Model.UserInfo.UserId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("Delete User?")) }))
+					{
+						@Html.AntiForgeryToken()
+						<input type="submit" value="@Strings.Delete" class="btn btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
+					}
 				}
-			}
-			else
-			{
-				using (Html.BeginForm(ActionConstants.RemoveInvitation, ControllerConstants.Account, new { id = Model.OrganizationId, userId = Model.UserInfo.UserId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("Delete User?")) }))
+				else
 				{
-					@Html.AntiForgeryToken()
-					<input type="submit" value="@Strings.Delete" class="btn btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
+					using (Html.BeginForm(ActionConstants.RemoveInvitation, ControllerConstants.Account, new { id = Model.OrganizationId, userId = Model.UserInfo.UserId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("Delete User?")) }))
+					{
+						@Html.AntiForgeryToken()
+						<input type="submit" value="@Strings.Delete" class="btn btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
+					}
 				}
-			}
-
-		</div>
-
-
-
+			</div>
+		}
 		<div class="form-group allyis-action-buttons">
 			
 		</div>

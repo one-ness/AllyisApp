@@ -19,6 +19,11 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets/sets the user's info for display
 		/// </summary>
+		public int CurrentUserId { get; set; }
+
+		/// <summary>
+		/// Gets/sets the user's info for display
+		/// </summary>
 		public User UserInfo { get; set; }
 
 		/// <summary>
