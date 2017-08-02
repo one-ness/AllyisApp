@@ -310,7 +310,6 @@ namespace AllyisApps.DBModel
 			parameters.Add("@Subdomain", org.Subdomain);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 			parameters.Add("@EmployeeId", employeeId);
-			parameters.Add("@EmployeeTypeId", 1);   //assuming Org's owner is always a salaried employee
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -391,7 +390,6 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userId", orgUser.UserId);
 			parameters.Add("@RoleId", orgUser.OrganizationRoleId);
 			parameters.Add("@employeeId", orgUser.EmployeeId);
-			parameters.Add("employeeTypeId", orgUser.EmployeeTypeId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -428,7 +426,6 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userId", modelData["userId"]);
 			parameters.Add("@orgId", modelData["orgId"]);
 			parameters.Add("@employeeId", modelData["employeeId"]);
-			parameters.Add("@employeeTypeId", modelData["employeeTypeId"]);
 			parameters.Add("@employeeRoleId", modelData["employeeRoleId"]);
 			parameters.Add("@firstName", modelData["firstName"]);
 			parameters.Add("@lastName", modelData["lastName"]);
@@ -550,21 +547,6 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Retreives the id of the given employee type.
-		/// </summary>
-		/// <param name="employeeType">The employee type's name.</param>
-		/// <returns>The id of the employee type.</returns>
-		public byte GetEmployeeTypeIdByTypeName(string employeeType)
-		{
-			DynamicParameters param = new DynamicParameters();
-			param.Add("@EmployeeType", employeeType);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<byte>("[Hrm].[GetEmployeeTypeId]", param, commandType: CommandType.StoredProcedure).SingleOrDefault();
-			}
-		}
-
-		/// <summary>
 		/// Retrieves the subdomain that is registerd with the organzation with the provided id.
 		/// </summary>
 		/// <param name="id">The organization's Id.</param>
@@ -621,7 +603,6 @@ namespace AllyisApps.DBModel
 			parameters.Add("@OrganizationRole", invitation.OrganizationRoleId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 			parameters.Add("@EmployeeId", invitation.EmployeeId);
-			parameters.Add("@EmployeeTypeId", invitation.EmployeeTypeId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[Auth].[CreateUserInvitation]", parameters, commandType: CommandType.StoredProcedure);
@@ -658,7 +639,6 @@ namespace AllyisApps.DBModel
 			parameters.Add("@EmployeeId", invitation.EmployeeId);
 			parameters.Add("@SubscriptionId", subscriptionId);
 			parameters.Add("@SubRoleId", productRoleId);
-			parameters.Add("@EmployeeType", invitation.EmployeeTypeId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple("[Auth].[InviteUser]", parameters, commandType: CommandType.StoredProcedure);

@@ -10,14 +10,11 @@ BEGIN
 	DECLARE @OrganizationRole INT;
 	DECLARE @Email NVARCHAR(384);
 	DECLARE @EmployeeId NVARCHAR(16);
-	DECLARE @EmployeeTypeId INT;
-
 	SELECT
 		@OrganizationId = [OrganizationId],
 		@OrganizationRole = [OrganizationRoleId],
 		@Email = [Email],
-		@EmployeeId = [EmployeeId],
-		@EmployeeTypeId = [EmployeeTypeId]
+		@EmployeeId = [EmployeeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
 	WHERE [Invitation].[InvitationId] = @InvitationId AND [Invitation].[IsActive] = 1
 
@@ -44,8 +41,7 @@ BEGIN
 			BEGIN -- User already in organization
 				UPDATE [Auth].[OrganizationUser]
 				SET [OrganizationRoleId] = @OrganizationRole,
-					[EmployeeId] = @EmployeeId,
-					[EmployeeTypeId] = @EmployeeTypeId
+					[EmployeeId] = @EmployeeId
 				WHERE [UserId] = @UserId AND 
 					[OrganizationId] = @OrganizationId;
 			END
@@ -55,15 +51,13 @@ BEGIN
 					[UserId], 
 					[OrganizationId], 
 					[OrganizationRoleId], 
-					[EmployeeId],
-					[EmployeeTypeId]
+					[EmployeeId]
 				)
 				VALUES (
 					@UserId, 
 					@OrganizationId,
 					@OrganizationRole, 
-					@EmployeeId,
-					@EmployeeTypeId
+					@EmployeeId
 				);
 			END
 

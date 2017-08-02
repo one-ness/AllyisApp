@@ -6,7 +6,7 @@
 
 using System;
 
-namespace AllyisApps.DBModel.TimeTracker
+namespace AllyisApps.DBModel.Hrm
 {
 	/// <summary>
 	/// Represents a holiday for an organization.

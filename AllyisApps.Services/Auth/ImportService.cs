@@ -6,7 +6,6 @@ using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlTypes;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -153,7 +152,6 @@ namespace AllyisApps.Services
 				bool hasUserPhoneNumber = table.Columns.Contains(ColumnHeaders.UserPhoneNumber);
 				bool hasUserPostalCode = table.Columns.Contains(ColumnHeaders.UserPostalCode);
 				bool hasUserState = table.Columns.Contains(ColumnHeaders.UserState);
-				bool hasEmployeeType = table.Columns.Contains(ColumnHeaders.EmployeeType);  //if not provided, set to Salaried as default
 				bool hasNonRequiredUserInfo = hasUserAddress || hasUserCity || hasUserCountry || hasUserDateOfBirth || hasUserUsername ||
 					hasUserPhoneExtension || hasUserPhoneNumber || hasUserPostalCode || hasUserState;
 
@@ -705,17 +703,12 @@ namespace AllyisApps.Services
 									{
 										try
 										{
-											string employeeType = hasEmployeeType ? row[ColumnHeaders.EmployeeType].ToString() : "";
 											//get the id of employeeType, if not found default to Salaried
-											byte employeeTypeId = DBHelper.GetEmployeeTypeIdByTypeName(employeeType);
-											if (employeeTypeId == 0) { employeeTypeId = 1; }
 											DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
 											{
 												EmployeeId = fields[1],
 												OrganizationId = orgId,
 												OrganizationRoleId = (int)(OrganizationRole.Member),
-												UserId = user.UserId,
-												EmployeeTypeId = employeeTypeId
 											});
 											result.UsersAddedToOrganization += 1;
 										}

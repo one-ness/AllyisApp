@@ -19,6 +19,11 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets/sets the user's info for display
 		/// </summary>
+		public int CurrentUserId { get; set; }
+
+		/// <summary>
+		/// Gets/sets the user's info for display
+		/// </summary>
 		public User UserInfo { get; set; }
 
 		/// <summary>
@@ -46,11 +51,6 @@ namespace AllyisApps.ViewModels.Auth
 		[DataType(DataType.Text)]
 		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "EmployeeIdValidation")]
 		public string EmployeeId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the employee type.
-		/// </summary>
-		public EmployeeType EmployeeTypeId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the employee role.
