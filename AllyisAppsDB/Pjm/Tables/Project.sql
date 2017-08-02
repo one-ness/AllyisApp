@@ -3,7 +3,7 @@
     [CustomerId]   INT           NOT NULL,
     [Name]         NVARCHAR (64) NOT NULL,
     [ProjectOrgId] NVARCHAR (16) NOT NULL,
-    [Type]         NVARCHAR (20) DEFAULT ('') NOT NULL,
+    [IsHourly]     BIT			 DEFAULT ((1)) NOT NULL,
     [IsActive]     BIT           DEFAULT ((1)) NOT NULL,
     [CreatedUtc]   DATETIME2 (0) DEFAULT (getutcdate()) NOT NULL,
     [StartUtc]     DATETIME2 (0) NULL,

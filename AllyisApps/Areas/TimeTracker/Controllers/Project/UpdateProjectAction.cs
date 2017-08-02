@@ -44,8 +44,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			AppService.UpdateProjectAndUsers(
 				project.ProjectId,
 				project.ProjectName,
-				project.ProjectOrgId,
-				project.PriceType,
+				project.ProjectOrgId,  //TODO: add an isHourly parameter to update the project's isHourly column
 				AppService.GetDateTimeFromDays(project.StartDate),
 				AppService.GetDateTimeFromDays(project.EndDate),
 				project.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString)),

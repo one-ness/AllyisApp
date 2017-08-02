@@ -125,10 +125,12 @@ namespace AllyisApps.Services
 					(hasCustomerName || hasCustomerId || projectLinks[2, 0].Count > 0 || projectLinks[2, 1].Count > 0);
 
 				// Non-required project columns
-				bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
+
+				//TODO use this line once project isHourly property is supported.  Currently disabled
+				//bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
 				bool hasProjectStartDate = table.Columns.Contains(ColumnHeaders.ProjectStartDate);
 				bool hasProjectEndDate = table.Columns.Contains(ColumnHeaders.ProjectEndDate);
-				bool hasNonRequiredProjectInfo = hasProjectType || hasProjectStartDate || hasProjectEndDate;
+				bool hasNonRequiredProjectInfo = /*hasProjectType ||*/ hasProjectStartDate || hasProjectEndDate;
 
 				// User importing: requires email, id, first and last name
 				bool hasUserEmail = table.Columns.Contains(ColumnHeaders.UserEmail);
@@ -400,7 +402,7 @@ namespace AllyisApps.Services
 								{
 									CustomerId = customer.CustomerId,
 									Name = thisRowHasProjectName ? knownValue : readValue,
-									Type = "Hourly",
+									IsHourly = true,
 									OrganizationId = orgId,
 									ProjectOrgId = thisRowHasProjectName ? readValue : knownValue,
 									StartingDate = defaultProjectStartDate,
@@ -505,7 +507,7 @@ namespace AllyisApps.Services
 									{
 										CustomerId = customer.CustomerId,
 										Name = fields[0],
-										Type = "Hourly",
+										IsHourly = true,
 										OrganizationId = orgId,
 										ProjectOrgId = fields[1],
 										StartingDate = defaultProjectStartDate,
@@ -550,7 +552,8 @@ namespace AllyisApps.Services
 							string startDate = null;
 							string endDate = null;
 
-							if (hasProjectType) updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.Type = val) || updated;
+							//TODO use this line once project isHourly property is supported.  Currently disabled
+							//if (hasProjectType) updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.isHourly = val) || updated;
 							if (hasProjectStartDate) updated = this.readColumn(row, ColumnHeaders.ProjectStartDate, val => startDate = val) || updated;
 							if (hasProjectEndDate) updated = this.readColumn(row, ColumnHeaders.ProjectEndDate, val => endDate = val) || updated;
 							if (startDate != null) project.StartingDate = DateTime.Parse(startDate);

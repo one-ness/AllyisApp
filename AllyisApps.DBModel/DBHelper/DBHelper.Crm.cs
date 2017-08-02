@@ -45,7 +45,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerId", project.CustomerId);
 			parameters.Add("@Name", project.Name);
-			parameters.Add("@PriceType", project.Type);
+			parameters.Add("@IsHourly", project.IsHourly);
 			parameters.Add("@ProjectOrgId", project.ProjectOrgId);
 			parameters.Add("@StartingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
 			parameters.Add("@EndingDate", project.EndingDate == null ? null : project.EndingDate.Value.ToShortDateString());
@@ -78,7 +78,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerId", project.CustomerId);
 			parameters.Add("@Name", project.Name);
-			parameters.Add("@PriceType", project.Type);
+			parameters.Add("@IsHourly", project.IsHourly);
 			parameters.Add("@ProjectOrgId", project.ProjectOrgId);
 			parameters.Add("@StartingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
 			parameters.Add("@EndingDate", project.EndingDate == null ? null : project.EndingDate.Value.ToShortDateString());
@@ -156,7 +156,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@ProjectId", project.ProjectId);
 			parameters.Add("@Name", project.Name);
-			parameters.Add("@PriceType", project.Type);
+			parameters.Add("@IsHourly", project.IsHourly);
 			parameters.Add("@ProjectOrgId", project.ProjectOrgId);
 			parameters.Add("@StartingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
 			parameters.Add("@EndingDate", project.EndingDate == null ? null : project.EndingDate.Value.ToShortDateString());
@@ -645,11 +645,11 @@ namespace AllyisApps.DBModel
 		/// <param name="projectId">The Project's Id.</param>
 		/// <param name="name">The new name of the project.</param>
 		/// <param name="orgId">The new orgId of the project.</param>
-		/// <param name="type">The pricing type of the project.</param>
+		/// <param name="isHourly">The pricing type of the project.  True == hourly, false == fixed. TODO: use this parameter to update the project's isHourly column.  Currently disabled attribute.</param>
 		/// <param name="start">The start date assigned to the project.</param>
 		/// <param name="end">The end date assigned to the project.</param>
 		/// <param name="userIds">The updated list of project users, by their Ids.</param>
-		public void UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime? start, DateTime? end, IEnumerable<int> userIds)
+		public void UpdateProjectAndUsers(int projectId, string name, string orgId, bool isHourly, DateTime? start, DateTime? end, IEnumerable<int> userIds)
 		{
 			if (string.IsNullOrWhiteSpace(name))
 			{
@@ -672,7 +672,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@ProjectId", projectId);
 			parameters.Add("@Name", name);
 			parameters.Add("@OrgId", orgId);
-			parameters.Add("@PriceType", type);
+			parameters.Add("@isHourly", isHourly);
 			parameters.Add("@StartingDate", start == null ? null : start.Value.ToShortDateString());
 			parameters.Add("@EndingDate", end == null ? null : end.Value.ToShortDateString());
 			parameters.Add("@UserIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
