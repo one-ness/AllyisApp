@@ -56,7 +56,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					CustomerName = AppService.GetCustomer(userId).Name,
 					SubscriptionId = subscriptionId,
 					UserId = userId,
-					OrganizationId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId
+					OrganizationId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId
 				});
 		}
 
@@ -132,7 +132,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				CustomerId = model.ParentCustomerId,
 				Name = model.ProjectName,
-				Type = model.PriceType,
 				ProjectOrgId = model.ProjectOrgId,
 				StartingDate = AppService.GetDateTimeFromDays(model.StartDate),
 				EndingDate = AppService.GetDateTimeFromDays(model.EndDate)
@@ -150,7 +149,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				CustomerId = model.ParentCustomerId,
 				Name = model.ProjectName,
-				Type = model.PriceType,
 				ProjectOrgId = model.ProjectOrgId,
 				StartingDate = AppService.GetDateTimeFromDays(model.StartDate),
 				EndingDate = AppService.GetDateTimeFromDays(model.EndDate)

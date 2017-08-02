@@ -16,7 +16,7 @@
 }
 
 <tr>
-	<td width="33%">
+	<td class="col-md-9">
 		@if (Model.AreaUrl == "ExpenseTracker")
 		{
 			@Model.ProductName
@@ -28,8 +28,8 @@
 			</a>
 		}
 	</td>
-	<td style="text-align: center">@userDisplay</td>
-	<td class="text-right icon-strip">
+	<td class="col-md-2" style="text-align: center">@userDisplay</td>
+	<td class="text-right icon-strip col-md-1">
 		<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = Model.Info.SubscriptionId })"
 			class="text-muted" title="@Strings.EditSubscription" style="color:inherit"><span class="fa fa-fw fa-edit"></span></a>
 	</td>

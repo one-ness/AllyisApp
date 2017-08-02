@@ -41,7 +41,7 @@ namespace AllyisApps.DBModel.Crm
 		/// <summary>
 		/// Gets or sets the project type.
 		/// </summary>
-		public string Type { get; set; }
+		public bool IsHourly { get; set; }
 
 		/// <summary>
 		/// Gets or sets the project's Id as used by the organization

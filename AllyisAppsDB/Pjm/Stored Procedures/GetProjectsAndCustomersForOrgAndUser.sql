@@ -15,7 +15,7 @@ AS
 		[Customer].[Name] AS [CustomerName],
 		[Customer].[CustomerOrgId],
 		[Customer].[IsActive] AS [IsCustomerActive],
-		[Project].[Type] AS [PriceType],
+		[Project].[IsHourly] AS [IsHourly],
 		[SUB].[IsProjectUser]
 	FROM (
 		[Auth].[Organization] WITH (NOLOCK) 

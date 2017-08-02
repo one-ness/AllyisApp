@@ -7,8 +7,7 @@
 	@AccessCode VARCHAR(50),
 	@OrganizationRole INT,
 	@retId INT OUTPUT,
-	@EmployeeId NVARCHAR(16),
-	@EmployeeTypeId INT
+	@EmployeeId NVARCHAR(16)
 AS
 
 BEGIN
@@ -23,8 +22,7 @@ BEGIN
 		[AccessCode], 
 		[IsActive], 
 		[OrganizationRoleId], 
-		[EmployeeId],
-		[EmployeeTypeId])
+		[EmployeeId])
 	VALUES 
 		(@Email, 
 		@FirstName, 
@@ -34,8 +32,7 @@ BEGIN
 		@AccessCode, 
 		1, 
 		@OrganizationRole, 
-		@EmployeeId,
-		@EmployeeTypeId);
+		@EmployeeId);
 
 	SET @retId = SCOPE_IDENTITY();
 

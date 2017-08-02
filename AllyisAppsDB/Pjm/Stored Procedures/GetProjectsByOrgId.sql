@@ -14,7 +14,7 @@ SELECT	[Project].[ProjectId],
 		[Customer].[Name] AS [CustomerName],
 		[Customer].[CustomerOrgId],
 		[Customer].[IsActive] AS [IsCustomerActive],
-		[Project].[Type] AS [PriceType]
+		[Project].[IsHourly] AS [IsHourly]
 		--[OrganizationRoleId]
 FROM (
 --(SELECT [OrganizationId], [OrganizationRoleId] FROM [Auth].[OrganizationUser] WHERE [OrganizationId] = @orgId) AS OrganizationUser

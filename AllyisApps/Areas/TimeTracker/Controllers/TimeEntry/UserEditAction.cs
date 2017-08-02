@@ -49,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[ValidateAntiForgeryToken]
 		public JsonResult UserEditAJAX(int userId, int subscriptionId, List<int> offUser, List<int> onUser)
 		{
-			int organizationId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+			int organizationId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
 			if (this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false))
 			{
 				if (offUser != null)

@@ -52,10 +52,5 @@ namespace AllyisApps.DBModel.Auth
 		/// Gets or sets the employee id for this user.
 		/// </summary>
 		public string EmployeeId { get; set; }
-
-		/// <summary>
-		/// Gets or sets EmployeeTypeId
-		/// </summary>
-		public byte EmployeeTypeId { get; set; }
 	}
 }

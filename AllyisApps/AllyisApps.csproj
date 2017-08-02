@@ -522,6 +522,7 @@
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile3.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile4.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile5.pubxml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Properties\PublishProfiles\LocalPublish.pubxml" />
     <None Include="Resources\628px-achtung-svg.png" />
@@ -575,7 +576,7 @@
     <Content Include="Views\Account\ManageOrg.cshtml" />
     <Content Include="Views\Account\_ManageOrgDetails.cshtml" />
     <Content Include="Views\Account\_ManageOrgSubscriptions.cshtml" />
-    <Content Include="Views\Account\_OrganizationEditDetailsPartial.cshtml" />
+    <Content Include="Views\Account\_OrganizationEditDetails.cshtml" />
     <Content Include="Views\Account\Subscribe.cshtml" />
     <Content Include="Views\Account\NewMemberJoin.cshtml" />
     <Content Include="Views\Account\_OrgBillingInfo.cshtml" />

@@ -53,7 +53,7 @@ namespace AllyisApps.Controllers
 				this.AppService.UserContext.UserOrganizations.TryGetValue(o.OrganizationId, out userOrgInfo);
 				if (userOrgInfo != null)
 				{
-					foreach (UserSubscription userSubInfo in userOrgInfo.UserSubscriptions.Values)
+					foreach (UserSubscription userSubInfo in userOrgInfo.OrganizationSubscriptions.Values)
 					{
 						//TODO move description info into a product description column in Billing.Product
 						string description =

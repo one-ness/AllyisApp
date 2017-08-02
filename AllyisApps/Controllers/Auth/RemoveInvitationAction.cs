@@ -20,10 +20,10 @@ namespace AllyisApps.Controllers
 		/// <paramref name="id"/>Organization's id
 		/// </summary>
 		[HttpPost]
-		public ActionResult RemoveInvitation(int id, int invitationId)
+		public ActionResult RemoveInvitation(int id, int userId)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.DeleteInvitation, id);
-			AppService.RemoveInvitation(id, invitationId);
+			AppService.RemoveInvitation(id, userId);
 			Notifications.Add(new BootstrapAlert(Resources.Strings.InvitationDeleteNotification, Variety.Success));
 			return this.RedirectToAction(ActionConstants.ManageOrg, new { id = id });
 		}

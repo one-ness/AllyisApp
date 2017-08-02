@@ -52,12 +52,6 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		public int ProjectId { get; set; }
 
 		/// <summary>
-		/// Gets or sets Project Pricing Type.
-		/// </summary>
-		[Required]
-		public string PriceType { get; set; }
-
-		/// <summary>
 		/// Gets or sets Project Start Date. Note: must be int and not DateTime for Json serialization to work correctly in different cultures.
 		/// </summary>
 		public int StartDate { get; set; }

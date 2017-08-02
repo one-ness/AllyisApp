@@ -39,9 +39,9 @@ namespace AllyisApps.Services
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets the project type.
+		/// Gets or sets the project type -- true == hourly, false == fixed.
 		/// </summary>
-		public string Type { get; set; }
+		public bool IsHourly { get; set; }
 
 		/// <summary>
 		/// Gets or sets the project's org id

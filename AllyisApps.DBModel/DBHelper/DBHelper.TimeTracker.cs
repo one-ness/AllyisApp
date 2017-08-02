@@ -7,6 +7,7 @@
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
+using AllyisApps.DBModel.Hrm;
 using AllyisApps.DBModel.TimeTracker;
 using Dapper;
 using System;
@@ -400,9 +401,9 @@ namespace AllyisApps.DBModel
 				{
 					connection.Execute("[TimeTracker].[UpdateSettings]", parameters, commandType: CommandType.StoredProcedure);
 				}
-
-				// Init new set of default holidays for time tracker
-				IEnumerable<HolidayDBEntity> holidays;
+                
+                // Init new set of default holidays for time tracker
+                IEnumerable<HolidayDBEntity> holidays;
 
 				using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 				{

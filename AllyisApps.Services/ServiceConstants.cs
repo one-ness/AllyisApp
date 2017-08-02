@@ -160,11 +160,6 @@
 		/// </summary>
 		public const string UserPhoneExtension = "User Phone Extension";
 
-		/// <summary>
-		/// User-Property: Employee Type
-		/// </summary>
-		public const string EmployeeType = "Employee Type";
-
 		#endregion user
 
 		#region Time Entry

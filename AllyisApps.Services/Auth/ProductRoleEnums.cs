@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="ProductRoleIdEnum.cs" company="Allyis, Inc.">
+// <copyright file="ProductRoleEnum.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -11,11 +11,6 @@ namespace AllyisApps.Services
 	/// </summary>
 	public enum TimeTrackerRole : int
 	{
-		/// <summary>
-		/// Not in TimeTracker product.
-		/// </summary>
-		NotInProduct = 0,
-
 		/// <summary>
 		/// TimeTracker User.
 		/// </summary>
