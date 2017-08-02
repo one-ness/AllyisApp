@@ -222,7 +222,6 @@
     <None Include="DefaultData\CountryStates.sql" />
     <None Include="DefaultData\Holidays.sql" />
     <None Include="DefaultData\Languages.sql" />
-    <None Include="DefaultData\PayClasses.sql" />
     <None Include="DefaultData\Products.sql" />
     <None Include="DefaultData\Role.sql" />
     <None Include="DefaultData\Sku.sql" />
@@ -299,6 +298,7 @@
     <Build Include="Pjm\Stored Procedures\UpdateProjectAndUsers.sql" />
     <Build Include="Pjm\Stored Procedures\UpdateProjectUser.sql" />
     <Build Include="Billing\Stored Procedures\UpdateSubscriptionName.sql" />
+    <Build Include="TimeTracker\Stored Procedures\CreateDefaultPayClass.sql" />
     <Build Include="Lookup\Tables\OrganizationLocation.sql" />
   </ItemGroup>
   <ItemGroup>

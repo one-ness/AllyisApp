@@ -41,7 +41,7 @@
                         @Html.DropDownListFor(m => m.ActionType, items, new { @class = "form-control" })
                     </div>
                     
-					<div style="margin-top:50px;">
+					<div class="pull-right", style="margin-top:50px;">
 						<input type="submit" value="@Strings.Save" class="btn btn-primary" id="save" />
 						@Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, htmlAttributes: new { @class = "btn btn-default" })
 					</div>
