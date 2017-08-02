@@ -267,11 +267,6 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
 			}
 
-			if (string.IsNullOrEmpty(newProject.Type))
-			{
-				throw new ArgumentNullException("type", "Type must have a value.");
-			}
-
 			if (string.IsNullOrEmpty(newProject.ProjectOrgId))
 			{
 				throw new ArgumentNullException("projectOrgId", "Project must have an Id");
@@ -304,11 +299,6 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(newProject.Name))
 			{
 				throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
-			}
-
-			if (string.IsNullOrEmpty(newProject.Type))
-			{
-				throw new ArgumentNullException("type", "Type must have a value.");
 			}
 
 			if (string.IsNullOrEmpty(newProject.ProjectOrgId))
@@ -345,11 +335,6 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("Name", "Project name must have a value and cannot be whitespace.");
 			}
 
-			if (string.IsNullOrEmpty(project.Type))
-			{
-				throw new ArgumentNullException("Type", "Type must have a value.");
-			}
-
 			if (project.StartingDate.HasValue && project.EndingDate.HasValue && DateTime.Compare(project.StartingDate.Value, project.EndingDate.Value) > 0)
 			{
 				throw new ArgumentException("Project cannot end before it starts.");
@@ -367,13 +352,13 @@ namespace AllyisApps.Services
 		/// <param name="projectId">Project Id.</param>
 		/// <param name="name">Project name.</param>
 		/// <param name="orgId">Project org id.</param>
-		/// <param name="type">Project type.</param>
+		/// <param name="isHourly">Project type.  True == hourly, false == fixed. TODO: use this parameter to update the project's isHourly column.  Currently disabled attribute.</param>
 		/// <param name="start">Starting date. <see cref="DateTime"/></param>
 		/// <param name="end">Ending date. <see cref="DateTime"/></param>
 		/// <param name="userIds">Updated on-project user list.</param>
 		/// <param name="subscriptionId"></param>
 		/// <returns>Returns false if authorization fails.</returns>
-		public bool UpdateProjectAndUsers(int projectId, string name, string orgId, string type, DateTime? start, DateTime? end, IEnumerable<int> userIds, int subscriptionId)
+		public bool UpdateProjectAndUsers(int projectId, string name, string orgId, DateTime? start, DateTime? end, IEnumerable<int> userIds, int subscriptionId, bool isHourly = true)
 		{
 			#region Validation
 
@@ -392,11 +377,6 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("orgId", "Project Org Id must have a value and cannot be whitespace.");
 			}
 
-			if (string.IsNullOrEmpty(type))
-			{
-				throw new ArgumentNullException("type", "Type must have a value.");
-			}
-
 			if (start.HasValue && end.HasValue && DateTime.Compare(start.Value, end.Value) > 0)
 			{
 				throw new ArgumentException("Project cannot end before it starts.");
@@ -410,7 +390,7 @@ namespace AllyisApps.Services
 			#endregion Validation
 
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
-			DBHelper.UpdateProjectAndUsers(projectId, name, orgId, type, start, end, userIds);
+			DBHelper.UpdateProjectAndUsers(projectId, name, orgId, isHourly, start, end, userIds);
 			return true;
 		}
 
@@ -733,7 +713,7 @@ namespace AllyisApps.Services
 				ProjectId = project.ProjectId,
 				ProjectOrgId = project.ProjectOrgId,
 				StartingDate = project.StartingDate,
-				Type = project.Type
+				IsHourly = project.IsHourly
 			};
 		}
 
@@ -758,7 +738,7 @@ namespace AllyisApps.Services
 				ProjectId = project.ProjectId,
 				ProjectOrgId = project.ProjectOrgId,
 				StartingDate = project.StartingDate,
-				Type = project.Type
+				IsHourly = project.IsHourly
 			};
 		}
 

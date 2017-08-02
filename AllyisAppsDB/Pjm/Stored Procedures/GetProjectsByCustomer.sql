@@ -5,7 +5,7 @@ AS
 	SELECT [Name],
 		   [ProjectId],
 		   [ProjectOrgId],
-		   [Type],
+		   [IsHourly],
 		   [CustomerId],
 		   [StartUtc] AS [StartingDate],
 		   [EndUtc] AS [EndingDate]

@@ -35,7 +35,7 @@ AS
 		[Customer].[Name] AS [CustomerName],
 		[Customer].[CustomerOrgId],
 		[Customer].[IsActive] AS [IsCustomerActive],
-		[Project].[Type] AS [PriceType]
+		[Project].[IsHourly] AS [IsHourly]
 	FROM [Auth].[Organization] WITH (NOLOCK) 
 		JOIN [Crm].[Customer]	WITH (NOLOCK) ON ([Customer].[OrganizationId] = [Organization].[OrganizationId] AND [Organization].[OrganizationId] = @OrgId)
 		JOIN [Pjm].[Project]		WITH (NOLOCK) ON [Project].[CustomerId] = [Customer].[CustomerId]
