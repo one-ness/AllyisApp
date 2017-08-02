@@ -267,7 +267,6 @@ namespace AllyisApps.Services
 				this.SetUserContext(result);
 
 				// note: if contextInfo.Count > 0, user is part of at least one organization
-				//bool chosenSubscriptionFound = false;
 				foreach (var item in contextInfo)
 				{
 					// user is part of at least one organization, do we have org id?
@@ -313,24 +312,9 @@ namespace AllyisApps.Services
 								// also add it to the result
 								result.UserSubscriptions.Add(item.SubscriptionId.Value, subInfo);
 							}
-							// compare with chosen subscription? is user still a member of it?
-							//if (result.ChosenSubscriptionId == item.SubscriptionId.Value)
-							//{
-							//	chosenSubscriptionFound = true;
-							//}
 						}
 					}
 				}
-
-				// was chosen subscription found?
-				//if (!chosenSubscriptionFound && result.ChosenSubscriptionId > 0)
-				//{
-				//	// no, set it to 0
-				//	result.ChosenSubscriptionId = 0;
-
-				//	// update database
-				//	this.UpdateActiveSubscription(result.ChosenSubscriptionId);
-				//}
 			}
 
 			return result;
