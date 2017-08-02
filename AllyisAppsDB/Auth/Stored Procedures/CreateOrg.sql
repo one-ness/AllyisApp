@@ -63,7 +63,7 @@ BEGIN
 
 			EXEC [Auth].[CreateOrgUser] @UserId, @retId, @RoleId, @EmployeeId;
 
-			-- Set users's chosen organization to new org
+			-- Set users's last used organization to new org
 			UPDATE [Auth].[User]
 			SET [LastUsedOrganizationId] = @retId
 			WHERE [UserId] = @UserId

@@ -124,10 +124,33 @@
 				</div>
 			</div>
 			<div class="form-group allyis-action-buttons">
-				<a href="javascript:history.back()" class="btn btn-default">@Strings.Back</a>
-				<button class="btn btn-primary" type="submit" value=@Strings.Save>@Strings.Save</button>
+				<div class="pull-right" style="display:inline-block; margin-top:15px;">
+					<a href="javascript:history.back()" class="btn btn-default">@Strings.Back</a>
+					<button class="btn btn-primary" type="submit" value=@Strings.Save>@Strings.Save</button>
+				</div>
 			</div>
 		}
+		<div class="pull-left">
+			@if (!Model.IsInvited)
+			{
+				using (Html.BeginForm(ActionConstants.RemoveMember, ControllerConstants.Account, new { id = Model.OrganizationId, userId = Model.UserInfo.UserId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("Delete User?")) }))
+				{
+					@Html.AntiForgeryToken()
+					<input type="submit" value="@Strings.Delete" class="btn btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
+				}
+			}
+			else
+			{
+				using (Html.BeginForm(ActionConstants.RemoveInvitation, ControllerConstants.Account, new { id = Model.OrganizationId, userId = Model.UserInfo.UserId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("Delete User?")) }))
+				{
+					@Html.AntiForgeryToken()
+					<input type="submit" value="@Strings.Delete" class="btn btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
+				}
+			}
+
+		</div>
+
+
 
 		<div class="form-group allyis-action-buttons">
 			

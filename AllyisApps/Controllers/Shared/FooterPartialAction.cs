@@ -30,7 +30,6 @@ namespace AllyisApps.Controllers
 				LanguageName = l.LanguageName,
 				CultureName = l.CultureName
 			}).ToList();
-			//int orgId = this.AppService.UserContext == null ? 0 : this.AppService.UserContext.ChosenOrganizationId;
 			var model = languages;
 			ViewData["LanguageId"] = AppService.UserContext != null ? AppService.UserContext.ChosenLanguageId : TempData["language"];
 			return this.View(ViewConstants.Footer, model);

@@ -44,8 +44,8 @@
 					<td class="memberSearchProperty">@invite.EmployeeId</td>
 					<td class="memberSearchProperty">@((int)invite.EmployeeType == 1 ? Strings.Salaried : (int)invite.EmployeeType == 2 ? Strings.Hourly : "N/A")</td>
 					<td class="text-right icon-strip">
-						<a href="javascript: void(0);" class="text-muted" title="@Strings.RemoveInvitation"
-						   onclick='removeUser("@invite.OrganizationId", "@invite.InvitationId", "@invite.FirstName @invite.LastName", true)'><span class="fa fa-fw fa-remove text-danger"></span></a>
+						@*<a href="javascript: void(0);" class="text-muted" title="@Strings.RemoveInvitation"
+						   onclick='removeUser("@invite.OrganizationId", "@invite.InvitationId", "@invite.FirstName @invite.LastName", true)'><span class="fa fa-fw fa-remove text-danger"></span></a>*@
 						<a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account)@pars"
 						   title="@Strings.EditEmployee"><span class="fa fa-fw fa-edit"></span></a>
 					</td>
@@ -60,11 +60,11 @@
 					<td class="memberSearchProperty">@user.EmployeeId</td>
 					<td class="memberOrgRole">@Strings.ResourceManager.GetString(user.PermissionLevel)</td>
 					<td class="text-right icon-strip">
-						@if (Model.CurrentUserId != user.UserId)
+						@*@if (Model.CurrentUserId != user.UserId)
 						{
 							<a href="javascript: void(0);" class="text-muted" title="@Strings.RemoveMember"
 							   onclick='removeUser("@user.OrganizationId", "@user.UserId", "@user.FullName", false)'><span class="fa fa-fw fa-remove text-danger"></span></a>
-						}
+						}*@
 						<a href="@Url.Action(ActionConstants.EditMember, ControllerConstants.Account)@pars"
 						   title="@Strings.EditEmployee"><span class="fa fa-fw fa-edit"></span></a>
 					</td>

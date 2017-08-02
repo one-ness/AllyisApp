@@ -137,6 +137,6 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets the language preference.
 		/// </summary>
-		public int PreferredLanguageId { get; set; }
+		public int? PreferredLanguageId { get; set; }
 	}
 }
