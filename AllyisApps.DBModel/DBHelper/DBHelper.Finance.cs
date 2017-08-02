@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System;
 
 namespace AllyisApps.DBModel
 {
@@ -158,6 +159,22 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[Finance].[DeleteAccount]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Returns the Owners of a given organization.
+		/// </summary>
+		/// <param name="organizationId"></param>
+		/// <returns></returns>
+		public IEnumerable<dynamic> GetOrgOwnerEmails(int organizationId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@OrganizationId", organizationId);
+			
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query("[Auth].[GetOrganizationOwnerEmails]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 	}

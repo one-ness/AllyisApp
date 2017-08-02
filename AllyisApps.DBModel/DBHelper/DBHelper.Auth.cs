@@ -839,6 +839,22 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Gets the roles for each subscription the organization has.
+		/// </summary>
+		/// <param name="inviteId">The invite Id.</param>
+		/// <returns>List of all roles.</returns>
+		public IEnumerable<InvitationDBEntity> GetUserInvitationsByInviteId(int inviteId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@InviteId", inviteId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<InvitationDBEntity>("[Auth].[GetUserInvitationsByInviteId]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
 		/// Gets the user roles.
 		/// </summary>
 		/// <param name="orgid">The id of the relevant organization.</param>
