@@ -7,6 +7,7 @@
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
+using AllyisApps.DBModel.Hrm;
 using AllyisApps.DBModel.TimeTracker;
 using Dapper;
 using System;
