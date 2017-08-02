@@ -2302,6 +2302,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are not a member of any organization yet. Please contact your employer to send you an invitation, or you can create your own, by clicking the Create Organization button..
+        /// </summary>
+        public static string NoOrganizationMessage {
+            get {
+                return ResourceManager.GetString("NoOrganizationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You aren&apos;t in an organization. Please create one or get an invite..
         /// </summary>
         public static string NoOrganizationWhenGoingToApp {

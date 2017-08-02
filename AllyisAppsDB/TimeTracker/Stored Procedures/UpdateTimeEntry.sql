@@ -4,7 +4,7 @@
 	@PayClassId INT,
 	@Duration FLOAT,
 	@Description NVARCHAR(120),
-	@LockSaved BIT
+	@IsLockSaved BIT
 AS
 	SET NOCOUNT ON;
 UPDATE [TimeTracker].[TimeEntry]
@@ -12,5 +12,5 @@ UPDATE [TimeTracker].[TimeEntry]
 	  ,[PayClassId] = @PayClassId
       ,[Duration] = @Duration
       ,[Description] = @Description
-	  ,[LockSaved] = @LockSaved
+	  ,[IsLockSaved] = @IsLockSaved
  WHERE [TimeEntryId] = @TimeEntryId

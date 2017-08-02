@@ -11,8 +11,8 @@
 	@DateOfBirth DATETIME2(0),
 	@PasswordHash NVARCHAR(MAX),
 	@EmailConfirmationCode UNIQUEIdENTIFIER,
-	@TwoFactorEnabled BIT,
-	@LockoutEnabled BIT,
+	@IsTwoFactorEnabled BIT,
+	@IsLockoutEnabled BIT,
 	@LockoutEndDateUtc DATE,
 	@LanguageId INT
 
@@ -48,10 +48,10 @@ BEGIN
 		[DateOfBirth],
 		[PasswordHash],
 		[EmailConfirmationCode],
-		[EmailConfirmed],
-		[TwoFactorEnabled],
+		[IsEmailConfirmed],
+		[IsTwoFactorEnabled],
 		[AccessFailedCount],
-		[LockoutEnabled],
+		[IsLockoutEnabled],
 		[LockoutEndDateUtc],
 		[PreferredLanguageId])
 	VALUES 
@@ -64,9 +64,9 @@ BEGIN
 		@PasswordHash, 
 		@EmailConfirmationCode,
 		0,
-		COALESCE(@TwoFactorEnabled,0),
+		COALESCE(@IsTwoFactorEnabled,0),
 		0,
-		COALESCE(@LockoutEnabled,0),
+		COALESCE(@IsLockoutEnabled,0),
 		COALESCE(@LockoutEndDateUtc,NULL),
 		@LanguageId);
 

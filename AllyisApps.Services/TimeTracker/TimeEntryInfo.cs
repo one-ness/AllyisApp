@@ -81,7 +81,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Gets or sets a value indicating whether the saved approval lock.
 		/// </summary>
-		public bool LockSaved { get; set; }
+		public bool IsLockSaved { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the data has changed since being approved or dissaproved.

@@ -39,7 +39,7 @@ namespace AllyisApps.DBModel.TimeTracker
 		/// <summary>
 		/// Gets or sets a value indicating whether to use a lock date.
 		/// </summary>
-		public bool LockDateUsed { get; set; }
+		public bool IsLockDateUsed { get; set; }
 
 		/// <summary>
 		/// Gets or sets the LockDatePeriod.
