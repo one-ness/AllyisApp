@@ -317,7 +317,15 @@ namespace AllyisApps.DBModel
 				connection.Execute("[Auth].[CreateOrg]", parameters, commandType: CommandType.StoredProcedure);
 			}
 
-			return parameters.Get<int>("@retId");
+            // Init default pay classes for new org
+            DynamicParameters parameters2 = new DynamicParameters();
+            parameters2.Add("@organizationId", parameters.Get<int>("@retId"));
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                connection.Execute("[Hrm].[CreateDefaultPayClass]", parameters2, commandType: CommandType.StoredProcedure);
+            }
+
+            return parameters.Get<int>("@retId");
 		}
 
 		/// <summary>

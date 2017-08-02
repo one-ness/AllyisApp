@@ -2,7 +2,7 @@
 	@ProjectId INT,
 	@Name NVARCHAR(MAX),
 	@OrgId NVARCHAR(16),
-	@PriceType NVARCHAR(20),
+	@IsHourly BIT,
     @StartingDate DATE,
     @EndingDate DATE,
 	@UserIds [Auth].[UserTable] READONLY
@@ -37,7 +37,7 @@ BEGIN
 		SET 
 			[Name] = @Name,
 			[ProjectOrgId] = @OrgId,
-			[Type] = @PriceType,
+			[IsHourly] = @IsHourly,
 			[StartUtc] = @StartingDate,
 			[EndUtc] = @EndingDate
 		WHERE [ProjectId] = @ProjectId

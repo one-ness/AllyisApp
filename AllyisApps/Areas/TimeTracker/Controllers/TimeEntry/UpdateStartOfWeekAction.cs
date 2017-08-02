@@ -28,7 +28,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.InvalidSOW, Variety.Warning));
 			}
-			else if (!AppService.UpdateStartOfWeek(AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId, subscriptionId, startOfWeek))
+			else if (!AppService.UpdateStartOfWeek(AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId, subscriptionId, startOfWeek))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}

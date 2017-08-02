@@ -31,7 +31,7 @@ namespace AllyisApps.Controllers
 				CultureName = l.CultureName
 			}).ToList();
 			var model = languages;
-			ViewData["LanguageId"] = AppService.UserContext != null ? AppService.UserContext.ChosenLanguageId : TempData["language"];
+			ViewData["LanguageId"] = AppService.UserContext != null ? AppService.UserContext.PrefferedLanguageId : TempData["language"];
 			return this.View(ViewConstants.Footer, model);
 		}
 	}

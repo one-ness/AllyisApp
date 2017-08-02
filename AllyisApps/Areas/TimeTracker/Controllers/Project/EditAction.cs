@@ -49,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 			}
 			model.SubscriptionUsers = subList;
-			int orgId = AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId; ;
+			int orgId = AppService.UserContext.OrganizationSubscriptions[model.SubscriptionId].OrganizationId; ;
 			if (ModelState.IsValid)
 			{
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
@@ -123,7 +123,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ProjectName = infos.Item1.ProjectName,
 				ProjectUsers = projectUsers,
 				SubscriptionUsers = subscriptionUsers.Where(user => !projectUsers.Any(pu => (pu.UserId == user.UserId))), // Grab users that are not part of the project
-				PriceType = infos.Item1.PriceType,
 				StartDate = AppService.GetDayFromDateTime(infos.Item1.StartDate),
 				EndDate = AppService.GetDayFromDateTime(infos.Item1.EndDate),
 				SubscriptionId = subscriptionId,

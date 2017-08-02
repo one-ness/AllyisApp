@@ -25,13 +25,13 @@ namespace AllyisApps.Services
 		public UserContext()
 		{
 			this.UserOrganizations = new Dictionary<int, UserOrganization>();
-			this.UserSubscriptions = new Dictionary<int, UserSubscription>();
+			this.OrganizationSubscriptions = new Dictionary<int, UserSubscription>();
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserContext"/> class.
 		/// </summary>
-		public UserContext(int userId, string email, string firstName, string lastName, int chosenLanguageId = 0) : this()
+		public UserContext(int userId, string email, string firstName, string lastName, int preferredLanguageId = 0) : this()
 		{
 			if (userId <= 0) throw new ArgumentException("userId");
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentException("firstName");
@@ -42,7 +42,7 @@ namespace AllyisApps.Services
 			this.UserId = userId;
 			this.FirstName = firstName;
 			this.LastName = lastName;
-			this.ChosenLanguageId = chosenLanguageId;
+			this.PrefferedLanguageId = preferredLanguageId;
 		}
 
 		/// <summary>
@@ -73,15 +73,16 @@ namespace AllyisApps.Services
 		public Dictionary<int, UserOrganization> UserOrganizations { get; set; }
 
 		/// <summary>
-		/// Gets or sets the list of subscriptions the user is a member of. This is essentially a flattened out list of each of the organization above.
+		/// Gets or sets the list of subscriptions this organization has.
+		/// If the user is not a member of that subscrption, then the role is set to NotAssigned
 		/// </summary>
 		[JsonIgnore]
-		public Dictionary<int, UserSubscription> UserSubscriptions { get; set; }
+		public Dictionary<int, UserSubscription> OrganizationSubscriptions { get; set; }
 
 		/// <summary>
 		/// Gets or sets the preferred language for this user.
 		/// </summary>
 		[JsonIgnore]
-		public int ChosenLanguageId { get; set; }
+		public int PrefferedLanguageId { get; set; }
 	}
 }

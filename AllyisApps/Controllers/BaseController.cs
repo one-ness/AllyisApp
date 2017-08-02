@@ -151,12 +151,12 @@ namespace AllyisApps.Controllers
 				if (this.AppService.UserContext != null)
 				{
 					// user context obtained. set user's language on the thread.
-					if (languageId == 0 || languageId != this.AppService.UserContext.ChosenLanguageId || languageId != 1)
+					if (languageId == 0 || languageId != this.AppService.UserContext.PrefferedLanguageId || languageId != 1)
 					{
 						// user's language is either not set, or user has changed the language to a different one
-						if (this.AppService.UserContext.ChosenLanguageId > 0)
+						if (this.AppService.UserContext.PrefferedLanguageId > 0)
 						{
-							languageId = ChangeLanguage(this.AppService.UserContext.ChosenLanguageId);
+							languageId = ChangeLanguage(this.AppService.UserContext.PrefferedLanguageId);
 						}
 					}
 				}

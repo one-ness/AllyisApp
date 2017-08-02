@@ -29,9 +29,9 @@ namespace AllyisApps.Services
 		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0)
 		{
 			int orgId;
-			if (subscriptionId > 0 && UserContext.UserSubscriptions[subscriptionId] != null)
+			if (subscriptionId > 0 && UserContext.OrganizationSubscriptions[subscriptionId] != null)
 			{
-				orgId = UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+				orgId = UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
 			}
 			else if (organizationId > 0 && UserContext.UserOrganizations[organizationId] != null)
 			{
@@ -124,10 +124,12 @@ namespace AllyisApps.Services
 					(hasCustomerName || hasCustomerId || projectLinks[2, 0].Count > 0 || projectLinks[2, 1].Count > 0);
 
 				// Non-required project columns
-				bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
+
+				//TODO use this line once project isHourly property is supported.  Currently disabled
+				//bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
 				bool hasProjectStartDate = table.Columns.Contains(ColumnHeaders.ProjectStartDate);
 				bool hasProjectEndDate = table.Columns.Contains(ColumnHeaders.ProjectEndDate);
-				bool hasNonRequiredProjectInfo = hasProjectType || hasProjectStartDate || hasProjectEndDate;
+				bool hasNonRequiredProjectInfo = /*hasProjectType ||*/ hasProjectStartDate || hasProjectEndDate;
 
 				// User importing: requires email, id, first and last name
 				bool hasUserEmail = table.Columns.Contains(ColumnHeaders.UserEmail);
@@ -398,7 +400,7 @@ namespace AllyisApps.Services
 								{
 									CustomerId = customer.CustomerId,
 									Name = thisRowHasProjectName ? knownValue : readValue,
-									Type = "Hourly",
+									IsHourly = false, //TODO un-hardcode once project isHourly property is supported.  Currently disabled
 									OrganizationId = orgId,
 									ProjectOrgId = thisRowHasProjectName ? readValue : knownValue,
 									StartingDate = defaultProjectStartDate,
@@ -503,7 +505,7 @@ namespace AllyisApps.Services
 									{
 										CustomerId = customer.CustomerId,
 										Name = fields[0],
-										Type = "Hourly",
+										IsHourly = false,  //TODO un-hardocode once project isHourly property is supported.  Currently disabled
 										OrganizationId = orgId,
 										ProjectOrgId = fields[1],
 										StartingDate = defaultProjectStartDate,
@@ -548,7 +550,8 @@ namespace AllyisApps.Services
 							string startDate = null;
 							string endDate = null;
 
-							if (hasProjectType) updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.Type = val) || updated;
+							//TODO use this line once project isHourly property is supported.  Currently disabled
+							//if (hasProjectType) updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.isHourly = val) || updated;
 							if (hasProjectStartDate) updated = this.readColumn(row, ColumnHeaders.ProjectStartDate, val => startDate = val) || updated;
 							if (hasProjectEndDate) updated = this.readColumn(row, ColumnHeaders.ProjectEndDate, val => endDate = val) || updated;
 							if (startDate != null) project.StartingDate = DateTime.Parse(startDate);

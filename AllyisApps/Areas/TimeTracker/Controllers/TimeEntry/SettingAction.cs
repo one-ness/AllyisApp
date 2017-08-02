@@ -26,7 +26,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			var infos = AppService.GetAllSettings(subscriptionId);
             UserSubscription subInfo = null;
-            this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+            this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
             var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
             ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infoOrg.Item1.StartOfWeek));

@@ -20,7 +20,7 @@ namespace AllyisApps.Services
 		public UserOrganization()
 		{
 			this.OrganizationRole = OrganizationRole.Member;
-			this.UserSubscriptions = new Dictionary<int, UserSubscription>();
+			this.OrganizationSubscriptions = new Dictionary<int, UserSubscription>();
 		}
 
 		/// <summary>
@@ -57,6 +57,6 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the List of subscriptions this organization has subscribed to and the user's role in it.
 		/// </summary>
-		public Dictionary<int, UserSubscription> UserSubscriptions { get; set; }
+		public Dictionary<int, UserSubscription> OrganizationSubscriptions { get; set; }
 	}
 }

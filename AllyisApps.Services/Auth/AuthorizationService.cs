@@ -239,7 +239,7 @@ namespace AllyisApps.Services
 		{
 			int orgId = -1;
 			UserSubscription subInfo = null;
-			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			if (subInfo != null)
 			{
 				orgId = subInfo.OrganizationId;
@@ -255,7 +255,7 @@ namespace AllyisApps.Services
 		{
 			bool result = false;
 			UserSubscription subInfo = null;
-			this.UserContext.UserSubscriptions.TryGetValue(subId, out subInfo);
+			this.UserContext.OrganizationSubscriptions.TryGetValue(subId, out subInfo);
 
 			if (subInfo != null && subInfo.ProductId == ProductIdEnum.TimeTracker)
 			{
