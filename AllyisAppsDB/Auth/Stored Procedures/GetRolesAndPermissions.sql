@@ -9,7 +9,7 @@ BEGIN
 		[User].[LastName],
 		[User].[UserId],
 		[OrganizationUser].[OrganizationRoleId],
-		[OrganizationRole].[Name],
+		[OrganizationRole].[OrganizationRoleName],
 		[User].[Email],
 		[SubscriptionUser].[ProductRoleId], 
 		[SubscriptionUser].[SubscriptionId]

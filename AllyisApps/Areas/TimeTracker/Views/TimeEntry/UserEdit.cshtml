@@ -37,7 +37,7 @@
                                     var css_class = "out";
                                     @*@Html.HiddenFor(project.CustomerId)
                                         @Html.HiddenFor(project.ProjectId)*@
-                                    <option value="@project.ProjectId" class="@css_class" data-search="@project.Name">@project.CustomerName - @project.Name</option>
+                                    <option value="@project.ProjectId" class="@css_class" data-search="@project.ProjectName">@project.CustomerName - @project.ProjectName</option>
                                 }
                             }
                         </select>
@@ -61,7 +61,7 @@
                                 if (checkboxValue)
                                 {
                                     var css_class = "in";
-                                    <option value="@project.ProjectId" class="@css_class" data-search="@project.Name">@project.CustomerName - @project.Name</option>
+                                    <option value="@project.ProjectId" class="@css_class" data-search="@project.ProjectName">@project.CustomerName - @project.ProjectName</option>
                                 }
                             }
                         </select>

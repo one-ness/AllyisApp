@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [Pjm].[CreateProject]
 	@CustomerId INT,
-	@Name NVARCHAR(MAX),
+	@ProjectName NVARCHAR(MAX),
 	@IsHourly BIT,
 	@ProjectOrgId NVARCHAR(16),
 	@StartingDate DATETIME2(0),
@@ -10,8 +10,8 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRANSACTION
-	INSERT INTO [Pjm].[Project] ([CustomerId], [Name], [IsHourly], [ProjectOrgId], [StartUtc], [EndUtc])
-	VALUES	(@CustomerId, @Name, @IsHourly, @ProjectOrgId, @StartingDate, @EndingDate);
+	INSERT INTO [Pjm].[Project] ([CustomerId], [ProjectName], [IsHourly], [ProjectOrgId], [StartUtc], [EndUtc])
+	VALUES	(@CustomerId, @ProjectName, @IsHourly, @ProjectOrgId, @StartingDate, @EndingDate);
 	SET @retId = SCOPE_IDENTITY()
 	COMMIT TRANSACTION
 	SELECT SCOPE_IDENTITY();

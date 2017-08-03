@@ -34,7 +34,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets name of the sku.
 		/// </summary>
-		public string Name { get; set; }
+		public string SkuName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the SkuId of the upgrade or downgrade version of the Product.

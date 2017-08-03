@@ -3,7 +3,7 @@
 AS
 	SET NOCOUNT ON;
 SELECT 
-	[ProductRole].[Name],
+	[ProductRole].[ProductRoleName],
 	[ProductRole].[ProductRoleId]
 FROM [Billing].[Subscription] WITH (NOLOCK) 
 LEFT JOIN [Billing].[Sku] WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]

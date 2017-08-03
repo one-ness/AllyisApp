@@ -6,12 +6,12 @@ BEGIN
 
 	SELECT 
 		[OrganizationId],
-		[Organization].[Name],
+		[Organization].[OrganizationName],
 		[SiteUrl], 
 		[Address].[Address1] AS 'Address',
 		[Address].[City], 
-		[State].[Name] AS 'State', 
-		[Country].[Name] AS 'Country', 
+		[State].[StateName] AS 'State', 
+		[Country].[CountryName] AS 'Country', 
 		[Address].[PostalCode], 
 		[PhoneNumber], 
 		[FaxNumber], 
@@ -27,7 +27,7 @@ BEGIN
 	SELECT [OU].[OrganizationId],
 	    [OU].[UserId],
 		[OU].[OrganizationRoleId],
-		[O].[Name] AS [OrganizationName],
+		[O].[OrganizationName] AS [OrganizationName],
 		[OU].[EmployeeId],
 		[U].[Email],
 		[U].[FirstName],
@@ -42,22 +42,22 @@ BEGIN
 	ORDER BY [U].[LastName]
 
 	SELECT	[Product].[ProductId],
-		[Product].[Name] AS [ProductName],
+		[Product].[ProductName] AS [ProductName],
 		[Product].[AreaUrl],
 		[Subscription].[SubscriptionId],
 		[Organization].[OrganizationId],
 		[Subscription].[SkuId],
 		[Subscription].[NumberOfUsers],
 		[Subscription].[SubscriptionName],
-		[Organization].[Name] AS [OrganizationName],
-		[Sku].[Name] AS [SkuName]
+		[Organization].[OrganizationName] AS [OrganizationName],
+		[Sku].[SkuName] AS [SkuName]
 	FROM [Billing].[Subscription] WITH (NOLOCK) 
 	LEFT JOIN [Billing].[Sku]			WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
 	LEFT JOIN [Auth].[Organization]	WITH (NOLOCK) ON [Organization].[OrganizationId] = [Subscription].[OrganizationId]
 	LEFT JOIN [Billing].[Product]		WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
 	WHERE [Subscription].[OrganizationId] = @OrganizationId
 	AND [Subscription].[IsActive] = 1
-	ORDER BY [Product].[Name]
+	ORDER BY [Product].[ProductName]
 
 	SELECT 
 		[InvitationId],
@@ -68,7 +68,7 @@ BEGIN
 		[OrganizationId], 
 		[AccessCode], 
 		[Invitation].[OrganizationRoleId],
-		[Name] AS [OrganizationRoleName],
+		[OrganizationRoleName] AS [OrganizationRoleName],
 		[EmployeeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
 	LEFT JOIN [Auth].[OrganizationRole] WITH (NOLOCK) ON [OrganizationRole].[OrganizationRoleId] = [Invitation].[OrganizationRoleId]
@@ -80,12 +80,12 @@ BEGIN
 
 	SELECT
 		[Product].[ProductId],
-		[Sku].[Name],
+		[Sku].[SkuName],
 		[Product].[Description],
 		[Product].[AreaUrl]
 	FROM [Billing].[Product] WITH (NOLOCK) 
 	INNER JOIN [Billing].[Sku] WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
 	RIGHT JOIN [Billing].[Subscription] WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
 	WHERE [Product].[IsActive] = 1 AND [Subscription].[IsActive] = 1 AND [Subscription].OrganizationId = @OrganizationId
-	ORDER BY [Product].[Name]
+	ORDER BY [Product].[ProductName]
 END

@@ -1,4 +1,4 @@
-﻿INSERT INTO [Auth].[Organization] (OrganizationId, Name, CreatedUtc, ModifiedUtc, IsActive) VALUES (112559, 'Test Organization', '7/13/2017 6:03:40 PM', '7/13/2017 6:03:40 PM', 1);
+﻿INSERT INTO [Auth].[Organization] (OrganizationId, [OrganizationName], CreatedUtc, ModifiedUtc, IsActive) VALUES (112559, 'Test Organization', '7/13/2017 6:03:40 PM', '7/13/2017 6:03:40 PM', 1);
 
 INSERT INTO [Auth].[OrganizationUser] (UserId, OrganizationId, EmployeeId, [OrganizationRoleId], CreatedUtc, ModifiedUtc) VALUES (111119, 112559, 'qwe', 2, 1, '7/13/2017 6:03:40 PM', '7/13/2017 6:03:40 PM');
 INSERT INTO [Auth].[OrganizationUser] (UserId, OrganizationId, EmployeeId, [OrganizationRoleId], CreatedUtc, ModifiedUtc) VALUES (111122, 112559, 'qwert', 1, 2, '7/13/2017 6:03:40 PM', '7/13/2017 6:03:40 PM');

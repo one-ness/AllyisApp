@@ -2,4 +2,4 @@
 	@ProductName NVARCHAR(128)
 AS
 	SET NOCOUNT ON;
-	SELECT [ProductId] FROM [Billing].[Product] WITH (NOLOCK) WHERE [Name] = @ProductName;
+	SELECT [ProductId] FROM [Billing].[Product] WITH (NOLOCK) WHERE [ProductName] = @ProductName;

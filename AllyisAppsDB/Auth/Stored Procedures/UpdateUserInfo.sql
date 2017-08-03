@@ -23,8 +23,8 @@ BEGIN
 	UPDATE [Lookup].[Address]
 	SET [Address1] = @Address,
 		[City] = @City,
-		[StateId] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
-		[CountryId] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
+		[StateId] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [StateName] = @State),
+		[CountryId] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @Country),
 		[PostalCode] = @PostalCode
 	WHERE [AddressId] = @AddressId
 END

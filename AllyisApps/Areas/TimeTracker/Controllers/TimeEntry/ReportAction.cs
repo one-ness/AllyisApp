@@ -146,7 +146,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		private IEnumerable<SelectListItem> GetCustomerSelectList(List<Customer> customers, int customerSelected)
 		{
 			IList<Customer> customerData = customers;
-			customerData.Insert(0, new Customer { Name = Resources.Strings.NoFilter, CustomerId = 0 });
+			customerData.Insert(0, new Customer { CustomerName = Resources.Strings.NoFilter, CustomerId = 0 });
 
 			var cSelectList = new List<SelectListItem>();
 			foreach (var customer in customerData)
@@ -154,7 +154,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				cSelectList.Add(new SelectListItem
 				{
 					Value = customer.CustomerId.ToString(),
-					Text = customer.Name,
+					Text = customer.CustomerName,
 					Selected = customer.CustomerId == customerSelected
 				});
 			}

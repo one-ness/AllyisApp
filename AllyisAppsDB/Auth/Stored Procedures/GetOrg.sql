@@ -6,12 +6,12 @@ BEGIN
 
 	SELECT 
 		[OrganizationId],
-		[Organization].[Name],
+		[Organization].[OrganizationName],
 		[SiteUrl], 
 		[Address1] AS 'Address', 
 		[City], 
-		[State].[Name] AS 'State', 
-		[Country].[Name] AS 'Country', 
+		[State].[StateName] AS 'State', 
+		[Country].[CountryName] AS 'Country', 
 		[PostalCode], 
 		[PhoneNumber], 
 		[FaxNumber], 

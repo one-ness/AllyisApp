@@ -506,7 +506,7 @@ namespace AllyisApps.Services
 
 				return new ProductRole
 				{
-					Name = s.Name,
+					ProductRoleName = s.Name,
 					ProductRoleId = s.ProductRoleId
 				};
 			});
@@ -534,7 +534,7 @@ namespace AllyisApps.Services
 			{
 				SkuId = sku.SkuId,
 				ProductId = sku.ProductId,
-				Name = sku.Name,
+				SkuName = sku.SkuName,
 				Price = sku.Price,
 				UserLimit = sku.UserLimit,
 				BillingFrequency = (BillingFrequencyEnum)sku.BillingFrequency,
@@ -578,7 +578,7 @@ namespace AllyisApps.Services
 			int subId = DBHelper.ChangeSubscription(orgId, selectedSku, productId, subscriptionName);
 			if (subId != 0)
 			{
-				DBHelper.UpdateSubscriptionUserProductRole(this.GetProductRolesFromSubscription(subId).Where(x => x.Name == "Manager").Single().ProductRoleId, subId, UserContext.UserId);
+				DBHelper.UpdateSubscriptionUserProductRole(this.GetProductRolesFromSubscription(subId).Where(x => x.ProductRoleName == "Manager").Single().ProductRoleId, subId, UserContext.UserId);
 			}
 		}
 
@@ -898,7 +898,7 @@ namespace AllyisApps.Services
 			return new SkuInfo
 			{
 				BillingFrequency = (BillingFrequencyEnum)sku.BillingFrequency,
-				Name = sku.Name,
+				SkuName = sku.SkuName,
 				Price = sku.Price,
 				ProductId = sku.ProductId,
 				SkuId = sku.SkuId,
@@ -922,7 +922,7 @@ namespace AllyisApps.Services
 
 			return new ProductRole
 			{
-				Name = subscriptionRole.Name,
+				ProductRoleName = subscriptionRole.Name,
 				ProductRoleId = subscriptionRole.ProductRoleId,
 				ProductId = subscriptionRole.ProductId
 			};

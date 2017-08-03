@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			return this.View(new EditCustomerInfoViewModel
 			{
 				ContactEmail = infos.Item1.ContactEmail,
-				Name = infos.Item1.Name,
+                CustomerName = infos.Item1.CustomerName,
 				Address = infos.Item1.Address,
 				City = infos.Item1.City,
 				State = infos.Item1.State,

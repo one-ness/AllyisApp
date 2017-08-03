@@ -280,7 +280,7 @@ namespace AllyisApps.Services
 			string htmlbody = string.Format(
 				"{0} has requested you join their organization on Allyis Apps, {1}!<br /> Click <a href=http://{2}/Account/Index?accessCode={3}>Here</a> to create an account and join!",
 				requestingUserFullName,
-				orgInfo.Name,
+				orgInfo.OrganizationName,
 				webRoot,
 				invitationInfo.AccessCode);
 
@@ -610,7 +610,7 @@ namespace AllyisApps.Services
 				Country = organization.Country,
 				CreatedUtc = organization.CreatedUtc,
 				FaxNumber = organization.FaxNumber,
-				Name = organization.Name,
+                OrganizationName = organization.OrganizationName,
 				OrganizationId = organization.OrganizationId,
 				PhoneNumber = organization.PhoneNumber,
 				SiteUrl = organization.SiteUrl,
@@ -640,7 +640,7 @@ namespace AllyisApps.Services
 				Country = organization.Country,
 				CreatedUtc = organization.CreatedUtc,
 				FaxNumber = organization.FaxNumber,
-				Name = organization.Name,
+                OrganizationName = organization.OrganizationName,
 				OrganizationId = organization.OrganizationId,
 				PhoneNumber = organization.PhoneNumber,
 				SiteUrl = organization.SiteUrl,

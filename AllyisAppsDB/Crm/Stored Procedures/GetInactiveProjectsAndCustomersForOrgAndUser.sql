@@ -8,11 +8,11 @@ AS
 		[Project].[CustomerId],
 		[Customer].[OrganizationId],
 		[Project].[CreatedUtc],
-		[Project].[Name] AS [ProjectName],
+		[Project].[ProjectName] AS [ProjectName],
 		[Project].[IsActive],
 		[ProjectOrgId],
-		[Organization].[Name] AS [OrganizationName],
-		[Customer].[Name] AS [CustomerName],
+		[Organization].[OrganizationName] AS [OrganizationName],
+		[Customer].[CustomerName] AS [CustomerName],
 		[Customer].[CustomerOrgId],
 		[Customer].[IsActive] AS [IsCustomerActive],
 		[Project].[IsHourly] AS [IsHourly],
@@ -32,14 +32,14 @@ AS
 	WHERE [Customer].[IsActive] = 0
 	OR [Project].[IsActive] = 0
 
-	ORDER BY [Project].[Name]
+	ORDER BY [Project].[ProjectName]
 
 	SELECT DISTINCT [Customer].[CustomerId],
-		   [Customer].[Name],
+		   [Customer].[CustomerName],
 		   [Address1],
 		   [City],
-		   [State].[Name] AS 'State',
-		   [Country].[Name] AS 'Country',
+		   [State].[StateName] AS 'State',
+		   [Country].[CountryName] AS 'Country',
 		   [PostalCode],
 		   [Customer].[ContactEmail],
 		   [Customer].[ContactPhoneNumber],
@@ -57,4 +57,4 @@ AS
 	WHERE [Customer].[OrganizationId] = @OrgId
 	AND ([Customer].[IsActive] = 0
 	OR [Project].[IsActive] = 0)
-	ORDER BY [Customer].[Name]
+	ORDER BY [Customer].[CustomerName]

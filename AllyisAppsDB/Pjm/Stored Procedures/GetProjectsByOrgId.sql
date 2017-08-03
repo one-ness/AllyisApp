@@ -7,11 +7,11 @@ SELECT	[Project].[ProjectId],
 		[Project].[CustomerId],
 		[Customer].[OrganizationId],
 		[Project].[CreatedUtc],
-		[Project].[Name] AS [ProjectName],
+		[Project].[ProjectName] AS [ProjectName],
 		[Project].[IsActive],
 		[ProjectOrgId],
-		[Organization].[Name] AS [OrganizationName],
-		[Customer].[Name] AS [CustomerName],
+		[Organization].[OrganizationName] AS [OrganizationName],
+		[Customer].[CustomerName] AS [CustomerName],
 		[Customer].[CustomerOrgId],
 		[Customer].[IsActive] AS [IsCustomerActive],
 		[Project].[IsHourly] AS [IsHourly]
@@ -26,4 +26,4 @@ FROM (
 WHERE [Customer].[IsActive] >= @Activity
 	AND [Project].[IsActive] >= @Activity
 
-ORDER BY [Project].[Name]
+ORDER BY [Project].[ProjectName]

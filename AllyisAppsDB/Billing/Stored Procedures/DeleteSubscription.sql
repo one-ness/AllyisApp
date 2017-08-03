@@ -10,7 +10,7 @@ BEGIN
 	WHERE [SubscriptionId] = @SubscriptionId
 
 	-- Return sku name for the notification
-	SELECT [Sku].[Name]
+	SELECT [Sku].[SkuName]
 	FROM [Billing].[Subscription] WITH (NOLOCK)
 	JOIN [Billing].[Sku] WITH (NOLOCK) ON [Subscription].[SkuId] = [Sku].[SkuId]
 	WHERE [Subscription].[SubscriptionId] = @SubscriptionId

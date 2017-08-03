@@ -3,7 +3,7 @@ AS
 	SET NOCOUNT ON;
 	SELECT
 		[Product].[ProductId],
-		[Product].[Name],
+		[Product].[ProductName],
 		[Product].[Description],
 		[Product].[AreaUrl]
 	FROM [Billing].[Product] WITH (NOLOCK) 
@@ -13,7 +13,7 @@ AS
 	SELECT
 		[Product].[ProductId],
 		[Sku].[SkuId],
-		[Sku].[Name],
+		[Sku].[SkuName],
 		[Sku].[CostPerBlock] AS 'Price',
 		[Sku].[UserLimit],
 		[Sku].[BillingFrequency],

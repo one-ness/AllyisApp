@@ -30,7 +30,7 @@ namespace AllyisApps.DBModel
 		/// <returns>Returns the id of the created project, else returns -1.</returns>
 		public int CreateProjectAndUpdateItsUserList(ProjectDBEntity project, IEnumerable<int> userIds)
 		{
-			if (string.IsNullOrWhiteSpace(project.Name))
+			if (string.IsNullOrWhiteSpace(project.ProjectName))
 			{
 				throw new ArgumentException("Name cannot be null, empty, or whitespace.");
 			}
@@ -44,7 +44,7 @@ namespace AllyisApps.DBModel
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerId", project.CustomerId);
-			parameters.Add("@Name", project.Name);
+			parameters.Add("@ProjectName", project.ProjectName);
 			parameters.Add("@IsHourly", project.IsHourly);
 			parameters.Add("@ProjectOrgId", project.ProjectOrgId);
 			parameters.Add("@StartingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
@@ -70,14 +70,14 @@ namespace AllyisApps.DBModel
 		/// <returns>Returns the id of the created project, else returns -1.</returns>
 		public int CreateProject(ProjectDBEntity project)
 		{
-			if (string.IsNullOrWhiteSpace(project.Name))
+			if (string.IsNullOrWhiteSpace(project.ProjectName))
 			{
 				throw new ArgumentException("Name cannot be null, empty, or whitespace.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerId", project.CustomerId);
-			parameters.Add("@Name", project.Name);
+			parameters.Add("@ProjectName", project.ProjectName);
 			parameters.Add("@IsHourly", project.IsHourly);
 			parameters.Add("@ProjectOrgId", project.ProjectOrgId);
 			parameters.Add("@StartingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
@@ -155,7 +155,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@ProjectId", project.ProjectId);
-			parameters.Add("@Name", project.Name);
+			parameters.Add("@ProjectName", project.ProjectName);
 			parameters.Add("@IsHourly", project.IsHourly);
 			parameters.Add("@ProjectOrgId", project.ProjectOrgId);
 			parameters.Add("@StartingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
@@ -340,7 +340,7 @@ namespace AllyisApps.DBModel
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@ContactEmail", customer.ContactEmail);
-			parameters.Add("@Name", customer.Name);
+			parameters.Add("@CustomerName", customer.CustomerName);
 			parameters.Add("@Address", customer.Address);
 			parameters.Add("@City", customer.City);
 			parameters.Add("@State", customer.State);
@@ -378,7 +378,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@CustomerId", customer.CustomerId);
 			parameters.Add("@ContactEmail", customer.ContactEmail);
-			parameters.Add("@Name", customer.Name);
+			parameters.Add("@CustomerName", customer.CustomerName);
 			parameters.Add("@AddressId", customer.AddressId);
 			parameters.Add("@Address", customer.Address);
 			parameters.Add("@City", customer.City);
@@ -643,15 +643,15 @@ namespace AllyisApps.DBModel
 		/// Updates all of a project's properties and its users in one go.
 		/// </summary>
 		/// <param name="projectId">The Project's Id.</param>
-		/// <param name="name">The new name of the project.</param>
+		/// <param name="projectName">The new name of the project.</param>
 		/// <param name="orgId">The new orgId of the project.</param>
 		/// <param name="isHourly">The pricing type of the project.  True == hourly, false == fixed. TODO: use this parameter to update the project's isHourly column.  Currently disabled attribute.</param>
 		/// <param name="start">The start date assigned to the project.</param>
 		/// <param name="end">The end date assigned to the project.</param>
 		/// <param name="userIds">The updated list of project users, by their Ids.</param>
-		public void UpdateProjectAndUsers(int projectId, string name, string orgId, bool isHourly, DateTime? start, DateTime? end, IEnumerable<int> userIds)
+		public void UpdateProjectAndUsers(int projectId, string projectName, string orgId, bool isHourly, DateTime? start, DateTime? end, IEnumerable<int> userIds)
 		{
-			if (string.IsNullOrWhiteSpace(name))
+			if (string.IsNullOrWhiteSpace(projectName))
 			{
 				throw new ArgumentException("Name cannot be null, empty, or whitespace.");
 			}
@@ -670,7 +670,7 @@ namespace AllyisApps.DBModel
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@ProjectId", projectId);
-			parameters.Add("@Name", name);
+			parameters.Add("@ProjectName", projectName);
 			parameters.Add("@OrgId", orgId);
 			parameters.Add("@IsHourly", isHourly);
 			parameters.Add("@StartingDate", start == null ? null : start.Value.ToShortDateString());

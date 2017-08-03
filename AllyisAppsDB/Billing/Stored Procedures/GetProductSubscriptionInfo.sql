@@ -13,7 +13,7 @@ FROM [Billing].[Product]
 	  WHERE [Sku].SkuId = @skuId
 
 SELECT 
-	[Product].[Name], 
+	[Product].[ProductName], 
 	[Product].[ProductId], 
 	[Product].[Description], 
 	[Product].[AreaUrl]
@@ -36,7 +36,7 @@ SELECT
 
 	SELECT [SkuId],
 		[ProductId],
-		[Name],
+		[SkuName],
 		[CostPerBlock],
 		[UserLimit],
 		[BillingFrequency],

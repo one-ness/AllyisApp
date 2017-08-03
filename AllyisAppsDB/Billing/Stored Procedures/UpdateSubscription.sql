@@ -66,7 +66,7 @@ ELSE
 				--Find the ProductRoleId of the User role for the given Product
 				SELECT @UserProductRoleId = [ProductRoleId]
 				FROM [Auth].[ProductRole]
-				WHERE ([ProductId] = @ProductId AND [Name] = 'User')
+				WHERE ([ProductId] = @ProductId AND [ProductRoleName] = 'User')
 
 				--Insert all members of given org to SubscriptionUser table with User role
 				INSERT INTO [Billing].[SubscriptionUser] ([UserId], [SubscriptionId], [ProductRoleId])

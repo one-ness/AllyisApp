@@ -7,7 +7,7 @@ BEGIN
 	DECLARE @CustomerName NVARCHAR(384);
 
 	SELECT 
-		@CustomerName = [Name] 
+		@CustomerName = [CustomerName] 
 	FROM [Crm].[Customer] WITH (NOLOCK)
 	WHERE [CustomerId] = @CustomerId
 

@@ -5,7 +5,7 @@
 
 @{
     Organization details = Model.PanelInfo.OrgInfo;
-    string title = details.Name;
+    string title = details.OrganizationName;
     string subtitle = details.SiteUrl ?? "";
     var cityState = details.City != null && details.State != null ? details.City + ", " + details.State : details.City + details.State;
 }

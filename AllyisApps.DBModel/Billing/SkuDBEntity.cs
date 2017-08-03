@@ -31,7 +31,7 @@ namespace AllyisApps.DBModel.Billing
 		/// <summary>
 		/// Gets or sets Name.
 		/// </summary>
-		public string Name { get; set; }
+		public string SkuName { get; set; }
 
 		/// <summary>
 		/// Gets or sets Price.

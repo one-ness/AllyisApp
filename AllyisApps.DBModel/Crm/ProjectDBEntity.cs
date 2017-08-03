@@ -36,7 +36,7 @@ namespace AllyisApps.DBModel.Crm
 		/// <summary>
 		/// Gets or sets the project name.
 		/// </summary>
-		public string Name { get; set; }
+		public string ProjectName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the project type.
@@ -72,12 +72,7 @@ namespace AllyisApps.DBModel.Crm
 		/// Gets or sets The date/time of creation.
 		/// </summary>
 		public DateTime CreatedUtc { get; set; }
-
-		/// <summary>
-		/// Gets or sets The name of the project.
-		/// </summary>
-		public string ProjectName { get; set; }
-
+        
 		/// <summary>
 		/// Gets or sets the customer org id.
 		/// </summary>

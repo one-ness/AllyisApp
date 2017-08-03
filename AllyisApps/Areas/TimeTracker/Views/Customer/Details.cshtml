@@ -1,7 +1,7 @@
 ﻿@model AllyisApps.ViewModels.TimeTracker.Customer.EditCustomerInfoViewModel
 
 @{
-    ViewBag.Title = Model.Name;
+    ViewBag.Title = Model.CustomerName;
     DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
     DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
     ViewData["IsManager"] = Model.canEditCustomers;

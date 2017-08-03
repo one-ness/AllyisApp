@@ -191,7 +191,7 @@ namespace AllyisApps.Services
 					if (hasCustomerName || hasCustomerId)
 					{
 						// Find the existing customer using name, or id if name isn't on this sheet.
-						customer = customersProjects.Select(tup => tup.Item1).Where(c => hasCustomerName ? c.Name.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerOrgId.Equals(row[ColumnHeaders.CustomerId].ToString())).FirstOrDefault();
+						customer = customersProjects.Select(tup => tup.Item1).Where(c => hasCustomerName ? c.CustomerName.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerOrgId.Equals(row[ColumnHeaders.CustomerId].ToString())).FirstOrDefault();
 						if (customer == null)
 						{
 							if (canCreateCustomers)
@@ -219,7 +219,7 @@ namespace AllyisApps.Services
 
 									newCustomer = new Customer
 									{
-										Name = name,
+                                        CustomerName = name,
 										CustomerOrgId = custOrgId,
 										OrganizationId = orgId
 									};
@@ -254,7 +254,7 @@ namespace AllyisApps.Services
 
 									newCustomer = new Customer
 									{
-										Name = hasCustomerName ? knownValue : readValue,
+                                        CustomerName = hasCustomerName ? knownValue : readValue,
 										CustomerOrgId = hasCustomerName ? readValue : knownValue,
 										OrganizationId = orgId
 									};
@@ -265,14 +265,14 @@ namespace AllyisApps.Services
 									int? newCustomerId = this.CreateCustomer(newCustomer, subscriptionId);
 									if (newCustomerId == null)
 									{
-										result.CustomerFailures.Add(string.Format("Could not create customer {0}: permission failure.", newCustomer.Name));
+										result.CustomerFailures.Add(string.Format("Could not create customer {0}: permission failure.", newCustomer.CustomerName));
 										continue;
 									}
 
 									newCustomer.CustomerId = newCustomerId.Value;
 									if (newCustomer.CustomerId == -1)
 									{
-										result.CustomerFailures.Add(string.Format("Database error while creating customer {0}.", newCustomer.Name));
+										result.CustomerFailures.Add(string.Format("Database error while creating customer {0}.", newCustomer.CustomerName));
 										continue;
 									}
 
@@ -362,7 +362,7 @@ namespace AllyisApps.Services
 						{
 							// We now have the customer and at least one piece of identifying project information. That's enough to tell if the project already exists.
 							project = customersProjects.Where(tup => tup.Item1.CustomerId == customer.CustomerId).FirstOrDefault().Item2.Where(
-								p => thisRowHasProjectName ? p.Name.Equals(knownValue) : p.ProjectOrgId.Equals(knownValue)).FirstOrDefault();
+								p => thisRowHasProjectName ? p.ProjectName.Equals(knownValue) : p.ProjectOrgId.Equals(knownValue)).FirstOrDefault();
 							if (project == null)
 							{
 								// Project does not exist, so we should create it
@@ -399,7 +399,7 @@ namespace AllyisApps.Services
 								project = new Project
 								{
 									CustomerId = customer.CustomerId,
-									Name = thisRowHasProjectName ? knownValue : readValue,
+                                    ProjectName = thisRowHasProjectName ? knownValue : readValue,
 									IsHourly = false, //TODO un-hardcode once project isHourly property is supported.  Currently disabled
 									OrganizationId = orgId,
 									ProjectOrgId = thisRowHasProjectName ? readValue : knownValue,
@@ -409,7 +409,7 @@ namespace AllyisApps.Services
 								project.ProjectId = this.CreateProject(project);
 								if (project.ProjectId == -1)
 								{
-									result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.Name));
+									result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.ProjectName));
 									project = null;
 								}
 								else
@@ -482,7 +482,7 @@ namespace AllyisApps.Services
 							// After that, if we don't have all the information, it's safe to say it can't be found
 							if (!string.IsNullOrEmpty(fields[2]))
 							{
-								customer = customersProjects.Select(tup => tup.Item1).Where(c => customerFieldIsName ? c.Name.Equals(fields[2]) : c.CustomerOrgId.Equals(fields[2])).FirstOrDefault();
+								customer = customersProjects.Select(tup => tup.Item1).Where(c => customerFieldIsName ? c.CustomerName.Equals(fields[2]) : c.CustomerOrgId.Equals(fields[2])).FirstOrDefault();
 
 								if (customer == null)
 								{
@@ -490,7 +490,7 @@ namespace AllyisApps.Services
 									continue;
 								}
 
-								project = customersProjects.Where(tup => tup.Item1.CustomerId == customer.CustomerId).FirstOrDefault().Item2.Where(p => p.Name.Equals(fields[0])).FirstOrDefault();
+								project = customersProjects.Where(tup => tup.Item1.CustomerId == customer.CustomerId).FirstOrDefault().Item2.Where(p => p.ProjectName.Equals(fields[0])).FirstOrDefault();
 								if (project == null)
 								{
 									// Project does not exist, so we should create it
@@ -504,7 +504,7 @@ namespace AllyisApps.Services
 									project = new Project
 									{
 										CustomerId = customer.CustomerId,
-										Name = fields[0],
+                                        ProjectName = fields[0],
 										IsHourly = false,  //TODO un-hardocode once project isHourly property is supported.  Currently disabled
 										OrganizationId = orgId,
 										ProjectOrgId = fields[1],
@@ -514,7 +514,7 @@ namespace AllyisApps.Services
 									project.ProjectId = this.CreateProject(project);
 									if (project.ProjectId == -1)
 									{
-										result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.Name));
+										result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.ProjectName));
 										project = null;
 									}
 									else
@@ -530,8 +530,8 @@ namespace AllyisApps.Services
 								project = customersProjects.Select(
 									tup => tup.Item2).Select(
 										plst => plst.Where(
-											p => thisRowHasProjectName ? p.Name.Equals(knownValue) && (!string.IsNullOrEmpty(fields[1]) ? p.ProjectOrgId.Equals(fields[1]) : true) :
-												p.ProjectOrgId.Equals(knownValue) && (!string.IsNullOrEmpty(fields[0]) ? p.Name.Equals(fields[0]) : true)
+											p => thisRowHasProjectName ? p.ProjectName.Equals(knownValue) && (!string.IsNullOrEmpty(fields[1]) ? p.ProjectOrgId.Equals(fields[1]) : true) :
+												p.ProjectOrgId.Equals(knownValue) && (!string.IsNullOrEmpty(fields[0]) ? p.ProjectName.Equals(fields[0]) : true)
 										).FirstOrDefault()
 									).Where(p => p != null).FirstOrDefault();
 
@@ -820,7 +820,7 @@ namespace AllyisApps.Services
 									if (hasTTDescription) this.readColumn(row, ColumnHeaders.Description, val => description = val);
 									this.readColumn(row, ColumnHeaders.PayClass, val => payclass = val);
 
-									PayClass payClass = payClasses.Where(p => p.Name.ToUpper().Equals(payclass.ToUpper())).SingleOrDefault();
+									PayClass payClass = payClasses.Where(p => p.PayClassName.ToUpper().Equals(payclass.ToUpper())).SingleOrDefault();
 									DateTime theDate;
 									float? theDuration;
 

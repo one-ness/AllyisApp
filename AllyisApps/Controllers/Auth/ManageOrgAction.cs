@@ -70,7 +70,7 @@ namespace AllyisApps.Controllers
 						UserId = oui.UserId
 					}),
 					OrganizationId = infos.Item1.OrganizationId,
-					OrganizationName = infos.Item1.Name,
+					OrganizationName = infos.Item1.OrganizationName,
 					PendingInvitation = infos.Item4,
 					TotalUsers = infos.Item2.Count
 				},

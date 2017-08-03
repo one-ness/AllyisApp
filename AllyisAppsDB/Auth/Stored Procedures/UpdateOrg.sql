@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [Auth].[UpdateOrg]
 	@Id INT,
-	@Name NVARCHAR(100),
+	@OrganizationName NVARCHAR(100),
 	@SiteUrl NVARCHAR(100),
     @Address NVARCHAR(100), 
     @City NVARCHAR(100), 
@@ -26,7 +26,7 @@ BEGIN
 
 		SET NOCOUNT ON;
 		UPDATE [Auth].[Organization]
-		SET [Name] = @Name,
+		SET [OrganizationName] = @OrganizationName,
 			[SiteUrl] = @SiteUrl,
 			[PhoneNumber] = @PhoneNumber,
 			[FaxNumber] = @FaxNumber,
@@ -36,8 +36,8 @@ BEGIN
 		UPDATE [Lookup].[Address]
 		SET [Address1] = @Address,
 			[City] = @City,
-			[StateId] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
-			[CountryId] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
+			[StateId] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [StateName] = @State),
+			[CountryId] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @Country),
 			[PostalCode] = @PostalCode
 		WHERE [AddressId] = @AddressId
 		

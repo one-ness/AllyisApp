@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [Crm].[CreateCustomerInfo]
-	@Name NVARCHAR(32),
+	@CustomerName NVARCHAR(32),
     @Address NVARCHAR(100),
     @City NVARCHAR(100), 
     @State NVARCHAR(100), 
@@ -38,15 +38,15 @@ BEGIN
 				[PostalCode])
 			VALUES (@Address,
 				@City,
-				(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
-				(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
+				(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [StateName] = @State),
+				(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @Country),
 				@PostalCode)
 
 			SET @AddressId = SCOPE_IDENTITY();
 
 			-- Create customer
 			INSERT INTO [Crm].[Customer] 
-				([Name], 
+				([CustomerName], 
 				[AddressId],
 				[ContactEmail], 
 				[ContactPhoneNumber], 
@@ -55,7 +55,7 @@ BEGIN
 				[EIN], 
 				[OrganizationId], 
 				[CustomerOrgId])
-			VALUES (@Name, 
+			VALUES (@CustomerName, 
 				@AddressId,
 				@ContactEmail, 
 				@ContactPhoneNumber, 

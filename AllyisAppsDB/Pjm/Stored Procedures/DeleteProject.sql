@@ -8,7 +8,7 @@ BEGIN
 	DECLARE @ProjectName NVARCHAR(384);
 
 	SELECT 
-		@ProjectName = [Name] 
+		@ProjectName = [ProjectName] 
 	FROM [Pjm].[Project] WITH (NOLOCK)
 	WHERE [ProjectId] = @ProjectId
 

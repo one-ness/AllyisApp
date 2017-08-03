@@ -42,7 +42,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		[DataType(DataType.Text)]
         [RegularExpression(@"^.{1,30}$", ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "CustomerNameWarning")]
 		[Display(Name = "Name")]
-		public string Name { get; set; }
+		public string CustomerName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Customer id.
