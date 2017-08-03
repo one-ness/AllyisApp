@@ -11,7 +11,7 @@ AS
 		[OrganizationId], 
 		[AccessCode], 
 		[Invitation].[OrganizationRoleId],
-		[Name] AS [OrganizationRoleName],
+		[OrganizationRoleName] AS [OrganizationRoleName],
 		[EmployeeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
 	LEFT JOIN [Auth].[OrganizationRole] WITH (NOLOCK) ON [OrganizationRole].[OrganizationRoleId] = [Invitation].[OrganizationRoleId]
