@@ -506,7 +506,7 @@ namespace AllyisApps.Services
 
 				return new ProductRole
 				{
-					ProductRoleName = s.Name,
+					ProductRoleName = s.ProductRoleName,
 					ProductRoleId = s.ProductRoleId
 				};
 			});
@@ -578,6 +578,7 @@ namespace AllyisApps.Services
 			int subId = DBHelper.ChangeSubscription(orgId, selectedSku, productId, subscriptionName);
 			if (subId != 0)
 			{
+				var thing = GetProductRolesFromSubscription(subId);
 				DBHelper.UpdateSubscriptionUserProductRole(this.GetProductRolesFromSubscription(subId).Where(x => x.ProductRoleName == "Manager").Single().ProductRoleId, subId, UserContext.UserId);
 			}
 		}
@@ -922,7 +923,7 @@ namespace AllyisApps.Services
 
 			return new ProductRole
 			{
-				ProductRoleName = subscriptionRole.Name,
+				ProductRoleName = subscriptionRole.ProductRoleName,
 				ProductRoleId = subscriptionRole.ProductRoleId,
 				ProductId = subscriptionRole.ProductId
 			};
