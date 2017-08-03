@@ -234,7 +234,7 @@ namespace AllyisApps.Services
 			string htmlbody = string.Format(
 				"{0} has joined the organization {1} on Allyis Apps.",
 				invitation.FirstName + " " + invitation.LastName,
-				org.Name);
+				org.OrganizationName);
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
 			foreach (dynamic owner in owners)
