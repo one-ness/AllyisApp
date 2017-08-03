@@ -2,5 +2,5 @@
 
     @foreach (AllyisApps.Services.Project proj in Model.Projects)
     {
-        <a onclick="SelectProject('@proj.ProjectId')" id="project-@proj.ProjectId" class="list-group-item"><text>@proj.Name</text></a>
+        <a onclick="SelectProject('@proj.ProjectId')" id="project-@proj.ProjectId" class="list-group-item"><text>@proj.ProjectName</text></a>
     }

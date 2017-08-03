@@ -605,7 +605,7 @@ namespace AllyisApps.Services
 		{
 			return new PayClass
 			{
-				Name = pc.Name,
+                PayClassName = pc.PayClassName,
 				OrganizationId = pc.OrganizationId,
 				PayClassId = pc.PayClassId,
 				CreatedUtc = pc.CreatedUtc,

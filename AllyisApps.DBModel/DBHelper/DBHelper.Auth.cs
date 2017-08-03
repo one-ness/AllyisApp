@@ -297,7 +297,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", ownerId);
 			parameters.Add("@RoleId", roleId);
-			parameters.Add("@Name", org.Name);
+			parameters.Add("@OrganizationName", org.OrganizationName);
 			parameters.Add("@SiteUrl", org.SiteUrl);
 			parameters.Add("AddressId", org.AddressId);
 			parameters.Add("@Address", org.Address);
@@ -342,7 +342,7 @@ namespace AllyisApps.DBModel
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@Id", org.OrganizationId);
-			parameters.Add("@Name", org.Name);
+			parameters.Add("@OrganizationName", org.OrganizationName);
 			parameters.Add("@SiteUrl", org.SiteUrl);
 			parameters.Add("@AddressId", org.AddressId);
 			parameters.Add("@Address", org.Address);

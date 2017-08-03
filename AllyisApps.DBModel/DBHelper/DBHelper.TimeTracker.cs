@@ -97,7 +97,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
-			parameters.Add("@Name", payClassName);
+			parameters.Add("@PayClassName", payClassName);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[Hrm].[CreatePayClass]", parameters, commandType: CommandType.StoredProcedure);
@@ -437,7 +437,7 @@ namespace AllyisApps.DBModel
 						{
 							parameters = new DynamicParameters();
 							parameters.Add("@organizationId", orgId);
-							parameters.Add("@Name", currentPayClass.Name);
+							parameters.Add("@PayClassName", currentPayClass.PayClassName);
 							connection.Execute("[Hrm].[CreatePayClass]", parameters, commandType: CommandType.StoredProcedure);
 						}
 					}

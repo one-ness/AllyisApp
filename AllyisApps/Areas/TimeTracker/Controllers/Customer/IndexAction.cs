@@ -104,7 +104,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 							   {
 								   CustomerId = p.CustomerId,
 								   OrganizationId = p.OrganizationId,
-								   Name = p.ProjectName,
+                                   ProjectName = p.ProjectName,
 								   ProjectId = p.ProjectId
 							   }
 				};
@@ -131,7 +131,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 							   {
 								   CustomerId = p.CustomerId,
 								   OrganizationId = p.OrganizationId,
-								   Name = p.ProjectName,
+                                   ProjectName = p.ProjectName,
 								   ProjectId = p.ProjectId
 							   }
 				};

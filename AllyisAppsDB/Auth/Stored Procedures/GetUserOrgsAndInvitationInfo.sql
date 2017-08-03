@@ -21,12 +21,12 @@ BEGIN
 	WHERE [UserId] = @userId;
 
 	SELECT [Auth].[Organization].[OrganizationId],
-		   [Organization].[Name],
+		   [Organization].[OrganizationName],
 		   [SiteUrl],
 		   [Address1] AS 'Address',
 		   [City],
-		   [Country].[Name] AS 'Country',
-		   [State].[Name] AS 'State',
+		   [Country].[CountryName] AS 'Country',
+		   [State].[StateName] AS 'State',
 		   [PostalCode],
 		   [PhoneNumber],
 		   [FaxNumber],
@@ -39,7 +39,7 @@ BEGIN
 	LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE [OrganizationUser].[UserId] = @userId 
 		  AND [Auth].[Organization].[IsActive] = 1
-	ORDER BY [OrganizationUser].[OrganizationRoleId] DESC, [Organization].[Name]
+	ORDER BY [OrganizationUser].[OrganizationRoleId] DESC, [Organization].[OrganizationName]
 
 	SELECT 
 		[InvitationId], 
@@ -48,7 +48,7 @@ BEGIN
 		[Invitation].[LastName], 
 		[Invitation].[DateOfBirth], 
 		[Invitation].[OrganizationId],
-		[Organization].[Name] AS 'OrganizationName',
+		[Organization].[OrganizationName] AS 'OrganizationName',
 		[AccessCode], 
 		[OrganizationRoleId],
 		[EmployeeId] 
@@ -64,8 +64,8 @@ BEGIN
 
 	SELECT [Address].[Address1],
 		   [Address].[City],
-		   [State].[Name] AS 'State',
-		   [Country].[Name] AS 'CountryId',
+		   [State].[StateName] AS 'State',
+		   [Country].[CountryName] AS 'CountryId',
 		   [Address].[PostalCode]
 	FROM [Lookup].[Address] AS [Address] WITH (NOLOCK)
 	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]

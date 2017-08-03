@@ -141,7 +141,7 @@ namespace AllyisApps.Controllers
 				};
 				subInfo.ProductRoles.Insert(0, new ProductRole
 				{
-					Name = "None",
+					ProductRoleName = "None",
 					ProductId = (int)ProductIdEnum.None,
 					ProductRoleId = (int)TimeTrackerRole.User
 				});

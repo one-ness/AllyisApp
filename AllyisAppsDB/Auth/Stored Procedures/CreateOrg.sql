@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [Auth].[CreateOrg]
     @UserId INT,
     @RoleId INT,
-    @Name NVARCHAR(100),
+    @OrganizationName NVARCHAR(100),
     @SiteUrl NVARCHAR(100),
     @Address NVARCHAR(100),
     @City NVARCHAR(100),
@@ -38,21 +38,21 @@ BEGIN
 					[PostalCode])
 			VALUES(@Address,
 					@City, 
-					(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State), 
-					(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
+					(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [StateName] = @State), 
+					(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @Country),
 					@PostalCode);	
 					
 			SET @AddressId = SCOPE_IDENTITY()
 
 			-- Create org
 			INSERT INTO [Auth].[Organization] 
-					([Name], 
+					([OrganizationName], 
 					[SiteUrl], 
 					[AddressId],
 					[PhoneNumber], 
 					[FaxNumber], 
 					[Subdomain])
-			VALUES (@Name,
+			VALUES (@OrganizationName,
 					@SiteUrl,
 					@AddressId,
 					@PhoneNumber,

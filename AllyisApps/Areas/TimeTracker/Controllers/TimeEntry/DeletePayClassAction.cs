@@ -26,7 +26,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			int orgId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
 
-			string sourcePayClassName = AppService.GetPayClasses(subscriptionId).First(pc => pc.PayClassId == userId).Name;
+			string sourcePayClassName = AppService.GetPayClasses(subscriptionId).First(pc => pc.PayClassId == userId).PayClassName;
 
 			//Built-in, non-editable pay classes cannot be deleted
 			//Used pay classes cannot be deleted, suggest manager to merge it with another payclass instead

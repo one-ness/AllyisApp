@@ -35,7 +35,7 @@ namespace AllyisApps.Controllers
 
 			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
 			model.SelectedSku = skuId;
-			model.SelectedSkuName = infos.Item3.Where(s => s.SkuId == skuId).SingleOrDefault().Name;
+			model.SelectedSkuName = infos.Item3.Where(s => s.SkuId == skuId).SingleOrDefault().SkuName;
 			model.SelectedSkuDescription = infos.Item3.Where(s => s.SkuId == skuId).SingleOrDefault().Description;
 
 			if (!model.IsValid)
@@ -77,7 +77,7 @@ namespace AllyisApps.Controllers
 					CurrentSubscription = currentSubscription,
 					Skus = skus,
 					SelectedSku = selectedSku,
-					SelectedSkuName = selectedSku > 0 ? skus.Where(s => s.SkuId == selectedSku).SingleOrDefault().Name : string.Empty,
+					SelectedSkuName = selectedSku > 0 ? skus.Where(s => s.SkuId == selectedSku).SingleOrDefault().SkuName : string.Empty,
 					PreviousSku = selectedSku,
 					CustomerId = customerId,
 					Token = new BillingServicesToken(customerId.ToString()) // TODO: Does this just convert back to the stripeToken string?? Investigate.

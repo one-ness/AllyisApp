@@ -7,9 +7,9 @@ AS
 			[Project].[CustomerId],
 			[Customer].[OrganizationId],
 			[Project].[CreatedUtc],
-			[Project].[Name] AS [ProjectName],
-			[Organization].[Name] AS [OrganizationName],
-			[Customer].[Name] AS [CustomerName],
+			[Project].[ProjectName] AS [ProjectName],
+			[Organization].[OrganizationName] AS [OrganizationName],
+			[Customer].[CustomerName] AS [CustomerName],
 			[Customer].[CustomerOrgId],
 			[Project].[IsHourly] AS [PriceType],
 			[Project].[StartUtc] AS [StartDate],
@@ -17,7 +17,7 @@ AS
 			[Project].[ProjectOrgId],
 			[SUB].[IsProjectUser]
 			FROM (
-		(SELECT [ProjectId], [CustomerId], [Name], [IsHourly], [StartUtc], [EndUtc], [IsActive], 
+		(SELECT [ProjectId], [CustomerId], [ProjectName], [IsHourly], [StartUtc], [EndUtc], [IsActive], 
 				[CreatedUtc], [ProjectOrgId] FROM [Pjm].[Project] WITH (NOLOCK) WHERE [ProjectId] = @ProjectId) AS [Project]
 			JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId]
 			JOIN [Auth].[Organization] WITH (NOLOCK) ON [Organization].[OrganizationId] = [Customer].[OrganizationId]

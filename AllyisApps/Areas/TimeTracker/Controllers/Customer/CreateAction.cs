@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				int? customerId = AppService.CreateCustomer(new Customer()
 				{
 					ContactEmail = model.ContactEmail,
-					Name = model.Name,
+                    CustomerName = model.CustomerName,
 					Address = model.Address,
 					City = model.City,
 					State = model.State,

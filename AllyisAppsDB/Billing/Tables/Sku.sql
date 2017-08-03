@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [Billing].[Sku] (
     [SkuId]             INT            NOT NULL,
     [ProductId]         INT            NOT NULL,
-    [Name]              NVARCHAR (64)  NOT NULL,
+    [SkuName]              NVARCHAR (64)  NOT NULL,
     [CostPerBlock]      MONEY          NOT NULL,
     [BlockBasedOn]      TINYINT        NOT NULL,
     [UserLimit]         INT            CONSTRAINT [DF__Sku__UserLimit__6E01572D] DEFAULT ((0)) NOT NULL,

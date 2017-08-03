@@ -22,7 +22,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Organization name.
 		/// </summary>
-		public string Name { get; set; }
+		public string OrganizationName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Organization site URL.

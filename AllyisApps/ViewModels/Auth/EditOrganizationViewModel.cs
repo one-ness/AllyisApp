@@ -35,7 +35,7 @@ namespace AllyisApps.ViewModels.Auth
 		[Required]
 		[DataType(DataType.Text)]
 		[Display(Name = "Organization Name")]
-		public string Name { get; set; }
+		public string OrganizationName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's website URL.

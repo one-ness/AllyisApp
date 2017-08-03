@@ -2,7 +2,7 @@
 	@CustomerId INT
 AS
 	SET NOCOUNT ON;
-	SELECT [Name],
+	SELECT [ProjectName],
 		   [ProjectId],
 		   [ProjectOrgId],
 		   [IsHourly],
@@ -11,4 +11,4 @@ AS
 		   [EndUtc] AS [EndingDate]
 	FROM [Pjm].[Project] WITH (NOLOCK) 
 	WHERE [IsActive] = 1 AND [CustomerId] = @CustomerId
-	ORDER BY [Project].[Name]
+	ORDER BY [Project].[ProjectName]

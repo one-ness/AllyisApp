@@ -65,11 +65,11 @@ BEGIN
 			WHERE [InvitationId] = @InvitationId
 			
 			-- On success, return name of organization and role
-			SELECT [Organization].[Name]
+			SELECT [Organization].[OrganizationName]
 			FROM [Auth].[Organization]
 			WHERE [Organization].[OrganizationId] = @OrganizationId
 
-			SELECT [OrganizationRole].[Name]
+			SELECT [OrganizationRole].[OrganizationRoleName]
 			FROM [Auth].[OrganizationRole]
 			WHERE [OrganizationRole].[OrganizationRoleId] = @OrganizationRole
 

@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [Pjm].[Project] (
     [ProjectId]    INT           IDENTITY (116827, 3) NOT NULL,
     [CustomerId]   INT           NOT NULL,
-    [Name]         NVARCHAR (64) NOT NULL,
+    [ProjectName]         NVARCHAR (64) NOT NULL,
     [ProjectOrgId] NVARCHAR (16) NOT NULL,
     [IsHourly]     BIT			 DEFAULT ((0)) NOT NULL,
     [IsActive]     BIT           DEFAULT ((1)) NOT NULL,

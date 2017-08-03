@@ -92,8 +92,8 @@
                     }
                     else
                     {
-                        var PCname = Model.PayClasses.FirstOrDefault(c => c.PayClassId == Model.PayClassId).Name;
-                        @Html.TextBoxDisabledFor(m => Model.PayClasses.FirstOrDefault(c => c.PayClassId == Model.PayClassId).Name, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" })
+                        var PCname = Model.PayClasses.FirstOrDefault(c => c.PayClassId == Model.PayClassId).PayClassName;
+                        @Html.TextBoxDisabledFor(m => Model.PayClasses.FirstOrDefault(c => c.PayClassId == Model.PayClassId).PayClassName, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" })
                     }
                 }
                 else
@@ -103,7 +103,7 @@
                                                                   {
                                                                       Selected = (Model.PayClasses.Count() == 1) || (Model.PayClassId == c.PayClassId),
 
-                                                                      Text = Strings.ResourceManager.GetString((c.Name).Replace(" ","")) ?? c.Name,
+                                                                      Text = Strings.ResourceManager.GetString((c.PayClassName).Replace(" ","")) ?? c.PayClassName,
 
                                                                       Value = c.PayClassId.ToString()
                                                                   }, locked, new { @class = "form-control", @style = "width: 100%", @onchange = "changeOccur(this)" }).RemoveIdAttribute()

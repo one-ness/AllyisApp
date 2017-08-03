@@ -6,7 +6,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT [Name]												
+	SELECT [ProductRoleName]												
 	FROM [Auth].[ProductRole]
 	WITH (NOLOCK)								
 	WHERE [ProductRoleId] =										
@@ -28,5 +28,5 @@ BEGIN
 						(SELECT [ProductId]						
 						FROM [Billing].[Product]
 						WITH (NOLOCK)				
-						WHERE [Product].[Name] = @ProductName))));
+						WHERE [Product].[ProductName] = @ProductName))));
 END

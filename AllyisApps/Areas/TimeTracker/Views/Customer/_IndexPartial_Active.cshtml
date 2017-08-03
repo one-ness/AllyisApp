@@ -13,7 +13,7 @@
                 @foreach (CustomerProjectViewModel customer in Model.Customers)
                 {
                     <a onclick="PopulateProjects('@customer.CustomerInfo.CustomerId')" class="list-group-item" id="@customer.CustomerInfo.CustomerId">
-                        <text>@customer.CustomerInfo.Name</text>
+                        <text>@customer.CustomerInfo.CustomerName</text>
                     </a>
                 }
             </div>

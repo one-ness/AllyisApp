@@ -29,8 +29,8 @@ BEGIN
 	SELECT [Address].[AddressId],
 		   [Address].[Address1],
 		   [Address].[City],
-		   [State].[Name] AS 'State',
-		   [Country].[Name] AS 'CountryId',
+		   [State].[StateName] AS 'State',
+		   [Country].[CountryName] AS 'CountryId',
 		   [Address].[PostalCode]
 	FROM [Lookup].[Address] AS [Address] WITH (NOLOCK)
 	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]

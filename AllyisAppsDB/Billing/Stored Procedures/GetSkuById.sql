@@ -4,7 +4,7 @@ AS
 	SET NOCOUNT ON;
 	SELECT [SkuId]
       ,[ProductId]
-      ,[Name]
+      ,[SkuName]
       ,[CostPerBlock]
       ,[UserLimit]
       ,[BillingFrequency]

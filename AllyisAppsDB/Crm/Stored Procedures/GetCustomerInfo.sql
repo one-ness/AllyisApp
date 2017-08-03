@@ -4,11 +4,11 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	SELECT [Customer].[CustomerId],
-		   [Customer].[Name],
+		   [Customer].[CustomerName],
 		   [Address1] AS 'Address',
 		   [City],
-		   [State].[Name] AS 'State',
-		   [Country].[Name] AS 'Country',
+		   [State].[StateName] AS 'State',
+		   [Country].[CountryName] AS 'Country',
 		   [PostalCode],
 		   [Customer].[ContactEmail],
 		   [Customer].[ContactPhoneNumber],

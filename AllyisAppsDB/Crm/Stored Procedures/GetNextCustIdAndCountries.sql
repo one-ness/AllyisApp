@@ -9,5 +9,5 @@ BEGIN
 	WHERE [Customer].[OrganizationId] = @OrgId
 	ORDER BY [CustomerOrgId] DESC
 	
-	SELECT [Name] FROM [Lookup].[Country] WITH (NOLOCK) ;
+	SELECT [CountryName] FROM [Lookup].[Country] WITH (NOLOCK) ;
 END

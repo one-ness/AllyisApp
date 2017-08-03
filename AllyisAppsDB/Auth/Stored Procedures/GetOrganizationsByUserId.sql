@@ -4,12 +4,12 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 SELECT [Auth].[Organization].[OrganizationId]
-      ,[Organization].[Name]
+      ,[Organization].[OrganizationName]
       ,[SiteUrl]
       ,[Address1] AS 'Address'
       ,[City]
-      ,[State].[Name] AS 'State'
-      ,[Country].[Name] AS 'Country'
+      ,[State].[StateName] AS 'State'
+      ,[Country].[CountryName] AS 'Country'
       ,[PostalCode]
       ,[PhoneNumber]
 	  ,[FaxNumber]
@@ -21,5 +21,5 @@ LEFT JOIN [Lookup].[Country]			WITH (NOLOCK) ON [Country].[CountryId] = [Address
 LEFT JOIN [Lookup].[State]				WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 WHERE [OrganizationUser].[UserId] = @UserId 
       AND [Auth].[Organization].[IsActive] = 1
-ORDER BY [OrganizationUser].[OrganizationRoleId] DESC, [Organization].[Name]
+ORDER BY [OrganizationUser].[OrganizationRoleId] DESC, [Organization].[OrganizationName]
 END
