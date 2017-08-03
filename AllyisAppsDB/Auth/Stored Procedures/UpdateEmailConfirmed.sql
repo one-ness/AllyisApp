@@ -4,9 +4,9 @@ AS
 BEGIN
 	SELECT [UserId]
 	FROM [Auth].[User] WITH (NOLOCK)
-	WHERE [EmailConfirmationCode] = @emailConfirmCode and [EmailConfirmed] = 0
+	WHERE [EmailConfirmationCode] = @emailConfirmCode and [IsEmailConfirmed] = 0
 
 	UPDATE [Auth].[User]
-	SET [EmailConfirmed] = 1
+	SET [IsEmailConfirmed] = 1
 	WHERE [EmailConfirmationCode] = @emailConfirmCode
 END

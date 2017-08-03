@@ -429,21 +429,13 @@ function focusPreviousDuration(form_child) {
 init_drp(
 	"daterange",
 	[{
-		text: "Today",
-		dateStart: function () { return moment() },
-		dateEnd: function () { return moment() }
+        text: "This Week",
+        dateStart: function () { return moment().startOf('week') },
+        dateEnd: function () { return moment().endOf('week') }
 	}, {
-		text: "Yesterday",
-		dateStart: function () { return moment().subtract(1, 'days') },
-		dateEnd: function () { return moment().subtract(1, 'days') }
-	}, {
-		text: "Last 7 Days",
-		dateStart: function () { return moment().subtract(6, 'days') },
-		dateEnd: function () { return moment() }
-	}, {
-		text: "Last 30 Days",
-		dateStart: function () { return moment().subtract(29, 'days') },
-		dateEnd: function () { return moment() }
+        text: "Last Week",
+        dateStart: function () { return moment().subtract(7, 'days').startOf('week') },
+        dateEnd: function () { return moment().subtract(7, 'days').endOf('week') }
 	}, {
 		text: "This Month",
 		dateStart: function () { return moment().startOf('month') },
@@ -452,6 +444,14 @@ init_drp(
 		text: "Last Month",
 		dateStart: function () { return moment().subtract(1, 'month').startOf('month') },
 		dateEnd: function () { return moment().subtract(1, 'month').endOf('month') }
+	}, {
+		text: "Last 7 Days",
+		dateStart: function () { return moment().subtract(6, 'days') },
+		dateEnd: function () { return moment() }
+	}, {
+		text: "Last 30 Days",
+		dateStart: function () { return moment().subtract(29, 'days') },
+		dateEnd: function () { return moment() }
 	}],
 	"StartDate",
 	"EndDate",

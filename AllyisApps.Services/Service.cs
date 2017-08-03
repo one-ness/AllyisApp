@@ -228,7 +228,7 @@ namespace AllyisApps.Services
 		public DateTime? GetLockDate(int organizationId)
 		{
 			LockDateDBEntity lockDate = DBHelper.GetLockDate(organizationId);
-			return GetLockDateFromParameters(lockDate.LockDateUsed, lockDate.LockDatePeriod, lockDate.LockDateQuantity);
+			return GetLockDateFromParameters(lockDate.IsLockDateUsed, lockDate.LockDatePeriod, lockDate.LockDateQuantity);
 		}
 
 		/// <summary>
@@ -650,7 +650,7 @@ namespace AllyisApps.Services
 				StartOfWeek = settings.StartOfWeek,
 				LockDatePeriod = settings.LockDatePeriod,
 				LockDateQuantity = settings.LockDateQuantity,
-				LockDateUsed = settings.LockDateUsed
+				IsLockDateUsed = settings.IsLockDateUsed
 			};
 		}
 
@@ -669,7 +669,7 @@ namespace AllyisApps.Services
 				Duration = entity.Duration,
 				FirstName = entity.FirstName,
 				LastName = entity.LastName,
-				LockSaved = entity.LockSaved,
+				IsLockSaved = entity.IsLockSaved,
 				ModSinceApproval = entity.ModSinceApproval,
 				PayClassId = entity.PayClassId,
 				PayClassName = entity.PayClassName,
@@ -696,7 +696,7 @@ namespace AllyisApps.Services
 				Duration = info.Duration,
 				FirstName = info.FirstName,
 				LastName = info.LastName,
-				LockSaved = info.LockSaved,
+				IsLockSaved = info.IsLockSaved,
 				ModSinceApproval = info.ModSinceApproval,
 				PayClassId = info.PayClassId,
 				ProjectId = info.ProjectId,

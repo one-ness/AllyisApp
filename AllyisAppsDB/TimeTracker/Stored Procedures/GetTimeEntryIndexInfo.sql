@@ -11,12 +11,12 @@ AS
 	-- blocks lower in this same stored procedure, while also letting the settings table itself be returned
 	DECLARE @Settings TABLE (
 		StartOfWeek INT,
-		LockDateUsed INT,
+		IsLockDateUsed INT,
 		LockDatePeriod VARCHAR(10),
 		LockDateQuantity INT
 	);
-	INSERT INTO @Settings (StartOfWeek, LockDateUsed, LockDatePeriod, LockDateQuantity)
-	SELECT [StartOfWeek], [LockDateUsed], [LockDatePeriod], [LockDateQuantity]
+	INSERT INTO @Settings (StartOfWeek, IsLockDateUsed, LockDatePeriod, LockDateQuantity)
+	SELECT [StartOfWeek], [IsLockDateUsed], [LockDatePeriod], [LockDateQuantity]
 	FROM [TimeTracker].[Setting] 
 	WITH (NOLOCK) 
 	WHERE [OrganizationId] = @OrganizationId

@@ -120,6 +120,8 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
+			NotifyInviteAcceptAsync(invitationId);
+
 			var results = DBHelper.AcceptInvitation(invitationId, UserContext.UserId);
 
 			if (results == null) return null;
@@ -190,8 +192,8 @@ namespace AllyisApps.Services
                     DateOfBirth = dateOfBirth,
 					PhoneNumber = phone,
 					PasswordHash = Crypto.GetPasswordHash(password),
-					TwoFactorEnabled = twoFactorEnabled,
-					LockoutEnabled = lockOutEnabled,
+					IsTwoFactorEnabled = twoFactorEnabled,
+					IsLockoutEnabled = lockOutEnabled,
 					LockoutEndDateUtc = lockOutEndDateUtc,
 					PreferredLanguageId = languagePreference
 				};
@@ -404,18 +406,18 @@ namespace AllyisApps.Services
 				Country = model.Address.CountryId,
 				DateOfBirth = model.DateOfBirth,
 				Email = model.Email,
-				EmailConfirmed = model.EmailConfirmed,
+				IsEmailConfirmed = model.IsEmailConfirmed,
 				FirstName = model.FirstName,
 				LastName = model.LastName,
-				LockoutEnabled = model.LockoutEnabled,
+				IsLockoutEnabled = model.IsLockoutEnabled,
 				LockoutEndDateUtc = model.LockoutEndDateUtc,
 				PasswordHash = model.PasswordHash,
 				PasswordResetCode = model.PasswordResetCode,
 				PhoneExtension = model.PhoneExtension,
 				PhoneNumber = model.PhoneNumber,
-				PhoneNumberConfirmed = model.PhoneNumberConfirmed,
+				IsPhoneNumberConfirmed = model.IsPhoneNumberConfirmed,
 				State = model.Address.State,
-				TwoFactorEnabled = model.TwoFactorEnabled,
+				IsTwoFactorEnabled = model.IsTwoFactorEnabled,
 				UserId = model.UserId,
 				PostalCode = model.Address.PostalCode
 			});
@@ -613,17 +615,17 @@ namespace AllyisApps.Services
 				AccessFailedCount = user.AccessFailedCount,
 				DateOfBirth = user.DateOfBirth,
 				Email = user.Email,
-				EmailConfirmed = user.EmailConfirmed,
+				IsEmailConfirmed = user.IsEmailConfirmed,
 				FirstName = user.FirstName,
 				LastName = user.LastName,
-				LockoutEnabled = user.LockoutEnabled,
+				IsLockoutEnabled = user.IsLockoutEnabled,
 				LockoutEndDateUtc = user.LockoutEndDateUtc,
 				PasswordHash = user.PasswordHash,
 				PasswordResetCode = user.PasswordResetCode,
 				PhoneExtension = user.PhoneExtension,
 				PhoneNumber = user.PhoneNumber,
-				PhoneNumberConfirmed = user.PhoneNumberConfirmed,
-				TwoFactorEnabled = user.TwoFactorEnabled,
+				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
+				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
 			};
 		}
@@ -648,18 +650,18 @@ namespace AllyisApps.Services
 				Country = user.Address.CountryId,
 				DateOfBirth = user.DateOfBirth,
 				Email = user.Email,
-				EmailConfirmed = user.EmailConfirmed,
+				IsEmailConfirmed = user.IsEmailConfirmed,
 				FirstName = user.FirstName,
 				LastName = user.LastName,
-				LockoutEnabled = user.LockoutEnabled,
+				IsLockoutEnabled = user.IsLockoutEnabled,
 				LockoutEndDateUtc = user.LockoutEndDateUtc,
 				PasswordHash = user.PasswordHash,
 				PasswordResetCode = user.PasswordResetCode,
 				PhoneExtension = user.PhoneExtension,
 				PhoneNumber = user.PhoneNumber,
-				PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
 				State = user.Address.State,
-				TwoFactorEnabled = user.TwoFactorEnabled,
+				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
 				PostalCode = user.Address.PostalCode,
 				PreferredLanguageId = 1          // TODO: Put this into UserInfo and do proper lookup

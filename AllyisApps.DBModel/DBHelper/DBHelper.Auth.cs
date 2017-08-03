@@ -48,8 +48,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@DateOfBirth", user.DateOfBirth);
 			parameters.Add("@EmailConfirmationCode", user.EmailConfirmationCode);
 			parameters.Add("@PasswordHash", user.PasswordHash);
-			parameters.Add("@TwoFactorEnabled", user.TwoFactorEnabled);
-			parameters.Add("@LockoutEnabled", user.LockoutEnabled);
+			parameters.Add("@IsTwoFactorEnabled", user.IsTwoFactorEnabled);
+			parameters.Add("@IsLockoutEnabled", user.IsLockoutEnabled);
 			parameters.Add("@LockoutEndDateUtc", user.LockoutEndDateUtc);
 			parameters.Add("@LanguageId", user.PreferredLanguageId);
 
@@ -827,6 +827,22 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Gets the roles for each subscription the organization has.
+		/// </summary>
+		/// <param name="inviteId">The invite Id.</param>
+		/// <returns>List of all roles.</returns>
+		public IEnumerable<InvitationDBEntity> GetUserInvitationsByInviteId(int inviteId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@InviteId", inviteId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<InvitationDBEntity>("[Auth].[GetUserInvitationsByInviteId]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
 		/// Gets the user roles.
 		/// </summary>
 		/// <param name="orgid">The id of the relevant organization.</param>
@@ -989,7 +1005,7 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Updates user's EmailConfirmed to True in Auth.User table.
+		/// Updates user's IsEmailConfirmed to True in Auth.User table.
 		/// </summary>
 		public int UpdateEmailConfirmed(Guid code)
 		{
