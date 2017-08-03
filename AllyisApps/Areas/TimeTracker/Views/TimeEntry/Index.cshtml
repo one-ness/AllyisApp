@@ -17,11 +17,11 @@
 }
 
 <div class="row">
-	@using (Html.BeginForm(ActionConstants.Index, ControllerConstants.TimeEntry, FormMethod.Post, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" }))
+    @using(Html.BeginForm("TimeTrackerDatePickerRedirect",ControllerConstants.TimeEntry, FormMethod.Get, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" }))
     {
-		<input id="UserId" name="UserId" type="hidden" value="@Model.EntryRange.UserId" />
-		<input id="StartDate" name="StartDate" type="hidden" value="@Model.EntryRange.StartDate" />
-		<input id="EndDate" name="EndDate" type="hidden" value="@Model.EntryRange.EndDate" />
+		@*<input id="UserId" name="UserId" type="hidden" value="@Model.EntryRange.UserId" />*@
+		<input id="StartDate" name="startDate" type="hidden" value="@Model.EntryRange.StartDate" />
+		<input id="EndDate" name="endDate" type="hidden" value="@Model.EntryRange.EndDate" />
 		<div class="form-group pull-left">
 			<a href="@Url.Action(ActionConstants.Export, ControllerConstants.TimeEntry, routeValues: new
                 {

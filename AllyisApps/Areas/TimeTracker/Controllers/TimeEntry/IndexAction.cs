@@ -101,6 +101,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         }
 
         /// <summary>
+        ///  Redirect rout for date picker so route is propperly displayed.
+        /// </summary>
+        /// <param name="subscriptionId">The subscription id</param>
+        /// <param name="startDate">The start date</param>
+        /// <param name="endDate">The end date</param>
+        public RedirectToRouteResult TimeTrackerDatePickerRedirect(int subscriptionId, int startDate, int endDate)
+        {
+            return RedirectToAction("IndexNoUserId",new { subscriptionId = subscriptionId, startDate = startDate, endDate = endDate });
+        }
+
+        /// <summary>
         /// Constructor for the TimeEntryOverDateRangeViewModel.
         /// </summary>
         /// <param name="orgId">The Organization Id</param>
