@@ -10,7 +10,7 @@
 	[IsTwoFactorEnabled]		BIT              CONSTRAINT [DF__User__TwoFactorE__68487DD7] DEFAULT ((0)) NOT NULL,
 	[AccessFailedCount]			INT              CONSTRAINT [DF__User__AccessFail__693CA210] DEFAULT ((0)) NOT NULL,
 	[IsLockoutEnabled]			BIT              CONSTRAINT [DF__User__LockoutEna__6A30C649] DEFAULT ((0)) NOT NULL,
-	[CreatedUtc]				DATETIME2 (0)    CONSTRAINT [DF__User__CreatedUtc__6B24EA82] DEFAULT (getutcdate()) NOT NULL,
+	[UserCreatedUtc]				DATETIME2 (0)    CONSTRAINT [DF__User__CreatedUtc__6B24EA82] DEFAULT (getutcdate()) NOT NULL,
 	[PreferredLanguageId]		INT              NULL,
 	[DateOfBirth]				DATE		     NULL,
 	[PhoneNumber]				VARCHAR (16)     NULL,

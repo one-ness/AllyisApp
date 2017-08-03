@@ -3,7 +3,7 @@
     [EntityName]      NVARCHAR (128) NOT NULL,
     [UserId]          INT            NOT NULL,
     [Action]          NVARCHAR (128) NOT NULL,
-    [DateModifiedUtc] DATETIME2 (0)  NOT NULL DEFAULT getutcdate(),
+    [LoggingDateModifiedUtc] DATETIME2 (0)  NOT NULL DEFAULT getutcdate(),
     [DataBefore]      NVARCHAR (512) NULL,
     [DataAfter]       NVARCHAR (512) NULL,
     CONSTRAINT [PK_Logging] PRIMARY KEY NONCLUSTERED ([LoggingId] ASC),

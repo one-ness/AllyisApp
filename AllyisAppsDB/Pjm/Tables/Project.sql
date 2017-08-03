@@ -5,7 +5,7 @@
     [ProjectOrgId] NVARCHAR (16) NOT NULL,
     [IsHourly]     BIT			 DEFAULT ((0)) NOT NULL,
     [IsActive]     BIT           DEFAULT ((1)) NOT NULL,
-    [CreatedUtc]   DATETIME2 (0) DEFAULT (getutcdate()) NOT NULL,
+    [ProjectCreatedUtc]   DATETIME2 (0) DEFAULT (getutcdate()) NOT NULL,
     [StartUtc]     DATETIME2 (0) NULL,
     [EndUtc]       DATETIME2 (0) NULL,
     CONSTRAINT [PK_Project] PRIMARY KEY NONCLUSTERED ([ProjectId] ASC),

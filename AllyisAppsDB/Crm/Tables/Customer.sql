@@ -4,7 +4,7 @@ CREATE TABLE [Crm].[Customer] (
     [OrganizationId]     INT            NOT NULL,
     [IsActive]           BIT            DEFAULT ((1)) NOT NULL,
     [CustomerOrgId]      NVARCHAR (16)  NOT NULL,
-    [CreatedUtc]         DATETIME2 (0)  DEFAULT (getutcdate()) NOT NULL,
+    [CustomerCreatedUtc]         DATETIME2 (0)  DEFAULT (getutcdate()) NOT NULL,
     [ContactEmail]       NVARCHAR (384) NULL,
     [AddressId]          INT            NULL,
     [ContactPhoneNumber] VARCHAR (16)   NULL,

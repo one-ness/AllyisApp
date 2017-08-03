@@ -12,8 +12,8 @@ BEGIN
 		[SubmittedById],
 		[ReportStatus],
 		[BusinessJustification],
-		[CreatedUtc],
-		[ModifiedUtc]
+		[ExpenseReportCreatedUtc],
+		[ExpenseReportModifiedUtc]
 	FROM [Expense].[ExpenseReport] WITH (NOLOCK)
 	WHERE ExpenseReportId = @expenseReportId
 END
