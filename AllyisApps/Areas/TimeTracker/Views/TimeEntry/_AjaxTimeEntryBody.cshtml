@@ -16,7 +16,7 @@
     string approvalClass = Model.ModSinceApproval ? "pending" :
                       Model.ApprovalState == (int)ApprovalState.NotApproved ? "rejected" :
                       Model.ApprovalState == (int)ApprovalState.Approved ? "approved" : string.Empty;
-    bool locked = Model.Locked;
+    bool locked = Model.IsLocked;
     string lockedClass = locked ? "locked" : string.Empty;
     bool disabledString = locked ? true : false;
     var canManage = ViewBag.canManage;

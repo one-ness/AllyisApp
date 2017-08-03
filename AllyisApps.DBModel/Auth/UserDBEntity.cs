@@ -40,9 +40,9 @@ namespace AllyisApps.DBModel.Auth
 		public string PasswordHash { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether EmailConfirmed.
+		/// Gets or sets a value indicating whether IsEmailConfirmed.
 		/// </summary>
-		public bool EmailConfirmed { get; set; }
+		public bool IsEmailConfirmed { get; set; }
 
 		/// <summary>
 		/// Gets or sets EmailConfirmationCode.
@@ -52,12 +52,12 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets a value indicating whether the phone number of the user has been confirmed.
 		/// </summary>
-		public bool PhoneNumberConfirmed { get; set; }
+		public bool IsPhoneNumberConfirmed { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether TwoFactorEnabled.
+		/// Gets or sets a value indicating whether IsTwoFactorEnabled.
 		/// </summary>
-		public bool TwoFactorEnabled { get; set; }
+		public bool IsTwoFactorEnabled { get; set; }
 
 		/// <summary>
 		/// Gets or sets AccessFailedCount.
@@ -65,9 +65,9 @@ namespace AllyisApps.DBModel.Auth
 		public int AccessFailedCount { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether LockoutEnabled.
+		/// Gets or sets a value indicating whether IsLockoutEnabled.
 		/// </summary>
-		public bool LockoutEnabled { get; set; }
+		public bool IsLockoutEnabled { get; set; }
 
 		/// <summary>
 		/// Gets or sets DateOfBirth.

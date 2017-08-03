@@ -281,7 +281,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@PayClassId", entry.PayClassId);
 			parameters.Add("@Duration", entry.Duration);
 			parameters.Add("@Description", entry.Description);
-			parameters.Add("@LockSaved", entry.LockSaved);
+			parameters.Add("@IsLockSaved", entry.IsLockSaved);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -457,7 +457,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
-			parameters.Add("@LockDateUsed", lockDateUsed);
+			parameters.Add("@IsLockDateUsed", lockDateUsed);
 			parameters.Add("@LockDatePeriod", lockDatePeriod);
 			parameters.Add("@LockDateQuantity", lockDateQuantity);
 

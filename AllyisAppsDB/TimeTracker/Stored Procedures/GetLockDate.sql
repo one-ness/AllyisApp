@@ -2,4 +2,4 @@
 	@OrganizationId INT
 AS
 	SET NOCOUNT ON;
-	SELECT [LockDateUsed], [LockDatePeriod], [LockDateQuantity] FROM [TimeTracker].[Setting] WITH (NOLOCK) WHERE [OrganizationId] = @OrganizationId;
+	SELECT [IsLockDateUsed], [LockDatePeriod], [LockDateQuantity] FROM [TimeTracker].[Setting] WITH (NOLOCK) WHERE [OrganizationId] = @OrganizationId;
