@@ -1,0 +1,35 @@
+﻿@using AllyisApps.ViewModels.ExpenseTracker.Expense;
+
+@model ExpenseReportsViewModel
+@{ 
+
+}
+
+<div class="">
+    <div class="pull-right">
+        <button class="btn btn-primary">Add Report</button>
+    </div>
+
+</div>
+<table class="table table-hover table-condensed">
+    <thead>
+        <tr class="double-bottom-border">
+            <th style="width: 25%">Report Name</th>
+            <th style="width: 25%">Submitted Date</th>
+            <th style="width: 25%">Status</th>
+            <th style="width: 25%">Amount</th>
+        </tr>
+    </thead>   
+    <tbody>
+        
+        @foreach(ExpenseReportModel report in Model.Reports)
+        {
+            <tr>
+                <td>@Html.ActionLink(@report.ReportName,"ViewReport", new { reportId = report.ReportId }, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" })</td>
+                <td>@report.SubmittedDate</td>
+                <td>@report.Status</td>
+                <td>@report.Amount</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -200,10 +200,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ExpenseController.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\IndexAction.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ReportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseReportModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseReportsViewModel.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ReportStatusEnum.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\DetailsAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ReactivateAction.cs" />
@@ -516,7 +519,9 @@
     <Content Include="Areas\ExpenseTracker\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\Index.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\web.config" />
-    <Content Include="Areas\ExpenseTracker\Views\Shared\BreadcrumbNavPartial.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\Shared\_BreadcrumbNavPartial.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\Expense\_AjaxExpenseEntries.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\Expense\ReportView.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
@@ -940,7 +945,9 @@
     <Content Include="Views\Shared\_Breadcrumbs.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Areas\ExpenseTracker\Views\Report\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
