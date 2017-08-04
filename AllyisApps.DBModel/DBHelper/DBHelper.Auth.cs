@@ -26,7 +26,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates the user with the information specified in the user table.
 		/// </summary>
-		public async Task<int> CreateUserAsync(UserDBEntity user)
+		public int CreateUser(UserDBEntity user)
 		{
 			if (user == null)
 			{
@@ -34,28 +34,26 @@ namespace AllyisApps.DBModel
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@email", user.Email);
+			parameters.Add("@firstName", user.FirstName);
+			parameters.Add("@lastName", user.LastName);
+			parameters.Add("@address", user.Address);
+			parameters.Add("@city", user.City);
+			parameters.Add("@state", user.State);
+			parameters.Add("@country", user.Country);
+			parameters.Add("@postalCode", user.PostalCode);
+			parameters.Add("@phoneNumber", user.PhoneNumber);
+			parameters.Add("@dateOfBirth", user.DateOfBirth);
+			parameters.Add("@emailConfirmationCode", user.EmailConfirmationCode);
+			parameters.Add("@passwordHash", user.PasswordHash);
+			parameters.Add("@isTwoFactorEnabled", user.IsTwoFactorEnabled);
+			parameters.Add("@isLockoutEnabled", user.IsLockoutEnabled);
+			parameters.Add("@lockoutEndDateUtc", user.LockoutEndDateUtc);
+			parameters.Add("@languageId", user.PreferredLanguageId);
 
-			parameters.Add("@Email", user.Email);
-			parameters.Add("@FirstName", user.FirstName);
-			parameters.Add("@LastName", user.LastName);
-			parameters.Add("@Address", user.Address);
-            parameters.Add("@Address_Identity", user.AddressId);
-			parameters.Add("@City", user.City);
-			parameters.Add("@State", user.State);
-			parameters.Add("@Country", user.Country);
-			parameters.Add("@PostalCode", user.PostalCode);
-			parameters.Add("@PhoneNumber", user.PhoneNumber);
-			parameters.Add("@DateOfBirth", user.DateOfBirth);
-			parameters.Add("@EmailConfirmationCode", user.EmailConfirmationCode);
-			parameters.Add("@PasswordHash", user.PasswordHash);
-			parameters.Add("@IsTwoFactorEnabled", user.IsTwoFactorEnabled);
-			parameters.Add("@IsLockoutEnabled", user.IsLockoutEnabled);
-			parameters.Add("@LockoutEndDateUtc", user.LockoutEndDateUtc);
-			parameters.Add("@LanguageId", user.PreferredLanguageId);
-
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return (await con.QueryAsync<int>("Auth.CreateUser", parameters, commandType: CommandType.StoredProcedure)).FirstOrDefault();
+				return connection.Query<int>("Auth.CreateUser", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
 
@@ -106,17 +104,17 @@ namespace AllyisApps.DBModel
 
 			DynamicParameters parameters = new DynamicParameters();
 
-			parameters.Add("@Id", user.UserId);
-			parameters.Add("@AddressId", user.AddressId);
-			parameters.Add("@FirstName", user.FirstName);
-			parameters.Add("@LastName", user.LastName);
-			parameters.Add("@Address", user.Address);
-			parameters.Add("@City", user.City);
-			parameters.Add("@State", user.State);
-			parameters.Add("@Country", user.Country);
-			parameters.Add("@PostalCode", user.PostalCode);
-			parameters.Add("@PhoneNumber", user.PhoneNumber);
-			parameters.Add("@DateOfBirth", user.DateOfBirth);
+			parameters.Add("@id", user.UserId);
+			parameters.Add("@addressId", user.AddressId);
+			parameters.Add("@firstName", user.FirstName);
+			parameters.Add("@lastName", user.LastName);
+			parameters.Add("@address", user.Address);
+			parameters.Add("@city", user.City);
+			parameters.Add("@state", user.State);
+			parameters.Add("@country", user.Country);
+			parameters.Add("@postalCode", user.PostalCode);
+			parameters.Add("@phoneNumber", user.PhoneNumber);
+			parameters.Add("@dateOfBirth", user.DateOfBirth);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -152,14 +150,11 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
-			parameters.Add("@SubscriptionId", subId);
+			parameters.Add("@subscriptionId", subId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute(
-					"[Auth].[UpdateUserActiveSub]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
+				connection.Execute("[Auth].[UpdateUserActiveSub]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -176,10 +171,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute(
-					"[Auth].[UpdateUserActiveOrg]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
+				connection.Execute("[Auth].[UpdateUserActiveOrg]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -191,15 +183,12 @@ namespace AllyisApps.DBModel
 		public void UpdateUserLanguagePreference(int userId, int languageId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@Id", userId);
-			parameters.Add("@LanguageId", languageId);
+			parameters.Add("@id", userId);
+			parameters.Add("@languageId", languageId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute(
-					"[Auth].[UpdateUserLanguagePreference]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
+				connection.Execute("[Auth].[UpdateUserLanguagePreference]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -248,9 +237,13 @@ namespace AllyisApps.DBModel
 		/// <returns>The password hash retreived independently after the update, for verification.</returns>
 		public void UpdateUserPassword(int userId, string passwordHash)
 		{
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@userId", userId);
+			parameters.Add("@passwordHash", passwordHash);
+
+			using (var connection = new SqlConnection(this.SqlConnectionString))
 			{
-				con.Execute("[Auth].[UpdateUserPassword] @a, @b", new { a = userId, b = passwordHash });
+				connection.Execute("[Auth].[UpdateUserPassword]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -259,9 +252,13 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public int UpdateUserPasswordUsingCode(string passwordHash, Guid code)
 		{
-			using (var conn = new SqlConnection(this.SqlConnectionString))
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@passwordHash", passwordHash);
+			parameters.Add("@code", code);
+
+			using (var connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return conn.Query<int>("[Auth].[UpdateUserPasswordUsingCode] @a, @b", new { a = passwordHash, b = code }).FirstOrDefault();
+				return connection.Execute("[Auth].[UpdateUserPasswordUsingCode]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -273,89 +270,81 @@ namespace AllyisApps.DBModel
 		/// <returns>number of rows updated</returns>
 		public int UpdateUserPasswordResetCode(string email, string resetCode)
 		{
-			using (var con = new SqlConnection(this.SqlConnectionString))
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@email", email);
+			parameters.Add("@resetCode", resetCode);
+
+			using (var connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return con.Query<int>("Auth.UpdateUserPasswordResetCode @a, @b", new { a = email, b = resetCode }).FirstOrDefault();
+				return connection.Execute("[Auth].[UpdateUserPasswordResetCode]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 	
 		/// <summary>
 		/// Adds an organization to the database and sets the owner's chosen organization to th
 		/// </summary>
-		/// <param name="org">The OrganizationDBEntity to create.</param>
+		/// <param name="organization">The OrganizationDBEntity to create.</param>
 		/// <param name="ownerId">The owner's user Id.</param>
 		/// <param name="roleId">The role associated with the creator of the organization.</param>
 		/// <param name="employeeId">The employee Id for the user creating the organization.</param>
-		/// <returns>The id of the created organization or -1 if the subdomain name is taken.</returns>
-		public int CreateOrganization(OrganizationDBEntity org, int ownerId, int roleId, string employeeId)
+		/// <returns>The id of the created organization</returns>
+		public int InitOrganization(OrganizationDBEntity organization, int ownerId, int roleId, string employeeId)
 		{
-			if (org == null)
+			if (organization == null)
 			{
 				throw new ArgumentException("organizationId cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", ownerId);
-			parameters.Add("@RoleId", roleId);
-			parameters.Add("@Name", org.Name);
-			parameters.Add("@SiteUrl", org.SiteUrl);
-			parameters.Add("AddressId", org.AddressId);
-			parameters.Add("@Address", org.Address);
-			parameters.Add("@City", org.City);
-			parameters.Add("@State", org.State);
-			parameters.Add("@Country", org.Country);
-			parameters.Add("@PostalCode", org.PostalCode);
-			parameters.Add("@PhoneNumber", org.PhoneNumber);
-			parameters.Add("@FaxNumber", org.FaxNumber);
-			parameters.Add("@Subdomain", org.Subdomain);
-			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
-			parameters.Add("@EmployeeId", employeeId);
+			parameters.Add("@roleId", roleId);
+			parameters.Add("@name", organization.Name);
+			parameters.Add("@siteUrl", organization.SiteUrl);
+			parameters.Add("@address", organization.Address);
+			parameters.Add("@city", organization.City);
+			parameters.Add("@state", organization.State);
+			parameters.Add("@country", organization.Country);
+			parameters.Add("@postalCode", organization.PostalCode);
+			parameters.Add("@phoneNumber", organization.PhoneNumber);
+			parameters.Add("@faxNumber", organization.FaxNumber);
+			parameters.Add("@subdomain", organization.Subdomain);
+			parameters.Add("@employeeId", employeeId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				// default -1
-				connection.Execute("[Auth].[CreateOrg]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<int>("[Auth].[SetupOrganization]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
-
-            // Init default pay classes for new org
-            DynamicParameters parameters2 = new DynamicParameters();
-            parameters2.Add("@organizationId", parameters.Get<int>("@retId"));
-            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-            {
-                connection.Execute("[Hrm].[CreateDefaultPayClass]", parameters2, commandType: CommandType.StoredProcedure);
-            }
-
-            return parameters.Get<int>("@retId");
 		}
 
 		/// <summary>
 		/// Updates the specified organization with new information.
 		/// </summary>
-		/// <param name="org">The organization table with updates.</param>
-		/// <returns>True for success, false if the subdomain name is changed to something already taken.</returns>
-		public bool UpdateOrganization(OrganizationDBEntity org)
+		/// <param name="organization">The organization table with updates.</param>
+		/// <returns>Number of rows changed</returns>
+		public int UpdateOrganization(OrganizationDBEntity organization)
 		{
-			if (org == null)
+			if (organization == null)
 			{
-				throw new ArgumentException("org cannot be null.");
+				throw new ArgumentException("organization cannot be null.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@Id", org.OrganizationId);
-			parameters.Add("@Name", org.Name);
-			parameters.Add("@SiteUrl", org.SiteUrl);
-			parameters.Add("@AddressId", org.AddressId);
-			parameters.Add("@Address", org.Address);
-			parameters.Add("@City", org.City);
-			parameters.Add("@State", org.State);
-			parameters.Add("@Country", org.Country);
-			parameters.Add("@PostalCode", org.PostalCode);
-			parameters.Add("@PhoneNumber", org.PhoneNumber);
-			parameters.Add("@FaxNumber", org.FaxNumber);
-			parameters.Add("@SubdomainName", org.Subdomain);
+			parameters.Add("@organizationId", organization.OrganizationId);
+			parameters.Add("@name", organization.Name);
+			parameters.Add("@siteUrl", organization.SiteUrl);
+			parameters.Add("@addressId", organization.AddressId);
+			parameters.Add("@address", organization.Address);
+			parameters.Add("@city", organization.City);
+			parameters.Add("@state", organization.State);
+			parameters.Add("@country", organization.Country);
+			parameters.Add("@postalCode", organization.PostalCode);
+			parameters.Add("@phoneNumber", organization.PhoneNumber);
+			parameters.Add("@faxNumber", organization.FaxNumber);
+			parameters.Add("@subdomainName", organization.Subdomain);
+
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<int>("[Auth].[UpdateOrg]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault() == 1;
+				return connection.Execute("[Auth].[UpdateOrganization]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -377,23 +366,23 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Adds user to an organization.
 		/// </summary>
-		/// <param name="orgUser">The organization's Id.</param>
-		public void CreateOrganizationUser(OrganizationUserDBEntity orgUser)
+		/// <param name="organizationUser">The organization's Id.</param>
+		public void CreateOrganizationUser(OrganizationUserDBEntity organizationUser)
 		{
-			if (orgUser == null)
+			if (organizationUser == null)
 			{
 				throw new ArgumentException("orgUser cannot be null.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", orgUser.OrganizationId);
-			parameters.Add("@userId", orgUser.UserId);
-			parameters.Add("@RoleId", orgUser.OrganizationRoleId);
-			parameters.Add("@employeeId", orgUser.EmployeeId);
+			parameters.Add("@organizationId", organizationUser.OrganizationId);
+			parameters.Add("@userId", organizationUser.UserId);
+			parameters.Add("@roleId", organizationUser.OrganizationRoleId);
+			parameters.Add("@employeeId", organizationUser.EmployeeId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Auth].[CreateOrgUser]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Auth].[CreateOrganizationUser]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -460,26 +449,42 @@ namespace AllyisApps.DBModel
 		/// <param name="organizationId">The Organization Id.</param>
 		/// <param name="organizationRoleId">Organization role to assign (or -1 to remove from organization).</param>
 		/// <returns>The number of affected users.</returns>
-		public int EditOrganizationUsers(List<int> userIds, int organizationId, int organizationRoleId)
+		public int UpdateOrganizationUsersRole(List<int> userIds, int organizationId, int organizationRoleId)
 		{
 			DataTable userIdsTable = new DataTable();
 			userIdsTable.Columns.Add("userId", typeof(int));
-			foreach (int userId in userIds)
-			{
-				userIdsTable.Rows.Add(userId);
-			}
+			foreach (int userId in userIds) { userIdsTable.Rows.Add(userId); }
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@UserIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
-			parameters.Add("@OrganizationId", organizationId);
-			parameters.Add("@OrganizationRole", organizationRoleId);
+			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
+			parameters.Add("@organizationId", organizationId);
+			parameters.Add("@organizationRole", organizationRoleId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<int>(
-					"[Auth].[EditOrgUsers]",
-					parameters,
-					commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return connection.Execute("[Auth].[UpdateOrganizationUsersRole]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Assigns an organization role to a list of users.
+		/// </summary>
+		/// <param name="userIds">List of user Ids.</param>
+		/// <param name="organizationId">The Organization Id.</param>
+		/// <returns>The number of affected users.</returns>
+		public int DeleteOrganizationUsers(List<int> userIds, int organizationId)
+		{
+			DataTable userIdsTable = new DataTable();
+			userIdsTable.Columns.Add("userId", typeof(int));
+			foreach (int userId in userIds) { userIdsTable.Rows.Add(userId); }
+
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
+			parameters.Add("@organizationId", organizationId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Execute("[Auth].[DeleteOrganizationUsers]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -1009,15 +1014,13 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public int UpdateEmailConfirmed(Guid code)
 		{
-			int result = 0;
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@emailConfirmCode", code);
+
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				result = connection.Query<int>("[Auth].[UpdateEmailConfirmed]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				return connection.Execute("[Auth].[UpdateEmailConfirmed]", parameters, commandType: CommandType.StoredProcedure);
 			}
-
-			return result;
 		}
 	}
 }

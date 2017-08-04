@@ -1,30 +1,30 @@
 ﻿CREATE PROCEDURE [Auth].[UpdateUserInfo]
-	@Id INT,
-	@AddressId INT,
-	@FirstName NVARCHAR(32),
-	@LastName NVARCHAR(32),
-    @Address NVARCHAR(32), 
-    @City NVARCHAR(32), 
-    @State NVARCHAR(100), 
-    @Country NVARCHAR(100), 
-    @PostalCode NVARCHAR(16),
-    @PhoneNumber VARCHAR(16),
-	@DateOfBirth DATE
+	@userId INT,
+	@addressId INT,
+	@firstName NVARCHAR(32),
+	@lastName NVARCHAR(32),
+	@address NVARCHAR(32),
+	@city NVARCHAR(32),
+	@state NVARCHAR(100),
+	@country NVARCHAR(100),
+	@postalCode NVARCHAR(16),
+	@phoneNumber VARCHAR(16),
+	@dateOfBirth DATE
 AS
 BEGIN
 	SET NOCOUNT ON;
 	UPDATE [Auth].[User]
-	SET [FirstName] = @FirstName,
-		[LastName] = @LastName,
-		[PhoneNumber] = @PhoneNumber,
-		[DateOfBirth] = @DateOfBirth
-	WHERE [UserId] = @Id
+	SET [FirstName] = @firstName,
+		[LastName] = @lastName,
+		[PhoneNumber] = @phoneNumber,
+		[DateOfBirth] = @dateOfBirth
+	WHERE [UserId] = @userId
 
 	UPDATE [Lookup].[Address]
-	SET [Address1] = @Address,
-		[City] = @City,
-		[StateId] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
-		[CountryId] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
-		[PostalCode] = @PostalCode
-	WHERE [AddressId] = @AddressId
+	SET [Address1] = @address,
+		[City] = @city,
+		[StateId] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @state),
+		[CountryId] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @country),
+		[PostalCode] = @postalCode
+	WHERE [AddressId] = @addressId
 END

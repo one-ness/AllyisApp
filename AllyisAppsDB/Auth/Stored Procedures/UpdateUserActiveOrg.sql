@@ -1,10 +1,10 @@
 ﻿CREATE PROCEDURE [Auth].[UpdateUserActiveOrg]
-	@UserId INT,
-	@OrganizationId INT
+	@userId INT,
+	@organizationId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 	UPDATE [Auth].[User]
-	SET [LastUsedOrganizationId] = @OrganizationId
-	WHERE [UserId] = @UserId
+	SET [LastUsedOrganizationId] = @organizationId
+	WHERE [UserId] = @userId
 END

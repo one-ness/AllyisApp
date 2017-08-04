@@ -692,10 +692,8 @@ namespace AllyisApps.Services
 										};
 										try
 										{
-											var task = DBHelper.CreateUserAsync(GetDBEntityFromUser(user));
-											task.RunSynchronously();
 											result.UsersImported += 1;
-											user.UserId = task.Result;
+											user.UserId = DBHelper.CreateUser(GetDBEntityFromUser(user));
 										}
 										catch
 										{

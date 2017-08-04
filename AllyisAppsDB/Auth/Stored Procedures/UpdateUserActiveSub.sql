@@ -1,10 +1,10 @@
 ﻿CREATE PROCEDURE [Auth].[UpdateUserActiveSub]
-	@UserId INT,
-	@SubscriptionId INT
+	@userId INT,
+	@subscriptionId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 	UPDATE [Auth].[User]
-	SET [LastUsedSubscriptionId] = @SubscriptionId
-	WHERE [UserId] = @UserId
+	SET [LastUsedSubscriptionId] = @subscriptionId
+	WHERE [UserId] = @userId
 END

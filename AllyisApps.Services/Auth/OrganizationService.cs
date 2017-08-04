@@ -28,12 +28,23 @@ namespace AllyisApps.Services
 		/// <param name="organization">Organization.</param>
 		/// <param name="employeeId">Organization owner employee Id.</param>
 		/// <returns>Organizaiton Id, or -1 if the subdomain name is taken.</returns>
-		public int CreateOrganization(Organization organization, string employeeId)
+		public int InitOrganization(Organization organization, string employeeId)
 		{
-			if (organization == null) throw new ArgumentNullException("organization");
-			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
+			#region Validation
 
-			return DBHelper.CreateOrganization(GetDBEntityFromOrganization(organization), this.UserContext.UserId, (int)OrganizationRole.Owner, employeeId);
+			if (organization == null)
+			{
+				throw new ArgumentNullException("organization", "Organization object must not be null.");
+			}
+
+			if (string.IsNullOrWhiteSpace(employeeId))
+			{
+				throw new ArgumentNullException("employeeId", "EmployeeId must not be null");
+			}
+
+			#endregion Validation
+
+			return DBHelper.InitOrganization(GetDBEntityFromOrganization(organization), this.UserContext.UserId, (int)OrganizationRole.Owner, employeeId);
 		}
 
 		/// <summary>
@@ -43,10 +54,14 @@ namespace AllyisApps.Services
 		/// <returns>The Organization.</returns>
 		public Organization GetOrganization(int orgId)
 		{
+			#region Validation
+
 			if (orgId < 0)
 			{
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
 			}
+
+			#endregion Validation
 
 			return InitializeOrganization(DBHelper.GetOrganization(orgId));
 		}
@@ -127,7 +142,7 @@ namespace AllyisApps.Services
 		{
 			if (organization == null) throw new ArgumentException("organization");
 			this.CheckOrgAction(OrgAction.EditOrganization, organization.OrganizationId);
-			return DBHelper.UpdateOrganization(GetDBEntityFromOrganization(organization));
+			return DBHelper.UpdateOrganization(GetDBEntityFromOrganization(organization)) > 0;
 		}
 
 		/// <summary>
@@ -523,16 +538,37 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="userIds">List of user Ids.</param>
 		/// <param name="newOrganizationRole">Organization role to assign, or -1 to remove from organization.</param>
-		/// <param name="orgId">The organization Id</param>
+		/// <param name="organizationId">The organization Id</param>
 		/// <returns>The number of affected users.</returns>
-		public int ChangeUserRoles(List<int> userIds, int newOrganizationRole, int orgId)
+		public int UpdateOrganizationUsersRole(List<int> userIds, int newOrganizationRole, int organizationId)
 		{
 			#region Validation
 
-			if (!Enum.IsDefined(typeof(OrganizationRole), newOrganizationRole) && newOrganizationRole != -1)
+			if (!Enum.IsDefined(typeof(OrganizationRole), newOrganizationRole))
 			{
-				throw new ArgumentOutOfRangeException("newOrganizationRole", "Organization role must either be -1 or match a value of the OrganizationRole enum.");
+				throw new ArgumentOutOfRangeException("newOrganizationRole", "Organization role must match a value of the OrganizationRole enum.");
 			}
+
+			if (userIds == null || userIds.Count == 0)
+			{
+				throw new ArgumentException("userIds", "No user ids provided.");
+			}
+
+			#endregion Validation
+
+			return DBHelper.UpdateOrganizationUsersRole(userIds, organizationId, newOrganizationRole);
+		}
+
+		/// <summary>
+		/// Deletes all users from the org that are in the given userIds list.
+		/// </summary>
+		/// <param name="userIds">List of user Ids.</param>
+		/// <param name="organizationId">The organization Id</param>
+		/// <returns>The number of affected users.</returns>
+		public int DeleteOrganizationUsers(List<int> userIds, int organizationId)
+		{
+			#region Validation
+
 			if (userIds == null || userIds.Count == 0)
 			{
 				throw new ArgumentException("No user ids provided.", "userIds");
@@ -540,7 +576,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.EditOrganizationUsers(userIds, orgId, newOrganizationRole);
+			return DBHelper.DeleteOrganizationUsers(userIds, organizationId);
 		}
 
 		/// <summary>

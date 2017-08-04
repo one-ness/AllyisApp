@@ -38,7 +38,7 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				int orgId = AppService.CreateOrganization(
+				int orgId = AppService.InitOrganization(
 					new Organization()
 					{
 						Address = model.Address,
