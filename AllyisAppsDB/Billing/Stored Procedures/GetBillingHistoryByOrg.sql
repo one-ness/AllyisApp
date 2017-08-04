@@ -4,13 +4,13 @@ AS
 	SET NOCOUNT ON;
 SELECT
 	[BillingHistory].[OrganizationId],
-	[BillingHistory].[CreatedUtc] AS [Date],
+	[BillingHistory].[BillingHistoryCreatedUtc] AS [Date],
 	[BillingHistory].[Description],
 	[BillingHistory].[UserId],
 	[BillingHistory].[SkuId],
-	[Sku].[Name] AS [SkuName],
+	[Sku].[SkuName] AS [SkuName],
 	[Sku].[ProductId],
-	[Product].[Name] AS [ProductName]
+	[Product].[ProductName] AS [ProductName]
 FROM [Billing].[BillingHistory] WITH (NOLOCK)
 LEFT JOIN [Auth].[User] WITH (NOLOCK) ON [User].[UserId] = [BillingHistory].[UserId]
 LEFT JOIN [Billing].[Sku] WITH (NOLOCK) ON [Sku].[SkuId] = [BillingHistory].[SkuId]

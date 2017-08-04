@@ -16,13 +16,13 @@
                     if (customer.CustomerInfo.IsActive)
                     {
                     <a onclick="PopulateInactiveProjects('@customer.CustomerInfo.CustomerId', 1)" class="list-group-item" id="inactive-@customer.CustomerInfo.CustomerId">
-                        <text>@customer.CustomerInfo.Name</text>
+                        <text>@customer.CustomerInfo.CustomerName</text>
                     </a>
                     }
                     else
                     {
                         <a onclick="PopulateInactiveProjects('@customer.CustomerInfo.CustomerId', 0)" class="list-group-item" id="inactive-@customer.CustomerInfo.CustomerId">
-                            <text>@customer.CustomerInfo.Name</text>
+                            <text>@customer.CustomerInfo.CustomerName</text>
                         </a>
                     }
                 }

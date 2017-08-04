@@ -38,13 +38,13 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				int orgId = AppService.InitOrganization(
+				int orgId = AppService.SetupOrganization(
 					new Organization()
 					{
 						Address = model.Address,
 						City = model.City,
 						Country = model.Country,
-						Name = model.Name,
+                        OrganizationName = model.OrganizationName,
 						SiteUrl = model.SiteUrl,
 						State = model.State,
 						PostalCode = model.PostalCode,

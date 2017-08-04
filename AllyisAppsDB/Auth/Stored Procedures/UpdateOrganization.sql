@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [Auth].[UpdateOrganization]
 	@organizationId INT,
-	@name NVARCHAR(100),
+	@organizationName NVARCHAR(100),
 	@siteUrl NVARCHAR(100),
 	@address NVARCHAR(100), 
 	@city NVARCHAR(100), 
@@ -16,13 +16,13 @@ BEGIN
 	UPDATE [Lookup].[Address]
 	SET [Address1] = @address,
 		[City] = @city,
-		[StateId] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @state),
-		[CountryId] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @country),
+		[StateId] = (SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [StateName] = @state),
+		[CountryId] = (SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @country),
 		[PostalCode] = @postalCode
 	WHERE [AddressId] = @addressId
 
 	UPDATE [Auth].[Organization]
-	SET [Name] = @name,
+	SET [OrganizationName] = @organizationName,
 		[SiteUrl] = @siteUrl,
 		[PhoneNumber] = @phoneNumber,
 		[FaxNumber] = @faxNumber,

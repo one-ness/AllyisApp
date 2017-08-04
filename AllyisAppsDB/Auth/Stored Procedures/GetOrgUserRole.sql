@@ -7,7 +7,7 @@ BEGIN
 
 	SELECT
 		[OrganizationRole].[OrganizationRoleId], 
-		[OrganizationRole].[Name]
+		[OrganizationRole].[OrganizationRoleName]
 	FROM [Auth].[OrganizationUser]
 	WITH (NOLOCK)
 	INNER JOIN [Auth].[OrganizationRole] WITH (NOLOCK) ON [OrganizationRole].[OrganizationRoleId] = [OrganizationUser].[OrganizationRoleId]

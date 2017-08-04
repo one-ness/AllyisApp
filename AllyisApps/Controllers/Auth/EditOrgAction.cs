@@ -35,7 +35,7 @@ namespace AllyisApps.Controllers
 						new Organization()
 						{
 							OrganizationId = model.OrganizationId,
-							Name = model.Name,
+                            OrganizationName = model.OrganizationName,
 							SiteUrl = model.SiteUrl,
 							AddressId = model.AddressId,
 							Address = model.Address,
@@ -95,7 +95,7 @@ namespace AllyisApps.Controllers
 			return new EditOrganizationViewModel
 			{
 				OrganizationId = organization.OrganizationId,
-				Name = organization.Name,
+                OrganizationName = organization.OrganizationName,
 				SiteUrl = organization.SiteUrl,
 				AddressId = organization.AddressId,
 				Address = organization.Address,

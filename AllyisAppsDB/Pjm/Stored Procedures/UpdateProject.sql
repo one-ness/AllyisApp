@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [Pjm].[UpdateProject]
 	@ProjectId INT,
-	@Name NVARCHAR(MAX),
+	@ProjectName NVARCHAR(MAX),
 	@IsHourly BIT,
     @StartingDate DATE,
     @EndingDate DATE,
@@ -9,7 +9,7 @@ AS
 	SET NOCOUNT ON;
 	UPDATE [Pjm].[Project]
 	SET 
-		[Name] = @Name,
+		[ProjectName] = @ProjectName,
 		[IsHourly] = @IsHourly,
 		[StartUtc] = @StartingDate,
 		[EndUtc] = @EndingDate,

@@ -4,18 +4,18 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	SELECT [Customer].[CustomerId],
-		   [Customer].[Name],
+		   [Customer].[CustomerName],
 		   [Address1] AS 'Address',
 		   [City],
-		   [State].[Name] AS 'State',
-		   [Country].[Name] AS 'Country',
+		   [State].[StateName] AS 'State',
+		   [Country].[CountryName] AS 'Country',
 		   [PostalCode],
 		   [Customer].[ContactEmail],
 		   [Customer].[ContactPhoneNumber],
 		   [Customer].[FaxNumber],
 		   [Customer].[Website],
 		   [Customer].[EIN],
-		   [Customer].[CreatedUtc],
+		   [Customer].[CustomerCreatedUtc],
 		   [Customer].[OrganizationId],
 		   [Customer].[CustomerOrgId]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 

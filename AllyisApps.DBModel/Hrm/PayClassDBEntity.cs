@@ -21,7 +21,7 @@ namespace AllyisApps.DBModel.Hrm
 		/// <summary>
 		/// Gets or sets.
 		/// </summary>
-		public string Name { get; set; }
+		public string PayClassName { get; set; }
 
 		/// <summary>
 		/// Gets or sets.

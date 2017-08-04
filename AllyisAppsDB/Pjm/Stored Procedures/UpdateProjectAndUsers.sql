@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [Pjm].[UpdateProjectAndUsers]
 	@ProjectId INT,
-	@Name NVARCHAR(MAX),
+	@ProjectName NVARCHAR(MAX),
 	@OrgId NVARCHAR(16),
 	@IsHourly BIT,
     @StartingDate DATE,
@@ -35,7 +35,7 @@ BEGIN
 		/* Update other project properties */
 		UPDATE [Pjm].[Project]
 		SET 
-			[Name] = @Name,
+			[ProjectName] = @ProjectName,
 			[ProjectOrgId] = @OrgId,
 			[IsHourly] = @IsHourly,
 			[StartUtc] = @StartingDate,

@@ -35,7 +35,7 @@ namespace AllyisApps.Controllers
 			{
 				SkuId = sku.SkuId,
 				SkuIdNext = sku.SkuIdNext,
-				Name = sku.Name,
+				Name = sku.SkuName,
 				NextName = sku.NextName,
 				Description = sku.Description,
 				SubscriptionId = id,
@@ -52,8 +52,8 @@ namespace AllyisApps.Controllers
 			SkuInfo sku = AppService.GetSkuDetails(skuId);
 			SkuInfo skuNext = infos.Item3.Where(s => s.SkuId != skuId && s.ProductId == productId).SingleOrDefault();
 			sku.SkuIdNext = skuNext == null ? 0 : skuNext.SkuId;
-			sku.NextName = skuNext == null ? null : skuNext.Name;
-			switch (sku.Name)
+			sku.NextName = skuNext == null ? null : skuNext.SkuName;
+			switch (sku.SkuName)
 			{
 				case "Time Tracker":
 					sku.NextName = "Time Tracker Pro";

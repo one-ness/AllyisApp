@@ -40,7 +40,7 @@ namespace AllyisApps.ViewModels.Auth
 			{
 				foreach (ProductRole role in value)
 				{
-					role.Name = Resources.Strings.ResourceManager.GetString(role.Name.Replace(" ", string.Empty)) ?? role.Name;
+					role.ProductRoleName = Resources.Strings.ResourceManager.GetString(role.ProductRoleName.Replace(" ", string.Empty)) ?? role.ProductRoleName;
 				}
 
 				roles = value;

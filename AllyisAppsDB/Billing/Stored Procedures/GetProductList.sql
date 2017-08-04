@@ -3,8 +3,8 @@ AS
 	SET NOCOUNT ON;
 	SELECT
 		[Product].[ProductId],
-		[Product].[Name],
+		[Product].[ProductName],
 		[Product].[Description]
 	FROM [Billing].[Product] WITH (NOLOCK) 
 	WHERE [IsActive] = 1
-	ORDER BY [Product].[Name]
+	ORDER BY [Product].[ProductName]

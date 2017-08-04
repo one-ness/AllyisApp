@@ -21,7 +21,7 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Gets or sets the name.
 		/// </summary>
-		public string Name { get; set; }
+		public string PayClassName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization Id.

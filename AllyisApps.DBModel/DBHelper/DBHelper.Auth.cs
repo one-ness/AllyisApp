@@ -104,7 +104,7 @@ namespace AllyisApps.DBModel
 
 			DynamicParameters parameters = new DynamicParameters();
 
-			parameters.Add("@id", user.UserId);
+			parameters.Add("@userId", user.UserId);
 			parameters.Add("@addressId", user.AddressId);
 			parameters.Add("@firstName", user.FirstName);
 			parameters.Add("@lastName", user.LastName);
@@ -288,7 +288,7 @@ namespace AllyisApps.DBModel
 		/// <param name="roleId">The role associated with the creator of the organization.</param>
 		/// <param name="employeeId">The employee Id for the user creating the organization.</param>
 		/// <returns>The id of the created organization</returns>
-		public int InitOrganization(OrganizationDBEntity organization, int ownerId, int roleId, string employeeId)
+		public int SetupOrganization(OrganizationDBEntity organization, int ownerId, int roleId, string employeeId)
 		{
 			if (organization == null)
 			{
@@ -298,7 +298,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", ownerId);
 			parameters.Add("@roleId", roleId);
-			parameters.Add("@name", organization.Name);
+			parameters.Add("@organizationName", organization.OrganizationName);
 			parameters.Add("@siteUrl", organization.SiteUrl);
 			parameters.Add("@address", organization.Address);
 			parameters.Add("@city", organization.City);
@@ -330,7 +330,7 @@ namespace AllyisApps.DBModel
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organization.OrganizationId);
-			parameters.Add("@name", organization.Name);
+			parameters.Add("@organizationName", organization.OrganizationName);
 			parameters.Add("@siteUrl", organization.SiteUrl);
 			parameters.Add("@addressId", organization.AddressId);
 			parameters.Add("@address", organization.Address);

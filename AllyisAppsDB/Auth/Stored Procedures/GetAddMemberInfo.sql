@@ -8,23 +8,23 @@ AS
 	ORDER BY [EmployeeId] DESC
 
 	SELECT	[Product].[ProductId],
-		[Product].[Name] AS [ProductName],
+		[Product].[ProductName] AS [ProductName],
 		[Subscription].[SubscriptionId],
 		[Organization].[OrganizationId],
 		[Subscription].[SkuId],
 		[Subscription].[NumberOfUsers],
-		[Organization].[Name] AS [OrganizationName],
-		[Sku].[Name] AS [SkuName]
+		[Organization].[OrganizationName] AS [OrganizationName],
+		[Sku].[SkuName] AS [SkuName]
 	FROM [Billing].[Subscription] WITH (NOLOCK) 
 	LEFT JOIN [Billing].[Sku]			WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
 	LEFT JOIN [Auth].[Organization]	WITH (NOLOCK) ON [Organization].[OrganizationId] = [Subscription].[OrganizationId]
 	LEFT JOIN [Billing].[Product]		WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
 	WHERE [Subscription].[OrganizationId] = @OrganizationId
 	AND [Subscription].[IsActive] = 1
-	ORDER BY [Product].[Name]
+	ORDER BY [Product].[ProductName]
 
 	SELECT 
-		[ProductRole].[Name],
+		[ProductRole].[ProductRoleName],
 		[ProductRole].[ProductRoleId],
 		[ProductRole].[ProductId]
 	FROM [Billing].[Subscription] WITH (NOLOCK) 
@@ -35,12 +35,12 @@ AS
 	SELECT	[Project].[ProjectId],
 		[Project].[CustomerId],
 		[Customer].[OrganizationId],
-		[Project].[CreatedUtc],
-		[Project].[Name] AS [ProjectName],
+		[Project].[ProjectCreatedUtc],
+		[Project].[ProjectName] AS [ProjectName],
 		[Project].[IsActive],
 		[ProjectOrgId],
-		[Organization].[Name] AS [OrganizationName],
-		[Customer].[Name] AS [CustomerName],
+		[Organization].[OrganizationName] AS [OrganizationName],
+		[Customer].[CustomerName] AS [CustomerName],
 		[Customer].[CustomerOrgId],
 		[Customer].[IsActive] AS [IsCustomerActive],
 		[Project].[IsHourly] AS [IsHourly]
@@ -53,7 +53,7 @@ AS
 	WHERE [Customer].[IsActive] >= 1
 		AND [Project].[IsActive] >= 1
 
-	ORDER BY [Project].[Name]
+	ORDER BY [Project].[ProjectName]
 
 	SELECT TOP 1
 		[EmployeeId]

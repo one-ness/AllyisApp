@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [Auth].[CreateOrganization]
-	@name NVARCHAR(100),
+	@organizationName NVARCHAR(100),
 	@siteUrl NVARCHAR(100),
 	@address NVARCHAR(100),
 	@city NVARCHAR(100),
@@ -24,19 +24,19 @@ BEGIN
 				[PostalCode])
 		VALUES(@address,
 				@city,
-				(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @state),
-				(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @country),
+				(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [StateName] = @state),
+				(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @country),
 				@postalCode);
 
 		-- Create org
 		INSERT INTO [Auth].[Organization] 
-				([Name],
+				([OrganizationName],
 				[SiteUrl],
 				[AddressId],
 				[PhoneNumber],
 				[FaxNumber],
 				[Subdomain])
-		VALUES (@name,
+		VALUES (@organizationName,
 				@siteUrl,
 				SCOPE_IDENTITY(),
 				@phoneNumber,

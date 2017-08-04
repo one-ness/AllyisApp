@@ -42,7 +42,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		[DataType(DataType.Text)]
         [RegularExpression(@"^.{1,30}$", ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "CustomerNameWarning")]
 		[Display(Name = "Name")]
-		public string Name { get; set; }
+		public string CustomerName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Customer id.
@@ -126,6 +126,11 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// Gets or sets the id of subscription Id that the Customer belongs too.
 		/// </summary>
 		public int SubscriptionId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the name of subscription Id that the Customer belongs too.
+		/// </summary>
+		public string SubscriptionName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user's id

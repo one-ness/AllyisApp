@@ -6,7 +6,7 @@ AS
 		[User].[LastName],
 		[User].[UserId],
 		[OrganizationUser].[OrganizationRoleId],
-		[OrganizationRole].[Name],
+		[OrganizationRole].[OrganizationRoleName],
 		[User].[Email],
 		[SubscriptionUser].[ProductRoleId], 
 		[SubscriptionUser].[SubscriptionId]
@@ -24,7 +24,7 @@ AS
 	SELECT 
 		[Subscription].[SubscriptionId],
 		[Sku].[ProductId],
-		[Product].[Name] AS 'ProductName'
+		[Product].[ProductName] AS 'ProductName'
 	FROM [Billing].[Subscription] WITH (NOLOCK)
 	LEFT JOIN [Billing].[Sku] WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
 	LEFT JOIN [Billing].[Product] WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]

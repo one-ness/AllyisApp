@@ -6,17 +6,17 @@ BEGIN
 
 	SELECT 
 		[OrganizationId],
-		[Organization].[Name],
+		[Organization].[OrganizationName],
 		[SiteUrl], 
 		[Address1] AS 'Address', 
 		[City], 
-		[State].[Name] AS 'State', 
-		[Country].[Name] AS 'Country', 
+		[State].[StateName] AS 'State', 
+		[Country].[CountryName] AS 'Country', 
 		[PostalCode], 
 		[PhoneNumber], 
 		[FaxNumber], 
 		[Subdomain],
-		[CreatedUtc]
+		[OrganizationCreatedUtc]
 	FROM [Auth].[Organization] WITH (NOLOCK)
 		LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [Organization].[AddressId]
 		LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]

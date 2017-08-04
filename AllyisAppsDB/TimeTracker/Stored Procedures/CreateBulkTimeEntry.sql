@@ -8,7 +8,7 @@
 AS
 BEGIN
 	SET NOCOUNT ON;
-	DECLARE @TTProductId INT = (SELECT [ProductId] FROM [Billing].[Product] WHERE [Product].[Name] = 'TimeTracker');
+	DECLARE @TTProductId INT = (SELECT [ProductId] FROM [Billing].[Product] WHERE [Product].[ProductName] = 'TimeTracker');
 	SELECT [SkuId] INTO #SKUIDs FROM [Billing].[Sku] WHERE [ProductId] = @TTProductId;
 
 	IF (@OrganizationId = 0) --Every time tracker user

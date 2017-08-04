@@ -21,7 +21,7 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets the organization's e-mail address.
 		/// </summary>
-		public string Name { get; set; }
+		public string OrganizationName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's website URL.

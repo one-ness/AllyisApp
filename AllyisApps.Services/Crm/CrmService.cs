@@ -262,7 +262,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
 			}
 
-			if (string.IsNullOrWhiteSpace(newProject.Name))
+			if (string.IsNullOrWhiteSpace(newProject.ProjectName))
 			{
 				throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
 			}
@@ -296,7 +296,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("customerId", "Customer Id cannot be 0 or negative.");
 			}
 
-			if (string.IsNullOrWhiteSpace(newProject.Name))
+			if (string.IsNullOrWhiteSpace(newProject.ProjectName))
 			{
 				throw new ArgumentNullException("name", "Project name must have a value and cannot be whitespace.");
 			}
@@ -330,7 +330,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("ProjectId", "Project Id cannot be 0 or negative.");
 			}
 
-			if (string.IsNullOrWhiteSpace(project.Name))
+			if (string.IsNullOrWhiteSpace(project.ProjectName))
 			{
 				throw new ArgumentNullException("Name", "Project name must have a value and cannot be whitespace.");
 			}
@@ -648,7 +648,7 @@ namespace AllyisApps.Services
 				CustomerOrgId = customer.CustomerOrgId,
 				EIN = customer.EIN,
 				FaxNumber = customer.FaxNumber,
-				Name = customer.Name,
+                CustomerName = customer.CustomerName,
 				OrganizationId = customer.OrganizationId,
 				PostalCode = customer.PostalCode,
 				State = customer.State,
@@ -682,7 +682,7 @@ namespace AllyisApps.Services
 				CustomerOrgId = customer.CustomerOrgId,
 				EIN = customer.EIN,
 				FaxNumber = customer.FaxNumber,
-				Name = customer.Name,
+                CustomerName = customer.CustomerName,
 				OrganizationId = customer.OrganizationId,
 				PostalCode = customer.PostalCode,
 				State = customer.State,
@@ -708,7 +708,7 @@ namespace AllyisApps.Services
                 CustomerId = project.CustomerId,
                 CustomerName = project.CustomerName,
 				EndingDate = project.EndingDate,
-				Name = project.Name,
+                ProjectName = project.ProjectName,
 				OrganizationId = project.OrganizationId,
 				ProjectId = project.ProjectId,
 				ProjectOrgId = project.ProjectOrgId,
@@ -733,7 +733,7 @@ namespace AllyisApps.Services
 			{
 				CustomerId = project.CustomerId,
 				EndingDate = project.EndingDate,
-				Name = project.Name,
+                ProjectName = project.ProjectName,
 				OrganizationId = project.OrganizationId,
 				ProjectId = project.ProjectId,
 				ProjectOrgId = project.ProjectOrgId,

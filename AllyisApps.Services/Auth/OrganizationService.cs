@@ -28,7 +28,7 @@ namespace AllyisApps.Services
 		/// <param name="organization">Organization.</param>
 		/// <param name="employeeId">Organization owner employee Id.</param>
 		/// <returns>Organizaiton Id, or -1 if the subdomain name is taken.</returns>
-		public int InitOrganization(Organization organization, string employeeId)
+		public int SetupOrganization(Organization organization, string employeeId)
 		{
 			#region Validation
 
@@ -44,7 +44,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.InitOrganization(GetDBEntityFromOrganization(organization), this.UserContext.UserId, (int)OrganizationRole.Owner, employeeId);
+			return DBHelper.SetupOrganization(GetDBEntityFromOrganization(organization), this.UserContext.UserId, (int)OrganizationRole.Owner, employeeId);
 		}
 
 		/// <summary>
@@ -249,7 +249,7 @@ namespace AllyisApps.Services
 			string htmlbody = string.Format(
 				"{0} has joined the organization {1} on Allyis Apps.",
 				invitation.FirstName + " " + invitation.LastName,
-				org.Name);
+				org.OrganizationName);
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
 			foreach (dynamic owner in owners)
@@ -295,7 +295,7 @@ namespace AllyisApps.Services
 			string htmlbody = string.Format(
 				"{0} has requested you join their organization on Allyis Apps, {1}!<br /> Click <a href=http://{2}/Account/Index?accessCode={3}>Here</a> to create an account and join!",
 				requestingUserFullName,
-				orgInfo.Name,
+				orgInfo.OrganizationName,
 				webRoot,
 				invitationInfo.AccessCode);
 
@@ -646,7 +646,7 @@ namespace AllyisApps.Services
 				Country = organization.Country,
 				CreatedUtc = organization.CreatedUtc,
 				FaxNumber = organization.FaxNumber,
-				Name = organization.Name,
+                OrganizationName = organization.OrganizationName,
 				OrganizationId = organization.OrganizationId,
 				PhoneNumber = organization.PhoneNumber,
 				SiteUrl = organization.SiteUrl,
@@ -676,7 +676,7 @@ namespace AllyisApps.Services
 				Country = organization.Country,
 				CreatedUtc = organization.CreatedUtc,
 				FaxNumber = organization.FaxNumber,
-				Name = organization.Name,
+                OrganizationName = organization.OrganizationName,
 				OrganizationId = organization.OrganizationId,
 				PhoneNumber = organization.PhoneNumber,
 				SiteUrl = organization.SiteUrl,

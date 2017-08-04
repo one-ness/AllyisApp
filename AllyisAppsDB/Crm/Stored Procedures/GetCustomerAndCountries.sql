@@ -7,14 +7,14 @@ BEGIN
 	
 	SET NOCOUNT ON;
 	SELECT [Customer].[CustomerId],
-		   [Customer].[Name],
+		   [Customer].[CustomerName],
 		   [Customer].[AddressId],
 		   [Customer].[ContactEmail],
 		   [Customer].[ContactPhoneNumber],
 		   [Customer].[FaxNumber],
 		   [Customer].[Website],
 		   [Customer].[EIN],
-		   [Customer].[CreatedUtc],
+		   [Customer].[CustomerCreatedUtc],
 		   [Customer].[OrganizationId],
 		   [Customer].[CustomerOrgId]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 
@@ -23,7 +23,7 @@ BEGIN
 	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE [CustomerId] = @CustomerId
 	
-	SELECT [Name] FROM [Lookup].[Country] WITH (NOLOCK);
+	SELECT [CountryName] FROM [Lookup].[Country] WITH (NOLOCK);
 
 	SET @AddressId = (SELECT m.AddressId
 					FROM [Crm].[Customer] AS m
@@ -31,8 +31,8 @@ BEGIN
 
 	SELECT [Address].[Address1],
 		   [Address].[City],
-		   [State].[Name] AS 'State',
-		   [Country].[Name] AS 'CountryId',
+		   [State].[StateName] AS 'State',
+		   [Country].[CountryName] AS 'CountryId',
 		   [Address].[PostalCode]
 	FROM [Lookup].[Address] AS [Address] WITH (NOLOCK)
 	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]

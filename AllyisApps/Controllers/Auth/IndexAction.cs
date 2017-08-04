@@ -35,7 +35,7 @@ namespace AllyisApps.Controllers
 
             foreach(var invite in infos.Item3)
             {
-                string orgName =  AppService.GetOrganization(invite.OrganizationId).Name;
+                string orgName =  AppService.GetOrganization(invite.OrganizationId).OrganizationName;
                 ViewData[invite.OrganizationId.ToString()] = orgName;
             }
 

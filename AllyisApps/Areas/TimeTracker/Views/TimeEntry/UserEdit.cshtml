@@ -2,12 +2,13 @@
 @model UserEditViewModel
 
 @{
-    ViewBag.Title = Strings.EditUser;
-    DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
-    DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
-    Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
-    ViewData["UserId"] = Model.UserId;  //logged in user
-    ViewData["SubscriptionId"] = Model.SubscriptionId;
+	ViewBag.Title = Strings.EditUser;
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+	Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
+	ViewData["UserId"] = Model.UserId;  //logged in user
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
 <div class="shrink-wrap-center">
@@ -37,7 +38,7 @@
                                     var css_class = "out";
                                     @*@Html.HiddenFor(project.CustomerId)
                                         @Html.HiddenFor(project.ProjectId)*@
-                                    <option value="@project.ProjectId" class="@css_class" data-search="@project.Name">@project.CustomerName - @project.Name</option>
+                                    <option value="@project.ProjectId" class="@css_class" data-search="@project.ProjectName">@project.CustomerName - @project.ProjectName</option>
                                 }
                             }
                         </select>
@@ -61,7 +62,7 @@
                                 if (checkboxValue)
                                 {
                                     var css_class = "in";
-                                    <option value="@project.ProjectId" class="@css_class" data-search="@project.Name">@project.CustomerName - @project.Name</option>
+                                    <option value="@project.ProjectId" class="@css_class" data-search="@project.ProjectName">@project.CustomerName - @project.ProjectName</option>
                                 }
                             }
                         </select>

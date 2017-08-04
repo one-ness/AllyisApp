@@ -27,7 +27,7 @@ namespace AllyisApps.DBModel
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<CountryDBEntity>("[Lookup].[GetCountries]").ToDictionary(x => x.CountryId, x => x.Name);
+				return connection.Query<CountryDBEntity>("[Lookup].[GetCountries]").ToDictionary(x => x.CountryId, x => x.CountryName);
 			}
 		}
 
@@ -38,7 +38,7 @@ namespace AllyisApps.DBModel
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<CountryDBEntity>("[Lookup].[GetCountries]").Select(x => x.Name).ToList();
+				return connection.Query<CountryDBEntity>("[Lookup].[GetCountries]").Select(x => x.CountryName).ToList();
 			}
 		}
 

@@ -4,18 +4,18 @@
 AS
 	SELECT 
 		[OrganizationId],
-		[Organization].[Name],
+		[Organization].[OrganizationName],
 		[SiteUrl], 
 		[Organization].[AddressId],
 		[Address].[Address1] AS 'Address',
 		[Address].[City], 
-		[State].[Name] AS 'State', 
-		[Country].[Name] AS 'Country', 
+		[State].[StateName] AS 'State', 
+		[Country].[CountryName] AS 'Country', 
 		[Address].[PostalCode], 
 		[PhoneNumber], 
 		[FaxNumber], 
 		[Subdomain],
-		[CreatedUtc]
+		[OrganizationCreatedUtc]
 
 	FROM [Auth].[Organization] WITH (NOLOCK)
 		LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [Organization].[AddressId]
@@ -23,7 +23,7 @@ AS
 		LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE OrganizationId = @OrganizationId
 
-	SELECT [Name] FROM [Lookup].[Country] WITH (NOLOCK)
+	SELECT [CountryName] FROM [Lookup].[Country] WITH (NOLOCK)
 
 	SELECT [EmployeeId]
 	FROM [Auth].[OrganizationUser] WITH (NOLOCK)

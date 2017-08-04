@@ -56,9 +56,9 @@ AS
 	SELECT * FROM @Settings
 
 	IF(SELECT COUNT(*) FROM [Hrm].[PayClass] WHERE [OrganizationId] = @OrganizationId) > 0
-		SELECT [PayClassId], [Name], [OrganizationId] FROM [Hrm].[PayClass] WITH (NOLOCK) WHERE [OrganizationId] = @OrganizationId;
+		SELECT [PayClassId], [PayClassName], [OrganizationId] FROM [Hrm].[PayClass] WITH (NOLOCK) WHERE [OrganizationId] = @OrganizationId;
 	ELSE
-		SELECT [PayClassId], [Name], [OrganizationId] FROM [Hrm].[PayClass] WITH (NOLOCK) WHERE [OrganizationId] = 0;
+		SELECT [PayClassId], [PayClassName], [OrganizationId] FROM [Hrm].[PayClass] WITH (NOLOCK) WHERE [OrganizationId] = 0;
 
 	IF(SELECT COUNT(*) FROM [Hrm].[Holiday] WITH (NOLOCK) WHERE [OrganizationId] = @OrganizationId) > 0
 		SELECT [HolidayId], [HolidayName], [Date], [OrganizationId] FROM [Hrm].[Holiday] WITH (NOLOCK) WHERE [OrganizationId] = @OrganizationId ORDER BY [Date];
@@ -68,14 +68,14 @@ AS
 	SELECT	[Project].[ProjectId],
 			[Project].[CustomerId],
 			[Customer].[OrganizationId],
-			[Project].[CreatedUtc],
+			[Project].[ProjectCreatedUtc],
 			[Project].[StartUtc] as [StartDate],
 			[Project].[EndUtc] as [EndDate],
-			[Project].[Name] AS [ProjectName],
+			[Project].[ProjectName] AS [ProjectName],
 			[Project].[IsActive],
 			[Project].[IsHourly] AS [IsHourly],
-			[Organization].[Name] AS [OrganizationName],
-			[Customer].[Name] AS [CustomerName],
+			[Organization].[OrganizationName] AS [OrganizationName],
+			[Customer].[CustomerName] AS [CustomerName],
 			[Customer].[CustomerOrgId],
 			[Customer].[IsActive] AS [IsCustomerActive],
 			[ProjectUser].[IsActive] AS [IsUserActive],
@@ -98,21 +98,21 @@ AS
 	SELECT	[ProjectId],
 			[CustomerId],
 			0,
-			[CreatedUtc],
+			[ProjectCreatedUtc],
 			[StartUtc],
 			[EndUtc],
-			[Name],
+			[ProjectName],
 			[IsActive],
 			[IsHourly],
-			(SELECT [Name] FROM [Auth].[Organization] WITH (NOLOCK) WHERE [OrganizationId] = 0),
-			(SELECT [Name] FROM [Crm].[Customer] WITH (NOLOCK) WHERE [CustomerId] = 0),
+			(SELECT [OrganizationName] FROM [Auth].[Organization] WITH (NOLOCK) WHERE [OrganizationId] = 0),
+			(SELECT [CustomerName] FROM [Crm].[Customer] WITH (NOLOCK) WHERE [CustomerId] = 0),
 			NULL,
 			0,
 			0,
 			0,
 			[ProjectOrgId]
 			FROM [Pjm].[Project] WITH (NOLOCK) WHERE [ProjectId] = 0
-	ORDER BY [Project].[Name]
+	ORDER BY [Project].[ProjectName]
 
 	SELECT [User].[UserId],
 		[User].[FirstName],
@@ -141,7 +141,7 @@ AS
 		,[OrganizationUser].[EmployeeId]
 		,[TimeEntry].[ProjectId]
 		,[TimeEntry].[PayClassId]
-		,[PayClass].[Name] AS [PayClassName]
+		,[PayClass].[PayClassName] AS [PayClassName]
 		,[Date]
 		,[Duration]
 		,[Description]

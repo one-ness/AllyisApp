@@ -13,7 +13,7 @@ FROM [Billing].[Product]
 	  WHERE [Sku].SkuId = @skuId
 
 SELECT 
-	[Product].[Name], 
+	[Product].[ProductName], 
 	[Product].[ProductId], 
 	[Product].[Description], 
 	[Product].[AreaUrl]
@@ -29,14 +29,14 @@ SELECT
 		[SubscriptionId],
 		[SkuId],
 		[NumberOfUsers],
-		[CreatedUtc],
+		[SubscriptionCreatedUtc],
 		[OrganizationId]
 	FROM [Billing].[Subscription] WITH (NOLOCK) 
 	WHERE [SubscriptionId] = @SubscriptionId
 
 	SELECT [SkuId],
 		[ProductId],
-		[Name],
+		[SkuName],
 		[CostPerBlock],
 		[UserLimit],
 		[BillingFrequency],

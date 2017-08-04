@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [Auth].[SetupOrganization]
 	@userId INT,
 	@roleId INT,
-	@name NVARCHAR(100),
+	@organizationName NVARCHAR(100),
 	@siteUrl NVARCHAR(100),
 	@address NVARCHAR(100),
 	@city NVARCHAR(100),
@@ -19,7 +19,7 @@ BEGIN
 
 	BEGIN TRANSACTION
 		-- Create organization
-		EXEC [Auth].[CreateOrganization] @name, @siteUrl, @address, @city, @state, @country, @postalCode, @phoneNumber, @faxNumber, @subdomain;
+		EXEC [Auth].[CreateOrganization] @organizationName, @siteUrl, @address, @city, @state, @country, @postalCode, @phoneNumber, @faxNumber, @subdomain;
 
 		-- get the new organization id
 		DECLARE @organizationId INT = IDENT_CURRENT('[Auth].[Organization]');
