@@ -147,7 +147,6 @@
     <Build Include="Crm\Stored Procedures\UpdateCustomerInfo.sql" />
     <Build Include="Billing\Stored Procedures\GetProductSubscriptionInfo.sql" />
     <Build Include="Billing\Stored Procedures\DeleteSubPlanAndAddHistory.sql" />
-    <Build Include="Billing\Stored Procedures\EditSubscriptionUsers.sql" />
     <Build Include="Billing\Stored Procedures\GetBillingHistoryByOrg.sql" />
     <Build Include="Billing\Stored Procedures\CreateStripeOrganizationCustomer.sql" />
     <Build Include="Billing\Stored Procedures\CreateSubscriptionPlan.sql" />
@@ -303,6 +302,8 @@
     <Build Include="Auth\Stored Procedures\UpdateOrganizationUsersRole.sql" />
     <Build Include="Auth\Stored Procedures\DeleteOrganizationUsers.sql" />
     <Build Include="Auth\Stored Procedures\CreateUser.sql" />
+    <Build Include="Billing\Stored Procedures\UpdateSubscriptionUserRoles.sql" />
+    <Build Include="Billing\Stored Procedures\DeleteSubscriptionUsers.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

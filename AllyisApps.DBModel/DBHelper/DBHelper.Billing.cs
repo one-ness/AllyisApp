@@ -86,21 +86,16 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-        /// <summary>
-        /// Assigns a time tracker role to a list of users.
-        /// </summary>
-        /// <param name="userIds">List of user Ids.</param>
-        /// <param name="organizationId">The Organization Id.</param>
-        /// <param name="productRoleId">Product role to assign (or -1 to remove from organization).</param>
-        /// <param name="productId">ID of Product in question.</param>
-        /// <returns>The number of updated/removed users, and the number of newly added users (or -1 if subscription is too full).</returns>
-        public Tuple<int, int> EditSubscriptionUsers(List<int> userIds, int organizationId, int productRoleId, int productId)
+		/// <summary>
+		/// Assigns a time tracker role to a list of users.
+		/// </summary>
+		/// <param name="userIds">List of user Ids.</param>
+		/// <param name="organizationId">The Organization Id.</param>
+		/// <param name="productRoleId">Product role to assign (or -1 to remove from organization).</param>
+		/// <param name="productId">ID of Product in question.</param>
+		/// <returns>The number of updated/removed users, and the number of newly added users (or -1 if subscription is too full).</returns>
+		public Tuple<int, int> UpdateSubscriptionUserRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
 		{
-			if (productRoleId == 0)
-			{
-				throw new ArgumentException("Role cannot be 0.");
-			}
-
 			DataTable userIdsTable = new DataTable();
 			userIdsTable.Columns.Add("userId", typeof(int));
 			foreach (int userId in userIds) { userIdsTable.Rows.Add(userId); }
@@ -109,26 +104,41 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@productRoleId", productRoleId);
+
+			//TODO: instead of providing product id, provide subscription id of the subscription to be modified
 			parameters.Add("@productId", productId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple("[Billing].[EditSubscriptionUsers]", parameters, commandType: CommandType.StoredProcedure);
+				//TODO: split updating user roles and creating new sub users
+				var results = connection.QueryMultiple("[Billing].[UpdateSubscriptionUserRoles]", parameters, commandType: CommandType.StoredProcedure);
 				int usersUpdated = results.Read<int>().SingleOrDefault();
-				if (usersUpdated == -1)
-				{
-					return Tuple.Create(-1, 0); // Indicates no subscription to TimeTracker for this organization.
-												//throw new InvalidOperationException("No subscription to TimeTracker for this organization.");
-				}
-
-				if (productRoleId == -1) // If removing from subscription, return only the number of users succesfully removed.
-				{
-					return Tuple.Create(usersUpdated, 0);
-				}
-
-				// If changing roles, return the number of users updated and the number of users added.
-				int usersAdded = results.Read<int>().SingleOrDefault(); // Note: this number may be -1, indicating too many users in the subscription to add any.
+				int usersAdded = results.Read<int>().SingleOrDefault();
 				return Tuple.Create(usersUpdated, usersAdded);
+			}
+		}
+
+		/// <summary>Deletes the given users in the given organization's subscription</summary>
+		/// <param name="userIds">List of user Ids.</param>
+		/// <param name="organizationId">The Organization Id.</param>
+		/// <param name="productId">ID of Product in question.</param>
+		/// <returns>count of deleted users</returns>
+		public void DeleteSubscriptionUsers(List<int> userIds, int organizationId, int productId)
+		{
+			DataTable userIdsTable = new DataTable();
+			userIdsTable.Columns.Add("userId", typeof(int));
+			foreach (int userId in userIds) { userIdsTable.Rows.Add(userId); }
+
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
+			parameters.Add("@organizationId", organizationId);
+
+			//TODO: instead of providing product id, provide subscription id of the subscription to be modified
+			parameters.Add("@productId", productId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Execute("[Billing].[DeleteSubscriptionUsers]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

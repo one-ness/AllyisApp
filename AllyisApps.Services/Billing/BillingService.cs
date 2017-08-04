@@ -317,32 +317,51 @@ namespace AllyisApps.Services
 			DBHelper.DeleteSubscriptionUser(subscriptionId, userId);
 		}
 
-        /// <summary>
-        /// Assigns a new TimeTracker role to the given users for the current organization.
-        /// </summary>
-        /// <param name="userIds">List of user Ids.</param>
-        /// <param name="newProductRole">Product role to assign, or -1 to remove from subscription.</param>
-        /// <param name="orgId">The Organization Id</param>
-        /// <param name="productId">The subscribed Product Id</param>
-        /// <returns>A tuple containing the number of updated users and the number of added users. If the updated users is -1,
-        /// there is no TimeTracker subscription. If the number added is -1, there are too many subscription users already to
-        /// add the given list.</returns>
-        public Tuple<int, int> ChangeSubscriptionUserRoles(List<int> userIds, int newProductRole, int orgId, int productId)
+		/// <summary>
+		/// Assigns a new TimeTracker role to the given users for the current organization.
+		/// </summary>
+		/// <param name="userIds">List of user Ids.</param>
+		/// <param name="newProductRole">Product role to assign</param>
+		/// <param name="orgId">The Organization Id</param>
+		/// <param name="productId">The subscribed Product Id</param>
+		/// <returns>A tuple containing the number of updated users and the number of added users.</returns>
+		public Tuple<int, int> UpdateSubscriptionUserRoles(List<int> userIds, int newProductRole, int orgId, int productId)
 		{
 			#region Validation
 
-			if (!Enum.IsDefined(typeof(TimeTrackerRole), newProductRole) && newProductRole != -1)
+			if (!Enum.IsDefined(typeof(TimeTrackerRole), newProductRole))
 			{
-				throw new ArgumentOutOfRangeException("newProductRole", "Product role must either be -1 or match a value of the ProductRoleIdEnum enum.");
+				throw new ArgumentOutOfRangeException("newProductRole", "Product role must match a value of the ProductRoleIdEnum enum.");
 			}
+
 			if (userIds == null || userIds.Count == 0)
 			{
-				throw new ArgumentException("No user ids provided.", "userIds");
+				throw new ArgumentException("userIds", "No user ids provided.");
 			}
 
 			#endregion Validation
 
-			return DBHelper.EditSubscriptionUsers(userIds, orgId, newProductRole, productId);
+			//TODO: split updating user roles and creating new sub users
+			return DBHelper.UpdateSubscriptionUserRoles(userIds, orgId, newProductRole, productId);
+		}
+
+		/// <summary>Deletes the given users in the given organization's subscription</summary>
+		/// <param name="userIds">List of user Ids.</param>
+		/// <param name="orgId">The Organization Id</param>
+		/// <param name="productId">The subscribed Product Id</param>
+		/// <returns>count of deleted users</returns>
+		public void DeleteSubscriptionUsers(List<int> userIds, int orgId, int productId)
+		{
+			#region Validation
+
+			if (userIds == null || userIds.Count == 0)
+			{
+				throw new ArgumentException("userIds", "No user ids provided.");
+			}
+
+			#endregion Validation
+
+			DBHelper.DeleteSubscriptionUsers(userIds, orgId, productId);
 		}
 
 		/// <summary>
@@ -578,8 +597,7 @@ namespace AllyisApps.Services
 			int subId = DBHelper.ChangeSubscription(orgId, selectedSku, productId, subscriptionName);
 			if (subId != 0)
 			{
-				var thing = GetProductRolesFromSubscription(subId);
-				DBHelper.UpdateSubscriptionUserProductRole(this.GetProductRolesFromSubscription(subId).Where(x => x.ProductRoleName == "Manager").Single().ProductRoleId, subId, UserContext.UserId);
+				DBHelper.UpdateSubscriptionUserProductRole((int)ProductRoleIdEnum.Manager, subId, UserContext.UserId);
 			}
 		}
 
