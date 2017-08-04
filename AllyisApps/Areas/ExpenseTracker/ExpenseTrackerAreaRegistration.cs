@@ -33,6 +33,14 @@ namespace AllyisApps.Areas.TimeTracker
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
 			context.Routes.MapSubdomainRoute(
+				name: "ExpenseReport",
+				url: "ExpenseTracker/{subscriptionId}/{controller}/{action}",
+				area: this.AreaName,
+				defaults: new { controller = "Expense", action = "Create" },
+				constraints: new { subscriptionId = @"\d+" },
+				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers" });
+
+			context.Routes.MapSubdomainRoute(
 				name: "ExpenseTracker_Default",
 				url: "ExpenseTracker/{subscriptionId}/{controller}",
 				area: this.AreaName,

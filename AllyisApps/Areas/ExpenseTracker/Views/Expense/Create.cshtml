@@ -1,0 +1,67 @@
+﻿@using AllyisApps.ViewModels.ExpenseTracker.Expense;
+@using AllyisApps.Core;
+@using AllyisApps.Services;
+
+@model ExpenseReportsViewModel
+
+@{
+    ViewBag.Title = Strings.Report;
+    Layout = "~/Areas/ExpenseTracker/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Strings.Report</h2>
+
+<div class="row report-wrap">
+	<div class="col-md-12">
+		<div class="row">
+            @using (Html.BeginForm(ActionConstants.ViewReport, ControllerConstants.TimeEntry, FormMethod.Post, htmlAttributes: new { @id = "reportForm" }))
+            {
+                @Html.HiddenFor(m => m.SubscriptionId)
+                <div class="options-right container">
+                    <div class="row">
+
+						<!-- A holder for all the projects, to draw from for populating the real selection list -->
+						<select id="allprojects" style="display: none;">
+							@if (Model.Reports != null)
+							{
+								foreach (ExpenseReportModel proj in Model.Reports)
+								{
+									<option value="@proj.ReportId" class="projectSelectOption">@proj.ReportName</option>
+								}
+							}
+						</select>
+                    </div>
+					<div class="row">
+						<label style="margin-right:200px">Report Name</label>
+						@Html.TextBox("ReportName", "", new { @class = "form-control", style = "width: 50%, display: inline-block;" })
+						<label style="margin-right:200px">Business Justification</label>
+						@Html.TextBox("BusinessJustification", "", new { @class = "form-control", style = "width: 50%, display: inline-block;" })
+						<div class="form-group col-md-6 col-lg-6">
+							<label style="margin-right:200px">@Strings.Date</label>
+							<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.StartDate" />
+							<input type="text" class="form-control" style="width: 50%; display: inline-block;" id="datePickerStart" />
+							<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id="datePickerStartButton" title="Choose start date"></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div>
+								<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" style="margin-left: 15px;" value=@Strings.Preview title="Preview Excel Time Tracker entries"/>
+							</div>
+						</div>
+					</div>
+                </div>
+			}
+		</div>
+		<br>
+	</div>
+
+	<div class="col-xs-12">
+		<div class="panel panel-default">
+			<div class="panel-body" style="padding: 0px">
+			</div>
+			<div id="data-message" class="panel-footer">
+			</div>
+		</div>
+	</div>
+</div>

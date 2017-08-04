@@ -31,5 +31,24 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 }
             });
 		}
+
+		///// <summary>
+		///// return create expense report page
+		///// </summary>
+		///// <returns></returns>
+		//public ActionResult Create()
+		//{
+		//	return View();
+		//}
+
+		/// <summary>
+		/// return expense report
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
+		public ActionResult Create(ExpenseReportsViewModel model)
+		{
+			return View(model);
+		}
 	}
 }
