@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [Billing].[EditSubscriptionUsers]
-	@OrganizationId	INT,
+	@OrganizationId INT,
 	@UserIds [Auth].[UserTable] READONLY,
 	@ProductRoleId INT,
 	@ProductId INT
@@ -78,4 +78,4 @@ BEGIN TRANSACTION
 	BEGIN	
 		SELECT -1 -- No subscription to time tracker
 	END
-COMMIT
+COMMIT TRANSACTION

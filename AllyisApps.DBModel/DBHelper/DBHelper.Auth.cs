@@ -307,7 +307,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@postalCode", organization.PostalCode);
 			parameters.Add("@phoneNumber", organization.PhoneNumber);
 			parameters.Add("@faxNumber", organization.FaxNumber);
-			parameters.Add("@subdomain", organization.Subdomain);
+			parameters.Add("@subdomainName", organization.Subdomain);
 			parameters.Add("@employeeId", employeeId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))

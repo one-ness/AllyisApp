@@ -149,7 +149,7 @@
     <Build Include="Billing\Stored Procedures\DeleteSubPlanAndAddHistory.sql" />
     <Build Include="Billing\Stored Procedures\EditSubscriptionUsers.sql" />
     <Build Include="Billing\Stored Procedures\GetBillingHistoryByOrg.sql" />
-    <Build Include="Billing\Stored Procedures\CreateStripeOrgCustomer.sql" />
+    <Build Include="Billing\Stored Procedures\CreateStripeOrganizationCustomer.sql" />
     <Build Include="Billing\Stored Procedures\CreateSubscriptionPlan.sql" />
     <Build Include="Billing\Stored Procedures\DeleteBillingInformation.sql" />
     <Build Include="Billing\Stored Procedures\DeleteCustomerSubscription.sql" />
