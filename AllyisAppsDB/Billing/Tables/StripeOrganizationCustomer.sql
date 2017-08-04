@@ -4,7 +4,7 @@
     [IsActive]          BIT           NOT NULL,
     [StripeOrganizationCustomerCreatedUtc]        DATETIME2 (0) CONSTRAINT [DF_StripeOrganizationCustomer_CreatedUtc] DEFAULT (getutcdate()) NOT NULL,
     [StripeOrganizationCustomerModifiedUtc]       DATETIME2 (0) CONSTRAINT [DF_StripeOrganizationCustomer_ModifiedUtc] DEFAULT (getutcdate()) NOT NULL,
-    PRIMARY KEY NONCLUSTERED ([StripeTokenCustId] ASC),
+    CONSTRAINT [PK_StripeOrganizationCustomer] PRIMARY KEY NONCLUSTERED ([StripeTokenCustId] ASC),
     CONSTRAINT [FK_OrganizationCustomer_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId])
 );
 
