@@ -304,6 +304,7 @@
     <Build Include="Auth\Stored Procedures\CreateUser.sql" />
     <Build Include="Billing\Stored Procedures\UpdateSubscriptionUserRoles.sql" />
     <Build Include="Billing\Stored Procedures\DeleteSubscriptionUsers.sql" />
+    <Build Include="Billing\Stored Procedures\GetNumberSubscriptionUsers.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
