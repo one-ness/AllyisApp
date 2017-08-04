@@ -14,8 +14,8 @@
 	@isTwoFactorEnabled BIT,
 	@isLockoutEnabled BIT,
 	@lockoutEndDateUtc DATE,
-	@languageId INT,
-	@address_Identity INT
+	@languageId INT
+
 AS
 BEGIN
 	SET NOCOUNT ON;
