@@ -27,7 +27,13 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 ProductRole = 2,
                 Reports= new List<ExpenseReportModel>()
                 {
-                    new ExpenseReportModel() {Amount = 250.01, Status = ReportStatusEnum.Pending, SubmittedDate = DateTime.UtcNow, ReportName = "Test Report"}
+                    new ExpenseReportModel() {ReportId = 000001, Amount = 250.01, Status = ReportStatusEnum.Rejected, SubmittedDate = DateTime.UtcNow, ReportName = "Kichenette Supplies"},
+                    new ExpenseReportModel() {ReportId = 000002, Amount = 10000.92, Status = ReportStatusEnum.Pending, SubmittedDate = DateTime.UtcNow, ReportName = "Company Scooter"},
+                    new ExpenseReportModel() {ReportId = 000003, Amount = 7356.11, Status = ReportStatusEnum.Accepted, SubmittedDate = DateTime.UtcNow, ReportName = "Laptop Order"},
+                    new ExpenseReportModel() {ReportId = 000004, Amount = 20.33, Status = ReportStatusEnum.Pending, SubmittedDate = DateTime.UtcNow, ReportName = "New Batteries"},
+                    new ExpenseReportModel() {ReportId = 000005, Amount = 92.31, Status = ReportStatusEnum.Pending, SubmittedDate = DateTime.UtcNow, ReportName = "IT Lunch Meeting"},
+                    new ExpenseReportModel() {ReportId = 000006, Amount = 2566355.00, Status = ReportStatusEnum.Rejected, SubmittedDate = DateTime.UtcNow, ReportName = "Toga Party"},
+                    new ExpenseReportModel() {ReportId = 000007, Amount = 477.63, Status = ReportStatusEnum.Accepted, SubmittedDate = DateTime.UtcNow, ReportName = "Exec Lunch Meeting"},
                 }
             });
 		}

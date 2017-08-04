@@ -3,7 +3,8 @@
 
 @model ExpenseReportsViewModel
 @{
-
+    DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/ExpenseTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+    DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
 }
 
 @Html.Partial("_AjaxExpenseEntries", Model)
