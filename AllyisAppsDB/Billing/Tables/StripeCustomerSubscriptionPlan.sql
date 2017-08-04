@@ -6,11 +6,11 @@
     [ProductId]         INT           NOT NULL,
     [IsActive]          BIT           NOT NULL,
     [OrganizationId]    INT           NOT NULL,
-    [StripeCustomerSubscriptionPlanCreatedUtc]        DATETIME2 (0) CONSTRAINT [DF__StripeCus__Creat__6C190EBB] DEFAULT (getutcdate()) NOT NULL,
-    [StripeCustomerSubscriptionPlanModifiedUtc]       DATETIME2 (0) CONSTRAINT [DF__StripeCus__Modif__6D0D32F4] DEFAULT (getutcdate()) NOT NULL,
-    CONSTRAINT [PK__StripeCu__902596C6930887E0] PRIMARY KEY CLUSTERED ([StripeTokenSubId] ASC),
-    CONSTRAINT [FK_CustomerSubscriptionPlan_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),
-    CONSTRAINT [FK_CustomerSubscriptionPlan_Product] FOREIGN KEY ([ProductId]) REFERENCES [Billing].[Product] ([ProductId])
+    [StripeCustomerSubscriptionPlanCreatedUtc]        DATETIME2 (0) CONSTRAINT [DF__StripeCustomerSubscriptionPlan__CreatedUtc] DEFAULT (getutcdate()) NOT NULL,
+    [StripeCustomerSubscriptionPlanModifiedUtc]       DATETIME2 (0) CONSTRAINT [DF__StripeCustomerSubscriptionPlan__ModifiedUtc] DEFAULT (getutcdate()) NOT NULL,
+    CONSTRAINT [PK__StripeCustomerSubscriptionPlan] PRIMARY KEY CLUSTERED ([StripeTokenSubId] ASC),
+    CONSTRAINT [FK_StripeCustomerSubscriptionPlan_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),
+    CONSTRAINT [FK_StripeCustomerSubscriptionPlan_Product] FOREIGN KEY ([ProductId]) REFERENCES [Billing].[Product] ([ProductId])
 );
 
 

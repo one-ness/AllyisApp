@@ -4,8 +4,8 @@
     [OrganizationId] INT            NOT NULL,
     [UserId]         INT            NOT NULL,
     [SkuId]          INT            NULL,
-    [BillingHistoryCreatedUtc]     DATETIME2 (0)  CONSTRAINT [DF__BillingHi__Creat__6A30C649] DEFAULT (getutcdate()) NOT NULL,
-    [BillingHistoryModifiedUtc]    DATETIME2 (0)  CONSTRAINT [DF__BillingHi__Modif__6B24EA82] DEFAULT (getutcdate()) NOT NULL,
+    [BillingHistoryCreatedUtc]     DATETIME2 (0)  CONSTRAINT [DF__BillingHistory__CreatedUtc] DEFAULT (getutcdate()) NOT NULL,
+    [BillingHistoryModifiedUtc]    DATETIME2 (0)  CONSTRAINT [DF__BillingHistory__ModifiedUtc] DEFAULT (getutcdate()) NOT NULL,
     CONSTRAINT [PK_BillingHistory] PRIMARY KEY NONCLUSTERED ([Date] ASC),
     CONSTRAINT [FK_BillingHistory_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),
     CONSTRAINT [FK_BillingHistory_User] FOREIGN KEY ([UserId]) REFERENCES [Auth].[User] ([UserId])
