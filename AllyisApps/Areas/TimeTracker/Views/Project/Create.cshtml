@@ -2,16 +2,17 @@
 @model EditProjectViewModel
 
 @{
-    DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
-    DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
-    string actionName = (string)ViewContext.Controller.ValueProvider.GetValue("action").RawValue;
-    string controllerName = (string)ViewContext.Controller.ValueProvider.GetValue("controller").RawValue;
-    ViewBag.Title = Strings.CreateProject;
-    ViewBag.Subtitle = Model.CustomerName;
-    ViewData["UserId"] = Model.UserId;
-    ViewData["SubscriptionId"] = Model.SubscriptionId;
-    ViewData.Add(ControllerConstants.Controller, ControllerConstants.Project);
-    ViewData.Add(ActionConstants.Action, ActionConstants.Create);
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+	string actionName = (string)ViewContext.Controller.ValueProvider.GetValue("action").RawValue;
+	string controllerName = (string)ViewContext.Controller.ValueProvider.GetValue("controller").RawValue;
+	ViewBag.Title = Strings.CreateProject;
+	ViewBag.Subtitle = Model.CustomerName;
+	ViewData["UserId"] = Model.UserId;
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
+	ViewData.Add(ControllerConstants.Controller, ControllerConstants.Project);
+	ViewData.Add(ActionConstants.Action, ActionConstants.Create);
 }
 
 <div>

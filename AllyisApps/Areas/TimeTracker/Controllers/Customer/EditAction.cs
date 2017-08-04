@@ -28,11 +28,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
 			var infos = AppService.GetCustomerAndCountries(userId);
+			string SubscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
 
 			return this.View(new EditCustomerInfoViewModel
 			{
 				ContactEmail = infos.Item1.ContactEmail,
-                CustomerName = infos.Item1.CustomerName,
+				CustomerName = infos.Item1.CustomerName,
 				AddressId = infos.Item1.AddressId,
 				Address = infos.Item3.Address1,
 				City = infos.Item3.City,
@@ -47,7 +48,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				CustomerId = userId,
 				ValidCountries = infos.Item2,
 				CustomerOrgId = infos.Item1.CustomerOrgId,
-				SubscriptionId = subscriptionId
+				SubscriptionId = subscriptionId,
+				SubscriptionName = SubscriptionNameToDisplay
 			});
 		}
 
