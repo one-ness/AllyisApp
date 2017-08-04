@@ -149,7 +149,7 @@
     <Build Include="Billing\Stored Procedures\DeleteSubPlanAndAddHistory.sql" />
     <Build Include="Billing\Stored Procedures\EditSubscriptionUsers.sql" />
     <Build Include="Billing\Stored Procedures\GetBillingHistoryByOrg.sql" />
-    <Build Include="Billing\Stored Procedures\CreateStripeOrgCustomer.sql" />
+    <Build Include="Billing\Stored Procedures\CreateStripeOrganizationCustomer.sql" />
     <Build Include="Billing\Stored Procedures\CreateSubscriptionPlan.sql" />
     <Build Include="Billing\Stored Procedures\DeleteBillingInformation.sql" />
     <Build Include="Billing\Stored Procedures\DeleteCustomerSubscription.sql" />
@@ -184,16 +184,13 @@
     <Build Include="Auth\Stored Procedures\GetUserInvitationsByOrgId.sql" />
     <Build Include="Auth\Stored Procedures\GetUserInvitationsByUserData.sql" />
     <Build Include="Auth\Stored Procedures\GetUsersWithSubscriptionToProductInOrganization.sql" />
-    <Build Include="Auth\Stored Procedures\UpdateOrg.sql" />
+    <Build Include="Auth\Stored Procedures\UpdateOrganization.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserActiveOrg.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserActiveSub.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserInfo.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserPassword.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserPasswordResetCode.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserPasswordUsingCode.sql" />
-    <Build Include="Auth\Stored Procedures\CreateOrg.sql" />
-    <Build Include="Auth\Stored Procedures\CreateOrgUser.sql" />
-    <Build Include="Auth\Stored Procedures\CreateUserInfo.sql" />
     <Build Include="Auth\Stored Procedures\CreateUserInvitation.sql" />
     <Build Include="Auth\Stored Procedures\DeleteOrg.sql" />
     <Build Include="Auth\Stored Procedures\DeleteOrgUser.sql" />
@@ -201,7 +198,6 @@
     <Build Include="Auth\Stored Procedures\GetActiveProductRoleForUser.sql" />
     <Build Include="Auth\Stored Procedures\GetOrg.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationsByUserId.sql" />
-    <Build Include="Auth\Stored Procedures\EditOrgUsers.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgWithCountriesAndEmployeeId.sql" />
     <Build Include="Auth\Stored Procedures\GetAddMemberInfo.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgAndSubRoles.sql" />
@@ -245,7 +241,6 @@
     <Build Include="Billing\Stored Procedures\GetAllActiveProductsAndSkus.sql" />
     <Build Include="Auth\Stored Procedures\UpdateMember.sql" />
     <None Include="DefaultData\DummyData.sql" />
-    <Build Include="Auth\Stored Procedures\CreateUser.sql" />
     <Build Include="Finance\Tables\Account.sql" />
     <Build Include="Finance\Tables\AccountType.sql" />
     <Build Include="Expense\Tables\ExpenseReport.sql" />
@@ -302,6 +297,12 @@
     <Build Include="Lookup\Tables\OrganizationLocation.sql" />
     <Build Include="Auth\Stored Procedures\GetUserInvitationsByInviteId.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationOwnerEmails.sql" />
+    <Build Include="Auth\Stored Procedures\CreateOrganization.sql" />
+    <Build Include="Auth\Stored Procedures\CreateOrganizationUser.sql" />
+    <Build Include="Auth\Stored Procedures\SetupOrganization.sql" />
+    <Build Include="Auth\Stored Procedures\UpdateOrganizationUsersRole.sql" />
+    <Build Include="Auth\Stored Procedures\DeleteOrganizationUsers.sql" />
+    <Build Include="Auth\Stored Procedures\CreateUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

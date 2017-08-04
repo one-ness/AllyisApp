@@ -81,7 +81,7 @@ namespace AllyisApps.Services
 				string serviceType = "Stripe";
 				BillingServicesHandler handler = new BillingServicesHandler(serviceType);
 				customerId = handler.CreateCustomer(billingServicesEmail, token);
-				this.AddOrgCustomer(customerId, null, orgId);
+				this.CreateStripeOrganizationCustomer(customerId, null, orgId);
 				//this.AddBillingHistory(string.Format("Adding {0} customer data", serviceType), null);
 			}
 			else
@@ -212,14 +212,14 @@ namespace AllyisApps.Services
 		/// <param name="selectedSku">Selected sku id, for the billing history item.</param>
 		/// <param name="orgId"></param>
 		[CLSCompliant(false)]
-		public void AddOrgCustomer(BillingServicesCustomerId customerId, int? selectedSku, int orgId)
+		public void CreateStripeOrganizationCustomer(BillingServicesCustomerId customerId, int? selectedSku, int orgId)
 		{
 			if (customerId == null)
 			{
 				throw new ArgumentNullException("customerId", "Billing Services customer id must have a value.");
 			}
 
-			DBHelper.AddOrgCustomer(orgId, UserContext.UserId, customerId.Id, selectedSku, "Adding stripe customer data.");
+			DBHelper.CreateStripeOrganizationCustomer(orgId, UserContext.UserId, customerId.Id, selectedSku, "Adding stripe customer data.");
 		}
 
 		/// <summary>
@@ -639,7 +639,7 @@ namespace AllyisApps.Services
 			{
 				BillingServicesCustomerId customerId = this.CreateBillingServicesCustomer(newBillingEmail, newBillingToken);
 
-				this.AddOrgCustomer(customerId, null, orgId);
+				this.CreateStripeOrganizationCustomer(customerId, null, orgId);
 				customer = this.RetrieveCustomer(customerId);
 				token = newBillingToken;
 			}
@@ -656,7 +656,7 @@ namespace AllyisApps.Services
 				if (customerId == null)
 				{
 					customer = this.RetrieveCustomer(this.CreateBillingServicesCustomer(newBillingEmail, token));
-					this.AddOrgCustomer(customer.Id, null, orgId);
+					this.CreateStripeOrganizationCustomer(customer.Id, null, orgId);
 				}
 				else
 				{

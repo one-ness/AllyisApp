@@ -16,7 +16,7 @@ BEGIN
 		[PhoneNumber], 
 		[FaxNumber], 
 		[Subdomain],
-		[CreatedUtc]
+		[OrganizationCreatedUtc]
 	FROM [Auth].[Organization] WITH (NOLOCK)
 		LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [Organization].[AddressId]
 		LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]

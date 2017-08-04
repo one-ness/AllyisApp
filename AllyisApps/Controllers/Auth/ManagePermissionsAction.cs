@@ -227,14 +227,15 @@ namespace AllyisApps.Controllers
 						return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 					}
 				}
-
-				int numberChanged = AppService.ChangeUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.OrganizationRoleTarget.Value, model.OrganizationId);
+				
 				if (model.SelectedActions.OrganizationRoleTarget == -1)
 				{
+					int numberChanged = AppService.DeleteOrganizationUsers(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId);
 					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
 				}
 				else
 				{
+					int numberChanged = AppService.UpdateOrganizationUsersRole(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.OrganizationRoleTarget.Value, model.OrganizationId);
 					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersChangedRolesInOrg, numberChanged), Variety.Success));
 				}
 			}

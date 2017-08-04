@@ -12,8 +12,8 @@ BEGIN
 		[ExpenseReportId],
 		[AccountId],
 		[IsBillableToCustomer],
-		[CreatedUtc],
-		[ModifiedUtc]
+		[ExpenseItemCreatedUtc],
+		[ExpenseItemModifiedUtc]
 	FROM [Expense].[ExpenseItem] WITH (NOLOCK)
 	WHERE AccountId = @accountId
 END

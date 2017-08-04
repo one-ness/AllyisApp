@@ -27,13 +27,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			var infos = AppService.GetProjectsForOrgAndUser(userId, subscriptionId);
+			string SubscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
 			return this.View(new UserEditViewModel
 			{
 				UserId = this.AppService.UserContext.UserId,
 				SubscriptionId = subscriptionId,
 				UserProjects = infos.Item1,
 				AllProjects = infos.Item2,
-				UserName = infos.Item3
+				UserName = infos.Item3,
+				SubscriptionName = SubscriptionNameToDisplay
 			});
 		}
 

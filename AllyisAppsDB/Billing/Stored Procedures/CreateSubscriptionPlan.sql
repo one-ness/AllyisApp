@@ -1,14 +1,15 @@
 ﻿CREATE PROCEDURE [Billing].[CreateSubscriptionPlan]
-	@OrganizationId INT,
-	@StripeTokenCustId NVARCHAR(50),
-	@StripeTokenSubId NVARCHAR(50), 
-	@NumberOfUsers INT, 
-	@Price INT,
-	@ProductId INT,
-	@UserId INT,
-	@SkuId INT,
-	@Description NVARCHAR(MAX)
+	@organizationId INT,
+	@stripeTokenCustId NVARCHAR(50),
+	@stripeTokenSubId NVARCHAR(50),
+	@numberOfUsers INT,
+	@price INT,
+	@productId INT,
+	@userId INT,
+	@skuId INT,
+	@description NVARCHAR(MAX)
 AS
+BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRANSACTION
 		INSERT INTO [Billing].[StripeCustomerSubscriptionPlan] (
@@ -20,14 +21,25 @@ AS
 			[ProductId],
 			[IsActive])
 		VALUES (
-			@OrganizationId,
-			@StripeTokenCustId,
-			@StripeTokenSubId,
-			@NumberOfUsers,
-			@Price,
-			@ProductId,
+			@organizationId,
+			@stripeTokenCustId,
+			@stripeTokenSubId,
+			@numberOfUsers,
+			@price,
+			@productId,
 			1);
 
-		INSERT INTO [Billing].[BillingHistory] ([Date], [Description], [OrganizationId], [UserId], [SkuId])
-		VALUES (SYSDATETIME(), @Description, @OrganizationId, @UserId, @SkuId)
+		INSERT INTO [Billing].[BillingHistory]
+			([Date],
+			[Description],
+			[OrganizationId],
+			[UserId],
+			[SkuId])
+		VALUES
+			(SYSDATETIME(),
+			@description,
+			@organizationId,
+			@userId,
+			@skuId)
 	COMMIT
+END

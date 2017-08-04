@@ -1,9 +1,21 @@
 ﻿CREATE PROCEDURE [Billing].[CreateBillingHistory]
-	@Description NVARCHAR(MAX), 
-	@OrganizationId INT, 
-	@UserId INT, 
-	@SkuId INT 
+	@description NVARCHAR(MAX),
+	@organizationId INT,
+	@userId INT,
+	@skuId INT
 AS
+BEGIN
 	SET NOCOUNT ON;
-	INSERT INTO [Billing].[BillingHistory] ([Date], [Description], [OrganizationId], [UserId], [SkuId])
-	VALUES (SYSDATETIME(), @Description, @OrganizationId, @UserId, @SkuId)
+	INSERT INTO [Billing].[BillingHistory]
+		([Date],
+		[Description],
+		[OrganizationId],
+		[UserId],
+		[SkuId])
+	VALUES (
+		SYSDATETIME(),
+		@description,
+		@organizationId,
+		@userId,
+		@skuId);
+END

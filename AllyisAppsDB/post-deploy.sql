@@ -12,10 +12,10 @@ Post-Deployment Script Template
 
 
 --Insert Default Org
-SET IDENTITY_INSERT [Auth].[Organization] ON
-INSERT INTO [Auth].[Organization] (OrganizationId, [OrganizationName], Subdomain)
-VALUES (0, 'Default', 'default')
-SET IDENTITY_INSERT [Auth].[Organization] OFF
+--SET IDENTITY_INSERT [Auth].[Organization] ON
+--INSERT INTO [Auth].[Organization] (OrganizationId, [OrganizationName], Subdomain)
+--VALUES (0, 'Default', 'default')
+--SET IDENTITY_INSERT [Auth].[Organization] OFF
 GO
 
 ----Insert Default Customer

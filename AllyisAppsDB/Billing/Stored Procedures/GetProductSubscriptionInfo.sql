@@ -29,7 +29,7 @@ SELECT
 		[SubscriptionId],
 		[SkuId],
 		[NumberOfUsers],
-		[CreatedUtc],
+		[SubscriptionCreatedUtc],
 		[OrganizationId]
 	FROM [Billing].[Subscription] WITH (NOLOCK) 
 	WHERE [SubscriptionId] = @SubscriptionId

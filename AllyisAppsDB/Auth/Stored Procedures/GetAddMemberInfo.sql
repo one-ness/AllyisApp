@@ -35,7 +35,7 @@ AS
 	SELECT	[Project].[ProjectId],
 		[Project].[CustomerId],
 		[Customer].[OrganizationId],
-		[Project].[CreatedUtc],
+		[Project].[ProjectCreatedUtc],
 		[Project].[ProjectName] AS [ProjectName],
 		[Project].[IsActive],
 		[ProjectOrgId],
