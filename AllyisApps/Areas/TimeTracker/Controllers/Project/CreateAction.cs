@@ -43,6 +43,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 			}
 
+			string SubscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
 			return this.View(
 				new EditProjectViewModel()
 				{
@@ -55,6 +56,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					ProjectOrgId = idAndUsers.Item1, //Service.GetRecommendedProjectId()
 					CustomerName = AppService.GetCustomer(userId).CustomerName,
 					SubscriptionId = subscriptionId,
+					SubscriptionName = SubscriptionNameToDisplay,
 					UserId = userId,
 					OrganizationId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId
 				});
