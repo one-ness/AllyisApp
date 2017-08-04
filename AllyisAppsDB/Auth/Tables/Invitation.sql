@@ -8,7 +8,7 @@ CREATE TABLE [Auth].[Invitation] (
     [AccessCode]     VARCHAR (50)   NOT NULL,
     [IsActive]       BIT            NOT NULL,
     [OrganizationRoleId]      INT   NOT NULL,
-    [InvitationCreatedUtc]     DATETIME2 (0)  DEFAULT (getutcdate()) NOT NULL,
+    [InvitationCreatedUtc]     DATETIME2 (0)  CONSTRAINT [DF_Invitation_CreatedUtc] DEFAULT (getutcdate()) NOT NULL,
     [EmployeeId]     NVARCHAR (16)  NOT NULL,
     CONSTRAINT [PK_Invitation] PRIMARY KEY CLUSTERED ([InvitationId] ASC),
     CONSTRAINT [FK_Invitation_OrganizationId] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),
