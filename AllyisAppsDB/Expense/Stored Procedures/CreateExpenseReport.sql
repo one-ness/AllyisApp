@@ -16,10 +16,10 @@ BEGIN
 		[SubmittedById],
 		[ReportStatus],
 		[BusinessJustification])
-	VALUES (@ReportTitle,
-		@ReportDate,
-		@OrganizationId,
-		@SubmittedById,
-		@ReportStatus,
-		@BuisnessJustification);
+	VALUES (@reportTitle,
+		@reportDate,
+		@organizationId,
+		@submittedById,
+		@reportStatus,
+		@buisnessJustification);
 END

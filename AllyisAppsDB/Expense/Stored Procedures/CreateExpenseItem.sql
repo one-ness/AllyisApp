@@ -14,9 +14,9 @@ BEGIN
 		[Amount],
 		[ExpenseReportId],
 		[IsBillableToCustomer])
-	VALUES (@ItemDescription,
-		@TransactionDate,
-		@Amount,
-		@ExpenseReportId,
-		@IsBillableToCustomer);
+	VALUES (@itemDescription,
+		@transactionDate,
+		@amount,
+		@expenseReportId,
+		@isBillableToCustomer);
 END

@@ -11,7 +11,7 @@ BEGIN
 
 	IF EXISTS (
 		SELECT * FROM [Finance].[Account] WITH (NOLOCK)
-		WHERE [AccountName] = @AccountName
+		WHERE [AccountName] = @accountName
 	)
 	BEGIN
 		-- Account name is not unique
