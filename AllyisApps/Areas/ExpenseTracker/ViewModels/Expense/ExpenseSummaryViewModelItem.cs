@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -8,7 +9,7 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
     /// <summary>
     /// 
     /// </summary>
-    public class ExpenseReportModel : BaseViewModel
+    public class ExpenseSummaryViewModelItem : BaseViewModel
     {
         /// <summary>
         /// The reportId
@@ -33,6 +34,7 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         /// <summary>
         /// Date the report was submitted
         /// </summary>
+        [DisplayFormat(DataFormatString = "{0:MM-dd-YYYY")]
         public DateTime SubmittedDate { get; set; }
 
         /// <summary>
