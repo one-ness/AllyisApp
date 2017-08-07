@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Auth].[GetUserOrgsAndInvitationInfo]
+CREATE PROCEDURE [Auth].[GetUserOrgsAndInvitationInfo]
 	@userId int
 AS
 BEGIN
@@ -57,8 +57,8 @@ BEGIN
 	LEFT JOIN [Auth].[Organization] WITH (NOLOCK) ON [Invitation].[OrganizationId] = [Organization].[OrganizationId]
 	WHERE [User].[UserId] = @userId AND [Invitation].[IsActive] = 1
 
-	DECLARE @AddressId INT
-	SET @AddressId = (SELECT m.AddressId
+	DECLARE @addressId INT
+	SET @addressId = (SELECT m.AddressId
 				FROM [Auth].[User] AS m
 				WHERE [UserId] = @userId)
 
@@ -70,5 +70,5 @@ BEGIN
 	FROM [Lookup].[Address] AS [Address] WITH (NOLOCK)
 	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
 	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
-	WHERE [AddressId] = @AddressId
+	WHERE [AddressId] = @addressId
 END

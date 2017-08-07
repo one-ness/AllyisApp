@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Billing].[GetProductAreaBySubscription]
-	@SubscriptionId INT
+CREATE PROCEDURE [Billing].[GetProductAreaBySubscription]
+	@subscriptionId INT
 AS
 	SET NOCOUNT ON;
 	SELECT DISTINCT [Product].[ProductName]

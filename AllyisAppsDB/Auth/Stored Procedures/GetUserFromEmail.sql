@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Auth].[GetUserFromEmail]
-	@Email NVARCHAR(384)
+CREATE PROCEDURE [Auth].[GetUserFromEmail]
+	@email NVARCHAR(384)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -24,5 +24,5 @@ BEGIN
 	LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [User].[AddressId]
 	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
 	LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
-	WHERE [Email] = @Email;
+	WHERE [Email] = @email;
 END

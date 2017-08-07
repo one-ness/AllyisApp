@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="DBHelper.Lookup.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -170,7 +170,7 @@ namespace AllyisApps.DBModel
 		public IEnumerable<dynamic> GetOrgOwnerEmails(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@OrganizationId", organizationId);
+			parameters.Add("@organizationId", organizationId);
 			
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
