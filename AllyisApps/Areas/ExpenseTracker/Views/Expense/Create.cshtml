@@ -15,7 +15,7 @@
 
 <div class="row report-wrap">
 
-	<div class="panel panel-info" style="background-color: #f5f5f5; float: right; width: 500px;">
+	<div class="panel panel-info" style="background-color: #f5f5f5; float: right; width: 300px;">
 		<div class="panel-heading"><span class="panel-title">@Strings.Upload</span></div>
 		@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Expense, new { subscriptionid = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
 			{
@@ -28,7 +28,9 @@
 			</div>
 			@*<div style="width:70%; margin:0 auto">*@
 			<div id="footUpload" style="background-color:#f5f5f5; display: flex; justify-content: space-around; flex-wrap: wrap; padding-bottom: 0px; float:right; margin-top: 10px;">
-				<span class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose Excel file containing Expense Tracker entries">@Strings.ChooseFile</span>
+				<a onclick="$('input[id=upload-box]').click();" title="Choose Excel file containing Expense Tracker entries">
+					<span class="btn btn-primary">@Strings.ChooseFile</span>
+				</a>
 				<input type="submit" style="margin-left: 3px; margin-right: 3px;" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload Excel Expense Tracker entries" />
 			</div>
 			}
@@ -93,15 +95,19 @@
 									@Html.TextBox("ItemAmount_" + item, "", new { @class = "form-control", style = "display: inline-block; width: 150px;", placeholder = "Amount" })
 									<label>Payed for by Customer</label>
 									@Html.CheckBox("CustomerPay_" + item, true)
-									<span class="btn btn-primary" onclick="">
-										Remove
-									</span>
+									<a>
+										<span class="btn btn-primary">
+											Remove
+										</span>
+									</a>
 								</div>
 							}
 							<div style="text-align: center;">
-								<span class="btn btn-primary" href="">
-									Add Item
-								</span>
+								<a>
+									<span class="btn btn-primary">
+										Add Item
+									</span>
+								</a>
 							</div>
 					</div>
 
