@@ -31,7 +31,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserContext"/> class.
 		/// </summary>
-		public UserContext(int userId, string email, string firstName, string lastName, int preferredLanguageId = 0) : this()
+		public UserContext(int userId, string email, string firstName, string lastName, string preferredLanguageId = "en-US") : this()
 		{
 			if (userId <= 0) throw new ArgumentException("userId");
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentException("firstName");
@@ -42,7 +42,7 @@ namespace AllyisApps.Services
 			this.UserId = userId;
 			this.FirstName = firstName;
 			this.LastName = lastName;
-			this.PrefferedLanguageId = preferredLanguageId;
+			this.PreferedLanguageId = preferredLanguageId;
 		}
 
 		/// <summary>
@@ -83,6 +83,6 @@ namespace AllyisApps.Services
 		/// Gets or sets the preferred language for this user.
 		/// </summary>
 		[JsonIgnore]
-		public int PrefferedLanguageId { get; set; }
+		public string PreferedLanguageId { get; set; }
 	}
 }

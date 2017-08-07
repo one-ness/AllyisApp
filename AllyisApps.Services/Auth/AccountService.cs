@@ -77,7 +77,6 @@ namespace AllyisApps.Services
 		{
 			return DBHelper.ValidLanguages().Select(s => new Language
 			{
-				LanguageId = s.LanguageId,
 				LanguageName = s.LanguageName,
 				CultureName = s.CultureName
 			});
@@ -161,7 +160,7 @@ namespace AllyisApps.Services
 			string postalCode,
 			string phone,
 			string password,
-			int languagePreference,
+			string languagePreference,
 			string confirmEmailSubject,
 			string confirmEmailMessage,
 			Guid emailConfirmationCode,
@@ -264,7 +263,7 @@ namespace AllyisApps.Services
 			{
 				// user exists in db
 				UserContextDBEntity firstRow = contextInfo[0];
-				result = new UserContext(userId, firstRow.Email, firstRow.FirstName, firstRow.LastName, firstRow.PreferredLanguageId.Value);
+				result = new UserContext(userId, firstRow.Email, firstRow.FirstName, firstRow.LastName, firstRow.PreferredLanguageId);
 				// set result to self
 				this.SetUserContext(result);
 
@@ -455,39 +454,38 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Sets the language preference for the current user.
 		/// </summary>
-		/// <param name="languageId">The language Id.</param>
-		public void SetLanguage(int languageId)
+		/// <param name="CultureName">The language Id.</param>
+		public void SetLanguage(string CultureName)
 		{
-			if (languageId < 0)
+			if (CultureName == null)
 			{
-				throw new ArgumentOutOfRangeException("languageId", "Language Id cannot be negative.");
+				throw new ArgumentOutOfRangeException("CultureName", "Culture Name cannot be empty.");
 			}
 
-			DBHelper.UpdateUserLanguagePreference(UserContext.UserId, languageId);
+			DBHelper.UpdateUserLanguagePreference(UserContext.UserId, CultureName);
 		}
 
 		/// <summary>
 		/// Gets the browser-compatible universal culture language string (e.g. "en-US") based on language Id.
 		/// </summary>
-		/// <param name="languageId">The language Id. May use 0 to indicate no language setting.</param>
+		/// <param name="CultureName">The language Id. May use 0 to indicate no language setting.</param>
 		/// <returns>Culture string.</returns>
-		public Language GetLanguage(int languageId)
+		public Language GetLanguage(string CultureName)
 		{
-			if (languageId < 0)
+			if (CultureName == null)
 			{
-				throw new ArgumentOutOfRangeException("languageId", "Language Id cannot be negative.");
+				throw new ArgumentOutOfRangeException("CultureName", "Culture Name cannot be empty.");
 			}
 
 			// No language setting, use browser setting. May return null if browser culture is unsupported in this app's database.
-			if (languageId == 0)
+			if (CultureName == null)
 			{
 				return this.ValidLanguages().Where(c => System.Globalization.CultureInfo.CurrentCulture.Name.Equals(c.CultureName)).SingleOrDefault();
 			}
 
-			LanguageDBEntity language = DBHelper.GetLanguage(languageId);
+			LanguageDBEntity language = DBHelper.GetLanguage(CultureName);
 			return new Language
 			{
-				LanguageId = language.LanguageId,
 				LanguageName = language.LanguageName,
 				CultureName = language.CultureName
 			};
@@ -664,7 +662,7 @@ namespace AllyisApps.Services
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
 				PostalCode = user.Address.PostalCode,
-				PreferredLanguageId = 1          // TODO: Put this into UserInfo and do proper lookup
+				PreferredLanguageId = "en-US"          // TODO: Put this into UserInfo and do proper lookup
 			};
 		}
 
