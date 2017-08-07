@@ -205,8 +205,8 @@
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
-    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseReportModel.cs" />
-    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseReportsViewModel.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseSummaryViewModelItem.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseIndexViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ReportStatusEnum.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\DetailsAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ImportAction.cs" />
@@ -348,6 +348,7 @@
     <Compile Include="ViewModels\Auth\EditMemberViewModel.cs" />
     <Compile Include="ViewModels\Auth\EditSubscriptionViewModel.cs" />
     <Compile Include="ViewModels\Auth\IndexAndOrgsViewModel.cs" />
+    <Compile Include="ViewModels\Auth\IndexViewModel.cs" />
     <Compile Include="ViewModels\Auth\InvitationViewModel.cs" />
     <Compile Include="ViewModels\Auth\ManageOrgViewModel.cs" />
     <Compile Include="ViewModels\Auth\ManagePermissionsViewModel.cs" />

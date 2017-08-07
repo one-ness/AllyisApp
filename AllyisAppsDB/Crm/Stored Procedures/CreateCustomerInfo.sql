@@ -1,27 +1,27 @@
-﻿CREATE PROCEDURE [Crm].[CreateCustomerInfo]
-	@CustomerName NVARCHAR(32),
-    @Address NVARCHAR(100),
-    @City NVARCHAR(100), 
-    @State NVARCHAR(100), 
-    @Country NVARCHAR(100), 
-    @PostalCode NVARCHAR(50),
-	@ContactEmail NVARCHAR(384), 
-    @ContactPhoneNumber VARCHAR(50),
-	@FaxNumber VARCHAR(50),
-	@Website NVARCHAR(50),
-	@EIN NVARCHAR(50),
-	@OrganizationId INT,
-	@CustomerOrgId NVARCHAR(16),
+CREATE PROCEDURE [Crm].[CreateCustomerInfo]
+	@customerName NVARCHAR(32),
+    @address NVARCHAR(100),
+    @city NVARCHAR(100), 
+    @state NVARCHAR(100), 
+    @country NVARCHAR(100), 
+    @postalCode NVARCHAR(50),
+	@contactEmail NVARCHAR(384), 
+    @contactPhoneNumber VARCHAR(50),
+	@faxNumber VARCHAR(50),
+	@website NVARCHAR(50),
+	@eIN NVARCHAR(50),
+	@organizationId INT,
+	@customerOrgId NVARCHAR(16),
 	@retId INT OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @AddressId INT
+	DECLARE @addressId INT
 
 	IF EXISTS (
 		SELECT * FROM [Crm].[Customer] WITH (NOLOCK)
-		WHERE [CustomerOrgId] = @CustomerOrgId
+		WHERE [CustomerOrgId] = @customerOrgId
 	)
 	BEGIN
 		-- CustomerOrgId is not unique
@@ -36,13 +36,13 @@ BEGIN
 				[StateId],
 				[CountryId],
 				[PostalCode])
-			VALUES (@Address,
-				@City,
-				(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [StateName] = @State),
-				(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @Country),
-				@PostalCode)
+			VALUES (@address,
+				@city,
+				(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [StateName] = @state),
+				(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @country),
+				@postalCode)
 
-			SET @AddressId = SCOPE_IDENTITY();
+			SET @addressId = SCOPE_IDENTITY();
 
 			-- Create customer
 			INSERT INTO [Crm].[Customer] 
@@ -55,15 +55,15 @@ BEGIN
 				[EIN], 
 				[OrganizationId], 
 				[CustomerOrgId])
-			VALUES (@CustomerName, 
-				@AddressId,
-				@ContactEmail, 
-				@ContactPhoneNumber, 
-				@FaxNumber, 
-				@Website, 
-				@EIN, 
-				@OrganizationId, 
-				@CustomerOrgId);
+			VALUES (@customerName, 
+				@addressId,
+				@contactEmail, 
+				@contactPhoneNumber, 
+				@faxNumber, 
+				@website, 
+				@eIN, 
+				@organizationId, 
+				@customerOrgId);
 			SET @retId = SCOPE_IDENTITY();
 		COMMIT TRANSACTION		
 	END

@@ -235,7 +235,7 @@
     <value>{0} users changed roles in organization.</value>
   </data>
   <data name="UsersChangedRolesInTimeTracker" xml:space="preserve">
-    <value>Users changed roles in Time Tracker.</value>
+    <value>{0} users changed roles in Time Tracker.</value>
   </data>
   <data name="UsersRemovedFromOrg" xml:space="preserve">
     <value>{0} users were removed from the organization.</value>

@@ -1,23 +1,21 @@
 ﻿CREATE PROCEDURE [Auth].[CreateUser]
-	@FirstName NVARCHAR(32),
-	@LastName NVARCHAR(32),
-    @Address NVARCHAR(100), 
-    @City NVARCHAR(32), 
-    @State NVARCHAR(32), 
-    @Country NVARCHAR(32), 
-    @PostalCode NVARCHAR(16),
-	@Email NVARCHAR(256), 
-    @PhoneNumber VARCHAR(32),
-	@DateOfBirth DATETIME2(0),
-	@PasswordHash NVARCHAR(MAX),
-	@EmailConfirmationCode UNIQUEIdENTIFIER,
-	@IsTwoFactorEnabled BIT,
-	@IsLockoutEnabled BIT,
-	@LockoutEndDateUtc DATE,
-	@LanguageId INT,
-	@Address_Identity INT
+	@firstName NVARCHAR(32),
+	@lastName NVARCHAR(32),
+    @address NVARCHAR(100), 
+    @city NVARCHAR(32), 
+    @state NVARCHAR(32), 
+    @country NVARCHAR(32), 
+    @postalCode NVARCHAR(16),
+	@email NVARCHAR(256), 
+    @phoneNumber VARCHAR(32),
+	@dateOfBirth DATETIME2(0),
+	@passwordHash NVARCHAR(MAX),
+	@emailConfirmationCode UNIQUEIdENTIFIER,
+	@isTwoFactorEnabled BIT,
+	@isLockoutEnabled BIT,
+	@lockoutEndDateUtc DATE,
+	@languageId INT
 AS
-
 BEGIN
 	SET NOCOUNT ON;
 
@@ -28,13 +26,11 @@ BEGIN
 		[CountryId],
 		[PostalCode])
 	VALUES
-		(@Address,
-		@City,
-		(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [StateName] = @State),
-		(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @Country),
-		@PostalCode);
-
-	SET @Address_Identity = SCOPE_IDENTITY()
+		(@address,
+		@city,
+		(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [StateName] = @state),
+		(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @country),
+		@postalCode);
 
 	INSERT INTO [Auth].[User] 
 		([FirstName], 
@@ -52,20 +48,20 @@ BEGIN
 		[LockoutEndDateUtc],
 		[PreferredLanguageId])
 	VALUES 
-		(@FirstName, 
-		@LastName,
-		@Address_Identity,
-		@Email,
-		@PhoneNumber,
-		@DateOfBirth, 
-		@PasswordHash, 
-		@EmailConfirmationCode,
+		(@firstName, 
+		@lastName,
+		SCOPE_IDENTITY(),
+		@email,
+		@phoneNumber,
+		@dateOfBirth, 
+		@passwordHash, 
+		@emailConfirmationCode,
 		0,
-		COALESCE(@IsTwoFactorEnabled,0),
+		COALESCE(@isTwoFactorEnabled,0),
 		0,
-		COALESCE(@IsLockoutEnabled,0),
-		COALESCE(@LockoutEndDateUtc,NULL),
-		@LanguageId);
+		COALESCE(@isLockoutEnabled,0),
+		COALESCE(@lockoutEndDateUtc,NULL),
+		@languageId);
 
 	SELECT SCOPE_IDENTITY();
 END

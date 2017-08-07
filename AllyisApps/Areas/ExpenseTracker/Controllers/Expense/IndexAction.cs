@@ -17,7 +17,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		public ActionResult Index(int subscriptionId)
 		{
-			return View(new ExpenseReportsViewModel()
+			return View(new ExpenseIndexViewModel()
             {
                 SubscriptionId = 111111,
                 CanManage = true,
@@ -25,9 +25,15 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 EndDate = 1111111,
                 StartDate = 01111111,
                 ProductRole = 2,
-                Reports= new List<ExpenseReportModel>()
+                Reports= new List<ExpenseSummaryViewModelItem>()
                 {
-                    new ExpenseReportModel() {Amount = 250.01, Status = ReportStatusEnum.Pending, SubmittedDate = DateTime.UtcNow, ReportName = "Test Report"}
+                    new ExpenseSummaryViewModelItem() {ReportId = 000001, Amount = 250.01, Status = ReportStatusEnum.Rejected, SubmittedDate = DateTime.UtcNow, ReportName = "Kichenette Supplies"},
+                    new ExpenseSummaryViewModelItem() {ReportId = 000002, Amount = 10000.92, Status = ReportStatusEnum.Pending, SubmittedDate = DateTime.UtcNow, ReportName = "Company Scooter"},
+                    new ExpenseSummaryViewModelItem() {ReportId = 000003, Amount = 7356.11, Status = ReportStatusEnum.Accepted, SubmittedDate = DateTime.UtcNow, ReportName = "Laptop Order"},
+                    new ExpenseSummaryViewModelItem() {ReportId = 000004, Amount = 20.33, Status = ReportStatusEnum.Pending, SubmittedDate = DateTime.UtcNow, ReportName = "New Batteries"},
+                    new ExpenseSummaryViewModelItem() {ReportId = 000005, Amount = 92.31, Status = ReportStatusEnum.Pending, SubmittedDate = DateTime.UtcNow, ReportName = "IT Lunch Meeting"},
+                    new ExpenseSummaryViewModelItem() {ReportId = 000006, Amount = 2566355.00, Status = ReportStatusEnum.Rejected, SubmittedDate = DateTime.UtcNow, ReportName = "Toga Party"},
+                    new ExpenseSummaryViewModelItem() {ReportId = 000007, Amount = 477.63, Status = ReportStatusEnum.Accepted, SubmittedDate = DateTime.UtcNow, ReportName = "Exec Lunch Meeting"},
                 }
             });
 		}
@@ -46,7 +52,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		public ActionResult Create(ExpenseReportsViewModel model)
+		public ActionResult Create(ExpenseIndexViewModel model)
 		{
 			return View(model);
 		}

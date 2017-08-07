@@ -1,12 +1,12 @@
-﻿CREATE PROCEDURE [Billing].[GetProductSubscriptionInfo]
+CREATE PROCEDURE [Billing].[GetProductSubscriptionInfo]
 	@skuId INT,
 	@orgId INT
 AS
 	SET NOCOUNT ON;
-	DECLARE @ProductId INT;
-	DECLARE @SubscriptionId INT;
+	DECLARE @productId INT;
+	DECLARE @subscriptionId INT;
 
-SELECT @ProductId = [Product].[ProductId]
+SELECT @productId = [Product].[ProductId]
 FROM [Billing].[Product] 
 	  LEFT JOIN [Billing].[Sku] WITH (NOLOCK) 
 	  ON [Product].ProductId = [Sku].ProductId	  
@@ -18,10 +18,10 @@ SELECT
 	[Product].[Description], 
 	[Product].[AreaUrl]
 	FROM [Billing].[Product]   
-	WHERE [Product].ProductId = @ProductId
+	WHERE [Product].ProductId = @productId
 
 	SELECT
-		@SubscriptionId = [SubscriptionId]
+		@subscriptionId = [SubscriptionId]
 	FROM [Billing].[Subscription] WITH (NOLOCK) 
 	WHERE [OrganizationId] = @orgId AND [Subscription].[SkuId] = @skuId AND [Subscription].[IsActive] = 1
 
@@ -29,10 +29,10 @@ SELECT
 		[SubscriptionId],
 		[SkuId],
 		[NumberOfUsers],
-		[CreatedUtc],
+		[SubscriptionCreatedUtc],
 		[OrganizationId]
 	FROM [Billing].[Subscription] WITH (NOLOCK) 
-	WHERE [SubscriptionId] = @SubscriptionId
+	WHERE [SubscriptionId] = @subscriptionId
 
 	SELECT [SkuId],
 		[ProductId],
@@ -47,7 +47,7 @@ SELECT
 		[IsActive],
 		[Description]
 	FROM [Billing].[Sku] WITH (NOLOCK) 
-	WHERE [Billing].[Sku].[ProductId] = @ProductId
+	WHERE [Billing].[Sku].[ProductId] = @productId
 
 	SELECT [StripeTokenCustId]
 	FROM [Billing].[StripeOrganizationCustomer] WITH (NOLOCK) 
@@ -59,5 +59,5 @@ SELECT
 		FROM [Billing].[SubscriptionUser] WITH (NOLOCK)
 		LEFT JOIN [Billing].[Subscription] WITH (NOLOCK) ON [Subscription].[SubscriptionId] = [SubscriptionUser].[SubscriptionId]
 		WHERE 
-			[Subscription].[SubscriptionId] = @SubscriptionId
+			[Subscription].[SubscriptionId] = @subscriptionId
 	) src

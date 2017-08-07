@@ -5,10 +5,10 @@
     [Date]        DATE			 NOT NULL,
     [Duration]    FLOAT (53)     NOT NULL,
     [Description] NVARCHAR (128) NULL,
-    [IsLockSaved] BIT            DEFAULT 0 NOT NULL,
-    [PayClassId]  INT            DEFAULT 1 NOT NULL,
-    [CreatedUtc]  DATETIME2 (0)  NOT NULL DEFAULT getutcdate(),
-    [ModifiedUtc] DATETIME2 (0)  NOT NULL DEFAULT getutcdate(),
+    [IsLockSaved] BIT            CONSTRAINT [DF_TimeEntry_IsLockSaved] DEFAULT 0 NOT NULL,
+    [PayClassId]  INT            CONSTRAINT [DF_TimeEntry_PayClassId] DEFAULT 1 NOT NULL,
+    [TimeEntryCreatedUtc]  DATETIME2 (0) CONSTRAINT [DF_TimeEntry_CreatedUtc] DEFAULT getutcdate() NOT NULL,
+    [TimeEntryModifiedUtc] DATETIME2 (0) CONSTRAINT [DF_TimeEntry_ModifiedUtc] DEFAULT getutcdate() NOT NULL,
     CONSTRAINT [PK_TimeEntry] PRIMARY KEY NONCLUSTERED ([TimeEntryId] ASC),
     CONSTRAINT [FK_TimeEntry_Project] FOREIGN KEY ([ProjectId]) REFERENCES [Pjm].[Project] ([ProjectId]),
     CONSTRAINT [FK_TimeEntry_User] FOREIGN KEY ([UserId]) REFERENCES [Auth].[User] ([UserId])
@@ -28,6 +28,6 @@ GO
 
 CREATE TRIGGER [TimeTracker].trg_update_TimeEntry ON [TimeTracker].[TimeEntry] FOR UPDATE AS
 BEGIN
-	UPDATE [TimeTracker].[TimeEntry] SET [ModifiedUtc] = CONVERT(DATETIME2(0), GETUtcDATE()) 
+	UPDATE [TimeTracker].[TimeEntry] SET [TimeEntryModifiedUtc] = CONVERT(DATETIME2(0), GETUtcDATE()) 
 	WHERE [TimeEntryId] IN (SELECT [TimeEntryId] FROM [deleted]);
 END

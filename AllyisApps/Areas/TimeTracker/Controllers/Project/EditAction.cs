@@ -112,6 +112,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subscriptionUsers.Add(new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId));
 			}
 
+			string SubscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
+
 			return new EditProjectViewModel
 			{
 				CustomerName = infos.Item1.CustomerName,
@@ -126,6 +128,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				StartDate = AppService.GetDayFromDateTime(infos.Item1.StartDate),
 				EndDate = AppService.GetDayFromDateTime(infos.Item1.EndDate),
 				SubscriptionId = subscriptionId,
+				SubscriptionName = SubscriptionNameToDisplay,
 				UserId = AppService.UserContext.UserId
 			};
 		}

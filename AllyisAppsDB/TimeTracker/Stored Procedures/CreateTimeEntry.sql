@@ -1,10 +1,10 @@
-﻿CREATE PROCEDURE [TimeTracker].[CreateTimeEntry]
-	@UserId INT,
-	@ProjectId INT,
-	@PayClassId INT,
-    @Date DATE,
-    @Duration FLOAT,
-    @Description NVARCHAR(120)
+CREATE PROCEDURE [TimeTracker].[CreateTimeEntry]
+	@userId INT,
+	@projectId INT,
+	@payClassId INT,
+    @date DATE,
+    @duration FLOAT,
+    @description NVARCHAR(120)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -16,11 +16,11 @@ BEGIN
 			   ,[Date]
 			   ,[Duration]
 			   ,[Description])
-		 VALUES(@UserId
-			   ,@ProjectId
-			   ,@PayClassId
-			   ,@Date
-			   ,@Duration
-			   ,@Description);
+		 VALUES(@userId
+			   ,@projectId
+			   ,@payClassId
+			   ,@date
+			   ,@duration
+			   ,@description);
 	SELECT SCOPE_IDENTITY();
 END

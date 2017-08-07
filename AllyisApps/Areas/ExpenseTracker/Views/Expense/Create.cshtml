@@ -2,7 +2,7 @@
 @using AllyisApps.Core;
 @using AllyisApps.Services;
 
-@model ExpenseReportsViewModel
+@model ExpenseIndexViewModel
 
 @{
     ViewBag.Title = Strings.Report;
@@ -24,9 +24,9 @@
 						<select id="allprojects" style="display: none;">
 							@if (Model.Reports != null)
 							{
-								foreach (ExpenseReportModel proj in Model.Reports)
+								foreach (ExpenseSummaryViewModelItem item in Model.Reports)
 								{
-									<option value="@proj.ReportId" class="projectSelectOption">@proj.ReportName</option>
+									<option value="@item.ReportId" class="projectSelectOption">@item.ReportName</option>
 								}
 							}
 						</select>
@@ -94,16 +94,6 @@
 				<input type="submit" id="template-button" value="@Strings.Template" class="btn btn-primary tt-template" title="Download Excel Time Tracker template" />
 			</div>
 			}
-	</div>
-
-
-	<div class="inline-form-anim-wrap" style="clear: both;">
-		@using (Html.BeginForm("ReportItems", ControllerConstants.TimeEntry, FormMethod.Get))
-		{
-			<div>
-				Thing
-			</div>
-		}
 	</div>
 
 	@*<div class="col-xs-12">

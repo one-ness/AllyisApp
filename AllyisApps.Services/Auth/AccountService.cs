@@ -198,7 +198,7 @@ namespace AllyisApps.Services
 					PreferredLanguageId = languagePreference
 				};
 
-				result = await this.DBHelper.CreateUserAsync(entity);
+				result = this.DBHelper.CreateUser(entity);
 
 				// send confirmation email
 				await Mailer.SendEmailAsync(this.ServiceSettings.SupportEmail, email, confirmEmailSubject, confirmEmailMessage);

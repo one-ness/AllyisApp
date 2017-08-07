@@ -6,7 +6,7 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 	/// <summary>
 	/// Information needed for the Expense report view.
 	/// </summary>
-	public class ExpenseReportsViewModel : BaseViewModel
+	public class ExpenseIndexViewModel : BaseViewModel
 	{
         /// <summary>
         /// The Subscription Id
@@ -36,7 +36,7 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         /// <summary>
         /// A List of expense reports
         /// </summary>
-        public List<ExpenseReportModel> Reports { get; set; }
+        public List<ExpenseSummaryViewModelItem> Reports { get; set; }
 
         /// <summary>
 		/// Gets the type of product.

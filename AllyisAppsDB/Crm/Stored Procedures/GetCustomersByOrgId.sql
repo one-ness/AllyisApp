@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Crm].[GetCustomersByOrgId]
-	@OrgId INT
+CREATE PROCEDURE [Crm].[GetCustomersByOrgId]
+	@orgId INT
 AS
 	BEGIN
 	SET NOCOUNT ON;
@@ -15,13 +15,13 @@ AS
 		   [Customer].[FaxNumber],
 		   [Customer].[Website],
 		   [Customer].[EIN],
-		   [Customer].[CreatedUtc],
+		   [Customer].[CustomerCreatedUtc],
 		   [Customer].[CustomerOrgId]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 
 	LEFT JOIN [Lookup].[Address] WITH (NOLOCK) ON [Address].[AddressId] = [Customer].[AddressId]
 	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
 	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
-	WHERE [Customer].[OrganizationId] = @OrgId
+	WHERE [Customer].[OrganizationId] = @orgId
 	AND [Customer].[IsActive] = 1
 	ORDER BY [Customer].[CustomerName]
 END

@@ -26,6 +26,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.CreateCustomer, subscriptionId);
 			var idAndCountries = AppService.GetNextCustIdAndCountries(subscriptionId);
+			string SubscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
 			return this.View(new EditCustomerInfoViewModel
 			{
 				ValidCountries = idAndCountries.Item2,
@@ -33,7 +34,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				CustomerOrgId = idAndCountries.Item1,
 				SubscriptionId = subscriptionId,
 				OrganizationId = idAndCountries.Item3,
-				UserId = AppService.UserContext.UserId
+				UserId = AppService.UserContext.UserId,
+				SubscriptionName = SubscriptionNameToDisplay
 			});
 		}
 

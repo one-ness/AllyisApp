@@ -692,10 +692,8 @@ namespace AllyisApps.Services
 										};
 										try
 										{
-											var task = DBHelper.CreateUserAsync(GetDBEntityFromUser(user));
-											task.RunSynchronously();
 											result.UsersImported += 1;
-											user.UserId = task.Result;
+											user.UserId = DBHelper.CreateUser(GetDBEntityFromUser(user));
 										}
 										catch
 										{
@@ -854,7 +852,7 @@ namespace AllyisApps.Services
 
 									// Find existing entry. If none, create new one     TODO: See if there's a good way to populate this by sheet rather than by row, or once at the top
 									List<TimeEntryDBEntity> entries = DBHelper.GetTimeEntriesByUserOverDateRange(new List<int> { user.UserId }, orgId, theDate, theDate).ToList();
-									if (!entries.Where(e => e.Description.Equals(description) && e.Duration == theDuration && e.PayClassId == payClass.PayClassId && e.ProjectId == project.ProjectId).Any())
+									if (!entries.Where(e => ((e.Description == null && description.Equals("")) || description.Equals(e.Description)) && e.Duration == theDuration && e.PayClassId == payClass.PayClassId && e.ProjectId == project.ProjectId).Any())
 									{
 										if (entries.Select(e => e.Duration).Sum() + theDuration > 24)
 										{

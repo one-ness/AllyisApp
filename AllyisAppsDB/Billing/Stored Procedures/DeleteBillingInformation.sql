@@ -1,7 +1,7 @@
-﻿CREATE PROCEDURE [Billing].[DeleteBillingInformation]
-	@OrgId INT
+CREATE PROCEDURE [Billing].[DeleteBillingInformation]
+	@orgId INT
 AS
 	SET NOCOUNT ON;
 	UPDATE [Billing].[StripeOrganizationCustomer]
 	SET [IsActive] = 0
-	WHERE [OrganizationId] = @OrgId
+	WHERE [OrganizationId] = @orgId

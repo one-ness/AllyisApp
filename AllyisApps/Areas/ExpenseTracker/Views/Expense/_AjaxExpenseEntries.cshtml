@@ -1,18 +1,18 @@
 ﻿@using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
-@model ExpenseReportsViewModel
+@model ExpenseIndexViewModel
 @{ 
 
 }
 
-<div class="">
-    <div class="pull-right">
-        <button class="btn btn-primary">Add Report</button>
-    </div>
+<div class="form-group pull-right">
+    <a  href="@Url.Action("Create")">
+        <span class="btn btn-primary">Create Report</span>
+    </a>
 
 </div>
-<table class="table table-hover table-condensed">
-    <thead>
+<table class="table table-hover">
+    <thead >
         <tr class="double-bottom-border">
             <th style="width: 25%">Report Name</th>
             <th style="width: 25%">Submitted Date</th>
@@ -22,11 +22,11 @@
     </thead>   
     <tbody>
         
-        @foreach(ExpenseReportModel report in Model.Reports)
+        @foreach(ExpenseSummaryViewModelItem report in Model.Reports)
         {
             <tr>
-                <td>@Html.ActionLink(@report.ReportName,"ViewReport", new { reportId = report.ReportId }, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" })</td>
-                <td>@report.SubmittedDate</td>
+                <td>@Html.ActionLink(@report.ReportName,"Edit", new { reportId = report.ReportId }, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" })</td>
+                <td>@String.Format("{0:MM-dd-yyyy}", @report.SubmittedDate)</td>
                 <td>@report.Status</td>
                 <td>@report.Amount</td>
             </tr>

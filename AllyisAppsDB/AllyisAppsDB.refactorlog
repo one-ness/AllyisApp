@@ -133,4 +133,165 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[ProjectName]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="966e63d4-8b9f-4ada-bf32-bbf044843d07" ChangeDateTime="08/03/2017 23:25:42">
+    <Property Name="ElementName" Value="[Auth].[Invitation].[CreatedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Auth].[Invitation]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[InvitationCreatedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5e68ff46-6f6e-4378-870e-4a1d83294bab" ChangeDateTime="08/03/2017 23:26:39">
+    <Property Name="ElementName" Value="[Auth].[Logging].[DateModifiedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Auth].[Logging]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[LoggingDateModifiedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2d66c2ed-1503-4a43-8c7b-85cd9db6afc3" ChangeDateTime="08/03/2017 23:28:11">
+    <Property Name="ElementName" Value="[Auth].[Organization].[CreatedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Auth].[Organization]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[OrganizationCreatedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="28d87a44-ab6f-4518-9c2b-a91bbe5b8e6a" ChangeDateTime="08/03/2017 23:28:59">
+    <Property Name="ElementName" Value="[Auth].[OrganizationUser].[CreatedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Auth].[OrganizationUser]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[OrganizationUserCreatedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b64b80b2-dd09-42e0-a52f-7a2b3eaa8c9d" ChangeDateTime="08/03/2017 23:30:26">
+    <Property Name="ElementName" Value="[Auth].[User].[CreatedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Auth].[User]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[UserCreatedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e2ebc197-28fe-4f40-9283-03f3072cd7ef" ChangeDateTime="08/03/2017 23:32:06">
+    <Property Name="ElementName" Value="[Billing].[BillingHistory].[CreatedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Billing].[BillingHistory]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[BillingHistoryCreatedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8f896573-4e65-4726-9aa6-3f7001c87755" ChangeDateTime="08/03/2017 23:32:33">
+    <Property Name="ElementName" Value="[Billing].[BillingHistory].[ModifiedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Billing].[BillingHistory]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[BillingHistoryModifiedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f6a59a61-e520-4701-87f1-484ac030d378" ChangeDateTime="08/03/2017 23:33:30">
+    <Property Name="ElementName" Value="[Billing].[StripeCustomerSubscriptionPlan].[CreatedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Billing].[StripeCustomerSubscriptionPlan]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[StripeCustomerSubscriptionPlanCreatedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="55937b5b-a45f-47b9-8998-81639d42a514" ChangeDateTime="08/03/2017 23:33:58">
+    <Property Name="ElementName" Value="[Billing].[StripeCustomerSubscriptionPlan].[ModifiedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Billing].[StripeCustomerSubscriptionPlan]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[StripeCustomerSubscriptionPlanModifiedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ec6c346d-91ca-49ee-b20e-6d1e9e4973c7" ChangeDateTime="08/03/2017 23:36:09">
+    <Property Name="ElementName" Value="[Billing].[StripeOrganizationCustomer].[CreatedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Billing].[StripeOrganizationCustomer]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[StripeOrganizationCustomerCreatedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="18ebc0f1-fe47-4b2a-ae14-3d688ec0bf59" ChangeDateTime="08/03/2017 23:36:38">
+    <Property Name="ElementName" Value="[Billing].[StripeOrganizationCustomer].[ModifiedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Billing].[StripeOrganizationCustomer]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[StripeOrganizationCustomerModifiedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="012aa26a-a293-45ff-ab49-366c72759ae5" ChangeDateTime="08/03/2017 23:37:24">
+    <Property Name="ElementName" Value="[Billing].[Subscription].[CreatedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Billing].[Subscription]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[SubscriptionCreatedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="7b8c941a-8ac3-41e7-b812-739d2cbff2e0" ChangeDateTime="08/03/2017 23:38:04">
+    <Property Name="ElementName" Value="[Billing].[Subscription].[ModifiedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Billing].[Subscription]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[SubscriptionModifiedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="87e3eb67-4a6f-4543-bc7a-c88d4ac50b66" ChangeDateTime="08/03/2017 23:38:53">
+    <Property Name="ElementName" Value="[Billing].[SubscriptionUser].[CreatedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Billing].[SubscriptionUser]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[SubscriptionUserCreatedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5fdd2352-b43e-4123-b372-017df268fe9b" ChangeDateTime="08/03/2017 23:40:15">
+    <Property Name="ElementName" Value="[Crm].[Customer].[CreatedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Crm].[Customer]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[CustomerCreatedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="73cc4553-2ee2-45df-8380-255b923f6254" ChangeDateTime="08/03/2017 23:40:47">
+    <Property Name="ElementName" Value="[Expense].[ExpenseItem].[CreatedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Expense].[ExpenseItem]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ExpenseItemCreatedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="abe3058c-2402-473d-884c-a2cc825de950" ChangeDateTime="08/03/2017 23:41:31">
+    <Property Name="ElementName" Value="[Expense].[ExpenseItem].[ModifiedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Expense].[ExpenseItem]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ExpenseItemModifiedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8aefaa49-66c9-4154-8530-613aa19b1ac1" ChangeDateTime="08/03/2017 23:42:21">
+    <Property Name="ElementName" Value="[Expense].[ExpenseReport].[CreatedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Expense].[ExpenseReport]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ExpenseReportCreatedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="36cecd4a-2d4a-4cbc-a037-f3c8e238d6f3" ChangeDateTime="08/03/2017 23:42:56">
+    <Property Name="ElementName" Value="[Expense].[ExpenseReport].[ModifiedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Expense].[ExpenseReport]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ExpenseReportModifiedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5ae1c196-02d1-4722-944b-d00a840814b2" ChangeDateTime="08/03/2017 23:44:23">
+    <Property Name="ElementName" Value="[Pjm].[Project].[CreatedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Pjm].[Project]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ProjectCreatedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9e7a3ff2-c3dd-41e0-95fa-9e73129c20ca" ChangeDateTime="08/03/2017 23:44:57">
+    <Property Name="ElementName" Value="[Pjm].[ProjectUser].[CreatedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Pjm].[ProjectUser]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ProjectUserCreatedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2f8ee18d-4ed2-4fea-b930-654b1b29b393" ChangeDateTime="08/03/2017 23:46:15">
+    <Property Name="ElementName" Value="[TimeTracker].[TimeEntry].[CreatedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[TimeTracker].[TimeEntry]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[TimeEntryCreatedUtc]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="173ca97f-7ea2-441a-be18-3cf8d69b6ac2" ChangeDateTime="08/03/2017 23:46:57">
+    <Property Name="ElementName" Value="[TimeTracker].[TimeEntry].[ModifiedUtc]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[TimeTracker].[TimeEntry]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[TimeEntryModifiedUtc]" />
+  </Operation>
 </Operations>

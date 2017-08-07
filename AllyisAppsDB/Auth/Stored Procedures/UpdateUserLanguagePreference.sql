@@ -1,10 +1,10 @@
 ﻿CREATE PROCEDURE [Auth].[UpdateUserLanguagePreference]
-	@Id INT,
-	@LanguageId INT
+	@id INT,
+	@languageId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 	UPDATE [Auth].[User]
-	SET [PreferredLanguageId] = @LanguageId
-	WHERE [UserId] = @Id
+	SET [PreferredLanguageId] = @languageId
+	WHERE [UserId] = @id
 END

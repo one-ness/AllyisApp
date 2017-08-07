@@ -1,9 +1,9 @@
-﻿CREATE PROCEDURE [Crm].[GetCustomerAndCountries]
-	@CustomerId INT
+CREATE PROCEDURE [Crm].[GetCustomerAndCountries]
+	@customerId INT
 AS
 BEGIN
 
-	DECLARE @AddressId AS INT
+	DECLARE @addressId AS INT
 	
 	SET NOCOUNT ON;
 	SELECT [Customer].[CustomerId],
@@ -14,20 +14,20 @@ BEGIN
 		   [Customer].[FaxNumber],
 		   [Customer].[Website],
 		   [Customer].[EIN],
-		   [Customer].[CreatedUtc],
+		   [Customer].[CustomerCreatedUtc],
 		   [Customer].[OrganizationId],
 		   [Customer].[CustomerOrgId]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 
 	LEFT JOIN [Lookup].[Address] WITH (NOLOCK) ON [Address].[AddressId] = [Customer].[AddressId]
 	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
 	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
-	WHERE [CustomerId] = @CustomerId
+	WHERE [CustomerId] = @customerId
 	
 	SELECT [CountryName] FROM [Lookup].[Country] WITH (NOLOCK);
 
-	SET @AddressId = (SELECT m.AddressId
+	SET @addressId = (SELECT m.AddressId
 					FROM [Crm].[Customer] AS m
-					WHERE [CustomerId] = @CustomerId)
+					WHERE [CustomerId] = @customerId)
 
 	SELECT [Address].[Address1],
 		   [Address].[City],
@@ -37,5 +37,5 @@ BEGIN
 	FROM [Lookup].[Address] AS [Address] WITH (NOLOCK)
 	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
 	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
-	WHERE [AddressId] = @AddressId
+	WHERE [AddressId] = @addressId
 END

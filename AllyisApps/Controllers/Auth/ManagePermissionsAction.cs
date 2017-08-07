@@ -227,14 +227,15 @@ namespace AllyisApps.Controllers
 						return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 					}
 				}
-
-				int numberChanged = AppService.ChangeUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.OrganizationRoleTarget.Value, model.OrganizationId);
+				
 				if (model.SelectedActions.OrganizationRoleTarget == -1)
 				{
+					int numberChanged = AppService.DeleteOrganizationUsers(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId);
 					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersRemovedFromOrg, numberChanged), Variety.Success));
 				}
 				else
 				{
+					int numberChanged = AppService.UpdateOrganizationUsersRole(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.OrganizationRoleTarget.Value, model.OrganizationId);
 					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersChangedRolesInOrg, numberChanged), Variety.Success));
 				}
 			}
@@ -246,24 +247,30 @@ namespace AllyisApps.Controllers
 					Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
 					return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 				}
-
-				Tuple<int, int> updatedAndAdded = AppService.ChangeSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value, model.OrganizationId, (int)ProductIdEnum.TimeTracker); //TODO: this should get a product ID from the model so that this method doesnt only work on time tracker subscriptions
-				if (updatedAndAdded.Item1 == -1)
+				
+				if (model.SelectedActions.TimeTrackerRoleTarget.Value != -1)
 				{
-					Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDontHaveASubscriptionToTimeTracker, Variety.Danger));
-					return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
+					//TODO: instead of providing product id, provide subscription id of the subscription to be modified
+					//TODO: split updating user roles and creating new sub users
+					Tuple<int, int> updatedAndAdded = AppService.UpdateSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value, model.OrganizationId, (int)ProductIdEnum.TimeTracker);
+					if (updatedAndAdded.Item1 > 0)
+					{
+						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersChangedRolesInTimeTracker, updatedAndAdded.Item1), Variety.Success));
+					}
+
+					if (updatedAndAdded.Item2 > 0)
+					{
+						Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersAddedToTimeTracker, updatedAndAdded.Item2), Variety.Success));
+					}
+				}
+				else
+				{
+					//TODO: instead of providing product id, provide subscription id of the subscription to be modified
+					AppService.DeleteSubscriptionUsers(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId, (int)ProductIdEnum.TimeTracker);
+					Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
 				}
 
-				if (updatedAndAdded.Item1 != 0)
-				{
-					Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", updatedAndAdded.Item1, model.SelectedActions.TimeTrackerRoleTarget == -1 ?
-						Resources.Strings.UsersRemovedFromTimeTracker : Resources.Strings.UsersChangedRolesInTimeTracker), Variety.Success));
-				}
 
-				if (updatedAndAdded.Item2 != 0 )
-				{
-					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersAddedToTimeTracker, updatedAndAdded.Item2), Variety.Success));
-				}
 			}
 
 			/*
