@@ -27,8 +27,10 @@
                 }
             </select >*@
             <span class="col-xs-12 col-sm-6 footer-text">
-                @Html.ActionLink(Strings.PrivacyPolicy, ActionConstants.PrivacyPolicy, ControllerConstants.Home)
-                @Html.ActionLink(Strings.Help, ActionConstants.Help, ControllerConstants.Home)
+                <a href="@Url.Action(ActionConstants.PrivacyPolicy, ControllerConstants.Home)">@Strings.PrivacyPolicy</a>
+                <!--Html.ActionLink(Strings.PrivacyPolicy, ActionConstants.PrivacyPolicy, ControllerConstants.Home)-->
+                <a href="@Url.Action(ActionConstants.Help, ControllerConstants.Home)">@Strings.Help</a>
+                <!--Html.ActionLink(Strings.Help, ActionConstants.Help, ControllerConstants.Home)-->
             </span>
         </p>
         <p class="col-xs-4 col-sm-6 footer-text" style="text-align: right">

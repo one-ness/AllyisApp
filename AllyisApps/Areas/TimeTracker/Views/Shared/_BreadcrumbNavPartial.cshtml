@@ -19,9 +19,9 @@
     </a>
 
     <ul class="dropdown-menu dropdown-menu-right" id="TheDropdown2">
-        <li>@Html.ActionLink(Strings.TimeEntry, ActionConstants.IndexNoUserId, ControllerConstants.TimeEntry, new { subscriptionId = subId, startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd }, "TimeTracker")</li>
-        @if (manager) { <li>@Html.ActionLink(Strings.Reports, ActionConstants.Report, ControllerConstants.TimeEntry, new { subscriptionId = subId }, "TimeTracker")</li> }
-        <li>@Html.ActionLink(Strings.Customers, ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subId }, "TimeTracker")</li>
-        @if (manager) {<li>@Html.ActionLink(Strings.Settings, ActionConstants.Settings, ControllerConstants.TimeEntry, new { subscriptionId = subId }, "TimeTracker")</li> }
+        <li href="@Url.Action(ActionConstants.IndexNoUserId, ControllerConstants.TimeEntry, new { subscriptionId = subId, startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd }, "TimeTracker")"> @Strings.TimeEntry</li>
+        @if (manager) {<li href="@Url.Action(ActionConstants.Report, ControllerConstants.TimeEntry, new { subscriptionId = subId }, "TimeTracker")"> @Strings.Reports</li> }
+        <li href="@Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subId }, "TimeTracker")">@Strings.Customers </li>
+        @if (manager) {<li href="@Url.Action(ActionConstants.Settings, ControllerConstants.TimeEntry, new { subscriptionId = subId }, "TimeTracker")">@Strings.Settings </li> }
     </ul>
 </li>
