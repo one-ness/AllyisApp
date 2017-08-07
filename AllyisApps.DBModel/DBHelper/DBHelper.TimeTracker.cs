@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="DBHelper.TimeTracker.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -97,7 +97,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
-			parameters.Add("@PayClassName", payClassName);
+			parameters.Add("@payClassName", payClassName);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[Hrm].[CreatePayClass]", parameters, commandType: CommandType.StoredProcedure);
@@ -123,7 +123,7 @@ namespace AllyisApps.DBModel
 				}
 			}
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@Id", payClassId);
+			parameters.Add("@id", payClassId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[Hrm].[DeletePayClass]", parameters, commandType: CommandType.StoredProcedure);
@@ -188,8 +188,8 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", users.AsTableValuedParameter("[Auth].[UserTable]"));
 			parameters.Add("@organizationId", orgId);
-			parameters.Add("@StartingDate", startingDate);
-			parameters.Add("@EndingDate", endingDate);
+			parameters.Add("@startingDate", startingDate);
+			parameters.Add("@endingDate", endingDate);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -213,8 +213,8 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
-			parameters.Add("@StartingDate", startingDate);
-			parameters.Add("@EndingDate", endingDate);
+			parameters.Add("@startingDate", startingDate);
+			parameters.Add("@endingDate", endingDate);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -235,7 +235,7 @@ namespace AllyisApps.DBModel
 		public TimeEntryDBEntity GetTimeEntryById(int timeEntryId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@TimeEntryId", timeEntryId);
+			parameters.Add("@timeEntryId", timeEntryId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -258,8 +258,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@projectId", entry.ProjectId);
 			parameters.Add("@payClassId", entry.PayClassId);
 			parameters.Add("@date", entry.Date);
-			parameters.Add("@Duration", entry.Duration);
-			parameters.Add("@Description", entry.Description);
+			parameters.Add("@duration", entry.Duration);
+			parameters.Add("@description", entry.Description);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -276,12 +276,12 @@ namespace AllyisApps.DBModel
 		public void UpdateTimeEntry(TimeEntryDBEntity entry)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@TimeEntryId", entry.TimeEntryId);
+			parameters.Add("@timeEntryId", entry.TimeEntryId);
 			parameters.Add("@projectId", entry.ProjectId);
-			parameters.Add("@PayClassId", entry.PayClassId);
-			parameters.Add("@Duration", entry.Duration);
-			parameters.Add("@Description", entry.Description);
-			parameters.Add("@IsLockSaved", entry.IsLockSaved);
+			parameters.Add("@payClassId", entry.PayClassId);
+			parameters.Add("@duration", entry.Duration);
+			parameters.Add("@description", entry.Description);
+			parameters.Add("@isLockSaved", entry.IsLockSaved);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -296,7 +296,7 @@ namespace AllyisApps.DBModel
 		public void DeleteTimeEntry(int timeEntryId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@TimeEntryId", timeEntryId);
+			parameters.Add("@timeEntryId", timeEntryId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -312,8 +312,8 @@ namespace AllyisApps.DBModel
 		public void SetTimeEntryApprovalStateById(int timeEntryId, int approvalState)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@TimeEntryId", timeEntryId);
-			parameters.Add("@ApprovalState", approvalState);
+			parameters.Add("@timeEntryId", timeEntryId);
+			parameters.Add("@approvalState", approvalState);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -330,7 +330,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
-			parameters.Add("@StartOfWeek", startOfWeek);
+			parameters.Add("@startOfWeek", startOfWeek);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[TimeTracker].[UpdateStartOfWeek]", parameters, commandType: CommandType.StoredProcedure);
@@ -348,9 +348,9 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
-			parameters.Add("@OvertimeHours", overtimeHours);
-			parameters.Add("@OvertimePeriod", overtimePeriod);
-			parameters.Add("@OvertimeMultiplier", overtimeMultiplier);
+			parameters.Add("@overtimeHours", overtimeHours);
+			parameters.Add("@overtimePeriod", overtimePeriod);
+			parameters.Add("@overtimeMultiplier", overtimeMultiplier);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -393,10 +393,10 @@ namespace AllyisApps.DBModel
 
 				// Init the actaul settings
 				parameters.Add("@organizationId", orgId);
-				parameters.Add("@StartOfWeek", 1);
-				parameters.Add("@OverTimeHours", 40);
-				parameters.Add("@OverTimePeriod", "Week");
-				parameters.Add("@OverTimeMultiplier", 1.5);
+				parameters.Add("@startOfWeek", 1);
+				parameters.Add("@overTimeHours", 40);
+				parameters.Add("@overTimePeriod", "Week");
+				parameters.Add("@overTimeMultiplier", 1.5);
 				using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 				{
 					connection.Execute("[TimeTracker].[UpdateSettings]", parameters, commandType: CommandType.StoredProcedure);
@@ -437,7 +437,7 @@ namespace AllyisApps.DBModel
 						{
 							parameters = new DynamicParameters();
 							parameters.Add("@organizationId", orgId);
-							parameters.Add("@PayClassName", currentPayClass.PayClassName);
+							parameters.Add("@payClassName", currentPayClass.PayClassName);
 							connection.Execute("[Hrm].[CreatePayClass]", parameters, commandType: CommandType.StoredProcedure);
 						}
 					}
@@ -457,9 +457,9 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
-			parameters.Add("@IsLockDateUsed", lockDateUsed);
-			parameters.Add("@LockDatePeriod", lockDatePeriod);
-			parameters.Add("@LockDateQuantity", lockDateQuantity);
+			parameters.Add("@isLockDateUsed", lockDateUsed);
+			parameters.Add("@lockDatePeriod", lockDatePeriod);
+			parameters.Add("@lockDateQuantity", lockDateQuantity);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -538,11 +538,11 @@ namespace AllyisApps.DBModel
 			GetTimeEntryIndexPageInfo(int orgId, int timeTrackerProductId, int userId, DateTime? startingDate, DateTime? endingDate)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@OrganizationId", orgId);
-			parameters.Add("@ProductId", timeTrackerProductId);
-			parameters.Add("@UserId", userId);
-			parameters.Add("@StartingDate", startingDate);
-			parameters.Add("@EndingDate", endingDate);
+			parameters.Add("@organizationId", orgId);
+			parameters.Add("@productId", timeTrackerProductId);
+			parameters.Add("@userId", userId);
+			parameters.Add("@startingDate", startingDate);
+			parameters.Add("@endingDate", endingDate);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{

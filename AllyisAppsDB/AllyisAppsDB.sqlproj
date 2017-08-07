@@ -215,7 +215,6 @@
     <Build Include="Security\Billing.sql" />
     <Build Include="Security\Auth.sql" />
     <None Include="DefaultData\CountryStates.sql" />
-    <None Include="DefaultData\Holidays.sql" />
     <None Include="DefaultData\Languages.sql" />
     <None Include="DefaultData\Products.sql" />
     <None Include="DefaultData\Role.sql" />
@@ -239,7 +238,6 @@
     <Build Include="Crm\Stored Procedures\ReactivateCustomer.sql" />
     <Build Include="Billing\Stored Procedures\GetAllActiveProductsAndSkus.sql" />
     <Build Include="Auth\Stored Procedures\UpdateMember.sql" />
-    <None Include="DefaultData\DummyData.sql" />
     <Build Include="Finance\Tables\Account.sql" />
     <Build Include="Finance\Tables\AccountType.sql" />
     <Build Include="Expense\Tables\ExpenseReport.sql" />

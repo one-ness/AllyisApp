@@ -14,7 +14,7 @@
 	@isTwoFactorEnabled BIT,
 	@isLockoutEnabled BIT,
 	@lockoutEndDateUtc DATE,
-	@languageId INT
+	@CultureName VARCHAR (16)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -61,7 +61,7 @@ BEGIN
 		0,
 		COALESCE(@isLockoutEnabled,0),
 		COALESCE(@lockoutEndDateUtc,NULL),
-		@languageId);
+		@CultureName);
 
 	SELECT SCOPE_IDENTITY();
 END

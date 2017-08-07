@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Hrm].[DeletePayClass]
-	@Id INT
+CREATE PROCEDURE [Hrm].[DeletePayClass]
+	@id INT
 AS
 	SET NOCOUNT ON;
-	DELETE FROM [Hrm].[PayClass] WHERE [PayClassId] = @Id;
+	DELETE FROM [Hrm].[PayClass] WHERE [PayClassId] = @id;

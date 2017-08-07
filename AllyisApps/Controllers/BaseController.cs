@@ -133,10 +133,10 @@ namespace AllyisApps.Controllers
 			base.OnActionExecuting(filterContext);
 
 			// get the language id from TempData dictionary, which was set in previous request
-			int languageId = 0;
+			string CultureName = "en-US";
 			if (TempData[languageKey] != null)
 			{
-				languageId = (int)TempData[languageKey];
+				CultureName = (string)TempData[languageKey];
 			}
 
 			if (Request.IsAuthenticated)
@@ -151,12 +151,12 @@ namespace AllyisApps.Controllers
 				if (this.AppService.UserContext != null)
 				{
 					// user context obtained. set user's language on the thread.
-					if (languageId == 0 || languageId != this.AppService.UserContext.PrefferedLanguageId || languageId != 1)
+					if (CultureName == null || CultureName != this.AppService.UserContext.PreferedLanguageId || CultureName != "en-US")
 					{
 						// user's language is either not set, or user has changed the language to a different one
-						if (this.AppService.UserContext.PrefferedLanguageId > 0)
+						if (this.AppService.UserContext.PreferedLanguageId != "" || this.AppService.UserContext.PreferedLanguageId != null)
 						{
-							languageId = ChangeLanguage(this.AppService.UserContext.PrefferedLanguageId);
+							CultureName = ChangeLanguage(this.AppService.UserContext.PreferedLanguageId);
 						}
 					}
 				}
@@ -168,25 +168,25 @@ namespace AllyisApps.Controllers
 					return;
 				}
 			}
-			else if (languageId != 1 && languageId > 0) //non logged-in user changing language
+			else if (CultureName != "en-US" && CultureName != "" && CultureName != null) //non logged-in user changing language
 			{
-				languageId = ChangeLanguage(languageId);
+				CultureName = ChangeLanguage(CultureName);
 			}
 
 			// store language for next request
-			TempData[languageKey] = languageId;
+			TempData[languageKey] = CultureName;
 			TempData.Keep(languageKey);
 		}
 
 		/// <summary>
 		/// Change the language displayed in the App
 		/// </summary>
-		/// <param name="languageId"></param>
-		private int ChangeLanguage(int languageId)
+		/// <param name="CultureName"></param>
+		private string ChangeLanguage(string CultureName)
 		{
-			if (languageId <= 0) return 0;
+			if (CultureName == null || CultureName == "") return "";
 
-			Language language = this.AppService.GetLanguage(languageId);
+			Language language = this.AppService.GetLanguage(CultureName);
 			if (language != null)
 			{
 				CultureInfo cInfo = CultureInfo.CreateSpecificCulture(language.CultureName);
@@ -194,7 +194,7 @@ namespace AllyisApps.Controllers
 				Thread.CurrentThread.CurrentUICulture = cInfo;
 				ViewBag.languageName = language.LanguageName;
 			}
-			return languageId;
+			return CultureName;
 		}
 
 		/// <summary>

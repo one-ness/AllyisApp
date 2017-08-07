@@ -6,7 +6,7 @@ BEGIN
 
 	IF EXISTS ( SELECT * FROM [Expense].[ExpenseReport] Where [ExpenseReportId] = @expenseReportId)
 	BEGIN
-		DELETE FROM [Expense].[Expensereport] WHERE [ExpenseReportId] = @expenseReportId;
+		DELETE FROM [Expense].[ExpenseReport] WHERE [ExpenseReportId] = @expenseReportId;
 		SELECT 1;
 	END
 	ELSE

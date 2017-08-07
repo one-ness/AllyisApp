@@ -1,7 +1,7 @@
-﻿CREATE PROCEDURE [Pjm].[GetProjectsByUserAndOrganization]
-	@UserId INT,
-	@OrgId INT,
-	@Activity INT = 1
+CREATE PROCEDURE [Pjm].[GetProjectsByUserAndOrganization]
+	@userId INT,
+	@orgId INT,
+	@activity INT = 1
 AS
 	SET NOCOUNT ON;
 	SELECT	[Project].[ProjectId],
@@ -22,7 +22,7 @@ AS
 			[ProjectOrgId]
 FROM (
 	(SELECT [OrganizationId], [UserId], [OrganizationRoleId]
-	FROM [Auth].[OrganizationUser] WITH (NOLOCK) WHERE [UserId] = @UserId AND [OrganizationId] = @OrgId)
+	FROM [Auth].[OrganizationUser] WITH (NOLOCK) WHERE [UserId] = @userId AND [OrganizationId] = @orgId)
 	AS [OrganizationUser]
 	JOIN [Auth].[Organization]		WITH (NOLOCK) ON [OrganizationUser].[OrganizationId] = [Organization].[OrganizationId]
 	JOIN [Crm].[Customer]		WITH (NOLOCK) ON [Customer].[OrganizationId] = [Organization].[OrganizationId]
@@ -33,9 +33,9 @@ FROM (
 									AND [ProjectUser].[UserId] = [OrganizationUser].[UserId]
 	
 )
-WHERE [Customer].[IsActive] >= @Activity
-	AND [Project].[IsActive] >= @Activity
-	AND [ProjectUser].[IsActive] >= @Activity
+WHERE [Customer].[IsActive] >= @activity
+	AND [Project].[IsActive] >= @activity
+	AND [ProjectUser].[IsActive] >= @activity
 	UNION ALL
 SELECT	[ProjectId],
 		[CustomerId],

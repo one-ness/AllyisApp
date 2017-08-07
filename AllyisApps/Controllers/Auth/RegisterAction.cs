@@ -56,7 +56,7 @@ namespace AllyisApps.Controllers
 				string confirmEmailSubject = string.Format(Strings.ConfirmEmailSubject, Strings.ApplicationTitle);
 				string confirmEmailBody = string.Format(Strings.ConfirmEmailMessage, Strings.ApplicationTitle, confirmUrl);
 				// TODO: Change language preference from 1 to a value grabbed from session/URL
-				int langPreference = 1;
+				string langPreference = "en-US";
 				// compute birthdate			
 				var birthdate = AppService.GetDateTimeFromDays(model.DateOfBirth);
 				// create new user in the db and get back the userId and count of invitations

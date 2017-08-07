@@ -1,12 +1,11 @@
 ﻿CREATE PROCEDURE [Lookup].[GetLanguageById]
-	@LanguageId INT
+	@CultureName VARCHAR (16)
 AS
 BEGIN
 	SELECT
-		[Language].[Id] AS [LanguageId],
 		[Language].[LanguageName],
 		[Language].[CultureName]
 	FROM [Lookup].[Language] WITH (NOLOCK)
-	WHERE [Language].[Id] = @LanguageId
+	WHERE [Language].[CultureName] = @CultureName
 	 
 END

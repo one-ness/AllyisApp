@@ -11,10 +11,10 @@ namespace AllyisApps.DBModel.Lookup
 	/// </summary>
 	public class LanguageDBEntity
 	{
-		/// <summary>
-		/// Gets or sets the language Id.
-		/// </summary>
-		public int LanguageId { get; set; }
+		///// <summary>
+		///// Gets or sets the language Id.
+		///// </summary>
+		//public int LanguageId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the language name.

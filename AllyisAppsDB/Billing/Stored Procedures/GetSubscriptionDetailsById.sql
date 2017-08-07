@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Billing].[GetSubscriptionDetailsById]
-	@SubscriptionId INT
+CREATE PROCEDURE [Billing].[GetSubscriptionDetailsById]
+	@subscriptionId INT
 AS
 	SET NOCOUNT ON;
 SELECT [OrganizationId]
@@ -8,4 +8,4 @@ SELECT [OrganizationId]
       ,[SubscriptionCreatedUtc]
       ,[IsActive]
 FROM [Billing].[Subscription] WITH (NOLOCK) 
-WHERE [SubscriptionId] = @SubscriptionId AND [IsActive] = 1
+WHERE [SubscriptionId] = @subscriptionId AND [IsActive] = 1

@@ -1,49 +1,49 @@
-﻿CREATE PROCEDURE [Auth].[AcceptInvitation]
-	@InvitationId INT,
-	@CallingUserId INT
+CREATE PROCEDURE [Auth].[AcceptInvitation]
+	@invitationId INT,
+	@callingUserId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	-- Retrieve the invitation information
-	DECLARE @OrganizationId INT;
-	DECLARE @OrganizationRole INT;
-	DECLARE @Email NVARCHAR(384);
-	DECLARE @EmployeeId NVARCHAR(16);
+	DECLARE @organizationId INT;
+	DECLARE @organizationRole INT;
+	DECLARE @email NVARCHAR(384);
+	DECLARE @employeeId NVARCHAR(16);
 	SELECT
-		@OrganizationId = [OrganizationId],
-		@OrganizationRole = [OrganizationRoleId],
-		@Email = [Email],
-		@EmployeeId = [EmployeeId]
+		@organizationId = [OrganizationId],
+		@organizationRole = [OrganizationRoleId],
+		@email = [Email],
+		@employeeId = [EmployeeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
-	WHERE [Invitation].[InvitationId] = @InvitationId AND [Invitation].[IsActive] = 1
+	WHERE [Invitation].[InvitationId] = @invitationId AND [Invitation].[IsActive] = 1
 
-	IF @OrganizationId IS NOT NULL
+	IF @organizationId IS NOT NULL
 	BEGIN -- Invitation found
 
 		-- Retrieve invited user
-		DECLARE @UserId INT;
-		SET @UserId = (
+		DECLARE @userId INT;
+		SET @userId = (
 			SELECT [UserId]
 			FROM [Auth].[User] WITH (NOLOCK)
-			WHERE [User].[Email] = @Email
+			WHERE [User].[Email] = @email
 		)
 
-		IF @UserId IS NOT NULL AND @UserId = @CallingUserId
+		IF @userId IS NOT NULL AND @userId = @callingUserId
 		BEGIN -- Invited user found and matches calling user id
 			BEGIN TRANSACTION
 
 			-- Add user to organization
 			IF EXISTS (
 				SELECT * FROM [Auth].[OrganizationUser] WITH (NOLOCK)
-				WHERE [OrganizationUser].[UserId] = @UserId AND [OrganizationUser].[OrganizationId] = @OrganizationId
+				WHERE [OrganizationUser].[UserId] = @userId AND [OrganizationUser].[OrganizationId] = @organizationId
 			)
 			BEGIN -- User already in organization
 				UPDATE [Auth].[OrganizationUser]
-				SET [OrganizationRoleId] = @OrganizationRole,
-					[EmployeeId] = @EmployeeId
-				WHERE [UserId] = @UserId AND 
-					[OrganizationId] = @OrganizationId;
+				SET [OrganizationRoleId] = @organizationRole,
+					[EmployeeId] = @employeeId
+				WHERE [UserId] = @userId AND 
+					[OrganizationId] = @organizationId;
 			END
 			ELSE
 			BEGIN -- User not in organization
@@ -54,24 +54,24 @@ BEGIN
 					[EmployeeId]
 				)
 				VALUES (
-					@UserId, 
-					@OrganizationId,
-					@OrganizationRole, 
-					@EmployeeId
+					@userId, 
+					@organizationId,
+					@organizationRole, 
+					@employeeId
 				);
 			END
 
 			DELETE FROM [Auth].[Invitation]
-			WHERE [InvitationId] = @InvitationId
+			WHERE [InvitationId] = @invitationId
 			
 			-- On success, return name of organization and role
 			SELECT [Organization].[OrganizationName]
 			FROM [Auth].[Organization]
-			WHERE [Organization].[OrganizationId] = @OrganizationId
+			WHERE [Organization].[OrganizationId] = @organizationId
 
 			SELECT [OrganizationRole].[OrganizationRoleName]
 			FROM [Auth].[OrganizationRole]
-			WHERE [OrganizationRole].[OrganizationRoleId] = @OrganizationRole
+			WHERE [OrganizationRole].[OrganizationRoleId] = @organizationRole
 
 			COMMIT
 		END

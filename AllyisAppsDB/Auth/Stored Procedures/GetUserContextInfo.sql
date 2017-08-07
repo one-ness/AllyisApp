@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Auth].[GetUserContextInfo]
-	@UserId int
+CREATE PROCEDURE [Auth].[GetUserContextInfo]
+	@userId int
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -42,5 +42,5 @@ BEGIN
 				LEFT JOIN [Billing].[Product] AS [P] WITH (NOLOCK) ON [PR].[ProductId] = [P].[ProductId]
 			WHERE [S].[IsActive] = 1
 		) [SUB] ON [SUB].[UserId] = [U].[UserId] AND [SUB].[OrganizationId] = [O].[OrganizationId]
-	WHERE [U].[UserId] = @UserId;
+	WHERE [U].[UserId] = @userId;
 END

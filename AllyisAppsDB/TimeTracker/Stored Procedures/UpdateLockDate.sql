@@ -1,12 +1,12 @@
-﻿CREATE PROCEDURE [TimeTracker].[UpdateLockDate]
-	@OrganizationId INT,
-	@IsLockDateUsed BIT,
-	@LockDatePeriod INT,
-	@LockDateQuantity INT
+CREATE PROCEDURE [TimeTracker].[UpdateLockDate]
+	@organizationId INT,
+	@isLockDateUsed BIT,
+	@lockDatePeriod INT,
+	@lockDateQuantity INT
 AS
 	SET NOCOUNT ON;
 	UPDATE [TimeTracker].[Setting]
-		SET [IsLockDateUsed] = @IsLockDateUsed,
-			[LockDatePeriod] = @LockDatePeriod,
-			[LockDateQuantity] = @LockDateQuantity
-		WHERE [OrganizationId] = @OrganizationId;
+		SET [IsLockDateUsed] = @isLockDateUsed,
+			[LockDatePeriod] = @lockDatePeriod,
+			[LockDateQuantity] = @lockDateQuantity
+		WHERE [OrganizationId] = @organizationId;

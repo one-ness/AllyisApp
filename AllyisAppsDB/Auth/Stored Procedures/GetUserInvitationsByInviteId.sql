@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Auth].[GetUserInvitationsByInviteId]
-	@InviteId INT
+CREATE PROCEDURE [Auth].[GetUserInvitationsByInviteId]
+	@inviteId INT
 AS
 	SET NOCOUNT ON;
 	SELECT 
@@ -15,4 +15,4 @@ AS
 		[EmployeeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
 	LEFT JOIN [Auth].[OrganizationRole] WITH (NOLOCK) ON [OrganizationRole].[OrganizationRoleId] = [Invitation].[OrganizationRoleId]
-	WHERE [InvitationId] = @InviteId AND [IsActive] = 1
+	WHERE [InvitationId] = @inviteId AND [IsActive] = 1

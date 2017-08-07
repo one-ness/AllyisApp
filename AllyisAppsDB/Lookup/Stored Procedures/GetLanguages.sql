@@ -3,8 +3,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	SELECT
-		[Id] AS [LanguageId],
-		[LanguageName],
-		[CultureName]
+		[CultureName],
+		[LanguageName]
 	FROM [Language] WITH (NOLOCK)
 END

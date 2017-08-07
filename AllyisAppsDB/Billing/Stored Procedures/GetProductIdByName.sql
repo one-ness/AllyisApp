@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Billing].[GetProductIdByName]
-	@ProductName NVARCHAR(128)
+CREATE PROCEDURE [Billing].[GetProductIdByName]
+	@productName NVARCHAR(128)
 AS
 	SET NOCOUNT ON;
-	SELECT [ProductId] FROM [Billing].[Product] WITH (NOLOCK) WHERE [ProductName] = @ProductName;
+	SELECT [ProductId] FROM [Billing].[Product] WITH (NOLOCK) WHERE [ProductName] = @productName;

@@ -1,58 +1,58 @@
-﻿CREATE PROCEDURE [Auth].[UpdateMember]
-	@UserId INT,
-	@OrgId INT,
-	@EmployeeId NVARCHAR(100),
-	@EmployeeRoleId INT,
-	@IsInvited BIT,
-	@FirstName NVARCHAR(100),
-	@LastName NVARCHAR (100)
+CREATE PROCEDURE [Auth].[UpdateMember]
+	@userId INT,
+	@orgId INT,
+	@employeeId NVARCHAR(100),
+	@employeeRoleId INT,
+	@isInvited BIT,
+	@firstName NVARCHAR(100),
+	@lastName NVARCHAR (100)
 AS
 BEGIN
 	IF EXISTS (
 			SELECT * FROM [Auth].[OrganizationUser] WITH (NOLOCK)
-			WHERE [OrganizationId] = @OrgId AND [EmployeeId] = @EmployeeId AND [UserId] != @UserId
+			WHERE [OrganizationId] = @orgId AND [EmployeeId] = @employeeId AND [UserId] != @userId
 		) OR EXISTS (
 			SELECT * FROM [Auth].[Invitation] WITH (NOLOCK)
-			WHERE [OrganizationId] = @OrgId AND [IsActive] = 1 AND [EmployeeId] = @EmployeeId AND [InvitationId] != @UserId
+			WHERE [OrganizationId] = @orgId AND [IsActive] = 1 AND [EmployeeId] = @employeeId AND [InvitationId] != @userId
 		)
 	BEGIN
-		IF @IsInvited = 0
+		IF @isInvited = 0
 		BEGIN
 			SET NOCOUNT ON;
 			UPDATE [Auth].[OrganizationUser]
-			SET [OrganizationRoleId] = @EmployeeRoleId
-			WHERE [UserId] = @UserId AND [OrganizationId] = @OrgId;
+			SET [OrganizationRoleId] = @employeeRoleId
+			WHERE [UserId] = @userId AND [OrganizationId] = @orgId;
 		END
 		ELSE
 		BEGIN
 			SET NOCOUNT ON;
 			UPDATE [Auth].[Invitation]
-			SET [OrganizationRoleId] = @EmployeeRoleId,
-				[FirstName] = @FirstName,
-				[LastName] = @LastName
-			WHERE [InvitationId] = @UserId AND [OrganizationId] = @OrgId;
+			SET [OrganizationRoleId] = @employeeRoleId,
+				[FirstName] = @firstName,
+				[LastName] = @lastName
+			WHERE [InvitationId] = @userId AND [OrganizationId] = @orgId;
 		END
 		SELECT 1;
 	END
 	ELSE
 	BEGIN
-		IF @IsInvited = 0
+		IF @isInvited = 0
 		BEGIN
 			SET NOCOUNT ON;
 			UPDATE [Auth].[OrganizationUser]
-			SET [EmployeeId] = @EmployeeId,
-				[OrganizationRoleId] = @EmployeeRoleId
-			WHERE [UserId] = @UserId AND [OrganizationId] = @OrgId;
+			SET [EmployeeId] = @employeeId,
+				[OrganizationRoleId] = @employeeRoleId
+			WHERE [UserId] = @userId AND [OrganizationId] = @orgId;
 		END
 		ELSE
 		BEGIN
 			SET NOCOUNT ON;
 			UPDATE [Auth].[Invitation]
-			SET [EmployeeId] = @EmployeeId,
-				[OrganizationRoleId] = @EmployeeRoleId,
-				[FirstName] = @FirstName,
-				[LastName] = @LastName
-			WHERE [InvitationId] = @UserId AND [OrganizationId] = @OrgId;
+			SET [EmployeeId] = @employeeId,
+				[OrganizationRoleId] = @employeeRoleId,
+				[FirstName] = @firstName,
+				[LastName] = @lastName
+			WHERE [InvitationId] = @userId AND [OrganizationId] = @orgId;
 		END
 		SELECT 2;
 	END
