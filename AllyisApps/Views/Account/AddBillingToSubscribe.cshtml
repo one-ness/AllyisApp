@@ -12,7 +12,8 @@
 
         @using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, FormMethod.Post))
         {
-            @Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+            <a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account)" new { class = "btn btn-default" }> Strings.Cancel </a>
+            //@Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
 
             @Html.AntiForgeryToken()
             @Html.HiddenFor(m => m.OrganizationId)

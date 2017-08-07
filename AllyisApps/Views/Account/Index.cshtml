@@ -40,8 +40,10 @@
 					</p>
 				</div>
 				<div class="col-sm-3 vertically-stacked-buttons text-right" style="padding-right:5px">
-					@Html.ActionLink(Strings.ChangePassword, ActionConstants.ChangePassword, ControllerConstants.Account, null, new { @class = "btn btn-default"})
-					@Html.ActionLink(Strings.EditProfile, ActionConstants.EditProfile, null, new { @class = "btn btn-default"})
+                    <a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)" class="btn btn-default"> @Strings.ChangePassword </a>
+					<!--Html.ActionLink(Strings.ChangePassword, ActionConstants.ChangePassword, ControllerConstants.Account, null, new { class = "btn btn-default"})-->
+                    <a href="@Url.Action(ActionConstants.EditProfile, ControllerConstants.Account)" class="btn btn-default"> @Strings.EditProfile </a>
+					<!--Html.ActionLink(Strings.EditProfile, ActionConstants.EditProfile, null, new { class = "btn btn-default"})-->
 				</div>
 			</div>
 

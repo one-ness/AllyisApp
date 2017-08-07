@@ -57,22 +57,23 @@
 					@foreach (SubscriptionDisplayViewModel sub in Model.PanelInfo.Subscriptions)
 					{
 						<div class="square-box">
-								<a href="@Url.RouteUrl(RouteNameConstants.TimeTrackerNoIndex, new { subscriptionId = @sub.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = ViewBag.StartDate, endDate = ViewBag.EndDate})" style="text-decoration: none">
-									<div class="panel panel-default">
-										<div class="btn default" style="text-align:center; margin:10px;">
-											<div class="center-block" text-align: center; vertical-align: middle;" style="margin-top:5px;">
-												<img src="~/@string.Format("Content/icons/{0}.png", @sub.ProductName.Replace(" ", ""))" alt="@sub.ProductName" />
-											</div>
-
-											<h3>
-												@sub.ProductName
-											</h3>
-											<p>
-												@sub.SubscriptionName
-											</p>
+                            <a href="@Url.Action(RouteNameConstants.TimeTrackerNoIndex, ControllerConstants.TimeEntry, new { subscriptionId = @sub.SubscriptionId, startDate = ViewBag.StartDate, endDate = ViewBag.EndDate } )" style="text-decoration: none">
+							<!--<a href="Url.RouteUrl(RouteNameConstants.TimeTrackerNoIndex, new { subscriptionId = @sub.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = ViewBag.StartDate, endDate = ViewBag.EndDate})" style="text-decoration: none">-->
+								<div class="panel panel-default">
+									<div class="btn default" style="text-align:center; margin:10px;">
+										<div class="center-block" text-align: center; vertical-align: middle;" style="margin-top:5px;">
+											<img src="~/@string.Format("Content/icons/{0}.png", @sub.ProductName.Replace(" ", ""))" alt="@sub.ProductName" />
 										</div>
+
+										<h3>
+											@sub.ProductName
+										</h3>
+										<p>
+											@sub.SubscriptionName
+										</p>
 									</div>
-								</a>
+								</div>
+							</a>
 						</div>
 					}
                 </div>

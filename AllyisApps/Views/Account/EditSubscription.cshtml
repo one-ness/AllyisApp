@@ -43,7 +43,8 @@
                     
 					<div class="pull-right", style="margin-top:50px;">
 						<input type="submit" value="@Strings.Save" class="btn btn-primary" id="save" />
-						@Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, htmlAttributes: new { @class = "btn btn-default" })
+                        <a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
+                        <!--Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, htmlAttributes: new { class = "btn btn-default" })-->
 					</div>
 
                 }
