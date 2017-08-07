@@ -5,16 +5,19 @@
 @model ExpenseIndexViewModel
 
 @{
-    ViewBag.Title = Strings.Report;
-    Layout = "~/Areas/ExpenseTracker/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = Strings.Report;
+	Layout = "~/Areas/ExpenseTracker/Views/Shared/_Layout.cshtml";
+	var items = new List<string>();
+	items.AddRange(new string[]{""});
 }
 
 <h2>@Strings.Report</h2>
 
 <div class="row report-wrap">
-	<div class="col-md-6 col-lg-6" style="float: left;">
+	<div class="col-md-12" style="float: left;">
 		<div class="row">
-            @using (Html.BeginForm(ActionConstants.ViewReport, ControllerConstants.TimeEntry, FormMethod.Post, htmlAttributes: new { @id = "reportForm" }))
+
+			@using (Html.BeginForm(ActionConstants.ViewReport, ControllerConstants.TimeEntry, FormMethod.Post, htmlAttributes: new { @id = "reportForm" }))
             {
                 @Html.HiddenFor(m => m.SubscriptionId)
                 <div class="options-right container">
@@ -31,30 +34,53 @@
 							}
 						</select>
                     </div>
-					<div class="row">
-						<div class="form-group">
-							<div class="left-label">
-								<label>Report Name</label>
-							</div>
-							<div class="right-input">
-								@Html.TextBox("ReportName", "", new { @class = "form-control" })
-							</div>
-							<div class="left-label">
-								<label>Business Justification</label>
-							</div>
-							<div class="right-input">
-								@Html.TextBox("BusinessJustification", "", new { @class = "form-control" })
-							</div>
-							<div class="left-label">
-								<label>@Strings.Date</label>
-							</div>
-							<div class="right-input">
-								<input type="text" class="form-control" id="datePickerStart" style="display: inline-block; width: 75%" />
-								<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id="datePickerStartButton" title="Choose start date"></span>
-							</div>
-							<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.StartDate" />
+					<div class="form-group" style="width: 50%;">
+						<div class="left-label">
+							<label>Report Name</label>
 						</div>
+						<div class="right-input">
+							@Html.TextBox("ReportName", "", new { @class = "form-control" })
+						</div>
+						<div class="left-label">
+							<label>Business Justification</label>
+						</div>
+						<div class="right-input">
+							@Html.TextBox("BusinessJustification", "", new { @class = "form-control" })
+						</div>
+						<div class="left-label">
+							<label>@Strings.Date</label>
+						</div>
+						<div class="right-input">
+							<input type="text" class="form-control" id="datePickerStart" style="display: inline-block; width: 75%" />
+							<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id="datePickerStartButton" title="Choose start date"></span>
+						</div>
+						<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.StartDate" />
 					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							Items
+						</div>
+							@foreach (var item in items)
+							{
+								<div class="item-div">
+									@Html.TextBox("ItemDate" + item, "", new { type = "text", @class = "form-control", id = "datePickerStart", style = "display: inline-block; width: 150px", placeholder = "Date" })
+									<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id=@item title="Choose start date"></span>
+									@Html.TextBox("ItemName_" + item, item, new { @class = "form-control", style = "display: inline-block; width: 150px;", placeholder = "Name" })
+									@Html.TextBox("ItemAmount_" + item, "", new { @class = "form-control", style = "display: inline-block; width: 150px;", placeholder = "Amount" })
+									<label>Payed for by Customer</label>
+									@Html.CheckBox("CustomerPay_" + item, true)
+									<span class="btn btn-primary" onclick="">
+										Remove
+									</span>
+								</div>
+							}
+							<div style="text-align: center;">
+								<span class="btn btn-primary" href="">
+									Add Item
+								</span>
+							</div>
+					</div>
+
 					<div class="row">
 						<div class="col-xs-12">
 							<div>
@@ -65,7 +91,7 @@
 							</div>
 						</div>
 					</div>
-                </div>
+				</div>
 			}
 		</div>
 		<br>
@@ -84,7 +110,7 @@
 			</div>
 			@*<div style="width:70%; margin:0 auto">*@
 			<div id="footUpload" style="background-color:#f5f5f5; display: flex; justify-content: space-around; flex-wrap: wrap; padding-bottom: 0px; float:right; margin-top: 10px;">
-				<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose Excel file containing Time Tracker entries">@Strings.ChooseFile</a>
+				<span class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose Excel file containing Time Tracker entries">@Strings.ChooseFile</span>
 				<input type="submit" style="margin-left: 3px; margin-right: 3px;" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload Excel Time Tracker entries" />
 			</div>
 			}
@@ -119,5 +145,8 @@
 		pwf.setPageLimit(15);
 		pwf.setPageButtonLimit(10);
 		pwf.setRowClass("previewRow");
+		var addItem = function () {
+			items.Add("");
+		}
 	</script>
 }
