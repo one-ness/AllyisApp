@@ -192,7 +192,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			// back to the formula so that the weekend highlighting is based off of start of week.
 			// int weekend = 7 + ((int)startOfWeek - 2); // weekend = both days before startOfWeek
 			int weekend = (int)StartOfWeekEnum.Saturday;
-			bool holidayPopulated = false;
+			//bool holidayPopulated = false;
 
 			// For each date in the date range
 			for (DateTime date = startDate; date <= endDate;)
@@ -243,16 +243,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					if (holidays.Where(x => x.Date == iter.Current.Date).FirstOrDefault() != null)
 					{
-						holidayPopulated = true;
+						//holidayPopulated = true;
 					}
 
 					iter.MoveNext();
 				}
+                /*
 				else if ((holidays.Where(x => x.Date == date).FirstOrDefault() != null) && (iter.Current == null || iter.Current.Date != date) && !holidayPopulated)
 				{
+                    /* TODO: REPLACE HOLIDY LOGIC HERE IMPORTANT: ALL HOLIDAY Calculations May not work as expected ARE CURENTLY DISABLED 
 					holidayPopulated = true;
 					// Prepopulate holidays
-
+                      
 					result.GrandTotal.Hours += 8;
 
 					TimeEntryInfo timeEntryInfo = new TimeEntryInfo()
@@ -265,9 +267,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						PayClassId = infos.Item2.Where(p => p.PayClassName.Equals("Holiday")).FirstOrDefault().PayClassId,
 						Description = holidays.Where(x => x.Date == date).First().HolidayName,
 					};
-
+                    
 					int timeEntryId = AppService.CreateTimeEntry(timeEntryInfo);
-
+                    
 					result.EntryRange.Entries.Add(new EditTimeEntryViewModel
 					{
 						TimeEntryId = timeEntryId,
@@ -288,7 +290,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						IsLocked = (!result.CanManage && beforeLockDate),
 						LockDate = result.LockDate
 					});
-				}
+                    
+				    }
+                    */
 				else
 				{
 					// Otherwise, create an empty entry.
@@ -314,7 +318,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 					// Go to the next day.
 					date = date.AddDays(1.0d);
-					holidayPopulated = false;
+				    //holidayPopulated = false;
 				}
 			}
 
