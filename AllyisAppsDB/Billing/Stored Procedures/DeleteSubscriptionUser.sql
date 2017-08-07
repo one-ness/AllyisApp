@@ -1,7 +1,7 @@
-﻿CREATE PROCEDURE [Billing].[DeleteSubscriptionUser]
-	@SubscriptionId INT,
-	@UserId INT
+CREATE PROCEDURE [Billing].[DeleteSubscriptionUser]
+	@subscriptionId INT,
+	@userId INT
 AS
 	SET NOCOUNT ON;
 	DELETE [Billing].[SubscriptionUser] 
-	WHERE [SubscriptionId] = @SubscriptionId AND [UserId] = @UserId;
+	WHERE [SubscriptionId] = @subscriptionId AND [UserId] = @userId;

@@ -15,7 +15,6 @@
 	@isLockoutEnabled BIT,
 	@lockoutEndDateUtc DATE,
 	@languageId INT
-
 AS
 BEGIN
 	SET NOCOUNT ON;

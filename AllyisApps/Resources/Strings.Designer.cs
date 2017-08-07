@@ -3958,7 +3958,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Users changed roles in Time Tracker..
+        ///   Looks up a localized string similar to {0} users changed roles in Time Tracker..
         /// </summary>
         public static string UsersChangedRolesInTimeTracker {
             get {

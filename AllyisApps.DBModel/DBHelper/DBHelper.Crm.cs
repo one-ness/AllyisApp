@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="DBHelper.Crm.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -44,12 +44,12 @@ namespace AllyisApps.DBModel
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerId", project.CustomerId);
-			parameters.Add("@ProjectName", project.ProjectName);
-			parameters.Add("@IsHourly", project.IsHourly);
-			parameters.Add("@ProjectOrgId", project.ProjectOrgId);
-			parameters.Add("@StartingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
-			parameters.Add("@EndingDate", project.EndingDate == null ? null : project.EndingDate.Value.ToShortDateString());
-			parameters.Add("@UserIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
+			parameters.Add("@projectName", project.ProjectName);
+			parameters.Add("@isHourly", project.IsHourly);
+			parameters.Add("@projectOrgId", project.ProjectOrgId);
+			parameters.Add("@startingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
+			parameters.Add("@endingDate", project.EndingDate == null ? null : project.EndingDate.Value.ToShortDateString());
+			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -77,11 +77,11 @@ namespace AllyisApps.DBModel
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@customerId", project.CustomerId);
-			parameters.Add("@ProjectName", project.ProjectName);
-			parameters.Add("@IsHourly", project.IsHourly);
-			parameters.Add("@ProjectOrgId", project.ProjectOrgId);
-			parameters.Add("@StartingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
-			parameters.Add("@EndingDate", project.EndingDate == null ? null : project.EndingDate.Value.ToShortDateString());
+			parameters.Add("@projectName", project.ProjectName);
+			parameters.Add("@isHourly", project.IsHourly);
+			parameters.Add("@projectOrgId", project.ProjectOrgId);
+			parameters.Add("@startingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
+			parameters.Add("@endingDate", project.EndingDate == null ? null : project.EndingDate.Value.ToShortDateString());
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -118,7 +118,7 @@ namespace AllyisApps.DBModel
         public void DeleteProject(int projectId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ProjectId", projectId);
+			parameters.Add("@projectId", projectId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -136,7 +136,7 @@ namespace AllyisApps.DBModel
 		public void ReactivateProject(int projectId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ProjectId", projectId);
+			parameters.Add("@projectId", projectId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -154,12 +154,12 @@ namespace AllyisApps.DBModel
 		public void UpdateProject(ProjectDBEntity project)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ProjectId", project.ProjectId);
-			parameters.Add("@ProjectName", project.ProjectName);
-			parameters.Add("@IsHourly", project.IsHourly);
-			parameters.Add("@ProjectOrgId", project.ProjectOrgId);
-			parameters.Add("@StartingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
-			parameters.Add("@EndingDate", project.EndingDate == null ? null : project.EndingDate.Value.ToShortDateString());
+			parameters.Add("@projectId", project.ProjectId);
+			parameters.Add("@projectName", project.ProjectName);
+			parameters.Add("@isHourly", project.IsHourly);
+			parameters.Add("@projectOrgId", project.ProjectOrgId);
+			parameters.Add("@startingDate", project.StartingDate == null ? null : project.StartingDate.Value.ToShortDateString());
+			parameters.Add("@endingDate", project.EndingDate == null ? null : project.EndingDate.Value.ToShortDateString());
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -218,8 +218,8 @@ namespace AllyisApps.DBModel
 		public Tuple<ProjectDBEntity, List<UserDBEntity>, List<SubscriptionUserDBEntity>> GetProjectEditInfo(int projectId, int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ProjectId", projectId);
-			parameters.Add("@SubscriptionId", subscriptionId);
+			parameters.Add("@projectId", projectId);
+			parameters.Add("@subscriptionId", subscriptionId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -244,8 +244,8 @@ namespace AllyisApps.DBModel
 		public Tuple<string, List<SubscriptionUserDBEntity>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@CustomerId", customerId);
-			parameters.Add("@SubscriptionId", subscriptionId);
+			parameters.Add("@customerId", customerId);
+			parameters.Add("@subscriptionId", subscriptionId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -267,8 +267,8 @@ namespace AllyisApps.DBModel
 		public void CreateProjectUser(int projectId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ProjectId", projectId);
-			parameters.Add("@UserId", userId);
+			parameters.Add("@projectId", projectId);
+			parameters.Add("@userId", userId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Query<int>(
@@ -288,10 +288,10 @@ namespace AllyisApps.DBModel
 		public int UpdateProjectUser(int projectId, int userId, int isActive)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ProjectId", projectId);
-			parameters.Add("@UserId", userId);
-			parameters.Add("@IsActive", isActive);
-			parameters.Add("@RowsUpdated", 0);
+			parameters.Add("@projectId", projectId);
+			parameters.Add("@userId", userId);
+			parameters.Add("@isActive", isActive);
+			parameters.Add("@rowsUpdated", 0);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -314,8 +314,8 @@ namespace AllyisApps.DBModel
 		public int DeleteProjectUser(int projectId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ProjectId", projectId);
-			parameters.Add("@UserId", userId);
+			parameters.Add("@projectId", projectId);
+			parameters.Add("@userId", userId);
 			parameters.Add("@ret", 0);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -339,19 +339,19 @@ namespace AllyisApps.DBModel
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ContactEmail", customer.ContactEmail);
-			parameters.Add("@CustomerName", customer.CustomerName);
-			parameters.Add("@Address", customer.Address);
-			parameters.Add("@City", customer.City);
-			parameters.Add("@State", customer.State);
-			parameters.Add("@Country", customer.Country);
-			parameters.Add("@PostalCode", customer.PostalCode);
-			parameters.Add("@ContactPhoneNumber", customer.ContactPhoneNumber);
-			parameters.Add("@FaxNumber", customer.FaxNumber);
-			parameters.Add("@Website", customer.Website);
-			parameters.Add("@EIN", customer.EIN);
-			parameters.Add("@OrganizationId", customer.OrganizationId);
-			parameters.Add("@CustomerOrgId", customer.CustomerOrgId);
+			parameters.Add("@contactEmail", customer.ContactEmail);
+			parameters.Add("@customerName", customer.CustomerName);
+			parameters.Add("@address", customer.Address);
+			parameters.Add("@city", customer.City);
+			parameters.Add("@state", customer.State);
+			parameters.Add("@country", customer.Country);
+			parameters.Add("@postalCode", customer.PostalCode);
+			parameters.Add("@contactPhoneNumber", customer.ContactPhoneNumber);
+			parameters.Add("@faxNumber", customer.FaxNumber);
+			parameters.Add("@website", customer.Website);
+			parameters.Add("@eIN", customer.EIN);
+			parameters.Add("@organizationId", customer.OrganizationId);
+			parameters.Add("@customerOrgId", customer.CustomerOrgId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -376,20 +376,20 @@ namespace AllyisApps.DBModel
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@CustomerId", customer.CustomerId);
-			parameters.Add("@ContactEmail", customer.ContactEmail);
-			parameters.Add("@CustomerName", customer.CustomerName);
-			parameters.Add("@AddressId", customer.AddressId);
-			parameters.Add("@Address", customer.Address);
-			parameters.Add("@City", customer.City);
-			parameters.Add("@State", customer.State);
-			parameters.Add("@Country", customer.Country);
-			parameters.Add("@PostalCode", customer.PostalCode);
-			parameters.Add("@ContactPhoneNumber", customer.ContactPhoneNumber);
-			parameters.Add("@FaxNumber", customer.FaxNumber);
-			parameters.Add("@Website", customer.Website);
-			parameters.Add("@EIN", customer.EIN);
-			parameters.Add("@OrgId", customer.CustomerOrgId);
+			parameters.Add("@customerId", customer.CustomerId);
+			parameters.Add("@contactEmail", customer.ContactEmail);
+			parameters.Add("@customerName", customer.CustomerName);
+			parameters.Add("@addressId", customer.AddressId);
+			parameters.Add("@address", customer.Address);
+			parameters.Add("@city", customer.City);
+			parameters.Add("@state", customer.State);
+			parameters.Add("@country", customer.Country);
+			parameters.Add("@postalCode", customer.PostalCode);
+			parameters.Add("@contactPhoneNumber", customer.ContactPhoneNumber);
+			parameters.Add("@faxNumber", customer.FaxNumber);
+			parameters.Add("@website", customer.Website);
+			parameters.Add("@eIN", customer.EIN);
+			parameters.Add("@orgId", customer.CustomerOrgId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -412,19 +412,19 @@ namespace AllyisApps.DBModel
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@CustomerId", customer.CustomerId);
-			parameters.Add("@ContactEmail", customer.ContactEmail);
-			parameters.Add("@Name", customer.Name);
-			parameters.Add("@Address", customer.Address);
-			parameters.Add("@City", customer.City);
-			parameters.Add("@State", customer.State);
-			parameters.Add("@Country", customer.Country);
-			parameters.Add("@PostalCode", customer.PostalCode);
-			parameters.Add("@ContactPhoneNumber", customer.ContactPhoneNumber);
-			parameters.Add("@FaxNumber", customer.FaxNumber);
-			parameters.Add("@Website", customer.Website);
-			parameters.Add("@EIN", customer.EIN);
-			parameters.Add("@OrgId", customer.CustomerOrgId);
+			parameters.Add("@customerId", customer.CustomerId);
+			parameters.Add("@contactEmail", customer.ContactEmail);
+			parameters.Add("@name", customer.Name);
+			parameters.Add("@address", customer.Address);
+			parameters.Add("@city", customer.City);
+			parameters.Add("@state", customer.State);
+			parameters.Add("@country", customer.Country);
+			parameters.Add("@postalCode", customer.PostalCode);
+			parameters.Add("@contactPhoneNumber", customer.ContactPhoneNumber);
+			parameters.Add("@faxNumber", customer.FaxNumber);
+			parameters.Add("@website", customer.Website);
+			parameters.Add("@eIN", customer.EIN);
+			parameters.Add("@orgId", customer.CustomerOrgId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -472,7 +472,7 @@ namespace AllyisApps.DBModel
 		public Tuple<string, List<string>> GetNextCustIdAndCountries(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@OrgId", orgId);
+			parameters.Add("@orgId", orgId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
@@ -494,7 +494,7 @@ namespace AllyisApps.DBModel
 		public Tuple<CustomerDBEntity, List<string>, AddressDBEntity> GetCustomerCountries(int customerId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@CustomerId", customerId);
+			parameters.Add("@customerId", customerId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
@@ -566,9 +566,9 @@ namespace AllyisApps.DBModel
 		public IEnumerable<ProjectDBEntity> GetProjectsByUserAndOrganization(int userId, int orgId, int activity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@UserId", userId);
-			parameters.Add("@OrgId", orgId);
-			parameters.Add("@Activity", activity);
+			parameters.Add("@userId", userId);
+			parameters.Add("@orgId", orgId);
+			parameters.Add("@activity", activity);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<ProjectDBEntity>(
@@ -587,8 +587,8 @@ namespace AllyisApps.DBModel
 		public IEnumerable<ProjectDBEntity> GetProjectsByOrgId(int orgId, int activity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@OrgId", orgId);
-			parameters.Add("@Activity", activity);
+			parameters.Add("@orgId", orgId);
+			parameters.Add("@activity", activity);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<ProjectDBEntity>(
@@ -606,7 +606,7 @@ namespace AllyisApps.DBModel
 		public ProjectDBEntity GetProjectById(int projectId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ProjectId", projectId);
+			parameters.Add("@projectId", projectId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -627,8 +627,8 @@ namespace AllyisApps.DBModel
 		public ProjectDBEntity GetProjectByIdAndUser(int projectId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ProjectId", projectId);
-			parameters.Add("@UserId", userId);
+			parameters.Add("@projectId", projectId);
+			parameters.Add("@userId", userId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -669,13 +669,13 @@ namespace AllyisApps.DBModel
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ProjectId", projectId);
-			parameters.Add("@ProjectName", projectName);
-			parameters.Add("@OrgId", orgId);
-			parameters.Add("@IsHourly", isHourly);
-			parameters.Add("@StartingDate", start == null ? null : start.Value.ToShortDateString());
-			parameters.Add("@EndingDate", end == null ? null : end.Value.ToShortDateString());
-			parameters.Add("@UserIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
+			parameters.Add("@projectId", projectId);
+			parameters.Add("@projectName", projectName);
+			parameters.Add("@orgId", orgId);
+			parameters.Add("@isHourly", isHourly);
+			parameters.Add("@startingDate", start == null ? null : start.Value.ToShortDateString());
+			parameters.Add("@endingDate", end == null ? null : end.Value.ToShortDateString());
+			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -692,9 +692,9 @@ namespace AllyisApps.DBModel
 		public void UpdateSubscriptionName(int orgId, int selectedSku, string subscriptionName)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@OrganizationId", orgId);
-			parameters.Add("@SkuId", selectedSku);
-			parameters.Add("@SubscriptionName", subscriptionName);
+			parameters.Add("@organizationId", orgId);
+			parameters.Add("@skuId", selectedSku);
+			parameters.Add("@subscriptionName", subscriptionName);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -716,8 +716,8 @@ namespace AllyisApps.DBModel
 		public Tuple<List<ProjectDBEntity>, List<ProjectDBEntity>, UserDBEntity> GetProjectsForOrgAndUser(int userId, int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@UserId", userId);
-			parameters.Add("@OrgId", orgId);
+			parameters.Add("@userId", userId);
+			parameters.Add("@orgId", orgId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
@@ -741,8 +741,8 @@ namespace AllyisApps.DBModel
 		public Tuple<List<ProjectDBEntity>, List<CustomerDBEntity>> GetProjectsAndCustomersForOrgAndUser(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@UserId", userId);
-			parameters.Add("@OrgId", orgId);
+			parameters.Add("@userId", userId);
+			parameters.Add("@orgId", orgId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
@@ -765,8 +765,8 @@ namespace AllyisApps.DBModel
 		public Tuple<List<ProjectDBEntity>, List<CustomerDBEntity>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@UserId", userId);
-			parameters.Add("@OrgId", orgId);
+			parameters.Add("@userId", userId);
+			parameters.Add("@orgId", orgId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(

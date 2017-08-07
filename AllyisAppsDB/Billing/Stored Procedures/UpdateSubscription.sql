@@ -1,18 +1,18 @@
-﻿/*This query will change the Sku for an organization's subscription and will prevent multiple Skus of the same product*/
+/*This query will change the Sku for an organization's subscription and will prevent multiple Skus of the same product*/
 CREATE PROCEDURE [Billing].[UpdateSubscription]
-	@OrganizationId INT,
-	@SkuId INT,
-	@ProductId INT,/*Leave this null unless you are trying to delete something (unsubscribe)*/
-	@SubscriptionName NVARCHAR(50), 
+	@organizationId INT,
+	@skuId INT,
+	@productId INT,/*Leave this null unless you are trying to delete something (unsubscribe)*/
+	@subscriptionName NVARCHAR(50), 
 	@retId INT OUTPUT
 AS
 	SET NOCOUNT ON;
-IF(@SkuId = 0)
+IF(@skuId = 0)
 	BEGIN
 		UPDATE [Billing].[Subscription] SET [Subscription].[IsActive] = 0
-			 WHERE [OrganizationId] = @OrganizationId
+			 WHERE [OrganizationId] = @organizationId
 			 AND [SkuId] IN (SELECT [SkuId] FROM [Billing].[Sku]
-								WHERE [ProductId] = @ProductId);
+								WHERE [ProductId] = @productId);
 		DELETE [Billing].[SubscriptionUser]
 			WHERE (SELECT [IsActive] FROM [Subscription]
 					WHERE [Subscription].[SubscriptionId] = [SubscriptionUser].[SubscriptionId])
@@ -21,7 +21,7 @@ IF(@SkuId = 0)
 			WHERE (SELECT [IsActive] FROM [Subscription]
 					WHERE [Subscription].[SubscriptionId] = [User].[LastUsedSubscriptionId])
 					= 0
-		--Delete from [Billing].[Subscription] where OrganizationId=@OrganizationId and SkuId in 
+		--Delete from [Billing].[Subscription] where OrganizationId=@organizationId and SkuId in 
 		--	(select SkuId from Billing.Sku where  ProductId=@productId);
 		SET @retId = 0;
 	END
@@ -30,7 +30,7 @@ ELSE
 		--Find existing subscription by given org that has the same SkuId, if found do nothing and return 0
 		IF EXISTS (
 			SELECT * FROM [Billing].[Subscription] 
-			WHERE [SkuId] = @SkuId AND [OrganizationId] = @OrganizationId AND [IsActive] = 1
+			WHERE [SkuId] = @skuId AND [OrganizationId] = @organizationId AND [IsActive] = 1
 		)
 		BEGIN
 			SET @retId = 0;
@@ -39,38 +39,38 @@ ELSE
 
 		--Find existing subscription that has the same ProductId but different SkuId, update it to the new SkuId
 		--Because the productRoleId and subscriptionId don't change so no need to update SubscriptionUser table
-		UPDATE [Billing].[Subscription] SET [SkuId] = @SkuId, [SubscriptionName] = @SubscriptionName
-			WHERE [OrganizationId] = @OrganizationId
+		UPDATE [Billing].[Subscription] SET [SkuId] = @skuId, [SubscriptionName] = @subscriptionName
+			WHERE [OrganizationId] = @organizationId
 			AND [Subscription].[IsActive] = 1
 			AND [SkuId] IN (SELECT [SkuId] FROM [Billing].[Sku]
-							WHERE [SkuId] != @SkuId
-							AND [ProductId] = (SELECT [ProductId] FROM [Billing].[Sku] WHERE [SkuId] = @SkuId)
-							AND [OrganizationId] = @OrganizationId);
+							WHERE [SkuId] != @skuId
+							AND [ProductId] = (SELECT [ProductId] FROM [Billing].[Sku] WHERE [SkuId] = @skuId)
+							AND [OrganizationId] = @organizationId);
 
 		--If not exist, create new subscription and add all org members to the new subscription as sub users
-		IF(@@ROWCOUNT=0)
+		IF(@@rOWCOUNT=0)
 			BEGIN
 				--Create the new subscription
 				INSERT INTO [Billing].[Subscription] ([OrganizationId], [SkuId], [SubscriptionName])
-				VALUES (@OrganizationId, @SkuId, @SubscriptionName);
+				VALUES (@organizationId, @skuId, @subscriptionName);
 				SET @retId = SCOPE_IDENTITY();		
 
-				DECLARE @OrgMemberTable TABLE (userId INT) 
-				DECLARE @UserProductRoleId INT
+				DECLARE @orgMemberTable TABLE (userId INT) 
+				DECLARE @userProductRoleId INT
 
 				--Find the productId of the given sku
-				SELECT @ProductId = [ProductId]
+				SELECT @productId = [ProductId]
 				FROM [Billing].[Sku]
-				WHERE [SkuId] = @SkuId
+				WHERE [SkuId] = @skuId
 
 				--Find the ProductRoleId of the User role for the given Product
-				SELECT @UserProductRoleId = [ProductRoleId]
+				SELECT @userProductRoleId = [ProductRoleId]
 				FROM [Auth].[ProductRole]
-				WHERE ([ProductId] = @ProductId AND [ProductRoleName] = 'User')
+				WHERE ([ProductId] = @productId AND [ProductRoleName] = 'User')
 
 				--Insert all members of given org to SubscriptionUser table with User role
 				INSERT INTO [Billing].[SubscriptionUser] ([UserId], [SubscriptionId], [ProductRoleId])
-				SELECT [UserId], @retId, @UserProductRoleId FROM [Auth].[OrganizationUser] WHERE [OrganizationId] = @OrganizationId;
+				SELECT [UserId], @retId, @userProductRoleId FROM [Auth].[OrganizationUser] WHERE [OrganizationId] = @organizationId;
 			END
 		ELSE
 			SET @retId = 0;

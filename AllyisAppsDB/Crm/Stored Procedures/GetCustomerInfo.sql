@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Crm].[GetCustomerInfo]
-	@CustomerId INT
+CREATE PROCEDURE [Crm].[GetCustomerInfo]
+	@customerId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -22,5 +22,5 @@ BEGIN
 	LEFT JOIN [Lookup].[Address] WITH (NOLOCK) ON [Address].[AddressId] = [Customer].[AddressId]
 	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
 	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
-	WHERE [CustomerId] = @CustomerId
+	WHERE [CustomerId] = @customerId
 END

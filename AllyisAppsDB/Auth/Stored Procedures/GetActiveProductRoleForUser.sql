@@ -1,7 +1,7 @@
-﻿CREATE PROCEDURE [Auth].[GetActiveProductRoleForUser]
-	@ProductName VARCHAR (32),
-	@OrganizationId INT,
-	@UserId INT
+CREATE PROCEDURE [Auth].[GetActiveProductRoleForUser]
+	@productName VARCHAR (32),
+	@organizationId INT,
+	@userId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -13,12 +13,12 @@ BEGIN
 		(SELECT [ProductRoleId]									
 		FROM [Billing].[SubscriptionUser]
 		WITH (NOLOCK)						
-		WHERE [UserId] = @UserId								
+		WHERE [UserId] = @userId								
 		AND [SubscriptionId] =									
 			(SELECT [SubscriptionId]							
 			FROM [Billing].[Subscription]
 			WITH (NOLOCK)						
-			WHERE [OrganizationId] = @OrganizationId			
+			WHERE [OrganizationId] = @organizationId			
 				AND [IsActive] = 1								
 				AND [SkuId] IN									
 					(SELECT [SkuId]								
@@ -28,5 +28,5 @@ BEGIN
 						(SELECT [ProductId]						
 						FROM [Billing].[Product]
 						WITH (NOLOCK)				
-						WHERE [Product].[ProductName] = @ProductName))));
+						WHERE [Product].[ProductName] = @productName))));
 END

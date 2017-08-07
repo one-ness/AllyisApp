@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Auth].[GetOrgManagementInfo]
-	@OrganizationId INT
+CREATE PROCEDURE [Auth].[GetOrgManagementInfo]
+	@organizationId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -22,7 +22,7 @@ BEGIN
 		LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [Organization].[AddressId]
 		LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
 		LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
-	WHERE OrganizationId = @OrganizationId
+	WHERE OrganizationId = @organizationId
 
 	SELECT [OU].[OrganizationId],
 	    [OU].[UserId],
@@ -38,7 +38,7 @@ BEGIN
 		ON [U].[UserId] = [OU].[UserId]
 	INNER JOIN [Auth].[Organization] AS [O] WITH (NOLOCK)
 		ON [O].[OrganizationId] = [OU].[OrganizationId]
-    WHERE [OU].[OrganizationId] = @OrganizationId
+    WHERE [OU].[OrganizationId] = @organizationId
 	ORDER BY [U].[LastName]
 
 	SELECT	[Product].[ProductId],
@@ -55,7 +55,7 @@ BEGIN
 	LEFT JOIN [Billing].[Sku]			WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
 	LEFT JOIN [Auth].[Organization]	WITH (NOLOCK) ON [Organization].[OrganizationId] = [Subscription].[OrganizationId]
 	LEFT JOIN [Billing].[Product]		WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
-	WHERE [Subscription].[OrganizationId] = @OrganizationId
+	WHERE [Subscription].[OrganizationId] = @organizationId
 	AND [Subscription].[IsActive] = 1
 	ORDER BY [Product].[ProductName]
 
@@ -72,11 +72,11 @@ BEGIN
 		[EmployeeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
 	LEFT JOIN [Auth].[OrganizationRole] WITH (NOLOCK) ON [OrganizationRole].[OrganizationRoleId] = [Invitation].[OrganizationRoleId]
-	WHERE [OrganizationId] = @OrganizationId AND [IsActive] = 1
+	WHERE [OrganizationId] = @organizationId AND [IsActive] = 1
 
 	SELECT [StripeTokenCustId]
 	FROM [Billing].[StripeOrganizationCustomer] WITH (NOLOCK) 
-	WHERE [OrganizationId] = @OrganizationId AND [IsActive] = 1
+	WHERE [OrganizationId] = @organizationId AND [IsActive] = 1
 
 	SELECT
 		[Product].[ProductId],
@@ -86,6 +86,6 @@ BEGIN
 	FROM [Billing].[Product] WITH (NOLOCK) 
 	INNER JOIN [Billing].[Sku] WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
 	RIGHT JOIN [Billing].[Subscription] WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
-	WHERE [Product].[IsActive] = 1 AND [Subscription].[IsActive] = 1 AND [Subscription].OrganizationId = @OrganizationId
+	WHERE [Product].[IsActive] = 1 AND [Subscription].[IsActive] = 1 AND [Subscription].OrganizationId = @organizationId
 	ORDER BY [Product].[ProductName]
 END

@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Auth].[GetUserInfo]
-	@UserId INT
+CREATE PROCEDURE [Auth].[GetUserInfo]
+	@userId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -19,12 +19,12 @@ BEGIN
 	FROM [Auth].[User]
 	WITH (NOLOCK)
 	JOIN [Lookup].[Address]			WITH (NOLOCK) ON [Address].[AddressId] = [User].[AddressId]
-	WHERE [UserId] = @UserId;
+	WHERE [UserId] = @userId;
 
-	DECLARE @AddressId INT
-	SET @AddressId = (SELECT U.AddressId
+	DECLARE @addressId INT
+	SET @addressId = (SELECT U.AddressId
 					 FROM [Auth].[User] AS U
-					 WHERE [UserId] = @UserId)
+					 WHERE [UserId] = @userId)
 
 	SELECT [Address].[AddressId],
 		   [Address].[Address1],
@@ -35,5 +35,5 @@ BEGIN
 	FROM [Lookup].[Address] AS [Address] WITH (NOLOCK)
 	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
 	LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
-	WHERE [AddressId] = @AddressId
+	WHERE [AddressId] = @addressId
 END

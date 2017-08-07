@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Auth].[GetOrg]
-	@OrganizationId INT
+CREATE PROCEDURE [Auth].[GetOrg]
+	@organizationId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -21,5 +21,5 @@ BEGIN
 		LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [Organization].[AddressId]
 		LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
 		LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
-	WHERE OrganizationId = @OrganizationId
+	WHERE OrganizationId = @organizationId
 END

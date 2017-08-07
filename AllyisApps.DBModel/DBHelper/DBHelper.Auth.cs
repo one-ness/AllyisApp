@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="DBHelper.Auth.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -130,7 +130,7 @@ namespace AllyisApps.DBModel
 		public Tuple<UserDBEntity, AddressDBEntity> GetUserInfo(int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@UserId", userId);
+			parameters.Add("@userId", userId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -202,7 +202,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
-			parameters.Add("@ProductId", productId);
+			parameters.Add("@productId", productId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -218,7 +218,7 @@ namespace AllyisApps.DBModel
 		public string GetPasswordHashById(int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@UserId", userId);
+			parameters.Add("@userId", userId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -355,7 +355,7 @@ namespace AllyisApps.DBModel
 		public void DeleteOrganization(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@OrgId", organizationId);
+			parameters.Add("@orgId", organizationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -544,7 +544,7 @@ namespace AllyisApps.DBModel
 		public int GetIdBySubdomain(string subdomain)
 		{
 			DynamicParameters param = new DynamicParameters();
-			param.Add("@Subdomain", subdomain);
+			param.Add("@subdomain", subdomain);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<int>("[Auth].[GetOrgIdBySubdomain]", param, commandType: CommandType.StoredProcedure).SingleOrDefault();
@@ -559,7 +559,7 @@ namespace AllyisApps.DBModel
 		public string GetSubdomainById(int id)
 		{
 			DynamicParameters param = new DynamicParameters();
-			param.Add("@OrgId", id);
+			param.Add("@orgId", id);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<string>("[Auth].[GetSubdomainByOrgId]", param, commandType: CommandType.StoredProcedure).SingleOrDefault();
@@ -599,15 +599,15 @@ namespace AllyisApps.DBModel
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@Email", invitation.Email);
-			parameters.Add("@FirstName", invitation.FirstName);
-			parameters.Add("@LastName", invitation.LastName);
-			parameters.Add("@DateOfBirth", invitation.DateOfBirth);
+			parameters.Add("@email", invitation.Email);
+			parameters.Add("@firstName", invitation.FirstName);
+			parameters.Add("@lastName", invitation.LastName);
+			parameters.Add("@dateOfBirth", invitation.DateOfBirth);
 			parameters.Add("@organizationId", invitation.OrganizationId);
-			parameters.Add("@AccessCode", invitation.AccessCode);
-			parameters.Add("@OrganizationRole", invitation.OrganizationRoleId);
+			parameters.Add("@accessCode", invitation.AccessCode);
+			parameters.Add("@organizationRole", invitation.OrganizationRoleId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
-			parameters.Add("@EmployeeId", invitation.EmployeeId);
+			parameters.Add("@employeeId", invitation.EmployeeId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[Auth].[CreateUserInvitation]", parameters, commandType: CommandType.StoredProcedure);
@@ -633,17 +633,17 @@ namespace AllyisApps.DBModel
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@UserId", invitingUserId);
-			parameters.Add("@Email", invitation.Email);
-			parameters.Add("@FirstName", invitation.FirstName);
-			parameters.Add("@LastName", invitation.LastName);
+			parameters.Add("@userId", invitingUserId);
+			parameters.Add("@email", invitation.Email);
+			parameters.Add("@firstName", invitation.FirstName);
+			parameters.Add("@lastName", invitation.LastName);
 			parameters.Add("@organizationId", invitation.OrganizationId);
-			parameters.Add("@AccessCode", invitation.AccessCode);
-			parameters.Add("@OrganizationRole", invitation.OrganizationRoleId);
+			parameters.Add("@accessCode", invitation.AccessCode);
+			parameters.Add("@organizationRole", invitation.OrganizationRoleId);
 			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
-			parameters.Add("@EmployeeId", invitation.EmployeeId);
-			parameters.Add("@SubscriptionId", subscriptionId);
-			parameters.Add("@SubRoleId", productRoleId);
+			parameters.Add("@employeeId", invitation.EmployeeId);
+			parameters.Add("@subscriptionId", subscriptionId);
+			parameters.Add("@subRoleId", productRoleId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple("[Auth].[InviteUser]", parameters, commandType: CommandType.StoredProcedure);
@@ -670,8 +670,8 @@ namespace AllyisApps.DBModel
 		public Tuple<string, string> AcceptInvitation(int invitationId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@InvitationId", invitationId);
-			parameters.Add("@CallingUserId", userId);
+			parameters.Add("@invitationId", invitationId);
+			parameters.Add("@callingUserId", userId);
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = con.QueryMultiple(
@@ -697,8 +697,8 @@ namespace AllyisApps.DBModel
 		public bool RemoveInvitation(int invitationId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@InvitationId", invitationId);
-			parameters.Add("@CallingUserId", userId);
+			parameters.Add("@invitationId", invitationId);
+			parameters.Add("@callingUserId", userId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				int success = connection.Query<int>(
@@ -722,7 +722,7 @@ namespace AllyisApps.DBModel
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@Email", user.Email);
+			parameters.Add("@email", user.Email);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -738,7 +738,7 @@ namespace AllyisApps.DBModel
 		public void RemoveUserInvitation(int invitationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@InvitationId", invitationId);
+			parameters.Add("@invitationId", invitationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -755,9 +755,9 @@ namespace AllyisApps.DBModel
 		//public void CreateInvitationSubRole(int invitationId, int subscriptionId, int productRoleId)
 		//{
 		//    DynamicParameters parameters = new DynamicParameters();
-		//    parameters.Add("@InvitationId", invitationId);
-		//    parameters.Add("@SubscriptionId", subscriptionId);
-		//    parameters.Add("@ProductRoleId", productRoleId);
+		//    parameters.Add("@invitationId", invitationId);
+		//    parameters.Add("@subscriptionId", subscriptionId);
+		//    parameters.Add("@productRoleId", productRoleId);
 
 		//    using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 		//    {
@@ -773,8 +773,8 @@ namespace AllyisApps.DBModel
 		//public void DeleteInvitationSubRole(int invitationId, int subscriptionId)
 		//{
 		//    DynamicParameters parameters = new DynamicParameters();
-		//    parameters.Add("@InvitationId", invitationId);
-		//    parameters.Add("@SubscriptionId", subscriptionId);
+		//    parameters.Add("@invitationId", invitationId);
+		//    parameters.Add("@subscriptionId", subscriptionId);
 
 		//    using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 		//    {
@@ -790,7 +790,7 @@ namespace AllyisApps.DBModel
 		//public IEnumerable<InvitationSubRoleDBEntity> GetInvitationSubRolesByInvitationId(int invitationId)
 		//{
 		//    DynamicParameters parameters = new DynamicParameters();
-		//    parameters.Add("@InvitationId", invitationId);
+		//    parameters.Add("@invitationId", invitationId);
 		//    using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 		//    {
 		//        return connection.Query<InvitationSubRoleDBEntity>("[Auth].[GetInvitationSubRolesByInvitationId]", parameters, commandType: CommandType.StoredProcedure);
@@ -806,8 +806,8 @@ namespace AllyisApps.DBModel
 		public string GetOrgUserFirstName(int organizationId, string email)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@Email", email);
-			parameters.Add("@OrgId", organizationId);
+			parameters.Add("@email", email);
+			parameters.Add("@orgId", organizationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -839,7 +839,7 @@ namespace AllyisApps.DBModel
 		public IEnumerable<InvitationDBEntity> GetUserInvitationsByInviteId(int inviteId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@InviteId", inviteId);
+			parameters.Add("@inviteId", inviteId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -855,7 +855,7 @@ namespace AllyisApps.DBModel
 		public IEnumerable<UserRolesDBEntity> GetRoles(int orgid)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@OrgId", orgid);
+			parameters.Add("@orgId", orgid);
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
 				return con.Query<UserRolesDBEntity>(
@@ -875,7 +875,7 @@ namespace AllyisApps.DBModel
 		public List<UserContextDBEntity> GetUserContextInfo(int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@UserId", userId);
+			parameters.Add("@userId", userId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<UserContextDBEntity>(
@@ -917,7 +917,7 @@ namespace AllyisApps.DBModel
 		public Tuple<OrganizationDBEntity, List<OrganizationUserDBEntity>, List<SubscriptionDisplayDBEntity>, List<InvitationDBEntity>, string, List<ProductDBEntity>> GetOrganizationManagementInfo(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@OrganizationId", organizationId);
+			parameters.Add("@organizationId", organizationId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
@@ -944,8 +944,8 @@ namespace AllyisApps.DBModel
 		public Tuple<OrganizationDBEntity, List<string>, string> GetOrgWithCountriesAndEmployeeId(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@OrganizationId", orgId);
-			parameters.Add("@UserId", userId);
+			parameters.Add("@organizationId", orgId);
+			parameters.Add("@userId", userId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
@@ -970,7 +970,7 @@ namespace AllyisApps.DBModel
 		public Tuple<string, List<SubscriptionDisplayDBEntity>, List<SubscriptionRoleDBEntity>, List<ProjectDBEntity>, string> GetAddMemberInfo(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@OrganizationId", orgId);
+			parameters.Add("@organizationId", orgId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
@@ -996,7 +996,7 @@ namespace AllyisApps.DBModel
 		public Tuple<List<UserRolesDBEntity>, List<SubscriptionDisplayDBEntity>> GetOrgAndSubRoles(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@OrganizationId", orgId);
+			parameters.Add("@organizationId", orgId);
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = con.QueryMultiple(

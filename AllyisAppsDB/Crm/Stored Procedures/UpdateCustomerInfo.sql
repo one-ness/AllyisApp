@@ -1,27 +1,27 @@
-﻿CREATE PROCEDURE [Crm].[UpdateCustomerInfo]
-	@CustomerId INT,
-	@CustomerName NVARCHAR(50),
-	@ContactEmail NVARCHAR(384),
-	@AddressId INT,
-    @Address NVARCHAR(100), 
-    @City NVARCHAR(100), 
-    @State NVARCHAR(100), 
-    @Country NVARCHAR(100), 
-    @PostalCode NVARCHAR(50),
-    @ContactPhoneNumber VARCHAR(50),
-	@FaxNumber VARCHAR(50),
-	@Website NVARCHAR(50),
-	@EIN NVARCHAR(50),
-	@OrgId NVARCHAR(16),
+CREATE PROCEDURE [Crm].[UpdateCustomerInfo]
+	@customerId INT,
+	@customerName NVARCHAR(50),
+	@contactEmail NVARCHAR(384),
+	@addressId INT,
+    @address NVARCHAR(100), 
+    @city NVARCHAR(100), 
+    @state NVARCHAR(100), 
+    @country NVARCHAR(100), 
+    @postalCode NVARCHAR(50),
+    @contactPhoneNumber VARCHAR(50),
+	@faxNumber VARCHAR(50),
+	@website NVARCHAR(50),
+	@eIN NVARCHAR(50),
+	@orgId NVARCHAR(16),
 	@retId INT OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
 	IF EXISTS (
 		SELECT * FROM [Crm].[Customer] WITH (NOLOCK)
-		WHERE [CustomerOrgId] = @OrgId
+		WHERE [CustomerOrgId] = @orgId
 		AND [IsActive] = 1
-		AND [CustomerId] != @CustomerId
+		AND [CustomerId] != @customerId
 	)
 	BEGIN
 		-- new CustomerOrgId is taken by a different Customer
@@ -31,23 +31,23 @@ BEGIN
 	BEGIN
 		BEGIN TRANSACTION
 			UPDATE [Lookup].[Address]
-			SET [Address1] = @Address,
-				[City] = @City,
-				[StateId] = (SELECT [StateId] FROM [Lookup].[State] WHERE [StateName] = @State), 
-				[CountryId] = (SELECT [CountryId] FROM [Lookup].[Country] WHERE [CountryName] = @Country), 
-				[PostalCode] = @PostalCode
-			WHERE [AddressId] = @AddressId
+			SET [Address1] = @address,
+				[City] = @city,
+				[StateId] = (SELECT [StateId] FROM [Lookup].[State] WHERE [StateName] = @state), 
+				[CountryId] = (SELECT [CountryId] FROM [Lookup].[Country] WHERE [CountryName] = @country), 
+				[PostalCode] = @postalCode
+			WHERE [AddressId] = @addressId
 
 			-- update customer
 			UPDATE [Crm].[Customer]
-			SET [CustomerName] = @CustomerName,
-				[ContactEmail] = @ContactEmail,
-				[ContactPhoneNumber] = @ContactPhoneNumber, 
-				[FaxNumber] = @FaxNumber,
-				[Website] = @Website,
-				[EIN] = @EIN,
-				[CustomerOrgId] = @OrgId
-			WHERE [CustomerId] = @CustomerId 
+			SET [CustomerName] = @customerName,
+				[ContactEmail] = @contactEmail,
+				[ContactPhoneNumber] = @contactPhoneNumber, 
+				[FaxNumber] = @faxNumber,
+				[Website] = @website,
+				[EIN] = @eIN,
+				[CustomerOrgId] = @orgId
+			WHERE [CustomerId] = @customerId 
 				AND [IsActive] = 1
 			SET @retId = 1;
 		COMMIT TRANSACTION		

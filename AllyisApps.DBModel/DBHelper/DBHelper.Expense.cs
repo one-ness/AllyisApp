@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="DBHelper.Lookup.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -35,13 +35,13 @@ namespace AllyisApps.DBModel
             }
 
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@ItemDescription", item.ItemDescription);
-            parameters.Add("@TransactionDate", item.TransactionDate);
-            parameters.Add("@Amount", item.Amount);
-            parameters.Add("@ExpenseReportId", item.ExpenseReportId);
-            parameters.Add("@IsBillableToCustomer", item.IsBillableToCustomer);
-            parameters.Add("@CreatedUtc", item.CreatedUtc);
-            parameters.Add("@ModifiedUtc", item.ModifiedUtc);
+            parameters.Add("@itemDescription", item.ItemDescription);
+            parameters.Add("@transactionDate", item.TransactionDate);
+            parameters.Add("@amount", item.Amount);
+            parameters.Add("@expenseReportId", item.ExpenseReportId);
+            parameters.Add("@isBillableToCustomer", item.IsBillableToCustomer);
+            parameters.Add("@createdUtc", item.CreatedUtc);
+            parameters.Add("@modifiedUtc", item.ModifiedUtc);
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
@@ -58,7 +58,7 @@ namespace AllyisApps.DBModel
         public IEnumerable<ExpenseItemDBEntity> GetExpenseItemsByAccountId(int AccountId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@AccountId", AccountId);
+			parameters.Add("@accountId", AccountId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -74,7 +74,7 @@ namespace AllyisApps.DBModel
         public ExpenseItemDBEntity GetExpenseItem(int ExpenseItemId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@ExpenseItemId", ExpenseItemId);
+			parameters.Add("@expenseItemId", ExpenseItemId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -95,14 +95,14 @@ namespace AllyisApps.DBModel
             }
 
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@ExpenseItemId", item.ExpenseItemId);
-            parameters.Add("@ItemDescription", item.ItemDescription);
-            parameters.Add("@TransactionDate", item.TransactionDate);
-            parameters.Add("@Amount", item.Amount);
-            parameters.Add("@ExpenseReportId", item.ExpenseReportId);
-            parameters.Add("@IsBillableToCustomer", item.IsBillableToCustomer);
-            parameters.Add("@CreatedUtc", item.CreatedUtc);
-            parameters.Add("@ModifiedUtc", item.ModifiedUtc);
+            parameters.Add("@expenseItemId", item.ExpenseItemId);
+            parameters.Add("@itemDescription", item.ItemDescription);
+            parameters.Add("@transactionDate", item.TransactionDate);
+            parameters.Add("@amount", item.Amount);
+            parameters.Add("@expenseReportId", item.ExpenseReportId);
+            parameters.Add("@isBillableToCustomer", item.IsBillableToCustomer);
+            parameters.Add("@createdUtc", item.CreatedUtc);
+            parameters.Add("@modifiedUtc", item.ModifiedUtc);
 
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -120,7 +120,7 @@ namespace AllyisApps.DBModel
         public bool DeleteExpenseItem(int ExpenseItemId)
         {
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@ExpenseItemId", ExpenseItemId);
+            parameters.Add("@expenseItemId", ExpenseItemId);
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
@@ -145,14 +145,14 @@ namespace AllyisApps.DBModel
             }
 
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@ReportTitle", report.ReportTitle);
-            parameters.Add("@ReportDate", report.ReportDate);
-            parameters.Add("@OrganizaitonId", report.OrganizationId);
-            parameters.Add("@SubmittedById", report.SubmittedById);
-            parameters.Add("@ReportStatus", report.ReportStatus);
-            parameters.Add("@BuisnessJustification", report.BusinessJustification);
-            parameters.Add("@CreatedUtc", report.CreatedUtc);
-            parameters.Add("@ModifiedUtc", report.ModifiedUtc);
+            parameters.Add("@reportTitle", report.ReportTitle);
+            parameters.Add("@reportDate", report.ReportDate);
+            parameters.Add("@organizaitonId", report.OrganizationId);
+            parameters.Add("@submittedById", report.SubmittedById);
+            parameters.Add("@reportStatus", report.ReportStatus);
+            parameters.Add("@buisnessJustification", report.BusinessJustification);
+            parameters.Add("@createdUtc", report.CreatedUtc);
+            parameters.Add("@modifiedUtc", report.ModifiedUtc);
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
@@ -169,7 +169,7 @@ namespace AllyisApps.DBModel
         public ExpenseItemDBEntity GetExpenseReport(int ExpenseReportId)
         {
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@ExpenseReportId", ExpenseReportId);
+            parameters.Add("@expenseReportId", ExpenseReportId);
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
@@ -185,7 +185,7 @@ namespace AllyisApps.DBModel
         public IEnumerable<ExpenseItemDBEntity> GetExpenseReportsBySubmittedById(int SubmittedById)
         {
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@SubmittedById", SubmittedById);
+            parameters.Add("@submittedById", SubmittedById);
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
@@ -201,7 +201,7 @@ namespace AllyisApps.DBModel
         public IEnumerable<ExpenseItemDBEntity> GetExpenseReportsByOrganizationId(int OrganizationId)
         {
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@OrganziationId", OrganizationId);
+            parameters.Add("@organziationId", OrganizationId);
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
@@ -221,15 +221,15 @@ namespace AllyisApps.DBModel
             }
 
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@ExpenseReportId", report.ExpenseReportId);
-            parameters.Add("@ReportTitle", report.ReportTitle);
-            parameters.Add("@ReportDate", report.ReportDate);
-            parameters.Add("@OrganizationId", report.OrganizationId);
-            parameters.Add("@SubmittedById", report.SubmittedById);
-            parameters.Add("@ReportStatus", report.ReportStatus);
-            parameters.Add("@BusinessJustification", report.BusinessJustification);
-            parameters.Add("@CreatedUtc", report.CreatedUtc);
-            parameters.Add("@ModifiedUtc", report.ModifiedUtc);
+            parameters.Add("@expenseReportId", report.ExpenseReportId);
+            parameters.Add("@reportTitle", report.ReportTitle);
+            parameters.Add("@reportDate", report.ReportDate);
+            parameters.Add("@organizationId", report.OrganizationId);
+            parameters.Add("@submittedById", report.SubmittedById);
+            parameters.Add("@reportStatus", report.ReportStatus);
+            parameters.Add("@businessJustification", report.BusinessJustification);
+            parameters.Add("@createdUtc", report.CreatedUtc);
+            parameters.Add("@modifiedUtc", report.ModifiedUtc);
 
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -246,7 +246,7 @@ namespace AllyisApps.DBModel
         public bool DeleteExpenseReport(int ExpenseReportId)
         {
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@ExpenseReportId", ExpenseReportId);
+            parameters.Add("@expenseReportId", ExpenseReportId);
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {

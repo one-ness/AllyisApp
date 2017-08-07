@@ -1,10 +1,10 @@
-﻿CREATE PROCEDURE [Auth].[GetAddMemberInfo]
-	@OrganizationId INT
+CREATE PROCEDURE [Auth].[GetAddMemberInfo]
+	@organizationId INT
 AS
 	SELECT TOP 1
 		[EmployeeId]
 	FROM [Auth].[OrganizationUser] WITH (NOLOCK)
-	WHERE [OrganizationUser].[OrganizationId] = @OrganizationId
+	WHERE [OrganizationUser].[OrganizationId] = @organizationId
 	ORDER BY [EmployeeId] DESC
 
 	SELECT	[Product].[ProductId],
@@ -19,7 +19,7 @@ AS
 	LEFT JOIN [Billing].[Sku]			WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
 	LEFT JOIN [Auth].[Organization]	WITH (NOLOCK) ON [Organization].[OrganizationId] = [Subscription].[OrganizationId]
 	LEFT JOIN [Billing].[Product]		WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
-	WHERE [Subscription].[OrganizationId] = @OrganizationId
+	WHERE [Subscription].[OrganizationId] = @organizationId
 	AND [Subscription].[IsActive] = 1
 	ORDER BY [Product].[ProductName]
 
@@ -30,7 +30,7 @@ AS
 	FROM [Billing].[Subscription] WITH (NOLOCK) 
 	LEFT JOIN [Billing].[Sku] WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
 	RIGHT JOIN [Auth].[ProductRole]  WITH (NOLOCK) ON [ProductRole].[ProductId] = [Sku].[ProductId]
-	WHERE [Subscription].[OrganizationId] = @OrganizationId AND [Subscription].[IsActive] = 1
+	WHERE [Subscription].[OrganizationId] = @organizationId AND [Subscription].[IsActive] = 1
 
 	SELECT	[Project].[ProjectId],
 		[Project].[CustomerId],
@@ -46,7 +46,7 @@ AS
 		[Project].[IsHourly] AS [IsHourly]
 	FROM (
 		[Auth].[Organization]	WITH (NOLOCK) 
-		JOIN [Crm].[Customer]	WITH (NOLOCK) ON ([Customer].[OrganizationId] = [Organization].[OrganizationId] AND [Organization].[OrganizationId] = @OrganizationId)
+		JOIN [Crm].[Customer]	WITH (NOLOCK) ON ([Customer].[OrganizationId] = [Organization].[OrganizationId] AND [Organization].[OrganizationId] = @organizationId)
 		JOIN [Pjm].[Project]	WITH (NOLOCK) ON [Project].[CustomerId] = [Customer].[CustomerId]
 	)
 	
@@ -58,5 +58,5 @@ AS
 	SELECT TOP 1
 		[EmployeeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
-	WHERE [OrganizationId] = @OrganizationId AND [IsActive] = 1
+	WHERE [OrganizationId] = @organizationId AND [IsActive] = 1
 	ORDER BY [EmployeeId] DESC

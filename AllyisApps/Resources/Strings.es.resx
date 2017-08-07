@@ -835,7 +835,7 @@
     <value>{0} usuarios cambian los roles en la organización.</value>
   </data>
   <data name="UsersChangedRolesInTimeTracker" xml:space="preserve">
-    <value>Los usuarios cambian papeles en Rastreador de tiempo.</value>
+    <value>{0} usuarios cambiaron roles en Time Tracker.</value>
   </data>
   <data name="UsersRemovedFromOrg" xml:space="preserve">
     <value>Se eliminaron {0} usuarios de la organización.</value>

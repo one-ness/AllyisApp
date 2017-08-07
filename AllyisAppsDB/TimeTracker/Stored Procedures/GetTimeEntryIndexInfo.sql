@@ -1,67 +1,67 @@
-﻿CREATE PROCEDURE [TimeTracker].[GetTimeEntryIndexInfo]
-	@OrganizationId INT,
-	@UserId INT,
-	@ProductId INT,
-	@StartingDate DATE,
-	@EndingDate DATE
+CREATE PROCEDURE [TimeTracker].[GetTimeEntryIndexInfo]
+	@organizationId INT,
+	@userId INT,
+	@productId INT,
+	@startingDate DATE,
+	@endingDate DATE
 AS
 	SET NOCOUNT ON;
 
 	-- Settings is declared as a table here so that the StartOfWeek field can be used in other Select
 	-- blocks lower in this same stored procedure, while also letting the settings table itself be returned
-	DECLARE @Settings TABLE (
+	DECLARE @settings TABLE (
 		StartOfWeek INT,
 		IsLockDateUsed INT,
 		LockDatePeriod VARCHAR(10),
 		LockDateQuantity INT
 	);
-	INSERT INTO @Settings (StartOfWeek, IsLockDateUsed, LockDatePeriod, LockDateQuantity)
+	INSERT INTO @settings (StartOfWeek, IsLockDateUsed, LockDatePeriod, LockDateQuantity)
 	SELECT [StartOfWeek], [IsLockDateUsed], [LockDatePeriod], [LockDateQuantity]
 	FROM [TimeTracker].[Setting] 
 	WITH (NOLOCK) 
-	WHERE [OrganizationId] = @OrganizationId
+	WHERE [OrganizationId] = @organizationId
 
 	-- Starting and Ending date parameters are adjusted if the input is null, using the StartOfWeek from above
-	DECLARE @StartOfWeek INT;
-	SET @StartOfWeek = (
+	DECLARE @startOfWeek INT;
+	SET @startOfWeek = (
 		SELECT TOP 1
 			[StartOfWeek]
-		FROM @Settings
+		FROM @settings
 	)
-	DECLARE @TodayDayOfWeek INT;
-	SET @TodayDayOfWeek = ((6 + DATEPART(dw, GETDATE()) + @@DATEFIRST) % 7);
+	DECLARE @todayDayOfWeek INT;
+	SET @todayDayOfWeek = ((6 + DATEPART(dw, GETDATE()) + @@dATEFIRST) % 7);
 
-	IF(@StartingDate IS NULL)
+	IF(@startingDate IS NULL)
 	BEGIN
-		DECLARE @DaysIntoWeek INT;
-		IF (@TodayDayOfWeek < @StartOfWeek)
-			SET @DaysIntoWeek = @StartOfWeek - @TodayDayOfWeek - 7;
+		DECLARE @daysIntoWeek INT;
+		IF (@todayDayOfWeek < @startOfWeek)
+			SET @daysIntoWeek = @startOfWeek - @todayDayOfWeek - 7;
 		ELSE
-			SET @DaysIntoWeek = @StartOfWeek - @TodayDayOfWeek;
-		SET @StartingDate = DATEADD(dd, @DaysIntoWeek, GETDATE());
+			SET @daysIntoWeek = @startOfWeek - @todayDayOfWeek;
+		SET @startingDate = DATEADD(dd, @daysIntoWeek, GETDATE());
 	END
 
-	IF(@EndingDate IS NULL)
+	IF(@endingDate IS NULL)
 	BEGIN
-		DECLARE @DaysLeftInWeek INT;
-		IF (@TodayDayOfWeek < @StartOfWeek)
-			SET @DaysLeftInWeek = @StartOfWeek - @TodayDayOfWeek - 1;
+		DECLARE @daysLeftInWeek INT;
+		IF (@todayDayOfWeek < @startOfWeek)
+			SET @daysLeftInWeek = @startOfWeek - @todayDayOfWeek - 1;
 		ELSE
-			SET @DaysLeftInWeek = @StartOfWeek - @TodayDayOfWeek + 6;
-		SET @EndingDate = DATEADD(dd, @DaysLeftInWeek, GETDATE());
+			SET @daysLeftInWeek = @startOfWeek - @todayDayOfWeek + 6;
+		SET @endingDate = DATEADD(dd, @daysLeftInWeek, GETDATE());
 	END
 
 	-- Begin select statements
 
-	SELECT * FROM @Settings
+	SELECT * FROM @settings
 
-	IF(SELECT COUNT(*) FROM [Hrm].[PayClass] WHERE [OrganizationId] = @OrganizationId) > 0
-		SELECT [PayClassId], [PayClassName], [OrganizationId] FROM [Hrm].[PayClass] WITH (NOLOCK) WHERE [OrganizationId] = @OrganizationId;
+	IF(SELECT COUNT(*) FROM [Hrm].[PayClass] WHERE [OrganizationId] = @organizationId) > 0
+		SELECT [PayClassId], [PayClassName], [OrganizationId] FROM [Hrm].[PayClass] WITH (NOLOCK) WHERE [OrganizationId] = @organizationId;
 	ELSE
 		SELECT [PayClassId], [PayClassName], [OrganizationId] FROM [Hrm].[PayClass] WITH (NOLOCK) WHERE [OrganizationId] = 0;
 
-	IF(SELECT COUNT(*) FROM [Hrm].[Holiday] WITH (NOLOCK) WHERE [OrganizationId] = @OrganizationId) > 0
-		SELECT [HolidayId], [HolidayName], [Date], [OrganizationId] FROM [Hrm].[Holiday] WITH (NOLOCK) WHERE [OrganizationId] = @OrganizationId ORDER BY [Date];
+	IF(SELECT COUNT(*) FROM [Hrm].[Holiday] WITH (NOLOCK) WHERE [OrganizationId] = @organizationId) > 0
+		SELECT [HolidayId], [HolidayName], [Date], [OrganizationId] FROM [Hrm].[Holiday] WITH (NOLOCK) WHERE [OrganizationId] = @organizationId ORDER BY [Date];
 	ELSE
 		SELECT [HolidayId], [HolidayName], [Date], [OrganizationId] FROM [Hrm].[Holiday] WITH (NOLOCK) WHERE [OrganizationId] = 0 ORDER BY [Date];
 
@@ -83,7 +83,7 @@ AS
 			[ProjectOrgId]
 	FROM (
 		(SELECT [OrganizationId], [UserId], [OrganizationRoleId]
-		FROM [Auth].[OrganizationUser] WITH (NOLOCK) WHERE [UserId] = @UserId AND [OrganizationId] = @OrganizationId)
+		FROM [Auth].[OrganizationUser] WITH (NOLOCK) WHERE [UserId] = @userId AND [OrganizationId] = @organizationId)
 		AS [OrganizationUser]
 		JOIN [Auth].[Organization]		WITH (NOLOCK) ON [OrganizationUser].[OrganizationId] = [Organization].[OrganizationId]
 		JOIN [Crm].[Customer]		WITH (NOLOCK) ON [Customer].[OrganizationId] = [Organization].[OrganizationId]
@@ -127,8 +127,8 @@ AS
 		FROM [Billing].[Subscription] WITH (NOLOCK) 
 		LEFT JOIN [Billing].[Sku]		WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
 		LEFT JOIN [Auth].[Organization]	WITH (NOLOCK) ON [Organization].[OrganizationId] = [Subscription].[OrganizationId]
-		WHERE [Subscription].[OrganizationId] = @OrganizationId
-			AND [Sku].[ProductId] = @ProductId
+		WHERE [Subscription].[OrganizationId] = @organizationId
+			AND [Sku].[ProductId] = @productId
 			AND [Subscription].[IsActive] = 1
 		)
 	ORDER BY [User].[LastName]
@@ -148,9 +148,9 @@ AS
 	FROM [TimeTracker].[TimeEntry] WITH (NOLOCK) 
 	JOIN [Auth].[User] WITH (NOLOCK) ON [User].[UserId] = [TimeEntry].[UserId]
 	JOIN [Hrm].[PayClass] WITH (NOLOCK) ON [PayClass].[PayClassId] = [TimeEntry].[PayClassId]
-	JOIN [Auth].[OrganizationUser] WITH (NOLOCK) ON [User].[UserId] = [OrganizationUser].[UserId] AND [OrganizationUser].[OrganizationId] = @OrganizationId
-	WHERE [User].[UserId] = @UserId
-		AND [Date] >= @StartingDate
-		AND [Date] <= @EndingDate
-		AND [PayClass].[OrganizationId] = @OrganizationId
+	JOIN [Auth].[OrganizationUser] WITH (NOLOCK) ON [User].[UserId] = [OrganizationUser].[UserId] AND [OrganizationUser].[OrganizationId] = @organizationId
+	WHERE [User].[UserId] = @userId
+		AND [Date] >= @startingDate
+		AND [Date] <= @endingDate
+		AND [PayClass].[OrganizationId] = @organizationId
 	ORDER BY [Date] ASC

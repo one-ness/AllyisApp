@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Auth].[GetSubdomainByOrgId]
-	@OrgId INT
+CREATE PROCEDURE [Auth].[GetSubdomainByOrgId]
+	@orgId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -7,5 +7,5 @@ BEGIN
 	SELECT TOP 1 [Subdomain] 
 	FROM [Auth].[Organization]
 	WITH (NOLOCK)
-	WHERE [OrganizationId] = @OrgId;
+	WHERE [OrganizationId] = @orgId;
 END
