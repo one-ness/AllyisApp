@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Auth].[GetOrgIdBySubdomain]
-	@Subdomain NVARCHAR(50)
+CREATE PROCEDURE [Auth].[GetOrgIdBySubdomain]
+	@subdomain NVARCHAR(50)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -7,5 +7,5 @@ BEGIN
 	SELECT TOP 1 [OrganizationId] 
 	FROM [Auth].[Organization]
 	WITH (NOLOCK) 
-	WHERE [Subdomain] = @Subdomain AND [IsActive] = 1
+	WHERE [Subdomain] = @subdomain AND [IsActive] = 1
 END

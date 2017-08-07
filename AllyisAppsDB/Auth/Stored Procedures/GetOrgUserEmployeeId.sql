@@ -1,6 +1,6 @@
-﻿CREATE PROCEDURE [Auth].[GetOrgUserEmployeeId]
-	@UserId INT,
-	@OrganizationId INT
+CREATE PROCEDURE [Auth].[GetOrgUserEmployeeId]
+	@userId INT,
+	@organizationId INT
 AS
 
 BEGIN
@@ -9,6 +9,6 @@ BEGIN
 	SELECT [OrganizationUser].[EmployeeId] 
 	FROM [Auth].[OrganizationUser]
 	WITH (NOLOCK)
-	WHERE [UserId] = @UserId 
-		AND [OrganizationId] = @OrganizationId;
+	WHERE [UserId] = @userId 
+		AND [OrganizationId] = @organizationId;
 END

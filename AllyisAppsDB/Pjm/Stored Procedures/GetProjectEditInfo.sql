@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Pjm].[GetProjectEditInfo]
+CREATE PROCEDURE [Pjm].[GetProjectEditInfo]
 	@projectId INT,
 	@subscriptionId INT
 AS
@@ -11,12 +11,12 @@ AS
 			[Organization].[OrganizationName] AS [OrganizationName],
 			[Customer].[CustomerName] AS [CustomerName],
 			[Customer].[CustomerOrgId],
-			[Project].[isHourly] AS [isHourly],
+			[Project].[IsHourly] AS [IsHourly],
 			[Project].[StartUtc] AS [StartDate],
 			[Project].[EndUtc] AS [EndDate],
 			[Project].[ProjectOrgId]
 			FROM (
-		(SELECT [ProjectId], [CustomerId], [ProjectName], [isHourly], [StartUtc], [EndUtc], [IsActive], 
+		(SELECT [ProjectId], [CustomerId], [ProjectName], [IsHourly], [StartUtc], [EndUtc], [IsActive], 
 				[ProjectCreatedUtc], [ProjectOrgId] FROM [Pjm].[Project] WITH (NOLOCK) WHERE [ProjectId] = @projectId) AS [Project]
 			JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId]
 			JOIN [Auth].[Organization] WITH (NOLOCK) ON [Organization].[OrganizationId] = [Customer].[OrganizationId]

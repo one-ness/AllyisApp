@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Expense].[CreateExpenseItem]
+CREATE PROCEDURE [Expense].[CreateExpenseItem]
 	@itemDescription NVARCHAR(100),
 	@transactionDate DATETIME2(0),
 	@amount DECIMAL(18, 2),

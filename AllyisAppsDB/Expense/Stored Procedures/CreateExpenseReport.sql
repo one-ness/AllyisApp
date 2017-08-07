@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Expense].[CreateExpenseReport]
+CREATE PROCEDURE [Expense].[CreateExpenseReport]
 	@reportTitle NVARCHAR(100),
 	@reportDate DATETIME2(0),
 	@organizationId INT,

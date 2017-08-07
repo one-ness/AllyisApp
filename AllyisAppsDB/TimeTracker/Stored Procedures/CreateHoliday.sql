@@ -1,10 +1,10 @@
-﻿CREATE PROCEDURE [Hrm].[CreateHoliday]
-	@HolidayName NVARCHAR(50),
-	@Date DATE,
-	@OrganizationId INT
+CREATE PROCEDURE [Hrm].[CreateHoliday]
+	@holidayName NVARCHAR(50),
+	@date DATE,
+	@organizationId INT
 AS
 	SET NOCOUNT ON;
-	INSERT INTO [Hrm].[Holiday] ([HolidayName], [Date], [OrganizationId]) VALUES (@HolidayName, @Date, @OrganizationId);
+	INSERT INTO [Hrm].[Holiday] ([HolidayName], [Date], [OrganizationId]) VALUES (@holidayName, @date, @organizationId);
 	
 	declare 
 		@payClassIdForHoliday int;
@@ -13,15 +13,15 @@ AS
 		SET @payClassIdForHoliday = (SELECT TOP 1 [PayClassId] FROM [Hrm].[PayClass] WITH (NOLOCK) WHERE [PayClassName] = 'Holiday');
 	ELSE
 		BEGIN
-			EXEC [Hrm].[CreatePayClass] @PayClassName = 'Holiday', @OrganizationId = @OrganizationId
+			EXEC [Hrm].[CreatePayClass] @payClassName = 'Holiday', @organizationId = @organizationId
 			SET @payClassIdForHoliday = (SELECT TOP 1 [PayClassId] FROM [Hrm].[PayClass] WITH (NOLOCK) WHERE [PayClassName] = 'Holiday');
 		END
 		
 	EXEC [TimeTracker].[CreateBulkTimeEntry]
-		@Date = @Date,
-		@Duration = 8, 
-		@Description = @HolidayName,
-		@PayClassId = @payClassIdForHoliday,
-		@OrganizationId = @OrganizationId,
-		@Overwrite = 0;
+		@date = @date,
+		@duration = 8, 
+		@description = @holidayName,
+		@payClassId = @payClassIdForHoliday,
+		@organizationId = @organizationId,
+		@overwrite = 0;
 SELECT SCOPE_IDENTITY();

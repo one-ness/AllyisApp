@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Finance].[UpdateAccount]
+CREATE PROCEDURE [Finance].[UpdateAccount]
 	@accountId INT,
 	@accountName NVARCHAR(100),
 	@isActive BIT,

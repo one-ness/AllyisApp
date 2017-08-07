@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Auth].[GetOrgUserList]
-	@OrganizationId INT
+CREATE PROCEDURE [Auth].[GetOrgUserList]
+	@organizationId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -16,6 +16,6 @@ BEGIN
 		ON [U].[UserId] = [OU].[UserId]
 	INNER JOIN [Auth].[Organization] AS [O] WITH (NOLOCK)
 		ON [O].[OrganizationId] = [OU].[OrganizationId]
-    WHERE [OU].[OrganizationId] = @OrganizationId
+    WHERE [OU].[OrganizationId] = @organizationId
 	ORDER BY [U].[LastName]
 END

@@ -1,9 +1,9 @@
-﻿CREATE PROCEDURE [TimeTracker].[UpdateStartOfWeek]
-	@OrganizationId INT,
-	@StartOfWeek INT
+CREATE PROCEDURE [TimeTracker].[UpdateStartOfWeek]
+	@organizationId INT,
+	@startOfWeek INT
 AS
 	SET NOCOUNT ON;
 UPDATE [TimeTracker].[Setting]
 	SET
-		[StartOfWeek] = @StartOfWeek
-	WHERE [OrganizationId] = @OrganizationId ;
+		[StartOfWeek] = @startOfWeek
+	WHERE [OrganizationId] = @organizationId ;

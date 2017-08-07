@@ -1,37 +1,37 @@
-﻿CREATE PROCEDURE [Auth].[RemoveInvitation]
-	@InvitationId INT,
-	@CallingUserId INT
+CREATE PROCEDURE [Auth].[RemoveInvitation]
+	@invitationId INT,
+	@callingUserId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	-- Retrieve the invitation information
-	DECLARE @OrganizationId INT;
-	DECLARE @Email NVARCHAR(384);
+	DECLARE @organizationId INT;
+	DECLARE @email NVARCHAR(384);
 
 	SELECT
-		@OrganizationId = [OrganizationId],
-		@Email = [Email]
+		@organizationId = [OrganizationId],
+		@email = [Email]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
-	WHERE [Invitation].[InvitationId] = @InvitationId AND [Invitation].[IsActive] = 1
+	WHERE [Invitation].[InvitationId] = @invitationId AND [Invitation].[IsActive] = 1
 
-	IF @OrganizationId IS NOT NULL
+	IF @organizationId IS NOT NULL
 	BEGIN -- Invitation found
 
 		-- Retrieve invited user
-		DECLARE @UserId INT;
-		SET @UserId = (
+		DECLARE @userId INT;
+		SET @userId = (
 			SELECT [UserId]
 			FROM [Auth].[User] WITH (NOLOCK)
-			WHERE [User].[Email] = @Email
+			WHERE [User].[Email] = @email
 		)
 
-		IF (@UserId IS NOT NULL AND @UserId = @CallingUserId) OR @CallingUserId = -1
+		IF (@userId IS NOT NULL AND @userId = @callingUserId) OR @callingUserId = -1
 		BEGIN -- Invited user found and matches calling user
 			BEGIN TRANSACTION
 
 			DELETE FROM [Auth].[Invitation]
-			WHERE [InvitationId] = @InvitationId
+			WHERE [InvitationId] = @invitationId
 
 			-- Success indication
 			SELECT 1

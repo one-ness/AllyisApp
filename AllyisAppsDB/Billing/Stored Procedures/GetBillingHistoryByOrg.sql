@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Billing].[GetBillingHistoryByOrg]
-	@OrganizationId INT
+CREATE PROCEDURE [Billing].[GetBillingHistoryByOrg]
+	@organizationId INT
 AS
 	SET NOCOUNT ON;
 SELECT
@@ -15,5 +15,5 @@ FROM [Billing].[BillingHistory] WITH (NOLOCK)
 LEFT JOIN [Auth].[User] WITH (NOLOCK) ON [User].[UserId] = [BillingHistory].[UserId]
 LEFT JOIN [Billing].[Sku] WITH (NOLOCK) ON [Sku].[SkuId] = [BillingHistory].[SkuId]
 LEFT JOIN [Billing].[Product] WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
-WHERE [OrganizationId] = @OrganizationId
+WHERE [OrganizationId] = @organizationId
 ORDER BY [Date] desc

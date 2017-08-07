@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Billing].[UpdateSubscriptionUserRoles]
+CREATE PROCEDURE [Billing].[UpdateSubscriptionUserRoles]
 	@organizationId INT,
 	@userIds [Auth].[UserTable] READONLY,
 	@productRoleId INT,
@@ -20,7 +20,7 @@ BEGIN TRANSACTION
 	WHERE [SubscriptionId] = @subscriptionId AND [UserId] IN (SELECT [userId] FROM @userIds)
 
 	-- return updated users count
-	SELECT @@ROWCOUNT
+	SELECT @@rOWCOUNT
 
 	-- Select users from @userIds that are not already subscribed
 	DECLARE @addingUsers TABLE ([userId] INT);
