@@ -77,8 +77,8 @@
 							<label>@Strings.Date</label>
 						</div>
 						<div class="right-input">
-							<input type="text" class="form-control" id="datePickerStart" style="display: inline-block; width: 75%" />
-							<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id="datePickerStartButton" title="Choose start date"></span>
+							<input type="text" class="datepicker form-control" id="DateRangeStart" style="display: inline-block; width: 75%" />
+							@*<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id="datePickerStartButton" title="Choose start date"></span>*@
 						</div>
 						<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.StartDate" />
 					</div>
@@ -89,8 +89,8 @@
 							@foreach (var item in items)
 							{
 								<div class="item-div">
-									@Html.TextBox("ItemDate" + item, "", new { type = "text", @class = "form-control", id = "datePickerStart", style = "display: inline-block; width: 150px", placeholder = "Date" })
-									<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id=@item title="Choose start date"></span>
+									@Html.TextBox("ItemDate" + item, "", new { type = "text", @class = "datepicker form-control", id = "datePickerStart_" + item, style = "display: inline-block; width: 150px", placeholder = "Date" })
+									@*<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id=@item title="Choose start date"></span>*@
 									@Html.TextBox("ItemName_" + item, item, new { @class = "form-control", style = "display: inline-block; width: 150px;", placeholder = "Name" })
 									@Html.TextBox("ItemAmount_" + item, "", new { @class = "form-control", style = "display: inline-block; width: 150px;", placeholder = "Amount" })
 									<label>Payed for by Customer</label>
@@ -149,5 +149,8 @@
 		pwf.setPageLimit(15);
 		pwf.setPageButtonLimit(10);
 		pwf.setRowClass("previewRow");
+		$('.datepicker').each(function () {
+			$(this).datepicker();
+		});
 	</script>
 }
