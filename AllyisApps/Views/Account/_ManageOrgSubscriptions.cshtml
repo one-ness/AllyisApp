@@ -23,10 +23,9 @@
         }
         else
         {
-			<a href="@Url.RouteUrl(RouteNameConstants.TimeTrackerNoIndex, new { subscriptionId = Model.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = ViewData["StartDate"], endDate = ViewData["EndDate"] })" style="text-decoration: none; color: inherit">
-				@string.Format("{0}", Model.SubscriptionName) <i class="fa fa-caret-right"></i>
-			</a>
-		}
+            <a href="@Url.Action(ActionConstants.IndexNoUserId, ControllerConstants.TimeEntry, new { area = "TimeTracker", subscriptionId = Model.SubscriptionId, startDate = ViewBag.StartDate, endDate = ViewBag.EndDate })" style="text-decoration: none; color: inherit">
+                @string.Format("{0}", Model.SubscriptionName) <i class="fa fa-caret-right"></i>
+            </a>}
 	</td>
 	<td class="col-md-2" style="text-align: center">@userDisplay</td>
 	<td class="text-right icon-strip col-md-1">
