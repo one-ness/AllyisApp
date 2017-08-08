@@ -4,11 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
-using AllyisApps.Core.Alert;
-using AllyisApps.Filters;
-using AllyisApps.Lib;
-using AllyisApps.Services;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,6 +12,11 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using AllyisApps.Core;
+using AllyisApps.Core.Alert;
+using AllyisApps.Filters;
+using AllyisApps.Lib;
+using AllyisApps.Services;
 
 namespace AllyisApps.Controllers
 {

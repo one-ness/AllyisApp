@@ -38,7 +38,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				var result = AppService.DeleteCustomer(subscriptionId, numValue);
 				
 				// if deleted successfully
-				if (result != null && result != string.Empty)
+				if (!string.IsNullOrEmpty(result))
 				{
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", result, Resources.Strings.CustomerDeleteNotification), Variety.Success));
 				}

@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.ComponentModel;
 
 namespace AllyisApps.DBModel.Auth
 {

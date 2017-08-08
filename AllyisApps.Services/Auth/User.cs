@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services.Lookup;
 using System;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
 {

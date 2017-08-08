@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
-using AllyisApps.Services;
-using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -54,7 +54,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The DataExportViewModel.</returns>
 		public DataExportViewModel ConstructDataExportViewModel(int subscriptionId, int orgId = -1, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
-			if (-1 <= orgId) orgId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
+			if (-1 <= orgId)
+			{
+				orgId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
+			}
 
 			DataExportViewModel result = new DataExportViewModel();
 			if ((userIds == null) || (userIds[0] == -1))

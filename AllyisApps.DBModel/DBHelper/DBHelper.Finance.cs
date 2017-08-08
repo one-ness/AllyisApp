@@ -4,13 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Finance;
-using Dapper;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System;
+using AllyisApps.DBModel.Finance;
+using Dapper;
 
 namespace AllyisApps.DBModel
 {

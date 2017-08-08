@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
-using AllyisApps.Core.Alert;
 using System;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
+using AllyisApps.Core.Alert;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
-				int orgId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId; ;
+				int orgId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
 				try//should put try catch in 'else'. Creating a blank pay class results in Two alerts: "Cannot create blank pay class" and "pay class already exists"
 				{
 					if (AppService.CreatePayClass(newPayClass, orgId, subscriptionId))
@@ -49,6 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(Resources.Strings.FailureCreatePayClassAlreadyExists, Variety.Danger));
 				}
 			}
+
 			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
 		}
 	}

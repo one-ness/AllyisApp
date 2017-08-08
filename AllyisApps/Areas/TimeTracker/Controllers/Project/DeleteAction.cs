@@ -26,7 +26,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			var result = AppService.DeleteProject(userId, subscriptionId);
 			// if deleted successfully
-			if (result != null && result != "")
+			if (!string.IsNullOrEmpty(result))
 			{
 				Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", result, Resources.Strings.ProjectDeleteNotification), Variety.Success));
 			}
