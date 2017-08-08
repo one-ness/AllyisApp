@@ -80,7 +80,6 @@
                 @Strings.IAgree @Html.ActionLink(Strings.TOS, ActionConstants.PrivacyPolicy, ControllerConstants.Home, null, new { @style = "color:#0000FF;" }).
                 <br /><br />
                 <a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account)" class="btn btn-default"> @Strings.Cancel </a>
-				<!--Html.ActionLink(Strings.Cancel, ActionConstants.Index, ControllerConstants.Account, null, new { class = "btn btn-default" })-->
                 <button type="submit" value=@Strings.Register class="btn btn-primary" id="registerSubmit" disabled="disabled">@Strings.Register</button>
             </div>
 

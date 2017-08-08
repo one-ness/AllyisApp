@@ -84,13 +84,11 @@
                     @if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
                     {
                         <a href="@Url.Action(ActionConstants.Index, ControllerConstants.Customer)" class="btn btn-default">@Strings.Cancel</a>
-                        <!--Html.ActionLink(Strings.Cancel, ActionConstants.Index, ControllerConstants.Customer, null, new { class = "btn btn-default" })-->
                         <input type="submit" value="@Strings.Create" class="btn btn-primary"/>
                     }
                     else
                     {
                         <a href="@Url.Action(ActionConstants.Index, ControllerConstants.Customer)" class="btn btn-default">@Strings.Cancel</a>
-                        <!--Html.ActionLink(Strings.Cancel, ActionConstants.Index, ControllerConstants.Customer, null, new { class = "btn btn-default" })-->
                         <input type="submit" value="@Strings.Save" class="btn btn-primary"/>
                     }
                 </div>

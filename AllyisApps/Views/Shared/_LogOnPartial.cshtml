@@ -19,7 +19,5 @@
 else
 {
 	<li href="@Url.Action(ActionConstants.Register, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }),  new { id = "registerLink" }">@Strings.Register</li>
-    <!--<li>Html.ActionLink(Strings.Register, ActionConstants.Register, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, htmlAttributes: new { id = "registerLink" })</li>-->
     <li href="@Url.Action(ActionConstants.LogOn, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }),  new { id = "loginLink" }">@Strings.SignIn</li>
-	<!--<li>Html.ActionLink(Strings.SignIn, ActionConstants.LogOn, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }, htmlAttributes: new { id = "loginLink" })</li>-->
 }
