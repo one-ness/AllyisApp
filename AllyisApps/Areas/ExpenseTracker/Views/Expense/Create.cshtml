@@ -51,7 +51,7 @@
 						<select id="allprojects" style="display: none;">
 							@if (Model.Reports != null)
 							{
-								foreach (ExpenseSummaryViewModelItem item in Model.Reports)
+								foreach (ExpenseItemViewModel item in Model.Reports)
 								{
 									<option value="@item.ReportId" class="projectSelectOption">@item.ReportName</option>
 								}
@@ -87,10 +87,10 @@
 						<div>
 							@for (int i = 0; i < items.Count; i++)
 							{
-								string dateName = String.Format("[{0}].Date", i);
-								string nameName = String.Format("[{0}].Name", i);
+								string dateName = String.Format("[{0}].TransactionDate", i);
+								string nameName = String.Format("[{0}].ExpenseItemName", i);
 								string amountName = String.Format("[{0}].Amount", i);
-								string checkboxName = String.Format("[{0}].IsCustomerPaying", i);
+								string checkboxName = String.Format("[{0}].IsBillableToCustomer", i);
 								<div class="item-div">
 									<input type="text" value="" class="datepicker form-control" name="@dateName" style="display: inline-block; width: 150px" placeholder = "Date"/>
 									@*<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id=@item title="Choose start date"></span>*@

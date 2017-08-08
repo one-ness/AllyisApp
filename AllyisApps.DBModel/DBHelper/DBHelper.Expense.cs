@@ -29,10 +29,10 @@ namespace AllyisApps.DBModel
         /// <returns>TODO: Should this return success/failuer codes? ? ?</returns>
         public void CreateExpenseItem(ExpenseItemDBEntity item)
         {
-            if (item.AccountId == 0) //check if account exists already
-            {
-                throw new System.ArgumentException("An Error");
-            }
+            //if (item.AccountId == 0) //check if account exists already
+            //{
+            //    throw new System.ArgumentException("An Error");
+            //}
 
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@itemDescription", item.ItemDescription);

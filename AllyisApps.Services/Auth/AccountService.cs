@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AllyisApps.Services.Lookup;
+using AllyisApps.DBModel.Finance;
 
 namespace AllyisApps.Services
 {

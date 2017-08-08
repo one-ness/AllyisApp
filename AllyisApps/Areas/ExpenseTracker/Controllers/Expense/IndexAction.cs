@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 using System.Collections.Generic;
 using System;
-using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense;
+using AllyisApps.DBModel;
+using AllyisApps.DBModel.Finance;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -87,16 +88,33 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="date"></param>
 		/// <param name="items"></param>
 		/// <returns></returns>
-		public ActionResult ViewReport(string reportName, string businessJustification, DateTime date, List<ReportItem> items)
+		public ActionResult ViewReport(string reportName, string businessJustification, List<ExpenseItem> items, DateTime? date)
 		{
-			ExpenseReportViewModel model = new ExpenseReportViewModel()
+			foreach (var item in items)
 			{
-				Name = reportName,
-				BusinessJustification = businessJustification,
-				Date = date,
+				AppService.CreateExpenseItem(item);
+			}
+
+			var report = new ExpenseItemViewModel()
+			{
+				ReportName = reportName,
+				SubmittedDate = date == null ? DateTime.Now.Date : (DateTime)date,
+				Reason = businessJustification,
+				Status = ExpenseStatusEnum.New,
 				Items = items
 			};
-			return View(model);
+
+			//AppService.CreateExpenseReport(report);
+
+			List<ExpenseItemViewModel> reports = new List<ExpenseItemViewModel>();
+
+			reports.Add(report);
+
+			ExpenseIndexViewModel model = new ExpenseIndexViewModel()
+			{
+				Reports = reports
+			};
+			return RedirectToAction("Index");
 		}
 	}
 }

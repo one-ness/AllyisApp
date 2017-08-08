@@ -86,6 +86,32 @@ namespace AllyisApps.Services
 			};
 
 		}
-	   
+		
+		public void CreateExpenseItem(ExpenseItem item)
+		{
+			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
+			{
+				AccountId = item.AccountId,
+				Amount = item.Amount,
+				CreatedUtc = item.ExpenseItemCreatedUtc,
+				ExpenseItemId = item.ExpenseItemId,
+				ExpenseReportId = item.ExpenseReportId,
+				IsBillableToCustomer = item.IsBillableToCustomer,
+				ItemDescription = item.ItemDiscription,
+				ModifiedUtc = item.ExpenseItemModifiedUtc,
+				//ReportStatus = item.ExpenseReportStatus,
+				TransactionDate = item.TransactionDate,
+			};
+			DBHelper.CreateExpenseItem(itemEntity);
+		}
+
+		//public void CreateExpenseReport(AllyisApps.ViewModels.ExpenseTracker.Expense.ExpenseItemViewModel report)
+		//{
+		//	ExpenseReportDBEntity reportEntity = new ExpenseReportDBEntity()
+		//	{
+		//		BusinessJustification
+		//	};
+		//	DBHelper.CreateExpenseReport(reportEntity);
+		//}
 	}
 }
