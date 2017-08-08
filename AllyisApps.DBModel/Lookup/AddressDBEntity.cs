@@ -30,15 +30,30 @@
         /// </summary>
         public string State { get; set; }
 
+		/// <summary>
+		/// Gets or sets the state id
+		/// </summary>
+		public int StateId { get; set; }
+
         /// <summary>
         /// Gets or sets the PostalCode
         /// </summary>
         public string PostalCode { get; set; }
 
         /// <summary>
-        /// Gets or sets the Country Id
+        /// Gets or sets the Country
         /// </summary>
-        public string CountryId { get; set; }
+        public string Country { get; set; }
+
+		/// <summary>
+		/// Gets or sets the country id
+		/// </summary>
+		public int CountryId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the country code
+		/// </summary>
+		public string CountryCode { get; set; }
 
     }
 }

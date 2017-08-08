@@ -38,7 +38,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Address = infos.Item3.Address1,
 				City = infos.Item3.City,
 				State = infos.Item3.State,
-				Country = infos.Item3.CountryId,
+				Country = infos.Item3.Country,
 				PostalCode = infos.Item3.PostalCode,
 				ContactPhoneNumber = infos.Item1.ContactPhoneNumber,
 				FaxNumber = infos.Item1.FaxNumber,

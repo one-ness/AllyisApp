@@ -20,25 +20,24 @@ namespace AllyisApps.DBModel
 	public partial class DBHelper
 	{
 		/// <summary>
-		/// Retrieves a collection of valid countries from the database.
+		/// list of valid countries
 		/// </summary>
-		/// <returns>A collection of country names.</returns>
-		public Dictionary<int, string> GetCountriesDictionary()
+		public Dictionary<string, string> GetCountries()
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<CountryDBEntity>("[Lookup].[GetCountries]").ToDictionary(x => x.CountryId, x => x.CountryName);
+				return connection.Query<CountryDBEntity>("[Lookup].[GetCountries]").ToDictionary(x => x.CountryCode, x => x.CountryName);
 			}
 		}
 
 		/// <summary>
-		/// list of valid countries.
+		/// list of states for the given country
 		/// </summary>
-		public List<string> ValidCountries()
+		public Dictionary<int, string> GetStates(string countryCode)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<CountryDBEntity>("[Lookup].[GetCountries]").Select(x => x.CountryName).ToList();
+				return connection.Query<StateDBEntity>("[Lookup].[GetStates] @a", new { a = countryCode }).ToDictionary(x => x.StateId, x => x.StateName);
 			}
 		}
 

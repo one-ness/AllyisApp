@@ -369,6 +369,7 @@
     <Compile Include="ViewModels\Auth\SubscriptionRoleSelectionModel.cs" />
     <Compile Include="ViewModels\Auth\UserOrgViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\ModelHelper.cs" />
     <Compile Include="ViewModels\Shared\LanguageViewModel.cs" />
     <Compile Include="ViewModels\Shared\LogOnPartialViewModel.cs" />
     <Compile Include="ViewModels\Shared\SubscriptionsViewModel.cs" />

@@ -14,6 +14,7 @@ using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Lookup;
 using Dapper;
+using System.Threading.Tasks;
 
 namespace AllyisApps.DBModel
 {
@@ -23,36 +24,13 @@ namespace AllyisApps.DBModel
 	public partial class DBHelper
 	{
 		/// <summary>
-		/// Updates the user with the information specified in the user table.
+		/// create a new user
 		/// </summary>
-		public int CreateUser(UserDBEntity user)
+		public async Task<int> CreateUserAsync(string email, string passwordHash, string firstName, string lastName, Guid emailConfirmationCode, DateTime? dateOfBirth, string phoneNumber, string preferredLanguageId, string address1, string address2, string city, int? stateId, string postalCode, string countryCode)
 		{
-			if (user == null)
+			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				throw new ArgumentException("user cannot be null.");
-			}
-
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@email", user.Email);
-			parameters.Add("@firstName", user.FirstName);
-			parameters.Add("@lastName", user.LastName);
-			parameters.Add("@address", user.Address);
-			parameters.Add("@city", user.City);
-			parameters.Add("@state", user.State);
-			parameters.Add("@country", user.Country);
-			parameters.Add("@postalCode", user.PostalCode);
-			parameters.Add("@phoneNumber", user.PhoneNumber);
-			parameters.Add("@dateOfBirth", user.DateOfBirth);
-			parameters.Add("@emailConfirmationCode", user.EmailConfirmationCode);
-			parameters.Add("@passwordHash", user.PasswordHash);
-			parameters.Add("@isTwoFactorEnabled", user.IsTwoFactorEnabled);
-			parameters.Add("@isLockoutEnabled", user.IsLockoutEnabled);
-			parameters.Add("@lockoutEndDateUtc", user.LockoutEndDateUtc);
-			parameters.Add("@CultureName", user.PreferredLanguageId);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<int>("Auth.CreateUser", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return (await con.QueryAsync<int>("Auth.CreateUser @a, @b, @c, @d, @e, @f, @g, @h, @i, @j, @k, @l, @m, @n", new { a = email, b = passwordHash, c = firstName, d = lastName, e = emailConfirmationCode, f = dateOfBirth, g = phoneNumber, h = preferredLanguageId, i = address1, j = address2, k = city, l = stateId, m = postalCode, n = countryCode })).FirstOrDefault();
 			}
 		}
 
@@ -96,29 +74,29 @@ namespace AllyisApps.DBModel
 		/// <param name="user">The table with the user to create.</param>
 		public void UpdateUser(UserDBEntity user)
 		{
-			if (user == null)
-			{
-				throw new ArgumentException("user cannot be null.");
-			}
+			//if (user == null)
+			//{
+			//	throw new ArgumentException("user cannot be null.");
+			//}
 
-			DynamicParameters parameters = new DynamicParameters();
+			//DynamicParameters parameters = new DynamicParameters();
 
-			parameters.Add("@userId", user.UserId);
-			parameters.Add("@addressId", user.AddressId);
-			parameters.Add("@firstName", user.FirstName);
-			parameters.Add("@lastName", user.LastName);
-			parameters.Add("@address", user.Address);
-			parameters.Add("@city", user.City);
-			parameters.Add("@state", user.State);
-			parameters.Add("@country", user.Country);
-			parameters.Add("@postalCode", user.PostalCode);
-			parameters.Add("@phoneNumber", user.PhoneNumber);
-			parameters.Add("@dateOfBirth", user.DateOfBirth);
+			//parameters.Add("@userId", user.UserId);
+			//parameters.Add("@addressId", user.AddressId);
+			//parameters.Add("@firstName", user.FirstName);
+			//parameters.Add("@lastName", user.LastName);
+			//parameters.Add("@address", user.Address);
+			//parameters.Add("@city", user.City);
+			//parameters.Add("@state", user.State);
+			//parameters.Add("@country", user.Country);
+			//parameters.Add("@postalCode", user.PostalCode);
+			//parameters.Add("@phoneNumber", user.PhoneNumber);
+			//parameters.Add("@dateOfBirth", user.DateOfBirth);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				connection.Execute("[Auth].[UpdateUserInfo]", parameters, commandType: CommandType.StoredProcedure);
-			}
+			//using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			//{
+			//	connection.Execute("[Auth].[UpdateUserInfo]", parameters, commandType: CommandType.StoredProcedure);
+			//}
 		}
 
 		/// <summary>

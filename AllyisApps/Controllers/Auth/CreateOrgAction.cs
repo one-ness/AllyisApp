@@ -4,10 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
 using AllyisApps.Core.Alert;
+using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -24,7 +25,24 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult CreateOrg()
 		{
-			return this.View(new EditOrganizationViewModel() { ValidCountries = AppService.ValidCountries(), IsCreating = true });
+			var model = new EditOrganizationViewModel();
+			model.IsCreating = true;
+
+			// create localized countries
+			var countries = this.AppService.GetCountries();
+			foreach (var item in countries)
+			{
+				// get the country name
+				string countryName = Utility.AggregateSpaces(item.Value);
+
+				// use the country name in the resource file to get it's localized name
+				string localized = Resources.Countries.ResourceManager.GetString(countryName) ?? item.Value;
+
+				// add it to localized countries dictionary
+				model.LocalizedCountries.Add(item.Key, localized);
+			}
+
+			return this.View(model);
 		}
 
 		/// <summary>

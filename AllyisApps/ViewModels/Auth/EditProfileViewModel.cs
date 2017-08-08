@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using AllyisApps.Resources;
+using System.Web.Mvc;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -17,15 +19,29 @@ namespace AllyisApps.ViewModels.Auth
 	public class EditProfileViewModel : BaseViewModel
 	{
 		private const string CharsToReplace = @"""/\[]:|<>+=; ,?*'`()@";
+		/*
+		 * possible phone validation regex
+		[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")] // [Phone] does not work //I am not conviced that this is a good idea either.
+		[RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
+
+		possible postal code regex (We shouldn't be validating all postal codes this way as every country has a different format.)
+		[RegularExpression(@"(\d{5}(?:[-\s]\d{4})?)", ErrorMessage = "Invalid postal code.")] // Require 5 digits followed by an optional hyphen/whitespace and four more digits
+		[RegularExpression(@"([\-\s\w]{3,10})", ErrorMessage = "Invalid postal code.")]
+
+		possible date validation
+		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+		[DataType(DataType.Date)]
+		[SQLDateProtector]
+		 * */
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EditProfileViewModel"/> class.
 		/// </summary>
 		public EditProfileViewModel()
 		{
-			// Note: this is included soley to keep the model constructed during a POST from complaining about a null reference
-			// as it builds the countries list, even though the list isn't used anymore.
 			this.ValidCountries = new List<string>();
+			this.LocalizedCountries = new Dictionary<string, string>();
+			this.LocalizedStates = new Dictionary<string, string>();
 		}
 
 		/// <summary>
@@ -55,8 +71,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the user's phone number.
 		/// </summary>
-		[RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
-		//[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")] // [Phone] does not work //I am not conviced that this is a good idea either.
+		[RegularExpression(@"^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
 		[Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
 
@@ -80,35 +95,15 @@ namespace AllyisApps.ViewModels.Auth
 		public string City { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user's state.
-		/// </summary>
-		[Display(Name = "State")]
-		public string State { get; set; }
-
-		/// <summary>
-		/// Gets or sets the user's country or region.
-		/// </summary>
-		[Display(Name = "Country/Region")]
-		public string Country { get; set; }
-
-		/// <summary>
 		/// Gets or sets the user's postal code.
 		/// </summary>
 		[DataType(DataType.PostalCode)]
 		[Display(Name = "Postal Code")]
 		public string PostalCode { get; set; }
 
-		//// [RegularExpression(@"(\d{5}(?:[-\s]\d{4})?)", ErrorMessage = "Invalid postal code.")] // Require 5 digits followed by an optional hyphen/whitespace and four more digits
-		//// [RegularExpression(@"([\-\s\w]{3,10})", ErrorMessage = "Invalid postal code.")]
-		//// We shouldn't be validating all postal codes this way as every country has a different format.
-
 		/// <summary>
 		/// Gets or sets Date of birth.
 		/// </summary>
-		//[DataType(DataType.Date)]
-		//[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-		//[Display(Name = "Date of Birth")]
-		//[SQLDateProtector]
 		[MinDateValidation]
 		public int DateOfBirth { get; set; } //has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view.
 
@@ -118,10 +113,32 @@ namespace AllyisApps.ViewModels.Auth
 		public IEnumerable<string> ValidCountries { get; set; }
 
 		/// <summary>
+		/// selected state id
+		/// </summary>
+		public int? SelectedStateId { get; set; }
+
+		/// <summary>
+		/// state id and localized names
+		/// </summary>
+		[Display(Name = "State")]
+		public Dictionary<string, string> LocalizedStates { get; set; }
+
+		/// <summary>
+		/// selected country code
+		/// </summary>
+		public string SelectedCountryCode { get; set; }
+
+		/// <summary>
+		/// country code and localized names
+		/// </summary>
+		[Display(Name = "Country/Region")]
+		public Dictionary<string, string> LocalizedCountries { get; set; }
+
+		/// <summary>
 		/// Localized valid countries.
 		/// </summary>
 		/// <returns>A Dictionary keyed with the English translation and valued with the localized version.</returns>
-		public Dictionary<string, string> GetLocalizedValidCoutriesDictionary()
+		public Dictionary<string, string> GetLocalizedValidCountriesDictionary()
 		{
 			Dictionary<string, string> countries = new Dictionary<string, string>();
 

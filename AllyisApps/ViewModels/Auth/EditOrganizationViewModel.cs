@@ -23,9 +23,8 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public EditOrganizationViewModel()
 		{
-			// Note: this is included soley to keep the model constructed during a POST from complaining about a null reference
-			//   as it builds the countries list, even though the list isn't used anymore.
 			this.ValidCountries = new List<string>();
+			this.LocalizedCountries = new Dictionary<string, string>();
 			this.IsCreating = false;
 		}
 
@@ -82,8 +81,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the organization's postal code.
 		/// </summary>
 		[DataType(DataType.PostalCode)]
-		//[RegularExpression(@"^\d{5}(-\d{4})?$", ErrorMessage = "Invalid postal code")]
-		//[RegularExpression(@"([\-\s\w]{3,10})", ErrorMessage = "Invalid postal code.")]
 		[Display(Name = "Postal Code")]
 		public string PostalCode { get; set; }
 
@@ -91,8 +88,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the organization's phone number.
 		/// </summary>
 		[DataType(DataType.Text)]
-		//[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
-		//[RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
 		[RegularExpression(@"^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
 		[Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
@@ -102,8 +97,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		[DataType(DataType.Text)]
 		[Display(Name = "Fax Number")]
-		//[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
-		//[RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
 		[RegularExpression(@"^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
 		public string FaxNumber { get; set; }
 
@@ -134,6 +127,26 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets a list of valid countries.
 		/// </summary>
 		public IEnumerable<string> ValidCountries { get; internal set; }
+
+		/// <summary>
+		/// selected state id
+		/// </summary>
+		public short SelectedStateId { get; set; }
+
+		/// <summary>
+		/// state id and localized names
+		/// </summary>
+		public Dictionary<string, string> LocalizedStates { get; set; }
+
+		/// <summary>
+		/// selected country code
+		/// </summary>
+		public int SelectedCountryCode { get; set; }
+
+		/// <summary>
+		/// country code and localized names
+		/// </summary>
+		public Dictionary<string, string> LocalizedCountries { get; set; }
 
 		/// <summary>
 		/// Cleans things.

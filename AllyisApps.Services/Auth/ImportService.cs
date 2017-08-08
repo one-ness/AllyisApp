@@ -693,7 +693,7 @@ namespace AllyisApps.Services
 										try
 										{
 											result.UsersImported += 1;
-											user.UserId = DBHelper.CreateUser(GetDBEntityFromUser(user));
+											//user.UserId = DBHelper.CreateUser(GetDBEntityFromUser(user));
 										}
 										catch
 										{
@@ -741,7 +741,7 @@ namespace AllyisApps.Services
 
 							if (hasUserAddress) updated = this.readColumn(row, ColumnHeaders.UserAddress, val => user.Address.Address1 = val) || updated;
 							if (hasUserCity) updated = this.readColumn(row, ColumnHeaders.UserCity, val => user.Address.City = val) || updated;
-							if (hasUserCountry) updated = this.readColumn(row, ColumnHeaders.UserCountry, val => user.Address.CountryId = val) || updated;
+							if (hasUserCountry) updated = this.readColumn(row, ColumnHeaders.UserCountry, val => user.Address.Country = val) || updated;
 							string dateOfBirth = null;
 							if (hasUserDateOfBirth) updated = this.readColumn(row, ColumnHeaders.UserDateOfBirth, val => dateOfBirth = val) || updated;
 							if (!string.IsNullOrEmpty(dateOfBirth))

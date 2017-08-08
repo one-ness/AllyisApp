@@ -7,6 +7,7 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
+using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels.Auth;
@@ -32,13 +33,26 @@ namespace AllyisApps.Controllers
 				AddressId = userInfo.Address.AddressId,
 				Address = userInfo.Address.Address1,
 				City = userInfo.Address.City,
-				State = userInfo.Address.State,
-				Country = userInfo.Address.CountryId,
+				SelectedStateId = userInfo.Address.StateId,
+				SelectedCountryCode = userInfo.Address.CountryCode,
 				PostalCode = userInfo.Address.PostalCode,
 				PhoneNumber = userInfo.PhoneNumber,
-				DateOfBirth = AppService.GetDayFromDateTime(userInfo.DateOfBirth),
-				ValidCountries = AppService.ValidCountries()
+				DateOfBirth = AppService.GetDayFromDateTime(userInfo.DateOfBirth)
 			};
+
+			// create localized countries
+			var countries = this.AppService.GetCountries();
+			foreach (var item in countries)
+			{
+				// get the country name
+				string countryName = Utility.AggregateSpaces(item.Value);
+
+				// use the country name in the resource file to get it's localized name
+				string localized = Resources.Countries.ResourceManager.GetString(countryName) ?? item.Value;
+
+				// add it to localized countries dictionary
+				model.LocalizedCountries.Add(item.Key, localized);
+			}
 
 			return this.View(model);
 		}
@@ -66,8 +80,8 @@ namespace AllyisApps.Controllers
 					AddressId = model.AddressId,
 					Address1 = model.Address,
 					City = model.City,
-					State = model.State,
-					CountryId = model.Country,
+					StateId = model.SelectedStateId,
+					CountryCode = model.SelectedCountryCode,
 					PostalCode = model.PostalCode
 				};
 				await Task.Factory.StartNew(() => AppService.SaveUserInfo(user));
@@ -76,7 +90,7 @@ namespace AllyisApps.Controllers
 				return this.RouteUserHome();
 			}
 
-			model.ValidCountries = AppService.ValidCountries();
+			//model.ValidCountries = AppService.GetCountries();
 
 			// Invalid Model
 			return this.View(model);

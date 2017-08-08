@@ -40,6 +40,7 @@ namespace AllyisApps
 		public const string ForgotPasswordConfirmation = "forgotpasswordconfirmation";
 		public const string GetBillingSummary = "getbillingsummary";
 		public const string GetDetailsDataJson = "getdetailsdatajson";
+		public const string GetStates = "getstates";
 		public const string Import = "import";
 		public const string Index = "index";
         public const string IndexNoUserId = "indexnouserid";
@@ -121,6 +122,9 @@ namespace AllyisApps
 		public const string LogOnPartial = "_logonpartial";
 		public const string Subscribe = "subscribe";
 		public const string MergePayClass = "mergepayclass";
+		public const string DdlCountriesId = "ddlCountries";
+		public const string DdlStatesId = "ddlStates";
+		public const string DdlStatesOptionsId = DdlStatesId + " option";
 	}
 
 	/// <summary>
@@ -131,9 +135,4 @@ namespace AllyisApps
 		public const string TimeTracker = "TimeTracker";
 		public const string ExpenseTracker = "ExpenseTracker";
 	}
-
-    public static class RouteNameConstants
-    {
-        public const string TimeTrackerNoIndex = "TimeTracker_NoUserId";
-    }
 }

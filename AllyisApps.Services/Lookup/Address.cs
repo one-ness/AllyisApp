@@ -32,13 +32,24 @@
 		public string State { get; set; }
 
 		/// <summary>
-		/// Gets or sets the PostalCode.
+		/// Gets or sets the State Id
+		/// </summary>
+		public int? StateId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the PostalCode
 		/// </summary>
 		public string PostalCode { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Country Id.
+		/// Gets or sets the country
 		/// </summary>
-		public string CountryId { get; set; }
+		public string Country { get; set; }
+
+		/// <summary>
+		/// Gets or sets the country code
+		/// </summary>
+		public string CountryCode { get; set; }
+
 	}
 }

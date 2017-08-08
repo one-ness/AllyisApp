@@ -619,7 +619,7 @@ namespace AllyisApps.Services
 				City = address.City,
 				State = address.State,
 				PostalCode = address.PostalCode,
-				CountryId = address.CountryId
+				CountryCode = address.CountryCode
 			};
 		}
 

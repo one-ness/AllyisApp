@@ -64,9 +64,17 @@ namespace AllyisApps.Services
 		/// Gets the list of valid countries.
 		/// </summary>
 		/// <returns>A collection of valid countries.</returns>
-		public IEnumerable<string> ValidCountries()
+		public Dictionary<string, string> GetCountries()
 		{
-			return DBHelper.ValidCountries();
+			return DBHelper.GetCountries();
+		}
+
+		/// <summary>
+		/// get the list of states for the given country
+		/// </summary>
+		public Dictionary<int, string> GetStates(string countryCode)
+		{
+			return this.DBHelper.GetStates(countryCode);
 		}
 
 		/// <summary>
@@ -150,23 +158,20 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task<int> SetupNewUser(
 			string email,
+			string password,
 			string firstName,
 			string lastName,
-			DateTime? dateOfBirth,
-			string address,
-			string city,
-			string state,
-			string country,
-			string postalCode,
-			string phone,
-			string password,
-			string languagePreference,
-			string confirmEmailSubject,
-			string confirmEmailMessage,
 			Guid emailConfirmationCode,
-			bool twoFactorEnabled = false,
-			bool lockOutEnabled = false,
-			DateTime? lockOutEndDateUtc = null)
+			DateTime? dateOfBirth,
+			string phoneNumber,
+			string address1,
+			string address2,
+			string city,
+			int? stateId,
+			string postalCode,
+			string countryCode,
+			string confirmEmailSubject,
+			string confirmEmailMessage)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName:");
@@ -174,32 +179,12 @@ namespace AllyisApps.Services
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
 			if (emailConfirmationCode == null) throw new ArgumentException("emailConfirmationCode");
 
-			int result = 0;
+			var result = 0;
 			try
 			{
-				UserDBEntity entity = new UserDBEntity()
-				{
-					EmailConfirmationCode = emailConfirmationCode,
-					Email = email,
-					FirstName = firstName,
-					LastName = lastName,
-                    Address = address,
-					Country = country,
-                    City = city,
-                    State = state,
-                    PostalCode = postalCode,
-                    DateOfBirth = dateOfBirth,
-					PhoneNumber = phone,
-					PasswordHash = Crypto.GetPasswordHash(password),
-					IsTwoFactorEnabled = twoFactorEnabled,
-					IsLockoutEnabled = lockOutEnabled,
-					LockoutEndDateUtc = lockOutEndDateUtc,
-					PreferredLanguageId = languagePreference
-				};
+				result = await this.DBHelper.CreateUserAsync(email, Crypto.GetPasswordHash(password), firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName, address1, address2, city, stateId, postalCode, countryCode);
 
-				result = this.DBHelper.CreateUser(entity);
-
-				// send confirmation email
+				// user created, send confirmation email
 				await Mailer.SendEmailAsync(this.ServiceSettings.SupportEmail, email, confirmEmailSubject, confirmEmailMessage);
 			}
 			catch (SqlException ex)
@@ -390,36 +375,36 @@ namespace AllyisApps.Services
 		/// <param name="model">UserInfo containing updated info.</param>
 		public void SaveUserInfo(User model)
 		{
-			if (model == null)
-			{
-				throw new ArgumentNullException("model", "UserInfo object must not be null.");
-			}
+			//if (model == null)
+			//{
+			//	throw new ArgumentNullException("model", "UserInfo object must not be null.");
+			//}
 
-			// TODO: Add UserInfo->UserDBEntity conversion at bottom
-			DBHelper.UpdateUser(new UserDBEntity
-			{
-				AccessFailedCount = model.AccessFailedCount,
-				AddressId = model.Address.AddressId,
-				Address = model.Address.Address1,
-				City = model.Address.City,
-				Country = model.Address.CountryId,
-				DateOfBirth = model.DateOfBirth,
-				Email = model.Email,
-				IsEmailConfirmed = model.IsEmailConfirmed,
-				FirstName = model.FirstName,
-				LastName = model.LastName,
-				IsLockoutEnabled = model.IsLockoutEnabled,
-				LockoutEndDateUtc = model.LockoutEndDateUtc,
-				PasswordHash = model.PasswordHash,
-				PasswordResetCode = model.PasswordResetCode,
-				PhoneExtension = model.PhoneExtension,
-				PhoneNumber = model.PhoneNumber,
-				IsPhoneNumberConfirmed = model.IsPhoneNumberConfirmed,
-				State = model.Address.State,
-				IsTwoFactorEnabled = model.IsTwoFactorEnabled,
-				UserId = model.UserId,
-				PostalCode = model.Address.PostalCode
-			});
+			//// TODO: Add UserInfo->UserDBEntity conversion at bottom
+			//DBHelper.UpdateUser(new UserDBEntity
+			//{
+			//	AccessFailedCount = model.AccessFailedCount,
+			//	AddressId = model.Address.AddressId,
+			//	Address = model.Address.Address1,
+			//	City = model.Address.City,
+			//	Country = model.Address.Country,
+			//	DateOfBirth = model.DateOfBirth,
+			//	Email = model.Email,
+			//	IsEmailConfirmed = model.IsEmailConfirmed,
+			//	FirstName = model.FirstName,
+			//	LastName = model.LastName,
+			//	IsLockoutEnabled = model.IsLockoutEnabled,
+			//	LockoutEndDateUtc = model.LockoutEndDateUtc,
+			//	PasswordHash = model.PasswordHash,
+			//	PasswordResetCode = model.PasswordResetCode,
+			//	PhoneExtension = model.PhoneExtension,
+			//	PhoneNumber = model.PhoneNumber,
+			//	IsPhoneNumberConfirmed = model.IsPhoneNumberConfirmed,
+			//	State = model.Address.State,
+			//	IsTwoFactorEnabled = model.IsTwoFactorEnabled,
+			//	UserId = model.UserId,
+			//	PostalCode = model.Address.PostalCode
+			//});
 		}
 
 		/// <summary>
@@ -635,35 +620,36 @@ namespace AllyisApps.Services
 		/// <returns>UserDBEntity instance.</returns>
 		public static UserDBEntity GetDBEntityFromUser(User user)
 		{
-			if (user == null)
-			{
-				return null;
-			}
+			return null;
+			//if (user == null)
+			//{
+			//	return null;
+			//}
 
-			return new UserDBEntity
-			{
-				AccessFailedCount = user.AccessFailedCount,
-				Address = user.Address.Address1,
-				City = user.Address.City,
-				Country = user.Address.CountryId,
-				DateOfBirth = user.DateOfBirth,
-				Email = user.Email,
-				IsEmailConfirmed = user.IsEmailConfirmed,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				IsLockoutEnabled = user.IsLockoutEnabled,
-				LockoutEndDateUtc = user.LockoutEndDateUtc,
-				PasswordHash = user.PasswordHash,
-				PasswordResetCode = user.PasswordResetCode,
-				PhoneExtension = user.PhoneExtension,
-				PhoneNumber = user.PhoneNumber,
-				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
-				State = user.Address.State,
-				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
-				UserId = user.UserId,
-				PostalCode = user.Address.PostalCode,
-				PreferredLanguageId = "en-US"          // TODO: Put this into UserInfo and do proper lookup
-			};
+			//return new UserDBEntity
+			//{
+			//	AccessFailedCount = user.AccessFailedCount,
+			//	Address = user.Address.Address1,
+			//	City = user.Address.City,
+			//	Country = user.Address.Country,
+			//	DateOfBirth = user.DateOfBirth,
+			//	Email = user.Email,
+			//	IsEmailConfirmed = user.IsEmailConfirmed,
+			//	FirstName = user.FirstName,
+			//	LastName = user.LastName,
+			//	IsLockoutEnabled = user.IsLockoutEnabled,
+			//	LockoutEndDateUtc = user.LockoutEndDateUtc,
+			//	PasswordHash = user.PasswordHash,
+			//	PasswordResetCode = user.PasswordResetCode,
+			//	PhoneExtension = user.PhoneExtension,
+			//	PhoneNumber = user.PhoneNumber,
+			//	IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
+			//	State = user.Address.State,
+			//	IsTwoFactorEnabled = user.IsTwoFactorEnabled,
+			//	UserId = user.UserId,
+			//	PostalCode = user.Address.PostalCode,
+			//	PreferredLanguageId = "en-US"          // TODO: Put this into UserInfo and do proper lookup
+			//};
 		}
 
 		/// <summary>
