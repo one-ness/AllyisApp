@@ -206,6 +206,7 @@
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseReportViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseSummaryViewModelItem.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseIndexViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ReportStatusEnum.cs" />

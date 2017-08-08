@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 using System.Collections.Generic;
 using System;
+using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -38,22 +39,32 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             });
 		}
 
-		///// <summary>
-		///// return create expense report page
-		///// </summary>
-		///// <returns></returns>
-		//public ActionResult Create()
-		//{
-		//	return View();
-		//}
-
 		/// <summary>
-		/// return expense report
+		/// create expense report
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
 		public ActionResult Create(ExpenseIndexViewModel model)
 		{
+			return View(model);
+		}
+
+		/// <summary>
+		/// view/export expense report
+		/// </summary>
+		/// <param name="reportName"></param>
+		/// <param name="businessJustification"></param>
+		/// <param name="date"></param>
+		/// <returns></returns>
+		public ActionResult ViewReport(string reportName, string businessJustification, int date = 0)
+		{
+			ExpenseReportViewModel model = new ExpenseReportViewModel()
+			{
+				Name = reportName,
+				BusinessJustification = businessJustification,
+				Date = date,
+				Items = new List<ReportItem>()
+			};
 			return View(model);
 		}
 	}
