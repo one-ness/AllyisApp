@@ -203,28 +203,50 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Executes [Billing].[UpdateSubscription].
+		/// Updates subscription:
+		///  - upgrades or downgrades the subscription (sku id)
+		///  - changes the subscription name
 		/// </summary>
 		/// <param name="organizationId">Sets OrganizationId.</param>
-		/// <param name="skuId">Set to 0 for unsubscribe.</param>
-		/// <param name="productId"> Param @productId. </param>
+		/// <param name="skuId">sku to change to</param>
 		/// <param name="subscriptionName">The subscription name</param>
-		/// <returns>The ret Id.</returns>
-		public int ChangeSubscription(int organizationId, int skuId, int productId, string subscriptionName)
+		/// <returns>Number of rows changed</returns>
+		public int UpdateSubscription(int organizationId, int skuId, string subscriptionName)
+		{
+			//TODO: pass in subscriptionId as a parameter to simplify logic
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", organizationId);
+			parameters.Add("@skuId", skuId);
+			parameters.Add("@subscriptionName", subscriptionName);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Execute("[Billing].[UpdateSubscription]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Creates subscription
+		/// Adds all the organization users as users to the subscription
+		/// Adds the user who subscribed to the subscription as a manager
+		/// </summary>
+		/// <param name="organizationId">Sets OrganizationId.</param>
+		/// <param name="skuId">sku -- the subscription item you're subscribing to</param>
+		/// <param name="subscriptionName">The subscription name</param>
+		/// <param name="userId">The user who is subscribing -- we need to make them manager</param>
+		/// <returns>The new subscription id</returns>
+		public int CreateSubscription(int organizationId, int skuId, string subscriptionName, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@skuId", skuId);
 			parameters.Add("@subscriptionName", subscriptionName);
-			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
-			parameters.Add("@productId", productId);
+			parameters.Add("@userId", userId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Billing].[UpdateSubscription]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<int>("[Billing].[CreateSubscription]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
-
-			return parameters.Get<int>("@retId");
 		}
 
 		/// <summary>

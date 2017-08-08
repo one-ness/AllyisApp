@@ -289,7 +289,6 @@
     <Build Include="Pjm\Stored Procedures\UpdateProject.sql" />
     <Build Include="Pjm\Stored Procedures\UpdateProjectAndUsers.sql" />
     <Build Include="Pjm\Stored Procedures\UpdateProjectUser.sql" />
-    <Build Include="Billing\Stored Procedures\UpdateSubscriptionName.sql" />
     <Build Include="TimeTracker\Stored Procedures\CreateDefaultPayClass.sql" />
     <Build Include="Lookup\Tables\OrganizationLocation.sql" />
     <Build Include="Auth\Stored Procedures\GetUserInvitationsByInviteId.sql" />
@@ -303,6 +302,7 @@
     <Build Include="Billing\Stored Procedures\UpdateSubscriptionUserRoles.sql" />
     <Build Include="Billing\Stored Procedures\DeleteSubscriptionUsers.sql" />
     <Build Include="Billing\Stored Procedures\GetNumberSubscriptionUsers.sql" />
+    <Build Include="Billing\Stored Procedures\CreateSubscription.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

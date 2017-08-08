@@ -82,15 +82,21 @@ namespace AllyisApps.Controllers
 			{
 				try
 				{
+					//Unsubscribe
 					if (model.ActionType == "Unsubscribe")
 					{
 						return this.RedirectToAction(ActionConstants.Unsubscribe, new { id = model.SubscriptionId, idTwo = model.SkuId });
 					}
+
+					//Nothing happening in "change subscription" dropdown, just changing subscription name
 					else if (model.ActionType == model.Name)
 					{
 						model.SkuIdNext = model.SkuId;
 						model.NextName = model.Name;
 					}
+
+					//Upgrade or downgrade
+					//TODO: Pass SKU ids from the db to the view dropdown values.  No hardcoding here plz
 					else
 					{
 						model.NextName = model.ActionType;

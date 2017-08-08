@@ -562,46 +562,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Creates a new Subscription in the database.
-		/// </summary>
-		/// <param name="orgId">Organization Id.</param>
-		/// <param name="selectedSku">Selected Sku.</param>
-		/// <param name="productId">Product Id.</param>
-		/// <param name="subscriptionName">The Subscription Name</param>
-		public void AddSubscriptionOfSkuToOrganization(int orgId, int selectedSku, int productId, string subscriptionName)
-		{
-			#region Validation
-
-			if (orgId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be 0 or negative.");
-			}
-
-			if (selectedSku <= 0)
-			{
-				throw new ArgumentOutOfRangeException("selectedSku", "Sku Id cannot be 0 or negative.");
-			}
-
-			if (productId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("productId", "Product Id cannot be 0 or negative.");
-			}
-
-			if (string.IsNullOrEmpty(subscriptionName))
-			{
-				throw new ArgumentException("subscriptionName", "Subscription Name cannot be empty.");
-			}
-
-			#endregion Validation
-
-			int subId = DBHelper.ChangeSubscription(orgId, selectedSku, productId, subscriptionName);
-			if (subId != 0)
-			{
-				DBHelper.UpdateSubscriptionUserProductRole((int)ProductRoleIdEnum.Manager, subId, UserContext.UserId);
-			}
-		}
-
-		/// <summary>
 		/// Removes the billing subscription plan for the current organization and adds a billing history
 		/// item. If the supllied subscription id has a value, also removes that subscription and returns
 		/// a message to place in a notification.
@@ -651,6 +611,26 @@ namespace AllyisApps.Services
 		[CLSCompliant(false)]
 		public void Subscribe(int productId, string productName, int selectedSku, string subscriptionName, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
 		{
+			//TODO: Split Subscribe into CreateSubscription and Update Subscription, called from SubscribeAction and EditSubscriptionAction
+
+			//This method is related to billing, which is not supported
+			//CreateAndUpdateAndDeleteSubscriptionPlan(productId, productName, selectedSku, previousSku, billingAmount, existingToken, addingBillingCustomer, newBillingEmail, newBillingToken, orgId);
+
+			this.InitializeSettingsForProduct(productId, orgId);
+
+			if (previousSku == 0) //creating new subscription
+			{
+				DBHelper.CreateSubscription(orgId, selectedSku, subscriptionName, UserContext.UserId);
+			}
+			else //upgrading or downgrading
+			{
+				//TODO: pass in subscriptionId as a parameter to simplify logic
+				DBHelper.UpdateSubscription(orgId, selectedSku, subscriptionName);
+			}
+		}
+
+		public void CreateAndUpdateAndDeleteSubscriptionPlan(int productId, string productName, int selectedSku, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
+		{
 			BillingServicesCustomer customer;
 			BillingServicesToken token;
 			if (addingBillingCustomer)
@@ -667,7 +647,6 @@ namespace AllyisApps.Services
 				token = existingToken;
 			}
 
-			// Users >= 500 (the hardcoded free amount) will not trigger this
 			if (billingAmount > 0)
 			{
 				BillingServicesCustomerId customerId = this.GetOrgBillingServicesCustomerId(orgId);
@@ -705,17 +684,6 @@ namespace AllyisApps.Services
 						this.DeleteSubscriptionPlan(subscriptionId, customer.Id, selectedSku, orgId);
 					}
 				}
-			}
-
-			this.InitializeSettingsForProduct(productId, orgId);
-
-			if (selectedSku != previousSku) //previousSku is not set and always = 0 for now
-			{
-				this.AddSubscriptionOfSkuToOrganization(orgId, selectedSku, productId, subscriptionName);
-			}
-			else
-			{
-				DBHelper.UpdateSubscriptionName(orgId, selectedSku, subscriptionName);
 			}
 		}
 

@@ -687,25 +687,6 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Updates the name of existing subscription.
-		/// </summary>
-		public void UpdateSubscriptionName(int orgId, int selectedSku, string subscriptionName)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", orgId);
-			parameters.Add("@skuId", selectedSku);
-			parameters.Add("@subscriptionName", subscriptionName);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				connection.Query(
-					"[Billing].[UpdateSubscriptionName]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
 		/// Returns a list of ProjectDBEntities for projects the given user is assigned to in the given organization,
 		/// another list of ProjectDBEntities for all projects in the given organization, and a UserDBEntity with the
 		/// name and email of the user.
