@@ -70,51 +70,5 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             };
             return model;
         }
-		/// <summary>
-		/// create expense report
-		/// </summary>
-		/// <param name="model"></param>
-		/// <returns></returns>
-		public ActionResult Create(ExpenseIndexViewModel model)
-		{
-			return View(model);
-		}
-
-		/// <summary>
-		/// view/export expense report
-		/// </summary>
-		/// <param name="reportName"></param>
-		/// <param name="businessJustification"></param>
-		/// <param name="date"></param>
-		/// <param name="items"></param>
-		/// <returns></returns>
-		public ActionResult ViewReport(string reportName, string businessJustification, List<ExpenseItem> items, DateTime? date)
-		{
-			foreach (var item in items)
-			{
-				AppService.CreateExpenseItem(item);
-			}
-
-			var report = new ExpenseItemViewModel()
-			{
-				ReportName = reportName,
-				SubmittedDate = date == null ? DateTime.Now.Date : (DateTime)date,
-				Reason = businessJustification,
-				Status = ExpenseStatusEnum.New,
-				Items = items
-			};
-
-			//AppService.CreateExpenseReport(report);
-
-			List<ExpenseItemViewModel> reports = new List<ExpenseItemViewModel>();
-
-			reports.Add(report);
-
-			ExpenseIndexViewModel model = new ExpenseIndexViewModel()
-			{
-				Reports = reports
-			};
-			return RedirectToAction("Index");
-		}
 	}
 }

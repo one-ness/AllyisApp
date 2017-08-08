@@ -123,19 +123,26 @@ namespace AllyisApps.Services
 				IsBillableToCustomer = item.IsBillableToCustomer,
 				ItemDescription = item.ItemDiscription,
 				ModifiedUtc = item.ExpenseItemModifiedUtc,
-				//ReportStatus = item.ExpenseReportStatus,
 				TransactionDate = item.TransactionDate,
 			};
 			DBHelper.CreateExpenseItem(itemEntity);
 		}
 
-		//public void CreateExpenseReport(AllyisApps.ViewModels.ExpenseTracker.Expense.ExpenseItemViewModel report)
-		//{
-		//	ExpenseReportDBEntity reportEntity = new ExpenseReportDBEntity()
-		//	{
-		//		BusinessJustification
-		//	};
-		//	DBHelper.CreateExpenseReport(reportEntity);
-		//}
+		public void CreateExpenseReport(ExpenseReport report)
+		{
+			ExpenseReportDBEntity reportEntity = new ExpenseReportDBEntity()
+			{
+				BusinessJustification = report.BusinessJustification,
+				ExpenseReportCreatedCreatedUtc = report.CreatedUtc,
+				ExpenseReportId = report.ExpenseReportId,
+				ExpenseReportModifiedUtc = report.ModifiedUtc,
+				OrganizationId = report.OrganizationId,
+				ReportDate = report.ReportDate,
+				ReportStatus = report.ReportStatus,
+				ReportTitle = report.ReportTitle,
+				SubmittedById = report.SubmittedById
+			};
+			DBHelper.CreateExpenseReport(reportEntity);
+		}
 	}
 }

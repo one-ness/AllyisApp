@@ -29,12 +29,12 @@ namespace AllyisApps.DBModel
         /// <returns>TODO: Should this return success/failuer codes? ? ?</returns>
         public void CreateExpenseItem(ExpenseItemDBEntity item)
         {
-            //if (item.AccountId == 0) //check if account exists already
-            //{
-            //    throw new System.ArgumentException("An Error");
-            //}
+			if (item.AccountId == 0) //check if account exists already
+			{
+				throw new System.ArgumentException("An Error");
+			}
 
-            DynamicParameters parameters = new DynamicParameters();
+			DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@itemDescription", item.ItemDescription);
             parameters.Add("@transactionDate", item.TransactionDate);
             parameters.Add("@amount", item.Amount);
@@ -147,10 +147,10 @@ namespace AllyisApps.DBModel
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@reportTitle", report.ReportTitle);
             parameters.Add("@reportDate", report.ReportDate);
-            parameters.Add("@organizaitonId", report.OrganizationId);
-            parameters.Add("@submittedById", report.SubmittedById);
+			parameters.Add("@organizationId", report.OrganizationId);
+			parameters.Add("@submittedById", report.SubmittedById);
             parameters.Add("@reportStatus", report.ReportStatus);
-            parameters.Add("@buisnessJustification", report.BusinessJustification);
+            parameters.Add("@businessJustification", report.BusinessJustification);
             parameters.Add("@createdUtc", report.ExpenseReportCreatedCreatedUtc);
             parameters.Add("@modifiedUtc", report.ExpenseReportModifiedUtc);
 
