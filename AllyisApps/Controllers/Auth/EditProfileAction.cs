@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
+using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels.Auth;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {

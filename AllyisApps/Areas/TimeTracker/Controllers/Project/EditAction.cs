@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
-using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.ViewModels.TimeTracker.Project;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
+using AllyisApps.Core.Alert;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -49,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 			}
 			model.SubscriptionUsers = subList;
-			int orgId = AppService.UserContext.OrganizationSubscriptions[model.SubscriptionId].OrganizationId; ;
+			int orgId = AppService.UserContext.OrganizationSubscriptions[model.SubscriptionId].OrganizationId;
 			if (ModelState.IsValid)
 			{
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
@@ -77,6 +77,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
 					return this.View(model);
 				}
+
 				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessProjectEdited, Variety.Success));
 
 				return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId }), model.ParentCustomerId));
@@ -91,7 +92,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Uses services to populate a new <see cref="EditProjectViewModel"/> from a project Id and returns it.
 		/// </summary>
 		/// <param name="projectId">Project Id.</param>
-		/// <param name="subscriptionId">.</param>
+		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>The EditProjectViewModel.</returns>
 		public EditProjectViewModel ConstructEditProjectViewModel(int projectId, int subscriptionId)
 		{
@@ -112,7 +113,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subscriptionUsers.Add(new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId));
 			}
 
-			string SubscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
+			string subscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
 
 			return new EditProjectViewModel
 			{
@@ -128,7 +129,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				StartDate = AppService.GetDayFromDateTime(infos.Item1.StartDate),
 				EndDate = AppService.GetDayFromDateTime(infos.Item1.EndDate),
 				SubscriptionId = subscriptionId,
-				SubscriptionName = SubscriptionNameToDisplay,
+				SubscriptionName = subscriptionNameToDisplay,
 				UserId = AppService.UserContext.UserId
 			};
 		}

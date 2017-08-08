@@ -4,16 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.ViewModels.Shared;
-using System.Collections.Generic;
 using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels.Auth
 {
-    /// <summary>
-    /// View Model used by the _OrgPanel
-    /// </summary>
-    public class UserOrgViewModel
+	/// <summary>
+	/// View Model used by the _OrgPanel
+	/// </summary>
+	public class UserOrgViewModel
     {
         /// <summary>
         /// Get or set UserInfor object for the model.
