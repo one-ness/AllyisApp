@@ -202,6 +202,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ImportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
