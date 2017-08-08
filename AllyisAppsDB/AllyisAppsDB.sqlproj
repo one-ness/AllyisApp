@@ -310,4 +310,7 @@
   <ItemGroup>
     <RefactorLog Include="AllyisAppsDB.refactorlog" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="DefaultData\EReportTestData.sql" />
+  </ItemGroup>
 </Project>

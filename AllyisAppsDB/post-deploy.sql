@@ -36,7 +36,6 @@ GO
 :r .\DefaultData\Products.sql
 :r .\DefaultData\Sku.sql
 :r .\DefaultData\Role.sql
---:r .\DefaultData\Holidays.sql
 :r .\DefaultData\Languages.sql
 --:r .\TestData\TestData.sql
 --:r .\TestData\DuplicateTestData.sql

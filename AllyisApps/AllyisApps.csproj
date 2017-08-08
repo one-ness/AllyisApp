@@ -209,7 +209,6 @@
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseReportViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseSummaryViewModelItem.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseIndexViewModel.cs" />
-    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ReportStatusEnum.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\DetailsAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ImportAction.cs" />
     <Compile Include="Areas\TimeTracker\Controllers\Customer\ReactivateAction.cs" />
