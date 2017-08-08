@@ -9,7 +9,7 @@ using System.Linq;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Finance;
 
-namespace AllyisApps.Areas.ExpenseTracker.Controllers.Expense
+namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
 	/// <summary>
 	/// Stores a new report in database and redirects to View

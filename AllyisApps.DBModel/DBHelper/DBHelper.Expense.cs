@@ -158,7 +158,6 @@ namespace AllyisApps.DBModel
             {
                 connection.Execute("[Expense].[CreateExpenseReport]", parameters, commandType: CommandType.StoredProcedure);
             }
-
         }
 
         /// <summary>
