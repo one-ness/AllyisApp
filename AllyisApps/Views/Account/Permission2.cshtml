@@ -143,7 +143,7 @@
         </div>
 
         <div class="bottom-right">
-			@Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, new { @class = "btn btn-default" })
+            <a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
             <input type="button" class="btn btn-primary" id="do-it" value="@Strings.Save" />
         </div>
     </div>

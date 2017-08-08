@@ -402,46 +402,46 @@ namespace AllyisApps.DBModel
 					connection.Execute("[TimeTracker].[UpdateSettings]", parameters, commandType: CommandType.StoredProcedure);
 				}
                 
-                // Init new set of default holidays for time tracker
-                IEnumerable<HolidayDBEntity> holidays;
+    //            // Init new set of default holidays for time tracker
+    //            IEnumerable<HolidayDBEntity> holidays;
 
-				using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-				{
-					parameters = new DynamicParameters();
-					parameters.Add("@organizationId", 0);
-					holidays = connection.Query<HolidayDBEntity>("[Hrm].[GetHolidays]", parameters, commandType: CommandType.StoredProcedure);
-					if (holidays != null && holidays.Count() > 0)
-					{
-						foreach (HolidayDBEntity currentHoliday in holidays)
-						{
-							parameters = new DynamicParameters();
-							parameters.Add("@organizationId", orgId);
-							parameters.Add("@holidayName", currentHoliday.HolidayName);
-							parameters.Add("@date", currentHoliday.Date);
-							connection.Execute("[Hrm].[CreateHoliday]", parameters, commandType: CommandType.StoredProcedure);
-						}
-					}
-				}
+				//using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+				//{
+				//	parameters = new DynamicParameters();
+				//	parameters.Add("@organizationId", 0);
+				//	holidays = connection.Query<HolidayDBEntity>("[Hrm].[GetHolidays]", parameters, commandType: CommandType.StoredProcedure);
+				//	if (holidays != null && holidays.Count() > 0)
+				//	{
+				//		foreach (HolidayDBEntity currentHoliday in holidays)
+				//		{
+				//			parameters = new DynamicParameters();
+				//			parameters.Add("@organizationId", orgId);
+				//			parameters.Add("@holidayName", currentHoliday.HolidayName);
+				//			parameters.Add("@date", currentHoliday.Date);
+				//			connection.Execute("[Hrm].[CreateHoliday]", parameters, commandType: CommandType.StoredProcedure);
+				//		}
+				//	}
+				//}
 
-				// init new set of pay classes
-				IEnumerable<PayClassDBEntity> payClasses;
+				//// init new set of pay classes
+				//IEnumerable<PayClassDBEntity> payClasses;
 
-				using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-				{
-					parameters = new DynamicParameters();
-					parameters.Add("@organizationId", 0);
-					payClasses = connection.Query<PayClassDBEntity>("[Hrm].[GetPayClasses]", parameters, commandType: CommandType.StoredProcedure);
-					if (payClasses != null && payClasses.Count() > 0)
-					{
-						foreach (PayClassDBEntity currentPayClass in payClasses)
-						{
-							parameters = new DynamicParameters();
-							parameters.Add("@organizationId", orgId);
-							parameters.Add("@payClassName", currentPayClass.PayClassName);
-							connection.Execute("[Hrm].[CreatePayClass]", parameters, commandType: CommandType.StoredProcedure);
-						}
-					}
-				}
+				//using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+				//{
+				//	parameters = new DynamicParameters();
+				//	parameters.Add("@organizationId", 0);
+				//	payClasses = connection.Query<PayClassDBEntity>("[Hrm].[GetPayClasses]", parameters, commandType: CommandType.StoredProcedure);
+				//	if (payClasses != null && payClasses.Count() > 0)
+				//	{
+				//		foreach (PayClassDBEntity currentPayClass in payClasses)
+				//		{
+				//			parameters = new DynamicParameters();
+				//			parameters.Add("@organizationId", orgId);
+				//			parameters.Add("@payClassName", currentPayClass.PayClassName);
+				//			connection.Execute("[Hrm].[CreatePayClass]", parameters, commandType: CommandType.StoredProcedure);
+				//		}
+				//	}
+				//}
 			}
 		}
 

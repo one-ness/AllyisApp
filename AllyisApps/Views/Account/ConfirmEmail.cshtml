@@ -5,7 +5,7 @@
 <div class="shrink-wrap-center">
     <div class="min300">
         <p>
-            @Strings.ConfirmEmailDialogue @Html.ActionLink(Strings.RedirectToSignIn, ActionConstants.LogOn, ControllerConstants.Account, routeValues: null, htmlAttributes: new { id = "loginLink" })
+            @Strings.ConfirmEmailDialogue <a href="@Url.Action(ActionConstants.LogOn, ControllerConstants.Account, new { id = "loginLink" })" class="btn btn-default"> @Strings.RedirectToSignIn </a>
         </p>
     </div>
 </div>

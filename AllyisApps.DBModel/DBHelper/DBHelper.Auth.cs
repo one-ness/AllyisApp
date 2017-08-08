@@ -49,7 +49,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@isTwoFactorEnabled", user.IsTwoFactorEnabled);
 			parameters.Add("@isLockoutEnabled", user.IsLockoutEnabled);
 			parameters.Add("@lockoutEndDateUtc", user.LockoutEndDateUtc);
-			parameters.Add("@languageId", user.PreferredLanguageId);
+			parameters.Add("@CultureName", user.PreferredLanguageId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -179,12 +179,12 @@ namespace AllyisApps.DBModel
 		/// Updates the preferred language for a user.
 		/// </summary>
 		/// <param name="userId">Target user's Id.</param>
-		/// <param name="languageId">Language Id.</param>
-		public void UpdateUserLanguagePreference(int userId, int languageId)
+		/// <param name="CultureName">Language Id.</param>
+		public void UpdateUserLanguagePreference(int userId, string CultureName)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@id", userId);
-			parameters.Add("@languageId", languageId);
+			parameters.Add("@CultureName", CultureName);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{

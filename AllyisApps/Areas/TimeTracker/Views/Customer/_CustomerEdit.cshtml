@@ -83,12 +83,12 @@
                 <div class="form-group allyis-action-buttons">
                     @if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
                     {
-                        @Html.ActionLink(Strings.Cancel, ActionConstants.Index, ControllerConstants.Customer, null, new { @class = "btn btn-default" })
+                        <a href="@Url.Action(ActionConstants.Index, ControllerConstants.Customer)" class="btn btn-default">@Strings.Cancel</a>
                         <input type="submit" value="@Strings.Create" class="btn btn-primary"/>
                     }
                     else
                     {
-                        @Html.ActionLink(Strings.Cancel, ActionConstants.Index, ControllerConstants.Customer, null, new { @class = "btn btn-default" })
+                        <a href="@Url.Action(ActionConstants.Index, ControllerConstants.Customer)" class="btn btn-default">@Strings.Cancel</a>
                         <input type="submit" value="@Strings.Save" class="btn btn-primary"/>
                     }
                 </div>
