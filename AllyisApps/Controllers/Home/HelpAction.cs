@@ -18,7 +18,7 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <returns>
 		/// Returns view for help.
-		/// </returns>
+		/// .</returns>
 		public ActionResult Help()
 		{
 			return this.View();

@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Text.RegularExpressions;
 
 namespace AllyisApps.Lib
 {
 	/// <summary>
-	/// utility methods
+	/// Utility methods.
 	/// </summary>
 	public static class Utility
 	{

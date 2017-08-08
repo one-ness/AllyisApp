@@ -21,7 +21,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="LDsetting">Whether or not to use a lock date.</param>
 		/// <param name="LDperiod">The currently-selected period (days/weeks/months).</param>
 		/// <param name="LDquantity">The quantity of the selected period.</param>
-		/// <param name="subscriptionId">The subscription's Id</param>
+		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <returns>Provides the view for the user.</returns>
 		[HttpPost]
 		public ActionResult SetLockDate(int subscriptionId, bool LDsetting, int LDperiod, int LDquantity)

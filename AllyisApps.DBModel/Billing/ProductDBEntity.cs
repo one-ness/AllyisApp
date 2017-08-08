@@ -27,12 +27,12 @@ namespace AllyisApps.DBModel.Billing
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets is active
+		/// Gets or sets is active.
 		/// </summary>
 		public bool IsActive { get; set; }
 
 		/// <summary>
-		/// Gets or sets area url
+		/// Gets or sets area url.
 		/// </summary>
 		public string AreaUrl { get; set; }
 	}

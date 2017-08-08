@@ -25,7 +25,7 @@ namespace AllyisApps.Controllers
 		/// GET: /Add.
 		/// The page for adding members to an organization.
 		/// </summary>
-		/// <param name="id"></param>
+		/// <param name="id">.</param>
 		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
 		/// <returns>The result of this action.</returns>
 		public ActionResult AddMember(int id, string returnUrl)
@@ -40,9 +40,9 @@ namespace AllyisApps.Controllers
 		/// POST: /Add
 		/// Adding a new member to an organization.
 		/// </summary>
-		/// <param name="add">The View Model of user info passed from Add.cshtml</param>
-		/// <param name="id"></param>
-		/// <returns>The result of this action</returns>
+		/// <param name="add">The View Model of user info passed from Add.cshtml.</param>
+		/// <param name="id">.</param>
+		/// <returns>The result of this action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> AddMember(AddMemberViewModel add, int id)
@@ -116,7 +116,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Uses services to populate the lists of an <see cref="AddMemberViewModel"/> and returns it.
 		/// </summary>
-		/// <param name="id">The Organization Id</param>
+		/// <param name="id">The Organization Id.</param>
 		/// <returns>The OrganizationAddMembersViewModel.</returns>
 		public AddMemberViewModel ConstructOrganizationAddMembersViewModel(int id)
 		{

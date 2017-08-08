@@ -9,17 +9,17 @@ namespace AllyisApps.Services
 	public enum LockDatePeriodEnum : int
 	{
 		/// <summary>
-		/// Days
+		/// Days.
 		/// </summary>
 		days = 1,
 
 		/// <summary>
-		/// Weeks
+		/// Weeks.
 		/// </summary>
 		weeks = 2,
 
 		/// <summary>
-		/// Weeks
+		/// Weeks.
 		/// </summary>
 		months = 3
 	}

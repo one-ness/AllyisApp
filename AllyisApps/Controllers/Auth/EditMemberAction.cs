@@ -23,10 +23,10 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/EditMember.
 		/// </summary>
-		/// <param name="userId">Org member to edit</param>
-		/// <param name="orgId">Id of the org the member is in</param>
-		/// <param name="invited">Is the user invited or a already a member?</param>
-		/// <returns>Returns info for a view about the member to be edited</returns>
+		/// <param name="userId">Org member to edit.</param>
+		/// <param name="orgId">Id of the org the member is in.</param>
+		/// <param name="invited">Is the user invited or a already a member?.</param>
+		/// <returns>Returns info for a view about the member to be edited.</returns>
 		public ActionResult EditMember(int userId, int orgId, int invited)
 		{
 			bool isInvited = invited == 0 ? false : true;
@@ -77,8 +77,8 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// POST: /Account/EditMember.
 		/// </summary>
-		/// <param name="model">The Edit Member view model, with all the form info that we need to save</param>
-		/// <returns>The async task to redirect to the manage org page</returns>
+		/// <param name="model">The Edit Member view model, with all the form info that we need to save.</param>
+		/// <returns>The async task to redirect to the manage org page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> EditMember(EditMemberViewModel model)

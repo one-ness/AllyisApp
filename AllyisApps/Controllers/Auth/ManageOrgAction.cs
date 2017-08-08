@@ -22,7 +22,7 @@ namespace AllyisApps.Controllers
 		/// Get: Account/Manage/id
 		/// The management page for an organization, displays billing, subscriptions, etc.
 		/// </summary>
-		/// <param name="id">The organization Id</param>
+		/// <param name="id">The organization Id.</param>
 		/// <returns>The organization's management page.</returns>
 		public ActionResult ManageOrg(int id)
 		{

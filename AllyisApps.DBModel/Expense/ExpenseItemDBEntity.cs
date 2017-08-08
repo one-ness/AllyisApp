@@ -1,7 +1,7 @@
-﻿namespace AllyisApps.DBModel.Expense
+namespace AllyisApps.DBModel.Expense
 {
 	/// <summary>
-	/// expense item
+	/// Expense item.
 	/// </summary>
 	public class ExpenseItemDBEntity
 	{

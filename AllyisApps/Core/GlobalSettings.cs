@@ -21,12 +21,12 @@ namespace AllyisApps.Core
 		public static string SqlConnectionString { get; set; }
 
 		/// <summary>
-		/// support email
+		/// support email.
 		/// </summary>
 		public static string SupportEmail { get; set; }
 
 		/// <summary>
-		/// sendgrid api key
+		/// sendgrid api key.
 		/// </summary>
 		public static string SendGridApiKey { get; set; }
 

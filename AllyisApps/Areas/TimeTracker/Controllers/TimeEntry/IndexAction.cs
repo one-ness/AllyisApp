@@ -23,8 +23,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET: /TimeTracker/TimeEntry/Ajax?{params}.
 		/// </summary>
-		/// <param name="subscriptionId">The SubscriptionId</param>
-		/// <param name="userId">The id of the targeted user</param>
+		/// <param name="subscriptionId">The SubscriptionId.</param>
+		/// <param name="userId">The id of the targeted user.</param>
 		/// <param name="startDate">The beginning of the Date Range.</param>
 		/// <param name="endDate">The ending of the Date Range.</param>
 		/// <returns>Provides the view for the defined user over the date range defined.</returns>
@@ -61,7 +61,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <summary>
         /// Get: /TimeTracker/{subscriptionId}/TimeEntry
         /// </summary>
-        /// <param name="subscriptionId">The SubscriptionId</param>
+        /// <param name="subscriptionId">The SubscriptionId.</param>
         /// <param name="startDate">The beginning of the Date Range.</param>
         /// <param name="endDate">The ending of the Date Range.</param>
         /// <returns>Provides the view for the defined user over the date range defined.</returns>
@@ -103,9 +103,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <summary>
         ///  Redirect rout for date picker so route is propperly displayed.
         /// </summary>
-        /// <param name="subscriptionId">The subscription id</param>
-        /// <param name="startDate">The start date</param>
-        /// <param name="endDate">The end date</param>
+        /// <param name="subscriptionId">The subscription id.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
         public RedirectToRouteResult TimeTrackerDatePickerRedirect(int subscriptionId, int startDate, int endDate)
         {
             return RedirectToAction("IndexNoUserId",new { subscriptionId = subscriptionId, startDate = startDate, endDate = endDate });
@@ -114,9 +114,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <summary>
         /// Constructor for the TimeEntryOverDateRangeViewModel.
         /// </summary>
-        /// <param name="orgId">The Organization Id</param>
-        /// <param name="subId">The Subscription's Id</param>
-        /// <param name="subName">The Subscription's Name</param>
+        /// <param name="orgId">The Organization Id.</param>
+        /// <param name="subId">The Subscription's Id.</param>
+        /// <param name="subName">The Subscription's Name.</param>
         /// <param name="userId">The User Id.</param>
         /// <param name="manager">The Manager.</param>
         /// <param name="startingDate">The Starting Date.</param>

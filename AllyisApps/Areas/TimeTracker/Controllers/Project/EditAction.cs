@@ -24,7 +24,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// GET: Project/Edit.
 		/// Gets the form for editing an existing Project.
 		/// </summary>
-		/// <param name="subscriptionId"></param>
+		/// <param name="subscriptionId">.</param>
 		/// <param name="userId">The project's Id.</param>
 		/// <returns>The ActionResult for the Edit view.</returns>
 		public ActionResult Edit(int subscriptionId, int userId)
@@ -91,7 +91,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Uses services to populate a new <see cref="EditProjectViewModel"/> from a project Id and returns it.
 		/// </summary>
 		/// <param name="projectId">Project Id.</param>
-		/// <param name="subscriptionId"></param>
+		/// <param name="subscriptionId">.</param>
 		/// <returns>The EditProjectViewModel.</returns>
 		public EditProjectViewModel ConstructEditProjectViewModel(int projectId, int subscriptionId)
 		{

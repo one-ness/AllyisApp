@@ -22,9 +22,9 @@ namespace AllyisApps.Controllers
 	public partial class AccountController : BaseController
 	{
 		/// <summary>
-		/// GET: /account/skus/id
+		/// GET: /account/skus/id.
 		/// </summary>
-		/// <param name="id">The organization id</param>
+		/// <param name="id">The organization id.</param>
 		public ActionResult Skus(int id)
 		{
 
@@ -38,7 +38,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Uses services and utilities to initialize an <see cref="SkusListViewModel"/>.
 		/// </summary>
-		/// <param name="orgId">The current organization Id</param>
+		/// <param name="orgId">The current organization Id.</param>
 		/// <returns>Populated SkusListViewModel.</returns>
 		public SkusListViewModel ConstructSkusListViewModel(int orgId)
 		{

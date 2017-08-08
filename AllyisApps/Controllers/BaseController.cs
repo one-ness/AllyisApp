@@ -72,7 +72,7 @@ namespace AllyisApps.Controllers
 		}
 
 		/// <summary>
-		/// Redirect to user home page or the return url
+		/// Redirect to user home page or the return url.
 		/// </summary>
 		public ActionResult RouteUserHome()
 		{
@@ -120,7 +120,7 @@ namespace AllyisApps.Controllers
 		}
 
 		/// <summary>
-		/// Language Key
+		/// Language Key.
 		/// </summary>
 		protected const string languageKey = "language";
 
@@ -179,9 +179,9 @@ namespace AllyisApps.Controllers
 		}
 
 		/// <summary>
-		/// Change the language displayed in the App
+		/// Change the language displayed in the App.
 		/// </summary>
-		/// <param name="CultureName"></param>
+		/// <param name="CultureName">.</param>
 		private string ChangeLanguage(string CultureName)
 		{
 			if (CultureName == null || CultureName == "") return "";
@@ -200,25 +200,25 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Serializes a CookieData.
 		/// </summary>
-		/// <param name="cookie">The CookieData</param>
-		/// <returns>The serialized string</returns>
+		/// <param name="cookie">The CookieData.</param>
+		/// <returns>The serialized string.</returns>
 		public string SerializeCookie(CookieData cookie)
 		{
 			return Serializer.SerilalizeToJson(cookie);
 		}
 
 		/// <summary>
-		/// Deserializes a CookieData
+		/// Deserializes a CookieData.
 		/// </summary>
-		/// <param name="serializedCookie">The serialized CookieData string</param>
-		/// <returns>The CookieData</returns>
+		/// <param name="serializedCookie">The serialized CookieData string.</param>
+		/// <returns>The CookieData.</returns>
 		public CookieData DeserializeCookie(string serializedCookie)
 		{
 			return Serializer.DeserializeFromJson<CookieData>(serializedCookie);
 		}
 
 		/// <summary>
-		/// Gets the application root url
+		/// Gets the application root url.
 		/// </summary>
 		public string ApplicationRootUrl
 		{

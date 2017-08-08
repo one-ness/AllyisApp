@@ -40,7 +40,7 @@ namespace AllyisApps.DBModel.Billing
 		public decimal Price { get; set; }
 
 		/// <summary>
-		/// cost per block
+		/// cost per block.
 		/// </summary>
 		public decimal CostPerBlock { get; set; }
 
@@ -55,27 +55,27 @@ namespace AllyisApps.DBModel.Billing
 		public byte BillingFrequency { get; set; }
 
 		/// <summary>
-		/// Gets or sets the block size
+		/// Gets or sets the block size.
 		/// </summary>
 		public int BlockSize { get; set; }
 
 		/// <summary>
-		/// Gets or sets is active
+		/// Gets or sets is active.
 		/// </summary>
 		public bool IsActive { get; set; }
 
 		/// <summary>
-		/// Gets or sets promotional cost per block
+		/// Gets or sets promotional cost per block.
 		/// </summary>
 		public decimal PromoCostPerBlock { get; set; }
 
 		/// <summary>
-		/// Gets or sets the date on which the promotional cost ends
+		/// Gets or sets the date on which the promotional cost ends.
 		/// </summary>
 		public DateTime? PromotDeadline { get; set; }
 
 		/// <summary>
-		/// Gets or sets the description
+		/// Gets or sets the description.
 		/// </summary>
 		public string Description { get; set; }
 	}

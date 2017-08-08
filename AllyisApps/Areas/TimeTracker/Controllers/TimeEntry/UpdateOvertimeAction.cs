@@ -18,7 +18,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Updates the Overtime setting for an Organization.
 		/// </summary>
-		/// <param name="subscriptionId">The subscription Id</param>
+		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <param name="setting">Overtime available setting.</param>
 		/// <param name="hours">Hours until overtime.</param>
 		/// <param name="period">Time period for hours until overtime.</param>

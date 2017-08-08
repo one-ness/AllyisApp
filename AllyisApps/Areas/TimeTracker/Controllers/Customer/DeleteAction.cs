@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using System;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -18,9 +18,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	public partial class CustomerController : BaseController
 	{
 		/// <summary>
-		/// GET: Customer/SubscriptionId/Delete/CustomerId
+		/// GET: Customer/SubscriptionId/Delete/CustomerId.
 		/// </summary>
-		/// <param name="subscriptionId">The Subscription Id</param>
+		/// <param name="subscriptionId">The Subscription Id.</param>
 		/// <param name="userId">The Customer id.</param>
 		/// <returns>The Customer index.</returns>
 		[HttpGet]
@@ -36,16 +36,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			else
 			{
 				var result = AppService.DeleteCustomer(subscriptionId, numValue);
+				
 				// if deleted successfully
-				if (result != null && result != "")
+				if (result != null && result != string.Empty)
 				{
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", result, Resources.Strings.CustomerDeleteNotification), Variety.Success));
 				}
+				
 				// Permission failure
 				else if (result == null)
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 				}
+
 				return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
 			}
 		}

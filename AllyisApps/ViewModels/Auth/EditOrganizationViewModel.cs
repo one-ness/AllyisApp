@@ -46,7 +46,7 @@ namespace AllyisApps.ViewModels.Auth
 		public string SiteUrl { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Address Id
+		/// Gets or sets the Address Id.
 		/// </summary>
 		public int AddressId { get; set; }
 

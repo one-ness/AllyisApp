@@ -28,12 +28,12 @@ namespace AllyisApps.ViewModels.Auth
 		}
 
 		/// <summary>
-		/// the subscritpion that is being unsubscribed from
+		/// the subscritpion that is being unsubscribed from.
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
 		/// <summary>
-		/// get or set the subscription name
+		/// get or set the subscription name.
 		/// </summary>
 		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "SubscriptionNameValidation")]
 		[DataType(DataType.Text)]

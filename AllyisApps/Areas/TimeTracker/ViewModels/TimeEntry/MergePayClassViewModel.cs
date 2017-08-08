@@ -25,7 +25,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public string sourcePayClassName { get; set; }
 
 		/// <summary>
-		/// The subscription's Id
+		/// The subscription's Id.
 		/// </summary>
 		public int SubscriptionId { get; set; }
 

@@ -1,4 +1,4 @@
-﻿using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Lib;
@@ -23,9 +23,9 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Import data from a workbook. Imports customers, projects, users, project/user relationships, and/or time entry data.
 		/// </summary>
-		/// <param name="subscriptionId">subscriptionId</param>
+		/// <param name="subscriptionId">SubscriptionId.</param>
 		/// <param name="importData">Workbook with data to import.</param>
-		/// <param name="organizationId">The organization's Id</param>
+		/// <param name="organizationId">The organization's Id.</param>
 		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0)
 		{
 			int orgId;

@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Customer;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -21,14 +21,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// GET: Customer/{SubscriptionId}/Edit.
 		/// </summary>
 		/// <param name="userId">The Customer id.</param>
-		/// <param name="subscriptionId">The Subscription Id</param>
+		/// <param name="subscriptionId">The Subscription Id.</param>
 		/// <returns>Presents a page to edit Customer data.</returns>
 		[HttpGet]
 		public ActionResult Edit(int subscriptionId, int userId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
 			var infos = AppService.GetCustomerAndCountries(userId);
-			string SubscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
+			string subscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
 
 			return this.View(new EditCustomerInfoViewModel
 			{
@@ -49,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ValidCountries = infos.Item2,
 				CustomerOrgId = infos.Item1.CustomerOrgId,
 				SubscriptionId = subscriptionId,
-				SubscriptionName = SubscriptionNameToDisplay
+				SubscriptionName = subscriptionNameToDisplay
 			});
 		}
 
@@ -64,24 +64,26 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				var result = AppService.UpdateCustomer(new Customer()
-				{
-					CustomerId = model.CustomerId,
-					ContactEmail = model.ContactEmail,
-                    CustomerName = model.CustomerName,
-					AddressId = model.AddressId,
-					Address = model.Address,
-					City = model.City,
-					State = model.State,
-					Country = model.Country,
-					PostalCode = model.PostalCode,
-					ContactPhoneNumber = model.ContactPhoneNumber,
-					FaxNumber = model.FaxNumber,
-					Website = model.Website,
-					EIN = model.EIN,
-					CustomerOrgId = model.CustomerOrgId,
-					OrganizationId = model.OrganizationId
-				}, model.SubscriptionId);
+				var result = AppService.UpdateCustomer(
+					new Customer()
+					{
+						CustomerId = model.CustomerId,
+						ContactEmail = model.ContactEmail,
+						CustomerName = model.CustomerName,
+						AddressId = model.AddressId,
+						Address = model.Address,
+						City = model.City,
+						State = model.State,
+						Country = model.Country,
+						PostalCode = model.PostalCode,
+						ContactPhoneNumber = model.ContactPhoneNumber,
+						FaxNumber = model.FaxNumber,
+						Website = model.Website,
+						EIN = model.EIN,
+						CustomerOrgId = model.CustomerOrgId,
+						OrganizationId = model.OrganizationId
+					},
+					model.SubscriptionId);
 
 				if (result == -1)   //the new CustOrgId is not unique
 				{

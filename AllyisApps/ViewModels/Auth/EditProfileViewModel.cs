@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="EditProfileViewModel.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -61,7 +61,7 @@ namespace AllyisApps.ViewModels.Auth
 		public string PhoneNumber { get; set; }
 
 		/// <summary>
-		/// Gets of sets the user's address Id
+		/// Gets of sets the user's address Id.
 		/// </summary>
 		public int AddressId { get; set; }
 
@@ -156,16 +156,16 @@ namespace AllyisApps.ViewModels.Auth
 	}
 
 	/// <summary>
-	/// Validates that the integer representing the birthdate meets a minimum requirement
+	/// Validates that the integer representing the birthdate meets a minimum requirement.
 	/// </summary>
 	public class MinDateValidation : ValidationAttribute
 	{
 		/// <summary>
-		/// Validates if the value meets the minimum requirement
+		/// Validates if the value meets the minimum requirement.
 		/// </summary>
-		/// <param name="value"></param>
-		/// <param name="validationContext">validation context</param>
-		/// <returns></returns>
+		/// <param name="value">.</param>
+		/// <param name="validationContext">Validation context.</param>
+		/// <returns>.</returns>
 		protected override ValidationResult IsValid(object value, ValidationContext validationContext)
 		{
 			int minAgeYears = 15;

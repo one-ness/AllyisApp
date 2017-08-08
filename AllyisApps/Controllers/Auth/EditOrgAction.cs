@@ -70,7 +70,7 @@ namespace AllyisApps.Controllers
 		/// GET: /Account/EditOrg.
 		/// The page for editing an organization's information.
 		/// </summary>
-		/// <param name="id">The organization id</param>
+		/// <param name="id">The organization id.</param>
 		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
 		/// <returns>The result of this action.</returns>
 		public ActionResult EditOrg(int id, string returnUrl)

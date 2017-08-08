@@ -28,7 +28,7 @@ namespace AllyisApps.Services
 		public string CultureName { get; set; }
 
 		/// <summary>
-		/// constructor. default language is en-us
+		/// constructor. default language is en-us.
 		/// </summary>
 		public Language()
 		{

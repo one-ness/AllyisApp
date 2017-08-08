@@ -20,7 +20,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET /TimeTracker/TimeEntry/UserEdit.
 		/// </summary>
-		/// <param name="subscriptionId">The subscription's id</param>
+		/// <param name="subscriptionId">The subscription's id.</param>
 		/// <param name="userId">The Id of the user to edit.</param>
 		/// <returns>The user edit page.</returns>
 		public ActionResult UserEdit(int subscriptionId, int userId)
@@ -43,7 +43,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// AJAX callback to update the projects for a user.
 		/// </summary>
 		/// <param name="userId">The Id of the user to edit.</param>
-		/// <param name="subscriptionId">The subscription's Id</param>
+		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="offUser">The list of projects not associated with the user.</param>
 		/// <param name="onUser">The list of projects associated with the user.</param>
 		/// <returns>Json object representing the results of the action.</returns>

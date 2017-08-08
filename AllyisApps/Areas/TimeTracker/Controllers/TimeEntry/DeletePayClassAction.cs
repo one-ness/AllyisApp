@@ -20,7 +20,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Deletes a payclass from an org.
 		/// </summary>
 		/// <param name="userId">The id of the class to delete.</param> //TODO: update this after changing the route
-		/// <param name="subscriptionId">The subscription's id</param>
+		/// <param name="subscriptionId">The subscription's id.</param>
 		/// <returns>Redirects to the settings view.</returns>
 		public ActionResult DeletePayClass(int userId, int subscriptionId)
 		{

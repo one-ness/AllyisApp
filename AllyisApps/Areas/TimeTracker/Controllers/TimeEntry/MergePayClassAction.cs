@@ -22,10 +22,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	public partial class TimeEntryController : BaseController
 	{
 		/// <summary>
-		/// Merge a pay class with another one
+		/// Merge a pay class with another one.
 		/// </summary>
-		/// <param name="subscriptionId">The subscription Id</param>
-		/// <param name="userId"> The payclass Id</param>
+		/// <param name="subscriptionId">The subscription Id.</param>
+		/// <param name="userId"> The payclass Id.</param>
 		[HttpGet]
 		public ActionResult MergePayClass(int subscriptionId, int userId)
 		{
@@ -48,10 +48,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Uses services to populate a <see cref="MergePayClassViewModel"/> and returns it.
 		/// </summary>
-		/// <param name="sourcePayClassId">The id of the pay class being merged</param>
-		/// <param name="destPayClasses">List of all PayClass that can be merged into</param>
-		/// <param name="subscriptionId">The subscription's Id</param>
-		/// <param name="sourcePayClassName">The name of the pay class being merged</param>
+		/// <param name="sourcePayClassId">The id of the pay class being merged.</param>
+		/// <param name="destPayClasses">List of all PayClass that can be merged into.</param>
+		/// <param name="subscriptionId">The subscription's Id.</param>
+		/// <param name="sourcePayClassName">The name of the pay class being merged.</param>
 		/// <returns>The MergePayClassViewModel.</returns>
 		[CLSCompliant(false)]
 		public MergePayClassViewModel ConstructMergePayClassViewModel(int sourcePayClassId, string sourcePayClassName, int subscriptionId, IEnumerable<PayClass> destPayClasses)
@@ -66,7 +66,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		}
 
 		/// <summary>
-		/// Merge a pay class into another one: delete the old pay class, change all of its time entries' payclassId to the new one
+		/// Merge a pay class into another one: delete the old pay class, change all of its time entries' payclassId to the new one.
 		/// </summary>
 		/// <param name="model">The model.</param>
 		/// <param name="destPayClass">The destination pay class' id.</param>
