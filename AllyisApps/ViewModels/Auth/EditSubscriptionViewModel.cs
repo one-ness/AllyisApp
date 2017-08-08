@@ -67,17 +67,17 @@ namespace AllyisApps.ViewModels.Auth
 		public string isActive { get; set; }
 
 		/// <summary>
-		/// the subscritpion that is being unsubscribed from
+		/// the subscritpion that is being unsubscribed from.
 		/// </summary>
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// the subscription id that is being unsubscribed from
+		/// the subscription id that is being unsubscribed from.
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
 		/// <summary>
-		/// the subscription name that is being unsubscribed from
+		/// the subscription name that is being unsubscribed from.
 		/// </summary>
 		public string SubscriptionName { get; set; }
 

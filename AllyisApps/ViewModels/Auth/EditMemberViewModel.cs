@@ -17,12 +17,12 @@ namespace AllyisApps.ViewModels.Auth
 	public class EditMemberViewModel : BaseViewModel
 	{
 		/// <summary>
-		/// Gets/sets the user's info for display
+		/// Gets/sets the user's info for display.
 		/// </summary>
 		public int CurrentUserId { get; set; }
 
 		/// <summary>
-		/// Gets/sets the user's info for display
+		/// Gets/sets the user's info for display.
 		/// </summary>
 		public User UserInfo { get; set; }
 
@@ -41,7 +41,7 @@ namespace AllyisApps.ViewModels.Auth
 		public string LastName { get; set; }
 
 		/// <summary>
-		/// Gets/sets the user's organization id
+		/// Gets/sets the user's organization id.
 		/// </summary>
 		public int OrganizationId { get; set; }
 

@@ -51,12 +51,12 @@ namespace AllyisApps.Services
 		public int UserId { get; set; }
 
 		/// <summary>
-		/// First name of the user
+		/// First name of the user.
 		/// </summary>
 		public string FirstName { get; set; }
 
 		/// <summary>
-		/// Last name of the user
+		/// Last name of the user.
 		/// </summary>
 		public string LastName { get; set; }
 
@@ -74,7 +74,7 @@ namespace AllyisApps.Services
 
 		/// <summary>
 		/// Gets or sets the list of subscriptions this organization has.
-		/// If the user is not a member of that subscrption, then the role is set to NotAssigned
+		/// If the user is not a member of that subscrption, then the role is set to NotAssigned.
 		/// </summary>
 		[JsonIgnore]
 		public Dictionary<int, UserSubscription> OrganizationSubscriptions { get; set; }

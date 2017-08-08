@@ -22,7 +22,7 @@ namespace AllyisApps.Services
 		public int SubscriptionId { get; set; }
 
 		/// <summary>
-		/// Gets the name of the subscription
+		/// Gets the name of the subscription.
 		/// </summary>
 		public string SubscriptionName { get; set; }
         
@@ -32,7 +32,7 @@ namespace AllyisApps.Services
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the name of the organization specified by the id
+		/// Gets or sets the name of the organization specified by the id.
 		/// </summary>
 		public string OrganizationName { get; set; }
 
@@ -62,7 +62,7 @@ namespace AllyisApps.Services
 		public string ProductRoleName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Area URL
+		/// Gets or sets the Area URL.
 		/// </summary>
 		public string AreaUrl { get; set; }
 	}

@@ -10,12 +10,12 @@ using System.Collections.Generic;
 namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
-	/// Represents the Skus List view
+	/// Represents the Skus List view.
 	/// </summary>
 	public class SkusListViewModel : BaseViewModel
 	{
 		/// <summary>
-		/// The collection of all products offered to user
+		/// The collection of all products offered to user.
 		/// </summary>
 		public IEnumerable<Product> ProductsList { get; set; }
 
@@ -25,7 +25,7 @@ namespace AllyisApps.ViewModels.Auth
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the current Organization's active subscriptions
+		/// Gets or sets the current Organization's active subscriptions.
 		/// </summary>
 		public IEnumerable<SubscriptionDisplayInfo> currentSubscriptions { get; set; }
 	}

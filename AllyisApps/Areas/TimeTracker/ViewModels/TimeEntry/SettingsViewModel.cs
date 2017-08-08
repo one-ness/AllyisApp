@@ -31,7 +31,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public IEnumerable<Holiday> Holidays { get; set; }
 
 		/// <summary>
-		/// Subscription Id for the customer
+		/// Subscription Id for the customer.
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
@@ -41,7 +41,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
         public string SubscriptionName { get; set; }
 
 		/// <summary>
-		/// User's Id
+		/// User's Id.
 		/// </summary>
 		public int UserId { get; set; }
 	}

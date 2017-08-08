@@ -24,12 +24,12 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public string UserName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the subscription's Id
+		/// Gets or sets the subscription's Id.
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the subscription's Name
+		/// Gets or sets the subscription's Name.
 		/// </summary>
 		public string SubscriptionName { get; set; }
 

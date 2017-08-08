@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="SubscribeAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -24,7 +24,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Subscription/Subscribe/ProductId=#.
 		/// </summary>
-		/// <param name="id">organization id</param>
+		/// <param name="id">Organization id.</param>
 		/// <param name="skuId">The id of the SKU being subscribed to.</param>
 		/// <returns>The result of this action.</returns>
 		[HttpGet]
@@ -54,7 +54,7 @@ namespace AllyisApps.Controllers
 		/// <param name="currentSubscription">SubscriptionInfo for this org's subscription to the product.</param>
 		/// <param name="skus">List of SkuInfos for this product's skus.</param>
 		/// <param name="stripeToken">This org's billing stripe token.</param>
-		/// <param name="orgId"></param>
+		/// <param name="orgId">.</param>
 		/// <returns>The ProductSubscriptionViewModel.</returns>
 		[CLSCompliant(false)]
 		public ProductSubscriptionViewModel ConstructProductSubscriptionViewModel(Product productInfo, SubscriptionInfo currentSubscription, List<SkuInfo> skus, string stripeToken, int orgId)

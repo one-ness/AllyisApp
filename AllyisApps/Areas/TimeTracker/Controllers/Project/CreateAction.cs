@@ -24,7 +24,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// GET: Project/Create.
 		/// Gets the page for creating new projects.
 		/// </summary>
-		/// <param name="subscriptionId"></param>
+		/// <param name="subscriptionId">.</param>
 		/// <param name="userId">Customer Id for the project.</param>
 		/// <returns>The ActionResult for the Create view.</returns>
 		[HttpGet]
@@ -43,7 +43,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 			}
 
-			string SubscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
+			string subscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
 			return this.View(
 				new EditProjectViewModel()
 				{
@@ -53,10 +53,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					SubscriptionUsers = subList,
 					StartDate = AppService.GetDayFromDateTime(defaultStart),
 					EndDate = AppService.GetDayFromDateTime(defaultEnd),
-					ProjectOrgId = idAndUsers.Item1, //Service.GetRecommendedProjectId()
+					ProjectOrgId = idAndUsers.Item1, // Service.GetRecommendedProjectId()
 					CustomerName = AppService.GetCustomer(userId).CustomerName,
 					SubscriptionId = subscriptionId,
-					SubscriptionName = SubscriptionNameToDisplay,
+					SubscriptionName = subscriptionNameToDisplay,
 					UserId = userId,
 					OrganizationId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId
 				});
@@ -112,6 +112,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
 					return this.View(model);
 				}
+
 				return RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = model.SubscriptionId });
 			}
 			else
@@ -130,14 +131,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			IEnumerable<int> userIds = model.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString));
 
-			return AppService.CreateProjectAndUpdateItsUserList(new Project()
-			{
-				CustomerId = model.ParentCustomerId,
-                ProjectName = model.ProjectName,
-				ProjectOrgId = model.ProjectOrgId,
-				StartingDate = AppService.GetDateTimeFromDays(model.StartDate),
-				EndingDate = AppService.GetDateTimeFromDays(model.EndDate)
-			}, userIds);
+			return AppService.CreateProjectAndUpdateItsUserList(
+				new Project()
+				{
+					CustomerId = model.ParentCustomerId,
+					ProjectName = model.ProjectName,
+					ProjectOrgId = model.ProjectOrgId,
+					StartingDate = AppService.GetDateTimeFromDays(model.StartDate),
+					EndingDate = AppService.GetDateTimeFromDays(model.EndDate)
+				},
+				userIds);
 		}
 
 		/// <summary>

@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="AccountService.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -361,7 +361,7 @@ namespace AllyisApps.Services
 		/// Gets the User for the current user, along with Organizations for each organization the
 		/// user is a member of, and InvitationInfos for any invitations for the user.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<User, List<Organization>, List<InvitationInfo>, Address> GetUserOrgsAndInvitationInfo()
 		{
 			var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
@@ -423,9 +423,9 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Updates an organization member's info
+		/// Updates an organization member's info.
 		/// </summary>
-		/// <param name="modelData">The data from the form that the controller passed in</param>
+		/// <param name="modelData">The data from the form that the controller passed in.</param>
 		public bool UpdateMember(Dictionary<string, dynamic> modelData)
 		{
 			if (modelData["userId"] <= 0)
@@ -495,7 +495,7 @@ namespace AllyisApps.Services
 		/// Sends an email with password reset link to the given email address.
 		/// </summary>
 		/// <param name="email">The user email address.</param>
-		/// <param name="code">the password reset code that is </param>
+		/// <param name="code">The password reset code that is .</param>
 		/// <param name="callbackUrl">The Url to include as the "click here" link, with stand-ins for userid and code (as "{userid}" and "{code}".</param>
 		/// <returns>A value indicating whether the given email address matched with an existing user.</returns>
 		public async Task<bool> SendPasswordResetMessage(string email, string code, string callbackUrl)

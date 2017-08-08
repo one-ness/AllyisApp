@@ -72,8 +72,8 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// POST: /Account/EditSubscription.
 		/// </summary>
-		/// <param name="model"></param>
-		/// <returns></returns>
+		/// <param name="model">Edit subscription view model, containing the form info to edit the subscription.</param>
+		/// <returns>.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult EditSubscription(EditSubscriptionViewModel model)

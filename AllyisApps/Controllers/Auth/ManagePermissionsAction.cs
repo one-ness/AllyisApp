@@ -24,7 +24,7 @@ namespace AllyisApps.Controllers
 		//      /// <summary>
 		//      /// GET Account/ManagePermissions2.
 		//      /// </summary>
-		//      /// <param name="id">The Organization Id</param>
+		//      /// <param name="id">The Organization Id.</param>
 		//      /// <returns>Action result.</returns>
 		//      [HttpGet]
 		//public ActionResult ManagePermissions2(int id)
@@ -37,7 +37,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET Account/ManagePermissions.
 		/// </summary>
-		/// <param name="id">The Organization Id</param>
+		/// <param name="id">The Organization Id.</param>
 		/// <returns>Action result.</returns>
 		[HttpGet]
 		public ActionResult ManagePermissions(int id)
@@ -101,7 +101,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Uses services to populate a <see cref="PermissionsManagementViewModel"/> and returns it.
 		/// </summary>
-        /// <param name="id">The Organization Id</param>
+        /// <param name="id">The Organization Id.</param>
 		/// <returns>The PermissionsManagementViewModel.</returns>
 		public PermissionsManagementViewModel ConstructPermissionsManagementViewModel(int id)
 		{

@@ -19,7 +19,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET /TimeTracker/TimeEntry/subscriptionId/Settings.
 		/// </summary>
-		/// <param name="subscriptionId">The subscription Id</param>
+		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>The settings page.</returns>
 		public ActionResult Settings(int subscriptionId)
 		{

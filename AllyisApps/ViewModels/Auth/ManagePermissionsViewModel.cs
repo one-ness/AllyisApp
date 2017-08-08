@@ -41,7 +41,7 @@ namespace AllyisApps.ViewModels.Auth
 	}
 
 	/// <summary>
-	/// A sub-view model for each user and their permissions in all subscriptions
+	/// A sub-view model for each user and their permissions in all subscriptions.
 	/// </summary>
 	public class UserPermissionsViewModel
 	{
@@ -61,12 +61,12 @@ namespace AllyisApps.ViewModels.Auth
 		public string Email { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user's id
+		/// Gets or sets the user's id.
 		/// </summary>
 		public int UserId { get; set; }
 
 		/// <summary>
-		/// Gets or sets this user's role in the organization
+		/// Gets or sets this user's role in the organization.
 		/// </summary>
 		public int OrganizationRoleId { get; set; }
 

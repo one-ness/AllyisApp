@@ -108,7 +108,7 @@ namespace AllyisApps.DBModel
 		/// Deletes a pay class from the specified organization.
 		/// </summary>
 		/// <param name="payClassId">The id of the pay class to remove.</param>
-		/// <param name="destPayClass">The id of the payclass to move all old entries to (nullable)</param>
+		/// <param name="destPayClass">The id of the payclass to move all old entries to (nullable).</param>
 		public void DeletePayClass(int payClassId, int? destPayClass)
 		{
 			//TODO: move this part in the DeletePayClass stored procedure
@@ -131,7 +131,7 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Return a list of TimeEntryIds that use the specified payClassId
+		/// Return a list of TimeEntryIds that use the specified payClassId.
 		/// </summary>
 		/// <param name="payClassId">The id of the pay class.</param>
 		public IEnumerable<TimeEntryDBEntity> GetTimeEntriesThatUseAPayClass(int payClassId)
@@ -448,11 +448,11 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates lock date settings.
 		/// </summary>
-		/// <param name="organizationId"></param>
-		/// <param name="lockDateUsed"></param>
-		/// <param name="lockDatePeriod"></param>
-		/// <param name="lockDateQuantity"></param>
-		/// <returns></returns>
+		/// <param name="organizationId">.</param>
+		/// <param name="lockDateUsed">.</param>
+		/// <param name="lockDatePeriod">.</param>
+		/// <param name="lockDateQuantity">.</param>
+		/// <returns>.</returns>
 		public bool UpdateLockDate(int organizationId, bool lockDateUsed, int lockDatePeriod, int lockDateQuantity)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -474,7 +474,7 @@ namespace AllyisApps.DBModel
 		/// and a list of HolidayDBEntites for the given organization.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>> GetAllSettings(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -500,7 +500,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<List<CustomerDBEntity>, List<ProjectDBEntity>, List<SubscriptionUserDBEntity>> GetReportInfo(int orgId, int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -533,7 +533,7 @@ namespace AllyisApps.DBModel
 		/// <param name="userId">User Id.</param>
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<SettingDBEntity, List<PayClassDBEntity>, List<HolidayDBEntity>, List<ProjectDBEntity>, List<UserDBEntity>, List<TimeEntryDBEntity>>
 			GetTimeEntryIndexPageInfo(int orgId, int timeTrackerProductId, int userId, DateTime? startingDate, DateTime? endingDate)
 		{

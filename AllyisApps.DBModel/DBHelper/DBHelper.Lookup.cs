@@ -32,7 +32,7 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// list of valid countries
+		/// list of valid countries.
 		/// </summary>
 		public List<string> ValidCountries()
 		{

@@ -29,7 +29,7 @@ namespace AllyisApps.DBModel.Billing
 		public int SkuId { get; set; }
 
 		/// <summary>
-		/// Gets or sets number of users
+		/// Gets or sets number of users.
 		/// </summary>
 		public int NumberOfUsers { get; set; }
 
@@ -44,12 +44,12 @@ namespace AllyisApps.DBModel.Billing
 		public DateTime CreatedUtc { get; set; }
 
 		/// <summary>
-		/// gets or sets modified date
+		/// gets or sets modified date.
 		/// </summary>
 		public DateTime ModifiedUtc { get; set; }
 
 		/// <summary>
-		/// gets or set promotion expiration date
+		/// gets or set promotion expiration date.
 		/// </summary>
 		public DateTime? PromoExpirationDateUtc { get; set; }
 

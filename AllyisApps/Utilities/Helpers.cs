@@ -21,10 +21,10 @@ namespace AllyisApps.Utilities
 		/// </summary>
 		/// <param name="key">
 		/// They configuration key.
-		/// </param>
+		/// .</param>
 		/// <returns>
 		/// Returns appliction settings.
-		/// </returns>
+		/// .</returns>
 		public static string ReadAppSetting(string key)
 		{
 			return ConfigurationManager.AppSettings[key];
@@ -35,14 +35,14 @@ namespace AllyisApps.Utilities
 		/// <para>
 		///   The Format of the variables construct should be "variable" => "value", where
 		///   all instances of "%variable%" within the string will be replaced with "value"
-		/// </para>
+		/// </para>.
 		/// </summary>
 		/// <param name="resourceString">
 		/// The resource string to process.
-		/// </param>
+		/// .</param>
 		/// <param name="variables">
 		/// The variables to replace. Should be specified as "variable" => "value" where "%variable%" will be replaced with "value".
-		/// </param>
+		/// .</param>
 		/// <returns>The input resource string with the values replaced.</returns>
 		public static string ResourceReplace(string resourceString, Dictionary<string, string> variables)
 		{
@@ -62,7 +62,7 @@ namespace AllyisApps.Utilities
 		/// <para>
 		///   The Format of the variables construct should be "variable" => "value", where
 		///   all instances of "%variable%" within the string will be replaced with "value"
-		/// </para>
+		/// </para>.
 		/// </summary>
 		/// <param name="resourceString">The resource string to process.</param>
 		/// <param name="variable">The variable string to replace. Should be "variable" where "%variable%" will be replaced.</param>

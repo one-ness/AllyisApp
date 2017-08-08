@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Customer;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -17,13 +17,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	public partial class CustomerController : BaseController
 	{
 		/// <summary>
-		/// Returns a details page for a customer
+		/// Returns a details page for a customer.
 		/// </summary>
+		/// <param name="subscriptionId">Subscription id.</param>
+		/// <param name="customerId">Customer id.</param>
+		/// <returns>The edit customer view - info on all the customer details.</returns>
 		[HttpGet]
-		public ActionResult Details(int subscriptionId, int id)
+		public ActionResult Details(int subscriptionId, int customerId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
-			var infos = AppService.GetCustomerAndCountries(id);
+			var infos = AppService.GetCustomerAndCountries(customerId);
 			return this.View(new EditCustomerInfoViewModel
 			{
 				ContactEmail = infos.Item1.ContactEmail,
@@ -38,7 +41,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Website = infos.Item1.Website,
 				EIN = infos.Item1.EIN,
 				OrganizationId = infos.Item1.OrganizationId,
-				CustomerId = id,
+				CustomerId = customerId,
 				ValidCountries = infos.Item2,
 				CustomerOrgId = infos.Item1.CustomerOrgId,
 				canEditCustomers = this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false)

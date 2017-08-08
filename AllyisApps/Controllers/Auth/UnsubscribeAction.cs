@@ -20,7 +20,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Removes the selected subscription from the database.
 		/// </summary>
-		/// <param name="id"> Subscription Id</param>
+		/// <param name="id"> Subscription Id.</param>
 		/// <param name="idTwo">The id of the sku being unsubscribed from.</param>
 		/// <returns>Removes selected subscription.</returns>
 		[HttpGet]

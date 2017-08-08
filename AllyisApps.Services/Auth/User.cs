@@ -35,7 +35,7 @@ namespace AllyisApps.Services
 		public DateTime? DateOfBirth { get; set; }
 
 		/// <summary>
-		/// Gets or sets the User's address
+		/// Gets or sets the User's address.
 		/// </summary>
 		public Address Address { get; set; }
 

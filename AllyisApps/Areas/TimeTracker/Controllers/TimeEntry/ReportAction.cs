@@ -22,7 +22,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET /TimeTracker/TimeEntry/Report.
 		/// </summary>
-		/// <param name="subscriptionId">The Subscription Id</param>
+		/// <param name="subscriptionId">The Subscription Id.</param>
 		/// <returns>The reports page.</returns>
 		public ActionResult Report(int subscriptionId)
 		{

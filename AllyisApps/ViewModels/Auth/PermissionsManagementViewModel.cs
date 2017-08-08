@@ -247,12 +247,12 @@ namespace AllyisApps.ViewModels.Auth
 		public PermissionsAction SelectedActions { get; set; }
 
 		/// <summary>
-		/// TODO: Delete this once there's only one permissions management page
+		/// TODO: Delete this once there's only one permissions management page.
 		/// </summary>
 		public bool isPermissions2 { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Organization's Id
+		/// Gets or sets the Organization's Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
 	}
@@ -277,7 +277,7 @@ namespace AllyisApps.ViewModels.Auth
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the subscription Id for Timetracker if this organization has one.TimeTrackerRole
+		/// Gets or sets the subscription Id for Timetracker if this organization has one.TimeTrackerRole.
 		/// </summary>
 		public int TimeTrackerSubscriptionId { get; set; }
 

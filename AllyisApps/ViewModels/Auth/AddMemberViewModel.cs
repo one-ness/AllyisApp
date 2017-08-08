@@ -65,7 +65,7 @@ namespace AllyisApps.ViewModels.Auth
 	}
 
 	/// <summary>
-	/// A sub-view model for relevant subscription information on the Add Member page
+	/// A sub-view model for relevant subscription information on the Add Member page.
 	/// </summary>
 	public class AddMemberSubscriptionInfo
 	{

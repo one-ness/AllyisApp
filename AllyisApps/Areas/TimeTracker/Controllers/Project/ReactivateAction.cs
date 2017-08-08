@@ -16,11 +16,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	public partial class ProjectController : BaseController
 	{
 		/// <summary>
-		/// Reactivates a project
+		/// Reactivates a project.
 		/// </summary>
-		/// <param name="subscriptionId">The subscription Id</param>
-		/// <param name="userId">Project Id</param>
-		/// <returns></returns>
+		/// <param name="subscriptionId">The subscription Id.</param>
+		/// <param name="userId">Project Id.</param>
+		/// <returns>.</returns>
 		public ActionResult Reactivate(int subscriptionId, int userId)
 		{
 			CompleteProjectInfo project = AppService.GetProject(userId);

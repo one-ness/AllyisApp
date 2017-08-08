@@ -72,7 +72,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public string EIN { get; set; }
 
 		/// <summary>
-		/// Gets or sets the customer's Address Id
+		/// Gets or sets the customer's Address Id.
 		/// </summary>
 		public int AddressId { get; set; }
 
@@ -133,7 +133,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public string SubscriptionName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user's id
+		/// Gets or sets the user's id.
 		/// </summary>
 		public int UserId { get; set; }
 
@@ -158,7 +158,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public IEnumerable<string> ValidCountries { get; set; }
 
 		/// <summary>
-		/// Gets or sets a boolean indicating whether the user can edit customers
+		/// Gets or sets a boolean indicating whether the user can edit customers.
 		/// </summary>
 		public bool canEditCustomers { get; set; }
 

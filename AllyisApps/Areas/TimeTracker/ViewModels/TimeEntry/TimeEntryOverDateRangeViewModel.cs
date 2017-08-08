@@ -34,7 +34,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public bool CanManage { get; internal set; }
 
 		/// <summary>
-		/// Subscription Id for the Organization
+		/// Subscription Id for the Organization.
 		/// </summary>
 		public int Subscriptionid { get; set; }
 

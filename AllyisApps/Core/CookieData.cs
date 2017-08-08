@@ -1,7 +1,7 @@
 ﻿namespace AllyisApps.Services
 {
 	/// <summary>
-	/// Represents the user information serialized to the forms authentication cookie
+	/// Represents the user information serialized to the forms authentication cookie.
 	/// </summary>
 	public class CookieData
 	{
@@ -11,7 +11,7 @@
 		public int UserId { get; set; }
 
 		/// <summary>
-		/// constructor
+		/// constructor.
 		/// </summary>
 		public CookieData(int userId)
 		{
