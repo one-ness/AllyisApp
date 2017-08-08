@@ -36,7 +36,7 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         /// <summary>
         /// A List of expense reports
         /// </summary>
-        public List<ExpenseSummaryViewModelItem> Reports { get; set; }
+        public List<ExpenseItemViewModel> Reports { get; set; }
 
         /// <summary>
 		/// Gets the type of product.

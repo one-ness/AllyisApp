@@ -1,4 +1,5 @@
 ﻿using AllyisApps.Controllers;
+using AllyisApps.Services;
 using System.Web.Mvc;
 using System.Threading.Tasks;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
@@ -13,29 +14,59 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 	public partial class ExpenseController : BaseController
 	{
 		/// <summary>
-		/// show the list of expense reports submitted by the logged in user
+		/// Show the list of expense reports submitted by the logged in user
 		/// </summary>
 		public ActionResult Index(int subscriptionId)
 		{
-			return View(new ExpenseIndexViewModel()
-            {
-                SubscriptionId = 111111,
-                CanManage = true,
-                CurrentUser = 1111111,
-                EndDate = 1111111,
-                StartDate = 01111111,
-                ProductRole = 2,
-                Reports= new List<ExpenseSummaryViewModelItem>()
-                {
-                    new ExpenseSummaryViewModelItem() {ReportId = 000001, Amount = 250.01, Status = ReportStatusEnum.Rejected, SubmittedDate = DateTime.UtcNow, ReportName = "Kichenette Supplies"},
-                    new ExpenseSummaryViewModelItem() {ReportId = 000002, Amount = 10000.92, Status = ReportStatusEnum.Pending, SubmittedDate = DateTime.UtcNow, ReportName = "Company Scooter"},
-                    new ExpenseSummaryViewModelItem() {ReportId = 000003, Amount = 7356.11, Status = ReportStatusEnum.Accepted, SubmittedDate = DateTime.UtcNow, ReportName = "Laptop Order"},
-                    new ExpenseSummaryViewModelItem() {ReportId = 000004, Amount = 20.33, Status = ReportStatusEnum.Pending, SubmittedDate = DateTime.UtcNow, ReportName = "New Batteries"},
-                    new ExpenseSummaryViewModelItem() {ReportId = 000005, Amount = 92.31, Status = ReportStatusEnum.Pending, SubmittedDate = DateTime.UtcNow, ReportName = "IT Lunch Meeting"},
-                    new ExpenseSummaryViewModelItem() {ReportId = 000006, Amount = 2566355.00, Status = ReportStatusEnum.Rejected, SubmittedDate = DateTime.UtcNow, ReportName = "Toga Party"},
-                    new ExpenseSummaryViewModelItem() {ReportId = 000007, Amount = 477.63, Status = ReportStatusEnum.Accepted, SubmittedDate = DateTime.UtcNow, ReportName = "Exec Lunch Meeting"},
-                }
-            });
+            int userId = GetCookieData().UserId;
+
+            var items = AppService.GetExpenseReportBySubmittedId(userId);
+
+
+			return View();
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subId"></param>
+        /// <param name="userId"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="pRole"></param>
+        /// <param name="expenses"></param>
+        /// <returns></returns>
+        public ExpenseIndexViewModel InitializeViewModel(int subId, int userId, int startDate, int endDate, int pRole, IEnumerable<ExpenseItem> expenses)
+        {
+            List<ExpenseItemViewModel> items = new List<ExpenseItemViewModel>();
+
+            foreach( var item in expenses)
+            {
+                var compInfo = AppService.GetExpenseItem(item.ExpenseItemId);
+                var user = AppService.GetUser(item.AccountId);
+                items.Add(new ExpenseItemViewModel()
+                {
+                    Amount = compInfo.Amount,
+                    ReportId = item.ExpenseReportId,
+                    Reason = item.ItemDiscription,
+                    ReportName = item.ExpenseItemName,
+                    SubmittedDate = item.TransactionDate,
+                    UserId = item.AccountId,
+                    Status = item.ExpenseReportStatus,
+                    UserName = user.FirstName + " " + user.LastName
+                });
+            }
+
+
+            ExpenseIndexViewModel model = new ExpenseIndexViewModel()
+            {
+                CanManage = true,
+                CurrentUser = userId,
+                StartDate = startDate,
+                EndDate = endDate,
+                ProductRole = pRole
+            };
+            return model;
+        }
 	}
 }

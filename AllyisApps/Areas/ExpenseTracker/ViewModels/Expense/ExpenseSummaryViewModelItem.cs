@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AllyisApps.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
     /// <summary>
     /// 
     /// </summary>
-    public class ExpenseSummaryViewModelItem : BaseViewModel
+    public class ExpenseItemViewModel : BaseViewModel
     {
         /// <summary>
         /// The reportId
@@ -19,12 +20,12 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         /// <summary>
         /// The user id of the user who submitted the report
         /// </summary>
-        public int SubmittedByUserId { get; set; }
+        public int UserId { get; set; }
 
         /// <summary>
         /// The user name of the user who submitted the report
         /// </summary>
-        public string SubmittedByUserName { get; set; }
+        public string UserName { get; set; }
         
         /// <summary>
         /// Name of the report
@@ -40,12 +41,12 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         /// <summary>
         /// Status of the report
         /// </summary>
-        public ReportStatusEnum Status { get; set; }
+        public ExpenseStatusEnum Status { get; set; }
 
         /// <summary>
         /// the dollar amount that is reported
         /// </summary>
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
 
         /// <summary>
         /// The reason for the expense being submitted.

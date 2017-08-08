@@ -22,7 +22,7 @@
     </thead>   
     <tbody>
         
-        @foreach(ExpenseSummaryViewModelItem report in Model.Reports)
+        @foreach(ExpenseItemViewModel report in Model.Reports)
         {
             <tr>
                 <td>@Html.ActionLink(@report.ReportName,"Edit", new { reportId = report.ReportId }, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" })</td>
