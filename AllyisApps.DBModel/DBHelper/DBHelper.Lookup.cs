@@ -80,18 +80,5 @@ namespace AllyisApps.DBModel
 				return connection.Query<LanguageDBEntity>("[Lookup].[GetLanguageById]", new { CultureName = CultureName }, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
-
-        /// <summary>
-        /// Retrieve a address from the database via an address id.
-        /// </summary>
-        /// <param name="addressID"></param>
-        /// <returns></returns>
-        public AddressDBEntity GetAddressByAddressId(int addressID)
-        {
-            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-            {
-                return connection.Query<AddressDBEntity>("[Lookup].[GetAddress]", new { addressID = addressID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
-            }
-        }
 	}
 }
