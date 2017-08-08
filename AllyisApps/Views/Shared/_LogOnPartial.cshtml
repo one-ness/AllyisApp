@@ -18,6 +18,14 @@
 }
 else
 {
-	<li href="@Url.Action(ActionConstants.Register, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }),  new { id = "registerLink" }">@Strings.Register</li>
-    <li href="@Url.Action(ActionConstants.LogOn, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl }),  new { id = "loginLink" }">@Strings.SignIn</li>
+	<li>
+		<a href="@Url.Action(ActionConstants.Register, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl })"  id = "registerLink" style ="padding: 6px 6px; line-height: 40px">
+			@Strings.Register
+		</a>
+	</li>
+	<li>
+		<a href="@Url.Action(ActionConstants.LogOn, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl })" id = "loginLink" style ="padding: 6px 6px; line-height: 40px">
+			@Strings.SignIn
+		</a>
+	</li>
 }
