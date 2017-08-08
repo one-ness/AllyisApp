@@ -53,10 +53,35 @@ namespace AllyisApps.Services
 			return DBHelper.GetExpenseReportsByOrganizationId(orgId).Select(x => InitializeExpenseItem(x));
 		}
 
-		public IEnumerable<ExpenseItem> GetExpenseReportBySubmittedId(int submitedId)
+		public IEnumerable<ExpenseReport> GetExpenseReportBySubmittedId(int submitedId)
 		{
-			return DBHelper.GetExpenseReportsBySubmittedById(submitedId).Select(x => InitializeExpenseItem(x));
+			return DBHelper.GetExpenseReportsBySubmittedById(submitedId).Select(x => InitializeExpenseReport(x));
 		}
+
+        /// <summary>
+        /// Initializes an ExpenseReport from and ExpenseReportDbEntity.
+        /// </summary>
+        /// <param name="entity">The ExpenseReportDBEntity</param>
+        /// <returns></returns>
+        public static ExpenseReport InitializeExpenseReport(ExpenseReportDBEntity entity)
+        {
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return new ExpenseReport()
+            {
+                OrganizationId = entity.OrganizationId,
+                ExpenseReportId = entity.ExpenseReportId,
+                SubmittedById = entity.SubmittedById,
+                CreatedUtc = entity.ExpenseReportCreatedCreatedUtc,
+                ModifiedUtc = entity.ExpenseReportModifiedUtc,
+                ReportDate = entity.ReportDate,
+                ReportStatus = entity.ReportStatus,
+                ReportTitle = entity.ReportTitle
+            };
+        }
 
         /// <summary>
         /// Initialize an ExpenseItem from an ExpenseItemDBEntity.
@@ -79,7 +104,6 @@ namespace AllyisApps.Services
 				ExpenseItemId = entity.ExpenseItemId,
 				ExpenseItemModifiedUtc = entity.ModifiedUtc,
 				ExpenseReportId = entity.ExpenseReportId,
-                ExpenseReportStatus = (ExpenseStatusEnum)entity.ReportStatus,
 				IsBillableToCustomer = entity.IsBillableToCustomer,
 				ItemDiscription = entity.ItemDescription,
 				TransactionDate = entity.TransactionDate

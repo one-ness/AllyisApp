@@ -81,6 +81,7 @@
     <Compile Include="Billing\BlockBasedOnEnum.cs" />
     <Compile Include="Billing\ProductRoleIdEnum.cs" />
     <Compile Include="Expense\ExpenseItem.cs" />
+    <Compile Include="Expense\ExpenseReport.cs" />
     <Compile Include="Expense\ExpenseReportStatusEnum.cs" />
     <Compile Include="Expense\ExpenseService.cs" />
     <Compile Include="Finance\FinanceService.cs" />

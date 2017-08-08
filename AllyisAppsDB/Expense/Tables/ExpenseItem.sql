@@ -4,7 +4,7 @@
     [TransactionDate]      DATETIME2 (0)   NOT NULL,
     [Amount]               DECIMAL (19, 4) NOT NULL,
     [ExpenseReportId]      INT             NOT NULL,
-    [AccountId]            SMALLINT        NOT NULL,
+    [AccountId]            INT        NOT NULL,
     [IsBillableToCustomer] BIT             CONSTRAINT [DF_ExpenseItem_IsBillableToCustomer] DEFAULT ((0)) NOT NULL,
     [ExpenseItemCreatedUtc]           DATETIME2 (0) CONSTRAINT [DF_ExpenseItem_CreatedUtc] DEFAULT (getutcdate()) NOT NULL,
     [ExpenseItemModifiedUtc]          DATETIME2 (0) CONSTRAINT [DF_ExpenseItem_ModifiedUtc] DEFAULT (getutcdate()) NOT NULL,

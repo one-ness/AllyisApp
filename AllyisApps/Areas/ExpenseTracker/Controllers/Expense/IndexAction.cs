@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -22,8 +23,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
             var items = AppService.GetExpenseReportBySubmittedId(userId);
 
-
-			return View();
+			return View(InitializeViewModel(subscriptionId, userId, DateTime.UtcNow, DateTime.UtcNow.AddDays(7), items));
 		}
 
         /// <summary>
@@ -33,27 +33,27 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         /// <param name="userId"></param>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
-        /// <param name="pRole"></param>
         /// <param name="expenses"></param>
         /// <returns></returns>
-        public ExpenseIndexViewModel InitializeViewModel(int subId, int userId, int startDate, int endDate, int pRole, IEnumerable<ExpenseItem> expenses)
+        public ExpenseIndexViewModel InitializeViewModel(int subId, int userId, DateTime startDate, DateTime endDate, IEnumerable<ExpenseReport> expenses)
         {
             List<ExpenseItemViewModel> items = new List<ExpenseItemViewModel>();
 
             foreach( var item in expenses)
             {
-                var compInfo = AppService.GetExpenseItem(item.ExpenseItemId);
-                var user = AppService.GetUser(item.AccountId);
+                var compInfo = AppService.GetExpenseItemsByUserSubmitted(item.SubmittedById).Select(x => x).Where(x => x.ExpenseReportId == item.ExpenseReportId).First();
+                var user = AppService.GetUser(item.SubmittedById);
                 items.Add(new ExpenseItemViewModel()
                 {
                     Amount = compInfo.Amount,
+                    Reason = item.BusinessJustification,
                     ReportId = item.ExpenseReportId,
-                    Reason = item.ItemDiscription,
-                    ReportName = item.ExpenseItemName,
-                    SubmittedDate = item.TransactionDate,
-                    UserId = item.AccountId,
-                    Status = item.ExpenseReportStatus,
+                    ReportName = item.ReportTitle,
+                    Status = (ExpenseStatusEnum)item.ReportStatus,
+                    SubmittedDate = item.CreatedUtc,
+                    UserId = compInfo.AccountId,
                     UserName = user.FirstName + " " + user.LastName
+                    
                 });
             }
 
@@ -63,8 +63,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 CanManage = true,
                 CurrentUser = userId,
                 StartDate = startDate,
+                Reports = items,
                 EndDate = endDate,
-                ProductRole = pRole
             };
             return model;
         }

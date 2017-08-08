@@ -78,7 +78,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseItem]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable().FirstOrDefault();
+				return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseItemsByExpenseItemId]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable().FirstOrDefault();
 			}
 		}
 
@@ -151,8 +151,8 @@ namespace AllyisApps.DBModel
             parameters.Add("@submittedById", report.SubmittedById);
             parameters.Add("@reportStatus", report.ReportStatus);
             parameters.Add("@buisnessJustification", report.BusinessJustification);
-            parameters.Add("@createdUtc", report.CreatedUtc);
-            parameters.Add("@modifiedUtc", report.ModifiedUtc);
+            parameters.Add("@createdUtc", report.ExpenseReportCreatedCreatedUtc);
+            parameters.Add("@modifiedUtc", report.ExpenseReportModifiedUtc);
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
@@ -182,14 +182,14 @@ namespace AllyisApps.DBModel
         /// </summary>
         /// <param name="SubmittedById">The id of the parent account</param>
         /// <returns>A collection of Expense Reports.</returns>
-        public IEnumerable<ExpenseItemDBEntity> GetExpenseReportsBySubmittedById(int SubmittedById)
+        public IEnumerable<ExpenseReportDBEntity> GetExpenseReportsBySubmittedById(int SubmittedById)
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@submittedById", SubmittedById);
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
-                return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseReportsBySubmittedById]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable();
+                return connection.Query<ExpenseReportDBEntity>("[Expense].[GetExpenseReportsBySubmittedById]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable();
             }
         }
 
@@ -228,8 +228,8 @@ namespace AllyisApps.DBModel
             parameters.Add("@submittedById", report.SubmittedById);
             parameters.Add("@reportStatus", report.ReportStatus);
             parameters.Add("@businessJustification", report.BusinessJustification);
-            parameters.Add("@createdUtc", report.CreatedUtc);
-            parameters.Add("@modifiedUtc", report.ModifiedUtc);
+            parameters.Add("@createdUtc", report.ExpenseReportCreatedCreatedUtc);
+            parameters.Add("@modifiedUtc", report.ExpenseReportModifiedUtc);
 
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))

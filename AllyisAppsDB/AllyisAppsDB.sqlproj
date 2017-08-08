@@ -311,6 +311,6 @@
     <RefactorLog Include="AllyisAppsDB.refactorlog" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DefaultData\EReportTestData.sql" />
+    <None Include="TestData\ExpenseTracker.Expenses.Table.sql" />
   </ItemGroup>
 </Project>

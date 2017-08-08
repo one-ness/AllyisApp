@@ -37,11 +37,6 @@ namespace AllyisApps.DBModel.Finance
         public int ExpenseReportId { get; set; }
 
         /// <summary>
-        /// Gets or sets the Expense Item's Report Status.
-        /// </summary>
-        public int ReportStatus { get; set; }
-
-        /// <summary>
         /// Gets or sets the Expense Item's Account ID.
         /// </summary>
         public int AccountId { get; set; }
