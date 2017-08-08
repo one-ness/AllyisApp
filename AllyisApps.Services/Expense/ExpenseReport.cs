@@ -4,59 +4,54 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AllyisApps.DBModel.Finance
+namespace AllyisApps.Services
 {
-    /// <summary>
-    /// Represents the Expense Item table in the database.
-    /// </summary>
-    public class ExpenseReportDBEntity
+    public class ExpenseReport
     {
         /// <summary>
-        /// Gets or sets the Expense Report's ID.
+        /// The expense report id.
         /// </summary>
         public int ExpenseReportId { get; set; }
 
         /// <summary>
-        /// Gets or sets the Expense Report's Title.
+        /// The expense report title
         /// </summary>
         public string ReportTitle { get; set; }
 
         /// <summary>
-        /// Gets or sets the Expense Report's date.
+        /// the expense report date.
         /// </summary>
         public DateTime ReportDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the Expense Reports's parent organization Id.
+        /// the organization id of the expense
         /// </summary>
         public int OrganizationId { get; set; }
 
         /// <summary>
-        /// Gets or sets the Expense Report's parent User ID.
+        /// Te submiting user id.
         /// </summary>
         public int SubmittedById { get; set; }
 
+
         /// <summary>
-        /// Gets or sets the Expense Report's status.
+        /// The report status
         /// </summary>
         public int ReportStatus { get; set; }
 
-
         /// <summary>
-        /// Gets or sets description of why report is needed or created.
+        /// The business justification
         /// </summary>
         public string BusinessJustification { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the Expense Report's creation date.
-        /// </summary>
-        public DateTime ExpenseReportCreatedCreatedUtc { get; set; }
 
         /// <summary>
-        /// Gets or sets the Expense Report's last-modified-on date.
+        /// The date created
         /// </summary>
-        public DateTime ExpenseReportModifiedUtc { get; set; }
-        
+        public DateTime CreatedUtc { get; set; }
+
+        /// <summary>
+        /// The last date modified
+        /// </summary>
+        public DateTime ModifiedUtc { get; set; }
     }
-
 }

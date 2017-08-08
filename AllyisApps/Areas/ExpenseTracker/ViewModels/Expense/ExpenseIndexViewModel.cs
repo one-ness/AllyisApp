@@ -1,4 +1,5 @@
 ﻿using AllyisApps.ViewModels;
+using System;
 using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
@@ -21,12 +22,12 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         /// <summary>
         /// Start date for the expense reports
         /// </summary>
-        public int StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         /// <summary>
         /// End date for the expense reports
         /// </summary>
-        public int EndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         /// <summary>
         /// Value indicating if user can manage the items.
