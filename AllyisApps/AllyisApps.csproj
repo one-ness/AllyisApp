@@ -17,8 +17,10 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -200,8 +202,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ImportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\IndexAction.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ViewReport.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseSummaryViewModelItem.cs" />

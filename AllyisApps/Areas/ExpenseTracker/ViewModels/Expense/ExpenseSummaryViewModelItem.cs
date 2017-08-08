@@ -53,5 +53,9 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         /// </summary>
         public string Reason { get; set; }
 
-    }
+		/// <summary>
+		/// List of Items contained in report
+		/// </summary>
+		public List<ExpenseItem> Items { get; set; }
+	}
 }

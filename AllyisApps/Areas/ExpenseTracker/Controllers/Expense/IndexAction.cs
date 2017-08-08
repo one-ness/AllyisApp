@@ -6,6 +6,8 @@ using AllyisApps.ViewModels.ExpenseTracker.Expense;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using AllyisApps.DBModel;
+using AllyisApps.DBModel.Finance;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {

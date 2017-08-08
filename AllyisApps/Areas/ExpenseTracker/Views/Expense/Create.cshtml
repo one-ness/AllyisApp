@@ -11,8 +11,6 @@
 	items.AddRange(new string[]{""});
 }
 
-<h2>@Strings.Report</h2>
-
 <div class="row report-wrap">
 
 	<div class="panel panel-info" style="background-color: #f5f5f5; float: right; width: 300px;">
@@ -53,7 +51,7 @@
 						<select id="allprojects" style="display: none;">
 							@if (Model.Reports != null)
 							{
-								foreach (ExpenseSummaryViewModelItem item in Model.Reports)
+								foreach (ExpenseItemViewModel item in Model.Reports)
 								{
 									<option value="@item.ReportId" class="projectSelectOption">@item.ReportName</option>
 								}
@@ -65,19 +63,19 @@
 							<label>Report Name</label>
 						</div>
 						<div class="right-input">
-							@Html.TextBox("ReportName", "", new { @class = "form-control" })
+							<input type="text" name="ReportName" value="" class="form-control"/>
 						</div>
 						<div class="left-label">
 							<label>Business Justification</label>
 						</div>
 						<div class="right-input">
-							@Html.TextBox("BusinessJustification", "", new { @class = "form-control" })
+							<input type="text" name="BusinessJustification" value="" class="form-control" />
 						</div>
 						<div class="left-label">
 							<label>@Strings.Date</label>
 						</div>
 						<div class="right-input">
-							<input type="text" class="datepicker form-control" id="DateRangeStart" style="display: inline-block; width: 75%" />
+							<input name="date" type="text" class="datepicker form-control" id="DateRangeStart" style="display: inline-block; width: 75%" />
 							@*<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id="datePickerStartButton" title="Choose start date"></span>*@
 						</div>
 						<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.StartDate" />
@@ -86,15 +84,20 @@
 						<div class="panel-heading">
 							Items
 						</div>
-							@foreach (var item in items)
+						<div>
+							@for (int i = 0; i < items.Count; i++)
 							{
+								string dateName = String.Format("[{0}].TransactionDate", i);
+								string nameName = String.Format("[{0}].ExpenseItemName", i);
+								string amountName = String.Format("[{0}].Amount", i);
+								string checkboxName = String.Format("[{0}].IsBillableToCustomer", i);
 								<div class="item-div">
-									@Html.TextBox("ItemDate" + item, "", new { type = "text", @class = "datepicker form-control", id = "datePickerStart_" + item, style = "display: inline-block; width: 150px", placeholder = "Date" })
+									<input type="text" value="" class="datepicker form-control" name="@dateName" style="display: inline-block; width: 150px" placeholder = "Date"/>
 									@*<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id=@item title="Choose start date"></span>*@
-									@Html.TextBox("ItemName_" + item, item, new { @class = "form-control", style = "display: inline-block; width: 150px;", placeholder = "Name" })
-									@Html.TextBox("ItemAmount_" + item, "", new { @class = "form-control", style = "display: inline-block; width: 150px;", placeholder = "Amount" })
+									<input type="text" value="" class="form-control" name="@nameName" style="display: inline-block; width: 150px" placeholder="Name" />
+									<input type="text" value="" class="form-control" name="@amountName" style="display: inline-block; width: 150px" placeholder="Amount" />
 									<label>Payed for by Customer</label>
-									@Html.CheckBox("CustomerPay_" + item, true)
+									<input type="checkbox" checked class="form-control" name="@checkboxName" />
 									<a>
 										<span class="btn btn-primary">
 											Remove
@@ -102,13 +105,14 @@
 									</a>
 								</div>
 							}
-							<div style="text-align: center;">
-								<a>
-									<span class="btn btn-primary">
-										Add Item
-									</span>
-								</a>
-							</div>
+						</div>
+						<div style="text-align: center;">
+							<a>
+								<span class="btn btn-primary">
+									Add Item
+								</span>
+							</a>
+						</div>
 					</div>
 
 					<div class="row">
@@ -136,6 +140,12 @@
 		</div>
 	</div>*@
 </div>
+
+@section css
+{
+	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" href="~/Content/jquery.comiseo.daterangepicker.css" />
+}
 
 @section scripts
 {

@@ -110,6 +110,40 @@ namespace AllyisApps.Services
 			};
 
 		}
-	   
+		
+		public void CreateExpenseItem(ExpenseItem item)
+		{
+			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
+			{
+				AccountId = item.AccountId,
+				Amount = item.Amount,
+				CreatedUtc = item.ExpenseItemCreatedUtc,
+				ExpenseItemId = item.ExpenseItemId,
+				ExpenseReportId = item.ExpenseReportId,
+				IsBillableToCustomer = item.IsBillableToCustomer,
+				ItemDescription = item.ItemDiscription,
+				ModifiedUtc = item.ExpenseItemModifiedUtc,
+				TransactionDate = item.TransactionDate,
+			};
+			DBHelper.CreateExpenseItem(itemEntity);
+		}
+
+		public void CreateExpenseReport(ExpenseReport report)
+		{
+			ExpenseReportDBEntity reportEntity = new ExpenseReportDBEntity()
+			{
+				BusinessJustification = report.BusinessJustification,
+				ExpenseReportCreatedCreatedUtc = report.CreatedUtc,
+				ExpenseReportId = report.ExpenseReportId,
+				ExpenseReportModifiedUtc = report.ModifiedUtc,
+				//OrganizationId = report.OrganizationId,
+				OrganizationId = 112559,
+				ReportDate = report.ReportDate,
+				ReportStatus = report.ReportStatus,
+				ReportTitle = report.ReportTitle,
+				SubmittedById = report.SubmittedById
+			};
+			DBHelper.CreateExpenseReport(reportEntity);
+		}
 	}
 }
