@@ -55,15 +55,16 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="reportName"></param>
 		/// <param name="businessJustification"></param>
 		/// <param name="date"></param>
+		/// <param name="items"></param>
 		/// <returns></returns>
-		public ActionResult ViewReport(string reportName, string businessJustification, int date = 0)
+		public ActionResult ViewReport(string reportName, string businessJustification, DateTime date, List<ReportItem> items)
 		{
 			ExpenseReportViewModel model = new ExpenseReportViewModel()
 			{
 				Name = reportName,
 				BusinessJustification = businessJustification,
 				Date = date,
-				Items = new List<ReportItem>()
+				Items = items
 			};
 			return View(model);
 		}

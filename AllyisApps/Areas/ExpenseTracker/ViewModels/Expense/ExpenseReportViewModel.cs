@@ -13,7 +13,7 @@ namespace AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 		/// <summary>
 		/// Date of report
 		/// </summary>
-		public int Date { get; set; }
+		public DateTime Date { get; set; }
 
 		/// <summary>
 		/// Name of report
@@ -44,7 +44,7 @@ namespace AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 		/// <summary>
 		/// Date that item was added
 		/// </summary>
-		public int Date { get; set; }
+		public DateTime Date { get; set; }
 
 		/// <summary>
 		/// Cost of item
