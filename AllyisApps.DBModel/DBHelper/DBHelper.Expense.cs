@@ -156,8 +156,8 @@ namespace AllyisApps.DBModel
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
-                connection.Execute("[Expense].[CreateExpenseReport]", parameters, commandType: CommandType.StoredProcedure);
-				int reportId = parameters.Get<int>("@reportId");
+                //int reportId = connection.Execute("[Expense].[CreateExpenseReport]", parameters, commandType: CommandType.StoredProcedure);
+				int reportId = connection.ExecuteScalar<int>("[Expense].[CreateExpenseReport]", parameters, commandType: CommandType.StoredProcedure);
 				return reportId;
 			}
 		}

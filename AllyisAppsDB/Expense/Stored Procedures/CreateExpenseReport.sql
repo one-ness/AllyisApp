@@ -29,9 +29,6 @@ BEGIN
 		@businessJustification,
 		@createdUtc,
 		@modifiedUtc);
+
+	SELECT IDENT_CURRENT('[Expense].[ExpenseReport]');
 END
-
-
-	SELECT [ExpenseReportId]
-	FROM [Expense].[ExpenseReport]
-	WHERE [ExpenseReportId] = @@IDENTITY;

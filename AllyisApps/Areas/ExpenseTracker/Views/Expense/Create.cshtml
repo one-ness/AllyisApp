@@ -41,6 +41,7 @@
 		<div class="row">
 			@using (Html.BeginForm(ActionConstants.ViewReport, ControllerConstants.Expense, FormMethod.Post, htmlAttributes: new { @id = "reportForm" }))
             {
+				<input type="hidden" name="accountId" value="@Model.CurrentUser" />
 				<input type="hidden" name="submittedById" value="@Model.CurrentUser" />
 				<input type="hidden" name="subscriptionId" value="@Model.SubscriptionId" />
                 <div class="options-right container">
