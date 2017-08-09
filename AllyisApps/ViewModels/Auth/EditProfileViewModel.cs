@@ -71,12 +71,13 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the user's phone number.
 		/// </summary>
+
 		[RegularExpression(@"^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
 		[Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
 
 		/// <summary>
-		/// Gets of sets the user's address Id.
+		/// Gets or sets the user's address Id.
 		/// </summary>
 		public int? AddressId { get; set; }
 
@@ -106,6 +107,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		[MinDateValidation]
 		public int? DateOfBirth { get; set; } //has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view.
+
 
 		/// <summary>
 		/// Gets or sets a List of valid countries.
@@ -180,13 +182,15 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Validates if the value meets the minimum requirement.
 		/// </summary>
-		/// <param name="value">.</param>
+		/// <param name="value">The integer value of the birthdate to be validated.</param>
 		/// <param name="validationContext">Validation context.</param>
-		/// <returns>.</returns>
+		/// <returns>A validation result with the status of the value being validated.</returns>
 		protected override ValidationResult IsValid(object value, ValidationContext validationContext)
 		{
 			int minAgeYears = 15;
-			if ((int) value > -1) //-1 represents a null date
+
+			// -1 represents a null date
+			if ((int)value > -1)
 			{
 				DateTime dob = new DateTime(1 / 1 / 1).AddDays((int)value);
 				dob = new DateTime(dob.Subtract(new DateTime(1 / 1 / 1)).Ticks);
@@ -195,11 +199,12 @@ namespace AllyisApps.ViewModels.Auth
 				{
 					return new ValidationResult("Must be at least " + minAgeYears + " years of age to register");
 				}
-				else if ((int)value < 639905) 
+				else if ((int)value < 639905)
 				{
 					return new ValidationResult("Please enter a date within the last 150 years");
 				}
 			}
+
 			return ValidationResult.Success;
 		}
 	}

@@ -57,12 +57,12 @@ namespace AllyisApps.Controllers
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 PhoneExtension = user.PhoneExtension,
-                Address1 = userAddress.Address1 ,
+                Address1 = userAddress.Address1,
                 Address2 = userAddress.Address2,
                 City = userAddress.City,
-                State = userAddress.State,
+                State = userAddress.StateName,
                 PostalCode = userAddress.PostalCode,
-                Country = userAddress.CountryId,
+                Country = userAddress.CountryName,
             };
             AccountIndexViewModel indexViewModel = new AccountIndexViewModel()
             {
@@ -74,7 +74,7 @@ namespace AllyisApps.Controllers
             {
                 var org = AppService.GetOrganization(invite.OrganizationId);
 
-                indexViewModel.Invitations.Add(new InvitationViewModel()
+                indexViewModel.Invitations.Add(new AccountIndexViewModel.InvitationViewModel()
                 {
                     InvitationId = invite.InvitationId,
                     OrganizationName = org.OrganizationName,
@@ -86,22 +86,10 @@ namespace AllyisApps.Controllers
             //Add organizations to model
             foreach (Organization curorg in orgs)
             {
-                
+
                 AccountIndexViewModel.OrganizationViewModel orgViewModel =
-                new AccountIndexViewModel.OrganizationViewModel()
+                new AccountIndexViewModel.OrganizationViewModel(curorg, this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.OrganizationId, false))
                 {
-                    OrganizationId = curorg.OrganizationId,
-                    OrganizationName = curorg.OrganizationName,
-                    PhoneNumber = curorg.PhoneNumber,
-                    PhoneExtension = null,//TODO: Fill with values
-                    StreetAddress = curorg.Address, 
-                    
-                    City = curorg.City,
-                    State = curorg.State,
-                    PostalCode = curorg.PostalCode,
-                    Country = curorg.Country,
-                    SiteUrl = curorg.SiteUrl,
-                    FaxNumber = curorg.FaxNumber,
                     //TODO: Infomation is dependent on curent user
                     IsManageAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.OrganizationId, false),
                 };
@@ -127,18 +115,29 @@ namespace AllyisApps.Controllers
                             int startOfWeek = AppService.GetAllSettings(userSubInfo.SubscriptionId).Item1.StartOfWeek;
                             sDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
                             eDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
+                            orgViewModel.Subscriptions.Add(new AccountIndexViewModel.OrganizationViewModel.TimeTrackerSubViewModel()
+                            {
+                                ProductName = userSubInfo.ProductName,
+                                SubscriptionId = userSubInfo.SubscriptionId,
+                                SubscriptionName = userSubInfo.SubscriptionName,
+                                ProductDescription = description,
+                                productID = userSubInfo.ProductId,
+                                AreaUrl = userSubInfo.AreaUrl,
+                                startDate = sDate,
+                                endDate = eDate
+                            } );
                         }
+                        else { 
                         orgViewModel.Subscriptions.Add(new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel()
-                        {
-                            ProductName = userSubInfo.ProductName,
-                            SubscriptionId = userSubInfo.SubscriptionId,
-                            SubscriptionName = userSubInfo.SubscriptionName,
-                            ProductDescription = description,
-                            productID = userSubInfo.ProductId,
-                            AreaUrl = userSubInfo.AreaUrl,
-                            startDate = sDate,
-                            endDate = eDate
-                        });
+                            {
+                                ProductName = userSubInfo.ProductName,
+                                SubscriptionId = userSubInfo.SubscriptionId,
+                                SubscriptionName = userSubInfo.SubscriptionName,
+                                ProductDescription = description,
+                                productID = userSubInfo.ProductId,
+                                AreaUrl = userSubInfo.AreaUrl,
+                            });
+                        }
                     }
                 }
 

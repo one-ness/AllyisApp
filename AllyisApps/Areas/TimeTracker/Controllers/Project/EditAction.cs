@@ -24,7 +24,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// GET: Project/Edit.
 		/// Gets the form for editing an existing Project.
 		/// </summary>
-		/// <param name="subscriptionId">.</param>
+		/// <param name="subscriptionId">Subscription id.</param>
 		/// <param name="userId">The project's Id.</param>
 		/// <returns>The ActionResult for the Edit view.</returns>
 		public ActionResult Edit(int subscriptionId, int userId)
@@ -48,6 +48,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 			}
+
 			model.SubscriptionUsers = subList;
 			int orgId = AppService.UserContext.OrganizationSubscriptions[model.SubscriptionId].OrganizationId;
 			if (ModelState.IsValid)
@@ -73,7 +74,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						message = string.Format("{0} {1}", message, ex.Message);
 					}
 
-					//Update failure
+					// Update failure
 					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
 					return this.View(model);
 				}

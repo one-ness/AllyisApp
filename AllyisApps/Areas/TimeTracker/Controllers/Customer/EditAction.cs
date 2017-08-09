@@ -20,8 +20,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET: Customer/{SubscriptionId}/Edit.
 		/// </summary>
-		/// <param name="userId">The Customer id.</param>
 		/// <param name="subscriptionId">The Subscription Id.</param>
+		/// <param name="userId">The Customer id.</param>
 		/// <returns>Presents a page to edit Customer data.</returns>
 		[HttpGet]
 		public ActionResult Edit(int subscriptionId, int userId)
@@ -85,18 +85,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					},
 					model.SubscriptionId);
 
-				if (result == -1)   //the new CustOrgId is not unique
+				if (result == -1)
 				{
+					// the new CustOrgId is not unique
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
 					return this.View(model);
 				}
-				else if (result == 1) //updated successfully
+				else if (result == 1)
 				{
+					// updated successfully
 					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerDetailsUpdated, Variety.Success));
 					return this.Redirect(string.Format("{0}#customerNumber{1}", Url.Action(ActionConstants.Index, new { subscriptionId = model.SubscriptionId }), model.CustomerId));
 				}
-				else // Permissions failure
+				else
 				{
+					// Permissions failure
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 					return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = model.SubscriptionId });
 				}

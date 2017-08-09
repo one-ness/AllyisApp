@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="ManageAction.cs" company="Allyis, Inc.">
+// <copyright file="ManageOrgAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -31,25 +31,26 @@ namespace AllyisApps.Controllers
 
 			var sub = model.Subscriptions.Select(x => x).Where(y => y.ProductId == (int)ProductIdEnum.TimeTracker).FirstOrDefault();
 			if (sub != null && model.Subscriptions.Count() > 0)
-            {
+			{
 				int subId = sub.SubscriptionId;
-                int startOfWeek = AppService.GetAllSettings(subId).Item1.StartOfWeek;
-                ViewBag.StartDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
-                ViewBag.EndDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
-            }
+				int startOfWeek = AppService.GetAllSettings(subId).Item1.StartOfWeek;
+				ViewBag.StartDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
+				ViewBag.EndDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
+			}
 
-            ViewData["UserId"] = this.AppService.UserContext.UserId;
+			ViewData["UserId"] = this.AppService.UserContext.UserId;
 			return this.View(model);
 		}
 
 		/// <summary>
 		/// Uses services to populate the lists of an <see cref="ManageOrgViewModel"/> and returns it.
 		/// </summary>
+		/// <param name="organizationId">Organization id.</param>
 		/// <returns>The OrganizationManageViewModel.</returns>
 		[CLSCompliant(false)]
-		public ManageOrgViewModel ConstructOrganizationManageViewModel(int orgId)
+		public ManageOrgViewModel ConstructOrganizationManageViewModel(int organizationId)
 		{
-			var infos = AppService.GetOrganizationManagementInfo(orgId);
+			var infos = AppService.GetOrganizationManagementInfo(organizationId);
 
 			BillingServicesCustomer customer = (infos.Item5 == null) ? null : AppService.RetrieveCustomer(new BillingServicesCustomerId(infos.Item5));
 
@@ -74,7 +75,7 @@ namespace AllyisApps.Controllers
 					PendingInvitation = infos.Item4,
 					TotalUsers = infos.Item2.Count
 				},
-				OrganizationId = orgId,
+				OrganizationId = organizationId,
 				BillingCustomer = customer,
 				SubscriptionCount = infos.Item3.Count,
 				Subscriptions = infos.Item6.Select(p =>
@@ -85,9 +86,9 @@ namespace AllyisApps.Controllers
 						ProductId = p.ProductId,
 						ProductName = p.ProductName,
 						SubscriptionId = infos.Item3.Where(s => s.ProductId == p.ProductId).FirstOrDefault().SubscriptionId,
-                        SubscriptionName = infos.Item3.Where(s => s.ProductId == p.ProductId).FirstOrDefault().SubscriptionName,
-                        ProductDescription = p.ProductDescription,
-						OrganizationId = orgId,
+						SubscriptionName = infos.Item3.Where(s => s.ProductId == p.ProductId).FirstOrDefault().SubscriptionName,
+						ProductDescription = p.ProductDescription,
+						OrganizationId = organizationId,
 						AreaUrl = p.AreaUrl,
 					};
 				})

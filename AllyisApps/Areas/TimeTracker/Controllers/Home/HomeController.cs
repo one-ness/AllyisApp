@@ -25,6 +25,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Index page.
 		/// </summary>
+		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>The view.</returns>
 		public ActionResult Index(int subscriptionId)
 		{

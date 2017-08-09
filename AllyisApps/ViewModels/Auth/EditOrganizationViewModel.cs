@@ -109,7 +109,7 @@ namespace AllyisApps.ViewModels.Auth
 		public string EmployeeId { get; set; }
 
 		/// <summary>
-		/// Gets the organization's Id.
+		/// Gets or sets the organization's Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
 

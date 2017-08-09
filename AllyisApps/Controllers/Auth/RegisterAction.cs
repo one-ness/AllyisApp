@@ -23,6 +23,7 @@ namespace AllyisApps.Controllers
 		/// GET: /Account/Register.
 		/// </summary>
 		/// <param name="returnUrl">Return Url.</param>
+		/// <returns>The register view.</returns>
 		[AllowAnonymous]
 		public ActionResult Register(string returnUrl)
 		{
@@ -56,9 +57,14 @@ namespace AllyisApps.Controllers
 				string confirmUrl = Url.Action(ActionConstants.ConfirmEmail, ControllerConstants.Account, new { id = code }, protocol: Request.Url.Scheme);
 				string confirmEmailSubject = string.Format(Strings.ConfirmEmailSubject, Strings.ApplicationTitle);
 				string confirmEmailBody = string.Format(Strings.ConfirmEmailMessage, Strings.ApplicationTitle, confirmUrl);
+
 				// TODO: Change language preference from 1 to a value grabbed from session/URL
+
+				//string langPreference = "en-US";
+
 				// compute birthdate			
 				var birthdate = AppService.GetDateTimeFromDays(model.DateOfBirth);
+
 				// create new user in the db and get back the userId and count of invitations
 				int userId = await AppService.SetupNewUser(model.Email, model.Password, model.FirstName, model.LastName, code, birthdate, model.PhoneNumber, model.Address, null, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode, confirmEmailSubject, confirmEmailBody);
 				if (userId > 0)

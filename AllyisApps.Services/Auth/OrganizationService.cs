@@ -327,7 +327,7 @@ namespace AllyisApps.Services
 		///// Getst a list of the user invitations for the current organization.
 		///// </summary>
 		///// <returns>List of InvitationInfos of organization's user invitations.</returns>
-		//public IEnumerable<InvitationInfo> GetUserInvitations()
+		// public IEnumerable<InvitationInfo> GetUserInvitations()
 		//{
 		//	return DBHelper.GetUserInvitationsByOrgId(UserContext.ChosenOrganizationId).Select(i => InitializeInvitationInfo(i));
 		//}
@@ -338,7 +338,7 @@ namespace AllyisApps.Services
 		///// <param name="invitationId">Invitation id.</param>
 		///// <param name="subscriptionId">Subscription id.</param>
 		///// <param name="selectedRole">Selected role.</param>
-		//public void CreateInvitationSubRole(int invitationId, int subscriptionId, int selectedRole)
+		// public void CreateInvitationSubRole(int invitationId, int subscriptionId, int selectedRole)
 		//{
 		//    #region Validation
 
@@ -414,7 +414,7 @@ namespace AllyisApps.Services
 		///// </summary>
 		///// <param name="email">Email address.</param>
 		///// <returns>User's first name.</returns>
-		//public string GetOrgUserFirstName(string email)
+		// public string GetOrgUserFirstName(string email)
 		//{
 		//	#region Validation
 
@@ -436,7 +436,7 @@ namespace AllyisApps.Services
 		///// Gets a list of subscription details for the current organization.
 		///// </summary>
 		///// <returns><see cref="IEnumerable{SubscriptionInfo}"/>.</returns>
-		//public IEnumerable<SubscriptionInfo> GetSubscriptionDetails()
+		// public IEnumerable<SubscriptionInfo> GetSubscriptionDetails()
 		//{
 		//	IEnumerable<SubscriptionDBEntity> subDBEList = DBHelper.GetSubscriptionDetails(UserContext.ChosenOrganizationId);
 		//	List<SubscriptionInfo> list = new List<SubscriptionInfo>();

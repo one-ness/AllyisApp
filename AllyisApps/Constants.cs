@@ -43,7 +43,7 @@ namespace AllyisApps
 		public const string GetStates = "getstates";
 		public const string Import = "import";
 		public const string Index = "index";
-        public const string IndexNoUserId = "indexnouserid";
+		public const string IndexNoUserId = "indexnouserid";
 		public const string Invite = "invite";
 		public const string IsSubdomainNameUnique = "issubdomainnameunique";
 		public const string LogOff = "logoff";
@@ -68,7 +68,7 @@ namespace AllyisApps
 		public const string Skus = "skus";
 		public const string Subscribe = "subscribe";
 		public const string Unsubscribe = "unsubscribe";
-		public const string Upgrade= "upgrade";
+		public const string Upgrade = "upgrade";
 		public const string UpdateOvertime = "updateovertime";
 		public const string UpdateStartOfWeek = "updatestartofweek";
 		public const string UserEditAJAX = "usereditajax";
@@ -134,5 +134,13 @@ namespace AllyisApps
 	{
 		public const string TimeTracker = "TimeTracker";
 		public const string ExpenseTracker = "ExpenseTracker";
+	}
+
+	/// <summary>
+	/// Route name constants.
+	/// </summary>
+	public static class RouteNameConstants
+	{
+		public const string TimeTrackerNoIndex = "TimeTracker_NoUserId";
 	}
 }

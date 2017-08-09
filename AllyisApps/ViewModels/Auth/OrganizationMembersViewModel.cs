@@ -61,7 +61,7 @@ namespace AllyisApps.ViewModels.Auth
 		public IEnumerable<InvitationInfo> PendingInvitation { get; internal set; }
 
 		/// <summary>
-		/// Gets OrganizationId.
+		/// Gets or sets the OrganizationId.
 		/// </summary>
 		public int OrganizationId { get; set; }
 

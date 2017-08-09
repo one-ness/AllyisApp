@@ -53,7 +53,7 @@ namespace AllyisApps.Utilities
 					break;
 
 				case 2:
-					successMessage = successfulImports[0] + " and " + successfulImports[1];//LANGUAGE Update to use resource file to change message language
+					successMessage = successfulImports[0] + " and " + successfulImports[1]; // LANGUAGE Update to use resource file to change message language
 					break;
 
 				default:
@@ -63,13 +63,13 @@ namespace AllyisApps.Utilities
 						successMessage = successMessage + successfulImports[i] + ", ";
 					}
 
-					successMessage = successMessage + " and " + successfulImports[successes - 1];//LANGUAGE Update to use resource file to change message language
+					successMessage = successMessage + " and " + successfulImports[successes - 1]; // LANGUAGE Update to use resource file to change message language
 					break;
 			}
 
 			if (successMessage != null)
 			{
-				formattedResult[0] = successMessage + " imported.";//LANGUAGE Update to use resource file to change message language
+				formattedResult[0] = successMessage + " imported."; // LANGUAGE Update to use resource file to change message language
 			}
 
 			if (result.UsersAddedToOrganization > 0)
@@ -77,7 +77,7 @@ namespace AllyisApps.Utilities
 				int difference = result.UsersAddedToOrganization - result.UsersImported;
 				if (difference > 0)
 				{
-					formattedResult[0] = formattedResult[0] + " " + difference + " existing users added to organization.";//LANGUAGE Update to use resource file to change message language
+					formattedResult[0] = formattedResult[0] + " " + difference + " existing users added to organization."; // LANGUAGE Update to use resource file to change message language
 				}
 			}
 

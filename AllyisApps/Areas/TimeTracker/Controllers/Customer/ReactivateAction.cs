@@ -25,11 +25,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", Resources.Strings.CustomerReactivateNotification, AppService.GetCustomer(userId).CustomerName), Variety.Success));
 			}
-			// Permission failure
 			else if (result == null)
 			{
+				// Permission failure
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
+
 			return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
 		}
 	}
