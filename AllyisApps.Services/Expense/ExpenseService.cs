@@ -128,7 +128,7 @@ namespace AllyisApps.Services
 			DBHelper.CreateExpenseItem(itemEntity);
 		}
 
-		public void CreateExpenseReport(ExpenseReport report)
+		public int CreateExpenseReport(ExpenseReport report)
 		{
 			ExpenseReportDBEntity reportEntity = new ExpenseReportDBEntity()
 			{
@@ -136,15 +136,13 @@ namespace AllyisApps.Services
 				ExpenseReportCreatedCreatedUtc = report.CreatedUtc,
 				ExpenseReportId = report.ExpenseReportId,
 				ExpenseReportModifiedUtc = report.ModifiedUtc,
-				//OrganizationId = report.OrganizationId,
-				OrganizationId = 112559,
+				OrganizationId = report.OrganizationId,
 				ReportDate = report.ReportDate,
 				ReportStatus = report.ReportStatus,
 				ReportTitle = report.ReportTitle,
-				//SubmittedById = report.SubmittedById
-				SubmittedById = 111119
+				SubmittedById = report.SubmittedById
 			};
-			DBHelper.CreateExpenseReport(reportEntity);
+			return DBHelper.CreateExpenseReport(reportEntity);
 		}
 	}
 }

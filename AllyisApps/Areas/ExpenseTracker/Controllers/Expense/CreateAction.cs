@@ -19,10 +19,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// create expense report
 		/// </summary>
-		/// <param name="model"></param>
+		/// <param name="reportId"></param>
 		/// <returns></returns>
-		public ActionResult Create(ExpenseIndexViewModel model)
+		public ActionResult Create(int reportId)
 		{
+			model.CurrentUser = userId;
 			return View(model);
 		}
 	}

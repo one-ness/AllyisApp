@@ -136,7 +136,7 @@ namespace AllyisApps.DBModel
         /// </summary>
         /// <param name="report">The ExpenseReportDBEntity to create.</param>
         /// <returns>TODO: Should this return success/failuer codes? ? ?</returns>
-        public void CreateExpenseReport(ExpenseReportDBEntity report)
+        public int CreateExpenseReport(ExpenseReportDBEntity report)
         {
             if (report.OrganizationId == 0 || report.SubmittedById == 0) //check if user and organization exists already
             {
@@ -155,7 +155,8 @@ namespace AllyisApps.DBModel
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
-                connection.Execute("[Expense].[CreateExpenseReport]", parameters, commandType: CommandType.StoredProcedure);
+                int reportId = connection.Execute("[Expense].[CreateExpenseReport]", parameters, commandType: CommandType.StoredProcedure);
+				return reportId;
             }
         }
 
@@ -199,7 +200,7 @@ namespace AllyisApps.DBModel
         public IEnumerable<ExpenseItemDBEntity> GetExpenseReportsByOrganizationId(int OrganizationId)
         {
             DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@organziationId", OrganizationId);
+            parameters.Add("@organizationId", OrganizationId);
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {

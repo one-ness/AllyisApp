@@ -19,13 +19,18 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// view/export expense report
 		/// </summary>
+		/// <param name="subscriptionId"></param>
+		/// <param name="submittedById"></param>
 		/// <param name="reportName"></param>
 		/// <param name="businessJustification"></param>
 		/// <param name="date"></param>
 		/// <param name="items"></param>
 		/// <returns></returns>
-		public ActionResult ViewReport(string reportName, string businessJustification, List<ExpenseItem> items, DateTime date)
+		public ActionResult ViewReport(int subscriptionId, int submittedById, string reportName, string businessJustification, List<ExpenseItem> items, DateTime date)
 		{
+			var subscription = AppService.GetSubscription(subscriptionId);
+			var organizationId = subscription.OrganizationId;
+
 			var report = new ExpenseReport()
 			{
 				ReportTitle = reportName,
@@ -33,18 +38,18 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				CreatedUtc = date,
 				ModifiedUtc = date,
 				ReportDate = date,
-				SubmittedById = 1,
-				OrganizationId = 1
+				SubmittedById = submittedById,
+				OrganizationId = organizationId
 			};
 
-			AppService.CreateExpenseReport(report);
+			var reportId = AppService.CreateExpenseReport(report);
 
 			foreach (var item in items)
 			{
 				item.AccountId = 1;
 				item.ExpenseItemCreatedUtc = item.TransactionDate;
 				item.ExpenseItemModifiedUtc = item.TransactionDate;
-				item.ExpenseReportId = report.ExpenseReportId;
+				item.ExpenseReportId = reportId;
 				AppService.CreateExpenseItem(item);
 			}
 

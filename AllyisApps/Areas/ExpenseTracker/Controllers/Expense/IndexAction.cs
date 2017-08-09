@@ -43,7 +43,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
             foreach( var item in expenses)
             {
-                var compInfo = AppService.GetExpenseItemsByUserSubmitted(item.SubmittedById).Select(x => x).Where(x => x.ExpenseReportId == item.ExpenseReportId).First();
+				var expItems = AppService.GetExpenseItemsByUserSubmitted(item.SubmittedById);
+				var compInfo = expItems.Select(x => x).Where(x => x.ExpenseReportId == item.ExpenseReportId).First();
                 var user = AppService.GetUser(item.SubmittedById);
                 items.Add(new ExpenseItemViewModel()
                 {
@@ -55,7 +56,6 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                     SubmittedDate = item.CreatedUtc,
                     UserId = compInfo.AccountId,
                     UserName = user.FirstName + " " + user.LastName
-                    
                 });
             }
 

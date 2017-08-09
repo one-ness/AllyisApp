@@ -28,4 +28,6 @@ BEGIN
 		@businessJustification,
 		@createdUtc,
 		@modifiedUtc);
+	SELECT SCOPE_IDENTITY();
+	RETURN
 END
