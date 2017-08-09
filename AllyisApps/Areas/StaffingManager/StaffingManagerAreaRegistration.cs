@@ -28,6 +28,7 @@ namespace AllyisApps.Areas.StaffingManager
 		/// <summary>
 		/// Registers the area within the site.
 		/// </summary>
+		/// <param name="context">The context object to add the route to.</param>
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
 			context.Routes.MapSubdomainRoute(
