@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------
-// <copyright file="DBHelper.Lookup.cs" company="Allyis, Inc.">
+// <copyright file="DBHelper.StaffingManager.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------

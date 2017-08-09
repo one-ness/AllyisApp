@@ -1,8 +1,8 @@
 CREATE TABLE [StaffingManager].[Position] (
 	[PositionId]					INT		         IDENTITY (123000, 3) NOT NULL,
-	[OrganizationId]				INT				 CONSTRAINT [DF__Auth__OrganizationId] DEFAULT ((0)) NOT NULL,
-	[CustomerId]					INT				 CONSTRAINT [DF__Crm_CustomerId] DEFAULT ((0)) NULL,
-	[AddressId]						INT              CONSTRAINT [DF__Lookup_AddressId] DEFAULT ((0)) NOT NULL,
+	[OrganizationId]				INT				 CONSTRAINT [DF_Position_Organization] DEFAULT ((0)) NOT NULL,
+	[CustomerId]					INT				 CONSTRAINT [DF_Position_Customer] DEFAULT ((0)) NULL,
+	[AddressId]						INT              CONSTRAINT [DF_Position_Address] DEFAULT ((0)) NOT NULL,
 	[PositionCreatedUtc]			DATETIME2 (0)    DEFAULT (getutcdate()) NOT NULL,
 	[PositionModifiedUtc]			DATETIME2 (0)    DEFAULT (getutcdate()) NOT NULL,
 	[StartDate]						DATETIME2 (0)    NULL,
@@ -20,8 +20,8 @@ CREATE TABLE [StaffingManager].[Position] (
 	[HiringManager]					NVARCHAR (384)   NULL,
 	[TeamName]						NVARCHAR (384)   NULL,
 	CONSTRAINT [PK_PositionId] PRIMARY KEY CLUSTERED ([PositionId] ASC),
-	CONSTRAINT [FK_Auth_OrganizationId] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),
-	CONSTRAINT [FK_Lookup_AddressId] FOREIGN KEY ([AddressId]) REFERENCES [Lookup].[Address] ([AddressId]),
-	CONSTRAINT [FK_Crm_CustomerId] FOREIGN KEY ([CustomerId]) REFERENCES [Crm].[Customer] ([CustomerId]),
+	CONSTRAINT [FK_Position_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),
+	CONSTRAINT [FK_Position_Address] FOREIGN KEY ([AddressId]) REFERENCES [Lookup].[Address] ([AddressId]),
+	CONSTRAINT [FK_Position_Customer] FOREIGN KEY ([CustomerId]) REFERENCES [Crm].[Customer] ([CustomerId]),
 );
 
