@@ -75,7 +75,7 @@ namespace AllyisApps.Services
                 OrganizationId = entity.OrganizationId,
                 ExpenseReportId = entity.ExpenseReportId,
                 SubmittedById = entity.SubmittedById,
-                CreatedUtc = entity.ExpenseReportCreatedCreatedUtc,
+                CreatedUtc = entity.ExpenseReportCreatedUtc,
                 ModifiedUtc = entity.ExpenseReportModifiedUtc,
                 ReportDate = entity.ReportDate,
                 ReportStatus = entity.ReportStatus,
@@ -133,7 +133,7 @@ namespace AllyisApps.Services
 			ExpenseReportDBEntity reportEntity = new ExpenseReportDBEntity()
 			{
 				BusinessJustification = report.BusinessJustification,
-				ExpenseReportCreatedCreatedUtc = report.CreatedUtc,
+				ExpenseReportCreatedUtc = report.CreatedUtc,
 				ExpenseReportId = report.ExpenseReportId,
 				ExpenseReportModifiedUtc = report.ModifiedUtc,
 				//OrganizationId = report.OrganizationId,

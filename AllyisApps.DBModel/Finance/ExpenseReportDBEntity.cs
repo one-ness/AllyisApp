@@ -50,7 +50,7 @@ namespace AllyisApps.DBModel.Finance
         /// <summary>
         /// Gets or sets the Expense Report's creation date.
         /// </summary>
-        public DateTime ExpenseReportCreatedCreatedUtc { get; set; }
+        public DateTime ExpenseReportCreatedUtc { get; set; }
 
         /// <summary>
         /// Gets or sets the Expense Report's last-modified-on date.

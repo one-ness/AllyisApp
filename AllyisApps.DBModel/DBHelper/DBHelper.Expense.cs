@@ -151,7 +151,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@submittedById", report.SubmittedById);
             parameters.Add("@reportStatus", report.ReportStatus);
             parameters.Add("@businessJustification", report.BusinessJustification);
-            parameters.Add("@createdUtc", report.ExpenseReportCreatedCreatedUtc);
+            parameters.Add("@createdUtc", report.ExpenseReportCreatedUtc);
             parameters.Add("@modifiedUtc", report.ExpenseReportModifiedUtc);
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -227,7 +227,7 @@ namespace AllyisApps.DBModel
             parameters.Add("@submittedById", report.SubmittedById);
             parameters.Add("@reportStatus", report.ReportStatus);
             parameters.Add("@businessJustification", report.BusinessJustification);
-            parameters.Add("@createdUtc", report.ExpenseReportCreatedCreatedUtc);
+            parameters.Add("@createdUtc", report.ExpenseReportCreatedUtc);
             parameters.Add("@modifiedUtc", report.ExpenseReportModifiedUtc);
 
 
