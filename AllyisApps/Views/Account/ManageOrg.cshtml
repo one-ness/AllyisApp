@@ -38,14 +38,14 @@
 				}
 			</table>
 			<div class="panel-body">
-				<p>Optimize your organization further at the <a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId })" style="color:cornflowerblue">subscriptions page</a></p>
+				<p>Optimize your organization further at the <a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { organizationId = Model.OrganizationId })" style="color:cornflowerblue">subscriptions page</a></p>
 			</div>
 		}
 		else
 		{
 			<div class="panel-body">
 				<h4>No Subscriptions</h4>
-				<p>Start your organization's first subscription at the <a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId })" style="color:cornflowerblue">subscriptions page</a> to begin alleviating the management process</p>
+				<p>Start your organization's first subscription at the <a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { organizationId = Model.OrganizationId })" style="color:cornflowerblue">subscriptions page</a> to begin alleviating the management process</p>
 			</div>
 		}
 	</div>
