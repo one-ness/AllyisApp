@@ -50,20 +50,7 @@ namespace AllyisApps.Controllers
             User user = infos.Item1;
             Services.Lookup.Address userAddress = infos.Item4;
 
-            AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel()
-            {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                PhoneNumber = user.PhoneNumber,
-                PhoneExtension = user.PhoneExtension,
-                Address1 = userAddress.Address1,
-                Address2 = userAddress.Address2,
-                City = userAddress.City,
-                State = userAddress.StateName,
-                PostalCode = userAddress.PostalCode,
-                Country = userAddress.CountryName,
-            };
+            AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel(user,userAddress);
             AccountIndexViewModel indexViewModel = new AccountIndexViewModel()
             {
                 UserInfo = userViewModel
@@ -88,11 +75,7 @@ namespace AllyisApps.Controllers
             {
 
                 AccountIndexViewModel.OrganizationViewModel orgViewModel =
-                new AccountIndexViewModel.OrganizationViewModel(curorg, this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.OrganizationId, false))
-                {
-                    //TODO: Infomation is dependent on curent user
-                    IsManageAllowed = this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.OrganizationId, false),
-                };
+                new AccountIndexViewModel.OrganizationViewModel(curorg, this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.OrganizationId, false));
 
 
                 //Get orgs Subscriptions
@@ -115,28 +98,10 @@ namespace AllyisApps.Controllers
                             int startOfWeek = AppService.GetAllSettings(userSubInfo.SubscriptionId).Item1.StartOfWeek;
                             sDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
                             eDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
-                            orgViewModel.Subscriptions.Add(new AccountIndexViewModel.OrganizationViewModel.TimeTrackerSubViewModel()
-                            {
-                                ProductName = userSubInfo.ProductName,
-                                SubscriptionId = userSubInfo.SubscriptionId,
-                                SubscriptionName = userSubInfo.SubscriptionName,
-                                ProductDescription = description,
-                                productID = userSubInfo.ProductId,
-                                AreaUrl = userSubInfo.AreaUrl,
-                                startDate = sDate,
-                                endDate = eDate
-                            } );
+                            orgViewModel.Subscriptions.Add(new AccountIndexViewModel.OrganizationViewModel.TimeTrackerSubViewModel(userSubInfo,description,sDate,eDate));
                         }
-                        else { 
-                        orgViewModel.Subscriptions.Add(new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel()
-                            {
-                                ProductName = userSubInfo.ProductName,
-                                SubscriptionId = userSubInfo.SubscriptionId,
-                                SubscriptionName = userSubInfo.SubscriptionName,
-                                ProductDescription = description,
-                                productID = userSubInfo.ProductId,
-                                AreaUrl = userSubInfo.AreaUrl,
-                            });
+                        else {
+                            orgViewModel.Subscriptions.Add(new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel(userSubInfo, description));
                         }
                     }
                 }

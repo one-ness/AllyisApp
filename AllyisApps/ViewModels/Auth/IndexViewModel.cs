@@ -44,6 +44,23 @@ namespace AllyisApps.ViewModels.Auth
         /// </summary>
         public class UserViewModel
         {
+
+            public UserViewModel() {  }
+
+            public UserViewModel(User user, Services.Lookup.Address userAddress)
+            {
+                FirstName = user.FirstName;
+                LastName = user.LastName;
+                Email = user.Email;
+                PhoneNumber = user.PhoneNumber;
+                PhoneExtension = user.PhoneExtension;
+                Address1 = userAddress.Address1;
+                Address2 = userAddress.Address2;
+                City = userAddress.City;
+                State = userAddress.StateName;
+                PostalCode = userAddress.PostalCode;
+                Country = userAddress.CountryName;
+            }
             /// <summary>
             /// Gets or sets FirstName.
             /// </summary>
@@ -133,7 +150,7 @@ namespace AllyisApps.ViewModels.Auth
                 this.Subscriptions = new List<SubscriptionViewModel>();
             }
 
-            public OrganizationViewModel(Organization curorg,bool isManageAllowed)
+            public OrganizationViewModel(Organization curorg,bool isManageAllowed) : this()
             {
                 OrganizationId = curorg.OrganizationId;
                 OrganizationName = curorg.OrganizationName;
@@ -220,6 +237,17 @@ namespace AllyisApps.ViewModels.Auth
             /// List of this organization's subscription, that user is member of.
             /// </summary>
             public class SubscriptionViewModel {
+                public SubscriptionViewModel() { }
+
+                public SubscriptionViewModel(UserSubscription userSubInfo, string description)
+                {
+                    ProductName = userSubInfo.ProductName;
+                    SubscriptionId = userSubInfo.SubscriptionId;
+                    SubscriptionName = userSubInfo.SubscriptionName;
+                    ProductDescription = description;
+                    productID = userSubInfo.ProductId;
+                    AreaUrl = userSubInfo.AreaUrl;
+                }
                 public string ProductDescription { get; set; }
 
                 /// <summary>
@@ -244,6 +272,16 @@ namespace AllyisApps.ViewModels.Auth
             {
                 public int? startDate { get; set; }
                 public int? endDate { get; set; }
+
+                public TimeTrackerSubViewModel() : base()
+                {
+                    
+                }
+                public TimeTrackerSubViewModel(UserSubscription userSubInfo, string description, int? sDate,int? eDate) : base( userSubInfo,description)
+                {
+                    startDate = sDate;
+                    endDate = eDate;
+                }
             }
         }
     }
