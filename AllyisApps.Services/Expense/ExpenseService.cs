@@ -141,7 +141,8 @@ namespace AllyisApps.Services
 				ReportDate = report.ReportDate,
 				ReportStatus = report.ReportStatus,
 				ReportTitle = report.ReportTitle,
-				SubmittedById = report.SubmittedById
+				//SubmittedById = report.SubmittedById
+				SubmittedById = 111119
 			};
 			DBHelper.CreateExpenseReport(reportEntity);
 		}

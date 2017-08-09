@@ -1,7 +1,7 @@
 CREATE PROCEDURE [Expense].[CreateExpenseReport]
 	@reportTitle NVARCHAR(100),
 	@reportDate DATETIME2(0),
-	--@organizationId INT,
+	@organizationId INT,
 	@submittedById INT,
 	@reportStatus TINYINT,
 	@businessJustification NVARCHAR(100),
@@ -14,7 +14,7 @@ BEGIN
 	INSERT INTO [Expense].[ExpenseReport]
 		([ReportTitle],
 		[ReportDate],
-		--[OrganizationId],
+		[OrganizationId],
 		[SubmittedById],
 		[ReportStatus],
 		[BusinessJustification],
@@ -22,7 +22,7 @@ BEGIN
 		[ExpenseReportModifiedUtc])
 	VALUES (@reportTitle,
 		@reportDate,
-		--@organizationId,
+		@organizationId,
 		@submittedById,
 		@reportStatus,
 		@businessJustification,

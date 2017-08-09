@@ -35,13 +35,12 @@ namespace AllyisApps.DBModel
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-            parameters.Add("@itemDescription", item.ItemDescription);
+            parameters.Add("@itemDescription", item.ItemDescription ?? "");
             parameters.Add("@transactionDate", item.TransactionDate);
             parameters.Add("@amount", item.Amount);
             parameters.Add("@expenseReportId", item.ExpenseReportId);
             parameters.Add("@isBillableToCustomer", item.IsBillableToCustomer);
-            parameters.Add("@createdUtc", item.CreatedUtc);
-            parameters.Add("@modifiedUtc", item.ModifiedUtc);
+			parameters.Add("@accountId", item.AccountId);
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
