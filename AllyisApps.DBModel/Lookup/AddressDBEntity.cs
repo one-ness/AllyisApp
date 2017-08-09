@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AllyisApps.DBModel.Lookup
+﻿namespace AllyisApps.DBModel.Lookup
 {
-    /// <summary>
-    /// Represents the Address table in the database.
-    /// </summary>
-    public class AddressDBEntity
+	/// <summary>
+	/// Represents the Address table in the database.
+	/// </summary>
+	public class AddressDBEntity
     {
         /// <summary>
         /// Gets or sets the address' Id

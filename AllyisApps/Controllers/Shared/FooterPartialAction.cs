@@ -4,11 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.ViewModels.Shared;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.ViewModels.Shared;
 
 namespace AllyisApps.Controllers
 {
@@ -26,12 +25,11 @@ namespace AllyisApps.Controllers
 		{
 			List<LanguageViewModel> languages = AppService.ValidLanguages().Select(l => new LanguageViewModel
 			{
-				LanguageId = l.LanguageId,
 				LanguageName = l.LanguageName,
 				CultureName = l.CultureName
 			}).ToList();
 			var model = languages;
-			ViewData["LanguageId"] = AppService.UserContext != null ? AppService.UserContext.PrefferedLanguageId : TempData["language"];
+			ViewData["CultureName"] = AppService.UserContext != null ? AppService.UserContext.PreferedLanguageId : TempData["language"];
 			return this.View(ViewConstants.Footer, model);
 		}
 	}

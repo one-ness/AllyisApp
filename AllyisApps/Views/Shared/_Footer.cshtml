@@ -4,7 +4,7 @@
 
 @{
     Layout = string.Empty;
-    var languageID = (int)ViewData["LanguageID"];
+    var CultureName = (string)ViewData["CultureName"];
 }
 
 @*<footer class="footer">
@@ -16,19 +16,19 @@
                 @foreach (LanguageViewModel language in Model.Item1)
                 {
                     string languageKey = LanguageViewModel.Clean(language.LanguageName);
-                    if (languageID == language.LanguageID)
+                    if (CultureName == language.CultureName)
                     {
-                        <option value=@language.LanguageID selected>@(Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
+                        <option value=@language.CultureName selected>@(Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
                     }
                     else
                     {
-                        <option value=@language.LanguageID>@(Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
+                        <option value=@language.CultureName>@(Strings.ResourceManager.GetString(languageKey) ?? language.LanguageName)</option>
                     }
                 }
             </select >*@
             <span class="col-xs-12 col-sm-6 footer-text">
-                @Html.ActionLink(Strings.PrivacyPolicy, ActionConstants.PrivacyPolicy, ControllerConstants.Home)
-                @Html.ActionLink(Strings.Help, ActionConstants.Help, ControllerConstants.Home)
+                <a href="@Url.Action(ActionConstants.PrivacyPolicy, ControllerConstants.Home)">@Strings.PrivacyPolicy</a>
+                <a href="@Url.Action(ActionConstants.Help, ControllerConstants.Home)">@Strings.Help</a>
             </span>
         </p>
         <p class="col-xs-4 col-sm-6 footer-text" style="text-align: right">
@@ -42,6 +42,6 @@
 
 @*<script type="text/javascript">
     OnLanguageSelect = function () {
-        window.location.href = "@Url.Action(ActionConstants.UpdateLanguage, ControllerConstants.Shared, new { languageId = -1 } )".replace('-1', $("#languageSelect").val());
+        window.location.href = "@Url.Action(ActionConstants.UpdateLanguage, ControllerConstants.Shared, new { CultureName = -1 } )".replace('-1', $("#languageSelect").val());
     }
 </script>*@

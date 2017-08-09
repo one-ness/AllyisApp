@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Finance;
-using Dapper;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using AllyisApps.DBModel.Finance;
+using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -26,7 +26,7 @@ namespace AllyisApps.DBModel
         /// Adds an ExpenseItem to the database.
         /// </summary>
         /// <param name="item">The ExpenseDBEntity to create.</param>
-        /// <returns>TODO: Should this return success/failuer codes? ? ?</returns>
+        /// <returns>TODO: Should this return success/failuer codes? ? ?.</returns>
         public void CreateExpenseItem(ExpenseItemDBEntity item)
         {
 			if (item.AccountId == 0) //check if account exists already
@@ -52,7 +52,7 @@ namespace AllyisApps.DBModel
         /// <summary>
         /// Retrieves all Expense Items with a given account id.
         /// </summary>
-        /// <param name="AccountId">The id of the parent account</param>
+        /// <param name="AccountId">The id of the parent account.</param>
         /// <returns>A collection of accounts.</returns>
         public IEnumerable<ExpenseItemDBEntity> GetExpenseItemsByAccountId(int AccountId)
 		{
@@ -68,7 +68,7 @@ namespace AllyisApps.DBModel
         /// <summary>
         /// Gets the Expense Item with the corresponding ID
         /// </summary>
-        /// <param name="ExpenseItemId"> the ID of the Expense Item</param>
+        /// <param name="ExpenseItemId"> the ID of the Expense Item.</param>
         /// <returns>A collection of accounts.</returns>
         public ExpenseItemDBEntity GetExpenseItem(int ExpenseItemId)
 		{
@@ -114,8 +114,8 @@ namespace AllyisApps.DBModel
         /// <summary>
         /// Deletes an Expense Item with a given id.
         /// </summary>
-        /// <param name="ExpenseItemId">The id of the expense item to be deleted</param>
-        /// <returns>Boolean to determine if the process succeeded in finding the item</returns>
+        /// <param name="ExpenseItemId">The id of the expense item to be deleted.</param>
+        /// <returns>Boolean to determine if the process succeeded in finding the item.</returns>
         public bool DeleteExpenseItem(int ExpenseItemId)
         {
             DynamicParameters parameters = new DynamicParameters();
@@ -135,10 +135,10 @@ namespace AllyisApps.DBModel
         /// Adds an ExpenseReport to the database.
         /// </summary>
         /// <param name="report">The ExpenseReportDBEntity to create.</param>
-        /// <returns>TODO: Should this return success/failuer codes? ? ?</returns>
+        /// <returns>TODO: Should this return success/failuer codes? ? ?.</returns>
         public void CreateExpenseReport(ExpenseReportDBEntity report)
         {
-            if (report.OrganizationId == 0 || report.SubmittedById == 0) //check if user and organization exists already
+            if (report.OrganizationId == 0 || report.SubmittedById == 0) // check if user and organization exists already
             {
                 throw new System.ArgumentException("An Error Creating Report");
             }
@@ -162,7 +162,7 @@ namespace AllyisApps.DBModel
         /// <summary>
         /// Retrieves the Expense Reportss with specific id.
         /// </summary>
-        /// <param name="ExpenseReportId">The id of the Report</param>
+        /// <param name="ExpenseReportId">The id of the Report.</param>
         /// <returns>An Expense Reports.</returns>
         public ExpenseItemDBEntity GetExpenseReport(int ExpenseReportId)
         {
@@ -178,7 +178,7 @@ namespace AllyisApps.DBModel
         /// <summary>
         /// Retrieves all Expense Reportss created by a user id.
         /// </summary>
-        /// <param name="SubmittedById">The id of the parent account</param>
+        /// <param name="SubmittedById">The id of the parent account.</param>
         /// <returns>A collection of Expense Reports.</returns>
         public IEnumerable<ExpenseReportDBEntity> GetExpenseReportsBySubmittedById(int SubmittedById)
         {
@@ -194,7 +194,7 @@ namespace AllyisApps.DBModel
         /// <summary>
         /// Retrieves all Expense Reportss created by an organization.
         /// </summary>
-        /// <param name="OrganizationId">The id of the parent organization</param>
+        /// <param name="OrganizationId">The id of the parent organization.</param>
         /// <returns>A collection of Expense Reports.</returns>
         public IEnumerable<ExpenseItemDBEntity> GetExpenseReportsByOrganizationId(int OrganizationId)
         {
@@ -239,8 +239,8 @@ namespace AllyisApps.DBModel
         /// <summary>
         /// Deletes an Expense Report with a given id.
         /// </summary>
-        /// <param name="ExpenseReportId">The id of the expense report to be deleted</param>
-        /// <returns>Boolean to determine if the process succeeded in finding the item</returns>
+        /// <param name="ExpenseReportId">The id of the expense report to be deleted.</param>
+        /// <returns>Boolean to determine if the process succeeded in finding the item.</returns>
         public bool DeleteExpenseReport(int ExpenseReportId)
         {
             DynamicParameters parameters = new DynamicParameters();

@@ -13,17 +13,17 @@ namespace AllyisApps.DBModel.Billing
 	public class SubscriptionUserDBEntity
 	{
 		/// <summary>
-		/// gets or set the product role
+		/// gets or set the product role.
 		/// </summary>
 		public string FirstName { get; set; }
 
 		/// <summary>
-		/// gets or set the product role
+		/// gets or set the product role.
 		/// </summary>
 		public string LastName { get; set; }
 
 		/// <summary>
-		/// gets or set the product role
+		/// gets or set the product role.
 		/// </summary>
 		public int ProductRoleId { get; set; }
 

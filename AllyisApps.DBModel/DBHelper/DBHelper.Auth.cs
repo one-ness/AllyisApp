@@ -4,17 +4,16 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Crm;
-using AllyisApps.DBModel.Lookup;
-using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Threading.Tasks;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.Crm;
+using AllyisApps.DBModel.Lookup;
+using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -49,7 +48,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@isTwoFactorEnabled", user.IsTwoFactorEnabled);
 			parameters.Add("@isLockoutEnabled", user.IsLockoutEnabled);
 			parameters.Add("@lockoutEndDateUtc", user.LockoutEndDateUtc);
-			parameters.Add("@languageId", user.PreferredLanguageId);
+			parameters.Add("@CultureName", user.PreferredLanguageId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -179,12 +178,12 @@ namespace AllyisApps.DBModel
 		/// Updates the preferred language for a user.
 		/// </summary>
 		/// <param name="userId">Target user's Id.</param>
-		/// <param name="languageId">Language Id.</param>
-		public void UpdateUserLanguagePreference(int userId, int languageId)
+		/// <param name="CultureName">Language Id.</param>
+		public void UpdateUserLanguagePreference(int userId, string CultureName)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@id", userId);
-			parameters.Add("@languageId", languageId);
+			parameters.Add("@CultureName", CultureName);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -267,7 +266,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name = "email">Target user's email address.</param>
 		/// <param name = "resetCode">The resetCode.</param>
-		/// <returns>number of rows updated</returns>
+		/// <returns>number of rows updated.</returns>
 		public int UpdateUserPasswordResetCode(string email, string resetCode)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -281,13 +280,13 @@ namespace AllyisApps.DBModel
 		}
 	
 		/// <summary>
-		/// Adds an organization to the database and sets the owner's chosen organization to th
+		/// Adds an organization to the database and sets the owner's chosen organization to th.
 		/// </summary>
 		/// <param name="organization">The OrganizationDBEntity to create.</param>
 		/// <param name="ownerId">The owner's user Id.</param>
 		/// <param name="roleId">The role associated with the creator of the organization.</param>
 		/// <param name="employeeId">The employee Id for the user creating the organization.</param>
-		/// <returns>The id of the created organization</returns>
+		/// <returns>The id of the created organization.</returns>
 		public int SetupOrganization(OrganizationDBEntity organization, int ownerId, int roleId, string employeeId)
 		{
 			if (organization == null)
@@ -320,7 +319,7 @@ namespace AllyisApps.DBModel
 		/// Updates the specified organization with new information.
 		/// </summary>
 		/// <param name="organization">The organization table with updates.</param>
-		/// <returns>Number of rows changed</returns>
+		/// <returns>Number of rows changed.</returns>
 		public int UpdateOrganization(OrganizationDBEntity organization)
 		{
 			if (organization == null)
@@ -351,7 +350,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Executes [Auth].[DeleteOrg].
 		/// </summary>
-		/// <param name="organizationId">Parameter @organizationId. </param>
+		/// <param name="organizationId">Parameter @organizationId. .</param>
 		public void DeleteOrganization(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -405,10 +404,10 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Updates an organization member's info
+		/// Updates an organization member's info.
 		/// </summary>
-		/// <param name="modelData">The data from the form that the service passed in</param>
-		/// <returns>A 1 or 0 based on if the employeeId already exists or not</returns>
+		/// <param name="modelData">The data from the form that the service passed in.</param>
+		/// <returns>A 1 or 0 based on if the employeeId already exists or not.</returns>
 		public int UpdateMember(Dictionary<string, dynamic> modelData)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -624,7 +623,7 @@ namespace AllyisApps.DBModel
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="productRoleId">The product role id.</param>
 		/// <returns>The id of the newly created invitation (or -1 if the employee id is taken), and the
-		/// first and last name of the inviting user</returns>
+		/// first and last name of the inviting user.</returns>
 		public Tuple<int, string, string> CreateInvitation(int invitingUserId, InvitationDBEntity invitation, int? subscriptionId, int? productRoleId)
 		{
 			if (invitation == null)
@@ -752,7 +751,7 @@ namespace AllyisApps.DBModel
 		///// <param name="invitationId">The invitation Id.</param>
 		///// <param name="subscriptionId">The subscription Id.</param>
 		///// <param name="productRoleId">The Id of the product role.</param>
-		//public void CreateInvitationSubRole(int invitationId, int subscriptionId, int productRoleId)
+		// public void CreateInvitationSubRole(int invitationId, int subscriptionId, int productRoleId)
 		//{
 		//    DynamicParameters parameters = new DynamicParameters();
 		//    parameters.Add("@invitationId", invitationId);
@@ -770,7 +769,7 @@ namespace AllyisApps.DBModel
 		///// </summary>
 		///// <param name="invitationId">The invitation Id.</param>
 		///// <param name="subscriptionId">The subscription Id.</param>
-		//public void DeleteInvitationSubRole(int invitationId, int subscriptionId)
+		// public void DeleteInvitationSubRole(int invitationId, int subscriptionId)
 		//{
 		//    DynamicParameters parameters = new DynamicParameters();
 		//    parameters.Add("@invitationId", invitationId);
@@ -787,7 +786,7 @@ namespace AllyisApps.DBModel
 		///// </summary>
 		///// <param name="invitationId">The invitation Id.</param>
 		///// <returns>List of all roles.</returns>
-		//public IEnumerable<InvitationSubRoleDBEntity> GetInvitationSubRolesByInvitationId(int invitationId)
+		// public IEnumerable<InvitationSubRoleDBEntity> GetInvitationSubRolesByInvitationId(int invitationId)
 		//{
 		//    DynamicParameters parameters = new DynamicParameters();
 		//    parameters.Add("@invitationId", invitationId);
@@ -870,8 +869,8 @@ namespace AllyisApps.DBModel
 		/// the user is a part of. User information is repeated on each row, and organizaiton information is repeated in some rows when the user
 		/// is a part of mulitple subscriptions in the same organization.
 		/// </summary>
-		/// <param name="userId"></param>
-		/// <returns></returns>
+		/// <param name="userId">.</param>
+		/// <returns>.</returns>
 		public List<UserContextDBEntity> GetUserContextInfo(int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -889,7 +888,7 @@ namespace AllyisApps.DBModel
 		/// Returns a UserDBEntity for the given user, along with a list of OrganizationDBEntities for the organizations that
 		/// the user is a member of, and a list of InvititationDBEntities for any invitations for that user.
 		/// </summary>
-		/// <param name="userId">The User Id</param>
+		/// <param name="userId">The User Id.</param>
 		public Tuple<UserDBEntity, List<OrganizationDBEntity>, List<InvitationDBEntity>, AddressDBEntity> GetUserOrgsAndInvitations(int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -913,7 +912,7 @@ namespace AllyisApps.DBModel
 		/// in the organization, a list of SubscriptionDisplayDBEntities for any subscriptions for the organization, a list of InvitiationDBEntities
 		/// for any invitations pending in the organization, the organization's billing stripe handle, and the complete list of products.
 		/// </summary>
-		/// <param name="organizationId">The organization Id</param>
+		/// <param name="organizationId">The organization Id.</param>
 		public Tuple<OrganizationDBEntity, List<OrganizationUserDBEntity>, List<SubscriptionDisplayDBEntity>, List<InvitationDBEntity>, string, List<ProductDBEntity>> GetOrganizationManagementInfo(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -940,7 +939,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization id.</param>
 		/// <param name="userId">User id.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<OrganizationDBEntity, List<string>, string> GetOrgWithCountriesAndEmployeeId(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -966,7 +965,7 @@ namespace AllyisApps.DBModel
 		/// invitations.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<string, List<SubscriptionDisplayDBEntity>, List<SubscriptionRoleDBEntity>, List<ProjectDBEntity>, string> GetAddMemberInfo(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -992,7 +991,7 @@ namespace AllyisApps.DBModel
 		/// all subscriptions in the organization.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<List<UserRolesDBEntity>, List<SubscriptionDisplayDBEntity>> GetOrgAndSubRoles(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();

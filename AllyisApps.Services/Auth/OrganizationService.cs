@@ -1,19 +1,19 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="OrgService.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel;
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.Lib;
-using AllyisApps.Services.Billing;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using AllyisApps.DBModel;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.Lib;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.Services
 {
@@ -71,7 +71,7 @@ namespace AllyisApps.Services
 		/// organization, SubscriptionDisplayInfos for any subscriptions in the organization, InvitationInfos for any invitiations
 		/// pending in the organization, the organization's billing stripe handle, and a list of all products.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<Organization, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string, List<Product>> GetOrganizationManagementInfo(int orgId)
 		{
 			var spResults = DBHelper.GetOrganizationManagementInfo(orgId);
@@ -89,7 +89,7 @@ namespace AllyisApps.Services
 		/// employee id for the current user in the current chosen organization.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<Organization, List<string>, string> GetOrgWithCountriesAndEmployeeId(int orgId)
 		{
 			var spResults = DBHelper.GetOrgWithCountriesAndEmployeeId(orgId, UserContext.UserId);
@@ -105,8 +105,8 @@ namespace AllyisApps.Services
 		/// a list of CompleteProjectInfos for TimeTracker projects in the organization, and the next recommended employee id
 		/// by invitations.
 		/// </summary>
-		/// <param name="orgId">The Organization Id</param>
-		/// <returns></returns>
+		/// <param name="orgId">The Organization Id.</param>
+		/// <returns>.</returns>
 		public Tuple<string, List<SubscriptionDisplayInfo>, List<ProductRole>, List<CompleteProjectInfo>, string> GetAddMemberInfo(int orgId)
 		{
 			var spResults = DBHelper.GetAddMemberInfo(orgId);
@@ -123,8 +123,8 @@ namespace AllyisApps.Services
 		/// and a list of SubscriptionRoles (with only SubscriptionId, ProductId, and ProductName populated) for
 		/// all subscriptions in the current organization.
 		/// </summary>
-		/// <param name="orgId">The Organization Id</param>
-		/// <returns></returns>
+		/// <param name="orgId">The Organization Id.</param>
+		/// <returns>.</returns>
 		public Tuple<List<UserRolesInfo>, List<SubscriptionDisplayInfo>> GetOrgAndSubRoles(int orgId)
 		{
 			var spResults = DBHelper.GetOrgAndSubRoles(orgId);
@@ -312,7 +312,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Removes an invitation.
 		/// </summary>
-		/// <param name="orgId">organization id</param>
+		/// <param name="orgId">Organization id.</param>
 		/// <param name="invitationId">Invitation Id.</param>
 		/// <returns>Returns false if permissions fail.</returns>
 		public bool RemoveInvitation(int orgId, int invitationId)
@@ -327,7 +327,7 @@ namespace AllyisApps.Services
 		///// Getst a list of the user invitations for the current organization.
 		///// </summary>
 		///// <returns>List of InvitationInfos of organization's user invitations.</returns>
-		//public IEnumerable<InvitationInfo> GetUserInvitations()
+		// public IEnumerable<InvitationInfo> GetUserInvitations()
 		//{
 		//	return DBHelper.GetUserInvitationsByOrgId(UserContext.ChosenOrganizationId).Select(i => InitializeInvitationInfo(i));
 		//}
@@ -338,7 +338,7 @@ namespace AllyisApps.Services
 		///// <param name="invitationId">Invitation id.</param>
 		///// <param name="subscriptionId">Subscription id.</param>
 		///// <param name="selectedRole">Selected role.</param>
-		//public void CreateInvitationSubRole(int invitationId, int subscriptionId, int selectedRole)
+		// public void CreateInvitationSubRole(int invitationId, int subscriptionId, int selectedRole)
 		//{
 		//    #region Validation
 
@@ -414,7 +414,7 @@ namespace AllyisApps.Services
 		///// </summary>
 		///// <param name="email">Email address.</param>
 		///// <returns>User's first name.</returns>
-		//public string GetOrgUserFirstName(string email)
+		// public string GetOrgUserFirstName(string email)
 		//{
 		//	#region Validation
 
@@ -435,8 +435,8 @@ namespace AllyisApps.Services
 		///// <summary>
 		///// Gets a list of subscription details for the current organization.
 		///// </summary>
-		///// <returns><see cref="IEnumerable{SubscriptionInfo}"/></returns>
-		//public IEnumerable<SubscriptionInfo> GetSubscriptionDetails()
+		///// <returns><see cref="IEnumerable{SubscriptionInfo}"/>.</returns>
+		// public IEnumerable<SubscriptionInfo> GetSubscriptionDetails()
 		//{
 		//	IEnumerable<SubscriptionDBEntity> subDBEList = DBHelper.GetSubscriptionDetails(UserContext.ChosenOrganizationId);
 		//	List<SubscriptionInfo> list = new List<SubscriptionInfo>();
@@ -526,7 +526,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets the user roles for an organization.
 		/// </summary>
-		/// <param name="orgId">The Organization Id</param>
+		/// <param name="orgId">The Organization Id.</param>
 		/// <returns>List of UserRolesInfos.</returns>
 		public IEnumerable<UserRolesInfo> GetUserRoles(int orgId)
 		{
@@ -538,7 +538,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="userIds">List of user Ids.</param>
 		/// <param name="newOrganizationRole">Organization role to assign, or -1 to remove from organization.</param>
-		/// <param name="organizationId">The organization Id</param>
+		/// <param name="organizationId">The organization Id.</param>
 		/// <returns>The number of affected users.</returns>
 		public int UpdateOrganizationUsersRole(List<int> userIds, int newOrganizationRole, int organizationId)
 		{
@@ -563,7 +563,7 @@ namespace AllyisApps.Services
 		/// Deletes all users from the org that are in the given userIds list.
 		/// </summary>
 		/// <param name="userIds">List of user Ids.</param>
-		/// <param name="organizationId">The organization Id</param>
+		/// <param name="organizationId">The organization Id.</param>
 		/// <returns>The number of affected users.</returns>
 		public int DeleteOrganizationUsers(List<int> userIds, int organizationId)
 		{
@@ -584,7 +584,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="productName">Product name.</param>
 		/// <param name="userId">User Id.</param>
-		/// <param name="orgId"> The Organization Id</param>
+		/// <param name="orgId"> The Organization Id.</param>
 		/// <returns>The product role.</returns>
 		public string GetProductRoleForUser(string productName, int userId, int orgId)
 		{

@@ -132,7 +132,7 @@ function editTimes(values) {
 	/* then edits the entry, the Total Time will be 0. This if will stop it but
 	/* not update the times in this case. 
 	*/
-	if (elements.length != 0)
+	if (elements.length !== 0)
 	{
 		var totalTime = $('#totalHours').text().split(":"),
 			totalHours = parseInt(totalTime[0]),
@@ -173,18 +173,18 @@ function editTimes(values) {
 function updateTimes(values) {
 	var currentVal = $('#totalHours').text().split(":"),
 		updateVal = values.duration.split(":"),
-        projectVal = $('#' + values.projectId).text().split(":");
+		projectVal = $('#' + values.projectId).text().split(":");
 
-    if (updateVal[0].startsWith('-')) {
-        updateVal[1] = '-' + updateVal[1];
-    }
+	if (updateVal[0].lastIndexOf('-', 0) === 0) {
+		updateVal[1] = '-' + updateVal[1];
+	}
 
 	var projectHours = parseInt(projectVal[0]),
 		projectMinutes = parseInt(projectVal[1]),
 		totalHours = parseInt(currentVal[0]),
 		totalMinutes = parseInt(currentVal[1]),
 		hourUpdate = parseInt(updateVal[0]),
-        minuteUpdate = parseInt(updateVal[1]);
+		minuteUpdate = parseInt(updateVal[1]);
 
 	var projHour = projectHours + hourUpdate;
 	var projMinute = projectMinutes + (hourUpdate < 0 ? minuteUpdate * -1 : minuteUpdate);
@@ -429,13 +429,13 @@ function focusPreviousDuration(form_child) {
 init_drp(
 	"daterange",
 	[{
-        text: "This Week",
-        dateStart: function () { return moment().startOf('week') },
-        dateEnd: function () { return moment().endOf('week') }
+		text: "This Week",
+		dateStart: function () { return moment().startOf('week') },
+		dateEnd: function () { return moment().endOf('week') }
 	}, {
-        text: "Last Week",
-        dateStart: function () { return moment().subtract(7, 'days').startOf('week') },
-        dateEnd: function () { return moment().subtract(7, 'days').endOf('week') }
+		text: "Last Week",
+		dateStart: function () { return moment().subtract(7, 'days').startOf('week') },
+		dateEnd: function () { return moment().subtract(7, 'days').endOf('week') }
 	}, {
 		text: "This Month",
 		dateStart: function () { return moment().startOf('month') },
@@ -544,10 +544,10 @@ function drp_prevWeek() {
 }
 
 (function set_copier_confirmation() {
-    $('.weekcopier').click(function () {
-        return confirm('Copying the previous week will overwrite the current entries for this week. Are you sure you want to continue?');
-    });
-    $('.daycopier').click(function () {
-        return confirm('Copying the previous day will overwrite the current entries for this day. Are you sure you want to continue?')
-    })
+	$('.weekcopier').click(function () {
+		return confirm('Copying the previous week will overwrite the current entries for this week. Are you sure you want to continue?');
+	});
+	$('.daycopier').click(function () {
+		return confirm('Copying the previous day will overwrite the current entries for this day. Are you sure you want to continue?')
+	})
 })()

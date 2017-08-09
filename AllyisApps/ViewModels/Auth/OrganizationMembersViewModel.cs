@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -61,7 +61,7 @@ namespace AllyisApps.ViewModels.Auth
 		public IEnumerable<InvitationInfo> PendingInvitation { get; internal set; }
 
 		/// <summary>
-		/// Gets OrganizationId.
+		/// Gets or sets the OrganizationId.
 		/// </summary>
 		public int OrganizationId { get; set; }
 

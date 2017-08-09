@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using AllyisApps.Services.TimeTracker;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using AllyisApps.Services;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
@@ -43,19 +43,19 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public int UserId { get; set; }
 
 		/// <summary>
-		/// Subscription Id
+		/// Gets or sets the subscription Id.
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
-        /// <summary>
-        /// The Subscription Name
-        /// </summary>
-        public string SubscriptionName { get; set; }
+		/// <summary>
+		/// Gets or sets the Subscription Name.
+		/// </summary>
+		public string SubscriptionName { get; set; }
 
-        /// <summary>
-        /// Gets the id of the organization related to the report data.
-        /// </summary>
-        public int OrganizationId { get; internal set; }
+		/// <summary>
+		/// Gets the id of the organization related to the report data.
+		/// </summary>
+		public int OrganizationId { get; internal set; }
 
 		/// <summary>
 		/// Gets the Select List of Users for this organization.

@@ -1,17 +1,17 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="CrmService.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel;
-using AllyisApps.DBModel.Crm;
-using AllyisApps.DBModel.Lookup;
-using AllyisApps.Services.Lookup;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using AllyisApps.DBModel;
+using AllyisApps.DBModel.Crm;
+using AllyisApps.DBModel.Lookup;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
 {
@@ -34,7 +34,7 @@ namespace AllyisApps.Services
 		/// Gets the next logical customer id for the current organization, and a list of
 		/// valid country names.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<string, List<string>, int> GetNextCustIdAndCountries(int subscriptionId)
 		{
 			UserSubscription subInfo = null;
@@ -49,7 +49,7 @@ namespace AllyisApps.Services
 		/// Gets a Customer for the given customer, and a list of valid country names.
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<Customer, List<string>, Address> GetCustomerAndCountries(int customerId)
 		{
 			var spResults = DBHelper.GetCustomerCountries(customerId);
@@ -62,7 +62,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Creates a customer.
 		/// </summary>
-		/// <param name="subId">subscription id</param>
+		/// <param name="subId">Subscription id.</param>
 		/// <param name="customer">Customer.</param>
 		/// <returns>Customer id.</returns>
 		public int? CreateCustomer(int subId, Customer customer)
@@ -75,7 +75,7 @@ namespace AllyisApps.Services
 		/// Creates a customer.
 		/// </summary>
 		/// <param name="customer">Customer.</param>
-		/// <param name="subscriptionId"></param>
+		/// <param name="subscriptionId">.</param>
 		/// <returns>Customer id.</returns>
 		public int? CreateCustomer(Customer customer, int subscriptionId)
 		{
@@ -87,7 +87,7 @@ namespace AllyisApps.Services
 		/// Updates a customer in the database.
 		/// </summary>
 		/// <param name="customer">Updated customer info.</param>
-		/// <param name="subscriptionId">The customer's subscription Id</param>
+		/// <param name="subscriptionId">The customer's subscription Id.</param>
 		/// <returns>Returns 1 if succeed, -1 if fail, and null if authorization fails.</returns>
 		public int? UpdateCustomer(Customer customer, int subscriptionId)
 		{
@@ -99,7 +99,7 @@ namespace AllyisApps.Services
 		/// Deletes a customer.
 		/// </summary>
 		/// <param name="customerId">Customer id.</param>
-		/// <param name="subscriptionId">Subscription Id</param>
+		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public string DeleteCustomer(int subscriptionId, int customerId)
 		{
@@ -108,11 +108,11 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Reactivate a Customer
+		/// Reactivate a Customer.
 		/// </summary>
 		/// <param name="customerId">Customer id.</param>
-		/// <param name="orgId">The Organization Id</param>
-		/// <param name="subscriptionId">The subscription Id</param>
+		/// <param name="orgId">The Organization Id.</param>
+		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public string ReactivateCustomer(int customerId, int subscriptionId, int orgId)
 		{
@@ -144,8 +144,8 @@ namespace AllyisApps.Services
 		/// Returns a list of CompleteProjectInfos for the current organization with the IsProjectUser field filled
 		/// out for the current user, and a list of CustomerInfos for the organization.
 		/// </summary>
-		/// <param name="orgId">The organization Id</param>
-		/// <returns></returns>
+		/// <param name="orgId">The organization Id.</param>
+		/// <returns>.</returns>
 		public Tuple<List<CompleteProjectInfo>, List<Customer>> GetProjectsAndCustomersForOrgAndUser(int orgId)
 		{
 			var spResults = DBHelper.GetProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
@@ -158,8 +158,8 @@ namespace AllyisApps.Services
 		/// Returns a list of CompleteProjectInfos for the current organization with the IsProjectUser field filled
 		/// out for the current user, and a list of CustomerInfos for the organization.
 		/// </summary>
-		/// <param name="orgId">The Organization Id</param>
-		/// <returns></returns>
+		/// <param name="orgId">The Organization Id.</param>
+		/// <returns>.</returns>
 		public Tuple<List<CompleteProjectInfo>, List<Customer>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId)
 		{
 			var spResults = DBHelper.GetInactiveProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
@@ -248,10 +248,10 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Creates a new project and update its user list if succeed
+		/// Creates a new project and update its user list if succeed.
 		/// </summary>
 		/// <param name="newProject">Project with project information.</param>
-		/// <param name="userIds">List of users being assigned to the project</param>
+		/// <param name="userIds">List of users being assigned to the project.</param>
 		/// <returns>Project Id if succeed, -1 if ProjectOrgId is taken.</returns>
 		public int CreateProjectAndUpdateItsUserList(Project newProject, IEnumerable<int> userIds)
 		{
@@ -319,7 +319,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates a project's properties.
 		/// </summary>
-		/// <param name="subId">subscriptionId</param>
+		/// <param name="subId">SubscriptionId.</param>
 		/// <param name="project">Project with updated properties.</param>
 		public void UpdateProject(int subId, Project project)
 		{
@@ -353,10 +353,10 @@ namespace AllyisApps.Services
 		/// <param name="name">Project name.</param>
 		/// <param name="orgId">Project org id.</param>
 		/// <param name="isHourly">Project type.  True == hourly, false == fixed. TODO: use this parameter to update the project's isHourly column.  Currently disabled attribute.</param>
-		/// <param name="start">Starting date. <see cref="DateTime"/></param>
-		/// <param name="end">Ending date. <see cref="DateTime"/></param>
+		/// <param name="start">Starting date. <see cref="DateTime"/>.</param>
+		/// <param name="end">Ending date. <see cref="DateTime"/>.</param>
 		/// <param name="userIds">Updated on-project user list.</param>
-		/// <param name="subscriptionId"></param>
+		/// <param name="subscriptionId">.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool UpdateProjectAndUsers(int projectId, string name, string orgId, DateTime? start, DateTime? end, IEnumerable<int> userIds, int subscriptionId, bool isHourly = true)
 		{
@@ -395,12 +395,12 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Reactivate a project
+		/// Reactivate a project.
 		/// </summary>
-		/// <param name="projectId">Project Id</param>
-		/// <param name="organizationId">Organization Id</param>
-		/// <param name="subscriptionId"> subscription Id</param>
-		/// <returns>Returns false if authorization fails</returns>
+		/// <param name="projectId">Project Id.</param>
+		/// <param name="organizationId">Organization Id.</param>
+		/// <param name="subscriptionId"> subscription Id.</param>
+		/// <returns>Returns false if authorization fails.</returns>
 		public bool ReactivateProject(int projectId, int organizationId, int subscriptionId)
 		{
 			if (projectId <= 0)
@@ -417,7 +417,7 @@ namespace AllyisApps.Services
 		/// Deletes a project.
 		/// </summary>
 		/// <param name="projectId">Project Id.</param>
-		/// <param name="subscriptionId"></param>
+		/// <param name="subscriptionId">.</param>
 		/// <returns>Returns null if authorization fails, project name is succeed, empty string if not found.</returns>
 		public string DeleteProject(int projectId, int subscriptionId)
 		{
@@ -497,7 +497,7 @@ namespace AllyisApps.Services
 		/// Gets all the projects a user can use in the chosen organization.
 		/// </summary>
 		/// <param name="userId">User Id.</param>
-		/// <param name="orgId">The organization's Id</param>
+		/// <param name="orgId">The organization's Id.</param>
 		/// <param name="isActive">True (default) to only return active projects, false to include all projects, active or not.</param>
 		/// <returns>A list of all the projects a user can access in an organization.</returns>
 		public IEnumerable<CompleteProjectInfo> GetProjectsByUserAndOrganization(int userId, int orgId = -1, bool isActive = true)
@@ -546,8 +546,8 @@ namespace AllyisApps.Services
 		/// users, and a list of SubscriptionUserInfos for all users in the current subscription.
 		/// </summary>
 		/// <param name="projectId">Project Id.</param>
-		/// <param name="subscriptionId"></param>
-		/// <returns></returns>
+		/// <param name="subscriptionId">.</param>
+		/// <returns>.</returns>
 		public Tuple<CompleteProjectInfo, List<User>, List<SubscriptionUserInfo>> GetProjectEditInfo(int projectId, int subscriptionId)
 		{
 			if (projectId < 0)
@@ -567,8 +567,8 @@ namespace AllyisApps.Services
 		/// all useres in the current subscription.
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
-		/// <param name="subscriptionId"></param>
-		/// <returns></returns>
+		/// <param name="subscriptionId">.</param>
+		/// <returns>.</returns>
 		public Tuple<string, List<SubscriptionUserInfo>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
 		{
 			if (customerId < 0)
@@ -600,10 +600,10 @@ namespace AllyisApps.Services
 		#region Info-DBEntity Conversions
 
 		/// <summary>
-		/// Initializes a <see cref="Address"/> from a <see cref="AddressDBEntity"/>
+		/// Initializes a <see cref="Address"/> from a <see cref="AddressDBEntity"/>.
 		/// </summary>
-		/// <param name="address"></param>
-		/// <returns></returns>
+		/// <param name="address">.</param>
+		/// <returns>.</returns>
 		public static Address InitializeAddress(AddressDBEntity address)
 		{
 			if (address == null)

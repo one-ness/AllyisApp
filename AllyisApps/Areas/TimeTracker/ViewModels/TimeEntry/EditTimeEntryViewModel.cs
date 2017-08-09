@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
-using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
@@ -44,7 +44,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public int UserId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the subscription's Id
+		/// Gets or sets the subscription's Id.
 		/// </summary>
 		public int SubscriptionId { get; set; }
 

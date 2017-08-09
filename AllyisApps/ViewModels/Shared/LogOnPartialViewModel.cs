@@ -27,22 +27,22 @@ namespace AllyisApps.ViewModels.Shared
 		}
 
 		/// <summary>
-		/// Gets or sets the First Name of the user
+		/// Gets or sets the First Name of the user.
 		/// </summary>
 		public string FirstName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Last Name of the user
+		/// Gets or sets the Last Name of the user.
 		/// </summary>
 		public string LastName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the name of the organziation the user is working in currently
+		/// Gets or sets the name of the organziation the user is working in currently.
 		/// </summary>
 		public string CurrentOrganizationName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the name of the subscription the user is working in currently
+		/// Gets or sets the name of the subscription the user is working in currently.
 		/// </summary>
 		public string CurrentSubscriptionName { get; set; }
 	}

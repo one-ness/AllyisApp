@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -18,7 +18,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Updates the start of week for an Organization.
 		/// </summary>
-		/// <param name="subscriptionId">The subscription's id</param>
+		/// <param name="subscriptionId">The subscription's id.</param>
 		/// <param name="startOfWeek">Start of week selected by Organization admin.</param>
 		/// <returns>Action result.</returns>
 		public ActionResult UpdateStartOfWeek(int subscriptionId, int startOfWeek)

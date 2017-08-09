@@ -1,7 +1,7 @@
-﻿using AllyisApps.Services;
-using AllyisApps.Services.Billing;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -65,7 +65,7 @@ namespace AllyisApps.ViewModels.Auth
 	}
 
 	/// <summary>
-	/// A sub-view model for relevant subscription information on the Add Member page
+	/// A sub-view model for relevant subscription information on the Add Member page.
 	/// </summary>
 	public class AddMemberSubscriptionInfo
 	{

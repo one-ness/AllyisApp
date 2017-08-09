@@ -44,7 +44,7 @@ namespace AllyisApps.DBModel.Crm
 		public bool IsHourly { get; set; }
 
 		/// <summary>
-		/// Gets or sets the project's Id as used by the organization
+		/// Gets or sets the project's Id as used by the organization.
 		/// </summary>
 		public string ProjectOrgId { get; set; }
 

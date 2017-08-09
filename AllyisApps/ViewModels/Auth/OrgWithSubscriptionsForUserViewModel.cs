@@ -1,11 +1,11 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="OrganizationUserViewModel.cs" company="Allyis, Inc.">
+// <copyright file="OrgWithSubscriptionsForUserViewModel.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
 using System.Collections.Generic;
+using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels.Auth
 {

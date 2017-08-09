@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Lookup;
-using Dapper;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using AllyisApps.DBModel.Lookup;
+using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -32,7 +32,7 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// list of valid countries
+		/// list of valid countries.
 		/// </summary>
 		public List<string> ValidCountries()
 		{
@@ -71,13 +71,13 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Retrieves a language setting from the database.
 		/// </summary>
-		/// <param name="languageId">The language Id.</param>
+		/// <param name="CultureName">The language Id.</param>
 		/// <returns>A language setting row.</returns>
-		public LanguageDBEntity GetLanguage(int languageId)
+		public LanguageDBEntity GetLanguage(string CultureName)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<LanguageDBEntity>("[Lookup].[GetLanguageById]", new { LanguageId = languageId }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return connection.Query<LanguageDBEntity>("[Lookup].[GetLanguageById]", new { CultureName = CultureName }, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
 	}

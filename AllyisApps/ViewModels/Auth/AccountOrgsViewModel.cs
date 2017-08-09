@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.ViewModels.Shared;
 using System.Collections.Generic;
+using AllyisApps.ViewModels.Shared;
 
 namespace AllyisApps.ViewModels.Auth
 {

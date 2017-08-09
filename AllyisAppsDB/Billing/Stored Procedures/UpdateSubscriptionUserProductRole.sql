@@ -6,7 +6,7 @@ AS
 	UPDATE [Billing].[SubscriptionUser] 
 		SET [ProductRoleId] = @productRoleId
 			WHERE [SubscriptionId] = @subscriptionId AND [UserId] = @userId;
-	IF @@rOWCOUNT=0
+	IF @@ROWCOUNT=0
 		BEGIN
 			INSERT INTO [Billing].[SubscriptionUser] ([SubscriptionId], [UserId], [ProductRoleId]) 
 			VALUES(@subscriptionId, @userId, @productRoleId);

@@ -1,7 +1,7 @@
-﻿namespace AllyisApps.DBModel.Pjm
+namespace AllyisApps.DBModel.Pjm
 {
 	/// <summary>
-	/// project user
+	/// Project user.
 	/// </summary>
 	public class ProjectUserDBEntity
 	{

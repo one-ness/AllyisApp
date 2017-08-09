@@ -14,7 +14,7 @@ namespace AllyisApps.Services
 	public partial class AppService : BaseService
 	{
 		/// <summary>
-		/// organizational actions
+		/// organizational actions.
 		/// </summary>
 		public enum OrgAction : int
 		{
@@ -33,7 +33,7 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// time tracker actions
+		/// time tracker actions.
 		/// </summary>
 		public enum TimeTrackerAction : int
 		{
@@ -50,7 +50,7 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// check permissions for the given action in the given org for the logged in user
+		/// check permissions for the given action in the given org for the logged in user.
 		/// </summary>
 		public bool CheckOrgAction(OrgAction action, int orgId, bool throwException = true)
 		{
@@ -233,7 +233,7 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// check the permissions in the org the given subscription belongs to for the given user
+		/// check the permissions in the org the given subscription belongs to for the given user.
 		/// </summary>
 		public bool CheckOrgActionForSubscriptionId(OrgAction action, int subscriptionId, bool throwException = true)
 		{
@@ -249,7 +249,7 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// check permissions for the given action in the given subscription for the logged in user
+		/// check permissions for the given action in the given subscription for the logged in user.
 		/// </summary>
 		public bool CheckTimeTrackerAction(TimeTrackerAction action, int subId, bool throwException = true)
 		{

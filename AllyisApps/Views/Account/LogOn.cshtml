@@ -30,10 +30,10 @@
                     <input type="submit" value="@Strings.SignIn" class="btn btn-primary" />
                 </p>
                 <p>
-                    @Html.ActionLink(Strings.RegisterLinkText, ActionConstants.Register, new { ReturnUrl = ViewBag.ReturnUrl })
+                    <a href="@Url.Action(ActionConstants.Register, ControllerConstants.Account, new { ReturnUrl = ViewBag.ReturnUrl })"> @Strings.RegisterLinkText </a>
                 </p>
                 <p>
-                    @Html.ActionLink(Strings.ForgotPasswordViewTitle, ActionConstants.ForgotPassword)
+                    <a href="@Url.Action(ActionConstants.ForgotPassword, ControllerConstants.Account)"> @Strings.ForgotPasswordViewTitle </a>
                 </p>
             </div>
         }

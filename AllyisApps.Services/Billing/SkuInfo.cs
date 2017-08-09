@@ -57,7 +57,7 @@ namespace AllyisApps.Services
 		public BillingFrequencyEnum BillingFrequency { get; set; }
 
 		/// <summary>
-		/// Gets or sets the description of the sku
+		/// Gets or sets the description of the sku.
 		/// </summary>
 		public string Description { get; set; }
 	}

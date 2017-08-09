@@ -4,9 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Configuration;
 using System;
-using AllyisApps.Lib;
+using System.Configuration;
 
 namespace AllyisApps.Core
 {
@@ -21,18 +20,21 @@ namespace AllyisApps.Core
 		public static string SqlConnectionString { get; set; }
 
 		/// <summary>
-		/// support email
+		/// Gets or sets support email.
 		/// </summary>
 		public static string SupportEmail { get; set; }
 
 		/// <summary>
-		/// sendgrid api key
+		/// Gets or sets sendgrid api key.
 		/// </summary>
 		public static string SendGridApiKey { get; set; }
 
 		/// <summary>
 		/// Initialize Global Settings.
 		/// </summary>
+		/// <param name="connectionStringKey">The connection string used to connect to the db.</param>
+		/// <param name="supportEmailKey">Key for email support.</param>
+		/// <param name="sendGridApiKey">Key for grid api.</param>
 		public static void Init(string connectionStringKey = "DefaultConnection", string supportEmailKey = "SupportEmail", string sendGridApiKey = "SendGridApiKey")
 		{
 			SqlConnectionString = ConfigurationManager.ConnectionStrings[connectionStringKey].ConnectionString;

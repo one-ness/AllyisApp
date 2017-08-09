@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
-using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
@@ -31,17 +31,17 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public IEnumerable<Holiday> Holidays { get; set; }
 
 		/// <summary>
-		/// Subscription Id for the customer
+		/// Gets or sets subscription Id for the customer.
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
-        /// <summary>
-        /// The Subscription Name
-        /// </summary>
-        public string SubscriptionName { get; set; }
+		/// <summary>
+		/// Gets or sets the Subscription Name.
+		/// </summary>
+		public string SubscriptionName { get; set; }
 
 		/// <summary>
-		/// User's Id
+		/// Gets or sets the user's Id.
 		/// </summary>
 		public int UserId { get; set; }
 	}

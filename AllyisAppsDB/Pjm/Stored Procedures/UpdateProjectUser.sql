@@ -11,7 +11,7 @@ BEGIN
 		SET [IsActive] = @isActive
 		WHERE [ProjectUser].[ProjectId] = @projectId AND [ProjectUser].[UserId] = @userId
 		
-		SELECT @rowsUpdated = @@rOWCOUNT
+		SELECT @rowsUpdated = @@ROWCOUNT
 
 	COMMIT TRANSACTION
 

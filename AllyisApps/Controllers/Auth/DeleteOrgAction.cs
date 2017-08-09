@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core.Alert;
 using System.Web.Mvc;
+using AllyisApps.Core.Alert;
 
 namespace AllyisApps.Controllers
 {

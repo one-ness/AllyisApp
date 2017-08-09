@@ -1,18 +1,18 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="ImportAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Data;
+using System.IO;
+using System.Web;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Utilities;
 using Excel;
-using System.Data;
-using System.IO;
-using System.Web;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -25,7 +25,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// POST: Customer/Import.
 		/// Code adapted from http://techbrij.com/read-excel-xls-xlsx-asp-net-mvc-upload.
 		/// </summary>
-		/// <param name="subscriptionId">subscription id</param>
+		/// <param name="subscriptionId">Subscription id.</param>
 		/// <param name="upload">File to upload.</param>
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
