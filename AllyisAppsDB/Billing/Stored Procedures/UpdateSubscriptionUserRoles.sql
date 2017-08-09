@@ -20,7 +20,7 @@ BEGIN TRANSACTION
 	WHERE [SubscriptionId] = @subscriptionId AND [UserId] IN (SELECT [userId] FROM @userIds)
 
 	-- return updated users count
-	SELECT @@rOWCOUNT
+	SELECT @@ROWCOUNT
 
 	-- Select users from @userIds that are not already subscribed
 	DECLARE @addingUsers TABLE ([userId] INT);

@@ -82,7 +82,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Project
 		public string SubscriptionName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the User's Id
+		/// Gets or sets the User's Id.
 		/// </summary>
 		public int UserId { get; set; }
 

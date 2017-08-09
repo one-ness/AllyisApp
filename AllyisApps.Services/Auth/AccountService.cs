@@ -1,14 +1,9 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="AccountService.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel;
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Lookup;
-using AllyisApps.Lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +11,11 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AllyisApps.DBModel;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.Lookup;
+using AllyisApps.Lib;
 using AllyisApps.Services.Lookup;
 using AllyisApps.DBModel.Finance;
 
@@ -78,7 +78,6 @@ namespace AllyisApps.Services
 		{
 			return DBHelper.ValidLanguages().Select(s => new Language
 			{
-				LanguageId = s.LanguageId,
 				LanguageName = s.LanguageName,
 				CultureName = s.CultureName
 			});
@@ -162,7 +161,7 @@ namespace AllyisApps.Services
 			string postalCode,
 			string phone,
 			string password,
-			int languagePreference,
+			string languagePreference,
 			string confirmEmailSubject,
 			string confirmEmailMessage,
 			Guid emailConfirmationCode,
@@ -265,7 +264,7 @@ namespace AllyisApps.Services
 			{
 				// user exists in db
 				UserContextDBEntity firstRow = contextInfo[0];
-				result = new UserContext(userId, firstRow.Email, firstRow.FirstName, firstRow.LastName, firstRow.PreferredLanguageId.Value);
+				result = new UserContext(userId, firstRow.Email, firstRow.FirstName, firstRow.LastName, firstRow.PreferredLanguageId);
 				// set result to self
 				this.SetUserContext(result);
 
@@ -363,7 +362,7 @@ namespace AllyisApps.Services
 		/// Gets the User for the current user, along with Organizations for each organization the
 		/// user is a member of, and InvitationInfos for any invitations for the user.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<User, List<Organization>, List<InvitationInfo>, Address> GetUserOrgsAndInvitationInfo()
 		{
 			var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
@@ -425,9 +424,9 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Updates an organization member's info
+		/// Updates an organization member's info.
 		/// </summary>
-		/// <param name="modelData">The data from the form that the controller passed in</param>
+		/// <param name="modelData">The data from the form that the controller passed in.</param>
 		public bool UpdateMember(Dictionary<string, dynamic> modelData)
 		{
 			if (modelData["userId"] <= 0)
@@ -456,39 +455,38 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Sets the language preference for the current user.
 		/// </summary>
-		/// <param name="languageId">The language Id.</param>
-		public void SetLanguage(int languageId)
+		/// <param name="CultureName">The language Id.</param>
+		public void SetLanguage(string CultureName)
 		{
-			if (languageId < 0)
+			if (CultureName == null)
 			{
-				throw new ArgumentOutOfRangeException("languageId", "Language Id cannot be negative.");
+				throw new ArgumentOutOfRangeException("CultureName", "Culture Name cannot be empty.");
 			}
 
-			DBHelper.UpdateUserLanguagePreference(UserContext.UserId, languageId);
+			DBHelper.UpdateUserLanguagePreference(UserContext.UserId, CultureName);
 		}
 
 		/// <summary>
 		/// Gets the browser-compatible universal culture language string (e.g. "en-US") based on language Id.
 		/// </summary>
-		/// <param name="languageId">The language Id. May use 0 to indicate no language setting.</param>
+		/// <param name="CultureName">The language Id. May use 0 to indicate no language setting.</param>
 		/// <returns>Culture string.</returns>
-		public Language GetLanguage(int languageId)
+		public Language GetLanguage(string CultureName)
 		{
-			if (languageId < 0)
+			if (CultureName == null)
 			{
-				throw new ArgumentOutOfRangeException("languageId", "Language Id cannot be negative.");
+				throw new ArgumentOutOfRangeException("CultureName", "Culture Name cannot be empty.");
 			}
 
 			// No language setting, use browser setting. May return null if browser culture is unsupported in this app's database.
-			if (languageId == 0)
+			if (CultureName == null)
 			{
 				return this.ValidLanguages().Where(c => System.Globalization.CultureInfo.CurrentCulture.Name.Equals(c.CultureName)).SingleOrDefault();
 			}
 
-			LanguageDBEntity language = DBHelper.GetLanguage(languageId);
+			LanguageDBEntity language = DBHelper.GetLanguage(CultureName);
 			return new Language
 			{
-				LanguageId = language.LanguageId,
 				LanguageName = language.LanguageName,
 				CultureName = language.CultureName
 			};
@@ -498,7 +496,7 @@ namespace AllyisApps.Services
 		/// Sends an email with password reset link to the given email address.
 		/// </summary>
 		/// <param name="email">The user email address.</param>
-		/// <param name="code">the password reset code that is </param>
+		/// <param name="code">The password reset code that is .</param>
 		/// <param name="callbackUrl">The Url to include as the "click here" link, with stand-ins for userid and code (as "{userid}" and "{code}".</param>
 		/// <returns>A value indicating whether the given email address matched with an existing user.</returns>
 		public async Task<bool> SendPasswordResetMessage(string email, string code, string callbackUrl)
@@ -665,7 +663,7 @@ namespace AllyisApps.Services
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
 				PostalCode = user.Address.PostalCode,
-				PreferredLanguageId = 1          // TODO: Put this into UserInfo and do proper lookup
+				PreferredLanguageId = "en-US"          // TODO: Put this into UserInfo and do proper lookup
 			};
 		}
 

@@ -4,16 +4,16 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Crm;
-using AllyisApps.DBModel.Lookup;
-using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.Crm;
+using AllyisApps.DBModel.Lookup;
+using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -130,9 +130,9 @@ namespace AllyisApps.DBModel
 		}*/
 
 		/// <summary>
-		/// Reactivate a project
+		/// Reactivate a project.
 		/// </summary>
-		/// <param name="projectId">The id of the project to be reactivated</param>
+		/// <param name="projectId">The id of the project to be reactivated.</param>
 		public void ReactivateProject(int projectId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -214,7 +214,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="projectId">Project Id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<ProjectDBEntity, List<UserDBEntity>, List<SubscriptionUserDBEntity>> GetProjectEditInfo(int projectId, int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -240,7 +240,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<string, List<SubscriptionUserDBEntity>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -468,7 +468,7 @@ namespace AllyisApps.DBModel
 		/// country names.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<string, List<string>> GetNextCustIdAndCountries(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -490,7 +490,7 @@ namespace AllyisApps.DBModel
 		/// country names.
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<CustomerDBEntity, List<string>, AddressDBEntity> GetCustomerCountries(int customerId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -687,32 +687,13 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Updates the name of existing subscription.
-		/// </summary>
-		public void UpdateSubscriptionName(int orgId, int selectedSku, string subscriptionName)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", orgId);
-			parameters.Add("@skuId", selectedSku);
-			parameters.Add("@subscriptionName", subscriptionName);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				connection.Query(
-					"[Billing].[UpdateSubscriptionName]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
 		/// Returns a list of ProjectDBEntities for projects the given user is assigned to in the given organization,
 		/// another list of ProjectDBEntities for all projects in the given organization, and a UserDBEntity with the
 		/// name and email of the user.
 		/// </summary>
 		/// <param name="userId">User Id.</param>
 		/// <param name="orgId">Organization Id.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<List<ProjectDBEntity>, List<ProjectDBEntity>, UserDBEntity> GetProjectsForOrgAndUser(int userId, int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -737,7 +718,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="userId">User Id.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<List<ProjectDBEntity>, List<CustomerDBEntity>> GetProjectsAndCustomersForOrgAndUser(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -761,7 +742,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="userId">User Id.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<List<ProjectDBEntity>, List<CustomerDBEntity>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();

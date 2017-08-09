@@ -1,13 +1,13 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="ChargeAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using AllyisApps.Services.Common.Types;
 using System;
 using System.Web.Mvc;
+using AllyisApps.Services;
+using AllyisApps.Services.Common.Types;
 
 namespace AllyisApps.Controllers
 {
@@ -19,7 +19,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Edits or creates billing information.
 		/// </summary>
-		/// <param name="id">the organization this billing information belongs to</param>
+		/// <param name="id">The organization this billing information belongs to.</param>
 		/// <param name="token">The billing services token being used for this charge.</param>
 		/// <param name="billingServicesEmail">The email associated with this customer.</param>
 		/// <returns>A page.</returns>

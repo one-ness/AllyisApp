@@ -4,6 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+[assembly: System.CLSCompliant(true)]
+
 namespace AllyisApps.Services.Common.Types
 {
 	/// <summary>

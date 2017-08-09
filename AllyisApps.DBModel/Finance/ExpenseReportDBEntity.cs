@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AllyisApps.DBModel.Finance
 {
-    /// <summary>
-    /// Represents the Expense Item table in the database.
-    /// </summary>
-    public class ExpenseReportDBEntity
+	/// <summary>
+	/// Represents the Expense Item table in the database.
+	/// </summary>
+	public class ExpenseReportDBEntity
     {
         /// <summary>
         /// Gets or sets the Expense Report's ID.
@@ -50,7 +46,7 @@ namespace AllyisApps.DBModel.Finance
         /// <summary>
         /// Gets or sets the Expense Report's creation date.
         /// </summary>
-        public DateTime ExpenseReportCreatedCreatedUtc { get; set; }
+        public DateTime ExpenseReportCreatedUtc { get; set; }
 
         /// <summary>
         /// Gets or sets the Expense Report's last-modified-on date.

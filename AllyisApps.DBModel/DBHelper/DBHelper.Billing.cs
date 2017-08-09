@@ -4,15 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Billing;
-
-//using AllyisApps.DBModel.Cache;
-using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using AllyisApps.DBModel.Billing;
+// using AllyisApps.DBModel.Cache;
+using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -105,12 +104,12 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@productRoleId", productRoleId);
 
-			//TODO: instead of providing product id, provide subscription id of the subscription to be modified
+			// TODO: instead of providing product id, provide subscription id of the subscription to be modified
 			parameters.Add("@productId", productId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				//TODO: split updating user roles and creating new sub users
+				// TODO: split updating user roles and creating new sub users
 				var results = connection.QueryMultiple("[Billing].[UpdateSubscriptionUserRoles]", parameters, commandType: CommandType.StoredProcedure);
 				int usersUpdated = results.Read<int>().SingleOrDefault();
 				int usersAdded = results.Read<int>().SingleOrDefault();
@@ -122,7 +121,7 @@ namespace AllyisApps.DBModel
 		/// <param name="userIds">List of user Ids.</param>
 		/// <param name="organizationId">The Organization Id.</param>
 		/// <param name="productId">ID of Product in question.</param>
-		/// <returns>count of deleted users</returns>
+		/// <returns>count of deleted users.</returns>
 		public void DeleteSubscriptionUsers(List<int> userIds, int organizationId, int productId)
 		{
 			DataTable userIdsTable = new DataTable();
@@ -133,7 +132,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
 			parameters.Add("@organizationId", organizationId);
 
-			//TODO: instead of providing product id, provide subscription id of the subscription to be modified
+			// TODO: instead of providing product id, provide subscription id of the subscription to be modified
 			parameters.Add("@productId", productId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -203,28 +202,50 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Executes [Billing].[UpdateSubscription].
+		/// Updates subscription:
+		///  - upgrades or downgrades the subscription (sku id)
+		///  - changes the subscription name.
 		/// </summary>
 		/// <param name="organizationId">Sets OrganizationId.</param>
-		/// <param name="skuId">Set to 0 for unsubscribe.</param>
-		/// <param name="productId"> Param @productId. </param>
-		/// <param name="subscriptionName">The subscription name</param>
-		/// <returns>The ret Id.</returns>
-		public int ChangeSubscription(int organizationId, int skuId, int productId, string subscriptionName)
+		/// <param name="skuId">Sku to change to.</param>
+		/// <param name="subscriptionName">The subscription name.</param>
+		/// <returns>Number of rows changed.</returns>
+		public int UpdateSubscription(int organizationId, int skuId, string subscriptionName)
+		{
+			// TODO: pass in subscriptionId as a parameter to simplify logic
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", organizationId);
+			parameters.Add("@skuId", skuId);
+			parameters.Add("@subscriptionName", subscriptionName);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Execute("[Billing].[UpdateSubscription]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Creates subscription
+		/// Adds all the organization users as users to the subscription
+		/// Adds the user who subscribed to the subscription as a manager.
+		/// </summary>
+		/// <param name="organizationId">Sets OrganizationId.</param>
+		/// <param name="skuId">Sku -- the subscription item you're subscribing to.</param>
+		/// <param name="subscriptionName">The subscription name.</param>
+		/// <param name="userId">The user who is subscribing -- we need to make them manager.</param>
+		/// <returns>The new subscription id.</returns>
+		public int CreateSubscription(int organizationId, int skuId, string subscriptionName, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@skuId", skuId);
 			parameters.Add("@subscriptionName", subscriptionName);
-			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
-			parameters.Add("@productId", productId);
+			parameters.Add("@userId", userId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Billing].[UpdateSubscription]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<int>("[Billing].[CreateSubscription]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
-
-			return parameters.Get<int>("@retId");
 		}
 
 		/// <summary>
@@ -544,7 +565,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="skuId">Product Id.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<ProductDBEntity, SubscriptionDBEntity, List<SkuDBEntity>, string, int> GetProductSubscriptionInfo(int orgId, int skuId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -566,7 +587,7 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Returns a list of active products and each product's active skus
+		/// Returns a list of active products and each product's active skus.
 		/// </summary>
 		public Tuple<List<ProductDBEntity>, List<SkuDBEntity>> GetAllActiveProductsAndSkus()
 		{

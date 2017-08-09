@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.TimeTracker;
-using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AllyisApps.DBModel.Hrm;
+using AllyisApps.DBModel.TimeTracker;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Services
 {
@@ -142,9 +142,9 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets a list of <see cref="TimeEntryInfo"/>'s for a given organization and start/end times.
 		/// </summary>
-		/// <param name="orgId"></param>
-		/// <param name="start">Starting. <see cref="DateTime"/></param>
-		/// <param name="end">Ending. <see cref="DateTime"/></param>
+		/// <param name="orgId">.</param>
+		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
+		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
 		/// <returns>A list of TimeEntryInfo's for a given organization and start/end times.</returns>
 		public IEnumerable<TimeEntryInfo> GetTimeEntriesOverDateRange(int orgId, DateTime start, DateTime end)
 		{
@@ -171,11 +171,11 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets a list of <see cref="TimeEntryInfo"/>'s for a given set of users, organization, and start/end times.
 		/// </summary>
-		/// <param name="organizationId">The organization's Id</param>
+		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="userIds">List of user Id's.</param>
-		/// <param name="start">Starting. <see cref="DateTime"/></param>
-		/// <param name="end">Ending. <see cref="DateTime"/></param>
-		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/></returns>
+		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
+		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
+		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/>.</returns>
 		public IEnumerable<TimeEntryInfo> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId = -1)
 		{
 			#region Validation
@@ -254,7 +254,7 @@ namespace AllyisApps.Services
 		/// Creates a holiday and related time entries for an organization.
 		/// </summary>
 		/// <param name="holiday">Holiday.</param>
-		/// <param name="subscriptionId">Subscription Id</param>
+		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool CreateHoliday(Holiday holiday, int subscriptionId)
 		{
@@ -268,8 +268,8 @@ namespace AllyisApps.Services
 		/// Deletes a holiday and related time entries for the current organization.
 		/// </summary>
 		/// <param name="holidayId">Id of holiday to delete.</param>
-		/// <param name="orgId">The organization's Id</param>
-		/// <param name="subscriptionId">The subscription id</param>
+		/// <param name="orgId">The organization's Id.</param>
+		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool DeleteHoliday(int holidayId, int orgId, int subscriptionId)
 		{
@@ -291,8 +291,8 @@ namespace AllyisApps.Services
 		/// Creates a new pay class for an organization.
 		/// </summary>
 		/// <param name="payClassName">Name of pay class.</param>
-		/// <param name="orgId">Organization Id</param>
-		/// <param name="subscriptionId">Subscription Id</param>
+		/// <param name="orgId">Organization Id.</param>
+		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool CreatePayClass(string payClassName, int orgId, int subscriptionId)
 		{
@@ -305,9 +305,9 @@ namespace AllyisApps.Services
 		/// Deletes a pay class.
 		/// </summary>
 		/// <param name="payClassId">Pay class Id.</param>
-		/// <param name="orgId">The organization's Id</param>
-		/// <param name="subscriptionId">The subscription's Id</param>
-		/// <param name="destPayClass">The id of the destination payclass</param>
+		/// <param name="orgId">The organization's Id.</param>
+		/// <param name="subscriptionId">The subscription's Id.</param>
+		/// <param name="destPayClass">The id of the destination payclass.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool DeletePayClass(int payClassId, int orgId, int subscriptionId, int? destPayClass)
 		{
@@ -348,8 +348,8 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates the Start of Week for an organization.
 		/// </summary>
-		/// <param name="organizationId">The organization's Id</param>
-		/// <param name="subscriptionId">The subscription's Id</param>
+		/// <param name="organizationId">The organization's Id.</param>
+		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="startOfWeek">Start of Week.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool UpdateStartOfWeek(int organizationId, int subscriptionId, int startOfWeek)
@@ -371,8 +371,8 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates overtime settings for an organization.
 		/// </summary>
-		/// <param name="subscriptionId">The subscription's Id</param>
-		/// <param name="organizationId">The organization's Id</param>
+		/// <param name="subscriptionId">The subscription's Id.</param>
+		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="overtimeHours">Hours until overtime.</param>
 		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
 		/// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
@@ -406,7 +406,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Prepares the Excel file for output of time entry information.
 		/// </summary>
-		/// <param name="orgId">The current Organization Id</param>
+		/// <param name="orgId">The current Organization Id.</param>
 		/// <param name="userIds">List of user ids to filter by.</param>
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
@@ -415,7 +415,7 @@ namespace AllyisApps.Services
 		/// <returns>The stream writer.</returns>
 		public StreamWriter PrepareCSVExport(int orgId, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
-			//Preparing data
+			// Preparing data
 			IEnumerable<TimeEntryInfo> data = new List<TimeEntryInfo>();
 			IEnumerable<CompleteProjectInfo> projects = new List<CompleteProjectInfo>();
 
@@ -513,8 +513,8 @@ namespace AllyisApps.Services
 		/// <param name="lockDateUsed">Whether or not to use a lock date.</param>
 		/// <param name="lockDatePeriod">The lock date period (days/weeks/months).</param>
 		/// <param name="lockDateQuantity">The quantity of the selected period.</param>
-		/// <param name="orgId"></param>
-		/// <returns></returns>
+		/// <param name="orgId">.</param>
+		/// <returns>.</returns>
 		public bool UpdateLockDate(bool lockDateUsed, int lockDatePeriod, int lockDateQuantity, int orgId)
 		{
 			if (!new int[] { 1, 2, 3 }.Contains(lockDatePeriod))
@@ -534,8 +534,8 @@ namespace AllyisApps.Services
 		/// Returns a SettingsInfo with start of week, overtime, and lock date settings, a list of PayClassInfos,
 		/// and a list of Holidays for the current organization.
 		/// </summary>
-		/// <param name="subscriptionId">Subscription Id</param>
-		/// <returns></returns>
+		/// <param name="subscriptionId">Subscription Id.</param>
+		/// <returns>.</returns>
 		public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int subscriptionId)
 		{
 			UserSubscription subInfo = null;
@@ -556,10 +556,10 @@ namespace AllyisApps.Services
 		/// for all time entries for the given user in the given time range.
 		/// </summary>
 		/// <param name="userId">User Id.</param>
-		/// <param name="orgId">Organization Id</param>
+		/// <param name="orgId">Organization Id.</param>
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<Setting, List<PayClass>, List<Holiday>, List<CompleteProjectInfo>, List<User>, List<TimeEntryInfo>>
 			GetTimeEntryIndexInfo(int orgId, DateTime? startingDate, DateTime? endingDate, int? userId = null)
 		{

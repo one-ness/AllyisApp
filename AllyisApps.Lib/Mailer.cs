@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System;
 
 namespace AllyisApps.Lib
 {

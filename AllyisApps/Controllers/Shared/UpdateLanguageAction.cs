@@ -16,17 +16,17 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Sets the language preference.
 		/// </summary>
-		/// <param name="languageId">The language selection.</param>
+		/// <param name="cultureName">The language selection.</param>
 		/// <returns>A redirection to the same page again.</returns>
-		public ActionResult UpdateLanguage(int languageId)
+		public ActionResult UpdateLanguage(string cultureName)
 		{
 			if (Request.IsAuthenticated)
 			{
-				AppService.SetLanguage(languageId);
+				AppService.SetLanguage(cultureName);
 			}
 			else
 			{
-				TempData[languageKey] = languageId;
+				TempData[LanguageKey] = cultureName;
 			}
 
 			return Redirect(HttpContext.Request.UrlReferrer.AbsoluteUri); // Reloads page request came from

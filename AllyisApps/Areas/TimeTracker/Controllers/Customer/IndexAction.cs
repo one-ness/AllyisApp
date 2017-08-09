@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
-using AllyisApps.Services;
-using AllyisApps.ViewModels.TimeTracker.Customer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.TimeTracker.Customer;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -23,7 +23,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET: Customer/subscriptionId/Index.
 		/// </summary>
-		/// <param name="subscriptionId">The Subscription Id</param>
+		/// <param name="subscriptionId">The Subscription Id.</param>
 		/// <returns>Customer Index.</returns>
 		[HttpGet]
 		public ActionResult Index(int subscriptionId)
@@ -37,8 +37,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         /// <summary>
         /// Quick fix for new routing issue. 
         /// </summary>
-        /// <param name="subscriptionId"></param>
-        /// <returns></returns>
+        /// <param name="subscriptionId">Subscription id.</param>
+        /// <returns>The index page.</returns>
         public ActionResult IndexNoUserId(int subscriptionId)
         {
             this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
@@ -53,9 +53,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         }
 
 		/// <summary>
-		/// PopulateProjects.
+		/// Populate Projects.
 		/// </summary>
-		/// <returns>_ProjectByCustomer partial view.</returns>
+		/// <param name="customerId">The customer id.</param>
+		/// <returns>ProjectByCustomer partial view.</returns>
 		[HttpPost]
 		public ActionResult PopulateProjects(int customerId)
 		{
@@ -66,9 +67,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		}
 
 		/// <summary>
-		/// PopulateProjects.
+		/// Populate Projects.
 		/// </summary>
-		/// <returns>_ProjectByCustomer partial view.</returns>
+		/// <param name="customerId">The customer id.</param>
+		/// <returns>ProjectByCustomer partial view.</returns>
 		[HttpPost]
 		public ActionResult PopulateInactiveProjects(int customerId)
 		{
@@ -81,7 +83,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ManageCustomerViewModel" /> class.
 		/// </summary>
-		/// <param name="subscriptionId">The id of the current subscription</param>
+		/// <param name="subscriptionId">The id of the current subscription.</param>
 		/// <returns>The ManageCustomerViewModel.</returns>
 		public ManageCustomerViewModel ConstructManageCustomerViewModel(int subscriptionId)
 		{
@@ -148,7 +150,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Customers = customersList,
 				InactiveCustomerAndProjects = inactiveCustomersList,
 				OrganizationId = subInfo.OrganizationId,
-				canEdit = canEditProjects,
+				CanEdit = canEditProjects,
 				SubscriptionId = subscriptionId,
                 SubscriptionName = subInfo.SubscriptionName,
 				UserId = this.AppService.UserContext.UserId

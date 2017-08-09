@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
-using System;
-using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -20,7 +20,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Removes the selected subscription from the database.
 		/// </summary>
-		/// <param name="id"> Subscription Id</param>
+		/// <param name="id"> Subscription Id.</param>
 		/// <param name="idTwo">The id of the sku being unsubscribed from.</param>
 		/// <returns>Removes selected subscription.</returns>
 		[HttpGet]

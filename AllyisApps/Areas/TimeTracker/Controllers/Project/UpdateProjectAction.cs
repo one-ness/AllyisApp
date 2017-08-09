@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
-using AllyisApps.ViewModels.TimeTracker.Project;
 using System;
 using System.Linq;
+using AllyisApps.Controllers;
+using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -45,7 +45,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				AppService.GetDateTimeFromDays(project.EndDate),
 				project.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString)),
 				project.SubscriptionId);
-				//project.IsHourly; //TODO: add an isHourly parameter to update the project's isHourly column.  Currently disabled feature
+
+			// project.IsHourly; // TODO: add an isHourly parameter to update the project's isHourly column.  Currently disabled feature
 		}
 	}
 }

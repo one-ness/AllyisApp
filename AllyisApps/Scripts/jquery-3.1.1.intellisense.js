@@ -15,7 +15,7 @@ intellisense.annotate(jQuery, {
   'ajaxPrefilter': function() {
     /// <signature>
     ///   <summary>Handle custom Ajax options or modify existing options before each request is sent and before they are processed by $.ajax().</summary>
-    ///   <param name="dataTypes" type="String">An optional string containing one or more space-separated dataTypes</param>
+    ///   <param name="dataTypes" type="String">An optional string containing one or more space-separated dataTypes.</param>
     ///   <param name="handler(options, originalOptions, jqXHR)" type="Function">A handler to set default values for future Ajax requests.</param>
     /// </signature>
   },
@@ -28,7 +28,7 @@ intellisense.annotate(jQuery, {
   'ajaxTransport': function() {
     /// <signature>
     ///   <summary>Creates an object that handles the actual transmission of Ajax data.</summary>
-    ///   <param name="dataType" type="String">A string identifying the data type to use</param>
+    ///   <param name="dataType" type="String">A string identifying the data type to use.</param>
     ///   <param name="handler(options, originalOptions, jqXHR)" type="Function">A handler to return the new transport object to use with the data type provided in the first argument.</param>
     /// </signature>
   },
@@ -180,7 +180,7 @@ intellisense.annotate(jQuery, {
   'holdReady': function() {
     /// <signature>
     ///   <summary>Holds or releases the execution of jQuery's ready event.</summary>
-    ///   <param name="hold" type="Boolean">Indicates whether the ready hold is being requested or released</param>
+    ///   <param name="hold" type="Boolean">Indicates whether the ready hold is being requested or released.</param>
     /// </signature>
   },
   'inArray': function() {
@@ -300,9 +300,9 @@ intellisense.annotate(jQuery, {
   'parseHTML': function() {
     /// <signature>
     ///   <summary>Parses a string into an array of DOM nodes.</summary>
-    ///   <param name="data" type="String">HTML string to be parsed</param>
-    ///   <param name="context" type="Element">Document element to serve as the context in which the HTML fragment will be created</param>
-    ///   <param name="keepScripts" type="Boolean">A Boolean indicating whether to include scripts passed in the HTML string</param>
+    ///   <param name="data" type="String">HTML string to be parsed.</param>
+    ///   <param name="context" type="Element">Document element to serve as the context in which the HTML fragment will be created.</param>
+    ///   <param name="keepScripts" type="Boolean">A Boolean indicating whether to include scripts passed in the HTML string.</param>
     ///   <returns type="Array" />
     /// </signature>
   },
@@ -316,7 +316,7 @@ intellisense.annotate(jQuery, {
   'parseXML': function() {
     /// <signature>
     ///   <summary>Parses a string into an XML document.</summary>
-    ///   <param name="data" type="String">a well-formed XML string to be parsed</param>
+    ///   <param name="data" type="String">a well-formed XML string to be parsed.</param>
     ///   <returns type="XMLDocument" />
     /// </signature>
   },
@@ -566,7 +566,7 @@ intellisense.annotate(_object, {
   'promise': function() {
     /// <signature>
     ///   <summary>Return a Deferred's Promise object.</summary>
-    ///   <param name="target" type="Object">Object onto which the promise methods have to be attached</param>
+    ///   <param name="target" type="Object">Object onto which the promise methods have to be attached.</param>
     ///   <returns type="Promise" />
     /// </signature>
   },
@@ -921,8 +921,8 @@ intellisense.annotate(jQuery.fn, {
     /// <signature>
     ///   <summary>Matches elements that match all of the specified attribute filters.</summary>
     ///   <param name="attributeFilter1" type="String">An attribute filter.</param>
-    ///   <param name="attributeFilter2" type="String">Another attribute filter, reducing the selection even more</param>
-    ///   <param name="attributeFilterN" type="String">As many more attribute filters as necessary</param>
+    ///   <param name="attributeFilter2" type="String">Another attribute filter, reducing the selection even more.</param>
+    ///   <param name="attributeFilterN" type="String">As many more attribute filters as necessary.</param>
     /// </signature>
   },
   'attributeNotEqual': function() {
@@ -1546,8 +1546,8 @@ intellisense.annotate(jQuery.fn, {
   'init': function() {
     /// <signature>
     ///   <summary>Accepts a string containing a CSS selector which is then used to match a set of elements.</summary>
-    ///   <param name="selector" type="String">A string containing a selector expression</param>
-    ///   <param name="context" type="">A DOM Element, Document, or jQuery to use as context</param>
+    ///   <param name="selector" type="String">A string containing a selector expression.</param>
+    ///   <param name="context" type="">A DOM Element, Document, or jQuery to use as context.</param>
     ///   <returns type="jQuery" />
     /// </signature>
     /// <signature>
@@ -1896,25 +1896,25 @@ intellisense.annotate(jQuery.fn, {
   'nth-child': function() {
     /// <signature>
     ///   <summary>Selects all elements that are the nth-child of their parent.</summary>
-    ///   <param name="index" type="String">The index of each child to match, starting with 1, the string even or odd, or an equation ( eg. :nth-child(even), :nth-child(4n) )</param>
+    ///   <param name="index" type="String">The index of each child to match, starting with 1, the string even or odd, or an equation ( eg. :nth-child(even), :nth-child(4n) ).</param>
     /// </signature>
   },
   'nth-last-child': function() {
     /// <signature>
     ///   <summary>Selects all elements that are the nth-child of their parent, counting from the last element to the first.</summary>
-    ///   <param name="index" type="String">The index of each child to match, starting with the last one (1), the string even or odd, or an equation ( eg. :nth-last-child(even), :nth-last-child(4n) )</param>
+    ///   <param name="index" type="String">The index of each child to match, starting with the last one (1), the string even or odd, or an equation ( eg. :nth-last-child(even), :nth-last-child(4n) ).</param>
     /// </signature>
   },
   'nth-last-of-type': function() {
     /// <signature>
     ///   <summary>Selects all elements that are the nth-child of their parent, counting from the last element to the first.</summary>
-    ///   <param name="index" type="String">The index of each child to match, starting with the last one (1), the string even or odd, or an equation ( eg. :nth-last-of-type(even), :nth-last-of-type(4n) )</param>
+    ///   <param name="index" type="String">The index of each child to match, starting with the last one (1), the string even or odd, or an equation ( eg. :nth-last-of-type(even), :nth-last-of-type(4n) ).</param>
     /// </signature>
   },
   'nth-of-type': function() {
     /// <signature>
     ///   <summary>Selects all elements that are the nth child of their parent in relation to siblings with the same element name.</summary>
-    ///   <param name="index" type="String">The index of each child to match, starting with 1, the string even or odd, or an equation ( eg. :nth-of-type(even), :nth-of-type(4n) )</param>
+    ///   <param name="index" type="String">The index of each child to match, starting with 1, the string even or odd, or an equation ( eg. :nth-of-type(even), :nth-of-type(4n) ).</param>
     /// </signature>
   },
   'odd': function() {
@@ -2099,7 +2099,7 @@ intellisense.annotate(jQuery.fn, {
     /// <signature>
     ///   <summary>Return a Promise object to observe when all actions of a certain type bound to the collection, queued or not, have finished.</summary>
     ///   <param name="type" type="String">The type of queue that needs to be observed.</param>
-    ///   <param name="target" type="PlainObject">Object onto which the promise methods have to be attached</param>
+    ///   <param name="target" type="PlainObject">Object onto which the promise methods have to be attached.</param>
     ///   <returns type="Promise" />
     /// </signature>
   },
@@ -2538,13 +2538,13 @@ intellisense.annotate(jQuery.fn, {
     /// <signature>
     ///   <summary>Remove a handler from the event for all elements which match the current selector, based upon a specific set of root elements.</summary>
     ///   <param name="selector" type="String">A selector which will be used to filter the event results.</param>
-    ///   <param name="eventType" type="String">A string containing a JavaScript event type, such as "click" or "keydown"</param>
+    ///   <param name="eventType" type="String">A string containing a JavaScript event type, such as "click" or "keydown".</param>
     ///   <returns type="jQuery" />
     /// </signature>
     /// <signature>
     ///   <summary>Remove a handler from the event for all elements which match the current selector, based upon a specific set of root elements.</summary>
     ///   <param name="selector" type="String">A selector which will be used to filter the event results.</param>
-    ///   <param name="eventType" type="String">A string containing a JavaScript event type, such as "click" or "keydown"</param>
+    ///   <param name="eventType" type="String">A string containing a JavaScript event type, such as "click" or "keydown".</param>
     ///   <param name="handler(eventObject)" type="Function">A function to execute at the time the event is triggered.</param>
     ///   <returns type="jQuery" />
     /// </signature>
@@ -2641,8 +2641,8 @@ intellisense.annotate(window, {
   '$': function() {
     /// <signature>
     ///   <summary>Accepts a string containing a CSS selector which is then used to match a set of elements.</summary>
-    ///   <param name="selector" type="String">A string containing a selector expression</param>
-    ///   <param name="context" type="">A DOM Element, Document, or jQuery to use as context</param>
+    ///   <param name="selector" type="String">A string containing a selector expression.</param>
+    ///   <param name="context" type="">A DOM Element, Document, or jQuery to use as context.</param>
     ///   <returns type="jQuery" />
     /// </signature>
     /// <signature>

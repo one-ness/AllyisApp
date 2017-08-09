@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="EditProfileViewModel.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -56,12 +56,11 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the user's phone number.
 		/// </summary>
 		[RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
-		//[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")] // [Phone] does not work //I am not conviced that this is a good idea either.
 		[Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
 
 		/// <summary>
-		/// Gets of sets the user's address Id
+		/// Gets or sets the user's address Id.
 		/// </summary>
 		public int AddressId { get; set; }
 
@@ -105,12 +104,8 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets Date of birth.
 		/// </summary>
-		//[DataType(DataType.Date)]
-		//[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-		//[Display(Name = "Date of Birth")]
-		//[SQLDateProtector]
 		[MinDateValidation]
-		public int DateOfBirth { get; set; } //has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view.
+		public int DateOfBirth { get; set; } // has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view.
 
 		/// <summary>
 		/// Gets or sets a List of valid countries.
@@ -156,20 +151,22 @@ namespace AllyisApps.ViewModels.Auth
 	}
 
 	/// <summary>
-	/// Validates that the integer representing the birthdate meets a minimum requirement
+	/// Validates that the integer representing the birthdate meets a minimum requirement.
 	/// </summary>
 	public class MinDateValidation : ValidationAttribute
 	{
 		/// <summary>
-		/// Validates if the value meets the minimum requirement
+		/// Validates if the value meets the minimum requirement.
 		/// </summary>
-		/// <param name="value"></param>
-		/// <param name="validationContext">validation context</param>
-		/// <returns></returns>
+		/// <param name="value">The integer value of the birthdate to be validated.</param>
+		/// <param name="validationContext">Validation context.</param>
+		/// <returns>A validation result with the status of the value being validated.</returns>
 		protected override ValidationResult IsValid(object value, ValidationContext validationContext)
 		{
 			int minAgeYears = 15;
-			if ((int) value > -1) //-1 represents a null date
+
+			// -1 represents a null date
+			if ((int)value > -1)
 			{
 				DateTime dob = new DateTime(1 / 1 / 1).AddDays((int)value);
 				dob = new DateTime(dob.Subtract(new DateTime(1 / 1 / 1)).Ticks);
@@ -178,11 +175,12 @@ namespace AllyisApps.ViewModels.Auth
 				{
 					return new ValidationResult("Must be at least " + minAgeYears + " years of age to register");
 				}
-				else if ((int)value < 639905) 
+				else if ((int)value < 639905)
 				{
 					return new ValidationResult("Please enter a date within the last 150 years");
 				}
 			}
+
 			return ValidationResult.Success;
 		}
 	}
