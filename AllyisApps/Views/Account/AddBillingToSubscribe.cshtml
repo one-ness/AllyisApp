@@ -1,37 +1,37 @@
 ﻿@model AllyisApps.ViewModels.Auth.ProductSubscriptionViewModel
 
 @{
-    ViewBag.Title = Strings.AddBillingInformation;
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = Strings.AddBillingInformation;
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="shrink-wrap-center">
-    <div class="min300">
-        <p>
-            @Strings.NeedBillingInfo
-        </p>
+	<div class="min300">
+		<p>
+			@Strings.NeedBillingInfo
+		</p>
 
-        @using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, FormMethod.Post))
-        {
-            <a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account)" new { class = "btn btn-default" }> Strings.Cancel </a>
+		@using (Html.BeginForm(ActionConstants.Subscribe, ControllerConstants.Account, FormMethod.Post))
+		{
+			<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account)" new { class="btn btn-default" }> Strings.Cancel </a>
 
-            @Html.AntiForgeryToken()
-            @Html.HiddenFor(m => m.OrganizationId)
-            @Html.HiddenFor(m => m.ProductId)
-            @Html.Hidden("SelectedSku", 1)
-            @Html.HiddenFor(m => m.PreviousSku)
+			@Html.AntiForgeryToken()
+			@Html.HiddenFor(m => m.OrganizationId)
+			@Html.HiddenFor(m => m.ProductId)
+			@Html.Hidden("SelectedSku", 1)
+			@Html.HiddenFor(m => m.PreviousSku)
 
-            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                    data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
-                    data-name="Allyis Apps"
-                    data-description="Adding Billing Information"
-                    @*data-image="/128x128.png"*@
-                    data-locale="auto"
-                    data-label="Add Billing Information"
-                    data-panel-label="Submit Billing Info"
-                    data-billing-address="true"
-                    data-zip-code="true"
-                    data-allow-remember-me="false">
-            </script>
-        }
-    </div>
+			<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+					data-key="pk_test_gCF350S6jE0k1BvPgdofdzvP"
+					data-name="Allyis Apps"
+					data-description="Adding Billing Information"
+					@*data-image="/128x128.png"*@
+					data-locale="auto"
+					data-label="Add Billing Information"
+					data-panel-label="Submit Billing Info"
+					data-billing-address="true"
+					data-zip-code="true"
+					data-allow-remember-me="false">
+			</script>
+		}
+	</div>
 </div>

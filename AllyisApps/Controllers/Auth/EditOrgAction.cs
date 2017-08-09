@@ -1,15 +1,15 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="EditAction.cs" company="Allyis, Inc.">
+// <copyright file="EditOrgAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.ViewModels.Auth;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using AllyisApps.Core.Alert;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {
@@ -35,7 +35,7 @@ namespace AllyisApps.Controllers
 						new Organization()
 						{
 							OrganizationId = model.OrganizationId,
-                            OrganizationName = model.OrganizationName,
+							OrganizationName = model.OrganizationName,
 							SiteUrl = model.SiteUrl,
 							AddressId = model.AddressId,
 							Address = model.Address,
@@ -95,7 +95,7 @@ namespace AllyisApps.Controllers
 			return new EditOrganizationViewModel
 			{
 				OrganizationId = organization.OrganizationId,
-                OrganizationName = organization.OrganizationName,
+				OrganizationName = organization.OrganizationName,
 				SiteUrl = organization.SiteUrl,
 				AddressId = organization.AddressId,
 				Address = organization.Address,

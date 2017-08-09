@@ -1,13 +1,13 @@
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.TimeTracker;
-using AllyisApps.Lib;
-using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.TimeTracker;
+using AllyisApps.Lib;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Services
 {
@@ -39,7 +39,7 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				return null; //subsciptionId and/or organization id are invalid
+				return null; // subsciptionId and/or organization id are invalid
 			}
 
 			// For some reason, linq won't work directly with DataSets, so we start by just moving the tables over to a linq-able List
@@ -75,7 +75,7 @@ namespace AllyisApps.Services
 			// Retrieval of existing pay class data
 			List<PayClass> payClasses = DBHelper.GetPayClasses(orgId).Select(pc => InitializePayClassInfo(pc)).ToList();
 
-			//Result object
+			// Result object
 			ImportActionResult result = new ImportActionResult();
 
 			// Loop through and see what can be imported from each table in turn. Order doesn't matter, since missing information
@@ -125,8 +125,8 @@ namespace AllyisApps.Services
 
 				// Non-required project columns
 
-				//TODO use this line once project isHourly property is supported.  Currently disabled
-				//bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
+				// TODO use this line once project isHourly property is supported.  Currently disabled
+				// bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
 				bool hasProjectStartDate = table.Columns.Contains(ColumnHeaders.ProjectStartDate);
 				bool hasProjectEndDate = table.Columns.Contains(ColumnHeaders.ProjectEndDate);
 				bool hasNonRequiredProjectInfo = /*hasProjectType ||*/ hasProjectStartDate || hasProjectEndDate;
@@ -400,7 +400,7 @@ namespace AllyisApps.Services
 								{
 									CustomerId = customer.CustomerId,
                                     ProjectName = thisRowHasProjectName ? knownValue : readValue,
-									IsHourly = false, //TODO un-hardcode once project isHourly property is supported.  Currently disabled
+									IsHourly = false, // TODO un-hardcode once project isHourly property is supported.  Currently disabled
 									OrganizationId = orgId,
 									ProjectOrgId = thisRowHasProjectName ? readValue : knownValue,
 									StartingDate = defaultProjectStartDate,
@@ -421,7 +421,7 @@ namespace AllyisApps.Services
 						}
 						else
 						{
-							//if(!canImportProjects)
+							// if(!canImportProjects)
 							//{
 							//    result.ProjectFailures.Add(string.Format("Could not create project {0}: no corresponding {1}.", knownValue, thisRowHasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName));
 							//    continue;
@@ -505,7 +505,7 @@ namespace AllyisApps.Services
 									{
 										CustomerId = customer.CustomerId,
                                         ProjectName = fields[0],
-										IsHourly = false,  //TODO un-hardocode once project isHourly property is supported.  Currently disabled
+										IsHourly = false,  // TODO un-hardocode once project isHourly property is supported.  Currently disabled
 										OrganizationId = orgId,
 										ProjectOrgId = fields[1],
 										StartingDate = defaultProjectStartDate,
@@ -550,8 +550,8 @@ namespace AllyisApps.Services
 							string startDate = null;
 							string endDate = null;
 
-							//TODO use this line once project isHourly property is supported.  Currently disabled
-							//if (hasProjectType) updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.isHourly = val) || updated;
+							// TODO use this line once project isHourly property is supported.  Currently disabled
+							// if (hasProjectType) updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.isHourly = val) || updated;
 							if (hasProjectStartDate) updated = this.readColumn(row, ColumnHeaders.ProjectStartDate, val => startDate = val) || updated;
 							if (hasProjectEndDate) updated = this.readColumn(row, ColumnHeaders.ProjectEndDate, val => endDate = val) || updated;
 							if (startDate != null) project.StartingDate = DateTime.Parse(startDate);
@@ -616,7 +616,7 @@ namespace AllyisApps.Services
                                     // have a user who's name includes the text __IMPORT__
                                     hasUserName ? (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "" ? null : row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString()) : null
 								};
-								//if (fields[2] == "__IMPORT__") fields[2] = null;
+								// if (fields[2] == "__IMPORT__") fields[2] = null;
 
 								/*
                                     There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
@@ -704,7 +704,7 @@ namespace AllyisApps.Services
 									{
 										try
 										{
-											//get the id of employeeType, if not found default to Salaried
+											// get the id of employeeType, if not found default to Salaried
 											DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
 											{
 												EmployeeId = fields[1],
@@ -865,7 +865,7 @@ namespace AllyisApps.Services
 										{
 											Date = theDate,
 											Description = description,
-											Duration = theDuration.Value, //value is verified earlier
+											Duration = theDuration.Value, // value is verified earlier
 											FirstName = user.FirstName,
 											LastName = user.LastName,
 											PayClassId = payClass.PayClassId,
@@ -929,7 +929,7 @@ namespace AllyisApps.Services
 		{
 			try
 			{
-				fromValue = fromValue.Replace("'", "''"); //Escape any 's in the names
+				fromValue = fromValue.Replace("'", "''"); // Escape any 's in the names
 				string selectText = null;
 				if (fieldIdFrom == 2)
 				{

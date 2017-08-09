@@ -4,15 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.Lib;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 
 namespace AllyisApps.Services
 {
@@ -82,7 +82,7 @@ namespace AllyisApps.Services
 				BillingServicesHandler handler = new BillingServicesHandler(serviceType);
 				customerId = handler.CreateCustomer(billingServicesEmail, token);
 				this.CreateStripeOrganizationCustomer(customerId, null, orgId);
-				//this.AddBillingHistory(string.Format("Adding {0} customer data", serviceType), null);
+				// this.AddBillingHistory(string.Format("Adding {0} customer data", serviceType), null);
 			}
 			else
 			{
@@ -99,12 +99,12 @@ namespace AllyisApps.Services
 		///// <param name="id">The customer id associated with the subscription to be deleted.</param>
 		///// <param name="subscriptionId">The id of the subscription to delete.</param>
 		//[CLSCompliant(false)]
-		//public void DeleteSubscription(BillingServicesCustomerId id, string subscriptionId)
+		// public void DeleteSubscription(BillingServicesCustomerId id, string subscriptionId)
 		//{
 		//	string serviceType = "Stripe";
 		//	BillingServicesHandler handler = new BillingServicesHandler(serviceType);
 
-		//	//TODO complete this
+		//	// TODO complete this
 		//}
 
 		/// <summary>
@@ -341,7 +341,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			//TODO: split updating user roles and creating new sub users
+			// TODO: split updating user roles and creating new sub users
 			return DBHelper.UpdateSubscriptionUserRoles(userIds, orgId, newProductRole, productId);
 		}
 
@@ -470,7 +470,7 @@ namespace AllyisApps.Services
 			string service = "Stripe";
 			BillingServicesHandler handler = new BillingServicesHandler(service);
 			handler.DeleteSubscription(customerId, subscriptionId);
-			//DBHelper.DeleteSubscriptionPlan(subscriptionId);
+			// DBHelper.DeleteSubscriptionPlan(subscriptionId);
 			DBHelper.DeleteSubscriptionPlanAndAddHistory(orgId, customerId.Id, UserContext.UserId, skuId, "Switching to free subscription, canceling stripe susbcription");
 		}
 
@@ -576,8 +576,8 @@ namespace AllyisApps.Services
 			if (custId != null)
 			{
 				this.DeleteSubscriptionPlanAndAddHistory(custId.Id.Id, SelectedSku, "Unsubscribing from product.", orgId);
-				//string subscriptionPlanId = this.DeleteSubscriptionPlanAndAddHistory(custId.Id.Id, SelectedSku, "Unsubscribing from product.");
-				//if (subscriptionPlanId != null)
+				// string subscriptionPlanId = this.DeleteSubscriptionPlanAndAddHistory(custId.Id.Id, SelectedSku, "Unsubscribing from product.");
+				// if (subscriptionPlanId != null)
 				//{
 				//	this.DeleteSubscription(custId.Id, subscriptionPlanId);
 				//}
@@ -611,20 +611,20 @@ namespace AllyisApps.Services
 		[CLSCompliant(false)]
 		public void Subscribe(int productId, string productName, int selectedSku, string subscriptionName, int previousSku, int billingAmount, BillingServicesToken existingToken, bool addingBillingCustomer, string newBillingEmail, BillingServicesToken newBillingToken, int orgId)
 		{
-			//TODO: Split Subscribe into CreateSubscription and Update Subscription, called from SubscribeAction and EditSubscriptionAction
+			// TODO: Split Subscribe into CreateSubscription and Update Subscription, called from SubscribeAction and EditSubscriptionAction
 
-			//This method is related to billing, which is not supported
-			//CreateAndUpdateAndDeleteSubscriptionPlan(productId, productName, selectedSku, previousSku, billingAmount, existingToken, addingBillingCustomer, newBillingEmail, newBillingToken, orgId);
+			// This method is related to billing, which is not supported
+			// CreateAndUpdateAndDeleteSubscriptionPlan(productId, productName, selectedSku, previousSku, billingAmount, existingToken, addingBillingCustomer, newBillingEmail, newBillingToken, orgId);
 
 			this.InitializeSettingsForProduct(productId, orgId);
 
-			if (previousSku == 0) //creating new subscription
+			if (previousSku == 0) // creating new subscription
 			{
 				DBHelper.CreateSubscription(orgId, selectedSku, subscriptionName, UserContext.UserId);
 			}
-			else //upgrading or downgrading
+			else // upgrading or downgrading
 			{
-				//TODO: pass in subscriptionId as a parameter to simplify logic
+				// TODO: pass in subscriptionId as a parameter to simplify logic
 				DBHelper.UpdateSubscription(orgId, selectedSku, subscriptionName);
 			}
 		}

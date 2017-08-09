@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
@@ -27,7 +26,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult Delete(int subscriptionId, string userId)
 		{
 			int numValue;
-			bool parsed = Int32.TryParse(userId, out numValue);
+			bool parsed = int.TryParse(userId, out numValue);
 
 			if (!parsed)
 			{
@@ -36,48 +35,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			else
 			{
 				var result = AppService.DeleteCustomer(subscriptionId, numValue);
-				
-				// if deleted successfully
-				if (result != null && result != string.Empty)
+
+				if (!string.IsNullOrEmpty(result))
 				{
+					// if deleted successfully
+
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", result, Resources.Strings.CustomerDeleteNotification), Variety.Success));
 				}
-				
-				// Permission failure
 				else if (result == null)
 				{
+					// Permission failure
+
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 				}
 
 				return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
 			}
 		}
-
-		/*
-        /// <summary>
-		/// POST: Customer/Delete.
-		/// </summary>
-		/// <param name="id">The Customer id.</param>
-		/// <returns>The Customer index.</returns>
-		public ActionResult Delete(int id)
-		{
-			Customer customer = AppService.GetCustomer(id);
-
-			if (customer != null)
-			{
-				if (AppService.DeleteCustomer(id))
-				{
-					Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", customer.Name, Resources.Strings.CustomerDeleteNotification), Variety.Success));
-
-					return this.RedirectToAction(ActionConstants.Index);
-				}
-
-				// Permission failure
-				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
-			}
-
-			return this.RedirectToAction(ActionConstants.Index);
-		}
-    */
 	}
 }

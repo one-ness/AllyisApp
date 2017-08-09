@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using AllyisApps.Services.Billing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Web;
+using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -245,11 +245,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the actions to be performed.
 		/// </summary>
 		public PermissionsAction SelectedActions { get; set; }
-
-		/// <summary>
-		/// TODO: Delete this once there's only one permissions management page.
-		/// </summary>
-		public bool isPermissions2 { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Organization's Id.

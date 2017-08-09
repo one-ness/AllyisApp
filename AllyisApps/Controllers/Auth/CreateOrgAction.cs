@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
-using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -44,7 +44,7 @@ namespace AllyisApps.Controllers
 						Address = model.Address,
 						City = model.City,
 						Country = model.Country,
-                        OrganizationName = model.OrganizationName,
+						OrganizationName = model.OrganizationName,
 						SiteUrl = model.SiteUrl,
 						State = model.State,
 						PostalCode = model.PostalCode,
@@ -61,7 +61,7 @@ namespace AllyisApps.Controllers
 				else
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.OrganizationCreatedNotification, Variety.Success));
-					return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = orgId });
+					return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { organizationId = orgId });
 				}
 			}
 

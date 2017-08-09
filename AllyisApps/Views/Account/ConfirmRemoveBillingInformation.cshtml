@@ -1,22 +1,22 @@
 ﻿@{
-    ViewBag.Title = Strings.RemoveBilling;
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = Strings.RemoveBilling;
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="shrink-wrap-center">
-    <div class="min300">
-        <p>
-            @Strings.ConfirmRemoveBilling
-        </p>
+	<div class="min300">
+		<p>
+			@Strings.ConfirmRemoveBilling
+		</p>
 
-        @using (Html.BeginForm(ActionConstants.RemoveBilling, ControllerConstants.Account, FormMethod.Post))
-        {
+		@using (Html.BeginForm(ActionConstants.RemoveBilling, ControllerConstants.Account, FormMethod.Post))
+		{
 
-            <div class="form-group allyis-action-buttons">
-                <a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account)" class="btn btn-default"> @Strings.Cancel </a>
-                <input type="submit" class="btn btn-primary" value=@Strings.Continue>
-            </div>
+			<div class="form-group allyis-action-buttons">
+				<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account)" class="btn btn-default"> @Strings.Cancel </a>
+				<input type="submit" class="btn btn-primary" value=@Strings.Continue>
+			</div>
 
-        }
-    </div>
+		}
+	</div>
 </div>

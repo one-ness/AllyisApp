@@ -4,15 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -26,6 +26,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <param name="userId"> The payclass Id.</param>
+		/// <returns>The merge pay class view.</returns>
 		[HttpGet]
 		public ActionResult MergePayClass(int subscriptionId, int userId)
 		{
@@ -34,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var destPayClasses = allPayClasses.Where(pc => pc.PayClassId != userId);
 			string sourcePayClassName = allPayClasses.Where(pc => pc.PayClassId == userId).ElementAt(0).PayClassName;
 
-			//Built-in, non-editable pay classes cannot be merged
+			// Built-in, non-editable pay classes cannot be merged
 			if (sourcePayClassName == "Regular" || sourcePayClassName == "Overtime" || sourcePayClassName == "Holiday" || sourcePayClassName == "Paid Time Off" || sourcePayClassName == "Unpaid Time Off")
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotMergePayClass, Variety.Warning));
@@ -49,19 +50,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Uses services to populate a <see cref="MergePayClassViewModel"/> and returns it.
 		/// </summary>
 		/// <param name="sourcePayClassId">The id of the pay class being merged.</param>
-		/// <param name="destPayClasses">List of all PayClass that can be merged into.</param>
-		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="sourcePayClassName">The name of the pay class being merged.</param>
+		/// <param name="subscriptionId">The subscription's Id.</param>
+		/// <param name="destPayClasses">List of all PayClass that can be merged into.</param>
 		/// <returns>The MergePayClassViewModel.</returns>
 		[CLSCompliant(false)]
 		public MergePayClassViewModel ConstructMergePayClassViewModel(int sourcePayClassId, string sourcePayClassName, int subscriptionId, IEnumerable<PayClass> destPayClasses)
 		{
 			return new MergePayClassViewModel
 			{
-				sourcePayClassId = sourcePayClassId,
-				sourcePayClassName = sourcePayClassName,
+				SourcePayClassId = sourcePayClassId,
+				SourcePayClassName = sourcePayClassName,
 				SubscriptionId = subscriptionId,
-				destinationPayClasses = destPayClasses
+				DestinationPayClasses = destPayClasses
 			};
 		}
 
@@ -76,8 +77,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[CLSCompliant(false)]
 		public ActionResult MergePayClass(MergePayClassViewModel model, int destPayClass)
 		{
-			//change all of the entries with old payclass to destPayClass and delete the old payclass
-			if (AppService.DeletePayClass(model.sourcePayClassId, AppService.UserContext.OrganizationSubscriptions[model.SubscriptionId].OrganizationId, model.SubscriptionId, destPayClass))
+			// change all of the entries with old payclass to destPayClass and delete the old payclass
+			if (AppService.DeletePayClass(model.SourcePayClassId, AppService.UserContext.OrganizationSubscriptions[model.SubscriptionId].OrganizationId, model.SubscriptionId, destPayClass))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulMergePayClass, Variety.Success));
 			}
@@ -86,6 +87,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				// Should only be here because of permission failures
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
+
 			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = model.SubscriptionId });
 		}
 	}

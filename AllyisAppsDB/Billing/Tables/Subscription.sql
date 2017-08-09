@@ -23,8 +23,3 @@ CREATE CLUSTERED INDEX [IX_Subscription_OrganizationId]
 GO
 CREATE NONCLUSTERED INDEX [IX_Subscription]
     ON [Billing].[Subscription]([OrganizationId] ASC, [SkuId] ASC);
-
-GO
-CREATE UNIQUE NONCLUSTERED INDEX IX_Subscription_SkuId_OrganizationId
-	ON [Billing].[Subscription]([SkuId], [OrganizationId])
-	WITH( IGNORE_DUP_KEY = OFF)

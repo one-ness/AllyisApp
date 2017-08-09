@@ -4,10 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
+using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -17,12 +15,12 @@ namespace AllyisApps.ViewModels.Auth
 	public class EditMemberViewModel : BaseViewModel
 	{
 		/// <summary>
-		/// Gets/sets the user's info for display.
+		/// Gets or sets the user's info for display.
 		/// </summary>
 		public int CurrentUserId { get; set; }
 
 		/// <summary>
-		/// Gets/sets the user's info for display.
+		/// Gets or sets the user's info for display.
 		/// </summary>
 		public User UserInfo { get; set; }
 
@@ -41,7 +39,7 @@ namespace AllyisApps.ViewModels.Auth
 		public string LastName { get; set; }
 
 		/// <summary>
-		/// Gets/sets the user's organization id.
+		/// Gets or sets the user's organization id.
 		/// </summary>
 		public int OrganizationId { get; set; }
 
@@ -58,7 +56,7 @@ namespace AllyisApps.ViewModels.Auth
 		public int EmployeeRoleId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the is invited status.
+		/// Gets or sets a value indicating whether the user is invited.
 		/// </summary>
 		public bool IsInvited { get; set; }
 	}

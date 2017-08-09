@@ -6,7 +6,7 @@
 
 <div class="shrink-wrap-center">
 	<div>
-		@using (Html.BeginForm(ActionConstants.AddMember, ControllerConstants.Account, FormMethod.Post, new { id = "OrgAddForm" }))
+		@using (Html.BeginForm(ActionConstants.AddMember, ControllerConstants.Account, FormMethod.Post, new { organizationId = "OrgAddForm" }))
 		{
 			@Html.AntiForgeryToken()
 			@Html.HiddenFor(m => m.OrganizationId)

@@ -4,11 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core;
-using AllyisApps.Core.Alert;
-using AllyisApps.Filters;
-using AllyisApps.Lib;
-using AllyisApps.Services;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,6 +12,11 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using AllyisApps.Core;
+using AllyisApps.Core.Alert;
+using AllyisApps.Filters;
+using AllyisApps.Lib;
+using AllyisApps.Services;
 
 namespace AllyisApps.Controllers
 {
@@ -26,6 +26,11 @@ namespace AllyisApps.Controllers
 	[NotificationFilter]
 	public partial class BaseController : Controller
 	{
+		/// <summary>
+		/// Language Key.
+		/// </summary>
+		protected const string LanguageKey = "language";
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseController" /> class.
 		/// </summary>
@@ -50,30 +55,56 @@ namespace AllyisApps.Controllers
 		}
 
 		/// <summary>
+		/// Gets the application root url.
+		/// </summary>
+		public string ApplicationRootUrl
+		{
+			get
+			{
+				var request = HttpContext.Request;
+				StringBuilder sb = new StringBuilder();
+				if (request.Url.IsDefaultPort)
+				{
+					sb.AppendFormat("{0}://{1}", request.Url.Scheme, request.Url.Host);
+				}
+				else
+				{
+					sb.AppendFormat("{0}://{1}:{2}", request.Url.Scheme, request.Url.Host, request.Url.Port);
+				}
+
+				return sb.ToString();
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the service.
 		/// </summary>
 		protected AppService AppService { get; set; }
 
 		/// <summary>
-		/// Helper for ensuring a returnUrl is local and hasn't been tampered with.
+		/// Serializes a CookieData.
 		/// </summary>
-		/// <param name="returnUrl">The returnUrl.</param>
-		/// <returns>The redirection action, or a redirection to home if the url is bad.</returns>
-		protected ActionResult RedirectToLocal(string returnUrl = "")
+		/// <param name="cookie">The CookieData.</param>
+		/// <returns>The serialized string.</returns>
+		public string SerializeCookie(CookieData cookie)
 		{
-			if (Url.IsLocalUrl(returnUrl))
-			{
-				return this.Redirect(returnUrl);
-			}
-			else
-			{
-				return this.RouteUserHome();
-			}
+			return Serializer.SerilalizeToJson(cookie);
+		}
+
+		/// <summary>
+		/// Deserializes a CookieData.
+		/// </summary>
+		/// <param name="serializedCookie">The serialized CookieData string.</param>
+		/// <returns>The CookieData.</returns>
+		public CookieData DeserializeCookie(string serializedCookie)
+		{
+			return Serializer.DeserializeFromJson<CookieData>(serializedCookie);
 		}
 
 		/// <summary>
 		/// Redirect to user home page or the return url.
 		/// </summary>
+		/// <returns>Redirection to the user home page.</returns>
 		public ActionResult RouteUserHome()
 		{
 			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Account);
@@ -82,6 +113,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Get user context from cookie.
 		/// </summary>
+		/// <returns>The user cookie data.</returns>
 		public CookieData GetCookieData()
 		{
 			CookieData result = null;
@@ -120,9 +152,21 @@ namespace AllyisApps.Controllers
 		}
 
 		/// <summary>
-		/// Language Key.
+		/// Helper for ensuring a returnUrl is local and hasn't been tampered with.
 		/// </summary>
-		protected const string languageKey = "language";
+		/// <param name="returnUrl">The returnUrl.</param>
+		/// <returns>The redirection action, or a redirection to home if the url is bad.</returns>
+		protected ActionResult RedirectToLocal(string returnUrl = "")
+		{
+			if (Url.IsLocalUrl(returnUrl))
+			{
+				return this.Redirect(returnUrl);
+			}
+			else
+			{
+				return this.RouteUserHome();
+			}
+		}
 
 		/// <summary>
 		/// On action executing - executed before every action.
@@ -133,10 +177,10 @@ namespace AllyisApps.Controllers
 			base.OnActionExecuting(filterContext);
 
 			// get the language id from TempData dictionary, which was set in previous request
-			string CultureName = "en-US";
-			if (TempData[languageKey] != null)
+			string cultureName = "en-US";
+			if (TempData[LanguageKey] != null)
 			{
-				CultureName = (string)TempData[languageKey];
+				cultureName = (string)TempData[LanguageKey];
 			}
 
 			if (Request.IsAuthenticated)
@@ -151,12 +195,12 @@ namespace AllyisApps.Controllers
 				if (this.AppService.UserContext != null)
 				{
 					// user context obtained. set user's language on the thread.
-					if (CultureName == null || CultureName != this.AppService.UserContext.PreferedLanguageId || CultureName != "en-US")
+					if (cultureName == null || cultureName != this.AppService.UserContext.PreferedLanguageId || cultureName != "en-US")
 					{
 						// user's language is either not set, or user has changed the language to a different one
-						if (this.AppService.UserContext.PreferedLanguageId != "" || this.AppService.UserContext.PreferedLanguageId != null)
+						if (this.AppService.UserContext.PreferedLanguageId != string.Empty || this.AppService.UserContext.PreferedLanguageId != null)
 						{
-							CultureName = ChangeLanguage(this.AppService.UserContext.PreferedLanguageId);
+							cultureName = ChangeLanguage(this.AppService.UserContext.PreferedLanguageId);
 						}
 					}
 				}
@@ -168,25 +212,31 @@ namespace AllyisApps.Controllers
 					return;
 				}
 			}
-			else if (CultureName != "en-US" && CultureName != "" && CultureName != null) //non logged-in user changing language
+			else if (cultureName != "en-US" && cultureName != string.Empty && cultureName != null)
 			{
-				CultureName = ChangeLanguage(CultureName);
+				// non logged-in user changing language
+
+				cultureName = ChangeLanguage(cultureName);
 			}
 
 			// store language for next request
-			TempData[languageKey] = CultureName;
-			TempData.Keep(languageKey);
+			TempData[LanguageKey] = cultureName;
+			TempData.Keep(LanguageKey);
 		}
 
 		/// <summary>
 		/// Change the language displayed in the App.
 		/// </summary>
-		/// <param name="CultureName">.</param>
-		private string ChangeLanguage(string CultureName)
+		/// <param name="cultureName">Name of the culture.</param>
+		/// <returns>The culture name.</returns>
+		private string ChangeLanguage(string cultureName)
 		{
-			if (CultureName == null || CultureName == "") return "";
+			if (string.IsNullOrEmpty(cultureName))
+			{
+				return string.Empty;
+			}
 
-			Language language = this.AppService.GetLanguage(CultureName);
+			Language language = this.AppService.GetLanguage(cultureName);
 			if (language != null)
 			{
 				CultureInfo cInfo = CultureInfo.CreateSpecificCulture(language.CultureName);
@@ -194,49 +244,8 @@ namespace AllyisApps.Controllers
 				Thread.CurrentThread.CurrentUICulture = cInfo;
 				ViewBag.languageName = language.LanguageName;
 			}
-			return CultureName;
-		}
 
-		/// <summary>
-		/// Serializes a CookieData.
-		/// </summary>
-		/// <param name="cookie">The CookieData.</param>
-		/// <returns>The serialized string.</returns>
-		public string SerializeCookie(CookieData cookie)
-		{
-			return Serializer.SerilalizeToJson(cookie);
-		}
-
-		/// <summary>
-		/// Deserializes a CookieData.
-		/// </summary>
-		/// <param name="serializedCookie">The serialized CookieData string.</param>
-		/// <returns>The CookieData.</returns>
-		public CookieData DeserializeCookie(string serializedCookie)
-		{
-			return Serializer.DeserializeFromJson<CookieData>(serializedCookie);
-		}
-
-		/// <summary>
-		/// Gets the application root url.
-		/// </summary>
-		public string ApplicationRootUrl
-		{
-			get
-			{
-				var request = HttpContext.Request;
-				StringBuilder sb = new StringBuilder();
-				if (request.Url.IsDefaultPort)
-				{
-					sb.AppendFormat("{0}://{1}", request.Url.Scheme, request.Url.Host);
-				}
-				else
-				{
-					sb.AppendFormat("{0}://{1}:{2}", request.Url.Scheme, request.Url.Host, request.Url.Port);
-				}
-
-				return sb.ToString();
-			}
+			return cultureName;
 		}
 	}
 }

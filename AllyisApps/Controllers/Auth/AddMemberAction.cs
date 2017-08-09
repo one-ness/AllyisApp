@@ -1,18 +1,18 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="AddAction.cs" company="Allyis, Inc.">
+// <copyright file="AddMemberAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.Services.Billing;
-using AllyisApps.ViewModels.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AllyisApps.Core.Alert;
+using AllyisApps.Services;
+using AllyisApps.Services.Billing;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {
@@ -25,13 +25,13 @@ namespace AllyisApps.Controllers
 		/// GET: /Add.
 		/// The page for adding members to an organization.
 		/// </summary>
-		/// <param name="id">.</param>
+		/// <param name="organizationId">Organization id.</param>
 		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
 		/// <returns>The result of this action.</returns>
-		public ActionResult AddMember(int id, string returnUrl)
+		public ActionResult AddMember(int organizationId, string returnUrl)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(id);
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, organizationId);
+			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(organizationId);
 			ViewBag.returnUrl = returnUrl;
 			return this.View(model);
 		}
@@ -41,13 +41,13 @@ namespace AllyisApps.Controllers
 		/// Adding a new member to an organization.
 		/// </summary>
 		/// <param name="add">The View Model of user info passed from Add.cshtml.</param>
-		/// <param name="id">.</param>
+		/// <param name="organizationId">Organization id.</param>
 		/// <returns>The result of this action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> AddMember(AddMemberViewModel add, int id)
+		public async Task<ActionResult> AddMember(AddMemberViewModel add, int organizationId)
 		{
-			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(id);
+			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(organizationId);
 			add.Subscriptions = model.Subscriptions;
 			add.Projects = model.Projects;
 
@@ -58,11 +58,6 @@ namespace AllyisApps.Controllers
 				if (add.Subscriptions != null && add.Subscriptions.Count > 0)
 				{
 					var sub = add.Subscriptions.First();
-					//if (sub.SelectedRole != 0)
-					//{
-					//	subId = sub.SubscriptionId;
-					//	subRoleId = sub.SelectedRole;
-					//}
 				}
 
 				try
@@ -76,7 +71,7 @@ namespace AllyisApps.Controllers
 						OrganizationRole = add.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member,
 						EmployeeId = add.EmployeeId
 					};
-					
+
 					User usr = AppService.GetUserByEmail(info.Email);
 					string url = usr != null && usr.Email == info.Email ?
 						Url.Action(ActionConstants.Index, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme) :
@@ -116,16 +111,16 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Uses services to populate the lists of an <see cref="AddMemberViewModel"/> and returns it.
 		/// </summary>
-		/// <param name="id">The Organization Id.</param>
+		/// <param name="organizationId">The Organization Id.</param>
 		/// <returns>The OrganizationAddMembersViewModel.</returns>
-		public AddMemberViewModel ConstructOrganizationAddMembersViewModel(int id)
+		public AddMemberViewModel ConstructOrganizationAddMembersViewModel(int organizationId)
 		{
-			var infos = AppService.GetAddMemberInfo(id);
+			var infos = AppService.GetAddMemberInfo(organizationId);
 			string nextId = string.Compare(infos.Item1, infos.Item5) > 0 ? infos.Item1 : infos.Item5;
 
 			AddMemberViewModel result = new AddMemberViewModel
 			{
-				OrganizationId = id,
+				OrganizationId = organizationId,
 				EmployeeId = new string(AppService.IncrementAlphanumericCharArray(nextId.ToCharArray())),
 				Subscriptions = new List<AddMemberSubscriptionInfo>(),
 				Projects = infos.Item4,
@@ -139,12 +134,14 @@ namespace AllyisApps.Controllers
 					ProductRoles = infos.Item3.Where(r => r.ProductId == sub.ProductId).ToList(),
 					SubscriptionId = sub.SubscriptionId
 				};
-				subInfo.ProductRoles.Insert(0, new ProductRole
-				{
-					ProductRoleName = "None",
-					ProductId = (int)ProductIdEnum.None,
-					ProductRoleId = (int)TimeTrackerRole.User
-				});
+				subInfo.ProductRoles.Insert(
+					0,
+					new ProductRole
+					{
+						ProductRoleName = "None",
+						ProductId = (int)ProductIdEnum.None,
+						ProductRoleId = (int)TimeTrackerRole.User
+					});
 				result.Subscriptions.Add(subInfo);
 			}
 

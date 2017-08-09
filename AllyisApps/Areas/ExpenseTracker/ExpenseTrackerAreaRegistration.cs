@@ -7,11 +7,10 @@
 using System.Web.Mvc;
 using AllyisApps.Extensions.RouteExtensions;
 
-namespace AllyisApps.Areas.TimeTracker
+namespace AllyisApps.Areas.ExpenseTracker
 {
 	/// <summary>
-	/// Class which handles the registration of the ExpenseTracker
-	///		site sub-area.
+	/// Class which handles the registration of the ExpenseTracker area.
 	/// </summary>
 	public class ExpenseTrackerAreaRegistration : AreaRegistration
 	{

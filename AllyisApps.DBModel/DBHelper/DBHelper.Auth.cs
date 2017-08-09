@@ -4,17 +4,16 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Crm;
-using AllyisApps.DBModel.Lookup;
-using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Threading.Tasks;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.Crm;
+using AllyisApps.DBModel.Lookup;
+using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -752,7 +751,7 @@ namespace AllyisApps.DBModel
 		///// <param name="invitationId">The invitation Id.</param>
 		///// <param name="subscriptionId">The subscription Id.</param>
 		///// <param name="productRoleId">The Id of the product role.</param>
-		//public void CreateInvitationSubRole(int invitationId, int subscriptionId, int productRoleId)
+		// public void CreateInvitationSubRole(int invitationId, int subscriptionId, int productRoleId)
 		//{
 		//    DynamicParameters parameters = new DynamicParameters();
 		//    parameters.Add("@invitationId", invitationId);
@@ -770,7 +769,7 @@ namespace AllyisApps.DBModel
 		///// </summary>
 		///// <param name="invitationId">The invitation Id.</param>
 		///// <param name="subscriptionId">The subscription Id.</param>
-		//public void DeleteInvitationSubRole(int invitationId, int subscriptionId)
+		// public void DeleteInvitationSubRole(int invitationId, int subscriptionId)
 		//{
 		//    DynamicParameters parameters = new DynamicParameters();
 		//    parameters.Add("@invitationId", invitationId);
@@ -787,7 +786,7 @@ namespace AllyisApps.DBModel
 		///// </summary>
 		///// <param name="invitationId">The invitation Id.</param>
 		///// <returns>List of all roles.</returns>
-		//public IEnumerable<InvitationSubRoleDBEntity> GetInvitationSubRolesByInvitationId(int invitationId)
+		// public IEnumerable<InvitationSubRoleDBEntity> GetInvitationSubRolesByInvitationId(int invitationId)
 		//{
 		//    DynamicParameters parameters = new DynamicParameters();
 		//    parameters.Add("@invitationId", invitationId);

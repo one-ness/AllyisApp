@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Finance;
-using Dapper;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using AllyisApps.DBModel.Finance;
+using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -29,7 +29,7 @@ namespace AllyisApps.DBModel
         /// <returns>TODO: Should this return success/failuer codes? ? ?.</returns>
         public void CreateExpenseItem(ExpenseItemDBEntity item)
         {
-            if (item.AccountId == 0) //check if account exists already
+            if (item.AccountId == 0) // check if account exists already
             {
                 throw new System.ArgumentException("An Error");
             }
@@ -139,7 +139,7 @@ namespace AllyisApps.DBModel
         /// <returns>TODO: Should this return success/failuer codes? ? ?.</returns>
         public void CreateExpenseReport(ExpenseReportDBEntity report)
         {
-            if (report.OrganizationId == 0 || report.SubmittedById == 0) //check if user and organization exists already
+            if (report.OrganizationId == 0 || report.SubmittedById == 0) // check if user and organization exists already
             {
                 throw new System.ArgumentException("An Error Creating Report");
             }

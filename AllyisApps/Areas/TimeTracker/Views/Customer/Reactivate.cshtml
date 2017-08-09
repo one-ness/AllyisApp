@@ -7,11 +7,11 @@
 @{
     DisplayHints.PageBodyId = "tt-customer";
     ViewBag.Title = Strings.CustomerList;
-    ViewData["IsManager"] = Model.canEdit;
+    ViewData["IsManager"] = Model.CanEdit;
     Layout = "~/Areas/TimeTracker/Views/Shared/_Layout.cshtml";
     var empty = new EditCustomerInfoViewModel() { OrganizationId = Model.OrganizationId };
     var emptyProj = new EditProjectViewModel();
-    var createButtonClass = !Model.canEdit ? "invisible" : "";
+    var createButtonClass = !Model.CanEdit ? "invisible" : "";
 }
 
 <div class="row">

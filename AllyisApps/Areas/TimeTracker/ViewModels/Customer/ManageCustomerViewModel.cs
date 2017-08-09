@@ -24,28 +24,28 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public IEnumerable<CustomerProjectViewModel> InactiveCustomerAndProjects { get; internal set; }
 
 		/// <summary>
-		/// The subscription's Id.
+		/// Gets or sets the subscription's Id.
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
-        /// <summary>
-        /// The Subscription Name
-        /// </summary>
-        public string SubscriptionName { get; set; }
-
-        /// <summary>
-        /// Gets the id of the current organization.
-        /// </summary>
-        public int OrganizationId { get; internal set; }
+		/// <summary>
+		/// Gets or sets the Subscription Name.
+		/// </summary>
+		public string SubscriptionName { get; set; }
 
 		/// <summary>
-		/// Gets the user's Id.
+		/// Gets the id of the current organization.
+		/// </summary>
+		public int OrganizationId { get; internal set; }
+
+		/// <summary>
+		/// Gets or sets the user's Id.
 		/// </summary>
 		public int UserId { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the user can edit customers/projects.
 		/// </summary>
-		public bool canEdit { get; set; }
+		public bool CanEdit { get; set; }
 	}
 }

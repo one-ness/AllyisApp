@@ -1,5 +1,5 @@
-﻿using AllyisApps.Services.Billing;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -24,6 +24,7 @@ namespace AllyisApps.ViewModels.Auth
 		public List<int> SubIds { get; set; }
 
 		// TODO: Eliminate these once product panes in Permissions page are genericized
+
 		/// <summary>
 		/// Gets or sets the product id for TimeTracker.
 		/// </summary>

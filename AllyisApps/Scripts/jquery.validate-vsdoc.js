@@ -34,7 +34,7 @@ $.extend($.fn, {
 		/// </summary>
 		/// <param name="options" type="Object">
 		/// A set of key/value pairs that configure the validate. All options are optional.
-		/// </param>
+		/// .</param>
 
 		// if nothing is selected, return nothing; can't chain anyway
 		if (!this.length) {
@@ -133,7 +133,7 @@ $.extend($.fn, {
 		/// </summary>
 		/// <param name="attributes" type="String">
 		/// A space-seperated list of attribute names to remove.
-		/// </param>
+		/// .</param>
 
 		var result = {},
 			$element = this;
@@ -150,10 +150,10 @@ $.extend($.fn, {
 		/// </summary>
 		/// <param name="command" type="String">
 		/// Can be either "add" or "remove".
-		/// </param>
+		/// .</param>
 		/// <param name="argument" type="">
 		/// A list of rules to add or remove.
-		/// </param>
+		/// .</param>
 
 		var element = this[0];
 		
@@ -227,10 +227,10 @@ $.validator.format = function(source, params) {
 	/// </summary>
 	/// <param name="source" type="String">
 	/// The string to format.
-	/// </param>
+	/// .</param>
 	/// <param name="params" type="String">
 	/// The first argument to insert, or an array of Strings to insert
-	/// </param>
+	/// .</param>
 	/// <returns type="String" />
 
 	if ( arguments.length == 1 ) 
@@ -309,7 +309,7 @@ $.extend($.validator, {
 		/// </summary>
 		/// <param name="settings" type="Options">
 		/// Options to set as default.
-		/// </param>
+		/// .</param>
 
 		$.extend( $.validator.defaults, settings );
 	},
@@ -406,7 +406,7 @@ $.extend($.validator, {
 			/// </summary>
 			/// <param name="element" type="Selector">
 			/// An element to validate, must be inside the validated form.
-			/// </param>
+			/// .</param>
 			/// <returns type="Boolean" />
 
 			element = this.clean( element );
@@ -435,7 +435,7 @@ $.extend($.validator, {
 			/// </summary>
 			/// <param name="errors" type="Object">
 			/// One or more key/value pairs of input names and messages.
-			/// </param>
+			/// .</param>
 
 			if(errors) {
 				// add items to error list and map
@@ -859,10 +859,10 @@ $.extend($.validator, {
 		/// </summary>
 		/// <param name="name" type="String">
 		/// The name of the class rule to add
-		/// </param>
+		/// .</param>
 		/// <param name="rules" type="Options">
 		/// The compound rules
-		/// </param>
+		/// .</param>
 
 		className.constructor == String ?
 			this.classRuleSettings[className] = rules :
@@ -1003,15 +1003,15 @@ $.extend($.validator, {
 		/// <param name="name" type="String">
 		/// The name of the method, used to identify and referencing it, must be a valid javascript
 		/// identifier
-		/// </param>
+		/// .</param>
 		/// <param name="method" type="Function">
 		/// The actual method implementation, returning true if an element is valid
-		/// </param>
+		/// .</param>
 		/// <param name="message" type="String" optional="true">
 		/// (Optional) The default message to display for this method. Can be a function created by 
 		/// jQuery.validator.format(value). When undefined, an already existing message is used 
 		/// (handy for localization), otherwise the field-specific messages have to be defined.
-		/// </param>
+		/// .</param>
 
 		$.validator.methods[name] = method;
 		$.validator.messages[name] = message != undefined ? message : $.validator.messages[name];

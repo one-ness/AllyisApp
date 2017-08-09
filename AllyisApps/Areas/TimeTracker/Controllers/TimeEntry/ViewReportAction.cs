@@ -4,15 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -80,7 +80,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						message = string.Format("{0} {1}", message, ex.Message);
 					}
 
-					//Update failure
+					// Update failure
 					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
 					return this.RedirectToAction(ActionConstants.Report, ControllerConstants.TimeEntry);
 				}

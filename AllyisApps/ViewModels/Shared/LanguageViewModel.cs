@@ -18,7 +18,7 @@ namespace AllyisApps.ViewModels.Shared
 		///// <summary>
 		///// Gets or sets the language Id.
 		///// </summary>
-		//public int LanguageId { get; set; }
+		// public int LanguageId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the language name.
