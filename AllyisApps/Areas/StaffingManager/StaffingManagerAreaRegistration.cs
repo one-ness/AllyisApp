@@ -31,12 +31,12 @@ namespace AllyisApps.Areas.StaffingManager
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
 			context.Routes.MapSubdomainRoute(
-				name: "ExpenseTracker_Default",
-				url: "expensetracker/{subscriptionId}/{controller}/{action}/{id}",
+				name: "StaffingManager_Default",
+				url: "staffingmanager/{subscriptionId}/{controller}/{action}/{id}",
 				area: this.AreaName,
 				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
 				constraints: new { subscriptionId = @"\d+" },
-				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers" });
+				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
 		}
 	}
 }
