@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="ExpenseTrackerAreaRegistration.cs" company="Allyis, Inc.">
+// <copyright file="StaffingManagerAreaRegistration.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -7,12 +7,12 @@
 using System.Web.Mvc;
 using AllyisApps.Extensions.RouteExtensions;
 
-namespace AllyisApps.Areas.ExpenseTracker
+namespace AllyisApps.Areas.StaffingManager
 {
 	/// <summary>
-	/// Class which handles the registration of the ExpenseTracker area.
+	/// Class which handles the registration of the StaffingManager area.
 	/// </summary>
-	public class ExpenseTrackerAreaRegistration : AreaRegistration
+	public class StaffingManagerAreaRegistration : AreaRegistration
 	{
 		/// <summary>
 		/// Gets the area's name.
@@ -21,23 +21,22 @@ namespace AllyisApps.Areas.ExpenseTracker
 		{
 			get
 			{
-				return ProductNameConstants.ExpenseTracker;
+				return ProductNameConstants.StaffingManager;
 			}
 		}
 
 		/// <summary>
 		/// Registers the area within the site.
 		/// </summary>
-		/// <param name="context">The site area registration context.</param>
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
 			context.Routes.MapSubdomainRoute(
-				name: "ExpenseTracker_Default",
-				url: "expensetracker/{subscriptionId}/{controller}/{action}/{id}",
+				name: "StaffingManager_Default",
+				url: "staffingmanager/{subscriptionId}/{controller}/{action}/{id}",
 				area: this.AreaName,
 				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
 				constraints: new { subscriptionId = @"\d+" },
-				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers" });
+				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
 		}
 	}
 }
