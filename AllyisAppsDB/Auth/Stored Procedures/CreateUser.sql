@@ -11,7 +11,7 @@ CREATE PROCEDURE [Auth].[CreateUser]
 	@address1 nvarchar(64) = null,
 	@address2 nvarchar(64) = null,
 	@city nvarchar(32) = null,
-	@stateId smallint = null,
+	@stateId int = null,
 	@postalCode nvarchar(16) = null,
 	@countryCode varchar(8) = null
 as
@@ -26,12 +26,8 @@ begin
 	if (@address1 is not null or @address2 is not null or @city is not null or @postalCode is not null or @stateId is not null or @countryCode is not null)
 		begin
 			exec @addressId = [Lookup].CreateAddress @address1, @address2, @city, @stateId, @postalCode, @countryCode
-			--create table #temp (AddressId int not null)
-			--insert into #temp (AddressId) exec [Lookup].CreateAddress @address1, @address2, @city, @stateId, @postalCode, @countryCode
 			if @@ERROR <> 0 
 				goto _failure
-			--select top 1 @addressId = AddressId from #temp
-			--drop table #temp
 		end
 
 	insert into Auth.[User] (Email, PasswordHash, FirstName, LastName, EmailConfirmationCode, DateOfBirth, PhoneNumber, PreferredLanguageId, AddressId) values (@email, @passwordHash, @firstName, @lastName, @emailConfirmationCode, @dateOfBirth, @phoneNumber, @preferredLanguageId, @addressId)
