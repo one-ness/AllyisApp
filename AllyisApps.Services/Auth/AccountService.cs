@@ -172,13 +172,12 @@ namespace AllyisApps.Services
 			string countryCode,
 			string confirmEmailSubject,
 			string confirmEmailMessage)
-		{
+        { 
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName:");
 			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException("lastName");
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
 			if (emailConfirmationCode == null) throw new ArgumentException("emailConfirmationCode");
-
 			var result = 0;
 			try
 			{
@@ -620,19 +619,24 @@ namespace AllyisApps.Services
 		/// <returns>Collection of Organizations.</returns>
 		public IEnumerable<Organization> GetOrganizationsByUserId()
 		{
-			return DBHelper.GetOrganizationsByUserId(UserContext.UserId).Select(o => InitializeOrganization(o));
+            return GetOrganizationsByUserId(UserContext.UserId);
 		}
 
-		#endregion public
+        public IEnumerable<Organization> GetOrganizationsByUserId(int userID)
+        {
+            return DBHelper.GetOrganizationsByUserId(userID).Select(o => InitializeOrganization(o));
+        }
 
-		#region Info-DBEntity Conversions
+        #endregion public
 
-		/// <summary>
-		/// Translates a UserDBEntity into a User business object.
-		/// </summary>
-		/// <param name="user">UserDBEntity instance.</param>
-		/// <returns>User instance.</returns>
-		public static User InitializeUser(UserDBEntity user)
+        #region Info-DBEntity Conversions
+
+        /// <summary>
+        /// Translates a UserDBEntity into a User business object.
+        /// </summary>
+        /// <param name="user">UserDBEntity instance.</param>
+        /// <returns>User instance.</returns>
+        public static User InitializeUser(UserDBEntity user)
 		{
 			if (user == null)
 			{
@@ -656,6 +660,7 @@ namespace AllyisApps.Services
 				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
+                
 			};
 		}
 

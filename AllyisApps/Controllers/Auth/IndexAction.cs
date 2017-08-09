@@ -46,17 +46,16 @@ namespace AllyisApps.Controllers
         /// <returns></returns>
         public AccountIndexViewModel ConstuctIndexViewModel()
         {
-            var infos = AppService.GetUserOrgsAndInvitationInfo();
-            User user = infos.Item1;
-            Services.Lookup.Address userAddress = infos.Item4;
+            User user = AppService.GetCurrentUserProfile();
+            Services.Lookup.Address userAddress = user.Address;
 
-            AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel(user,userAddress);
+            AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel(user);
             AccountIndexViewModel indexViewModel = new AccountIndexViewModel()
             {
                 UserInfo = userViewModel
             };
             //Add invitations to view model
-            List<InvitationInfo> invitationslist = infos.Item3;
+            List<InvitationInfo> invitationslist = AppService.GetInvitationsByUser(user.Email);
             foreach (InvitationInfo invite in invitationslist)
             {
                 var org = AppService.GetOrganization(invite.OrganizationId);
@@ -69,7 +68,7 @@ namespace AllyisApps.Controllers
                 });
             }
 
-            List<Organization> orgs = infos.Item2;
+            List<Organization> orgs = AppService.GetOrganizationsByUserId(user.UserId).ToList();
             //Add organizations to model
             foreach (Organization curorg in orgs)
             {
@@ -98,10 +97,13 @@ namespace AllyisApps.Controllers
                             int startOfWeek = AppService.GetAllSettings(userSubInfo.SubscriptionId).Item1.StartOfWeek;
                             sDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
                             eDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
-                            orgViewModel.Subscriptions.Add(new AccountIndexViewModel.OrganizationViewModel.TimeTrackerSubViewModel(userSubInfo,description,sDate,eDate));
+                            orgViewModel.Subscriptions.Add(
+                                new AccountIndexViewModel.OrganizationViewModel.TimeTrackerSubViewModel
+                                (userSubInfo,description,sDate,eDate));
                         }
                         else {
-                            orgViewModel.Subscriptions.Add(new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel(userSubInfo, description));
+                            orgViewModel.Subscriptions.Add(
+                                new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel(userSubInfo, description));
                         }
                     }
                 }

@@ -30,11 +30,11 @@ function updateStateDdl() {
 				}));
 
 				// prepend the first option
-				ddlStatesObj.eq(0).prepend($("<option></option>").val("0").text(dropdownempty));
+				ddlStatesObj.eq(0).prepend($("<option></option>").val("").text(dropdownempty));
 
 				// set selected state (to preserve state)
 				if (countryCode !== selectedCountryCode) {
-					ddlStatesObj.val("0");
+					ddlStatesObj.val("");
 				} else {
 					ddlStatesObj.val(selectedStateId);
 				}

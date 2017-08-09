@@ -28,13 +28,17 @@ begin
 		end
 	else
 		begin
-			-- create address
-			exec @temp =  [Lookup].CreateAddress @address1, @address2, @city, @stateId, @postalCode, @countryCode
-			if @@ERROR <> 0 
-				goto _failure
+			if(@address1 is not null or @address2 is not null or @city is not null or @postalCode is not null or @stateId is not null or @countryCode is not null)
+				begin 
+				-- create address
+					exec @temp =  [Lookup].CreateAddress @address1, @address2, @city, @stateId, @postalCode, @countryCode;
+
+					if @@ERROR <> 0 
+						goto _failure
+				end 
 		end
 
-	update [User] set FirstName = @firstName, LastName = @lastName, PhoneNumber = @phoneNumber, DateOfBirth = @dateOfBirth
+	update [User] set AddressId = @temp, FirstName = @firstName, LastName = @lastName, PhoneNumber = @phoneNumber, DateOfBirth = @dateOfBirth
 	where UserId = @userId
 
 	_success:

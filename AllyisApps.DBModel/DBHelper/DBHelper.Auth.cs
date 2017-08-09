@@ -136,7 +136,10 @@ namespace AllyisApps.DBModel
 		{
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				con.Execute("Auth.UpdateUserProfile @a, @b, @c, @d, @e, @f, @g, @h, @i, @j, @k, @l", new { a = userId, b = firstName, c = lastName, d = dateOfBirth, e = phoneNumber, f = addressId, g = address1, h = address2, i = city, j = stateId, k = postalCode, l = countryCode });
+				con.Execute("[Auth].[UpdateUserProfile] @a, @b, @c, @d, @e, @f, @g, @h, @i, @j, @k, @l", 
+                    new { a = userId, b = firstName, c = lastName, d = dateOfBirth,
+                        e = phoneNumber, f = addressId, g = address1, h = address2, i = city, j = stateId,
+                        k = postalCode, l = countryCode });
 			}
 		}
 
