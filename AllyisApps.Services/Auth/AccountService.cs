@@ -343,6 +343,52 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// get the user profile
+		/// </summary>
+		public User GetCurrentUserProfile()
+		{
+			var result = new User();
+			var entity = this.DBHelper.GetUserProfile(this.UserContext.UserId);
+			result.AccessFailedCount = entity.AccessFailedCount;
+			result.DateOfBirth = entity.DateOfBirth;
+			result.Email = entity.Email;
+			result.EmailConfirmationCode = entity.EmailConfirmationCode;
+			result.FirstName = entity.FirstName;
+			result.IsEmailConfirmed = entity.IsEmailConfirmed;
+			result.IsLockoutEnabled = entity.IsLockoutEnabled;
+			result.IsPhoneNumberConfirmed = entity.IsPhoneNumberConfirmed;
+			result.IsTwoFactorEnabled = entity.IsTwoFactorEnabled;
+			result.LastName = entity.LastName;
+			result.LastUsedOrganizationId = entity.LastUsedOrganizationId;
+			result.LastUsedSubscriptionId = entity.LastUsedSubscriptionId;
+			result.LockoutEndDateUtc = entity.LockoutEndDateUtc;
+			result.PasswordHash = entity.PasswordHash;
+			result.PasswordResetCode = entity.PasswordResetCode;
+			result.PhoneExtension = entity.PhoneExtension;
+			result.PhoneNumber = entity.PhoneNumber;
+			result.UserCreatedUtc = entity.UserCreatedUtc;
+			result.UserId = entity.UserId;
+			result.Address.Address1 = entity.Address1;
+			result.Address.Address2 = entity.Address2;
+			result.Address.AddressId = entity.AddressId;
+			result.Address.City = entity.City;
+			result.Address.CountryName = entity.CountryName;
+			result.Address.CountryCode = entity.CountryCode;
+			result.Address.PostalCode = entity.PostalCode;
+			result.Address.StateName = entity.StateName;
+			result.Address.StateId = entity.StateId;
+			return result;
+		}
+
+		/// <summary>
+		/// update the current user profile
+		/// </summary>
+		public void UpdateCurrentUserProfile(int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
+		{
+			this.DBHelper.UpdateUserProfile(this.UserContext.UserId, firstName, lastName, this.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+		}
+
+		/// <summary>
 		/// Gets the User for the current user, along with Organizations for each organization the
 		/// user is a member of, and InvitationInfos for any invitations for the user.
 		/// </summary>

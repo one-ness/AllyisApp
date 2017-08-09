@@ -9,7 +9,7 @@
 		/// <summary>
 		/// Gets or sets the address' Id.
 		/// </summary>
-		public int AddressId { get; set; }
+		public int? AddressId { get; set; }
 
 		/// <summary>
 		/// Gets or sets address1.
@@ -29,7 +29,7 @@
 		/// <summary>
 		/// Get or sets the State.
 		/// </summary>
-		public string State { get; set; }
+		public string StateName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the State Id
@@ -44,7 +44,7 @@
 		/// <summary>
 		/// Gets or sets the country
 		/// </summary>
-		public string Country { get; set; }
+		public string CountryName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the country code

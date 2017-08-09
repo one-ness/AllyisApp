@@ -42,29 +42,25 @@
 				</div>
 				<div class="col-md-6 min300">
 					<div class="form-group">
-						@Html.ReqLabelFor(m => m.Address, Strings.Address)
+						@Html.LabelFor(m => m.Address, Strings.Address)
 						@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
-						@Html.ReqLabelFor(m => m.Country, Strings.Country)
-						@Html.DropDownListFor(m => m.Country, new SelectList(Model.GetLocalizedValidCoutriesDictionary(), "Key", "Value"), Strings.DropDownEmpty, new { @id = "Country", @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
+						@Html.LabelFor(m => m.LocalizedCountries, Strings.Country)
+						@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @id = @ViewConstants.DdlCountriesId, @class = "form-control" })
 					</div>
 					<div class="form-group">
-						@Html.ReqLabelFor(m => m.State, Strings.State)
-						@Html.DropDownListFor(m => m.State, new SelectList(new List<string>()), Strings.DropDownEmpty, new { @id = "State", @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
+						@Html.LabelFor(m => m.LocalizedStates, Strings.State)
+						@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlStatesId, @class = "form-control" })
 					</div>
 					<div class="form-group">
-						@Html.ReqLabelFor(m => m.City, Strings.City)
+						@Html.LabelFor(m => m.City, Strings.City)
 						@Html.TextBoxFor(m => m.City, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
-						@Html.ReqLabelFor(m => m.PostalCode, Strings.PostalCode)
+						@Html.LabelFor(m => m.PostalCode, Strings.PostalCode)
 						@Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.PostalCode, "", new { @class = "text-danger" })
 					</div>
 				</div>
 			</div>
@@ -82,9 +78,16 @@
 @section Scripts {
 	@Scripts.Render("~/bundles/jqueryval")
 	<script type="text/javascript">
-		var preserveState = '@(Model != null ? (States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';
+        @*var preserveState = '@(Model != null ? (States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : "")';*@
+        var model_birthdate = @Model.DateOfBirth;
+		// variables to be passed to updatestateddl
 		var dropdownempty = "@Strings.DropDownEmpty";
-		var model_birthdate = @Model.DateOfBirth;
+		var ddlCountriesId = "@ViewConstants.DdlCountriesId";
+		var ddlStatesId = "@ViewConstants.DdlStatesId";
+		var ddlStatesOptionsId = "@ViewConstants.DdlStatesOptionsId";
+		var getStatesUrl = "/Home/GetStates"; @*"@Url.Action(ControllerConstants.Home, ActionConstants.GetStates)";*@
+		var selectedCountryCode = "@Model.SelectedCountryCode";
+		var selectedStateId = "@Model.SelectedStateId";
 	</script>
 	@Scripts.Render("~/bundles/UpdateStateDDL");
 	@Scripts.Render("~/bundles/jqueryui");

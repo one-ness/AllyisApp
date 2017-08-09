@@ -617,7 +617,7 @@ namespace AllyisApps.Services
 				Address1 = address.Address1,
 				Address2 = address.Address2,
 				City = address.City,
-				State = address.State,
+				StateName = address.State,
 				PostalCode = address.PostalCode,
 				CountryCode = address.CountryCode
 			};

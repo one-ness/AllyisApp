@@ -78,7 +78,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets of sets the user's address Id.
 		/// </summary>
-		public int AddressId { get; set; }
+		public int? AddressId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user's street address.
@@ -105,7 +105,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets Date of birth.
 		/// </summary>
 		[MinDateValidation]
-		public int DateOfBirth { get; set; } //has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view.
+		public int? DateOfBirth { get; set; } //has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view.
 
 		/// <summary>
 		/// Gets or sets a List of valid countries.
