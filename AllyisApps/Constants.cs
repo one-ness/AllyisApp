@@ -130,10 +130,6 @@ namespace AllyisApps
 	{
 		public const string TimeTracker = "TimeTracker";
 		public const string ExpenseTracker = "ExpenseTracker";
+		public const string StaffingManager = "StaffingManager";
 	}
-
-    public static class RouteNameConstants
-    {
-        public const string TimeTrackerNoIndex = "TimeTracker_NoUserId";
-    }
 }
