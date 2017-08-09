@@ -80,7 +80,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						message = string.Format("{0} {1}", message, ex.Message);
 					}
 
-					//Update failure
+					// Update failure
 					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
 					return this.RedirectToAction(ActionConstants.Report, ControllerConstants.TimeEntry);
 				}

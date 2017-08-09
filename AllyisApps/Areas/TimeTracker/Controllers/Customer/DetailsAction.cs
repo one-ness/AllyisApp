@@ -44,7 +44,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				CustomerId = customerId,
 				ValidCountries = infos.Item2,
 				CustomerOrgId = infos.Item1.CustomerOrgId,
-				canEditCustomers = this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false)
+				CanEditCustomers = this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false)
 			});
 		}
 	}

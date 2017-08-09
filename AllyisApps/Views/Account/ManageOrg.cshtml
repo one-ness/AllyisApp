@@ -55,19 +55,19 @@
 </div>
 @section Scripts {
 	<script type="text/javascript">
-        var removeFromOrg = "@Html.Raw(Strings.RemoveFromOrg)";
-        var removeMemberAction = "@Url.Action(ActionConstants.RemoveMember, ControllerConstants.Account)?userId=";
-        var removeInvitationAction = "@Url.Action(ActionConstants.RemoveInvitation, ControllerConstants.Account)?invitationId=";
+		var removeFromOrg = "@Html.Raw(Strings.RemoveFromOrg)";
+		var removeMemberAction = "@Url.Action(ActionConstants.RemoveMember, ControllerConstants.Account)?userId=";
+		var removeInvitationAction = "@Url.Action(ActionConstants.RemoveInvitation, ControllerConstants.Account)?invitationId=";
 	</script>
 	@Scripts.Render("~/bundles/AccountManage")
 	<script type="text/javascript" src="~/Scripts/allyis-pages-with-filter.js"></script>
 	<script type="text/javascript">
-        pwf.setPageLimit(15);
-        pwf.setRowClass("memberRow");
-        pwf.addFilter('#org-members-search', "search", '.memberSearchProperty');
-        pwf.addFilter('#org-members-role', "dropDown", '.memberOrgRole', '@Strings.Any');
-        if (sessionStorage.getItem("/ManagePage") != null) {
-            pwf.setPreviouslySelectedPage(sessionStorage.getItem("/ManagePage"));
-        }
+		pwf.setPageLimit(15);
+		pwf.setRowClass("memberRow");
+		pwf.addFilter('#org-members-search', "search", '.memberSearchProperty');
+		pwf.addFilter('#org-members-role', "dropDown", '.memberOrgRole', '@Strings.Any');
+		if (sessionStorage.getItem("/ManagePage") != null) {
+			pwf.setPreviouslySelectedPage(sessionStorage.getItem("/ManagePage"));
+		}
 	</script>
 }

@@ -21,6 +21,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Removes Billing information.
 		/// </summary>
+		/// <param name="id">Subscription plan id.</param>
 		/// <returns>Action result.</returns>
 		[HttpGet]
 		public ActionResult RemoveBilling(int id)

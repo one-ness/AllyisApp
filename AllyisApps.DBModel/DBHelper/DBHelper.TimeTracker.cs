@@ -111,11 +111,11 @@ namespace AllyisApps.DBModel
 		/// <param name="destPayClass">The id of the payclass to move all old entries to (nullable).</param>
 		public void DeletePayClass(int payClassId, int? destPayClass)
 		{
-			//TODO: move this part in the DeletePayClass stored procedure
+			// TODO: move this part in the DeletePayClass stored procedure
 			if (destPayClass != null)
 			{
 				IEnumerable<TimeEntryDBEntity> allEntries = GetTimeEntriesThatUseAPayClass(payClassId);
-				//update the payClassId for all time entries that used the old pay class
+				// update the payClassId for all time entries that used the old pay class
 				foreach (TimeEntryDBEntity entry in allEntries)
 				{
 					entry.PayClassId = destPayClass.Value;
@@ -405,7 +405,7 @@ namespace AllyisApps.DBModel
     //            // Init new set of default holidays for time tracker
     //            IEnumerable<HolidayDBEntity> holidays;
 
-				//using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+				// using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 				//{
 				//	parameters = new DynamicParameters();
 				//	parameters.Add("@organizationId", 0);
@@ -424,9 +424,9 @@ namespace AllyisApps.DBModel
 				//}
 
 				//// init new set of pay classes
-				//IEnumerable<PayClassDBEntity> payClasses;
+				// IEnumerable<PayClassDBEntity> payClasses;
 
-				//using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+				// using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 				//{
 				//	parameters = new DynamicParameters();
 				//	parameters.Add("@organizationId", 0);

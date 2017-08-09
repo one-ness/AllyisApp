@@ -20,6 +20,8 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/ResetPassword.
 		/// </summary>
+		/// <param name="id">The guid for the password reset.</param>
+		/// <returns>The reset password view.</returns>
 		[HttpGet]
 		[AllowAnonymous]
 		public ActionResult ResetPassword(Guid id)

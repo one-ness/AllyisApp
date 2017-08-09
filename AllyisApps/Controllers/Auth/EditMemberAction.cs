@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -97,7 +96,7 @@ namespace AllyisApps.Controllers
 			{
 				if (await Task.Factory.StartNew(() => AppService.UpdateMember(modelData)))
 				{
-					Notifications.Add(new BootstrapAlert(String.Format(Resources.Strings.UpdateMemberSuccessMessage, model.UserInfo.FirstName, model.UserInfo.LastName), Variety.Success));
+					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UpdateMemberSuccessMessage, model.UserInfo.FirstName, model.UserInfo.LastName), Variety.Success));
 				}
 				else
 				{

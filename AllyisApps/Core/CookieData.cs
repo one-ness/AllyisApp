@@ -6,16 +6,17 @@
 	public class CookieData
 	{
 		/// <summary>
-		/// Gets or sets the user id.
+		/// Initializes a new instance of the <see cref="CookieData"/> class.
 		/// </summary>
-		public int UserId { get; set; }
-
-		/// <summary>
-		/// constructor.
-		/// </summary>
+		/// <param name="userId">User id.</param>
 		public CookieData(int userId)
 		{
 			this.UserId = userId;
 		}
+
+		/// <summary>
+		/// Gets or sets the user id.
+		/// </summary>
+		public int UserId { get; set; }
 	}
 }

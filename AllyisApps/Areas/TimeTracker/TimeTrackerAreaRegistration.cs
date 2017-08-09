@@ -33,31 +33,29 @@ namespace AllyisApps.Areas.TimeTracker
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "MVC Framework managed.")]
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
-            context.Routes.MapSubdomainRoute(
-                name: "TimeTracker_NoUserId",
-                url: "TimeTracker/{subscriptionId}/{controller}/{startDate}/{endDate}",
-                area: this.AreaName,
-                defaults: new { controller = "Home", action = "IndexNoUserId" },
-                constraints: new { subscriptionId = @"\d+", startDate = @"\d+", endDate = @"\d+", },
-                namespaces: new string[] { "AllyisApps.Areas.TimeTracker.Controllers" });
+			context.Routes.MapSubdomainRoute(
+				name: "TimeTracker_NoUserId",
+				url: "TimeTracker/{subscriptionId}/{controller}/{startDate}/{endDate}",
+				area: this.AreaName,
+				defaults: new { controller = "Home", action = "IndexNoUserId" },
+				constraints: new { subscriptionId = @"\d+", startDate = @"\d+", endDate = @"\d+", },
+				namespaces: new string[] { "AllyisApps.Areas.TimeTracker.Controllers" });
 
-            context.Routes.MapSubdomainRoute(
-                name: "TimeEntry_Index_User_TimeSheet",
-                url: "TimeTracker/{subscriptionId}/{controller}/{userId}/{startDate}/{endDate}",
-                area: this.AreaName,
-                defaults: new { controller = "Home", action = "Index" },
-                constraints: new { subscriptionId = @"\d+", userId = @"\d+", startDate = @"\d+", endDate = @"\d+" },
-                namespaces: new string[] { "AllyisApps.Areas.TimeTracker.Controllers" });
+			context.Routes.MapSubdomainRoute(
+				name: "TimeEntry_Index_User_TimeSheet",
+				url: "TimeTracker/{subscriptionId}/{controller}/{userId}/{startDate}/{endDate}",
+				area: this.AreaName,
+				defaults: new { controller = "Home", action = "Index" },
+				constraints: new { subscriptionId = @"\d+", userId = @"\d+", startDate = @"\d+", endDate = @"\d+" },
+				namespaces: new string[] { "AllyisApps.Areas.TimeTracker.Controllers" });
 
-            context.Routes.MapSubdomainRoute(
+			context.Routes.MapSubdomainRoute(
 				name: "TimeEntry_Export",
 				url: "TimeTracker/{subscriptionId}/{controller}/{action}/{userId}/{startingDate}-{endingDate}",
 				area: this.AreaName,
 				defaults: new { controller = "Home", startingDate = UrlParameter.Optional, endingDate = UrlParameter.Optional },
 				constraints: new { action = "Export", subscriptionId = @"\d+", userId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.TimeTracker.Controllers" });
-
-			
 
 			context.Routes.MapSubdomainRoute(
 				name: "TimeEntry_Index_Current_Week",
@@ -67,7 +65,7 @@ namespace AllyisApps.Areas.TimeTracker
 				constraints: new { subscriptionId = @"\d+", userId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.TimeTracker.Controllers" });
 
-            context.Routes.MapSubdomainRoute(
+			context.Routes.MapSubdomainRoute(
 				name: "TimeTracker_Default",
 				url: "timetracker/{subscriptionId}/{controller}/{action}/{id}",
 				area: this.AreaName,

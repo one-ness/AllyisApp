@@ -54,21 +54,21 @@ namespace AllyisApps.Controllers
 		/// <param name="currentSubscription">SubscriptionInfo for this org's subscription to the product.</param>
 		/// <param name="skus">List of SkuInfos for this product's skus.</param>
 		/// <param name="stripeToken">This org's billing stripe token.</param>
-		/// <param name="orgId">.</param>
+		/// <param name="organizationId">Organization id.</param>
 		/// <returns>The ProductSubscriptionViewModel.</returns>
 		[CLSCompliant(false)]
-		public ProductSubscriptionViewModel ConstructProductSubscriptionViewModel(Product productInfo, SubscriptionInfo currentSubscription, List<SkuInfo> skus, string stripeToken, int orgId)
+		public ProductSubscriptionViewModel ConstructProductSubscriptionViewModel(Product productInfo, SubscriptionInfo currentSubscription, List<SkuInfo> skus, string stripeToken, int organizationId)
 		{
 			if (productInfo != null)
 			{
 				int selectedSku = currentSubscription == null ? 0 : currentSubscription.SkuId;
-				string orgName = AppService.UserContext.UserOrganizations[orgId].OrganizationName;
+				string orgName = AppService.UserContext.UserOrganizations[organizationId].OrganizationName;
 				BillingServicesCustomerId customerId = new BillingServicesCustomerId(stripeToken);
 
 				return new ProductSubscriptionViewModel
 				{
 					IsValid = true,
-					OrganizationId = orgId,
+					OrganizationId = organizationId,
 					OrganizationName = orgName,
 					ProductId = productInfo.ProductId,
 					ProductName = productInfo.ProductName,

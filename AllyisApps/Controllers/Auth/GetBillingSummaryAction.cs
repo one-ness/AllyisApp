@@ -22,11 +22,12 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Gets the billing summary page.
 		/// </summary>
+		/// <param name="organizationId">Organization id.</param>
 		/// <returns>The Billing summary page.</returns>
 		[HttpGet]
-		public ActionResult GetBillingSummary(int orgId)
+		public ActionResult GetBillingSummary(int organizationId)
 		{
-			IEnumerable<BillingHistoryItemViewModel> model = this.ConstructBillingHistoryViewModel(orgId);
+			IEnumerable<BillingHistoryItemViewModel> model = this.ConstructBillingHistoryViewModel(organizationId);
 
 			return this.View(model);
 		}
@@ -34,13 +35,14 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Uses services and utilities to initialize an <see cref="IEnumerable{BillingHistoryItemViewModel}"/>.
 		/// </summary>
+		/// <param name="organizationId">Organization id.</param>
 		/// <returns>Populated list of BillingHistoryItemViewModels.</returns>
-		public IEnumerable<BillingHistoryItemViewModel> ConstructBillingHistoryViewModel(int orgId)
+		public IEnumerable<BillingHistoryItemViewModel> ConstructBillingHistoryViewModel(int organizationId)
 		{
 			List<BillingHistoryItemViewModel> result = new List<BillingHistoryItemViewModel>();
 
 			// Creation of items from Stripe data
-			BillingServicesCustomerId customerId = AppService.GetOrgBillingServicesCustomerId(orgId);
+			BillingServicesCustomerId customerId = AppService.GetOrgBillingServicesCustomerId(organizationId);
 			if (customerId != null)
 			{
 				foreach (BillingServicesInvoice invoice in AppService.ListInvoices(customerId))
@@ -49,7 +51,7 @@ namespace AllyisApps.Controllers
 					{
 						Date = ConvertUtcDateTimeToEpoch(invoice.Date.Value),
 						Id = invoice.Id,
-						Description = string.Format("{0} invoice - Amount due: {1:C}", invoice.Service, invoice.AmountDue / 100.0), // Only works for USD right now //LANGUAGE Update to use resource file to change message language
+						Description = string.Format("{0} invoice - Amount due: {1:C}", invoice.Service, invoice.AmountDue / 100.0), // Only works for USD right now // LANGUAGE Update to use resource file to change message language
 						ProductName = invoice.ProductName,
 						Username = string.Empty
 					});
@@ -61,7 +63,7 @@ namespace AllyisApps.Controllers
 					{
 						Date = ConvertUtcDateTimeToEpoch(charge.Created),
 						Id = charge.Id,
-						Description = string.Format("{0} charge - Amount paid: {1:C}", charge.Service, charge.Amount / 100.0), // Only works for USD right now //LANGUAGE Update to use resource file to change message language
+						Description = string.Format("{0} charge - Amount paid: {1:C}", charge.Service, charge.Amount / 100.0), // Only works for USD right now // LANGUAGE Update to use resource file to change message language
 						ProductName = charge.StatementDescriptor,
 						Username = string.Empty
 					});
@@ -69,7 +71,7 @@ namespace AllyisApps.Controllers
 			}
 
 			// Creation of items from our database
-			foreach (BillingHistoryItemInfo item in AppService.GetBillingHistory(orgId))
+			foreach (BillingHistoryItemInfo item in AppService.GetBillingHistory(organizationId))
 			{
 				result.Add(new BillingHistoryItemViewModel
 				{

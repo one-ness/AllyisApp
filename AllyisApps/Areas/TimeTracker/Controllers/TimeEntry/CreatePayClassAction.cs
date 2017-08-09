@@ -31,7 +31,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			else
 			{
 				int orgId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
-				try//should put try catch in 'else'. Creating a blank pay class results in Two alerts: "Cannot create blank pay class" and "pay class already exists"
+
+				// should put try catch in 'else'. Creating a blank pay class results in Two alerts: "Cannot create blank pay class" and "pay class already exists"
+				try
 				{
 					if (AppService.CreatePayClass(newPayClass, orgId, subscriptionId))
 					{

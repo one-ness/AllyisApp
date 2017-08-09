@@ -16,6 +16,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Displays the Home page.
 		/// </summary>
+		/// <returns>The users home route.</returns>
 		public ActionResult Index()
 		{
 			return this.RouteUserHome();

@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="OrganizationUserViewModel.cs" company="Allyis, Inc.">
+// <copyright file="OrgWithSubscriptionsForUserViewModel.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------

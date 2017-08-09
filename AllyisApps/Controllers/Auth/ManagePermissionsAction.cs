@@ -21,19 +21,6 @@ namespace AllyisApps.Controllers
 	/// </summary>
 	public partial class AccountController : BaseController
 	{
-		//      /// <summary>
-		//      /// GET Account/ManagePermissions2.
-		//      /// </summary>
-		//      /// <param name="id">The Organization Id.</param>
-		//      /// <returns>Action result.</returns>
-		//      [HttpGet]
-		//public ActionResult ManagePermissions2(int id)
-		//{
-		//	this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-		//	PermissionsManagementViewModel model = this.ConstructPermissionsManagementViewModel(id);
-		//	return this.View("Permission", model);
-		//}
-
 		/// <summary>
 		/// GET Account/ManagePermissions.
 		/// </summary>
@@ -50,6 +37,7 @@ namespace AllyisApps.Controllers
 				Subscriptions = infos.Item2,
 				SubIds = infos.Item2.Select(s => s.SubscriptionId).ToList(),
 				OrganizationId = id,
+
 				// TODO: Get rid of this once product panes in Permissions page are genericized.
 				TimeTrackerId = (int)ProductIdEnum.TimeTracker
 			};
@@ -81,6 +69,7 @@ namespace AllyisApps.Controllers
 					{
 						modelUser.ProductRoleIds.Add(ProductRole.NotInProduct);
 					}
+
 					model.Users.Add(modelUser);
 				}
 
@@ -101,7 +90,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Uses services to populate a <see cref="PermissionsManagementViewModel"/> and returns it.
 		/// </summary>
-        /// <param name="id">The Organization Id.</param>
+		/// <param name="id">The Organization Id.</param>
 		/// <returns>The PermissionsManagementViewModel.</returns>
 		public PermissionsManagementViewModel ConstructPermissionsManagementViewModel(int id)
 		{
@@ -227,7 +216,7 @@ namespace AllyisApps.Controllers
 						return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 					}
 				}
-				
+
 				if (model.SelectedActions.OrganizationRoleTarget == -1)
 				{
 					int numberChanged = AppService.DeleteOrganizationUsers(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId);
@@ -247,11 +236,11 @@ namespace AllyisApps.Controllers
 					Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
 					return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 				}
-				
+
 				if (model.SelectedActions.TimeTrackerRoleTarget.Value != -1)
 				{
-					//TODO: instead of providing product id, provide subscription id of the subscription to be modified
-					//TODO: split updating user roles and creating new sub users
+					// TODO: instead of providing product id, provide subscription id of the subscription to be modified
+					// TODO: split updating user roles and creating new sub users
 					Tuple<int, int> updatedAndAdded = AppService.UpdateSubscriptionUserRoles(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.SelectedActions.TimeTrackerRoleTarget.Value, model.OrganizationId, (int)ProductIdEnum.TimeTracker);
 					if (updatedAndAdded.Item1 > 0)
 					{
@@ -265,12 +254,10 @@ namespace AllyisApps.Controllers
 				}
 				else
 				{
-					//TODO: instead of providing product id, provide subscription id of the subscription to be modified
+					// TODO: instead of providing product id, provide subscription id of the subscription to be modified
 					AppService.DeleteSubscriptionUsers(model.SelectedUsers.Select(tu => tu.UserId).ToList(), model.OrganizationId, (int)ProductIdEnum.TimeTracker);
 					Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
 				}
-
-
 			}
 
 			/*

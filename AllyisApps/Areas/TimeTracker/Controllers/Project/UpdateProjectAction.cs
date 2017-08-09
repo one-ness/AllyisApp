@@ -45,7 +45,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				AppService.GetDateTimeFromDays(project.EndDate),
 				project.SelectedProjectUserIds.Select(userIdString => int.Parse(userIdString)),
 				project.SubscriptionId);
-				//project.IsHourly; //TODO: add an isHourly parameter to update the project's isHourly column.  Currently disabled feature
+
+			// project.IsHourly; // TODO: add an isHourly parameter to update the project's isHourly column.  Currently disabled feature
 		}
 	}
 }

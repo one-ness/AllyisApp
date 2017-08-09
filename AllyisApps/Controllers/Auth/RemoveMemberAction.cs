@@ -18,14 +18,17 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// POST: Organization/RemoveUser.
 		/// </summary>
+		/// <param name="organizationId">Organization Id.</param>
+		/// <param name="userId">User id.</param>
+		/// <returns>Redirects to the manage org action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult RemoveMember(int id, int userId)
+		public ActionResult RemoveMember(int organizationId, int userId)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-			AppService.RemoveOrganizationUser(id, userId);
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, organizationId);
+			AppService.RemoveOrganizationUser(organizationId, userId);
 			Notifications.Add(new BootstrapAlert(Resources.Strings.UserDeletedSuccessfully, Variety.Success));
-			return this.RedirectToAction(ActionConstants.ManageOrg, new { id = id });
+			return this.RedirectToAction(ActionConstants.ManageOrg, new { id = organizationId });
 		}
 	}
 }

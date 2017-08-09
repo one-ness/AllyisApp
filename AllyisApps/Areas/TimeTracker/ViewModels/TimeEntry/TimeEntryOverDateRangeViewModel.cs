@@ -34,19 +34,19 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public bool CanManage { get; internal set; }
 
 		/// <summary>
-		/// Subscription Id for the Organization.
+		/// Gets or sets the subscription Id for the Organization.
 		/// </summary>
 		public int Subscriptionid { get; set; }
 
-        /// <summary>
-        /// Subscription Name for the Organizations subscription
-        /// </summary>
-        public string SubscriptionName { get; set; }
+		/// <summary>
+		/// Gets or sets the subscription Name for the Organizations subscription.
+		/// </summary>
+		public string SubscriptionName { get; set; }
 
-        /// <summary>
-        /// Gets the user's Id.
-        /// </summary>
-        public User CurrentUser { get; internal set; }
+		/// <summary>
+		/// Gets the user's Id.
+		/// </summary>
+		public User CurrentUser { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of active projects available.
@@ -111,7 +111,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public IEnumerable<PayClass> PayClasses { get; internal set; }
 
 		/// <summary>
-		/// Gets the type of product.
+		/// Gets or sets the type of product.
 		/// </summary>
 		public int ProductRole { get; set; }
 	}

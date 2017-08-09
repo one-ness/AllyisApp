@@ -10,7 +10,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using AllyisApps.DBModel.Billing;
-//using AllyisApps.DBModel.Cache;
+// using AllyisApps.DBModel.Cache;
 using Dapper;
 
 namespace AllyisApps.DBModel
@@ -104,12 +104,12 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@productRoleId", productRoleId);
 
-			//TODO: instead of providing product id, provide subscription id of the subscription to be modified
+			// TODO: instead of providing product id, provide subscription id of the subscription to be modified
 			parameters.Add("@productId", productId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				//TODO: split updating user roles and creating new sub users
+				// TODO: split updating user roles and creating new sub users
 				var results = connection.QueryMultiple("[Billing].[UpdateSubscriptionUserRoles]", parameters, commandType: CommandType.StoredProcedure);
 				int usersUpdated = results.Read<int>().SingleOrDefault();
 				int usersAdded = results.Read<int>().SingleOrDefault();
@@ -132,7 +132,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@userIds", userIdsTable.AsTableValuedParameter("[Auth].[UserTable]"));
 			parameters.Add("@organizationId", organizationId);
 
-			//TODO: instead of providing product id, provide subscription id of the subscription to be modified
+			// TODO: instead of providing product id, provide subscription id of the subscription to be modified
 			parameters.Add("@productId", productId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -212,7 +212,7 @@ namespace AllyisApps.DBModel
 		/// <returns>Number of rows changed.</returns>
 		public int UpdateSubscription(int organizationId, int skuId, string subscriptionName)
 		{
-			//TODO: pass in subscriptionId as a parameter to simplify logic
+			// TODO: pass in subscriptionId as a parameter to simplify logic
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 			parameters.Add("@skuId", skuId);

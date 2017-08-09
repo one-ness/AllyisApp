@@ -415,7 +415,7 @@ namespace AllyisApps.Services
 		/// <returns>The stream writer.</returns>
 		public StreamWriter PrepareCSVExport(int orgId, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
-			//Preparing data
+			// Preparing data
 			IEnumerable<TimeEntryInfo> data = new List<TimeEntryInfo>();
 			IEnumerable<CompleteProjectInfo> projects = new List<CompleteProjectInfo>();
 

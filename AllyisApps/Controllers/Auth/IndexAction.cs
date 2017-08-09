@@ -27,22 +27,22 @@ namespace AllyisApps.Controllers
 		{
 			var infos = AppService.GetUserOrgsAndInvitationInfo();
 
-            IndexAndOrgsViewModel model = new IndexAndOrgsViewModel
+			IndexAndOrgsViewModel model = new IndexAndOrgsViewModel
 			{
 				UserInfo = infos.Item1,
 				InviteInfos = infos.Item3
 			};
 
-            foreach(var invite in infos.Item3)
-            {
-                string orgName =  AppService.GetOrganization(invite.OrganizationId).OrganizationName;
-                ViewData[invite.OrganizationId.ToString()] = orgName;
-            }
+			foreach (var invite in infos.Item3)
+			{
+				string orgName = AppService.GetOrganization(invite.OrganizationId).OrganizationName;
+				ViewData[invite.OrganizationId.ToString()] = orgName;
+			}
 
 			model.UserInfo.Address = infos.Item4;
 
-            model.OrgInfos = infos.Item2.Select(o =>
-            {
+			model.OrgInfos = infos.Item2.Select(o =>
+			{
 				OrgWithSubscriptionsForUserViewModel orgVM = new OrgWithSubscriptionsForUserViewModel
 				{
 					OrgInfo = o,
@@ -55,11 +55,11 @@ namespace AllyisApps.Controllers
 				{
 					foreach (UserSubscription userSubInfo in userOrgInfo.OrganizationSubscriptions.Values)
 					{
-						//TODO move description info into a product description column in Billing.Product
+						// TODO move description info into a product description column in Billing.Product
 						string description =
 							userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
 							userSubInfo.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
-							"";
+							string.Empty;
 
 						if (userSubInfo.ProductId == ProductIdEnum.TimeTracker)
 						{
@@ -79,23 +79,21 @@ namespace AllyisApps.Controllers
 						});
 					}
 				}
+
 				return orgVM;
 			}).ToList();
 
 			return this.View(model);
 		}
 
-        private DateTime SetStartingDate(int startOfWeek)
-        {
-            DateTime today = DateTime.Now;
-            int daysIntoTheWeek = (int)today.DayOfWeek < startOfWeek
-                ? (int)today.DayOfWeek + (7 - startOfWeek)
-                : (int)today.DayOfWeek - startOfWeek;
-
-
-
-
-            return today.AddDays(-daysIntoTheWeek);
-        }
-    }
+		private DateTime SetStartingDate(int startOfWeek)
+		{
+			DateTime today = DateTime.Now;
+			int daysIntoTheWeek =
+				(int)today.DayOfWeek < startOfWeek ?
+					(int)today.DayOfWeek + (7 - startOfWeek) :
+					(int)today.DayOfWeek - startOfWeek;
+			return today.AddDays(-daysIntoTheWeek);
+		}
+	}
 }
