@@ -172,7 +172,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			var pSelectList = new List<SelectListItem>();
 
-			//disable project selection if no customer selected
+			// disable project selection if no customer selected
 			if (customerSelected == 0)
 			{
 				pSelectList.Add(new SelectListItem

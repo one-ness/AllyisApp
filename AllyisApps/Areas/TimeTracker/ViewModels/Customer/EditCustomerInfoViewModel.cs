@@ -40,7 +40,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// </summary>
 		[Required]
 		[DataType(DataType.Text)]
-        [RegularExpression(@"^.{1,30}$", ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "CustomerNameWarning")]
+		[RegularExpression(@"^.{1,30}$", ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "CustomerNameWarning")]
 		[Display(Name = "Name")]
 		public string CustomerName { get; set; }
 
@@ -158,9 +158,9 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public IEnumerable<string> ValidCountries { get; set; }
 
 		/// <summary>
-		/// Gets or sets a boolean indicating whether the user can edit customers.
+		/// Gets or sets a value indicating whether the user can edit customers.
 		/// </summary>
-		public bool canEditCustomers { get; set; }
+		public bool CanEditCustomers { get; set; }
 
 		/// <summary>
 		/// Localized valid countries.

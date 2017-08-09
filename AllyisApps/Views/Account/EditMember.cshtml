@@ -135,7 +135,7 @@
 			<div class="pull-left">
 				@if (!Model.IsInvited)
 				{
-					using (Html.BeginForm(ActionConstants.RemoveMember, ControllerConstants.Account, new { id = Model.OrganizationId, userId = Model.UserInfo.UserId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("Delete User?")) }))
+					using (Html.BeginForm(ActionConstants.RemoveMember, ControllerConstants.Account, new { organizationId = Model.OrganizationId, userId = Model.UserInfo.UserId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw("Delete User?")) }))
 					{
 						@Html.AntiForgeryToken()
 						<input type="submit" value="@Strings.Delete" class="btn btn-danger" style="margin-bottom: 15px;" id="submitDelete" />

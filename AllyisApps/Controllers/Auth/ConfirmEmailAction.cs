@@ -18,6 +18,8 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/ConfirmEmail.
 		/// </summary>
+		/// <param name="id">The guid to confirm the user email.</param>
+		/// <returns>The route for the user's home page.</returns>
 		[AllowAnonymous]
 		public ActionResult ConfirmEmail(Guid id)
 		{

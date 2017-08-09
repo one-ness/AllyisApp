@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="InviteAction.cs" company="Allyis, Inc.">
+// <copyright file="RemoveInvitationAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -17,8 +17,10 @@ namespace AllyisApps.Controllers
 	{
 		/// <summary>
 		/// Removes the provided invitation from the invitations table.
-		/// <paramref name="id"/>Organization's id.
 		/// </summary>
+		/// <param name="id">Organization's id.</param>
+		/// <param name="userId">User id.</param>
+		/// <returns>Redirects to the manage org action.</returns>
 		[HttpPost]
 		public ActionResult RemoveInvitation(int id, int userId)
 		{

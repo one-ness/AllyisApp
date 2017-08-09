@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DateTime? defaultEnd = null;
 			var idAndUsers = AppService.GetNextProjectIdAndSubUsers(userId, subscriptionId);
 
-			var list = idAndUsers.Item2; //Service.GetUsers();
+			var list = idAndUsers.Item2; // Service.GetUsers();
 			var subList = new List<BasicUserInfoViewModel>();
 
 			foreach (var user in list)
@@ -78,6 +78,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 			}
+
 			model.SubscriptionUsers = subList;
 			if (ModelState.IsValid)
 			{
@@ -90,8 +91,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				try
 				{
 					var result = CreateProjectAndUpdateItsUserList(model);
-					if (result == -1)   //duplicate projectOrgId
+					if (result == -1)
 					{
+						// duplicate projectOrgId
 						Notifications.Add(new BootstrapAlert(Resources.Strings.ProjectOrgIdNotUnique, Variety.Danger));
 					}
 					else
@@ -108,7 +110,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						message = string.Format("{0} {1}", message, ex.Message);
 					}
 
-					//Create failure
+					// Create failure
 					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
 					return this.View(model);
 				}
@@ -153,7 +155,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			return AppService.CreateProject(new Project()
 			{
 				CustomerId = model.ParentCustomerId,
-                ProjectName = model.ProjectName,
+				ProjectName = model.ProjectName,
 				ProjectOrgId = model.ProjectOrgId,
 				StartingDate = AppService.GetDateTimeFromDays(model.StartDate),
 				EndingDate = AppService.GetDateTimeFromDays(model.EndDate)

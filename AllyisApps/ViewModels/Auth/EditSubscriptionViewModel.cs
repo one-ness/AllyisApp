@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-
 namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
@@ -60,20 +59,20 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets a description of this product.
 		/// </summary>
-		public string isActive { get; set; }
+		public string IsActive { get; set; }
 
 		/// <summary>
-		/// the subscritpion that is being unsubscribed from.
+		/// Gets or sets the subscritpion that is being unsubscribed from.
 		/// </summary>
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// the subscription id that is being unsubscribed from.
+		/// Gets or sets the subscription id that is being unsubscribed from.
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
 		/// <summary>
-		/// the subscription name that is being unsubscribed from.
+		/// Gets or sets the subscription name that is being unsubscribed from.
 		/// </summary>
 		public string SubscriptionName { get; set; }
 

@@ -39,6 +39,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					throw new ArgumentException(Resources.Strings.DurationFormat);
 				}
+
 				if (this.ParseDuration(model.Duration) == 0)
 				{
 					throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
@@ -48,12 +49,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					new List<int> { model.UserId },
 					AppService.GetDateTimeFromDays(model.Date),
 					AppService.GetDateTimeFromDays(model.Date),
-                    AppService.UserContext.OrganizationSubscriptions[model.SubscriptionId].OrganizationId);
+					AppService.UserContext.OrganizationSubscriptions[model.SubscriptionId].OrganizationId);
 				float durationOther = 0.0f;
-                foreach (TimeEntryInfo otherEntry in otherEntriesToday)
+				foreach (TimeEntryInfo otherEntry in otherEntriesToday)
 				{
 					durationOther += otherEntry.Duration;
-                }
+				}
 
 				UserSubscription subInfo = null;
 				this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(model.SubscriptionId, out subInfo);

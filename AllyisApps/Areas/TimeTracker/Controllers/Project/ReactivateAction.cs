@@ -38,7 +38,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subscriptionId });
 				}
 
-				//Permission Failed
+				// Permission Failed
 				Notifications.Add(new BootstrapAlert(Resources.Strings.DeleteUnauthorizedMessage, Variety.Warning));
 			}
 

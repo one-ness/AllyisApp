@@ -21,6 +21,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/EditProfile.
 		/// </summary>
+		/// <returns>The edit profile view.</returns>
 		public ActionResult EditProfile()
 		{
 			User userInfo = AppService.GetCurrentUser();
@@ -46,6 +47,8 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// POST: /Account/EditProfile.
 		/// </summary>
+		/// <param name="model">The edit profile model containing the form information.</param>
+		/// <returns>The user home page if successful, and the same page if not.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> EditProfile(EditProfileViewModel model)
