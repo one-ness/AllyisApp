@@ -2,13 +2,11 @@
 @using AllyisApps.Core;
 @using AllyisApps.Services;
 
-@model ExpenseIndexViewModel
+@model ExpenseCreateModel
 
 @{
 	ViewBag.Title = Strings.Report;
 	Layout = "~/Areas/ExpenseTracker/Views/Shared/_Layout.cshtml";
-	var items = new List<string>();
-	items.AddRange(new string[]{""});
 }
 
 <div class="row report-wrap">
@@ -43,23 +41,9 @@
 		<div class="row">
 			@using (Html.BeginForm(ActionConstants.ViewReport, ControllerConstants.Expense, FormMethod.Post, htmlAttributes: new { @id = "reportForm" }))
             {
-                @Html.HiddenFor(m => m.SubscriptionId)
 				<input type="hidden" name="submittedById" value="@Model.CurrentUser" />
 				<input type="hidden" name="subscriptionId" value="@Model.SubscriptionId" />
                 <div class="options-right container">
-                    <div class="row">
-
-						<!-- A holder for all the projects, to draw from for populating the real selection list -->
-						<select id="allprojects" style="display: none;">
-							@if (Model.Reports != null)
-							{
-								foreach (ExpenseItemViewModel item in Model.Reports)
-								{
-									<option value="@item.ReportId" class="projectSelectOption">@item.ReportName</option>
-								}
-							}
-						</select>
-                    </div>
 					<div class="form-group" style="width: 50%;">
 						<div class="left-label">
 							<label>Report Name</label>
@@ -86,28 +70,7 @@
 						<div class="panel-heading">
 							Items
 						</div>
-						<div>
-							@for (int i = 0; i < items.Count; i++)
-							{
-								string dateName = String.Format("[{0}].TransactionDate", i);
-								string nameName = String.Format("[{0}].ExpenseItemName", i);
-								string amountName = String.Format("[{0}].Amount", i);
-								string checkboxName = String.Format("[{0}].IsBillableToCustomer", i);
-								<div class="item-div">
-									<input type="text" value="" class="datepicker form-control" name="@dateName" style="display: inline-block; width: 150px" placeholder = "Date"/>
-									@*<span class="fa fa-fw fa-calendar fa-lg" style="margin-top:10px;" id=@item title="Choose start date"></span>*@
-									<input type="text" value="" class="form-control" name="@nameName" style="display: inline-block; width: 150px" placeholder="Name" />
-									<input type="text" value="" class="form-control" name="@amountName" style="display: inline-block; width: 150px" placeholder="Amount" />
-									<label>Payed for by Customer</label>
-									<input type="checkbox" checked class="form-control" name="@checkboxName" />
-									<a>
-										<span class="btn btn-primary">
-											Remove
-										</span>
-									</a>
-								</div>
-							}
-						</div>
+						@Html.Partial("_AjaxExpenseReportItems", Model)
 						<div style="text-align: center;">
 							<a>
 								<span class="btn btn-primary">

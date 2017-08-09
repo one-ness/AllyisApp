@@ -152,13 +152,15 @@ namespace AllyisApps.DBModel
             parameters.Add("@businessJustification", report.BusinessJustification);
             parameters.Add("@createdUtc", report.ExpenseReportCreatedUtc);
             parameters.Add("@modifiedUtc", report.ExpenseReportModifiedUtc);
+			parameters.Add("@reportId");
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
-                int reportId = connection.Execute("[Expense].[CreateExpenseReport]", parameters, commandType: CommandType.StoredProcedure);
+                connection.Execute("[Expense].[CreateExpenseReport]", parameters, commandType: CommandType.StoredProcedure);
+				int reportId = parameters.Get<int>("@reportId");
 				return reportId;
-            }
-        }
+			}
+		}
 
         /// <summary>
         /// Retrieves the Expense Reportss with specific id.

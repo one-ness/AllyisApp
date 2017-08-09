@@ -6,7 +6,8 @@ CREATE PROCEDURE [Expense].[CreateExpenseReport]
 	@reportStatus TINYINT,
 	@businessJustification NVARCHAR(100),
 	@createdUtc DATETIME2,
-	@modifiedUtc DATETIME2
+	@modifiedUtc DATETIME2,
+	@reportId INT OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -28,6 +29,9 @@ BEGIN
 		@businessJustification,
 		@createdUtc,
 		@modifiedUtc);
-	SELECT SCOPE_IDENTITY();
-	RETURN
 END
+
+
+	SELECT [ExpenseReportId]
+	FROM [Expense].[ExpenseReport]
+	WHERE [ExpenseReportId] = @@IDENTITY;

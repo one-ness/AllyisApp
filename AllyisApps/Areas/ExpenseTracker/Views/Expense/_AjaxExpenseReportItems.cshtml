@@ -1,0 +1,32 @@
+﻿@using AllyisApps.ViewModels.ExpenseTracker.Expense
+
+@model ExpenseCreateModel
+@{
+	//Layout = "~/Areas/ExpenseTracker/Views/Expense/Create.cshtml";
+	Model.Items = new List<ExpenseItemViewModel>();
+	Model.Items.AddRange(new ExpenseItemViewModel[] { new ExpenseItemViewModel() });
+	int i = 0;
+}
+
+<div>
+	@foreach (ExpenseItemViewModel item in Model.Items)
+	{
+		string dateName = String.Format("[{0}].TransactionDate", i);
+		string nameName = String.Format("[{0}].ExpenseItemName", i);
+		string amountName = String.Format("[{0}].Amount", i);
+		string checkboxName = String.Format("[{0}].IsBillableToCustomer", i);
+		<div class="item-div">
+			<input type="text" value="" class="datepicker form-control" name="@dateName" style="display: inline-block; width: 150px" placeholder="Date" />
+			<input type="text" value="" class="form-control" name="@nameName" style="display: inline-block; width: 150px" placeholder="Name" />
+			<input type="text" value="" class="form-control" name="@amountName" style="display: inline-block; width: 150px" placeholder="Amount" />
+			<label>Payed for by Customer</label>
+			<input type="checkbox" checked class="form-control" name="@checkboxName" style="width: 14px; display: inline-block;" />
+			<a>
+				<span class="btn btn-primary">
+					Remove
+				</span>
+			</a>
+		</div>
+		i++;
+	}
+</div>
