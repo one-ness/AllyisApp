@@ -40,7 +40,7 @@ namespace AllyisApps.Services
         /// <returns>A IEnumerabe of ExpenseItems for the report.</returns>
         public IEnumerable<ExpenseItem> GetExpenseItemsByReportId(int reportId)
         {
-            return DBHelper.GetExpenseItemsByReportId(reportId).Select(x => InitializeExpenseItem(x));
+            return DBHelper.GetExpenseItemsByReportId(reportId).Select(x => InitializeExpenseItem(x)).AsEnumerable(); ;
         }
 
 		/// <summary>
@@ -168,8 +168,7 @@ namespace AllyisApps.Services
 				ExpenseReportId = entity.ExpenseReportId,
 				IsBillableToCustomer = entity.IsBillableToCustomer,
 				ItemDiscription = entity.ItemDescription,
-				TransactionDate = entity.TransactionDate,
-				ExpenseItemName = entity.ItemDescription
+				TransactionDate = entity.TransactionDate
 			};
 		}
 		

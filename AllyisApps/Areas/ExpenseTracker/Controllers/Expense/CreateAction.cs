@@ -21,7 +21,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		public ActionResult Create(int subscriptionId, int reportId = -1)
 		{
 			ExpenseReport report = reportId == -1 ? null : AppService.GetExpenseReport(reportId);
-			List<ExpenseItem> items = report == null ? new List<ExpenseItem>() : AppService.GetExpenseItemsByReportId(reportId);
+			IEnumerable<ExpenseItem> items = report == null ? new List<ExpenseItem>() : AppService.GetExpenseItemsByReportId(reportId);
 
 			var model = new ExpenseCreateModel()
 			{
