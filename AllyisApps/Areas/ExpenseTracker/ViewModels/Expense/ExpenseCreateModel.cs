@@ -29,9 +29,9 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// </summary>
 		public DateTime StartDate { get; set; }
 
-        /// <summary>
-        /// Gets or sets Expense Items.
-        /// </summary>
-        public List<ExpenseItemViewModel> Items { get; set; }
+		/// <summary>
+		/// Gets or sets the Expense Items
+		/// </summary>
+		public List<ExpenseItem> Items { get; set; }
 	}
 }
