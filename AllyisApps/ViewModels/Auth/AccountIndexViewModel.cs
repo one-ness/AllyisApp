@@ -243,7 +243,7 @@ namespace AllyisApps.ViewModels.Auth
 					SubscriptionId = userSubInfo.SubscriptionId;
 					SubscriptionName = userSubInfo.SubscriptionName;
 					ProductDescription = description;
-					productID = userSubInfo.ProductId;
+					productId = userSubInfo.ProductId;
 					AreaUrl = userSubInfo.AreaUrl;
 				}
 
@@ -264,8 +264,9 @@ namespace AllyisApps.ViewModels.Auth
 				/// </summary>
 				public string SubscriptionName { get; set; }
 				public string AreaUrl { get; set; }
-				public ProductIdEnum productID { get; set; }
+				public ProductIdEnum productId { get; set; }
 				public string ProductGoToUrl { get; set; }
+				public string IconUrl { get; set; }
 			}
 		}
 	}
