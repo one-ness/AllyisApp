@@ -36,8 +36,7 @@ namespace AllyisApps.DBModel.Finance
         /// Gets or sets the Expense Report's status.
         /// </summary>
         public int ReportStatus { get; set; }
-
-
+		
         /// <summary>
         /// Gets or sets description of why report is needed or created.
         /// </summary>

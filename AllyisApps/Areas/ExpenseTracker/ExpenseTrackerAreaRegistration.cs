@@ -31,7 +31,15 @@ namespace AllyisApps.Areas.ExpenseTracker
 		/// <param name="context">The site area registration context.</param>
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
-            context.Routes.MapSubdomainRoute(
+			context.Routes.MapSubdomainRoute(
+				name: "ExpenseTracker_Detail",
+				url: "ExpenseTracker/{subscriptionId}/{controller}/{action}/{reportId}",
+				area: this.AreaName,
+				defaults: new { controller = "Expense", action = "Index" },
+				constraints: new { subscriptionId = @"\d+", reportId = @"\d+" },
+				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers" });
+
+			context.Routes.MapSubdomainRoute(
                 name: "ExpenseTracker_Action",
                 url: "ExpenseTracker/{subscriptionId}/{controller}/{action}",
                 area: this.AreaName,
