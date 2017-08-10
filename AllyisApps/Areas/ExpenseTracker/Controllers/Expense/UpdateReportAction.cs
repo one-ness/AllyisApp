@@ -17,16 +17,17 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 	public partial class ExpenseController : BaseController
 	{
 		/// <summary>
-		/// view/export expense report
+		/// update expense report
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <param name="submittedById"></param>
 		/// <param name="reportName"></param>
 		/// <param name="businessJustification"></param>
 		/// <param name="date"></param>
+		/// <param name="reportId"></param>
 		/// <param name="items"></param>
 		/// <returns></returns>
-		public ActionResult ViewReport(int subscriptionId, int submittedById, string reportName, string businessJustification, List<ExpenseItem> items, DateTime date)
+		public ActionResult UpdateReport(int subscriptionId, int submittedById, int reportId, List<ExpenseItem> items, DateTime date, string reportName = "", string businessJustification = "")
 		{
 			var subscription = AppService.GetSubscription(subscriptionId);
 			var organizationId = subscription.OrganizationId;
@@ -42,16 +43,16 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				OrganizationId = organizationId
 			};
 
-			var reportId = AppService.CreateExpenseReport(report);
-
 			foreach (var item in items)
 			{
 				item.AccountId = submittedById;
 				item.ExpenseItemCreatedUtc = item.TransactionDate;
 				item.ExpenseItemModifiedUtc = item.TransactionDate;
 				item.ExpenseReportId = reportId;
-				AppService.CreateExpenseItem(item);
+				AppService.UpdateExpenseItem(item, item.ExpenseItemId);
 			}
+
+			AppService.UpdateExpenseReport(report, reportId);
 
 			return RedirectToAction("Index");
 		}

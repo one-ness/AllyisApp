@@ -100,8 +100,6 @@ namespace AllyisApps.DBModel
             parameters.Add("@amount", item.Amount);
             parameters.Add("@expenseReportId", item.ExpenseReportId);
             parameters.Add("@isBillableToCustomer", item.IsBillableToCustomer);
-            parameters.Add("@createdUtc", item.CreatedUtc);
-            parameters.Add("@modifiedUtc", item.ModifiedUtc);
 
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
@@ -174,7 +172,8 @@ namespace AllyisApps.DBModel
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
-                return connection.Query<ExpenseReportDBEntity>("[Expense].[GetExpenseReportByExpenseReportId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                var entity = connection.Query<ExpenseReportDBEntity>("[Expense].[GetExpenseReportByExpenseReportId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				return entity;
             }
         }
 
@@ -229,8 +228,6 @@ namespace AllyisApps.DBModel
             parameters.Add("@submittedById", report.SubmittedById);
             parameters.Add("@reportStatus", report.ReportStatus);
             parameters.Add("@businessJustification", report.BusinessJustification);
-            parameters.Add("@createdUtc", report.ExpenseReportCreatedUtc);
-            parameters.Add("@modifiedUtc", report.ExpenseReportModifiedUtc);
 
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))

@@ -1,5 +1,6 @@
 ﻿using AllyisApps.DBModel;
 using AllyisApps.DBModel.Finance;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -32,15 +33,70 @@ namespace AllyisApps.Services
 			return InitializeExpenseItem(DBHelper.GetExpenseItem(expenseId));
 		}
 
+		/// <summary>
+		/// Gets Items associated with a specific report
+		/// </summary>
+		/// <param name="reportId"></param>
+		/// <returns></returns>
+		public List<ExpenseItem> GetExpenseItemsByReportId(int reportId)
+		{
+			ExpenseReport report = GetExpenseReport(reportId);
+			return GetExpenseItemsByUserSubmitted(report.SubmittedById).Where(i => i.ExpenseReportId == reportId).ToList();
+		}
 
-        /// <summary>
-        /// Gets an expense report by its id.
-        /// </summary>
-        /// <param name="reportId">The report id.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets an expense report by its id.
+		/// </summary>
+		/// <param name="reportId">The report id.</param>
+		/// <returns></returns>
 		public ExpenseReport GetExpenseReport(int reportId)
 		{
 			return InitializeExpenseReport(DBHelper.GetExpenseReport(reportId));
+		}
+
+		/// <summary>
+		/// Updates expense report with given reportId.
+		/// </summary>
+		/// <param name="report"></param>
+		/// <param name="reportId"></param>
+		public void UpdateExpenseReport(ExpenseReport report, int reportId)
+		{
+			ExpenseReportDBEntity reportEntity = new ExpenseReportDBEntity()
+			{
+				BusinessJustification = report.BusinessJustification,
+				ExpenseReportCreatedUtc = report.CreatedUtc,
+				ExpenseReportId = reportId,
+				ExpenseReportModifiedUtc = report.ModifiedUtc,
+				OrganizationId = report.OrganizationId,
+				ReportDate = report.ReportDate,
+				ReportStatus = report.ReportStatus,
+				ReportTitle = report.ReportTitle,
+				SubmittedById = report.SubmittedById
+			};
+			DBHelper.UpdateExpenseReport(reportEntity);
+		}
+
+		/// <summary>
+		/// Updates Expense Item with given itemId.
+		/// </summary>
+		/// <param name="item"></param>
+		/// <param name="itemId"></param>
+		public void UpdateExpenseItem(ExpenseItem item, int itemId)
+		{
+			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
+			{
+				AccountId = item.AccountId,
+				Amount = item.Amount,
+				CreatedUtc = item.ExpenseItemCreatedUtc,
+				ExpenseItemId = itemId,
+				ExpenseReportId = item.ExpenseReportId,
+				IsBillableToCustomer = item.IsBillableToCustomer,
+				ItemDescription = item.ExpenseItemName,
+				ModifiedUtc = item.ExpenseItemModifiedUtc,
+				TransactionDate = item.TransactionDate,
+			};
+
+			DBHelper.UpdateExpenseItem(itemEntity);
 		}
 
         /// <summary>
@@ -70,16 +126,17 @@ namespace AllyisApps.Services
                 return null;
             }
 
-            return new ExpenseReport()
-            {
-                OrganizationId = entity.OrganizationId,
-                ExpenseReportId = entity.ExpenseReportId,
-                SubmittedById = entity.SubmittedById,
-                CreatedUtc = entity.ExpenseReportCreatedUtc,
-                ModifiedUtc = entity.ExpenseReportModifiedUtc,
-                ReportDate = entity.ReportDate,
-                ReportStatus = entity.ReportStatus,
-                ReportTitle = entity.ReportTitle
+			return new ExpenseReport()
+			{
+				OrganizationId = entity.OrganizationId,
+				ExpenseReportId = entity.ExpenseReportId,
+				SubmittedById = entity.SubmittedById,
+				CreatedUtc = entity.ExpenseReportCreatedUtc,
+				ModifiedUtc = entity.ExpenseReportModifiedUtc,
+				ReportDate = entity.ReportDate,
+				ReportStatus = entity.ReportStatus,
+				ReportTitle = entity.ReportTitle,
+				BusinessJustification = entity.BusinessJustification
             };
         }
 
@@ -106,9 +163,9 @@ namespace AllyisApps.Services
 				ExpenseReportId = entity.ExpenseReportId,
 				IsBillableToCustomer = entity.IsBillableToCustomer,
 				ItemDiscription = entity.ItemDescription,
-				TransactionDate = entity.TransactionDate
+				TransactionDate = entity.TransactionDate,
+				ExpenseItemName = entity.ItemDescription
 			};
-
 		}
 		
 		public void CreateExpenseItem(ExpenseItem item)
@@ -121,7 +178,7 @@ namespace AllyisApps.Services
 				ExpenseItemId = item.ExpenseItemId,
 				ExpenseReportId = item.ExpenseReportId,
 				IsBillableToCustomer = item.IsBillableToCustomer,
-				ItemDescription = item.ItemDiscription,
+				ItemDescription = item.ExpenseItemName,
 				ModifiedUtc = item.ExpenseItemModifiedUtc,
 				TransactionDate = item.TransactionDate,
 			};

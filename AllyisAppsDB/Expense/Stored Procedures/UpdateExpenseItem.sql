@@ -9,18 +9,13 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO [Expense].[ExpenseItem]
-		([ExpenseItemId],
-		[ItemDescription],
-		[TransactionDate],
-		[Amount],
-		[ExpenseReportId],
-		[IsBillableToCustomer])
-	VALUES (@expenseItemId,
-		@itemDescription,
-		@transactionDate,
-		@amount,
-		@expenseReportId,
-		@isBillableToCustomer);
+	UPDATE [Expense].[ExpenseItem]
+	SET
+		[ItemDescription] = @itemDescription,
+		[TransactionDate] = @transactionDate,
+		[Amount] = @amount,
+		[ExpenseReportId] = @expenseReportId,
+		[IsBillableToCustomer] = @isBillableToCustomer
+	WHERE [ExpenseItem].[ExpenseItemId] = @expenseItemId;
 END
 

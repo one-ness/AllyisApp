@@ -5,24 +5,16 @@
 	@organizationId INT,
 	@submittedById INT,
 	@reportStatus TINYINT,
-	@buisnessJustification NVARCHAR(100)
+	@businessJustification NVARCHAR(100)
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO [Expense].[ExpenseReport]
-		([ExpenseReportId],
-		[ReportTitle],
-		[ReportDate],
-		[OrganizationId],
-		[SubmittedById],
-		[ReportStatus],
-		[BusinessJustification])
-	VALUES (@expenseReportId,
-		@reportTitle,
-		@reportDate,
-		@organizationId,
-		@submittedById,
-		@reportStatus,
-		@buisnessJustification);
+	UPDATE [Expense].[ExpenseReport]
+	SET
+		[ReportTitle] = @reportTitle,
+		[ReportDate] = @reportDate,
+		[ReportStatus] = @reportStatus,
+		[BusinessJustification] = @businessJustification
+	WHERE [ExpenseReportId] = @expenseReportId;
 END

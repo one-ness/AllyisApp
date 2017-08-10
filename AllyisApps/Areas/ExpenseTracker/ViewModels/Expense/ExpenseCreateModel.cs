@@ -33,6 +33,6 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// <summary>
 		/// Expense Items
 		/// </summary>
-		public List<ExpenseItemViewModel> Items { get; set; }
+		public List<ExpenseItem> Items { get; set; }
 	}
 }
