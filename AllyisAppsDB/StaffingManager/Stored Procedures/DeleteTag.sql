@@ -1,6 +1,8 @@
 ﻿CREATE PROCEDURE [StaffingManager].[DeleteTag]
-	@TagId INT
+	@tagId INT
 	
 AS
-	DELETE FROM [StaffingManager].[Tag]
-		WHERE [TagId] IN (SELECT [TagId] FROM @TagId) 
+BEGIN
+	SET NOCOUNT ON
+	DELETE FROM [StaffingManager].[Tag] WHERE [TagId] = @tagId
+END

@@ -172,7 +172,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="positionId">The id of the position.</param>
 		/// <returns>One Position.</returns>
-		public dynamic GetPositionByPositionId(int positionId)
+		public dynamic GetPositionById(int positionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@PositionId", positionId);
@@ -187,7 +187,7 @@ namespace AllyisApps.DBModel
 		/// Retrieves the Positions from a given orgnizatin.
 		/// </summary>
 		/// <param name="organizationId">The id of the organization.</param>
-		/// <returns>One Position.</returns>
+		/// <returns>All positions in the given organization.</returns>
 		public IEnumerable<dynamic> GetPositionsByOrganizationId(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -294,23 +294,23 @@ namespace AllyisApps.DBModel
 				throw new System.ArgumentException("Position cannot be null or empty.");
 			}
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@PositionId", position.PositionId);
-			parameters.Add("@OrganizationId", position.OrganizationId);
-			parameters.Add("@AddressId", position.AddressId);
-			parameters.Add("@StartDate", position.StartDate);
-			parameters.Add("@PositionStatus", position.PositionStatus);
-			parameters.Add("@PositionTitle", position.PositionTitle);
-			parameters.Add("@BillingRateFrequency", position.BillingRateFrequency);
-			parameters.Add("@BillingRateAmount", position.BillingRateAmount);
-			parameters.Add("@DurationMonths", position.DurationMonths);
-			parameters.Add("@EmploymentType", position.EmploymentType);
-			parameters.Add("@PositionCount", position.PositionCount);
-			parameters.Add("@RequiredSkills", position.RequiredSkills);
-			parameters.Add("@JobResponsibilities", position.JobResponsibilities);
-			parameters.Add("@DesiredSkills", position.DesiredSkills);
-			parameters.Add("@PositionLevel", position.PositionLevel);
-			parameters.Add("@HiringManager", position.HiringManager);
-			parameters.Add("@TeamName", position.TeamName);
+			parameters.Add("@positionId", position.PositionId);
+			parameters.Add("@organizationId", position.OrganizationId);
+			parameters.Add("@addressId", position.AddressId);
+			parameters.Add("@startDate", position.StartDate);
+			parameters.Add("@positionStatus", position.PositionStatus);
+			parameters.Add("@positionTitle", position.PositionTitle);
+			parameters.Add("@billingRateFrequency", position.BillingRateFrequency);
+			parameters.Add("@billingRateAmount", position.BillingRateAmount);
+			parameters.Add("@durationMonths", position.DurationMonths);
+			parameters.Add("@employmentType", position.EmploymentType);
+			parameters.Add("@positionCount", position.PositionCount);
+			parameters.Add("@requiredSkills", position.RequiredSkills);
+			parameters.Add("@jobResponsibilities", position.JobResponsibilities);
+			parameters.Add("@desiredSkills", position.DesiredSkills);
+			parameters.Add("@positionLevel", position.PositionLevel);
+			parameters.Add("@hiringManager", position.HiringManager);
+			parameters.Add("@teamName", position.TeamName);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -324,13 +324,58 @@ namespace AllyisApps.DBModel
 		////////////////////////////
 
 		/// <summary>
+		/// Deletes an applicant from the database
+		/// </summary>
+		/// <param name="applicantId">The applicant to be deleted</param>
+		public void DeleteApplicant(int applicantId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicantId", applicantId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Execute("[StaffingManager].[DeleteApplicant]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Deletes an application from the database
+		/// </summary>
+		/// <param name="applicationId">The applicant to be deleted</param>
+		public void DeleteApplication(int applicationId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicationId", applicationId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Execute("[StaffingManager].[DeleteApplication]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Deletes an application document from the database
+		/// </summary>
+		/// <param name="applicationDocumentId">The applicant to be deleted</param>
+		public void DeleteApplicationDocument(int applicationDocumentId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicationDocumentId", applicationDocumentId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Execute("[StaffingManager].[DeleteApplicationDocument]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
 		/// Deletes a tag from the database
 		/// </summary>
-		/// <param name="tagId">Parameter @TagId. .</param>
+		/// <param name="tagId">The tag id.</param>
 		public void DeleteTag(int tagId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@TagId", tagId);
+			parameters.Add("@tagId", tagId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -341,13 +386,13 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Deletes a position tag from the database; Doesnt delete the tag, just removes it from the position
 		/// </summary>
-		/// <param name="tagId">Parameter @TagId. .</param>
-		/// <param name="positionId">Parameter @TagId. .</param>
+		/// <param name="tagId">The tag id.</param>
+		/// <param name="positionId">The position id.</param>
 		public void DeletePositionTag(int tagId, int positionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@TagId", tagId);
-			parameters.Add("@PositionId", positionId);
+			parameters.Add("@tagId", tagId);
+			parameters.Add("@positionId", positionId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -358,7 +403,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Removes a Position from the Database
 		/// </summary>
-		/// <param name="positionId">Parameter @PositionId. .</param>
+		/// <param name="positionId">The position id</param>
 		public void DeletePosition(int positionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
