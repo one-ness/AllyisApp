@@ -306,6 +306,53 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// populate user context
+		/// </summary>
+		public UserContext2 PopulateUserContext2(int userId)
+		{
+			if (userId <= 0) throw new ArgumentException("userId");
+
+			UserContext2 result = null;
+
+			// get context from db
+			dynamic expando = this.DBHelper.GetUserContext(userId);
+
+			// get user information
+			if (expando != null && expando.User != null)
+			{
+				// user found.
+				result = new UserContext2();
+				result.UserId = expando.User.UserId;
+				result.FistName = expando.User.FirstName;
+				result.LastName = expando.User.LastName;
+				result.Email = expando.User.Email;
+
+				// set result to self
+				this.SetUserContext2(result);
+
+				// get organization and roles
+				foreach (var item in expando.OrganizationsAndRoles)
+				{
+					result.OrganizationAndRoles.Add(item.OrganizationId, item.OrganizationRoleId);
+				}
+
+				// get subscriptions and roles
+				foreach (var item in expando.SubscriptionsAndRoles)
+				{
+					var sar = new UserContext2.SubscriptionAndRole();
+					sar.OrganizationId = item.OrganizationId;
+					sar.ProductId = item.ProductId;
+					sar.ProductRoleId = item.ProductRoleId;
+					sar.SkuId = item.SkuId;
+					sar.SubscriptionId = item.SubscriptionId;
+					result.SubscriptionsAndRoles.Add(sar.SubscriptionId, sar);
+				}
+			}
+
+			return result;
+		}
+
+		/// <summary>
 		/// Updates the active subsciption for the current user.
 		/// </summary>
 		/// <param name="subscriptionId">Subscription Id.</param>

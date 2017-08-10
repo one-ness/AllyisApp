@@ -4,16 +4,17 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Lookup;
 using Dapper;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Dynamic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AllyisApps.DBModel
@@ -66,37 +67,6 @@ namespace AllyisApps.DBModel
 			{
 				return connection.Query<string>("[Auth].[GetActiveProductRoleForUser]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault() ?? "None";
 			}
-		}
-
-		/// <summary>
-		/// Updates the user with the specified Id.
-		/// </summary>
-		/// <param name="user">The table with the user to create.</param>
-		public void UpdateUser(UserDBEntity user)
-		{
-			//if (user == null)
-			//{
-			//	throw new ArgumentException("user cannot be null.");
-			//}
-
-			//DynamicParameters parameters = new DynamicParameters();
-
-			//parameters.Add("@userId", user.UserId);
-			//parameters.Add("@addressId", user.AddressId);
-			//parameters.Add("@firstName", user.FirstName);
-			//parameters.Add("@lastName", user.LastName);
-			//parameters.Add("@address", user.Address);
-			//parameters.Add("@city", user.City);
-			//parameters.Add("@state", user.State);
-			//parameters.Add("@country", user.Country);
-			//parameters.Add("@postalCode", user.PostalCode);
-			//parameters.Add("@phoneNumber", user.PhoneNumber);
-			//parameters.Add("@dateOfBirth", user.DateOfBirth);
-
-			//using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			//{
-			//	connection.Execute("[Auth].[UpdateUserInfo]", parameters, commandType: CommandType.StoredProcedure);
-			//}
 		}
 
 		/// <summary>
@@ -887,6 +857,22 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+		/// <summary>
+		/// get context for the given user
+		/// </summary>
+		public dynamic GetUserContext(int userId)
+		{
+			dynamic result = new ExpandoObject();
+			using (var con = new SqlConnection(this.SqlConnectionString))
+			{
+				var query = con.QueryMultiple("Auth.GetUserContext @a", new { a = userId });
+				result.User = query.Read<dynamic>().FirstOrDefault();
+				result.OrganizationsAndRoles = query.Read<dynamic>().ToList();
+				result.SubscriptionsAndRoles = query.Read<dynamic>().ToList();
+			}
+
+			return result;
+		}
 		/// <summary>
 		/// Returns a UserDBEntity for the given user, along with a list of OrganizationDBEntities for the organizations that
 		/// the user is a member of, and a list of InvititationDBEntities for any invitations for that user.

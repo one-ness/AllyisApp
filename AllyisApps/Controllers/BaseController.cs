@@ -177,31 +177,29 @@ namespace AllyisApps.Controllers
 			base.OnActionExecuting(filterContext);
 
 			// get the language id from TempData dictionary, which was set in previous request
-			string cultureName = "en-US";
+			string cultureName = Language.DefaultLanguageCultureName;
 			if (TempData[LanguageKey] != null)
 			{
-				cultureName = (string)TempData[LanguageKey];
+				cultureName = ((string)TempData[LanguageKey]).Trim();
 			}
 
 			if (Request.IsAuthenticated)
 			{
-				// an authenticated request MUST have user context in the cookie.
+				// an authenticated request MUST have user id in the cookie.
 				CookieData cookie = this.GetCookieData();
 				if (cookie != null && cookie.UserId > 0)
 				{
 					this.AppService.PopulateUserContext(cookie.UserId);
+					this.AppService.PopulateUserContext2(cookie.UserId);
 				}
 
-				if (this.AppService.UserContext != null)
+				if (this.AppService.UserContext2 != null)
 				{
 					// user context obtained. set user's language on the thread.
-					if (cultureName == null || cultureName != this.AppService.UserContext.PreferedLanguageId || cultureName != "en-US")
+					if (string.Compare(cultureName, this.AppService.UserContext.PreferedLanguageId, true) != 0)
 					{
-						// user's language is either not set, or user has changed the language to a different one
-						if (this.AppService.UserContext.PreferedLanguageId != string.Empty || this.AppService.UserContext.PreferedLanguageId != null)
-						{
-							cultureName = ChangeLanguage(this.AppService.UserContext.PreferedLanguageId);
-						}
+						// change it
+						cultureName = ChangeLanguage(this.AppService.UserContext.PreferedLanguageId);
 					}
 				}
 				else
@@ -212,10 +210,9 @@ namespace AllyisApps.Controllers
 					return;
 				}
 			}
-			else if (cultureName != "en-US" && cultureName != string.Empty && cultureName != null)
+			else if (string.Compare(Language.DefaultLanguageCultureName, cultureName, true) != 0)
 			{
 				// non logged-in user changing language
-
 				cultureName = ChangeLanguage(cultureName);
 			}
 
