@@ -22,8 +22,6 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/Register.
 		/// </summary>
-		/// <param name="returnUrl">Return Url.</param>
-		/// <returns>The register view.</returns>
 		[AllowAnonymous]
 		public ActionResult Register(string returnUrl)
 		{
@@ -43,9 +41,6 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// POST: /Account/Register.
 		/// </summary>
-		/// <param name="model">The view model for registration.</param>
-		/// <param name="returnUrl">Return Url.</param>
-		/// <returns>The async task responsible for this action.</returns>
 		[HttpPost]
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
@@ -57,10 +52,6 @@ namespace AllyisApps.Controllers
 				string confirmUrl = Url.Action(ActionConstants.ConfirmEmail, ControllerConstants.Account, new { id = code }, protocol: Request.Url.Scheme);
 				string confirmEmailSubject = string.Format(Strings.ConfirmEmailSubject, Strings.ApplicationTitle);
 				string confirmEmailBody = string.Format(Strings.ConfirmEmailMessage, Strings.ApplicationTitle, confirmUrl);
-
-				// TODO: Change language preference from 1 to a value grabbed from session/URL
-
-				//string langPreference = "en-US";
 
 				// compute birthdate			
 				var birthdate = AppService.GetDateTimeFromDays(model.DateOfBirth);
@@ -76,7 +67,6 @@ namespace AllyisApps.Controllers
 				else
 				{
 					Notifications.Add(new BootstrapAlert(Strings.UserAccountAlreadyExists, Variety.Danger));
-					return this.View(model);
 				}
 			}
 

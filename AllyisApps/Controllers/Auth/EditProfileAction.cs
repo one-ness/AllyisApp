@@ -23,7 +23,6 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/EditProfile.
 		/// </summary>
-		/// <returns>The edit profile view.</returns>
 		public ActionResult EditProfile()
 		{
 			var model = new EditProfileViewModel();
@@ -48,8 +47,6 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// POST: /Account/EditProfile.
 		/// </summary>
-		/// <param name="model">The edit profile model containing the form information.</param>
-		/// <returns>The user home page if successful, and the same page if not.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult EditProfile(EditProfileViewModel model)

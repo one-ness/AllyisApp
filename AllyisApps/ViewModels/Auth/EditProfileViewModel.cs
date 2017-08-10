@@ -18,7 +18,6 @@ namespace AllyisApps.ViewModels.Auth
 	/// </summary>
 	public class EditProfileViewModel : BaseViewModel
 	{
-		private const string CharsToReplace = @"""/\[]:|<>+=; ,?*'`()@";
 		/*
 		 * possible phone validation regex
 		[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")] // [Phone] does not work //I am not conviced that this is a good idea either.
@@ -39,7 +38,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public EditProfileViewModel()
 		{
-			this.ValidCountries = new List<string>();
 			this.LocalizedCountries = new Dictionary<string, string>();
 			this.LocalizedStates = new Dictionary<string, string>();
 		}
@@ -71,7 +69,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the user's phone number.
 		/// </summary>
-
 		[RegularExpression(@"^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
 		[Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
@@ -108,12 +105,6 @@ namespace AllyisApps.ViewModels.Auth
 		[MinDateValidation]
 		public int? DateOfBirth { get; set; } //has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view.
 
-
-		/// <summary>
-		/// Gets or sets a List of valid countries.
-		/// </summary>
-		public IEnumerable<string> ValidCountries { get; set; }
-
 		/// <summary>
 		/// selected state id
 		/// </summary>
@@ -135,43 +126,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		[Display(Name = "Country/Region")]
 		public Dictionary<string, string> LocalizedCountries { get; set; }
-
-		/// <summary>
-		/// Localized valid countries.
-		/// </summary>
-		/// <returns>A Dictionary keyed with the English translation and valued with the localized version.</returns>
-		public Dictionary<string, string> GetLocalizedValidCountriesDictionary()
-		{
-			Dictionary<string, string> countries = new Dictionary<string, string>();
-
-			foreach (string country in ValidCountries)
-			{
-				string countryKey = Clean(country);
-
-				string localized = Resources.Countries.ResourceManager.GetString(countryKey) ?? country;
-
-				countries.Add(country, localized);
-			}
-
-			return countries;
-		}
-
-		/// <summary>
-		/// Cleans things.
-		/// </summary>
-		/// <param name="stringToClean">The thing to clean.</param>
-		/// <returns>The cleaned thing.</returns>
-		public string Clean(string stringToClean)
-		{
-			if (stringToClean == null)
-			{
-				return string.Empty;
-			}
-			else
-			{
-				return CharsToReplace.Aggregate(stringToClean, (str, l) => str.Replace(string.Empty + l, string.Empty));
-			}
-		}
 	}
 
 	/// <summary>
