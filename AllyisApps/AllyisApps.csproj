@@ -347,7 +347,7 @@
     <Compile Include="ViewModels\Auth\EditMemberViewModel.cs" />
     <Compile Include="ViewModels\Auth\EditSubscriptionViewModel.cs" />
     <Compile Include="ViewModels\Auth\IndexAndOrgsViewModel.cs" />
-    <Compile Include="ViewModels\Auth\IndexViewModel.cs" />
+    <Compile Include="ViewModels\Auth\AccountIndexViewModel.cs" />
     <Compile Include="ViewModels\Auth\InvitationViewModel.cs" />
     <Compile Include="ViewModels\Auth\ManageOrgViewModel.cs" />
     <Compile Include="ViewModels\Auth\ManagePermissionsViewModel.cs" />
