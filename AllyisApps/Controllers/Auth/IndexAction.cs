@@ -90,6 +90,7 @@ namespace AllyisApps.Controllers
                             userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
                             userSubInfo.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
                             "";
+                        var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel(userSubInfo, description);
                         int? sDate = null;
                         int? eDate = null;
                         if (userSubInfo.ProductId == ProductIdEnum.TimeTracker)
@@ -97,14 +98,10 @@ namespace AllyisApps.Controllers
                             int startOfWeek = AppService.GetAllSettings(userSubInfo.SubscriptionId).Item1.StartOfWeek;
                             sDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
                             eDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
-                            //orgViewModel.Subscriptions.Add(
-                            //    new AccountIndexViewModel.OrganizationViewModel.TimeTrackerSubViewModel
-                            //    (userSubInfo,description,sDate,eDate));
+                            subViewModel.AreaUrl = Url.RouteUrl(RouteNameConstants.TimeTrackerNoIndex, new { subscriptionId = 
+                                userSubInfo.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = sDate, endDate = eDate});
                         }
-                        else {
-                            orgViewModel.Subscriptions.Add(
-                                new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel(userSubInfo, description));
-                        }
+                        orgViewModel.Subscriptions.Add(subViewModel);
                     }
                 }
 

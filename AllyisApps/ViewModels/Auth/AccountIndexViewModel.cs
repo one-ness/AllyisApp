@@ -149,11 +149,11 @@ namespace AllyisApps.ViewModels.Auth
 				OrganizationName = curorg.OrganizationName;
 				PhoneNumber = curorg.PhoneNumber;
 				PhoneExtension = null;//TODO: Fill with values
-				this.Address1 = curorg.Address;
-				City = curorg.City;
-				State = curorg.State;
-				PostalCode = curorg.PostalCode;
-				Country = curorg.Country;
+				this.Address1 = curorg.Address?.Address1;
+				City = curorg.Address?.City;
+				State = curorg.Address?.StateName;
+				PostalCode = curorg.Address?.PostalCode;
+				Country = curorg.Address?.CountryName;
 				SiteUrl = curorg.SiteUrl;
 				FaxNumber = curorg.FaxNumber;
 				//TODO: Infomation is dependent on curent user

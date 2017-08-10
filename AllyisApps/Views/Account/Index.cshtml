@@ -132,7 +132,7 @@
                                     </p>
                                     <p>
                                         <label>@Strings.Address:</label>
-                                        <span class="address-row">@org.StreetAddress</span>
+                                        <span class="address-row">@org.Address1</span>
                                         <span class="address-row">@OrgcityState @org.PostalCode</span>
                                     </p>
                                 </div>
@@ -161,19 +161,10 @@
                                     {
                                         <div class="square-box">
 
-                                            @{
-                                                string route = "";
-
-                                                if (sub is AccountIndexViewModel.OrganizationViewModel.TimeTrackerSubViewModel)
-                                                {
-                                                    AccountIndexViewModel.OrganizationViewModel.TimeTrackerSubViewModel subT = (AccountIndexViewModel.OrganizationViewModel.TimeTrackerSubViewModel)sub;
-                                                    route = Url.RouteUrl(RouteNameConstants.TimeTrackerNoIndex,
-                                                                                                        new { subscriptionId = @sub.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = subT.startDate, endDate = subT.endDate });
-                                                }
-                                            }
+                                            
 
 
-                                            <a href="@(route)" style="text-decoration: none">
+                                            <a href="@(@sub.AreaUrl)" style="text-decoration: none">
                                                 <div class="panel panel-default">
                                                     <div class="btn default" style="text-align:center; margin:10px;">
                                                         <div class="center-block" text-align: center; vertical-align: middle;" style="margin-top:5px;">

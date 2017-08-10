@@ -8,7 +8,7 @@
 	@address1 nvarchar(64) = null,
 	@address2 nvarchar(64) = null,
 	@city nvarchar(32) = null,
-	@stateId int = null,
+	@stateId smallint = null,
 	@postalCode nvarchar(16) = null,
 	@countryCode varchar(8) = null
 as

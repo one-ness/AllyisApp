@@ -76,7 +76,7 @@ namespace AllyisApps.DBModel.Auth
         /// <summary>
         /// Gets or sets user's Address Id.
         /// </summary>
-        public int AddressId { get; set; }
+        public int? AddressId { get; set; }
 
 		/// <summary>
 		/// Gets or sets PhoneNumber.

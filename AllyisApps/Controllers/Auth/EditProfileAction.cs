@@ -28,17 +28,17 @@ namespace AllyisApps.Controllers
 			var model = new EditProfileViewModel();
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
 			var user = this.AppService.GetCurrentUserProfile();
-			model.Address = user.Address.Address1;
-			model.AddressId = user.Address.AddressId;
-			model.City = user.Address.City;
+			model.Address = user.Address?.Address1;
+			model.AddressId = user.Address?.AddressId;
+			model.City = user.Address?.City;
 			model.DateOfBirth = this.AppService.GetDayFromDateTime(user.DateOfBirth);
 			model.Email = user.Email;
 			model.FirstName = user.FirstName;
 			model.LastName = user.LastName;
 			model.PhoneNumber = user.PhoneNumber;
-			model.PostalCode = user.Address.PostalCode;
-			model.SelectedCountryCode = user.Address.CountryCode;
-			model.SelectedStateId = user.Address.StateId;
+			model.PostalCode = user.Address?.PostalCode;
+			model.SelectedCountryCode = user.Address?.CountryCode;
+			model.SelectedStateId = user.Address?.StateId;
 			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, model.SelectedCountryCode);
 
 			return this.View(model);

@@ -420,36 +420,17 @@ namespace AllyisApps.Services
 		/// <param name="model">UserInfo containing updated info.</param>
 		public void SaveUserInfo(User model)
 		{
-			//if (model == null)
-			//{
-			//	throw new ArgumentNullException("model", "UserInfo object must not be null.");
-			//}
+			if (model == null)
+			{
+				throw new ArgumentNullException("model", "UserInfo object must not be null.");
+			}
 
-			//// TODO: Add UserInfo->UserDBEntity conversion at bottom
-			//DBHelper.UpdateUser(new UserDBEntity
-			//{
-			//	AccessFailedCount = model.AccessFailedCount,
-			//	AddressId = model.Address.AddressId,
-			//	Address = model.Address.Address1,
-			//	City = model.Address.City,
-			//	Country = model.Address.Country,
-			//	DateOfBirth = model.DateOfBirth,
-			//	Email = model.Email,
-			//	IsEmailConfirmed = model.IsEmailConfirmed,
-			//	FirstName = model.FirstName,
-			//	LastName = model.LastName,
-			//	IsLockoutEnabled = model.IsLockoutEnabled,
-			//	LockoutEndDateUtc = model.LockoutEndDateUtc,
-			//	PasswordHash = model.PasswordHash,
-			//	PasswordResetCode = model.PasswordResetCode,
-			//	PhoneExtension = model.PhoneExtension,
-			//	PhoneNumber = model.PhoneNumber,
-			//	IsPhoneNumberConfirmed = model.IsPhoneNumberConfirmed,
-			//	State = model.Address.State,
-			//	IsTwoFactorEnabled = model.IsTwoFactorEnabled,
-			//	UserId = model.UserId,
-			//	PostalCode = model.Address.PostalCode
-			//});
+            //// TODO: Add UserInfo->UserDBEntity conversion at bottom
+            DBHelper.UpdateUserProfile(model.UserId,
+                model.FirstName, model.LastName, model.DateOfBirth, model.PhoneNumber, 
+                model.Address?.AddressId,
+                model.Address?.Address1, model.Address?.Address2, model.Address?.City, model.Address?.StateId, model.Address?.PostalCode, model.Address?.CountryCode
+            );
 		}
 
 		/// <summary>
@@ -660,7 +641,6 @@ namespace AllyisApps.Services
 				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
-                
 			};
 		}
 
