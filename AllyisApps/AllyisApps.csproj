@@ -202,6 +202,7 @@
   <ItemGroup>
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\EditAction.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ReportViewActionController.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseCreateModel.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ImportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\IndexAction.cs" />

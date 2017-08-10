@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
+using AllyisApps.Services;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
@@ -15,6 +16,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// Create expense report.
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
+        /// <param name="reportId">The report id.</param>
 		/// <returns>Returns an action result.</returns>
 		public ActionResult Create(int subscriptionId, int reportId = -1)
 		{
