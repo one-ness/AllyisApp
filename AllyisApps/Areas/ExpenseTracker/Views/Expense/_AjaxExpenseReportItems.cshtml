@@ -3,8 +3,11 @@
 @model ExpenseCreateModel
 @{
 	//Layout = "~/Areas/ExpenseTracker/Views/Expense/Create.cshtml";
-	Model.Items = new List<ExpenseItemViewModel>();
-	Model.Items.AddRange(new ExpenseItemViewModel[] { new ExpenseItemViewModel() });
+	if (Model == null)
+	{
+		Model.Items = new List<ExpenseItemViewModel>();
+		Model.Items.AddRange(new ExpenseItemViewModel[] { new ExpenseItemViewModel() });
+	}
 	int i = 0;
 }
 
