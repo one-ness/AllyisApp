@@ -49,7 +49,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					new List<int> { model.UserId },
 					AppService.GetDateTimeFromDays(model.Date),
 					AppService.GetDateTimeFromDays(model.Date),
-					AppService.UserContext.OrganizationSubscriptions[model.SubscriptionId].OrganizationId);
+					AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId);
 				float durationOther = 0.0f;
 				foreach (TimeEntryInfo otherEntry in otherEntriesToday)
 				{
@@ -57,8 +57,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 
 				UserSubscription subInfo = null;
-				this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(model.SubscriptionId, out subInfo);
-				DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.OrganizationSubscriptions[model.SubscriptionId].OrganizationId);
+				this.AppService.UserContext.UserSubscriptions.TryGetValue(model.SubscriptionId, out subInfo);
+				DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId);
 				if (durationResult + durationOther > 24.00)
 				{
 					throw new ArgumentException(Resources.Strings.CannotExceed24);

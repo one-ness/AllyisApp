@@ -242,63 +242,44 @@ namespace AllyisApps.Services
 			if (userId <= 0) throw new ArgumentException("userId");
 
 			UserContext result = null;
-			List<UserContextDBEntity> contextInfo = this.DBHelper.GetUserContextInfo(userId);
-			if (contextInfo != null && contextInfo.Count > 0)
+
+			// get context from db
+			dynamic expando = this.DBHelper.GetUserContext(userId);
+
+			// get user information
+			if (expando != null && expando.User != null)
 			{
-				// user exists in db
-				UserContextDBEntity firstRow = contextInfo[0];
-				result = new UserContext(userId, firstRow.Email, firstRow.FirstName, firstRow.LastName, firstRow.PreferredLanguageId);
+				// user found.
+				result = new UserContext();
+				result.UserId = expando.User.UserId;
+				result.FirstName = expando.User.FirstName;
+				result.LastName = expando.User.LastName;
+				result.Email = expando.User.Email;
+
 				// set result to self
 				this.SetUserContext(result);
 
-				// note: if contextInfo.Count > 0, user is part of at least one organization
-				foreach (var item in contextInfo)
+				// get organization and roles
+				foreach (var item in expando.OrganizationsAndRoles)
 				{
-					// user is part of at least one organization, do we have org id?
-					if (item.OrganizationId.HasValue)
-					{
-						// yes, was it already added to the list?
-						UserOrganization orgInfo = null;
-						if (!result.UserOrganizations.TryGetValue(item.OrganizationId.Value, out orgInfo))
-						{
-							// no, add it now
-							orgInfo = new UserOrganization
-							{
-								OrganizationId = item.OrganizationId.Value,
-								OrganizationName = item.OrganizationName,
-								OrganizationRole = (OrganizationRole)item.OrganizationRoleId.Value,
-							};
+					result.UserOrganizations.Add(item.OrganizationId, new UserOrganization(item.OrganizationId, item.OrganizationName, item.OrganizationRoleId));
+				}
 
-							result.UserOrganizations.Add(item.OrganizationId.Value, orgInfo);
-						}
-
-						// is there a subscription id?
-						if (item.SubscriptionId.HasValue)
-						{
-							UserSubscription subInfo = new UserSubscription()
-							{
-								SubscriptionId = item.SubscriptionId.Value,
-								SubscriptionName = item.SubscriptionName,
-								OrganizationId = orgInfo.OrganizationId,
-								OrganizationName = orgInfo.OrganizationName,
-								ProductId = (ProductIdEnum)item.ProductId.Value,
-								ProductName = item.ProductName,
-								ProductRoleName = item.ProductRoleName,
-								ProductRoleId = item.ProductRoleId.Value,
-								SkuId = item.SkuId.Value,
-								AreaUrl = item.AreaUrl
-							};
-
-							if (!orgInfo.OrganizationSubscriptions.ContainsKey(item.SubscriptionId.Value))
-							{
-								// add it to the list of subscriptions for this organization
-								orgInfo.OrganizationSubscriptions.Add(item.SubscriptionId.Value, subInfo);
-
-								// also add it to the result
-								result.OrganizationSubscriptions.Add(item.SubscriptionId.Value, subInfo);
-							}
-						}
-					}
+				// get subscriptions and roles
+				foreach (var item in expando.SubscriptionsAndRoles)
+				{
+					UserSubscription sub = new UserSubscription();
+					sub.AreaUrl = item.AreadUrl;
+					sub.OrganizationId = item.OrganizationId;
+					sub.OrganizationName = item.OrganizationName;
+					sub.ProductId = item.ProductId;
+					sub.ProductName = item.ProductName;
+					sub.ProductRoleId = item.ProductRoleId;
+					sub.ProductRoleName = item.ProductRoleName;
+					sub.SkuId = item.SkuId;
+					sub.SubscriptionId = item.SubscriptionId;
+					sub.SubscriptionName = item.SubscriptionName;
+					result.UserSubscriptions.Add(sub.SubscriptionId, sub);
 				}
 			}
 

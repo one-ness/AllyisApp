@@ -38,7 +38,7 @@ namespace AllyisApps.Services
 		public Tuple<string, List<string>, int> GetNextCustIdAndCountries(int subscriptionId)
 		{
 			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetNextCustIdAndCountries(subInfo.OrganizationId);
 			return Tuple.Create(
 				spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray())),
@@ -67,7 +67,7 @@ namespace AllyisApps.Services
 		/// <returns>Customer id.</returns>
 		public int? CreateCustomer(int subId, Customer customer)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.CreateCustomer, subId);
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subId);
 			return DBHelper.CreateCustomerInfo(GetDBEntityFromCustomer(customer));
 		}
 
@@ -79,7 +79,7 @@ namespace AllyisApps.Services
 		/// <returns>Customer id.</returns>
 		public int? CreateCustomer(Customer customer, int subscriptionId)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.CreateCustomer, subscriptionId);
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
 			return DBHelper.CreateCustomerInfo(GetDBEntityFromCustomer(customer));
 		}
 
@@ -103,7 +103,7 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if authorization fails.</returns>
 		public string DeleteCustomer(int subscriptionId, int customerId)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.DeleteCustomer, subscriptionId);
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
 			return DBHelper.DeleteCustomer(customerId);
 		}
 
@@ -179,7 +179,7 @@ namespace AllyisApps.Services
 			if (subscriptionId <= 0) throw new ArgumentException("subscriptionId");
 
 			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			if (subInfo != null)
 			{
 				var spResults = DBHelper.GetProjectsForOrgAndUser(userId, subInfo.OrganizationId);
@@ -426,7 +426,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
 			}
 
-			this.CheckTimeTrackerAction(TimeTrackerAction.DeleteProject, subscriptionId);
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 			return DBHelper.DeleteProject(projectId);
 		}
 

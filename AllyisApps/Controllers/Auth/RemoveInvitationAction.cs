@@ -24,7 +24,7 @@ namespace AllyisApps.Controllers
 		[HttpPost]
 		public ActionResult RemoveInvitation(int id, int userId)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.DeleteInvitation, id);
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditInvitation, id);
 			AppService.RemoveInvitation(id, userId);
 			Notifications.Add(new BootstrapAlert(Resources.Strings.InvitationDeleteNotification, Variety.Success));
 			return this.RedirectToAction(ActionConstants.ManageOrg, new { id = id });

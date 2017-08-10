@@ -50,7 +50,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			model.SubscriptionUsers = subList;
-			int orgId = AppService.UserContext.OrganizationSubscriptions[model.SubscriptionId].OrganizationId;
+			int orgId = AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId;
 			if (ModelState.IsValid)
 			{
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
@@ -114,7 +114,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subscriptionUsers.Add(new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId));
 			}
 
-			string subscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
+			string subscriptionNameToDisplay = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
 
 			return new EditProjectViewModel
 			{

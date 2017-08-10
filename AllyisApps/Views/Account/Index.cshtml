@@ -1,198 +1,191 @@
-﻿@using AllyisApps.ViewModels.Auth;
-@using AllyisApps.Services;
-
-@model AllyisApps.ViewModels.Auth.AccountIndexViewModel
+﻿@model AllyisApps.ViewModels.Auth.AccountIndexViewModel
 @{
-    DisplayHints.ShowBreadcrumbs = false;
-    DisplayHints.PageBodyId = "paneled-index";
-    ViewBag.TitleBar = Strings.MyAccount;
-    var cityState = Model.UserInfo.City != null && Model.UserInfo.State != null ? Model.UserInfo.City + ", " + Model.UserInfo.State : string.Empty;
+	DisplayHints.ShowBreadcrumbs = false;
+	DisplayHints.PageBodyId = "paneled-index";
+	ViewBag.TitleBar = Strings.MyAccount;
+	var cityState = Model.UserInfo.City != null && Model.UserInfo.State != null ? Model.UserInfo.City + ", " + Model.UserInfo.State : string.Empty;
 }
 
 <div class="row">
-    <div class="col-md-8 col-md-push-2">
+	<div class="col-md-8 col-md-push-2">
 
-        <div class="row">
-            <div class="col-xs-12">
-                <h1 style="float: left">@Strings.MyAccount</h1>
-            </div>
-        </div>
+		<div class="row">
+			<div class="col-xs-12">
+				<h1 style="float: left">@Strings.MyAccount</h1>
+			</div>
+		</div>
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2 style="margin-top: 0px; margin-bottom: 0px;">
-                    @Model.UserInfo.FirstName @Model.UserInfo.LastName
-                    <span class="small text-muted" style="margin-left: 10px;">
-                        (@Model.UserInfo.Email)
-                    </span>
-                </h2>
-            </div>
-            <div class="panel-body">
-                <div class="col-sm-9 index-details">
-                    <p>
-                        <label>@Strings.PhoneNumber:</label>
-                        @Model.UserInfo.PhoneNumber @Model.UserInfo.PhoneExtension
-                    </p>
-                    <p>
-                        <label>@Strings.Address:</label>
-                        <span class="address-row">@Model.UserInfo.Address1</span>
-                        <span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
-                    </p>
-                </div>
-                <div class="col-sm-3 vertically-stacked-buttons text-right" style="padding-right:5px">
-                    <a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)" class="btn btn-default"> @Strings.ChangePassword </a>
-                    <a href="@Url.Action(ActionConstants.EditProfile, ControllerConstants.Account)" class="btn btn-default"> @Strings.EditProfile </a>
-                </div>
-            </div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h2 style="margin-top: 0px; margin-bottom: 0px;">
+					@Model.UserInfo.FirstName @Model.UserInfo.LastName
+					<span class="small text-muted" style="margin-left: 10px;">
+						(@Model.UserInfo.Email)
+					</span>
+				</h2>
+			</div>
+			<div class="panel-body">
+				<div class="col-sm-9 index-details">
+					<p>
+						<label>@Strings.PhoneNumber:</label>
+						@Model.UserInfo.PhoneNumber @Model.UserInfo.PhoneExtension
+					</p>
+					<p>
+						<label>@Strings.Address:</label>
+						<span class="address-row">@Model.UserInfo.Address1</span>
+						<span class="address-row">@cityState @Model.UserInfo.PostalCode</span>
+					</p>
+				</div>
+				<div class="col-sm-3 vertically-stacked-buttons text-right" style="padding-right:5px">
+					<a href="@Url.Action(ActionConstants.ChangePassword, ControllerConstants.Account)" class="btn btn-default"> @Strings.ChangePassword </a>
+					<a href="@Url.Action(ActionConstants.EditProfile, ControllerConstants.Account)" class="btn btn-default"> @Strings.EditProfile </a>
+				</div>
+			</div>
 
-            @if (Model.Invitations.Count > 0)
-            {
-                <div class="panel-body">
-                    <div class="index-details" style="padding-left: 15px">
-                        <p>
-                            <label>@Strings.Invitations</label>
-                            @if (Model.Invitations.Count == 1)
-                            {
-                                @Strings.Invite
-                            }
-                            else
-                            {
-                                @Strings.Invites
-                            }
-                        </p>
-                        @foreach (AccountIndexViewModel.InvitationViewModel invite in Model.Invitations)
-                        {
-                            <div class="invites">
-                                <span class="col-xs-4 col-xs-6" style="margin-top:25px;">@invite.OrganizationName</span>
-                                @using (Html.BeginForm(ActionConstants.AcceptInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
-                                {
+			@if (Model.Invitations.Count > 0)
+			{
+				<div class="panel-body">
+					<div class="index-details" style="padding-left: 15px">
+						<p>
+							<label>@Strings.Invitations</label>
+							@if (Model.Invitations.Count == 1)
+							{
+								@Strings.Invite
+							}
+							else
+							{
+								@Strings.Invites
+							}
+						</p>
+						@foreach (var invite in Model.Invitations)
+						{
+							<div class="invites">
+								<span class="col-xs-4 col-xs-6" style="margin-top:25px;">@invite.OrganizationName</span>
+								@using (Html.BeginForm(ActionConstants.AcceptInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
+								{
 
-                                    <span class="col-xs-4 col-xs-3 pull-right" style="margin-top:15px;">
-                                        <input type="submit" value="@Strings.Accept" class="btn btn-primary col-xs-12" />
-                                    </span>
-                                }
-                                @using (Html.BeginForm(ActionConstants.RejectInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
-                                {
-                                    <span class="col-xs-4 col-xs-3 pull-right" style="margin-top:15px;">
-                                        <input type="submit" value="@Strings.Reject" class="btn btn-primary col-xs-12" />
-                                    </span>
-                                }
-                            </div>
-                        }
-                    </div>
-                </div>}
-        </div>
-    </div>
+									<span class="col-xs-4 col-xs-3 pull-right" style="margin-top:15px;">
+										<input type="submit" value="@Strings.Accept" class="btn btn-primary col-xs-12" />
+									</span>
+								}
+								@using (Html.BeginForm(ActionConstants.RejectInvitation, ControllerConstants.Account, new { id = @invite.InvitationId }, FormMethod.Post))
+								{
+									<span class="col-xs-4 col-xs-3 pull-right" style="margin-top:15px;">
+										<input type="submit" value="@Strings.Reject" class="btn btn-primary col-xs-12" />
+									</span>
+								}
+							</div>
+						}
+					</div>
+				</div>
+			}
+		</div>
+	</div>
 </div>
 
 <div class="row">
-    <div class="col-md-push-2 col-md-8">
-        <div class="row">
-            <div class="col-xs-12">
-                <h1 style="float: left">@Strings.YourOrganizations</h1>
-                <a href="@Url.Action(ActionConstants.CreateOrg, ControllerConstants.Account)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">@Strings.CreateOrganization</a>
-            </div>
-        </div>
-        @if (Model.Organizations.Count <= 0)
-        {
-            <div class="row">
-                <div class="col-xs-12">
-                    @Strings.NoOrganizationMessage
-                </div>
-            </div>
-        }
-        else
-        {
-            foreach (var org in Model.Organizations)
-            {
+	<div class="col-md-push-2 col-md-8">
+		<div class="row">
+			<div class="col-xs-12">
+				<h1 style="float: left">@Strings.YourOrganizations</h1>
+				<a href="@Url.Action(ActionConstants.CreateOrg, ControllerConstants.Account)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">@Strings.CreateOrganization</a>
+			</div>
+		</div>
+		@if (Model.Organizations.Count <= 0)
+		{
+			<div class="row">
+				<div class="col-xs-12">
+					@Strings.NoOrganizationMessage
+				</div>
+			</div>
+		}
+		else
+		{
+			foreach (var org in Model.Organizations)
+			{
 
-                string title = org.OrganizationName;
-                string subtitle = org.SiteUrl ?? "";
-                var OrgcityState = org.City != null && org.State != null ? org.City + ", " + org.State : org.City + org.State;
+				string title = org.OrganizationName;
+				string subtitle = org.SiteUrl ?? "";
+				var OrgcityState = org.City != null && org.State != null ? org.City + ", " + org.State : org.City + org.State;
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h2 style="margin-top: 0px; margin-bottom: 0px;">
-                                    @title
-                                    @if (org.IsManageAllowed)
-                                    {
-                                        <a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = org.OrganizationId })" title="@Strings.EditOrganization" class="pull-right text-muted">
-                                            <i class="fa fa-cog  fa-lg"></i>
-                                        </a>
-                                    }
-                                </h2>
-                            </div>
-                            <div class="panel-body">
-                                <div class="col-sm-8 index-details">
-                                    <p>
-                                        <label>@Strings.PhoneNumber:</label>
-                                        @org.PhoneNumber
-                                    </p>
-                                    <p>
-                                        <label>@Strings.Address:</label>
-                                        <span class="address-row">@org.Address1</span>
-                                        <span class="address-row">@OrgcityState @org.PostalCode</span>
-                                    </p>
-                                </div>
-                                <div class="col-sm-4 index-details">
-                                    <p>
-                                        <label>@Strings.Website:</label>
-                                        @{
-                                            string orgWebSite = subtitle;
-                                            if (!(subtitle == null || subtitle == ""))
-                                            {
-                                                if (!subtitle.StartsWith("http"))
-                                                {
-                                                    orgWebSite = "http://" + subtitle;
-                                                }
-                                                <a href="@orgWebSite" target="_blank">@subtitle</a>
-                                            }
-                                        }
-                                    </p>
-                                    <p>
-                                        <label>@Strings.Fax:</label>
-                                        @org.FaxNumber
-                                    </p>
-                                </div>
-                                <div class="col-md-12" style="height: 100%; margin-top:15px; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
-                                    @foreach (AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel sub in org.Subscriptions)
-                                    {
-                                        <div class="square-box">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h2 style="margin-top: 0px; margin-bottom: 0px;">
+									@title
+									@if (org.IsManageAllowed)
+									{
+										<a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = org.OrganizationId })" title="@Strings.EditOrganization" class="pull-right text-muted">
+											<i class="fa fa-cog  fa-lg"></i>
+										</a>
+									}
+								</h2>
+							</div>
+							<div class="panel-body">
+								<div class="col-sm-8 index-details">
+									<p>
+										<label>@Strings.PhoneNumber:</label>
+										@org.PhoneNumber
+									</p>
+									<p>
+										<label>@Strings.Address:</label>
+										<span class="address-row">@org.Address1</span>
+										<span class="address-row">@OrgcityState @org.PostalCode</span>
+									</p>
+								</div>
+								<div class="col-sm-4 index-details">
+									<p>
+										<label>@Strings.Website:</label>
+										@{
+											string orgWebSite = subtitle;
+											if (!(subtitle == null || subtitle == ""))
+											{
+												if (!subtitle.StartsWith("http"))
+												{
+													orgWebSite = "http://" + subtitle;
+												}
+												<a href="@orgWebSite" target="_blank">@subtitle</a>
+											}
+										}
+									</p>
+									<p>
+										<label>@Strings.Fax:</label>
+										@org.FaxNumber
+									</p>
+								</div>
+								<div class="col-md-12" style="height: 100%; margin-top:15px; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
+									@foreach (var sub in org.Subscriptions)
+									{
+										<div class="square-box">
+											<a href="@sub.ProductGoToUrl" style="text-decoration: none">
+												<div class="panel panel-default">
+													<div class="btn default" style="text-align:center; margin:10px;">
+														<div class="center-block" text-align: center; vertical-align: middle;" style="margin-top:5px;">
+															<img src="@sub.IconUrl" alt="@sub.ProductName" />
+														</div>
 
-                                            
+														<h3>
+															@sub.ProductName
+														</h3>
+														<p>
+															@sub.SubscriptionName
+														</p>
 
+													</div>
+												</div>
+											</a>
+										</div>
+									}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-                                            <a href="@(@sub.AreaUrl)" style="text-decoration: none">
-                                                <div class="panel panel-default">
-                                                    <div class="btn default" style="text-align:center; margin:10px;">
-                                                        <div class="center-block" text-align: center; vertical-align: middle;" style="margin-top:5px;">
-                                                            <img src="~/@string.Format("Content/icons/{0}.png", @sub.ProductName.Replace(" ", ""))" alt="@sub.ProductName" />
-                                                        </div>
-
-                                                        <h3>
-                                                            @sub.ProductName
-                                                        </h3>
-                                                        <p>
-                                                            @sub.SubscriptionName
-                                                        </p>
-
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                       }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                    <div class="row">
-                    </div>
-
-           }
-        }
-    </div>
+				<div class="row">
+				</div>
+			}
+		}
+	</div>
 </div>
