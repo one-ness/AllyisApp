@@ -28,7 +28,7 @@
                 <td>@Html.ActionLink(@report.ReportName,"Edit", new { reportModel = @report }, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" })</td>
                 <td>@String.Format("{0:MM-dd-yyyy}", @report.SubmittedDate)</td>
                 <td>@report.Status</td>
-                <td>@report.Amount</td>
+                <td>@Math.Round(@report.Amount, 2)</td>
             </tr>
         }
     </tbody>

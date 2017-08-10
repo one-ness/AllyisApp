@@ -43,18 +43,21 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
             foreach( var item in expenses)
             {
-				var expItems = AppService.GetExpenseItemsByUserSubmitted(item.SubmittedById);
-				var compInfo = expItems.Select(x => x).Where(x => x.ExpenseReportId == item.ExpenseReportId).First();
+				var expItems = AppService.GetExpenseItemsByUserSubmitted(item.SubmittedById).Select(x => x).Where(x => x.ExpenseReportId == item.ExpenseReportId);
+				
                 var user = AppService.GetUser(item.SubmittedById);
+
+                decimal totalAmount = expItems.Sum(x => x.Amount);
+
                 items.Add(new ExpenseItemViewModel()
                 {
-                    Amount = compInfo.Amount,
+                    Amount = totalAmount,
                     Reason = item.BusinessJustification,
                     ReportId = item.ExpenseReportId,
                     ReportName = item.ReportTitle,
                     Status = (ExpenseStatusEnum)item.ReportStatus,
                     SubmittedDate = item.CreatedUtc,
-                    UserId = compInfo.AccountId,
+                    UserId = user.UserId,
                     UserName = user.FirstName + " " + user.LastName
                 });
             }
