@@ -314,6 +314,12 @@
     <Build Include="StaffingManager\Tables\PositionTag.sql" />
     <Build Include="StaffingManager\Tables\Tag.sql" />
     <Build Include="StaffingManager\Stored Procedures\CreatePosition.sql" />
+    <Build Include="StaffingManager\Stored Procedures\UpdatePosition.sql" />
+    <Build Include="StaffingManager\Stored Procedures\DeletePosition.sql" />
+    <Build Include="StaffingManager\Stored Procedures\DeleteTag.sql" />
+    <Build Include="StaffingManager\Stored Procedures\DeletePositionTag.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreatePositionTag.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreateTag.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

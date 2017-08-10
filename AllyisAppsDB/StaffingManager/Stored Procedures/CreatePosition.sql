@@ -1,67 +1,60 @@
 ﻿CREATE PROCEDURE [StaffingManager].[CreatePosition]
-	@firstName NVARCHAR(32),
-	@lastName NVARCHAR(32),
-    @address NVARCHAR(100), 
-    @city NVARCHAR(32), 
-    @state NVARCHAR(32), 
-    @country NVARCHAR(32), 
-    @postalCode NVARCHAR(16),
-	@email NVARCHAR(256), 
-    @phoneNumber VARCHAR(32),
-	@dateOfBirth DATETIME2(0),
-	@passwordHash NVARCHAR(MAX),
-	@emailConfirmationCode UNIQUEIdENTIFIER,
-	@isTwoFactorEnabled BIT,
-	@isLockoutEnabled BIT,
-	@lockoutEndDateUtc DATE,
-	@CultureName VARCHAR (16)
+	@OrganizationId INT,
+	@CustomerId INT,
+    @AddressId INT,  
+    @StartDate DATETIME2(0), 
+    @PositionStatus INT,
+	@PositionTitle NVARCHAR(140), 
+    @BillingRateFrequency INT,
+	@BillingRateAmount INT,
+	@DurationMonths INT,
+	@EmploymentType INT,
+	@PositionCount INT,
+	@RequiredSkills NVARCHAR (MAX),
+	@JobResponsibilities NVARCHAR (MAX),
+	@DesiredSkills NVARCHAR (MAX),
+	@PositionLevel NVARCHAR (140),
+	@HiringManager NVARCHAR (140),
+	@TeamName NVARCHAR (140)
 AS
 BEGIN
 	SET NOCOUNT ON;
-
-	INSERT INTO [Lookup].[Address]
-		([Address1],
-		[City],
-		[StateId],
-		[CountryId],
-		[PostalCode])
-	VALUES
-		(@address,
-		@city,
-		(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [StateName] = @state),
-		(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @country),
-		@postalCode);
-
-	INSERT INTO [Auth].[User] 
-		([FirstName], 
-		[LastName], 
+		INSERT INTO [StaffingManager].[Position] 
+		([OrganizationId], 
+		[CustomerId], 
 		[AddressId],
-		[Email], 
-		[PhoneNumber], 
-		[DateOfBirth],
-		[PasswordHash],
-		[EmailConfirmationCode],
-		[IsEmailConfirmed],
-		[IsTwoFactorEnabled],
-		[AccessFailedCount],
-		[IsLockoutEnabled],
-		[LockoutEndDateUtc],
-		[PreferredLanguageId])
-	VALUES 
-		(@firstName, 
-		@lastName,
-		SCOPE_IDENTITY(),
-		@email,
-		@phoneNumber,
-		@dateOfBirth, 
-		@passwordHash, 
-		@emailConfirmationCode,
-		0,
-		COALESCE(@isTwoFactorEnabled,0),
-		0,
-		COALESCE(@isLockoutEnabled,0),
-		COALESCE(@lockoutEndDateUtc,NULL),
-		@CultureName);
+		[StartDate], 
+		[PositionStatus], 
+		[PositionTitle],
+		[BillingRateFrequency],
+		[BillingRateAmount],
+		[DurationMonths],
+		[EmploymentType],
+		[PositionCount],
+		[RequiredSkills],
+		[JobResponsibilities],
+		[DesiredSkills],
+		[PositionLevel],
+		[HiringManager],
+		[TeamName])
+	VALUES 	
+		(@OrganizationId, 
+		@CustomerId, 
+		@AddressId,
+		@StartDate, 
+		@PositionStatus, 
+		@PositionTitle,
+		@BillingRateFrequency,
+		@BillingRateAmount,
+		@DurationMonths,
+		@EmploymentType,
+		@PositionCount,
+		@RequiredSkills,
+		@JobResponsibilities,
+		@DesiredSkills,
+		@PositionLevel,
+		@HiringManager,
+		@TeamName)
 
 	SELECT SCOPE_IDENTITY();
 END
