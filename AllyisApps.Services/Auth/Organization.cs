@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Services.Lookup;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -31,42 +32,13 @@ namespace AllyisApps.Services
 		public string SiteUrl { get; set; }
 
 		/// <summary>
-		/// Gets or sets the organization's Address Id.
+		/// Gets or sets the organization's Address.
 		/// </summary>
-		public int AddressId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Street address.
-		/// </summary>
-		[Display(Name = "Street Address")]
-		public string Address { get; set; }
-
-		/// <summary>
-		/// Gets or sets the City.
-		/// </summary>
-		public string City { get; set; }
-
-		/// <summary>
-		/// Gets or sets the State.
-		/// </summary>
-		public string State { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Country.
-		/// </summary>
-		[Display(Name = "Country/Region")]
-		public string Country { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Postal code.
-		/// </summary>
-		[Display(Name = "Postal Code")]
-		public string PostalCode { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Phone number.
-		/// </summary>
-		[Display(Name = "Phone Number")]
+		public Address Address { get; set; }
+        /// <summary>
+        /// Gets or sets the Phone number.
+        /// </summary>
+        [Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
 
 		/// <summary>
@@ -84,5 +56,10 @@ namespace AllyisApps.Services
 		/// Gets or sets the Organization subdomain perfix.
 		/// </summary>
 		public string Subdomain { get; set; }
+
+        public Organization()
+        {
+            Address = new Address();
+        }
 	}
 }

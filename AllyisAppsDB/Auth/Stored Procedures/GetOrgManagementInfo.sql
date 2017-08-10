@@ -7,11 +7,12 @@ BEGIN
 	SELECT 
 		[OrganizationId],
 		[Organization].[OrganizationName],
-		[SiteUrl], 
+		[SiteUrl],
+		[Address].[AddressId],
 		[Address].[Address1] AS 'Address',
 		[Address].[City], 
-		[State].[StateName] AS 'State', 
-		[Country].[CountryName] AS 'Country', 
+		[State].[StateName] AS 'StateName', 
+		[Country].[CountryName] AS 'CountryName', 
 		[Address].[PostalCode], 
 		[PhoneNumber], 
 		[FaxNumber], 
@@ -20,7 +21,7 @@ BEGIN
 
 	FROM [Auth].[Organization] WITH (NOLOCK)
 		LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [Organization].[AddressId]
-		LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
+		LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryCode] = [Address].[CountryCode]
 		LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE OrganizationId = @organizationId
 

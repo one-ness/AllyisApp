@@ -7,6 +7,7 @@
 using AllyisApps.Core.Alert;
 using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
 using System.Web.Mvc;
 
@@ -28,20 +29,9 @@ namespace AllyisApps.Controllers
 			var model = new EditOrganizationViewModel();
 			model.IsCreating = true;
 
-			// create localized countries
-			var countries = this.AppService.GetCountries();
-			foreach (var item in countries)
-			{
-				// get the country name
-				string countryName = Utility.AggregateSpaces(item.Value);
-
-				// use the country name in the resource file to get it's localized name
-				string localized = Resources.Countries.ResourceManager.GetString(countryName) ?? item.Value;
-
-				// add it to localized countries dictionary
-				model.LocalizedCountries.Add(item.Key, localized);
-			}
-
+            // create localized countries
+            model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
+            
 			return this.View(model);
 		}
 
@@ -59,13 +49,17 @@ namespace AllyisApps.Controllers
 				int orgId = AppService.SetupOrganization(
 					new Organization()
 					{
-						Address = model.Address,
-						City = model.City,
-						Country = model.Country,
+						Address = new Services.Lookup.Address()
+                        {
+                            //AddressId = model.AddressId, should be null
+                            Address1 = model.Address,
+                            City = model.City,
+                            CountryCode = model.SelectedCountryCode,
+                            StateId = model.SelectedStateId,
+                            PostalCode =model.PostalCode,
+                        },
 						OrganizationName = model.OrganizationName,
 						SiteUrl = model.SiteUrl,
-						State = model.State,
-						PostalCode = model.PostalCode,
 						PhoneNumber = model.PhoneNumber,
 						FaxNumber = model.FaxNumber
 					},

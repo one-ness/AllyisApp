@@ -25,6 +25,7 @@ namespace AllyisApps.ViewModels.Auth
 		{
 			this.ValidCountries = new List<string>();
 			this.LocalizedCountries = new Dictionary<string, string>();
+            this.LocalizedStates = new Dictionary<string, string>();
 			this.IsCreating = false;
 		}
 
@@ -47,7 +48,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the Address Id.
 		/// </summary>
-		public int AddressId { get; set; }
+		public int? AddressId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's physical address.
@@ -131,7 +132,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// selected state id
 		/// </summary>
-		public short SelectedStateId { get; set; }
+		public int? SelectedStateId { get; set; }
 
 		/// <summary>
 		/// state id and localized names
@@ -141,7 +142,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// selected country code
 		/// </summary>
-		public int SelectedCountryCode { get; set; }
+		public string SelectedCountryCode { get; set; }
 
 		/// <summary>
 		/// country code and localized names

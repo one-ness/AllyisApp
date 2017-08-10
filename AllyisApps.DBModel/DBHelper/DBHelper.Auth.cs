@@ -304,8 +304,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@siteUrl", organization.SiteUrl);
 			parameters.Add("@address", organization.Address);
 			parameters.Add("@city", organization.City);
-			parameters.Add("@state", organization.State);
-			parameters.Add("@country", organization.Country);
+			parameters.Add("@stateID", organization.StateId);
+			parameters.Add("@countryCode", organization.CountryCode);
 			parameters.Add("@postalCode", organization.PostalCode);
 			parameters.Add("@phoneNumber", organization.PhoneNumber);
 			parameters.Add("@faxNumber", organization.FaxNumber);
@@ -335,10 +335,10 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationName", organization.OrganizationName);
 			parameters.Add("@siteUrl", organization.SiteUrl);
 			parameters.Add("@addressId", organization.AddressId);
-			parameters.Add("@address", organization.Address);
+			parameters.Add("@address1", organization.Address);
 			parameters.Add("@city", organization.City);
-			parameters.Add("@state", organization.State);
-			parameters.Add("@country", organization.Country);
+			parameters.Add("@stateId", organization.StateId);
+			parameters.Add("@countryCode", organization.CountryCode);
 			parameters.Add("@postalCode", organization.PostalCode);
 			parameters.Add("@phoneNumber", organization.PhoneNumber);
 			parameters.Add("@faxNumber", organization.FaxNumber);
@@ -349,6 +349,8 @@ namespace AllyisApps.DBModel
 				return connection.Execute("[Auth].[UpdateOrganization]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
+
+        
 
 		/// <summary>
 		/// Executes [Auth].[DeleteOrg].
@@ -517,6 +519,9 @@ namespace AllyisApps.DBModel
 				return connection.Query<OrganizationDBEntity>("[Auth].[GetOrg] @a", new { a = organizationId }).FirstOrDefault();
 			}
 		}
+
+        
+
 
 		/// <summary>
 		/// Retrieves the list of members for the specified organization.

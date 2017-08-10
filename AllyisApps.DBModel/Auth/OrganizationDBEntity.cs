@@ -30,7 +30,7 @@ namespace AllyisApps.DBModel.Auth
         /// <summary>
         /// Gets or sets the organization's Address Id.
         /// </summary>
-        public int AddressId { get; set; }
+        public int? AddressId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's physical address.
@@ -45,12 +45,22 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets the organization's state.
 		/// </summary>
-		public string State { get; set; }
+		public string StateName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's country.
 		/// </summary>
-		public string Country { get; set; }
+		public string CountryName { get; set; }
+
+        /// <summary>
+        /// StateID
+        /// </summary>
+        public int? StateId { get; set; }
+
+        /// <summary>
+        /// Country Code
+        /// </summary>
+        public string CountryCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's postal code.

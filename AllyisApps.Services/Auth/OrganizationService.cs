@@ -14,6 +14,7 @@ using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.Lib;
 using AllyisApps.Services.Billing;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
 {
@@ -637,22 +638,33 @@ namespace AllyisApps.Services
 			{
 				return null;
 			}
+            Address address = null;
+            if (organization.AddressId != null)
+            {
+                address = new Address()
+                {
+                    AddressId = organization.AddressId,
+                    Address1 = organization.Address,
+                    Address2 = null,
+                    City = organization.City,
+                    CountryCode = organization.CountryCode,
+                    CountryName = organization.CountryName,
+                    StateId = organization.StateId,
+                    StateName = organization.StateName,
+                    PostalCode = organization.PostalCode
+                };
+            }
 
-			return new Organization
-			{
-				AddressId = organization.AddressId,
-				Address = organization.Address,
-				City = organization.City,
-				Country = organization.Country,
-				CreatedUtc = organization.CreatedUtc,
-				FaxNumber = organization.FaxNumber,
+            return new Organization
+            {
+                CreatedUtc = organization.CreatedUtc,
+                FaxNumber = organization.FaxNumber,
                 OrganizationName = organization.OrganizationName,
-				OrganizationId = organization.OrganizationId,
-				PhoneNumber = organization.PhoneNumber,
-				SiteUrl = organization.SiteUrl,
-				State = organization.State,
-				Subdomain = organization.Subdomain,
-				PostalCode = organization.PostalCode
+                OrganizationId = organization.OrganizationId,
+                PhoneNumber = organization.PhoneNumber,
+                SiteUrl = organization.SiteUrl,
+                Subdomain = organization.Subdomain,
+                Address = address
 			};
 		}
 
@@ -670,19 +682,22 @@ namespace AllyisApps.Services
 
 			return new OrganizationDBEntity
 			{
-				AddressId = organization.AddressId,
-				Address = organization.Address,
-				City = organization.City,
-				Country = organization.Country,
-				CreatedUtc = organization.CreatedUtc,
+				AddressId = organization.Address?.AddressId,
+				Address = organization.Address?.Address1,
+				City = organization.Address?.City,
+				CountryName = organization.Address?.CountryName,
+                CountryCode = organization.Address?.CountryCode,
+                StateName = organization.Address?.StateName,
+                StateId = organization.Address?.StateId,
+                PostalCode = organization.Address?.PostalCode,
+
+                CreatedUtc = organization.CreatedUtc,
 				FaxNumber = organization.FaxNumber,
                 OrganizationName = organization.OrganizationName,
 				OrganizationId = organization.OrganizationId,
 				PhoneNumber = organization.PhoneNumber,
 				SiteUrl = organization.SiteUrl,
-				State = organization.State,
 				Subdomain = organization.Subdomain,
-				PostalCode = organization.PostalCode
 			};
 		}
 

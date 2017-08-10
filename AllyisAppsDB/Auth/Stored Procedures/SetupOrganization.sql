@@ -5,8 +5,8 @@
 	@siteUrl NVARCHAR(100),
 	@address NVARCHAR(100),
 	@city NVARCHAR(100),
-	@state NVARCHAR(100),
-	@country NVARCHAR(100),
+	@stateID INT,
+	@countryCode NVARCHAR(8),
 	@postalCode NVARCHAR(50),
 	@phoneNumber VARCHAR(50),
 	@faxNumber VARCHAR(50),
@@ -19,7 +19,7 @@ BEGIN
 
 	BEGIN TRANSACTION
 		-- Create organization
-		EXEC [Auth].[CreateOrganization] @organizationName, @siteUrl, @address, @city, @state, @country, @postalCode, @phoneNumber, @faxNumber, @subdomainName;
+		EXEC [Auth].[CreateOrganization] @organizationName, @siteUrl, @address, @city, @stateID, @countryCode, @postalCode, @phoneNumber, @faxNumber, @subdomainName;
 
 		-- get the new organization id
 		DECLARE @organizationId INT = IDENT_CURRENT('[Auth].[Organization]');

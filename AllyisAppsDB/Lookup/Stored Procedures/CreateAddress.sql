@@ -7,7 +7,13 @@
 	@countryCode varchar(8)
 as
 begin
+	declare @cID int
+	Select @cID = Country.CountryId
+	From Country
+	WHERE @countryCode = Country.CountryCode
+
+
 	set nocount on
-	insert into [Address] (Address1, Address2, City, StateId, PostalCode, CountryCode) values (@address1, @address2, @city, @stateId, @postalCode, @countryCode)
+	insert into [Address] (Address1, Address2, City, StateId, PostalCode, CountryCode, CountryId) values (@address1, @address2, @city, @stateId, @postalCode, @countryCode,@cID)
 	return SCOPE_IDENTITY()
 end
