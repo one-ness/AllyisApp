@@ -75,7 +75,7 @@ namespace AllyisApps.DBModel.StaffingManager
         /// <summary>
         /// Gets or sets the Job responibilites description
         /// </summary>
-        public string JobResponsibilites { get; set; }
+        public string JobResponsibilities { get; set; }
 
         /// <summary>
         /// Gets or sets the desired skills description
@@ -90,7 +90,7 @@ namespace AllyisApps.DBModel.StaffingManager
         /// <summary>
         /// Get or sets the name of the responsible hiring manager
         /// </summary>
-        public string HiriingManager { get; set; }
+        public string HiringManager { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the team this position is for

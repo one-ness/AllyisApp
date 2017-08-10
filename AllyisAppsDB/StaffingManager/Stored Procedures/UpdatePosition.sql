@@ -19,7 +19,6 @@
 	@TeamName NVARCHAR (140)
 AS
 BEGIN
-	SET NOCOUNT ON;
 		UPDATE [StaffingManager].[Position] 
 		SET [OrganizationId] = @OrganizationId, 
 			[CustomerId] = @CustomerId, 
@@ -37,7 +36,8 @@ BEGIN
 			[DesiredSkills] = @DesiredSkills,
 			[PositionLevel] = @PositionLevel,
 			[HiringManager] = @HiringManager,
-			[TeamName] = @TeamName
-		WHERE [PositionId] = @PositionId
+			[TeamName] = @TeamName,
+			[PositionModifiedUtc] = SYSUTCDATETIME()
+	  WHERE [PositionId] = @PositionId
 
 END
