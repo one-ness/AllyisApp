@@ -18,10 +18,15 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         /// </summary>
         public int CurrentUser { get; set; }
 
-        /// <summary>
-        /// Gets or sets Start Date.
-        /// </summary>
-        public DateTime StartDate { get; set; }
+		/// <summary>
+		/// Gets or sets the Expense Report.
+		/// </summary>
+		public ExpenseReport Report { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Start Date.
+		/// </summary>
+		public DateTime StartDate { get; set; }
 
         /// <summary>
         /// Gets or sets Expense Items.
