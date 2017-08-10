@@ -167,14 +167,14 @@ namespace AllyisApps.DBModel
         /// </summary>
         /// <param name="ExpenseReportId">The id of the Report</param>
         /// <returns>An Expense Reports.</returns>
-        public ExpenseItemDBEntity GetExpenseReport(int ExpenseReportId)
+        public ExpenseReportDBEntity GetExpenseReport(int ExpenseReportId)
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@expenseReportId", ExpenseReportId);
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
-                return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseReport]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                return connection.Query<ExpenseReportDBEntity>("[Expense].[GetExpenseReportByExpenseReportId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
             }
         }
 

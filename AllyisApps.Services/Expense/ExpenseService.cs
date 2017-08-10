@@ -38,9 +38,9 @@ namespace AllyisApps.Services
         /// </summary>
         /// <param name="reportId">The report id.</param>
         /// <returns></returns>
-		public ExpenseItem GetExpenseReport(int reportId)
+		public ExpenseReport GetExpenseReport(int reportId)
 		{
-			return InitializeExpenseItem(DBHelper.GetExpenseReport(reportId));
+			return InitializeExpenseReport(DBHelper.GetExpenseReport(reportId));
 		}
 
         /// <summary>

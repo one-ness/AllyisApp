@@ -19,16 +19,20 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// create expense report
 		/// </summary>
+		/// <param name="reportId"></param>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
-		public ActionResult Create(int subscriptionId)
+		public ActionResult Create(int subscriptionId, int reportId = -1)
 		{
+			ExpenseReport report = reportId == -1 ? null : AppService.GetExpenseReport(reportId);
+
 			var model = new ExpenseCreateModel()
 			{
 				CurrentUser = GetCookieData().UserId,
 				Items = new List<ExpenseItemViewModel>(),
 				StartDate = DateTime.UtcNow,
-				SubscriptionId = subscriptionId
+				SubscriptionId = subscriptionId,
+				Report = report
 			};
 			return View(model);
 		}

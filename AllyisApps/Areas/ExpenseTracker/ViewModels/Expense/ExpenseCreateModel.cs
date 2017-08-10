@@ -1,4 +1,5 @@
-﻿using AllyisApps.ViewModels;
+﻿using AllyisApps.Services;
+using AllyisApps.ViewModels;
 using System;
 using System.Collections.Generic;
 
@@ -18,6 +19,11 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// Current User Id
 		/// </summary>
 		public int CurrentUser { get; set; }
+
+		/// <summary>
+		/// Expense Report
+		/// </summary>
+		public ExpenseReport Report { get; set; }
 
 		/// <summary>
 		/// Start Date
