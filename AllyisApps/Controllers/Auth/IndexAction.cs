@@ -64,7 +64,7 @@ namespace AllyisApps.Controllers
                 {
                     InvitationId = invite.InvitationId,
                     OrganizationName = org.OrganizationName,
-                    OrganizationId = org.OrganizationId
+                    //OrganizationId = org.OrganizationId
                 });
             }
 
@@ -97,9 +97,9 @@ namespace AllyisApps.Controllers
                             int startOfWeek = AppService.GetAllSettings(userSubInfo.SubscriptionId).Item1.StartOfWeek;
                             sDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
                             eDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
-                            orgViewModel.Subscriptions.Add(
-                                new AccountIndexViewModel.OrganizationViewModel.TimeTrackerSubViewModel
-                                (userSubInfo,description,sDate,eDate));
+                            //orgViewModel.Subscriptions.Add(
+                            //    new AccountIndexViewModel.OrganizationViewModel.TimeTrackerSubViewModel
+                            //    (userSubInfo,description,sDate,eDate));
                         }
                         else {
                             orgViewModel.Subscriptions.Add(
