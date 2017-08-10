@@ -93,6 +93,11 @@
     <Compile Include="Billing\SkuDBEntity.cs" />
     <Compile Include="Lookup\LanguageDBEntity.cs" />
     <Compile Include="Hrm\HolidayDBEntity.cs" />
+    <Compile Include="StaffingManager\ApplicantDBEntity.cs" />
+    <Compile Include="StaffingManager\ApplicationDocumentDBEntity.cs" />
+    <Compile Include="StaffingManager\ApplicationDBEntity.cs" />
+    <Compile Include="StaffingManager\PositionDBEntity.cs" />
+    <Compile Include="StaffingManager\TagDBEntity.cs" />
     <Compile Include="TimeTracker\LockDateDBEntity.cs" />
     <Compile Include="Hrm\PayClassDBEntity.cs" />
     <Compile Include="TimeTracker\SettingDBEntity.cs" />
@@ -106,9 +111,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="StaffingManager\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

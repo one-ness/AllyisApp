@@ -1,16 +1,16 @@
 //------------------------------------------------------------------------------
-// <copyright file="DBHelper.Lookup.cs" company="Allyis, Inc.">
+// <copyright file="DBHelper.StaffingManager.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using Dapper;
 using AllyisApps.DBModel.StaffingManager;
-using System;
+using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -49,6 +49,84 @@ namespace AllyisApps.DBModel
 			}
 
 			return parameters.Get<int>("@returnValue");
+		}
+
+		/// <summary>
+		/// Adds an applicant to the DB if there is not already another applicant with the same email.
+		/// </summary>
+		/// <param name="applicant">The applicant object to be added to the db.</param>
+		/// <returns>The id of the created address and applicant</returns>
+		public Tuple<int, int> CreateApplicant(ApplicantDBEntity applicant)
+		{
+			if (applicant == null)
+			{
+				throw new System.ArgumentException("applicant cannot be null or empty.");
+			}
+
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@email", applicant.Email);
+			parameters.Add("@firstName", applicant.FirstName);
+			parameters.Add("@lastName", applicant.LastName);
+			parameters.Add("@address", applicant.Address);
+			parameters.Add("@city", applicant.City);
+			parameters.Add("@state", applicant.State);
+			parameters.Add("@country", applicant.Country);
+			parameters.Add("@postalCode", applicant.PostalCode);
+			parameters.Add("@phoneNumber", applicant.PhoneNumber);
+			parameters.Add("@notes", applicant.Notes);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				dynamic results = connection.Query<dynamic>("[StaffingManager].[CreateApplicant]", parameters, commandType: CommandType.StoredProcedure).Single();
+				return Tuple.Create(results.AddressId, results.ApplicantId);
+			}
+		}
+
+		/// <summary>
+		/// Adds an application to the DB.
+		/// </summary>
+		/// <param name="application">The application object to be added to the db.</param>
+		/// <returns>The id of the created application</returns>
+		public int CreateApplication(ApplicationDBEntity application)
+		{
+			if (application == null)
+			{
+				throw new System.ArgumentException("application cannot be null or empty.");
+			}
+
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicantId", application.ApplicantId);
+			parameters.Add("@positionId", application.PositionId);
+			parameters.Add("@applicationStatusId", application.ApplicationStatusId);
+			parameters.Add("@notes", application.Notes);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<int>("[StaffingManager].[CreateApplication]", parameters, commandType: CommandType.StoredProcedure).Single();
+			}
+		}
+
+		/// <summary>
+		/// Adds an application document to the DB, which joins to an application.
+		/// </summary>
+		/// <param name="applicationDocument">The application document object to be added to the db.</param>
+		/// <returns>The id of the created application document</returns>
+		public int CreateApplicationDocument(ApplicationDocumentDBEntity applicationDocument)
+		{
+			if (applicationDocument == null)
+			{
+				throw new System.ArgumentException("application document cannot be null or empty.");
+			}
+
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicationId", applicationDocument.ApplicationId);
+			parameters.Add("@documentLink", applicationDocument.DocumentLink);
+			parameters.Add("@documentName", applicationDocument.DocumentName);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<int>("[StaffingManager].[CreateApplicationDocument]", parameters, commandType: CommandType.StoredProcedure).Single();
+			}
 		}
 
 
@@ -234,7 +312,7 @@ namespace AllyisApps.DBModel
 
 			return parameters.Get<int>("@returnValue");
 		}
-
+        
         /// <summary>
 		/// Updates the position with the given id.
 		/// </summary>
@@ -246,7 +324,6 @@ namespace AllyisApps.DBModel
             {
                 throw new System.ArgumentException("Position cannot be null or empty.");
             }
-
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@PositionId", position.PositionId);
             parameters.Add("@OrganizationId", position.OrganizationId);
@@ -272,7 +349,83 @@ namespace AllyisApps.DBModel
                 return connection.Execute("[StaffingManager].[UpdatePosition]", parameters, commandType: CommandType.StoredProcedure);
             }
         }
+        /// <summary>
+        /// Updates the given applicant if there is not already another applicant with the same email.
+        /// </summary>
+        /// <param name="applicant">The applicant object to be updated.</param>
+        /// <returns>The number of rows updated.</returns>
+        public int UpdateApplicant(ApplicantDBEntity applicant)
+        {
+            if (applicant == null)
+            {
+                throw new System.ArgumentException("applicant cannot be null or empty.");
+            }
 
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@applicantId", applicant.ApplicantId);
+            parameters.Add("@addressId", applicant.AddressId);
+            parameters.Add("@email", applicant.Email);
+            parameters.Add("@firstName", applicant.FirstName);
+            parameters.Add("@lastName", applicant.LastName);
+            parameters.Add("@address", applicant.Address);
+            parameters.Add("@city", applicant.City);
+            parameters.Add("@state", applicant.State);
+            parameters.Add("@country", applicant.Country);
+            parameters.Add("@postalCode", applicant.PostalCode);
+            parameters.Add("@phoneNumber", applicant.PhoneNumber);
+            parameters.Add("@notes", applicant.Notes);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                return connection.Execute("[StaffingManager].[UpdateApplicant]", parameters, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        /// <summary>
+        /// Updates the given application.
+        /// </summary>
+        /// <param name="application">The application object to be updated.</param>
+        /// <returns>The number of rows updated.</returns>
+        public int UpdateApplication(ApplicationDBEntity application)
+        {
+            if (application == null)
+            {
+                throw new System.ArgumentException("application cannot be null or empty.");
+            }
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@applicationId", application.ApplicationId);
+            parameters.Add("@applicationStatusId", application.ApplicationStatusId);
+            parameters.Add("@notes", application.Notes);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                return connection.Execute("[StaffingManager].[UpdateApplication]", parameters, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        /// <summary>
+        /// Updates the given application document.
+        /// </summary>
+        /// <param name="applicationDocument">The application document object to be updated.</param>
+        /// <returns>The number of rows updated.</returns>
+        public int UpdateApplicationDocument(ApplicationDocumentDBEntity applicationDocument)
+        {
+            if (applicationDocument == null)
+            {
+                throw new System.ArgumentException("application document cannot be null or empty.");
+            }
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@applicationDocumentId", applicationDocument.ApplicationDocumentId);
+            parameters.Add("@documentLink", applicationDocument.DocumentLink);
+            parameters.Add("@documentName", applicationDocument.DocumentName);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                return connection.Execute("[StaffingManager].[UpdateApplicationDocument]", parameters, commandType: CommandType.StoredProcedure);
+            }
+        }
 
         ////////////////////////////
         /*         DELETE         */
