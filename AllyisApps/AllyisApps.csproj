@@ -17,10 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -203,12 +201,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateAction.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ReportViewActionController.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseCreateModel.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ImportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ViewReportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ReportViewModel.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\StaffingController.cs" />
     <Compile Include="Areas\StaffingManager\StaffingManagerAreaRegistration.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\StaffingIndexViewModel.cs" />
@@ -537,6 +537,7 @@
     <Content Include="Areas\StaffingManager\Views\Staffing\index.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Shared\_BreadcrumbNavPartial.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\_AjaxExpenseReportItems.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\Expense\ReportView.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
@@ -959,10 +960,7 @@
     <Content Include="Views\Shared\_Breadcrumbs.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Areas\ExpenseTracker\Views\CreateAction\" />
-    <Folder Include="Areas\ExpenseTracker\Views\Report\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>

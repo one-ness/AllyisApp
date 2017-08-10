@@ -306,6 +306,7 @@
     <Build Include="Billing\Stored Procedures\CreateSubscription.sql" />
     <None Include="UpgradeScripts\Upgrade_AllyisAppsDB_1.0_to_1.1.sql" />
     <None Include="UpgradeScripts\Upgrade_AllyisAppsDB_1.1_to_1.2.sql" />
+    <Build Include="Expense\Stored Procedures\GetExpenseItemsByExpenseReportId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

@@ -1,0 +1,84 @@
+﻿@using AllyisApps.ViewModels.ExpenseTracker.Expense;
+@using AllyisApps.Services;
+@model ReportViewModel
+
+@{
+    DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
+}
+<div>
+    <h2 class="pull-left">@Model.ReprortTitle</h2>
+</div>
+
+    @using (@Html.BeginForm("UpdateReport", ControllerConstants.Expense, FormMethod.Get, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" }))
+    {
+        @Html.HiddenFor(m => m.ReportId)
+        @Html.HiddenFor(m => m.UserId)
+        <div class="row">
+            <div class="report-top">
+                <div class="col-lg-6 col-md-6 col-xs-6">
+                    <div class="report-detail">
+                        <div><b>User:</b></div>
+                        <div>@Model.SubmittedBy (@Model.UserId)</div>
+                    </div>
+                    <div class="report-detail">
+                        <div><b>Report Date:</b></div>
+                        <div>@String.Format("{0:MM-dd-yyyy}", @Model.ReportDate)</div>
+                    </div>
+                    <div class="report-detail">
+                        <div><b>Status:</b></div>
+                        <div>@Model.Status</div>
+                    </div>
+                    <div class="report-detail">
+                        <div>Justification:</div>
+                        <div>@Model.Justification</div>
+                    </div>
+                    <div class="report-detail">
+                        <div>Created On:</div>
+                        <div>@String.Format("{0:MM-dd-yyyy}", @Model.CreatedUtc)</div>
+                    </div>
+                    <div class="report-detail">
+                        <div>Last Modified On:</div>
+                        <div>@String.Format("{0:MM-dd-yyyy}", @Model.ModifiedUtc)</div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-xs-6">
+                    TestArea
+                </div>
+            </div>
+            <table class="table table-hover col-lg-12 col-md-12 col-xs-12">
+                <thead>
+                    <tr>
+                        <th>Expense Name</th>
+                        <th>Amount</th>
+                        <th>Transaction Date</th>
+                        <th>Discription</th>
+                        <th>Is Billable</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(ExpenseItem item in Model.Expenses)
+                    {
+                        <tr>
+                            <td>@item.ExpenseItemName</td>
+                            <td>@Math.Round(@item.Amount, 2)</td>
+                            <td>@String.Format("{0:MM-dd-yyyy}", @item.TransactionDate)</td>
+                            <td>@item.ItemDiscription</td>
+                            <td>
+                                @if(@item.IsBillableToCustomer)
+                                {
+                                    <div class="fa fa-check-square"></div>
+                                }
+                                else
+                                {
+                                    <div class="fa fa-square-o"></div>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+
+

@@ -32,15 +32,24 @@ namespace AllyisApps.Services
 			return InitializeExpenseItem(DBHelper.GetExpenseItem(expenseId));
 		}
 
+        /// <summary>
+        /// Get an expense reports items by it id.
+        /// </summary>
+        /// <param name="reportId">The reports id</param>
+        /// <returns>A IEnumerabe of ExpenseItems for the report.</returns>
+        public IEnumerable<ExpenseItem> GetExpenseItemsByReportId(int reportId)
+        {
+            return DBHelper.GetExpenseItemsByReportId(reportId).Select(x => InitializeExpenseItem(x));
+        }
 
         /// <summary>
         /// Gets an expense report by its id.
         /// </summary>
         /// <param name="reportId">The report id.</param>
         /// <returns></returns>
-		public ExpenseItem GetExpenseReport(int reportId)
+		public ExpenseReport GetExpenseReport(int reportId)
 		{
-			return InitializeExpenseItem(DBHelper.GetExpenseReport(reportId));
+			return InitializeExpenseReport(DBHelper.GetExpenseReport(reportId));
 		}
 
         /// <summary>
@@ -48,14 +57,19 @@ namespace AllyisApps.Services
         /// </summary>
         /// <param name="orgId">The organization id</param>
         /// <returns></returns>
-		public IEnumerable<ExpenseItem> GetExpenseReportByOrgId(int orgId)
+		public IEnumerable<ExpenseReport> GetExpenseReportByOrgId(int orgId)
 		{
-			return DBHelper.GetExpenseReportsByOrganizationId(orgId).Select(x => InitializeExpenseItem(x));
+			return DBHelper.GetExpenseReportsByOrganizationId(orgId).Select(x => InitializeExpenseReport(x));
 		}
 
-		public IEnumerable<ExpenseReport> GetExpenseReportBySubmittedId(int submitedId)
+        /// <summary>
+        /// Get an expense report by the submitted id
+        /// </summary>
+        /// <param name="submittedId">The submitting users id.</param>
+        /// <returns>An IEnumerabe of expense reports.</returns>
+		public IEnumerable<ExpenseReport> GetExpenseReportBySubmittedId(int submittedId)
 		{
-			return DBHelper.GetExpenseReportsBySubmittedById(submitedId).Select(x => InitializeExpenseReport(x));
+			return DBHelper.GetExpenseReportsBySubmittedById(submittedId).Select(x => InitializeExpenseReport(x));
 		}
 
         /// <summary>
@@ -103,6 +117,7 @@ namespace AllyisApps.Services
 				ExpenseItemCreatedUtc = entity.CreatedUtc,
 				ExpenseItemId = entity.ExpenseItemId,
 				ExpenseItemModifiedUtc = entity.ModifiedUtc,
+                ExpenseItemName = entity.ExpenseItemName,
 				ExpenseReportId = entity.ExpenseReportId,
 				IsBillableToCustomer = entity.IsBillableToCustomer,
 				ItemDiscription = entity.ItemDescription,
@@ -116,6 +131,7 @@ namespace AllyisApps.Services
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
 			{
 				AccountId = item.AccountId,
+                ExpenseItemName = item.ExpenseItemName,
 				Amount = item.Amount,
 				CreatedUtc = item.ExpenseItemCreatedUtc,
 				ExpenseItemId = item.ExpenseItemId,

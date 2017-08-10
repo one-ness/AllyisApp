@@ -133,9 +133,11 @@ namespace AllyisApps
 		public const string StaffingManager = "StaffingManager";
 	}
 
+    /// <summary>
+    /// Route name constents for user when passing route names to Action Links.
+    /// </summary>
     public static class RouteNameConstants
     {
         public const string TimeTrackerNoIndex = "TimeTracker_NoUserId";
     }
-
 }

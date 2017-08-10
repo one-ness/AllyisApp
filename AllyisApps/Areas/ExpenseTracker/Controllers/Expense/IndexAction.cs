@@ -1,24 +1,23 @@
-﻿using AllyisApps.Controllers;
-using AllyisApps.Services;
-using System.Web.Mvc;
-using System.Threading.Tasks;
-using AllyisApps.ViewModels.ExpenseTracker.Expense;
+﻿using System;
 using System.Collections.Generic;
-using System;
 using System.Linq;
-using AllyisApps.DBModel;
-using AllyisApps.DBModel.Finance;
+using System.Web.Mvc;
+using AllyisApps.Controllers;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
 	/// <summary>
-	/// expense controller
+	/// Expense controller.
 	/// </summary>
 	public partial class ExpenseController : BaseController
 	{
 		/// <summary>
-		/// Show the list of expense reports submitted by the logged in user
+		/// Show the list of expense reports submitted by the logged in user.
 		/// </summary>
+        /// <param name="subscriptionId">The subscription id.</param>
+        /// <returns>The action result.</returns>
 		public ActionResult Index(int subscriptionId)
 		{
             int userId = GetCookieData().UserId;
@@ -29,19 +28,19 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		}
 
         /// <summary>
-        /// 
+        /// Initializes the home page view model.
         /// </summary>
-        /// <param name="subId"></param>
-        /// <param name="userId"></param>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <param name="expenses"></param>
-        /// <returns></returns>
+        /// <param name="subId">The subscription id.</param>
+        /// <param name="userId">The user id.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="expenses">The expenses.</param>
+        /// <returns>Returns the view model.</returns>
         public ExpenseIndexViewModel InitializeViewModel(int subId, int userId, DateTime startDate, DateTime endDate, IEnumerable<ExpenseReport> expenses)
         {
             List<ExpenseItemViewModel> items = new List<ExpenseItemViewModel>();
 
-            foreach( var item in expenses)
+            foreach (var item in expenses)
             {
 				var expItems = AppService.GetExpenseItemsByUserSubmitted(item.SubmittedById).Select(x => x).Where(x => x.ExpenseReportId == item.ExpenseReportId);
 				
@@ -62,7 +61,6 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 });
             }
 
-
             ExpenseIndexViewModel model = new ExpenseIndexViewModel()
             {
                 CanManage = true,
@@ -71,6 +69,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 Reports = items,
                 EndDate = endDate,
             };
+
             return model;
         }
 	}

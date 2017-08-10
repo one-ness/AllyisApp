@@ -39,11 +39,6 @@ namespace AllyisApps.Services
         public int ExpenseReportId { get; set; }
 
         /// <summary>
-        /// The expense report status.
-        /// </summary>
-        public ExpenseStatusEnum ExpenseReportStatus { get; set; }
-
-        /// <summary>
         /// the user id associated with the Expense
         /// </summary>
         public int AccountId { get; set; }

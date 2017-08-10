@@ -13,6 +13,11 @@ namespace AllyisApps.DBModel.Finance
         public int ExpenseItemId { get; set; }
 
         /// <summary>
+        /// Gets or sets the expense item name.
+        /// </summary>
+        public string ExpenseItemName { get; set; }
+
+        /// <summary>
         /// Gets or sets the Expense Item's description.
         /// </summary>
         public string ItemDescription { get; set; }

@@ -6,6 +6,7 @@ BEGIN
 
 	SELECT 
 		[ExpenseItemId],
+		[ExpenseItemName],
 		[ItemDescription],
 		[TransactionDate],
 		[Amount],
