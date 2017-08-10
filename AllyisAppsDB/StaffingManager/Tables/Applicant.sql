@@ -7,5 +7,10 @@ CREATE TABLE [StaffingManager].[Applicant] (
 	[PhoneNumber] VARCHAR (16)   NULL,
 	[Notes]       NVARCHAR (MAX) NULL,
 	CONSTRAINT [PK_Applicant] PRIMARY KEY CLUSTERED ([ApplicantId] ASC),
-	CONSTRAINT [FK_Applicant_Address] FOREIGN KEY ([AddressId]) REFERENCES [Lookup].[Address] ([AddressId]),
+	CONSTRAINT [FK_Applicant_Address] FOREIGN KEY ([AddressId]) REFERENCES [Lookup].[Address] ([AddressId])
 );
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Email]
+	ON [StaffingManager].[Applicant] ([Email] ASC)

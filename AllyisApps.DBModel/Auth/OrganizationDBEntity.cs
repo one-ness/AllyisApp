@@ -27,10 +27,10 @@ namespace AllyisApps.DBModel.Auth
 		/// </summary>
 		public string SiteUrl { get; set; }
 
-        /// <summary>
-        /// Gets or sets the organization's Address Id.
-        /// </summary>
-        public int AddressId { get; set; }
+		/// <summary>
+		/// Gets or sets the organization's Address Id.
+		/// </summary>
+		public int AddressId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's physical address.

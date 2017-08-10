@@ -3,5 +3,6 @@ CREATE TABLE [StaffingManager].[ApplicationDocument] (
 	[ApplicationId]         INT            NOT NULL,
 	[DocumentLink]          NVARCHAR (100) NOT NULL,
 	[DocumentName]          NVARCHAR (32)  NOT NULL,
-	CONSTRAINT [PK_ApplicationDocument] PRIMARY KEY CLUSTERED ([ApplicationDocumentId] ASC)
+	CONSTRAINT [PK_ApplicationDocument] PRIMARY KEY CLUSTERED ([ApplicationDocumentId] ASC),
+	CONSTRAINT [PK_ApplicationDocument_Application] FOREIGN KEY ([ApplicationId]) REFERENCES [StaffingManager].[Application] ([ApplicationId])
 );

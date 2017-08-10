@@ -1,5 +1,5 @@
 CREATE TABLE [StaffingManager].[Application] (
-	[ApplicationId]          INT            IDENTITY (111874, 7) NOT NULL,
+	[ApplicationId]          INT            NOT NULL IDENTITY (111874, 7),
 	[ApplicantId]            INT            NOT NULL,
 	[PositionId]             INT            NOT NULL,
 	[ApplicationCreatedUtc]  DATETIME2 (0)  NOT NULL DEFAULT (getutcdate()),

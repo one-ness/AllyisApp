@@ -317,6 +317,12 @@
     <Build Include="StaffingManager\Tables\PositionTag.sql" />
     <Build Include="StaffingManager\Tables\Tag.sql" />
     <Build Include="StaffingManager\Stored Procedures\CreatePosition.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreateApplication.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreateApplicant.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreateApplicationDocument.sql" />
+    <Build Include="StaffingManager\Stored Procedures\UpdateApplicant.sql" />
+    <Build Include="StaffingManager\Stored Procedures\UpdateApplication.sql" />
+    <Build Include="StaffingManager\Stored Procedures\UpdateApplicationDocument.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
