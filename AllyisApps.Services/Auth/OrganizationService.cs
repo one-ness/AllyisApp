@@ -172,7 +172,7 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if permissions fail.</returns>
 		public void DeleteOrganization(int orgId)
 		{
-			this.CheckOrgAction(OrgAction.DeleteOrganization, orgId);
+			this.CheckOrgAction(OrgAction.EditOrganization, orgId);
 			DBHelper.DeleteOrganization(orgId);
 		}
 
@@ -221,12 +221,13 @@ namespace AllyisApps.Services
 				throw new InvalidOperationException("Employee Id is already taken.");
 			}
 
-            // Send invitation email
+			// Send invitation email
+			string orgName = string.Empty;
             string htmlbody = string.Format(
                 "{0} {1} has requested you join their organization on Allyis Apps{2}!<br /> Click <a href={3}>Here</a> to create an account and join!",
                 spResults.Item2,
                 spResults.Item3,
-                subscriptionId == null ? "" : ", " + UserContext.OrganizationSubscriptions[subscriptionId.Value].OrganizationName,
+                orgName,
 				url.Replace("%7BaccessCode%7D", code));
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
@@ -319,7 +320,7 @@ namespace AllyisApps.Services
 		{
 			if (orgId <= 0) throw new ArgumentException("orgId");
 			if (invitationId <= 0) throw new ArgumentException("invitationId");
-			this.CheckOrgAction(OrgAction.DeleteInvitation, orgId);
+			this.CheckOrgAction(OrgAction.EditInvitation, orgId);
 			return DBHelper.RemoveInvitation(invitationId, -1);
 		}
 

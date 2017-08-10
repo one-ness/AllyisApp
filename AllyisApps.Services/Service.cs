@@ -213,7 +213,7 @@ namespace AllyisApps.Services
 		public Tuple<List<Customer>, List<CompleteProjectInfo>, List<SubscriptionUserInfo>> GetReportInfo(int subscriptionId)
 		{
 			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetReportInfo(subInfo.OrganizationId, subscriptionId);
 			return Tuple.Create(
 				spResults.Item1.Select(cdb => InitializeCustomer(cdb)).ToList(),
@@ -341,7 +341,7 @@ namespace AllyisApps.Services
 		public IEnumerable<PayClass> GetPayClasses(int subscriptionId)
 		{
 			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			return DBHelper.GetPayClasses(subInfo.OrganizationId).Select(pc => InitializePayClassInfo(pc));
 		}
 
@@ -539,7 +539,7 @@ namespace AllyisApps.Services
 		public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int subscriptionId)
 		{
 			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetAllSettings(subInfo.OrganizationId);
 			return Tuple.Create(
 				InitializeSettingsInfo(spResults.Item1),

@@ -190,10 +190,9 @@ namespace AllyisApps.Controllers
 				if (cookie != null && cookie.UserId > 0)
 				{
 					this.AppService.PopulateUserContext(cookie.UserId);
-					this.AppService.PopulateUserContext2(cookie.UserId);
 				}
 
-				if (this.AppService.UserContext2 != null)
+				if (this.AppService.UserContext != null)
 				{
 					// user context obtained. set user's language on the thread.
 					if (string.Compare(cultureName, this.AppService.UserContext.PreferedLanguageId, true) != 0)

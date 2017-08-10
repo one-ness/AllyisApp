@@ -70,7 +70,6 @@
     <Compile Include="Auth\OrganizationRoleEnum.cs" />
     <Compile Include="Auth\ProductRoleEnums.cs" />
     <Compile Include="Auth\UserContext.cs" />
-    <Compile Include="Auth\UserContext2.cs" />
     <Compile Include="Auth\UserOrganization.cs" />
     <Compile Include="Auth\UserSubscription.cs" />
     <Compile Include="BaseService.cs" />

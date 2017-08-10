@@ -24,7 +24,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Redirects to the settings view.</returns>
 		public ActionResult DeletePayClass(int userId, int subscriptionId)
 		{
-			int orgId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
+			int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
 
 			string sourcePayClassName = AppService.GetPayClasses(subscriptionId).First(pc => pc.PayClassId == userId).PayClassName;
 

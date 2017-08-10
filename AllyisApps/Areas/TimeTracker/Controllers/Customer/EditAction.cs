@@ -28,7 +28,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
 			var infos = AppService.GetCustomerAndCountries(userId);
-			string subscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
+			string subscriptionNameToDisplay = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
 
 			return this.View(new EditCustomerInfoViewModel
 			{

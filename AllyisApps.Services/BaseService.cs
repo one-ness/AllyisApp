@@ -48,25 +48,12 @@ namespace AllyisApps.Services
 		public UserContext UserContext { get; private set; }
 
 		/// <summary>
-		/// Gets the logged in user context.
-		/// </summary>
-		public UserContext2 UserContext2 { get; private set; }
-
-		/// <summary>
 		/// Sets the UserContext.
 		/// </summary>
 		/// <param name="userContext">The UserContext.</param>
 		public void SetUserContext(UserContext userContext)
 		{
 			this.UserContext = userContext;
-		}
-
-		/// <summary>
-		/// sets the user context
-		/// </summary>
-		public void SetUserContext2(UserContext2 userContext)
-		{
-			this.UserContext2 = userContext;
 		}
 
 		/// <summary>
