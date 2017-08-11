@@ -262,7 +262,7 @@ namespace AllyisApps.Services
 				// get organization and roles
 				foreach (var item in expando.OrganizationsAndRoles)
 				{
-					result.UserOrganizations.Add(item.OrganizationId, new UserOrganization(item.OrganizationId, item.OrganizationName, item.OrganizationRoleId));
+					result.UserOrganizations.Add(item.OrganizationId, new UserOrganization(item.OrganizationId, item.OrganizationName, (OrganizationRole)item.OrganizationRoleId));
 				}
 
 				// get subscriptions and roles
@@ -272,7 +272,7 @@ namespace AllyisApps.Services
 					sub.AreaUrl = item.AreadUrl;
 					sub.OrganizationId = item.OrganizationId;
 					sub.OrganizationName = item.OrganizationName;
-					sub.ProductId = item.ProductId;
+					sub.ProductId = (ProductIdEnum)item.ProductId;
 					sub.ProductName = item.ProductName;
 					sub.ProductRoleId = item.ProductRoleId;
 					sub.ProductRoleName = item.ProductRoleName;

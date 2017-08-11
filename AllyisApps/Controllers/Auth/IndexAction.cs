@@ -98,7 +98,7 @@ namespace AllyisApps.Controllers
                             int startOfWeek = AppService.GetAllSettings(userSubInfo.SubscriptionId).Item1.StartOfWeek;
                             sDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
                             eDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
-                            subViewModel.AreaUrl = Url.RouteUrl(RouteNameConstants.TimeTrackerNoIndex, new { subscriptionId = 
+                            subViewModel.AreaUrl = Url.RouteUrl("TimeTracker_NoUserId", new { subscriptionId = 
                                 userSubInfo.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = sDate, endDate = eDate});
                         }
                         orgViewModel.Subscriptions.Add(subViewModel);
