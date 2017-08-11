@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [StaffingManager].[DeletePositionTag]
-	@TagId INT,
-	@PositionId INT
+	@tagId INT,
+	@positionId INT
 	
 AS
 	DELETE FROM [StaffingManager].[PositionTag]
-		WHERE [TagId] IN (SELECT [TagId] FROM @TagId) AND [PositionId] = @PositionId
+		WHERE [TagId] IN (SELECT [TagId] FROM @TagId) AND [PositionId] = @positionId

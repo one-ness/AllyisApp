@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [StaffingManager].[CreateTag]
-	@TagName INT
+	@tagName INT
 
 AS
 BEGIN
@@ -7,6 +7,5 @@ BEGIN
 		INSERT INTO [StaffingManager].[Tag] 
 		([TagName])
 	VALUES 	 
-		(@TagName)
-
+		(@tagName)
 END

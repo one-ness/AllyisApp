@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [StaffingManager].[DeletePosition]
-	@PositionId INT
+	@positionId INT
 	
 AS
 	DELETE FROM [StaffingManager].[Position]
-		WHERE [PositionId] IN (SELECT [PositionId] FROM @PositionId) 
+		WHERE [PositionId] IN (SELECT [PositionId] FROM @positionId) 

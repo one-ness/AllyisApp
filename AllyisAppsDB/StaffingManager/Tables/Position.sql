@@ -25,3 +25,8 @@ CREATE TABLE [StaffingManager].[Position] (
 	CONSTRAINT [FK_Position_Customer] FOREIGN KEY ([CustomerId]) REFERENCES [Crm].[Customer] ([CustomerId]),
 );
 
+GO
+	CREATE UNIQUE NONCLUSTERED INDEX
+	[IX_AddressId]
+		ON [StaffingManager].[Position]([AddressId] ASC)
+

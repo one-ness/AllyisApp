@@ -115,22 +115,22 @@ namespace AllyisApps.DBModel
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@OrganizationId", position.OrganizationId);
-			parameters.Add("@AddressId", position.AddressId);
-			parameters.Add("@StartDate", position.StartDate);
-			parameters.Add("@PositionStatus", position.PositionStatus);
-			parameters.Add("@PositionTitle", position.PositionTitle);
-			parameters.Add("@BillingRateFrequency", position.BillingRateFrequency);
-			parameters.Add("@BillingRateAmount", position.BillingRateAmount);
-			parameters.Add("@DurationMonths", position.DurationMonths);
-			parameters.Add("@EmploymentType", position.EmploymentType);
-			parameters.Add("@PositionCount", position.PositionCount);
-			parameters.Add("@RequiredSkills", position.RequiredSkills);
-			parameters.Add("@JobResponsiblities", position.JobResponsibilities);
-			parameters.Add("@DesiredSkills", position.DesiredSkills);
-			parameters.Add("@PositionLevel", position.PositionLevel);
-			parameters.Add("@HiringManager", position.HiringManager);
-			parameters.Add("@TeamName", position.TeamName);
+			parameters.Add("@organizationId", position.OrganizationId);
+			parameters.Add("@addressId", position.AddressId);
+			parameters.Add("@startDate", position.StartDate);
+			parameters.Add("@positionStatus", position.PositionStatus);
+			parameters.Add("@positionTitle", position.PositionTitle);
+			parameters.Add("@billingRateFrequency", position.BillingRateFrequency);
+			parameters.Add("@billingRateAmount", position.BillingRateAmount);
+			parameters.Add("@durationMonths", position.DurationMonths);
+			parameters.Add("@employmentType", position.EmploymentType);
+			parameters.Add("@positionCount", position.PositionCount);
+			parameters.Add("@requiredSkills", position.RequiredSkills);
+			parameters.Add("@jobResponsiblities", position.JobResponsibilities);
+			parameters.Add("@desiredSkills", position.DesiredSkills);
+			parameters.Add("@positionLevel", position.PositionLevel);
+			parameters.Add("@hiringManager", position.HiringManager);
+			parameters.Add("@teamName", position.TeamName);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -138,12 +138,13 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Adds an Tag to the DB if there is not already another tag with the same name.
-		/// </summary>
-		/// <param name="name">The name of the tag to be added to the db.</param>
-		/// <returns>The id of the created Tag or -1 if the tag name is already in use.</returns>
-		public int CreateTag(string name)
+        /// <summary>
+        /// Adds an Tag to the DB if there is not already another tag with the same name.
+        /// </summary>
+        /// <param name="name">The name of the tag to be added to the db.</param>
+        /// <param name="positionId">The name of the tag to be added to the db.</param>
+        /// <returns>The id of the created Tag or -1 if the tag name is already in use.</returns>
+        public int CreateTag(string name, int positionId)
 		{
 			if (name == null)
 			{
@@ -151,16 +152,26 @@ namespace AllyisApps.DBModel
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@TagName", name);
+			parameters.Add("@tagName", name);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default -1
-				connection.Execute("[StaffingManager].[Tag]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[StaffingManager].[CreateTag]", parameters, commandType: CommandType.StoredProcedure);
 			}
 
-			return parameters.Get<int>("@returnValue");
-		}
+            DynamicParameters parameters2 = new DynamicParameters();
+            parameters2.Add("@tagId", parameters.Get<int>("@returnValue"));
+            parameters2.Add("@positionId", positionId);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                // default -1
+                connection.Execute("[StaffingManager].[CreatePositionTag]", parameters2, commandType: CommandType.StoredProcedure);
+            }
+
+            return parameters.Get<int>("@returnValue");
+        }
 
 
 		////////////////////////////
@@ -175,7 +186,7 @@ namespace AllyisApps.DBModel
 		public dynamic GetPositionByPositionId(int positionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@PositionId", positionId);
+			parameters.Add("@positionId", positionId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -191,7 +202,7 @@ namespace AllyisApps.DBModel
 		public IEnumerable<dynamic> GetPositionsByOrganizationId(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@OrganizationId", organizationId);
+			parameters.Add("@organizationId", organizationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -294,25 +305,29 @@ namespace AllyisApps.DBModel
 				throw new System.ArgumentException("Position cannot be null or empty.");
 			}
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@PositionId", position.PositionId);
-			parameters.Add("@OrganizationId", position.OrganizationId);
-			parameters.Add("@AddressId", position.AddressId);
-			parameters.Add("@StartDate", position.StartDate);
-			parameters.Add("@PositionStatus", position.PositionStatus);
-			parameters.Add("@PositionTitle", position.PositionTitle);
-			parameters.Add("@BillingRateFrequency", position.BillingRateFrequency);
-			parameters.Add("@BillingRateAmount", position.BillingRateAmount);
-			parameters.Add("@DurationMonths", position.DurationMonths);
-			parameters.Add("@EmploymentType", position.EmploymentType);
-			parameters.Add("@PositionCount", position.PositionCount);
-			parameters.Add("@RequiredSkills", position.RequiredSkills);
-			parameters.Add("@JobResponsibilities", position.JobResponsibilities);
-			parameters.Add("@DesiredSkills", position.DesiredSkills);
-			parameters.Add("@PositionLevel", position.PositionLevel);
-			parameters.Add("@HiringManager", position.HiringManager);
-			parameters.Add("@TeamName", position.TeamName);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			parameters.Add("@positionId", position.PositionId);
+			parameters.Add("@organizationId", position.OrganizationId);
+			parameters.Add("@addressId", position.AddressId);
+			parameters.Add("@startDate", position.StartDate);
+			parameters.Add("@positionStatus", position.PositionStatus);
+			parameters.Add("@positionTitle", position.PositionTitle);
+			parameters.Add("@billingRateFrequency", position.BillingRateFrequency);
+			parameters.Add("@billingRateAmount", position.BillingRateAmount);
+			parameters.Add("@durationMonths", position.DurationMonths);
+			parameters.Add("@employmentType", position.EmploymentType);
+			parameters.Add("@positionCount", position.PositionCount);
+			parameters.Add("@requiredSkills", position.RequiredSkills);
+			parameters.Add("@jobResponsibilities", position.JobResponsibilities);
+			parameters.Add("@desiredSkills", position.DesiredSkills);
+			parameters.Add("@positionLevel", position.PositionLevel);
+			parameters.Add("@hiringManager", position.HiringManager);
+			parameters.Add("@teamName", position.TeamName);
+            parameters.Add("@address", position.Address);
+            parameters.Add("@city", position.City);
+            parameters.Add("@state", position.State);
+            parameters.Add("@country", position.Country);
+            parameters.Add("@postalCode ", position.PostalCode);
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Execute("[StaffingManager].[UpdatePosition]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -330,7 +345,7 @@ namespace AllyisApps.DBModel
 		public void DeleteTag(int tagId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@TagId", tagId);
+			parameters.Add("@tagId", tagId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -346,8 +361,8 @@ namespace AllyisApps.DBModel
 		public void DeletePositionTag(int tagId, int positionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@TagId", tagId);
-			parameters.Add("@PositionId", positionId);
+			parameters.Add("@tagId", tagId);
+			parameters.Add("@positionId", positionId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{

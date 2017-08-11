@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [StaffingManager].[CreatePositionTag]
-	@TagId INT,
-	@PositionId INT
+	@tagId INT,
+	@positionId INT
 
 AS
 BEGIN
@@ -9,7 +9,7 @@ BEGIN
 		([TagId], 
 		[PositionId])
 	VALUES 	
-		(@TagId, 
-		@PositionId)
+		(@tagId, 
+		@positionId)
 
 END
