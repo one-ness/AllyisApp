@@ -3,5 +3,6 @@
 	@positionId INT
 	
 AS
-	DELETE FROM [StaffingManager].[PositionTag]
-		WHERE [TagId] IN (SELECT [TagId] FROM @TagId) AND [PositionId] = @positionId
+BEGIN
+	DELETE FROM [StaffingManager].[PositionTag] WHERE [TagId] = @tagId AND [PositionId] = @positionId
+END

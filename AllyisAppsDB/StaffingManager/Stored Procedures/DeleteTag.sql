@@ -2,5 +2,7 @@
 	@tagId INT
 	
 AS
-	DELETE FROM [StaffingManager].[Tag]
-		WHERE [TagId] IN (SELECT [TagId] FROM @tagId) 
+BEGIN
+	SET NOCOUNT ON
+	DELETE FROM [StaffingManager].[Tag] WHERE [TagId] = @tagId
+END

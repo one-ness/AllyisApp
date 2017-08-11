@@ -329,6 +329,9 @@
     <Build Include="StaffingManager\Stored Procedures\DeletePositionTag.sql" />
     <Build Include="StaffingManager\Stored Procedures\CreatePositionTag.sql" />
     <Build Include="StaffingManager\Stored Procedures\CreateTag.sql" />
+    <Build Include="StaffingManager\Stored Procedures\DeleteApplicant.sql" />
+    <Build Include="StaffingManager\Stored Procedures\DeleteApplication.sql" />
+    <Build Include="StaffingManager\Stored Procedures\DeleteApplicationDocument.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

@@ -10,7 +10,10 @@ CREATE TABLE [StaffingManager].[Applicant] (
 	CONSTRAINT [FK_Applicant_Address] FOREIGN KEY ([AddressId]) REFERENCES [Lookup].[Address] ([AddressId])
 );
 
-
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Email]
 	ON [StaffingManager].[Applicant] ([Email] ASC)
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AddressId]
+	ON [StaffingManager].[Applicant] ([AddressId] ASC)
