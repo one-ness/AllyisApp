@@ -2,14 +2,11 @@
 @using AllyisApps.Services
 
 @model ExpenseCreateModel
-@{
-	//Layout = "~/Areas/ExpenseTracker/Views/Expense/Create.cshtml";
-	int i = 0;
-}
 
 <div>
-	@foreach (ExpenseItem item in Model.Items)
+	@for (int i = 0; i < Model.Items.Count(); i++)
 	{
+		var item = Model.Items[i];
 		string dateVal = "";
 		string amountVal = "";
 		if (item.TransactionDate.ToShortDateString() != "1/1/0001")
@@ -27,9 +24,9 @@
 		string itemIdName = String.Format("[{0}].ExpenseItemId", i);
 		<div class="item-div">
 			<input type="hidden" value="@item.ExpenseItemId" name="@itemIdName" />
-			<input type="text" value="@dateVal" class="datepicker form-control" name="@dateName" style="display: inline-block; width: 150px" placeholder="Date" />
-			<input type="text" value="@item.ExpenseItemName" class="form-control" name="@nameName" style="display: inline-block; width: 150px" placeholder="Name" />
-			<input type="text" value="@amountVal" class="form-control" name="@amountName" style="display: inline-block; width: 150px" placeholder="Amount" />
+			@Html.TextBoxFor(m => m.Items[i].TransactionDate, new { @class = "datepicker form-control", name = dateName, Value = dateVal, placeholder = "Date", style = "display: inline-block; width: 150px" })
+			@Html.TextBoxFor(m => m.Items[i].ExpenseItemName, new { @class = "form-control", name = nameName, Value = Model.Items[i].ExpenseItemName, placeholder = "Name", style = "display: inline-block; width: 150px" })
+			@Html.TextBoxFor(m => m.Items[i].Amount, new { @class = "form-control", name = amountName, Value = amountVal, placeholder = "Amount", style = "display: inline-block; width: 150px" })
 			<label>Payed for by Customer</label>
 			<input type="checkbox" checked class="form-control" name="@checkboxName" style="width: 14px; display: inline-block;" />
 			<a>
@@ -38,6 +35,5 @@
 				</span>
 			</a>
 		</div>
-		i++;
 	}
 </div>
