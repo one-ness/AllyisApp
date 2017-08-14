@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [StaffingManager].[CreateTag]
-	@tagName INT
+	@tagName NVARCHAR(32)
 
 AS
 BEGIN

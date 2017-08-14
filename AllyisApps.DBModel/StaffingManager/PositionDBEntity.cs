@@ -97,5 +97,10 @@ namespace AllyisApps.DBModel.StaffingManager
         /// </summary>
         public string TeamName { get; set; }
 
-    }
+		/// <summary>
+		/// Gets or sets the name of the team this position is for
+		/// </summary>
+		public TagDBEntity[] Tags { get; set; }
+
+	}
 }
