@@ -840,7 +840,7 @@ namespace AllyisApps.Services
 				SkuId = subscriptionDisplay.SkuId,
 				SkuName = subscriptionDisplay.SkuName,
 				SubscriptionId = subscriptionDisplay.SubscriptionId,
-                SubscriptionName = subscriptionDisplay.SubscriptionName,
+				SubscriptionName = subscriptionDisplay.SubscriptionName,
 				Tier = subscriptionDisplay.Tier
 			};
 		}

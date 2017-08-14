@@ -88,6 +88,7 @@
     <Compile Include="Service.cs" />
     <Compile Include="Crm\Customer.cs" />
     <Compile Include="ServiceSettings.cs" />
+    <Compile Include="StaffingManager\StaffingManagerService.cs" />
     <Compile Include="TimeTracker\Holiday.cs" />
     <Compile Include="Auth\InvitationInfo.cs" />
     <Compile Include="Auth\Language.cs" />

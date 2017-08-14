@@ -183,12 +183,12 @@ namespace AllyisApps.Services
 					Email = email,
 					FirstName = firstName,
 					LastName = lastName,
-                    Address = address,
+					Address = address,
 					Country = country,
-                    City = city,
-                    State = state,
-                    PostalCode = postalCode,
-                    DateOfBirth = dateOfBirth,
+					City = city,
+					State = state,
+					PostalCode = postalCode,
+					DateOfBirth = dateOfBirth,
 					PhoneNumber = phone,
 					PasswordHash = Crypto.GetPasswordHash(password),
 					IsTwoFactorEnabled = twoFactorEnabled,
@@ -448,7 +448,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("employeeRoleId", "Employee Role Id cannot be negative.");
 			}
 
-			return DBHelper.UpdateMember(modelData)	== 1 ? false : true;
+			return DBHelper.UpdateMember(modelData) == 1 ? false : true;
 		}
 
 		/// <summary>
