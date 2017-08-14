@@ -153,24 +153,40 @@ namespace AllyisApps.DBModel
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@tagName", name);
+			parameters.Add("@positionId", positionId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default -1
-				connection.Execute("[StaffingManager].[CreateTag]", parameters, commandType: CommandType.StoredProcedure);
-			}
-
-			DynamicParameters parameters2 = new DynamicParameters();
-			parameters2.Add("@tagId", parameters.Get<int>("@returnValue"));
-			parameters2.Add("@positionId", positionId);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				// default -1
-				connection.Execute("[StaffingManager].[CreatePositionTag]", parameters2, commandType: CommandType.StoredProcedure);
+				connection.Execute("[StaffingManager].[SetupTag]", parameters, commandType: CommandType.StoredProcedure);
 			}
 
 			return parameters.Get<int>("@returnValue");
+		}
+
+		/// <summary>
+		/// Adds a PositionTag to the DB when there is already another tag with the same name.
+		/// </summary>
+		/// <param name="tagId">The name of the tag to be added to the db.</param>
+		/// <param name="positionId">The name of the tag to be added to the db.</param>
+		/// <returns>The id of the created Tag or -1 if the tag name is already in use.</returns>
+		public void AssignTag(int tagId, int positionId)
+		{
+			if (tagId == 0)
+			{
+				throw new System.ArgumentException("tag ID cannot be null or empty.");
+			}
+
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@tagId", tagId);
+			parameters.Add("@positionId", positionId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				// default -1
+				connection.Execute("[StaffingManager].[CreatePositionTag]", parameters, commandType: CommandType.StoredProcedure);
+			}
+
 		}
 
 
@@ -326,15 +342,18 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="positionId">The id of the position.</param>
 		/// <returns>One Position.</returns>
-		public dynamic GetPositionByPositionId(int positionId)
+		public PositionDBEntity GetPositionById(int positionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@positionId", positionId);
 
+			PositionDBEntity position;
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<dynamic>("[StaffingManager].[GetPositionByPositionId]", parameters, commandType: CommandType.StoredProcedure).Single();
+				position = connection.Query<PositionDBEntity>("[StaffingManager].[GetPosition]", parameters, commandType: CommandType.StoredProcedure).Single();
+				position.Tags = connection.Query<TagDBEntity>("[StaffingManager].[GetTagsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
 			}
+			return position;
 		}
 
 		/// <summary>
@@ -342,14 +361,51 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The id of the organization.</param>
 		/// <returns>One Position.</returns>
-		public IEnumerable<dynamic> GetPositionsByOrganizationId(int organizationId)
+		public IEnumerable<PositionDBEntity> GetPositionsByOrganizationId(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 
+			IEnumerable<PositionDBEntity> positions;
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<dynamic>("[StaffingManager].[GetPositionsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
+				positions = connection.Query<PositionDBEntity>("[StaffingManager].[GetPositionsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
+				foreach (PositionDBEntity position in positions)
+				{
+					position.Tags = connection.Query<TagDBEntity>(
+						"[StaffingManager].[GetTagsByPositionId]",
+						new { positionId = position.PositionId },
+						commandType: CommandType.StoredProcedure);
+				}
+			}
+			return positions;
+		}
+
+		/// <summary>
+		/// Retrieves the tags on a position.
+		/// </summary>
+		/// <param name="positionId">The id of the posiion.</param>
+		/// <returns>One Position.</returns>
+		public IEnumerable<TagDBEntity> GetTagsByPositionId(int positionId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@positionId", positionId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<TagDBEntity>("[StaffingManager].[GetTagsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Retrieves All tags
+		/// </summary>
+		/// <returns>All the tags</returns>
+		public IEnumerable<dynamic> GetTags()
+		{
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<dynamic>("[StaffingManager].[GetTags]", commandType: CommandType.StoredProcedure);
 			}
 		}
 
