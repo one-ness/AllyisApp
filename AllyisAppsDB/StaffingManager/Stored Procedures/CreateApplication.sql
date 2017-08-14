@@ -7,16 +7,18 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO [StaffingManager].[Application]
-		([ApplicantId],
-		[PositionId],
-		[ApplicationStatusId],
-		[Notes])
-	VALUES
-		(@applicantId,
-		@positionId,
-		@applicationStatusId,
-		@notes);
+	BEGIN TRANSACTION
+		INSERT INTO [StaffingManager].[Application]
+			([ApplicantId],
+			[PositionId],
+			[ApplicationStatusId],
+			[Notes])
+		VALUES
+			(@applicantId,
+			@positionId,
+			@applicationStatusId,
+			@notes);
 
-	SELECT SCOPE_IDENTITY();
+		SELECT SCOPE_IDENTITY();
+	COMMIT TRANSACTION
 END

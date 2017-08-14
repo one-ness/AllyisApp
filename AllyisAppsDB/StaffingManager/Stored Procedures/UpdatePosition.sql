@@ -2,11 +2,11 @@
 	@positionId INT,
 	@organizationId INT,
 	@customerId INT,
-    @addressId INT,  
-    @startDate DATETIME2(0), 
-    @positionStatus INT,
-	@positionTitle NVARCHAR(140), 
-    @billingRateFrequency INT,
+	@addressId INT,
+	@startDate DATETIME2(0),
+	@positionStatus INT,
+	@positionTitle NVARCHAR(140),
+	@billingRateFrequency INT,
 	@billingRateAmount INT,
 	@durationMonths INT,
 	@employmentType INT,
@@ -46,7 +46,6 @@ BEGIN
 		[PositionModifiedUtc] = SYSUTCDATETIME()
 	WHERE [PositionId] = @positionId
 
-	  
 	SET NOCOUNT ON
 	UPDATE [Lookup].[Address] SET 
 		[Address1] = @address,
@@ -55,5 +54,4 @@ BEGIN
 		[CountryId] = @country,
 		[PostalCode] = @postalCode
 	WHERE [AddressId] = @addressId
-
 END
