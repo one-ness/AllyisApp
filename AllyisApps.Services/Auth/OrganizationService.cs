@@ -221,12 +221,12 @@ namespace AllyisApps.Services
 				throw new InvalidOperationException("Employee Id is already taken.");
 			}
 
-            // Send invitation email
-            string htmlbody = string.Format(
-                "{0} {1} has requested you join their organization on Allyis Apps{2}!<br /> Click <a href={3}>Here</a> to create an account and join!",
-                spResults.Item2,
-                spResults.Item3,
-                subscriptionId == null ? "" : ", " + UserContext.OrganizationSubscriptions[subscriptionId.Value].OrganizationName,
+			// Send invitation email
+			string htmlbody = string.Format(
+				"{0} {1} has requested you join their organization on Allyis Apps{2}!<br /> Click <a href={3}>Here</a> to create an account and join!",
+				spResults.Item2,
+				spResults.Item3,
+				subscriptionId == null ? "" : ", " + UserContext.OrganizationSubscriptions[subscriptionId.Value].OrganizationName,
 				url.Replace("%7BaccessCode%7D", code));
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
@@ -646,7 +646,7 @@ namespace AllyisApps.Services
 				Country = organization.Country,
 				CreatedUtc = organization.CreatedUtc,
 				FaxNumber = organization.FaxNumber,
-                OrganizationName = organization.OrganizationName,
+				OrganizationName = organization.OrganizationName,
 				OrganizationId = organization.OrganizationId,
 				PhoneNumber = organization.PhoneNumber,
 				SiteUrl = organization.SiteUrl,
@@ -676,7 +676,7 @@ namespace AllyisApps.Services
 				Country = organization.Country,
 				CreatedUtc = organization.CreatedUtc,
 				FaxNumber = organization.FaxNumber,
-                OrganizationName = organization.OrganizationName,
+				OrganizationName = organization.OrganizationName,
 				OrganizationId = organization.OrganizationId,
 				PhoneNumber = organization.PhoneNumber,
 				SiteUrl = organization.SiteUrl,
