@@ -6,14 +6,16 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO [StaffingManager].[ApplicationDocument]
-		([ApplicationId],
-		[DocumentLink],
-		[DocumentName])
-	VALUES
-		(@applicationId,
-		@documentLink,
-		@documentName)
+	BEGIN TRANSACTION
+		INSERT INTO [StaffingManager].[ApplicationDocument]
+			([ApplicationId],
+			[DocumentLink],
+			[DocumentName])
+		VALUES
+			(@applicationId,
+			@documentLink,
+			@documentName)
 
-	SELECT SCOPE_IDENTITY();
+		SELECT SCOPE_IDENTITY();
+	COMMIT TRANSACTION
 END
