@@ -30,7 +30,7 @@ BEGIN
 		[CustomerId] = @customerId, 
 		[AddressId] = @addressId,
 		[StartDate] = @startDate, 
-		[PositionStatus] = @positionStatus, 
+		[PositionStatusId] = @positionStatus, 
 		[PositionTitle] = @positionTitle,
 		[BillingRateFrequency] = @billingRateFrequency,
 		[BillingRateAmount] = @billingRateAmount,
@@ -40,7 +40,7 @@ BEGIN
 		[RequiredSkills] = @requiredSkills,
 		[JobResponsibilities] = @jobResponsibilities,
 		[DesiredSkills] = @desiredSkills,
-		[PositionLevel] = @positionLevel,
+		[PositionLevelId] = @positionLevel,
 		[HiringManager] = @hiringManager,
 		[TeamName] = @teamName,
 		[PositionModifiedUtc] = SYSUTCDATETIME()

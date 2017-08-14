@@ -332,6 +332,11 @@
     <Build Include="StaffingManager\Stored Procedures\DeleteApplicant.sql" />
     <Build Include="StaffingManager\Stored Procedures\DeleteApplication.sql" />
     <Build Include="StaffingManager\Stored Procedures\DeleteApplicationDocument.sql" />
+    <Build Include="StaffingManager\Stored Procedures\SetupTag.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetPosition.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetPositionsByOrganizationId.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetTags.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetTagsByPositionId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
