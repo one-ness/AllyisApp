@@ -17,11 +17,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 	public partial class ExpenseController : BaseController
 	{
 		/// <summary>
-		/// Adds an empty item to the create report view.
+		/// Displays the items in the create report view.
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		public ActionResult AddItem(ExpenseCreateModel model)
+		public ActionResult DisplayItems(ExpenseCreateModel model)
 		{
 			//model.Items.Add(new ExpenseItem());
 			return PartialView("_AjaxExpenseReportItems", model);

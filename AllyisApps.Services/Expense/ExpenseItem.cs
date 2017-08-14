@@ -29,7 +29,7 @@ namespace AllyisApps.Services
         /// The transaction date
         /// </summary>
 		[Required]
-        public DateTime TransactionDate { get; set; }
+        public string TransactionDate { get; set; }
 
         /// <summary>
         /// The amount of the expense

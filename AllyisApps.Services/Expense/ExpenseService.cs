@@ -92,7 +92,7 @@ namespace AllyisApps.Services
 				IsBillableToCustomer = item.IsBillableToCustomer,
 				ItemDescription = item.ExpenseItemName,
 				ModifiedUtc = item.ExpenseItemModifiedUtc,
-				TransactionDate = item.TransactionDate,
+				TransactionDate = Convert.ToDateTime(item.TransactionDate),
 			};
 
 			DBHelper.UpdateExpenseItem(itemEntity);
@@ -168,7 +168,7 @@ namespace AllyisApps.Services
 				ExpenseReportId = entity.ExpenseReportId,
 				IsBillableToCustomer = entity.IsBillableToCustomer,
 				ItemDiscription = entity.ItemDescription,
-				TransactionDate = entity.TransactionDate
+				TransactionDate = entity.TransactionDate.ToString()
 			};
 		}
 		
@@ -185,7 +185,7 @@ namespace AllyisApps.Services
 				IsBillableToCustomer = item.IsBillableToCustomer,
 				ItemDescription = item.ItemDiscription,
 				ModifiedUtc = item.ExpenseItemModifiedUtc,
-				TransactionDate = item.TransactionDate,
+				TransactionDate = Convert.ToDateTime(item.TransactionDate),
 			};
 			DBHelper.CreateExpenseItem(itemEntity);
 		}

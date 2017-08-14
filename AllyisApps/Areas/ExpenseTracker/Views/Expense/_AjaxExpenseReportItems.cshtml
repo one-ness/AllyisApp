@@ -9,9 +9,9 @@
 		var item = Model.Items[i];
 		string dateVal = "";
 		string amountVal = "";
-		if (item.TransactionDate.ToShortDateString() != "1/1/0001")
+		if (Convert.ToDateTime(item.TransactionDate).ToShortDateString() != "1/1/0001")
 		{
-			dateVal = item.TransactionDate.ToShortDateString();
+			dateVal = Convert.ToDateTime(item.TransactionDate).ToShortDateString();
 		}
 		if (item.Amount != 0)
 		{

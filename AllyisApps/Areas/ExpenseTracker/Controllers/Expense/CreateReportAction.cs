@@ -21,8 +21,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         /// <param name="reportName">The report name.</param>
         /// <param name="businessJustification">The justification.</param>
         /// <returns>An action result.</returns>
-        public ActionResult CreateReport(int subscriptionId, int submittedById, List<ExpenseItem> items, DateTime date, string reportName = "", string businessJustification = "")
+        public ActionResult CreateReport(int subscriptionId, int submittedById, string date, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
 		{
+			if (items == null)
+			{
+				items = new List<ExpenseItem>();
+			}
 			var subscription = AppService.GetSubscription(subscriptionId);
 			var organizationId = subscription.OrganizationId;
 			
@@ -30,9 +34,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				ReportTitle = reportName,
 				BusinessJustification = businessJustification,
-				CreatedUtc = date,
-				ModifiedUtc = date,
-				ReportDate = date,
+				CreatedUtc = Convert.ToDateTime(date),
+				ModifiedUtc = Convert.ToDateTime(date),
+				ReportDate = Convert.ToDateTime(date),
 				SubmittedById = submittedById,
 				OrganizationId = organizationId
 			};
@@ -42,8 +46,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			foreach (var item in items)
 			{
 				item.AccountId = submittedById;
-				item.ExpenseItemCreatedUtc = item.TransactionDate;
-				item.ExpenseItemModifiedUtc = item.TransactionDate;
+				item.ExpenseItemCreatedUtc = Convert.ToDateTime(item.TransactionDate);
+				item.ExpenseItemModifiedUtc = Convert.ToDateTime(item.TransactionDate);
 				item.ExpenseReportId = reportId;
 				AppService.CreateExpenseItem(item);
 			}
