@@ -294,4 +294,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[TimeEntryModifiedUtc]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="46ba1d07-3038-4b76-8ba4-5b92584b0fc5" ChangeDateTime="08/14/2017 21:07:23">
+    <Property Name="ElementName" Value="[StaffingManager].[Position].[PositionStatus]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[StaffingManager].[Position]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[PositionStatusId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="cf7b1fe7-6394-41a3-9515-82e65b62ea9e" ChangeDateTime="08/14/2017 21:07:54">
+    <Property Name="ElementName" Value="[StaffingManager].[Position].[PositionLevel]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[StaffingManager].[Position]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[PositionLevelId]" />
+  </Operation>
 </Operations>

@@ -134,17 +134,17 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<int>("[StaffingManager].[CreatePosition]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				return connection.Query<int>("[StaffingManager].[CreatePosition]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
 		}
 
-        /// <summary>
-        /// Adds an Tag to the DB if there is not already another tag with the same name.
-        /// </summary>
-        /// <param name="name">The name of the tag to be added to the db.</param>
-        /// <param name="positionId">The name of the tag to be added to the db.</param>
-        /// <returns>The id of the created Tag or -1 if the tag name is already in use.</returns>
-        public int CreateTag(string name, int positionId)
+		/// <summary>
+		/// Adds an Tag to the DB if there is not already another tag with the same name.
+		/// </summary>
+		/// <param name="name">The name of the tag to be added to the db.</param>
+		/// <param name="positionId">The name of the tag to be added to the db.</param>
+		/// <returns>The id of the created Tag or -1 if the tag name is already in use.</returns>
+		public int CreateTag(string name, int positionId)
 		{
 			if (name == null)
 			{
@@ -153,46 +153,173 @@ namespace AllyisApps.DBModel
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@tagName", name);
-			parameters.Add("@positionId", positionId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default -1
-				connection.Execute("[StaffingManager].[SetupTag]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[StaffingManager].[CreateTag]", parameters, commandType: CommandType.StoredProcedure);
 			}
 
-            return parameters.Get<int>("@returnValue");
-        }
-
-		/// <summary>
-		/// Adds a PositionTag to the DB when there is already another tag with the same name.
-		/// </summary>
-		/// <param name="tagId">The name of the tag to be added to the db.</param>
-		/// <param name="positionId">The name of the tag to be added to the db.</param>
-		/// <returns>The id of the created Tag or -1 if the tag name is already in use.</returns>
-		public void AssignTag(int tagId, int positionId)
-		{
-			if (tagId == 0)
-			{
-				throw new System.ArgumentException("tag ID cannot be null or empty.");
-			}
-
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@tagId", tagId);
-			parameters.Add("@positionId", positionId);
+			DynamicParameters parameters2 = new DynamicParameters();
+			parameters2.Add("@tagId", parameters.Get<int>("@returnValue"));
+			parameters2.Add("@positionId", positionId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default -1
-				connection.Execute("[StaffingManager].[CreatePositionTag]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[StaffingManager].[CreatePositionTag]", parameters2, commandType: CommandType.StoredProcedure);
 			}
-			
+
+			return parameters.Get<int>("@returnValue");
 		}
 
 
 		////////////////////////////
 		/*          READ          */
 		////////////////////////////
+
+		/// <summary>
+		/// Retrieves the application with a given id.
+		/// </summary>
+		/// <param name="applicationId">The id of the application.</param>
+		/// <returns>One application, if present.</returns>
+		public ApplicationDBEntity GetApplicationById(int applicationId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicationId", applicationId);
+
+			ApplicationDBEntity application;
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				application = connection.Query<ApplicationDBEntity>("[StaffingManager].[GetApplicationById]", parameters, commandType: CommandType.StoredProcedure).Single();
+				application.ApplicationDocuments = connection.Query<ApplicationDocumentDBEntity>("[StaffingManager].[GetApplicationDocumentsByApplicationId]", parameters, commandType: CommandType.StoredProcedure);
+			}
+			return application;
+		}
+
+		/// <summary>
+		/// Retrieves all applications **and associated application information** for a given position.
+		/// </summary>
+		/// <param name="positionId">The id of the position.</param>
+		/// <returns>
+		/// List of application objects containing:
+		///  - Application info
+		///  - Applicant info
+		///  - Application document info
+		/// </returns>
+		public IEnumerable<ApplicationDBEntity> GetApplicationsInfoByPositionId(int positionId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@positionId", positionId);
+
+			IEnumerable<ApplicationDBEntity> applications;
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				applications = connection.Query<ApplicationDBEntity>("[StaffingManager].[GetApplicationsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
+				foreach (ApplicationDBEntity application in applications)
+				{
+					application.ApplicationDocuments = connection.Query<ApplicationDocumentDBEntity>(
+						"[StaffingManager].[GetApplicationDocumentsByApplicationId]",
+						new { applicationId = application.ApplicationId },
+						commandType: CommandType.StoredProcedure);
+
+					application.Applicant = connection.Query<ApplicantDBEntity>(
+						"[StaffingManager].[GetApplicantById]",
+						new { applicantId = application.ApplicantId },
+						commandType: CommandType.StoredProcedure).Single();
+				}
+			}
+			return applications;
+		}
+
+		/// <summary>
+		/// Retrieves all applications that have been submitted by the given applicant.
+		/// </summary>
+		/// <param name="applicantId">The id of the applicant.</param>
+		/// <returns>All applications that have been submitted by the given applicant.</returns>
+		public IEnumerable<ApplicationDBEntity> GetApplicationsByApplicantId(int applicantId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicantId", applicantId);
+
+			IEnumerable<ApplicationDBEntity> applications;
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				applications = connection.Query<ApplicationDBEntity>("[StaffingManager].[GetApplicationsByApplicantId]", parameters, commandType: CommandType.StoredProcedure);
+				foreach (ApplicationDBEntity application in applications)
+				{
+					application.ApplicationDocuments = connection.Query<ApplicationDocumentDBEntity>(
+						"[StaffingManager].[GetApplicationDocumentsByApplicationId]",
+						new { applicationId = application.ApplicationId },
+						commandType: CommandType.StoredProcedure);
+				}
+			}
+			return applications;
+		}
+
+		/// <summary>
+		/// Retrieves the application document with a given id.
+		/// </summary>
+		/// <param name="applicationDocumentId">The id of the application document.</param>
+		/// <returns>One application document, if present.</returns>
+		public ApplicationDocumentDBEntity GetApplicationDocumentById(int applicationDocumentId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicationDocumentId", applicationDocumentId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<ApplicationDocumentDBEntity>("[StaffingManager].[GetApplicationDocumentById]", parameters, commandType: CommandType.StoredProcedure).Single();
+			}
+		}
+
+		/// <summary>
+		/// Retrieves all application documents attached to the given application.
+		/// </summary>
+		/// <param name="applicationId">The id of the application, containing multiple application documents.</param>
+		/// <returns>All application documents attached to the given application.</returns>
+		public IEnumerable<ApplicationDocumentDBEntity> GetApplicationDocumentsByApplicationId(int applicationId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicationId", applicationId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<ApplicationDocumentDBEntity>("[StaffingManager].[GetApplicationDocumentsByApplicationId]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Retrieves the applicant with a given id.
+		/// </summary>
+		/// <param name="applicantId">The id of the applicant.</param>
+		/// <returns>One applicant, if present.</returns>
+		public ApplicantDBEntity GetApplicantById(int applicantId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicantId", applicantId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<ApplicantDBEntity>("[StaffingManager].[GetApplicantById]", parameters, commandType: CommandType.StoredProcedure).Single();
+			}
+		}
+
+		/// <summary>
+		/// Retrieves the applicant that submitted the given application.
+		/// </summary>
+		/// <param name="applicationId">The id of the application.</param>
+		/// <returns>The applicant that submitted the given application.</returns>
+		public ApplicantDBEntity GetApplicantByApplicationId(int applicationId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicationId", applicationId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<ApplicantDBEntity>("[StaffingManager].[GetApplicantByApplicationId]", parameters, commandType: CommandType.StoredProcedure).Single();
+			}
+		}
 
 		/// <summary>
 		/// Retrieves the Position with a given id.
@@ -206,7 +333,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<dynamic>("[StaffingManager].[GetPosition]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				return connection.Query<dynamic>("[StaffingManager].[GetPositionByPositionId]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
 		}
 
@@ -223,34 +350,6 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<dynamic>("[StaffingManager].[GetPositionsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
-		/// Retrieves the tags on a position.
-		/// </summary>
-		/// <param name="positionId">The id of the posiion.</param>
-		/// <returns>One Position.</returns>
-		public IEnumerable<dynamic> GetTagsByPositionId(int positionId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@positionId", positionId);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<dynamic>("[StaffingManager].[GetTagsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
-		/// Retrieves All tags
-		/// </summary>
-		/// <returns>All the tags</returns>
-		public IEnumerable<dynamic> GetTags()
-		{ 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<dynamic>("[StaffingManager].[GetTags]", commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -366,12 +465,12 @@ namespace AllyisApps.DBModel
 			parameters.Add("@positionLevel", position.PositionLevel);
 			parameters.Add("@hiringManager", position.HiringManager);
 			parameters.Add("@teamName", position.TeamName);
-            parameters.Add("@address", position.Address);
-            parameters.Add("@city", position.City);
-            parameters.Add("@state", position.State);
-            parameters.Add("@country", position.Country);
-            parameters.Add("@postalCode ", position.PostalCode);
-            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			parameters.Add("@address", position.Address);
+			parameters.Add("@city", position.City);
+			parameters.Add("@state", position.State);
+			parameters.Add("@country", position.Country);
+			parameters.Add("@postalCode ", position.PostalCode);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Execute("[StaffingManager].[UpdatePosition]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -381,6 +480,51 @@ namespace AllyisApps.DBModel
 		////////////////////////////
 		/*         DELETE         */
 		////////////////////////////
+
+		/// <summary>
+		/// Deletes an applicant from the database
+		/// </summary>
+		/// <param name="applicantId">The applicant to be deleted</param>
+		public void DeleteApplicant(int applicantId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicantId", applicantId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Execute("[StaffingManager].[DeleteApplicant]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Deletes an application from the database
+		/// </summary>
+		/// <param name="applicationId">The applicant to be deleted</param>
+		public void DeleteApplication(int applicationId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicationId", applicationId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Execute("[StaffingManager].[DeleteApplication]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Deletes an application document from the database
+		/// </summary>
+		/// <param name="applicationDocumentId">The applicant to be deleted</param>
+		public void DeleteApplicationDocument(int applicationDocumentId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@applicationDocumentId", applicationDocumentId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Execute("[StaffingManager].[DeleteApplicationDocument]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
 
 		/// <summary>
 		/// Deletes a tag from the database

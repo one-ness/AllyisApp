@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 
 namespace AllyisApps.DBModel.StaffingManager
 {
@@ -36,16 +37,26 @@ namespace AllyisApps.DBModel.StaffingManager
 		/// <summary>
 		/// Gets or sets DateCreated.
 		/// </summary>
-		public DateTime CreatedUtc { get; set; }
+		public DateTime ApplicationCreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets date modified.
 		/// </summary>
-		public DateTime ModifiedUtc { get; set; }
+		public DateTime ApplicationModifiedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets Notes.
 		/// </summary>
 		public string Notes { get; set; }
+
+		/// <summary>
+		/// Gets or sets the ApplicationDocument list.
+		/// </summary>
+		public IEnumerable<ApplicationDocumentDBEntity> ApplicationDocuments { get; set; }
+
+		/// <summary>
+		/// Gets or sets the ApplicantDBEntity.
+		/// </summary>
+		public ApplicantDBEntity Applicant { get; set; }
 	}
 }

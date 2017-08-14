@@ -13,21 +13,23 @@
 	@notes NVARCHAR (MAX)
 AS
 BEGIN
-	SET NOCOUNT ON
-	UPDATE [Lookup].[Address] SET 
-		[Address1] = @address,
-		[City] = @city,
-		[StateId] = @state,
-		[CountryId] = @country,
-		[PostalCode] = @postalCode
-	WHERE [AddressId] = @addressId
+	BEGIN TRANSACTION
+		SET NOCOUNT ON
+		UPDATE [Lookup].[Address] SET 
+			[Address1] = @address,
+			[City] = @city,
+			[StateId] = @state,
+			[CountryId] = @country,
+			[PostalCode] = @postalCode
+		WHERE [AddressId] = @addressId
 
-	SET NOCOUNT OFF
-	UPDATE [StaffingManager].[Applicant] SET
-		[FirstName] = @firstName,
-		[LastName] = @lastName,
-		[Email] = @email,
-		[PhoneNumber] = @phoneNumber,
-		[Notes] = @notes
-	WHERE [ApplicantId] = @applicantId
+		SET NOCOUNT OFF
+		UPDATE [StaffingManager].[Applicant] SET
+			[FirstName] = @firstName,
+			[LastName] = @lastName,
+			[Email] = @email,
+			[PhoneNumber] = @phoneNumber,
+			[Notes] = @notes
+		WHERE [ApplicantId] = @applicantId
+	COMMIT TRANSACTION
 END
