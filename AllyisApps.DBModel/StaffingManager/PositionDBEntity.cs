@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AllyisApps.DBModel.StaffingManager
 { 
@@ -97,5 +98,10 @@ namespace AllyisApps.DBModel.StaffingManager
         /// </summary>
         public string TeamName { get; set; }
 
-    }
+		/// <summary>
+		/// Gets or sets a list of tags on the position
+		/// </summary>
+		public IEnumerable<TagDBEntity> Tags { get; set; }
+
+	}
 }

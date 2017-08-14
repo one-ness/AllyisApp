@@ -43,7 +43,7 @@ BEGIN
 		[CustomerId], 
 		[AddressId],
 		[StartDate], 
-		[PositionStatus], 
+		[PositionStatusId], 
 		[PositionTitle],
 		[BillingRateFrequency],
 		[BillingRateAmount],
@@ -53,7 +53,7 @@ BEGIN
 		[RequiredSkills],
 		[JobResponsibilities],
 		[DesiredSkills],
-		[PositionLevel],
+		[PositionLevelId],
 		[HiringManager],
 		[TeamName])
 	VALUES 	
