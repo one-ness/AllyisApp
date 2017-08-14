@@ -4,7 +4,7 @@
 AS
 BEGIN
 	SET NOCOUNT ON;
-		INSERT INTO [StaffingManager].[Tag] 
+	INSERT INTO [StaffingManager].[Tag] 
 		([TagName])
 	VALUES 	 
 		(@tagName)

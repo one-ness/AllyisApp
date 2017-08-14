@@ -339,6 +339,12 @@
     <Build Include="StaffingManager\Stored Procedures\GetApplicationsByApplicantId.sql" />
     <Build Include="StaffingManager\Stored Procedures\GetApplicationDocumentById.sql" />
     <Build Include="StaffingManager\Stored Procedures\GetApplicantByApplicationId.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetPosition.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetPositionTagsByPosition.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetPositionsByOrganizationId.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetTags.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetTagsByPositionId.sql" />
+    <Build Include="StaffingManager\Stored Procedures\SetupTag.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

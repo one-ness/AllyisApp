@@ -7,13 +7,12 @@ BEGIN
 	SET NOCOUNT ON;
 
 	BEGIN TRANSACTION
-		
 		EXEC [StaffingManager].[CreateTag] @tagName;
 
 		DECLARE @tagId INT = IDENT_CURRENT('[StaffingManager].[TagId]');
 
 		EXEC [StaffingManager].[CreatePositionTag] @tagId, @positionId;
 
-		SELECT IDENT_CURRENT('[StaffingManager].[tagId]');
+		SELECT IDENT_CURRENT('[StaffingManager].[TagId]');
 	COMMIT TRANSACTION
 END

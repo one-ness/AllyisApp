@@ -2,8 +2,11 @@ CREATE PROCEDURE [StaffingManager].[GetTagsByPositionId]
 	@positionId INT
 AS
 BEGIN
-	SELECT [StaffingManager].[Tag].[TagName]
-	FROM [StaffingManager].[Tag]
-	JOIN [StaffingManager].[PositionTag] WITH (NOLOCK) ON [PositionTag].[TagId] = [Tag].[TagId]
-	WHERE [StaffingManager].[PositionTag].[PositionId] = @positionId
+	SELECT
+		@positionId AS [PositionId],
+		[T].[TagId],
+		[T].[TagName]
+	FROM [StaffingManager].[Tag] [T]
+		JOIN [StaffingManager].[PositionTag] [PT] ON [PT].[TagId] = [T].[TagId]
+	WHERE [PT].[PositionId] = @positionId
 END

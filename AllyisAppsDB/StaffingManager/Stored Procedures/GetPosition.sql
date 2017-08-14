@@ -8,7 +8,7 @@ BEGIN
 		[CustomerId],
 		[Position].[AddressId] AS 'Address',  
 		[StartDate], 
-		[PositionStatus],
+		[PositionStatusId],
 		[PositionTitle], 
 		[BillingRateFrequency],
 		[BillingRateAmount],
@@ -18,11 +18,11 @@ BEGIN
 		[RequiredSkills],
 		[JobResponsibilities],
 		[DesiredSkills],
-		[PositionLevel],
+		[PositionLevelId],
 		[HiringManager],
 		[TeamName]
 	FROM [StaffingManager].[Position]
 	LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [Position].[AddressId]
-	WHERE [Position].[PositionId] = @PositionId
+	WHERE [Position].[PositionId] = @positionId
 	ORDER BY [StaffingManager].[Position].[PositionCreatedUtc] DESC
 END

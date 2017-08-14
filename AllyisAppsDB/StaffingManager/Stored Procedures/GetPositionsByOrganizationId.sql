@@ -6,9 +6,9 @@ BEGIN
 	SELECT [PositionId],
 		[OrganizationId],
 		[CustomerId],
-		[Position].[AddressId] AS 'Address',  
+		[Position].[AddressId],
 		[StartDate], 
-		[PositionStatus],
+		[PositionStatusId],
 		[PositionTitle], 
 		[BillingRateFrequency],
 		[BillingRateAmount],
@@ -18,11 +18,11 @@ BEGIN
 		[RequiredSkills],
 		[JobResponsibilities],
 		[DesiredSkills],
-		[PositionLevel],
+		[PositionLevelId],
 		[HiringManager],
 		[TeamName],
 		[Address].[City],
-		[Address].[postalCode]
+		[Address].[PostalCode]
 	FROM [StaffingManager].[Position]
 	LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [Position].[AddressId]
 	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
