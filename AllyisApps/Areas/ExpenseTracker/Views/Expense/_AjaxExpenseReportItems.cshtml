@@ -3,7 +3,7 @@
 
 @model ExpenseCreateModel
 
-<div>
+<div class="items">
 	@for (int i = 0; i < Model.Items.Count(); i++)
 	{
 		var item = Model.Items[i];
@@ -36,4 +36,18 @@
 			</a>
 		</div>
 	}
+	<div style="text-align: center;">
+		<a class="addItem">
+			<span class="btn btn-primary">
+				Add Item
+			</span>
+		</a>
+	</div>
 </div>
+
+@Scripts.Render("~/bundles/jquery")
+<script>
+	$('.addItem').on('click', function () {
+		$('.items').load('@Url.Action("AddItem")', @Html.Raw(Json.Encode(@Model)));
+	});
+</script>

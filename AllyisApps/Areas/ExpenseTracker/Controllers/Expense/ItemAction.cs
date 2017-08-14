@@ -28,6 +28,18 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		}
 
 		/// <summary>
+		/// Adds a new item to the model and displays the items in the create report view.
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
+		public ActionResult AddItem(ExpenseCreateModel model)
+		{
+			model.Items.Add(new ExpenseItem());
+			//return PartialView("_AjaxExpenseReportItems", model);
+			return PartialView("_AjaxExpenseReportItems", model);
+		}
+
+		/// <summary>
 		/// Removes the item from the model with the given ItemId.
 		/// </summary>
 		/// <param name="model"></param>

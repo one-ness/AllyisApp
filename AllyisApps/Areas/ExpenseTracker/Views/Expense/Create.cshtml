@@ -84,19 +84,10 @@
 					<div class="panel-heading">
 						Items
 					</div>
-					<div class="items">
-						@{
-							Model.Items.Add(new ExpenseItem());
-							Html.RenderAction("DisplayItems", Model);
-						}
-					</div>
-					<div style="text-align: center;">
-						<a class="addItem">
-							<span class="btn btn-primary">
-								Add Item
-							</span>
-						</a>
-					</div>
+					@{
+						Model.Items.Add(new ExpenseItem());
+						Html.RenderAction("DisplayItems", Model);
+					}
 				</div>
 
 				<div class="row">
@@ -142,10 +133,5 @@
 		$('.datepicker').each(function () {
 			$(this).datepicker();
 		});
-		@*$(function () {
-			$('.addItem').on('click', function () {
-				$('.items').load('@Url.Action("AddItem")', @Html.Raw(Json.Encode(@Model)));
-			});
-		});*@
 	</script>
 }
