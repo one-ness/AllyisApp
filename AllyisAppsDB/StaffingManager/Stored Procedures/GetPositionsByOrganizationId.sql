@@ -13,7 +13,7 @@ BEGIN
 		[BillingRateFrequency],
 		[BillingRateAmount],
 		[DurationMonths],
-		[EmploymentType],
+		[EmploymentTypeId],
 		[PositionCount],
 		[RequiredSkills],
 		[JobResponsibilities],
@@ -21,7 +21,10 @@ BEGIN
 		[PositionLevelId],
 		[HiringManager],
 		[TeamName],
+		[Address].[Address1],
 		[Address].[City],
+		[State].[StateName],
+		[Country].[CountryName],
 		[Address].[PostalCode]
 	FROM [StaffingManager].[Position]
 	LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [Position].[AddressId]

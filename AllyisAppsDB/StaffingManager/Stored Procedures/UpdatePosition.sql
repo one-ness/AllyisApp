@@ -35,7 +35,7 @@ BEGIN
 		[BillingRateFrequency] = @billingRateFrequency,
 		[BillingRateAmount] = @billingRateAmount,
 		[DurationMonths] = @durationMonths,
-		[EmploymentType] = @employmentType,
+		[EmploymentTypeId] = @employmentType,
 		[PositionCount] = @positionCount,
 		[RequiredSkills] = @requiredSkills,
 		[JobResponsibilities] = @jobResponsibilities,

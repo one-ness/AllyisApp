@@ -7,31 +7,31 @@ namespace AllyisApps.Services.TimeTracker
 		/// <summary>
 		/// Entry level.
 		/// </summary>
-		entry = 1,
+		Entry,
 
 		/// <summary>
 		/// Junior level.
 		/// </summary>
-		junior = 2,
+		Junior,
 
 		/// <summary>
 		/// Mid level.
 		/// </summary>
-		mid = 3,
+		Mid,
 
 		/// <summary>
 		/// Senior level
 		/// </summary>
-		senior = 4,
+		Senior,
 
 		/// <summary>
 		/// Principal level.
 		/// </summary>
-		principal = 5,
+		Principal,
 
 		/// <summary>
 		/// Executive level.
 		/// </summary>
-		executive = 6
+		Executive
 	}
 }

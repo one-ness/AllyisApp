@@ -401,11 +401,11 @@ namespace AllyisApps.DBModel
 		/// Retrieves All tags
 		/// </summary>
 		/// <returns>All the tags</returns>
-		public IEnumerable<dynamic> GetTags()
+		public IEnumerable<TagDBEntity> GetTags()
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<dynamic>("[StaffingManager].[GetTags]", commandType: CommandType.StoredProcedure);
+				return connection.Query<TagDBEntity>("[StaffingManager].[GetTags]", commandType: CommandType.StoredProcedure);
 			}
 		}
 

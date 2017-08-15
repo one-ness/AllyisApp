@@ -48,7 +48,7 @@ BEGIN
 		[BillingRateFrequency],
 		[BillingRateAmount],
 		[DurationMonths],
-		[EmploymentType],
+		[EmploymentTypeId],
 		[PositionCount],
 		[RequiredSkills],
 		[JobResponsibilities],

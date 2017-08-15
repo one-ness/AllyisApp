@@ -294,4 +294,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[TimeEntryModifiedUtc]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="52b32b4f-9b1c-4043-b7f4-87641f83ff97" ChangeDateTime="08/15/2017 17:50:00">
+    <Property Name="ElementName" Value="[StaffingManager].[Position].[EmploymentType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[StaffingManager].[Position]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[EmploymentTypeId]" />
+  </Operation>
 </Operations>

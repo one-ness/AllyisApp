@@ -1,32 +1,32 @@
 ﻿using System;
 
-namespace AllyisApps.Services.TimeTracker
+namespace AllyisApps.Services.StaffingManager
 {
 	public enum PositionStatusEnum : int
 	{
 		/// <summary>
 		/// Active.
 		/// </summary>
-		active = 1,
+		Active,
 
 		/// <summary>
 		/// Closed, no longer accepting applicants.
 		/// </summary>
-		closed = 2,
+		Closed,
 
 		/// <summary>
 		/// Filled, the position has been filled, no longer accpeting apllicants.
 		/// </summary>
-		won = 3,
+		Won,
 
 		/// <summary>
 		/// On Hold.
 		/// </summary>
-		onHold = 4,
+		OnHold,
 
 		/// <summary>
 		/// lost.
 		/// </summary>
-		lost = 5
+		Lost
 	}
 }
