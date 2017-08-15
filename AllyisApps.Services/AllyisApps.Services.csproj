@@ -90,6 +90,10 @@
     <Compile Include="ServiceSettings.cs" />
     <Compile Include="StaffingManager\Position.cs" />
     <Compile Include="StaffingManager\EmploymentTypeEnum.cs" />
+    <Compile Include="StaffingManager\Applicant.cs" />
+    <Compile Include="StaffingManager\ApplicationDocument.cs" />
+    <Compile Include="StaffingManager\Application.cs" />
+    <Compile Include="StaffingManager\ApplicationStatusEnum.cs" />
     <Compile Include="StaffingManager\StaffingManagerService.cs" />
     <Compile Include="StaffingManager\PositionLevelEnum.cs" />
     <Compile Include="StaffingManager\PositionStatusEnum.cs" />

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AllyisApps.Services.TimeTracker
+﻿namespace AllyisApps.Services.StaffingManager
 {
 	public enum PositionLevelEnum : int
 	{
