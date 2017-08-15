@@ -30,7 +30,7 @@ namespace AllyisApps.Services.StaffingManager
 		private string state;
 		private string country;
 		private string postalCode;
-		private IEnumerable<Tag> tags;
+		private List<Tag> tags;
 
 		/// <summary>
 		/// This contructor for use by DBEntity to be passed to view
@@ -85,7 +85,7 @@ namespace AllyisApps.Services.StaffingManager
 			int? billingRateAmount = null, 
 			string jobResponsibilities = null, 
 			string desiredSkills = null, 
-			IEnumerable<Tag> tags = null,
+			List<Tag> tags = null,
 			string hiringManager = null, 
 			string teamName = null)
 		{
@@ -176,10 +176,7 @@ namespace AllyisApps.Services.StaffingManager
 		/// </summary>
 		public DateTime? StartDate
 		{
-			get
-			{
-				return startDate;
-			}
+			get { return startDate; }
 			set
 			{
 				if(value == null) throw new ArgumentNullException("StartDate", "The Start Date cannot be blank");
@@ -192,10 +189,7 @@ namespace AllyisApps.Services.StaffingManager
 		/// </summary>
 		public int PositionStatusId
 		{
-			get
-			{
-				return positionStatusId;
-			}
+			get { return positionStatusId; }
 			set
 			{
 				if (!Enum.IsDefined(typeof(PositionStatusEnum), value)) throw new ArgumentOutOfRangeException("PositionStatusId", value, "Position Status was not defined");
@@ -207,10 +201,7 @@ namespace AllyisApps.Services.StaffingManager
 		/// </summary>
 		public string PositionTitle
 		{
-			get
-			{
-				return PositionTitle;
-			}
+			get { return PositionTitle; }
 			set
 			{
 				if (value.Length > 140 || value.Length <= 0) throw new ArgumentOutOfRangeException("PositionTitle", value, "The position title cannot be blank or over 140 characters");
@@ -241,10 +232,7 @@ namespace AllyisApps.Services.StaffingManager
 		/// </summary>
 		public int DurationMonths
 		{
-			get
-			{
-				return durationMonths;
-			}
+			get { return durationMonths; }
 			set
 			{
 				if (value < 1) throw new ArgumentOutOfRangeException("DurationMonths", value, "The Month Duration cannot be less than 1 Month");
@@ -270,10 +258,7 @@ namespace AllyisApps.Services.StaffingManager
 		/// </summary>
 		public int PositionCount
 		{
-			get
-			{
-				return positionCount;
-			}
+			get { return positionCount; }
 			set
 			{
 				if (value < 0) throw new ArgumentOutOfRangeException("PositionCount", value, "Position Count cannot be less than 0");
@@ -326,10 +311,7 @@ namespace AllyisApps.Services.StaffingManager
 		/// </summary>
 		public string HiringManager
 		{
-			get
-			{
-				return hiringManager;
-			}
+			get { return hiringManager; }
 			set
 			{
 				if (value.Length > 140) throw new ArgumentOutOfRangeException("HiringManager", value, "Hiring Manager Name cannot be over 140 characters");
@@ -341,10 +323,7 @@ namespace AllyisApps.Services.StaffingManager
 		/// Gets or sets the name of the team this position is for
 		/// </summary>
 		public string TeamName {
-			get
-			{
-				return teamName;
-			}
+			get { return teamName; }
 			set
 			{
 				if(value.Length > 140) throw new ArgumentOutOfRangeException("TeamName", value, "Team Name cannot be  over 140 characters");
@@ -400,10 +379,14 @@ namespace AllyisApps.Services.StaffingManager
 		/// <summary>
 		/// Gets or sets a list of tags on the position
 		/// </summary>
-		public IEnumerable<Tag> Tags
+		public List<Tag> Tags
 		{ 
 			get { return tags; }
-			set { tags = value; }
+			set
+			{
+				if (value.Count > 10) throw new ArgumentOutOfRangeException("Tags", value, "A position can only have a maximum of 10 tags");
+				tags = value;
+			}
 		}
 
 	}
