@@ -31,12 +31,22 @@ namespace AllyisApps.DBModel.StaffingManager
 		/// <summary>
 		/// Get or sets the Start date of the position
 		/// </summary>
+		public DateTime PositionCreatedUtc { get; set; }
+
+		/// <summary>
+		/// Get or sets the Start date of the position
+		/// </summary>
+		public DateTime PositionModifiedUtc { get; set; }
+
+		/// <summary>
+		/// Get or sets the Start date of the position
+		/// </summary>
 		public DateTime StartDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets the status int(enum) of the position
 		/// </summary>
-		public int PositionStatus { get; set; }
+		public int PositionStatusId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the position name
@@ -86,7 +96,7 @@ namespace AllyisApps.DBModel.StaffingManager
 		/// <summary>
 		/// Gets or sets the poition level description (eg: Senior, Junior)
 		/// </summary>
-		public string PositionLevelId { get; set; }
+		public int PositionLevelId { get; set; }
 
 		/// <summary>
 		/// Get or sets the name of the responsible hiring manager
@@ -127,7 +137,7 @@ namespace AllyisApps.DBModel.StaffingManager
 		/// <summary>
 		/// Gets or sets a list of tags on the position
 		/// </summary>
-		public IEnumerable<TagDBEntity> Tags { get; set; }
+		public List<TagDBEntity> Tags { get; set; }
 
 	}
 }
