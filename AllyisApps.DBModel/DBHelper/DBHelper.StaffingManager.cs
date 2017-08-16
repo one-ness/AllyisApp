@@ -118,17 +118,17 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", position.OrganizationId);
 			parameters.Add("@addressId", position.AddressId);
 			parameters.Add("@startDate", position.StartDate);
-			parameters.Add("@positionStatus", position.PositionStatus);
+			parameters.Add("@positionStatus", position.PositionStatusId);
 			parameters.Add("@positionTitle", position.PositionTitle);
 			parameters.Add("@billingRateFrequency", position.BillingRateFrequency);
 			parameters.Add("@billingRateAmount", position.BillingRateAmount);
 			parameters.Add("@durationMonths", position.DurationMonths);
-			parameters.Add("@employmentType", position.EmploymentType);
+			parameters.Add("@employmentType", position.EmploymentTypeId);
 			parameters.Add("@positionCount", position.PositionCount);
 			parameters.Add("@requiredSkills", position.RequiredSkills);
 			parameters.Add("@jobResponsiblities", position.JobResponsibilities);
 			parameters.Add("@desiredSkills", position.DesiredSkills);
-			parameters.Add("@positionLevel", position.PositionLevel);
+			parameters.Add("@positionLevel", position.PositionLevelId);
 			parameters.Add("@hiringManager", position.HiringManager);
 			parameters.Add("@teamName", position.TeamName);
 
@@ -351,7 +351,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				position = connection.Query<PositionDBEntity>("[StaffingManager].[GetPosition]", parameters, commandType: CommandType.StoredProcedure).Single();
-				position.Tags = connection.Query<TagDBEntity>("[StaffingManager].[GetTagsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
+				position.Tags = connection.Query<TagDBEntity>("[StaffingManager].[GetTagsByPositionId]", parameters, commandType: CommandType.StoredProcedure).ToList<TagDBEntity>();
 			}
 			return position;
 		}
@@ -375,7 +375,7 @@ namespace AllyisApps.DBModel
 					position.Tags = connection.Query<TagDBEntity>(
 						"[StaffingManager].[GetTagsByPositionId]",
 						new { positionId = position.PositionId },
-						commandType: CommandType.StoredProcedure);
+						commandType: CommandType.StoredProcedure).ToList<TagDBEntity>();
 				}
 			}
 			return positions;

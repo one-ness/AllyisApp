@@ -95,7 +95,7 @@ namespace AllyisApps.Services.StaffingManager
 			set
 			{
 				if(value == null) throw new ArgumentNullException("StartDate", "The Start Date cannot be blank");
-				value = startDate;
+				startDate =  value;
 			}
 		}
 
@@ -108,6 +108,7 @@ namespace AllyisApps.Services.StaffingManager
 			set
 			{
 				if (!Enum.IsDefined(typeof(PositionStatusEnum), value)) throw new ArgumentOutOfRangeException("PositionStatusId", value, "Position Status was not defined");
+				positionStatusId = value;
 			}
 		}
 
@@ -120,7 +121,7 @@ namespace AllyisApps.Services.StaffingManager
 			set
 			{
 				if (value.Length > 140 || value.Length <= 0) throw new ArgumentOutOfRangeException("PositionTitle", value, "The position title cannot be blank or over 140 characters");
-				value = positionTitle;
+				positionTitle = value;
 			}
 		}
 
