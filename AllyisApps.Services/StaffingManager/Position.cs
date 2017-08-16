@@ -5,6 +5,9 @@ namespace AllyisApps.Services.StaffingManager
 {
 	public class Position
 	{
+		private const int titleLength = 140;
+		private const int maxTags = 10;
+
 		private int positionStatusId;
 		private string positionTitle;
 		private int durationMonths;
@@ -71,7 +74,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => positionTitle;
 			set
 			{
-				if (value.Length > 140 || value.Length <= 0) throw new ArgumentOutOfRangeException(nameof(positionTitle), value, "The position title cannot be blank or over 140 characters");
+				if (value.Length > titleLength || value.Length <= 0) throw new ArgumentOutOfRangeException(nameof(positionTitle), value, "The position title cannot be blank or over " + titleLength.ToString() + " characters");
 				positionTitle = value;
 			}
 		}
@@ -161,7 +164,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => hiringManager;
 			set
 			{
-				if (value.Length > 140) throw new ArgumentOutOfRangeException(nameof(hiringManager), value, "Hiring Manager Name cannot be over 140 characters");
+				if (value.Length > titleLength) throw new ArgumentOutOfRangeException(nameof(hiringManager), value, "Hiring Manager Name cannot be over " + titleLength.ToString() + " characters");
 				hiringManager = value;
 			}
 		}
@@ -174,7 +177,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => teamName;
 			set
 			{
-				if (value.Length > 140) throw new ArgumentOutOfRangeException(nameof(teamName), value, "Team Name cannot be  over 140 characters");
+				if (value.Length > titleLength) throw new ArgumentOutOfRangeException(nameof(teamName), value, "Team Name cannot be  over " + titleLength.ToString() + " characters");
 				teamName = value;
 			}
 		}
@@ -212,7 +215,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => tags;
 			set
 			{
-				if (value.Count > 10) throw new ArgumentOutOfRangeException(nameof(tags), value, "A position can only have a maximum of 10 tags");
+				if (value.Count > maxTags) throw new ArgumentOutOfRangeException(nameof(tags), value, "A position can only have a maximum of " + maxTags.ToString() + " tags");
 				tags = value;
 			}
 		}
