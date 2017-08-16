@@ -1,0 +1,74 @@
+﻿using System.Web.Mvc;
+using System.Collections.Generic;
+using AllyisApps.Controllers;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.ExpenseTracker.Expense;
+
+namespace AllyisApps.Areas.ExpenseTracker.Controllers
+{
+    /// <summary>
+    /// The ExpenseController class with ReportView actions.
+    /// </summary>
+    public partial class ExpenseController : BaseController
+    {
+        /// <summary>
+        /// The ReportView Action.
+        /// </summary>
+        /// <param name="reportId">The report id.</param>
+        /// <param name="subscriptionId">The subscription id.</param>
+        /// <returns>The view with selected report details.</returns>
+        public ActionResult ReportView(int subscriptionId, int reportId)
+        {
+            var model = InitializeReportViewModel(subscriptionId, reportId);
+
+            UserSubscription subInfo = null;
+            this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+
+            ViewBag.SubscriptionName = subInfo.SubscriptionName;
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// Initializes the ReportViewModel.
+        /// </summary>
+        /// <param name="id">The report id.</param>
+        /// <param name="subscriptionId">The subscription id.</param>
+        /// <returns>The view model.</returns>
+        public ReportViewModel InitializeReportViewModel(int subscriptionId, int id)
+        {
+            var report = AppService.GetExpenseReport(id);
+            var reportItems = AppService.GetExpenseItemsByReportId(id);
+            var user = AppService.GetUser(report.SubmittedById);
+            var history = AppService.GetExpenseHistoryByReportId(id);
+            List<ExpenseHistoryViewModel> reportHistory = new List<ExpenseHistoryViewModel>();
+
+            foreach(var item in history)
+            {
+                var reviewer = AppService.GetUser(item.UserId);
+                reportHistory.Add(new ExpenseHistoryViewModel()
+                {
+                    Reviewer = string.Format("{0} {1}", reviewer.FirstName, reviewer.LastName),
+                    Status = (ExpenseStatusEnum)item.Status,
+                    Submitted = item.CreatedUtc,
+                    Text = item.Text
+                });
+            }
+
+            return new ReportViewModel()
+            {
+                ReprortTitle = report.ReportTitle,
+                SubmittedBy = string.Format("{0} {1}", user.FirstName, user.LastName),
+                CreatedUtc = report.CreatedUtc,
+                ModifiedUtc = report.ModifiedUtc,
+                Justification = report.BusinessJustification,
+                ReportDate = report.ReportDate,
+                Status = (ExpenseStatusEnum)report.ReportStatus,
+                Expenses = reportItems,
+                History = reportHistory,
+                UserId = user.UserId,
+                SubscriptionId = subscriptionId
+            };
+        }
+    }
+}

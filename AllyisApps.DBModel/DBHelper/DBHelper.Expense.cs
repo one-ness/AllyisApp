@@ -269,5 +269,62 @@ namespace AllyisApps.DBModel
                 return connection.Query<int>("[Expense].[DeleteExpenseReport]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault() == 1;
             }
         }
+
+        //=================//
+        /* Expense History */
+        //=================//
+
+        /// <summary>
+        /// Creates an expense history item.
+        /// </summary>
+        /// <param name="entity">An ExpenseHistoryDBEntity</param>
+        public void CreateExpenseHistory(ExpenseHistoryDBEntity entity)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@historyId", entity.HistoryId);
+            parameters.Add("@reportId", entity.ExpenseReportId);
+            parameters.Add("@userId", entity.UserId);
+            parameters.Add("@status", entity.Status);
+            parameters.Add("@text", entity.Text);
+            parameters.Add("@createdUtc", entity.CreatedUtc);
+            parameters.Add("@modifiedUtc", entity.ModifiedUtc);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                connection.Execute("[Expense].[CreateExpenseHistory]", parameters, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        /// <summary>
+        /// Gets an expense report history.
+        /// </summary>
+        /// <param name="reportId">The report id.</param>
+        /// <returns></returns>
+        public IEnumerable<ExpenseHistoryDBEntity> GetExpenseHistory(int reportId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add(@"reportId", reportId);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                return connection.Query<ExpenseHistoryDBEntity>("[Expense].[GetExpenseHistory]", parameters, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        /// <summary>
+        /// Updates an expense history item.
+        /// </summary>
+        /// <param name="entity">The expense history entity.</param>
+        public void UpdateExpenseHistory(ExpenseHistoryDBEntity entity)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@historyId", entity.HistoryId);
+            parameters.Add("@text", entity.Text);
+
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                connection.Execute("[Expense].[UpdateExpenseHistory]", parameters, commandType: CommandType.StoredProcedure);
+            }
+        }
     }
 }

@@ -1,18 +1,10 @@
-﻿using AllyisApps.Controllers;
-using AllyisApps.Services;
-using System.Web.Mvc;
-using System.Threading.Tasks;
-using AllyisApps.ViewModels.ExpenseTracker.Expense;
-using System.Collections.Generic;
-using System;
-using System.Linq;
-using AllyisApps.DBModel;
-using AllyisApps.DBModel.Finance;
+﻿using System.Web.Mvc;
+using AllyisApps.Controllers;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
 	/// <summary>
-	/// Edits a report
+	/// Edits a report.
 	/// </summary>
 	public partial class ExpenseController : BaseController
 	{

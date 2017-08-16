@@ -20,6 +20,11 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         public int UserId { get; set; }
 
         /// <summary>
+        /// Gets or sets the current subsctipition id.
+        /// </summary>
+        public int SubscriptionId { get; set; }
+
+        /// <summary>
         /// Gets or sets the report title.
         /// </summary>
         public string ReprortTitle { get; set; }
@@ -58,5 +63,10 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         /// Gets or sets the associated expense items.
         /// </summary>
         public IEnumerable<ExpenseItem> Expenses { get; set; }
+
+        /// <summary>
+        /// Gets or sets the associeate report history.
+        /// </summary>
+        public IEnumerable<ExpenseHistoryViewModel> History { get; set; }
     }
 }
