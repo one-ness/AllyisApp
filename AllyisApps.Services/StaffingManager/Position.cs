@@ -94,7 +94,7 @@ namespace AllyisApps.Services.StaffingManager
 			get { return startDate; }
 			set
 			{
-				if(value == null) throw new ArgumentNullException("StartDate", "The Start Date cannot be blank");
+				if(value == null) throw new ArgumentNullException(nameof(startDate), "The Start Date cannot be blank");
 				startDate =  value;
 			}
 		}
@@ -107,7 +107,7 @@ namespace AllyisApps.Services.StaffingManager
 			get { return positionStatusId; }
 			set
 			{
-				if (!Enum.IsDefined(typeof(PositionStatusEnum), value)) throw new ArgumentOutOfRangeException("PositionStatusId", value, "Position Status was not defined");
+				if (!Enum.IsDefined(typeof(PositionStatusEnum), value)) throw new ArgumentOutOfRangeException(nameof(PositionStatusId), value, "Position Status was not defined");
 				positionStatusId = value;
 			}
 		}
@@ -120,7 +120,7 @@ namespace AllyisApps.Services.StaffingManager
 			get { return PositionTitle; }
 			set
 			{
-				if (value.Length > 140 || value.Length <= 0) throw new ArgumentOutOfRangeException("PositionTitle", value, "The position title cannot be blank or over 140 characters");
+				if (value.Length > 140 || value.Length <= 0) throw new ArgumentOutOfRangeException(nameof(positionTitle), value, "The position title cannot be blank or over 140 characters");
 				positionTitle = value;
 			}
 		}
@@ -151,7 +151,7 @@ namespace AllyisApps.Services.StaffingManager
 			get { return durationMonths; }
 			set
 			{
-				if (value < 1) throw new ArgumentOutOfRangeException("DurationMonths", value, "The Month Duration cannot be less than 1 Month");
+				if (value < 1) throw new ArgumentOutOfRangeException(nameof(durationMonths), value, "The Month Duration cannot be less than 1 Month");
 				durationMonths = value;
 			}
 		}
@@ -164,7 +164,7 @@ namespace AllyisApps.Services.StaffingManager
 			get { return employmentTypeId; }
 			set
 			{
-				if (value <= 0 ) throw new ArgumentOutOfRangeException("EmploymentTypeId", value, "Employment Type cannot be 0");
+				if (value <= 0 ) throw new ArgumentOutOfRangeException(nameof(employmentTypeId), value, "Employment Type cannot be 0");
 				employmentTypeId = value;
 			}
 		}
@@ -177,7 +177,7 @@ namespace AllyisApps.Services.StaffingManager
 			get { return positionCount; }
 			set
 			{
-				if (value < 0) throw new ArgumentOutOfRangeException("PositionCount", value, "Position Count cannot be less than 0");
+				if (value < 0) throw new ArgumentOutOfRangeException(nameof(positionCount), value, "Position Count cannot be less than 0");
 				positionCount = value;
 			}
 		}
@@ -190,7 +190,7 @@ namespace AllyisApps.Services.StaffingManager
 			get { return requiredSkills; }
 			set
 			{
-				if(value == null) throw new ArgumentOutOfRangeException("RequiredSkills", value, "Required Skills cannot be left blank");
+				if(value == null) throw new ArgumentOutOfRangeException(nameof(requiredSkills), value, "Required Skills cannot be left blank");
 				requiredSkills = value;
 			}
 		}
@@ -230,7 +230,7 @@ namespace AllyisApps.Services.StaffingManager
 			get { return hiringManager; }
 			set
 			{
-				if (value.Length > 140) throw new ArgumentOutOfRangeException("HiringManager", value, "Hiring Manager Name cannot be over 140 characters");
+				if (value.Length > 140) throw new ArgumentOutOfRangeException(nameof(hiringManager), value, "Hiring Manager Name cannot be over 140 characters");
 				hiringManager = value;
 			}
 		}
@@ -242,7 +242,7 @@ namespace AllyisApps.Services.StaffingManager
 			get { return teamName; }
 			set
 			{
-				if(value.Length > 140) throw new ArgumentOutOfRangeException("TeamName", value, "Team Name cannot be  over 140 characters");
+				if(value.Length > 140) throw new ArgumentOutOfRangeException(nameof(teamName), value, "Team Name cannot be  over 140 characters");
 				teamName = value;
 			}
 		}
@@ -300,7 +300,7 @@ namespace AllyisApps.Services.StaffingManager
 			get { return tags; }
 			set
 			{
-				if (value.Count > 10) throw new ArgumentOutOfRangeException("Tags", value, "A position can only have a maximum of 10 tags");
+				if (value.Count > 10) throw new ArgumentOutOfRangeException( nameof(tags), value, "A position can only have a maximum of 10 tags");
 				tags = value;
 			}
 		}
