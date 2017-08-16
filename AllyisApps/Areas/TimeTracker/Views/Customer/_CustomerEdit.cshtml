@@ -29,11 +29,11 @@
 
 				<div class="form-group">
 					@Html.ReqLabelFor(m => m.Country, Strings.Country)
-					@Html.DropDownListFor(m => m.Country, new SelectList(Model.GetLocalizedValidCoutriesDictionary(), "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control" })
+					@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control" , @id= ViewConstants.DdlCountriesId })
 				</div>
 				<div class="form-group">
 					@Html.ReqLabelFor(m => m.State, Strings.State)
-					@Html.DropDownListFor(m => m.State, new SelectList(new Dictionary<string, string>(), "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control" })
+					@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control", @id=ViewConstants.DdlStatesId })
 				</div>
 
 				<div class="form-group">

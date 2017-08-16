@@ -8,7 +8,7 @@
         /// <summary>
         /// Gets or sets the address' Id
         /// </summary>
-        public int AddressId { get; set; }
+        public int? AddressId { get; set; }
 
         /// <summary>
         /// Gets or sets address1
@@ -33,7 +33,7 @@
 		/// <summary>
 		/// Gets or sets the state id
 		/// </summary>
-		public int StateId { get; set; }
+		public int? StateId { get; set; }
 
         /// <summary>
         /// Gets or sets the PostalCode
@@ -48,7 +48,7 @@
 		/// <summary>
 		/// Gets or sets the country id
 		/// </summary>
-		public int CountryId { get; set; }
+		public int? CountryId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the country code

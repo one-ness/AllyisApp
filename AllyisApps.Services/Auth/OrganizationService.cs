@@ -15,6 +15,7 @@ using AllyisApps.DBModel.Billing;
 using AllyisApps.Lib;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Lookup;
+using AllyisApps.DBModel.Lookup;
 
 namespace AllyisApps.Services
 {
@@ -640,6 +641,8 @@ namespace AllyisApps.Services
 				return null;
 			}
             Address address = null;
+
+            
             if (organization.AddressId != null)
             {
                 address = new Address()
@@ -674,14 +677,20 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="organization">Organization instance.</param>
 		/// <returns>OrganizationDBEntity instance.</returns>
-		public static OrganizationDBEntity GetDBEntityFromOrganization(Organization organization)
+		public  OrganizationDBEntity GetDBEntityFromOrganization(Organization organization)
 		{
 			if (organization == null)
 			{
 				return null;
 			}
 
-			return new OrganizationDBEntity
+            //Ensure that organizion buisneess object does not attempt to set CountryName or state name without ID
+            //Should not happen but can from import service.
+            organization.Address?.EnsureDBRef(this);
+
+            
+
+            return new OrganizationDBEntity
 			{
 				AddressId = organization.Address?.AddressId,
 				Address = organization.Address?.Address1,
@@ -690,8 +699,8 @@ namespace AllyisApps.Services
                 CountryCode = organization.Address?.CountryCode,
                 StateName = organization.Address?.StateName,
                 StateId = organization.Address?.StateId,
-                PostalCode = organization.Address?.PostalCode,
 
+                PostalCode = organization.Address?.PostalCode,
                 CreatedUtc = organization.CreatedUtc,
 				FaxNumber = organization.FaxNumber,
                 OrganizationName = organization.OrganizationName,
@@ -701,6 +710,24 @@ namespace AllyisApps.Services
 				Subdomain = organization.Subdomain,
 			};
 		}
+
+        /// <summary>
+        /// Toodo: Good idea need time to implement fully
+        /// </summary>
+        /// <param name="organization"></param>
+        /// <returns></returns>
+        public Tuple<OrganizationDBEntity,AddressDBEntity> GetDBEntitiesFormOrganization(Organization organization)
+        {
+            if (organization == null)
+            {
+                return null;
+            }
+            organization.Address?.EnsureDBRef(this);
+
+            return new Tuple<OrganizationDBEntity, AddressDBEntity>(
+                GetDBEntityFromOrganization(organization),
+                GetDBEntityFromAddress(organization.Address));
+        }
 
 		/// <summary>
 		/// Translates an InvitationDBEntity into an InvitationInfo business object.

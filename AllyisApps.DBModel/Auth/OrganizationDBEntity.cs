@@ -32,40 +32,40 @@ namespace AllyisApps.DBModel.Auth
         /// </summary>
         public int? AddressId { get; set; }
 
-		/// <summary>
-		/// Gets or sets the organization's physical address.
-		/// </summary>
-		public string Address { get; set; }
+		///// <summary>
+		///// Gets or sets the organization's physical address.
+		///// </summary>
+		//public string Address { get; set; }
 
-		/// <summary>
-		/// Gets or sets the organization's city.
-		/// </summary>
-		public string City { get; set; }
+		///// <summary>
+		///// Gets or sets the organization's city.
+		///// </summary>
+		//public string City { get; set; }
 
-		/// <summary>
-		/// Gets or sets the organization's state.
-		/// </summary>
-		public string StateName { get; set; }
+		///// <summary>
+		///// Gets or sets the organization's state.
+		///// </summary>
+		//public string StateName { get; set; }
 
-		/// <summary>
-		/// Gets or sets the organization's country.
-		/// </summary>
-		public string CountryName { get; set; }
+		///// <summary>
+		///// Gets or sets the organization's country.
+		///// </summary>
+		//public string CountryName { get; set; }
 
-        /// <summary>
-        /// StateID
-        /// </summary>
-        public int? StateId { get; set; }
+  //      /// <summary>
+  //      /// StateID
+  //      /// </summary>
+  //      public int? StateId { get; set; }
 
-        /// <summary>
-        /// Country Code
-        /// </summary>
-        public string CountryCode { get; set; }
+  //      /// <summary>
+  //      /// Country Code
+  //      /// </summary>
+  //      public string CountryCode { get; set; }
 
-		/// <summary>
-		/// Gets or sets the organization's postal code.
-		/// </summary>
-		public string PostalCode { get; set; }
+		///// <summary>
+		///// Gets or sets the organization's postal code.
+		///// </summary>
+		//public string PostalCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's phone number.

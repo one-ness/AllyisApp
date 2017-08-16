@@ -256,8 +256,7 @@ namespace AllyisApps.Services
 				result.LastName = expando.User.LastName;
 				result.Email = expando.User.Email;
 
-				// set result to self
-				this.SetUserContext(result);
+				
 
 				// get organization and roles
 				foreach (var item in expando.OrganizationsAndRoles)
@@ -269,19 +268,22 @@ namespace AllyisApps.Services
 				foreach (var item in expando.SubscriptionsAndRoles)
 				{
 					UserSubscription sub = new UserSubscription();
-					sub.AreaUrl = item.AreadUrl;
+					sub.AreaUrl = item.AreaUrl;
 					sub.OrganizationId = item.OrganizationId;
 					sub.OrganizationName = item.OrganizationName;
 					sub.ProductId = (ProductIdEnum)item.ProductId;
 					sub.ProductName = item.ProductName;
 					sub.ProductRoleId = item.ProductRoleId;
-					sub.ProductRoleName = item.ProductRoleName;
+					//sub.ProductRoleName = item.ProductRoleName; Logic Fails here as this is a one-to-many for this information I don't think we use it.
 					sub.SkuId = item.SkuId;
 					sub.SubscriptionId = item.SubscriptionId;
 					sub.SubscriptionName = item.SubscriptionName;
 					result.UserSubscriptions.Add(sub.SubscriptionId, sub);
 				}
-			}
+                
+                // set result to self
+                this.SetUserContext(result);
+            }
 
 			return result;
 		}
@@ -598,13 +600,17 @@ namespace AllyisApps.Services
         /// </summary>
         /// <param name="user">UserDBEntity instance.</param>
         /// <returns>User instance.</returns>
-        public static User InitializeUser(UserDBEntity user)
+        public User InitializeUser(UserDBEntity user)
 		{
 			if (user == null)
 			{
 				return null;
 			}
-
+            Address address = null;
+            if (user.AddressId != null)
+            {
+                address = getAddress(user.AddressId);
+            }
 			return new User
 			{
 				AccessFailedCount = user.AccessFailedCount,
@@ -622,6 +628,7 @@ namespace AllyisApps.Services
 				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
+                Address = address,
 			};
 		}
 
@@ -630,46 +637,38 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="user">User instance.</param>
 		/// <returns>UserDBEntity instance.</returns>
-		public static UserDBEntity GetDBEntityFromUser(User user)
+		public UserDBEntity GetDBEntityFromUser(User user)
 		{
-			return null;
-			//if (user == null)
-			//{
-			//	return null;
-			//}
+            return new UserDBEntity()
+            {
+                AddressId = user.Address?.AddressId,
+                AccessFailedCount = user.AccessFailedCount,
+                DateOfBirth = user.DateOfBirth,
+                Email = user.Email,
+                IsEmailConfirmed = user.IsEmailConfirmed,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                IsLockoutEnabled = user.IsLockoutEnabled,
+                LockoutEndDateUtc = user.LockoutEndDateUtc,
+                PasswordHash = user.PasswordHash,
+                PasswordResetCode = user.PasswordResetCode,
+                PhoneExtension = user.PhoneExtension,
+                PhoneNumber = user.PhoneNumber,
+                IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
+                IsTwoFactorEnabled = user.IsTwoFactorEnabled,
+                UserId = user.UserId,
+                PreferredLanguageId = "en-US"          // TODO: Put this into UserInfo and do proper lookup
+            };
 
-			//return new UserDBEntity
-			//{
-			//	AccessFailedCount = user.AccessFailedCount,
-			//	Address = user.Address.Address1,
-			//	City = user.Address.City,
-			//	Country = user.Address.Country,
-			//	DateOfBirth = user.DateOfBirth,
-			//	Email = user.Email,
-			//	IsEmailConfirmed = user.IsEmailConfirmed,
-			//	FirstName = user.FirstName,
-			//	LastName = user.LastName,
-			//	IsLockoutEnabled = user.IsLockoutEnabled,
-			//	LockoutEndDateUtc = user.LockoutEndDateUtc,
-			//	PasswordHash = user.PasswordHash,
-			//	PasswordResetCode = user.PasswordResetCode,
-			//	PhoneExtension = user.PhoneExtension,
-			//	PhoneNumber = user.PhoneNumber,
-			//	IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
-			//	State = user.Address.State,
-			//	IsTwoFactorEnabled = user.IsTwoFactorEnabled,
-			//	UserId = user.UserId,
-			//	PostalCode = user.Address.PostalCode,
-			//	PreferredLanguageId = "en-US"          // TODO: Put this into UserInfo and do proper lookup
-			//};
-		}
+            
+        }
 
 		/// <summary>
 		/// Translates a <see cref="UserRolesDBEntity"/> into a <see cref="UserRolesInfo"/>.
 		/// </summary>
 		/// <param name="userRoles">UserRolesDBEntity instance.</param>
 		/// <returns>UserRolesInfo instance.</returns>
-		public static UserRolesInfo InitializeUserRolesInfo(UserRolesDBEntity userRoles)
+		public  UserRolesInfo InitializeUserRolesInfo(UserRolesDBEntity userRoles)
 		{
 			if (userRoles == null)
 			{
@@ -694,7 +693,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subUser">SubscriptionUserDBEntity instance.</param>
 		/// <returns>SubscriptionUserInfo instance.</returns>
-		public static SubscriptionUserInfo InitializeSubscriptionUserInfo(SubscriptionUserDBEntity subUser)
+		public  SubscriptionUserInfo InitializeSubscriptionUserInfo(SubscriptionUserDBEntity subUser)
 		{
 			if (subUser == null)
 			{

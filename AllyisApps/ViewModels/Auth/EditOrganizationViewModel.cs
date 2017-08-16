@@ -23,7 +23,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public EditOrganizationViewModel()
 		{
-			this.ValidCountries = new List<string>();
+			
 			this.LocalizedCountries = new Dictionary<string, string>();
             this.LocalizedStates = new Dictionary<string, string>();
 			this.IsCreating = false;
@@ -125,11 +125,6 @@ namespace AllyisApps.ViewModels.Auth
 		public bool IsCreating { get; set; }
 
 		/// <summary>
-		/// Gets a list of valid countries.
-		/// </summary>
-		public IEnumerable<string> ValidCountries { get; internal set; }
-
-		/// <summary>
 		/// selected state id
 		/// </summary>
 		public int? SelectedStateId { get; set; }
@@ -149,21 +144,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public Dictionary<string, string> LocalizedCountries { get; set; }
 
-		/// <summary>
-		/// Cleans things.
-		/// </summary>
-		/// <param name="stringToClean">The thing to clean.</param>
-		/// <returns>The cleaned thing.</returns>
-		public string Clean(string stringToClean)
-		{
-			if (stringToClean == null)
-			{
-				return string.Empty;
-			}
-			else
-			{
-				return CharsToReplace.Aggregate(stringToClean, (str, l) => str.Replace(string.Empty + l, string.Empty));
-			}
-		}
+		
 	}
 }

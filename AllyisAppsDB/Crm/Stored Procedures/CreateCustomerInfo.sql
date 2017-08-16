@@ -2,8 +2,8 @@ CREATE PROCEDURE [Crm].[CreateCustomerInfo]
 	@customerName NVARCHAR(32),
     @address NVARCHAR(100),
     @city NVARCHAR(100), 
-    @state NVARCHAR(100), 
-    @country NVARCHAR(100), 
+    @stateId int, 
+    @countryCode VARCHAR(8), 
     @postalCode NVARCHAR(50),
 	@contactEmail NVARCHAR(384), 
     @contactPhoneNumber VARCHAR(50),
@@ -29,20 +29,15 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		BEGIN TRANSACTION
-			INSERT INTO [Lookup].[Address]
-				([Address1],
-				[City],
-				[StateId],
-				[CountryId],
-				[PostalCode])
-			VALUES (@address,
-				@city,
-				(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [StateName] = @state),
-				(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @country),
-				@postalCode)
 
-			SET @addressId = SCOPE_IDENTITY();
+		begin tran t1
+
+			if (@address is not null  or @city is not null or @postalCode is not null or @stateId is not null or @countryCode is not null)
+			begin
+				exec @addressId = [Lookup].CreateAddress @address, null, @city, @stateId, @postalCode, @countryCode
+				if @@ERROR <> 0 
+					goto _failure
+			end
 
 			-- Create customer
 			INSERT INTO [Crm].[Customer] 
@@ -65,7 +60,19 @@ BEGIN
 				@organizationId, 
 				@customerOrgId);
 			SET @retId = SCOPE_IDENTITY();
-		COMMIT TRANSACTION		
+			if (@@ERROR <> 0)
+					goto _failure
 	END
 	SELECT @retId;
+		_success:
+			begin
+				commit tran t1
+				return @retId;
+			end
+
+		_failure:
+			begin
+				rollback tran t1
+				return @retId;
+			end		
 END

@@ -114,7 +114,6 @@ namespace AllyisApps.Controllers
                 PhoneNumber = organization.PhoneNumber,
                 FaxNumber = organization.FaxNumber,
                 CanDelete = canDelete,
-                ValidCountries = validCountries,
                 LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService)
             };
             model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, model.SelectedCountryCode);

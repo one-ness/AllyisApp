@@ -20,13 +20,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// GET: Customer/SubscriptionId/Delete/CustomerId.
 		/// </summary>
 		/// <param name="subscriptionId">The Subscription Id.</param>
-		/// <param name="userId">The Customer id.</param>
+		/// <param name="customerID">The Customer id.</param>
 		/// <returns>The Customer index.</returns>
 		[HttpGet]
-		public ActionResult Delete(int subscriptionId, string userId)
+		public ActionResult Delete(int subscriptionId, string customerID)
 		{
 			int numValue;
-			bool parsed = int.TryParse(userId, out numValue);
+			bool parsed = int.TryParse(customerID, out numValue);
 
 			if (!parsed)
 			{

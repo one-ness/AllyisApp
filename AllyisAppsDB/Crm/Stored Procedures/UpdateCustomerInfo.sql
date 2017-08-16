@@ -5,8 +5,8 @@ CREATE PROCEDURE [Crm].[UpdateCustomerInfo]
 	@addressId INT,
     @address NVARCHAR(100), 
     @city NVARCHAR(100), 
-    @state NVARCHAR(100), 
-    @country NVARCHAR(100), 
+    @stateId NVARCHAR(100), 
+    @countryCode VARCHAR(8), 
     @postalCode NVARCHAR(50),
     @contactPhoneNumber VARCHAR(50),
 	@faxNumber VARCHAR(50),
@@ -23,34 +23,57 @@ BEGIN
 		AND [IsActive] = 1
 		AND [CustomerId] != @customerId
 	)
-	BEGIN
-		-- new CustomerOrgId is taken by a different Customer
-		SET @retId = -1;
-	END
+		BEGIN
+			-- new CustomerOrgId is taken by a different Customer
+			SET @retId = -1;
+		END
 	ELSE
-	BEGIN
-		BEGIN TRANSACTION
-			UPDATE [Lookup].[Address]
-			SET [Address1] = @address,
-				[City] = @city,
-				[StateId] = (SELECT [StateId] FROM [Lookup].[State] WHERE [StateName] = @state), 
-				[CountryId] = (SELECT [CountryId] FROM [Lookup].[Country] WHERE [CountryName] = @country), 
-				[PostalCode] = @postalCode
-			WHERE [AddressId] = @addressId
-
-			-- update customer
-			UPDATE [Crm].[Customer]
-			SET [CustomerName] = @customerName,
-				[ContactEmail] = @contactEmail,
-				[ContactPhoneNumber] = @contactPhoneNumber, 
-				[FaxNumber] = @faxNumber,
-				[Website] = @website,
-				[EIN] = @eIN,
-				[CustomerOrgId] = @orgId
-			WHERE [CustomerId] = @customerId 
-				AND [IsActive] = 1
+		BEGIN
+			declare @temp int
+			set @temp = @addressId
+			begin tran t1
+			
+				if @addressId is not null
+					begin
+				-- update address
+						exec [Lookup].UpdateAddress @temp, @address, null, @city, @stateId, @postalCode, @countryCode
+							if @@ERROR <> 0 
+								goto _failure
+					end
+				else
+					begin
+						if(@address is not null or @city is not null or @postalCode is not null or @stateId is not null or @countryCode is not null)
+							begin 
+					-- create address
+							exec @temp =  [Lookup].CreateAddress @address, null, @city, @stateId, @postalCode, @countryCode;
+							if @@ERROR <> 0 
+								goto _failure
+							end 
+					end 
+				-- update customer
+				UPDATE [Crm].[Customer]
+				SET [CustomerName] = @customerName,
+					[ContactEmail] = @contactEmail,
+					[ContactPhoneNumber] = @contactPhoneNumber, 
+					[FaxNumber] = @faxNumber,
+					[Website] = @website,
+					[EIN] = @eIN,
+					[CustomerOrgId] = @orgId,
+					[AddressId] =  COALESCE(@temp, [AddressId])
+				WHERE [CustomerId] = @customerId 
+					AND [IsActive] = 1;
 			SET @retId = 1;
-		COMMIT TRANSACTION		
-	END
-	SELECT @retId;
+			SELECT @retId;
+			_success:
+				begin
+					commit tran t1
+					return
+				end
+
+			_failure:
+				begin
+					rollback tran t1
+					return
+				end
+		END
 END

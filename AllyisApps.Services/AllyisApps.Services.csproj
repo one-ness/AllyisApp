@@ -83,6 +83,7 @@
     <Compile Include="Expense\ExpenseService.cs" />
     <Compile Include="Finance\FinanceService.cs" />
     <Compile Include="Lookup\Address.cs" />
+    <Compile Include="Lookup\AddressService.cs" />
     <Compile Include="Pjm\PjmService.cs" />
     <Compile Include="ServiceConstants.cs" />
     <Compile Include="Service.cs" />

@@ -5,11 +5,7 @@ BEGIN
 	SET NOCOUNT ON;
 	SELECT [Customer].[CustomerId],
 		   [Customer].[CustomerName],
-		   [Address1] AS 'Address',
-		   [City],
-		   [State].[StateName] AS 'State',
-		   [Country].[CountryName] AS 'Country',
-		   [PostalCode],
+		   [Customer].[AddressId],
 		   [Customer].[ContactEmail],
 		   [Customer].[ContactPhoneNumber],
 		   [Customer].[FaxNumber],
@@ -19,8 +15,5 @@ BEGIN
 		   [Customer].[OrganizationId],
 		   [Customer].[CustomerOrgId]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 
-	LEFT JOIN [Lookup].[Address] WITH (NOLOCK) ON [Address].[AddressId] = [Customer].[AddressId]
-	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
-	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE [CustomerId] = @customerId
 END

@@ -59,7 +59,7 @@
 
                             @{
                                 string route = "";
-                                if (sub.productID == AllyisApps.Services.ProductIdEnum.TimeTracker)
+                                if (sub.productId == AllyisApps.Services.ProductIdEnum.TimeTracker)
                                 {
                                     route = Url.RouteUrl(RouteNameConstants.TimeTrackerNoIndex, new { subscriptionId = @sub.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = sub.startDate, endDate = sub.endDate});
                                 }

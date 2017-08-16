@@ -6,7 +6,7 @@
 	@address NVARCHAR(100),
 	@city NVARCHAR(100),
 	@stateID INT,
-	@countryCode NVARCHAR(8),
+	@countryCode VARCHAR(8),
 	@postalCode NVARCHAR(50),
 	@phoneNumber VARCHAR(50),
 	@faxNumber VARCHAR(50),

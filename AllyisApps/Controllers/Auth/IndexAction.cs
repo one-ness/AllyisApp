@@ -84,7 +84,7 @@ namespace AllyisApps.Controllers
                 if (userOrgInfo != null)
                 {
                     //Add subscription info 
-                    foreach (UserSubscription userSubInfo in userOrgInfo.OrganizationSubscriptions.Values)
+                    foreach (UserSubscription userSubInfo in AppService.UserContext.UserSubscriptions.Values)
                     {
                         string description =
                             userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
@@ -98,7 +98,7 @@ namespace AllyisApps.Controllers
                             int startOfWeek = AppService.GetAllSettings(userSubInfo.SubscriptionId).Item1.StartOfWeek;
                             sDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
                             eDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
-                            subViewModel.AreaUrl = Url.RouteUrl("TimeTracker_NoUserId", new { subscriptionId = 
+                            subViewModel.ProductGoToUrl = Url.RouteUrl("TimeTracker_NoUserId", new { subscriptionId = 
                                 userSubInfo.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = sDate, endDate = eDate});
                         }
                         orgViewModel.Subscriptions.Add(subViewModel);

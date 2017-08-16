@@ -33,7 +33,7 @@ BEGIN
 		   [Country].[CountryName] AS 'CountryId',
 		   [Address].[PostalCode]
 	FROM [Lookup].[Address] AS [Address] WITH (NOLOCK)
-	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
+	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryCode] = [Address].[CountryCode]
 	LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE [AddressId] = @addressId
 END
