@@ -28,11 +28,11 @@ namespace AllyisApps.Controllers
 		{
 			if (Request.IsAuthenticated)
 			{
-				return this.RedirectToLocal(returnUrl);
+				return RedirectToLocal(returnUrl);
 			}
 
 			ViewBag.ReturnUrl = returnUrl;
-			return this.View(new RegisterViewModel
+			return View(new RegisterViewModel
 			{
 				ValidCountries = AppService.ValidCountries(),
 				DateOfBirth = AppService.GetDayFromDateTime(DateTime.UtcNow.AddYears(-18).AddDays(-1))
@@ -50,35 +50,33 @@ namespace AllyisApps.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Register(RegisterViewModel model, string returnUrl)
 		{
-			if (ModelState.IsValid)
+			if (!ModelState.IsValid)
 			{
-				Guid code = Guid.NewGuid();
-				string confirmUrl = Url.Action(ActionConstants.ConfirmEmail, ControllerConstants.Account, new { id = code }, protocol: Request.Url.Scheme);
-				string confirmEmailSubject = string.Format(Strings.ConfirmEmailSubject, Strings.ApplicationTitle);
-				string confirmEmailBody = string.Format(Strings.ConfirmEmailMessage, Strings.ApplicationTitle, confirmUrl);
-
-				// TODO: Change language preference from 1 to a value grabbed from session/URL
-				string langPreference = "en-US";
-
-				// compute birthdate			
-				var birthdate = AppService.GetDateTimeFromDays(model.DateOfBirth);
-
-				// create new user in the db and get back the userId and count of invitations
-				int userId = await AppService.SetupNewUser(model.Email, model.FirstName, model.LastName, birthdate, model.Address, model.City, model.State, model.Country, model.PostalCode, model.PhoneNumber, model.Password, langPreference, confirmEmailSubject, confirmEmailBody, code);
-				if (userId > 0)
-				{
-					// sign in (and set cookie)
-					this.SignIn(userId, model.Email);
-					return this.RedirectToLocal(returnUrl);
-				}
-				else
-				{
-					Notifications.Add(new BootstrapAlert(Strings.UserAccountAlreadyExists, Variety.Danger));
-					return this.View(model);
-				}
+				return View(model); // model error
 			}
 
-			return View(model); // model error
+			Guid code = Guid.NewGuid();
+			string confirmUrl = Url.Action(ActionConstants.ConfirmEmail, ControllerConstants.Account, new { id = code }, Request.Url?.Scheme);
+			string confirmEmailSubject = string.Format(Strings.ConfirmEmailSubject, Strings.ApplicationTitle);
+			string confirmEmailBody = string.Format(Strings.ConfirmEmailMessage, Strings.ApplicationTitle, confirmUrl);
+
+			// TODO: Change language preference from 1 to a value grabbed from session/URL
+			string langPreference = "en-US";
+
+			// compute birthdate			
+			var birthdate = AppService.GetDateTimeFromDays(model.DateOfBirth);
+
+			// create new user in the db and get back the userId and count of invitations
+			int userId = await AppService.SetupNewUser(model.Email, model.FirstName, model.LastName, birthdate, model.Address, model.City, model.State, model.Country, model.PostalCode, model.PhoneNumber, model.Password, langPreference, confirmEmailSubject, confirmEmailBody, code);
+			if (userId > 0)
+			{
+				// sign in (and set cookie)
+				SignIn(userId, model.Email);
+				return RedirectToLocal(returnUrl);
+			}
+
+			Notifications.Add(new BootstrapAlert(Strings.UserAccountAlreadyExists, Variety.Danger));
+			return View(model);
 		}
 	}
 }

@@ -209,8 +209,9 @@ namespace AllyisApps.DBModel
 			ApplicationDBEntity application;
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				application = connection.Query<ApplicationDBEntity>("[StaffingManager].[GetApplicationById]", parameters, commandType: CommandType.StoredProcedure).Single();
-				application.ApplicationDocuments = connection.Query<ApplicationDocumentDBEntity>("[StaffingManager].[GetApplicationDocumentsByApplicationId]", parameters, commandType: CommandType.StoredProcedure);
+				var results = connection.QueryMultiple("[StaffingManager].[GetApplicationAndDocumentsById]", parameters, commandType: CommandType.StoredProcedure);
+				application = results.Read<ApplicationDBEntity>().Single();
+				application.ApplicationDocuments = results.Read<ApplicationDocumentDBEntity>();
 			}
 			return application;
 		}
