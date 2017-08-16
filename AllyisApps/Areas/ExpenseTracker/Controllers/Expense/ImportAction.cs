@@ -18,26 +18,25 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 	/// </summary>
 	public partial class ExpenseController : BaseController
 	{
-        /// <summary>
-        /// POST: TimeEntry/Import
-        /// Code adapted from http://techbrij.com/read-excel-xls-xlsx-asp-net-mvc-upload.
-        /// </summary>
-        /// <param name="subscriptionId">The subscription Id.</param>
-        /// <param name="upload">File to upload.</param>
-        /// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
-        [HttpPost]
+		/// <summary>
+		/// POST: TimeEntry/Import
+		/// Code adapted from http://techbrij.com/read-excel-xls-xlsx-asp-net-mvc-upload.
+		/// </summary>
+		/// <param name="subscriptionId">The subscription Id.</param>
+		/// <param name="reportId"></param>
+		/// <param name="uploads">File to upload.</param>
+		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
+		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Import(int subscriptionId, HttpPostedFileBase upload)
+		public ActionResult Import(int subscriptionId, int reportId, List<HttpPostedFileBase> uploads)
 		{
 			int organizationId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
-			var report = AppService.GetExpenseReportByOrgId(organizationId).ToList();
-			if (report != null)
-			{
-				var reportId = report.First().ExpenseReportId;
 
-				// TODO: Replace ModelState errors with exception catches and notifications
-				// TODO: Buff up the error handling (catch errors from import functions, etc.)
-				if (ModelState.IsValid && upload != null)
+			// TODO: Replace ModelState errors with exception catches and notifications
+			// TODO: Buff up the error handling (catch errors from import functions, etc.)
+			if (ModelState.IsValid && uploads != null)
+			{
+				foreach (var upload in uploads)
 				{
 					AppService.CreateExpenseFile(upload, reportId);
 				}

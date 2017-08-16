@@ -32,27 +32,32 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			var subscription = AppService.GetSubscription(subscriptionId);
 			var organizationId = subscription.OrganizationId;
 
-			var report = new ExpenseReport()
-			{
-				ReportTitle = reportName,
-				BusinessJustification = businessJustification,
-				CreatedUtc = date,
-				ModifiedUtc = date,
-				ReportDate = date,
-				SubmittedById = submittedById,
-				OrganizationId = organizationId
-			};
+			var oldReport = AppService.GetExpenseReport(reportId);
 
-			foreach (var item in items)
+			if (oldReport.ReportStatus == (int)ExpenseStatusEnum.Draft)
 			{
-				item.AccountId = submittedById;
-				item.ExpenseItemCreatedUtc = Convert.ToDateTime(item.TransactionDate);
-				item.ExpenseItemModifiedUtc = Convert.ToDateTime(item.TransactionDate);
-				item.ExpenseReportId = reportId;
-				AppService.UpdateExpenseItem(item, item.ExpenseItemId);
+				var report = new ExpenseReport()
+				{
+					ReportTitle = reportName,
+					BusinessJustification = businessJustification,
+					CreatedUtc = date,
+					ModifiedUtc = date,
+					ReportDate = date,
+					SubmittedById = submittedById,
+					OrganizationId = organizationId
+				};
+
+				foreach (var item in items)
+				{
+					item.AccountId = submittedById;
+					item.ExpenseItemCreatedUtc = Convert.ToDateTime(item.TransactionDate);
+					item.ExpenseItemModifiedUtc = Convert.ToDateTime(item.TransactionDate);
+					item.ExpenseReportId = reportId;
+					AppService.UpdateExpenseItem(item, item.ExpenseItemId);
+				}
+
+				AppService.UpdateExpenseReport(report, reportId);
 			}
-
-			AppService.UpdateExpenseReport(report, reportId);
 
 			return RedirectToAction("Index");
 		}

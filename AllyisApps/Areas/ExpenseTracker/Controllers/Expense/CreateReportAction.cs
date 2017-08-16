@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
+using System.Web;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -11,17 +12,18 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 	/// </summary>
 	public partial class ExpenseController : BaseController
 	{
-        /// <summary>
-        /// View/export expense report.
-        /// </summary>
-        /// <param name="subscriptionId">The subscription id.</param>
-        /// <param name="submittedById">The submitted by id.</param>
-        ///  <param name="items">The expense items.</param>
-        /// <param name="date">The date.</param>
-        /// <param name="reportName">The report name.</param>
-        /// <param name="businessJustification">The justification.</param>
-        /// <returns>An action result.</returns>
-        public ActionResult CreateReport(int subscriptionId, int submittedById, string date, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
+		/// <summary>
+		/// View/export expense report.
+		/// </summary>
+		/// <param name="subscriptionId">The subscription id.</param>
+		/// <param name="submittedById">The submitted by id.</param>
+		///  <param name="items">The expense items.</param>
+		/// <param name="date">The date.</param>
+		/// <param name="uploads"></param>
+		/// <param name="reportName">The report name.</param>
+		/// <param name="businessJustification">The justification.</param>
+		/// <returns>An action result.</returns>
+		public ActionResult CreateReport(int subscriptionId, int submittedById, string date, List<HttpPostedFileBase> uploads = null, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
 		{
 			if (items == null)
 			{
@@ -41,7 +43,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				OrganizationId = organizationId
 			};
 
-			var reportId = AppService.CreateExpenseReport(report);
+			int reportId = AppService.CreateExpenseReport(report);
 
 			foreach (var item in items)
 			{
@@ -52,6 +54,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				AppService.CreateExpenseItem(item);
 			}
 
+			if (uploads != null)
+			{
+				//return RedirectToAction("Import", new { subscriptionId = subscriptionId, uploads = uploads, reportId = reportId });
+			}
 			return RedirectToAction("Index");
 		}
 	}
