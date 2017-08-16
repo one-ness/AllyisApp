@@ -22,7 +22,7 @@ namespace AllyisApps.DBModel
 		////////////////////////////
 		/*         CREATE         */
 		////////////////////////////
-
+		#region Create Methods
 		/// <summary>
 		/// Adds an applicant to the DB if there is not already another applicant with the same email.
 		/// </summary>
@@ -189,10 +189,12 @@ namespace AllyisApps.DBModel
 
 		}
 
+		#endregion Create Methods
 
 		////////////////////////////
 		/*          READ          */
 		////////////////////////////
+		#region Get Methods
 
 		/// <summary>
 		/// Retrieves the application with a given id.
@@ -409,10 +411,12 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+		#endregion Get Methods
 
 		////////////////////////////
 		/*         UPDATE         */
 		////////////////////////////
+		#region Update Methods
 
 		/// <summary>
 		/// Updates the given applicant if there is not already another applicant with the same email.
@@ -532,11 +536,12 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+		#endregion Update Methods
 
 		////////////////////////////
 		/*         DELETE         */
 		////////////////////////////
-
+		#region Delete Methods
 		/// <summary>
 		/// Deletes an applicant from the database
 		/// </summary>
@@ -628,5 +633,6 @@ namespace AllyisApps.DBModel
 				connection.Execute("[StaffingManager].[DeletePosition]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
+		#endregion Delete Methods
 	}
 }
