@@ -2,6 +2,7 @@
 using AllyisApps.Services.StaffingManager;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AllyisApps.Services
 {
@@ -10,6 +11,99 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
+		///////////////////////
+		// METHOD CONVERTERS //
+		///////////////////////
+
+		#region CreateMethods
+		/// <summary>
+		/// Creates a new position.
+		/// </summary>
+		/// <param name="position">The account object to be created. </param>
+		/// <returns>The id of the created position. </returns>
+		public int CreatePosition(Position position) => DBHelper.CreatePosition(ServiceObjectToDBEntity(position));
+
+		/// <summary>
+		/// Adds an Tag to the DB if there is not already another tag with the same name.
+		/// </summary>
+		/// <param name="name">The name of the tag to be added to the db. </param>
+		/// <param name="positionId">The name of the tag to be added to the db. </param>
+		/// <returns>The id of the created Tag or -1 if the tag name is already in use. </returns>
+		public int CreateTag(string name, int positionId) => DBHelper.CreateTag(name, positionId);
+
+		/// <summary>
+		/// Adds a PositionTag to the DB when there is already another tag with the same name.
+		/// </summary>
+		/// <param name="tagId">The name of the tag to be added to the db. </param>
+		/// <param name="positionId">The name of the tag to be added to the db. </param>
+		/// <returns>The id of the created Tag or -1 if the tag name is already in use. </returns>
+		public void AssignTag(int tagId, int positionId) => DBHelper.AssignTag(tagId, positionId);
+
+		#endregion
+
+		#region GetMethods
+		/// <summary>
+		/// Get Position method that pulls a position from the DB.
+		/// </summary>
+		/// <param name="positionId">ID of position to be pulled.</param>
+		/// <returns>returns the service layer position object.</returns>
+		public Position GetPosition(int positionId) => DBEntityToServiceObject(DBHelper.GetPositionById(positionId));
+
+		/// <summary>
+		/// Get Positions by Org ID method to pull a list of Service Layer positions objects based on their org ID.
+		/// </summary>
+		/// <param name="organizationId">the tagert organizations ID number. </param>
+		/// <returns>A list of service layer Position Objects. </returns>
+		public List<Position> GetPositionByOrganizationId(int organizationId) => DBHelper.GetPositionsByOrganizationId(organizationId).Select(DBEntityToServiceObject).ToList();
+
+		/// <summary>
+		/// Get Tags by a position Id method; pulls a list of all of the positions tags as service layer Tag Objects.
+		/// </summary>
+		/// <param name="positionId"> the position whose tags are to be pulled. </param>
+		/// <returns>A list of the positions tags as service layer Tag objects</returns>
+		public List<Tag> GetTagsByPositionId(int positionId) => DBHelper.GetTagsByPositionId(positionId).Select(DBEntityToServiceObject).ToList();
+
+		/// <summary>
+		/// Gets a list of ALL current tags.
+		/// </summary>
+		/// <returns>returns a list of all current tags. </returns>
+		public List<Tag> GetTags() => DBHelper.GetTags().Select(DBEntityToServiceObject).ToList();
+
+		#endregion
+
+		#region UpdateMethods
+
+		/// <summary>
+		/// Updates the position with the given id.
+		/// </summary>
+		/// <param name="position">The service layer Position object to be passed to the DB and updated. </param>
+		/// <returns>Returns the number of rows updated.</returns>
+		public int UpdatePosition(Position position) => DBHelper.UpdatePosition(ServiceObjectToDBEntity(position));
+
+		#endregion
+
+		#region DeleteMethods
+
+		/// <summary>
+		/// Deletes a tag from the database.
+		/// </summary>
+		/// <param name="tagId">the id of the Tag to be removed from the db. </param>
+		public void DeleteTag(int tagId) => DBHelper.DeleteTag(tagId);
+
+		/// <summary>
+		/// Deletes a position tag from the database; Doesnt delete the tag, just removes it from the position.
+		/// </summary>
+		/// <param name="tagId">tag id of the tag to be removed. </param>
+		/// <param name="positionId">the position id that no longer has the tag. </param>
+		public void DeletePositionTag(int tagId, int positionId) => DBHelper.DeletePositionTag(tagId, positionId);
+
+		/// <summary>
+		/// Removes a Position from the Database.
+		/// </summary>
+		/// <param name="positionId">ID of the Position to be removed from the DB. </param>
+		public void DeletePosition(int positionId) => DBHelper.DeletePosition(positionId);
+
+		#endregion
 
 		//////////////////////////////////////////
 		// SERVICE LAYER to DB LAYER CONVERTERS //
@@ -90,8 +184,8 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Converts a DB Layer PositionDBEntity object to a service layer Position Object.
 		/// </summary>
-		/// <param name="position"> the PositionDBEntity to be converted to service layer object</param>
-		/// <returns>Returns a service layer Position Obejct</returns>
+		/// <param name="position"> the PositionDBEntity to be converted to service layer object. </param>
+		/// <returns>Returns a service layer Position Obejct. </returns>
 		public static Position DBEntityToServiceObject(PositionDBEntity position)
 		{
 			if (position == null) throw new ArgumentNullException(nameof(position), "Cannot accept a null position object.");
