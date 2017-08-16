@@ -38,9 +38,9 @@ namespace AllyisApps.Services
         /// </summary>
         /// <param name="reportId">The reports id</param>
         /// <returns>A IEnumerabe of ExpenseItems for the report.</returns>
-        public IEnumerable<ExpenseItem> GetExpenseItemsByReportId(int reportId)
+        public IList<ExpenseItem> GetExpenseItemsByReportId(int reportId)
         {
-            return DBHelper.GetExpenseItemsByReportId(reportId).Select(x => InitializeExpenseItem(x)).AsEnumerable(); ;
+            return DBHelper.GetExpenseItemsByReportId(reportId).Select(x => InitializeExpenseItem(x)).AsEnumerable().ToList(); ;
         }
 
 		/// <summary>
@@ -92,7 +92,7 @@ namespace AllyisApps.Services
 				IsBillableToCustomer = item.IsBillableToCustomer,
 				ItemDescription = item.ExpenseItemName,
 				ModifiedUtc = item.ExpenseItemModifiedUtc,
-				TransactionDate = item.TransactionDate,
+				TransactionDate = Convert.ToDateTime(item.TransactionDate),
 			};
 
 			DBHelper.UpdateExpenseItem(itemEntity);
@@ -213,7 +213,7 @@ namespace AllyisApps.Services
 				ExpenseReportId = entity.ExpenseReportId,
 				IsBillableToCustomer = entity.IsBillableToCustomer,
 				ItemDiscription = entity.ItemDescription,
-				TransactionDate = entity.TransactionDate
+				TransactionDate = entity.TransactionDate.ToString()
 			};
 		}
 
@@ -248,9 +248,9 @@ namespace AllyisApps.Services
 				ExpenseItemId = item.ExpenseItemId,
 				ExpenseReportId = item.ExpenseReportId,
 				IsBillableToCustomer = item.IsBillableToCustomer,
-				ItemDescription = item.ExpenseItemName,
+				ItemDescription = item.ItemDiscription,
 				ModifiedUtc = item.ExpenseItemModifiedUtc,
-				TransactionDate = item.TransactionDate,
+				TransactionDate = Convert.ToDateTime(item.TransactionDate),
 			};
 			DBHelper.CreateExpenseItem(itemEntity);
 		}

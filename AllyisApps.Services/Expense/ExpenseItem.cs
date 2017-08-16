@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace AllyisApps.Services
         /// <summary>
         /// The expense item name
         /// </summary>
+		[Required]
         public string ExpenseItemName { get; set; }
 
         /// <summary>
@@ -26,11 +28,13 @@ namespace AllyisApps.Services
         /// <summary>
         /// The transaction date
         /// </summary>
-        public DateTime TransactionDate { get; set; }
+		[Required]
+        public string TransactionDate { get; set; }
 
         /// <summary>
         /// The amount of the expense
         /// </summary>
+		[Required]
         public decimal Amount { get; set; }
 
         /// <summary>

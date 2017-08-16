@@ -46,8 +46,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			foreach (var item in items)
 			{
 				item.AccountId = submittedById;
-				item.ExpenseItemCreatedUtc = item.TransactionDate;
-				item.ExpenseItemModifiedUtc = item.TransactionDate;
+				item.ExpenseItemCreatedUtc = Convert.ToDateTime(item.TransactionDate);
+				item.ExpenseItemModifiedUtc = Convert.ToDateTime(item.TransactionDate);
 				item.ExpenseReportId = reportId;
 				AppService.UpdateExpenseItem(item, item.ExpenseItemId);
 			}

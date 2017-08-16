@@ -71,14 +71,14 @@ namespace AllyisApps.DBModel
         /// </summary>
         /// <param name="ReportId">The report id.</param>
         /// <returns>IEnumerable of Expense items.</returns>
-        public IEnumerable<ExpenseItemDBEntity> GetExpenseItemsByReportId(int ReportId)
+        public IList<ExpenseItemDBEntity> GetExpenseItemsByReportId(int ReportId)
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@reportId", ReportId);
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
-                return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseItemsByExpenseReportId]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable();
+                return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseItemsByExpenseReportId]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable().ToList();
             }
         }
 
