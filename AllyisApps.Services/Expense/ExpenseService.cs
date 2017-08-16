@@ -3,6 +3,7 @@ using AllyisApps.DBModel.Finance;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 
 namespace AllyisApps.Services
 {
@@ -34,14 +35,24 @@ namespace AllyisApps.Services
 		}
 
         /// <summary>
-        /// Get an expense reports items by it id.
+        /// Get expense report items by report id.
         /// </summary>
         /// <param name="reportId">The reports id</param>
         /// <returns>A IEnumerabe of ExpenseItems for the report.</returns>
         public IList<ExpenseItem> GetExpenseItemsByReportId(int reportId)
         {
-            return DBHelper.GetExpenseItemsByReportId(reportId).Select(x => InitializeExpenseItem(x)).AsEnumerable().ToList(); ;
+            return DBHelper.GetExpenseItemsByReportId(reportId).Select(x => InitializeExpenseItem(x)).AsEnumerable().ToList();
         }
+
+		/// <summary>
+		/// Get expense report files by report id
+		/// </summary>
+		/// <param name="reportId"></param>
+		/// <returns></returns>
+		public IList<string> GetExpenseFilesByReportId(int reportId)
+		{
+			return DBHelper.GetExpenseFilesByReportId(reportId).Select(x => InitializeExpenseFile(x)).AsEnumerable().ToList();
+		}
 
 		/// <summary>
 		/// Gets an expense report by its id.
@@ -171,6 +182,15 @@ namespace AllyisApps.Services
 				TransactionDate = entity.TransactionDate.ToString()
 			};
 		}
+
+		public static string InitializeExpenseFile(ExpenseFileDBEntity entity)
+		{
+			if(entity == null)
+			{
+				return null;
+			}
+			return entity.FileName;
+		}
 		
 		public void CreateExpenseItem(ExpenseItem item)
 		{
@@ -188,6 +208,17 @@ namespace AllyisApps.Services
 				TransactionDate = Convert.ToDateTime(item.TransactionDate),
 			};
 			DBHelper.CreateExpenseItem(itemEntity);
+		}
+
+		public void CreateExpenseFile(HttpPostedFileBase file, int reportId)
+		{
+			ExpenseFileDBEntity fileEntity = new ExpenseFileDBEntity()
+			{
+				FileName = file.FileName,
+				Url = "",
+				ExpenseReportId = reportId
+			};
+			DBHelper.CreateExpenseFile(fileEntity);
 		}
 
 		public int CreateExpenseReport(ExpenseReport report)

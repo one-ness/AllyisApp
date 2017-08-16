@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -28,14 +30,20 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		public ActionResult Import(int subscriptionId, HttpPostedFileBase upload)
 		{
 			int organizationId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
-			
-            // TODO: Replace ModelState errors with exception catches and notifications
-			// TODO: Buff up the error handling (catch errors from import functions, etc.)
-			if (ModelState.IsValid)
+			var report = AppService.GetExpenseReportByOrgId(organizationId).ToList();
+			if (report != null)
 			{
+				var reportId = report.First().ExpenseReportId;
+
+				// TODO: Replace ModelState errors with exception catches and notifications
+				// TODO: Buff up the error handling (catch errors from import functions, etc.)
+				if (ModelState.IsValid && upload != null)
+				{
+					AppService.CreateExpenseFile(upload, reportId);
+				}
 			}
 
-			return RedirectToAction(ActionConstants.Index, ControllerConstants.Expense, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
+			return RedirectToAction(ActionConstants.Create, ControllerConstants.Expense, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
 		}
 	}
 }
