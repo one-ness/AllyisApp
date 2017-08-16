@@ -77,11 +77,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 				}
-                CompleteProjectInfo project = AppService.GetProject(model.ProjectId);
-                if (!project.IsActive)
-                {
-                    throw new ArgumentException(Resources.Strings.MustSelectActiveProject);
-                }
+                
 
                 int id = AppService.CreateTimeEntry(new TimeEntryInfo()
 				{
