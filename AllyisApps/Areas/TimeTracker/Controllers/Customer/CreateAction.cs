@@ -33,12 +33,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			return this.View(new EditCustomerInfoViewModel
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
+                
                 IsCreating = true,
 				CustomerOrgId = idAndCountries.Item1,
 				SubscriptionId = subscriptionId,
 				OrganizationId = idAndCountries.Item2,
 				UserId = AppService.UserContext.UserId,
-				SubscriptionName = subscriptionNameToDisplay
+				SubscriptionName = subscriptionNameToDisplay,
 			});
 		}
 

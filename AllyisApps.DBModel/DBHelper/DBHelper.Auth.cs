@@ -251,32 +251,34 @@ namespace AllyisApps.DBModel
 				return connection.Execute("[Auth].[UpdateUserPasswordResetCode]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
-	
-		/// <summary>
-		/// Adds an organization to the database and sets the owner's chosen organization to th.
-		/// </summary>
-		/// <param name="organization">The OrganizationDBEntity to create.</param>
-		/// <param name="ownerId">The owner's user Id.</param>
-		/// <param name="roleId">The role associated with the creator of the organization.</param>
-		/// <param name="employeeId">The employee Id for the user creating the organization.</param>
-		/// <returns>The id of the created organization.</returns>
-		public int SetupOrganization(OrganizationDBEntity organization, int ownerId, int roleId, string employeeId)
+
+        /// <summary>
+        /// Adds an organization to the database and sets the owner's chosen organization to th.
+        /// </summary>
+        /// <param name="organization">The OrganizationDBEntity to create with address infomation.</param>
+        /// <param name="address"></param>
+        /// <param name="ownerId">The owner's user Id.</param>
+        /// <param name="roleId">The role associated with the creator of the organization.</param>
+        /// <param name="employeeId">The employee Id for the user creating the organization.</param>
+        /// <returns>The id of the created organization.</returns>
+        public int SetupOrganization(OrganizationDBEntity organization, AddressDBEntity address, int ownerId, int roleId, string employeeId)
 		{
 			if (organization == null)
 			{
 				throw new ArgumentException("organizationId cannot be null or empty.");
 			}
+            
 
-			DynamicParameters parameters = new DynamicParameters();
+            DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", ownerId);
 			parameters.Add("@roleId", roleId);
 			parameters.Add("@organizationName", organization.OrganizationName);
 			parameters.Add("@siteUrl", organization.SiteUrl);
-			parameters.Add("@address", organization.Address);
-			parameters.Add("@city", organization.City);
-			parameters.Add("@stateID", organization.StateId);
-			parameters.Add("@countryCode", organization.CountryCode);
-			parameters.Add("@postalCode", organization.PostalCode);
+			parameters.Add("@address", address?.Address1);
+			parameters.Add("@city", address?.City);
+			parameters.Add("@stateID", address?.StateId);
+			parameters.Add("@countryCode", address?.CountryCode);
+			parameters.Add("@postalCode", address?.PostalCode);
 			parameters.Add("@phoneNumber", organization.PhoneNumber);
 			parameters.Add("@faxNumber", organization.FaxNumber);
 			parameters.Add("@subdomainName", organization.Subdomain);
@@ -288,12 +290,13 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Updates the specified organization with new information.
-		/// </summary>
-		/// <param name="organization">The organization table with updates.</param>
-		/// <returns>Number of rows changed.</returns>
-		public int UpdateOrganization(OrganizationDBEntity organization)
+        /// <summary>
+        /// Updates the specified organization with new information.
+        /// </summary>
+        /// <param name="organization">The organization table with updates.</param>
+        /// <param name="address"></param>
+        /// <returns>Number of rows changed.</returns>
+        public int UpdateOrganization(OrganizationDBEntity organization, AddressDBEntity address)
 		{
 			if (organization == null)
 			{
@@ -305,11 +308,11 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationName", organization.OrganizationName);
 			parameters.Add("@siteUrl", organization.SiteUrl);
 			parameters.Add("@addressId", organization.AddressId);
-			parameters.Add("@address1", organization.Address);
-			parameters.Add("@city", organization.City);
-			parameters.Add("@stateId", organization.StateId);
-			parameters.Add("@countryCode", organization.CountryCode);
-			parameters.Add("@postalCode", organization.PostalCode);
+			parameters.Add("@address1", address?.Address1);
+			parameters.Add("@city", address?.City);
+			parameters.Add("@stateId", address?.StateId);
+			parameters.Add("@countryCode", address?.CountryCode);
+			parameters.Add("@postalCode", address?.PostalCode);
 			parameters.Add("@phoneNumber", organization.PhoneNumber);
 			parameters.Add("@faxNumber", organization.FaxNumber);
 			parameters.Add("@subdomainName", organization.Subdomain);
@@ -482,11 +485,11 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The organization's Id.</param>
 		/// <returns>The TableOrganizations containing the organization's information, null if an error is encountered.</returns>
-		public OrganizationDBEntity GetOrganization(int organizationId)
+		public dynamic GetOrganization(int organizationId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<OrganizationDBEntity>("[Auth].[GetOrg] @a", new { a = organizationId }).FirstOrDefault();
+				return connection.Query<dynamic>("[Auth].[GetOrg] @a", new { a = organizationId }).FirstOrDefault();
 			}
 		}
 
@@ -548,12 +551,12 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="userId">Parameter @userId.</param>
 		/// <returns>A list of OrganizationDBEntities containing the organizations the user is subscribed to.</returns>
-		public IEnumerable<OrganizationDBEntity> GetOrganizationsByUserId(int userId)
+		public IEnumerable<dynamic> GetOrganizationsByUserId(int userId)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				// default empty list
-				return connection.Query<OrganizationDBEntity>(
+				return connection.Query<dynamic>(
 					"[Auth].[GetOrganizationsByUserId]",
 					new
 					{
@@ -883,7 +886,7 @@ namespace AllyisApps.DBModel
 		/// the user is a member of, and a list of InvititationDBEntities for any invitations for that user.
 		/// </summary>
 		/// <param name="userId">The User Id.</param>
-		public Tuple<UserDBEntity, List<OrganizationDBEntity>, List<InvitationDBEntity>, AddressDBEntity> GetUserOrgsAndInvitations(int userId)
+		public Tuple<UserDBEntity, List<dynamic>, List<InvitationDBEntity>, AddressDBEntity> GetUserOrgsAndInvitations(int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", userId);
@@ -895,7 +898,7 @@ namespace AllyisApps.DBModel
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
 					results.Read<UserDBEntity>().SingleOrDefault(),
-					results.Read<OrganizationDBEntity>().ToList(),
+					results.Read<dynamic>().ToList(),
 					results.Read<InvitationDBEntity>().ToList(),
 					results.Read<AddressDBEntity>().SingleOrDefault());
 			}
@@ -907,7 +910,7 @@ namespace AllyisApps.DBModel
 		/// for any invitations pending in the organization, the organization's billing stripe handle, and the complete list of products.
 		/// </summary>
 		/// <param name="organizationId">The organization Id.</param>
-		public Tuple<OrganizationDBEntity, List<OrganizationUserDBEntity>, List<SubscriptionDisplayDBEntity>, List<InvitationDBEntity>, string, List<ProductDBEntity>> GetOrganizationManagementInfo(int organizationId)
+		public Tuple<dynamic, List<OrganizationUserDBEntity>, List<SubscriptionDisplayDBEntity>, List<InvitationDBEntity>, string, List<ProductDBEntity>> GetOrganizationManagementInfo(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -918,7 +921,7 @@ namespace AllyisApps.DBModel
 					parameters,
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
-					results.Read<OrganizationDBEntity>().SingleOrDefault(),
+					results.Read<dynamic>().SingleOrDefault(),
 					results.Read<OrganizationUserDBEntity>().ToList(),
 					results.Read<SubscriptionDisplayDBEntity>().ToList(),
 					results.Read<InvitationDBEntity>().ToList(),
@@ -934,7 +937,7 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">Organization id.</param>
 		/// <param name="userId">User id.</param>
 		/// <returns>.</returns>
-		public Tuple<OrganizationDBEntity, List<string>, string> GetOrgWithCountriesAndEmployeeId(int orgId, int userId)
+		public Tuple<dynamic, List<string>, string> GetOrgWithCountriesAndEmployeeId(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
@@ -946,7 +949,7 @@ namespace AllyisApps.DBModel
 					parameters,
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
-					results.Read<OrganizationDBEntity>().SingleOrDefault(),
+					results.Read<dynamic>().SingleOrDefault(),
 					results.Read<string>().ToList(),
 					results.Read<string>().SingleOrDefault());
 			}

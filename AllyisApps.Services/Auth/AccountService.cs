@@ -380,7 +380,7 @@ namespace AllyisApps.Services
 			var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
 			return Tuple.Create<User, List<Organization>, List<InvitationInfo>, Address>(
 				InitializeUser(spResults.Item1),
-				spResults.Item2.Select(odb => InitializeOrganization(odb)).ToList(),
+				spResults.Item2.Select(odb => (Organization)InitializeOrganization(odb)).ToList(),
 				spResults.Item3.Select(idb => InitializeInvitationInfo(idb)).ToList(),
 				InitializeAddress(spResults.Item4));
 		}
@@ -588,7 +588,7 @@ namespace AllyisApps.Services
 
         public IEnumerable<Organization> GetOrganizationsByUserId(int userID)
         {
-            return DBHelper.GetOrganizationsByUserId(userID).Select(o => InitializeOrganization(o));
+            return DBHelper.GetOrganizationsByUserId(userID).Select(o => (Organization) InitializeOrganization(o));
         }
 
         #endregion public

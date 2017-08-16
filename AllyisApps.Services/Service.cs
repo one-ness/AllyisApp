@@ -216,7 +216,7 @@ namespace AllyisApps.Services
 			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetReportInfo(subInfo.OrganizationId, subscriptionId);
 			return Tuple.Create(
-				spResults.Item1.Select(cdb => InitializeCustomer(cdb)).ToList(),
+				spResults.Item1.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList(),
 				spResults.Item2.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
 				spResults.Item3.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());
 		}

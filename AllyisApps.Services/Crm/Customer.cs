@@ -71,7 +71,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the bool value indicating if this Customer is currently active.
 		/// </summary>
-		public bool IsActive { get; set; }
+		public bool? IsActive { get; set; }
 
         public Customer()
         {

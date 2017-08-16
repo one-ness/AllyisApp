@@ -85,6 +85,6 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets DateCreated.
 		/// </summary>
-		public DateTime CreatedUtc { get; set; }
+		public DateTime? CreatedUtc { get; set; }
 	}
 }

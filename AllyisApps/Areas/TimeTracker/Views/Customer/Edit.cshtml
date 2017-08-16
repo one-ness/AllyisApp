@@ -17,7 +17,7 @@
 
 @section Scripts {
     <script type="text/javascript">
-        var preserveState = "@(Model != null ? (States.ResourceManager.GetString(Model.State) ?? Model.State) : string.Empty)";
+        var preserveState = "@(Model.State != null ? (States.ResourceManager.GetString(Model.State) ?? Model.State) : string.Empty)";
         var dropdownempty = "@Strings.DropDownEmpty";
 		var ddlCountriesId = "@ViewConstants.DdlCountriesId";
 		var ddlStatesId = "@ViewConstants.DdlStatesId";

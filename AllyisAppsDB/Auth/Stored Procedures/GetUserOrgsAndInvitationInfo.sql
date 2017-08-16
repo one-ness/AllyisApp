@@ -24,6 +24,7 @@ BEGIN
 		   [Organization].[OrganizationName],
 		   [SiteUrl],
 		   [Address1] AS 'Address',
+		   [Organization].[AddressId],
 		   [City],
 		   [Country].[CountryName] AS 'CountryName',
 		   [State].[StateName] AS 'StateName',

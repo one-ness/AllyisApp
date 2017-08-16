@@ -43,10 +43,15 @@ namespace AllyisApps.Services
 			{
 				throw new ArgumentNullException("employeeId", "EmployeeId must not be null");
 			}
-
+            AddressDBEntity address = null;
+            if(organization.Address != null)
+            {
+                address = GetDBEntityFromAddress(organization.Address);   
+            }
 			#endregion Validation
 
-			return DBHelper.SetupOrganization(GetDBEntityFromOrganization(organization), this.UserContext.UserId, (int)OrganizationRole.Owner, employeeId);
+			return DBHelper.SetupOrganization(GetDBEntityFromOrganization(organization),
+                GetDBEntityFromAddress(organization.Address), this.UserContext.UserId, (int)OrganizationRole.Owner, employeeId);
 		}
 
 		/// <summary>
@@ -144,7 +149,12 @@ namespace AllyisApps.Services
 		{
 			if (organization == null) throw new ArgumentException("organization");
 			this.CheckOrgAction(OrgAction.EditOrganization, organization.OrganizationId);
-			return DBHelper.UpdateOrganization(GetDBEntityFromOrganization(organization)) > 0;
+            AddressDBEntity address = null;
+            if(organization.Address != null)
+            {
+                address = GetDBEntityFromAddress(organization.Address);
+            }
+			return DBHelper.UpdateOrganization(GetDBEntityFromOrganization(organization),address) > 0;
 		}
 
 		/// <summary>
@@ -246,7 +256,7 @@ namespace AllyisApps.Services
 		public async void NotifyInviteAcceptAsync(int inviteId)
 		{
 			InvitationDBEntity invitation = DBHelper.GetUserInvitationsByInviteId(inviteId).FirstOrDefault();
-			OrganizationDBEntity org = DBHelper.GetOrganization(invitation.OrganizationId);
+			dynamic org = DBHelper.GetOrganization(invitation.OrganizationId);
 			IEnumerable<dynamic> owners = DBHelper.GetOrgOwnerEmails(invitation.OrganizationId);
 
 			string htmlbody = string.Format(
@@ -629,12 +639,14 @@ namespace AllyisApps.Services
 			};
 		}
 
-		/// <summary>
-		/// Translates an OrganizationDBEntity into an Organization business object.
-		/// </summary>
-		/// <param name="organization">OrganizationDBEntity instance.</param>
-		/// <returns>Organization instance.</returns>
-		public static Organization InitializeOrganization(OrganizationDBEntity organization)
+
+
+        /// <summary>
+        /// Translates an OrganizationDBEntity into an Organization business object.
+        /// </summary>
+        /// <param name="organization">OrganizationDBEntity instance.</param>
+        /// <returns>Organization instance.</returns>
+        public  Organization InitializeOrganization(dynamic organization)
 		{
 			if (organization == null)
 			{
@@ -647,14 +659,14 @@ namespace AllyisApps.Services
             {
                 address = new Address()
                 {
-                    AddressId = organization.AddressId,
-                    Address1 = organization.Address,
+                    Address1 = organization.Adress,
                     Address2 = null,
+                    AddressId = organization.AddressId,
                     City = organization.City,
-                    CountryCode = organization.CountryCode,
-                    CountryName = organization.CountryName,
                     StateId = organization.StateId,
                     StateName = organization.StateName,
+                    CountryCode = organization.CountryCode,
+                    CountryName = organization.CountryName,
                     PostalCode = organization.PostalCode
                 };
             }
@@ -693,14 +705,6 @@ namespace AllyisApps.Services
             return new OrganizationDBEntity
 			{
 				AddressId = organization.Address?.AddressId,
-				Address = organization.Address?.Address1,
-				City = organization.Address?.City,
-				CountryName = organization.Address?.CountryName,
-                CountryCode = organization.Address?.CountryCode,
-                StateName = organization.Address?.StateName,
-                StateId = organization.Address?.StateId,
-
-                PostalCode = organization.Address?.PostalCode,
                 CreatedUtc = organization.CreatedUtc,
 				FaxNumber = organization.FaxNumber,
                 OrganizationName = organization.OrganizationName,

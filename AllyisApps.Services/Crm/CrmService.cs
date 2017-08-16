@@ -143,7 +143,7 @@ namespace AllyisApps.Services
 			var spResults = DBHelper.GetProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
 			return Tuple.Create(
 				spResults.Item1.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item2.Select(cdb => InitializeCustomer(cdb)).ToList());
+				spResults.Item2.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList());
 		}
 
 		/// <summary>
@@ -157,7 +157,7 @@ namespace AllyisApps.Services
 			var spResults = DBHelper.GetInactiveProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
 			return Tuple.Create(
 				spResults.Item1.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item2.Select(cdb => InitializeCustomer(cdb)).ToList());
+				spResults.Item2.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList());
 		}
 
 		/// <summary>
@@ -611,7 +611,9 @@ namespace AllyisApps.Services
 				City = address.City,
 				StateName = address.State,
 				PostalCode = address.PostalCode,
-				CountryCode = address.CountryCode
+				CountryCode = address.CountryCode,
+                StateId =address.StateId,
+                CountryName = address.Country
 			};
 		}
 
@@ -638,7 +640,7 @@ namespace AllyisApps.Services
         /// Initializes a <see cref="Customer"/> from a <see cref="CustomerDBEntity"/>.
         /// </summary>
         /// <returns>A Customer object.</returns>
-        public static Customer InitializeCustomer(dynamic customer)
+        public  Customer InitializeCustomer(dynamic customer)
 		{
 			if (customer == null)
 			{
@@ -646,21 +648,21 @@ namespace AllyisApps.Services
 			}
 
             Address address = null;
-            if(customer.AddressId != null)
+            if (customer.AddressId != null)
             {
                 address = new Address()
                 {
-                    AddressId = customer.AddressId,
                     Address1 = customer.Address,
-                    City = customer.City,
-                    CountryCode = customer.CountryCode,
-                    CountryName = customer.CountryName,
-                    PostalCode = customer.PostalCode,
+                    Address2 = null,
+                    AddressId = customer.AddressId,
                     StateId = customer.StateId,
-                    StateName = customer.StateName
+                    City = customer.City,
+                    StateName = customer.StateName,
+                    CountryCode = customer.CountryCode,
+                    PostalCode = customer.PostalCode,
+                    CountryName = customer.CountryName
                 };
             }
-
 			return new Customer()
 			{
                 Address = address,
@@ -678,45 +680,45 @@ namespace AllyisApps.Services
 			};
 		}
         
-        /// <summary>
-        /// Initializes a <see cref="CustomerDBEntity"/> from a <see cref="Customer"/>.
-        /// </summary>
-        /// <param name="customer">The Customer to use.</param>
-        /// <returns>A CustomerDBEntity object.</returns>
-        public CustomerDBEntity GetDBEntityFromCustomer(Customer customer)
-        {
-            if (customer == null)
-            {
-                return null;
-            }
+        ///// <summary>
+        ///// Initializes a <see cref="CustomerDBEntity"/> from a <see cref="Customer"/>.
+        ///// </summary>
+        ///// <param name="customer">The Customer to use.</param>
+        ///// <returns>A CustomerDBEntity object.</returns>
+        //public CustomerDBEntity GetDBEntityFromCustomer(Customer customer)
+        //{
+        //    if (customer == null)
+        //    {
+        //        return null;
+        //    }
 
-            //Ensure that customer buisneess object does not attempt to set CountryName without ID
-            //Should not happen but can from import service.
-            customer.Address?.EnsureDBRef(this);
-            return new CustomerDBEntity()
-            {
+        //    //Ensure that customer buisneess object does not attempt to set CountryName without ID
+        //    //Should not happen but can from import service.
+        //    customer.Address?.EnsureDBRef(this);
+        //    return new CustomerDBEntity()
+        //    {
                 
-                ContactEmail = customer.ContactEmail,
-                ContactPhoneNumber = customer.ContactPhoneNumber,
-                CreatedUtc = customer.CreatedUtc,
-                CustomerId = customer.CustomerId,
-                CustomerOrgId = customer.CustomerOrgId,
-                EIN = customer.EIN,
-                FaxNumber = customer.FaxNumber,
-                CustomerName = customer.CustomerName,
-                OrganizationId = customer.OrganizationId,
-                Website = customer.Website,
-                IsActive = customer.IsActive,
-                AddressId = customer.Address?.AddressId,
-                Address = customer.Address?.Address1,
-                City = customer.Address?.City,
-                CountryCode = customer.Address?.CountryCode,
-                CountryName = customer.Address?.CountryName,
-                StateId = customer.Address?.StateId,
-                PostalCode = customer.Address?.PostalCode,
-                StateName = customer.Address?.StateName
-            };
-        }
+        //        ContactEmail = customer.ContactEmail,
+        //        ContactPhoneNumber = customer.ContactPhoneNumber,
+        //        CreatedUtc = customer.CreatedUtc,
+        //        CustomerId = customer.CustomerId,
+        //        CustomerOrgId = customer.CustomerOrgId,
+        //        EIN = customer.EIN,
+        //        FaxNumber = customer.FaxNumber,
+        //        CustomerName = customer.CustomerName,
+        //        OrganizationId = customer.OrganizationId,
+        //        Website = customer.Website,
+        //        IsActive = customer.IsActive,
+        //        AddressId = customer.Address?.AddressId,
+        //        Address = customer.Address?.Address1,
+        //        City = customer.Address?.City,
+        //        CountryCode = customer.Address?.CountryCode,
+        //        CountryName = customer.Address?.CountryName,
+        //        StateId = customer.Address?.StateId,
+        //        PostalCode = customer.Address?.PostalCode,
+        //        StateName = customer.Address?.StateName
+        //    };
+        //}
 
         public Tuple<CustomerDBEntity, AddressDBEntity> GetDBEntitiesFromCustomerInfo(Customer customer)
         {
@@ -738,6 +740,7 @@ namespace AllyisApps.Services
                 },
                 new AddressDBEntity()
                 {
+                    AddressId = customer.Address?.AddressId,
                     Address1 = customer.Address?.Address1,
                     City = customer.Address?.City,
                     Country = customer.Address?.CountryName,

@@ -62,7 +62,6 @@ BEGIN
 			SET @retId = SCOPE_IDENTITY();
 			if (@@ERROR <> 0)
 					goto _failure
-	END
 	SELECT @retId;
 		_success:
 			begin
@@ -75,4 +74,5 @@ BEGIN
 				rollback tran t1
 				return @retId;
 			end		
+	END
 END

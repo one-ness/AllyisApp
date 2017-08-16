@@ -59,7 +59,7 @@ BEGIN
 					[Website] = @website,
 					[EIN] = @eIN,
 					[CustomerOrgId] = @orgId,
-					[AddressId] =  COALESCE(@temp, [AddressId])
+					[AddressId] =  @temp
 				WHERE [CustomerId] = @customerId 
 					AND [IsActive] = 1;
 			SET @retId = 1;

@@ -41,6 +41,7 @@ BEGIN
 		[Subdomain] = @subdomainName,
 		[AddressId] = @temp
 	WHERE [OrganizationId] = @organizationId
+	;
 	_success:
 		begin
 			commit tran t1

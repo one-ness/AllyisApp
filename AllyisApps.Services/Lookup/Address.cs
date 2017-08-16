@@ -69,7 +69,7 @@ namespace AllyisApps.Services.Lookup
 
                 try
                 {
-                    CountryCode = service.GetCountries()[CountryName];
+                    CountryCode = service.GetCountries().First(pair => pair.Value.Equals(CountryName)).Key;
                 }
                 catch (KeyNotFoundException)
                 {

@@ -50,7 +50,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Date this organization was created.
 		/// </summary>
-		public DateTime CreatedUtc { get; set; }
+		public DateTime? CreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Organization subdomain perfix.

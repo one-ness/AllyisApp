@@ -13,7 +13,8 @@ BEGIN
 		   [Customer].[EIN],
 		   [Customer].[CustomerCreatedUtc],
 		   [Customer].[OrganizationId],
-		   [Customer].[CustomerOrgId]
+		   [Customer].[CustomerOrgId],
+		   [Customer].[IsActive]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 
 	WHERE [CustomerId] = @customerId
 END

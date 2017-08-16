@@ -41,16 +41,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
                 City = customer.Address?.City,
                 State = customer.Address?.StateName,
                 Country = customer.Address?.CountryName,
+                SelectedCountryCode = customer.Address?.CountryCode,
+
+                SelectedStateId = customer.Address?.StateId,
+                
                 PostalCode = customer.Address?.PostalCode,
                 ContactPhoneNumber = customer.ContactPhoneNumber,
+                
                 FaxNumber = customer.FaxNumber,
-                Website = infos.Item1.Website,
-                EIN = infos.Item1.EIN,
-                OrganizationId = infos.Item1.OrganizationId,
+                Website = customer.Website,
+                EIN = customer.EIN,
+                OrganizationId = customer.OrganizationId,
                 CustomerId = userId,
                 LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
                 LocalizedStates = ModelHelper.GetLocalizedStates(AppService, customer.Address?.CountryCode),
-				CustomerOrgId = infos.Item1.CustomerOrgId,
+                
+				CustomerOrgId = customer.CustomerOrgId,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subscriptionNameToDisplay
 			});

@@ -48,6 +48,7 @@ AS
 		   [Customer].[EIN],
 		   [Customer].[CustomerCreatedUtc],
 		   [Customer].[CustomerOrgId],
+		   [Customer].[OrganizationId],
 		   [Customer].[IsActive]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 
 	LEFT JOIN [Pjm].[Project] WITH (NOLOCK) ON [Project].[CustomerId] = [Customer].[CustomerId]

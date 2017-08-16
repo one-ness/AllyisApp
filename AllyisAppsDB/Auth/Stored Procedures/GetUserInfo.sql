@@ -30,7 +30,7 @@ BEGIN
 		   [Address].[Address1],
 		   [Address].[City],
 		   [State].[StateName] AS 'State',
-		   [Country].[CountryName] AS 'CountryId',
+		   [Country].[CountryName] AS 'Country',
 		   [Address].[PostalCode]
 	FROM [Lookup].[Address] AS [Address] WITH (NOLOCK)
 	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryCode] = [Address].[CountryCode]

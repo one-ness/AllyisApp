@@ -89,7 +89,7 @@ namespace AllyisApps.DBModel
         {
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
-                return connection.Query<AddressDBEntity>("[Lookup].[GetAddress]", new { addressID = addressID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+               return connection.Query<AddressDBEntity>("[Lookup].[GetAddress]", new { addresId = addressID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
             }
         }
     }

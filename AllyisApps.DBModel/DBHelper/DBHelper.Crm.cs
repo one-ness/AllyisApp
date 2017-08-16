@@ -329,7 +329,7 @@ namespace AllyisApps.DBModel
         /// <summary>
         /// Updates the customer with the information specified in the customer table.
         /// </summary>
-        /// <param name="customer">The table with the customer to create.</param>
+        /// <param name="customerInfo">The table with the customer to create.</param>
         /// <returns>The Id of the customer if one was created -1 if not.</returns>
         public int CreateCustomerInfo(Tuple<CustomerDBEntity,AddressDBEntity> customerInfo)
         {
@@ -462,12 +462,12 @@ namespace AllyisApps.DBModel
         /// </summary>
         /// <param name="customerId">The customer's Id.</param>
         /// <returns>The CustomerDBEntity containing the customer's information, null if call fails.</returns>
-        public CustomerDBEntity GetCustomerInfo(int customerId)
+        public dynamic GetCustomerInfo(int customerId)
         {
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
                 // default null
-                return connection.Query<CustomerDBEntity>("[Crm].[GetCustomerInfo]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+                return connection.Query<dynamic>("[Crm].[GetCustomerInfo]", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure).SingleOrDefault();
             }
         }
 
@@ -499,7 +499,7 @@ namespace AllyisApps.DBModel
         /// </summary>
         /// <param name="customerId">Customer Id.</param>
         /// <returns>.</returns>
-        public Tuple<CustomerDBEntity, AddressDBEntity> GetCustomerProfile(int customerId)
+        public Tuple<dynamic, AddressDBEntity> GetCustomerProfile(int customerId)
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@customerId", customerId);
@@ -510,7 +510,7 @@ namespace AllyisApps.DBModel
                     parameters,
                     commandType: CommandType.StoredProcedure);
                 return Tuple.Create(
-                    results.Read<CustomerDBEntity>().SingleOrDefault(),
+                    results.Read<dynamic>().SingleOrDefault(),
                     results.Read<AddressDBEntity>().SingleOrDefault());
             }
         }
@@ -726,7 +726,7 @@ namespace AllyisApps.DBModel
         /// <param name="orgId">Organization Id.</param>
         /// <param name="userId">User Id.</param>
         /// <returns>.</returns>
-        public Tuple<List<ProjectDBEntity>, List<CustomerDBEntity>> GetProjectsAndCustomersForOrgAndUser(int orgId, int userId)
+        public Tuple<List<ProjectDBEntity>, List<dynamic>> GetProjectsAndCustomersForOrgAndUser(int orgId, int userId)
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@userId", userId);
@@ -739,7 +739,7 @@ namespace AllyisApps.DBModel
                     commandType: CommandType.StoredProcedure);
                 return Tuple.Create(
                     results.Read<ProjectDBEntity>().ToList(),
-                    results.Read<CustomerDBEntity>().ToList());
+                    results.Read<dynamic>().ToList());
             }
         }
 
@@ -750,7 +750,7 @@ namespace AllyisApps.DBModel
         /// <param name="orgId">Organization Id.</param>
         /// <param name="userId">User Id.</param>
         /// <returns>.</returns>
-        public Tuple<List<ProjectDBEntity>, List<CustomerDBEntity>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId, int userId)
+        public Tuple<List<ProjectDBEntity>, List<dynamic>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId, int userId)
         {
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@userId", userId);
@@ -763,7 +763,7 @@ namespace AllyisApps.DBModel
                     commandType: CommandType.StoredProcedure);
                 return Tuple.Create(
                     results.Read<ProjectDBEntity>().ToList(),
-                    results.Read<CustomerDBEntity>().ToList());
+                    results.Read<dynamic>().ToList());
             }
         }
     }
