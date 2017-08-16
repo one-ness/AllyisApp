@@ -32,7 +32,7 @@ namespace AllyisApps.DBModel
 		{
 			if (applicant == null)
 			{
-				throw new System.ArgumentException("applicant cannot be null or empty.");
+				throw new ArgumentException("applicant cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -63,7 +63,7 @@ namespace AllyisApps.DBModel
 		{
 			if (application == null)
 			{
-				throw new System.ArgumentException("application cannot be null or empty.");
+				throw new ArgumentException("application cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -87,7 +87,7 @@ namespace AllyisApps.DBModel
 		{
 			if (applicationDocument == null)
 			{
-				throw new System.ArgumentException("application document cannot be null or empty.");
+				throw new ArgumentException("application document cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -111,7 +111,7 @@ namespace AllyisApps.DBModel
 		{
 			if (position == null)
 			{
-				throw new System.ArgumentException("Position cannot be null or empty.");
+				throw new ArgumentException("Position cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -123,12 +123,12 @@ namespace AllyisApps.DBModel
 			parameters.Add("@billingRateFrequency", position.BillingRateFrequency);
 			parameters.Add("@billingRateAmount", position.BillingRateAmount);
 			parameters.Add("@durationMonths", position.DurationMonths);
-			parameters.Add("@employmentType", position.EmploymentType);
+			parameters.Add("@employmentType", position.EmploymentTypeId);
 			parameters.Add("@positionCount", position.PositionCount);
 			parameters.Add("@requiredSkills", position.RequiredSkills);
 			parameters.Add("@jobResponsiblities", position.JobResponsibilities);
 			parameters.Add("@desiredSkills", position.DesiredSkills);
-			parameters.Add("@positionLevel", position.PositionLevel);
+			parameters.Add("@positionLevel", position.PositionLevelId);
 			parameters.Add("@hiringManager", position.HiringManager);
 			parameters.Add("@teamName", position.TeamName);
 
@@ -148,7 +148,7 @@ namespace AllyisApps.DBModel
 		{
 			if (name == null)
 			{
-				throw new System.ArgumentException("Name cannot be null or empty.");
+				throw new ArgumentException("Name cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -174,7 +174,7 @@ namespace AllyisApps.DBModel
 		{
 			if (tagId == 0)
 			{
-				throw new System.ArgumentException("tag ID cannot be null or empty.");
+				throw new ArgumentException("tag ID cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -423,7 +423,7 @@ namespace AllyisApps.DBModel
 		{
 			if (applicant == null)
 			{
-				throw new System.ArgumentException("applicant cannot be null or empty.");
+				throw new ArgumentException("applicant cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -455,7 +455,7 @@ namespace AllyisApps.DBModel
 		{
 			if (application == null)
 			{
-				throw new System.ArgumentException("application cannot be null or empty.");
+				throw new ArgumentException("application cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -478,7 +478,7 @@ namespace AllyisApps.DBModel
 		{
 			if (applicationDocument == null)
 			{
-				throw new System.ArgumentException("application document cannot be null or empty.");
+				throw new ArgumentException("application document cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -501,8 +501,9 @@ namespace AllyisApps.DBModel
 		{
 			if (position == null)
 			{
-				throw new System.ArgumentException("Position cannot be null or empty.");
+				throw new ArgumentException("Position cannot be null or empty.");
 			}
+
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@positionId", position.PositionId);
 			parameters.Add("@organizationId", position.OrganizationId);
@@ -526,6 +527,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@state", position.State);
 			parameters.Add("@country", position.Country);
 			parameters.Add("@postalCode ", position.PostalCode);
+
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Execute("[StaffingManager].[UpdatePosition]", parameters, commandType: CommandType.StoredProcedure);

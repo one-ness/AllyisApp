@@ -7,22 +7,7 @@ namespace AllyisApps.Services.StaffingManager
 	/// </summary>
 	public class Tag
 	{
-		private int? tagId;
-		private int? positionId;
 		private string tagName;
-
-		/// <summary>
-		/// Tag constructor for use in passing DBEntity object information to the view
-		/// </summary>
-		/// <param name="tagId"></param>
-		/// <param name="positionId"></param>
-		/// <param name="tagName"></param>
-		public Tag (int tagId, int positionId, string tagName)
-		{
-			TagId = tagId;
-			PositionId = positionId;
-			TagName = tagName;
-		}
 
 		/// <summary>
 		/// Gets or sets the Tags Id
@@ -39,11 +24,11 @@ namespace AllyisApps.Services.StaffingManager
 		/// </summary>
 		public string TagName
 		{
-			get { return tagName; }
+			get => tagName;
 			set
 			{
 				if (value.Length > 32 || value.Length == 0) throw new ArgumentOutOfRangeException("TagName", value, "Tag Name must be between 1 and 32 characters in length");
-
+				tagName = value;
 			}
 		}
 
