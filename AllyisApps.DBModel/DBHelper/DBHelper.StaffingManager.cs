@@ -32,7 +32,7 @@ namespace AllyisApps.DBModel
 		{
 			if (applicant == null)
 			{
-				throw new System.ArgumentException("applicant cannot be null or empty.");
+				throw new ArgumentException("applicant cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -47,7 +47,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@phoneNumber", applicant.PhoneNumber);
 			parameters.Add("@notes", applicant.Notes);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				dynamic results = connection.Query<dynamic>("[StaffingManager].[CreateApplicant]", parameters, commandType: CommandType.StoredProcedure).Single();
 				return Tuple.Create(results.AddressId, results.ApplicantId);
@@ -63,7 +63,7 @@ namespace AllyisApps.DBModel
 		{
 			if (application == null)
 			{
-				throw new System.ArgumentException("application cannot be null or empty.");
+				throw new ArgumentException("application cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -72,7 +72,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@applicationStatusId", application.ApplicationStatusId);
 			parameters.Add("@notes", application.Notes);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<int>("[StaffingManager].[CreateApplication]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
@@ -87,7 +87,7 @@ namespace AllyisApps.DBModel
 		{
 			if (applicationDocument == null)
 			{
-				throw new System.ArgumentException("application document cannot be null or empty.");
+				throw new ArgumentException("application document cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -95,7 +95,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@documentLink", applicationDocument.DocumentLink);
 			parameters.Add("@documentName", applicationDocument.DocumentName);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<int>("[StaffingManager].[CreateApplicationDocument]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
@@ -111,7 +111,7 @@ namespace AllyisApps.DBModel
 		{
 			if (position == null)
 			{
-				throw new System.ArgumentException("Position cannot be null or empty.");
+				throw new ArgumentException("Position cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -132,7 +132,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@hiringManager", position.HiringManager);
 			parameters.Add("@teamName", position.TeamName);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<int>("[StaffingManager].[CreatePosition]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
@@ -148,14 +148,14 @@ namespace AllyisApps.DBModel
 		{
 			if (name == null)
 			{
-				throw new System.ArgumentException("Name cannot be null or empty.");
+				throw new ArgumentException("Name cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@tagName", name);
 			parameters.Add("@positionId", positionId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default -1
 				connection.Execute("[StaffingManager].[SetupTag]", parameters, commandType: CommandType.StoredProcedure);
@@ -174,14 +174,14 @@ namespace AllyisApps.DBModel
 		{
 			if (tagId == 0)
 			{
-				throw new System.ArgumentException("tag ID cannot be null or empty.");
+				throw new ArgumentException("tag ID cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@tagId", tagId);
 			parameters.Add("@positionId", positionId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				// default -1
 				connection.Execute("[StaffingManager].[CreatePositionTag]", parameters, commandType: CommandType.StoredProcedure);
@@ -207,7 +207,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@applicationId", applicationId);
 
 			ApplicationDBEntity application;
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				application = connection.Query<ApplicationDBEntity>("[StaffingManager].[GetApplicationById]", parameters, commandType: CommandType.StoredProcedure).Single();
 				application.ApplicationDocuments = connection.Query<ApplicationDocumentDBEntity>("[StaffingManager].[GetApplicationDocumentsByApplicationId]", parameters, commandType: CommandType.StoredProcedure);
@@ -231,7 +231,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@positionId", positionId);
 
 			IEnumerable<ApplicationDBEntity> applications;
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				applications = connection.Query<ApplicationDBEntity>("[StaffingManager].[GetApplicationsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
 				foreach (ApplicationDBEntity application in applications)
@@ -261,7 +261,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@applicantId", applicantId);
 
 			IEnumerable<ApplicationDBEntity> applications;
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				applications = connection.Query<ApplicationDBEntity>("[StaffingManager].[GetApplicationsByApplicantId]", parameters, commandType: CommandType.StoredProcedure);
 				foreach (ApplicationDBEntity application in applications)
@@ -285,7 +285,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicationDocumentId", applicationDocumentId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<ApplicationDocumentDBEntity>("[StaffingManager].[GetApplicationDocumentById]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
@@ -301,7 +301,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicationId", applicationId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<ApplicationDocumentDBEntity>("[StaffingManager].[GetApplicationDocumentsByApplicationId]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -317,7 +317,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicantId", applicantId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<ApplicantDBEntity>("[StaffingManager].[GetApplicantById]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
@@ -333,7 +333,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicationId", applicationId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<ApplicantDBEntity>("[StaffingManager].[GetApplicantByApplicationId]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
@@ -350,7 +350,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@positionId", positionId);
 
 			PositionDBEntity position;
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				position = connection.Query<PositionDBEntity>("[StaffingManager].[GetPosition]", parameters, commandType: CommandType.StoredProcedure).Single();
 				position.Tags = connection.Query<TagDBEntity>("[StaffingManager].[GetTagsByPositionId]", parameters, commandType: CommandType.StoredProcedure).ToList<TagDBEntity>();
@@ -369,7 +369,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@organizationId", organizationId);
 
 			IEnumerable<PositionDBEntity> positions;
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				positions = connection.Query<PositionDBEntity>("[StaffingManager].[GetPositionsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
 				foreach (PositionDBEntity position in positions)
@@ -393,7 +393,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@positionId", positionId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<TagDBEntity>("[StaffingManager].[GetTagsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -405,7 +405,7 @@ namespace AllyisApps.DBModel
 		/// <returns>All the tags</returns>
 		public IEnumerable<TagDBEntity> GetTags()
 		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<TagDBEntity>("[StaffingManager].[GetTags]", commandType: CommandType.StoredProcedure);
 			}
@@ -427,7 +427,7 @@ namespace AllyisApps.DBModel
 		{
 			if (applicant == null)
 			{
-				throw new System.ArgumentException("applicant cannot be null or empty.");
+				throw new ArgumentException("applicant cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -444,7 +444,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@phoneNumber", applicant.PhoneNumber);
 			parameters.Add("@notes", applicant.Notes);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Execute("[StaffingManager].[UpdateApplicant]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -459,7 +459,7 @@ namespace AllyisApps.DBModel
 		{
 			if (application == null)
 			{
-				throw new System.ArgumentException("application cannot be null or empty.");
+				throw new ArgumentException("application cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -467,7 +467,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@applicationStatusId", application.ApplicationStatusId);
 			parameters.Add("@notes", application.Notes);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Execute("[StaffingManager].[UpdateApplication]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -482,7 +482,7 @@ namespace AllyisApps.DBModel
 		{
 			if (applicationDocument == null)
 			{
-				throw new System.ArgumentException("application document cannot be null or empty.");
+				throw new ArgumentException("application document cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
@@ -490,7 +490,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@documentLink", applicationDocument.DocumentLink);
 			parameters.Add("@documentName", applicationDocument.DocumentName);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Execute("[StaffingManager].[UpdateApplicationDocument]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -505,8 +505,9 @@ namespace AllyisApps.DBModel
 		{
 			if (position == null)
 			{
-				throw new System.ArgumentException("Position cannot be null or empty.");
+				throw new ArgumentException("Position cannot be null or empty.");
 			}
+
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@positionId", position.PositionId);
 			parameters.Add("@organizationId", position.OrganizationId);
@@ -530,7 +531,8 @@ namespace AllyisApps.DBModel
 			parameters.Add("@state", position.State);
 			parameters.Add("@country", position.Country);
 			parameters.Add("@postalCode ", position.PostalCode);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Execute("[StaffingManager].[UpdatePosition]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -551,7 +553,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicantId", applicantId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Execute("[StaffingManager].[DeleteApplicant]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -566,7 +568,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicationId", applicationId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Execute("[StaffingManager].[DeleteApplication]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -581,7 +583,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicationDocumentId", applicationDocumentId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Execute("[StaffingManager].[DeleteApplicationDocument]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -596,7 +598,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@tagId", tagId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Execute("[StaffingManager].[DeleteTag]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -613,7 +615,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@tagId", tagId);
 			parameters.Add("@positionId", positionId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Execute("[StaffingManager].[DeletePositionTag]", parameters, commandType: CommandType.StoredProcedure);
 			}
@@ -628,7 +630,7 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@positionId", positionId);
 
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Execute("[StaffingManager].[DeletePosition]", parameters, commandType: CommandType.StoredProcedure);
 			}

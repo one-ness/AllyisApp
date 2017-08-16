@@ -1,8 +1,14 @@
-﻿using AllyisApps.DBModel.StaffingManager;
-using AllyisApps.Services.StaffingManager;
+//------------------------------------------------------------------------------
+// <copyright file="StaffingManagerService.cs" company="Allyis, Inc.">
+//     Copyright (c) Allyis, Inc.  All rights reserved.
+// </copyright>
+//------------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AllyisApps.DBModel.StaffingManager;
+using AllyisApps.Services.StaffingManager;
 
 namespace AllyisApps.Services
 {
@@ -16,6 +22,28 @@ namespace AllyisApps.Services
 		///////////////////////
 
 		#region CreateMethods
+
+		/// <summary>
+		/// Adds an applicant to the DB if there is not already another applicant with the same email.
+		/// </summary>
+		/// <param name="applicant">The applicant object to be added to the db.</param>
+		/// <returns>The id of the created address and applicant</returns>
+		public Tuple<int, int> CreateApplicant(Applicant applicant) => DBHelper.CreateApplicant(ServiceObjectToDBEntity(applicant));
+
+		/// <summary>
+		/// Adds an application to the DB.
+		/// </summary>
+		/// <param name="application">The application object to be added to the db.</param>
+		/// <returns>The id of the created application</returns>
+		public int CreateApplication(Application application) => DBHelper.CreateApplication(ServiceObjectToDBEntity(application));
+
+		/// <summary>
+		/// Adds an application document to the DB, which joins to an application.
+		/// </summary>
+		/// <param name="applicationDocument">The application document object to be added to the db.</param>
+		/// <returns>The id of the created application document</returns>
+		public int CreateApplicationDocument(ApplicationDocument applicationDocument) => DBHelper.CreateApplicationDocument(ServiceObjectToDBEntity(applicationDocument));
+
 		/// <summary>
 		/// Creates a new position.
 		/// </summary>
@@ -42,6 +70,61 @@ namespace AllyisApps.Services
 		#endregion
 
 		#region GetMethods
+
+		/// <summary>
+		/// Retrieves the applicant with a given id.
+		/// </summary>
+		/// <param name="applicantId">The id of the applicant.</param>
+		/// <returns>One applicant, if present.</returns>
+		public Applicant GetApplicantById(int applicantId) => DBEntityToServiceObject(DBHelper.GetApplicantById(applicantId));
+
+		/// <summary>
+		/// Retrieves the application with a given id.
+		/// </summary>
+		/// <param name="applicationId">The id of the application.</param>
+		/// <returns>One application, if present.</returns>
+		public Application GetApplicationById(int applicationId) => DBEntityToServiceObject(DBHelper.GetApplicationById(applicationId));
+
+		/// <summary>
+		/// Retrieves the application document with a given id.
+		/// </summary>
+		/// <param name="applicationDocumentId">The id of the application document.</param>
+		/// <returns>One application document, if present.</returns>
+		public ApplicationDocument GetApplicationDocumentById(int applicationDocumentId) => DBEntityToServiceObject(DBHelper.GetApplicationDocumentById(applicationDocumentId));
+
+		/// <summary>
+		/// Retrieves the applicant that submitted the given application.
+		/// </summary>
+		/// <param name="applicationId">The id of the application.</param>
+		/// <returns>The applicant that submitted the given application.</returns>
+		public Applicant GetApplicantByApplicationId(int applicationId) => DBEntityToServiceObject(DBHelper.GetApplicantByApplicationId(applicationId));
+
+		/// <summary>
+		/// Retrieves all applications **and associated application information** for a given position.
+		/// </summary>
+		/// <param name="positionId">The id of the position.</param>
+		/// <returns>
+		/// List of application objects containing:
+		///  - Application info
+		///  - Applicant info
+		///  - Application document info
+		/// </returns>
+		public List<Application> GetApplicationsInfoByPositionId(int positionId) => DBHelper.GetApplicationsInfoByPositionId(positionId).Select(DBEntityToServiceObject).ToList();
+
+		/// <summary>
+		/// Retrieves all applications that have been submitted by the given applicant.
+		/// </summary>
+		/// <param name="applicantId">The id of the applicant.</param>
+		/// <returns>All applications that have been submitted by the given applicant.</returns>
+		public List<Application> GetApplicationsByApplicantId(int applicantId) => DBHelper.GetApplicationsByApplicantId(applicantId).Select(DBEntityToServiceObject).ToList();
+
+		/// <summary>
+		/// Retrieves all application documents attached to the given application.
+		/// </summary>
+		/// <param name="applicationId">The id of the application, containing multiple application documents.</param>
+		/// <returns>All application documents attached to the given application.</returns>
+		public List<ApplicationDocument> GetApplicationDocumentsByApplicationId(int applicationId) => DBHelper.GetApplicationDocumentsByApplicationId(applicationId).Select(DBEntityToServiceObject).ToList();
+
 		/// <summary>
 		/// Get Position method that pulls a position from the DB.
 		/// </summary>
@@ -74,6 +157,27 @@ namespace AllyisApps.Services
 		#region UpdateMethods
 
 		/// <summary>
+		/// Updates the given applicant if there is not already another applicant with the same email.
+		/// </summary>
+		/// <param name="applicant">The applicant object to be updated.</param>
+		/// <returns>The number of rows updated.</returns>
+		public int UpdateApplicant(Applicant applicant) => DBHelper.UpdateApplicant(ServiceObjectToDBEntity(applicant));
+
+		/// <summary>
+		/// Updates the given application.
+		/// </summary>
+		/// <param name="application">The application object to be updated.</param>
+		/// <returns>The number of rows updated.</returns>
+		public int UpdateApplication(Application application) => DBHelper.UpdateApplication(ServiceObjectToDBEntity(application));
+
+		/// <summary>
+		/// Updates the given application document.
+		/// </summary>
+		/// <param name="applicationDocument">The application document object to be updated.</param>
+		/// <returns>The number of rows updated.</returns>
+		public int UpdateApplicationDocument(ApplicationDocument applicationDocument) => DBHelper.UpdateApplicationDocument(ServiceObjectToDBEntity(applicationDocument));
+
+		/// <summary>
 		/// Updates the position with the given id.
 		/// </summary>
 		/// <param name="position">The service layer Position object to be passed to the DB and updated. </param>
@@ -83,6 +187,24 @@ namespace AllyisApps.Services
 		#endregion
 
 		#region DeleteMethods
+
+		/// <summary>
+		/// Deletes an applicant from the database
+		/// </summary>
+		/// <param name="applicantId">The applicant to be deleted</param>
+		public void DeleteApplicant(int applicantId) => DBHelper.DeleteApplicant(applicantId);
+
+		/// <summary>
+		/// Deletes an application from the database
+		/// </summary>
+		/// <param name="applicationId">The applicant to be deleted</param>
+		public void DeleteApplication(int applicationId) => DBHelper.DeleteApplication(applicationId);
+
+		/// <summary>
+		/// Deletes an application document from the database
+		/// </summary>
+		/// <param name="applicationDocumentId">The applicant to be deleted</param>
+		public void DeleteApplicationDocument(int applicationDocumentId) => DBHelper.DeleteApplicationDocument(applicationDocumentId);
 
 		/// <summary>
 		/// Deletes a tag from the database.
@@ -106,80 +228,71 @@ namespace AllyisApps.Services
 		#endregion
 
 		//////////////////////////////////////////
-		// SERVICE LAYER to DB LAYER CONVERTERS //
+		// DB LAYER to SERVICE LAYER CONVERSION //
 		//////////////////////////////////////////
 
-		/// <summary>
-		/// Converts a Position service layer object to a PositionDBEntity object.
-		/// </summary>
-		/// <param name="position"> The Position service layer obejct. </param>
-		/// <returns> Returns the PositionDBEntity for the DB layer.  </returns>
-		public static PositionDBEntity ServiceObjectToDBEntity(Position position)
-		{
-			if (position == null) throw new ArgumentNullException("position", "Cannot accept a null position object");
+		#region DB to Service Conversions
 
-			return new PositionDBEntity
+		public static Applicant DBEntityToServiceObject(ApplicantDBEntity applicant)
+		{
+			if (applicant == null)
 			{
-				OrganizationId = position.OrganizationId,
-				CustomerId = position.CustomerId,
-				AddressId = position.AddressId,
-				PositionStatusId = position.PositionStatusId,
-				PositionTitle = position.PositionTitle,
-				DurationMonths = position.DurationMonths,
-				EmploymentTypeId = position.EmploymentTypeId,
-				PositionCount = position.PositionCount,
-				RequiredSkills = position.RequiredSkills,
-				PositionLevelId = position.PositionLevelId,
-				Address = position.Address,
-				City = position.City,
-				State = position.State,
-				Country = position.Country,
-				PostalCode = position.PostalCode,
-				PositionId = (int)position.PositionId,
-				PositionCreatedUtc = (DateTime)position.PositionCreatedUtc,
-				PositionModifiedUtc = (DateTime)position.PositionModifiedUtc,
-				StartDate = (DateTime)position.StartDate,
-				BillingRateFrequency = (int)position.BillingRateFrequency,
-				BillingRateAmount = (int)position.BillingRateAmount,
-				JobResponsibilities = position.JobResponsibilities,
-				DesiredSkills = position.DesiredSkills,
-				Tags = ServiceObjectToDBEntity(position.Tags),
-				HiringManager = position.HiringManager,
-				TeamName = position.TeamName
+				throw new ArgumentNullException(nameof(applicant), nameof(applicant) + " must not be null.");
+			}
+
+			return new Applicant
+			{
+				Address = applicant.Address,
+				State = applicant.State,
+				AddressId = applicant.AddressId,
+				ApplicantId = applicant.ApplicantId,
+				City = applicant.City,
+				Country = applicant.Country,
+				Email = applicant.Email,
+				FirstName = applicant.FirstName,
+				LastName = applicant.LastName,
+				Notes = applicant.Notes,
+				PhoneNumber = applicant.PhoneNumber,
+				PostalCode = applicant.PostalCode
 			};
 		}
 
-
-		/// <summary>
-		/// Converts a list of Tag service layer objects to a TagDBEntity object list.
-		/// </summary>
-		/// <param name="tags"> The List of tag service layer objects to be converted. </param>
-		/// <returns> Returns a list of TagDBEntity objects for the DB layer.  </returns>
-		public static List<TagDBEntity> ServiceObjectToDBEntity(List<Tag> tags)
+		public static Application DBEntityToServiceObject(ApplicationDBEntity application)
 		{
-			if (tags == null) throw new ArgumentNullException(nameof(tags), "Cannot accept null list of tags to be converted.");
+			if (application == null)
+			{
+				throw new ArgumentNullException(nameof(application), nameof(application) + " must not be null.");
+			}
 
-			var taglist = tags
-					.ConvertAll(x => new TagDBEntity { TagId = (int)x.TagId, PositionId = (int)x.PositionId, TagName = x.TagName });
-			return taglist;
+			return new Application
+			{
+				ApplicantId = application.ApplicantId,
+				Notes = application.Notes,
+				Applicant = DBEntityToServiceObject(application.Applicant),
+				ApplicationCreatedUtc = application.ApplicationCreatedUtc,
+				ApplicationDocuments = application.ApplicationDocuments.Select(DBEntityToServiceObject).ToList(),
+				ApplicationId = application.ApplicationId,
+				ApplicationModifiedUtc = application.ApplicationModifiedUtc,
+				ApplicationStatus = (ApplicationStatusEnum)application.ApplicationStatusId,
+				PositionId = application.PositionId
+			};
 		}
 
-		/// <summary>
-		/// Converts a Tag service layer object to a TagDBEntity object.
-		/// </summary>
-		/// <param name="tag"> Thetag service layer object to be converted. </param>
-		/// <returns> Returns a TagDBEntity object for the DB layer.  </returns>
-		public static TagDBEntity ServiceObjectToDBEntity(Tag tag)
+		public static ApplicationDocument DBEntityToServiceObject(ApplicationDocumentDBEntity applicationDocument)
 		{
-			if (tag == null) throw new ArgumentNullException(nameof(tag), "Cannot accept a null tag to be converted.");
+			if (applicationDocument == null)
+			{
+				throw new ArgumentNullException(nameof(applicationDocument), nameof(applicationDocument) + " must not be null.");
+			}
 
-			return new TagDBEntity { TagId = (int)tag.TagId, PositionId = (int)tag.PositionId, TagName = tag.TagName };
+			return new ApplicationDocument
+			{
+				ApplicationId = applicationDocument.ApplicationId,
+				ApplicationDocumentId = applicationDocument.ApplicationDocumentId,
+				DocumentLink = applicationDocument.DocumentLink,
+				DocumentName = applicationDocument.DocumentName
+			};
 		}
-
-
-		//////////////////////////////////////////
-		// DB LAYER to SERVICE LAYER CONVERTERS //
-		//////////////////////////////////////////
 
 		/// <summary>
 		/// Converts a DB Layer PositionDBEntity object to a service layer Position Object.
@@ -189,8 +302,9 @@ namespace AllyisApps.Services
 		public static Position DBEntityToServiceObject(PositionDBEntity position)
 		{
 			if (position == null) throw new ArgumentNullException(nameof(position), "Cannot accept a null position object.");
-			
-			return new Position {
+
+			return new Position
+			{
 				OrganizationId = position.OrganizationId,
 				CustomerId = position.CustomerId,
 				AddressId = position.AddressId,
@@ -217,7 +331,7 @@ namespace AllyisApps.Services
 				Tags = DBEntityToServiceObject(position.Tags),
 				HiringManager = position.HiringManager,
 				TeamName = position.TeamName
-				};
+			};
 		}
 
 		/// <summary>
@@ -228,7 +342,7 @@ namespace AllyisApps.Services
 		public static List<Tag> DBEntityToServiceObject(List<TagDBEntity> tags)
 		{
 			var taglist = tags
-					.ConvertAll(x => new Tag {TagId = x.TagId, PositionId = x.PositionId, TagName = x.TagName });
+				.ConvertAll(x => new Tag { TagId = x.TagId, PositionId = x.PositionId, TagName = x.TagName });
 			return taglist;
 		}
 
@@ -241,7 +355,141 @@ namespace AllyisApps.Services
 		{
 			if (tag == null) throw new ArgumentNullException(nameof(tag), "Cannot accept a null tag to be converted");
 
-			return new Tag {TagId = tag.TagId, PositionId = tag.PositionId, TagName = tag.TagName };
+			return new Tag { TagId = tag.TagId, PositionId = tag.PositionId, TagName = tag.TagName };
 		}
+
+		#endregion DB to Service Conversion
+
+		//////////////////////////////////////////
+		// SERVICE LAYER to DB LAYER CONVERSION //
+		//////////////////////////////////////////
+
+		#region Service to DB Conversions
+
+		public static ApplicationDBEntity ServiceObjectToDBEntity(Application application)
+		{
+			if (application == null)
+			{
+				throw new ArgumentNullException(nameof(application), nameof(application) + " must not be null.");
+			}
+
+			return new ApplicationDBEntity
+			{
+				ApplicationId = application.ApplicationId,
+				ApplicationStatusId = (int)application.ApplicationStatus,
+				Notes = application.Notes,
+				PositionId = application.PositionId,
+				ApplicantId = application.ApplicantId
+			};
+		}
+
+		public static ApplicationDocumentDBEntity ServiceObjectToDBEntity(ApplicationDocument applicationDocument)
+		{
+			if (applicationDocument == null)
+			{
+				throw new ArgumentNullException(nameof(applicationDocument), nameof(applicationDocument) + " must not be null.");
+			}
+
+			return new ApplicationDocumentDBEntity
+			{
+				ApplicationId = applicationDocument.ApplicationId,
+				ApplicationDocumentId = applicationDocument.ApplicationDocumentId,
+				DocumentName = applicationDocument.DocumentName,
+				DocumentLink = applicationDocument.DocumentLink
+			};
+		}
+
+		public static ApplicantDBEntity ServiceObjectToDBEntity(Applicant applicant)
+		{
+			if (applicant == null)
+			{
+				throw new ArgumentNullException(nameof(applicant), nameof(applicant) + " must not be null.");
+			}
+
+			return new ApplicantDBEntity
+			{
+				Address = applicant.Address,
+				State = applicant.State,
+				AddressId = applicant.AddressId,
+				ApplicantId = applicant.ApplicantId,
+				City = applicant.City,
+				Country = applicant.Country,
+				Email = applicant.Email,
+				FirstName = applicant.FirstName,
+				LastName = applicant.LastName,
+				Notes = applicant.Notes,
+				PhoneNumber = applicant.PhoneNumber,
+				PostalCode = applicant.PostalCode
+			};
+		}
+
+		/// <summary>
+		/// Converts a Position service layer object to a PositionDBEntity object.
+		/// </summary>
+		/// <param name="position"> The Position service layer obejct. </param>
+		/// <returns> Returns the PositionDBEntity for the DB layer.  </returns>
+		public static PositionDBEntity ServiceObjectToDBEntity(Position position)
+		{
+			if (position == null) throw new ArgumentNullException(nameof(position), "Cannot accept a null position object");
+
+			return new PositionDBEntity
+			{
+				OrganizationId = position.OrganizationId,
+				CustomerId = position.CustomerId,
+				AddressId = position.AddressId,
+				PositionStatusId = position.PositionStatusId,
+				PositionTitle = position.PositionTitle,
+				DurationMonths = position.DurationMonths,
+				EmploymentTypeId = position.EmploymentTypeId,
+				PositionCount = position.PositionCount,
+				RequiredSkills = position.RequiredSkills,
+				PositionLevelId = position.PositionLevelId,
+				Address = position.Address,
+				City = position.City,
+				State = position.State,
+				Country = position.Country,
+				PostalCode = position.PostalCode,
+				PositionId = position.PositionId,
+				PositionCreatedUtc = position.PositionCreatedUtc,
+				PositionModifiedUtc = position.PositionModifiedUtc,
+				StartDate = position.StartDate,
+				BillingRateFrequency = position.BillingRateFrequency,
+				BillingRateAmount = position.BillingRateAmount,
+				JobResponsibilities = position.JobResponsibilities,
+				DesiredSkills = position.DesiredSkills,
+				Tags = ServiceObjectToDBEntity(position.Tags),
+				HiringManager = position.HiringManager,
+				TeamName = position.TeamName
+			};
+		}
+
+
+		/// <summary>
+		/// Converts a list of Tag service layer objects to a TagDBEntity object list.
+		/// </summary>
+		/// <param name="tags"> The List of tag service layer objects to be converted. </param>
+		/// <returns> Returns a list of TagDBEntity objects for the DB layer.  </returns>
+		public static List<TagDBEntity> ServiceObjectToDBEntity(List<Tag> tags)
+		{
+			if (tags == null) throw new ArgumentNullException(nameof(tags), "Cannot accept null list of tags to be converted.");
+
+			var taglist = tags
+				.ConvertAll(x => new TagDBEntity { TagId = (int)x.TagId, PositionId = (int)x.PositionId, TagName = x.TagName });
+			return taglist;
+		}
+
+		/// <summary>
+		/// Converts a Tag service layer object to a TagDBEntity object.
+		/// </summary>
+		/// <param name="tag"> Thetag service layer object to be converted. </param>
+		/// <returns> Returns a TagDBEntity object for the DB layer.  </returns>
+		public static TagDBEntity ServiceObjectToDBEntity(Tag tag)
+		{
+			if (tag == null) throw new ArgumentNullException(nameof(tag), "Cannot accept a null tag to be converted.");
+
+			return new TagDBEntity { TagId = (int)tag.TagId, PositionId = (int)tag.PositionId, TagName = tag.TagName };
+		}
+
+		#endregion Service to DB Conversions
 	}
 }

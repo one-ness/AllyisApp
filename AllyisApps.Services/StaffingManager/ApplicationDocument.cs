@@ -22,54 +22,16 @@ namespace AllyisApps.Services
 		private string documentName;
 
 		/// <summary>
-		/// The constructor used when GETTING or UPDATING info from the backend (includes ApplicationDocumentId)
-		/// </summary>
-		/// <param name="applicationDocumentId">The application document id.</param>
-		/// <param name="applicationId">The application id that the application document belongs to.</param>
-		/// <param name="documentLink">The link to the actual document, wherever the document is actually stored (not in our db).</param>
-		/// <param name="documentName">The name of the document</param>
-		public ApplicationDocument(
-			int applicationDocumentId,
-			int applicationId,
-			string documentLink,
-			string documentName)
-		{
-			ApplicationDocumentId = applicationDocumentId;
-			ApplicationId = applicationId;
-			DocumentLink = documentLink;
-			DocumentName = documentName;
-		}
-
-		/// <summary>
-		/// The constructor used when INSERTING into the backend (excludes ApplicationDocumentId)
-		/// </summary>
-		/// <param name="applicationId">The application id that the application document belongs to.</param>
-		/// <param name="documentLink">The link to the actual document, wherever the document is actually stored (not in our db).</param>
-		/// <param name="documentName">The name of the document</param>
-		public ApplicationDocument(
-			int applicationId,
-			string documentLink,
-			string documentName)
-		{
-			ApplicationId = applicationId;
-			DocumentLink = documentLink;
-			DocumentName = documentName;
-		}
-
-		/// <summary>
 		/// Gets or sets the ApplicationDocumentId.
 		/// </summary>
 		public int ApplicationDocumentId
 		{
-			get
-			{
-				return applicationDocumentId;
-			}
+			get => applicationDocumentId;
 			set
 			{
 				if (value < 0)
 				{
-					throw new ArgumentOutOfRangeException("ApplicationDocumentId", value, "ApplicationDocumentId must be greater than 0.");
+					throw new ArgumentOutOfRangeException(nameof(ApplicationDocumentId), value, nameof(ApplicationDocumentId) + " must be greater than 0.");
 				}
 				applicationDocumentId = value;
 			}
@@ -80,15 +42,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		public int ApplicationId
 		{
-			get
-			{
-				return applicationId;
-			}
+			get => applicationId;
 			set
 			{
 				if (value < 0)
 				{
-					throw new ArgumentOutOfRangeException("ApplicationId", value, "ApplicationId must be greater than 0.");
+					throw new ArgumentOutOfRangeException(nameof(ApplicationId), value, nameof(ApplicationId) + " must be greater than 0.");
 				}
 				applicationId = value;
 			}
@@ -99,19 +58,16 @@ namespace AllyisApps.Services
 		/// </summary>
 		public string DocumentLink
 		{
-			get
-			{
-				return documentLink;
-			}
+			get => documentLink;
 			set
 			{
 				if (string.IsNullOrEmpty(value))
 				{
-					throw new ArgumentNullException("DocumentLink", "DocumentLink must not be null or empty.");
+					throw new ArgumentNullException(nameof(DocumentLink), nameof(DocumentLink) + " must not be null or empty.");
 				}
-				else if (value.Length > MaxDocumentLinkLength)
+				if (value.Length > MaxDocumentLinkLength)
 				{
-					throw new ArgumentOutOfRangeException("DocumentLink", value, "DocumentLink length must be less than " + MaxDocumentLinkLength + ".");
+					throw new ArgumentOutOfRangeException(nameof(DocumentLink), value, nameof(DocumentLink) + " length must be less than " + MaxDocumentLinkLength + ".");
 				}
 				documentLink = value;
 			}
@@ -122,19 +78,16 @@ namespace AllyisApps.Services
 		/// </summary>
 		public string DocumentName
 		{
-			get
-			{
-				return documentName;
-			}
+			get => documentName;
 			set
 			{
 				if (string.IsNullOrEmpty(value))
 				{
-					throw new ArgumentNullException("DocumentName", "DocumentName must not be null or empty.");
+					throw new ArgumentNullException(nameof(DocumentName), nameof(DocumentName) + " must not be null or empty.");
 				}
-				else if (value.Length > MaxDocumentNameLength)
+				if (value.Length > MaxDocumentNameLength)
 				{
-					throw new ArgumentOutOfRangeException("DocumentName", value, "DocumentName length must be less than " + MaxDocumentNameLength + ".");
+					throw new ArgumentOutOfRangeException(nameof(DocumentName), value, nameof(DocumentName) + " length must be less than " + MaxDocumentNameLength + ".");
 				}
 				documentName = value;
 			}

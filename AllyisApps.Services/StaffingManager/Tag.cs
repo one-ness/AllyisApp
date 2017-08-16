@@ -7,34 +7,24 @@ namespace AllyisApps.Services.StaffingManager
 	/// </summary>
 	public class Tag
 	{
-		private int? tagId;
-		private int? positionId;
 		private string tagName;
 
 		/// <summary>
 		/// Gets or sets the Tags Id
 		/// </summary>
-		public int? TagId
-		{
-			get { return tagId; }
-			set { tagId = value; }
-		}
+		public int TagId { get; set; }
 
 		/// <summary>
 		/// Gets or sets Position Id
 		/// </summary>
-		public int? PositionId
-		{
-			get { return positionId; }
-			set { positionId = value; }
-		}
+		public int PositionId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Tag's Name
 		/// </summary>
 		public string TagName
 		{
-			get { return tagName; }
+			get => tagName;
 			set
 			{
 				if (value.Length > 32 || value.Length == 0) throw new ArgumentOutOfRangeException(nameof(tagName), value, nameof(tagName) + " must be between 1 and 32 characters in length");
