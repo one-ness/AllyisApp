@@ -5,7 +5,6 @@ namespace AllyisApps.Services.StaffingManager
 {
 	public class Position
 	{
-		private DateTime? startDate;
 		private int positionStatusId;
 		private string positionTitle;
 		private int durationMonths;
@@ -17,94 +16,9 @@ namespace AllyisApps.Services.StaffingManager
 		private List<Tag> tags;
 
 		/// <summary>
-		/// This contructor for use by DBEntity to be passed to view
-		/// </summary>
-		/// <param name="positionId"></param>
-		/// <param name="organizationId"></param>
-		/// <param name="customerId"></param>
-		/// <param name="addressId"></param>
-		/// <param name="positionCreatedUtc"></param>
-		/// <param name="positionModifiedUtc"></param>
-		/// <param name="startDate"></param>
-		/// <param name="positionStatusId"></param>
-		/// <param name="positionTitle"></param>
-		/// <param name="billingRateFrequency"></param>
-		/// <param name="billingRateAmount"></param>
-		/// <param name="durationMonths"></param>
-		/// <param name="employmentTypeId"></param>
-		/// <param name="positionCount"></param>
-		/// <param name="requiredSkills"></param>
-		/// <param name="jobResponsibilities"></param>
-		/// <param name="desiredSkills"></param>
-		/// <param name="positionLevelId"></param>
-		/// <param name="hiringManager"></param>
-		/// <param name="teamName"></param>
-		/// <param name="address"></param>
-		/// <param name="city"></param>
-		/// <param name="state"></param>
-		/// <param name="country"></param>
-		/// <param name="postalCode"></param>
-		/// <param name="tags"></param>
-		public Position(
-			int organizationId,
-			int customerId,
-			int addressId,
-			int positionStatusId,
-			string positionTitle,
-			int durationMonths,
-			int employmentTypeId,
-			int positionCount,
-			string requiredSkills,
-			int positionLevelId,
-			string address,
-			string city,
-			string state,
-			string country,
-			string postalCode,
-			int? positionId = null,
-			DateTime? positionCreatedUtc = null,
-			DateTime? positionModifiedUtc = null,
-			DateTime? startDate = null,
-			int? billingRateFrequency = null,
-			int? billingRateAmount = null,
-			string jobResponsibilities = null,
-			string desiredSkills = null,
-			List<Tag> tags = null,
-			string hiringManager = null,
-			string teamName = null)
-		{
-			PositionId = positionId;
-			OrganizationId = organizationId;
-			CustomerId = customerId;
-			AddressId = addressId;
-			this.PositionCreatedUtc = positionCreatedUtc;
-			this.PositionModifiedUtc = positionModifiedUtc;
-			StartDate = startDate;
-			PositionStatusId = positionStatusId;
-			PositionTitle = positionTitle;
-			BillingRateFrequency = billingRateFrequency;
-			BillingRateAmount = billingRateAmount;
-			DurationMonths = durationMonths;
-			EmploymentTypeId = employmentTypeId;
-			PositionCount = positionCount;
-			RequiredSkills = requiredSkills;
-			JobResponsibilities = jobResponsibilities;
-			DesiredSkills = desiredSkills;
-			PositionLevelId = positionLevelId;
-			HiringManager = hiringManager;
-			TeamName = teamName;
-			Address = address;
-			City = city;
-			State = state;
-			Country = country;
-			PostalCode = postalCode;
-			Tags = tags;
-		}
-
-		/// <summary>
 		/// Gets or sets the position's Id
 		/// </summary>
-		public int? PositionId { get; set; }
+		public int PositionId { get; set; }
 
 		/// <summary>
 		/// Gets or sets positions associated organization
@@ -124,25 +38,17 @@ namespace AllyisApps.Services.StaffingManager
 		/// <summary>
 		/// Gets when the position was created
 		/// </summary>
-		public DateTime? PositionCreatedUtc { get; set; }
+		public DateTime PositionCreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets when the position was last modified
 		/// </summary>
-		public DateTime? PositionModifiedUtc { get; set; }
+		public DateTime PositionModifiedUtc { get; set; }
 
 		/// <summary>
 		/// Get or sets the Start date of the position
 		/// </summary>
-		public DateTime? StartDate
-		{
-			get => startDate;
-			set
-			{
-				if (value == null) throw new ArgumentNullException("StartDate", "The Start Date cannot be blank");
-				startDate = value;
-			}
-		}
+		public DateTime StartDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets the status int(enum) of the position
@@ -152,7 +58,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => positionStatusId;
 			set
 			{
-				if (!Enum.IsDefined(typeof(PositionStatusEnum), value)) throw new ArgumentOutOfRangeException("PositionStatusId", value, "Position Status was not defined");
+				if (!Enum.IsDefined(typeof(PositionStatusEnum), value)) throw new ArgumentOutOfRangeException(nameof(PositionStatusId), value, "Position Status was not defined");
 				positionStatusId = value;
 			}
 		}
@@ -165,7 +71,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => positionTitle;
 			set
 			{
-				if (value.Length > 140 || value.Length <= 0) throw new ArgumentOutOfRangeException("PositionTitle", value, "The position title cannot be blank or over 140 characters");
+				if (value.Length > 140 || value.Length <= 0) throw new ArgumentOutOfRangeException(nameof(positionTitle), value, "The position title cannot be blank or over 140 characters");
 				positionTitle = value;
 			}
 		}
@@ -173,12 +79,12 @@ namespace AllyisApps.Services.StaffingManager
 		/// <summary>
 		/// Gets or sets billing rate frequency (eg: Months, Weeks)
 		/// </summary>
-		public int? BillingRateFrequency { get; set; }
+		public int BillingRateFrequency { get; set; }
 
 		/// <summary>
 		/// Get or sets the billing rate amount in dollars
 		/// </summary>
-		public int? BillingRateAmount { get; set; }
+		public int BillingRateAmount { get; set; }
 
 		/// <summary>
 		/// Gets or sets the duration of the position if applicable
@@ -188,7 +94,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => durationMonths;
 			set
 			{
-				if (value < 1) throw new ArgumentOutOfRangeException("DurationMonths", value, "The Month Duration cannot be less than 1 Month");
+				if (value < 1) throw new ArgumentOutOfRangeException(nameof(durationMonths), value, "The Month Duration cannot be less than 1 Month");
 				durationMonths = value;
 			}
 		}
@@ -201,7 +107,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => employmentTypeId;
 			set
 			{
-				if (value <= 0) throw new ArgumentOutOfRangeException("EmploymentTypeId", value, "Employment Type cannot be 0");
+				if (value <= 0) throw new ArgumentOutOfRangeException(nameof(employmentTypeId), value, "Employment Type cannot be 0");
 				employmentTypeId = value;
 			}
 		}
@@ -214,7 +120,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => positionCount;
 			set
 			{
-				if (value < 0) throw new ArgumentOutOfRangeException("PositionCount", value, "Position Count cannot be less than 0");
+				if (value < 0) throw new ArgumentOutOfRangeException(nameof(positionCount), value, "Position Count cannot be less than 0");
 				positionCount = value;
 			}
 		}
@@ -227,7 +133,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => requiredSkills;
 			set
 			{
-				if (string.IsNullOrEmpty(value)) throw new ArgumentOutOfRangeException("RequiredSkills", value, "Required Skills cannot be left blank");
+				if (string.IsNullOrEmpty(value)) throw new ArgumentOutOfRangeException(nameof(requiredSkills), value, "Required Skills cannot be left blank");
 				requiredSkills = value;
 			}
 		}
@@ -255,7 +161,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => hiringManager;
 			set
 			{
-				if (value.Length > 140) throw new ArgumentOutOfRangeException("HiringManager", value, "Hiring Manager Name cannot be over 140 characters");
+				if (value.Length > 140) throw new ArgumentOutOfRangeException(nameof(hiringManager), value, "Hiring Manager Name cannot be over 140 characters");
 				hiringManager = value;
 			}
 		}
@@ -268,7 +174,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => teamName;
 			set
 			{
-				if (value.Length > 140) throw new ArgumentOutOfRangeException("TeamName", value, "Team Name cannot be  over 140 characters");
+				if (value.Length > 140) throw new ArgumentOutOfRangeException(nameof(teamName), value, "Team Name cannot be  over 140 characters");
 				teamName = value;
 			}
 		}
@@ -306,7 +212,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => tags;
 			set
 			{
-				if (value.Count > 10) throw new ArgumentOutOfRangeException("Tags", value, "A position can only have a maximum of 10 tags");
+				if (value.Count > 10) throw new ArgumentOutOfRangeException(nameof(tags), value, "A position can only have a maximum of 10 tags");
 				tags = value;
 			}
 		}

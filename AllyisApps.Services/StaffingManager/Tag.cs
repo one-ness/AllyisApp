@@ -27,7 +27,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => tagName;
 			set
 			{
-				if (value.Length > 32 || value.Length == 0) throw new ArgumentOutOfRangeException("TagName", value, "Tag Name must be between 1 and 32 characters in length");
+				if (value.Length > 32 || value.Length == 0) throw new ArgumentOutOfRangeException(nameof(tagName), value, nameof(tagName) + " must be between 1 and 32 characters in length");
 				tagName = value;
 			}
 		}
