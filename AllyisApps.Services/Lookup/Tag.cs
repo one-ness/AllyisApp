@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AllyisApps.Services.StaffingManager
+namespace AllyisApps.Services.Lookup
 {
 	/// <summary>
 	/// Represents the Address table in the database.

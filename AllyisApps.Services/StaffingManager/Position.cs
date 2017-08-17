@@ -1,16 +1,17 @@
-﻿using System;
+﻿using AllyisApps.Services.Lookup;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.Services.StaffingManager
 {
 	public class Position
 	{
-		private const int titleLength = 140;
+		private const int titleLengthMax = 140;
+		private const int nameLenthMax = 64;
 		private const int maxTags = 10;
-
-		private int positionStatusId;
+		
 		private string positionTitle;
-		private int durationMonths;
 		private int employmentTypeId;
 		private int positionCount;
 		private string requiredSkills;
@@ -54,17 +55,9 @@ namespace AllyisApps.Services.StaffingManager
 		public DateTime StartDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets the status int(enum) of the position
+		/// Gets or sets the id int of the positionStatus
 		/// </summary>
-		public int PositionStatusId
-		{
-			get => positionStatusId;
-			set
-			{
-				if (!Enum.IsDefined(typeof(PositionStatusEnum), value)) throw new ArgumentOutOfRangeException(nameof(PositionStatusId), value, "Position Status was not defined");
-				positionStatusId = value;
-			}
-		}
+		public int PositionStatusId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the position name
@@ -74,7 +67,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => positionTitle;
 			set
 			{
-				if (value.Length > titleLength || value.Length <= 0) throw new ArgumentOutOfRangeException(nameof(positionTitle), value, "The position title cannot be blank or over " + titleLength.ToString() + " characters");
+				if (value.Length > titleLengthMax || value.Length <= 0) throw new ArgumentOutOfRangeException(nameof(positionTitle), value, "The position title cannot be blank or over " + titleLengthMax.ToString() + " characters");
 				positionTitle = value;
 			}
 		}
@@ -92,20 +85,12 @@ namespace AllyisApps.Services.StaffingManager
 		/// <summary>
 		/// Gets or sets the duration of the position if applicable
 		/// </summary>
-		public int DurationMonths
-		{
-			get => durationMonths;
-			set
-			{
-				if (value < 1) throw new ArgumentOutOfRangeException(nameof(durationMonths), value, "The Month Duration cannot be less than 1 Month");
-				durationMonths = value;
-			}
-		}
+		public int DurationMonths { get; set; }
 
-		/// <summary>
-		/// Gets or sets the employment type (eg: salary, hourly)
-		/// </summary>
-		public int EmploymentTypeId
+	/// <summary>
+	/// Gets or sets the employment type (eg: salary, hourly)
+	/// </summary>
+	public int EmploymentTypeId
 		{
 			get => employmentTypeId;
 			set
@@ -164,7 +149,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => hiringManager;
 			set
 			{
-				if (value.Length > titleLength) throw new ArgumentOutOfRangeException(nameof(hiringManager), value, "Hiring Manager Name cannot be over " + titleLength.ToString() + " characters");
+				if (value.Length > nameLenthMax) throw new ArgumentOutOfRangeException(nameof(hiringManager), value, "Hiring Manager Name cannot be over " + nameLenthMax.ToString() + " characters");
 				hiringManager = value;
 			}
 		}
@@ -177,7 +162,7 @@ namespace AllyisApps.Services.StaffingManager
 			get => teamName;
 			set
 			{
-				if (value.Length > titleLength) throw new ArgumentOutOfRangeException(nameof(teamName), value, "Team Name cannot be  over " + titleLength.ToString() + " characters");
+				if (value.Length > nameLenthMax) throw new ArgumentOutOfRangeException(nameof(teamName), value, "Team Name cannot be  over " + nameLenthMax.ToString() + " characters");
 				teamName = value;
 			}
 		}

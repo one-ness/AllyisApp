@@ -1,11 +1,11 @@
-﻿CREATE PROCEDURE [StaffingManager].[CreatePositionTag]
+﻿CREATE PROCEDURE [Lookup].[CreatePositionTag]
 	@tagId INT,
 	@positionId INT
 
 AS
 BEGIN
 	SET NOCOUNT ON;
-		INSERT INTO [StaffingManager].[PositionTag] 
+		INSERT INTO [Lookup].[PositionTag] 
 		([TagId], 
 		[PositionId])
 	VALUES 	

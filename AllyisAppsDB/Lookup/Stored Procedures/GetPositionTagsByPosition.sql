@@ -1,4 +1,4 @@
-CREATE PROCEDURE [StaffingManager].[GetPositionTagsByPosition]
+CREATE PROCEDURE [Lookup].[GetPositionTagsByPosition]
 	@PositionId INT
 AS
 BEGIN
@@ -8,8 +8,8 @@ BEGIN
 		@PositionId AS [PositionId],
 		[PositionTag].[TagId],
 		[Tag].[TagName]
-	FROM [StaffingManager].[PositionTag]
-		JOIN [StaffingManager].[Tag]
+	FROM [Lookup].[PositionTag]
+		JOIN [Lookup].[Tag]
 		ON [Tag].[TagId] = [PositionTag].[TagId]
 	WHERE [PositionTag].[PositionId] = @PositionId; 
 END

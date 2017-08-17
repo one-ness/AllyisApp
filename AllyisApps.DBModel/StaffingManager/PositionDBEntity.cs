@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AllyisApps.DBModel.Lookup;
+using System;
 using System.Collections.Generic;
 
 namespace AllyisApps.DBModel.StaffingManager

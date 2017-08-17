@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using AllyisApps.DBModel.StaffingManager;
 using AllyisApps.Services.StaffingManager;
+using AllyisApps.Services.Lookup;
+using AllyisApps.DBModel.Lookup;
 
 namespace AllyisApps.Services
 {
@@ -342,7 +344,7 @@ namespace AllyisApps.Services
 		public static List<Tag> DBEntityToServiceObject(List<TagDBEntity> tags)
 		{
 			var taglist = tags
-				.ConvertAll(x => new Tag { TagId = x.TagId, PositionId = x.PositionId, TagName = x.TagName });
+				.ConvertAll(x => new Tag { TagId = x.TagId, TagName = x.TagName });
 			return taglist;
 		}
 
@@ -355,7 +357,7 @@ namespace AllyisApps.Services
 		{
 			if (tag == null) throw new ArgumentNullException(nameof(tag), "Cannot accept a null tag to be converted");
 
-			return new Tag { TagId = tag.TagId, PositionId = tag.PositionId, TagName = tag.TagName };
+			return new Tag { TagId = tag.TagId, TagName = tag.TagName };
 		}
 
 		#endregion DB to Service Conversion
@@ -474,7 +476,7 @@ namespace AllyisApps.Services
 			if (tags == null) throw new ArgumentNullException(nameof(tags), "Cannot accept null list of tags to be converted.");
 
 			var taglist = tags
-				.ConvertAll(x => new TagDBEntity { TagId = (int)x.TagId, PositionId = (int)x.PositionId, TagName = x.TagName });
+				.ConvertAll(x => new TagDBEntity { TagId = (int)x.TagId, TagName = x.TagName });
 			return taglist;
 		}
 
@@ -487,7 +489,7 @@ namespace AllyisApps.Services
 		{
 			if (tag == null) throw new ArgumentNullException(nameof(tag), "Cannot accept a null tag to be converted.");
 
-			return new TagDBEntity { TagId = (int)tag.TagId, PositionId = (int)tag.PositionId, TagName = tag.TagName };
+			return new TagDBEntity { TagId = (int)tag.TagId, TagName = tag.TagName };
 		}
 
 		#endregion Service to DB Conversions

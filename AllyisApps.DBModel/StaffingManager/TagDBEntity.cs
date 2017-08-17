@@ -1,4 +1,4 @@
-﻿namespace AllyisApps.DBModel.StaffingManager
+﻿namespace AllyisApps.DBModel.Lookup
 {
 	/// <summary>
 	/// Represents the Address table in the database.
@@ -9,11 +9,6 @@
 		/// Gets or sets the Tags Id
 		/// </summary>
 		public int TagId { get; set; }
-
-		/// <summary>
-		/// Gets or sets Position Id
-		/// </summary>
-		public int PositionId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Tag's Name

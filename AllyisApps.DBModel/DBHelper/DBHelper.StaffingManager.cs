@@ -11,6 +11,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using AllyisApps.DBModel.StaffingManager;
 using Dapper;
+using AllyisApps.DBModel.Lookup;
 
 namespace AllyisApps.DBModel
 {
@@ -135,6 +136,59 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<int>("[StaffingManager].[CreatePosition]", parameters, commandType: CommandType.StoredProcedure).Single();
+			}
+		}
+
+
+
+		/// <summary>
+		/// Creates a position level for the database
+		/// </summary>
+		/// <param name="organizationId"> The ID of the organization this level belongs to. </param>
+		/// <param name="positionLevelName"> The name of the position Level to be created. </param>
+		public void CreatePositionLevel(int organizationId, string positionLevelName)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", organizationId);
+			parameters.Add("@positionLevelName", positionLevelName);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				connection.Execute("[StaffingManager].[CreatePositionLevel]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Creates a position status for the database
+		/// </summary>
+		/// <param name="organizationId"> The ID of the organization this status belongs to. </param>
+		/// <param name="positionStatusName">Parameter @positionStatusName.</param>
+		public void CreatePositionStatus(int organizationId, string positionStatusName)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", organizationId);
+			parameters.Add("@positionStatusName", positionStatusName);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				connection.Execute("[StaffingManager].[CreatePositionStatus]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Creates a employment type for the database
+		/// </summary>
+		/// <param name="organizationId"> The ID of the organization this type belongs to. </param>
+		/// <param name="employmentTypeName">Parameter @employmentTypeName.</param>
+		public void CreateEmploymentType(int organizationId, string employmentTypeName)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", organizationId);
+			parameters.Add("@employmentTypeName", employmentTypeName);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				connection.Execute("[StaffingManager].[CreateEmploymentType]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -384,6 +438,96 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Gets a position level from the database
+		/// </summary>
+		/// <param name="positionLevelId">Parameter @positionLevelId.</param>
+		public PositionLevelDBEntity GetPositionLevelById(int positionLevelId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@positionLevelId", positionLevelId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return connection.Query<PositionLevelDBEntity>("[StaffingManager].[GetPositionLevelById]", parameters, commandType: CommandType.StoredProcedure).Single();
+			}
+		}
+
+		/// <summary>
+		/// Gets a position levels by organization from the database
+		/// </summary>
+		/// <param name="organizationId">Parameter @organizationId.</param>
+		public IEnumerable<PositionLevelDBEntity> GetPositionLevelsByOrganization(int organizationId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", organizationId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return connection.Query<PositionLevelDBEntity>("[StaffingManager].[GetPositionLevelsByOrganization]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Gets a position status from the database
+		/// </summary>
+		/// <param name="positionStatusId">Parameter @positionStatusId.</param>
+		public PositionStatusDBEntity GetPositionStatusById(int positionStatusId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@positionStatusId", positionStatusId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return connection.Query<PositionStatusDBEntity>("[StaffingManager].[GetPositionStatusById]", parameters, commandType: CommandType.StoredProcedure).Single();
+			}
+		}
+
+		/// <summary>
+		/// Gets position statuses by an organization from the database
+		/// </summary>
+		/// <param name="organizationId">Parameter @organizationId.</param>
+		public IEnumerable<PositionStatusDBEntity> GetPositionStatusesByOrganization(int organizationId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", organizationId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return connection.Query<PositionStatusDBEntity>("[StaffingManager].[GetPositionStatusById]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Gets an employment type from the database
+		/// </summary>
+		/// <param name="employmentTypeId">Parameter @employmentTypeId.</param>
+		public EmploymentTypeDBEntity GetEmploymentTypeById(int employmentTypeId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@employmentTypeId", employmentTypeId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return connection.Query<EmploymentTypeDBEntity>("[StaffingManager].[GetEmploymentTypeById]", parameters, commandType: CommandType.StoredProcedure).Single();
+			}
+		}
+
+		/// <summary>
+		/// Get employment types by organization from the database
+		/// </summary>
+		/// <param name="organizationId">Parameter @organizationId.</param>
+		public IEnumerable<EmploymentTypeDBEntity> GetEmploymentTypesByOrganization(int organizationId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", organizationId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				return connection.Query<EmploymentTypeDBEntity>("[StaffingManager].[GetEmploymentTypesByOrganization]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
 		/// Retrieves the tags on a position.
 		/// </summary>
 		/// <param name="positionId">The id of the posiion.</param>
@@ -601,6 +745,51 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				connection.Execute("[StaffingManager].[DeleteTag]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Deletes a position level from the database
+		/// </summary>
+		/// <param name="positionLevelId">Parameter @positionLevelId.</param>
+		public void DeletePositionLevel(int positionLevelId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@positionLevelId", positionLevelId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				connection.Execute("[StaffingManager].[DeletePositionLevel]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Deletes a position status from the database
+		/// </summary>
+		/// <param name="positionStatusId">Parameter @positionStatusId.</param>
+		public void DeletePositionStatus(int positionStatusId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@positionStatusId", positionStatusId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				connection.Execute("[StaffingManager].[DeletePositionStatus]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Deletes a employment level from the database
+		/// </summary>
+		/// <param name="employmentTypeId">Parameter @employmentTypeId.</param>
+		public void DeleteEmploymentType(int employmentTypeId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@employmentTypeId", employmentTypeId);
+
+			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+			{
+				connection.Execute("[StaffingManager].[DeleteEmploymentType]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
