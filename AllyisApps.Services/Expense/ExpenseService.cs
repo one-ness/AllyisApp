@@ -1,5 +1,6 @@
 ﻿using AllyisApps.DBModel;
 using AllyisApps.DBModel.Finance;
+using AllyisApps.Services.Expense;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +50,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="reportId"></param>
 		/// <returns></returns>
-		public IList<string> GetExpenseFilesByReportId(int reportId)
+		public IList<ExpenseFile> GetExpenseFilesByReportId(int reportId)
 		{
 			return DBHelper.GetExpenseFilesByReportId(reportId).Select(x => InitializeExpenseFile(x)).AsEnumerable().ToList();
 		}
@@ -183,13 +184,13 @@ namespace AllyisApps.Services
 			};
 		}
 
-		public static string InitializeExpenseFile(ExpenseFileDBEntity entity)
+		public static ExpenseFile InitializeExpenseFile(ExpenseFileDBEntity entity)
 		{
 			if(entity == null)
 			{
 				return null;
 			}
-			return entity.FileName;
+			return new ExpenseFile(entity.Stream, entity.FileType, entity.FileName);
 		}
 		
 		public void CreateExpenseItem(ExpenseItem item)
@@ -210,10 +211,12 @@ namespace AllyisApps.Services
 			DBHelper.CreateExpenseItem(itemEntity);
 		}
 
-		public void CreateExpenseFile(HttpPostedFileBase file, int reportId)
+		public void CreateExpenseFile(ExpenseFile file, int reportId)
 		{
 			ExpenseFileDBEntity fileEntity = new ExpenseFileDBEntity()
 			{
+				FileType = file.ContentType,
+				Stream = file.InputStream,
 				FileName = file.FileName,
 				Url = "",
 				ExpenseReportId = reportId

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace AllyisApps.DBModel.Finance
 {
@@ -7,8 +8,18 @@ namespace AllyisApps.DBModel.Finance
 	/// </summary>
 	public class ExpenseFileDBEntity
     {
+		/// <summary>
+		/// Gets or sets the expense file's stream.
+		/// </summary>
+		public Stream Stream { get; set; }
+
+		/// <summary>
+		/// Gets or sets the expense file's type.
+		/// </summary>
+		public string FileType { get; set; }
+
         /// <summary>
-        /// Gets or sets the Expense File's ID.
+        /// Gets or sets the expense file's ID.
         /// </summary>
         public int FileId { get; set; }
 

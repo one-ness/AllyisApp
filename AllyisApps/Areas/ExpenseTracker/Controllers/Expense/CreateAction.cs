@@ -4,6 +4,9 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
+using System.Web;
+using AllyisApps.Services.Expense;
+using System.IO;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -24,7 +27,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		{
 			ExpenseReport report = reportId == -1 ? null : AppService.GetExpenseReport(reportId);
 			IList<ExpenseItem> items = new List<ExpenseItem>();
-			IList<string> files = new List<string>();
+			IList<ExpenseFile> files = new List<ExpenseFile>();
 			if (report == null)
 			{
 				items = new List<ExpenseItem>();
@@ -32,10 +35,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				{
 					items.Add(new ExpenseItem());
 				}
-				files = new List<string>();
+				files = new List<ExpenseFile>();
 				for (int i = 0; i < fileCount; i++)
 				{
-					files.Add("");
+					files.Add(new ExpenseFile(new FileStream("", FileMode.Create), "", ""));
 				}
 			}
 			else

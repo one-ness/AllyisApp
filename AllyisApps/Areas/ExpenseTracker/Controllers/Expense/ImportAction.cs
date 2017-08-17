@@ -10,6 +10,7 @@ using AllyisApps.Controllers;
 using AllyisApps.Services;
 using System.Collections.Generic;
 using System.Linq;
+using AllyisApps.Services.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -24,19 +25,19 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <param name="reportId"></param>
-		/// <param name="uploads">File to upload.</param>
+		/// <param name="files">File to upload.</param>
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Import(int subscriptionId, int reportId, List<HttpPostedFileBase> uploads)
+		public ActionResult Import(int subscriptionId, int reportId, List<ExpenseFile> files)
 		{
 			int organizationId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
 
 			// TODO: Replace ModelState errors with exception catches and notifications
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)
-			if (ModelState.IsValid && uploads != null)
+			if (ModelState.IsValid && files != null)
 			{
-				foreach (var upload in uploads)
+				foreach (var upload in files)
 				{
 					AppService.CreateExpenseFile(upload, reportId);
 				}

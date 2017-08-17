@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using AllyisApps.Services;
+using System.Web;
+using AllyisApps.Services.Expense;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {
@@ -37,6 +39,6 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// <summary>
 		/// Gets or sets the Expense Files
 		/// </summary>
-		public IList<string> Files { get; set; }
+		public IList<ExpenseFile> Files { get; set; }
 	}
 }
