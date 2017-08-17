@@ -181,7 +181,10 @@ namespace AllyisApps.Services
 			var result = 0;
 			try
 			{
-				result = await this.DBHelper.CreateUserAsync(email, Crypto.GetPasswordHash(password), firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName, address1, address2, city, stateId, postalCode, countryCode);
+                
+				result = await this.DBHelper.CreateUserAsync(
+                    email, Crypto.GetPasswordHash(password), firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName, 
+                    address1, address2, city, stateId, postalCode, countryCode);
 
 				// user created, send confirmation email
 				await Mailer.SendEmailAsync(this.ServiceSettings.SupportEmail, email, confirmEmailSubject, confirmEmailMessage);
@@ -411,8 +414,7 @@ namespace AllyisApps.Services
             //// TODO: Add UserInfo->UserDBEntity conversion at bottom
             DBHelper.UpdateUserProfile(model.UserId,
                 model.FirstName, model.LastName, model.DateOfBirth, model.PhoneNumber, 
-                model.Address?.AddressId,
-                model.Address?.Address1, model.Address?.Address2, model.Address?.City, model.Address?.StateId, model.Address?.PostalCode, model.Address?.CountryCode
+                model.Address?.AddressId, model.Address?.Address1, model.Address?.Address2, model.Address?.City, model.Address?.StateId, model.Address?.PostalCode, model.Address?.CountryCode
             );
 		}
 
@@ -599,15 +601,16 @@ namespace AllyisApps.Services
         /// Translates a UserDBEntity into a User business object.
         /// </summary>
         /// <param name="user">UserDBEntity instance.</param>
+        /// <param name="loadAddress"></param>
         /// <returns>User instance.</returns>
-        public User InitializeUser(UserDBEntity user)
+        public User InitializeUser(UserDBEntity user, bool loadAddress = true)
 		{
 			if (user == null)
 			{
 				return null;
 			}
             Address address = null;
-            if (user.AddressId != null)
+            if (user.AddressId != null && loadAddress)
             {
                 address = getAddress(user.AddressId);
             }

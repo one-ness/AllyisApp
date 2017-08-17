@@ -103,6 +103,10 @@ namespace AllyisApps.Controllers
                             subViewModel.ProductGoToUrl = Url.RouteUrl("TimeTracker_NoUserId", new { subscriptionId = 
                                 userSubInfo.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = sDate, endDate = eDate});
                         }
+                        else
+                        {
+                            subViewModel.ProductGoToUrl = userSubInfo.AreaUrl;
+                        }
                         subViewModel.IconUrl = string.Format("Content/icons/{0}.png", subViewModel.ProductName.Replace(" ", ""));
                         orgViewModel.Subscriptions.Add(subViewModel);
                     }

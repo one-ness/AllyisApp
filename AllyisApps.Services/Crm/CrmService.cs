@@ -490,16 +490,16 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="userId">User Id.</param>
 		/// <param name="orgId">The organization's Id.</param>
-		/// <param name="isActive">True (default) to only return active projects, false to include all projects, active or not.</param>
+		/// <param name="onlyActive">True (default) to only return active projects, false to include all projects, active or not.</param>
 		/// <returns>A list of all the projects a user can access in an organization.</returns>
-		public IEnumerable<CompleteProjectInfo> GetProjectsByUserAndOrganization(int userId, int orgId = -1, bool isActive = true)
+		public IEnumerable<CompleteProjectInfo> GetProjectsByUserAndOrganization(int userId, int orgId = -1, bool onlyActive = true)
 		{
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.GetProjectsByUserAndOrganization(userId, orgId, isActive ? 1 : 0).Select(c => InitializeCompleteProjectInfo(c));
+			return DBHelper.GetProjectsByUserAndOrganization(userId, orgId, onlyActive ? 1 : 0).Select(c => InitializeCompleteProjectInfo(c));
 		}
 
 		/// <summary>
@@ -636,8 +636,31 @@ namespace AllyisApps.Services
             };
         }
 
+        public Customer IntializeCustomer(CustomerDBEntity customer, bool loadAddress = true)
+        {
+            if(customer == null)
+            {
+                return null;
+            }
+            return new Customer()
+            {
+                Address = loadAddress ? getAddress(customer.AddressId) : null,
+                ContactEmail = customer.ContactEmail,
+                ContactPhoneNumber = customer.ContactPhoneNumber,
+                CreatedUtc = customer.CreatedUtc,
+                CustomerId = customer.CustomerId,
+                CustomerOrgId = customer.CustomerOrgId,
+                EIN = customer.EIN,
+                FaxNumber = customer.FaxNumber,
+                CustomerName = customer.CustomerName,
+                OrganizationId = customer.OrganizationId,
+                Website = customer.Website,
+                IsActive = customer.IsActive
+            };
+        }
+
         /// <summary>
-        /// Initializes a <see cref="Customer"/> from a <see cref="CustomerDBEntity"/>.
+        /// Initializes a <see cref="Customer"/> from a query"/>.
         /// </summary>
         /// <returns>A Customer object.</returns>
         public  Customer InitializeCustomer(dynamic customer)

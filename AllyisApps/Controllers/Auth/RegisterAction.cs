@@ -6,6 +6,7 @@
 
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
+using AllyisApps.Services;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
 using System;
@@ -55,6 +56,8 @@ namespace AllyisApps.Controllers
 
 				// compute birthdate			
 				var birthdate = AppService.GetDateTimeFromDays(model.DateOfBirth);
+
+                
 
 				// create new user in the db and get back the userId and count of invitations
 				int userId = await AppService.SetupNewUser(model.Email, model.Password, model.FirstName, model.LastName, code, birthdate, model.PhoneNumber, model.Address, null, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode, confirmEmailSubject, confirmEmailBody);
