@@ -76,10 +76,12 @@
 					<div class="panel-heading">
 						Items
 					</div>
-					@{
-						Model.Items.Add(new ExpenseItem());
-						Html.RenderAction("DisplayItems", Model);
-					}
+					<div class="items">
+						@{
+							Model.Items.Add(new ExpenseItem());
+							Html.RenderAction("DisplayItems", Model);
+						}
+					</div>
 				</div>
 
 				<div class="row">

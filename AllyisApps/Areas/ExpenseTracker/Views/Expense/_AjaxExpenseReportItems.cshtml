@@ -3,47 +3,45 @@
 
 @model ExpenseCreateModel
 
-<div class="items">
-	@for (int i = 0; i < Model.Items.Count(); i++)
+@for (int i = 0; i < Model.Items.Count(); i++)
+{
+	int index = i;
+	var item = Model.Items[i];
+	string dateVal = "";
+	string amountVal = "";
+	if (Convert.ToDateTime(item.TransactionDate).ToShortDateString() != "1/1/0001")
 	{
-		int index = i;
-		var item = Model.Items[i];
-		string dateVal = "";
-		string amountVal = "";
-		if (Convert.ToDateTime(item.TransactionDate).ToShortDateString() != "1/1/0001")
-		{
-			dateVal = Convert.ToDateTime(item.TransactionDate).ToShortDateString();
-		}
-		if (item.Amount != 0)
-		{
-			amountVal = item.Amount.ToString();
-		}
-		string dateName = String.Format("[{0}].TransactionDate", i);
-		string nameName = String.Format("[{0}].ExpenseItemName", i);
-		string amountName = String.Format("[{0}].Amount", i);
-		string checkboxName = String.Format("[{0}].IsBillableToCustomer", i);
-		string itemIdName = String.Format("[{0}].ExpenseItemId", i);
-		<div class="item-div">
-			<input type="hidden" value="@item.ExpenseItemId" name="@itemIdName" />
-			@Html.TextBoxFor(m => m.Items[i].TransactionDate, new { @class = "datepicker form-control", name = dateName, Value = dateVal, placeholder = "Date", style = "display: inline-block; width: 150px" })
-			@Html.TextBoxFor(m => m.Items[i].ExpenseItemName, new { @class = "form-control", name = nameName, Value = Model.Items[i].ExpenseItemName, placeholder = "Name", style = "display: inline-block; width: 150px" })
-			@Html.TextBoxFor(m => m.Items[i].Amount, new { @class = "form-control", name = amountName, Value = amountVal, placeholder = "Amount", style = "display: inline-block; width: 150px" })
-			<label>Payed for by Customer</label>
-			<input type="checkbox" checked class="form-control" name="@checkboxName" style="width: 14px; display: inline-block;" />
-			<a onclick="removeItem(@index)">
-				<span class="btn btn-primary">
-					Remove
-				</span>
-			</a>
-		</div>
+		dateVal = Convert.ToDateTime(item.TransactionDate).ToShortDateString();
 	}
-	<div style="text-align: center;">
-		<a class="addItem">
+	if (item.Amount != 0)
+	{
+		amountVal = item.Amount.ToString();
+	}
+	string dateName = String.Format("[{0}].TransactionDate", i);
+	string nameName = String.Format("[{0}].ExpenseItemName", i);
+	string amountName = String.Format("[{0}].Amount", i);
+	string checkboxName = String.Format("[{0}].IsBillableToCustomer", i);
+	string itemIdName = String.Format("[{0}].ExpenseItemId", i);
+	<div class="item-div">
+		<input type="hidden" value="@item.ExpenseItemId" name="@itemIdName" />
+		@Html.TextBoxFor(m => m.Items[i].TransactionDate, new { @class = "datepicker form-control", name = dateName, Value = dateVal, placeholder = "Date", style = "display: inline-block; width: 150px" })
+		@Html.TextBoxFor(m => m.Items[i].ExpenseItemName, new { @class = "form-control", name = nameName, Value = Model.Items[i].ExpenseItemName, placeholder = "Name", style = "display: inline-block; width: 150px" })
+		@Html.TextBoxFor(m => m.Items[i].Amount, new { @class = "form-control", name = amountName, Value = amountVal, placeholder = "Amount", style = "display: inline-block; width: 150px" })
+		<label>Payed for by Customer</label>
+		<input type="checkbox" checked class="form-control" name="@checkboxName" style="width: 14px; display: inline-block;" />
+		<a onclick="removeItem(@index)">
 			<span class="btn btn-primary">
-				Add Item
+				Remove
 			</span>
 		</a>
 	</div>
+}
+<div style="text-align: center;">
+	<a class="addItem">
+		<span class="btn btn-primary">
+			Add Item
+		</span>
+	</a>
 </div>
 
 @Scripts.Render("~/bundles/jquery")
@@ -52,7 +50,6 @@
 		$('.items').load('@Url.Action("AddItem")', @Html.Raw(Json.Encode(@Model)));
 	});
 	function removeItem(index) {
-		console.log('removing ' + index);
 		$('.items').load('@Url.Action("RemoveItem")', { model: @Html.Raw(Json.Encode(@Model)), index: index });
 	}
 </script>

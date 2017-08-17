@@ -34,6 +34,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns></returns>
 		public ActionResult AddItem(ExpenseCreateModel model)
 		{
+			if (model.Items == null)
+			{
+				model.Items = new List<ExpenseItem>();
+			}
 			model.Items.Add(new ExpenseItem()
 			{
 				Index = model.Items.Count
@@ -50,7 +54,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns></returns>
 		public ActionResult RemoveItem(ExpenseCreateModel model, int index)
 		{
-			model.Items.Remove(model.Items.Where(i => i.Index == index).FirstOrDefault());
+			model.Items.Remove(model.Items.Last());
+			//model.Items.Remove(model.Items.Where(i => i.Index == index).FirstOrDefault());
 			return PartialView("_AjaxExpenseReportItems", model);
 		}
 	}
