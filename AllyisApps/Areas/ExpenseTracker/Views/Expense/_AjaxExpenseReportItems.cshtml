@@ -52,6 +52,7 @@
 		$('.items').load('@Url.Action("AddItem")', @Html.Raw(Json.Encode(@Model)));
 	});
 	function removeItem(index) {
-		$('.items').load('@Url.Action("RemoveItem")', @Html.Raw(Json.Encode(@Model)), index);
+		console.log('removing ' + index);
+		$('.items').load('@Url.Action("RemoveItem")', { model: @Html.Raw(Json.Encode(@Model)), index: index });
 	}
 </script>
