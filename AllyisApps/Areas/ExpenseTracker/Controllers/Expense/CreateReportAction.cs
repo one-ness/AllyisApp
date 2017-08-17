@@ -57,7 +57,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			if (files != null)
 			{
-				//return RedirectToAction("Import", new { subscriptionId = subscriptionId, uploads = uploads, reportId = reportId });
+				return RedirectToAction("Import", new { subscriptionId = subscriptionId, files = files, reportId = reportId });
 			}
 			return RedirectToAction("Index");
 		}

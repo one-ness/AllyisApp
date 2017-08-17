@@ -38,7 +38,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				files = new List<ExpenseFile>();
 				for (int i = 0; i < fileCount; i++)
 				{
-					files.Add(new ExpenseFile(new FileStream("", FileMode.Create), "", ""));
+					files.Add(new ExpenseFile(null, "", ""));
 				}
 			}
 			else

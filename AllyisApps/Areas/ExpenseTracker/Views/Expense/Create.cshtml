@@ -17,7 +17,7 @@
 		<div class="panel-heading"><span class="panel-title">@Strings.Upload</span></div>
 		<div class="files">
 			@{
-				Model.Files.Add(new AllyisApps.Services.Expense.ExpenseFile(new FileStream("/", FileMode.Create), "", ""));
+				Model.Files.Add(new AllyisApps.Services.Expense.ExpenseFile(null, "", ""));
 				foreach (var item in Model.Files)
 				{
 					Html.RenderAction("DisplayFile", Model);
