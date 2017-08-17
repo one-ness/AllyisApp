@@ -84,13 +84,15 @@ namespace AllyisApps.Controllers
                 if (userOrgInfo != null)
                 {
                     //Add subscription info 
-                    foreach (UserSubscription userSubInfo in AppService.UserContext.UserSubscriptions.Values)
+                    foreach (UserSubscription userSubInfo in AppService.UserContext.UserSubscriptions.Values.Where(item => item.OrganizationId == userOrgInfo.OrganizationId))
                     {
+                        
                         string description =
                             userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
                             userSubInfo.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
                             "";
                         var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel(userSubInfo, description);
+                        
                         int? sDate = null;
                         int? eDate = null;
                         if (userSubInfo.ProductId == ProductIdEnum.TimeTracker)
@@ -101,6 +103,7 @@ namespace AllyisApps.Controllers
                             subViewModel.ProductGoToUrl = Url.RouteUrl("TimeTracker_NoUserId", new { subscriptionId = 
                                 userSubInfo.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = sDate, endDate = eDate});
                         }
+                        subViewModel.IconUrl = string.Format("Content/icons/{0}.png", subViewModel.ProductName.Replace(" ", ""));
                         orgViewModel.Subscriptions.Add(subViewModel);
                     }
                 }
