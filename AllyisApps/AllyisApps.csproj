@@ -203,6 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateAction.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\FileAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\UpdateReportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ItemAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\EditAction.cs" />
@@ -543,6 +544,7 @@
     <Content Include="Areas\StaffingManager\Views\Shared\_BreadcrumbNavPartial.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\_AjaxExpenseReportItems.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\ReportView.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\Expense\_AjaxExpenseReportFile.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />

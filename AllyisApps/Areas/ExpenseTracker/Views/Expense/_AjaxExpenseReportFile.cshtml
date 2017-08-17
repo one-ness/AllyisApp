@@ -1,0 +1,14 @@
+﻿@using AllyisApps.ViewModels.ExpenseTracker.Expense
+@using AllyisApps.Services
+
+@model ExpenseCreateModel
+
+<div>
+	<input type="file" id="upload-box" name="upload" style="display:none;"
+		   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+	<input id="upload-file-name-display" class="form-control"
+		   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+</div>
+<a onclick="$('input[id=upload-box]').click();" title="Choose Excel file containing Expense Tracker entries">
+	<span class="btn btn-primary">@Strings.ChooseFile</span>
+</a>
