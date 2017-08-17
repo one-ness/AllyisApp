@@ -13,9 +13,8 @@
 
 <div class="panel panel-info" style="background-color: #f5f5f5; float: right; width: 300px; position: relative; z-index: 10">
 	<div class="panel-heading"><span class="panel-title">@Strings.Upload</span></div>
-	@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Expense, new { subscriptionid = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
-		{
-		@Html.AntiForgeryToken();
+	@*@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Expense, new { subscriptionid = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+		@Html.AntiForgeryToken();*@
 		<div>
 			<input type="file" id="upload-box" name="upload" style="display:none;"
 					onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
@@ -27,9 +26,8 @@
 			<a onclick="$('input[id=upload-box]').click();" title="Choose Excel file containing Expense Tracker entries">
 				<span class="btn btn-primary">@Strings.ChooseFile</span>
 			</a>
-			<input type="submit" style="margin-left: 3px; margin-right: 3px;" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload Excel Expense Tracker entries" />
+			@*<input type="submit" style="margin-left: 3px; margin-right: 3px;" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload Excel Expense Tracker entries" />*@
 		</div>
-		}
 </div>
 <div class="col-md-6" style="float: left;">
 	<div class="row">

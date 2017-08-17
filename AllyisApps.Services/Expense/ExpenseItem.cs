@@ -61,5 +61,10 @@ namespace AllyisApps.Services
         /// When it was last modified.
         /// </summary>
         public DateTime ExpenseItemModifiedUtc { get; set; }
+
+		/// <summary>
+		/// Index of item in report
+		/// </summary>
+		public int Index { get; set; }
     }
 }

@@ -34,7 +34,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns></returns>
 		public ActionResult AddItem(ExpenseCreateModel model)
 		{
-			model.Items.Add(new ExpenseItem());
+			model.Items.Add(new ExpenseItem()
+			{
+				Index = model.Items.Count
+			});
 			//return PartialView("_AjaxExpenseReportItems", model);
 			return PartialView("_AjaxExpenseReportItems", model);
 		}
@@ -43,11 +46,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// Removes the item from the model with the given ItemId.
 		/// </summary>
 		/// <param name="model"></param>
-		/// <param name="ItemId"></param>
+		/// <param name="index"></param>
 		/// <returns></returns>
-		public ActionResult RemoveItem(ExpenseCreateModel model, int ItemId)
+		public ActionResult RemoveItem(ExpenseCreateModel model, int index)
 		{
-			model.Items.Remove(model.Items.Where(i => i.ExpenseItemId == ItemId).FirstOrDefault());
+			model.Items.Remove(model.Items.Where(i => i.Index == index).FirstOrDefault());
 			return PartialView("_AjaxExpenseReportItems", model);
 		}
 	}

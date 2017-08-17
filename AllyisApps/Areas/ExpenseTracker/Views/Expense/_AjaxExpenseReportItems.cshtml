@@ -6,6 +6,7 @@
 <div class="items">
 	@for (int i = 0; i < Model.Items.Count(); i++)
 	{
+		int index = i;
 		var item = Model.Items[i];
 		string dateVal = "";
 		string amountVal = "";
@@ -29,7 +30,7 @@
 			@Html.TextBoxFor(m => m.Items[i].Amount, new { @class = "form-control", name = amountName, Value = amountVal, placeholder = "Amount", style = "display: inline-block; width: 150px" })
 			<label>Payed for by Customer</label>
 			<input type="checkbox" checked class="form-control" name="@checkboxName" style="width: 14px; display: inline-block;" />
-			<a>
+			<a onclick="removeItem(@index)">
 				<span class="btn btn-primary">
 					Remove
 				</span>
@@ -50,4 +51,7 @@
 	$('.addItem').on('click', function () {
 		$('.items').load('@Url.Action("AddItem")', @Html.Raw(Json.Encode(@Model)));
 	});
+	function removeItem(index) {
+		$('.items').load('@Url.Action("RemoveItem")', @Html.Raw(Json.Encode(@Model)), index);
+	}
 </script>
