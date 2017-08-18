@@ -9,6 +9,11 @@ namespace AllyisApps.Services
 {
     public class ExpenseItem
     {
+		/// <summary>
+		/// The account type
+		/// </summary>
+		public Account Account { get; set; }
+
         /// <summary>
 		/// The expense item id
 		/// </summary>
@@ -67,4 +72,10 @@ namespace AllyisApps.Services
 		/// </summary>
 		public int Index { get; set; }
     }
+
+	public enum Account
+	{
+		Option1,
+		Option2
+	}
 }

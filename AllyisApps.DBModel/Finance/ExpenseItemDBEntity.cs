@@ -7,6 +7,11 @@ namespace AllyisApps.DBModel.Finance
 	/// </summary>
 	public class ExpenseItemDBEntity
     {
+		/// <summary>
+		/// Gets or sets the Expense Item's Account type
+		/// </summary>
+		public string Account { get; set; }
+
         /// <summary>
         /// Gets or sets the Expense Item's ID.
         /// </summary>

@@ -97,6 +97,7 @@ namespace AllyisApps.Services
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
 			{
 				AccountId = item.AccountId,
+				Account = item.Account.ToString(),
 				Amount = item.Amount,
 				CreatedUtc = item.ExpenseItemCreatedUtc,
 				ExpenseItemId = itemId,
@@ -197,6 +198,7 @@ namespace AllyisApps.Services
 		{
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
 			{
+				Account = item.Account.ToString(),
 				AccountId = item.AccountId,
                 ExpenseItemName = item.ExpenseItemName,
 				Amount = item.Amount,

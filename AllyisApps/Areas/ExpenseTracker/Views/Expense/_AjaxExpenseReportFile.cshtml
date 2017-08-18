@@ -3,7 +3,7 @@
 
 @model ExpenseCreateModel
 
-<div>
+<div style="display: inline-block;">
 	@{
 		string uploadName = String.Format("Files[{0}]", Model.Files.Count);
 		string uploadId = "upload-box" + Model.Files.Count;
@@ -11,9 +11,9 @@
 	}
 	<input type="file" id="@uploadId" class="@uploadName" name="@uploadName" style="display:none;"
 		   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-	<input id="upload-file-name-display" class="form-control"
+	<input id="upload-file-name-display" class="form-control" style="width: 180px;"
 		   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
 </div>
-<a onclick="@uploadFunc" title="Choose Excel file containing Expense Tracker entries">
+<a onclick="@uploadFunc" title="Choose Excel file containing Expense Tracker entries" style="float: right;">
 	<span class="btn btn-primary">@Strings.ChooseFile</span>
 </a>

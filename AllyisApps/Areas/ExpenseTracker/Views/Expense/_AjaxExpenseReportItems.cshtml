@@ -7,6 +7,10 @@
 {
 	int index = i;
 	var item = Model.Items[i];
+	if (String.IsNullOrEmpty(item.ExpenseItemName)) // sets default value to checked if item is new
+	{
+		item.IsBillableToCustomer = true;
+	}
 	string dateVal = "";
 	string amountVal = "";
 	if (Convert.ToDateTime(item.TransactionDate).ToShortDateString() != "1/1/0001")
@@ -23,6 +27,7 @@
 	string checkboxName = String.Format("[{0}].IsBillableToCustomer", i);
 	string itemIdName = String.Format("[{0}].ExpenseItemId", i);
 	string descriptionName = String.Format("[{0}].ItemDescription", i);
+	string accountName = String.Format("[{0}].Account", i);
 	<div class="item-div">
 		<input type="hidden" value="@item.ExpenseItemId" name="@itemIdName" />
 		@Html.TextBoxFor(m => m.Items[i].TransactionDate, new { @class = "datepicker form-control", name = dateName, Value = dateVal, placeholder = "Date", style = "display: inline-block; width: 150px" })
@@ -30,11 +35,12 @@
 		@Html.TextBoxFor(m => m.Items[i].Amount, new { @class = "form-control", name = amountName, Value = amountVal, placeholder = "Amount", style = "display: inline-block; width: 150px" })
 		@Html.TextBoxFor(m => m.Items[i].ItemDiscription, new { @class = "form-control", name = descriptionName, Value = Model.Items[i].ItemDiscription, placeholder = "Description", style = "display: inline-block; width: 150px" })
 		<label>Billable to Customer</label>
-		@Html.CheckBoxFor(m => m.Items[i].IsBillableToCustomer, new { @class = "form-control", name = checkboxName, style = "width: 14px; display: inline-block;" })
-		<a onclick="removeItem(@index)">
-			<span class="btn btn-primary">
-				Remove
-			</span>
+		@Html.CheckBoxFor(m => m.Items[i].IsBillableToCustomer, new { @class = "form-control", name = checkboxName, style = "width: 14px; height: 14px; display: inline-block; margin: 10px; vertical-align: middle;" })
+		@Html.EnumDropDownListFor(m => m.Items[i].Account, new { @class = "form-control", name = accountName, style = "display: inline-block; width: 150px" })
+		<a class="btn btn-danger btn-fa hidden-create"
+		   onclick="removeItem(@index)"
+		   style="color: white !important; float: right; width: 34px; border-color: #d43f3a !important;">
+			<i class="allyisicon-delete"></i>X
 		</a>
 	</div>
 }

@@ -14,7 +14,7 @@
 @using (Html.BeginForm(submitAction, ControllerConstants.Expense, FormMethod.Post, htmlAttributes: new { @id = "reportForm" }))
 {
 	<div class="panel panel-info" style="background-color: #f5f5f5; float: right; width: 300px; position: relative; z-index: 10">
-		<div class="panel-heading"><span class="panel-title">@Strings.Upload</span></div>
+		<div class="panel-heading"><span class="panel-title">Attachments</span></div>
 		<div class="files">
 			@{
 				Model.Files.Add(new AllyisApps.Services.Expense.ExpenseFile(null, "", ""));

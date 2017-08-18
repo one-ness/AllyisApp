@@ -5,7 +5,8 @@
 	@transactionDate DATETIME2(0),
 	@amount DECIMAL(18, 2),
 	@expenseReportId INT,
-	@isBillableToCustomer BIT
+	@isBillableToCustomer BIT,
+	@account NVARCHAR (60)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -17,13 +18,15 @@ BEGIN
 		[TransactionDate],
 		[Amount],
 		[ExpenseReportId],
-		[IsBillableToCustomer])
+		[IsBillableToCustomer],
+		[Account])
 	VALUES (@expenseItemId,
 		@expenseItemName,
 		@itemDescription,
 		@transactionDate,
 		@amount,
 		@expenseReportId,
-		@isBillableToCustomer);
+		@isBillableToCustomer,
+		@account);
 END
 
