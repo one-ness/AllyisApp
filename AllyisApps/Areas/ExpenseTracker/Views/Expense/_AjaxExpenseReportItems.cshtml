@@ -22,13 +22,14 @@
 	string amountName = String.Format("[{0}].Amount", i);
 	string checkboxName = String.Format("[{0}].IsBillableToCustomer", i);
 	string itemIdName = String.Format("[{0}].ExpenseItemId", i);
+	string descriptionName = String.Format("[{0}].ItemDescription", i);
 	<div class="item-div">
 		<input type="hidden" value="@item.ExpenseItemId" name="@itemIdName" />
 		@Html.TextBoxFor(m => m.Items[i].TransactionDate, new { @class = "datepicker form-control", name = dateName, Value = dateVal, placeholder = "Date", style = "display: inline-block; width: 150px" })
 		@Html.TextBoxFor(m => m.Items[i].ExpenseItemName, new { @class = "form-control", name = nameName, Value = Model.Items[i].ExpenseItemName, placeholder = "Name", style = "display: inline-block; width: 150px" })
 		@Html.TextBoxFor(m => m.Items[i].Amount, new { @class = "form-control", name = amountName, Value = amountVal, placeholder = "Amount", style = "display: inline-block; width: 150px" })
-		<label>Payed for by Customer</label>
-		@*<input type="checkbox" checked class="form-control" name="@checkboxName" style="width: 14px; display: inline-block;" />*@
+		@Html.TextBoxFor(m => m.Items[i].ItemDiscription, new { @class = "form-control", name = descriptionName, Value = Model.Items[i].ItemDiscription, placeholder = "Description", style = "display: inline-block; width: 150px" })
+		<label>Billable to Customer</label>
 		@Html.CheckBoxFor(m => m.Items[i].IsBillableToCustomer, new { @class = "form-control", name = checkboxName, style = "width: 14px; display: inline-block;" })
 		<a onclick="removeItem(@index)">
 			<span class="btn btn-primary">
