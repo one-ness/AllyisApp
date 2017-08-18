@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="ApplicationDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -12,7 +12,7 @@ namespace AllyisApps.DBModel.StaffingManager
 	/// <summary>
 	/// Represents the Application table in the database.
 	/// </summary>
-	public class ApplicationDBEntity
+	public class ApplicationDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the application's ID.

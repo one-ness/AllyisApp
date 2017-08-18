@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="ProductDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -9,7 +9,7 @@ namespace AllyisApps.DBModel.Billing
 	/// <summary>
 	/// Represents the Product table in the database.
 	/// </summary>
-	public class ProductDBEntity
+	public class ProductDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets Description.

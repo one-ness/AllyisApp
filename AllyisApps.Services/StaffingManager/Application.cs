@@ -28,7 +28,7 @@ namespace AllyisApps.Services
 			get => applicationId;
 			set
 			{
-				if (value < 0)
+				if (value <= 0)
 				{
 					throw new ArgumentOutOfRangeException(nameof(ApplicationId), value, nameof(ApplicationId) + " must be greater than 0.");
 				}
@@ -44,7 +44,7 @@ namespace AllyisApps.Services
 			get => applicantId;
 			set
 			{
-				if (value < 0)
+				if (value <= 0)
 				{
 					throw new ArgumentOutOfRangeException(nameof(ApplicantId), value, nameof(ApplicantId) + " must be greater than 0.");
 				}
@@ -60,7 +60,7 @@ namespace AllyisApps.Services
 			get => positionId;
 			set
 			{
-				if (value < 0)
+				if (value <= 0)
 				{
 					throw new ArgumentOutOfRangeException(nameof(PositionId), value, nameof(PositionId) + " must be greater than 0.");
 				}

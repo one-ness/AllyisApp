@@ -346,6 +346,7 @@
     <Build Include="StaffingManager\Stored Procedures\GetTagsByPositionId.sql" />
     <Build Include="StaffingManager\Stored Procedures\SetupTag.sql" />
     <Build Include="StaffingManager\Stored Procedures\GetApplicationAndDocumentsById.sql" />
+    <Build Include="StaffingManager\Tables\ApplicationStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

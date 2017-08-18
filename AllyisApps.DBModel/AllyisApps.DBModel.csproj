@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseDBEntity.cs" />
     <Compile Include="Auth\UserContextDBEntity.cs" />
     <Compile Include="Auth\UserRolesDBEntity.cs" />
     <Compile Include="Billing\BillingHistoryItemDBEntity.cs" />

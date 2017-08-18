@@ -13,8 +13,8 @@ namespace AllyisApps.Services
 	/// </summary>
 	public class ApplicationDocument
 	{
-		private const int MaxDocumentNameLength = 32;
-		private const int MaxDocumentLinkLength = 100;
+		public const int MaxDocumentNameLength = 32;
+		public const int MaxDocumentLinkLength = 100;
 
 		private int applicationDocumentId;
 		private int applicationId;
@@ -29,7 +29,7 @@ namespace AllyisApps.Services
 			get => applicationDocumentId;
 			set
 			{
-				if (value < 0)
+				if (value <= 0)
 				{
 					throw new ArgumentOutOfRangeException(nameof(ApplicationDocumentId), value, nameof(ApplicationDocumentId) + " must be greater than 0.");
 				}
@@ -45,7 +45,7 @@ namespace AllyisApps.Services
 			get => applicationId;
 			set
 			{
-				if (value < 0)
+				if (value <= 0)
 				{
 					throw new ArgumentOutOfRangeException(nameof(ApplicationId), value, nameof(ApplicationId) + " must be greater than 0.");
 				}

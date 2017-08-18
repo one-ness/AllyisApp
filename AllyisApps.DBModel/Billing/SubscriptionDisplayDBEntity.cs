@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="SubscriptionDisplayDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -11,7 +11,7 @@ namespace AllyisApps.DBModel.Billing
 	/// <summary>
 	/// The table to display the subscription information.
 	/// </summary>
-	public class SubscriptionDisplayDBEntity
+	public class SubscriptionDisplayDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets The id of the subscription product.

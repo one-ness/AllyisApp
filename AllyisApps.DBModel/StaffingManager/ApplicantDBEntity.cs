@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="ApplicantDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -9,7 +9,7 @@ namespace AllyisApps.DBModel.StaffingManager
 	/// <summary>
 	/// Represents the Applicant table in the database.
 	/// </summary>
-	public class ApplicantDBEntity
+	public class ApplicantDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the applicant's ID.

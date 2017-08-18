@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="UserDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -11,7 +11,7 @@ namespace AllyisApps.DBModel.Auth
 	/// <summary>
 	/// Represents the Users table in the database.
 	/// </summary>
-	public class UserDBEntity
+	public class UserDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets UserId.

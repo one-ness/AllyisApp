@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="ProjectDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -11,7 +11,7 @@ namespace AllyisApps.DBModel.Crm
 	/// <summary>
 	/// The project table.
 	/// </summary>
-	public class ProjectDBEntity
+	public class ProjectDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the project id.

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace AllyisApps.DBModel.StaffingManager
@@ -6,7 +6,7 @@ namespace AllyisApps.DBModel.StaffingManager
 	/// <summary>
 	/// Represents the Address table in the database.
 	/// </summary>
-	public class PositionDBEntity
+	public class PositionDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the position's Id

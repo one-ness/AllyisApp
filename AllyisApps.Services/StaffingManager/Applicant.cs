@@ -13,12 +13,12 @@ namespace AllyisApps.Services
 	/// </summary>
 	public class Applicant
 	{
-		private const int MaxNameLength = 32;
-		private const int MaxEmailLength = 100;
-		private const int MaxPhoneNumberLength = 16;
-		private const int MaxAddressLength = 64;
-		private const int MaxCityLength = 64;
-		private const int MaxPostalCodeLength = 64;
+		public const int MaxNameLength = 32;
+		public const int MaxEmailLength = 100;
+		public const int MaxPhoneNumberLength = 16;
+		public const int MaxAddressLength = 64;
+		public const int MaxCityLength = 64;
+		public const int MaxPostalCodeLength = 64;
 
 		private int applicantId;
 		private string firstName;
@@ -41,7 +41,7 @@ namespace AllyisApps.Services
 			get => applicantId;
 			set
 			{
-				if (value < 0)
+				if (value <= 0)
 				{
 					throw new ArgumentOutOfRangeException(nameof(ApplicantId), value, nameof(ApplicantId) + " must be greater than 0.");
 				}
@@ -117,7 +117,7 @@ namespace AllyisApps.Services
 			get => addressId;
 			set
 			{
-				if (value < 0)
+				if (value <= 0)
 				{
 					throw new ArgumentOutOfRangeException(nameof(AddressId), value, nameof(AddressId) + " must be greater than 0.");
 				}

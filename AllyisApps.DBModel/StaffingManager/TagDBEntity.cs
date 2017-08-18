@@ -1,9 +1,9 @@
-﻿namespace AllyisApps.DBModel.StaffingManager
+namespace AllyisApps.DBModel.StaffingManager
 {
 	/// <summary>
 	/// Represents the Address table in the database.
 	/// </summary>
-	public class TagDBEntity
+	public class TagDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the Tags Id

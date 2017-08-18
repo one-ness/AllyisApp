@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="OrganizationDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -10,7 +10,7 @@ namespace AllyisApps.DBModel.Auth
 	/// <summary>
 	/// Represents the Organizations table in the database.
 	/// </summary>
-	public class OrganizationDBEntity
+	public class OrganizationDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the organization's Id.
