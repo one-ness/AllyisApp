@@ -9,5 +9,5 @@ namespace AllyisApps.DBModel
 	/// <summary>
 	/// Base DB entity for anything that we want all entities to share
 	/// </summary>
-	public class BaseDBEntity : BaseDBEntity { }
+	public class BaseDBEntity { }
 }
