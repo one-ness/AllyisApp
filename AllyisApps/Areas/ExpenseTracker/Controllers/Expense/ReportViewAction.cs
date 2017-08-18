@@ -21,8 +21,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         {
             var model = InitializeReportViewModel(subscriptionId, reportId);
 
-            UserSubscription subInfo = null;
-            this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+            UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
+            
 
             ViewBag.SubscriptionName = subInfo.SubscriptionName;
 
