@@ -11,6 +11,7 @@ using AllyisApps.DBModel.StaffingManager;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.Lookup;
 using AllyisApps.DBModel.Lookup;
+using System.Dynamic;
 
 namespace AllyisApps.Services
 {
@@ -51,7 +52,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="position">The account object to be created. </param>
 		/// <returns>The id of the created position. </returns>
-		public int CreatePosition(Position position) => DBHelper.CreatePosition(ServiceObjectToDBEntity(position));
+		public int CreatePosition(Position position) => DBHelper.SetupPosition(ServiceObjectToDBEntity(position));
 
 		/// <summary>
 		/// Adds an Tag to the DB if there is not already another tag with the same name.
@@ -132,14 +133,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="positionId">ID of position to be pulled.</param>
 		/// <returns>returns the service layer position object.</returns>
-		public Position GetPosition(int positionId) => DBEntityToServiceObject(DBHelper.GetPositionById(positionId));
+		public Position GetPosition(int positionId) => GetPositionToPositionServiceObject(DBHelper.GetPositionById(positionId));
 
 		/// <summary>
 		/// Get Positions by Org ID method to pull a list of Service Layer positions objects based on their org ID.
 		/// </summary>
 		/// <param name="organizationId">the tagert organizations ID number. </param>
 		/// <returns>A list of service layer Position Objects. </returns>
-		public List<Position> GetPositionByOrganizationId(int organizationId) => DBHelper.GetPositionsByOrganizationId(organizationId).Select(DBEntityToServiceObject).ToList();
+		public List<Position> GetPositionByOrganizationId(int organizationId) => DBHelper.GetPositionsByOrganizationId(organizationId).Select(GetPositionToPositionServiceObject).ToList();
 
 		/// <summary>
 		/// Get Tags by a position Id method; pulls a list of all of the positions tags as service layer Tag Objects.
@@ -301,7 +302,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="position"> the PositionDBEntity to be converted to service layer object. </param>
 		/// <returns>Returns a service layer Position Obejct. </returns>
-		public static Position DBEntityToServiceObject(PositionDBEntity position)
+		public static Position GetPositionToPositionServiceObject(dynamic position)
 		{
 			if (position == null) throw new ArgumentNullException(nameof(position), "Cannot accept a null position object.");
 
@@ -317,11 +318,6 @@ namespace AllyisApps.Services
 				PositionCount = position.PositionCount,
 				RequiredSkills = position.RequiredSkills,
 				PositionLevelId = position.PositionLevelId,
-				Address = position.Address,
-				City = position.City,
-				State = position.State,
-				Country = position.Country,
-				PostalCode = position.PostalCode,
 				PositionId = position.PositionId,
 				PositionCreatedUtc = position.PositionCreatedUtc,
 				PositionModifiedUtc = position.PositionModifiedUtc,
@@ -330,9 +326,23 @@ namespace AllyisApps.Services
 				BillingRateAmount = position.BillingRateAmount,
 				JobResponsibilities = position.JobResponsibilities,
 				DesiredSkills = position.DesiredSkills,
-				Tags = DBEntityToServiceObject(position.Tags),
 				HiringManager = position.HiringManager,
-				TeamName = position.TeamName
+				TeamName = position.TeamName,
+
+
+				Address = new Address
+				{
+					Address1 = position.Address.Address,
+					CountryId = position.Address.Address,
+					State = position.Address.Address,
+					PostalCode = position.Address.Address
+				},
+
+				Tags = DBEntityToServiceObject(position.Tags),
+				
+				EmploymentTypeName = position.EmploymentType.EmploymentTypeName,
+				PositionLevelName = position.PositionLevel.PositionLevelName,
+				PositionStatusName = position.PositionStatus.PositionStatusName
 			};
 		}
 
@@ -430,39 +440,44 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="position"> The Position service layer obejct. </param>
 		/// <returns> Returns the PositionDBEntity for the DB layer.  </returns>
-		public static PositionDBEntity ServiceObjectToDBEntity(Position position)
+		public static dynamic ServiceObjectToDBEntity(Position position)
 		{
 			if (position == null) throw new ArgumentNullException(nameof(position), "Cannot accept a null position object");
 
-			return new PositionDBEntity
-			{
-				OrganizationId = position.OrganizationId,
-				CustomerId = position.CustomerId,
-				AddressId = position.AddressId,
-				PositionStatusId = position.PositionStatusId,
-				PositionTitle = position.PositionTitle,
-				DurationMonths = position.DurationMonths,
-				EmploymentTypeId = position.EmploymentTypeId,
-				PositionCount = position.PositionCount,
-				RequiredSkills = position.RequiredSkills,
-				PositionLevelId = position.PositionLevelId,
-				Address = position.Address,
-				City = position.City,
-				State = position.State,
-				Country = position.Country,
-				PostalCode = position.PostalCode,
-				PositionId = position.PositionId,
-				PositionCreatedUtc = position.PositionCreatedUtc,
-				PositionModifiedUtc = position.PositionModifiedUtc,
-				StartDate = position.StartDate,
-				BillingRateFrequency = position.BillingRateFrequency,
-				BillingRateAmount = position.BillingRateAmount,
-				JobResponsibilities = position.JobResponsibilities,
-				DesiredSkills = position.DesiredSkills,
-				Tags = ServiceObjectToDBEntity(position.Tags),
-				HiringManager = position.HiringManager,
-				TeamName = position.TeamName
-			};
+			dynamic obj = new ExpandoObject();
+
+			obj.Position = new ExpandoObject();
+			obj.Position.OrganizationId = position.OrganizationId;
+			obj.Position.CustomerId = position.CustomerId;
+			obj.Position.AddressId = position.AddressId;
+			obj.Position.PositionStatusId = position.PositionStatusId;
+			obj.Position.ositionTitle = position.PositionTitle;
+			obj.Position.DurationMonths = position.DurationMonths;
+			obj.Position.EmploymentTypeId = position.EmploymentTypeId;
+			obj.Position.PositionCount = position.PositionCount;
+			obj.Position.RequiredSkills = position.RequiredSkills;
+			obj.Position.PositionLevelId = position.PositionLevelId;
+			obj.Position.PositionId = position.PositionId;
+			obj.Position.PositionCreatedUtc = position.PositionCreatedUtc;
+			obj.Position.PositionModifiedUtc = position.PositionModifiedUtc;
+			obj.Position.StartDate = position.StartDate;
+			obj.Position.BillingRateFrequency = position.BillingRateFrequency;
+			obj.Position.BillingRateAmount = position.BillingRateAmount;
+			obj.Position.JobResponsibilities = position.JobResponsibilities;
+			obj.Position.DesiredSkills = position.DesiredSkills;
+			obj.Position.HiringManager = position.HiringManager;
+			obj.Position.TeamName = position.TeamName;
+			
+			obj.Address = new ExpandoObject();
+			obj.Address.Address = position.Address;
+			obj.Address.City = position.Address.City;
+			obj.Address.State = position.Address.State;
+			obj.Address.Country = position.Address.CountryId;
+			obj.Address.PostalCode = position.Address.PostalCode;
+
+			obj.Tags = ServiceObjectToDBEntity(position.Tags);
+
+			return obj;
 		}
 
 
@@ -471,13 +486,13 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="tags"> The List of tag service layer objects to be converted. </param>
 		/// <returns> Returns a list of TagDBEntity objects for the DB layer.  </returns>
-		public static List<TagDBEntity> ServiceObjectToDBEntity(List<Tag> tags)
+		public static List<dynamic> ServiceObjectToDBEntity(List<Tag> tags)
 		{
 			if (tags == null) throw new ArgumentNullException(nameof(tags), "Cannot accept null list of tags to be converted.");
 
-			var taglist = tags
-				.ConvertAll(x => new TagDBEntity { TagId = (int)x.TagId, TagName = x.TagName });
-			return taglist;
+			dynamic obj = tags;
+	
+			return obj;
 		}
 
 		/// <summary>

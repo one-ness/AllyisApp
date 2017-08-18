@@ -15,6 +15,11 @@ namespace AllyisApps.DBModel.StaffingManager
 		public int PositionLevelId { get; set; }
 
 		/// <summary>
+		/// Gets or sets Organization Id
+		/// </summary>
+		public int OrganizationId { get; set; }
+
+		/// <summary>
 		/// Gets or sets the Position Level's Name
 		/// </summary>
 		public string PositionLevelName

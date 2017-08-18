@@ -12,6 +12,7 @@ using System.Linq;
 using AllyisApps.DBModel.StaffingManager;
 using Dapper;
 using AllyisApps.DBModel.Lookup;
+using System.Dynamic;
 
 namespace AllyisApps.DBModel
 {
@@ -29,7 +30,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicant">The applicant object to be added to the db.</param>
 		/// <returns>The id of the created address and applicant</returns>
-		public Tuple<int, int> CreateApplicant(ApplicantDBEntity applicant)
+		public Tuple<int, int> CreateApplicant(dynamic applicant)
 		{
 			if (applicant == null)
 			{
@@ -60,7 +61,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="application">The application object to be added to the db.</param>
 		/// <returns>The id of the created application</returns>
-		public int CreateApplication(ApplicationDBEntity application)
+		public int CreateApplication(dynamic application)
 		{
 			if (application == null)
 			{
@@ -84,7 +85,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicationDocument">The application document object to be added to the db.</param>
 		/// <returns>The id of the created application document</returns>
-		public int CreateApplicationDocument(ApplicationDocumentDBEntity applicationDocument)
+		public int CreateApplicationDocument(dynamic applicationDocument)
 		{
 			if (applicationDocument == null)
 			{
@@ -108,7 +109,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="position">The account object to be created.</param>
 		/// <returns>The id of the created position</returns>
-		public int CreatePosition(PositionDBEntity position)
+		public int SetupPosition(dynamic position)
 		{
 			if (position == null)
 			{
@@ -132,10 +133,22 @@ namespace AllyisApps.DBModel
 			parameters.Add("@positionLevel", position.PositionLevelId);
 			parameters.Add("@hiringManager", position.HiringManager);
 			parameters.Add("@teamName", position.TeamName);
+			
+			parameters.Add("@address", position.Address.Address);
+			parameters.Add("@city", position.Address.City);
+			parameters.Add("@state", position.Address.State);
+			parameters.Add("@country", position.Address.Country);
+			parameters.Add("@postalCode", position.Address.PostalCode);
+
+			DataTable tagsTable = new DataTable();
+			tagsTable.Columns.Add("TagName", typeof(string));
+			foreach (dynamic tag in position.Tags) tagsTable.Rows.Add(tag.TagName);
+
+			parameters.Add("@tagsTable", tagsTable.AsTableValuedParameter("[Lookup].[UserTable]"));
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<int>("[StaffingManager].[CreatePosition]", parameters, commandType: CommandType.StoredProcedure).Single();
+				return connection.Query<int>("[StaffingManager].[SetupPosition]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
 		}
 
@@ -144,13 +157,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Creates a position level for the database
 		/// </summary>
-		/// <param name="organizationId"> The ID of the organization this level belongs to. </param>
-		/// <param name="positionLevelName"> The name of the position Level to be created. </param>
-		public void CreatePositionLevel(int organizationId, string positionLevelName)
+		/// <param name="positionLevel"> The name of the position Level to be created. </param>
+		public void CreatePositionLevel(dynamic positionLevel)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", organizationId);
-			parameters.Add("@positionLevelName", positionLevelName);
+			parameters.Add("@organizationId", positionLevel.organizationId);
+			parameters.Add("@positionLevelName", positionLevel.positionLevelName);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
@@ -161,13 +173,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Creates a position status for the database
 		/// </summary>
-		/// <param name="organizationId"> The ID of the organization this status belongs to. </param>
-		/// <param name="positionStatusName">Parameter @positionStatusName.</param>
-		public void CreatePositionStatus(int organizationId, string positionStatusName)
+		/// <param name="positionStatus">Parameter @positionStatusName.</param>
+		public void CreatePositionStatus(dynamic positionStatus)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", organizationId);
-			parameters.Add("@positionStatusName", positionStatusName);
+			parameters.Add("@organizationId", positionStatus.organizationId);
+			parameters.Add("@positionStatusName", positionStatus.positionStatusName);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
@@ -178,13 +189,12 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Creates a employment type for the database
 		/// </summary>
-		/// <param name="organizationId"> The ID of the organization this type belongs to. </param>
-		/// <param name="employmentTypeName">Parameter @employmentTypeName.</param>
-		public void CreateEmploymentType(int organizationId, string employmentTypeName)
+		/// <param name="employmentType">Parameter @employmentTypeName.</param>
+		public void CreateEmploymentType(dynamic employmentType)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", organizationId);
-			parameters.Add("@employmentTypeName", employmentTypeName);
+			parameters.Add("@organizationId", employmentType.organizationId);
+			parameters.Add("@employmentTypeName", employmentType.employmentTypeName);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
@@ -193,20 +203,20 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Adds an Tag to the DB if there is not already another tag with the same name.
+		/// Adds an Tag to the DB if there is NOT already another tag with the same name.
 		/// </summary>
-		/// <param name="name">The name of the tag to be added to the db.</param>
-		/// <param name="positionId">The name of the tag to be added to the db.</param>
+		/// <param name="tagName">The name of the tag to be added to the db.</param>
+		/// <param name="positionId">The position the tag will be added to .</param>
 		/// <returns>The id of the created Tag or -1 if the tag name is already in use.</returns>
-		public int CreateTag(string name, int positionId)
+		public int CreateTag(string tagName, int positionId)
 		{
-			if (name == null)
+			if (tagName == null)
 			{
 				throw new ArgumentException("Name cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@tagName", name);
+			parameters.Add("@tagName", tagName);
 			parameters.Add("@positionId", positionId);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
@@ -219,14 +229,14 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Adds a PositionTag to the DB when there is already another tag with the same name.
+		/// Adds a PositionTag to the DB when there IS ALREADY another tag with the same name.
 		/// </summary>
-		/// <param name="tagId">The name of the tag to be added to the db.</param>
-		/// <param name="positionId">The name of the tag to be added to the db.</param>
+		/// <param name="tagId">The ID of the tag to be added to the db.</param>
+		/// <param name="positionId">The ID of the Position to be added to the db.</param>
 		/// <returns>The id of the created Tag or -1 if the tag name is already in use.</returns>
 		public void AssignTag(int tagId, int positionId)
 		{
-			if (tagId == 0)
+			if (positionId == 0)
 			{
 				throw new ArgumentException("tag ID cannot be null or empty.");
 			}
@@ -398,18 +408,19 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="positionId">The id of the position.</param>
 		/// <returns>One Position.</returns>
-		public PositionDBEntity GetPositionById(int positionId)
+		public dynamic GetPositionById(int positionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@positionId", positionId);
 
-			PositionDBEntity position;
+			dynamic positionAndTags = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				position = connection.Query<PositionDBEntity>("[StaffingManager].[GetPosition]", parameters, commandType: CommandType.StoredProcedure).Single();
-				position.Tags = connection.Query<TagDBEntity>("[StaffingManager].[GetTagsByPositionId]", parameters, commandType: CommandType.StoredProcedure).ToList<TagDBEntity>();
+				var results = connection.Query<dynamic>("[StaffingManager].[GetPosition]", parameters, commandType: CommandType.StoredProcedure).Single();
+				positionAndTags.position = results.Read<dynamic>().Single();
+				positionAndTags.tags = results.Read<dynamic>().ToList();
 			}
-			return position;
+			return positionAndTags;
 		}
 
 		/// <summary>
@@ -426,13 +437,6 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				positions = connection.Query<PositionDBEntity>("[StaffingManager].[GetPositionsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
-				foreach (PositionDBEntity position in positions)
-				{
-					position.Tags = connection.Query<TagDBEntity>(
-						"[StaffingManager].[GetTagsByPositionId]",
-						new { positionId = position.PositionId },
-						commandType: CommandType.StoredProcedure).ToList<TagDBEntity>();
-				}
 			}
 			return positions;
 		}

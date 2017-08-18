@@ -1,7 +1,6 @@
 ﻿using AllyisApps.Services.Lookup;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.Services.StaffingManager
 {
@@ -20,47 +19,47 @@ namespace AllyisApps.Services.StaffingManager
 		private List<Tag> tags;
 
 		/// <summary>
-		/// Gets or sets the position's Id
+		/// Gets or sets the position's Id.
 		/// </summary>
 		public int PositionId { get; set; }
 
 		/// <summary>
-		/// Gets or sets positions associated organization
+		/// Gets or sets positions associated organization.
 		/// </summary>
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets positionss hiring customer
+		/// Gets or sets positionss hiring customer.
 		/// </summary>
 		public int CustomerId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the address of the position location
+		/// Gets or sets the address of the position location.
 		/// </summary>
 		public int AddressId { get; set; }
 
 		/// <summary>
-		/// Gets when the position was created
+		/// Gets when the position was created.
 		/// </summary>
 		public DateTime PositionCreatedUtc { get; set; }
 
 		/// <summary>
-		/// Gets when the position was last modified
+		/// Gets when the position was last modified.
 		/// </summary>
 		public DateTime PositionModifiedUtc { get; set; }
 
 		/// <summary>
-		/// Get or sets the Start date of the position
+		/// Get or sets the Start date of the position.
 		/// </summary>
 		public DateTime StartDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets the id int of the positionStatus
+		/// Gets or sets the id int of the positionStatus.
 		/// </summary>
 		public int PositionStatusId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the position name
+		/// Gets or sets the position name.
 		/// </summary>
 		public string PositionTitle
 		{
@@ -73,22 +72,22 @@ namespace AllyisApps.Services.StaffingManager
 		}
 
 		/// <summary>
-		/// Gets or sets billing rate frequency (eg: Months, Weeks)
+		/// Gets or sets billing rate frequency (eg: Months, Weeks).
 		/// </summary>
 		public int BillingRateFrequency { get; set; }
 
 		/// <summary>
-		/// Get or sets the billing rate amount in dollars
+		/// Get or sets the billing rate amount in dollars.
 		/// </summary>
 		public int BillingRateAmount { get; set; }
 
 		/// <summary>
-		/// Gets or sets the duration of the position if applicable
+		/// Gets or sets the duration of the position if applicable.
 		/// </summary>
 		public int DurationMonths { get; set; }
 
 	/// <summary>
-	/// Gets or sets the employment type (eg: salary, hourly)
+	/// Gets or sets the employment type (eg: salary, hourly).
 	/// </summary>
 	public int EmploymentTypeId
 		{
@@ -101,7 +100,7 @@ namespace AllyisApps.Services.StaffingManager
 		}
 
 		/// <summary>
-		/// Gets or sets the number of hires needed for this position
+		/// Gets or sets the number of hires needed for this position.
 		/// </summary>
 		public int PositionCount
 		{
@@ -114,7 +113,7 @@ namespace AllyisApps.Services.StaffingManager
 		}
 
 		/// <summary>
-		/// Get or sets the Required Skills description
+		/// Get or sets the Required Skills description.
 		/// </summary>
 		public string RequiredSkills
 		{
@@ -127,22 +126,22 @@ namespace AllyisApps.Services.StaffingManager
 		}
 
 		/// <summary>
-		/// Gets or sets the Job responibilites description
+		/// Gets or sets the Job responibilites description.
 		/// </summary>
 		public string JobResponsibilities { get; set; }
 
 		/// <summary>
-		/// Gets or sets the desired skills description
+		/// Gets or sets the desired skills description.
 		/// </summary>
 		public string DesiredSkills { get; set; }
 
 		/// <summary>
-		/// Gets or sets the poition level description (eg: Senior, Junior)
+		/// Gets or sets the poition level description (eg: Senior, Junior).
 		/// </summary>
 		public int PositionLevelId { get; set; }
 
 		/// <summary>
-		/// Get or sets the name of the responsible hiring manager
+		/// Get or sets the name of the responsible hiring manager.
 		/// </summary>
 		public string HiringManager
 		{
@@ -155,7 +154,7 @@ namespace AllyisApps.Services.StaffingManager
 		}
 
 		/// <summary>
-		/// Gets or sets the name of the team this position is for
+		/// Gets or sets the name of the team this position is for.
 		/// </summary>
 		public string TeamName
 		{
@@ -168,32 +167,12 @@ namespace AllyisApps.Services.StaffingManager
 		}
 
 		/// <summary>
-		/// Gets or sets the address for the positions
+		/// Gets or sets the address for the positions.
 		/// </summary>
-		public string Address { get; set; }
+		public Address Address { get; set; }
 
 		/// <summary>
-		/// Gets or sets the city of the positions address
-		/// </summary>
-		public string City { get; set; }
-
-		/// <summary>
-		/// Gets or sets the state of the positions address
-		/// </summary>
-		public string State { get; set; }
-
-		/// <summary>
-		/// Gets or sets the country of the positions address
-		/// </summary>
-		public string Country { get; set; }
-
-		/// <summary>
-		/// Gets or sets the postal code of the positions address
-		/// </summary>
-		public string PostalCode { get; set; }
-
-		/// <summary>
-		/// Gets or sets a list of tags on the position
+		/// Gets or sets a list of tags on the position.
 		/// </summary>
 		public List<Tag> Tags
 		{
@@ -204,6 +183,21 @@ namespace AllyisApps.Services.StaffingManager
 				tags = value;
 			}
 		}
+
+		/// <summary>
+		/// Gets or sets the Employment Type object of the position.
+		/// </summary>
+		public string EmploymentTypeName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Position Status of the position.
+		/// </summary>
+		public string PositionStatusName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Position Level object of the position.
+		/// </summary>
+		public string PositionLevelName { get; set; }
 
 	}
 }

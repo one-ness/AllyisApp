@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AllyisApps.Services.TimeTracker
+namespace AllyisApps.Services.StaffingManager
 {
 	public class EmploymentType
 	{

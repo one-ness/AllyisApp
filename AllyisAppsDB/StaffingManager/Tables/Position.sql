@@ -25,7 +25,7 @@ CREATE TABLE [StaffingManager].[Position] (
 	CONSTRAINT [FK_Position_Customer] FOREIGN KEY ([CustomerId]) REFERENCES [Crm].[Customer] ([CustomerId]),
 	CONSTRAINT [FK_Position_PositionStatus] FOREIGN KEY ([PositionStatusId]) REFERENCES [StaffingManager].[PositionStatus] ([PositionStatusId]),
 	CONSTRAINT [FK_Position_PositionLevel] FOREIGN KEY ([PositionLevelId]) REFERENCES [StaffingManager].[PositionLevel] ([PositionLevelId]),
-	CONSTRAINT [FK_Position_Employment] FOREIGN KEY ([EmploymentTypeId]) REFERENCES [StaffingManager].[EmploymentType] ([EmploymentTypeId])
+	CONSTRAINT [FK_Position_EmploymentType] FOREIGN KEY ([EmploymentTypeId]) REFERENCES [StaffingManager].[EmploymentType] ([EmploymentTypeId])
 );
 
 GO

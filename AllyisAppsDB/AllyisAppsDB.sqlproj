@@ -89,6 +89,7 @@
     <Folder Include="StaffingManager" />
     <Folder Include="StaffingManager\Stored Procedures" />
     <Folder Include="StaffingManager\Tables" />
+    <Folder Include="Lookup\User Defined Types" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TimeTracker\Tables\Holiday.sql" />
@@ -352,14 +353,17 @@
     <Build Include="StaffingManager\Stored Procedures\GetPositionEmploymentTypeById.sql" />
     <Build Include="Lookup\Stored Procedures\DeleteTag.sql" />
     <Build Include="Lookup\Stored Procedures\CreateTag.sql" />
-    <Build Include="Lookup\Stored Procedures\CreatePositionTag.sql" />
-    <Build Include="Lookup\Stored Procedures\DeletePositionTag.sql" />
-    <Build Include="Lookup\Stored Procedures\GetPositionTagsByPosition.sql" />
     <Build Include="Lookup\Stored Procedures\GetTags.sql" />
     <Build Include="Lookup\Stored Procedures\GetTagsByPositionId.sql" />
     <Build Include="Lookup\Stored Procedures\SetupTag.sql" />
     <Build Include="Lookup\Tables\Tag.sql" />
-    <Build Include="Lookup\Tables\PositionTag.sql" />
+    <Build Include="Lookup\User Defined Types\TagTable.sql" />
+    <Build Include="StaffingManager\Stored Procedures\SetupPosition.sql" />
+    <Build Include="StaffingManager\Tables\PositionTag.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetPositionTagsByPosition.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreatePositionTags.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreatePositionTag.sql" />
+    <Build Include="StaffingManager\Stored Procedures\DeletePositionTag.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
