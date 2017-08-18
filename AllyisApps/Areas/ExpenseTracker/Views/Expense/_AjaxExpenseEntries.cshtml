@@ -1,4 +1,5 @@
 ﻿@using AllyisApps.ViewModels.ExpenseTracker.Expense;
+@using AllyisApps.Services;
 
 @model ExpenseIndexViewModel
 @{ 
@@ -9,7 +10,6 @@
     <a  href="@Url.Action("Create")">
         <span class="btn btn-primary">Create Report</span>
     </a>
-
 </div>
 <table class="table table-hover">
     <thead >
@@ -17,11 +17,11 @@
             <th style="width: 25%">Report Name</th>
             <th style="width: 25%">Submitted Date</th>
             <th style="width: 25%">Status</th>
-            <th style="width: 25%">Amount</th>
+            <th style="width: 15%">Amount</th>
+            <th style="width: 10%"></th>
         </tr>
     </thead>   
     <tbody>
-        
         @foreach(ExpenseItemViewModel report in Model.Reports)
         {
             <tr>
@@ -29,6 +29,20 @@
                 <td>@String.Format("{0:MM-dd-yyyy}", @report.SubmittedDate)</td>
                 <td>@report.Status</td>
                 <td>@Math.Round(@report.Amount, 2)</td>
+                <td class="text-right icon-strip">
+                    @if (report.Status == ExpenseStatusEnum.Rejected || report.Status == ExpenseStatusEnum.Draft)
+                    {
+                        <a href="@Url.Action(ActionConstants.Edit, ControllerConstants.Expense, new { reportId = report.ReportId })" title="Edit Report">
+                            <span class="fa fa-fw fa-edit"></span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a>
+                            <span class="fa fa-edit" title="Can't Edit" style="color:slategray;"></span>
+                        </a>
+                    }
+                </td>
             </tr>
         }
     </tbody>

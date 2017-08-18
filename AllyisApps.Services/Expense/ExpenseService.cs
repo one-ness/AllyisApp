@@ -131,6 +131,51 @@ namespace AllyisApps.Services
 			return DBHelper.GetExpenseReportsBySubmittedById(submittedId).Select(x => InitializeExpenseReport(x));
 		}
 
+        public IEnumerable<ExpenseHistory> GetExpenseHistoryByReportId(int reportId)
+        {
+            return DBHelper.GetExpenseHistory(reportId).Select(x=> InitializeExpenseHistory(x));
+        }
+
+        /// <summary>
+        /// Updates an expense report history.
+        /// </summary>
+        /// <param name="history">An expense history object.</param>
+        public void UpdateExpenseReportHistory(ExpenseHistory history)
+        {
+            ExpenseHistoryDBEntity expHistory = new ExpenseHistoryDBEntity()
+            {
+                HistoryId = history.HistoryId,
+                CreatedUtc = history.CreatedUtc,
+                ModifiedUtc = history.ModifiedUtc,
+                ExpenseReportId = history.ReportId,
+                Status = history.Status,
+                Text = history.Text,
+                UserId = history.UserId
+            };
+
+            DBHelper.UpdateExpenseHistory(expHistory);
+        }
+
+        /// <summary>
+        /// Updates an expense report history.
+        /// </summary>
+        /// <param name="history">An expense history object.</param>
+        public void CreateExpenseReportHistory(ExpenseHistory history)
+        {
+            ExpenseHistoryDBEntity expHistory = new ExpenseHistoryDBEntity()
+            {
+                HistoryId = history.HistoryId,
+                CreatedUtc = history.CreatedUtc,
+                ModifiedUtc = history.ModifiedUtc,
+                ExpenseReportId = history.ReportId,
+                Text = history.Text,
+                Status = history.Status,
+                UserId = history.UserId
+            };
+
+            DBHelper.CreateExpenseHistory(expHistory);
+        }
+
         /// <summary>
         /// Initializes an ExpenseReport from and ExpenseReportDbEntity.
         /// </summary>
@@ -184,6 +229,26 @@ namespace AllyisApps.Services
 				TransactionDate = entity.TransactionDate.ToString()
 			};
 		}
+
+        public ExpenseHistory InitializeExpenseHistory(ExpenseHistoryDBEntity entity)
+        {
+            if(entity == null)
+            {
+                return null;
+            }
+
+            return new ExpenseHistory()
+            {
+                UserId = entity.UserId,
+                HistoryId = entity.HistoryId,
+                ReportId = entity.ExpenseReportId,
+                Text = entity.Text,
+                Status = entity.Status,
+                CreatedUtc = entity.CreatedUtc,
+                ModifiedUtc = entity.ModifiedUtc
+            };
+
+        }
 
 		public static HttpPostedFileBase InitializeExpenseFile(ExpenseFileDBEntity entity)
 		{

@@ -73,6 +73,7 @@
     <Compile Include="DBHelper\DBHelper.Crm.cs" />
     <Compile Include="Finance\AccountDBEntity.cs" />
     <Compile Include="Finance\ExpenseFileDBEntity.cs" />
+    <Compile Include="Finance\ExpenseHistoryDBEntity.cs" />
     <Compile Include="Finance\ExpenseReportDBEntity.cs" />
     <Compile Include="Finance\ExpenseItemDBEntity.cs" />
     <Compile Include="Lookup\AddressDBEntity.cs" />

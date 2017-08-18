@@ -203,17 +203,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateAction.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\StatusUpdateAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\FileAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\UpdateReportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ItemAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\EditAction.cs" />
-    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ReportViewActionController.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ReportViewAction.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseCreateModel.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ImportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateReportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseHistoryViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ReportViewModel.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\StaffingController.cs" />
     <Compile Include="Areas\StaffingManager\StaffingManagerAreaRegistration.cs" />
@@ -967,7 +969,9 @@
     <Content Include="Views\Shared\_Breadcrumbs.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Areas\ExpenseTracker\Views\ReportAdmin\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>

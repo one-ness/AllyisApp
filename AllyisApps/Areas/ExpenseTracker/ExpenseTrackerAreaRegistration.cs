@@ -25,11 +25,12 @@ namespace AllyisApps.Areas.ExpenseTracker
 			}
 		}
 
-		/// <summary>
-		/// Registers the area within the site.
-		/// </summary>
-		/// <param name="context">The site area registration context.</param>
-		public override void RegisterArea(AreaRegistrationContext context)
+        /// <summary>
+        /// Registers the area within the site.
+        /// </summary>
+        /// <param name="context">The site area registration context.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "MVC Framework managed.")]
+        public override void RegisterArea(AreaRegistrationContext context)
 		{
 			context.Routes.MapSubdomainRoute(
 				name: "ExpenseTracker_Detail",

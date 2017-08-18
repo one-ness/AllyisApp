@@ -5,14 +5,16 @@
 
 <div style="display: inline-block;">
 	@{
+		string className = String.Format("file_{0}", Model.Files.Count);
 		string uploadName = String.Format("Files[{0}]", Model.Files.Count);
-		string uploadFunc = String.Format("$('input[id={0}]').click();", uploadName);
+		string uploadFunc = String.Format("$('input[class={0}]').click(); console.log('choosing file');", className);
 	}
-	<input type="file" id="@uploadName" class="@uploadName" name="files" style="display:none;"
+	<input type="file" id="@uploadName" class="@className" name="files" style="display:none;"
 		   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
 	<input id="upload-file-name-display" class="form-control" style="width: 180px;"
 		   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
 </div>
 <a onclick="@uploadFunc" title="Choose Excel file containing Expense Tracker entries" style="float: right;">
 	<span class="btn btn-primary">@Strings.ChooseFile</span>
+	@*@Strings.ChooseFile*@
 </a>

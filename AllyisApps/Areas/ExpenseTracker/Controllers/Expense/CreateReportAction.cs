@@ -5,6 +5,7 @@ using AllyisApps.Controllers;
 using AllyisApps.Services;
 using System.Web;
 using AllyisApps.Services.Expense;
+using System.Linq;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -20,11 +21,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="submittedById">The submitted by id.</param>
 		///  <param name="items">The expense items.</param>
 		/// <param name="date">The date.</param>
+		/// <param name="file"></param>
 		/// <param name="files"></param>
 		/// <param name="reportName">The report name.</param>
 		/// <param name="businessJustification">The justification.</param>
 		/// <returns>An action result.</returns>
-		public ActionResult CreateReport(int subscriptionId, int submittedById, string date, List<HttpPostedFileBase> files = null, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
+		public ActionResult CreateReport(int subscriptionId, int submittedById, string date, HttpPostedFileBase file, IEnumerable<HttpPostedFileBase> files = null, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
 		{
 			if (items == null)
 			{
@@ -55,7 +57,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				AppService.CreateExpenseItem(item);
 			}
 
-			if (files != null)
+			var thing = file;
+
+			if (files != null && files.ToList().Count > 0)
 			{
 				return RedirectToAction("Import", new { subscriptionId = subscriptionId, files = files, reportId = reportId });
 			}

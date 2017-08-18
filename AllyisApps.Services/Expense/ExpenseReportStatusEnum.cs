@@ -17,29 +17,24 @@ namespace AllyisApps.Services
         Draft = 0,
 
         /// <summary>
-        /// Expense is new and not being reviewed.
+        /// Expense is pending.
         /// </summary>
-        New = 1,
-
-        /// <summary>
-        /// Expense is in the process of being reviewed.
-        /// </summary>
-        InProgress = 2,
+        Pending = 1,
 
         /// <summary>
         /// Expense has been approved
         /// </summary>
-        Approved = 3,
+        Approved = 2,
 
         /// <summary>
         /// Expense has been rejected
         /// </summary>
-        Rejected = 4,
+        Rejected = 3,
 
         /// <summary>
         /// Expense has been paid out.
         /// </summary>
-        Paid = 5
+        Paid = 4
 
     }
 }

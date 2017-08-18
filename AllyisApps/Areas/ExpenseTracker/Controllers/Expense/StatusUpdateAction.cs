@@ -1,0 +1,67 @@
+﻿using System.Web.Mvc;
+using System;
+using AllyisApps.Controllers;
+using AllyisApps.Services;
+
+
+namespace AllyisApps.Areas.ExpenseTracker.Controllers
+{
+    /// <summary>
+    /// Stores a new report in database and redirects to View
+    /// </summary>
+    public partial class ExpenseController : BaseController
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public RedirectToRouteResult StatusUpdate(int subscriptionId, int reportId, string btnAction, string reasonText)
+        {
+            switch(btnAction)
+            {
+                case "Approve":
+                    UpdateReport(reportId, "Approve", reasonText);
+                    break;
+                case "Reject":
+                    UpdateReport(reportId, "Reject", reasonText);
+                    break;
+                default:
+                    break;
+            }
+
+            return RedirectToRoute("ExpenseTracker_Default", new { subscriptionId = subscriptionId, controller = "expense" });
+        }
+
+        private void UpdateReport(int reportId, string status, string text)
+        {
+            ExpenseReport report = AppService.GetExpenseReport(reportId);
+            ExpenseHistory history = new ExpenseHistory()
+            {
+                CreatedUtc = DateTime.UtcNow,
+                ModifiedUtc = DateTime.UtcNow,
+                HistoryId = GetHashCode(),
+                ReportId = reportId,
+                Text = text,
+                UserId = GetCookieData().UserId
+            };
+
+            if(string.Equals(status, "Approve"))
+            {
+                report.ReportStatus = (int)ExpenseStatusEnum.Approved;
+                history.Status = report.ReportStatus;
+            }
+            else if(string.Equals(status, "Reject"))
+            {
+                report.ReportStatus = (int)ExpenseStatusEnum.Rejected;
+                history.Status = report.ReportStatus;
+            }
+            else
+            {
+                throw new Exception("Unknown status given to status update.");
+            }
+
+            AppService.UpdateExpenseReport(report, reportId);
+            AppService.CreateExpenseReportHistory(history);
+        }
+    }
+}

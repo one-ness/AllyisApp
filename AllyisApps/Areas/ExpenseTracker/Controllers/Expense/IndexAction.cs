@@ -24,6 +24,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
             var items = AppService.GetExpenseReportBySubmittedId(userId);
 
+            UserSubscription subInfo = null;
+            this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+
+            ViewBag.SubscriptionName = subInfo.SubscriptionName;
+
 			return View(InitializeViewModel(subscriptionId, userId, DateTime.UtcNow, DateTime.UtcNow.AddDays(7), items));
 		}
 
