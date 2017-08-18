@@ -23,7 +23,9 @@ namespace AllyisApps.Services.Expense
 
 		public override int ContentLength
 		{
-			get { return (int)stream.Length; }
+			get {
+				return stream == null ? 0 : (int)stream.Length;
+			}
 		}
 
 		public override string ContentType
