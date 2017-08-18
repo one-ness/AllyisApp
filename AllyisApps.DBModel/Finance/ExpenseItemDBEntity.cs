@@ -10,7 +10,7 @@ namespace AllyisApps.DBModel.Finance
 		/// <summary>
 		/// Gets or sets the Expense Item's Account type
 		/// </summary>
-		public string Account { get; set; }
+		public int AccountTypeId { get; set; }
 
         /// <summary>
         /// Gets or sets the Expense Item's ID.

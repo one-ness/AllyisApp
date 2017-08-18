@@ -6,7 +6,7 @@ CREATE PROCEDURE [Expense].[CreateExpenseItem]
 	@expenseReportId INT,
 	@isBillableToCustomer BIT,
 	@accountId INT,
-	@account NVARCHAR(60)
+	@accountTypeId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -19,7 +19,7 @@ BEGIN
 		[ExpenseReportId],
 		[IsBillableToCustomer],
 		[AccountId],
-		[Account])
+		[AccountTypeId])
 	VALUES (@itemDescription,
 		@itemExpenseName,
 		@transactionDate,
@@ -27,5 +27,5 @@ BEGIN
 		@expenseReportId,
 		@isBillableToCustomer,
 		@accountId,
-		@account);
+		@accountTypeId);
 END

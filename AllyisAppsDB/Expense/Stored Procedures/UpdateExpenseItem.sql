@@ -6,7 +6,7 @@
 	@amount DECIMAL(18, 2),
 	@expenseReportId INT,
 	@isBillableToCustomer BIT,
-	@account NVARCHAR (60)
+	@accountTypeId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -19,7 +19,7 @@ BEGIN
 		[Amount],
 		[ExpenseReportId],
 		[IsBillableToCustomer],
-		[Account])
+		[AccountTypeId])
 	VALUES (@expenseItemId,
 		@expenseItemName,
 		@itemDescription,
@@ -27,6 +27,6 @@ BEGIN
 		@amount,
 		@expenseReportId,
 		@isBillableToCustomer,
-		@account);
+		@accountTypeId);
 END
 

@@ -42,7 +42,7 @@ namespace AllyisApps.DBModel
             parameters.Add("@expenseReportId", item.ExpenseReportId);
             parameters.Add("@isBillableToCustomer", item.IsBillableToCustomer);
 			parameters.Add("@accountId", item.AccountId);
-			parameters.Add("@account", item.Account);
+			parameters.Add("@accountTypeId", item.AccountTypeId);
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
@@ -152,7 +152,7 @@ namespace AllyisApps.DBModel
             parameters.Add("@amount", item.Amount);
             parameters.Add("@expenseReportId", item.ExpenseReportId);
             parameters.Add("@isBillableToCustomer", item.IsBillableToCustomer);
-			parameters.Add("@account", item.Account);
+			parameters.Add("@accountTypeId", item.AccountTypeId);
 
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
