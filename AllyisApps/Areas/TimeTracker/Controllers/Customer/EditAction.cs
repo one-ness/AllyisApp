@@ -9,6 +9,8 @@ using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Customer;
+using AllyisApps.Services.Lookup;
+using AllyisApps.ViewModels;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -27,27 +29,34 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult Edit(int subscriptionId, int userId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
-			var infos = AppService.GetCustomerAndCountries(userId);
-			string subscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
+			var infos = AppService.GetCustomerInfo(userId);
+			string subscriptionNameToDisplay = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
+            Customer customer = infos.Item1;
+            return this.View(new EditCustomerInfoViewModel
+            {
+                ContactEmail = customer.ContactEmail,
+                CustomerName = customer.CustomerName,
+                AddressId = customer.Address?.AddressId,
+                Address = customer.Address?.Address1,
+                City = customer.Address?.City,
+                State = customer.Address?.StateName,
+                Country = customer.Address?.CountryName,
+                SelectedCountryCode = customer.Address?.CountryCode,
 
-			return this.View(new EditCustomerInfoViewModel
-			{
-				ContactEmail = infos.Item1.ContactEmail,
-				CustomerName = infos.Item1.CustomerName,
-				AddressId = infos.Item1.AddressId,
-				Address = infos.Item3.Address1,
-				City = infos.Item3.City,
-				State = infos.Item3.State,
-				Country = infos.Item3.CountryId,
-				PostalCode = infos.Item3.PostalCode,
-				ContactPhoneNumber = infos.Item1.ContactPhoneNumber,
-				FaxNumber = infos.Item1.FaxNumber,
-				Website = infos.Item1.Website,
-				EIN = infos.Item1.EIN,
-				OrganizationId = infos.Item1.OrganizationId,
-				CustomerId = userId,
-				ValidCountries = infos.Item2,
-				CustomerOrgId = infos.Item1.CustomerOrgId,
+                SelectedStateId = customer.Address?.StateId,
+                
+                PostalCode = customer.Address?.PostalCode,
+                ContactPhoneNumber = customer.ContactPhoneNumber,
+                
+                FaxNumber = customer.FaxNumber,
+                Website = customer.Website,
+                EIN = customer.EIN,
+                OrganizationId = customer.OrganizationId,
+                CustomerId = userId,
+                LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
+                LocalizedStates = ModelHelper.GetLocalizedStates(AppService, customer.Address?.CountryCode),
+                
+				CustomerOrgId = customer.CustomerOrgId,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subscriptionNameToDisplay
 			});
@@ -70,12 +79,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						CustomerId = model.CustomerId,
 						ContactEmail = model.ContactEmail,
 						CustomerName = model.CustomerName,
-						AddressId = model.AddressId,
-						Address = model.Address,
-						City = model.City,
-						State = model.State,
-						Country = model.Country,
-						PostalCode = model.PostalCode,
+						Address = new Address() {
+                            Address1 = model.Address,
+                            AddressId = model.AddressId,
+                            City = model.City,
+                            StateId = model.SelectedStateId,
+                            StateName = model.State,
+                            CountryCode = model.SelectedCountryCode,
+                            CountryName = model.Country,
+                            PostalCode = model.PostalCode
+                        },
 						ContactPhoneNumber = model.ContactPhoneNumber,
 						FaxNumber = model.FaxNumber,
 						Website = model.Website,

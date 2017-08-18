@@ -33,7 +33,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
 			UserSubscription subInfo = null;
-			this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
 			ViewBag.GetDateFromDays = new Func<int, DateTime>(AppService.GetDateFromDays);
 
@@ -71,7 +71,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
 			UserSubscription subInfo = null;
-			this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
 			ViewBag.GetDateFromDays = new Func<int, DateTime>(AppService.GetDateFromDays);
 

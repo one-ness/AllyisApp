@@ -30,7 +30,7 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult Subscribe(int id, int skuId)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, id);
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, id);
 			var infos = AppService.GetProductSubscriptionInfo(id, skuId);
 
 			ProductSubscriptionViewModel model = this.ConstructProductSubscriptionViewModel(infos.Item1, infos.Item2, infos.Item3, infos.Item4, id);
@@ -100,7 +100,7 @@ namespace AllyisApps.Controllers
 		[CLSCompliant(false)]
 		public ActionResult Subscribe(ProductSubscriptionViewModel model)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, model.OrganizationId);
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, model.OrganizationId);
 			AppService.Subscribe(model.ProductId, model.ProductName, model.SelectedSku, model.SubscriptionName, model.PreviousSku, 0, model.Token, false, null, null, model.OrganizationId);
 			Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.SubscribedSuccessfully, model.SelectedSkuName), Variety.Success));
 			return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });

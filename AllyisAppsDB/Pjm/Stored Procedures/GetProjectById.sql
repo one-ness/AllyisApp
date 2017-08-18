@@ -11,6 +11,7 @@ AS
 			[Customer].[CustomerName] AS [CustomerName],
 			[Customer].[CustomerOrgId],
 			[Project].[IsHourly] AS [PriceType],
+			[Project].[IsActive],
 			[Project].[StartUtc] AS [StartDate],
 			[Project].[EndUtc] AS [EndDate],
 			[Project].[ProjectOrgId]

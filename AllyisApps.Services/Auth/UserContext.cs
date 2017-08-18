@@ -6,7 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace AllyisApps.Services
 {
@@ -17,7 +16,30 @@ namespace AllyisApps.Services
 	/// </summary>
 	public class UserContext
 	{
-		// TODO: Add project information somewhere here (in OrganizationInfo?)
+		/// <summary>
+		/// Gets or sets the database id of the user.
+		/// </summary>
+		public int UserId { get; set; }
+
+		/// <summary>
+		/// First name of the user.
+		/// </summary>
+		public string FirstName { get; set; }
+
+		/// <summary>
+		/// Last name of the user.
+		/// </summary>
+		public string LastName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the email of the user.
+		/// </summary>
+		public string Email { get; set; }
+
+		/// <summary>
+		/// Gets or sets the preferred language for this user.
+		/// </summary>
+		public string PreferedLanguageId { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserContext"/> class.
@@ -25,7 +47,7 @@ namespace AllyisApps.Services
 		public UserContext()
 		{
 			this.UserOrganizations = new Dictionary<int, UserOrganization>();
-			this.OrganizationSubscriptions = new Dictionary<int, UserSubscription>();
+			this.UserSubscriptions = new Dictionary<int, UserSubscription>();
 		}
 
 		/// <summary>
@@ -46,43 +68,14 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets or sets the database id of the user.
-		/// </summary>
-		public int UserId { get; set; }
-
-		/// <summary>
-		/// First name of the user.
-		/// </summary>
-		public string FirstName { get; set; }
-
-		/// <summary>
-		/// Last name of the user.
-		/// </summary>
-		public string LastName { get; set; }
-
-		/// <summary>
-		/// Gets or sets the email of the user.
-		/// </summary>
-		[JsonIgnore]
-		public string Email { get; set; }
-
-		/// <summary>
 		/// Gets or sets the list of organizations the user is a member of, role in the organization, subscriptions each organization has subscribed to and user's role in that subscription.
 		/// </summary>
-		[JsonIgnore]
 		public Dictionary<int, UserOrganization> UserOrganizations { get; set; }
 
 		/// <summary>
 		/// Gets or sets the list of subscriptions this organization has.
 		/// If the user is not a member of that subscrption, then the role is set to NotAssigned.
 		/// </summary>
-		[JsonIgnore]
-		public Dictionary<int, UserSubscription> OrganizationSubscriptions { get; set; }
-
-		/// <summary>
-		/// Gets or sets the preferred language for this user.
-		/// </summary>
-		[JsonIgnore]
-		public string PreferedLanguageId { get; set; }
+		public Dictionary<int, UserSubscription> UserSubscriptions { get; set; }
 	}
 }

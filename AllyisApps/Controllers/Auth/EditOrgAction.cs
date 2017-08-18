@@ -10,6 +10,8 @@ using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.ViewModels;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Controllers
 {
@@ -31,18 +33,23 @@ namespace AllyisApps.Controllers
 			{
 				try
 				{
-					if (AppService.UpdateOrganization(
-						new Organization()
-						{
-							OrganizationId = model.OrganizationId,
-							OrganizationName = model.OrganizationName,
-							SiteUrl = model.SiteUrl,
-							AddressId = model.AddressId,
-							Address = model.Address,
-							City = model.City,
-							State = model.State,
-							Country = model.Country,
-							PostalCode = model.PostalCode,
+                    if (AppService.UpdateOrganization(
+                        new Organization()
+                        {
+                            OrganizationId = model.OrganizationId,
+                            OrganizationName = model.OrganizationName,
+                            SiteUrl = model.SiteUrl,
+
+                            Address = new Address()
+                            {
+                                AddressId = model.AddressId,
+                                City = model.City,
+                                StateId = model.SelectedStateId,
+                                CountryCode = model.SelectedCountryCode,
+                                PostalCode = model.PostalCode,
+                                Address1 = model.Address
+                            },
+							
 							PhoneNumber = model.PhoneNumber,
 							FaxNumber = model.FaxNumber
 						}))
@@ -92,22 +99,25 @@ namespace AllyisApps.Controllers
 		/// <returns>An initialized EditOrganizationViewModel.</returns>
 		public EditOrganizationViewModel ConstructEditOrganizationViewModel(Organization organization, bool canDelete, IEnumerable<string> validCountries)
 		{
-			return new EditOrganizationViewModel
-			{
-				OrganizationId = organization.OrganizationId,
-				OrganizationName = organization.OrganizationName,
-				SiteUrl = organization.SiteUrl,
-				AddressId = organization.AddressId,
-				Address = organization.Address,
-				City = organization.City,
-				State = organization.State,
-				Country = organization.Country,
-				PostalCode = organization.PostalCode,
-				PhoneNumber = organization.PhoneNumber,
-				FaxNumber = organization.FaxNumber,
-				CanDelete = canDelete,
-				ValidCountries = validCountries
-			};
-		}
+            var model = new EditOrganizationViewModel
+            {
+                OrganizationId = organization.OrganizationId,
+                OrganizationName = organization.OrganizationName,
+                SiteUrl = organization.SiteUrl,
+                AddressId = organization.Address?.AddressId,
+                Address = organization.Address?.Address1,
+                City = organization.Address?.City,
+                SelectedStateId = organization.Address?.StateId,
+                SelectedCountryCode = organization.Address?.CountryCode,
+                Country = organization.Address?.CountryName,
+                PostalCode = organization.Address?.PostalCode,
+                PhoneNumber = organization.PhoneNumber,
+                FaxNumber = organization.FaxNumber,
+                CanDelete = canDelete,
+                LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService)
+            };
+            model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, model.SelectedCountryCode);
+            return model;
+        }
 	}
 }

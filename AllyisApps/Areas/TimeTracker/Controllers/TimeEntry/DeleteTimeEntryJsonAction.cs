@@ -55,7 +55,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			// Time entry is locked
-			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.OrganizationSubscriptions[model.SubscriptionId].OrganizationId);
+			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId);
 			if ((!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, model.SubscriptionId)) && entry.Date <= (lockDate == null ? DateTime.MinValue : lockDate.Value))
 			{
 				string errorMessage = Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture);

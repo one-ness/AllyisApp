@@ -66,9 +66,17 @@ namespace AllyisApps.Services
 		/// Gets the list of valid countries.
 		/// </summary>
 		/// <returns>A collection of valid countries.</returns>
-		public IEnumerable<string> ValidCountries()
+		public Dictionary<string, string> GetCountries()
 		{
-			return DBHelper.ValidCountries();
+			return DBHelper.GetCountries();
+		}
+
+		/// <summary>
+		/// get the list of states for the given country
+		/// </summary>
+		public Dictionary<int, string> GetStates(string countryCode)
+		{
+			return this.DBHelper.GetStates(countryCode);
 		}
 
 		/// <summary>
@@ -152,56 +160,35 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task<int> SetupNewUser(
 			string email,
+			string password,
 			string firstName,
 			string lastName,
-			DateTime? dateOfBirth,
-			string address,
-			string city,
-			string state,
-			string country,
-			string postalCode,
-			string phone,
-			string password,
-			string languagePreference,
-			string confirmEmailSubject,
-			string confirmEmailMessage,
 			Guid emailConfirmationCode,
-			bool twoFactorEnabled = false,
-			bool lockOutEnabled = false,
-			DateTime? lockOutEndDateUtc = null)
-		{
+			DateTime? dateOfBirth,
+			string phoneNumber,
+			string address1,
+			string address2,
+			string city,
+			int? stateId,
+			string postalCode,
+			string countryCode,
+			string confirmEmailSubject,
+			string confirmEmailMessage)
+        { 
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName:");
 			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException("lastName");
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
 			if (emailConfirmationCode == null) throw new ArgumentException("emailConfirmationCode");
-
-			int result = 0;
+			var result = 0;
 			try
 			{
-				UserDBEntity entity = new UserDBEntity()
-				{
-					EmailConfirmationCode = emailConfirmationCode,
-					Email = email,
-					FirstName = firstName,
-					LastName = lastName,
-                    Address = address,
-					Country = country,
-                    City = city,
-                    State = state,
-                    PostalCode = postalCode,
-                    DateOfBirth = dateOfBirth,
-					PhoneNumber = phone,
-					PasswordHash = Crypto.GetPasswordHash(password),
-					IsTwoFactorEnabled = twoFactorEnabled,
-					IsLockoutEnabled = lockOutEnabled,
-					LockoutEndDateUtc = lockOutEndDateUtc,
-					PreferredLanguageId = languagePreference
-				};
+                
+				result = await this.DBHelper.CreateUserAsync(
+                    email, Crypto.GetPasswordHash(password), firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName, 
+                    address1, address2, city, stateId, postalCode, countryCode);
 
-				result = this.DBHelper.CreateUser(entity);
-
-				// send confirmation email
+				// user created, send confirmation email
 				await Mailer.SendEmailAsync(this.ServiceSettings.SupportEmail, email, confirmEmailSubject, confirmEmailMessage);
 			}
 			catch (SqlException ex)
@@ -260,65 +247,48 @@ namespace AllyisApps.Services
 			if (userId <= 0) throw new ArgumentException("userId");
 
 			UserContext result = null;
-			List<UserContextDBEntity> contextInfo = this.DBHelper.GetUserContextInfo(userId);
-			if (contextInfo != null && contextInfo.Count > 0)
+
+			// get context from db
+			dynamic expando = this.DBHelper.GetUserContext(userId);
+
+			// get user information
+			if (expando != null && expando.User != null)
 			{
-				// user exists in db
-				UserContextDBEntity firstRow = contextInfo[0];
-				result = new UserContext(userId, firstRow.Email, firstRow.FirstName, firstRow.LastName, firstRow.PreferredLanguageId);
-				// set result to self
-				this.SetUserContext(result);
+				// user found.
+				result = new UserContext();
+				result.UserId = expando.User.UserId;
+				result.FirstName = expando.User.FirstName;
+				result.LastName = expando.User.LastName;
+				result.Email = expando.User.Email;
 
-				// note: if contextInfo.Count > 0, user is part of at least one organization
-				foreach (var item in contextInfo)
+				
+
+				// get organization and roles
+				foreach (var item in expando.OrganizationsAndRoles)
 				{
-					// user is part of at least one organization, do we have org id?
-					if (item.OrganizationId.HasValue)
-					{
-						// yes, was it already added to the list?
-						UserOrganization orgInfo = null;
-						if (!result.UserOrganizations.TryGetValue(item.OrganizationId.Value, out orgInfo))
-						{
-							// no, add it now
-							orgInfo = new UserOrganization
-							{
-								OrganizationId = item.OrganizationId.Value,
-								OrganizationName = item.OrganizationName,
-								OrganizationRole = (OrganizationRole)item.OrganizationRoleId.Value,
-							};
-
-							result.UserOrganizations.Add(item.OrganizationId.Value, orgInfo);
-						}
-
-						// is there a subscription id?
-						if (item.SubscriptionId.HasValue)
-						{
-							UserSubscription subInfo = new UserSubscription()
-							{
-								SubscriptionId = item.SubscriptionId.Value,
-								SubscriptionName = item.SubscriptionName,
-								OrganizationId = orgInfo.OrganizationId,
-								OrganizationName = orgInfo.OrganizationName,
-								ProductId = (ProductIdEnum)item.ProductId.Value,
-								ProductName = item.ProductName,
-								ProductRoleName = item.ProductRoleName,
-								ProductRoleId = item.ProductRoleId.Value,
-								SkuId = item.SkuId.Value,
-								AreaUrl = item.AreaUrl
-							};
-
-							if (!orgInfo.OrganizationSubscriptions.ContainsKey(item.SubscriptionId.Value))
-							{
-								// add it to the list of subscriptions for this organization
-								orgInfo.OrganizationSubscriptions.Add(item.SubscriptionId.Value, subInfo);
-
-								// also add it to the result
-								result.OrganizationSubscriptions.Add(item.SubscriptionId.Value, subInfo);
-							}
-						}
-					}
+					result.UserOrganizations.Add(item.OrganizationId, new UserOrganization(item.OrganizationId, item.OrganizationName, (OrganizationRole)item.OrganizationRoleId));
 				}
-			}
+
+				// get subscriptions and roles
+				foreach (var item in expando.SubscriptionsAndRoles)
+				{
+					UserSubscription sub = new UserSubscription();
+					sub.AreaUrl = item.AreaUrl;
+					sub.OrganizationId = item.OrganizationId;
+					sub.OrganizationName = item.OrganizationName;
+					sub.ProductId = (ProductIdEnum)item.ProductId;
+					sub.ProductName = item.ProductName;
+					sub.ProductRoleId = item.ProductRoleId;
+					//sub.ProductRoleName = item.ProductRoleName; Logic Fails here as this is a one-to-many for this information I don't think we use it.
+					sub.SkuId = item.SkuId;
+					sub.SubscriptionId = item.SubscriptionId;
+					sub.SubscriptionName = item.SubscriptionName;
+					result.UserSubscriptions.Add(sub.SubscriptionId, sub);
+				}
+                
+                // set result to self
+                this.SetUserContext(result);
+            }
 
 			return result;
 		}
@@ -333,14 +303,7 @@ namespace AllyisApps.Services
 			DBHelper.UpdateActiveSubscription(UserContext.UserId, subscriptionId);
 		}
 
-		/// <summary>
-		/// Gets the user info for the current user.
-		/// </summary>
-		/// <returns>A User instance with the current user's info.</returns>
-		public User GetCurrentUser()
-		{
-			return GetUser(UserContext.UserId);
-		}
+		
 
 		/// <summary>
 		/// Gets the user info for a specific user.
@@ -360,6 +323,23 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// get the user profile
+		/// </summary>
+		public User GetCurrentUserProfile()
+		{
+            var result = GetUser(this.UserContext.UserId);	
+			return result;
+		}
+
+		/// <summary>
+		/// update the current user profile
+		/// </summary>
+		public void UpdateCurrentUserProfile(int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
+		{
+			this.DBHelper.UpdateUserProfile(this.UserContext.UserId, firstName, lastName, this.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+		}
+
+		/// <summary>
 		/// Gets the User for the current user, along with Organizations for each organization the
 		/// user is a member of, and InvitationInfos for any invitations for the user.
 		/// </summary>
@@ -369,7 +349,7 @@ namespace AllyisApps.Services
 			var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
 			return Tuple.Create<User, List<Organization>, List<InvitationInfo>, Address>(
 				InitializeUser(spResults.Item1),
-				spResults.Item2.Select(odb => InitializeOrganization(odb)).ToList(),
+				spResults.Item2.Select(odb => (Organization)InitializeOrganization(odb)).ToList(),
 				spResults.Item3.Select(idb => InitializeInvitationInfo(idb)).ToList(),
 				InitializeAddress(spResults.Item4));
 		}
@@ -397,31 +377,11 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("model", "UserInfo object must not be null.");
 			}
 
-			// TODO: Add UserInfo->UserDBEntity conversion at bottom
-			DBHelper.UpdateUser(new UserDBEntity
-			{
-				AccessFailedCount = model.AccessFailedCount,
-				AddressId = model.Address.AddressId,
-				Address = model.Address.Address1,
-				City = model.Address.City,
-				Country = model.Address.CountryId,
-				DateOfBirth = model.DateOfBirth,
-				Email = model.Email,
-				IsEmailConfirmed = model.IsEmailConfirmed,
-				FirstName = model.FirstName,
-				LastName = model.LastName,
-				IsLockoutEnabled = model.IsLockoutEnabled,
-				LockoutEndDateUtc = model.LockoutEndDateUtc,
-				PasswordHash = model.PasswordHash,
-				PasswordResetCode = model.PasswordResetCode,
-				PhoneExtension = model.PhoneExtension,
-				PhoneNumber = model.PhoneNumber,
-				IsPhoneNumberConfirmed = model.IsPhoneNumberConfirmed,
-				State = model.Address.State,
-				IsTwoFactorEnabled = model.IsTwoFactorEnabled,
-				UserId = model.UserId,
-				PostalCode = model.Address.PostalCode
-			});
+            //// TODO: Add UserInfo->UserDBEntity conversion at bottom
+            DBHelper.UpdateUserProfile(model.UserId,
+                model.FirstName, model.LastName, model.DateOfBirth, model.PhoneNumber, 
+                model.Address?.AddressId, model.Address?.Address1, model.Address?.Address2, model.Address?.City, model.Address?.StateId, model.Address?.PostalCode, model.Address?.CountryCode
+            );
 		}
 
 		/// <summary>
@@ -591,25 +551,35 @@ namespace AllyisApps.Services
 		/// <returns>Collection of Organizations.</returns>
 		public IEnumerable<Organization> GetOrganizationsByUserId()
 		{
-			return DBHelper.GetOrganizationsByUserId(UserContext.UserId).Select(o => InitializeOrganization(o));
+            return GetOrganizationsByUserId(UserContext.UserId);
 		}
 
-		#endregion public
+        public IEnumerable<Organization> GetOrganizationsByUserId(int userID)
+        {
+            return DBHelper.GetOrganizationsByUserId(userID).Select(o => (Organization) InitializeOrganization(o));
+        }
 
-		#region Info-DBEntity Conversions
+        #endregion public
 
-		/// <summary>
-		/// Translates a UserDBEntity into a User business object.
-		/// </summary>
-		/// <param name="user">UserDBEntity instance.</param>
-		/// <returns>User instance.</returns>
-		public static User InitializeUser(UserDBEntity user)
+        #region Info-DBEntity Conversions
+
+        /// <summary>
+        /// Translates a UserDBEntity into a User business object.
+        /// </summary>
+        /// <param name="user">UserDBEntity instance.</param>
+        /// <param name="loadAddress"></param>
+        /// <returns>User instance.</returns>
+        public User InitializeUser(UserDBEntity user, bool loadAddress = true)
 		{
 			if (user == null)
 			{
 				return null;
 			}
-
+            Address address = null;
+            if (user.AddressId != null && loadAddress)
+            {
+                address = getAddress(user.AddressId);
+            }
 			return new User
 			{
 				AccessFailedCount = user.AccessFailedCount,
@@ -627,6 +597,7 @@ namespace AllyisApps.Services
 				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
+                Address = address,
 			};
 		}
 
@@ -635,45 +606,38 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="user">User instance.</param>
 		/// <returns>UserDBEntity instance.</returns>
-		public static UserDBEntity GetDBEntityFromUser(User user)
+		public UserDBEntity GetDBEntityFromUser(User user)
 		{
-			if (user == null)
-			{
-				return null;
-			}
+            return new UserDBEntity()
+            {
+                AddressId = user.Address?.AddressId,
+                AccessFailedCount = user.AccessFailedCount,
+                DateOfBirth = user.DateOfBirth,
+                Email = user.Email,
+                IsEmailConfirmed = user.IsEmailConfirmed,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                IsLockoutEnabled = user.IsLockoutEnabled,
+                LockoutEndDateUtc = user.LockoutEndDateUtc,
+                PasswordHash = user.PasswordHash,
+                PasswordResetCode = user.PasswordResetCode,
+                PhoneExtension = user.PhoneExtension,
+                PhoneNumber = user.PhoneNumber,
+                IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
+                IsTwoFactorEnabled = user.IsTwoFactorEnabled,
+                UserId = user.UserId,
+                PreferredLanguageId = "en-US"          // TODO: Put this into UserInfo and do proper lookup
+            };
 
-			return new UserDBEntity
-			{
-				AccessFailedCount = user.AccessFailedCount,
-				Address = user.Address.Address1,
-				City = user.Address.City,
-				Country = user.Address.CountryId,
-				DateOfBirth = user.DateOfBirth,
-				Email = user.Email,
-				IsEmailConfirmed = user.IsEmailConfirmed,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				IsLockoutEnabled = user.IsLockoutEnabled,
-				LockoutEndDateUtc = user.LockoutEndDateUtc,
-				PasswordHash = user.PasswordHash,
-				PasswordResetCode = user.PasswordResetCode,
-				PhoneExtension = user.PhoneExtension,
-				PhoneNumber = user.PhoneNumber,
-				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
-				State = user.Address.State,
-				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
-				UserId = user.UserId,
-				PostalCode = user.Address.PostalCode,
-				PreferredLanguageId = "en-US"          // TODO: Put this into UserInfo and do proper lookup
-			};
-		}
+            
+        }
 
 		/// <summary>
 		/// Translates a <see cref="UserRolesDBEntity"/> into a <see cref="UserRolesInfo"/>.
 		/// </summary>
 		/// <param name="userRoles">UserRolesDBEntity instance.</param>
 		/// <returns>UserRolesInfo instance.</returns>
-		public static UserRolesInfo InitializeUserRolesInfo(UserRolesDBEntity userRoles)
+		public  UserRolesInfo InitializeUserRolesInfo(UserRolesDBEntity userRoles)
 		{
 			if (userRoles == null)
 			{
@@ -698,7 +662,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subUser">SubscriptionUserDBEntity instance.</param>
 		/// <returns>SubscriptionUserInfo instance.</returns>
-		public static SubscriptionUserInfo InitializeSubscriptionUserInfo(SubscriptionUserDBEntity subUser)
+		public  SubscriptionUserInfo InitializeSubscriptionUserInfo(SubscriptionUserDBEntity subUser)
 		{
 			if (subUser == null)
 			{

@@ -13,7 +13,7 @@ namespace AllyisApps.DBModel.Lookup
 		/// <summary>
 		/// two character country code.
 		/// </summary>
-		public string Code { get; set; }
+		public string CountryCode { get; set; }
 
 		/// <summary>
 		/// country name.

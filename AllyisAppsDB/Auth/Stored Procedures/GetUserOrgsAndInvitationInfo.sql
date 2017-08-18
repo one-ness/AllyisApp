@@ -16,7 +16,7 @@ BEGIN
 	FROM [Auth].[User]
 	WITH (NOLOCK)
 	LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [User].[AddressId]
-	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
+	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryCode] = [Address].[CountryCode]
 	LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE [UserId] = @userId;
 
@@ -24,9 +24,10 @@ BEGIN
 		   [Organization].[OrganizationName],
 		   [SiteUrl],
 		   [Address1] AS 'Address',
+		   [Organization].[AddressId],
 		   [City],
-		   [Country].[CountryName] AS 'Country',
-		   [State].[StateName] AS 'State',
+		   [Country].[CountryName] AS 'CountryName',
+		   [State].[StateName] AS 'StateName',
 		   [PostalCode],
 		   [PhoneNumber],
 		   [FaxNumber],
@@ -35,7 +36,7 @@ BEGIN
 	FROM [Auth].[Organization] WITH (NOLOCK)
 	RIGHT JOIN [Auth].[OrganizationUser]	WITH (NOLOCK) ON [OrganizationUser].[OrganizationId] = [Organization].[OrganizationId]
 	LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [Organization].[AddressId]
-	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
+	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryCode] = [Address].[CountryCode]
 	LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE [OrganizationUser].[UserId] = @userId 
 		  AND [Auth].[Organization].[IsActive] = 1
@@ -65,10 +66,10 @@ BEGIN
 	SELECT [Address].[Address1],
 		   [Address].[City],
 		   [State].[StateName] AS 'State',
-		   [Country].[CountryName] AS 'CountryId',
+		   [Country].[CountryName] AS 'Country',
 		   [Address].[PostalCode]
 	FROM [Lookup].[Address] AS [Address] WITH (NOLOCK)
-	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
+	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].CountryCode = [Address].CountryCode
 	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE [AddressId] = @addressId
 END
