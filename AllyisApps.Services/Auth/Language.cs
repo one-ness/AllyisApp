@@ -11,6 +11,8 @@ namespace AllyisApps.Services
 	/// </summary>
 	public class Language
 	{
+		public const string DefaultLanguageCultureName = "en-us";
+		public const string DefaultLanguageName = "English (US)";
 		///// <summary>
 		///// Gets or sets the language Id.
 		///// </summary>
@@ -32,8 +34,8 @@ namespace AllyisApps.Services
 		/// </summary>
 		public Language()
 		{
-			this.LanguageName = "English (US)";
-			this.CultureName = "en-us";
+			this.LanguageName = DefaultLanguageName;
+			this.CultureName = DefaultLanguageCultureName;
 		}
 	}
 }

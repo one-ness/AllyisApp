@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // <copyright file="UserDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -11,7 +11,7 @@ namespace AllyisApps.DBModel.Auth
 	/// <summary>
 	/// Represents the Users table in the database.
 	/// </summary>
-	public class UserDBEntity : BaseDBEntity
+	public class UserDBEntity
 	{
 		/// <summary>
 		/// Gets or sets UserId.
@@ -73,35 +73,10 @@ namespace AllyisApps.DBModel.Auth
 		/// </summary>
 		public DateTime? DateOfBirth { get; set; }
 
-		/// <summary>
-		/// Gets or sets user's Address Id.
-		/// </summary>
-		public int AddressId { get; set; }
-
-		/// <summary>
-		/// Gets or sets Address.
-		/// </summary>
-		public string Address { get; set; }
-
-		/// <summary>
-		/// Gets or sets City.
-		/// </summary>
-		public string City { get; set; }
-
-		/// <summary>
-		/// Gets or sets State.
-		/// </summary>
-		public string State { get; set; }
-
-		/// <summary>
-		/// Gets or sets Country.
-		/// </summary>
-		public string Country { get; set; }
-
-		/// <summary>
-		/// Gets or sets PostalCode.
-		/// </summary>
-		public string PostalCode { get; set; }
+        /// <summary>
+        /// Gets or sets user's Address Id.
+        /// </summary>
+        public int? AddressId { get; set; }
 
 		/// <summary>
 		/// Gets or sets PhoneNumber.

@@ -82,7 +82,7 @@
 				$("#inactivePartial").removeClass('hidden');
 				@if (@Model.InactiveCustomerAndProjects.Count() > 0)
 				{
-					if (Model.InactiveCustomerAndProjects.First().CustomerInfo.IsActive)
+					if (Model.InactiveCustomerAndProjects.First().CustomerInfo.IsActive.Value)
 					{
 						<text>
 							PopulateInactiveProjects('@Model.InactiveCustomerAndProjects.First().CustomerInfo.CustomerId', true);

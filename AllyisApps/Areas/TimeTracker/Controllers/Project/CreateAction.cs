@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[HttpGet]
 		public ActionResult Create(int subscriptionId, int userId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.CreateProject, subscriptionId);
+			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			DateTime? defaultStart = null;
 			DateTime? defaultEnd = null;
 			var idAndUsers = AppService.GetNextProjectIdAndSubUsers(userId, subscriptionId);
@@ -43,7 +43,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 			}
 
-			string subscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
+			string subscriptionNameToDisplay = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
 			return this.View(
 				new EditProjectViewModel()
 				{
@@ -58,7 +58,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					SubscriptionId = subscriptionId,
 					SubscriptionName = subscriptionNameToDisplay,
 					UserId = userId,
-					OrganizationId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId
+					OrganizationId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId
 				});
 		}
 

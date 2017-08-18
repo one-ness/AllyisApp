@@ -143,8 +143,8 @@
     <Build Include="Lookup\Stored Procedures\GetLanguageByID.sql" />
     <Build Include="Lookup\Stored Procedures\GetCountries.sql" />
     <Build Include="Lookup\Stored Procedures\GetStatesByCountry.sql" />
-    <Build Include="Crm\Stored Procedures\GetCustomerAndCountries.sql" />
-    <Build Include="Crm\Stored Procedures\GetNextCustIdAndCountries.sql" />
+    <Build Include="Crm\Stored Procedures\GetCustomerProfile.sql" />
+    <Build Include="Crm\Stored Procedures\GetNextCustId.sql" />
     <Build Include="Crm\Stored Procedures\CreateCustomerInfo.sql" />
     <Build Include="Crm\Stored Procedures\DeleteCustomer.sql" />
     <Build Include="Crm\Stored Procedures\GetCustomerInfo.sql" />
@@ -366,6 +366,13 @@
     <Build Include="StaffingManager\Stored Procedures\CreatePositionTags.sql" />
     <Build Include="StaffingManager\Stored Procedures\CreatePositionTag.sql" />
     <Build Include="StaffingManager\Stored Procedures\DeletePositionTag.sql" />
+    <Build Include="Lookup\Stored Procedures\GetStates.sql" />
+    <Build Include="Lookup\Stored Procedures\CreateAddress.sql" />
+    <Build Include="Lookup\Stored Procedures\UpdateAddress.sql" />
+    <Build Include="Auth\Stored Procedures\UpdateUserProfile.sql" />
+    <Build Include="Auth\Stored Procedures\GetUserProfile.sql" />
+    <Build Include="Auth\Stored Procedures\GetUserContext.sql" />
+    <Build Include="Lookup\Stored Procedures\GetAddress.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

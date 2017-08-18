@@ -6,12 +6,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using AllyisApps.DBModel.StaffingManager;
-using AllyisApps.Services.StaffingManager;
-using AllyisApps.Services.Lookup;
-using AllyisApps.DBModel.Lookup;
 using System.Dynamic;
+using System.Linq;
+using AllyisApps.DBModel.Lookup;
+using AllyisApps.DBModel.StaffingManager;
+using AllyisApps.Services.Lookup;
+using AllyisApps.Services.StaffingManager;
 
 namespace AllyisApps.Services
 {
@@ -332,14 +332,15 @@ namespace AllyisApps.Services
 
 				Address = new Address
 				{
-					Address1 = position.Address.Address,
-					CountryId = position.Address.Address,
-					State = position.Address.Address,
-					PostalCode = position.Address.Address
+					// TODO DO TO DO
+					Address1 = position.position.Address1,
+					CountryName = position.position.CountryName,
+					StateName = position.position.StateName,
+					PostalCode = position.position.PostalCodes
 				},
 
 				Tags = DBEntityToServiceObject(position.Tags),
-				
+
 				EmploymentTypeName = position.EmploymentType.EmploymentTypeName,
 				PositionLevelName = position.PositionLevel.PositionLevelName,
 				PositionStatusName = position.PositionStatus.PositionStatusName
@@ -467,12 +468,12 @@ namespace AllyisApps.Services
 			obj.Position.DesiredSkills = position.DesiredSkills;
 			obj.Position.HiringManager = position.HiringManager;
 			obj.Position.TeamName = position.TeamName;
-			
+
 			obj.Address = new ExpandoObject();
 			obj.Address.Address = position.Address;
 			obj.Address.City = position.Address.City;
-			obj.Address.State = position.Address.State;
-			obj.Address.Country = position.Address.CountryId;
+			obj.Address.StateName = position.Address.StateName;
+			obj.Address.CountryName = position.Address.CountryName;
 			obj.Address.PostalCode = position.Address.PostalCode;
 
 			obj.Tags = ServiceObjectToDBEntity(position.Tags);
@@ -491,7 +492,7 @@ namespace AllyisApps.Services
 			if (tags == null) throw new ArgumentNullException(nameof(tags), "Cannot accept null list of tags to be converted.");
 
 			dynamic obj = tags;
-	
+
 			return obj;
 		}
 

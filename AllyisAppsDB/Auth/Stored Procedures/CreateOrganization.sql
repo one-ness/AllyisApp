@@ -3,8 +3,8 @@
 	@siteUrl NVARCHAR(100),
 	@address NVARCHAR(100),
 	@city NVARCHAR(100),
-	@state NVARCHAR(100),
-	@country NVARCHAR(100),
+	@stateID int,
+	@countryCode VARCHAR(8),
 	@postalCode NVARCHAR(50),
 	@phoneNumber VARCHAR(50),
 	@faxNumber VARCHAR(50),
@@ -13,21 +13,15 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	SET XACT_ABORT ON;
+	declare @addressId int
+	set @addressId = null
 
 	BEGIN TRANSACTION
 		-- Create Address
-		INSERT INTO [Lookup].[Address]
-				([Address1],
-				[City],
-				[StateId],
-				[CountryId],
-				[PostalCode])
-		VALUES(@address,
-				@city,
-				(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [StateName] = @state),
-				(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @country),
-				@postalCode);
-
+		if(@address is not null or @city is not null or @countryCode is not null or @postalCode is not null or @stateID is not null)
+		Begin
+			EXEC @addressId = [Lookup].CreateAddress @address, null, @city, @stateId, @postalCode, @countryCode
+		end
 		-- Create org
 		INSERT INTO [Auth].[Organization] 
 				([OrganizationName],
@@ -38,7 +32,7 @@ BEGIN
 				[Subdomain])
 		VALUES (@organizationName,
 				@siteUrl,
-				SCOPE_IDENTITY(),
+				@addressId,
 				@phoneNumber,
 				@faxNumber,
 				@subdomain);

@@ -501,7 +501,7 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">Organization Id.</param>
 		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<CustomerDBEntity>, List<ProjectDBEntity>, List<SubscriptionUserDBEntity>> GetReportInfo(int orgId, int subscriptionId)
+		public Tuple<List<dynamic>, List<ProjectDBEntity>, List<SubscriptionUserDBEntity>> GetReportInfo(int orgId, int subscriptionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@orgId", orgId);
@@ -514,7 +514,7 @@ namespace AllyisApps.DBModel
 					parameters,
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
-					results.Read<CustomerDBEntity>().ToList(),
+					results.Read<dynamic>().ToList(),
 					results.Read<ProjectDBEntity>().ToList(),
 					results.Read<SubscriptionUserDBEntity>().ToList());
 			}

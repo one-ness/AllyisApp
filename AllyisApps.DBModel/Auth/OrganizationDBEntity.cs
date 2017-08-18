@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // <copyright file="OrganizationDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -10,7 +10,7 @@ namespace AllyisApps.DBModel.Auth
 	/// <summary>
 	/// Represents the Organizations table in the database.
 	/// </summary>
-	public class OrganizationDBEntity : BaseDBEntity
+	public class OrganizationDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the organization's Id.
@@ -27,35 +27,10 @@ namespace AllyisApps.DBModel.Auth
 		/// </summary>
 		public string SiteUrl { get; set; }
 
-		/// <summary>
-		/// Gets or sets the organization's Address Id.
-		/// </summary>
-		public int AddressId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the organization's physical address.
-		/// </summary>
-		public string Address { get; set; }
-
-		/// <summary>
-		/// Gets or sets the organization's city.
-		/// </summary>
-		public string City { get; set; }
-
-		/// <summary>
-		/// Gets or sets the organization's state.
-		/// </summary>
-		public string State { get; set; }
-
-		/// <summary>
-		/// Gets or sets the organization's country.
-		/// </summary>
-		public string Country { get; set; }
-
-		/// <summary>
-		/// Gets or sets the organization's postal code.
-		/// </summary>
-		public string PostalCode { get; set; }
+        /// <summary>
+        /// Gets or sets the organization's Address Id.
+        /// </summary>
+        public int? AddressId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's phone number.
@@ -75,6 +50,8 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets DateCreated.
 		/// </summary>
-		public DateTime CreatedUtc { get; set; }
+		public DateTime? CreatedUtc { get; set; }
 	}
+
+    
 }

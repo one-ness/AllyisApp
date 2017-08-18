@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
 			UserSubscription subInfo = null;
-			this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			return this.View(this.ConstructManageCustomerViewModel(subscriptionId));
 		}
 
@@ -43,7 +43,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
         {
             this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
             UserSubscription subInfo = null;
-            this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+            this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
             var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
             ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infos.Item1.StartOfWeek));
@@ -88,7 +88,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ManageCustomerViewModel ConstructManageCustomerViewModel(int subscriptionId)
 		{
 			UserSubscription subInfo = null;
-			this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			var infos = AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			bool canEditProjects = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;

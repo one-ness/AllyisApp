@@ -2,7 +2,7 @@
 	[UserId]					INT              IDENTITY (111119, 3) NOT NULL,
 	[FirstName]					NVARCHAR (32)    NOT NULL,
 	[LastName]					NVARCHAR (32)    NOT NULL,
-	[AddressId]					INT              NOT NULL,
+	[AddressId]					INT              NULL,
 	[Email]						NVARCHAR (384)   NOT NULL,
 	[PasswordHash]				NVARCHAR (512)   NOT NULL,
 	[IsEmailConfirmed]			BIT              CONSTRAINT [DF__User__EmailConfirmed] DEFAULT ((0)) NOT NULL,

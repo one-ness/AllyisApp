@@ -38,8 +38,8 @@ AS
 		   [Customer].[CustomerName],
 		   [Address1],
 		   [City],
-		   [State].[StateName] AS 'State',
-		   [Country].[CountryName] AS 'Country',
+		   [State].[StateName] AS 'StateName',
+		   [Country].[CountryName] AS 'CountryName',
 		   [PostalCode],
 		   [Customer].[ContactEmail],
 		   [Customer].[ContactPhoneNumber],
@@ -48,11 +48,12 @@ AS
 		   [Customer].[EIN],
 		   [Customer].[CustomerCreatedUtc],
 		   [Customer].[CustomerOrgId],
+		   [Customer].[OrganizationId],
 		   [Customer].[IsActive]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 
 	LEFT JOIN [Pjm].[Project] WITH (NOLOCK) ON [Project].[CustomerId] = [Customer].[CustomerId]
 	LEFT JOIN [Lookup].[Address] WITH (NOLOCK) ON [Address].[AddressId] = [Customer].[AddressId]
-	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
+	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryCode] = [Address].[CountryCode]
 	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE [Customer].[OrganizationId] = @orgId
 	AND ([Customer].[IsActive] = 0

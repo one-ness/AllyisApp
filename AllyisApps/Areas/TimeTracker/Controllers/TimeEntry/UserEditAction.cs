@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			var infos = AppService.GetProjectsForOrgAndUser(userId, subscriptionId);
-			string subscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
+			string subscriptionNameToDisplay = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
 			return this.View(new UserEditViewModel
 			{
 				UserId = this.AppService.UserContext.UserId,
@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[ValidateAntiForgeryToken]
 		public JsonResult UserEditAJAX(int userId, int subscriptionId, List<int> offUser, List<int> onUser)
 		{
-			int organizationId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
+			int organizationId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
 			if (this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false))
 			{
 				if (offUser != null)

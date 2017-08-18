@@ -189,7 +189,7 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool RemoveBilling(int orgId)
 		{
-			this.CheckOrgAction(OrgAction.DeleteBilling, orgId);
+			this.CheckOrgAction(OrgAction.EditBilling, orgId);
 			DBHelper.RemoveBilling(orgId);
 			return true;
 		}
@@ -571,7 +571,7 @@ namespace AllyisApps.Services
 		/// <returns>A notification string, or null.</returns>
 		public string UnsubscribeAndRemoveBillingSubscription(int SelectedSku, int? subscriptionId)
 		{
-			var orgId = this.UserContext.OrganizationSubscriptions[subscriptionId.Value].OrganizationId;
+			var orgId = this.UserContext.UserSubscriptions[subscriptionId.Value].OrganizationId;
 			BillingServicesCustomer custId = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId(orgId));
 			if (custId != null)
 			{
@@ -586,7 +586,7 @@ namespace AllyisApps.Services
 			if (subscriptionId != null)
 			{
 				string skuName = this.Unsubscribe(subscriptionId.Value);
-				return string.Format("{0} has been unsubscribed from {1}.", UserContext.OrganizationSubscriptions[subscriptionId.Value].OrganizationName, skuName);
+				//return string.Format("{0} has been unsubscribed from {1}.", UserContext.UserSubscriptions[subscriptionId.Value].OrganizationName, skuName);
 			}
 
 			return null;

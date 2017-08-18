@@ -29,9 +29,9 @@ namespace AllyisApps.Services
 		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0)
 		{
 			int orgId;
-			if (subscriptionId > 0 && UserContext.OrganizationSubscriptions[subscriptionId] != null)
+			if (subscriptionId > 0 && UserContext.UserSubscriptions[subscriptionId] != null)
 			{
-				orgId = UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
+				orgId = UserContext.UserSubscriptions[subscriptionId].OrganizationId;
 			}
 			else if (organizationId > 0 && UserContext.UserOrganizations[organizationId] != null)
 			{
@@ -291,16 +291,17 @@ namespace AllyisApps.Services
 							}
 						}
 
+
 						// Importing non-required customer data
 						if (customer != null && hasNonRequiredCustomerInfo)
 						{
 							bool updated = false;
-
-							if (hasCustomerStreetAddress) updated = this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address = val) || updated;
-							if (hasCustomerCity) updated = this.readColumn(row, ColumnHeaders.CustomerCity, val => customer.City = val) || updated;
-							if (hasCustomerCountry) updated = this.readColumn(row, ColumnHeaders.CustomerCountry, val => customer.Country = val) || updated;
-							if (hasCustomerState) updated = this.readColumn(row, ColumnHeaders.CustomerState, val => customer.State = val) || updated;
-							if (hasCustomerPostalCode) updated = this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => customer.PostalCode = val) || updated;
+                            
+							if (hasCustomerStreetAddress) updated = this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address.Address1 = val) || updated;
+							if (hasCustomerCity) updated = this.readColumn(row, ColumnHeaders.CustomerCity, val => customer.Address.City = val) || updated;
+							if (hasCustomerCountry) updated = this.readColumn(row, ColumnHeaders.CustomerCountry, val => customer.Address.CountryName = val) || updated;
+							if (hasCustomerState) updated = this.readColumn(row, ColumnHeaders.CustomerState, val => customer.Address.StateName = val) || updated;
+							if (hasCustomerPostalCode) updated = this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => customer.Address.PostalCode = val) || updated;
 							if (hasCustomerEmail) updated = this.readColumn(row, ColumnHeaders.CustomerEmail, val => customer.ContactEmail = val) || updated;
 							if (hasCustomerPhoneNumber) updated = this.readColumn(row, ColumnHeaders.CustomerPhoneNumber, val => customer.ContactPhoneNumber = val) || updated;
 							if (hasCustomerFaxNumber) updated = this.readColumn(row, ColumnHeaders.CustomerFaxNumber, val => customer.FaxNumber = val) || updated;
@@ -693,7 +694,7 @@ namespace AllyisApps.Services
 										try
 										{
 											result.UsersImported += 1;
-											user.UserId = DBHelper.CreateUser(GetDBEntityFromUser(user));
+											//user.UserId = DBHelper.CreateUser(GetDBEntityFromUser(user));
 										}
 										catch
 										{
@@ -741,7 +742,7 @@ namespace AllyisApps.Services
 
 							if (hasUserAddress) updated = this.readColumn(row, ColumnHeaders.UserAddress, val => user.Address.Address1 = val) || updated;
 							if (hasUserCity) updated = this.readColumn(row, ColumnHeaders.UserCity, val => user.Address.City = val) || updated;
-							if (hasUserCountry) updated = this.readColumn(row, ColumnHeaders.UserCountry, val => user.Address.CountryId = val) || updated;
+							if (hasUserCountry) updated = this.readColumn(row, ColumnHeaders.UserCountry, val => user.Address.CountryName = val) || updated;
 							string dateOfBirth = null;
 							if (hasUserDateOfBirth) updated = this.readColumn(row, ColumnHeaders.UserDateOfBirth, val => dateOfBirth = val) || updated;
 							if (!string.IsNullOrEmpty(dateOfBirth))
@@ -761,7 +762,7 @@ namespace AllyisApps.Services
 							if (hasUserPhoneExtension) updated = this.readColumn(row, ColumnHeaders.UserPhoneExtension, val => user.PhoneExtension = val) || updated;
 							if (hasUserPhoneNumber) updated = this.readColumn(row, ColumnHeaders.UserPhoneNumber, val => user.PhoneNumber = val) || updated;
 							if (hasUserPostalCode) updated = this.readColumn(row, ColumnHeaders.UserPostalCode, val => user.Address.PostalCode = val) || updated;
-							if (hasUserState) updated = this.readColumn(row, ColumnHeaders.UserState, val => user.Address.State = val) || updated;
+							if (hasUserState) updated = this.readColumn(row, ColumnHeaders.UserState, val => user.Address.StateName = val) || updated;
 
 							if (updated)
 							{
