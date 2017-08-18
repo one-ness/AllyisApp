@@ -56,7 +56,6 @@
 						<label>Report Name</label>
 					</div>
 					<div class="right-input">
-						@*@Html.TextBoxFor(m => m.Report.ReportTitle, new { @class = "form-control", name = "ReportName", Value = Model.Report.ReportTitle })*@
 						<input type="text" name="ReportName" value="@Model.Report.ReportTitle" class="form-control" />
 					</div>
 					<div class="left-label">
@@ -69,7 +68,6 @@
 						<label>@Strings.Date</label>
 					</div>
 					<div class="right-input">
-						@*@Html.TextBoxFor(m => m.Report.ReportDate, new { @class = "datepicker form-control", name = "date", Value = dateVal, id = "DateRangeStart" })*@
 						<input type="text" id="DateRangeStart" name="date" value="@dateVal" class="datepicker form-control" />
 					</div>
 					<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.StartDate" />

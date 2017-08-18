@@ -28,7 +28,8 @@
 		@Html.TextBoxFor(m => m.Items[i].ExpenseItemName, new { @class = "form-control", name = nameName, Value = Model.Items[i].ExpenseItemName, placeholder = "Name", style = "display: inline-block; width: 150px" })
 		@Html.TextBoxFor(m => m.Items[i].Amount, new { @class = "form-control", name = amountName, Value = amountVal, placeholder = "Amount", style = "display: inline-block; width: 150px" })
 		<label>Payed for by Customer</label>
-		<input type="checkbox" checked class="form-control" name="@checkboxName" style="width: 14px; display: inline-block;" />
+		@*<input type="checkbox" checked class="form-control" name="@checkboxName" style="width: 14px; display: inline-block;" />*@
+		@Html.CheckBoxFor(m => m.Items[i].IsBillableToCustomer, new { @class = "form-control", name = checkboxName, style = "width: 14px; display: inline-block;" })
 		<a onclick="removeItem(@index)">
 			<span class="btn btn-primary">
 				Remove
