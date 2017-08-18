@@ -1,10 +1,10 @@
-﻿CREATE PROCEDURE [StaffingManager].[CreateTag]
+﻿CREATE PROCEDURE [Lookup].[CreateTag]
 	@tagName NVARCHAR(32)
 
 AS
 BEGIN
 	SET NOCOUNT ON;
-	INSERT INTO [StaffingManager].[Tag] 
+	INSERT INTO [Lookup].[Tag] 
 		([TagName])
 	VALUES 	 
 		(@tagName)

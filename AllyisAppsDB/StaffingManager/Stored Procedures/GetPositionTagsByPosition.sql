@@ -9,7 +9,7 @@ BEGIN
 		[PositionTag].[TagId],
 		[Tag].[TagName]
 	FROM [StaffingManager].[PositionTag]
-		JOIN [StaffingManager].[Tag]
+		JOIN [Lookup].[Tag]
 		ON [Tag].[TagId] = [PositionTag].[TagId]
 	WHERE [PositionTag].[PositionId] = @PositionId; 
 END

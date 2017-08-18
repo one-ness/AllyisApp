@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [StaffingManager].[SetupTag]
+﻿CREATE PROCEDURE [Lookup].[SetupTag]
 	@positionId INT,
 	@tagName NVARCHAR(32)
 
@@ -7,7 +7,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	BEGIN TRANSACTION
-		EXEC [StaffingManager].[CreateTag] @tagName;
+		EXEC [Lookup].[CreateTag] @tagName;
 
 		DECLARE @tagId INT = IDENT_CURRENT('[StaffingManager].[TagId]');
 

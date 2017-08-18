@@ -97,8 +97,11 @@
     <Compile Include="StaffingManager\ApplicantDBEntity.cs" />
     <Compile Include="StaffingManager\ApplicationDocumentDBEntity.cs" />
     <Compile Include="StaffingManager\ApplicationDBEntity.cs" />
+    <Compile Include="StaffingManager\EmploymentTypeDBEntity.cs" />
     <Compile Include="StaffingManager\PositionDBEntity.cs" />
-    <Compile Include="StaffingManager\TagDBEntity.cs" />
+    <Compile Include="StaffingManager\PositionLevelDBEntity.cs" />
+    <Compile Include="StaffingManager\PositionStatusDBEntity.cs" />
+    <Compile Include="Lookup\TagDBEntity.cs" />
     <Compile Include="TimeTracker\LockDateDBEntity.cs" />
     <Compile Include="Hrm\PayClassDBEntity.cs" />
     <Compile Include="TimeTracker\SettingDBEntity.cs" />
