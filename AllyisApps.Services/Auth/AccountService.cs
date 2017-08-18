@@ -301,14 +301,7 @@ namespace AllyisApps.Services
 			DBHelper.UpdateActiveSubscription(UserContext.UserId, subscriptionId);
 		}
 
-		/// <summary>
-		/// Gets the user info for the current user.
-		/// </summary>
-		/// <returns>A User instance with the current user's info.</returns>
-		public User GetCurrentUser()
-		{
-			return GetUser(UserContext.UserId);
-		}
+		
 
 		/// <summary>
 		/// Gets the user info for a specific user.
@@ -332,36 +325,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public User GetCurrentUserProfile()
 		{
-			var result = new User();
-			var entity = this.DBHelper.GetUserProfile(this.UserContext.UserId);
-			result.AccessFailedCount = entity.AccessFailedCount;
-			result.DateOfBirth = entity.DateOfBirth;
-			result.Email = entity.Email;
-			result.EmailConfirmationCode = entity.EmailConfirmationCode;
-			result.FirstName = entity.FirstName;
-			result.IsEmailConfirmed = entity.IsEmailConfirmed;
-			result.IsLockoutEnabled = entity.IsLockoutEnabled;
-			result.IsPhoneNumberConfirmed = entity.IsPhoneNumberConfirmed;
-			result.IsTwoFactorEnabled = entity.IsTwoFactorEnabled;
-			result.LastName = entity.LastName;
-			result.LastUsedOrganizationId = entity.LastUsedOrganizationId;
-			result.LastUsedSubscriptionId = entity.LastUsedSubscriptionId;
-			result.LockoutEndDateUtc = entity.LockoutEndDateUtc;
-			result.PasswordHash = entity.PasswordHash;
-			result.PasswordResetCode = entity.PasswordResetCode;
-			result.PhoneExtension = entity.PhoneExtension;
-			result.PhoneNumber = entity.PhoneNumber;
-			result.UserCreatedUtc = entity.UserCreatedUtc;
-			result.UserId = entity.UserId;
-			result.Address.Address1 = entity.Address1;
-			result.Address.Address2 = entity.Address2;
-			result.Address.AddressId = entity.AddressId;
-			result.Address.City = entity.City;
-			result.Address.CountryName = entity.CountryName;
-			result.Address.CountryCode = entity.CountryCode;
-			result.Address.PostalCode = entity.PostalCode;
-			result.Address.StateName = entity.StateName;
-			result.Address.StateId = entity.StateId;
+            var result = GetUser(this.UserContext.UserId);	
 			return result;
 		}
 
