@@ -39,6 +39,6 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// <summary>
 		/// Gets or sets the Expense Files
 		/// </summary>
-		public IList<ExpenseFile> Files { get; set; }
+		public IList<HttpPostedFileBase> Files { get; set; }
 	}
 }

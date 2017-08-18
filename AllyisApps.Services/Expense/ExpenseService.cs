@@ -50,7 +50,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="reportId"></param>
 		/// <returns></returns>
-		public IList<ExpenseFile> GetExpenseFilesByReportId(int reportId)
+		public IList<HttpPostedFileBase> GetExpenseFilesByReportId(int reportId)
 		{
 			return DBHelper.GetExpenseFilesByReportId(reportId).Select(x => InitializeExpenseFile(x)).AsEnumerable().ToList();
 		}
@@ -185,7 +185,7 @@ namespace AllyisApps.Services
 			};
 		}
 
-		public static ExpenseFile InitializeExpenseFile(ExpenseFileDBEntity entity)
+		public static HttpPostedFileBase InitializeExpenseFile(ExpenseFileDBEntity entity)
 		{
 			if(entity == null)
 			{
@@ -213,7 +213,7 @@ namespace AllyisApps.Services
 			DBHelper.CreateExpenseItem(itemEntity);
 		}
 
-		public void CreateExpenseFile(ExpenseFile file, int reportId)
+		public void CreateExpenseFile(HttpPostedFileBase file, int reportId)
 		{
 			ExpenseFileDBEntity fileEntity = new ExpenseFileDBEntity()
 			{

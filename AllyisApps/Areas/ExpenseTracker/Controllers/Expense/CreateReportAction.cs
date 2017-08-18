@@ -24,7 +24,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="reportName">The report name.</param>
 		/// <param name="businessJustification">The justification.</param>
 		/// <returns>An action result.</returns>
-		public ActionResult CreateReport(int subscriptionId, int submittedById, string date, List<ExpenseFile> files = null, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
+		public ActionResult CreateReport(int subscriptionId, int submittedById, string date, List<HttpPostedFileBase> files = null, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
 		{
 			if (items == null)
 			{

@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Import(int subscriptionId, int reportId, List<ExpenseFile> files)
+		public ActionResult Import(int subscriptionId, int reportId, List<HttpPostedFileBase> files)
 		{
 			int organizationId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
 

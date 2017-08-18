@@ -56,11 +56,9 @@
 @Scripts.Render("~/bundles/jquery")
 <script>
 	$('.addItem').on('click', function () {
-		console.log('adding item');
 		$('.items').load('@Url.Action("AddItem")', @Html.Raw(Json.Encode(@Model)));
 	});
 	function removeItem(index) {
-		console.log('removing item');
 		$('.items').load('@Url.Action("RemoveItem")', { model: @Html.Raw(Json.Encode(@Model)), index: index });
 	}
 </script>

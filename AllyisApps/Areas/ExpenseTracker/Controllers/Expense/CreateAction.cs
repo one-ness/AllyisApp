@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		{
 			ExpenseReport report = reportId == -1 ? null : AppService.GetExpenseReport(reportId);
 			IList<ExpenseItem> items = new List<ExpenseItem>();
-			IList<ExpenseFile> files = new List<ExpenseFile>();
+			IList<HttpPostedFileBase> files = new List<HttpPostedFileBase>();
 			if (report == null)
 			{
 				items = new List<ExpenseItem>();
@@ -35,7 +35,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				{
 					items.Add(new ExpenseItem());
 				}
-				files = new List<ExpenseFile>();
+				files = new List<HttpPostedFileBase>();
 				for (int i = 0; i < fileCount; i++)
 				{
 					files.Add(new ExpenseFile(null, "", ""));
