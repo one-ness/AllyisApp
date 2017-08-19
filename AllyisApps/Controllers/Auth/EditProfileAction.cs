@@ -7,9 +7,11 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
+using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels.Auth;
+using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
 {
@@ -21,25 +23,23 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/EditProfile.
 		/// </summary>
-		/// <returns>The edit profile view.</returns>
 		public ActionResult EditProfile()
 		{
-			User userInfo = AppService.GetCurrentUser();
-			EditProfileViewModel model = new EditProfileViewModel
-			{
-				Email = userInfo.Email,
-				FirstName = userInfo.FirstName,
-				LastName = userInfo.LastName,
-				AddressId = userInfo.Address.AddressId,
-				Address = userInfo.Address.Address1,
-				City = userInfo.Address.City,
-				State = userInfo.Address.State,
-				Country = userInfo.Address.CountryId,
-				PostalCode = userInfo.Address.PostalCode,
-				PhoneNumber = userInfo.PhoneNumber,
-				DateOfBirth = AppService.GetDayFromDateTime(userInfo.DateOfBirth),
-				ValidCountries = AppService.ValidCountries()
-			};
+			var model = new EditProfileViewModel();
+			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
+			var user = this.AppService.GetCurrentUserProfile();
+			model.Address = user.Address?.Address1;
+			model.AddressId = user.Address?.AddressId;
+			model.City = user.Address?.City;
+			model.DateOfBirth = this.AppService.GetDayFromDateTime(user.DateOfBirth);
+			model.Email = user.Email;
+			model.FirstName = user.FirstName;
+			model.LastName = user.LastName;
+			model.PhoneNumber = user.PhoneNumber;
+			model.PostalCode = user.Address?.PostalCode;
+			model.SelectedCountryCode = user.Address?.CountryCode;
+			model.SelectedStateId = user.Address?.StateId;
+			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, model.SelectedCountryCode);
 
 			return this.View(model);
 		}
@@ -47,42 +47,21 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// POST: /Account/EditProfile.
 		/// </summary>
-		/// <param name="model">The edit profile model containing the form information.</param>
-		/// <returns>The user home page if successful, and the same page if not.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> EditProfile(EditProfileViewModel model)
+		public ActionResult EditProfile(EditProfileViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				User user = new Services.User
-				{
-					UserId = this.AppService.UserContext.UserId,
-					Email = model.Email,
-					FirstName = model.FirstName,
-					LastName = model.LastName,
-					DateOfBirth = AppService.GetDateTimeFromDays(model.DateOfBirth),
-					PhoneNumber = model.PhoneNumber
-				};
-				user.Address = new Address
-				{
-					AddressId = model.AddressId,
-					Address1 = model.Address,
-					City = model.City,
-					State = model.State,
-					CountryId = model.Country,
-					PostalCode = model.PostalCode
-				};
-				await Task.Factory.StartNew(() => AppService.SaveUserInfo(user));
-
+				this.AppService.UpdateCurrentUserProfile(model.DateOfBirth, model.FirstName, model.LastName, model.PhoneNumber, model.AddressId, model.Address, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode);
 				Notifications.Add(new BootstrapAlert(Resources.Strings.UpdateProfileSuccessMessage, Variety.Success));
 				return this.RouteUserHome();
 			}
 
-			model.ValidCountries = AppService.ValidCountries();
-
-			// Invalid Model
-			return this.View(model);
+			// model error
+			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
+			model.LocalizedStates = ModelHelper.GetLocalizedStates(this.AppService, model.SelectedCountryCode);
+			return View(model);
 		}
 	}
 }

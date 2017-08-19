@@ -23,12 +23,12 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult EditSubscription(int subscriptionId)
 		{
-			int orgId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
+			int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
-			int skuId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SkuId;
+			int skuId = AppService.UserContext.UserSubscriptions[subscriptionId].SkuId;
 
-			int productId = (int)AppService.UserContext.OrganizationSubscriptions[subscriptionId].ProductId;
-			string subscriptionName = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
+			int productId = (int)AppService.UserContext.UserSubscriptions[subscriptionId].ProductId;
+			string subscriptionName = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
 
 			SkuInfo sku = GetNextName(subscriptionId, skuId, productId);
 			EditSubscriptionViewModel model = new EditSubscriptionViewModel
@@ -104,7 +104,7 @@ namespace AllyisApps.Controllers
 					var customerId = new BillingServicesCustomerId(id);
 					var token = new BillingServicesToken(customerId.ToString());
 
-					AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, model.OrganizationId);
+					AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, model.OrganizationId);
 
 					// TODO: Seperate edit subscription and create subscription
 					AppService.Subscribe(model.ProductId, model.ProductName, model.SkuIdNext, model.SubscriptionName, model.SkuId, 0, token, false, null, null, model.OrganizationId);

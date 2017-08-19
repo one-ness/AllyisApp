@@ -23,7 +23,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The skus view.</returns>
 		public ActionResult Skus(int organizationId)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, organizationId);    // only org owner has permission
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, organizationId);    // only org owner has permission
 
 			SkusListViewModel model = ConstructSkusListViewModel(organizationId);
 

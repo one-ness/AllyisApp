@@ -56,13 +56,13 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="days">An int of the date as days since Jan 1st, 0001. Use -1 for null dates.</param>
 		/// <returns>The DateTime date.</returns>
-		public DateTime? GetDateTimeFromDays(int days)
+		public DateTime? GetDateTimeFromDays(int? days)
 		{
-			if (days <= -1)
+			if (!days.HasValue || days <=0)
 			{
 				return null;
 			}
-			return GetDateFromDays(days);
+			return GetDateFromDays(days.Value);
 		}
 
 		/// <summary>
@@ -213,10 +213,10 @@ namespace AllyisApps.Services
 		public Tuple<List<Customer>, List<CompleteProjectInfo>, List<SubscriptionUserInfo>> GetReportInfo(int subscriptionId)
 		{
 			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetReportInfo(subInfo.OrganizationId, subscriptionId);
 			return Tuple.Create(
-				spResults.Item1.Select(cdb => InitializeCustomer(cdb)).ToList(),
+				spResults.Item1.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList(),
 				spResults.Item2.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
 				spResults.Item3.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());
 		}
@@ -341,7 +341,7 @@ namespace AllyisApps.Services
 		public IEnumerable<PayClass> GetPayClasses(int subscriptionId)
 		{
 			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			return DBHelper.GetPayClasses(subInfo.OrganizationId).Select(pc => InitializePayClassInfo(pc));
 		}
 
@@ -443,7 +443,7 @@ namespace AllyisApps.Services
 
 			if (userIds != null && userIds.Count == 1 && userIds[0] > 0)
 			{
-				projects = GetProjectsByUserAndOrganization(userIds[0], orgId, isActive: false);
+				projects = GetProjectsByUserAndOrganization(userIds[0], orgId, onlyActive: false);
 			}
 			else
 			{
@@ -539,7 +539,7 @@ namespace AllyisApps.Services
 		public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int subscriptionId)
 		{
 			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetAllSettings(subInfo.OrganizationId);
 			return Tuple.Create(
 				InitializeSettingsInfo(spResults.Item1),

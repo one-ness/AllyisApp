@@ -62,4 +62,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public int SubscriptionCount { get; set; }
 	}
+
+
 }

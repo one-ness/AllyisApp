@@ -18,18 +18,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		public enum OrgAction : int
 		{
-			AddUser = 1,
-			EditUser,
-			DeleteUser,
+			EditUser = 1,
 			EditUserPermission,
 			EditInvitation,
-			DeleteInvitation,
 			EditOrganization,
-			DeleteOrganization,
-			SubscribeToProduct,
 			EditSubscription,
 			EditBilling,
-			DeleteBilling,
 		}
 
 		/// <summary>
@@ -38,13 +32,9 @@ namespace AllyisApps.Services
 		public enum TimeTrackerAction : int
 		{
 			TimeEntry = 1,
-			CreateCustomer,
 			EditCustomer,
-			DeleteCustomer,
 			ViewCustomer,
-			CreateProject,
 			EditProject,
-			DeleteProject,
 			ViewOthers,
 			EditOthers,
 		}
@@ -60,162 +50,10 @@ namespace AllyisApps.Services
 
 			if (orgInfo != null)
 			{
-				switch (action)
+				switch (orgInfo.OrganizationRole)
 				{
-					case OrgAction.AddUser:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.DeleteBilling:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.DeleteInvitation:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.DeleteOrganization:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.DeleteUser:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.EditBilling:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.EditInvitation:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.EditOrganization:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.EditUser:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.EditUserPermission:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.SubscribeToProduct:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.EditSubscription:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
+					case OrganizationRole.Owner:
+						result = true;
 						break;
 
 					default:
@@ -239,7 +77,7 @@ namespace AllyisApps.Services
 		{
 			int orgId = -1;
 			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			if (subInfo != null)
 			{
 				orgId = subInfo.OrganizationId;
@@ -255,100 +93,15 @@ namespace AllyisApps.Services
 		{
 			bool result = false;
 			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subId, out subInfo);
+			this.UserContext.UserSubscriptions.TryGetValue(subId, out subInfo);
 
 			if (subInfo != null && subInfo.ProductId == ProductIdEnum.TimeTracker)
 			{
 				TimeTrackerRole ttRole = (TimeTrackerRole)subInfo.ProductRoleId;
-				switch (action)
+				switch (ttRole)
 				{
-					case TimeTrackerAction.CreateCustomer:
-						switch (ttRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
-						}
-
-						break;
-
-					case TimeTrackerAction.CreateProject:
-						switch (ttRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
-						}
-
-						break;
-
-					case TimeTrackerAction.DeleteCustomer:
-						switch (ttRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
-						}
-
-						break;
-
-					case TimeTrackerAction.DeleteProject:
-						switch (ttRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
-						}
-
-						break;
-
-					case TimeTrackerAction.EditCustomer:
-						switch (ttRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
-						}
-
-						break;
-
-					case TimeTrackerAction.EditOthers:
-						switch (ttRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
-						}
-
-						break;
-
-					case TimeTrackerAction.EditProject:
-						switch (ttRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
-						}
-
-						break;
-
-					case TimeTrackerAction.TimeEntry:
-						// everyone with timetracker product id
+					case TimeTrackerRole.Manager:
 						result = true;
-						break;
-
-					case TimeTrackerAction.ViewCustomer:
-						result = true;
-						break;
-
-					case TimeTrackerAction.ViewOthers:
-						switch (ttRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
-						}
-
 						break;
 
 					default:

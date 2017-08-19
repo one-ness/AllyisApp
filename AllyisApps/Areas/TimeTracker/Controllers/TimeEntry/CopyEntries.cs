@@ -54,12 +54,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
             UserSubscription subInfo = null;
-            this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+            this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
             int organizationId = subInfo.OrganizationId;
 
             // Reference for checking status of entries
             List<CompleteProjectInfo> allProjects = AppService.GetProjectsByUserAndOrganization(userId, organizationId, false).ToList();
-			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId);
+			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId);
 
 			// Authorized to edit this entry
 			// Remove existing entries in target range

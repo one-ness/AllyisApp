@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			int actualHours = string.Equals(setting, "No") ? -1 : hours;
 
-			if (AppService.UpdateOvertime(subscriptionId, AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId, actualHours, period, mult))
+			if (AppService.UpdateOvertime(subscriptionId, AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId, actualHours, period, mult))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.OvertimeUpdate, Variety.Success));
 			}
