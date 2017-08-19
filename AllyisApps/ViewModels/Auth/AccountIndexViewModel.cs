@@ -45,17 +45,20 @@ namespace AllyisApps.ViewModels.Auth
 
 			public UserViewModel(User user)
 			{
-				FirstName = user.FirstName;
-				LastName = user.LastName;
-				Email = user.Email;
-				PhoneNumber = user.PhoneNumber;
-				PhoneExtension = user.PhoneExtension;
-				Address1 = user.Address?.Address1;
-				Address2 = user.Address?.Address2;
-				City = user.Address?.City;
-				State = user.Address?.StateName;
-				PostalCode = user.Address?.PostalCode;
-				Country = user.Address?.CountryName;
+                if (user != null)
+                {
+                    FirstName = user.FirstName;
+                    LastName = user.LastName;
+                    Email = user.Email;
+                    PhoneNumber = user.PhoneNumber;
+                    PhoneExtension = user.PhoneExtension;
+                    Address1 = user.Address?.Address1;
+                    Address2 = user.Address?.Address2;
+                    City = user.Address?.City;
+                    State = user.Address?.StateName;
+                    PostalCode = user.Address?.PostalCode;
+                    Country = user.Address?.CountryName;
+                }
 			}
 
 			/// <summary>
