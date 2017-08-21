@@ -1,13 +1,13 @@
-﻿using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.TimeTracker;
-using AllyisApps.Lib;
-using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.TimeTracker;
+using AllyisApps.Lib;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Services
 {
@@ -23,15 +23,15 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Import data from a workbook. Imports customers, projects, users, project/user relationships, and/or time entry data.
 		/// </summary>
-		/// <param name="subscriptionId">subscriptionId</param>
+		/// <param name="subscriptionId">SubscriptionId.</param>
 		/// <param name="importData">Workbook with data to import.</param>
-		/// <param name="organizationId">The organization's Id</param>
+		/// <param name="organizationId">The organization's Id.</param>
 		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0)
 		{
 			int orgId;
-			if (subscriptionId > 0 && UserContext.OrganizationSubscriptions[subscriptionId] != null)
+			if (subscriptionId > 0 && UserContext.UserSubscriptions[subscriptionId] != null)
 			{
-				orgId = UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
+				orgId = UserContext.UserSubscriptions[subscriptionId].OrganizationId;
 			}
 			else if (organizationId > 0 && UserContext.UserOrganizations[organizationId] != null)
 			{
@@ -39,7 +39,7 @@ namespace AllyisApps.Services
 			}
 			else
 			{
-				return null; //subsciptionId and/or organization id are invalid
+				return null; // subsciptionId and/or organization id are invalid
 			}
 
 			// For some reason, linq won't work directly with DataSets, so we start by just moving the tables over to a linq-able List
@@ -75,7 +75,7 @@ namespace AllyisApps.Services
 			// Retrieval of existing pay class data
 			List<PayClass> payClasses = DBHelper.GetPayClasses(orgId).Select(pc => InitializePayClassInfo(pc)).ToList();
 
-			//Result object
+			// Result object
 			ImportActionResult result = new ImportActionResult();
 
 			// Loop through and see what can be imported from each table in turn. Order doesn't matter, since missing information
@@ -125,8 +125,8 @@ namespace AllyisApps.Services
 
 				// Non-required project columns
 
-				//TODO use this line once project isHourly property is supported.  Currently disabled
-				//bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
+				// TODO use this line once project isHourly property is supported.  Currently disabled
+				// bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
 				bool hasProjectStartDate = table.Columns.Contains(ColumnHeaders.ProjectStartDate);
 				bool hasProjectEndDate = table.Columns.Contains(ColumnHeaders.ProjectEndDate);
 				bool hasNonRequiredProjectInfo = /*hasProjectType ||*/ hasProjectStartDate || hasProjectEndDate;
@@ -291,16 +291,17 @@ namespace AllyisApps.Services
 							}
 						}
 
+
 						// Importing non-required customer data
 						if (customer != null && hasNonRequiredCustomerInfo)
 						{
 							bool updated = false;
-
-							if (hasCustomerStreetAddress) updated = this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address = val) || updated;
-							if (hasCustomerCity) updated = this.readColumn(row, ColumnHeaders.CustomerCity, val => customer.City = val) || updated;
-							if (hasCustomerCountry) updated = this.readColumn(row, ColumnHeaders.CustomerCountry, val => customer.Country = val) || updated;
-							if (hasCustomerState) updated = this.readColumn(row, ColumnHeaders.CustomerState, val => customer.State = val) || updated;
-							if (hasCustomerPostalCode) updated = this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => customer.PostalCode = val) || updated;
+                            
+							if (hasCustomerStreetAddress) updated = this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address.Address1 = val) || updated;
+							if (hasCustomerCity) updated = this.readColumn(row, ColumnHeaders.CustomerCity, val => customer.Address.City = val) || updated;
+							if (hasCustomerCountry) updated = this.readColumn(row, ColumnHeaders.CustomerCountry, val => customer.Address.CountryName = val) || updated;
+							if (hasCustomerState) updated = this.readColumn(row, ColumnHeaders.CustomerState, val => customer.Address.StateName = val) || updated;
+							if (hasCustomerPostalCode) updated = this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => customer.Address.PostalCode = val) || updated;
 							if (hasCustomerEmail) updated = this.readColumn(row, ColumnHeaders.CustomerEmail, val => customer.ContactEmail = val) || updated;
 							if (hasCustomerPhoneNumber) updated = this.readColumn(row, ColumnHeaders.CustomerPhoneNumber, val => customer.ContactPhoneNumber = val) || updated;
 							if (hasCustomerFaxNumber) updated = this.readColumn(row, ColumnHeaders.CustomerFaxNumber, val => customer.FaxNumber = val) || updated;
@@ -400,7 +401,7 @@ namespace AllyisApps.Services
 								{
 									CustomerId = customer.CustomerId,
                                     ProjectName = thisRowHasProjectName ? knownValue : readValue,
-									IsHourly = false, //TODO un-hardcode once project isHourly property is supported.  Currently disabled
+									IsHourly = false, // TODO un-hardcode once project isHourly property is supported.  Currently disabled
 									OrganizationId = orgId,
 									ProjectOrgId = thisRowHasProjectName ? readValue : knownValue,
 									StartingDate = defaultProjectStartDate,
@@ -421,7 +422,7 @@ namespace AllyisApps.Services
 						}
 						else
 						{
-							//if(!canImportProjects)
+							// if(!canImportProjects)
 							//{
 							//    result.ProjectFailures.Add(string.Format("Could not create project {0}: no corresponding {1}.", knownValue, thisRowHasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName));
 							//    continue;
@@ -505,7 +506,7 @@ namespace AllyisApps.Services
 									{
 										CustomerId = customer.CustomerId,
                                         ProjectName = fields[0],
-										IsHourly = false,  //TODO un-hardocode once project isHourly property is supported.  Currently disabled
+										IsHourly = false,  // TODO un-hardocode once project isHourly property is supported.  Currently disabled
 										OrganizationId = orgId,
 										ProjectOrgId = fields[1],
 										StartingDate = defaultProjectStartDate,
@@ -550,8 +551,8 @@ namespace AllyisApps.Services
 							string startDate = null;
 							string endDate = null;
 
-							//TODO use this line once project isHourly property is supported.  Currently disabled
-							//if (hasProjectType) updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.isHourly = val) || updated;
+							// TODO use this line once project isHourly property is supported.  Currently disabled
+							// if (hasProjectType) updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.isHourly = val) || updated;
 							if (hasProjectStartDate) updated = this.readColumn(row, ColumnHeaders.ProjectStartDate, val => startDate = val) || updated;
 							if (hasProjectEndDate) updated = this.readColumn(row, ColumnHeaders.ProjectEndDate, val => endDate = val) || updated;
 							if (startDate != null) project.StartingDate = DateTime.Parse(startDate);
@@ -616,7 +617,7 @@ namespace AllyisApps.Services
                                     // have a user who's name includes the text __IMPORT__
                                     hasUserName ? (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "" ? null : row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString()) : null
 								};
-								//if (fields[2] == "__IMPORT__") fields[2] = null;
+								// if (fields[2] == "__IMPORT__") fields[2] = null;
 
 								/*
                                     There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
@@ -693,7 +694,7 @@ namespace AllyisApps.Services
 										try
 										{
 											result.UsersImported += 1;
-											user.UserId = DBHelper.CreateUser(GetDBEntityFromUser(user));
+											//user.UserId = DBHelper.CreateUser(GetDBEntityFromUser(user));
 										}
 										catch
 										{
@@ -704,7 +705,7 @@ namespace AllyisApps.Services
 									{
 										try
 										{
-											//get the id of employeeType, if not found default to Salaried
+											// get the id of employeeType, if not found default to Salaried
 											DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
 											{
 												EmployeeId = fields[1],
@@ -741,7 +742,7 @@ namespace AllyisApps.Services
 
 							if (hasUserAddress) updated = this.readColumn(row, ColumnHeaders.UserAddress, val => user.Address.Address1 = val) || updated;
 							if (hasUserCity) updated = this.readColumn(row, ColumnHeaders.UserCity, val => user.Address.City = val) || updated;
-							if (hasUserCountry) updated = this.readColumn(row, ColumnHeaders.UserCountry, val => user.Address.CountryId = val) || updated;
+							if (hasUserCountry) updated = this.readColumn(row, ColumnHeaders.UserCountry, val => user.Address.CountryName = val) || updated;
 							string dateOfBirth = null;
 							if (hasUserDateOfBirth) updated = this.readColumn(row, ColumnHeaders.UserDateOfBirth, val => dateOfBirth = val) || updated;
 							if (!string.IsNullOrEmpty(dateOfBirth))
@@ -761,7 +762,7 @@ namespace AllyisApps.Services
 							if (hasUserPhoneExtension) updated = this.readColumn(row, ColumnHeaders.UserPhoneExtension, val => user.PhoneExtension = val) || updated;
 							if (hasUserPhoneNumber) updated = this.readColumn(row, ColumnHeaders.UserPhoneNumber, val => user.PhoneNumber = val) || updated;
 							if (hasUserPostalCode) updated = this.readColumn(row, ColumnHeaders.UserPostalCode, val => user.Address.PostalCode = val) || updated;
-							if (hasUserState) updated = this.readColumn(row, ColumnHeaders.UserState, val => user.Address.State = val) || updated;
+							if (hasUserState) updated = this.readColumn(row, ColumnHeaders.UserState, val => user.Address.StateName = val) || updated;
 
 							if (updated)
 							{
@@ -865,7 +866,7 @@ namespace AllyisApps.Services
 										{
 											Date = theDate,
 											Description = description,
-											Duration = theDuration.Value, //value is verified earlier
+											Duration = theDuration.Value, // value is verified earlier
 											FirstName = user.FirstName,
 											LastName = user.LastName,
 											PayClassId = payClass.PayClassId,
@@ -929,7 +930,7 @@ namespace AllyisApps.Services
 		{
 			try
 			{
-				fromValue = fromValue.Replace("'", "''"); //Escape any 's in the names
+				fromValue = fromValue.Replace("'", "''"); // Escape any 's in the names
 				string selectText = null;
 				if (fieldIdFrom == 2)
 				{

@@ -4,13 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Finance;
-using Dapper;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System;
+using AllyisApps.DBModel.Finance;
+using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -24,9 +23,9 @@ namespace AllyisApps.DBModel
 		////////////////////////////
 
 		/// <summary>
-		/// Adds an account to the DB if there is not already another account with the same AccountName
+		/// Adds an account to the DB if there is not already another account with the same AccountName.
 		/// </summary>
-		/// <param name="account">The account object to be added to the db</param>
+		/// <param name="account">The account object to be added to the db.</param>
 		/// <returns>The id of the created account or -1 if the account name is already taken.</returns>
 		public int CreateAccount(AccountDBEntity account)
 		{
@@ -59,8 +58,8 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Retrieves all acounts with a given parent account id.
 		/// </summary>
-		/// <param name="parentAccountId">The id of the parent account</param>
-		/// <param name="isActive">Determines whether the account is "deleted" or not.  Most times we only want active accounts, so default to true</param>
+		/// <param name="parentAccountId">The id of the parent account.</param>
+		/// <param name="isActive">Determines whether the account is "deleted" or not.  Most times we only want active accounts, so default to true.</param>
 		/// <returns>A collection of accounts.</returns>
 		public IEnumerable<AccountDBEntity> GetAccountsByParentId(int parentAccountId, bool isActive = true)
 		{
@@ -77,8 +76,8 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Retrieves all acounts with a given account type.
 		/// </summary>
-		/// <param name="accountTypeId">The id of the account type (TODO: what are the different account types?)</param>
-		/// <param name="isActive">Determines whether the account is "deleted" or not.  Most times we only want active accounts, so default to true</param>
+		/// <param name="accountTypeId">The id of the account type (TODO: what are the different account types?).</param>
+		/// <param name="isActive">Determines whether the account is "deleted" or not.  Most times we only want active accounts, so default to true.</param>
 		/// <returns>A collection of accounts.</returns>
 		public IEnumerable<AccountDBEntity> GetAccountsByAccountTypeId(int accountTypeId, bool isActive = true)
 		{
@@ -95,7 +94,7 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Retrieves the acount with a given account id.
 		/// </summary>
-		/// <param name="accountId">The id of the account</param>
+		/// <param name="accountId">The id of the account.</param>
 		/// <returns>One account.</returns>
 		public AccountDBEntity GetAccountByAccountId(int accountId)
 		{
@@ -116,8 +115,8 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates the account with the given id, if another account doesn't already have the same AccountName.
 		/// </summary>
-		/// <param name="account">The account object to be updated</param>
-		/// <returns>-1 if the account wasn't updated (duplicate accountname), and the accountId if the account was updated</returns>
+		/// <param name="account">The account object to be updated.</param>
+		/// <returns>-1 if the account wasn't updated (duplicate accountname), and the accountId if the account was updated.</returns>
 		public int UpdateAccount(AccountDBEntity account)
 		{
 			if (account == null)
@@ -148,9 +147,9 @@ namespace AllyisApps.DBModel
 		////////////////////////////
 
 		/// <summary>
-		/// Sets the given account (if exists) to inactive (IsActive == false)
+		/// Sets the given account (if exists) to inactive (IsActive == false).
 		/// </summary>
-		/// <param name="accountId">Parameter @organizationId. </param>
+		/// <param name="accountId">Parameter @organizationId. .</param>
 		public void DeleteAccount(int accountId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -165,8 +164,8 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Returns the Owners of a given organization.
 		/// </summary>
-		/// <param name="organizationId"></param>
-		/// <returns></returns>
+		/// <param name="organizationId">.</param>
+		/// <returns>.</returns>
 		public IEnumerable<dynamic> GetOrgOwnerEmails(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();

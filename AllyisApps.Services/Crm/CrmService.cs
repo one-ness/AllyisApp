@@ -1,17 +1,17 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="CrmService.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel;
-using AllyisApps.DBModel.Crm;
-using AllyisApps.DBModel.Lookup;
-using AllyisApps.Services.Lookup;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using AllyisApps.DBModel;
+using AllyisApps.DBModel.Crm;
+using AllyisApps.DBModel.Lookup;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
 {
@@ -34,85 +34,76 @@ namespace AllyisApps.Services
 		/// Gets the next logical customer id for the current organization, and a list of
 		/// valid country names.
 		/// </summary>
-		/// <returns></returns>
-		public Tuple<string, List<string>, int> GetNextCustIdAndCountries(int subscriptionId)
+		/// <returns>.</returns>
+		public Tuple<string,int> GetNextCustId(int subscriptionId)
 		{
 			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
-			var spResults = DBHelper.GetNextCustIdAndCountries(subInfo.OrganizationId);
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			var spResults = DBHelper.GetNextCustId(subInfo.OrganizationId);
 			return Tuple.Create(
 				spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray())),
-				spResults.Item2, subInfo.OrganizationId);
+				subInfo.OrganizationId);
 		}
 
 		/// <summary>
-		/// Gets a Customer for the given customer, and a list of valid country names.
+		/// Gets a Customer for the given customer
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
-		/// <returns></returns>
-		public Tuple<Customer, List<string>, Address> GetCustomerAndCountries(int customerId)
+		/// <returns>.</returns>
+		public Tuple<Customer> GetCustomerInfo(int customerId)
 		{
-			var spResults = DBHelper.GetCustomerCountries(customerId);
+			var spResults = DBHelper.GetCustomerProfile(customerId);
+            Customer customer = InitializeCustomer(spResults.Item1);
+            customer.Address = InitializeAddress(spResults.Item2);
 			return Tuple.Create(
-				InitializeCustomer(spResults.Item1),
-				spResults.Item2,
-				InitializeAddress(spResults.Item3));
+				customer);
 		}
 
-		/// <summary>
-		/// Creates a customer.
-		/// </summary>
-		/// <param name="subId">subscription id</param>
-		/// <param name="customer">Customer.</param>
-		/// <returns>Customer id.</returns>
-		public int? CreateCustomer(int subId, Customer customer)
-		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.CreateCustomer, subId);
-			return DBHelper.CreateCustomerInfo(GetDBEntityFromCustomer(customer));
-		}
 
 		/// <summary>
 		/// Creates a customer.
 		/// </summary>
 		/// <param name="customer">Customer.</param>
-		/// <param name="subscriptionId"></param>
+		/// <param name="subscriptionId">.</param>
 		/// <returns>Customer id.</returns>
 		public int? CreateCustomer(Customer customer, int subscriptionId)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.CreateCustomer, subscriptionId);
-			return DBHelper.CreateCustomerInfo(GetDBEntityFromCustomer(customer));
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
+            customer.Address?.EnsureDBRef(this);
+			return DBHelper.CreateCustomerInfo(GetDBEntitiesFromCustomerInfo(customer));
 		}
 
 		/// <summary>
 		/// Updates a customer in the database.
 		/// </summary>
 		/// <param name="customer">Updated customer info.</param>
-		/// <param name="subscriptionId">The customer's subscription Id</param>
+		/// <param name="subscriptionId">The customer's subscription Id.</param>
 		/// <returns>Returns 1 if succeed, -1 if fail, and null if authorization fails.</returns>
 		public int? UpdateCustomer(Customer customer, int subscriptionId)
 		{
 			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
-			return DBHelper.UpdateCustomer(GetDBEntityFromCustomer(customer));
+            customer.Address?.EnsureDBRef(this);
+			return DBHelper.UpdateCustomer(GetDBEntitiesFromCustomerInfo(customer));
 		}
 
 		/// <summary>
 		/// Deletes a customer.
 		/// </summary>
 		/// <param name="customerId">Customer id.</param>
-		/// <param name="subscriptionId">Subscription Id</param>
+		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public string DeleteCustomer(int subscriptionId, int customerId)
 		{
-			this.CheckTimeTrackerAction(TimeTrackerAction.DeleteCustomer, subscriptionId);
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditCustomer, subscriptionId);
 			return DBHelper.DeleteCustomer(customerId);
 		}
 
 		/// <summary>
-		/// Reactivate a Customer
+		/// Reactivate a Customer.
 		/// </summary>
 		/// <param name="customerId">Customer id.</param>
-		/// <param name="orgId">The Organization Id</param>
-		/// <param name="subscriptionId">The subscription Id</param>
+		/// <param name="orgId">The Organization Id.</param>
+		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public string ReactivateCustomer(int customerId, int subscriptionId, int orgId)
 		{
@@ -127,12 +118,13 @@ namespace AllyisApps.Services
 		/// <returns><see cref="IEnumerable{CustomerDBEntity}"/>.</returns>
 		public IEnumerable<Customer> GetCustomerList(int orgId)
 		{
-			IEnumerable<CustomerDBEntity> dbeList = DBHelper.GetCustomerList(orgId);
+			IEnumerable<dynamic> dbeList = DBHelper.GetCustomerList(orgId);
 			List<Customer> list = new List<Customer>();
-			foreach (CustomerDBEntity dbe in dbeList)
+			foreach (dynamic dbe in dbeList)
 			{
 				if (dbe != null)
 				{
+
 					list.Add(InitializeCustomer(dbe));
 				}
 			}
@@ -144,28 +136,28 @@ namespace AllyisApps.Services
 		/// Returns a list of CompleteProjectInfos for the current organization with the IsProjectUser field filled
 		/// out for the current user, and a list of CustomerInfos for the organization.
 		/// </summary>
-		/// <param name="orgId">The organization Id</param>
-		/// <returns></returns>
+		/// <param name="orgId">The organization Id.</param>
+		/// <returns>.</returns>
 		public Tuple<List<CompleteProjectInfo>, List<Customer>> GetProjectsAndCustomersForOrgAndUser(int orgId)
 		{
 			var spResults = DBHelper.GetProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
 			return Tuple.Create(
 				spResults.Item1.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item2.Select(cdb => InitializeCustomer(cdb)).ToList());
+				spResults.Item2.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList());
 		}
 
 		/// <summary>
 		/// Returns a list of CompleteProjectInfos for the current organization with the IsProjectUser field filled
 		/// out for the current user, and a list of CustomerInfos for the organization.
 		/// </summary>
-		/// <param name="orgId">The Organization Id</param>
-		/// <returns></returns>
+		/// <param name="orgId">The Organization Id.</param>
+		/// <returns>.</returns>
 		public Tuple<List<CompleteProjectInfo>, List<Customer>> GetInactiveProjectsAndCustomersForOrgAndUser(int orgId)
 		{
 			var spResults = DBHelper.GetInactiveProjectsAndCustomersForOrgAndUser(orgId, UserContext.UserId);
 			return Tuple.Create(
 				spResults.Item1.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item2.Select(cdb => InitializeCustomer(cdb)).ToList());
+				spResults.Item2.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList());
 		}
 
 		/// <summary>
@@ -179,7 +171,7 @@ namespace AllyisApps.Services
 			if (subscriptionId <= 0) throw new ArgumentException("subscriptionId");
 
 			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 			if (subInfo != null)
 			{
 				var spResults = DBHelper.GetProjectsForOrgAndUser(userId, subInfo.OrganizationId);
@@ -248,10 +240,10 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Creates a new project and update its user list if succeed
+		/// Creates a new project and update its user list if succeed.
 		/// </summary>
 		/// <param name="newProject">Project with project information.</param>
-		/// <param name="userIds">List of users being assigned to the project</param>
+		/// <param name="userIds">List of users being assigned to the project.</param>
 		/// <returns>Project Id if succeed, -1 if ProjectOrgId is taken.</returns>
 		public int CreateProjectAndUpdateItsUserList(Project newProject, IEnumerable<int> userIds)
 		{
@@ -319,7 +311,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates a project's properties.
 		/// </summary>
-		/// <param name="subId">subscriptionId</param>
+		/// <param name="subId">SubscriptionId.</param>
 		/// <param name="project">Project with updated properties.</param>
 		public void UpdateProject(int subId, Project project)
 		{
@@ -353,10 +345,10 @@ namespace AllyisApps.Services
 		/// <param name="name">Project name.</param>
 		/// <param name="orgId">Project org id.</param>
 		/// <param name="isHourly">Project type.  True == hourly, false == fixed. TODO: use this parameter to update the project's isHourly column.  Currently disabled attribute.</param>
-		/// <param name="start">Starting date. <see cref="DateTime"/></param>
-		/// <param name="end">Ending date. <see cref="DateTime"/></param>
+		/// <param name="start">Starting date. <see cref="DateTime"/>.</param>
+		/// <param name="end">Ending date. <see cref="DateTime"/>.</param>
 		/// <param name="userIds">Updated on-project user list.</param>
-		/// <param name="subscriptionId"></param>
+		/// <param name="subscriptionId">.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool UpdateProjectAndUsers(int projectId, string name, string orgId, DateTime? start, DateTime? end, IEnumerable<int> userIds, int subscriptionId, bool isHourly = true)
 		{
@@ -395,12 +387,12 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Reactivate a project
+		/// Reactivate a project.
 		/// </summary>
-		/// <param name="projectId">Project Id</param>
-		/// <param name="organizationId">Organization Id</param>
-		/// <param name="subscriptionId"> subscription Id</param>
-		/// <returns>Returns false if authorization fails</returns>
+		/// <param name="projectId">Project Id.</param>
+		/// <param name="organizationId">Organization Id.</param>
+		/// <param name="subscriptionId"> subscription Id.</param>
+		/// <returns>Returns false if authorization fails.</returns>
 		public bool ReactivateProject(int projectId, int organizationId, int subscriptionId)
 		{
 			if (projectId <= 0)
@@ -417,7 +409,7 @@ namespace AllyisApps.Services
 		/// Deletes a project.
 		/// </summary>
 		/// <param name="projectId">Project Id.</param>
-		/// <param name="subscriptionId"></param>
+		/// <param name="subscriptionId">.</param>
 		/// <returns>Returns null if authorization fails, project name is succeed, empty string if not found.</returns>
 		public string DeleteProject(int projectId, int subscriptionId)
 		{
@@ -426,7 +418,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("projectId", "Project Id cannot be 0 or negative.");
 			}
 
-			this.CheckTimeTrackerAction(TimeTrackerAction.DeleteProject, subscriptionId);
+			this.CheckTimeTrackerAction(TimeTrackerAction.EditProject, subscriptionId);
 			return DBHelper.DeleteProject(projectId);
 		}
 
@@ -497,17 +489,17 @@ namespace AllyisApps.Services
 		/// Gets all the projects a user can use in the chosen organization.
 		/// </summary>
 		/// <param name="userId">User Id.</param>
-		/// <param name="orgId">The organization's Id</param>
-		/// <param name="isActive">True (default) to only return active projects, false to include all projects, active or not.</param>
+		/// <param name="orgId">The organization's Id.</param>
+		/// <param name="onlyActive">True (default) to only return active projects, false to include all projects, active or not.</param>
 		/// <returns>A list of all the projects a user can access in an organization.</returns>
-		public IEnumerable<CompleteProjectInfo> GetProjectsByUserAndOrganization(int userId, int orgId = -1, bool isActive = true)
+		public IEnumerable<CompleteProjectInfo> GetProjectsByUserAndOrganization(int userId, int orgId = -1, bool onlyActive = true)
 		{
 			if (userId <= 0)
 			{
 				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
 			}
 
-			return DBHelper.GetProjectsByUserAndOrganization(userId, orgId, isActive ? 1 : 0).Select(c => InitializeCompleteProjectInfo(c));
+			return DBHelper.GetProjectsByUserAndOrganization(userId, orgId, onlyActive ? 1 : 0).Select(c => InitializeCompleteProjectInfo(c));
 		}
 
 		/// <summary>
@@ -546,8 +538,8 @@ namespace AllyisApps.Services
 		/// users, and a list of SubscriptionUserInfos for all users in the current subscription.
 		/// </summary>
 		/// <param name="projectId">Project Id.</param>
-		/// <param name="subscriptionId"></param>
-		/// <returns></returns>
+		/// <param name="subscriptionId">.</param>
+		/// <returns>.</returns>
 		public Tuple<CompleteProjectInfo, List<User>, List<SubscriptionUserInfo>> GetProjectEditInfo(int projectId, int subscriptionId)
 		{
 			if (projectId < 0)
@@ -567,8 +559,8 @@ namespace AllyisApps.Services
 		/// all useres in the current subscription.
 		/// </summary>
 		/// <param name="customerId">Customer Id.</param>
-		/// <param name="subscriptionId"></param>
-		/// <returns></returns>
+		/// <param name="subscriptionId">.</param>
+		/// <returns>.</returns>
 		public Tuple<string, List<SubscriptionUserInfo>> GetNextProjectIdAndSubUsers(int customerId, int subscriptionId)
 		{
 			if (customerId < 0)
@@ -600,10 +592,10 @@ namespace AllyisApps.Services
 		#region Info-DBEntity Conversions
 
 		/// <summary>
-		/// Initializes a <see cref="Address"/> from a <see cref="AddressDBEntity"/>
+		/// Initializes a <see cref="Address"/> from a <see cref="AddressDBEntity"/>.
 		/// </summary>
-		/// <param name="address"></param>
-		/// <returns></returns>
+		/// <param name="address">.</param>
+		/// <returns>.</returns>
 		public static Address InitializeAddress(AddressDBEntity address)
 		{
 			if (address == null)
@@ -617,32 +609,88 @@ namespace AllyisApps.Services
 				Address1 = address.Address1,
 				Address2 = address.Address2,
 				City = address.City,
-				State = address.State,
+				StateName = address.State,
 				PostalCode = address.PostalCode,
-				CountryId = address.CountryId
+				CountryCode = address.CountryCode,
+                StateId =address.StateId,
+                CountryName = address.Country
 			};
 		}
 
-		/// <summary>
-		/// Initializes a <see cref="Customer"/> from a <see cref="CustomerDBEntity"/>.
-		/// </summary>
-		/// <param name="customer">The CustomerDBEntity to use.</param>
-		/// <returns>A Customer object.</returns>
-		public static Customer InitializeCustomer(CustomerDBEntity customer)
+        public static AddressDBEntity GetDBEntityFromAddress(Address address)
+        {
+            
+
+            return new AddressDBEntity()
+            {
+                AddressId = address?.AddressId,
+                Address1 = address?.Address1,
+                Address2 = address?.Address2,
+                City = address?.City,
+                Country = address?.CountryName,
+                CountryCode = address?.CountryCode,
+                CountryId = null,
+                PostalCode = address?.PostalCode,
+                State = address?.StateName,
+                StateId = address?.StateId
+            };
+        }
+
+        public Customer IntializeCustomer(CustomerDBEntity customer, bool loadAddress = true)
+        {
+            if(customer == null)
+            {
+                return null;
+            }
+            return new Customer()
+            {
+                Address = loadAddress ? getAddress(customer.AddressId) : null,
+                ContactEmail = customer.ContactEmail,
+                ContactPhoneNumber = customer.ContactPhoneNumber,
+                CreatedUtc = customer.CreatedUtc,
+                CustomerId = customer.CustomerId,
+                CustomerOrgId = customer.CustomerOrgId,
+                EIN = customer.EIN,
+                FaxNumber = customer.FaxNumber,
+                CustomerName = customer.CustomerName,
+                OrganizationId = customer.OrganizationId,
+                Website = customer.Website,
+                IsActive = customer.IsActive
+            };
+        }
+
+        /// <summary>
+        /// Initializes a <see cref="Customer"/> from a query"/>.
+        /// </summary>
+        /// <returns>A Customer object.</returns>
+        public  Customer InitializeCustomer(dynamic customer)
 		{
 			if (customer == null)
 			{
 				return null;
 			}
 
+            Address address = null;
+            if (customer.AddressId != null)
+            {
+                address = new Address()
+                {
+                    Address1 = customer.Address,
+                    Address2 = null,
+                    AddressId = customer.AddressId,
+                    StateId = customer.StateId,
+                    City = customer.City,
+                    StateName = customer.StateName,
+                    CountryCode = customer.CountryCode,
+                    PostalCode = customer.PostalCode,
+                    CountryName = customer.CountryName
+                };
+            }
 			return new Customer()
 			{
-				AddressId = customer.AddressId,
-				Address = customer.Address,
-				City = customer.City,
+                Address = address,
 				ContactEmail = customer.ContactEmail,
 				ContactPhoneNumber = customer.ContactPhoneNumber,
-				Country = customer.Country,
 				CreatedUtc = customer.CreatedUtc,
 				CustomerId = customer.CustomerId,
 				CustomerOrgId = customer.CustomerOrgId,
@@ -650,46 +698,81 @@ namespace AllyisApps.Services
 				FaxNumber = customer.FaxNumber,
                 CustomerName = customer.CustomerName,
 				OrganizationId = customer.OrganizationId,
-				PostalCode = customer.PostalCode,
-				State = customer.State,
 				Website = customer.Website,
 				IsActive = customer.IsActive
 			};
 		}
+        
+        ///// <summary>
+        ///// Initializes a <see cref="CustomerDBEntity"/> from a <see cref="Customer"/>.
+        ///// </summary>
+        ///// <param name="customer">The Customer to use.</param>
+        ///// <returns>A CustomerDBEntity object.</returns>
+        //public CustomerDBEntity GetDBEntityFromCustomer(Customer customer)
+        //{
+        //    if (customer == null)
+        //    {
+        //        return null;
+        //    }
 
-		/// <summary>
-		/// Initializes a <see cref="CustomerDBEntity"/> from a <see cref="Customer"/>.
-		/// </summary>
-		/// <param name="customer">The Customer to use.</param>
-		/// <returns>A CustomerDBEntity object.</returns>
-		public static CustomerDBEntity GetDBEntityFromCustomer(Customer customer)
-		{
-			if (customer == null)
-			{
-				return null;
-			}
+        //    //Ensure that customer buisneess object does not attempt to set CountryName without ID
+        //    //Should not happen but can from import service.
+        //    customer.Address?.EnsureDBRef(this);
+        //    return new CustomerDBEntity()
+        //    {
+                
+        //        ContactEmail = customer.ContactEmail,
+        //        ContactPhoneNumber = customer.ContactPhoneNumber,
+        //        CreatedUtc = customer.CreatedUtc,
+        //        CustomerId = customer.CustomerId,
+        //        CustomerOrgId = customer.CustomerOrgId,
+        //        EIN = customer.EIN,
+        //        FaxNumber = customer.FaxNumber,
+        //        CustomerName = customer.CustomerName,
+        //        OrganizationId = customer.OrganizationId,
+        //        Website = customer.Website,
+        //        IsActive = customer.IsActive,
+        //        AddressId = customer.Address?.AddressId,
+        //        Address = customer.Address?.Address1,
+        //        City = customer.Address?.City,
+        //        CountryCode = customer.Address?.CountryCode,
+        //        CountryName = customer.Address?.CountryName,
+        //        StateId = customer.Address?.StateId,
+        //        PostalCode = customer.Address?.PostalCode,
+        //        StateName = customer.Address?.StateName
+        //    };
+        //}
 
-			return new CustomerDBEntity()
-			{
-				AddressId = customer.AddressId,
-				Address = customer.Address,
-				City = customer.City,
-				ContactEmail = customer.ContactEmail,
-				ContactPhoneNumber = customer.ContactPhoneNumber,
-				Country = customer.Country,
-				CreatedUtc = customer.CreatedUtc,
-				CustomerId = customer.CustomerId,
-				CustomerOrgId = customer.CustomerOrgId,
-				EIN = customer.EIN,
-				FaxNumber = customer.FaxNumber,
-                CustomerName = customer.CustomerName,
-				OrganizationId = customer.OrganizationId,
-				PostalCode = customer.PostalCode,
-				State = customer.State,
-				Website = customer.Website,
-				IsActive = customer.IsActive
-			};
-		}
+        public Tuple<CustomerDBEntity, AddressDBEntity> GetDBEntitiesFromCustomerInfo(Customer customer)
+        {
+            return new Tuple<CustomerDBEntity, AddressDBEntity>(
+                new CustomerDBEntity()
+                {
+                    AddressId = customer.Address?.AddressId,
+                    ContactEmail = customer.ContactEmail,
+                    ContactPhoneNumber = customer.ContactPhoneNumber,
+                    CreatedUtc = customer.CreatedUtc,
+                    CustomerId = customer.CustomerId,
+                    CustomerOrgId = customer.CustomerOrgId,
+                    EIN = customer.EIN,
+                    FaxNumber = customer.FaxNumber,
+                    CustomerName = customer.CustomerName,
+                    OrganizationId = customer.OrganizationId,
+                    Website = customer.Website,
+                    IsActive = customer.IsActive
+                },
+                new AddressDBEntity()
+                {
+                    AddressId = customer.Address?.AddressId,
+                    Address1 = customer.Address?.Address1,
+                    City = customer.Address?.City,
+                    Country = customer.Address?.CountryName,
+                    CountryCode = customer.Address?.CountryCode,
+                    PostalCode = customer.Address?.PostalCode,
+                    State = customer.Address?.StateName,
+                    StateId = customer.Address?.StateId,
+                });
+        } 
 
 		/// <summary>
 		/// Translates a <see cref="ProjectDBEntity"/> into a <see cref="Project"/>.

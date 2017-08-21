@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services.Lookup;
 using System;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
 {
@@ -35,7 +35,7 @@ namespace AllyisApps.Services
 		public DateTime? DateOfBirth { get; set; }
 
 		/// <summary>
-		/// Gets or sets the User's address
+		/// Gets or sets the User's address.
 		/// </summary>
 		public Address Address { get; set; }
 
@@ -57,7 +57,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets Id of the last subscription used/viewed.
 		/// </summary>
-		public int LastUsedSubscriptionId { get; set; }
+		public int? LastUsedSubscriptionId { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the email address has been confirmed.
@@ -87,7 +87,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets Id of this user's active organization.
 		/// </summary>
-		public int LastUsedOrganizationId { get; set; }
+		public int? LastUsedOrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets End date for lockout.
@@ -108,5 +108,18 @@ namespace AllyisApps.Services
 		/// Gets or sets EmailConfirmationCode.
 		/// </summary>
 		public Guid? EmailConfirmationCode { get; set; }
+
+		/// <summary>
+		/// Gets or sets the created time
+		/// </summary>
+		public DateTime UserCreatedUtc { get; set; }
+
+		/// <summary>
+		/// constructor
+		/// </summary>
+		public User()
+		{
+			this.Address = new Address();
+		}
 	}
 }

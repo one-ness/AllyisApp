@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="EditProfileViewModel.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using AllyisApps.Resources;
+using System.Web.Mvc;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -16,16 +18,28 @@ namespace AllyisApps.ViewModels.Auth
 	/// </summary>
 	public class EditProfileViewModel : BaseViewModel
 	{
-		private const string CharsToReplace = @"""/\[]:|<>+=; ,?*'`()@";
+		/*
+		 * possible phone validation regex
+		[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")] // [Phone] does not work //I am not conviced that this is a good idea either.
+		[RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
+
+		possible postal code regex (We shouldn't be validating all postal codes this way as every country has a different format.)
+		[RegularExpression(@"(\d{5}(?:[-\s]\d{4})?)", ErrorMessage = "Invalid postal code.")] // Require 5 digits followed by an optional hyphen/whitespace and four more digits
+		[RegularExpression(@"([\-\s\w]{3,10})", ErrorMessage = "Invalid postal code.")]
+
+		possible date validation
+		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+		[DataType(DataType.Date)]
+		[SQLDateProtector]
+		 * */
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EditProfileViewModel"/> class.
 		/// </summary>
 		public EditProfileViewModel()
 		{
-			// Note: this is included soley to keep the model constructed during a POST from complaining about a null reference
-			// as it builds the countries list, even though the list isn't used anymore.
-			this.ValidCountries = new List<string>();
+			this.LocalizedCountries = new Dictionary<string, string>();
+			this.LocalizedStates = new Dictionary<string, string>();
 		}
 
 		/// <summary>
@@ -55,15 +69,14 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the user's phone number.
 		/// </summary>
-		[RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
-		//[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")] // [Phone] does not work //I am not conviced that this is a good idea either.
+		[RegularExpression(@"^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
 		[Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
 
 		/// <summary>
-		/// Gets of sets the user's address Id
+		/// Gets or sets the user's address Id.
 		/// </summary>
-		public int AddressId { get; set; }
+		public int? AddressId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user's street address.
@@ -80,96 +93,58 @@ namespace AllyisApps.ViewModels.Auth
 		public string City { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user's state.
-		/// </summary>
-		[Display(Name = "State")]
-		public string State { get; set; }
-
-		/// <summary>
-		/// Gets or sets the user's country or region.
-		/// </summary>
-		[Display(Name = "Country/Region")]
-		public string Country { get; set; }
-
-		/// <summary>
 		/// Gets or sets the user's postal code.
 		/// </summary>
 		[DataType(DataType.PostalCode)]
 		[Display(Name = "Postal Code")]
 		public string PostalCode { get; set; }
 
-		//// [RegularExpression(@"(\d{5}(?:[-\s]\d{4})?)", ErrorMessage = "Invalid postal code.")] // Require 5 digits followed by an optional hyphen/whitespace and four more digits
-		//// [RegularExpression(@"([\-\s\w]{3,10})", ErrorMessage = "Invalid postal code.")]
-		//// We shouldn't be validating all postal codes this way as every country has a different format.
-
 		/// <summary>
 		/// Gets or sets Date of birth.
 		/// </summary>
-		//[DataType(DataType.Date)]
-		//[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-		//[Display(Name = "Date of Birth")]
-		//[SQLDateProtector]
 		[MinDateValidation]
-		public int DateOfBirth { get; set; } //has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view.
+		public int? DateOfBirth { get; set; } //has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view.
 
 		/// <summary>
-		/// Gets or sets a List of valid countries.
+		/// selected state id
 		/// </summary>
-		public IEnumerable<string> ValidCountries { get; set; }
+		public int? SelectedStateId { get; set; }
 
 		/// <summary>
-		/// Localized valid countries.
+		/// state id and localized names
 		/// </summary>
-		/// <returns>A Dictionary keyed with the English translation and valued with the localized version.</returns>
-		public Dictionary<string, string> GetLocalizedValidCoutriesDictionary()
-		{
-			Dictionary<string, string> countries = new Dictionary<string, string>();
-
-			foreach (string country in ValidCountries)
-			{
-				string countryKey = Clean(country);
-
-				string localized = Resources.Countries.ResourceManager.GetString(countryKey) ?? country;
-
-				countries.Add(country, localized);
-			}
-
-			return countries;
-		}
+		[Display(Name = "State")]
+		public Dictionary<string, string> LocalizedStates { get; set; }
 
 		/// <summary>
-		/// Cleans things.
+		/// selected country code
 		/// </summary>
-		/// <param name="stringToClean">The thing to clean.</param>
-		/// <returns>The cleaned thing.</returns>
-		public string Clean(string stringToClean)
-		{
-			if (stringToClean == null)
-			{
-				return string.Empty;
-			}
-			else
-			{
-				return CharsToReplace.Aggregate(stringToClean, (str, l) => str.Replace(string.Empty + l, string.Empty));
-			}
-		}
+		public string SelectedCountryCode { get; set; }
+
+		/// <summary>
+		/// country code and localized names
+		/// </summary>
+		[Display(Name = "Country/Region")]
+		public Dictionary<string, string> LocalizedCountries { get; set; }
 	}
 
 	/// <summary>
-	/// Validates that the integer representing the birthdate meets a minimum requirement
+	/// Validates that the integer representing the birthdate meets a minimum requirement.
 	/// </summary>
 	public class MinDateValidation : ValidationAttribute
 	{
 		/// <summary>
-		/// Validates if the value meets the minimum requirement
+		/// Validates if the value meets the minimum requirement.
 		/// </summary>
-		/// <param name="value"></param>
-		/// <param name="validationContext">validation context</param>
-		/// <returns></returns>
+		/// <param name="value">The integer value of the birthdate to be validated.</param>
+		/// <param name="validationContext">Validation context.</param>
+		/// <returns>A validation result with the status of the value being validated.</returns>
 		protected override ValidationResult IsValid(object value, ValidationContext validationContext)
 		{
 			int minAgeYears = 15;
-			if ((int) value > -1) //-1 represents a null date
+
+			// -1 represents a null date
+			if ((int)value > -1)
 			{
 				DateTime dob = new DateTime(1 / 1 / 1).AddDays((int)value);
 				dob = new DateTime(dob.Subtract(new DateTime(1 / 1 / 1)).Ticks);
@@ -178,11 +153,12 @@ namespace AllyisApps.ViewModels.Auth
 				{
 					return new ValidationResult("Must be at least " + minAgeYears + " years of age to register");
 				}
-				else if ((int)value < 639905) 
+				else if ((int)value < 639905)
 				{
 					return new ValidationResult("Please enter a date within the last 150 years");
 				}
 			}
+
 			return ValidationResult.Success;
 		}
 	}

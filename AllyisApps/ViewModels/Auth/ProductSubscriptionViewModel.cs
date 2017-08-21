@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using AllyisApps.Services.Billing;
-using AllyisApps.Services.Common.Types;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using AllyisApps.Services;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Common.Types;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -28,12 +28,12 @@ namespace AllyisApps.ViewModels.Auth
 		}
 
 		/// <summary>
-		/// the subscritpion that is being unsubscribed from
+		/// Gets or sets the subscritpion that is being unsubscribed from.
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
 		/// <summary>
-		/// get or set the subscription name
+		/// Gets or sets the subscription name.
 		/// </summary>
 		[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "SubscriptionNameValidation")]
 		[DataType(DataType.Text)]
@@ -44,7 +44,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the current Organization's Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
-
 
 		/// <summary>
 		/// Gets or sets the current Organization's Name.
@@ -131,7 +130,8 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Subscription Name displayed when first subscribing.
 		/// </summary>
-		public string subscriptionNameToDisplayForSubscribing()
+		/// <returns>A string with subscription name to display for subscribing.</returns>
+		public string SubscriptionNameToDisplayForSubscribing()
 		{
 			return OrganizationName + " - " + ProductName;
 		}

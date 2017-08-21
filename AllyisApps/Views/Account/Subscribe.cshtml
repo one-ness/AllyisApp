@@ -38,13 +38,13 @@
 							<div class="form-group">
 								<p>@Html.DisplayTextFor(m => m.SelectedSkuDescription)</p>
 								@Html.ReqLabelFor(m => m.SubscriptionName, "Subscription Name")
-								@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control", @placeholder = Model.subscriptionNameToDisplayForSubscribing() })
+								@Html.TextBoxFor(m => m.SubscriptionName, new { @class = "form-control", @placeholder = Model.SubscriptionNameToDisplayForSubscribing() })
 								@Html.ValidationMessageFor(m => m.SubscriptionName)
 							</div>
 						</div>
 						<div class="panel-footer">
 							<div class="pull-right">
-								<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
+								<a href="@Url.Action(ActionConstants.Skus, ControllerConstants.Account, new { organizationId = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
 								<input type="submit" class="btn btn-primary" value=@Strings.Save>
 							</div>
 							<div class="clearfix"></div>

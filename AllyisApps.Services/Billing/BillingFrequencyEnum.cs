@@ -1,9 +1,9 @@
-﻿#pragma warning disable 1591
+#pragma warning disable 1591
 
 namespace AllyisApps.Services
 {
 	/// <summary>
-	/// billing frequency
+	/// Billing frequency.
 	/// </summary>
 	public enum BillingFrequencyEnum : byte
 	{

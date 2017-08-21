@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using DataAnnotationsExtensions;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using DataAnnotationsExtensions;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -23,9 +23,9 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public EditOrganizationViewModel()
 		{
-			// Note: this is included soley to keep the model constructed during a POST from complaining about a null reference
-			//   as it builds the countries list, even though the list isn't used anymore.
-			this.ValidCountries = new List<string>();
+			
+			this.LocalizedCountries = new Dictionary<string, string>();
+            this.LocalizedStates = new Dictionary<string, string>();
 			this.IsCreating = false;
 		}
 
@@ -46,9 +46,9 @@ namespace AllyisApps.ViewModels.Auth
 		public string SiteUrl { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Address Id
+		/// Gets or sets the Address Id.
 		/// </summary>
-		public int AddressId { get; set; }
+		public int? AddressId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's physical address.
@@ -82,8 +82,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the organization's postal code.
 		/// </summary>
 		[DataType(DataType.PostalCode)]
-		//[RegularExpression(@"^\d{5}(-\d{4})?$", ErrorMessage = "Invalid postal code")]
-		//[RegularExpression(@"([\-\s\w]{3,10})", ErrorMessage = "Invalid postal code.")]
 		[Display(Name = "Postal Code")]
 		public string PostalCode { get; set; }
 
@@ -91,8 +89,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the organization's phone number.
 		/// </summary>
 		[DataType(DataType.Text)]
-		//[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
-		//[RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
 		[RegularExpression(@"^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
 		[Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
@@ -102,8 +98,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		[DataType(DataType.Text)]
 		[Display(Name = "Fax Number")]
-		//[Required(ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
-		//[RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
 		[RegularExpression(@"^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
 		public string FaxNumber { get; set; }
 
@@ -116,7 +110,7 @@ namespace AllyisApps.ViewModels.Auth
 		public string EmployeeId { get; set; }
 
 		/// <summary>
-		/// Gets the organization's Id.
+		/// Gets or sets the organization's Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
 
@@ -131,25 +125,25 @@ namespace AllyisApps.ViewModels.Auth
 		public bool IsCreating { get; set; }
 
 		/// <summary>
-		/// Gets a list of valid countries.
+		/// selected state id
 		/// </summary>
-		public IEnumerable<string> ValidCountries { get; internal set; }
+		public int? SelectedStateId { get; set; }
 
 		/// <summary>
-		/// Cleans things.
+		/// state id and localized names
 		/// </summary>
-		/// <param name="stringToClean">The thing to clean.</param>
-		/// <returns>The cleaned thing.</returns>
-		public string Clean(string stringToClean)
-		{
-			if (stringToClean == null)
-			{
-				return string.Empty;
-			}
-			else
-			{
-				return CharsToReplace.Aggregate(stringToClean, (str, l) => str.Replace(string.Empty + l, string.Empty));
-			}
-		}
+		public Dictionary<string, string> LocalizedStates { get; set; }
+
+		/// <summary>
+		/// selected country code
+		/// </summary>
+		public string SelectedCountryCode { get; set; }
+
+		/// <summary>
+		/// country code and localized names
+		/// </summary>
+		public Dictionary<string, string> LocalizedCountries { get; set; }
+
+		
 	}
 }

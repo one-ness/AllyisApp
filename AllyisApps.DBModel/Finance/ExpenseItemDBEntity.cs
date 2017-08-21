@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AllyisApps.DBModel.Finance
 {
-    /// <summary>
-    /// Represents the Expense Item table in the database.
-    /// </summary>
-    public class ExpenseItemDBEntity
+	/// <summary>
+	/// Represents the Expense Item table in the database.
+	/// </summary>
+	public class ExpenseItemDBEntity
     {
         /// <summary>
         /// Gets or sets the Expense Item's ID.

@@ -4,11 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.Customer;
-using System.Web.Mvc;
+using AllyisApps.Services.Lookup;
+using AllyisApps.ViewModels;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -20,22 +22,24 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET: Customer/Create.
 		/// </summary>
+		/// <param name="subscriptionId">The subscription.</param>
 		/// <returns>Presents a page for the creation of a new Customer.</returns>
 		[HttpGet]
 		public ActionResult Create(int subscriptionId)
 		{
-			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.CreateCustomer, subscriptionId);
-			var idAndCountries = AppService.GetNextCustIdAndCountries(subscriptionId);
-			string SubscriptionNameToDisplay = AppService.UserContext.OrganizationSubscriptions[subscriptionId].SubscriptionName;
+			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
+			var idAndCountries = AppService.GetNextCustId(subscriptionId);
+			string subscriptionNameToDisplay = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
 			return this.View(new EditCustomerInfoViewModel
 			{
-				ValidCountries = idAndCountries.Item2,
-				IsCreating = true,
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
+                
+                IsCreating = true,
 				CustomerOrgId = idAndCountries.Item1,
 				SubscriptionId = subscriptionId,
-				OrganizationId = idAndCountries.Item3,
+				OrganizationId = idAndCountries.Item2,
 				UserId = AppService.UserContext.UserId,
-				SubscriptionName = SubscriptionNameToDisplay
+				SubscriptionName = subscriptionNameToDisplay,
 			});
 		}
 
@@ -50,22 +54,29 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				int? customerId = AppService.CreateCustomer(new Customer()
-				{
-					ContactEmail = model.ContactEmail,
-                    CustomerName = model.CustomerName,
-					Address = model.Address,
-					City = model.City,
-					State = model.State,
-					Country = model.Country,
-					PostalCode = model.PostalCode,
-					ContactPhoneNumber = model.ContactPhoneNumber,
-					FaxNumber = model.FaxNumber,
-					Website = model.Website,
-					EIN = model.EIN,
-					OrganizationId = model.OrganizationId,
-					CustomerOrgId = model.CustomerOrgId
-				}, model.SubscriptionId);
+                int? customerId = AppService.CreateCustomer(
+                    new Customer()
+                    {
+                        ContactEmail = model.ContactEmail,
+                        CustomerName = model.CustomerName,
+                        Address = new Address()
+                        {
+                            Address1 = model.Address,
+                            City = model.City,
+                            StateName = model.State,
+                            CountryName = model.Country,
+                            PostalCode = model.PostalCode,
+                            CountryCode = model.SelectedCountryCode,
+                            StateId = model.SelectedStateId
+                        },
+						ContactPhoneNumber = model.ContactPhoneNumber,
+						FaxNumber = model.FaxNumber,
+						Website = model.Website,
+						EIN = model.EIN,
+						OrganizationId = model.OrganizationId,
+						CustomerOrgId = model.CustomerOrgId
+					},
+					model.SubscriptionId);
 
 				if (customerId.HasValue)
 				{

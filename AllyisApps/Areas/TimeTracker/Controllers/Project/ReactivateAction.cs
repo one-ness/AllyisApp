@@ -3,10 +3,11 @@
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
+
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -16,17 +17,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	public partial class ProjectController : BaseController
 	{
 		/// <summary>
-		/// Reactivates a project
+		/// Reactivates a project.
 		/// </summary>
-		/// <param name="subscriptionId">The subscription Id</param>
-		/// <param name="userId">Project Id</param>
-		/// <returns></returns>
+		/// <param name="subscriptionId">The subscription Id.</param>
+		/// <param name="userId">Project Id.</param>
+		/// <returns>A redirect to the customer index page controller action.</returns>
 		public ActionResult Reactivate(int subscriptionId, int userId)
 		{
 			CompleteProjectInfo project = AppService.GetProject(userId);
 			if (project != null)
 			{
-				if (!AppService.GetCustomer(project.CustomerId).IsActive)
+				if (!AppService.GetCustomer(project.CustomerId).IsActive.Value)
 				{
 					AppService.ReactivateCustomer(project.CustomerId, subscriptionId, project.OrganizationId);
 				}
@@ -37,7 +38,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subscriptionId });
 				}
 
-				//Permission Failed
+				// Permission Failed
 				Notifications.Add(new BootstrapAlert(Resources.Strings.DeleteUnauthorizedMessage, Variety.Warning));
 			}
 

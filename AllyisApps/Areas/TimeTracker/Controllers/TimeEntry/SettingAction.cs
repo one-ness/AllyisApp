@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -19,30 +19,28 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET /TimeTracker/TimeEntry/subscriptionId/Settings.
 		/// </summary>
-		/// <param name="subscriptionId">The subscription Id</param>
+		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <returns>The settings page.</returns>
 		public ActionResult Settings(int subscriptionId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			var infos = AppService.GetAllSettings(subscriptionId);
-            UserSubscription subInfo = null;
-            this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserSubscription subInfo = null;
+			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
-            var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
-            ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infoOrg.Item1.StartOfWeek));
-            ViewBag.WeekEnd = AppService.GetDayFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
+			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+			ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infoOrg.Item1.StartOfWeek));
+			ViewBag.WeekEnd = AppService.GetDayFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 
-            return this.View(new SettingsViewModel()
+			return this.View(new SettingsViewModel()
 			{
 				Settings = infos.Item1,
 				PayClasses = infos.Item2,
 				Holidays = infos.Item3,
 				SubscriptionId = subscriptionId,
-                SubscriptionName = subInfo.SubscriptionName,
+				SubscriptionName = subInfo.SubscriptionName,
 				UserId = this.AppService.UserContext.UserId
 			});
 		}
-
-
 	}
 }

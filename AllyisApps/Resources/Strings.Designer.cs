@@ -2122,6 +2122,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You cant edit a time entry on a project that is Deactivated.
+        /// </summary>
+        public static string MustSelectActiveProject {
+            get {
+                return ResourceManager.GetString("MustSelectActiveProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must select a pay class..
         /// </summary>
         public static string MustSelectPayClass {

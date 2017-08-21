@@ -4,14 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -23,10 +21,10 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/EditMember.
 		/// </summary>
-		/// <param name="userId">Org member to edit</param>
-		/// <param name="orgId">Id of the org the member is in</param>
-		/// <param name="invited">Is the user invited or a already a member?</param>
-		/// <returns>Returns info for a view about the member to be edited</returns>
+		/// <param name="userId">Org member to edit.</param>
+		/// <param name="orgId">Id of the org the member is in.</param>
+		/// <param name="invited">Is the user invited or a already a member?.</param>
+		/// <returns>Returns info for a view about the member to be edited.</returns>
 		public ActionResult EditMember(int userId, int orgId, int invited)
 		{
 			bool isInvited = invited == 0 ? false : true;
@@ -77,8 +75,8 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// POST: /Account/EditMember.
 		/// </summary>
-		/// <param name="model">The Edit Member view model, with all the form info that we need to save</param>
-		/// <returns>The async task to redirect to the manage org page</returns>
+		/// <param name="model">The Edit Member view model, with all the form info that we need to save.</param>
+		/// <returns>The async task to redirect to the manage org page.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> EditMember(EditMemberViewModel model)
@@ -98,7 +96,7 @@ namespace AllyisApps.Controllers
 			{
 				if (await Task.Factory.StartNew(() => AppService.UpdateMember(modelData)))
 				{
-					Notifications.Add(new BootstrapAlert(String.Format(Resources.Strings.UpdateMemberSuccessMessage, model.UserInfo.FirstName, model.UserInfo.LastName), Variety.Success));
+					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UpdateMemberSuccessMessage, model.UserInfo.FirstName, model.UserInfo.LastName), Variety.Success));
 				}
 				else
 				{

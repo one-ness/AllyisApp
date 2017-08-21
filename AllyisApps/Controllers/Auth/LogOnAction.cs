@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.ViewModels.Auth;
 using System;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using AllyisApps.Core.Alert;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {
@@ -23,6 +23,7 @@ namespace AllyisApps.Controllers
 		/// GET: /Account/LogOn.
 		/// </summary>
 		/// <param name="returnUrl">The URL the user wishes to visit.</param>
+		/// <returns>The log on view.</returns>
 		[AllowAnonymous]
 		public ActionResult LogOn(string returnUrl)
 		{
@@ -40,6 +41,7 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <param name="model">The Log On view model.</param>
 		/// <param name="returnUrl">The URL the user wishes to visit.</param>
+		/// <returns>The user's home page if successful, and the log in page if not.</returns>
 		[HttpPost]
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
@@ -68,6 +70,9 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Sign in the given user.
 		/// </summary>
+		/// <param name="userId">User id.</param>
+		/// <param name="userName">User name.</param>
+		/// <param name="isPersisted">Is persisted.</param>
 		private void SignIn(int userId, string userName, bool isPersisted = false)
 		{
 			this.SetAuthCookie(userId, userName, isPersisted);
@@ -79,11 +84,17 @@ namespace AllyisApps.Controllers
 		/// -   make the Request.IsAuthenticated to true
 		/// - sample code here: https://msdn.microsoft.com/en-us/library/system.web.security.formsauthentication.encrypt(v=vs.110).aspx .
 		/// </summary>
+		/// <param name="userId">User id.</param>
+		/// <param name="userName">User name.</param>
+		/// <param name="isPersisted">Is persisted.</param>
 		private void SetAuthCookie(int userId, string userName, bool isPersisted = false)
 		{
 			// serialize the cookie data object, then ecnrypt it using formsauthentication module
 			string serialized = this.SerializeCookie(new CookieData(userId));
-			FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(/*AuthenticationTicketVersion*/ 1, userName, DateTime.UtcNow,
+			FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
+				/*AuthenticationTicketVersion*/ 1,
+				userName,
+				DateTime.UtcNow,
 				DateTime.UtcNow.AddMinutes(FormsAuthentication.Timeout.TotalMinutes),
 				isPersisted,
 				serialized);

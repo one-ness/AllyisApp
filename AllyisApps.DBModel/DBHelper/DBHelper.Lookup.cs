@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Lookup;
-using Dapper;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using AllyisApps.DBModel.Lookup;
+using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -20,25 +20,24 @@ namespace AllyisApps.DBModel
 	public partial class DBHelper
 	{
 		/// <summary>
-		/// Retrieves a collection of valid countries from the database.
+		/// list of valid countries
 		/// </summary>
-		/// <returns>A collection of country names.</returns>
-		public Dictionary<int, string> GetCountriesDictionary()
+		public Dictionary<string, string> GetCountries()
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<CountryDBEntity>("[Lookup].[GetCountries]").ToDictionary(x => x.CountryId, x => x.CountryName);
+				return connection.Query<CountryDBEntity>("[Lookup].[GetCountries]").ToDictionary(x => x.CountryCode, x => x.CountryName);
 			}
 		}
 
 		/// <summary>
-		/// list of valid countries
+		/// list of states for the given country
 		/// </summary>
-		public List<string> ValidCountries()
+		public Dictionary<int, string> GetStates(string countryCode)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<CountryDBEntity>("[Lookup].[GetCountries]").Select(x => x.CountryName).ToList();
+				return connection.Query<StateDBEntity>("[Lookup].[GetStates] @a", new { a = countryCode }).ToDictionary(x => x.StateId, x => x.StateName);
 			}
 		}
 
@@ -80,5 +79,18 @@ namespace AllyisApps.DBModel
 				return connection.Query<LanguageDBEntity>("[Lookup].[GetLanguageById]", new { CultureName = CultureName }, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
-	}
+
+        /// <summary>
+        /// Get Address based on addres ID
+        /// </summary>
+        /// <param name="addressID"></param>
+        /// <returns></returns>
+        public AddressDBEntity getAddreess(int? addressID)
+        {
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+               return connection.Query<AddressDBEntity>("[Lookup].[GetAddress]", new { addresId = addressID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+            }
+        }
+    }
 }

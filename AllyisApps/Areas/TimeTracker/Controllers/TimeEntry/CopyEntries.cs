@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
-using AllyisApps.Services;
-using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
+using AllyisApps.Services;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="startDateCopy">The start (inclusive) of the date range for the entries to be copied.</param>
 		/// <param name="endDateCopy">The end (inclusive) of the date range for the entries to be copied.</param>
 		/// <param name="userId">The id for the user whose entries are being edited.</param>
-		/// <param name="subscriptionId">The subscription's Id</param>
+		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="startDate">The start of the date range of the TimeEntry index page.</param>
 		/// <param name="endDate">The end of the date range of the TimeEntry index page.</param>
 		/// <returns>The action result.</returns>
@@ -54,12 +54,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
             UserSubscription subInfo = null;
-            this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+            this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
             int organizationId = subInfo.OrganizationId;
 
             // Reference for checking status of entries
             List<CompleteProjectInfo> allProjects = AppService.GetProjectsByUserAndOrganization(userId, organizationId, false).ToList();
-			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId);
+			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId);
 
 			// Authorized to edit this entry
 			// Remove existing entries in target range

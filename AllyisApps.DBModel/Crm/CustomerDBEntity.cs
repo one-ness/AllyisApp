@@ -27,39 +27,49 @@ namespace AllyisApps.DBModel.Crm
         /// <summary>
         /// Gets or sets the customer's Address Id.
         /// </summary>
-        public int AddressId { get; set; }
+        public int? AddressId { get; set; }
 
-		/// <summary>
-		/// Gets or sets Address.
-		/// </summary>
-		[DisplayName("Address")]
-		public string Address { get; set; }
+        ///// <summary>
+        ///// Gets or sets Address.
+        ///// </summary>
+        //[DisplayName("Address")]
+        //public string Address { get; set; }
 
-		/// <summary>
-		/// Gets or sets City.
-		/// </summary>
-		public string City { get; set; }
+        ///// <summary>
+        ///// Gets or sets City.
+        ///// </summary>
+        //public string City { get; set; }
 
-		/// <summary>
-		/// Gets or sets State.
-		/// </summary>
-		public string State { get; set; }
+        ///// <summary>
+        ///// Gets or sets State.
+        ///// </summary>
+        //public string StateName { get; set; }
 
-		/// <summary>
-		/// Gets or sets Country.
-		/// </summary>
-		public string Country { get; set; }
+        ///// <summary>
+        ///// StateID for state Name
+        ///// </summary>
+        //public int? StateId { get; set; }
 
-		/// <summary>
-		/// Gets or sets PostalCode.
-		/// </summary>
-		[DisplayName("Postal Code")]
-		public string PostalCode { get; set; }
+        ///// <summary>
+        ///// Gets or sets Country.
+        ///// </summary>
+        //public string CountryName { get; set; }
 
-		/// <summary>
-		/// Gets or sets Email.
-		/// </summary>
-		public string ContactEmail { get; set; }
+        ///// <summary>
+        ///// ISO ID for country
+        ///// </summary>
+        //public string CountryCode { get; set; }
+
+        ///// <summary>
+        ///// Gets or sets PostalCode.
+        ///// </summary>
+        //[DisplayName("Postal Code")]
+        //public string PostalCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets Email.
+        /// </summary>
+        public string ContactEmail { get; set; }
 
 		/// <summary>
 		/// Gets or sets PhoneNumber.
@@ -98,13 +108,13 @@ namespace AllyisApps.DBModel.Crm
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the id of the customer to be used by users within the organization
+		/// Gets or sets the id of the customer to be used by users within the organization.
 		/// </summary>
 		public string CustomerOrgId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the IsActive bool value for the customer. True means currently active
+		/// Gets or sets the IsActive bool value for the customer. True means currently active.
 		/// </summary>
-		public bool IsActive { get; set; }
+		public bool? IsActive { get; set; }
 	}
 }

@@ -1,4 +1,4 @@
-CREATE PROCEDURE [Crm].[GetNextCustIdAndCountries]
+CREATE PROCEDURE [Crm].[GetNextCustId]
 	@orgId INT
 AS
 BEGIN
@@ -7,7 +7,5 @@ BEGIN
 		[CustomerOrgId]
 	FROM [Crm].[Customer] WITH (NOLOCK)
 	WHERE [Customer].[OrganizationId] = @orgId
-	ORDER BY [CustomerOrgId] DESC
-	
-	SELECT [CountryName] FROM [Lookup].[Country] WITH (NOLOCK) ;
+	ORDER BY [CustomerOrgId] DESC;
 END

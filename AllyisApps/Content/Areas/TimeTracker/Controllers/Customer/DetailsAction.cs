@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="DetailsAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -20,7 +20,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Returns a details page for a customer
 		/// </summary>
-		/// <param name="id">id of customer</param>
+		/// <param name="id">Id of customer</param>
 		/// <returns></returns>
 		[HttpGet]
 		public ActionResult Details(int id)

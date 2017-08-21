@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -18,7 +18,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Updates the Overtime setting for an Organization.
 		/// </summary>
-		/// <param name="subscriptionId">The subscription Id</param>
+		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <param name="setting">Overtime available setting.</param>
 		/// <param name="hours">Hours until overtime.</param>
 		/// <param name="period">Time period for hours until overtime.</param>
@@ -29,7 +29,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			int actualHours = string.Equals(setting, "No") ? -1 : hours;
 
-			if (AppService.UpdateOvertime(subscriptionId, AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId, actualHours, period, mult))
+			if (AppService.UpdateOvertime(subscriptionId, AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId, actualHours, period, mult))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.OvertimeUpdate, Variety.Success));
 			}

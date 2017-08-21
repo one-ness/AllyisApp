@@ -1,7 +1,7 @@
-﻿using AllyisApps.Controllers;
+﻿using System.Web.Mvc;
+using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -11,25 +11,26 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 	public partial class CustomerController : BaseController
 	{
 		/// <summary>
-		/// GET: Reactivate Customer
+		/// GET: Reactivate Customer.
 		/// </summary>
-		/// <param name="subscriptionId">The subscription Id</param>
+		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <param name = "userId" > The Customer id.</param>
 		/// <returns>The Customer index.</returns>
 		public ActionResult Reactivate(int subscriptionId, int userId)
 		{
-			int orgId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId; ;
+			int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
 			var result = AppService.ReactivateCustomer(userId, subscriptionId, orgId);
 
-			if (result != null && result != "")
+			if (!string.IsNullOrEmpty(result))
 			{
 				Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", Resources.Strings.CustomerReactivateNotification, AppService.GetCustomer(userId).CustomerName), Variety.Success));
 			}
-			// Permission failure
 			else if (result == null)
 			{
+				// Permission failure
 				Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 			}
+
 			return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
 		}
 	}

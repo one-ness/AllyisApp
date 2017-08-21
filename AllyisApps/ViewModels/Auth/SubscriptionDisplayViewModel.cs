@@ -40,22 +40,22 @@ namespace AllyisApps.ViewModels.Auth
 		public string ProductDescription { get; set; }
 
 		/// <summary>
-		/// Gets or sets the subscriptionId
+		/// Gets or sets the subscriptionId.
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the subscriptionName
-        /// </summary>
-        public string SubscriptionName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the organization's id
-        /// </summary>
-        public int OrganizationId { get; set; }
+		/// <summary>
+		/// Gets or sets the subscriptionName.
+		/// </summary>
+		public string SubscriptionName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the product area url
+		/// Gets or sets the organization's id.
+		/// </summary>
+		public int OrganizationId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the product area url.
 		/// </summary>
 		public string AreaUrl { get; set; }
 	}

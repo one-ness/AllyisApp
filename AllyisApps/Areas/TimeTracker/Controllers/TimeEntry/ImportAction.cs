@@ -4,15 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Data;
+using System.IO;
+using System.Web;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Utilities;
 using Excel;
-using System.Data;
-using System.IO;
-using System.Web;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -25,14 +25,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// POST: TimeEntry/Import
 		/// Code adapted from http://techbrij.com/read-excel-xls-xlsx-asp-net-mvc-upload.
 		/// </summary>
+		/// <param name="subscriptionId">The subscription Id.</param>
 		/// <param name="upload">File to upload.</param>
-		/// <param name="subscriptionId">The subscription Id</param>
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult Import(int subscriptionId, HttpPostedFileBase upload)
 		{
-			int organizationId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
+			int organizationId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+
 			// TODO: Replace ModelState errors with exception catches and notifications
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)
 			if (ModelState.IsValid)

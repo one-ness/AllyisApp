@@ -4,15 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Web.Mvc;
 using AllyisApps.Areas.TimeTracker.Core;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -45,7 +45,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				});
 			}
 
-			int organizationId = AppService.UserContext.OrganizationSubscriptions[model.SubscriptionId].OrganizationId;
+			int organizationId = AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId;
+
 			// Check permissions
 			if (model.UserId != this.AppService.UserContext.UserId)
 			{
@@ -106,6 +107,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				throw new ArgumentException(Resources.Strings.DurationFormat);
 			}
+
 			if (this.ParseDuration(model.Duration) == 0)
 			{
 				throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
@@ -115,7 +117,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				new List<int> { model.UserId },
 				AppService.GetDateTimeFromDays(model.Date),
 				AppService.GetDateTimeFromDays(model.Date),
-				AppService.UserContext.OrganizationSubscriptions[model.SubscriptionId].OrganizationId);
+				AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId);
 			float durationOther = 0.0f;
 			foreach (TimeEntryInfo otherEntry in otherEntriesToday)
 			{
@@ -140,7 +142,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Resources.Strings.MustSelectPayClass);
 			}
 
-			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.OrganizationSubscriptions[model.SubscriptionId].OrganizationId);
+			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId);
 			if ((!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId, false)) && model.Date <= (lockDate == null ? -1 : AppService.GetDayFromDateTime(lockDate.Value)))
 			{
 				throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
@@ -162,13 +164,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Uses the time entry id to construct a new EditTimeEntryViewModel.
 		/// </summary>
 		/// <param name="timeEntryId">The time entry Id.</param>
-		/// <param name="subscriptionId">The subscription's Id</param>
+		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <returns>The EditTimeEntryViewModel.</returns>
 		public EditTimeEntryViewModel ConstructEditTimeEntryViewModel(int timeEntryId, int subscriptionId)
 		{
 			TimeEntryInfo entry = AppService.GetTimeEntry(timeEntryId);
 
-			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId);
+			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId);
 			return new EditTimeEntryViewModel
 			{
 				UserId = entry.UserId,
@@ -180,7 +182,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Description = entry.Description,
 				IsLockSaved = entry.IsLockSaved,
 				LockDate = lockDate == null ? -1 : AppService.GetDayFromDateTime(lockDate.Value),
-				IsManager = AppService.GetProductRoleForUser(ProductNameConstants.TimeTracker, entry.UserId, AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId) == "Manager"
+				IsManager = AppService.GetProductRoleForUser(ProductNameConstants.TimeTracker, entry.UserId, AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId) == "Manager"
 			};
 		}
 

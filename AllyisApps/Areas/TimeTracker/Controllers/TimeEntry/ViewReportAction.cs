@@ -4,15 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -26,8 +26,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="viewDataButton">The value of the button used to submit the form.</param>
 		/// <param name="userSelect">Array of selected user Ids.</param>
-		/// <param name="subscriptionId">The subscription's Id</param>
-		/// <param name="organizationId">The organization's Id</param>
+		/// <param name="subscriptionId">The subscription's Id.</param>
+		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="dateRangeStart">The beginning of the date range(nullable).</param>
 		/// <param name="dateRangeEnd">The end of the date range (nullable).</param>
 		/// <param name="showExport">Export button visibility.</param>
@@ -61,7 +61,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				var infos = AppService.GetReportInfo(subscriptionId);
 				UserSubscription subInfo = null;
-				this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+				this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
 				bool canEditOthers = this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId, false);
 				ReportViewModel reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, organizationId, canEditOthers, infos.Item1, infos.Item2, showExport, reportVMselect);
@@ -80,7 +80,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						message = string.Format("{0} {1}", message, ex.Message);
 					}
 
-					//Update failure
+					// Update failure
 					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
 					return this.RedirectToAction(ActionConstants.Report, ControllerConstants.TimeEntry);
 				}

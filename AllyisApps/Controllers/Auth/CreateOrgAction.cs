@@ -5,7 +5,9 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.Core.Alert;
+using AllyisApps.Lib;
 using AllyisApps.Services;
+using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
 using System.Web.Mvc;
 
@@ -24,7 +26,13 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult CreateOrg()
 		{
-			return this.View(new EditOrganizationViewModel() { ValidCountries = AppService.ValidCountries(), IsCreating = true });
+			var model = new EditOrganizationViewModel();
+			model.IsCreating = true;
+
+            // create localized countries
+            model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
+            
+			return this.View(model);
 		}
 
 		/// <summary>
@@ -41,13 +49,17 @@ namespace AllyisApps.Controllers
 				int orgId = AppService.SetupOrganization(
 					new Organization()
 					{
-						Address = model.Address,
-						City = model.City,
-						Country = model.Country,
-                        OrganizationName = model.OrganizationName,
+						Address = new Services.Lookup.Address()
+                        {
+                            //AddressId = model.AddressId, should be null
+                            Address1 = model.Address,
+                            City = model.City,
+                            CountryCode = model.SelectedCountryCode,
+                            StateId = model.SelectedStateId,
+                            PostalCode =model.PostalCode,
+                        },
+						OrganizationName = model.OrganizationName,
 						SiteUrl = model.SiteUrl,
-						State = model.State,
-						PostalCode = model.PostalCode,
 						PhoneNumber = model.PhoneNumber,
 						FaxNumber = model.FaxNumber
 					},
@@ -61,7 +73,7 @@ namespace AllyisApps.Controllers
 				else
 				{
 					Notifications.Add(new BootstrapAlert(Resources.Strings.OrganizationCreatedNotification, Variety.Success));
-					return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { id = orgId });
+					return this.RedirectToAction(ActionConstants.Skus, ControllerConstants.Account, new { organizationId = orgId });
 				}
 			}
 

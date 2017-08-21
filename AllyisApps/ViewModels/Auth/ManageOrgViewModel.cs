@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using AllyisApps.Services.Common.Types;
 using System;
 using System.Collections.Generic;
+using AllyisApps.Services;
+using AllyisApps.Services.Common.Types;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -62,4 +62,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public int SubscriptionCount { get; set; }
 	}
+
+
 }
