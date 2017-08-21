@@ -318,7 +318,10 @@ namespace AllyisApps.Services
 			}
 			var results = DBHelper.GetUserInfo(userId);
 			User user = InitializeUser(results.Item1);
-			user.Address = InitializeAddress(results.Item2);
+            if (results.Item2 != null)
+            {
+                user.Address = InitializeAddress(results.Item2);
+            }
 			return user;
 		}
 
@@ -327,6 +330,10 @@ namespace AllyisApps.Services
 		/// </summary>
 		public User GetCurrentUserProfile()
 		{
+            if(this.UserContext?.UserId == null)
+            {
+                return null;
+            }
             var result = GetUser(this.UserContext.UserId);	
 			return result;
 		}

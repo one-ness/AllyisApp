@@ -30,6 +30,8 @@ BEGIN
 		   [Address].[Address1],
 		   [Address].[City],
 		   [State].[StateName] AS 'State',
+		   [Address].[StateId],
+		   [Address].[CountryCode],
 		   [Country].[CountryName] AS 'Country',
 		   [Address].[PostalCode]
 	FROM [Lookup].[Address] AS [Address] WITH (NOLOCK)
