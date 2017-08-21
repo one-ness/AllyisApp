@@ -679,7 +679,7 @@ namespace AllyisApps.Services
             {
                 address = new Address()
                 {
-                    Address1 = organizationInfo.Adress,
+                    Address1 = organizationInfo.Address,
                     Address2 = null,
                     AddressId = organizationInfo.AddressId,
                     City = organizationInfo.City,
