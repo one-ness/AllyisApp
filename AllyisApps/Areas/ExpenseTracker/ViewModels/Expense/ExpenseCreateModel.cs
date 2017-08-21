@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using AllyisApps.Services;
 using System.Web;
 using AllyisApps.Services.Expense;
+using System.Web.Mvc;
+using AllyisApps.DBModel.Finance;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {
@@ -40,5 +42,10 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// Gets or sets the Expense Files
 		/// </summary>
 		public IList<HttpPostedFileBase> Files { get; set; }
+
+		/// <summary>
+		/// Gets or sets the list of accounts
+		/// </summary>
+		public IList<AccountDBEntity> AccountList { get; set; }
 	}
 }

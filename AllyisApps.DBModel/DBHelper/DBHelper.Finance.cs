@@ -107,6 +107,17 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+		/// <summary>
+		/// Retrieves all of the accounts in the database.
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<AccountDBEntity> GetAccounts()
+		{
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<AccountDBEntity>("[Finance].[GetAccounts]", commandType: CommandType.StoredProcedure).AsEnumerable();
+			}
+		}
 
 		////////////////////////////
 		/*         UPDATE         */

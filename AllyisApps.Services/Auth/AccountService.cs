@@ -18,7 +18,6 @@ using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
 using AllyisApps.Services.Lookup;
 using AllyisApps.DBModel.Finance;
-using System.Web;
 
 namespace AllyisApps.Services
 {
@@ -684,6 +683,11 @@ namespace AllyisApps.Services
 				SubscriptionId = subUser.SubscriptionId,
 				UserId = subUser.UserId
 			};
+		}
+
+		public IList<AccountDBEntity> GetAccounts()
+		{
+			return DBHelper.GetAccounts().ToList();
 		}
 
 		#endregion Info-DBEntity Conversions
