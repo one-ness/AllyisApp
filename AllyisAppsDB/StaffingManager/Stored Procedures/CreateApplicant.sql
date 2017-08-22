@@ -2,30 +2,26 @@
 	@email NVARCHAR (100),
 	@firstName NVARCHAR (32),
 	@lastName NVARCHAR (32),
-	@address NVARCHAR (64),
-	@city NVARCHAR(32),
-	@state NVARCHAR(32),
-	@country NVARCHAR(32),
-	@postalCode NVARCHAR(16),
 	@phoneNumber NVARCHAR (16),
-	@notes NVARCHAR (MAX)
+	@notes NVARCHAR (MAX),
+	@address1 nvarchar(64),
+	@address2 nvarchar(64),
+	@city nvarchar(32),
+	@stateId smallint,
+	@postalCode nvarchar(16),
+	@countryCode varchar(8)
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	BEGIN TRANSACTION
-		INSERT INTO [Lookup].[Address]
-			([Address1],
-			[City],
-			[StateId],
-			[CountryId],
-			[PostalCode])
-		VALUES
-			(@address,
+		EXEC [Lookup].[CreateAddress]
+			@address1,
+			@address2,
 			@city,
-			(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [StateName] = @state),
-			(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @country),
-			@postalCode);
+			@stateId,
+			@postalCode,
+			@countryCode
 
 		INSERT INTO [StaffingManager].[Applicant]
 			([AddressId],
@@ -35,15 +31,13 @@ BEGIN
 			[PhoneNumber],
 			[Notes])
 		VALUES
-			(SCOPE_IDENTITY(),
+			(IDENT_CURRENT('[Lookup].[Address]'),
 			@firstName,
 			@lastName,
 			@email,
 			@phoneNumber,
 			@notes);
 
-		SELECT
-			IDENT_CURRENT('[Lookup].[Address]') AS [AddressId],
-			IDENT_CURRENT('[StaffingManager].[Applicant]') AS [ApplicantId];
+		SELECT IDENT_CURRENT('[StaffingManager].[Applicant]') AS [ApplicantId];
 	COMMIT TRANSACTION
 END

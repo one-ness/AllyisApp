@@ -33,4 +33,14 @@ BEGIN
 	LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE [Position].[OrganizationId] = @organizationId
 	ORDER BY [StaffingManager].[Position].[PositionCreatedUtc] DESC
+
+	-- Select all tags from the position
+	SELECT
+		[Tag].[TagId],
+		[Tag].[TagName],
+		[Position].[PositionId]
+	FROM [StaffingManager].[Position]
+		JOIN [StaffingManager].[PositionTag] ON [PositionTag].[PositionId] = [Position].[PositionId]
+		JOIN [Lookup].[Tag] ON [PositionTag].[TagId] = [Tag].[TagId]
+	WHERE [Position].[OrganizationId] = @organizationId
 END
