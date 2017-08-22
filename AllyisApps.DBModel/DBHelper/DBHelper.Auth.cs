@@ -82,9 +82,17 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple("[Auth].[GetUserInfo]", parameters, commandType: CommandType.StoredProcedure);
-				return Tuple.Create(
-					results.Read<UserDBEntity>().FirstOrDefault(),
-					results.Read<AddressDBEntity>().FirstOrDefault());
+
+
+                UserDBEntity user = results.Read<UserDBEntity>().FirstOrDefault();
+                if (!results.IsConsumed) {
+                    AddressDBEntity address = results.Read<AddressDBEntity>().FirstOrDefault();
+                    return new Tuple<UserDBEntity, AddressDBEntity>(user, address);
+                }
+                else
+                {
+                    return new Tuple<UserDBEntity, AddressDBEntity>(user, null);
+                }
 			}
 		}
 
@@ -226,7 +234,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@passwordHash", passwordHash);
-			parameters.Add("@code", code);
+			parameters.Add("@passwordResetCode", code);
 
 			using (var connection = new SqlConnection(this.SqlConnectionString))
 			{
@@ -244,7 +252,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@email", email);
-			parameters.Add("@resetCode", resetCode);
+			parameters.Add("@passwordResetCode", resetCode);
 
 			using (var connection = new SqlConnection(this.SqlConnectionString))
 			{
