@@ -31,7 +31,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="applicant">The applicant object to be added to the db.</param>
 		/// <returns>The id of the created address and applicant</returns>
-		public Tuple<int, int> CreateApplicant(Applicant applicant) => DBHelper.CreateApplicant(ServiceObjectToDBEntity(applicant));
+		public int CreateApplicant(Applicant applicant) => DBHelper.CreateApplicant(ServiceObjectToDBEntity(applicant));
 
 		/// <summary>
 		/// Adds an application to the DB.
@@ -140,7 +140,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="organizationId">the tagert organizations ID number. </param>
 		/// <returns>A list of service layer Position Objects. </returns>
-		public List<Position> GetPositionByOrganizationId(int organizationId) => DBHelper.GetPositionsByOrganizationId(organizationId).Select(GetPositionToPositionServiceObject).ToList();
+		public List<Position> GetPositionsByOrganizationId(int organizationId) => DBPositionsAndTagsToList(DBHelper.GetPositionsByOrganizationId(organizationId));
 
 		/// <summary>
 		/// Get Tags by a position Id method; pulls a list of all of the positions tags as service layer Tag Objects.
@@ -346,6 +346,45 @@ namespace AllyisApps.Services
 				PositionLevelName = position.PositionLevel.PositionLevelName,
 				PositionStatusName = position.PositionStatus.PositionStatusName
 			};
+		}
+
+		/// <summary>
+		/// Converts a DB Layer PositionDBEntity object to a service layer Position Object.
+		/// </summary>
+		/// <param name="positionsAndTags">expando object containing a list or positions and a list of all tags belonging to all positions</param>
+		/// <returns>Returns a service layer Position Obejct. </returns>
+		public static List<Position> DBPositionsAndTagsToList(dynamic positionsAndTags)
+		{
+			List<Position> positions = new List<Position>();
+			foreach (dynamic position in positionsAndTags.positions)
+			{
+				Position newPosition = new Position
+				{
+					PositionId = position.PositionId,
+					//etc....
+
+					Address = new Address
+					{
+						AddressId = position.AddressId,
+						//etc....
+					},
+
+					Tags = new List<Tag>()
+				};
+
+				foreach (dynamic tag in positionsAndTags.tags[position.PositionId])
+				{
+					newPosition.Tags.Add(new Tag
+					{
+						TagId = tag.TagId,
+						TagName = tag.TagName
+					});
+				}
+
+				positions.Add(newPosition);
+			}
+
+			return positions;
 		}
 
 		/// <summary>

@@ -265,19 +265,19 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicationId">The id of the application.</param>
 		/// <returns>One application, if present.</returns>
-		public ApplicationDBEntity GetApplicationById(int applicationId)
+		public dynamic GetApplicationById(int applicationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicationId", applicationId);
 
-			ApplicationDBEntity application;
+			dynamic applicationAndDocuments = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var results = connection.QueryMultiple("[StaffingManager].[GetApplicationAndDocumentsById]", parameters, commandType: CommandType.StoredProcedure);
-				application = results.Read<ApplicationDBEntity>().Single();
-				application.ApplicationDocuments = results.Read<ApplicationDocumentDBEntity>();
+				applicationAndDocuments.application = results.Read<ApplicationDBEntity>().Single();
+				applicationAndDocuments.applicationDocuments = results.Read<ApplicationDocumentDBEntity>();
 			}
-			return application;
+			return applicationAndDocuments;
 		}
 
 		/// <summary>
@@ -429,17 +429,19 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The id of the organization.</param>
 		/// <returns>One Position.</returns>
-		public IEnumerable<PositionDBEntity> GetPositionsByOrganizationId(int organizationId)
+		public dynamic GetPositionsByOrganizationId(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 
-			IEnumerable<PositionDBEntity> positions;
+			dynamic positionsAndTags = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				positions = connection.Query<PositionDBEntity>("[StaffingManager].[GetPositionsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
+				var results = connection.QueryMultiple("[StaffingManager].[GetPositionsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
+				positionsAndTags.positions = results.Read<dynamic>().ToList();
+				positionsAndTags.tags = results.Read<dynamic>().ToDictionary(t => t.PositionId, t => t);
 			}
-			return positions;
+			return positionsAndTags;
 		}
 
 		/// <summary>
