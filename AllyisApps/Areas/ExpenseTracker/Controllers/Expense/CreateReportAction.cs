@@ -34,7 +34,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			}
 			var subscription = AppService.GetSubscription(subscriptionId);
 			var organizationId = subscription.OrganizationId;
-			
+			var reportStatus = (ExpenseStatusEnum)Enum.Parse(typeof(ExpenseStatusEnum), Request.Form["Report.ReportStatus"]);
+
 			var report = new ExpenseReport()
 			{
 				ReportTitle = reportName,
@@ -43,7 +44,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				ModifiedUtc = Convert.ToDateTime(date),
 				ReportDate = Convert.ToDateTime(date),
 				SubmittedById = submittedById,
-				OrganizationId = organizationId
+				OrganizationId = organizationId,
+				ReportStatus = (int)reportStatus
 			};
 
 			int reportId = AppService.CreateExpenseReport(report);
