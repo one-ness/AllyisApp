@@ -1,6 +1,7 @@
 ﻿@using AllyisApps.ViewModels.ExpenseTracker.Expense;
 @using AllyisApps.Core;
 @using AllyisApps.Services;
+@using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense;
 
 @model ExpenseCreateModel
 
@@ -18,9 +19,14 @@
 		<div class="files">
 			@{
 				Model.Files.Add(new AllyisApps.Services.Expense.ExpenseFile(null, "", ""));
-				foreach (var item in Model.Files)
+				for (int i = 0; i < Model.Files.Count; i++)
 				{
-					Html.RenderAction("DisplayFile", Model);
+					var file = new ExpenseFileModel()
+					{
+						File = Model.Files[i],
+						Index = i
+					};
+					Html.RenderAction("DisplayFile", file);
 				}
 			}
 		</div>
@@ -132,7 +138,7 @@
 			console.log('adding file');
 			$.ajax({
 				url: '@Url.Action("DisplayFile")',
-				data: @Html.Raw(Json.Encode(Model)),
+				data: @Html.Raw(Json.Encode(new ExpenseFileModel() { Index = Model.Files.Count })),
 				success: function (response) {
 					$('.files').append(response);
 				}

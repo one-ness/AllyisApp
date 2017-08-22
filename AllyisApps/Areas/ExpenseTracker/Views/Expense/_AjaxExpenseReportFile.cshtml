@@ -1,20 +1,20 @@
-﻿@using AllyisApps.ViewModels.ExpenseTracker.Expense
-@using AllyisApps.Services
+﻿@using AllyisApps.Services
+@using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 
-@model ExpenseCreateModel
+@model ExpenseFileModel
 
 <div style="display: inline-block;">
 	@{
-		string className = String.Format("file_{0}", Model.Files.Count);
-		string uploadName = String.Format("Files[{0}].FileName", Model.Files.Count);
+		string className = String.Format("file_{0}", Model.Index);
+		string uploadName = String.Format("Files[{0}].FileName", Model.Index);
 		string uploadFunc = String.Format("$('input[class={0}]').click();", className);
+		string inputName = String.Format("upload-file-name-display_{0}", Model.Index);
 	}
-	<input type="file" id="@uploadName" class="@className" name="files" style="display:none;"
-		   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-	<input id="upload-file-name-display" class="form-control" style="width: 180px;"
-		   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+	<input type="file" id="@uploadName" class="@className" name="files" style="display:none;" value="@Model.File"
+		   onchange="$('#@inputName').val($(this).val().replace('C:\\fakepath\\', ''));" />
+	<input id="@inputName" class="form-control" style="width: 180px;"
+		   onchange="$('#@inputName').val($(this).val().replace('C:\\fakepath\\', ''));" />
 </div>
 <a onclick="@uploadFunc" title="Choose Excel file containing Expense Tracker entries" style="float: right;">
 	<span class="btn btn-primary">@Strings.ChooseFile</span>
-	@*@Strings.ChooseFile*@
 </a>

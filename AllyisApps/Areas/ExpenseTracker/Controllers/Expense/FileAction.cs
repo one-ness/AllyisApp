@@ -8,6 +8,8 @@ using System;
 using System.Linq;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Finance;
+using System.Web;
+using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -21,9 +23,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		public ActionResult DisplayFile(ExpenseCreateModel model)
+		public ActionResult DisplayFile(ExpenseFileModel model)
 		{
-			if (model.Files != null)
+			if (model != null)
 			{
 				return PartialView("_AjaxExpenseReportFile", model);
 			}
