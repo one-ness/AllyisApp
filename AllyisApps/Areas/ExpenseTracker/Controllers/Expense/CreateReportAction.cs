@@ -58,8 +58,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			if (files != null && files.ToList().Count > 0 && files.First() != null)
 			{
-				var fileList = files.ToList();
-				return RedirectToAction("Import", new { subscriptionId = subscriptionId, files = fileList, reportId = reportId });
+				foreach (var upload in files)
+				{
+					AppService.CreateExpenseFile(upload, reportId);
+				}
 			}
 			return RedirectToAction("Index");
 		}
