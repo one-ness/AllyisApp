@@ -322,6 +322,7 @@
     <Build Include="Expense\Tables\ExpenseFile.sql" />
     <Build Include="Expense\Stored Procedures\UpdateExpenseFile.sql" />
     <Build Include="Expense\Stored Procedures\CreateExpenseFile.sql" />
+    <Build Include="Finance\Stored Procedures\GetAccounts.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

@@ -6,8 +6,8 @@
 <div style="display: inline-block;">
 	@{
 		string className = String.Format("file_{0}", Model.Files.Count);
-		string uploadName = String.Format("Files[{0}]", Model.Files.Count);
-		string uploadFunc = String.Format("$('input[class={0}]').click(); console.log('choosing file');", className);
+		string uploadName = String.Format("Files[{0}].FileName", Model.Files.Count);
+		string uploadFunc = String.Format("$('input[class={0}]').click();", className);
 	}
 	<input type="file" id="@uploadName" class="@className" name="files" style="display:none;"
 		   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />

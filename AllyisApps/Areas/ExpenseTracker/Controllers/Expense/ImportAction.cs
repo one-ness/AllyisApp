@@ -27,8 +27,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="reportId"></param>
 		/// <param name="files">File to upload.</param>
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
-		[HttpPost]
-		[ValidateAntiForgeryToken]
+		//[HttpPost]
+		//[ValidateAntiForgeryToken]
 		public ActionResult Import(int subscriptionId, int reportId, List<HttpPostedFileBase> files)
 		{
             int organizationId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
@@ -43,7 +43,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				}
 			}
 
-			return RedirectToAction(ActionConstants.Create, ControllerConstants.Expense, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
+			//return RedirectToAction(ActionConstants.Create, ControllerConstants.Expense, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId });
+			return RedirectToAction("Index");
 		}
 	}
 }

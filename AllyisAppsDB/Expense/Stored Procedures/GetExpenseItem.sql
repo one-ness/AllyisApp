@@ -12,7 +12,6 @@ BEGIN
 		[Amount],
 		[ExpenseReportId],
 		[AccountId],
-		[AccountTypeId],
 		[IsBillableToCustomer],
 		[ExpenseItemCreatedUtc],
 		[ExpenseItemModifiedUtc]

@@ -23,7 +23,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns></returns>
 		public ActionResult DisplayItems(ExpenseCreateModel model)
 		{
-			//model.Items.Add(new ExpenseItem());
+			model.AccountList = AppService.GetAccounts();
 			return PartialView("_AjaxExpenseReportItems", model);
 		}
 
