@@ -17,10 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -202,6 +200,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AttachmentDownloadController.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\StatusUpdateAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\FileAction.cs" />
@@ -971,6 +970,7 @@
     <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\ExpenseTracker\Views\AttachmentDownload\" />
     <Folder Include="Areas\ExpenseTracker\Views\ReportAdmin\" />
   </ItemGroup>
   <ItemGroup>

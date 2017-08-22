@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Collections.Generic;
 using AllyisApps.Controllers;
+using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
@@ -43,6 +44,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             var history = AppService.GetExpenseHistoryByReportId(id);
             List<ExpenseHistoryViewModel> reportHistory = new List<ExpenseHistoryViewModel>();
 
+            List<string> fileNames = AzureFiles.GetReportAttachments(id);
+
             foreach(var item in history)
             {
                 var reviewer = AppService.GetUser(item.UserId);
@@ -67,7 +70,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 Expenses = reportItems,
                 History = reportHistory,
                 UserId = user.UserId,
-                SubscriptionId = subscriptionId
+                ReportId = report.ExpenseReportId,
+                SubscriptionId = subscriptionId,
+                Attachments = fileNames
             };
         }
     }

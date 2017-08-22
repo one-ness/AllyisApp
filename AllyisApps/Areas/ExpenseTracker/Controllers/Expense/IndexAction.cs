@@ -46,7 +46,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
             foreach (var item in expenses)
             {
-				var expItems = AppService.GetExpenseItemsByUserSubmitted(item.SubmittedById).Select(x => x).Where(x => x.ExpenseReportId == item.ExpenseReportId);
+				var expItems = AppService.GetExpenseItemsByReportId(item.ExpenseReportId);
 				
                 var user = AppService.GetUser(item.SubmittedById);
 
