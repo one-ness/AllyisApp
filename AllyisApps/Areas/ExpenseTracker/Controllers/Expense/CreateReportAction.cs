@@ -59,11 +59,14 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				AppService.CreateExpenseItem(item);
 			}
 
-			if (files != null && files.ToList().Count > 0 && files.First() != null)
+			if (files != null)
 			{
 				foreach (var file in files)
 				{
-                    AzureFiles.SaveReportAttachments(reportId, file.InputStream, file.FileName);
+					if (file != null)
+					{
+						AzureFiles.SaveReportAttachments(reportId, file.InputStream, file.FileName);
+					}
 				}
 			}
 			return RedirectToAction("Index");

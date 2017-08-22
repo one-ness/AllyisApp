@@ -12,9 +12,16 @@
 	}
 	<input type="file" id="@uploadName" class="@className" name="files" style="display:none;" value="@Model.File"
 		   onchange="$('#@inputName').val($(this).val().replace('C:\\fakepath\\', ''));" />
-	<input id="@inputName" class="form-control" style="width: 180px;"
+	<input id="@inputName" class="form-control" style="width: 150px; display: inline-block;"
 		   onchange="$('#@inputName').val($(this).val().replace('C:\\fakepath\\', ''));" />
 </div>
-<a onclick="@uploadFunc" title="Choose Excel file containing Expense Tracker entries" style="float: right;">
-	<span class="btn btn-group-sm">@Strings.ChooseFile</span>
-</a>
+<div class="file-right" style="float: right;">
+	<a onclick="@uploadFunc" title="Choose Excel file containing Expense Tracker entries">
+		<span class="btn btn-group-sm">@Strings.ChooseFile</span>
+	</a>
+	<a class="btn btn-danger btn-fa hidden-create"
+	   onclick="removeFile(@Model.Index)"
+	   style="color: white !important; float: right; width: 34px; border-color: #d43f3a !important; border-radius: 0px; margin-right: 0px; display: inline-block">
+		<i class="allyisicon-delete"></i>X
+	</a>
+</div>

@@ -96,13 +96,14 @@ namespace AllyisApps.Services
 		{
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
 			{
+				ExpenseItemName = item.ExpenseItemName,
 				AccountId = item.AccountId,
 				Amount = item.Amount,
 				CreatedUtc = item.ExpenseItemCreatedUtc,
 				ExpenseItemId = itemId,
 				ExpenseReportId = item.ExpenseReportId,
 				IsBillableToCustomer = item.IsBillableToCustomer,
-				ItemDescription = item.ExpenseItemName,
+				ItemDescription = item.ItemDiscription,
 				ModifiedUtc = item.ExpenseItemModifiedUtc,
 				TransactionDate = Convert.ToDateTime(item.TransactionDate),
 			};
