@@ -44,7 +44,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					ModifiedUtc = date,
 					ReportDate = date,
 					SubmittedById = submittedById,
-					OrganizationId = organizationId
+					OrganizationId = organizationId,
+					ReportStatus = (int)Enum.Parse(typeof(ExpenseStatusEnum), Request.Form["Report.ReportStatus"])
 				};
 
 				foreach (var item in items)

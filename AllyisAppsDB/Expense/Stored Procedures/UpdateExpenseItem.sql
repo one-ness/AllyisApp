@@ -1,4 +1,5 @@
 ﻿CREATE PROCEDURE [Expense].[UpdateExpenseItem]
+	@expenseItemId INT,
 	@expenseItemName NVARCHAR(60),
 	@itemDescription NVARCHAR(100),
 	@transactionDate DATETIME2(0),
@@ -10,20 +11,14 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO [Expense].[ExpenseItem]
-		([ExpenseItemName],
-		[ItemDescription],
-		[TransactionDate],
-		[Amount],
-		[ExpenseReportId],
-		[IsBillableToCustomer],
-		[AccountId])
-	VALUES (@expenseItemName,
-		@itemDescription,
-		@transactionDate,
-		@amount,
-		@expenseReportId,
-		@isBillableToCustomer,
-		@accountId);
+	UPDATE [Expense].[ExpenseItem]
+	SET 
+		[ExpenseItemName] = @expenseItemName,
+		[ItemDescription] = @itemDescription,
+		[TransactionDate] = @transactionDate,
+		[Amount] = @amount,
+		[ExpenseReportId] = @expenseReportId,
+		[IsBillableToCustomer] = @isBillableToCustomer,
+		[AccountId] = @accountId
+	WHERE [ExpenseItemId] = @expenseItemId;
 END
-

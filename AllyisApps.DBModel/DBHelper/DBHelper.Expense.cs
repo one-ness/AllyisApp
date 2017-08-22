@@ -144,6 +144,7 @@ namespace AllyisApps.DBModel
             }
 
             DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@expenseItemId", item.ExpenseItemId);
             parameters.Add("@expenseItemName", item.ExpenseItemName);
             parameters.Add("@itemDescription", item.ItemDescription);
             parameters.Add("@transactionDate", item.TransactionDate);
