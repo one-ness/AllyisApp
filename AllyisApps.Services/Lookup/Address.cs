@@ -81,7 +81,7 @@ namespace AllyisApps.Services.Lookup
 			{
 				if (CountryCode == null)
 				{
-					throw new ArgumentNullException("Attempted to add state without country");
+					throw new ArgumentNullException(nameof(CountryCode), "Attempted to add state without country");
 				}
 				StateId = service
 					.GetStates(CountryCode).First(x => (x.Value.Equals(StateName))).Key;
