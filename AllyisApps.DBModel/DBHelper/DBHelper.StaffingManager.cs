@@ -133,11 +133,11 @@ namespace AllyisApps.DBModel
 			parameters.Add("@positionLevel", position.PositionLevelId);
 			parameters.Add("@hiringManager", position.HiringManager);
 			parameters.Add("@teamName", position.TeamName);
-
-			parameters.Add("@address", position.Address.Address);
+			parameters.Add("@address1", position.Address.Address);
+			parameters.Add("@address2", position.Address.Address);
 			parameters.Add("@city", position.Address.City);
-			parameters.Add("@state", position.Address.State);
-			parameters.Add("@country", position.Address.Country);
+			parameters.Add("@stateId", position.Address.StateId);
+			parameters.Add("@countryCode", position.Address.CountryCode);
 			parameters.Add("@postalCode", position.Address.PostalCode);
 
 			DataTable tagsTable = new DataTable();
@@ -498,7 +498,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<PositionStatusDBEntity>("[StaffingManager].[GetPositionStatusById]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<PositionStatusDBEntity>("[StaffingManager].[GetPositionStatusByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 

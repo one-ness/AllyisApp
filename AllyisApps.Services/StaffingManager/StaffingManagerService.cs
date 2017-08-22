@@ -332,10 +332,11 @@ namespace AllyisApps.Services
 
 				Address = new Address
 				{
-					// TODO DO TO DO
 					Address1 = position.position.Address1,
-					CountryName = position.position.CountryName,
-					StateName = position.position.StateName,
+					Address2 = position.position.Address2,
+					City = position.position.City,
+					StateName = position.position.StateId,
+					CountryName = position.position.CountryCode,
 					PostalCode = position.position.PostalCodes
 				},
 
@@ -470,11 +471,12 @@ namespace AllyisApps.Services
 			obj.Position.TeamName = position.TeamName;
 
 			obj.Address = new ExpandoObject();
-			obj.Address.Address = position.Address;
+			obj.Address.Address1 = position.Address.Address1;
+			obj.Address.Address2 = position.Address.Address2;
 			obj.Address.City = position.Address.City;
-			obj.Address.StateName = position.Address.StateName;
-			obj.Address.CountryName = position.Address.CountryName;
+			obj.Address.StateId = position.Address.StateId;
 			obj.Address.PostalCode = position.Address.PostalCode;
+			obj.Address.CountryCode = position.Address.CountryCode;
 
 			obj.Tags = ServiceObjectToDBEntity(position.Tags);
 

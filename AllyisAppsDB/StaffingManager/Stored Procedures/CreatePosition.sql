@@ -15,27 +15,9 @@
 	@desiredSkills NVARCHAR (MAX),
 	@positionLevel NVARCHAR (140),
 	@hiringManager NVARCHAR (140),
-	@teamName NVARCHAR (140),
-	@address NVARCHAR (64),
-	@city NVARCHAR(32),
-	@state NVARCHAR(32),
-	@country NVARCHAR(32),
-	@postalCode NVARCHAR(16)
+	@teamName NVARCHAR (140)
 AS
 BEGIN
-
-	INSERT INTO [Lookup].[Address]
-		([Address1],
-		[City],
-		[StateId],
-		[CountryId],
-		[PostalCode])
-	VALUES
-		(@address,
-		@city,
-		(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [StateName] = @state),
-		(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [CountryName] = @country),
-		@postalCode);
 
 	SET NOCOUNT ON;
 		INSERT INTO [StaffingManager].[Position] 
@@ -76,6 +58,5 @@ BEGIN
 		@teamName)
 		
 	SELECT
-		IDENT_CURRENT('[Lookup].[Address]') AS [AddressId],
 		IDENT_CURRENT('[StaffingManager].[Position]') AS [PositionId];
 END
