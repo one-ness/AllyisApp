@@ -22,13 +22,14 @@ BEGIN
 		[HiringManager],
 		[TeamName],
 		[Address].[Address1],
+		[Address].[Address2],
 		[Address].[City],
 		[State].[StateName],
 		[Country].[CountryName],
 		[Address].[PostalCode]
 	FROM [StaffingManager].[Position]
 	LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [Position].[AddressId]
-	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
+	LEFT JOIN [Lookup].[Country]	WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryCode]
 	LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE [Position].[OrganizationId] = @organizationId
 	ORDER BY [StaffingManager].[Position].[PositionCreatedUtc] DESC

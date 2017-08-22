@@ -335,8 +335,8 @@ namespace AllyisApps.Services
 					Address1 = position.position.Address1,
 					Address2 = position.position.Address2,
 					City = position.position.City,
-					StateName = position.position.StateId,
-					CountryName = position.position.CountryCode,
+					StateId = position.position.StateId,
+					CountryCode = position.position.CountryCode,
 					PostalCode = position.position.PostalCodes
 				},
 

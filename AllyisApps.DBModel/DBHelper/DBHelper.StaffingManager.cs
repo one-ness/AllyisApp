@@ -430,17 +430,19 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="organizationId">The id of the organization.</param>
 		/// <returns>One Position.</returns>
-		public IEnumerable<PositionDBEntity> GetPositionsByOrganizationId(int organizationId)
+		public IEnumerable<dynamic> GetPositionsByOrganizationId(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
 
-			IEnumerable<PositionDBEntity> positions;
+			dynamic positionsAndTags = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				positions = connection.Query<PositionDBEntity>("[StaffingManager].[GetPositionsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
+				var results = connection.Query<dynamic>("[StaffingManager].[GetPositionsByOrganizationId]", parameters, commandType: CommandType.StoredProcedure);
+				positionsAndTags.positions = results.Read<dynamic>();
+				positionsAndTags.tags = results.Read<dynamic>().ToList();
 			}
-			return positions;
+			return positionsAndTags;
 		}
 
 		/// <summary>
