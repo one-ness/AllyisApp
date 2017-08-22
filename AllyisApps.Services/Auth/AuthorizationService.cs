@@ -94,19 +94,40 @@ namespace AllyisApps.Services
 			bool result = false;
 			UserSubscription subInfo = null;
 			this.UserContext.UserSubscriptions.TryGetValue(subId, out subInfo);
-
+            
 			if (subInfo != null && subInfo.ProductId == ProductIdEnum.TimeTracker)
 			{
 				TimeTrackerRole ttRole = (TimeTrackerRole)subInfo.ProductRoleId;
-				switch (ttRole)
-				{
-					case TimeTrackerRole.Manager:
-						result = true;
-						break;
+                switch (action)
+                {
+                    case TimeTrackerAction.TimeEntry:
+                        switch (ttRole)
+                        {
+                            case TimeTrackerRole.Manager:
+                            case TimeTrackerRole.User:
+                                result = true;
+                                break;
 
-					default:
-						break;
-				}
+                            default:
+                                break;
+
+                        }
+                        break;
+                    default:
+                        switch (ttRole)
+                        {
+                            case TimeTrackerRole.Manager:
+                                result = true;
+                                break;
+
+                            default:
+                                break;
+
+                        }
+                        break;
+                }
+				
+
 			}
 
 			if (!result && throwException)
