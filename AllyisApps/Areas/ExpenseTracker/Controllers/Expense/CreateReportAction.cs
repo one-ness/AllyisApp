@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
+using AllyisApps.Lib;
 using AllyisApps.Services;
-using System.Web;
 using AllyisApps.Services.Expense;
-using System.Linq;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -60,7 +61,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				foreach (var upload in files)
 				{
-					AppService.CreateExpenseFile(upload, reportId);
+                    AzureFiles.SaveReportAttachments(reportId, upload.InputStream, upload.FileName);
 				}
 			}
 			return RedirectToAction("Index");

@@ -96,36 +96,58 @@
         </table>
     </div>
 }
-
-    @*REPORT HISTORY AREA*@
-    @if (Model.History.Count() > 0)
-    {
-        <div>
-            <h2 class="pull-left">Report History</h2>
-        </div>
+    
+@*REPORT ATTACHMENTS AREA*@
+@if(Model.Attachments.Count () > 0)
+{
+    <div>
+        <h2 class="pull-left">Report Attachments</h2>
         <table class="table table-hover col-lg-12 col-md-12 col-xs-12">
-            <thead>
-                <tr>
-                    <th style="width: 15%">Reviewer</th>
-                    <th style="width: 15%">Status</th>
-                    <th style="width: 15%">Submitted</th>
-                    <th style="width: 55%">Reason</th>
-                </tr>
-            </thead>
             <tbody>
-                @foreach (ExpenseHistoryViewModel history in Model.History)
+                @foreach (var attch in Model.Attachments)
                 {
                     <tr>
-                        <td>@history.Reviewer</td>
-                        <td>@history.Status</td>
-                        <td>@history.Submitted</td>
-                        <td>@history.Text</td>
+                        <td>@Html.ActionLink(attch,"download", new { reportId = Model.ReportId, fileName = attch }, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" })</td>
                     </tr>
                 }
+                
             </tbody>
-
         </table>
-    }
+    </div>
+}
+
+
+@*END REPORT ATTACHMENTS AREA*@
+
+@*REPORT HISTORY AREA*@
+@if (Model.History.Count() > 0)
+{
+    <div>
+        <h2 class="pull-left">Report History</h2>
+    </div>
+    <table class="table table-hover col-lg-12 col-md-12 col-xs-12">
+        <thead>
+            <tr>
+                <th style="width: 15%">Reviewer</th>
+                <th style="width: 15%">Status</th>
+                <th style="width: 15%">Submitted</th>
+                <th style="width: 55%">Reason</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ExpenseHistoryViewModel history in Model.History)
+            {
+                <tr>
+                    <td>@history.Reviewer</td>
+                    <td>@history.Status</td>
+                    <td>@history.Submitted</td>
+                    <td>@history.Text</td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
     
 
 

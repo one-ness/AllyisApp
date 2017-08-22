@@ -68,5 +68,10 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         /// Gets or sets the associeate report history.
         /// </summary>
         public IEnumerable<ExpenseHistoryViewModel> History { get; set; }
+
+        /// <summary>
+        /// Gets or sets the list of attachments.
+        /// </summary>
+        public IEnumerable<string> Attachments { get; set; }
     }
 }
