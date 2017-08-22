@@ -40,7 +40,13 @@
 
 	<div class="col-md-6" style="float: left;">
 		<div class="row">
-			@{ 
+			@{
+				var statusList = Enum.GetValues(typeof(ExpenseStatusEnum)).Cast<ExpenseStatusEnum>().Select(v => new SelectListItem
+				{
+					Text = v.ToString(),
+					Value = ((int)v).ToString()
+				}).ToList();
+
 				string dateVal = "";
 				int reportId = Model.Report == null ? -1 : Model.Report.ExpenseReportId;
 				if (Model.Report == null)
@@ -77,6 +83,12 @@
 					<input type="text" id="DateRangeStart" name="date" value="@dateVal" class="datepicker form-control" />
 				</div>
 				<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.StartDate" />
+				<div class="left-label">
+					<label>Status</label>
+				</div>
+				<div class="right-input">
+					@Html.DropDownListFor(m => m.Report.ReportStatus, statusList, new { @class = "form-control", name = "reportStatus", style = "display: inline-block; width: 150px" })
+				</div>
 			</div>
 		</div>
 		<br>

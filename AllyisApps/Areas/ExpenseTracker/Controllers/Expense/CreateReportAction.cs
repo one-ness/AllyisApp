@@ -6,6 +6,7 @@ using AllyisApps.Services;
 using System.Web;
 using AllyisApps.Services.Expense;
 using System.Linq;
+using System.IO;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -58,9 +59,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			if (files != null && files.ToList().Count > 0 && files.First() != null)
 			{
-				foreach (var upload in files)
+				foreach (var file in files)
 				{
-					AppService.CreateExpenseFile(upload, reportId);
+					AppService.CreateExpenseFile(file, reportId);
 				}
 			}
 			return RedirectToAction("Index");

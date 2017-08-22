@@ -31,7 +31,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Import(int subscriptionId, ExpenseFile file)
+		public ActionResult Import(int subscriptionId, HttpPostedFileBase file)
 		{
 			int organizationId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
 
