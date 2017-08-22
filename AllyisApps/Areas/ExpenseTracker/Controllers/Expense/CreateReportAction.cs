@@ -21,12 +21,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="submittedById">The submitted by id.</param>
 		///  <param name="items">The expense items.</param>
 		/// <param name="date">The date.</param>
-		/// <param name="file"></param>
 		/// <param name="files"></param>
 		/// <param name="reportName">The report name.</param>
 		/// <param name="businessJustification">The justification.</param>
 		/// <returns>An action result.</returns>
-		public ActionResult CreateReport(int subscriptionId, int submittedById, string date, HttpPostedFileBase file, IEnumerable<HttpPostedFileBase> files = null, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
+		public ActionResult CreateReport(int subscriptionId, int submittedById, string date, IEnumerable<HttpPostedFileBase> files = null, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
 		{
 			if (items == null)
 			{
@@ -57,11 +56,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				AppService.CreateExpenseItem(item);
 			}
 
-			var thing = file;
-
-			if (files != null && files.ToList().Count > 0)
+			if (files != null && files.ToList().Count > 0 && files.First() != null)
 			{
-				//return RedirectToAction("Import", new { subscriptionId = subscriptionId, files = files, reportId = reportId });
+				var fileList = files.ToList();
+				return RedirectToAction("Import", new { subscriptionId = subscriptionId, files = fileList, reportId = reportId });
 			}
 			return RedirectToAction("Index");
 		}
