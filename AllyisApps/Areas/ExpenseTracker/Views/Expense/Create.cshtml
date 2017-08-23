@@ -16,7 +16,7 @@
 {
 	<div class="panel panel-info" style="background-color: #f5f5f5; float: right; width: 300px; position: relative; z-index: 10">
 		<div class="panel-heading"><span class="panel-title">Attachments</span></div>
-		<div class="files">
+		<div class="files" id="files">
 			@{
 				Model.Files.Add(new AllyisApps.Services.Expense.ExpenseFile(null, "", ""));
 				for (int i = 0; i < Model.Files.Count; i++)
@@ -160,6 +160,11 @@
 					$('.files').append(response);
 				}
 			})
+		}
+
+		function removeFile(index) {
+			console.log('removing file');
+			$('.file-input').last().remove();
 		}
 	</script>
 }
