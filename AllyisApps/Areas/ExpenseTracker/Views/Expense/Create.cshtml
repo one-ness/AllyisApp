@@ -151,20 +151,27 @@
 			$(this).datepicker();
 		});
 
+		var file_index = 1;
+		var item_index = 1;
+
 		function addFile() {
 			console.log('adding file');
+			var data = @Html.Raw(Json.Encode(new ExpenseFileModel() { Index = -1 }));
+			data.Index = file_index;
 			$.ajax({
 				url: '@Url.Action("DisplayFile")',
-				data: @Html.Raw(Json.Encode(new ExpenseFileModel() { Index = Model.Files.Count })),
+				data: data,
 				success: function (response) {
 					$('.files').append(response);
 				}
-			})
+			});
+			file_index += 1;
 		}
 
-		function removeFile(index) {
+		function removeFile() {
 			console.log('removing file');
 			$('.file-input').last().remove();
+			file_index -= 1;
 		}
 	</script>
 }
