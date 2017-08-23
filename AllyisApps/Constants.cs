@@ -87,6 +87,7 @@ namespace AllyisApps
 		public const string ViewReport = "viewreport";
 		public const string Template = "template";
 		public const string EditUsers = "editusers";
+		public const string EditPosition = "editposition";
 	}
 
 	/// <summary>

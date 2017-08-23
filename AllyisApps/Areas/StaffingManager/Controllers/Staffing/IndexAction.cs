@@ -70,7 +70,15 @@ namespace AllyisApps.Areas.StaffingManager.Controllers.Staffing
 		{
 			StaffingIndexViewModel result = new StaffingIndexViewModel()
 			{
-
+				organizationId = orgId,
+				subscriptionId = subId,
+				subscriptionName = subName,
+				userId = userId,
+				positions = positions,
+				tags = tags,
+				employmentTypes = employmentTypes,
+				positionLevels = positionLevels,
+				positionStatuses = positionStatuses
 			};
 
 			return result;

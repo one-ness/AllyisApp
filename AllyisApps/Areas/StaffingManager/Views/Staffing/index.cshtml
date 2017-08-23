@@ -1,7 +1,88 @@
-﻿
+﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.StaffingIndexViewModel
 @{
-    ViewBag.Title = "index";
+	DisplayHints.ShowBreadcrumbs = false;
+	DisplayHints.PageBodyId = "paneled-index";
+	ViewBag.TitleBar = Strings.MyAccount;
 }
 
-<h2>index</h2>
+<div class="row">
+	<div class="col-md-8 col-md-push-2">
 
+		<div class="row">
+			<div class="col-xs-12">
+				<h1 style="float: left">@Strings.MyAccount</h1>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h2 style="margin-top: 0px; margin-bottom: 0px;">
+					@Model.subscriptionName
+				</h2>
+			</div>
+			<div class="panel-body">
+				<div class="col-sm-9 index-details">
+					<p>
+						<label>"- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"</label>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-push-2 col-md-8">
+		<div class="row">
+			<div class="col-xs-12">
+				<h1 style="float: left">POSITIONS</h1>
+				<a href="@Url.Action(ActionConstants.CreateOrg, ControllerConstants.Account)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">@Strings.CreateOrganization</a>
+			</div>
+		</div>
+		else
+		{
+			@foreach (var pos in Model.positions)
+			{
+
+				string title = pos.PositionTitle;
+				string subtitle = pos.TeamName ?? "";
+				<div class="row">
+					<div class="col-md-12">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h2 style="margin-top: 0px; margin-bottom: 0px;">
+									pos.StartDate
+									<a href="@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { id = pos.PositionId })" title="Edit Position" class="pull-right text-muted">
+										<i class="fa fa-cog  fa-lg"></i>
+									</a>
+								</h2>
+							</div>
+							<div class="panel-body">
+								<div class="col-sm-8 index-details">
+									<p>
+										<label>Positions Available: </label>
+										pos.PositionCount
+									</p>
+								</div>
+								<div class="col-sm-4 index-details">
+									<p>
+										<label>Tags: </label>
+										@foreach (var tag in pos.Tags)
+										{
+											<label>tag.TagName + ", "</label> 
+										}
+									</p>
+								</div>
+								<div class="col-md-12" style="height: 100%; margin-top:15px; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+				</div>
+												}
+											}
+	</div>
+</div>
