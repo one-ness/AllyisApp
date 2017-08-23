@@ -1,21 +1,16 @@
-//------------------------------------------------------------------------------
-// <copyright file="ApplicantDBEntity.cs" company="Allyis, Inc.">
+﻿//------------------------------------------------------------------------------
+// <copyright file="CreateApplicantViewModel.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace AllyisApps.DBModel.StaffingManager
+namespace AllyisApps.ViewModels.Staffing
 {
 	/// <summary>
-	/// Represents the Applicant table in the database.
+	/// Represents a position for creation into the database.
 	/// </summary>
-	public class ApplicantDBEntity : BaseDBEntity
+	public class CreateApplicantViewModel
 	{
-		/// <summary>
-		/// Gets or sets the applicant's ID.
-		/// </summary>
-		public int ApplicantId { get; set; }
-
 		/// <summary>
 		/// Gets or sets FirstName.
 		/// </summary>

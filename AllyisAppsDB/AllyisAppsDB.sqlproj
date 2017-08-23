@@ -373,6 +373,7 @@
     <Build Include="Auth\Stored Procedures\GetUserProfile.sql" />
     <Build Include="Auth\Stored Procedures\GetUserContext.sql" />
     <Build Include="Lookup\Stored Procedures\GetAddress.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetStaffingIndexInfo.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

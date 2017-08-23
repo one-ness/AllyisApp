@@ -11,6 +11,9 @@ using System.Linq;
 using AllyisApps.DBModel.Hrm;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Services.TimeTracker;
+using AllyisApps.Services.StaffingManager;
+using AllyisApps.DBModel.StaffingManager;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
 {
@@ -723,5 +726,123 @@ namespace AllyisApps.Services
 		}
 
 		#endregion Info-DBEntity Conversions
+
+		/// <summary>
+		/// TODO
+		/// </summary>
+		/// <param name="userId">User Id.</param>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns>.</returns>
+		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>>
+			GetStaffingIndexInfo(int orgId, int? userId = null)
+		{
+			#region Validation
+
+			if (userId == null)
+			{
+				userId = UserContext.UserId;
+			}
+			if (userId <= 0)
+			{
+				throw new ArgumentException("User Id cannot be zero or negative.");
+			}
+			if (orgId <= 0)
+			{
+				throw new ArgumentException("Organization Id cannot be zero or negative.");
+			}
+
+			#endregion Validation
+
+			var results = DBHelper.GetStaffingIndexPageInfo(orgId);
+
+			return Tuple.Create(
+				results.Item1.Select(posdb => InitializePositionThumbnailInfo(posdb, results.Item2)).ToList(),
+				results.Item2.Select(tagsdb => InitializeTags(tagsdb)).ToList(),
+				results.Item3.Select(typedb => InitializeEmploymentTypes(typedb)).ToList(),
+				results.Item4.Select(leveldb => InitializePositionLevel(leveldb)).ToList(),
+				results.Item5.Select(statdb => InitializePositionStatus(statdb)).ToList()
+				);
+		}
+
+		/// <summary>
+		/// Initializes a PositionThumbnailInfo from a PositionDBEntity.
+		/// </summary>
+		/// <param name="pos">the PositionDBEntity to be converted.</param>
+		/// <param name="tags">the list of PositionTagDBEntity from initial results.</param>
+		/// <returns>PositionThumbnailInfo.</returns>
+		public static PositionThumbnailInfo InitializePositionThumbnailInfo(PositionDBEntity pos, List<PositionTagDBEntity> tags)
+		{
+			List<Tag> tagsList = new List<Tag>();
+			foreach (PositionTagDBEntity tag in tags) if (tag.PositionId == pos.PositionId) tagsList.Add(new Tag { TagId = tag.TagId, TagName = tag.TagName, PositionId = tag.PositionId });
+
+			return new PositionThumbnailInfo
+			{
+				PositionId = pos.PositionId,
+				OrganizationId = pos.OrganizationId,
+				CustomerId = pos.CustomerId,
+				PositionModifiedUtc = pos.PositionModifiedUtc,
+				StartDate = pos.StartDate,
+				PositionTitle = pos.PositionTitle,
+				TeamName = pos.TeamName,
+				Tags = tagsList
+			};
+		}
+
+		/// <summary>
+		/// Converts PositioNTagDBEntity to Tag services object
+		/// </summary>
+		/// <param name="tag"></param>
+		/// <returns></returns>
+		public static Tag InitializeTags(PositionTagDBEntity tag)
+		{
+			return new Tag
+			{
+				TagId = tag.TagId,
+				TagName = tag.TagName,
+				PositionId = tag.PositionId
+			};
+		}
+
+		/// <summary>
+		/// Converts employmentTypeDBEntity to employment type service object
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static EmploymentType InitializeEmploymentTypes(EmploymentTypeDBEntity type)
+		{
+			return new EmploymentType
+			{
+				EmploymentTypeId = type.EmploymentTypeId,
+				EmploymentTypeName = type.EmploymentTypeName
+			};
+		}
+		
+		/// <summary>
+		/// Converts positionLevelDBEntity to employment level service object
+		/// </summary>
+		/// <param name="level"></param>
+		/// <returns></returns>
+		public static PositionLevel InitializePositionLevel(PositionLevelDBEntity level)
+		{
+			return new PositionLevel
+			{
+				PositionLevelId = level.PositionLevelId,
+				PositionLevelName = level.PositionLevelName
+			};
+		}
+
+		/// <summary>
+		/// converts PositionStatusDBEntity to position status service obejct
+		/// </summary>
+		/// <param name="status"></param>
+		/// <returns></returns>
+		public static PositionStatus InitializePositionStatus(PositionStatusDBEntity status)
+		{
+			return new PositionStatus
+			{
+				PositionStatusId = status.PositionStatusId,
+				PositionStatusName = status.PositionStatusName
+			};
+		}
 	}
 }

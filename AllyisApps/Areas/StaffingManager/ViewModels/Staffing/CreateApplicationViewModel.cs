@@ -1,24 +1,18 @@
-//------------------------------------------------------------------------------
-// <copyright file="ApplicationDBEntity.cs" company="Allyis, Inc.">
+﻿//------------------------------------------------------------------------------
+// <copyright file="CreateApplicationViewModel.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 
-namespace AllyisApps.DBModel.StaffingManager
+namespace AllyisApps.ViewModels.Staffing
 {
 	/// <summary>
-	/// Represents the Application table in the database.
+	/// Represents a position for creation into the database.
 	/// </summary>
-	public class ApplicationDBEntity : BaseDBEntity
+	public class CreateApplicationViewModel
 	{
-		/// <summary>
-		/// Gets or sets the application's ID.
-		/// </summary>
-		public int ApplicationId { get; set; }
-
 		/// <summary>
 		/// Gets or sets the applicant's ID.
 		/// </summary>
@@ -48,6 +42,6 @@ namespace AllyisApps.DBModel.StaffingManager
 		/// Gets or sets Notes.
 		/// </summary>
 		public string Notes { get; set; }
-		
+
 	}
 }

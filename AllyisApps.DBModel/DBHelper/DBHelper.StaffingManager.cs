@@ -8,11 +8,12 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Dynamic;
 using System.Linq;
-using AllyisApps.DBModel.Lookup;
 using AllyisApps.DBModel.StaffingManager;
 using Dapper;
+using AllyisApps.DBModel.Lookup;
+using System.Dynamic;
+using AllyisApps.DBModel.Auth;
 
 namespace AllyisApps.DBModel
 {
@@ -41,19 +42,20 @@ namespace AllyisApps.DBModel
 			parameters.Add("@email", applicant.Email);
 			parameters.Add("@firstName", applicant.FirstName);
 			parameters.Add("@lastName", applicant.LastName);
+			parameters.Add("@address", applicant.Address);
+			parameters.Add("@city", applicant.City);
+			parameters.Add("@state", applicant.State);
+			parameters.Add("@country", applicant.Country);
+			parameters.Add("@postalCode", applicant.PostalCode);
 			parameters.Add("@phoneNumber", applicant.PhoneNumber);
 			parameters.Add("@notes", applicant.Notes);
-			parameters.Add("@address1", applicant.Address1);
-			parameters.Add("@address2", applicant.Address2);
-			parameters.Add("@city", applicant.City);
-			parameters.Add("@stateId", applicant.StateId);
-			parameters.Add("@postalCode", applicant.PostalCode);
-			parameters.Add("@countryCode", applicant.CountryCode);
 
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Query<int>("[StaffingManager].[CreateApplicant]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
+
+			
 		}
 
 		/// <summary>
@@ -133,6 +135,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@positionLevel", position.PositionLevelId);
 			parameters.Add("@hiringManager", position.HiringManager);
 			parameters.Add("@teamName", position.TeamName);
+			
 			parameters.Add("@address1", position.Address.Address);
 			parameters.Add("@address2", position.Address.Address);
 			parameters.Add("@city", position.Address.City);
@@ -270,14 +273,14 @@ namespace AllyisApps.DBModel
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@applicationId", applicationId);
 
-			dynamic applicationAndDocuments = new ExpandoObject();
+			dynamic applicationAndDocs = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				var results = connection.QueryMultiple("[StaffingManager].[GetApplicationAndDocumentsById]", parameters, commandType: CommandType.StoredProcedure);
-				applicationAndDocuments.application = results.Read<ApplicationDBEntity>().Single();
-				applicationAndDocuments.applicationDocuments = results.Read<ApplicationDocumentDBEntity>();
+				applicationAndDocs.application = results.Read<ApplicationDBEntity>().Single();
+				applicationAndDocs.applicationDocuments = results.Read<ApplicationDocumentDBEntity>().ToList();
 			}
-			return applicationAndDocuments;
+			return applicationAndDocs;
 		}
 
 		/// <summary>
@@ -290,29 +293,17 @@ namespace AllyisApps.DBModel
 		///  - Applicant info
 		///  - Application document info
 		/// </returns>
-		public IEnumerable<ApplicationDBEntity> GetApplicationsInfoByPositionId(int positionId)
+		public IEnumerable<ApplicationDBEntity> GetApplicationsByPositionId(int positionId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@positionId", positionId);
 
-			IEnumerable<ApplicationDBEntity> applications;
+			dynamic applicationsAndDocuments = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				applications = connection.Query<ApplicationDBEntity>("[StaffingManager].[GetApplicationsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
-				foreach (ApplicationDBEntity application in applications)
-				{
-					application.ApplicationDocuments = connection.Query<ApplicationDocumentDBEntity>(
-						"[StaffingManager].[GetApplicationDocumentsByApplicationId]",
-						new { applicationId = application.ApplicationId },
-						commandType: CommandType.StoredProcedure);
-
-					application.Applicant = connection.Query<ApplicantDBEntity>(
-						"[StaffingManager].[GetApplicantById]",
-						new { applicantId = application.ApplicantId },
-						commandType: CommandType.StoredProcedure).Single();
-				}
+				var results  = connection.Query<ApplicationDBEntity>("[StaffingManager].[GetApplicationsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
 			}
-			return applications;
+			return applicationsAndDocuments;
 		}
 
 		/// <summary>
@@ -329,13 +320,6 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				applications = connection.Query<ApplicationDBEntity>("[StaffingManager].[GetApplicationsByApplicantId]", parameters, commandType: CommandType.StoredProcedure);
-				foreach (ApplicationDBEntity application in applications)
-				{
-					application.ApplicationDocuments = connection.Query<ApplicationDocumentDBEntity>(
-						"[StaffingManager].[GetApplicationDocumentsByApplicationId]",
-						new { applicationId = application.ApplicationId },
-						commandType: CommandType.StoredProcedure);
-				}
 			}
 			return applications;
 		}
@@ -417,7 +401,7 @@ namespace AllyisApps.DBModel
 			dynamic positionAndTags = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results = connection.QueryMultiple("[StaffingManager].[GetPosition]", parameters, commandType: CommandType.StoredProcedure);
+				var results = connection.Query<dynamic>("[StaffingManager].[GetPosition]", parameters, commandType: CommandType.StoredProcedure).Single();
 				positionAndTags.position = results.Read<dynamic>().Single();
 				positionAndTags.tags = results.Read<dynamic>().ToList();
 			}
@@ -562,6 +546,32 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+		/// <summary>
+		/// TODO
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns>.</returns>
+		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>>
+			GetStaffingIndexPageInfo(int orgId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", orgId);
+
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[StaffingManager].[GetStaffingIndexInfo]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+
+				return Tuple.Create(results.Read<PositionDBEntity>().ToList(),
+					results.Read<PositionTagDBEntity>().ToList(),
+					results.Read<EmploymentTypeDBEntity>().ToList(),
+					results.Read<PositionLevelDBEntity>().ToList(),
+					results.Read<PositionStatusDBEntity>().ToList());
+			}
+		}
+
 		#endregion Get Methods
 
 		////////////////////////////
@@ -574,7 +584,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="applicant">The applicant object to be updated.</param>
 		/// <returns>The number of rows updated.</returns>
-		public int UpdateApplicant(ApplicantDBEntity applicant)
+		public int UpdateApplicant(dynamic applicant)
 		{
 			if (applicant == null)
 			{
