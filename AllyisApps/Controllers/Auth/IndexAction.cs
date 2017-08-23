@@ -78,8 +78,8 @@ namespace AllyisApps.Controllers
 				new AccountIndexViewModel.OrganizationViewModel(curorg, this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.OrganizationId, false));
 
 				//Get orgs Subscriptions
-				UserOrganization userOrgInfo;
-				AppService.UserContext.UserOrganizations.TryGetValue(curorg.OrganizationId, out userOrgInfo);
+				UserContext.OrganizationAndRole userOrgInfo;
+				AppService.UserContext.OrganizationsAndRoles.TryGetValue(curorg.OrganizationId, out userOrgInfo);
 
 				if (userOrgInfo != null)
 				{

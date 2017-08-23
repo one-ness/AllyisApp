@@ -33,7 +33,7 @@ namespace AllyisApps.Services
 			{
 				orgId = UserContext.UserSubscriptions[subscriptionId].OrganizationId;
 			}
-			else if (organizationId > 0 && UserContext.UserOrganizations[organizationId] != null)
+			else if (organizationId > 0 && UserContext.OrganizationsAndRoles[organizationId] != null)
 			{
 				orgId = organizationId;
 			}

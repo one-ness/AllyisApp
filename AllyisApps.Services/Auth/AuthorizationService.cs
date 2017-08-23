@@ -45,8 +45,8 @@ namespace AllyisApps.Services
 		public bool CheckOrgAction(OrgAction action, int orgId, bool throwException = true)
 		{
 			bool result = false;
-			UserOrganization orgInfo = null;
-			this.UserContext.UserOrganizations.TryGetValue(orgId, out orgInfo);
+			UserContext.OrganizationAndRole orgInfo = null;
+			this.UserContext.OrganizationsAndRoles.TryGetValue(orgId, out orgInfo);
 
 			if (orgInfo != null)
 			{

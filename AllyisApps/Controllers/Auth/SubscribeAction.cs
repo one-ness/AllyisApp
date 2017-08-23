@@ -62,7 +62,8 @@ namespace AllyisApps.Controllers
 			if (productInfo != null)
 			{
 				int selectedSku = currentSubscription == null ? 0 : currentSubscription.SkuId;
-				string orgName = AppService.UserContext.UserOrganizations[organizationId].OrganizationName;
+				// TODO: orgName MUST be obtained in the service call AppService.GetProductSubscriptionInfo (it gets the orgId)
+				string orgName = "Get ORG Name";
 				BillingServicesCustomerId customerId = new BillingServicesCustomerId(stripeToken);
 
 				return new ProductSubscriptionViewModel
