@@ -47,13 +47,17 @@ namespace AllyisApps.Controllers
         public AccountIndexViewModel ConstuctIndexViewModel()
         {
             User user = AppService.GetCurrentUserProfile();
-            Services.Lookup.Address userAddress = user.Address;
+            
 
             AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel(user);
             AccountIndexViewModel indexViewModel = new AccountIndexViewModel()
             {
                 UserInfo = userViewModel
             };
+            if (user == null)
+            {
+                return indexViewModel;
+            }
             //Add invitations to view model
             List<InvitationInfo> invitationslist = AppService.GetInvitationsByUser(user.Email);
             foreach (InvitationInfo invite in invitationslist)
