@@ -148,6 +148,7 @@ namespace AllyisApps.DBModel
             parameters.Add("@expenseItemName", item.ExpenseItemName);
             parameters.Add("@itemDescription", item.ItemDescription);
             parameters.Add("@transactionDate", item.TransactionDate);
+			parameters.Add("@modifiedUtc", item.ModifiedUtc);
             parameters.Add("@amount", item.Amount);
             parameters.Add("@expenseReportId", item.ExpenseReportId);
             parameters.Add("@isBillableToCustomer", item.IsBillableToCustomer);

@@ -63,10 +63,9 @@
 	</a>
 </div>
 
-@Scripts.Render("~/bundles/jquery")
 <script>
 	$('.addItem').on('click', function () {
-		$('.items').load('@Url.Action("AddItem")', @Html.Raw(Json.Encode(@Model)));
+		$('.items').load('@Url.Action("AddItem")', @Html.Raw(Json.Encode(@Model)), setDatePickers);
 	});
 	function removeItem(index) {
 		$('.items').load('@Url.Action("RemoveItem")', { model: @Html.Raw(Json.Encode(@Model)), index: index });

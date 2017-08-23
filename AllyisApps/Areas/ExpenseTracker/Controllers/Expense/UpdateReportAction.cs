@@ -41,7 +41,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					ReportTitle = reportName,
 					BusinessJustification = businessJustification,
 					CreatedUtc = date,
-					ModifiedUtc = date,
+					ModifiedUtc = DateTime.UtcNow,
 					ReportDate = date,
 					SubmittedById = submittedById,
 					OrganizationId = organizationId,
@@ -52,7 +52,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				{
 					item.AccountId = submittedById;
 					item.ExpenseItemCreatedUtc = Convert.ToDateTime(item.TransactionDate);
-					item.ExpenseItemModifiedUtc = Convert.ToDateTime(item.TransactionDate);
+					item.ExpenseItemModifiedUtc = DateTime.UtcNow;
 					item.ExpenseReportId = reportId;
 					AppService.UpdateExpenseItem(item, item.ExpenseItemId);
 				}

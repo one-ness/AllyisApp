@@ -11,6 +11,7 @@
 	string submitAction = Model.Report == null ? "CreateReport" : "UpdateReport";
 	string submitName = Model.Report == null ? "Create" : "Update";
 }
+@Scripts.Render("~/bundles/jquery")
 
 @using (Html.BeginForm(submitAction, ControllerConstants.Expense, FormMethod.Post, htmlAttributes: new { @id = "reportForm", enctype = "multipart/form-data" }))
 {
@@ -76,19 +77,12 @@
 				<div class="right-input">
 					<input type="text" name="BusinessJustification" value="@Model.Report.BusinessJustification" class="form-control" />
 				</div>
-				<div class="left-label">
-					<label>@Strings.Date</label>
-				</div>
-				<div class="right-input">
-					<input type="text" id="DateRangeStart" name="date" value="@dateVal" class="datepicker form-control" />
-				</div>
-				<input type="hidden" id="DateRangeStart" name="DateRangeStart" value="@Model.StartDate" />
-				<div class="left-label">
+				@*<div class="left-label">
 					<label>Status</label>
 				</div>
 				<div class="right-input">
 					@Html.DropDownListFor(m => m.Report.ReportStatus, statusList, new { id = "reportStatus", @class = "form-control", name = "reportStatus", style = "display: inline-block; width: 150px" })
-				</div>
+				</div>*@
 			</div>
 		</div>
 		<br>
@@ -118,7 +112,7 @@
 			</div>
 		</div>
 	</div>
-					}
+}
 
 @*<div class="col-xs-12">
 	<div class="panel panel-default">
@@ -147,9 +141,6 @@
 		pwf.setPageLimit(15);
 		pwf.setPageButtonLimit(10);
 		pwf.setRowClass("previewRow");
-		$('.datepicker').each(function () {
-			$(this).datepicker();
-		});
 
 		var file_index = 1;
 		var item_index = 1;
@@ -168,10 +159,21 @@
 			file_index += 1;
 		}
 
-		function removeFile() {
+		function removeFile(index) {
 			console.log('removing file');
 			$('.file-input').last().remove();
 			file_index -= 1;
 		}
+
+		function setDatePickers() {
+			console.log('setting date picker');
+			$('.datepicker').each(function () {
+				$(this).datepicker({
+					changeMonth: true,
+					changeYear: true
+				});
+			});
+		}
+		setDatePickers();
 	</script>
 }
