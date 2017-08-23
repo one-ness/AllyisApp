@@ -40,8 +40,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				ReportTitle = reportName,
 				BusinessJustification = businessJustification,
-				CreatedUtc = Convert.ToDateTime(date),
-				ModifiedUtc = Convert.ToDateTime(date),
+				CreatedUtc = DateTime.UtcNow,
+				ModifiedUtc = DateTime.UtcNow,
 				ReportDate = Convert.ToDateTime(date),
 				SubmittedById = submittedById,
 				OrganizationId = organizationId,
