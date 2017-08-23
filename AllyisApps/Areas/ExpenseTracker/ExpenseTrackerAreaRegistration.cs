@@ -34,25 +34,25 @@ namespace AllyisApps.Areas.ExpenseTracker
 		{
 			context.Routes.MapSubdomainRoute(
 				name: "ExpenseTracker_Detail",
-				url: "ExpenseTracker/{subscriptionId}/{controller}/{action}/{reportId}",
+				url: "expensetracker/{subscriptionId}/{controller}/{action}/{reportId}",
 				area: this.AreaName,
-				defaults: new { controller = "Expense", action = "Index" },
+				defaults: new { controller = "expense", action = "index" },
 				constraints: new { subscriptionId = @"\d+", reportId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers" });
 
 			context.Routes.MapSubdomainRoute(
                 name: "ExpenseTracker_Action",
-                url: "ExpenseTracker/{subscriptionId}/{controller}/{action}",
+                url: "expensetracker/{subscriptionId}/{controller}/{action}",
                 area: this.AreaName,
-                defaults: new { controller = "Expense", action = "Index" },
+                defaults: new { controller = "expense", action = "index" },
                 constraints: new { subscriptionId = @"\d+" },
                 namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers" });
 
             context.Routes.MapSubdomainRoute(
 				name: "ExpenseTracker_Default",
-				url: "ExpenseTracker/{subscriptionId}/{controller}",
+				url: "expensetracker/{subscriptionId}/{controller}",
 				area: this.AreaName,
-				defaults: new { controller = "Expense", action = "Index" },
+				defaults: new { controller = "expense", action = "index" },
 				constraints: new { subscriptionId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers" });
 		}

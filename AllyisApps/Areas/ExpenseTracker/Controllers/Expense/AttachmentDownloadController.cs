@@ -22,8 +22,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         /// <returns></returns>
         public ActionResult Download(int reportId, string fileName)
         {
-            FileStream stream = AzureFiles.DownloadReportAttachment(reportId, fileName);
-            return View();
+            MemoryStream stream = new MemoryStream();
+            string contentType = AzureFiles.DownloadReportAttachment(reportId, fileName, stream);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, contentType, fileName);
         }
     }
 }

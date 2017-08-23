@@ -24,7 +24,15 @@
                 </div>
                 <div class="report-detail">
                     <div><b>Report Date:</b></div>
-                    <div>@String.Format("{0:MM-dd-yyyy}", @Model.ReportDate)</div>
+                    @if (Model.Status == ExpenseStatusEnum.Draft)
+                    {
+                        <div>-</div>
+                    }
+                    else
+                    {
+                        <div>@String.Format("{0:MM-dd-yyyy}", @Model.ReportDate)</div>
+                    }
+
                 </div>
                 <div class="report-detail">
                     <div><b>Status:</b></div>
@@ -52,10 +60,10 @@
                         <b>Accept/Reject Notes</b><br />
                         <textarea class="review-area" placeholder="Enter text here..." name="reasonText"></textarea>
                     </div>
-                    <div class="form-group pull-left btn-group">
-                        <input type="submit" value="Approve" name="btnAction" class="btn btn-primary" />
-                        <input type="submit" value="Reject" name="btnAction" class="btn btn-reject" />
+                    <div class="form-group pull-right btn-group">
                         <input type="submit" value="Cancel" name="btnAction" class="btn btn-primary" />
+                        <input type="submit" value="Reject" name="btnAction" class="btn btn-reject" />
+                        <input type="submit" value="Approve" name="btnAction" class="btn btn-primary" />
                     </div>
                 }
             </div>
@@ -65,11 +73,11 @@
         <table class="table table-hover col-lg-12 col-md-12 col-xs-12">
             <thead>
                 <tr>
-                    <th>Expense Name</th>
-                    <th>Amount</th>
-                    <th>Transaction Date</th>
-                    <th>Discription</th>
-                    <th>Is Billable</th>
+                    <th style="width: 20%">Expense Name</th>
+                    <th style="width: 10%">Amount</th>
+                    <th style="width: 25%">Transaction Date</th>
+                    <th style="width: 35%">Discription</th>
+                    <th style="width: 10%">Customer Billable</th>
                 </tr>
             </thead>
             <tbody>
