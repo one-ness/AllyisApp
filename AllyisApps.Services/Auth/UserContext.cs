@@ -77,5 +77,37 @@ namespace AllyisApps.Services
 		/// If the user is not a member of that subscrption, then the role is set to NotAssigned.
 		/// </summary>
 		public Dictionary<int, UserSubscription> UserSubscriptions { get; set; }
+
+		/// <summary>
+		/// list of oragnizations this user belongs to and the role in each organization, indexed by organziation id
+		/// </summary>
+		public Dictionary<int, OrganizationAndRole> OrganizationsAndRoles { get; set; }
+
+		/// <summary>
+		/// list of subscriptions this user belongs to and the role in each subscription, indexed by subscription id
+		/// </summary>
+		public Dictionary<int, SubscriptionAndRole> SubscriptionsAndRoles { get; set; }
+
+		/// <summary>
+		/// organization and role
+		/// </summary>
+		public class OrganizationAndRole
+		{
+			public int OrganizationId { get; set; }
+			public OrganizationRole OrganizationRole { get; set; }
+		}
+
+		/// <summary>
+		/// subscription and role information for the user
+		/// </summary>
+		public class SubscriptionAndRole
+		{
+			public int SubscriptionId { get; set; }
+			public int OrganizationId { get; set; }
+			public SkuIdEnum SkuId { get; set; }
+			public ProductIdEnum ProductId { get; set; }
+			public int ProductRoleId { get; set; }
+			public string AreaUrl { get; set; }
+		}
 	}
 }
