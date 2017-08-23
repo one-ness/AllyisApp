@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Azure;
-using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -28,9 +24,9 @@ namespace AllyisApps.Lib
                 CloudStorageAccount account = CloudStorageAccount.Parse(
                 CloudConfigurationManager.GetSetting("StorageConnectionString"));
 
-                CloudBlobClient client = new CloudBlobClient(account.BlobStorageUri.PrimaryUri);
+                CloudBlobClient client = account.CreateCloudBlobClient();
 
-                CloudBlobContainer blobContainer = client.GetContainerReference("ReportIdHere");
+                CloudBlobContainer blobContainer = client.GetContainerReference(reportId.ToString());
 
                 foreach (CloudBlockBlob blob in blobContainer.ListBlobs().OfType<CloudBlockBlob>())
                 {
@@ -39,10 +35,7 @@ namespace AllyisApps.Lib
             }
             catch
             {
-                blobInfo = new List<string>()
-                {
-                    "Test"
-                };
+                blobInfo = new List<string>();
             }
 
             return blobInfo;
@@ -53,21 +46,25 @@ namespace AllyisApps.Lib
         /// </summary>
         /// <param name="reportId">The report id.</param>
         /// <param name="attName">the attachment name.</param>
+        /// <param name="fileStream"></param>
         /// <returns></returns>
-        public static FileStream DownloadReportAttachment(int reportId, string attName)
+        public static string DownloadReportAttachment(int reportId, string attName, Stream fileStream)
         {
+           
 
             CloudStorageAccount account = CloudStorageAccount.Parse(
                 CloudConfigurationManager.GetSetting("StorageConnectionString"));
 
-            CloudBlobClient client = new CloudBlobClient(account.BlobStorageUri.PrimaryUri);
+            CloudBlobClient client = account.CreateCloudBlobClient();
 
             CloudBlobContainer blobContainer = client.GetContainerReference(reportId.ToString());
 
 
             CloudBlockBlob blob = blobContainer.GetBlockBlobReference(attName);
 
-            return File.OpenWrite(blob.Uri.ToString());
+            blob.DownloadToStream(fileStream);
+            
+            return blob.Properties.ContentType;
         }
 
         /// <summary>
@@ -84,9 +81,11 @@ namespace AllyisApps.Lib
                 CloudStorageAccount account = CloudStorageAccount.Parse(
                     CloudConfigurationManager.GetSetting("StorageConnectionString"));
 
-                CloudBlobClient client = new CloudBlobClient(account.BlobStorageUri.PrimaryUri);
+                CloudBlobClient client = account.CreateCloudBlobClient();
 
                 CloudBlobContainer blobContainer = client.GetContainerReference(reportId.ToString());
+
+                blobContainer.CreateIfNotExists();
 
                 CloudBlockBlob blockBlob = blobContainer.GetBlockBlobReference(fileName);
 
@@ -112,7 +111,7 @@ namespace AllyisApps.Lib
                 CloudStorageAccount account = CloudStorageAccount.Parse(
                   CloudConfigurationManager.GetSetting("StorageConnectionString"));
 
-                CloudBlobClient client = new CloudBlobClient(account.BlobStorageUri.PrimaryUri);
+                CloudBlobClient client = account.CreateCloudBlobClient();
 
                 CloudBlobContainer blobContainer = client.GetContainerReference(reportId.ToString());
 
