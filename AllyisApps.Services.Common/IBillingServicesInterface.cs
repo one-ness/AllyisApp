@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
 using AllyisApps.Services.Common.Types;
+using System.Collections.Generic;
 
 namespace AllyisApps.Services.Common
 {

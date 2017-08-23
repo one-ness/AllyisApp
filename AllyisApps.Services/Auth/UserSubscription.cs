@@ -25,7 +25,7 @@ namespace AllyisApps.Services
 		/// Gets the name of the subscription.
 		/// </summary>
 		public string SubscriptionName { get; set; }
-        
+
 		/// <summary>
 		/// Gets or sets the organization this subscription belongs to.
 		/// </summary>

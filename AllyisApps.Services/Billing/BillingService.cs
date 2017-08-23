@@ -4,15 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.Lib;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 
 namespace AllyisApps.Services
 {
@@ -840,7 +840,7 @@ namespace AllyisApps.Services
 				SkuId = subscriptionDisplay.SkuId,
 				SkuName = subscriptionDisplay.SkuName,
 				SubscriptionId = subscriptionDisplay.SubscriptionId,
-                SubscriptionName = subscriptionDisplay.SubscriptionName,
+				SubscriptionName = subscriptionDisplay.SubscriptionName,
 				Tier = subscriptionDisplay.Tier
 			};
 		}

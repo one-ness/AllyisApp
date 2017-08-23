@@ -7,9 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using AllyisApps.Resources;
-using System.Web.Mvc;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -22,7 +19,6 @@ namespace AllyisApps.ViewModels.Auth
 		 * possible phone validation regex
 		[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")] // [Phone] does not work //I am not conviced that this is a good idea either.
 		[RegularExpression(@"((\+?\d\s?|)(\(\d{3}\)|\d{3}) ?-? ?|)\d{3} ?-? ?\d{4}", ErrorMessageResourceType = (typeof(Resources.Strings)), ErrorMessageResourceName = "PhoneFormatValidation")]
-
 		possible postal code regex (We shouldn't be validating all postal codes this way as every country has a different format.)
 		[RegularExpression(@"(\d{5}(?:[-\s]\d{4})?)", ErrorMessage = "Invalid postal code.")] // Require 5 digits followed by an optional hyphen/whitespace and four more digits
 		[RegularExpression(@"([\-\s\w]{3,10})", ErrorMessage = "Invalid postal code.")]

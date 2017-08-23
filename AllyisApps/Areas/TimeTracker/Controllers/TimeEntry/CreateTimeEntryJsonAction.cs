@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -44,7 +44,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					throw new ArgumentException(Resources.Strings.EnterATimeLongerThanZero);
 				}
-                
 
 				IEnumerable<TimeEntryInfo> otherEntriesToday = AppService.GetTimeEntriesByUserOverDateRange(
 					new List<int> { model.UserId },
@@ -59,7 +58,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 				UserSubscription subInfo = null;
 				this.AppService.UserContext.UserSubscriptions.TryGetValue(model.SubscriptionId, out subInfo);
-                
+
 				DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId);
 				if (durationResult + durationOther > 24.00)
 				{
@@ -77,9 +76,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				{
 					throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
 				}
-                
 
-                int id = AppService.CreateTimeEntry(new TimeEntryInfo()
+				int id = AppService.CreateTimeEntry(new TimeEntryInfo()
 				{
 					UserId = model.UserId,
 					ProjectId = model.ProjectId,

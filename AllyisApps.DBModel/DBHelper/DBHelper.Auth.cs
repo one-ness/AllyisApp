@@ -83,16 +83,16 @@ namespace AllyisApps.DBModel
 			{
 				var results = connection.QueryMultiple("[Auth].[GetUserInfo]", parameters, commandType: CommandType.StoredProcedure);
 
-
-                UserDBEntity user = results.Read<UserDBEntity>().FirstOrDefault();
-                if (!results.IsConsumed) {
-                    AddressDBEntity address = results.Read<AddressDBEntity>().FirstOrDefault();
-                    return new Tuple<UserDBEntity, AddressDBEntity>(user, address);
-                }
-                else
-                {
-                    return new Tuple<UserDBEntity, AddressDBEntity>(user, null);
-                }
+				UserDBEntity user = results.Read<UserDBEntity>().FirstOrDefault();
+				if (!results.IsConsumed)
+				{
+					AddressDBEntity address = results.Read<AddressDBEntity>().FirstOrDefault();
+					return new Tuple<UserDBEntity, AddressDBEntity>(user, address);
+				}
+				else
+				{
+					return new Tuple<UserDBEntity, AddressDBEntity>(user, null);
+				}
 			}
 		}
 
@@ -114,10 +114,22 @@ namespace AllyisApps.DBModel
 		{
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				con.Execute("[Auth].[UpdateUserProfile] @a, @b, @c, @d, @e, @f, @g, @h, @i, @j, @k, @l", 
-                    new { a = userId, b = firstName, c = lastName, d = dateOfBirth,
-                        e = phoneNumber, f = addressId, g = address1, h = address2, i = city, j = stateId,
-                        k = postalCode, l = countryCode });
+				con.Execute("[Auth].[UpdateUserProfile] @a, @b, @c, @d, @e, @f, @g, @h, @i, @j, @k, @l",
+					new
+					{
+						a = userId,
+						b = firstName,
+						c = lastName,
+						d = dateOfBirth,
+						e = phoneNumber,
+						f = addressId,
+						g = address1,
+						h = address2,
+						i = city,
+						j = stateId,
+						k = postalCode,
+						l = countryCode
+					});
 			}
 		}
 
@@ -260,24 +272,23 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-        /// <summary>
-        /// Adds an organization to the database and sets the owner's chosen organization to th.
-        /// </summary>
-        /// <param name="organization">The OrganizationDBEntity to create with address infomation.</param>
-        /// <param name="address"></param>
-        /// <param name="ownerId">The owner's user Id.</param>
-        /// <param name="roleId">The role associated with the creator of the organization.</param>
-        /// <param name="employeeId">The employee Id for the user creating the organization.</param>
-        /// <returns>The id of the created organization.</returns>
-        public int SetupOrganization(OrganizationDBEntity organization, AddressDBEntity address, int ownerId, int roleId, string employeeId)
+		/// <summary>
+		/// Adds an organization to the database and sets the owner's chosen organization to th.
+		/// </summary>
+		/// <param name="organization">The OrganizationDBEntity to create with address infomation.</param>
+		/// <param name="address"></param>
+		/// <param name="ownerId">The owner's user Id.</param>
+		/// <param name="roleId">The role associated with the creator of the organization.</param>
+		/// <param name="employeeId">The employee Id for the user creating the organization.</param>
+		/// <returns>The id of the created organization.</returns>
+		public int SetupOrganization(OrganizationDBEntity organization, AddressDBEntity address, int ownerId, int roleId, string employeeId)
 		{
 			if (organization == null)
 			{
 				throw new ArgumentException("organizationId cannot be null or empty.");
 			}
-            
 
-            DynamicParameters parameters = new DynamicParameters();
+			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@userId", ownerId);
 			parameters.Add("@roleId", roleId);
 			parameters.Add("@organizationName", organization.OrganizationName);
@@ -298,13 +309,13 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-        /// <summary>
-        /// Updates the specified organization with new information.
-        /// </summary>
-        /// <param name="organization">The organization table with updates.</param>
-        /// <param name="address"></param>
-        /// <returns>Number of rows changed.</returns>
-        public int UpdateOrganization(OrganizationDBEntity organization, AddressDBEntity address)
+		/// <summary>
+		/// Updates the specified organization with new information.
+		/// </summary>
+		/// <param name="organization">The organization table with updates.</param>
+		/// <param name="address"></param>
+		/// <returns>Number of rows changed.</returns>
+		public int UpdateOrganization(OrganizationDBEntity organization, AddressDBEntity address)
 		{
 			if (organization == null)
 			{
@@ -330,8 +341,6 @@ namespace AllyisApps.DBModel
 				return connection.Execute("[Auth].[UpdateOrganization]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
-
-        
 
 		/// <summary>
 		/// Executes [Auth].[DeleteOrg].
@@ -500,9 +509,6 @@ namespace AllyisApps.DBModel
 				return connection.Query<dynamic>("[Auth].[GetOrg] @a", new { a = organizationId }).FirstOrDefault();
 			}
 		}
-
-        
-
 
 		/// <summary>
 		/// Retrieves the list of members for the specified organization.
@@ -889,6 +895,7 @@ namespace AllyisApps.DBModel
 
 			return result;
 		}
+
 		/// <summary>
 		/// Returns a UserDBEntity for the given user, along with a list of OrganizationDBEntities for the organizations that
 		/// the user is a member of, and a list of InvititationDBEntities for any invitations for that user.

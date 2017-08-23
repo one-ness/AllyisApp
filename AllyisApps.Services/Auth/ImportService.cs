@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text.RegularExpressions;
 using AllyisApps.DBModel.Auth;
 using AllyisApps.DBModel.Billing;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Lib;
 using AllyisApps.Services.TimeTracker;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AllyisApps.Services
 {
@@ -219,7 +219,7 @@ namespace AllyisApps.Services
 
 									newCustomer = new Customer
 									{
-                                        CustomerName = name,
+										CustomerName = name,
 										CustomerOrgId = custOrgId,
 										OrganizationId = orgId
 									};
@@ -254,7 +254,7 @@ namespace AllyisApps.Services
 
 									newCustomer = new Customer
 									{
-                                        CustomerName = hasCustomerName ? knownValue : readValue,
+										CustomerName = hasCustomerName ? knownValue : readValue,
 										CustomerOrgId = hasCustomerName ? readValue : knownValue,
 										OrganizationId = orgId
 									};
@@ -291,12 +291,11 @@ namespace AllyisApps.Services
 							}
 						}
 
-
 						// Importing non-required customer data
 						if (customer != null && hasNonRequiredCustomerInfo)
 						{
 							bool updated = false;
-                            
+
 							if (hasCustomerStreetAddress) updated = this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address.Address1 = val) || updated;
 							if (hasCustomerCity) updated = this.readColumn(row, ColumnHeaders.CustomerCity, val => customer.Address.City = val) || updated;
 							if (hasCustomerCountry) updated = this.readColumn(row, ColumnHeaders.CustomerCountry, val => customer.Address.CountryName = val) || updated;
@@ -400,7 +399,7 @@ namespace AllyisApps.Services
 								project = new Project
 								{
 									CustomerId = customer.CustomerId,
-                                    ProjectName = thisRowHasProjectName ? knownValue : readValue,
+									ProjectName = thisRowHasProjectName ? knownValue : readValue,
 									IsHourly = false, // TODO un-hardcode once project isHourly property is supported.  Currently disabled
 									OrganizationId = orgId,
 									ProjectOrgId = thisRowHasProjectName ? readValue : knownValue,
@@ -505,7 +504,7 @@ namespace AllyisApps.Services
 									project = new Project
 									{
 										CustomerId = customer.CustomerId,
-                                        ProjectName = fields[0],
+										ProjectName = fields[0],
 										IsHourly = false,  // TODO un-hardocode once project isHourly property is supported.  Currently disabled
 										OrganizationId = orgId,
 										ProjectOrgId = fields[1],
@@ -845,7 +844,7 @@ namespace AllyisApps.Services
 										result.TimeEntryFailures.Add(string.Format("You must enter the duration as HH:MM or H.HH format for the date {0}", theDate));
 										continue;
 									}
-									if(this.ParseDuration(duration) == 0)
+									if (this.ParseDuration(duration) == 0)
 									{
 										result.TimeEntryFailures.Add(string.Format("You must enter a time larger than 00:00 for the date {0}", theDate));
 										continue;
