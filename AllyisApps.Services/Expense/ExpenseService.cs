@@ -91,8 +91,7 @@ namespace AllyisApps.Services
 		/// Updates Expense Item with given itemId.
 		/// </summary>
 		/// <param name="item"></param>
-		/// <param name="itemId"></param>
-		public void UpdateExpenseItem(ExpenseItem item, int itemId)
+		public void UpdateExpenseItem(ExpenseItem item)
 		{
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
 			{
@@ -100,7 +99,7 @@ namespace AllyisApps.Services
 				AccountId = item.AccountId,
 				Amount = item.Amount,
 				CreatedUtc = item.ExpenseItemCreatedUtc,
-				ExpenseItemId = itemId,
+				ExpenseItemId = item.ExpenseItemId,
 				ExpenseReportId = item.ExpenseReportId,
 				IsBillableToCustomer = item.IsBillableToCustomer,
 				ItemDescription = item.ItemDiscription,

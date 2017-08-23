@@ -23,16 +23,16 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="submittedById"></param>
 		/// <param name="reportName"></param>
 		/// <param name="businessJustification"></param>
-		/// <param name="date"></param>
 		/// <param name="reportId"></param>
 		/// <param name="items"></param>
 		/// <returns></returns>
-		public ActionResult UpdateReport(int subscriptionId, int submittedById, int reportId, List<ExpenseItem> items, DateTime date, string reportName = "", string businessJustification = "")
+		public ActionResult UpdateReport(int subscriptionId, int submittedById, int reportId, List<ExpenseItem> items, string reportName = "", string businessJustification = "")
 		{
 			var subscription = AppService.GetSubscription(subscriptionId);
 			var organizationId = subscription.OrganizationId;
 
 			var oldReport = AppService.GetExpenseReport(reportId);
+			DateTime date = DateTime.UtcNow;
 
 			if (oldReport.ReportStatus == (int)ExpenseStatusEnum.Draft)
 			{
@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					ReportDate = date,
 					SubmittedById = submittedById,
 					OrganizationId = organizationId,
-					ReportStatus = (int)Enum.Parse(typeof(ExpenseStatusEnum), Request.Form["Report.ReportStatus"])
+					//ReportStatus = (int)Enum.Parse(typeof(ExpenseStatusEnum), Request.Form["Report.ReportStatus"])
 				};
 
 				foreach (var item in items)
@@ -54,7 +54,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					item.ExpenseItemCreatedUtc = Convert.ToDateTime(item.TransactionDate);
 					item.ExpenseItemModifiedUtc = DateTime.UtcNow;
 					item.ExpenseReportId = reportId;
-					AppService.UpdateExpenseItem(item, item.ExpenseItemId);
+					AppService.UpdateExpenseItem(item);
 				}
 
 				AppService.UpdateExpenseReport(report, reportId);

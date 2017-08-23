@@ -39,7 +39,7 @@
 		});
 	}
 	<div class="item-div">
-		<input type="hidden" value="@item.ExpenseItemId" name="@itemIdName" />
+		@Html.HiddenFor(m => m.Items[i].ExpenseItemId, new { name = itemIdName, Value = Model.Items[i].ExpenseItemId})
 		@Html.TextBoxFor(m => m.Items[i].TransactionDate, new { @class = "datepicker form-control", name = dateName, Value = dateVal, placeholder = "Date", style = "display: inline-block; width: 150px" })
 		@Html.TextBoxFor(m => m.Items[i].ExpenseItemName, new { @class = "form-control", name = nameName, Value = Model.Items[i].ExpenseItemName, placeholder = "Name", style = "display: inline-block; width: 150px" })
 		@Html.TextBoxFor(m => m.Items[i].Amount, new { @class = "form-control", name = amountName, Value = amountVal, placeholder = "Amount", style = "display: inline-block; width: 150px" })
