@@ -88,6 +88,8 @@ namespace AllyisApps
 		public const string Template = "template";
 		public const string EditUsers = "editusers";
 		public const string EditPosition = "editposition";
+		public const string CreatePosition = "createposition";
+		public const string DeletePosition = "deleteposition";
 	}
 
 	/// <summary>

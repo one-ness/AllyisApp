@@ -86,10 +86,10 @@ namespace AllyisApps.Services.StaffingManager
 		/// </summary>
 		public int DurationMonths { get; set; }
 
-	/// <summary>
-	/// Gets or sets the employment type (eg: salary, hourly).
-	/// </summary>
-	public int EmploymentTypeId
+		/// <summary>
+		/// Gets or sets the employment type (eg: salary, hourly).
+		/// </summary>
+		public int EmploymentTypeId
 		{
 			get => employmentTypeId;
 			set

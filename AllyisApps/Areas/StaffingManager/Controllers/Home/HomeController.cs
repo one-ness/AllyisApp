@@ -1,5 +1,5 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="StaffingController.cs" company="Allyis, Inc.">
+// <copyright file="HomeController.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
@@ -7,18 +7,18 @@
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 
-namespace AllyisApps.Areas.StaffingManager.Controllers.Staffing
+namespace AllyisApps.Areas.StaffingManager.Controllers
 {
 	/// <summary>
-	/// Staffing controller.
+	/// Home Controller.
 	/// </summary>
 	[Authorize]
-	public partial class StaffingController : BaseController
+	public class HomeController : BaseController
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="StaffingController" /> class
+		/// Initializes a new instance of the <see cref="HomeController" /> class.
 		/// </summary>
-		public StaffingController()
+		public HomeController()
 		{
 		}
 
@@ -31,6 +31,5 @@ namespace AllyisApps.Areas.StaffingManager.Controllers.Staffing
 		{
 			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Staffing);
 		}
-
 	}
 }

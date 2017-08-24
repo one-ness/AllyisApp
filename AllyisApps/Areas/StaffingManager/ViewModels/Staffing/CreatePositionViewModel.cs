@@ -5,6 +5,8 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.ViewModels.Staffing
 {
@@ -13,6 +15,16 @@ namespace AllyisApps.ViewModels.Staffing
 	/// </summary>
 	public class CreatePositionViewModel
 	{
+		/// <summary>
+		/// used to tell if editing or creating new position
+		/// </summary>
+		public bool IsCreating { get; set; }
+
+		/// <summary>
+		/// used to tell if editing or creating new position
+		/// </summary>
+		public string SubscriptionName { get; set; }
+
 		/// <summary>
 		/// Gets or sets the position's Id
 		/// </summary>
@@ -112,5 +124,59 @@ namespace AllyisApps.ViewModels.Staffing
 		/// Gets or sets the name of the team this position is for
 		/// </summary>
 		public string TeamName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Customer's address.
+		/// </summary>
+		[DataType(DataType.Text)]
+		[Display(Name = "Address")]
+		public string Address { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Customer's city.
+		/// </summary>
+		[DataType(DataType.Text)]
+		[Display(Name = "City")]
+		public string City { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Customer's state.
+		/// </summary>
+		[Display(Name = "State")]
+		public string State { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Customer's country or region.
+		/// </summary>
+		[Display(Name = "Country")]
+		public string Country { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Customer's postal code.
+		/// </summary>
+		[DataType(DataType.PostalCode)]
+		[Display(Name = "Postal Code")]
+		public string PostalCode { get; set; }
+
+		/// <summary>
+		/// selected state id
+		/// </summary>
+		public int? SelectedStateId { get; set; }
+
+		/// <summary>
+		/// state id and localized names
+		/// </summary>
+		public Dictionary<string, string> LocalizedStates { get; set; }
+
+		/// <summary>
+		/// selected country code
+		/// </summary>
+		public string SelectedCountryCode { get; set; }
+
+		/// <summary>
+		/// country code and localized names
+		/// </summary>
+		public Dictionary<string, string> LocalizedCountries { get; set; }
+
 	}
 }

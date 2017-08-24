@@ -204,6 +204,8 @@
     <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseReportsViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Home\HomeController.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\CreatePositionAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\IndexAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\StaffingController.cs" />
     <Compile Include="Areas\StaffingManager\StaffingManagerAreaRegistration.cs" />
@@ -527,11 +529,15 @@
     <Content Include="Areas\ExpenseTracker\Views\Expense\Index.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\web.config" />
     <Content Include="Areas\ExpenseTracker\Views\Shared\BreadcrumbNavPartial.cshtml" />
-    <Content Include="Areas\StaffingManager\Views\web.config" />
+    <Content Include="Areas\StaffingManager\Views\web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Areas\StaffingManager\Views\_ViewStart.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Staffing\index.cshtml" />
     <Content Include="Areas\StaffingManager\Views\Shared\_BreadcrumbNavPartial.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Staffing\CreatePosition.cshtml" />
+    <Content Include="Areas\StaffingManager\Views\Staffing\_PositionEditDetails.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />

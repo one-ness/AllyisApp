@@ -1,0 +1,113 @@
+﻿@model AllyisApps.ViewModels.Staffing.CreatePositionViewModel
+@{
+	string action = ActionConstants.EditPosition;
+	if (Model.IsCreating)
+	{
+		action = ActionConstants.CreatePosition;
+	}
+}
+
+<div class="shrink-wrap-center">
+	<div>
+		@using (Html.BeginForm(action, ControllerConstants.Staffing, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form" }))
+		{
+			@Html.AntiForgeryToken()
+			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+			<div class="row">
+				<div class="col-md-6 sm-control-width">
+					<div class="form-group">
+						@Html.ReqLabelFor(m => m.PositionTitle, Strings.Title)
+						@Html.TextBoxFor(m => m.PositionTitle, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.PositionTitle, "", new { @class = "text-danger" })
+					</div>
+					<div class="form-group">
+						@Html.ReqLabelFor(m => m.TeamName, Strings.TeamName)
+						@Html.TextBoxFor(m => m.TeamName, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.TeamName, "", new { @class = "text-danger" })
+					</div>
+					<div class="form-group">
+						@Html.ReqLabelFor(m => m.JobResponsibilities, Strings.JobResponsibilities)
+						@Html.TextBoxFor(m => m.JobResponsibilities, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.JobResponsibilities, "", new { @class = "text-danger" })
+					</div>
+					<div class="form-group">
+						@Html.ReqLabelFor(m => m.DesiredSkills, Strings.DesiredSkills)
+						@Html.TextBoxFor(m => m.DesiredSkills, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.DesiredSkills, "", new { @class = "text-danger" })
+					</div>
+					<div class="form-group">
+						@Html.ReqLabelFor(m => m.HiringManager, Strings.HiringManager)
+						@Html.TextBoxFor(m => m.HiringManager, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.HiringManager, "", new { @class = "text-danger" })
+					</div>
+					@if (Model.IsCreating)
+					{
+					}
+				</div>
+				<div class="col-md-6 sm-control-width">
+					<div class="form-group">
+						@Html.ReqLabelFor(m => m.DurationMonths, Strings.DurationMonths)
+						@Html.TextBoxFor(m => m.DurationMonths, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.DurationMonths, "", new { @class = "text-danger" })
+					</div>
+
+					
+
+					<div class="form-group">
+						@Html.ReqLabelFor(m => m.Address, Strings.Address)
+						@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+					</div>
+					<div class="form-group">
+						@Html.ReqLabelFor(m => m.Country, Strings.Country)
+						@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new {@id = ViewConstants.DdlCountriesId , @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
+					</div>
+					<div class="form-group">
+						@Html.ReqLabelFor(m => m.State, Strings.State)
+						@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id= ViewConstants.DdlStatesId, @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
+					</div>
+					<div class="form-group">
+						@Html.ReqLabelFor(m => m.City, Strings.City)
+						@Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+					</div>
+					<div class="form-group">
+						@Html.ReqLabelFor(m => m.PostalCode, Strings.PostalCode)
+						@Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.PostalCode, "", new { @class = "text-danger" })
+					</div>
+
+					@Html.HiddenFor(m => m.AddressId)
+					@Html.HiddenFor(m => m.OrganizationId)
+					@Html.HiddenFor(m => m.IsCreating)
+				</div>
+			</div>
+
+			<div class="form-group allyis-action-buttons">
+				@if (Model.IsCreating)
+                {
+                    <a href="@Url.Action(ActionConstants.Index, ControllerConstants.Staffing, null)" new { class = "btn btn-default" }>
+                        @Strings.Cancel
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Staffing, new { id = Model.OrganizationId })" new { class = "btn btn-default" }>
+                        @Strings.Cancel
+                    </a>
+                }
+				<input type="submit" value="@Strings.Save" class="btn btn-primary" id="submit" />
+			</div>
+		}
+	</div>
+	@if (Model != null && !Model.IsCreating)
+    {
+        using (Html.BeginForm(ActionConstants.DeletePosition, ControllerConstants.Staffing, new { id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(Strings.ConfirmDeleteOrg)) }))
+        {
+			@Html.AntiForgeryToken()
+			<input type="submit" value="@Strings.DeletePosition" class="btn btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
+        }
+    }
+</div>

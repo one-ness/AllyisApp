@@ -36,14 +36,13 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<h1 style="float: left">POSITIONS</h1>
-				<a href="@Url.Action(ActionConstants.CreateOrg, ControllerConstants.Account)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">@Strings.CreateOrganization</a>
+				<a href="@Url.Action(ActionConstants.CreatePosition, ControllerConstants.Staffing)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">Create Position</a>
 			</div>
 		</div>
 		else
 		{
 			@foreach (var pos in Model.positions)
 			{
-
 				string title = pos.PositionTitle;
 				string subtitle = pos.TeamName ?? "";
 				<div class="row">
@@ -82,7 +81,7 @@
 
 				<div class="row">
 				</div>
-												}
-											}
+			}
+		}
 	</div>
 </div>
