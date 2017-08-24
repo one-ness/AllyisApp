@@ -22,13 +22,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="submittedById">The submitted by id.</param>
 		///  <param name="items">The expense items.</param>
-		/// <param name="date">The date.</param>
 		/// <param name="files"></param>
 		/// <param name="reportName">The report name.</param>
 		/// <param name="businessJustification">The justification.</param>
 		/// <returns>An action result.</returns>
 		[HttpPost]
-		public ActionResult CreateReport(string submitType, int subscriptionId, int submittedById, string date, IEnumerable<HttpPostedFileBase> files = null, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
+		public ActionResult CreateReport(string submitType, int subscriptionId, int submittedById, IEnumerable<HttpPostedFileBase> files = null, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
 		{
 			if (items == null)
 			{
@@ -52,7 +51,6 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				BusinessJustification = businessJustification,
 				CreatedUtc = DateTime.UtcNow,
 				ModifiedUtc = DateTime.UtcNow,
-				ReportDate = Convert.ToDateTime(date),
 				SubmittedById = submittedById,
 				OrganizationId = organizationId,
 				ReportStatus = (int)reportStatus

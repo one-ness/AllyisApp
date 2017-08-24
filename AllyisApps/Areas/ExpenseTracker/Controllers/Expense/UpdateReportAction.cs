@@ -32,7 +32,6 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			var organizationId = subscription.OrganizationId;
 
 			var oldReport = AppService.GetExpenseReport(reportId);
-			DateTime date = DateTime.UtcNow;
 
 			if (oldReport.ReportStatus == (int)ExpenseStatusEnum.Draft)
 			{
@@ -40,9 +39,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				{
 					ReportTitle = reportName,
 					BusinessJustification = businessJustification,
-					CreatedUtc = date,
 					ModifiedUtc = DateTime.UtcNow,
-					ReportDate = date,
 					SubmittedById = submittedById,
 					OrganizationId = organizationId,
 					//ReportStatus = (int)Enum.Parse(typeof(ExpenseStatusEnum), Request.Form["Report.ReportStatus"])

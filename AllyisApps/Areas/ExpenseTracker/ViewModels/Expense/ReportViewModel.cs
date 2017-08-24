@@ -30,11 +30,6 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         public string ReprortTitle { get; set; }
 
         /// <summary>
-        /// Gets or sets the report date.
-        /// </summary>
-        public DateTime ReportDate { get; set; }
-
-        /// <summary>
         /// Gets or sets the submitting user name.
         /// </summary>
         public string SubmittedBy { get; set; }

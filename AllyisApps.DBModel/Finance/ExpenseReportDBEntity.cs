@@ -18,11 +18,6 @@ namespace AllyisApps.DBModel.Finance
         public string ReportTitle { get; set; }
 
         /// <summary>
-        /// Gets or sets the Expense Report's date.
-        /// </summary>
-        public DateTime ReportDate { get; set; }
-
-        /// <summary>
         /// Gets or sets the Expense Reports's parent organization Id.
         /// </summary>
         public int OrganizationId { get; set; }

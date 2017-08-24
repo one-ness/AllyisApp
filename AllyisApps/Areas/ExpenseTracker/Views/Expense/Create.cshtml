@@ -47,17 +47,12 @@
 					Text = v.ToString(),
 					Value = ((int)v).ToString()
 				}).ToList();
-
-				string dateVal = "";
+				
 				int reportId = Model.Report == null ? -1 : Model.Report.ExpenseReportId;
 				if (Model.Report == null)
 				{
 					Model.Report = new ExpenseReport();
 					Model.Items = new List<ExpenseItem>();
-				}
-				else
-				{
-					dateVal = Model.Report.ReportDate.ToShortDateString();
 				}
 			}
 			<input type="hidden" name="reportId" value="@reportId" />

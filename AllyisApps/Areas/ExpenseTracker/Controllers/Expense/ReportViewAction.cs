@@ -65,7 +65,6 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 CreatedUtc = report.CreatedUtc,
                 ModifiedUtc = report.ModifiedUtc,
                 Justification = report.BusinessJustification,
-                ReportDate = report.ReportDate,
                 Status = (ExpenseStatusEnum)report.ReportStatus,
                 Expenses = reportItems,
                 History = reportHistory,

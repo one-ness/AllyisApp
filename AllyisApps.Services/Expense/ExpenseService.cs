@@ -79,7 +79,6 @@ namespace AllyisApps.Services
 				ExpenseReportId = reportId,
 				ExpenseReportModifiedUtc = report.ModifiedUtc,
 				OrganizationId = report.OrganizationId,
-				ReportDate = report.ReportDate,
 				ReportStatus = report.ReportStatus,
 				ReportTitle = report.ReportTitle,
 				SubmittedById = report.SubmittedById
@@ -194,7 +193,6 @@ namespace AllyisApps.Services
 				SubmittedById = entity.SubmittedById,
 				CreatedUtc = entity.ExpenseReportCreatedUtc,
 				ModifiedUtc = entity.ExpenseReportModifiedUtc,
-				ReportDate = entity.ReportDate,
 				ReportStatus = entity.ReportStatus,
 				ReportTitle = entity.ReportTitle,
 				BusinessJustification = entity.BusinessJustification
@@ -298,7 +296,6 @@ namespace AllyisApps.Services
 				ExpenseReportId = report.ExpenseReportId,
 				ExpenseReportModifiedUtc = report.ModifiedUtc,
 				OrganizationId = report.OrganizationId,
-				ReportDate = report.ReportDate,
 				ReportStatus = report.ReportStatus,
 				ReportTitle = report.ReportTitle,
 				SubmittedById = report.SubmittedById

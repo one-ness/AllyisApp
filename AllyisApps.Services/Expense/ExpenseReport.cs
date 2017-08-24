@@ -21,12 +21,6 @@ namespace AllyisApps.Services
         public string ReportTitle { get; set; }
 
         /// <summary>
-        /// the expense report date.
-        /// </summary>
-		[Required]
-        public DateTime ReportDate { get; set; }
-
-        /// <summary>
         /// the organization id of the expense
         /// </summary>
         public int OrganizationId { get; set; }
