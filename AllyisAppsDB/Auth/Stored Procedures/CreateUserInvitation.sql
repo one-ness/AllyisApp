@@ -1,12 +1,11 @@
 CREATE PROCEDURE [Auth].[CreateUserInvitation]
 	@email NVARCHAR(384),
-	@firstName NVARCHAR(40),
-	@lastName NVARCHAR(40),
-	@dateOfBirth NVARCHAR(40),
+	@firstName NVARCHAR(32),
+	@lastName NVARCHAR(32),
+	@dateOfBirth date,
 	@organizationId INT,
 	@accessCode VARCHAR(50),
 	@organizationRole INT,
-	@retId INT OUTPUT,
 	@employeeId NVARCHAR(16)
 AS
 
@@ -33,8 +32,5 @@ BEGIN
 		1, 
 		@organizationRole, 
 		@employeeId);
-
-	SET @retId = SCOPE_IDENTITY();
-
 	SELECT SCOPE_IDENTITY();
 END

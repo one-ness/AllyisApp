@@ -604,18 +604,17 @@ namespace AllyisApps.DBModel
 			parameters.Add("@email", invitation.Email);
 			parameters.Add("@firstName", invitation.FirstName);
 			parameters.Add("@lastName", invitation.LastName);
-			parameters.Add("@dateOfBirth", invitation.DateOfBirth);
+			parameters.Add("@dateOfBirth", invitation.DateOfBirth.Date);
 			parameters.Add("@organizationId", invitation.OrganizationId);
 			parameters.Add("@accessCode", invitation.AccessCode);
-			parameters.Add("@organizationRole", invitation.OrganizationRoleId);
-			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
+			parameters.Add("@organizationRole", invitation.OrganizationRoleId);	
 			parameters.Add("@employeeId", invitation.EmployeeId);
+            int res;
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Auth].[CreateUserInvitation]", parameters, commandType: CommandType.StoredProcedure);
+                res = connection.QueryFirst<int>("[Auth].[CreateUserInvitation]", parameters, commandType: CommandType.StoredProcedure);
 			}
-
-			return parameters.Get<int>("@retId");
+			return res;
 		}
 
 		/// <summary>
