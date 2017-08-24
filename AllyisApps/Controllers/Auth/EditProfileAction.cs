@@ -23,7 +23,7 @@ namespace AllyisApps.Controllers
 		{
 			var model = new EditProfileViewModel();
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
-			var user = this.AppService.GetCurrentUserProfile();
+			var user = this.AppService.GetCurrentUserInfo();
 			model.Address = user.Address?.Address1;
 			model.AddressId = user.Address?.AddressId;
 			model.City = user.Address?.City;

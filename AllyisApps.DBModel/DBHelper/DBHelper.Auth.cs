@@ -97,13 +97,21 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// get user profile
-		/// </summary>
-		public dynamic GetUserProfile(int userId)
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>User infomation, </returns>
+		public Tuple<dynamic,IEnumerable<dynamic>,IEnumerable<dynamic>, IEnumerable<dynamic>> GetUser(int userId)
 		{
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				return con.Query<dynamic>("Auth.GetUserProfile @a", new { a = userId }).FirstOrDefault();
+                var res = con.QueryMultiple("Auth.GetUser @a", new { a = userId });
+                return new Tuple<dynamic, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>>(
+                    res.Read().FirstOrDefault(),
+                    res.Read(), 
+                    res.Read(),
+                    res.Read()
+                    );
 			}
 		}
 

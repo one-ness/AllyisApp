@@ -548,7 +548,7 @@ namespace AllyisApps.Services
 			var spResults = DBHelper.GetProjectEditInfo(projectId, subscriptionId);
 			return Tuple.Create(
 				InitializeCompleteProjectInfo(spResults.Item1),
-				spResults.Item2.Select(udb => InitializeUser(udb)).ToList(),
+				spResults.Item2.Select(udb => InitializeUser(udb,false)).ToList(),
 				spResults.Item3.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());
 		}
 
@@ -615,7 +615,33 @@ namespace AllyisApps.Services
 			};
 		}
 
-		public static AddressDBEntity GetDBEntityFromAddress(Address address)
+        /// <summary>
+        /// Initialize address from dynamic infomation
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        public static Address InitializeAddress(dynamic address)
+        {
+            if (address == null)
+            {
+                return null;
+            }
+
+            return new Address()
+            {
+                AddressId = address.AddressId,
+                Address1 = address.Address1,
+                Address2 = address.Address2,
+                City = address.City,
+                StateName = address.State,
+                PostalCode = address.PostalCode,
+                CountryCode = address.CountryCode,
+                StateId = address.StateId,
+                CountryName = address.Country
+            };
+        }
+
+        public static AddressDBEntity GetDBEntityFromAddress(Address address)
 		{
 			return new AddressDBEntity()
 			{

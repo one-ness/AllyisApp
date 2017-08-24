@@ -50,15 +50,7 @@ namespace AllyisApps.Services
 
 			if (orgInfo != null)
 			{
-				switch (orgInfo.OrganizationRole)
-				{
-					case OrganizationRole.Owner:
-						result = true;
-						break;
-
-					default:
-						break;
-				}
+                result = CheckOrgAction(action, orgId, orgInfo.OrganizationRole, throwException);
 			}
 
 			if (!result && throwException)
@@ -70,10 +62,30 @@ namespace AllyisApps.Services
 			return result;
 		}
 
-		/// <summary>
-		/// check the permissions in the org the given subscription belongs to for the given user.
-		/// </summary>
-		public bool CheckOrgActionForSubscriptionId(OrgAction action, int subscriptionId, bool throwException = true)
+        public bool CheckOrgAction(OrgAction action,int orgId, OrganizationRole role, bool throwException = true)
+        {
+            bool result = false;
+            switch (role)
+            {
+                case OrganizationRole.Owner:
+                    result = true;
+                    break;
+
+                default:
+                    break;
+            }
+            if (!result && throwException)
+            {
+                string message = string.Format("action {0} denied for org {1}", action.ToString(), orgId);
+                throw new AccessViolationException(message);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// check the permissions in the org the given subscription belongs to for the given user.
+        /// </summary>
+        public bool CheckOrgActionForSubscriptionId(OrgAction action, int subscriptionId, bool throwException = true)
 		{
 			int orgId = -1;
 			UserSubscription subInfo = null;

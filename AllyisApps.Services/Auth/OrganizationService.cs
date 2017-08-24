@@ -666,7 +666,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="organizationInfo">OrganizationDBEntity instance.</param>
 		/// <returns>Organization instance.</returns>
-		public Organization InitializeOrganization(dynamic organizationInfo)
+		public static Organization InitializeOrganization(dynamic organizationInfo)
 		{
 			if (organizationInfo == null)
 			{
@@ -676,18 +676,7 @@ namespace AllyisApps.Services
 
 			if (organizationInfo.AddressId != null)
 			{
-				address = new Address()
-				{
-					Address1 = organizationInfo.Address,
-					Address2 = null,
-					AddressId = organizationInfo.AddressId,
-					City = organizationInfo.City,
-					StateId = organizationInfo.StateId,
-					StateName = organizationInfo.StateName,
-					CountryCode = organizationInfo.CountryCode,
-					CountryName = organizationInfo.CountryName,
-					PostalCode = organizationInfo.PostalCode
-				};
+                address = InitializeAddress(organizationInfo);
 			}
 
 			return new Organization
