@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [Expense].[UpdateExpenseItem]
 	@expenseItemId INT,
-	@expenseItemName NVARCHAR(60),
 	@itemDescription NVARCHAR(100),
 	@transactionDate DATETIME2(0),
 	@modifiedUtc DATETIME2(0),
@@ -14,7 +13,6 @@ BEGIN
 
 	UPDATE [Expense].[ExpenseItem]
 	SET 
-		[ExpenseItemName] = @expenseItemName,
 		[ItemDescription] = @itemDescription,
 		[TransactionDate] = @transactionDate,
 		[ExpenseItemModifiedUtc] = @modifiedUtc,

@@ -8,9 +8,9 @@
 {
 	int index = i;
 	var item = Model.Items[i];
-	if (String.IsNullOrEmpty(item.ExpenseItemName)) // sets default value to checked if item is new
+	if (String.IsNullOrEmpty(item.ItemDiscription)) // sets default value to checked if item is new
 	{
-		item.IsBillableToCustomer = true;
+		item.IsBillableToCustomer = false;
 	}
 	string dateVal = "";
 	string amountVal = "";
@@ -48,7 +48,7 @@
 		<label>Account</label>
 		@Html.DropDownListFor(m => m.Items[i].AccountId, accountList, new { @class = "form-control item-control", name = accountName, style = "display: inline-block; width: 150px", Value = Model.Items[i].AccountId })
 		<label>Billable to Customer</label>
-		@Html.CheckBoxFor(m => m.Items[i].IsBillableToCustomer, new { @class = "form-control item-control", name = checkboxName, style = "width: 14px; height: 14px; display: inline-block; margin: 10px; vertical-align: middle;" })
+		@Html.CheckBoxFor(m => m.Items[i].IsBillableToCustomer, new { @class = "form-control item-control check-off", name = checkboxName, style = "width: 14px; height: 14px; display: inline-block; margin: 10px; vertical-align: middle;" })
 		<a class="btn btn-danger btn-fa hidden-create"
 		   onclick="removeItem(@index)"
 		   style="float: right; width: 34px; color: white !important; border-color: #d43f3a !important; border-radius: 0px; margin-right: 0px;"
@@ -67,7 +67,7 @@
 		$('.items').load('@Url.Action("AddItem")', @Html.Raw(Json.Encode(@Model)), setDatePickers);
 	});
 	function removeItem(index) {
-		$('.items').load('@Url.Action("RemoveItem")', { model: @Html.Raw(Json.Encode(@Model)), index: index });
+		$('.items').load('@Url.Action("RemoveItem")', { model: @Html.Raw(Json.Encode(@Model)), index: index }, setDatePickers);
 	}
 	$('.amount-textbox').focus(function () {
 		console.log('redirecting focus');

@@ -95,7 +95,6 @@ namespace AllyisApps.Services
 		{
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
 			{
-				ExpenseItemName = item.ExpenseItemName,
 				AccountId = item.AccountId,
 				Amount = item.Amount,
 				CreatedUtc = item.ExpenseItemCreatedUtc,
@@ -221,7 +220,6 @@ namespace AllyisApps.Services
 				ExpenseItemCreatedUtc = entity.CreatedUtc,
 				ExpenseItemId = entity.ExpenseItemId,
 				ExpenseItemModifiedUtc = entity.ModifiedUtc,
-                ExpenseItemName = entity.ExpenseItemName,
 				ExpenseReportId = entity.ExpenseReportId,
 				IsBillableToCustomer = entity.IsBillableToCustomer,
 				ItemDiscription = entity.ItemDescription,
@@ -263,7 +261,6 @@ namespace AllyisApps.Services
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
 			{
 				AccountId = item.AccountId,
-                ExpenseItemName = item.ExpenseItemName,
 				Amount = item.Amount,
 				CreatedUtc = item.ExpenseItemCreatedUtc,
 				ExpenseItemId = item.ExpenseItemId,
