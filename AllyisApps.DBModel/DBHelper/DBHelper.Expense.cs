@@ -195,7 +195,6 @@ namespace AllyisApps.DBModel
 
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@reportTitle", report.ReportTitle);
-            parameters.Add("@reportDate", report.ReportDate);
 			parameters.Add("@organizationId", report.OrganizationId);
 			parameters.Add("@submittedById", report.SubmittedById);
             parameters.Add("@reportStatus", report.ReportStatus);
@@ -275,7 +274,6 @@ namespace AllyisApps.DBModel
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@expenseReportId", report.ExpenseReportId);
             parameters.Add("@reportTitle", report.ReportTitle);
-            parameters.Add("@reportDate", report.ReportDate);
             parameters.Add("@organizationId", report.OrganizationId);
             parameters.Add("@submittedById", report.SubmittedById);
             parameters.Add("@reportStatus", report.ReportStatus);

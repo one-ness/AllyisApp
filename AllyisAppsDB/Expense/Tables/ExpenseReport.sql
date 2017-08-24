@@ -1,7 +1,6 @@
 ﻿CREATE TABLE [Expense].[ExpenseReport] (
     [ExpenseReportId]       INT            IDENTITY (104729, 2) NOT NULL,
     [ReportTitle]           NVARCHAR (128) NOT NULL,
-    [ReportDate]            DATETIME2 (0)  NOT NULL,
     [OrganizationId]        INT            NOT NULL,
     [SubmittedById]         INT            NOT NULL,
     [ReportStatus]          TINYINT        CONSTRAINT [DF_ExpenseReport_ReportStatus] DEFAULT ((1)) NOT NULL,

@@ -7,7 +7,6 @@ BEGIN
 	SELECT 
 		[ExpenseReportId],
 		[ReportTitle],
-		[ReportDate],
 		[OrganizationId],
 		[SubmittedById],
 		[ReportStatus],
