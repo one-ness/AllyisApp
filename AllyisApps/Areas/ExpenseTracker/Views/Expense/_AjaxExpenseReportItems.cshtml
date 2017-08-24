@@ -38,14 +38,13 @@
 			Text = entity.AccountName
 		});
 	}
-	<div class="item-div">
+	<div class="item-div" style="margin: 10px; margin-bottom: 0px;">
 		@Html.HiddenFor(m => m.Items[i].ExpenseItemId, new { name = itemIdName, Value = Model.Items[i].ExpenseItemId})
 		@Html.TextBoxFor(m => m.Items[i].TransactionDate, new { @class = "datepicker form-control item-control", name = dateName, Value = dateVal, placeholder = "Date", style = "display: inline-block; width: 150px" })
-		@Html.TextBoxFor(m => m.Items[i].ExpenseItemName, new { @class = "form-control item-control", name = nameName, Value = Model.Items[i].ExpenseItemName, placeholder = "Name", style = "display: inline-block; width: 150px" })
 		<div class="amount-div form-control item-control" style="display: inline-block; width: 150px;">$
 			@Html.TextBoxFor(m => m.Items[i].Amount, new { @class = "amount-textbox", name = amountName, Value = amountVal, placeholder = "Amount", style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px;" })
 		</div>
-		@Html.TextBoxFor(m => m.Items[i].ItemDiscription, new { @class = "form-control item-control", name = descriptionName, Value = Model.Items[i].ItemDiscription, placeholder = "Description", style = "display: inline-block; width: 150px" })
+		@Html.TextBoxFor(m => m.Items[i].ItemDiscription, new { @class = "form-control item-control", name = descriptionName, Value = Model.Items[i].ItemDiscription, placeholder = "Description", style = "display: inline-block; width: 300px" })
 		<label>Account</label>
 		@Html.DropDownListFor(m => m.Items[i].AccountId, accountList, new { @class = "form-control item-control", name = accountName, style = "display: inline-block; width: 150px", Value = Model.Items[i].AccountId })
 		<label>Billable to Customer</label>
@@ -58,13 +57,10 @@
 		</a>
 	</div>
 }
-<div style="text-align: center;">
-	<a class="addItem">
-		<span class="btn btn-fa">
-			Add Item
-		</span>
-	</a>
-</div>
+<a class="addItem btn btn-fa hidden-create add-button">
+	<span class="glyphicon glyphicon-plus"></span>
+</a>
+<div style="clear:both"></div>
 
 <script>
 	$('.addItem').on('click', function () {

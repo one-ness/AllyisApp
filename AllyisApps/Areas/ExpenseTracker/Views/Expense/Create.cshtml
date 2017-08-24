@@ -31,12 +31,10 @@
 				}
 			}
 		</div>
-		<div style="width:70%; margin:0 auto"></div>
-		<div id="footUpload" style="background-color:#f5f5f5; display: flex; justify-content: space-around; flex-wrap: wrap; padding-bottom: 0px; float:right; margin-top: 10px;">
-			<a onclick="addFile();">
-				<span class="btn btn-primary">Add File</span>
-			</a>
-		</div>
+		<a class="btn btn-fa hidden-create add-button"
+		   onclick="addFile()">
+			<span class="glyphicon glyphicon-plus"></span>
+		</a>
 	</div>
 
 	<div class="col-md-6" style="float: left;">
@@ -84,7 +82,7 @@
 	</div>
 	
 	<div style="clear: both;">
-		<div class="panel panel-default">
+		<div class="panel panel-default" style="background-color: #f5f5f5;">
 			<div class="panel-heading">
 				Items
 			</div>

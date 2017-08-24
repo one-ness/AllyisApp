@@ -2,7 +2,7 @@
 @using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 
 @model ExpenseFileModel
-<div class="file-input">
+<div class="file-input" style="margin: 10px; margin-bottom: 0px;">
 	<div style="display: inline-block;">
 		@{
 			string className = String.Format("file_{0}", Model.Index);
@@ -12,7 +12,7 @@
 		}
 		<input type="file" id="@uploadName" class="@className" name="files" style="display:none;" value="@Model.File"
 			   onchange="$('#@inputName').val($(this).val().replace('C:\\fakepath\\', ''));" />
-		<input id="@inputName" class="form-control" style="width: 150px; display: inline-block;"
+		<input id="@inputName" class="form-control item-control" style="width: 130px; display: inline-block;"
 			   onchange="$('#@inputName').val($(this).val().replace('C:\\fakepath\\', ''));" />
 	</div>
 	<div class="file-right" style="float: right;">
