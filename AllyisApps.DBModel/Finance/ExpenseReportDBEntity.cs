@@ -50,7 +50,7 @@ namespace AllyisApps.DBModel.Finance
 		/// <summary>
 		/// Gets or sets the Expense Report's submission date.
 		/// </summary>
-		public DateTime ExpenseReportSubmittedUtc { get; set; }
+		public DateTime? ExpenseReportSubmittedUtc { get; set; }
 	}
 
 }

@@ -34,7 +34,7 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         /// Gets or sets the date the report was submitted.
         /// </summary>
         [DisplayFormat(DataFormatString = "{0:MM-dd-YYYY")]
-        public DateTime SubmittedDate { get; set; }
+        public DateTime? SubmittedDate { get; set; }
 
         /// <summary>
         /// Gets or sets the status of the report.

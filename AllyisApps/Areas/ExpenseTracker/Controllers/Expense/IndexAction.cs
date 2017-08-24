@@ -59,7 +59,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                     ReportId = item.ExpenseReportId,
                     ReportName = item.ReportTitle,
                     Status = (ExpenseStatusEnum)item.ReportStatus,
-                    SubmittedDate = item.CreatedUtc,
+                    SubmittedDate = item.SubmittedUtc,
                     UserId = user.UserId,
                     UserName = user.FirstName + " " + user.LastName
                 });

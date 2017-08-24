@@ -27,7 +27,7 @@
             <tr>
                 <td>@Html.ActionLink(@report.ReportName,"reportview", new { reportId = @report.ReportId }, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" })</td>
                 
-                @if(report.Status == ExpenseStatusEnum.Draft)
+                @if(report.SubmittedDate == null)
                 {
                     <td>-</td>
                 }

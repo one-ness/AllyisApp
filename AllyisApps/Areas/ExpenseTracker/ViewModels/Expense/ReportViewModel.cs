@@ -50,14 +50,19 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         public DateTime CreatedUtc { get; set; }
 
         /// <summary>
-        /// Gets or sets the report last modified time.
+        /// Gets or sets the report last modified date.
         /// </summary>
         public DateTime ModifiedUtc { get; set; }
 
-        /// <summary>
-        /// Gets or sets the associated expense items.
-        /// </summary>
-        public IEnumerable<ExpenseItem> Expenses { get; set; }
+		/// <summary>
+		/// Gets or sets the submission date.
+		/// </summary>
+		public DateTime? SubmittedUtc { get; set; }
+
+		/// <summary>
+		/// Gets or sets the associated expense items.
+		/// </summary>
+		public IEnumerable<ExpenseItem> Expenses { get; set; }
 
         /// <summary>
         /// Gets or sets the associeate report history.

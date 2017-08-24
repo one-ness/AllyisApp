@@ -23,6 +23,18 @@
                     <div>@Model.SubmittedBy (@Model.UserId)</div>
                 </div>
                 <div class="report-detail">
+                    <div><b>Submission Date:</b></div>
+                    @if (Model.SubmittedUtc == null)
+                    {
+                        <div>-</div>
+                    }
+                    else
+                    {
+                        <div>@String.Format("{0:MM-dd-yyyy}", @Model.SubmittedUtc)</div>
+                    }
+
+                </div>
+                <div class="report-detail">
                     <div><b>Status:</b></div>
                     <div>@Model.Status</div>
                 </div>

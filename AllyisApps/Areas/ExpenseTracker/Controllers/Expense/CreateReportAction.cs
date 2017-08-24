@@ -36,9 +36,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			var subscription = AppService.GetSubscription(subscriptionId);
 			var organizationId = subscription.OrganizationId;
 			ExpenseStatusEnum reportStatus; // = (ExpenseStatusEnum)Enum.Parse(typeof(ExpenseStatusEnum), Request.Form["Report.ReportStatus"]);
+			DateTime? submittedUtc = null;
+
 			if (submitType == "Submit")
 			{
 				reportStatus = ExpenseStatusEnum.Pending;
+				submittedUtc = DateTime.UtcNow;
 			}
 			else
 			{
@@ -51,6 +54,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				BusinessJustification = businessJustification,
 				CreatedUtc = DateTime.UtcNow,
 				ModifiedUtc = DateTime.UtcNow,
+				SubmittedUtc = submittedUtc,
 				SubmittedById = submittedById,
 				OrganizationId = organizationId,
 				ReportStatus = (int)reportStatus

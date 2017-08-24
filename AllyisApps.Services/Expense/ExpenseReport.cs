@@ -53,6 +53,6 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// The date submitted
 		/// </summary>
-		public DateTime SubmittedUtc { get; set; }
+		public DateTime? SubmittedUtc { get; set; }
 	}
 }

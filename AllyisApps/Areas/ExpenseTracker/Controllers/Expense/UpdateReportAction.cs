@@ -8,6 +8,8 @@ using System;
 using System.Linq;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Finance;
+using System.Web;
+using AllyisApps.Lib;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -24,12 +26,30 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="reportName"></param>
 		/// <param name="businessJustification"></param>
 		/// <param name="reportId"></param>
+		/// <param name="submitType"></param>
+		/// <param name="files"></param>
 		/// <param name="items"></param>
 		/// <returns></returns>
-		public ActionResult UpdateReport(int subscriptionId, int submittedById, int reportId, List<ExpenseItem> items, string reportName = "", string businessJustification = "")
+		public ActionResult UpdateReport(int subscriptionId, int submittedById, int reportId, string submitType, IEnumerable<HttpPostedFileBase> files = null, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
 		{
+			if (items == null)
+			{
+				items = new List<ExpenseItem>();
+			}
 			var subscription = AppService.GetSubscription(subscriptionId);
 			var organizationId = subscription.OrganizationId;
+			ExpenseStatusEnum reportStatus; // = (ExpenseStatusEnum)Enum.Parse(typeof(ExpenseStatusEnum), Request.Form["Report.ReportStatus"]);
+			DateTime? submittedUtc = null;
+
+			if (submitType == "Submit")
+			{
+				reportStatus = ExpenseStatusEnum.Pending;
+				submittedUtc = DateTime.UtcNow;
+			}
+			else
+			{
+				reportStatus = ExpenseStatusEnum.Draft;
+			}
 
 			var oldReport = AppService.GetExpenseReport(reportId);
 
@@ -40,9 +60,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					ReportTitle = reportName,
 					BusinessJustification = businessJustification,
 					ModifiedUtc = DateTime.UtcNow,
+					SubmittedUtc = submittedUtc,
 					SubmittedById = submittedById,
 					OrganizationId = organizationId,
-					//ReportStatus = (int)Enum.Parse(typeof(ExpenseStatusEnum), Request.Form["Report.ReportStatus"])
+					ReportStatus = (int)reportStatus
 				};
 
 				foreach (var item in items)
@@ -52,6 +73,17 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					item.ExpenseItemModifiedUtc = DateTime.UtcNow;
 					item.ExpenseReportId = reportId;
 					AppService.UpdateExpenseItem(item);
+				}
+
+				if (files != null)
+				{
+					foreach (var file in files)
+					{
+						if (file != null)
+						{
+							AzureFiles.SaveReportAttachments(reportId, file.InputStream, file.FileName);
+						}
+					}
 				}
 
 				AppService.UpdateExpenseReport(report, reportId);

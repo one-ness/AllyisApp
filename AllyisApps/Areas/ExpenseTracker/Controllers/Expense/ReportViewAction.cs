@@ -64,6 +64,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 SubmittedBy = string.Format("{0} {1}", user.FirstName, user.LastName),
                 CreatedUtc = report.CreatedUtc,
                 ModifiedUtc = report.ModifiedUtc,
+				SubmittedUtc = report.SubmittedUtc,
                 Justification = report.BusinessJustification,
                 Status = (ExpenseStatusEnum)report.ReportStatus,
                 Expenses = reportItems,

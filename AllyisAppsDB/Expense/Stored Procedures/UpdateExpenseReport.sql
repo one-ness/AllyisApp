@@ -14,6 +14,7 @@ BEGIN
 	SET
 		[ReportTitle] = @reportTitle,
 		[ReportStatus] = @reportStatus,
-		[BusinessJustification] = @businessJustification
+		[BusinessJustification] = @businessJustification,
+		[ExpenseReportSubmittedUtc] = @submittedUtc
 	WHERE [ExpenseReportId] = @expenseReportId;
 END
