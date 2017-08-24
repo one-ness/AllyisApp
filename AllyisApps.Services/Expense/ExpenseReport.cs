@@ -30,7 +30,6 @@ namespace AllyisApps.Services
         /// </summary>
         public int SubmittedById { get; set; }
 
-
         /// <summary>
         /// The report status
         /// </summary>
@@ -50,5 +49,10 @@ namespace AllyisApps.Services
         /// The last date modified
         /// </summary>
         public DateTime ModifiedUtc { get; set; }
-    }
+
+		/// <summary>
+		/// The date submitted
+		/// </summary>
+		public DateTime SubmittedUtc { get; set; }
+	}
 }

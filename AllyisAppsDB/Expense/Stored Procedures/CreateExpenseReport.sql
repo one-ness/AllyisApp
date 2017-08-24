@@ -6,6 +6,7 @@ CREATE PROCEDURE [Expense].[CreateExpenseReport]
 	@businessJustification NVARCHAR(100),
 	@createdUtc DATETIME2,
 	@modifiedUtc DATETIME2,
+	@submittedUtc DATETIME2,
 	@reportId INT OUTPUT
 AS
 BEGIN
@@ -18,14 +19,16 @@ BEGIN
 		[ReportStatus],
 		[BusinessJustification],
 		[ExpenseReportCreatedUtc],
-		[ExpenseReportModifiedUtc])
+		[ExpenseReportModifiedUtc],
+		[ExpenseReportSubmittedUtc])
 	VALUES (@reportTitle,
 		@organizationId,
 		@submittedById,
 		@reportStatus,
 		@businessJustification,
 		@createdUtc,
-		@modifiedUtc);
+		@modifiedUtc,
+		@submittedUtc);
 
 	SELECT IDENT_CURRENT('[Expense].[ExpenseReport]');
 END

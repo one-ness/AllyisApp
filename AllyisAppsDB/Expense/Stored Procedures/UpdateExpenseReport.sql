@@ -4,7 +4,8 @@
 	@organizationId INT,
 	@submittedById INT,
 	@reportStatus TINYINT,
-	@businessJustification NVARCHAR(100)
+	@businessJustification NVARCHAR(100),
+	@submittedUtc DATETIME2 (0)
 AS
 BEGIN
 	SET NOCOUNT ON;

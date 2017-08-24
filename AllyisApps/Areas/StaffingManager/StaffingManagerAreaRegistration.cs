@@ -32,9 +32,9 @@ namespace AllyisApps.Areas.StaffingManager
 		{
 			context.Routes.MapSubdomainRoute(
 				name: "StaffingManager_Default",
-				url: "staffingmanager/{subscriptionId}/{controller}/{action}/{id}",
+				url: "staffingmanager/{subscriptionId}/{controller}/{action}",
 				area: this.AreaName,
-				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+				defaults: new { controller = "Home", action = "Index" },
 				constraints: new { subscriptionId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
 		}

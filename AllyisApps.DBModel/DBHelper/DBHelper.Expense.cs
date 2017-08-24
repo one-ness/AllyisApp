@@ -201,11 +201,11 @@ namespace AllyisApps.DBModel
             parameters.Add("@businessJustification", report.BusinessJustification);
             parameters.Add("@createdUtc", report.ExpenseReportCreatedUtc);
             parameters.Add("@modifiedUtc", report.ExpenseReportModifiedUtc);
+			parameters.Add("@submittedUtc", report.ExpenseReportSubmittedUtc);
 			parameters.Add("@reportId");
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
-                //int reportId = connection.Execute("[Expense].[CreateExpenseReport]", parameters, commandType: CommandType.StoredProcedure);
 				int reportId = connection.ExecuteScalar<int>("[Expense].[CreateExpenseReport]", parameters, commandType: CommandType.StoredProcedure);
 				return reportId;
 			}
@@ -278,6 +278,7 @@ namespace AllyisApps.DBModel
             parameters.Add("@submittedById", report.SubmittedById);
             parameters.Add("@reportStatus", report.ReportStatus);
             parameters.Add("@businessJustification", report.BusinessJustification);
+			parameters.Add("@submittedUtc", report.SubmittedUtc);
 
 
             using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))

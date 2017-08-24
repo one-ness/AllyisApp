@@ -193,6 +193,7 @@ namespace AllyisApps.Services
 				SubmittedById = entity.SubmittedById,
 				CreatedUtc = entity.ExpenseReportCreatedUtc,
 				ModifiedUtc = entity.ExpenseReportModifiedUtc,
+				SubmittedUtc = entity.ExpenseReportSubmittedUtc,
 				ReportStatus = entity.ReportStatus,
 				ReportTitle = entity.ReportTitle,
 				BusinessJustification = entity.BusinessJustification
