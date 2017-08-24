@@ -18,6 +18,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// View/export expense report.
 		/// </summary>
+		/// <param name="submitType"></param>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="submittedById">The submitted by id.</param>
 		///  <param name="items">The expense items.</param>
@@ -26,7 +27,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="reportName">The report name.</param>
 		/// <param name="businessJustification">The justification.</param>
 		/// <returns>An action result.</returns>
-		public ActionResult CreateReport(int subscriptionId, int submittedById, string date, IEnumerable<HttpPostedFileBase> files = null, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
+		[HttpPost]
+		public ActionResult CreateReport(string submitType, int subscriptionId, int submittedById, string date, IEnumerable<HttpPostedFileBase> files = null, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
 		{
 			if (items == null)
 			{
@@ -34,7 +36,15 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			}
 			var subscription = AppService.GetSubscription(subscriptionId);
 			var organizationId = subscription.OrganizationId;
-			var reportStatus = (ExpenseStatusEnum)Enum.Parse(typeof(ExpenseStatusEnum), Request.Form["Report.ReportStatus"]);
+			ExpenseStatusEnum reportStatus; // = (ExpenseStatusEnum)Enum.Parse(typeof(ExpenseStatusEnum), Request.Form["Report.ReportStatus"]);
+			if (submitType == "Submit")
+			{
+				reportStatus = ExpenseStatusEnum.Pending;
+			}
+			else
+			{
+				reportStatus = ExpenseStatusEnum.Draft;
+			}
 
 			var report = new ExpenseReport()
 			{

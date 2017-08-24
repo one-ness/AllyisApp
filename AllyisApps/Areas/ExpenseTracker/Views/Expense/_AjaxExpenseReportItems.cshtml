@@ -40,16 +40,16 @@
 	}
 	<div class="item-div">
 		@Html.HiddenFor(m => m.Items[i].ExpenseItemId, new { name = itemIdName, Value = Model.Items[i].ExpenseItemId})
-		@Html.TextBoxFor(m => m.Items[i].TransactionDate, new { @class = "datepicker form-control", name = dateName, Value = dateVal, placeholder = "Date", style = "display: inline-block; width: 150px" })
-		@Html.TextBoxFor(m => m.Items[i].ExpenseItemName, new { @class = "form-control", name = nameName, Value = Model.Items[i].ExpenseItemName, placeholder = "Name", style = "display: inline-block; width: 150px" })
-		<div class="amount-div form-control" style="display: inline-block; width: 150px;">$
+		@Html.TextBoxFor(m => m.Items[i].TransactionDate, new { @class = "datepicker form-control item-control", name = dateName, Value = dateVal, placeholder = "Date", style = "display: inline-block; width: 150px" })
+		@Html.TextBoxFor(m => m.Items[i].ExpenseItemName, new { @class = "form-control item-control", name = nameName, Value = Model.Items[i].ExpenseItemName, placeholder = "Name", style = "display: inline-block; width: 150px" })
+		<div class="amount-div form-control item-control" style="display: inline-block; width: 150px;">$
 			@Html.TextBoxFor(m => m.Items[i].Amount, new { @class = "amount-textbox", name = amountName, Value = amountVal, placeholder = "Amount", style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px;" })
 		</div>
-		@Html.TextBoxFor(m => m.Items[i].ItemDiscription, new { @class = "form-control", name = descriptionName, Value = Model.Items[i].ItemDiscription, placeholder = "Description", style = "display: inline-block; width: 150px" })
+		@Html.TextBoxFor(m => m.Items[i].ItemDiscription, new { @class = "form-control item-control", name = descriptionName, Value = Model.Items[i].ItemDiscription, placeholder = "Description", style = "display: inline-block; width: 150px" })
 		<label>Account</label>
-		@Html.DropDownListFor(m => m.Items[i].AccountId, accountList, new { @class = "form-control", name = accountName, style = "display: inline-block; width: 150px", Value = Model.Items[i].AccountId })
+		@Html.DropDownListFor(m => m.Items[i].AccountId, accountList, new { @class = "form-control item-control", name = accountName, style = "display: inline-block; width: 150px", Value = Model.Items[i].AccountId })
 		<label>Billable to Customer</label>
-		@Html.CheckBoxFor(m => m.Items[i].IsBillableToCustomer, new { @class = "form-control", name = checkboxName, style = "width: 14px; height: 14px; display: inline-block; margin: 10px; vertical-align: middle;" })
+		@Html.CheckBoxFor(m => m.Items[i].IsBillableToCustomer, new { @class = "form-control item-control", name = checkboxName, style = "width: 14px; height: 14px; display: inline-block; margin: 10px; vertical-align: middle;" })
 		<a class="btn btn-danger btn-fa hidden-create"
 		   onclick="removeItem(@index)"
 		   style="float: right; width: 34px; color: white !important; border-color: #d43f3a !important; border-radius: 0px; margin-right: 0px;"
