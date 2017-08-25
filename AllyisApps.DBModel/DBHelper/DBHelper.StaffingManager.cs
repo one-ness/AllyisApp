@@ -564,7 +564,8 @@ namespace AllyisApps.DBModel
 					parameters,
 					commandType: CommandType.StoredProcedure);
 
-				return Tuple.Create(results.Read<PositionDBEntity>().ToList(),
+				return Tuple.Create(
+					results.Read<PositionDBEntity>().ToList(),
 					results.Read<PositionTagDBEntity>().ToList(),
 					results.Read<EmploymentTypeDBEntity>().ToList(),
 					results.Read<PositionLevelDBEntity>().ToList(),

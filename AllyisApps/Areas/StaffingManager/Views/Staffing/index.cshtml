@@ -6,82 +6,126 @@
 }
 
 <div class="row">
-	<div class="col-md-8 col-md-push-2">
+	<style>
+		table {
+			border-collapse: collapse;
+			text-align: left;
+			width: 100%;
+		}
 
-		<div class="row">
-			<div class="col-xs-12">
-				<h1 style="float: left">@Strings.MyAccount</h1>
+		table td, .datagrid table th {
+			padding: 5px 5px;
+		}
+
+		table thead th {
+			background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #bc7967), color-stop(1, #80141C) );
+			background: -moz-linear-gradient( center top, #bc7967 5%, #80141C 100% );
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#991821', endColorstr='#80141C');
+			background-color: #bc7967;
+			color: #FFFFFF;
+			font-size: 14px;
+			font-weight: bold;
+			border-left: 2px solid #bc7967;
+		}
+
+			table thead th:first-child {
+				border: none;
+			}
+
+		table tbody td {
+			color: #80141C;
+			border-left: 3px solid #F7CDCD;
+			font-size: 14px;
+			font-weight: normal;
+		}
+
+		table tbody .alt td {
+			background: #F7CDCD;
+			color: #80141C;
+		}
+
+		table tbody td:first-child {
+			border-left: none;
+		}
+
+		table tr {
+			border-bottom: solid #bc7967;
+		}
+
+		tbody tr:last-child td {
+			border-bottom: none;
+		}
+
+		.left-element {
+			display: inline-block;
+			left: 0;
+		}
+
+		.right-element {
+			position: absolute;
+			display: inline-block;
+			right: 0px;
+		}
+	</style>
+
+	<div class="panel panel-default" width ="100%">
+		<div class="panel-heading">
+			<h2 class="left-element" style="margin-top: 0px; margin-bottom: 0px;">
+				@Model.subscriptionName
+			</h2>
+			<div class="text-right" href="@Url.Action(ActionConstants.CreatePosition, ControllerConstants.Staffing)">
+				<label class="btn btn-default">New Position</label>
 			</div>
 		</div>
+		<div class="table-responsive">
+			<table>
+				<thead>
+					<tr class="panel panel-default">
+						<th width ="24%" style="padding:0 5px 0 5px;">Position Title </th>
+						<th width ="10%" style="padding:0 5px 0 5px;">Position Status </th>
+						<th width ="8%" style="padding:0 5px 0 5px;">Positions Available </th>
+						<th width ="12%" style="padding:0 5px 0 5px;">@Strings.HiringManager </th>
+						<th width ="12%" style="padding:0 5px 0 5px;">@Strings.TeamName </th>
+						<th width ="16%" style="padding:0 5px 0 5px;">Tags </th>
+						<th width ="12%" style="padding:0 5px 0 5px;">Created </th>
+					</tr>
+				</thead>
+				@foreach (var pos in Model.positions)
+				{
+					<tr>
+						<td href = "@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { id = pos.PositionId })" >
+							@pos.PositionTitle
+						</td>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h2 style="margin-top: 0px; margin-bottom: 0px;">
-					@Model.subscriptionName
-				</h2>
-			</div>
-			<div class="panel-body">
-				<div class="col-sm-9 index-details">
-					<p>
-						<label>"- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"</label>
-					</p>
-				</div>
-			</div>
+						<td>@pos.PositionStatusName</td>
+						<td style="padding:0 5px 0 15px;">@pos.PositionCount</td>
+						<td>@pos.HiringManager</td>
+						<td>@pos.TeamName</td>
+						<td>
+							@foreach (var tag in pos.Tags)
+							{
+								<span>@tag.TagName,</span>
+							}
+						</td>
+						<td>@pos.StartDate</td>
+					</tr>
+				}
+			</table>
 		</div>
+
 	</div>
+	@if (Model.positions.Count == 0)
+	{
+		<div class="col-xs-12">
+			<h1 style="float: left">No Active Positions</h1>
+		</div>
+	}
 </div>
 
 <div class="row">
 	<div class="col-md-push-2 col-md-8">
 		<div class="row">
-			<div class="col-xs-12">
-				<h1 style="float: left">POSITIONS</h1>
-				<a href="@Url.Action(ActionConstants.CreatePosition, ControllerConstants.Staffing)" class="btn btn-default" style="float: right; margin-top: 20px; margin-bottom: 15px;">Create Position</a>
-			</div>
-		</div>
-		else
-		{
-			@foreach (var pos in Model.positions)
-			{
-				string title = pos.PositionTitle;
-				string subtitle = pos.TeamName ?? "";
-				<div class="row">
-					<div class="col-md-12">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h2 style="margin-top: 0px; margin-bottom: 0px;">
-									pos.StartDate
-									<a href="@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { id = pos.PositionId })" title="Edit Position" class="pull-right text-muted">
-										<i class="fa fa-cog  fa-lg"></i>
-									</a>
-								</h2>
-							</div>
-							<div class="panel-body">
-								<div class="col-sm-8 index-details">
-									<p>
-										<label>Positions Available: </label>
-										pos.PositionCount
-									</p>
-								</div>
-								<div class="col-sm-4 index-details">
-									<p>
-										<label>Tags: </label>
-										@foreach (var tag in pos.Tags)
-										{
-											<label>tag.TagName + ", "</label> 
-										}
-									</p>
-								</div>
-								<div class="col-md-12" style="height: 100%; margin-top:15px; display: flex; flex-wrap: wrap; justify-content: space-around; clear: both;">
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
 
-				<div class="row">
-				</div>
-			}
-		}
+		</div>
 	</div>
 </div>

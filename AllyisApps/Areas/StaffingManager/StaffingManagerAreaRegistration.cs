@@ -33,12 +33,21 @@ namespace AllyisApps.Areas.StaffingManager
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
 			context.Routes.MapSubdomainRoute(
-				name: "StaffingManager",
-				url: "staffingmanager/{subscriptionId}/{controller}/{action}",
+				name: "StaffingIndex",
+				url: "staffingmanager/{subscriptionId}/{controller}",
 				area: this.AreaName,
-				defaults: new { controller = "Home", action = "Index"},
+				defaults: new { controller = "Staffing", action = "Index" },
 				constraints: new { subscriptionId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
+
+			context.Routes.MapSubdomainRoute(
+				name: "StaffingManager",
+				url: "staffingmanager/{subscriptionId}/{controller}/{action}/{userId}",
+				area: this.AreaName,
+				defaults: new { controller = "Staffing", action = "Index", userId = UrlParameter.Optional, },
+				constraints: new { subscriptionId = @"\d+", userId = @"\d+" },
+				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
 		}
+		
 	}
 }

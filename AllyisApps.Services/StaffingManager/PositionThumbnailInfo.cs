@@ -20,7 +20,12 @@ namespace AllyisApps.Services.StaffingManager
 		/// Gets or sets positionss hiring customer.
 		/// </summary>
 		public int CustomerId { get; set; }
-		
+
+		/// <summary>
+		/// Gets or sets positionss hiring customer name.
+		/// </summary>
+		public string CustomerName { get; set; }
+
 		/// <summary>
 		/// Gets when the position was last modified.
 		/// </summary>
@@ -40,7 +45,12 @@ namespace AllyisApps.Services.StaffingManager
 		/// Gets or sets the number of hires needed for this position.
 		/// </summary>
 		public int PositionCount { get; set; }
-		
+
+		/// <summary>
+		/// Gets or sets positionss hiring manager.
+		/// </summary>
+		public string HiringManager { get; set; }
+
 		/// <summary>
 		/// Gets or sets the name of the team this position is for.
 		/// </summary>

@@ -21,16 +21,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers.Staffing
 		public StaffingController()
 		{
 		}
-
-		/// <summary>
-		/// Index page.
-		/// </summary>
-		/// <param name="subscriptionId">Subscription id.</param>
-		/// <returns>The view.</returns>
-		public ActionResult Index(int subscriptionId)
-		{
-			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Staffing);
-		}
+		
 
 	}
 }

@@ -756,7 +756,7 @@ namespace AllyisApps.Services
 			var results = DBHelper.GetStaffingIndexPageInfo(orgId);
 
 			return Tuple.Create(
-				results.Item1.Select(posdb => InitializePositionThumbnailInfo(posdb, results.Item2)).ToList(),
+				results.Item1.Select(posdb => InitializePositionThumbnailInfo(posdb, results.Item2, results.Item5)).ToList(),
 				results.Item2.Select(tagsdb => InitializeTags(tagsdb)).ToList(),
 				results.Item3.Select(typedb => InitializeEmploymentTypes(typedb)).ToList(),
 				results.Item4.Select(leveldb => InitializePositionLevel(leveldb)).ToList(),
@@ -769,11 +769,15 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="pos">the PositionDBEntity to be converted.</param>
 		/// <param name="tags">the list of PositionTagDBEntity from initial results.</param>
+		/// <param name="statuses">the list of PositionStatusDBEntity from initial results.</param>
 		/// <returns>PositionThumbnailInfo.</returns>
-		public static PositionThumbnailInfo InitializePositionThumbnailInfo(PositionDBEntity pos, List<PositionTagDBEntity> tags)
+		public static PositionThumbnailInfo InitializePositionThumbnailInfo(PositionDBEntity pos, List<PositionTagDBEntity> tags, List<PositionStatusDBEntity> statuses)
 		{
 			List<Tag> tagsList = new List<Tag>();
 			foreach (PositionTagDBEntity tag in tags) if (tag.PositionId == pos.PositionId) tagsList.Add(new Tag { TagId = tag.TagId, TagName = tag.TagName, PositionId = tag.PositionId });
+
+			string status = "";
+			foreach (PositionStatusDBEntity stat in statuses) if (stat.PositionStatusId == pos.PositionStatusId) status = stat.PositionStatusName;
 
 			return new PositionThumbnailInfo
 			{
@@ -781,9 +785,12 @@ namespace AllyisApps.Services
 				OrganizationId = pos.OrganizationId,
 				CustomerId = pos.CustomerId,
 				PositionModifiedUtc = pos.PositionModifiedUtc,
+				PositionStatusName = status,
 				StartDate = pos.StartDate,
 				PositionTitle = pos.PositionTitle,
+				PositionCount = pos.PositionCount,
 				TeamName = pos.TeamName,
+				HiringManager = pos.HiringManager,
 				Tags = tagsList
 			};
 		}
