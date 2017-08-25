@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -16,8 +17,18 @@ namespace AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 		public int Index { get; set; }
 
 		/// <summary>
-		/// Gets or sets the file.
+		/// Gets or sets the file stream.
 		/// </summary>
-		public HttpPostedFileBase File { get; set; }
+		public Stream Stream { get; set; }
+
+		/// <summary>
+		/// Gets or sets the file content type.
+		/// </summary>
+		public string ContentType { get; set; }
+
+		/// <summary>
+		/// Gets or sets the file name.
+		/// </summary>
+		public string FileName { get; set; }
 	}
 }

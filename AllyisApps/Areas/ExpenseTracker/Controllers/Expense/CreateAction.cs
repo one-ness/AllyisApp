@@ -7,6 +7,7 @@ using AllyisApps.ViewModels.ExpenseTracker.Expense;
 using System.Web;
 using AllyisApps.Services.Expense;
 using System.IO;
+using AllyisApps.Lib;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -27,11 +28,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		{
 			ExpenseReport report = reportId == -1 ? null : AppService.GetExpenseReport(reportId);
 			IList<ExpenseItem> items = new List<ExpenseItem>();
-			IList<HttpPostedFileBase> files = new List<HttpPostedFileBase>();
 			if (report != null)
 			{
 				items = AppService.GetExpenseItemsByReportId(reportId);
-				files = AppService.GetExpenseFilesByReportId(reportId);
 			}
 			//IList<ExpenseItem> items = report == null ? new List<ExpenseItem>() : AppService.GetExpenseItemsByReportId(reportId);
 
@@ -42,7 +41,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				StartDate = DateTime.UtcNow,
 				SubscriptionId = subscriptionId,
 				Report = report,
-				Files = files
+				Files = null
 			};
 			return View(model);
 		}

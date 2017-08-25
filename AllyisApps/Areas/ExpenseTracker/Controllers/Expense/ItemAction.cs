@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Finance;
+using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -21,7 +22,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		public ActionResult DisplayItems(ExpenseCreateModel model)
+		public ActionResult DisplayItems(ExpenseItemModel model)
 		{
 			model.AccountList = AppService.GetAccounts();
 			return PartialView("_AjaxExpenseReportItems", model);
@@ -32,9 +33,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		public ActionResult AddItem(ExpenseCreateModel model)
+		public ActionResult AddItem(ExpenseItemModel model)
 		{
-			if (model.Items == null)
+			if (model == null)
 			{
 				model.Items = new List<ExpenseItem>();
 			}
@@ -52,7 +53,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="model"></param>
 		/// <param name="index"></param>
 		/// <returns></returns>
-		public ActionResult RemoveItem(ExpenseCreateModel model, int index)
+		public ActionResult RemoveItem(ExpenseItemModel model, int index)
 		{
 			model.Items.Remove(model.Items.Last());
 			//model.Items.Remove(model.Items.Where(i => i.Index == index).FirstOrDefault());

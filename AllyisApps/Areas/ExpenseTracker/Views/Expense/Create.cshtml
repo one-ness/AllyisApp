@@ -1,7 +1,9 @@
-﻿@using AllyisApps.ViewModels.ExpenseTracker.Expense;
+﻿@using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense;
 @using AllyisApps.Core;
+@using AllyisApps.Lib;
 @using AllyisApps.Services;
-@using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense;
+@using AllyisApps.Services.Expense;
+@using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 @model ExpenseCreateModel
 
@@ -10,6 +12,7 @@
 	Layout = "~/Areas/ExpenseTracker/Views/Shared/_Layout.cshtml";
 	string submitAction = Model.Report == null ? "CreateReport" : "UpdateReport";
 	string submitName = Model.Report == null ? "Create" : "Update";
+	int fileIndex = 0;
 }
 @Scripts.Render("~/bundles/jquery")
 
@@ -19,14 +22,31 @@
 		<div class="panel-heading"><span class="panel-title">Attachments</span></div>
 		<div class="files" id="files">
 			@{
-				Model.Files.Add(new AllyisApps.Services.Expense.ExpenseFile(null, "", ""));
+				List<string> fileNames = AzureFiles.GetReportAttachments(Model.Report.ExpenseReportId);
+				if (Model.Files == null)
+				{
+					Model.Files = new List<HttpPostedFileBase>();
+				}
+				foreach (string name in fileNames)
+				{
+					Tuple<Stream, string, string> tup = AzureFiles.GetFile(Model.Report.ExpenseReportId, name);
+					HttpPostedFileBase file = new ExpenseFile(tup.Item1, tup.Item2, tup.Item3);
+					Model.Files.Add(file);
+				}
+				if (Model.Files.Count < 1)
+				{
+					Model.Files.Add(new ExpenseFile(null, "", ""));
+				}
 				for (int i = 0; i < Model.Files.Count; i++)
 				{
 					var file = new ExpenseFileModel()
 					{
-						File = Model.Files[i],
+						FileName = Model.Files[i].FileName,
+						ContentType = Model.Files[i].ContentType,
+						Stream = Model.Files[i].InputStream,
 						Index = i
 					};
+					fileIndex += 1;
 					Html.RenderAction("DisplayFile", file);
 				}
 			}
@@ -137,8 +157,8 @@
 		pwf.setPageButtonLimit(10);
 		pwf.setRowClass("previewRow");
 
-		var file_index = 1;
-		var item_index = 1;
+		var file_index = @fileIndex;
+		var item_index = @Model.Items.Count;
 
 		function addFile() {
 			console.log('adding file');

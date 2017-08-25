@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Web;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -66,6 +67,13 @@ namespace AllyisApps.Lib
             
             return blob.Properties.ContentType;
         }
+
+		public static Tuple<Stream, string, string> GetFile(int reportId, string attName)
+		{
+			Stream stream = new MemoryStream();
+			string contentType = DownloadReportAttachment(reportId, attName, stream);
+			return new Tuple<Stream, string, string>(stream, contentType, attName);
+		}
 
         /// <summary>
         /// Save an attachment to the blob storage.
