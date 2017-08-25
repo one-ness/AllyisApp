@@ -6,26 +6,26 @@ namespace AllyisApps.DBModel.Finance
 	/// Represents the Expense Item table in the database.
 	/// </summary>
 	public class ExpenseReportDBEntity
-    {
-        /// <summary>
-        /// Gets or sets the Expense Report's ID.
-        /// </summary>
-        public int ExpenseReportId { get; set; }
+	{
+		/// <summary>
+		/// Gets or sets the Expense Report's ID.
+		/// </summary>
+		public int ExpenseReportId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Expense Report's Title.
-        /// </summary>
-        public string ReportTitle { get; set; }
+		/// <summary>
+		/// Gets or sets the Expense Report's Title.
+		/// </summary>
+		public string ReportTitle { get; set; }
 
         /// <summary>
         /// Gets or sets the Expense Reports's parent organization Id.
         /// </summary>
         public int OrganizationId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Expense Report's parent User ID.
-        /// </summary>
-        public int SubmittedById { get; set; }
+		/// <summary>
+		/// Gets or sets the Expense Report's parent User ID.
+		/// </summary>
+		public int SubmittedById { get; set; }
 
         /// <summary>
         /// Gets or sets the Expense Report's status.

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using AllyisApps.Core.Alert;
+﻿using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -87,12 +87,15 @@ namespace AllyisApps.Controllers
 							case "Time Tracker":
 								model.SkuIdNext = 200001;
 								break;
+
 							case "Expense Tracker":
 								model.SkuIdNext = 300001;
 								break;
+
 							case "Staffing Manager":
 								model.SkuIdNext = 400001;
 								break;
+
 							default:
 								break;
 						}
@@ -135,10 +138,12 @@ namespace AllyisApps.Controllers
 					sku.NextName = "Time Tracker Pro";
 					sku.SkuIdNext = 300001;
 					break;
+
 				case "Time Tracker Pro":
 					sku.NextName = "Time Tracker";
 					sku.SkuIdNext = 200001;
 					break;
+
 				default:
 					break;
 			}

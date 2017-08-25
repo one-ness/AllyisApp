@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
 using AllyisApps.Extensions.RouteExtensions;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker
 {

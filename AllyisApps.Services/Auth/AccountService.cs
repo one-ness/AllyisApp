@@ -4,6 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.Lookup;
+using AllyisApps.Lib;
+using AllyisApps.Services.Auth;
+using AllyisApps.Services.Lookup;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,321 +28,337 @@ using AllyisApps.DBModel.Finance;
 
 namespace AllyisApps.Services
 {
-	/// <summary>
-	/// Business logic for all account related operations.
-	/// </summary>
-	public partial class AppService : BaseService
-	{
-		#region public static
+    /// <summary>
+    /// Business logic for all account related operations.
+    /// </summary>
+    public partial class AppService : BaseService
+    {
+        #region public static
 
-		/// <summary>
-		/// Returns a compressed version of the given email address if it is too long.
-		/// </summary>
-		/// <param name="fullEmail">Full email address.</param>
-		/// <returns>Compressed email address, or the full address if it is short enough (or null).</returns>
-		public static string GetCompressedEmail(string fullEmail)
-		{
-			if (!string.IsNullOrEmpty(fullEmail) && fullEmail.Length > 50)
-			{
-				string cemail = string.Format("{0}...{1}", fullEmail.Substring(0, 20), fullEmail.Substring(fullEmail.Length - 15));
-				return cemail;
-			}
-			else
-			{
-				return fullEmail;
-			}
-		}
+        /// <summary>
+        /// Returns a compressed version of the given email address if it is too long.
+        /// </summary>
+        /// <param name="fullEmail">Full email address.</param>
+        /// <returns>Compressed email address, or the full address if it is short enough (or null).</returns>
+        public static string GetCompressedEmail(string fullEmail)
+        {
+            if (!string.IsNullOrEmpty(fullEmail) && fullEmail.Length > 50)
+            {
+                string cemail = string.Format("{0}...{1}", fullEmail.Substring(0, 20), fullEmail.Substring(fullEmail.Length - 15));
+                return cemail;
+            }
+            else
+            {
+                return fullEmail;
+            }
+        }
 
-		#endregion public static
+        #endregion public static
 
-		#region public
+        #region public
 
-		/// <summary>
-		/// Returns a collection of valid states/provinces for the given country.
-		/// </summary>
-		/// <param name="countryName">Country name.</param>
-		/// <returns><see cref="IEnumerable"/> of valid states/provinces.</returns>
-		public IEnumerable ValidStates(string countryName)
-		{
-			if (string.IsNullOrWhiteSpace(countryName)) throw new ArgumentException("countryName");
-			return DBHelper.ValidStates(countryName);
-		}
+        /// <summary>
+        /// Returns a collection of valid states/provinces for the given country.
+        /// </summary>
+        /// <param name="countryName">Country name.</param>
+        /// <returns><see cref="IEnumerable"/> of valid states/provinces.</returns>
+        public IEnumerable ValidStates(string countryName)
+        {
+            if (string.IsNullOrWhiteSpace(countryName)) throw new ArgumentException("countryName");
+            return DBHelper.ValidStates(countryName);
+        }
 
-		/// <summary>
-		/// Gets the list of valid countries.
-		/// </summary>
-		/// <returns>A collection of valid countries.</returns>
-		public Dictionary<string, string> GetCountries()
-		{
-			return DBHelper.GetCountries();
-		}
+        /// <summary>
+        /// Gets the list of valid countries.
+        /// </summary>
+        /// <returns>A collection of valid countries.</returns>
+        public Dictionary<string, string> GetCountries()
+        {
+            return DBHelper.GetCountries();
+        }
 
-		/// <summary>
-		/// get the list of states for the given country
-		/// </summary>
-		public Dictionary<int, string> GetStates(string countryCode)
-		{
-			return this.DBHelper.GetStates(countryCode);
-		}
+        /// <summary>
+        /// get the list of states for the given country
+        /// </summary>
+        public Dictionary<int, string> GetStates(string countryCode)
+        {
+            return this.DBHelper.GetStates(countryCode);
+        }
 
-		/// <summary>
-		/// Gets the list of valid languages selections.
-		/// </summary>
-		/// <returns>A list of languages.</returns>
-		public IEnumerable<Language> ValidLanguages()
-		{
-			return DBHelper.ValidLanguages().Select(s => new Language
-			{
-				LanguageName = s.LanguageName,
-				CultureName = s.CultureName
-			});
-		}
+        /// <summary>
+        /// Gets the list of valid languages selections.
+        /// </summary>
+        /// <returns>A list of languages.</returns>
+        public IEnumerable<Language> ValidLanguages()
+        {
+            return DBHelper.ValidLanguages().Select(s => new Language
+            {
+                LanguageName = s.LanguageName,
+                CultureName = s.CultureName
+            });
+        }
 
-		/// <summary>
-		/// Retrieves a list of all pending invitations for a given user by the user's email.
-		/// </summary>
-		/// <param name="userEmail">The user's email address.</param>
-		/// <returns>The invitation associated with the user.</returns>
-		public List<InvitationInfo> GetInvitationsByUser(string userEmail)
-		{
-			#region Validation
+        /// <summary>
+        /// Retrieves a list of all pending invitations for a given user by the user's email.
+        /// </summary>
+        /// <param name="userEmail">The user's email address.</param>
+        /// <returns>The invitation associated with the user.</returns>
+        public List<InvitationInfo> GetInvitationsByUser(string userEmail)
+        {
+            #region Validation
 
-			if (!Utility.IsValidEmail(userEmail))
-			{
-				throw new FormatException("Email address must be in a valid format.");
-			}
+            if (!Utility.IsValidEmail(userEmail))
+            {
+                throw new FormatException("Email address must be in a valid format.");
+            }
 
-			#endregion Validation
+            #endregion Validation
 
-			var invitationsDB = DBHelper.GetUserInvitationsByUserData(new UserDBEntity()
-			{
-				Email = userEmail
-			});
+            var invitationsDB = DBHelper.GetUserInvitationsByUserData(new UserDBEntity()
+            {
+                Email = userEmail
+            });
 
-			return invitationsDB.Select(idb => InitializeInvitationInfo(idb)).ToList();
-		}
+            return invitationsDB.Select(idb => InitializeInvitationInfo(idb)).ToList();
+        }
 
-		/// <summary>
-		/// Accepts an invitation, adding the user to the invitation's organization, subscriptions, and projects, then deletes the invitations.
-		/// </summary>
-		/// <param name="invitationId">The invitationId.</param>
-		/// <returns>The resulting action message if succeed, null if fail.</returns>
-		public string AcceptUserInvitation(int invitationId)
-		{
-			#region Validation
+        /// <summary>
+        /// Accepts an invitation, adding the user to the invitation's organization, subscriptions, and projects, then deletes the invitations.
+        /// </summary>
+        /// <param name="invitationId">The invitationId.</param>
+        /// <returns>The resulting action message if succeed, null if fail.</returns>
+        public string AcceptUserInvitation(int invitationId)
+        {
+            #region Validation
 
-			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId", "The invitation id cannot be zero or negative.");
+            if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId", "The invitation id cannot be zero or negative.");
 
-			#endregion Validation
+            #endregion Validation
 
-			NotifyInviteAcceptAsync(invitationId);
+            NotifyInviteAcceptAsync(invitationId);
 
-			var results = DBHelper.AcceptInvitation(invitationId, UserContext.UserId);
+            var results = DBHelper.AcceptInvitation(invitationId, UserContext.UserId);
 
-			if (results == null) return null;
+            if (results == null) return null;
 
-			return string.Format("You have successfully joined {0} in the role of {1}.", results.Item1, results.Item2);
-		}
+            return string.Format("You have successfully joined {0} in the role of {1}.", results.Item1, results.Item2);
+        }
 
-		/// <summary>
-		/// Rejects an invitation, deleting it from a user's pending invites.
-		/// </summary>
-		/// <param name="invitationId">The id of the invitation to reject.</param>
-		/// <returns>The resulting message.</returns>
-		public string RejectUserInvitation(int invitationId)
-		{
-			if (DBHelper.RemoveInvitation(invitationId, UserContext.UserId))
-			{
-				return "The invitation has been rejected.";
-			}
-			else
-			{
-				return null;
-			}
-		}
+        /// <summary>
+        /// Rejects an invitation, deleting it from a user's pending invites.
+        /// </summary>
+        /// <param name="invitationId">The id of the invitation to reject.</param>
+        /// <returns>The resulting message.</returns>
+        public string RejectInvitation(int invitationId)
+        {
+            try
+            {
+                DBHelper.RejectInvitation(invitationId);
+                NotifyInviteRejectAsync(invitationId);
+                return "The invitation has been rejected.";
+            }
+            catch (SqlException)
+            {
+                return null;
+            }
+           
+        }
 
-		/// <summary>
-		/// Setup a new user.
-		/// </summary>
-		public async Task<int> SetupNewUser(
-			string email,
-			string password,
-			string firstName,
-			string lastName,
-			Guid emailConfirmationCode,
-			DateTime? dateOfBirth,
-			string phoneNumber,
-			string address1,
-			string address2,
-			string city,
-			int? stateId,
-			string postalCode,
-			string countryCode,
-			string confirmEmailSubject,
-			string confirmEmailMessage)
-        { 
-			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
-			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName:");
-			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException("lastName");
-			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
-			if (emailConfirmationCode == null) throw new ArgumentException("emailConfirmationCode");
-			var result = 0;
-			try
-			{
-                
-				result = await this.DBHelper.CreateUserAsync(
-                    email, Crypto.GetPasswordHash(password), firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName, 
+        /// <summary>
+        /// Setup a new user.
+        /// </summary>
+        public async Task<int> SetupNewUser(
+            string email,
+            string password,
+            string firstName,
+            string lastName,
+            Guid emailConfirmationCode,
+            DateTime? dateOfBirth,
+            string phoneNumber,
+            string address1,
+            string address2,
+            string city,
+            int? stateId,
+            string postalCode,
+            string countryCode,
+            string confirmEmailSubject,
+            string confirmEmailMessage)
+        {
+            if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
+            if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName:");
+            if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException("lastName");
+            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
+            if (emailConfirmationCode == null) throw new ArgumentException("emailConfirmationCode");
+            var result = 0;
+            try
+            {
+                result = await this.DBHelper.CreateUserAsync(
+                    email, Crypto.GetPasswordHash(password), firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName,
                     address1, address2, city, stateId, postalCode, countryCode);
 
-				// user created, send confirmation email
-				await Mailer.SendEmailAsync(this.ServiceSettings.SupportEmail, email, confirmEmailSubject, confirmEmailMessage);
-			}
-			catch (SqlException ex)
-			{
-				if (ex.Message.ToLower().Contains("unique"))
-				{
-					// unique constraint violation of email
-				}
-				else
-				{
-					throw;
-				}
-			}
+                // user created, send confirmation email
+                await Mailer.SendEmailAsync(this.ServiceSettings.SupportEmail, email, confirmEmailSubject, confirmEmailMessage);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Message.ToLower().Contains("unique"))
+                {
+                    // unique constraint violation of email
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-			return result;
-		}
+            return result;
+        }
 
-		/// <summary>
-		/// Validates the given email and password with the database.
-		/// </summary>
-		/// <param name="email">The login email.</param>
-		/// <param name="password">The login password.</param>
-		public UserContext ValidateLogin(string email, string password)
-		{
-			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
-			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
+        /// <summary>
+        /// Validates the given email and password with the database.
+        /// </summary>
+        /// <param name="email">The login email.</param>
+        /// <param name="password">The login password.</param>
+        public UserContext ValidateLogin(string email, string password)
+        {
+            if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
+            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
 
-			UserContext result = null;
-			var user = this.DBHelper.GetUserByEmail(email);
-			if (user != null)
-			{
-				// email exists, hash the given password and compare with hash in db
-				Tuple<bool, string> passwordValidation = Crypto.ValidateAndUpdate(password, user.PasswordHash);
-				if (passwordValidation.Item1)
-				{
-					result = new UserContext(user.UserId, email, user.FirstName, user.LastName);
+            UserContext result = null;
+            var user = this.DBHelper.GetUserByEmail(email);
+            if (user != null)
+            {
+                // email exists, hash the given password and compare with hash in db
+                Tuple<bool, string> passwordValidation = Crypto.ValidateAndUpdate(password, user.PasswordHash);
+                if (passwordValidation.Item1)
+                {
+                    result = new UserContext(user.UserId, email, user.FirstName, user.LastName);
 
-					// Store updated password hash if needed
-					if (passwordValidation.Item2 != null)
-					{
-						DBHelper.UpdateUserPassword(user.UserId, passwordValidation.Item2);
-					}
-				}
-			}
+                    // Store updated password hash if needed
+                    if (passwordValidation.Item2 != null)
+                    {
+                        DBHelper.UpdateUserPassword(user.UserId, passwordValidation.Item2);
+                    }
+                }
+            }
 
-			return result;
-		}
+            return result;
+        }
 
-		/// <summary>
-		/// Uses the database to return a fully populated UserContext from the userId.
-		/// </summary>
-		/// <param name="userId">The user Id to look up.</param>
-		/// <returns>The User context after population.</returns>
-		public UserContext PopulateUserContext(int userId)
-		{
-			if (userId <= 0) throw new ArgumentException("userId");
+        /// <summary>
+        /// Uses the database to return a fully populated UserContext from the userId.
+        /// </summary>
+        /// <param name="userId">The user Id to look up.</param>
+        /// <returns>The User context after population.</returns>
+        public UserContext PopulateUserContext(int userId)
+        {
+            if (userId <= 0) throw new ArgumentException("userId");
 
-			UserContext result = null;
+            UserContext result = null;
 
-			// get context from db
-			dynamic expando = this.DBHelper.GetUserContext(userId);
+            // get context from db
+            dynamic expando = this.DBHelper.GetUserContext(userId);
 
-			// get user information
-			if (expando != null && expando.User != null)
-			{
-				// user found.
-				result = new UserContext();
-				result.UserId = expando.User.UserId;
-				result.FirstName = expando.User.FirstName;
-				result.LastName = expando.User.LastName;
-				result.Email = expando.User.Email;
+            // get user information
+            if (expando != null && expando.User != null)
+            {
+                // user found.
+                result = new UserContext();
+                result.UserId = expando.User.UserId;
+                result.FirstName = expando.User.FirstName;
+                result.LastName = expando.User.LastName;
+                result.Email = expando.User.Email;
 
-				
+                // get organization and roles
+                foreach (var item in expando.OrganizationsAndRoles)
+                {
+                    result.OrganizationsAndRoles.Add(item.OrganizationId, new UserContext.OrganizationAndRole() {
+                        OrganizationId = item.OrganizationId,
+                        OrganizationRole = (OrganizationRole)item.OrganizationRoleId });
+                }
 
-				// get organization and roles
-				foreach (var item in expando.OrganizationsAndRoles)
-				{
-					result.UserOrganizations.Add(item.OrganizationId, new UserOrganization(item.OrganizationId, item.OrganizationName, (OrganizationRole)item.OrganizationRoleId));
-				}
+                // get subscriptions and roles
+                foreach (var item in expando.SubscriptionsAndRoles)
+                {
 
-				// get subscriptions and roles
-				foreach (var item in expando.SubscriptionsAndRoles)
-				{
-					UserSubscription sub = new UserSubscription();
-					sub.AreaUrl = item.AreaUrl;
-					sub.OrganizationId = item.OrganizationId;
-					sub.OrganizationName = item.OrganizationName;
-					sub.ProductId = (ProductIdEnum)item.ProductId;
-					sub.ProductName = item.ProductName;
-					sub.ProductRoleId = item.ProductRoleId;
-					//sub.ProductRoleName = item.ProductRoleName; Logic Fails here as this is a one-to-many for this information I don't think we use it.
-					sub.SkuId = item.SkuId;
-					sub.SubscriptionId = item.SubscriptionId;
-					sub.SubscriptionName = item.SubscriptionName;
-					result.UserSubscriptions.Add(sub.SubscriptionId, sub);
-				}
-                
+                    UserSubscription sub = new UserSubscription();
+                    sub.AreaUrl = item.AreaUrl;
+                    sub.OrganizationId = item.OrganizationId;
+                    sub.ProductId = (ProductIdEnum)item.ProductId;
+                    sub.ProductName = item.ProductName;
+                    sub.ProductRoleId = item.ProductRoleId;
+                    //sub.ProductRoleName = item.ProductRoleName; Logic Fails here as this is a one-to-many for this information I don't think we use it.
+                    sub.SkuId = item.SkuId;
+                    sub.SubscriptionId = item.SubscriptionId;
+                    sub.SubscriptionName = item.SubscriptionName;
+                    result.UserSubscriptions.Add(sub.SubscriptionId, sub);
+                }
+
                 // set result to self
                 this.SetUserContext(result);
             }
 
-			return result;
-		}
+            return result;
+        }
 
-		/// <summary>
-		/// Updates the active subsciption for the current user.
-		/// </summary>
-		/// <param name="subscriptionId">Subscription Id.</param>
-		public void UpdateActiveSubscription(int? subscriptionId)
-		{
-			if (subscriptionId.HasValue && subscriptionId.Value <= 0) throw new ArgumentException("subscriptionId");
-			DBHelper.UpdateActiveSubscription(UserContext.UserId, subscriptionId);
-		}
+        /// <summary>
+        /// Updates the active subsciption for the current user.
+        /// </summary>
+        /// <param name="subscriptionId">Subscription Id.</param>
+        public void UpdateActiveSubscription(int? subscriptionId)
+        {
+            if (subscriptionId.HasValue && subscriptionId.Value <= 0) throw new ArgumentException("subscriptionId");
+            DBHelper.UpdateActiveSubscription(UserContext.UserId, subscriptionId);
+        }
 
-		
-
-		/// <summary>
-		/// Gets the user info for a specific user.
-		/// </summary>
-		/// <param name="userId">User Id.</param>
-		/// <returns>A User instance with the current user's info.</returns>
-		public User GetUser(int userId)
-		{
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-			}
-			var results = DBHelper.GetUserInfo(userId);
-			User user = InitializeUser(results.Item1);
+        /// <summary>
+        /// Gets the user info for a specific user.
+        /// </summary>
+        /// <param name="userId">User Id.</param>
+        /// <returns>A User instance with the current user's info.</returns>
+        public User GetUserInfo(int userId)
+        {
+            if (userId <= 0)
+            {
+                throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+            }
+            var results = DBHelper.GetUserInfo(userId);
+            User user = InitializeUser(results.Item1, false);
             if (results.Item2 != null)
             {
                 user.Address = InitializeAddress(results.Item2);
             }
-			return user;
-		}
+            return user;
+        }
 
-		/// <summary>
-		/// get the user profile
-		/// </summary>
-		public User GetCurrentUserProfile()
-		{
-            if(this.UserContext?.UserId == null)
+        /// <summary>
+        /// get the user profile
+        /// </summary>
+        public User GetCurrentUserInfo()
+        {
+            if (this.UserContext?.UserId == null)
             {
                 return null;
             }
-            var result = GetUser(this.UserContext.UserId);	
-			return result;
-		}
+            var result = GetUserInfo(this.UserContext.UserId);
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public UserAccount GetUser(int? userID){
+            if (userID.HasValue)
+            {
+                var infos = DBHelper.GetUser(userID.Value);
+                UserAccount account = new UserAccount(infos.Item1, infos.Item2, infos.Item3, infos.Item4);
+                return account;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
 		/// <summary>
 		/// update the current user profile
@@ -345,20 +368,22 @@ namespace AllyisApps.Services
 			this.DBHelper.UpdateUserProfile(this.UserContext.UserId, firstName, lastName, this.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
 		}
 
-		/// <summary>
-		/// Gets the User for the current user, along with Organizations for each organization the
-		/// user is a member of, and InvitationInfos for any invitations for the user.
-		/// </summary>
-		/// <returns>.</returns>
-		public Tuple<User, List<Organization>, List<InvitationInfo>, Address> GetUserOrgsAndInvitationInfo()
-		{
-			var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
-			return Tuple.Create<User, List<Organization>, List<InvitationInfo>, Address>(
-				InitializeUser(spResults.Item1),
-				spResults.Item2.Select(odb => (Organization)InitializeOrganization(odb)).ToList(),
-				spResults.Item3.Select(idb => InitializeInvitationInfo(idb)).ToList(),
-				InitializeAddress(spResults.Item4));
-		}
+        
+
+		///// <summary>
+		///// Gets the User for the current user, along with Organizations for each organization the
+		///// user is a member of, and InvitationInfos for any invitations for the user.
+		///// </summary>
+		///// <returns>.</returns>
+		//public Tuple<User, List<Organization>, List<InvitationInfo>, Address> GetUserOrgsAndInvitationInfo()
+		//{
+		//	var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
+		//	return Tuple.Create<User, List<Organization>, List<InvitationInfo>, Address>(
+		//		InitializeUser(spResults.Item1),
+		//		spResults.Item2.Select(odb => (Organization)InitializeOrganization(odb)).ToList(),
+		//		spResults.Item3.Select(idb => InitializeInvitationInfo(idb)).ToList(),
+		//		InitializeAddress(spResults.Item4));
+		//}
 
 		/// <summary>
 		/// Gets the user info from an email address.
@@ -383,11 +408,11 @@ namespace AllyisApps.Services
 				throw new ArgumentNullException("model", "UserInfo object must not be null.");
 			}
 
-            //// TODO: Add UserInfo->UserDBEntity conversion at bottom
-            DBHelper.UpdateUserProfile(model.UserId,
-                model.FirstName, model.LastName, model.DateOfBirth, model.PhoneNumber, 
-                model.Address?.AddressId, model.Address?.Address1, model.Address?.Address2, model.Address?.City, model.Address?.StateId, model.Address?.PostalCode, model.Address?.CountryCode
-            );
+			//// TODO: Add UserInfo->UserDBEntity conversion at bottom
+			DBHelper.UpdateUserProfile(model.UserId,
+				model.FirstName, model.LastName, model.DateOfBirth, model.PhoneNumber,
+				model.Address?.AddressId, model.Address?.Address1, model.Address?.Address2, model.Address?.City, model.Address?.StateId, model.Address?.PostalCode, model.Address?.CountryCode
+			);
 		}
 
 		/// <summary>
@@ -416,7 +441,7 @@ namespace AllyisApps.Services
 				throw new ArgumentOutOfRangeException("employeeRoleId", "Employee Role Id cannot be negative.");
 			}
 
-			return DBHelper.UpdateMember(modelData)	== 1 ? false : true;
+			return DBHelper.UpdateMember(modelData) == 1 ? false : true;
 		}
 
 		/// <summary>
@@ -557,35 +582,35 @@ namespace AllyisApps.Services
 		/// <returns>Collection of Organizations.</returns>
 		public IEnumerable<Organization> GetOrganizationsByUserId()
 		{
-            return GetOrganizationsByUserId(UserContext.UserId);
+			return GetOrganizationsByUserId(UserContext.UserId);
 		}
 
-        public IEnumerable<Organization> GetOrganizationsByUserId(int userID)
-        {
-            return DBHelper.GetOrganizationsByUserId(userID).Select(o => (Organization) InitializeOrganization(o));
-        }
+		public IEnumerable<Organization> GetOrganizationsByUserId(int userID)
+		{
+			return DBHelper.GetOrganizationsByUserId(userID).Select(o => (Organization)InitializeOrganization(o));
+		}
 
-        #endregion public
+		#endregion public
 
-        #region Info-DBEntity Conversions
+		#region Info-DBEntity Conversions
 
-        /// <summary>
-        /// Translates a UserDBEntity into a User business object.
-        /// </summary>
-        /// <param name="user">UserDBEntity instance.</param>
-        /// <param name="loadAddress"></param>
-        /// <returns>User instance.</returns>
-        public User InitializeUser(UserDBEntity user, bool loadAddress = true)
+		/// <summary>
+		/// Translates a UserDBEntity into a User business object.
+		/// </summary>
+		/// <param name="user">UserDBEntity instance.</param>
+		/// <param name="loadAddress"></param>
+		/// <returns>User instance.</returns>
+		public User InitializeUser(UserDBEntity user, bool loadAddress = true)
 		{
 			if (user == null)
 			{
 				return null;
 			}
-            Address address = null;
-            if (user.AddressId != null && loadAddress)
-            {
-                address = getAddress(user.AddressId);
-            }
+			Address address = null;
+			if (user.AddressId != null && loadAddress)
+			{
+				address = getAddress(user.AddressId);
+			}
 			return new User
 			{
 				AccessFailedCount = user.AccessFailedCount,
@@ -603,47 +628,74 @@ namespace AllyisApps.Services
 				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
-                Address = address,
+				Address = address,
 			};
 		}
 
-		/// <summary>
-		/// Translates a User into a UserDBEntity.
-		/// </summary>
-		/// <param name="user">User instance.</param>
-		/// <returns>UserDBEntity instance.</returns>
-		public UserDBEntity GetDBEntityFromUser(User user)
-		{
-            return new UserDBEntity()
-            {
-                AddressId = user.Address?.AddressId,
-                AccessFailedCount = user.AccessFailedCount,
-                DateOfBirth = user.DateOfBirth,
-                Email = user.Email,
-                IsEmailConfirmed = user.IsEmailConfirmed,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                IsLockoutEnabled = user.IsLockoutEnabled,
-                LockoutEndDateUtc = user.LockoutEndDateUtc,
-                PasswordHash = user.PasswordHash,
-                PasswordResetCode = user.PasswordResetCode,
-                PhoneExtension = user.PhoneExtension,
-                PhoneNumber = user.PhoneNumber,
-                IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
-                IsTwoFactorEnabled = user.IsTwoFactorEnabled,
-                UserId = user.UserId,
-                PreferredLanguageId = "en-US"          // TODO: Put this into UserInfo and do proper lookup
-            };
+        /// <summary>
+        /// Initialzie user from dynamic object 
+        /// </summary>
+        /// <param name="userInfo"></param>
+        /// <returns></returns>
+        public static User InitializeUser(dynamic userInfo)
+        {
+            Address address = InitializeAddress((dynamic)userInfo);
 
-            
+            return new User
+            {
+                AccessFailedCount = userInfo.AccessFailedCount,
+                DateOfBirth = userInfo.DateOfBirth,
+                Email = userInfo.Email,
+                IsEmailConfirmed = userInfo.IsEmailConfirmed,
+                FirstName = userInfo.FirstName,
+                LastName = userInfo.LastName,
+                IsLockoutEnabled = userInfo.IsLockoutEnabled,
+                LockoutEndDateUtc = userInfo.LockoutEndDateUtc,
+                PasswordHash = userInfo.PasswordHash,
+                PasswordResetCode = userInfo.PasswordResetCode,
+                PhoneExtension = userInfo.PhoneExtension,
+                PhoneNumber = userInfo.PhoneNumber,
+                IsPhoneNumberConfirmed = userInfo.IsPhoneNumberConfirmed,
+                IsTwoFactorEnabled = userInfo.IsTwoFactorEnabled,
+                UserId = userInfo.UserId,
+                Address = address,
+            };
         }
+        /// <summary>
+        /// Translates a User into a UserDBEntity.
+        /// </summary>
+        /// <param name="user">User instance.</param>
+        /// <returns>UserDBEntity instance.</returns>
+        public UserDBEntity GetDBEntityFromUser(User user)
+		{
+			return new UserDBEntity()
+			{
+				AddressId = user.Address?.AddressId,
+				AccessFailedCount = user.AccessFailedCount,
+				DateOfBirth = user.DateOfBirth,
+				Email = user.Email,
+				IsEmailConfirmed = user.IsEmailConfirmed,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				IsLockoutEnabled = user.IsLockoutEnabled,
+				LockoutEndDateUtc = user.LockoutEndDateUtc,
+				PasswordHash = user.PasswordHash,
+				PasswordResetCode = user.PasswordResetCode,
+				PhoneExtension = user.PhoneExtension,
+				PhoneNumber = user.PhoneNumber,
+				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
+				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
+				UserId = user.UserId,
+				PreferredLanguageId = "en-US"          // TODO: Put this into UserInfo and do proper lookup
+			};
+		}
 
 		/// <summary>
 		/// Translates a <see cref="UserRolesDBEntity"/> into a <see cref="UserRolesInfo"/>.
 		/// </summary>
 		/// <param name="userRoles">UserRolesDBEntity instance.</param>
 		/// <returns>UserRolesInfo instance.</returns>
-		public  UserRolesInfo InitializeUserRolesInfo(UserRolesDBEntity userRoles)
+		public UserRolesInfo InitializeUserRolesInfo(UserRolesDBEntity userRoles)
 		{
 			if (userRoles == null)
 			{
@@ -668,7 +720,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subUser">SubscriptionUserDBEntity instance.</param>
 		/// <returns>SubscriptionUserInfo instance.</returns>
-		public  SubscriptionUserInfo InitializeSubscriptionUserInfo(SubscriptionUserDBEntity subUser)
+		public SubscriptionUserInfo InitializeSubscriptionUserInfo(SubscriptionUserDBEntity subUser)
 		{
 			if (subUser == null)
 			{

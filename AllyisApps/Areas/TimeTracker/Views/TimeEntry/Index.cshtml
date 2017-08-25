@@ -243,7 +243,7 @@
 			@using (Html.BeginForm(ActionConstants.Template, ControllerConstants.TimeEntry, null, FormMethod.Get, new { style = "margin-bottom:10px;" }))
 			{
 				<div style="margin-top: 10px; margin-left: 3px; margin-bottom:10px;">
-					<input type="submit" id="template-button" value="@Strings.Template" class="btn btn-primary tt-template" title="Download Excel Time Tracker template"/>
+					<input type="submit" id="template-button" value="@Strings.Template" class="btn btn-primary tt-template" title="Download Excel Time Tracker template" />
 				</div>
 			}
 		</div>
@@ -285,4 +285,3 @@
 		showPage(1); // This is important to call at the very end; otherwise all pages will be shown until the user clicks a page button.
 	</script>
 }
-

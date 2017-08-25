@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Core.Alert;
 using System;
 using System.Web.Mvc;
-using AllyisApps.Core.Alert;
 
 namespace AllyisApps.Controllers
 {

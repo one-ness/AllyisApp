@@ -35,30 +35,31 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public List<OrganizationViewModel> Organizations { get; set; }
 
-
 		/// <summary>
 		/// Logged in user information.
 		/// </summary>
 		public class UserViewModel
 		{
-			public UserViewModel() { }
+			public UserViewModel()
+			{
+			}
 
 			public UserViewModel(User user)
 			{
-                if (user != null)
-                {
-                    FirstName = user.FirstName;
-                    LastName = user.LastName;
-                    Email = user.Email;
-                    PhoneNumber = user.PhoneNumber;
-                    PhoneExtension = user.PhoneExtension;
-                    Address1 = user.Address?.Address1;
-                    Address2 = user.Address?.Address2;
-                    City = user.Address?.City;
-                    State = user.Address?.StateName;
-                    PostalCode = user.Address?.PostalCode;
-                    Country = user.Address?.CountryName;
-                }
+				if (user != null)
+				{
+					FirstName = user.FirstName;
+					LastName = user.LastName;
+					Email = user.Email;
+					PhoneNumber = user.PhoneNumber;
+					PhoneExtension = user.PhoneExtension;
+					Address1 = user.Address?.Address1;
+					Address2 = user.Address?.Address2;
+					City = user.Address?.City;
+					State = user.Address?.StateName;
+					PostalCode = user.Address?.PostalCode;
+					Country = user.Address?.CountryName;
+				}
 			}
 
 			/// <summary>
@@ -238,7 +239,9 @@ namespace AllyisApps.ViewModels.Auth
 			/// </summary>
 			public class SubscriptionViewModel
 			{
-				public SubscriptionViewModel() { }
+				public SubscriptionViewModel()
+				{
+				}
 
 				public SubscriptionViewModel(UserSubscription userSubInfo, string description)
 				{
@@ -266,6 +269,7 @@ namespace AllyisApps.ViewModels.Auth
 				/// Gets or sets the SubscriptionName.
 				/// </summary>
 				public string SubscriptionName { get; set; }
+
 				public string AreaUrl { get; set; }
 				public ProductIdEnum productId { get; set; }
 				public string ProductGoToUrl { get; set; }
