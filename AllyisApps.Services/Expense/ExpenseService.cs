@@ -91,7 +91,7 @@ namespace AllyisApps.Services
 		/// Updates Expense Item with given itemId.
 		/// </summary>
 		/// <param name="item"></param>
-		public void UpdateExpenseItem(ExpenseItem item)
+		public int UpdateExpenseItem(ExpenseItem item)
 		{
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
 			{
@@ -101,12 +101,12 @@ namespace AllyisApps.Services
 				ExpenseItemId = item.ExpenseItemId,
 				ExpenseReportId = item.ExpenseReportId,
 				IsBillableToCustomer = item.IsBillableToCustomer,
-				ItemDescription = item.ItemDiscription,
+				ItemDescription = item.ItemDescription,
 				ModifiedUtc = item.ExpenseItemModifiedUtc,
 				TransactionDate = Convert.ToDateTime(item.TransactionDate),
 			};
 
-			DBHelper.UpdateExpenseItem(itemEntity);
+			return DBHelper.UpdateExpenseItem(itemEntity);
 		}
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace AllyisApps.Services
 				ExpenseItemModifiedUtc = entity.ModifiedUtc,
 				ExpenseReportId = entity.ExpenseReportId,
 				IsBillableToCustomer = entity.IsBillableToCustomer,
-				ItemDiscription = entity.ItemDescription,
+				ItemDescription = entity.ItemDescription,
 				TransactionDate = entity.TransactionDate.ToString()
 			};
 		}
@@ -266,7 +266,7 @@ namespace AllyisApps.Services
 				ExpenseItemId = item.ExpenseItemId,
 				ExpenseReportId = item.ExpenseReportId,
 				IsBillableToCustomer = item.IsBillableToCustomer,
-				ItemDescription = item.ItemDiscription,
+				ItemDescription = item.ItemDescription,
 				ModifiedUtc = item.ExpenseItemModifiedUtc,
 				TransactionDate = Convert.ToDateTime(item.TransactionDate),
 			};

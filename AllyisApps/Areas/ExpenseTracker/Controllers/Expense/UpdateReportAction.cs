@@ -72,7 +72,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					item.ExpenseItemCreatedUtc = Convert.ToDateTime(item.TransactionDate);
 					item.ExpenseItemModifiedUtc = DateTime.UtcNow;
 					item.ExpenseReportId = reportId;
-					AppService.UpdateExpenseItem(item);
+					int status = AppService.UpdateExpenseItem(item);
+					if (status != 1)
+					{
+						AppService.CreateExpenseItem(item);
+					}
 				}
 
 				foreach (string name in AzureFiles.GetReportAttachments(reportId))

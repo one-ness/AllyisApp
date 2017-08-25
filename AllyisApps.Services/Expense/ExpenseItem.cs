@@ -17,7 +17,7 @@ namespace AllyisApps.Services
         /// <summary>
         /// The expense discription
         /// </summary>
-        public string ItemDiscription { get; set; }
+        public string ItemDescription { get; set; }
 
         /// <summary>
         /// The transaction date

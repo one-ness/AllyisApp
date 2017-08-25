@@ -135,7 +135,7 @@ namespace AllyisApps.DBModel
         /// Updates the Expense Item with the specified ID.
         /// </summary>
         /// <param name="item">The expense item object that will replace the previous entry.</param>
-        public void UpdateExpenseItem(ExpenseItemDBEntity item)
+        public int UpdateExpenseItem(ExpenseItemDBEntity item)
         {
             if (item == null)
             {
@@ -154,7 +154,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
             {
-                connection.Execute("[Expense].[UpdateExpenseItem]", parameters, commandType: CommandType.StoredProcedure);
+                return connection.Execute("[Expense].[UpdateExpenseItem]", parameters, commandType: CommandType.StoredProcedure);
             }
         }
 
