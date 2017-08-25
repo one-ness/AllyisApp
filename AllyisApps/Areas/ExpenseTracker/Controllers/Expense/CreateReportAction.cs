@@ -71,6 +71,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				AppService.CreateExpenseItem(item);
 			}
 
+			foreach (string name in AzureFiles.GetReportAttachments(report.ExpenseReportId))
+			{
+				AzureFiles.DeleteReportAttachment(report.ExpenseReportId, name);
+			}
 			if (files != null)
 			{
 				foreach (var file in files)

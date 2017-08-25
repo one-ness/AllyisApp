@@ -22,7 +22,7 @@
 		<div class="panel-heading"><span class="panel-title">Attachments</span></div>
 		<div class="files" id="files">
 			@{
-				List<string> fileNames = AzureFiles.GetReportAttachments(Model.Report.ExpenseReportId);
+				List<string> fileNames = Model.Report == null ? new List<string>() : AzureFiles.GetReportAttachments(Model.Report.ExpenseReportId);
 				if (Model.Files == null)
 				{
 					Model.Files = new List<HttpPostedFileBase>();

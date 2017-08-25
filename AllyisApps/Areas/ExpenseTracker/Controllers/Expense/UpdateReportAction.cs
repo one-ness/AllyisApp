@@ -28,9 +28,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="reportId"></param>
 		/// <param name="submitType"></param>
 		/// <param name="files"></param>
+		/// <param name="previousFiles"></param>
 		/// <param name="items"></param>
 		/// <returns></returns>
-		public ActionResult UpdateReport(int subscriptionId, int submittedById, int reportId, string submitType, IEnumerable<HttpPostedFileBase> files = null, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
+		public ActionResult UpdateReport(int subscriptionId, int submittedById, int reportId, string submitType, IEnumerable<HttpPostedFileBase> files = null, IEnumerable<string> previousFiles = null, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
 		{
 			if (items == null)
 			{
@@ -75,6 +76,14 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					AppService.UpdateExpenseItem(item);
 				}
 
+				foreach (string name in AzureFiles.GetReportAttachments(reportId))
+				{
+					if (previousFiles != null && !previousFiles.Contains(name))
+					{
+						AzureFiles.DeleteReportAttachment(reportId, name);
+					}
+				}
+				List<string> empty = AzureFiles.GetReportAttachments(reportId);
 				if (files != null)
 				{
 					foreach (var file in files)
