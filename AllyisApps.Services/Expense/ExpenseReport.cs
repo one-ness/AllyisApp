@@ -14,11 +14,11 @@ namespace AllyisApps.Services
         /// </summary>
         public int ExpenseReportId { get; set; }
 
-        /// <summary>
-        /// The expense report title
-        /// </summary>
-		[Required]
-        public string ReportTitle { get; set; }
+		/// <summary>
+		/// The expense report title
+		/// </summary>
+		[Required(ErrorMessage = "Please enter the name of the report.")]
+		public string ReportTitle { get; set; }
 
         /// <summary>
         /// the organization id of the expense
@@ -38,6 +38,7 @@ namespace AllyisApps.Services
         /// <summary>
         /// The business justification
         /// </summary>
+		[Required(ErrorMessage = "Please enter the justification for the report.")]
         public string BusinessJustification { get; set; }
 
         /// <summary>

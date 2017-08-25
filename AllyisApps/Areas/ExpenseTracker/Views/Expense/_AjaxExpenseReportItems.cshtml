@@ -55,6 +55,9 @@
 		   area-label="Close">
 			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 		</a>
+		<br />
+		@Html.ValidationMessageFor(m => m.Items[i].TransactionDate)
+		@Html.ValidationMessageFor(m => m.Items[i].Amount)
 	</div>
 }
 <a class="addItem btn btn-fa hidden-create add-button">

@@ -7,6 +7,7 @@ using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
 using AllyisApps.Services.Expense;
+using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -18,16 +19,15 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// View/export expense report.
 		/// </summary>
+		/// <param name="model"></param>
 		/// <param name="submitType"></param>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="submittedById">The submitted by id.</param>
 		///  <param name="items">The expense items.</param>
 		/// <param name="files"></param>
-		/// <param name="reportName">The report name.</param>
-		/// <param name="businessJustification">The justification.</param>
 		/// <returns>An action result.</returns>
 		[HttpPost]
-		public ActionResult CreateReport(string submitType, int subscriptionId, int submittedById, IEnumerable<HttpPostedFileBase> files = null, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
+		public ActionResult CreateReport(ExpenseCreateModel model, string submitType, int subscriptionId, int submittedById, IEnumerable<HttpPostedFileBase> files = null, List<ExpenseItem> items = null)
 		{
 			if (items == null)
 			{
@@ -50,8 +50,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			var report = new ExpenseReport()
 			{
-				ReportTitle = reportName,
-				BusinessJustification = businessJustification,
+				ReportTitle = model.Report.ReportTitle,
+				BusinessJustification = model.Report.BusinessJustification,
 				CreatedUtc = DateTime.UtcNow,
 				ModifiedUtc = DateTime.UtcNow,
 				SubmittedUtc = submittedUtc,

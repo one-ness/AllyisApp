@@ -78,17 +78,21 @@
 			<input type="hidden" name="submittedById" value="@Model.CurrentUser" />
 			<input type="hidden" name="subscriptionId" value="@Model.SubscriptionId" />
 			<div class="form-group">
-				<div class="left-label">
+				<div class="left-label" style="vertical-align: top;">
 					<label>Report Name</label>
 				</div>
 				<div class="right-input">
-					<input type="text" name="ReportName" value="@Model.Report.ReportTitle" class="form-control" />
+					@*<input type="text" name="ReportName" value="@Model.Report.ReportTitle" class="form-control" />*@
+					@Html.TextBoxFor(m => m.Report.ReportTitle, new { @class = "form-control", name = "ReportName" })
+					@Html.ValidationMessageFor(m => m.Report.ReportTitle)
 				</div>
 				<div class="left-label" style="vertical-align: top;">
 					<label>Business Justification</label>
 				</div>
 				<div class="right-input">
-					<textarea  name="BusinessJustification" class="form-control" rows="3" style="resize: none;">@Model.Report.BusinessJustification</textarea>
+					@*<textarea  name="BusinessJustification" class="form-control" rows="3" style="resize: none;">@Model.Report.BusinessJustification</textarea>*@
+					@Html.TextAreaFor(m => m.Report.BusinessJustification, new { @class = "form-control", rows = "3", style = "resize: none;", name = "BusinessJustification" })
+					@Html.ValidationMessageFor(m => m.Report.BusinessJustification)
 				</div>
 				@*<div class="left-label">
 					<label>Status</label>

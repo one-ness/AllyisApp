@@ -22,13 +22,13 @@ namespace AllyisApps.Services
         /// <summary>
         /// The transaction date
         /// </summary>
-		[Required]
+		[Required(ErrorMessage = "Please enter the date of transaction.")]
         public string TransactionDate { get; set; }
 
         /// <summary>
         /// The amount of the expense
         /// </summary>
-		[Required]
+		[Required(ErrorMessage = "Please enter the amount.")]
         public decimal Amount { get; set; }
 
         /// <summary>
