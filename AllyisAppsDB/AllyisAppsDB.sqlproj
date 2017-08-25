@@ -193,7 +193,7 @@
     <Build Include="Auth\Stored Procedures\UpdateUserPasswordUsingCode.sql" />
     <Build Include="Auth\Stored Procedures\DeleteOrg.sql" />
     <Build Include="Auth\Stored Procedures\DeleteOrgUser.sql" />
-    <Build Include="Auth\Stored Procedures\RejectUserInvitation.sql" />
+    <Build Include="Auth\Stored Procedures\RejectInvitation.sql" />
     <Build Include="Auth\Stored Procedures\GetActiveProductRoleForUser.sql" />
     <Build Include="Auth\Stored Procedures\GetOrg.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationsByUserId.sql" />

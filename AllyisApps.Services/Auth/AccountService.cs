@@ -142,11 +142,11 @@ namespace AllyisApps.Services
         /// </summary>
         /// <param name="invitationId">The id of the invitation to reject.</param>
         /// <returns>The resulting message.</returns>
-        public string RejectUserInvitation(int invitationId)
+        public string RejectInvitation(int invitationId)
         {
             try
             {
-                DBHelper.RejectUserInvitation(invitationId);
+                DBHelper.RejectInvitation(invitationId);
                 NotifyInviteRejectAsync(invitationId);
                 return "The invitation has been rejected.";
             }
