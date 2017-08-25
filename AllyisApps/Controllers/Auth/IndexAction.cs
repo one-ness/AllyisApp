@@ -64,12 +64,10 @@ namespace AllyisApps.Controllers
 
             //Add invitations to view model
 
-            //List<InvitationInfo> invitationslist = AppService.GetInvitationsByUser(accountInfo?.userInfo.Email);
             var invitationslist = accountInfo.InviatationInfoWithName;
             foreach (var inviteInfo in invitationslist)
             {
                 var invite = inviteInfo.Item1;
-                var org = AppService.GetOrganization(invite.OrganizationId);
 
                 indexViewModel.Invitations.Add(new AccountIndexViewModel.InvitationViewModel()
                 {

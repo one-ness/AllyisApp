@@ -16,7 +16,7 @@ BEGIN
 		@email = [Email],
 		@employeeId = [EmployeeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
-	WHERE [Invitation].[InvitationId] = @invitationId AND [Invitation].[IsActive] = 1
+	WHERE [Invitation].[InvitationId] = @invitationId AND [Invitation].[IsActive] = 1 AND [Invitation].StatusId = 0;
 
 	IF @organizationId IS NOT NULL
 	BEGIN -- Invitation found
@@ -61,17 +61,18 @@ BEGIN
 				);
 			END
 
-			DELETE FROM [Auth].[Invitation]
-			WHERE [InvitationId] = @invitationId
+			UPDAtE [Auth].[Invitation]
+			SET StatusId = 1, DecisionDate = GETUTCDATE()
+			WHERE [InvitationId] = @invitationId;
 			
 			-- On success, return name of organization and role
 			SELECT [Organization].[OrganizationName]
 			FROM [Auth].[Organization]
-			WHERE [Organization].[OrganizationId] = @organizationId
+			WHERE [Organization].[OrganizationId] = @organizationId;
 
 			SELECT [OrganizationRole].[OrganizationRoleName]
 			FROM [Auth].[OrganizationRole]
-			WHERE [OrganizationRole].[OrganizationRoleId] = @organizationRole
+			WHERE [OrganizationRole].[OrganizationRoleId] = @organizationRole;
 
 			COMMIT
 		END

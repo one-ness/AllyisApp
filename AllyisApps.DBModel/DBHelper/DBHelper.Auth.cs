@@ -588,45 +588,16 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Adds a user Invitation to the invitations table.
-		/// </summary>
-		/// <param name="invitation">A representation of the invitation to create.</param>
-		/// <returns>The id of the newly created invitation.</returns>
-		public int CreateUserInvitation(InvitationDBEntity invitation)
-		{
-			if (invitation == null)
-			{
-				throw new ArgumentException("invitation cannot be null.");
-			}
-
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@email", invitation.Email);
-			parameters.Add("@firstName", invitation.FirstName);
-			parameters.Add("@lastName", invitation.LastName);
-			parameters.Add("@dateOfBirth", invitation.DateOfBirth.Date);
-			parameters.Add("@organizationId", invitation.OrganizationId);
-			parameters.Add("@accessCode", invitation.AccessCode);
-			parameters.Add("@organizationRole", invitation.OrganizationRoleId);	
-			parameters.Add("@employeeId", invitation.EmployeeId);
-            int res;
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-                res = connection.QueryFirst<int>("[Auth].[CreateUserInvitation]", parameters, commandType: CommandType.StoredProcedure);
-			}
-			return res;
-		}
+		
 
 		/// <summary>
 		/// Adds an Invitation to the invitations table and invitation sub roles table.
 		/// </summary>
 		/// <param name="invitingUserId">The id of the user sending the invitation.</param>
 		/// <param name="invitation">A representation of the invitation to create.</param>
-		/// <param name="subscriptionId">The subscription id.</param>
-		/// <param name="productRoleId">The product role id.</param>
 		/// <returns>The id of the newly created invitation (or -1 if the employee id is taken), and the
 		/// first and last name of the inviting user.</returns>
-		public Tuple<int, string, string> CreateInvitation(int invitingUserId, InvitationDBEntity invitation, int? subscriptionId, int? productRoleId)
+		public Tuple<int, string, string> CreateInvitation(int invitingUserId, InvitationDBEntity invitation)
 		{
 			if (invitation == null)
 			{
@@ -639,15 +610,11 @@ namespace AllyisApps.DBModel
 			parameters.Add("@firstName", invitation.FirstName);
 			parameters.Add("@lastName", invitation.LastName);
 			parameters.Add("@organizationId", invitation.OrganizationId);
-			parameters.Add("@accessCode", invitation.AccessCode);
 			parameters.Add("@organizationRole", invitation.OrganizationRoleId);
-			parameters.Add("@retId", -1, DbType.Int32, direction: ParameterDirection.Output);
 			parameters.Add("@employeeId", invitation.EmployeeId);
-			parameters.Add("@subscriptionId", subscriptionId);
-			parameters.Add("@subRoleId", productRoleId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = connection.QueryMultiple("[Auth].[InviteUser]", parameters, commandType: CommandType.StoredProcedure);
+				var results = connection.QueryMultiple("[Auth].[CreateInvitation]", parameters, commandType: CommandType.StoredProcedure);
 				int inviteId = results.Read<int>().FirstOrDefault();
 				if (inviteId < 0)
 				{
@@ -688,24 +655,23 @@ namespace AllyisApps.DBModel
 				}
 			}
 		}
+       
 
 		/// <summary>
 		/// Removes a user invitation and related invitation sub roles.
 		/// </summary>
 		/// <param name="invitationId">Invitation Id.</param>
-		/// <param name="userId">User Id for invited user, or -1 to skip that check.</param>
 		/// <returns>True for success, false for error.</returns>
-		public bool RemoveInvitation(int invitationId, int userId)
+		public bool DeleteInvitation(int invitationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@invitationId", invitationId);
-			parameters.Add("@callingUserId", userId);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				int success = connection.Query<int>(
-					"[Auth].[RemoveInvitation]",
+				int success = connection.Execute(
+                    "[Auth].[DeleteInvitation]",
 					parameters,
-					commandType: CommandType.StoredProcedure).FirstOrDefault();
+					commandType: CommandType.StoredProcedure);
 				return success == 1;
 			}
 		}
@@ -736,14 +702,14 @@ namespace AllyisApps.DBModel
 		/// Deletes the defined invitation.
 		/// </summary>
 		/// <param name="invitationId">The invitation's Id.</param>
-		public void RemoveUserInvitation(int invitationId)
+		public void RejectUserInvitation(int invitationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@invitationId", invitationId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				connection.Execute("[Auth].[DeleteUserInvitation]", parameters, commandType: CommandType.StoredProcedure);
+				connection.Execute("[Auth].[RejectUserInvitation]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -837,14 +803,14 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="inviteId">The invite Id.</param>
 		/// <returns>List of all roles.</returns>
-		public IEnumerable<InvitationDBEntity> GetUserInvitationsByInviteId(int inviteId)
+		public InvitationDBEntity GetUserInvitationByInviteId(int inviteId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@inviteId", inviteId);
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<InvitationDBEntity>("[Auth].[GetUserInvitationsByInviteId]", parameters, commandType: CommandType.StoredProcedure);
+				return connection.Query<InvitationDBEntity>("[Auth].[GetUserInvitationsByInviteId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 

@@ -144,14 +144,17 @@ namespace AllyisApps.Services
         /// <returns>The resulting message.</returns>
         public string RejectUserInvitation(int invitationId)
         {
-            if (DBHelper.RemoveInvitation(invitationId, UserContext.UserId))
+            try
             {
+                DBHelper.RejectUserInvitation(invitationId);
+                NotifyInviteRejectAsync(invitationId);
                 return "The invitation has been rejected.";
             }
-            else
+            catch (SqlException)
             {
                 return null;
             }
+           
         }
 
         /// <summary>
@@ -360,20 +363,20 @@ namespace AllyisApps.Services
 
         
 
-		/// <summary>
-		/// Gets the User for the current user, along with Organizations for each organization the
-		/// user is a member of, and InvitationInfos for any invitations for the user.
-		/// </summary>
-		/// <returns>.</returns>
-		public Tuple<User, List<Organization>, List<InvitationInfo>, Address> GetUserOrgsAndInvitationInfo()
-		{
-			var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
-			return Tuple.Create<User, List<Organization>, List<InvitationInfo>, Address>(
-				InitializeUser(spResults.Item1),
-				spResults.Item2.Select(odb => (Organization)InitializeOrganization(odb)).ToList(),
-				spResults.Item3.Select(idb => InitializeInvitationInfo(idb)).ToList(),
-				InitializeAddress(spResults.Item4));
-		}
+		///// <summary>
+		///// Gets the User for the current user, along with Organizations for each organization the
+		///// user is a member of, and InvitationInfos for any invitations for the user.
+		///// </summary>
+		///// <returns>.</returns>
+		//public Tuple<User, List<Organization>, List<InvitationInfo>, Address> GetUserOrgsAndInvitationInfo()
+		//{
+		//	var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
+		//	return Tuple.Create<User, List<Organization>, List<InvitationInfo>, Address>(
+		//		InitializeUser(spResults.Item1),
+		//		spResults.Item2.Select(odb => (Organization)InitializeOrganization(odb)).ToList(),
+		//		spResults.Item3.Select(idb => InitializeInvitationInfo(idb)).ToList(),
+		//		InitializeAddress(spResults.Item4));
+		//}
 
 		/// <summary>
 		/// Gets the user info from an email address.

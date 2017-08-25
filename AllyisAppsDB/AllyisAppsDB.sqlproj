@@ -191,10 +191,9 @@
     <Build Include="Auth\Stored Procedures\UpdateUserPassword.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserPasswordResetCode.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserPasswordUsingCode.sql" />
-    <Build Include="Auth\Stored Procedures\CreateUserInvitation.sql" />
     <Build Include="Auth\Stored Procedures\DeleteOrg.sql" />
     <Build Include="Auth\Stored Procedures\DeleteOrgUser.sql" />
-    <Build Include="Auth\Stored Procedures\DeleteUserInvitation.sql" />
+    <Build Include="Auth\Stored Procedures\RejectUserInvitation.sql" />
     <Build Include="Auth\Stored Procedures\GetActiveProductRoleForUser.sql" />
     <Build Include="Auth\Stored Procedures\GetOrg.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationsByUserId.sql" />
@@ -202,9 +201,9 @@
     <Build Include="Auth\Stored Procedures\GetAddMemberInfo.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgAndSubRoles.sql" />
     <Build Include="Auth\Stored Procedures\AcceptInvitation.sql" />
-    <Build Include="Auth\Stored Procedures\RemoveInvitation.sql" />
+    <Build Include="Auth\Stored Procedures\DeleteInvitation.sql" />
     <Build Include="Auth\Stored Procedures\GetPasswordHashFromUserId.sql" />
-    <Build Include="Auth\Stored Procedures\InviteUser.sql" />
+    <Build Include="Auth\Stored Procedures\CreateInvitation.sql" />
     <Build Include="Auth\Stored Procedures\UpdateEmailConfirmed.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserLanguagePreference.sql" />
     <Build Include="Auth\Stored Procedures\GetUserContextInfo.sql" />

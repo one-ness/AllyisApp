@@ -61,7 +61,6 @@ namespace AllyisApps.Services.Auth
             {
                 InviatationInfoWithName.Add(new Tuple<InvitationInfo, string>(
                 new InvitationInfo() {
-                    AccessCode = invite.AccessCode,
                     CompressedEmail = AppService.GetCompressedEmail(invite.Email),
                     DateOfBirth = invite.DateOfBirth,
                     Email = invite.Email,
@@ -70,7 +69,7 @@ namespace AllyisApps.Services.Auth
                     LastName = invite.LastName,
                     InvitationId = invite.InvitationId,
                     OrganizationId = invite.OrganizationId,
-                    OrganizationRole = invite.OrganizationRoleId,
+                    OrganizationRole = (OrganizationRole) invite.OrganizationRoleId,
                 },
                 invite.OrganizationName
                 ));

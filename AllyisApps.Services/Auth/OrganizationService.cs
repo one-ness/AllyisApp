@@ -194,10 +194,8 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="url">The url for Account/Index with the accessCode value as "{accessCode}".</param>
 		/// <param name="invitationInfo">An <see cref="InvitationInfo"/> with invitee information filled out.</param>
-		/// <param name="subscriptionId">The subscription id, if user is invited with role in subscription.</param>
-		/// <param name="productRoleId">The product role id, if user in invited with role in subscription.</param>
 		/// <returns>The invitation Id, or -1 if the employee id is already taken.</returns>
-		public async Task<int> InviteUser(string url, InvitationInfo invitationInfo, int? subscriptionId, int? productRoleId)
+		public async Task<int> InviteUser(string url, InvitationInfo invitationInfo)
 		{
 			#region Validation
 
@@ -218,12 +216,10 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			// Generation of access code
-			string code = Guid.NewGuid().ToString();
-			invitationInfo.AccessCode = code;
 
-			// Creation of invitation & sub roles
-			var spResults = DBHelper.CreateInvitation(UserContext.UserId, GetDBEntityFromInvitationInfo(invitationInfo), subscriptionId, productRoleId);
+
+			// Creation of invitation 
+			var spResults = DBHelper.CreateInvitation(UserContext.UserId, GetDBEntityFromInvitationInfo(invitationInfo));
 			if (spResults.Item1 == -1)
 			{
 				throw new DuplicateNameException("User is already a member of the organization.");
@@ -241,7 +237,7 @@ namespace AllyisApps.Services
 				spResults.Item2,
 				spResults.Item3,
 				orgName,
-				url.Replace("%7BaccessCode%7D", code));
+				url);
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
 			await Lib.Mailer.SendEmailAsync(
@@ -256,7 +252,7 @@ namespace AllyisApps.Services
 
 		public async void NotifyInviteAcceptAsync(int inviteId)
 		{
-			InvitationDBEntity invitation = DBHelper.GetUserInvitationsByInviteId(inviteId).FirstOrDefault();
+			InvitationDBEntity invitation = DBHelper.GetUserInvitationByInviteId(inviteId);
 			dynamic org = DBHelper.GetOrganization(invitation.OrganizationId);
 			IEnumerable<dynamic> owners = DBHelper.GetOrgOwnerEmails(invitation.OrganizationId);
 
@@ -276,65 +272,42 @@ namespace AllyisApps.Services
 			}
 		}
 
-		/// <summary>
-		/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
-		/// </summary>
-		/// <param name="requestingUserFullName">Full name of requesting user (not invitee).</param>
-		/// <param name="webRoot">The url webroot, taken from Global Settings.</param>
-		/// <param name="invitationInfo">An <see cref="InvitationInfo"/> with invitee information filled out.</param>
-		/// <returns>The invitation Id.</returns>
-		public async Task<int> InviteNewUser(string requestingUserFullName, string webRoot, InvitationInfo invitationInfo)
-		{
-			#region Validation
+        public async void NotifyInviteRejectAsync(int inviteId)
+        {
+            InvitationDBEntity invitation = DBHelper.GetUserInvitationByInviteId(inviteId);
+            dynamic org = DBHelper.GetOrganization(invitation.OrganizationId);
+            IEnumerable<dynamic> owners = DBHelper.GetOrgOwnerEmails(invitation.OrganizationId);
 
-			if (string.IsNullOrEmpty(requestingUserFullName))
-			{
-				throw new ArgumentNullException("requestingUserFullName", "Requesting user full name must have a value.");
-			}
+            string htmlbody = string.Format(
+                "{0} has rejected joining the organization {1} on Allyis Apps.",
+                invitation.FirstName + " " + invitation.LastName,
+                org.OrganizationName);
 
-			if (string.IsNullOrEmpty(webRoot))
-			{
-				throw new ArgumentNullException("webRoot", "Webroot must have a value.");
-			}
+            string msgbody = new System.Web.HtmlString(htmlbody).ToString();
+            foreach (dynamic owner in owners)
+            {
+                await Mailer.SendEmailAsync(
+                    this.ServiceSettings.SupportEmail,
+                    owner.Email,
+                    "User rejected invite Allyis Apps!",
+                    msgbody);
+            }
+        }
 
-			if (invitationInfo == null)
-			{
-				throw new ArgumentNullException("invitationInfo", "Invitation info object must not be null.");
-			}
 
-			#endregion Validation
 
-			Organization orgInfo = this.GetOrganization(invitationInfo.OrganizationId);
-
-			string htmlbody = string.Format(
-				"{0} has requested you join their organization on Allyis Apps, {1}!<br /> Click <a href=http://{2}/Account/Index?accessCode={3}>Here</a> to create an account and join!",
-				requestingUserFullName,
-				orgInfo.OrganizationName,
-				webRoot,
-				invitationInfo.AccessCode);
-
-			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
-			await Lib.Mailer.SendEmailAsync(
-				this.ServiceSettings.SupportEmail,
-				invitationInfo.Email,
-				"Join Allyis Apps!",
-				msgbody);
-
-			return DBHelper.CreateUserInvitation(GetDBEntityFromInvitationInfo(invitationInfo));
-		}
-
-		/// <summary>
-		/// Removes an invitation.
-		/// </summary>
-		/// <param name="orgId">Organization id.</param>
-		/// <param name="invitationId">Invitation Id.</param>
-		/// <returns>Returns false if permissions fail.</returns>
-		public bool RemoveInvitation(int orgId, int invitationId)
+        /// <summary>
+        /// Removes an invitation.
+        /// </summary>
+        /// <param name="orgId">Organization id.</param>
+        /// <param name="invitationId">Invitation Id.</param>
+        /// <returns>Returns false if permissions fail.</returns>
+        public bool RemoveInvitation(int orgId, int invitationId)
 		{
 			if (orgId <= 0) throw new ArgumentException("orgId");
 			if (invitationId <= 0) throw new ArgumentException("invitationId");
 			this.CheckOrgAction(OrgAction.EditInvitation, orgId);
-			return DBHelper.RemoveInvitation(invitationId, -1);
+			return DBHelper.DeleteInvitation(invitationId);
 		}
 
 		///// <summary>
@@ -751,18 +724,19 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-			return new InvitationInfo
-			{
-				AccessCode = invitation.AccessCode,
-				DateOfBirth = invitation.DateOfBirth,
-				Email = invitation.Email,
-				CompressedEmail = AppService.GetCompressedEmail(invitation.Email),
-				FirstName = invitation.FirstName,
-				InvitationId = invitation.InvitationId,
-				LastName = invitation.LastName,
-				OrganizationId = invitation.OrganizationId,
-				OrganizationRole = (OrganizationRole)invitation.OrganizationRoleId,
-				EmployeeId = invitation.EmployeeId
+            return new InvitationInfo
+            {
+                DateOfBirth = invitation.DateOfBirth,
+                Email = invitation.Email,
+                CompressedEmail = AppService.GetCompressedEmail(invitation.Email),
+                FirstName = invitation.FirstName,
+                InvitationId = invitation.InvitationId,
+                LastName = invitation.LastName,
+                OrganizationId = invitation.OrganizationId,
+                OrganizationRole = (OrganizationRole)invitation.OrganizationRoleId,
+                EmployeeId = invitation.EmployeeId,
+                DecisionDate = invitation.DecisionDate,
+                status = (InvitationStatusEnum)invitation.InvitationStatusId
 			};
 		}
 
@@ -801,7 +775,6 @@ namespace AllyisApps.Services
 
 			return new InvitationDBEntity
 			{
-				AccessCode = invitation.AccessCode,
 				DateOfBirth = invitation.DateOfBirth,
 				Email = invitation.Email,
 				FirstName = invitation.FirstName,
@@ -809,7 +782,9 @@ namespace AllyisApps.Services
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
 				OrganizationRoleId = (int)invitation.OrganizationRole,
-				EmployeeId = invitation.EmployeeId
+				EmployeeId = invitation.EmployeeId,
+                DecisionDate = invitation.DecisionDate,
+                InvitationStatusId = (int)invitation.status
 			};
 		}
 
