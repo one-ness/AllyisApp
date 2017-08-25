@@ -73,9 +73,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		public bool? IsActive { get; set; }
 
-        public Customer()
-        {
-            Address = new Address();
-        }
+		public Customer()
+		{
+			Address = new Address();
+		}
 	}
 }

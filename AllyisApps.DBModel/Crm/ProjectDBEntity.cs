@@ -28,10 +28,10 @@ namespace AllyisApps.DBModel.Crm
 		/// </summary>
 		public int CustomerId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the customer name associated with the project.
-        /// </summary>
-        public string CustomerName { get; set; }
+		/// <summary>
+		/// Gets or sets the customer name associated with the project.
+		/// </summary>
+		public string CustomerName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the project name.
@@ -72,7 +72,7 @@ namespace AllyisApps.DBModel.Crm
 		/// Gets or sets The date/time of creation.
 		/// </summary>
 		public DateTime CreatedUtc { get; set; }
-        
+
 		/// <summary>
 		/// Gets or sets the customer org id.
 		/// </summary>

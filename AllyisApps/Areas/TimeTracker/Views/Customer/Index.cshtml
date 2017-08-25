@@ -217,7 +217,7 @@
 			   if (selectedCust != null && confirm("Reactivate Customer" + $("#customer-" + selectedCust).text().trim() + "?")) {
 				   window.location = "@Url.Action(ActionConstants.Reactivate, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId, id = -1 })".replace('-1', selectedCust);
 			   }
-			   else if (selectedCust == null) 
+			   else if (selectedCust == null)
 			   {
 				   alert("There is no customer that was chosen to reactivate");
 			   }

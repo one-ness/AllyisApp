@@ -10,16 +10,16 @@ namespace AllyisApps.Services
 	/// Product role aka Subscription role.
 	/// </summary>
 	public enum TimeTrackerRole : int
-    {
-        /// <summary>
-        /// TimeTracker Unavailable.
-        /// </summary>
-        NotInProduct = 0,
+	{
+		/// <summary>
+		/// TimeTracker Unavailable.
+		/// </summary>
+		NotInProduct = 0,
 
-        /// <summary>
-        /// TimeTracker User.
-        /// </summary>
-        User = 1,
+		/// <summary>
+		/// TimeTracker User.
+		/// </summary>
+		User = 1,
 
 		/// <summary>
 		/// TimeTracker Manager.

@@ -1,5 +1,5 @@
-﻿using System.Web.Mvc;
-using AllyisApps.Services;
+﻿using AllyisApps.Services;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -16,7 +16,7 @@ namespace AllyisApps.Controllers
 		[HttpPost]
 		public ActionResult RejectInvitation(int id)
 		{
-			string result = AppService.RejectUserInvitation(id);
+			string result = AppService.RejectInvitation(id);
 			if (result != null)
 			{
 				// Validate that the user does have the requested pending invitation

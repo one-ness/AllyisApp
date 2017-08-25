@@ -45,20 +45,12 @@ namespace AllyisApps.Services
 		public bool CheckOrgAction(OrgAction action, int orgId, bool throwException = true)
 		{
 			bool result = false;
-			UserOrganization orgInfo = null;
-			this.UserContext.UserOrganizations.TryGetValue(orgId, out orgInfo);
+			UserContext.OrganizationAndRole orgInfo = null;
+			this.UserContext.OrganizationsAndRoles.TryGetValue(orgId, out orgInfo);
 
 			if (orgInfo != null)
 			{
-				switch (orgInfo.OrganizationRole)
-				{
-					case OrganizationRole.Owner:
-						result = true;
-						break;
-
-					default:
-						break;
-				}
+                result = CheckOrgAction(action, orgId, orgInfo.OrganizationRole, throwException);
 			}
 
 			if (!result && throwException)
@@ -70,10 +62,30 @@ namespace AllyisApps.Services
 			return result;
 		}
 
-		/// <summary>
-		/// check the permissions in the org the given subscription belongs to for the given user.
-		/// </summary>
-		public bool CheckOrgActionForSubscriptionId(OrgAction action, int subscriptionId, bool throwException = true)
+        public bool CheckOrgAction(OrgAction action,int orgId, OrganizationRole role, bool throwException = true)
+        {
+            bool result = false;
+            switch (role)
+            {
+                case OrganizationRole.Owner:
+                    result = true;
+                    break;
+
+                default:
+                    break;
+            }
+            if (!result && throwException)
+            {
+                string message = string.Format("action {0} denied for org {1}", action.ToString(), orgId);
+                throw new AccessViolationException(message);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// check the permissions in the org the given subscription belongs to for the given user.
+        /// </summary>
+        public bool CheckOrgActionForSubscriptionId(OrgAction action, int subscriptionId, bool throwException = true)
 		{
 			int orgId = -1;
 			UserSubscription subInfo = null;
@@ -94,40 +106,37 @@ namespace AllyisApps.Services
 			bool result = false;
 			UserSubscription subInfo = null;
 			this.UserContext.UserSubscriptions.TryGetValue(subId, out subInfo);
-            
+
 			if (subInfo != null && subInfo.ProductId == ProductIdEnum.TimeTracker)
 			{
 				TimeTrackerRole ttRole = (TimeTrackerRole)subInfo.ProductRoleId;
-                switch (action)
-                {
-                    case TimeTrackerAction.TimeEntry:
-                        switch (ttRole)
-                        {
-                            case TimeTrackerRole.Manager:
-                            case TimeTrackerRole.User:
-                                result = true;
-                                break;
+				switch (action)
+				{
+					case TimeTrackerAction.TimeEntry:
+						switch (ttRole)
+						{
+							case TimeTrackerRole.Manager:
+							case TimeTrackerRole.User:
+								result = true;
+								break;
 
-                            default:
-                                break;
+							default:
+								break;
+						}
+						break;
 
-                        }
-                        break;
-                    default:
-                        switch (ttRole)
-                        {
-                            case TimeTrackerRole.Manager:
-                                result = true;
-                                break;
+					default:
+						switch (ttRole)
+						{
+							case TimeTrackerRole.Manager:
+								result = true;
+								break;
 
-                            default:
-                                break;
-
-                        }
-                        break;
-                }
-				
-
+							default:
+								break;
+						}
+						break;
+				}
 			}
 
 			if (!result && throwException)

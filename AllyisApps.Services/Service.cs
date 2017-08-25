@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.Hrm;
+using AllyisApps.DBModel.TimeTracker;
+using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AllyisApps.DBModel.Hrm;
-using AllyisApps.DBModel.TimeTracker;
-using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Services
 {
@@ -58,7 +58,7 @@ namespace AllyisApps.Services
 		/// <returns>The DateTime date.</returns>
 		public DateTime? GetDateTimeFromDays(int? days)
 		{
-			if (!days.HasValue || days <=0)
+			if (!days.HasValue || days <= 0)
 			{
 				return null;
 			}
@@ -590,7 +590,7 @@ namespace AllyisApps.Services
 				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
 				spResults.Item3.Select(hdb => InitializeHoliday(hdb)).ToList(),
 				spResults.Item4.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item5.Select(udb => InitializeUser(udb)).ToList(),
+				spResults.Item5.Select(udb => InitializeUser(udb,false)).ToList(),
 				spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList());
 		}
 
@@ -605,7 +605,7 @@ namespace AllyisApps.Services
 		{
 			return new PayClass
 			{
-                PayClassName = pc.PayClassName,
+				PayClassName = pc.PayClassName,
 				OrganizationId = pc.OrganizationId,
 				PayClassId = pc.PayClassId,
 				CreatedUtc = pc.CreatedUtc,

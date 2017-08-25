@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using AllyisApps.Lib;
 using AllyisApps.Services;
-using AllyisApps.Lib;
+using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels
 {
