@@ -21,17 +21,16 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// update expense report
 		/// </summary>
+		/// <param name="model"></param>
 		/// <param name="subscriptionId"></param>
 		/// <param name="submittedById"></param>
-		/// <param name="reportName"></param>
-		/// <param name="businessJustification"></param>
 		/// <param name="reportId"></param>
 		/// <param name="submitType"></param>
 		/// <param name="files"></param>
 		/// <param name="previousFiles"></param>
 		/// <param name="items"></param>
 		/// <returns></returns>
-		public ActionResult UpdateReport(int subscriptionId, int submittedById, int reportId, string submitType, IEnumerable<HttpPostedFileBase> files = null, IEnumerable<string> previousFiles = null, List<ExpenseItem> items = null, string reportName = "", string businessJustification = "")
+		public ActionResult UpdateReport(ExpenseCreateModel model, int subscriptionId, int submittedById, int reportId, string submitType, IEnumerable<HttpPostedFileBase> files = null, IEnumerable<string> previousFiles = null, List<ExpenseItem> items = null)
 		{
 			if (items == null)
 			{
@@ -58,8 +57,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				var report = new ExpenseReport()
 				{
-					ReportTitle = reportName,
-					BusinessJustification = businessJustification,
+					ReportTitle = model.Report.ReportTitle,
+					BusinessJustification = model.Report.BusinessJustification,
 					ModifiedUtc = DateTime.UtcNow,
 					SubmittedUtc = submittedUtc,
 					SubmittedById = submittedById,
