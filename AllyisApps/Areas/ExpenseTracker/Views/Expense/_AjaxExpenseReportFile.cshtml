@@ -3,7 +3,7 @@
 @using AllyisApps.Lib;
 
 @model ExpenseFileModel
-<div class="file-input" style="margin: 10px; margin-bottom: 0px;">
+<div class="file-input" id="@String.Format("file-input_{0}", Model.Index)" style="margin: 10px; margin-bottom: 0px;">
 	<div style="display: inline-block;">
 		@{
 			string className = String.Format("file_{0}", Model.Index);

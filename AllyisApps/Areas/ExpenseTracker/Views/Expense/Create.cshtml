@@ -176,8 +176,7 @@
 
 		function removeFile(index) {
 			console.log('removing file');
-			$('.file-input').last().remove();
-			file_index -= 1;
+			$('#file-input_' + index).remove();
 		}
 
 		function setDatePickers() {
