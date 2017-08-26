@@ -6,6 +6,7 @@
 
 using AllyisApps.Services.Lookup;
 using System;
+using System.Collections.Generic;
 
 namespace AllyisApps.Services
 {
@@ -110,6 +111,11 @@ namespace AllyisApps.Services
 		/// Gets or sets the created time
 		/// </summary>
 		public DateTime UserCreatedUtc { get; set; }
+
+		/// <summary>
+		/// organizations the user is member of
+		/// </summary>
+		public List<UserOrganization> Organizations { get; set; }
 
 		/// <summary>
 		/// constructor

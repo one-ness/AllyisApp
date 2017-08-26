@@ -12,6 +12,11 @@ namespace AllyisApps.Services
 	public enum SkuIdEnum : int
 	{
 		/// <summary>
+		/// Id for no sku
+		/// </summary>
+		None = 0,
+
+		/// <summary>
 		/// Time tracker basic.
 		/// </summary>
 		TimeTrackerBasic = 200001,
