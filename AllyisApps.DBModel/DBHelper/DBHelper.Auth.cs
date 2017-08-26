@@ -159,23 +159,6 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Populates a user's last used organization.
-		/// </summary>
-		/// <param name = "userId">Target user's Id.</param>
-		/// <param name = "organizationId">The organization's Id.</param>
-		public void UpdateActiveOrganization(int userId, int organizationId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userId", userId);
-			parameters.Add("@organizationId", organizationId);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				connection.Execute("[Auth].[UpdateUserActiveOrg]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
 		/// Updates the preferred language for a user.
 		/// </summary>
 		/// <param name="userId">Target user's Id.</param>

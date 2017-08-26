@@ -87,11 +87,6 @@ namespace AllyisApps.Services
 		public bool IsLockoutEnabled { get; set; }
 
 		/// <summary>
-		/// Gets or sets Id of this user's active organization.
-		/// </summary>
-		public int? LastUsedOrganizationId { get; set; }
-
-		/// <summary>
 		/// Gets or sets End date for lockout.
 		/// </summary>
 		public DateTime? LockoutEndDateUtc { get; set; }

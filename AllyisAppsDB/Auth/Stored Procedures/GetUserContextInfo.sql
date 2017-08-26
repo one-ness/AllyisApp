@@ -9,7 +9,6 @@ BEGIN
 		   [U].[LastName],
 		   [U].[Email],
 		   [U].[LastUsedSubscriptionId],
-		   [U].[LastUsedOrganizationId],
 		   [U].[PreferredLanguageId],
 		   [O].[OrganizationId],
 		   [O].[OrganizationName] AS 'OrganizationName',

@@ -185,7 +185,6 @@
     <Build Include="Auth\Stored Procedures\GetUserInvitationsByUserData.sql" />
     <Build Include="Auth\Stored Procedures\GetUsersWithSubscriptionToProductInOrganization.sql" />
     <Build Include="Auth\Stored Procedures\UpdateOrganization.sql" />
-    <Build Include="Auth\Stored Procedures\UpdateUserActiveOrg.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserActiveSub.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserInfo.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserPassword.sql" />

@@ -16,13 +16,11 @@
 	[PhoneNumber]				VARCHAR (16)     NULL,
 	[PhoneExtension]			VARCHAR (8)      NULL,
 	[LastUsedSubscriptionId]	INT              NULL,
-	[LastUsedOrganizationId]	INT              NULL,
 	[LockoutEndDateUtc]			DATETIME2 (0)    NULL,
 	[PasswordResetCode]			UNIQUEIDENTIFIER NULL,
 	[EmailConfirmationCode]		UNIQUEIDENTIFIER NULL,
 	CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([UserId] ASC),
 	CONSTRAINT [FK_User_Language] FOREIGN KEY ([PreferredLanguageId]) REFERENCES [Lookup].[Language] ([CultureName]) ON DELETE SET DEFAULT,
-	CONSTRAINT [FK_User_Organization] FOREIGN KEY ([LastUsedOrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId]),
 	CONSTRAINT [FK_User_Subscription] FOREIGN KEY ([LastUsedSubscriptionId]) REFERENCES [Billing].[Subscription] ([SubscriptionId]),
 	CONSTRAINT [UQ_User] UNIQUE NONCLUSTERED ([Email] ASC)
 );
