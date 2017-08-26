@@ -9,7 +9,6 @@ AS
 		[LastName], 
 		[DateOfBirth], 
 		[OrganizationId], 
-		[AccessCode], 
 		[Invitation].[OrganizationRoleId],
 		[OrganizationRoleName] AS [OrganizationRoleName],
 		[EmployeeId]

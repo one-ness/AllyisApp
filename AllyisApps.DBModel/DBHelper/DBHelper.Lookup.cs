@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.Lookup;
+using Dapper;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using AllyisApps.DBModel.Lookup;
-using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -80,17 +80,17 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-        /// <summary>
-        /// Get Address based on addres ID
-        /// </summary>
-        /// <param name="addressID"></param>
-        /// <returns></returns>
-        public AddressDBEntity getAddreess(int? addressID)
-        {
-            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-            {
-               return connection.Query<AddressDBEntity>("[Lookup].[GetAddress]", new { addresId = addressID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
-            }
-        }
-    }
+		/// <summary>
+		/// Get Address based on addres ID
+		/// </summary>
+		/// <param name="addressID"></param>
+		/// <returns></returns>
+		public AddressDBEntity getAddreess(int? addressID)
+		{
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<AddressDBEntity>("[Lookup].[GetAddress]", new { addresId = addressID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+			}
+		}
+	}
 }

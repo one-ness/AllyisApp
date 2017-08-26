@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.Finance;
+using Dapper;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using AllyisApps.DBModel.Finance;
-using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -49,7 +49,6 @@ namespace AllyisApps.DBModel
 
 			return parameters.Get<int>("@returnValue");
 		}
-
 
 		////////////////////////////
 		/*          READ          */
@@ -152,7 +151,6 @@ namespace AllyisApps.DBModel
 			return parameters.Get<int>("@returnValue");
 		}
 
-
 		////////////////////////////
 		/*         DELETE         */
 		////////////////////////////
@@ -181,7 +179,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
-			
+
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query("[Auth].[GetOrganizationOwnerEmails]", parameters, commandType: CommandType.StoredProcedure);

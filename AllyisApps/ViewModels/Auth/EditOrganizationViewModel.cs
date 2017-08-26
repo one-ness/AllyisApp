@@ -4,10 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using DataAnnotationsExtensions;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using DataAnnotationsExtensions;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -23,9 +22,8 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public EditOrganizationViewModel()
 		{
-			
 			this.LocalizedCountries = new Dictionary<string, string>();
-            this.LocalizedStates = new Dictionary<string, string>();
+			this.LocalizedStates = new Dictionary<string, string>();
 			this.IsCreating = false;
 		}
 
@@ -143,7 +141,5 @@ namespace AllyisApps.ViewModels.Auth
 		/// country code and localized names
 		/// </summary>
 		public Dictionary<string, string> LocalizedCountries { get; set; }
-
-		
 	}
 }

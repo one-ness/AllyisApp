@@ -6,36 +6,36 @@ namespace AllyisApps.DBModel.Finance
 	/// Represents the Expense Item table in the database.
 	/// </summary>
 	public class ExpenseItemDBEntity
-    {
-        /// <summary>
-        /// Gets or sets the Expense Item's ID.
-        /// </summary>
-        public int ExpenseItemId { get; set; }
+	{
+		/// <summary>
+		/// Gets or sets the Expense Item's ID.
+		/// </summary>
+		public int ExpenseItemId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Expense Item's description.
-        /// </summary>
-        public string ItemDescription { get; set; }
+		/// <summary>
+		/// Gets or sets the Expense Item's description.
+		/// </summary>
+		public string ItemDescription { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Expense Item's date of transaction.
-        /// </summary>
-        public DateTime TransactionDate { get; set; }
+		/// <summary>
+		/// Gets or sets the Expense Item's date of transaction.
+		/// </summary>
+		public DateTime TransactionDate { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Expense Item's currency ammount.
-        /// </summary>
-        public decimal Amount { get; set; }
+		/// <summary>
+		/// Gets or sets the Expense Item's currency ammount.
+		/// </summary>
+		public decimal Amount { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Expense Item's Report ID.
-        /// </summary>
-        public int ExpenseReportId { get; set; }
+		/// <summary>
+		/// Gets or sets the Expense Item's Report ID.
+		/// </summary>
+		public int ExpenseReportId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Expense Item's Account ID.
-        /// </summary>
-        public int AccountId { get; set; }
+		/// <summary>
+		/// Gets or sets the Expense Item's Account ID.
+		/// </summary>
+		public int AccountId { get; set; }
 
 
         /// <summary>

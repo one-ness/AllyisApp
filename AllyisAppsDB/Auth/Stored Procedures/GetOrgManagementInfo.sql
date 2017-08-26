@@ -67,17 +67,16 @@ BEGIN
 		[LastName], 
 		[DateOfBirth], 
 		[OrganizationId], 
-		[AccessCode], 
 		[Invitation].[OrganizationRoleId],
 		[OrganizationRoleName] AS [OrganizationRoleName],
 		[EmployeeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
 	LEFT JOIN [Auth].[OrganizationRole] WITH (NOLOCK) ON [OrganizationRole].[OrganizationRoleId] = [Invitation].[OrganizationRoleId]
-	WHERE [OrganizationId] = @organizationId AND [IsActive] = 1
+	WHERE [OrganizationId] = @organizationId AND [IsActive] = 1 AND [StatusId] = 0
 
 	SELECT [StripeTokenCustId]
 	FROM [Billing].[StripeOrganizationCustomer] WITH (NOLOCK) 
-	WHERE [OrganizationId] = @organizationId AND [IsActive] = 1
+	WHERE [OrganizationId] = @organizationId AND [IsActive] = 1 
 
 	SELECT
 		[Product].[ProductId],

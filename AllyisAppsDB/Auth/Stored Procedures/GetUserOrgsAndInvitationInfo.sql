@@ -50,13 +50,12 @@ BEGIN
 		[Invitation].[DateOfBirth], 
 		[Invitation].[OrganizationId],
 		[Organization].[OrganizationName] AS 'OrganizationName',
-		[AccessCode], 
 		[OrganizationRoleId],
 		[EmployeeId] 
 	FROM [Auth].[User] WITH (NOLOCK)
 	LEFT JOIN [Auth].[Invitation] WITH (NOLOCK) ON [User].[Email] = [Invitation].[Email]
 	LEFT JOIN [Auth].[Organization] WITH (NOLOCK) ON [Invitation].[OrganizationId] = [Organization].[OrganizationId]
-	WHERE [User].[UserId] = @userId AND [Invitation].[IsActive] = 1
+	WHERE [User].[UserId] = @userId AND [Invitation].[IsActive] = 1 AND [Invitation].StatusId = 0;
 
 	DECLARE @addressId INT
 	SET @addressId = (SELECT m.AddressId

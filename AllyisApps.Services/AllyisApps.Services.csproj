@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auth\InvitationStatusEnum.cs" />
     <Compile Include="Auth\Organization.cs" />
     <Compile Include="Auth\AccountService.cs" />
     <Compile Include="Auth\AuthorizationService.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Auth\ProductRoleEnums.cs" />
     <Compile Include="Auth\UserContext.cs" />
     <Compile Include="Auth\UserOrganization.cs" />
+    <Compile Include="Auth\UserAccount.cs" />
     <Compile Include="Auth\UserSubscription.cs" />
     <Compile Include="BaseService.cs" />
     <Compile Include="Billing\BillingFrequencyEnum.cs" />
