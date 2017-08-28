@@ -78,7 +78,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult MergePayClass(MergePayClassViewModel model, int destPayClass)
 		{
 			// change all of the entries with old payclass to destPayClass and delete the old payclass
-			if (AppService.DeletePayClass(model.SourcePayClassId, AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId, model.SubscriptionId, destPayClass))
+			if (AppService.DeletePayClass(model.SourcePayClassId, AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId, model.SubscriptionId, destPayClass))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulMergePayClass, Variety.Success));
 			}

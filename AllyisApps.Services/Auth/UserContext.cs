@@ -46,7 +46,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public UserContext()
 		{
-			this.UserSubscriptions = new Dictionary<int, UserSubscription>();
+			//this.UserSubscriptions = new Dictionary<int, UserSubscription>();
 			this.OrganizationsAndRoles = new Dictionary<int, OrganizationAndRole>();
 			this.SubscriptionsAndRoles = new Dictionary<int, SubscriptionAndRole>();
 		}
@@ -68,11 +68,11 @@ namespace AllyisApps.Services
 			this.PreferedLanguageId = preferredLanguageId;
 		}
 
-		/// <summary>
-		/// Gets or sets the list of subscriptions this organization has.
-		/// If the user is not a member of that subscrption, then the role is set to NotAssigned.
-		/// </summary>
-		public Dictionary<int, UserSubscription> UserSubscriptions { get; set; }
+		///// <summary>
+		///// Gets or sets the list of subscriptions this organization has.
+		///// If the user is not a member of that subscrption, then the role is set to NotAssigned.
+		///// </summary>
+		//public Dictionary<int, UserSubscription> UserSubscriptions { get; set; }
 
 		/// <summary>
 		/// list of oragnizations this user belongs to and the role in each organization, indexed by organziation id

@@ -273,18 +273,18 @@ namespace AllyisApps.Services
                 // get subscriptions and roles
                 foreach (var item in expando.SubscriptionsAndRoles)
                 {
+                    result.SubscriptionsAndRoles.Add(item.SubscriptionId,
+                        new UserContext.SubscriptionAndRole()
+                        {
+                            AreaUrl = item.AreaUrl,
+                            ProductId = (ProductIdEnum) item.ProductId,
+                            ProductRoleId = item.ProductRoleId,
+                            SkuId = (SkuIdEnum) item.SkuId,
+                            SubscriptionId = item.SubscriptionId,
+                            OrganizationId = item.OrganizationId
+                        });
 
-                    UserSubscription sub = new UserSubscription();
-                    sub.AreaUrl = item.AreaUrl;
-                    sub.OrganizationId = item.OrganizationId;
-                    sub.ProductId = (ProductIdEnum)item.ProductId;
-                    sub.ProductName = item.ProductName;
-                    sub.ProductRoleId = item.ProductRoleId;
-                    //sub.ProductRoleName = item.ProductRoleName; Logic Fails here as this is a one-to-many for this information I don't think we use it.
-                    sub.SkuId = item.SkuId;
-                    sub.SubscriptionId = item.SubscriptionId;
-                    sub.SubscriptionName = item.SubscriptionName;
-                    result.UserSubscriptions.Add(sub.SubscriptionId, sub);
+                    //result.UserSubscriptions.Add(sub.SubscriptionId, sub);
                 }
 
                 // set result to self
@@ -338,7 +338,7 @@ namespace AllyisApps.Services
         }
 
         /// <summary>
-        /// 
+        /// Get User Address, Organizaiontins 
         /// </summary>
         public UserAccount GetUser(int? userID){
             if (userID.HasValue)

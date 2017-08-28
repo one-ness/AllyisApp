@@ -78,19 +78,19 @@ namespace AllyisApps.Controllers
 				OrganizationId = organizationId,
 				BillingCustomer = customer,
 				SubscriptionCount = infos.Item3.Count,
-				Subscriptions = infos.Item6.Select(p =>
+				Subscriptions = infos.Item3.Select(sub =>
 				{
 
 					return new SubscriptionDisplayViewModel
 					{
-						Info = infos.Item3.Where(s => s.ProductId == p.ProductId).FirstOrDefault(),
-						ProductId = p.ProductId,
-						ProductName = p.ProductName,
-						SubscriptionId = infos.Item3.Where(s => s.ProductId == p.ProductId).FirstOrDefault().SubscriptionId,
-						SubscriptionName = infos.Item3.Where(s => s.ProductId == p.ProductId).FirstOrDefault().SubscriptionName,
-						ProductDescription = p.ProductDescription,
+						Info = sub,
+						ProductId = sub.ProductId,
+						ProductName = sub.ProductName,
+						SubscriptionId = sub.SubscriptionId,
+						SubscriptionName = sub.SubscriptionName,
+						ProductDescription = sub.Description,
 						OrganizationId = organizationId,
-						AreaUrl = p.AreaUrl,
+						AreaUrl = sub.AreaUrl,
 					};
 				})
 			};

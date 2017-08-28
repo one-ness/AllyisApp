@@ -100,17 +100,17 @@ namespace AllyisApps.DBModel
         /// 
         /// </summary>
         /// <param name="userId"></param>
-        /// <returns>User infomation, </returns>
+        /// <returns>User infomation,Organizations,Subscripltions,  </returns>
 		public Tuple<dynamic,IEnumerable<dynamic>,IEnumerable<dynamic>, IEnumerable<dynamic>> GetUser(int userId)
 		{
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
                 var res = con.QueryMultiple("Auth.GetUser @a", new { a = userId });
                 return new Tuple<dynamic, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>>(
-                    res.Read().FirstOrDefault(),
-                    res.Read(), 
-                    res.Read(),
-                    res.Read()
+                    res.Read().FirstOrDefault(),//User
+                    res.Read(), //Organizions
+                    res.Read(),//Subscritions
+                    res.Read()//Invitations
                     );
 			}
 		}
@@ -852,28 +852,7 @@ namespace AllyisApps.DBModel
 			return result;
 		}
 
-		/// <summary>
-		/// Returns a UserDBEntity for the given user, along with a list of OrganizationDBEntities for the organizations that
-		/// the user is a member of, and a list of InvititationDBEntities for any invitations for that user.
-		/// </summary>
-		/// <param name="userId">The User Id.</param>
-		public Tuple<UserDBEntity, List<dynamic>, List<InvitationDBEntity>, AddressDBEntity> GetUserOrgsAndInvitations(int userId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userId", userId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				var results = connection.QueryMultiple(
-					"[Auth].[GetUserOrgsAndInvitationInfo]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
-				return Tuple.Create(
-					results.Read<UserDBEntity>().SingleOrDefault(),
-					results.Read<dynamic>().ToList(),
-					results.Read<InvitationDBEntity>().ToList(),
-					results.Read<AddressDBEntity>().SingleOrDefault());
-			}
-		}
+		
 
 		/// <summary>
 		/// Returns an OrganizationDBEntity for the given organization, along with a list of OrganizationUserDBEntities for the organization users

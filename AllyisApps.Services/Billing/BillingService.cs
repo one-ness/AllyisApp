@@ -417,6 +417,16 @@ namespace AllyisApps.Services
 			};
 		}
 
+        /// <summary>
+        /// Get Name of Subscription
+        /// </summary>
+        /// <param name="subscriptionId"></param>
+        /// <returns></returns>
+        public string getSubscriptionName(int subscriptionId)
+        {
+            return DBHelper.GetSubscriptionName(subscriptionId);
+        }
+
 		/// <summary>
 		/// Gets a subscription Id for a customer of the current organization.
 		/// </summary>
@@ -571,7 +581,7 @@ namespace AllyisApps.Services
 		/// <returns>A notification string, or null.</returns>
 		public string UnsubscribeAndRemoveBillingSubscription(int SelectedSku, int? subscriptionId)
 		{
-			var orgId = this.UserContext.UserSubscriptions[subscriptionId.Value].OrganizationId;
+			var orgId = this.UserContext.SubscriptionsAndRoles[subscriptionId.Value].OrganizationId;
 			BillingServicesCustomer custId = this.RetrieveCustomer(this.GetOrgBillingServicesCustomerId(orgId));
 			if (custId != null)
 			{
@@ -830,12 +840,13 @@ namespace AllyisApps.Services
 
 			return new SubscriptionDisplayInfo
 			{
-				CanViewSubscription = subscriptionDisplay.CanViewSubscription,
+                AreaUrl = subscriptionDisplay.AreaUrl,
 				CreatedUtc = subscriptionDisplay.CreatedUtc,
 				NumberOfUsers = subscriptionDisplay.NumberOfUsers,
 				OrganizationId = subscriptionDisplay.OrganizationId,
 				OrganizationName = subscriptionDisplay.OrganizationName,
-				ProductId = subscriptionDisplay.ProductId,
+                Description = subscriptionDisplay.Description,
+                ProductId = subscriptionDisplay.ProductId,
 				ProductName = subscriptionDisplay.ProductName,
 				SkuId = subscriptionDisplay.SkuId,
 				SkuName = subscriptionDisplay.SkuName,

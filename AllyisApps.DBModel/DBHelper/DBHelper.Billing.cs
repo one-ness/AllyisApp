@@ -174,6 +174,20 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+        /// <summary>
+        /// Get just subscription Name by subscriptionid.
+        /// </summary>
+        /// <param name="subscriptionId"></param>
+        /// <returns></returns>
+        public string GetSubscriptionName(int subscriptionId)
+        {
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@subscriptionId", subscriptionId);
+            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+            {
+                return connection.Query<string>("[Billing].[GetSubscriptionName]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+            }
+        }
 		/// <summary>
 		/// Executes [Billing].[GetProductById].
 		/// </summary>

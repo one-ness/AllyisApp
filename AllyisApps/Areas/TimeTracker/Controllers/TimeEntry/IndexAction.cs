@@ -32,8 +32,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
-			UserSubscription subInfo = null;
-			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+            String subName = AppService.GetSubscription(subscriptionId).Name;
 
 			ViewBag.GetDateFromDays = new Func<int, DateTime>(AppService.GetDateFromDays);
 
@@ -49,7 +50,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(
 				subInfo.OrganizationId,
 				subscriptionId,
-				subInfo.SubscriptionName,
+				subName,
 				userId,
 				manager,
 				startDate,
@@ -70,9 +71,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.TimeEntry, subscriptionId);
 
-			UserSubscription subInfo = null;
-			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
-
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+            string subName = this.AppService.GetSubscription(subscriptionId).Name;
 			ViewBag.GetDateFromDays = new Func<int, DateTime>(AppService.GetDateFromDays);
 
 			var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null, userId);
@@ -87,7 +88,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			TimeEntryOverDateRangeViewModel model = this.ConstructTimeEntryOverDataRangeViewModel(
 				subInfo.OrganizationId,
 				subscriptionId,
-				subInfo.SubscriptionName,
+				subName,
 				userId,
 				manager,
 				startDate,
