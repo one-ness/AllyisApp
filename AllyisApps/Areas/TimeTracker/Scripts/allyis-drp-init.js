@@ -51,7 +51,9 @@ function init_drp(drpElementId, drpPresets, startDateId, endDateId, numberOfMont
 	if (customChangeFunction == null) {
 		customChangeFunction = function () { };
 	}
-	var picker = $('#' + drpElementId).daterangepicker({
+    var picker = $('#' + drpElementId).daterangepicker({
+        changeMonth: true,
+        changeYear: true,
 		initialText: 'Select period...',
 		datepickerOptions: {
 			minDate: null,
