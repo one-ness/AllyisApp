@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -34,7 +34,7 @@ namespace AllyisApps.Controllers
 			if (!isInvited)
 			{
 				OrganizationUserInfo userOrgInfo = AppService.GetOrganizationManagementInfo(orgId).Item2.Find(m => m.UserId == userId);
-				User userBasicInfo = AppService.GetUser(userId);
+				User userBasicInfo = AppService.GetUserInfo(userId);
 
 				model = new EditMemberViewModel
 				{

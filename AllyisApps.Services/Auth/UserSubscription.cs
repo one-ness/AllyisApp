@@ -25,16 +25,11 @@ namespace AllyisApps.Services
 		/// Gets the name of the subscription.
 		/// </summary>
 		public string SubscriptionName { get; set; }
-        
+
 		/// <summary>
 		/// Gets or sets the organization this subscription belongs to.
 		/// </summary>
 		public int OrganizationId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the name of the organization specified by the id.
-		/// </summary>
-		public string OrganizationName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Sku of this subscription.
@@ -55,11 +50,6 @@ namespace AllyisApps.Services
 		/// Gets or sets the Role of the user in this subscription.
 		/// </summary>
 		public int ProductRoleId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Product Role name.
-		/// </summary>
-		public string ProductRoleName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Area URL.

@@ -17,10 +17,10 @@ namespace AllyisApps.DBModel
 	/// DBHelper Partial.
 	/// </summary>
 	public partial class DBHelper
-    {
-        //=================//
-        /*  Expense Items  */
-        //=================//
+	{
+		//=================//
+		/*  Expense Items  */
+		//=================//
 
         /// <summary>
         /// Adds an ExpenseItem to the database.
@@ -42,12 +42,11 @@ namespace AllyisApps.DBModel
             parameters.Add("@isBillableToCustomer", item.IsBillableToCustomer);
 			parameters.Add("@accountId", item.AccountId);
 
-            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-            {
-                connection.Execute("[Expense].[CreateExpenseItem]", parameters, commandType: CommandType.StoredProcedure);
-            }
-            
-        }
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Execute("[Expense].[CreateExpenseItem]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
 
 		/// <summary>
 		/// Adds an ExpenseFile to the database.
@@ -169,15 +168,15 @@ namespace AllyisApps.DBModel
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@expenseItemId", ExpenseItemId);
 
-            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-            {
-                return connection.Query<int>("[Expense].[DeleteExpenseItem]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault() == 1;
-            }
-        }
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<int>("[Expense].[DeleteExpenseItem]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault() == 1;
+			}
+		}
 
-        //=================//
-        /* Expense Reports */
-        //=================//
+		//=================//
+		/* Expense Reports */
+		//=================//
 
         /// <summary>
         /// Adds an ExpenseReport to the database.
@@ -258,16 +257,16 @@ namespace AllyisApps.DBModel
             }
         }
 
-        /// <summary>
-        /// Updates the Expense Report with the specified ID.
-        /// </summary>
-        /// <param name="report">The expense report object that will replace the previous entry.</param>
-        public void UpdateExpenseReport(ExpenseReportDBEntity report)
-        {
-            if (report == null)
-            {
-                throw new System.ArgumentException("Report cannot be null, must already exist");
-            }
+		/// <summary>
+		/// Updates the Expense Report with the specified ID.
+		/// </summary>
+		/// <param name="report">The expense report object that will replace the previous entry.</param>
+		public void UpdateExpenseReport(ExpenseReportDBEntity report)
+		{
+			if (report == null)
+			{
+				throw new System.ArgumentException("Report cannot be null, must already exist");
+			}
 
             DynamicParameters parameters = new DynamicParameters();
             parameters.Add("@expenseReportId", report.ExpenseReportId);
@@ -278,12 +277,11 @@ namespace AllyisApps.DBModel
             parameters.Add("@businessJustification", report.BusinessJustification);
 			parameters.Add("@submittedUtc", report.ExpenseReportSubmittedUtc);
 
-
-            using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-            {
-                connection.Execute("[Expense].[UpdateExpenseReport]", parameters, commandType: CommandType.StoredProcedure);
-            }
-        }
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Execute("[Expense].[UpdateExpenseReport]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
 
         /// <summary>
         /// Deletes an Expense Report with a given id.

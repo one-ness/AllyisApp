@@ -1,15 +1,11 @@
-CREATE PROCEDURE [Auth].[InviteUser]
+CREATE PROCEDURE [Auth].[CreateInvitation]
 	@userId INT,
 	@email NVARCHAR(384),
 	@firstName NVARCHAR(40),
 	@lastName NVARCHAR(40),
 	@organizationId INT,
-	@accessCode VARCHAR(50),
 	@organizationRole INT,
-	@retId INT OUTPUT,
-	@employeeId NVARCHAR(16),
-	@subscriptionId INT,
-	@subRoleId INT
+	@employeeId NVARCHAR(16)
 AS
 
 BEGIN
@@ -41,8 +37,7 @@ BEGIN
 				([Email], 
 				[FirstName], 
 				[LastName], 
-				[OrganizationId], 
-				[AccessCode], 
+				[OrganizationId],  
 				[IsActive], 
 				[OrganizationRoleId],
 				[EmployeeId],
@@ -51,8 +46,7 @@ BEGIN
 				(@email, 
 				@firstName, 
 				@lastName, 
-				@organizationId, 
-				@accessCode, 
+				@organizationId,  
 				1, 
 				@organizationRole, 
 				@employeeId,

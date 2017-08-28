@@ -9,10 +9,10 @@ AS
 		[LastName], 
 		[DateOfBirth], 
 		[OrganizationId], 
-		[AccessCode], 
 		[Invitation].[OrganizationRoleId],
 		[OrganizationRoleName] AS [OrganizationRoleName],
-		[EmployeeId]
+		[EmployeeId],
+		[Invitation].[StatusId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
 	LEFT JOIN [Auth].[OrganizationRole] WITH (NOLOCK) ON [OrganizationRole].[OrganizationRoleId] = [Invitation].[OrganizationRoleId]
 	WHERE [InvitationId] = @inviteId AND [IsActive] = 1

@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
 using AllyisApps.Services.Lookup;
+using System;
 
 namespace AllyisApps.Services
 {
@@ -14,6 +14,8 @@ namespace AllyisApps.Services
 	/// </summary>
 	public class User
 	{
+		public const int PasswordMinLength = 8;
+
 		/// <summary>
 		/// Gets or sets User Id.
 		/// </summary>

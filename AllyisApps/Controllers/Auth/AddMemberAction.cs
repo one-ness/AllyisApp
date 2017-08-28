@@ -4,15 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Core.Alert;
+using AllyisApps.Services;
+using AllyisApps.Services.Billing;
+using AllyisApps.ViewModels.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.Services.Billing;
-using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {
@@ -54,11 +54,7 @@ namespace AllyisApps.Controllers
 			if (ModelState.IsValid)
 			{
 				this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, add.OrganizationId);
-				int? subId = null, subRoleId = null;
-				if (add.Subscriptions != null && add.Subscriptions.Count > 0)
-				{
-					var sub = add.Subscriptions.First();
-				}
+				
 
 				try
 				{
@@ -69,15 +65,15 @@ namespace AllyisApps.Controllers
 						LastName = add.LastName,
 						OrganizationId = add.OrganizationId,
 						OrganizationRole = add.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member,
-						EmployeeId = add.EmployeeId
+						EmployeeId = add.EmployeeId,
 					};
 
 					User usr = AppService.GetUserByEmail(info.Email);
 					string url = usr != null && usr.Email == info.Email ?
-						Url.Action(ActionConstants.Index, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme) :
-						Url.Action(ActionConstants.Register, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme);
+						Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
+						Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
 
-					int invitationId = await AppService.InviteUser(url, info, subId, subRoleId);
+					int invitationId = await AppService.InviteUser(url, info);
 
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, add.FirstName, add.LastName), Variety.Success));
 					return this.RedirectToAction(ActionConstants.ManageOrg, new { id = add.OrganizationId });

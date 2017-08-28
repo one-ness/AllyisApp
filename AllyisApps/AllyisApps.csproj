@@ -407,6 +407,7 @@
       <DependentUpon>Timetracker - Copy.css</DependentUpon>
     </Content>
     <Content Include="Scripts\allyis-account-permission2.js" />
+    <Content Include="Scripts\allyis-holidayDatepicker.js" />
     <Content Include="Scripts\allyis-birthDatepicker.js" />
     <Content Include="Scripts\allyis-pages-with-filter.js" />
     <Content Include="Scripts\allyis-paginate.js" />

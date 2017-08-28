@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
 using AllyisApps.ViewModels.Shared;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {

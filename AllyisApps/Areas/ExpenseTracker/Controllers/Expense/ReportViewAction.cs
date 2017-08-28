@@ -51,7 +51,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 var reviewer = AppService.GetUser(item.UserId);
                 reportHistory.Add(new ExpenseHistoryViewModel()
                 {
-                    Reviewer = string.Format("{0} {1}", reviewer.FirstName, reviewer.LastName),
+                    Reviewer = string.Format("{0} {1}", reviewer.userInfo.FirstName, reviewer.userInfo.LastName),
                     Status = (ExpenseStatusEnum)item.Status,
                     Submitted = item.CreatedUtc,
                     Text = item.Text
@@ -61,7 +61,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             return new ReportViewModel()
             {
                 ReprortTitle = report.ReportTitle,
-                SubmittedBy = string.Format("{0} {1}", user.FirstName, user.LastName),
+                SubmittedBy = string.Format("{0} {1}", user.userInfo.FirstName, user.userInfo.LastName),
                 CreatedUtc = report.CreatedUtc,
                 ModifiedUtc = report.ModifiedUtc,
 				SubmittedUtc = report.SubmittedUtc,
@@ -69,7 +69,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 Status = (ExpenseStatusEnum)report.ReportStatus,
                 Expenses = reportItems,
                 History = reportHistory,
-                UserId = user.UserId,
+                UserId = user.userInfo.UserId,
                 ReportId = report.ExpenseReportId,
                 SubscriptionId = subscriptionId,
                 Attachments = fileNames
