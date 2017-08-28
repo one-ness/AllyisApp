@@ -5,12 +5,12 @@
 //------------------------------------------------------------------------------
 
 using AllyisApps.Services;
+using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Controllers
 {
@@ -27,7 +27,7 @@ namespace AllyisApps.Controllers
         public ActionResult Index()
         {
             AccountIndexViewModel viewModel = ConstuctIndexViewModel();
-            //View Bag needed to 
+            //View Bag needed to
             return this.View(viewModel);
         }
 
@@ -41,81 +41,81 @@ namespace AllyisApps.Controllers
         }
 
         /// <summary>
-        /// Constuct index view Model for 
+        /// Constuct index view Model for
         /// </summary>
         /// <returns></returns>
         public AccountIndexViewModel ConstuctIndexViewModel()
         {
-            User user = AppService.GetCurrentUserProfile();
-            
+            int? userID = AppService.UserContext?.UserId;
 
-            AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel(user);
+            UserAccount accountInfo = AppService.GetUser(userID);
+
+
+            AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel(accountInfo?.userInfo);
             AccountIndexViewModel indexViewModel = new AccountIndexViewModel()
             {
                 UserInfo = userViewModel
             };
-            if (user == null)
+            if (accountInfo == null)
             {
+                //if not signed in do not attpempt to load values.
                 return indexViewModel;
             }
+
             //Add invitations to view model
-            List<InvitationInfo> invitationslist = AppService.GetInvitationsByUser(user.Email);
-            foreach (InvitationInfo invite in invitationslist)
+
+            var invitationslist = accountInfo.InviatationInfoWithName;
+            foreach (var inviteInfo in invitationslist)
             {
-                var org = AppService.GetOrganization(invite.OrganizationId);
+                var invite = inviteInfo.Item1;
 
                 indexViewModel.Invitations.Add(new AccountIndexViewModel.InvitationViewModel()
                 {
                     InvitationId = invite.InvitationId,
-                    OrganizationName = org.OrganizationName,
-                    //OrganizationId = org.OrganizationId
+                    OrganizationName = inviteInfo.Item2,
                 });
             }
 
-            List<Organization> orgs = AppService.GetOrganizationsByUserId(user.UserId).ToList();
+            var orgs = accountInfo.Organizations;
             //Add organizations to model
-            foreach (Organization curorg in orgs)
+            foreach (var curorg in orgs)
             {
-
                 AccountIndexViewModel.OrganizationViewModel orgViewModel =
-                new AccountIndexViewModel.OrganizationViewModel(curorg, this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.OrganizationId, false));
+                new AccountIndexViewModel.OrganizationViewModel(curorg.organization,
+                    this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.organization.OrganizationId, curorg.role, false));
 
-
-                //Get orgs Subscriptions
-                UserOrganization userOrgInfo;
-                AppService.UserContext.UserOrganizations.TryGetValue(curorg.OrganizationId, out userOrgInfo);
-
-                if (userOrgInfo != null)
+               
+                //Add subscription info
+                foreach (UserSubscription userSubInfo in curorg.OrganizationSubscriptions)
                 {
-                    //Add subscription info 
-                    foreach (UserSubscription userSubInfo in AppService.UserContext.UserSubscriptions.Values.Where(item => item.OrganizationId == userOrgInfo.OrganizationId))
+                    string description =
+                        userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
+                        userSubInfo.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
+                        "";
+                    var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel(userSubInfo, description);
+                    if (userSubInfo.ProductId == ProductIdEnum.TimeTracker)
                     {
-                        
-                        string description =
-                            userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
-                            userSubInfo.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
-                            "";
-                        var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel(userSubInfo, description);
-                        
                         int? sDate = null;
                         int? eDate = null;
-                        if (userSubInfo.ProductId == ProductIdEnum.TimeTracker)
+                        int startOfWeek = AppService.GetAllSettings(userSubInfo.SubscriptionId).Item1.StartOfWeek;
+                        sDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
+                        eDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
+                        subViewModel.ProductGoToUrl = Url.RouteUrl("TimeTracker_NoUserId", new
                         {
-                            int startOfWeek = AppService.GetAllSettings(userSubInfo.SubscriptionId).Item1.StartOfWeek;
-                            sDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
-                            eDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
-                            subViewModel.ProductGoToUrl = Url.RouteUrl("TimeTracker_NoUserId", new { subscriptionId = 
-                                userSubInfo.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = sDate, endDate = eDate});
-                        }
-                        else
-                        {
-                            subViewModel.ProductGoToUrl = userSubInfo.AreaUrl;
-                        }
-                        subViewModel.IconUrl = string.Format("Content/icons/{0}.png", subViewModel.ProductName.Replace(" ", ""));
-                        orgViewModel.Subscriptions.Add(subViewModel);
+                            subscriptionId =
+                            userSubInfo.SubscriptionId,
+                            controller = ControllerConstants.TimeEntry,
+                            startDate = sDate,
+                            endDate = eDate
+                        });
                     }
+                    else
+                    {
+                        subViewModel.ProductGoToUrl = userSubInfo.AreaUrl;
+                    }
+                    subViewModel.IconUrl = string.Format("Content/icons/{0}.png", subViewModel.ProductName.Replace(" ", ""));
+                    orgViewModel.Subscriptions.Add(subViewModel);
                 }
-
                 indexViewModel.Organizations.Add(orgViewModel);
             }
 

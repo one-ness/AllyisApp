@@ -35,10 +35,11 @@ namespace AllyisApps.Services
 		/// Gets or sets the organization's Address.
 		/// </summary>
 		public Address Address { get; set; }
-        /// <summary>
-        /// Gets or sets the Phone number.
-        /// </summary>
-        [Display(Name = "Phone Number")]
+
+		/// <summary>
+		/// Gets or sets the Phone number.
+		/// </summary>
+		[Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
 
 		/// <summary>
@@ -57,9 +58,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		public string Subdomain { get; set; }
 
-        public Organization()
-        {
-            Address = new Address();
-        }
+		public Organization()
+		{
+			Address = new Address();
+		}
 	}
 }

@@ -4,6 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.Hrm;
+using AllyisApps.DBModel.TimeTracker;
+using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -594,6 +597,7 @@ namespace AllyisApps.Services
 				spResults.Item3.Select(hdb => InitializeHoliday(hdb)).ToList(),
 				spResults.Item4.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
 				spResults.Item5.Select(udb => InitializeUser(udb)).ToList(),
+				spResults.Item5.Select(udb => InitializeUser(udb,false)).ToList(),
 				spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList());
 		}
 
@@ -608,7 +612,7 @@ namespace AllyisApps.Services
 		{
 			return new PayClass
 			{
-                PayClassName = pc.PayClassName,
+				PayClassName = pc.PayClassName,
 				OrganizationId = pc.OrganizationId,
 				PayClassId = pc.PayClassId,
 				CreatedUtc = pc.CreatedUtc,

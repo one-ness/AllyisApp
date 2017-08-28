@@ -4,14 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using System.Web.Mvc;
 using AllyisApps.Core.Alert;
-using AllyisApps.Lib;
-using AllyisApps.Services;
-using AllyisApps.Services.Lookup;
-using AllyisApps.ViewModels.Auth;
 using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.Auth;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -27,7 +23,7 @@ namespace AllyisApps.Controllers
 		{
 			var model = new EditProfileViewModel();
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
-			var user = this.AppService.GetCurrentUserProfile();
+			var user = this.AppService.GetCurrentUserInfo();
 			model.Address = user.Address?.Address1;
 			model.AddressId = user.Address?.AddressId;
 			model.City = user.Address?.City;

@@ -982,7 +982,7 @@
     <value>The entered passwords do not match.</value>
   </data>
   <data name="PasswordLengthValidation" xml:space="preserve">
-    <value>Your password must be at least 12 characters long.</value>
+    <value>Your password must be at least 8 characters long.</value>
   </data>
   <data name="PasswordValidation" xml:space="preserve">
     <value>Please enter your password.</value>

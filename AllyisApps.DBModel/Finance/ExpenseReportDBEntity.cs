@@ -5,7 +5,7 @@ namespace AllyisApps.DBModel.Finance
 	/// <summary>
 	/// Represents the Expense Item table in the database.
 	/// </summary>
-	public class ExpenseReportDBEntity : BaseDBEntity
+	public class ExpenseReportDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the Expense Report's ID.
@@ -37,7 +37,6 @@ namespace AllyisApps.DBModel.Finance
 		/// </summary>
 		public int ReportStatus { get; set; }
 
-
 		/// <summary>
 		/// Gets or sets description of why report is needed or created.
 		/// </summary>
@@ -52,7 +51,5 @@ namespace AllyisApps.DBModel.Finance
 		/// Gets or sets the Expense Report's last-modified-on date.
 		/// </summary>
 		public int ModifiedUtc { get; set; }
-
 	}
-
 }

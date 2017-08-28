@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using AllyisApps.ViewModels.TimeTracker.Customer;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.TimeTracker.Customer;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -31,31 +31,31 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
 			var infos = AppService.GetCustomerInfo(userId);
 			string subscriptionNameToDisplay = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
-            Customer customer = infos.Item1;
-            return this.View(new EditCustomerInfoViewModel
-            {
-                ContactEmail = customer.ContactEmail,
-                CustomerName = customer.CustomerName,
-                AddressId = customer.Address?.AddressId,
-                Address = customer.Address?.Address1,
-                City = customer.Address?.City,
-                State = customer.Address?.StateName,
-                Country = customer.Address?.CountryName,
-                SelectedCountryCode = customer.Address?.CountryCode,
+			Customer customer = infos.Item1;
+			return this.View(new EditCustomerInfoViewModel
+			{
+				ContactEmail = customer.ContactEmail,
+				CustomerName = customer.CustomerName,
+				AddressId = customer.Address?.AddressId,
+				Address = customer.Address?.Address1,
+				City = customer.Address?.City,
+				State = customer.Address?.StateName,
+				Country = customer.Address?.CountryName,
+				SelectedCountryCode = customer.Address?.CountryCode,
 
-                SelectedStateId = customer.Address?.StateId,
-                
-                PostalCode = customer.Address?.PostalCode,
-                ContactPhoneNumber = customer.ContactPhoneNumber,
-                
-                FaxNumber = customer.FaxNumber,
-                Website = customer.Website,
-                EIN = customer.EIN,
-                OrganizationId = customer.OrganizationId,
-                CustomerId = userId,
-                LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
-                LocalizedStates = ModelHelper.GetLocalizedStates(AppService, customer.Address?.CountryCode),
-                
+				SelectedStateId = customer.Address?.StateId,
+
+				PostalCode = customer.Address?.PostalCode,
+				ContactPhoneNumber = customer.ContactPhoneNumber,
+
+				FaxNumber = customer.FaxNumber,
+				Website = customer.Website,
+				EIN = customer.EIN,
+				OrganizationId = customer.OrganizationId,
+				CustomerId = userId,
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(AppService),
+				LocalizedStates = ModelHelper.GetLocalizedStates(AppService, customer.Address?.CountryCode),
+
 				CustomerOrgId = customer.CustomerOrgId,
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subscriptionNameToDisplay
@@ -79,16 +79,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						CustomerId = model.CustomerId,
 						ContactEmail = model.ContactEmail,
 						CustomerName = model.CustomerName,
-						Address = new Address() {
-                            Address1 = model.Address,
-                            AddressId = model.AddressId,
-                            City = model.City,
-                            StateId = model.SelectedStateId,
-                            StateName = model.State,
-                            CountryCode = model.SelectedCountryCode,
-                            CountryName = model.Country,
-                            PostalCode = model.PostalCode
-                        },
+						Address = new Address()
+						{
+							Address1 = model.Address,
+							AddressId = model.AddressId,
+							City = model.City,
+							StateId = model.SelectedStateId,
+							StateName = model.State,
+							CountryCode = model.SelectedCountryCode,
+							CountryName = model.Country,
+							PostalCode = model.PostalCode
+						},
 						ContactPhoneNumber = model.ContactPhoneNumber,
 						FaxNumber = model.FaxNumber,
 						Website = model.Website,

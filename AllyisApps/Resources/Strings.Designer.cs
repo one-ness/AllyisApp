@@ -2752,7 +2752,7 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your password must be at least 12 characters long..
+        ///   Looks up a localized string similar to Your password must be at least 8 characters long..
         /// </summary>
         public static string PasswordLengthValidation {
             get {

@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 
 namespace AllyisApps.DBModel.Finance
 {
 	/// <summary>
 	/// Represents the Expense Item table in the database.
 	/// </summary>
-	public class ExpenseItemDBEntity : BaseDBEntity
+	public class ExpenseItemDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the Expense Item's ID.
@@ -37,7 +37,6 @@ namespace AllyisApps.DBModel.Finance
 		/// </summary>
 		public int AccountId { get; set; }
 
-
 		/// <summary>
 		/// Gets or sets whether the Expense Item can be billed to the associated customer.
 		/// </summary>
@@ -52,7 +51,5 @@ namespace AllyisApps.DBModel.Finance
 		/// Gets or sets the Expense Item's last-modified-on date.
 		/// </summary>
 		public int ModifiedUtc { get; set; }
-
 	}
-
 }

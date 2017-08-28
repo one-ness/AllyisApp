@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -36,6 +36,7 @@ namespace AllyisApps.Lib
 		}
 
 		private const string CharsToReplace = @"""/\[]:|<>+=; ,?*'`()@";
+
 		/// <summary>
 		/// aggregate spaces in the given string
 		/// </summary>

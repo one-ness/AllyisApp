@@ -54,6 +54,5 @@
 		/// Gets or sets the country code
 		/// </summary>
 		public string CountryCode { get; set; }
-
 	}
 }
