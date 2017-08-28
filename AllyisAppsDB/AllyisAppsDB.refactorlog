@@ -300,6 +300,7 @@
     <Property Name="ParentElementName" Value="[StaffingManager].[Position]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[EmploymentTypeId]" />
+  </Operation>
   <Operation Name="Rename Refactor" Key="abefad04-71e3-4b98-a32f-492f383c8847" ChangeDateTime="08/24/2017 20:55:59">
     <Property Name="ElementName" Value="[Auth].[Invitation].[Status]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />

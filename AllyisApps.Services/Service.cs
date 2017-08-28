@@ -11,9 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AllyisApps.DBModel.Hrm;
-using AllyisApps.DBModel.TimeTracker;
-using AllyisApps.Services.TimeTracker;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.DBModel.StaffingManager;
 using AllyisApps.Services.Lookup;
@@ -596,7 +593,6 @@ namespace AllyisApps.Services
 				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
 				spResults.Item3.Select(hdb => InitializeHoliday(hdb)).ToList(),
 				spResults.Item4.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item5.Select(udb => InitializeUser(udb)).ToList(),
 				spResults.Item5.Select(udb => InitializeUser(udb,false)).ToList(),
 				spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList());
 		}
