@@ -15,7 +15,7 @@ namespace AllyisApps.Services
 		public int ExpenseItemId { get; set; }
 
         /// <summary>
-        /// The expense discription
+        /// The expense description
         /// </summary>
         public string ItemDescription { get; set; }
 

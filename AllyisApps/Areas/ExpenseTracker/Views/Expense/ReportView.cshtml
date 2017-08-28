@@ -75,7 +75,7 @@
                 <tr>
                     <th style="width: 10%">Amount</th>
                     <th style="width: 25%">Transaction Date</th>
-                    <th style="width: 35%">Discription</th>
+                    <th style="width: 35%">Description</th>
                     <th style="width: 10%">Customer Billable</th>
                 </tr>
             </thead>
@@ -85,7 +85,7 @@
                     <tr>
                         <td>@Math.Round(@item.Amount, 2)</td>
                         <td>@String.Format("{0:MM-dd-yyyy}", DateTime.Parse(@item.TransactionDate))</td>
-                        <td>@item.ItemDiscription</td>
+                        <td>@item.ItemDescription</td>
                         <td>
                             @if (@item.IsBillableToCustomer)
                             {

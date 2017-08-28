@@ -203,6 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AttachmentDownloadController.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\PendingAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\StatusUpdateAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\FileAction.cs" />
@@ -210,6 +211,7 @@
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ItemAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\EditAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ReportViewAction.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpensePendingModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseCreateModel.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateReportAction.cs" />
@@ -551,6 +553,8 @@
     <Content Include="Areas\ExpenseTracker\Views\Expense\_AjaxExpenseReportItems.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\ReportView.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\_AjaxExpenseReportFile.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\Expense\Pending.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\Expense\_AjaxPendingEntries.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
