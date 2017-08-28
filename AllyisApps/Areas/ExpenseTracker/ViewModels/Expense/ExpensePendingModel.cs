@@ -16,6 +16,6 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// <summary>
 		/// Gets or sets the pending reports.
 		/// </summary>
-		public IEnumerable<ExpenseReport> PendingReports { get; set; }
+		public IEnumerable<ExpenseItemViewModel> PendingReports { get; set; }
 	}
 }

@@ -2,18 +2,10 @@
 
 @model ExpensePendingModel
 @{
-    Layout = null;
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/ExpenseTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
+	ViewBag.Title = "Pending Reports";
 }
 
-<!DOCTYPE html>
+@Html.Partial("_AjaxPendingEntries", Model)
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Pending</title>
-</head>
-<body>
-    <div> 
-    </div>
-</body>
-</html>

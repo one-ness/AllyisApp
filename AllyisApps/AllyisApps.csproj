@@ -554,6 +554,7 @@
     <Content Include="Areas\ExpenseTracker\Views\Expense\ReportView.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\_AjaxExpenseReportFile.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\Pending.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\Expense\_AjaxPendingEntries.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />

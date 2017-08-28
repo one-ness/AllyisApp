@@ -8,7 +8,7 @@
 {
 	int index = i;
 	var item = Model.Items[i];
-	if (String.IsNullOrEmpty(item.ItemDiscription)) // sets default value to checked if item is new
+	if (String.IsNullOrEmpty(item.ItemDescription)) // sets default value to checked if item is new
 	{
 		item.IsBillableToCustomer = false;
 	}
@@ -44,7 +44,7 @@
 		<div class="amount-div form-control item-control" style="display: inline-block; width: 150px;">$
 			@Html.TextBoxFor(m => m.Items[i].Amount, new { @class = "amount-textbox", name = amountName, Value = amountVal, placeholder = "Amount", style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px;" })
 		</div>
-		@Html.TextBoxFor(m => m.Items[i].ItemDiscription, new { @class = "form-control item-control", name = descriptionName, Value = Model.Items[i].ItemDiscription, placeholder = "Description", style = "display: inline-block; width: 300px" })
+		@Html.TextBoxFor(m => m.Items[i].ItemDescription, new { @class = "form-control item-control", name = descriptionName, Value = Model.Items[i].ItemDescription, placeholder = "Description", style = "display: inline-block; width: 300px" })
 		<label>Account</label>
 		@Html.DropDownListFor(m => m.Items[i].AccountId, accountList, new { @class = "form-control item-control", name = accountName, style = "display: inline-block; width: 150px", Value = Model.Items[i].AccountId })
 		<label>Billable to Customer</label>
