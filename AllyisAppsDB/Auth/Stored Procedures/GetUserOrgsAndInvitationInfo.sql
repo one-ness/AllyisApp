@@ -11,7 +11,6 @@ BEGIN
 			[User].[Email],
 			[User].[PhoneNumber],
 			[User].[LastUsedSubscriptionId],
-			[User].[LastUsedOrganizationId],
 			[PreferredLanguageId]
 	FROM [Auth].[User]
 	WITH (NOLOCK)

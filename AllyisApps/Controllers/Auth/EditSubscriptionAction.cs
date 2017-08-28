@@ -25,7 +25,7 @@ namespace AllyisApps.Controllers
 		{
 			int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
-			int skuId = AppService.UserContext.UserSubscriptions[subscriptionId].SkuId;
+			int skuId = (int)AppService.UserContext.UserSubscriptions[subscriptionId].SkuId;
 
 			int productId = (int)AppService.UserContext.UserSubscriptions[subscriptionId].ProductId;
 			string subscriptionName = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;

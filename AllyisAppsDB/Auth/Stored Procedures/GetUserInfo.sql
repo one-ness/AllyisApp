@@ -12,7 +12,6 @@ BEGIN
 		   [User].[Email],
 		   [User].[PhoneNumber],
 		   [User].[LastUsedSubscriptionId],
-		   [User].[LastUsedOrganizationId],
 		   [User].[IsEmailConfirmed],
 		   [User].[EmailConfirmationCode],
 		   [PreferredLanguageId]

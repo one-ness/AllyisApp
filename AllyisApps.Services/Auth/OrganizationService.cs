@@ -159,27 +159,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Updates the active organization.
-		/// </summary>
-		/// <param name="userId">User Id.</param>
-		/// <param name="orgId">Organization Id.</param>
-		public void UpdateActiveOrganization(int userId, int orgId)
-		{
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-			}
-
-			if (orgId < 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
-			}
-
-			// Note: This method cannot use UserContext.UserId because this method is called before the service obejct's UserContext is set.
-			DBHelper.UpdateActiveOrganization(userId, orgId);
-		}
-
-		/// <summary>
 		/// Deletes the user's current chosen organization.
 		/// </summary>
 		/// <returns>Returns false if permissions fail.</returns>

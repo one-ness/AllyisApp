@@ -16,7 +16,6 @@ BEGIN
 		,[PhoneNumber]
 		,[PhoneExtension]
 		,[LastUsedSubscriptionId]
-		,[LastUsedOrganizationId]
 		,[PasswordHash]
 		,[PreferredLanguageId]
 	FROM [Auth].[User]
