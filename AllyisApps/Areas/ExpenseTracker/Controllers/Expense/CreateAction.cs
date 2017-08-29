@@ -26,7 +26,17 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>Returns an action result.</returns>
 		public ActionResult Create(int subscriptionId, int reportId = -1, int itemCount = 0, int fileCount = 0)
 		{
-			ExpenseReport report = reportId == -1 ? null : AppService.GetExpenseReport(reportId);
+            if(reportId != -1)
+            {
+                AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.EditReport, subscriptionId);
+            }
+            else
+            {
+                AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
+            }
+            
+
+            ExpenseReport report = reportId == -1 ? null : AppService.GetExpenseReport(reportId);
 			IList<ExpenseItem> items = new List<ExpenseItem>();
 			if (report != null)
 			{

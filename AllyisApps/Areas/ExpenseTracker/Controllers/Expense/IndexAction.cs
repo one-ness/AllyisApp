@@ -20,6 +20,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         /// <returns>The action result.</returns>
 		public ActionResult Index(int subscriptionId)
 		{
+            AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
             int userId = GetCookieData().UserId;
 
             var items = AppService.GetExpenseReportBySubmittedId(userId);

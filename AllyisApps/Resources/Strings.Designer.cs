@@ -1393,6 +1393,26 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ExpenseTracker.
+        /// </summary>
+        public static string ExpenseTracker {
+            get {
+                return ResourceManager.GetString("ExpenseTracker", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        /// Looks up localized string similar to ExpenseTracekrRole.
+        /// </summary>
+        public static string ExpenseTrackerRole
+        {
+            get
+            {
+                return ResourceManager.GetString("ExpenseTrackerRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Easily manages your expenses.
         /// </summary>
         public static string ExpenseTrackerDescription {
@@ -3949,11 +3969,22 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} users added to TimeTracker..
+        ///   Looks up a localized string similar to {0} users added to TimeTracker.
         /// </summary>
         public static string UsersAddedToTimeTracker {
             get {
                 return ResourceManager.GetString("UsersAddedToTimeTracker", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        /// Looks up a localized string similar to {0} users added to Expense Tracker.
+        /// </summary>
+        public static string UserAddedToExpenseTracker
+        {
+            get
+            {
+                return ResourceManager.GetString("UserAddedToExpenseTracker", resourceCulture);
             }
         }
         
@@ -3972,6 +4003,17 @@ namespace AllyisApps.Resources {
         public static string UsersChangedRolesInTimeTracker {
             get {
                 return ResourceManager.GetString("UsersChangedRolesInTimeTracker", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        /// Looks up a localized string similar to {0} users changed roles in Expense Tracker..
+        /// </summary>
+        public static string UserChangedRolesInExpenseTracker
+        {
+            get
+            {
+                return ResourceManager.GetString("UserChangedRolesInExpenseTracker", resourceCulture);
             }
         }
         
