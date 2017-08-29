@@ -860,7 +860,7 @@ namespace AllyisApps.DBModel
 		/// for any invitations pending in the organization, the organization's billing stripe handle, and the complete list of products.
 		/// </summary>
 		/// <param name="organizationId">The organization Id.</param>
-		public Tuple<dynamic, List<OrganizationUserDBEntity>, List<SubscriptionDisplayDBEntity>, List<InvitationDBEntity>, string, List<ProductDBEntity>> GetOrganizationManagementInfo(int organizationId)
+		public Tuple<dynamic, List<OrganizationUserDBEntity>, List<SubscriptionDisplayDBEntity>, List<InvitationDBEntity>, string> GetOrganizationManagementInfo(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -870,13 +870,12 @@ namespace AllyisApps.DBModel
 					"[Auth].[GetOrgManagementInfo]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
-				return Tuple.Create(
-					results.Read<dynamic>().SingleOrDefault(),
-					results.Read<OrganizationUserDBEntity>().ToList(),
-					results.Read<SubscriptionDisplayDBEntity>().ToList(),
-					results.Read<InvitationDBEntity>().ToList(),
-					results.Read<string>().SingleOrDefault(),
-					results.Read<ProductDBEntity>().ToList());
+                return Tuple.Create(
+                    results.Read<dynamic>().SingleOrDefault(),
+                    results.Read<OrganizationUserDBEntity>().ToList(),
+                    results.Read<SubscriptionDisplayDBEntity>().ToList(),
+                    results.Read<InvitationDBEntity>().ToList(),
+                    results.Read<string>().SingleOrDefault();
 			}
 		}
 
