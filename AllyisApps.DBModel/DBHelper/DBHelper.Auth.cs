@@ -875,7 +875,7 @@ namespace AllyisApps.DBModel
                     results.Read<OrganizationUserDBEntity>().ToList(),
                     results.Read<SubscriptionDisplayDBEntity>().ToList(),
                     results.Read<InvitationDBEntity>().ToList(),
-                    results.Read<string>().SingleOrDefault();
+                    results.Read<string>().SingleOrDefault());
 			}
 		}
 
