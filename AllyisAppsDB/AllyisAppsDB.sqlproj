@@ -375,6 +375,8 @@
     <Build Include="StaffingManager\Stored Procedures\GetStaffingIndexInfo.sql" />
     <None Include="UpgradeScripts\Upgrade_AllyisAppsDB_1.2_to_1.3.sql" />
     <Build Include="Auth\Stored Procedures\GetUser.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetFilteredPositionsByOrganizationId.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetStaffingIndexInfoFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

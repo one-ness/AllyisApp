@@ -47,6 +47,39 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			return this.View(model);
 		}
 
+		/// <summary>
+		/// Index 
+		/// </summary>
+		/// <param name="subscriptionId"></param>
+		/// <param name="statusFilterId"></param>
+		/// <param name="typeFilterId"></param>
+		/// <param name="tagsFilter"></param>
+		/// <returns></returns>
+		[Route("{StaffingManager}/{Index}/{Status?}/{Type?}/{Tags?}")]
+		public ActionResult IndexFiltered(int subscriptionId, int statusFilterId, int typeFilterId, List<int> tagsFilter)
+		{
+
+			UserSubscription subInfo = null;
+			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+
+			var infos = AppService.GetStaffingIndexInfoFiltered(subInfo.OrganizationId, statusFilterId, typeFilterId, tagsFilter);
+
+			//ViewBag.SignedInUserID = GetCookieData().UserId;
+			//ViewBag.SelectedUserId = userId;
+
+			StaffingIndexViewModel model = this.ConstructStaffingIndexViewModel(
+				subInfo.OrganizationId,
+				subscriptionId,
+				subInfo.SubscriptionName,
+				infos.Item1, //positions list
+				infos.Item2, //tags list
+				infos.Item3, //employmentTypes list
+				infos.Item4, //positionLevels list
+				infos.Item5  //positionStatuses list
+				);
+			return this.View(model);
+		}
+
 
 		/// <summary>
 		/// Constructor for the TimeEntryOverDateRangeViewModel.

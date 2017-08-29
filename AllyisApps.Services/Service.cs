@@ -765,6 +765,46 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// TODO
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <param name="statusId"></param>
+		/// <param name="typeId"></param>
+		/// <param name="tags">tags.</param>
+		/// <param name="userId">User Id.</param>
+		/// <returns>.</returns>
+		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>>
+			GetStaffingIndexInfoFiltered(int orgId, int? statusId = null, int? typeId = null, List<int> tags = null, int? userId = 0)
+		{
+			#region Validation
+
+			if (userId == null)
+			{
+				userId = UserContext.UserId;
+			}
+			if (userId <= 0)
+			{
+				throw new ArgumentException("User Id cannot be zero or negative.");
+			}
+			if (orgId <= 0)
+			{
+				throw new ArgumentException("Organization Id cannot be zero or negative.");
+			}
+
+			#endregion Validation
+
+			var results = DBHelper.GetStaffingIndexPageInfoFiltered(orgId, statusId, typeId, tags);
+
+			return Tuple.Create(
+				results.Item1.Select(posdb => InitializePositionThumbnailInfo(posdb, results.Item2, results.Item5)).ToList(),
+				results.Item2.Select(tagsdb => InitializeTags(tagsdb)).ToList(),
+				results.Item3.Select(typedb => InitializeEmploymentTypes(typedb)).ToList(),
+				results.Item4.Select(leveldb => InitializePositionLevel(leveldb)).ToList(),
+				results.Item5.Select(statdb => InitializePositionStatus(statdb)).ToList()
+				);
+		}
+
+		/// <summary>
 		/// Initializes a PositionThumbnailInfo from a PositionDBEntity.
 		/// </summary>
 		/// <param name="pos">the PositionDBEntity to be converted.</param>

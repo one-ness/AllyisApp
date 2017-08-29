@@ -573,6 +573,42 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+		/// <summary>
+		/// TODO
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <param name="statusId">Organization Id.</param>
+		/// <param name="typeId">Organization Id.</param>
+		/// <param name="tags">Organization Id.</param>
+		/// <returns>.</returns>
+		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>>
+			GetStaffingIndexPageInfoFiltered(int orgId, int? statusId = null, int? typeId = null, List<int> tags = null)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", orgId);
+			parameters.Add("@statusId", statusId);
+			parameters.Add("@typeId", typeId);
+
+			DataTable tagsTable = new DataTable();
+			tagsTable.Columns.Add("tagId", typeof(int));
+			foreach (int tag in tags) tagsTable.Rows.Add(tag);
+			
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[StaffingManager].[GetStaffingIndexInfoFiltered]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+
+				return Tuple.Create(
+					results.Read<PositionDBEntity>().ToList(),
+					results.Read<PositionTagDBEntity>().ToList(),
+					results.Read<EmploymentTypeDBEntity>().ToList(),
+					results.Read<PositionLevelDBEntity>().ToList(),
+					results.Read<PositionStatusDBEntity>().ToList());
+			}
+		}
+
 		#endregion Get Methods
 
 		////////////////////////////
