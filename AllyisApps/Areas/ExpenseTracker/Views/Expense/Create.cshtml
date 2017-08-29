@@ -13,6 +13,7 @@
 	string submitAction = Model.Report == null ? "CreateReport" : "UpdateReport";
 	string submitName = Model.Report == null ? "Create" : "Update";
 	int fileIndex = 0;
+	int itemIndex = 0;
 }
 @Scripts.Render("~/bundles/jquery")
 
@@ -82,7 +83,6 @@
 					<label>Report Name</label>
 				</div>
 				<div class="right-input">
-					@*<input type="text" name="ReportName" value="@Model.Report.ReportTitle" class="form-control" />*@
 					@Html.TextBoxFor(m => m.Report.ReportTitle, new { @class = "form-control", name = "ReportName" })
 					@Html.ValidationMessageFor(m => m.Report.ReportTitle)
 				</div>
@@ -90,16 +90,9 @@
 					<label>Business Justification</label>
 				</div>
 				<div class="right-input">
-					@*<textarea  name="BusinessJustification" class="form-control" rows="3" style="resize: none;">@Model.Report.BusinessJustification</textarea>*@
 					@Html.TextAreaFor(m => m.Report.BusinessJustification, new { @class = "form-control", rows = "3", style = "resize: none;", name = "BusinessJustification" })
 					@Html.ValidationMessageFor(m => m.Report.BusinessJustification)
 				</div>
-				@*<div class="left-label">
-					<label>Status</label>
-				</div>
-				<div class="right-input">
-					@Html.DropDownListFor(m => m.Report.ReportStatus, statusList, new { id = "reportStatus", @class = "form-control", name = "reportStatus", style = "display: inline-block; width: 150px" })
-				</div>*@
 			</div>
 		</div>
 		<br>
@@ -116,9 +109,25 @@
 					{
 						Model.Items.Add(new ExpenseItem());
 					}
-					Html.RenderAction("DisplayItems", Model);
+					for (int i = 0; i < Model.Items.Count; i++)
+					{
+						ExpenseItemModel model = new ExpenseItemModel()
+						{
+							Index = itemIndex,
+							Item = Model.Items[itemIndex]
+						};
+						itemIndex += 1;
+						Html.RenderAction("DisplayItem", model);
+					}
+
+					ExpenseCreateModel newModel = new ExpenseCreateModel();
 				}
 			</div>
+			<a class="addItem btn btn-fa hidden-create add-button"
+			   onclick="addItem();">
+				<span class="glyphicon glyphicon-plus"></span>
+			</a>
+			<div style="clear:both"></div>
 		</div>
 
 		<div class="row pull-right">
@@ -162,7 +171,7 @@
 		pwf.setRowClass("previewRow");
 
 		var file_index = @fileIndex;
-		var item_index = @Model.Items.Count;
+		var item_index = @itemIndex;
 
 		function addFile() {
 			console.log('adding file');
@@ -178,9 +187,30 @@
 			file_index += 1;
 		}
 
+		function addItem() {
+			console.log('adding item');
+			var data = @Html.Raw(Json.Encode(new ExpenseItemModel() { Index = -1 }));
+			data.Index = item_index;
+			$.ajax({
+				url: '@Url.Action("DisplayItem")',
+				data: data,
+				success: function (response) {
+					$('.items').append(response);
+					setDatePickers();
+				}
+			})
+			item_index += 1;
+		}
+
 		function removeFile(index) {
 			console.log('removing file');
 			$('#file-input_' + index).remove();
+		}
+
+		function removeItem(index) {
+			console.log('removing item');
+			$('#item-input_' + index).remove();
+			setDatePickers();
 		}
 
 		function setDatePickers() {

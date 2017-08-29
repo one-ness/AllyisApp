@@ -66,13 +66,29 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					ReportStatus = (int)reportStatus
 				};
 
+				IList<ExpenseItem> oldItems = AppService.GetExpenseItemsByReportId(reportId);
+				List<int> itemIds = new List<int>();
+				foreach (ExpenseItem oldItem in oldItems)
+				{
+					itemIds.Add(oldItem.ExpenseItemId);
+				}
+
 				foreach (var item in items)
 				{
-					item.AccountId = submittedById;
-					item.ExpenseItemCreatedUtc = Convert.ToDateTime(item.TransactionDate);
-					item.ExpenseItemModifiedUtc = DateTime.UtcNow;
 					item.ExpenseReportId = reportId;
-					AppService.UpdateExpenseItem(item);
+					if (itemIds.Contains(item.ExpenseItemId)) {
+						AppService.UpdateExpenseItem(item);
+						itemIds.Remove(item.ExpenseItemId);
+					}
+					else
+					{
+						AppService.CreateExpenseItem(item);
+					}
+				}
+
+				foreach (int itemId in itemIds)
+				{
+					AppService.DeleteExpenseItem(itemId);
 				}
 
 				foreach (string name in AzureFiles.GetReportAttachments(reportId))

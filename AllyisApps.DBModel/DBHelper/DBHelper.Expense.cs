@@ -129,22 +129,22 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		/// <summary>
-		/// Updates the Expense Item with the specified ID.
-		/// </summary>
-		/// <param name="item">The expense item object that will replace the previous entry.</param>
-		public void UpdateExpenseItem(ExpenseItemDBEntity item)
-		{
-			if (item == null)
-			{
-				throw new System.ArgumentException("Item cannot be null, must already exist");
-			}
+
+        /// <summary>
+        /// Updates the Expense Item with the specified ID.
+        /// </summary>
+        /// <param name="item">The expense item object that will replace the previous entry.</param>
+        public void UpdateExpenseItem(ExpenseItemDBEntity item)
+        {
+            if (item == null)
+            {
+                throw new System.ArgumentException("Item cannot be null, must already exist");
+            }
 
             DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@expenseItemId", item.ExpenseItemId);
             parameters.Add("@itemDescription", item.ItemDescription);
             parameters.Add("@transactionDate", item.TransactionDate);
-			parameters.Add("@modifiedUtc", item.ModifiedUtc);
             parameters.Add("@amount", item.Amount);
             parameters.Add("@expenseReportId", item.ExpenseReportId);
             parameters.Add("@isBillableToCustomer", item.IsBillableToCustomer);

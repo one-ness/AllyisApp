@@ -1,0 +1,11 @@
+﻿@using AllyisApps.ViewModels.ExpenseTracker.Expense
+
+@model ExpensePendingModel
+@{
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/ExpenseTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
+	ViewBag.Title = "Pending Reports";
+}
+
+@Html.Partial("_AjaxPendingEntries", Model)
+

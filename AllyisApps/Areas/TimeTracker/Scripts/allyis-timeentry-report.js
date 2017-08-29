@@ -56,6 +56,8 @@ function submitFormForCSV() {
 }
 
 $('#datePickerStart').datepicker({
+    changeMonth: true,
+    changeYear: true,
 	showOn: "button",
 	buttonImageOnly: true,
 	onSelect: function () {
@@ -70,6 +72,8 @@ $('#datePickerStart').on("change", function () {
 	$('#DateRangeStart').val(DateConvert.GetDaysFromMoment(enteredDate));
 });
 $('#datePickerEnd').datepicker({
+    changeMonth: true,
+    changeYear: true,
 	showOn: "button",
 	buttonImageOnly: true,
 	onSelect: function () {

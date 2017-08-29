@@ -28,7 +28,7 @@
 				{text: 'Month to Date', dateStart: function() { return moment().startOf('month') }, dateEnd: function() { return moment() } },
 				{text: 'Previous Month', dateStart: function() { return moment().subtract('month', 1).startOf('month') }, dateEnd: function() { return moment().subtract('month', 1).endOf('month') } },
 				{text: 'Year to Date', dateStart: function() { return moment().startOf('year') }, dateEnd: function() { return moment() } }
-			],
+            ],
 			initialText: 'Select date range...', // placeholder text - shown when nothing is selected
 			icon: 'ui-icon-triangle-1-s',
 			applyButtonText: 'Apply', // use '' to get rid of the button

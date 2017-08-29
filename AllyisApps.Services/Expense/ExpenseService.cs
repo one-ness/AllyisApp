@@ -97,12 +97,10 @@ namespace AllyisApps.Services
 			{
 				AccountId = item.AccountId,
 				Amount = item.Amount,
-				CreatedUtc = item.ExpenseItemCreatedUtc,
 				ExpenseItemId = item.ExpenseItemId,
 				ExpenseReportId = item.ExpenseReportId,
 				IsBillableToCustomer = item.IsBillableToCustomer,
-				ItemDescription = item.ItemDiscription,
-				ModifiedUtc = item.ExpenseItemModifiedUtc,
+				ItemDescription = item.ItemDescription,
 				TransactionDate = Convert.ToDateTime(item.TransactionDate),
 			};
 
@@ -222,7 +220,7 @@ namespace AllyisApps.Services
 				ExpenseItemModifiedUtc = entity.ModifiedUtc,
 				ExpenseReportId = entity.ExpenseReportId,
 				IsBillableToCustomer = entity.IsBillableToCustomer,
-				ItemDiscription = entity.ItemDescription,
+				ItemDescription = entity.ItemDescription,
 				TransactionDate = entity.TransactionDate.ToString()
 			};
 		}
@@ -266,7 +264,7 @@ namespace AllyisApps.Services
 				ExpenseItemId = item.ExpenseItemId,
 				ExpenseReportId = item.ExpenseReportId,
 				IsBillableToCustomer = item.IsBillableToCustomer,
-				ItemDescription = item.ItemDiscription,
+				ItemDescription = item.ItemDescription,
 				ModifiedUtc = item.ExpenseItemModifiedUtc,
 				TransactionDate = Convert.ToDateTime(item.TransactionDate),
 			};

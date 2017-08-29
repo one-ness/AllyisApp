@@ -1,14 +1,14 @@
 ﻿@using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 @using AllyisApps.DBModel.Finance
+@using AllyisApps.Services
 @using AllyisApps.ViewModels.ExpenseTracker.Expense
 
 @model ExpenseItemModel
 
-@for (int i = 0; i < Model.Items.Count(); i++)
-{
-	int index = i;
-	var item = Model.Items[i];
-	if (String.IsNullOrEmpty(item.ItemDiscription)) // sets default value to checked if item is new
+@{
+	int index = Model.Index;
+	var item = Model.Item;
+	if (String.IsNullOrEmpty(item.ItemDescription)) // sets default value to checked if item is new
 	{
 		item.IsBillableToCustomer = false;
 	}
@@ -22,13 +22,13 @@
 	{
 		amountVal = item.Amount.ToString();
 	}
-	string dateName = String.Format("[{0}].TransactionDate", i);
-	string nameName = String.Format("[{0}].ExpenseItemName", i);
-	string amountName = String.Format("[{0}].Amount", i);
-	string checkboxName = String.Format("[{0}].IsBillableToCustomer", i);
-	string itemIdName = String.Format("[{0}].ExpenseItemId", i);
-	string descriptionName = String.Format("[{0}].ItemDescription", i);
-	string accountName = String.Format("[{0}].Account", i);
+	string dateName = String.Format("[{0}].TransactionDate", Model.Index);
+	string nameName = String.Format("[{0}].ExpenseItemName", Model.Index);
+	string amountName = String.Format("[{0}].Amount", Model.Index);
+	string checkboxName = String.Format("[{0}].IsBillableToCustomer", Model.Index);
+	string itemIdName = String.Format("[{0}].ExpenseItemId", Model.Index);
+	string descriptionName = String.Format("[{0}].ItemDescription", Model.Index);
+	string accountName = String.Format("[{0}].AccountId", Model.Index);
 	List<SelectListItem> accountList = new List<SelectListItem>();
 	foreach (AccountDBEntity entity in Model.AccountList)
 	{
@@ -38,46 +38,45 @@
 			Text = entity.AccountName
 		});
 	}
-	<div class="item-div" style="margin: 10px; margin-bottom: 0px;">
-		@Html.HiddenFor(m => m.Items[i].ExpenseItemId, new { name = itemIdName, Value = Model.Items[i].ExpenseItemId})
-		@Html.TextBoxFor(m => m.Items[i].TransactionDate, new { @class = "datepicker form-control item-control", name = dateName, Value = dateVal, placeholder = "Date", style = "display: inline-block; width: 150px" })
-		<div class="amount-div form-control item-control" style="display: inline-block; width: 150px;">$
-			@Html.TextBoxFor(m => m.Items[i].Amount, new { @class = "amount-textbox", name = amountName, Value = amountVal, placeholder = "Amount", style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px;" })
-		</div>
-		@Html.TextBoxFor(m => m.Items[i].ItemDiscription, new { @class = "form-control item-control", name = descriptionName, Value = Model.Items[i].ItemDiscription, placeholder = "Description", style = "display: inline-block; width: 300px" })
-		<label>Account</label>
-		@Html.DropDownListFor(m => m.Items[i].AccountId, accountList, new { @class = "form-control item-control", name = accountName, style = "display: inline-block; width: 150px", Value = Model.Items[i].AccountId })
-		<label>Billable to Customer</label>
-		@Html.CheckBoxFor(m => m.Items[i].IsBillableToCustomer, new { @class = "form-control item-control check-off", name = checkboxName, style = "width: 14px; height: 14px; display: inline-block; margin: 10px; vertical-align: middle;" })
-		<a class="btn btn-danger btn-fa hidden-create"
-		   onclick="removeItem(@index)"
-		   style="float: right; width: 34px; color: white !important; border-color: #d43f3a !important; border-radius: 0px; margin-right: 0px;"
-		   area-label="Close">
-			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-		</a>
-		<br />
-		@Html.ValidationMessageFor(m => m.Items[i].TransactionDate)
-		@Html.ValidationMessageFor(m => m.Items[i].Amount)
+}
+<div id="@String.Format("item-input_{0}", Model.Index)" class="item-div" style="margin: 10px; margin-bottom: 0px;">
+	@*@Html.HiddenFor(m => m.Item.ExpenseItemId, new { name = itemIdName, Value = Model.Item.ExpenseItemId})*@
+	<input type="hidden" name="@itemIdName" value="@Model.Item.ExpenseItemId" />
+	@*@Html.TextBoxFor(m => m.Item.TransactionDate, new { @class = "datepicker form-control item-control", name = dateName, Value = dateVal, placeholder = "Date", style = "display: inline-block; width: 150px" })*@
+	<input type="text" class="datepicker form-control item-control" name="@dateName" value="@dateVal" placeholder="Date" style="display: inline-block; width: 150px" />
+	<div class="amount-div form-control item-control" style="display: inline-block; width: 150px;">$
+		@*@Html.TextBoxFor(m => m.Item.Amount, new { @class = "amount-textbox", name = amountName, Value = amountVal, placeholder = "Amount", style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px;" })*@
+		<input type="text" class="amount-textbox" name="@amountName" value="@amountVal" placeholder="Amount" style="display: inline-block; width: 100px; border: 0px; margin-top: -1px;" />
 	</div>
-}
-<a class="addItem btn btn-fa hidden-create add-button">
-	<span class="glyphicon glyphicon-plus"></span>
-</a>
-<div style="clear:both"></div>
-
-@{ 
-	ExpenseCreateModel newModel = new ExpenseCreateModel();
-}
-
-<script>
-	$('.addItem').on('click', function () {
-		$('.items').load('@Url.Action("AddItem")', @Html.Raw(Json.Encode(@Model)), setDatePickers);
-	});
-	function removeItem(index) {
-		$('.items').load('@Url.Action("RemoveItem")', { model: @Html.Raw(Json.Encode(@Model)), index: index }, setDatePickers);
-	}
-	$('.amount-textbox').focus(function () {
-		console.log('redirecting focus');
-		$(this).parent().css('border-color: #ff0000;')
-	})
-</script>
+	@*@Html.TextBoxFor(m => m.Item.ItemDiscription, new { @class = "form-control item-control", name = descriptionName, Value = Model.Item.ItemDescription, placeholder = "Description", style = "display: inline-block; width: 300px" })*@
+	<input type="text" class="form-control item-control" name="@descriptionName" value="@Model.Item.ItemDescription" placeholder="Description" style="display: inline-block; width: 300px" />
+	<label>Account</label>
+	@*@Html.DropDownListFor(m => m.Item.AccountId, accountList, new { @class = "form-control item-control", name = accountName, style = "display: inline-block; width: 150px", Value = Model.Item.AccountId })*@
+	<select class="form-control item-control" name="@accountName" style="display: inline-block; width: 150px">
+		@foreach (SelectListItem listItem in accountList)
+		{
+			int val = Int32.Parse(listItem.Value);
+			if (val == Model.Item.AccountId)
+			{
+				<option value="@val" selected>@listItem.Text</option>
+			}
+			else
+			{
+				<option value="@val">@listItem.Text</option>
+			}
+		}
+	</select>
+	<label>Billable to Customer</label>
+	@*@Html.CheckBoxFor(m => m.Item.IsBillableToCustomer, new { @class = "form-control item-control check-off", name = checkboxName, style = "width: 14px; height: 14px; display: inline-block; margin: 10px; vertical-align: middle;" })*@
+	@Html.CheckBox(checkboxName, Model.Item.IsBillableToCustomer, new { @class = "form-control item-control check-off", style = "width: 14px; height: 14px; display: inline-block; margin: 10px; vertical-align: middle;" })
+	@*<input type="checkbox" value="@Model.Item.IsBillableToCustomer" class="form-control item-control check-off" name="@checkboxName" style="width: 14px; height: 14px; display: inline-block; margin: 10px; vertical-align: middle;" />*@
+	<a class="btn btn-danger btn-fa hidden-create"
+		onclick="removeItem(@index)"
+		style="float: right; width: 34px; color: white !important; border-color: #d43f3a !important; border-radius: 0px; margin-right: 0px;"
+		area-label="Close">
+		<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+	</a>
+	<br />
+	@Html.ValidationMessageFor(m => m.Item.TransactionDate)
+	@Html.ValidationMessageFor(m => m.Item.Amount)
+</div>

@@ -52,6 +52,7 @@ namespace AllyisApps
 		public const string ManagePermissions = "managepermissions";
 		public const string ManagePermissions2 = "managepermissions2";
 		public const string OrgIndex = "orgindex";
+		public const string Pending = "pending";
 		public const string PrivacyPolicy = "privacypolicy";
 		public const string Reactivate = "reactivate";
 		public const string ReactivateCustomer = "reactivatecustomer";

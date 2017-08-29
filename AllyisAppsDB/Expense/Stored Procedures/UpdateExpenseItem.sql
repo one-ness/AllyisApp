@@ -2,7 +2,6 @@
 	@expenseItemId INT,
 	@itemDescription NVARCHAR(100),
 	@transactionDate DATETIME2(0),
-	@modifiedUtc DATETIME2(0),
 	@amount DECIMAL(18, 2),
 	@expenseReportId INT,
 	@isBillableToCustomer BIT,
@@ -15,7 +14,6 @@ BEGIN
 	SET 
 		[ItemDescription] = @itemDescription,
 		[TransactionDate] = @transactionDate,
-		[ExpenseItemModifiedUtc] = @modifiedUtc,
 		[Amount] = @amount,
 		[ExpenseReportId] = @expenseReportId,
 		[IsBillableToCustomer] = @isBillableToCustomer,
