@@ -79,11 +79,16 @@ namespace AllyisApps.Services
             return this.DBHelper.GetStates(countryCode);
         }
 
-        /// <summary>
-        /// Gets the list of valid languages selections.
-        /// </summary>
-        /// <returns>A list of languages.</returns>
-        public IEnumerable<Language> ValidLanguages()
+		public bool DeleteExpenseItem(int itemId)
+		{
+			return this.DBHelper.DeleteExpenseItem(itemId);
+		}
+
+		/// <summary>
+		/// Gets the list of valid languages selections.
+		/// </summary>
+		/// <returns>A list of languages.</returns>
+		public IEnumerable<Language> ValidLanguages()
         {
             return DBHelper.ValidLanguages().Select(s => new Language
             {

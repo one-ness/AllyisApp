@@ -91,22 +91,20 @@ namespace AllyisApps.Services
 		/// Updates Expense Item with given itemId.
 		/// </summary>
 		/// <param name="item"></param>
-		public int UpdateExpenseItem(ExpenseItem item)
+		public void UpdateExpenseItem(ExpenseItem item)
 		{
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
 			{
 				AccountId = item.AccountId,
 				Amount = item.Amount,
-				CreatedUtc = item.ExpenseItemCreatedUtc,
 				ExpenseItemId = item.ExpenseItemId,
 				ExpenseReportId = item.ExpenseReportId,
 				IsBillableToCustomer = item.IsBillableToCustomer,
 				ItemDescription = item.ItemDescription,
-				ModifiedUtc = item.ExpenseItemModifiedUtc,
 				TransactionDate = Convert.ToDateTime(item.TransactionDate),
 			};
 
-			return DBHelper.UpdateExpenseItem(itemEntity);
+			DBHelper.UpdateExpenseItem(itemEntity);
 		}
 
         /// <summary>
