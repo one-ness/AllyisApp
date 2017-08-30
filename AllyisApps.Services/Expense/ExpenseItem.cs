@@ -17,19 +17,19 @@ namespace AllyisApps.Services
         /// <summary>
         /// The expense description
         /// </summary>
-		[Required(ErrorMessage = "Please enter the item description.")]
+		[Required(ErrorMessage = "Description is required.")]
         public string ItemDescription { get; set; }
 
         /// <summary>
         /// The transaction date
         /// </summary>
-		[Required(ErrorMessage = "Please enter the date of transaction.")]
+		[Required(ErrorMessage = "Date is required.")]
         public string TransactionDate { get; set; }
 
         /// <summary>
         /// The amount of the expense
         /// </summary>
-		[Required(ErrorMessage = "Please enter the amount.")]
+		[Required(ErrorMessage = "Amount is required.")]
         public decimal Amount { get; set; }
 
         /// <summary>
