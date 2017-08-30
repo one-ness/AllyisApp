@@ -26,7 +26,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>Returns an action result.</returns>
 		public ActionResult Create(int subscriptionId, int reportId = -1, int itemCount = 0, int fileCount = 0)
 		{
-            ExpenseReport report = reportId == -1 ? null : AppService.GetExpenseReport(reportId);
+			UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
+			ViewBag.SubscriptionName = subInfo.SubscriptionName;
+
+			ExpenseReport report = reportId == -1 ? null : AppService.GetExpenseReport(reportId);
             var userInfo = GetCookieData();
             if (reportId != -1)
             {
