@@ -39,6 +39,18 @@ namespace AllyisApps.Services
 			EditOthers,
 		}
 
+        /// <summary>
+        /// Expense Tracker Actions.
+        /// </summary>
+		public enum ExpenseTrackerAction : int
+		{
+			Unmanaged = 0,
+			EditReport,
+			AdminReport,
+            AdminExpense,
+            StatusUpdate
+        }
+
 		/// <summary>
 		/// check permissions for the given action in the given org for the logged in user.
 		/// </summary>
@@ -147,5 +159,60 @@ namespace AllyisApps.Services
 
 			return result;
 		}
-	}
+
+
+        /// <summary>
+        /// Checks if an action is allowed for the current user.
+        /// </summary>
+        /// <param name="action">The controller action</param>
+        /// <param name="subId">The subscription id.</param>
+        /// <param name="throwException">Throw exception or not.</param>
+        /// <returns></returns>
+        public bool CheckExpenseTrackerAction(ExpenseTrackerAction action, int subId, bool throwException = true)
+        {
+            bool result = false;
+
+            UserSubscription subInfo = null;
+            this.UserContext.UserSubscriptions.TryGetValue(subId, out subInfo);
+            ExpenseTrackerRole etRole = (ExpenseTrackerRole)subInfo.ProductRoleId;
+            if (subInfo != null && subInfo.ProductId == ProductIdEnum.ExpenseTracker && etRole != ExpenseTrackerRole.NotInProduct)
+            {
+                if (action == ExpenseTrackerAction.AdminReport || action == ExpenseTrackerAction.StatusUpdate || action == ExpenseTrackerAction.AdminExpense)
+                {
+                    switch (etRole)
+                    {
+                        case ExpenseTrackerRole.Manager:
+                            result = true;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else if (action == ExpenseTrackerAction.EditReport)
+                {
+                    switch (etRole)
+                    {
+                        case ExpenseTrackerRole.User:
+                            result = true;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    result = true;
+                }
+            }
+
+            if (!result && throwException)
+            {
+                string message = string.Format("action {0} denied for subscription {1}", action.ToString(), subId);
+                throw new AccessViolationException(message);
+            }
+
+            return result;
+        }
+    }
 }
+

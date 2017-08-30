@@ -1498,4 +1498,7 @@
   <data name="MustSelectActiveProject" xml:space="preserve">
     <value>You cant edit a time entry on a project that is Deactivated</value>
   </data>
+  <data name="ExpenseTracker" xml:space="preserve">
+    <value>ExpenseTracker</value>
+  </data>
 </root>
