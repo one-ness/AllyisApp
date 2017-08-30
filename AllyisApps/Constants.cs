@@ -144,5 +144,6 @@ namespace AllyisApps
     public static class RouteNameConstants
     {
         public const string TimeTrackerNoIndex = "TimeTracker_NoUserId";
+		public const string ExpenseTracker = "ExpenseTracker_Default";
     }
 }

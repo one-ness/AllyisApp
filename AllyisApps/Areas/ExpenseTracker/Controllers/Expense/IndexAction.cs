@@ -29,6 +29,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
             ViewBag.SubscriptionName = subInfo.SubscriptionName;
 
+			ViewData["SubscriptionId"] = subInfo.SubscriptionId;
+
 			return View(InitializeViewModel(subscriptionId, userId, DateTime.UtcNow, DateTime.UtcNow.AddDays(7), items));
 		}
 

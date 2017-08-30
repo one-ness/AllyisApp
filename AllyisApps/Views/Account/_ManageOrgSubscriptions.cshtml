@@ -17,13 +17,21 @@
 
 <tr>
 	<td class="col-md-9">
-		@if (Model.AreaUrl == "ExpenseTracker")
+		@if (Model.AreaUrl == "expensetracker")
 		{
-			@Model.ProductName
+			<a href="@Url.RouteUrl(RouteNameConstants.ExpenseTracker, new { subscriptionId = Model.SubscriptionId, controller = ControllerConstants.Expense })" style="text-decoration: none; color: inherit">
+				@string.Format("{0}", Model.SubscriptionName) <i class="fa fa-caret-right"></i>
+			</a>
+		}
+		else if (Model.AreaUrl == "timetracker")
+		{
+			<a href="@Url.RouteUrl(RouteNameConstants.TimeTrackerNoIndex, new { subscriptionId = Model.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = ViewData["StartDate"], endDate = ViewData["EndDate"] })" style="text-decoration: none; color: inherit">
+				@string.Format("{0}", Model.SubscriptionName) <i class="fa fa-caret-right"></i>
+			</a>
 		}
 		else
 		{
-			<a href="@Url.RouteUrl(RouteNameConstants.TimeTrackerNoIndex, new { subscriptionId = Model.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = ViewData["StartDate"], endDate = ViewData["EndDate"] })" style="text-decoration: none; color: inherit">
+			<a href="" style="text-decoration: none; color: inherit">
 				@string.Format("{0}", Model.SubscriptionName) <i class="fa fa-caret-right"></i>
 			</a>
 		}

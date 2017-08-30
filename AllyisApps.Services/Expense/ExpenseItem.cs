@@ -17,6 +17,7 @@ namespace AllyisApps.Services
         /// <summary>
         /// The expense description
         /// </summary>
+		[Required(ErrorMessage = "Please enter the item description.")]
         public string ItemDescription { get; set; }
 
         /// <summary>

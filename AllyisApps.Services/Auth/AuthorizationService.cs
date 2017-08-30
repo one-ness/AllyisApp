@@ -174,36 +174,39 @@ namespace AllyisApps.Services
 
             UserSubscription subInfo = null;
             this.UserContext.UserSubscriptions.TryGetValue(subId, out subInfo);
-            ExpenseTrackerRole etRole = (ExpenseTrackerRole)subInfo.ProductRoleId;
-            if (subInfo != null && subInfo.ProductId == ProductIdEnum.ExpenseTracker && etRole != ExpenseTrackerRole.NotInProduct)
-            {
-                if (action == ExpenseTrackerAction.AdminReport || action == ExpenseTrackerAction.StatusUpdate || action == ExpenseTrackerAction.AdminExpense)
-                {
-                    switch (etRole)
-                    {
-                        case ExpenseTrackerRole.Manager:
-                            result = true;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else if (action == ExpenseTrackerAction.EditReport)
-                {
-                    switch (etRole)
-                    {
-                        case ExpenseTrackerRole.User:
-                            result = true;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else
-                {
-                    result = true;
-                }
-            }
+			if (subInfo != null)
+			{
+				ExpenseTrackerRole etRole = (ExpenseTrackerRole)subInfo.ProductRoleId;
+				if (subInfo.ProductId == ProductIdEnum.ExpenseTracker && etRole != ExpenseTrackerRole.NotInProduct)
+				{
+					if (action == ExpenseTrackerAction.AdminReport || action == ExpenseTrackerAction.StatusUpdate || action == ExpenseTrackerAction.AdminExpense)
+					{
+						switch (etRole)
+						{
+							case ExpenseTrackerRole.Manager:
+								result = true;
+								break;
+							default:
+								break;
+						}
+					}
+					else if (action == ExpenseTrackerAction.EditReport)
+					{
+						switch (etRole)
+						{
+							case ExpenseTrackerRole.User:
+								result = true;
+								break;
+							default:
+								break;
+						}
+					}
+					else
+					{
+						result = true;
+					}
+				}
+			}
 
             if (!result && throwException)
             {
