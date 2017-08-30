@@ -589,9 +589,11 @@ namespace AllyisApps.DBModel
 			parameters.Add("@statusName", statusName);
 			parameters.Add("@typeName", typeName);
 
-			DataTable tagsTable = new DataTable();
-			tagsTable.Columns.Add("tagNames", typeof(string));
-			foreach (string tag in tags) tagsTable.Rows.Add(tag);
+			DataTable TagTable = new DataTable();
+			TagTable.Columns.Add("tagNames", typeof(string));
+			foreach (string tag in tags) TagTable.Rows.Add(tag);
+
+			parameters.Add("@tags", TagTable);
 			
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{

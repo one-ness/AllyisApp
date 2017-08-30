@@ -42,11 +42,10 @@ BEGIN
 		SET @Where = @Where + 'AND [PositionStatusName] = @_Status '
 	IF @type is not null
 		SET @Where = @Where + 'AND [EmploymentTypeName] = @_Type '
-	IF @tags IS NOT NULL
-		SET @Where = @Where + 'AND [Tag].[TagName] IN (SELECT [TagNames] FROM @_Tags) '
-
+	IF (SELECT count(*) from @tags) > 0
+		SET @Where = @Where + 'AND [Tag].[TagName] IN (SELECT [TagName] FROM @_Tags) '
 	EXEC sp_executesql @sSQL,
-	N'@_Status NVARCHAR, @_Type NVARCHAR, @_Tags [Lookup].[TagTable]',
+	N'@_Status NVARCHAR, @_Type NVARCHAR, @_Tags [Lookup].[TagTable] READONLY',
 	@_Status = @status, @_Type = @type, @_Tags = @tags
 
 	-- Select all tags from the positions
