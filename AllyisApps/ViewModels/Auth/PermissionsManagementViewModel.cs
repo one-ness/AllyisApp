@@ -264,6 +264,7 @@ namespace AllyisApps.ViewModels.Auth
 		{
 			this.OrganizationRoleTarget = 0;
 			this.TimeTrackerRoleTarget = 0;
+            this.ExpenseTrackerRoleTarget = 0;
 		}
 
 		/// <summary>
@@ -275,6 +276,11 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the subscription Id for Timetracker if this organization has one.TimeTrackerRole.
 		/// </summary>
 		public int TimeTrackerSubscriptionId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the subscription Id for Expensetracker if the organization has one.
+        /// </summary>
+        public int ExpenseTrackerSubscriptionId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the set of userIds who are members of the organization.
@@ -290,7 +296,13 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the target role to set the timetracker subscription users to.
 		/// </summary>
 		public int? TimeTrackerRoleTarget { get; set; }
-	}
+
+        /// <summary>
+        /// Gets or sets the target role to set the expensetracker subscription users to.
+        /// </summary>
+        public int? ExpenseTrackerRoleTarget { get; set; }
+
+    }
 
 	/// <summary>
 	/// A user to perform actions on.

@@ -17,10 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -978,6 +976,8 @@
     <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\ExpenseTracker\Views\AdminAction\" />
+    <Folder Include="Areas\ExpenseTracker\Views\Admin\" />
     <Folder Include="Areas\ExpenseTracker\Views\AttachmentDownload\" />
     <Folder Include="Areas\ExpenseTracker\Views\ReportAdmin\" />
   </ItemGroup>
@@ -1020,7 +1020,9 @@
       <LastGenOutput>States.Designer.cs</LastGenOutput>
       <CustomToolNamespace>AllyisApps.Resources.ViewModels.Auth</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.en-GB.resx" />
+    <EmbeddedResource Include="Resources\Strings.en-GB.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Strings.en-US.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
