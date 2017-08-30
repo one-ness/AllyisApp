@@ -53,7 +53,7 @@
 					<th>
 						<div class="amount-div form-control item-control" style="display: inline-block; width: 150px;">
 							$
-							@Html.TextBoxFor(m => m.ToList()[i].Amount, new { @class = "amount-textbox", Value = amountVal, style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px;" })
+							@Html.TextBoxFor(m => m.ToList()[i].Amount, new { @class = "amount-textbox", Value = amountVal, style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px; margin-bottom: 6px;" })
 							@Html.ValidationMessageFor(m => m.ToList()[i].Amount)
 						</div>
 					</th>
