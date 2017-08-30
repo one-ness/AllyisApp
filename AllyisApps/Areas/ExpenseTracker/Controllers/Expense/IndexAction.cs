@@ -31,6 +31,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			ViewData["SubscriptionId"] = subInfo.SubscriptionId;
 
+			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
+
 			return View(InitializeViewModel(subscriptionId, userId, DateTime.UtcNow, DateTime.UtcNow.AddDays(7), items));
 		}
 

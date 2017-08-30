@@ -27,6 +27,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
 			ViewBag.SubscriptionName = subInfo.SubscriptionName;
 
+			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
+
 			var orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
 			int userId = GetCookieData().UserId;
 			IEnumerable<ExpenseReport> reports = AppService.GetExpenseReportByOrgId(orgId);
