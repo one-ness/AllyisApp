@@ -15,7 +15,7 @@ begin
 	select o.*, ou.*, a.* from Organization o with (nolock)
 	inner join OrganizationUser ou with (nolock) on ou.OrganizationId = o.OrganizationId
 	left join Lookup.Address a with (nolock) on a.AddressId = o.AddressId
-	where ou.UserId = @userId
+	where ou.UserId = @userId AND o.IsActive = 1 
 
 	-- get a list of subscriptions and the user role in each
 	select s.*, su.*, sku.SkuId, p.ProductId, p.ProductName, p.AreaUrl from Billing.Subscription s with (nolock)

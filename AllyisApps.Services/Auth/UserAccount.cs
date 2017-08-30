@@ -46,7 +46,7 @@ namespace AllyisApps.Services.Auth
                             OrganizationId = sub.OrganizationId,
                             ProductId = (ProductIdEnum)sub.ProductId,
                             ProductName = sub.ProductName,
-                            SkuId = sub.SkuId,
+                            SkuId = (SkuIdEnum) sub.SkuId,
                             ProductRoleId = sub.ProductRoleId,
                             SubscriptionId = sub.SubscriptionId,
                             SubscriptionName = sub.SubscriptionName

@@ -23,6 +23,11 @@ namespace AllyisApps.DBModel.Billing
 		/// </summary>
 		public string ProductName { get; set; }
 
+        /// <summary>
+        /// Prodcut Description 
+        /// </summary>
+        public string Description { get; set; }
+
 		/// <summary>
 		/// Gets or sets The subscription id.
 		/// </summary>
@@ -68,9 +73,9 @@ namespace AllyisApps.DBModel.Billing
 		/// </summary>
 		public string Tier { get; set; }
 
-		/// <summary>
-		/// Gets or sets a value indicating whether a user has permission to view this subscription.
-		/// </summary>
-		public bool CanViewSubscription { get; set; }
+        /// <summary>
+        /// Get Area Url
+        /// </summary>
+        public string AreaUrl { get; set; }
 	}
 }

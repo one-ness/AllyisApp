@@ -6,6 +6,7 @@
 
 using AllyisApps.Services.Lookup;
 using System;
+using System.Collections.Generic;
 
 namespace AllyisApps.Services
 {
@@ -87,11 +88,6 @@ namespace AllyisApps.Services
 		public bool IsLockoutEnabled { get; set; }
 
 		/// <summary>
-		/// Gets or sets Id of this user's active organization.
-		/// </summary>
-		public int? LastUsedOrganizationId { get; set; }
-
-		/// <summary>
 		/// Gets or sets End date for lockout.
 		/// </summary>
 		public DateTime? LockoutEndDateUtc { get; set; }
@@ -115,6 +111,11 @@ namespace AllyisApps.Services
 		/// Gets or sets the created time
 		/// </summary>
 		public DateTime UserCreatedUtc { get; set; }
+
+		/// <summary>
+		/// organizations the user is member of
+		/// </summary>
+		public List<UserOrganization> Organizations { get; set; }
 
 		/// <summary>
 		/// constructor

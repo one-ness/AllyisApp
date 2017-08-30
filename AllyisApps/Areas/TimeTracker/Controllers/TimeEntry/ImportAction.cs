@@ -33,7 +33,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Import(int subscriptionId, HttpPostedFileBase file)
 		{
-			int organizationId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 
 			// TODO: Replace ModelState errors with exception catches and notifications
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)

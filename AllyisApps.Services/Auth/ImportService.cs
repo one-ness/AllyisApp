@@ -29,9 +29,9 @@ namespace AllyisApps.Services
 		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0)
 		{
 			int orgId;
-			if (subscriptionId > 0 && UserContext.UserSubscriptions[subscriptionId] != null)
+			if (subscriptionId > 0 && UserContext.SubscriptionsAndRoles[subscriptionId] != null)
 			{
-				orgId = UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+				orgId = UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			}
 			else if (organizationId > 0 && UserContext.OrganizationsAndRoles[organizationId] != null)
 			{

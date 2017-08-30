@@ -185,7 +185,6 @@
     <Build Include="Auth\Stored Procedures\GetUserInvitationsByUserData.sql" />
     <Build Include="Auth\Stored Procedures\GetUsersWithSubscriptionToProductInOrganization.sql" />
     <Build Include="Auth\Stored Procedures\UpdateOrganization.sql" />
-    <Build Include="Auth\Stored Procedures\UpdateUserActiveOrg.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserActiveSub.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserInfo.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserPassword.sql" />
@@ -324,6 +323,7 @@
     <Build Include="Finance\Stored Procedures\GetAccounts.sql" />
     <None Include="UpgradeScripts\Upgrade_AllyisAppsDB_1.2_to_1.3.sql" />
     <Build Include="Auth\Stored Procedures\GetUser.sql" />
+    <Build Include="Billing\Stored Procedures\GetSubscriptionName.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

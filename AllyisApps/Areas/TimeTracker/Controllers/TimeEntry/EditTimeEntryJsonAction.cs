@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				});
 			}
 
-			int organizationId = AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId;
+			int organizationId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
 
 			// Check permissions
 			if (model.UserId != this.AppService.UserContext.UserId)
@@ -117,7 +117,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				new List<int> { model.UserId },
 				AppService.GetDateTimeFromDays(model.Date),
 				AppService.GetDateTimeFromDays(model.Date),
-				AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId);
+				AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
 			float durationOther = 0.0f;
 			foreach (TimeEntryInfo otherEntry in otherEntriesToday)
 			{
@@ -142,7 +142,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				throw new ArgumentException(Resources.Strings.MustSelectPayClass);
 			}
 
-			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId);
+			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId);
 			if ((!this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, model.SubscriptionId, false)) && model.Date <= (lockDate == null ? -1 : AppService.GetDayFromDateTime(lockDate.Value)))
 			{
 				throw new ArgumentException(Resources.Strings.CanOnlyEdit + " " + lockDate.Value.ToString("d", System.Threading.Thread.CurrentThread.CurrentCulture));
@@ -170,7 +170,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			TimeEntryInfo entry = AppService.GetTimeEntry(timeEntryId);
 
-			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId);
+			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
 			return new EditTimeEntryViewModel
 			{
 				UserId = entry.UserId,
@@ -182,7 +182,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Description = entry.Description,
 				IsLockSaved = entry.IsLockSaved,
 				LockDate = lockDate == null ? -1 : AppService.GetDayFromDateTime(lockDate.Value),
-				IsManager = AppService.GetProductRoleForUser(ProductNameConstants.TimeTracker, entry.UserId, AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId) == "Manager"
+				IsManager = AppService.GetProductRoleForUser(ProductNameConstants.TimeTracker, entry.UserId, AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId) == "Manager"
 			};
 		}
 

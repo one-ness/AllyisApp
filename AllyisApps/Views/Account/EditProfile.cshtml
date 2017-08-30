@@ -76,7 +76,7 @@
 	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
 }
 @section Scripts {
-	@Scripts.Render("~/bundles/jqueryval")
+	
 	<script type="text/javascript">
 		// variables passed to allyis-birthdatepicker.js
         var model_birthdate = @Model.DateOfBirth;
@@ -89,8 +89,10 @@
 		var selectedCountryCode = "@Model.SelectedCountryCode";
 		var selectedStateId = "@Model.SelectedStateId";
 	</script>
-	@Scripts.Render("~/bundles/UpdateStateDDL");
-	@Scripts.Render("~/bundles/jqueryui");
+	@Scripts.Render("~/bundles/UpdateStateDDL")
+	@Scripts.Render("~/bundles/jqueryui")
 	@Scripts.Render("~/bundles/moment")
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    @*Scripts.Render("~/bundles/jqueryouval")*@
 	<script src="~/Scripts/allyis-birthDatepicker.js"></script>
 }

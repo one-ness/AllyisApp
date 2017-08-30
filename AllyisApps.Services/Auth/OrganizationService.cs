@@ -80,16 +80,15 @@ namespace AllyisApps.Services
 		/// pending in the organization, the organization's billing stripe handle, and a list of all products.
 		/// </summary>
 		/// <returns>.</returns>
-		public Tuple<Organization, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string, List<Product>> GetOrganizationManagementInfo(int orgId)
+		public Tuple<Organization, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string> GetOrganizationManagementInfo(int orgId)
 		{
 			var spResults = DBHelper.GetOrganizationManagementInfo(orgId);
-			return Tuple.Create(
-				InitializeOrganization(spResults.Item1),
-				spResults.Item2.Select(oudb => InitializeOrganizationUserInfo(oudb)).ToList(),
-				spResults.Item3.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
-				spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList(),
-				spResults.Item5,
-				spResults.Item6.Select(pdb => InitializeProduct(pdb)).ToList());
+            return Tuple.Create(
+                InitializeOrganization(spResults.Item1),
+                spResults.Item2.Select(oudb => InitializeOrganizationUserInfo(oudb)).ToList(),
+                spResults.Item3.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
+                spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList(),
+                spResults.Item5);
 		}
 
 		/// <summary>
@@ -156,27 +155,6 @@ namespace AllyisApps.Services
 				address = GetDBEntityFromAddress(organization.Address);
 			}
 			return DBHelper.UpdateOrganization(GetDBEntityFromOrganization(organization), address) > 0;
-		}
-
-		/// <summary>
-		/// Updates the active organization.
-		/// </summary>
-		/// <param name="userId">User Id.</param>
-		/// <param name="orgId">Organization Id.</param>
-		public void UpdateActiveOrganization(int userId, int orgId)
-		{
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-			}
-
-			if (orgId < 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
-			}
-
-			// Note: This method cannot use UserContext.UserId because this method is called before the service obejct's UserContext is set.
-			DBHelper.UpdateActiveOrganization(userId, orgId);
 		}
 
 		/// <summary>
