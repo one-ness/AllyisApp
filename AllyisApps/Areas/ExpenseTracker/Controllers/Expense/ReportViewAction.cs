@@ -22,10 +22,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         {
             var model = InitializeReportViewModel(subscriptionId, reportId);
 
-            UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
+            
             
 
-            ViewBag.SubscriptionName = subInfo.SubscriptionName;
+            ViewBag.SubscriptionName = this.AppService.getSubscriptionName(subscriptionId); ;
 
             return View(model);
         }

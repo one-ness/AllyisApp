@@ -172,8 +172,8 @@ namespace AllyisApps.Services
         {
             bool result = false;
 
-            UserSubscription subInfo = null;
-            this.UserContext.UserSubscriptions.TryGetValue(subId, out subInfo);
+            UserContext.SubscriptionAndRole subInfo = null;
+            this.UserContext.SubscriptionsAndRoles.TryGetValue(subId, out subInfo);
             ExpenseTrackerRole etRole = (ExpenseTrackerRole)subInfo.ProductRoleId;
             if (subInfo != null && subInfo.ProductId == ProductIdEnum.ExpenseTracker && etRole != ExpenseTrackerRole.NotInProduct)
             {

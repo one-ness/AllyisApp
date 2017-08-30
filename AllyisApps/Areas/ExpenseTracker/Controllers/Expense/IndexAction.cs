@@ -23,11 +23,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
             int userId = GetCookieData().UserId;
 
-            UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
+            UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 
             var items = AppService.GetExpenseReportBySubmittedId(userId).Select(x => x).Where(y => y.OrganizationId == subInfo.OrganizationId);
 
-            ViewBag.SubscriptionName = subInfo.SubscriptionName;
+            ViewBag.SubscriptionName = AppService.getSubscriptionName(subscriptionId);
 
 			return View(InitializeViewModel(subscriptionId, userId, DateTime.UtcNow, DateTime.UtcNow.AddDays(7), items));
 		}
