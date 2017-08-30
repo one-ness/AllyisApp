@@ -4,7 +4,6 @@
 @using AllyisApps.ViewModels.ExpenseTracker.Expense
 
 @model IEnumerable<ExpenseItem>
-
 @for (int i = 0; i < Model.Count(); i++)
 {
 	var item = Model.ToList()[i];
@@ -24,8 +23,9 @@
 	}
 	string itemIdName = String.Format("[{0}].ExpenseItemId", item.Index);
 	string accountName = String.Format("[{0}].AccountId", item.Index);
-	var accountList = (List<AccountDBEntity>)ViewBag.AccountList;
-	var selected = accountList.ToArray().Where(a => a.AccountId == item.AccountId).First();
+	var accountList = (List<AccountDBEntity>)Session["AccountList"];
+	var selection = accountList.ToArray().Where(a => a.AccountId == item.AccountId);
+	var selected = selection.Count() == 0 ? accountList.First() : selection.First();
 	var selectList = new SelectList(accountList, "AccountId", "AccountName", selected.AccountId);
 
 	<div id="@String.Format("item-input_{0}", item.Index)" class="item-div" style="margin: 10px; margin-bottom: 0px;">
@@ -49,28 +49,14 @@
 		@Html.ValidationMessageFor(m => m.ToList()[i].TransactionDate)
 		@Html.ValidationMessageFor(m => m.ToList()[i].Amount)
 	</div>
-	<script>
-		@{
-			IList<ExpenseItem> subtractedModel = new List<ExpenseItem>();
-			foreach (ExpenseItem expenseItem in Model)
-			{
-				subtractedModel.Add(expenseItem);
-			}
-			subtractedModel.RemoveAt(i);
-		}
-		function removeItem(index) {
-			console.log('removing item');
-			var data = @Html.Raw(Json.Encode(Model));
-			$.ajax({
-				url: '@Url.Action("DisplayItem")',
-				data: data,
-				success: function (response) {
-					$('.items').html(response);
-					setDatePickers();
-				}
-			});
-		}
-	</script>
+
+	IList<ExpenseItem> subtractedModel = new List<ExpenseItem>();
+	foreach (ExpenseItem expenseItem in Model)
+	{
+		subtractedModel.Add(expenseItem);
+	}
+	subtractedModel.RemoveAt(i);
+	Session["Subtracted_" + i] = subtractedModel.ToArray();
 }
 
 <script>
@@ -81,14 +67,26 @@
 			addedModel.Add(expenseItem);
 		}
 		addedModel.Add(new ExpenseItem());
+		Session["AddedModel"] = addedModel.ToArray();
 	}
 	function addItem() {
 		console.log('adding item');
-		var data = @Html.Raw(Json.Encode(addedModel.ToArray()));
-		console.log(data);
 		$.ajax({
-			url: '@Url.Action("DisplayItem")',
-			data: data,
+			url: '@Url.Action("AddItem")',
+			success: function (response) {
+				$('.items').html(response);
+					setDatePickers();
+				}
+			});
+	}
+
+	function removeItem(index) {
+		console.log('removing item');
+		var url = '@Url.Action("DeleteItem", new { index = -1 })';
+		url = url.replace('-1', index);
+		$.ajax({
+			url: url,
+			data: index,
 			success: function (response) {
 				$('.items').html(response);
 				setDatePickers();

@@ -20,30 +20,36 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// Displays the items in the create report view.
 		/// </summary>
+		/// <param name="data"></param>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		public ActionResult DisplayItem(IEnumerable<ExpenseItem> model)
+		public ActionResult DisplayItem(ExpenseItem[] data, IEnumerable<ExpenseItem> model)
 		{
-			ViewBag.AccountList = AppService.GetAccounts();
+			Session["AccountList"] = AppService.GetAccounts();
 			return PartialView("_AjaxExpenseReportItems", model);
 		}
 
 		/// <summary>
 		/// Adds a new item to the model and displays the items in the create report view.
 		/// </summary>
-		/// <param name="model"></param>
+		/// <returns></returns>
+		public ActionResult AddItem()
+		{
+			Session["AccountList"] = AppService.GetAccounts();
+			var addedModel = Session["AddedModel"];
+			return PartialView("_AjaxExpenseReportItems", addedModel);
+		}
+
+		/// <summary>
+		/// Adds a new item to the model and displays the items in the create report view.
+		/// </summary>
 		/// <param name="index"></param>
 		/// <returns></returns>
-		public ActionResult AddItem(ExpenseItemModel model, int index)
+		public ActionResult DeleteItem(int index)
 		{
-			if (model == null)
-			{
-				model.Item = new ExpenseItem()
-				{
-					Index = index
-				};
-			}
-			return PartialView("_AjaxExpenseReportItems", model);
+			Session["AccountList"] = AppService.GetAccounts();
+			var subtractedModel = Session["Subtracted_" + index];
+			return PartialView("_AjaxExpenseReportItems", subtractedModel);
 		}
 	}
 }
