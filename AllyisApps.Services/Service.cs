@@ -768,13 +768,13 @@ namespace AllyisApps.Services
 		/// TODO
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
-		/// <param name="statusId"></param>
-		/// <param name="typeId"></param>
+		/// <param name="statusName"></param>
+		/// <param name="typeName"></param>
 		/// <param name="tags">tags.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns>.</returns>
 		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>>
-			GetStaffingIndexInfoFiltered(int orgId, int? statusId = null, int? typeId = null, List<int> tags = null, int? userId = 0)
+			GetStaffingIndexInfoFiltered(int orgId, string statusName, string typeName, List<string> tags = null, int? userId = 0)
 		{
 			#region Validation
 
@@ -793,7 +793,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			var results = DBHelper.GetStaffingIndexPageInfoFiltered(orgId, statusId, typeId, tags);
+			var results = DBHelper.GetStaffingIndexPageInfoFiltered(orgId, statusName, typeName, tags);
 
 			return Tuple.Create(
 				results.Item1.Select(posdb => InitializePositionThumbnailInfo(posdb, results.Item2, results.Item5)).ToList(),

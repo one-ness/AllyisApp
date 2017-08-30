@@ -28,9 +28,9 @@
 			border-left: 2px solid #bc7967;
 		}
 
-			table thead th:first-child {
-				border: none;
-			}
+		table thead th:first-child {
+			border: none;
+		}
 
 		table tbody td {
 			color: #80141C;
@@ -61,6 +61,18 @@
 			left: 0;
 		}
 
+		select {
+			width: 150px
+		}
+
+		label {
+			padding: 5px 5px;
+		}
+
+		div {
+			padding: 3px 3px;
+		}
+
 		.right-element {
 			position: absolute;
 			display: inline-block;
@@ -78,22 +90,22 @@
 			</div>
 			<div id="FilterArea" class="collapse panel panel-default">
 				<div class="left">
-					<label>Filter Status</label>
+					<label>Filter by Position Status</label>
 					<select id="statusFilter" class="statusFilter">
 						<option value="">Any</option>
 						@foreach (var status in Model.positionStatuses)
 						{
-							<option value=@status.PositionStatusId>@status.PositionStatusName</option>
+							<option value=@status.PositionStatusName>@status.PositionStatusName</option>
 						}
 					</select>
 				</div>
 				<div class="left">
-					<label>Filter Type</label>
+					<label>Filter by Employment Type</label>
 					<select id="typesFilter" class="typesFilter">
 						<option value="">Any</option>
 						@foreach (var type in Model.employmentTypes)
 						{
-							<option value=@type.EmploymentTypeId>@type.EmploymentTypeName</option>
+							<option value=@type.EmploymentTypeName>@type.EmploymentTypeName</option>
 						}
 					</select>
 				</div>
@@ -102,12 +114,12 @@
 					<select multiple id="tagsFilter" class="tagsFilter">
 						@foreach (var tag in Model.tags)
 						{
-							<option value=@tag.TagId>@tag.TagName</option>
+							<option value=@tag.TagName>@tag.TagName</option>
 						}
 					</select>
 				</div>
-				<div>
-					<button id="filterSubmit" type="button" class="btn btn-default right filterSubmit" onclick="filteredSubmit()"> Apply Filters </button>
+				<div class="text-right">
+					<button id="filterSubmit" type="button" class="btn btn-default text-right filterSubmit" onclick="filteredSubmit()"> Apply Filters </button>
 				</div>
 			</div>
 			<div class="text-right">
@@ -212,7 +224,6 @@
 	}
 	
 	function filteredSubmit() {
-
 		var status;
 		if (document.getElementById("statusFilter") != null) status = document.getElementById("statusFilter").value;
 		else status = null;
@@ -221,15 +232,26 @@
 		if (document.getElementById("typeFilter") != null) type = document.getElementById("typeFilter").value;
 		else type = null;
 
-		var tags;
-		if (document.getElementById("tagsFilter") != null) tags = document.getElementById("tagsFilter").value;
-		else tags = null;
-
-
-		var url = "/staffingmanager/" + @Model.subscriptionId + "/";
-		if (status != null) url = url + "?Status=" + status;
-		if (type != null) url = url + "?Types=" + type;
-		if (tags != null && tags != "") url = url + "?Tags=" + tags;
+		var tags = []; 
+		var count = 0;
+		var i = 0;
+		var selecter = document.getElementById("tagsFilter");
+		for(i = 0; i < selecter.options.length; i++)
+		{
+			if (selecter.options[i].selected) tags[count] = selecter.options[i].value;
+			count++;
+		}
+		
+		var url = "/staffingmanager/" + @Model.subscriptionId + "/?";
+		if (status != null) url = url + "Status=" + status;
+		if (type != null) {
+			if (status != null) url = url + "&";
+			url = url + "Types=" + type;
+		}
+		if (tags != null && tags != "") {
+			if (status != null || type != null) url = url + "&";
+			url = url + "Tags=" + tags;
+		}
 		window.location.href = url;
 	}
 </script>

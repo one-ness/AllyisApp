@@ -51,18 +51,18 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// Index 
 		/// </summary>
 		/// <param name="subscriptionId"></param>
-		/// <param name="statusFilterId"></param>
-		/// <param name="typeFilterId"></param>
+		/// <param name="statusFilterName"></param>
+		/// <param name="typeFilterName"></param>
 		/// <param name="tagsFilter"></param>
 		/// <returns></returns>
 		[Route("{StaffingManager}/{Index}/{Status?}/{Type?}/{Tags?}")]
-		public ActionResult IndexFiltered(int subscriptionId, int statusFilterId, int typeFilterId, List<int> tagsFilter)
+		public ActionResult IndexFiltered(int subscriptionId, string statusFilterName, string typeFilterName, List<string> tagsFilter)
 		{
 
 			UserSubscription subInfo = null;
 			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
-			var infos = AppService.GetStaffingIndexInfoFiltered(subInfo.OrganizationId, statusFilterId, typeFilterId, tagsFilter);
+			var infos = AppService.GetStaffingIndexInfoFiltered(subInfo.OrganizationId, statusFilterName, typeFilterName, tagsFilter);
 
 			//ViewBag.SignedInUserID = GetCookieData().UserId;
 			//ViewBag.SelectedUserId = userId;

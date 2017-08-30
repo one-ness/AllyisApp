@@ -1,12 +1,12 @@
 CREATE PROCEDURE [StaffingManager].[GetStaffingIndexInfoFiltered]
 	@organizationId INT,
-	@Status INT,
-	@Type INT,
+	@status NVARCHAR(32),
+	@type NVARCHAR(32),
 	@tags [Lookup].[TagTable] READONLY
 AS
 BEGIN
-	DECLARE @sSQL NVARCHAR(2000), @Where NVARCHAR(1000) = ''
-	SET @sSQL = 
+	DECLARE @sSQL NVARCHAR(2000), @Where NVARCHAR(1000) = ''
+	SET @sSQL =
 		'SELECT DISTINCT [PositionId],
 			[OrganizationId],
 			[CustomerId],
@@ -38,16 +38,16 @@ BEGIN
 		LEFT JOIN [Lookup].[Country]				WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryCode]
 		LEFT JOIN [Lookup].[State]					WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 		WHERE [Position].[OrganizationId] = @organizationId '
-	IF @Status is not null
-		SET @Where = @Where + 'AND [PositionStatusId] = @_Status '
-	IF @Type is not null
-		SET @Where = @Where + 'AND [EmploymentTypeId] = @_Type '
-	IF @Tags IS NOT NULL
-		SET @Where = @Where + 'AND [Tag].[TagId] IN (SELECT [TagId] FROM @_Tags) '
+	IF @status is not null
+		SET @Where = @Where + 'AND [PositionStatusName] = @_Status '
+	IF @type is not null
+		SET @Where = @Where + 'AND [EmploymentTypeName] = @_Type '
+	IF @tags IS NOT NULL
+		SET @Where = @Where + 'AND [Tag].[TagName] IN (SELECT [TagNames] FROM @_Tags) '
 
-	EXEC sp_executesql @sSQL,
-	N'@_Status int, @_Type int, @_Tags [Lookup].[TagTable]',
-	@_Status = @Status, @_Type = @Type, @_Tags = @Tags
+	EXEC sp_executesql @sSQL,
+	N'@_Status NVARCHAR, @_Type NVARCHAR, @_Tags [Lookup].[TagTable]',
+	@_Status = @status, @_Type = @type, @_Tags = @tags
 
 	-- Select all tags from the positions
 	SELECT

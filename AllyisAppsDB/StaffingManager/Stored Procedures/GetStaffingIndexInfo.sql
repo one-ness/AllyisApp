@@ -29,7 +29,7 @@ BEGIN
 
 	-- Select all tags from the positions
 	SELECT
-		[Tag].[TagId],
+		DISTINCT [Tag].[TagId],
 		[Tag].[TagName],
 		[Position].[PositionId]
 	FROM [StaffingManager].[Position]

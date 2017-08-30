@@ -577,21 +577,21 @@ namespace AllyisApps.DBModel
 		/// TODO
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
-		/// <param name="statusId">Organization Id.</param>
-		/// <param name="typeId">Organization Id.</param>
+		/// <param name="statusName">Organization Id.</param>
+		/// <param name="typeName">Organization Id.</param>
 		/// <param name="tags">Organization Id.</param>
 		/// <returns>.</returns>
 		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>>
-			GetStaffingIndexPageInfoFiltered(int orgId, int? statusId = null, int? typeId = null, List<int> tags = null)
+			GetStaffingIndexPageInfoFiltered(int orgId, string statusName = "", string typeName = "", List<string> tags = null)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
-			parameters.Add("@statusId", statusId);
-			parameters.Add("@typeId", typeId);
+			parameters.Add("@statusName", statusName);
+			parameters.Add("@typeName", typeName);
 
 			DataTable tagsTable = new DataTable();
-			tagsTable.Columns.Add("tagId", typeof(int));
-			foreach (int tag in tags) tagsTable.Rows.Add(tag);
+			tagsTable.Columns.Add("tagNames", typeof(string));
+			foreach (string tag in tags) tagsTable.Rows.Add(tag);
 			
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
