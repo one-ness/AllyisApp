@@ -171,6 +171,38 @@
 				});
 			});
 		}
+
+		function addItem() {
+			console.log('adding item');
+			console.log($('form').serialize());
+			$.ajax({
+				url: '@Url.Action("AddItem")',
+				data: $('form').serialize(),
+				success: function (response) {
+					$('.items').html(response);
+					setDatePickers();
+				}
+			});
+		}
+
+		function removeItem(index) {
+			console.log('removing item');
+			var data = $('form').serialize();
+			var url = '@Url.Action("DeleteItem", new { index = -1 })';
+			url = url.replace('-1', index);
+			var url = '@Url.Action("DeleteItem")';
+			console.log(url);
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: data,
+				success: function (response) {
+					$('.items').html(response);
+					setDatePickers();
+				}
+			});
+		}
+
 		setDatePickers();
 	</script>
 }
