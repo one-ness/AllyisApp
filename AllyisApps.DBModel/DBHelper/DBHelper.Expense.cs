@@ -128,8 +128,7 @@ namespace AllyisApps.DBModel
 				return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseItemsByExpenseItemId]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable().FirstOrDefault();
 			}
 		}
-
-
+		
         /// <summary>
         /// Updates the Expense Item with the specified ID.
         /// </summary>

@@ -109,18 +109,7 @@
 					{
 						Model.Items.Add(new ExpenseItem());
 					}
-					for (int i = 0; i < Model.Items.Count; i++)
-					{
-						ExpenseItemModel model = new ExpenseItemModel()
-						{
-							Index = itemIndex,
-							Item = Model.Items[itemIndex]
-						};
-						itemIndex += 1;
-						Html.RenderAction("DisplayItem", model);
-					}
-
-					ExpenseCreateModel newModel = new ExpenseCreateModel();
+					Html.RenderAction("DisplayItem", new { model = Model.Items });
 				}
 			</div>
 			<a class="addItem btn btn-fa hidden-create add-button"
@@ -187,30 +176,9 @@
 			file_index += 1;
 		}
 
-		function addItem() {
-			console.log('adding item');
-			var data = @Html.Raw(Json.Encode(new ExpenseItemModel() { Index = -1 }));
-			data.Index = item_index;
-			$.ajax({
-				url: '@Url.Action("DisplayItem")',
-				data: data,
-				success: function (response) {
-					$('.items').append(response);
-					setDatePickers();
-				}
-			})
-			item_index += 1;
-		}
-
 		function removeFile(index) {
 			console.log('removing file');
 			$('#file-input_' + index).remove();
-		}
-
-		function removeItem(index) {
-			console.log('removing item');
-			$('#item-input_' + index).remove();
-			setDatePickers();
 		}
 
 		function setDatePickers() {

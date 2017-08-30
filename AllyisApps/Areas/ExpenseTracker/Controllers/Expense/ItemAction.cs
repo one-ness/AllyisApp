@@ -22,13 +22,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		public ActionResult DisplayItem(ExpenseItemModel model)
+		public ActionResult DisplayItem(IEnumerable<ExpenseItem> model)
 		{
-			if (model.Item == null)
-			{
-				model.Item = new ExpenseItem();
-			}
-			model.AccountList = AppService.GetAccounts();
+			ViewBag.AccountList = AppService.GetAccounts();
 			return PartialView("_AjaxExpenseReportItems", model);
 		}
 
