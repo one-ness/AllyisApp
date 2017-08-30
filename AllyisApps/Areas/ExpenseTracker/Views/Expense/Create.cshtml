@@ -59,59 +59,46 @@
 	</div>
 
 	<div class="col-md-6" style="float: left;">
-		<div class="row">
-			@{
-				var statusList = Enum.GetValues(typeof(ExpenseStatusEnum)).Cast<ExpenseStatusEnum>().Select(v => new SelectListItem
-				{
-					Text = v.ToString(),
-					Value = ((int)v).ToString()
-				}).ToList();
+		@{
+			var statusList = Enum.GetValues(typeof(ExpenseStatusEnum)).Cast<ExpenseStatusEnum>().Select(v => new SelectListItem
+			{
+				Text = v.ToString(),
+				Value = ((int)v).ToString()
+			}).ToList();
 				
-				int reportId = Model.Report == null ? -1 : Model.Report.ExpenseReportId;
-				if (Model.Report == null)
-				{
-					Model.Report = new ExpenseReport();
-					Model.Items = new List<ExpenseItem>();
-				}
+			int reportId = Model.Report == null ? -1 : Model.Report.ExpenseReportId;
+			if (Model.Report == null)
+			{
+				Model.Report = new ExpenseReport();
+				Model.Items = new List<ExpenseItem>();
 			}
-			<input type="hidden" name="reportId" value="@reportId" />
-			<input type="hidden" name="accountId" value="@Model.CurrentUser" />
-			<input type="hidden" name="submittedById" value="@Model.CurrentUser" />
-			<input type="hidden" name="subscriptionId" value="@Model.SubscriptionId" />
-			<div class="form-group">
-				@Html.ReqLabelFor(m =>m.Report.ReportTitle, "Report Name")
-				@Html.TextBoxFor(m => m.Report.ReportTitle, new { @class = "form-control", name = "ReportName" })
-				@Html.ValidationMessageFor(m => m.Report.ReportTitle)
-			</div>
-			<div class="form-group">
-				@Html.ReqLabelFor(m => m.Report.BusinessJustification, "Business Justification")
-				@Html.TextAreaFor(m => m.Report.BusinessJustification, new { @class = "form-control", rows = "3", style = "resize: none;", name = "BusinessJustification" })
-				@Html.ValidationMessageFor(m => m.Report.BusinessJustification)
-			</div>
+		}
+		<input type="hidden" name="reportId" value="@reportId" />
+		<input type="hidden" name="accountId" value="@Model.CurrentUser" />
+		<input type="hidden" name="submittedById" value="@Model.CurrentUser" />
+		<input type="hidden" name="subscriptionId" value="@Model.SubscriptionId" />
+		<div class="form-group">
+			@Html.ReqLabelFor(m => m.Report.ReportTitle, "Report Name")
+			@Html.TextBoxFor(m => m.Report.ReportTitle, new { @class = "form-control", name = "ReportName" })
+			@Html.ValidationMessageFor(m => m.Report.ReportTitle)
+		</div>
+		<div class="form-group">
+			@Html.ReqLabelFor(m => m.Report.BusinessJustification, "Business Justification")
+			@Html.TextAreaFor(m => m.Report.BusinessJustification, new { @class = "form-control", rows = "3", style = "resize: none;", name = "BusinessJustification" })
+			@Html.ValidationMessageFor(m => m.Report.BusinessJustification)
 		</div>
 		<br>
 	</div>
 	
 	<div style="clear: both;">
-		<div class="panel panel-default" style="background-color: #f5f5f5;">
-			<div class="panel-heading">
-				Items
-			</div>
-			<div class="items">
-				@{
-					if (Model.Items.Count == 0)
-					{
-						Model.Items.Add(new ExpenseItem());
-					}
-					Html.RenderAction("DisplayItem", new { model = Model.Items });
-				}
-			</div>
-			<a class="addItem btn btn-fa hidden-create add-button"
-			   onclick="addItem();">
-				<span class="glyphicon glyphicon-plus"></span>
-			</a>
-			<div style="clear:both"></div>
-		</div>
+		@{
+			if (Model.Items.Count == 0)
+			{
+				Model.Items.Add(new ExpenseItem());
+			}
+			Html.RenderAction("DisplayItem", new { model = Model.Items });
+		}
+		<div style="clear:both"></div>
 
 		<div class="row pull-right">
 			<div class="col-xs-12">
