@@ -23,9 +23,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
             int userId = GetCookieData().UserId;
 
-            var items = AppService.GetExpenseReportBySubmittedId(userId);
-
             UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
+
+            var items = AppService.GetExpenseReportBySubmittedId(userId).Select(x => x).Where(y => y.OrganizationId == subInfo.OrganizationId);
 
             ViewBag.SubscriptionName = subInfo.SubscriptionName;
 

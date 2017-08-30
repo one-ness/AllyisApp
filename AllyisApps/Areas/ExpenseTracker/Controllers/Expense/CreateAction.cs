@@ -26,9 +26,15 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>Returns an action result.</returns>
 		public ActionResult Create(int subscriptionId, int reportId = -1, int itemCount = 0, int fileCount = 0)
 		{
-            if(reportId != -1)
+            ExpenseReport report = reportId == -1 ? null : AppService.GetExpenseReport(reportId);
+            var userInfo = GetCookieData();
+            if (reportId != -1)
             {
-                AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.EditReport, subscriptionId);
+                if(report.SubmittedById != userInfo.UserId)
+                {
+                    AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.EditReport, subscriptionId);
+                }
+                
             }
             else
             {
@@ -36,7 +42,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             }
             
 
-            ExpenseReport report = reportId == -1 ? null : AppService.GetExpenseReport(reportId);
+            
 			IList<ExpenseItem> items = new List<ExpenseItem>();
 			if (report != null)
 			{
