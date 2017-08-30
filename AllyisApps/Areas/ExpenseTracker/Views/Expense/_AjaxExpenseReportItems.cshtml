@@ -45,7 +45,8 @@
 
 				<tr id="@String.Format("item-input_{0}", item.Index)" class="item-div" style="margin: 10px; margin-bottom: 0px;">
 					<th>
-						<input type="hidden" name="@itemIdName" value="@item.ExpenseItemId" />
+						@*<input type="hidden" name="@itemIdName" value="@item.ExpenseItemId" />*@
+						@Html.HiddenFor(m => m.ToList()[i].ExpenseItemId)
 						@Html.TextBoxFor(m => m.ToList()[i].TransactionDate, new { @class = "datepicker form-control item-control", Value = dateVal, style = "display: inline-block; width: 150px" })
 						@Html.ValidationMessageFor(m => m.ToList()[i].TransactionDate)
 					</th>
@@ -58,6 +59,7 @@
 					</th>
 					<th>
 						@Html.TextBoxFor(m => m.ToList()[i].ItemDescription, new { @class = "form-control item-control", Value = item.ItemDescription, style = "display: inline-block; width: 300px" })
+						@Html.ValidationMessageFor(m => m.ToList()[i].ItemDescription)
 					</th>
 					<th>
 						@Html.DropDownListFor(m => m.ToList()[i].AccountId, selectList, new { @class = "form-control item-control", name = accountName, style = "display: inline-block; width: 150px", Value = item.AccountId })

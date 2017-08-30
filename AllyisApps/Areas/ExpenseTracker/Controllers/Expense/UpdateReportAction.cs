@@ -53,7 +53,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			var oldReport = AppService.GetExpenseReport(reportId);
 
-			if (oldReport.ReportStatus == (int)ExpenseStatusEnum.Draft)
+			if (oldReport.ReportStatus == (int)ExpenseStatusEnum.Draft || oldReport.ReportStatus == (int)ExpenseStatusEnum.Rejected)
 			{
 				var report = new ExpenseReport()
 				{

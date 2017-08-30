@@ -58,11 +58,24 @@
                         <div class="square-box">
 
                             @{
-                                string route = "";
-                                if (sub.productId == AllyisApps.Services.ProductIdEnum.TimeTracker)
-                                {
-                                    route = Url.RouteUrl(RouteNameConstants.TimeTrackerNoIndex, new { subscriptionId = @sub.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = sub.startDate, endDate = sub.endDate});
-                                }
+								string route = "";
+								switch (sub.productId)
+								{
+									case ProductIdEnum.None:
+										break;
+									case ProductIdEnum.AllyisApps:
+										break;
+									case ProductIdEnum.TimeTracker:
+										route = Url.RouteUrl(RouteNameConstants.TimeTrackerNoIndex, new { subscriptionId = @sub.SubscriptionId, controller = ControllerConstants.TimeEntry });
+										break;
+									case ProductIdEnum.ExpenseTracker:
+										route = Url.RouteUrl(RouteNameConstants.ExpenseTracker, new { subscriptionId = @sub.SubscriptionId, controller = ControllerConstants.Expense });
+										break;
+									case ProductIdEnum.StaffingManager:
+										break;
+									default:
+										break;
+								}
                             }
 
                             <a href="@(route)" style="text-decoration: none">
