@@ -111,7 +111,7 @@ namespace AllyisApps.Controllers
                     }
                     else
                     {
-                        subViewModel.ProductGoToUrl = userSubInfo.AreaUrl;
+                        subViewModel.ProductGoToUrl = userSubInfo.AreaUrl + "/"+subViewModel.SubscriptionId;
                     }
                     subViewModel.IconUrl = string.Format("Content/icons/{0}.png", subViewModel.ProductName.Replace(" ", ""));
                     orgViewModel.Subscriptions.Add(subViewModel);
