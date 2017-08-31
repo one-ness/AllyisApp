@@ -375,6 +375,18 @@
     <None Include="UpgradeScripts\Upgrade_AllyisAppsDB_1.2_to_1.3.sql" />
     <Build Include="Auth\Stored Procedures\GetUser.sql" />
     <Build Include="Billing\Stored Procedures\GetSubscriptionName.sql" />
+    <Build Include="Expense\Stored Procedures\GetExpenseItemsByExpenseReportId.sql" />
+    <Build Include="Expense\Stored Procedures\CreateExpenseFile.sql" />
+    <Build Include="Expense\Stored Procedures\CreateExpenseHistory.sql" />
+    <Build Include="Expense\Stored Procedures\CreateExpenseReportHistory.sql" />
+    <Build Include="Expense\Stored Procedures\GetExpenseFilesByExpenseReportId.sql" />
+    <Build Include="Expense\Stored Procedures\GetExpenseHistory.sql" />
+    <Build Include="Expense\Stored Procedures\GetExpenseReportHistory.sql" />
+    <Build Include="Expense\Stored Procedures\UpdateExpenseFile.sql" />
+    <Build Include="Expense\Stored Procedures\UpdateExpenseHistory.sql" />
+    <Build Include="Finance\Stored Procedures\GetAccounts.sql" />
+    <Build Include="Expense\Tables\ExpenseFile.sql" />
+    <Build Include="Expense\Tables\ExpenseReportHistory.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
