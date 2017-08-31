@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="InvitationDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -11,7 +11,7 @@ namespace AllyisApps.DBModel.Auth
 	/// <summary>
 	/// The model for the invitations table.
 	/// </summary>
-	public class InvitationDBEntity
+	public class InvitationDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the id of the invitation.

@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="CustomerDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -11,7 +11,7 @@ namespace AllyisApps.DBModel.Crm
 	/// <summary>
 	/// Represents the Users table in the database.
 	/// </summary>
-	public class CustomerDBEntity
+	public class CustomerDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets CustomerId.

@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseDBEntity.cs" />
     <Compile Include="Auth\UserContextDBEntity.cs" />
     <Compile Include="Auth\UserRolesDBEntity.cs" />
     <Compile Include="Billing\BillingHistoryItemDBEntity.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Billing\SubscriptionRoleDBEntity.cs" />
     <Compile Include="Crm\ProjectDBEntity.cs" />
     <Compile Include="DBHelper\DBHelper.Expense.cs" />
+    <Compile Include="DBHelper\DBHelper.StaffingManager.cs" />
     <Compile Include="DBHelper\DBHelper.Finance.cs" />
     <Compile Include="DBHelper\DBHelper.Lookup.cs" />
     <Compile Include="DBHelper\DBHelper.TimeTracker.cs" />
@@ -93,6 +95,15 @@
     <Compile Include="Billing\SkuDBEntity.cs" />
     <Compile Include="Lookup\LanguageDBEntity.cs" />
     <Compile Include="Hrm\HolidayDBEntity.cs" />
+    <Compile Include="StaffingManager\ApplicantDBEntity.cs" />
+    <Compile Include="StaffingManager\ApplicationDocumentDBEntity.cs" />
+    <Compile Include="StaffingManager\ApplicationDBEntity.cs" />
+    <Compile Include="StaffingManager\EmploymentTypeDBEntity.cs" />
+    <Compile Include="StaffingManager\PositionDBEntity.cs" />
+    <Compile Include="StaffingManager\PositionLevelDBEntity.cs" />
+    <Compile Include="StaffingManager\PositionStatusDBEntity.cs" />
+    <Compile Include="Lookup\TagDBEntity.cs" />
+    <Compile Include="StaffingManager\PositionTagDBEntity.cs" />
     <Compile Include="TimeTracker\LockDateDBEntity.cs" />
     <Compile Include="Hrm\PayClassDBEntity.cs" />
     <Compile Include="TimeTracker\SettingDBEntity.cs" />

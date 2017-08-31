@@ -87,6 +87,9 @@ namespace AllyisApps
 		public const string ViewReport = "viewreport";
 		public const string Template = "template";
 		public const string EditUsers = "editusers";
+		public const string EditPosition = "editposition";
+		public const string CreatePosition = "createposition";
+		public const string DeletePosition = "deleteposition";
 	}
 
 	/// <summary>
@@ -104,6 +107,7 @@ namespace AllyisApps
 		public const string Subscription = "subscription";
 		public const string TimeEntry = "timeentry";
 		public const string Expense = "expense";
+		public const string Staffing = "staffing";
 	}
 
 	/// <summary>
@@ -137,6 +141,9 @@ namespace AllyisApps
 		public const string StaffingManager = "StaffingManager";
 	}
 
+	/// <summary>
+	/// Route name constants for use in routing.
+	/// </summary>
 	public static class RouteNameConstants
 	{
 		public const string TimeTrackerNoIndex = "TimeTracker_NoUserId";

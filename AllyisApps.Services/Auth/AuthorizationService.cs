@@ -40,6 +40,22 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// staffing actions.
+		/// </summary>
+		public enum StaffingAction : int
+		{
+			Index = 1,
+			EditPosition,
+			ViewPosition,
+			EditApplicant,
+			ViewApplicant,
+			EditApplication,
+			ViewApplication,
+			ViewOthers,
+			EditOthers,
+		}
+
+		/// <summary>
 		/// check permissions for the given action in the given org for the logged in user.
 		/// </summary>
 		public bool CheckOrgAction(OrgAction action, int orgId, bool throwException = true)

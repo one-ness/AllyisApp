@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="UserRolesDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -9,7 +9,7 @@ namespace AllyisApps.DBModel.Auth
 	/// <summary>
 	/// The database model for the collection of roles that a user has.
 	/// </summary>
-	public class UserRolesDBEntity
+	public class UserRolesDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets User's first name.

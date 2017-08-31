@@ -93,7 +93,7 @@ namespace AllyisApps.DBModel
 		/// <param name="organizationId">The Organization Id.</param>
 		/// <param name="productRoleId">Product role to assign (or -1 to remove from organization).</param>
 		/// <param name="productId">ID of Product in question.</param>
-		/// <returns>The number of updated/removed users, and the number of newly added users (or -1 if subscription is too full).</returns>
+		/// <returns>The number of updated and number of added users.</returns>
 		public Tuple<int, int> UpdateSubscriptionUserRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
 		{
 			DataTable userIdsTable = new DataTable();
