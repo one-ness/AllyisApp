@@ -24,6 +24,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>Returns an action result.</returns>
 		public ActionResult Pending(int subscriptionId)
 		{
+            UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
+            ViewBag.SubscriptionName = subInfo.SubscriptionName;
+            if (subInfo.ProductRoleId != 2)
+            {
+                return RedirectToAction("Index");
+            }
 
             ViewBag.SubscriptionName = AppService.getSubscriptionName(subscriptionId);
 			var orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
