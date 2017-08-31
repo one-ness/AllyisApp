@@ -15,8 +15,11 @@
 
 GO
 
-CREATE TRIGGER [Expense].trg_update_report_ModifiedUtc ON [Expense].[ExpenseReport] FOR UPDATE AS
-BEGIN
-    UPDATE [Expense].[ExpenseReport] SET [ExpenseReportModifiedUtc] = CONVERT(DATETIME2(0), GETUTCDATE()) FROM [Expense].[ExpenseReport] INNER JOIN [deleted] [d] ON [ExpenseReport].[ExpenseReportId] = [d].[ExpenseReportId]
-END
-GO 
+CREATE TRIGGER [Expense].trg_update_ExpenseReportModifiedUtc
+ON [Expense].[ExpenseReport]
+FOR UPDATE
+AS
+	UPDATE [Expense].[ExpenseReport]
+	SET [ExpenseReportModifiedUtc] = SYSDATETIME()
+	FROM [deleted] [d]
+	WHERE [Expense].[ExpenseReport].[ExpenseReportId] = [d].[ExpenseReportId]

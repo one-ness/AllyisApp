@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="LockDateDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -9,7 +9,7 @@ namespace AllyisApps.DBModel.TimeTracker
 	/// <summary>
 	/// Represents a lock date for an organization.
 	/// </summary>
-	public class LockDateDBEntity
+	public class LockDateDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets a quantity indicating whether to use a lock date.

@@ -826,6 +826,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Position.
+        /// </summary>
+        public static string CreatePosition {
+            get {
+                return ResourceManager.GetString("CreatePosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create Project.
         /// </summary>
         public static string CreateProject {
@@ -1078,6 +1087,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete Position.
+        /// </summary>
+        public static string DeletePosition {
+            get {
+                return ResourceManager.GetString("DeletePosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You do not have permission to delete projects.
         /// </summary>
         public static string DeleteUnauthorizedMessage {
@@ -1092,6 +1110,15 @@ namespace AllyisApps.Resources {
         public static string Description {
             get {
                 return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Desired Skills.
+        /// </summary>
+        public static string DesiredSkills {
+            get {
+                return ResourceManager.GetString("DesiredSkills", resourceCulture);
             }
         }
         
@@ -1146,6 +1173,15 @@ namespace AllyisApps.Resources {
         public static string DurationFormat {
             get {
                 return ResourceManager.GetString("DurationFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duration of Position (Months).
+        /// </summary>
+        public static string DurationMonths {
+            get {
+                return ResourceManager.GetString("DurationMonths", resourceCulture);
             }
         }
         
@@ -1611,6 +1647,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hiring Manager.
+        /// </summary>
+        public static string HiringManager {
+            get {
+                return ResourceManager.GetString("HiringManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Holiday.
         /// </summary>
         public static string Holiday {
@@ -1850,6 +1895,15 @@ namespace AllyisApps.Resources {
         public static string Invoice {
             get {
                 return ResourceManager.GetString("Invoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Job Responsibilities.
+        /// </summary>
+        public static string JobResponsibilities {
+            get {
+                return ResourceManager.GetString("JobResponsibilities", resourceCulture);
             }
         }
         
@@ -3618,6 +3672,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Team Name.
+        /// </summary>
+        public static string TeamName {
+            get {
+                return ResourceManager.GetString("TeamName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Template.
         /// </summary>
         public static string Template {
@@ -3704,6 +3767,15 @@ namespace AllyisApps.Resources {
         public static string TimeTrackerRoleRequired {
             get {
                 return ResourceManager.GetString("TimeTrackerRoleRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
             }
         }
         
