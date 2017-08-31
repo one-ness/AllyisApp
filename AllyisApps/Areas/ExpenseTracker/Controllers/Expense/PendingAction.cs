@@ -29,6 +29,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
 
+			if (subInfo.ProductRoleId != 2)
+			{
+				return RedirectToAction("Index");
+			}
+
 			var orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
 			int userId = GetCookieData().UserId;
 			IEnumerable<ExpenseReport> reports = AppService.GetExpenseReportByOrgId(orgId);

@@ -3,7 +3,8 @@
 @model ReportViewModel
 
 @{
-    DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/ExpenseTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
 }
 <div>
     <h2 class="pull-left">@Model.ReprortTitle</h2>
