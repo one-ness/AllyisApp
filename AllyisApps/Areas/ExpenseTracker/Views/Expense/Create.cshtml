@@ -171,6 +171,45 @@
 				});
 			});
 		}
+
+		function addItem() {
+			console.log('adding item');
+			$.ajax({
+				url: '@Url.Action("AddItem")',
+				data: $('form').serialize(),
+				success: function (response) {
+					$('.items').html(response);
+					setDatePickers();
+				}
+			});
+		}
+
+		function removeItem(index) {
+			console.log('removing item');
+
+			//var input = document.createElement('input');
+			//input.setAttribute('type', 'hidden');
+			//input.setAttribute('value', index);
+			//input.setAttribute('name', 'index');
+
+			@*var url = '@Url.Action("DeleteItem", new { index = -1 })';
+			url = url.replace('-1', index);*@
+
+			document.cookie = 'index=' + index;
+
+			var data = $('form').serialize();
+			
+			$.ajax({
+				type: 'POST',
+				url: '@Url.Action("DeleteItem")',
+				data: data,
+				success: function (response) {
+					$('.items').html(response);
+					setDatePickers();
+				}
+			});
+		}
+
 		setDatePickers();
 	</script>
 }

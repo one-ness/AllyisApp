@@ -76,14 +76,6 @@
 						</a>
 					</th>
 				</tr>
-
-				IList<ExpenseItem> subtractedModel = new List<ExpenseItem>();
-				foreach (ExpenseItem expenseItem in Model)
-				{
-					subtractedModel.Add(expenseItem);
-				}
-				subtractedModel.RemoveAt(i);
-				Session["Subtracted_" + i] = subtractedModel.ToArray();
 			}
 		</tbody>
 	</table>
@@ -92,40 +84,4 @@
 	   style="margin-right: 8px; margin-top: -12px;">
 		<span class="glyphicon glyphicon-plus"></span>
 	</a>
-
-	<script>
-	@{
-		IList<ExpenseItem> addedModel = new List<ExpenseItem>();
-		foreach (ExpenseItem expenseItem in Model)
-		{
-			addedModel.Add(expenseItem);
-		}
-		addedModel.Add(new ExpenseItem());
-		Session["AddedModel"] = addedModel.ToArray();
-	}
-	function addItem() {
-		console.log('adding item');
-		$.ajax({
-			url: '@Url.Action("AddItem")',
-			success: function (response) {
-				$('.items').html(response);
-					setDatePickers();
-				}
-			});
-	}
-
-	function removeItem(index) {
-		console.log('removing item');
-		var url = '@Url.Action("DeleteItem", new { index = -1 })';
-		url = url.replace('-1', index);
-		$.ajax({
-			url: url,
-			data: index,
-			success: function (response) {
-				$('.items').html(response);
-				setDatePickers();
-			}
-		});
-	}
-	</script>
 </div>

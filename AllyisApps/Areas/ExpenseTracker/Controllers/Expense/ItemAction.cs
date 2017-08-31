@@ -32,24 +32,31 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// Adds a new item to the model and displays the items in the create report view.
 		/// </summary>
+		/// <param name="items"></param>
 		/// <returns></returns>
-		public ActionResult AddItem()
+		public ActionResult AddItem(List<ExpenseItem> items)
 		{
+			if (items == null)
+			{
+				items = new List<ExpenseItem>();
+			}
 			Session["AccountList"] = AppService.GetAccounts();
-			var addedModel = Session["AddedModel"];
-			return PartialView("_AjaxExpenseReportItems", addedModel);
+			items.Add(new ExpenseItem());
+			return PartialView("_AjaxExpenseReportItems", items);
 		}
 
 		/// <summary>
 		/// Adds a new item to the model and displays the items in the create report view.
 		/// </summary>
+		/// <param name="items"></param>
 		/// <param name="index"></param>
 		/// <returns></returns>
-		public ActionResult DeleteItem(int index)
+		public ActionResult DeleteItem(List<ExpenseItem> items, int index = 0)
 		{
+			index = Int32.Parse(Request.Cookies["index"].Value);
 			Session["AccountList"] = AppService.GetAccounts();
-			var subtractedModel = Session["Subtracted_" + index];
-			return PartialView("_AjaxExpenseReportItems", subtractedModel);
+			items.RemoveAt(index);
+			return PartialView("_AjaxExpenseReportItems", items);
 		}
 	}
 }
