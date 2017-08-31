@@ -45,6 +45,7 @@
 				<tr id="@String.Format("item-input_{0}", item.Index)" class="item-div" style="margin: 10px; margin-bottom: 0px;">
 					<th>
 						@*<input type="hidden" name="@itemIdName" value="@item.ExpenseItemId" />*@
+						@Html.HiddenFor(m => m.ToList()[i].ToDelete, new { @id = "toDelete_" + i.ToString(), @class = "updatable" })
 						@Html.HiddenFor(m => m.ToList()[i].ExpenseItemId)
 						@Html.TextBoxFor(m => m.ToList()[i].TransactionDate, new { @class = "updatable datepicker form-control item-control", Value = dateVal, style = "display: inline-block; width: 150px" })
 						@Html.ValidationMessageFor(m => m.ToList()[i].TransactionDate)

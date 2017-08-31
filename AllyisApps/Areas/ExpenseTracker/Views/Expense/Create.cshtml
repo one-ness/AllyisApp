@@ -187,7 +187,7 @@
 		function removeItem(index) {
 			console.log('removing item');
 
-			document.cookie = 'index=' + index;
+			$('#toDelete_' + index).val('True');
 
 			var data = $('.updatable').serialize();
 			
