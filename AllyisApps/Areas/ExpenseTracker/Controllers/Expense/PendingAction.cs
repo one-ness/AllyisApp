@@ -24,14 +24,15 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>Returns an action result.</returns>
 		public ActionResult Pending(int subscriptionId)
 		{
-            UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
-            ViewBag.SubscriptionName = subInfo.SubscriptionName;
+            UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+            ViewBag.SubscriptionName = AppService.getSubscriptionName(subscriptionId);
+
             if (subInfo.ProductRoleId != 2)
             {
                 return RedirectToAction("Index");
             }
 
-            ViewBag.SubscriptionName = AppService.getSubscriptionName(subscriptionId);
+           
 			var orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
 			int userId = GetCookieData().UserId;
 			IEnumerable<ExpenseReport> reports = AppService.GetExpenseReportByOrgId(orgId);
