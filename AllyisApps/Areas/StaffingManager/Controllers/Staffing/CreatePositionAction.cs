@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		public ActionResult Create(int subscriptionId, int organizationId)
 		{
 			//var idAndCountries = AppService.GetNextCustId(subscriptionId);
-			string subscriptionNameToDisplay = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
+			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
 			return this.View(new CreatePositionViewModel
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
