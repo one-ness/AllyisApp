@@ -204,8 +204,7 @@
     <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseReportsViewModel.cs" />
-    <Compile Include="Areas\StaffingManager\Controllers\Position\CreateAction.cs" />
-    <Compile Include="Areas\StaffingManager\Controllers\Position\PositionController.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\CreatePositionAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\IndexAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\StaffingController.cs" />
     <Compile Include="Areas\StaffingManager\StaffingManagerAreaRegistration.cs" />
@@ -970,9 +969,7 @@
     <Content Include="Views\Shared\_Breadcrumbs.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Areas\StaffingManager\Controllers\Applicant\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
