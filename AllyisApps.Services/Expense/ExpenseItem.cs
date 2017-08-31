@@ -62,5 +62,10 @@ namespace AllyisApps.Services
 		/// Index of item in report
 		/// </summary>
 		public int Index { get; set; }
+
+		/// <summary>
+		/// Gets or sets whether to delete.
+		/// </summary>
+		public bool ToDelete { get; set; }
     }
 }

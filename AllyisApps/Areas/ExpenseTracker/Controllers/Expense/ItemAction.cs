@@ -49,13 +49,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// Adds a new item to the model and displays the items in the create report view.
 		/// </summary>
 		/// <param name="items"></param>
-		/// <param name="index"></param>
 		/// <returns></returns>
-		public ActionResult DeleteItem(List<ExpenseItem> items, int index = 0)
+		public ActionResult DeleteItem(List<ExpenseItem> items)
 		{
-			index = Int32.Parse(Request.Cookies["index"].Value);
+			items.Remove(items.Where(i => i.ToDelete).FirstOrDefault());
 			Session["AccountList"] = AppService.GetAccounts();
-			items.RemoveAt(index);
 			return PartialView("_AjaxExpenseReportItems", items);
 		}
 	}
