@@ -33,7 +33,7 @@
 				}
 				if (item.Amount != 0)
 				{
-					amountVal = item.Amount.ToString();
+					amountVal = String.Format("{0:0.00}", item.Amount);
 				}
 				string itemIdName = String.Format("[{0}].ExpenseItemId", item.Index);
 				string accountName = String.Format("[{0}].AccountId", item.Index);
@@ -42,30 +42,29 @@
 				var selected = selection.Count() == 0 ? accountList.First() : selection.First();
 				var selectList = new SelectList(accountList, "AccountId", "AccountName", selected.AccountId);
 
-
 				<tr id="@String.Format("item-input_{0}", item.Index)" class="item-div" style="margin: 10px; margin-bottom: 0px;">
 					<th>
 						@*<input type="hidden" name="@itemIdName" value="@item.ExpenseItemId" />*@
 						@Html.HiddenFor(m => m.ToList()[i].ExpenseItemId)
-						@Html.TextBoxFor(m => m.ToList()[i].TransactionDate, new { @class = "datepicker form-control item-control", Value = dateVal, style = "display: inline-block; width: 150px" })
+						@Html.TextBoxFor(m => m.ToList()[i].TransactionDate, new { @class = "updatable datepicker form-control item-control", Value = dateVal, style = "display: inline-block; width: 150px" })
 						@Html.ValidationMessageFor(m => m.ToList()[i].TransactionDate)
 					</th>
 					<th>
 						<div class="amount-div form-control item-control" style="display: inline-block; width: 150px;">
 							$
-							@Html.TextBoxFor(m => m.ToList()[i].Amount, new { @class = "amount-textbox", Value = amountVal, style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px; margin-bottom: 6px;" })
+							@Html.TextBoxFor(m => m.ToList()[i].Amount, new { @class = "updatable amount-textbox", Value = amountVal, style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px; margin-bottom: 6px;" })
 							@Html.ValidationMessageFor(m => m.ToList()[i].Amount)
 						</div>
 					</th>
 					<th>
-						@Html.TextBoxFor(m => m.ToList()[i].ItemDescription, new { @class = "form-control item-control", Value = item.ItemDescription, style = "display: inline-block; width: 300px" })
+						@Html.TextBoxFor(m => m.ToList()[i].ItemDescription, new { @class = "updatable form-control item-control", Value = item.ItemDescription, style = "display: inline-block; width: 300px" })
 						@Html.ValidationMessageFor(m => m.ToList()[i].ItemDescription)
 					</th>
 					<th>
-						@Html.DropDownListFor(m => m.ToList()[i].AccountId, selectList, new { @class = "form-control item-control", name = accountName, style = "display: inline-block; width: 150px", Value = item.AccountId })
+						@Html.DropDownListFor(m => m.ToList()[i].AccountId, selectList, new { @class = "updatable form-control item-control", name = accountName, style = "display: inline-block; width: 150px", Value = item.AccountId })
 					</th>
 					<th>
-						@Html.CheckBoxFor(m => m.ToList()[i].IsBillableToCustomer, new { @class = "form-control item-control check-off", style = "width: 14px; height: 14px; display: inline-block; margin: 10px; vertical-align: middle;" })
+						@Html.CheckBoxFor(m => m.ToList()[i].IsBillableToCustomer, new { @class = "updatable form-control item-control check-off", style = "width: 14px; height: 14px; display: inline-block; margin: 10px; vertical-align: middle;" })
 					</th>
 					<th>
 						<a class="btn btn-danger btn-fa hidden-create"

@@ -30,6 +30,7 @@ namespace AllyisApps.Services
 		/// The amount of the expense
 		/// </summary>
 		[Required(ErrorMessage = "Amount is required.")]
+		[DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
 		public decimal Amount { get; set; }
 
 		/// <summary>

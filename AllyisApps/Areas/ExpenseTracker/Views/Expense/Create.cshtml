@@ -176,7 +176,7 @@
 			console.log('adding item');
 			$.ajax({
 				url: '@Url.Action("AddItem")',
-				data: $('form').serialize(),
+				data: $('.updatable').serialize(),
 				success: function (response) {
 					$('.items').html(response);
 					setDatePickers();
@@ -187,17 +187,9 @@
 		function removeItem(index) {
 			console.log('removing item');
 
-			//var input = document.createElement('input');
-			//input.setAttribute('type', 'hidden');
-			//input.setAttribute('value', index);
-			//input.setAttribute('name', 'index');
-
-			@*var url = '@Url.Action("DeleteItem", new { index = -1 })';
-			url = url.replace('-1', index);*@
-
 			document.cookie = 'index=' + index;
 
-			var data = $('form').serialize();
+			var data = $('.updatable').serialize();
 			
 			$.ajax({
 				type: 'POST',
