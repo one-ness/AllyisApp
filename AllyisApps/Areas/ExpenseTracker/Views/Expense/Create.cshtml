@@ -150,6 +150,7 @@
 			$.ajax({
 				url: '@Url.Action("DisplayFile")',
 				data: data,
+				type: 'POST',
 				success: function (response) {
 					$('.files').append(response);
 				}
@@ -174,9 +175,14 @@
 
 		function addItem() {
 			console.log('adding item');
+
+			var data = $('.updatable').serialize();
+			console.log('Data:\n\n' + data + '\n\n');
+
 			$.ajax({
 				url: '@Url.Action("AddItem")',
-				data: $('.updatable').serialize(),
+				type: 'POST',
+				data: data,
 				success: function (response) {
 					$('.items').html(response);
 					setDatePickers();
@@ -190,6 +196,7 @@
 			$('#toDelete_' + index).val('True');
 
 			var data = $('.updatable').serialize();
+			console.log('Data:\n\n' + data + '\n\n');
 			
 			$.ajax({
 				type: 'POST',
