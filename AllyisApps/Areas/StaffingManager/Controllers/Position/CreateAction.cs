@@ -18,7 +18,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 	/// <summary>
 	/// Represents pages for the management of a position.
 	/// </summary>
-	public partial class StaffingController : BaseController
+	public partial class PositionController : BaseController
 	{
 		/// <summary>
 		/// GET: Position/Create.
