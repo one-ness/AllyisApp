@@ -26,7 +26,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>Returns an action result.</returns>
 		public ActionResult Create(int subscriptionId, int reportId = -1, int itemCount = 0, int fileCount = 0)
 		{
-			
+            UserContext.SubscriptionAndRole subInfo = null;
+            AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			ViewBag.SubscriptionName = AppService.getSubscriptionName(subscriptionId);
 
 			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
