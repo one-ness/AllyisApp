@@ -46,9 +46,7 @@ namespace AllyisApps.Controllers
         /// <returns></returns>
         public AccountIndexViewModel ConstuctIndexViewModel()
         {
-            int? userID = AppService.UserContext?.UserId;
-
-            UserAccount accountInfo = AppService.GetUser(userID);
+            UserAccount accountInfo = AppService.GetCurrentUser();
 
 
             AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel(accountInfo?.userInfo);

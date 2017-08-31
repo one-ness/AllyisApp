@@ -113,9 +113,19 @@ namespace AllyisApps.Services
 		public DateTime UserCreatedUtc { get; set; }
 
 		/// <summary>
-		/// organizations the user is member of
+		/// list of organizations the user is member of
 		/// </summary>
 		public List<UserOrganization> Organizations { get; set; }
+
+		/// <summary>
+		/// list of subscriptions the user is a member of
+		/// </summary>
+		public List<UserSubscription> Subscriptions { get; set; }
+
+		/// <summary>
+		/// list of invitations pending for the user
+		/// </summary>
+		public List<Invitation> Invitations { get; set; }
 
 		/// <summary>
 		/// constructor
@@ -123,6 +133,9 @@ namespace AllyisApps.Services
 		public User()
 		{
 			this.Address = new Address();
+			this.Organizations = new List<UserOrganization>();
+			this.Subscriptions = new List<UserSubscription>();
+			this.Invitations = new List<Invitation>();
 		}
 	}
 }

@@ -97,22 +97,21 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-        /// 
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns>User infomation,Organizations,Subscripltions,  </returns>
-		public Tuple<dynamic,IEnumerable<dynamic>,IEnumerable<dynamic>, IEnumerable<dynamic>> GetUser(int userId)
+		/// Get user from the db
+		/// </summary>
+		public dynamic GetUser(int userId)
 		{
+			dynamic result = new ExpandoObject();
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-                var res = con.QueryMultiple("Auth.GetUser @a", new { a = userId });
-                return new Tuple<dynamic, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>>(
-                    res.Read().FirstOrDefault(),//User
-                    res.Read(), //Organizions
-                    res.Read(),//Subscritions
-                    res.Read()//Invitations
-                    );
+				var res = con.QueryMultiple("Auth.GetUser @a", new { a = userId });
+				result.User = res.Read().FirstOrDefault();
+				result.Organizations = res.Read().ToList();
+				result.Subscriptions = res.Read().ToList();
+				result.Invitations = res.Read().ToList();
 			}
+
+			return result;
 		}
 
 		/// <summary>
@@ -571,7 +570,7 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		
+
 
 		/// <summary>
 		/// Adds an Invitation to the invitations table and invitation sub roles table.
@@ -638,7 +637,7 @@ namespace AllyisApps.DBModel
 				}
 			}
 		}
-       
+
 
 		/// <summary>
 		/// Removes a user invitation and related invitation sub roles.
@@ -652,7 +651,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				int success = connection.Execute(
-                    "[Auth].[DeleteInvitation]",
+					"[Auth].[DeleteInvitation]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 				return success == 1;
@@ -852,7 +851,7 @@ namespace AllyisApps.DBModel
 			return result;
 		}
 
-		
+
 
 		/// <summary>
 		/// Returns an OrganizationDBEntity for the given organization, along with a list of OrganizationUserDBEntities for the organization users
@@ -870,12 +869,12 @@ namespace AllyisApps.DBModel
 					"[Auth].[GetOrgManagementInfo]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
-                return Tuple.Create(
-                    results.Read<dynamic>().SingleOrDefault(),
-                    results.Read<OrganizationUserDBEntity>().ToList(),
-                    results.Read<SubscriptionDisplayDBEntity>().ToList(),
-                    results.Read<InvitationDBEntity>().ToList(),
-                    results.Read<string>().SingleOrDefault());
+				return Tuple.Create(
+					results.Read<dynamic>().SingleOrDefault(),
+					results.Read<OrganizationUserDBEntity>().ToList(),
+					results.Read<SubscriptionDisplayDBEntity>().ToList(),
+					results.Read<InvitationDBEntity>().ToList(),
+					results.Read<string>().SingleOrDefault());
 			}
 		}
 
