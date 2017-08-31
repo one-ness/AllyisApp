@@ -53,6 +53,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns></returns>
 		public ActionResult DeleteItem(List<ExpenseItem> items, int index = 0)
 		{
+			index = Int32.Parse(Request.Cookies["index"].Value);
 			Session["AccountList"] = AppService.GetAccounts();
 			items.RemoveAt(index);
 			return PartialView("_AjaxExpenseReportItems", items);

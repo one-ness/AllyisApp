@@ -174,7 +174,6 @@
 
 		function addItem() {
 			console.log('adding item');
-			console.log($('form').serialize());
 			$.ajax({
 				url: '@Url.Action("AddItem")',
 				data: $('form').serialize(),
@@ -187,14 +186,22 @@
 
 		function removeItem(index) {
 			console.log('removing item');
+
+			//var input = document.createElement('input');
+			//input.setAttribute('type', 'hidden');
+			//input.setAttribute('value', index);
+			//input.setAttribute('name', 'index');
+
+			@*var url = '@Url.Action("DeleteItem", new { index = -1 })';
+			url = url.replace('-1', index);*@
+
+			document.cookie = 'index=' + index;
+
 			var data = $('form').serialize();
-			var url = '@Url.Action("DeleteItem", new { index = -1 })';
-			url = url.replace('-1', index);
-			var url = '@Url.Action("DeleteItem")';
-			console.log(url);
+			
 			$.ajax({
 				type: 'POST',
-				url: url,
+				url: '@Url.Action("DeleteItem")',
 				data: data,
 				success: function (response) {
 					$('.items').html(response);
