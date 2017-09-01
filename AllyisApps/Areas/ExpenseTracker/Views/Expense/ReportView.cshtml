@@ -137,7 +137,7 @@
             <tr>
                 <th style="width: 15%">Reviewer</th>
                 <th style="width: 15%">Status</th>
-                <th style="width: 15%">Submitted</th>
+                <th style="width: 15%">Reviewed</th>
                 <th style="width: 55%">Reason</th>
             </tr>
         </thead>
@@ -147,7 +147,7 @@
                 <tr>
                     <td>@history.Reviewer</td>
                     <td>@history.Status</td>
-                    <td>@history.Submitted</td>
+                    <td>@String.Format("{0:MM-dd-yyyy}", @history.Submitted)</td>
                     <td>@history.Text</td>
                 </tr>
             }
