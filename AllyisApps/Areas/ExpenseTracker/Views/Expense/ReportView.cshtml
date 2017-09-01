@@ -117,7 +117,7 @@
                 @foreach (var attch in Model.Attachments)
                 {
                     <tr>
-                        <td>@Html.ActionLink(attch,"download", new { reportId = Model.ReportId, fileName = attch }, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" })</td>
+                        <td>@Html.ActionLink(attch,"download", new { reportId = Model.ReportId, fileName = attch }, htmlAttributes: new { @class = "form-inline col-xs-12", })</td>
                     </tr>
                 }
                 
