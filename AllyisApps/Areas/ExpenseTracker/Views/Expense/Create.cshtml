@@ -34,10 +34,6 @@
 					HttpPostedFileBase file = new ExpenseFile(tup.Item1, tup.Item2, tup.Item3);
 					Model.Files.Add(file);
 				}
-				if (Model.Files.Count < 1)
-				{
-					Model.Files.Add(new ExpenseFile(null, "", ""));
-				}
 				for (int i = 0; i < Model.Files.Count; i++)
 				{
 					var file = new ExpenseFileModel()
@@ -45,10 +41,24 @@
 						FileName = Model.Files[i].FileName,
 						ContentType = Model.Files[i].ContentType,
 						Stream = Model.Files[i].InputStream,
-						Index = i
+						Index = i,
+						ReportId = Model.Report.ExpenseReportId
 					};
 					fileIndex += 1;
-					Html.RenderAction("DisplayFile", file);
+					Html.RenderAction("DisplayFileLink", file);
+				}
+				if (Model.Files.Count < 1)
+				{
+					var file = new ExpenseFile(null, "", "");
+					var model = new ExpenseFileModel()
+					{
+						FileName = file.FileName,
+						ContentType = file.ContentType,
+						Stream = file.InputStream,
+						Index = fileIndex
+					};
+					fileIndex += 1;
+					Html.RenderAction("DisplayFile", model);
 				}
 			}
 		</div>
@@ -65,7 +75,7 @@
 				Text = v.ToString(),
 				Value = ((int)v).ToString()
 			}).ToList();
-				
+
 			int reportId = Model.Report == null ? -1 : Model.Report.ExpenseReportId;
 			if (Model.Report == null)
 			{

@@ -24,6 +24,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>Returns an action result.</returns>
 		public ActionResult Pending(int subscriptionId)
 		{
+			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Pending, subscriptionId);
 			UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
 			ViewBag.SubscriptionName = subInfo.SubscriptionName;
 

@@ -1,0 +1,26 @@
+﻿@using AllyisApps.Services.Expense
+@using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
+@using AllyisApps.Lib;
+
+@model ExpenseFileModel
+<div class="file-input" id="@String.Format("file-input_{0}", Model.Index)" style="margin: 10px; margin-bottom: 0px;">
+	<div style="display: inline-block;">
+		@{
+			string className = String.Format("file_{0}", Model.Index);
+			string uploadName = String.Format("Files[{0}].FileName", Model.Index);
+			string uploadFunc = String.Format("$('input[class={0}]').click();", className);
+			string inputName = String.Format("upload-file-name-display_{0}", Model.Index);
+			string previousName = String.Format("Files[{0}].PreviousName", Model.Index);
+			HttpPostedFileBase file = new ExpenseFile(Model.Stream, Model.ContentType, Model.FileName);
+		}
+		<input type="hidden" value="@Model.FileName" name="previousFiles" id="@previousName" />
+		@Html.ActionLink(Model.FileName, "download", new { reportId = Model.ReportId, fileName = Model.FileName }, htmlAttributes: new { @class = "btn btn-default form-inline col-xs-12", @style = "margin-bottom: -6px;" })
+	</div>
+	<div class="file-right" style="float: right;">
+		<a class="btn btn-danger btn-fa hidden-create"
+		   onclick="removeFile(@Model.Index)"
+		   style="color: white !important; float: right; width: 34px; border-color: #d43f3a !important; border-radius: 0px; margin-right: 0px; margin-bottom: -4px; display: inline-block">
+			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+		</a>
+	</div>
+</div>

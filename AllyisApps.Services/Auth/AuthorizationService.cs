@@ -48,7 +48,8 @@ namespace AllyisApps.Services
 			EditReport,
 			AdminReport,
             AdminExpense,
-            StatusUpdate
+            StatusUpdate,
+			Pending
         }
 
 		/// <summary>
@@ -179,7 +180,10 @@ namespace AllyisApps.Services
 				ExpenseTrackerRole etRole = (ExpenseTrackerRole)subInfo.ProductRoleId;
 				if (subInfo.ProductId == ProductIdEnum.ExpenseTracker && etRole != ExpenseTrackerRole.NotInProduct)
 				{
-					if (action == ExpenseTrackerAction.AdminReport || action == ExpenseTrackerAction.StatusUpdate || action == ExpenseTrackerAction.AdminExpense)
+					if (action == ExpenseTrackerAction.AdminReport 
+						|| action == ExpenseTrackerAction.StatusUpdate 
+						|| action == ExpenseTrackerAction.AdminExpense 
+						|| action == ExpenseTrackerAction.Pending)
 					{
 						switch (etRole)
 						{
