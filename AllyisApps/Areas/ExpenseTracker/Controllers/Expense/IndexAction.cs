@@ -24,10 +24,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             int userId = GetCookieData().UserId;
 
             UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
+			
+			var items = AppService.GetExpenseReportBySubmittedId(userId).Select(x => x).Where(y => y.OrganizationId == subInfo.OrganizationId);
 
-            var items = AppService.GetExpenseReportBySubmittedId(userId).Select(x => x).Where(y => y.OrganizationId == subInfo.OrganizationId);
-
-            ViewBag.SubscriptionName = subInfo.SubscriptionName;
+			ViewBag.SubscriptionName = subInfo.SubscriptionName;
 
 			ViewData["SubscriptionId"] = subInfo.SubscriptionId;
 
