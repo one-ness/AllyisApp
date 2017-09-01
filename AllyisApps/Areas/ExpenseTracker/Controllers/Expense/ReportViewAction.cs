@@ -41,6 +41,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		{
 			UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
 			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
+			ViewData["SubscriptionId"] = subscriptionId;
 
 			var report = AppService.GetExpenseReport(id);
             var reportItems = AppService.GetExpenseItemsByReportId(id);
