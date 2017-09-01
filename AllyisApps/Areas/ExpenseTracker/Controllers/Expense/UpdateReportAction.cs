@@ -30,8 +30,28 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="previousFiles"></param>
 		/// <param name="items"></param>
 		/// <returns></returns>
+		[HttpPost]
 		public ActionResult UpdateReport(ExpenseCreateModel model, int subscriptionId, int submittedById, int reportId, string submitType, IEnumerable<HttpPostedFileBase> files = null, IEnumerable<string> previousFiles = null, List<ExpenseItem> items = null)
 		{
+			var oldReport = AppService.GetExpenseReport(reportId);
+			var userInfo = GetCookieData();
+			if (reportId != -1)
+			{
+				if (oldReport.SubmittedById != userInfo.UserId
+					|| ((ExpenseStatusEnum)oldReport.ReportStatus != ExpenseStatusEnum.Draft
+					&& (ExpenseStatusEnum)oldReport.ReportStatus != ExpenseStatusEnum.Rejected))
+				{
+					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.UpdateReport.ToString());
+					throw new AccessViolationException(message);
+				}
+				AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.EditReport, subscriptionId);
+			}
+			else
+			{
+				AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
+			}
+
+
 			if (items == null)
 			{
 				items = new List<ExpenseItem>();
@@ -50,8 +70,6 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				reportStatus = ExpenseStatusEnum.Draft;
 			}
-
-			var oldReport = AppService.GetExpenseReport(reportId);
 
 			if (oldReport.ReportStatus == (int)ExpenseStatusEnum.Draft || oldReport.ReportStatus == (int)ExpenseStatusEnum.Rejected)
 			{

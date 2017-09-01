@@ -49,7 +49,9 @@ namespace AllyisApps.Services
 			AdminReport,
             AdminExpense,
             StatusUpdate,
-			Pending
+			Pending,
+			UpdateReport,
+			CreateReport
         }
 
 		/// <summary>
@@ -188,17 +190,6 @@ namespace AllyisApps.Services
 						switch (etRole)
 						{
 							case ExpenseTrackerRole.Manager:
-								result = true;
-								break;
-							default:
-								break;
-						}
-					}
-					else if (action == ExpenseTrackerAction.EditReport)
-					{
-						switch (etRole)
-						{
-							case ExpenseTrackerRole.User:
 								result = true;
 								break;
 							default:

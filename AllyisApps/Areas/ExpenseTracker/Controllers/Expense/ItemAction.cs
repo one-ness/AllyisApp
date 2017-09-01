@@ -34,6 +34,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="items"></param>
 		/// <returns></returns>
+		[HttpPost]
 		public ActionResult AddItem(List<ExpenseItem> items)
 		{
 			if (items == null)
@@ -50,6 +51,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="items"></param>
 		/// <returns></returns>
+		[HttpPost]
 		public ActionResult DeleteItem(List<ExpenseItem> items)
 		{
 			items.Remove(items.Where(i => i.ToDelete).FirstOrDefault());
