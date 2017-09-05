@@ -508,7 +508,7 @@ namespace AllyisApps.Services
 			obj.Position.CustomerId = position.CustomerId;
 			obj.Position.AddressId = position.AddressId;
 			obj.Position.PositionStatusId = position.PositionStatusId;
-			obj.Position.ositionTitle = position.PositionTitle;
+			obj.Position.PositionTitle = position.PositionTitle;
 			obj.Position.DurationMonths = position.DurationMonths;
 			obj.Position.EmploymentTypeId = position.EmploymentTypeId;
 			obj.Position.PositionCount = position.PositionCount;
@@ -533,7 +533,8 @@ namespace AllyisApps.Services
 			obj.Address.PostalCode = position.Address.PostalCode;
 			obj.Address.CountryCode = position.Address.CountryCode;
 
-			obj.Tags = ServiceObjectToDBEntity(position.Tags);
+			if (position.Tags != null && position.Tags.Count != 0) obj.Tags = ServiceObjectToDBEntity(position.Tags);
+			else obj.Tags = new List<dynamic>();
 
 			return obj;
 		}

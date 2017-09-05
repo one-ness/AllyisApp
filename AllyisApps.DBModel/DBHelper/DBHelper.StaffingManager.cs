@@ -109,43 +109,47 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Creates a new position.
 		/// </summary>
-		/// <param name="position">The account object to be created.</param>
+		/// <param name="obj">The account object to be created.</param>
 		/// <returns>The id of the created position</returns>
-		public int SetupPosition(dynamic position)
+		public int SetupPosition(dynamic obj)
 		{
-			if (position == null)
+			if (obj == null)
 			{
 				throw new ArgumentException("Position cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", position.OrganizationId);
-			parameters.Add("@addressId", position.AddressId);
-			parameters.Add("@startDate", position.StartDate);
-			parameters.Add("@positionStatus", position.PositionStatusId);
-			parameters.Add("@positionTitle", position.PositionTitle);
-			parameters.Add("@billingRateFrequency", position.BillingRateFrequency);
-			parameters.Add("@billingRateAmount", position.BillingRateAmount);
-			parameters.Add("@durationMonths", position.DurationMonths);
-			parameters.Add("@employmentType", position.EmploymentTypeId);
-			parameters.Add("@positionCount", position.PositionCount);
-			parameters.Add("@requiredSkills", position.RequiredSkills);
-			parameters.Add("@jobResponsiblities", position.JobResponsibilities);
-			parameters.Add("@desiredSkills", position.DesiredSkills);
-			parameters.Add("@positionLevel", position.PositionLevelId);
-			parameters.Add("@hiringManager", position.HiringManager);
-			parameters.Add("@teamName", position.TeamName);
+			parameters.Add("@organizationId", obj.Position.OrganizationId);
+			parameters.Add("@addressId", obj.Position.AddressId);
+			parameters.Add("@startDate", obj.Position.StartDate);
+			parameters.Add("@positionStatus", obj.Position.PositionStatusId);
+			parameters.Add("@positionTitle", obj.Position.PositionTitle);
+			parameters.Add("@billingRateFrequency", obj.Position.BillingRateFrequency);
+			parameters.Add("@billingRateAmount", obj.Position.BillingRateAmount);
+			parameters.Add("@durationMonths", obj.Position.DurationMonths);
+			parameters.Add("@employmentType", obj.Position.EmploymentTypeId);
+			parameters.Add("@positionCount", obj.Position.PositionCount);
+			parameters.Add("@requiredSkills", obj.Position.RequiredSkills);
+			parameters.Add("@jobResponsiblities", obj.Position.JobResponsibilities);
+			parameters.Add("@desiredSkills", obj.Position.DesiredSkills);
+			parameters.Add("@positionLevel", obj.Position.PositionLevelId);
+			parameters.Add("@hiringManager", obj.Position.HiringManager);
+			parameters.Add("@teamName", obj.Position.TeamName);
 			
-			parameters.Add("@address1", position.Address.Address);
-			parameters.Add("@address2", position.Address.Address);
-			parameters.Add("@city", position.Address.City);
-			parameters.Add("@stateId", position.Address.StateId);
-			parameters.Add("@countryCode", position.Address.CountryCode);
-			parameters.Add("@postalCode", position.Address.PostalCode);
+			parameters.Add("@address1", obj.Address.Address1);
+			parameters.Add("@address2", obj.Address.Address2);
+			parameters.Add("@city", obj.Address.City);
+			parameters.Add("@stateId", obj.Address.StateId);
+			parameters.Add("@countryCode", obj.Address.CountryCode);
+			parameters.Add("@postalCode", obj.Address.PostalCode);
 
 			DataTable tagsTable = new DataTable();
 			tagsTable.Columns.Add("TagName", typeof(string));
-			foreach (dynamic tag in position.Tags) tagsTable.Rows.Add(tag.TagName);
+			if (obj.Tags != null && obj.Tags.Count != 0)
+			{
+				tagsTable.Columns.Add("TagName", typeof(string));
+				foreach (dynamic tag in obj.Tags) tagsTable.Rows.Add(tag.TagName);
+			}
 
 			parameters.Add("@tagsTable", tagsTable.AsTableValuedParameter("[Lookup].[UserTable]"));
 

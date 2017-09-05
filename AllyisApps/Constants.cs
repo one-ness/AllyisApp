@@ -89,6 +89,7 @@ namespace AllyisApps
 		public const string EditUsers = "editusers";
 		public const string EditPosition = "editposition";
 		public const string CreatePosition = "createposition";
+		public const string SubmitCreatePosition = "submitcreateposition";
 		public const string DeletePosition = "deleteposition";
 	}
 
@@ -108,8 +109,6 @@ namespace AllyisApps
 		public const string TimeEntry = "timeentry";
 		public const string Expense = "expense";
 		public const string Staffing = "staffing";
-		public const string Position = "position";
-		public const string Applicant = "applicant";
 	}
 
 	/// <summary>

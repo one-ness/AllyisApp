@@ -4,16 +4,17 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Services.StaffingManager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace AllyisApps.ViewModels.Staffing
+namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 {
 	/// <summary>
 	/// Represents a position for creation into the database.
 	/// </summary>
-	public class CreatePositionViewModel
+	public class EditPositionViewModel
 	{
 		/// <summary>
 		/// used to tell if editing or creating new position
@@ -24,6 +25,11 @@ namespace AllyisApps.ViewModels.Staffing
 		/// used to tell if editing or creating new position
 		/// </summary>
 		public string SubscriptionName { get; set; }
+
+		/// <summary>
+		/// used to tell if editing or creating new position
+		/// </summary>
+		public int SubscriptionId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the position's Id
@@ -126,6 +132,11 @@ namespace AllyisApps.ViewModels.Staffing
 		public string TeamName { get; set; }
 
 		/// <summary>
+		/// list of tag objects
+		/// </summary>
+		public List<Services.Lookup.Tag> Tags { get; set; }
+
+		/// <summary>
 		/// Gets or sets the Customer's address.
 		/// </summary>
 		[DataType(DataType.Text)]
@@ -178,5 +189,44 @@ namespace AllyisApps.ViewModels.Staffing
 		/// </summary>
 		public Dictionary<string, string> LocalizedCountries { get; set; }
 
+		/// <summary>
+		/// selected country code
+		/// </summary>
+		public string CustomerName { get; set; }
+
+		/// <summary>
+		/// selected country code
+		/// </summary>
+		public string CustomerContactEmail { get; set; }
+
+		/// <summary>
+		/// selected country code
+		/// </summary>
+		public string CustomerContactPhoneNumber { get; set; }
+
+		/// <summary>
+		/// selected country code
+		/// </summary>
+		public string CustomerFaxNumber { get; set; }
+
+		/// <summary>
+		/// selected country code
+		/// </summary>
+		public string CustomerEIN { get; set; }
+
+		/// <summary>
+		/// position levels available
+		/// </summary>
+		public List<PositionLevel> PositionLevels { get; set; }
+
+		/// <summary>
+		/// position statuses available
+		/// </summary>
+		public List<PositionStatus> PositionStatuses { get; set; }
+
+		/// <summary>
+		/// employment types available
+		/// </summary>
+		public List<EmploymentType> EmploymentTypes { get; set; }
 	}
 }

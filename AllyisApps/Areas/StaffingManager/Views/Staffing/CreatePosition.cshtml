@@ -1,7 +1,10 @@
-﻿@model AllyisApps.ViewModels.Staffing.CreatePositionViewModel
+﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.EditPositionViewModel
 @{
 	ViewBag.Title = Strings.CreatePosition;
 	Html.RenderPartial("_PositionEditDetails", Model);
+	Model.IsCreating = true;
+	ViewData.Add(ControllerConstants.Controller, ControllerConstants.Staffing);
+	ViewData.Add(ActionConstants.Action, ActionConstants.SubmitCreatePosition);
 }
 
 @section scripts
@@ -16,7 +19,16 @@
 		var selectedCountryCode = "@Model.SelectedCountryCode";
 		var selectedStateId = "@Model.SelectedStateId";
     </script>
+
+
+	<script type="text/javascript">
+			var mindate_shortstring = "@DateTime.MinValue.ToShortDateString()";
+			var maxdate_shortstring = "@DateTime.MaxValue.ToShortDateString()";
+			var model_startdate = @Model.StartDate;
+	</script>
+
+	@Scripts.Render("~/bundles/jqueryui");
+	@Scripts.Render("~/bundles/daterangepicker");
     @Scripts.Render("~/bundles/UpdateStateDDL");
-    @Scripts.Render("~/bundles/jqueryui");
     @Scripts.Render("~/bundles/moment");
 }

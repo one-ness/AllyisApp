@@ -89,9 +89,9 @@
 				<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#FilterArea">Filters</button>
 			</div>
 			<div id="FilterArea" class="collapse panel panel-default">
-				<div class="left">
+				<div class="left form-group">
 					<label>Filter by Position Status</label>
-					<select id="statusFilter" class="statusFilter">
+					<select id="statusFilter" class="statusFilter form-control">
 						<option value="">Any</option>
 						@foreach (var status in Model.positionStatuses)
 						{
@@ -99,9 +99,9 @@
 						}
 					</select>
 				</div>
-				<div class="left">
+				<div class="left form-group">
 					<label>Filter by Employment Type</label>
-					<select id="typesFilter" class="typesFilter">
+					<select id="typesFilter" class="typesFilter form-control">
 						<option value="">Any</option>
 						@foreach (var type in Model.employmentTypes)
 						{
@@ -109,9 +109,9 @@
 						}
 					</select>
 				</div>
-				<div class="left">
+				<div class="left form-group">
 					<label>Filter By Tags</label>
-					<select multiple id="tagsFilter" class="tagsFilter">
+					<select multiple id="tagsFilter" class="tagsFilter form-control">
 						@foreach (var tag in Model.tags)
 						{
 							<option value=@tag.TagName>@tag.TagName</option>
@@ -123,7 +123,7 @@
 				</div>
 			</div>
 			<div class="text-right">
-				<button class="btn btn-default" onclick="location.href='@Url.Action(ActionConstants.Create, ControllerConstants.Position, new { subscriptionId = Model.subscriptionId, organizationId = Model.organizationId})'">New Position</button>
+				<button class="btn btn-default" onclick="location.href='@Url.Action(ActionConstants.CreatePosition, ControllerConstants.Staffing, new { subscriptionId = Model.subscriptionId } )'">New Position</button>
 			</div>
 		</div>
 		<div>

@@ -47,6 +47,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			return this.View(model);
 		}
 
+		/*
 		/// <summary>
 		/// Index 
 		/// </summary>
@@ -79,6 +80,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				);
 			return this.View(model);
 		}
+		*/
 
 
 		/// <summary>

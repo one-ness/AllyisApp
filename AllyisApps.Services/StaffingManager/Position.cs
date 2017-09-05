@@ -179,7 +179,8 @@ namespace AllyisApps.Services.StaffingManager
 			get => tags;
 			set
 			{
-				if (value.Count > maxTags) throw new ArgumentOutOfRangeException(nameof(tags), value, "A position can only have a maximum of " + maxTags.ToString() + " tags");
+				if (value == null || value.Count == 0) tags = null;
+				else if (value.Count > maxTags) throw new ArgumentOutOfRangeException(nameof(tags), value, "A position can only have a maximum of " + maxTags.ToString() + " tags");
 				tags = value;
 			}
 		}
