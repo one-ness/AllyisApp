@@ -7,6 +7,10 @@
 	}
 }
 
+@section css {
+	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" href="~/Content/jquery.comiseo.daterangepicker.css" />
+}
 <div class="shrink-wrap-center">
 	<div>
 		@using (Html.BeginForm(action, ControllerConstants.Staffing, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form" }))
@@ -24,9 +28,8 @@
 					<div class="form-group">
 						<label>Start Date</label>
 						@Html.HiddenFor(m => m.StartDate)
-						@Html.TextBoxFor(m => m.StartDate, new { @class = "updatable datepicker form-control item-control", Value = Model.PositionCreatedUtc})
+						@Html.TextBoxFor(m => m.StartDate, new { @class = "updatable datepicker form-control item-control"})
 						<span class="fa fa-fw fa-calendar" id="datePickerBirth"></span>
-						@Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.TeamName, Strings.TeamName)
