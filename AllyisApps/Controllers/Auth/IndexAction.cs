@@ -46,10 +46,10 @@ namespace AllyisApps.Controllers
         /// <returns></returns>
         public AccountIndexViewModel ConstuctIndexViewModel()
         {
-            UserAccount accountInfo = AppService.GetCurrentUser();
+            User accountInfo = AppService.GetCurrentUser();
 
 
-            AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel(accountInfo?.userInfo);
+            AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel(accountInfo);
             AccountIndexViewModel indexViewModel = new AccountIndexViewModel()
             {
                 UserInfo = userViewModel
@@ -62,15 +62,15 @@ namespace AllyisApps.Controllers
 
             //Add invitations to view model
 
-            var invitationslist = accountInfo.InviatationInfoWithName;
+            var invitationslist = accountInfo.Invitations;
             foreach (var inviteInfo in invitationslist)
             {
-                var invite = inviteInfo.Item1;
+                var invite = inviteInfo.invite;
 
                 indexViewModel.Invitations.Add(new AccountIndexViewModel.InvitationViewModel()
                 {
                     InvitationId = invite.InvitationId,
-                    OrganizationName = inviteInfo.Item2,
+                    OrganizationName = inviteInfo.invitingOrgName,
                 });
             }
 
@@ -79,29 +79,29 @@ namespace AllyisApps.Controllers
             foreach (var curorg in orgs)
             {
                 AccountIndexViewModel.OrganizationViewModel orgViewModel =
-                new AccountIndexViewModel.OrganizationViewModel(curorg.organization,
-                    this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.organization.OrganizationId, curorg.role, false));
+                new AccountIndexViewModel.OrganizationViewModel(curorg.Organization,
+                    this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.Organization.OrganizationId, curorg.OrganizationRole, false));
 
                
                 //Add subscription info
-                foreach (UserSubscription userSubInfo in curorg.OrganizationSubscriptions)
+                foreach (UserSubscription userSubInfo in accountInfo.Subscriptions.Where(sub => sub.Subscription.OrganizationId == curorg.Organization.OrganizationId))
                 {
                     string description =
-                        userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
-                        userSubInfo.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
+                        userSubInfo.Subscription.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
+                        userSubInfo.Subscription.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
                         "";
                     var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel(userSubInfo, description);
-                    if (userSubInfo.ProductId == ProductIdEnum.TimeTracker)
+                    if (userSubInfo.Subscription.ProductId == ProductIdEnum.TimeTracker)
                     {
                         int? sDate = null;
                         int? eDate = null;
-                        int startOfWeek = AppService.GetAllSettings(userSubInfo.SubscriptionId).Item1.StartOfWeek;
+                        int startOfWeek = AppService.GetAllSettings(userSubInfo.Subscription.SubscriptionId).Item1.StartOfWeek;
                         sDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
                         eDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
                         subViewModel.ProductGoToUrl = Url.RouteUrl("TimeTracker_NoUserId", new
                         {
                             subscriptionId =
-                            userSubInfo.SubscriptionId,
+                            userSubInfo.Subscription.SubscriptionId,
                             controller = ControllerConstants.TimeEntry,
                             startDate = sDate,
                             endDate = eDate
@@ -109,7 +109,7 @@ namespace AllyisApps.Controllers
                     }
                     else
                     {
-                        subViewModel.ProductGoToUrl = userSubInfo.AreaUrl;
+                        subViewModel.ProductGoToUrl = userSubInfo.Subscription.AreaUrl;
                     }
                     subViewModel.IconUrl = string.Format("Content/icons/{0}.png", subViewModel.ProductName.Replace(" ", ""));
                     orgViewModel.Subscriptions.Add(subViewModel);

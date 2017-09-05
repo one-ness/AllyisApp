@@ -11,6 +11,7 @@ namespace AllyisApps.Services
 	/// </summary>
 	public class Invitation
 	{
-
+		public string invitingOrgName { get; set; }
+		public InvitationInfo invite;
 	}
 }

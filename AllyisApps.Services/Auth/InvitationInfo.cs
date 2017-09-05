@@ -58,6 +58,9 @@ namespace AllyisApps.Services
 		/// </summary>
 		public string EmployeeId { get; set; }
 
+		/// <summary>
+		/// Date that user had accepted or rejected the invitation.
+		/// </summary>
         public DateTime DecisionDate { get; set; }
 
         public InvitationStatusEnum status { get; set; }

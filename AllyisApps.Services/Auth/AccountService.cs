@@ -342,24 +342,76 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// get the current logged in user
 		/// </summary>
-		public UserAccount GetCurrentUser()
+		public User GetCurrentUser()
 		{
 			// TODO: this should return User object
 			return this.GetUser(this.UserContext.UserId);
 		}
 
 		/// <summary>
-		/// Get User Address, Organizaiontins 
+		/// Get User Address, Organizaiontins, and Inviations
 		/// </summary>
-		public UserAccount GetUser(int userId)
+		public User GetUser(int userId)
 		{
 			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
 
 			dynamic infos = this.DBHelper.GetUser(userId);
 			// TODO: return User object from this method
 			// copy infos in to User object
-			UserAccount account = new UserAccount(infos.Item1, infos.Item2, infos.Item3, infos.Item4);
-			return account;
+			User userInfo = AppService.InitializeUser(infos.User);
+
+			IEnumerable<dynamic> Organizations = infos.Organizations;
+
+			IEnumerable<dynamic> Subscriptions = infos.Subscriptions;
+
+			userInfo.Subscriptions = Subscriptions.Select(sub =>
+				new UserSubscription()
+				{
+					Subscription = new Subscription()
+					{
+						AreaUrl = sub.AreaUrl,
+						OrganizationId = sub.OrganizationId,
+						ProductId = (ProductIdEnum)sub.ProductId,
+						ProductName = sub.ProductName,
+						SkuId = (SkuIdEnum)sub.SkuId,
+						SubscriptionId = sub.SubscriptionId,
+						SubscriptionName = sub.SubscriptionName
+					},
+					ProductRoleId = sub.ProductRoleId,
+					UserId = userId
+				}
+			).ToList();
+
+			userInfo.Organizations = Organizations.Select(
+				org =>
+					new UserOrganization()
+					{
+						Organization = InitializeOrganization(org),
+						OrganizationRole = (OrganizationRole)org.OrganizationRoleId,
+						UserId = userId,
+					}
+			).ToList();
+
+			IEnumerable<dynamic> Invitations = infos.Invitations;
+			userInfo.Invitations = Invitations.Select(
+				inv =>
+					new Invitation()
+					{
+						invite = new InvitationInfo()
+						{
+							//CompressedEmail = AppService.GetCompressedEmail(inv.Email),
+							Email = inv.Email,
+							EmployeeId = inv.EmployeeId,
+							FirstName = inv.FirstName,
+							LastName = inv.LastName,
+							InvitationId = inv.InvitationId,
+							OrganizationId = inv.OrganizationId,
+							OrganizationRole = (OrganizationRole)inv.OrganizationRoleId,
+						},
+						invitingOrgName = inv.OrganizationName
+					}
+				).ToList();
+			return userInfo;
 		}
 
 		/// <summary>
@@ -507,8 +559,8 @@ namespace AllyisApps.Services
 			int result = 0;
 			await Task.Run(() =>
 			{
-			// update password for user and reset password code to null
-			result = this.DBHelper.UpdateUserPasswordUsingCode(Crypto.GetPasswordHash(password), code);
+				// update password for user and reset password code to null
+				result = this.DBHelper.UpdateUserPasswordUsingCode(Crypto.GetPasswordHash(password), code);
 			});
 
 			return result;
