@@ -202,6 +202,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AdminReportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AttachmentDownloadController.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\PendingAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateAction.cs" />
@@ -211,6 +212,9 @@
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ItemAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\EditAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ReportViewAction.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ViewAdminReport.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\AdminReportModel.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseDataExportViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpensePendingModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseCreateModel.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\IndexAction.cs" />
@@ -556,6 +560,7 @@
     <Content Include="Areas\ExpenseTracker\Views\Expense\Pending.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\_AjaxPendingEntries.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\_AjaxExpenseReportFileLink.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\Expense\AdminReport.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
@@ -980,9 +985,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\ExpenseTracker\Views\AdminAction\" />
+    <Folder Include="Areas\ExpenseTracker\Views\AdminReportAction\" />
     <Folder Include="Areas\ExpenseTracker\Views\Admin\" />
     <Folder Include="Areas\ExpenseTracker\Views\AttachmentDownload\" />
     <Folder Include="Areas\ExpenseTracker\Views\ReportAdmin\" />
+    <Folder Include="Areas\ExpenseTracker\Views\ViewAdminReport\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

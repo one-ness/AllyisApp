@@ -507,6 +507,47 @@ namespace AllyisApps.Services
 			return output;
 		}
 
+        public StreamWriter PrepareExpenseCSVExport(int orgId, IEnumerable<ExpenseReport> reports, DateTime startDate, DateTime endDate)
+        {
+            
+
+            StreamWriter output = new StreamWriter(new MemoryStream());
+
+            output.WriteLine(
+                string.Format(
+                    "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\"",
+                    "Expense Report Id",
+                    "Report Title",
+                    "Organization Id",
+                    "Submitted By",
+                    "Report Status",
+                    "Created On",
+                    "Modified On",
+                    "Submitted On"
+                ));
+
+            foreach (ExpenseReport report in reports)
+            {
+                output.WriteLine(
+                    string.Format(
+                        "\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\"",
+                        report.ExpenseReportId,
+                        report.ReportTitle,
+                        report.OrganizationId,
+                        report.SubmittedById,
+                        report.ReportStatus,
+                        report.CreatedUtc,
+                        report.ModifiedUtc,
+                        report.SubmittedUtc
+                        ));
+            }
+
+            output.Flush();
+            output.BaseStream.Seek(0, SeekOrigin.Begin);
+
+            return output;
+        }
+
 		/// <summary>
 		/// Updates the lock date setttings.
 		/// </summary>
