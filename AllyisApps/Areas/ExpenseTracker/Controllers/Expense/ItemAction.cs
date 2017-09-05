@@ -23,7 +23,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="data"></param>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		public ActionResult DisplayItem(ExpenseItem[] data, IEnumerable<ExpenseItem> model)
+		public ActionResult DisplayItem(ExpenseItem[] data, ExpenseCreateModel model)
 		{
 			Session["AccountList"] = AppService.GetAccounts();
 			return PartialView("_AjaxExpenseReportItems", model);
@@ -32,31 +32,31 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// Adds a new item to the model and displays the items in the create report view.
 		/// </summary>
-		/// <param name="items"></param>
+		/// <param name="model"></param>
 		/// <returns></returns>
 		[HttpPost]
-		public ActionResult AddItem(List<ExpenseItem> items)
+		public ActionResult AddItem(ExpenseCreateModel model)
 		{
-			if (items == null)
+			if (model.Items == null)
 			{
-				items = new List<ExpenseItem>();
+				model.Items = new List<ExpenseItem>();
 			}
 			Session["AccountList"] = AppService.GetAccounts();
-			items.Add(new ExpenseItem());
-			return PartialView("_AjaxExpenseReportItems", items);
+			model.Items.Add(new ExpenseItem());
+			return PartialView("_AjaxExpenseReportItems", model);
 		}
 
 		/// <summary>
 		/// Adds a new item to the model and displays the items in the create report view.
 		/// </summary>
-		/// <param name="items"></param>
+		/// <param name="model"></param>
 		/// <returns></returns>
 		[HttpPost]
-		public ActionResult DeleteItem(List<ExpenseItem> items)
+		public ActionResult DeleteItem(ExpenseCreateModel model)
 		{
-			items.Remove(items.Where(i => i.ToDelete).FirstOrDefault());
+			model.Items.Remove(model.Items.Where(i => i.ToDelete).FirstOrDefault());
 			Session["AccountList"] = AppService.GetAccounts();
-			return PartialView("_AjaxExpenseReportItems", items);
+			return PartialView("_AjaxExpenseReportItems", model);
 		}
 	}
 }

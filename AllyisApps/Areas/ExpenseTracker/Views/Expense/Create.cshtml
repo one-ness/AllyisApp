@@ -17,7 +17,7 @@
 }
 @Scripts.Render("~/bundles/jquery")
 
-@using (Html.BeginForm(submitAction, ControllerConstants.Expense, FormMethod.Post, htmlAttributes: new { @id = "reportForm", enctype = "multipart/form-data", onsubmit = "validateForm(event);" }))
+@using (Html.BeginForm(submitAction, ControllerConstants.Expense, FormMethod.Post, htmlAttributes: new { @id = "reportForm", enctype = "multipart/form-data" }))
 {
 	<div class="panel panel-info" style="background-color: #f5f5f5; float: right; width: 380px; position: relative; z-index: 10">
 		<div class="panel-heading"><span class="panel-title">Attachments</span></div>
@@ -83,10 +83,9 @@
 				Model.Items = new List<ExpenseItem>();
 			}
 		}
-		<input type="hidden" name="reportId" value="@reportId" />
-		<input type="hidden" name="accountId" value="@Model.CurrentUser" />
-		<input type="hidden" name="submittedById" value="@Model.CurrentUser" />
-		<input type="hidden" name="subscriptionId" value="@Model.SubscriptionId" />
+		@Html.HiddenFor(m => m.Report.ExpenseReportId)
+		@Html.HiddenFor(m => m.CurrentUser)
+		@Html.HiddenFor(m => m.SubscriptionId)
 		<div class="form-group">
 			@Html.ReqLabelFor(m => m.Report.ReportTitle, "Report Name")
 			@Html.TextBoxFor(m => m.Report.ReportTitle, new { @class = "form-control", name = "ReportName" })
@@ -106,7 +105,7 @@
 			{
 				Model.Items.Add(new ExpenseItem());
 			}
-			Html.RenderAction("DisplayItem", new { model = Model.Items });
+			Html.RenderAction("DisplayItem", new { model = Model });
 		}
 		<div style="clear:both"></div>
 
@@ -209,18 +208,6 @@
 				}
 			});
 		}
-
-		function validateForm(event) {
-			console.log('about to submit');
-			var reqs = document.getElementsByClassName('req');
-			for (var i = 0; i < reqs.length; i++) {
-				if ($(reqs[i]).val() == '') {
-					event.preventDefault();
-					console.log('invalid: ' + reqs[i]);
-				}
-			}
-			console.log('valid');
-		};
 
 		setDatePickers();
 	</script>
