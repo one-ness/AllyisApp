@@ -1,4 +1,5 @@
-﻿@using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
+﻿@using AllyisApps.Areas.ExpenseTracker.Controllers
+@using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 @using AllyisApps.DBModel.Finance
 @using AllyisApps.Services
 @using AllyisApps.ViewModels.ExpenseTracker.Expense
@@ -47,18 +48,18 @@
 						@*<input type="hidden" name="@itemIdName" value="@item.ExpenseItemId" />*@
 						@Html.HiddenFor(m => m.ToList()[i].ToDelete, new { @id = "toDelete_" + i.ToString(), @class = "updatable" })
 						@Html.HiddenFor(m => m.ToList()[i].ExpenseItemId)
-						@Html.TextBoxFor(m => m.ToList()[i].TransactionDate, new { @class = "updatable datepicker form-control item-control", Value = dateVal, style = "display: inline-block; width: 150px" })
+						@Html.TextBoxFor(m => m.ToList()[i].TransactionDate, new { @class = "updatable datepicker form-control item-control req", Value = dateVal, style = "display: inline-block; width: 150px" })
 						@Html.ValidationMessageFor(m => m.ToList()[i].TransactionDate)
 					</td>
 					<td>
 						<div class="amount-div form-control item-control" style="display: inline-block; width: 150px;">
 							$
-							@Html.TextBoxFor(m => m.ToList()[i].Amount, new { @class = "updatable amount-textbox", Value = amountVal, style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px; margin-bottom: 6px;" })
+							@Html.TextBoxFor(m => m.ToList()[i].Amount, new { @class = "updatable amount-textbox req", Value = amountVal, style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px; margin-bottom: 6px;" })
 							@Html.ValidationMessageFor(m => m.ToList()[i].Amount)
 						</div>
 					</td>
 					<td>
-						@Html.TextBoxFor(m => m.ToList()[i].ItemDescription, new { @class = "updatable form-control item-control", Value = item.ItemDescription, style = "display: inline-block; width: 300px" })
+						@Html.TextBoxFor(m => m.ToList()[i].ItemDescription, new { @class = "updatable form-control item-control req", Value = item.ItemDescription, style = "display: inline-block; width: 300px" })
 						@Html.ValidationMessageFor(m => m.ToList()[i].ItemDescription)
 					</td>
 					<td>

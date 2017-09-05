@@ -17,7 +17,7 @@
 }
 @Scripts.Render("~/bundles/jquery")
 
-@using (Html.BeginForm(submitAction, ControllerConstants.Expense, FormMethod.Post, htmlAttributes: new { @id = "reportForm", enctype = "multipart/form-data" }))
+@using (Html.BeginForm(submitAction, ControllerConstants.Expense, FormMethod.Post, htmlAttributes: new { @id = "reportForm", enctype = "multipart/form-data", onsubmit = "validateForm(event);" }))
 {
 	<div class="panel panel-info" style="background-color: #f5f5f5; float: right; width: 380px; position: relative; z-index: 10">
 		<div class="panel-heading"><span class="panel-title">Attachments</span></div>
@@ -154,7 +154,6 @@
 		var item_index = @itemIndex;
 
 		function addFile() {
-			console.log('adding file');
 			var data = @Html.Raw(Json.Encode(new ExpenseFileModel() { Index = -1 }));
 			data.Index = file_index;
 			$.ajax({
@@ -169,12 +168,10 @@
 		}
 
 		function removeFile(index) {
-			console.log('removing file');
 			$('#file-input_' + index).remove();
 		}
 
 		function setDatePickers() {
-			console.log('setting date picker');
 			$('.datepicker').each(function () {
 				$(this).datepicker({
 					changeMonth: true,
@@ -184,10 +181,7 @@
 		}
 
 		function addItem() {
-			console.log('adding item');
-
 			var data = $('.updatable').serialize();
-			console.log('Data:\n\n' + data + '\n\n');
 
 			$.ajax({
 				url: '@Url.Action("AddItem")',
@@ -201,13 +195,10 @@
 		}
 
 		function removeItem(index) {
-			console.log('removing item');
-
 			$('#toDelete_' + index).val('True');
 
 			var data = $('.updatable').serialize();
-			console.log('Data:\n\n' + data + '\n\n');
-			
+
 			$.ajax({
 				type: 'POST',
 				url: '@Url.Action("DeleteItem")',
@@ -218,6 +209,18 @@
 				}
 			});
 		}
+
+		function validateForm(event) {
+			console.log('about to submit');
+			var reqs = document.getElementsByClassName('req');
+			for (var i = 0; i < reqs.length; i++) {
+				if ($(reqs[i]).val() == '') {
+					event.preventDefault();
+					console.log('invalid: ' + reqs[i]);
+				}
+			}
+			console.log('valid');
+		};
 
 		setDatePickers();
 	</script>
