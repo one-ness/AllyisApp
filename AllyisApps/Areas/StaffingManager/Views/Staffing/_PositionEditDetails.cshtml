@@ -30,8 +30,8 @@
 					<div class="form-group">
 						<label>Start Date</label>
 						@Html.HiddenFor(m => m.StartDate)
-						<input type="text" class="form-control ui-datepicker" style="width: 90%; display: inline-block;" id="datepicker"/>@*Needs to be <input /> tag, not Html.EditorFor or a NULL date will show up as -1*@
-						<span class="fa fa-fw fa-calendar" id="datePickerStartDateButton"></span>
+						@Html.TextBoxFor(m => m.StartDate, new { @class = "updatable datepicker form-control item-control", Value = Model.PositionCreatedUtc})
+						<span class="fa fa-fw fa-calendar" id="datePickerButton"></span>
 						@Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
