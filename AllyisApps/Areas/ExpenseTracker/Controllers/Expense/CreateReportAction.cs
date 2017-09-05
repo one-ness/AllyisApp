@@ -132,7 +132,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		{
 			foreach (string name in AzureFiles.GetReportAttachments(report.ExpenseReportId))
 			{
-				AzureFiles.DeleteReportAttachment(report.ExpenseReportId, name);
+				if (!model.PreviousFiles.Contains(name))
+				{
+					AzureFiles.DeleteReportAttachment(report.ExpenseReportId, name);
+				}
 			}
 			if (model.Files != null)
 			{
