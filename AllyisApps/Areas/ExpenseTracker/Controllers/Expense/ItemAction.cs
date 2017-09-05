@@ -20,10 +20,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// Displays the items in the create report view.
 		/// </summary>
-		/// <param name="data"></param>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		public ActionResult DisplayItem(ExpenseItem[] data, ExpenseCreateModel model)
+		public ActionResult DisplayItem(ExpenseCreateModel model)
 		{
 			Session["AccountList"] = AppService.GetAccounts();
 			return PartialView("_AjaxExpenseReportItems", model);

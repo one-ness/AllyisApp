@@ -24,10 +24,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="reportId">The report id.</param>
-		/// <param name="itemCount"></param>
-		/// <param name="fileCount"></param>
 		/// <returns>Returns an action result.</returns>
-		public ActionResult Create(int subscriptionId, int reportId = -1, int itemCount = 0, int fileCount = 0)
+		public ActionResult Create(int subscriptionId, int reportId = -1)
 		{
 			UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
 			ViewBag.SubscriptionName = subInfo.SubscriptionName;
