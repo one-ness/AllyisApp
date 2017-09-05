@@ -96,7 +96,7 @@ namespace AllyisApps.Services
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
 			{
 				AccountId = item.AccountId,
-				Amount = item.Amount,
+				Amount = Decimal.Parse(String.Format("{0:c}", item.Amount.ToString())),
 				ExpenseItemId = item.ExpenseItemId,
 				ExpenseReportId = item.ExpenseReportId,
 				IsBillableToCustomer = item.IsBillableToCustomer,
@@ -259,7 +259,7 @@ namespace AllyisApps.Services
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
 			{
 				AccountId = item.AccountId,
-				Amount = item.Amount,
+				Amount = Decimal.Parse(String.Format("{0:c}", item.Amount.ToString())),
 				CreatedUtc = item.ExpenseItemCreatedUtc,
 				ExpenseItemId = item.ExpenseItemId,
 				ExpenseReportId = item.ExpenseReportId,

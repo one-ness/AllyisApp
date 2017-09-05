@@ -30,8 +30,28 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <param name="previousFiles"></param>
 		/// <param name="items"></param>
 		/// <returns></returns>
+		[HttpPost]
 		public ActionResult UpdateReport(ExpenseCreateModel model, int subscriptionId, int submittedById, int reportId, string submitType, IEnumerable<HttpPostedFileBase> files = null, IEnumerable<string> previousFiles = null, List<ExpenseItem> items = null)
 		{
+			var oldReport = AppService.GetExpenseReport(reportId);
+			var userInfo = GetCookieData();
+			if (reportId != -1)
+			{
+				if (oldReport.SubmittedById != userInfo.UserId
+					|| ((ExpenseStatusEnum)oldReport.ReportStatus != ExpenseStatusEnum.Draft
+					&& (ExpenseStatusEnum)oldReport.ReportStatus != ExpenseStatusEnum.Rejected))
+				{
+					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.UpdateReport.ToString());
+					throw new AccessViolationException(message);
+				}
+				AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.EditReport, subscriptionId);
+			}
+			else
+			{
+				AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
+			}
+
+
 			if (items == null)
 			{
 				items = new List<ExpenseItem>();
@@ -51,8 +71,6 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				reportStatus = ExpenseStatusEnum.Draft;
 			}
 
-			var oldReport = AppService.GetExpenseReport(reportId);
-
 			if (oldReport.ReportStatus == (int)ExpenseStatusEnum.Draft || oldReport.ReportStatus == (int)ExpenseStatusEnum.Rejected)
 			{
 				var report = new ExpenseReport()
@@ -66,54 +84,81 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					ReportStatus = (int)reportStatus
 				};
 
-				IList<ExpenseItem> oldItems = AppService.GetExpenseItemsByReportId(reportId);
-				List<int> itemIds = new List<int>();
-				foreach (ExpenseItem oldItem in oldItems)
-				{
-					itemIds.Add(oldItem.ExpenseItemId);
-				}
+				UploadAttachments(reportId, files, previousFiles);
 
-				foreach (var item in items)
+				if (UploadItems(reportId, items))
 				{
-					item.ExpenseReportId = reportId;
-					if (itemIds.Contains(item.ExpenseItemId)) {
-						AppService.UpdateExpenseItem(item);
-						itemIds.Remove(item.ExpenseItemId);
-					}
-					else
-					{
-						AppService.CreateExpenseItem(item);
-					}
+					AppService.UpdateExpenseReport(report, reportId);
 				}
-
-				foreach (int itemId in itemIds)
+				else
 				{
-					AppService.DeleteExpenseItem(itemId);
+					return RedirectToAction("Create", new { subscriptionId = subscriptionId, reportId = reportId });
 				}
-
-				foreach (string name in AzureFiles.GetReportAttachments(reportId))
-				{
-					if (previousFiles != null && !previousFiles.Contains(name))
-					{
-						AzureFiles.DeleteReportAttachment(reportId, name);
-					}
-				}
-				List<string> empty = AzureFiles.GetReportAttachments(reportId);
-				if (files != null)
-				{
-					foreach (var file in files)
-					{
-						if (file != null)
-						{
-							AzureFiles.SaveReportAttachments(reportId, file.InputStream, file.FileName);
-						}
-					}
-				}
-
-				AppService.UpdateExpenseReport(report, reportId);
 			}
 
 			return RedirectToAction("Index");
+		}
+
+		private bool UploadItems(int reportId, List<ExpenseItem> items)
+		{
+			// this should be handled with client-side validation
+			foreach (var item in items)
+			{
+				if (String.IsNullOrEmpty(item.ItemDescription) || String.IsNullOrEmpty(item.TransactionDate) || item.Amount == 0)
+				{
+					return false;
+				}
+			}
+
+			IList<ExpenseItem> oldItems = AppService.GetExpenseItemsByReportId(reportId);
+			List<int> itemIds = new List<int>();
+			foreach (ExpenseItem oldItem in oldItems)
+			{
+				itemIds.Add(oldItem.ExpenseItemId);
+			}
+
+			foreach (var item in items)
+			{
+				item.ExpenseReportId = reportId;
+				if (itemIds.Contains(item.ExpenseItemId))
+				{
+					AppService.UpdateExpenseItem(item);
+					itemIds.Remove(item.ExpenseItemId);
+				}
+				else
+				{
+					AppService.CreateExpenseItem(item);
+				}
+			}
+
+			foreach (int itemId in itemIds)
+			{
+				AppService.DeleteExpenseItem(itemId);
+			}
+
+			return true;
+		}
+
+		private static void UploadAttachments(int reportId, IEnumerable<HttpPostedFileBase> files, IEnumerable<string> previousFiles)
+		{
+			foreach (string name in AzureFiles.GetReportAttachments(reportId))
+			{
+				if (previousFiles != null && !previousFiles.Contains(name))
+				{
+					AzureFiles.DeleteReportAttachment(reportId, name);
+				}
+			}
+			List<string> empty = AzureFiles.GetReportAttachments(reportId);
+			if (files != null)
+			{
+				foreach (var file in files)
+				{
+					if (file != null)
+					{
+						AzureFiles.SaveReportAttachments(reportId, file.InputStream, file.FileName);
+					}
+				}
+			}
 		}
 	}
 }

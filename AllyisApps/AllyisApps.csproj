@@ -17,8 +17,10 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -557,6 +559,7 @@
     <Content Include="Areas\ExpenseTracker\Views\Expense\_AjaxExpenseReportFile.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\Pending.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\_AjaxPendingEntries.cshtml" />
+    <Content Include="Areas\ExpenseTracker\Views\Expense\_AjaxExpenseReportFileLink.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\AdminReport.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />

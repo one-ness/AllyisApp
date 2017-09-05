@@ -29,7 +29,15 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		[HttpPost]
 		public ActionResult CreateReport(ExpenseCreateModel model, string submitType, int subscriptionId, int submittedById, IEnumerable<HttpPostedFileBase> files = null, List<ExpenseItem> items = null)
 		{
-            AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
+			var userInfo = GetCookieData();
+			if (userInfo.UserId != submittedById)
+			{
+				string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.CreateReport.ToString());
+				throw new AccessViolationException(message);
+			}
+
+
+			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
 
             if (items == null)
 			{

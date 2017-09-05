@@ -28,6 +28,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		{
 			UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
 			ViewBag.SubscriptionName = subInfo.SubscriptionName;
+			ViewData["SubscriptionId"] = subscriptionId;
 
 			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
 
@@ -35,12 +36,15 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             var userInfo = GetCookieData();
             if (reportId != -1)
             {
-                if(report.SubmittedById != userInfo.UserId)
-                {
-                    AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.EditReport, subscriptionId);
-                }
-                
-            }
+                if(report.SubmittedById != userInfo.UserId 
+					|| ((ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Draft 
+					&& (ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Rejected))
+				{
+					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.EditReport.ToString());
+					throw new AccessViolationException(message);
+				}
+				AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.EditReport, subscriptionId);
+			}
             else
             {
                 AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);

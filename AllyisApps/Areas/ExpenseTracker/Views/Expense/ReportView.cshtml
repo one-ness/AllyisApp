@@ -3,7 +3,8 @@
 @model ReportViewModel
 
 @{
-    DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/ExpenseTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
 }
 <div>
     <h2 class="pull-left">@Model.ReprortTitle</h2>
@@ -54,7 +55,10 @@
 
             @*START REVIEW AREA*@
             <div class="col-lg-6 col-md-6 col-xs-6" >
-                @if (Model.Status != ExpenseStatusEnum.Approved && Model.Status != ExpenseStatusEnum.Paid && Model.Status != ExpenseStatusEnum.Draft)
+                @if (Model.Status != ExpenseStatusEnum.Approved 
+					&& Model.Status != ExpenseStatusEnum.Paid 
+					&& Model.Status != ExpenseStatusEnum.Draft 
+					&& (bool)ViewData["IsManager"] == true)
                 {
                     <div class="review-area col-lg-12 col-md-12 col-xs-12" height="290px">
                         <b>Accept/Reject Notes</b><br />
@@ -113,7 +117,7 @@
                 @foreach (var attch in Model.Attachments)
                 {
                     <tr>
-                        <td>@Html.ActionLink(attch,"download", new { reportId = Model.ReportId, fileName = attch }, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" })</td>
+                        <td>@Html.ActionLink(attch,"download", new { reportId = Model.ReportId, fileName = attch }, htmlAttributes: new { @class = "form-inline col-xs-12", })</td>
                     </tr>
                 }
                 
@@ -136,7 +140,7 @@
             <tr>
                 <th style="width: 15%">Reviewer</th>
                 <th style="width: 15%">Status</th>
-                <th style="width: 15%">Submitted</th>
+                <th style="width: 15%">Reviewed</th>
                 <th style="width: 55%">Reason</th>
             </tr>
         </thead>
@@ -146,7 +150,7 @@
                 <tr>
                     <td>@history.Reviewer</td>
                     <td>@history.Status</td>
-                    <td>@history.Submitted</td>
+                    <td>@String.Format("{0:MM-dd-yyyy}", @history.Submitted)</td>
                     <td>@history.Text</td>
                 </tr>
             }

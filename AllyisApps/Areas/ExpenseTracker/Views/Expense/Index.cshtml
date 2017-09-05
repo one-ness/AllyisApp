@@ -3,10 +3,25 @@
 
 @model ExpenseIndexViewModel
 @{
-    DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/ExpenseTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
-    DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
-    ViewBag.Title = "My Expense Reports";
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/ExpenseTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
+	ViewBag.Title = "My Expense Reports";
 }
 
-@Html.Partial("_AjaxExpenseEntries", Model)
+<div class="form-group pull-right">
+	<a href="@Url.Action("Create")">
+		<span class="btn btn-primary">Create Report</span>
+	</a>
+</div>
 
+@if (Model.Reports.Count > 0)
+{
+	@Html.Partial("_AjaxExpenseEntries", Model);
+}
+else
+{
+	<span class="text-warning"
+			style="font-size: 20px; text-align: center; display: block; margin-top: 100px;">
+		There are no reports to display.
+	</span>
+}

@@ -14,28 +14,29 @@ namespace AllyisApps.Services
 		/// </summary>
 		public int ExpenseItemId { get; set; }
 
-        /// <summary>
-        /// The expense description
-        /// </summary>
-		[Required(ErrorMessage = "Please enter the item description.")]
-        public string ItemDescription { get; set; }
+		/// <summary>
+		/// The expense description
+		/// </summary>
+		[Required(ErrorMessage = "Description is required.")]
+		public string ItemDescription { get; set; }
 
-        /// <summary>
-        /// The transaction date
-        /// </summary>
-		[Required(ErrorMessage = "Please enter the date of transaction.")]
-        public string TransactionDate { get; set; }
+		/// <summary>
+		/// The transaction date
+		/// </summary>
+		[Required(ErrorMessage = "Date is required.")]
+		public string TransactionDate { get; set; }
 
-        /// <summary>
-        /// The amount of the expense
-        /// </summary>
-		[Required(ErrorMessage = "Please enter the amount.")]
-        public decimal Amount { get; set; }
+		/// <summary>
+		/// The amount of the expense
+		/// </summary>
+		[Required(ErrorMessage = "Amount is required.")]
+		[DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+		public decimal Amount { get; set; }
 
-        /// <summary>
-        /// The expenses report id.
-        /// </summary>
-        public int ExpenseReportId { get; set; }
+		/// <summary>
+		/// The expenses report id.
+		/// </summary>
+		public int ExpenseReportId { get; set; }
 
         /// <summary>
         /// the user id associated with the Expense
@@ -61,5 +62,10 @@ namespace AllyisApps.Services
 		/// Index of item in report
 		/// </summary>
 		public int Index { get; set; }
+
+		/// <summary>
+		/// Gets or sets whether to delete.
+		/// </summary>
+		public bool ToDelete { get; set; }
     }
 }

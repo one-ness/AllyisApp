@@ -23,9 +23,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             var model = InitializeReportViewModel(subscriptionId, reportId);
 
             UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
-            
 
-            ViewBag.SubscriptionName = subInfo.SubscriptionName;
+			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
+
+			ViewBag.SubscriptionName = subInfo.SubscriptionName;
 
             return View(model);
         }
@@ -37,8 +38,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         /// <param name="subscriptionId">The subscription id.</param>
         /// <returns>The view model.</returns>
         public ReportViewModel InitializeReportViewModel(int subscriptionId, int id)
-        {
-            var report = AppService.GetExpenseReport(id);
+		{
+			UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
+			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
+			ViewData["SubscriptionId"] = subscriptionId;
+
+			var report = AppService.GetExpenseReport(id);
             var reportItems = AppService.GetExpenseItemsByReportId(id);
             var user = AppService.GetUser(report.SubmittedById);
             var history = AppService.GetExpenseHistoryByReportId(id);
