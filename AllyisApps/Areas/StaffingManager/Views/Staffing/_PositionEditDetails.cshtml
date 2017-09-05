@@ -7,12 +7,6 @@
 	}
 }
 
-
-@Scripts.Render("~/bundles/jqueryui")
-@Scripts.Render("~/bundles/moment")
-<script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
-@Scripts.Render("~/bundles/daterangepicker")
-
 <div class="shrink-wrap-center">
 	<div>
 		@using (Html.BeginForm(action, ControllerConstants.Staffing, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form" }))
@@ -31,7 +25,7 @@
 						<label>Start Date</label>
 						@Html.HiddenFor(m => m.StartDate)
 						@Html.TextBoxFor(m => m.StartDate, new { @class = "updatable datepicker form-control item-control", Value = Model.PositionCreatedUtc})
-						<span class="fa fa-fw fa-calendar" id="datePickerButton"></span>
+						<span class="fa fa-fw fa-calendar" id="datePickerBirth"></span>
 						@Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
@@ -188,18 +182,4 @@
     }
 </div>
 
-
-<script>
-	function setDatePickers() {
-		console.log('setting date picker');
-		$('.datepicker').each(function () {
-			$(this).datepicker({
-				changeMonth: true,
-				changeYear: true
-			});
-		});
-	}
-
-	setDatePickers();
-</script>
 
