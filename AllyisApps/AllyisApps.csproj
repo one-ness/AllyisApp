@@ -204,6 +204,7 @@
   <ItemGroup>
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AdminReportAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AttachmentDownloadController.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ReportHelper.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\PendingAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\StatusUpdateAction.cs" />

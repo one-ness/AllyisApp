@@ -19,36 +19,31 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// View/export expense report.
 		/// </summary>
-		/// <param name="model">The expense create model.</param>
-		/// <param name="submitType">The type of submission.</param>
-		/// <param name="subscriptionId">The subscription id.</param>
-		/// <param name="submittedById">The submitted by id.</param>
-		/// <param name="files">The attachment files.</param>
-        /// <param name="items">The expense items.</param>
+		/// <param name="model"></param>
 		/// <returns>An action result.</returns>
 		[HttpPost]
-		public ActionResult CreateReport(ExpenseCreateModel model, string submitType, int subscriptionId, int submittedById, IEnumerable<HttpPostedFileBase> files = null, List<ExpenseItem> items = null)
+		public ActionResult CreateReport(ExpenseCreateModel model)
 		{
 			var userInfo = GetCookieData();
-			if (userInfo.UserId != submittedById)
+			if (userInfo.UserId != model.CurrentUser)
 			{
 				string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.CreateReport.ToString());
 				throw new AccessViolationException(message);
 			}
 
-			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
 
-            if (items == null)
+			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, model.SubscriptionId);
+
+			if (model.Items == null)
 			{
-				items = new List<ExpenseItem>();
+				model.Items = new List<ExpenseItem>();
 			}
-
-			var subscription = AppService.GetSubscription(subscriptionId);
+			var subscription = AppService.GetSubscription(model.SubscriptionId);
 			var organizationId = subscription.OrganizationId;
 			ExpenseStatusEnum reportStatus; // = (ExpenseStatusEnum)Enum.Parse(typeof(ExpenseStatusEnum), Request.Form["Report.ReportStatus"]);
 			DateTime? submittedUtc = null;
 
-			if (submitType == "Submit")
+			if (model.SubmitType == "Submit")
 			{
 				reportStatus = ExpenseStatusEnum.Pending;
 				submittedUtc = DateTime.UtcNow;
@@ -65,33 +60,20 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				CreatedUtc = DateTime.UtcNow,
 				ModifiedUtc = DateTime.UtcNow,
 				SubmittedUtc = submittedUtc,
-				SubmittedById = submittedById,
+				SubmittedById = model.CurrentUser,
 				OrganizationId = organizationId,
 				ReportStatus = (int)reportStatus
 			};
 
-			int reportId = AppService.CreateExpenseReport(report);
-
-			foreach (var item in items)
+			if (ValidateItems(model, report))
 			{
-				item.ExpenseReportId = reportId;
-				AppService.CreateExpenseItem(item);
+				report.ExpenseReportId = AppService.CreateExpenseReport(report);
+				UploadItems(model, report);
+				UploadAttachments(model, report);
 			}
-
-			foreach (string name in AzureFiles.GetReportAttachments(report.ExpenseReportId))
+			else
 			{
-				AzureFiles.DeleteReportAttachment(report.ExpenseReportId, name);
-			}
-
-			if (files != null)
-			{
-				foreach (var file in files)
-				{
-					if (file != null)
-					{
-						AzureFiles.SaveReportAttachments(reportId, file.InputStream, file.FileName);
-					}
-				}
+				return RedirectToAction("Create", new { subscriptionId = model.SubscriptionId, reportId = model.Report.ExpenseReportId });
 			}
 
 			return RedirectToAction("Index");

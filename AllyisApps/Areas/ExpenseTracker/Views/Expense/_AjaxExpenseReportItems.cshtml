@@ -1,9 +1,10 @@
-﻿@using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
+﻿@using AllyisApps.Areas.ExpenseTracker.Controllers
+@using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 @using AllyisApps.DBModel.Finance
 @using AllyisApps.Services
 @using AllyisApps.ViewModels.ExpenseTracker.Expense
 
-@model IEnumerable<ExpenseItem>
+@model ExpenseCreateModel
 
 <div class="items">
 	<table class="table table-hover">
@@ -18,9 +19,9 @@
 			</tr>
 		</thead>
 		<tbody>
-			@for (int i = 0; i < Model.Count(); i++)
+			@for (int i = 0; i < Model.Items.Count; i++)
 			{
-				var item = Model.ToList()[i];
+				var item = Model.Items[i];
 				if (String.IsNullOrEmpty(item.ItemDescription)) // sets default value to checked if item is new
 				{
 					item.IsBillableToCustomer = false;
@@ -45,27 +46,27 @@
 				<tr id="@String.Format("item-input_{0}", item.Index)" class="item-div" style="margin: 10px; margin-bottom: 0px;">
 					<td>
 						@*<input type="hidden" name="@itemIdName" value="@item.ExpenseItemId" />*@
-						@Html.HiddenFor(m => m.ToList()[i].ToDelete, new { @id = "toDelete_" + i.ToString(), @class = "updatable" })
-						@Html.HiddenFor(m => m.ToList()[i].ExpenseItemId)
-						@Html.TextBoxFor(m => m.ToList()[i].TransactionDate, new { @class = "updatable datepicker form-control item-control", Value = dateVal, style = "display: inline-block; width: 150px" })
-						@Html.ValidationMessageFor(m => m.ToList()[i].TransactionDate)
+						@Html.HiddenFor(m => m.Items[i].ToDelete, new { @id = "toDelete_" + i.ToString(), @class = "updatable" })
+						@Html.HiddenFor(m => m.Items[i].ExpenseItemId)
+						@Html.TextBoxFor(m => m.Items[i].TransactionDate, new { @class = "updatable datepicker form-control item-control req", Value = dateVal, style = "display: inline-block; width: 150px" })
+						@Html.ValidationMessageFor(m => m.Items[i].TransactionDate)
 					</td>
 					<td>
 						<div class="amount-div form-control item-control" style="display: inline-block; width: 150px;">
 							$
-							@Html.TextBoxFor(m => m.ToList()[i].Amount, new { @class = "updatable amount-textbox", Value = amountVal, style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px; margin-bottom: 6px;" })
-							@Html.ValidationMessageFor(m => m.ToList()[i].Amount)
+							@Html.TextBoxFor(m => m.Items[i].Amount, new { @class = "updatable amount-textbox req", Value = amountVal, style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px; margin-bottom: 6px;" })
+							@Html.ValidationMessageFor(m => m.Items[i].Amount)
 						</div>
 					</td>
 					<td>
-						@Html.TextBoxFor(m => m.ToList()[i].ItemDescription, new { @class = "updatable form-control item-control", Value = item.ItemDescription, style = "display: inline-block; width: 300px" })
-						@Html.ValidationMessageFor(m => m.ToList()[i].ItemDescription)
+						@Html.TextBoxFor(m => m.Items[i].ItemDescription, new { @class = "updatable form-control item-control req", Value = item.ItemDescription, style = "display: inline-block; width: 300px" })
+						@Html.ValidationMessageFor(m => m.Items[i].ItemDescription)
 					</td>
 					<td>
-						@Html.DropDownListFor(m => m.ToList()[i].AccountId, selectList, new { @class = "updatable form-control item-control", name = accountName, style = "display: inline-block; width: 150px", Value = item.AccountId })
+						@Html.DropDownListFor(m => m.Items[i].AccountId, selectList, new { @class = "updatable form-control item-control", name = accountName, style = "display: inline-block; width: 150px", Value = item.AccountId })
 					</td>
 					<td>
-						@Html.CheckBoxFor(m => m.ToList()[i].IsBillableToCustomer, new { @class = "updatable form-control item-control check-off", style = "width: 14px; height: 14px; display: inline-block; margin: 10px; vertical-align: middle;" })
+						@Html.CheckBoxFor(m => m.Items[i].IsBillableToCustomer, new { @class = "updatable form-control item-control check-off", style = "width: 14px; height: 14px; display: inline-block; margin: 10px; vertical-align: middle;" })
 					</td>
 					<td>
 						<a class="btn btn-danger btn-fa hidden-create"

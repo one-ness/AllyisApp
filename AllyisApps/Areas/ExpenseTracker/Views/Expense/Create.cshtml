@@ -83,10 +83,9 @@
 				Model.Items = new List<ExpenseItem>();
 			}
 		}
-		<input type="hidden" name="reportId" value="@reportId" />
-		<input type="hidden" name="accountId" value="@Model.CurrentUser" />
-		<input type="hidden" name="submittedById" value="@Model.CurrentUser" />
-		<input type="hidden" name="subscriptionId" value="@Model.SubscriptionId" />
+		@Html.HiddenFor(m => m.Report.ExpenseReportId)
+		@Html.HiddenFor(m => m.CurrentUser)
+		@Html.HiddenFor(m => m.SubscriptionId)
 		<div class="form-group">
 			@Html.ReqLabelFor(m => m.Report.ReportTitle, "Report Name")
 			@Html.TextBoxFor(m => m.Report.ReportTitle, new { @class = "form-control", name = "ReportName" })
@@ -106,7 +105,7 @@
 			{
 				Model.Items.Add(new ExpenseItem());
 			}
-			Html.RenderAction("DisplayItem", new { model = Model.Items });
+			Html.RenderAction("DisplayItem", new { model = Model });
 		}
 		<div style="clear:both"></div>
 
@@ -154,7 +153,6 @@
 		var item_index = @itemIndex;
 
 		function addFile() {
-			console.log('adding file');
 			var data = @Html.Raw(Json.Encode(new ExpenseFileModel() { Index = -1 }));
 			data.Index = file_index;
 			$.ajax({
@@ -169,12 +167,10 @@
 		}
 
 		function removeFile(index) {
-			console.log('removing file');
 			$('#file-input_' + index).remove();
 		}
 
 		function setDatePickers() {
-			console.log('setting date picker');
 			$('.datepicker').each(function () {
 				$(this).datepicker({
 					changeMonth: true,
@@ -184,10 +180,7 @@
 		}
 
 		function addItem() {
-			console.log('adding item');
-
 			var data = $('.updatable').serialize();
-			console.log('Data:\n\n' + data + '\n\n');
 
 			$.ajax({
 				url: '@Url.Action("AddItem")',
@@ -201,13 +194,10 @@
 		}
 
 		function removeItem(index) {
-			console.log('removing item');
-
 			$('#toDelete_' + index).val('True');
 
 			var data = $('.updatable').serialize();
-			console.log('Data:\n\n' + data + '\n\n');
-			
+
 			$.ajax({
 				type: 'POST',
 				url: '@Url.Action("DeleteItem")',
