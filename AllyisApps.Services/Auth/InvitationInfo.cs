@@ -38,10 +38,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		public string LastName { get; set; }
 
-		/// <summary>
-		/// Gets or sets the Date of birth.
-		/// </summary>
-		public DateTime DateOfBirth { get; set; }
+		
 
 		/// <summary>
 		/// Gets or sets the Organization Id.
@@ -61,7 +58,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Date that user had accepted or rejected the invitation.
 		/// </summary>
-        public DateTime DecisionDate { get; set; }
+        public DateTime DecisionDateUtc { get; set; }
 
         public InvitationStatusEnum status { get; set; }
 	}

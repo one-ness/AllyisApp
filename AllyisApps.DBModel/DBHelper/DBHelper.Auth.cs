@@ -886,7 +886,7 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">Organization id.</param>
 		/// <param name="userId">User id.</param>
 		/// <returns>.</returns>
-		public Tuple<dynamic, List<string>, string> GetOrgWithCountriesAndEmployeeId(int orgId, int userId)
+		public Tuple<dynamic, string> GetOrgWithNextEmployeeId(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
@@ -894,12 +894,11 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
-					"[Auth].[GetOrgWithCountriesAndEmployeeId]",
+					"[Auth].[GetOrgWithNextEmployeeId]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
 					results.Read<dynamic>().SingleOrDefault(),
-					results.Read<string>().ToList(),
 					results.Read<string>().SingleOrDefault());
 			}
 		}

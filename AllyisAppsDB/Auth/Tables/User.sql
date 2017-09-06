@@ -12,7 +12,7 @@
 	[IsLockoutEnabled]			BIT              CONSTRAINT [DF__User__LockoutEnabled] DEFAULT ((0)) NOT NULL,
 	[UserCreatedUtc]			DATETIME2 (0)    CONSTRAINT [DF__User__UserCreatedUtc] DEFAULT (getutcdate()) NOT NULL,
 	[PreferredLanguageId]		VARCHAR (16)     NULL,
-	[DateOfBirth]				DATE		     NULL,
+	[DateOfBirth]				DATE		     NOT NULL,
 	[PhoneNumber]				VARCHAR (16)     NULL,
 	[PhoneExtension]			VARCHAR (8)      NULL,
 	[LastUsedSubscriptionId]	INT              NULL,

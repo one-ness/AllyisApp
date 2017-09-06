@@ -630,14 +630,14 @@ namespace AllyisApps.Services
             return new Address()
             {
                 AddressId = address.AddressId,
-                Address1 = address.Address1,
+                Address1 = address.Address1 ?? address.Address,
                 Address2 = address.Address2,
                 City = address.City,
-                StateName = address.State,
+                StateName = address.State ?? address.StateName,
                 PostalCode = address.PostalCode,
                 CountryCode = address.CountryCode,
                 StateId = address.StateId,
-                CountryName = address.Country
+                CountryName = address.Country ?? address.CountryName
             };
         }
 

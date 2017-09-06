@@ -1,4 +1,4 @@
-CREATE PROCEDURE [Auth].[GetOrgWithCountriesAndEmployeeId]
+CREATE PROCEDURE [Auth].[GetOrgWithNextEmployeeId]
 	@organizationId int,
 	@userId int
 AS
@@ -25,7 +25,6 @@ AS
 		LEFT JOIN [Lookup].[State]		WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
 	WHERE OrganizationId = @organizationId
 
-	SELECT [CountryName] FROM [Lookup].[Country] WITH (NOLOCK)
 
 	SELECT [EmployeeId]
 	FROM [Auth].[OrganizationUser] WITH (NOLOCK)

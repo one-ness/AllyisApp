@@ -349,7 +349,7 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Get User Address, Organizaiontins, and Inviations
+		/// Get User Address, Organizaiontins, and Inviations for account page 
 		/// </summary>
 		public User GetUser(int userId)
 		{
@@ -398,8 +398,7 @@ namespace AllyisApps.Services
 					new Invitation()
 					{
 						invite = new InvitationInfo()
-						{
-							//CompressedEmail = AppService.GetCompressedEmail(inv.Email),
+						{ 
 							Email = inv.Email,
 							EmployeeId = inv.EmployeeId,
 							FirstName = inv.FirstName,

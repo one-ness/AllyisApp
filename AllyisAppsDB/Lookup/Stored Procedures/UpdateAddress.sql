@@ -9,6 +9,6 @@
 as
 begin
 	set nocount on
-	update [Address] set Address1 = @address1, Address2 = @address2, City = @city, StateId = @stateId, CountryCode = @countryCode
+	update [Address] set Address1 = @address1, Address2 = @address2, City = @city, StateId = @stateId, CountryCode = @countryCode, PostalCode = @postalCode
 	where AddressId = @addressId
 end
