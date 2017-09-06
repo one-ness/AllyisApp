@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
-using AllyisApps.Services;
-using AllyisApps.ViewModels.TimeTracker.Customer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.TimeTracker.Customer;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {

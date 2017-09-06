@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Extensions.RouteExtensions;
 using System.Web.Mvc;
+using AllyisApps.Extensions.RouteExtensions;
 
 namespace AllyisApps.Areas.StaffingManager
 {
@@ -28,6 +28,7 @@ namespace AllyisApps.Areas.StaffingManager
 		/// <summary>
 		/// Registers the area within the site.
 		/// </summary>
+        /// <param name="context">The context.</param>
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
 			context.Routes.MapSubdomainRoute(

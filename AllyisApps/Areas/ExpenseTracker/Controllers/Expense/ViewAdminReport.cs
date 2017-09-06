@@ -1,47 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
 using AllyisApps.Services;
-using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
-using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense;
-
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
+    /// <summary>
+    /// The Expense controller.
+    /// </summary>
     public partial class ExpenseController : BaseController
     {
         /// <summary>
-        /// 
+        /// The action to view a admin report.
         /// </summary>
-        /// <param name="viewDataButton"></param>
-        /// <param name="model"></param>
-        /// <param name="subscriptionId"></param>
-        /// <param name="organizationId"></param>
-        /// <param name="StartDate"></param>
-        /// <param name="EndDate"></param>
-        /// <returns></returns>
-        public ActionResult ViewAdminReport(string viewDataButton, AdminReportModel model, int subscriptionId, int organizationId, DateTime? StartDate, DateTime? EndDate)
+        /// <param name="viewDataButton">The type of button clicked.</param>
+        /// <param name="model">The view model.</param>
+        /// <param name="subscriptionId">The subscription id.</param>
+        /// <param name="organizationId">The oranization id.</param>
+        /// <param name="startDate">The start date range.</param>
+        /// <param name="endDate">The end date range.</param>
+        /// <returns>Returns File or a Redirect to the admin report page.</returns>
+        public ActionResult ViewAdminReport(string viewDataButton, AdminReportModel model, int subscriptionId, int organizationId, DateTime? startDate, DateTime? endDate)
         {
             AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
 
-
-            var selectedUsers = model.Selection != null ? model.Selection.SelectedUsers : new List<int>();
-            var selectedStatus = model.Selection != null ? model.Selection.Status : new List<int>();
+            var selectedUsers = model.Selection != null ? model.Selection.SelectedUsers : model.Users.Select(x => Convert.ToInt32(x.Value)).ToList();
+            var selectedStatus = model.Selection != null ? model.Selection.Status : model.Statuses.Select(x => Convert.ToInt32(x.Value)).ToList();
 
             if (viewDataButton.Equals(Strings.Preview))
             {
                 AdminReportSelectionModel adminRVMSelect = new AdminReportSelectionModel
                 {
-                    EndDate = EndDate,
-                    StartDate = StartDate,
-                    SelectedUsers = model.Selection.SelectedUsers != null ? model.Selection.SelectedUsers : new List<int>(),
-                    Status = model.Selection.Status
+                    EndDate = endDate,
+                    StartDate = startDate,
+                    SelectedUsers = selectedUsers,
+                    Status = selectedStatus
                 };
 
                 var infos = AppService.GetReportInfo(subscriptionId);
@@ -55,12 +54,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 ExpenseDataExportViewModel dataVM = null;
                 try
                 {
-                    dataVM = ConstructAdminDataExportViewModel(subscriptionId, organizationId, selectedUsers.ToList(), selectedStatus, StartDate, EndDate);
+                    dataVM = ConstructAdminDataExportViewModel(subscriptionId, organizationId, selectedUsers.ToList(), selectedStatus, startDate, endDate);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     string message = Strings.CannotCreateReport;
-                    if(e.Message != null)
+                    if (e.Message != null)
                     {
                         message = string.Format("{0} {1}", message, e.Message);
                     }
@@ -68,27 +67,29 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                     Notifications.Add(new BootstrapAlert(message, Variety.Danger));
                     return RedirectToAction(ActionConstants.AdminReport, ControllerConstants.Expense);
                 }
+
                 adminReportVM.PreviewReports = dataVM.PreviewData;
                 this.TempData["ARVM"] = adminReportVM;
                 return this.RedirectToAction(ActionConstants.AdminReport);
             }
-            else if(viewDataButton.Equals(Strings.Export))
+            else if (viewDataButton.Equals(Strings.Export))
             {
-                return this.ExportExpenseReport(subscriptionId, organizationId, model, StartDate, EndDate);
+                return this.ExportExpenseReport(subscriptionId, organizationId, model, startDate, endDate);
             }
 
             return RedirectToAction(ActionConstants.AdminReport);
         }
+
         /// <summary>
-        /// 
+        /// Makes an admin report view from provided data.
         /// </summary>
-        /// <param name="subscriptionId"></param>
-        /// <param name="organizationId"></param>
-        /// <param name="userId"></param>
-        /// <param name="selectedStatus"></param>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <returns></returns>
+        /// <param name="subscriptionId">The subscription id.</param>
+        /// <param name="organizationId">The organization id.</param>
+        /// <param name="userId">The selected users..</param>
+        /// <param name="selectedStatus">The selected statuses.</param>
+        /// <param name="startDate">The start date range.</param>
+        /// <param name="endDate">The end date range.</param>
+        /// <returns>An ExpenseDataExportViewModel.</returns>
         public ExpenseDataExportViewModel ConstructAdminDataExportViewModel(int subscriptionId, int organizationId, List<int> userId, List<int> selectedStatus, DateTime? startDate = null, DateTime? endDate = null)
         {
             List<ExpenseReport> expenses = new List<ExpenseReport>();
@@ -96,7 +97,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             DateTime start = startDate != null ? startDate.Value : DateTime.UtcNow;
             DateTime end = endDate != null ? endDate.Value : DateTime.UtcNow;
 
-            foreach(var user in userId)
+            foreach (var user in userId)
             {
                 var reports = AppService.GetExpenseReportBySubmittedId(user).Select(x => x).Where(x => DateTime.Compare(x.CreatedUtc, start) >= 0 && DateTime.Compare(x.CreatedUtc, end) <= 0);
                  reports = reports.Select(x => x).Where(y => selectedStatus.IndexOf(y.ReportStatus) != -1);
@@ -113,14 +114,14 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Exports the expense report to a csv file.
         /// </summary>
-        /// <param name="subscriptionId"></param>
-        /// <param name="organizationId"></param>
-        /// <param name="model"></param>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <returns></returns>
+        /// <param name="subscriptionId">The subscription id.</param>
+        /// <param name="organizationId">The organization id.</param>
+        /// <param name="model">The admin report model.</param>
+        /// <param name="startDate">The start date range.</param>
+        /// <param name="endDate">The end date range.</param>
+        /// <returns>A file for download.</returns>
         public ActionResult ExportExpenseReport(int subscriptionId, int organizationId, AdminReportModel model, DateTime? startDate = null, DateTime? endDate = null)
         {
             List<ExpenseReport> expenses = new List<ExpenseReport>();
@@ -134,7 +135,6 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 reports = reports.Select(x => x).Where(y => model.Selection.Status.IndexOf(y.ReportStatus) != -1);
                 expenses.AddRange(reports);
             }
-
 
             return File(AppService.PrepareExpenseCSVExport(organizationId, expenses, start, end).BaseStream, "text/csv", "export.csv");
         }

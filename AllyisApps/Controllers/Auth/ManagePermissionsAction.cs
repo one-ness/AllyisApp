@@ -298,7 +298,7 @@ namespace AllyisApps.Controllers
 
                     if (updatedAndAdded.Item2 > 0)
                     {
-                        Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersAddedToTimeTracker, updatedAndAdded.Item2), Variety.Success));
+                        Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UserAddedToExpenseTracker, updatedAndAdded.Item2), Variety.Success));
                     }
                 }
                 else

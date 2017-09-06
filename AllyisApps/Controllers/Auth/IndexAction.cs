@@ -4,13 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Web.Mvc;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -27,29 +25,19 @@ namespace AllyisApps.Controllers
         public ActionResult Index()
         {
             AccountIndexViewModel viewModel = ConstuctIndexViewModel();
-            //View Bag needed to
+
             return this.View(viewModel);
         }
 
-        private DateTime SetStartingDate(int startOfWeek)
-        {
-            DateTime today = DateTime.Now;
-            int daysIntoTheWeek = (int)today.DayOfWeek < startOfWeek
-                ? (int)today.DayOfWeek + (7 - startOfWeek)
-                : (int)today.DayOfWeek - startOfWeek;
-            return today.AddDays(-daysIntoTheWeek);
-        }
-
         /// <summary>
-        /// Constuct index view Model for
+        /// Constuct index view Model for Accounts.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The Accound Index view model.</returns>
         public AccountIndexViewModel ConstuctIndexViewModel()
         {
             int? userID = AppService.UserContext?.UserId;
 
             UserAccount accountInfo = AppService.GetUser(userID);
-
 
             AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel(accountInfo?.userInfo);
             AccountIndexViewModel indexViewModel = new AccountIndexViewModel()
@@ -58,11 +46,11 @@ namespace AllyisApps.Controllers
             };
             if (accountInfo == null)
             {
-                //if not signed in do not attpempt to load values.
+                // If not signed in do not attpempt to load values.
                 return indexViewModel;
             }
 
-            //Add invitations to view model
+            // Add invitations to view model
 
             var invitationslist = accountInfo.InviatationInfoWithName;
             foreach (var inviteInfo in invitationslist)
@@ -77,7 +65,8 @@ namespace AllyisApps.Controllers
             }
 
             var orgs = accountInfo.Organizations;
-            //Add organizations to model
+            
+            // Add organizations to model
             foreach (var curorg in orgs)
             {
                 AccountIndexViewModel.OrganizationViewModel orgViewModel =
@@ -128,6 +117,20 @@ namespace AllyisApps.Controllers
             }
 
             return indexViewModel;
+        }
+        
+        /// <summary>
+        /// Gets the Starting date from an int value.
+        /// </summary>
+        /// <param name="startOfWeek">Integer value representing a date.</param>
+        /// <returns></returns>
+        private DateTime SetStartingDate(int startOfWeek)
+        {
+            DateTime today = DateTime.Now;
+            int daysIntoTheWeek = (int)today.DayOfWeek < startOfWeek
+                ? (int)today.DayOfWeek + (7 - startOfWeek)
+                : (int)today.DayOfWeek - startOfWeek;
+            return today.AddDays(-daysIntoTheWeek);
         }
     }
 }

@@ -4,10 +4,6 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
-using System.Web;
-using AllyisApps.Services.Expense;
-using System.IO;
-using AllyisApps.Lib;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -21,8 +17,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="reportId">The report id.</param>
-		/// <param name="itemCount"></param>
-		/// <param name="fileCount"></param>
+		/// <param name="itemCount">The number of items.</param>
+		/// <param name="fileCount">The number of files.</param>
 		/// <returns>Returns an action result.</returns>
 		public ActionResult Create(int subscriptionId, int reportId = -1, int itemCount = 0, int fileCount = 0)
 		{
@@ -36,13 +32,14 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             var userInfo = GetCookieData();
             if (reportId != -1)
             {
-                if(report.SubmittedById != userInfo.UserId 
+                if (report.SubmittedById != userInfo.UserId 
 					|| ((ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Draft 
 					&& (ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Rejected))
 				{
 					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.EditReport.ToString());
 					throw new AccessViolationException(message);
 				}
+
 				AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.EditReport, subscriptionId);
 			}
             else
@@ -50,14 +47,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
             }
             
-
-            
 			IList<ExpenseItem> items = new List<ExpenseItem>();
 			if (report != null)
 			{
 				items = AppService.GetExpenseItemsByReportId(reportId);
 			}
-			//IList<ExpenseItem> items = report == null ? new List<ExpenseItem>() : AppService.GetExpenseItemsByReportId(reportId);
 
 			var model = new ExpenseCreateModel()
 			{

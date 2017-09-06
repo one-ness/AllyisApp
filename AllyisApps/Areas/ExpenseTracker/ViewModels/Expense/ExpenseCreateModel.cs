@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using AllyisApps.Services;
 using System.Web;
-using AllyisApps.Services.Expense;
-using System.Web.Mvc;
 using AllyisApps.DBModel.Finance;
+using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {
@@ -34,17 +32,17 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		public DateTime StartDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Expense Items
+		/// Gets or sets the Expense Items.
 		/// </summary>
 		public IList<ExpenseItem> Items { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Expense Files
+		/// Gets or sets the Expense Files.
 		/// </summary>
 		public IList<HttpPostedFileBase> Files { get; set; }
 
 		/// <summary>
-		/// Gets or sets the list of accounts
+		/// Gets or sets the list of accounts.
 		/// </summary>
 		public IList<AccountDBEntity> AccountList { get; set; }
 	}

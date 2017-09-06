@@ -7,7 +7,7 @@
 	DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
 }
 <div>
-    <h2 class="pull-left">@Model.ReprortTitle</h2>
+    <h1 class="pull-left">@Model.ReprortTitle</h1>
 </div>
 
 @using (@Html.BeginForm("StatusUpdate", ControllerConstants.Expense, FormMethod.Post, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" }))
@@ -74,6 +74,7 @@
         </div>
 
         @*START REPORT ITEM AREA*@
+        <h2>Report Items</h2>
         <table class="table table-hover col-lg-12 col-md-12 col-xs-12">
             <thead>
                 <tr>

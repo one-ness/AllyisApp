@@ -1,7 +1,7 @@
 ﻿namespace AllyisApps.Areas.StaffingManager.Controllers.Staffing
 {
 	/// <summary>
-	/// staffing controller
+	/// Staffing controller.
 	/// </summary>
 	public class StaffingController
 	{

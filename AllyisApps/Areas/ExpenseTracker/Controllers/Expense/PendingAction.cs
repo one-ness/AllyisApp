@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
-using System.Web;
-using AllyisApps.Services.Expense;
-using System.IO;
-using AllyisApps.Lib;
-using System.Linq;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -47,10 +42,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// Initializes the pending page view model.
 		/// </summary>
-		/// <param name="subId"></param>
-		/// <param name="userId"></param>
-		/// <param name="reports"></param>
-		/// <returns></returns>
+		/// <param name="subId">The subscription id.</param>
+		/// <param name="userId">The user id.</param>
+		/// <param name="reports">A list of expense reports.</param>
+		/// <returns>A Expense Pending model.</returns>
 		public ExpensePendingModel InitializeViewModel(int subId, int userId, IEnumerable<ExpenseReport> reports)
 		{
 			List<ExpenseItemViewModel> reportModels = new List<ExpenseItemViewModel>();
@@ -74,6 +69,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					UserName = user.userInfo.FirstName + " " + user.userInfo.LastName
 				});
 			}
+
 			ExpensePendingModel model = new ExpensePendingModel()
 			{
 				PendingReports = reportModels

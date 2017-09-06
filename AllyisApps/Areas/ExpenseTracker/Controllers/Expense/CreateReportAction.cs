@@ -19,12 +19,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// View/export expense report.
 		/// </summary>
-		/// <param name="model"></param>
-		/// <param name="submitType"></param>
+		/// <param name="model">The expense create model.</param>
+		/// <param name="submitType">The type of submission.</param>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="submittedById">The submitted by id.</param>
-		///  <param name="items">The expense items.</param>
-		/// <param name="files"></param>
+		/// <param name="files">The attachment files.</param>
+        /// <param name="items">The expense items.</param>
 		/// <returns>An action result.</returns>
 		[HttpPost]
 		public ActionResult CreateReport(ExpenseCreateModel model, string submitType, int subscriptionId, int submittedById, IEnumerable<HttpPostedFileBase> files = null, List<ExpenseItem> items = null)
@@ -36,13 +36,13 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				throw new AccessViolationException(message);
 			}
 
-
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
 
             if (items == null)
 			{
 				items = new List<ExpenseItem>();
 			}
+
 			var subscription = AppService.GetSubscription(subscriptionId);
 			var organizationId = subscription.OrganizationId;
 			ExpenseStatusEnum reportStatus; // = (ExpenseStatusEnum)Enum.Parse(typeof(ExpenseStatusEnum), Request.Form["Report.ReportStatus"]);
@@ -82,6 +82,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				AzureFiles.DeleteReportAttachment(report.ExpenseReportId, name);
 			}
+
 			if (files != null)
 			{
 				foreach (var file in files)
@@ -92,6 +93,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					}
 				}
 			}
+
 			return RedirectToAction("Index");
 		}
 	}

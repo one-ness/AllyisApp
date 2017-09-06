@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using AllyisApps.Services;
-using System.Web;
-using AllyisApps.Services.Expense;
-using System.Web.Mvc;
-using AllyisApps.DBModel.Finance;
+﻿using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {
