@@ -24,7 +24,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>Returns an action result.</returns>
 		public ActionResult Pending(int subscriptionId)
 		{
-            UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Pending, subscriptionId);
+			ViewData["SubscriptionId"] = subscriptionId;
+			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
             ViewBag.SubscriptionName = AppService.getSubscriptionName(subscriptionId);
 
             if (subInfo.ProductRoleId != 2)

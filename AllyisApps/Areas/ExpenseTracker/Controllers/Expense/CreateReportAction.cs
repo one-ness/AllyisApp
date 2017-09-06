@@ -20,27 +20,30 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// View/export expense report.
 		/// </summary>
 		/// <param name="model"></param>
-		/// <param name="submitType"></param>
-		/// <param name="subscriptionId">The subscription id.</param>
-		/// <param name="submittedById">The submitted by id.</param>
-		///  <param name="items">The expense items.</param>
-		/// <param name="files"></param>
 		/// <returns>An action result.</returns>
 		[HttpPost]
-		public ActionResult CreateReport(ExpenseCreateModel model, string submitType, int subscriptionId, int submittedById, IEnumerable<HttpPostedFileBase> files = null, List<ExpenseItem> items = null)
+		public ActionResult CreateReport(ExpenseCreateModel model)
 		{
-            AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
-
-            if (items == null)
+			var userInfo = GetCookieData();
+			if (userInfo.UserId != model.CurrentUser)
 			{
-				items = new List<ExpenseItem>();
+				string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.CreateReport.ToString());
+				throw new AccessViolationException(message);
 			}
-			var subscription = AppService.GetSubscription(subscriptionId);
+
+
+			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, model.SubscriptionId);
+
+			if (model.Items == null)
+			{
+				model.Items = new List<ExpenseItem>();
+			}
+			var subscription = AppService.GetSubscription(model.SubscriptionId);
 			var organizationId = subscription.OrganizationId;
 			ExpenseStatusEnum reportStatus; // = (ExpenseStatusEnum)Enum.Parse(typeof(ExpenseStatusEnum), Request.Form["Report.ReportStatus"]);
 			DateTime? submittedUtc = null;
 
-			if (submitType == "Submit")
+			if (model.SubmitType == "Submit")
 			{
 				reportStatus = ExpenseStatusEnum.Pending;
 				submittedUtc = DateTime.UtcNow;
@@ -57,33 +60,22 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				CreatedUtc = DateTime.UtcNow,
 				ModifiedUtc = DateTime.UtcNow,
 				SubmittedUtc = submittedUtc,
-				SubmittedById = submittedById,
+				SubmittedById = model.CurrentUser,
 				OrganizationId = organizationId,
 				ReportStatus = (int)reportStatus
 			};
 
-			int reportId = AppService.CreateExpenseReport(report);
-
-			foreach (var item in items)
+			if (ValidateItems(model, report))
 			{
-				item.ExpenseReportId = reportId;
-				AppService.CreateExpenseItem(item);
+				report.ExpenseReportId = AppService.CreateExpenseReport(report);
+				UploadItems(model, report);
+				UploadAttachments(model, report);
+			}
+			else
+			{
+				return RedirectToAction("Create", new { subscriptionId = model.SubscriptionId, reportId = model.Report.ExpenseReportId });
 			}
 
-			foreach (string name in AzureFiles.GetReportAttachments(report.ExpenseReportId))
-			{
-				AzureFiles.DeleteReportAttachment(report.ExpenseReportId, name);
-			}
-			if (files != null)
-			{
-				foreach (var file in files)
-				{
-					if (file != null)
-					{
-						AzureFiles.SaveReportAttachments(reportId, file.InputStream, file.FileName);
-					}
-				}
-			}
 			return RedirectToAction("Index");
 		}
 	}

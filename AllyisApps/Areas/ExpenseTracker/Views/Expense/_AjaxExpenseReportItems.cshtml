@@ -1,86 +1,92 @@
-﻿@using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
+﻿@using AllyisApps.Areas.ExpenseTracker.Controllers
+@using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 @using AllyisApps.DBModel.Finance
 @using AllyisApps.Services
 @using AllyisApps.ViewModels.ExpenseTracker.Expense
-@model IEnumerable<ExpenseItem>
+
+@model ExpenseCreateModel
+
 <div class="items">
-    <table class="table table-hover">
-        <thead>
-            <tr class="double-bottom-border">
-                <th style="width: 10%;">Transaction Date</th>
-                <th style="width: 10%;">Amount</th>
-                <th style="width: 10%;">Description</th>
-                <th style="width: 10%;">Account</th>
-                <th style="width: 10%;">Billable to Customer</th>
-                <th style="width: 10%;"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < Model.Count(); i++)
-            {
-                var item = Model.ToList()[i];
-                if (String.IsNullOrEmpty(item.ItemDescription)) // sets default value to checked if item is new
-                {
-                    item.IsBillableToCustomer = false;
-                }
-                string dateVal = "";
-                string amountVal = "";
-                if (Convert.ToDateTime(item.TransactionDate).ToShortDateString() != "1/1/0001")
-                {
-                    dateVal = Convert.ToDateTime(item.TransactionDate).ToShortDateString();
-                }
-                if (item.Amount != 0)
-                {
-                    amountVal = String.Format("{0:0.00}", item.Amount);
-                }
-                string itemIdName = String.Format("[{0}].ExpenseItemId", item.Index);
-                string accountName = String.Format("[{0}].AccountId", item.Index);
-                var accountList = (List<AccountDBEntity>)Session["AccountList"];
-                var selection = accountList.ToArray().Where(a => a.AccountId == item.AccountId);
-                var selected = selection.Count() == 0 ? accountList.First() : selection.First();
-                var selectList = new SelectList(accountList, "AccountId", "AccountName", selected.AccountId);
+	<table class="table table-hover">
+		<thead>
+			<tr class="double-bottom-border">
+				<th style="width: 10%;">Transaction Date</th>
+				<th style="width: 10%;">Amount</th>
+				<th style="width: 10%;">Description</th>
+				<th style="width: 10%;">Account</th>
+				<th style="width: 10%;">Billable to Customer</th>
+				<th style="width: 10%;"></th>
+			</tr>
+		</thead>
+		<tbody>
+			@for (int i = 0; i < Model.Items.Count; i++)
+			{
+				var item = Model.Items[i];
+				if (String.IsNullOrEmpty(item.ItemDescription)) // sets default value to checked if item is new
+				{
+					item.IsBillableToCustomer = false;
+				}
+				string dateVal = "";
+				string amountVal = "";
+				if (Convert.ToDateTime(item.TransactionDate).ToShortDateString() != "1/1/0001")
+				{
+					dateVal = Convert.ToDateTime(item.TransactionDate).ToShortDateString();
+				}
+				if (item.Amount != 0)
+				{
+					amountVal = String.Format("{0:0.00}", item.Amount);
+				}
+				string itemIdName = String.Format("[{0}].ExpenseItemId", item.Index);
+				string accountName = String.Format("[{0}].AccountId", item.Index);
+				var accountList = (List<AccountDBEntity>)Session["AccountList"];
+				var selection = accountList.ToArray().Where(a => a.AccountId == item.AccountId);
+				var selected = selection.Count() == 0 ? accountList.First() : selection.First();
+				var selectList = new SelectList(accountList, "AccountId", "AccountName", selected.AccountId);
 
-
-                <tr id="@String.Format("item-input_{0}", item.Index)" class="item-div" style="margin: 10px; margin-bottom: 0px;">
-                    <th>
-                        @*<input type="hidden" name="@itemIdName" value="@item.ExpenseItemId" />*@
-                        @Html.HiddenFor(m => m.ToList()[i].ToDelete, new { @id = "toDelete_" + i.ToString(), @class = "updatable" })
-                        @Html.HiddenFor(m => m.ToList()[i].ExpenseItemId)
-                        @Html.TextBoxFor(m => m.ToList()[i].TransactionDate, new { @class = "updatable datepicker form-control item-control", Value = dateVal, style = "display: inline-block; width: 150px" })
-                        @Html.ValidationMessageFor(m => m.ToList()[i].TransactionDate)
-                    </th>
-                    <th>
-                        <div class="amount-div form-control item-control" style="display: inline-block; width: 150px;">
-                            $
-                            @Html.TextBoxFor(m => m.ToList()[i].Amount, new { @class = "updatable amount-textbox", Value = amountVal, style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px; margin-bottom: 6px;" })
-                            @Html.ValidationMessageFor(m => m.ToList()[i].Amount)
-                        </div>
-                    </th>
-                    <th>
-                        @Html.TextBoxFor(m => m.ToList()[i].ItemDescription, new { @class = "updatable form-control item-control", Value = item.ItemDescription, style = "display: inline-block; width: 300px" })
-                        @Html.ValidationMessageFor(m => m.ToList()[i].ItemDescription)
-                    </th>
-                    <th>
-                        @Html.DropDownListFor(m => m.ToList()[i].AccountId, selectList, new { @class = "updatable form-control item-control", name = accountName, style = "display: inline-block; width: 150px", Value = item.AccountId })
-                    </th>
-                    <th>
-                        @Html.CheckBoxFor(m => m.ToList()[i].IsBillableToCustomer, new { @class = "updatable form-control item-control check-off", style = "width: 14px; height: 14px; display: inline-block; margin: 10px; vertical-align: middle;" })
-                    </th>
-                    <th>
-                        <a class="btn btn-danger btn-fa hidden-create"
-                           onclick="removeItem(@i)"
-                           style="float: right; width: 34px; color: white !important; border-color: #d43f3a !important; border-radius: 0px; margin-right: 0px;"
-                           area-label="Close">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                        </a>
-                    </th>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <a class="addItem btn btn-fa hidden-create add-button"
-       onclick="addItem();"
-       style="margin-right: 8px; margin-top: -12px;">
-        <span class="glyphicon glyphicon-plus"></span>
-    </a>
+				<tr id="@String.Format("item-input_{0}", item.Index)" class="item-div" style="margin: 10px; margin-bottom: 0px;">
+					<td>
+						@*<input type="hidden" name="@itemIdName" value="@item.ExpenseItemId" />*@
+						@Html.HiddenFor(m => m.Items[i].ToDelete, new { @id = "toDelete_" + i.ToString(), @class = "updatable" })
+						@Html.HiddenFor(m => m.Items[i].ExpenseItemId)
+						@Html.TextBoxFor(m => m.Items[i].TransactionDate, new { @class = "updatable datepicker form-control item-control req", Value = dateVal, style = "display: inline-block; width: 150px" })
+						@Html.ValidationMessageFor(m => m.Items[i].TransactionDate)
+					</td>
+					<td>
+						<div class="amount-div form-control item-control" style="display: inline-block; width: 150px;">
+							$
+							@Html.TextBoxFor(m => m.Items[i].Amount, new { @class = "updatable amount-textbox req", Value = amountVal, style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px; margin-bottom: 6px;" })
+							@Html.ValidationMessageFor(m => m.Items[i].Amount)
+						</div>
+					</td>
+					<td>
+						@Html.TextBoxFor(m => m.Items[i].ItemDescription, new { @class = "updatable form-control item-control req", Value = item.ItemDescription, style = "display: inline-block; width: 300px" })
+						@Html.ValidationMessageFor(m => m.Items[i].ItemDescription)
+					</td>
+					<td>
+						@Html.DropDownListFor(m => m.Items[i].AccountId, selectList, new { @class = "updatable form-control item-control", name = accountName, style = "display: inline-block; width: 150px", Value = item.AccountId })
+					</td>
+					<td>
+						@Html.CheckBoxFor(m => m.Items[i].IsBillableToCustomer, new { @class = "updatable form-control item-control check-off", style = "width: 14px; height: 14px; display: inline-block; margin: 10px; vertical-align: middle;" })
+					</td>
+					<td>
+						<a class="btn btn-danger btn-fa hidden-create"
+						   onclick="removeItem(@i)"
+						   style="float: right; width: 34px; color: white !important; border-color: #d43f3a !important; border-radius: 0px; margin-right: 0px;"
+						   area-label="Close">
+							<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+						</a>
+					</td>
+				</tr>
+			}
+			<tr>
+				<td colspan="6">
+					<a class="addItem btn btn-fa hidden-create add-button"
+					   onclick="addItem();"
+					   style="margin: 0px;">
+						<span class="glyphicon glyphicon-plus"></span>
+					</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </div>

@@ -59,7 +59,10 @@ namespace AllyisApps.Services
 			EditReport,
 			AdminReport,
             AdminExpense,
-            StatusUpdate
+            StatusUpdate,
+			Pending,
+			UpdateReport,
+			CreateReport
         }
 
 		/// <summary>
@@ -199,38 +202,33 @@ namespace AllyisApps.Services
         {
             bool result = false;
 
-            UserContext.SubscriptionAndRole subInfo = null;
-            this.UserContext.SubscriptionsAndRoles.TryGetValue(subId, out subInfo);
-            ExpenseTrackerRole etRole = (ExpenseTrackerRole)subInfo.ProductRoleId;
-            if (subInfo != null && subInfo.ProductId == ProductIdEnum.ExpenseTracker && etRole != ExpenseTrackerRole.NotInProduct)
-            {
-                if (action == ExpenseTrackerAction.AdminReport || action == ExpenseTrackerAction.StatusUpdate || action == ExpenseTrackerAction.AdminExpense)
-                {
-                    switch (etRole)
-                    {
-                        case ExpenseTrackerRole.Manager:
-                            result = true;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else if (action == ExpenseTrackerAction.EditReport)
-                {
-                    switch (etRole)
-                    {
-                        case ExpenseTrackerRole.User:
-                            result = true;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else
-                {
-                    result = true;
-                }
-            }
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.UserContext.SubscriptionsAndRoles.TryGetValue(subId, out subInfo);
+			if (subInfo != null)
+			{
+				ExpenseTrackerRole etRole = (ExpenseTrackerRole)subInfo.ProductRoleId;
+				if (subInfo.ProductId == ProductIdEnum.ExpenseTracker && etRole != ExpenseTrackerRole.NotInProduct)
+				{
+					if (action == ExpenseTrackerAction.AdminReport 
+						|| action == ExpenseTrackerAction.StatusUpdate 
+						|| action == ExpenseTrackerAction.AdminExpense 
+						|| action == ExpenseTrackerAction.Pending)
+					{
+						switch (etRole)
+						{
+							case ExpenseTrackerRole.Manager:
+								result = true;
+								break;
+							default:
+								break;
+						}
+					}
+					else
+					{
+						result = true;
+					}
+				}
+			}
 
             if (!result && throwException)
             {

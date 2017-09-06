@@ -8,6 +8,9 @@ using System.Web;
 using AllyisApps.Services.Expense;
 using System.IO;
 using AllyisApps.Lib;
+using System.Web.Routing;
+using System.Web.Mvc.Html;
+using System.Linq.Expressions;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -21,27 +24,29 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// </summary>
 		/// <param name="subscriptionId">The subscription id.</param>
 		/// <param name="reportId">The report id.</param>
-		/// <param name="itemCount"></param>
-		/// <param name="fileCount"></param>
 		/// <returns>Returns an action result.</returns>
-		public ActionResult Create(int subscriptionId, int reportId = -1, int itemCount = 0, int fileCount = 0)
+		public ActionResult Create(int subscriptionId, int reportId = -1)
 		{
             UserContext.SubscriptionAndRole subInfo = null;
             AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			ViewBag.SubscriptionName = AppService.getSubscriptionName(subscriptionId);
-
+			ViewData["SubscriptionId"] = subscriptionId;
 			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
 
 			ExpenseReport report = reportId == -1 ? null : AppService.GetExpenseReport(reportId);
             var userInfo = GetCookieData();
             if (reportId != -1)
             {
-                if(report.SubmittedById != userInfo.UserId)
-                {
-                    AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.EditReport, subscriptionId);
-                }
-                
-            }
+                if(report != null
+					&& (report.SubmittedById != userInfo.UserId 
+					|| ((ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Draft 
+					&& (ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Rejected)))
+				{
+					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.EditReport.ToString());
+					throw new AccessViolationException(message);
+				}
+				AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.EditReport, subscriptionId);
+			}
             else
             {
                 AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
@@ -54,7 +59,6 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				items = AppService.GetExpenseItemsByReportId(reportId);
 			}
-			//IList<ExpenseItem> items = report == null ? new List<ExpenseItem>() : AppService.GetExpenseItemsByReportId(reportId);
 
 			var model = new ExpenseCreateModel()
 			{

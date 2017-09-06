@@ -22,26 +22,39 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// update expense report
 		/// </summary>
 		/// <param name="model"></param>
-		/// <param name="subscriptionId"></param>
-		/// <param name="submittedById"></param>
-		/// <param name="reportId"></param>
-		/// <param name="submitType"></param>
-		/// <param name="files"></param>
-		/// <param name="previousFiles"></param>
-		/// <param name="items"></param>
 		/// <returns></returns>
-		public ActionResult UpdateReport(ExpenseCreateModel model, int subscriptionId, int submittedById, int reportId, string submitType, IEnumerable<HttpPostedFileBase> files = null, IEnumerable<string> previousFiles = null, List<ExpenseItem> items = null)
+		[HttpPost]
+		public ActionResult UpdateReport(ExpenseCreateModel model)
 		{
-			if (items == null)
+			var oldReport = AppService.GetExpenseReport(model.Report.ExpenseReportId);
+			var userInfo = GetCookieData();
+			if (model.Report.ExpenseReportId != -1)
 			{
-				items = new List<ExpenseItem>();
+				if (oldReport.SubmittedById != userInfo.UserId
+					|| ((ExpenseStatusEnum)oldReport.ReportStatus != ExpenseStatusEnum.Draft
+					&& (ExpenseStatusEnum)oldReport.ReportStatus != ExpenseStatusEnum.Rejected))
+				{
+					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.UpdateReport.ToString());
+					throw new AccessViolationException(message);
+				}
+				AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.EditReport, model.SubscriptionId);
 			}
-			var subscription = AppService.GetSubscription(subscriptionId);
+			else
+			{
+				AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, model.SubscriptionId);
+			}
+
+
+			if (model.Items == null)
+			{
+				model.Items = new List<ExpenseItem>();
+			}
+			var subscription = AppService.GetSubscription(model.SubscriptionId);
 			var organizationId = subscription.OrganizationId;
 			ExpenseStatusEnum reportStatus; // = (ExpenseStatusEnum)Enum.Parse(typeof(ExpenseStatusEnum), Request.Form["Report.ReportStatus"]);
 			DateTime? submittedUtc = null;
 
-			if (submitType == "Submit")
+			if (model.SubmitType == "Submit")
 			{
 				reportStatus = ExpenseStatusEnum.Pending;
 				submittedUtc = DateTime.UtcNow;
@@ -51,66 +64,29 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				reportStatus = ExpenseStatusEnum.Draft;
 			}
 
-			var oldReport = AppService.GetExpenseReport(reportId);
-
 			if (oldReport.ReportStatus == (int)ExpenseStatusEnum.Draft || oldReport.ReportStatus == (int)ExpenseStatusEnum.Rejected)
 			{
 				var report = new ExpenseReport()
 				{
+					ExpenseReportId = model.Report.ExpenseReportId,
 					ReportTitle = model.Report.ReportTitle,
 					BusinessJustification = model.Report.BusinessJustification,
 					ModifiedUtc = DateTime.UtcNow,
 					SubmittedUtc = submittedUtc,
-					SubmittedById = submittedById,
+					SubmittedById = model.CurrentUser,
 					OrganizationId = organizationId,
 					ReportStatus = (int)reportStatus
 				};
 
-				IList<ExpenseItem> oldItems = AppService.GetExpenseItemsByReportId(reportId);
-				List<int> itemIds = new List<int>();
-				foreach (ExpenseItem oldItem in oldItems)
+				if (UploadItems(model, report))
 				{
-					itemIds.Add(oldItem.ExpenseItemId);
+					AppService.UpdateExpenseReport(report, model.Report.ExpenseReportId);
+					UploadAttachments(model, report);
 				}
-
-				foreach (var item in items)
+				else
 				{
-					item.ExpenseReportId = reportId;
-					if (itemIds.Contains(item.ExpenseItemId)) {
-						AppService.UpdateExpenseItem(item);
-						itemIds.Remove(item.ExpenseItemId);
-					}
-					else
-					{
-						AppService.CreateExpenseItem(item);
-					}
+					return RedirectToAction("Create", new { subscriptionId = model.SubscriptionId, reportId = model.Report.ExpenseReportId });
 				}
-
-				foreach (int itemId in itemIds)
-				{
-					AppService.DeleteExpenseItem(itemId);
-				}
-
-				foreach (string name in AzureFiles.GetReportAttachments(reportId))
-				{
-					if (previousFiles != null && !previousFiles.Contains(name))
-					{
-						AzureFiles.DeleteReportAttachment(reportId, name);
-					}
-				}
-				List<string> empty = AzureFiles.GetReportAttachments(reportId);
-				if (files != null)
-				{
-					foreach (var file in files)
-					{
-						if (file != null)
-						{
-							AzureFiles.SaveReportAttachments(reportId, file.InputStream, file.FileName);
-						}
-					}
-				}
-
-				AppService.UpdateExpenseReport(report, reportId);
 			}
 
 			return RedirectToAction("Index");

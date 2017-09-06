@@ -10,6 +10,7 @@ namespace AllyisApps
 		public const string AcceptInvitation = "acceptinvitation";
 		public const string Action = "action";
 		public const string AddMember = "addmember";
+        public const string AdminReport = "adminreport";
 		public const string ChangePassword = "changepassword";
 		public const string Charge = "charge";
 		public const string ConfirmEmail = "confirmemail";
@@ -86,6 +87,7 @@ namespace AllyisApps
 		public const string Settings = "settings";
 		public const string MergePayClass = "mergepayclass";
 		public const string ViewReport = "viewreport";
+        public const string ViewAdminReport = "viewadminreport";
 		public const string Template = "template";
 		public const string EditUsers = "editusers";
 		public const string EditPosition = "editposition";

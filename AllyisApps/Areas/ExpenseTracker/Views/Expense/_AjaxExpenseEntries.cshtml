@@ -6,11 +6,6 @@
 
 }
 
-<div class="form-group pull-right">
-    <a  href="@Url.Action("Create")">
-        <span class="btn btn-primary">Create Report</span>
-    </a>
-</div>
 <table class="table table-hover">
     <thead >
         <tr class="double-bottom-border">
@@ -25,7 +20,7 @@
         @foreach(ExpenseItemViewModel report in Model.Reports)
         {
             <tr>
-                <td>@Html.ActionLink(@report.ReportName,"reportview", new { reportId = @report.ReportId }, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" })</td>
+                <td>@Html.ActionLink(@report.ReportName,"reportview", new { reportId = @report.ReportId }, htmlAttributes: new { @class = "form-inline col-xs-12" })</td>
                 
                 @if(report.SubmittedDate == null)
                 {

@@ -14,6 +14,11 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 	public class ExpenseCreateModel
 	{
 		/// <summary>
+		/// Gets or sets whether the submission is an update or create.
+		/// </summary>
+		public string SubmitType { get; set; }
+
+		/// <summary>
 		/// Gets or sets Subscription Id.
 		/// </summary>
 		public int SubscriptionId { get; set; }
@@ -34,17 +39,22 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		public DateTime StartDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Expense Items
+		/// Gets or sets the Expense Items.
 		/// </summary>
 		public IList<ExpenseItem> Items { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Expense Files
+		/// Gets or sets the Expense Files.
 		/// </summary>
 		public IList<HttpPostedFileBase> Files { get; set; }
 
 		/// <summary>
-		/// Gets or sets the list of accounts
+		/// Gets or sets the names of files that were previously uploaded.
+		/// </summary>
+		public IEnumerable<string> PreviousFiles { get; set; }
+
+		/// <summary>
+		/// Gets or sets the list of accounts.
 		/// </summary>
 		public IList<AccountDBEntity> AccountList { get; set; }
 	}
