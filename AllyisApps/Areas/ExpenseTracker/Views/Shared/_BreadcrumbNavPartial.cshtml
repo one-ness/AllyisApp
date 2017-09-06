@@ -14,7 +14,7 @@
 		@if (manager)
         { 
             <li>@Html.ActionLink("Pending", ActionConstants.Pending, ControllerConstants.Expense, new { subscriptionId = subId })</li> 
-            <li>@Html.ActionLink("Organization Reports", ActionConstants.AdminReport, ControllerConstants.Expense, new { subscriptionId = subId })</li>
+            <li>@Html.ActionLink("Admin Reports", ActionConstants.AdminReport, ControllerConstants.Expense, new { subscriptionId = subId })</li>
         }
     </ul>
 </li>
