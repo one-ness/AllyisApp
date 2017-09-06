@@ -61,8 +61,9 @@ namespace AllyisApps.Controllers
 				int userId = await AppService.SetupNewUser(model.Email, model.Password, model.FirstName, model.LastName, code, birthdate, model.PhoneNumber, model.Address, null, model.City, model.SelectedStateId, model.PostalCode, model.SelectedCountryCode, confirmEmailSubject, confirmEmailBody);
 				if (userId > 0)
 				{
-					// sign in (and set cookie)
-					this.SignIn(userId, model.Email);
+					// sign in (and set cookie) do not set cookie need to confirm email 
+					//this.SignIn(userId, model.Email);
+					Notifications.Add(new BootstrapAlert(Strings.RegistationSucessful, Variety.Success));
 					return this.RedirectToLocal(returnUrl);
 				}
 				else

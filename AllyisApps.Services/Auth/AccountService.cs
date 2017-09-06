@@ -212,25 +212,25 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">The login email.</param>
 		/// <param name="password">The login password.</param>
-		public UserContext ValidateLogin(string email, string password)
+		public User ValidateLogin(string email, string password)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
 
-			UserContext result = null;
-			var user = this.DBHelper.GetUserByEmail(email);
-			if (user != null)
+			User result = null;
+			result = InitializeUser(this.DBHelper.GetUserByEmail(email),false);
+			
+			if (result != null)
 			{
 				// email exists, hash the given password and compare with hash in db
-				Tuple<bool, string> passwordValidation = Crypto.ValidateAndUpdate(password, user.PasswordHash);
+				Tuple<bool, string> passwordValidation = Crypto.ValidateAndUpdate(password, result.PasswordHash);
 				if (passwordValidation.Item1)
 				{
-					result = new UserContext(user.UserId, email, user.FirstName, user.LastName);
 
 					// Store updated password hash if needed
 					if (passwordValidation.Item2 != null)
 					{
-						DBHelper.UpdateUserPassword(user.UserId, passwordValidation.Item2);
+						DBHelper.UpdateUserPassword(result.UserId, passwordValidation.Item2);
 					}
 				}
 			}
