@@ -99,9 +99,10 @@ namespace AllyisApps.Controllers
 		public ActionResult EditOrg(int id, string returnUrl)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
-			var infos = AppService.GetOrgWithCountriesAndEmployeeId(id);
-			EditOrganizationViewModel model = this.ConstructEditOrganizationViewModel(infos.Item1, true, infos.Item2);
-			model.EmployeeId = infos.Item3;
+			bool candelete = this.AppService.CheckOrgAction(AppService.OrgAction.DeleteOrganization, id, false);
+			var infos = AppService.GetOrgWithNextEmployeeId(id);
+			EditOrganizationViewModel model = this.ConstructEditOrganizationViewModel(infos.Item1, candelete);
+			model.EmployeeId = infos.Item2;
 			ViewBag.returnUrl = returnUrl;
 			return this.View(model);
 		}
@@ -111,9 +112,8 @@ namespace AllyisApps.Controllers
 		/// </summary>
 		/// <param name="organization">An <see cref="Organization"/> for the organization.</param>
 		/// <param name="canDelete">The users permission to delete.</param>
-		/// <param name="validCountries">List of valid countries.</param>
 		/// <returns>An initialized EditOrganizationViewModel.</returns>
-		public EditOrganizationViewModel ConstructEditOrganizationViewModel(Organization organization, bool canDelete, IEnumerable<string> validCountries)
+		public EditOrganizationViewModel ConstructEditOrganizationViewModel(Organization organization, bool canDelete)
 		{
 			var model = new EditOrganizationViewModel
 			{

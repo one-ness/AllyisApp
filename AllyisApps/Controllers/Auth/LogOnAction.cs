@@ -9,6 +9,7 @@ using AllyisApps.Services;
 using AllyisApps.ViewModels.Auth;
 using System;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -49,12 +50,19 @@ namespace AllyisApps.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				UserContext result = null;
+				User result = null;
 				if ((result = AppService.ValidateLogin(model.Email, model.Password)) != null)
 				{
 					// sign in
-					this.SignIn(result.UserId, result.Email, model.RememberMe);
-					return this.RedirectToLocal(returnUrl);
+					if (result.IsEmailConfirmed || (WebConfigurationManager.AppSettings["RequireEmailConfirmation"] ??"true").ToLower().Equals("false"))
+					{
+						this.SignIn(result.UserId, result.Email, model.RememberMe);
+						return this.RedirectToLocal(returnUrl);
+					}
+					else
+					{
+						Notifications.Add(new BootstrapAlert(Resources.Strings.YouMustRegisterYourEmailAddress, Variety.Danger));
+					}
 				}
 				else
 				{

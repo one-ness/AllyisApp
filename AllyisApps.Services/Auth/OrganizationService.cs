@@ -97,13 +97,12 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<Organization, List<string>, string> GetOrgWithCountriesAndEmployeeId(int orgId)
+		public Tuple<Organization,  string> GetOrgWithNextEmployeeId(int orgId)
 		{
-			var spResults = DBHelper.GetOrgWithCountriesAndEmployeeId(orgId, UserContext.UserId);
+			var spResults = DBHelper.GetOrgWithNextEmployeeId(orgId, UserContext.UserId);
 			return Tuple.Create(
 				InitializeOrganization(spResults.Item1),
-				spResults.Item2,
-				spResults.Item3);
+				spResults.Item2);
 		}
 
 		/// <summary>
@@ -704,7 +703,6 @@ namespace AllyisApps.Services
 
             return new InvitationInfo
             {
-                DateOfBirth = invitation.DateOfBirth,
                 Email = invitation.Email,
                 CompressedEmail = AppService.GetCompressedEmail(invitation.Email),
                 FirstName = invitation.FirstName,
@@ -713,7 +711,7 @@ namespace AllyisApps.Services
                 OrganizationId = invitation.OrganizationId,
                 OrganizationRole = (OrganizationRole)invitation.OrganizationRoleId,
                 EmployeeId = invitation.EmployeeId,
-                DecisionDate = invitation.DecisionDate,
+                DecisionDateUtc = invitation.DecisionDateUtc,
                 status = (InvitationStatusEnum)invitation.InvitationStatusId
 			};
 		}
@@ -753,7 +751,6 @@ namespace AllyisApps.Services
 
 			return new InvitationDBEntity
 			{
-				DateOfBirth = invitation.DateOfBirth,
 				Email = invitation.Email,
 				FirstName = invitation.FirstName,
 				InvitationId = invitation.InvitationId,
@@ -761,7 +758,7 @@ namespace AllyisApps.Services
 				OrganizationId = invitation.OrganizationId,
 				OrganizationRoleId = (int)invitation.OrganizationRole,
 				EmployeeId = invitation.EmployeeId,
-                DecisionDate = invitation.DecisionDate,
+                DecisionDateUtc = invitation.DecisionDateUtc,
                 InvitationStatusId = (int)invitation.status
 			};
 		}

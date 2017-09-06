@@ -10,10 +10,11 @@ namespace AllyisApps.Services
 	/// <summary>
 	/// a subscription that a user belongs to
 	/// </summary>
-	public class UserSubscription : Subscription
+	public class UserSubscription
 	{
 		public int UserId { get; set; }
 		public int ProductRoleId { get; set; }
-		public DateTime JoinedDateUtc { get; set; }
+		
+		public Subscription Subscription {get; set;}
 	}
 }

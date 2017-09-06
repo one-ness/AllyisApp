@@ -62,7 +62,7 @@ BEGIN
 			END
 
 			UPDAtE [Auth].[Invitation]
-			SET StatusId = 1, DecisionDate = GETUTCDATE()
+			SET StatusId = 1, DecisionDateUtc = GETUTCDATE()
 			WHERE [InvitationId] = @invitationId;
 			
 			-- On success, return name of organization and role

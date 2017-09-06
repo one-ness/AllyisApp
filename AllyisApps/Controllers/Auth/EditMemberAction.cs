@@ -57,8 +57,7 @@ namespace AllyisApps.Controllers
 					UserInfo = new User
 					{
 						UserId = userOrgInfo.InvitationId,
-						Email = userOrgInfo.Email,
-						DateOfBirth = userOrgInfo.DateOfBirth
+						Email = userOrgInfo.Email
 					},
 					FirstName = userOrgInfo.FirstName,
 					LastName = userOrgInfo.LastName,

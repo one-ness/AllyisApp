@@ -33,15 +33,11 @@ namespace AllyisApps.DBModel.Auth
 		/// </summary>
 		public string LastName { get; set; }
 
-		/// <summary>
-		/// Gets or sets the birthday of the recipiant.
-		/// </summary>
-		public DateTime DateOfBirth { get; set; }
 
         /// <summary>
         /// Date invitation is accepted or Rejected 
         /// </summary>
-        public DateTime DecisionDate { get; set; }
+        public DateTime DecisionDateUtc { get; set; }
 
         /// <summary>
         /// Invitation stauts of accepted pending or rejected

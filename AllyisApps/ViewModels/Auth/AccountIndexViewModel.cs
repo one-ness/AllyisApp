@@ -245,12 +245,12 @@ namespace AllyisApps.ViewModels.Auth
 
 				public SubscriptionViewModel(UserSubscription userSubInfo, string description)
 				{
-					ProductName = userSubInfo.ProductName;
-					SubscriptionId = userSubInfo.SubscriptionId;
-					SubscriptionName = userSubInfo.SubscriptionName;
+					ProductName = userSubInfo.Subscription.ProductName;
+					SubscriptionId = userSubInfo.Subscription.SubscriptionId;
+					SubscriptionName = userSubInfo.Subscription.SubscriptionName;
 					ProductDescription = description;
-					productId = userSubInfo.ProductId;
-					AreaUrl = userSubInfo.AreaUrl;
+					productId = userSubInfo.Subscription.ProductId;
+					AreaUrl = userSubInfo.Subscription.AreaUrl;
 				}
 
 				public string ProductDescription { get; set; }

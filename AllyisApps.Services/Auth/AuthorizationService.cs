@@ -18,12 +18,23 @@ namespace AllyisApps.Services
 		/// </summary>
 		public enum OrgAction : int
 		{
-			EditUser = 1,
+			EditUser = 1, // edit other users (edit self must always be allowed)
 			EditUserPermission,
 			EditInvitation,
 			EditOrganization,
 			EditSubscription,
 			EditBilling,
+			ViewUser, // view other users (view self must always be allowed)
+			DeleteUserFromOrganization,
+			DeleteUserFromSubscription,
+			DeleteOrganization,
+			DeleteSubscritpion,
+			DeleteBilling,
+			AddUserToOrganization, // same as create invitation
+			AddUserToSubscription,
+			CreateSubscription,
+			CreateBilling,
+			ChangePassword, // change password for others (change for self must always be allowed)
 		}
 
 		/// <summary>
@@ -78,7 +89,7 @@ namespace AllyisApps.Services
 
 			if (orgInfo != null)
 			{
-                result = CheckOrgAction(action, orgId, orgInfo.OrganizationRole, throwException);
+				result = CheckOrgAction(action, orgId, orgInfo.OrganizationRole, throwException);
 			}
 
 			if (!result && throwException)
@@ -90,30 +101,30 @@ namespace AllyisApps.Services
 			return result;
 		}
 
-        public bool CheckOrgAction(OrgAction action,int orgId, OrganizationRole role, bool throwException = true)
-        {
-            bool result = false;
-            switch (role)
-            {
-                case OrganizationRole.Owner:
-                    result = true;
-                    break;
+		public bool CheckOrgAction(OrgAction action, int orgId, OrganizationRole role, bool throwException = true)
+		{
+			bool result = false;
+			switch (role)
+			{
+				case OrganizationRole.Owner:
+					result = true;
+					break;
 
-                default:
-                    break;
-            }
-            if (!result && throwException)
-            {
-                string message = string.Format("action {0} denied for org {1}", action.ToString(), orgId);
-                throw new AccessViolationException(message);
-            }
-            return result;
-        }
+				default:
+					break;
+			}
+			if (!result && throwException)
+			{
+				string message = string.Format("action {0} denied for org {1}", action.ToString(), orgId);
+				throw new AccessViolationException(message);
+			}
+			return result;
+		}
 
-        /// <summary>
-        /// check the permissions in the org the given subscription belongs to for the given user.
-        /// </summary>
-        public bool CheckOrgActionForSubscriptionId(OrgAction action, int subscriptionId, bool throwException = true)
+		/// <summary>
+		/// check the permissions in the org the given subscription belongs to for the given user.
+		/// </summary>
+		public bool CheckOrgActionForSubscriptionId(OrgAction action, int subscriptionId, bool throwException = true)
 		{
 			int orgId = -1;
 			UserContext.SubscriptionAndRole subInfo = null;

@@ -1522,6 +1522,12 @@
   <data name="Title" xml:space="preserve">
     <value>Title</value>
   </data>
+  <data name="RegistationSucessful" xml:space="preserve">
+    <value>Registation is successful Please verify email address.</value>
+  </data>
+  <data name="YouMustRegisterYourEmailAddress" xml:space="preserve">
+    <value>You must Register Your Email Address</value>
+  </data>
   <data name="ExpenseTracker" xml:space="preserve">
     <value>ExpenseTracker</value>
   </data>

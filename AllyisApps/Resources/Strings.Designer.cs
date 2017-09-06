@@ -3069,6 +3069,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Registation is successful Please verify email address..
+        /// </summary>
+        public static string RegistationSucessful {
+            get {
+                return ResourceManager.GetString("RegistationSucessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Register.
         /// </summary>
         public static string Register {
@@ -4293,6 +4302,15 @@ namespace AllyisApps.Resources {
         public static string YouDontHaveASubscriptionToTimeTracker {
             get {
                 return ResourceManager.GetString("YouDontHaveASubscriptionToTimeTracker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must Register Your Email Address.
+        /// </summary>
+        public static string YouMustRegisterYourEmailAddress {
+            get {
+                return ResourceManager.GetString("YouMustRegisterYourEmailAddress", resourceCulture);
             }
         }
         

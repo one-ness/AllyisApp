@@ -68,7 +68,6 @@ BEGIN
 		[Email],
 		[FirstName],
 		[LastName], 
-		[DateOfBirth], 
 		[OrganizationId], 
 		[Invitation].[OrganizationRoleId],
 		[OrganizationRoleName] AS [OrganizationRoleName],

@@ -46,7 +46,6 @@ BEGIN
 		[Invitation].[Email], 
 		[Invitation].[FirstName], 
 		[Invitation].[LastName], 
-		[Invitation].[DateOfBirth], 
 		[Invitation].[OrganizationId],
 		[Organization].[OrganizationName] AS 'OrganizationName',
 		[OrganizationRoleId],

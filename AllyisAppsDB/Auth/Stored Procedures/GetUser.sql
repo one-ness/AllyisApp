@@ -1,4 +1,4 @@
-﻿create procedure Auth.GetUser
+﻿CREATE procedure [Auth].[GetUser]
 	@userId int
 as
 begin
@@ -30,8 +30,7 @@ begin
 		[InvitationId], 
 		[Invitation].[Email], 
 		[Invitation].[FirstName], 
-		[Invitation].[LastName], 
-		[Invitation].[DateOfBirth], 
+		[Invitation].[LastName],  
 		[Invitation].[OrganizationId],
 		[Organization].[OrganizationName] AS 'OrganizationName', 
 		[OrganizationRoleId],
@@ -39,6 +38,6 @@ begin
 	FROM [Auth].[User] WITH (NOLOCK)
 	LEFT JOIN [Auth].[Invitation] WITH (NOLOCK) ON [User].[Email] = [Invitation].[Email]
 	LEFT JOIN [Auth].[Organization] WITH (NOLOCK) ON [Invitation].[OrganizationId] = [Organization].[OrganizationId]
-	WHERE [User].[UserId] = @userId AND [Invitation].[IsActive] = 1 And [Invitation].StatusId = 0;
+	WHERE [User].[UserId] = @userId AND [Invitation].[IsActive] = 1 and [Invitation].[DecisionDateUtc] is null
 
 end
