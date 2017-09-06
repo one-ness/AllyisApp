@@ -13,11 +13,10 @@
 			string previousName = String.Format("Files[{0}].PreviousName", Model.Index);
 			HttpPostedFileBase file = new ExpenseFile(Model.Stream, Model.ContentType, Model.FileName);
 		}
-		<input type="hidden" value="@Model.FileName" name="previousFiles" id="@previousName" />
-		<input type="file" id="@uploadName" class="@className" name="files" style="display:none;" value="@file"
-			   onchange="$('#@inputName').val($(this).val().replace('C:\\fakepath\\', '')); $('#@previousName').val('');" />
+		<input type="file" id="@uploadName" class="@className" name="model.Files" style="display:none;" value="@file"
+			   onchange="$('#@inputName').val($(this).val().replace('C:\\fakepath\\', ''));" />
 		<input id="@inputName" class="form-control item-control" style="width: 210px; display: inline-block;" value="@Model.FileName"
-			   onchange="$('#@inputName').val($(this).val().replace('C:\\fakepath\\', '')); $('#@previousName').val('');" />
+			   onchange="$('#@inputName').val($(this).val().replace('C:\\fakepath\\', ''));" />
 	</div>
 	<div class="file-right" style="float: right;">
 		<a onclick="@uploadFunc" title="Choose Excel file containing Expense Tracker entries">

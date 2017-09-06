@@ -84,17 +84,17 @@
 				Model.Items = new List<ExpenseItem>();
 			}
 		}
-		@Html.HiddenFor(m => m.Report.ExpenseReportId)
-		@Html.HiddenFor(m => m.CurrentUser)
-		@Html.HiddenFor(m => m.SubscriptionId)
+		@Html.HiddenFor(m => m.Report.ExpenseReportId, new { Name = "model.Report.ExpenseReportId" })
+		@Html.HiddenFor(m => m.CurrentUser, new { Name = "model.CurrentUser" })
+		@Html.HiddenFor(m => m.SubscriptionId, new { Name = "model.SubscriptionId" })
 		<div class="form-group">
 			@Html.ReqLabelFor(m => m.Report.ReportTitle, "Report Name")
-			@Html.TextBoxFor(m => m.Report.ReportTitle, new { @class = "form-control", name = "ReportName" })
+			@Html.TextBoxFor(m => m.Report.ReportTitle, new { Name = "model.Report.ReportTitle", @class = "form-control" })
 			@Html.ValidationMessageFor(m => m.Report.ReportTitle)
 		</div>
 		<div class="form-group">
 			@Html.ReqLabelFor(m => m.Report.BusinessJustification, "Business Justification")
-			@Html.TextAreaFor(m => m.Report.BusinessJustification, new { @class = "form-control", rows = "3", style = "resize: none;", name = "BusinessJustification" })
+			@Html.TextAreaFor(m => m.Report.BusinessJustification, new { Name = "model.Report.BusinessJustification", @class = "form-control", rows = "3", style = "resize: none;", })
 			@Html.ValidationMessageFor(m => m.Report.BusinessJustification)
 		</div>
 		<br>
