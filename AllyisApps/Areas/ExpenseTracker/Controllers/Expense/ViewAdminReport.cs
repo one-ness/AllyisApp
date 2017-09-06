@@ -111,32 +111,5 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
             return model;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="subscriptionId"></param>
-        /// <param name="organizationId"></param>
-        /// <param name="model"></param>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <returns></returns>
-        public ActionResult ExportExpenseReport(int subscriptionId, int organizationId, AdminReportModel model, DateTime? startDate = null, DateTime? endDate = null)
-        {
-            List<ExpenseReport> expenses = new List<ExpenseReport>();
-
-            DateTime start = startDate != null ? startDate.Value : DateTime.UtcNow;
-            DateTime end = endDate != null ? endDate.Value : DateTime.UtcNow;
-
-            foreach (var user in model.Selection.SelectedUsers)
-            {
-                var reports = AppService.GetExpenseReportBySubmittedId(user).Select(x => x).Where(x => DateTime.Compare(x.CreatedUtc, start) >= 0 && DateTime.Compare(x.CreatedUtc, end) <= 0);
-                reports = reports.Select(x => x).Where(y => model.Selection.Status.IndexOf(y.ReportStatus) != -1);
-                expenses.AddRange(reports);
-            }
-
-
-            return File(AppService.PrepareExpenseCSVExport(organizationId, expenses, start, end).BaseStream, "text/csv", "export.csv");
-        }
     }
 }
