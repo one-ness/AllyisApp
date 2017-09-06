@@ -27,6 +27,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>Returns an action result.</returns>
 		public ActionResult Create(int subscriptionId, int reportId = -1)
 		{
+			Session["AccountList"] = AppService.GetAccounts();
+
 			UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
 			ViewBag.SubscriptionName = subInfo.SubscriptionName;
 			ViewData["SubscriptionId"] = subscriptionId;

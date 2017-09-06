@@ -23,20 +23,5 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			return null;
 		}
-
-        /// <summary>
-        /// Displays a file with a link associated with report.
-        /// </summary>
-        /// <param name="model">A ExpenseFile model.</param>
-        /// <returns>A ExpenseFile model.</returns>
-        public ActionResult DisplayFileLink(ExpenseFileModel model)
-		{
-			if (model != null)
-			{
-				return PartialView("_AjaxExpenseReportFileLink", model);
-			}
-
-			return null;
-		}
 	}
 }

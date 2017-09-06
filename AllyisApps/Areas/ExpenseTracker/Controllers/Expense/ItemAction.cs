@@ -18,44 +18,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 	public partial class ExpenseController : BaseController
 	{
 		/// <summary>
-		/// Displays the items in the create report view.
-		/// </summary>
-		/// <param name="model"></param>
-		/// <returns></returns>
-		public ActionResult DisplayItem(ExpenseCreateModel model)
-		{
-			Session["AccountList"] = AppService.GetAccounts();
-			return PartialView("_AjaxExpenseReportItems", model);
-		}
-
-		/// <summary>
 		/// Adds a new item to the model and displays the items in the create report view.
 		/// </summary>
-		/// <param name="model"></param>
 		/// <returns></returns>
-		[HttpPost]
-		public ActionResult AddItem(ExpenseCreateModel model)
+		public ActionResult AddItem(int index)
 		{
-			if (model.Items == null)
-			{
-				model.Items = new List<ExpenseItem>();
-			}
-			Session["AccountList"] = AppService.GetAccounts();
-			model.Items.Add(new ExpenseItem());
-			return PartialView("_AjaxExpenseReportItems", model);
-		}
-
-		/// <summary>
-		/// Adds a new item to the model and displays the items in the create report view.
-		/// </summary>
-		/// <param name="model"></param>
-		/// <returns></returns>
-		[HttpPost]
-		public ActionResult DeleteItem(ExpenseCreateModel model)
-		{
-			model.Items.Remove(model.Items.Where(i => i.ToDelete).FirstOrDefault());
-			Session["AccountList"] = AppService.GetAccounts();
-			return PartialView("_AjaxExpenseReportItems", model);
+			return PartialView("_AjaxExpenseReportItems", new ExpenseItem() { Index = index });
 		}
 	}
 }

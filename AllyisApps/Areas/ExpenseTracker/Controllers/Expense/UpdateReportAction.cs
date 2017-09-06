@@ -26,6 +26,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		[HttpPost]
 		public ActionResult UpdateReport(ExpenseCreateModel model)
 		{
+			var modelstate = ModelState;
 			var oldReport = AppService.GetExpenseReport(model.Report.ExpenseReportId);
 			var userInfo = GetCookieData();
 			if (model.Report.ExpenseReportId != -1)
@@ -51,7 +52,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			}
 			var subscription = AppService.GetSubscription(model.SubscriptionId);
 			var organizationId = subscription.OrganizationId;
-			ExpenseStatusEnum reportStatus; // = (ExpenseStatusEnum)Enum.Parse(typeof(ExpenseStatusEnum), Request.Form["Report.ReportStatus"]);
+			ExpenseStatusEnum reportStatus;
 			DateTime? submittedUtc = null;
 
 			if (model.SubmitType == "Submit")
