@@ -24,6 +24,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		[HttpPost]
 		public ActionResult CreateReport(ExpenseCreateModel model)
 		{
+			if (!ModelState.IsValid)
+			{
+				return RedirectToAction("Create", new { subscriptionId = model.SubscriptionId, reportId = model.Report.ExpenseReportId });
+			}
+
 			var userInfo = GetCookieData();
 			if (userInfo.UserId != model.CurrentUser)
 			{
@@ -64,17 +69,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				OrganizationId = organizationId,
 				ReportStatus = (int)reportStatus
 			};
-
-			if (ValidateItems(model, report))
-			{
-				report.ExpenseReportId = AppService.CreateExpenseReport(report);
-				UploadItems(model, report);
-				UploadAttachments(model, report);
-			}
-			else
-			{
-				return RedirectToAction("Create", new { subscriptionId = model.SubscriptionId, reportId = model.Report.ExpenseReportId });
-			}
+			
+			report.ExpenseReportId = AppService.CreateExpenseReport(report);
+			UploadItems(model, report);
+			UploadAttachments(model, report);
 
 			return RedirectToAction("Index");
 		}
