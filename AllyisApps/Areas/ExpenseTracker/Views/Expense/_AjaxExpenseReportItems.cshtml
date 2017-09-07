@@ -1,4 +1,4 @@
-﻿@using AllyisApps.Areas.ExpenseTracker.Controllers
+﻿﻿@using AllyisApps.Areas.ExpenseTracker.Controllers
 @using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 @using AllyisApps.DBModel.Finance
 @using AllyisApps.Services
@@ -21,23 +21,15 @@
 		{
 			Model.IsBillableToCustomer = false;
 		}
-		string dateVal = "";
-		string amountVal = "";
-		if (Convert.ToDateTime(Model.TransactionDate).ToShortDateString() != "1/1/0001")
-		{
-			dateVal = Convert.ToDateTime(Model.TransactionDate).ToShortDateString();
-		}
-		if (Model.Amount != 0)
-		{
-			amountVal = String.Format("{0:0.00}", Model.Amount);
-		}
+		string amountVal = Model.Amount == 0 ? "" : String.Format("{0:0.00}", Model.Amount);
+		string dateVal = Convert.ToDateTime(Model.TransactionDate).ToShortDateString() == "1/1/0001" ? "" : Convert.ToDateTime(Model.TransactionDate).ToShortDateString();
 		string itemIdName = String.Format("[{0}].ExpenseItemId", Model.Index);
 		string accountName = String.Format("[{0}].AccountId", Model.Index);
 		var accountList = (List<AccountDBEntity>)Session["AccountList"];
 		var selection = accountList.ToArray().Where(a => a.AccountId == Model.AccountId);
 		var selected = selection.Count() == 0 ? accountList.First() : selection.First();
 		var selectList = new SelectList(accountList, "AccountId", "AccountName", selected.AccountId);
-		
+
 		<td>
 			@Html.HiddenFor(m => m.ExpenseItemId)
 			@Html.TextBoxFor(m => m.TransactionDate, new { @class = "updatable datepicker form-control item-control req", Value = dateVal, style = "display: inline-block; width: 150px" })

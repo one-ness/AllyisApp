@@ -90,12 +90,12 @@
 		<div class="form-group">
 			@Html.ReqLabelFor(m => m.Report.ReportTitle, "Report Name")
 			@Html.TextBoxFor(m => m.Report.ReportTitle, new { Name = "model.Report.ReportTitle", @class = "form-control" })
-			@Html.ValidationMessageFor(m => m.Report.ReportTitle)
+			@Html.ValidationMessageFor(m => m.Report.ReportTitle, "", new { data_valmsg_for = "model.Report.ReportTitle" })
 		</div>
 		<div class="form-group">
 			@Html.ReqLabelFor(m => m.Report.BusinessJustification, "Business Justification")
 			@Html.TextAreaFor(m => m.Report.BusinessJustification, new { Name = "model.Report.BusinessJustification", @class = "form-control", rows = "3", style = "resize: none;", })
-			@Html.ValidationMessageFor(m => m.Report.BusinessJustification)
+			@Html.ValidationMessageFor(m => m.Report.BusinessJustification, "", new { data_valmsg_for = "model.Report.BusinessJustification" })
 		</div>
 		<br>
 	</div>
@@ -111,21 +111,27 @@
 				<table class="table table-hover">
 					<thead>
 						<tr class="double-bottom-border">
-							<th style="width: 10%;">Transaction Date</th>
-							<th style="width: 10%;">Amount</th>
-							<th style="width: 10%;">Description</th>
+							<th style="width: 10%;">
+								@Html.ReqLabelFor(m => new ExpenseItem().TransactionDate, "Transaction Date")
+							</th>
+							<th style="width: 10%;">
+								@Html.ReqLabelFor(m => new ExpenseItem().Amount, "Amount")
+							</th>
+							<th style="width: 10%;">
+								@Html.ReqLabelFor(m => new ExpenseItem().ItemDescription, "Description")
+							</th>
 							<th style="width: 10%;">Account</th>
-							<th style="width: 10%;">Billable to Customer</th>
+							<th style="width: 50%;">Billable to Customer</th>
 							<th style="width: 10%;"></th>
 						</tr>
 					</thead>
 					<tbody class="item-container">
 						@foreach (ExpenseItem item in Model.Items)
-						{
-							item.Index = itemIndex;
-							Html.RenderPartial("_AjaxExpenseReportItems", item);
-							itemIndex += 1;
-						}
+			{
+				item.Index = itemIndex;
+				Html.RenderPartial("_AjaxExpenseReportItems", item);
+				itemIndex += 1;
+			}
 						<tr class="final-row">
 							<td colspan="6">
 								<a class="addItem btn btn-fa hidden-create add-button"
@@ -154,13 +160,13 @@
 }
 
 @section css
-{
+			{
 	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
 	<link rel="stylesheet" type="text/css" href="~/Content/jquery.comiseo.daterangepicker.css" />
 }
 
-@section scripts
-{
+			@section scripts
+			{
 	@*Date range picker dependencies:*@
 	@Scripts.Render("~/bundles/jqueryui")
 	@Scripts.Render("~/bundles/moment")
