@@ -6,7 +6,7 @@ AS
 BEGIN
 	
 	INSERT INTO [Expense].[ExpenseReportHistory]
-		([ExpenseReportId],
+		([UserId],
 		[ExpenseReportId],
 		[Text])
 	VALUES (@userId,
