@@ -1,5 +1,5 @@
-﻿using System.Web.Mvc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Lib;
 using AllyisApps.Services;
@@ -15,8 +15,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         /// <summary>
         /// The ReportView Action.
         /// </summary>
-        /// <param name="reportId">The report id.</param>
         /// <param name="subscriptionId">The subscription id.</param>
+        /// <param name="reportId">The report id.</param>
         /// <returns>The view with selected report details.</returns>
         public ActionResult ReportView(int subscriptionId, int reportId)
         {
@@ -33,8 +33,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         /// <summary>
         /// Initializes the ReportViewModel.
         /// </summary>
-        /// <param name="id">The report id.</param>
         /// <param name="subscriptionId">The subscription id.</param>
+        /// <param name="id">The report id.</param>
         /// <returns>The view model.</returns>
         public ReportViewModel InitializeReportViewModel(int subscriptionId, int id)
 		{
@@ -50,7 +50,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
             List<string> fileNames = AzureFiles.GetReportAttachments(id);
 
-            foreach(var item in history)
+            foreach (var item in history)
             {
                 var reviewer = AppService.GetUser(item.UserId);
                 reportHistory.Add(new ExpenseHistoryViewModel()

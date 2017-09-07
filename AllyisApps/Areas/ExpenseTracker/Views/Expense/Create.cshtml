@@ -17,6 +17,7 @@
 }
 @Scripts.Render("~/bundles/jquery")
 
+@{ Html.EnableClientValidation(); }
 @using (Html.BeginForm(submitAction, ControllerConstants.Expense, FormMethod.Post, htmlAttributes: new { @id = "reportForm", enctype = "multipart/form-data" }))
 {
 	<div class="panel panel-info" style="background-color: #f5f5f5; float: right; width: 380px; position: relative; z-index: 10">
@@ -83,17 +84,17 @@
 				Model.Items = new List<ExpenseItem>();
 			}
 		}
-		@Html.HiddenFor(m => m.Report.ExpenseReportId)
-		@Html.HiddenFor(m => m.CurrentUser)
-		@Html.HiddenFor(m => m.SubscriptionId)
+		@Html.HiddenFor(m => m.Report.ExpenseReportId, new { Name = "model.Report.ExpenseReportId" })
+		@Html.HiddenFor(m => m.CurrentUser, new { Name = "model.CurrentUser" })
+		@Html.HiddenFor(m => m.SubscriptionId, new { Name = "model.SubscriptionId" })
 		<div class="form-group">
 			@Html.ReqLabelFor(m => m.Report.ReportTitle, "Report Name")
-			@Html.TextBoxFor(m => m.Report.ReportTitle, new { @class = "form-control", name = "ReportName" })
+			@Html.TextBoxFor(m => m.Report.ReportTitle, new { Name = "model.Report.ReportTitle", @class = "form-control" })
 			@Html.ValidationMessageFor(m => m.Report.ReportTitle)
 		</div>
 		<div class="form-group">
 			@Html.ReqLabelFor(m => m.Report.BusinessJustification, "Business Justification")
-			@Html.TextAreaFor(m => m.Report.BusinessJustification, new { @class = "form-control", rows = "3", style = "resize: none;", name = "BusinessJustification" })
+			@Html.TextAreaFor(m => m.Report.BusinessJustification, new { Name = "model.Report.BusinessJustification", @class = "form-control", rows = "3", style = "resize: none;", })
 			@Html.ValidationMessageFor(m => m.Report.BusinessJustification)
 		</div>
 		<br>
@@ -105,7 +106,38 @@
 			{
 				Model.Items.Add(new ExpenseItem());
 			}
-			Html.RenderAction("DisplayItem", new { model = Model });
+
+			<div class="items">
+				<table class="table table-hover">
+					<thead>
+						<tr class="double-bottom-border">
+							<th style="width: 10%;">Transaction Date</th>
+							<th style="width: 10%;">Amount</th>
+							<th style="width: 10%;">Description</th>
+							<th style="width: 10%;">Account</th>
+							<th style="width: 10%;">Billable to Customer</th>
+							<th style="width: 10%;"></th>
+						</tr>
+					</thead>
+					<tbody class="item-container">
+						@foreach (ExpenseItem item in Model.Items)
+						{
+							item.Index = itemIndex;
+							Html.RenderPartial("_AjaxExpenseReportItems", item);
+							itemIndex += 1;
+						}
+						<tr>
+							<td colspan="6">
+								<a class="addItem btn btn-fa hidden-create add-button"
+								   onclick="addItem();"
+								   style="margin: 0px;">
+									<span class="glyphicon glyphicon-plus"></span>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		}
 		<div style="clear:both"></div>
 
@@ -120,15 +152,6 @@
 		</div>
 	</div>
 }
-
-@*<div class="col-xs-12">
-	<div class="panel panel-default">
-		<div class="panel-body" style="padding: 0px">
-		</div>
-		<div id="data-message" class="panel-footer">
-		</div>
-	</div>
-</div>*@
 
 @section css
 {
@@ -180,33 +203,30 @@
 		}
 
 		function addItem() {
-			var data = $('.updatable').serialize();
-
+			var url = '@Url.Action("AddItem", new { index = -1 })';
+			url = url.replace('-1', item_index);
 			$.ajax({
-				url: '@Url.Action("AddItem")',
-				type: 'POST',
-				data: data,
+				url: url,
 				success: function (response) {
-					$('.items').html(response);
+					console.log(response);
+					$('table tr:last').before(response);
 					setDatePickers();
+
+					$("form").removeData("validator");
+					$("form").removeData("unobtrusiveValidation");
+					$.validator.unobtrusive.parse("form");
+
+					item_index += 1;
 				}
 			});
 		}
 
 		function removeItem(index) {
-			$('#toDelete_' + index).val('True');
+			$('#item-input_' + index).remove();
 
-			var data = $('.updatable').serialize();
-
-			$.ajax({
-				type: 'POST',
-				url: '@Url.Action("DeleteItem")',
-				data: data,
-				success: function (response) {
-					$('.items').html(response);
-					setDatePickers();
-				}
-			});
+			$("form").removeData("validator");
+			$("form").removeData("unobtrusiveValidation");
+			$.validator.unobtrusive.parse("form");
 		}
 
 		setDatePickers();

@@ -1,36 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
-using AllyisApps.Services.Billing;
-using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
     /// <summary>
-    /// 
+    /// The expense controller.
     /// </summary>
     public partial class ExpenseController : BaseController
     {
         /// <summary>
-        /// 
+        /// The Admin report action.
         /// </summary>
-        /// <param name="subscriptionId"></param>
-        /// <returns></returns>
+        /// <param name="subscriptionId">The subscription id.</param>
+        /// <returns>A admin report view model.</returns>
         public ActionResult AdminReport(int subscriptionId)
         {
-            AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
+            ViewData["IsManager"] = AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
 
-            ViewData["IsManager"] = true;
+            UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
+
+            ViewData["SubscriptionName"] = subInfo.SubscriptionName;
 
             AdminReportModel adminReportVM = null;
 
             string tempDataKey = "ARVM";
 
-            if(this.TempData[tempDataKey] != null)
+            if (this.TempData[tempDataKey] != null)
             {
                 adminReportVM = (AdminReportModel)TempData[tempDataKey];
             }
@@ -43,10 +42,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Creates an admin report view model.
         /// </summary>
-        /// <param name="subId"></param>
-        /// <returns></returns>
+        /// <param name="subId">The subscription id.</param>
+        /// <returns>An admin report model.</returns>
         public AdminReportModel CreateAdminReportModel(int subId)
         {
             var subInfo = AppService.GetSubscription(subId);
@@ -59,12 +58,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             foreach (var item in Enum.GetValues(typeof(ExpenseStatusEnum)))
             {
                 int value = 0;
-                switch(item.ToString())
+                switch (item.ToString())
                 {
-                    //We dont want reports on rough drafts for now.
-                    //case "Draft":
-                    //    value = 0;
-                    //    break;
+                    // We dont want reports on rough drafts for now.
                     case "Pending":
                         value = 1;
                         break;
@@ -79,23 +75,21 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                         break;
                     default:
                         break;
+                }
 
-                };
-
-                if(value != 0)
+                if (value != 0)
                 {
                     enumList.Add(new SelectListItem()
                     {
                         Disabled = false,
                         Text = item.ToString(),
                         Value = value.ToString(),
-                        Selected = String.Equals("1", value.ToString()) // Set pending as the default status.
+                        Selected = string.Equals("1", value.ToString()) // Set pending as the default status.
                     });
                 }
-                
             }
 
-            foreach(var user in users)
+            foreach (var user in users)
             {
                 userList.Add(new SelectListItem()
                 {

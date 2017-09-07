@@ -1531,4 +1531,13 @@
   <data name="ExpenseTracker" xml:space="preserve">
     <value>ExpenseTracker</value>
   </data>
+  <data name="UserAddedToExpenseTracker" xml:space="preserve">
+    <value>{0} users added to Expense Tracker.</value>
+  </data>
+  <data name="UserChangedRolesInExpenseTracker" xml:space="preserve">
+    <value>{0} user roles changed in Expense Tracker.</value>
+  </data>
+  <data name="ExpenseTrackerRole" xml:space="preserve">
+    <value>ExpenseTracker Roles</value>
+  </data>
 </root>

@@ -1,23 +1,26 @@
-﻿using System.Web.Mvc;
-using System;
+﻿using System;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
-
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
     /// <summary>
-    /// Stores a new report in database and redirects to View
+    /// Stores a new report in database and redirects to View.
     /// </summary>
     public partial class ExpenseController : BaseController
     {
         /// <summary>
-        /// 
+        /// Updates the status of a report to accepted or rejected depending on the clicked button.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="subscriptionId">The subscription id.</param>
+        /// <param name="reportId">The reprot id.</param>
+        /// <param name="btnAction">The button action.</param>
+        /// <param name="reasonText">The reason text.</param>
+        /// <returns>A redirect to the home page.</returns>
         public RedirectToRouteResult StatusUpdate(int subscriptionId, int reportId, string btnAction, string reasonText)
         {
-            switch(btnAction)
+            switch (btnAction)
             {
                 case "Approve":
                     UpdateReport(reportId, "Approve", reasonText);
@@ -32,6 +35,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             return RedirectToRoute("ExpenseTracker_Default", new { subscriptionId = subscriptionId, controller = "expense" });
         }
 
+        /// <summary>
+        /// Call functionality to update a report.
+        /// </summary>
+        /// <param name="reportId">The report id.</param>
+        /// <param name="status">The new report status.</param>
+        /// <param name="text">The reason text.</param>
         private void UpdateReport(int reportId, string status, string text)
         {
             ExpenseReport report = AppService.GetExpenseReport(reportId);
@@ -45,12 +54,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 UserId = GetCookieData().UserId
             };
 
-            if(string.Equals(status, "Approve"))
+            if (string.Equals(status, "Approve"))
             {
                 report.ReportStatus = (int)ExpenseStatusEnum.Approved;
                 history.Status = report.ReportStatus;
             }
-            else if(string.Equals(status, "Reject"))
+            else if (string.Equals(status, "Reject"))
             {
                 report.ReportStatus = (int)ExpenseStatusEnum.Rejected;
                 history.Status = report.ReportStatus;

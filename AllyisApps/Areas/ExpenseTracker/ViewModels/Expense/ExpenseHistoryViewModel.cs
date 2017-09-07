@@ -1,8 +1,5 @@
 ﻿using System;
 using AllyisApps.Services;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {
@@ -22,7 +19,7 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         public ExpenseStatusEnum Status { get; set; }
 
         /// <summary>
-        /// Gets or sets the submitted date
+        /// Gets or sets the submitted date.
         /// </summary>
         public DateTime Submitted { get; set; }
 
@@ -30,6 +27,5 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         /// Gets or sets the text.
         /// </summary>
         public string Text { get; set; }
-
     }
 }

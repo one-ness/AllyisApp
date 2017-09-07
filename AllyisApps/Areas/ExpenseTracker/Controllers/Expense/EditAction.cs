@@ -10,9 +10,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 	public partial class ExpenseController : BaseController
 	{
         /// <summary>
-		/// Edits a report
+		/// Edits a report.
 		/// </summary>
-		/// <returns></returns>
+        /// <param name="subscriptionId">The subscription Id.</param>
+        /// <param name="reportId">The report Id.</param>
+		/// <returns>A redirect action to the report create page.</returns>
         public ActionResult Edit(int subscriptionId, int reportId)
 		{
 			return RedirectToAction("Create", new { subscriptionId = subscriptionId, reportId = reportId });

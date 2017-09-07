@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services.TimeTracker;
 using System.Collections.Generic;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {

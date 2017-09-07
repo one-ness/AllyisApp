@@ -13,7 +13,7 @@
 			string previousName = String.Format("Files[{0}].PreviousName", Model.Index);
 			HttpPostedFileBase file = new ExpenseFile(Model.Stream, Model.ContentType, Model.FileName);
 		}
-		<input type="hidden" value="@Model.FileName" name="previousFiles" id="@previousName" />
+		<input type="hidden" value="@Model.FileName" name="model.PreviousFiles" id="@previousName" />
 		@Html.ActionLink(Model.FileName, "download", new { reportId = Model.ReportId, fileName = Model.FileName }, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 9px;" })
 	</div>
 	<div class="file-right" style="float: right;">

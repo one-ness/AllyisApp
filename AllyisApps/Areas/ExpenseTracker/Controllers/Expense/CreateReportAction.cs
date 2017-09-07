@@ -40,7 +40,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			}
 			var subscription = AppService.GetSubscription(model.SubscriptionId);
 			var organizationId = subscription.OrganizationId;
-			ExpenseStatusEnum reportStatus; // = (ExpenseStatusEnum)Enum.Parse(typeof(ExpenseStatusEnum), Request.Form["Report.ReportStatus"]);
+			ExpenseStatusEnum reportStatus;
 			DateTime? submittedUtc = null;
 
 			if (model.SubmitType == "Submit")

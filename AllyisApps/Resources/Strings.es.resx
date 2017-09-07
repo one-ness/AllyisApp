@@ -1471,4 +1471,7 @@
   <data name="ExpenseTracker" xml:space="preserve">
     <value>Rastreador de gastos</value>
   </data>
+  <data name="UserChangedRolesInExpenseTracker" xml:space="preserve">
+    <value>{0} los usuarios cambiaron sus funciones en la organización.</value>
+  </data>
 </root>

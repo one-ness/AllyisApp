@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using AllyisApps.Services;
 using System.Web.Mvc;
-using System.ComponentModel.DataAnnotations;
+using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {
     /// <summary>
-    /// 
+    /// The AdminReport Model.
     /// </summary>
     public class AdminReportModel
     {
@@ -32,32 +31,32 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         public int OrganizationId { get; set; }
 
         /// <summary>
-        /// Gets or sets the check to show an export button.
+        /// Gets or sets a value indicating whether to show the export button.
         /// </summary>
         public bool ShowExport { get; set; }
 
         /// <summary>
-        /// Gets or sets the manager check.
+        /// Gets or sets a value indicating whether the user is a manager.
         /// </summary>
         public bool CanManage { get; set; }
 
         /// <summary>
-        /// Gets or sets the list of user in the subscription
+        /// Gets the list of user in the subscription.
         /// </summary>
         public IEnumerable<SelectListItem> Users { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the list or reports to show.
+        /// Gets the list or reports to show.
         /// </summary>
         public IEnumerable<ExpenseReport> Reports { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the Preview reports.
+        /// Gets the Preview reports.
         /// </summary>
         public IEnumerable<ExpenseReport> PreviewReports { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the list of statuses.
+        /// Gets the list of statuses.
         /// </summary>
         public IEnumerable<SelectListItem> Statuses { get; internal set; }
 
@@ -68,7 +67,7 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
     }
 
     /// <summary>
-    /// 
+    /// The Admin report selection model.
     /// </summary>
     public class AdminReportSelectionModel
     {
@@ -83,12 +82,12 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
         public List<int> Status { get; set; }
 
         /// <summary>
-        /// Gets or sets the start date of reports to show.
+        /// Gets the start date of reports to show.
         /// </summary>
         public DateTime? StartDate { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the end date of reports to show.
+        /// Gets the end date of reports to show.
         /// </summary>
         public DateTime? EndDate { get; internal set; }
     }
