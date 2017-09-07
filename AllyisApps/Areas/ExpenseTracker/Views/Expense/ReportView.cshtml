@@ -72,42 +72,45 @@
                 }
             </div>
         </div>
-
-        @*START REPORT ITEM AREA*@
-        <h2>Report Items</h2>
-        <table class="table table-hover col-lg-12 col-md-12 col-xs-12">
-            <thead>
-                <tr>
-                    <th style="width: 10%">Amount</th>
-                    <th style="width: 25%">Transaction Date</th>
-                    <th style="width: 35%">Description</th>
-                    <th style="width: 10%">Customer Billable</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (ExpenseItem item in Model.Expenses)
-                {
-                    <tr>
-                        <td>@Math.Round(@item.Amount, 2)</td>
-                        <td>@String.Format("{0:MM-dd-yyyy}", DateTime.Parse(@item.TransactionDate))</td>
-                        <td>@item.ItemDescription</td>
-                        <td>
-                            @if (@item.IsBillableToCustomer)
-                            {
-                                <div class="fa fa-check-square"></div>
-                            }
-                            else
-                            {
-                                <div class="fa fa-square-o"></div>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
     </div>
 }
     
+@*START REPORT ITEM AREA*@
+<br/>
+<h2>Report Items</h2>
+<table class="table table-hover col-lg-12 col-md-12 col-xs-12">
+    <thead>
+        <tr>
+            <th style="width: 10%">Amount</th>
+            <th style="width: 25%">Transaction Date</th>
+            <th style="width: 35%">Description</th>
+            <th style="width: 10%">Customer Billable</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ExpenseItem item in Model.Expenses)
+        {
+            <tr>
+                <td>@Math.Round(@item.Amount, 2)</td>
+                <td>@String.Format("{0:MM-dd-yyyy}", DateTime.Parse(@item.TransactionDate))</td>
+                <td>@item.ItemDescription</td>
+                <td>
+                    @if (@item.IsBillableToCustomer)
+                    {
+                        <div class="fa fa-check-square"></div>
+                    }
+                    else
+                    {
+                        <div class="fa fa-square-o"></div>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
 @*REPORT ATTACHMENTS AREA*@
 @if(Model.Attachments.Count () > 0)
 {
@@ -126,7 +129,6 @@
         </table>
     </div>
 }
-
 
 @*END REPORT ATTACHMENTS AREA*@
 
