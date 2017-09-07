@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
+using System.Linq;
 
 namespace AllyisApps.Controllers
 {
@@ -107,7 +108,7 @@ namespace AllyisApps.Controllers
 					}
                     else
                     {
-                        subViewModel.ProductGoToUrl = userSubInfo.AreaUrl + "/" + subViewModel.SubscriptionId;
+                        subViewModel.ProductGoToUrl = userSubInfo.Subscription.AreaUrl + "/" + subViewModel.SubscriptionId;
                     }
                     subViewModel.IconUrl = string.Format("Content/icons/{0}.png", subViewModel.ProductName.Replace(" ", ""));
                     orgViewModel.Subscriptions.Add(subViewModel);

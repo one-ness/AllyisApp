@@ -38,13 +38,13 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         /// <returns>The view model.</returns>
         public ReportViewModel InitializeReportViewModel(int subscriptionId, int id)
 		{
-			UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
+			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
 			ViewData["SubscriptionId"] = subscriptionId;
 
 			var report = AppService.GetExpenseReport(id);
             var reportItems = AppService.GetExpenseItemsByReportId(id);
-            var user = AppService.GetUser(report.SubmittedById);
+            var user = AppService.GetUserInfo(report.SubmittedById);
             var history = AppService.GetExpenseHistoryByReportId(id);
             List<ExpenseHistoryViewModel> reportHistory = new List<ExpenseHistoryViewModel>();
 
@@ -52,10 +52,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
             foreach (var item in history)
             {
-                var reviewer = AppService.GetUser(item.UserId);
+                var reviewer = AppService.GetUserInfo(item.UserId);
                 reportHistory.Add(new ExpenseHistoryViewModel()
                 {
-                    Reviewer = string.Format("{0} {1}", reviewer.userInfo.FirstName, reviewer.userInfo.LastName),
+                    Reviewer = string.Format("{0} {1}", reviewer.FirstName, reviewer.LastName),
                     Status = (ExpenseStatusEnum)item.Status,
                     Submitted = item.CreatedUtc,
                     Text = item.Text
@@ -65,7 +65,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             return new ReportViewModel()
             {
                 ReprortTitle = report.ReportTitle,
-                SubmittedBy = string.Format("{0} {1}", user.userInfo.FirstName, user.userInfo.LastName),
+                SubmittedBy = string.Format("{0} {1}", user.FirstName, user.LastName),
                 CreatedUtc = report.CreatedUtc,
                 ModifiedUtc = report.ModifiedUtc,
 				SubmittedUtc = report.SubmittedUtc,
@@ -73,7 +73,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 Status = (ExpenseStatusEnum)report.ReportStatus,
                 Expenses = reportItems,
                 History = reportHistory,
-                UserId = user.userInfo.UserId,
+                UserId = user.UserId,
                 ReportId = report.ExpenseReportId,
                 SubscriptionId = subscriptionId,
                 Attachments = fileNames

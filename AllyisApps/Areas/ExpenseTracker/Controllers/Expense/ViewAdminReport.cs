@@ -44,11 +44,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                 };
 
                 var infos = AppService.GetReportInfo(subscriptionId);
-                UserSubscription subInfo = null;
-                AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+                UserContext.SubscriptionAndRole subInfo = null;
+                AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
                 AdminReportModel adminReportVM = CreateAdminReportModel(subscriptionId);
-                adminReportVM.SubscriptionName = subInfo.SubscriptionName;
+				adminReportVM.SubscriptionName = AppService.getSubscriptionName(subscriptionId);
                 adminReportVM.Selection = adminRVMSelect;
 
                 ExpenseDataExportViewModel dataVM = null;
