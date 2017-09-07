@@ -16,27 +16,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 	/// </summary>
 	public partial class ExpenseController : BaseController
 	{
-
-		private bool ValidateItems(ExpenseCreateModel model, ExpenseReport report)
+		private void UploadItems(ExpenseCreateModel model, ExpenseReport report)
 		{
-			// this should be handled with client-side validation
-			foreach (var item in model.Items)
-			{
-				if (String.IsNullOrEmpty(item.ItemDescription) || String.IsNullOrEmpty(item.TransactionDate) || item.Amount == 0)
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
-		private bool UploadItems(ExpenseCreateModel model, ExpenseReport report)
-		{
-			if (!ValidateItems(model, report))
-			{
-				return false;
-			}
-
 			IList<ExpenseItem> oldItems = AppService.GetExpenseItemsByReportId(report.ExpenseReportId);
 			List<int> itemIds = new List<int>();
 			foreach (ExpenseItem oldItem in oldItems)
@@ -62,8 +43,6 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				AppService.DeleteExpenseItem(itemId);
 			}
-
-			return true;
 		}
 
 		private static void UploadAttachments(ExpenseCreateModel model, ExpenseReport report)

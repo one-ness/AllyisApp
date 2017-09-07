@@ -11,6 +11,7 @@ using AllyisApps.Lib;
 using System.Web.Routing;
 using System.Web.Mvc.Html;
 using System.Linq.Expressions;
+using AllyisApps.DBModel.Finance;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -28,6 +29,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		public ActionResult Create(int subscriptionId, int reportId = -1)
 		{
 			Session["AccountList"] = AppService.GetAccounts();
+
+			if (((List<AccountDBEntity>)Session["AccountList"]).Count == 0)
+			{
+				throw new InvalidOperationException("Cannot create a report if no accounts exist.");
+			}
 
 			UserSubscription subInfo = this.AppService.UserContext.UserSubscriptions[subscriptionId];
 			ViewBag.SubscriptionName = subInfo.SubscriptionName;
