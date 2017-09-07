@@ -17,7 +17,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// The expense report title
 		/// </summary>
-		[Required(ErrorMessage = "Please enter the name of the report.")]
+		[Required(ErrorMessage = "Report name is required.")]
 		public string ReportTitle { get; set; }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace AllyisApps.Services
         /// <summary>
         /// The business justification
         /// </summary>
-		[Required(ErrorMessage = "Please enter the justification for the report.")]
+		[Required(ErrorMessage = "Justification is required.")]
         public string BusinessJustification { get; set; }
 
         /// <summary>
