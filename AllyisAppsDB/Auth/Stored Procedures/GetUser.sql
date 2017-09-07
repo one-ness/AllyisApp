@@ -12,9 +12,11 @@ begin
 	where u.UserId = @userId
 
 	-- get list of organizations and the user role in each
-	select o.*, ou.*, a.* from Organization o with (nolock)
+	select o.*, ou.*, a.*, s.StateName as 'State', c.CountryName as 'Country' from Organization o with (nolock)
 	inner join OrganizationUser ou with (nolock) on ou.OrganizationId = o.OrganizationId
 	left join Lookup.Address a with (nolock) on a.AddressId = o.AddressId
+	left join [Lookup].[State] s with (nolock) on s.StateId = a.StateId
+	left join [Lookup].[Country] c with (nolock) on c.CountryCode = a.CountryCode
 	where ou.UserId = @userId AND o.IsActive = 1 
 
 	-- get a list of subscriptions and the user role in each
