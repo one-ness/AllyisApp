@@ -126,7 +126,7 @@
 							Html.RenderPartial("_AjaxExpenseReportItems", item);
 							itemIndex += 1;
 						}
-						<tr>
+						<tr class="final-row">
 							<td colspan="6">
 								<a class="addItem btn btn-fa hidden-create add-button"
 								   onclick="addItem();"
@@ -145,8 +145,8 @@
 			<div class="col-xs-12">
 				<div>
 					@Html.ActionLink("Cancel", "Index", new { }, new { @class = "btn btn-reject", type = "button", name = "viewDataButton", value = "Cancel", title = "Export Excel Expense Tracker entries", style = "display: inline-block; color: white !important; border-color: maroon !important;" })
-					<input class="btn btn-primary" type="submit" name="submitType" value="Save Draft" title="Export Excel Expense Tracker entries" style="display: inline-block;" />
-					<input class="btn btn-primary" type="submit" name="submitType" value="Submit" title="Export Excel Expense Tracker entries" style="display: inline-block;" />
+					<input class="btn btn-primary" type="submit" name="model.submitType" value="Save Draft" title="Export Excel Expense Tracker entries" style="display: inline-block;" />
+					<input class="btn btn-primary" type="submit" name="model.submitType" value="Submit" title="Export Excel Expense Tracker entries" style="display: inline-block;" />
 				</div>
 			</div>
 		</div>
@@ -209,7 +209,7 @@
 				url: url,
 				success: function (response) {
 					console.log(response);
-					$('table tr:last').before(response);
+					$('table tr.final-row').before(response);
 					setDatePickers();
 
 					$("form").removeData("validator");
