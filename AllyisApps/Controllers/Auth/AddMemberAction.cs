@@ -25,13 +25,13 @@ namespace AllyisApps.Controllers
 		/// GET: /Add.
 		/// The page for adding members to an organization.
 		/// </summary>
-		/// <param name="organizationId">Organization id.</param>
+		/// <param name="id">Organization id.</param>
 		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
 		/// <returns>The result of this action.</returns>
-		public ActionResult AddMember(int organizationId, string returnUrl)
+		public ActionResult AddMember(int id, string returnUrl)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, organizationId);
-			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(organizationId);
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(id);
 			ViewBag.returnUrl = returnUrl;
 			return this.View(model);
 		}
