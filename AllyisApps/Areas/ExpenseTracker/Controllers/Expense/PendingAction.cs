@@ -69,8 +69,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					ReportName = report.ReportTitle,
 					Status = (ExpenseStatusEnum)report.ReportStatus,
 					SubmittedDate = report.SubmittedUtc,
-					UserId = user.userInfo.UserId,
-					UserName = user.userInfo.FirstName + " " + user.userInfo.LastName
+					UserId = user.UserId,
+					UserName = user.FirstName + " " + user.LastName
 				});
 			}
 			ExpensePendingModel model = new ExpensePendingModel()

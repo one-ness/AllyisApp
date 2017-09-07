@@ -107,11 +107,11 @@ namespace AllyisApps.Controllers
                             endDate = eDate
                         });
                     }
-					else if (userSubInfo.ProductId == ProductIdEnum.ExpenseTracker)
+					else if (userSubInfo.Subscription.ProductId == ProductIdEnum.ExpenseTracker)
 					{
 						subViewModel.ProductGoToUrl = Url.RouteUrl("ExpenseTracker_Default", new
 						{
-							subscriptionId = userSubInfo.SubscriptionId,
+							subscriptionId = userSubInfo.Subscription.SubscriptionId,
 							controller = ControllerConstants.Expense
 						});
 					}

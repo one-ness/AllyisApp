@@ -65,8 +65,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
                     ReportName = item.ReportTitle,
                     Status = (ExpenseStatusEnum)item.ReportStatus,
                     SubmittedDate = item.SubmittedUtc,
-                    UserId = user.userInfo.UserId,
-                    UserName = user.userInfo.FirstName + " " + user.userInfo.LastName
+                    UserId = user.UserId,
+                    UserName = user.FirstName + " " + user.LastName
                 });
             }
 
