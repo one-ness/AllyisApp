@@ -432,7 +432,7 @@ namespace AllyisApps.Services
 
 			return new Tag { TagId = tag.TagId, TagName = tag.TagName };
 		}
-
+		
 		#endregion DB to Service Conversion
 
 		//////////////////////////////////////////
@@ -525,6 +525,17 @@ namespace AllyisApps.Services
 			obj.Position.HiringManager = position.HiringManager;
 			obj.Position.TeamName = position.TeamName;
 
+
+			obj.Customer = new ExpandoObject();
+			obj.Customer.CustomerName = position.Customer.CustomerName;
+			obj.Customer.OrganizationId = position.Customer.OrganizationId;
+			obj.Customer.ContactEmail = position.Customer.ContactEmail;
+			obj.Customer.FaxNumber = position.Customer.FaxNumber;
+			obj.Customer.ContactPhoneNumber = position.Customer.ContactPhoneNumber;
+			obj.Customer.Website = position.Customer.Website;
+			obj.Customer.EIN = position.Customer.EIN;
+			obj.Customer.CustomerOrgId = position.Customer.CustomerOrgId;
+
 			obj.Address = new ExpandoObject();
 			obj.Address.Address1 = position.Address.Address1;
 			obj.Address.Address2 = position.Address.Address2;
@@ -549,9 +560,17 @@ namespace AllyisApps.Services
 		{
 			if (tags == null) throw new ArgumentNullException(nameof(tags), "Cannot accept null list of tags to be converted.");
 
-			dynamic obj = tags;
+			List<dynamic> list = new List<dynamic>();
+			foreach(Tag tag in tags)
+			{
+				dynamic obj = new ExpandoObject();
+				obj.TagName = tag.TagName;
+				obj.TagId = tag.TagId;
+				obj.PositionId = tag.PositionId;
+				list.Add(obj);
+			}
 
-			return obj;
+			return list;
 		}
 
 		/// <summary>

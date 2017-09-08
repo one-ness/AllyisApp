@@ -14,6 +14,7 @@ using System.Linq;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.DBModel.StaffingManager;
 using AllyisApps.Services.Lookup;
+using AllyisApps.DBModel.Crm;
 
 namespace AllyisApps.Services
 {
@@ -733,7 +734,7 @@ namespace AllyisApps.Services
 		/// <param name="userId">User Id.</param>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>>
+		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<Customer>>
 			GetStaffingIndexInfo(int orgId, int? userId = null)
 		{
 			#region Validation
@@ -760,7 +761,8 @@ namespace AllyisApps.Services
 				results.Item2.Select(tagsdb => InitializeTags(tagsdb)).ToList(),
 				results.Item3.Select(typedb => InitializeEmploymentTypes(typedb)).ToList(),
 				results.Item4.Select(leveldb => InitializePositionLevel(leveldb)).ToList(),
-				results.Item5.Select(statdb => InitializePositionStatus(statdb)).ToList()
+				results.Item5.Select(statdb => InitializePositionStatus(statdb)).ToList(),
+				results.Item6.Select(custdb => InitializeBaseCustomer(custdb)).ToList()
 				);
 		}
 
@@ -847,6 +849,24 @@ namespace AllyisApps.Services
 				TagId = tag.TagId,
 				TagName = tag.TagName,
 				PositionId = tag.PositionId
+			};
+		}
+
+		public static Customer InitializeBaseCustomer(CustomerDBEntity customer)
+		{
+			return new Customer()
+			{
+				ContactEmail = customer.ContactEmail,
+				ContactPhoneNumber = customer.ContactPhoneNumber,
+				CreatedUtc = customer.CreatedUtc,
+				CustomerId = customer.CustomerId,
+				CustomerOrgId = customer.CustomerOrgId,
+				EIN = customer.EIN,
+				FaxNumber = customer.FaxNumber,
+				CustomerName = customer.CustomerName,
+				OrganizationId = customer.OrganizationId,
+				Website = customer.Website,
+				IsActive = customer.IsActive
 			};
 		}
 

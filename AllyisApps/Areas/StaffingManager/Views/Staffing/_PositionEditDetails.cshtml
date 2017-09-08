@@ -7,10 +7,12 @@
 	}
 }
 
+
 @section css {
 	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
 	<link rel="stylesheet" type="text/css" href="~/Content/jquery.comiseo.daterangepicker.css" />
 }
+
 <div class="shrink-wrap-center">
 	<div>
 		@using (Html.BeginForm(action, ControllerConstants.Staffing, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "", role = "form" }))
@@ -20,158 +22,184 @@
 			<div class="row">
 				<div class="col-md-6 sm-control-width">
 					<h3>Position Info</h3>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.PositionTitle, "Position Title")
-						@Html.TextBoxFor(m => m.PositionTitle, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.PositionTitle, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						<label>Start Date</label>
-						@Html.HiddenFor(m => m.StartDate)
-						@Html.TextBoxFor(m => m.StartDate, new { @class = "updatable datepicker form-control item-control"})
-						<span class="fa fa-fw fa-calendar" id="datePickerBirth"></span>
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.TeamName, Strings.TeamName)
-						@Html.TextBoxFor(m => m.TeamName, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.TeamName, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.PositionCount, "Position Count")
-						@Html.TextBoxFor(m => m.PositionCount, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.PositionCount, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.HiringManager, Strings.HiringManager)
-						@Html.TextBoxFor(m => m.HiringManager, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.HiringManager, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.EmploymentTypeId, "Employment Type")
-						@Html.DropDownListFor(m => m.EmploymentTypeId, new SelectList(Model.EmploymentTypes, "EmploymentTypeId", "EmploymentTypeName"), Strings.DropDownEmpty, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.EmploymentTypeId, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.PositionStatusId, "Position Status")
-						@Html.DropDownListFor(m => m.PositionStatusId, new SelectList(Model.PositionStatuses, "PositionStatusId", "PositionStatusName"), Strings.DropDownEmpty, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.PositionStatusId, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.PositionLevelId, "Position Level")
-						@Html.DropDownListFor(m => m.PositionLevelId, new SelectList(Model.PositionLevels, "PositionLevelId", "PositionLevelName"), Strings.DropDownEmpty, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.PositionLevelId, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.RequiredSkills, "Required Skills")
-						@Html.TextBoxFor(m => m.RequiredSkills, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.RequiredSkills, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.JobResponsibilities, Strings.JobResponsibilities)
-						@Html.TextBoxFor(m => m.JobResponsibilities, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.JobResponsibilities, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.DesiredSkills, Strings.DesiredSkills)
-						@Html.TextBoxFor(m => m.DesiredSkills, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.DesiredSkills, "", new { @class = "text-danger" })
-					</div>
-					@if (Model.IsCreating)
-					{
-					}
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.DurationMonths, Strings.DurationMonths)
-						@Html.TextBoxFor(m => m.DurationMonths, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.DurationMonths, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.BillingRateFrequency, "Billing Rate Frequency (make drop-down)")
-						@Html.TextBoxFor(m => m.BillingRateFrequency, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.BillingRateFrequency, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.BillingRateAmount, "Billing Rate Amount (make drop-down)")
-						@Html.TextBoxFor(m => m.BillingRateAmount, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.BillingRateAmount, "", new { @class = "text-danger" })
+					<div class="panel panel-default">
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.PositionTitle, "Position Title")
+							@Html.TextBoxFor(m => m.PositionTitle, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.PositionTitle, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							<label>Start Date</label>
+							<span class="fa fa-fw fa-calendar"></span>
+							@Html.TextBoxFor(m => m.StartDate, new { @class = "updatable datepicker form-control item-control", @id = "datepicker" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.TeamName, Strings.TeamName)
+							@Html.TextBoxFor(m => m.TeamName, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.TeamName, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.PositionCount, "Position Count")
+							@Html.TextBoxFor(m => m.PositionCount, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.PositionCount, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.HiringManager, Strings.HiringManager)
+							@Html.TextBoxFor(m => m.HiringManager, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.HiringManager, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.EmploymentTypeId, "Employment Type")
+							@Html.DropDownListFor(m => m.EmploymentTypeId, new SelectList(Model.EmploymentTypes, "EmploymentTypeId", "EmploymentTypeName"), Strings.DropDownEmpty, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.EmploymentTypeId, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.PositionStatusId, "Position Status")
+							@Html.DropDownListFor(m => m.PositionStatusId, new SelectList(Model.PositionStatuses, "PositionStatusId", "PositionStatusName"), Strings.DropDownEmpty, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.PositionStatusId, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.PositionLevelId, "Position Level")
+							@Html.DropDownListFor(m => m.PositionLevelId, new SelectList(Model.PositionLevels, "PositionLevelId", "PositionLevelName"), Strings.DropDownEmpty, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.PositionLevelId, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.RequiredSkills, "Required Skills")
+							@Html.TextBoxFor(m => m.RequiredSkills, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.RequiredSkills, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.JobResponsibilities, Strings.JobResponsibilities)
+							@Html.TextBoxFor(m => m.JobResponsibilities, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.JobResponsibilities, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.DesiredSkills, Strings.DesiredSkills)
+							@Html.TextBoxFor(m => m.DesiredSkills, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.DesiredSkills, "", new { @class = "text-danger" })
+						</div>
+						@if (Model.IsCreating)
+						{
+						}
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.DurationMonths, Strings.DurationMonths)
+							@Html.TextBoxFor(m => m.DurationMonths, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.DurationMonths, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.BillingRateFrequency, "Billing Rate Frequency (make drop-down)")
+							@Html.TextBoxFor(m => m.BillingRateFrequency, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.BillingRateFrequency, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.BillingRateAmount, "Billing Rate Amount (make drop-down)")
+							@Html.TextBoxFor(m => m.BillingRateAmount, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.BillingRateAmount, "", new { @class = "text-danger" })
+						</div>
 					</div>
 				</div>
 				<div class="col-md-6 sm-control-width">
 					<h3>Address Info</h3>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.Address, Strings.Address)
-						@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.Country, Strings.Country)
-						@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new {@id = ViewConstants.DdlCountriesId , @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
-					</div>
-					<!--<div class="form-group">
-						Html.ReqLabelFor(m => m.State, Strings.State)
-						Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { id = ViewConstants.DdlStatesId, class = "form-control" })
-						Html.ValidationMessageFor(m => m.State, "", new { class = "text-danger" })
-					</div> -->
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.City, Strings.City)
-						@Html.TextBoxFor(m => m.City, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(m => m.PostalCode, Strings.PostalCode)
-						@Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.PostalCode, "", new { @class = "text-danger" })
+					<div class="panel panel-default">
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.Address, Strings.Address)
+							@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.Country, Strings.Country)
+							@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @id = ViewConstants.DdlCountriesId, @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
+						</div>
+						<!--<div class="form-group">
+			Html.ReqLabelFor(m => m.State, Strings.State)
+			Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { id = ViewConstants.DdlStatesId, class = "form-control" })
+			Html.ValidationMessageFor(m => m.State, "", new { class = "text-danger" })
+		</div> -->
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.City, Strings.City)
+							@Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.PostalCode, Strings.PostalCode)
+							@Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.PostalCode, "", new { @class = "text-danger" })
+						</div>
 					</div>
 					<h3>Customer Info</h3>
-					<div class="form-group">
-						@Html.ReqLabelFor(model => model.CustomerName, Strings.Name)
-						@Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control" } })
-						@Html.ValidationMessageFor(model => model.CustomerName, string.Empty, new { @class = "text-danger" })
-					</div>
-					<div class="form-group">
-						@Html.ReqLabelFor(model => model.CustomerContactEmail, Strings.ContactEmail)
-						@Html.EditorFor(model => model.CustomerContactEmail, new { htmlAttributes = new { @class = "form-control" } })
-						@Html.ValidationMessageFor(model => model.CustomerContactEmail, string.Empty, new { @class = "text-danger" })
-					</div>
+					<div class="panel panel-default">
+						<div class="form-group">
+							<Label>Existing Customer?</Label>
+							<select id="exsitingCustomer" class="customers-list form-control" onchange="updateCustomer(this.value)">
+								<option value="">New Customer</option>
+								@foreach (var customer in Model.Customers)
+								{
+									<option value=@customer.CustomerId>@customer.CustomerName</option>
+								}
+							</select>
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(model => model.CustomerName, Strings.Name)
+							@Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control", @id = "customer-name" } })
+							@Html.ValidationMessageFor(model => model.CustomerName, string.Empty, new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(model => model.CustomerContactEmail, Strings.ContactEmail)
+							@Html.EditorFor(model => model.CustomerContactEmail, new { htmlAttributes = new { @class = "form-control", @id = "customer-email" } })
+							@Html.ValidationMessageFor(model => model.CustomerContactEmail, string.Empty, new { @class = "text-danger" })
+						</div>
 
-					<div class="form-group">
-						@Html.ReqLabelFor(model => model.CustomerContactPhoneNumber, Strings.ContactPhoneNumber)
-						@Html.EditorFor(model => model.CustomerContactPhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
-						@Html.ValidationMessageFor(model => model.CustomerContactPhoneNumber, string.Empty, new { @class = "text-danger" })
-					</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(model => model.CustomerContactPhoneNumber, Strings.ContactPhoneNumber)
+							@Html.EditorFor(model => model.CustomerContactPhoneNumber, new { htmlAttributes = new { @class = "form-control", @id = "customer-phone" } })
+							@Html.ValidationMessageFor(model => model.CustomerContactPhoneNumber, string.Empty, new { @class = "text-danger" })
+						</div>
 
-					<div class="form-group">
-						@Html.ReqLabelFor(model => model.CustomerFaxNumber, Strings.FaxNumber)
-						@Html.EditorFor(model => model.CustomerFaxNumber, new { htmlAttributes = new { @class = "form-control" } })
-						@Html.ValidationMessageFor(model => model.CustomerFaxNumber, string.Empty, new { @class = "text-danger" })
-					</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(model => model.CustomerFaxNumber, Strings.FaxNumber)
+							@Html.EditorFor(model => model.CustomerFaxNumber, new { htmlAttributes = new { @class = "form-control", @id = "customer-fax" } })
+							@Html.ValidationMessageFor(model => model.CustomerFaxNumber, string.Empty, new { @class = "text-danger" })
+						</div>
 
-					<div class="form-group">
-						@Html.ReqLabelFor(model => model.CustomerEIN, Strings.EIN)
-						@Html.EditorFor(model => model.CustomerEIN, new { htmlAttributes = new { @class = "form-control" } })
-						@Html.ValidationMessageFor(model => model.CustomerEIN, string.Empty, new { @class = "text-danger" })
+						<div class="form-group">
+							@Html.ReqLabelFor(model => model.CustomerEIN, Strings.EIN)
+							@Html.EditorFor(model => model.CustomerEIN, new { htmlAttributes = new { @class = "form-control", @id = "customer-ein" } })
+							@Html.ValidationMessageFor(model => model.CustomerEIN, string.Empty, new { @class = "text-danger" })
+						</div>
 					</div>
+					<input type="hidden" id="TagsToSubmit" name="TagsToSubmit" value="" />
 
-					@Html.HiddenFor(m => m.AddressId)
-					@Html.HiddenFor(m => m.OrganizationId)
-					@Html.HiddenFor(m => m.IsCreating)
+					<div class="form-group panel panel-group" id="tags" onclick="updateTags()">
+						<div>
+							<input type="text" id="AddNewTag" />
+							<input type="button" value="Add new Tag" id="btnTag" onclick="clickAddTag()" />
+						</div>
+						@foreach (string tag in Model.Tags)
+						{
+							<span>
+								<input type="checkbox" class="tagList" name="TagBox" value=tag id="tagsList" />
+								<label> @tag </label>
+							</span>
+						}
+
+					</div>
 				</div>
-			</div>
-
-			<div class="form-group allyis-action-buttons">
-				@if (Model.IsCreating)
-                {
-                    <a href="@Url.Action(ActionConstants.Index, ControllerConstants.Staffing, null)" new { class = "btn btn-default" }>
-                        @Strings.Cancel
-                    </a>
-                }
-                else
-                {
-                    <a href="@Url.Action(ActionConstants.Index, ControllerConstants.Staffing, new { id = Model.OrganizationId })" new { class = "btn btn-default" }>
-                        @Strings.Cancel
-                    </a>
-                }
-				<input type="submit" href="@Url.Action(ActionConstants.SubmitCreatePosition, ControllerConstants.Staffing, new { model = Model, subscriptionId = Model.SubscriptionId })" class="btn btn-primary" id="submit"  />
+				<div class="form-group allyis-action-buttons">
+					@if (Model.IsCreating)
+					{
+						<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Staffing, null)" new { class="btn btn-default" }>
+							@Strings.Cancel
+						</a>
+					}
+					else
+					{
+						<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Staffing, new { id = Model.OrganizationId })" new { class="btn btn-default" }>
+							@Strings.Cancel
+						</a>
+					}
+					<input type="submit" href="@Url.Action(ActionConstants.Index, ControllerConstants.Staffing, new { model = Model, subscriptionId = Model.SubscriptionId })" class="btn btn-primary" id="submit"/>
+				</div>
 			</div>
 		}
 	</div>
@@ -185,4 +213,77 @@
     }
 </div>
 
+<script>
+	function clickAddTag()
+	{
+		addCheckbox(document.getElementById("AddNewTag").value);
+	}
 
+	function addCheckbox(name) {
+		var container = $('#tags');
+		var inputs = container.find('input');
+		var id = inputs.length + 1;
+		console.log("Added Tag " + name + " id: " + id);
+		$('<input />', { type: 'checkbox', id: 'tagsList', checked: 'checked', class: 'tagList' + id, value: name }).appendTo(container);
+		$('<label />', { 'for': 'tagList' + id, text: name }).appendTo(container);
+		document.getElementById("AddNewTag").value = "";
+	}
+
+	function updateCustomer(customerId) {
+		@for (int i = 0; i < Model.Customers.Count; i++){
+			<text>
+			if (@Model.Customers[i].CustomerId == customerId) {
+				updateCustomerFields('@Model.Customers[i].CustomerName',
+									 '@Model.Customers[i].ContactEmail',
+									  @Model.Customers[i].ContactPhoneNumber,
+									  @Model.Customers[i].FaxNumber,
+									  @Model.Customers[i].EIN
+									);
+			}
+			</text>
+		}
+		if (customerId == "") {
+			document.getElementById("customer-name").value = "";
+			document.getElementById("customer-email").value = "";
+			document.getElementById("customer-phone").value = "";
+			document.getElementById("customer-fax").value = "";
+			document.getElementById("customer-ein").value = "";
+		}
+	}
+
+	function updateCustomerFields(name, email, phone, fax, ein) {
+		document.getElementById("customer-name").value = name;
+		document.getElementById("customer-email").value = email;
+		document.getElementById("customer-phone").value = phone;
+		document.getElementById("customer-fax").value = fax;
+		document.getElementById("customer-ein").value = ein;
+	}
+
+	function updateTags() {
+		var count = 0;
+		var i = 0;
+		var j = 0;
+		var selecter = [document.getElementsByClassName("tagList").count];
+		selecter = document.getElementsByClassName("tagList");
+		var tags = [selecter.count];
+		for (i = 0; i < selecter.length; i++)
+		{
+			if (selecter[i].selected) {
+				tags[count] = selecter[i].value;
+				count++;
+			}
+		}
+		var send = [count];
+		for ( j = 0; j < count; j++)
+		{
+			send[j] = tags[j]
+		}
+		sendTags(send);
+	}
+
+	function sendTags(tags) {
+		$('input[name=TagsToSubmit]').val(tags);
+		console.log("TAGS: " + tags[1]);
+	}
+
+</script>

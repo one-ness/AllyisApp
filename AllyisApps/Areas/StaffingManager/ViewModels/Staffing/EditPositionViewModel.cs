@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Services;
 using AllyisApps.Services.StaffingManager;
 using System;
 using System.Collections.Generic;
@@ -65,7 +66,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// Get or sets the Start date of the position
 		/// </summary>
 		public DateTime StartDate { get; set; }
-
+		
 		/// <summary>
 		/// Gets or sets the status int(enum) of the position
 		/// </summary>
@@ -134,36 +135,41 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// list of tag objects
 		/// </summary>
-		public List<Services.Lookup.Tag> Tags { get; set; }
+		public string[] Tags { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Customer's address.
+		/// the list of tags for the new position to set
+		/// </summary>
+		public string[] TagsToSubmit { get; set; }
+
+		/// <summary>
+		/// Gets or sets the position's address.
 		/// </summary>
 		[DataType(DataType.Text)]
 		[Display(Name = "Address")]
 		public string Address { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Customer's city.
+		/// Gets or sets the position's city.
 		/// </summary>
 		[DataType(DataType.Text)]
 		[Display(Name = "City")]
 		public string City { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Customer's state.
+		/// Gets or sets the position's state.
 		/// </summary>
 		[Display(Name = "State")]
 		public string State { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Customer's country or region.
+		/// Gets or sets the position's country or region.
 		/// </summary>
 		[Display(Name = "Country")]
 		public string Country { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Customer's postal code.
+		/// Gets or sets the position's postal code.
 		/// </summary>
 		[DataType(DataType.PostalCode)]
 		[Display(Name = "Postal Code")]
@@ -215,6 +221,54 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		public string CustomerEIN { get; set; }
 
 		/// <summary>
+		/// selected country code
+		/// </summary>
+		public int CustomerOrganizationId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Customer's address.
+		/// </summary>
+		[DataType(DataType.Text)]
+		[Display(Name = "Address")]
+		public string CustomerAddress { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Customer's city.
+		/// </summary>
+		[DataType(DataType.Text)]
+		[Display(Name = "City")]
+		public string CustomerCity { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Customer's state.
+		/// </summary>
+		[Display(Name = "State")]
+		public string CustomerState { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Customer's country or region.
+		/// </summary>
+		[Display(Name = "Country")]
+		public string CustomerCountry { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Customer's postal code.
+		/// </summary>
+		[DataType(DataType.PostalCode)]
+		[Display(Name = "Postal Code")]
+		public string CustomerPostalCode { get; set; }
+
+		/// <summary>
+		/// selected country code
+		/// </summary>
+		public string CustomerSelectedCountryCode { get; set; }
+
+		/// <summary>
+		/// selected state id
+		/// </summary>
+		public int? CustomerSelectedStateId { get; set; }
+
+		/// <summary>
 		/// position levels available
 		/// </summary>
 		public List<PositionLevel> PositionLevels { get; set; }
@@ -228,5 +282,10 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// employment types available
 		/// </summary>
 		public List<EmploymentType> EmploymentTypes { get; set; }
+
+		/// <summary>
+		/// list of customers the org has used
+		/// </summary>
+		public List<Customer> Customers { get; set; }
 	}
 }

@@ -13,6 +13,7 @@ using AllyisApps.Services.StaffingManager;
 using System.Web.Mvc;
 using AllyisApps.ViewModels;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
+using System.Collections.Generic;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -46,6 +47,19 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			string subscriptionNameToDisplay = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
 			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
+			var temp = new string[infos.Item2.Count];
+			var count = 0;
+			for (int i = 0; i < infos.Item2.Count; i++)
+			{
+				bool taken = false;
+				for(int j=0; j < i; j++)
+				{
+					if (infos.Item2[i].TagName == temp[j] && !taken) taken = true;
+					if (!taken) temp[count] = infos.Item2[i].TagName;
+				}
+			}
+			var tags = new string[count];
+			for (int k = 0; k < count; k++) tags[k] = temp[k];
 			return new EditPositionViewModel
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
@@ -54,9 +68,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				OrganizationId = subInfo.OrganizationId,
 				SubscriptionName = subscriptionNameToDisplay,
 				SubscriptionId = subInfo.SubscriptionId,
+				Tags = tags,
 				EmploymentTypes = infos.Item3,
 				PositionLevels = infos.Item4,
-				PositionStatuses = infos.Item5
+				PositionStatuses = infos.Item5,
+				Customers = infos.Item6
 			};
 		}
 
@@ -70,7 +86,22 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				int? customerId = AppService.CreatePosition(
+				var tags = new List<Tag>();
+				if (model.OrganizationId == 0)
+				{
+					UserSubscription subInfo = null;
+					this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+					model.OrganizationId = subInfo.OrganizationId;
+					if (model.TagsToSubmit != null)
+					{
+						foreach (string tag in model.TagsToSubmit)
+						{
+							if(tag == "") tags.Add(new Tag { TagName = "New", TagId = -1, PositionId = -1 });
+							else tags.Add(new Tag { TagName = tag, TagId = -1, PositionId = -1 });
+						}
+					}
+				}
+				int? positionId = AppService.CreatePosition(
 					new Position()
 					{
 						OrganizationId = model.OrganizationId,
@@ -93,8 +124,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 						DesiredSkills = model.DesiredSkills,
 						HiringManager = model.HiringManager,
 						TeamName = model.TeamName,
-
-
+						
 						Address = new Address
 						{
 							Address1 = model.Address,
@@ -103,22 +133,35 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 							CountryCode = model.SelectedCountryCode,
 							PostalCode = model.PostalCode
 						},
+						
+						CustomerAddress = new Address
+						{
+							Address1 = model.CustomerAddress,
+							City = model.CustomerCity,
+							StateId = model.CustomerSelectedStateId,
+							CountryCode = model.CustomerSelectedCountryCode,
+							PostalCode = model.CustomerPostalCode
+						},
 
-						Tags = model.Tags
+						Customer = new Customer
+						{
+							CustomerName = model.CustomerName,
+							ContactEmail = model.CustomerContactEmail,
+							ContactPhoneNumber = model.CustomerContactPhoneNumber,
+							FaxNumber = model.CustomerFaxNumber,
+							EIN = model.CustomerEIN,
+							OrganizationId = model.CustomerOrganizationId
+						},
+
+
+						Tags = tags
 					});
 
-				if (customerId.HasValue)
+				if (positionId.HasValue)
 				{
-					// CustomerOrgId is not unique
-					if (customerId == -1)
-					{
-						Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerOrgIdNotUnique, Variety.Danger));
-						return this.View(model);
-					}
+					Notifications.Add(new BootstrapAlert("Successfully created a new Position", Variety.Success));
 
-					Notifications.Add(new BootstrapAlert(Resources.Strings.CustomerCreatedNotification, Variety.Success));
-
-					// Redirect to the user details page
+					// Redirect to the user position page
 					return this.RedirectToAction(ActionConstants.Index, new { subscriptionId = subscriptionId });
 				}
 
@@ -128,8 +171,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				return this.RedirectToAction(ActionConstants.Index);
 			}
 
-			// Invalid model
-			return this.View(model);
+			// Invalid model TODO: redirect back to form page
+			return this.RedirectToAction(ActionConstants.CreatePosition, new { subscriptionId = subscriptionId } );
 		}
 	}
 }

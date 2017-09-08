@@ -172,6 +172,16 @@ namespace AllyisApps.Services.StaffingManager
 		public Address Address { get; set; }
 
 		/// <summary>
+		/// Gets or sets the customer for the positions.
+		/// </summary>
+		public Customer Customer { get; set; }
+
+		/// <summary>
+		/// Gets or sets the customers address for the positions.
+		/// </summary>
+		public Address CustomerAddress { get; set; }
+
+		/// <summary>
 		/// Gets or sets a list of tags on the position.
 		/// </summary>
 		public List<Tag> Tags
