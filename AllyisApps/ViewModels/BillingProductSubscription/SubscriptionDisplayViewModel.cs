@@ -14,9 +14,29 @@ namespace AllyisApps.ViewModels.Auth
 	public class SubscriptionDisplayViewModel : BaseViewModel
 	{
 		/// <summary>
-		/// Gets or sets the subscription info object.
+		/// Constuct defalt object 
 		/// </summary>
-		public SubscriptionDisplayInfo Info { get; set; } // TODO: Move this information into view model directly?
+		public SubscriptionDisplayViewModel()
+		{
+			
+		}
+		/// <summary>
+		/// Constuct Subscirption Display from Service object
+		/// </summary>
+		/// <param name="sub"></param>
+		public SubscriptionDisplayViewModel(SubscriptionDisplayInfo sub) : this()
+		{
+			this.ProductId = sub.ProductId;	
+			this.ProductName = sub.ProductName;
+			this.ProductDescription = sub.Description;
+			this.SubscriptionId = sub.SubscriptionId;
+			this.SubscriptionName = sub.SubscriptionName;
+			this.OrganizationId = sub.OrganizationId;
+			this.AreaUrl = sub.AreaUrl;
+			this.NumberofUsers = sub.NumberOfUsers;
+		}
+
+		
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the user has permission to edit this subscription.
@@ -58,5 +78,10 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the product area url.
 		/// </summary>
 		public string AreaUrl { get; set; }
+
+		/// <summary>
+		/// Number of users in the subscription. 
+		/// </summary>
+		public int NumberofUsers { get; set; }
 	}
 }

@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -58,7 +58,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets a list of pending user invitations.
 		/// </summary>
-		public IEnumerable<InvitationInfo> PendingInvitation { get; internal set; }
+		public IEnumerable<InvitationInfoViewModel> PendingInvitation { get; internal set; }
 
 		/// <summary>
 		/// Gets or sets the OrganizationId.

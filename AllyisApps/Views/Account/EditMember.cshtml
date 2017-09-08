@@ -51,23 +51,23 @@
 				<div class="col-md-6 min300">
 					<div class="form-group">
 						<label>@Strings.Address</label>
-						<div class="text-box-padded">@(Model.UserInfo.Address == null ?  null : Model.UserInfo.Address.Address1)</div>
+						<div class="text-box-padded">@(Model.UserInfo.Address == null ?  null : Model.UserInfo.Address)</div>
 					</div>
 					<div class="form-group">
 						<label>@Strings.Country</label>
-						<div class="text-box-padded">@(Model.UserInfo.Address == null ? null : Model.UserInfo.Address.CountryName)</div>
+						<div class="text-box-padded">@(Model.UserInfo.Address == null ? null : Model.UserInfo.CountryName)</div>
 					</div>
 					<div class="form-group">
 						<label>@Strings.State</label>
-						<div class="text-box-padded">@(Model.UserInfo.Address == null ? null : Model.UserInfo.Address.StateName)</div>
+						<div class="text-box-padded">@(Model.UserInfo.Address == null ? null : Model.UserInfo.StateName)</div>
 					</div>
 					<div class="form-group">
 						<label>@Strings.City</label>
-						<div class="text-box-padded">@(Model.UserInfo.Address == null ? null : Model.UserInfo.Address.City)</div>
+						<div class="text-box-padded">@(Model.UserInfo.Address == null ? null : Model.UserInfo.City)</div>
 					</div>
 					<div class="form-group">
 						<label>@Strings.PostalCode</label>
-						<div class="text-box-padded">@(Model.UserInfo.Address == null ? null : Model.UserInfo.Address.PostalCode)</div>
+						<div class="text-box-padded">@(Model.UserInfo.Address == null ? null : Model.UserInfo.PostalCode)</div>
 					</div>
 				</div>
 			}

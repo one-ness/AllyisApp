@@ -29,14 +29,14 @@ namespace AllyisApps.Controllers
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
 			ManageOrgViewModel model = this.ConstructOrganizationManageViewModel(id);
 
-			//var sub = model.Subscriptions.Select(x => x).Where(y => y.ProductId == (int)ProductIdEnum.TimeTracker).FirstOrDefault();
-			//if (sub != null && model.Subscriptions.Count() > 0)
-			//{
-			//	int subId = sub.SubscriptionId;
-			//	int startOfWeek = AppService.GetAllSettings(subId).Item1.StartOfWeek;
-			//	ViewBag.StartDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
-			//	ViewBag.EndDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
-			//}
+			var sub = model.Subscriptions.Select(x => x).Where(y => y.ProductId == (int)ProductIdEnum.TimeTracker).FirstOrDefault();
+			if (sub != null && model.Subscriptions.Count() > 0)
+			{
+				int subId = sub.SubscriptionId;
+				int startOfWeek = AppService.GetAllSettings(subId).Item1.StartOfWeek;
+				ViewBag.StartDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
+				ViewBag.EndDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
+			}
 
 			ViewData["UserId"] = this.AppService.UserContext.UserId;
 			return this.View(model);
@@ -53,10 +53,22 @@ namespace AllyisApps.Controllers
 			var infos = AppService.GetOrganizationManagementInfo(organizationId);
 
 			BillingServicesCustomer customer = (infos.Item5 == null) ? null : AppService.RetrieveCustomer(new BillingServicesCustomerId(infos.Item5));
-
+			Organization orgInfo = infos.Item1;
 			return new ManageOrgViewModel
 			{
-				Details = infos.Item1,
+				Details = new OrganizationInfoViewModel()
+				{
+					OrganizationName = orgInfo.OrganizationName,
+					OrganizaitonId = orgInfo.OrganizationId,
+					SiteURL = orgInfo.SiteUrl,
+					FaxNumber = orgInfo.FaxNumber,
+					PhoneNumber = orgInfo.PhoneNumber,
+					Address = orgInfo.Address?.Address1,
+					City = orgInfo.Address?.City,
+					CountryName = orgInfo.Address?.CountryName,
+					StateName = orgInfo.Address?.StateName,
+					PostalCode = orgInfo.Address?.PostalCode
+				},
 				LastFour = customer == null ? string.Empty : customer.Last4,
 				Members = new OrganizationMembersViewModel
 				{
@@ -72,27 +84,15 @@ namespace AllyisApps.Controllers
 					}),
 					OrganizationId = infos.Item1.OrganizationId,
 					OrganizationName = infos.Item1.OrganizationName,
-					PendingInvitation = infos.Item4,
+					PendingInvitation = infos.Item4.Select(invite => new InvitationInfoViewModel(invite)),
 					TotalUsers = infos.Item2.Count
 				},
 				OrganizationId = organizationId,
 				BillingCustomer = customer,
 				SubscriptionCount = infos.Item3.Count,
 				Subscriptions = infos.Item3.Select(sub =>
-				{
-
-					return new SubscriptionDisplayViewModel
-					{
-						Info = sub,
-						ProductId = sub.ProductId,
-						ProductName = sub.ProductName,
-						SubscriptionId = sub.SubscriptionId,
-						SubscriptionName = sub.SubscriptionName,
-						ProductDescription = sub.Description,
-						OrganizationId = organizationId,
-						AreaUrl = sub.AreaUrl,
-					};
-				})
+					 new SubscriptionDisplayViewModel(sub)
+				)
 			};
 		}
 	}

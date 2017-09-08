@@ -34,7 +34,8 @@ namespace AllyisApps.Controllers
 			ManagePermissionsViewModel model = new ManagePermissionsViewModel
 			{
 				Users = new List<UserPermissionsViewModel>(),
-				Subscriptions = infos.Item2,
+				Subscriptions = infos.Item2.Select(sub => new
+					SubscriptionDisplayViewModel(sub)).ToList(),
 				SubIds = infos.Item2.Select(s => s.SubscriptionId).ToList(),
 				OrganizationId = id,
 
@@ -73,7 +74,7 @@ namespace AllyisApps.Controllers
 					};
 
 					// Start out with default TT NotInProduct role if org is subscribed to TT.
-					foreach (SubscriptionDisplayInfo sub in model.Subscriptions)
+					foreach (SubscriptionDisplayViewModel sub in model.Subscriptions)
 					{
 						modelUser.ProductRoleIds.Add(ProductRole.NotInProduct);
 					}

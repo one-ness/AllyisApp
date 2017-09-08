@@ -49,7 +49,7 @@ namespace AllyisApps.Controllers
 		{
 			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(organizationId);
 			add.Subscriptions = model.Subscriptions;
-			add.Projects = model.Projects;
+			//add.Projects = model.Projects;
 
 			if (ModelState.IsValid)
 			{
@@ -117,21 +117,27 @@ namespace AllyisApps.Controllers
 			{
 				OrganizationId = organizationId,
 				EmployeeId = new string(AppService.IncrementAlphanumericCharArray(nextId.ToCharArray())),
-				Subscriptions = new List<AddMemberSubscriptionInfo>(),
-				Projects = infos.Item4,
+				Subscriptions = new List<AddMemberSubscriptionViewModel>(),
+				//Projects = infos.Item4,
 			};
 
 			foreach (SubscriptionDisplayInfo sub in infos.Item2)
 			{
-				AddMemberSubscriptionInfo subInfo = new AddMemberSubscriptionInfo
+				AddMemberSubscriptionViewModel subInfo = new AddMemberSubscriptionViewModel
 				{
 					ProductName = sub.ProductName,
-					ProductRoles = infos.Item3.Where(r => r.ProductId == sub.ProductId).ToList(),
+					ProductRoles = infos.Item3.Where(r => r.ProductId == sub.ProductId)
+						.Select(r =>new ProductRoleViewModel()
+						{
+							ProductId = r.ProductId,
+							ProductRoleId = r.ProductRoleId,
+							ProductRoleName = r.ProductRoleName
+						}).ToList(),
 					SubscriptionId = sub.SubscriptionId
 				};
 				subInfo.ProductRoles.Insert(
 					0,
-					new ProductRole
+					new ProductRoleViewModel
 					{
 						ProductRoleName = "None",
 						ProductId = (int)ProductIdEnum.None,

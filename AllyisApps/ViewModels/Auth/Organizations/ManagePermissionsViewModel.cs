@@ -16,7 +16,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the list of subscriptions in the organization.
 		/// </summary>
-		public List<SubscriptionDisplayInfo> Subscriptions { get; set; }
+		public List<SubscriptionDisplayViewModel> Subscriptions { get; set; }
 
 		/// <summary>
 		/// Gets or sets a list of subscription ids for quick index reference.

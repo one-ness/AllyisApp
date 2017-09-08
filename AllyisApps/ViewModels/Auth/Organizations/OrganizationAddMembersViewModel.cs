@@ -83,10 +83,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public int? SubscriptionProjectId { get; set; }
 
-		/// <summary>
-		/// Gets organization.
-		/// </summary>
-		public Organization Organization { get; internal set; }
 
 		/// <summary>
 		/// Gets AddedUsers.
@@ -103,9 +99,5 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public HashSet<string> EmailedUsers { get; internal set; }
 
-		/// <summary>
-		/// Gets projects in this organizaiton.
-		/// </summary>
-		public IEnumerable<CompleteProjectInfo> OrganizationProjects { get; internal set; }
 	}
 }

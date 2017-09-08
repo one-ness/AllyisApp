@@ -1,5 +1,4 @@
-﻿using AllyisApps.Services;
-using AllyisApps.Services.Billing;
+﻿
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,12 +12,13 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the list of subscriptions for the organization.
 		/// </summary>
-		public List<AddMemberSubscriptionInfo> Subscriptions { get; set; }
+		public List<AddMemberSubscriptionViewModel> Subscriptions { get; set; }
 
-		/// <summary>
-		/// Gets or sets the list of projects in the organization.
-		/// </summary>
-		public List<CompleteProjectInfo> Projects { get; set; }
+		///// <summary>
+		///// Gets or sets the list of projects in the organization. 
+		////*** remove time traker depenency
+		///// </summary>
+		//public List<CompleteProjectInfo> Projects { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization id.
@@ -67,7 +67,7 @@ namespace AllyisApps.ViewModels.Auth
 	/// <summary>
 	/// A sub-view model for relevant subscription information on the Add Member page.
 	/// </summary>
-	public class AddMemberSubscriptionInfo
+	public class AddMemberSubscriptionViewModel
 	{
 		/// <summary>
 		/// Gets or sets the subscription id.
@@ -82,7 +82,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the list of product roles.
 		/// </summary>
-		public List<ProductRole> ProductRoles { get; set; }
+		public List<ProductRoleViewModel> ProductRoles { get; set; }
 
 		/// <summary>
 		/// Gets or sets the role selected in the drop down menu.

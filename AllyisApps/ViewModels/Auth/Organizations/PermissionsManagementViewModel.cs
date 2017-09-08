@@ -17,6 +17,7 @@ namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
 	/// The Permissions Management model.
+	/// This view Model is not used but it is very well deveoloped so leaving here in case we reuse this logic.
 	/// </summary>
 	public class PermissionsManagementViewModel : BaseViewModel
 	{
@@ -97,7 +98,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets the list of Subscription roles the user has.
 		/// </summary>
-		public List<ProductRole> SubscriptionRoles { get; internal set; }
+		public List<ProductRoleViewModel> SubscriptionRoles { get; internal set; }
 	}
 
 	/// <summary>

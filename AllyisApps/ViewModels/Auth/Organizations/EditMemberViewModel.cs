@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
 using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.ViewModels.Auth
@@ -22,7 +21,7 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// Gets or sets the user's info for display.
 		/// </summary>
-		public User UserInfo { get; set; }
+		public UserInfoViewModel UserInfo { get; set; }
 
 		/// <summary>
 		/// Gets or sets the user's first name.

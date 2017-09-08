@@ -153,7 +153,7 @@ namespace AllyisApps.ViewModels.Auth
 				OrganizationName = curorg.OrganizationName;
 				PhoneNumber = curorg.PhoneNumber;
 				PhoneExtension = null;//TODO: Fill with values
-				this.Address1 = curorg.Address?.Address1;
+				Address1 = curorg.Address?.Address1;
 				City = curorg.Address?.City;
 				State = curorg.Address?.StateName;
 				PostalCode = curorg.Address?.PostalCode;

@@ -1,5 +1,5 @@
-﻿@using AllyisApps.Services;
-@model Organization
+﻿@using AllyisApps.ViewModels.Auth;
+@model OrganizationInfoViewModel
 @{
 	ViewBag.Title = Strings.OrganizationDetails;
 }
@@ -11,27 +11,27 @@
 	</tr>
 	<tr>
 		<td><label>@Strings.SiteURL</label></td>
-		<td>@Html.DisplayFor(m => m.SiteUrl)</td>
+		<td>@Html.DisplayFor(m => m.SiteURL)</td>
 	</tr>
 	<tr>
 		<td><label>@Strings.Address</label></td>
-		<td>@Html.DisplayFor(m => m.Address.Address1)</td>
+		<td>@Html.DisplayFor(m => m.Address)</td>
 	</tr>
 	<tr>
 		<td><label>@Strings.Country</label></td>
-		<td>@Html.DisplayFor(m => m.Address.CountryName)</td>
+		<td>@Html.DisplayFor(m => m.CountryName)</td>
 	</tr>
 	<tr>
 		<td><label>@Strings.State</label></td>
-		<td>@Html.DisplayFor(m => m.Address.StateName)</td>
+		<td>@Html.DisplayFor(m => m.StateName)</td>
 	</tr>
 	<tr>
 		<td><label>@Strings.City</label></td>
-		<td>@Html.DisplayFor(m => m.Address.City)</td>
+		<td>@Html.DisplayFor(m => m.City)</td>
 	</tr>
 	<tr>
 		<td><label>@Strings.PostalCode</label></td>
-		<td>@Html.DisplayFor(m => m.Address.PostalCode)</td>
+		<td>@Html.DisplayFor(m => m.PostalCode)</td>
 	</tr>
 	<tr>
 		<td><label>@Strings.PhoneNumber</label></td>

@@ -35,7 +35,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (InvitationInfo invite in Model.PendingInvitation)
+			@foreach (InvitationInfoViewModel invite in Model.PendingInvitation)
 			{
 				string pars = "/" + invite.InvitationId + "/" + invite.OrganizationId + "/1";
 				<tr class="memberRow">
