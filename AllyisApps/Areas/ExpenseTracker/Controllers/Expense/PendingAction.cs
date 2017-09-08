@@ -24,7 +24,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
             ViewBag.SubscriptionName = AppService.getSubscriptionName(subscriptionId);
 
-            if (subInfo.ProductRoleId != 2)
+			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
+
+			if (subInfo.ProductRoleId != 2)
             {
                 return RedirectToAction("Index");
             }

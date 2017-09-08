@@ -19,6 +19,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         /// <returns>A admin report view model.</returns>
         public ActionResult AdminReport(int subscriptionId)
         {
+			ViewData["SubscriptionId"] = subscriptionId;
+
             ViewData["IsManager"] = AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
 
             UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];

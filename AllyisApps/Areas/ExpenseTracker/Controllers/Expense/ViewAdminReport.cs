@@ -28,7 +28,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         /// <returns>Returns File or a Redirect to the admin report page.</returns>
         public ActionResult ViewAdminReport(string viewDataButton, AdminReportModel model, int subscriptionId, int organizationId, DateTime? startDate, DateTime? endDate)
         {
-            AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
+			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
 
             var selectedUsers = model.Selection != null ? model.Selection.SelectedUsers : new List<int>() { GetCookieData().UserId };
             var selectedStatus = model.Selection != null ? model.Selection.Status : new List<int> { 1, 2, 3, 4 };
