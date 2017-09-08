@@ -5,11 +5,11 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Services;
 using AllyisApps.Services.Auth;
 using AllyisApps.ViewModels.Auth;
-using System.Linq;
 
 namespace AllyisApps.Controllers
 {
@@ -37,8 +37,7 @@ namespace AllyisApps.Controllers
         public AccountIndexViewModel ConstuctIndexViewModel()
         {
             User accountInfo = AppService.GetCurrentUser();
-
-
+			
             AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel(accountInfo);
             AccountIndexViewModel indexViewModel = new AccountIndexViewModel()
             {
@@ -70,17 +69,17 @@ namespace AllyisApps.Controllers
             foreach (var curorg in orgs)
             {
                 AccountIndexViewModel.OrganizationViewModel orgViewModel =
-                new AccountIndexViewModel.OrganizationViewModel(curorg.Organization,
+                new AccountIndexViewModel.OrganizationViewModel(
+					curorg.Organization,
                     this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.Organization.OrganizationId, curorg.OrganizationRole, false));
-
-               
-                //Add subscription info
+				
+                // Add subscription info
                 foreach (UserSubscription userSubInfo in accountInfo.Subscriptions.Where(sub => sub.Subscription.OrganizationId == curorg.Organization.OrganizationId))
                 {
                     string description =
                         userSubInfo.Subscription.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
                         userSubInfo.Subscription.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
-                        "";
+                        string.Empty;
                     var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel(userSubInfo, description);
                     if (userSubInfo.Subscription.ProductId == ProductIdEnum.TimeTracker)
                     {
@@ -89,30 +88,36 @@ namespace AllyisApps.Controllers
                         int startOfWeek = AppService.GetAllSettings(userSubInfo.Subscription.SubscriptionId).Item1.StartOfWeek;
                         sDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
                         eDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
-                        subViewModel.ProductGoToUrl = Url.RouteUrl("TimeTracker_NoUserId", new
-                        {
-                            subscriptionId =
-                            userSubInfo.Subscription.SubscriptionId,
-                            controller = ControllerConstants.TimeEntry,
-                            startDate = sDate,
-                            endDate = eDate
-                        });
+                        subViewModel.ProductGoToUrl = Url.RouteUrl(
+							"TimeTracker_NoUserId",
+							new
+							{
+								subscriptionId =
+								userSubInfo.Subscription.SubscriptionId,
+								controller = ControllerConstants.TimeEntry,
+								startDate = sDate,
+								endDate = eDate
+							});
                     }
 					else if (userSubInfo.Subscription.ProductId == ProductIdEnum.ExpenseTracker)
 					{
-						subViewModel.ProductGoToUrl = Url.RouteUrl("ExpenseTracker_Default", new
-						{
-							subscriptionId = userSubInfo.Subscription.SubscriptionId,
-							controller = ControllerConstants.Expense
-						});
+						subViewModel.ProductGoToUrl = Url.RouteUrl(
+							"ExpenseTracker_Default",
+							new
+							{
+								subscriptionId = userSubInfo.Subscription.SubscriptionId,
+								controller = ControllerConstants.Expense
+							});
 					}
                     else
                     {
                         subViewModel.ProductGoToUrl = userSubInfo.Subscription.AreaUrl + "/" + subViewModel.SubscriptionId;
                     }
-                    subViewModel.IconUrl = string.Format("Content/icons/{0}.png", subViewModel.ProductName.Replace(" ", ""));
+
+                    subViewModel.IconUrl = string.Format("Content/icons/{0}.png", subViewModel.ProductName.Replace(" ", string.Empty));
                     orgViewModel.Subscriptions.Add(subViewModel);
                 }
+
                 indexViewModel.Organizations.Add(orgViewModel);
             }
 
@@ -123,7 +128,7 @@ namespace AllyisApps.Controllers
         /// Gets the Starting date from an int value.
         /// </summary>
         /// <param name="startOfWeek">Integer value representing a date.</param>
-        /// <returns></returns>
+        /// <returns>A datetime object.</returns>
         private DateTime SetStartingDate(int startOfWeek)
         {
             DateTime today = DateTime.Now;

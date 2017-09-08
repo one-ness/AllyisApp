@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using DataAnnotationsExtensions;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using DataAnnotationsExtensions;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -123,22 +123,22 @@ namespace AllyisApps.ViewModels.Auth
 		public bool IsCreating { get; set; }
 
 		/// <summary>
-		/// selected state id
+		/// Gets or sets the selected state id.
 		/// </summary>
 		public int? SelectedStateId { get; set; }
 
 		/// <summary>
-		/// state id and localized names
+		/// Gets or sets the state id and localized names.
 		/// </summary>
 		public Dictionary<string, string> LocalizedStates { get; set; }
 
 		/// <summary>
-		/// selected country code
+		/// Gets or sets the selected country code.
 		/// </summary>
 		public string SelectedCountryCode { get; set; }
 
 		/// <summary>
-		/// country code and localized names
+		/// Gets or sets the country code and localized names.
 		/// </summary>
 		public Dictionary<string, string> LocalizedCountries { get; set; }
 	}

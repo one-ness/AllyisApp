@@ -4,15 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.ViewModels.Auth;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -53,7 +53,7 @@ namespace AllyisApps.Controllers
 				model.TimeTrackerSubIndex = model.Subscriptions.IndexOf(ttsub);
 			}
 
-            if(etsub != null)
+            if (etsub != null)
             {
                 model.ExpenseTrackerSubIndex = model.Subscriptions.IndexOf(etsub);
             }
@@ -237,7 +237,7 @@ namespace AllyisApps.Controllers
 					Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.UsersChangedRolesInOrg, numberChanged), Variety.Success));
 				}
 			}
-			else if(model.SelectedActions.TimeTrackerRoleTarget != 0)
+			else if (model.SelectedActions.TimeTrackerRoleTarget != 0)
 			{
 				// Changing time tracker roles
 				if (!Enum.IsDefined(typeof(TimeTrackerRole), model.SelectedActions.TimeTrackerRoleTarget) && model.SelectedActions.TimeTrackerRoleTarget != -1)
@@ -245,7 +245,7 @@ namespace AllyisApps.Controllers
 					Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
 					return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });
 				}
-                else if(!Enum.IsDefined(typeof(ExpenseTrackerRole), model.SelectedActions.ExpenseTrackerRoleTarget) && model.SelectedActions.ExpenseTrackerRoleTarget != -1)
+                else if (!Enum.IsDefined(typeof(ExpenseTrackerRole), model.SelectedActions.ExpenseTrackerRoleTarget) && model.SelectedActions.ExpenseTrackerRoleTarget != -1)
                 {
                     Notifications.Add(new BootstrapAlert(AllyisApps.Resources.Strings.YouDidNotDefineATargetRole, Variety.Danger));
                     return RedirectToAction(ActionConstants.ManagePermissions, new { id = model.OrganizationId });

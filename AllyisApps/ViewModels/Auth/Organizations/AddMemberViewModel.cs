@@ -1,6 +1,7 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
 {

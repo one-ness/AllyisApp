@@ -42,6 +42,5 @@ namespace AllyisApps.ViewModels.Staffing
 		/// Gets or sets Notes.
 		/// </summary>
 		public string Notes { get; set; }
-
 	}
 }

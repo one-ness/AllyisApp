@@ -9,12 +9,12 @@
     </a>
 
     <ul class="dropdown-menu dropdown-menu-right" id="TheDropdown2">
-		<li>@Html.ActionLink("Create Report", ActionConstants.Create, ControllerConstants.Expense, new { subscriptionId = subId })</li>
-		<li>@Html.ActionLink("Reports", ActionConstants.Index, ControllerConstants.Expense, new { subscriptionId = subId })</li>
+		<li>@Html.ActionLink("Create Report", ActionConstants.Create, ControllerConstants.Expense, new { subscriptionId = subId }, null)</li>
+		<li>@Html.ActionLink("Reports", ActionConstants.Index, ControllerConstants.Expense, new { subscriptionId = subId }, null)</li>
 		@if (manager)
         { 
-            <li>@Html.ActionLink("Pending", ActionConstants.Pending, ControllerConstants.Expense, new { subscriptionId = subId })</li> 
-            <li>@Html.ActionLink("Admin Reports", ActionConstants.AdminReport, ControllerConstants.Expense, new { subscriptionId = subId })</li>
+            <li>@Html.ActionLink("Pending", ActionConstants.Pending, ControllerConstants.Expense, new { subscriptionId = subId }, null)</li> 
+            <li>@Html.ActionLink("Admin Reports", ActionConstants.AdminReport, ControllerConstants.Expense, new { subscriptionId = subId }, null)</li>
         }
     </ul>
 </li>

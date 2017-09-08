@@ -19,11 +19,13 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// View/export expense report.
 		/// </summary>
-		/// <param name="model"></param>
+		/// <param name="model">The model object.</param>
 		/// <returns>An action result.</returns>
 		[HttpPost]
 		public ActionResult CreateReport(ExpenseCreateModel model)
 		{
+			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, model.SubscriptionId);
+
 			if (!ModelState.IsValid)
 			{
 				return RedirectToAction("Create", new { subscriptionId = model.SubscriptionId, reportId = model.Report.ExpenseReportId });
@@ -36,13 +38,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				throw new AccessViolationException(message);
 			}
 
-
-			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, model.SubscriptionId);
-
 			if (model.Items == null)
 			{
 				model.Items = new List<ExpenseItem>();
 			}
+
 			var subscription = AppService.GetSubscription(model.SubscriptionId);
 			var organizationId = subscription.OrganizationId;
 			ExpenseStatusEnum reportStatus;

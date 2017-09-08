@@ -20,18 +20,15 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         /// <returns>The action result.</returns>
 		public ActionResult Index(int subscriptionId)
 		{
+			SetNavData(subscriptionId);
+
             AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
+
             int userId = GetCookieData().UserId;
 
             UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 
             var items = AppService.GetExpenseReportBySubmittedId(userId).Select(x => x).Where(y => y.OrganizationId == subInfo.OrganizationId);
-
-            ViewBag.SubscriptionName = AppService.getSubscriptionName(subscriptionId);
-
-			ViewData["SubscriptionId"] = subInfo.SubscriptionId;
-
-			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
 
 			return View(InitializeViewModel(subscriptionId, userId, DateTime.UtcNow, DateTime.UtcNow.AddDays(7), items));
 		}

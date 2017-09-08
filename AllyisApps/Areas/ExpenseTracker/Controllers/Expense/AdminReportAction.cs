@@ -18,14 +18,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         /// <param name="subscriptionId">The subscription id.</param>
         /// <returns>A admin report view model.</returns>
         public ActionResult AdminReport(int subscriptionId)
-        {
-            ViewData["IsManager"] = AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
+		{
+			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.AdminReport, subscriptionId);
 
-            UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			SetNavData(subscriptionId);
 
-            ViewData["SubscriptionName"] = AppService.getSubscriptionName(subInfo.SubscriptionId);
-
-            AdminReportModel adminReportVM = null;
+			AdminReportModel adminReportVM = null;
 
             string tempDataKey = "ARVM";
 

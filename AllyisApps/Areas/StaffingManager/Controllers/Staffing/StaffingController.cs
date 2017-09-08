@@ -16,12 +16,10 @@ namespace AllyisApps.Areas.StaffingManager.Controllers.Staffing
 	public partial class StaffingController : BaseController
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="StaffingController" /> class
+		/// Initializes a new instance of the <see cref="StaffingController" /> class.
 		/// </summary>
 		public StaffingController()
 		{
 		}
-		
-
 	}
 }

@@ -16,6 +16,14 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 	/// </summary>
 	public partial class ExpenseController : BaseController
 	{
+		private void SetNavData(int subscriptionId)
+		{
+			UserContext.SubscriptionAndRole subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			ViewData["SubscriptionName"] = AppService.getSubscriptionName(subscriptionId);
+			ViewData["SubscriptionId"] = subscriptionId;
+			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
+		}
+
 		private void UploadItems(ExpenseCreateModel model, ExpenseReport report)
 		{
 			IList<ExpenseItem> oldItems = AppService.GetExpenseItemsByReportId(report.ExpenseReportId);
@@ -45,7 +53,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			}
 		}
 
-		private static void UploadAttachments(ExpenseCreateModel model, ExpenseReport report)
+		private void UploadAttachments(ExpenseCreateModel model, ExpenseReport report)
 		{
 			foreach (string name in AzureFiles.GetReportAttachments(report.ExpenseReportId))
 			{
@@ -54,6 +62,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					AzureFiles.DeleteReportAttachment(report.ExpenseReportId, name);
 				}
 			}
+
 			if (model.Files != null)
 			{
 				foreach (var file in model.Files)

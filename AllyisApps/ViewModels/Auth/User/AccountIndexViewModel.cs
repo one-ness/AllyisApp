@@ -1,5 +1,5 @@
-﻿using AllyisApps.Services;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using AllyisApps.Services;
 
 #pragma warning disable 1591
 
@@ -40,25 +40,32 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public class UserViewModel
 		{
+			/// <summary>
+			/// Initializes a new instance of the <see cref="UserViewModel"/> class.
+			/// </summary>
 			public UserViewModel()
 			{
 			}
 
+			/// <summary>
+			/// Initializes a new instance of the <see cref="UserViewModel"/> class.
+			/// </summary>
+			/// <param name="user">The user object.</param>
 			public UserViewModel(User user)
 			{
 				if (user != null)
 				{
-					FirstName = user.FirstName;
-					LastName = user.LastName;
-					Email = user.Email;
-					PhoneNumber = user.PhoneNumber;
-					PhoneExtension = user.PhoneExtension;
-					Address1 = user.Address?.Address1;
-					Address2 = user.Address?.Address2;
-					City = user.Address?.City;
-					State = user.Address?.StateName;
-					PostalCode = user.Address?.PostalCode;
-					Country = user.Address?.CountryName;
+					this.FirstName = user.FirstName;
+					this.LastName = user.LastName;
+					this.Email = user.Email;
+					this.PhoneNumber = user.PhoneNumber;
+					this.PhoneExtension = user.PhoneExtension;
+					this.Address1 = user.Address?.Address1;
+					this.Address2 = user.Address?.Address2;
+					this.City = user.Address?.City;
+					this.State = user.Address?.StateName;
+					this.PostalCode = user.Address?.PostalCode;
+					this.Country = user.Address?.CountryName;
 				}
 			}
 
@@ -147,21 +154,27 @@ namespace AllyisApps.ViewModels.Auth
 				this.Subscriptions = new List<SubscriptionViewModel>();
 			}
 
+			/// <summary>
+			/// Initializes a new instance of the <see cref="OrganizationViewModel"/> class.
+			/// </summary>
+			/// <param name="curorg">The organization.</param>
+			/// <param name="isManageAllowed">Determines whether management permissions are allowed.</param>
 			public OrganizationViewModel(Organization curorg, bool isManageAllowed) : this()
 			{
-				OrganizationId = curorg.OrganizationId;
-				OrganizationName = curorg.OrganizationName;
-				PhoneNumber = curorg.PhoneNumber;
-				PhoneExtension = null;//TODO: Fill with values
-				Address1 = curorg.Address?.Address1;
-				City = curorg.Address?.City;
-				State = curorg.Address?.StateName;
-				PostalCode = curorg.Address?.PostalCode;
-				Country = curorg.Address?.CountryName;
-				SiteUrl = curorg.SiteUrl;
-				FaxNumber = curorg.FaxNumber;
-				//TODO: Infomation is dependent on curent user
-				IsManageAllowed = isManageAllowed;
+				this.OrganizationId = curorg.OrganizationId;
+				this.OrganizationName = curorg.OrganizationName;
+				this.PhoneNumber = curorg.PhoneNumber;
+				this.PhoneExtension = null; // TODO: Fill with values
+				this.Address1 = curorg.Address?.Address1;
+				this.City = curorg.Address?.City;
+				this.State = curorg.Address?.StateName;
+				this.PostalCode = curorg.Address?.PostalCode;
+				this.Country = curorg.Address?.CountryName;
+				this.SiteUrl = curorg.SiteUrl;
+				this.FaxNumber = curorg.FaxNumber;
+
+				// TODO: Infomation is dependent on curent user
+				this.IsManageAllowed = isManageAllowed;
 			}
 
 			/// <summary>
@@ -239,20 +252,31 @@ namespace AllyisApps.ViewModels.Auth
 			/// </summary>
 			public class SubscriptionViewModel
 			{
+				/// <summary>
+				/// Initializes a new instance of the <see cref="SubscriptionViewModel"/> class.
+				/// </summary>
 				public SubscriptionViewModel()
 				{
 				}
 
+				/// <summary>
+				/// Initializes a new instance of the <see cref="SubscriptionViewModel"/> class.
+				/// </summary>
+				/// <param name="userSubInfo">The UserSubscription object.</param>
+				/// <param name="description">The description.</param>
 				public SubscriptionViewModel(UserSubscription userSubInfo, string description)
 				{
-					ProductName = userSubInfo.Subscription.ProductName;
-					SubscriptionId = userSubInfo.Subscription.SubscriptionId;
-					SubscriptionName = userSubInfo.Subscription.SubscriptionName;
-					ProductDescription = description;
-					productId = userSubInfo.Subscription.ProductId;
-					AreaUrl = userSubInfo.Subscription.AreaUrl;
+					this.ProductName = userSubInfo.Subscription.ProductName;
+					this.SubscriptionId = userSubInfo.Subscription.SubscriptionId;
+					this.SubscriptionName = userSubInfo.Subscription.SubscriptionName;
+					this.ProductDescription = description;
+					this.ProductId = userSubInfo.Subscription.ProductId;
+					this.AreaUrl = userSubInfo.Subscription.AreaUrl;
 				}
 
+				/// <summary>
+				/// Gets or sets the ProductDescription.
+				/// </summary>
 				public string ProductDescription { get; set; }
 
 				/// <summary>
@@ -270,9 +294,24 @@ namespace AllyisApps.ViewModels.Auth
 				/// </summary>
 				public string SubscriptionName { get; set; }
 
+				/// <summary>
+				/// Gets or sets the AreaUrl.
+				/// </summary>
 				public string AreaUrl { get; set; }
-				public ProductIdEnum productId { get; set; }
+
+				/// <summary>
+				/// Gets or sets the ProductId.
+				/// </summary>
+				public ProductIdEnum ProductId { get; set; }
+
+				/// <summary>
+				/// Gets or sets the ProductGoToUrl.
+				/// </summary>
 				public string ProductGoToUrl { get; set; }
+
+				/// <summary>
+				/// Gets or sets the IconUrl.
+				/// </summary>
 				public string IconUrl { get; set; }
 			}
 		}

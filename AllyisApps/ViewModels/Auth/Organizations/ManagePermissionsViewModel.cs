@@ -1,5 +1,5 @@
-﻿using AllyisApps.Services.Billing;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
 {

@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
-using System;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -23,6 +23,8 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/Register.
 		/// </summary>
+		/// <param name="returnUrl">The return url.</param>
+		/// <returns>A registration view.</returns>
 		[AllowAnonymous]
 		public ActionResult Register(string returnUrl)
 		{
@@ -42,6 +44,9 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// POST: /Account/Register.
 		/// </summary>
+		/// <param name="model">The model.</param>
+		/// <param name="returnUrl">The return url.</param>
+		/// <returns>An async registration view.</returns>
 		[HttpPost]
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
@@ -62,7 +67,7 @@ namespace AllyisApps.Controllers
 				if (userId > 0)
 				{
 					// sign in (and set cookie) do not set cookie need to confirm email 
-					//this.SignIn(userId, model.Email);
+					// this.SignIn(userId, model.Email);
 					Notifications.Add(new BootstrapAlert(Strings.RegistationSucessful, Variety.Success));
 					return this.RedirectToLocal(returnUrl);
 				}
