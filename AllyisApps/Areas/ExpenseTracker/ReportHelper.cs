@@ -16,6 +16,14 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 	/// </summary>
 	public partial class ExpenseController : BaseController
 	{
+		private void SetNavData(int subscriptionId)
+		{
+			UserContext.SubscriptionAndRole subInfo = AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			ViewData["SubscriptionName"] = AppService.getSubscriptionName(subscriptionId);
+			ViewData["SubscriptionId"] = subscriptionId;
+			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
+		}
+
 		private void UploadItems(ExpenseCreateModel model, ExpenseReport report)
 		{
 			IList<ExpenseItem> oldItems = AppService.GetExpenseItemsByReportId(report.ExpenseReportId);

@@ -16,12 +16,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>A partial view.</returns>
 		public ActionResult DisplayFileLink(ExpenseFileModel model)
 		{
-			if (model != null)
-			{
-				return PartialView("_AjaxExpenseReportFileLink", model);
-			}
-
-			return null;
+			return PartialView("_AjaxExpenseReportFileLink", model);
 		}
 	}
 }

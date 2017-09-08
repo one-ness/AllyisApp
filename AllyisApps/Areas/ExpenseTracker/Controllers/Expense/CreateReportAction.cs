@@ -24,6 +24,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		[HttpPost]
 		public ActionResult CreateReport(ExpenseCreateModel model)
 		{
+			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, model.SubscriptionId);
+
 			if (!ModelState.IsValid)
 			{
 				return RedirectToAction("Create", new { subscriptionId = model.SubscriptionId, reportId = model.Report.ExpenseReportId });
@@ -35,8 +37,6 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.CreateReport.ToString());
 				throw new AccessViolationException(message);
 			}
-			
-			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, model.SubscriptionId);
 
 			if (model.Items == null)
 			{

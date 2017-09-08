@@ -21,17 +21,13 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>Returns an action result.</returns>
 		public ActionResult Create(int subscriptionId, int reportId = -1)
 		{
+			SetNavData(subscriptionId);
+
 			Session["AccountList"] = AppService.GetAccounts();
 			if (((List<AccountDBEntity>)Session["AccountList"]).Count == 0)
 			{
 				throw new InvalidOperationException("Cannot create a report if no accounts exist.");
 			}
-
-			UserContext.SubscriptionAndRole subInfo = null;
-            AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-			ViewBag.SubscriptionName = AppService.getSubscriptionName(subscriptionId);
-			ViewData["SubscriptionId"] = subscriptionId;
-			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
 
 			ExpenseReport report = reportId == -1 ? null : AppService.GetExpenseReport(reportId);
             var userInfo = GetCookieData();
@@ -52,12 +48,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             {
                 AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
             }
-            
-			IList<ExpenseItem> items = new List<ExpenseItem>();
-			if (report != null)
-			{
-				items = AppService.GetExpenseItemsByReportId(reportId);
-			}
+
+			IList<ExpenseItem> items = report == null ? null : AppService.GetExpenseItemsByReportId(reportId);
 
 			var model = new ExpenseCreateModel()
 			{
@@ -68,6 +60,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				Report = report,
 				Files = null
 			};
+
 			return View(model);
 		}
 	}

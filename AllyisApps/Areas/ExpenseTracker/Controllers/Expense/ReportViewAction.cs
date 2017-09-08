@@ -20,12 +20,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
         /// <returns>The view with selected report details.</returns>
         public ActionResult ReportView(int subscriptionId, int reportId)
         {
+			SetNavData(subscriptionId);
+
             var model = InitializeReportViewModel(subscriptionId, reportId);
-
-            UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-            ViewData["IsManager"] = subInfo.ProductRoleId == 2;
-
-            ViewBag.SubscriptionName = this.AppService.getSubscriptionName(subscriptionId);
 
             return View(model);
         }
