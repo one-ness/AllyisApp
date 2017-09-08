@@ -39,7 +39,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				OrganizationId = idAndCountries.Item2,
 				UserId = AppService.UserContext.UserId,
 				SubscriptionName = subscriptionNameToDisplay,
-                
 			});
 		}
 

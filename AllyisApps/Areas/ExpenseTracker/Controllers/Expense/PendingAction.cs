@@ -28,8 +28,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             {
                 return RedirectToAction("Index");
             }
-
-           
+			
 			var orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
 			int userId = GetCookieData().UserId;
 			IEnumerable<ExpenseReport> reports = AppService.GetExpenseReportByOrgId(orgId);

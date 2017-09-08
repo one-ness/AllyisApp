@@ -19,7 +19,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/EditProfile.
 		/// </summary>
-        /// <retuns>Edit profile view.</retuns>
+        /// <returns>Edit profile view.</returns>
 		public ActionResult EditProfile()
 		{
 			var model = new EditProfileViewModel();

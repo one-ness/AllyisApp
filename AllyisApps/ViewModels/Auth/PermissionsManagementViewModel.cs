@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using AllyisApps.Services.Billing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Web;
+using AllyisApps.Services;
+using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -301,7 +301,6 @@ namespace AllyisApps.ViewModels.Auth
         /// Gets or sets the target role to set the expensetracker subscription users to.
         /// </summary>
         public int? ExpenseTrackerRoleTarget { get; set; }
-
     }
 
 	/// <summary>

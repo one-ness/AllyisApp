@@ -2,16 +2,9 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
+using AllyisApps.DBModel.Finance;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
-using System.Web;
-using AllyisApps.Services.Expense;
-using System.IO;
-using AllyisApps.Lib;
-using System.Web.Routing;
-using System.Web.Mvc.Html;
-using System.Linq.Expressions;
-using AllyisApps.DBModel.Finance;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -33,6 +26,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				throw new InvalidOperationException("Cannot create a report if no accounts exist.");
 			}
+
 			UserContext.SubscriptionAndRole subInfo = null;
             AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			ViewBag.SubscriptionName = AppService.getSubscriptionName(subscriptionId);
@@ -43,7 +37,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             var userInfo = GetCookieData();
             if (reportId != -1)
             {
-                if(report != null
+                if (report != null
 					&& (report.SubmittedById != userInfo.UserId 
 					|| ((ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Draft 
 					&& (ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Rejected)))
@@ -51,14 +45,13 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.EditReport.ToString());
 					throw new AccessViolationException(message);
 				}
+
 				AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.EditReport, subscriptionId);
 			}
             else
             {
                 AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
             }
-            
-
             
 			IList<ExpenseItem> items = new List<ExpenseItem>();
 			if (report != null)

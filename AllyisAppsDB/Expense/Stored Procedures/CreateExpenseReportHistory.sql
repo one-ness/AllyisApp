@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [Expense].[AddReportHistory]
 	@userId INT,
-	@reportID INT,
+	@reportId INT,
 	@text NVARCHAR(MAX)
 AS
 BEGIN

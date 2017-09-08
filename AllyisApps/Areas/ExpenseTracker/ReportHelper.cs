@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			}
 		}
 
-		private static void UploadAttachments(ExpenseCreateModel model, ExpenseReport report)
+		private void UploadAttachments(ExpenseCreateModel model, ExpenseReport report)
 		{
 			foreach (string name in AzureFiles.GetReportAttachments(report.ExpenseReportId))
 			{
@@ -54,6 +54,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					AzureFiles.DeleteReportAttachment(report.ExpenseReportId, name);
 				}
 			}
+
 			if (model.Files != null)
 			{
 				foreach (var file in model.Files)

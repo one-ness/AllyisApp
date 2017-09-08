@@ -99,26 +99,26 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets Date of birth.
 		/// </summary>
 		[MinDateValidation]
-		public int? DateOfBirth { get; set; } //has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view.
+		public int? DateOfBirth { get; set; } // has to be int for localization to work correctly. Gets changed to DateTime? when saving data from view.
 
 		/// <summary>
-		/// selected state id
+		/// Gets or sets the selected state id.
 		/// </summary>
 		public int? SelectedStateId { get; set; }
 
 		/// <summary>
-		/// state id and localized names
+		/// Gets or sets the state id and localized names.
 		/// </summary>
 		[Display(Name = "State")]
 		public Dictionary<string, string> LocalizedStates { get; set; }
 
 		/// <summary>
-		/// selected country code
+		/// Gets or sets the selected country code.
 		/// </summary>
 		public string SelectedCountryCode { get; set; }
 
 		/// <summary>
-		/// country code and localized names
+		/// Gets or sets the country code and localized names.
 		/// </summary>
 		[Display(Name = "Country/Region")]
 		public Dictionary<string, string> LocalizedCountries { get; set; }

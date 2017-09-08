@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var infos = AppService.GetAllSettings(subscriptionId);
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-            string SubName = AppService.GetSubscription(subscriptionId).Name;
+            string subName = AppService.GetSubscription(subscriptionId).Name;
 			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = AppService.GetDayFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
@@ -38,7 +38,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				PayClasses = infos.Item2,
 				Holidays = infos.Item3,
 				SubscriptionId = subscriptionId,
-				SubscriptionName = SubName,
+				SubscriptionName = subName,
 				UserId = this.AppService.UserContext.UserId
 			});
 		}

@@ -48,6 +48,5 @@ namespace AllyisApps.Areas.StaffingManager
 				constraints: new { subscriptionId = @"\d+", userId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
 		}
-		
 	}
 }

@@ -8,10 +8,10 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using AllyisApps.ViewModels.Staffing;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.Staffing;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -29,14 +29,15 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		[HttpGet]
 		public ActionResult Create(int subscriptionId, int organizationId)
 		{
-			//var idAndCountries = AppService.GetNextCustId(subscriptionId);
+			// var idAndCountries = AppService.GetNextCustId(subscriptionId);
 			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
 			return this.View(new CreatePositionViewModel
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
                 
                 IsCreating = true,
-				//SubscriptionId = subscriptionId,
+
+				// SubscriptionId = subscriptionId,
 				OrganizationId = organizationId,
 				SubscriptionName = subscriptionNameToDisplay,
 			});

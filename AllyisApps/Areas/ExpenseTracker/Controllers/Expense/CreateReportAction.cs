@@ -19,7 +19,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// View/export expense report.
 		/// </summary>
-		/// <param name="model"></param>
+		/// <param name="model">The model object.</param>
 		/// <returns>An action result.</returns>
 		[HttpPost]
 		public ActionResult CreateReport(ExpenseCreateModel model)
@@ -35,14 +35,14 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.CreateReport.ToString());
 				throw new AccessViolationException(message);
 			}
-
-
+			
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, model.SubscriptionId);
 
 			if (model.Items == null)
 			{
 				model.Items = new List<ExpenseItem>();
 			}
+
 			var subscription = AppService.GetSubscription(model.SubscriptionId);
 			var organizationId = subscription.OrganizationId;
 			ExpenseStatusEnum reportStatus;
