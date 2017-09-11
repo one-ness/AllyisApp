@@ -49,7 +49,7 @@ namespace AllyisApps.Controllers
 		{
 			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(organizationId);
 			add.Subscriptions = model.Subscriptions;
-			
+
 			if (ModelState.IsValid)
 			{
 				this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, add.OrganizationId);

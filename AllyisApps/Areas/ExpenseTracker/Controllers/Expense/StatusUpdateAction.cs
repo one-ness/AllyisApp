@@ -25,9 +25,11 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				case "Approve":
 					UpdateReport(reportId, "Approve", reasonText);
 					break;
+
 				case "Reject":
 					UpdateReport(reportId, "Reject", reasonText);
 					break;
+
 				default:
 					break;
 			}

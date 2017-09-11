@@ -21,7 +21,7 @@ namespace AllyisApps.ViewModels.Auth
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SubscriptionDisplayViewModel"/> class. 
+		/// Initializes a new instance of the <see cref="SubscriptionDisplayViewModel"/> class.
 		/// </summary>
 		/// <param name="sub">Subscription display.</param>
 		public SubscriptionDisplayViewModel(SubscriptionDisplayInfo sub) : this()
