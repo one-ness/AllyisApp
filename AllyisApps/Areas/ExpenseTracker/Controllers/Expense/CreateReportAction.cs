@@ -69,7 +69,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				OrganizationId = organizationId,
 				ReportStatus = (int)reportStatus
 			};
-			
+
 			report.ExpenseReportId = AppService.CreateExpenseReport(report);
 			UploadItems(model, report);
 			UploadAttachments(model, report);

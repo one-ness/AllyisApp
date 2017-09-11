@@ -2,32 +2,32 @@
 @model CompleteProjectInfo
 
 @{
-    DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
-    ViewData["IsManager"] = Model.CanEditProject;
-    DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
-    ViewBag.Title = Strings.ProjectDetails;
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	ViewData["IsManager"] = Model.CanEditProject;
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+	ViewBag.Title = Strings.ProjectDetails;
 }
 
 <div class="row">
-    <div class="col-xs-10 col-xs-push-1 col-sm-8 col-sm-push-2 col-md-6 col-md-push-3">
-        <div class="form-group">
-            @Html.LabelFor(m => m.ProjectName, @Strings.Name)
-            <div id="projectName">@Model.ProjectName</div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.ProjectOrgId, Strings.ProjectOrgId)
-            <div id="projectOrgId">@Model.ProjectOrgId</div>
-        </div>
-        <div class="form-group row" style="margin-bottom: 0px; margin-top: 15px;">
-            <div class="col-xs-6 text-left">
-                <label for="daterange" style="text-align:center">@Strings.DateRange</label>
-            </div>
-            <div class="col-xs-6 text-right">
-                <label for="price" style="text-align:center">@Strings.PriceType</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-8 text-left">
+	<div class="col-xs-10 col-xs-push-1 col-sm-8 col-sm-push-2 col-md-6 col-md-push-3">
+		<div class="form-group">
+			@Html.LabelFor(m => m.ProjectName, @Strings.Name)
+			<div id="projectName">@Model.ProjectName</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.ProjectOrgId, Strings.ProjectOrgId)
+			<div id="projectOrgId">@Model.ProjectOrgId</div>
+		</div>
+		<div class="form-group row" style="margin-bottom: 0px; margin-top: 15px;">
+			<div class="col-xs-6 text-left">
+				<label for="daterange" style="text-align:center">@Strings.DateRange</label>
+			</div>
+			<div class="col-xs-6 text-right">
+				<label for="price" style="text-align:center">@Strings.PriceType</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-8 text-left">
 				@{
 					string startDateString = "";
 					if (Model.StartDate.HasValue)
@@ -41,21 +41,21 @@
 						endDateString = Model.EndDate.Value.ToShortDateString();
 					}
 				}
-                <span id="projectDate">@startDateString - @endDateString</span>
-            </div>
+				<span id="projectDate">@startDateString - @endDateString</span>
+			</div>
 
-            @{
-                <div class="col-xs-4 text-right">
-                    <span id="projectDate">@Model.PriceType</span>
-                </div>
-            }
-        </div>
-        <div class="text-right" style="padding-top: 15px; padding-bottom: 15px;">
-            <input type="button" class="btn btn-default" value="@Strings.ProjectList" onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer)'" />
+			@{
+				<div class="col-xs-4 text-right">
+					<span id="projectDate">@Model.PriceType</span>
+				</div>
+			}
+		</div>
+		<div class="text-right" style="padding-top: 15px; padding-bottom: 15px;">
+			<input type="button" class="btn btn-default" value="@Strings.ProjectList" onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer)'" />
 			@if (Model.CanEditProject)
 			{
 				<input type="button" value=@Strings.Edit class="btn btn-primary" onclick="location='@Url.Action(ActionConstants.Edit, ControllerConstants.Project, new { id = Model.ProjectId })'" />
 			}
-        </div>
-    </div>
+		</div>
+	</div>
 </div>
