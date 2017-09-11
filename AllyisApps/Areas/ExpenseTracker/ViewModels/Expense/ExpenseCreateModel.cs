@@ -10,7 +10,6 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {
 	/// <summary>
 	/// Model for Create Expense Report View.
-	/// 
 	/// </summary>
 	public class ExpenseCreateModel
 	{
