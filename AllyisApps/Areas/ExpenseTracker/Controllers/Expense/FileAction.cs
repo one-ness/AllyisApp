@@ -1,6 +1,6 @@
-﻿using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense;
+﻿using System.Web.Mvc;
+using AllyisApps.Areas.ExpenseTracker.ViewModels.Expense;
 using AllyisApps.Controllers;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {

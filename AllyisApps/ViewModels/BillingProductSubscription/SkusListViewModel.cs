@@ -3,9 +3,9 @@
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
+using System.Collections.Generic;
 using AllyisApps.Services;
 using AllyisApps.Services.Billing;
-using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.Auth
 {

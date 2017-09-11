@@ -14,7 +14,7 @@ namespace AllyisApps.ViewModels.Auth
 	public class UserInfoViewModel
 	{
 		/// <summary>
-		/// UserId
+		/// Gets or sets User Id.
 		/// </summary>
 		public int UserId { get; set; }
 
@@ -49,27 +49,27 @@ namespace AllyisApps.ViewModels.Auth
 		public string PhoneExtension { get; set; }
 
 		/// <summary>
-		/// Address of loading User
+		/// Gets or sets Address of loading User.
 		/// </summary>
 		public string Address { get; set; }
 
 		/// <summary>
-		/// Countryname of User
+		/// Gets or sets Countryname of User.
 		/// </summary>
 		public string CountryName { get; set; }
 
 		/// <summary>
-		/// StateName of User
+		/// Gets or sets StateName of User.
 		/// </summary>
 		public string StateName { get; set; }
 
 		/// <summary>
-		/// City of User
+		/// Gets or sets City of User.
 		/// </summary>
 		public string City { get; set; }
 
 		/// <summary>
-		/// Zip/Postalcode of User
+		/// Gets or sets Zip/Postalcode of User.
 		/// </summary>
 		public string PostalCode { get; set; }
 	}

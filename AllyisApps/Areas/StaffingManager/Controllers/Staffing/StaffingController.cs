@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers.Staffing
 {

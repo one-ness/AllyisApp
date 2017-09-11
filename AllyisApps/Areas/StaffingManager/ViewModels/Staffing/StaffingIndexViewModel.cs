@@ -1,5 +1,5 @@
-﻿using AllyisApps.Services.StaffingManager;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using AllyisApps.Services.StaffingManager;
 
 namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 {

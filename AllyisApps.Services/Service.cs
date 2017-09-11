@@ -4,16 +4,16 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using AllyisApps.DBModel.Hrm;
 using AllyisApps.DBModel.StaffingManager;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.Services.TimeTracker;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace AllyisApps.Services
 {

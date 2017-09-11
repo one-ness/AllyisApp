@@ -14,16 +14,16 @@ namespace AllyisApps.ViewModels.Auth
 	public class SubscriptionDisplayViewModel : BaseViewModel
 	{
 		/// <summary>
-		/// Constuct defalt object
+		/// Initializes a new instance of the <see cref="SubscriptionDisplayViewModel"/> class.
 		/// </summary>
 		public SubscriptionDisplayViewModel()
 		{
 		}
 
 		/// <summary>
-		/// Constuct Subscirption Display from Service object
+		/// Initializes a new instance of the <see cref="SubscriptionDisplayViewModel"/> class. 
 		/// </summary>
-		/// <param name="sub"></param>
+		/// <param name="sub">Subscription display.</param>
 		public SubscriptionDisplayViewModel(SubscriptionDisplayInfo sub) : this()
 		{
 			this.ProductId = sub.ProductId;
@@ -78,7 +78,7 @@ namespace AllyisApps.ViewModels.Auth
 		public string AreaUrl { get; set; }
 
 		/// <summary>
-		/// Number of users in the subscription.
+		/// Gets or sets Number of users in the subscription.
 		/// </summary>
 		public int NumberofUsers { get; set; }
 	}

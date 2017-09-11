@@ -1,5 +1,5 @@
-﻿using AllyisApps.Services;
-using System;
+﻿using System;
+using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -8,6 +8,23 @@ namespace AllyisApps.ViewModels.Auth
 	/// </summary>
 	public class InvitationInfoViewModel
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InvitationInfoViewModel"/> class.
+		/// Invitation Info constuctor as it is likely that service object is reused in many places.
+		/// </summary>
+		/// <param name="info">Invitation Infos.</param>
+		public InvitationInfoViewModel(InvitationInfo info)
+		{
+			this.CompressedEmail = info.CompressedEmail;
+			this.DecisionDateUtc = info.DecisionDateUtc;
+			this.Email = info.Email;
+			this.EmployeeId = info.EmployeeId;
+			this.FirstName = info.FirstName;
+			this.InvitationId = info.InvitationId;
+			this.LastName = info.LastName;
+			this.OrganizationId = info.OrganizationId;
+		}
+
 		/// <summary>
 		/// Gets or sets the Invitation Id.
 		/// </summary>
@@ -44,24 +61,8 @@ namespace AllyisApps.ViewModels.Auth
 		public string EmployeeId { get; set; }
 
 		/// <summary>
-		/// Date that user had accepted or rejected the invitation.
+		/// Gets or sets Date that user had accepted or rejected the invitation.
 		/// </summary>
 		public DateTime DecisionDateUtc { get; set; }
-
-		/// <summary>
-		/// Invitation Info constuctor as it is likely that service object is reused in many places
-		/// </summary>
-		/// <param name="info"></param>
-		public InvitationInfoViewModel(InvitationInfo info)
-		{
-			this.CompressedEmail = info.CompressedEmail;
-			this.DecisionDateUtc = info.DecisionDateUtc;
-			this.Email = info.Email;
-			this.EmployeeId = info.EmployeeId;
-			this.FirstName = info.FirstName;
-			this.InvitationId = info.InvitationId;
-			this.LastName = info.LastName;
-			this.OrganizationId = info.OrganizationId;
-		}
 	}
 }

@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Resources;
 using AllyisApps.Services;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
-using System;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {

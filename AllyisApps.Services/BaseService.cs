@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel;
 using System;
 using System.Collections.Generic;
+using AllyisApps.DBModel;
 
 namespace AllyisApps.Services
 {

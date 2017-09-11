@@ -70,7 +70,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				OrganizationId = proj.OrganizationId,
 				ProjectId = proj.ProjectId,
 				ProjectName = proj.ProjectName
-			}); 
+			});
 			return PartialView("_ProjectsByCustomer", model);
 		}
 

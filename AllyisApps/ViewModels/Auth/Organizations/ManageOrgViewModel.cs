@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services.Common.Types;
 using System;
 using System.Collections.Generic;
+using AllyisApps.Services.Common.Types;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -58,57 +58,57 @@ namespace AllyisApps.ViewModels.Auth
 	}
 
 	/// <summary>
-	/// Organizaion View Model with Address Infomation
+	/// Organizaion View Model with Address Infomation.
 	/// </summary>
 	public class OrganizationInfoViewModel
 	{
 		/// <summary>
-		/// Organiziton Id
+		/// Gets or sets Organiziton Id.
 		/// </summary>
 		public int OrganizaitonId { get; set; }
 
 		/// <summary>
-		/// Organizaiton name
+		/// Gets or sets Organizaiton name.
 		/// </summary>
 		public string OrganizationName { get; set; }
 
 		/// <summary>
-		/// Site Url
+		/// Gets or sets Site Url.
 		/// </summary>
 		public string SiteURL { get; set; }
 
 		/// <summary>
-		/// Address1 for organizaiton address
+		/// Gets or sets Address1 for organizaiton address.
 		/// </summary>
 		public string Address { get; set; }
 
 		/// <summary>
-		/// Country of organization.
+		/// Gets or sets Country of organization.
 		/// </summary>
 		public string CountryName { get; set; }
 
 		/// <summary>
-		/// State of organization.
+		/// Gets or sets State of organization.
 		/// </summary>
 		public string StateName { get; set; }
 
 		/// <summary>
-		/// City of organization.
+		/// Gets or sets City of organization.
 		/// </summary>
 		public string City { get; set; }
 
 		/// <summary>
-		/// PostalCode of organizaton.
+		/// Gets or sets PostalCode of organizaton.
 		/// </summary>
 		public string PostalCode { get; set; }
 
 		/// <summary>
-		/// PhoneNumber of Organization
+		/// Gets or sets PhoneNumber of Organization.
 		/// </summary>
 		public string PhoneNumber { get; set; }
 
 		/// <summary>
-		/// FaxNumber of organization.
+		/// Gets or sets FaxNumber of organization.
 		/// </summary>
 		public string FaxNumber { get; set; }
 	}

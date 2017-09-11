@@ -1,12 +1,12 @@
 ﻿namespace AllyisApps.ViewModels.Auth
 {
 	/// <summary>
-	/// View Model For Product Role
+	/// View Model For Product Role.
 	/// </summary>
 	public class ProductRoleViewModel
 	{
 		/// <summary>
-		/// indicates that user is not assigned this product yet.
+		/// Indicates that user is not assigned this product yet.
 		/// </summary>
 		public const int NotInProduct = 0;
 

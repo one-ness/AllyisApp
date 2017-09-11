@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services.Lookup;
 using System;
 using System.ComponentModel.DataAnnotations;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
 {

@@ -1,6 +1,6 @@
-﻿using AllyisApps.DBModel.Finance;
+﻿using System.Collections.Generic;
+using AllyisApps.DBModel.Finance;
 using AllyisApps.Services;
-using System.Collections.Generic;
 
 namespace AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 {

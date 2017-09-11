@@ -4,15 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.Services.Billing;
-using AllyisApps.ViewModels.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AllyisApps.Core.Alert;
+using AllyisApps.Services;
+using AllyisApps.Services.Billing;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {
@@ -49,8 +49,7 @@ namespace AllyisApps.Controllers
 		{
 			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(organizationId);
 			add.Subscriptions = model.Subscriptions;
-			//add.Projects = model.Projects;
-
+			
 			if (ModelState.IsValid)
 			{
 				this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, add.OrganizationId);
@@ -117,8 +116,7 @@ namespace AllyisApps.Controllers
 			{
 				OrganizationId = organizationId,
 				EmployeeId = new string(AppService.IncrementAlphanumericCharArray(nextId.ToCharArray())),
-				Subscriptions = new List<AddMemberSubscriptionViewModel>(),
-				//Projects = infos.Item4,
+				Subscriptions = new List<AddMemberSubscriptionViewModel>()
 			};
 
 			foreach (SubscriptionDisplayInfo sub in infos.Item2)

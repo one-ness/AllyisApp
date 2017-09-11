@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Web.Mvc;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.Services.StaffingManager;
-using System.Collections.Generic;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {

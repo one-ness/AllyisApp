@@ -1,5 +1,5 @@
-﻿using AllyisApps.Services;
-using System;
+﻿using System;
+using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {

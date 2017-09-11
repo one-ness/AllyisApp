@@ -13,12 +13,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public List<AddMemberSubscriptionViewModel> Subscriptions { get; set; }
 
-		///// <summary>
-		///// Gets or sets the list of projects in the organization.
-		////*** remove time traker depenency
-		///// </summary>
-		//public List<CompleteProjectInfo> Projects { get; set; }
-
 		/// <summary>
 		/// Gets or sets the organization id.
 		/// </summary>

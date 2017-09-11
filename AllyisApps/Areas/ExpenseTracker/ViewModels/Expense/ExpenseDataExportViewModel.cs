@@ -1,6 +1,6 @@
-﻿using AllyisApps.Services;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 {

@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using AllyisApps.Services.Common.Types;
-using AllyisApps.ViewModels.Auth;
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Services;
+using AllyisApps.Services.Common.Types;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {
@@ -90,9 +90,7 @@ namespace AllyisApps.Controllers
 				OrganizationId = organizationId,
 				BillingCustomer = customer,
 				SubscriptionCount = infos.Item3.Count,
-				Subscriptions = infos.Item3.Select(sub =>
-					 new SubscriptionDisplayViewModel(sub)
-				)
+				Subscriptions = infos.Item3.Select(sub => new SubscriptionDisplayViewModel(sub))
 			};
 		}
 	}

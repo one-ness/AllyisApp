@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Lookup;
-using AllyisApps.DBModel.StaffingManager;
-using AllyisApps.Services.Lookup;
-using AllyisApps.Services.StaffingManager;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using AllyisApps.DBModel.Lookup;
+using AllyisApps.DBModel.StaffingManager;
+using AllyisApps.Services.Lookup;
+using AllyisApps.Services.StaffingManager;
 
 namespace AllyisApps.Services
 {

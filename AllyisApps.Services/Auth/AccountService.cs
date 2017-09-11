@@ -4,13 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel;
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Finance;
-using AllyisApps.DBModel.Lookup;
-using AllyisApps.Lib;
-using AllyisApps.Services.Lookup;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,6 +11,13 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AllyisApps.DBModel;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.Finance;
+using AllyisApps.DBModel.Lookup;
+using AllyisApps.Lib;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
 {
