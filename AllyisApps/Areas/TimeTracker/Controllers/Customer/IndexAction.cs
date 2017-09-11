@@ -92,7 +92,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var infos = AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			bool canEditProjects = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
-            string SubName = AppService.getSubscriptionName(subscriptionId);
+            string subName = AppService.getSubscriptionName(subscriptionId);
 			List<CompleteProjectInfo> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> customers = infos.Item2;
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
@@ -153,7 +153,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				OrganizationId = subInfo.OrganizationId,
 				CanEdit = canEditProjects,
 				SubscriptionId = subscriptionId,
-				SubscriptionName = SubName,
+				SubscriptionName = subName,
 				UserId = this.AppService.UserContext.UserId
 			};
 		}

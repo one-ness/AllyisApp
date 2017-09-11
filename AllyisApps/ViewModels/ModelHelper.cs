@@ -1,17 +1,19 @@
-﻿using AllyisApps.Lib;
+﻿using System.Collections.Generic;
+using AllyisApps.Lib;
 using AllyisApps.Services;
-using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels
 {
 	/// <summary>
-	/// utility methods that have to be called from the model
+	/// Utility methods that have to be called from the model.
 	/// </summary>
 	public static class ModelHelper
 	{
 		/// <summary>
-		/// get a list of countries, name localized
+		/// Get a list of countries, name localized.
 		/// </summary>
+		/// <param name="service">The AppService object.</param>
+		/// <returns>A Dictionary(string, string) object.</returns>
 		public static Dictionary<string, string> GetLocalizedCountries(AppService service)
 		{
 			var result = new Dictionary<string, string>();
@@ -33,8 +35,11 @@ namespace AllyisApps.ViewModels
 		}
 
 		/// <summary>
-		/// get a list of states for the given country, name localized
+		/// Get a list of states for the given country, name localized.
 		/// </summary>
+		/// <param name="service">The service.</param>
+		/// <param name="countryCode">The country code.</param>
+		/// <returns>A Dictionary(string, string) object.</returns>
 		public static Dictionary<string, string> GetLocalizedStates(AppService service, string countryCode)
 		{
 			var result = new Dictionary<string, string>();

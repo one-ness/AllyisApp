@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -564,7 +564,6 @@
     <Content Include="Areas\ExpenseTracker\Views\Shared\_BreadcrumbNavPartial.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\_AjaxExpenseEntries.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\Create.cshtml" />
-    <Content Include="Areas\ExpenseTracker\Views\Shared\BreadcrumbNavPartial.cshtml" />
     <Content Include="Areas\StaffingManager\Views\web.config">
       <SubType>Designer</SubType>
     </Content>

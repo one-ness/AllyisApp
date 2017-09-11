@@ -57,6 +57,7 @@
 </div>
 
 <div class="col-xs-12">
+
 	@if (Model.PreviewReports != null && Model.PreviewReports.Count() > 0)
 	{
 		<div class="panel panel-default">
@@ -123,16 +124,16 @@
 	@Scripts.Render("~/bundles/daterangepicker")
 
 	<script type="text/javascript">
-			function setDatePickers() {
-				console.log('setting date picker');
-				$('.datepicker').each(function () {
-					$(this).datepicker({
-						changeMonth: true,
-						changeYear: true
-					});
-				});
-			}
-			setDatePickers();
+            function setDatePickers() {
+                console.log('setting date picker');
+                $('.datepicker').each(function () {
+                    $(this).datepicker({
+                        changeMonth: true,
+                        changeYear: true
+                    });
+                });
+            }
+            setDatePickers();
 	</script>
 
 }

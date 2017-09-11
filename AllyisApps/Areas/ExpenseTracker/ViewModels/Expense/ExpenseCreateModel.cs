@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using AllyisApps.Services;
 using System.Web;
-using AllyisApps.Services.Expense;
 using System.Web.Mvc;
 using AllyisApps.DBModel.Finance;
+using AllyisApps.Services;
+using AllyisApps.Services.Expense;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {
 	/// <summary>
 	/// Model for Create Expense Report View.
+	/// 
 	/// </summary>
 	public class ExpenseCreateModel
 	{
@@ -23,10 +24,10 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
-        /// <summary>
-        /// Gets or sets Current User Id.
-        /// </summary>
-        public int CurrentUser { get; set; }
+		/// <summary>
+		/// Gets or sets Current User Id.
+		/// </summary>
+		public int CurrentUser { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Expense Report.
