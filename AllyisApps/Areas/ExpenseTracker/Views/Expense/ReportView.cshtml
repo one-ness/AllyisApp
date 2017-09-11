@@ -7,152 +7,160 @@
 	DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
 }
 <div>
-    <h1 class="pull-left">@Model.ReprortTitle</h1>
+	<h1 class="pull-left">@Model.ReprortTitle</h1>
 </div>
 
 @using (@Html.BeginForm("StatusUpdate", ControllerConstants.Expense, FormMethod.Post, htmlAttributes: new { @class = "form-inline col-xs-12", @style = "margin-bottom: 20px;" }))
 {
-    <div class="row">
-        @*START REPORT DETAIL AREA*@
-        @Html.HiddenFor(m => m.ReportId)
-        @Html.HiddenFor(m => m.UserId)
+	<div class="row">
+		@*START REPORT DETAIL AREA*@
+		@Html.HiddenFor(m => m.ReportId)
+		@Html.HiddenFor(m => m.UserId)
 
-        <div class="report-top">
-            <div class="col-lg-6 col-md-6 col-xs-6">
-                <div class="report-detail">
-                    <div><b>User:</b></div>
-                    <div>@Model.SubmittedBy (@Model.UserId)</div>
-                </div>
-                <div class="report-detail">
-                    <div><b>Submission Date:</b></div>
-                    @if (Model.SubmittedUtc == null)
-                    {
-                        <div>-</div>
-                    }
-                    else
-                    {
-                        <div>@String.Format("{0:MM-dd-yyyy}", @Model.SubmittedUtc)</div>
-                    }
-                </div>
-                <div class="report-detail">
-                    <div><b>Status:</b></div>
-                    <div>@Model.Status</div>
-                </div>
-                <div class="report-detail">
-                    <div><b>Justification:</b></div>
-                    <div>@Model.Justification</div>
-                </div>
-                <div class="report-detail">
-                    <div><b>Created On:</b></div>
-                    <div>@String.Format("{0:MM-dd-yyyy}", @Model.CreatedUtc)</div>
-                </div>
-                <div class="report-detail">
-                    <div><b>Last Modified On:</b></div>
-                    <div>@String.Format("{0:MM-dd-yyyy}", @Model.ModifiedUtc)</div>
-                </div>
-            </div>
+		<div class="report-top">
+			<div class="col-lg-6 col-md-6 col-xs-6">
+				<div class="report-detail">
+					<div><b>User:</b></div>
+					<div>@Model.SubmittedBy (@Model.UserId)</div>
+				</div>
+				<div class="report-detail">
+					<div><b>Submission Date:</b></div>
+					@if (Model.SubmittedUtc == null)
+					{
+						<div>-</div>
+					}
+					else
+					{
+						<div>@String.Format("{0:MM-dd-yyyy}", @Model.SubmittedUtc)</div>
+					}
 
-            @*START REVIEW AREA*@
-            <div class="col-lg-6 col-md-6 col-xs-6">
-                @if (Model.Status != ExpenseStatusEnum.Approved
+				</div>
+				<div class="report-detail">
+					<div><b>Status:</b></div>
+					<div>@Model.Status</div>
+				</div>
+				<div class="report-detail">
+					<div><b>Justification:</b></div>
+					<div>@Model.Justification</div>
+				</div>
+				<div class="report-detail">
+					<div><b>Created On:</b></div>
+					<div>@String.Format("{0:MM-dd-yyyy}", @Model.CreatedUtc)</div>
+				</div>
+				<div class="report-detail">
+					<div><b>Last Modified On:</b></div>
+					<div>@String.Format("{0:MM-dd-yyyy}", @Model.ModifiedUtc)</div>
+				</div>
+			</div>
+
+			@*START REVIEW AREA*@
+			<div class="col-lg-6 col-md-6 col-xs-6">
+				@if (Model.Status != ExpenseStatusEnum.Approved
 					&& Model.Status != ExpenseStatusEnum.Paid
 					&& Model.Status != ExpenseStatusEnum.Draft
 					&& (bool)ViewData["IsManager"] == true)
-                {
-                    <div class="review-area col-lg-12 col-md-12 col-xs-12" height="290px">
-                        <b>Accept/Reject Notes</b><br />
-                        <textarea class="review-area" placeholder="Enter text here..." name="reasonText"></textarea>
-                    </div>
-                    <div class="form-group pull-right btn-group">
-                        <input type="submit" value="Cancel" name="btnAction" class="btn btn-primary" />
-                        <input type="submit" value="Reject" name="btnAction" class="btn btn-reject" />
-                        <input type="submit" value="Approve" name="btnAction" class="btn btn-primary" />
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
+				{
+					<div class="review-area col-lg-12 col-md-12 col-xs-12" height="290px">
+						<b>Accept/Reject Notes</b><br />
+						<textarea class="review-area" placeholder="Enter text here..." name="reasonText"></textarea>
+					</div>
+					<div class="form-group pull-right btn-group">
+						<input type="submit" value="Cancel" name="btnAction" class="btn btn-primary" />
+						<input type="submit" value="Reject" name="btnAction" class="btn btn-reject" />
+						<input type="submit" value="Approve" name="btnAction" class="btn btn-primary" />
+					</div>
+				}
+			</div>
+		</div>
+	</div>
 }
 
 @*START REPORT ITEM AREA*@
 <br />
 <h2>Report Items</h2>
 <table class="table table-hover col-lg-12 col-md-12 col-xs-12">
-    <thead>
-        <tr>
-            <th style="width: 10%">Amount</th>
-            <th style="width: 25%">Transaction Date</th>
-            <th style="width: 35%">Description</th>
-            <th style="width: 10%">Customer Billable</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (ExpenseItem item in Model.Expenses)
-        {
-            <tr>
-                <td>@Math.Round(@item.Amount, 2)</td>
-                <td>@String.Format("{0:MM-dd-yyyy}", DateTime.Parse(@item.TransactionDate))</td>
-                <td>@item.ItemDescription</td>
-                <td>
-                    @if (@item.IsBillableToCustomer)
-                    {
-                        <div class="fa fa-check-square"></div>
-                    }
-                    else
-                    {
-                        <div class="fa fa-square-o"></div>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
+	<thead>
+		<tr>
+			<th style="width: 10%">Amount</th>
+			<th style="width: 25%">Transaction Date</th>
+			<th style="width: 35%">Description</th>
+			<th style="width: 10%">Customer Billable</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (ExpenseItem item in Model.Expenses)
+		{
+			<tr>
+				<td>@Math.Round(@item.Amount, 2)</td>
+				<td>@String.Format("{0:MM-dd-yyyy}", DateTime.Parse(@item.TransactionDate))</td>
+				<td>@item.ItemDescription</td>
+				<td>
+					@if (@item.IsBillableToCustomer)
+					{
+						<div class="fa fa-check-square"></div>
+					}
+					else
+					{
+						<div class="fa fa-square-o"></div>
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>
 
 @*REPORT ATTACHMENTS AREA*@
-@if(Model.Attachments.Count () > 0)
+@if (Model.Attachments.Count() > 0)
 {
-    <div>
-        <h2 class="pull-left">Report Attachments</h2>
-        <table class="table table-hover col-lg-12 col-md-12 col-xs-12">
-            <tbody>
-                @foreach (var attch in Model.Attachments)
-                {
-                    <tr>
-                        <td>@Html.ActionLink(attch,"download", new { reportId = Model.ReportId, fileName = attch }, htmlAttributes: new { @class = "form-inline col-xs-12", })</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+	<div>
+		<h2 class="pull-left">Report Attachments</h2>
+		<table class="table table-hover col-lg-12 col-md-12 col-xs-12">
+			<tbody>
+				@foreach (var attch in Model.Attachments)
+				{
+					<tr>
+						<td>@Html.ActionLink(attch, "download", new { reportId = Model.ReportId, fileName = attch }, htmlAttributes: new { @class = "form-inline col-xs-12", })</td>
+					</tr>
+				}
+
+			</tbody>
+		</table>
+	</div>
 }
 
-@*END REPORT ATTACHMENTS AREA*@
+	@*END REPORT ATTACHMENTS AREA*@
 
-@*REPORT HISTORY AREA*@
-@if (Model.History.Count() > 0)
-{
-    <div>
-        <h2 class="pull-left">Report History</h2>
-    </div>
-    <table class="table table-hover col-lg-12 col-md-12 col-xs-12">
-        <thead>
-            <tr>
-                <th style="width: 15%">Reviewer</th>
-                <th style="width: 15%">Status</th>
-                <th style="width: 15%">Reviewed</th>
-                <th style="width: 55%">Reason</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (ExpenseHistoryViewModel history in Model.History)
-            {
-                <tr>
-                    <td>@history.Reviewer</td>
-                    <td>@history.Status</td>
-                    <td>@String.Format("{0:MM-dd-yyyy}", @history.Submitted)</td>
-                    <td>@history.Text</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+	@*REPORT HISTORY AREA*@
+	@if (Model.History.Count() > 0)
+	{
+		<div>
+			<h2 class="pull-left">Report History</h2>
+		</div>
+		<table class="table table-hover col-lg-12 col-md-12 col-xs-12">
+			<thead>
+				<tr>
+					<th style="width: 15%">Reviewer</th>
+					<th style="width: 15%">Status</th>
+					<th style="width: 15%">Reviewed</th>
+					<th style="width: 55%">Reason</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (ExpenseHistoryViewModel history in Model.History)
+				{
+					<tr>
+						<td>@history.Reviewer</td>
+						<td>@history.Status</td>
+						<td>@String.Format("{0:MM-dd-yyyy}", @history.Submitted)</td>
+						<td>@history.Text</td>
+					</tr>
+				}
+			</tbody>
+
+		</table>
+	}
+
+
+
+
+

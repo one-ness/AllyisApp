@@ -1,6 +1,6 @@
 ﻿@model AllyisApps.ViewModels.TimeTracker.Customer.CustomerProjectViewModel
 
-    @foreach (var proj in Model.Projects)
-    {
-        <a onclick="SelectProject('@proj.ProjectId')" id="project-@proj.ProjectId" class="list-group-item"><text>@proj.ProjectName</text></a>
-    }
+@foreach (AllyisApps.Services.Project proj in Model.Projects)
+{
+	<a onclick="SelectProject('@proj.ProjectId')" id="project-@proj.ProjectId" class="list-group-item"><text>@proj.ProjectName</text></a>
+}

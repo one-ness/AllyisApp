@@ -1,37 +1,34 @@
 ﻿@using AllyisApps.ViewModels.ExpenseTracker.Expense;
 @using AllyisApps.Services;
-
 @model ExpensePendingModel
 @{
 
 }
-
 <table class="table table-hover">
-    <thead>
-        <tr class="double-bottom-border">
-            <th style="width: 25%">Report Name</th>
+	<thead>
+		<tr class="double-bottom-border">
+			<th style="width: 25%">Report Name</th>
 			<th style="width: 25%">Submitted By</th>
-            <th style="width: 25%">Submitted Date</th>
-            <th style="width: 15%">Amount</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(ExpenseItemViewModel report in Model.PendingReports)
+			<th style="width: 25%">Submitted Date</th>
+			<th style="width: 15%">Amount</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (ExpenseItemViewModel report in Model.PendingReports)
 		{
-            <tr>
-                <td>@Html.ActionLink(@report.ReportName,"reportview", new { reportId = @report.ReportId }, htmlAttributes: new { @class = "form-inline col-xs-12" })</td>
-
+			<tr>
+				<td>@Html.ActionLink(@report.ReportName, "reportview", new { reportId = @report.ReportId }, htmlAttributes: new { @class = "form-inline col-xs-12" })</td>
 				<td>@report.UserName</td>
-                @if(report.SubmittedDate == null)
-                {
-                    <td>-</td>
-                }
-                else
-                {
-                   <td>@String.Format("{0:MM-dd-yyyy}", @report.SubmittedDate)</td>
-                }
-                <td>@Math.Round(@report.Amount, 2)</td>
-            </tr>
-        }
-    </tbody>
+				@if (report.SubmittedDate == null)
+				{
+					<td>-</td>
+				}
+				else
+				{
+					<td>@String.Format("{0:MM-dd-yyyy}", @report.SubmittedDate)</td>
+				}
+				<td>@Math.Round(@report.Amount, 2)</td>
+			</tr>
+		}
+	</tbody>
 </table>

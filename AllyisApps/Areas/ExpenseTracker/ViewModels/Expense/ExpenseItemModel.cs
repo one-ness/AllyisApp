@@ -11,7 +11,7 @@ namespace AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 	{
 		/// <summary>
 		/// Gets or sets the list of accounts.
-		/// </summary>
+		/// </summary>k
 		public IList<AccountDBEntity> AccountList { get; set; }
 
 		/// <summary>

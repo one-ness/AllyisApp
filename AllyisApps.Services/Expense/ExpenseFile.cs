@@ -1,13 +1,18 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace AllyisApps.Services.Expense
 {
 	public class ExpenseFile : HttpPostedFileBase
 	{
-		private Stream stream;
-		private string contentType;
-		private string fileName;
+		Stream stream;
+		string contentType;
+		string fileName;
 
 		public ExpenseFile(Stream stream, string contentType, string fileName)
 		{

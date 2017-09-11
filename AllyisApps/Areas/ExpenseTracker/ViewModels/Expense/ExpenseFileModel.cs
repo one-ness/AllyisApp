@@ -4,7 +4,7 @@ namespace AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 {
 	/// <summary>
 	/// View model for Expense Files.
-	/// </summary>
+	/// // </summary>
 	public class ExpenseFileModel
 	{
 		/// <summary>
