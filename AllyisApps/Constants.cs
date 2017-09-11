@@ -76,6 +76,7 @@ namespace AllyisApps
 		public const string UserEditAJAX = "usereditajax";
 		public const string UploadCSVFile = "uploadcsvfile";
 		public const string UserEdit = "useredit";
+		public const string UserSettings = "usersettings";
 		public const string ViewPage = "viewpage";
 		public const string Help = "help";
 		public const string FooterPartial = "footerpartial";

@@ -46,16 +46,6 @@ namespace AllyisApps.Services
         }
 
 		/// <summary>
-		/// Get expense report files by report id
-		/// </summary>
-		/// <param name="reportId"></param>
-		/// <returns></returns>
-		public IList<HttpPostedFileBase> GetExpenseFilesByReportId(int reportId)
-		{
-			return DBHelper.GetExpenseFilesByReportId(reportId).Select(x => InitializeExpenseFile(x)).AsEnumerable().ToList();
-		}
-
-		/// <summary>
 		/// Gets an expense report by its id.
 		/// </summary>
 		/// <param name="reportId">The report id.</param>
@@ -115,6 +105,16 @@ namespace AllyisApps.Services
 		public IEnumerable<ExpenseReport> GetExpenseReportByOrgId(int orgId)
 		{
 			return DBHelper.GetExpenseReportsByOrganizationId(orgId).Select(x => InitializeExpenseReport(x));
+		}
+
+		/// <summary>
+		/// Get a list of users in a given organization.
+		/// </summary>
+		/// <param name="orgId"></param>
+		/// <returns></returns>
+		public IEnumerable<ExpenseUser> GetUsersByOrgId(int orgId)
+		{
+			return DBHelper.GetUsersByOrganizationId(orgId).Select(x => InitializeExpenseUser(x));
 		}
 
         /// <summary>
@@ -198,6 +198,19 @@ namespace AllyisApps.Services
             };
         }
 
+		public static ExpenseUser InitializeExpenseUser(ExpenseUserDBEntity entity)
+		{
+			if (entity == null)
+			{
+				return null;
+			}
+
+			return new ExpenseUser()
+			{
+
+			};
+		}
+
         /// <summary>
         /// Initialize an ExpenseItem from an ExpenseItemDBEntity.
         /// </summary>
@@ -245,15 +258,6 @@ namespace AllyisApps.Services
 
         }
 
-		public static HttpPostedFileBase InitializeExpenseFile(ExpenseFileDBEntity entity)
-		{
-			if(entity == null)
-			{
-				return null;
-			}
-			return new ExpenseFile(entity.Stream, entity.FileType, entity.FileName);
-		}
-		
 		public void CreateExpenseItem(ExpenseItem item)
 		{
 			ExpenseItemDBEntity itemEntity = new ExpenseItemDBEntity()
@@ -269,19 +273,6 @@ namespace AllyisApps.Services
 				TransactionDate = Convert.ToDateTime(item.TransactionDate),
 			};
 			DBHelper.CreateExpenseItem(itemEntity);
-		}
-
-		public void CreateExpenseFile(HttpPostedFileBase file, int reportId)
-		{
-			ExpenseFileDBEntity fileEntity = new ExpenseFileDBEntity()
-			{
-				FileType = file.ContentType,
-				Stream = file.InputStream,
-				FileName = file.FileName,
-				Url = "",
-				ExpenseReportId = reportId
-			};
-			DBHelper.CreateExpenseFile(fileEntity);
 		}
 
 		public int CreateExpenseReport(ExpenseReport report)

@@ -62,7 +62,8 @@ namespace AllyisApps.Services
             StatusUpdate,
 			Pending,
 			UpdateReport,
-			CreateReport
+			CreateReport,
+			UserSettings
         }
 
 		/// <summary>
@@ -212,7 +213,8 @@ namespace AllyisApps.Services
 					if (action == ExpenseTrackerAction.AdminReport 
 						|| action == ExpenseTrackerAction.StatusUpdate 
 						|| action == ExpenseTrackerAction.AdminExpense 
-						|| action == ExpenseTrackerAction.Pending)
+						|| action == ExpenseTrackerAction.Pending
+						|| action == ExpenseTrackerAction.UserSettings)
 					{
 						switch (etRole)
 						{

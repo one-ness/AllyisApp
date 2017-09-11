@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -17,8 +17,10 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -207,6 +209,7 @@
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AttachmentDownloadController.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\FileLinkAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ExportReportAction.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\UserSettingsAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\PendingAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\StatusUpdateAction.cs" />
@@ -219,6 +222,7 @@
     <Compile Include="Areas\ExpenseTracker\ReportHelper.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\AdminReportModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseDataExportViewModel.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\UserSettingsViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpensePendingModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseCreateModel.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\IndexAction.cs" />
@@ -585,6 +589,7 @@
     <Content Include="Content\Timetracker - Copy.css - Copy.map">
       <DependentUpon>Timetracker - Copy - Copy.css</DependentUpon>
     </Content>
+    <Content Include="Areas\ExpenseTracker\Views\Expense\UserSettings.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
