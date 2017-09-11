@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Web;
 
 namespace AllyisApps.Services.Expense
 {
 	public class ExpenseFile : HttpPostedFileBase
 	{
-		Stream stream;
-		string contentType;
-		string fileName;
+		private Stream stream;
+		private string contentType;
+		private string fileName;
 
 		public ExpenseFile(Stream stream, string contentType, string fileName)
 		{
@@ -23,7 +18,8 @@ namespace AllyisApps.Services.Expense
 
 		public override int ContentLength
 		{
-			get {
+			get
+			{
 				return stream == null ? 0 : (int)stream.Length;
 			}
 		}

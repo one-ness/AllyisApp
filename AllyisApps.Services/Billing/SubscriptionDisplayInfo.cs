@@ -67,13 +67,13 @@ namespace AllyisApps.Services.Billing
 		/// Gets or sets a String representing the tier of the subscription.
 		/// </summary>
 		public string Tier { get; set; }
-        public string Description { get; internal set; }
 
+		public string Description { get; internal set; }
 
-        public String AreaUrl { get; set; }
-        ///// <summary>
-        ///// Gets or sets a value indicating whether a user has permission to view this subscription.
-        ///// </summary>
-        //public bool CanViewSubscription { get; set; }
-    }
+		public String AreaUrl { get; set; }
+		///// <summary>
+		///// Gets or sets a value indicating whether a user has permission to view this subscription.
+		///// </summary>
+		//public bool CanViewSubscription { get; set; }
+	}
 }

@@ -93,7 +93,7 @@
 				@foreach (var pos in Model.positions)
 				{
 					<tr>
-						<td href = "@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { id = pos.PositionId })" >
+						<td href = "@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { id = pos.PositionId })">
 							@pos.PositionTitle
 						</td>
 
@@ -112,7 +112,6 @@
 				}
 			</table>
 		</div>
-
 	</div>
 	@if (Model.positions.Count == 0)
 	{
@@ -125,7 +124,6 @@
 <div class="row">
 	<div class="col-md-push-2 col-md-8">
 		<div class="row">
-
 		</div>
 	</div>
 </div>

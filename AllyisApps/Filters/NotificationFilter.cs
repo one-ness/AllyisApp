@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Controllers;
 using System;
 using System.Web.Mvc;
-using AllyisApps.Controllers;
 
 namespace AllyisApps.Filters
 {

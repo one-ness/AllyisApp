@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using AllyisApps.Controllers;
-using AllyisApps.DBModel;
-using AllyisApps.DBModel.Finance;
-using AllyisApps.Lib;
+﻿using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -30,7 +24,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				return RedirectToAction("Create", new { subscriptionId = model.SubscriptionId, reportId = model.Report.ExpenseReportId });
 			}
-			
+
 			var oldReport = AppService.GetExpenseReport(model.Report.ExpenseReportId);
 			var userInfo = GetCookieData();
 			if (model.Report.ExpenseReportId != -1)
@@ -83,7 +77,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					OrganizationId = organizationId,
 					ReportStatus = (int)reportStatus
 				};
-				
+
 				AppService.UpdateExpenseReport(report, model.Report.ExpenseReportId);
 				UploadAttachments(model, report);
 				UploadItems(model, report);

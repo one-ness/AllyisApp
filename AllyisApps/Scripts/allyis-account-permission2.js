@@ -29,12 +29,12 @@ gatherData = function () {
 			value = ttActions[$('#ttActionSelect').val()];
 			selectedAction["TimeTrackerRoleTarget"] = value;
 		}
-    } else {
-        if (currentTabTitle === "ExpenseTrackerTab") {
-            value = etActions[$('#etActionSelect').val()];
-            selectedAction["ExpenseTrackerRoleTarget"] = value;
-        }
-    }
+	} else {
+		if (currentTabTitle === "ExpenseTrackerTab") {
+			value = etActions[$('#etActionSelect').val()];
+			selectedAction["ExpenseTrackerRoleTarget"] = value;
+		}
+	}
 
 	// Assemble and return UserPermissionsAction object of data
 	result = {};

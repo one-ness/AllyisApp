@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using AllyisApps.Services;
-using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -16,7 +14,7 @@ namespace AllyisApps.ViewModels.Auth
 		public List<AddMemberSubscriptionViewModel> Subscriptions { get; set; }
 
 		///// <summary>
-		///// Gets or sets the list of projects in the organization. 
+		///// Gets or sets the list of projects in the organization.
 		////*** remove time traker depenency
 		///// </summary>
 		//public List<CompleteProjectInfo> Projects { get; set; }

@@ -4,15 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Core.Alert;
+using AllyisApps.Services;
+using AllyisApps.Services.Billing;
+using AllyisApps.ViewModels.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.Services.Billing;
-using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {
@@ -54,7 +54,7 @@ namespace AllyisApps.Controllers
 			if (ModelState.IsValid)
 			{
 				this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, add.OrganizationId);
-				
+
 				try
 				{
 					InvitationInfo info = new InvitationInfo
@@ -127,7 +127,7 @@ namespace AllyisApps.Controllers
 				{
 					ProductName = sub.ProductName,
 					ProductRoles = infos.Item3.Where(r => r.ProductId == sub.ProductId)
-						.Select(r =>new ProductRoleViewModel()
+						.Select(r => new ProductRoleViewModel()
 						{
 							ProductId = r.ProductId,
 							ProductRoleId = r.ProductRoleId,

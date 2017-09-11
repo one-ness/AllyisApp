@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
@@ -12,6 +11,7 @@ using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Staffing;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -34,8 +34,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			return this.View(new CreatePositionViewModel
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
-                
-                IsCreating = true,
+
+				IsCreating = true,
 
 				// SubscriptionId = subscriptionId,
 				OrganizationId = organizationId,
@@ -54,21 +54,21 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-                int? positionId = AppService.CreatePosition(
-                    new Position()
-                    {
-                        OrganizationId = model.OrganizationId,
-                        CustomerId = model.CustomerId,
-                        Address = new Address()
-                        {
-                            Address1 = model.Address,
-                            City = model.City,
-                            StateName = model.State,
-                            CountryName = model.Country,
-                            PostalCode = model.PostalCode,
-                            CountryCode = model.SelectedCountryCode,
-                            StateId = model.SelectedStateId
-                        },
+				int? positionId = AppService.CreatePosition(
+					new Position()
+					{
+						OrganizationId = model.OrganizationId,
+						CustomerId = model.CustomerId,
+						Address = new Address()
+						{
+							Address1 = model.Address,
+							City = model.City,
+							StateName = model.State,
+							CountryName = model.Country,
+							PostalCode = model.PostalCode,
+							CountryCode = model.SelectedCountryCode,
+							StateId = model.SelectedStateId
+						},
 						StartDate = model.StartDate,
 						PositionStatusId = model.PositionStatusId,
 						PositionTitle = model.PositionTitle,

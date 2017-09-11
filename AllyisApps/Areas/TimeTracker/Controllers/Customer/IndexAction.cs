@@ -61,8 +61,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult PopulateProjects(int customerId)
 		{
 			var model = new CustomerProjectViewModel();
-			model.CustomerInfo = new Customer { CustomerId = customerId };
-			model.Projects = AppService.GetProjectsByCustomer(customerId);
+			model.CustomerInfo = new CustomerProjectViewModel.CustomerViewModel { CustomerId = customerId };
+			model.Projects = AppService.GetProjectsByCustomer(customerId).AsParallel()
+			.Select(proj => new
+			CustomerProjectViewModel.ProjectViewModel()
+			{
+				CustomerId = proj.CustomerId,
+				OrganizationId = proj.OrganizationId,
+				ProjectId = proj.ProjectId,
+				ProjectName = proj.ProjectName
+			}); 
 			return PartialView("_ProjectsByCustomer", model);
 		}
 
@@ -75,8 +83,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult PopulateInactiveProjects(int customerId)
 		{
 			var model = new CustomerProjectViewModel();
-			model.CustomerInfo = new Customer { CustomerId = customerId };
-			model.Projects = AppService.GetInactiveProjectsByCustomer(customerId);
+			model.CustomerInfo = new CustomerProjectViewModel.CustomerViewModel { CustomerId = customerId };
+			model.Projects = AppService.GetInactiveProjectsByCustomer(customerId).AsParallel()
+			.Select(proj => new
+			CustomerProjectViewModel.ProjectViewModel()
+			{
+				CustomerId = proj.CustomerId,
+				OrganizationId = proj.OrganizationId,
+				ProjectId = proj.ProjectId,
+				ProjectName = proj.ProjectName
+			});
 			return PartialView("_ProjectsByCustomer", model);
 		}
 
@@ -87,12 +103,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The ManageCustomerViewModel.</returns>
 		public ManageCustomerViewModel ConstructManageCustomerViewModel(int subscriptionId)
 		{
-            UserContext.SubscriptionAndRole subInfo = null;
+			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var infos = AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			bool canEditProjects = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
-            string subName = AppService.getSubscriptionName(subscriptionId);
+			string subName = AppService.getSubscriptionName(subscriptionId);
 			List<CompleteProjectInfo> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> customers = infos.Item2;
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
@@ -100,10 +116,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				CustomerProjectViewModel customerResult = new CustomerProjectViewModel()
 				{
-					CustomerInfo = currentCustomer,
+					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel()
+					{
+						CustomerName = currentCustomer.CustomerName,
+						CustomerId = currentCustomer.CustomerId,
+						IsActive = currentCustomer.IsActive
+					},
 					Projects = from p in projects
 							   where p.CustomerId == currentCustomer.CustomerId
-							   select new Project
+							   select new CustomerProjectViewModel.ProjectViewModel
 							   {
 								   CustomerId = p.CustomerId,
 								   OrganizationId = p.OrganizationId,
@@ -127,10 +148,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				CustomerProjectViewModel customerResult = new CustomerProjectViewModel()
 				{
-					CustomerInfo = currentCustomer,
+					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel()
+					{
+						CustomerId = currentCustomer.CustomerId,
+						CustomerName = currentCustomer.CustomerName,
+						IsActive = currentCustomer.IsActive
+					},
 					Projects = from p in inactiveProjects
 							   where p.CustomerId == currentCustomer.CustomerId
-							   select new Project
+							   select new CustomerProjectViewModel.ProjectViewModel
 							   {
 								   CustomerId = p.CustomerId,
 								   OrganizationId = p.OrganizationId,

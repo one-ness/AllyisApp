@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using AllyisApps.Controllers;
+﻿using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -22,7 +22,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			SetNavData(subscriptionId);
 
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Pending, subscriptionId);
-			
+
 			var orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
 			int userId = GetCookieData().UserId;
 			IEnumerable<ExpenseReport> reports = AppService.GetExpenseReportByOrgId(orgId);

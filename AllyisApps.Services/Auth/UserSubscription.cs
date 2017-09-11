@@ -3,7 +3,6 @@
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
-using System;
 
 namespace AllyisApps.Services
 {
@@ -14,7 +13,7 @@ namespace AllyisApps.Services
 	{
 		public int UserId { get; set; }
 		public int ProductRoleId { get; set; }
-		
-		public Subscription Subscription {get; set;}
+
+		public Subscription Subscription { get; set; }
 	}
 }

@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
+using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -19,7 +19,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/EditProfile.
 		/// </summary>
-        /// <returns>Edit profile view.</returns>
+		/// <returns>Edit profile view.</returns>
 		public ActionResult EditProfile()
 		{
 			var model = new EditProfileViewModel();
@@ -44,8 +44,8 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// POST: /Account/EditProfile.
 		/// </summary>
-        /// <param name="model">The EditProfileViewModel.</param>
-        /// <returns>Tje Edit profile view.</returns>
+		/// <param name="model">The EditProfileViewModel.</param>
+		/// <returns>Tje Edit profile view.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult EditProfile(EditProfileViewModel model)

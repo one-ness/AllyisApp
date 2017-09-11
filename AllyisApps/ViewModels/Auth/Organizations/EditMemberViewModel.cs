@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
-using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels.Auth
 {

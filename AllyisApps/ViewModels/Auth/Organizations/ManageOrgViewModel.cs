@@ -4,10 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Services.Common.Types;
 using System;
 using System.Collections.Generic;
-using AllyisApps.Services;
-using AllyisApps.Services.Common.Types;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -37,7 +36,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public IEnumerable<SubscriptionDisplayViewModel> Subscriptions { get; set; }
 
-
 		/// <summary>
 		/// Gets or sets the stripe Token id.
 		/// </summary>
@@ -58,12 +56,14 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public int SubscriptionCount { get; set; }
 	}
+
 	/// <summary>
 	/// Organizaion View Model with Address Infomation
 	/// </summary>
-	public class OrganizationInfoViewModel{
+	public class OrganizationInfoViewModel
+	{
 		/// <summary>
-		/// Organiziton Id 
+		/// Organiziton Id
 		/// </summary>
 		public int OrganizaitonId { get; set; }
 
@@ -73,10 +73,10 @@ namespace AllyisApps.ViewModels.Auth
 		public string OrganizationName { get; set; }
 
 		/// <summary>
-		/// Site Url 
+		/// Site Url
 		/// </summary>
 		public string SiteURL { get; set; }
-		
+
 		/// <summary>
 		/// Address1 for organizaiton address
 		/// </summary>
@@ -90,11 +90,13 @@ namespace AllyisApps.ViewModels.Auth
 		/// <summary>
 		/// State of organization.
 		/// </summary>
-		public string StateName { get; set;}
+		public string StateName { get; set; }
+
 		/// <summary>
 		/// City of organization.
 		/// </summary>
 		public string City { get; set; }
+
 		/// <summary>
 		/// PostalCode of organizaton.
 		/// </summary>

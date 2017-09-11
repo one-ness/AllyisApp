@@ -11,6 +11,5 @@ namespace AllyisApps.Services.Lookup
 		/// Gets or sets the List of all tags
 		/// </summary>
 		public IEnumerable<Tag> TagList { get; set; }
-
 	}
 }

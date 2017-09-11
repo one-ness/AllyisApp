@@ -2,19 +2,19 @@
 @using AllyisApps.Services;
 
 @model ExpensePendingModel
-@{ 
+@{
 
 }
 
 <table class="table table-hover">
-    <thead >
+    <thead>
         <tr class="double-bottom-border">
             <th style="width: 25%">Report Name</th>
 			<th style="width: 25%">Submitted By</th>
             <th style="width: 25%">Submitted Date</th>
             <th style="width: 15%">Amount</th>
         </tr>
-    </thead>   
+    </thead>
     <tbody>
         @foreach(ExpenseItemViewModel report in Model.PendingReports)
 		{

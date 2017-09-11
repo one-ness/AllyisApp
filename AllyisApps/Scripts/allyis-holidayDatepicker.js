@@ -34,8 +34,8 @@ $('#datePickerHoliday').on("change", function () {
 
 $(function () {
 	var initHoliday = DateConvert.GetMomentFromDays(model_holiday);
-    if (!isNaN(initHoliday)) {
-        $('#datePickerHoliday').datepicker("setDate", initHoliday.toDate());
+	if (!isNaN(initHoliday)) {
+		$('#datePickerHoliday').datepicker("setDate", initHoliday.toDate());
 	}
 	$('.ui-datepicker-trigger').remove();
 	$('#datePickerHolidayButton').on("click", function () {

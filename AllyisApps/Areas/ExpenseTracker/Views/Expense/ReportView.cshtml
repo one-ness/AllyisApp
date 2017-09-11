@@ -33,7 +33,6 @@
                     {
                         <div>@String.Format("{0:MM-dd-yyyy}", @Model.SubmittedUtc)</div>
                     }
-
                 </div>
                 <div class="report-detail">
                     <div><b>Status:</b></div>
@@ -54,10 +53,10 @@
             </div>
 
             @*START REVIEW AREA*@
-            <div class="col-lg-6 col-md-6 col-xs-6" >
-                @if (Model.Status != ExpenseStatusEnum.Approved 
-					&& Model.Status != ExpenseStatusEnum.Paid 
-					&& Model.Status != ExpenseStatusEnum.Draft 
+            <div class="col-lg-6 col-md-6 col-xs-6">
+                @if (Model.Status != ExpenseStatusEnum.Approved
+					&& Model.Status != ExpenseStatusEnum.Paid
+					&& Model.Status != ExpenseStatusEnum.Draft
 					&& (bool)ViewData["IsManager"] == true)
                 {
                     <div class="review-area col-lg-12 col-md-12 col-xs-12" height="290px">
@@ -74,9 +73,9 @@
         </div>
     </div>
 }
-    
+
 @*START REPORT ITEM AREA*@
-<br/>
+<br />
 <h2>Report Items</h2>
 <table class="table table-hover col-lg-12 col-md-12 col-xs-12">
     <thead>
@@ -109,8 +108,6 @@
     </tbody>
 </table>
 
-
-
 @*REPORT ATTACHMENTS AREA*@
 @if(Model.Attachments.Count () > 0)
 {
@@ -124,7 +121,6 @@
                         <td>@Html.ActionLink(attch,"download", new { reportId = Model.ReportId, fileName = attch }, htmlAttributes: new { @class = "form-inline col-xs-12", })</td>
                     </tr>
                 }
-                
             </tbody>
         </table>
     </div>
@@ -158,11 +154,5 @@
                 </tr>
             }
         </tbody>
-
     </table>
 }
-    
-
-
-
-

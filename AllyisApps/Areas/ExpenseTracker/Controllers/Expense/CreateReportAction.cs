@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using AllyisApps.Controllers;
-using AllyisApps.Lib;
+﻿using AllyisApps.Controllers;
 using AllyisApps.Services;
-using AllyisApps.Services.Expense;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -69,7 +65,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				OrganizationId = organizationId,
 				ReportStatus = (int)reportStatus
 			};
-			
+
 			report.ExpenseReportId = AppService.CreateExpenseReport(report);
 			UploadItems(model, report);
 			UploadAttachments(model, report);

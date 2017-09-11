@@ -4,9 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-
 using System;
-
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -49,18 +47,22 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets Phone extension.
 		/// </summary>
 		public string PhoneExtension { get; set; }
+
 		/// <summary>
 		/// Address of loading User
 		/// </summary>
 		public string Address { get; set; }
+
 		/// <summary>
 		/// Countryname of User
 		/// </summary>
 		public string CountryName { get; set; }
+
 		/// <summary>
 		/// StateName of User
 		/// </summary>
 		public string StateName { get; set; }
+
 		/// <summary>
 		/// City of User
 		/// </summary>

@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Web.Mvc;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.Services.StaffingManager;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -27,7 +27,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		{
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
-            string subName = AppService.getSubscriptionName(subscriptionId);
+			string subName = AppService.getSubscriptionName(subscriptionId);
 			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
 
 			// ViewBag.SignedInUserID = GetCookieData().UserId;
@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 			return this.View(model);
 		}
-		
+
 		/// <summary>
 		/// Constructor for the TimeEntryOverDateRangeViewModel.
 		/// </summary>

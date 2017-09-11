@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AllyisApps.Services.Billing;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -30,20 +29,20 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public int TimeTrackerId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the product id for ExpenseTracker.
-        /// </summary>
-        public int ExpenseTrackerId { get; set; }
+		/// <summary>
+		/// Gets or sets the product id for ExpenseTracker.
+		/// </summary>
+		public int ExpenseTrackerId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the index of TimeTracker in the subscriptions list.
-        /// </summary>
-        public int TimeTrackerSubIndex { get; set; }
+		/// <summary>
+		/// Gets or sets the index of TimeTracker in the subscriptions list.
+		/// </summary>
+		public int TimeTrackerSubIndex { get; set; }
 
-        /// <summary>
-        /// Gets or sets the index of ExpenseTracker in the subscriptions list.
-        /// </summary>
-        public int ExpenseTrackerSubIndex { get; set; }
+		/// <summary>
+		/// Gets or sets the index of ExpenseTracker in the subscriptions list.
+		/// </summary>
+		public int ExpenseTrackerSubIndex { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Id of the organization associated with this manager.

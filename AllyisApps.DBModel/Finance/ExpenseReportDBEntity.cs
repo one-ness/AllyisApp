@@ -17,40 +17,39 @@ namespace AllyisApps.DBModel.Finance
 		/// </summary>
 		public string ReportTitle { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Expense Reports's parent organization Id.
-        /// </summary>
-        public int OrganizationId { get; set; }
+		/// <summary>
+		/// Gets or sets the Expense Reports's parent organization Id.
+		/// </summary>
+		public int OrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Expense Report's parent User ID.
 		/// </summary>
 		public int SubmittedById { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Expense Report's status.
-        /// </summary>
-        public int ReportStatus { get; set; }
-		
-        /// <summary>
-        /// Gets or sets description of why report is needed or created.
-        /// </summary>
-        public string BusinessJustification { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the Expense Report's creation date.
-        /// </summary>
-        public DateTime ExpenseReportCreatedUtc { get; set; }
+		/// <summary>
+		/// Gets or sets the Expense Report's status.
+		/// </summary>
+		public int ReportStatus { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Expense Report's last-modified-on date.
-        /// </summary>
-        public DateTime ExpenseReportModifiedUtc { get; set; }
+		/// <summary>
+		/// Gets or sets description of why report is needed or created.
+		/// </summary>
+		public string BusinessJustification { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Expense Report's creation date.
+		/// </summary>
+		public DateTime ExpenseReportCreatedUtc { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Expense Report's last-modified-on date.
+		/// </summary>
+		public DateTime ExpenseReportModifiedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Expense Report's submission date.
 		/// </summary>
 		public DateTime? ExpenseReportSubmittedUtc { get; set; }
 	}
-
 }

@@ -119,25 +119,24 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		public void UpdateUserProfile(int userId, string firstName, string lastName, DateTime? dateOfBirth, string phoneNumber, int? addressId, string address1, string address2, string city, int? stateId, string postalCode, string countryCode)
 		{
-			
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-			con.Execute("[Auth].[UpdateUserProfile] @a, @b, @c, @d, @e, @f, @g, @h, @i, @j, @k, @l",
-					new
-					{
-						a = userId,
-						b = firstName,
-						c = lastName,
-						d = dateOfBirth,
-						e = phoneNumber,
-						f = addressId,
-						g = address1,
-						h = address2,
-						i = city,
-						j = stateId,
-						k = postalCode,
-						l = countryCode
-					});
+				con.Execute("[Auth].[UpdateUserProfile] @a, @b, @c, @d, @e, @f, @g, @h, @i, @j, @k, @l",
+						new
+						{
+							a = userId,
+							b = firstName,
+							c = lastName,
+							d = dateOfBirth,
+							e = phoneNumber,
+							f = addressId,
+							g = address1,
+							h = address2,
+							i = city,
+							j = stateId,
+							k = postalCode,
+							l = countryCode
+						});
 			}
 		}
 
@@ -571,8 +570,6 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-
-
 		/// <summary>
 		/// Adds an Invitation to the invitations table and invitation sub roles table.
 		/// </summary>
@@ -638,7 +635,6 @@ namespace AllyisApps.DBModel
 				}
 			}
 		}
-
 
 		/// <summary>
 		/// Removes a user invitation and related invitation sub roles.
@@ -851,8 +847,6 @@ namespace AllyisApps.DBModel
 
 			return result;
 		}
-
-
 
 		/// <summary>
 		/// Returns an OrganizationDBEntity for the given organization, along with a list of OrganizationUserDBEntities for the organization users

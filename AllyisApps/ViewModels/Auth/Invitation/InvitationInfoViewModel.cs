@@ -1,6 +1,4 @@
-﻿
-
-using AllyisApps.Services;
+﻿using AllyisApps.Services;
 using System;
 
 namespace AllyisApps.ViewModels.Auth
@@ -34,8 +32,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets or sets the Last name.
 		/// </summary>
 		public string LastName { get; set; }
-
-
 
 		/// <summary>
 		/// Gets or sets the Organization Id.

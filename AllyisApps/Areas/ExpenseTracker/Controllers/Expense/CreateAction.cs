@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web.Mvc;
-using AllyisApps.Controllers;
+﻿using AllyisApps.Controllers;
 using AllyisApps.DBModel.Finance;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -30,12 +30,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			}
 
 			ExpenseReport report = reportId == -1 ? null : AppService.GetExpenseReport(reportId);
-            var userInfo = GetCookieData();
-            if (reportId != -1)
-            {
-                if (report != null
-					&& (report.SubmittedById != userInfo.UserId 
-					|| ((ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Draft 
+			var userInfo = GetCookieData();
+			if (reportId != -1)
+			{
+				if (report != null
+					&& (report.SubmittedById != userInfo.UserId
+					|| ((ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Draft
 					&& (ExpenseStatusEnum)report.ReportStatus != ExpenseStatusEnum.Rejected)))
 				{
 					string message = string.Format("action {0} denied", AppService.ExpenseTrackerAction.EditReport.ToString());
@@ -44,10 +44,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 				AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.EditReport, subscriptionId);
 			}
-            else
-            {
-                AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
-            }
+			else
+			{
+				AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Unmanaged, subscriptionId);
+			}
 
 			IList<ExpenseItem> items = report == null ? null : AppService.GetExpenseItemsByReportId(reportId);
 

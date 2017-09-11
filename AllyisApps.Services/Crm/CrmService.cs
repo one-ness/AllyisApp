@@ -168,7 +168,7 @@ namespace AllyisApps.Services
 			if (userId <= 0) throw new ArgumentException("userId");
 			if (subscriptionId <= 0) throw new ArgumentException("subscriptionId");
 
-            UserContext.SubscriptionAndRole subInfo = null;
+			UserContext.SubscriptionAndRole subInfo = null;
 			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			if (subInfo != null)
 			{
@@ -548,7 +548,7 @@ namespace AllyisApps.Services
 			var spResults = DBHelper.GetProjectEditInfo(projectId, subscriptionId);
 			return Tuple.Create(
 				InitializeCompleteProjectInfo(spResults.Item1),
-				spResults.Item2.Select(udb => InitializeUser(udb,false)).ToList(),
+				spResults.Item2.Select(udb => InitializeUser(udb, false)).ToList(),
 				spResults.Item3.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());
 		}
 
@@ -615,33 +615,33 @@ namespace AllyisApps.Services
 			};
 		}
 
-        /// <summary>
-        /// Initialize address from dynamic infomation
-        /// </summary>
-        /// <param name="address"></param>
-        /// <returns></returns>
-        public static Address InitializeAddress(dynamic address)
-        {
-            if (address == null)
-            {
-                return null;
-            }
+		/// <summary>
+		/// Initialize address from dynamic infomation
+		/// </summary>
+		/// <param name="address"></param>
+		/// <returns></returns>
+		public static Address InitializeAddress(dynamic address)
+		{
+			if (address == null)
+			{
+				return null;
+			}
 
-            return new Address()
-            {
-                AddressId = address.AddressId,
-                Address1 = address.Address1 ?? address.Address,
-                Address2 = address.Address2,
-                City = address.City,
-                StateName = address.State ?? address.StateName,
-                PostalCode = address.PostalCode,
-                CountryCode = address.CountryCode,
-                StateId = address.StateId,
-                CountryName = address.Country ?? address.CountryName
-            };
-        }
+			return new Address()
+			{
+				AddressId = address.AddressId,
+				Address1 = address.Address1 ?? address.Address,
+				Address2 = address.Address2,
+				City = address.City,
+				StateName = address.State ?? address.StateName,
+				PostalCode = address.PostalCode,
+				CountryCode = address.CountryCode,
+				StateId = address.StateId,
+				CountryName = address.Country ?? address.CountryName
+			};
+		}
 
-        public static AddressDBEntity GetDBEntityFromAddress(Address address)
+		public static AddressDBEntity GetDBEntityFromAddress(Address address)
 		{
 			return new AddressDBEntity()
 			{

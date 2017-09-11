@@ -4,8 +4,8 @@
 // </copyright>
 
 //------------------------------------------------------------------------------
-using System;
 using AllyisApps.Services.Common.Types;
+using System;
 
 namespace AllyisApps.ViewModels.Auth
 {

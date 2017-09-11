@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.IO;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
+using System.Collections.Generic;
+using System.IO;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {

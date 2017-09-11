@@ -1,10 +1,8 @@
-﻿using System;
+﻿using AllyisApps.DBModel.Finance;
+using AllyisApps.Services;
+using System;
 using System.Collections.Generic;
 using System.Web;
-using System.Web.Mvc;
-using AllyisApps.DBModel.Finance;
-using AllyisApps.Services;
-using AllyisApps.Services.Expense;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {
@@ -23,10 +21,10 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
-        /// <summary>
-        /// Gets or sets Current User Id.
-        /// </summary>
-        public int CurrentUser { get; set; }
+		/// <summary>
+		/// Gets or sets Current User Id.
+		/// </summary>
+		public int CurrentUser { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Expense Report.

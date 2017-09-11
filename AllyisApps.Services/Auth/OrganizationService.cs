@@ -83,12 +83,12 @@ namespace AllyisApps.Services
 		public Tuple<Organization, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string> GetOrganizationManagementInfo(int orgId)
 		{
 			var spResults = DBHelper.GetOrganizationManagementInfo(orgId);
-            return Tuple.Create(
-                InitializeOrganization(spResults.Item1),
-                spResults.Item2.Select(oudb => InitializeOrganizationUserInfo(oudb)).ToList(),
-                spResults.Item3.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
-                spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList(),
-                spResults.Item5);
+			return Tuple.Create(
+				InitializeOrganization(spResults.Item1),
+				spResults.Item2.Select(oudb => InitializeOrganizationUserInfo(oudb)).ToList(),
+				spResults.Item3.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
+				spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList(),
+				spResults.Item5);
 		}
 
 		/// <summary>
@@ -97,7 +97,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<Organization,  string> GetOrgWithNextEmployeeId(int orgId)
+		public Tuple<Organization, string> GetOrgWithNextEmployeeId(int orgId)
 		{
 			var spResults = DBHelper.GetOrgWithNextEmployeeId(orgId, UserContext.UserId);
 			return Tuple.Create(
@@ -193,9 +193,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-
-
-			// Creation of invitation 
+			// Creation of invitation
 			var spResults = DBHelper.CreateInvitation(UserContext.UserId, GetDBEntityFromInvitationInfo(invitationInfo));
 			if (spResults.Item1 == -1)
 			{
@@ -249,37 +247,35 @@ namespace AllyisApps.Services
 			}
 		}
 
-        public async void NotifyInviteRejectAsync(int inviteId)
-        {
-            InvitationDBEntity invitation = DBHelper.GetUserInvitationByInviteId(inviteId);
-            dynamic org = DBHelper.GetOrganization(invitation.OrganizationId);
-            IEnumerable<dynamic> owners = DBHelper.GetOrgOwnerEmails(invitation.OrganizationId);
+		public async void NotifyInviteRejectAsync(int inviteId)
+		{
+			InvitationDBEntity invitation = DBHelper.GetUserInvitationByInviteId(inviteId);
+			dynamic org = DBHelper.GetOrganization(invitation.OrganizationId);
+			IEnumerable<dynamic> owners = DBHelper.GetOrgOwnerEmails(invitation.OrganizationId);
 
-            string htmlbody = string.Format(
-                "{0} has rejected joining the organization {1} on Allyis Apps.",
-                invitation.FirstName + " " + invitation.LastName,
-                org.OrganizationName);
+			string htmlbody = string.Format(
+				"{0} has rejected joining the organization {1} on Allyis Apps.",
+				invitation.FirstName + " " + invitation.LastName,
+				org.OrganizationName);
 
-            string msgbody = new System.Web.HtmlString(htmlbody).ToString();
-            foreach (dynamic owner in owners)
-            {
-                await Mailer.SendEmailAsync(
-                    this.ServiceSettings.SupportEmail,
-                    owner.Email,
-                    "User rejected invite Allyis Apps!",
-                    msgbody);
-            }
-        }
+			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
+			foreach (dynamic owner in owners)
+			{
+				await Mailer.SendEmailAsync(
+					this.ServiceSettings.SupportEmail,
+					owner.Email,
+					"User rejected invite Allyis Apps!",
+					msgbody);
+			}
+		}
 
-
-
-        /// <summary>
-        /// Removes an invitation.
-        /// </summary>
-        /// <param name="orgId">Organization id.</param>
-        /// <param name="invitationId">Invitation Id.</param>
-        /// <returns>Returns false if permissions fail.</returns>
-        public bool RemoveInvitation(int orgId, int invitationId)
+		/// <summary>
+		/// Removes an invitation.
+		/// </summary>
+		/// <param name="orgId">Organization id.</param>
+		/// <param name="invitationId">Invitation Id.</param>
+		/// <returns>Returns false if permissions fail.</returns>
+		public bool RemoveInvitation(int orgId, int invitationId)
 		{
 			if (orgId <= 0) throw new ArgumentException("orgId");
 			if (invitationId <= 0) throw new ArgumentException("invitationId");
@@ -626,7 +622,7 @@ namespace AllyisApps.Services
 
 			if (organizationInfo.AddressId != null)
 			{
-                address = InitializeAddress(organizationInfo);
+				address = InitializeAddress(organizationInfo);
 			}
 
 			return new Organization
@@ -701,18 +697,18 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-            return new InvitationInfo
-            {
-                Email = invitation.Email,
-                CompressedEmail = AppService.GetCompressedEmail(invitation.Email),
-                FirstName = invitation.FirstName,
-                InvitationId = invitation.InvitationId,
-                LastName = invitation.LastName,
-                OrganizationId = invitation.OrganizationId,
-                OrganizationRole = (OrganizationRole)invitation.OrganizationRoleId,
-                EmployeeId = invitation.EmployeeId,
-                DecisionDateUtc = invitation.DecisionDateUtc,
-                status = (InvitationStatusEnum)invitation.InvitationStatusId
+			return new InvitationInfo
+			{
+				Email = invitation.Email,
+				CompressedEmail = AppService.GetCompressedEmail(invitation.Email),
+				FirstName = invitation.FirstName,
+				InvitationId = invitation.InvitationId,
+				LastName = invitation.LastName,
+				OrganizationId = invitation.OrganizationId,
+				OrganizationRole = (OrganizationRole)invitation.OrganizationRoleId,
+				EmployeeId = invitation.EmployeeId,
+				DecisionDateUtc = invitation.DecisionDateUtc,
+				status = (InvitationStatusEnum)invitation.InvitationStatusId
 			};
 		}
 
@@ -758,8 +754,8 @@ namespace AllyisApps.Services
 				OrganizationId = invitation.OrganizationId,
 				OrganizationRoleId = (int)invitation.OrganizationRole,
 				EmployeeId = invitation.EmployeeId,
-                DecisionDateUtc = invitation.DecisionDateUtc,
-                InvitationStatusId = (int)invitation.status
+				DecisionDateUtc = invitation.DecisionDateUtc,
+				InvitationStatusId = (int)invitation.status
 			};
 		}
 

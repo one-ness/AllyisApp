@@ -27,21 +27,21 @@ namespace AllyisApps.Services
 		Manager = 2
 	}
 
-    public enum ExpenseTrackerRole : int
-    {
-        /// <summary>
-        /// Expense Tracker Unavailable.
-        /// </summary>
-        NotInProduct = 0,
+	public enum ExpenseTrackerRole : int
+	{
+		/// <summary>
+		/// Expense Tracker Unavailable.
+		/// </summary>
+		NotInProduct = 0,
 
-        /// <summary>
-        /// Expense Tracker User.
-        /// </summary>
-        User = 1,
+		/// <summary>
+		/// Expense Tracker User.
+		/// </summary>
+		User = 1,
 
-        /// <summary>
-        /// Expense Tracker Manager.
-        /// </summary>
-        Manager = 2
-    }
+		/// <summary>
+		/// Expense Tracker Manager.
+		/// </summary>
+		Manager = 2
+	}
 }

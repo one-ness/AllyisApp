@@ -38,8 +38,6 @@ namespace AllyisApps.Services
 		/// </summary>
 		public string LastName { get; set; }
 
-		
-
 		/// <summary>
 		/// Gets or sets the Organization Id.
 		/// </summary>
@@ -58,8 +56,8 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Date that user had accepted or rejected the invitation.
 		/// </summary>
-        public DateTime DecisionDateUtc { get; set; }
+		public DateTime DecisionDateUtc { get; set; }
 
-        public InvitationStatusEnum status { get; set; }
+		public InvitationStatusEnum status { get; set; }
 	}
 }

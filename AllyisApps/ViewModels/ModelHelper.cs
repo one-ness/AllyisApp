@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using AllyisApps.Lib;
+﻿using AllyisApps.Lib;
 using AllyisApps.Services;
+using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels
 {

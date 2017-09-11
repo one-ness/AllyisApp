@@ -6,7 +6,6 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels.Auth
 {
@@ -83,7 +82,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public int? SubscriptionProjectId { get; set; }
 
-
 		/// <summary>
 		/// Gets AddedUsers.
 		/// </summary>
@@ -98,6 +96,5 @@ namespace AllyisApps.ViewModels.Auth
 		/// Gets EmailedUsers.
 		/// </summary>
 		public HashSet<string> EmailedUsers { get; internal set; }
-
 	}
 }

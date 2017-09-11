@@ -4,16 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.DBModel.Lookup;
+using AllyisApps.DBModel.StaffingManager;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using AllyisApps.DBModel.StaffingManager;
-using Dapper;
-using AllyisApps.DBModel.Lookup;
 using System.Dynamic;
-using AllyisApps.DBModel.Auth;
+using System.Linq;
 
 namespace AllyisApps.DBModel
 {
@@ -25,7 +24,9 @@ namespace AllyisApps.DBModel
 		////////////////////////////
 		/*         CREATE         */
 		////////////////////////////
+
 		#region Create Methods
+
 		/// <summary>
 		/// Adds an applicant to the DB if there is not already another applicant with the same email.
 		/// </summary>
@@ -54,8 +55,6 @@ namespace AllyisApps.DBModel
 			{
 				return connection.Query<int>("[StaffingManager].[CreateApplicant]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
-
-			
 		}
 
 		/// <summary>
@@ -105,7 +104,6 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-
 		/// <summary>
 		/// Creates a new position.
 		/// </summary>
@@ -135,7 +133,7 @@ namespace AllyisApps.DBModel
 			parameters.Add("@positionLevel", position.PositionLevelId);
 			parameters.Add("@hiringManager", position.HiringManager);
 			parameters.Add("@teamName", position.TeamName);
-			
+
 			parameters.Add("@address1", position.Address.Address);
 			parameters.Add("@address2", position.Address.Address);
 			parameters.Add("@city", position.Address.City);
@@ -154,8 +152,6 @@ namespace AllyisApps.DBModel
 				return connection.Query<int>("[StaffingManager].[SetupPosition]", parameters, commandType: CommandType.StoredProcedure).Single();
 			}
 		}
-
-
 
 		/// <summary>
 		/// Creates a position level for the database
@@ -253,7 +249,6 @@ namespace AllyisApps.DBModel
 				// default -1
 				connection.Execute("[StaffingManager].[CreatePositionTag]", parameters, commandType: CommandType.StoredProcedure);
 			}
-
 		}
 
 		#endregion Create Methods
@@ -261,6 +256,7 @@ namespace AllyisApps.DBModel
 		////////////////////////////
 		/*          READ          */
 		////////////////////////////
+
 		#region Get Methods
 
 		/// <summary>
@@ -301,7 +297,7 @@ namespace AllyisApps.DBModel
 			dynamic applicationsAndDocuments = new ExpandoObject();
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				var results  = connection.Query<ApplicationDBEntity>("[StaffingManager].[GetApplicationsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
+				var results = connection.Query<ApplicationDBEntity>("[StaffingManager].[GetApplicationsByPositionId]", parameters, commandType: CommandType.StoredProcedure);
 			}
 			return applicationsAndDocuments;
 		}
@@ -578,6 +574,7 @@ namespace AllyisApps.DBModel
 		////////////////////////////
 		/*         UPDATE         */
 		////////////////////////////
+
 		#region Update Methods
 
 		/// <summary>
@@ -705,7 +702,9 @@ namespace AllyisApps.DBModel
 		////////////////////////////
 		/*         DELETE         */
 		////////////////////////////
+
 		#region Delete Methods
+
 		/// <summary>
 		/// Deletes an applicant from the database
 		/// </summary>
@@ -842,6 +841,7 @@ namespace AllyisApps.DBModel
 				connection.Execute("[StaffingManager].[DeletePosition]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
+
 		#endregion Delete Methods
 	}
 }
