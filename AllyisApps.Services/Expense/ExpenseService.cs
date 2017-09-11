@@ -107,16 +107,6 @@ namespace AllyisApps.Services
 			return DBHelper.GetExpenseReportsByOrganizationId(orgId).Select(x => InitializeExpenseReport(x));
 		}
 
-		/// <summary>
-		/// Get a list of users in a given organization.
-		/// </summary>
-		/// <param name="orgId"></param>
-		/// <returns></returns>
-		public IEnumerable<ExpenseUser> GetUsersByOrgId(int orgId)
-		{
-			return DBHelper.GetUsersByOrganizationId(orgId).Select(x => InitializeExpenseUser(x));
-		}
-
         /// <summary>
         /// Get an expense report by the submitted id
         /// </summary>
@@ -197,19 +187,6 @@ namespace AllyisApps.Services
 				BusinessJustification = entity.BusinessJustification
             };
         }
-
-		public static ExpenseUser InitializeExpenseUser(ExpenseUserDBEntity entity)
-		{
-			if (entity == null)
-			{
-				return null;
-			}
-
-			return new ExpenseUser()
-			{
-
-			};
-		}
 
         /// <summary>
         /// Initialize an ExpenseItem from an ExpenseItemDBEntity.

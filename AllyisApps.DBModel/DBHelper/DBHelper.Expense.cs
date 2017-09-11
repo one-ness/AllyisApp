@@ -223,22 +223,6 @@ namespace AllyisApps.DBModel
         }
 
 		/// <summary>
-		/// Retrieves all users that are part of the organization.
-		/// </summary>
-		/// <param name="OrganizationId"></param>
-		/// <returns>A collection of users.</returns>
-		public IEnumerable<ExpenseUserDBEntity> GetUsersByOrganizationId(int OrganizationId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", OrganizationId);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<ExpenseUserDBEntity>("[Expense].[GetUsersByOrganizationId]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable();
-			}
-		}
-
-		/// <summary>
 		/// Updates the Expense Report with the specified ID.
 		/// </summary>
 		/// <param name="report">The expense report object that will replace the previous entry.</param>

@@ -1,6 +1,6 @@
-﻿using AllyisApps.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {
@@ -9,6 +9,9 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 	/// </summary>
 	public class UserSettingsViewModel : BaseViewModel
 	{
-		IEnumerable<ExpenseUser> Users { get; set; }
+		/// <summary>
+		/// Gets or sets the users for the expense tracker.
+		/// </summary>
+		public IEnumerable<User> Users { get; set; }
     }
 }

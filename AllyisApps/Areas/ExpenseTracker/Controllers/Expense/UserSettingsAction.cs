@@ -28,7 +28,10 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
             UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 
-			UserSettingsViewModel model = new UserSettingsViewModel();
+			UserSettingsViewModel model = new UserSettingsViewModel()
+			{
+				Users = AppService.GetUsersWithSubscriptionToProductInOrganization(subInfo.OrganizationId, (int)subInfo.ProductId)
+			};
 
 			return View(model);
 		}

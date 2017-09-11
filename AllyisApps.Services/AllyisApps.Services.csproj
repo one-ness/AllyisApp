@@ -92,7 +92,6 @@
     <Compile Include="Expense\ExpenseHistory.cs" />
     <Compile Include="Expense\ExpenseFile.cs" />
     <Compile Include="Expense\ExpenseItem.cs" />
-    <Compile Include="Expense\ExpenseUser.cs" />
     <Compile Include="Expense\ExpenseReport.cs" />
     <Compile Include="Expense\ExpenseReportStatusEnum.cs" />
     <Compile Include="Expense\ExpenseService.cs" />
