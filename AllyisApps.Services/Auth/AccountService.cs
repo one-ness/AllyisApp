@@ -671,6 +671,7 @@ namespace AllyisApps.Services
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
 				Address = address,
+				MaxAmount = user.MaxAmount
 			};
 		}
 

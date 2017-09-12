@@ -7,6 +7,7 @@
 	DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
 	ViewBag.Title = "User Settings";
 }
+
 @Html.BeginForm("UpdateUserSettings", ControllerConstants.Expense, FormMethod.Post, new { })
 {
 	<table>
@@ -17,12 +18,17 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (User user in Model.Users)
+			@for (int i = 0; i < Model.Users.Count(); i++)
 			{
+				User user = Model.Users.ToArray()[i];
+				string userIdName = "Users[" + i + "].UserId";
+				string maxAmountName = "Users[" + i + "].MaxAmount";
 				string userName = user.FirstName + " " + user.LastName;
+
+				@Html.HiddenFor(m => user.UserId, new { Name = userIdName })
 				<tr>
 					<td>@userName</td>
-					<td>@Html.TextBoxFor(m => user.MaxAmount)</td>
+					<td>@Html.TextBoxFor(m => user.MaxAmount, new { Name = maxAmountName })</td>
 				</tr>
 			}
 		</tbody>
