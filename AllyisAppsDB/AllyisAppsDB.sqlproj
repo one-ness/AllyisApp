@@ -383,6 +383,7 @@
     <Build Include="Expense\Stored Procedures\UpdateExpenseHistory.sql" />
     <Build Include="Finance\Stored Procedures\GetAccounts.sql" />
     <Build Include="Expense\Tables\ExpenseReportHistory.sql" />
+    <Build Include="Auth\Stored Procedures\UpdateUserMaxAmount.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />

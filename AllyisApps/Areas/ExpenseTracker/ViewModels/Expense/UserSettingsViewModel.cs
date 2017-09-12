@@ -13,5 +13,10 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// Gets or sets the users for the expense tracker.
 		/// </summary>
 		public IEnumerable<User> Users { get; set; }
+
+		/// <summary>
+		/// Gets or sets the subscription id.
+		/// </summary>
+		public int SubscriptionId { get; set; }
     }
 }

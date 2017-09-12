@@ -1,4 +1,5 @@
-﻿@using AllyisApps.ViewModels.ExpenseTracker.Expense;
+﻿@using AllyisApps.Services;
+@using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 @model UserSettingsViewModel
 @{
@@ -6,16 +7,25 @@
 	DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
 	ViewBag.Title = "User Settings";
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>UserSettings</title>
-</head>
-<body>
-    <div> 
-    </div>
-</body>
-</html>
+@Html.BeginForm("UpdateUserSettings", ControllerConstants.Expense, FormMethod.Post, new { })
+{
+	<table>
+		<thead>
+			<tr>
+				<th style="width: 50%">Name</th>
+				<th style="width: 50%">Max Amount</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (User user in Model.Users)
+			{
+				string userName = user.FirstName + " " + user.LastName;
+				<tr>
+					<td>@userName</td>
+					<td>@Html.TextBoxFor(m => user.MaxAmount)</td>
+				</tr>
+			}
+		</tbody>
+	</table> 
+	<input type="submit" value="Submit" />
+}

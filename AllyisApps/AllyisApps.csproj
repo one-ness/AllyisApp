@@ -209,6 +209,7 @@
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\AttachmentDownloadController.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\FileLinkAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ExportReportAction.cs" />
+    <Compile Include="Areas\ExpenseTracker\Controllers\Expense\UpdateUserSettingsAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\UserSettingsAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\PendingAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\CreateAction.cs" />
