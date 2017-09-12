@@ -10,9 +10,9 @@
 
 @using (Html.BeginForm("UpdateUserSettings", ControllerConstants.Expense, FormMethod.Post, new { }))
 {
-	<table>
+	<table class="table table-hover">
 		<thead>
-			<tr>
+			<tr class="double-bottom-border">
 				<th style="width: 50%">Name</th>
 				<th style="width: 50%">Max Amount</th>
 			</tr>
@@ -28,10 +28,17 @@
 				@Html.HiddenFor(m => user.UserId, new { Name = userIdName })
 				<tr>
 					<td>@userName</td>
-					<td>@Html.TextBoxFor(m => user.MaxAmount, new { Name = maxAmountName })</td>
+					<td>
+						<div class="amount-div form-control item-control" style="display: inline-block; width: 150px;">
+							$@Html.TextBoxFor(m => user.MaxAmount, new { @class = "amount-textbox", Name = maxAmountName, style = "display: inline-block; width: 100px; border: 0px; margin-top: -1px; margin-bottom: 6px;" })
+						</div>
+					</td>
 				</tr>
 				}
 		</tbody>
-	</table> 
-	<input type="submit" value="Submit" />
+	</table>
+	<div class="pull-right">
+		@Html.ActionLink("Cancel", "Index", new { }, new { @class = "btn btn-reject", type = "button", name = "viewDataButton", value = "Cancel", title = "Export Excel Expense Tracker entries", style = "display: inline-block; color: white !important; border-color: maroon !important;" })
+		<input class="btn btn-primary" type="submit" value="Submit" />
+	</div>
 }
