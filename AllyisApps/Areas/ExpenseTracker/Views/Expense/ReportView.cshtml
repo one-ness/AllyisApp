@@ -5,6 +5,12 @@
 @{
 	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/ExpenseTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
 	DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
+
+	decimal totalAmount = 0;
+	foreach (ExpenseItem item in Model.Expenses)
+	{
+		totalAmount += item.Amount;
+	}
 }
 <div>
 	<h1 class="pull-left">@Model.ReprortTitle</h1>
@@ -58,7 +64,7 @@
 				@if (Model.Status != ExpenseStatusEnum.Approved
 					&& Model.Status != ExpenseStatusEnum.Paid
 					&& Model.Status != ExpenseStatusEnum.Draft
-					&& (bool)ViewData["IsManager"] == true)
+					&& ((bool)ViewData["IsManager"] == true || (decimal)ViewData["MaxAmount"] > totalAmount))
 				{
 					<div class="review-area col-lg-12 col-md-12 col-xs-12" height="290px">
 						<b>Accept/Reject Notes</b><br />

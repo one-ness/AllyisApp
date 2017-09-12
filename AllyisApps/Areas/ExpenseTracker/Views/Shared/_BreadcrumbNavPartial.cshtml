@@ -1,6 +1,7 @@
 ﻿<li class="dropdown link-zone">
 	@{
 		bool manager = (bool?)ViewData["IsManager"] ?? false;
+		decimal maxAmount = (decimal)ViewData["MaxAmount"];
 		var userId = ViewData["UserId"];
 		var subId = ViewData["SubscriptionId"];
 	}
@@ -11,9 +12,12 @@
     <ul class="dropdown-menu dropdown-menu-right" id="TheDropdown2">
 		<li>@Html.ActionLink("My Reports", ActionConstants.Index, ControllerConstants.Expense, new { subscriptionId = subId }, new { @class = "nav-a" })</li>
 		<li>@Html.ActionLink("Create Report", ActionConstants.Create, ControllerConstants.Expense, new { subscriptionId = subId }, new { @class = "nav-a" })</li>
+		@if (manager || maxAmount > 0)
+		{
+            <li>@Html.ActionLink("Pending Reports", ActionConstants.Pending, ControllerConstants.Expense, new { subscriptionId = subId }, new { @class = "nav-a" })</li> 
+		}
 		@if (manager)
         {
-            <li>@Html.ActionLink("Pending Reports", ActionConstants.Pending, ControllerConstants.Expense, new { subscriptionId = subId }, new { @class = "nav-a" })</li> 
             <li>@Html.ActionLink("Admin Reports", ActionConstants.AdminReport, ControllerConstants.Expense, new { subscriptionId = subId }, new { @class = "nav-a" })</li>
 			<li>@Html.ActionLink("User Settings", ActionConstants.UserSettings, ControllerConstants.Expense, new { }, new { @class = "nav-a" })</li>
 		}

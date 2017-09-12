@@ -289,7 +289,8 @@ namespace AllyisApps.Services
 							ProductRoleId = item.ProductRoleId,
 							SkuId = (SkuIdEnum)item.SkuId,
 							SubscriptionId = item.SubscriptionId,
-							OrganizationId = item.OrganizationId
+							OrganizationId = item.OrganizationId,
+							MaxAmount = expando.User.MaxAmount
 						});
 
 					//result.UserSubscriptions.Add(sub.SubscriptionId, sub);

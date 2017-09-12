@@ -97,6 +97,7 @@ namespace AllyisApps.Services
 			public ProductIdEnum ProductId { get; set; }
 			public int ProductRoleId { get; set; }
 			public string AreaUrl { get; set; }
+			public decimal MaxAmount { get; set; }
 		}
 	}
 }

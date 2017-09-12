@@ -192,14 +192,15 @@ namespace AllyisApps.Services
 		}
 
 
-        /// <summary>
-        /// Checks if an action is allowed for the current user.
-        /// </summary>
-        /// <param name="action">The controller action</param>
-        /// <param name="subId">The subscription id.</param>
-        /// <param name="throwException">Throw exception or not.</param>
-        /// <returns></returns>
-        public bool CheckExpenseTrackerAction(ExpenseTrackerAction action, int subId, bool throwException = true)
+		/// <summary>
+		/// Checks if an action is allowed for the current user.
+		/// </summary>
+		/// <param name="action">The controller action.</param>
+		/// <param name="subId">The subscription id.</param>
+		/// <param name="maxAmount">The maximum amount a user is allowed to approve.</param>
+		/// <param name="throwException">Throw exception or not.</param>
+		/// <returns></returns>
+		public bool CheckExpenseTrackerAction(ExpenseTrackerAction action, int subId, decimal maxAmount = 0, bool throwException = true)
         {
             bool result = false;
 
@@ -213,7 +214,6 @@ namespace AllyisApps.Services
 					if (action == ExpenseTrackerAction.AdminReport 
 						|| action == ExpenseTrackerAction.StatusUpdate 
 						|| action == ExpenseTrackerAction.AdminExpense 
-						|| action == ExpenseTrackerAction.Pending
 						|| action == ExpenseTrackerAction.UserSettings)
 					{
 						switch (etRole)
@@ -223,6 +223,13 @@ namespace AllyisApps.Services
 								break;
 							default:
 								break;
+						}
+					}
+					else if (action == ExpenseTrackerAction.Pending)
+					{
+						if (subInfo.MaxAmount > maxAmount)
+						{
+							result = true;
 						}
 					}
 					else
