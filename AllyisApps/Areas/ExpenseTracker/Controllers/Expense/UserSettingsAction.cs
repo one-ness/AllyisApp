@@ -28,10 +28,14 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
             UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 
+			IEnumerable<User> allUsers = AppService.GetUsersWithSubscriptionToProductInOrganization(subInfo.OrganizationId, (int)subInfo.ProductId);
+
+			string productName = AppService.GetProductNameBySubscriptionId(subInfo.SubscriptionId);
+			
 			UserSettingsViewModel model = new UserSettingsViewModel()
 			{
 				SubscriptionId = subscriptionId,
-				Users = AppService.GetUsersWithSubscriptionToProductInOrganization(subInfo.OrganizationId, (int)subInfo.ProductId)
+				Users = allUsers.Where(u => AppService.GetProductRoleForUser(productName, u.UserId, subInfo.OrganizationId) == "User")
 			};
 
 			return View(model);
