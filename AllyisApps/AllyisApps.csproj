@@ -568,7 +568,6 @@
     <Content Include="Areas\ExpenseTracker\Views\Shared\_BreadcrumbNavPartial.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\_AjaxExpenseEntries.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\Create.cshtml" />
-    <Content Include="Areas\ExpenseTracker\Views\Shared\BreadcrumbNavPartial.cshtml" />
     <Content Include="Areas\StaffingManager\Views\web.config">
       <SubType>Designer</SubType>
     </Content>

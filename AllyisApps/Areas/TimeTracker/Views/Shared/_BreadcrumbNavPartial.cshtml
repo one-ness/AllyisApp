@@ -1,27 +1,31 @@
 ﻿<li class="dropdown link-zone">
-    @{
-        bool manager = false;
-        try
-        {
-            manager = (bool)ViewData["IsManager"];
-        }
-        //Only set ViewData["IsManager"] on pages visible to both managers and users. So if the try fails, it'll be on a page only managers can get to anyway.
-        //If ViewData["IsManager"] isn't set on a page it should be, then the options will be visible to a user when they shouldn't, but actual access permissions still prevent them from getting there.
-        catch
-        {
-            manager = true;
-        }
-        var userId = ViewData["UserId"];
-        var subId = ViewData["SubscriptionId"];
-    }
-    <a class="dropdown-toggle" id="TheDropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        @String.Format("{0}", ViewData["SubscriptionName"]) <span class="caret"></span>
-    </a>
+	@{
+		bool manager = false;
+		try
+		{
+			manager = (bool)ViewData["IsManager"];
+		}
+		//Only set ViewData["IsManager"] on pages visible to both managers and users. So if the try fails, it'll be on a page only managers can get to anyway.
+		//If ViewData["IsManager"] isn't set on a page it should be, then the options will be visible to a user when they shouldn't, but actual access permissions still prevent them from getting there.
+		catch
+		{
+			manager = true;
+		}
+		var userId = ViewData["UserId"];
+		var subId = ViewData["SubscriptionId"];
+	}
+	<a class="dropdown-toggle" id="TheDropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		@String.Format("{0}", ViewData["SubscriptionName"]) <span class="caret"></span>
+	</a>
 
-    <ul class="dropdown-menu dropdown-menu-right" id="TheDropdown2">
-        <li>@Html.ActionLink(Strings.TimeEntry, ActionConstants.IndexNoUserId, ControllerConstants.TimeEntry, new { subscriptionId = subId, startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd }, "TimeTracker")</li>
-        @if (manager) { <li>@Html.ActionLink(Strings.Reports, ActionConstants.Report, ControllerConstants.TimeEntry, new { subscriptionId = subId }, "TimeTracker")</li> }
-        <li>@Html.ActionLink(Strings.Customers, ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subId }, "TimeTracker")</li>
-        @if (manager) { <li>@Html.ActionLink(Strings.Settings, ActionConstants.Settings, ControllerConstants.TimeEntry, new { subscriptionId = subId }, "TimeTracker")</li> }
-    </ul>
+	<ul class="dropdown-menu dropdown-menu-right" id="TheDropdown2">
+		<li>@Html.ActionLink(Strings.TimeEntry, ActionConstants.IndexNoUserId, ControllerConstants.TimeEntry, new { subscriptionId = subId, startDate = ViewBag.WeekStart, endDate = ViewBag.WeekEnd }, "TimeTracker")</li>
+		@if (manager)
+		{
+		<li>@Html.ActionLink(Strings.Reports, ActionConstants.Report, ControllerConstants.TimeEntry, new { subscriptionId = subId }, "TimeTracker")</li> }
+		<li>@Html.ActionLink(Strings.Customers, ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subId }, "TimeTracker")</li>
+		@if (manager)
+		{
+		<li>@Html.ActionLink(Strings.Settings, ActionConstants.Settings, ControllerConstants.TimeEntry, new { subscriptionId = subId }, "TimeTracker")</li> }
+	</ul>
 </li>

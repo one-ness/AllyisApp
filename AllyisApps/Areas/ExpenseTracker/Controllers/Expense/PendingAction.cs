@@ -22,7 +22,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			SetNavData(subscriptionId);
 
 			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.Pending, subscriptionId);
-			
+
 			var orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
 			int userId = GetCookieData().UserId;
 			IEnumerable<ExpenseReport> reports = AppService.GetExpenseReportByOrgId(orgId);

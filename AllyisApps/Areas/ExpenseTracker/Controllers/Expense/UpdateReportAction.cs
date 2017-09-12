@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				return RedirectToAction("Create", new { subscriptionId = model.SubscriptionId, reportId = model.Report.ExpenseReportId });
 			}
-			
+
 			var oldReport = AppService.GetExpenseReport(model.Report.ExpenseReportId);
 			var userInfo = GetCookieData();
 			if (model.Report.ExpenseReportId != -1)
@@ -83,7 +83,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 					OrganizationId = organizationId,
 					ReportStatus = (int)reportStatus
 				};
-				
+
 				AppService.UpdateExpenseReport(report, model.Report.ExpenseReportId);
 				UploadAttachments(model, report);
 				UploadItems(model, report);

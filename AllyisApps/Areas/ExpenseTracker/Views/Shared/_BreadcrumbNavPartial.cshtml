@@ -1,12 +1,12 @@
 ﻿<li class="dropdown link-zone">
-    @{
-        bool manager = (bool?)ViewData["IsManager"] ?? false;
-        var userId = ViewData["UserId"];
-        var subId = ViewData["SubscriptionId"];
-    }
-    <a class="dropdown-toggle" id="TheDropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        @String.Format("{0}", ViewData["SubscriptionName"]) <span class="caret"></span>
-    </a>
+	@{
+		bool manager = (bool?)ViewData["IsManager"] ?? false;
+		var userId = ViewData["UserId"];
+		var subId = ViewData["SubscriptionId"];
+	}
+	<a class="dropdown-toggle" id="TheDropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		@String.Format("{0}", ViewData["SubscriptionName"]) <span class="caret"></span>
+	</a>
 
     <ul class="dropdown-menu dropdown-menu-right" id="TheDropdown2">
 		<li>@Html.ActionLink("My Reports", ActionConstants.Index, ControllerConstants.Expense, new { subscriptionId = subId }, new { @class = "nav-a" })</li>
