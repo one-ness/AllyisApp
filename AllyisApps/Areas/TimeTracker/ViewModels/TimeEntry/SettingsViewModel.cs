@@ -45,7 +45,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public int UserId { get; set; }
 
 		/// <summary>
-		/// Settings View Model 
+		/// Settings View Model.
 		/// </summary>
 		public class SettingsInfoViewModel
 		{
@@ -91,23 +91,23 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		}
 
 		/// <summary>
-		/// Pay classes View for settings page
+		/// Pay classes View for settings page.
 		/// </summary>
 		public class PayClassViewModel
 		{
 			/// <summary>
-			/// Gets or sets Name of pay Class 
+			/// Gets or sets Name of pay Class.
 			/// </summary>
 			public string PayClassName { get; set; }
 
 			/// <summary>
-			/// Gets or sets id of pay Class 
+			/// Gets or sets id of pay Class.
 			/// </summary>
 			public int PayClassId { get; set; }
 		}
 
 		/// <summary>
-		/// Holiday View Model for settings page
+		/// Holiday View Model for settings page.
 		/// </summary>
 		public class HolidayViewModel
 		{

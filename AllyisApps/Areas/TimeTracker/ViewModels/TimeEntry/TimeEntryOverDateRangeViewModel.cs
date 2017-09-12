@@ -115,27 +115,27 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public int ProductRole { get; set; }
 
 		/// <summary>
-		/// Users for Time Entries
+		/// Users for Time Entries.
 		/// </summary>
 		public class UserViewModel
 		{
 			/// <summary>
-			/// gets or sets Id of the user
+			/// Gets or sets Id of the user.
 			/// </summary>
 			public int UserId { get; set; }
 
 			/// <summary>
-			/// Gets or sets FirstName of the User
+			/// Gets or sets FirstName of the User.
 			/// </summary>
 			public string FirstName { get; set; }
 
 			/// <summary>
-			/// Gets or set LastName of the user.
+			/// Gets or sets LastName of the user.
 			/// </summary>
 			public string LastName { get; set; }
 
 			/// <summary>
-			/// gets or sets contact emial of user.
+			/// Gets or sets contact emial of user.
 			/// </summary>
 			public string Email { get; set; }
 		}

@@ -44,25 +44,24 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		public IEnumerable<ProjectInfoViewModel> UserProjects { get; set; }
 
 		/// <summary>
-		/// View Model for Project infomation
+		/// View Model for Project infomation.
 		/// </summary>
 		public class ProjectInfoViewModel
 		{
 			/// <summary>
-			/// Gets or sets project ID 
+			/// Gets or sets project ID.
 			/// </summary>
 			public int ProjectId { get; set; }
 
 			/// <summary>
-			/// Project Name 
+			/// Gets or sets Project Name.
 			/// </summary>
 			public string ProjectName { get; set; }
 
 			/// <summary>
-			/// Customer Name
+			/// Gets or sets Customer Name.
 			/// </summary>
 			public string CustomerName { get; set; }
-
 		}
 	}
 }

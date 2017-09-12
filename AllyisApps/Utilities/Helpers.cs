@@ -8,10 +8,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Web.Mvc;
-using AllyisApps.ViewModels.TimeTracker.Project;
-using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using AllyisApps.Services;
-using AllyisApps.Services.TimeTracker;
+using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.Utilities
 {
@@ -109,15 +107,15 @@ namespace AllyisApps.Utilities
 	}
 
 	/// <summary>
-	/// Helper for commonly shared 
+	/// Helper for commonly shared.
 	/// </summary>
 	public static class ViewModelHelper
 	{
 		/// <summary>
-		/// Constuct View Model 
+		/// Constuct View Model.
 		/// </summary>
-		/// <param name="proj"></param>
-		/// <returns></returns>
+		/// <param name="proj">Project from database.</param>
+		/// <returns>Complete Project View Model.</returns>
 		public static CompleteProjectViewModel ConstuctCompleteProjectViewModel(CompleteProjectInfo proj)
 		{
 			return new CompleteProjectViewModel()
@@ -142,7 +140,5 @@ namespace AllyisApps.Utilities
 				StartDate = proj.StartDate
 			};
 		}
-
-		
 	}
 }

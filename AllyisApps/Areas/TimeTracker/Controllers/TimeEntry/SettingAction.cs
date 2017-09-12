@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Web.Mvc;
 using System.Linq;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
@@ -53,7 +53,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}),
 				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsViewModel.HolidayViewModel()
 				{
-					
 				}),
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,

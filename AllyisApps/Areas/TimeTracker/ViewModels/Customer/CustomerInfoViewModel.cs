@@ -4,8 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services.Lookup;
-
 namespace AllyisApps.ViewModels.TimeTracker.Customer
 {
 	/// <summary>
@@ -79,7 +77,7 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public bool? IsActive { get; set; }
 
 		/// <summary>
-		/// Address View Model 
+		/// Address View Model.
 		/// </summary>
 		public class AddessViewModel
 		{
@@ -104,27 +102,27 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 			public string City { get; set; }
 
 			/// <summary>
-			/// Get or sets the State.
+			/// Gets or sets the State.
 			/// </summary>
 			public string StateName { get; set; }
 
 			/// <summary>
-			/// Gets or sets the State Id
+			/// Gets or sets the State Id.
 			/// </summary>
 			public int? StateId { get; set; }
 
 			/// <summary>
-			/// Gets or sets the PostalCode
+			/// Gets or sets the PostalCode.
 			/// </summary>
 			public string PostalCode { get; set; }
 
 			/// <summary>
-			/// Gets or sets the country
+			/// Gets or sets the country.
 			/// </summary>
 			public string CountryName { get; set; }
 
 			/// <summary>
-			/// Gets or sets the country code
+			/// Gets or sets the country code.
 			/// </summary>
 			public string CountryCode { get; set; }
 		}

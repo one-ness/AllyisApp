@@ -145,7 +145,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets a value indicating whether the current user a manager and can approve time entries  [This needs logics].
 		/// </summary>
-		public bool IsManager { get; set; }		
+		public bool IsManager { get; set; }
 	}
 
 	/// <summary>

@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
 	/// <summary>
-	/// Pay Class 
+	/// Pay Class.
 	/// </summary>
 	public class PayClassInfoViewModel
 	{

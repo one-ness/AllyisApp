@@ -39,7 +39,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public class UserViewModel
 		{
-
 			/// <summary>
 			/// Gets or sets FirstName.
 			/// </summary>
@@ -201,7 +200,6 @@ namespace AllyisApps.ViewModels.Auth
 				public SubscriptionViewModel()
 				{
 				}
-
 
 				/// <summary>
 				/// Gets or sets the ProductDescription.

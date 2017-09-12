@@ -93,9 +93,10 @@ namespace AllyisApps.Controllers
 					Country = curorg.Organization.Address?.CountryName,
 					SiteUrl = curorg.Organization.SiteUrl,
 					FaxNumber = curorg.Organization.FaxNumber,
-					// TODO: Infomation is dependent on curent user
+					//// TODO: Infomation is dependent on curent user
 					IsManageAllowed = AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.Organization.OrganizationId, curorg.OrganizationRole, false)
 				};
+
 				// Add subscription info
 				foreach (UserSubscription userSubInfo in accountInfo.Subscriptions.Where(sub => sub.Subscription.OrganizationId == curorg.Organization.OrganizationId))
 				{
@@ -106,10 +107,10 @@ namespace AllyisApps.Controllers
 					var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel()
 					{
 						ProductName = userSubInfo.Subscription.ProductName,
-					    SubscriptionId = userSubInfo.Subscription.SubscriptionId,
+						SubscriptionId = userSubInfo.Subscription.SubscriptionId,
 						SubscriptionName = userSubInfo.Subscription.SubscriptionName,
 						ProductDescription = description,
-					    ProductId = userSubInfo.Subscription.ProductId,
+						ProductId = userSubInfo.Subscription.ProductId,
 						AreaUrl = userSubInfo.Subscription.AreaUrl
 					};
 					if (userSubInfo.Subscription.ProductId == ProductIdEnum.TimeTracker)

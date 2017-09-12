@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
 	/// <summary>
-	/// View Model for Time Entries
+	/// View Model for Time Entries.
 	/// </summary>
 	public class TimeEntryViewModel
 	{
-
 		/// <summary>
 		/// Gets or sets the TimeEntryId.
 		/// </summary>
