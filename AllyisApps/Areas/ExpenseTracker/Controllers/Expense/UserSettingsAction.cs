@@ -30,6 +30,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			UserSettingsViewModel model = new UserSettingsViewModel()
 			{
+				SubscriptionId = subscriptionId,
 				Users = AppService.GetUsersWithSubscriptionToProductInOrganization(subInfo.OrganizationId, (int)subInfo.ProductId)
 			};
 

@@ -784,6 +784,16 @@ namespace AllyisApps.Services
 			return DBHelper.GetAccounts().ToList();
 		}
 
+		public void UpdateUserMaxAmount(User user)
+		{
+			UserDBEntity entity = new UserDBEntity()
+			{
+				UserId = user.UserId,
+				MaxAmount = user.MaxAmount
+			};
+			DBHelper.UpdateUserMaxAmount(entity);
+		}
+
 		#endregion Info-DBEntity Conversions
 	}
 }
