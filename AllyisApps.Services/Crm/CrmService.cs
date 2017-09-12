@@ -163,7 +163,7 @@ namespace AllyisApps.Services
 		/// (current organization by default), another list of Projects for all projects in the organization,
 		/// the name of the user (as "Firstname Lastname"), and the user's email.
 		/// </summary>
-		public Tuple<List<Project>, List<Project>, string, string> GetProjectsForOrgAndUser(int userId, int subscriptionId)
+		public Tuple<IEnumerable<Project>, IEnumerable<Project>, string, string> GetProjectsForOrgAndUser(int userId, int subscriptionId)
 		{
 			if (userId <= 0) throw new ArgumentException("userId");
 			if (subscriptionId <= 0) throw new ArgumentException("subscriptionId");
@@ -176,8 +176,8 @@ namespace AllyisApps.Services
 				var userDBEntity = spResults.Item3;
 				string name = string.Format("{0} {1}", userDBEntity.FirstName, userDBEntity.LastName);
 				return Tuple.Create(
-					spResults.Item1.Select(pdb => InitializeProject(pdb)).ToList(),
-					spResults.Item2.Select(pdb => InitializeProject(pdb)).ToList(),
+					spResults.Item1.Select(pdb => InitializeProject(pdb)),
+					spResults.Item2.Select(pdb => InitializeProject(pdb)),
 					name,
 					userDBEntity.Email);
 			}

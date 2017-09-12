@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Web.Mvc;
+using System.Linq;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
@@ -31,12 +32,29 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infoOrg.Item1.StartOfWeek));
 			ViewBag.WeekEnd = AppService.GetDayFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
-
+			Services.TimeTracker.Setting settings = infos.Item1;
 			return this.View(new SettingsViewModel()
 			{
-				Settings = infos.Item1,
-				PayClasses = infos.Item2,
-				Holidays = infos.Item3,
+				Settings = new SettingsViewModel.SettingsInfoViewModel()
+				{
+					IsLockDateUsed = settings.IsLockDateUsed,
+					LockDatePeriod = settings.LockDatePeriod,
+					LockDateQuantity = settings.LockDateQuantity,
+					OrganizationId = settings.OrganizationId,
+					OvertimeHours = settings.OvertimeHours,
+					OvertimeMultiplier = settings.OvertimeMultiplier,
+					OvertimePeriod = settings.OvertimePeriod,
+					StartOfWeek = settings.StartOfWeek
+				},
+				PayClasses = infos.Item2.AsParallel().Select(payClass => new SettingsViewModel.PayClassViewModel()
+				{
+					PayClassId = payClass.PayClassId,
+					PayClassName = payClass.PayClassName
+				}),
+				Holidays = infos.Item3.AsParallel().Select(holiday => new SettingsViewModel.HolidayViewModel()
+				{
+					
+				}),
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subName,
 				UserId = this.AppService.UserContext.UserId

@@ -53,7 +53,7 @@
 						<th><span class="pull-right">@Strings.Delete</span></th>
 					</tr>
 				</thead>
-				@foreach (PayClass PayClass in Model.PayClasses)
+				@foreach (SettingsViewModel.PayClassViewModel PayClass in Model.PayClasses)
 				{
 					<tr>
 						@{
@@ -172,7 +172,7 @@
 						<th><span class="pull-right">@Strings.Delete</span></th>
 					</tr>
 				</thead>
-				@foreach (Holiday Holiday in Model.Holidays)
+				@foreach (SettingsViewModel.HolidayViewModel Holiday in Model.Holidays)
 				{
 					<tr class="@Holiday.Date.Year">
 						@{

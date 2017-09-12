@@ -11,7 +11,10 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.Services.TimeTracker;
+using AllyisApps.Utilities;
+using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
+using static AllyisApps.ViewModels.TimeTracker.TimeEntry.TimeEntryOverDateRangeViewModel;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -146,7 +149,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			foreach (CompleteProjectInfo proj in allProjects.Where(p => p.ProjectId > 0))
 			{
 				// if ( hours.Count == 0 )
-				hours.Add(proj.ProjectId, new ProjectHours { Project = proj, Hours = 0.0f });
+				hours.Add(proj.ProjectId, new ProjectHours { Project = ViewModelHelper.ConstuctCompleteProjectViewModel(proj), Hours = 0.0f });
 			}
 
 			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = -1, ProjectName = Resources.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
@@ -165,14 +168,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				},
 				CanManage = manager,
 				StartOfWeek = (StartOfWeekEnum)startOfWeek,
-				PayClasses = infos.Item2,
-				GrandTotal = new ProjectHours { Project = new CompleteProjectInfo { ProjectName = "Total" }, Hours = 0.0f },
-				Projects = allProjects.Where(x => x.IsActive == true && x.IsCustomerActive == true && x.IsUserActive == true),
-				ProjectsWithInactive = allProjects.Where(p => p.ProjectId != 0),
+				PayClasses = infos.Item2.Select(payclass => new PayClassInfoViewModel()
+				{
+					CreatedUtc = payclass.CreatedUtc,
+					OrganizationId = payclass.OrganizationId,
+					PayClassId = payclass.PayClassId,
+					PayClassName = payclass.PayClassName
+				}),
+				GrandTotal = new ProjectHours { Project = new CompleteProjectViewModel { ProjectName = "Total" }, Hours = 0.0f },
+				Projects = allProjects.Where(x => x.IsActive == true && x.IsCustomerActive == true && x.IsUserActive == true).AsParallel()
+					.Select(proj => ViewModelHelper.ConstuctCompleteProjectViewModel(proj)),
+				ProjectsWithInactive = allProjects.Where(p => p.ProjectId != 0).AsParallel().Select(proj =>
+					ViewModelHelper.ConstuctCompleteProjectViewModel(proj)),
 				ProjectHours = hours.Values.Where(x => x.Hours > 0),
-				Users = users,
+				Users = users.AsParallel().Select(user => ConstuctUserViewModel(user)),
 				TotalUsers = users.Count(),
-				CurrentUser = users.Where(x => x.UserId == userId).Single(),
+				CurrentUser = ConstuctUserViewModel(users.Where(x => x.UserId == userId).Single()),
 				LockDate = AppService.GetDayFromDateTime(AppService.GetLockDateFromParameters(infos.Item1.IsLockDateUsed, infos.Item1.LockDatePeriod, infos.Item1.LockDateQuantity)),
 				Subscriptionid = subId,
 				SubscriptionName = subName,
@@ -323,6 +334,22 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			return result;
+		}
+
+		/// <summary>
+		/// Cunstuct User View Model.
+		/// </summary>
+		/// <param name="user">Sercive Object User</param>
+		/// <returns>User View Model</returns>
+		public UserViewModel ConstuctUserViewModel(User user)
+		{
+			return new UserViewModel()
+			{
+				Email = user.Email,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				UserId = user.UserId
+			};
 		}
 
 		private DateTime SetStartingDate(DateTime? date, int startOfWeek)

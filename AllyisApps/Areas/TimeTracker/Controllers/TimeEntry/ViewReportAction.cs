@@ -11,7 +11,6 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using AllyisApps.Services.TimeTracker;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -99,7 +98,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				if (dataCount > 0)
 				{
 					IList<TablePreviewEntry> pEntries = new List<TablePreviewEntry>();
-					foreach (TimeEntryInfo data in dataVM.PreviewData)
+					foreach (TimeEntryViewModel data in dataVM.PreviewData)
 					{
 						CompleteProjectInfo orgProj = data.ProjectId == 0 ? defaultProject : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
 						TablePreviewEntry previewData = new TablePreviewEntry
@@ -144,13 +143,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="pageSize">The page size.</param>
 		/// <param name="page">The page.</param>
 		/// <returns>A list of time entry info objects.</returns>
-		public IEnumerable<TimeEntryInfo> SetPreviewData(IEnumerable<TimeEntryInfo> data, int pageSize = 0, int page = 1)
+		public IEnumerable<TimeEntryViewModel> SetPreviewData(IEnumerable<TimeEntryViewModel> data, int pageSize = 0, int page = 1)
 		{
 			int skipNum = pageSize * (page - 1);
 			int limit = pageSize == 0 ? data.Count() : pageSize;
 
 			// only process data values for current page
-			IEnumerable<TimeEntryInfo> previewData = (from p in data select p).Skip(skipNum).Take(limit);
+			IEnumerable<TimeEntryViewModel> previewData = (from p in data select p).Skip(skipNum).Take(limit);
 
 			return previewData;
 		}
@@ -162,7 +161,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="pageSize">Total size of preivew data.</param>
 		/// <param name="page">Offset page amount.</param>
 		/// <returns>The page total.</returns>
-		public int SetPageTotal(IEnumerable<TimeEntryInfo> data, int pageSize = 0, int page = 1)
+		public int SetPageTotal(IEnumerable<TimeEntryViewModel> data, int pageSize = 0, int page = 1)
 		{
 			int skipNum = pageSize * (page - 1);
 			int pageTotal = 0;

@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.Web.Mvc;
+using System.Linq;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
@@ -32,8 +33,18 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				UserId = this.AppService.UserContext.UserId,
 				SubscriptionId = subscriptionId,
-				UserProjects = infos.Item1,
-				AllProjects = infos.Item2,
+				UserProjects = infos.Item1.AsParallel().Select(proj => new UserEditViewModel.ProjectInfoViewModel()
+				{
+					ProjectId = proj.ProjectId,
+					ProjectName = proj.ProjectName,
+					CustomerName = proj.CustomerName
+				}),
+				AllProjects = infos.Item2.AsParallel().Select(proj => new UserEditViewModel.ProjectInfoViewModel()
+				{
+					ProjectName = proj.ProjectName,
+					ProjectId = proj.ProjectId,
+					CustomerName = proj.CustomerName
+				}),
 				UserName = infos.Item3,
 				SubscriptionName = subscriptionNameToDisplay
 			});

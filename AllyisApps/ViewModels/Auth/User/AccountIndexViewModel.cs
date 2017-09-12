@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AllyisApps.Services;
 
 #pragma warning disable 1591
 
@@ -40,34 +39,6 @@ namespace AllyisApps.ViewModels.Auth
 		/// </summary>
 		public class UserViewModel
 		{
-			/// <summary>
-			/// Initializes a new instance of the <see cref="UserViewModel"/> class.
-			/// </summary>
-			public UserViewModel()
-			{
-			}
-
-			/// <summary>
-			/// Initializes a new instance of the <see cref="UserViewModel"/> class.
-			/// </summary>
-			/// <param name="user">The user object.</param>
-			public UserViewModel(User user)
-			{
-				if (user != null)
-				{
-					this.FirstName = user.FirstName;
-					this.LastName = user.LastName;
-					this.Email = user.Email;
-					this.PhoneNumber = user.PhoneNumber;
-					this.PhoneExtension = user.PhoneExtension;
-					this.Address1 = user.Address?.Address1;
-					this.Address2 = user.Address?.Address2;
-					this.City = user.Address?.City;
-					this.State = user.Address?.StateName;
-					this.PostalCode = user.Address?.PostalCode;
-					this.Country = user.Address?.CountryName;
-				}
-			}
 
 			/// <summary>
 			/// Gets or sets FirstName.
@@ -155,29 +126,6 @@ namespace AllyisApps.ViewModels.Auth
 			}
 
 			/// <summary>
-			/// Initializes a new instance of the <see cref="OrganizationViewModel"/> class.
-			/// </summary>
-			/// <param name="curorg">The organization.</param>
-			/// <param name="isManageAllowed">Determines whether management permissions are allowed.</param>
-			public OrganizationViewModel(Organization curorg, bool isManageAllowed) : this()
-			{
-				this.OrganizationId = curorg.OrganizationId;
-				this.OrganizationName = curorg.OrganizationName;
-				this.PhoneNumber = curorg.PhoneNumber;
-				this.PhoneExtension = null; // TODO: Fill with values
-				this.Address1 = curorg.Address?.Address1;
-				this.City = curorg.Address?.City;
-				this.State = curorg.Address?.StateName;
-				this.PostalCode = curorg.Address?.PostalCode;
-				this.Country = curorg.Address?.CountryName;
-				this.SiteUrl = curorg.SiteUrl;
-				this.FaxNumber = curorg.FaxNumber;
-
-				// TODO: Infomation is dependent on curent user
-				this.IsManageAllowed = isManageAllowed;
-			}
-
-			/// <summary>
 			/// Gets or sets the OrganizationId.
 			/// </summary>
 			public int OrganizationId { get; set; }
@@ -191,11 +139,6 @@ namespace AllyisApps.ViewModels.Auth
 			/// Gets or sets PhoneNumber.
 			/// </summary>
 			public string PhoneNumber { get; set; }
-
-			/// <summary>
-			/// Gets or sets PhoneExtension.
-			/// </summary>
-			public string PhoneExtension { get; set; }
 
 			/// <summary>
 			/// Gets or sets Address1.
@@ -259,20 +202,6 @@ namespace AllyisApps.ViewModels.Auth
 				{
 				}
 
-				/// <summary>
-				/// Initializes a new instance of the <see cref="SubscriptionViewModel"/> class.
-				/// </summary>
-				/// <param name="userSubInfo">The UserSubscription object.</param>
-				/// <param name="description">The description.</param>
-				public SubscriptionViewModel(UserSubscription userSubInfo, string description)
-				{
-					this.ProductName = userSubInfo.Subscription.ProductName;
-					this.SubscriptionId = userSubInfo.Subscription.SubscriptionId;
-					this.SubscriptionName = userSubInfo.Subscription.SubscriptionName;
-					this.ProductDescription = description;
-					this.ProductId = userSubInfo.Subscription.ProductId;
-					this.AreaUrl = userSubInfo.Subscription.AreaUrl;
-				}
 
 				/// <summary>
 				/// Gets or sets the ProductDescription.
@@ -302,7 +231,7 @@ namespace AllyisApps.ViewModels.Auth
 				/// <summary>
 				/// Gets or sets the ProductId.
 				/// </summary>
-				public ProductIdEnum ProductId { get; set; }
+				public Services.ProductIdEnum ProductId { get; set; }
 
 				/// <summary>
 				/// Gets or sets the ProductGoToUrl.

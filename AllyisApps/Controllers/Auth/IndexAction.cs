@@ -37,7 +37,20 @@ namespace AllyisApps.Controllers
 		{
 			User accountInfo = AppService.GetCurrentUser();
 
-			AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel(accountInfo);
+			AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel()
+			{
+				FirstName = accountInfo.FirstName,
+				LastName = accountInfo.LastName,
+				Email = accountInfo.Email,
+				PhoneNumber = accountInfo.PhoneNumber,
+				PhoneExtension = accountInfo.PhoneExtension,
+				Address1 = accountInfo.Address?.Address1,
+				Address2 = accountInfo.Address?.Address2,
+				City = accountInfo.Address?.City,
+				State = accountInfo.Address?.StateName,
+				PostalCode = accountInfo.Address?.PostalCode,
+				Country = accountInfo.Address?.CountryName,
+			};
 			AccountIndexViewModel indexViewModel = new AccountIndexViewModel()
 			{
 				UserInfo = userViewModel
@@ -68,10 +81,21 @@ namespace AllyisApps.Controllers
 			foreach (var curorg in orgs)
 			{
 				AccountIndexViewModel.OrganizationViewModel orgViewModel =
-				new AccountIndexViewModel.OrganizationViewModel(
-					curorg.Organization,
-					this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.Organization.OrganizationId, curorg.OrganizationRole, false));
-
+				new AccountIndexViewModel.OrganizationViewModel()
+				{
+					OrganizationId = curorg.Organization.OrganizationId,
+					OrganizationName = curorg.Organization.OrganizationName,
+					PhoneNumber = curorg.Organization.PhoneNumber,
+					Address1 = curorg.Organization.Address?.Address1,
+					City = curorg.Organization.Address?.City,
+					State = curorg.Organization.Address?.StateName,
+					PostalCode = curorg.Organization.Address?.PostalCode,
+					Country = curorg.Organization.Address?.CountryName,
+					SiteUrl = curorg.Organization.SiteUrl,
+					FaxNumber = curorg.Organization.FaxNumber,
+					// TODO: Infomation is dependent on curent user
+					IsManageAllowed = AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.Organization.OrganizationId, curorg.OrganizationRole, false)
+				};
 				// Add subscription info
 				foreach (UserSubscription userSubInfo in accountInfo.Subscriptions.Where(sub => sub.Subscription.OrganizationId == curorg.Organization.OrganizationId))
 				{
@@ -79,7 +103,15 @@ namespace AllyisApps.Controllers
 						userSubInfo.Subscription.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
 						userSubInfo.Subscription.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
 						string.Empty;
-					var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel(userSubInfo, description);
+					var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel()
+					{
+						ProductName = userSubInfo.Subscription.ProductName,
+					    SubscriptionId = userSubInfo.Subscription.SubscriptionId,
+						SubscriptionName = userSubInfo.Subscription.SubscriptionName,
+						ProductDescription = description,
+					    ProductId = userSubInfo.Subscription.ProductId,
+						AreaUrl = userSubInfo.Subscription.AreaUrl
+					};
 					if (userSubInfo.Subscription.ProductId == ProductIdEnum.TimeTracker)
 					{
 						int? sDate = null;

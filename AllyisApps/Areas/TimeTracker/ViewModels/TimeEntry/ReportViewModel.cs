@@ -6,8 +6,8 @@
 
 using System.Collections.Generic;
 using System.Web.Mvc;
-using AllyisApps.Services;
-using AllyisApps.Services.TimeTracker;
+using AllyisApps.ViewModels.TimeTracker.Project;
+using AllyisApps.ViewModels.TimeTracker.Customer;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
@@ -19,7 +19,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// TimeEntry field.
 		/// </summary>
-		public TimeEntryInfo TimeEntry;
+		public TimeEntryViewModel TimeEntry;
 
 		/// <summary>
 		/// Customer name field.
@@ -62,10 +62,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// </summary>
 		public IEnumerable<SelectListItem> UserView { get; internal set; }
 
-		/// <summary>
-		/// Gets the list of Customers for this organization.
-		/// </summary>
-		public IEnumerable<Services.Customer> Customers { get; internal set; }
+		
 
 		/// <summary>
 		/// Gets the Select List of Customers for this organization.
@@ -75,7 +72,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the list of Projects for this organization.
 		/// </summary>
-		public IEnumerable<CompleteProjectInfo> Projects { get; internal set; }
+		public IEnumerable<CompleteProjectViewModel> Projects { get; internal set; }
 
 		/// <summary>
 		/// Gets the Select List of Projects for this organization.

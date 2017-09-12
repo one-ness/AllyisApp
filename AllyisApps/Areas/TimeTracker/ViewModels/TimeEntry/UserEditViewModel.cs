@@ -36,11 +36,33 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets all projects available to the user.
 		/// </summary>
-		public IEnumerable<Services.Project> AllProjects { get; set; }
+		public IEnumerable<ProjectInfoViewModel> AllProjects { get; set; }
 
 		/// <summary>
 		/// Gets or sets the projects associated with the user.
 		/// </summary>
-		public IEnumerable<Services.Project> UserProjects { get; set; }
+		public IEnumerable<ProjectInfoViewModel> UserProjects { get; set; }
+
+		/// <summary>
+		/// View Model for Project infomation
+		/// </summary>
+		public class ProjectInfoViewModel
+		{
+			/// <summary>
+			/// Gets or sets project ID 
+			/// </summary>
+			public int ProjectId { get; set; }
+
+			/// <summary>
+			/// Project Name 
+			/// </summary>
+			public string ProjectName { get; set; }
+
+			/// <summary>
+			/// Customer Name
+			/// </summary>
+			public string CustomerName { get; set; }
+
+		}
 	}
 }

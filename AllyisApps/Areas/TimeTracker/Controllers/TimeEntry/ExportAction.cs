@@ -10,6 +10,9 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
+using AllyisApps.Services.TimeTracker;
+using AllyisApps.Utilities;
+using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -62,11 +65,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			DataExportViewModel result = new DataExportViewModel();
 			if ((userIds == null) || (userIds[0] == -1))
 			{
-				result.Data = AppService.GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1));
+				result.Data = AppService.GetTimeEntriesOverDateRange(orgId, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1))
+				.AsParallel().Select(timeEntry => ConstuctTimeEntryViewModel(timeEntry)).AsEnumerable();
 			}
 			else
 			{
-				result.Data = AppService.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1), orgId);
+				result.Data = AppService.GetTimeEntriesByUserOverDateRange(userIds, startingDate ?? DateTime.MinValue.AddYears(1754), endingDate ?? DateTime.MaxValue.AddDays(-1), orgId)
+				.AsParallel().Select(timeEntry => ConstuctTimeEntryViewModel(timeEntry));
 			}
 
 			if (projectId != 0)
@@ -87,21 +92,48 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if ((userIds.Count > 1) || (userIds[0] == -1))
 				{
-					result.Projects = AppService.GetProjectsByOrganization(orgId);
+					result.Projects = AppService.GetProjectsByOrganization(orgId).AsParallel().Select(proj => ViewModelHelper.ConstuctCompleteProjectViewModel(proj));
 				}
 				else
 				{
 					// single user selected
-					result.Projects = AppService.GetProjectsByUserAndOrganization(userIds[0], orgId, false);
+					result.Projects = AppService.GetProjectsByUserAndOrganization(userIds[0], orgId, false).AsParallel().Select(proj => ViewModelHelper.ConstuctCompleteProjectViewModel(proj));
 				}
 
 				// Add default project in case there are holiday entries
-				List<CompleteProjectInfo> defaultProject = new List<CompleteProjectInfo>();
-				defaultProject.Add(AppService.GetProject(0));
+				List<CompleteProjectViewModel> defaultProject = new List<CompleteProjectViewModel>();
+				defaultProject.Add(ViewModelHelper.ConstuctCompleteProjectViewModel(AppService.GetProject(0)));
 				result.Projects = result.Projects.Concat(defaultProject);
 			}
 
 			return result;
+		}
+
+		/// <summary>
+		/// Constucts Time entry View model for time entry info.
+		/// </summary>
+		/// <param name="timeEntry">Time entry</param>
+		/// <returns>Time EntryView</returns>
+		public static TimeEntryViewModel ConstuctTimeEntryViewModel(TimeEntryInfo timeEntry)
+		{
+			return new TimeEntryViewModel()
+			{
+				ApprovalState = timeEntry.ApprovalState,
+				Date = timeEntry.Date,
+				Description = timeEntry.Description,
+				Duration = timeEntry.Duration,
+				Email = timeEntry.Email,
+				EmployeeId = timeEntry.EmployeeId,
+				FirstName = timeEntry.FirstName,
+				IsLockSaved = timeEntry.IsLockSaved,
+				LastName = timeEntry.LastName,
+				ModSinceApproval = timeEntry.ModSinceApproval,
+				PayClassId = timeEntry.PayClassId,
+				PayClassName = timeEntry.PayClassName,
+				ProjectId = timeEntry.ProjectId,
+				TimeEntryId = timeEntry.TimeEntryId,
+				UserId = timeEntry.UserId
+			};
 		}
 	}
 }
