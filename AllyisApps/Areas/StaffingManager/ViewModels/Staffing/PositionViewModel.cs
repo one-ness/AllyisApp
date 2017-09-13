@@ -13,7 +13,7 @@ namespace AllyisApps.ViewModels.Staffing
 	/// <summary>
 	/// Represents a position for creation into the database.
 	/// </summary>
-	public class CreatePositionViewModel
+	public class PositionViewModel
 	{
 		/// <summary>
 		/// Gets or sets a value indicating whether editing or creating a new position.

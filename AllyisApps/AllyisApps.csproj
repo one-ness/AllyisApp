@@ -17,10 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44326</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>
-    </IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>
-    </IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <NuGetPackageImportStamp>
@@ -236,12 +234,12 @@
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseFileModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseHistoryViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ReportViewModel.cs" />
-    <Compile Include="Areas\StaffingManager\Controllers\Staffing\StaffingController.cs" />
     <Compile Include="Areas\StaffingManager\StaffingManagerAreaRegistration.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicationDocumentViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicationViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicantViewModel.cs" />
-    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreatePositionViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\PositionViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\EditPositionViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\StaffingIndexViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseSummaryViewModelItem.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseIndexViewModel.cs" />

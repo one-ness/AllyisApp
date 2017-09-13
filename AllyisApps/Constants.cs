@@ -93,6 +93,7 @@ namespace AllyisApps
 		public const string EditUsers = "editusers";
 		public const string EditPosition = "editposition";
 		public const string CreatePosition = "createposition";
+		public const string SubmitCreatePosition = "submitcreateposition";
 		public const string DeletePosition = "deleteposition";
 	}
 

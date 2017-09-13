@@ -28,9 +28,9 @@
 			border-left: 2px solid #bc7967;
 		}
 
-			table thead th:first-child {
-				border: none;
-			}
+		table thead th:first-child {
+			border: none;
+		}
 
 		table tbody td {
 			color: #80141C;
@@ -61,6 +61,18 @@
 			left: 0;
 		}
 
+		select {
+			width: 150px
+		}
+
+		label {
+			padding: 5px 5px;
+		}
+
+		div {
+			padding: 3px 3px;
+		}
+
 		.right-element {
 			position: absolute;
 			display: inline-block;
@@ -73,21 +85,58 @@
 			<h2 class="left-element" style="margin-top: 0px; margin-bottom: 0px;">
 				@Model.subscriptionName
 			</h2>
-			<div class="text-right" href="@Url.Action(ActionConstants.CreatePosition, ControllerConstants.Staffing)">
-				<label class="btn btn-default">New Position</label>
+			<div>
+				<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#FilterArea">Filters</button>
+			</div>
+			<div id="FilterArea" class="collapse panel panel-default">
+				<div class="left form-group">
+					<label>Filter by Position Status</label>
+					<select id="statusFilter" class="statusFilter form-control">
+						<option value="">Any</option>
+						@foreach (var status in Model.positionStatuses)
+						{
+							<option value=@status.PositionStatusName>@status.PositionStatusName</option>
+						}
+					</select>
+				</div>
+				<div class="left form-group">
+					<label>Filter by Employment Type</label>
+					<select id="typesFilter" class="typesFilter form-control">
+						<option value="">Any</option>
+						@foreach (var type in Model.employmentTypes)
+						{
+							<option value=@type.EmploymentTypeName>@type.EmploymentTypeName</option>
+						}
+					</select>
+				</div>
+				<div class="left form-group">
+					<label>Filter By Tags</label>
+					<select multiple id="tagsFilter" class="tagsFilter form-control">
+						@foreach (var tag in Model.tags)
+						{
+							<option value=@tag.TagName>@tag.TagName</option>
+						}
+					</select>
+				</div>
+				<div class="text-right">
+					<button id="filterSubmit" type="button" class="btn btn-default text-right filterSubmit" onclick="filteredSubmit()"> Apply Filters </button>
+				</div>
+			</div>
+			<div class="text-right">
+				<button class="btn btn-default" onclick="location.href='@Url.Action(ActionConstants.CreatePosition, ControllerConstants.Staffing, new { subscriptionId = Model.subscriptionId } )'">New Position</button>
 			</div>
 		</div>
-		<div class="table-responsive">
-			<table>
+		<div>
+			<table class="table-responsive" id="PositionsTable">
 				<thead>
 					<tr class="panel panel-default">
-						<th width ="24%" style="padding:0 5px 0 5px;">Position Title </th>
-						<th width ="10%" style="padding:0 5px 0 5px;">Position Status </th>
-						<th width ="8%" style="padding:0 5px 0 5px;">Positions Available </th>
-						<th width ="12%" style="padding:0 5px 0 5px;">@Strings.HiringManager </th>
-						<th width ="12%" style="padding:0 5px 0 5px;">@Strings.TeamName </th>
-						<th width ="16%" style="padding:0 5px 0 5px;">Tags </th>
-						<th width ="12%" style="padding:0 5px 0 5px;">Created </th>
+						<th width ="24%" style="padding:0 5px 0 5px;" onclick="sortTable(0)">Position Title </th>
+						<th width ="10%" style="padding:0 5px 0 5px;" onclick="sortTable(1)">Position Status </th>
+						<th width ="8%"  style="padding:0 5px 0 5px;" onclick="sortTable(2)">Positions Available </th>
+						<th width ="12%" style="padding:0 5px 0 5px;" onclick="sortTable(3)">@Strings.Customer </th>
+						<th width ="12%" style="padding:0 5px 0 5px;" onclick="sortTable(4)">@Strings.TeamName </th>
+						<th width ="12%" style="padding:0 5px 0 5px;" onclick="sortTable(5)">Start Date </th>
+						<th width ="12%" style="padding:0 5px 0 5px;" onclick="sortTable(6)">Created </th>
 					</tr>
 				</thead>
 				@foreach (var pos in Model.positions)
@@ -95,19 +144,20 @@
 					<tr>
 						<td href = "@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { id = pos.PositionId })">
 							@pos.PositionTitle
+							<p style="font-size: 10px">
+								@foreach (var tag in pos.Tags)
+								{
+									<span style="font-style: italic">@tag.TagName,</span>
+								}
+							</p>
 						</td>
 
 						<td>@pos.PositionStatusName</td>
 						<td style="padding:0 5px 0 15px;">@pos.PositionCount</td>
-						<td>@pos.HiringManager</td>
+						<td>@pos.CustomerName</td>
 						<td>@pos.TeamName</td>
-						<td>
-							@foreach (var tag in pos.Tags)
-							{
-								<span>@tag.TagName,</span>
-							}
-						</td>
-						<td>@pos.StartDate</td>
+						<td>@pos.StartDate.ToShortDateString()</td>
+						<td>@pos.StartDate.ToShortDateString()</td>
 					</tr>
 				}
 			</table>
@@ -121,9 +171,87 @@
 	}
 </div>
 
-<div class="row">
-	<div class="col-md-push-2 col-md-8">
-		<div class="row">
-		</div>
-	</div>
-</div>
+<script type="text/javascript">
+	function sortTable(n) {
+		var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+		table = document.getElementById("PositionsTable");
+		switching = true;
+
+		dir = "asc";
+		/*Make a loop that will continue until no switching has been done:*/
+		while (switching) {
+			//start by saying: no switching is done:
+			switching = false;
+			rows = table.getElementsByTagName("TR");
+			/*Loop through all table rows (except the first, which contains table headers):*/
+			for (i = 1; i < (rows.length - 1); i++) {
+				//start by saying there should be no switching:
+				shouldSwitch = false;
+				/*Get the two elements you want to compare, one from current row and one from the next:*/
+				x = rows[i].getElementsByTagName("TD")[n];
+				y = rows[i + 1].getElementsByTagName("TD")[n];
+				/*check if the two rows should switch place, based on the direction, asc or desc:*/
+				if (dir == "asc") {
+					if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) 
+					{
+						shouldSwitch= true;
+						break;
+					}
+				}
+				else if (dir == "desc") {
+					if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase())
+					{
+						shouldSwitch= true;
+						break;
+					}
+				}
+			}
+			if (shouldSwitch) {
+				/*If a switch has been marked, make the switch and mark that a switch has been done:*/
+				rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+				switching = true;
+				//Each time a switch is done, increase this count by 1:
+				switchcount ++;
+			}
+			else {
+				/*If no switching has been done AND the direction is "asc", set the direction to "desc" and run the while loop again.*/
+				if (switchcount == 0 && dir == "asc") {
+				dir = "desc";
+				switching = true;
+				}
+			}
+		}
+	}
+	
+	function filteredSubmit() {
+		var status;
+		if (document.getElementById("statusFilter") != null) status = document.getElementById("statusFilter").value;
+		else status = null;
+
+		var type;
+		if (document.getElementById("typeFilter") != null) type = document.getElementById("typeFilter").value;
+		else type = null;
+
+		var tags = []; 
+		var count = 0;
+		var i = 0;
+		var selecter = document.getElementById("tagsFilter");
+		for(i = 0; i < selecter.options.length; i++)
+		{
+			if (selecter.options[i].selected) tags[count] = selecter.options[i].value;
+			count++;
+		}
+
+		var url = "/staffingmanager/" + @Model.subscriptionId + "/?";
+		if (status != null) url = url + "Status=" + status;
+		if (type != null) {
+			if (status != null) url = url + "&";
+			url = url + "Types=" + type;
+		}
+		if (tags != null && tags != "") {
+			if (status != null || type != null) url = url + "&";
+			url = url + "Tags=" + tags;
+		}
+		window.location.href = url;
+	}
+</script>

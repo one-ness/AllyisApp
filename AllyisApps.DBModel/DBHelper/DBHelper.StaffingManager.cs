@@ -13,6 +13,8 @@ using System.Linq;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.DBModel.StaffingManager;
 using Dapper;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Crm;
 
 namespace AllyisApps.DBModel
 {
@@ -107,49 +109,64 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Creates a new position.
 		/// </summary>
-		/// <param name="position">The account object to be created.</param>
+		/// <param name="obj">The account object to be created.</param>
 		/// <returns>The id of the created position</returns>
-		public int SetupPosition(dynamic position)
+		public int SetupPosition(dynamic obj)
 		{
-			if (position == null)
+			if (obj == null)
 			{
 				throw new ArgumentException("Position cannot be null or empty.");
 			}
 
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@organizationId", position.OrganizationId);
-			parameters.Add("@addressId", position.AddressId);
-			parameters.Add("@startDate", position.StartDate);
-			parameters.Add("@positionStatus", position.PositionStatusId);
-			parameters.Add("@positionTitle", position.PositionTitle);
-			parameters.Add("@billingRateFrequency", position.BillingRateFrequency);
-			parameters.Add("@billingRateAmount", position.BillingRateAmount);
-			parameters.Add("@durationMonths", position.DurationMonths);
-			parameters.Add("@employmentType", position.EmploymentTypeId);
-			parameters.Add("@positionCount", position.PositionCount);
-			parameters.Add("@requiredSkills", position.RequiredSkills);
-			parameters.Add("@jobResponsiblities", position.JobResponsibilities);
-			parameters.Add("@desiredSkills", position.DesiredSkills);
-			parameters.Add("@positionLevel", position.PositionLevelId);
-			parameters.Add("@hiringManager", position.HiringManager);
-			parameters.Add("@teamName", position.TeamName);
-
-			parameters.Add("@address1", position.Address.Address);
-			parameters.Add("@address2", position.Address.Address);
-			parameters.Add("@city", position.Address.City);
-			parameters.Add("@stateId", position.Address.StateId);
-			parameters.Add("@countryCode", position.Address.CountryCode);
-			parameters.Add("@postalCode", position.Address.PostalCode);
+			parameters.Add("@organizationId", obj.Position.OrganizationId);
+			parameters.Add("@startDate", obj.Position.StartDate);
+			parameters.Add("@positionStatus", obj.Position.PositionStatusId);
+			parameters.Add("@positionTitle", obj.Position.PositionTitle);
+			parameters.Add("@billingRateFrequency", obj.Position.BillingRateFrequency);
+			parameters.Add("@billingRateAmount", obj.Position.BillingRateAmount);
+			parameters.Add("@durationMonths", obj.Position.DurationMonths);
+			parameters.Add("@employmentType", obj.Position.EmploymentTypeId);
+			parameters.Add("@positionCount", obj.Position.PositionCount);
+			parameters.Add("@requiredSkills", obj.Position.RequiredSkills);
+			parameters.Add("@jobResponsibilities", obj.Position.JobResponsibilities);
+			parameters.Add("@desiredSkills", obj.Position.DesiredSkills);
+			parameters.Add("@positionLevel", obj.Position.PositionLevelId);
+			parameters.Add("@hiringManager", obj.Position.HiringManager);
+			parameters.Add("@teamName", obj.Position.TeamName);
+			
+			parameters.Add("@address1", obj.Address.Address1);
+			parameters.Add("@address2", obj.Address.Address2);
+			parameters.Add("@city", obj.Address.City);
+			parameters.Add("@stateId", obj.Address.StateId);
+			parameters.Add("@countryCode", obj.Address.CountryCode);
+			parameters.Add("@postalCode", obj.Address.PostalCode);
+			
+			parameters.Add("@customerName", obj.Customer.CustomerName);
+			parameters.Add("@address", obj.Address.Address1);
+			parameters.Add("@contactEmail", obj.Customer.ContactEmail);
+			parameters.Add("@contactPhoneNumber", obj.Customer.ContactPhoneNumber);
+			parameters.Add("@faxNumber", obj.Customer.FaxNumber);
+			parameters.Add("@website", obj.Customer.Website);
+			parameters.Add("@eIN", obj.Customer.EIN);
+			parameters.Add("@customerOrgId", 1212+ new Random().Next(0, 1000)); //TODO fix this to be assigned properly
 
 			DataTable tagsTable = new DataTable();
 			tagsTable.Columns.Add("TagName", typeof(string));
-			foreach (dynamic tag in position.Tags) tagsTable.Rows.Add(tag.TagName);
-
-			parameters.Add("@tagsTable", tagsTable.AsTableValuedParameter("[Lookup].[UserTable]"));
-
+			if (obj.Tags != null && obj.Tags.Count != 0)
+			{
+				foreach (dynamic tag in obj.Tags) tagsTable.Rows.Add(tag.TagName);
+				parameters.Add("@tags", tagsTable.AsTableValuedParameter("[Lookup].[TagTable]"));
+			}
+			else
+			{
+				tagsTable.Rows.Add("New");
+				parameters.Add("@tags", tagsTable.AsTableValuedParameter("[Lookup].[TagTable]"));
+			}
+			
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
-				return connection.Query<int>("[StaffingManager].[SetupPosition]", parameters, commandType: CommandType.StoredProcedure).Single();
+				return connection.Execute("[StaffingManager].[SetupPosition]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -547,7 +564,7 @@ namespace AllyisApps.DBModel
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>>
+		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<CustomerDBEntity>>
 			GetStaffingIndexPageInfo(int orgId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -557,6 +574,45 @@ namespace AllyisApps.DBModel
 			{
 				var results = connection.QueryMultiple(
 					"[StaffingManager].[GetStaffingIndexInfo]",
+					parameters,
+					commandType: CommandType.StoredProcedure);
+
+				return Tuple.Create(
+					results.Read<PositionDBEntity>().ToList(),
+					results.Read<PositionTagDBEntity>().ToList(),
+					results.Read<EmploymentTypeDBEntity>().ToList(),
+					results.Read<PositionLevelDBEntity>().ToList(),
+					results.Read<PositionStatusDBEntity>().ToList(),
+					results.Read<CustomerDBEntity>().ToList());
+			}
+		}
+
+		/// <summary>
+		/// TODO
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <param name="statusName">Organization Id.</param>
+		/// <param name="typeName">Organization Id.</param>
+		/// <param name="tags">Organization Id.</param>
+		/// <returns>.</returns>
+		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>>
+			GetStaffingIndexPageInfoFiltered(int orgId, string statusName = "", string typeName = "", List<string> tags = null)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@organizationId", orgId);
+			parameters.Add("@statusName", statusName);
+			parameters.Add("@typeName", typeName);
+
+			DataTable TagTable = new DataTable();
+			TagTable.Columns.Add("tagNames", typeof(string));
+			foreach (string tag in tags) TagTable.Rows.Add(tag);
+
+			parameters.Add("@tags", TagTable);
+			
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				var results = connection.QueryMultiple(
+					"[StaffingManager].[GetStaffingIndexInfoFiltered]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 

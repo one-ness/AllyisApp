@@ -57,4 +57,21 @@ BEGIN
 		[PositionStatusName]
 	FROM [StaffingManager].[PositionStatus]
 	WHERE [PositionStatus].[OrganizationId] = @organizationId
+
+	
+	-- Select all Position Status' from the org
+	SELECT [CustomerId],
+		   [CustomerName],
+		   [AddressId],
+		   [ContactEmail],
+		   [ContactPhoneNumber],
+		   [FaxNumber],
+		   [Website],
+		   [EIN],
+		   [CustomerCreatedUtc],
+		   [OrganizationId],
+		   [CustomerOrgId],
+		   [IsActive]
+	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK)
+	WHERE [Customer].[OrganizationId] = @organizationId
 END

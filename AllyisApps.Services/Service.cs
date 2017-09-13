@@ -12,8 +12,9 @@ using AllyisApps.DBModel.Hrm;
 using AllyisApps.DBModel.StaffingManager;
 using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Services.Lookup;
-using AllyisApps.Services.StaffingManager;
+using AllyisApps.DBModel.Crm;
 using AllyisApps.Services.TimeTracker;
+using AllyisApps.Services.StaffingManager;
 
 namespace AllyisApps.Services
 {
@@ -772,7 +773,7 @@ namespace AllyisApps.Services
 		/// <param name="userId">User Id.</param>
 		/// <param name="orgId">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>>
+		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<Customer>>
 			GetStaffingIndexInfo(int orgId, int? userId = null)
 		{
 			#region Validation
@@ -793,6 +794,47 @@ namespace AllyisApps.Services
 			#endregion Validation
 
 			var results = DBHelper.GetStaffingIndexPageInfo(orgId);
+
+			return Tuple.Create(
+				results.Item1.Select(posdb => InitializePositionThumbnailInfo(posdb, results.Item2, results.Item5)).ToList(),
+				results.Item2.Select(tagsdb => InitializeTags(tagsdb)).ToList(),
+				results.Item3.Select(typedb => InitializeEmploymentTypes(typedb)).ToList(),
+				results.Item4.Select(leveldb => InitializePositionLevel(leveldb)).ToList(),
+				results.Item5.Select(statdb => InitializePositionStatus(statdb)).ToList(),
+				results.Item6.Select(custdb => InitializeBaseCustomer(custdb)).ToList()
+				);
+		}
+
+		/// <summary>
+		/// TODO
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <param name="statusName"></param>
+		/// <param name="typeName"></param>
+		/// <param name="tags">tags.</param>
+		/// <param name="userId">User Id.</param>
+		/// <returns>.</returns>
+		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>>
+			GetStaffingIndexInfoFiltered(int orgId, string statusName, string typeName, List<string> tags = null, int? userId = 0)
+		{
+			#region Validation
+
+			if (userId == null)
+			{
+				userId = UserContext.UserId;
+			}
+			if (userId <= 0)
+			{
+				throw new ArgumentException("User Id cannot be zero or negative.");
+			}
+			if (orgId <= 0)
+			{
+				throw new ArgumentException("Organization Id cannot be zero or negative.");
+			}
+
+			#endregion Validation
+
+			var results = DBHelper.GetStaffingIndexPageInfoFiltered(orgId, statusName, typeName, tags);
 
 			return Tuple.Create(
 				results.Item1.Select(posdb => InitializePositionThumbnailInfo(posdb, results.Item2, results.Item5)).ToList(),
@@ -846,6 +888,24 @@ namespace AllyisApps.Services
 				TagId = tag.TagId,
 				TagName = tag.TagName,
 				PositionId = tag.PositionId
+			};
+		}
+
+		public static Customer InitializeBaseCustomer(CustomerDBEntity customer)
+		{
+			return new Customer()
+			{
+				ContactEmail = customer.ContactEmail,
+				ContactPhoneNumber = customer.ContactPhoneNumber,
+				CreatedUtc = customer.CreatedUtc,
+				CustomerId = customer.CustomerId,
+				CustomerOrgId = customer.CustomerOrgId,
+				EIN = customer.EIN,
+				FaxNumber = customer.FaxNumber,
+				CustomerName = customer.CustomerName,
+				OrganizationId = customer.OrganizationId,
+				Website = customer.Website,
+				IsActive = customer.IsActive
 			};
 		}
 
