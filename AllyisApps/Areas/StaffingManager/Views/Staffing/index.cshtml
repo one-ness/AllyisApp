@@ -78,41 +78,53 @@
 			display: inline-block;
 			right: 0px;
 		}
+
+		.column-left {
+			float: left;
+			width: 33%;
+		}
+
+		.column-right {
+			float: right;
+			width: 33%;
+		}
+
+		.column-center {
+			display: inline-block;
+			width: 33%;
+		}
 	</style>
 
 	<div class="panel panel-default" width ="100%">
 		<div class="panel-heading">
 			<h2 class="left-element" style="margin-top: 0px; margin-bottom: 0px;">
-				@Model.subscriptionName
+				@Model.SubscriptionName
 			</h2>
-			<div>
-				<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#FilterArea">Filters</button>
-			</div>
-			<div id="FilterArea" class="collapse panel panel-default">
-				<div class="left form-group">
+			<button type="button" class="btn" data-toggle="collapse" data-target="#FilterArea">Filters</button>
+
+			<div id="FilterArea" class="collapse panel panel-default filter">
+				<div class="column-left">
 					<label>Filter by Position Status</label>
-					<select id="statusFilter" class="statusFilter form-control">
-						<option value="">Any</option>
-						@foreach (var status in Model.positionStatuses)
+					<select multiple id="statusFilter" class="statusFilter form-control">
+						@foreach (var status in Model.PositionStatuses)
 						{
 							<option value=@status.PositionStatusName>@status.PositionStatusName</option>
 						}
 					</select>
 				</div>
-				<div class="left form-group">
+				<div class="column-center">
 					<label>Filter by Employment Type</label>
-					<select id="typesFilter" class="typesFilter form-control">
-						<option value="">Any</option>
-						@foreach (var type in Model.employmentTypes)
+					<select multiple id="typesFilter" class="typesFilter form-control">
+						@foreach (var type in Model.EmploymentTypes)
 						{
 							<option value=@type.EmploymentTypeName>@type.EmploymentTypeName</option>
 						}
 					</select>
 				</div>
-				<div class="left form-group">
+				<div class="column-right">
 					<label>Filter By Tags</label>
 					<select multiple id="tagsFilter" class="tagsFilter form-control">
-						@foreach (var tag in Model.tags)
+						@foreach (var tag in Model.Tags)
 						{
 							<option value=@tag.TagName>@tag.TagName</option>
 						}
@@ -123,7 +135,7 @@
 				</div>
 			</div>
 			<div class="text-right">
-				<button class="btn btn-default" onclick="location.href='@Url.Action(ActionConstants.CreatePosition, ControllerConstants.Staffing, new { subscriptionId = Model.subscriptionId } )'">New Position</button>
+				<button class="btn btn-default" onclick="location.href='@Url.Action(ActionConstants.CreatePosition, ControllerConstants.Staffing, new { subscriptionId = Model.SubscriptionId } )'">New Position</button>
 			</div>
 		</div>
 		<div>
@@ -134,12 +146,11 @@
 						<th width ="10%" style="padding:0 5px 0 5px;" onclick="sortTable(1)">Position Status </th>
 						<th width ="8%"  style="padding:0 5px 0 5px;" onclick="sortTable(2)">Positions Available </th>
 						<th width ="12%" style="padding:0 5px 0 5px;" onclick="sortTable(3)">@Strings.Customer </th>
-						<th width ="12%" style="padding:0 5px 0 5px;" onclick="sortTable(4)">@Strings.TeamName </th>
+						<th width ="12%" style="padding:0 5px 0 5px;" onclick="sortTable(4)">Hiring Manager </th>
 						<th width ="12%" style="padding:0 5px 0 5px;" onclick="sortTable(5)">Start Date </th>
-						<th width ="12%" style="padding:0 5px 0 5px;" onclick="sortTable(6)">Created </th>
 					</tr>
 				</thead>
-				@foreach (var pos in Model.positions)
+				@foreach (var pos in Model.Positions)
 				{
 					<tr>
 						<td href = "@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { id = pos.PositionId })">
@@ -155,15 +166,14 @@
 						<td>@pos.PositionStatusName</td>
 						<td style="padding:0 5px 0 15px;">@pos.PositionCount</td>
 						<td>@pos.CustomerName</td>
-						<td>@pos.TeamName</td>
-						<td>@pos.StartDate.ToShortDateString()</td>
+						<td>@pos.HiringManager</td>
 						<td>@pos.StartDate.ToShortDateString()</td>
 					</tr>
 				}
 			</table>
 		</div>
 	</div>
-	@if (Model.positions.Count == 0)
+	@if (Model.Positions.Count == 0)
 	{
 		<div class="col-xs-12">
 			<h1 style="float: left">No Active Positions</h1>
@@ -192,7 +202,7 @@
 				y = rows[i + 1].getElementsByTagName("TD")[n];
 				/*check if the two rows should switch place, based on the direction, asc or desc:*/
 				if (dir == "asc") {
-					if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) 
+					if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase())
 					{
 						shouldSwitch= true;
 						break;
@@ -222,33 +232,45 @@
 			}
 		}
 	}
-	
+
 	function filteredSubmit() {
-		var status;
-		if (document.getElementById("statusFilter") != null) status = document.getElementById("statusFilter").value;
-		else status = null;
-
-		var type;
-		if (document.getElementById("typeFilter") != null) type = document.getElementById("typeFilter").value;
-		else type = null;
-
-		var tags = []; 
+		var statuses = [];
 		var count = 0;
+		var k = 0;
+		var selecter = document.getElementById("statusFilter");
+		for (k = 0; k < selecter.options.length; k++) {
+			if (selecter.options[k].selected) statuses[count] = selecter.options[k].value;
+			count++;
+		}
+
+		var types = [];
+		count = 0;
+		var j = 0;
+		selecter = document.getElementById("typesFilter");
+		for (j = 0; j < selecter.options.length; j++) {
+			if (selecter.options[j].selected) types[count] = selecter.options[j].value;
+			count++;
+		}
+
+		var tags = [];
+		count = 0;
 		var i = 0;
-		var selecter = document.getElementById("tagsFilter");
+		selecter = document.getElementById("tagsFilter");
 		for(i = 0; i < selecter.options.length; i++)
 		{
 			if (selecter.options[i].selected) tags[count] = selecter.options[i].value;
 			count++;
 		}
 
-		var url = "/staffingmanager/" + @Model.subscriptionId + "/?";
-		if (status != null) url = url + "Status=" + status;
-		if (type != null) {
-			if (status != null) url = url + "&";
-			url = url + "Types=" + type;
+		var url = "/staffingmanager/" + @Model.SubscriptionId + "/?";
+		if (status.count != 0) {
+			url = url + "Status=" + statuses;
 		}
-		if (tags != null && tags != "") {
+		if (types.count != 0) {
+			if (status != null) url = url + "&";
+			url = url + "Types=" + types;
+		}
+		if (tags.count != 0 && tags[0] != "") {
 			if (status != null || type != null) url = url + "&";
 			url = url + "Tags=" + tags;
 		}

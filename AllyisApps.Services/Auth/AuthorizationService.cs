@@ -64,7 +64,7 @@ namespace AllyisApps.Services
 			UpdateReport,
 			CreateReport,
 			UserSettings
-        }
+		}
 
 		/// <summary>
 		/// staffing actions.
@@ -191,7 +191,6 @@ namespace AllyisApps.Services
 			return result;
 		}
 
-
 		/// <summary>
 		/// Checks if an action is allowed for the current user.
 		/// </summary>
@@ -201,8 +200,8 @@ namespace AllyisApps.Services
 		/// <param name="throwException">Throw exception or not.</param>
 		/// <returns></returns>
 		public bool CheckExpenseTrackerAction(ExpenseTrackerAction action, int subId, decimal maxAmount = 0, bool throwException = true)
-        {
-            bool result = false;
+		{
+			bool result = false;
 
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.UserContext.SubscriptionsAndRoles.TryGetValue(subId, out subInfo);
@@ -211,9 +210,9 @@ namespace AllyisApps.Services
 				ExpenseTrackerRole etRole = (ExpenseTrackerRole)subInfo.ProductRoleId;
 				if (subInfo.ProductId == ProductIdEnum.ExpenseTracker && etRole != ExpenseTrackerRole.NotInProduct)
 				{
-					if (action == ExpenseTrackerAction.AdminReport 
-						|| action == ExpenseTrackerAction.StatusUpdate 
-						|| action == ExpenseTrackerAction.AdminExpense 
+					if (action == ExpenseTrackerAction.AdminReport
+						|| action == ExpenseTrackerAction.StatusUpdate
+						|| action == ExpenseTrackerAction.AdminExpense
 						|| action == ExpenseTrackerAction.UserSettings)
 					{
 						switch (etRole)

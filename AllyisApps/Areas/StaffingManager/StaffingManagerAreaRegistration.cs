@@ -41,13 +41,20 @@ namespace AllyisApps.Areas.StaffingManager
 				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
 
 			context.Routes.MapSubdomainRoute(
+				name: "StaffingManager_filtered",
+				url: "staffingmanager/{subscriptionId}/{controller}/{action}/{filters}",
+				area: this.AreaName,
+				defaults: new { controller = "Staffing", action = "Index" },
+				constraints: new { subscriptionId = @"\d+" },
+				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
+
+			context.Routes.MapSubdomainRoute(
 				name: "StaffingIndex",
 				url: "staffingmanager/{subscriptionId}/{controller}",
 				area: this.AreaName,
 				defaults: new { controller = "Staffing", action = "Index" },
 				constraints: new { subscriptionId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
-
 		}
 	}
 }

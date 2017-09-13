@@ -10,11 +10,10 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
+using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.DBModel.StaffingManager;
 using Dapper;
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Crm;
 
 namespace AllyisApps.DBModel
 {
@@ -120,6 +119,7 @@ namespace AllyisApps.DBModel
 
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", obj.Position.OrganizationId);
+			parameters.Add("@customerId", obj.Position.CustomerId);
 			parameters.Add("@startDate", obj.Position.StartDate);
 			parameters.Add("@positionStatus", obj.Position.PositionStatusId);
 			parameters.Add("@positionTitle", obj.Position.PositionTitle);
@@ -134,22 +134,13 @@ namespace AllyisApps.DBModel
 			parameters.Add("@positionLevel", obj.Position.PositionLevelId);
 			parameters.Add("@hiringManager", obj.Position.HiringManager);
 			parameters.Add("@teamName", obj.Position.TeamName);
-			
+
 			parameters.Add("@address1", obj.Address.Address1);
 			parameters.Add("@address2", obj.Address.Address2);
 			parameters.Add("@city", obj.Address.City);
 			parameters.Add("@stateId", obj.Address.StateId);
 			parameters.Add("@countryCode", obj.Address.CountryCode);
 			parameters.Add("@postalCode", obj.Address.PostalCode);
-			
-			parameters.Add("@customerName", obj.Customer.CustomerName);
-			parameters.Add("@address", obj.Address.Address1);
-			parameters.Add("@contactEmail", obj.Customer.ContactEmail);
-			parameters.Add("@contactPhoneNumber", obj.Customer.ContactPhoneNumber);
-			parameters.Add("@faxNumber", obj.Customer.FaxNumber);
-			parameters.Add("@website", obj.Customer.Website);
-			parameters.Add("@eIN", obj.Customer.EIN);
-			parameters.Add("@customerOrgId", 1212+ new Random().Next(0, 1000)); //TODO fix this to be assigned properly
 
 			DataTable tagsTable = new DataTable();
 			tagsTable.Columns.Add("TagName", typeof(string));
@@ -163,7 +154,7 @@ namespace AllyisApps.DBModel
 				tagsTable.Rows.Add("New");
 				parameters.Add("@tags", tagsTable.AsTableValuedParameter("[Lookup].[TagTable]"));
 			}
-			
+
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Execute("[StaffingManager].[SetupPosition]", parameters, commandType: CommandType.StoredProcedure);
@@ -595,7 +586,7 @@ namespace AllyisApps.DBModel
 		/// <param name="typeName">Organization Id.</param>
 		/// <param name="tags">Organization Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>>
+		public Tuple<List<PositionDBEntity>, List<PositionTagDBEntity>, List<EmploymentTypeDBEntity>, List<PositionLevelDBEntity>, List<PositionStatusDBEntity>, List<CustomerDBEntity>>
 			GetStaffingIndexPageInfoFiltered(int orgId, string statusName = "", string typeName = "", List<string> tags = null)
 		{
 			DynamicParameters parameters = new DynamicParameters();
@@ -608,7 +599,7 @@ namespace AllyisApps.DBModel
 			foreach (string tag in tags) TagTable.Rows.Add(tag);
 
 			parameters.Add("@tags", TagTable);
-			
+
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
@@ -621,7 +612,8 @@ namespace AllyisApps.DBModel
 					results.Read<PositionTagDBEntity>().ToList(),
 					results.Read<EmploymentTypeDBEntity>().ToList(),
 					results.Read<PositionLevelDBEntity>().ToList(),
-					results.Read<PositionStatusDBEntity>().ToList());
+					results.Read<PositionStatusDBEntity>().ToList(),
+					results.Read<CustomerDBEntity>().ToList());
 			}
 		}
 

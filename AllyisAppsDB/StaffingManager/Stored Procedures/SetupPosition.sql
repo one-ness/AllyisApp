@@ -1,5 +1,6 @@
 CREATE PROCEDURE [StaffingManager].[SetupPosition]
 	@organizationId INT,
+	@customerId INT,
 	@startDate DATETIME2(0), 
 	@positionStatus INT,
 	@positionTitle NVARCHAR(140), 
@@ -20,14 +21,6 @@ CREATE PROCEDURE [StaffingManager].[SetupPosition]
 	@stateId SMALLINT,
 	@postalCode NVARCHAR(16),
 	@countryCode VARCHAR(8),
-	@customerName NVARCHAR(32),
-    @address NVARCHAR(100),
-	@contactEmail NVARCHAR(384), 
-    @contactPhoneNumber VARCHAR(50),
-	@faxNumber VARCHAR(50),
-	@website NVARCHAR(50),
-	@eIN NVARCHAR(50),
-	@customerOrgId NVARCHAR(16),
 	@tags [Lookup].[TagTable] READONLY
 AS
 BEGIN TRANSACTION
@@ -42,20 +35,6 @@ BEGIN TRANSACTION
 		
 		DECLARE @addressId INT
 		SET @addressId = IDENT_CURRENT('[Lookup].[Address]')
-
-	Exec [Crm].[CreateCustomer]
-		@customerName,
-		@addressId,
-		@contactEmail, 
-		@contactPhoneNumber,
-		@faxNumber,
-		@website,
-		@eIN,
-		@organizationId,
-		@customerOrgId
-		
-		DECLARE @customerId INT
-		SET @customerId = IDENT_CURRENT('[Crm].[Customer]')
 
 	EXEC [StaffingManager].[CreatePosition]
 		@organizationId,

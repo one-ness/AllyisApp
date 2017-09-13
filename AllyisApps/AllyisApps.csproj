@@ -229,6 +229,7 @@
     <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\CreatePositionAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\SettingsAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseItemModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseFileModel.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\CreateApplicantViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\PositionViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\EditPositionViewModel.cs" />
+    <Compile Include="Areas\StaffingManager\ViewModels\Staffing\StaffingSettingsViewModel.cs" />
     <Compile Include="Areas\StaffingManager\ViewModels\Staffing\StaffingIndexViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseSummaryViewModelItem.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseIndexViewModel.cs" />
@@ -585,6 +587,7 @@
     <Content Include="Content\Timetracker - Copy.css - Copy.map">
       <DependentUpon>Timetracker - Copy - Copy.css</DependentUpon>
     </Content>
+    <Content Include="Areas\StaffingManager\Views\Staffing\settings.cshtml" />
     <Content Include="Areas\ExpenseTracker\Views\Expense\UserSettings.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />

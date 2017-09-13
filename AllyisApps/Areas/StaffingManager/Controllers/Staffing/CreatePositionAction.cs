@@ -4,16 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Web.Mvc;
+using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.Lookup;
-using AllyisApps.ViewModels.Staffing;
 using AllyisApps.Services.StaffingManager;
-using System.Web.Mvc;
 using AllyisApps.ViewModels;
-using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
-using System.Collections.Generic;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -52,7 +51,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			for (int i = 0; i < infos.Item2.Count; i++)
 			{
 				bool taken = false;
-				for(int j=0; j < i; j++)
+				for (int j = 0; j < i; j++)
 				{
 					if (infos.Item2[i].TagName == temp[j] && !taken) taken = true;
 					if (!taken) temp[count] = infos.Item2[i].TagName;
@@ -68,6 +67,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				OrganizationId = subInfo.OrganizationId,
 				SubscriptionName = subscriptionNameToDisplay,
 				SubscriptionId = subInfo.SubscriptionId,
+				StartDate = System.DateTime.UtcNow.Date,
 				Tags = tags,
 				EmploymentTypes = infos.Item3,
 				PositionLevels = infos.Item4,
@@ -96,7 +96,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					{
 						foreach (string tag in model.TagsToSubmit)
 						{
-							if(tag == "") tags.Add(new Tag { TagName = "New", TagId = -1, PositionId = -1 });
+							if (tag == "") tags.Add(new Tag { TagName = "New", TagId = -1, PositionId = -1 });
 							else tags.Add(new Tag { TagName = tag, TagId = -1, PositionId = -1 });
 						}
 					}
@@ -118,13 +118,13 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 						PositionCreatedUtc = model.PositionCreatedUtc,
 						PositionModifiedUtc = model.PositionModifiedUtc,
 						StartDate = model.StartDate,
-						BillingRateFrequency = model.BillingRateFrequency,
+						BillingRateFrequency = (int)model.BillingRateFrequency,
 						BillingRateAmount = model.BillingRateAmount,
 						JobResponsibilities = model.JobResponsibilities,
 						DesiredSkills = model.DesiredSkills,
 						HiringManager = model.HiringManager,
 						TeamName = model.TeamName,
-						
+
 						Address = new Address
 						{
 							Address1 = model.Address,
@@ -133,26 +133,6 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 							CountryCode = model.SelectedCountryCode,
 							PostalCode = model.PostalCode
 						},
-						
-						CustomerAddress = new Address
-						{
-							Address1 = model.CustomerAddress,
-							City = model.CustomerCity,
-							StateId = model.CustomerSelectedStateId,
-							CountryCode = model.CustomerSelectedCountryCode,
-							PostalCode = model.CustomerPostalCode
-						},
-
-						Customer = new Customer
-						{
-							CustomerName = model.CustomerName,
-							ContactEmail = model.CustomerContactEmail,
-							ContactPhoneNumber = model.CustomerContactPhoneNumber,
-							FaxNumber = model.CustomerFaxNumber,
-							EIN = model.CustomerEIN,
-							OrganizationId = model.CustomerOrganizationId
-						},
-
 
 						Tags = tags
 					});
@@ -172,7 +152,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			}
 
 			// Invalid model TODO: redirect back to form page
-			return this.RedirectToAction(ActionConstants.CreatePosition, new { subscriptionId = subscriptionId } );
+			return this.RedirectToAction(ActionConstants.CreatePosition, new { subscriptionId = subscriptionId });
 		}
 	}
 }

@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using AllyisApps.Services.StaffingManager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using AllyisApps.Services;
+using AllyisApps.Services.StaffingManager;
 
 namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 {
@@ -66,7 +66,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// Get or sets the Start date of the position
 		/// </summary>
 		public DateTime StartDate { get; set; }
-		
+
 		/// <summary>
 		/// Gets or sets the status int(enum) of the position
 		/// </summary>
@@ -80,7 +80,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// Gets or sets billing rate frequency (eg: Months, Weeks)
 		/// </summary>
-		public int BillingRateFrequency { get; set; }
+		public BillingRateEnum BillingRateFrequency { get; set; }
 
 		/// <summary>
 		/// Get or sets the billing rate amount in dollars

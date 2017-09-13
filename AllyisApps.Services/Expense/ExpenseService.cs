@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using AllyisApps.DBModel;
 using AllyisApps.DBModel.Finance;
-using AllyisApps.Services.Expense;
 
 namespace AllyisApps.Services
 {
@@ -221,18 +219,17 @@ namespace AllyisApps.Services
 				return null;
 			}
 
-            return new ExpenseHistory()
-            {
-                UserId = entity.UserId,
-                HistoryId = entity.HistoryId,
-                ReportId = entity.ExpenseReportId,
-                Text = entity.Text,
-                Status = entity.Status,
-                CreatedUtc = entity.CreatedUtc,
-                ModifiedUtc = entity.ModifiedUtc
-            };
-
-        }
+			return new ExpenseHistory()
+			{
+				UserId = entity.UserId,
+				HistoryId = entity.HistoryId,
+				ReportId = entity.ExpenseReportId,
+				Text = entity.Text,
+				Status = entity.Status,
+				CreatedUtc = entity.CreatedUtc,
+				ModifiedUtc = entity.ModifiedUtc
+			};
+		}
 
 		public void CreateExpenseItem(ExpenseItem item)
 		{
