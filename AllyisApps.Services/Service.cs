@@ -801,7 +801,7 @@ namespace AllyisApps.Services
 				results.Item3.Select(typedb => InitializeEmploymentTypes(typedb)).ToList(),
 				results.Item4.Select(leveldb => InitializePositionLevel(leveldb)).ToList(),
 				results.Item5.Select(statdb => InitializePositionStatus(statdb)).ToList(),
-				results.Item6.Select(custdb => InitializeBaseCustomer(custdb)).ToList()
+				results.Item6.Select(cusdb => InitializeBaseCustomer(cusdb)).ToList()
 				);
 		}
 
@@ -814,7 +814,7 @@ namespace AllyisApps.Services
 		/// <param name="tags">tags.</param>
 		/// <param name="userId">User Id.</param>
 		/// <returns>.</returns>
-		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>>
+		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<Customer>>
 			GetStaffingIndexInfoFiltered(int orgId, string statusName, string typeName, List<string> tags = null, int? userId = 0)
 		{
 			#region Validation
@@ -841,7 +841,8 @@ namespace AllyisApps.Services
 				results.Item2.Select(tagsdb => InitializeTags(tagsdb)).ToList(),
 				results.Item3.Select(typedb => InitializeEmploymentTypes(typedb)).ToList(),
 				results.Item4.Select(leveldb => InitializePositionLevel(leveldb)).ToList(),
-				results.Item5.Select(statdb => InitializePositionStatus(statdb)).ToList()
+				results.Item5.Select(statdb => InitializePositionStatus(statdb)).ToList(),
+				results.Item6.Select(custdb => InitializeBaseCustomer(custdb)).ToList()
 				);
 		}
 

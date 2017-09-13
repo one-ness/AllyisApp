@@ -110,6 +110,7 @@
     <Compile Include="StaffingManager\ApplicationDocument.cs" />
     <Compile Include="StaffingManager\Application.cs" />
     <Compile Include="StaffingManager\ApplicationStatusEnum.cs" />
+    <Compile Include="StaffingManager\BillingRateEnum.cs" />
     <Compile Include="StaffingManager\StaffingManagerService.cs" />
     <Compile Include="StaffingManager\PositionLevel.cs" />
     <Compile Include="StaffingManager\PositionStatus.cs" />

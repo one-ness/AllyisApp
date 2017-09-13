@@ -68,6 +68,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				OrganizationId = subInfo.OrganizationId,
 				SubscriptionName = subscriptionNameToDisplay,
 				SubscriptionId = subInfo.SubscriptionId,
+				StartDate = System.DateTime.UtcNow.Date,
 				Tags = tags,
 				EmploymentTypes = infos.Item3,
 				PositionLevels = infos.Item4,
@@ -118,7 +119,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 						PositionCreatedUtc = model.PositionCreatedUtc,
 						PositionModifiedUtc = model.PositionModifiedUtc,
 						StartDate = model.StartDate,
-						BillingRateFrequency = model.BillingRateFrequency,
+						BillingRateFrequency = (int)model.BillingRateFrequency,
 						BillingRateAmount = model.BillingRateAmount,
 						JobResponsibilities = model.JobResponsibilities,
 						DesiredSkills = model.DesiredSkills,
@@ -133,26 +134,6 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 							CountryCode = model.SelectedCountryCode,
 							PostalCode = model.PostalCode
 						},
-						
-						CustomerAddress = new Address
-						{
-							Address1 = model.CustomerAddress,
-							City = model.CustomerCity,
-							StateId = model.CustomerSelectedStateId,
-							CountryCode = model.CustomerSelectedCountryCode,
-							PostalCode = model.CustomerPostalCode
-						},
-
-						Customer = new Customer
-						{
-							CustomerName = model.CustomerName,
-							ContactEmail = model.CustomerContactEmail,
-							ContactPhoneNumber = model.CustomerContactPhoneNumber,
-							FaxNumber = model.CustomerFaxNumber,
-							EIN = model.CustomerEIN,
-							OrganizationId = model.CustomerOrganizationId
-						},
-
 
 						Tags = tags
 					});
