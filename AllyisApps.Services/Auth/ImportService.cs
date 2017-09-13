@@ -1,13 +1,13 @@
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.TimeTracker;
-using AllyisApps.Lib;
-using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.TimeTracker;
+using AllyisApps.Lib;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Services
 {
@@ -29,9 +29,9 @@ namespace AllyisApps.Services
 		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0)
 		{
 			int orgId;
-			if (subscriptionId > 0 && UserContext.UserSubscriptions[subscriptionId] != null)
+			if (subscriptionId > 0 && UserContext.SubscriptionsAndRoles[subscriptionId] != null)
 			{
-				orgId = UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+				orgId = UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			}
 			else if (organizationId > 0 && UserContext.OrganizationsAndRoles[organizationId] != null)
 			{

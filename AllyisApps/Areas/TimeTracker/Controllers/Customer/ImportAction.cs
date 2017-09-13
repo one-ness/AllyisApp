@@ -4,15 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Data;
+using System.IO;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
+using AllyisApps.Services.Expense;
 using AllyisApps.Utilities;
 using Excel;
-using System.Data;
-using System.IO;
-using System.Web;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -26,31 +26,31 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// Code adapted from http://techbrij.com/read-excel-xls-xlsx-asp-net-mvc-upload.
 		/// </summary>
 		/// <param name="subscriptionId">Subscription id.</param>
-		/// <param name="upload">File to upload.</param>
+		/// <param name="file">File to upload.</param>
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Import(int subscriptionId, HttpPostedFileBase upload)
+		public ActionResult Import(int subscriptionId, ExpenseFile file)
 		{
 			// TODO: Replace ModelState errors with exception catches and notifications
 			// TODO: Buff up the error handling (catch errors from import functions, etc.)
 			if (ModelState.IsValid)
 			{
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
-				if (upload != null && upload.ContentLength > 0)
+				if (file != null && file.ContentLength > 0)
 				{
 					// ExcelDataReader works with the binary Excel file, so it needs a FileStream
 					// to get started. This is how we avoid dependencies on ACE or Interop:
-					Stream stream = upload.InputStream;
+					Stream stream = file.InputStream;
 
 					// We return the interface, so that
 					IExcelDataReader reader = null;
 
-					if (upload.FileName.EndsWith(".xls"))
+					if (file.FileName.EndsWith(".xls"))
 					{
 						reader = ExcelReaderFactory.CreateBinaryReader(stream);
 					}
-					else if (upload.FileName.EndsWith(".xlsx"))
+					else if (file.FileName.EndsWith(".xlsx"))
 					{
 						reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
 					}

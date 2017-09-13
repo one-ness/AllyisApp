@@ -1,4 +1,4 @@
-﻿create procedure Auth.GetUser
+﻿CREATE procedure [Auth].[GetUser]
 	@userId int
 as
 begin
@@ -12,10 +12,12 @@ begin
 	where u.UserId = @userId
 
 	-- get list of organizations and the user role in each
-	select o.*, ou.*, a.* from Organization o with (nolock)
+	select o.*, ou.*, a.*, s.StateName as 'State', c.CountryName as 'Country' from Organization o with (nolock)
 	inner join OrganizationUser ou with (nolock) on ou.OrganizationId = o.OrganizationId
 	left join Lookup.Address a with (nolock) on a.AddressId = o.AddressId
-	where ou.UserId = @userId
+	left join [Lookup].[State] s with (nolock) on s.StateId = a.StateId
+	left join [Lookup].[Country] c with (nolock) on c.CountryCode = a.CountryCode
+	where ou.UserId = @userId AND o.IsActive = 1 
 
 	-- get a list of subscriptions and the user role in each
 	select s.*, su.*, sku.SkuId, p.ProductId, p.ProductName, p.AreaUrl from Billing.Subscription s with (nolock)
@@ -30,8 +32,7 @@ begin
 		[InvitationId], 
 		[Invitation].[Email], 
 		[Invitation].[FirstName], 
-		[Invitation].[LastName], 
-		[Invitation].[DateOfBirth], 
+		[Invitation].[LastName],  
 		[Invitation].[OrganizationId],
 		[Organization].[OrganizationName] AS 'OrganizationName', 
 		[OrganizationRoleId],
@@ -39,6 +40,6 @@ begin
 	FROM [Auth].[User] WITH (NOLOCK)
 	LEFT JOIN [Auth].[Invitation] WITH (NOLOCK) ON [User].[Email] = [Invitation].[Email]
 	LEFT JOIN [Auth].[Organization] WITH (NOLOCK) ON [Invitation].[OrganizationId] = [Organization].[OrganizationId]
-	WHERE [User].[UserId] = @userId AND [Invitation].[IsActive] = 1 And [Invitation].StatusId = 0;
+	WHERE [User].[UserId] = @userId AND [Invitation].[IsActive] = 1 and [Invitation].[DecisionDateUtc] is null
 
 end

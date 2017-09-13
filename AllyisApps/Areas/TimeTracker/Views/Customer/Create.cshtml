@@ -12,21 +12,21 @@
 }
 
 <div>
-    @{Html.RenderPartial("_CustomerEdit", Model, ViewData);}
+	@{Html.RenderPartial("_CustomerEdit", Model, ViewData);}
 </div>
 
 @section Scripts {
-    <script type="text/javascript">
-        var preserveState = '@(Model.State != null ? (States.ResourceManager.GetString(Model.State) ?? Model.State) : "")';
-        var dropdownempty = "@Strings.DropDownEmpty";
+	<script type="text/javascript">
+		var preserveState = '@(Model.State != null ? (States.ResourceManager.GetString(Model.State) ?? Model.State) : "")';
+		var dropdownempty = "@Strings.DropDownEmpty";
 		var ddlCountriesId = "@ViewConstants.DdlCountriesId";
 		var ddlStatesId = "@ViewConstants.DdlStatesId";
 		var ddlStatesOptionsId = "@ViewConstants.DdlStatesOptionsId";
 		var getStatesUrl = "/Home/GetStates";
 		var selectedCountryCode = "@Model.SelectedCountryCode";
 		var selectedStateId = "@Model.SelectedStateId";
-    </script>
-@Scripts.Render("~/bundles/UpdateStateDDL");
-@Scripts.Render("~/bundles/jqueryui")
-@Scripts.Render("~/bundles/moment")
+	</script>
+	@Scripts.Render("~/bundles/UpdateStateDDL");
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/moment")
 }

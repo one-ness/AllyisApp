@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
-using AllyisApps.Services;
-using AllyisApps.ViewModels.TimeTracker.Customer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.TimeTracker.Customer;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -29,8 +29,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult Index(int subscriptionId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
-			UserSubscription subInfo = null;
-			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			return this.View(this.ConstructManageCustomerViewModel(subscriptionId));
 		}
 
@@ -42,8 +42,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult IndexNoUserId(int subscriptionId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
-			UserSubscription subInfo = null;
-			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
 			var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
 			ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infos.Item1.StartOfWeek));
@@ -61,8 +61,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult PopulateProjects(int customerId)
 		{
 			var model = new CustomerProjectViewModel();
-			model.CustomerInfo = new Customer { CustomerId = customerId };
-			model.Projects = AppService.GetProjectsByCustomer(customerId);
+			model.CustomerInfo = new CustomerProjectViewModel.CustomerViewModel { CustomerId = customerId };
+			model.Projects = AppService.GetProjectsByCustomer(customerId).AsParallel()
+			.Select(proj => new
+			CustomerProjectViewModel.ProjectViewModel()
+			{
+				CustomerId = proj.CustomerId,
+				OrganizationId = proj.OrganizationId,
+				ProjectId = proj.ProjectId,
+				ProjectName = proj.ProjectName
+			});
 			return PartialView("_ProjectsByCustomer", model);
 		}
 
@@ -75,8 +83,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult PopulateInactiveProjects(int customerId)
 		{
 			var model = new CustomerProjectViewModel();
-			model.CustomerInfo = new Customer { CustomerId = customerId };
-			model.Projects = AppService.GetInactiveProjectsByCustomer(customerId);
+			model.CustomerInfo = new CustomerProjectViewModel.CustomerViewModel { CustomerId = customerId };
+			model.Projects = AppService.GetInactiveProjectsByCustomer(customerId).AsParallel()
+			.Select(proj => new
+			CustomerProjectViewModel.ProjectViewModel()
+			{
+				CustomerId = proj.CustomerId,
+				OrganizationId = proj.OrganizationId,
+				ProjectId = proj.ProjectId,
+				ProjectName = proj.ProjectName
+			});
 			return PartialView("_ProjectsByCustomer", model);
 		}
 
@@ -87,11 +103,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The ManageCustomerViewModel.</returns>
 		public ManageCustomerViewModel ConstructManageCustomerViewModel(int subscriptionId)
 		{
-			UserSubscription subInfo = null;
-			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var infos = AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			bool canEditProjects = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
+			string subName = AppService.getSubscriptionName(subscriptionId);
 			List<CompleteProjectInfo> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> customers = infos.Item2;
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
@@ -99,10 +116,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				CustomerProjectViewModel customerResult = new CustomerProjectViewModel()
 				{
-					CustomerInfo = currentCustomer,
+					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel()
+					{
+						CustomerName = currentCustomer.CustomerName,
+						CustomerId = currentCustomer.CustomerId,
+						IsActive = currentCustomer.IsActive
+					},
 					Projects = from p in projects
 							   where p.CustomerId == currentCustomer.CustomerId
-							   select new Project
+							   select new CustomerProjectViewModel.ProjectViewModel
 							   {
 								   CustomerId = p.CustomerId,
 								   OrganizationId = p.OrganizationId,
@@ -126,10 +148,15 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				CustomerProjectViewModel customerResult = new CustomerProjectViewModel()
 				{
-					CustomerInfo = currentCustomer,
+					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel()
+					{
+						CustomerId = currentCustomer.CustomerId,
+						CustomerName = currentCustomer.CustomerName,
+						IsActive = currentCustomer.IsActive
+					},
 					Projects = from p in inactiveProjects
 							   where p.CustomerId == currentCustomer.CustomerId
-							   select new Project
+							   select new CustomerProjectViewModel.ProjectViewModel
 							   {
 								   CustomerId = p.CustomerId,
 								   OrganizationId = p.OrganizationId,
@@ -152,7 +179,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				OrganizationId = subInfo.OrganizationId,
 				CanEdit = canEditProjects,
 				SubscriptionId = subscriptionId,
-				SubscriptionName = subInfo.SubscriptionName,
+				SubscriptionName = subName,
 				UserId = this.AppService.UserContext.UserId
 			};
 		}

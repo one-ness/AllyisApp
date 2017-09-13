@@ -7,13 +7,13 @@ BEGIN
 	SELECT 
 		[ExpenseReportId],
 		[ReportTitle],
-		[ReportDate],
 		[OrganizationId],
 		[SubmittedById],
 		[ReportStatus],
 		[BusinessJustification],
 		[ExpenseReportCreatedUtc],
-		[ExpenseReportModifiedUtc]
+		[ExpenseReportModifiedUtc],
+		[ExpenseReportSubmittedUtc]
 	FROM [Expense].[ExpenseReport] WITH (NOLOCK)
 	WHERE ExpenseReportId = @expenseReportId
 END

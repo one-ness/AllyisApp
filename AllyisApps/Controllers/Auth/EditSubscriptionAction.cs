@@ -1,12 +1,12 @@
-﻿using AllyisApps.Core.Alert;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.Billing;
 using AllyisApps.Services.Common.Types;
 using AllyisApps.ViewModels.Auth;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -23,12 +23,12 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult EditSubscription(int subscriptionId)
 		{
-			int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+			int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
-			int skuId = AppService.UserContext.UserSubscriptions[subscriptionId].SkuId;
+			int skuId = (int)AppService.GetSubscription(subscriptionId).SkuId;
 
-			int productId = (int)AppService.UserContext.UserSubscriptions[subscriptionId].ProductId;
-			string subscriptionName = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
+			int productId = (int)AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId;
+			string subscriptionName = AppService.getSubscriptionName(subscriptionId);
 
 			SkuInfo sku = GetNextName(subscriptionId, skuId, productId);
 			EditSubscriptionViewModel model = new EditSubscriptionViewModel

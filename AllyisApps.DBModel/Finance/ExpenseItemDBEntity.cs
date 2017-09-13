@@ -45,11 +45,11 @@ namespace AllyisApps.DBModel.Finance
 		/// <summary>
 		/// Gets or sets the Expense Item's creation date.
 		/// </summary>
-		public int CreatedUtc { get; set; }
+		public DateTime CreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Expense Item's last-modified-on date.
 		/// </summary>
-		public int ModifiedUtc { get; set; }
+		public DateTime ModifiedUtc { get; set; }
 	}
 }

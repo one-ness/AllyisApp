@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auth\Invitation.cs" />
     <Compile Include="Auth\InvitationStatusEnum.cs" />
     <Compile Include="Auth\Organization.cs" />
     <Compile Include="Auth\AccountService.cs" />
@@ -87,6 +88,12 @@
     <Compile Include="Billing\BillingHistoryItemInfo.cs" />
     <Compile Include="Billing\BillingService.cs" />
     <Compile Include="Billing\BlockBasedOnEnum.cs" />
+    <Compile Include="Billing\Subscription.cs" />
+    <Compile Include="Expense\ExpenseHistory.cs" />
+    <Compile Include="Expense\ExpenseFile.cs" />
+    <Compile Include="Expense\ExpenseItem.cs" />
+    <Compile Include="Expense\ExpenseReport.cs" />
+    <Compile Include="Expense\ExpenseReportStatusEnum.cs" />
     <Compile Include="Expense\ExpenseService.cs" />
     <Compile Include="Finance\FinanceService.cs" />
     <Compile Include="Lookup\Address.cs" />

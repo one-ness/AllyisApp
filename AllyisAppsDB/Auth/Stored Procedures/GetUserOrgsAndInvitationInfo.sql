@@ -11,7 +11,6 @@ BEGIN
 			[User].[Email],
 			[User].[PhoneNumber],
 			[User].[LastUsedSubscriptionId],
-			[User].[LastUsedOrganizationId],
 			[PreferredLanguageId]
 	FROM [Auth].[User]
 	WITH (NOLOCK)
@@ -47,7 +46,6 @@ BEGIN
 		[Invitation].[Email], 
 		[Invitation].[FirstName], 
 		[Invitation].[LastName], 
-		[Invitation].[DateOfBirth], 
 		[Invitation].[OrganizationId],
 		[Organization].[OrganizationName] AS 'OrganizationName',
 		[OrganizationRoleId],

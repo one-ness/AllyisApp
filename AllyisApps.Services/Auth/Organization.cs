@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services.Lookup;
 using System;
 using System.ComponentModel.DataAnnotations;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
 {
 	/// <summary>
-	/// An object for keeping track of all the info related to a given organization.
+	/// an organization
 	/// </summary>
 	public class Organization
 	{
@@ -57,6 +57,11 @@ namespace AllyisApps.Services
 		/// Gets or sets the Organization subdomain perfix.
 		/// </summary>
 		public string Subdomain { get; set; }
+
+		/// <summary>
+		/// Gets or sets if this organization is active
+		/// </summary>
+		public bool IsActive { get; set; }
 
 		public Organization()
 		{

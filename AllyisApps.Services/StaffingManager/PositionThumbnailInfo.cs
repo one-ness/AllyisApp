@@ -1,6 +1,6 @@
-﻿using AllyisApps.Services.Lookup;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services.StaffingManager
 {
@@ -55,7 +55,7 @@ namespace AllyisApps.Services.StaffingManager
 		/// Gets or sets the name of the team this position is for.
 		/// </summary>
 		public string TeamName { get; set; }
-		
+
 		/// <summary>
 		/// Gets or sets a list of tags on the position.
 		/// </summary>
@@ -75,6 +75,5 @@ namespace AllyisApps.Services.StaffingManager
 		/// Gets or sets the Position Level object of the position.
 		/// </summary>
 		public string PositionLevelName { get; set; }
-
 	}
 }

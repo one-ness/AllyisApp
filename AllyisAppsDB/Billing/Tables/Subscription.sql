@@ -3,14 +3,15 @@
     [OrganizationId]         INT           NOT NULL,
     [SkuId]                  INT           NOT NULL,
     [SubscriptionName]       NVARCHAR (64) NULL,
-	[NumberOfUsers]         AS            [Billing].[GetNumberSubscriptionUsers]([SubscriptionId]),
+    [NumberOfUsers]          AS            ([Billing].[GetNumberSubscriptionUsers]([SubscriptionId])),
     [IsActive]               BIT           CONSTRAINT [DF_Subscription_IsActive] DEFAULT ((1)) NOT NULL,
-    [SubscriptionCreatedUtc]             DATETIME2 (0) CONSTRAINT [DF_Subscription_CreatedUtc] DEFAULT (getutcdate()) NOT NULL,
-    [SubscriptionModifiedUtc]            DATETIME2 (0) CONSTRAINT [DF_Subscription_ModifiedUtc] DEFAULT (getutcdate()) NOT NULL,
+    [SubscriptionCreatedUtc] DATETIME2 (0) CONSTRAINT [DF_Subscription_CreatedUtc] DEFAULT (getutcdate()) NOT NULL,
     [PromoExpirationDateUtc] DATETIME2 (0) NULL,
     CONSTRAINT [PK_Subscription] PRIMARY KEY NONCLUSTERED ([SubscriptionId] ASC),
     CONSTRAINT [FK_Subscription_Organization] FOREIGN KEY ([OrganizationId]) REFERENCES [Auth].[Organization] ([OrganizationId])
 );
+
+
 
 Go 
 

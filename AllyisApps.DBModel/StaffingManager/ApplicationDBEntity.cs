@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 
 namespace AllyisApps.DBModel.StaffingManager
 {
@@ -48,6 +47,5 @@ namespace AllyisApps.DBModel.StaffingManager
 		/// Gets or sets Notes.
 		/// </summary>
 		public string Notes { get; set; }
-		
 	}
 }

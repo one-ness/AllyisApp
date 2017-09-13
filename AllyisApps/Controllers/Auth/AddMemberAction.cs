@@ -4,15 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.Services.Billing;
-using AllyisApps.ViewModels.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AllyisApps.Core.Alert;
+using AllyisApps.Services;
+using AllyisApps.Services.Billing;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {
@@ -25,13 +25,13 @@ namespace AllyisApps.Controllers
 		/// GET: /Add.
 		/// The page for adding members to an organization.
 		/// </summary>
-		/// <param name="organizationId">Organization id.</param>
+		/// <param name="id">Organization id.</param>
 		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
 		/// <returns>The result of this action.</returns>
-		public ActionResult AddMember(int organizationId, string returnUrl)
+		public ActionResult AddMember(int id, string returnUrl)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, organizationId);
-			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(organizationId);
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(id);
 			ViewBag.returnUrl = returnUrl;
 			return this.View(model);
 		}
@@ -49,12 +49,10 @@ namespace AllyisApps.Controllers
 		{
 			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(organizationId);
 			add.Subscriptions = model.Subscriptions;
-			add.Projects = model.Projects;
 
 			if (ModelState.IsValid)
 			{
 				this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, add.OrganizationId);
-				
 
 				try
 				{
@@ -118,21 +116,26 @@ namespace AllyisApps.Controllers
 			{
 				OrganizationId = organizationId,
 				EmployeeId = new string(AppService.IncrementAlphanumericCharArray(nextId.ToCharArray())),
-				Subscriptions = new List<AddMemberSubscriptionInfo>(),
-				Projects = infos.Item4,
+				Subscriptions = new List<AddMemberSubscriptionViewModel>()
 			};
 
 			foreach (SubscriptionDisplayInfo sub in infos.Item2)
 			{
-				AddMemberSubscriptionInfo subInfo = new AddMemberSubscriptionInfo
+				AddMemberSubscriptionViewModel subInfo = new AddMemberSubscriptionViewModel
 				{
 					ProductName = sub.ProductName,
-					ProductRoles = infos.Item3.Where(r => r.ProductId == sub.ProductId).ToList(),
+					ProductRoles = infos.Item3.Where(r => r.ProductId == sub.ProductId)
+						.Select(r => new ProductRoleViewModel()
+						{
+							ProductId = r.ProductId,
+							ProductRoleId = r.ProductRoleId,
+							ProductRoleName = r.ProductRoleName
+						}).ToList(),
 					SubscriptionId = sub.SubscriptionId
 				};
 				subInfo.ProductRoles.Insert(
 					0,
-					new ProductRole
+					new ProductRoleViewModel
 					{
 						ProductRoleName = "None",
 						ProductId = (int)ProductIdEnum.None,

@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-
 namespace AllyisApps.DBModel.StaffingManager
 {
 	/// <summary>

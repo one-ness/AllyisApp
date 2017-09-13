@@ -5,7 +5,7 @@ begin
 	set nocount on
 	-- return 3 result sets
 	-- get user information
-	select u.FirstName, u.LastName, u.UserId, u.Email, u.PreferredLanguageId from [User] u with (nolock)
+	select u.FirstName, u.LastName, u.UserId, u.Email, u.PreferredLanguageId, u.MaxAmount from [User] u with (nolock)
 	where u.UserId = @userId;
 
 	-- get list of organizations and the user role in each

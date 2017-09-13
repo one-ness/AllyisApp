@@ -130,10 +130,9 @@ function editTimes(values) {
 
 	/* BUG: If the user makes a new entry for a project not currently listed and
 	/* then edits the entry, the Total Time will be 0. This if will stop it but
-	/* not update the times in this case. 
+	/* not update the times in this case.
 	*/
-	if (elements.length !== 0)
-	{
+	if (elements.length !== 0) {
 		var totalTime = $('#totalHours').text().split(":"),
 			totalHours = parseInt(totalTime[0]),
 			totalMinutes = parseInt(totalTime[1]),
@@ -152,7 +151,6 @@ function editTimes(values) {
 			updatedHours += updatedMinutes / 60;
 			updatedMinutes = updatedMinutes % 60;
 		}
-
 
 		$('#' + values.projectId).fadeOut(500, function () {
 			$('#' + values.projectId).text(Math.floor(updatedHours) + ":" + (updatedMinutes < 10 ? "0" + updatedMinutes : updatedMinutes)).fadeIn(500);

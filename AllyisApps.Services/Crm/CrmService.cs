@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel;
-using AllyisApps.DBModel.Crm;
-using AllyisApps.DBModel.Lookup;
-using AllyisApps.Services.Lookup;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using AllyisApps.DBModel;
+using AllyisApps.DBModel.Crm;
+using AllyisApps.DBModel.Lookup;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
 {
@@ -37,8 +37,8 @@ namespace AllyisApps.Services
 		/// <returns>.</returns>
 		public Tuple<string, int> GetNextCustId(int subscriptionId)
 		{
-			UserSubscription subInfo = null;
-			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetNextCustId(subInfo.OrganizationId);
 			return Tuple.Create(
 				spResults.Item1 == null ? "0000000000000000" : new string(IncrementAlphanumericCharArray(spResults.Item1.ToCharArray())),
@@ -163,21 +163,21 @@ namespace AllyisApps.Services
 		/// (current organization by default), another list of Projects for all projects in the organization,
 		/// the name of the user (as "Firstname Lastname"), and the user's email.
 		/// </summary>
-		public Tuple<List<Project>, List<Project>, string, string> GetProjectsForOrgAndUser(int userId, int subscriptionId)
+		public Tuple<IEnumerable<Project>, IEnumerable<Project>, string, string> GetProjectsForOrgAndUser(int userId, int subscriptionId)
 		{
 			if (userId <= 0) throw new ArgumentException("userId");
 			if (subscriptionId <= 0) throw new ArgumentException("subscriptionId");
 
-			UserSubscription subInfo = null;
-			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			if (subInfo != null)
 			{
 				var spResults = DBHelper.GetProjectsForOrgAndUser(userId, subInfo.OrganizationId);
 				var userDBEntity = spResults.Item3;
 				string name = string.Format("{0} {1}", userDBEntity.FirstName, userDBEntity.LastName);
 				return Tuple.Create(
-					spResults.Item1.Select(pdb => InitializeProject(pdb)).ToList(),
-					spResults.Item2.Select(pdb => InitializeProject(pdb)).ToList(),
+					spResults.Item1.Select(pdb => InitializeProject(pdb)),
+					spResults.Item2.Select(pdb => InitializeProject(pdb)),
 					name,
 					userDBEntity.Email);
 			}
@@ -548,7 +548,7 @@ namespace AllyisApps.Services
 			var spResults = DBHelper.GetProjectEditInfo(projectId, subscriptionId);
 			return Tuple.Create(
 				InitializeCompleteProjectInfo(spResults.Item1),
-				spResults.Item2.Select(udb => InitializeUser(udb,false)).ToList(),
+				spResults.Item2.Select(udb => InitializeUser(udb, false)).ToList(),
 				spResults.Item3.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());
 		}
 
@@ -615,33 +615,33 @@ namespace AllyisApps.Services
 			};
 		}
 
-        /// <summary>
-        /// Initialize address from dynamic infomation
-        /// </summary>
-        /// <param name="address"></param>
-        /// <returns></returns>
-        public static Address InitializeAddress(dynamic address)
-        {
-            if (address == null)
-            {
-                return null;
-            }
+		/// <summary>
+		/// Initialize address from dynamic infomation
+		/// </summary>
+		/// <param name="address"></param>
+		/// <returns></returns>
+		public static Address InitializeAddress(dynamic address)
+		{
+			if (address == null)
+			{
+				return null;
+			}
 
-            return new Address()
-            {
-                AddressId = address.AddressId,
-                Address1 = address.Address1,
-                Address2 = address.Address2,
-                City = address.City,
-                StateName = address.State,
-                PostalCode = address.PostalCode,
-                CountryCode = address.CountryCode,
-                StateId = address.StateId,
-                CountryName = address.Country
-            };
-        }
+			return new Address()
+			{
+				AddressId = address.AddressId,
+				Address1 = address.Address1 ?? address.Address,
+				Address2 = address.Address2,
+				City = address.City,
+				StateName = address.State ?? address.StateName,
+				PostalCode = address.PostalCode,
+				CountryCode = address.CountryCode,
+				StateId = address.StateId,
+				CountryName = address.Country ?? address.CountryName
+			};
+		}
 
-        public static AddressDBEntity GetDBEntityFromAddress(Address address)
+		public static AddressDBEntity GetDBEntityFromAddress(Address address)
 		{
 			return new AddressDBEntity()
 			{

@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -23,7 +23,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>Redirects to the settings view.</returns>
 		public ActionResult DeleteHoliday(int holidayId, int subscriptionId)
 		{
-			if (AppService.DeleteHoliday(holidayId, AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId, subscriptionId))
+			if (AppService.DeleteHoliday(holidayId, AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId, subscriptionId))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulDeleteHoliday, Variety.Success));
 			}

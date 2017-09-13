@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using System;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -33,7 +33,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotCreateHolidayWIthoutName, Variety.Warning));
 			}
 
-			int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			DateTime holidayDate;
 			if (!DateTime.TryParse(newHolidayDate, out holidayDate))
 			{

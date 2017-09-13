@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace AllyisApps.DBModel.StaffingManager
-{ 
+{
 	/// <summary>
 	/// DB obj
 	/// </summary>

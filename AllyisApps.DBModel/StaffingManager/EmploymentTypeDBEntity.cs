@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AllyisApps.DBModel.StaffingManager
+﻿namespace AllyisApps.DBModel.StaffingManager
 {
 	/// <summary>
 	/// Employment Type DB Entity

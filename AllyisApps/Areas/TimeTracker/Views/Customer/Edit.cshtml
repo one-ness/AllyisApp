@@ -1,32 +1,32 @@
 ﻿@model AllyisApps.ViewModels.TimeTracker.Customer.EditCustomerInfoViewModel
 
 @{
-    DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
-    DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
-    ViewBag.Title = Strings.EditCustomer;
-    ViewData.Add(ControllerConstants.Controller, ControllerConstants.Customer);
-    ViewData.Add(ActionConstants.Action, ActionConstants.Edit);
-    ViewData["UserId"] = Model.UserId;
-    ViewData["SubscriptionId"] = Model.SubscriptionId;
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+	ViewBag.Title = Strings.EditCustomer;
+	ViewData.Add(ControllerConstants.Controller, ControllerConstants.Customer);
+	ViewData.Add(ActionConstants.Action, ActionConstants.Edit);
+	ViewData["UserId"] = Model.UserId;
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
 	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
 <div class="shrink-wrap-center">
-    @{Html.RenderPartial("_CustomerEdit", Model, ViewData);}
+	@{Html.RenderPartial("_CustomerEdit", Model, ViewData);}
 </div>
 
 @section Scripts {
-    <script type="text/javascript">
-        var preserveState = "@(Model.State != null ? (States.ResourceManager.GetString(Model.State) ?? Model.State) : string.Empty)";
-        var dropdownempty = "@Strings.DropDownEmpty";
+	<script type="text/javascript">
+		var preserveState = "@(Model.State != null ? (States.ResourceManager.GetString(Model.State) ?? Model.State) : string.Empty)";
+		var dropdownempty = "@Strings.DropDownEmpty";
 		var ddlCountriesId = "@ViewConstants.DdlCountriesId";
 		var ddlStatesId = "@ViewConstants.DdlStatesId";
 		var ddlStatesOptionsId = "@ViewConstants.DdlStatesOptionsId";
 		var getStatesUrl = "/Home/GetStates";
 		var selectedCountryCode = "@Model.SelectedCountryCode";
 		var selectedStateId = "@Model.SelectedStateId";
-</script>
-@Scripts.Render("~/bundles/UpdateStateDDL");
-@Scripts.Render("~/bundles/jqueryui")
-@Scripts.Render("~/bundles/moment")
+	</script>
+	@Scripts.Render("~/bundles/UpdateStateDDL")
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/moment")
 }
