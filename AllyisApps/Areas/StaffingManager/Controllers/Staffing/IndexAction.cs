@@ -44,7 +44,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				infos.Item5  //positionStatuses list
 				);
 
-			foreach (PositionThumbnailInfo pos in model.positions)
+			foreach (PositionThumbnailInfo pos in model.Positions)
 			{
 				foreach (Customer cus in infos.Item6)
 				{
