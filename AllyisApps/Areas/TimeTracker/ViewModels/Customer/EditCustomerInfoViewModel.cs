@@ -158,22 +158,22 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public bool CanEditCustomers { get; set; }
 
 		/// <summary>
-		/// selected state id
+		/// Gets or sets Selected state id.
 		/// </summary>
 		public int? SelectedStateId { get; set; }
 
 		/// <summary>
-		/// state id and localized names
+		/// Gets or sets the State id and localized names.
 		/// </summary>
 		public Dictionary<string, string> LocalizedStates { get; set; }
 
 		/// <summary>
-		/// selected country code
+		/// Gets or sets the Selected country code.
 		/// </summary>
 		public string SelectedCountryCode { get; set; }
 
 		/// <summary>
-		/// country code and localized names
+		/// Gets or sets Country code and localized names.
 		/// </summary>
 		public Dictionary<string, string> LocalizedCountries { get; set; }
 	}

@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
 using AllyisApps.Services.Common;
 using AllyisApps.Services.Common.Types;
 using Stripe;
-using System;
-using System.Collections.Generic;
 
 namespace BillingServices.StripeService
 {

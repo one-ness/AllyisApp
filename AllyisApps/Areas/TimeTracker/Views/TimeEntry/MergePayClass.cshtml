@@ -29,7 +29,7 @@
 					@Html.AntiForgeryToken();
 					@Html.HiddenFor(m => m.SourcePayClassId)
 					@Html.HiddenFor(m => m.SourcePayClassName)
-					foreach (PayClass payClass in Model.DestinationPayClasses)
+					foreach (var payClass in Model.DestinationPayClasses)
 					{
 						string _payClassName = Strings.ResourceManager.GetString(payClass.PayClassName.Replace(" ", string.Empty)) ?? payClass.PayClassName;
 						<input type="radio" name="destPayClass" style="margin:5px" id="mpc" value="@payClass.PayClassId" @(payClass.PayClassName == "Regular" ? " checked " : string.Empty)><text>@_payClassName</text><br />

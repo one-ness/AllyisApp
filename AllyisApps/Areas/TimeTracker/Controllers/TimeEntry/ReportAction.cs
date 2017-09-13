@@ -4,13 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
-using AllyisApps.Services;
-using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
+using AllyisApps.Services;
+using AllyisApps.Utilities;
+using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -33,8 +34,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var infos = AppService.GetReportInfo(subscriptionId);
 
 			const string TempDataKey = "RVM";
-			UserSubscription subInfo = null;
-			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			string subName = AppService.GetSubscription(subscriptionId).Name;
 			if (this.TempData[TempDataKey] != null)
 			{
 				reportVM = (ReportViewModel)TempData[TempDataKey];
@@ -42,7 +44,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			else
 			{
 				reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, subInfo.OrganizationId, true, infos.Item1, infos.Item2);
-				reportVM.SubscriptionName = subInfo.SubscriptionName;
+				reportVM.SubscriptionName = subName;
 			}
 
 			reportVM.UserView = this.GetUserSelectList(infos.Item3, reportVM.Selection.Users);
@@ -85,8 +87,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				CanManage = canManage,
 				OrganizationId = organizationId,
 				ShowExport = showExport,
-				Projects = projects,
-				Customers = customers,
+				Projects = projects.AsParallel().Select(proj => ViewModelHelper.ConstuctCompleteProjectViewModel(proj)).AsEnumerable(),
 				PreviewPageSize = 20,
 				PreviewTotal = string.Format("{0} {1}", 0, Resources.Strings.HoursTotal),
 				PreviewEntries = null,

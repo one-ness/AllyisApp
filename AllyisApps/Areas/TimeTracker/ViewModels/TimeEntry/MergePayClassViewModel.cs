@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services.TimeTracker;
 using System.Collections.Generic;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
@@ -32,6 +31,6 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets the pay classes that can be merged into.
 		/// </summary>
-		public IEnumerable<PayClass> DestinationPayClasses { get; set; }
+		public IEnumerable<PayClassInfoViewModel> DestinationPayClasses { get; set; }
 	}
 }

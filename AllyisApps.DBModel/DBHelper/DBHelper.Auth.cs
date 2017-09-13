@@ -4,11 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Crm;
-using AllyisApps.DBModel.Lookup;
-using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,6 +11,11 @@ using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.Crm;
+using AllyisApps.DBModel.Lookup;
+using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -97,22 +97,21 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-        /// 
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns>User infomation, </returns>
-		public Tuple<dynamic,IEnumerable<dynamic>,IEnumerable<dynamic>, IEnumerable<dynamic>> GetUser(int userId)
+		/// Get user from the db
+		/// </summary>
+		public dynamic GetUser(int userId)
 		{
+			dynamic result = new ExpandoObject();
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-                var res = con.QueryMultiple("Auth.GetUser @a", new { a = userId });
-                return new Tuple<dynamic, IEnumerable<dynamic>, IEnumerable<dynamic>, IEnumerable<dynamic>>(
-                    res.Read().FirstOrDefault(),
-                    res.Read(), 
-                    res.Read(),
-                    res.Read()
-                    );
+				var res = con.QueryMultiple("Auth.GetUser @a", new { a = userId });
+				result.User = res.Read().FirstOrDefault();
+				result.Organizations = res.Read().ToList();
+				result.Subscriptions = res.Read().ToList();
+				result.Invitations = res.Read().ToList();
 			}
+
+			return result;
 		}
 
 		/// <summary>
@@ -123,21 +122,21 @@ namespace AllyisApps.DBModel
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
 				con.Execute("[Auth].[UpdateUserProfile] @a, @b, @c, @d, @e, @f, @g, @h, @i, @j, @k, @l",
-					new
-					{
-						a = userId,
-						b = firstName,
-						c = lastName,
-						d = dateOfBirth,
-						e = phoneNumber,
-						f = addressId,
-						g = address1,
-						h = address2,
-						i = city,
-						j = stateId,
-						k = postalCode,
-						l = countryCode
-					});
+						new
+						{
+							a = userId,
+							b = firstName,
+							c = lastName,
+							d = dateOfBirth,
+							e = phoneNumber,
+							f = addressId,
+							g = address1,
+							h = address2,
+							i = city,
+							j = stateId,
+							k = postalCode,
+							l = countryCode
+						});
 			}
 		}
 
@@ -155,23 +154,6 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				connection.Execute("[Auth].[UpdateUserActiveSub]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
-		/// Populates a user's last used organization.
-		/// </summary>
-		/// <param name = "userId">Target user's Id.</param>
-		/// <param name = "organizationId">The organization's Id.</param>
-		public void UpdateActiveOrganization(int userId, int organizationId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userId", userId);
-			parameters.Add("@organizationId", organizationId);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				connection.Execute("[Auth].[UpdateUserActiveOrg]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -207,6 +189,22 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<UserDBEntity>("[Auth].[GetUsersWithSubscriptionToProductInOrganization]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
+		/// Updates the max amount a user can approve of in a report.
+		/// </summary>
+		/// <param name="user"></param>
+		public void UpdateUserMaxAmount(UserDBEntity user)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@userId", user.UserId);
+			parameters.Add("@maxAmount", user.MaxAmount);
+
+			using (var connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Execute("[Auth].[UpdateUserMaxAmount]", parameters, commandType: CommandType.StoredProcedure);
 			}
 		}
 
@@ -588,8 +586,6 @@ namespace AllyisApps.DBModel
 			}
 		}
 
-		
-
 		/// <summary>
 		/// Adds an Invitation to the invitations table and invitation sub roles table.
 		/// </summary>
@@ -655,7 +651,6 @@ namespace AllyisApps.DBModel
 				}
 			}
 		}
-       
 
 		/// <summary>
 		/// Removes a user invitation and related invitation sub roles.
@@ -669,7 +664,7 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				int success = connection.Execute(
-                    "[Auth].[DeleteInvitation]",
+					"[Auth].[DeleteInvitation]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 				return success == 1;
@@ -870,35 +865,12 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Returns a UserDBEntity for the given user, along with a list of OrganizationDBEntities for the organizations that
-		/// the user is a member of, and a list of InvititationDBEntities for any invitations for that user.
-		/// </summary>
-		/// <param name="userId">The User Id.</param>
-		public Tuple<UserDBEntity, List<dynamic>, List<InvitationDBEntity>, AddressDBEntity> GetUserOrgsAndInvitations(int userId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userId", userId);
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				var results = connection.QueryMultiple(
-					"[Auth].[GetUserOrgsAndInvitationInfo]",
-					parameters,
-					commandType: CommandType.StoredProcedure);
-				return Tuple.Create(
-					results.Read<UserDBEntity>().SingleOrDefault(),
-					results.Read<dynamic>().ToList(),
-					results.Read<InvitationDBEntity>().ToList(),
-					results.Read<AddressDBEntity>().SingleOrDefault());
-			}
-		}
-
-		/// <summary>
 		/// Returns an OrganizationDBEntity for the given organization, along with a list of OrganizationUserDBEntities for the organization users
 		/// in the organization, a list of SubscriptionDisplayDBEntities for any subscriptions for the organization, a list of InvitiationDBEntities
 		/// for any invitations pending in the organization, the organization's billing stripe handle, and the complete list of products.
 		/// </summary>
 		/// <param name="organizationId">The organization Id.</param>
-		public Tuple<dynamic, List<OrganizationUserDBEntity>, List<SubscriptionDisplayDBEntity>, List<InvitationDBEntity>, string, List<ProductDBEntity>> GetOrganizationManagementInfo(int organizationId)
+		public Tuple<dynamic, List<OrganizationUserDBEntity>, List<SubscriptionDisplayDBEntity>, List<InvitationDBEntity>, string> GetOrganizationManagementInfo(int organizationId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
@@ -913,8 +885,7 @@ namespace AllyisApps.DBModel
 					results.Read<OrganizationUserDBEntity>().ToList(),
 					results.Read<SubscriptionDisplayDBEntity>().ToList(),
 					results.Read<InvitationDBEntity>().ToList(),
-					results.Read<string>().SingleOrDefault(),
-					results.Read<ProductDBEntity>().ToList());
+					results.Read<string>().SingleOrDefault());
 			}
 		}
 
@@ -925,7 +896,7 @@ namespace AllyisApps.DBModel
 		/// <param name="orgId">Organization id.</param>
 		/// <param name="userId">User id.</param>
 		/// <returns>.</returns>
-		public Tuple<dynamic, List<string>, string> GetOrgWithCountriesAndEmployeeId(int orgId, int userId)
+		public Tuple<dynamic, string> GetOrgWithNextEmployeeId(int orgId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", orgId);
@@ -933,12 +904,11 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				var results = connection.QueryMultiple(
-					"[Auth].[GetOrgWithCountriesAndEmployeeId]",
+					"[Auth].[GetOrgWithNextEmployeeId]",
 					parameters,
 					commandType: CommandType.StoredProcedure);
 				return Tuple.Create(
 					results.Read<dynamic>().SingleOrDefault(),
-					results.Read<string>().ToList(),
 					results.Read<string>().SingleOrDefault());
 			}
 		}

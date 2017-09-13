@@ -14,6 +14,5 @@ namespace AllyisApps.DBModel.Lookup
 		/// Gets or sets the Tag's Name
 		/// </summary>
 		public string TagName { get; set; }
-		
 	}
 }

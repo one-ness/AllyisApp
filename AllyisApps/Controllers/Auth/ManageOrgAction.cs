@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using AllyisApps.Services.Common.Types;
-using AllyisApps.ViewModels.Auth;
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Services;
+using AllyisApps.Services.Common.Types;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {
@@ -53,10 +53,22 @@ namespace AllyisApps.Controllers
 			var infos = AppService.GetOrganizationManagementInfo(organizationId);
 
 			BillingServicesCustomer customer = (infos.Item5 == null) ? null : AppService.RetrieveCustomer(new BillingServicesCustomerId(infos.Item5));
-
+			Organization orgInfo = infos.Item1;
 			return new ManageOrgViewModel
 			{
-				Details = infos.Item1,
+				Details = new OrganizationInfoViewModel()
+				{
+					OrganizationName = orgInfo.OrganizationName,
+					OrganizaitonId = orgInfo.OrganizationId,
+					SiteURL = orgInfo.SiteUrl,
+					FaxNumber = orgInfo.FaxNumber,
+					PhoneNumber = orgInfo.PhoneNumber,
+					Address = orgInfo.Address?.Address1,
+					City = orgInfo.Address?.City,
+					CountryName = orgInfo.Address?.CountryName,
+					StateName = orgInfo.Address?.StateName,
+					PostalCode = orgInfo.Address?.PostalCode
+				},
 				LastFour = customer == null ? string.Empty : customer.Last4,
 				Members = new OrganizationMembersViewModel
 				{
@@ -72,26 +84,13 @@ namespace AllyisApps.Controllers
 					}),
 					OrganizationId = infos.Item1.OrganizationId,
 					OrganizationName = infos.Item1.OrganizationName,
-					PendingInvitation = infos.Item4,
+					PendingInvitation = infos.Item4.Select(invite => new InvitationInfoViewModel(invite)),
 					TotalUsers = infos.Item2.Count
 				},
 				OrganizationId = organizationId,
 				BillingCustomer = customer,
 				SubscriptionCount = infos.Item3.Count,
-				Subscriptions = infos.Item6.Select(p =>
-				{
-					return new SubscriptionDisplayViewModel
-					{
-						Info = infos.Item3.Where(s => s.ProductId == p.ProductId).FirstOrDefault(),
-						ProductId = p.ProductId,
-						ProductName = p.ProductName,
-						SubscriptionId = infos.Item3.Where(s => s.ProductId == p.ProductId).FirstOrDefault().SubscriptionId,
-						SubscriptionName = infos.Item3.Where(s => s.ProductId == p.ProductId).FirstOrDefault().SubscriptionName,
-						ProductDescription = p.ProductDescription,
-						OrganizationId = organizationId,
-						AreaUrl = p.AreaUrl,
-					};
-				})
+				Subscriptions = infos.Item3.Select(sub => new SubscriptionDisplayViewModel(sub))
 			};
 		}
 	}

@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Web.Mvc;
+using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
-using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Services.StaffingManager;
-using System.Collections.Generic;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -19,25 +19,24 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 	public partial class StaffingController : BaseController
 	{
 		/// <summary>
-		/// Index 
+		/// Index page.
 		/// </summary>
-		/// <param name="subscriptionId"></param>
-		/// <returns></returns>
+		/// <param name="subscriptionId">The subscription id.</param>
+		/// <returns>The index view.</returns>
 		public ActionResult Index(int subscriptionId)
 		{
-
-			UserSubscription subInfo = null;
-			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
-
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			string subName = AppService.getSubscriptionName(subscriptionId);
 			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
-			
-			//ViewBag.SignedInUserID = GetCookieData().UserId;
-			//ViewBag.SelectedUserId = userId;
-			
+
+			// ViewBag.SignedInUserID = GetCookieData().UserId;
+			// ViewBag.SelectedUserId = userId;
+
 			StaffingIndexViewModel model = this.ConstructStaffingIndexViewModel(
 				subInfo.OrganizationId,
 				subscriptionId,
-				subInfo.SubscriptionName,
+				subName,
 				infos.Item1, //positions list
 				infos.Item2, //tags list
 				infos.Item3, //employmentTypes list
@@ -45,7 +44,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				infos.Item5  //positionStatuses list
 				);
 
-			foreach (PositionThumbnailInfo pos in model.positions)
+			foreach (PositionThumbnailInfo pos in model.Positions)
 			{
 				foreach (Customer cus in infos.Item6)
 				{
@@ -99,25 +98,31 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <param name="subId">The Subscription's Id.</param>
 		/// <param name="subName">The Subscription's Name.</param>
 		/// <param name="positions">The positions list to be displayed.</param>
-		/// <param name="tags">tags used by the org.</param>
+		/// <param name="tags">Tags used by the org.</param>
 		/// <param name="employmentTypes">The employment types used by the org.</param>
 		/// <param name="positionLevels">The position levels used by the orgs.</param>
 		/// <param name="positionStatuses">The position statuses used by the org.</param>
 		/// <returns>The constructed TimeEntryOverDateRangeViewModel.</returns>
-		public StaffingIndexViewModel ConstructStaffingIndexViewModel(int orgId, int subId, string subName, 
-						List<PositionThumbnailInfo> positions, List<Services.Lookup.Tag> tags, List<EmploymentType> employmentTypes, 
-						List<PositionLevel> positionLevels, List<PositionStatus> positionStatuses)
+		public StaffingIndexViewModel ConstructStaffingIndexViewModel(
+			int orgId,
+			int subId,
+			string subName,
+			List<PositionThumbnailInfo> positions,
+			List<Services.Lookup.Tag> tags,
+			List<EmploymentType> employmentTypes,
+			List<PositionLevel> positionLevels,
+			List<PositionStatus> positionStatuses)
 		{
 			StaffingIndexViewModel result = new StaffingIndexViewModel()
 			{
-				organizationId = orgId,
-				subscriptionId = subId,
-				subscriptionName = subName,
-				positions = positions,
-				tags = tags,
-				employmentTypes = employmentTypes,
-				positionLevels = positionLevels,
-				positionStatuses = positionStatuses
+				OrganizationId = orgId,
+				SubscriptionId = subId,
+				SubscriptionName = subName,
+				Positions = positions,
+				Tags = tags,
+				EmploymentTypes = employmentTypes,
+				PositionLevels = positionLevels,
+				PositionStatuses = positionStatuses
 			};
 
 			return result;

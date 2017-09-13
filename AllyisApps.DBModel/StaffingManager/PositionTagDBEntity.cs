@@ -19,6 +19,5 @@ namespace AllyisApps.DBModel.StaffingManager
 		/// Gets or sets the Position Id
 		/// </summary>
 		public int PositionId { get; set; }
-
 	}
 }

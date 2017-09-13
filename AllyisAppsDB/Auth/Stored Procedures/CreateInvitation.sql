@@ -40,8 +40,8 @@ BEGIN
 				[OrganizationId],  
 				[IsActive], 
 				[OrganizationRoleId],
-				[EmployeeId],
-				[DateOfBirth])
+				[EmployeeId]
+				)
 			VALUES 
 				(@email, 
 				@firstName, 
@@ -49,8 +49,8 @@ BEGIN
 				@organizationId,  
 				1, 
 				@organizationRole, 
-				@employeeId,
-				'1755-01-01');
+				@employeeId
+				);
 
 			-- Return invitation id
 			SELECT SCOPE_IDENTITY()

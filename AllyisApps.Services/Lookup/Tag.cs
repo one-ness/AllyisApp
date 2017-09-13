@@ -31,6 +31,5 @@ namespace AllyisApps.Services.Lookup
 				tagName = value;
 			}
 		}
-
 	}
 }

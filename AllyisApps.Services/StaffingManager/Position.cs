@@ -1,6 +1,6 @@
-﻿using AllyisApps.Services.Lookup;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services.StaffingManager
 {
@@ -9,7 +9,7 @@ namespace AllyisApps.Services.StaffingManager
 		private const int titleLengthMax = 140;
 		private const int nameLenthMax = 64;
 		private const int maxTags = 10;
-		
+
 		private string positionTitle;
 		private int employmentTypeId;
 		private int positionCount;
@@ -209,6 +209,5 @@ namespace AllyisApps.Services.StaffingManager
 		/// Gets or sets the Position Level object of the position.
 		/// </summary>
 		public string PositionLevelName { get; set; }
-
 	}
 }

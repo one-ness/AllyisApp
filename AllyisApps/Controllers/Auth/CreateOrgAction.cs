@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Web.Mvc;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.Auth;
-using System.Web.Mvc;
 
 namespace AllyisApps.Controllers
 {
@@ -50,7 +50,6 @@ namespace AllyisApps.Controllers
 					{
 						Address = new Services.Lookup.Address()
 						{
-							//AddressId = model.AddressId, should be null
 							Address1 = model.Address,
 							City = model.City,
 							CountryCode = model.SelectedCountryCode,

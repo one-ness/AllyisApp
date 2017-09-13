@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.ViewModels.Auth;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AllyisApps.Core.Alert;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {
@@ -38,7 +38,21 @@ namespace AllyisApps.Controllers
 
 				model = new EditMemberViewModel
 				{
-					UserInfo = userBasicInfo,
+					UserInfo = new UserInfoViewModel()
+					{
+						UserId = userBasicInfo.UserId,
+						DateOfBirth = userBasicInfo.DateOfBirth,
+						PhoneExtension = userBasicInfo.PhoneExtension,
+						Email = userBasicInfo.Email,
+						FirstName = userBasicInfo.FirstName,
+						LastName = userBasicInfo.LastName,
+
+						Address = userBasicInfo.Address?.Address1,
+						City = userBasicInfo.Address?.City,
+						CountryName = userBasicInfo.Address?.CountryName,
+						PostalCode = userBasicInfo.Address?.PostalCode,
+						StateName = userBasicInfo.Address?.StateName,
+					},
 					CurrentUserId = this.AppService.UserContext.UserId,
 					FirstName = userBasicInfo.FirstName,
 					LastName = userBasicInfo.LastName,
@@ -54,11 +68,10 @@ namespace AllyisApps.Controllers
 
 				model = new EditMemberViewModel
 				{
-					UserInfo = new User
+					UserInfo = new UserInfoViewModel
 					{
 						UserId = userOrgInfo.InvitationId,
-						Email = userOrgInfo.Email,
-						DateOfBirth = userOrgInfo.DateOfBirth
+						Email = userOrgInfo.Email
 					},
 					FirstName = userOrgInfo.FirstName,
 					LastName = userOrgInfo.LastName,

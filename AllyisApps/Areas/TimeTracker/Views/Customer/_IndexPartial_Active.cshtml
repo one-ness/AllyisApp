@@ -5,44 +5,44 @@
 @model ManageCustomerViewModel
 
 <div class="flexbox-row flexbox-row-2-col-collapse">
-        <div class="panel panel-info" style="position: relative">
-            <div class="panel-heading">
-                <h1 class="panel-title">@Strings.CustomerList</h1>
-            </div>
-            <div class="panel-body list-group" id="Customers">
-                @foreach (CustomerProjectViewModel customer in Model.Customers)
-                {
-                    <a onclick="PopulateProjects('@customer.CustomerInfo.CustomerId')" class="list-group-item" id="@customer.CustomerInfo.CustomerId">
-                        <text>@customer.CustomerInfo.CustomerName</text>
-                    </a>
-                }
-            </div>
-        </div>
+	<div class="panel panel-info" style="position: relative">
+		<div class="panel-heading">
+			<h1 class="panel-title">@Strings.CustomerList</h1>
+		</div>
+		<div class="panel-body list-group" id="Customers">
+			@foreach (CustomerProjectViewModel customer in Model.Customers)
+			{
+				<a onclick="PopulateProjects('@customer.CustomerInfo.CustomerId')" class="list-group-item" id="@customer.CustomerInfo.CustomerId">
+					<text>@customer.CustomerInfo.CustomerName</text>
+				</a>
+			}
+		</div>
+	</div>
 
-        <div class="panel panel-info" style="position: relative">
-            <div class="panel-heading">
-                <h1 class="panel-title">@Strings.Projects</h1>
-            </div>
-            <div class="panel-body list-group" id="Projects">
-                <!--active projects belong to chosen customer will be populated here-->
-            </div>
-        </div>
-        @if ((bool)ViewData["IsManager"])
-        {
-        <div style="position: relative">
-            <div class="pull-right">
-                <button type="button" onclick="EditCustomer()" class="btn btn-primary" title="Edit Customer"><i class="glyphicon glyphicon-pencil"></i></button>
-                <button type="button" onclick="DeleteCustomer()" class="btn btn-primary" title="Delete Customer"><i class="glyphicon glyphicon-remove"></i></button>
-                <button type="button" onclick="CreateCustomer()" class="btn btn-primary" title="Create Customer"><i class="glyphicon glyphicon-plus"></i></button>
-            </div>
-        </div>
+	<div class="panel panel-info" style="position: relative">
+		<div class="panel-heading">
+			<h1 class="panel-title">@Strings.Projects</h1>
+		</div>
+		<div class="panel-body list-group" id="Projects">
+			<!--active projects belong to chosen customer will be populated here-->
+		</div>
+	</div>
+	@if ((bool)ViewData["IsManager"])
+	{
+		<div style="position: relative">
+			<div class="pull-right">
+				<button type="button" onclick="EditCustomer()" class="btn btn-primary" title="Edit Customer"><i class="glyphicon glyphicon-pencil"></i></button>
+				<button type="button" onclick="DeleteCustomer()" class="btn btn-primary" title="Delete Customer"><i class="glyphicon glyphicon-remove"></i></button>
+				<button type="button" onclick="CreateCustomer()" class="btn btn-primary" title="Create Customer"><i class="glyphicon glyphicon-plus"></i></button>
+			</div>
+		</div>
 
-        <div style="position: relative">
-            <div class="pull-right">
-                <button type="button" onclick="EditProject()" class="btn btn-primary" title="Edit Project"><i class="glyphicon glyphicon-pencil"></i></button>
-                <button type="button" onclick="DeleteProject()" class="btn btn-primary" title="Delete Project"><i class="glyphicon glyphicon-remove"></i></button>
-                <button type="button" onclick="CreateProject()" class="btn btn-primary" title="Create Project"><i class="glyphicon glyphicon-plus"></i></button>
-            </div>
-        </div>
-        }
-    </div>
+		<div style="position: relative">
+			<div class="pull-right">
+				<button type="button" onclick="EditProject()" class="btn btn-primary" title="Edit Project"><i class="glyphicon glyphicon-pencil"></i></button>
+				<button type="button" onclick="DeleteProject()" class="btn btn-primary" title="Delete Project"><i class="glyphicon glyphicon-remove"></i></button>
+				<button type="button" onclick="CreateProject()" class="btn btn-primary" title="Create Project"><i class="glyphicon glyphicon-plus"></i></button>
+			</div>
+		</div>
+	}
+</div>

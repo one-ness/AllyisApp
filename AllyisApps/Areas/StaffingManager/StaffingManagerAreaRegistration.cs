@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Extensions.RouteExtensions;
 using System.Web.Mvc;
+using AllyisApps.Extensions.RouteExtensions;
 
 namespace AllyisApps.Areas.StaffingManager
 {
@@ -36,7 +36,7 @@ namespace AllyisApps.Areas.StaffingManager
 				name: "StaffingManager_default",
 				url: "staffingmanager/{subscriptionId}/{controller}/{action}",
 				area: this.AreaName,
-				defaults: new { controller = "Staffing", action = "Index" },
+				defaults: new { controller = "Home", action = "Index" },
 				constraints: new { subscriptionId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
 
@@ -57,6 +57,5 @@ namespace AllyisApps.Areas.StaffingManager
 				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
 
 		}
-		
 	}
 }

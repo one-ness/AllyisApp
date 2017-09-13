@@ -27,11 +27,12 @@ namespace AllyisApps.Services
 		private int addressId;
 		private string address;
 		private string city;
+
 		//private string state;
 		//private string country;
 		private string postalCode;
-		private string phoneNumber;
 
+		private string phoneNumber;
 
 		/// <summary>
 		/// Gets or sets the applicant's ID.

@@ -8,7 +8,6 @@ SELECT
 	[Email], 
 	[FirstName], 
 	[LastName], 
-	[DateOfBirth], 
 	[OrganizationId],  
 	[OrganizationRoleId],
 	[EmployeeId] 

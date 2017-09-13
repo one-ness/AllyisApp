@@ -40,11 +40,11 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		/// <returns></returns>
 		public EditPositionViewModel setupPositionEditViewModel(int subscriptionId)
 		{
-			UserSubscription subInfo = null;
-			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
 			var idAndCountries = AppService.GetNextCustId(subscriptionId);
-			string subscriptionNameToDisplay = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
+			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
 			//TODO: this is piggy-backing off the get index action, create a new action that just gets items 3-5.
 			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
 			var temp = new string[infos.Item2.Count];
@@ -90,8 +90,8 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				var tags = new List<Tag>();
 				if (model.OrganizationId == 0)
 				{
-					UserSubscription subInfo = null;
-					this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+					UserContext.SubscriptionAndRole subInfo = null;
+					this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 					model.OrganizationId = subInfo.OrganizationId;
 					if (model.TagsToSubmit != null)
 					{

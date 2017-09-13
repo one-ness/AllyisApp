@@ -94,11 +94,6 @@ namespace AllyisApps.DBModel.Auth
 		public int? LastUsedSubscriptionId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the last active organization id.
-		/// </summary>
-		public int? LastUsedOrganizationId { get; set; }
-
-		/// <summary>
 		/// Gets or sets LockoutEndDateUtc.
 		/// </summary>
 		public DateTime? LockoutEndDateUtc { get; set; }
@@ -112,5 +107,10 @@ namespace AllyisApps.DBModel.Auth
 		/// Gets or sets the language preference.
 		/// </summary>
 		public string PreferredLanguageId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the maximum amount that a user can approve of in a report.
+		/// </summary>
+		public decimal MaxAmount { get; set; }
 	}
 }

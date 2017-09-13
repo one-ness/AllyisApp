@@ -1429,11 +1429,29 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ExpenseTracker.
+        /// </summary>
+        public static string ExpenseTracker {
+            get {
+                return ResourceManager.GetString("ExpenseTracker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Easily manages your expenses.
         /// </summary>
         public static string ExpenseTrackerDescription {
             get {
                 return ResourceManager.GetString("ExpenseTrackerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ExpenseTracker Roles.
+        /// </summary>
+        public static string ExpenseTrackerRole {
+            get {
+                return ResourceManager.GetString("ExpenseTrackerRole", resourceCulture);
             }
         }
         
@@ -3049,6 +3067,15 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Registation is successful Please verify email address..
+        /// </summary>
+        public static string RegistationSucessful {
+            get {
+                return ResourceManager.GetString("RegistationSucessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Register.
         /// </summary>
         public static string Register {
@@ -3976,11 +4003,29 @@ namespace AllyisApps.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} users added to Expense Tracker..
+        /// </summary>
+        public static string UserAddedToExpenseTracker {
+            get {
+                return ResourceManager.GetString("UserAddedToExpenseTracker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to already is a part of this organization!.
         /// </summary>
         public static string UserAlreadyExists {
             get {
                 return ResourceManager.GetString("UserAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} user roles changed in Expense Tracker..
+        /// </summary>
+        public static string UserChangedRolesInExpenseTracker {
+            get {
+                return ResourceManager.GetString("UserChangedRolesInExpenseTracker", resourceCulture);
             }
         }
         
@@ -4251,6 +4296,15 @@ namespace AllyisApps.Resources {
         public static string YouDontHaveASubscriptionToTimeTracker {
             get {
                 return ResourceManager.GetString("YouDontHaveASubscriptionToTimeTracker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must Register Your Email Address.
+        /// </summary>
+        public static string YouMustRegisterYourEmailAddress {
+            get {
+                return ResourceManager.GetString("YouMustRegisterYourEmailAddress", resourceCulture);
             }
         }
         

@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
-using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.ViewModels.TimeTracker.Project;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
+using AllyisApps.Core.Alert;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -43,7 +43,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 			}
 
-			string subscriptionNameToDisplay = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
+			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
 			return this.View(
 				new EditProjectViewModel()
 				{
@@ -58,7 +58,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					SubscriptionId = subscriptionId,
 					SubscriptionName = subscriptionNameToDisplay,
 					UserId = userId,
-					OrganizationId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId
+					OrganizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId
 				});
 		}
 

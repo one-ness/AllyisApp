@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
 using AllyisApps.ViewModels.TimeTracker.Customer;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -29,11 +29,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
 			var idAndCountries = AppService.GetNextCustId(subscriptionId);
-			string subscriptionNameToDisplay = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
+			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
 			return this.View(new EditCustomerInfoViewModel
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
-
 				IsCreating = true,
 				CustomerOrgId = idAndCountries.Item1,
 				SubscriptionId = subscriptionId,

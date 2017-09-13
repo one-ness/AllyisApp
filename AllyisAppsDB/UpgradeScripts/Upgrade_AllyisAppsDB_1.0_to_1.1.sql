@@ -5074,7 +5074,8 @@ BEGIN
 		[ReportStatus],
 		[BusinessJustification],
 		[ExpenseReportCreatedUtc],
-		[ExpenseReportModifiedUtc]
+		[ExpenseReportModifiedUtc],
+		[ExpenseReportSubmittedUtc]
 	FROM [Expense].[ExpenseReport] WITH (NOLOCK)
 	WHERE ExpenseReportId = @expenseReportId
 END
@@ -5098,7 +5099,8 @@ BEGIN
 		[ReportStatus],
 		[BusinessJustification],
 		[ExpenseReportCreatedUtc],
-		[ExpenseReportModifiedUtc]
+		[ExpenseReportModifiedUtc],
+		[ExpenseReportSubmittedUtc]
 	FROM [Expense].[ExpenseReport] WITH (NOLOCK)
 	WHERE OrganizationId = @organizationId
 END
@@ -5122,7 +5124,8 @@ BEGIN
 		[ReportStatus],
 		[BusinessJustification],
 		[ExpenseReportCreatedUtc],
-		[ExpenseReportModifiedUtc]
+		[ExpenseReportModifiedUtc],
+		[ExpenseReportSubmittedUtc]
 	FROM [Expense].[ExpenseReport] WITH (NOLOCK)
 	WHERE SubmittedById = @submittedById
 END

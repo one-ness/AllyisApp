@@ -1445,21 +1445,30 @@
     <value>The employee id you entered already exists.  Please enter a unique employee id.</value>
   </data>
   <data name="ExpenseTrackerDescription" xml:space="preserve">
-	<value>Easily manages your expenses</value>
+    <value>Easily manages your expenses</value>
   </data>
   <data name="CreateSubscription" xml:space="preserve">
-	<value>Create Subscription</value>
+    <value>Create Subscription</value>
   </data>
   <data name="Edit" xml:space="preserve">
-	<value>Edit</value>
+    <value>Edit</value>
   </data>
   <data name="Downgrade" xml:space="preserve">
     <value>Downgrade</value>
   </data>
   <data name="ChangeSubscription" xml:space="preserve">
-	<value>Change Subscription</value>
+    <value>Change Subscription</value>
   </data>
   <data name="SubscriptionName" xml:space="preserve">
-	<value>Subscription Name</value>
+    <value>Subscription Name</value>
+  </data>
+  <data name="ExpenseTracker" xml:space="preserve">
+    <value>ExpenseTracker</value>
+  </data>
+  <data name="UserAddedToExpenseTracker" xml:space="preserve">
+    <value>{0} users added to Expense Tracker.</value>
+  </data>
+  <data name="UserChangedRolesInExpenseTracker" xml:space="preserve">
+    <value>{0} users changed roles in Expense Tracker.</value>
   </data>
 </root>

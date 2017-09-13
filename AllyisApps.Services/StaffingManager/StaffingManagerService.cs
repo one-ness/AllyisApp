@@ -70,7 +70,7 @@ namespace AllyisApps.Services
 		/// <returns>The id of the created Tag or -1 if the tag name is already in use. </returns>
 		public void AssignTag(int tagId, int positionId) => DBHelper.AssignTag(tagId, positionId);
 
-		#endregion
+		#endregion CreateMethods
 
 		#region GetMethods
 
@@ -155,7 +155,7 @@ namespace AllyisApps.Services
 		/// <returns>returns a list of all current tags. </returns>
 		public List<Tag> GetTags() => DBHelper.GetTags().Select(DBEntityToServiceObject).ToList();
 
-		#endregion
+		#endregion GetMethods
 
 		#region UpdateMethods
 
@@ -187,7 +187,7 @@ namespace AllyisApps.Services
 		/// <returns>Returns the number of rows updated.</returns>
 		public int UpdatePosition(Position position) => DBHelper.UpdatePosition(ServiceObjectToDBEntity(position));
 
-		#endregion
+		#endregion UpdateMethods
 
 		#region DeleteMethods
 
@@ -228,7 +228,7 @@ namespace AllyisApps.Services
 		/// <param name="positionId">ID of the Position to be removed from the DB. </param>
 		public void DeletePosition(int positionId) => DBHelper.DeletePosition(positionId);
 
-		#endregion
+		#endregion DeleteMethods
 
 		//////////////////////////////////////////
 		// DB LAYER to SERVICE LAYER CONVERSION //
@@ -328,7 +328,6 @@ namespace AllyisApps.Services
 				DesiredSkills = position.DesiredSkills,
 				HiringManager = position.HiringManager,
 				TeamName = position.TeamName,
-
 
 				Address = new Address
 				{
@@ -538,7 +537,6 @@ namespace AllyisApps.Services
 
 			return obj;
 		}
-
 
 		/// <summary>
 		/// Converts a list of Tag service layer objects to a TagDBEntity object list.

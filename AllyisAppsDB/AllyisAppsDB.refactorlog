@@ -315,4 +315,11 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[DeleteInvitation]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="7d101c52-1703-4eca-8686-50fbe419ebe2" ChangeDateTime="09/05/2017 22:18:33">
+    <Property Name="ElementName" Value="[Auth].[Invitation].[DecisionDate]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[Auth].[Invitation]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DecisionDateUtc" />
+  </Operation>
 </Operations>

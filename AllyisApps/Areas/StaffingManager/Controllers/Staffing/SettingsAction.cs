@@ -26,9 +26,9 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		public ActionResult Settings(int subscriptionId)
 		{
 
-			UserSubscription subInfo = null;
-			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
-
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			string Subname = AppService.getSubscriptionName(subscriptionId);
 			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
 			
 			//ViewBag.SignedInUserID = GetCookieData().UserId;
@@ -37,7 +37,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			StaffingSettingsViewModel model = this.ConstructStaffingSettingsViewModel(
 				subInfo.OrganizationId,
 				subscriptionId,
-				subInfo.SubscriptionName,
+				Subname,
 				infos.Item2, //tags list
 				infos.Item3, //employmentTypes list
 				infos.Item4, //positionLevels list

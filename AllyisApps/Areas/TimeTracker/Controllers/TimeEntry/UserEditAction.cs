@@ -4,11 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Collections.Generic;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -27,13 +28,23 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			var infos = AppService.GetProjectsForOrgAndUser(userId, subscriptionId);
-			string subscriptionNameToDisplay = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
+			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
 			return this.View(new UserEditViewModel
 			{
 				UserId = this.AppService.UserContext.UserId,
 				SubscriptionId = subscriptionId,
-				UserProjects = infos.Item1,
-				AllProjects = infos.Item2,
+				UserProjects = infos.Item1.AsParallel().Select(proj => new UserEditViewModel.ProjectInfoViewModel()
+				{
+					ProjectId = proj.ProjectId,
+					ProjectName = proj.ProjectName,
+					CustomerName = proj.CustomerName
+				}),
+				AllProjects = infos.Item2.AsParallel().Select(proj => new UserEditViewModel.ProjectInfoViewModel()
+				{
+					ProjectName = proj.ProjectName,
+					ProjectId = proj.ProjectId,
+					CustomerName = proj.CustomerName
+				}),
 				UserName = infos.Item3,
 				SubscriptionName = subscriptionNameToDisplay
 			});
@@ -51,7 +62,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[ValidateAntiForgeryToken]
 		public JsonResult UserEditAJAX(int userId, int subscriptionId, List<int> offUser, List<int> onUser)
 		{
-			int organizationId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			if (this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false))
 			{
 				if (offUser != null)

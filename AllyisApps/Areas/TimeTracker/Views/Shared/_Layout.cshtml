@@ -1,7 +1,7 @@
 ﻿@{
-    DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
-    DisplayHints.LayoutThemeBundle = "~/Content/TimeTracker";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/TimeTracker";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @RenderBody()
@@ -12,4 +12,9 @@
 
 @section modals {@*chain the section to the next layout*@
 @RenderSection("modals", required: false)
+}
+
+@section css
+{
+	@RenderSection("css", required: false)
 }

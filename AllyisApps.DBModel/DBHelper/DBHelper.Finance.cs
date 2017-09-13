@@ -4,12 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Finance;
-using Dapper;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using AllyisApps.DBModel.Finance;
+using Dapper;
+using System;
 
 namespace AllyisApps.DBModel
 {
@@ -103,6 +104,18 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<AccountDBEntity>("[Finance].[GetAccount]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable().FirstOrDefault();
+			}
+		}
+
+		/// <summary>
+		/// Retrieves all of the accounts in the database.
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<AccountDBEntity> GetAccounts()
+		{
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<AccountDBEntity>("[Finance].[GetAccounts]", commandType: CommandType.StoredProcedure).AsEnumerable();
 			}
 		}
 

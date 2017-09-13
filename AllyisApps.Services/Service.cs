@@ -4,17 +4,17 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Hrm;
-using AllyisApps.DBModel.TimeTracker;
-using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AllyisApps.Services.StaffingManager;
+using AllyisApps.DBModel.Hrm;
 using AllyisApps.DBModel.StaffingManager;
+using AllyisApps.DBModel.TimeTracker;
 using AllyisApps.Services.Lookup;
 using AllyisApps.DBModel.Crm;
+using AllyisApps.Services.TimeTracker;
+using AllyisApps.Services.StaffingManager;
 
 namespace AllyisApps.Services
 {
@@ -62,7 +62,7 @@ namespace AllyisApps.Services
 		/// <returns>The DateTime date.</returns>
 		public DateTime? GetDateTimeFromDays(int? days)
 		{
-			if (!days.HasValue || days <=0)
+			if (!days.HasValue || days <= 0)
 			{
 				return null;
 			}
@@ -216,8 +216,8 @@ namespace AllyisApps.Services
 		/// </summary>
 		public Tuple<List<Customer>, List<CompleteProjectInfo>, List<SubscriptionUserInfo>> GetReportInfo(int subscriptionId)
 		{
-			UserSubscription subInfo = null;
-			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetReportInfo(subInfo.OrganizationId, subscriptionId);
 			return Tuple.Create(
 				spResults.Item1.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList(),
@@ -344,8 +344,8 @@ namespace AllyisApps.Services
 		/// </summary>
 		public IEnumerable<PayClass> GetPayClasses(int subscriptionId)
 		{
-			UserSubscription subInfo = null;
-			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			return DBHelper.GetPayClasses(subInfo.OrganizationId).Select(pc => InitializePayClassInfo(pc));
 		}
 
@@ -511,6 +511,45 @@ namespace AllyisApps.Services
 			return output;
 		}
 
+		public StreamWriter PrepareExpenseCSVExport(int orgId, IEnumerable<ExpenseReport> reports, DateTime startDate, DateTime endDate)
+		{
+			StreamWriter output = new StreamWriter(new MemoryStream());
+
+			output.WriteLine(
+				string.Format(
+					"\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\"",
+					"Expense Report Id",
+					"Report Title",
+					"Organization Id",
+					"Submitted By",
+					"Report Status",
+					"Created On",
+					"Modified On",
+					"Submitted On"
+				));
+
+			foreach (ExpenseReport report in reports)
+			{
+				output.WriteLine(
+					string.Format(
+						"\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\"",
+						report.ExpenseReportId,
+						report.ReportTitle,
+						report.OrganizationId,
+						report.SubmittedById,
+						report.ReportStatus,
+						report.CreatedUtc,
+						report.ModifiedUtc,
+						report.SubmittedUtc
+						));
+			}
+
+			output.Flush();
+			output.BaseStream.Seek(0, SeekOrigin.Begin);
+
+			return output;
+		}
+
 		/// <summary>
 		/// Updates the lock date setttings.
 		/// </summary>
@@ -542,8 +581,8 @@ namespace AllyisApps.Services
 		/// <returns>.</returns>
 		public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int subscriptionId)
 		{
-			UserSubscription subInfo = null;
-			this.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetAllSettings(subInfo.OrganizationId);
 			return Tuple.Create(
 				InitializeSettingsInfo(spResults.Item1),
@@ -594,7 +633,7 @@ namespace AllyisApps.Services
 				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
 				spResults.Item3.Select(hdb => InitializeHoliday(hdb)).ToList(),
 				spResults.Item4.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item5.Select(udb => InitializeUser(udb,false)).ToList(),
+				spResults.Item5.Select(udb => InitializeUser(udb, false)).ToList(),
 				spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList());
 		}
 
@@ -884,7 +923,7 @@ namespace AllyisApps.Services
 				EmploymentTypeName = type.EmploymentTypeName
 			};
 		}
-		
+
 		/// <summary>
 		/// Converts positionLevelDBEntity to employment level service object
 		/// </summary>

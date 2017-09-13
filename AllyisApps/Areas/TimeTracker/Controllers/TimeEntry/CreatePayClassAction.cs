@@ -4,10 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
-using AllyisApps.Core.Alert;
 using System;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
+using AllyisApps.Core.Alert;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -30,7 +30,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 			else
 			{
-				int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+				int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 
 				// should put try catch in 'else'. Creating a blank pay class results in Two alerts: "Cannot create blank pay class" and "pay class already exists"
 				try

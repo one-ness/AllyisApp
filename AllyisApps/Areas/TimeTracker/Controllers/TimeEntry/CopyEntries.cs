@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
-using AllyisApps.Services;
-using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
+using AllyisApps.Services;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -53,13 +53,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId);
 			}
 
-			UserSubscription subInfo = null;
-			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			int organizationId = subInfo.OrganizationId;
 
 			// Reference for checking status of entries
 			List<CompleteProjectInfo> allProjects = AppService.GetProjectsByUserAndOrganization(userId, organizationId, false).ToList();
-			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId);
+			DateTime? lockDate = AppService.GetLockDate(AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId);
 
 			// Authorized to edit this entry
 			// Remove existing entries in target range

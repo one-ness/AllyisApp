@@ -53,7 +53,7 @@
 						<th><span class="pull-right">@Strings.Delete</span></th>
 					</tr>
 				</thead>
-				@foreach (PayClass PayClass in Model.PayClasses)
+				@foreach (SettingsViewModel.PayClassViewModel PayClass in Model.PayClasses)
 				{
 					<tr>
 						@{
@@ -172,7 +172,7 @@
 						<th><span class="pull-right">@Strings.Delete</span></th>
 					</tr>
 				</thead>
-				@foreach (Holiday Holiday in Model.Holidays)
+				@foreach (SettingsViewModel.HolidayViewModel Holiday in Model.Holidays)
 				{
 					<tr class="@Holiday.Date.Year">
 						@{
@@ -193,7 +193,11 @@
 						@Html.AntiForgeryToken();
 						@Html.HiddenFor(m => m.SubscriptionId)
 						<td><input type="text" class="form-control" name="NewHolidayName" required /></td>
-						<td><input type="date" class="form-control" name="NewHolidayDate" required /></td>
+						<td>
+							<input type="hidden" id="DateRangeStart" name="NewHolidayDate" value="" />
+							<input onchange="$('#DateRangeStart').val($(this).val());" type="text" class="form-control" style="width: 50%; display: inline-block;" id="datePickerHoliday" />@*Needs to be <input /> tag, not Html.EditorFor or a NULL holiday will show up as -1*@
+							<span class="fa fa-fw fa-calendar" id="datePickerHolidayButton"></span>
+						</td>
 						<td><input class="pull-right btn btn-primary" type="submit" value=@Strings.Add /></td>
 					}
 				</tr>
@@ -204,6 +208,7 @@
 
 @section scripts{
 	<script type="text/javascript">
+		var model_holiday = "";
 		deletePayClassWarning = "@Html.Raw(Strings.ConfirmDeletePayClass)";
 		deleteHolidayWarning = "@Html.Raw(Strings.ConfirmDeleteHoliday)";
 
@@ -232,6 +237,9 @@
 			populateHolidayForSelectedYear(@DateTime.Now.Year);
 		});
 	</script>
+	@Scripts.Render("~/bundles/jqueryui");
+	@Scripts.Render("~/bundles/moment")
+	<script src="~/Scripts/allyis-holidayDatepicker.js"></script>
 
 	@Scripts.Render("~/bundles/TTTimeEntrySettings")
 }

@@ -4,10 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
+using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
@@ -46,17 +45,17 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the user's Id.
 		/// </summary>
-		public User CurrentUser { get; internal set; }
+		public UserViewModel CurrentUser { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of active projects available.
 		/// </summary>
-		public IEnumerable<CompleteProjectInfo> Projects { get; internal set; }
+		public IEnumerable<CompleteProjectViewModel> Projects { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of projects available, including inactive projects.
 		/// </summary>
-		public IEnumerable<CompleteProjectInfo> ProjectsWithInactive { get; internal set; }
+		public IEnumerable<CompleteProjectViewModel> ProjectsWithInactive { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of projects available, associated with their total hours.
@@ -71,7 +70,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the list of users for the defined organization.
 		/// </summary>
-		public IEnumerable<User> Users { get; internal set; }
+		public IEnumerable<UserViewModel> Users { get; internal set; }
 
 		/// <summary>
 		/// Gets the total number of users.
@@ -103,17 +102,43 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets start of week for an Organization.
 		/// </summary>
-		public StartOfWeekEnum StartOfWeek { get; internal set; }
+		public Services.StartOfWeekEnum StartOfWeek { get; internal set; }
 
 		/// <summary>
 		/// Gets pay classes for an org.
 		/// </summary>
-		public IEnumerable<PayClass> PayClasses { get; internal set; }
+		public IEnumerable<PayClassInfoViewModel> PayClasses { get; internal set; }
 
 		/// <summary>
 		/// Gets or sets the type of product.
 		/// </summary>
 		public int ProductRole { get; set; }
+
+		/// <summary>
+		/// Users for Time Entries.
+		/// </summary>
+		public class UserViewModel
+		{
+			/// <summary>
+			/// Gets or sets Id of the user.
+			/// </summary>
+			public int UserId { get; set; }
+
+			/// <summary>
+			/// Gets or sets FirstName of the User.
+			/// </summary>
+			public string FirstName { get; set; }
+
+			/// <summary>
+			/// Gets or sets LastName of the user.
+			/// </summary>
+			public string LastName { get; set; }
+
+			/// <summary>
+			/// Gets or sets contact emial of user.
+			/// </summary>
+			public string Email { get; set; }
+		}
 	}
 
 	/// <summary>
@@ -124,7 +149,7 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets or sets the project in use.
 		/// </summary>
-		public CompleteProjectInfo Project { get; set; }
+		public CompleteProjectViewModel Project { get; set; }
 
 		/// <summary>
 		/// Gets or sets the total amount of hours attributed to this project.

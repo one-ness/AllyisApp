@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Web.Mvc;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.Utilities
 {
@@ -101,6 +103,42 @@ namespace AllyisApps.Utilities
 
 				return sw.ToString();
 			}
+		}
+	}
+
+	/// <summary>
+	/// Helper for commonly shared.
+	/// </summary>
+	public static class ViewModelHelper
+	{
+		/// <summary>
+		/// Constuct View Model.
+		/// </summary>
+		/// <param name="proj">Project from database.</param>
+		/// <returns>Complete Project View Model.</returns>
+		public static CompleteProjectViewModel ConstuctCompleteProjectViewModel(CompleteProjectInfo proj)
+		{
+			return new CompleteProjectViewModel()
+			{
+				CanEditProject = proj.CanEditProject,
+				CreatedUtc = proj.CreatedUtc,
+				CustomerId = proj.CustomerId,
+				CustomerName = proj.CustomerName,
+				CustomerOrgId = proj.CustomerOrgId,
+				EndDate = proj.EndDate,
+				IsActive = proj.IsActive,
+				IsCustomerActive = proj.IsCustomerActive,
+				IsProjectUser = proj.IsProjectUser,
+				IsUserActive = proj.IsUserActive,
+				OrganizationId = proj.OrganizationId,
+				OrganizationName = proj.OrganizationName,
+				OrganizationRoleId = proj.OrganizationRoleId,
+				PriceType = proj.PriceType,
+				ProjectId = proj.ProjectId,
+				ProjectName = proj.ProjectName,
+				ProjectOrgId = proj.ProjectOrgId,
+				StartDate = proj.StartDate
+			};
 		}
 	}
 }

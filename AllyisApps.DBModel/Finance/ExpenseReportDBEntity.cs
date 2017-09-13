@@ -18,11 +18,6 @@ namespace AllyisApps.DBModel.Finance
 		public string ReportTitle { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Expense Report's date.
-		/// </summary>
-		public DateTime ReportDate { get; set; }
-
-		/// <summary>
 		/// Gets or sets the Expense Reports's parent organization Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
@@ -45,11 +40,16 @@ namespace AllyisApps.DBModel.Finance
 		/// <summary>
 		/// Gets or sets the Expense Report's creation date.
 		/// </summary>
-		public int CreatedUtc { get; set; }
+		public DateTime ExpenseReportCreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Expense Report's last-modified-on date.
 		/// </summary>
-		public int ModifiedUtc { get; set; }
+		public DateTime ExpenseReportModifiedUtc { get; set; }
+
+		/// <summary>
+		/// Gets or sets the Expense Report's submission date.
+		/// </summary>
+		public DateTime? ExpenseReportSubmittedUtc { get; set; }
 	}
 }
