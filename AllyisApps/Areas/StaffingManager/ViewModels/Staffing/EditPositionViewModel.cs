@@ -80,7 +80,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// Gets or sets billing rate frequency (eg: Months, Weeks)
 		/// </summary>
-		public int BillingRateFrequency { get; set; }
+		public BillingRateEnum BillingRateFrequency { get; set; }
 
 		/// <summary>
 		/// Get or sets the billing rate amount in dollars

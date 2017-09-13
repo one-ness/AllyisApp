@@ -525,17 +525,6 @@ namespace AllyisApps.Services
 			obj.Position.HiringManager = position.HiringManager;
 			obj.Position.TeamName = position.TeamName;
 
-
-			obj.Customer = new ExpandoObject();
-			obj.Customer.CustomerName = position.Customer.CustomerName;
-			obj.Customer.OrganizationId = position.Customer.OrganizationId;
-			obj.Customer.ContactEmail = position.Customer.ContactEmail;
-			obj.Customer.FaxNumber = position.Customer.FaxNumber;
-			obj.Customer.ContactPhoneNumber = position.Customer.ContactPhoneNumber;
-			obj.Customer.Website = position.Customer.Website;
-			obj.Customer.EIN = position.Customer.EIN;
-			obj.Customer.CustomerOrgId = position.Customer.CustomerOrgId;
-
 			obj.Address = new ExpandoObject();
 			obj.Address.Address1 = position.Address.Address1;
 			obj.Address.Address2 = position.Address.Address2;

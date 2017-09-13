@@ -44,6 +44,15 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				infos.Item4, //positionLevels list
 				infos.Item5  //positionStatuses list
 				);
+
+			foreach (PositionThumbnailInfo pos in model.positions)
+			{
+				foreach (Customer cus in infos.Item6)
+				{
+					if (pos.CustomerId == cus.CustomerId) pos.CustomerName = cus.CustomerName;
+				}
+			}
+
 			return this.View(model);
 		}
 

@@ -1,0 +1,99 @@
+﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.StaffingSettingsViewModel
+@{
+
+	Model.LocalizedStates = new Dictionary<string, string>();
+}
+
+<div>
+	@using (@Html.BeginForm((string)ViewData[ActionConstants.Action], (string)ViewData[ControllerConstants.Controller], FormMethod.Post, new { @class = string.Empty, role = "form" }))
+	{
+		@Html.AntiForgeryToken()
+		@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+		<div class="row">
+			<div class="col-md-6 sm-control-width">
+
+				<div class="form-group">
+					@Html.ReqLabelFor(model => model.newCustomer.CustomerName, Strings.Name)
+					@Html.EditorFor(model => model.newCustomer.CustomerName, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.newCustomer.CustomerName, string.Empty, new { @class = "text-danger" })
+				</div>
+
+				<div class="form-group">
+					@Html.ReqLabelFor(model => model.newCustomer.Address, Strings.Address)
+					@Html.EditorFor(model => model.newCustomer.Address, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.newCustomer.Address, string.Empty, new { @class = "text-danger" })
+				</div>
+
+				<div class="form-group">
+					@Html.ReqLabelFor(model => model.newCustomerAddress.City, Strings.City)
+					@Html.EditorFor(model => model.newCustomerAddress.City, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.newCustomerAddress.City, string.Empty, new { @class = "text-danger" })
+				</div>
+
+				<div class="form-group">
+					@Html.ReqLabelFor(m => m.newCustomerAddress.CountryCode, Strings.Country)
+					@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control", @id = ViewConstants.DdlCountriesId })
+				</div>
+				<div class="form-group">
+					@Html.ReqLabelFor(m => m.newCustomerAddress.StateId, Strings.State)
+					@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control", @id = ViewConstants.DdlStatesId })
+				</div>
+
+				<div class="form-group">
+					@Html.ReqLabelFor(model => model.newCustomerAddress.PostalCode, Strings.PostalCode)
+					@Html.EditorFor(model => model.newCustomerAddress.PostalCode, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.newCustomerAddress.PostalCode, string.Empty, new { @class = "text-danger" })
+				</div>
+			</div>
+			<div class="col-md-6 sm-control-width">
+
+				<div class="form-group">
+					@Html.ReqLabelFor(model => model.newCustomer.ContactEmail, Strings.ContactEmail)
+					@Html.EditorFor(model => model.newCustomer.ContactEmail, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.newCustomer.ContactEmail, string.Empty, new { @class = "text-danger" })
+				</div>
+
+				<div class="form-group">
+					@Html.ReqLabelFor(model => model.newCustomer.ContactPhoneNumber, Strings.ContactPhoneNumber)
+					@Html.EditorFor(model => model.newCustomer.ContactPhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.newCustomer.ContactPhoneNumber, string.Empty, new { @class = "text-danger" })
+				</div>
+
+				<div class="form-group">
+					@Html.ReqLabelFor(model => model.newCustomer.FaxNumber, Strings.FaxNumber)
+					@Html.EditorFor(model => model.newCustomer.FaxNumber, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.newCustomer.FaxNumber, string.Empty, new { @class = "text-danger" })
+				</div>
+
+				<div class="form-group">
+					@Html.ReqLabelFor(model => model.newCustomer.EIN, Strings.EIN)
+					@Html.EditorFor(model => model.newCustomer.EIN, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.newCustomer.EIN, string.Empty, new { @class = "text-danger" })
+				</div>
+
+				<div class="form-group">
+					@Html.ReqLabelFor(m => m.newCustomer.CustomerOrgId, Strings.CustomerOrgId)
+					@Html.TextBoxFor(m => m.newCustomer.CustomerOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.newCustomer.CustomerOrgId })
+					@Html.ValidationMessageFor(model => model.newCustomer.CustomerOrgId, string.Empty, new { @class = "text-danger" })
+				</div>
+
+				@Html.HiddenFor(m => m.newCustomer.OrganizationId)
+				@Html.HiddenFor(m => m.newCustomer.CustomerId)
+				@Html.HiddenFor(m => m.addressId)
+
+				<div class="form-group allyis-action-buttons">
+					@if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
+					{
+						<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Customer)" class="btn btn-default">@Strings.Cancel</a>
+						<input type="submit" value="@Strings.Create" class="btn btn-primary" />
+					}
+					else
+					{
+						<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Customer)" class="btn btn-default">@Strings.Cancel</a>
+						<input type="submit" value="@Strings.Save" class="btn btn-primary" />
+					}
+				</div>
+			</div>
+		</div>
+	}
+</div>

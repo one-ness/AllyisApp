@@ -30,13 +30,26 @@ BEGIN
 			[Address].[City],
 			[State].[StateName],
 			[Country].[CountryName],
-			[Address].[PostalCode]
+			[Address].[PostalCode],
+			[Customer].[CustomerId],
+			[Customer].[CustomerName],
+			[Customer].[AddressId],
+			[Customer].[ContactEmail],
+			[Customer].[ContactPhoneNumber],
+			[Customer].[FaxNumber],
+			[Customer].[Website],
+			[Customer].[EIN],
+			[Customer].[CustomerCreatedUtc],
+			[Customer].[OrganizationId],
+			[Customer].[CustomerOrgId],
+			[Customer].[IsActive]
 		FROM [StaffingManager].[Position]
 		LEFT JOIN [StaffingManager].[PositionTag]	WITH (NOLOCK) ON [PositionTag].[PositionId] = [Position].[PositionId]
 			 JOIN [Lookup].[Tag]					WITH (NOLOCK) ON [PositionTag].[TagId] = [Tag].[TagId]
 		LEFT JOIN [Lookup].[Address]				WITH (NOLOCK) ON [Address].[AddressId] = [Position].[AddressId]
-		LEFT JOIN [Lookup].[Country]				WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryCode]
+		LEFT JOIN [Lookup].[Country]				WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
 		LEFT JOIN [Lookup].[State]					WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
+		LEFT JOIN [CRM].[Customer]					WITH (NOLOCK) ON [Customer].[CustomerId] = [Position].[CustomerId]
 		WHERE [Position].[OrganizationId] = @organizationId '
 	IF @status is not null
 		SET @Where = @Where + 'AND [PositionStatusName] = @_Status '
@@ -78,4 +91,20 @@ BEGIN
 		[PositionStatusName]
 	FROM [StaffingManager].[PositionStatus]
 	WHERE [PositionStatus].[OrganizationId] = @organizationId
+	
+	-- Select all Positions Customers from the org
+	SELECT [CustomerId],
+		   [CustomerName],
+		   [AddressId],
+		   [ContactEmail],
+		   [ContactPhoneNumber],
+		   [FaxNumber],
+		   [Website],
+		   [EIN],
+		   [CustomerCreatedUtc],
+		   [OrganizationId],
+		   [CustomerOrgId],
+		   [IsActive]
+	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK)
+	WHERE [Customer].[OrganizationId] = @organizationId
 END
