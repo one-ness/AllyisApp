@@ -113,43 +113,52 @@ namespace AllyisApps.Controllers
 						ProductId = userSubInfo.Subscription.ProductId,
 						AreaUrl = userSubInfo.Subscription.AreaUrl
 					};
-					if (userSubInfo.Subscription.ProductId == ProductIdEnum.TimeTracker)
+					switch (userSubInfo.Subscription.ProductId)
 					{
-						int? sDate = null;
-						int? eDate = null;
-						int startOfWeek = AppService.GetAllSettings(userSubInfo.Subscription.SubscriptionId).Item1.StartOfWeek;
-						sDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
-						eDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
-						subViewModel.ProductGoToUrl = Url.RouteUrl(
-							"TimeTracker_NoUserId",
-							new
+						case ProductIdEnum.TimeTracker:
 							{
-								subscriptionId =
-								userSubInfo.Subscription.SubscriptionId,
-								controller = ControllerConstants.TimeEntry,
-								startDate = sDate,
-								endDate = eDate
-							});
-					}
-					else if (userSubInfo.Subscription.ProductId == ProductIdEnum.ExpenseTracker)
-					{
-						subViewModel.ProductGoToUrl = Url.RouteUrl(
-							"ExpenseTracker_Default",
-							new
+								int? sDate = null;
+								int? eDate = null;
+								int startOfWeek = AppService.GetAllSettings(userSubInfo.Subscription.SubscriptionId).Item1.StartOfWeek;
+								sDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
+								eDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
+								subViewModel.ProductGoToUrl = Url.RouteUrl(
+									"TimeTracker_NoUserId",
+									new
+									{
+										subscriptionId =
+										userSubInfo.Subscription.SubscriptionId,
+										controller = ControllerConstants.TimeEntry,
+										startDate = sDate,
+										endDate = eDate
+									});
+								break;
+							}
+						case ProductIdEnum.ExpenseTracker:
 							{
-								subscriptionId = userSubInfo.Subscription.SubscriptionId,
-								controller = ControllerConstants.Expense
-							});
-					}
-					else
-					{
-						subViewModel.ProductGoToUrl = userSubInfo.Subscription.AreaUrl + "/" + subViewModel.SubscriptionId;
+								subViewModel.ProductGoToUrl = Url.RouteUrl(
+									"ExpenseTracker_Default",
+									new
+									{
+										subscriptionId = userSubInfo.Subscription.SubscriptionId,
+										controller = ControllerConstants.Expense
+									});
+								break;
+							}
+						case ProductIdEnum.StaffingManager:
+
+							subViewModel.ProductGoToUrl = Url.RouteUrl("StaffingManager_default",
+								new
+								{
+									subscriptionId = userSubInfo.Subscription.SubscriptionId,
+									controller = ControllerConstants.Staffing
+								});
+							break;
 					}
 
 					subViewModel.IconUrl = string.Format("Content/icons/{0}.png", subViewModel.ProductName.Replace(" ", string.Empty));
 					orgViewModel.Subscriptions.Add(subViewModel);
 				}
-
 				indexViewModel.Organizations.Add(orgViewModel);
 			}
 
