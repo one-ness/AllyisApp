@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using AllyisApps.DBModel.Finance;
 using Dapper;
+using System;
 
 namespace AllyisApps.DBModel
 {

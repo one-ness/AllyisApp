@@ -49,23 +49,6 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Adds an ExpenseFile to the database.
-		/// </summary>
-		/// <param name="file"></param>
-		public void CreateExpenseFile(ExpenseFileDBEntity file)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@fileName", file.FileName);
-			parameters.Add("@url", file.Url);
-			parameters.Add("@expenseReportId", file.ExpenseReportId);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				connection.Execute("[Expense].[CreateExpenseFile]", parameters, commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
 		/// Retrieves all Expense Items with a given account id.
 		/// </summary>
 		/// <param name="AccountId">The id of the parent account</param>
@@ -94,22 +77,6 @@ namespace AllyisApps.DBModel
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<ExpenseItemDBEntity>("[Expense].[GetExpenseItemsByExpenseReportId]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable().ToList();
-			}
-		}
-
-		/// <summary>
-		/// Gets expense files for a specified report
-		/// </summary>
-		/// <param name="ReportId"></param>
-		/// <returns></returns>
-		public IList<ExpenseFileDBEntity> GetExpenseFilesByReportId(int ReportId)
-		{
-			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@reportId", ReportId);
-
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<ExpenseFileDBEntity>("[Expense].[GetExpenseFilesByExpenseReportId]", parameters, commandType: CommandType.StoredProcedure).AsEnumerable().ToList();
 			}
 		}
 

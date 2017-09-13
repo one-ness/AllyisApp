@@ -18,6 +18,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			ViewData["SubscriptionName"] = AppService.getSubscriptionName(subscriptionId);
 			ViewData["SubscriptionId"] = subscriptionId;
 			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
+			ViewData["MaxAmount"] = subInfo.MaxAmount;
 		}
 
 		private void UploadItems(ExpenseCreateModel model, ExpenseReport report)

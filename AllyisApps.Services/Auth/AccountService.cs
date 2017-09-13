@@ -286,7 +286,8 @@ namespace AllyisApps.Services
 							ProductRoleId = item.ProductRoleId,
 							SkuId = (SkuIdEnum)item.SkuId,
 							SubscriptionId = item.SubscriptionId,
-							OrganizationId = item.OrganizationId
+							OrganizationId = item.OrganizationId,
+							MaxAmount = expando.User.MaxAmount
 						});
 
 					//result.UserSubscriptions.Add(sub.SubscriptionId, sub);
@@ -668,6 +669,7 @@ namespace AllyisApps.Services
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
 				Address = address,
+				MaxAmount = user.MaxAmount
 			};
 		}
 
@@ -780,6 +782,16 @@ namespace AllyisApps.Services
 		public IList<AccountDBEntity> GetAccounts()
 		{
 			return DBHelper.GetAccounts().ToList();
+		}
+
+		public void UpdateUserMaxAmount(User user)
+		{
+			UserDBEntity entity = new UserDBEntity()
+			{
+				UserId = user.UserId,
+				MaxAmount = user.MaxAmount
+			};
+			DBHelper.UpdateUserMaxAmount(entity);
 		}
 
 		#endregion Info-DBEntity Conversions

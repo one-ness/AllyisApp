@@ -35,9 +35,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <returns>The view model.</returns>
 		public ReportViewModel InitializeReportViewModel(int subscriptionId, int id)
 		{
-			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
-			ViewData["IsManager"] = subInfo.ProductRoleId == 2;
-			ViewData["SubscriptionId"] = subscriptionId;
+			SetNavData(subscriptionId);
 
 			var report = AppService.GetExpenseReport(id);
 			var reportItems = AppService.GetExpenseItemsByReportId(id);

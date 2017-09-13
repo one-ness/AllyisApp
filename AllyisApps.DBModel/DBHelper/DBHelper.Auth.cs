@@ -193,6 +193,22 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
+		/// Updates the max amount a user can approve of in a report.
+		/// </summary>
+		/// <param name="user"></param>
+		public void UpdateUserMaxAmount(UserDBEntity user)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@userId", user.UserId);
+			parameters.Add("@maxAmount", user.MaxAmount);
+
+			using (var connection = new SqlConnection(this.SqlConnectionString))
+			{
+				connection.Execute("[Auth].[UpdateUserMaxAmount]", parameters, commandType: CommandType.StoredProcedure);
+			}
+		}
+
+		/// <summary>
 		/// Returns the password hash for the given user.
 		/// </summary>
 		/// <param name="userId">User id.</param>
