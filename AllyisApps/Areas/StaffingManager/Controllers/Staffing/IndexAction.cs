@@ -57,7 +57,7 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 
 		/*
 		/// <summary>
-		/// Index 
+		/// Index
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <param name="statusFilterName"></param>
@@ -67,7 +67,6 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 		[Route("{StaffingManager}/{Index}/{Status?}/{Type?}/{Tags?}")]
 		public ActionResult IndexFiltered(int subscriptionId, string statusFilterName, string typeFilterName, List<string> tagsFilter)
 		{
-
 			UserSubscription subInfo = null;
 			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
 
@@ -89,7 +88,6 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 			return this.View(model);
 		}
 		*/
-
 
 		/// <summary>
 		/// Constructor for the TimeEntryOverDateRangeViewModel.

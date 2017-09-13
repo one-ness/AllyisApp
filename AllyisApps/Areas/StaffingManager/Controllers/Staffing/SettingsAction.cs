@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Web.Mvc;
+using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
-using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Services.StaffingManager;
-using System.Collections.Generic;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -19,21 +19,20 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 	public partial class StaffingController : BaseController
 	{
 		/// <summary>
-		/// Index 
+		/// Index
 		/// </summary>
 		/// <param name="subscriptionId"></param>
 		/// <returns></returns>
 		public ActionResult Settings(int subscriptionId)
 		{
-
 			UserContext.SubscriptionAndRole subInfo = null;
 			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			string Subname = AppService.getSubscriptionName(subscriptionId);
 			var infos = AppService.GetStaffingIndexInfo(subInfo.OrganizationId);
-			
+
 			//ViewBag.SignedInUserID = GetCookieData().UserId;
 			//ViewBag.SelectedUserId = userId;
-			
+
 			StaffingSettingsViewModel model = this.ConstructStaffingSettingsViewModel(
 				subInfo.OrganizationId,
 				subscriptionId,

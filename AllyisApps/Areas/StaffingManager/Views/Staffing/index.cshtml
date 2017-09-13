@@ -93,7 +93,6 @@
 			display: inline-block;
 			width: 33%;
 		}
-
 	</style>
 
 	<div class="panel panel-default" width ="100%">
@@ -102,7 +101,7 @@
 				@Model.SubscriptionName
 			</h2>
 			<button type="button" class="btn" data-toggle="collapse" data-target="#FilterArea">Filters</button>
-			
+
 			<div id="FilterArea" class="collapse panel panel-default filter">
 				<div class="column-left">
 					<label>Filter by Position Status</label>
@@ -203,7 +202,7 @@
 				y = rows[i + 1].getElementsByTagName("TD")[n];
 				/*check if the two rows should switch place, based on the direction, asc or desc:*/
 				if (dir == "asc") {
-					if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) 
+					if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase())
 					{
 						shouldSwitch= true;
 						break;
@@ -233,7 +232,7 @@
 			}
 		}
 	}
-	
+
 	function filteredSubmit() {
 		var statuses = [];
 		var count = 0;
@@ -243,7 +242,7 @@
 			if (selecter.options[k].selected) statuses[count] = selecter.options[k].value;
 			count++;
 		}
-		
+
 		var types = [];
 		count = 0;
 		var j = 0;
@@ -253,7 +252,7 @@
 			count++;
 		}
 
-		var tags = []; 
+		var tags = [];
 		count = 0;
 		var i = 0;
 		selecter = document.getElementById("tagsFilter");

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AllyisApps.Services;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
@@ -18,5 +17,5 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// Gets or sets the subscription id.
 		/// </summary>
 		public int SubscriptionId { get; set; }
-    }
+	}
 }

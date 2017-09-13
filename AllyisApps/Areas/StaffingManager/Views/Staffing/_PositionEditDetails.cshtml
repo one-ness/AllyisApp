@@ -8,7 +8,6 @@
 	}
 }
 
-
 <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
 <link rel="stylesheet" type="text/css" href="~/Content/jquery.comiseo.daterangepicker.css" />
 
@@ -83,7 +82,7 @@
 						<div class="form-group">
 							<label>Start Date</label>
 							<span class="fa fa-fw fa-calendar"></span>
-							@Html.TextBoxFor(m => m.StartDate, new {  @class = "updatable datepicker form-control item-control", @id = "datepicker", value = DateTime.UtcNow })
+							@Html.TextBoxFor(m => m.StartDate, new { @class = "updatable datepicker form-control item-control", @id = "datepicker", value = DateTime.UtcNow })
 						</div>
 						<div class="form-group">
 							@Html.ReqLabelFor(m => m.TeamName, Strings.TeamName)
@@ -128,7 +127,6 @@
 							@Html.ReqLabelFor(m => m.BillingRateFrequency, "Rate")
 							@Html.EnumDropDownListFor(m => m.BillingRateFrequency, Strings.DropDownEmpty, new { @class = "form-control" })
 							@Html.ValidationMessageFor(m => m.BillingRateFrequency, "", new { @class = "text-danger" })
-					
 						</div>
 						<div class="form-group">
 							@Html.ReqLabelFor(m => m.DurationMonths, Strings.DurationMonths)
@@ -198,7 +196,7 @@
 						<Label>Tags</Label>
 						<div>
 							<div id="tags">
-								<input type="text" data-role="tagsinput" placeholder="Add a tag" size="45"/>
+								<input type="text" data-role="tagsinput" placeholder="Add a tag" size="45" />
 							</div>
 						</div>
 						<br>
@@ -229,15 +227,14 @@
 		}
 	</div>
 	@if (Model != null && !Model.IsCreating)
-    {
-        using (Html.BeginForm(ActionConstants.DeletePosition, ControllerConstants.Staffing, new { id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(Strings.ConfirmDeleteOrg)) }))
-        {
+	{
+		using (Html.BeginForm(ActionConstants.DeletePosition, ControllerConstants.Staffing, new { id = Model.OrganizationId }, FormMethod.Post, new { @onsubmit = String.Format("return confirm(\"{0}\")", Html.Raw(Strings.ConfirmDeleteOrg)) }))
+		{
 			@Html.AntiForgeryToken()
 			<input type="submit" value="@Strings.DeletePosition" class="btn btn-danger" style="margin-bottom: 15px;" id="submitDelete" />
-        }
-    }
+		}
+	}
 </div>
-
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
@@ -265,7 +262,6 @@
 		$('input[name=TagsToSubmit]').val(tags);
 		console.log("TAGS: " + tags[1]);
 	}
-
 
 	$(function () {
 		$("#tags input").on({
