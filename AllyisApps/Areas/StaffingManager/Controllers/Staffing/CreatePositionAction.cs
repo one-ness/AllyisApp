@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
@@ -69,10 +70,26 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				SubscriptionId = subInfo.SubscriptionId,
 				StartDate = System.DateTime.UtcNow.Date,
 				Tags = tags,
-				EmploymentTypes = infos.Item3,
-				PositionLevels = infos.Item4,
-				PositionStatuses = infos.Item5,
-				Customers = infos.Item6
+				EmploymentTypes = infos.Item3.AsParallel().Select(et => new EmploymentTypeViewModel()
+				{
+					EmploymentTypeId = et.EmploymentTypeId,
+					EmploymentTypeName = et.EmploymentTypeName
+				}).ToList(),
+				PositionLevels = infos.Item4.AsParallel().Select(pl => new PositionLevelViewModel()
+				{
+					PositionLevelId = pl.PositionLevelId,
+					PositionLevelName = pl.PositionLevelName
+				}).ToList(),
+				PositionStatuses = infos.Item5.AsParallel().Select(ps  => new PositionStatusViewModel()
+				{
+					PositionStatusId = ps.PositionStatusId,
+					PositionStatusName = ps.PositionStatusName
+				}).ToList(),
+				Customers = infos.Item6.AsParallel().Select(cus => new CustomerViewModel()
+				{
+					CustomerId = cus.CustomerId,
+					CustomerName = cus.CustomerName
+				}).ToList()
 			};
 		}
 

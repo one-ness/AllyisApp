@@ -36,21 +36,21 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// Gets or sets list fo tag objects used by the organization.
 		/// </summary>
-		public List<Services.Lookup.Tag> Tags { get; set; }
+		public List<TagViewModel> Tags { get; set; }
 
 		/// <summary>
 		/// Gets or sets list of employment types used by the organization.
 		/// </summary>
-		public List<EmploymentType> EmploymentTypes { get; set; }
+		public List<EmploymentTypeViewModel> EmploymentTypes { get; set; }
 
 		/// <summary>
 		/// Gets or sets list of position levels used by the organization.
 		/// </summary>
-		public List<PositionLevel> PositionLevels { get; set; }
+		public List<PositionLevelViewModel> PositionLevels { get; set; }
 
 		/// <summary>
 		/// Gets or sets list of position statuses used by the organization.
 		/// </summary>
-		public List<PositionStatus> PositionStatuses { get; set; }
+		public List<PositionStatusViewModel> PositionStatuses { get; set; }
 	}
 }

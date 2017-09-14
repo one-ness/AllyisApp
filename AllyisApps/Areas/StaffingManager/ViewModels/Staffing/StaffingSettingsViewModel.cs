@@ -44,7 +44,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// list fo tag objects used by the organization
 		/// </summary>
-		public List<Services.Lookup.Tag> tags { get; set; }
+		public List<TagViewModel> tags { get; set; }
 
 		/// <summary>
 		/// customers from the company
@@ -59,22 +59,22 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// an address for new customer creation
 		/// </summary>
-		public Address newCustomerAddress { get; set; }
+		public NewAddressViewModel newCustomerAddress { get; set; }
 
 		/// <summary>
 		/// list of employment types used by the organization
 		/// </summary>
-		public List<EmploymentType> employmentTypes { get; set; }
+		public List<EmploymentTypeViewModel> employmentTypes { get; set; }
 
 		/// <summary>
 		/// list of position levels used by the organization
 		/// </summary>
-		public List<PositionLevel> positionLevels { get; set; }
+		public List<PositionLevelViewModel> positionLevels { get; set; }
 
 		/// <summary>
 		/// list of position statuses used by the organization
 		/// </summary>
-		public List<PositionStatus> positionStatuses { get; set; }
+		public List<PositionStatusViewModel> positionStatuses { get; set; }
 
 		/// <summary>
 		/// Gets or sets the position's address.
@@ -128,5 +128,34 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// country code and localized names
 		/// </summary>
 		public Dictionary<string, string> LocalizedCountries { get; set; }
+
+		/// <summary>
+		/// Addres for new Custoemr 
+		/// </summary>
+		public class NewAddressViewModel {
+			/// <summary>
+			/// New City
+			/// </summary>
+			public string City { get; set; }
+			/// <summary>
+			/// CounteryCode
+			/// </summary>
+			public string CountryCode { get; set; }
+			/// <summary>
+			/// StateId
+			/// </summary>
+			public int StateId {get;set;}
+
+			/// <summary>
+			/// Postal/Zip Code 
+			/// </summary>
+			public string PostalCode { get; set; }
+
+			/// <summary>
+			/// Street Address
+			/// </summary>
+			public string Address1 { get; set; }
+		}
+
 	}
 }

@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using AllyisApps.Services;
-using AllyisApps.Services.StaffingManager;
 
 namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 {
@@ -271,21 +270,22 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// position levels available
 		/// </summary>
-		public List<PositionLevel> PositionLevels { get; set; }
+		public List<PositionLevelViewModel> PositionLevels { get; set; }
 
 		/// <summary>
 		/// position statuses available
 		/// </summary>
-		public List<PositionStatus> PositionStatuses { get; set; }
+		public List<PositionStatusViewModel> PositionStatuses { get; set; }
 
 		/// <summary>
 		/// employment types available
 		/// </summary>
-		public List<EmploymentType> EmploymentTypes { get; set; }
+		public List<EmploymentTypeViewModel> EmploymentTypes { get; set; }
+
 
 		/// <summary>
 		/// list of customers the org has used
 		/// </summary>
-		public List<Customer> Customers { get; set; }
+		public List<CustomerViewModel> Customers { get; set; }
 	}
 }

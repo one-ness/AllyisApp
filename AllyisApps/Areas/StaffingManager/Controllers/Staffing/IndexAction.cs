@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
 using AllyisApps.Controllers;
@@ -118,9 +119,21 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 				SubscriptionName = subName,
 				Positions = positions,
 				Tags = tags,
-				EmploymentTypes = employmentTypes,
-				PositionLevels = positionLevels,
-				PositionStatuses = positionStatuses
+				EmploymentTypes = employmentTypes.AsParallel().Select(et => new EmploymentTypeViewModel()
+				{
+					EmploymentTypeId = et.EmploymentTypeId,
+					EmploymentTypeName = et.EmploymentTypeName
+				}).ToList(),
+				PositionLevels = positionLevels.AsParallel().Select(pl => new PositionLevelViewModel()
+				{
+					PositionLevelId = pl.PositionLevelId,
+					PositionLevelName = pl.PositionLevelName
+				}).ToList(),
+				PositionStatuses = positionStatuses.AsParallel().Select(ps => new PositionStatusViewModel()
+				{
+					PositionStatusId = ps.PositionStatusId,
+					PositionStatusName = ps.PositionStatusName
+				}).ToList(),
 			};
 
 			return result;
