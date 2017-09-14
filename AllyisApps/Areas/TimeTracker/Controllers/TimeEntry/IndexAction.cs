@@ -149,7 +149,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			foreach (CompleteProjectInfo proj in allProjects.Where(p => p.ProjectId > 0))
 			{
 				// if ( hours.Count == 0 )
-				hours.Add(proj.ProjectId, new ProjectHours { Project = ViewModelHelper.ConstuctCompleteProjectViewModel(proj), Hours = 0.0f });
+				hours.Add(proj.ProjectId, new ProjectHours { Project = new CompleteProjectViewModel(proj), Hours = 0.0f });
 			}
 
 			allProjects.Insert(0, new CompleteProjectInfo { ProjectId = -1, ProjectName = Resources.Strings.SelectProject, IsActive = true, IsCustomerActive = true, IsUserActive = true });
@@ -177,9 +177,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}),
 				GrandTotal = new ProjectHours { Project = new CompleteProjectViewModel { ProjectName = "Total" }, Hours = 0.0f },
 				Projects = allProjects.Where(x => x.IsActive == true && x.IsCustomerActive == true && x.IsUserActive == true).AsParallel()
-					.Select(proj => ViewModelHelper.ConstuctCompleteProjectViewModel(proj)),
+					.Select(proj => new CompleteProjectViewModel(proj)),
 				ProjectsWithInactive = allProjects.Where(p => p.ProjectId != 0).AsParallel().Select(proj =>
-					ViewModelHelper.ConstuctCompleteProjectViewModel(proj)),
+					new CompleteProjectViewModel(proj)),
 				ProjectHours = hours.Values.Where(x => x.Hours > 0),
 				Users = users.AsParallel().Select(user => ConstuctUserViewModel(user)),
 				TotalUsers = users.Count(),

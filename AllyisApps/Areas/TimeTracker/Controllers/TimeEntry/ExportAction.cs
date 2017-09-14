@@ -92,17 +92,17 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				if ((userIds.Count > 1) || (userIds[0] == -1))
 				{
-					result.Projects = AppService.GetProjectsByOrganization(orgId).AsParallel().Select(proj => ViewModelHelper.ConstuctCompleteProjectViewModel(proj));
+					result.Projects = AppService.GetProjectsByOrganization(orgId).AsParallel().Select(proj => new CompleteProjectViewModel(proj));
 				}
 				else
 				{
 					// single user selected
-					result.Projects = AppService.GetProjectsByUserAndOrganization(userIds[0], orgId, false).AsParallel().Select(proj => ViewModelHelper.ConstuctCompleteProjectViewModel(proj));
+					result.Projects = AppService.GetProjectsByUserAndOrganization(userIds[0], orgId, false).AsParallel().Select(proj => new CompleteProjectViewModel(proj));
 				}
 
 				// Add default project in case there are holiday entries
 				List<CompleteProjectViewModel> defaultProject = new List<CompleteProjectViewModel>();
-				defaultProject.Add(ViewModelHelper.ConstuctCompleteProjectViewModel(AppService.GetProject(0)));
+				defaultProject.Add(new CompleteProjectViewModel(AppService.GetProject(0)));
 				result.Projects = result.Projects.Concat(defaultProject);
 			}
 

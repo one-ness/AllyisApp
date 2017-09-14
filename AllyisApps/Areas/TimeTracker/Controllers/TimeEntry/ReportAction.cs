@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.Utilities;
+using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -87,7 +88,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				CanManage = canManage,
 				OrganizationId = organizationId,
 				ShowExport = showExport,
-				Projects = projects.AsParallel().Select(proj => ViewModelHelper.ConstuctCompleteProjectViewModel(proj)).AsEnumerable(),
+				Projects = projects.AsParallel().Select(proj => new CompleteProjectViewModel(proj)).AsEnumerable(),
 				PreviewPageSize = 20,
 				PreviewTotal = string.Format("{0} {1}", 0, Resources.Strings.HoursTotal),
 				PreviewEntries = null,
