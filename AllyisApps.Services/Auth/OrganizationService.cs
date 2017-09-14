@@ -700,7 +700,7 @@ namespace AllyisApps.Services
 			return new InvitationInfo
 			{
 				Email = invitation.Email,
-				CompressedEmail = AppService.GetCompressedEmail(invitation.Email),
+				CompressedEmail = Utility.GetCompressedEmail(invitation.Email),
 				FirstName = invitation.FirstName,
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,

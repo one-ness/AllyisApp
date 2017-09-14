@@ -24,6 +24,21 @@ namespace AllyisApps.Lib
 			return result;
 		}
 
+		const int EmailDisplayMaxLength = 48;
+		/// <summary>
+		/// get a reduced length email if it is too long
+		/// </summary>
+		public static string GetCompressedEmail(string fullEmail)
+		{
+			var result = fullEmail;
+			if (!string.IsNullOrWhiteSpace(fullEmail) && fullEmail.Length > EmailDisplayMaxLength)
+			{
+				result = string.Format("{0}...{1}", fullEmail.Substring(0, 20), fullEmail.Substring(fullEmail.Length - 15));
+			}
+
+			return result;
+		}
+
 		/// <summary>
 		/// Verifies a url format for a web address (http or https).
 		/// </summary>

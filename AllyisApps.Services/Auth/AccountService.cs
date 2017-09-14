@@ -26,41 +26,6 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
-		#region public static
-
-		/// <summary>
-		/// Returns a compressed version of the given email address if it is too long.
-		/// </summary>
-		/// <param name="fullEmail">Full email address.</param>
-		/// <returns>Compressed email address, or the full address if it is short enough (or null).</returns>
-		public static string GetCompressedEmail(string fullEmail)
-		{
-			if (!string.IsNullOrEmpty(fullEmail) && fullEmail.Length > 50)
-			{
-				string cemail = string.Format("{0}...{1}", fullEmail.Substring(0, 20), fullEmail.Substring(fullEmail.Length - 15));
-				return cemail;
-			}
-			else
-			{
-				return fullEmail;
-			}
-		}
-
-		#endregion public static
-
-		#region public
-
-		/// <summary>
-		/// Returns a collection of valid states/provinces for the given country.
-		/// </summary>
-		/// <param name="countryName">Country name.</param>
-		/// <returns><see cref="IEnumerable"/> of valid states/provinces.</returns>
-		public IEnumerable ValidStates(string countryName)
-		{
-			if (string.IsNullOrWhiteSpace(countryName)) throw new ArgumentException("countryName");
-			return DBHelper.ValidStates(countryName);
-		}
-
 		/// <summary>
 		/// Gets the list of valid countries.
 		/// </summary>
@@ -97,41 +62,13 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Retrieves a list of all pending invitations for a given user by the user's email.
-		/// </summary>
-		/// <param name="userEmail">The user's email address.</param>
-		/// <returns>The invitation associated with the user.</returns>
-		public List<InvitationInfo> GetInvitationsByUser(string userEmail)
-		{
-			#region Validation
-
-			if (!Utility.IsValidEmail(userEmail))
-			{
-				throw new FormatException("Email address must be in a valid format.");
-			}
-
-			#endregion Validation
-
-			var invitationsDB = DBHelper.GetUserInvitationsByUserData(new UserDBEntity()
-			{
-				Email = userEmail
-			});
-
-			return invitationsDB.Select(idb => InitializeInvitationInfo(idb)).ToList();
-		}
-
-		/// <summary>
 		/// Accepts an invitation, adding the user to the invitation's organization, subscriptions, and projects, then deletes the invitations.
 		/// </summary>
 		/// <param name="invitationId">The invitationId.</param>
 		/// <returns>The resulting action message if succeed, null if fail.</returns>
 		public string AcceptUserInvitation(int invitationId)
 		{
-			#region Validation
-
 			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId", "The invitation id cannot be zero or negative.");
-
-			#endregion Validation
 
 			NotifyInviteAcceptAsync(invitationId);
 
@@ -289,8 +226,6 @@ namespace AllyisApps.Services
 							OrganizationId = item.OrganizationId,
 							MaxAmount = expando.User.MaxAmount
 						});
-
-					//result.UserSubscriptions.Add(sub.SubscriptionId, sub);
 				}
 
 				// set result to self
@@ -298,16 +233,6 @@ namespace AllyisApps.Services
 			}
 
 			return result;
-		}
-
-		/// <summary>
-		/// Updates the active subsciption for the current user.
-		/// </summary>
-		/// <param name="subscriptionId">Subscription Id.</param>
-		public void UpdateActiveSubscription(int? subscriptionId)
-		{
-			if (subscriptionId.HasValue && subscriptionId.Value <= 0) throw new ArgumentException("subscriptionId");
-			DBHelper.UpdateActiveSubscription(UserContext.UserId, subscriptionId);
 		}
 
 		/// <summary>
@@ -331,24 +256,10 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// get the user profile
-		/// </summary>
-		public User GetCurrentUserInfo()
-		{
-			if (this.UserContext?.UserId == null)
-			{
-				return null;
-			}
-			var result = GetUserInfo(this.UserContext.UserId);
-			return result;
-		}
-
-		/// <summary>
 		/// get the current logged in user
 		/// </summary>
 		public User GetCurrentUser()
 		{
-			// TODO: this should return User object
 			return this.GetUser(this.UserContext.UserId);
 		}
 
@@ -360,12 +271,8 @@ namespace AllyisApps.Services
 			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
 
 			dynamic infos = this.DBHelper.GetUser(userId);
-			// TODO: return User object from this method
-			// copy infos in to User object
 			User userInfo = AppService.InitializeUser(infos.User);
-
 			IEnumerable<dynamic> Organizations = infos.Organizations;
-
 			IEnumerable<dynamic> Subscriptions = infos.Subscriptions;
 
 			userInfo.Subscriptions = Subscriptions.Select(sub =>
@@ -629,8 +536,6 @@ namespace AllyisApps.Services
 		{
 			return DBHelper.GetOrganizationsByUserId(userID).Select(o => (Organization)InitializeOrganization(o));
 		}
-
-		#endregion public
 
 		#region Info-DBEntity Conversions
 

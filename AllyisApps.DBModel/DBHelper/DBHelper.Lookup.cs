@@ -42,20 +42,6 @@ namespace AllyisApps.DBModel
 		}
 
 		/// <summary>
-		/// Retrieves a collection of valid states (or provinces)
-		///     from the database based on the source country.
-		/// </summary>
-		/// <param name="countryName">The country's name.</param>
-		/// <returns>A collection of states/provinces within that country.</returns>
-		public IEnumerable ValidStates(string countryName)
-		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<string>("[Lookup].[GetStatesByCountry]", new { CountryName = countryName }, commandType: CommandType.StoredProcedure);
-			}
-		}
-
-		/// <summary>
 		/// Retrieves a collection of language settings from the database.
 		/// </summary>
 		/// <returns>A collection of all valid language settings.</returns>
