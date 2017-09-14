@@ -23,12 +23,24 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				return RedirectToAction("UserSettings", new { subscriptionId = model.SubscriptionId });
 			}
 
-			foreach (User user in model.Users)
+			foreach (UserMaxAmountViewModel userMaxAmountViewModel in model.Users)
 			{
+				User user = InitializeUser(userMaxAmountViewModel);
 				AppService.UpdateUserMaxAmount(user);
 			}
 
 			return RedirectToAction("index");
+		}
+
+		private User InitializeUser(UserMaxAmountViewModel user)
+		{
+			return new User()
+			{
+				MaxAmount = user.MaxAmount,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				UserId = user.UserId
+			};
 		}
 	}
 }

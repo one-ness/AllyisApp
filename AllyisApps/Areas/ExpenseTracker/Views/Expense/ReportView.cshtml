@@ -7,7 +7,7 @@
 	DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
 
 	decimal totalAmount = 0;
-	foreach (ExpenseItem item in Model.Expenses)
+	foreach (ExpenseItemCreateViewModel item in Model.Expenses)
 	{
 		totalAmount += item.Amount;
 	}
@@ -93,7 +93,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach (ExpenseItem item in Model.Expenses)
+		@foreach (ExpenseItemCreateViewModel item in Model.Expenses)
 		{
 			<tr>
 				<td>@Math.Round(@item.Amount, 2)</td>

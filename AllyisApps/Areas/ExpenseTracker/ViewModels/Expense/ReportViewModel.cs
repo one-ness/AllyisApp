@@ -62,7 +62,7 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// <summary>
 		/// Gets or sets the associated expense items.
 		/// </summary>
-		public IEnumerable<ExpenseItem> Expenses { get; set; }
+		public IEnumerable<ExpenseItemCreateViewModel> Expenses { get; set; }
 
 		/// <summary>
 		/// Gets or sets the associeate report history.

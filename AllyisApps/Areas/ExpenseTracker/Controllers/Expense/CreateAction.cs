@@ -50,14 +50,22 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			}
 
 			IList<ExpenseItem> items = report == null ? null : AppService.GetExpenseItemsByReportId(reportId);
+			List<ExpenseItemCreateViewModel> itemViewModels = new List<ExpenseItemCreateViewModel>();
+			if (items != null)
+			{
+				foreach (ExpenseItem item in items)
+				{
+					itemViewModels.Add(InitializeExpenseItemViewModel(item));
+				}
+			}
 
 			var model = new ExpenseCreateModel()
 			{
 				CurrentUser = GetCookieData().UserId,
-				Items = items,
+				Items = itemViewModels,
 				StartDate = DateTime.UtcNow,
 				SubscriptionId = subscriptionId,
-				Report = report,
+				Report = InitializeExpenseReportViewModel(report),
 				Files = null
 			};
 

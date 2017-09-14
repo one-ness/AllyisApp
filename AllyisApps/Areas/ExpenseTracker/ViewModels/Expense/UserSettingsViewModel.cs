@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AllyisApps.Services;
+using static AllyisApps.ViewModels.Auth.AccountIndexViewModel;
 
 namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 {
@@ -11,7 +12,7 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// <summary>
 		/// Gets or sets the users for the expense tracker.
 		/// </summary>
-		public IEnumerable<User> Users { get; set; }
+		public IEnumerable<UserMaxAmountViewModel> Users { get; set; }
 
 		/// <summary>
 		/// Gets or sets the subscription id.

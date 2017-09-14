@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AllyisApps.DBModel.Finance;
 using AllyisApps.Services;
+using AllyisApps.ViewModels.ExpenseTracker.Expense;
 
 namespace AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 {
@@ -12,12 +13,12 @@ namespace AllyisApps.Areas.ExpenseTracker.ViewModels.Expense
 		/// <summary>
 		/// Gets or sets the list of accounts.
 		/// </summary>k
-		public IList<AccountDBEntity> AccountList { get; set; }
+		public IList<AccountViewModel> AccountList { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Expense Items.
 		/// </summary>
-		public ExpenseItem Item { get; set; }
+		public ExpenseItemCreateViewModel Item { get; set; }
 
 		/// <summary>
 		/// Gets or sets the index.

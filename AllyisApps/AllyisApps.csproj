@@ -219,8 +219,12 @@
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ReportViewAction.cs" />
     <Compile Include="Areas\ExpenseTracker\Controllers\Expense\ViewAdminReport.cs" />
     <Compile Include="Areas\ExpenseTracker\ReportHelper.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\UserMaxAmountViewModel.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\AccountViewModel.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseItemCreateViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\AdminReportModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseDataExportViewModel.cs" />
+    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseReportViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\UserSettingsViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpensePendingModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseCreateModel.cs" />

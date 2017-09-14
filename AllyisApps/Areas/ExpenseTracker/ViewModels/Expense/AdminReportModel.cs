@@ -48,12 +48,12 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// <summary>
 		/// Gets the list or reports to show.
 		/// </summary>
-		public IEnumerable<ExpenseReport> Reports { get; internal set; }
+		public IEnumerable<ExpenseReportViewModel> Reports { get; internal set; }
 
 		/// <summary>
 		/// Gets the Preview reports.
 		/// </summary>
-		public IEnumerable<ExpenseReport> PreviewReports { get; internal set; }
+		public IEnumerable<ExpenseReportViewModel> PreviewReports { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of statuses.
