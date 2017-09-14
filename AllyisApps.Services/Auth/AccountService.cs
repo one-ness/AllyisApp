@@ -54,11 +54,14 @@ namespace AllyisApps.Services
 		/// <returns>A list of languages.</returns>
 		public IEnumerable<Language> ValidLanguages()
 		{
-			return DBHelper.ValidLanguages().Select(s => new Language
+			var result = new List<Language>();
+			var list = this.DBHelper.ValidLanguages();
+			foreach (var item in list)
 			{
-				LanguageName = s.LanguageName,
-				CultureName = s.CultureName
-			});
+				result.Add(new Language() { CultureName = item.CultureName, LanguageName = item.LanguageName });
+			}
+
+			return result;
 		}
 
 		/// <summary>
@@ -68,11 +71,10 @@ namespace AllyisApps.Services
 		/// <returns>The resulting action message if succeed, null if fail.</returns>
 		public string AcceptUserInvitation(int invitationId)
 		{
-			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId", "The invitation id cannot be zero or negative.");
-
-			NotifyInviteAcceptAsync(invitationId);
+			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
 
 			var results = DBHelper.AcceptInvitation(invitationId, UserContext.UserId);
+			NotifyInviteAcceptAsync(invitationId);
 
 			if (results == null) return null;
 
