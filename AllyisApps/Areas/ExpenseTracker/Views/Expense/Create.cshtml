@@ -77,8 +77,8 @@
 			int reportId = Model.Report == null ? -1 : Model.Report.ExpenseReportId;
 			if (Model.Report == null)
 			{
-				Model.Report = new ExpenseReport();
-				Model.Items = new List<ExpenseItem>();
+				Model.Report = new ExpenseReportViewModel();
+				Model.Items = new List<ExpenseItemCreateViewModel>();
 			}
 		}
 		@Html.HiddenFor(m => m.Report.ExpenseReportId, new { Name = "model.Report.ExpenseReportId" })
@@ -101,7 +101,7 @@
 		@{
 			if (Model.Items.Count == 0)
 			{
-				Model.Items.Add(new ExpenseItem());
+				Model.Items.Add(new ExpenseItemCreateViewModel());
 			}
 
 			<div class="items">
@@ -123,7 +123,7 @@
 						</tr>
 					</thead>
 					<tbody class="item-container">
-						@foreach (ExpenseItem item in Model.Items)
+						@foreach (ExpenseItemCreateViewModel item in Model.Items)
 						{
 							item.Index = itemIndex;
 							Html.RenderPartial("_AjaxExpenseReportItems", item);

@@ -34,8 +34,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				itemIds.Add(oldItem.ExpenseItemId);
 			}
 
-			foreach (var item in model.Items)
+			foreach (var itemViewModel in model.Items)
 			{
+				ExpenseItem item = InitializeExpenseItem(itemViewModel);
 				item.ExpenseReportId = report.ExpenseReportId;
 				if (itemIds.Contains(item.ExpenseItemId))
 				{
@@ -52,6 +53,24 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				AppService.DeleteExpenseItem(itemId);
 			}
+		}
+
+		private ExpenseItem InitializeExpenseItem(ExpenseItemCreateViewModel itemViewModel)
+		{
+			return new ExpenseItem()
+			{
+				AccountId = itemViewModel.AccountId,
+				Amount = itemViewModel.Amount,
+				ExpenseItemCreatedUtc = itemViewModel.ExpenseItemCreatedUtc,
+				ExpenseItemId = itemViewModel.ExpenseItemId,
+				ExpenseItemModifiedUtc = itemViewModel.ExpenseItemModifiedUtc,
+				ExpenseReportId = itemViewModel.ExpenseReportId,
+				Index = itemViewModel.Index,
+				IsBillableToCustomer = itemViewModel.IsBillableToCustomer,
+				ItemDescription = itemViewModel.ItemDescription,
+				ToDelete = itemViewModel.ToDelete,
+				TransactionDate = itemViewModel.TransactionDate
+			};
 		}
 
 		private void UploadAttachments(ExpenseCreateModel model, ExpenseReport report)

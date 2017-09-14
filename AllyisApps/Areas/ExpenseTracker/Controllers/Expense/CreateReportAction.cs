@@ -40,7 +40,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			if (model.Items == null)
 			{
-				model.Items = new List<ExpenseItem>();
+				model.Items = new List<ExpenseItemCreateViewModel>();
 			}
 
 			var subscription = AppService.GetSubscription(model.SubscriptionId);

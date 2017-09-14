@@ -54,6 +54,6 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		/// <summary>
 		/// Gets or sets the list of Items contained in report.
 		/// </summary>
-		public List<ExpenseItem> Items { get; set; }
+		public List<ExpenseItemCreateViewModel> Items { get; set; }
 	}
 }
