@@ -612,7 +612,7 @@ namespace AllyisApps.DBModel
 				int inviteId = results.Read<int>().FirstOrDefault();
 				if (inviteId < 0)
 				{
-					return new Tuple<int, string, string>(inviteId, inviteId == -1 ? "User is already in organization." : "Employee Id is taken.", null);
+					return new Tuple<int, string, string>(inviteId, null, null);
 				}
 				return Tuple.Create(
 					inviteId,
@@ -641,7 +641,6 @@ namespace AllyisApps.DBModel
 					parameters,
 					commandType: CommandType.StoredProcedure).First();
 				return results == 1;
-				
 			}
 		}
 

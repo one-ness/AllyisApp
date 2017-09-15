@@ -65,13 +65,12 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets information for an invite. 
+		/// Gets information for an invite.
 		/// </summary>
 		/// <param name="invitationId">Id of invite.</param>
 		/// <returns>Inviation info </returns>
 		public InvitationInfo GetInvitationByID(int invitationId)
 		{
-
 			return InitializeInvitationInfo(DBHelper.GetUserInvitationByInviteId(invitationId));
 		}
 
@@ -87,7 +86,6 @@ namespace AllyisApps.Services
 			var results = DBHelper.AcceptInvitation(invitationId, UserContext.UserId);
 			NotifyInviteAcceptAsync(invitationId);
 
-			
 			return results;
 		}
 
@@ -96,17 +94,17 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">The id of the invitation to reject.</param>
 		/// <returns>The resulting message.</returns>
-		public string RejectInvitation(int invitationId)
+		public bool RejectInvitation(int invitationId)
 		{
 			try
 			{
 				DBHelper.RejectInvitation(invitationId);
 				NotifyInviteRejectAsync(invitationId);
-				return "The invitation has been rejected.";
+				return true;
 			}
 			catch (SqlException)
 			{
-				return null;
+				return false;
 			}
 		}
 
