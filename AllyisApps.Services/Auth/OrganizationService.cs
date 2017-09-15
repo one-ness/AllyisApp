@@ -706,6 +706,7 @@ namespace AllyisApps.Services
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
 				OrganizationRole = (OrganizationRole)invitation.OrganizationRoleId,
+				OrganizationName = invitation.OrganizationName,
 				EmployeeId = invitation.EmployeeId,
 				DecisionDateUtc = invitation.DecisionDateUtc,
 				status = (InvitationStatusEnum)invitation.InvitationStatusId
