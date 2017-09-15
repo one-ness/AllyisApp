@@ -261,7 +261,7 @@ namespace AllyisApps.Services
 			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
 
 			dynamic infos = this.DBHelper.GetUser(userId);
-			User userInfo = AppService.InitializeUser(infos.User);
+			User userInfo = this.InitializeUser(infos.User);
 			IEnumerable<dynamic> Organizations = infos.Organizations;
 			IEnumerable<dynamic> Subscriptions = infos.Subscriptions;
 
@@ -483,11 +483,13 @@ namespace AllyisApps.Services
 			{
 				return null;
 			}
+
 			Address address = null;
 			if (user.AddressId != null && loadAddress)
 			{
 				address = getAddress(user.AddressId);
 			}
+
 			return new User
 			{
 				AccessFailedCount = user.AccessFailedCount,
@@ -507,65 +509,6 @@ namespace AllyisApps.Services
 				UserId = user.UserId,
 				Address = address,
 				MaxAmount = user.MaxAmount
-			};
-		}
-
-		/// <summary>
-		/// Initialzie user from dynamic object
-		/// </summary>
-		/// <param name="userInfo"></param>
-		/// <returns></returns>
-		public static User InitializeUser(dynamic userInfo)
-		{
-			Address address = InitializeAddress((dynamic)userInfo);
-
-			return new User
-			{
-				AccessFailedCount = userInfo.AccessFailedCount,
-				DateOfBirth = userInfo.DateOfBirth,
-				Email = userInfo.Email,
-				IsEmailConfirmed = userInfo.IsEmailConfirmed,
-				FirstName = userInfo.FirstName,
-				LastName = userInfo.LastName,
-				IsLockoutEnabled = userInfo.IsLockoutEnabled,
-				LockoutEndDateUtc = userInfo.LockoutEndDateUtc,
-				PasswordHash = userInfo.PasswordHash,
-				PasswordResetCode = userInfo.PasswordResetCode,
-				PhoneExtension = userInfo.PhoneExtension,
-				PhoneNumber = userInfo.PhoneNumber,
-				IsPhoneNumberConfirmed = userInfo.IsPhoneNumberConfirmed,
-				IsTwoFactorEnabled = userInfo.IsTwoFactorEnabled,
-				UserId = userInfo.UserId,
-				Address = address,
-			};
-		}
-
-		/// <summary>
-		/// Translates a User into a UserDBEntity.
-		/// </summary>
-		/// <param name="user">User instance.</param>
-		/// <returns>UserDBEntity instance.</returns>
-		public UserDBEntity GetDBEntityFromUser(User user)
-		{
-			return new UserDBEntity()
-			{
-				AddressId = user.Address?.AddressId,
-				AccessFailedCount = user.AccessFailedCount,
-				DateOfBirth = user.DateOfBirth,
-				Email = user.Email,
-				IsEmailConfirmed = user.IsEmailConfirmed,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				IsLockoutEnabled = user.IsLockoutEnabled,
-				LockoutEndDateUtc = user.LockoutEndDateUtc,
-				PasswordHash = user.PasswordHash,
-				PasswordResetCode = user.PasswordResetCode,
-				PhoneExtension = user.PhoneExtension,
-				PhoneNumber = user.PhoneNumber,
-				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
-				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
-				UserId = user.UserId,
-				PreferredLanguageId = "en-US"          // TODO: Put this into UserInfo and do proper lookup
 			};
 		}
 

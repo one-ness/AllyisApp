@@ -29,7 +29,7 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult ManagePermissions(int id)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditUserPermission, id);
 			var infos = AppService.GetOrgAndSubRoles(id);
 			ManagePermissionsViewModel model = new ManagePermissionsViewModel
 			{
