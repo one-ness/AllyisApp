@@ -89,9 +89,6 @@ namespace AllyisApps.Services
 
 			
 			return results;
-
-
-			return string.Format("You have successfully joined {0} in the role of {1}.", results.Item1, results.Item2);
 		}
 
 		/// <summary>
