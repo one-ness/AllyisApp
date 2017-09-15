@@ -16,6 +16,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// Show the list of expense reports submitted by the logged in user.
 		/// </summary>
+		/// <param name="model">The view model.</param>
         /// <returns>The action result.</returns>
 		[HttpPost]
 		public ActionResult UpdateUserSettings(UserSettingsViewModel model)
@@ -30,6 +31,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				User user = InitializeUser(userMaxAmountViewModel);
 				AppService.UpdateUserMaxAmount(user);
 			}
+
 			return RedirectToAction("index");
 		}
 

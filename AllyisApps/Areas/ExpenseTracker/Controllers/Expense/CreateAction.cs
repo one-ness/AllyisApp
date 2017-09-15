@@ -23,8 +23,14 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		{
 			SetNavData(subscriptionId);
 
-			Session["AccountList"] = AppService.GetAccounts();
-			if (((List<AccountDBEntity>)Session["AccountList"]).Count == 0)
+			IList<AccountDBEntity> accountEntities = AppService.GetAccounts();
+			List<AccountViewModel> accountViewModels = new List<AccountViewModel>();
+			foreach (AccountDBEntity entity in accountEntities)
+			{
+				accountViewModels.Add(InitializeAccountViewModel(entity));
+			}
+
+			if (accountEntities.Count == 0)
 			{
 				throw new InvalidOperationException("Cannot create a report if no accounts exist.");
 			}
@@ -66,10 +72,20 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				StartDate = DateTime.UtcNow,
 				SubscriptionId = subscriptionId,
 				Report = InitializeExpenseReportViewModel(report),
-				Files = null
+				Files = null,
+				AccountList = accountViewModels
 			};
 
 			return View(model);
+		}
+
+		private AccountViewModel InitializeAccountViewModel(AccountDBEntity entity)
+		{
+			return new AccountViewModel()
+			{
+				AccountId = entity.AccountId,
+				AccountName = entity.AccountName
+			};
 		}
 	}
 }

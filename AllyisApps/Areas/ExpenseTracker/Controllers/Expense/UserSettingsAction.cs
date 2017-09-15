@@ -37,6 +37,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				userViewModels.Add(InitializeUserMaxAmout(user));
 			}
+
 			UserSettingsViewModel model = new UserSettingsViewModel()
 			{
 				SubscriptionId = subscriptionId,

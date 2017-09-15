@@ -126,7 +126,12 @@
 						@foreach (ExpenseItemCreateViewModel item in Model.Items)
 						{
 							item.Index = itemIndex;
-							Html.RenderPartial("_AjaxExpenseReportItems", item);
+							ExpenseItemModel subModel = new ExpenseItemModel()
+							{
+								AccountList = Model.AccountList,
+								Item = item,
+							};
+							Html.RenderPartial("_AjaxExpenseReportItems", subModel);
 							itemIndex += 1;
 						}
 						<tr class="final-row">
