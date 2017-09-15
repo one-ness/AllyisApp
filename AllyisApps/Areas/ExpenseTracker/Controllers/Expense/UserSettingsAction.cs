@@ -29,13 +29,12 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 
 			string productName = AppService.GetProductNameBySubscriptionId(subInfo.SubscriptionId);
-
-			IEnumerable<User> allUsers = AppService.GetUsersWithSubscriptionToProductInOrganization(subInfo.OrganizationId, (int)subInfo.ProductId);
-			IEnumerable<User> specificUsers = allUsers.Where(u => AppService.GetProductRoleForUser(productName, u.UserId, subInfo.OrganizationId) == "User");
+			
+			IEnumerable<OrganizationUserInfo> userInfos = AppService.GetOrganizationManagementInfo(subInfo.OrganizationId).Item2.Where(u => u.OrganizationRoleId == 1);
 			List<UserMaxAmountViewModel> userViewModels = new List<UserMaxAmountViewModel>();
-			foreach (User user in specificUsers)
+			foreach (OrganizationUserInfo user in userInfos)
 			{
-				userViewModels.Add(InitializeUserMaxAmout(user));
+				userViewModels.Add(InitializeUserMaxAmount(user));
 			}
 
 			UserSettingsViewModel model = new UserSettingsViewModel()
@@ -47,7 +46,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			return View(model);
 		}
 
-		private UserMaxAmountViewModel InitializeUserMaxAmout(User user)
+		private UserMaxAmountViewModel InitializeUserMaxAmount(OrganizationUserInfo user)
 		{
 			return new UserMaxAmountViewModel()
 			{
