@@ -27,7 +27,7 @@ namespace AllyisApps.Services
 		/// <param name="importData">Workbook with data to import.</param>
 		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="inviteUrl">Used for userImport when adding users via AddMemberPage</param>
-		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0,string inviteUrl= null)
+		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0, string inviteUrl = null)
 		{
 			int orgId;
 			if (subscriptionId > 0 && UserContext.SubscriptionsAndRoles[subscriptionId] != null)
@@ -591,7 +591,7 @@ namespace AllyisApps.Services
 								{
 									userTuple = users.Where(tup => tup.Item1.Equals(readValue)).FirstOrDefault();
 								}
-							}
+							}//Remove logic only email matters.
 							if (userTuple == null)
 							{
 								string readLastName = null;
@@ -683,14 +683,14 @@ namespace AllyisApps.Services
 									InvitationInfo inviteInfo = new InvitationInfo()
 									{
 										OrganizationId = orgId,
-										Email = fields[0],
+										Email = fields[0].Trim(),
 										EmployeeId = fields[1],
 										FirstName = names[0],
 										LastName = names[1],
 										OrganizationRole = OrganizationRole.Member
 									};
 
-									int x = InviteUser(inviteUrl, inviteInfo).Result;
+									int x = InviteUser(inviteUrl, inviteInfo);
 
 									result.UsersImported += 1;
 								}
@@ -701,7 +701,7 @@ namespace AllyisApps.Services
 								}
 							}
 						}
-						
+
 						// Importing non-required user data
 						if (userInOrg != null && hasNonRequiredUserInfo)//If user exists then allow org to change user. 
 						{

@@ -42,6 +42,7 @@ namespace AllyisApps.Controllers
 					{
 						UserId = userBasicInfo.UserId,
 						DateOfBirth = userBasicInfo.DateOfBirth,
+						PhoneNumber = userBasicInfo.PhoneNumber,
 						PhoneExtension = userBasicInfo.PhoneExtension,
 						Email = userBasicInfo.Email,
 						FirstName = userBasicInfo.FirstName,

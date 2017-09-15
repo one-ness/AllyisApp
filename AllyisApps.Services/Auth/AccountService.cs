@@ -471,6 +471,32 @@ namespace AllyisApps.Services
 
 		#region Info-DBEntity Conversions
 
+
+
+		public User InitializeUser(dynamic user)
+		{
+			User newUser = new User()
+			{
+				AccessFailedCount = user.AccessFailedCount,
+				DateOfBirth = user.DateOfBirth,
+				Email = user.Email,
+				IsEmailConfirmed = user.IsEmailConfirmed,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				IsLockoutEnabled = user.IsLockoutEnabled,
+				LockoutEndDateUtc = user.LockoutEndDateUtc,
+				PasswordHash = user.PasswordHash,
+				PasswordResetCode = user.PasswordResetCode,
+				PhoneExtension = user.PhoneExtension,
+				PhoneNumber = user.PhoneNumber,
+				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
+				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
+				UserId = user.UserId,
+				Address = InitializeAddress(user),
+				MaxAmount = user.MaxAmount
+			};
+			return newUser;
+		}
 		/// <summary>
 		/// Translates a UserDBEntity into a User business object.
 		/// </summary>

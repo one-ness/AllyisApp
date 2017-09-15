@@ -172,7 +172,7 @@ namespace AllyisApps.Services
 		/// <param name="url">The url for Account/Index with the accessCode value as "{accessCode}".</param>
 		/// <param name="invitationInfo">An <see cref="InvitationInfo"/> with invitee information filled out.</param>
 		/// <returns>The invitation Id, or -1 if the employee id is already taken.</returns>
-		public async Task<int> InviteUser(string url, InvitationInfo invitationInfo)
+		public  int InviteUser(string url, InvitationInfo invitationInfo)
 		{
 			#region Validation
 
@@ -215,11 +215,11 @@ namespace AllyisApps.Services
 				url);
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
-			await Lib.Mailer.SendEmailAsync(
+			bool email = Lib.Mailer.SendEmailAsync(
 				this.ServiceSettings.SupportEmail,
 				invitationInfo.Email,
 				"Join Allyis Apps!",
-				msgbody);
+				msgbody).Result;
 
 			// Return invitation id
 			return spResults.Item1;

@@ -45,7 +45,7 @@ namespace AllyisApps.Controllers
 		/// <returns>The result of this action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> AddMember(AddMemberViewModel add, int organizationId)
+		public ActionResult AddMember(AddMemberViewModel add, int organizationId)
 		{
 			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(organizationId);
 			add.Subscriptions = model.Subscriptions;
@@ -71,7 +71,7 @@ namespace AllyisApps.Controllers
 						Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
 						Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
 
-					int invitationId = await AppService.InviteUser(url, info);
+					int invitationId = AppService.InviteUser(url, info);
 
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, add.FirstName, add.LastName), Variety.Success));
 					return this.RedirectToAction(ActionConstants.ManageOrg, new { id = add.OrganizationId });

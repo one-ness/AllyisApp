@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.Services
 {
@@ -21,6 +22,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Email address of invitee.
 		/// </summary>
+		[EmailAddress]
 		public string Email { get; set; }
 
 		/// <summary>
