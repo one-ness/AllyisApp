@@ -127,8 +127,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ProjectName = infos.Item1.ProjectName,
 				ProjectUsers = projectUsers,
 				SubscriptionUsers = subscriptionUsers.Where(user => !projectUsers.Any(pu => (pu.UserId == user.UserId))), // Grab users that are not part of the project
-				StartDate = AppService.GetDayFromDateTime(infos.Item1.StartDate),
-				EndDate = AppService.GetDayFromDateTime(infos.Item1.EndDate),
+				StartDate = AppService.GetDaysFromDateTime(infos.Item1.StartDate),
+				EndDate = AppService.GetDaysFromDateTime(infos.Item1.EndDate),
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subscriptionNameToDisplay,
 				UserId = AppService.UserContext.UserId

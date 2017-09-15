@@ -45,7 +45,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 			{
 				itemViewModels.Add(InitializeExpenseItemViewModel(item));
 			}
-			var user = AppService.GetUserInfo(report.SubmittedById);
+			var user = AppService.GetUser(report.SubmittedById);
 			var history = AppService.GetExpenseHistoryByReportId(id);
 			List<ExpenseHistoryViewModel> reportHistory = new List<ExpenseHistoryViewModel>();
 
@@ -53,7 +53,7 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 
 			foreach (var item in history)
 			{
-				var reviewer = AppService.GetUserInfo(item.UserId);
+				var reviewer = AppService.GetUser(item.UserId);
 				reportHistory.Add(new ExpenseHistoryViewModel()
 				{
 					Reviewer = string.Format("{0} {1}", reviewer.FirstName, reviewer.LastName),

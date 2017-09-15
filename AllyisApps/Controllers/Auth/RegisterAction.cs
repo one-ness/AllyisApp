@@ -35,7 +35,7 @@ namespace AllyisApps.Controllers
 
 			ViewBag.ReturnUrl = returnUrl;
 			var model = new RegisterViewModel();
-			model.DateOfBirth = AppService.GetDayFromDateTime(DateTime.UtcNow.AddYears(-18).AddDays(-1));
+			model.DateOfBirth = AppService.GetDaysFromDateTime(DateTime.UtcNow.AddYears(-18).AddDays(-1));
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
 
 			return this.View(model);
