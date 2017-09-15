@@ -8,9 +8,7 @@ SELECT
 	[Email], 
 	[FirstName], 
 	[LastName], 
-	[DateOfBirth], 
-	[OrganizationId], 
-	[AccessCode], 
+	[OrganizationId],  
 	[OrganizationRoleId],
 	[EmployeeId] 
 FROM [Auth].[Invitation]

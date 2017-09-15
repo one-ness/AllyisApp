@@ -28,13 +28,31 @@ namespace AllyisApps.Areas.StaffingManager
 		/// <summary>
 		/// Registers the area within the site.
 		/// </summary>
+		/// <param name="context">The context object to add the route to.</param>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "MVC Framework managed.")]
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
 			context.Routes.MapSubdomainRoute(
-				name: "StaffingManager_Default",
-				url: "staffingmanager/{subscriptionId}/{controller}/{action}/{id}",
+				name: "StaffingManager_default",
+				url: "staffingmanager/{subscriptionId}/{controller}/{action}",
 				area: this.AreaName,
-				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+				defaults: new { controller = "Home", action = "Index" },
+				constraints: new { subscriptionId = @"\d+" },
+				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
+
+			context.Routes.MapSubdomainRoute(
+				name: "StaffingManager_filtered",
+				url: "staffingmanager/{subscriptionId}/{controller}/{action}/{filters}",
+				area: this.AreaName,
+				defaults: new { controller = "Staffing", action = "Index" },
+				constraints: new { subscriptionId = @"\d+" },
+				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
+
+			context.Routes.MapSubdomainRoute(
+				name: "StaffingIndex",
+				url: "staffingmanager/{subscriptionId}/{controller}",
+				area: this.AreaName,
+				defaults: new { controller = "Staffing", action = "Index" },
 				constraints: new { subscriptionId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
 		}

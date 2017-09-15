@@ -10,6 +10,7 @@ namespace AllyisApps
 		public const string AcceptInvitation = "acceptinvitation";
 		public const string Action = "action";
 		public const string AddMember = "addmember";
+		public const string AdminReport = "adminreport";
 		public const string ChangePassword = "changepassword";
 		public const string Charge = "charge";
 		public const string ConfirmEmail = "confirmemail";
@@ -52,6 +53,7 @@ namespace AllyisApps
 		public const string ManagePermissions = "managepermissions";
 		public const string ManagePermissions2 = "managepermissions2";
 		public const string OrgIndex = "orgindex";
+		public const string Pending = "pending";
 		public const string PrivacyPolicy = "privacypolicy";
 		public const string Reactivate = "reactivate";
 		public const string ReactivateCustomer = "reactivatecustomer";
@@ -74,6 +76,7 @@ namespace AllyisApps
 		public const string UserEditAJAX = "usereditajax";
 		public const string UploadCSVFile = "uploadcsvfile";
 		public const string UserEdit = "useredit";
+		public const string UserSettings = "usersettings";
 		public const string ViewPage = "viewpage";
 		public const string Help = "help";
 		public const string FooterPartial = "footerpartial";
@@ -85,8 +88,16 @@ namespace AllyisApps
 		public const string Settings = "settings";
 		public const string MergePayClass = "mergepayclass";
 		public const string ViewReport = "viewreport";
+		public const string ViewAdminReport = "viewadminreport";
 		public const string Template = "template";
 		public const string EditUsers = "editusers";
+		public const string EditPosition = "editposition";
+		public const string CreatePosition = "createposition";
+		public const string SubmitCreatePosition = "submitcreateposition";
+		public const string DeletePosition = "deleteposition";
+		public const string CreatePositionStatus = "createpositionstatus";
+		public const string CreatePositionLevel = "createpositionlevel";
+		public const string CreateEmploymentType = "createemploymenttype";
 	}
 
 	/// <summary>
@@ -104,6 +115,7 @@ namespace AllyisApps
 		public const string Subscription = "subscription";
 		public const string TimeEntry = "timeentry";
 		public const string Expense = "expense";
+		public const string Staffing = "staffing";
 	}
 
 	/// <summary>
@@ -137,9 +149,12 @@ namespace AllyisApps
 		public const string StaffingManager = "StaffingManager";
 	}
 
-    public static class RouteNameConstants
-    {
-        public const string TimeTrackerNoIndex = "TimeTracker_NoUserId";
-    }
-
+	/// <summary>
+	/// Route name constents for user when passing route names to Action Links.
+	/// </summary>
+	public static class RouteNameConstants
+	{
+		public const string TimeTrackerNoIndex = "TimeTracker_NoUserId";
+		public const string ExpenseTracker = "ExpenseTracker_Default";
+	}
 }

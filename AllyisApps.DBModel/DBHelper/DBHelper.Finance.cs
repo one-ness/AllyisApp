@@ -50,7 +50,6 @@ namespace AllyisApps.DBModel
 			return parameters.Get<int>("@returnValue");
 		}
 
-
 		////////////////////////////
 		/*          READ          */
 		////////////////////////////
@@ -107,6 +106,17 @@ namespace AllyisApps.DBModel
 			}
 		}
 
+		/// <summary>
+		/// Retrieves all of the accounts in the database.
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<AccountDBEntity> GetAccounts()
+		{
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<AccountDBEntity>("[Finance].[GetAccounts]", commandType: CommandType.StoredProcedure).AsEnumerable();
+			}
+		}
 
 		////////////////////////////
 		/*         UPDATE         */
@@ -141,7 +151,6 @@ namespace AllyisApps.DBModel
 			return parameters.Get<int>("@returnValue");
 		}
 
-
 		////////////////////////////
 		/*         DELETE         */
 		////////////////////////////
@@ -170,7 +179,7 @@ namespace AllyisApps.DBModel
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@organizationId", organizationId);
-			
+
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query("[Auth].[GetOrganizationOwnerEmails]", parameters, commandType: CommandType.StoredProcedure);

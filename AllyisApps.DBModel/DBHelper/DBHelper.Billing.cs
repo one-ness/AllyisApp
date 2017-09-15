@@ -10,6 +10,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using AllyisApps.DBModel.Billing;
+
 // using AllyisApps.DBModel.Cache;
 using Dapper;
 
@@ -92,7 +93,7 @@ namespace AllyisApps.DBModel
 		/// <param name="organizationId">The Organization Id.</param>
 		/// <param name="productRoleId">Product role to assign (or -1 to remove from organization).</param>
 		/// <param name="productId">ID of Product in question.</param>
-		/// <returns>The number of updated/removed users, and the number of newly added users (or -1 if subscription is too full).</returns>
+		/// <returns>The number of updated and number of added users.</returns>
 		public Tuple<int, int> UpdateSubscriptionUserRoles(List<int> userIds, int organizationId, int productRoleId, int productId)
 		{
 			DataTable userIdsTable = new DataTable();
@@ -170,6 +171,21 @@ namespace AllyisApps.DBModel
 			{
 				// default blank object
 				return connection.Query<SubscriptionDBEntity>("[Billing].[GetSubscriptionDetailsById]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
+			}
+		}
+
+		/// <summary>
+		/// Get just subscription Name by subscriptionid.
+		/// </summary>
+		/// <param name="subscriptionId"></param>
+		/// <returns></returns>
+		public string GetSubscriptionName(int subscriptionId)
+		{
+			DynamicParameters parameters = new DynamicParameters();
+			parameters.Add("@subscriptionId", subscriptionId);
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<string>("[Billing].[GetSubscriptionName]", parameters, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
 

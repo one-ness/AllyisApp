@@ -86,6 +86,10 @@
     <Folder Include="Pjm\Stored Procedures" />
     <Folder Include="Pjm\Tables" />
     <Folder Include="UpgradeScripts" />
+    <Folder Include="StaffingManager" />
+    <Folder Include="StaffingManager\Stored Procedures" />
+    <Folder Include="StaffingManager\Tables" />
+    <Folder Include="Lookup\User Defined Types" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TimeTracker\Tables\Holiday.sql" />
@@ -185,16 +189,14 @@
     <Build Include="Auth\Stored Procedures\GetUserInvitationsByUserData.sql" />
     <Build Include="Auth\Stored Procedures\GetUsersWithSubscriptionToProductInOrganization.sql" />
     <Build Include="Auth\Stored Procedures\UpdateOrganization.sql" />
-    <Build Include="Auth\Stored Procedures\UpdateUserActiveOrg.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserActiveSub.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserInfo.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserPassword.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserPasswordResetCode.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserPasswordUsingCode.sql" />
-    <Build Include="Auth\Stored Procedures\CreateUserInvitation.sql" />
     <Build Include="Auth\Stored Procedures\DeleteOrg.sql" />
     <Build Include="Auth\Stored Procedures\DeleteOrgUser.sql" />
-    <Build Include="Auth\Stored Procedures\DeleteUserInvitation.sql" />
+    <Build Include="Auth\Stored Procedures\RejectInvitation.sql" />
     <Build Include="Auth\Stored Procedures\GetActiveProductRoleForUser.sql" />
     <Build Include="Auth\Stored Procedures\GetOrg.sql" />
     <Build Include="Auth\Stored Procedures\GetOrganizationsByUserId.sql" />
@@ -202,9 +204,9 @@
     <Build Include="Auth\Stored Procedures\GetAddMemberInfo.sql" />
     <Build Include="Auth\Stored Procedures\GetOrgAndSubRoles.sql" />
     <Build Include="Auth\Stored Procedures\AcceptInvitation.sql" />
-    <Build Include="Auth\Stored Procedures\RemoveInvitation.sql" />
+    <Build Include="Auth\Stored Procedures\DeleteInvitation.sql" />
     <Build Include="Auth\Stored Procedures\GetPasswordHashFromUserId.sql" />
-    <Build Include="Auth\Stored Procedures\InviteUser.sql" />
+    <Build Include="Auth\Stored Procedures\CreateInvitation.sql" />
     <Build Include="Auth\Stored Procedures\UpdateEmailConfirmed.sql" />
     <Build Include="Auth\Stored Procedures\UpdateUserLanguagePreference.sql" />
     <Build Include="Auth\Stored Procedures\GetUserContextInfo.sql" />
@@ -306,6 +308,62 @@
     <Build Include="Billing\Stored Procedures\CreateSubscription.sql" />
     <None Include="UpgradeScripts\Upgrade_AllyisAppsDB_1.0_to_1.1.sql" />
     <None Include="UpgradeScripts\Upgrade_AllyisAppsDB_1.1_to_1.2.sql" />
+    <Build Include="Security\StaffingManager.sql" />
+    <Build Include="StaffingManager\Tables\Application.sql" />
+    <Build Include="StaffingManager\Tables\Applicant.sql" />
+    <Build Include="StaffingManager\Tables\ApplicationDocument.sql" />
+    <Build Include="StaffingManager\Tables\Position.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreatePosition.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreateApplication.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreateApplicant.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreateApplicationDocument.sql" />
+    <Build Include="StaffingManager\Stored Procedures\UpdateApplicant.sql" />
+    <Build Include="StaffingManager\Stored Procedures\UpdateApplication.sql" />
+    <Build Include="StaffingManager\Stored Procedures\UpdateApplicationDocument.sql" />
+    <Build Include="StaffingManager\Stored Procedures\UpdatePosition.sql" />
+    <Build Include="StaffingManager\Stored Procedures\DeletePosition.sql" />
+    <Build Include="StaffingManager\Stored Procedures\DeleteApplicant.sql" />
+    <Build Include="StaffingManager\Stored Procedures\DeleteApplication.sql" />
+    <Build Include="StaffingManager\Stored Procedures\DeleteApplicationDocument.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetApplicationById.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetApplicationsByPositionId.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetApplicationDocumentsByApplicationId.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetApplicantById.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetApplicationsByApplicantId.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetApplicationDocumentById.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetApplicantByApplicationId.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetPosition.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetPositionsByOrganizationId.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetApplicationAndDocumentsById.sql" />
+    <Build Include="StaffingManager\Tables\ApplicationStatus.sql" />
+    <Build Include="StaffingManager\Tables\EmploymentType.sql" />
+    <Build Include="StaffingManager\Tables\PositionLevel.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreateEmploymentType.sql" />
+    <Build Include="StaffingManager\Tables\PositionStatus.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreatePositionLevel.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreatePositionStatus.sql" />
+    <Build Include="StaffingManager\Stored Procedures\DeletePositionLevel.sql" />
+    <Build Include="StaffingManager\Stored Procedures\DeletePositionStatus.sql" />
+    <Build Include="StaffingManager\Stored Procedures\DeleteEmploymentType.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetPositionLevelsByOrganizationId.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetPositionStatusesByOrganizationId.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetPositionEmploymentTypesByOrganizationId.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetPositionLevelById.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetPositionStatusById.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetPositionEmploymentTypeById.sql" />
+    <Build Include="Lookup\Stored Procedures\DeleteTag.sql" />
+    <Build Include="Lookup\Stored Procedures\CreateTag.sql" />
+    <Build Include="Lookup\Stored Procedures\GetTags.sql" />
+    <Build Include="Lookup\Stored Procedures\GetTagsByPositionId.sql" />
+    <Build Include="Lookup\Stored Procedures\SetupTag.sql" />
+    <Build Include="Lookup\Tables\Tag.sql" />
+    <Build Include="Lookup\User Defined Types\TagTable.sql" />
+    <Build Include="StaffingManager\Stored Procedures\SetupPosition.sql" />
+    <Build Include="StaffingManager\Tables\PositionTag.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetPositionTagsByPosition.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreatePositionTags.sql" />
+    <Build Include="StaffingManager\Stored Procedures\CreatePositionTag.sql" />
+    <Build Include="StaffingManager\Stored Procedures\DeletePositionTag.sql" />
     <Build Include="Lookup\Stored Procedures\GetStates.sql" />
     <Build Include="Lookup\Stored Procedures\CreateAddress.sql" />
     <Build Include="Lookup\Stored Procedures\UpdateAddress.sql" />
@@ -313,12 +371,29 @@
     <Build Include="Auth\Stored Procedures\GetUserProfile.sql" />
     <Build Include="Auth\Stored Procedures\GetUserContext.sql" />
     <Build Include="Lookup\Stored Procedures\GetAddress.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetStaffingIndexInfo.sql" />
     <None Include="UpgradeScripts\Upgrade_AllyisAppsDB_1.2_to_1.3.sql" />
+    <Build Include="Auth\Stored Procedures\GetUser.sql" />
+    <Build Include="Billing\Stored Procedures\GetSubscriptionName.sql" />
+    <Build Include="Expense\Stored Procedures\GetExpenseItemsByExpenseReportId.sql" />
+    <Build Include="Expense\Stored Procedures\CreateExpenseHistory.sql" />
+    <Build Include="Expense\Stored Procedures\CreateExpenseReportHistory.sql" />
+    <Build Include="Expense\Stored Procedures\GetExpenseHistory.sql" />
+    <Build Include="Expense\Stored Procedures\GetExpenseReportHistory.sql" />
+    <Build Include="Expense\Stored Procedures\UpdateExpenseHistory.sql" />
+    <Build Include="Finance\Stored Procedures\GetAccounts.sql" />
+    <Build Include="Expense\Tables\ExpenseReportHistory.sql" />
+    <Build Include="Auth\Stored Procedures\UpdateUserMaxAmount.sql" />
+    <Build Include="StaffingManager\Stored Procedures\GetStaffingIndexInfoFiltered.sql" />
+    <Build Include="Crm\Stored Procedures\CreateCustomer.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="post-deploy.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="AllyisAppsDB.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestData\ExpenseTracker.Expenses.Table.sql" />
   </ItemGroup>
 </Project>

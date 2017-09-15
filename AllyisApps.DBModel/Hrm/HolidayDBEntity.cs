@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="HolidayDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -11,7 +11,7 @@ namespace AllyisApps.DBModel.Hrm
 	/// <summary>
 	/// Represents a holiday for an organization.
 	/// </summary>
-	public class HolidayDBEntity
+	public class HolidayDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the HolidayId.

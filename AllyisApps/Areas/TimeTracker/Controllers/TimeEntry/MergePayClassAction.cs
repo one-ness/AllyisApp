@@ -62,7 +62,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				SourcePayClassId = sourcePayClassId,
 				SourcePayClassName = sourcePayClassName,
 				SubscriptionId = subscriptionId,
-				DestinationPayClasses = destPayClasses
+				DestinationPayClasses = destPayClasses.Select(payclass => new PayClassInfoViewModel()
+				{
+					CreatedUtc = payclass.CreatedUtc,
+					OrganizationId = payclass.OrganizationId,
+					PayClassId = payclass.PayClassId,
+					PayClassName = payclass.PayClassName
+				})
 			};
 		}
 
@@ -78,7 +84,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult MergePayClass(MergePayClassViewModel model, int destPayClass)
 		{
 			// change all of the entries with old payclass to destPayClass and delete the old payclass
-			if (AppService.DeletePayClass(model.SourcePayClassId, AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId, model.SubscriptionId, destPayClass))
+			if (AppService.DeletePayClass(model.SourcePayClassId, AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId, model.SubscriptionId, destPayClass))
 			{
 				Notifications.Add(new BootstrapAlert(Resources.Strings.SuccessfulMergePayClass, Variety.Success));
 			}

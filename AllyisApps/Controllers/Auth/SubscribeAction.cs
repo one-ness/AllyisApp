@@ -62,7 +62,9 @@ namespace AllyisApps.Controllers
 			if (productInfo != null)
 			{
 				int selectedSku = currentSubscription == null ? 0 : currentSubscription.SkuId;
-				string orgName = AppService.UserContext.UserOrganizations[organizationId].OrganizationName;
+
+				// TODO: orgName MUST be obtained in the service call AppService.GetProductSubscriptionInfo (it gets the orgId)
+				string orgName = "Get ORG Name";
 				BillingServicesCustomerId customerId = new BillingServicesCustomerId(stripeToken);
 
 				return new ProductSubscriptionViewModel
@@ -127,7 +129,7 @@ namespace AllyisApps.Controllers
 			}
 
 			bool addingNewBilling = token != null && model.Token == null;
-			
+
 			AppService.Subscribe(model.ProductId, model.ProductName, model.SelectedSku, model.PreviousSku, model.Billing.Amount, model.Token, addingNewBilling, billingServicesEmail, token, model.OrganizationId);
 			Notifications.Add(new BootstrapAlert(string.Format(Resources.Strings.SubscribedSuccessfully, model.SelectedSkuName), Variety.Success));
 			return this.RedirectToAction(ActionConstants.ManageOrg, new { id = model.OrganizationId });

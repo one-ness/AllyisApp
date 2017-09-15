@@ -3,7 +3,7 @@ namespace AllyisApps.DBModel.Lookup
 	/// <summary>
 	/// Country db entity.
 	/// </summary>
-	public class CountryDBEntity
+	public class CountryDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// country id.

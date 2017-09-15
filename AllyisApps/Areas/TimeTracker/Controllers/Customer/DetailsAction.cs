@@ -7,9 +7,8 @@
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
-using AllyisApps.ViewModels.TimeTracker.Customer;
-using AllyisApps.DBModel;
 using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.TimeTracker.Customer;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -29,26 +28,26 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
 			var infos = AppService.GetCustomerInfo(customerId);
-            var customer = infos.Item1;
-            return this.View(new EditCustomerInfoViewModel
-            {
-                ContactEmail = customer.ContactEmail,
-                CustomerName = customer.CustomerName,
-                Address = customer.Address?.Address1,
-                City = customer.Address?.City,
-                State = customer.Address?.StateName,
-                SelectedStateId = customer.Address?.StateId,
-                SelectedCountryCode = customer.Address?.CountryCode,
-                AddressId = customer.Address?.AddressId,
-                Country = customer.Address?.CountryName,
-                PostalCode = customer.Address?.PostalCode,
-                ContactPhoneNumber = customer.ContactPhoneNumber,
-                FaxNumber = infos.Item1.FaxNumber,
-                Website = infos.Item1.Website,
-                EIN = infos.Item1.EIN,
-                OrganizationId = customer.OrganizationId,
-                CustomerId = customerId,
-                LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
+			var customer = infos.Item1;
+			return this.View(new EditCustomerInfoViewModel
+			{
+				ContactEmail = customer.ContactEmail,
+				CustomerName = customer.CustomerName,
+				Address = customer.Address?.Address1,
+				City = customer.Address?.City,
+				State = customer.Address?.StateName,
+				SelectedStateId = customer.Address?.StateId,
+				SelectedCountryCode = customer.Address?.CountryCode,
+				AddressId = customer.Address?.AddressId,
+				Country = customer.Address?.CountryName,
+				PostalCode = customer.Address?.PostalCode,
+				ContactPhoneNumber = customer.ContactPhoneNumber,
+				FaxNumber = infos.Item1.FaxNumber,
+				Website = infos.Item1.Website,
+				EIN = infos.Item1.EIN,
+				OrganizationId = customer.OrganizationId,
+				CustomerId = customerId,
+				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
 				CustomerOrgId = infos.Item1.CustomerOrgId,
 				CanEditCustomers = this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false)
 			});

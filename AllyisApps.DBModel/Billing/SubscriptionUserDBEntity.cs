@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="SubscriptionUserDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -10,7 +10,7 @@ namespace AllyisApps.DBModel.Billing
 	/// <summary>
 	/// Subscription User object.
 	/// </summary>
-	public class SubscriptionUserDBEntity
+	public class SubscriptionUserDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// gets or set the product role.

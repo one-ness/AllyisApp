@@ -10,6 +10,8 @@ using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
+using AllyisApps.Utilities;
+using AllyisApps.ViewModels.TimeTracker.Project;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
@@ -33,8 +35,9 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var infos = AppService.GetReportInfo(subscriptionId);
 
 			const string TempDataKey = "RVM";
-			UserSubscription subInfo = null;
-			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			string subName = AppService.GetSubscription(subscriptionId).Name;
 			if (this.TempData[TempDataKey] != null)
 			{
 				reportVM = (ReportViewModel)TempData[TempDataKey];
@@ -42,7 +45,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			else
 			{
 				reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, subInfo.OrganizationId, true, infos.Item1, infos.Item2);
-				reportVM.SubscriptionName = subInfo.SubscriptionName;
+				reportVM.SubscriptionName = subName;
 			}
 
 			reportVM.UserView = this.GetUserSelectList(infos.Item3, reportVM.Selection.Users);
@@ -51,8 +54,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			reportVM.SubscriptionId = subscriptionId;
 
 			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
-			ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infoOrg.Item1.StartOfWeek));
-			ViewBag.WeekEnd = AppService.GetDayFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
+			ViewBag.WeekStart = AppService.GetDaysFromDateTime(SetStartingDate(null, infoOrg.Item1.StartOfWeek));
+			ViewBag.WeekEnd = AppService.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 
 			return this.View(reportVM);
 		}
@@ -85,8 +88,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				CanManage = canManage,
 				OrganizationId = organizationId,
 				ShowExport = showExport,
-				Projects = projects,
-				Customers = customers,
+				Projects = projects.AsParallel().Select(proj => new CompleteProjectViewModel(proj)).AsEnumerable(),
 				PreviewPageSize = 20,
 				PreviewTotal = string.Format("{0} {1}", 0, Resources.Strings.HoursTotal),
 				PreviewEntries = null,
@@ -96,10 +98,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Selection = previousSelections ?? new ReportSelectionModel
 				{
 					CustomerId = 0,
-					EndDate = AppService.GetDayFromDateTime(DateTime.Today),
+					EndDate = AppService.GetDaysFromDateTime(DateTime.Today),
 					Page = 1,
 					ProjectId = 0,
-					StartDate = AppService.GetDayFromDateTime(DateTime.Today),
+					StartDate = AppService.GetDaysFromDateTime(DateTime.Today),
 					Users = new List<int>()
 				}
 			};

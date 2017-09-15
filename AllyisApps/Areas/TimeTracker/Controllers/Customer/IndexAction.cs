@@ -29,28 +29,28 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult Index(int subscriptionId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
-			UserSubscription subInfo = null;
-			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			return this.View(this.ConstructManageCustomerViewModel(subscriptionId));
 		}
 
-        /// <summary>
-        /// Quick fix for new routing issue. 
-        /// </summary>
-        /// <param name="subscriptionId">Subscription id.</param>
-        /// <returns>The index page.</returns>
-        public ActionResult IndexNoUserId(int subscriptionId)
-        {
-            this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
-            UserSubscription subInfo = null;
-            this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+		/// <summary>
+		/// Quick fix for new routing issue.
+		/// </summary>
+		/// <param name="subscriptionId">Subscription id.</param>
+		/// <returns>The index page.</returns>
+		public ActionResult IndexNoUserId(int subscriptionId)
+		{
+			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.ViewCustomer, subscriptionId);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 
-            var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
-            ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infos.Item1.StartOfWeek));
-            ViewBag.WeekEnd = AppService.GetDayFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
+			var infos = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+			ViewBag.WeekStart = AppService.GetDaysFromDateTime(SetStartingDate(null, infos.Item1.StartOfWeek));
+			ViewBag.WeekEnd = AppService.GetDaysFromDateTime(SetEndingDate(null, infos.Item1.StartOfWeek));
 
-            return this.View("Index", this.ConstructManageCustomerViewModel(subscriptionId));
-        }
+			return this.View("Index", this.ConstructManageCustomerViewModel(subscriptionId));
+		}
 
 		/// <summary>
 		/// Populate Projects.
@@ -61,8 +61,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult PopulateProjects(int customerId)
 		{
 			var model = new CustomerProjectViewModel();
-			model.CustomerInfo = new Customer { CustomerId = customerId };
-			model.Projects = AppService.GetProjectsByCustomer(customerId);
+			model.CustomerInfo = new CustomerProjectViewModel.CustomerViewModel { CustomerId = customerId };
+			model.Projects = AppService.GetProjectsByCustomer(customerId).AsParallel()
+			.Select(proj => new
+			CustomerProjectViewModel.ProjectViewModel()
+			{
+				CustomerId = proj.CustomerId,
+				OrganizationId = proj.OrganizationId,
+				ProjectId = proj.ProjectId,
+				ProjectName = proj.ProjectName
+			});
 			return PartialView("_ProjectsByCustomer", model);
 		}
 
@@ -75,8 +83,16 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		public ActionResult PopulateInactiveProjects(int customerId)
 		{
 			var model = new CustomerProjectViewModel();
-			model.CustomerInfo = new Customer { CustomerId = customerId };
-			model.Projects = AppService.GetInactiveProjectsByCustomer(customerId);
+			model.CustomerInfo = new CustomerProjectViewModel.CustomerViewModel { CustomerId = customerId };
+			model.Projects = AppService.GetInactiveProjectsByCustomer(customerId).AsParallel()
+			.Select(proj => new
+			CustomerProjectViewModel.ProjectViewModel()
+			{
+				CustomerId = proj.CustomerId,
+				OrganizationId = proj.OrganizationId,
+				ProjectId = proj.ProjectId,
+				ProjectName = proj.ProjectName
+			});
 			return PartialView("_ProjectsByCustomer", model);
 		}
 
@@ -87,11 +103,12 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The ManageCustomerViewModel.</returns>
 		public ManageCustomerViewModel ConstructManageCustomerViewModel(int subscriptionId)
 		{
-			UserSubscription subInfo = null;
-			this.AppService.UserContext.UserSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var infos = AppService.GetProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			var inactiveInfo = AppService.GetInactiveProjectsAndCustomersForOrgAndUser(subInfo.OrganizationId);
 			bool canEditProjects = subInfo.ProductRoleId == (int)TimeTrackerRole.Manager;
+			string subName = AppService.getSubscriptionName(subscriptionId);
 			List<CompleteProjectInfo> projects = canEditProjects ? infos.Item1 : infos.Item1.Where(p => p.IsProjectUser == true).ToList();
 			List<Customer> customers = infos.Item2;
 			IList<CustomerProjectViewModel> customersList = new List<CustomerProjectViewModel>();
@@ -99,14 +116,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				CustomerProjectViewModel customerResult = new CustomerProjectViewModel()
 				{
-					CustomerInfo = currentCustomer,
+					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel()
+					{
+						CustomerName = currentCustomer.CustomerName,
+						CustomerId = currentCustomer.CustomerId,
+						IsActive = currentCustomer.IsActive
+					},
 					Projects = from p in projects
 							   where p.CustomerId == currentCustomer.CustomerId
-							   select new Project
+							   select new CustomerProjectViewModel.ProjectViewModel
 							   {
 								   CustomerId = p.CustomerId,
 								   OrganizationId = p.OrganizationId,
-                                   ProjectName = p.ProjectName,
+								   ProjectName = p.ProjectName,
 								   ProjectId = p.ProjectId
 							   }
 				};
@@ -126,14 +148,19 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			{
 				CustomerProjectViewModel customerResult = new CustomerProjectViewModel()
 				{
-					CustomerInfo = currentCustomer,
+					CustomerInfo = new CustomerProjectViewModel.CustomerViewModel()
+					{
+						CustomerId = currentCustomer.CustomerId,
+						CustomerName = currentCustomer.CustomerName,
+						IsActive = currentCustomer.IsActive
+					},
 					Projects = from p in inactiveProjects
 							   where p.CustomerId == currentCustomer.CustomerId
-							   select new Project
+							   select new CustomerProjectViewModel.ProjectViewModel
 							   {
 								   CustomerId = p.CustomerId,
 								   OrganizationId = p.OrganizationId,
-                                   ProjectName = p.ProjectName,
+								   ProjectName = p.ProjectName,
 								   ProjectId = p.ProjectId
 							   }
 				};
@@ -152,40 +179,40 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				OrganizationId = subInfo.OrganizationId,
 				CanEdit = canEditProjects,
 				SubscriptionId = subscriptionId,
-                SubscriptionName = subInfo.SubscriptionName,
+				SubscriptionName = subName,
 				UserId = this.AppService.UserContext.UserId
 			};
 		}
 
-        private DateTime SetStartingDate(DateTime? date, int startOfWeek)
-        {
-            if (date == null && !date.HasValue)
-            {
-                DateTime today = DateTime.Now;
-                int daysIntoTheWeek = (int)today.DayOfWeek < startOfWeek
-                    ? (int)today.DayOfWeek + (7 - startOfWeek)
-                    : (int)today.DayOfWeek - startOfWeek;
+		private DateTime SetStartingDate(DateTime? date, int startOfWeek)
+		{
+			if (date == null && !date.HasValue)
+			{
+				DateTime today = DateTime.Now;
+				int daysIntoTheWeek = (int)today.DayOfWeek < startOfWeek
+					? (int)today.DayOfWeek + (7 - startOfWeek)
+					: (int)today.DayOfWeek - startOfWeek;
 
-                date = today.AddDays(-daysIntoTheWeek);
-            }
+				date = today.AddDays(-daysIntoTheWeek);
+			}
 
-            return date.Value.Date;
-        }
+			return date.Value.Date;
+		}
 
-        private DateTime SetEndingDate(DateTime? date, int startOfWeek)
-        {
-            if (date == null && !date.HasValue)
-            {
-                DateTime today = DateTime.Now;
+		private DateTime SetEndingDate(DateTime? date, int startOfWeek)
+		{
+			if (date == null && !date.HasValue)
+			{
+				DateTime today = DateTime.Now;
 
-                int daysLeftInWeek = (int)today.DayOfWeek < startOfWeek
-                    ? startOfWeek - (int)today.DayOfWeek - 1
-                    : (6 - (int)today.DayOfWeek) + startOfWeek;
+				int daysLeftInWeek = (int)today.DayOfWeek < startOfWeek
+					? startOfWeek - (int)today.DayOfWeek - 1
+					: (6 - (int)today.DayOfWeek) + startOfWeek;
 
-                date = today.AddDays(daysLeftInWeek);
-            }
+				date = today.AddDays(daysLeftInWeek);
+			}
 
-            return date.Value.Date;
-        }
-    }
+			return date.Value.Date;
+		}
+	}
 }

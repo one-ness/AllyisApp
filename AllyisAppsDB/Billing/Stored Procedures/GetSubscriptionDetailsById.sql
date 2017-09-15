@@ -7,5 +7,6 @@ SELECT [OrganizationId]
 	  ,[NumberOfUsers]
       ,[SubscriptionCreatedUtc]
       ,[IsActive]
+	  ,[SubscriptionName] As 'Name'
 FROM [Billing].[Subscription] WITH (NOLOCK) 
 WHERE [SubscriptionId] = @subscriptionId AND [IsActive] = 1

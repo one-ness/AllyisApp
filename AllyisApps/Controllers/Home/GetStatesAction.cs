@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.ViewModels;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
 {
@@ -20,6 +20,8 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Retrieves a list of states for the specified country.
 		/// </summary>
+		/// <param name="countryCode">The country code.</param>
+		/// <returns>A JsonResult object.</returns>
 		[HttpPost]
 		[AllowAnonymous]
 		public JsonResult GetStates(string countryCode)

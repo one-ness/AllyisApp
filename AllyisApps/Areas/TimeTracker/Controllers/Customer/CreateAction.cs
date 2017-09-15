@@ -8,9 +8,9 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using AllyisApps.ViewModels.TimeTracker.Customer;
 using AllyisApps.Services.Lookup;
 using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.TimeTracker.Customer;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -29,12 +29,11 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditCustomer, subscriptionId);
 			var idAndCountries = AppService.GetNextCustId(subscriptionId);
-			string subscriptionNameToDisplay = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
+			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
 			return this.View(new EditCustomerInfoViewModel
 			{
 				LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService),
-                
-                IsCreating = true,
+				IsCreating = true,
 				CustomerOrgId = idAndCountries.Item1,
 				SubscriptionId = subscriptionId,
 				OrganizationId = idAndCountries.Item2,
@@ -54,21 +53,21 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-                int? customerId = AppService.CreateCustomer(
-                    new Customer()
-                    {
-                        ContactEmail = model.ContactEmail,
-                        CustomerName = model.CustomerName,
-                        Address = new Address()
-                        {
-                            Address1 = model.Address,
-                            City = model.City,
-                            StateName = model.State,
-                            CountryName = model.Country,
-                            PostalCode = model.PostalCode,
-                            CountryCode = model.SelectedCountryCode,
-                            StateId = model.SelectedStateId
-                        },
+				int? customerId = AppService.CreateCustomer(
+					new Customer()
+					{
+						ContactEmail = model.ContactEmail,
+						CustomerName = model.CustomerName,
+						Address = new Address()
+						{
+							Address1 = model.Address,
+							City = model.City,
+							StateName = model.State,
+							CountryName = model.Country,
+							PostalCode = model.PostalCode,
+							CountryCode = model.SelectedCountryCode,
+							StateId = model.SelectedStateId
+						},
 						ContactPhoneNumber = model.ContactPhoneNumber,
 						FaxNumber = model.FaxNumber,
 						Website = model.Website,

@@ -1,83 +1,82 @@
 ﻿@using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 @using AllyisApps.Core;
-@using AllyisApps.Services;
-
+@using AllyisApps.ViewModels.TimeTracker.Project;
 @model ReportViewModel
 
 @{
-    ViewBag.Title = Strings.Report;
-    DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
-    DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
-    ViewBag.OrganizationId = Model.OrganizationId;
-    Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
-    ViewData["UserId"] = Model.UserId;
-    ViewData["SubscriptionId"] = Model.SubscriptionId;
-    ViewData["SubscriptionName"] = Model.SubscriptionName;
+	ViewBag.Title = Strings.Report;
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+	ViewBag.OrganizationId = Model.OrganizationId;
+	Layout = "~/Areas/TimeTracker/Views/Shared/_TimeTrackerSidebar.cshtml";
+	ViewData["UserId"] = Model.UserId;
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
 <div class="row report-wrap">
-    <div class="col-md-12">
-        <div class="row">
-            @using (Html.BeginForm(ActionConstants.ViewReport, ControllerConstants.TimeEntry, FormMethod.Post, htmlAttributes: new { @id = "reportForm" }))
-            {
-                @Html.Hidden("OrganizationId", Model.OrganizationId)
-                @Html.HiddenFor(m => m.SubscriptionId)
+	<div class="col-md-12">
+		<div class="row">
+			@using (Html.BeginForm(ActionConstants.ViewReport, ControllerConstants.TimeEntry, FormMethod.Post, htmlAttributes: new { @id = "reportForm" }))
+			{
+				@Html.Hidden("OrganizationId", Model.OrganizationId)
+				@Html.HiddenFor(m => m.SubscriptionId)
                 <!--Get users By subscriptionUser-->
                 <!--Default selection: current user-->if (Model.CanManage)// was previously: (Permissions.Can(ProductAction.TimeTrackerCreateReportOthers, Model.OrganizationId, DB Helper.Instance.GetProductIDByName("TimeTracker")))
-                {
-                    <div class="list-left container">
-                        <label for="UserSelect">@Strings.Employees</label>
-                        @Html.DropDownList("UserSelect",
-                                              Model.UserView,
-                                              htmlAttributes: new { @class = "form-control", multiple = "multiple", size = "9" })
-                    </div>
+				{
+					<div class="list-left container">
+						<label for="UserSelect">@Strings.Employees</label>
+						@Html.DropDownList("UserSelect",
+											  Model.UserView,
+											  htmlAttributes: new { @class = "form-control", multiple = "multiple", size = "9" })
+					</div>
 				}
-                else
-                {
-                    <div class="list-left container" style="display: none;">
-                        <label for="UserSelect">@Strings.Employees</label>
-                        @Html.DropDownList("UserSelect",
-                                              Model.UserView,
-                                              htmlAttributes: new { @class = "form-control", /*disabled = "disabled",*/ multiple = "multiple", size = "9", style = "display: none;" })
-                    </div>
+				else
+				{
+					<div class="list-left container" style="display: none;">
+						<label for="UserSelect">@Strings.Employees</label>
+						@Html.DropDownList("UserSelect",
+											  Model.UserView,
+											  htmlAttributes: new { @class = "form-control", /*disabled = "disabled",*/ multiple = "multiple", size = "9", style = "display: none;" })
+					</div>
 				}
-                <div class="options-right container">
-                    <div class="row">
-                        <div class="form-group col-md-6 col-lg-6">
-                            <!--Get Customers by OrganizationId-->
-                            <label for="CustomerSelect">@Strings.Customers</label>
-                            @Html.DropDownList("CustomerSelect",
-                                              Model.CustomerView,
-                                              htmlAttributes: new { @class = "form-control", @style = "width:85%", @id = "ddl-customers" })
-                        </div>
+				<div class="options-right container">
+					<div class="row">
+						<div class="form-group col-md-6 col-lg-6">
+							<!--Get Customers by OrganizationId-->
+							<label for="CustomerSelect">@Strings.Customers</label>
+							@Html.DropDownList("CustomerSelect",
+											  Model.CustomerView,
+											  htmlAttributes: new { @class = "form-control", @style = "width:85%", @id = "ddl-customers" })
+						</div>
 
 						<!-- A holder for all the projects, to draw from for populating the real selection list -->
 						<select id="allprojects" style="display: none;">
-							@foreach(CompleteProjectInfo proj in Model.Projects)
+							@foreach (CompleteProjectViewModel proj in Model.Projects)
 							{
 								<option value="@proj.ProjectId" data-cust="@proj.CustomerId" class="projectSelectOption">@proj.ProjectName</option>
 							}
 						</select>
 
-                        @if (Model.Selection.CustomerId == 0)
-                        {
-                            <div class="form-group col-md-6 col-lg-6">
-                                <label for="ddl-projects">@Strings.Projects</label>
-                                <!--Get Projects by OrgID-->
-                                @Html.DropDownList("ProjectSelect",
-                                              Model.ProjectView,
-                                              htmlAttributes: new { @class = "form-control", @style = "width:85%", @id = "ddl-projects", @disabled = "disabled" })
-                            </div>
-							}
-                        else
-                        {
-                            <div class="form-group col-md-6 col-lg-6">
-                                <label for="ddl-projects">@Strings.Projects</label>
-                                @*@Html.DropDownList("ProjectSelect",
-                                              Model.ProjectView,
-                                              htmlAttributes: new { @class = "form-control", @id = "ddl-projects" })*@
+						@if (Model.Selection.CustomerId == 0)
+						{
+							<div class="form-group col-md-6 col-lg-6">
+								<label for="ddl-projects">@Strings.Projects</label>
+								<!--Get Projects by OrgID-->
+								@Html.DropDownList("ProjectSelect",
+											  Model.ProjectView,
+											  htmlAttributes: new { @class = "form-control", @style = "width:85%", @id = "ddl-projects", @disabled = "disabled" })
+							</div>
+						}
+						else
+						{
+							<div class="form-group col-md-6 col-lg-6">
+								<label for="ddl-projects">@Strings.Projects</label>
+								@*@Html.DropDownList("ProjectSelect",
+									Model.ProjectView,
+									htmlAttributes: new { @class = "form-control", @id = "ddl-projects" })*@
 								<select name="ProjectSelect" class="form-control" id="ddl-projects">
-									@foreach(CompleteProjectInfo project in Model.Projects)
+									@foreach (CompleteProjectViewModel project in Model.Projects)
 									{
 										if (Model.Selection.CustomerId == project.CustomerId)
 										{
@@ -86,9 +85,9 @@
 										}
 									}
 								</select>
-                            </div>
+							</div>
 						}
-                    </div>
+					</div>
 					<div class="row">
 						<div class="form-group col-md-6 col-lg-6">
 							<label style="margin-right:200px">@Strings.StartDate</label>
@@ -113,14 +112,14 @@
 								</div>
 							}
 							<div>
-								<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" style="margin-left: 15px;" value=@Strings.Preview title="Preview Excel Time Tracker entries"/>
+								<input class="btn btn-primary pull-left" type="submit" name="viewDataButton" style="margin-left: 15px;" value=@Strings.Preview title="Preview Excel Time Tracker entries" />
 							</div>
 						</div>
 					</div>
-                </div>
-                @Html.Hidden("PageNum", Model.PreviewPageNum)
+				</div>
+				@Html.Hidden("PageNum", Model.PreviewPageNum)
 			}
-        </div>
+		</div>
 		<br>
 	</div>
 
@@ -182,28 +181,28 @@
 				@Model.PreviewMessage
 			</div>
 		</div>
-    </div>
+	</div>
 </div>
 
 @section css {
-    <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
-    <link rel="stylesheet" type="text/css" href="~/Content/jquery.comiseo.daterangepicker.css" />
+	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" href="~/Content/jquery.comiseo.daterangepicker.css" />
 }
 
 @section scripts
 {
-    @*Date range picker dependencies:*@
-    @Scripts.Render("~/bundles/jqueryui")
-    @Scripts.Render("~/bundles/moment")
+	@*Date range picker dependencies:*@
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/moment")
 
-    <script type="text/javascript">
+	<script type="text/javascript">
         var model_startofweek = @Model.StartOfWeek;
         var model_startdate = @Model.Selection.StartDate.Value;
         var model_enddate = @Model.Selection.EndDate.Value;
-    </script>
+	</script>
 	<script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
-    @Scripts.Render("~/bundles/daterangepicker")
-    @Scripts.Render("~/bundles/TTTimeEntryReport")
+	@Scripts.Render("~/bundles/daterangepicker")
+	@Scripts.Render("~/bundles/TTTimeEntryReport")
 	<script type="text/javascript">
 		pwf.setPageLimit(15);
 		pwf.setPageButtonLimit(10);

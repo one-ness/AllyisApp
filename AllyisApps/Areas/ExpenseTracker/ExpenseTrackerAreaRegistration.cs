@@ -29,13 +29,30 @@ namespace AllyisApps.Areas.ExpenseTracker
 		/// Registers the area within the site.
 		/// </summary>
 		/// <param name="context">The site area registration context.</param>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "MVC Framework managed.")]
 		public override void RegisterArea(AreaRegistrationContext context)
 		{
 			context.Routes.MapSubdomainRoute(
-				name: "ExpenseTracker_Default",
-				url: "expensetracker/{subscriptionId}/{controller}/{action}/{id}",
+				name: "ExpenseTracker_Detail",
+				url: "expensetracker/{subscriptionId}/{controller}/{action}/{reportId}",
 				area: this.AreaName,
-				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+				defaults: new { controller = "expense", action = "index" },
+				constraints: new { subscriptionId = @"\d+", reportId = @"\d+" },
+				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers" });
+
+			context.Routes.MapSubdomainRoute(
+				name: "ExpenseTracker_Action",
+				url: "expensetracker/{subscriptionId}/{controller}/{action}",
+				area: this.AreaName,
+				defaults: new { controller = "expense", action = "index" },
+				constraints: new { subscriptionId = @"\d+" },
+				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers" });
+
+			context.Routes.MapSubdomainRoute(
+				name: "ExpenseTracker_Default",
+				url: "expensetracker/{subscriptionId}/{controller}",
+				area: this.AreaName,
+				defaults: new { controller = "expense", action = "index" },
 				constraints: new { subscriptionId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.ExpenseTracker.Controllers" });
 		}

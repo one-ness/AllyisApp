@@ -19,6 +19,7 @@ namespace AllyisApps.Lib
 	public static class Mailer
 	{
 		private static SendGridAPIClient sender;
+
 		public static void Init(string apiKey)
 		{
 			if (string.IsNullOrWhiteSpace(apiKey)) throw new ArgumentNullException("apiKey");

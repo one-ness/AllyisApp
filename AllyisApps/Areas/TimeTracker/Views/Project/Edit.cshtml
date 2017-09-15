@@ -15,25 +15,25 @@
 }
 
 <div class="shrink-wrap-center">
-    @{Html.RenderPartial("_ProjectEdit", Model, ViewData);}
+	@{Html.RenderPartial("_ProjectEdit", Model, ViewData);}
 </div>
 
 @section css {
-    <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
-    <link rel="stylesheet" type="text/css" href="~/Content/jquery.comiseo.daterangepicker.css" />
+	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" href="~/Content/jquery.comiseo.daterangepicker.css" />
 }
 
 @section Scripts {
-    @*Date range picker dependencies*@
-    @Scripts.Render("~/bundles/jqueryui")
-    @Scripts.Render("~/bundles/moment")
+	@*Date range picker dependencies*@
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/moment")
 
-    <script type="text/javascript">
+	<script type="text/javascript">
         var mindate_shortstring = "@DateTime.MinValue.ToShortDateString()";
         var maxdate_shortstring = "@DateTime.MaxValue.ToShortDateString()";
         var model_startdate = @Model.StartDate;
         var model_enddate = @Model.EndDate;
-    </script>
-    @Scripts.Render("~/bundles/daterangepicker")
-    @Scripts.Render("~/bundles/TTProjectEditCreate")
+	</script>
+	@Scripts.Render("~/bundles/daterangepicker")
+	@Scripts.Render("~/bundles/TTProjectEditCreate")
 }

@@ -4,14 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services.Lookup;
 using System;
 using System.ComponentModel.DataAnnotations;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
 {
 	/// <summary>
-	/// An object for keeping track of all the info related to a given organization.
+	/// an organization
 	/// </summary>
 	public class Organization
 	{
@@ -35,10 +35,11 @@ namespace AllyisApps.Services
 		/// Gets or sets the organization's Address.
 		/// </summary>
 		public Address Address { get; set; }
-        /// <summary>
-        /// Gets or sets the Phone number.
-        /// </summary>
-        [Display(Name = "Phone Number")]
+
+		/// <summary>
+		/// Gets or sets the Phone number.
+		/// </summary>
+		[Display(Name = "Phone Number")]
 		public string PhoneNumber { get; set; }
 
 		/// <summary>
@@ -57,9 +58,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		public string Subdomain { get; set; }
 
-        public Organization()
-        {
-            Address = new Address();
-        }
+		/// <summary>
+		/// Gets or sets if this organization is active
+		/// </summary>
+		public bool IsActive { get; set; }
+
+		public Organization()
+		{
+			Address = new Address();
+		}
 	}
 }

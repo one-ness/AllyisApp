@@ -1,7 +1,279 @@
-﻿
+﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.StaffingIndexViewModel
 @{
-    ViewBag.Title = "index";
+	DisplayHints.ShowBreadcrumbs = false;
+	DisplayHints.PageBodyId = "paneled-index";
+	ViewBag.TitleBar = Strings.MyAccount;
 }
 
-<h2>index</h2>
+<div class="row">
+	<style>
+		table {
+			border-collapse: collapse;
+			text-align: left;
+			width: 100%;
+		}
 
+		table td, .datagrid table th {
+			padding: 5px 5px;
+		}
+
+		table thead th {
+			background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #bc7967), color-stop(1, #80141C) );
+			background: -moz-linear-gradient( center top, #bc7967 5%, #80141C 100% );
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#991821', endColorstr='#80141C');
+			background-color: #bc7967;
+			color: #FFFFFF;
+			font-size: 14px;
+			font-weight: bold;
+			border-left: 2px solid #bc7967;
+		}
+
+		table thead th:first-child {
+			border: none;
+		}
+
+		table tbody td {
+			color: #80141C;
+			border-left: 3px solid #F7CDCD;
+			font-size: 14px;
+			font-weight: normal;
+		}
+
+		table tbody .alt td {
+			background: #F7CDCD;
+			color: #80141C;
+		}
+
+		table tbody td:first-child {
+			border-left: none;
+		}
+
+		table tr {
+			border-bottom: solid #bc7967;
+		}
+
+		tbody tr:last-child td {
+			border-bottom: none;
+		}
+
+		.left-element {
+			display: inline-block;
+			left: 0;
+		}
+
+		select {
+			width: 150px
+		}
+
+		label {
+			padding: 5px 5px;
+		}
+
+		div {
+			padding: 3px 3px;
+		}
+
+		.right-element {
+			position: absolute;
+			display: inline-block;
+			right: 0px;
+		}
+
+		.column-left {
+			float: left;
+			width: 33%;
+		}
+
+		.column-right {
+			float: right;
+			width: 33%;
+		}
+
+		.column-center {
+			display: inline-block;
+			width: 33%;
+		}
+	</style>
+
+	<div class="panel panel-default" width ="100%">
+		<div class="panel-heading">
+			<h2 class="left-element" style="margin-top: 0px; margin-bottom: 0px;">
+				@Model.SubscriptionName
+			</h2>
+			<button type="button" class="btn" data-toggle="collapse" data-target="#FilterArea">Filters</button>
+
+			<div id="FilterArea" class="collapse panel panel-default filter">
+				<div class="column-left">
+					<label>Filter by Position Status</label>
+					<select multiple id="statusFilter" class="statusFilter form-control">
+						@foreach (var status in Model.PositionStatuses)
+						{
+							<option value=@status.PositionStatusName>@status.PositionStatusName</option>
+						}
+					</select>
+				</div>
+				<div class="column-center">
+					<label>Filter by Employment Type</label>
+					<select multiple id="typesFilter" class="typesFilter form-control">
+						@foreach (var type in Model.EmploymentTypes)
+						{
+							<option value=@type.EmploymentTypeName>@type.EmploymentTypeName</option>
+						}
+					</select>
+				</div>
+				<div class="column-right">
+					<label>Filter By Tags</label>
+					<select multiple id="tagsFilter" class="tagsFilter form-control">
+						@foreach (var tag in Model.Tags)
+						{
+							<option value=@tag.TagName>@tag.TagName</option>
+						}
+					</select>
+				</div>
+				<div class="text-right">
+					<button id="filterSubmit" type="button" class="btn btn-default text-right filterSubmit" onclick="filteredSubmit()"> Apply Filters </button>
+				</div>
+			</div>
+			<div class="text-right">
+				<button class="btn btn-default" onclick="location.href='@Url.Action(ActionConstants.CreatePosition, ControllerConstants.Staffing, new { subscriptionId = Model.SubscriptionId } )'">New Position</button>
+			</div>
+		</div>
+		<div>
+			<table class="table-responsive" id="PositionsTable">
+				<thead>
+					<tr class="panel panel-default">
+						<th width ="24%" style="padding:0 5px 0 5px;" onclick="sortTable(0)">Position Title </th>
+						<th width ="10%" style="padding:0 5px 0 5px;" onclick="sortTable(1)">Position Status </th>
+						<th width ="8%"  style="padding:0 5px 0 5px;" onclick="sortTable(2)">Positions Available </th>
+						<th width ="12%" style="padding:0 5px 0 5px;" onclick="sortTable(3)">@Strings.Customer </th>
+						<th width ="12%" style="padding:0 5px 0 5px;" onclick="sortTable(4)">Hiring Manager </th>
+						<th width ="12%" style="padding:0 5px 0 5px;" onclick="sortTable(5)">Start Date </th>
+					</tr>
+				</thead>
+				@foreach (var pos in Model.Positions)
+				{
+					<tr>
+						<td href = "@Url.Action(ActionConstants.EditPosition, ControllerConstants.Staffing, new { id = pos.PositionId })">
+							@pos.PositionTitle
+							<p style="font-size: 10px">
+								@foreach (var tag in pos.Tags)
+								{
+									<span style="font-style: italic">@tag.TagName,</span>
+								}
+							</p>
+						</td>
+
+						<td>@pos.PositionStatusName</td>
+						<td style="padding:0 5px 0 15px;">@pos.PositionCount</td>
+						<td>@pos.CustomerName</td>
+						<td>@pos.HiringManager</td>
+						<td>@pos.StartDate.ToShortDateString()</td>
+					</tr>
+				}
+			</table>
+		</div>
+	</div>
+	@if (Model.Positions.Count == 0)
+	{
+		<div class="col-xs-12">
+			<h1 style="float: left">No Active Positions</h1>
+		</div>
+	}
+</div>
+
+<script type="text/javascript">
+	function sortTable(n) {
+		var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+		table = document.getElementById("PositionsTable");
+		switching = true;
+
+		dir = "asc";
+		/*Make a loop that will continue until no switching has been done:*/
+		while (switching) {
+			//start by saying: no switching is done:
+			switching = false;
+			rows = table.getElementsByTagName("TR");
+			/*Loop through all table rows (except the first, which contains table headers):*/
+			for (i = 1; i < (rows.length - 1); i++) {
+				//start by saying there should be no switching:
+				shouldSwitch = false;
+				/*Get the two elements you want to compare, one from current row and one from the next:*/
+				x = rows[i].getElementsByTagName("TD")[n];
+				y = rows[i + 1].getElementsByTagName("TD")[n];
+				/*check if the two rows should switch place, based on the direction, asc or desc:*/
+				if (dir == "asc") {
+					if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase())
+					{
+						shouldSwitch= true;
+						break;
+					}
+				}
+				else if (dir == "desc") {
+					if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase())
+					{
+						shouldSwitch= true;
+						break;
+					}
+				}
+			}
+			if (shouldSwitch) {
+				/*If a switch has been marked, make the switch and mark that a switch has been done:*/
+				rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+				switching = true;
+				//Each time a switch is done, increase this count by 1:
+				switchcount ++;
+			}
+			else {
+				/*If no switching has been done AND the direction is "asc", set the direction to "desc" and run the while loop again.*/
+				if (switchcount == 0 && dir == "asc") {
+				dir = "desc";
+				switching = true;
+				}
+			}
+		}
+	}
+
+	function filteredSubmit() {
+		var statuses = [];
+		var count = 0;
+		var k = 0;
+		var selecter = document.getElementById("statusFilter");
+		for (k = 0; k < selecter.options.length; k++) {
+			if (selecter.options[k].selected) statuses[count] = selecter.options[k].value;
+			count++;
+		}
+
+		var types = [];
+		count = 0;
+		var j = 0;
+		selecter = document.getElementById("typesFilter");
+		for (j = 0; j < selecter.options.length; j++) {
+			if (selecter.options[j].selected) types[count] = selecter.options[j].value;
+			count++;
+		}
+
+		var tags = [];
+		count = 0;
+		var i = 0;
+		selecter = document.getElementById("tagsFilter");
+		for(i = 0; i < selecter.options.length; i++)
+		{
+			if (selecter.options[i].selected) tags[count] = selecter.options[i].value;
+			count++;
+		}
+
+		var url = "/staffingmanager/" + @Model.SubscriptionId + "/?";
+		if (status.count != 0) {
+			url = url + "Status=" + statuses;
+		}
+		if (types.count != 0) {
+			if (status != null) url = url + "&";
+			url = url + "Types=" + types;
+		}
+		if (tags.count != 0 && tags[0] != "") {
+			if (status != null || type != null) url = url + "&";
+			url = url + "Tags=" + tags;
+		}
+		window.location.href = url;
+	}
+</script>

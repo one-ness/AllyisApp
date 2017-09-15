@@ -25,13 +25,13 @@ namespace AllyisApps.Controllers
 		/// GET: /Add.
 		/// The page for adding members to an organization.
 		/// </summary>
-		/// <param name="organizationId">Organization id.</param>
+		/// <param name="id">Organization id.</param>
 		/// <param name="returnUrl">The return url to redirect to after form submit.</param>
 		/// <returns>The result of this action.</returns>
-		public ActionResult AddMember(int organizationId, string returnUrl)
+		public ActionResult AddMember(int id, string returnUrl)
 		{
-			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, organizationId);
-			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(organizationId);
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, id);
+			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(id);
 			ViewBag.returnUrl = returnUrl;
 			return this.View(model);
 		}
@@ -45,20 +45,14 @@ namespace AllyisApps.Controllers
 		/// <returns>The result of this action.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> AddMember(AddMemberViewModel add, int organizationId)
+		public ActionResult AddMember(AddMemberViewModel add, int organizationId)
 		{
 			AddMemberViewModel model = ConstructOrganizationAddMembersViewModel(organizationId);
 			add.Subscriptions = model.Subscriptions;
-			add.Projects = model.Projects;
 
 			if (ModelState.IsValid)
 			{
 				this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, add.OrganizationId);
-				int? subId = null, subRoleId = null;
-				if (add.Subscriptions != null && add.Subscriptions.Count > 0)
-				{
-					var sub = add.Subscriptions.First();
-				}
 
 				try
 				{
@@ -69,15 +63,15 @@ namespace AllyisApps.Controllers
 						LastName = add.LastName,
 						OrganizationId = add.OrganizationId,
 						OrganizationRole = add.AddAsOwner ? OrganizationRole.Owner : OrganizationRole.Member,
-						EmployeeId = add.EmployeeId
+						EmployeeId = add.EmployeeId,
 					};
 
 					User usr = AppService.GetUserByEmail(info.Email);
 					string url = usr != null && usr.Email == info.Email ?
-						Url.Action(ActionConstants.Index, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme) :
-						Url.Action(ActionConstants.Register, ControllerConstants.Account, new { accessCode = "{accessCode}" }, protocol: Request.Url.Scheme);
+						Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme) :
+						Url.Action(ActionConstants.Register, ControllerConstants.Account, null, protocol: Request.Url.Scheme);
 
-					int invitationId = await AppService.InviteUser(url, info, subId, subRoleId);
+					int invitationId = AppService.InviteUser(url, info);
 
 					Notifications.Add(new BootstrapAlert(string.Format("{0} {1} " + Resources.Strings.UserEmailed, add.FirstName, add.LastName), Variety.Success));
 					return this.RedirectToAction(ActionConstants.ManageOrg, new { id = add.OrganizationId });
@@ -122,21 +116,26 @@ namespace AllyisApps.Controllers
 			{
 				OrganizationId = organizationId,
 				EmployeeId = new string(AppService.IncrementAlphanumericCharArray(nextId.ToCharArray())),
-				Subscriptions = new List<AddMemberSubscriptionInfo>(),
-				Projects = infos.Item4,
+				Subscriptions = new List<AddMemberSubscriptionViewModel>()
 			};
 
 			foreach (SubscriptionDisplayInfo sub in infos.Item2)
 			{
-				AddMemberSubscriptionInfo subInfo = new AddMemberSubscriptionInfo
+				AddMemberSubscriptionViewModel subInfo = new AddMemberSubscriptionViewModel
 				{
 					ProductName = sub.ProductName,
-					ProductRoles = infos.Item3.Where(r => r.ProductId == sub.ProductId).ToList(),
+					ProductRoles = infos.Item3.Where(r => r.ProductId == sub.ProductId)
+						.Select(r => new ProductRoleViewModel()
+						{
+							ProductId = r.ProductId,
+							ProductRoleId = r.ProductRoleId,
+							ProductRoleName = r.ProductRoleName
+						}).ToList(),
 					SubscriptionId = sub.SubscriptionId
 				};
 				subInfo.ProductRoles.Insert(
 					0,
-					new ProductRole
+					new ProductRoleViewModel
 					{
 						ProductRoleName = "None",
 						ProductId = (int)ProductIdEnum.None,

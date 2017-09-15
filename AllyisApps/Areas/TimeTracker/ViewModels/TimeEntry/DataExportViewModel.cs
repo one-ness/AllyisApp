@@ -6,8 +6,7 @@
 
 using System.Collections.Generic;
 using System.IO;
-using AllyisApps.Services;
-using AllyisApps.Services.TimeTracker;
+using AllyisApps.ViewModels.TimeTracker.Project;
 
 namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 {
@@ -26,17 +25,17 @@ namespace AllyisApps.ViewModels.TimeTracker.TimeEntry
 		/// <summary>
 		/// Gets the list of projects associated with this query.
 		/// </summary>
-		public IEnumerable<CompleteProjectInfo> Projects { get; internal set; }
+		public IEnumerable<CompleteProjectViewModel> Projects { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of Time entry data.
 		/// </summary>
-		public IEnumerable<TimeEntryInfo> Data { get; internal set; }
+		public IEnumerable<TimeEntryViewModel> Data { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of Time entry data to preview.
 		/// </summary>
-		public IEnumerable<TimeEntryInfo> PreviewData { get; internal set; }
+		public IEnumerable<TimeEntryViewModel> PreviewData { get; internal set; }
 
 		/// <summary>
 		/// Gets the total number of pages available to view.

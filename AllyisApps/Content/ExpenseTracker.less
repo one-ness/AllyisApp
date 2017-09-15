@@ -3,15 +3,17 @@
 @import "bootstrap/less/navbar.less";
 
 //@brand-primary: darken(#428bca, 6.5%); // blue
-@brand-primary: darken(#8bca42, 6.5%); // green
+@brand-primary: darken(#336600, 6.5%); // green
 //@brand-primary: darken(#ca428b, 6.5%); // purple
 //@brand-primary: darken(#ca8b42, 6.5%); // brown
 //@brand-primary: darken(#42ca8b, 6.5%); // turquoise
 //@brand-primary: darken(#8b42ca, 6.5%); // purple
 
 @zone-color: @brand-primary;
+@zone-color-odd: lighten(@zone-color, 50%);
 @zone-color-bg: lighten(@zone-color, 25%);
 @zone-body-bg: mix(white, @zone-color-bg, 50%);
+@zone-table-body-bg: lighten(@zone-body-bg, 25%);
 
 //@navbar-default-bg: @zone-color-bg;
 @navbar-default-border: darken(@btn-zone-bg, 6.5%);
@@ -81,6 +83,14 @@ body {
 	}
 }
 
+.review-area
+{
+    width: 100%;
+    height: 250px;
+    margin-bottom: 15px;
+	resize: none;
+}
+
 .table-row {
 	.offDay {
 		background-color: @timetracker-offday;
@@ -116,10 +126,77 @@ body {
 	border-color: @navbar-default-border !important;
 }
 
-a {
-	color: @brand-primary !important;
-	background-color: @zone-body-bg !important;
-	border-color: @navbar-default-border !important;
+a
+{
+    color: @brand-primary !important;
+    border-color: @navbar-default-border !important;
+    color: white;
+}
+
+.btn-group
+{
+    margin-top: 15px;
+    margin-left: 15px;
+}
+
+.btn
+{
+    margin-right: 5px;
+}
+
+.btn-reject
+{
+    color: white;
+    background-color: maroon;
+}
+
+.input-notes
+{
+    height: 60%;
+    width: 100%;
+}
+.report-top
+{
+    .col-xs-6, .col-md-6, .col-lg-6
+    {
+        padding: 0px;
+        margin: 15px 0px 15px 0px;
+    }
+}
+
+.report-detail
+{
+    div:nth-child(even)
+    {
+        background-color: @zone-table-body-bg;
+    }
+
+    div:nth-child(odd)
+    {
+        background-color: @zone-body-bg;
+    }
+
+    margin-bottom: 15px;
+}
+
+.report-detail:last-child
+{
+    margin-bottom: 0px;
+}
+
+thead tr
+{
+    background-color: @zone-body-bg !important;
+}
+
+tbody tr
+{
+    background-color: @zone-table-body-bg !important;
+}
+
+tfoot
+{
+    background-color: @zone-body-bg !important;
 }
 
 .panel {
@@ -130,4 +207,53 @@ a {
 .list-group {
 	color: @brand-primary !important;
 	border-color: @navbar-default-border !important;
+}
+
+.dropdown-toggle
+{
+    background-color: @zone-body-bg !important;
+}
+
+.left-label {
+	width: 30%;
+	display: inline-block;
+	text-align: right;
+	margin-bottom: 20px;
+}
+
+.right-input {
+	width: 50%;
+	display: inline-block;
+}
+
+.item-control {
+	border-radius: 0px;
+}
+
+.add-button {
+	color: white !important;
+	background-color: #224500 !important;
+	border-color: #224500 !important;
+	float: right;
+	width: 34px;
+	border-radius: 0px;
+	margin: 10px;
+	display: inline-block;
+}
+
+.field-validation-error {
+	color: #a94442;
+	font-weight: normal;
+}
+
+.dropdown-menu {
+	background-color: #e9f5db !important;
+}
+
+.nav-a:hover {
+	background-color: #7ab733 !important;
+}
+
+th > label {
+	margin-bottom: 0px;
 }

@@ -16,9 +16,9 @@ BEGIN
 		,[PhoneNumber]
 		,[PhoneExtension]
 		,[LastUsedSubscriptionId]
-		,[LastUsedOrganizationId]
 		,[PasswordHash]
 		,[PreferredLanguageId]
+		,[User].[IsEmailConfirmed]
 	FROM [Auth].[User]
 	WITH (NOLOCK)
 	LEFT JOIN [Lookup].[Address]	WITH (NOLOCK) ON [Address].[AddressId] = [User].[AddressId]

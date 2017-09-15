@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="SkuDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -11,7 +11,7 @@ namespace AllyisApps.DBModel.Billing
 	/// <summary>
 	/// A class representing the Sku table in the database.
 	/// </summary>
-	public class SkuDBEntity
+	public class SkuDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets SubscriptionId.

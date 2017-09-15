@@ -43,7 +43,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subList.Add(new BasicUserInfoViewModel(user.FirstName, user.LastName, user.UserId));        // Change to select list for model binding
 			}
 
-			string subscriptionNameToDisplay = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
+			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
 			return this.View(
 				new EditProjectViewModel()
 				{
@@ -51,14 +51,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					ParentCustomerId = userId,
 					ProjectUsers = new List<BasicUserInfoViewModel>(),
 					SubscriptionUsers = subList,
-					StartDate = AppService.GetDayFromDateTime(defaultStart),
-					EndDate = AppService.GetDayFromDateTime(defaultEnd),
+					StartDate = AppService.GetDaysFromDateTime(defaultStart),
+					EndDate = AppService.GetDaysFromDateTime(defaultEnd),
 					ProjectOrgId = idAndUsers.Item1, // Service.GetRecommendedProjectId()
 					CustomerName = AppService.GetCustomer(userId).CustomerName,
 					SubscriptionId = subscriptionId,
 					SubscriptionName = subscriptionNameToDisplay,
 					UserId = userId,
-					OrganizationId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId
+					OrganizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId
 				});
 		}
 

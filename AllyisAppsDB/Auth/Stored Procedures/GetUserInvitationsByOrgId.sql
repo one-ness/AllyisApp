@@ -6,10 +6,8 @@ AS
 		[InvitationId],
 		[Email],
 		[FirstName],
-		[LastName], 
-		[DateOfBirth], 
+		[LastName],  
 		[OrganizationId], 
-		[AccessCode], 
 		[Invitation].[OrganizationRoleId],
 		[OrganizationRoleName] AS [OrganizationRoleName],
 		[EmployeeId]

@@ -1451,21 +1451,27 @@
     <value>El ID de empleado que ha ingresado ya existe. Ingresa un ID de empleado exclusivo.</value>
   </data>
   <data name="ExpenseTrackerDescription" xml:space="preserve">
-	<value>Gestiona fácilmente sus gastos</value>
+    <value>Gestiona fácilmente sus gastos</value>
   </data>
   <data name="CreateSubscription" xml:space="preserve">
-	<value>Crear suscripción</value>
+    <value>Crear suscripción</value>
   </data>
   <data name="Edit" xml:space="preserve">
-	<value>Editar</value>
+    <value>Editar</value>
   </data>
   <data name="Downgrade" xml:space="preserve">
     <value>Degradar</value>
   </data>
   <data name="ChangeSubscription" xml:space="preserve">
-	<value>Cambiar suscripción</value>
+    <value>Cambiar suscripción</value>
   </data>
   <data name="SubscriptionName" xml:space="preserve">
-	<value>Nombre de la suscripción</value>
+    <value>Nombre de la suscripción</value>
+  </data>
+  <data name="ExpenseTracker" xml:space="preserve">
+    <value>Rastreador de gastos</value>
+  </data>
+  <data name="UserChangedRolesInExpenseTracker" xml:space="preserve">
+    <value>{0} los usuarios cambiaron sus funciones en la organización.</value>
   </data>
 </root>

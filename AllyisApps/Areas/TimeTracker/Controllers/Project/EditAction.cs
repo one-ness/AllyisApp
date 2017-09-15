@@ -50,7 +50,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			}
 
 			model.SubscriptionUsers = subList;
-			int orgId = AppService.UserContext.UserSubscriptions[model.SubscriptionId].OrganizationId;
+			int orgId = AppService.UserContext.SubscriptionsAndRoles[model.SubscriptionId].OrganizationId;
 			if (ModelState.IsValid)
 			{
 				this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, model.SubscriptionId);
@@ -114,7 +114,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				subscriptionUsers.Add(new BasicUserInfoViewModel(su.FirstName, su.LastName, su.UserId));
 			}
 
-			string subscriptionNameToDisplay = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
+			string subscriptionNameToDisplay = AppService.GetSubscription(subscriptionId).Name;
 
 			return new EditProjectViewModel
 			{
@@ -127,8 +127,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				ProjectName = infos.Item1.ProjectName,
 				ProjectUsers = projectUsers,
 				SubscriptionUsers = subscriptionUsers.Where(user => !projectUsers.Any(pu => (pu.UserId == user.UserId))), // Grab users that are not part of the project
-				StartDate = AppService.GetDayFromDateTime(infos.Item1.StartDate),
-				EndDate = AppService.GetDayFromDateTime(infos.Item1.EndDate),
+				StartDate = AppService.GetDaysFromDateTime(infos.Item1.StartDate),
+				EndDate = AppService.GetDaysFromDateTime(infos.Item1.EndDate),
 				SubscriptionId = subscriptionId,
 				SubscriptionName = subscriptionNameToDisplay,
 				UserId = AppService.UserContext.UserId

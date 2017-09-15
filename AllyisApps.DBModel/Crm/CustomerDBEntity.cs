@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="CustomerDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -11,65 +11,65 @@ namespace AllyisApps.DBModel.Crm
 	/// <summary>
 	/// Represents the Users table in the database.
 	/// </summary>
-	public class CustomerDBEntity
+	public class CustomerDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets CustomerId.
 		/// </summary>
 		public int CustomerId { get; set; }
 
-        /// <summary>
-        /// Gets or sets Customer Name.
-        /// </summary>
-        [DisplayName("Name")]
+		/// <summary>
+		/// Gets or sets Customer Name.
+		/// </summary>
+		[DisplayName("Name")]
 		public string CustomerName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the customer's Address Id.
-        /// </summary>
-        public int? AddressId { get; set; }
+		/// <summary>
+		/// Gets or sets the customer's Address Id.
+		/// </summary>
+		public int? AddressId { get; set; }
 
-        ///// <summary>
-        ///// Gets or sets Address.
-        ///// </summary>
-        //[DisplayName("Address")]
-        //public string Address { get; set; }
+		///// <summary>
+		///// Gets or sets Address.
+		///// </summary>
+		//[DisplayName("Address")]
+		//public string Address { get; set; }
 
-        ///// <summary>
-        ///// Gets or sets City.
-        ///// </summary>
-        //public string City { get; set; }
+		///// <summary>
+		///// Gets or sets City.
+		///// </summary>
+		//public string City { get; set; }
 
-        ///// <summary>
-        ///// Gets or sets State.
-        ///// </summary>
-        //public string StateName { get; set; }
+		///// <summary>
+		///// Gets or sets State.
+		///// </summary>
+		//public string StateName { get; set; }
 
-        ///// <summary>
-        ///// StateID for state Name
-        ///// </summary>
-        //public int? StateId { get; set; }
+		///// <summary>
+		///// StateID for state Name
+		///// </summary>
+		//public int? StateId { get; set; }
 
-        ///// <summary>
-        ///// Gets or sets Country.
-        ///// </summary>
-        //public string CountryName { get; set; }
+		///// <summary>
+		///// Gets or sets Country.
+		///// </summary>
+		//public string CountryName { get; set; }
 
-        ///// <summary>
-        ///// ISO ID for country
-        ///// </summary>
-        //public string CountryCode { get; set; }
+		///// <summary>
+		///// ISO ID for country
+		///// </summary>
+		//public string CountryCode { get; set; }
 
-        ///// <summary>
-        ///// Gets or sets PostalCode.
-        ///// </summary>
-        //[DisplayName("Postal Code")]
-        //public string PostalCode { get; set; }
+		///// <summary>
+		///// Gets or sets PostalCode.
+		///// </summary>
+		//[DisplayName("Postal Code")]
+		//public string PostalCode { get; set; }
 
-        /// <summary>
-        /// Gets or sets Email.
-        /// </summary>
-        public string ContactEmail { get; set; }
+		/// <summary>
+		/// Gets or sets Email.
+		/// </summary>
+		public string ContactEmail { get; set; }
 
 		/// <summary>
 		/// Gets or sets PhoneNumber.

@@ -45,9 +45,11 @@ BEGIN
 	SELECT	[Product].[ProductId],
 		[Product].[ProductName] AS [ProductName],
 		[Product].[AreaUrl],
+		[Product].[Description],
 		[Subscription].[SubscriptionId],
 		[Organization].[OrganizationId],
 		[Subscription].[SkuId],
+		[Sku].[SkuName],
 		[Subscription].[NumberOfUsers],
 		[Subscription].[SubscriptionName],
 		[Organization].[OrganizationName] AS [OrganizationName],
@@ -58,6 +60,7 @@ BEGIN
 	LEFT JOIN [Billing].[Product]		WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
 	WHERE [Subscription].[OrganizationId] = @organizationId
 	AND [Subscription].[IsActive] = 1
+	AND [Product].IsActive = 1
 	ORDER BY [Product].[ProductName]
 
 	SELECT 
@@ -65,28 +68,15 @@ BEGIN
 		[Email],
 		[FirstName],
 		[LastName], 
-		[DateOfBirth], 
 		[OrganizationId], 
-		[AccessCode], 
 		[Invitation].[OrganizationRoleId],
 		[OrganizationRoleName] AS [OrganizationRoleName],
 		[EmployeeId]
 	FROM [Auth].[Invitation] WITH (NOLOCK)
 	LEFT JOIN [Auth].[OrganizationRole] WITH (NOLOCK) ON [OrganizationRole].[OrganizationRoleId] = [Invitation].[OrganizationRoleId]
-	WHERE [OrganizationId] = @organizationId AND [IsActive] = 1
+	WHERE [OrganizationId] = @organizationId AND [IsActive] = 1 AND [StatusId] = 0
 
 	SELECT [StripeTokenCustId]
 	FROM [Billing].[StripeOrganizationCustomer] WITH (NOLOCK) 
-	WHERE [OrganizationId] = @organizationId AND [IsActive] = 1
-
-	SELECT
-		[Product].[ProductId],
-		[Sku].[SkuName],
-		[Product].[Description],
-		[Product].[AreaUrl]
-	FROM [Billing].[Product] WITH (NOLOCK) 
-	INNER JOIN [Billing].[Sku] WITH (NOLOCK) ON [Product].[ProductId] = [Sku].[ProductId]
-	RIGHT JOIN [Billing].[Subscription] WITH (NOLOCK) ON [Sku].[SkuId] = [Subscription].[SkuId]
-	WHERE [Product].[IsActive] = 1 AND [Subscription].[IsActive] = 1 AND [Subscription].OrganizationId = @organizationId
-	ORDER BY [Product].[ProductName]
+	WHERE [OrganizationId] = @organizationId AND [IsActive] = 1 
 END

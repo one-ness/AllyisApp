@@ -24,10 +24,15 @@ gatherData = function () {
 			if (!confirm(confirmMessage)) return null;
 		}
 		selectedAction["OrganizationRoleTarget"] = value;
-	} else {
+	} else if (currentTabTitle === "TimeTrackerTab") {
 		if (currentTabTitle === "TimeTrackerTab") {
 			value = ttActions[$('#ttActionSelect').val()];
 			selectedAction["TimeTrackerRoleTarget"] = value;
+		}
+	} else {
+		if (currentTabTitle === "ExpenseTrackerTab") {
+			value = etActions[$('#etActionSelect').val()];
+			selectedAction["ExpenseTrackerRoleTarget"] = value;
 		}
 	}
 

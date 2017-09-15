@@ -4,14 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using AllyisApps.Core.Alert;
-using AllyisApps.Lib;
-using AllyisApps.Services;
-using AllyisApps.Services.Lookup;
-using AllyisApps.ViewModels.Auth;
 using AllyisApps.ViewModels;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {
@@ -23,15 +19,16 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/EditProfile.
 		/// </summary>
+		/// <returns>Edit profile view.</returns>
 		public ActionResult EditProfile()
 		{
 			var model = new EditProfileViewModel();
 			model.LocalizedCountries = ModelHelper.GetLocalizedCountries(this.AppService);
-			var user = this.AppService.GetCurrentUserProfile();
+			var user = this.AppService.GetCurrentUser();
 			model.Address = user.Address?.Address1;
 			model.AddressId = user.Address?.AddressId;
 			model.City = user.Address?.City;
-			model.DateOfBirth = this.AppService.GetDayFromDateTime(user.DateOfBirth);
+			model.DateOfBirth = this.AppService.GetDaysFromDateTime(user.DateOfBirth);
 			model.Email = user.Email;
 			model.FirstName = user.FirstName;
 			model.LastName = user.LastName;
@@ -47,6 +44,8 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// POST: /Account/EditProfile.
 		/// </summary>
+		/// <param name="model">The EditProfileViewModel.</param>
+		/// <returns>Tje Edit profile view.</returns>
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult EditProfile(EditProfileViewModel model)

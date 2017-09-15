@@ -26,8 +26,8 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult Unsubscribe(int id, int idTwo)
 		{
-			UserSubscription userSub = new UserSubscription();
-			AppService.UserContext.UserSubscriptions.TryGetValue(id, out userSub);
+			UserContext.SubscriptionAndRole userSub = null;
+			AppService.UserContext.SubscriptionsAndRoles.TryGetValue(id, out userSub);
 			int orgId = userSub.OrganizationId;
 			int productId = (int)userSub.ProductId;
 

@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
@@ -14,6 +15,8 @@ namespace AllyisApps.Services
 	/// </summary>
 	public class User
 	{
+		public const int PasswordMinLength = 8;
+
 		/// <summary>
 		/// Gets or sets User Id.
 		/// </summary>
@@ -85,11 +88,6 @@ namespace AllyisApps.Services
 		public bool IsLockoutEnabled { get; set; }
 
 		/// <summary>
-		/// Gets or sets Id of this user's active organization.
-		/// </summary>
-		public int? LastUsedOrganizationId { get; set; }
-
-		/// <summary>
 		/// Gets or sets End date for lockout.
 		/// </summary>
 		public DateTime? LockoutEndDateUtc { get; set; }
@@ -115,11 +113,34 @@ namespace AllyisApps.Services
 		public DateTime UserCreatedUtc { get; set; }
 
 		/// <summary>
+		/// list of organizations the user is member of
+		/// </summary>
+		public List<UserOrganization> Organizations { get; set; }
+
+		/// <summary>
+		/// list of subscriptions the user is a member of
+		/// </summary>
+		public List<UserSubscription> Subscriptions { get; set; }
+
+		/// <summary>
+		/// list of invitations pending for the user
+		/// </summary>
+		public List<Invitation> Invitations { get; set; }
+
+		/// <summary>
+		/// Gets or sets the maximum amount of money user is allowed to approve of in a report.
+		/// </summary>
+		public decimal MaxAmount { get; set; }
+
+		/// <summary>
 		/// constructor
 		/// </summary>
 		public User()
 		{
 			this.Address = new Address();
+			this.Organizations = new List<UserOrganization>();
+			this.Subscriptions = new List<UserSubscription>();
+			this.Invitations = new List<Invitation>();
 		}
 	}
 }

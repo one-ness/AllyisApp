@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="InvitationDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -11,7 +11,7 @@ namespace AllyisApps.DBModel.Auth
 	/// <summary>
 	/// The model for the invitations table.
 	/// </summary>
-	public class InvitationDBEntity
+	public class InvitationDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the id of the invitation.
@@ -34,19 +34,19 @@ namespace AllyisApps.DBModel.Auth
 		public string LastName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the birthday of the recipiant.
+		/// Date invitation is accepted or Rejected
 		/// </summary>
-		public DateTime DateOfBirth { get; set; }
+		public DateTime DecisionDateUtc { get; set; }
+
+		/// <summary>
+		/// Invitation stauts of accepted pending or rejected
+		/// </summary>
+		public int InvitationStatusId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the id of the inviting organization.
 		/// </summary>
 		public int OrganizationId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the access code associated with the invitation.
-		/// </summary>
-		public string AccessCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the id of the org role the user will be assigned.
@@ -57,5 +57,9 @@ namespace AllyisApps.DBModel.Auth
 		/// Gets or sets the employee id of the user.
 		/// </summary>
 		public string EmployeeId { get; set; }
+		/// <summary>
+		/// Gets or setOrganization Name
+		/// </summary>
+		public object OrganizationName { get; set; }
 	}
 }

@@ -23,12 +23,12 @@ namespace AllyisApps.Controllers
 		[HttpGet]
 		public ActionResult EditSubscription(int subscriptionId)
 		{
-			int orgId = AppService.UserContext.UserSubscriptions[subscriptionId].OrganizationId;
+			int orgId = AppService.GetSubscription(subscriptionId).OrganizationId;
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, orgId);
-			int skuId = AppService.UserContext.UserSubscriptions[subscriptionId].SkuId;
+			int skuId = (int)AppService.GetSubscription(subscriptionId).SkuId;
 
-			int productId = (int)AppService.UserContext.UserSubscriptions[subscriptionId].ProductId;
-			string subscriptionName = AppService.UserContext.UserSubscriptions[subscriptionId].SubscriptionName;
+			int productId = (int)AppService.UserContext.SubscriptionsAndRoles[subscriptionId].ProductId;
+			string subscriptionName = AppService.getSubscriptionName(subscriptionId);
 
 			SkuInfo sku = GetNextName(subscriptionId, skuId, productId);
 			EditSubscriptionViewModel model = new EditSubscriptionViewModel
@@ -87,12 +87,15 @@ namespace AllyisApps.Controllers
 							case "Time Tracker":
 								model.SkuIdNext = 200001;
 								break;
+
 							case "Expense Tracker":
 								model.SkuIdNext = 300001;
 								break;
+
 							case "Staffing Manager":
 								model.SkuIdNext = 400001;
 								break;
+
 							default:
 								break;
 						}
@@ -135,10 +138,12 @@ namespace AllyisApps.Controllers
 					sku.NextName = "Time Tracker Pro";
 					sku.SkuIdNext = 300001;
 					break;
+
 				case "Time Tracker Pro":
 					sku.NextName = "Time Tracker";
 					sku.SkuIdNext = 200001;
 					break;
+
 				default:
 					break;
 			}

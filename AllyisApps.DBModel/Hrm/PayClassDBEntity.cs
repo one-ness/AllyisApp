@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="PayClassDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -11,7 +11,7 @@ namespace AllyisApps.DBModel.Hrm
 	/// <summary>
 	/// Pay class.
 	/// </summary>
-	public class PayClassDBEntity
+	public class PayClassDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets.

@@ -25,9 +25,18 @@ namespace AllyisApps.Controllers
 		public ActionResult RemoveInvitation(int id, int userId)
 		{
 			this.AppService.CheckOrgAction(AppService.OrgAction.EditInvitation, id);
-			AppService.RemoveInvitation(id, userId);
-			Notifications.Add(new BootstrapAlert(Resources.Strings.InvitationDeleteNotification, Variety.Success));
-			return this.RedirectToAction(ActionConstants.ManageOrg, new { id = id });
+			var results = AppService.RemoveInvitation(id, userId);
+
+			if (results)
+			{
+				Notifications.Add(new BootstrapAlert(Resources.Strings.InvitationDeleteNotification, Variety.Success));
+				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = id });
+			}
+			else
+			{
+				Notifications.Add(new BootstrapAlert("Deleting Invitation Failed.", Variety.Warning));
+				return this.RedirectToAction(ActionConstants.ManageOrg, new { id = id });
+			}
 		}
 	}
 }
