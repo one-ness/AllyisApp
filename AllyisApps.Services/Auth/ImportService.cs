@@ -65,7 +65,7 @@ namespace AllyisApps.Services
 			}
 
 			// Retrieval of existing user data
-			List<Tuple<string, User>> users = this.GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, this.GetUserInfo(o.UserId))).ToList();
+			List<Tuple<string, User>> users = this.GetOrganizationMemberList(orgId).Select(o => new Tuple<string, User>(o.EmployeeId, this.GetUser(o.UserId))).ToList();
 
 			// Retrieval of existing user product subscription data
 			int ttProductId = (int)ProductIdEnum.TimeTracker;
@@ -765,7 +765,7 @@ namespace AllyisApps.Services
 
 							if (updated)
 							{
-								this.SaveUserInfo(user);
+								this.UpdateUserProfile(user.UserId, this.GetDaysFromDateTime(user.DateOfBirth), user.FirstName, user.LastName, user.PhoneNumber, user.Address?.AddressId, user.Address?.Address1, user.Address?.City, user.Address?.StateId, user.Address?.PostalCode, user.Address?.CountryCode);
 							}
 						}
 					}
