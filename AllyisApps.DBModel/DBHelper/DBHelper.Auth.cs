@@ -407,18 +407,16 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Updates an organization member's info.
 		/// </summary>
-		/// <param name="modelData">The data from the form that the service passed in.</param>
-		/// <returns>A 1 or 0 based on if the employeeId already exists or not.</returns>
-		public int UpdateMember(Dictionary<string, dynamic> modelData)
+		public int UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
 		{
 			DynamicParameters parameters = new DynamicParameters();
-			parameters.Add("@userId", modelData["userId"]);
-			parameters.Add("@orgId", modelData["orgId"]);
-			parameters.Add("@employeeId", modelData["employeeId"]);
-			parameters.Add("@employeeRoleId", modelData["employeeRoleId"]);
-			parameters.Add("@firstName", modelData["firstName"]);
-			parameters.Add("@lastName", modelData["lastName"]);
-			parameters.Add("@isInvited", modelData["isInvited"] ? 1 : 0);
+			parameters.Add("@userId", userId);
+			parameters.Add("@orgId", orgId);
+			parameters.Add("@employeeId", employeeId);
+			parameters.Add("@employeeRoleId", roleId);
+			parameters.Add("@firstName", firstName);
+			parameters.Add("@lastName", lastName);
+			parameters.Add("@isInvited", isInvited);
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
 				return connection.Query<int>("[Auth].[UpdateMember]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();

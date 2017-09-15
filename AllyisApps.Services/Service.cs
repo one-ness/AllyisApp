@@ -45,7 +45,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="date">The DateTime? date.</param>
 		/// <returns>An int of the date as days since Jan 1st, 0001. Returns -1 for null.</returns>
-		public int GetDayFromDateTime(DateTime? date)
+		public int GetDaysFromDateTime(DateTime? date)
 		{
 			if (!date.HasValue)
 			{

@@ -238,26 +238,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets the user info for a specific user.
-		/// </summary>
-		/// <param name="userId">User Id.</param>
-		/// <returns>A User instance with the current user's info.</returns>
-		public User GetUserInfo(int userId)
-		{
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-			}
-			var results = DBHelper.GetUserInfo(userId);
-			User user = InitializeUser(results.Item1, false);
-			if (results.Item2 != null)
-			{
-				user.Address = InitializeAddress(results.Item2);
-			}
-			return user;
-		}
-
-		/// <summary>
 		/// get the current logged in user
 		/// </summary>
 		public User GetCurrentUser()
@@ -335,6 +315,14 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// update the current user profile
+		/// </summary>
+		public void UpdateUserProfile(int userId, int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
+		{
+			this.DBHelper.UpdateUserProfile(userId, firstName, lastName, this.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+		}
+
+		/// <summary>
 		/// Gets the user info from an email address.
 		/// </summary>
 		/// <param name="email">Email address.</param>
@@ -347,85 +335,39 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Saves the user info in the database.
-		/// </summary>
-		/// <param name="model">UserInfo containing updated info.</param>
-		public void SaveUserInfo(User model)
-		{
-			if (model == null)
-			{
-				throw new ArgumentNullException("model", "UserInfo object must not be null.");
-			}
-
-			//// TODO: Add UserInfo->UserDBEntity conversion at bottom
-			DBHelper.UpdateUserProfile(model.UserId,
-				model.FirstName, model.LastName, model.DateOfBirth, model.PhoneNumber,
-				model.Address?.AddressId, model.Address?.Address1, model.Address?.Address2, model.Address?.City, model.Address?.StateId, model.Address?.PostalCode, model.Address?.CountryCode
-			);
-		}
-
-		/// <summary>
 		/// Updates an organization member's info.
 		/// </summary>
-		/// <param name="modelData">The data from the form that the controller passed in.</param>
-		public bool UpdateMember(Dictionary<string, dynamic> modelData)
+		public bool UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
 		{
-			if (modelData["userId"] <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-			}
+			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
+			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
+			if (roleId <= 0) throw new ArgumentOutOfRangeException("roleId");
 
-			if (modelData["orgId"] < 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
-			}
-
-			if (string.IsNullOrEmpty(modelData["employeeId"]))
-			{
-				throw new ArgumentNullException("employeeId", "Employee Id must have a value");
-			}
-
-			if (modelData["employeeRoleId"] < 0)
-			{
-				throw new ArgumentOutOfRangeException("employeeRoleId", "Employee Role Id cannot be negative.");
-			}
-
-			return DBHelper.UpdateMember(modelData) == 1 ? false : true;
+			return DBHelper.UpdateMember(userId, orgId, employeeId, roleId, firstName, lastName, isInvited) == 1 ? false : true;
 		}
 
 		/// <summary>
 		/// Sets the language preference for the current user.
 		/// </summary>
-		/// <param name="CultureName">The language Id.</param>
-		public void SetLanguage(string CultureName)
+		public void SetLanguage(string cultureName)
 		{
-			if (CultureName == null)
-			{
-				throw new ArgumentOutOfRangeException("CultureName", "Culture Name cannot be empty.");
-			}
+			if (string.IsNullOrWhiteSpace(cultureName)) throw new ArgumentNullException("cultureName");
 
-			DBHelper.UpdateUserLanguagePreference(UserContext.UserId, CultureName);
+			this.DBHelper.UpdateUserLanguagePreference(UserContext.UserId, cultureName);
 		}
 
 		/// <summary>
 		/// Gets the browser-compatible universal culture language string (e.g. "en-US") based on language Id.
 		/// </summary>
-		/// <param name="CultureName">The language Id. May use 0 to indicate no language setting.</param>
-		/// <returns>Culture string.</returns>
-		public Language GetLanguage(string CultureName)
+		public Language GetLanguage(string cultureName)
 		{
-			if (CultureName == null)
+			if (string.IsNullOrWhiteSpace(cultureName))
 			{
-				throw new ArgumentOutOfRangeException("CultureName", "Culture Name cannot be empty.");
+				cultureName = System.Globalization.CultureInfo.CurrentCulture.Name;
 			}
 
-			// No language setting, use browser setting. May return null if browser culture is unsupported in this app's database.
-			if (CultureName == null)
-			{
-				return this.ValidLanguages().Where(c => System.Globalization.CultureInfo.CurrentCulture.Name.Equals(c.CultureName)).SingleOrDefault();
-			}
-
-			LanguageDBEntity language = DBHelper.GetLanguage(CultureName);
+			LanguageDBEntity language = this.DBHelper.GetLanguage(cultureName);
 			return new Language
 			{
 				LanguageName = language.LanguageName,
@@ -506,32 +448,12 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets a password hash.
-		/// </summary>
-		/// <param name = "password" >The password entered by user.</param>
-		/// <returns>Password hash.</returns>
-		public string GetPasswordHash(string password)
-		{
-			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException("password");
-			return Crypto.GetPasswordHash(password);
-		}
-
-		/// <summary>
 		/// Confirms the users email.
 		/// </summary>
 		public bool ConfirmUserEmail(Guid code)
 		{
 			if (code == null) throw new ArgumentNullException("code");
 			return DBHelper.UpdateEmailConfirmed(code) > 0 ? true : false;
-		}
-
-		/// <summary>
-		/// Gets a list of <see cref="Organization"/>s for all organizations the user is a part of.
-		/// </summary>
-		/// <returns>Collection of Organizations.</returns>
-		public IEnumerable<Organization> GetOrganizationsByUserId()
-		{
-			return GetOrganizationsByUserId(UserContext.UserId);
 		}
 
 		public IEnumerable<Organization> GetOrganizationsByUserId(int userID)

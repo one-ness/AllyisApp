@@ -54,8 +54,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			reportVM.SubscriptionId = subscriptionId;
 
 			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
-			ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infoOrg.Item1.StartOfWeek));
-			ViewBag.WeekEnd = AppService.GetDayFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
+			ViewBag.WeekStart = AppService.GetDaysFromDateTime(SetStartingDate(null, infoOrg.Item1.StartOfWeek));
+			ViewBag.WeekEnd = AppService.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 
 			return this.View(reportVM);
 		}
@@ -98,10 +98,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Selection = previousSelections ?? new ReportSelectionModel
 				{
 					CustomerId = 0,
-					EndDate = AppService.GetDayFromDateTime(DateTime.Today),
+					EndDate = AppService.GetDaysFromDateTime(DateTime.Today),
 					Page = 1,
 					ProjectId = 0,
-					StartDate = AppService.GetDayFromDateTime(DateTime.Today),
+					StartDate = AppService.GetDaysFromDateTime(DateTime.Today),
 					Users = new List<int>()
 				}
 			};
