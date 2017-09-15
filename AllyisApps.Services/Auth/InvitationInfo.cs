@@ -59,5 +59,6 @@ namespace AllyisApps.Services
 		public DateTime DecisionDateUtc { get; set; }
 
 		public InvitationStatusEnum status { get; set; }
+		public object OrganizationName { get; internal set; }
 	}
 }

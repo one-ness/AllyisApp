@@ -65,18 +65,31 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		/// Gets information for an invite. 
+		/// </summary>
+		/// <param name="invitationId">Id of invite.</param>
+		/// <returns>Inviation info </returns>
+		public InvitationInfo GetInvitationByID(int invitationId)
+		{
+
+			return InitializeInvitationInfo(DBHelper.GetUserInvitationByInviteId(invitationId));
+		}
+
+		/// <summary>
 		/// Accepts an invitation, adding the user to the invitation's organization, subscriptions, and projects, then deletes the invitations.
 		/// </summary>
 		/// <param name="invitationId">The invitationId.</param>
 		/// <returns>The resulting action message if succeed, null if fail.</returns>
-		public string AcceptUserInvitation(int invitationId)
+		public bool AcceptUserInvitation(int invitationId)
 		{
 			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
 
 			var results = DBHelper.AcceptInvitation(invitationId, UserContext.UserId);
 			NotifyInviteAcceptAsync(invitationId);
 
-			if (results == null) return null;
+			
+			return results;
+
 
 			return string.Format("You have successfully joined {0} in the role of {1}.", results.Item1, results.Item2);
 		}

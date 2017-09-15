@@ -629,24 +629,19 @@ namespace AllyisApps.DBModel
 		/// <param name="userId">User Id for invited user.</param>
 		/// <returns>On success, returns the name of the organization and the name of the organization role.
 		/// If an error occurred, returns null.</returns>
-		public Tuple<string, string> AcceptInvitation(int invitationId, int userId)
+		public bool AcceptInvitation(int invitationId, int userId)
 		{
 			DynamicParameters parameters = new DynamicParameters();
 			parameters.Add("@invitationId", invitationId);
 			parameters.Add("@callingUserId", userId);
 			using (var con = new SqlConnection(this.SqlConnectionString))
 			{
-				var results = con.QueryMultiple(
+				var results = con.Query<int>(
 					"[Auth].[AcceptInvitation]",
 					parameters,
-					commandType: CommandType.StoredProcedure);
-				if (results == null) return null;
-				else
-				{
-					return Tuple.Create(
-						results.Read<string>().FirstOrDefault(),
-						results.Read<string>().FirstOrDefault());
-				}
+					commandType: CommandType.StoredProcedure).First();
+				return results == 1;
+				
 			}
 		}
 
@@ -803,7 +798,7 @@ namespace AllyisApps.DBModel
 
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<InvitationDBEntity>("[Auth].[GetUserInvitationsByInviteId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
+				return connection.Query<InvitationDBEntity>("[Auth].[GetUserInvitationByInviteId]", parameters, commandType: CommandType.StoredProcedure).FirstOrDefault();
 			}
 		}
 
