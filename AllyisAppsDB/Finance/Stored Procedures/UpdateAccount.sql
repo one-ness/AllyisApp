@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [Finance].[UpdateAccount]
+CREATE PROCEDURE [Finance].[UpdateAccount]
 	@accountId INT,
 	@accountName NVARCHAR(100),
 	@isActive BIT,
@@ -11,7 +11,7 @@ BEGIN
 
 	IF EXISTS (
 		SELECT * FROM [Finance].[Account] WITH (NOLOCK)
-		WHERE [AccountName] = @AccountName
+		WHERE [AccountName] = @accountName
 	)
 	BEGIN
 		-- Account name is not unique

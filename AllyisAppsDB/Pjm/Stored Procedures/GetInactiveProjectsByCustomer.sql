@@ -1,8 +1,8 @@
-﻿CREATE PROCEDURE [Pjm].[GetInactiveProjectsByCustomer]
-	@CustomerId INT
+CREATE PROCEDURE [Pjm].[GetInactiveProjectsByCustomer]
+	@customerId INT
 AS
 	SET NOCOUNT ON;
-	SELECT [Name],
+	SELECT [ProjectName],
 		   [ProjectId],
 		   [ProjectOrgId],
 		   [IsHourly],
@@ -10,5 +10,5 @@ AS
 		   [StartUtc] AS [StartingDate],
 		   [EndUtc] AS [EndingDate]
 	FROM [Pjm].[Project] WITH (NOLOCK) 
-	WHERE [IsActive] = 0 AND [CustomerId] = @CustomerId
-	ORDER BY [Project].[Name]
+	WHERE [IsActive] = 0 AND [CustomerId] = @customerId
+	ORDER BY [Project].[ProjectName]

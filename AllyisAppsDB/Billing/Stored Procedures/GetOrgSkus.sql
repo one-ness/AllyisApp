@@ -1,11 +1,11 @@
-﻿CREATE PROCEDURE [Billing].[GetOrgSkus]
-	@OrganizationId INT
+CREATE PROCEDURE [Billing].[GetOrgSkus]
+	@organizationId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 	SELECT
 		[A1].[SubscriptionId],
-		[A1].[Name],
+		[A1].[ProductName],
 		[A2].[UserCount],
 		[A1].[SkuId]
 	FROM
@@ -13,20 +13,20 @@ BEGIN
 		SELECT
 			[OrgSub].[OrganizationId],
 			[OrgSub].[SkuId],
-			[Name],
+			[ProductName],
 			[SubscriptionId]
 		FROM [Billing].[Subscription] AS [OrgSub] WITH (NOLOCK) 
 		INNER JOIN 
 		(
 			SELECT
 				[Sku].[SkuId],
-				[Product].[Name]
+				[Product].[ProductName]
 			FROM [Billing].[Product] AS [Product] WITH (NOLOCK) 
 			INNER JOIN [Billing].[Sku] AS [Sku] WITH (NOLOCK) 
 			ON [Product].[ProductId] = [Sku].[ProductId]
 		) AS [ProductSku]
 		ON [ProductSku].[SkuId] = [OrgSub].[SkuId] AND [OrgSub].[IsActive] = 1
-		WHERE [OrgSub].[OrganizationId] = @OrganizationId
+		WHERE [OrgSub].[OrganizationId] = @organizationId
 	) AS [A1]
 	INNER JOIN
 	(
@@ -34,9 +34,9 @@ BEGIN
 		FROM [Billing].[SubscriptionUser] AS [SubUser] WITH (NOLOCK) 
 		INNER JOIN [Billing].[Subscription] AS [OrgSubs] WITH (NOLOCK) 
 		ON [OrgSubs].[SubscriptionId] = [SubUser].[SubscriptionId]
-		WHERE [OrgSubs].[OrganizationId] = @OrganizationId AND [OrgSubs].[IsActive] = 1
+		WHERE [OrgSubs].[OrganizationId] = @organizationId AND [OrgSubs].[IsActive] = 1
 		GROUP BY [SubUser].[SubscriptionId]
 	) AS [A2]
 	ON [A1].[SubscriptionId] = [A2].[SubscriptionId]
-	ORDER BY [A1].[Name]
+	ORDER BY [A1].[ProductName]
 END

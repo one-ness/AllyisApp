@@ -6,7 +6,6 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace AllyisApps.ViewModels.TimeTracker.Customer
 {
@@ -24,7 +23,8 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		{
 			// Note: this is included soley to keep the model constructed during a POST from complaining about a null reference
 			//   as it builds the countries list, even though the list isn't used anymore.
-			this.ValidCountries = new List<string>();
+			this.LocalizedCountries = new Dictionary<string, string>();
+			this.LocalizedStates = new Dictionary<string, string>();
 			this.IsCreating = false;
 		}
 
@@ -40,9 +40,9 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		/// </summary>
 		[Required]
 		[DataType(DataType.Text)]
-        [RegularExpression(@"^.{1,30}$", ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "CustomerNameWarning")]
+		[RegularExpression(@"^.{1,30}$", ErrorMessageResourceType = typeof(Resources.Strings), ErrorMessageResourceName = "CustomerNameWarning")]
 		[Display(Name = "Name")]
-		public string Name { get; set; }
+		public string CustomerName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Customer id.
@@ -72,9 +72,9 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public string EIN { get; set; }
 
 		/// <summary>
-		/// Gets or sets the customer's Address Id
+		/// Gets or sets the customer's Address Id.
 		/// </summary>
-		public int AddressId { get; set; }
+		public int? AddressId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Customer's address.
@@ -128,7 +128,12 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public int SubscriptionId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the user's id
+		/// Gets or sets the name of subscription Id that the Customer belongs too.
+		/// </summary>
+		public string SubscriptionName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the user's id.
 		/// </summary>
 		public int UserId { get; set; }
 
@@ -148,50 +153,28 @@ namespace AllyisApps.ViewModels.TimeTracker.Customer
 		public bool IsCreating { get; set; }
 
 		/// <summary>
-		/// Gets or sets List of valid countries.
+		/// Gets or sets a value indicating whether the user can edit customers.
 		/// </summary>
-		public IEnumerable<string> ValidCountries { get; set; }
+		public bool CanEditCustomers { get; set; }
 
 		/// <summary>
-		/// Gets or sets a boolean indicating whether the user can edit customers
+		/// Gets or sets Selected state id.
 		/// </summary>
-		public bool canEditCustomers { get; set; }
+		public int? SelectedStateId { get; set; }
 
 		/// <summary>
-		/// Localized valid countries.
+		/// Gets or sets the State id and localized names.
 		/// </summary>
-		/// <returns>A Dictionary keyed with the English translation and valued with the localized version.</returns>
-		public Dictionary<string, string> GetLocalizedValidCoutriesDictionary()
-		{
-			Dictionary<string, string> countries = new Dictionary<string, string>();
-
-			foreach (string country in ValidCountries)
-			{
-				string countryKey = Clean(country);
-
-				string localized = Resources.Countries.ResourceManager.GetString(countryKey) ?? country;
-
-				countries.Add(country, localized);
-			}
-
-			return countries;
-		}
+		public Dictionary<string, string> LocalizedStates { get; set; }
 
 		/// <summary>
-		/// Cleans things.
+		/// Gets or sets the Selected country code.
 		/// </summary>
-		/// <param name="stringToClean">The thing to clean.</param>
-		/// <returns>The cleaned thing.</returns>
-		public string Clean(string stringToClean)
-		{
-			if (stringToClean == null)
-			{
-				return string.Empty;
-			}
-			else
-			{
-				return CharsToReplace.Aggregate(stringToClean, (str, l) => str.Replace(string.Empty + l, string.Empty));
-			}
-		}
+		public string SelectedCountryCode { get; set; }
+
+		/// <summary>
+		/// Gets or sets Country code and localized names.
+		/// </summary>
+		public Dictionary<string, string> LocalizedCountries { get; set; }
 	}
 }

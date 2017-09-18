@@ -4,15 +4,14 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
-using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.Services.TimeTracker;
-using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
+using AllyisApps.Core.Alert;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -26,8 +25,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="viewDataButton">The value of the button used to submit the form.</param>
 		/// <param name="userSelect">Array of selected user Ids.</param>
-		/// <param name="subscriptionId">The subscription's Id</param>
-		/// <param name="organizationId">The organization's Id</param>
+		/// <param name="subscriptionId">The subscription's Id.</param>
+		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="dateRangeStart">The beginning of the date range(nullable).</param>
 		/// <param name="dateRangeEnd">The end of the date range (nullable).</param>
 		/// <param name="showExport">Export button visibility.</param>
@@ -60,12 +59,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				}
 
 				var infos = AppService.GetReportInfo(subscriptionId);
-				UserSubscription subInfo = null;
-				this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+				UserContext.SubscriptionAndRole subInfo = null;
+				this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+				string subName = AppService.getSubscriptionName(subscriptionId);
 
 				bool canEditOthers = this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditOthers, subscriptionId, false);
 				ReportViewModel reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, organizationId, canEditOthers, infos.Item1, infos.Item2, showExport, reportVMselect);
-				reportVM.SubscriptionName = subInfo.SubscriptionName;
+				reportVM.SubscriptionName = subName;
 
 				DataExportViewModel dataVM = null;
 				try
@@ -80,7 +80,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 						message = string.Format("{0} {1}", message, ex.Message);
 					}
 
-					//Update failure
+					// Update failure
 					Notifications.Add(new BootstrapAlert(message, Variety.Danger));
 					return this.RedirectToAction(ActionConstants.Report, ControllerConstants.TimeEntry);
 				}
@@ -98,7 +98,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				if (dataCount > 0)
 				{
 					IList<TablePreviewEntry> pEntries = new List<TablePreviewEntry>();
-					foreach (TimeEntryInfo data in dataVM.PreviewData)
+					foreach (TimeEntryViewModel data in dataVM.PreviewData)
 					{
 						CompleteProjectInfo orgProj = data.ProjectId == 0 ? defaultProject : orgProjects.Where(o => o.ProjectId == data.ProjectId).SingleOrDefault();
 						TablePreviewEntry previewData = new TablePreviewEntry
@@ -143,13 +143,13 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="pageSize">The page size.</param>
 		/// <param name="page">The page.</param>
 		/// <returns>A list of time entry info objects.</returns>
-		public IEnumerable<TimeEntryInfo> SetPreviewData(IEnumerable<TimeEntryInfo> data, int pageSize = 0, int page = 1)
+		public IEnumerable<TimeEntryViewModel> SetPreviewData(IEnumerable<TimeEntryViewModel> data, int pageSize = 0, int page = 1)
 		{
 			int skipNum = pageSize * (page - 1);
 			int limit = pageSize == 0 ? data.Count() : pageSize;
 
 			// only process data values for current page
-			IEnumerable<TimeEntryInfo> previewData = (from p in data select p).Skip(skipNum).Take(limit);
+			IEnumerable<TimeEntryViewModel> previewData = (from p in data select p).Skip(skipNum).Take(limit);
 
 			return previewData;
 		}
@@ -161,7 +161,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <param name="pageSize">Total size of preivew data.</param>
 		/// <param name="page">Offset page amount.</param>
 		/// <returns>The page total.</returns>
-		public int SetPageTotal(IEnumerable<TimeEntryInfo> data, int pageSize = 0, int page = 1)
+		public int SetPageTotal(IEnumerable<TimeEntryViewModel> data, int pageSize = 0, int page = 1)
 		{
 			int skipNum = pageSize * (page - 1);
 			int pageTotal = 0;

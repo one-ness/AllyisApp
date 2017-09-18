@@ -5,7 +5,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.ComponentModel;
 
 namespace AllyisApps.DBModel.Auth
 {
@@ -74,35 +73,10 @@ namespace AllyisApps.DBModel.Auth
 		/// </summary>
 		public DateTime? DateOfBirth { get; set; }
 
-        /// <summary>
-        /// Gets or sets user's Address Id.
-        /// </summary>
-        public int AddressId { get; set; }
-
 		/// <summary>
-		/// Gets or sets Address.
+		/// Gets or sets user's Address Id.
 		/// </summary>
-		public string Address { get; set; }
-
-		/// <summary>
-		/// Gets or sets City.
-		/// </summary>
-		public string City { get; set; }
-
-		/// <summary>
-		/// Gets or sets State.
-		/// </summary>
-		public string State { get; set; }
-
-		/// <summary>
-		/// Gets or sets Country.
-		/// </summary>
-		public string Country { get; set; }
-
-		/// <summary>
-		/// Gets or sets PostalCode.
-		/// </summary>
-		public string PostalCode { get; set; }
+		public int? AddressId { get; set; }
 
 		/// <summary>
 		/// Gets or sets PhoneNumber.
@@ -120,11 +94,6 @@ namespace AllyisApps.DBModel.Auth
 		public int? LastUsedSubscriptionId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the last active organization id.
-		/// </summary>
-		public int? LastUsedOrganizationId { get; set; }
-
-		/// <summary>
 		/// Gets or sets LockoutEndDateUtc.
 		/// </summary>
 		public DateTime? LockoutEndDateUtc { get; set; }
@@ -137,6 +106,11 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets the language preference.
 		/// </summary>
-		public int? PreferredLanguageId { get; set; }
+		public string PreferredLanguageId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the maximum amount that a user can approve of in a report.
+		/// </summary>
+		public decimal MaxAmount { get; set; }
 	}
 }

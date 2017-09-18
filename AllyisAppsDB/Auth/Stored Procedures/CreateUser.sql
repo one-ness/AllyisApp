@@ -1,71 +1,50 @@
-﻿CREATE PROCEDURE [Auth].[CreateUser]
-	@FirstName NVARCHAR(32),
-	@LastName NVARCHAR(32),
-    @Address NVARCHAR(100), 
-    @City NVARCHAR(32), 
-    @State NVARCHAR(32), 
-    @Country NVARCHAR(32), 
-    @PostalCode NVARCHAR(16),
-	@Email NVARCHAR(256), 
-    @PhoneNumber VARCHAR(32),
-	@DateOfBirth DATETIME2(0),
-	@PasswordHash NVARCHAR(MAX),
-	@EmailConfirmationCode UNIQUEIdENTIFIER,
-	@IsTwoFactorEnabled BIT,
-	@IsLockoutEnabled BIT,
-	@LockoutEndDateUtc DATE,
-	@LanguageId INT,
-	@Address_Identity INT
-AS
+﻿
+CREATE PROCEDURE [Auth].[CreateUser]
+	@email nvarchar(384),
+	@passwordHash nvarchar(512),
+	@firstName nvarchar(32),
+	@lastName nvarchar(32),
+	@emailConfirmationCode uniqueidentifier,
+	@dateOfBirth date = null,
+	@phoneNumber varchar(16) = null,
+	@preferredLanguageId varchar(16) = null,
+	@address1 nvarchar(64) = null,
+	@address2 nvarchar(64) = null,
+	@city nvarchar(32) = null,
+	@stateId int = null,
+	@postalCode nvarchar(16) = null,
+	@countryCode varchar(8) = null
+as
+begin
+	set nocount on
+	declare @addressId int
+	set @addressId = null
+	declare @userId int
+	set @userId = -1
+	begin tran t1
+	-- if any address value present, create address
+	if (@address1 is not null or @address2 is not null or @city is not null or @postalCode is not null or @stateId is not null or @countryCode is not null)
+		begin
+			exec @addressId = [Lookup].CreateAddress @address1, @address2, @city, @stateId, @postalCode, @countryCode
+			if @@ERROR <> 0 
+				goto _failure
+		end
 
-BEGIN
-	SET NOCOUNT ON;
+	insert into Auth.[User] (Email, PasswordHash, FirstName, LastName, EmailConfirmationCode, DateOfBirth, PhoneNumber, PreferredLanguageId, AddressId) values (@email, @passwordHash, @firstName, @lastName, @emailConfirmationCode, @dateOfBirth, @phoneNumber, @preferredLanguageId, @addressId)
+	if (@@ERROR <> 0)
+		goto _failure
 
-	INSERT INTO [Lookup].[Address]
-		([Address1],
-		[City],
-		[StateId],
-		[CountryId],
-		[PostalCode])
-	VALUES
-		(@Address,
-		@City,
-		(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
-		(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
-		@PostalCode);
+	select SCOPE_IDENTITY() as UserId
 
-	SET @Address_Identity = SCOPE_IDENTITY()
+	_success:
+		begin
+			commit tran t1
+			return
+		end
 
-	INSERT INTO [Auth].[User] 
-		([FirstName], 
-		[LastName], 
-		[AddressId],
-		[Email], 
-		[PhoneNumber], 
-		[DateOfBirth],
-		[PasswordHash],
-		[EmailConfirmationCode],
-		[IsEmailConfirmed],
-		[IsTwoFactorEnabled],
-		[AccessFailedCount],
-		[IsLockoutEnabled],
-		[LockoutEndDateUtc],
-		[PreferredLanguageId])
-	VALUES 
-		(@FirstName, 
-		@LastName,
-		@Address_Identity,
-		@Email,
-		@PhoneNumber,
-		@DateOfBirth, 
-		@PasswordHash, 
-		@EmailConfirmationCode,
-		0,
-		COALESCE(@IsTwoFactorEnabled,0),
-		0,
-		COALESCE(@IsLockoutEnabled,0),
-		COALESCE(@LockoutEndDateUtc,NULL),
-		@LanguageId);
-
-	SELECT SCOPE_IDENTITY();
-END
+	_failure:
+		begin
+			rollback tran t1
+			return
+		end
+end

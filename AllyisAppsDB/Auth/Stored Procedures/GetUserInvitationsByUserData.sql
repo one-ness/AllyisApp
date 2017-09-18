@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Auth].[GetUserInvitationsByUserData]
-	@Email NVARCHAR(384)
+CREATE PROCEDURE [Auth].[GetUserInvitationsByUserData]
+	@email NVARCHAR(384)
 	
 AS
 	SET NOCOUNT ON;
@@ -8,11 +8,9 @@ SELECT
 	[Email], 
 	[FirstName], 
 	[LastName], 
-	[DateOfBirth], 
-	[OrganizationId], 
-	[AccessCode], 
+	[OrganizationId],  
 	[OrganizationRoleId],
 	[EmployeeId] 
 FROM [Auth].[Invitation]
 WITH (NOLOCK)
-WHERE [Email] = @Email AND [IsActive] = 1
+WHERE [Email] = @email AND [IsActive] = 1

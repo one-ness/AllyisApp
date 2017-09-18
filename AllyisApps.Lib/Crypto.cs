@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="Crypto.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -69,9 +69,9 @@ namespace AllyisApps.Lib
 		/// if the stored password hashing is out of date.
 		/// </summary>
 		/// <param name="password">Entered password.</param>
-		/// <param name="correctHash">correct hash of the password.</param>
+		/// <param name="correctHash">Correct hash of the password.</param>
 		/// <returns>Item1 is bool, indicates if the hash of the given password matches the given hash.
-		/// If Item1 indicates a match, then Item2 may contain the updated hash of the password, which the caller can update in database</returns>
+		/// If Item1 indicates a match, then Item2 may contain the updated hash of the password, which the caller can update in database.</returns>
 		public static Tuple<bool, string> ValidateAndUpdate(string password, string correctHash)
 		{
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException("password");

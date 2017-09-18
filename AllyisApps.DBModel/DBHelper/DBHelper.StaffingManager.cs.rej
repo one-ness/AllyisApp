@@ -1,0 +1,53 @@
+diff a/AllyisApps.DBModel/DBHelper/DBHelper.StaffingManager.cs b/AllyisApps.DBModel/DBHelper/DBHelper.StaffingManager.cs	(rejected hunks)
+@@ -324,6 +324,51 @@
+ 		////////////////////////////
+ 
+ 		/// <summary>
++		/// Deletes an applicant from the database
++		/// </summary>
++		/// <param name="applicantId">The applicant to be deleted</param>
++		public void DeleteApplicant(int applicantId)
++		{
++			DynamicParameters parameters = new DynamicParameters();
++			parameters.Add("@applicantId", applicantId);
++
++			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
++			{
++				connection.Execute("[StaffingManager].[DeleteApplicant]", parameters, commandType: CommandType.StoredProcedure);
++			}
++		}
++
++		/// <summary>
++		/// Deletes an application from the database
++		/// </summary>
++		/// <param name="applicationId">The applicant to be deleted</param>
++		public void DeleteApplication(int applicationId)
++		{
++			DynamicParameters parameters = new DynamicParameters();
++			parameters.Add("@applicationId", applicationId);
++
++			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
++			{
++				connection.Execute("[StaffingManager].[DeleteApplication]", parameters, commandType: CommandType.StoredProcedure);
++			}
++		}
++
++		/// <summary>
++		/// Deletes an application document from the database
++		/// </summary>
++		/// <param name="applicationDocumentId">The applicant to be deleted</param>
++		public void DeleteApplicationDocument(int applicationDocumentId)
++		{
++			DynamicParameters parameters = new DynamicParameters();
++			parameters.Add("@applicationDocumentId", applicationDocumentId);
++
++			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
++			{
++				connection.Execute("[StaffingManager].[DeleteApplicationDocument]", parameters, commandType: CommandType.StoredProcedure);
++			}
++		}
++
++		/// <summary>
+ 		/// Deletes a tag from the database
+ 		/// </summary>
+ 		/// <param name="tagId">The tag id.</param>

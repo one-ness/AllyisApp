@@ -4,13 +4,17 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.TimeTracker;
-using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Hrm;
+using AllyisApps.DBModel.StaffingManager;
+using AllyisApps.DBModel.TimeTracker;
+using AllyisApps.Services.Lookup;
+using AllyisApps.Services.StaffingManager;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Services
 {
@@ -41,7 +45,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="date">The DateTime? date.</param>
 		/// <returns>An int of the date as days since Jan 1st, 0001. Returns -1 for null.</returns>
-		public int GetDayFromDateTime(DateTime? date)
+		public int GetDaysFromDateTime(DateTime? date)
 		{
 			if (!date.HasValue)
 			{
@@ -56,13 +60,13 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="days">An int of the date as days since Jan 1st, 0001. Use -1 for null dates.</param>
 		/// <returns>The DateTime date.</returns>
-		public DateTime? GetDateTimeFromDays(int days)
+		public DateTime? GetDateTimeFromDays(int? days)
 		{
-			if (days <= -1)
+			if (!days.HasValue || days <= 0)
 			{
 				return null;
 			}
-			return GetDateFromDays(days);
+			return GetDateFromDays(days.Value);
 		}
 
 		/// <summary>
@@ -142,9 +146,9 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets a list of <see cref="TimeEntryInfo"/>'s for a given organization and start/end times.
 		/// </summary>
-		/// <param name="orgId"></param>
-		/// <param name="start">Starting. <see cref="DateTime"/></param>
-		/// <param name="end">Ending. <see cref="DateTime"/></param>
+		/// <param name="orgId">.</param>
+		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
+		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
 		/// <returns>A list of TimeEntryInfo's for a given organization and start/end times.</returns>
 		public IEnumerable<TimeEntryInfo> GetTimeEntriesOverDateRange(int orgId, DateTime start, DateTime end)
 		{
@@ -171,11 +175,11 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets a list of <see cref="TimeEntryInfo"/>'s for a given set of users, organization, and start/end times.
 		/// </summary>
-		/// <param name="organizationId">The organization's Id</param>
+		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="userIds">List of user Id's.</param>
-		/// <param name="start">Starting. <see cref="DateTime"/></param>
-		/// <param name="end">Ending. <see cref="DateTime"/></param>
-		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/></returns>
+		/// <param name="start">Starting. <see cref="DateTime"/>.</param>
+		/// <param name="end">Ending. <see cref="DateTime"/>.</param>
+		/// <returns><see cref="IEnumerable{TimeEntryInfo}"/>.</returns>
 		public IEnumerable<TimeEntryInfo> GetTimeEntriesByUserOverDateRange(List<int> userIds, DateTime? start, DateTime? end, int organizationId = -1)
 		{
 			#region Validation
@@ -212,11 +216,11 @@ namespace AllyisApps.Services
 		/// </summary>
 		public Tuple<List<Customer>, List<CompleteProjectInfo>, List<SubscriptionUserInfo>> GetReportInfo(int subscriptionId)
 		{
-			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetReportInfo(subInfo.OrganizationId, subscriptionId);
 			return Tuple.Create(
-				spResults.Item1.Select(cdb => InitializeCustomer(cdb)).ToList(),
+				spResults.Item1.Select(cdb => (Customer)InitializeCustomer(cdb)).ToList(),
 				spResults.Item2.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
 				spResults.Item3.Select(sudb => InitializeSubscriptionUserInfo(sudb)).ToList());
 		}
@@ -254,7 +258,7 @@ namespace AllyisApps.Services
 		/// Creates a holiday and related time entries for an organization.
 		/// </summary>
 		/// <param name="holiday">Holiday.</param>
-		/// <param name="subscriptionId">Subscription Id</param>
+		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool CreateHoliday(Holiday holiday, int subscriptionId)
 		{
@@ -268,8 +272,8 @@ namespace AllyisApps.Services
 		/// Deletes a holiday and related time entries for the current organization.
 		/// </summary>
 		/// <param name="holidayId">Id of holiday to delete.</param>
-		/// <param name="orgId">The organization's Id</param>
-		/// <param name="subscriptionId">The subscription id</param>
+		/// <param name="orgId">The organization's Id.</param>
+		/// <param name="subscriptionId">The subscription id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool DeleteHoliday(int holidayId, int orgId, int subscriptionId)
 		{
@@ -291,8 +295,8 @@ namespace AllyisApps.Services
 		/// Creates a new pay class for an organization.
 		/// </summary>
 		/// <param name="payClassName">Name of pay class.</param>
-		/// <param name="orgId">Organization Id</param>
-		/// <param name="subscriptionId">Subscription Id</param>
+		/// <param name="orgId">Organization Id.</param>
+		/// <param name="subscriptionId">Subscription Id.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool CreatePayClass(string payClassName, int orgId, int subscriptionId)
 		{
@@ -305,9 +309,9 @@ namespace AllyisApps.Services
 		/// Deletes a pay class.
 		/// </summary>
 		/// <param name="payClassId">Pay class Id.</param>
-		/// <param name="orgId">The organization's Id</param>
-		/// <param name="subscriptionId">The subscription's Id</param>
-		/// <param name="destPayClass">The id of the destination payclass</param>
+		/// <param name="orgId">The organization's Id.</param>
+		/// <param name="subscriptionId">The subscription's Id.</param>
+		/// <param name="destPayClass">The id of the destination payclass.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool DeletePayClass(int payClassId, int orgId, int subscriptionId, int? destPayClass)
 		{
@@ -340,16 +344,16 @@ namespace AllyisApps.Services
 		/// </summary>
 		public IEnumerable<PayClass> GetPayClasses(int subscriptionId)
 		{
-			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			return DBHelper.GetPayClasses(subInfo.OrganizationId).Select(pc => InitializePayClassInfo(pc));
 		}
 
 		/// <summary>
 		/// Updates the Start of Week for an organization.
 		/// </summary>
-		/// <param name="organizationId">The organization's Id</param>
-		/// <param name="subscriptionId">The subscription's Id</param>
+		/// <param name="organizationId">The organization's Id.</param>
+		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="startOfWeek">Start of Week.</param>
 		/// <returns>Returns false if authorization fails.</returns>
 		public bool UpdateStartOfWeek(int organizationId, int subscriptionId, int startOfWeek)
@@ -371,8 +375,8 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Updates overtime settings for an organization.
 		/// </summary>
-		/// <param name="subscriptionId">The subscription's Id</param>
-		/// <param name="organizationId">The organization's Id</param>
+		/// <param name="subscriptionId">The subscription's Id.</param>
+		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="overtimeHours">Hours until overtime.</param>
 		/// <param name="overtimePeriod">Time period for hours until overtime.</param>
 		/// <param name="overtimeMultiplier">Overtime pay multiplier.</param>
@@ -406,7 +410,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Prepares the Excel file for output of time entry information.
 		/// </summary>
-		/// <param name="orgId">The current Organization Id</param>
+		/// <param name="orgId">The current Organization Id.</param>
 		/// <param name="userIds">List of user ids to filter by.</param>
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
@@ -415,7 +419,7 @@ namespace AllyisApps.Services
 		/// <returns>The stream writer.</returns>
 		public StreamWriter PrepareCSVExport(int orgId, List<int> userIds = null, DateTime? startingDate = null, DateTime? endingDate = null, int projectId = 0, int customerId = 0)
 		{
-			//Preparing data
+			// Preparing data
 			IEnumerable<TimeEntryInfo> data = new List<TimeEntryInfo>();
 			IEnumerable<CompleteProjectInfo> projects = new List<CompleteProjectInfo>();
 
@@ -443,7 +447,7 @@ namespace AllyisApps.Services
 
 			if (userIds != null && userIds.Count == 1 && userIds[0] > 0)
 			{
-				projects = GetProjectsByUserAndOrganization(userIds[0], orgId, isActive: false);
+				projects = GetProjectsByUserAndOrganization(userIds[0], orgId, onlyActive: false);
 			}
 			else
 			{
@@ -507,14 +511,53 @@ namespace AllyisApps.Services
 			return output;
 		}
 
+		public StreamWriter PrepareExpenseCSVExport(int orgId, IEnumerable<ExpenseReport> reports, DateTime startDate, DateTime endDate)
+		{
+			StreamWriter output = new StreamWriter(new MemoryStream());
+
+			output.WriteLine(
+				string.Format(
+					"\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\"",
+					"Expense Report Id",
+					"Report Title",
+					"Organization Id",
+					"Submitted By",
+					"Report Status",
+					"Created On",
+					"Modified On",
+					"Submitted On"
+				));
+
+			foreach (ExpenseReport report in reports)
+			{
+				output.WriteLine(
+					string.Format(
+						"\"{0}\",\"{1}\",\"{2}\",\"{3}\",\"{4}\",\"{5}\",\"{6}\",\"{7}\"",
+						report.ExpenseReportId,
+						report.ReportTitle,
+						report.OrganizationId,
+						report.SubmittedById,
+						report.ReportStatus,
+						report.CreatedUtc,
+						report.ModifiedUtc,
+						report.SubmittedUtc
+						));
+			}
+
+			output.Flush();
+			output.BaseStream.Seek(0, SeekOrigin.Begin);
+
+			return output;
+		}
+
 		/// <summary>
 		/// Updates the lock date setttings.
 		/// </summary>
 		/// <param name="lockDateUsed">Whether or not to use a lock date.</param>
 		/// <param name="lockDatePeriod">The lock date period (days/weeks/months).</param>
 		/// <param name="lockDateQuantity">The quantity of the selected period.</param>
-		/// <param name="orgId"></param>
-		/// <returns></returns>
+		/// <param name="orgId">.</param>
+		/// <returns>.</returns>
 		public bool UpdateLockDate(bool lockDateUsed, int lockDatePeriod, int lockDateQuantity, int orgId)
 		{
 			if (!new int[] { 1, 2, 3 }.Contains(lockDatePeriod))
@@ -534,12 +577,12 @@ namespace AllyisApps.Services
 		/// Returns a SettingsInfo with start of week, overtime, and lock date settings, a list of PayClassInfos,
 		/// and a list of Holidays for the current organization.
 		/// </summary>
-		/// <param name="subscriptionId">Subscription Id</param>
-		/// <returns></returns>
+		/// <param name="subscriptionId">Subscription Id.</param>
+		/// <returns>.</returns>
 		public Tuple<Setting, List<PayClass>, List<Holiday>> GetAllSettings(int subscriptionId)
 		{
-			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			var spResults = DBHelper.GetAllSettings(subInfo.OrganizationId);
 			return Tuple.Create(
 				InitializeSettingsInfo(spResults.Item1),
@@ -556,10 +599,10 @@ namespace AllyisApps.Services
 		/// for all time entries for the given user in the given time range.
 		/// </summary>
 		/// <param name="userId">User Id.</param>
-		/// <param name="orgId">Organization Id</param>
+		/// <param name="orgId">Organization Id.</param>
 		/// <param name="startingDate">Start of date range.</param>
 		/// <param name="endingDate">End of date range.</param>
-		/// <returns></returns>
+		/// <returns>.</returns>
 		public Tuple<Setting, List<PayClass>, List<Holiday>, List<CompleteProjectInfo>, List<User>, List<TimeEntryInfo>>
 			GetTimeEntryIndexInfo(int orgId, DateTime? startingDate, DateTime? endingDate, int? userId = null)
 		{
@@ -590,7 +633,7 @@ namespace AllyisApps.Services
 				spResults.Item2.Select(pcdb => InitializePayClassInfo(pcdb)).ToList(),
 				spResults.Item3.Select(hdb => InitializeHoliday(hdb)).ToList(),
 				spResults.Item4.Select(cpdb => InitializeCompleteProjectInfo(cpdb)).ToList(),
-				spResults.Item5.Select(udb => InitializeUser(udb)).ToList(),
+				spResults.Item5.Select(udb => InitializeUser(udb, false)).ToList(),
 				spResults.Item6.Select(tedb => InitializeTimeEntryInfo(tedb)).ToList());
 		}
 
@@ -605,7 +648,7 @@ namespace AllyisApps.Services
 		{
 			return new PayClass
 			{
-				Name = pc.Name,
+				PayClassName = pc.PayClassName,
 				OrganizationId = pc.OrganizationId,
 				PayClassId = pc.PayClassId,
 				CreatedUtc = pc.CreatedUtc,
@@ -723,5 +766,190 @@ namespace AllyisApps.Services
 		}
 
 		#endregion Info-DBEntity Conversions
+
+		/// <summary>
+		/// TODO
+		/// </summary>
+		/// <param name="userId">User Id.</param>
+		/// <param name="orgId">Organization Id.</param>
+		/// <returns>.</returns>
+		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<Customer>>
+			GetStaffingIndexInfo(int orgId, int? userId = null)
+		{
+			#region Validation
+
+			if (userId == null)
+			{
+				userId = UserContext.UserId;
+			}
+			if (userId <= 0)
+			{
+				throw new ArgumentException("User Id cannot be zero or negative.");
+			}
+			if (orgId <= 0)
+			{
+				throw new ArgumentException("Organization Id cannot be zero or negative.");
+			}
+
+			#endregion Validation
+
+			var results = DBHelper.GetStaffingIndexPageInfo(orgId);
+
+			return Tuple.Create(
+				results.Item1.Select(posdb => InitializePositionThumbnailInfo(posdb, results.Item2, results.Item5)).ToList(),
+				results.Item2.Select(tagsdb => InitializeTags(tagsdb)).ToList(),
+				results.Item3.Select(typedb => InitializeEmploymentTypes(typedb)).ToList(),
+				results.Item4.Select(leveldb => InitializePositionLevel(leveldb)).ToList(),
+				results.Item5.Select(statdb => InitializePositionStatus(statdb)).ToList(),
+				results.Item6.Select(cusdb => InitializeBaseCustomer(cusdb)).ToList()
+				);
+		}
+
+		/// <summary>
+		/// TODO
+		/// </summary>
+		/// <param name="orgId">Organization Id.</param>
+		/// <param name="statusName"></param>
+		/// <param name="typeName"></param>
+		/// <param name="tags">tags.</param>
+		/// <param name="userId">User Id.</param>
+		/// <returns>.</returns>
+		public Tuple<List<PositionThumbnailInfo>, List<Tag>, List<EmploymentType>, List<PositionLevel>, List<PositionStatus>, List<Customer>>
+			GetStaffingIndexInfoFiltered(int orgId, string statusName, string typeName, List<string> tags = null, int? userId = 0)
+		{
+			#region Validation
+
+			if (userId == null)
+			{
+				userId = UserContext.UserId;
+			}
+			if (userId <= 0)
+			{
+				throw new ArgumentException("User Id cannot be zero or negative.");
+			}
+			if (orgId <= 0)
+			{
+				throw new ArgumentException("Organization Id cannot be zero or negative.");
+			}
+
+			#endregion Validation
+
+			var results = DBHelper.GetStaffingIndexPageInfoFiltered(orgId, statusName, typeName, tags);
+
+			return Tuple.Create(
+				results.Item1.Select(posdb => InitializePositionThumbnailInfo(posdb, results.Item2, results.Item5)).ToList(),
+				results.Item2.Select(tagsdb => InitializeTags(tagsdb)).ToList(),
+				results.Item3.Select(typedb => InitializeEmploymentTypes(typedb)).ToList(),
+				results.Item4.Select(leveldb => InitializePositionLevel(leveldb)).ToList(),
+				results.Item5.Select(statdb => InitializePositionStatus(statdb)).ToList(),
+				results.Item6.Select(custdb => InitializeBaseCustomer(custdb)).ToList()
+				);
+		}
+
+		/// <summary>
+		/// Initializes a PositionThumbnailInfo from a PositionDBEntity.
+		/// </summary>
+		/// <param name="pos">the PositionDBEntity to be converted.</param>
+		/// <param name="tags">the list of PositionTagDBEntity from initial results.</param>
+		/// <param name="statuses">the list of PositionStatusDBEntity from initial results.</param>
+		/// <returns>PositionThumbnailInfo.</returns>
+		public static PositionThumbnailInfo InitializePositionThumbnailInfo(PositionDBEntity pos, List<PositionTagDBEntity> tags, List<PositionStatusDBEntity> statuses)
+		{
+			List<Tag> tagsList = new List<Tag>();
+			foreach (PositionTagDBEntity tag in tags) if (tag.PositionId == pos.PositionId) tagsList.Add(new Tag { TagId = tag.TagId, TagName = tag.TagName, PositionId = tag.PositionId });
+
+			string status = "";
+			foreach (PositionStatusDBEntity stat in statuses) if (stat.PositionStatusId == pos.PositionStatusId) status = stat.PositionStatusName;
+
+			return new PositionThumbnailInfo
+			{
+				PositionId = pos.PositionId,
+				OrganizationId = pos.OrganizationId,
+				CustomerId = pos.CustomerId,
+				PositionModifiedUtc = pos.PositionModifiedUtc,
+				PositionStatusName = status,
+				StartDate = pos.StartDate,
+				PositionTitle = pos.PositionTitle,
+				PositionCount = pos.PositionCount,
+				TeamName = pos.TeamName,
+				HiringManager = pos.HiringManager,
+				Tags = tagsList
+			};
+		}
+
+		/// <summary>
+		/// Converts PositioNTagDBEntity to Tag services object
+		/// </summary>
+		/// <param name="tag"></param>
+		/// <returns></returns>
+		public static Tag InitializeTags(PositionTagDBEntity tag)
+		{
+			return new Tag
+			{
+				TagId = tag.TagId,
+				TagName = tag.TagName,
+				PositionId = tag.PositionId
+			};
+		}
+
+		public static Customer InitializeBaseCustomer(CustomerDBEntity customer)
+		{
+			return new Customer()
+			{
+				ContactEmail = customer.ContactEmail,
+				ContactPhoneNumber = customer.ContactPhoneNumber,
+				CreatedUtc = customer.CreatedUtc,
+				CustomerId = customer.CustomerId,
+				CustomerOrgId = customer.CustomerOrgId,
+				EIN = customer.EIN,
+				FaxNumber = customer.FaxNumber,
+				CustomerName = customer.CustomerName,
+				OrganizationId = customer.OrganizationId,
+				Website = customer.Website,
+				IsActive = customer.IsActive
+			};
+		}
+
+		/// <summary>
+		/// Converts employmentTypeDBEntity to employment type service object
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static EmploymentType InitializeEmploymentTypes(EmploymentTypeDBEntity type)
+		{
+			return new EmploymentType
+			{
+				EmploymentTypeId = type.EmploymentTypeId,
+				EmploymentTypeName = type.EmploymentTypeName
+			};
+		}
+
+		/// <summary>
+		/// Converts positionLevelDBEntity to employment level service object
+		/// </summary>
+		/// <param name="level"></param>
+		/// <returns></returns>
+		public static PositionLevel InitializePositionLevel(PositionLevelDBEntity level)
+		{
+			return new PositionLevel
+			{
+				PositionLevelId = level.PositionLevelId,
+				PositionLevelName = level.PositionLevelName
+			};
+		}
+
+		/// <summary>
+		/// converts PositionStatusDBEntity to position status service obejct
+		/// </summary>
+		/// <param name="status"></param>
+		/// <returns></returns>
+		public static PositionStatus InitializePositionStatus(PositionStatusDBEntity status)
+		{
+			return new PositionStatus
+			{
+				PositionStatusId = status.PositionStatusId,
+				PositionStatusName = status.PositionStatusName
+			};
+		}
 	}
 }

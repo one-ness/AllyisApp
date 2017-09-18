@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -25,6 +25,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Index page.
 		/// </summary>
+		/// <param name="subscriptionId">Subscription id.</param>
 		/// <returns>The view.</returns>
 		public ActionResult Index(int subscriptionId)
 		{

@@ -14,213 +14,86 @@ namespace AllyisApps.Services
 	public partial class AppService : BaseService
 	{
 		/// <summary>
-		/// organizational actions
+		/// organizational actions.
 		/// </summary>
 		public enum OrgAction : int
 		{
-			AddUser = 1,
-			EditUser,
-			DeleteUser,
+			EditUser = 1, // edit other users (edit self must always be allowed)
 			EditUserPermission,
 			EditInvitation,
-			DeleteInvitation,
 			EditOrganization,
-			DeleteOrganization,
-			SubscribeToProduct,
 			EditSubscription,
 			EditBilling,
+			ViewUser, // view other users (view self must always be allowed)
+			DeleteUserFromOrganization,
+			DeleteUserFromSubscription,
+			DeleteOrganization,
+			DeleteSubscritpion,
 			DeleteBilling,
+			AddUserToOrganization, // same as create invitation
+			AddUserToSubscription,
+			CreateSubscription,
+			CreateBilling,
+			ChangePassword, // change password for others (change for self must always be allowed)
 		}
 
 		/// <summary>
-		/// time tracker actions
+		/// time tracker actions.
 		/// </summary>
 		public enum TimeTrackerAction : int
 		{
 			TimeEntry = 1,
-			CreateCustomer,
 			EditCustomer,
-			DeleteCustomer,
 			ViewCustomer,
-			CreateProject,
 			EditProject,
-			DeleteProject,
 			ViewOthers,
 			EditOthers,
 		}
 
 		/// <summary>
-		/// check permissions for the given action in the given org for the logged in user
+		/// Expense Tracker Actions.
+		/// </summary>
+		public enum ExpenseTrackerAction : int
+		{
+			Unmanaged = 0,
+			EditReport,
+			AdminReport,
+			AdminExpense,
+			StatusUpdate,
+			Pending,
+			UpdateReport,
+			CreateReport,
+			UserSettings
+		}
+
+		/// <summary>
+		/// staffing actions.
+		/// </summary>
+		public enum StaffingAction : int
+		{
+			Index = 1,
+			EditPosition,
+			ViewPosition,
+			EditApplicant,
+			ViewApplicant,
+			EditApplication,
+			ViewApplication,
+			ViewOthers,
+			EditOthers,
+		}
+
+		/// <summary>
+		/// check permissions for the given action in the given org for the logged in user.
 		/// </summary>
 		public bool CheckOrgAction(OrgAction action, int orgId, bool throwException = true)
 		{
 			bool result = false;
-			UserOrganization orgInfo = null;
-			this.UserContext.UserOrganizations.TryGetValue(orgId, out orgInfo);
+			UserContext.OrganizationAndRole orgInfo = null;
+			this.UserContext.OrganizationsAndRoles.TryGetValue(orgId, out orgInfo);
 
 			if (orgInfo != null)
 			{
-				switch (action)
-				{
-					case OrgAction.AddUser:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.DeleteBilling:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.DeleteInvitation:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.DeleteOrganization:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.DeleteUser:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.EditBilling:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.EditInvitation:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.EditOrganization:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.EditUser:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.EditUserPermission:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.SubscribeToProduct:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					case OrgAction.EditSubscription:
-						switch (orgInfo.OrganizationRole)
-						{
-							case OrganizationRole.Owner:
-								result = true;
-								break;
-
-							default:
-								break;
-						}
-
-						break;
-
-					default:
-						break;
-				}
+				result = CheckOrgAction(action, orgId, orgInfo.OrganizationRole, throwException);
 			}
 
 			if (!result && throwException)
@@ -232,14 +105,34 @@ namespace AllyisApps.Services
 			return result;
 		}
 
+		public bool CheckOrgAction(OrgAction action, int orgId, OrganizationRole role, bool throwException = true)
+		{
+			bool result = false;
+			switch (role)
+			{
+				case OrganizationRole.Owner:
+					result = true;
+					break;
+
+				default:
+					break;
+			}
+			if (!result && throwException)
+			{
+				string message = string.Format("action {0} denied for org {1}", action.ToString(), orgId);
+				throw new AccessViolationException(message);
+			}
+			return result;
+		}
+
 		/// <summary>
-		/// check the permissions in the org the given subscription belongs to for the given user
+		/// check the permissions in the org the given subscription belongs to for the given user.
 		/// </summary>
 		public bool CheckOrgActionForSubscriptionId(OrgAction action, int subscriptionId, bool throwException = true)
 		{
 			int orgId = -1;
-			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 			if (subInfo != null)
 			{
 				orgId = subInfo.OrganizationId;
@@ -249,110 +142,100 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// check permissions for the given action in the given subscription for the logged in user
+		/// check permissions for the given action in the given subscription for the logged in user.
 		/// </summary>
 		public bool CheckTimeTrackerAction(TimeTrackerAction action, int subId, bool throwException = true)
 		{
 			bool result = false;
-			UserSubscription subInfo = null;
-			this.UserContext.OrganizationSubscriptions.TryGetValue(subId, out subInfo);
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.UserContext.SubscriptionsAndRoles.TryGetValue(subId, out subInfo);
 
 			if (subInfo != null && subInfo.ProductId == ProductIdEnum.TimeTracker)
 			{
 				TimeTrackerRole ttRole = (TimeTrackerRole)subInfo.ProductRoleId;
 				switch (action)
 				{
-					case TimeTrackerAction.CreateCustomer:
-						switch (ttRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
-						}
-
-						break;
-
-					case TimeTrackerAction.CreateProject:
-						switch (ttRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
-						}
-
-						break;
-
-					case TimeTrackerAction.DeleteCustomer:
-						switch (ttRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
-						}
-
-						break;
-
-					case TimeTrackerAction.DeleteProject:
-						switch (ttRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
-						}
-
-						break;
-
-					case TimeTrackerAction.EditCustomer:
-						switch (ttRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
-						}
-
-						break;
-
-					case TimeTrackerAction.EditOthers:
-						switch (ttRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
-						}
-
-						break;
-
-					case TimeTrackerAction.EditProject:
-						switch (ttRole)
-						{
-							case TimeTrackerRole.Manager:
-								result = true;
-								break;
-						}
-
-						break;
-
 					case TimeTrackerAction.TimeEntry:
-						// everyone with timetracker product id
-						result = true;
-						break;
-
-					case TimeTrackerAction.ViewCustomer:
-						result = true;
-						break;
-
-					case TimeTrackerAction.ViewOthers:
 						switch (ttRole)
 						{
 							case TimeTrackerRole.Manager:
+							case TimeTrackerRole.User:
 								result = true;
 								break;
-						}
 
+							default:
+								break;
+						}
 						break;
 
 					default:
+						switch (ttRole)
+						{
+							case TimeTrackerRole.Manager:
+								result = true;
+								break;
+
+							default:
+								break;
+						}
 						break;
+				}
+			}
+
+			if (!result && throwException)
+			{
+				string message = string.Format("action {0} denied for subscription {1}", action.ToString(), subId);
+				throw new AccessViolationException(message);
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// Checks if an action is allowed for the current user.
+		/// </summary>
+		/// <param name="action">The controller action.</param>
+		/// <param name="subId">The subscription id.</param>
+		/// <param name="maxAmount">The maximum amount a user is allowed to approve.</param>
+		/// <param name="throwException">Throw exception or not.</param>
+		/// <returns></returns>
+		public bool CheckExpenseTrackerAction(ExpenseTrackerAction action, int subId, decimal maxAmount = 0, bool throwException = true)
+		{
+			bool result = false;
+
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.UserContext.SubscriptionsAndRoles.TryGetValue(subId, out subInfo);
+			if (subInfo != null)
+			{
+				ExpenseTrackerRole etRole = (ExpenseTrackerRole)subInfo.ProductRoleId;
+				if (subInfo.ProductId == ProductIdEnum.ExpenseTracker && etRole != ExpenseTrackerRole.NotInProduct)
+				{
+					if (action == ExpenseTrackerAction.AdminReport
+						|| action == ExpenseTrackerAction.StatusUpdate
+						|| action == ExpenseTrackerAction.AdminExpense
+						|| action == ExpenseTrackerAction.UserSettings)
+					{
+						switch (etRole)
+						{
+							case ExpenseTrackerRole.Manager:
+								result = true;
+								break;
+
+							default:
+								break;
+						}
+					}
+					else if (action == ExpenseTrackerAction.Pending)
+					{
+						if (subInfo.MaxAmount > maxAmount)
+						{
+							result = true;
+						}
+					}
+					else
+					{
+						result = true;
+					}
 				}
 			}
 

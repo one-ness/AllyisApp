@@ -1,0 +1,52 @@
+﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.EditPositionViewModel
+@{
+	ViewBag.Title = Strings.CreatePosition;
+	Html.RenderPartial("_PositionEditDetails", Model);
+	Model.IsCreating = true;
+	ViewData.Add(ControllerConstants.Controller, ControllerConstants.Staffing);
+	ViewData.Add(ActionConstants.Action, ActionConstants.SubmitCreatePosition);
+
+	ViewBag.OrganizationId = Model.OrganizationId;
+}
+
+@section scripts
+{
+	<script type="text/javascript">
+		var currentDay = "";
+		var ddlCountriesId = "@ViewConstants.DdlCountriesId";
+	</script>
+
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/moment")
+	@Scripts.Render("~/bundles/daterangepicker")
+	<script src="~/Scripts/allyis-pages-with-filter.js" type="text/javascript"></script>
+	<script>
+		$(document).ready(function () {
+			function setDatePickers() {
+				console.log('setting date picker');
+				$('.datepicker').each(function () {
+					$(this).datepicker({
+						changeMonth: true,
+						changeYear: true
+					});
+				});
+			}
+
+			setDatePickers();
+		});
+	</script>
+    <script type="text/javascript">
+        var preserveState = '@(Model.State != null ? (States.ResourceManager.GetString(Model.State) ?? Model.State) : "")';
+		var dropdownempty = "@Strings.DropDownEmpty";
+		var ddlStatesId = "@ViewConstants.DdlStatesId";
+		var ddlStatesOptionsId = "@ViewConstants.DdlStatesOptionsId";
+		var getStatesUrl = "/Home/GetStates";
+		var selectedCountryCode = "@Model.SelectedCountryCode";
+		var selectedStateId = "@Model.SelectedStateId";
+		var mindate_shortstring = "@DateTime.MinValue.ToShortDateString()";
+		var maxdate_shortstring = "@DateTime.MaxValue.ToShortDateString()";
+	</script>
+    @Scripts.Render("~/bundles/UpdateStateDDL");
+}

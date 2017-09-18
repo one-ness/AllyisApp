@@ -1,6 +1,6 @@
-﻿CREATE PROCEDURE [TimeTracker].[DeleteTimeEntry]
-	@TimeEntryId INT
+CREATE PROCEDURE [TimeTracker].[DeleteTimeEntry]
+	@timeEntryId INT
 AS
 	SET NOCOUNT ON;
 DELETE [TimeTracker].[TimeEntry] 
-    WHERE [TimeEntryId] = @TimeEntryId
+    WHERE [TimeEntryId] = @timeEntryId

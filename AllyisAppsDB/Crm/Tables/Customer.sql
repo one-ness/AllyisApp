@@ -1,10 +1,10 @@
 CREATE TABLE [Crm].[Customer] (
     [CustomerId]         INT            IDENTITY (115421, 3) NOT NULL,
-    [Name]               NVARCHAR (32)  NOT NULL,
+    [CustomerName]               NVARCHAR (32)  NOT NULL,
     [OrganizationId]     INT            NOT NULL,
-    [IsActive]           BIT            DEFAULT ((1)) NOT NULL,
+    [IsActive]           BIT            CONSTRAINT [DF_Customer_IsActive] DEFAULT ((1)) NOT NULL,
     [CustomerOrgId]      NVARCHAR (16)  NOT NULL,
-    [CreatedUtc]         DATETIME2 (0)  DEFAULT (getutcdate()) NOT NULL,
+    [CustomerCreatedUtc]         DATETIME2 (0) CONSTRAINT [DF_Customer_CreatedUtc] DEFAULT (getutcdate()) NOT NULL,
     [ContactEmail]       NVARCHAR (384) NULL,
     [AddressId]          INT            NULL,
     [ContactPhoneNumber] VARCHAR (16)   NULL,

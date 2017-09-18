@@ -1,22 +1,23 @@
-﻿CREATE PROCEDURE [Pjm].[GetProjectById]
-	@ProjectId INT
+CREATE PROCEDURE [Pjm].[GetProjectById]
+	@projectId INT
 AS
 	SET NOCOUNT ON;
 	SELECT	[Project].[ProjectId],
 			[Project].[CustomerId],
 			[Customer].[OrganizationId],
-			[Project].[CreatedUtc],
-			[Project].[Name] AS [ProjectName],
-			[Organization].[Name] AS [OrganizationName],
-			[Customer].[Name] AS [CustomerName],
+			[Project].[ProjectCreatedUtc],
+			[Project].[ProjectName] AS [ProjectName],
+			[Organization].[OrganizationName] AS [OrganizationName],
+			[Customer].[CustomerName] AS [CustomerName],
 			[Customer].[CustomerOrgId],
 			[Project].[IsHourly] AS [PriceType],
+			[Project].[IsActive],
 			[Project].[StartUtc] AS [StartDate],
 			[Project].[EndUtc] AS [EndDate],
 			[Project].[ProjectOrgId]
 			FROM (
-		(SELECT [ProjectId], [CustomerId], [Name], [IsHourly], [StartUtc], [EndUtc], [IsActive], 
-				[CreatedUtc], [ProjectOrgId] FROM [Pjm].[Project] WITH (NOLOCK) WHERE [ProjectId] = @ProjectId) AS [Project]
+		(SELECT [ProjectId], [CustomerId], [ProjectName], [IsHourly], [StartUtc], [EndUtc], [IsActive], 
+				[ProjectCreatedUtc], [ProjectOrgId] FROM [Pjm].[Project] WITH (NOLOCK) WHERE [ProjectId] = @projectId) AS [Project]
 			JOIN [Crm].[Customer] WITH (NOLOCK) ON [Customer].[CustomerId] = [Project].[CustomerId]
 			JOIN [Auth].[Organization] WITH (NOLOCK) ON [Organization].[OrganizationId] = [Customer].[OrganizationId]
 	)

@@ -1,6 +1,6 @@
-﻿CREATE PROCEDURE [Auth].[GetOrgUserByEmail]
-	@Email NVARCHAR(384), 
-	@OrgId INT
+CREATE PROCEDURE [Auth].[GetOrgUserByEmail]
+	@email NVARCHAR(384), 
+	@orgId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -10,6 +10,6 @@ BEGIN
 	WITH (NOLOCK)
 	INNER JOIN [Auth].[User] WITH (NOLOCK)  
 		ON [User].[UserId] = [OrganizationUser].[UserId]
-	WHERE [OrganizationUser].[OrganizationId] = @OrgId 
-		AND [User].[Email] = @Email;
+	WHERE [OrganizationUser].[OrganizationId] = @orgId 
+		AND [User].[Email] = @email;
 END

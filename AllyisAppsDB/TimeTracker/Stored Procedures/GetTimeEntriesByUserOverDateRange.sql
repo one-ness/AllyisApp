@@ -1,8 +1,8 @@
-﻿CREATE PROCEDURE [TimeTracker].[GetTimeEntriesByUserOverDateRange]
-	@UserId [Auth].[UserTable] READONLY,
-	@OrganizationId INT,
-	@StartingDate DATE,
-	@EndingDate DATE
+CREATE PROCEDURE [TimeTracker].[GetTimeEntriesByUserOverDateRange]
+	@userId [Auth].[UserTable] READONLY,
+	@organizationId INT,
+	@startingDate DATE,
+	@endingDate DATE
 AS
 	SET NOCOUNT ON;
 SELECT DISTINCT [TimeEntryId] 
@@ -13,16 +13,16 @@ SELECT DISTINCT [TimeEntryId]
 	,[OrganizationUser].[EmployeeId]
 	,[TimeEntry].[ProjectId]
 	,[TimeEntry].[PayClassId]
-	,[PayClass].[Name] AS [PayClassName]
+	,[PayClass].[PayClassName] AS [PayClassName]
 	,[Date]
 	,[Duration]
 	,[Description]
 FROM [TimeTracker].[TimeEntry] WITH (NOLOCK) 
 JOIN [Auth].[User] WITH (NOLOCK) ON [User].[UserId] = [TimeEntry].[UserId]
 JOIN [Hrm].[PayClass] WITH (NOLOCK) ON [PayClass].[PayClassId] = [TimeEntry].[PayClassId]
-JOIN [Auth].[OrganizationUser] WITH (NOLOCK) ON [User].[UserId] = [OrganizationUser].[UserId] AND [OrganizationUser].[OrganizationId] = @OrganizationId
-WHERE [User].[UserId] IN (SELECT [userId] FROM @UserId)
-	AND [Date] >= @StartingDate
-	AND [Date] <= @EndingDate
-	AND [PayClass].[OrganizationId] = @OrganizationId
+JOIN [Auth].[OrganizationUser] WITH (NOLOCK) ON [User].[UserId] = [OrganizationUser].[UserId] AND [OrganizationUser].[OrganizationId] = @organizationId
+WHERE [User].[UserId] IN (SELECT [userId] FROM @userId)
+	AND [Date] >= @startingDate
+	AND [Date] <= @endingDate
+	AND [PayClass].[OrganizationId] = @organizationId
 ORDER BY [Date] ASC

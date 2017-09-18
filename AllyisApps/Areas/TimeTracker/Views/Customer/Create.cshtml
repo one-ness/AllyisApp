@@ -1,23 +1,32 @@
 ﻿@model AllyisApps.ViewModels.TimeTracker.Customer.EditCustomerInfoViewModel
 
 @{
-    DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
-    DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
-    ViewBag.Title = Strings.Create;
-    ViewData.Add(ControllerConstants.Controller, ControllerConstants.Customer);
-    ViewData.Add(ActionConstants.Action, ActionConstants.Create);
-    ViewData["UserId"] = Model.UserId;
-    ViewData["SubscriptionId"] = Model.SubscriptionId;
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/Timetracker";
+	ViewBag.Title = Strings.Create;
+	ViewData.Add(ControllerConstants.Controller, ControllerConstants.Customer);
+	ViewData.Add(ActionConstants.Action, ActionConstants.Create);
+	ViewData["UserId"] = Model.UserId;
+	ViewData["SubscriptionId"] = Model.SubscriptionId;
+	ViewData["SubscriptionName"] = Model.SubscriptionName;
 }
 
 <div>
-    @{Html.RenderPartial("_CustomerEdit", Model, ViewData);}
+	@{Html.RenderPartial("_CustomerEdit", Model, ViewData);}
 </div>
 
 @section Scripts {
-    <script type="text/javascript">
-        var preserveState = "@(Model != null ? (States.ResourceManager.GetString(Model.Clean(Model.State)) ?? Model.State) : string.Empty)";
-        var dropdownempty = "@Strings.DropDownEmpty";
-    </script>
-    <script type="text/javascript" src="~/Scripts/allyis-updateStateDDL.js"></script>
+	<script type="text/javascript">
+		var preserveState = '@(Model.State != null ? (States.ResourceManager.GetString(Model.State) ?? Model.State) : "")';
+		var dropdownempty = "@Strings.DropDownEmpty";
+		var ddlCountriesId = "@ViewConstants.DdlCountriesId";
+		var ddlStatesId = "@ViewConstants.DdlStatesId";
+		var ddlStatesOptionsId = "@ViewConstants.DdlStatesOptionsId";
+		var getStatesUrl = "/Home/GetStates";
+		var selectedCountryCode = "@Model.SelectedCountryCode";
+		var selectedStateId = "@Model.SelectedStateId";
+	</script>
+	@Scripts.Render("~/bundles/UpdateStateDDL");
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/moment")
 }

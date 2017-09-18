@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System;
 
 namespace AllyisApps.Lib
 {
@@ -19,6 +19,7 @@ namespace AllyisApps.Lib
 	public static class Mailer
 	{
 		private static SendGridAPIClient sender;
+
 		public static void Init(string apiKey)
 		{
 			if (string.IsNullOrWhiteSpace(apiKey)) throw new ArgumentNullException("apiKey");

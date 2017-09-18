@@ -10,32 +10,18 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
+
 --Insert Default Org
-SET IDENTITY_INSERT [Auth].[Organization] ON
-INSERT INTO [Auth].[Organization] (OrganizationId, Name, Subdomain)
-VALUES (0, 'Default', 'default')
-SET IDENTITY_INSERT [Auth].[Organization] OFF
-GO
-
---Insert Default Customer
-SET IDENTITY_INSERT [Crm].[Customer] ON
-INSERT INTO [CRM].[Customer] ([CustomerId], [Name], [OrganizationId], [CustomerOrgId], [IsActive])
-VALUES (0, 'Default', 0, 0, '0000000000000000')
-SET IDENTITY_INSERT [Crm].[Customer] OFF
-GO
-
---Insert Default Project
-SET IDENTITY_INSERT [Pjm].[Project] ON
-INSERT INTO [PJM].[Project] ([ProjectId], [Name], [CustomerId], [ProjectOrgId], [IsActive])
-VALUES (0, 'Default', 0, 0, '0000000000000000')
-SET IDENTITY_INSERT [Pjm].[Project] OFF
+--SET IDENTITY_INSERT [Auth].[Organization] ON
+--INSERT INTO [Auth].[Organization] (OrganizationId, [OrganizationName], Subdomain)
+--VALUES (0, 'Default', 'default')
+--SET IDENTITY_INSERT [Auth].[Organization] OFF
 GO
 
 :r .\DefaultData\CountryStates.sql
 :r .\DefaultData\Products.sql
 :r .\DefaultData\Sku.sql
 :r .\DefaultData\Role.sql
-:r .\DefaultData\Holidays.sql
 :r .\DefaultData\Languages.sql
 --:r .\TestData\TestData.sql
 --:r .\TestData\DuplicateTestData.sql

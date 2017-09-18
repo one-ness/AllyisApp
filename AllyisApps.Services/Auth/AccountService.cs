@@ -1,14 +1,9 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="AccountService.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel;
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.Lookup;
-using AllyisApps.Lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +11,12 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AllyisApps.DBModel;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.Finance;
+using AllyisApps.DBModel.Lookup;
+using AllyisApps.Lib;
 using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
@@ -25,48 +26,26 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
-		#region public static
-
-		/// <summary>
-		/// Returns a compressed version of the given email address if it is too long.
-		/// </summary>
-		/// <param name="fullEmail">Full email address.</param>
-		/// <returns>Compressed email address, or the full address if it is short enough (or null).</returns>
-		public static string GetCompressedEmail(string fullEmail)
-		{
-			if (!string.IsNullOrEmpty(fullEmail) && fullEmail.Length > 50)
-			{
-				string cemail = string.Format("{0}...{1}", fullEmail.Substring(0, 20), fullEmail.Substring(fullEmail.Length - 15));
-				return cemail;
-			}
-			else
-			{
-				return fullEmail;
-			}
-		}
-
-		#endregion public static
-
-		#region public
-
-		/// <summary>
-		/// Returns a collection of valid states/provinces for the given country.
-		/// </summary>
-		/// <param name="countryName">Country name.</param>
-		/// <returns><see cref="IEnumerable"/> of valid states/provinces.</returns>
-		public IEnumerable ValidStates(string countryName)
-		{
-			if (string.IsNullOrWhiteSpace(countryName)) throw new ArgumentException("countryName");
-			return DBHelper.ValidStates(countryName);
-		}
-
 		/// <summary>
 		/// Gets the list of valid countries.
 		/// </summary>
 		/// <returns>A collection of valid countries.</returns>
-		public IEnumerable<string> ValidCountries()
+		public Dictionary<string, string> GetCountries()
 		{
-			return DBHelper.ValidCountries();
+			return DBHelper.GetCountries();
+		}
+
+		/// <summary>
+		/// get the list of states for the given country
+		/// </summary>
+		public Dictionary<int, string> GetStates(string countryCode)
+		{
+			return this.DBHelper.GetStates(countryCode);
+		}
+
+		public bool DeleteExpenseItem(int itemId)
+		{
+			return this.DBHelper.DeleteExpenseItem(itemId);
 		}
 
 		/// <summary>
@@ -75,36 +54,24 @@ namespace AllyisApps.Services
 		/// <returns>A list of languages.</returns>
 		public IEnumerable<Language> ValidLanguages()
 		{
-			return DBHelper.ValidLanguages().Select(s => new Language
+			var result = new List<Language>();
+			var list = this.DBHelper.ValidLanguages();
+			foreach (var item in list)
 			{
-				LanguageId = s.LanguageId,
-				LanguageName = s.LanguageName,
-				CultureName = s.CultureName
-			});
+				result.Add(new Language() { CultureName = item.CultureName, LanguageName = item.LanguageName });
+			}
+
+			return result;
 		}
 
 		/// <summary>
-		/// Retrieves a list of all pending invitations for a given user by the user's email.
+		/// Gets information for an invite.
 		/// </summary>
-		/// <param name="userEmail">The user's email address.</param>
-		/// <returns>The invitation associated with the user.</returns>
-		public List<InvitationInfo> GetInvitationsByUser(string userEmail)
+		/// <param name="invitationId">Id of invite.</param>
+		/// <returns>Inviation info </returns>
+		public InvitationInfo GetInvitationByID(int invitationId)
 		{
-			#region Validation
-
-			if (!Utility.IsValidEmail(userEmail))
-			{
-				throw new FormatException("Email address must be in a valid format.");
-			}
-
-			#endregion Validation
-
-			var invitationsDB = DBHelper.GetUserInvitationsByUserData(new UserDBEntity()
-			{
-				Email = userEmail
-			});
-
-			return invitationsDB.Select(idb => InitializeInvitationInfo(idb)).ToList();
+			return InitializeInvitationInfo(DBHelper.GetUserInvitationByInviteId(invitationId));
 		}
 
 		/// <summary>
@@ -112,21 +79,14 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">The invitationId.</param>
 		/// <returns>The resulting action message if succeed, null if fail.</returns>
-		public string AcceptUserInvitation(int invitationId)
+		public bool AcceptUserInvitation(int invitationId)
 		{
-			#region Validation
-
-			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId", "The invitation id cannot be zero or negative.");
-
-			#endregion Validation
-
-			NotifyInviteAcceptAsync(invitationId);
+			if (invitationId <= 0) throw new ArgumentOutOfRangeException("invitationId");
 
 			var results = DBHelper.AcceptInvitation(invitationId, UserContext.UserId);
+			NotifyInviteAcceptAsync(invitationId);
 
-			if (results == null) return null;
-
-			return string.Format("You have successfully joined {0} in the role of {1}.", results.Item1, results.Item2);
+			return results;
 		}
 
 		/// <summary>
@@ -134,15 +94,17 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="invitationId">The id of the invitation to reject.</param>
 		/// <returns>The resulting message.</returns>
-		public string RejectUserInvitation(int invitationId)
+		public bool RejectInvitation(int invitationId)
 		{
-			if (DBHelper.RemoveInvitation(invitationId, UserContext.UserId))
+			try
 			{
-				return "The invitation has been rejected.";
+				DBHelper.RejectInvitation(invitationId);
+				NotifyInviteRejectAsync(invitationId);
+				return true;
 			}
-			else
+			catch (SqlException)
 			{
-				return null;
+				return false;
 			}
 		}
 
@@ -151,56 +113,34 @@ namespace AllyisApps.Services
 		/// </summary>
 		public async Task<int> SetupNewUser(
 			string email,
+			string password,
 			string firstName,
 			string lastName,
-			DateTime? dateOfBirth,
-			string address,
-			string city,
-			string state,
-			string country,
-			string postalCode,
-			string phone,
-			string password,
-			int languagePreference,
-			string confirmEmailSubject,
-			string confirmEmailMessage,
 			Guid emailConfirmationCode,
-			bool twoFactorEnabled = false,
-			bool lockOutEnabled = false,
-			DateTime? lockOutEndDateUtc = null)
+			DateTime? dateOfBirth,
+			string phoneNumber,
+			string address1,
+			string address2,
+			string city,
+			int? stateId,
+			string postalCode,
+			string countryCode,
+			string confirmEmailSubject,
+			string confirmEmailMessage)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException("firstName:");
 			if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException("lastName");
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
 			if (emailConfirmationCode == null) throw new ArgumentException("emailConfirmationCode");
-
-			int result = 0;
+			var result = 0;
 			try
 			{
-				UserDBEntity entity = new UserDBEntity()
-				{
-					EmailConfirmationCode = emailConfirmationCode,
-					Email = email,
-					FirstName = firstName,
-					LastName = lastName,
-                    Address = address,
-					Country = country,
-                    City = city,
-                    State = state,
-                    PostalCode = postalCode,
-                    DateOfBirth = dateOfBirth,
-					PhoneNumber = phone,
-					PasswordHash = Crypto.GetPasswordHash(password),
-					IsTwoFactorEnabled = twoFactorEnabled,
-					IsLockoutEnabled = lockOutEnabled,
-					LockoutEndDateUtc = lockOutEndDateUtc,
-					PreferredLanguageId = languagePreference
-				};
+				result = await this.DBHelper.CreateUserAsync(
+					email, Crypto.GetPasswordHash(password), firstName, lastName, emailConfirmationCode, dateOfBirth, phoneNumber, Language.DefaultLanguageCultureName,
+					address1, address2, city, stateId, postalCode, countryCode);
 
-				result = await this.DBHelper.CreateUserAsync(entity);
-
-				// send confirmation email
+				// user created, send confirmation email
 				await Mailer.SendEmailAsync(this.ServiceSettings.SupportEmail, email, confirmEmailSubject, confirmEmailMessage);
 			}
 			catch (SqlException ex)
@@ -223,25 +163,24 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="email">The login email.</param>
 		/// <param name="password">The login password.</param>
-		public UserContext ValidateLogin(string email, string password)
+		public User ValidateLogin(string email, string password)
 		{
 			if (!Utility.IsValidEmail(email)) throw new ArgumentException("email");
 			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("password");
 
-			UserContext result = null;
-			var user = this.DBHelper.GetUserByEmail(email);
-			if (user != null)
+			User result = null;
+			result = InitializeUser(this.DBHelper.GetUserByEmail(email), false);
+
+			if (result != null)
 			{
 				// email exists, hash the given password and compare with hash in db
-				Tuple<bool, string> passwordValidation = Crypto.ValidateAndUpdate(password, user.PasswordHash);
+				Tuple<bool, string> passwordValidation = Crypto.ValidateAndUpdate(password, result.PasswordHash);
 				if (passwordValidation.Item1)
 				{
-					result = new UserContext(user.UserId, email, user.FirstName, user.LastName);
-
 					// Store updated password hash if needed
 					if (passwordValidation.Item2 != null)
 					{
-						DBHelper.UpdateUserPassword(user.UserId, passwordValidation.Item2);
+						DBHelper.UpdateUserPassword(result.UserId, passwordValidation.Item2);
 					}
 				}
 			}
@@ -259,118 +198,136 @@ namespace AllyisApps.Services
 			if (userId <= 0) throw new ArgumentException("userId");
 
 			UserContext result = null;
-			List<UserContextDBEntity> contextInfo = this.DBHelper.GetUserContextInfo(userId);
-			if (contextInfo != null && contextInfo.Count > 0)
+
+			// get context from db
+			dynamic expando = this.DBHelper.GetUserContext(userId);
+
+			// get user information
+			if (expando != null && expando.User != null)
 			{
-				// user exists in db
-				UserContextDBEntity firstRow = contextInfo[0];
-				result = new UserContext(userId, firstRow.Email, firstRow.FirstName, firstRow.LastName, firstRow.PreferredLanguageId.Value);
+				// user found.
+				result = new UserContext();
+				result.UserId = expando.User.UserId;
+				result.FirstName = expando.User.FirstName;
+				result.LastName = expando.User.LastName;
+				result.Email = expando.User.Email;
+
+				// get organization and roles
+				foreach (var item in expando.OrganizationsAndRoles)
+				{
+					result.OrganizationsAndRoles.Add(item.OrganizationId, new UserContext.OrganizationAndRole()
+					{
+						OrganizationId = item.OrganizationId,
+						OrganizationRole = (OrganizationRole)item.OrganizationRoleId
+					});
+				}
+
+				// get subscriptions and roles
+				foreach (var item in expando.SubscriptionsAndRoles)
+				{
+					result.SubscriptionsAndRoles.Add(item.SubscriptionId,
+						new UserContext.SubscriptionAndRole()
+						{
+							AreaUrl = item.AreaUrl,
+							ProductId = (ProductIdEnum)item.ProductId,
+							ProductRoleId = item.ProductRoleId,
+							SkuId = (SkuIdEnum)item.SkuId,
+							SubscriptionId = item.SubscriptionId,
+							OrganizationId = item.OrganizationId,
+							MaxAmount = expando.User.MaxAmount
+						});
+				}
+
 				// set result to self
 				this.SetUserContext(result);
-
-				// note: if contextInfo.Count > 0, user is part of at least one organization
-				foreach (var item in contextInfo)
-				{
-					// user is part of at least one organization, do we have org id?
-					if (item.OrganizationId.HasValue)
-					{
-						// yes, was it already added to the list?
-						UserOrganization orgInfo = null;
-						if (!result.UserOrganizations.TryGetValue(item.OrganizationId.Value, out orgInfo))
-						{
-							// no, add it now
-							orgInfo = new UserOrganization
-							{
-								OrganizationId = item.OrganizationId.Value,
-								OrganizationName = item.OrganizationName,
-								OrganizationRole = (OrganizationRole)item.OrganizationRoleId.Value,
-							};
-
-							result.UserOrganizations.Add(item.OrganizationId.Value, orgInfo);
-						}
-
-						// is there a subscription id?
-						if (item.SubscriptionId.HasValue)
-						{
-							UserSubscription subInfo = new UserSubscription()
-							{
-								SubscriptionId = item.SubscriptionId.Value,
-								SubscriptionName = item.SubscriptionName,
-								OrganizationId = orgInfo.OrganizationId,
-								OrganizationName = orgInfo.OrganizationName,
-								ProductId = (ProductIdEnum)item.ProductId.Value,
-								ProductName = item.ProductName,
-								ProductRoleName = item.ProductRoleName,
-								ProductRoleId = item.ProductRoleId.Value,
-								SkuId = item.SkuId.Value,
-								AreaUrl = item.AreaUrl
-							};
-
-							if (!orgInfo.OrganizationSubscriptions.ContainsKey(item.SubscriptionId.Value))
-							{
-								// add it to the list of subscriptions for this organization
-								orgInfo.OrganizationSubscriptions.Add(item.SubscriptionId.Value, subInfo);
-
-								// also add it to the result
-								result.OrganizationSubscriptions.Add(item.SubscriptionId.Value, subInfo);
-							}
-						}
-					}
-				}
 			}
 
 			return result;
 		}
 
 		/// <summary>
-		/// Updates the active subsciption for the current user.
+		/// get the current logged in user
 		/// </summary>
-		/// <param name="subscriptionId">Subscription Id.</param>
-		public void UpdateActiveSubscription(int? subscriptionId)
-		{
-			if (subscriptionId.HasValue && subscriptionId.Value <= 0) throw new ArgumentException("subscriptionId");
-			DBHelper.UpdateActiveSubscription(UserContext.UserId, subscriptionId);
-		}
-
-		/// <summary>
-		/// Gets the user info for the current user.
-		/// </summary>
-		/// <returns>A User instance with the current user's info.</returns>
 		public User GetCurrentUser()
 		{
-			return GetUser(UserContext.UserId);
+			return this.GetUser(this.UserContext.UserId);
 		}
 
 		/// <summary>
-		/// Gets the user info for a specific user.
+		/// Get User Address, Organizaiontins, and Inviations for account page
 		/// </summary>
-		/// <param name="userId">User Id.</param>
-		/// <returns>A User instance with the current user's info.</returns>
 		public User GetUser(int userId)
 		{
-			if (userId <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-			}
-			var results = DBHelper.GetUserInfo(userId);
-			User user = InitializeUser(results.Item1);
-			user.Address = InitializeAddress(results.Item2);
-			return user;
+			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
+
+			dynamic infos = this.DBHelper.GetUser(userId);
+			User userInfo = this.InitializeUser(infos.User);
+			IEnumerable<dynamic> Organizations = infos.Organizations;
+			IEnumerable<dynamic> Subscriptions = infos.Subscriptions;
+
+			userInfo.Subscriptions = Subscriptions.Select(sub =>
+				new UserSubscription()
+				{
+					Subscription = new Subscription()
+					{
+						AreaUrl = sub.AreaUrl,
+						OrganizationId = sub.OrganizationId,
+						ProductId = (ProductIdEnum)sub.ProductId,
+						ProductName = sub.ProductName,
+						SkuId = (SkuIdEnum)sub.SkuId,
+						SubscriptionId = sub.SubscriptionId,
+						SubscriptionName = sub.SubscriptionName
+					},
+					ProductRoleId = sub.ProductRoleId,
+					UserId = userId
+				}
+			).ToList();
+
+			userInfo.Organizations = Organizations.Select(
+				org =>
+					new UserOrganization()
+					{
+						Organization = InitializeOrganization(org),
+						OrganizationRole = (OrganizationRole)org.OrganizationRoleId,
+						UserId = userId,
+					}
+			).ToList();
+
+			IEnumerable<dynamic> Invitations = infos.Invitations;
+			userInfo.Invitations = Invitations.Select(
+				inv =>
+					new Invitation()
+					{
+						invite = new InvitationInfo()
+						{
+							Email = inv.Email,
+							EmployeeId = inv.EmployeeId,
+							FirstName = inv.FirstName,
+							LastName = inv.LastName,
+							InvitationId = inv.InvitationId,
+							OrganizationId = inv.OrganizationId,
+							OrganizationRole = (OrganizationRole)inv.OrganizationRoleId,
+						},
+						invitingOrgName = inv.OrganizationName
+					}
+				).ToList();
+			return userInfo;
 		}
 
 		/// <summary>
-		/// Gets the User for the current user, along with Organizations for each organization the
-		/// user is a member of, and InvitationInfos for any invitations for the user.
+		/// update the current user profile
 		/// </summary>
-		/// <returns></returns>
-		public Tuple<User, List<Organization>, List<InvitationInfo>, Address> GetUserOrgsAndInvitationInfo()
+		public void UpdateCurrentUserProfile(int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
 		{
-			var spResults = DBHelper.GetUserOrgsAndInvitations(UserContext.UserId);
-			return Tuple.Create<User, List<Organization>, List<InvitationInfo>, Address>(
-				InitializeUser(spResults.Item1),
-				spResults.Item2.Select(odb => InitializeOrganization(odb)).ToList(),
-				spResults.Item3.Select(idb => InitializeInvitationInfo(idb)).ToList(),
-				InitializeAddress(spResults.Item4));
+			this.DBHelper.UpdateUserProfile(this.UserContext.UserId, firstName, lastName, this.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
+		}
+
+		/// <summary>
+		/// update the current user profile
+		/// </summary>
+		public void UpdateUserProfile(int userId, int? dateOfBirth, string firstName, string lastName, string phoneNumber, int? addressId, string address, string city, int? stateId, string postalCode, string countryCode)
+		{
+			this.DBHelper.UpdateUserProfile(userId, firstName, lastName, this.GetDateTimeFromDays(dateOfBirth), phoneNumber, addressId, address, null, city, stateId, postalCode, countryCode);
 		}
 
 		/// <summary>
@@ -386,108 +343,41 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Saves the user info in the database.
+		/// Updates an organization member's info.
 		/// </summary>
-		/// <param name="model">UserInfo containing updated info.</param>
-		public void SaveUserInfo(User model)
+		public bool UpdateMember(int userId, int orgId, string employeeId, int roleId, string firstName, string lastName, bool isInvited)
 		{
-			if (model == null)
-			{
-				throw new ArgumentNullException("model", "UserInfo object must not be null.");
-			}
+			if (userId <= 0) throw new ArgumentOutOfRangeException("userId");
+			if (orgId <= 0) throw new ArgumentOutOfRangeException("orgId");
+			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
+			if (roleId <= 0) throw new ArgumentOutOfRangeException("roleId");
 
-			// TODO: Add UserInfo->UserDBEntity conversion at bottom
-			DBHelper.UpdateUser(new UserDBEntity
-			{
-				AccessFailedCount = model.AccessFailedCount,
-				AddressId = model.Address.AddressId,
-				Address = model.Address.Address1,
-				City = model.Address.City,
-				Country = model.Address.CountryId,
-				DateOfBirth = model.DateOfBirth,
-				Email = model.Email,
-				IsEmailConfirmed = model.IsEmailConfirmed,
-				FirstName = model.FirstName,
-				LastName = model.LastName,
-				IsLockoutEnabled = model.IsLockoutEnabled,
-				LockoutEndDateUtc = model.LockoutEndDateUtc,
-				PasswordHash = model.PasswordHash,
-				PasswordResetCode = model.PasswordResetCode,
-				PhoneExtension = model.PhoneExtension,
-				PhoneNumber = model.PhoneNumber,
-				IsPhoneNumberConfirmed = model.IsPhoneNumberConfirmed,
-				State = model.Address.State,
-				IsTwoFactorEnabled = model.IsTwoFactorEnabled,
-				UserId = model.UserId,
-				PostalCode = model.Address.PostalCode
-			});
-		}
-
-		/// <summary>
-		/// Updates an organization member's info
-		/// </summary>
-		/// <param name="modelData">The data from the form that the controller passed in</param>
-		public bool UpdateMember(Dictionary<string, dynamic> modelData)
-		{
-			if (modelData["userId"] <= 0)
-			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
-			}
-
-			if (modelData["orgId"] < 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
-			}
-
-			if (string.IsNullOrEmpty(modelData["employeeId"]))
-			{
-				throw new ArgumentNullException("employeeId", "Employee Id must have a value");
-			}
-
-			if (modelData["employeeRoleId"] < 0)
-			{
-				throw new ArgumentOutOfRangeException("employeeRoleId", "Employee Role Id cannot be negative.");
-			}
-
-			return DBHelper.UpdateMember(modelData)	== 1 ? false : true;
+			return DBHelper.UpdateMember(userId, orgId, employeeId, roleId, firstName, lastName, isInvited) == 1 ? false : true;
 		}
 
 		/// <summary>
 		/// Sets the language preference for the current user.
 		/// </summary>
-		/// <param name="languageId">The language Id.</param>
-		public void SetLanguage(int languageId)
+		public void SetLanguage(string cultureName)
 		{
-			if (languageId < 0)
-			{
-				throw new ArgumentOutOfRangeException("languageId", "Language Id cannot be negative.");
-			}
+			if (string.IsNullOrWhiteSpace(cultureName)) throw new ArgumentNullException("cultureName");
 
-			DBHelper.UpdateUserLanguagePreference(UserContext.UserId, languageId);
+			this.DBHelper.UpdateUserLanguagePreference(UserContext.UserId, cultureName);
 		}
 
 		/// <summary>
 		/// Gets the browser-compatible universal culture language string (e.g. "en-US") based on language Id.
 		/// </summary>
-		/// <param name="languageId">The language Id. May use 0 to indicate no language setting.</param>
-		/// <returns>Culture string.</returns>
-		public Language GetLanguage(int languageId)
+		public Language GetLanguage(string cultureName)
 		{
-			if (languageId < 0)
+			if (string.IsNullOrWhiteSpace(cultureName))
 			{
-				throw new ArgumentOutOfRangeException("languageId", "Language Id cannot be negative.");
+				cultureName = System.Globalization.CultureInfo.CurrentCulture.Name;
 			}
 
-			// No language setting, use browser setting. May return null if browser culture is unsupported in this app's database.
-			if (languageId == 0)
-			{
-				return this.ValidLanguages().Where(c => System.Globalization.CultureInfo.CurrentCulture.Name.Equals(c.CultureName)).SingleOrDefault();
-			}
-
-			LanguageDBEntity language = DBHelper.GetLanguage(languageId);
+			LanguageDBEntity language = this.DBHelper.GetLanguage(cultureName);
 			return new Language
 			{
-				LanguageId = language.LanguageId,
 				LanguageName = language.LanguageName,
 				CultureName = language.CultureName
 			};
@@ -497,7 +387,7 @@ namespace AllyisApps.Services
 		/// Sends an email with password reset link to the given email address.
 		/// </summary>
 		/// <param name="email">The user email address.</param>
-		/// <param name="code">the password reset code that is </param>
+		/// <param name="code">The password reset code that is .</param>
 		/// <param name="callbackUrl">The Url to include as the "click here" link, with stand-ins for userid and code (as "{userid}" and "{code}".</param>
 		/// <returns>A value indicating whether the given email address matched with an existing user.</returns>
 		public async Task<bool> SendPasswordResetMessage(string email, string code, string callbackUrl)
@@ -566,17 +456,6 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
-		/// Gets a password hash.
-		/// </summary>
-		/// <param name = "password" >The password entered by user.</param>
-		/// <returns>Password hash.</returns>
-		public string GetPasswordHash(string password)
-		{
-			if (string.IsNullOrWhiteSpace(password)) throw new ArgumentNullException("password");
-			return Crypto.GetPasswordHash(password);
-		}
-
-		/// <summary>
 		/// Confirms the users email.
 		/// </summary>
 		public bool ConfirmUserEmail(Guid code)
@@ -585,29 +464,56 @@ namespace AllyisApps.Services
 			return DBHelper.UpdateEmailConfirmed(code) > 0 ? true : false;
 		}
 
-		/// <summary>
-		/// Gets a list of <see cref="Organization"/>s for all organizations the user is a part of.
-		/// </summary>
-		/// <returns>Collection of Organizations.</returns>
-		public IEnumerable<Organization> GetOrganizationsByUserId()
+		public IEnumerable<Organization> GetOrganizationsByUserId(int userID)
 		{
-			return DBHelper.GetOrganizationsByUserId(UserContext.UserId).Select(o => InitializeOrganization(o));
+			return DBHelper.GetOrganizationsByUserId(userID).Select(o => (Organization)InitializeOrganization(o));
 		}
-
-		#endregion public
 
 		#region Info-DBEntity Conversions
 
+
+
+		public User InitializeUser(dynamic user)
+		{
+			User newUser = new User()
+			{
+				AccessFailedCount = user.AccessFailedCount,
+				DateOfBirth = user.DateOfBirth,
+				Email = user.Email,
+				IsEmailConfirmed = user.IsEmailConfirmed,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				IsLockoutEnabled = user.IsLockoutEnabled,
+				LockoutEndDateUtc = user.LockoutEndDateUtc,
+				PasswordHash = user.PasswordHash,
+				PasswordResetCode = user.PasswordResetCode,
+				PhoneExtension = user.PhoneExtension,
+				PhoneNumber = user.PhoneNumber,
+				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
+				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
+				UserId = user.UserId,
+				Address = InitializeAddress(user),
+				MaxAmount = user.MaxAmount
+			};
+			return newUser;
+		}
 		/// <summary>
 		/// Translates a UserDBEntity into a User business object.
 		/// </summary>
 		/// <param name="user">UserDBEntity instance.</param>
+		/// <param name="loadAddress"></param>
 		/// <returns>User instance.</returns>
-		public static User InitializeUser(UserDBEntity user)
+		public User InitializeUser(UserDBEntity user, bool loadAddress = true)
 		{
 			if (user == null)
 			{
 				return null;
+			}
+
+			Address address = null;
+			if (user.AddressId != null && loadAddress)
+			{
+				address = getAddress(user.AddressId);
 			}
 
 			return new User
@@ -627,44 +533,8 @@ namespace AllyisApps.Services
 				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
 				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
 				UserId = user.UserId,
-			};
-		}
-
-		/// <summary>
-		/// Translates a User into a UserDBEntity.
-		/// </summary>
-		/// <param name="user">User instance.</param>
-		/// <returns>UserDBEntity instance.</returns>
-		public static UserDBEntity GetDBEntityFromUser(User user)
-		{
-			if (user == null)
-			{
-				return null;
-			}
-
-			return new UserDBEntity
-			{
-				AccessFailedCount = user.AccessFailedCount,
-				Address = user.Address.Address1,
-				City = user.Address.City,
-				Country = user.Address.CountryId,
-				DateOfBirth = user.DateOfBirth,
-				Email = user.Email,
-				IsEmailConfirmed = user.IsEmailConfirmed,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				IsLockoutEnabled = user.IsLockoutEnabled,
-				LockoutEndDateUtc = user.LockoutEndDateUtc,
-				PasswordHash = user.PasswordHash,
-				PasswordResetCode = user.PasswordResetCode,
-				PhoneExtension = user.PhoneExtension,
-				PhoneNumber = user.PhoneNumber,
-				IsPhoneNumberConfirmed = user.IsPhoneNumberConfirmed,
-				State = user.Address.State,
-				IsTwoFactorEnabled = user.IsTwoFactorEnabled,
-				UserId = user.UserId,
-				PostalCode = user.Address.PostalCode,
-				PreferredLanguageId = 1          // TODO: Put this into UserInfo and do proper lookup
+				Address = address,
+				MaxAmount = user.MaxAmount
 			};
 		}
 
@@ -673,7 +543,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="userRoles">UserRolesDBEntity instance.</param>
 		/// <returns>UserRolesInfo instance.</returns>
-		public static UserRolesInfo InitializeUserRolesInfo(UserRolesDBEntity userRoles)
+		public UserRolesInfo InitializeUserRolesInfo(UserRolesDBEntity userRoles)
 		{
 			if (userRoles == null)
 			{
@@ -698,7 +568,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="subUser">SubscriptionUserDBEntity instance.</param>
 		/// <returns>SubscriptionUserInfo instance.</returns>
-		public static SubscriptionUserInfo InitializeSubscriptionUserInfo(SubscriptionUserDBEntity subUser)
+		public SubscriptionUserInfo InitializeSubscriptionUserInfo(SubscriptionUserDBEntity subUser)
 		{
 			if (subUser == null)
 			{
@@ -713,6 +583,21 @@ namespace AllyisApps.Services
 				SubscriptionId = subUser.SubscriptionId,
 				UserId = subUser.UserId
 			};
+		}
+
+		public IList<AccountDBEntity> GetAccounts()
+		{
+			return DBHelper.GetAccounts().ToList();
+		}
+
+		public void UpdateUserMaxAmount(User user)
+		{
+			UserDBEntity entity = new UserDBEntity()
+			{
+				UserId = user.UserId,
+				MaxAmount = user.MaxAmount
+			};
+			DBHelper.UpdateUserMaxAmount(entity);
 		}
 
 		#endregion Info-DBEntity Conversions

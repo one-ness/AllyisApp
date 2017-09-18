@@ -1,19 +1,19 @@
-﻿CREATE PROCEDURE [Pjm].[UpdateProjectUser]
-	@ProjectId INT,
-	@UserId INT,
-	@IsActive BIT,
-	@RowsUpdated INT
+CREATE PROCEDURE [Pjm].[UpdateProjectUser]
+	@projectId INT,
+	@userId INT,
+	@isActive BIT,
+	@rowsUpdated INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRANSACTION
 		UPDATE [Pjm].[ProjectUser]
-		SET [IsActive] = @IsActive
-		WHERE [ProjectUser].[ProjectId] = @ProjectId AND [ProjectUser].[UserId] = @UserId
+		SET [IsActive] = @isActive
+		WHERE [ProjectUser].[ProjectId] = @projectId AND [ProjectUser].[UserId] = @userId
 		
-		SELECT @RowsUpdated = @@ROWCOUNT
+		SELECT @rowsUpdated = @@ROWCOUNT
 
 	COMMIT TRANSACTION
 
-	SELECT @RowsUpdated
+	SELECT @rowsUpdated
 END

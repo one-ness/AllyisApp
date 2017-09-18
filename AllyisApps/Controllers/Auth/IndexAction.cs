@@ -4,12 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using AllyisApps.ViewModels.Auth;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {
@@ -25,77 +24,159 @@ namespace AllyisApps.Controllers
 		/// <returns>The async task responsible for this action.</returns>
 		public ActionResult Index()
 		{
-			var infos = AppService.GetUserOrgsAndInvitationInfo();
+			AccountIndexViewModel viewModel = ConstuctIndexViewModel();
 
-            IndexAndOrgsViewModel model = new IndexAndOrgsViewModel
-			{
-				UserInfo = infos.Item1,
-				InviteInfos = infos.Item3
-			};
-
-            foreach(var invite in infos.Item3)
-            {
-                string orgName =  AppService.GetOrganization(invite.OrganizationId).Name;
-                ViewData[invite.OrganizationId.ToString()] = orgName;
-            }
-
-			model.UserInfo.Address = infos.Item4;
-
-            model.OrgInfos = infos.Item2.Select(o =>
-            {
-				OrgWithSubscriptionsForUserViewModel orgVM = new OrgWithSubscriptionsForUserViewModel
-				{
-					OrgInfo = o,
-					CanEditOrganization = this.AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, o.OrganizationId, false),
-					Subscriptions = new List<SubscriptionDisplayViewModel>()
-				};
-				UserOrganization userOrgInfo = null;
-				this.AppService.UserContext.UserOrganizations.TryGetValue(o.OrganizationId, out userOrgInfo);
-				if (userOrgInfo != null)
-				{
-					foreach (UserSubscription userSubInfo in userOrgInfo.OrganizationSubscriptions.Values)
-					{
-						//TODO move description info into a product description column in Billing.Product
-						string description =
-							userSubInfo.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
-							userSubInfo.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
-							"";
-
-						if (userSubInfo.ProductId == ProductIdEnum.TimeTracker)
-						{
-							int startOfWeek = AppService.GetAllSettings(userSubInfo.SubscriptionId).Item1.StartOfWeek;
-							ViewBag.StartDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
-							ViewBag.EndDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
-						}
-
-						orgVM.Subscriptions.Add(new SubscriptionDisplayViewModel
-						{
-							SubscriptionId = userSubInfo.SubscriptionId,
-							SubscriptionName = userSubInfo.SubscriptionName,
-							ProductId = (int)userSubInfo.ProductId,
-							ProductName = userSubInfo.ProductName,
-							ProductDescription = description,
-							AreaUrl = userSubInfo.AreaUrl
-						});
-					}
-				}
-				return orgVM;
-			}).ToList();
-
-			return this.View(model);
+			return this.View(viewModel);
 		}
 
-        private DateTime SetStartingDate(int startOfWeek)
-        {
-            DateTime today = DateTime.Now;
-            int daysIntoTheWeek = (int)today.DayOfWeek < startOfWeek
-                ? (int)today.DayOfWeek + (7 - startOfWeek)
-                : (int)today.DayOfWeek - startOfWeek;
+		/// <summary>
+		/// Constuct index view Model for Accounts.
+		/// </summary>
+		/// <returns>The Accound Index view model.</returns>
+		public AccountIndexViewModel ConstuctIndexViewModel()
+		{
+			User accountInfo = AppService.GetCurrentUser();
 
+			AccountIndexViewModel.UserViewModel userViewModel = new AccountIndexViewModel.UserViewModel()
+			{
+				FirstName = accountInfo.FirstName,
+				LastName = accountInfo.LastName,
+				Email = accountInfo.Email,
+				PhoneNumber = accountInfo.PhoneNumber,
+				PhoneExtension = accountInfo.PhoneExtension,
+				Address1 = accountInfo.Address?.Address1,
+				Address2 = accountInfo.Address?.Address2,
+				City = accountInfo.Address?.City,
+				State = accountInfo.Address?.StateName,
+				PostalCode = accountInfo.Address?.PostalCode,
+				Country = accountInfo.Address?.CountryName,
+			};
+			AccountIndexViewModel indexViewModel = new AccountIndexViewModel()
+			{
+				UserInfo = userViewModel
+			};
+			if (accountInfo == null)
+			{
+				// If not signed in do not attpempt to load values.
+				return indexViewModel;
+			}
 
+			// Add invitations to view model
 
+			var invitationslist = accountInfo.Invitations;
+			foreach (var inviteInfo in invitationslist)
+			{
+				var invite = inviteInfo.invite;
 
-            return today.AddDays(-daysIntoTheWeek);
-        }
-    }
+				indexViewModel.Invitations.Add(new AccountIndexViewModel.InvitationViewModel()
+				{
+					InvitationId = invite.InvitationId,
+					OrganizationName = inviteInfo.invitingOrgName,
+				});
+			}
+
+			var orgs = accountInfo.Organizations;
+
+			// Add organizations to model
+			foreach (var curorg in orgs)
+			{
+				AccountIndexViewModel.OrganizationViewModel orgViewModel =
+				new AccountIndexViewModel.OrganizationViewModel()
+				{
+					OrganizationId = curorg.Organization.OrganizationId,
+					OrganizationName = curorg.Organization.OrganizationName,
+					PhoneNumber = curorg.Organization.PhoneNumber,
+					Address1 = curorg.Organization.Address?.Address1,
+					City = curorg.Organization.Address?.City,
+					State = curorg.Organization.Address?.StateName,
+					PostalCode = curorg.Organization.Address?.PostalCode,
+					Country = curorg.Organization.Address?.CountryName,
+					SiteUrl = curorg.Organization.SiteUrl,
+					FaxNumber = curorg.Organization.FaxNumber,
+					//// TODO: Infomation is dependent on curent user
+					IsManageAllowed = AppService.CheckOrgAction(AppService.OrgAction.EditOrganization, curorg.Organization.OrganizationId, curorg.OrganizationRole, false)
+				};
+
+				// Add subscription info
+				foreach (UserSubscription userSubInfo in accountInfo.Subscriptions.Where(sub => sub.Subscription.OrganizationId == curorg.Organization.OrganizationId))
+				{
+					string description =
+						userSubInfo.Subscription.ProductId == ProductIdEnum.TimeTracker ? Resources.Strings.TimeTrackerDescription :
+						userSubInfo.Subscription.ProductId == ProductIdEnum.ExpenseTracker ? Resources.Strings.ExpenseTrackerDescription :
+						string.Empty;
+					var subViewModel = new AccountIndexViewModel.OrganizationViewModel.SubscriptionViewModel()
+					{
+						ProductName = userSubInfo.Subscription.ProductName,
+						SubscriptionId = userSubInfo.Subscription.SubscriptionId,
+						SubscriptionName = userSubInfo.Subscription.SubscriptionName,
+						ProductDescription = description,
+						ProductId = userSubInfo.Subscription.ProductId,
+						AreaUrl = userSubInfo.Subscription.AreaUrl
+					};
+					switch (userSubInfo.Subscription.ProductId)
+					{
+						case ProductIdEnum.TimeTracker:
+							{
+								int? sDate = null;
+								int? eDate = null;
+								int startOfWeek = AppService.GetAllSettings(userSubInfo.Subscription.SubscriptionId).Item1.StartOfWeek;
+								sDate = AppService.GetDaysFromDateTime(SetStartingDate(startOfWeek));
+								eDate = AppService.GetDaysFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
+								subViewModel.ProductGoToUrl = Url.RouteUrl(
+									"TimeTracker_NoUserId",
+									new
+									{
+										subscriptionId =
+										userSubInfo.Subscription.SubscriptionId,
+										controller = ControllerConstants.TimeEntry,
+										startDate = sDate,
+										endDate = eDate
+									});
+								break;
+							}
+						case ProductIdEnum.ExpenseTracker:
+							{
+								subViewModel.ProductGoToUrl = Url.RouteUrl(
+									"ExpenseTracker_Default",
+									new
+									{
+										subscriptionId = userSubInfo.Subscription.SubscriptionId,
+										controller = ControllerConstants.Expense
+									});
+								break;
+							}
+						case ProductIdEnum.StaffingManager:
+
+							subViewModel.ProductGoToUrl = Url.RouteUrl("StaffingManager_default",
+								new
+								{
+									subscriptionId = userSubInfo.Subscription.SubscriptionId,
+									controller = ControllerConstants.Staffing
+								});
+							break;
+					}
+
+					subViewModel.IconUrl = string.Format("Content/icons/{0}.png", subViewModel.ProductName.Replace(" ", string.Empty));
+					orgViewModel.Subscriptions.Add(subViewModel);
+				}
+				indexViewModel.Organizations.Add(orgViewModel);
+			}
+
+			return indexViewModel;
+		}
+
+		/// <summary>
+		/// Gets the Starting date from an int value.
+		/// </summary>
+		/// <param name="startOfWeek">Integer value representing a date.</param>
+		/// <returns>A datetime object.</returns>
+		private DateTime SetStartingDate(int startOfWeek)
+		{
+			DateTime today = DateTime.Now;
+			int daysIntoTheWeek = (int)today.DayOfWeek < startOfWeek
+				? (int)today.DayOfWeek + (7 - startOfWeek)
+				: (int)today.DayOfWeek - startOfWeek;
+			return today.AddDays(-daysIntoTheWeek);
+		}
+	}
 }

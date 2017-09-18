@@ -1,27 +1,27 @@
-﻿CREATE PROCEDURE [Crm].[CreateCustomerInfo]
-	@Name NVARCHAR(32),
-    @Address NVARCHAR(100),
-    @City NVARCHAR(100), 
-    @State NVARCHAR(100), 
-    @Country NVARCHAR(100), 
-    @PostalCode NVARCHAR(50),
-	@ContactEmail NVARCHAR(384), 
-    @ContactPhoneNumber VARCHAR(50),
-	@FaxNumber VARCHAR(50),
-	@Website NVARCHAR(50),
-	@EIN NVARCHAR(50),
-	@OrganizationId INT,
-	@CustomerOrgId NVARCHAR(16),
+CREATE PROCEDURE [Crm].[CreateCustomerInfo]
+	@customerName NVARCHAR(32),
+    @address NVARCHAR(100),
+    @city NVARCHAR(100), 
+    @stateId int, 
+    @countryCode VARCHAR(8), 
+    @postalCode NVARCHAR(50),
+	@contactEmail NVARCHAR(384), 
+    @contactPhoneNumber VARCHAR(50),
+	@faxNumber VARCHAR(50),
+	@website NVARCHAR(50),
+	@eIN NVARCHAR(50),
+	@organizationId INT,
+	@customerOrgId NVARCHAR(16),
 	@retId INT OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @AddressId INT
+	DECLARE @addressId INT
 
 	IF EXISTS (
 		SELECT * FROM [Crm].[Customer] WITH (NOLOCK)
-		WHERE [CustomerOrgId] = @CustomerOrgId
+		WHERE [CustomerOrgId] = @customerOrgId
 	)
 	BEGIN
 		-- CustomerOrgId is not unique
@@ -29,24 +29,19 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		BEGIN TRANSACTION
-			INSERT INTO [Lookup].[Address]
-				([Address1],
-				[City],
-				[StateId],
-				[CountryId],
-				[PostalCode])
-			VALUES (@Address,
-				@City,
-				(SELECT [StateId] FROM [Lookup].[State] WITH (NOLOCK) WHERE [Name] = @State),
-				(SELECT [CountryId] FROM [Lookup].[Country] WITH (NOLOCK) WHERE [Name] = @Country),
-				@PostalCode)
 
-			SET @AddressId = SCOPE_IDENTITY();
+		begin tran t1
+
+			if (@address is not null  or @city is not null or @postalCode is not null or @stateId is not null or @countryCode is not null)
+			begin
+				exec @addressId = [Lookup].CreateAddress @address, null, @city, @stateId, @postalCode, @countryCode
+				if @@ERROR <> 0 
+					goto _failure
+			end
 
 			-- Create customer
 			INSERT INTO [Crm].[Customer] 
-				([Name], 
+				([CustomerName], 
 				[AddressId],
 				[ContactEmail], 
 				[ContactPhoneNumber], 
@@ -55,17 +50,29 @@ BEGIN
 				[EIN], 
 				[OrganizationId], 
 				[CustomerOrgId])
-			VALUES (@Name, 
-				@AddressId,
-				@ContactEmail, 
-				@ContactPhoneNumber, 
-				@FaxNumber, 
-				@Website, 
-				@EIN, 
-				@OrganizationId, 
-				@CustomerOrgId);
+			VALUES (@customerName, 
+				@addressId,
+				@contactEmail, 
+				@contactPhoneNumber, 
+				@faxNumber, 
+				@website, 
+				@eIN, 
+				@organizationId, 
+				@customerOrgId);
 			SET @retId = SCOPE_IDENTITY();
-		COMMIT TRANSACTION		
-	END
+			if (@@ERROR <> 0)
+					goto _failure
 	SELECT @retId;
+		_success:
+			begin
+				commit tran t1
+				return @retId;
+			end
+
+		_failure:
+			begin
+				rollback tran t1
+				return @retId;
+			end		
+	END
 END

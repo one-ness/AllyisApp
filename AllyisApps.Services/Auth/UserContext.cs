@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -17,21 +16,44 @@ namespace AllyisApps.Services
 	/// </summary>
 	public class UserContext
 	{
-		// TODO: Add project information somewhere here (in OrganizationInfo?)
+		/// <summary>
+		/// Gets or sets the database id of the user.
+		/// </summary>
+		public int UserId { get; set; }
+
+		/// <summary>
+		/// First name of the user.
+		/// </summary>
+		public string FirstName { get; set; }
+
+		/// <summary>
+		/// Last name of the user.
+		/// </summary>
+		public string LastName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the email of the user.
+		/// </summary>
+		public string Email { get; set; }
+
+		/// <summary>
+		/// Gets or sets the preferred language for this user.
+		/// </summary>
+		public string PreferedLanguageId { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserContext"/> class.
 		/// </summary>
 		public UserContext()
 		{
-			this.UserOrganizations = new Dictionary<int, UserOrganization>();
-			this.OrganizationSubscriptions = new Dictionary<int, UserSubscription>();
+			this.OrganizationsAndRoles = new Dictionary<int, OrganizationAndRole>();
+			this.SubscriptionsAndRoles = new Dictionary<int, SubscriptionAndRole>();
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserContext"/> class.
 		/// </summary>
-		public UserContext(int userId, string email, string firstName, string lastName, int preferredLanguageId = 0) : this()
+		public UserContext(int userId, string email, string firstName, string lastName, string preferredLanguageId = "en-US") : this()
 		{
 			if (userId <= 0) throw new ArgumentException("userId");
 			if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentException("firstName");
@@ -42,47 +64,40 @@ namespace AllyisApps.Services
 			this.UserId = userId;
 			this.FirstName = firstName;
 			this.LastName = lastName;
-			this.PrefferedLanguageId = preferredLanguageId;
+			this.PreferedLanguageId = preferredLanguageId;
 		}
 
 		/// <summary>
-		/// Gets or sets the database id of the user.
+		/// list of oragnizations this user belongs to and the role in each organization, indexed by organziation id
 		/// </summary>
-		public int UserId { get; set; }
+		public Dictionary<int, OrganizationAndRole> OrganizationsAndRoles { get; set; }
 
 		/// <summary>
-		/// First name of the user
+		/// list of subscriptions this user belongs to and the role in each subscription, indexed by subscription id
 		/// </summary>
-		public string FirstName { get; set; }
+		public Dictionary<int, SubscriptionAndRole> SubscriptionsAndRoles { get; set; }
 
 		/// <summary>
-		/// Last name of the user
+		/// organization and role
 		/// </summary>
-		public string LastName { get; set; }
+		public class OrganizationAndRole
+		{
+			public int OrganizationId { get; set; }
+			public OrganizationRole OrganizationRole { get; set; }
+		}
 
 		/// <summary>
-		/// Gets or sets the email of the user.
+		/// subscription and role information for the user
 		/// </summary>
-		[JsonIgnore]
-		public string Email { get; set; }
-
-		/// <summary>
-		/// Gets or sets the list of organizations the user is a member of, role in the organization, subscriptions each organization has subscribed to and user's role in that subscription.
-		/// </summary>
-		[JsonIgnore]
-		public Dictionary<int, UserOrganization> UserOrganizations { get; set; }
-
-		/// <summary>
-		/// Gets or sets the list of subscriptions this organization has.
-		/// If the user is not a member of that subscrption, then the role is set to NotAssigned
-		/// </summary>
-		[JsonIgnore]
-		public Dictionary<int, UserSubscription> OrganizationSubscriptions { get; set; }
-
-		/// <summary>
-		/// Gets or sets the preferred language for this user.
-		/// </summary>
-		[JsonIgnore]
-		public int PrefferedLanguageId { get; set; }
+		public class SubscriptionAndRole
+		{
+			public int SubscriptionId { get; set; }
+			public int OrganizationId { get; set; }
+			public SkuIdEnum SkuId { get; set; }
+			public ProductIdEnum ProductId { get; set; }
+			public int ProductRoleId { get; set; }
+			public string AreaUrl { get; set; }
+			public decimal MaxAmount { get; set; }
+		}
 	}
 }

@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
-using AllyisApps.Services;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
+using AllyisApps.Services;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -20,8 +20,8 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Exports a CSV report file.
 		/// </summary>
-		/// <param name="subscriptionId">The subscription's Id</param>
-		/// <param name="organizationId">The organization's Id</param>
+		/// <param name="subscriptionId">The subscription's Id.</param>
+		/// <param name="organizationId">The organization's Id.</param>
 		/// <param name="userId">Array of user Ids.</param>
 		/// <param name="dateRangeStart">The beginning of the date range(nullable).</param>
 		/// <param name="dateRangeEnd">The end of the date range (nullable).</param>

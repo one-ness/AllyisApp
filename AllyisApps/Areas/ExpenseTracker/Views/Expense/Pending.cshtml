@@ -1,0 +1,18 @@
+﻿@using AllyisApps.ViewModels.ExpenseTracker.Expense
+@model ExpensePendingModel
+@{
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/ExpenseTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
+	DisplayHints.LayoutThemeBundle = "~/Content/ExpenseTracker";
+	ViewBag.Title = "Pending Reports";
+}
+@if (Model.PendingReports.Count() > 0)
+{
+	@Html.Partial("_AjaxPendingEntries", Model)
+}
+else
+{
+	<span class="text-warning"
+		  style="font-size: 20px; text-align: center; display: block; margin-top: 100px;">
+		There are no pending reports to display.
+	</span>
+}

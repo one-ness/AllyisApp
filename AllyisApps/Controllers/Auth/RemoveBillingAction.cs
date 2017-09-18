@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Core.Alert;
+using AllyisApps.Services;
+using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
 {
@@ -21,6 +21,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Removes Billing information.
 		/// </summary>
+		/// <param name="id">Subscription plan id.</param>
 		/// <returns>Action result.</returns>
 		[HttpGet]
 		public ActionResult RemoveBilling(int id)

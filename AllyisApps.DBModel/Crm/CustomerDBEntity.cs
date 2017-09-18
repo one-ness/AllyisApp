@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="CustomerDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -11,7 +11,7 @@ namespace AllyisApps.DBModel.Crm
 	/// <summary>
 	/// Represents the Users table in the database.
 	/// </summary>
-	public class CustomerDBEntity
+	public class CustomerDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets CustomerId.
@@ -19,42 +19,52 @@ namespace AllyisApps.DBModel.Crm
 		public int CustomerId { get; set; }
 
 		/// <summary>
-		/// Gets or sets Name.
+		/// Gets or sets Customer Name.
 		/// </summary>
 		[DisplayName("Name")]
-		public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the customer's Address Id.
-        /// </summary>
-        public int AddressId { get; set; }
+		public string CustomerName { get; set; }
 
 		/// <summary>
-		/// Gets or sets Address.
+		/// Gets or sets the customer's Address Id.
 		/// </summary>
-		[DisplayName("Address")]
-		public string Address { get; set; }
+		public int? AddressId { get; set; }
 
-		/// <summary>
-		/// Gets or sets City.
-		/// </summary>
-		public string City { get; set; }
+		///// <summary>
+		///// Gets or sets Address.
+		///// </summary>
+		//[DisplayName("Address")]
+		//public string Address { get; set; }
 
-		/// <summary>
-		/// Gets or sets State.
-		/// </summary>
-		public string State { get; set; }
+		///// <summary>
+		///// Gets or sets City.
+		///// </summary>
+		//public string City { get; set; }
 
-		/// <summary>
-		/// Gets or sets Country.
-		/// </summary>
-		public string Country { get; set; }
+		///// <summary>
+		///// Gets or sets State.
+		///// </summary>
+		//public string StateName { get; set; }
 
-		/// <summary>
-		/// Gets or sets PostalCode.
-		/// </summary>
-		[DisplayName("Postal Code")]
-		public string PostalCode { get; set; }
+		///// <summary>
+		///// StateID for state Name
+		///// </summary>
+		//public int? StateId { get; set; }
+
+		///// <summary>
+		///// Gets or sets Country.
+		///// </summary>
+		//public string CountryName { get; set; }
+
+		///// <summary>
+		///// ISO ID for country
+		///// </summary>
+		//public string CountryCode { get; set; }
+
+		///// <summary>
+		///// Gets or sets PostalCode.
+		///// </summary>
+		//[DisplayName("Postal Code")]
+		//public string PostalCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets Email.
@@ -98,13 +108,13 @@ namespace AllyisApps.DBModel.Crm
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the id of the customer to be used by users within the organization
+		/// Gets or sets the id of the customer to be used by users within the organization.
 		/// </summary>
 		public string CustomerOrgId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the IsActive bool value for the customer. True means currently active
+		/// Gets or sets the IsActive bool value for the customer. True means currently active.
 		/// </summary>
-		public bool IsActive { get; set; }
+		public bool? IsActive { get; set; }
 	}
 }

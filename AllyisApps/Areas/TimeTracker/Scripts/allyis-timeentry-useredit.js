@@ -271,89 +271,89 @@ $(document).ready(function () {
 //};
 //var MODULE = null;
 //$(document).ready(function () {
-    //MODULE = new ArbitrarySearcher();
+	//MODULE = new ArbitrarySearcher();
 
-    //function process($ele) {
-    //    var $collapsible = $ele.closest(".search-collapsible");
-    //    return {
-    //        $collapsible: $collapsible,
-    //        $collapsible_parent: $collapsible.closest(".search-collapsible-parent-title"),
-    //        $collapsible_title: $collapsible.closest(".search-collapsible-parent-title")
-    //    }
-    //}
+	//function process($ele) {
+	//    var $collapsible = $ele.closest(".search-collapsible");
+	//    return {
+	//        $collapsible: $collapsible,
+	//        $collapsible_parent: $collapsible.closest(".search-collapsible-parent-title"),
+	//        $collapsible_title: $collapsible.closest(".search-collapsible-parent-title")
+	//    }
+	//}
 
-    ////// all this is for expanding
-    //function getDomElement(element) {
-    //    if (element instanceof jQuery)
-    //        return element.get()
-    //    return element
-    //}
-    //getPrivateId = function () {
-    //    var expando_callback_id_counter = 0;
-    //    var getPrivateId = function (dom_element) {
-    //        dom_element = getDomElement(dom_element);
-    //        if (!dom_element.expando_callback_id) {
-    //            dom_element.expando_callback_id = expando_callback_id_counter;
-    //            expando_callback_id_counter += 1;
-    //        }
-    //        return dom_element.expando_callback_id
-    //    }
-    //    return getPrivateId;
-    //}()
-    //var expand_list = null;
-    //function expand_list_callback() {
-    //    if (expand_list) {
-    //        _.each(expand_list, function (value, key) {
-    //            // key is irrelevant, the value is our dom object
-    //            if (value.search_expand) {
-    //                $(value).collapse("show");
-    //            } else {
-    //                $(value).collapse("hide");
-    //            }
-    //        })
-    //        expand_list = null;
-    //    }
-    //}
+	////// all this is for expanding
+	//function getDomElement(element) {
+	//    if (element instanceof jQuery)
+	//        return element.get()
+	//    return element
+	//}
+	//getPrivateId = function () {
+	//    var expando_callback_id_counter = 0;
+	//    var getPrivateId = function (dom_element) {
+	//        dom_element = getDomElement(dom_element);
+	//        if (!dom_element.expando_callback_id) {
+	//            dom_element.expando_callback_id = expando_callback_id_counter;
+	//            expando_callback_id_counter += 1;
+	//        }
+	//        return dom_element.expando_callback_id
+	//    }
+	//    return getPrivateId;
+	//}()
+	//var expand_list = null;
+	//function expand_list_callback() {
+	//    if (expand_list) {
+	//        _.each(expand_list, function (value, key) {
+	//            // key is irrelevant, the value is our dom object
+	//            if (value.search_expand) {
+	//                $(value).collapse("show");
+	//            } else {
+	//                $(value).collapse("hide");
+	//            }
+	//        })
+	//        expand_list = null;
+	//    }
+	//}
 
-    //var expando_callbacks = {
-    //    before: function ($ele, data) {
-    //        //initialize if it hasn't been already
-    //        if (!expand_list)
-    //            expand_list = {}
-    //        $ele.parents(".search-expand").each(function () {
-    //            getDomElement(this).search_expand = false; // mark it to collapse by default
-    //            expand_list[getPrivateId(this)] = this; //just to keep it around
-    //        })
-    //    },
-    //    included: function ($ele, data) {
-    //        $ele.parents(".search-expand").each(function () {
-    //            getDomElement(this).search_expand = this; // mark it to expand
-    //        })
-    //    },
-    //    after: expand_list_callback
-    //}
+	//var expando_callbacks = {
+	//    before: function ($ele, data) {
+	//        //initialize if it hasn't been already
+	//        if (!expand_list)
+	//            expand_list = {}
+	//        $ele.parents(".search-expand").each(function () {
+	//            getDomElement(this).search_expand = false; // mark it to collapse by default
+	//            expand_list[getPrivateId(this)] = this; //just to keep it around
+	//        })
+	//    },
+	//    included: function ($ele, data) {
+	//        $ele.parents(".search-expand").each(function () {
+	//            getDomElement(this).search_expand = this; // mark it to expand
+	//        })
+	//    },
+	//    after: expand_list_callback
+	//}
 
-    //MODULE.init({
-    //    input: $("#SearchInput"),
-    //    targets: [
-    //      { // customers
-    //          target: $("#customer-panel"),
-    //          elements: function ($target) {
-    //              return $target.find("> .panel > .panel-heading > a")
-    //          },
-    //          before: expando_callbacks.before,
-    //          included: expando_callbacks.included,
-    //          after: expando_callbacks.after
-    //      },
-    //      { // unexpandable projects list
-    //          target: $("#customer-panel"),
-    //          elements: function ($target) {
-    //              return $target.find("> .panel > .panel-collapse > div > .list-group > .list-group-item > .accordion-toggle")
-    //          },
-    //          before: expando_callbacks.before,
-    //          included: expando_callbacks.included,
-    //          after: expando_callbacks.after
-    //      }
-    //    ]
-    //})
+	//MODULE.init({
+	//    input: $("#SearchInput"),
+	//    targets: [
+	//      { // customers
+	//          target: $("#customer-panel"),
+	//          elements: function ($target) {
+	//              return $target.find("> .panel > .panel-heading > a")
+	//          },
+	//          before: expando_callbacks.before,
+	//          included: expando_callbacks.included,
+	//          after: expando_callbacks.after
+	//      },
+	//      { // unexpandable projects list
+	//          target: $("#customer-panel"),
+	//          elements: function ($target) {
+	//              return $target.find("> .panel > .panel-collapse > div > .list-group > .list-group-item > .accordion-toggle")
+	//          },
+	//          before: expando_callbacks.before,
+	//          included: expando_callbacks.included,
+	//          after: expando_callbacks.after
+	//      }
+	//    ]
+	//})
 //});

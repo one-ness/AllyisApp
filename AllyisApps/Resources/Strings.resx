@@ -235,7 +235,7 @@
     <value>{0} users changed roles in organization.</value>
   </data>
   <data name="UsersChangedRolesInTimeTracker" xml:space="preserve">
-    <value>Users changed roles in Time Tracker.</value>
+    <value>{0} users changed roles in Time Tracker.</value>
   </data>
   <data name="UsersRemovedFromOrg" xml:space="preserve">
     <value>{0} users were removed from the organization.</value>
@@ -982,7 +982,7 @@
     <value>The entered passwords do not match.</value>
   </data>
   <data name="PasswordLengthValidation" xml:space="preserve">
-    <value>Your password must be at least 12 characters long.</value>
+    <value>Your password must be at least 8 characters long.</value>
   </data>
   <data name="PasswordValidation" xml:space="preserve">
     <value>Please enter your password.</value>
@@ -1494,5 +1494,50 @@
   </data>
   <data name="NoOrganizationMessage" xml:space="preserve">
     <value>You are not a member of any organization yet. Please contact your employer to send you an invitation, or you can create your own, by clicking the Create Organization button.</value>
+  </data>
+  <data name="MustSelectActiveProject" xml:space="preserve">
+    <value>You cant edit a time entry on a project that is Deactivated</value>
+  </data>
+  <data name="CreatePosition" xml:space="preserve">
+    <value>Create Position</value>
+  </data>
+  <data name="DeletePosition" xml:space="preserve">
+    <value>Delete Position</value>
+  </data>
+  <data name="DesiredSkills" xml:space="preserve">
+    <value>Desired Skills</value>
+  </data>
+  <data name="DurationMonths" xml:space="preserve">
+    <value>Duration of Position (Months)</value>
+  </data>
+  <data name="HiringManager" xml:space="preserve">
+    <value>Hiring Manager</value>
+  </data>
+  <data name="JobResponsibilities" xml:space="preserve">
+    <value>Job Responsibilities</value>
+  </data>
+  <data name="TeamName" xml:space="preserve">
+    <value>Team Name</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="RegistationSucessful" xml:space="preserve">
+    <value>Registation is successful Please verify email address.</value>
+  </data>
+  <data name="YouMustRegisterYourEmailAddress" xml:space="preserve">
+    <value>You must Register Your Email Address</value>
+  </data>
+  <data name="ExpenseTracker" xml:space="preserve">
+    <value>ExpenseTracker</value>
+  </data>
+  <data name="UserAddedToExpenseTracker" xml:space="preserve">
+    <value>{0} users added to Expense Tracker.</value>
+  </data>
+  <data name="UserChangedRolesInExpenseTracker" xml:space="preserve">
+    <value>{0} user roles changed in Expense Tracker.</value>
+  </data>
+  <data name="ExpenseTrackerRole" xml:space="preserve">
+    <value>ExpenseTracker Roles</value>
   </data>
 </root>

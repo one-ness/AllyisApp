@@ -1,13 +1,13 @@
-﻿using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.DBModel.TimeTracker;
-using AllyisApps.Lib;
-using AllyisApps.Services.TimeTracker;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.TimeTracker;
+using AllyisApps.Lib;
+using AllyisApps.Services.TimeTracker;
 
 namespace AllyisApps.Services
 {
@@ -23,23 +23,24 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Import data from a workbook. Imports customers, projects, users, project/user relationships, and/or time entry data.
 		/// </summary>
-		/// <param name="subscriptionId">subscriptionId</param>
+		/// <param name="subscriptionId">SubscriptionId.</param>
 		/// <param name="importData">Workbook with data to import.</param>
-		/// <param name="organizationId">The organization's Id</param>
-		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0)
+		/// <param name="organizationId">The organization's Id.</param>
+		/// <param name="inviteUrl">Used for userImport when adding users via AddMemberPage</param>
+		public ImportActionResult Import(DataSet importData, int subscriptionId = 0, int organizationId = 0, string inviteUrl = null)
 		{
 			int orgId;
-			if (subscriptionId > 0 && UserContext.OrganizationSubscriptions[subscriptionId] != null)
+			if (subscriptionId > 0 && UserContext.SubscriptionsAndRoles[subscriptionId] != null)
 			{
-				orgId = UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
+				orgId = UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			}
-			else if (organizationId > 0 && UserContext.UserOrganizations[organizationId] != null)
+			else if (organizationId > 0 && UserContext.OrganizationsAndRoles[organizationId] != null)
 			{
 				orgId = organizationId;
 			}
 			else
 			{
-				return null; //subsciptionId and/or organization id are invalid
+				return null; // subsciptionId and/or organization id are invalid
 			}
 
 			// For some reason, linq won't work directly with DataSets, so we start by just moving the tables over to a linq-able List
@@ -75,7 +76,7 @@ namespace AllyisApps.Services
 			// Retrieval of existing pay class data
 			List<PayClass> payClasses = DBHelper.GetPayClasses(orgId).Select(pc => InitializePayClassInfo(pc)).ToList();
 
-			//Result object
+			// Result object
 			ImportActionResult result = new ImportActionResult();
 
 			// Loop through and see what can be imported from each table in turn. Order doesn't matter, since missing information
@@ -125,8 +126,8 @@ namespace AllyisApps.Services
 
 				// Non-required project columns
 
-				//TODO use this line once project isHourly property is supported.  Currently disabled
-				//bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
+				// TODO use this line once project isHourly property is supported.  Currently disabled
+				// bool hasProjectType = table.Columns.Contains(ColumnHeaders.ProjectType);
 				bool hasProjectStartDate = table.Columns.Contains(ColumnHeaders.ProjectStartDate);
 				bool hasProjectEndDate = table.Columns.Contains(ColumnHeaders.ProjectEndDate);
 				bool hasNonRequiredProjectInfo = /*hasProjectType ||*/ hasProjectStartDate || hasProjectEndDate;
@@ -191,7 +192,7 @@ namespace AllyisApps.Services
 					if (hasCustomerName || hasCustomerId)
 					{
 						// Find the existing customer using name, or id if name isn't on this sheet.
-						customer = customersProjects.Select(tup => tup.Item1).Where(c => hasCustomerName ? c.Name.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerOrgId.Equals(row[ColumnHeaders.CustomerId].ToString())).FirstOrDefault();
+						customer = customersProjects.Select(tup => tup.Item1).Where(c => hasCustomerName ? c.CustomerName.Equals(row[ColumnHeaders.CustomerName].ToString()) : c.CustomerOrgId.Equals(row[ColumnHeaders.CustomerId].ToString())).FirstOrDefault();
 						if (customer == null)
 						{
 							if (canCreateCustomers)
@@ -219,7 +220,7 @@ namespace AllyisApps.Services
 
 									newCustomer = new Customer
 									{
-										Name = name,
+										CustomerName = name,
 										CustomerOrgId = custOrgId,
 										OrganizationId = orgId
 									};
@@ -254,7 +255,7 @@ namespace AllyisApps.Services
 
 									newCustomer = new Customer
 									{
-										Name = hasCustomerName ? knownValue : readValue,
+										CustomerName = hasCustomerName ? knownValue : readValue,
 										CustomerOrgId = hasCustomerName ? readValue : knownValue,
 										OrganizationId = orgId
 									};
@@ -265,14 +266,14 @@ namespace AllyisApps.Services
 									int? newCustomerId = this.CreateCustomer(newCustomer, subscriptionId);
 									if (newCustomerId == null)
 									{
-										result.CustomerFailures.Add(string.Format("Could not create customer {0}: permission failure.", newCustomer.Name));
+										result.CustomerFailures.Add(string.Format("Could not create customer {0}: permission failure.", newCustomer.CustomerName));
 										continue;
 									}
 
 									newCustomer.CustomerId = newCustomerId.Value;
 									if (newCustomer.CustomerId == -1)
 									{
-										result.CustomerFailures.Add(string.Format("Database error while creating customer {0}.", newCustomer.Name));
+										result.CustomerFailures.Add(string.Format("Database error while creating customer {0}.", newCustomer.CustomerName));
 										continue;
 									}
 
@@ -296,11 +297,11 @@ namespace AllyisApps.Services
 						{
 							bool updated = false;
 
-							if (hasCustomerStreetAddress) updated = this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address = val) || updated;
-							if (hasCustomerCity) updated = this.readColumn(row, ColumnHeaders.CustomerCity, val => customer.City = val) || updated;
-							if (hasCustomerCountry) updated = this.readColumn(row, ColumnHeaders.CustomerCountry, val => customer.Country = val) || updated;
-							if (hasCustomerState) updated = this.readColumn(row, ColumnHeaders.CustomerState, val => customer.State = val) || updated;
-							if (hasCustomerPostalCode) updated = this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => customer.PostalCode = val) || updated;
+							if (hasCustomerStreetAddress) updated = this.readColumn(row, ColumnHeaders.CustomerStreetAddress, val => customer.Address.Address1 = val) || updated;
+							if (hasCustomerCity) updated = this.readColumn(row, ColumnHeaders.CustomerCity, val => customer.Address.City = val) || updated;
+							if (hasCustomerCountry) updated = this.readColumn(row, ColumnHeaders.CustomerCountry, val => customer.Address.CountryName = val) || updated;
+							if (hasCustomerState) updated = this.readColumn(row, ColumnHeaders.CustomerState, val => customer.Address.StateName = val) || updated;
+							if (hasCustomerPostalCode) updated = this.readColumn(row, ColumnHeaders.CustomerPostalCode, val => customer.Address.PostalCode = val) || updated;
 							if (hasCustomerEmail) updated = this.readColumn(row, ColumnHeaders.CustomerEmail, val => customer.ContactEmail = val) || updated;
 							if (hasCustomerPhoneNumber) updated = this.readColumn(row, ColumnHeaders.CustomerPhoneNumber, val => customer.ContactPhoneNumber = val) || updated;
 							if (hasCustomerFaxNumber) updated = this.readColumn(row, ColumnHeaders.CustomerFaxNumber, val => customer.FaxNumber = val) || updated;
@@ -362,7 +363,7 @@ namespace AllyisApps.Services
 						{
 							// We now have the customer and at least one piece of identifying project information. That's enough to tell if the project already exists.
 							project = customersProjects.Where(tup => tup.Item1.CustomerId == customer.CustomerId).FirstOrDefault().Item2.Where(
-								p => thisRowHasProjectName ? p.Name.Equals(knownValue) : p.ProjectOrgId.Equals(knownValue)).FirstOrDefault();
+								p => thisRowHasProjectName ? p.ProjectName.Equals(knownValue) : p.ProjectOrgId.Equals(knownValue)).FirstOrDefault();
 							if (project == null)
 							{
 								// Project does not exist, so we should create it
@@ -399,8 +400,8 @@ namespace AllyisApps.Services
 								project = new Project
 								{
 									CustomerId = customer.CustomerId,
-									Name = thisRowHasProjectName ? knownValue : readValue,
-									IsHourly = false, //TODO un-hardcode once project isHourly property is supported.  Currently disabled
+									ProjectName = thisRowHasProjectName ? knownValue : readValue,
+									IsHourly = false, // TODO un-hardcode once project isHourly property is supported.  Currently disabled
 									OrganizationId = orgId,
 									ProjectOrgId = thisRowHasProjectName ? readValue : knownValue,
 									StartingDate = defaultProjectStartDate,
@@ -409,7 +410,7 @@ namespace AllyisApps.Services
 								project.ProjectId = this.CreateProject(project);
 								if (project.ProjectId == -1)
 								{
-									result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.Name));
+									result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.ProjectName));
 									project = null;
 								}
 								else
@@ -421,7 +422,7 @@ namespace AllyisApps.Services
 						}
 						else
 						{
-							//if(!canImportProjects)
+							// if(!canImportProjects)
 							//{
 							//    result.ProjectFailures.Add(string.Format("Could not create project {0}: no corresponding {1}.", knownValue, thisRowHasProjectName ? ColumnHeaders.ProjectId : ColumnHeaders.ProjectName));
 							//    continue;
@@ -482,7 +483,7 @@ namespace AllyisApps.Services
 							// After that, if we don't have all the information, it's safe to say it can't be found
 							if (!string.IsNullOrEmpty(fields[2]))
 							{
-								customer = customersProjects.Select(tup => tup.Item1).Where(c => customerFieldIsName ? c.Name.Equals(fields[2]) : c.CustomerOrgId.Equals(fields[2])).FirstOrDefault();
+								customer = customersProjects.Select(tup => tup.Item1).Where(c => customerFieldIsName ? c.CustomerName.Equals(fields[2]) : c.CustomerOrgId.Equals(fields[2])).FirstOrDefault();
 
 								if (customer == null)
 								{
@@ -490,7 +491,7 @@ namespace AllyisApps.Services
 									continue;
 								}
 
-								project = customersProjects.Where(tup => tup.Item1.CustomerId == customer.CustomerId).FirstOrDefault().Item2.Where(p => p.Name.Equals(fields[0])).FirstOrDefault();
+								project = customersProjects.Where(tup => tup.Item1.CustomerId == customer.CustomerId).FirstOrDefault().Item2.Where(p => p.ProjectName.Equals(fields[0])).FirstOrDefault();
 								if (project == null)
 								{
 									// Project does not exist, so we should create it
@@ -504,8 +505,8 @@ namespace AllyisApps.Services
 									project = new Project
 									{
 										CustomerId = customer.CustomerId,
-										Name = fields[0],
-										IsHourly = false,  //TODO un-hardocode once project isHourly property is supported.  Currently disabled
+										ProjectName = fields[0],
+										IsHourly = false,  // TODO un-hardocode once project isHourly property is supported.  Currently disabled
 										OrganizationId = orgId,
 										ProjectOrgId = fields[1],
 										StartingDate = defaultProjectStartDate,
@@ -514,7 +515,7 @@ namespace AllyisApps.Services
 									project.ProjectId = this.CreateProject(project);
 									if (project.ProjectId == -1)
 									{
-										result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.Name));
+										result.ProjectFailures.Add(string.Format("Database error while creating project {0}", project.ProjectName));
 										project = null;
 									}
 									else
@@ -530,8 +531,8 @@ namespace AllyisApps.Services
 								project = customersProjects.Select(
 									tup => tup.Item2).Select(
 										plst => plst.Where(
-											p => thisRowHasProjectName ? p.Name.Equals(knownValue) && (!string.IsNullOrEmpty(fields[1]) ? p.ProjectOrgId.Equals(fields[1]) : true) :
-												p.ProjectOrgId.Equals(knownValue) && (!string.IsNullOrEmpty(fields[0]) ? p.Name.Equals(fields[0]) : true)
+											p => thisRowHasProjectName ? p.ProjectName.Equals(knownValue) && (!string.IsNullOrEmpty(fields[1]) ? p.ProjectOrgId.Equals(fields[1]) : true) :
+												p.ProjectOrgId.Equals(knownValue) && (!string.IsNullOrEmpty(fields[0]) ? p.ProjectName.Equals(fields[0]) : true)
 										).FirstOrDefault()
 									).Where(p => p != null).FirstOrDefault();
 
@@ -550,8 +551,8 @@ namespace AllyisApps.Services
 							string startDate = null;
 							string endDate = null;
 
-							//TODO use this line once project isHourly property is supported.  Currently disabled
-							//if (hasProjectType) updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.isHourly = val) || updated;
+							// TODO use this line once project isHourly property is supported.  Currently disabled
+							// if (hasProjectType) updated = this.readColumn(row, ColumnHeaders.ProjectType, val => project.isHourly = val) || updated;
 							if (hasProjectStartDate) updated = this.readColumn(row, ColumnHeaders.ProjectStartDate, val => startDate = val) || updated;
 							if (hasProjectEndDate) updated = this.readColumn(row, ColumnHeaders.ProjectEndDate, val => endDate = val) || updated;
 							if (startDate != null) project.StartingDate = DateTime.Parse(startDate);
@@ -568,7 +569,7 @@ namespace AllyisApps.Services
 
 					#region User Import
 
-					User user = null;
+					User userInOrg = null;
 					if (hasUserEmail || hasEmployeeId || hasUserName)
 					{
 						Tuple<string, User> userTuple = null;
@@ -590,7 +591,7 @@ namespace AllyisApps.Services
 								{
 									userTuple = users.Where(tup => tup.Item1.Equals(readValue)).FirstOrDefault();
 								}
-							}
+							}//Remove logic only email matters.
 							if (userTuple == null)
 							{
 								string readLastName = null;
@@ -600,9 +601,9 @@ namespace AllyisApps.Services
 								}
 							}
 						}
-						user = userTuple == null ? null : userTuple.Item2;
+						userInOrg = userTuple == null ? null : userTuple.Item2;
 
-						if (user == null)
+						if (userInOrg == null)
 						{
 							if (canImportUsers)
 							{
@@ -616,7 +617,7 @@ namespace AllyisApps.Services
                                     // have a user who's name includes the text __IMPORT__
                                     hasUserName ? (row[ColumnHeaders.UserFirstName].ToString() == "" || row[ColumnHeaders.UserLastName].ToString() == "" ? null : row[ColumnHeaders.UserFirstName].ToString() + "__IMPORT__" + row[ColumnHeaders.UserLastName].ToString()) : null
 								};
-								//if (fields[2] == "__IMPORT__") fields[2] = null;
+								// if (fields[2] == "__IMPORT__") fields[2] = null;
 
 								/*
                                     There are 3 required fields, and we may need to traverse at most 2 links to get them all, with no knowledge of which links will succeed or fail in providing
@@ -678,55 +679,20 @@ namespace AllyisApps.Services
 
 								try
 								{
-									user = this.GetUserByEmail(fields[0]); // User may already exist, but not be a member of this organization
-									if (user == null)
+									//user = this.GetUserByEmail(fields[0]); // User may already exist, but not be a member of this organization
+									InvitationInfo inviteInfo = new InvitationInfo()
 									{
-										user = new User()
-										{
-											Email = fields[0],
-											FirstName = names[0],
-											LastName = names[1],
-											EmailConfirmationCode = Guid.NewGuid(),
-											// TODO: Figure out a better default password generation system
-											PasswordHash = Crypto.GetPasswordHash("password")
-										};
-										try
-										{
-											var task = DBHelper.CreateUserAsync(GetDBEntityFromUser(user));
-											task.RunSynchronously();
-											result.UsersImported += 1;
-											user.UserId = task.Result;
-										}
-										catch
-										{
-											result.UserFailures.Add(string.Format("Could not create user {0}, {1}: error adding user to database.", names[0], names[1]));
-										}
-									}
-									if (user.UserId != -1)
-									{
-										try
-										{
-											//get the id of employeeType, if not found default to Salaried
-											DBHelper.CreateOrganizationUser(new OrganizationUserDBEntity()
-											{
-												EmployeeId = fields[1],
-												OrganizationId = orgId,
-												OrganizationRoleId = (int)(OrganizationRole.Member),
-											});
-											result.UsersAddedToOrganization += 1;
-										}
-										catch (System.Data.SqlClient.SqlException)
-										{
-											result.OrgUserFailures.Add(string.Format("Database error assigning user {0} {1} to organization. Could be a duplicate employee id ({2}).", names[0], names[1], fields[1]));
-											continue;
-										}
-										users.Add(new Tuple<string, User>(fields[1], user));
-									}
-									else
-									{
-										result.UserFailures.Add(string.Format("Database error creating user {0} {1}.", names[0], names[1]));
-										continue;
-									}
+										OrganizationId = orgId,
+										Email = fields[0].Trim(),
+										EmployeeId = fields[1],
+										FirstName = names[0],
+										LastName = names[1],
+										OrganizationRole = OrganizationRole.Member
+									};
+
+									int x = InviteUser(inviteUrl, inviteInfo);
+
+									result.UsersImported += 1;
 								}
 								catch (System.Data.SqlClient.SqlException)
 								{
@@ -737,13 +703,13 @@ namespace AllyisApps.Services
 						}
 
 						// Importing non-required user data
-						if (user != null && hasNonRequiredUserInfo)
+						if (userInOrg != null && hasNonRequiredUserInfo)//If user exists then allow org to change user. 
 						{
 							bool updated = false;
-
-							if (hasUserAddress) updated = this.readColumn(row, ColumnHeaders.UserAddress, val => user.Address.Address1 = val) || updated;
-							if (hasUserCity) updated = this.readColumn(row, ColumnHeaders.UserCity, val => user.Address.City = val) || updated;
-							if (hasUserCountry) updated = this.readColumn(row, ColumnHeaders.UserCountry, val => user.Address.CountryId = val) || updated;
+							/* This allows any org to change thier users infomation Org are items of users, users are not properties of orgs */
+							if (hasUserAddress) updated = this.readColumn(row, ColumnHeaders.UserAddress, val => userInOrg.Address.Address1 = val) || updated;
+							if (hasUserCity) updated = this.readColumn(row, ColumnHeaders.UserCity, val => userInOrg.Address.City = val) || updated;
+							if (hasUserCountry) updated = this.readColumn(row, ColumnHeaders.UserCountry, val => userInOrg.Address.CountryName = val) || updated;
 							string dateOfBirth = null;
 							if (hasUserDateOfBirth) updated = this.readColumn(row, ColumnHeaders.UserDateOfBirth, val => dateOfBirth = val) || updated;
 							if (!string.IsNullOrEmpty(dateOfBirth))
@@ -752,23 +718,24 @@ namespace AllyisApps.Services
 								DateTime.TryParse(dateOfBirth, out dob);
 								if (DateTime.Compare(dob, DateTime.MinValue) <= 0)
 								{
-									result.UserFailures.Add(string.Format("The birthdate entered for {0} {1} was invalid. Please check to make sure it's in date format: dd/mm/yyyy and preferably after 1900 ", user.FirstName, user.LastName));
+									result.UserFailures.Add(string.Format("The birthdate entered for {0} {1} was invalid. Please check to make sure it's in date format: dd/mm/yyyy and preferably after 1900 ", userInOrg.FirstName, userInOrg.LastName));
 								}
 								else
 								{
-									user.DateOfBirth = dob;
+									userInOrg.DateOfBirth = dob;
 								}
 							}
 
-							if (hasUserPhoneExtension) updated = this.readColumn(row, ColumnHeaders.UserPhoneExtension, val => user.PhoneExtension = val) || updated;
-							if (hasUserPhoneNumber) updated = this.readColumn(row, ColumnHeaders.UserPhoneNumber, val => user.PhoneNumber = val) || updated;
-							if (hasUserPostalCode) updated = this.readColumn(row, ColumnHeaders.UserPostalCode, val => user.Address.PostalCode = val) || updated;
-							if (hasUserState) updated = this.readColumn(row, ColumnHeaders.UserState, val => user.Address.State = val) || updated;
+							if (hasUserPhoneExtension) updated = this.readColumn(row, ColumnHeaders.UserPhoneExtension, val => userInOrg.PhoneExtension = val) || updated;
+							if (hasUserPhoneNumber) updated = this.readColumn(row, ColumnHeaders.UserPhoneNumber, val => userInOrg.PhoneNumber = val) || updated;
+							if (hasUserPostalCode) updated = this.readColumn(row, ColumnHeaders.UserPostalCode, val => userInOrg.Address.PostalCode = val) || updated;
+							if (hasUserState) updated = this.readColumn(row, ColumnHeaders.UserState, val => userInOrg.Address.StateName = val) || updated;
 
 							if (updated)
 							{
-								this.SaveUserInfo(user);
+								this.UpdateUserProfile(userInOrg.UserId, this.GetDaysFromDateTime(userInOrg.DateOfBirth), userInOrg.FirstName, userInOrg.LastName, userInOrg.PhoneNumber, userInOrg.Address?.AddressId, userInOrg.Address?.Address1, userInOrg.Address?.City, userInOrg.Address?.StateId, userInOrg.Address?.PostalCode, userInOrg.Address?.CountryCode);
 							}
+
 						}
 					}
 
@@ -779,13 +746,13 @@ namespace AllyisApps.Services
 					if (canImportProjectUser)
 					{
 						// Double-check that previous adding/finding of project and user didn't fail
-						if (project != null && user != null)
+						if (project != null && userInOrg != null)
 						{
 							// Find existing project user
-							if (!this.GetProjectsByUserAndOrganization(user.UserId).Where(p => p.ProjectId == project.ProjectId).Any())
+							if (!this.GetProjectsByUserAndOrganization(userInOrg.UserId).Where(p => p.ProjectId == project.ProjectId).Any())
 							{
 								// If no project user entry exists for this user and project, we create one.
-								this.CreateProjectUser(project.ProjectId, user.UserId);
+								this.CreateProjectUser(project.ProjectId, userInOrg.UserId);
 							}
 
 							// Time Entry Import
@@ -793,11 +760,11 @@ namespace AllyisApps.Services
 							{
 								// Check for subscription role
 								bool canImportThisEntry = false;
-								if (!userSubs.Where(u => u.UserId == user.UserId).Any())
+								if (!userSubs.Where(u => u.UserId == userInOrg.UserId).Any())
 								{
 									// No existing subscription for this user, so we create one.
-									this.DBHelper.UpdateSubscriptionUserProductRole((int)(TimeTrackerRole.User), ttSub.SubscriptionId, user.UserId);
-									userSubs.Add(user);
+									this.DBHelper.UpdateSubscriptionUserProductRole((int)(TimeTrackerRole.User), ttSub.SubscriptionId, userInOrg.UserId);
+									userSubs.Add(userInOrg);
 									result.UsersAddedToSubscription += 1;
 									canImportThisEntry = true; // Successfully created.
 								}
@@ -820,7 +787,7 @@ namespace AllyisApps.Services
 									if (hasTTDescription) this.readColumn(row, ColumnHeaders.Description, val => description = val);
 									this.readColumn(row, ColumnHeaders.PayClass, val => payclass = val);
 
-									PayClass payClass = payClasses.Where(p => p.Name.ToUpper().Equals(payclass.ToUpper())).SingleOrDefault();
+									PayClass payClass = payClasses.Where(p => p.PayClassName.ToUpper().Equals(payclass.ToUpper())).SingleOrDefault();
 									DateTime theDate;
 									float? theDuration;
 
@@ -846,15 +813,15 @@ namespace AllyisApps.Services
 										result.TimeEntryFailures.Add(string.Format("You must enter the duration as HH:MM or H.HH format for the date {0}", theDate));
 										continue;
 									}
-									if(this.ParseDuration(duration) == 0)
+									if (this.ParseDuration(duration) == 0)
 									{
 										result.TimeEntryFailures.Add(string.Format("You must enter a time larger than 00:00 for the date {0}", theDate));
 										continue;
 									}
 
 									// Find existing entry. If none, create new one     TODO: See if there's a good way to populate this by sheet rather than by row, or once at the top
-									List<TimeEntryDBEntity> entries = DBHelper.GetTimeEntriesByUserOverDateRange(new List<int> { user.UserId }, orgId, theDate, theDate).ToList();
-									if (!entries.Where(e => e.Description.Equals(description) && e.Duration == theDuration && e.PayClassId == payClass.PayClassId && e.ProjectId == project.ProjectId).Any())
+									List<TimeEntryDBEntity> entries = DBHelper.GetTimeEntriesByUserOverDateRange(new List<int> { userInOrg.UserId }, orgId, theDate, theDate).ToList();
+									if (!entries.Where(e => ((e.Description == null && description.Equals("")) || description.Equals(e.Description)) && e.Duration == theDuration && e.PayClassId == payClass.PayClassId && e.ProjectId == project.ProjectId).Any())
 									{
 										if (entries.Select(e => e.Duration).Sum() + theDuration > 24)
 										{
@@ -867,12 +834,12 @@ namespace AllyisApps.Services
 										{
 											Date = theDate,
 											Description = description,
-											Duration = theDuration.Value, //value is verified earlier
-											FirstName = user.FirstName,
-											LastName = user.LastName,
+											Duration = theDuration.Value, // value is verified earlier
+											FirstName = userInOrg.FirstName,
+											LastName = userInOrg.LastName,
 											PayClassId = payClass.PayClassId,
 											ProjectId = project.ProjectId,
-											UserId = user.UserId
+											UserId = userInOrg.UserId
 										}) == -1)
 										{
 											result.TimeEntryFailures.Add(string.Format("Database error importing time entry on sheet {0}, row {1}.", table.TableName, table.Rows.IndexOf(row) + 2));
@@ -931,7 +898,7 @@ namespace AllyisApps.Services
 		{
 			try
 			{
-				fromValue = fromValue.Replace("'", "''"); //Escape any 's in the names
+				fromValue = fromValue.Replace("'", "''"); // Escape any 's in the names
 				string selectText = null;
 				if (fieldIdFrom == 2)
 				{

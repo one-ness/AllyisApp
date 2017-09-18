@@ -1,27 +1,32 @@
-﻿CREATE PROCEDURE [Crm].[GetCustomersByOrgId]
-	@OrgId INT
+CREATE PROCEDURE [Crm].[GetCustomersByOrgId]
+	@orgId INT
 AS
 	BEGIN
 	SET NOCOUNT ON;
 	SELECT [Customer].[CustomerId],
-		   [Customer].[Name],
+		   [Customer].[CustomerName],
 		   [Address1] AS 'Address',
 		   [City],
-		   [State].[Name] AS 'State',
-		   [Country].[Name] AS 'Country',
+		   [State].[StateName] AS 'StateName',
+		   [State].[StateId],
+		   [Country].[CountryName] AS 'CountryName',
+		   [Country].[CountryCode],
 		   [PostalCode],
 		   [Customer].[ContactEmail],
 		   [Customer].[ContactPhoneNumber],
 		   [Customer].[FaxNumber],
 		   [Customer].[Website],
 		   [Customer].[EIN],
-		   [Customer].[CreatedUtc],
-		   [Customer].[CustomerOrgId]
+		   [Customer].[CustomerCreatedUtc],
+		   [Customer].[OrganizationId],
+		   [Customer].[CustomerOrgId],
+		   [Customer].[AddressId],
+		   [Customer].[IsActive]
 	FROM [Crm].[Customer] AS [Customer] WITH (NOLOCK) 
 	LEFT JOIN [Lookup].[Address] WITH (NOLOCK) ON [Address].[AddressId] = [Customer].[AddressId]
-	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryId] = [Address].[CountryId]
+	LEFT JOIN [Lookup].[Country] WITH (NOLOCK) ON [Country].[CountryCode] = [Address].[CountryCode]
 	LEFT JOIN [Lookup].[State] WITH (NOLOCK) ON [State].[StateId] = [Address].[StateId]
-	WHERE [Customer].[OrganizationId] = @OrgId
+	WHERE [Customer].[OrganizationId] = @orgId
 	AND [Customer].[IsActive] = 1
-	ORDER BY [Customer].[Name]
+	ORDER BY [Customer].[CustomerName]
 END

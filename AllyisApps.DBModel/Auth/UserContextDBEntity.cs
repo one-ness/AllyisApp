@@ -1,9 +1,9 @@
-﻿namespace AllyisApps.DBModel.Auth
+namespace AllyisApps.DBModel.Auth
 {
 	/// <summary>
 	/// The model for rows returned by Auth.GetUserContextInfo.
 	/// </summary>
-	public class UserContextDBEntity
+	public class UserContextDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the user Id.
@@ -28,7 +28,7 @@
 		/// <summary>
 		/// Gets or sets the user's language preference.
 		/// </summary>
-		public int? PreferredLanguageId { get; set; }
+		public string PreferredLanguageId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization id.

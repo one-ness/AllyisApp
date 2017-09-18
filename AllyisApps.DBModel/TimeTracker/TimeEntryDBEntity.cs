@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="TimeEntryDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -11,7 +11,7 @@ namespace AllyisApps.DBModel.TimeTracker
 	/// <summary>
 	/// Represents an entry of time data for TimeTracker.
 	/// </summary>
-	public class TimeEntryDBEntity
+	public class TimeEntryDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the TimeEntryId.

@@ -4,6 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using AllyisApps.Services.Lookup;
+
 namespace AllyisApps.Services
 {
 	/// <summary>
@@ -19,37 +21,12 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets Name.
 		/// </summary>
-		public string Name { get; set; }
-
-		/// <summary>
-		/// Gets or sets the customer's Address id
-		/// </summary>
-		public int AddressId { get; set; }
+		public string CustomerName { get; set; }
 
 		/// <summary>
 		/// Gets or sets Address.
 		/// </summary>
-		public string Address { get; set; }
-
-		/// <summary>
-		/// Gets or sets City.
-		/// </summary>
-		public string City { get; set; }
-
-		/// <summary>
-		/// Gets or sets State.
-		/// </summary>
-		public string State { get; set; }
-
-		/// <summary>
-		/// Gets or sets Country.
-		/// </summary>
-		public string Country { get; set; }
-
-		/// <summary>
-		/// Gets or sets PostalCode.
-		/// </summary>
-		public string PostalCode { get; set; }
+		public Address Address { get; set; }
 
 		/// <summary>
 		/// Gets or sets Email.
@@ -87,13 +64,18 @@ namespace AllyisApps.Services
 		public int OrganizationId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the id of the customer to be used by the users within the organization
+		/// Gets or sets the id of the customer to be used by the users within the organization.
 		/// </summary>
 		public string CustomerOrgId { get; set; }
 
 		/// <summary>
-		/// Gets or sets the bool value indicating if this Customer is currently active
+		/// Gets or sets the bool value indicating if this Customer is currently active.
 		/// </summary>
-		public bool IsActive { get; set; }
+		public bool? IsActive { get; set; }
+
+		public Customer()
+		{
+			Address = new Address();
+		}
 	}
 }

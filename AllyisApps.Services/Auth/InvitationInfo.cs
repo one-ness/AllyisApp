@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.Services
 {
@@ -21,6 +22,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Email address of invitee.
 		/// </summary>
+		[EmailAddress]
 		public string Email { get; set; }
 
 		/// <summary>
@@ -39,19 +41,9 @@ namespace AllyisApps.Services
 		public string LastName { get; set; }
 
 		/// <summary>
-		/// Gets or sets the Date of birth.
-		/// </summary>
-		public DateTime DateOfBirth { get; set; }
-
-		/// <summary>
 		/// Gets or sets the Organization Id.
 		/// </summary>
 		public int OrganizationId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Access code for accepting the invitation.
-		/// </summary>
-		public string AccessCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Organization Role Id.
@@ -62,5 +54,13 @@ namespace AllyisApps.Services
 		/// Gets or sets the Employee Id.
 		/// </summary>
 		public string EmployeeId { get; set; }
+
+		/// <summary>
+		/// Date that user had accepted or rejected the invitation.
+		/// </summary>
+		public DateTime DecisionDateUtc { get; set; }
+
+		public InvitationStatusEnum status { get; set; }
+		public object OrganizationName { get; internal set; }
 	}
 }

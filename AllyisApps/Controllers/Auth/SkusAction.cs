@@ -4,15 +4,10 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.Services.Billing;
-using AllyisApps.Services.Common.Types;
-using AllyisApps.ViewModels.Auth;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Services;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {
@@ -22,15 +17,15 @@ namespace AllyisApps.Controllers
 	public partial class AccountController : BaseController
 	{
 		/// <summary>
-		/// GET: /account/skus/id
+		/// GET: /account/skus/id.
 		/// </summary>
-		/// <param name="id">The organization id</param>
-		public ActionResult Skus(int id)
+		/// <param name="organizationId">The organization id.</param>
+		/// <returns>The skus view.</returns>
+		public ActionResult Skus(int organizationId)
 		{
+			this.AppService.CheckOrgAction(AppService.OrgAction.EditSubscription, organizationId);    // only org owner has permission
 
-			this.AppService.CheckOrgAction(AppService.OrgAction.SubscribeToProduct, id);    //only org owner has permission
-
-			SkusListViewModel model = ConstructSkusListViewModel(id);
+			SkusListViewModel model = ConstructSkusListViewModel(organizationId);
 
 			return this.View("Skus", model);
 		}
@@ -38,7 +33,7 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Uses services and utilities to initialize an <see cref="SkusListViewModel"/>.
 		/// </summary>
-		/// <param name="orgId">The current organization Id</param>
+		/// <param name="orgId">The current organization Id.</param>
 		/// <returns>Populated SkusListViewModel.</returns>
 		public SkusListViewModel ConstructSkusListViewModel(int orgId)
 		{
@@ -47,22 +42,25 @@ namespace AllyisApps.Controllers
 			var result = AppService.GetAllActiveProductsAndSkus();
 			var activeSubscriptions = AppService.GetSubscriptionsDisplay(orgId);
 
-			model.currentSubscriptions = activeSubscriptions;
+			model.CurrentSubscriptions = activeSubscriptions;
 			model.ProductsList = result.Item1;
 			foreach (Product prod in model.ProductsList)
 			{
 				prod.ProductSkus = new List<SkuInfo>();
 			}
-			foreach (SkuInfo sku in result.Item2) {
+
+			foreach (SkuInfo sku in result.Item2)
+			{
 				foreach (Product prod in model.ProductsList)
 				{
-					if (sku.ProductId == prod.ProductId) {
+					if (sku.ProductId == prod.ProductId)
+					{
 						prod.ProductSkus.Add(sku);
 						break;
 					}
 				}
 			}
-			
+
 			return model;
 		}
 	}

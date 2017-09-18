@@ -1,30 +1,14 @@
 ﻿CREATE PROCEDURE [Hrm].[CreateDefaultPayClass]
 	@organizationId INT
 AS
+BEGIN
 	SET NOCOUNT ON;
-
-	INSERT INTO [Hrm].[PayClass] ([Name], [OrganizationId])
-	VALUES ('Regular', @OrganizationId);
-
-	INSERT INTO [Hrm].[PayClass] ([Name], [OrganizationId])
-	VALUES ('Paid Time Off', @OrganizationId);
-
-	INSERT INTO [Hrm].[PayClass] ([Name], [OrganizationId])
-	VALUES ('Unpaid Time Off', @OrganizationId);
-
-	INSERT INTO [Hrm].[PayClass] ([Name], [OrganizationId])
-	VALUES ('Holiday', @OrganizationId);
-
-	INSERT INTO [Hrm].[PayClass] ([Name], [OrganizationId])
-	VALUES ('Bereavement Leave', @OrganizationId);
-
-	INSERT INTO [Hrm].[PayClass] ([Name], [OrganizationId])
-	VALUES ('Jury Duty', @OrganizationId);
-
-	INSERT INTO [Hrm].[PayClass] ([Name], [OrganizationId])
-	VALUES ('Overtime', @OrganizationId);
-
-	INSERT INTO [Hrm].[PayClass] ([Name], [OrganizationId])
-	VALUES ('Other Leave', @OrganizationId);
-
-	SELECT SCOPE_IDENTITY();
+	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId]) VALUES ('Regular',           @organizationId);
+	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId]) VALUES ('Paid Time Off',     @organizationId);
+	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId]) VALUES ('Unpaid Time Off',   @organizationId);
+	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId]) VALUES ('Holiday',           @organizationId);
+	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId]) VALUES ('Bereavement Leave', @organizationId);
+	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId]) VALUES ('Jury Duty',         @organizationId);
+	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId]) VALUES ('Overtime',          @organizationId);
+	INSERT INTO [Hrm].[PayClass] ([PayClassName], [OrganizationId]) VALUES ('Other Leave',       @organizationId);
+END

@@ -17,22 +17,22 @@ namespace AllyisApps.Services
 		None = 0,
 
 		/// <summary>
-		/// Allyis Apps
+		/// Allyis Apps.
 		/// </summary>
 		AllyisApps = 100000,
 
 		/// <summary>
-		/// Time Tracker
+		/// Time Tracker.
 		/// </summary>
 		TimeTracker = 200000,
 
 		/// <summary>
-		/// Expense Tracker
+		/// Expense Tracker.
 		/// </summary>
 		ExpenseTracker = 300000,
 
 		/// <summary>
-		/// Staffing Manager
+		/// Staffing Manager.
 		/// </summary>
 		StaffingManager = 400000,
 	}

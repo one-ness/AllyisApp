@@ -4,13 +4,15 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
-using AllyisApps.Services;
-using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
+using AllyisApps.Services;
+using AllyisApps.Utilities;
+using AllyisApps.ViewModels.TimeTracker.Project;
+using AllyisApps.ViewModels.TimeTracker.TimeEntry;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -22,7 +24,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET /TimeTracker/TimeEntry/Report.
 		/// </summary>
-		/// <param name="subscriptionId">The Subscription Id</param>
+		/// <param name="subscriptionId">The Subscription Id.</param>
 		/// <returns>The reports page.</returns>
 		public ActionResult Report(int subscriptionId)
 		{
@@ -33,31 +35,29 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 			var infos = AppService.GetReportInfo(subscriptionId);
 
 			const string TempDataKey = "RVM";
-            UserSubscription subInfo = null;
-            this.AppService.UserContext.OrganizationSubscriptions.TryGetValue(subscriptionId, out subInfo);
-            if (this.TempData[TempDataKey] != null)
+			UserContext.SubscriptionAndRole subInfo = null;
+			this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
+			string subName = AppService.GetSubscription(subscriptionId).Name;
+			if (this.TempData[TempDataKey] != null)
 			{
 				reportVM = (ReportViewModel)TempData[TempDataKey];
 			}
 			else
 			{
-				
-				
 				reportVM = this.ConstructReportViewModel(this.AppService.UserContext.UserId, subInfo.OrganizationId, true, infos.Item1, infos.Item2);
-                reportVM.SubscriptionName = subInfo.SubscriptionName;
-            }
+				reportVM.SubscriptionName = subName;
+			}
 
 			reportVM.UserView = this.GetUserSelectList(infos.Item3, reportVM.Selection.Users);
 			reportVM.CustomerView = this.GetCustomerSelectList(infos.Item1, reportVM.Selection.CustomerId);
 			reportVM.ProjectView = this.GetProjectSelectList(infos.Item2, reportVM.Selection.CustomerId, reportVM.Selection.ProjectId);
 			reportVM.SubscriptionId = subscriptionId;
 
-            var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
-            ViewBag.WeekStart = AppService.GetDayFromDateTime(SetStartingDate(null, infoOrg.Item1.StartOfWeek));
-            ViewBag.WeekEnd = AppService.GetDayFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
+			var infoOrg = AppService.GetTimeEntryIndexInfo(subInfo.OrganizationId, null, null);
+			ViewBag.WeekStart = AppService.GetDaysFromDateTime(SetStartingDate(null, infoOrg.Item1.StartOfWeek));
+			ViewBag.WeekEnd = AppService.GetDaysFromDateTime(SetEndingDate(null, infoOrg.Item1.StartOfWeek));
 
-
-            return this.View(reportVM);
+			return this.View(reportVM);
 		}
 
 		/// <summary>
@@ -73,12 +73,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <returns>The ReportViewModel.</returns>
 		public ReportViewModel ConstructReportViewModel(int userId, int organizationId, bool canManage, List<Customer> customers, List<CompleteProjectInfo> projects, bool showExport = true, ReportSelectionModel previousSelections = null)
 		{
-			projects.Insert(0, new CompleteProjectInfo
-			{
-				ProjectId = 0,
-				ProjectName = AllyisApps.Resources.Strings.NoFilter,
-				CustomerId = 0
-			});
+			projects.Insert(
+				0,
+				new CompleteProjectInfo
+				{
+					ProjectId = 0,
+					ProjectName = AllyisApps.Resources.Strings.NoFilter,
+					CustomerId = 0
+				});
 
 			return new ReportViewModel
 			{
@@ -86,8 +88,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				CanManage = canManage,
 				OrganizationId = organizationId,
 				ShowExport = showExport,
-				Projects = projects,
-				Customers = customers,
+				Projects = projects.AsParallel().Select(proj => new CompleteProjectViewModel(proj)).AsEnumerable(),
 				PreviewPageSize = 20,
 				PreviewTotal = string.Format("{0} {1}", 0, Resources.Strings.HoursTotal),
 				PreviewEntries = null,
@@ -97,10 +98,10 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Selection = previousSelections ?? new ReportSelectionModel
 				{
 					CustomerId = 0,
-					EndDate = AppService.GetDayFromDateTime(DateTime.Today),
+					EndDate = AppService.GetDaysFromDateTime(DateTime.Today),
 					Page = 1,
 					ProjectId = 0,
-					StartDate = AppService.GetDayFromDateTime(DateTime.Today),
+					StartDate = AppService.GetDaysFromDateTime(DateTime.Today),
 					Users = new List<int>()
 				}
 			};
@@ -146,7 +147,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		private IEnumerable<SelectListItem> GetCustomerSelectList(List<Customer> customers, int customerSelected)
 		{
 			IList<Customer> customerData = customers;
-			customerData.Insert(0, new Customer { Name = Resources.Strings.NoFilter, CustomerId = 0 });
+			customerData.Insert(0, new Customer { CustomerName = Resources.Strings.NoFilter, CustomerId = 0 });
 
 			var cSelectList = new List<SelectListItem>();
 			foreach (var customer in customerData)
@@ -154,7 +155,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				cSelectList.Add(new SelectListItem
 				{
 					Value = customer.CustomerId.ToString(),
-					Text = customer.Name,
+					Text = customer.CustomerName,
 					Selected = customer.CustomerId == customerSelected
 				});
 			}
@@ -173,7 +174,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		{
 			var pSelectList = new List<SelectListItem>();
 
-			//disable project selection if no customer selected
+			// disable project selection if no customer selected
 			if (customerSelected == 0)
 			{
 				pSelectList.Add(new SelectListItem

@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [TimeTracker].[GetTimeEntryById]
-	@TimeEntryId INT
+CREATE PROCEDURE [TimeTracker].[GetTimeEntryById]
+	@timeEntryId INT
 AS
 	SET NOCOUNT ON;
 	SELECT [UserId],
@@ -10,4 +10,4 @@ AS
 		[Description],
 		[IsLockSaved]
 	FROM [TimeTracker].[TimeEntry] WITH (NOLOCK) 
-	WHERE [TimeEntryId] = @TimeEntryId
+	WHERE [TimeEntryId] = @timeEntryId

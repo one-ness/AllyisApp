@@ -28,15 +28,15 @@ namespace AllyisApps.Services.Billing
 		/// </summary>
 		public int SubscriptionId { get; set; }
 
-        /// <summary>
-        /// Gets or sets a Subscription name.
-        /// </summary>
-        public string SubscriptionName { get; set; }
+		/// <summary>
+		/// Gets or sets a Subscription name.
+		/// </summary>
+		public string SubscriptionName { get; set; }
 
-        /// <summary>
-        /// Gets or sets a Organization id.
-        /// </summary>
-        public int OrganizationId { get; set; }
+		/// <summary>
+		/// Gets or sets a Organization id.
+		/// </summary>
+		public int OrganizationId { get; set; }
 
 		/// <summary>
 		/// Gets or sets a Sku Id.
@@ -68,9 +68,12 @@ namespace AllyisApps.Services.Billing
 		/// </summary>
 		public string Tier { get; set; }
 
-		/// <summary>
-		/// Gets or sets a value indicating whether a user has permission to view this subscription.
-		/// </summary>
-		public bool CanViewSubscription { get; set; }
+		public string Description { get; internal set; }
+
+		public String AreaUrl { get; set; }
+		///// <summary>
+		///// Gets or sets a value indicating whether a user has permission to view this subscription.
+		///// </summary>
+		//public bool CanViewSubscription { get; set; }
 	}
 }

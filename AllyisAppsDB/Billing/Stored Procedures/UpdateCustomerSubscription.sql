@@ -1,23 +1,23 @@
-﻿CREATE PROCEDURE [Billing].[UpdateCustomerSubscription]
+CREATE PROCEDURE [Billing].[UpdateCustomerSubscription]
 	@customerId NVARCHAR(50),
-	@SubPlanId NVARCHAR(50),
-	@NumberOfUsers INT,
-	@Price INT,
-	@OrganizationId INT,
-	@UserId INT,
-	@SkuId INT,
-	@Description NVARCHAR(MAX)
+	@subPlanId NVARCHAR(50),
+	@numberOfUsers INT,
+	@price INT,
+	@organizationId INT,
+	@userId INT,
+	@skuId INT,
+	@description NVARCHAR(MAX)
 AS
 	SET NOCOUNT ON;
 BEGIN
 	BEGIN TRANSACTION
 		UPDATE [Billing].[StripeCustomerSubscriptionPlan] 
-		SET [StripeCustomerSubscriptionPlan].[NumberOfUsers] = @NumberOfUsers,
-		[StripeCustomerSubscriptionPlan].[Price] = @Price
+		SET [StripeCustomerSubscriptionPlan].[NumberOfUsers] = @numberOfUsers,
+		[StripeCustomerSubscriptionPlan].[Price] = @price
 		WHERE [StripeTokenCustId] = @customerId
-		AND [StripeTokenSubId] = @SubPlanId;
+		AND [StripeTokenSubId] = @subPlanId;
 
 		INSERT INTO [Billing].[BillingHistory] ([Date], [Description], [OrganizationId], [UserId], [SkuId])
-		VALUES (SYSDATETIME(), @Description, @OrganizationId, @UserId, @SkuId)
+		VALUES (SYSDATETIME(), @description, @organizationId, @userId, @skuId)
 	COMMIT
 END

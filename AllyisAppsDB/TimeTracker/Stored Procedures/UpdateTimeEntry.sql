@@ -1,16 +1,16 @@
-﻿CREATE PROCEDURE [TimeTracker].[UpdateTimeEntry]
-	@TimeEntryId INT,
-    @ProjectId INT,
-	@PayClassId INT,
-	@Duration FLOAT,
-	@Description NVARCHAR(120),
-	@IsLockSaved BIT
+CREATE PROCEDURE [TimeTracker].[UpdateTimeEntry]
+	@timeEntryId INT,
+    @projectId INT,
+	@payClassId INT,
+	@duration FLOAT,
+	@description NVARCHAR(120),
+	@isLockSaved BIT
 AS
 	SET NOCOUNT ON;
 UPDATE [TimeTracker].[TimeEntry]
-   SET [ProjectId] = @ProjectId
-	  ,[PayClassId] = @PayClassId
-      ,[Duration] = @Duration
-      ,[Description] = @Description
-	  ,[IsLockSaved] = @IsLockSaved
- WHERE [TimeEntryId] = @TimeEntryId
+   SET [ProjectId] = @projectId
+	  ,[PayClassId] = @payClassId
+      ,[Duration] = @duration
+      ,[Description] = @description
+	  ,[IsLockSaved] = @isLockSaved
+ WHERE [TimeEntryId] = @timeEntryId

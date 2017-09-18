@@ -1,19 +1,21 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="OrgService.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel;
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Billing;
-using AllyisApps.Lib;
-using AllyisApps.Services.Billing;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using AllyisApps.DBModel;
+using AllyisApps.DBModel.Auth;
+using AllyisApps.DBModel.Billing;
+using AllyisApps.DBModel.Lookup;
+using AllyisApps.Lib;
+using AllyisApps.Services.Billing;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
 {
@@ -28,12 +30,29 @@ namespace AllyisApps.Services
 		/// <param name="organization">Organization.</param>
 		/// <param name="employeeId">Organization owner employee Id.</param>
 		/// <returns>Organizaiton Id, or -1 if the subdomain name is taken.</returns>
-		public int CreateOrganization(Organization organization, string employeeId)
+		public int SetupOrganization(Organization organization, string employeeId)
 		{
-			if (organization == null) throw new ArgumentNullException("organization");
-			if (string.IsNullOrWhiteSpace(employeeId)) throw new ArgumentNullException("employeeId");
+			#region Validation
 
-			return DBHelper.CreateOrganization(GetDBEntityFromOrganization(organization), this.UserContext.UserId, (int)OrganizationRole.Owner, employeeId);
+			if (organization == null)
+			{
+				throw new ArgumentNullException("organization", "Organization object must not be null.");
+			}
+
+			if (string.IsNullOrWhiteSpace(employeeId))
+			{
+				throw new ArgumentNullException("employeeId", "EmployeeId must not be null");
+			}
+			AddressDBEntity address = null;
+			if (organization.Address != null)
+			{
+				address = GetDBEntityFromAddress(organization.Address);
+			}
+
+			#endregion Validation
+
+			return DBHelper.SetupOrganization(GetDBEntityFromOrganization(organization),
+				GetDBEntityFromAddress(organization.Address), this.UserContext.UserId, (int)OrganizationRole.Owner, employeeId);
 		}
 
 		/// <summary>
@@ -43,10 +62,14 @@ namespace AllyisApps.Services
 		/// <returns>The Organization.</returns>
 		public Organization GetOrganization(int orgId)
 		{
+			#region Validation
+
 			if (orgId < 0)
 			{
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
 			}
+
+			#endregion Validation
 
 			return InitializeOrganization(DBHelper.GetOrganization(orgId));
 		}
@@ -56,8 +79,8 @@ namespace AllyisApps.Services
 		/// organization, SubscriptionDisplayInfos for any subscriptions in the organization, InvitationInfos for any invitiations
 		/// pending in the organization, the organization's billing stripe handle, and a list of all products.
 		/// </summary>
-		/// <returns></returns>
-		public Tuple<Organization, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string, List<Product>> GetOrganizationManagementInfo(int orgId)
+		/// <returns>.</returns>
+		public Tuple<Organization, List<OrganizationUserInfo>, List<SubscriptionDisplayInfo>, List<InvitationInfo>, string> GetOrganizationManagementInfo(int orgId)
 		{
 			var spResults = DBHelper.GetOrganizationManagementInfo(orgId);
 			return Tuple.Create(
@@ -65,8 +88,7 @@ namespace AllyisApps.Services
 				spResults.Item2.Select(oudb => InitializeOrganizationUserInfo(oudb)).ToList(),
 				spResults.Item3.Select(sddb => InitializeSubscriptionDisplayInfo(sddb)).ToList(),
 				spResults.Item4.Select(idb => InitializeInvitationInfo(idb)).ToList(),
-				spResults.Item5,
-				spResults.Item6.Select(pdb => InitializeProduct(pdb)).ToList());
+				spResults.Item5);
 		}
 
 		/// <summary>
@@ -74,14 +96,13 @@ namespace AllyisApps.Services
 		/// employee id for the current user in the current chosen organization.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
-		/// <returns></returns>
-		public Tuple<Organization, List<string>, string> GetOrgWithCountriesAndEmployeeId(int orgId)
+		/// <returns>.</returns>
+		public Tuple<Organization, string> GetOrgWithNextEmployeeId(int orgId)
 		{
-			var spResults = DBHelper.GetOrgWithCountriesAndEmployeeId(orgId, UserContext.UserId);
+			var spResults = DBHelper.GetOrgWithNextEmployeeId(orgId, UserContext.UserId);
 			return Tuple.Create(
 				InitializeOrganization(spResults.Item1),
-				spResults.Item2,
-				spResults.Item3);
+				spResults.Item2);
 		}
 
 		/// <summary>
@@ -90,8 +111,8 @@ namespace AllyisApps.Services
 		/// a list of CompleteProjectInfos for TimeTracker projects in the organization, and the next recommended employee id
 		/// by invitations.
 		/// </summary>
-		/// <param name="orgId">The Organization Id</param>
-		/// <returns></returns>
+		/// <param name="orgId">The Organization Id.</param>
+		/// <returns>.</returns>
 		public Tuple<string, List<SubscriptionDisplayInfo>, List<ProductRole>, List<CompleteProjectInfo>, string> GetAddMemberInfo(int orgId)
 		{
 			var spResults = DBHelper.GetAddMemberInfo(orgId);
@@ -108,8 +129,8 @@ namespace AllyisApps.Services
 		/// and a list of SubscriptionRoles (with only SubscriptionId, ProductId, and ProductName populated) for
 		/// all subscriptions in the current organization.
 		/// </summary>
-		/// <param name="orgId">The Organization Id</param>
-		/// <returns></returns>
+		/// <param name="orgId">The Organization Id.</param>
+		/// <returns>.</returns>
 		public Tuple<List<UserRolesInfo>, List<SubscriptionDisplayInfo>> GetOrgAndSubRoles(int orgId)
 		{
 			var spResults = DBHelper.GetOrgAndSubRoles(orgId);
@@ -127,28 +148,12 @@ namespace AllyisApps.Services
 		{
 			if (organization == null) throw new ArgumentException("organization");
 			this.CheckOrgAction(OrgAction.EditOrganization, organization.OrganizationId);
-			return DBHelper.UpdateOrganization(GetDBEntityFromOrganization(organization));
-		}
-
-		/// <summary>
-		/// Updates the active organization.
-		/// </summary>
-		/// <param name="userId">User Id.</param>
-		/// <param name="orgId">Organization Id.</param>
-		public void UpdateActiveOrganization(int userId, int orgId)
-		{
-			if (userId <= 0)
+			AddressDBEntity address = null;
+			if (organization.Address != null)
 			{
-				throw new ArgumentOutOfRangeException("userId", "User Id cannot be 0 or negative.");
+				address = GetDBEntityFromAddress(organization.Address);
 			}
-
-			if (orgId < 0)
-			{
-				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
-			}
-
-			// Note: This method cannot use UserContext.UserId because this method is called before the service obejct's UserContext is set.
-			DBHelper.UpdateActiveOrganization(userId, orgId);
+			return DBHelper.UpdateOrganization(GetDBEntityFromOrganization(organization), address) > 0;
 		}
 
 		/// <summary>
@@ -157,7 +162,7 @@ namespace AllyisApps.Services
 		/// <returns>Returns false if permissions fail.</returns>
 		public void DeleteOrganization(int orgId)
 		{
-			this.CheckOrgAction(OrgAction.DeleteOrganization, orgId);
+			this.CheckOrgAction(OrgAction.EditOrganization, orgId);
 			DBHelper.DeleteOrganization(orgId);
 		}
 
@@ -166,10 +171,8 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="url">The url for Account/Index with the accessCode value as "{accessCode}".</param>
 		/// <param name="invitationInfo">An <see cref="InvitationInfo"/> with invitee information filled out.</param>
-		/// <param name="subscriptionId">The subscription id, if user is invited with role in subscription.</param>
-		/// <param name="productRoleId">The product role id, if user in invited with role in subscription.</param>
 		/// <returns>The invitation Id, or -1 if the employee id is already taken.</returns>
-		public async Task<int> InviteUser(string url, InvitationInfo invitationInfo, int? subscriptionId, int? productRoleId)
+		public  int InviteUser(string url, InvitationInfo invitationInfo)
 		{
 			#region Validation
 
@@ -190,12 +193,8 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			// Generation of access code
-			string code = Guid.NewGuid().ToString();
-			invitationInfo.AccessCode = code;
-
-			// Creation of invitation & sub roles
-			var spResults = DBHelper.CreateInvitation(UserContext.UserId, GetDBEntityFromInvitationInfo(invitationInfo), subscriptionId, productRoleId);
+			// Creation of invitation
+			var spResults = DBHelper.CreateInvitation(UserContext.UserId, GetDBEntityFromInvitationInfo(invitationInfo));
 			if (spResults.Item1 == -1)
 			{
 				throw new DuplicateNameException("User is already a member of the organization.");
@@ -206,20 +205,21 @@ namespace AllyisApps.Services
 				throw new InvalidOperationException("Employee Id is already taken.");
 			}
 
-            // Send invitation email
-            string htmlbody = string.Format(
-                "{0} {1} has requested you join their organization on Allyis Apps{2}!<br /> Click <a href={3}>Here</a> to create an account and join!",
-                spResults.Item2,
-                spResults.Item3,
-                subscriptionId == null ? "" : ", " + UserContext.OrganizationSubscriptions[subscriptionId.Value].OrganizationName,
-				url.Replace("%7BaccessCode%7D", code));
+			// Send invitation email
+			string orgName = string.Empty;
+			string htmlbody = string.Format(
+				"{0} {1} has requested you join their organization on Allyis Apps{2}!<br /> Click <a href={3}>Here</a> to create an account and join!",
+				spResults.Item2,
+				spResults.Item3,
+				orgName,
+				url);
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
-			await Lib.Mailer.SendEmailAsync(
+			bool email = Lib.Mailer.SendEmailAsync(
 				this.ServiceSettings.SupportEmail,
 				invitationInfo.Email,
 				"Join Allyis Apps!",
-				msgbody);
+				msgbody).Result;
 
 			// Return invitation id
 			return spResults.Item1;
@@ -227,14 +227,14 @@ namespace AllyisApps.Services
 
 		public async void NotifyInviteAcceptAsync(int inviteId)
 		{
-			InvitationDBEntity invitation = DBHelper.GetUserInvitationsByInviteId(inviteId).FirstOrDefault();
-			OrganizationDBEntity org = DBHelper.GetOrganization(invitation.OrganizationId);
+			InvitationDBEntity invitation = DBHelper.GetUserInvitationByInviteId(inviteId);
+			dynamic org = DBHelper.GetOrganization(invitation.OrganizationId);
 			IEnumerable<dynamic> owners = DBHelper.GetOrgOwnerEmails(invitation.OrganizationId);
 
 			string htmlbody = string.Format(
 				"{0} has joined the organization {1} on Allyis Apps.",
 				invitation.FirstName + " " + invitation.LastName,
-				org.Name);
+				org.OrganizationName);
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
 			foreach (dynamic owner in owners)
@@ -247,72 +247,47 @@ namespace AllyisApps.Services
 			}
 		}
 
-		/// <summary>
-		/// Creates an invitation for a new user in the database, and also sends an email to the new user with their access code.
-		/// </summary>
-		/// <param name="requestingUserFullName">Full name of requesting user (not invitee).</param>
-		/// <param name="webRoot">The url webroot, taken from Global Settings.</param>
-		/// <param name="invitationInfo">An <see cref="InvitationInfo"/> with invitee information filled out.</param>
-		/// <returns>The invitation Id.</returns>
-		public async Task<int> InviteNewUser(string requestingUserFullName, string webRoot, InvitationInfo invitationInfo)
+		public async void NotifyInviteRejectAsync(int inviteId)
 		{
-			#region Validation
-
-			if (string.IsNullOrEmpty(requestingUserFullName))
-			{
-				throw new ArgumentNullException("requestingUserFullName", "Requesting user full name must have a value.");
-			}
-
-			if (string.IsNullOrEmpty(webRoot))
-			{
-				throw new ArgumentNullException("webRoot", "Webroot must have a value.");
-			}
-
-			if (invitationInfo == null)
-			{
-				throw new ArgumentNullException("invitationInfo", "Invitation info object must not be null.");
-			}
-
-			#endregion Validation
-
-			Organization orgInfo = this.GetOrganization(invitationInfo.OrganizationId);
+			InvitationDBEntity invitation = DBHelper.GetUserInvitationByInviteId(inviteId);
+			dynamic org = DBHelper.GetOrganization(invitation.OrganizationId);
+			IEnumerable<dynamic> owners = DBHelper.GetOrgOwnerEmails(invitation.OrganizationId);
 
 			string htmlbody = string.Format(
-				"{0} has requested you join their organization on Allyis Apps, {1}!<br /> Click <a href=http://{2}/Account/Index?accessCode={3}>Here</a> to create an account and join!",
-				requestingUserFullName,
-				orgInfo.Name,
-				webRoot,
-				invitationInfo.AccessCode);
+				"{0} has rejected joining the organization {1} on Allyis Apps.",
+				invitation.FirstName + " " + invitation.LastName,
+				org.OrganizationName);
 
 			string msgbody = new System.Web.HtmlString(htmlbody).ToString();
-			await Lib.Mailer.SendEmailAsync(
-				this.ServiceSettings.SupportEmail,
-				invitationInfo.Email,
-				"Join Allyis Apps!",
-				msgbody);
-
-			return DBHelper.CreateUserInvitation(GetDBEntityFromInvitationInfo(invitationInfo));
+			foreach (dynamic owner in owners)
+			{
+				await Mailer.SendEmailAsync(
+					this.ServiceSettings.SupportEmail,
+					owner.Email,
+					"User rejected invite Allyis Apps!",
+					msgbody);
+			}
 		}
 
 		/// <summary>
 		/// Removes an invitation.
 		/// </summary>
-		/// <param name="orgId">organization id</param>
+		/// <param name="orgId">Organization id.</param>
 		/// <param name="invitationId">Invitation Id.</param>
 		/// <returns>Returns false if permissions fail.</returns>
 		public bool RemoveInvitation(int orgId, int invitationId)
 		{
 			if (orgId <= 0) throw new ArgumentException("orgId");
 			if (invitationId <= 0) throw new ArgumentException("invitationId");
-			this.CheckOrgAction(OrgAction.DeleteInvitation, orgId);
-			return DBHelper.RemoveInvitation(invitationId, -1);
+			this.CheckOrgAction(OrgAction.EditInvitation, orgId);
+			return DBHelper.DeleteInvitation(invitationId);
 		}
 
 		///// <summary>
 		///// Getst a list of the user invitations for the current organization.
 		///// </summary>
 		///// <returns>List of InvitationInfos of organization's user invitations.</returns>
-		//public IEnumerable<InvitationInfo> GetUserInvitations()
+		// public IEnumerable<InvitationInfo> GetUserInvitations()
 		//{
 		//	return DBHelper.GetUserInvitationsByOrgId(UserContext.ChosenOrganizationId).Select(i => InitializeInvitationInfo(i));
 		//}
@@ -323,7 +298,7 @@ namespace AllyisApps.Services
 		///// <param name="invitationId">Invitation id.</param>
 		///// <param name="subscriptionId">Subscription id.</param>
 		///// <param name="selectedRole">Selected role.</param>
-		//public void CreateInvitationSubRole(int invitationId, int subscriptionId, int selectedRole)
+		// public void CreateInvitationSubRole(int invitationId, int subscriptionId, int selectedRole)
 		//{
 		//    #region Validation
 
@@ -399,7 +374,7 @@ namespace AllyisApps.Services
 		///// </summary>
 		///// <param name="email">Email address.</param>
 		///// <returns>User's first name.</returns>
-		//public string GetOrgUserFirstName(string email)
+		// public string GetOrgUserFirstName(string email)
 		//{
 		//	#region Validation
 
@@ -420,8 +395,8 @@ namespace AllyisApps.Services
 		///// <summary>
 		///// Gets a list of subscription details for the current organization.
 		///// </summary>
-		///// <returns><see cref="IEnumerable{SubscriptionInfo}"/></returns>
-		//public IEnumerable<SubscriptionInfo> GetSubscriptionDetails()
+		///// <returns><see cref="IEnumerable{SubscriptionInfo}"/>.</returns>
+		// public IEnumerable<SubscriptionInfo> GetSubscriptionDetails()
 		//{
 		//	IEnumerable<SubscriptionDBEntity> subDBEList = DBHelper.GetSubscriptionDetails(UserContext.ChosenOrganizationId);
 		//	List<SubscriptionInfo> list = new List<SubscriptionInfo>();
@@ -496,22 +471,22 @@ namespace AllyisApps.Services
 		/// Gets all the projects in an organization.
 		/// </summary>
 		/// <param name="orgId">Organization Id.</param>
-		/// <param name="isActive">True (default) to only return active projects, false to include all projects, active or not.</param>
+		/// <param name="onlyActive">True (default) to only return active projects, false to include all projects, active or not.</param>
 		/// <returns>A list of project info objects based on Organization.</returns>
-		public IEnumerable<CompleteProjectInfo> GetProjectsByOrganization(int orgId, bool isActive = true)
+		public IEnumerable<CompleteProjectInfo> GetProjectsByOrganization(int orgId, bool onlyActive = true)
 		{
 			if (orgId < 0)
 			{
 				throw new ArgumentOutOfRangeException("orgId", "Organization Id cannot be negative.");
 			}
 
-			return DBHelper.GetProjectsByOrgId(orgId, isActive ? 1 : 0).Select(c => InitializeCompleteProjectInfo(c));
+			return DBHelper.GetProjectsByOrgId(orgId, onlyActive ? 1 : 0).Select(c => InitializeCompleteProjectInfo(c));
 		}
 
 		/// <summary>
 		/// Gets the user roles for an organization.
 		/// </summary>
-		/// <param name="orgId">The Organization Id</param>
+		/// <param name="orgId">The Organization Id.</param>
 		/// <returns>List of UserRolesInfos.</returns>
 		public IEnumerable<UserRolesInfo> GetUserRoles(int orgId)
 		{
@@ -523,16 +498,37 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="userIds">List of user Ids.</param>
 		/// <param name="newOrganizationRole">Organization role to assign, or -1 to remove from organization.</param>
-		/// <param name="orgId">The organization Id</param>
+		/// <param name="organizationId">The organization Id.</param>
 		/// <returns>The number of affected users.</returns>
-		public int ChangeUserRoles(List<int> userIds, int newOrganizationRole, int orgId)
+		public int UpdateOrganizationUsersRole(List<int> userIds, int newOrganizationRole, int organizationId)
 		{
 			#region Validation
 
-			if (!Enum.IsDefined(typeof(OrganizationRole), newOrganizationRole) && newOrganizationRole != -1)
+			if (!Enum.IsDefined(typeof(OrganizationRole), newOrganizationRole))
 			{
-				throw new ArgumentOutOfRangeException("newOrganizationRole", "Organization role must either be -1 or match a value of the OrganizationRole enum.");
+				throw new ArgumentOutOfRangeException("newOrganizationRole", "Organization role must match a value of the OrganizationRole enum.");
 			}
+
+			if (userIds == null || userIds.Count == 0)
+			{
+				throw new ArgumentException("userIds", "No user ids provided.");
+			}
+
+			#endregion Validation
+
+			return DBHelper.UpdateOrganizationUsersRole(userIds, organizationId, newOrganizationRole);
+		}
+
+		/// <summary>
+		/// Deletes all users from the org that are in the given userIds list.
+		/// </summary>
+		/// <param name="userIds">List of user Ids.</param>
+		/// <param name="organizationId">The organization Id.</param>
+		/// <returns>The number of affected users.</returns>
+		public int DeleteOrganizationUsers(List<int> userIds, int organizationId)
+		{
+			#region Validation
+
 			if (userIds == null || userIds.Count == 0)
 			{
 				throw new ArgumentException("No user ids provided.", "userIds");
@@ -540,7 +536,7 @@ namespace AllyisApps.Services
 
 			#endregion Validation
 
-			return DBHelper.EditOrganizationUsers(userIds, orgId, newOrganizationRole);
+			return DBHelper.DeleteOrganizationUsers(userIds, organizationId);
 		}
 
 		/// <summary>
@@ -548,7 +544,7 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="productName">Product name.</param>
 		/// <param name="userId">User Id.</param>
-		/// <param name="orgId"> The Organization Id</param>
+		/// <param name="orgId"> The Organization Id.</param>
 		/// <returns>The product role.</returns>
 		public string GetProductRoleForUser(string productName, int userId, int orgId)
 		{
@@ -591,32 +587,54 @@ namespace AllyisApps.Services
 		}
 
 		/// <summary>
+		///
+		/// </summary>
+		/// <param name="organizationEntity"></param>
+		/// <param name="loadAddress"></param>
+		/// <returns></returns>
+		public Organization InitializeOrganization(OrganizationDBEntity organizationEntity, bool loadAddress = true)
+		{
+			return new Organization
+			{
+				CreatedUtc = organizationEntity.CreatedUtc,
+				FaxNumber = organizationEntity.FaxNumber,
+				OrganizationName = organizationEntity.OrganizationName,
+				OrganizationId = organizationEntity.OrganizationId,
+				PhoneNumber = organizationEntity.PhoneNumber,
+				SiteUrl = organizationEntity.SiteUrl,
+				Subdomain = organizationEntity.Subdomain,
+				Address = loadAddress ? getAddress(organizationEntity.AddressId) : null
+			};
+		}
+
+		/// <summary>
 		/// Translates an OrganizationDBEntity into an Organization business object.
 		/// </summary>
-		/// <param name="organization">OrganizationDBEntity instance.</param>
+		/// <param name="organizationInfo">OrganizationDBEntity instance.</param>
 		/// <returns>Organization instance.</returns>
-		public static Organization InitializeOrganization(OrganizationDBEntity organization)
+		public static Organization InitializeOrganization(dynamic organizationInfo)
 		{
-			if (organization == null)
+			if (organizationInfo == null)
 			{
 				return null;
+			}
+			Address address = null;
+
+			if (organizationInfo.AddressId != null)
+			{
+				address = InitializeAddress(organizationInfo);
 			}
 
 			return new Organization
 			{
-				AddressId = organization.AddressId,
-				Address = organization.Address,
-				City = organization.City,
-				Country = organization.Country,
-				CreatedUtc = organization.CreatedUtc,
-				FaxNumber = organization.FaxNumber,
-				Name = organization.Name,
-				OrganizationId = organization.OrganizationId,
-				PhoneNumber = organization.PhoneNumber,
-				SiteUrl = organization.SiteUrl,
-				State = organization.State,
-				Subdomain = organization.Subdomain,
-				PostalCode = organization.PostalCode
+				CreatedUtc = organizationInfo.CreatedUtc,
+				FaxNumber = organizationInfo.FaxNumber,
+				OrganizationName = organizationInfo.OrganizationName,
+				OrganizationId = organizationInfo.OrganizationId,
+				PhoneNumber = organizationInfo.PhoneNumber,
+				SiteUrl = organizationInfo.SiteUrl,
+				Subdomain = organizationInfo.Subdomain,
+				Address = address
 			};
 		}
 
@@ -625,29 +643,46 @@ namespace AllyisApps.Services
 		/// </summary>
 		/// <param name="organization">Organization instance.</param>
 		/// <returns>OrganizationDBEntity instance.</returns>
-		public static OrganizationDBEntity GetDBEntityFromOrganization(Organization organization)
+		public OrganizationDBEntity GetDBEntityFromOrganization(Organization organization)
 		{
 			if (organization == null)
 			{
 				return null;
 			}
 
+			//Ensure that organizion buisneess object does not attempt to set CountryName or state name without ID
+			//Should not happen but can from import service.
+			organization.Address?.EnsureDBRef(this);
+
 			return new OrganizationDBEntity
 			{
-				AddressId = organization.AddressId,
-				Address = organization.Address,
-				City = organization.City,
-				Country = organization.Country,
+				AddressId = organization.Address?.AddressId,
 				CreatedUtc = organization.CreatedUtc,
 				FaxNumber = organization.FaxNumber,
-				Name = organization.Name,
+				OrganizationName = organization.OrganizationName,
 				OrganizationId = organization.OrganizationId,
 				PhoneNumber = organization.PhoneNumber,
 				SiteUrl = organization.SiteUrl,
-				State = organization.State,
 				Subdomain = organization.Subdomain,
-				PostalCode = organization.PostalCode
 			};
+		}
+
+		/// <summary>
+		/// Toodo: Good idea need time to implement fully
+		/// </summary>
+		/// <param name="organization"></param>
+		/// <returns></returns>
+		public Tuple<OrganizationDBEntity, AddressDBEntity> GetDBEntitiesFormOrganization(Organization organization)
+		{
+			if (organization == null)
+			{
+				return null;
+			}
+			organization.Address?.EnsureDBRef(this);
+
+			return new Tuple<OrganizationDBEntity, AddressDBEntity>(
+				GetDBEntityFromOrganization(organization),
+				GetDBEntityFromAddress(organization.Address));
 		}
 
 		/// <summary>
@@ -664,16 +699,17 @@ namespace AllyisApps.Services
 
 			return new InvitationInfo
 			{
-				AccessCode = invitation.AccessCode,
-				DateOfBirth = invitation.DateOfBirth,
 				Email = invitation.Email,
-				CompressedEmail = AppService.GetCompressedEmail(invitation.Email),
+				CompressedEmail = Utility.GetCompressedEmail(invitation.Email),
 				FirstName = invitation.FirstName,
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
 				OrganizationRole = (OrganizationRole)invitation.OrganizationRoleId,
-				EmployeeId = invitation.EmployeeId
+				OrganizationName = invitation.OrganizationName,
+				EmployeeId = invitation.EmployeeId,
+				DecisionDateUtc = invitation.DecisionDateUtc,
+				status = (InvitationStatusEnum)invitation.InvitationStatusId
 			};
 		}
 
@@ -712,15 +748,15 @@ namespace AllyisApps.Services
 
 			return new InvitationDBEntity
 			{
-				AccessCode = invitation.AccessCode,
-				DateOfBirth = invitation.DateOfBirth,
 				Email = invitation.Email,
 				FirstName = invitation.FirstName,
 				InvitationId = invitation.InvitationId,
 				LastName = invitation.LastName,
 				OrganizationId = invitation.OrganizationId,
 				OrganizationRoleId = (int)invitation.OrganizationRole,
-				EmployeeId = invitation.EmployeeId
+				EmployeeId = invitation.EmployeeId,
+				DecisionDateUtc = invitation.DecisionDateUtc,
+				InvitationStatusId = (int)invitation.status
 			};
 		}
 

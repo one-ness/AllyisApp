@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace AllyisApps.Lib
 {
 	/// <summary>
-	/// utility methods
+	/// Utility methods.
 	/// </summary>
 	public static class Utility
 	{
@@ -23,6 +24,21 @@ namespace AllyisApps.Lib
 			return result;
 		}
 
+		const int EmailDisplayMaxLength = 48;
+		/// <summary>
+		/// get a reduced length email if it is too long
+		/// </summary>
+		public static string GetCompressedEmail(string fullEmail)
+		{
+			var result = fullEmail;
+			if (!string.IsNullOrWhiteSpace(fullEmail) && fullEmail.Length > EmailDisplayMaxLength)
+			{
+				result = string.Format("{0}...{1}", fullEmail.Substring(0, 20), fullEmail.Substring(fullEmail.Length - 15));
+			}
+
+			return result;
+		}
+
 		/// <summary>
 		/// Verifies a url format for a web address (http or https).
 		/// </summary>
@@ -32,6 +48,18 @@ namespace AllyisApps.Lib
 		{
 			Uri result;
 			return Uri.TryCreate(url, UriKind.Absolute, out result) && (result.Scheme == Uri.UriSchemeHttp || result.Scheme == Uri.UriSchemeHttps);
+		}
+
+		private const string CharsToReplace = @"""/\[]:|<>+=; ,?*'`()@";
+
+		/// <summary>
+		/// aggregate spaces in the given string
+		/// </summary>
+		public static string AggregateSpaces(string input)
+		{
+			if (string.IsNullOrWhiteSpace(input)) return string.Empty;
+
+			return CharsToReplace.Aggregate(input, (str, l) => str.Replace(string.Empty + l, string.Empty));
 		}
 	}
 }

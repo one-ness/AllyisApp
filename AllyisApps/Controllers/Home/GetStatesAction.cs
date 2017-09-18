@@ -4,9 +4,9 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.ViewModels;
 
 namespace AllyisApps.Controllers
 {
@@ -20,27 +20,14 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Retrieves a list of states for the specified country.
 		/// </summary>
-		/// <param name="country">The country to query for.</param>
-		/// <returns>The JSON collection of state names.</returns>
+		/// <param name="countryCode">The country code.</param>
+		/// <returns>A JsonResult object.</returns>
 		[HttpPost]
 		[AllowAnonymous]
-		public JsonResult GetStates(string country)
+		public JsonResult GetStates(string countryCode)
 		{
-			if (string.IsNullOrWhiteSpace(country))
-			{
-				// No states
-				return this.Json(new List<string>());
-			}
-
-			Dictionary<string, string> localizedStates = new Dictionary<string, string>();
-
-			foreach (string state in AppService.ValidStates(country))
-			{
-				string stateKey = Clean(state);
-				localizedStates.Add(state, Resources.States.ResourceManager.GetString(stateKey) ?? state);
-			}
-
-			return this.Json(localizedStates);
+			// NOTE: to serialize a dictionary to json, it can contain only strings
+			return this.Json(ModelHelper.GetLocalizedStates(this.AppService, countryCode));
 		}
 
 		private string Clean(string stringToClean)

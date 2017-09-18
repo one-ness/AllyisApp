@@ -16,9 +16,9 @@
 			<div class="row">
 				<div class="col-md-6 sm-control-width">
 					<div class="form-group">
-						@Html.ReqLabelFor(m => m.Name, Strings.Name)
-						@Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-						@Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+						@Html.ReqLabelFor(m => m.OrganizationName, Strings.Name)
+						@Html.TextBoxFor(m => m.OrganizationName, new { @class = "form-control" })
+						@Html.ValidationMessageFor(m => m.OrganizationName, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.SiteUrl, Strings.SiteURL)
@@ -56,12 +56,12 @@
 					</div>
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.Country, Strings.Country)
-						@Html.DropDownListFor(m => m.Country, new SelectList(Model.ValidCountries), Strings.DropDownEmpty, new { @class = "form-control" })
+						@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new {@id = ViewConstants.DdlCountriesId , @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.Country, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
 						@Html.ReqLabelFor(m => m.State, Strings.State)
-						@Html.DropDownListFor(m => m.State, new SelectList(new List<string>()), Strings.DropDownEmpty, new { @class = "form-control" })
+						@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @id= ViewConstants.DdlStatesId, @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
 					</div>
 					<div class="form-group">
@@ -83,13 +83,17 @@
 
 			<div class="form-group allyis-action-buttons">
 				@if (Model.IsCreating)
-				{
-					@Html.ActionLink(Strings.Cancel, ActionConstants.Index, ControllerConstants.Account, null, new { @class = "btn btn-default" })
-				}
-				else
-				{
-					@Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, new { @class = "btn btn-default" })
-				}
+                {
+                    <a href="@Url.Action(ActionConstants.Index, ControllerConstants.Account, null)" new { class = "btn btn-default" }>
+                        @Strings.Cancel
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" new { class = "btn btn-default" }>
+                        @Strings.Cancel
+                    </a>
+                }
 				<input type="submit" value="@Strings.Save" class="btn btn-primary" id="submit" />
 			</div>
 		}

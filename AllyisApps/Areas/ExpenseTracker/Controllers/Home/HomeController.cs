@@ -4,8 +4,8 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Controllers;
 using System.Web.Mvc;
+using AllyisApps.Controllers;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -25,6 +25,8 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// Index page.
 		/// </summary>
+		/// <param name="subscriptionId">The id of the expense tracker subscription.</param>
+		/// <returns>A redirect to the expense tracker index page action.</returns>
 		public ActionResult Index(int subscriptionId)
 		{
 			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Expense);

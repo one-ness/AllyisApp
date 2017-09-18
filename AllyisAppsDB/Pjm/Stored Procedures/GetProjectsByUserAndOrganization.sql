@@ -1,20 +1,20 @@
-﻿CREATE PROCEDURE [Pjm].[GetProjectsByUserAndOrganization]
-	@UserId INT,
-	@OrgId INT,
-	@Activity INT = 1
+CREATE PROCEDURE [Pjm].[GetProjectsByUserAndOrganization]
+	@userId INT,
+	@orgId INT,
+	@activity INT = 1
 AS
 	SET NOCOUNT ON;
 	SELECT	[Project].[ProjectId],
 			[Project].[CustomerId],
 			[Customer].[OrganizationId],
-			[Project].[CreatedUtc],
-			[Project].[Name] AS [ProjectName],
+			[Project].[ProjectCreatedUtc],
+			[Project].[ProjectName] AS [ProjectName],
 			[Project].[IsActive],
 			[Project].[StartUtc] AS [StartDate],
 			[Project].[EndUtc] AS [EndDate],
 			[Project].[IsHourly] AS [PriceType],
-			[Organization].[Name] AS [OrganizationName],
-			[Customer].[Name] AS [CustomerName],
+			[Organization].[OrganizationName] AS [OrganizationName],
+			[Customer].[CustomerName] AS [CustomerName],
 			[Customer].[CustomerOrgId],
 			[Customer].[IsActive] AS [IsCustomerActive],
 			[ProjectUser].[IsActive] AS [IsUserActive],
@@ -22,7 +22,7 @@ AS
 			[ProjectOrgId]
 FROM (
 	(SELECT [OrganizationId], [UserId], [OrganizationRoleId]
-	FROM [Auth].[OrganizationUser] WITH (NOLOCK) WHERE [UserId] = @UserId AND [OrganizationId] = @OrgId)
+	FROM [Auth].[OrganizationUser] WITH (NOLOCK) WHERE [UserId] = @userId AND [OrganizationId] = @orgId)
 	AS [OrganizationUser]
 	JOIN [Auth].[Organization]		WITH (NOLOCK) ON [OrganizationUser].[OrganizationId] = [Organization].[OrganizationId]
 	JOIN [Crm].[Customer]		WITH (NOLOCK) ON [Customer].[OrganizationId] = [Organization].[OrganizationId]
@@ -33,25 +33,25 @@ FROM (
 									AND [ProjectUser].[UserId] = [OrganizationUser].[UserId]
 	
 )
-WHERE [Customer].[IsActive] >= @Activity
-	AND [Project].[IsActive] >= @Activity
-	AND [ProjectUser].[IsActive] >= @Activity
+WHERE [Customer].[IsActive] >= @activity
+	AND [Project].[IsActive] >= @activity
+	AND [ProjectUser].[IsActive] >= @activity
 	UNION ALL
 SELECT	[ProjectId],
 		[CustomerId],
 		0,
-		[CreatedUtc],
-		[Name],
+		[ProjectCreatedUtc],
+		[ProjectName],
 		[IsActive],
 		[StartUtc],
 		[EndUtc],
 		[IsHourly],
-		(SELECT [Name] FROM [Auth].[Organization]  WITH (NOLOCK) WHERE [OrganizationId] = 0),
-		(SELECT [Name] FROM [Crm].[Customer]  WITH (NOLOCK) WHERE [CustomerId] = 0),
+		(SELECT [OrganizationName] FROM [Auth].[Organization]  WITH (NOLOCK) WHERE [OrganizationId] = 0),
+		(SELECT [CustomerName] FROM [Crm].[Customer]  WITH (NOLOCK) WHERE [CustomerId] = 0),
 		NULL,
 		0,
 		0,
 		0,
 		[ProjectOrgId]
 		FROM [Pjm].[Project]  WITH (NOLOCK) WHERE [ProjectId] = 0
-ORDER BY [Project].[Name]
+ORDER BY [Project].[ProjectName]

@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 using System;
-using System.ComponentModel;
 
 namespace AllyisApps.DBModel.Auth
 {
@@ -21,42 +20,17 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets the organization's e-mail address.
 		/// </summary>
-		public string Name { get; set; }
+		public string OrganizationName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's website URL.
 		/// </summary>
 		public string SiteUrl { get; set; }
 
-        /// <summary>
-        /// Gets or sets the organization's Address Id.
-        /// </summary>
-        public int AddressId { get; set; }
-
 		/// <summary>
-		/// Gets or sets the organization's physical address.
+		/// Gets or sets the organization's Address Id.
 		/// </summary>
-		public string Address { get; set; }
-
-		/// <summary>
-		/// Gets or sets the organization's city.
-		/// </summary>
-		public string City { get; set; }
-
-		/// <summary>
-		/// Gets or sets the organization's state.
-		/// </summary>
-		public string State { get; set; }
-
-		/// <summary>
-		/// Gets or sets the organization's country.
-		/// </summary>
-		public string Country { get; set; }
-
-		/// <summary>
-		/// Gets or sets the organization's postal code.
-		/// </summary>
-		public string PostalCode { get; set; }
+		public int? AddressId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the organization's phone number.
@@ -76,6 +50,6 @@ namespace AllyisApps.DBModel.Auth
 		/// <summary>
 		/// Gets or sets DateCreated.
 		/// </summary>
-		public DateTime CreatedUtc { get; set; }
+		public DateTime? CreatedUtc { get; set; }
 	}
 }

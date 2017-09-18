@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="BillingHistoryItemDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -11,7 +11,7 @@ namespace AllyisApps.DBModel.Billing
 	/// <summary>
 	/// Represents an item in the billing history of an organization.
 	/// </summary>
-	public class BillingHistoryItemDBEntity
+	public class BillingHistoryItemDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets the organization Id.

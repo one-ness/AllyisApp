@@ -3,35 +3,50 @@
 @model ManagePermissionsViewModel
 @Html.HiddenFor(m => m.OrganizationId)
 @{
-	ViewBag.Title = Strings.Permissions;
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = Strings.Permissions;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 
-	bool hasTimeTracker = Model.Subscriptions.Where(s => s.ProductId == Model.TimeTrackerId).Any();
+    bool hasTimeTracker = Model.Subscriptions.Where(s => s.ProductId == Model.TimeTrackerId).Any();
+    bool hasExpenseTracker = Model.Subscriptions.Where(s => s.ProductId == Model.ExpenseTrackerId).Any();
 
-	Dictionary<int, string> organizationRoles = new Dictionary<int, string>
-	{
-		{ (int)AllyisApps.Services.OrganizationRole.Member, Strings.Member },
-		{ (int)AllyisApps.Services.OrganizationRole.Owner, Strings.Owner }
-	};
-	Dictionary<int, string> ttRoles = new Dictionary<int, string>
-	{
-		{ (int)AllyisApps.Services.TimeTrackerRole.User, Strings.User },
-		{ (int)AllyisApps.Services.TimeTrackerRole.Manager, Strings.Manager },
-		{ (int)AllyisApps.Services.TimeTrackerRole.NotInProduct, Strings.Unassigned }
-	};
+    Dictionary<int, string> organizationRoles = new Dictionary<int, string>
+    {
+        { (int)AllyisApps.Services.OrganizationRole.Member, Strings.Member },
+        { (int)AllyisApps.Services.OrganizationRole.Owner, Strings.Owner }
+    };
+    Dictionary<int, string> ttRoles = new Dictionary<int, string>
+    {
+        { (int)AllyisApps.Services.TimeTrackerRole.User, Strings.User },
+        { (int)AllyisApps.Services.TimeTrackerRole.Manager, Strings.Manager },
+        { (int)AllyisApps.Services.TimeTrackerRole.NotInProduct, Strings.Unassigned }
+    };
 
-	Dictionary<string, int> setOrganizationRoles = new Dictionary<string, int>
-	{
-		{ Strings.RemoveOrg, -1 },
-		{ Strings.SetMember, (int)AllyisApps.Services.OrganizationRole.Member },
-		{ Strings.SetOwner, (int)AllyisApps.Services.OrganizationRole.Owner }
-	};
-	Dictionary<string, int> setTTRoles = new Dictionary<string, int>
-	{
-		{ Strings.RemoveFromSubscription, -1 },
-		{ Strings.SetUser, (int)AllyisApps.Services.TimeTrackerRole.User },
-		{ Strings.SetManager, (int)AllyisApps.Services.TimeTrackerRole.Manager }
-	};
+    Dictionary<int, string> etRoles = new Dictionary<int, string>
+    {
+        { (int)AllyisApps.Services.ExpenseTrackerRole.User, Strings.User },
+        { (int)AllyisApps.Services.ExpenseTrackerRole.Manager, Strings.Manager },
+        { (int)AllyisApps.Services.ExpenseTrackerRole.NotInProduct, Strings.Unassigned }
+    };
+
+    Dictionary<string, int> setOrganizationRoles = new Dictionary<string, int>
+    {
+        { Strings.RemoveOrg, -1 },
+        { Strings.SetMember, (int)AllyisApps.Services.OrganizationRole.Member },
+        { Strings.SetOwner, (int)AllyisApps.Services.OrganizationRole.Owner }
+    };
+    Dictionary<string, int> setTTRoles = new Dictionary<string, int>
+    {
+        { Strings.RemoveFromSubscription, 0 },
+        { Strings.SetUser, (int)AllyisApps.Services.TimeTrackerRole.User },
+        { Strings.SetManager, (int)AllyisApps.Services.TimeTrackerRole.Manager }
+    };
+
+    Dictionary<string, int> setETRoles = new Dictionary<string, int>
+    {
+        { Strings.RemoveFromSubscription, 0},
+        { Strings.SetUser, (int)AllyisApps.Services.ExpenseTrackerRole.User },
+        { Strings.SetManager, (int)AllyisApps.Services.ExpenseTrackerRole.Manager }
+    };
 }
 
 @Html.AntiForgeryToken()
@@ -41,6 +56,10 @@
 	@if (hasTimeTracker)
 	{
 		<li id="TimeTrackerTab">@Strings.TimeTracker</li>
+    }
+    @if(hasExpenseTracker)
+    {
+        <li id="ExpenseTrackerTab">@Strings.ExpenseTracker</li>
     }
 </ul>
 <div class="panel panel-default">
@@ -54,6 +73,10 @@
                     @if (hasTimeTracker)
                     {
                         <th class="tab-TimeTrackerTab" style="display: none; width: 47%;">@Strings.TimeTrackerRole</th>
+                    }
+                    @if (hasTimeTracker)
+                    {
+                        <th class="tab-TimeTrackerTab" style="display: none; width: 47%;">@Strings.ExpenseTrackerRole</th>
                     }
                 </tr>
                 <tr class="double-bottom-border">
@@ -84,6 +107,18 @@
                             </select>
                         </td>
                     }
+                    @if(hasExpenseTracker)
+                    {
+                        <td class="tab-ExpenseTrackerTab" style="="display: none;">
+                            <select id="etRoleFilter" class=" = form-control">
+                                <option>@Strings.Any</option>
+                                @foreach(string etrole in etRoles.Values)
+                                {
+                                    <option>@etrole</option>
+                                }
+                            </select>
+                        </td>
+                    }
                 </tr>
             </thead>
 
@@ -100,6 +135,10 @@
                     @if (hasTimeTracker)
 					{
 						<td id="ttRole" class="tab-TimeTrackerTab" style="display: none;">@ttRoles[user.ProductRoleIds[Model.TimeTrackerSubIndex]]</td>
+                    }
+                    @if(hasExpenseTracker)
+                    {
+                        <td id="etRole" class="tab-ExpenseTrackerTab" style="display: none;">@etRoles[user.ProductRoleIds[Model.ExpenseTrackerSubIndex]]</td>
                     }
                 </tr>
             }
@@ -140,10 +179,21 @@
 					</optgroup>
 				</select>
 			}
+            @if (hasExpenseTracker)
+            {
+                <select class="form-control tab-ExpenseTrackerTab" id="etActionSelect" style="display: none">
+                    <optgroup label="@Strings.ExpenseTracker">
+                        @foreach(string setETRole in setETRoles.Keys)
+                        {
+                            <option>@setETRole</option>
+                        }
+                    </optgroup>
+                </select>
+            }
         </div>
 
         <div class="bottom-right">
-			@Html.ActionLink(Strings.Cancel, ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId }, new { @class = "btn btn-default" })
+            <a href="@Url.Action(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = Model.OrganizationId })" class="btn btn-default"> @Strings.Cancel </a>
             <input type="button" class="btn btn-primary" id="do-it" value="@Strings.Save" />
         </div>
     </div>
@@ -153,6 +203,7 @@
     <script type="text/javascript">
         orgActions = @Html.Raw(Json.Encode(setOrganizationRoles));
         ttActions = @Html.Raw(Json.Encode(setTTRoles));
+        etActions = @Html.Raw(Json.Encode(setETRoles));
         confirmMessage = "@Html.Raw(Strings.RemoveFromOrgNoName)";
     </script>
     <script src="~/Scripts/allyis-account-permission2.js" type="text/javascript"></script>

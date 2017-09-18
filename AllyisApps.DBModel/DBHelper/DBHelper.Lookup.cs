@@ -4,13 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.DBModel.Lookup;
-using Dapper;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using AllyisApps.DBModel.Lookup;
+using Dapper;
 
 namespace AllyisApps.DBModel
 {
@@ -20,39 +20,24 @@ namespace AllyisApps.DBModel
 	public partial class DBHelper
 	{
 		/// <summary>
-		/// Retrieves a collection of valid countries from the database.
-		/// </summary>
-		/// <returns>A collection of country names.</returns>
-		public Dictionary<int, string> GetCountriesDictionary()
-		{
-			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
-			{
-				return connection.Query<CountryDBEntity>("[Lookup].[GetCountries]").ToDictionary(x => x.CountryId, x => x.Name);
-			}
-		}
-
-		/// <summary>
 		/// list of valid countries
 		/// </summary>
-		public List<string> ValidCountries()
+		public Dictionary<string, string> GetCountries()
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<CountryDBEntity>("[Lookup].[GetCountries]").Select(x => x.Name).ToList();
+				return connection.Query<CountryDBEntity>("[Lookup].[GetCountries]").ToDictionary(x => x.CountryCode, x => x.CountryName);
 			}
 		}
 
 		/// <summary>
-		/// Retrieves a collection of valid states (or provinces)
-		///     from the database based on the source country.
+		/// list of states for the given country
 		/// </summary>
-		/// <param name="countryName">The country's name.</param>
-		/// <returns>A collection of states/provinces within that country.</returns>
-		public IEnumerable ValidStates(string countryName)
+		public Dictionary<int, string> GetStates(string countryCode)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<string>("[Lookup].[GetStatesByCountry]", new { CountryName = countryName }, commandType: CommandType.StoredProcedure);
+				return connection.Query<StateDBEntity>("[Lookup].[GetStates] @a", new { a = countryCode }).ToDictionary(x => x.StateId, x => x.StateName);
 			}
 		}
 
@@ -71,13 +56,26 @@ namespace AllyisApps.DBModel
 		/// <summary>
 		/// Retrieves a language setting from the database.
 		/// </summary>
-		/// <param name="languageId">The language Id.</param>
+		/// <param name="CultureName">The language Id.</param>
 		/// <returns>A language setting row.</returns>
-		public LanguageDBEntity GetLanguage(int languageId)
+		public LanguageDBEntity GetLanguage(string CultureName)
 		{
 			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
 			{
-				return connection.Query<LanguageDBEntity>("[Lookup].[GetLanguageById]", new { LanguageId = languageId }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+				return connection.Query<LanguageDBEntity>("[Lookup].[GetLanguageById]", new { CultureName = CultureName }, commandType: CommandType.StoredProcedure).SingleOrDefault();
+			}
+		}
+
+		/// <summary>
+		/// Get Address based on addres ID
+		/// </summary>
+		/// <param name="addressID"></param>
+		/// <returns></returns>
+		public AddressDBEntity getAddreess(int? addressID)
+		{
+			using (SqlConnection connection = new SqlConnection(this.SqlConnectionString))
+			{
+				return connection.Query<AddressDBEntity>("[Lookup].[GetAddress]", new { addresId = addressID }, commandType: CommandType.StoredProcedure).SingleOrDefault();
 			}
 		}
 	}

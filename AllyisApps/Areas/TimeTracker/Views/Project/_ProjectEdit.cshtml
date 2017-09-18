@@ -1,73 +1,73 @@
 ﻿@model AllyisApps.ViewModels.TimeTracker.Project.EditProjectViewModel
 
 @{
-    AjaxOptions ao = new AjaxOptions
-    {
-        UpdateTargetId = "OrgEditWrap"
-    };
-    Layout = "~/Views/Shared/_LayoutModal.cshtml";
-    string action = ViewBag.Action;
+	AjaxOptions ao = new AjaxOptions
+	{
+		UpdateTargetId = "OrgEditWrap"
+	};
+	Layout = "~/Views/Shared/_LayoutModal.cshtml";
+	string action = ViewBag.Action;
 }
 
 <div class="shrink-wrap-center">
-    <div>
-        @using (Html.BeginForm(action, ControllerConstants.Project, FormMethod.Post, new { @class = "", id = "ProjectForm", role = "form", name = "EditForm", onsubmit = "return selectAll()" }))
-        {
-            <div>
-                @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true)
-                <div class="form-group">
-                    @Html.ReqLabelFor(m => m.ProjectName, @Strings.Name)
-                    @Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(x => x.ProjectName, "", new { @class = "text-danger" })
-                </div>
-                <div class="form-group">
-                    @Html.ReqLabelFor(m => m.ProjectOrgId, Strings.ProjectOrgId)
-                    @Html.TextBoxFor(m => m.ProjectOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.ProjectOrgId })
-                    @Html.ValidationMessageFor(x => x.ProjectOrgId, "", new { @class = "text-danger"})
-                </div>
-                @if (Model.SelectedProjectUserIds.Count() > 0)
-                {
-                    var _projectUsers = Model.ProjectUsers.ToList();
-                    var _subscriptionUsers = Model.SubscriptionUsers.ToList();
-                    foreach (var id in Model.SelectedProjectUserIds)
-                    {
-                        var choice = Model.SubscriptionUsers.Where(m => m.UserId == id).FirstOrDefault();
-                        _projectUsers.Add(choice);
-                        _subscriptionUsers.Remove(choice);
-                    }
-                    Model.ProjectUsers = _projectUsers;
-                    Model.SubscriptionUsers = _subscriptionUsers;
-                }
-                <div id="swapper-ui" class="swapper-ui">
-                    <div class="left">
-                        <label>@Strings.OffProj</label>
-                        @*<input type="text" placeholder=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder class="form-control" />*@
-                        @*
-                            Create a multi-select list that is populated from SubscriptionUsers
-                            Uses Javascript and the add/remove buttons to add and remove items from this listbox
-                        *@
-                        @Html.ListBoxFor(m => m.SubscriptionUsers, new MultiSelectList(Model.SubscriptionUsers, "UserId", "Name"), new { @name = "Excluded", @id = "excluded-users", @class = "filter-list", @Multiple = "multiple" })
-                    </div>
-                    <div class="actions">
-                        <a href="javascript: moveSelectedProjectEditModal('in')" class="btn btn-default move-in">
-                            <i class="fa fa-lg fa-arrow-right"></i>
-                        </a>
-                        <a href="javascript: moveSelectedProjectEditModal('out')" class="btn btn-default move-out">
-                            <i class="fa fa-lg fa-arrow-left"></i>
-                        </a>
-                    </div>
-                    <div class="right">
-                        <label>@Strings.OnProj</label>
-                        @*<input type="text" placeholder="@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder" class="form-control" />*@
-                        @*
-                            Create a multi-select list that is populated from ProjectUsers and binds all selected items to SelectedProjectUserIds
-                            On Submit, all items in this list become selected, so the whole list is bound to the model
-                            Items are added and removed from this list via Javascript and the add / remove buttons
-                        *@
-                        @Html.ListBoxFor(m => m.SelectedProjectUserIds, new MultiSelectList(Model.ProjectUsers, "UserId", "Name"), new { @name = "Included", @id = "included-users", @class = "filter-list", @Multiple = "multiple" })
-                    </div>
-                </div>
+	<div>
+		@using (Html.BeginForm(action, ControllerConstants.Project, FormMethod.Post, new { @class = "", id = "ProjectForm", role = "form", name = "EditForm", onsubmit = "return selectAll()" }))
+		{
+			<div>
+				@Html.AntiForgeryToken()
+				@Html.ValidationSummary(true)
+				<div class="form-group">
+					@Html.ReqLabelFor(m => m.ProjectName, @Strings.Name)
+					@Html.TextBoxFor(m => m.ProjectName, new { @class = "form-control" })
+					@Html.ValidationMessageFor(x => x.ProjectName, "", new { @class = "text-danger" })
+				</div>
+				<div class="form-group">
+					@Html.ReqLabelFor(m => m.ProjectOrgId, Strings.ProjectOrgId)
+					@Html.TextBoxFor(m => m.ProjectOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.ProjectOrgId })
+					@Html.ValidationMessageFor(x => x.ProjectOrgId, "", new { @class = "text-danger" })
+				</div>
+				@if (Model.SelectedProjectUserIds.Count() > 0)
+				{
+					var _projectUsers = Model.ProjectUsers.ToList();
+					var _subscriptionUsers = Model.SubscriptionUsers.ToList();
+					foreach (var id in Model.SelectedProjectUserIds)
+					{
+						var choice = Model.SubscriptionUsers.Where(m => m.UserId == id).FirstOrDefault();
+						_projectUsers.Add(choice);
+						_subscriptionUsers.Remove(choice);
+					}
+					Model.ProjectUsers = _projectUsers;
+					Model.SubscriptionUsers = _subscriptionUsers;
+				}
+				<div id="swapper-ui" class="swapper-ui">
+					<div class="left">
+						<label>@Strings.OffProj</label>
+						@*<input type="text" placeholder=@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder class="form-control" />*@
+						@*
+							Create a multi-select list that is populated from SubscriptionUsers
+							Uses Javascript and the add/remove buttons to add and remove items from this listbox
+						*@
+						@Html.ListBoxFor(m => m.SubscriptionUsers, new MultiSelectList(Model.SubscriptionUsers, "UserId", "Name"), new { @name = "Excluded", @id = "excluded-users", @class = "filter-list", @Multiple = "multiple" })
+					</div>
+					<div class="actions">
+						<a href="javascript: moveSelectedProjectEditModal('in')" class="btn btn-default move-in">
+							<i class="fa fa-lg fa-arrow-right"></i>
+						</a>
+						<a href="javascript: moveSelectedProjectEditModal('out')" class="btn btn-default move-out">
+							<i class="fa fa-lg fa-arrow-left"></i>
+						</a>
+					</div>
+					<div class="right">
+						<label>@Strings.OnProj</label>
+						@*<input type="text" placeholder="@AllyisApps.Resources.TimeTracker.Views.Project.Strings.SearchPlaceholder" class="form-control" />*@
+						@*
+							Create a multi-select list that is populated from ProjectUsers and binds all selected items to SelectedProjectUserIds
+							On Submit, all items in this list become selected, so the whole list is bound to the model
+							Items are added and removed from this list via Javascript and the add / remove buttons
+						*@
+						@Html.ListBoxFor(m => m.SelectedProjectUserIds, new MultiSelectList(Model.ProjectUsers, "UserId", "Name"), new { @name = "Included", @id = "included-users", @class = "filter-list", @Multiple = "multiple" })
+					</div>
+				</div>
 				<div class="form-group row" style="margin-bottom: 0px; margin-top: 15px;">
 					<div class="form-group projectDate">
 						<label>@Strings.StartDate</label>
@@ -82,48 +82,48 @@
 						<span class="fa fa-fw fa-calendar" id="datePickerEndButton"></span>
 					</div>
 				</div>
-                @Html.HiddenFor(m => m.ParentCustomerId)
-                @Html.HiddenFor(m => m.ProjectId)
-                @Html.HiddenFor(m => m.IsCreating)
-                @Html.HiddenFor(m => m.OrganizationId)
-                @Html.HiddenFor(m=> m.SubscriptionId)
-            </div>
-			
-            <div class="text-right" style="padding-top: 15px; padding-bottom: 15px;">
-                <input type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId })'" />
-                <input type="submit" value=@Strings.Save class="btn btn-primary" id="submitProject"/>
-            </div>
-        }
+				@Html.HiddenFor(m => m.ParentCustomerId)
+				@Html.HiddenFor(m => m.ProjectId)
+				@Html.HiddenFor(m => m.IsCreating)
+				@Html.HiddenFor(m => m.OrganizationId)
+				@Html.HiddenFor(m => m.SubscriptionId)
+			</div>
 
-        <br />
-        @if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
-        {
-            <div class="row">
-                <div class="col-md-6 sm-control-width">
-                    <label>@Strings.Upload</label>
-                    @using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
-                    {
-                        @Html.AntiForgeryToken();
-                        <div>
-                            <input type="file" id="upload-box" name="upload" style="display:none;"
-                                   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-                            <input id="upload-file-name-display" class="form-control"
-                                   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
-                        </div>
+			<div class="text-right" style="padding-top: 15px; padding-bottom: 15px;">
+				<input type="button" class="btn btn-default" value=@Strings.Cancel onclick="location='@Url.Action(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId })'" />
+				<input type="submit" value=@Strings.Save class="btn btn-primary" id="submitProject" />
+			</div>
+		}
 
-                        <div style="margin-top: 10px; margin-bottom: 15px; float:right;">
-                            <a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose project entries Excel file to upload">@Strings.ChooseFile</a>
-                            <input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload project entries from Excel"/>
-                        </div>
-                    }
-                    @using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get, new { style = "display: flex; justify-content: space-between;", id = "template-form" }))
-                    {
-                        <div style="margin-top: 10px; margin-bottom: 15px; float:left">
-                            <input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary" title="Download Excel template for project entries"/>
-                        </div>
-                    }
-                </div>
-            </div>
-        }
-    </div><!-- /.modal-content -->
+		<br />
+		@if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
+		{
+			<div class="row">
+				<div class="col-md-6 sm-control-width">
+					<label>@Strings.Upload</label>
+					@using (Html.BeginForm(ActionConstants.Import, ControllerConstants.Customer, new { subscriptionId = Model.SubscriptionId }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+					{
+						@Html.AntiForgeryToken();
+						<div>
+							<input type="file" id="upload-box" name="upload" style="display:none;"
+								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+							<input id="upload-file-name-display" class="form-control"
+								   onchange="$('#upload-file-name-display').val($(this).val().replace('C:\\fakepath\\', ''));" />
+						</div>
+
+						<div style="margin-top: 10px; margin-bottom: 15px; float:right;">
+							<a class="btn btn-primary" onclick="$('input[id=upload-box]').click();" title="Choose project entries Excel file to upload">@Strings.ChooseFile</a>
+							<input style="margin-left: 10px" type="submit" id="upload-button" value="@Strings.Upload" class="btn btn-primary" title="Upload project entries from Excel" />
+						</div>
+					}
+					@using (Html.BeginForm(ActionConstants.Template, ControllerConstants.Customer, null, FormMethod.Get, new { style = "display: flex; justify-content: space-between;", id = "template-form" }))
+					{
+						<div style="margin-top: 10px; margin-bottom: 15px; float:left">
+							<input type="submit" form="template-form" id="template-button" value="@Strings.Template" class="btn btn-primary" title="Download Excel template for project entries" />
+						</div>
+					}
+				</div>
+			</div>
+		}
+	</div><!-- /.modal-content -->
 </div><!-- /.modal-dialog -->

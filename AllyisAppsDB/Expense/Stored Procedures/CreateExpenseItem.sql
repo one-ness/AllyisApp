@@ -1,9 +1,10 @@
-﻿CREATE PROCEDURE [Expense].[CreateExpenseItem]
+CREATE PROCEDURE [Expense].[CreateExpenseItem]
 	@itemDescription NVARCHAR(100),
 	@transactionDate DATETIME2(0),
 	@amount DECIMAL(18, 2),
 	@expenseReportId INT,
-	@isBillableToCustomer BIT
+	@isBillableToCustomer BIT,
+	@accountId INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -13,10 +14,12 @@ BEGIN
 		[TransactionDate],
 		[Amount],
 		[ExpenseReportId],
-		[IsBillableToCustomer])
-	VALUES (@ItemDescription,
-		@TransactionDate,
-		@Amount,
-		@ExpenseReportId,
-		@IsBillableToCustomer);
+		[IsBillableToCustomer],
+		[AccountId])
+	VALUES (@itemDescription,
+		@transactionDate,
+		@amount,
+		@expenseReportId,
+		@isBillableToCustomer,
+		@accountId);
 END

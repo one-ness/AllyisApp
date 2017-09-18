@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [Auth].[GetUserContextInfo]
-	@UserId int
+CREATE PROCEDURE [Auth].[GetUserContextInfo]
+	@userId int
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -9,10 +9,9 @@ BEGIN
 		   [U].[LastName],
 		   [U].[Email],
 		   [U].[LastUsedSubscriptionId],
-		   [U].[LastUsedOrganizationId],
 		   [U].[PreferredLanguageId],
 		   [O].[OrganizationId],
-		   [O].[Name] AS 'OrganizationName',
+		   [O].[OrganizationName] AS 'OrganizationName',
 		   [OU].[OrganizationRoleId],
 		   [SUB].[SubscriptionId],
 		   [SUB].[SubscriptionName],
@@ -28,9 +27,9 @@ BEGIN
 			SELECT	[S].[SubscriptionId],
 					[S].[SubscriptionName],
 					[PR].[ProductId],
-					[P].[Name] AS 'ProductName',
+					[P].[ProductName] AS 'ProductName',
 					[P].[AreaUrl],
-					[PR].[Name] AS 'ProductRoleName',
+					[PR].[ProductRoleName] AS 'ProductRoleName',
 					[S].[SkuId],
 					[SU].[ProductRoleId],
 					[SU].[UserId],
@@ -42,5 +41,5 @@ BEGIN
 				LEFT JOIN [Billing].[Product] AS [P] WITH (NOLOCK) ON [PR].[ProductId] = [P].[ProductId]
 			WHERE [S].[IsActive] = 1
 		) [SUB] ON [SUB].[UserId] = [U].[UserId] AND [SUB].[OrganizationId] = [O].[OrganizationId]
-	WHERE [U].[UserId] = @UserId;
+	WHERE [U].[UserId] = @userId;
 END

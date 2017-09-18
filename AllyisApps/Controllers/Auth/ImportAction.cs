@@ -1,17 +1,17 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="ImportAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core.Alert;
-using AllyisApps.Services;
-using AllyisApps.Utilities;
-using Excel;
 using System.Data;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
+using AllyisApps.Core.Alert;
+using AllyisApps.Services;
+using AllyisApps.Utilities;
+using Excel;
 
 namespace AllyisApps.Controllers
 {
@@ -25,7 +25,7 @@ namespace AllyisApps.Controllers
 		/// For importing users into an organization
 		/// Code adapted from http://techbrij.com/read-excel-xls-xlsx-asp-net-mvc-upload.
 		/// </summary>
-		/// <param name="id">organization id</param>
+		/// <param name="id">Organization id.</param>
 		/// <param name="upload">File to upload.</param>
 		/// <returns>The resulting page, Create if unsuccessful else Customer Index.</returns>
 		[HttpPost]
@@ -57,7 +57,7 @@ namespace AllyisApps.Controllers
 					else
 					{
 						Notifications.Add(new BootstrapAlert(Resources.Strings.FileFormatUnsupported, Variety.Danger));
-						return RedirectToAction(ActionConstants.AddMember, ControllerConstants.Account, new { id = id });
+						return RedirectToAction(ActionConstants.AddMember, ControllerConstants.Account, new { organizationId = id });
 					}
 
 					reader.IsFirstRowAsColumnNames = true;
@@ -65,7 +65,8 @@ namespace AllyisApps.Controllers
 					DataSet result = reader.AsDataSet();
 					reader.Close();
 
-					string[] formattedResult = ImportMessageFormatter.FormatImportResult(AppService.Import(result, organizationId: id));
+					string[] formattedResult = ImportMessageFormatter.FormatImportResult(AppService.Import(result, organizationId: id,
+						inviteUrl: Url.Action(ActionConstants.Index, ControllerConstants.Account, null, protocol: Request.Url.Scheme)));
 					if (!string.IsNullOrEmpty(formattedResult[0]))
 					{
 						Notifications.Add(new BootstrapAlert(formattedResult[0], Variety.Success));
@@ -77,6 +78,7 @@ namespace AllyisApps.Controllers
 						alert.IsHtmlString = true;
 						Notifications.Add(alert);
 					}
+
 					return RedirectToAction(ActionConstants.ManageOrg, ControllerConstants.Account, new { id = id });
 				}
 				else
@@ -85,7 +87,7 @@ namespace AllyisApps.Controllers
 				}
 			}
 
-			return RedirectToAction(ActionConstants.AddMember, ControllerConstants.Account, new { id = id });
+			return RedirectToAction(ActionConstants.AddMember, ControllerConstants.Account, new { organizationId = id });
 		}
 	}
 }

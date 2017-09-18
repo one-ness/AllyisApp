@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Core.Alert;
-using AllyisApps.ViewModels.Auth;
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AllyisApps.Core.Alert;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {
@@ -20,6 +20,8 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// GET: /Account/ResetPassword.
 		/// </summary>
+		/// <param name="id">The guid for the password reset.</param>
+		/// <returns>The reset password view.</returns>
 		[HttpGet]
 		[AllowAnonymous]
 		public ActionResult ResetPassword(Guid id)

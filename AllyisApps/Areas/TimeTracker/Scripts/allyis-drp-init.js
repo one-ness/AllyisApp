@@ -39,7 +39,7 @@ function updateDates(control) {
  startDateId - the hidden form input to set as the range start value
  endDateId - the hidden form input to set as the range end value (if applicable)
  numberOfMonths - 1 or 2; number of month panels to display
-                - This value also controlls whether to pick one date, or two (for a range) - perhaps not good behavior, but these numbers matched in all use cases
+				- This value also controlls whether to pick one date, or two (for a range) - perhaps not good behavior, but these numbers matched in all use cases
  customChangeFunction - a function that will be executed everytime the date range picker apply button is pressed
  startInit - the initial start of the date range, in days since DateTime.MinValue
  endInit - the initial end of the date range (if applicable), in days since DateTime.MinValue
@@ -52,6 +52,8 @@ function init_drp(drpElementId, drpPresets, startDateId, endDateId, numberOfMont
 		customChangeFunction = function () { };
 	}
 	var picker = $('#' + drpElementId).daterangepicker({
+		changeMonth: true,
+		changeYear: true,
 		initialText: 'Select period...',
 		datepickerOptions: {
 			minDate: null,
@@ -69,7 +71,7 @@ function init_drp(drpElementId, drpPresets, startDateId, endDateId, numberOfMont
 			customChangeFunction();
 		}
 	});
-	if (numberOfMonths == 1) {
+	if (numberOfMonths === 1) {
 		$('#' + drpElementId).daterangepicker("setRange", {
 			start: DateConvert.GetMomentFromDays(startInit).toDate()
 		});

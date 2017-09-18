@@ -6,11 +6,12 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using AllyisApps.Services.Lookup;
 
 namespace AllyisApps.Services
 {
 	/// <summary>
-	/// An object for keeping track of all the info related to a given organization.
+	/// an organization
 	/// </summary>
 	public class Organization
 	{
@@ -22,7 +23,7 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Organization name.
 		/// </summary>
-		public string Name { get; set; }
+		public string OrganizationName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Organization site URL.
@@ -31,37 +32,9 @@ namespace AllyisApps.Services
 		public string SiteUrl { get; set; }
 
 		/// <summary>
-		/// Gets or sets the organization's Address Id
+		/// Gets or sets the organization's Address.
 		/// </summary>
-		public int AddressId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Street address.
-		/// </summary>
-		[Display(Name = "Street Address")]
-		public string Address { get; set; }
-
-		/// <summary>
-		/// Gets or sets the City.
-		/// </summary>
-		public string City { get; set; }
-
-		/// <summary>
-		/// Gets or sets the State.
-		/// </summary>
-		public string State { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Country.
-		/// </summary>
-		[Display(Name = "Country/Region")]
-		public string Country { get; set; }
-
-		/// <summary>
-		/// Gets or sets the Postal code.
-		/// </summary>
-		[Display(Name = "Postal Code")]
-		public string PostalCode { get; set; }
+		public Address Address { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Phone number.
@@ -78,11 +51,21 @@ namespace AllyisApps.Services
 		/// <summary>
 		/// Gets or sets the Date this organization was created.
 		/// </summary>
-		public DateTime CreatedUtc { get; set; }
+		public DateTime? CreatedUtc { get; set; }
 
 		/// <summary>
 		/// Gets or sets the Organization subdomain perfix.
 		/// </summary>
 		public string Subdomain { get; set; }
+
+		/// <summary>
+		/// Gets or sets if this organization is active
+		/// </summary>
+		public bool IsActive { get; set; }
+
+		public Organization()
+		{
+			Address = new Address();
+		}
 	}
 }

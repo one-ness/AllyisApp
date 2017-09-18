@@ -4,11 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.TimeTracker.TimeEntry;
-using System.Collections.Generic;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -20,20 +21,32 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// GET /TimeTracker/TimeEntry/UserEdit.
 		/// </summary>
-		/// <param name="subscriptionId">The subscription's id</param>
+		/// <param name="subscriptionId">The subscription's id.</param>
 		/// <param name="userId">The Id of the user to edit.</param>
 		/// <returns>The user edit page.</returns>
 		public ActionResult UserEdit(int subscriptionId, int userId)
 		{
 			this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId);
 			var infos = AppService.GetProjectsForOrgAndUser(userId, subscriptionId);
+			string subscriptionNameToDisplay = AppService.getSubscriptionName(subscriptionId);
 			return this.View(new UserEditViewModel
 			{
 				UserId = this.AppService.UserContext.UserId,
 				SubscriptionId = subscriptionId,
-				UserProjects = infos.Item1,
-				AllProjects = infos.Item2,
-				UserName = infos.Item3
+				UserProjects = infos.Item1.AsParallel().Select(proj => new UserEditViewModel.ProjectInfoViewModel()
+				{
+					ProjectId = proj.ProjectId,
+					ProjectName = proj.ProjectName,
+					CustomerName = proj.CustomerName
+				}),
+				AllProjects = infos.Item2.AsParallel().Select(proj => new UserEditViewModel.ProjectInfoViewModel()
+				{
+					ProjectName = proj.ProjectName,
+					ProjectId = proj.ProjectId,
+					CustomerName = proj.CustomerName
+				}),
+				UserName = infos.Item3,
+				SubscriptionName = subscriptionNameToDisplay
 			});
 		}
 
@@ -41,7 +54,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// AJAX callback to update the projects for a user.
 		/// </summary>
 		/// <param name="userId">The Id of the user to edit.</param>
-		/// <param name="subscriptionId">The subscription's Id</param>
+		/// <param name="subscriptionId">The subscription's Id.</param>
 		/// <param name="offUser">The list of projects not associated with the user.</param>
 		/// <param name="onUser">The list of projects associated with the user.</param>
 		/// <returns>Json object representing the results of the action.</returns>
@@ -49,7 +62,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		[ValidateAntiForgeryToken]
 		public JsonResult UserEditAJAX(int userId, int subscriptionId, List<int> offUser, List<int> onUser)
 		{
-			int organizationId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
+			int organizationId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			if (this.AppService.CheckTimeTrackerAction(AppService.TimeTrackerAction.EditProject, subscriptionId, false))
 			{
 				if (offUser != null)

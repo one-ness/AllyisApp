@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="SubscriptionDisplayDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -11,7 +11,7 @@ namespace AllyisApps.DBModel.Billing
 	/// <summary>
 	/// The table to display the subscription information.
 	/// </summary>
-	public class SubscriptionDisplayDBEntity
+	public class SubscriptionDisplayDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets The id of the subscription product.
@@ -22,6 +22,11 @@ namespace AllyisApps.DBModel.Billing
 		/// Gets or sets The string identifier of the product id.
 		/// </summary>
 		public string ProductName { get; set; }
+
+		/// <summary>
+		/// Prodcut Description
+		/// </summary>
+		public string Description { get; set; }
 
 		/// <summary>
 		/// Gets or sets The subscription id.
@@ -43,15 +48,15 @@ namespace AllyisApps.DBModel.Billing
 		/// </summary>
 		public int NumberOfUsers { get; set; }
 
-        /// <summary>
-        /// Gets or sets Subscription Name.
-        /// </summary>
-        public string SubscriptionName { get; set; }
+		/// <summary>
+		/// Gets or sets Subscription Name.
+		/// </summary>
+		public string SubscriptionName { get; set; }
 
-        /// <summary>
-        /// Gets or sets The name of the organization.
-        /// </summary>
-        public string OrganizationName { get; set; }
+		/// <summary>
+		/// Gets or sets The name of the organization.
+		/// </summary>
+		public string OrganizationName { get; set; }
 
 		/// <summary>
 		/// Gets or sets The name of the Sku.
@@ -69,8 +74,8 @@ namespace AllyisApps.DBModel.Billing
 		public string Tier { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether a user has permission to view this subscription.
+		/// Get Area Url
 		/// </summary>
-		public bool CanViewSubscription { get; set; }
+		public string AreaUrl { get; set; }
 	}
 }

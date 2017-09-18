@@ -8,29 +8,37 @@
 	ViewBag.ShowAll = true;
 	string userDisplay = string.Empty;
 	string price = string.Empty;
-	if (Model.Info != null)
+	if (Model != null)
 	{
-		userDisplay = string.Format("{0} {1}", Model.Info.NumberOfUsers, Strings.Users);
+		userDisplay = string.Format("{0} {1}", Model.NumberofUsers, Strings.Users);
 		price = "";
 	}
 }
 
 <tr>
 	<td class="col-md-9">
-		@if (Model.AreaUrl == "ExpenseTracker")
+		@if (Model.AreaUrl.ToLower() == "expensetracker")
 		{
-			@Model.ProductName
+			<a href="@Url.RouteUrl(RouteNameConstants.ExpenseTracker, new { subscriptionId = Model.SubscriptionId, controller = ControllerConstants.Expense })" style="text-decoration: none; color: inherit">
+				@string.Format("{0}", Model.SubscriptionName) <i class="fa fa-caret-right"></i>
+			</a>
+		}
+		else if (Model.AreaUrl.ToLower() == "timetracker")
+		{
+			<a href="@Url.RouteUrl(RouteNameConstants.TimeTrackerNoIndex, new { subscriptionId = Model.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = ViewData["StartDate"], endDate = ViewData["EndDate"] })" style="text-decoration: none; color: inherit">
+				@string.Format("{0}", Model.SubscriptionName) <i class="fa fa-caret-right"></i>
+			</a>
 		}
 		else
 		{
-			<a href="@Url.RouteUrl(RouteNameConstants.TimeTrackerNoIndex, new { subscriptionId = Model.SubscriptionId, controller = ControllerConstants.TimeEntry, startDate = ViewData["StartDate"], endDate = ViewData["EndDate"] })" style="text-decoration: none; color: inherit">
+			<a href="" style="text-decoration: none; color: inherit">
 				@string.Format("{0}", Model.SubscriptionName) <i class="fa fa-caret-right"></i>
 			</a>
 		}
 	</td>
 	<td class="col-md-2" style="text-align: center">@userDisplay</td>
 	<td class="text-right icon-strip col-md-1">
-		<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { id = Model.Info.SubscriptionId })"
+		<a href="@Url.Action(ActionConstants.EditSubscription, ControllerConstants.Account, new { subscriptionId = Model.SubscriptionId })"
 			class="text-muted" title="@Strings.EditSubscription" style="color:inherit"><span class="fa fa-fw fa-edit"></span></a>
 	</td>
 </tr>

@@ -1,10 +1,10 @@
-﻿CREATE PROCEDURE [Billing].[GetSkuById]
-	@SkuId INT
+CREATE PROCEDURE [Billing].[GetSkuById]
+	@skuId INT
 AS
 	SET NOCOUNT ON;
 	SELECT [SkuId]
       ,[ProductId]
-      ,[Name]
+      ,[SkuName]
       ,[CostPerBlock]
       ,[UserLimit]
       ,[BillingFrequency]
@@ -14,4 +14,4 @@ AS
       ,[PromoCostPerBlock]
       ,[PromoDeadline]
       ,[IsActive]
-       FROM [Billing].[Sku] WITH (NOLOCK) WHERE [SkuId] = @SkuId
+       FROM [Billing].[Sku] WITH (NOLOCK) WHERE [SkuId] = @skuId

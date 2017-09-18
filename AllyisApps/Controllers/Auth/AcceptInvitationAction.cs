@@ -1,5 +1,5 @@
-﻿using AllyisApps.Services;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using AllyisApps.Services;
 
 namespace AllyisApps.Controllers
 {
@@ -11,21 +11,23 @@ namespace AllyisApps.Controllers
 		/// <summary>
 		/// Action that accepts an invitation to an organization.
 		/// </summary>
-		/// <param name="id">The id of the accepted invitation.</param>
-		/// <param name="sender">The name of the sender of the invitation.</param>
-		/// <returns>The action result.</returns>
 		[HttpPost]
-		public ActionResult AcceptInvitation(int id, string sender)
+		public ActionResult AcceptInvitation(int id)
 		{
-			string result = AppService.AcceptUserInvitation(id);
+			
+			bool result = this.AppService.AcceptUserInvitation(id);
 
-			if (result == null)
+			
+			if (!result)
 			{
 				Notifications.Add(new Core.Alert.BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Core.Alert.Variety.Warning));
 			}
 			else
 			{
-				Notifications.Add(new Core.Alert.BootstrapAlert(result, Core.Alert.Variety.Success));
+				var invitation = AppService.GetInvitationByID(id);
+   			
+				string res = string.Format("You have successfully joined {0} in the role of {1}.", invitation.OrganizationName, invitation.OrganizationRole);
+				Notifications.Add(new Core.Alert.BootstrapAlert(res, Core.Alert.Variety.Success));
 			}
 
 			return this.RouteUserHome();

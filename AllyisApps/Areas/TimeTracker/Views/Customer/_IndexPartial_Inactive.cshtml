@@ -6,48 +6,48 @@
 
 <div class="flexbox-row flexbox-row-2-col-collapse">
 
-        <div class="panel panel-info" style="position: relative">
-            <div class="panel-heading">
-                <h1 class="panel-title">@Strings.CustomerList</h1>
-            </div>
-            <div class="panel-body list-group" id="Customers">
-                @foreach (CustomerProjectViewModel customer in Model.InactiveCustomerAndProjects)
-                {
-                    if (customer.CustomerInfo.IsActive)
-                    {
-                    <a onclick="PopulateInactiveProjects('@customer.CustomerInfo.CustomerId', 1)" class="list-group-item" id="inactive-@customer.CustomerInfo.CustomerId">
-                        <text>@customer.CustomerInfo.Name</text>
-                    </a>
-                    }
-                    else
-                    {
-                        <a onclick="PopulateInactiveProjects('@customer.CustomerInfo.CustomerId', 0)" class="list-group-item" id="inactive-@customer.CustomerInfo.CustomerId">
-                            <text>@customer.CustomerInfo.Name</text>
-                        </a>
-                    }
-                }
-            </div>
-        </div>
+	<div class="panel panel-info" style="position: relative">
+		<div class="panel-heading">
+			<h1 class="panel-title">@Strings.CustomerList</h1>
+		</div>
+		<div class="panel-body list-group" id="Customers">
+			@foreach (CustomerProjectViewModel customer in Model.InactiveCustomerAndProjects)
+			{
+				if (customer.CustomerInfo.IsActive.Value)
+				{
+					<a onclick="PopulateInactiveProjects('@customer.CustomerInfo.CustomerId', 1)" class="list-group-item" id="inactive-@customer.CustomerInfo.CustomerId">
+						<text>@customer.CustomerInfo.CustomerName</text>
+					</a>
+				}
+				else
+				{
+					<a onclick="PopulateInactiveProjects('@customer.CustomerInfo.CustomerId', 0)" class="list-group-item" id="inactive-@customer.CustomerInfo.CustomerId">
+						<text>@customer.CustomerInfo.CustomerName</text>
+					</a>
+				}
+			}
+		</div>
+	</div>
 
-        <div class="panel panel-info" style="position: relative">
-            <div class="panel-heading">
-                <h1 class="panel-title">@Strings.Projects</h1>
-            </div>
-            <div class="panel-body list-group" id="InactiveProjects">
-                <!--inactive projects belong to chosen customer will be populated here-->
-            </div>
-        </div>
-        @if ((bool)ViewData["IsManager"])
-        {
-    <div style="position: relative">
-        <div class="pull-right">
-            <button type="button" onclick="ReactivateCustomer()" class="btn btn-primary" id="reactivateCustomerButton" title="Reactivate Customer"><i class="glyphicon glyphicon-plus"></i></button>
-        </div>
-    </div>
-    <div style="position: relative">
-        <div class="pull-right">
-            <button type="button" onclick="ReactivateProject()" class="btn btn-primary" id="reactivateProjectButton" title="Reactivate Project"><i class="glyphicon glyphicon-plus"></i></button>
-        </div>
-    </div>
-        }
+	<div class="panel panel-info" style="position: relative">
+		<div class="panel-heading">
+			<h1 class="panel-title">@Strings.Projects</h1>
+		</div>
+		<div class="panel-body list-group" id="InactiveProjects">
+			<!--inactive projects belong to chosen customer will be populated here-->
+		</div>
+	</div>
+	@if ((bool)ViewData["IsManager"])
+	{
+		<div style="position: relative">
+			<div class="pull-right">
+				<button type="button" onclick="ReactivateCustomer()" class="btn btn-primary" id="reactivateCustomerButton" title="Reactivate Customer"><i class="glyphicon glyphicon-plus"></i></button>
+			</div>
+		</div>
+		<div style="position: relative">
+			<div class="pull-right">
+				<button type="button" onclick="ReactivateProject()" class="btn btn-primary" id="reactivateProjectButton" title="Reactivate Project"><i class="glyphicon glyphicon-plus"></i></button>
+			</div>
+		</div>
+	}
 </div>

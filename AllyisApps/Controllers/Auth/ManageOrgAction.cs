@@ -1,15 +1,15 @@
 ﻿//------------------------------------------------------------------------------
-// <copyright file="ManageAction.cs" company="Allyis, Inc.">
+// <copyright file="ManageOrgAction.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using AllyisApps.Services.Common.Types;
-using AllyisApps.ViewModels.Auth;
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using AllyisApps.Services;
+using AllyisApps.Services.Common.Types;
+using AllyisApps.ViewModels.Auth;
 
 namespace AllyisApps.Controllers
 {
@@ -22,7 +22,7 @@ namespace AllyisApps.Controllers
 		/// Get: Account/Manage/id
 		/// The management page for an organization, displays billing, subscriptions, etc.
 		/// </summary>
-		/// <param name="id">The organization Id</param>
+		/// <param name="id">The organization Id.</param>
 		/// <returns>The organization's management page.</returns>
 		public ActionResult ManageOrg(int id)
 		{
@@ -31,31 +31,44 @@ namespace AllyisApps.Controllers
 
 			var sub = model.Subscriptions.Select(x => x).Where(y => y.ProductId == (int)ProductIdEnum.TimeTracker).FirstOrDefault();
 			if (sub != null && model.Subscriptions.Count() > 0)
-            {
+			{
 				int subId = sub.SubscriptionId;
-                int startOfWeek = AppService.GetAllSettings(subId).Item1.StartOfWeek;
-                ViewBag.StartDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek));
-                ViewBag.EndDate = AppService.GetDayFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
-            }
+				int startOfWeek = AppService.GetAllSettings(subId).Item1.StartOfWeek;
+				ViewBag.StartDate = AppService.GetDaysFromDateTime(SetStartingDate(startOfWeek));
+				ViewBag.EndDate = AppService.GetDaysFromDateTime(SetStartingDate(startOfWeek).AddDays(6));
+			}
 
-            ViewData["UserId"] = this.AppService.UserContext.UserId;
+			ViewData["UserId"] = this.AppService.UserContext.UserId;
 			return this.View(model);
 		}
 
 		/// <summary>
 		/// Uses services to populate the lists of an <see cref="ManageOrgViewModel"/> and returns it.
 		/// </summary>
+		/// <param name="organizationId">Organization id.</param>
 		/// <returns>The OrganizationManageViewModel.</returns>
 		[CLSCompliant(false)]
-		public ManageOrgViewModel ConstructOrganizationManageViewModel(int orgId)
+		public ManageOrgViewModel ConstructOrganizationManageViewModel(int organizationId)
 		{
-			var infos = AppService.GetOrganizationManagementInfo(orgId);
+			var infos = AppService.GetOrganizationManagementInfo(organizationId);
 
 			BillingServicesCustomer customer = (infos.Item5 == null) ? null : AppService.RetrieveCustomer(new BillingServicesCustomerId(infos.Item5));
-
+			Organization orgInfo = infos.Item1;
 			return new ManageOrgViewModel
 			{
-				Details = infos.Item1,
+				Details = new OrganizationInfoViewModel()
+				{
+					OrganizationName = orgInfo.OrganizationName,
+					OrganizaitonId = orgInfo.OrganizationId,
+					SiteURL = orgInfo.SiteUrl,
+					FaxNumber = orgInfo.FaxNumber,
+					PhoneNumber = orgInfo.PhoneNumber,
+					Address = orgInfo.Address?.Address1,
+					City = orgInfo.Address?.City,
+					CountryName = orgInfo.Address?.CountryName,
+					StateName = orgInfo.Address?.StateName,
+					PostalCode = orgInfo.Address?.PostalCode
+				},
 				LastFour = customer == null ? string.Empty : customer.Last4,
 				Members = new OrganizationMembersViewModel
 				{
@@ -70,27 +83,14 @@ namespace AllyisApps.Controllers
 						UserId = oui.UserId
 					}),
 					OrganizationId = infos.Item1.OrganizationId,
-					OrganizationName = infos.Item1.Name,
-					PendingInvitation = infos.Item4,
+					OrganizationName = infos.Item1.OrganizationName,
+					PendingInvitation = infos.Item4.Select(invite => new InvitationInfoViewModel(invite)),
 					TotalUsers = infos.Item2.Count
 				},
-				OrganizationId = orgId,
+				OrganizationId = organizationId,
 				BillingCustomer = customer,
 				SubscriptionCount = infos.Item3.Count,
-				Subscriptions = infos.Item6.Select(p =>
-				{
-					return new SubscriptionDisplayViewModel
-					{
-						Info = infos.Item3.Where(s => s.ProductId == p.ProductId).FirstOrDefault(),
-						ProductId = p.ProductId,
-						ProductName = p.ProductName,
-						SubscriptionId = infos.Item3.Where(s => s.ProductId == p.ProductId).FirstOrDefault().SubscriptionId,
-                        SubscriptionName = infos.Item3.Where(s => s.ProductId == p.ProductId).FirstOrDefault().SubscriptionName,
-                        ProductDescription = p.ProductDescription,
-						OrganizationId = orgId,
-						AreaUrl = p.AreaUrl,
-					};
-				})
+				Subscriptions = infos.Item3.Select(sub => new SubscriptionDisplayViewModel(sub))
 			};
 		}
 	}

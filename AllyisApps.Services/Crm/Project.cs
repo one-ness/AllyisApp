@@ -28,15 +28,15 @@ namespace AllyisApps.Services
 		/// </summary>
 		public int CustomerId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the name of the customer associated with the project.
-        /// </summary>
-        public string CustomerName { get; set; }
+		/// <summary>
+		/// Gets or sets the name of the customer associated with the project.
+		/// </summary>
+		public string CustomerName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the project name.
 		/// </summary>
-		public string Name { get; set; }
+		public string ProjectName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the project type -- true == hourly, false == fixed.
@@ -44,7 +44,7 @@ namespace AllyisApps.Services
 		public bool IsHourly { get; set; }
 
 		/// <summary>
-		/// Gets or sets the project's org id
+		/// Gets or sets the project's org id.
 		/// </summary>
 		public string ProjectOrgId { get; set; }
 
@@ -59,7 +59,7 @@ namespace AllyisApps.Services
 		public DateTime? EndingDate { get; set; }
 
 		/// <summary>
-		/// Gets or sets the bool value indicating if this Customer is currently active
+		/// Gets or sets the bool value indicating if this Customer is currently active.
 		/// </summary>
 		public bool IsActive { get; set; }
 	}

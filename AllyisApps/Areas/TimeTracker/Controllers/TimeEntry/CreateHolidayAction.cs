@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using System;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -22,7 +22,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// </summary>
 		/// <param name="newHolidayName">The name of the holiday.</param>
 		/// <param name="newHolidayDate">The date of the holiday.</param>
-		/// <param name="subscriptionId">The Id of the subscription</param>
+		/// <param name="subscriptionId">The Id of the subscription.</param>
 		/// <returns>Redirects to the settings view.</returns>
 		public ActionResult CreateHoliday(string newHolidayName, string newHolidayDate, int subscriptionId)
 		{
@@ -33,13 +33,14 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotCreateHolidayWIthoutName, Variety.Warning));
 			}
 
-			int orgId = AppService.UserContext.OrganizationSubscriptions[subscriptionId].OrganizationId;
+			int orgId = AppService.UserContext.SubscriptionsAndRoles[subscriptionId].OrganizationId;
 			DateTime holidayDate;
 			if (!DateTime.TryParse(newHolidayDate, out holidayDate))
 			{
 				isValid = false;
 				Notifications.Add(new BootstrapAlert(Resources.Strings.CannotCreateHolidayWithInvalidDate, Variety.Warning));
 			}
+
 			if (isValid)
 			{
 				if (AppService.CreateHoliday(new Holiday() { OrganizationId = orgId, HolidayName = newHolidayName, Date = holidayDate }, subscriptionId))
@@ -52,6 +53,7 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 					Notifications.Add(new BootstrapAlert(Resources.Strings.ActionUnauthorizedMessage, Variety.Warning));
 				}
 			}
+
 			return this.RedirectToAction(ActionConstants.Settings, new { subscriptionId = subscriptionId, id = this.AppService.UserContext.UserId }); // Same destination regardless of creation success
 		}
 	}

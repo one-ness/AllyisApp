@@ -1,4 +1,4 @@
-﻿//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // <copyright file="SkuDBEntity.cs" company="Allyis, Inc.">
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
@@ -11,7 +11,7 @@ namespace AllyisApps.DBModel.Billing
 	/// <summary>
 	/// A class representing the Sku table in the database.
 	/// </summary>
-	public class SkuDBEntity
+	public class SkuDBEntity : BaseDBEntity
 	{
 		/// <summary>
 		/// Gets or sets SubscriptionId.
@@ -31,7 +31,7 @@ namespace AllyisApps.DBModel.Billing
 		/// <summary>
 		/// Gets or sets Name.
 		/// </summary>
-		public string Name { get; set; }
+		public string SkuName { get; set; }
 
 		/// <summary>
 		/// Gets or sets Price.
@@ -40,7 +40,7 @@ namespace AllyisApps.DBModel.Billing
 		public decimal Price { get; set; }
 
 		/// <summary>
-		/// cost per block
+		/// cost per block.
 		/// </summary>
 		public decimal CostPerBlock { get; set; }
 
@@ -55,27 +55,27 @@ namespace AllyisApps.DBModel.Billing
 		public byte BillingFrequency { get; set; }
 
 		/// <summary>
-		/// Gets or sets the block size
+		/// Gets or sets the block size.
 		/// </summary>
 		public int BlockSize { get; set; }
 
 		/// <summary>
-		/// Gets or sets is active
+		/// Gets or sets is active.
 		/// </summary>
 		public bool IsActive { get; set; }
 
 		/// <summary>
-		/// Gets or sets promotional cost per block
+		/// Gets or sets promotional cost per block.
 		/// </summary>
 		public decimal PromoCostPerBlock { get; set; }
 
 		/// <summary>
-		/// Gets or sets the date on which the promotional cost ends
+		/// Gets or sets the date on which the promotional cost ends.
 		/// </summary>
 		public DateTime? PromotDeadline { get; set; }
 
 		/// <summary>
-		/// Gets or sets the description
+		/// Gets or sets the description.
 		/// </summary>
 		public string Description { get; set; }
 	}

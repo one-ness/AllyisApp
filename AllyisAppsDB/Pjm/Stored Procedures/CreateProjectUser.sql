@@ -1,12 +1,12 @@
-﻿CREATE PROCEDURE [Pjm].[CreateProjectUser]
-	@ProjectId INT,
-	@UserId INT
+CREATE PROCEDURE [Pjm].[CreateProjectUser]
+	@projectId INT,
+	@userId INT
 AS
 BEGIN 
 	SET NOCOUNT ON;
 	UPDATE [Pjm].[ProjectUser] SET [IsActive] = 1
-	WHERE [ProjectId] = @ProjectId AND [UserId] = @UserId;
+	WHERE [ProjectId] = @projectId AND [UserId] = @userId;
 	IF @@ROWCOUNT < 1
 		INSERT INTO [Pjm].[ProjectUser] ([ProjectId], [UserId], [IsActive])
-		VALUES(@ProjectId, @UserId, 1);
+		VALUES(@projectId, @userId, 1);
 END

@@ -3,10 +3,11 @@
 //     Copyright (c) Allyis, Inc.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
+
+using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Core.Alert;
 using AllyisApps.Services;
-using System.Web.Mvc;
 
 namespace AllyisApps.Areas.TimeTracker.Controllers
 {
@@ -18,32 +19,34 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 		/// <summary>
 		/// Deletes the project.
 		/// </summary>
-		/// <param name="subscriptionId"></param>
+		/// <param name="subscriptionId">Subscription id.</param>
 		/// <param name="userId">The project's Id.</param>
 		/// <returns>Deletes the project from the database.</returns>
 		public ActionResult Delete(int subscriptionId, int userId)
 		{
 			var result = AppService.DeleteProject(userId, subscriptionId);
-			// if deleted successfully
-			if (result != null && result != "")
+
+			if (!string.IsNullOrEmpty(result))
 			{
+				// if deleted successfully
 				Notifications.Add(new BootstrapAlert(string.Format("{0} {1}", result, Resources.Strings.ProjectDeleteNotification), Variety.Success));
 			}
-			// Permission failure
 			else if (result == null)
 			{
+				// Permission failure
 				Notifications.Add(new BootstrapAlert(Resources.Strings.DeleteUnauthorizedMessage, Variety.Warning));
 			}
+
 			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer, new { subscriptionId = subscriptionId });
 		}
 
 		/*
-        /// <summary>
-        /// Deletes the project.
-        /// </summary>
-        /// <param name="id">The project's Id.</param>
-        /// <returns>Deletes the project from the database.</returns>
-        public ActionResult Delete(int id)
+		/// <summary>
+		/// Deletes the project.
+		/// </summary>
+		/// <param name="id">The project's Id.</param>
+		/// <returns>Deletes the project from the database.</returns>
+		public ActionResult Delete(int id)
 		{
 			CompleteProjectInfo project = AppService.GetProject(id);
 
@@ -61,6 +64,6 @@ namespace AllyisApps.Areas.TimeTracker.Controllers
 
 			return this.RedirectToAction(ActionConstants.Index, ControllerConstants.Customer);
 		}
-        */
+		*/
 	}
 }
