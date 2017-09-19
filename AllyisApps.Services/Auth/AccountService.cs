@@ -275,7 +275,7 @@ namespace AllyisApps.Services
 					{
 						OrganizationId = item.OrganizationId,
 						OrganizationRole = (OrganizationRole)item.OrganizationRoleId,
-						MaxAmount = item.MaxAmount
+						MaxAmount = item.MaxAmount ?? 0
 					});
 				}
 

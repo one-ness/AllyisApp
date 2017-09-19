@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
+using AllyisApps.Resources;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -27,10 +28,13 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
             int userId = GetCookieData().UserId;
 
             UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			var productInfo = AppService.GetProductSubscriptionInfo(subInfo.OrganizationId, (int)subInfo.SkuId);
 
 			string productName = AppService.GetProductNameBySubscriptionId(subInfo.SubscriptionId);
-			
-			IEnumerable<OrganizationUserInfo> userInfos = AppService.GetOrganizationManagementInfo(subInfo.OrganizationId).Item2.Where(u => u.OrganizationRoleId == 1);
+
+			var allInfos = AppService.GetOrganizationManagementInfo(subInfo.OrganizationId).Item2;
+			IEnumerable <OrganizationUserInfo> userInfos = allInfos.Where(u => AppService.GetProductRoleForUser("Expense Tracker", u.UserId, subInfo.OrganizationId) == "Manager");
+
 			List<UserMaxAmountViewModel> userViewModels = new List<UserMaxAmountViewModel>();
 			foreach (OrganizationUserInfo user in userInfos)
 			{

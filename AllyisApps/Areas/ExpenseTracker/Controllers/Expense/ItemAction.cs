@@ -27,12 +27,9 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 				accountViewModels.Add(InitializeAccountViewModel(entity));
 			}
 
-			return PartialView("_AjaxExpenseReportItems", new ExpenseItemModel()
+			return PartialView("_AjaxExpenseReportItems", new ExpenseItemCreateViewModel()
 			{
-				Item = new ExpenseItemCreateViewModel()
-				{
-					Index = index,
-				},
+				Index = index,
 				AccountList = accountViewModels
 			});
 		}
