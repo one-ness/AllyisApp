@@ -229,6 +229,9 @@
     <Compile Include="Areas\ExpenseTracker\Controllers\Home\HomeController.cs" />
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\CreatePositionAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeleteEmploymentTypeAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeletePositionStatusAction.cs" />
+    <Compile Include="Areas\StaffingManager\Controllers\Staffing\DeletePositionLevelAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\SettingsAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\IndexAction.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseItemModel.cs" />

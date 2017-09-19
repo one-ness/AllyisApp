@@ -14,6 +14,9 @@ using AllyisApps.Services;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
 using AllyisApps.ViewModels;
+using AllyisApps.Areas.StaffingManager.ViewModels.Staffing;
+using System.Collections.Generic;
+using System.Web.Script.Serialization;
 
 namespace AllyisApps.Areas.StaffingManager.Controllers
 {
@@ -109,9 +112,13 @@ namespace AllyisApps.Areas.StaffingManager.Controllers
 					UserContext.SubscriptionAndRole subInfo = null;
 					this.AppService.UserContext.SubscriptionsAndRoles.TryGetValue(subscriptionId, out subInfo);
 					model.OrganizationId = subInfo.OrganizationId;
+					if (model.IsCreating) model.PositionStatusId = model.PositionStatuses[0].PositionStatusId;
 					if (model.TagsToSubmit != null)
 					{
-						foreach (string tag in model.TagsToSubmit)
+						JavaScriptSerializer js = new JavaScriptSerializer();
+						var tagArray = js.Deserialize<string[]>(model.TagsToSubmit);
+
+						foreach (string tag in tagArray)
 						{
 							if (tag == "") tags.Add(new Tag { TagName = "New", TagId = -1, PositionId = -1 });
 							else tags.Add(new Tag { TagName = tag, TagId = -1, PositionId = -1 });

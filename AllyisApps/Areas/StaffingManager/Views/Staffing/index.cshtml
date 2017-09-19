@@ -239,8 +239,11 @@
 		var k = 0;
 		var selecter = document.getElementById("statusFilter");
 		for (k = 0; k < selecter.options.length; k++) {
-			if (selecter.options[k].selected) statuses[count] = selecter.options[k].value;
-			count++;
+			if (selecter.options[k].selected)
+			{
+				statuses[count] = selecter.options[k].value;
+				count++;
+			}
 		}
 
 		var types = [];
@@ -248,8 +251,11 @@
 		var j = 0;
 		selecter = document.getElementById("typesFilter");
 		for (j = 0; j < selecter.options.length; j++) {
-			if (selecter.options[j].selected) types[count] = selecter.options[j].value;
-			count++;
+			if (selecter.options[j].selected)
+			{
+				types[count] = selecter.options[j].value;
+				count++
+			}
 		}
 
 		var tags = [];
@@ -258,20 +264,24 @@
 		selecter = document.getElementById("tagsFilter");
 		for(i = 0; i < selecter.options.length; i++)
 		{
-			if (selecter.options[i].selected) tags[count] = selecter.options[i].value;
-			count++;
+			if (selecter.options[i].selected)
+			{
+				tags[count] = selecter.options[i].value;
+				count++;
+			}
 		}
 
-		var url = "/staffingmanager/" + @Model.SubscriptionId + "/?";
-		if (status.count != 0) {
-			url = url + "Status=" + statuses;
+		console.log("DEBUG:  status = " + statuses + "  type = " + types + "  tags = " + tags);
+		var url = "/staffingmanager/" + @Model.SubscriptionId + "/staffing?";
+		if (statuses.length != 0) {
+			url = url + "Statuses=" + statuses;
 		}
-		if (types.count != 0) {
-			if (status != null) url = url + "&";
+		if (types.length != 0) {
+			if (status.length == 0) url = url + "&";
 			url = url + "Types=" + types;
 		}
-		if (tags.count != 0 && tags[0] != "") {
-			if (status != null || type != null) url = url + "&";
+		if (tags.length != 0 && tags[0] != "") {
+			if (status.length != 0 || types.length != 0 ) url = url + "&";
 			url = url + "Tags=" + tags;
 		}
 		window.location.href = url;

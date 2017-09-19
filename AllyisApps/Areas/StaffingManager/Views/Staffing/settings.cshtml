@@ -1,75 +1,86 @@
 ﻿@model AllyisApps.Areas.StaffingManager.ViewModels.Staffing.StaffingSettingsViewModel
 @{
-	//Model.LocalizedStates = new Dictionary<string, string>();
+	Model.LocalizedStates = new Dictionary<string, string>();
+	Model.newCustomer = new AllyisApps.Services.Customer();
+	Model.newCustomer.OrganizationId = Model.organizationId;
+}
+
+@{
+	<script type="text/javascript">
+		var currentDay = "";
+		var ddlCountriesId = "@ViewConstants.DdlCountriesId";
+        var preserveState = '@(Model.State != null ? (States.ResourceManager.GetString(Model.State) ?? Model.State) : "")';
+		var dropdownempty = "@Strings.DropDownEmpty";
+		var ddlStatesId = "@ViewConstants.DdlStatesId";
+		var ddlStatesOptionsId = "@ViewConstants.DdlStatesOptionsId";
+		var getStatesUrl = "/Home/GetStates";
+		var selectedCountryCode = "@Model.SelectedCountryCode";
+		var selectedStateId = "@Model.SelectedStateId";
+	</script>
+	@Scripts.Render("~/bundles/UpdateStateDDL");
+	@Scripts.Render("~/bundles/jqueryui");
+	@Scripts.Render("~/bundles/moment");
+	ViewBag.Title = Strings.Settings;
+	DisplayHints.BreadcrumbNavPartialLocation = "~/Areas/TimeTracker/Views/Shared/_BreadcrumbNavPartial.cshtml";
 }
 
 <div>
-	@using (@Html.BeginForm((string)ViewData[ActionConstants.Action], (string)ViewData[ControllerConstants.Controller], FormMethod.Post, new { @class = string.Empty, role = "form" }))
+	@using (@Html.BeginForm((string)ActionConstants.CreateCustomer, (string)ControllerConstants.Staffing, FormMethod.Post, new { @class = string.Empty, role = "form" }))
 	{
 		@Html.AntiForgeryToken()
 		@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
-		<div class="row">
-			<div class="col-md-6 sm-control-width">
+		<div class="row panel panel-default">
+			<h3 class="panel-heading">
+				Create Customer
+			</h3>
+			<div class="col-md-6">
 
 				<div class="form-group">
 					@Html.ReqLabelFor(model => model.newCustomer.CustomerName, Strings.Name)
 					@Html.EditorFor(model => model.newCustomer.CustomerName, new { htmlAttributes = new { @class = "form-control" } })
 					@Html.ValidationMessageFor(model => model.newCustomer.CustomerName, string.Empty, new { @class = "text-danger" })
 				</div>
-
 				<div class="form-group">
-					@Html.ReqLabelFor(model => model.newCustomerAddress.Address1, Strings.Address)
-					@Html.EditorFor(model => model.newCustomerAddress.Address1, new { htmlAttributes = new { @class = "form-control" } })
-					@Html.ValidationMessageFor(model => model.newCustomerAddress.Address1, string.Empty, new { @class = "text-danger" })
+					@Html.ReqLabelFor(model => model.newCustomerAddress.City, Strings.City)
+					@Html.EditorFor(model => model.newCustomerAddress.City, new { htmlAttributes = new { @class = "form-control" } })
+					@Html.ValidationMessageFor(model => model.newCustomerAddress.City, string.Empty, new { @class = "text-danger" })
 				</div>
-
-				<div class="form-group">
-					@Html.ReqLabelFor(model => model.newCustomer.Address.City, Strings.City)
-					@Html.EditorFor(model => model.newCustomer.Address.City, new { htmlAttributes = new { @class = "form-control" } })
-					@Html.ValidationMessageFor(model => model.newCustomer.Address.City, string.Empty, new { @class = "text-danger" })
-				</div>
-
 				<div class="form-group">
 					@Html.ReqLabelFor(m => m.newCustomerAddress.CountryCode, Strings.Country)
-					@Html.DropDownListFor(m => m.SelectedCountryCode, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control", @id = ViewConstants.DdlCountriesId })
+					@Html.DropDownListFor(m => m.Country, new SelectList(Model.LocalizedCountries, "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control", @id = ViewConstants.DdlCountriesId })
 				</div>
 				<div class="form-group">
 					@Html.ReqLabelFor(m => m.newCustomerAddress.StateId, Strings.State)
-					@Html.DropDownListFor(m => m.SelectedStateId, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control", @id = ViewConstants.DdlStatesId })
+					@Html.DropDownListFor(m => m.State, new SelectList(Model.LocalizedStates, "Key", "Value"), Strings.DropDownEmpty, new { @class = "form-control", @id = ViewConstants.DdlStatesId })
 				</div>
-
 				<div class="form-group">
 					@Html.ReqLabelFor(model => model.newCustomerAddress.PostalCode, Strings.PostalCode)
 					@Html.EditorFor(model => model.newCustomerAddress.PostalCode, new { htmlAttributes = new { @class = "form-control" } })
 					@Html.ValidationMessageFor(model => model.newCustomerAddress.PostalCode, string.Empty, new { @class = "text-danger" })
 				</div>
 			</div>
-			<div class="col-md-6 sm-control-width">
+			<div class="col-md-6">
 
 				<div class="form-group">
 					@Html.ReqLabelFor(model => model.newCustomer.ContactEmail, Strings.ContactEmail)
 					@Html.EditorFor(model => model.newCustomer.ContactEmail, new { htmlAttributes = new { @class = "form-control" } })
 					@Html.ValidationMessageFor(model => model.newCustomer.ContactEmail, string.Empty, new { @class = "text-danger" })
 				</div>
-
 				<div class="form-group">
 					@Html.ReqLabelFor(model => model.newCustomer.ContactPhoneNumber, Strings.ContactPhoneNumber)
 					@Html.EditorFor(model => model.newCustomer.ContactPhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
 					@Html.ValidationMessageFor(model => model.newCustomer.ContactPhoneNumber, string.Empty, new { @class = "text-danger" })
 				</div>
-
 				<div class="form-group">
 					@Html.ReqLabelFor(model => model.newCustomer.FaxNumber, Strings.FaxNumber)
 					@Html.EditorFor(model => model.newCustomer.FaxNumber, new { htmlAttributes = new { @class = "form-control" } })
 					@Html.ValidationMessageFor(model => model.newCustomer.FaxNumber, string.Empty, new { @class = "text-danger" })
 				</div>
-
 				<div class="form-group">
 					@Html.ReqLabelFor(model => model.newCustomer.EIN, Strings.EIN)
 					@Html.EditorFor(model => model.newCustomer.EIN, new { htmlAttributes = new { @class = "form-control" } })
 					@Html.ValidationMessageFor(model => model.newCustomer.EIN, string.Empty, new { @class = "text-danger" })
 				</div>
-
 				<div class="form-group">
 					@Html.ReqLabelFor(m => m.newCustomer.CustomerOrgId, Strings.CustomerOrgId)
 					@Html.TextBoxFor(m => m.newCustomer.CustomerOrgId, new { @class = "form-control", @maxlength = "16", @placeholder = Model.newCustomer.CustomerOrgId })
@@ -77,139 +88,170 @@
 				</div>
 
 				@Html.HiddenFor(m => m.newCustomer.OrganizationId)
-				@Html.HiddenFor(m => m.newCustomer.CustomerId)
 				@Html.HiddenFor(m => m.addressId)
 
 				<div class="form-group allyis-action-buttons">
-					@if ((string)ViewData[ActionConstants.Action] == ActionConstants.Create)
-					{
-						<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Customer)" class="btn btn-default">@Strings.Cancel</a>
-						<input type="submit" value="@Strings.Create" class="btn btn-primary" />
-					}
-					else
-					{
-						<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Customer)" class="btn btn-default">@Strings.Cancel</a>
-						<input type="submit" value="@Strings.Save" class="btn btn-primary" />
-					}
+					<a href="@Url.Action(ActionConstants.Index, ControllerConstants.Staffing)" class="btn btn-default">@Strings.Cancel</a>
+					<input type="submit" value="@Strings.Save" class="btn btn-primary" />
 				</div>
 			</div>
 		</div>
-
-		<div class="panel panel-info">
-			<div class="panel-heading">
-				<h1 class="panel-title">Employment Types</h1>
-			</div>
-			<div id="Types">
-				<table class="table table-condensed">
-					<thead>
-						<tr>
-							<th>Employment Types</th>
-							<th><span class="pull-right">@Strings.Delete</span></th>
-						</tr>
-					</thead>
-					@foreach (dynamic type in Model.employmentTypes)
-					{
-							<tr>
-								@{
-									string _typeName = Strings.ResourceManager.GetString((type.EmploymentTypeName).Replace(" ", string.Empty)) ?? type.PayClassName;
-								}
-								<td>@_typeName</td>
-								<td>
-									<a href="javascript: void(0);" class="text-muted" title="Delete Employment Type"
-										onclick='deleteEmploymentType("@type.EmploymentTypeId", "\"@_typeName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
-								</td>
-							</tr>
-					}
-					<tr>
-						@using (Html.BeginForm(ActionConstants.CreateEmploymentType, ControllerConstants.Staffing, new { subscriptionId = Model.subscriptionId, id = Model.userId }, FormMethod.Post))
-						{
-							@Html.AntiForgeryToken();
-							@Html.HiddenFor(m => m.subscriptionId)
-							<td><input type="text" name="NewPayClass" class="form-control" required /></td>
-							<td><span class="pull-right"></span></td>
-							<td><input class="btn btn-primary pull-right" type="submit" value="@Strings.Add" /></td>
-						}
-					</tr>
-				</table>
-			</div>
-		</div>
-
-		<div class="panel panel-info">
-			<div class="panel-heading">
-				<h1 class="panel-title">Position Statuses</h1>
-			</div>
-			<div id="Statuses">
-				<table class="table table-condensed">
-					<thead>
-						<tr>
-							<th>Position Statuses</th>
-							<th><span class="pull-right">@Strings.Delete</span></th>
-						</tr>
-					</thead>
-					@foreach (dynamic status in Model.positionStatuses)
-					{
-						<tr>
-							@{
-								string _statusName = Strings.ResourceManager.GetString((status.PositionStatusName).Replace(" ", string.Empty)) ?? status.PositionStatusName;
-							}
-							<td>@_statusName</td>
-							<td>
-								<a href="javascript: void(0);" class="text-muted" title="Delete Position Status"
-								   onclick='deletePositionStatus("@status.PositionStatusId", "\"@_statusName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
-							</td>
-						</tr>
-								}
-					<tr>
-						@using (Html.BeginForm(ActionConstants.CreatePositionStatus, ControllerConstants.Staffing, new { subscriptionId = Model.subscriptionId, id = Model.userId }, FormMethod.Post))
-						{
-							@Html.AntiForgeryToken();
-							@Html.HiddenFor(m => m.subscriptionId)
-							<td><input type="text" name="NewPositionStatus" class="form-control" required /></td>
-							<td><span class="pull-right"></span></td>
-							<td><input class="btn btn-primary pull-right" type="submit" value="@Strings.Add" /></td>
-						}
-					</tr>
-				</table>
-			</div>
-		</div>
-
-		<div class="panel panel-info">
-			<div class="panel-heading">
-				<h1 class="panel-title">Position Levels</h1>
-			</div>
-			<div id="Levels">
-				<table class="table table-condensed">
-					<thead>
-						<tr>
-							<th>Position Levels</th>
-							<th><span class="pull-right">@Strings.Delete</span></th>
-						</tr>
-					</thead>
-					@foreach (dynamic level in Model.positionLevels)
-					{
-						<tr>
-							@{
-								string _levelName = Strings.ResourceManager.GetString((level.PositionLevelName).Replace(" ", string.Empty)) ?? level.PositionLevelName;
-							}
-							<td>@_levelName</td>
-							<td>
-								<a href="javascript: void(0);" class="text-muted" title="Delete Position Level"
-								   onclick='deletePositionLevel("@level.PositionLevelId", "\"@_levelName\"")'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
-							</td>
-						</tr>
-								}
-					<tr>
-						@using (Html.BeginForm(ActionConstants.CreatePositionLevel, ControllerConstants.Staffing, new { subscriptionId = Model.subscriptionId, id = Model.userId }, FormMethod.Post))
-						{
-							@Html.AntiForgeryToken();
-							@Html.HiddenFor(m => m.subscriptionId)
-							<td><input type="text" name="NewPositionLevel" class="form-control" required /></td>
-							<td><span class="pull-right"></span></td>
-							<td><input class="btn btn-primary pull-right" type="submit" value="@Strings.Add" /></td>
-						}
-					</tr>
-				</table>
-			</div>
-		</div>
 	}
+		<div class="row">
+			<div class="col-md-2 sm-control-width">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h1 class="panel-title">Employment Types</h1>
+					</div>
+					<div id="Types">
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th>Employment Types</th>
+									<th><span class="pull-right">@Strings.Delete</span></th>
+								</tr>
+							</thead>
+							@foreach (dynamic type in Model.employmentTypes)
+							{
+								<tr>
+									@{
+										string _typeName = Strings.ResourceManager.GetString((type.EmploymentTypeName).Replace(" ", string.Empty)) ?? type.EmploymentTypeName;
+									}
+									<td>@_typeName</td>
+									<td>
+										<a href="javascript: void(0);" class="text-muted" title="Delete Employment Type"
+										   onclick='deleteEmploymentType("@type.EmploymentTypeId", @Model.userId, @Model.organizationId, @Model.subscriptionId)'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
+									</td>
+								</tr>
+							}
+							<tr>
+								@using (Html.BeginForm(ActionConstants.CreateEmploymentType, ControllerConstants.Staffing, new { subscriptionId = Model.subscriptionId, orgId = Model.organizationId }, FormMethod.Post))
+								{
+									@Html.AntiForgeryToken();
+									@Html.HiddenFor(m => m.subscriptionId)
+									<td><input type="text" name="employmentType" class="form-control" required /></td>
+									<td><span class="pull-right"></span></td>
+									<td><input class="btn btn-primary" type="submit" value="@Strings.Add" /></td>
+								}
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h1 class="panel-title">Position Statuses</h1>
+					</div>
+					<div id="Statuses">
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th>Position Statuses</th>
+									<th><span class="pull-right">@Strings.Delete</span></th>
+								</tr>
+							</thead>
+							@foreach (dynamic status in Model.positionStatuses)
+							{
+								<tr>
+									@{
+										string _statusName = Strings.ResourceManager.GetString((status.PositionStatusName).Replace(" ", string.Empty)) ?? status.PositionStatusName;
+									}
+									<td>@_statusName</td>
+									<td>
+										<a href="javascript: void(0);" class="text-muted" title="Delete Position Status"
+										   onclick='deletePositionStatus("@status.PositionStatusId", @Model.userId, @Model.organizationId, @Model.subscriptionId)'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
+									</td>
+								</tr>
+										}
+							<tr>
+								@using (Html.BeginForm(ActionConstants.CreatePositionStatus, ControllerConstants.Staffing, new { subscriptionId = Model.subscriptionId, orgId = Model.organizationId }, FormMethod.Post))
+								{
+									@Html.AntiForgeryToken();
+									@Html.HiddenFor(m => m.subscriptionId)
+									<td><input type="text" name="positionStatus" class="form-control" required /></td>
+									<td><span class="pull-right"></span></td>
+									<td><input class="btn btn-primary" type="submit" value="@Strings.Add" /></td>
+								}
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-2 sm-control-width">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h1 class="panel-title">Position Levels</h1>
+					</div>
+					<div id="Levels">
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th>Position Levels</th>
+									<th><span class="pull-right">@Strings.Delete</span></th>
+								</tr>
+							</thead>
+							@foreach (dynamic level in Model.positionLevels)
+							{
+								<tr>
+									@{
+										string _levelName = Strings.ResourceManager.GetString((level.PositionLevelName).Replace(" ", string.Empty)) ?? level.PositionLevelName;
+									}
+									<td>@_levelName</td>
+									<td>
+										<a href="javascript: void(0);" class="text-muted" title="Delete Position Level"
+										   onclick='deletePositionLevel("@level.PositionLevelId", @Model.userId, @Model.organizationId, @Model.subscriptionId)'><span class="fa fa-fw fa-remove text-danger pull-right"></span></a>
+									</td>
+								</tr>
+										}
+							<tr>
+								@using (Html.BeginForm(ActionConstants.CreatePositionLevel, ControllerConstants.Staffing, new { subscriptionId = Model.subscriptionId, orgId = Model.organizationId }, FormMethod.Post))
+								{
+									@Html.AntiForgeryToken();
+									@Html.HiddenFor(m => m.subscriptionId)
+									<td><input type="text" name="positionLevel" class="form-control" required /></td>
+									<td><span class="pull-right"></span></td>
+									<td><input class="btn btn-primary" type="submit" value="@Strings.Add" /></td>
+								}
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
 </div>
+
+@section scripts{
+	<script type="text/javascript">
+
+		deletePositionLevelUrl = "Url.Action(ActionConstants.DeletePositionLevel, ControllerConstants.Staffing, new { ";
+		deletePositionStatusUrl = "Url.Action(ActionConstants.DeletePositionStatus, ControllerConstants.Staffing, new { ";
+		deleteEmploymentTypeUrl = "Url.Action(ActionConstants.DeleteEmploymentType, ControllerConstants.Staffing, new { ";
+
+		function deletePositionLevel(PositionLevel, userId, orgId, subscriptionId) {
+			$.ajax({
+				url: '@Url.Action(ActionConstants.DeletePositionLevel, ControllerConstants.Staffing)',
+				data: { positionLevelId: PositionLevel, userId: userId, orgId: orgId, subscriptionId: subscriptionId }
+			})
+			window.location.reload();
+		}
+
+		function deletePositionStatus(PositionStatus, userId, orgId, subscriptionId) {
+			$.ajax({
+				url: '@Url.Action(ActionConstants.DeletePositionStatus, ControllerConstants.Staffing)',
+				data: { positionStatusId: PositionStatus, userId: userId, orgId: orgId, subscriptionId: subscriptionId }
+			})
+			window.location.reload();
+		}
+
+		function deleteEmploymentType(EmploymentType, userId, orgId, subscriptionId) {
+			$.ajax({
+				url: '@Url.Action(ActionConstants.DeleteEmploymentType, ControllerConstants.Staffing)',
+				data: { employmentTypeId: EmploymentType, userId: userId, orgId: orgId, subscriptionId: subscriptionId }
+			})
+			window.location.reload();
+		}
+</script>
+}
