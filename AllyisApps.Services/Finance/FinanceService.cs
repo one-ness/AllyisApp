@@ -13,7 +13,6 @@ using AllyisApps.DBModel.Lookup;
 using AllyisApps.Lib;
 using AllyisApps.Services.Auth;
 using AllyisApps.Services.Lookup;
-using AllyisApps.Services.Finance;
 
 namespace AllyisApps.Services
 {
@@ -22,9 +21,9 @@ namespace AllyisApps.Services
 	/// </summary>
 	public partial class AppService : BaseService
 	{
-		public IList<AccountDBEntity> GetAccounts()
+		public IList<Account> GetAccounts()
 		{
-			return DBHelper.GetAccounts().ToList();
+			return DBHelper.GetAccounts().Select(x => InitializeAccountModel(x)).ToList();
 		}
 
 		public bool UpdateAccount(Account item)
@@ -45,6 +44,19 @@ namespace AllyisApps.Services
 		{
 			DBHelper.DeleteAccount(id);
 			return;
+		}
+
+		public Account InitializeAccountModel(AccountDBEntity account)
+		{
+			return new Account()
+			{
+				AccountId = account.AccountId,
+				AccountName = account.AccountName,
+				AccountTypeId = account.AccountTypeId,
+				AccountTypeName = account.AccountTypeName,
+				IsActive = account.IsActive,
+				ParentAccountId = account.ParentAccountId != null ? account.ParentAccountId : null
+			};
 		}
 
 		public AccountDBEntity InitializeAccountDbModel(Account account)

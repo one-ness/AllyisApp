@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AllyisApps.Controllers;
 using AllyisApps.Services;
 using AllyisApps.ViewModels.ExpenseTracker.Expense;
-using AllyisApps.Resources;
 
 namespace AllyisApps.Areas.ExpenseTracker.Controllers
 {
@@ -17,23 +15,23 @@ namespace AllyisApps.Areas.ExpenseTracker.Controllers
 		/// <summary>
 		/// Show the list of expense reports submitted by the logged in user.
 		/// </summary>
-        /// <param name="subscriptionId">The subscription id.</param>
-        /// <returns>The action result.</returns>
+		/// <param name="subscriptionId">The subscription id.</param>
+		/// <returns>The action result.</returns>
 		public ActionResult UserSettings(int subscriptionId)
 		{
 			SetNavData(subscriptionId);
 
-            AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.UserSettings, subscriptionId);
+			AppService.CheckExpenseTrackerAction(AppService.ExpenseTrackerAction.UserSettings, subscriptionId);
 
-            int userId = GetCookieData().UserId;
+			int userId = GetCookieData().UserId;
 
-            UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
+			UserContext.SubscriptionAndRole subInfo = this.AppService.UserContext.SubscriptionsAndRoles[subscriptionId];
 			var productInfo = AppService.GetProductSubscriptionInfo(subInfo.OrganizationId, (int)subInfo.SkuId);
 
 			string productName = AppService.GetProductNameBySubscriptionId(subInfo.SubscriptionId);
 
 			var allInfos = AppService.GetOrganizationManagementInfo(subInfo.OrganizationId).Item2;
-			IEnumerable <OrganizationUserInfo> userInfos = allInfos.Where(u => AppService.GetProductRoleForUser("Expense Tracker", u.UserId, subInfo.OrganizationId) == "Manager");
+			IEnumerable<OrganizationUserInfo> userInfos = allInfos.Where(u => AppService.GetProductRoleForUser("Expense Tracker", u.UserId, subInfo.OrganizationId) == "Manager");
 
 			List<UserMaxAmountViewModel> userViewModels = new List<UserMaxAmountViewModel>();
 			foreach (OrganizationUserInfo user in userInfos)

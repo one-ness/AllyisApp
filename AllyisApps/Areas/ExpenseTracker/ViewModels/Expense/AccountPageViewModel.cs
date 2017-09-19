@@ -34,7 +34,7 @@ namespace AllyisApps.ViewModels.ExpenseTracker.Expense
 		public string AccountName { get; set; }
 
 		/// <summary>
-		/// Gets or sets whether the account is active.
+		/// Gets or sets a value indicating whether the account is active.
 		/// </summary>
 		public bool IsActive { get; set; }
 
