@@ -73,17 +73,41 @@
 			@Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
 			<div class="row">
 				<div class="col-md-2 sm-control-width">
-					<h3>Position Info</h3>
 					<div class="panel panel-default">
+						<h3 class="panel-heading panel-title">Position Info</h3>
 						<div class="form-group">
 							@Html.ReqLabelFor(m => m.PositionTitle, "Position Title")
-							@Html.TextBoxFor(m => m.PositionTitle, new { @class = "form-control" })
+							@Html.TextBoxFor(m => m.PositionTitle, new { @class = "form-control required" })
 							@Html.ValidationMessageFor(m => m.PositionTitle, "", new { @class = "text-danger" })
 						</div>
 						<div class="form-group">
-							<label>Start Date</label>
+							@Html.ReqLabelFor(m => m.CustomerId, Strings.Customer)
+							@Html.DropDownListFor(m => m.CustomerId, new SelectList(Model.Customers, "CustomerId", "CustomerName"), Strings.DropDownEmpty, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.CustomerId, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.StartDate, Strings.StartDate)
 							<span class="fa fa-fw fa-calendar"></span>
-							@Html.TextBoxFor(m => m.StartDate, new {  @class = "updatable datepicker form-control item-control", @id = "datepicker", value = DateTime.UtcNow })
+							@Html.TextBoxFor(m => m.StartDate, new { @class = "updatable datepicker form-control item-control", @id = "datepicker", value = DateTime.UtcNow })
+							@Html.ValidationMessageFor(m => m.CustomerId, "", new { @class = "text-danger" })
+						</div>
+						@if (!Model.IsCreating)
+						{
+							<div class="form-group">
+								@Html.ReqLabelFor(m => m.PositionStatusId, "Position Status")
+								@Html.DropDownListFor(m => m.PositionStatusId, new SelectList(Model.PositionStatuses, "PositionStatusId", "PositionStatusName"), Strings.DropDownEmpty, new { @class = "form-control" })
+								@Html.ValidationMessageFor(m => m.PositionStatusId, "", new { @class = "text-danger" })
+							</div>
+						}
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.EmploymentTypeId, "Employment Type")
+							@Html.DropDownListFor(m => m.EmploymentTypeId, new SelectList(Model.EmploymentTypes, "EmploymentTypeId", "EmploymentTypeName"), Strings.DropDownEmpty, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.EmploymentTypeId, "", new { @class = "text-danger" })
+						</div>
+						<div class="form-group">
+							@Html.ReqLabelFor(m => m.PositionLevelId, "Position Level")
+							@Html.DropDownListFor(m => m.PositionLevelId, new SelectList(Model.PositionLevels, "PositionLevelId", "PositionLevelName"), Strings.DropDownEmpty, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.PositionLevelId, "", new { @class = "text-danger" })
 						</div>
 						<div class="form-group">
 							@Html.ReqLabelFor(m => m.TeamName, Strings.TeamName)
@@ -91,75 +115,56 @@
 							@Html.ValidationMessageFor(m => m.TeamName, "", new { @class = "text-danger" })
 						</div>
 						<div class="form-group">
-							@Html.ReqLabelFor(m => m.PositionCount, "Position Count")
-							@Html.TextBoxFor(m => m.PositionCount, new { @class = "form-control" })
-							@Html.ValidationMessageFor(m => m.PositionCount, "", new { @class = "text-danger" })
-						</div>
-						<div class="form-group">
-							@Html.ReqLabelFor(m => m.HiringManager, Strings.HiringManager)
+							<label>Hiring Manager</label>
 							@Html.TextBoxFor(m => m.HiringManager, new { @class = "form-control" })
 							@Html.ValidationMessageFor(m => m.HiringManager, "", new { @class = "text-danger" })
 						</div>
 						<div class="form-group">
-							@Html.ReqLabelFor(m => m.EmploymentTypeId, "Employment Type")
-							@Html.DropDownListFor(m => m.EmploymentTypeId, new SelectList(Model.EmploymentTypes, "EmploymentTypeId", "EmploymentTypeName"), Strings.DropDownEmpty, new { @class = "form-control" })
-							@Html.ValidationMessageFor(m => m.EmploymentTypeId, "", new { @class = "text-danger" })
+							<label>Position Count</label>
+							@Html.TextBoxFor(m => m.PositionCount, new { @class = "form-control" })
+							@Html.ValidationMessageFor(m => m.PositionCount, "", new { @class = "text-danger" })
 						</div>
-						<div class="form-group">
-							@Html.ReqLabelFor(m => m.PositionStatusId, "Position Status")
-							@Html.DropDownListFor(m => m.PositionStatusId, new SelectList(Model.PositionStatuses, "PositionStatusId", "PositionStatusName"), Strings.DropDownEmpty, new { @class = "form-control" })
-							@Html.ValidationMessageFor(m => m.PositionStatusId, "", new { @class = "text-danger" })
-						</div>
-						<div class="form-group">
-							@Html.ReqLabelFor(m => m.PositionLevelId, "Position Level")
-							@Html.DropDownListFor(m => m.PositionLevelId, new SelectList(Model.PositionLevels, "PositionLevelId", "PositionLevelName"), Strings.DropDownEmpty, new { @class = "form-control" })
-							@Html.ValidationMessageFor(m => m.PositionLevelId, "", new { @class = "text-danger" })
-						</div>
-
-						@if (Model.IsCreating)
-						{
-						}
 						<div class="form-group billing-amount">
-							@Html.ReqLabelFor(m => m.BillingRateAmount, "Billing Amount")
-							@Html.TextBoxFor(m => m.BillingRateAmount, new { @class = "form-control", required = "required", type = "number", min = "0.00", step = "0.01" })
+							<label>Billing Amount</label>
+							@Html.TextBoxFor(m => m.BillingRateAmount, new { @class = "form-control", type = "number", min = "0.00", step = "0.01" })
 							@Html.ValidationMessageFor(m => m.BillingRateAmount, "", new { @class = "text-danger" })
 						</div>
 						<div class="form-group billing-frequency">
-							@Html.ReqLabelFor(m => m.BillingRateFrequency, "Rate")
+							<label>Rate</label>
 							@Html.EnumDropDownListFor(m => m.BillingRateFrequency, Strings.DropDownEmpty, new { @class = "form-control" })
 							@Html.ValidationMessageFor(m => m.BillingRateFrequency, "", new { @class = "text-danger" })
 					
 						</div>
 						<div class="form-group">
-							@Html.ReqLabelFor(m => m.DurationMonths, Strings.DurationMonths)
+							<label>Duration (Months)</label>
 							@Html.TextBoxFor(m => m.DurationMonths, new { @class = "form-control" })
 							@Html.ValidationMessageFor(m => m.DurationMonths, "", new { @class = "text-danger" })
 						</div>
 					</div>
 				</div>
 				<div class="col-md-3">
-					<h3>Details</h3>
 					<div class="panel panel-default">
+						<h3 class="panel-heading panel-title">Details</h3>
 						<div class="form-group">
 							@Html.ReqLabelFor(m => m.RequiredSkills, "Required Skills")
-							@Html.TextAreaFor(m => m.RequiredSkills, new { @class = "form-control", @cols = "80", @rows = "10", required = "required" })
+							@Html.TextAreaFor(m => m.RequiredSkills, new { @class = "form-control", @cols = "80", @rows = "10" })
 							@Html.ValidationMessageFor(m => m.RequiredSkills, "", new { @class = "text-danger" })
 						</div>
 						<div class="form-group">
-							@Html.ReqLabelFor(m => m.JobResponsibilities, Strings.JobResponsibilities)
+							<label>Job Responsibilities</label>
 							@Html.TextAreaFor(m => m.JobResponsibilities, new { @class = "form-control", @cols = "80", @rows = "10" })
 							@Html.ValidationMessageFor(m => m.JobResponsibilities, "", new { @class = "text-danger" })
 						</div>
 						<div class="form-group">
-							@Html.ReqLabelFor(m => m.DesiredSkills, Strings.DesiredSkills)
+							<label>Desired Skills</label>
 							@Html.TextAreaFor(m => m.DesiredSkills, new { @class = "form-control", @cols = "80", @rows = "9" })
 							@Html.ValidationMessageFor(m => m.DesiredSkills, "", new { @class = "text-danger" })
 						</div>
 					</div>
 				</div>
 				<div class="col-md-2 sm-control-width">
-					<h3>Address Info</h3>
 					<div class="panel panel-default">
+						<h3 class="panel-heading panel-title">Address Info *</h3>
 						<div class="form-group">
 							@Html.ReqLabelFor(m => m.Address, Strings.Address)
 							@Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
@@ -187,15 +192,8 @@
 						</div>
 					</div>
 					<div class="form-group panel panel-default">
-						<div class="form-group">
-							@Html.ReqLabelFor(m => m.CustomerId, Strings.Customer)
-							@Html.DropDownListFor(m => m.CustomerId, new SelectList(Model.Customers, "CustomerId", "CustomerName"), Strings.DropDownEmpty, new { @class = "form-control" })
-							@Html.ValidationMessageFor(m => m.CustomerId, "", new { @class = "text-danger" })
-						</div>
-					</div>
-					<div class="form-group panel panel-default">
-						<input type="hidden" id="TagsToSubmit" name="TagsToSubmit" value="" />
-						<Label>Tags</Label>
+						<input type="hidden" id="TagsToSubmit" name="TagsToSubmit" value="[]"/>
+						<Label class="panel-info">Tags</Label>
 						<div>
 							<div id="tags">
 								<input type="text" data-role="tagsinput" placeholder="Add a tag" size="45"/>
@@ -241,29 +239,36 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
-	function updateTags() {
-		var count = 0;
-		var i = 0;
-		var j = 0;
-		var selecter = [document.getElementsByClassName("tagList").count];
-		selecter = document.getElementsByClassName("tagList");
-		var tags = [selecter.count];
-		for (i = 0; i < selecter.length; i++) {
-			if (selecter[i].selected) {
-				tags[count] = selecter[i].value;
-				count++;
-			}
+	function updateTags(tag) {
+		var parsed = JSON.parse(document.getElementById("TagsToSubmit").value);
+		var tagsInput = [];
+		for (var x in parsed) {
+			tagsInput.push(parsed[x]);
+			console.log("Parsed: " + parsed);
 		}
-		var send = [count];
-		for (j = 0; j < count; j++) {
-			send[j] = tags[j]
+		var newArr = [];
+		for (var i in parsed)
+		{
+			newArr.push(tagsInput[i]);
 		}
-		sendTags(send);
+		newArr.push(tag);
+		document.getElementById("TagsToSubmit").value = JSON.stringify(newArr);
+		console.log("AfterTagDebug: " + document.getElementById("TagsToSubmit").value);
 	}
 
-	function sendTags(tags) {
-		$('input[name=TagsToSubmit]').val(tags);
-		console.log("TAGS: " + tags[1]);
+	function removeTag(tag) {
+		var parsed = JSON.parse(document.getElementById("TagsToSubmit").value);
+		var tagsInput = [];
+		for (var x in parsed) {
+			tagsInput.push(parsed[x]);
+			console.log("Parsed: " + parsed);
+		}
+		var newArr = [];
+		for (var i in parsed) { //push all but the one you want removed
+			if (tagsInput[i] != tag) newArr.push(tagsInput[i]);
+		}
+		document.getElementById("TagsToSubmit").value = JSON.stringify(newArr);
+		console.log("AfterTagDebug: " + document.getElementById("TagsToSubmit").value);
 	}
 
 
@@ -271,7 +276,12 @@
 		$("#tags input").on({
 			focusout: function () {
 				var txt = this.value.replace(/[^a-z0-9\+\-\.\#]/ig, ''); // allowed characters
-				if (txt) $("<span />", { text: txt.toLowerCase(), insertAfter: this });
+				if (txt)
+				{
+					$("<span />", { text: txt.toLowerCase(), insertAfter: this });
+					updateTags(txt);
+					console.log("ADD: " + txt);
+				}
 				this.value = "";
 			},
 			keyup: function (ev) {
@@ -280,6 +290,7 @@
 			}
 		});
 		$('#tags').on('click', 'span', function () {
+			removeTag(this.innerHTML);
 			$(this).remove();
 		});
 

@@ -75,6 +75,8 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// Gets or sets the position name
 		/// </summary>
+		[DataType(DataType.Text)]
+		[Display(Name = "Position Title")]
 		public string PositionTitle { get; set; }
 
 		/// <summary>
@@ -100,6 +102,8 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// Gets or sets the number of hires needed for this position
 		/// </summary>
+		[DataType(DataType.Text)]
+		[Display(Name = "Required Skills")]
 		public int PositionCount { get; set; }
 
 		/// <summary>
@@ -140,7 +144,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// <summary>
 		/// the list of tags for the new position to set
 		/// </summary>
-		public string[] TagsToSubmit { get; set; }
+		public string TagsToSubmit { get; set; }
 
 		/// <summary>
 		/// Gets or sets the position's address.
