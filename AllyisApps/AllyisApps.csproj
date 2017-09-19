@@ -236,7 +236,6 @@
     <Compile Include="Areas\ExpenseTracker\ExpenseTrackerAreaRegistration.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\CreatePositionAction.cs" />
     <Compile Include="Areas\StaffingManager\Controllers\Staffing\IndexAction.cs" />
-    <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseItemModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseFileModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ExpenseHistoryViewModel.cs" />
     <Compile Include="Areas\ExpenseTracker\ViewModels\Expense\ReportViewModel.cs" />
@@ -1073,7 +1072,9 @@
     <EmbeddedResource Include="Resources\Strings.en.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.es.resx" />
+    <EmbeddedResource Include="Resources\Strings.es.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Strings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
