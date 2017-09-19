@@ -502,8 +502,8 @@ namespace AllyisApps.Services
 
 			return new Tag { TagId = tag.TagId, TagName = tag.TagName };
 		}
-		
-		#endregion DB to Service Conversion
+
+		#endregion DB to Service Conversions
 
 		//////////////////////////////////////////
 		// SERVICE LAYER to DB LAYER CONVERSION //
@@ -619,7 +619,7 @@ namespace AllyisApps.Services
 			if (tags == null) throw new ArgumentNullException(nameof(tags), "Cannot accept null list of tags to be converted.");
 
 			List<dynamic> list = new List<dynamic>();
-			foreach(Tag tag in tags)
+			foreach (Tag tag in tags)
 			{
 				dynamic obj = new ExpandoObject();
 				obj.TagName = tag.TagName;

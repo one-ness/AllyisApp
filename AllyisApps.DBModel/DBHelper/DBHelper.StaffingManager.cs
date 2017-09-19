@@ -10,11 +10,10 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Dynamic;
 using System.Linq;
+using AllyisApps.DBModel.Crm;
 using AllyisApps.DBModel.Lookup;
 using AllyisApps.DBModel.StaffingManager;
 using Dapper;
-using AllyisApps.DBModel.Auth;
-using AllyisApps.DBModel.Crm;
 
 namespace AllyisApps.DBModel
 {
@@ -135,14 +134,14 @@ namespace AllyisApps.DBModel
 			parameters.Add("@positionLevel", obj.Position.PositionLevelId);
 			parameters.Add("@hiringManager", obj.Position.HiringManager);
 			parameters.Add("@teamName", obj.Position.TeamName);
-			
+
 			parameters.Add("@address1", obj.Address.Address1);
 			parameters.Add("@address2", obj.Address.Address2);
 			parameters.Add("@city", obj.Address.City);
 			parameters.Add("@stateId", obj.Address.StateId);
 			parameters.Add("@countryCode", obj.Address.CountryCode);
 			parameters.Add("@postalCode", obj.Address.PostalCode);
-			
+
 			DataTable tagsTable = new DataTable();
 			tagsTable.Columns.Add("TagName", typeof(string));
 			if (obj.Tags != null && obj.Tags.Count != 0)
@@ -155,7 +154,7 @@ namespace AllyisApps.DBModel
 				tagsTable.Rows.Add("New");
 				parameters.Add("@tags", tagsTable.AsTableValuedParameter("[Lookup].[TagTable]"));
 			}
-			
+
 			using (SqlConnection connection = new SqlConnection(SqlConnectionString))
 			{
 				return connection.Execute("[StaffingManager].[SetupPosition]", parameters, commandType: CommandType.StoredProcedure);

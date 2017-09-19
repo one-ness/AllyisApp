@@ -1,8 +1,8 @@
-﻿using AllyisApps.Services;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using AllyisApps.Services;
 using AllyisApps.Services.Lookup;
 using AllyisApps.Services.StaffingManager;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 {
@@ -10,7 +10,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 	/// Staffing home page view model.
 	/// </summary>
 	public class StaffingSettingsViewModel
-	{ 
+	{
 		/// <summary>
 		/// a list of the short-hand position objects used to populate the views main table
 		/// </summary>
@@ -128,6 +128,5 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// country code and localized names
 		/// </summary>
 		public Dictionary<string, string> LocalizedCountries { get; set; }
-
 	}
 }

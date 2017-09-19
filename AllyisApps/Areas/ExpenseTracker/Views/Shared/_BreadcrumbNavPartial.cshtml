@@ -14,7 +14,7 @@
 		<li>@Html.ActionLink("Create Report", ActionConstants.Create, ControllerConstants.Expense, new { subscriptionId = subId }, new { @class = "nav-a" })</li>
 		@if (manager || maxAmount > 0)
 		{
-            <li>@Html.ActionLink("Pending Reports", ActionConstants.Pending, ControllerConstants.Expense, new { subscriptionId = subId }, new { @class = "nav-a" })</li> 
+            <li>@Html.ActionLink("Pending Reports", ActionConstants.Pending, ControllerConstants.Expense, new { subscriptionId = subId }, new { @class = "nav-a" })</li>
 		}
 		@if (manager)
         {

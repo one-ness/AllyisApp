@@ -4,11 +4,11 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using AllyisApps.Services;
-using AllyisApps.Services.StaffingManager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using AllyisApps.Services;
+using AllyisApps.Services.StaffingManager;
 
 namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 {
@@ -66,7 +66,7 @@ namespace AllyisApps.Areas.StaffingManager.ViewModels.Staffing
 		/// Get or sets the Start date of the position
 		/// </summary>
 		public DateTime StartDate { get; set; }
-		
+
 		/// <summary>
 		/// Gets or sets the status int(enum) of the position
 		/// </summary>

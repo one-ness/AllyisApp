@@ -55,7 +55,6 @@ namespace AllyisApps.Areas.StaffingManager
 				defaults: new { controller = "Staffing", action = "Index" },
 				constraints: new { subscriptionId = @"\d+" },
 				namespaces: new string[] { "AllyisApps.Areas.StaffingManager.Controllers" });
-
 		}
 	}
 }
